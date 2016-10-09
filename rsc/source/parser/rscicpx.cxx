@@ -389,7 +389,6 @@ RscTop * RscTypCont::InitClassListBox( RscTop * pSuper, RscArray * pStrLst )
     INS_WINBIT(pClassListBox,VScroll);
     INS_WINBIT(pClassListBox,AutoSize)
     INS_WINBIT(pClassListBox,AutoHScroll)
-    INS_WINBIT(pClassListBox,DDExtraWidth)
 
     {
         RSCINST aDflt = aUShort.Create( nullptr, RSCINST() );

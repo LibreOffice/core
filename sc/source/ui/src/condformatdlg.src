@@ -38,7 +38,6 @@ Control RID_COND_ENTRY
         Size = MAP_APPFONT( 80, 60 );
         Border = TRUE;
         DropDown = TRUE;
-        DDExtraWidth = TRUE;
         StringList [ en-US ] =
         {
             "All Cells";
@@ -53,7 +52,6 @@ Control RID_COND_ENTRY
         Size = MAP_APPFONT( 80, 80 );
         Border = TRUE;
         DropDown = TRUE;
-        DDExtraWidth = TRUE;
         StringList [ en-US ] =
         {
             "equal to";
@@ -106,7 +104,6 @@ Control RID_COND_ENTRY
         Size = MAP_APPFONT( 80, 60);
         Border = TRUE;
         DropDown = TRUE;
-        DDExtraWidth = TRUE;
         StringList [ en-US ] =
         {
             "Color Scale (2 Entries)";
@@ -220,7 +217,6 @@ Control RID_COND_ENTRY
         Size = MAP_APPFONT( 80, 40 );
         Border = TRUE;
         DropDown = TRUE;
-        DDExtraWidth = TRUE;
     };
     ListBox LB_COL_MIDDLE
     {
@@ -228,7 +224,6 @@ Control RID_COND_ENTRY
         Size = MAP_APPFONT( 80, 40 );
         Border = TRUE;
         DropDown = TRUE;
-        DDExtraWidth = TRUE;
     };
     ListBox LB_COL_MAX
     {
@@ -236,7 +231,6 @@ Control RID_COND_ENTRY
         Size = MAP_APPFONT( 80, 40 );
         Border = TRUE;
         DropDown = TRUE;
-        DDExtraWidth = TRUE;
     };
     PushButton BTN_OPTIONS
     {
@@ -250,7 +244,6 @@ Control RID_COND_ENTRY
         Size = MAP_APPFONT( 100, 60 );
         Border = TRUE;
         DropDown = TRUE;
-        DDExtraWidth = TRUE;
         StringList [ en-US ] =
         {
             "Today";
@@ -274,7 +267,6 @@ Control RID_COND_ENTRY
         Size = MAP_APPFONT( 80, 50 );
         Border = TRUE;
         DropDown = TRUE;
-        DDExtraWidth = TRUE;
         StringList [ en-US ] =
         {
             "3 Arrows";
@@ -331,7 +323,6 @@ Control RID_ICON_SET_ENTRY
         Size = MAP_APPFONT( 60, 40 );
         Border = TRUE;
         DropDown = TRUE;
-        DDExtraWidth = TRUE;
         StringList [ en-US ] =
         {
             "Value";

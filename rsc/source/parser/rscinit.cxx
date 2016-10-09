@@ -198,8 +198,6 @@ void RscTypCont::Init()
     aWinBits.SetConstant( nAutoHScrollId, sal::static_int_cast<sal_Int32>(WB_AUTOHSCROLL) );
     nAutoVScrollId      = pHS->getID( "WB_AUTOVSCROLL" );
     aWinBits.SetConstant( nAutoVScrollId, sal::static_int_cast<sal_Int32>(WB_AUTOVSCROLL) );
-    nDDExtraWidthId     = pHS->getID( "WB_DDEXTRAWIDTH" );
-    aWinBits.SetConstant( nDDExtraWidthId, 0 /*WB_DDEXTRAWIDTH*/ );
     nWordBreakId        = pHS->getID( "WB_WORDBREAK" );
     aWinBits.SetConstant( nWordBreakId, sal::static_int_cast<sal_Int32>(WB_WORDBREAK) );
     nLeftLabelId        = pHS->getID( "WB_LEFTLABEL" );

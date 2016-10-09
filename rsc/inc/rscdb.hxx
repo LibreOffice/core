@@ -125,7 +125,6 @@ class RscTypCont
     Atom                nHideWhenDeactivateId;
     Atom                nAutoHScrollId;
     Atom                nAutoVScrollId;
-    Atom                nDDExtraWidthId;
     Atom                nWordBreakId;
     Atom                nLeftLabelId;
     Atom                nHasLinesId;
