@@ -286,27 +286,18 @@ void CommonSalLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos,
 
 void CommonSalLayout::AdjustLayout(ImplLayoutArgs& rArgs)
 {
-    GenericSalLayout::AdjustLayout(rArgs);
+    SalLayout::AdjustLayout(rArgs);
+
+    if (rArgs.mpDXArray)
+        ApplyDXArray(rArgs);
+    else if (rArgs.mnLayoutWidth)
+        Justify(rArgs.mnLayoutWidth);
 
     // apply asian kerning if the glyphs are not already formatted
     if ((rArgs.mnFlags & SalLayoutFlags::KerningAsian)
     && !(rArgs.mnFlags & SalLayoutFlags::Vertical))
         if ((rArgs.mpDXArray != nullptr) || (rArgs.mnLayoutWidth != 0))
             ApplyAsianKerning(rArgs.mrStr);
-
-    if ((rArgs.mnFlags & SalLayoutFlags::KashidaJustification) && rArgs.mpDXArray)
-    {
-        hb_codepoint_t nKashidaCodePoint = 0x0640;
-        hb_codepoint_t nKashidaGlyphIndex;
-
-        if (hb_font_get_glyph(mpHbFont, nKashidaCodePoint, 0, &nKashidaGlyphIndex))
-        {
-            if (nKashidaGlyphIndex)
-            {
-                KashidaJustify(nKashidaGlyphIndex, hb_font_get_glyph_h_advance(mpHbFont, nKashidaGlyphIndex) >> 6);
-            }
-        }
-    }
 }
 
 void CommonSalLayout::DrawText(SalGraphics& rSalGraphics) const
@@ -503,6 +494,19 @@ bool CommonSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
     return true;
 }
 
+// A note on how Kashida justification is implemented (because it took me 5
+// years to figure it out):
+// The decision to insert Kashidas, where and how much is taken by Writer.
+// This decision is communicated to us in a very indirect way; by increasing
+// the width of the character after which Kashidas should be inserted by the
+// desired amount.
+// Here we do:
+// - In LayoutText() set KashidaJustification flag based on text script.
+// - In ApplyDXArray():
+//   * Check the above flag to decide whether to insert Kashidas or not.
+//   * For any RTL glyph that has DX adjustment, insert enough Khashidas to
+//     fill in the added space.
+
 void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
 {
     if (rArgs.mpDXArray == nullptr)
@@ -524,6 +528,23 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
             pNewCharWidths[i] = rArgs.mpDXArray[i] - rArgs.mpDXArray[i - 1];
     }
 
+
+    bool bKashidaJustify = false;
+    DeviceCoordinate nKashidaWidth = 0;
+    hb_codepoint_t nKashidaIndex = 0;
+    if (rArgs.mnFlags & SalLayoutFlags::KashidaJustification)
+    {
+        // Find Kashida glyph width and index.
+        scaleHbFont(mpHbFont, mrFontSelData);
+        if (hb_font_get_glyph(mpHbFont, 0x0640, 0, &nKashidaIndex))
+            nKashidaWidth = hb_font_get_glyph_h_advance(mpHbFont, nKashidaIndex) / 64;
+        bKashidaJustify = nKashidaWidth != 0;
+    }
+
+    // Map of Kashida insertion points (in the glyph items vector) and the
+    // requested width.
+    std::map<size_t, DeviceCoordinate> pKashidas;
+
     // The accumulated difference in X position.
     DeviceCoordinate nDelta = 0;
 
@@ -534,14 +555,21 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         int nCharPos = m_GlyphItems[i].mnCharPos - mnMinCharPos;
         DeviceCoordinate nDiff = pNewCharWidths[nCharPos] - pOldCharWidths[nCharPos];
 
-        m_GlyphItems[i].maLinearPos.X() += nDelta;
+        // nDiff > 1 to ignore rounding errors.
+        if (bKashidaJustify && nDiff > 1)
+            pKashidas[i] = nDiff;
+
+        // Apply the same delta to all glyphs belonging to the same character.
         size_t j = i;
-        // Apply the delta to other glyphs belonging to the same character.
-        while (++j < m_GlyphItems.size())
+        while (j < m_GlyphItems.size())
         {
             if (m_GlyphItems[j].mnCharPos != m_GlyphItems[i].mnCharPos)
                 break;
             m_GlyphItems[j].maLinearPos.X() += nDelta;
+            // For RTL, put all DX adjustment space to the left of the glyph.
+            if (m_GlyphItems[i].IsRTLGlyph())
+                m_GlyphItems[j].maLinearPos.X() += nDiff;
+            ++j;
         }
 
         // Increment the delta, the loop above makes sure we do so only once
@@ -550,5 +578,59 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         // is wrong since DX adjustments are character based).
         nDelta += nDiff;
         i = j;
+    }
+
+    // Insert Kashida glyphs.
+    if (bKashidaJustify && !pKashidas.empty())
+    {
+        size_t nInserted = 0;
+        for (auto const& pKashida : pKashidas)
+        {
+            auto pGlyphIter = m_GlyphItems.begin() + nInserted + pKashida.first;
+
+            // Don’t insert Kashida after LTR glyphs.
+            if (!pGlyphIter->IsRTLGlyph())
+                continue;
+
+            // Don’t insert Kashida after space.
+            sal_Int32 indexUtf16 = pGlyphIter->mnCharPos;
+            sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
+            static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
+            if (hb_unicode_general_category (pHbUnicodeFuncs, aChar) == HB_UNICODE_GENERAL_CATEGORY_SPACE_SEPARATOR)
+                continue;
+
+            // The total Kashida width.
+            DeviceCoordinate nTotalWidth = pKashida.second;
+
+            // Number of times to repeat each Kashida.
+            int nCopies = 1;
+            if (nTotalWidth > nKashidaWidth)
+                nCopies = nTotalWidth / nKashidaWidth;
+
+            // See if we can improve the fit by adding an extra Kashidas and
+            // squeezing them together a bit.
+            DeviceCoordinate nOverlap = 0;
+            DeviceCoordinate nShortfall = nTotalWidth - nKashidaWidth * nCopies;
+            if (nShortfall > 0)
+            {
+                ++nCopies;
+                DeviceCoordinate nExcess = nCopies * nKashidaWidth - nTotalWidth;
+                if (nExcess > 0)
+                    nOverlap = nExcess / (nCopies - 1);
+            }
+
+            Point aPos(pGlyphIter->maLinearPos.X() - nTotalWidth, 0);
+            int nCharPos = pGlyphIter->mnCharPos;
+            int nFlags = GlyphItem::IS_IN_CLUSTER | GlyphItem::IS_RTL_GLYPH;
+            while (nCopies--)
+            {
+                GlyphItem aKashida(nCharPos, nKashidaIndex, aPos, nFlags, nKashidaWidth);
+                pGlyphIter = m_GlyphItems.insert(pGlyphIter, aKashida);
+                aPos.X() += nKashidaWidth;
+                aPos.X() -= nOverlap;
+                ++pGlyphIter;
+                ++nInserted;
+            }
+        }
     }
 }
