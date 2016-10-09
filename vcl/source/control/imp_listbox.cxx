@@ -2618,6 +2618,8 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
     if (!bLayout)
     {
         bool bNativeOK = false;
+        bool bHasFocus = HasFocus();
+        bool bIsEnabled = IsEnabled();
 
         ControlState nState = ControlState::ENABLED;
         if (rRenderContext.IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire)
@@ -2629,9 +2631,11 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             vcl::Window *pWin = GetParent();
 
             ImplControlValue aControlValue;
-            if ( !pWin->IsEnabled() )
+            bIsEnabled &= pWin->IsEnabled();
+            if ( !bIsEnabled )
                 nState &= ~ControlState::ENABLED;
-            if ( pWin->HasFocus() )
+            bHasFocus |= pWin->HasFocus();
+            if ( bHasFocus )
                 nState |= ControlState::FOCUSED;
 
             // The listbox is painted over the entire control including the
@@ -2667,12 +2671,23 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
                                                          nState, aControlValue, OUString());
         }
 
-        if (IsEnabled())
+        if (bIsEnabled)
         {
-            if (HasFocus() && !ImplGetSVData()->maNWFData.mbDDListBoxNoTextArea)
+            if (bHasFocus && !ImplGetSVData()->maNWFData.mbDDListBoxNoTextArea)
             {
-                rRenderContext.SetTextColor( rStyleSettings.GetHighlightTextColor() );
-                rRenderContext.SetFillColor( rStyleSettings.GetHighlightColor() );
+                if ( !ImplGetSVData()->maNWFData.mbNoFocusRects )
+                    rRenderContext.SetFillColor( rStyleSettings.GetHighlightColor() );
+                else
+                {
+                    rRenderContext.SetLineColor();
+                    rRenderContext.SetFillColor();
+                }
+                Color aColor;
+                if( bNativeOK && (nState & ControlState::ROLLOVER) )
+                    aColor = rStyleSettings.GetFieldRolloverTextColor();
+                else
+                    aColor = rStyleSettings.GetHighlightTextColor();
+                rRenderContext.SetTextColor( aColor );
                 rRenderContext.DrawRect( maFocusRect );
             }
             else
