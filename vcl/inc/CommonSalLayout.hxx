@@ -71,6 +71,8 @@ public:
 
     virtual bool            GetCharWidths(DeviceCoordinate* pCharWidths) const override;
     virtual void            ApplyDXArray(ImplLayoutArgs&) override;
+
+    virtual bool            IsKashidaPosValid(int nCharPos) const override;
 };
 
 #endif

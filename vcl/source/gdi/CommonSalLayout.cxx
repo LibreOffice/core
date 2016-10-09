@@ -500,6 +500,10 @@ bool CommonSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 // This decision is communicated to us in a very indirect way; by increasing
 // the width of the character after which Kashidas should be inserted by the
 // desired amount.
+//
+// Writer eventually calls IsKashidaPosValid() to check whether it can insert a
+// Kashida between two characters or not.
+//
 // Here we do:
 // - In LayoutText() set KashidaJustification flag based on text script.
 // - In ApplyDXArray():
@@ -633,4 +637,31 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
             }
         }
     }
+}
+
+bool CommonSalLayout::IsKashidaPosValid(int nCharPos) const
+{
+    for (auto pIter = m_GlyphItems.begin(); pIter != m_GlyphItems.end(); ++pIter)
+    {
+        if (pIter->mnCharPos == nCharPos)
+        {
+            // Search backwards for previous glyph belonging to a different
+            // character. We are looking backwards because we are dealing with
+            // RTL glyphs, which will be in visual order.
+            for (auto pPrev = pIter - 1; pPrev != m_GlyphItems.begin(); --pPrev)
+            {
+                if (pPrev->mnCharPos != nCharPos)
+                {
+                    // Check if the found glyph belongs to the next character,
+                    // otherwise the current glyph will be a ligature which is
+                    // invalid kashida position.
+                    if (pPrev->mnCharPos == (nCharPos + 1))
+                        return true;
+                    break;
+                }
+            }
+        }
+    }
+
+    return false;
 }
