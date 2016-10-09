@@ -405,6 +405,7 @@ public:
     /** Returns the number of pivot cache fields. */
     sal_Int32           getCacheFieldCount() const;
     /** Returns the cache field with the specified index. */
+    PivotCacheField* getCacheField( sal_Int32 nFieldIdx );
     const PivotCacheField* getCacheField( sal_Int32 nFieldIdx ) const;
     /** Returns the source column index of the field with the passed index. */
     sal_Int32           getCacheDatabaseIndex( sal_Int32 nFieldIdx ) const;

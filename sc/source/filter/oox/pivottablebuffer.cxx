@@ -439,7 +439,7 @@ void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotF
 {
     if( maDPFieldName.isEmpty() )    // prevent endless loops if file format is broken
     {
-        if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
+        if( PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
         {
             // data field can have user defined groupname captions, apply them
             // if they do
@@ -449,9 +449,9 @@ void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotF
                 if ( aIt->mnType == XML_data  && aIt->msCaption.getLength() )
                     captionList.push_back( IdCaptionPair( aIt->mnCacheItem, aIt->msCaption ) );
             }
-            // #FIXME find another way out of this const nightmare prison
             if ( !captionList.empty() )
-                const_cast<PivotCacheField*>( pCacheField )->applyItemCaptions( captionList );
+                pCacheField->applyItemCaptions( captionList );
+
             maDPFieldName = pCacheField->createParentGroupField( rxBaseDPField, rBaseCacheField, orItemNames );
             // on success, try to create nested group fields
             Reference< XDataPilotField > xDPField = mrPivotTable.getDataPilotField( maDPFieldName );
@@ -1298,6 +1298,11 @@ Reference< XDataPilotField > PivotTable::getDataLayoutField() const
     {
     }
     return xDPField;
+}
+
+PivotCacheField* PivotTable::getCacheField( sal_Int32 nFieldIdx )
+{
+    return mpPivotCache ? mpPivotCache->getCacheField( nFieldIdx ) : nullptr;
 }
 
 const PivotCacheField* PivotTable::getCacheField( sal_Int32 nFieldIdx ) const

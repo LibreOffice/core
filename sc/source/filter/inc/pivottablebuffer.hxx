@@ -175,7 +175,7 @@ private:
     PivotTable&         mrPivotTable;       /// The parent pivot table object.
     ItemModelVector     maItems;            /// All items of this field.
     PTFieldModel        maModel;            /// Pivot field settings.
-    OUString     maDPFieldName;      /// Name of the field in DataPilot field collection.
+    OUString            maDPFieldName;      /// Name of the field in DataPilot field collection.
     sal_Int32           mnFieldIndex;       /// Zero-based index of this field.
 };
 
@@ -338,6 +338,7 @@ public:
                         getDataLayoutField() const;
 
     /** Returns the cache field with the specified index. */
+    PivotCacheField* getCacheField( sal_Int32 nFieldIdx );
     const PivotCacheField* getCacheField( sal_Int32 nFieldIdx ) const;
     /** Returns the base cache field of the data field item with the specified index. */
     const PivotCacheField* getCacheFieldOfDataField( sal_Int32 nDataItemIdx ) const;
@@ -373,7 +374,7 @@ private:
     PivotTableFilterVector maFilters;       /// All field filters.
     PTDefinitionModel     maDefModel;         /// Global pivot table settings.
     PTLocationModel       maLocationModel;    /// Location settings of the pivot table.
-    const PivotCache*     mpPivotCache;       /// The pivot cache this table is based on.
+    PivotCache*           mpPivotCache;       /// The pivot cache this table is based on.
     css::uno::Reference< css::sheet::XDataPilotDescriptor >
                           mxDPDescriptor;     /// Descriptor of the DataPilot object.
 };
