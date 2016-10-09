@@ -79,59 +79,41 @@ public:
 
 class ScExtraEditViewManager
 {
+private:
+    enum ModifierTagType { Adder, Remover };
+
 public:
     ScExtraEditViewManager(ScTabViewShell* pThisViewShell, VclPtr<ScGridWindow>* pGridWin)
         : mpThisViewShell(pThisViewShell)
         , mpGridWin(pGridWin)
         , mpOtherEditView(nullptr)
-        , mpOtherEngine(nullptr)
-        , maSameEditViewChecker()
-        , nTotalActiveEditViews(0)
+        , nTotalWindows(0)
     {}
 
     ~ScExtraEditViewManager();
 
     void Add(SfxViewShell* pViewShell, ScSplitPos eWhich)
     {
-        Apply(pViewShell, eWhich, &ScExtraEditViewManager::Adder);
+        Apply<Adder>(pViewShell, eWhich);
     }
 
     void Remove(SfxViewShell* pViewShell, ScSplitPos eWhich)
     {
-        Apply(pViewShell, eWhich, &ScExtraEditViewManager::Remover);
+        Apply<Remover>(pViewShell, eWhich);
     }
 
 private:
-    class SameEditViewChecker
-    {
-    public:
-        SameEditViewChecker()
-            : mpOtherEditView(nullptr)
-            , mpWindow(nullptr)
-        {}
-        void SetEditView(EditView* pOtherEditView) { mpOtherEditView = pOtherEditView; }
-        void SetWindow(ScGridWindow* pWindow) { mpWindow = pWindow; }
-        bool operator() (const EditView* pView) const;
+    template<ModifierTagType ModifierTag>
+    void Apply(SfxViewShell* pViewShell, ScSplitPos eWhich);
 
-    private:
-        EditView* mpOtherEditView;
-        ScGridWindow* mpWindow;
-    };
-
-private:
-    typedef void (ScExtraEditViewManager::* FuncType)(ScGridWindow* );
-
-    void Apply(SfxViewShell* pViewShell, ScSplitPos eWhich, FuncType fHandler);
-    void Adder(ScGridWindow* pWin);
-    void Remover(ScGridWindow* pWin);
+    template<ModifierTagType ModifierTag>
+    void Modifier(ScGridWindow* pWin);
 
 private:
     ScTabViewShell* mpThisViewShell;
     VclPtr<ScGridWindow>* mpGridWin;
     EditView* mpOtherEditView;
-    EditEngine* mpOtherEngine;
-    SameEditViewChecker maSameEditViewChecker;
-    int nTotalActiveEditViews;
+    int nTotalWindows;
 };
 
 class ScTabView

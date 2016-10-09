@@ -738,6 +738,23 @@ void ScTiledRenderingTest::testTextEditViewInvalidations()
     CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
     CPPUNIT_ASSERT(aView2.m_bInvalidateTiles);
 
+    // text edit a cell in view #1 until
+    // we can be sure we are out of the initial tile
+    for (int i = 0; i < 40; ++i)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    }
+    Scheduler::ProcessEventsToIdle();
+
+    // text edit a cell in view #1 inside the new tile and
+    // check that view #2 receive a tile invalidate message
+    aView2.m_bInvalidateTiles = false;
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView2.m_bInvalidateTiles);
+
     // view #3
     SfxLokHelper::createView();
     ViewCallback aView3;
