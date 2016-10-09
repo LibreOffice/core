@@ -1930,12 +1930,10 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
 
         Reference<XAccessibleContext> pRParentContext = pParentAcc->getAccessibleContext();
 
-        int level = 0;
-        int index = 0;
-        int number = 0;
-
         if( Role ==  RADIO_BUTTON )
         {
+            int index = 0;
+            int number = 0;
             Reference<XAccessibleRelationSet> pRrelationSet = pRContext->getAccessibleRelationSet();
             long nRel = pRrelationSet->getRelationCount();
             for(int i=0 ; i<nRel ; i++)
@@ -2026,7 +2024,7 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
             return S_OK;
         }
 
-
+        int level = 0;
         BOOL isFound = FALSE;
         while( pParentAcc.is() && !isFound)
         {
