@@ -142,16 +142,18 @@ namespace
         QApplication::style()->drawComplexControl(element, option, &painter);
     }
 
-    void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State const & state)
+    void lcl_drawFrame( QStyle::PrimitiveElement element, QImage* image, QStyle::State const & state,
+                        QStyle::PixelMetric eLineMetric = QStyle::PM_DefaultFrameWidth )
     {
     #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
         QStyleOptionFrameV3 option;
         option.frameShape = QFrame::StyledPanel;
         option.state = QStyle::State_Sunken;
+        option.lineWidth = QApplication::style()->pixelMetric( eLineMetric );
     #else
         QStyleOptionFrame option;
 
-        QFrame aFrame( NULL );
+        QFrame aFrame( nullptr );
         aFrame.setFrameRect( QRect(0, 0, image->width(), image->height()) );
         aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
         aFrame.ensurePolished();
@@ -160,7 +162,6 @@ namespace
         option.lineWidth = aFrame.lineWidth();
         option.midLineWidth = aFrame.midLineWidth();
     #endif
-
         draw(element, &option, image, state);
     }
 }
@@ -422,10 +423,12 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     else if (type == ControlType::Listbox)
     {
         QStyleOptionComboBox option;
+        option.editable = false;
         switch (part) {
             case ControlPart::ListboxWindow:
                 lcl_drawFrame( QStyle::PE_Frame, m_image.get(),
-                               vclStateValue2StateFlag(nControlState, value) );
+                               vclStateValue2StateFlag(nControlState, value),
+                               QStyle::PM_ComboBoxFrameWidth );
                 break;
             case ControlPart::SubEdit:
                 draw( QStyle::CE_ComboBoxLabel, &option, m_image.get(),
@@ -773,9 +776,6 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     retVal = true;
                     break;
                 }
-                case ControlPart::ListboxWindow:
-                    retVal = true;
-                    break;
                 default:
                     break;
             }
