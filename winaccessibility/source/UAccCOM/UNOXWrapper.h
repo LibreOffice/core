@@ -38,19 +38,19 @@
  */
 class ATL_NO_VTABLE CUNOXWrapper : public IUNOXWrapper
 {
-public:
-    CUNOXWrapper()
-    {   }
+protected:
+    css::accessibility::XAccessible* pUNOInterface;
 
 public:
+    CUNOXWrapper() : pUNOInterface(nullptr)
+    {   }
+
     // IUNOXWrapper
     STDMETHOD(put_XInterface)(hyper pXInterface);
     STDMETHOD(put_XSubInterface)(hyper);
 
 protected:
     ~CUNOXWrapper() {}
-
-    css::accessibility::XAccessible* pUNOInterface;
 };
 
 #endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_UNOXWRAPPER_H
