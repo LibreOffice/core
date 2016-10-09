@@ -543,9 +543,8 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     {
         lcl_drawFrame( QStyle::PE_Frame, m_image.get(),
                        vclStateValue2StateFlag(nControlState, value) );
-
         // draw just the border, see http://qa.openoffice.org/issues/show_bug.cgi?id=107945
-        int fw = static_cast< KDESalInstance* >(GetSalData()->m_pInstance)->getFrameWidth();
+        int fw = QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
         localClipRegion = new QRegion(QRegion(widgetRect).subtracted(widgetRect.adjusted(fw, fw, -fw, -fw)));
     }
     else if (type == ControlType::WindowBackground)
@@ -858,14 +857,11 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         {
             if( part == ControlPart::Border )
             {
-                int nFrameWidth = static_cast< KDESalInstance* >(GetSalData()->m_pInstance)->getFrameWidth();
                 auto nStyle = static_cast<DrawFrameFlags>(
                     val.getNumericVal() & 0xFFF0);
                 if( nStyle & DrawFrameFlags::NoDraw )
                 {
-                    // in this case the question is: how thick would a frame be
-                    // see brdwin.cxx, decoview.cxx
-                    // most probably the behavior in decoview.cxx is wrong.
+                    int nFrameWidth = QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
                     contentRect.adjust(nFrameWidth, nFrameWidth, -nFrameWidth, -nFrameWidth);
                 }
                 retVal = true;

@@ -53,7 +53,6 @@ class KDEXLib : public QObject, public SalXLib
         QHash< int, SocketData > socketData; // key is fd
         QTimer timeoutTimer;
         QTimer userEventTimer;
-        int m_frameWidth;
         bool m_isGlibEventLoopType;
         bool m_allowKdeDialogs;
         bool m_blockIdleTimeout;
@@ -74,7 +73,6 @@ class KDEXLib : public QObject, public SalXLib
         void processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
         css::uno::Reference< css::ui::dialogs::XFilePicker2 >
             createFilePickerSignal( const css::uno::Reference< css::uno::XComponentContext >& );
-        int getFrameWidthSignal();
 
     public:
         KDEXLib();
@@ -95,7 +93,6 @@ class KDEXLib : public QObject, public SalXLib
     public Q_SLOTS:
         css::uno::Reference< css::ui::dialogs::XFilePicker2 >
             createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& );
-        int getFrameWidth();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
