@@ -588,3 +588,30 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         }
     }
 }
+
+bool CommonSalLayout::IsKashidaPosValid(int nCharPos) const
+{
+    for (auto pIter = m_GlyphItems.begin(); pIter != m_GlyphItems.end(); ++pIter)
+    {
+        if (pIter->mnCharPos == nCharPos)
+        {
+            // Search backwards for previous glyph belonging to a different
+            // character. We are looking backwards because we are dealing with
+            // RTL glyphs, which will be in visual order.
+            for (auto pPrev = pIter - 1; pPrev != m_GlyphItems.begin(); --pPrev)
+            {
+                if (pPrev->mnCharPos != nCharPos)
+                {
+                    // Check if the found glyph belongs to the next character,
+                    // otherwise the current glyph will be a ligature which is
+                    // invalid kashida position.
+                    if (pPrev->mnCharPos == (nCharPos + 1))
+                        return true;
+                    break;
+                }
+            }
+        }
+    }
+
+    return false;
+}
