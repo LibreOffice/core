@@ -30,7 +30,7 @@ void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData );
 }
 
 class ScDocument;
-class ScAddInDocs : public std::set<ScDocument*> {};
+using ScAddInDocs = std::set<ScDocument*>;
 
 class ScAddInAsync : public SvtBroadcaster
 {
