@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_851decbf",
+        "filename": "sw/source/core/text/portxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2016-10-10T16:38:28Z",
+      "side": 1,
+      "message": "This is used in lcl_AddSpace and is limited to CJK scripts. So the result should be number of CJK ideographs. The number of codepoints are almost the same as the number of glyphs except there are Unicode variation selectors.",
+      "parentUuid": "7a77a97e_85d88c1f",
+      "revId": "6e576c6b195784e1d2beea445f39e47f2f193912",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_25f8987c",
         "filename": "sw/source/core/text/portxt.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-10-10T14:08:29Z",
       "side": 1,
       "message": "I think a more robust and less ad hoc way is to count the Unicode grapheme clusters between nPos and nEnd using break iterators.",
+      "revId": "6e576c6b195784e1d2beea445f39e47f2f193912",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_a57828fa",
+        "filename": "sw/source/core/text/portxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2016-10-10T16:38:28Z",
+      "side": 1,
+      "message": "I don\u0027t know about break iterator. But I wonder if it is efficient because we only need to consider very limited case here. Writer already breaks text into different scripts so we only handle CJK script here.",
+      "parentUuid": "7a77a97e_25f8987c",
       "revId": "6e576c6b195784e1d2beea445f39e47f2f193912",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
