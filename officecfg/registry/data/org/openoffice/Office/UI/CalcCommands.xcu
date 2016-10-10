@@ -2181,7 +2181,7 @@
       </node>
       <node oor:name=".uno:PasteOnlyValue" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Paste Only Value</value>
+          <value xml:lang="en-US">Paste Only Numbers</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Number</value>
