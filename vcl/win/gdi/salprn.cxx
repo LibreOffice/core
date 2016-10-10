@@ -447,27 +447,21 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     return TRUE;
 }
 
-#define DECLARE_DEVMODE( i )\
-    DEVMODEW* pDevModeW = SAL_DEVMODE_W(i);\
-    if( pDevModeW == NULL )\
-        return
-
-#define CHOOSE_DEVMODE(i)\
-    (pDevModeW->i)
-
 static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData, JobSetFlags nFlags )
 {
     if ( !pSetupData || !pSetupData->GetDriverData() )
         return;
 
-    DECLARE_DEVMODE( pSetupData );
+    DEVMODEW* pDevModeW = SAL_DEVMODE_W(pSetupData);
+    if( pDevModeW == nullptr )
+        return;
 
     // Orientation
     if ( nFlags & JobSetFlags::ORIENTATION )
     {
-        if ( CHOOSE_DEVMODE(dmOrientation) == DMORIENT_PORTRAIT )
+        if ( pDevModeW->dmOrientation == DMORIENT_PORTRAIT )
             pSetupData->SetOrientation( Orientation::Portrait );
-        else if ( CHOOSE_DEVMODE(dmOrientation) == DMORIENT_LANDSCAPE )
+        else if ( pDevModeW->dmOrientation == DMORIENT_LANDSCAPE )
             pSetupData->SetOrientation( Orientation::Landscape );
     }
 
@@ -485,7 +479,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             // search the right bin and assign index to mnPaperBin
             for( DWORD i = 0; i < nCount; ++i )
             {
-                if( CHOOSE_DEVMODE(dmDefaultSource) == pBins[ i ] )
+                if( pDevModeW->dmDefaultSource == pBins[ i ] )
                 {
                     pSetupData->SetPaperBin( (sal_uInt16)i );
                     break;
@@ -499,10 +493,10 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     // PaperSize
     if ( nFlags & JobSetFlags::PAPERSIZE )
     {
-        if( (CHOOSE_DEVMODE(dmFields) & (DM_PAPERWIDTH|DM_PAPERLENGTH)) == (DM_PAPERWIDTH|DM_PAPERLENGTH) )
+        if( (pDevModeW->dmFields & (DM_PAPERWIDTH|DM_PAPERLENGTH)) == (DM_PAPERWIDTH|DM_PAPERLENGTH) )
         {
-            pSetupData->SetPaperWidth( CHOOSE_DEVMODE(dmPaperWidth)*10 );
-            pSetupData->SetPaperHeight( CHOOSE_DEVMODE(dmPaperLength)*10 );
+            pSetupData->SetPaperWidth( pDevModeW->dmPaperWidth*10 );
+            pSetupData->SetPaperHeight( pDevModeW->dmPaperLength*10 );
         }
         else
         {
@@ -524,7 +518,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             {
                 for( DWORD i = 0; i < nPaperCount; ++i )
                 {
-                    if( pPapers[ i ] == CHOOSE_DEVMODE(dmPaperSize) )
+                    if( pPapers[ i ] == pDevModeW->dmPaperSize )
                     {
                         pSetupData->SetPaperWidth( pPaperSizes[ i ].x*10 );
                         pSetupData->SetPaperHeight( pPaperSizes[ i ].y*10 );
@@ -537,7 +531,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             if( pPaperSizes )
                 rtl_freeMemory( pPaperSizes );
         }
-        switch( CHOOSE_DEVMODE(dmPaperSize) )
+        switch( pDevModeW->dmPaperSize )
         {
             case DMPAPER_LETTER:
                 pSetupData->SetPaperFormat( PAPER_LETTER );
@@ -708,13 +702,13 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     if( nFlags & JobSetFlags::DUPLEXMODE )
     {
         DuplexMode eDuplex = DuplexMode::Unknown;
-        if( (CHOOSE_DEVMODE(dmFields) & DM_DUPLEX) )
+        if( (pDevModeW->dmFields & DM_DUPLEX) )
         {
-            if( CHOOSE_DEVMODE(dmDuplex) == DMDUP_SIMPLEX )
+            if( pDevModeW->dmDuplex == DMDUP_SIMPLEX )
                 eDuplex = DuplexMode::Off;
-            else if( CHOOSE_DEVMODE(dmDuplex) == DMDUP_VERTICAL )
+            else if( pDevModeW->dmDuplex == DMDUP_VERTICAL )
                 eDuplex = DuplexMode::LongEdge;
-            else if( CHOOSE_DEVMODE(dmDuplex) == DMDUP_HORIZONTAL )
+            else if( pDevModeW->dmDuplex == DMDUP_HORIZONTAL )
                 eDuplex = DuplexMode::ShortEdge;
         }
         pSetupData->SetDuplexMode( eDuplex );
@@ -726,16 +720,18 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, const ImplJobSet
     if ( !pSetupData || !pSetupData->GetDriverData() )
         return;
 
-    DECLARE_DEVMODE( pSetupData );
+    DEVMODEW* pDevModeW = SAL_DEVMODE_W(pSetupData);
+    if( pDevModeW == nullptr )
+        return;
 
     // Orientation
     if ( nFlags & JobSetFlags::ORIENTATION )
     {
-        CHOOSE_DEVMODE(dmFields) |= DM_ORIENTATION;
+        pDevModeW->dmFields |= DM_ORIENTATION;
         if ( pSetupData->GetOrientation() == Orientation::Portrait )
-            CHOOSE_DEVMODE(dmOrientation) = DMORIENT_PORTRAIT;
+            pDevModeW->dmOrientation = DMORIENT_PORTRAIT;
         else
-            CHOOSE_DEVMODE(dmOrientation) = DMORIENT_LANDSCAPE;
+            pDevModeW->dmOrientation = DMORIENT_LANDSCAPE;
     }
 
     // PaperBin
@@ -747,8 +743,8 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, const ImplJobSet
         {
             WORD* pBins = (WORD*)rtl_allocateZeroMemory(nCount*sizeof(WORD));
             ImplDeviceCaps( pPrinter, DC_BINS, (BYTE*)pBins, pSetupData );
-            CHOOSE_DEVMODE(dmFields) |= DM_DEFAULTSOURCE;
-            CHOOSE_DEVMODE(dmDefaultSource) = pBins[ pSetupData->GetPaperBin() ];
+            pDevModeW->dmFields |= DM_DEFAULTSOURCE;
+            pDevModeW->dmDefaultSource = pBins[ pSetupData->GetPaperBin() ];
             rtl_freeMemory( pBins );
         }
     }
@@ -756,35 +752,35 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, const ImplJobSet
     // PaperSize
     if ( nFlags & JobSetFlags::PAPERSIZE )
     {
-        CHOOSE_DEVMODE(dmFields)        |= DM_PAPERSIZE;
-        CHOOSE_DEVMODE(dmPaperWidth)     = 0;
-        CHOOSE_DEVMODE(dmPaperLength)    = 0;
+        pDevModeW->dmFields        |= DM_PAPERSIZE;
+        pDevModeW->dmPaperWidth     = 0;
+        pDevModeW->dmPaperLength    = 0;
 
         switch( pSetupData->GetPaperFormat() )
         {
             case PAPER_A2:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A2;
+                pDevModeW->dmPaperSize = DMPAPER_A2;
                 break;
             case PAPER_A3:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A3;
+                pDevModeW->dmPaperSize = DMPAPER_A3;
                 break;
             case PAPER_A4:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A4;
+                pDevModeW->dmPaperSize = DMPAPER_A4;
                 break;
             case PAPER_A5:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A5;
+                pDevModeW->dmPaperSize = DMPAPER_A5;
                 break;
             case PAPER_B4_ISO:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ISO_B4;
+                pDevModeW->dmPaperSize = DMPAPER_ISO_B4;
                 break;
             case PAPER_LETTER:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_LETTER;
+                pDevModeW->dmPaperSize = DMPAPER_LETTER;
                 break;
             case PAPER_LEGAL:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_LEGAL;
+                pDevModeW->dmPaperSize = DMPAPER_LEGAL;
                 break;
             case PAPER_TABLOID:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_TABLOID;
+                pDevModeW->dmPaperSize = DMPAPER_TABLOID;
                 break;
 #if 0
             //http://msdn.microsoft.com/en-us/library/ms776398(VS.85).aspx
@@ -795,126 +791,126 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, const ImplJobSet
             //DMPAPER_ENV_B4    33  Envelope B4 250 x 353 mm
             //DMPAPER_ENV_B5    34  Envelope B5 176 x 250 mm
             case PAPER_B6_ISO:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_B6;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_B6;
                 break;
 #endif
             case PAPER_ENV_C4:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_C4;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_C4;
                 break;
             case PAPER_ENV_C5:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_C5;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_C5;
                 break;
             case PAPER_ENV_C6:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_C6;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_C6;
                 break;
             case PAPER_ENV_C65:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_C65;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_C65;
                 break;
             case PAPER_ENV_DL:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_DL;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_DL;
                 break;
             case PAPER_C:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_CSHEET;
+                pDevModeW->dmPaperSize = DMPAPER_CSHEET;
                 break;
             case PAPER_D:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_DSHEET;
+                pDevModeW->dmPaperSize = DMPAPER_DSHEET;
                 break;
             case PAPER_E:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ESHEET;
+                pDevModeW->dmPaperSize = DMPAPER_ESHEET;
                 break;
             case PAPER_EXECUTIVE:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_EXECUTIVE;
+                pDevModeW->dmPaperSize = DMPAPER_EXECUTIVE;
                 break;
             case PAPER_FANFOLD_LEGAL_DE:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_FANFOLD_LGL_GERMAN;
+                pDevModeW->dmPaperSize = DMPAPER_FANFOLD_LGL_GERMAN;
                 break;
             case PAPER_ENV_MONARCH:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_MONARCH;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_MONARCH;
                 break;
             case PAPER_ENV_PERSONAL:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_PERSONAL;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_PERSONAL;
                 break;
             case PAPER_ENV_9:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_9;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_9;
                 break;
             case PAPER_ENV_10:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_10;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_10;
                 break;
             case PAPER_ENV_11:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_11;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_11;
                 break;
             case PAPER_ENV_12:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_12;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_12;
                 break;
             //See the comments on DMPAPER_B4 above
             case PAPER_B4_JIS:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_B4;
+                pDevModeW->dmPaperSize = DMPAPER_B4;
                 break;
             case PAPER_B5_JIS:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_B5;
+                pDevModeW->dmPaperSize = DMPAPER_B5;
                 break;
             case PAPER_B6_JIS:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_B6_JIS;
+                pDevModeW->dmPaperSize = DMPAPER_B6_JIS;
                 break;
             case PAPER_LEDGER:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_LEDGER;
+                pDevModeW->dmPaperSize = DMPAPER_LEDGER;
                 break;
             case PAPER_STATEMENT:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_STATEMENT;
+                pDevModeW->dmPaperSize = DMPAPER_STATEMENT;
                 break;
             case PAPER_10x14:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_10X14;
+                pDevModeW->dmPaperSize = DMPAPER_10X14;
                 break;
             case PAPER_ENV_14:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_14;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_14;
                 break;
             case PAPER_ENV_C3:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_C3;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_C3;
                 break;
             case PAPER_ENV_ITALY:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_ITALY;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_ITALY;
                 break;
             case PAPER_FANFOLD_US:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_FANFOLD_US;
+                pDevModeW->dmPaperSize = DMPAPER_FANFOLD_US;
                 break;
             case PAPER_FANFOLD_DE:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_FANFOLD_STD_GERMAN;
+                pDevModeW->dmPaperSize = DMPAPER_FANFOLD_STD_GERMAN;
                 break;
             case PAPER_POSTCARD_JP:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_JAPANESE_POSTCARD;
+                pDevModeW->dmPaperSize = DMPAPER_JAPANESE_POSTCARD;
                 break;
             case PAPER_9x11:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_9X11;
+                pDevModeW->dmPaperSize = DMPAPER_9X11;
                 break;
             case PAPER_10x11:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_10X11;
+                pDevModeW->dmPaperSize = DMPAPER_10X11;
                 break;
             case PAPER_15x11:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_15X11;
+                pDevModeW->dmPaperSize = DMPAPER_15X11;
                 break;
             case PAPER_ENV_INVITE:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_INVITE;
+                pDevModeW->dmPaperSize = DMPAPER_ENV_INVITE;
                 break;
             case PAPER_A_PLUS:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A_PLUS;
+                pDevModeW->dmPaperSize = DMPAPER_A_PLUS;
                 break;
             case PAPER_B_PLUS:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_B_PLUS;
+                pDevModeW->dmPaperSize = DMPAPER_B_PLUS;
                 break;
             case PAPER_LETTER_PLUS:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_LETTER_PLUS;
+                pDevModeW->dmPaperSize = DMPAPER_LETTER_PLUS;
                 break;
             case PAPER_A4_PLUS:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A4_PLUS;
+                pDevModeW->dmPaperSize = DMPAPER_A4_PLUS;
                 break;
             case PAPER_DOUBLEPOSTCARD_JP:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_DBL_JAPANESE_POSTCARD;
+                pDevModeW->dmPaperSize = DMPAPER_DBL_JAPANESE_POSTCARD;
                 break;
             case PAPER_A6:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A6;
+                pDevModeW->dmPaperSize = DMPAPER_A6;
                 break;
             case PAPER_12x11:
-                CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_12X11;
+                pDevModeW->dmPaperSize = DMPAPER_12X11;
                 break;
             default:
             {
@@ -964,15 +960,15 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, const ImplJobSet
                     }
 
                     if ( nPaper )
-                        CHOOSE_DEVMODE(dmPaperSize) = nPaper;
+                        pDevModeW->dmPaperSize = nPaper;
                 }
 
                 if ( !nPaper )
                 {
-                    CHOOSE_DEVMODE(dmFields)       |= DM_PAPERLENGTH | DM_PAPERWIDTH;
-                    CHOOSE_DEVMODE(dmPaperSize)     = DMPAPER_USER;
-                    CHOOSE_DEVMODE(dmPaperWidth)    = (short)(pSetupData->GetPaperWidth()/10);
-                    CHOOSE_DEVMODE(dmPaperLength)   = (short)(pSetupData->GetPaperHeight()/10);
+                    pDevModeW->dmFields       |= DM_PAPERLENGTH | DM_PAPERWIDTH;
+                    pDevModeW->dmPaperSize     = DMPAPER_USER;
+                    pDevModeW->dmPaperWidth    = (short)(pSetupData->GetPaperWidth()/10);
+                    pDevModeW->dmPaperLength   = (short)(pSetupData->GetPaperHeight()/10);
                 }
 
                 if ( pPapers )
@@ -989,16 +985,16 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, const ImplJobSet
         switch( pSetupData->GetDuplexMode() )
         {
         case DuplexMode::Off:
-            CHOOSE_DEVMODE(dmFields) |= DM_DUPLEX;
-            CHOOSE_DEVMODE(dmDuplex) = DMDUP_SIMPLEX;
+            pDevModeW->dmFields |= DM_DUPLEX;
+            pDevModeW->dmDuplex = DMDUP_SIMPLEX;
             break;
         case DuplexMode::ShortEdge:
-            CHOOSE_DEVMODE(dmFields) |= DM_DUPLEX;
-            CHOOSE_DEVMODE(dmDuplex) = DMDUP_HORIZONTAL;
+            pDevModeW->dmFields |= DM_DUPLEX;
+            pDevModeW->dmDuplex = DMDUP_HORIZONTAL;
             break;
         case DuplexMode::LongEdge:
-            CHOOSE_DEVMODE(dmFields) |= DM_DUPLEX;
-            CHOOSE_DEVMODE(dmDuplex) = DMDUP_VERTICAL;
+            pDevModeW->dmFields |= DM_DUPLEX;
+            pDevModeW->dmDuplex = DMDUP_VERTICAL;
             break;
         case DuplexMode::Unknown:
             break;
