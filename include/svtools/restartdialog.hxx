@@ -32,9 +32,10 @@ enum RestartReason {
     RESTART_REASON_BIBLIOGRAPHY_INSTALL,
         // "For the bibliography to work properly,
         // %PRODUCTNAME must be restarted."
-    RESTART_REASON_MAILMERGE_INSTALL
+    RESTART_REASON_MAILMERGE_INSTALL,
         // "For the mail merge to work properly,
         // %PRODUCTNAME must be restarted."
+    RESTART_REASON_SAFE_MODE
 };
 
 // Must be called with the solar mutex locked:
