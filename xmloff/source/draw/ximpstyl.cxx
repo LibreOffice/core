@@ -1046,12 +1046,6 @@ SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
     return pContext;
 }
 
-sal_uInt16 SdXMLStylesContext::GetFamily( const OUString& rFamily ) const
-{
-    // call base class
-    return SvXMLStylesContext::GetFamily(rFamily);
-}
-
 rtl::Reference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyMapper(
     sal_uInt16 nFamily) const
 {
