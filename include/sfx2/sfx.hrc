@@ -143,7 +143,7 @@
 #define STR_PASSWD_EMPTY                    (RID_SFX_START+123)
 #define STR_PASSWD_MIN_LEN                  (RID_SFX_START+124)
 #define STR_NONCHECKEDOUT_DOCUMENT          (RID_SFX_START+125)
-#define BT_CHECKOUT                         (RID_SFX_START+126)
+#define STR_CHECKOUT                        (RID_SFX_START+126)
 #define STR_READONLY_EDIT                   (RID_SFX_START+127)
 #define STR_READONLY_DOCUMENT               (RID_SFX_START+128)
 #define STR_PASSWD_MIN_LEN1                 (RID_SFX_START+129)

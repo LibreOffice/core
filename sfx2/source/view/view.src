@@ -121,10 +121,8 @@ String STR_CLASSIFIED_EXPORT_CONTROL
     Text [ en-US ] = "Export Control:" ;
 };
 
-PushButton BT_CHECKOUT
+String STR_CHECKOUT
 {
-    Pos = MAP_APPFONT( 0 , 0 );
-    Size = MAP_APPFONT( 30 , 0 );
     Text[ en-US ] = "Check Out";
 };
 

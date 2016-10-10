@@ -1467,9 +1467,11 @@ void SfxBaseController::ShowInfoBars( )
                     SfxInfoBarWindow* pInfoBar = pViewFrame->AppendInfoBar( "checkout", SfxResId( STR_NONCHECKEDOUT_DOCUMENT ) );
                     if (pInfoBar)
                     {
-                        VclPtrInstance<PushButton> pBtn( &pViewFrame->GetWindow(), SfxResId( BT_CHECKOUT ) );
-                        pBtn->SetClickHdl( LINK( this, SfxBaseController, CheckOutHandler ) );
-                        pInfoBar->addButton(pBtn);
+                        VclPtrInstance<PushButton> xBtn(&pViewFrame->GetWindow());
+                        xBtn->SetText(SfxResId(STR_CHECKOUT));
+                        xBtn->SetSizePixel(xBtn->GetOptimalSize());
+                        xBtn->SetClickHdl(LINK(this, SfxBaseController, CheckOutHandler));
+                        pInfoBar->addButton(xBtn);
                     }
                 }
             }
