@@ -687,8 +687,6 @@ void SvxNumRule::Store( SvStream &rStream )
     }
     //second save of nFeatureFlags for new versions
     rStream.WriteUInt16( static_cast<sal_uInt16>(nFeatureFlags) );
-    if(pConverter)
-        DestroyFontToSubsFontConverter(pConverter);
 }
 
 void SvxNumRule::dumpAsXml(struct _xmlTextWriter* pWriter) const

@@ -1413,12 +1413,6 @@ FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName,
     return const_cast<ConvertChar *>(pCvt);
 }
 
-void DestroyFontToSubsFontConverter(
-    SAL_UNUSED_PARAMETER FontToSubsFontConverter )
-{
-    //TODO: nothing to do for now, because we use static ImplCvtChars
-}
-
 sal_Unicode ConvertFontToSubsFontChar(
     FontToSubsFontConverter hConverter, sal_Unicode cChar )
 {

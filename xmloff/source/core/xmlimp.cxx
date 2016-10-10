@@ -330,10 +330,6 @@ public:
 
     ~SvXMLImport_Impl()
     {
-        if( hBatsFontConv )
-            DestroyFontToSubsFontConverter( hBatsFontConv );
-        if( hMathFontConv )
-            DestroyFontToSubsFontConverter( hMathFontConv );
     }
 
     sal_uInt16 getGeneratorVersion( const SvXMLImport& rImport )

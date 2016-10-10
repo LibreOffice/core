@@ -181,8 +181,6 @@ public:
     SAL_DLLPRIVATE void SetQuietMode_Impl( bool bOn );
     SAL_DLLPRIVATE bool IsReadOnlyShell_Impl( sal_uInt16 nShell ) const;
     SAL_DLLPRIVATE void RemoveShell_Impl( SfxShell& rShell );
-    SAL_DLLPRIVATE static void DoParentActivate_Impl();
-    SAL_DLLPRIVATE static void DoParentDeactivate_Impl();
     SAL_DLLPRIVATE void DoActivate_Impl( bool bMDI );
     SAL_DLLPRIVATE void DoDeactivate_Impl( bool bMDI, SfxViewFrame* pNew );
     SAL_DLLPRIVATE void InvalidateBindings_Impl(bool);

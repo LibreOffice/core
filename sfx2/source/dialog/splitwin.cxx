@@ -663,7 +663,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
 {
     SfxDockingWindow* pDockWin = pDock->pWin;
 
-    SplitWindowItemFlags nItemBits = SfxDockingWindow::GetWinBits_Impl();
+    SplitWindowItemFlags nItemBits = SplitWindowItemFlags::NONE;
 
     long nWinSize, nSetSize;
     if ( IsHorizontal() )

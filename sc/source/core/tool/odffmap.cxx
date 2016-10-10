@@ -22,7 +22,7 @@
 
 // ODFF, English, MapDupToInternal when writing ODFF, Programmatical, ODF_11
 // functions duplicated to internal when writing ODFF are listed in static const XclFunctionInfo saFuncTable_4[]
-ScCompiler::AddInMap ScCompiler::maAddInMap[] =
+const ScCompiler::AddInMap ScCompiler::g_aAddInMap[] =
 {
     { "ORG.OPENOFFICE.WEEKS", "WEEKS", "com.sun.star.sheet.addin.DateFunctions.getDiffWeeks", "COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFWEEKS" },
     { "ORG.OPENOFFICE.MONTHS", "MONTHS", "com.sun.star.sheet.addin.DateFunctions.getDiffMonths", "COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFMONTHS" },
@@ -137,12 +137,12 @@ ScCompiler::AddInMap ScCompiler::maAddInMap[] =
 
 const ScCompiler::AddInMap* ScCompiler::GetAddInMap()
 {
-    return maAddInMap;
+    return g_aAddInMap;
 }
 
 size_t ScCompiler::GetAddInMapCount()
 {
-    return SAL_N_ELEMENTS(maAddInMap);
+    return SAL_N_ELEMENTS(g_aAddInMap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

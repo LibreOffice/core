@@ -1930,8 +1930,6 @@ public:
     bool            GetHasMacroFunc() const      { return bHasMacroFunc; }
     void            SetHasMacroFunc(bool bSet)   { bHasMacroFunc = bSet; }
 
-    static bool     CheckMacroWarn();
-
     void            SetRangeOverflowType(sal_uInt32 nType)  { nRangeOverflowType = nType; }
     bool            HasRangeOverflow() const                { return nRangeOverflowType != 0; }
     SC_DLLPUBLIC sal_uInt32      GetRangeOverflowType() const            { return nRangeOverflowType; }

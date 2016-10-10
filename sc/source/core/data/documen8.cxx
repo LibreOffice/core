@@ -1162,14 +1162,6 @@ void ScDocument::KeyInput( const KeyEvent& )
         apTemporaryChartLock->StartOrContinueLocking();
 }
 
-bool ScDocument::CheckMacroWarn()
-{
-    //  The check for macro configuration, macro warning and disabling is now handled
-    //  in SfxObjectShell::AdjustMacroMode, called by SfxObjectShell::CallBasic.
-
-    return true;
-}
-
 SfxBindings* ScDocument::GetViewBindings()
 {
     //  used to invalidate slots after changes to this document

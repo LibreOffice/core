@@ -361,7 +361,7 @@ public:
 
     virtual condformat::ScFormatEntryType GetType() const override;
 
-    static ScIconSetMap* getIconSetMap();
+    static const ScIconSetMap g_IconSetMap[];
     static BitmapEx& getBitmap(sc::IconSetBitmapMap& rBitmapMap, ScIconSetType eType, sal_Int32 nIndex);
 
     typedef ScIconSetFormatData::Entries_t::iterator iterator;

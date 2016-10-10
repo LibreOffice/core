@@ -1564,7 +1564,7 @@ void ScIconSetFrmtEntry::Init()
 
 IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl, ListBox&, void )
 {
-    ScIconSetMap* pMap = ScIconSetFormat::getIconSetMap();
+    const ScIconSetMap* pMap = ScIconSetFormat::g_IconSetMap;
 
     sal_Int32 nPos = maLbIconSetType->GetSelectEntryPos();
     sal_uInt32 nElements = pMap[nPos].nElements;

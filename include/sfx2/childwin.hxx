@@ -204,7 +204,6 @@ public:
     void                SetVisible_Impl( bool bVis );
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
     SAL_DLLPRIVATE void Activate_Impl();
-    SAL_DLLPRIVATE static void Deactivate_Impl();
 
     SAL_DLLPRIVATE SfxChildWindowContext*
                         GetContext_Impl() const
