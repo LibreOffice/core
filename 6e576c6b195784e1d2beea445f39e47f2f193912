@@ -16,6 +16,23 @@
       "revId": "6e576c6b195784e1d2beea445f39e47f2f193912",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_25f8987c",
+        "filename": "sw/source/core/text/portxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-10-10T14:08:29Z",
+      "side": 1,
+      "message": "I think a more robust and less ad hoc way is to count the Unicode grapheme clusters between nPos and nEnd using break iterators.",
+      "revId": "6e576c6b195784e1d2beea445f39e47f2f193912",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
