@@ -23,21 +23,10 @@
 #include <navipi.hxx>
 
 SwHelpToolBox::SwHelpToolBox( SwNavigationPI* pParent, const ResId& rResId )
-    : ToolBox( pParent, rResId ),
-    DropTargetHelper( this )
+    : ToolBox( pParent, rResId )
 {
 }
 
 SwHelpToolBox::~SwHelpToolBox() {}
-
-sal_Int8 SwHelpToolBox::AcceptDrop( const AcceptDropEvent& rEvt )
-{
-    return static_cast<SwNavigationPI*>(GetParent())->AcceptDrop( rEvt );
-}
-
-sal_Int8 SwHelpToolBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
-{
-    return static_cast<SwNavigationPI*>(GetParent())->ExecuteDrop( rEvt );
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

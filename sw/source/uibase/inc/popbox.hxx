@@ -24,12 +24,8 @@
 
 class SwNavigationPI;
 
-class SwHelpToolBox: public ToolBox, public DropTargetHelper
+class SwHelpToolBox: public ToolBox
 {
-protected:
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
-
 public:
     SwHelpToolBox(SwNavigationPI* pParent, const ResId &);
     virtual ~SwHelpToolBox() override;
