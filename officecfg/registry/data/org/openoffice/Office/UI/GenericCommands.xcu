@@ -6388,6 +6388,11 @@
           <value xml:lang="en-US">Description...</value>
         </prop>
       </node>
+      <node oor:name=".uno:SafeMode" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Restart in Safe Mode...</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>

@@ -37,6 +37,8 @@
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/text/ModuleDispatcher.hpp>
+#include <com/sun/star/task/OfficeRestartManager.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
@@ -290,6 +292,28 @@ namespace
     {
         EndDialog(RET_OK);
         showDocument("LICENSE");
+    }
+
+    class SafeModeQueryDialog : public ModalDialog
+    {
+    private:
+        DECL_LINK(RestartHdl, Button*, void);
+    public:
+        explicit SafeModeQueryDialog();
+    };
+
+    SafeModeQueryDialog::SafeModeQueryDialog()
+        : ModalDialog(nullptr, "SafeModeQueryDialog", "sfx/ui/safemodequerydialog.ui")
+    {
+        get<PushButton>("restart")->SetClickHdl(LINK(this, SafeModeQueryDialog, RestartHdl));
+    }
+
+    IMPL_LINK_NOARG(SafeModeQueryDialog, RestartHdl, Button*, void)
+    {
+        EndDialog(RET_OK);
+        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        css::task::OfficeRestartManager::get(xContext)->requestRestart(
+            css::uno::Reference< css::task::XInteractionHandler >());
     }
 }
 
@@ -975,6 +999,12 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
         }
+        case SID_SAFE_MODE:
+        {
+            ScopedVclPtrInstance< SafeModeQueryDialog > aDialog;
+            aDialog->Execute();
+            break;
+        }
 
         default:
             break;
@@ -1146,6 +1176,10 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         SfxBoolItem aItem( SID_MENUBAR, bState );
                         rSet.Put( aItem );
                     }
+                    break;
+                }
+                case SID_SAFE_MODE:
+                {
                     break;
                 }
 

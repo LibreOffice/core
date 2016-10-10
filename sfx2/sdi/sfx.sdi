@@ -5784,3 +5784,20 @@ SfxStringItem Insert3DModel SID_INSERT_3DMODEL
     ToolBoxConfig = TRUE,
     GroupId = GID_APPLICATION;
 ]
+
+SfxVoidItem SafeMode SID_SAFE_MODE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]

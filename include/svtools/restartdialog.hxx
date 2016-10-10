@@ -53,9 +53,10 @@ enum RestartReason {
     RESTART_REASON_EXTENSION_INSTALL,
         // "For the extension to work properly,
         // %PRODUCTNAME must be restarted."
-    RESTART_REASON_OPENGL
+    RESTART_REASON_OPENGL,
         // "For the OpenGL changes to take effect,
         // %PRODUCTNAME must be restarted."
+    RESTART_REASON_SAFE_MODE
 };
 
 // Must be called with the solar mutex locked:
