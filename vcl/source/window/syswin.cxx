@@ -1091,10 +1091,8 @@ Size SystemWindow::GetOptimalSize() const
 
     sal_Int32 nBorderWidth = get_border_width();
 
-    aSize.Height() += mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
-        + 2*nBorderWidth;
-    aSize.Width() += mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
-        + 2*nBorderWidth;
+    aSize.Height() += 2 * nBorderWidth;
+    aSize.Width()  += 2 * nBorderWidth;
 
     return Window::CalcWindowSize(aSize);
 }
