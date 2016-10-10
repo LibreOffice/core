@@ -685,7 +685,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
     // Insert the numeric field in the toolbox.
     VclPtr<NumEditAction> pEdit = VclPtr<NumEditAction>::Create(
-                    m_aContentToolBox.get(), SW_RES(NF_PAGE ));
+                    m_aContentToolBox.get(), WB_BORDER|WB_TABSTOP|WB_LEFT|WB_REPEAT|WB_SPIN);
     pEdit->SetActionHdl(LINK(this, SwNavigationPI, EditAction));
     pEdit->SetGetFocusHdl(LINK(this, SwNavigationPI, EditGetFocus));
     pEdit->SetAccessibleName(pEdit->GetQuickHelpText());

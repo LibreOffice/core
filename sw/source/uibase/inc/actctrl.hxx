@@ -31,8 +31,10 @@ protected:
     void Action();
     virtual bool Notify( NotifyEvent& rNEvt ) override;
 public:
-    NumEditAction( vcl::Window* pParent, const ResId& rResId ) :
-                                NumericField(pParent, rResId) {}
+    NumEditAction(vcl::Window* pParent, WinBits nBits)
+        : NumericField(pParent, nBits)
+    {
+    }
 
     void        SetActionHdl( const Link<NumEditAction&,void>& rLink ) { aActionLink = rLink;}
 };

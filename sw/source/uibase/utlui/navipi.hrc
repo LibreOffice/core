@@ -20,7 +20,6 @@
 #define TB_CONTENT          50
 #define TL_CONTENT          51
 #define LB_DOCS             53
-#define NF_PAGE             54
 #define TL_GLOBAL           55
 #define TB_GLOBAL           56
 

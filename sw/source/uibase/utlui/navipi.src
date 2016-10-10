@@ -292,22 +292,6 @@ Window DLG_NAVIGATION_PI
         Size = MAP_APPFONT ( 150 , 50 ) ;
         DropDown = TRUE ;
     };
-    NumericField NF_PAGE
-    {
-        Border = TRUE ;
-        Pos = MAP_PIXEL ( 50 , 29 ) ;
-        Size = MAP_PIXEL ( 34 , 20 ) ;
-        TabStop = TRUE ;
-        Left = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 1 ;
-        First = 1 ;
-         // Outline as default
-        Maximum = 5 ;
-        Last = 5 ;
-        Value = 5 ;
-    };
 };
 
 ImageList IMG_NAVI_ENTRYBMP
