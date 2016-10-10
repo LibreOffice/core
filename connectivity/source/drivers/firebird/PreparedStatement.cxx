@@ -561,12 +561,53 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Refere
 
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException, std::exception)
 {
-    (void) parameterIndex;
-    (void) x;
-    (void) sqlType;
-    (void) scale;
+    // NUMERIC and DECIMAL types
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
+
+    // set scale
+    XSQLVAR* pVar = m_pInSqlda->sqlvar + (parameterIndex - 1);
+    pVar->sqlscale = scale;
+
+    // set value depending on type
+    switch(sqlType)
+    {
+        case SQL_SHORT:
+            sal_Int16 nShortValue;
+            if(x >>= nShortValue)
+            {
+                this->setShort(parameterIndex, nShortValue);
+                return;
+            }
+        case SQL_LONG:
+            sal_Int32 nIntValue;
+            if(x >>= nIntValue)
+            {
+                this->setInt(parameterIndex, nIntValue);
+                return;
+            }
+        case SQL_DOUBLE:
+            double nDoubleValue;
+            if(x >>= nDoubleValue)
+            {
+                this->setDouble(parameterIndex, nDoubleValue);
+                return;
+            }
+        case SQL_INT64:
+            sal_Int64 nLongValue;
+            if(x >>= nLongValue)
+            {
+                this->setLong(parameterIndex, nLongValue);
+                return;
+            }
+    }
+
+    // handle error
+    OUStringBuffer buf;
+    buf.append( "PreparedStatement::setObjectWithInfo: can't convert value of type " );
+    buf.append( x.getValueTypeName() );
+    buf.append( " to type DECIMAL or NUMERIC" );
+    throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any () );
 
 }
 

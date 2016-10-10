@@ -53,7 +53,7 @@ namespace connectivity
                                   const css::uno::Reference< css::uno::XInterface >& _rxContext)
                 throw (css::sdbc::SQLException);
 
-        sal_Int32 getColumnTypeFromFBType(short aType);
+        sal_Int32 getColumnTypeFromFBType(short aType, short aSubType = 0);
         ::rtl::OUString getColumnTypeNameFromFBType(short aType);
 
         /**

@@ -28,6 +28,7 @@
 #include <propertyids.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/math.hxx>
 #include <time.h>
 #include <TConnection.hxx>
 
@@ -516,6 +517,45 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
         return OUString(m_pSqlda->sqlvar[nColumnIndex-1].sqldata + 2,
                         aLength,
                         RTL_TEXTENCODING_UTF8);
+    }
+    else
+    {
+        return retrieveValue< ORowSetValue >(nColumnIndex, 0);
+    }
+}
+
+template <>
+double OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*nType*/)
+{
+    // &~1 to remove the "can contain NULL" indicator
+    int aSqlType = m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1;
+    // TODO FIXME assume that sqlsubtype is never negative for
+    // a normal (not numeric or decimal) double column.
+    if (m_pSqlda->sqlvar[nColumnIndex-1].sqlsubtype > 0) // numeric or decimal
+    {
+        switch(aSqlType)
+        {
+            case SQL_SHORT:
+                return rtl::math::pow10Exp((double)retrieveValue< sal_Int16 >(nColumnIndex, SQL_SHORT),
+                    m_pSqlda->sqlvar[nColumnIndex-1].sqlscale);
+            case SQL_LONG:
+                return rtl::math::pow10Exp((double)retrieveValue< sal_Int32 >(nColumnIndex, SQL_SHORT),
+                    m_pSqlda->sqlvar[nColumnIndex-1].sqlscale);
+            case SQL_DOUBLE:
+                return rtl::math::pow10Exp(retrieveValue< double >(nColumnIndex, SQL_SHORT),
+                    m_pSqlda->sqlvar[nColumnIndex-1].sqlscale);
+            case SQL_INT64:
+                return rtl::math::pow10Exp((double)retrieveValue< sal_Int64 >(nColumnIndex, SQL_SHORT),
+                    m_pSqlda->sqlvar[nColumnIndex-1].sqlscale);
+
+            default:
+                assert(false);
+                return 0.0; // never reached
+        }
+    }
+    else if (aSqlType ==  SQL_DOUBLE)
+    {
+        return *reinterpret_cast<double*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
     }
     else
     {

@@ -34,6 +34,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbc/Deferrability.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 
 using namespace connectivity::firebird;
 using namespace com::sun::star;
@@ -956,6 +957,20 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
                 sal_Int16(ColumnSearch::FULL)); // Searchable
             aRow[12] = new ORowSetValueDecorator(true); // Autoincrement
         }
+        // NUMERIC
+        aRow[1] = new ORowSetValueDecorator(OUString("NUMERIC"));
+        aRow[2] = new ORowSetValueDecorator(DataType::NUMERIC);
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
+        aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
+        aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
+        aResults.push_back(aRow);
+        // DECIMAL
+        aRow[1] = new ORowSetValueDecorator(OUString("DECIMAL"));
+        aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
+        aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
+        aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
+        aResults.push_back(aRow);
         // SQL_FLOAT
         aRow[1] = new ORowSetValueDecorator(OUString("FLOAT"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_FLOAT));
@@ -970,6 +985,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
         aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
         aResults.push_back(aRow);
+
 //         // SQL_D_FLOAT
 //         aRow[1] = new ORowSetValueDecorator(getColumnTypeNameFromFBType(SQL_D_FLOAT));
 //         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_D_FLOAT));

@@ -62,8 +62,9 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
     verifyValidColumn(column);
 
     short aType = m_pSqlda->sqlvar[column-1].sqltype;
+    short aSubType = m_pSqlda->sqlvar[column-1].sqlsubtype;
 
-    return getColumnTypeFromFBType(aType);
+    return getColumnTypeFromFBType(aType, aSubType);
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)

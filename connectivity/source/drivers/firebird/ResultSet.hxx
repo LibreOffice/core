@@ -225,6 +225,10 @@ namespace connectivity
             OResultSet::retrieveValue(
                 const sal_Int32 nColumnIndex,
                 const ISC_SHORT nType);
+        template <> double
+            OResultSet::retrieveValue(
+                const sal_Int32 nColumnIndex,
+                const ISC_SHORT nType);
         template <> ISC_QUAD*
              OResultSet::retrieveValue(
                  const sal_Int32 nColumnIndex,
