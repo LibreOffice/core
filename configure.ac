@@ -3660,6 +3660,7 @@ cygwin*|wsl*)
     esac
 
     SCPDEFS="$SCPDEFS -D_MSC_VER"
+    AC_SUBST(WIN_BUILD_ARCH)
     ;;
 esac
 
@@ -5192,6 +5193,7 @@ if test "$cross_compiling" = "yes"; then
         bin/officeotron.sh.in \
         hardened_runtime.xcent.in \
         instsetoo_native/util/openoffice.lst.in \
+        setup_native/source/packinfo/finals_instsetoo.txt.in \
         config_host/*.in \
         sysui/desktop/macosx/Info.plist.in) \
     | (cd CONF-FOR-BUILD && tar xf -)
@@ -14073,6 +14075,7 @@ AC_CONFIG_FILES([config_host.mk
                  bin/officeotron.sh
                  hardened_runtime.xcent
                  instsetoo_native/util/openoffice.lst
+                 setup_native/source/packinfo/finals_instsetoo.txt
                  sysui/desktop/macosx/Info.plist])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_box2d.h])
