@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_2502583f",
+        "filename": "sw/source/core/text/portxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-10-10T20:38:31Z",
+      "side": 1,
+      "message": "You are still counting visible characters not glyphs, I’d rename it lcl_CountCJKCharacters or something similar.",
+      "parentUuid": "7a77a97e_851decbf",
+      "revId": "6e576c6b195784e1d2beea445f39e47f2f193912",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_25f8987c",
         "filename": "sw/source/core/text/portxt.cxx",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "I don\u0027t know about break iterator. But I wonder if it is efficient because we only need to consider very limited case here. Writer already breaks text into different scripts so we only handle CJK script here.",
       "parentUuid": "7a77a97e_25f8987c",
+      "revId": "6e576c6b195784e1d2beea445f39e47f2f193912",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_45ff5434",
+        "filename": "sw/source/core/text/portxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-10-10T20:38:31Z",
+      "side": 1,
+      "message": "I’m worried that there might be more cases than the code here is accounting for, for example U+3099 COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK e.g. when used in “ゞゔで” (in decomposed form they are 6 code points, but still 3 grapheme clusters), or Hangul Jamo or whatever other case we might be overlooking.",
+      "parentUuid": "7a77a97e_a57828fa",
       "revId": "6e576c6b195784e1d2beea445f39e47f2f193912",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
