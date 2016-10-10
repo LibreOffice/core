@@ -115,23 +115,9 @@
 #define FN_NEXT_BOOKMARK        (FN_EDIT + 68)  /*  */
 #define FN_PREV_BOOKMARK        (FN_EDIT + 69)  /*  */
 
-/*Navigator ToolBoxes*/
-#define FN_ITEM_DOWN                 (FN_EDIT + 71)  /**/
-#define FN_ITEM_LEFT                 (FN_EDIT + 72)  /**/
-#define FN_ITEM_RIGHT                (FN_EDIT + 73)  /**/
-#define FN_ITEM_UP                   (FN_EDIT + 74)  /**/
-#define FN_DOWN                      (FN_EDIT + 75)  /**/
-
-#define FN_SELECT_FOOTER             (FN_EDIT + 77)  /**/
-#define FN_SELECT_HEADER             (FN_EDIT + 79)  /**/
 #define FN_PAGENUMBER                (FN_EDIT + 80)  /**/
-#define FN_SELECT_FOOTNOTE           (FN_EDIT + 82)  /**/
-#define FN_SELECT_SET_AUTO_BOOKMARK  (FN_EDIT + 83)  /**/
-#define FN_UP                        (FN_EDIT + 86)  /**/
 
 #define FN_SELECT_PARA               (FN_EDIT + 97) /* select paragraph*/
-
-#define FN_SELECT_CONTENT            (FN_EDIT + 99) /* Navigator - Content Type */
 
 #define FN_UPDATE_ALL_LINKS          (FN_EDIT2 + 24) /* update all links */
 
@@ -178,28 +164,13 @@
 
 #define FN_SET_PAGE             (FN_VIEW + 29)  /* Set page template to paragraph */
 
-// more Navigator
-#define FN_SHOW_CONTENT_BOX     (FN_VIEW + 33)  /**/
-#define FN_SHOW_ROOT            (FN_VIEW + 34)  /**/
-#define FN_DROP_REGION          (FN_VIEW + 35)  /**/
-#define FN_OUTLINE_LEVEL        (FN_VIEW + 36)  /**/
-
 #define FN_PRINT_LAYOUT         (FN_VIEW + 37)  /* print layout */
-
-#define FN_DROP_REGION_LINK     (FN_VIEW + 38)  /**/
-#define FN_DROP_REGION_COPY     (FN_VIEW + 39)  /**/
 
 #define FN_SCROLL_NAVIGATION    (FN_VIEW + 40)  /* Navigation Controller */
 
 #define FN_VIEW_HIDDEN_PARA     (FN_VIEW + 42)  /* View hidden paragraphs */
 #define FN_VIEW_SMOOTH_SCROLL   (FN_VIEW + 43)
 
-#define FN_GLOBAL_SWITCH        (FN_VIEW + 44)  /* Toggle between Global and Content */
-#define FN_GLOBAL_EDIT          (FN_VIEW + 45)  /* edit */
-#define FN_GLOBAL_UPDATE        (FN_VIEW + 46)  /* update */
-#define FN_GLOBAL_OPEN          (FN_VIEW + 47)  /* open */
-#define FN_GLOBAL_SAVE_CONTENT  (FN_VIEW + 48)  /* save content of link */
-#define FN_CREATE_NAVIGATION    (FN_VIEW + 49)  /* create Navigations-Controller */
 #define FN_PREVIEW_ZOOM          (FN_VIEW + 51)  /* create table controller for zoom */
 
 #define FN_SET_MODOPT_TBLNUMFMT  (FN_VIEW + 52) /* Number recognition in tables */

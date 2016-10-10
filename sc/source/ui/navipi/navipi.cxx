@@ -83,11 +83,7 @@ ColumnEdit::~ColumnEdit()
     disposeOnce();
 }
 
-VCL_BUILDER_DECL_FACTORY(ColumnEdit)
-{
-    (void)rMap;
-    rRet = VclPtr<ColumnEdit>::Create(pParent, WB_BORDER | WB_SPIN | WB_REPEAT | WB_RIGHT);
-}
+VCL_BUILDER_FACTORY_ARGS(ColumnEdit, WB_BORDER | WB_SPIN | WB_REPEAT | WB_RIGHT)
 
 bool ColumnEdit::Notify( NotifyEvent& rNEvt )
 {
@@ -264,11 +260,7 @@ RowEdit::~RowEdit()
     disposeOnce();
 }
 
-VCL_BUILDER_DECL_FACTORY(RowEdit)
-{
-    (void)rMap;
-    rRet = VclPtr<RowEdit>::Create(pParent, WB_BORDER | WB_SPIN | WB_REPEAT | WB_RIGHT);
-}
+VCL_BUILDER_FACTORY_ARGS(RowEdit, WB_BORDER | WB_SPIN | WB_REPEAT | WB_RIGHT)
 
 bool RowEdit::Notify( NotifyEvent& rNEvt )
 {
@@ -417,9 +409,9 @@ void ScNavigatorDlg::UpdateButtons()
     aTbxCmd->SetItemImage(nDragModeId, Image(ScResId(nImageId)));
 }
 
-ScNavigatorSettings::ScNavigatorSettings() :
-    mnRootSelected( ScContentId::ROOT ),
-    mnChildSelected( SC_CONTENT_NOCHILD )
+ScNavigatorSettings::ScNavigatorSettings()
+    : mnRootSelected(ScContentId::ROOT)
+    , mnChildSelected(SC_CONTENT_NOCHILD)
 {
 }
 

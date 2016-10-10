@@ -129,6 +129,7 @@ public:
     void     SetNavigatorDlgFlag(bool isInNavigateDlg){ bisInNavigatoeDlg=isInNavigateDlg;};
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual Size    GetOptimalSize() const override;
 
     void    InitWindowBits( bool bButtons );
 

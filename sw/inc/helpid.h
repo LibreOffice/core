@@ -43,30 +43,7 @@
 #define HID_NAVIGATOR_TREELIST                                  "SW_HID_NAVIGATOR_TREELIST"
 #define HID_NAVIGATOR_TOOLBOX                                   "SW_HID_NAVIGATOR_TOOLBOX"
 #define HID_NAVIGATOR_LISTBOX                                   "SW_HID_NAVIGATOR_LISTBOX"
-#define HID_NAVI_TBX2                                           "SW_HID_NAVI_TBX2"
-#define HID_NAVI_TBX3                                           "SW_HID_NAVI_TBX3"
-#define HID_NAVI_TBX4                                           "SW_HID_NAVI_TBX4"
-#define HID_NAVI_TBX5                                           "SW_HID_NAVI_TBX5"
-#define HID_NAVI_TBX6                                           "SW_HID_NAVI_TBX6"
-#define HID_NAVI_TBX7                                           "SW_HID_NAVI_TBX7"
-#define HID_NAVI_TBX8                                           "SW_HID_NAVI_TBX8"
-#define HID_NAVI_TBX9                                           "SW_HID_NAVI_TBX9"
-#define HID_NAVI_TBX10                                          "SW_HID_NAVI_TBX10"
-#define HID_NAVI_TBX11                                          "SW_HID_NAVI_TBX11"
-#define HID_NAVI_TBX12                                          "SW_HID_NAVI_TBX12"
-#define HID_NAVI_TBX13                                          "SW_HID_NAVI_TBX13"
-#define HID_NAVI_TBX14                                          "SW_HID_NAVI_TBX14"
-#define HID_NAVI_TBX15                                          "SW_HID_NAVI_TBX15"
 #define HID_NAVI_VS                                             "SW_HID_NAVI_VS"
-#define HID_NAVI_TBX16                                          "SW_HID_NAVI_TBX16"
-#define HID_NAVI_TBX17                                          "SW_HID_NAVI_TBX17"
-#define HID_NAVI_TBX18                                          "SW_HID_NAVI_TBX18"
-#define HID_NAVI_TBX19                                          "SW_HID_NAVI_TBX19"
-#define HID_NAVI_TBX20                                          "SW_HID_NAVI_TBX20"
-#define HID_NAVI_TBX21                                          "SW_HID_NAVI_TBX21"
-#define HID_NAVI_TBX22                                          "SW_HID_NAVI_TBX22"
-#define HID_NAVI_TBX23                                          "SW_HID_NAVI_TBX23"
-#define HID_NAVI_TBX24                                          "SW_HID_NAVI_TBX24"
 #define HID_NAVIGATOR_GLOBAL_TOOLBOX                            "SW_HID_NAVIGATOR_GLOBAL_TOOLBOX"
 #define HID_NAVIGATOR_GLOB_TREELIST                             "SW_HID_NAVIGATOR_GLOB_TREELIST"
 #define HID_GLBLTREE_UPDATE                                     "SW_HID_GLBLTREE_UPDATE"
@@ -81,8 +58,6 @@
 #define HID_GLBLTREE_UPD_IDX                                    "SW_HID_GLBLTREE_UPD_IDX"
 #define HID_GLBLTREE_UPD_LINK                                   "SW_HID_GLBLTREE_UPD_LINK"
 #define HID_GLBLTREEUPD_ALL                                     "SW_HID_GLBLTREEUPD_ALL"
-#define HID_NAVI_CONTENT                                        "SW_HID_NAVI_CONTENT"
-#define HID_NAVI_GLOBAL                                         "SW_HID_NAVI_GLOBAL"
 #define HID_SORT_ACTION                                         "SW_HID_SORT_ACTION"
 #define HID_SORT_AUTHOR                                         "SW_HID_SORT_AUTHOR"
 #define HID_SORT_DATE                                           "SW_HID_SORT_DATE"
@@ -172,12 +147,8 @@
 
 // More Help-IDs
 #define HID_EDIT_FORMULA                                        "SW_HID_EDIT_FORMULA"
-#define HID_NAVIGATION_PI                                       "SW_HID_NAVIGATION_PI"
-
 
 #define HID_CALC_TOOLBOX                                        "SW_HID_CALC_TOOLBOX"
-
-
 
 #define HID_AUTOFORMAT_REJECT                                   "SW_HID_AUTOFORMAT_REJECT"
 #define HID_AUTOFORMAT_ACCEPT                                   "SW_HID_AUTOFORMAT_ACCEPT"

@@ -24,276 +24,6 @@
 #include "helpid.h"
 #include "access.hrc"
 
-Window DLG_NAVIGATION_PI
-{
-    HelpID = HID_NAVIGATION_PI ;
-    OutputSize = TRUE ;
-    DialogControl = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_PIXEL ( 282 , 59 ) ;
-    Hide = TRUE ;
-    Text [ en-US ] = "Navigator" ;
-    ExtraData =
-    {
-        198;
-    };
-
-    ImageList IL_CONTENT
-    {
-        Prefix = "sc";
-        IdList =
-        {
-            FN_UP ;
-            FN_DOWN ;
-            FN_SELECT_HEADER ;
-            FN_SELECT_FOOTER ;
-            FN_SELECT_FOOTNOTE ;
-            FN_SHOW_CONTENT_BOX ;
-            FN_SHOW_ROOT ;
-            FN_ITEM_UP ;
-            FN_ITEM_DOWN ;
-            FN_ITEM_LEFT ;
-            FN_ITEM_RIGHT ;
-            FN_DROP_REGION ;
-            FN_OUTLINE_LEVEL ;
-            FN_SELECT_SET_AUTO_BOOKMARK ;
-            FN_DROP_REGION_LINK ;
-            FN_DROP_REGION_COPY ;
-            FN_GLOBAL_SWITCH ;
-            FN_GLOBAL_EDIT ;
-            FN_GLOBAL_UPDATE ;
-            FN_GLOBAL_OPEN ;
-            FN_GLOBAL_SAVE_CONTENT ;
-            FN_CREATE_NAVIGATION ;
-        };
-        IdCount = { 21 ; };
-    };
-    Toolbox TB_CONTENT
-    {
-        Pos = MAP_PIXEL ( 5 , 5 ) ;
-        Size = MAP_PIXEL ( 300 , 47 ) ;
-        LineCount = 2 ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = FN_GLOBAL_SWITCH ;
-                HelpID = HID_NAVI_TBX17 ;
-                Text [ en-US ] = "Toggle Master View" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_CREATE_NAVIGATION ;
-                HelpID = HID_NAVI_TBX24 ;
-                Text [ en-US ] = "Navigation" ;
-                DropDown = TRUE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_UP ;
-                HelpID = HID_NAVI_TBX2 ;
-                Text [ en-US ] = "Back" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_DOWN ;
-                HelpID = HID_NAVI_TBX3 ;
-                Text [ en-US ] = "Forward" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_DROP_REGION ;
-                HelpID = HID_NAVI_TBX4 ;
-                DropDown = TRUE ;
-                Text [ en-US ] = "Drag Mode" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_ITEM_UP ;
-                HelpID = HID_NAVI_TBX5 ;
-                Text [ en-US ] = "Promote Chapter" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_ITEM_DOWN ;
-                HelpID = HID_NAVI_TBX6 ;
-                Text [ en-US ] = "Demote Chapter" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_SHOW_CONTENT_BOX ;
-                HelpID = HID_NAVI_TBX7 ;
-                Text [ en-US ] = "List Box On/Off" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_SHOW_ROOT ;
-                HelpID = HID_NAVI_TBX8 ;
-                Text [ en-US ] = "Content Navigation View" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_SELECT_SET_AUTO_BOOKMARK ;
-                HelpID = HID_NAVI_TBX9 ;
-                Text [ en-US ] = "Set Reminder" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_SELECT_HEADER ;
-                HelpID = HID_NAVI_TBX10 ;
-                Text [ en-US ] = "Header" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_SELECT_FOOTER ;
-                HelpID = HID_NAVI_TBX11 ;
-                Text [ en-US ] = "Footer" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_SELECT_FOOTNOTE ;
-                HelpID = HID_NAVI_TBX12 ;
-                Text [ en-US ] = "Anchor<->Text" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_OUTLINE_LEVEL ;
-                HelpID = HID_NAVI_TBX13 ;
-                Text [ en-US ] = "Heading Levels Shown" ;
-                DropDown = TRUE ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_ITEM_LEFT ;
-                HelpID = HID_NAVI_TBX14 ;
-                Text [ en-US ] = "Promote Level" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_ITEM_RIGHT ;
-                HelpID = HID_NAVI_TBX15 ;
-                Text [ en-US ] = "Demote Level" ;
-            };
-        };
-    };
-    ToolBox TB_GLOBAL
-    {
-        Pos = MAP_PIXEL ( 5 , 5 ) ;
-        Size = MAP_PIXEL ( 300 , 47 ) ;
-        LineCount = 1 ;
-        Hide = TRUE ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = FN_GLOBAL_SWITCH ;
-                HelpID = HID_NAVI_TBX17 ;
-                Text [ en-US ] = "Toggle Master View" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_GLOBAL_EDIT ;
-                HelpID = HID_NAVI_TBX18 ;
-                Text [ en-US ] = "Edit" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_GLOBAL_UPDATE ;
-                HelpID = HID_NAVI_TBX19 ;
-                Text [ en-US ] = "Update" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_GLOBAL_OPEN ;
-                HelpID = HID_NAVI_TBX20 ;
-                Text [ en-US ] = "Insert" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_GLOBAL_SAVE_CONTENT ;
-                HelpID = HID_NAVI_TBX21 ;
-                Text [ en-US ] = "Save Contents as well" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_ITEM_UP ;
-                HelpID = HID_NAVI_TBX22 ;
-                Text [ en-US ] = "Move Up" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_ITEM_DOWN ;
-                HelpID = HID_NAVI_TBX23 ;
-                Text [ en-US ] = "Move Down" ;
-            };
-        };
-    };
-    /* TreeListBox */
-    Control TL_CONTENT
-    {
-        HelpID = HID_NAVI_CONTENT ;
-        Border = TRUE ;
-        Pos = MAP_PIXEL ( 5 , 62 ) ;
-        Size = MAP_PIXEL ( 274 , 112 ) ;
-        TabStop = TRUE ;
-        ClipChildren = TRUE ;
-        Hide = TRUE ;
-    };
-    Control TL_GLOBAL
-    {
-        HelpID = HID_NAVI_GLOBAL ;
-        Border = TRUE ;
-        Pos = MAP_PIXEL ( 5 , 34 ) ;
-        Size = MAP_PIXEL ( 274 , 112 ) ;
-        TabStop = TRUE ;
-        ClipChildren = TRUE ;
-        Hide = TRUE ;
-    };
-    ListBox LB_DOCS
-    {
-        Border = TRUE ;
-        Pos = MAP_PIXEL ( 5 , 115 ) ;
-        Size = MAP_APPFONT ( 150 , 50 ) ;
-        DropDown = TRUE ;
-    };
-};
-
 ImageList IMG_NAVI_ENTRYBMP
 {
     Prefix = "nc";
@@ -313,6 +43,30 @@ ImageList IMG_NAVI_ENTRYBMP
         20011 ;
     };
     IdCount = { 12 ; };
+};
+
+Image RID_IMG_DROP_REGION
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc20235.png" ;
+    };
+};
+
+Image RID_IMG_DROP_LINK
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc20238.png" ;
+    };
+};
+
+Image RID_IMG_DROP_COPY
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc20239.png" ;
+    };
 };
 
 String STR_ACCESS_TL_GLOBAL

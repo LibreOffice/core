@@ -27,6 +27,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/tbxctrl.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include <conttree.hxx>
 
 class SwWrtShell;
@@ -38,20 +39,26 @@ class SwView;
 class SwNavigationConfig;
 class SfxObjectShellLock;
 class SfxChildWindowContext;
-class SwNavigationPI;
 enum class RegionMode;
 class SpinField;
 
 class SwNavHelpToolBox : public ToolBox
 {
+    VclPtr<SwNavigationPI> m_xDialog;
     virtual void    MouseButtonDown(const MouseEvent &rEvt) override;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-    public:
-        SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId);
+    virtual void    dispose() override;
+public:
+    SwNavHelpToolBox(Window* pParent);
+    void SetDialog(SwNavigationPI* pDialog)
+    {
+        m_xDialog = pDialog;
+    }
+    ~SwNavHelpToolBox() override;
 };
 
-class SwNavigationPI : public vcl::Window,
-                        public SfxControllerItem, public SfxListener
+class SwNavigationPI : public PanelLayout,
+                       public SfxControllerItem, public SfxListener
 {
     friend class SwNavigationChild;
     friend class SwContentTree;
@@ -59,8 +66,10 @@ class SwNavigationPI : public vcl::Window,
 
     VclPtr<SwNavHelpToolBox>    m_aContentToolBox;
     VclPtr<ToolBox>             m_aGlobalToolBox;
-    ImageList                   m_aContentImageList;
+    VclPtr<NumEditAction>       m_xEdit;
+    VclPtr<VclContainer>        m_aContentBox;
     VclPtr<SwContentTree>       m_aContentTree;
+    VclPtr<VclContainer>        m_aGlobalBox;
     VclPtr<SwGlobalTree>        m_aGlobalTree;
     VclPtr<ListBox>             m_aDocListBox;
     Idle                m_aPageChgIdle;
@@ -81,13 +90,9 @@ class SwNavigationPI : public vcl::Window,
     SwNavigationConfig  *m_pConfig;
     SfxBindings         &m_rBindings;
 
-    long    m_nDocLBIniHeight;
-    long    m_nWishWidth;
     sal_uInt16  m_nAutoMarkIdx;
     RegionMode  m_nRegionMode; // 0 - URL, 1 - region with link 2 - region without link
-    short   m_nZoomIn;
-    short   m_nZoomOutInit;
-    short   m_nZoomOut;
+    Size        m_aExpandedSize;
 
     bool    m_bIsZoomedIn : 1;
     bool    m_bPageCtrlsVisible : 1;
@@ -114,7 +119,6 @@ class SwNavigationPI : public vcl::Window,
     DECL_LINK( ClosePopupWindow, SfxPopupWindow *, void );
     void UsePage();
 
-    void InitImageList();
     void SetPopupWindow( SfxPopupWindow* );
 
     using Window::Notify;
@@ -122,14 +126,11 @@ class SwNavigationPI : public vcl::Window,
 
 protected:
 
-    virtual         void Resize() override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-
     // release ObjectShellLock early enough for app end
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     NumEditAction&  GetPageEdit();
-    bool            ToggleTree();
+    void            ToggleTree();
     void            SetGlobalMode(bool bSet) {m_bGlobalMode = bSet;}
 
 public:

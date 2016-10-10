@@ -55,6 +55,7 @@ class SwContentTree
     : public SvTreeListBox
     , public SfxListener
 {
+    VclPtr<SwNavigationPI> m_xDialog;
     ImageList           m_aEntryImages;
     OUString            m_sSpace;
     AutoTimer           m_aUpdTimer;
@@ -156,7 +157,7 @@ protected:
     virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
 
 public:
-    SwContentTree(vcl::Window* pParent, const ResId& rResId);
+    SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog);
     virtual ~SwContentTree() override;
     virtual void dispose() override;
     OUString        GetEntryAltText( SvTreeListEntry* pEntry ) const override;
@@ -199,7 +200,7 @@ public:
     virtual bool    Collapse( SvTreeListEntry* pParent ) override;
 
     /** Execute commands of the Navigator */
-    void            ExecCommand(sal_uInt16 nCmd, bool bModifier);
+    void            ExecCommand(const OUString& rCmd, bool bModifier);
 
     void            ShowTree();
     /** folded together will not be glidled */
@@ -221,6 +222,7 @@ public:
     virtual void    KeyInput(const KeyEvent& rKEvt) override;
 
     virtual bool    Select( SvTreeListEntry* pEntry, bool bSelect=true ) override;
+    virtual Size    GetOptimalSize() const override;
 
     using Control::Notify; // FIXME why do we have 2 of these
     virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) override;
@@ -247,10 +249,11 @@ namespace sfx2 { class FileDialogHelper; }
 class SwGlobalTree : public SvTreeListBox
 {
 private:
-    AutoTimer           aUpdateTimer;
-    OUString            aContextStrings[GLOBAL_CONTEXT_COUNT];
+    VclPtr<SwNavigationPI>  xDialog;
+    AutoTimer               aUpdateTimer;
+    OUString                aContextStrings[GLOBAL_CONTEXT_COUNT];
 
-    ImageList           aEntryImages;
+    ImageList               aEntryImages;
 
     SwWrtShell*             pActiveShell;
     SvTreeListEntry*        pEmphasisEntry; // Drag'n Drop emphasis
@@ -330,9 +333,10 @@ protected:
     virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
 
 public:
-    SwGlobalTree(vcl::Window* pParent, const ResId& rResId);
+    SwGlobalTree(vcl::Window* pParent, SwNavigationPI* pDialog);
     virtual ~SwGlobalTree() override;
     virtual void        dispose() override;
+    virtual Size        GetOptimalSize() const override;
 
     void                TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox);
     void                InsertRegion( const SwGlblDocContent* pCont,
@@ -342,7 +346,7 @@ public:
     void                ShowTree();
     void                HideTree();
 
-    void                ExecCommand(sal_uInt16 nCmd);
+    void                ExecCommand(const OUString& rCmd);
 
     void                Display(bool bOnlyUpdateUserData = false);
 
