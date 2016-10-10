@@ -179,11 +179,9 @@ public:
     void testErrorOnExternalReferences();
 
     //misc tests unrelated to the import filters
-#if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(_WIN32)
     void testPasswordNew();
     void testPasswordOld();
     void testPasswordWrongSHA();
-#endif
 
     //test shape import
     void testControlImport();
@@ -320,11 +318,9 @@ public:
 
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
-#if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(_WIN32)
     CPPUNIT_TEST(testPasswordWrongSHA);
     CPPUNIT_TEST(testPasswordOld);
     CPPUNIT_TEST(testPasswordNew);
-#endif
 
     CPPUNIT_TEST(testMiscRowHeights);
     CPPUNIT_TEST(testOptimalHeightReset);
@@ -359,9 +355,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-#if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(_WIN32)
     void testPassword_Impl(const OUString& rFileNameBase);
-#endif
 
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
@@ -1554,7 +1548,6 @@ void ScFiltersTest::testRowIndex1BasedXLSX()
     xDocSh->DoClose();
 }
 
-#if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(_WIN32)
 void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
 {
     OUString aFileExtension(getFileFormats()[0].pName, strlen(getFileFormats()[0].pName), RTL_TEXTENCODING_UTF8 );
@@ -1608,7 +1601,6 @@ void ScFiltersTest::testPasswordWrongSHA()
     const OUString aFileNameBase("passwordWrongSHA.");
     testPassword_Impl(aFileNameBase);
 }
-#endif
 
 void ScFiltersTest::testControlImport()
 {
