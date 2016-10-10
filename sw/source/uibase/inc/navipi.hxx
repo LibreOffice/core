@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NAVIPI_HXX
 
 #include <vcl/lstbox.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/idle.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/transfer.hxx>
@@ -27,7 +28,6 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <conttree.hxx>
-#include <popbox.hxx>
 
 class SwWrtShell;
 class SwNavigationPI;
@@ -42,7 +42,7 @@ class SwNavigationPI;
 enum class RegionMode;
 class SpinField;
 
-class SwNavHelpToolBox : public SwHelpToolBox
+class SwNavHelpToolBox : public ToolBox
 {
     virtual void    MouseButtonDown(const MouseEvent &rEvt) override;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
@@ -58,7 +58,7 @@ class SwNavigationPI : public vcl::Window,
     friend class SwGlobalTree;
 
     VclPtr<SwNavHelpToolBox>    m_aContentToolBox;
-    VclPtr<SwHelpToolBox>       m_aGlobalToolBox;
+    VclPtr<ToolBox>             m_aGlobalToolBox;
     ImageList                   m_aContentImageList;
     VclPtr<SwContentTree>       m_aContentTree;
     VclPtr<SwGlobalTree>        m_aGlobalTree;

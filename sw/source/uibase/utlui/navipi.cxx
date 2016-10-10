@@ -421,8 +421,8 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
     }
 }
 
-SwNavHelpToolBox::SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId) :
-            SwHelpToolBox(pParent, rResId)
+SwNavHelpToolBox::SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId)
+    : ToolBox(pParent, rResId)
 {}
 
 void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
@@ -433,7 +433,7 @@ void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
         static_cast<SwNavigationPI*>(GetParent())->CreateNavigationTool(GetItemRect(FN_CREATE_NAVIGATION), false, this);
     }
     else
-        SwHelpToolBox::MouseButtonDown(rEvt);
+        ToolBox::MouseButtonDown(rEvt);
 }
 
 void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, bool bSetFocus, vcl::Window *pParent)
@@ -461,7 +461,7 @@ void  SwNavHelpToolBox::RequestHelp( const HelpEvent& rHEvt )
     {
         SetItemText(nItemId, SwScrollNaviPopup::GetQuickHelpText((FN_DOWN == nItemId)));
     }
-    SwHelpToolBox::RequestHelp(rHEvt);
+    ToolBox::RequestHelp(rHEvt);
 }
 
 // Action-Handler Edit:
@@ -645,7 +645,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     SfxControllerItem( SID_DOCFULLNAME, *_pBindings ),
 
     m_aContentToolBox(VclPtr<SwNavHelpToolBox>::Create(this, SW_RES(TB_CONTENT))),
-    m_aGlobalToolBox(VclPtr<SwHelpToolBox>::Create(this, SW_RES(TB_GLOBAL))),
+    m_aGlobalToolBox(VclPtr<ToolBox>::Create(this, SW_RES(TB_GLOBAL))),
     m_aContentImageList(SW_RES(IL_CONTENT)),
     m_aContentTree(VclPtr<SwContentTree>::Create(this, SW_RES(TL_CONTENT))),
     m_aGlobalTree(VclPtr<SwGlobalTree>::Create(this, SW_RES(TL_GLOBAL))),

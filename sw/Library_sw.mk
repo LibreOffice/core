@@ -572,7 +572,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/app/swmodule \
     sw/source/uibase/app/swwait \
     sw/source/uibase/cctrl/actctrl \
-    sw/source/uibase/cctrl/popbox \
     sw/source/uibase/cctrl/swlbox \
     sw/source/uibase/chrdlg/ccoll \
     sw/source/uibase/config/StoredChapterNumbering \
