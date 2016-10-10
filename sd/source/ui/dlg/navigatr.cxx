@@ -304,16 +304,14 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
                  nullptr
             };
 
-            for( sal_uInt16 nID = NAVIGATOR_DRAGTYPE_URL;
-                 nID < NAVIGATOR_DRAGTYPE_COUNT;
-                 nID++ )
+            for (sal_uInt16 nID = NAVIGATOR_DRAGTYPE_URL; nID < NAVIGATOR_DRAGTYPE_COUNT; ++nID)
             {
                 sal_uInt16 nRId = GetDragTypeSdResId( (NavigatorDragType)nID, false );
                 if( nRId > 0 )
                 {
                     DBG_ASSERT(aHIDs[nID-NAVIGATOR_DRAGTYPE_URL],"HelpId not added!");
-                    pMenu->InsertItem( nID, SD_RESSTR( nRId ) );
-                    pMenu->SetHelpId( nID, aHIDs[nID - NAVIGATOR_DRAGTYPE_URL] );
+                    pMenu->InsertItem(nID, SD_RESSTR(nRId), MenuItemBits::RADIOCHECK);
+                    pMenu->SetHelpId(nID, aHIDs[nID - NAVIGATOR_DRAGTYPE_URL]);
                 }
 
             }
@@ -340,10 +338,12 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
 
             pMenu->InsertItem(
                 nShowNamedShapesFilter,
-                SD_RESSTR(STR_NAVIGATOR_SHOW_NAMED_SHAPES));
+                SD_RESSTR(STR_NAVIGATOR_SHOW_NAMED_SHAPES),
+                MenuItemBits::RADIOCHECK);
             pMenu->InsertItem(
                 nShowAllShapesFilter,
-                SD_RESSTR(STR_NAVIGATOR_SHOW_ALL_SHAPES));
+                SD_RESSTR(STR_NAVIGATOR_SHOW_ALL_SHAPES),
+                MenuItemBits::RADIOCHECK);
 
             if (maTlbObjects->GetShowAllShapes())
                 pMenu->CheckItem(nShowAllShapesFilter);
