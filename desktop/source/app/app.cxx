@@ -1016,6 +1016,7 @@ namespace {
 
 bool crashReportInfoExists()
 {
+    return true;
 #if HAVE_FEATURE_BREAKPAD
     std::string path = CrashReporter::getIniFileName();
     std::ifstream aFile(path);

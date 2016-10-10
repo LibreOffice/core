@@ -15,7 +15,11 @@
 #include <rtl/bootstrap.hxx>
 #include <desktop/crashreport.hxx>
 #include <desktop/minidump.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
+
+#include <com/sun/star/task/OfficeRestartManager.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 
 CrashReportDialog::CrashReportDialog(vcl::Window* pParent):
     Dialog(pParent, "CrashReportDialog",
@@ -27,6 +31,7 @@ CrashReportDialog::CrashReportDialog(vcl::Window* pParent):
     get(mpEditPreUpload, "ed_pre");
     get(mpEditPostUpload, "ed_post");
     get(mpFtBugReport, "ed_bugreport");
+    get(mpCBSafeMode, "check_safemode");
 
     maSuccessMsg = mpEditPostUpload->GetText();
 
@@ -49,6 +54,7 @@ void CrashReportDialog::dispose()
     mpEditPreUpload.clear();
     mpEditPostUpload.clear();
     mpFtBugReport.clear();
+    mpCBSafeMode.clear();
 
     Dialog::dispose();
 }
@@ -93,6 +99,15 @@ IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn, void)
     else if (pBtn == mpBtnClose.get())
     {
         Close();
+    }
+
+    // Check whether to go to safe mode
+    if (mpCBSafeMode->IsChecked())
+    {
+        //TODO: Actually set the safe mode, currently it's only restarting
+        css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        css::task::OfficeRestartManager::get(xContext)->requestRestart(
+            css::uno::Reference< css::task::XInteractionHandler >());
     }
 }
 

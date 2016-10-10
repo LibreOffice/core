@@ -34,6 +34,7 @@ private:
     VclPtr<FixedText> mpEditPreUpload;
     VclPtr<VclMultiLineEdit> mpEditPostUpload;
     VclPtr<VclMultiLineEdit> mpFtBugReport;
+    VclPtr<CheckBox> mpCBSafeMode;
 
     OUString maSuccessMsg;
 
