@@ -381,9 +381,9 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
                 HID_NAVI_DRAG_COPY,
             };
             ScopedVclPtrInstance<PopupMenu> pMenu;
-            for (sal_uInt16 i = 0; i <= static_cast<sal_uInt16>(RegionMode::EMBEDDED); i++)
+            for (sal_uInt16 i = 0; i <= static_cast<sal_uInt16>(RegionMode::EMBEDDED); ++i)
             {
-                pMenu->InsertItem( i + 1, m_aContextArr[i] );
+                pMenu->InsertItem(i + 1, m_aContextArr[i], MenuItemBits::RADIOCHECK);
                 pMenu->SetHelpId(i + 1, aHIDs[i]);
             }
             pMenu->CheckItem( static_cast<int>(m_nRegionMode) + 1 );
@@ -401,10 +401,10 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
         case FN_OUTLINE_LEVEL:
         {
             ScopedVclPtrInstance<PopupMenu> pMenu;
-            for (sal_uInt16 i = 101; i <= 100 + MAXLEVEL; i++)
+            for (sal_uInt16 i = 101; i <= 100 + MAXLEVEL; ++i)
             {
-                pMenu->InsertItem( i, OUString::number(i - 100) );
-                pMenu->SetHelpId( i, HID_NAVI_OUTLINES );
+                pMenu->InsertItem(i, OUString::number(i - 100), MenuItemBits::RADIOCHECK);
+                pMenu->SetHelpId(i, HID_NAVI_OUTLINES);
             }
             pMenu->CheckItem( m_aContentTree->GetOutlineLevel() + 100 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));
