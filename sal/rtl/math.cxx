@@ -1090,9 +1090,7 @@ bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C()
 {
     static const double e48 = 1.0 / (16777216.0 * 16777216.0);
     static const double e44 = e48 * 16.0;
-    // XXX loplugin:fpcomparison complains about floating-point comparison for
-    // a==b, though we actually want this here.
-    if (!(a<b) && !(a>b))
+    if (a == b)
         return true;
     if (a == 0.0 || b == 0.0)
         return false;

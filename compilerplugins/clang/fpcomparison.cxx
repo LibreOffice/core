@@ -88,6 +88,7 @@ bool FpComparison::ignore(FunctionDecl* function)
         || dc.Function("doubleToString").AnonymousNamespace().GlobalNamespace()
         || dc.Function("stringToDouble").AnonymousNamespace().GlobalNamespace()
         || dc.Function("rtl_math_round").GlobalNamespace()
+        || dc.Function("rtl_math_approxEqual").GlobalNamespace()
         || dc.Function("rtl_math_approxValue").GlobalNamespace()
         || dc.Function("rtl_math_asinh").GlobalNamespace()
         || dc.Function("rtl_math_acosh").GlobalNamespace()
@@ -103,6 +104,8 @@ bool FpComparison::ignore(FunctionDecl* function)
         || (dc.Function("initialize").Class("Impl").AnonymousNamespace()
             .GlobalNamespace())
             // testtools/source/bridgetest/constructors.cxx
+        || dc.Function("lok_approxEqual").AnonymousNamespace().GlobalNamespace()
+            // libreofficekit/source/gtk/lokdocview.cxx
         // These might need fixing:
         || (dc.Function("getSmallestDistancePointToPolygon").Namespace("tools")
             .Namespace("basegfx").GlobalNamespace())
