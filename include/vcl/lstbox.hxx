@@ -138,8 +138,6 @@ public:
 
     virtual void        setPosSizePixel( long nX, long nY,
                                          long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
-    void                SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override
-                        { Control::SetPosSizePixel( rNewPos, rNewSize ); }
 
     Rectangle           GetDropDownPosSizePixel() const;
 

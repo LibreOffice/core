@@ -141,14 +141,4 @@ void MoreButton::Click()
     PushButton::Click();
 }
 
-void MoreButton::SetText( const OUString& rText )
-{
-    PushButton::SetText( rText );
-}
-
-OUString MoreButton::GetText() const
-{
-    return PushButton::GetText();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

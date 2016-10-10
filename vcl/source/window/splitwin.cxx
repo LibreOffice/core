@@ -2530,11 +2530,6 @@ void SplitWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     }
 }
 
-void SplitWindow::Move()
-{
-    DockingWindow::Move();
-}
-
 void SplitWindow::Resize()
 {
     Size aSize = GetOutputSizePixel();

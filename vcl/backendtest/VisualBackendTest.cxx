@@ -134,11 +134,6 @@ public:
 
     DECL_LINK(updateHdl, Timer*, void);
 
-    virtual void dispose() override
-    {
-        WorkWindow::dispose();
-    }
-
     virtual void KeyInput(const KeyEvent& rKEvt) override
     {
         sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();

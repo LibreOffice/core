@@ -4158,11 +4158,6 @@ void ToolBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rPaintR
     ImplShowFocus();
 }
 
-void ToolBox::Move()
-{
-    DockingWindow::Move();
-}
-
 void ToolBox::Resize()
 {
     Size aSize = GetOutputSizePixel();
@@ -4984,11 +4979,6 @@ void ToolBox::EnableCustomize( bool bEnable )
         else
             pMgr->erase( this );
     }
-}
-
-void ToolBox::GetFocus()
-{
-    DockingWindow::GetFocus();
 }
 
 void ToolBox::LoseFocus()

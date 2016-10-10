@@ -85,13 +85,7 @@ class MyWin : public WorkWindow
 public:
                  MyWin( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual void MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void KeyUp( const KeyEvent& rKEvt ) override;
     virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
-    virtual void Resize() override;
 };
 
 void Main()
@@ -126,31 +120,6 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
         }
     }
     Bitmap::ReleaseAccess( pAcc );
-}
-
-void MyWin::MouseMove( const MouseEvent& rMEvt )
-{
-    WorkWindow::MouseMove( rMEvt );
-}
-
-void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    WorkWindow::MouseButtonDown( rMEvt );
-}
-
-void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    WorkWindow::MouseButtonUp( rMEvt );
-}
-
-void MyWin::KeyInput( const KeyEvent& rKEvt )
-{
-    WorkWindow::KeyInput( rKEvt );
-}
-
-void MyWin::KeyUp( const KeyEvent& rKEvt )
-{
-    WorkWindow::KeyUp( rKEvt );
 }
 
 static Point project( const Point& rPoint )
@@ -350,11 +319,6 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
         aP2 = aPoint;
     }
     rRenderContext.Pop();
-}
-
-void MyWin::Resize()
-{
-    WorkWindow::Resize();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
