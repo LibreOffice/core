@@ -1107,7 +1107,7 @@ void SystemWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
     aSize.Height() -= 2 * nBorderWidth;
 
     Point aPos(nBorderWidth, nBorderWidth);
-    VclContainer::setLayoutAllocation(rBox, aPos, aSize);
+    VclContainer::setLayoutAllocation(rBox, aPos, CalcOutputSize(aSize));
 }
 
 IMPL_LINK_NOARG( SystemWindow, ImplHandleLayoutTimerHdl, Idle*, void )

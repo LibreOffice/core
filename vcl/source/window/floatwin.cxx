@@ -827,15 +827,4 @@ void FloatingWindow::AddPopupModeWindow( vcl::Window* pWindow )
     mpFirstPopupModeWin = pWindow;
 }
 
-void FloatingWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
-{
-    sal_Int32 nBorderWidth = get_border_width();
-
-    aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder + 2 * nBorderWidth;
-    aSize.Height() -= nBorderWidth + mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder + 2 * nBorderWidth;
-
-    Point aPos(nBorderWidth, nBorderWidth);
-    VclContainer::setLayoutAllocation(rBox, aPos, aSize);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
