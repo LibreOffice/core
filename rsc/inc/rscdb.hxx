@@ -191,11 +191,6 @@ class RscTypCont
     RscTop *    InitClassMenuItem( RscTop * pSuper );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );
 
-    RscTop *    InitClassNumericFormatter( RscTop * pSuper );
-
-    RscTop *    InitClassSpinField( RscTop * pSuper );
-    RscTop *    InitClassNumericField( RscTop * pSuper );
-
     RscTop *    InitClassDockingWindow( RscTop * pSuper,
                                         RscEnum * pMapUnit );
     RscTop *    InitClassToolBoxItem(RscTop * pSuper);

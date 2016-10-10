@@ -51,8 +51,6 @@
 
 #define RSC_IMAGEBUTTON         (RSC_NOTYPE + 0x4a)
 
-#define RSC_SPINBUTTON          (RSC_NOTYPE + 0x4d)
-
 #define RSC_EDIT                (RSC_NOTYPE + 0x52)
 
 #define RSC_LISTBOX             (RSC_NOTYPE + 0x55)
@@ -60,11 +58,6 @@
 #define RSC_TEXT                (RSC_NOTYPE + 0x57)
 
 #define RSC_FIXEDIMAGE          (RSC_NOTYPE + 0x5a)
-
-#define RSC_SPINFIELD           (RSC_NOTYPE + 0x61)
-
-#define RSC_NUMERICFIELD        (RSC_NOTYPE + 0x63)
-
 
 #define RSC_TOOLBOXITEM         (RSC_NOTYPE + 0x70)
 #define RSC_TOOLBOX             (RSC_NOTYPE + 0x71)

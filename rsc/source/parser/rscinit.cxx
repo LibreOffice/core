@@ -72,7 +72,6 @@ void RscTypCont::Init()
     RscTop   *  pClassFixedImage;
     RscTop   *  pClassKeyCode;
     RscTop   *  pLangClassKeyCode;
-    RscTop   *  pClassSpinField;
 
     Atom        nId;
 
@@ -344,39 +343,6 @@ void RscTypCont::Init()
     nId = aNmTb.Put( "SubMenu", VARNAME );
     pClassMenuItem->SetVariable( nId, pClassMenu, nullptr, VAR_SVDYNAMIC,
                                  (sal_uInt32)RscMenuItem::Menu );
-}
-{
-    // initialize class
-    nId = pHS->getID( "SpinButton" );
-    RscTop*  pClassSpinButton = new RscClass( nId, RSC_SPINBUTTON, pClassControl );
-    pClassSpinButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassSpinButton );
-    {
-        RscClient * pClient;
-
-        // add client variables
-        // Sysmodal
-        aBaseLst.push_back(
-            pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, &aWinBits, nRepeatId )
-        );
-        nId = aNmTb.Put( "Repeat", VARNAME );
-        pClassSpinButton->SetVariable( nId, pClient, nullptr,
-                                      VAR_NODATAINST, 0, nWinBitVarId );
-    }
-    pRoot->Insert( pClassSpinButton );
-}
-{
-    pClassSpinField = InitClassSpinField( pClassEdit );
-    pRoot->Insert( pClassSpinField );
-}
-{
-    { // hand-made multiple inheritance
-        RscTop* pClassTmp = InitClassNumericFormatter( pClassSpinField );
-        aBaseLst.push_back( pClassTmp );
-
-        RscTop* pClassNumericField = InitClassNumericField( pClassTmp );
-        pRoot->Insert( pClassNumericField );
-    }
 }
 {
     RscTop* pClassDockingWindow = InitClassDockingWindow( pClassWindow, pMapUnit );

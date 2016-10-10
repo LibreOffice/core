@@ -524,34 +524,6 @@ NumericFormatter::NumericFormatter()
     ImplInit();
 }
 
-void NumericFormatter::ImplLoadRes( const ResId& rResId )
-{
-    ResMgr*     pMgr = rResId.GetResMgr();
-
-    if( pMgr )
-    {
-        RscNumFormatterFlags nMask = (RscNumFormatterFlags)pMgr->ReadLong();
-
-        if ( RscNumFormatterFlags::Min & nMask )
-            mnMin = pMgr->ReadLong();
-
-        if ( RscNumFormatterFlags::Max & nMask )
-            mnMax = pMgr->ReadLong();
-
-        if ( RscNumFormatterFlags::StrictFormat & nMask )
-            SetStrictFormat( pMgr->ReadShort() != 0 );
-
-        if ( RscNumFormatterFlags::DecimalDigits & nMask )
-            SetDecimalDigits( pMgr->ReadShort() );
-
-        if ( RscNumFormatterFlags::Value & nMask )
-        {
-            mnFieldValue = ClipAgainstMinMax(pMgr->ReadLong());
-            mnLastValue = mnFieldValue;
-        }
-    }
-}
-
 NumericFormatter::~NumericFormatter()
 {
 }
@@ -781,20 +753,6 @@ NumericField::NumericField( vcl::Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-NumericField::NumericField( vcl::Window* pParent, const ResId& rResId ) :
-    SpinField( WINDOW_NUMERICFIELD )
-{
-    rResId.SetRT( RSC_NUMERICFIELD );
-    WinBits nStyle = ImplInitRes( rResId ) ;
-    SpinField::ImplInit( pParent, nStyle );
-    SetField( this );
-    ImplLoadRes( rResId );
-    Reformat();
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
-}
-
 void NumericField::dispose()
 {
     NumericFormatter::SetField( nullptr );
@@ -812,23 +770,6 @@ bool NumericField::set_property(const OString &rKey, const OString &rValue)
     else
         return SpinField::set_property(rKey, rValue);
     return true;
-}
-
-void NumericField::ImplLoadRes( const ResId& rResId )
-{
-    SpinField::ImplLoadRes( rResId );
-    NumericFormatter::ImplLoadRes( ResId( static_cast<RSHEADER_TYPE *>(GetClassRes()), *rResId.GetResMgr() ) );
-
-    sal_uLong      nMask = ReadLongRes();
-
-    if ( NUMERICFIELD_FIRST & nMask )
-        mnFirst = ReadLongRes();
-
-    if ( NUMERICFIELD_LAST & nMask )
-        mnLast = ReadLongRes();
-
-    if ( NUMERICFIELD_SPINSIZE & nMask )
-        mnSpinSize = ReadLongRes();
 }
 
 bool NumericField::PreNotify( NotifyEvent& rNEvt )
