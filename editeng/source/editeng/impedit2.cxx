@@ -3458,15 +3458,38 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
 {
     EditSelection aNewSelection( rPaM );
 
-    if ( rxDataObj.is() )
-    {
-        datatransfer::DataFlavor aFlavor;
-        bool bDone = false;
+    if ( !rxDataObj.is() )
+        return aNewSelection;
 
-        if ( bUseSpecial )
+    datatransfer::DataFlavor aFlavor;
+    bool bDone = false;
+
+    if ( bUseSpecial )
+    {
+        // BIN
+        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EDITENGINE, aFlavor );
+        if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
         {
-            // BIN
-            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EDITENGINE, aFlavor );
+            try
+            {
+                uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                uno::Sequence< sal_Int8 > aSeq;
+                aData >>= aSeq;
+                {
+                    SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
+                    aNewSelection = Read( aBinStream, rBaseURL, EE_FORMAT_BIN, rPaM );
+                }
+                bDone = true;
+            }
+            catch( const css::uno::Exception& )
+            {
+            }
+        }
+
+        if ( !bDone )
+        {
+            // RTF
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RTF, aFlavor );
             if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
             {
                 try
@@ -3475,8 +3498,8 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                     uno::Sequence< sal_Int8 > aSeq;
                     aData >>= aSeq;
                     {
-                        SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
-                        aNewSelection = Read( aBinStream, rBaseURL, EE_FORMAT_BIN, rPaM );
+                        SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
+                        aNewSelection = Read( aRTFStream, rBaseURL, EE_FORMAT_RTF, rPaM );
                     }
                     bDone = true;
                 }
@@ -3484,51 +3507,28 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                 {
                 }
             }
-
-            if ( !bDone )
-            {
-                // RTF
-                SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RTF, aFlavor );
-                if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
-                {
-                    try
-                    {
-                        uno::Any aData = rxDataObj->getTransferData( aFlavor );
-                        uno::Sequence< sal_Int8 > aSeq;
-                        aData >>= aSeq;
-                        {
-                            SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
-                            aNewSelection = Read( aRTFStream, rBaseURL, EE_FORMAT_RTF, rPaM );
-                        }
-                        bDone = true;
-                    }
-                    catch( const css::uno::Exception& )
-                    {
-                    }
-                }
-            }
-            if ( !bDone )
-            {
-                // XML ?
-                // Currently, there is nothing like "The" XML format, StarOffice doesn't offer plain XML in Clipboard...
-            }
         }
         if ( !bDone )
         {
-            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
-            if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
+            // XML ?
+            // Currently, there is nothing like "The" XML format, StarOffice doesn't offer plain XML in Clipboard...
+        }
+    }
+    if ( !bDone )
+    {
+        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
+        if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
+        {
+            try
             {
-                try
-                {
-                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
-                    OUString aText;
-                    aData >>= aText;
-                    aNewSelection = ImpInsertText( rPaM, aText );
-                }
-                catch( ... )
-                {
-                    ; // #i9286# can happen, even if isDataFlavorSupported returns true...
-                }
+                uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                OUString aText;
+                aData >>= aText;
+                aNewSelection = ImpInsertText( rPaM, aText );
+            }
+            catch( ... )
+            {
+                ; // #i9286# can happen, even if isDataFlavorSupported returns true...
             }
         }
     }

@@ -1466,72 +1466,72 @@ void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XC
 
 void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard, bool bUseSpecial )
 {
-    if ( rxClipboard.is() )
+    if ( !rxClipboard.is() )
+        return;
+
+    uno::Reference< datatransfer::XTransferable > xDataObj;
+
+    try
     {
-        uno::Reference< datatransfer::XTransferable > xDataObj;
+        SolarMutexReleaser aReleaser;
+        xDataObj = rxClipboard->getContents();
+    }
+    catch( const css::uno::Exception& )
+    {
+    }
 
-        try
-            {
-                SolarMutexReleaser aReleaser;
-                xDataObj = rxClipboard->getContents();
-            }
-        catch( const css::uno::Exception& )
-            {
-            }
+    if ( !xDataObj.is() || !EditEngine::HasValidData( xDataObj ) )
+        return;
 
-        if ( xDataObj.is() && EditEngine::HasValidData( xDataObj ) )
+    pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
+
+    EditSelection aSel( GetEditSelection() );
+    if ( aSel.HasRange() )
+    {
+        DrawSelection();
+        aSel = pEditEngine->DeleteSelection(aSel);
+    }
+
+    PasteOrDropInfos aPasteOrDropInfos;
+    aPasteOrDropInfos.nStartPara = pEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
+    pEditEngine->HandleBeginPasteOrDrop(aPasteOrDropInfos);
+
+    if ( DoSingleLinePaste() )
+    {
+        datatransfer::DataFlavor aFlavor;
+        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
+        if ( xDataObj->isDataFlavorSupported( aFlavor ) )
         {
-            pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
-
-            EditSelection aSel( GetEditSelection() );
-            if ( aSel.HasRange() )
+            try
             {
-                DrawSelection();
-                aSel = pEditEngine->DeleteSelection(aSel);
+                uno::Any aData = xDataObj->getTransferData( aFlavor );
+                OUString aTmpText;
+                aData >>= aTmpText;
+                OUString aText(convertLineEnd(aTmpText, LINEEND_LF));
+                aText = aText.replaceAll( OUStringLiteral1(LINE_SEP), " " );
+                aSel = pEditEngine->InsertText(aSel, aText);
             }
-
-            PasteOrDropInfos aPasteOrDropInfos;
-            aPasteOrDropInfos.nStartPara = pEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
-            pEditEngine->HandleBeginPasteOrDrop(aPasteOrDropInfos);
-
-            if ( DoSingleLinePaste() )
+            catch( ... )
             {
-                datatransfer::DataFlavor aFlavor;
-                SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
-                if ( xDataObj->isDataFlavorSupported( aFlavor ) )
-                {
-                    try
-                    {
-                        uno::Any aData = xDataObj->getTransferData( aFlavor );
-                        OUString aTmpText;
-                        aData >>= aTmpText;
-                        OUString aText(convertLineEnd(aTmpText, LINEEND_LF));
-                        aText = aText.replaceAll( OUStringLiteral1(LINE_SEP), " " );
-                        aSel = pEditEngine->InsertText(aSel, aText);
-                    }
-                    catch( ... )
-                    {
-                        ; // #i9286# can happen, even if isDataFlavorSupported returns true...
-                    }
-                }
+                ; // #i9286# can happen, even if isDataFlavorSupported returns true...
             }
-            else
-            {
-                aSel = pEditEngine->InsertText(
-                    xDataObj, OUString(), aSel.Min(),
-                    bUseSpecial && pEditEngine->GetInternalEditStatus().AllowPasteSpecial());
-            }
-
-            aPasteOrDropInfos.nEndPara = pEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
-            pEditEngine->HandleEndPasteOrDrop(aPasteOrDropInfos);
-
-            pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_PASTE );
-            SetEditSelection( aSel );
-            pEditEngine->pImpEditEngine->UpdateSelections();
-            pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
-            ShowCursor( DoAutoScroll(), true );
         }
     }
+    else
+    {
+        aSel = pEditEngine->InsertText(
+            xDataObj, OUString(), aSel.Min(),
+            bUseSpecial && pEditEngine->GetInternalEditStatus().AllowPasteSpecial());
+    }
+
+    aPasteOrDropInfos.nEndPara = pEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
+    pEditEngine->HandleEndPasteOrDrop(aPasteOrDropInfos);
+
+    pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_PASTE );
+    SetEditSelection( aSel );
+    pEditEngine->pImpEditEngine->UpdateSelections();
+    pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
+    ShowCursor( DoAutoScroll(), true );
 }
 
 
