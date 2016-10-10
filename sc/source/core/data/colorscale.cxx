@@ -1101,9 +1101,7 @@ double ScIconSetFormat::CalcValue(double nMin, double nMax, ScIconSetFormat::con
     return (*itr)->GetValue();
 }
 
-namespace {
-
-ScIconSetMap aIconSetMap[] = {
+const ScIconSetMap ScIconSetFormat::g_IconSetMap[] = {
     { "3Arrows", IconSet_3Arrows, 3 },
     { "3ArrowsGray", IconSet_3ArrowsGray, 3 },
     { "3Flags", IconSet_3Flags, 3 },
@@ -1128,13 +1126,6 @@ ScIconSetMap aIconSetMap[] = {
     { "5Boxes", IconSet_5Boxes, 5 },
     { nullptr, IconSet_3Arrows, 0 }
 };
-
-}
-
-ScIconSetMap* ScIconSetFormat::getIconSetMap()
-{
-    return aIconSetMap;
-}
 
 size_t ScIconSetFormat::size() const
 {
@@ -1299,7 +1290,7 @@ BitmapEx& ScIconSetFormat::getBitmap(sc::IconSetBitmapMap & rIconSetBitmapMap,
 void ScIconSetFormat::EnsureSize()
 {
     ScIconSetType eType = mpFormatData->eIconSetType;
-    for (ScIconSetMap & i : aIconSetMap)
+    for (const ScIconSetMap & i : g_IconSetMap)
     {
         if (i.eType == eType)
         {

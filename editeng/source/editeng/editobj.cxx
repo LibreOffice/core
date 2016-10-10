@@ -1175,8 +1175,6 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
                         if ( cConv )
                             aBuffer[nChar] = cConv;
                     }
-
-                    DestroyFontToSubsFontConverter( hConv );
                 }
             }
         }
@@ -1203,9 +1201,6 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
                         aBuffer[nChar] = cConv;
                 }
             }
-
-            DestroyFontToSubsFontConverter( hConv );
-
         }
 
 
@@ -1432,8 +1427,6 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                         if ( cConv )
                             pC->SetText(pC->GetText().replaceAt(nChar, 1, OUString(cConv)));
                     }
-
-                    DestroyFontToSubsFontConverter( hConv );
                 }
             }
         }
@@ -1464,8 +1457,6 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                             pC->SetText(pC->GetText().replaceAt(nChar, 1, OUString(cConv)));
                     }
                 }
-
-                DestroyFontToSubsFontConverter( hConv );
             }
         }
     }

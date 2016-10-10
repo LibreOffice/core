@@ -658,10 +658,6 @@ void SfxChildWindow::Activate_Impl()
         pImpl->pWorkWin->SetActiveChild_Impl( pWindow );
 }
 
-void SfxChildWindow::Deactivate_Impl()
-{
-}
-
 bool SfxChildWindow::QueryClose()
 {
     bool bAllow = true;

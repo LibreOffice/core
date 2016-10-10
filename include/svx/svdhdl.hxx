@@ -429,8 +429,8 @@ protected:
     bool                        bMoveOutside : 1;      // Handles nach aussen ruecken (fuer TextEdit)
 
 private:
-    SVX_DLLPRIVATE SdrHdlList(const SdrHdlList&): aList()  {}
-    SVX_DLLPRIVATE void operator=(const SdrHdlList&)                 {}
+    SVX_DLLPRIVATE SdrHdlList(const SdrHdlList&) = delete;
+    SVX_DLLPRIVATE void operator=(const SdrHdlList&) = delete;
 
 public:
     explicit SdrHdlList(SdrMarkView* pV);

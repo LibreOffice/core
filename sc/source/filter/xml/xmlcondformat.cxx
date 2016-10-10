@@ -348,7 +348,7 @@ ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_u
         }
     }
 
-    ScIconSetMap* pMap = ScIconSetFormat::getIconSetMap();
+    const ScIconSetMap* pMap = ScIconSetFormat::g_IconSetMap;
     ScIconSetType eType = IconSet_3Arrows;
     for(; pMap->pName; ++pMap)
     {

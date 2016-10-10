@@ -44,7 +44,7 @@ public:
     // Hack around missing "once per class" setUp/tearDown in CppUnit; must be
     // called before/after all other tests:
     void globalSetUp() { test::setUpVcl(); }
-    void globalTearDown() { /* DeInitVCL(); */ }
+    // void globalTearDown() { /* DeInitVCL(); */ }
         // on e.g. Mac OS X, DeInitVCL() causes more trouble than it's worth,
         // calling VclPtr<WorkWindow>::disposeAndClear -> ... ->
         // vcl::Window::dispose -> UnoWrapper::WindowDestroy (tk) -> ... ->
@@ -69,7 +69,6 @@ public:
     CPPUNIT_TEST(testWorldTransformFontSize);
     CPPUNIT_TEST(testTdf93750);
     CPPUNIT_TEST(testTdf99402);
-    CPPUNIT_TEST(globalTearDown);
     CPPUNIT_TEST_SUITE_END();
 };
 

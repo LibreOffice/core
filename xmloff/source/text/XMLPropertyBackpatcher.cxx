@@ -41,7 +41,6 @@ XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
 template<class A>
 XMLPropertyBackpatcher<A>::~XMLPropertyBackpatcher()
 {
-    SetDefault();
 }
 
 
@@ -112,11 +111,6 @@ void XMLPropertyBackpatcher<A>::SetProperty(
         // insert footnote
         static_cast<BackpatchListType*>(aBackpatchListMap[sName])->push_back(xPropSet);
     }
-}
-
-template<class A>
-void XMLPropertyBackpatcher<A>::SetDefault()
-{
 }
 
 // force instantiation of templates

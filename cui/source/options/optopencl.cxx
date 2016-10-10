@@ -54,7 +54,6 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     mpUseOpenCL->Check(maConfig.mbUseOpenCL);
     mpUseOpenCL->Enable(!officecfg::Office::Common::Misc::UseOpenCL::isReadOnly());
-    mpUseOpenCL->SetClickHdl(LINK(this, SvxOpenCLTabPage, EnableOpenCLHdl));
 
     bool bCLUsed = opencl::GPUEnv::isOpenCLEnabled();
     mpOclUsed->Show(bCLUsed);
@@ -129,7 +128,4 @@ void SvxOpenCLTabPage::EnableOpenCLHdl(VclFrame* pFrame, bool aEnable)
 }
 
 
-IMPL_STATIC_LINK_NOARG(SvxOpenCLTabPage, EnableOpenCLHdl, Button*, void)
-{
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
