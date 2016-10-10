@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_85f96c50",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-10-10T20:41:34Z",
+      "side": 1,
+      "message": "I don’t like the idea of guessing whether a character has a visible or not based on its advance width, that feels a bit hacky. Again inserting space only between grapheme clusters would be a more robust solution here.",
+      "revId": "49f7e0433c52ccf023f2a2854d0509f212f4ebf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
