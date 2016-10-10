@@ -736,11 +736,6 @@ void SvHeaderTabListBox::SelectAll()
     SvTreeListBox::SelectAll(true);
 }
 
-void SvHeaderTabListBox::SelectAll( bool bSelect, bool bPaint )
-{
-    // overwritten just to disambiguate the SelectAll() from the base' class SelectAll( bool, bool )
-    SvTabListBox::SelectAll( bSelect, bPaint );
-}
 void SvHeaderTabListBox::SelectRow( long _nRow, bool _bSelect, bool )
 {
     Select( GetEntry( _nRow ), _bSelect );

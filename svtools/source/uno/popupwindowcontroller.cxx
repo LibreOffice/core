@@ -181,7 +181,6 @@ void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEve
     enable( rEvent.IsEnabled );
 }
 
-// XToolbarController
 Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() throw (RuntimeException, std::exception)
 {
     VclPtr< ToolBox > pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
