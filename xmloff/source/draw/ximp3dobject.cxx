@@ -185,13 +185,6 @@ void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax:
     }
 }
 
-void SdXML3DCubeObjectShapeContext::EndElement()
-{
-    // call parent
-    SdXML3DObjectContext::EndElement();
-}
-
-
 SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
@@ -279,13 +272,6 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
     }
 }
 
-void SdXML3DSphereObjectShapeContext::EndElement()
-{
-    // call parent
-    SdXML3DObjectContext::EndElement();
-}
-
-
 SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
@@ -362,12 +348,6 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
     }
 }
 
-void SdXML3DPolygonBasedShapeContext::EndElement()
-{
-    // call parent
-    SdXML3DObjectContext::EndElement();
-}
-
 
 SdXML3DLatheObjectShapeContext::SdXML3DLatheObjectShapeContext(
     SvXMLImport& rImport,
@@ -395,13 +375,6 @@ void SdXML3DLatheObjectShapeContext::StartElement(const uno::Reference< xml::sax
     }
 }
 
-void SdXML3DLatheObjectShapeContext::EndElement()
-{
-    // call parent
-    SdXML3DPolygonBasedShapeContext::EndElement();
-}
-
-
 SdXML3DExtrudeObjectShapeContext::SdXML3DExtrudeObjectShapeContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
@@ -427,12 +400,5 @@ void SdXML3DExtrudeObjectShapeContext::StartElement(const uno::Reference< xml::s
     }
 }
 
-void SdXML3DExtrudeObjectShapeContext::EndElement()
-{
-    // call parent
-    SdXML3DPolygonBasedShapeContext::EndElement();
-}
-
-// EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

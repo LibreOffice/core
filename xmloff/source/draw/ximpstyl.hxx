@@ -213,7 +213,6 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         bool bIsAutoStyle);
 
-    virtual sal_uInt16 GetFamily( const OUString& rFamily ) const override;
     virtual void EndElement() override;
     virtual rtl::Reference< SvXMLImportPropertyMapper > GetImportPropertyMapper(sal_uInt16 nFamily) const override;
 
