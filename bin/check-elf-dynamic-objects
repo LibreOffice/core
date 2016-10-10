@@ -33,49 +33,59 @@ status=0
 
 for file in ${files}
 do
-    if file "${file}" | grep -q 'ELF.*dynamically linked' ; then
-        whitelist="${globalwhitelist}"
-        case "${file}" in
-            */libcairocanvaslo.so)
-                whitelist="${whitelist} libcairo.so.2"
-            ;;
-            */libucpgio1lo.so|*/liblosessioninstalllo.so|*/libevoablo.so)
-                whitelist="${whitelist} ${giowhitelist}"
-            ;;
-            */libavmediagst.so)
-                whitelist="${whitelist} ${gtk3whitelist} ${gstreamerwhitelist}"
-            ;;
-            */libvclplug_kde4lo.so|*/libkde4be1lo.so)
-                whitelist="${whitelist} ${x11whitelist} ${kde4whitelist}"
-            ;;
-            */libvclplug_gtklo.so|*/libqstart_gtklo.so|*/updater)
-                whitelist="${whitelist} ${x11whitelist} ${gtk2whitelist}"
-            ;;
-            */libvclplug_gtk3lo.so)
-                whitelist="${whitelist} ${x11whitelist} ${gtk3whitelist}"
-            ;;
-            */libdesktop_detectorlo.so|*/ui-previewer|*/oosplash|*/gengal.bin)
-                whitelist="${whitelist} ${x11whitelist}"
-            ;;
-            */libvclplug_genlo.so|*/libGLEW.so.*|*/libchartcorelo.so|*/libavmediaogl.so|*/libOGLTranslo.so|*/liboglcanvaslo.so|*/libchartopengllo.so)
-                whitelist="${whitelist} ${x11whitelist} ${openglwhitelist}"
-            ;;
-            */libvcllo.so|*/libsofficeapp.so)
-                whitelist="${whitelist} ${x11whitelist} ${openglwhitelist} ${giowhitelist} libcups.so.2"
-            ;;
-            */liblibreofficekitgtk.so)
-                whitelist="${whitelist} ${gtk3whitelist}"
-            ;;
-            */libsdlo.so)
-                whitelist="${whitelist} ${avahiwhitelist}"
-            ;;
-            */libofficebean.so)
-                whitelist="${whitelist} libjawt.so"
-            ;;
-            */libpostgresql-sdbc-impllo.so)
-                whitelist="${whitelist} ${kerberoswhitelist}"
-            ;;
-        esac
+    skip=0
+    whitelist="${globalwhitelist}"
+    case "${file}" in
+        */sdk/docs/*)
+            # skip the majority of files, no ELF binaries here
+            skip=1
+        ;;
+        */libsalcpprt.a)
+            # strangely readelf -d "succeeds" on a static library so
+            # have to filter it manually
+            skip=1
+        ;;
+        */libcairocanvaslo.so)
+            whitelist="${whitelist} libcairo.so.2"
+        ;;
+        */libucpgio1lo.so|*/liblosessioninstalllo.so|*/libevoablo.so)
+            whitelist="${whitelist} ${giowhitelist}"
+        ;;
+        */libavmediagst.so)
+            whitelist="${whitelist} ${gtk3whitelist} ${gstreamerwhitelist}"
+        ;;
+        */libvclplug_kde4lo.so|*/libkde4be1lo.so)
+            whitelist="${whitelist} ${x11whitelist} ${kde4whitelist}"
+        ;;
+        */libvclplug_gtklo.so|*/libqstart_gtklo.so|*/updater)
+            whitelist="${whitelist} ${x11whitelist} ${gtk2whitelist}"
+        ;;
+        */libvclplug_gtk3lo.so)
+            whitelist="${whitelist} ${x11whitelist} ${gtk3whitelist}"
+        ;;
+        */libdesktop_detectorlo.so|*/ui-previewer|*/oosplash|*/gengal.bin)
+            whitelist="${whitelist} ${x11whitelist}"
+        ;;
+        */libvclplug_genlo.so|*/libGLEW.so.*|*/libchartcorelo.so|*/libavmediaogl.so|*/libOGLTranslo.so|*/liboglcanvaslo.so|*/libchartopengllo.so)
+            whitelist="${whitelist} ${x11whitelist} ${openglwhitelist}"
+        ;;
+        */libvcllo.so|*/libsofficeapp.so)
+            whitelist="${whitelist} ${x11whitelist} ${openglwhitelist} ${giowhitelist} libcups.so.2"
+        ;;
+        */liblibreofficekitgtk.so)
+            whitelist="${whitelist} ${gtk3whitelist}"
+        ;;
+        */libsdlo.so)
+            whitelist="${whitelist} ${avahiwhitelist}"
+        ;;
+        */libofficebean.so)
+            whitelist="${whitelist} libjawt.so"
+        ;;
+        */libpostgresql-sdbc-impllo.so)
+            whitelist="${whitelist} ${kerberoswhitelist}"
+        ;;
+    esac
+    if test "${skip}" = 0 && readelf -d "${file}" &> /dev/null ; then
         rpath=$(readelf -d "${file}" | grep '(RPATH)' || true)
         neededs=$(readelf -d "${file}" | grep '(NEEDED)' | sed -e 's/.*\[\(.*\)\]$/\1/')
         neededsinternal=
