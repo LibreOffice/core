@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_85d88c1f",
+        "filename": "sw/source/core/text/portxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-10-10T14:04:23Z",
+      "side": 1,
+      "message": "You are counting characters not glyphs here, so the name and comment should be updated to reflect this.",
+      "revId": "6e576c6b195784e1d2beea445f39e47f2f193912",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
