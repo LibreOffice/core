@@ -22,7 +22,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <tools/resid.hxx>
 
 class SfxViewFrame;
 class SfxViewShell;

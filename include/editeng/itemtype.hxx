@@ -24,7 +24,6 @@
 
 // forward ---------------------------------------------------------------
 #include <rtl/ustring.hxx>
-#include <tools/resid.hxx>
 #include <tools/bigint.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>

@@ -34,7 +34,6 @@ namespace com { namespace sun { namespace star { namespace linguistic2
 } } } }
 
 namespace vcl { class Window; }
-class ResId;
 class SvxSpellWrapper;
 class Button;
 class CheckBox;

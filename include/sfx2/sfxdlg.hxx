@@ -36,7 +36,6 @@ class SfxTabPage;
 class SfxViewFrame;
 class SfxBindings;
 class SfxItemSet;
-class ResId;
 namespace vcl { class Window; }
 namespace rtl {
    class OUString;
