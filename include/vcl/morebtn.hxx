@@ -51,9 +51,6 @@ public:
     void                Click() override;
 
     using PushButton::SetState;
-
-    void                SetText( const OUString& rNewText ) override;
-    OUString            GetText() const override;
 };
 
 #endif // INCLUDED_VCL_MOREBTN_HXX

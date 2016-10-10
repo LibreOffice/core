@@ -372,7 +372,6 @@ private:
 protected:
     virtual void        GetFocus() override;
     virtual void        StateChanged( StateChangedType nType ) override;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual bool        Notify( NotifyEvent& rNEvt ) override;
 
@@ -496,8 +495,6 @@ public:
 
     virtual void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
-    void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override
-                        { FloatingWindow::SetPosSizePixel( rNewPos, rNewSize ); }
 
     void            SetDropDownLineCount( sal_uInt16 n ) { mnDDLineCount = n; }
     sal_uInt16      GetDropDownLineCount() const { return mnDDLineCount; }

@@ -58,7 +58,6 @@ public:
 
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
     virtual void    Resize() override;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    Notify( NotifyEvent& rNEvt ) override;
     virtual void    StateChanged( StateChangedType nType ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
@@ -72,8 +71,6 @@ public:
     virtual const Wallpaper& GetDisplayBackground() const override;
 
     virtual void    setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
-    void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override
-                        { Edit::SetPosSizePixel( rNewPos, rNewSize ); }
 
     Rectangle       GetDropDownPosSizePixel() const;
 

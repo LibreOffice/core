@@ -2466,11 +2466,6 @@ void ImplListBox::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 }
 
-void ImplListBox::DataChanged( const DataChangedEvent& rDCEvt )
-{
-        Control::DataChanged( rDCEvt );
-}
-
 bool ImplListBox::Notify( NotifyEvent& rNEvt )
 {
     bool bDone = false;

@@ -99,14 +99,6 @@ class MyWin : public WorkWindow
 public:
                  MyWin( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual void MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void KeyUp( const KeyEvent& rKEvt ) override;
-    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
-    virtual void Resize() override;
-
     virtual bool Close() override;
     virtual ~MyWin() override { disposeOnce(); }
     virtual void dispose() override;
@@ -284,39 +276,5 @@ IMPL_LINK_NOARG( MyWin, SelectHdl, ListBox&, void)
     }
 }
 
-void MyWin::MouseMove( const MouseEvent& rMEvt )
-{
-    WorkWindow::MouseMove( rMEvt );
-}
-
-void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    WorkWindow::MouseButtonDown( rMEvt );
-}
-
-void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    WorkWindow::MouseButtonUp( rMEvt );
-}
-
-void MyWin::KeyInput( const KeyEvent& rKEvt )
-{
-    WorkWindow::KeyInput( rKEvt );
-}
-
-void MyWin::KeyUp( const KeyEvent& rKEvt )
-{
-    WorkWindow::KeyUp( rKEvt );
-}
-
-void MyWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
-{
-    WorkWindow::Paint(rRenderContext, rRect);
-}
-
-void MyWin::Resize()
-{
-    WorkWindow::Resize();
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

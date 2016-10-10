@@ -862,11 +862,6 @@ IMPL_LINK_NOARG(Slider, LinkedFieldModifyHdl, Edit&, void)
         SetThumbPos(mpLinkedField->GetValue());
 }
 
-void Slider::RequestHelp( const HelpEvent& rHEvt )
-{
-    Control::RequestHelp( rHEvt );
-}
-
 void Slider::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
