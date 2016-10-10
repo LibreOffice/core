@@ -7870,7 +7870,7 @@ if test "$with_system_libxml" = "yes"; then
         PKG_CHECK_MODULES(LIBEXSLT, libexslt)
         LIBEXSLT_CFLAGS=$(printf '%s' "$LIBEXSLT_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         FilterLibs "${LIBEXSLT_LIBS}"
-        LIBEXSLT_LIBS="${filteredlibs}"
+        LIBEXSLT_LIBS=$(printf '%s' "${filteredlibs}" | sed -e "s/-lgpg-error//"  -e "s/-lgcrypt//")
     fi
 
     dnl Check for xsltproc
