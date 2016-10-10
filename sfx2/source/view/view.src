@@ -127,10 +127,9 @@ PushButton BT_CHECKOUT
     Size = MAP_APPFONT( 30 , 0 );
     Text[ en-US ] = "Check Out";
 };
-PushButton BT_READONLY_EDIT
+
+String STR_READONLY_EDIT
 {
-    Pos = MAP_APPFONT( 0 , 0 );
-    Size = MAP_APPFONT( 70 , 0 );
     Text[ en-US ] = "Edit Document";
 };
 
