@@ -1244,10 +1244,6 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
 }
 
 
-void SfxObjectShell::StateView_Impl(SfxItemSet& /*rSet*/)
-{
-}
-
 SignatureState SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequence< security::DocumentSignatureInformation >& aInfos )
 {
     bool bCertValid = true;

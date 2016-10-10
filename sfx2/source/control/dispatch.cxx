@@ -794,10 +794,6 @@ void SfxDispatcher::DoActivate_Impl(bool bMDI)
     }
 }
 
-void SfxDispatcher::DoParentActivate_Impl()
-{
-}
-
 /** This method controls the deactivation of a dispatcher.
 
     Since the application dispatcher is always active, either as a sub
@@ -873,10 +869,6 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame* pNew)
     }
 
     Flush();
-}
-
-void SfxDispatcher::DoParentDeactivate_Impl()
-{
 }
 
 /** This method searches in SfxDispatcher after <SfxShell> , from the Slot Id

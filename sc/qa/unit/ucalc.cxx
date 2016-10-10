@@ -6041,7 +6041,6 @@ void Test::testEmptyCalcDocDefaults()
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsInVBAMode() );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasNotes() );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsCutMode() );
-    CPPUNIT_ASSERT_EQUAL( true, ScDocument::CheckMacroWarn() );
 
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsUsingEmbededFonts() );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsEmbedded() );

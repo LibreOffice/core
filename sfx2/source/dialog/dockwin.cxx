@@ -1656,17 +1656,9 @@ bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
     else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
     {
         pBindings->SetActiveFrame( nullptr );
-        if (pMgr != nullptr)
-            SfxChildWindow::Deactivate_Impl();
     }
 
     return DockingWindow::Notify( rEvt );
-}
-
-
-SplitWindowItemFlags SfxDockingWindow::GetWinBits_Impl()
-{
-    return SplitWindowItemFlags::NONE;
 }
 
 

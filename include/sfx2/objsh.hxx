@@ -673,7 +673,6 @@ public:
     SAL_DLLPRIVATE void ExecProps_Impl(SfxRequest &);
     SAL_DLLPRIVATE void StateProps_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void ExecView_Impl(SfxRequest &);
-    SAL_DLLPRIVATE static void StateView_Impl(SfxItemSet &);
 
     // Load/Save public internals
     SAL_DLLPRIVATE bool ImportFromGeneratedStream_Impl(

@@ -4158,7 +4158,7 @@ OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry, bool bFirst = t
 OUString getIconSetName(ScIconSetType eType)
 {
     const char* pName = nullptr;
-    ScIconSetMap* pMap = ScIconSetFormat::getIconSetMap();
+    const ScIconSetMap* pMap = ScIconSetFormat::g_IconSetMap;
     for(;pMap->pName;++pMap)
     {
         if(pMap->eType == eType)

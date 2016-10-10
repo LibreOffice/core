@@ -96,7 +96,7 @@ namespace
                 // use more precision, shrink the outer polygons. Since this may lead to self-intersections,
                 // some kind of correction should be applied here after that step
                 rOuterPolyPolygon = basegfx::tools::growInNormalDirection(rPolygon, -fOffset);
-                basegfx::tools::correctGrowShrinkPolygonPair(rPolygon, rOuterPolyPolygon);
+                // basegfx::tools::correctGrowShrinkPolygonPair(rPolygon, rOuterPolyPolygon);
             }
         }
     }

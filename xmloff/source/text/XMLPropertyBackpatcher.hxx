@@ -101,11 +101,6 @@ public:
     void SetProperty(
         css::uno::Reference<css::beans::XPropertySet> & xPropSet,
         const OUString& sName);
-
-    /// set default (if bDefaultHandling) for unresolved names
-    /// called by destructor
-    static void SetDefault();
-
 };
 
 #endif

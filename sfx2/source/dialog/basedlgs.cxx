@@ -333,7 +333,6 @@ bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
         else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
         {
             pBindings->SetActiveFrame( css::uno::Reference< css::frame::XFrame > () );
-            SfxChildWindow::Deactivate_Impl();
         }
         else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
@@ -421,7 +420,6 @@ bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
             if ( !HasChildPathFocus() )
             {
                 pBindings->SetActiveFrame( nullptr );
-                SfxChildWindow::Deactivate_Impl();
             }
         }
         else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )

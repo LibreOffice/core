@@ -255,13 +255,13 @@ private:
     static CharClass            *pCharClassEnglish;                      // character classification for en_US locale
     static const Convention     *pConventions[ formula::FormulaGrammar::CONV_LAST ];
 
-    static struct AddInMap
+    static const struct AddInMap
     {
         const char* pODFF;
         const char* pEnglish;
         const char* pOriginal;              // programmatical name
         const char* pUpper;                 // upper case programmatical name
-    } maAddInMap[];
+    } g_aAddInMap[];
     static const AddInMap* GetAddInMap();
     static size_t GetAddInMapCount();
 

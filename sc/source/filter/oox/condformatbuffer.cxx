@@ -368,7 +368,7 @@ namespace {
 ScIconSetType getType(const OUString& rName)
 {
     ScIconSetType eIconSetType = IconSet_3TrafficLights1;
-    ScIconSetMap* pIconSetMap = ScIconSetFormat::getIconSetMap();
+    const ScIconSetMap* pIconSetMap = ScIconSetFormat::g_IconSetMap;
     for(size_t i = 0; pIconSetMap[i].pName; ++i)
     {
         if(OUString::createFromAscii(pIconSetMap[i].pName) == rName)

@@ -162,12 +162,6 @@ namespace basegfx
         // with the given amount. Value may be negative.
         BASEGFX_DLLPUBLIC B2DPolyPolygon growInNormalDirection(const B2DPolyPolygon& rCandidate, double fValue);
 
-        // This method will correct a pair of polyPolygons where the goal is to keep same point count
-        // to allow direct point association and also to remove self-intersections produced by shrinks.
-        // This method might possibly change both polyPolygons to reach that goal because there are cases
-        // where it is necessary to add new cut points to the original
-        BASEGFX_DLLPUBLIC void correctGrowShrinkPolygonPair(B2DPolyPolygon& rOriginal, B2DPolyPolygon& rGrown);
-
         // force all sub-polygons to a point count of nSegments
         BASEGFX_DLLPUBLIC B2DPolyPolygon reSegmentPolyPolygon(const B2DPolyPolygon& rCandidate, sal_uInt32 nSegments);
 

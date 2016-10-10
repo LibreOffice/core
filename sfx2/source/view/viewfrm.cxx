@@ -1072,39 +1072,13 @@ bool SfxViewFrame::Close()
 void SfxViewFrame::DoActivate( bool bUI )
 {
     SfxGetpApp();
-
     m_pDispatcher->DoActivate_Impl( bUI );
-
-    // If this ViewFrame has got a parent and this is not a parent of the
-    // old ViewFrames, it gets a ParentActivate.
-    if ( bUI )
-    {
-        SfxViewFrame *pFrame = GetParentViewFrame();
-        while ( pFrame )
-        {
-            SfxDispatcher::DoParentActivate_Impl();
-            pFrame = pFrame->GetParentViewFrame();
-        }
-    }
 }
 
 void SfxViewFrame::DoDeactivate(bool bUI, SfxViewFrame* pNewFrame )
 {
     SfxGetpApp();
     m_pDispatcher->DoDeactivate_Impl( bUI, pNewFrame );
-
-    // If this ViewFrame has got a parent and this is not a parent of the
-    // new ViewFrames, it gets a ParentDeactivate.
-    if ( bUI )
-    {
-        SfxViewFrame *pFrame = GetParentViewFrame();
-        while ( pFrame )
-        {
-            if ( !pNewFrame || !pNewFrame->GetFrame().IsParent( &pFrame->GetFrame() ) )
-                SfxDispatcher::DoParentDeactivate_Impl();
-            pFrame = pFrame->GetParentViewFrame();
-        }
-    }
 }
 
 void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )

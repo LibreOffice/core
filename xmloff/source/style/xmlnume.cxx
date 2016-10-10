@@ -612,11 +612,6 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 }
 
 
-void SvxXMLNumRuleExport::AddListStyleAttributes()
-{
-}
-
-
 SvxXMLNumRuleExport::SvxXMLNumRuleExport( SvXMLExport& rExp ) :
     rExport( rExp ),
     sNumberingRules( "NumberingRules" ),
@@ -681,9 +676,6 @@ void SvxXMLNumRuleExport::exportNumberingRule(
     if( bContNumbering )
         GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                   XML_CONSECUTIVE_NUMBERING, XML_TRUE );
-
-    // other application specific attributes
-    AddListStyleAttributes();
 
     {
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, XML_LIST_STYLE ,

@@ -1431,7 +1431,7 @@ namespace {
 
 const char* getIconSetName( ScIconSetType eType )
 {
-    ScIconSetMap* pMap = ScIconSetFormat::getIconSetMap();
+    const ScIconSetMap* pMap = ScIconSetFormat::g_IconSetMap;
     for(; pMap->pName; ++pMap)
     {
         if(pMap->eType == eType)
