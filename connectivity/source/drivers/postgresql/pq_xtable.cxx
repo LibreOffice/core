@@ -311,13 +311,6 @@ Any Table::queryInterface( const Type & reqType ) throw (RuntimeException, std::
     return ret;
 }
 
-css::uno::Any Table::getPropertyValue(const OUString& aPropertyName)
-        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
-{
-    return ReflectionBase::getPropertyValue( aPropertyName );
-}
-
-
 OUString Table::getName(  ) throw (css::uno::RuntimeException, std::exception)
 {
     Statics & st = getStatics();

@@ -57,10 +57,6 @@ class SfxAccCfgTabListBox_Impl : public SvTabListBox
 
     void                        KeyInput( const KeyEvent &rKEvt ) override;
 
-protected:
-    virtual void                InitEntry(SvTreeListEntry*, const OUString&, const Image&,
-                                          const Image&, SvLBoxButtonKind eButtonKind) override;
-
 public:
     SfxAccCfgTabListBox_Impl(vcl::Window *pParent, WinBits nStyle)
         : SvTabListBox(pParent, nStyle)
