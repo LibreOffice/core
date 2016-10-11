@@ -47,11 +47,9 @@ struct FormulaResultValue
     and memory consumption. */
 class ScFormulaResult
 {
-    typedef unsigned char Multiline;
-    static const Multiline MULTILINE_UNKNOWN = 0;
-    static const Multiline MULTILINE_FALSE   = 1;
-    static const Multiline MULTILINE_TRUE    = 2;
-
+    enum class Multiline : sal_uInt8 {
+        Unknown, False, True
+    };
     // Clone token if the 16-bit only reference counter is nearing it's
     // capacity during fill or copy&paste, leaving 4k for temporary passing
     // around. (That should be enough for all times (TM) ;-)

@@ -22,7 +22,7 @@ FormulaResultValue::FormulaResultValue( FormulaError nErr ) : meType(Error), mfV
 ScFormulaResult::ScFormulaResult() :
     mpToken(nullptr), mnError(FormulaError::NONE), mbToken(true),
     mbEmpty(false), mbEmptyDisplayedAsString(false),
-    meMultiline(MULTILINE_UNKNOWN) {}
+    meMultiline(Multiline::Unknown) {}
 
 ScFormulaResult::ScFormulaResult( const ScFormulaResult & r ) :
     mnError( r.mnError), mbToken( r.mbToken),
@@ -56,7 +56,7 @@ ScFormulaResult::ScFormulaResult( const ScFormulaResult & r ) :
 
 ScFormulaResult::ScFormulaResult( const formula::FormulaToken* p ) :
     mnError(FormulaError::NONE), mbToken(false), mbEmpty(false), mbEmptyDisplayedAsString(false),
-    meMultiline(MULTILINE_UNKNOWN)
+    meMultiline(Multiline::Unknown)
 {
     SetToken( p);
 }
@@ -72,7 +72,7 @@ void ScFormulaResult::ResetToDefaults()
     mnError = FormulaError::NONE;
     mbEmpty = false;
     mbEmptyDisplayedAsString = false;
-    meMultiline = MULTILINE_UNKNOWN;
+    meMultiline = Multiline::Unknown;
 }
 
 void ScFormulaResult::ResolveToken( const formula::FormulaToken * p )
@@ -93,20 +93,20 @@ void ScFormulaResult::ResolveToken( const formula::FormulaToken * p )
                 mbToken = false;
                 // set in case mnError is 0 now, which shouldn't happen but ...
                 mfValue = 0.0;
-                meMultiline = MULTILINE_FALSE;
+                meMultiline = Multiline::False;
                 break;
             case formula::svEmptyCell:
                 mbEmpty = true;
                 mbEmptyDisplayedAsString = static_cast<const ScEmptyCellToken*>(p)->IsDisplayedAsString();
                 p->DecRef();
                 mbToken = false;
-                meMultiline = MULTILINE_FALSE;
+                meMultiline = Multiline::False;
                 break;
             case formula::svDouble:
                 mfValue = p->GetDouble();
                 p->DecRef();
                 mbToken = false;
-                meMultiline = MULTILINE_FALSE;
+                meMultiline = Multiline::False;
                 break;
             default:
                 mpToken = p;
@@ -212,7 +212,7 @@ void ScFormulaResult::SetDouble( double f )
             mpToken->DecRef();
         mfValue = f;
         mbToken = false;
-        meMultiline = MULTILINE_FALSE;
+        meMultiline = Multiline::False;
     }
 }
 
@@ -300,15 +300,15 @@ bool ScFormulaResult::IsValueNoError() const
 
 bool ScFormulaResult::IsMultiline() const
 {
-    if (meMultiline == MULTILINE_UNKNOWN)
+    if (meMultiline == Multiline::Unknown)
     {
         svl::SharedString aStr = GetString();
         if (!aStr.isEmpty() && aStr.getString().indexOf('\n') != -1)
-            const_cast<ScFormulaResult*>(this)->meMultiline = MULTILINE_TRUE;
+            const_cast<ScFormulaResult*>(this)->meMultiline = Multiline::True;
         else
-            const_cast<ScFormulaResult*>(this)->meMultiline = MULTILINE_FALSE;
+            const_cast<ScFormulaResult*>(this)->meMultiline = Multiline::False;
     }
-    return meMultiline == MULTILINE_TRUE;
+    return meMultiline == Multiline::True;
 }
 
 bool ScFormulaResult::GetErrorOrDouble( FormulaError& rErr, double& rVal ) const
@@ -513,7 +513,7 @@ void ScFormulaResult::SetHybridDouble( double f )
     {
         mfValue = f;
         mbToken = false;
-        meMultiline = MULTILINE_FALSE;
+        meMultiline = Multiline::False;
     }
 }
 
