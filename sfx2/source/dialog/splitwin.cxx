@@ -928,12 +928,6 @@ sal_uInt16 SfxSplitWindow::GetWindowCount() const
 }
 
 
-void SfxSplitWindow::Command( const CommandEvent& rCEvt )
-{
-    SplitWindow::Command( rCEvt );
-}
-
-
 IMPL_LINK( SfxSplitWindow, TimerHdl, Timer*, pTimer, void)
 {
     if ( pTimer )

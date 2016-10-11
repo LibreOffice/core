@@ -828,11 +828,6 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void ThumbnailView::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    Control::MouseButtonUp( rMEvt );
-}
-
 void ThumbnailView::Command( const CommandEvent& rCEvt )
 {
     if ( (rCEvt.GetCommand() == CommandEventId::Wheel) ||
