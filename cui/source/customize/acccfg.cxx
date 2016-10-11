@@ -675,15 +675,6 @@ VCL_BUILDER_DECL_FACTORY(SfxAccCfgTabListBox)
     rRet = VclPtr<SfxAccCfgTabListBox_Impl>::Create(pParent, nWinBits);
 }
 
-void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,
-                                         const OUString& rText,
-                                         const Image& rImage1,
-                                         const Image& rImage2,
-                                         SvLBoxButtonKind eButtonKind)
-{
-    SvTabListBox::InitEntry(pEntry, rText, rImage1, rImage2, eButtonKind);
-}
-
 SfxAccCfgTabListBox_Impl::~SfxAccCfgTabListBox_Impl()
 {
     disposeOnce();
