@@ -26,36 +26,6 @@
 #include "inputwin.hrc"
 #include "access.hrc"
 
-ToolBox RID_TBX_FORMULA
-{
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 600 , 14 ) ;
-    SVLook = TRUE ;
-    Border = TRUE ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = FN_FORMULA_CALC ;
-            HelpId = HID_TBX_FORMULA_CALC ;
-            DropDown = TRUE ;
-            Text [ en-US ] = "Functions" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_FORMULA_CANCEL ;
-            HelpId = HID_TBX_FORMULA_CANCEL ;
-            Text [ en-US ] = "Cancel" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_FORMULA_APPLY ;
-            HelpId = HID_TBX_FORMULA_APPLY ;
-            Text [ en-US ] = "Apply" ;
-        };
-    };
-};
-
 Menu MN_CALC_POPUP
 {
     ItemList =
@@ -252,9 +222,20 @@ Menu MN_CALC_POPUP
         };
     };
 };
-String STR_TBL_FORMULA
+
+String STR_FORMULA_CALC
 {
-    Text [ en-US ] = "Text formula" ;
+    Text [ en-US ] = "Functions" ;
+};
+
+String STR_FORMULA_CANCEL
+{
+    Text [ en-US ] = "Cancel" ;
+};
+
+String STR_FORMULA_APPLY
+{
+    Text [ en-US ] = "Apply" ;
 };
 
 String STR_ACCESS_FORMULA_TOOLBAR

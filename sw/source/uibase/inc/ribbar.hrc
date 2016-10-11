@@ -21,8 +21,6 @@
 
 #include "rcid.hrc"
 
-#define RID_TBX_FORMULA     (RC_RIBBAR_BEGIN +6)
-#define FT_POS              (RC_RIBBAR_BEGIN +7)
 #define STR_TBL_FORMULA                  (RC_RIBBAR_BEGIN +8)
 
 #define RID_DRAW_WIN                (RC_RIBBAR_BEGIN + 9)
@@ -50,8 +48,11 @@
 #define ST_INDEX_ENTRY              (RC_RIBBAR_BEGIN + 29)
 #define ST_TABLE_FORMULA            (RC_RIBBAR_BEGIN + 30)
 #define ST_TABLE_FORMULA_ERROR      (RC_RIBBAR_BEGIN + 31)
+#define STR_FORMULA_CALC            (RC_RIBBAR_BEGIN + 32)
+#define STR_FORMULA_CANCEL          (RC_RIBBAR_BEGIN + 33)
+#define STR_FORMULA_APPLY           (RC_RIBBAR_BEGIN + 34)
 
-#define STR_IMGBTN_START            (RC_RIBBAR_BEGIN + 33)
+#define STR_IMGBTN_START            (RC_RIBBAR_BEGIN + 35)
 
 #define STR_IMGBTN_NEXT_DOWN        (STR_IMGBTN_START + 0)
 #define STR_IMGBTN_PREV_DOWN        (STR_IMGBTN_START + 1)

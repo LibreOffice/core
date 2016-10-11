@@ -60,7 +60,7 @@
 SFX_IMPL_POS_CHILDWINDOW_WITHID( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
 
 SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
-    : ToolBox(pParent, SW_RES(RID_TBX_FORMULA))
+    : ToolBox(pParent, WB_3DLOOK|WB_BORDER)
     , aPos(VclPtr<Edit>::Create(this, WB_3DLOOK|WB_CENTER|WB_BORDER|WB_READONLY))
     , aEdit(VclPtr<InputEdit>::Create(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION))
     , aPopMenu(SW_RES(MN_CALC_POPUP))
@@ -75,13 +75,21 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
     bFirst = true;
     bActive = bIsTable = bDelSel = false;
 
-    FreeResource();
-
     aEdit->SetSizePixel(aEdit->CalcMinimumSize());
     aPos->SetSizePixel(aPos->LogicToPixel(Size(45, 11), MapMode(MapUnit::MapAppFont)));
 
-    SfxImageManager* pManager = SfxImageManager::GetImageManager( *SW_MOD() );
+    SfxImageManager* pManager = SfxImageManager::GetImageManager(*SW_MOD());
     pManager->RegisterToolBox(this);
+    InsertItem(FN_FORMULA_CALC, pManager->GetImage(FN_FORMULA_CALC),
+               SW_RESSTR(STR_FORMULA_CALC));
+    InsertItem(FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL),
+               SW_RESSTR(STR_FORMULA_CANCEL));
+    InsertItem(FN_FORMULA_APPLY, pManager->GetImage(FN_FORMULA_APPLY),
+               SW_RESSTR(STR_FORMULA_APPLY));
+
+    SetHelpId(FN_FORMULA_CALC, HID_TBX_FORMULA_CALC);
+    SetHelpId(FN_FORMULA_CANCEL, HID_TBX_FORMULA_CANCEL);
+    SetHelpId(FN_FORMULA_APPLY, HID_TBX_FORMULA_APPLY);
 
     SwView *pDispatcherView = dynamic_cast<SwView*>(pDispatcher ? pDispatcher->GetFrame()->GetViewShell() : nullptr);
     SwView* pActiveView = ::GetActiveView();
@@ -99,10 +107,6 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
     SetItemText(ED_FORMULA, SW_RESSTR(STR_ACCESS_FORMULA_TEXT));
     aEdit->SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TEXT));
     SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);
-
-    SetItemImage( FN_FORMULA_CALC,   pManager->GetImage(FN_FORMULA_CALC   ));
-    SetItemImage( FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL ));
-    SetItemImage( FN_FORMULA_APPLY,  pManager->GetImage(FN_FORMULA_APPLY  ));
 
     SetItemBits( FN_FORMULA_CALC, GetItemBits( FN_FORMULA_CALC ) | ToolBoxItemBits::DROPDOWNONLY );
     SetDropdownClickHdl( LINK( this, SwInputWindow, DropdownClickHdl ));
