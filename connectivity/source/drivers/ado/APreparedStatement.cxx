@@ -180,7 +180,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
         throw SQLException();
     }
     m_RecordSet = WpADORecordset(pSet);
-    return  static_cast<sal_Int32>(m_RecordsAffected);
+    return m_RecordsAffected.getInt32();
 }
 
 void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEnum& _eType,

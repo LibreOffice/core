@@ -333,17 +333,17 @@ sal_Bool OLEVariant::isEmpty() const {  return (vt == VT_EMPTY);    }
 
 VARTYPE OLEVariant::getType() const { return vt; }
 
-OLEVariant::operator css::util::Date() const
+css::util::Date OLEVariant::getDate() const
 {
-    return isNull() ? css::util::Date(30,12,1899) : ::dbtools::DBTypeConversion::toDate(getDate(),css::util::Date(30,12,1899));
+    return isNull() ? css::util::Date(30,12,1899) : ::dbtools::DBTypeConversion::toDate(getDateAsDouble(),css::util::Date(30,12,1899));
 }
-OLEVariant::operator css::util::Time() const
+css::util::Time OLEVariant::getTime() const
 {
-    return isNull() ? css::util::Time() : ::dbtools::DBTypeConversion::toTime(getDate());
+    return isNull() ? css::util::Time() : ::dbtools::DBTypeConversion::toTime(getDateAsDouble());
 }
-OLEVariant::operator css::util::DateTime()const
+css::util::DateTime OLEVariant::getDateTime() const
 {
-    return isNull() ? css::util::DateTime() : ::dbtools::DBTypeConversion::toDateTime(getDate(),css::util::Date(30,12,1899));
+    return isNull() ? css::util::DateTime() : ::dbtools::DBTypeConversion::toDateTime(getDateAsDouble(),css::util::Date(30,12,1899));
 }
 
 VARIANT_BOOL OLEVariant::VariantBool(sal_Bool bEinBoolean)
@@ -374,7 +374,7 @@ void OLEVariant::set(double n)
     }
 }
 
-OLEVariant::operator OUString() const
+OUString OLEVariant::getString() const
 {
     if (V_VT(this) == VT_BSTR)
         return reinterpret_cast<const sal_Unicode*>(LPCOLESTR(V_BSTR(this)));
@@ -421,7 +421,7 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
 }
 
 
-OLEVariant::operator css::uno::Sequence< sal_Int8 >() const
+css::uno::Sequence< sal_Int8 > OLEVariant::getByteSequence() const
 {
     css::uno::Sequence< sal_Int8 > aRet;
     if(V_VT(this) == VT_BSTR)
@@ -460,14 +460,6 @@ OLEVariant::operator css::uno::Sequence< sal_Int8 >() const
     }
 
     return aRet;
-}
-
-OUString OLEVariant::getString() const
-{
-    if(isNull())
-        return OUString();
-    else
-        return *this;
 }
 
 sal_Bool OLEVariant::getBool() const
@@ -620,7 +612,7 @@ double OLEVariant::getDouble() const
     return V_R8(&varDest);
 }
 
-double OLEVariant::getDate() const
+double OLEVariant::getDateAsDouble() const
 {
     if (V_VT(this) == VT_DATE)
         return V_DATE(this);
@@ -695,7 +687,7 @@ css::uno::Any OLEVariant::makeAny() const
          }
         case VT_DATE:
          {
-             aValue <<= (css::util::Date)*this;
+             aValue <<= getDate();
             break;
          }
         case VT_BSTR:

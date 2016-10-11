@@ -204,7 +204,7 @@ Reference< css::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int
     // else we ask for a bytesequence
     aField.get_Value(m_aValue);
 
-    return m_aValue.isNull() ? NULL : new ::comphelper::SequenceInputStream(m_aValue);
+    return m_aValue.isNull() ? NULL : new ::comphelper::SequenceInputStream(m_aValue.getByteSequence());
 }
 
 Reference< css::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
@@ -225,43 +225,43 @@ OLEVariant OResultSet::getValue(sal_Int32 columnIndex ) throw(SQLException, Runt
 
 sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getBool();
 }
 
 
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getInt8();
 }
 
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getByteSequence();
 }
 
 
 css::util::Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDate();
 }
 
 
 double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDouble();
 }
 
 
 float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getFloat();
 }
 
 
 sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getInt32();
 }
 
 
@@ -331,25 +331,25 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< css:
 
 sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getInt16();
 }
 
 
 OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getString();
 }
 
 
 css::util::Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getTime();
 }
 
 
 css::util::DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDateTime();
 }
 
 
@@ -903,7 +903,7 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, Runtim
 
     sal_Bool bValue(sal_False);
     if(!aVar.isNull() && !aVar.isEmpty())
-        bValue = aVar;
+        bValue = aVar.getBool();
     return bValue;
 }
 

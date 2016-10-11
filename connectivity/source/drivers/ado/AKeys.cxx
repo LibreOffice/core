@@ -99,7 +99,7 @@ sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XProper
 // XDrop
 void OKeys::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementName)
 {
-    if(!m_aCollection.Delete(OLEVariant(_sElementName)))
+    if(!m_aCollection.Delete(OLEVariant(_sElementName).getString()))
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
 }
 

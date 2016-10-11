@@ -195,7 +195,7 @@ sal_Int32 OStatement_Base::getRowCount () throw( SQLException)
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    return m_RecordsAffected;
+    return m_RecordsAffected.getInt32();
 }
 
 // getPrecision
@@ -408,7 +408,7 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const OUString& sql ) throw(S
         m_aLastWarning = ex;
     }
     if(!m_RecordsAffected.isEmpty() && !m_RecordsAffected.isNull() && m_RecordsAffected.getType() != VT_ERROR)
-        return m_RecordsAffected;
+        return m_RecordsAffected.getInt32();
 
     return 0;
 }
