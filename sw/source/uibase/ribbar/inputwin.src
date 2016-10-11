@@ -55,14 +55,6 @@ ToolBox RID_TBX_FORMULA
             Text [ en-US ] = "Apply" ;
         };
     };
-    Edit ED_POS
-    {
-        Border = TRUE ;
-        Size = MAP_APPFONT ( 45 , 11 ) ;
-        ReadOnly = TRUE ;
-        SVLook = TRUE ;
-        Center = TRUE ;
-    };
 };
 
 Menu MN_CALC_POPUP

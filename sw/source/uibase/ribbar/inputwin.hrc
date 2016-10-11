@@ -50,8 +50,6 @@
 #define MN_POP_STATISTICS   30
 #define MN_POP_FUNC         31
 
-#define ED_POS              2
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -54,19 +54,20 @@
 
 #include <IDocumentContentOperations.hxx>
 
+#define ED_POS              2
 #define ED_FORMULA          3
 
 SFX_IMPL_POS_CHILDWINDOW_WITHID( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
 
 SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
-    : ToolBox(  pParent ,   SW_RES( RID_TBX_FORMULA )),
-    aPos(       VclPtr<Edit>::Create(this,       SW_RES(ED_POS))),
-    aEdit(      VclPtr<InputEdit>::Create(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION)),
-    aPopMenu(   SW_RES(MN_CALC_POPUP)),
-    pMgr(nullptr),
-    pWrtShell(nullptr),
-    pView(nullptr),
-    aAktTableName(aEmptyOUStr)
+    : ToolBox(pParent, SW_RES(RID_TBX_FORMULA))
+    , aPos(VclPtr<Edit>::Create(this, WB_3DLOOK|WB_CENTER|WB_BORDER|WB_READONLY))
+    , aEdit(VclPtr<InputEdit>::Create(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION))
+    , aPopMenu(SW_RES(MN_CALC_POPUP))
+    , pMgr(nullptr)
+    , pWrtShell(nullptr)
+    , pView(nullptr)
+    , aAktTableName(aEmptyOUStr)
     , m_bDoesUndo(true)
     , m_bResetUndo(false)
     , m_bCallUndo(false)
@@ -76,7 +77,8 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
 
     FreeResource();
 
-    aEdit->SetSizePixel( aEdit->CalcMinimumSize() );
+    aEdit->SetSizePixel(aEdit->CalcMinimumSize());
+    aPos->SetSizePixel(aPos->LogicToPixel(Size(45, 11), MapMode(MapUnit::MapAppFont)));
 
     SfxImageManager* pManager = SfxImageManager::GetImageManager( *SW_MOD() );
     pManager->RegisterToolBox(this);
