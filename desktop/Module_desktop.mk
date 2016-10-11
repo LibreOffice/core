@@ -16,6 +16,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_deploymentgui \
     Library_deploymentmisc \
     Library_offacc \
+    Library_safemode \
     Library_sofficeapp \
     $(if $(ENABLE_BREAKPAD), \
         Library_crashreport \
