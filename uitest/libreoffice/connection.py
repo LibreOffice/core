@@ -74,6 +74,9 @@ class OfficeConnection:
         url = "uno:" + socket + ";urp;StarOffice.ComponentContext"
         print("OfficeConnection: connecting to: " + url)
         while True:
+            if self.soffice.poll() is not None:
+                raise Exception("soffice has stopped.")
+
             try:
                 xContext = xUnoResolver.resolve(url)
                 return xContext
