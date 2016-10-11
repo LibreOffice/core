@@ -372,11 +372,6 @@ namespace dbp
         OLCPage::dispose();
     }
 
-    void OContentFieldSelection::ActivatePage()
-    {
-        OLCPage::ActivatePage();
-    }
-
 
     void OContentFieldSelection::initializePage()
     {
