@@ -115,6 +115,8 @@ public:
     bool            RemoveOtherViewWindow( vcl::Window* pWin );
 
     void            Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
+    Rectangle       GetInvalidateRect() const;
+    void            InvalidateOtherViewWindows( const Rectangle& rInvRect );
     void            Invalidate();
     Pair            Scroll( long nHorzScroll, long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
 
