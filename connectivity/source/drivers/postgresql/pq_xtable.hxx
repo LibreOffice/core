@@ -123,10 +123,6 @@ public:
                css::lang::IndexOutOfBoundsException,
                css::uno::RuntimeException, std::exception) override;
 
-    // TODO: remove again
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& aPropertyName)
-        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-
     // XNamed
     virtual OUString SAL_CALL getName(  ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
