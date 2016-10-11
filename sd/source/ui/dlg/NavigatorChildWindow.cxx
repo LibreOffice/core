@@ -20,10 +20,10 @@
 #include "NavigatorChildWindow.hxx"
 #include "navigatr.hxx"
 #include "app.hrc"
-#include "navigatr.hrc"
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/navigat.hxx>
 #include <svl/eitem.hxx>
 
 namespace sd {
@@ -55,6 +55,9 @@ NavigatorChildWindow::NavigatorChildWindow (
 
     pNavWin->SetUpdateRequestFunctor(
         [pBindings] () { return RequestNavigatorUpdate(pBindings); });
+
+    if (SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(pParent))
+        pNav->SetMinOutputSizePixel(pNavWin->GetOptimalSize());
 
     SetWindow( pNavWin );
 }

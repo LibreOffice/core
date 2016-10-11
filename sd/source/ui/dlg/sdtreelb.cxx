@@ -192,37 +192,6 @@ SotClipboardFormatId SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormat
     return mnListBoxDropFormatId;
 }
 
-SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, const SdResId& rSdResId )
-:   SvTreeListBox       ( pParentWin, rSdResId )
-,   bisInSdNavigatorWin  ( false )
-,   mpParent            ( pParentWin )
-,   mpDoc               ( nullptr )
-,   mpBookmarkDoc       ( nullptr )
-,   mpMedium            ( nullptr )
-,   mpOwnMedium         ( nullptr )
-,   maImgOle             ( BitmapEx( SdResId( BMP_OLE ) ) )
-,   maImgGraphic         ( BitmapEx( SdResId( BMP_GRAPHIC ) ) )
-,   mbLinkableSelected  ( false )
-,   mpDropNavWin        ( nullptr )
-,   mpFrame             ( nullptr )
-,   mbSaveTreeItemState ( false )
-,   mbShowAllShapes     ( false )
-,   mbShowAllPages      ( false )
-{
-    // add lines to Tree-ListBox
-    SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
-                           WB_HASBUTTONS | // WB_HASLINESATROOT |
-                           WB_HSCROLL |
-                           WB_HASBUTTONSATROOT |
-                           WB_QUICK_SEARCH /* i31275 */ );
-    SetNodeBitmaps( Image(Bitmap( SdResId(BMP_EXPAND) )),
-                    Image(Bitmap( SdResId(BMP_COLLAPSE) )));
-
-    SetDragDropMode(
-         DragDropMode::CTRL_MOVE | DragDropMode::CTRL_COPY |
-            DragDropMode::APP_MOVE  | DragDropMode::APP_COPY  | DragDropMode::APP_DROP );
-}
-
 SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
 :   SvTreeListBox       ( pParentWin, nStyle )
 ,   bisInSdNavigatorWin ( false )

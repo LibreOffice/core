@@ -24,6 +24,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/toolbox.hxx>
 #include <sfx2/ctrlitem.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include "sdtreelb.hxx"
 #include "pres.hxx"
 
@@ -75,8 +76,7 @@ private:
     ::sd::DrawDocShell* mpDocShell;
 };
 
-class SdNavigatorWin
-    : public vcl::Window
+class SdNavigatorWin : public PanelLayout
 {
 public:
     typedef ::std::function<void ()> UpdateRequestFunctor;
@@ -103,7 +103,6 @@ public:
     NavigatorDragType           GetNavigatorDragType();
 
 protected:
-    virtual void                Resize() override;
     virtual bool                Notify(NotifyEvent& rNEvt) override;
 
 private:
@@ -115,8 +114,6 @@ private:
     VclPtr<SdPageObjsTLB>       maTlbObjects;
     VclPtr<ListBox>             maLbDocs;
 
-    Size                        maSize;
-    Size                        maMinSize;
     bool                        mbDocImported;
     OUString                    maDropFileName;
     NavigatorDragType           meDragType;
@@ -124,8 +121,6 @@ private:
     SfxBindings*                mpBindings;
     SdNavigatorControllerItem*  mpNavigatorCtrlItem;
     SdPageNameControllerItem*   mpPageNameCtrlItem;
-
-    ImageList                   maImageList;
 
     /** This flag controls whether all shapes or only the named shapes are
         shown.
@@ -142,9 +137,8 @@ private:
                                 DECL_LINK( MenuSelectHdl, Menu *, bool );
                                 DECL_LINK( ShapeFilterCallback, Menu *, bool );
 
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) override;
     void                        SetDragImage();
-    void                        ApplyImageList();
+
 public:
     //when object is marked , fresh the corresponding entry tree .
     static sd::DrawDocShell*    GetDrawDocShell(const SdDrawDocument*);

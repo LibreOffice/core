@@ -181,8 +181,7 @@ protected:
 
 public:
 
-    SdPageObjsTLB( vcl::Window* pParent, const SdResId& rSdResId );
-    SdPageObjsTLB( vcl::Window* pParent, WinBits nStyle );
+    SdPageObjsTLB(vcl::Window* pParent, WinBits nStyle);
                             virtual ~SdPageObjsTLB() override;
     virtual void            dispose() override;
 

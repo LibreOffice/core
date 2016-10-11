@@ -392,8 +392,7 @@
 #define STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION    (RID_APP_START+712)
 #define STR_TASKPANEL_LAYOUT_MENU_TITLE                 (RID_APP_START+713)
 #define STR_GRAPHICS_STYLE_FAMILY                       (RID_APP_START+715)
-
-// free
+#define STR_OBJECTS_TREE                                (RID_APP_START+716)
 #define STR_CELL_STYLE_FAMILY                           (RID_APP_START+717)
 
 #define STR_NAVIGATOR_SHOW_NAMED_SHAPES                 (RID_APP_START+718)

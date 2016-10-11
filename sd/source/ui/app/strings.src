@@ -1257,4 +1257,9 @@ String STR_INSERT_3D_MODEL_ALL_SUPPORTED_FORMATS
     Text [ en-US ] = "All supported formats";
 };
 
+String STR_OBJECTS_TREE
+{
+    Text [ en-US ] = "Page Tree";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
