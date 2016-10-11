@@ -349,6 +349,15 @@ struct RectangleAndPart
 
     static RectangleAndPart Create(const std::string& rPayload)
     {
+        RectangleAndPart aRet;
+        if (rPayload.find("EMPTY") == 0) // payload starts with "EMPTY"
+        {
+            if (comphelper::LibreOfficeKit::isPartInInvalidation())
+                aRet.m_nPart = std::stol(rPayload.substr(6));
+
+            return aRet;
+        }
+
         std::istringstream aStream(rPayload);
         long nLeft, nTop, nRight, nBottom;
         long nPart = -1;
@@ -357,7 +366,7 @@ struct RectangleAndPart
             aStream >> nLeft >> nComma >> nTop >> nComma >> nRight >> nComma >> nBottom >> nComma >> nPart;
         else
             aStream >> nLeft >> nComma >> nTop >> nComma >> nRight >> nComma >> nBottom;
-        RectangleAndPart aRet;
+
         aRet.m_aRectangle = Rectangle(nLeft, nTop, nLeft + nRight, nTop + nBottom);
         aRet.m_nPart = nPart;
         return aRet;
@@ -649,6 +658,24 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         break;
     }
 
+    // if we have to invalidate all tiles, we can skip any new tile invalidation
+    if (type == LOK_CALLBACK_INVALIDATE_TILES)
+    {
+        const auto& pos = std::find_if(m_queue.rbegin(), m_queue.rend(),
+                [] (const queue_type::value_type& elem) { return (elem.first == LOK_CALLBACK_INVALIDATE_TILES); });
+
+        if (pos != m_queue.rend())
+        {
+            RectangleAndPart rcOld = RectangleAndPart::Create(pos->second);
+            RectangleAndPart rcNew = RectangleAndPart::Create(payload);
+            if (rcOld.m_aRectangle.IsEmpty() && rcOld.m_nPart == rcNew.m_nPart)
+            {
+                //SAL_WARN("lok", "Skipping queue [" + std::to_string(type) + "]: [" + payload + "] since all tiles need to be invalidated.");
+                return;
+            }
+        }
+    }
+
     if (type == LOK_CALLBACK_TEXT_SELECTION && payload.empty())
     {
         const auto& posStart = std::find_if(m_queue.rbegin(), m_queue.rend(),
@@ -730,37 +757,56 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             {
                 RectangleAndPart rcNew = RectangleAndPart::Create(payload);
                 //SAL_WARN("lok", "New: " << rcNew.toString());
-                const auto rcOrig = rcNew;
-
-                removeAll(
-                    [type, &rcNew] (const queue_type::value_type& elem) {
-                        if (elem.first == type)
-                        {
-                            const RectangleAndPart rcOld = RectangleAndPart::Create(elem.second);
-                            if (rcOld.m_nPart != rcNew.m_nPart)
-                                return false;
-                            //SAL_WARN("lok", "#" << i << " Old: " << rcOld.toString());
-                            const Rectangle rcOverlap = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
-                            //SAL_WARN("lok", "#" << i << " Overlap: " << rcOverlap.toString());
-                            bool bOverlap = (rcOverlap.GetWidth() > 0 && rcOverlap.GetHeight() > 0);
-                            if (bOverlap)
-                            {
-                                //SAL_WARN("lok", rcOld.toString() << " U " << rcNew.toString());
-                                rcNew.m_aRectangle.Union(rcOld.m_aRectangle);
-                            }
-                            return bOverlap;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                );
-
-                if (rcNew.m_aRectangle != rcOrig.m_aRectangle)
+                if (rcNew.m_aRectangle.IsEmpty())
                 {
-                    SAL_WARN("lok", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
-                    payload = rcNew.toString().getStr();
+                    removeAll(
+                        [type, &rcNew] (const queue_type::value_type& elem) {
+                            if (elem.first == type)
+                            {
+                                const RectangleAndPart rcOld = RectangleAndPart::Create(elem.second);
+                                return (rcOld.m_nPart == rcNew.m_nPart);
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    );
+                }
+                else
+                {
+                    const auto rcOrig = rcNew;
+
+                    removeAll(
+                        [type, &rcNew] (const queue_type::value_type& elem) {
+                            if (elem.first == type)
+                            {
+                                const RectangleAndPart rcOld = RectangleAndPart::Create(elem.second);
+                                if (rcOld.m_nPart != rcNew.m_nPart)
+                                    return false;
+                                //SAL_WARN("lok", "#" << i << " Old: " << rcOld.toString());
+                                const Rectangle rcOverlap = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
+                                //SAL_WARN("lok", "#" << i << " Overlap: " << rcOverlap.toString());
+                                bool bOverlap = (rcOverlap.GetWidth() > 0 && rcOverlap.GetHeight() > 0);
+                                if (bOverlap)
+                                {
+                                    //SAL_WARN("lok", rcOld.toString() << " U " << rcNew.toString());
+                                    rcNew.m_aRectangle.Union(rcOld.m_aRectangle);
+                                }
+                                return bOverlap;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    );
+
+                    if (rcNew.m_aRectangle != rcOrig.m_aRectangle)
+                    {
+                        SAL_WARN("lok", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
+                        payload = rcNew.toString().getStr();
+                    }
                 }
             }
             break;
