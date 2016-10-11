@@ -26,7 +26,7 @@
 // Only of the measure arrows are on the outside
 class SdrMeasureOverhangItem: public SdrMetricItem {
 public:
-    SdrMeasureOverhangItem(long nVal=0): SdrMetricItem(SDRATTR_MEASUREOVERHANG,nVal)  {}
+    SdrMeasureOverhangItem(long nVal): SdrMetricItem(SDRATTR_MEASUREOVERHANG,nVal)  {}
     virtual SfxPoolItem* Clone(SfxItemPool*) const override
     {
         return new SdrMeasureOverhangItem(*this);

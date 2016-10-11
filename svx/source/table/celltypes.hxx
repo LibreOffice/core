@@ -56,7 +56,7 @@ public:
         bForward is true or from nEnd (excluding to nStart (including).
         rStart must be <= rEnd.
     */
-    RangeIterator( const T& rStart, const T& rEnd, bool bForward = true )
+    RangeIterator( const T& rStart, const T& rEnd, bool bForward )
     {
         if( bForward )
         {

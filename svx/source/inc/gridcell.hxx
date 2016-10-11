@@ -1071,7 +1071,7 @@ class FmXFilterCell :public FmXGridCell
 protected:
     virtual ~FmXFilterCell() override;
 public:
-    FmXFilterCell(DbGridColumn* pColumn = nullptr, DbCellControl* pControl = nullptr);
+    FmXFilterCell(DbGridColumn* pColumn, DbCellControl* pControl = nullptr);
 
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXFilterCell, FmXGridCell)
