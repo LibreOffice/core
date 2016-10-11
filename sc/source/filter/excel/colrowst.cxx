@@ -30,17 +30,12 @@
 #include "queryparam.hxx"
 #include "excimp8.hxx"
 
-const sal_uInt8 EXC_COLROW_USED         = 0x01;
-const sal_uInt8 EXC_COLROW_DEFAULT      = 0x02;
-const sal_uInt8 EXC_COLROW_HIDDEN       = 0x04;
-const sal_uInt8 EXC_COLROW_MAN          = 0x08;
-
 XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     maColWidths(0, MAXCOLCOUNT, 0),
-    maColFlags(0, MAXCOLCOUNT, 0),
+    maColFlags(0, MAXCOLCOUNT, ExcColRowFlags::NONE),
     maRowHeights(0, MAXROWCOUNT, 0),
-    maRowFlags(0, MAXROWCOUNT, 0),
+    maRowFlags(0, MAXROWCOUNT, ExcColRowFlags::NONE),
     maHiddenRows(0, MAXROWCOUNT, false),
     mnLastScRow( -1 ),
     mnDefWidth( STD_COL_WIDTH ),
@@ -85,7 +80,7 @@ void XclImpColRowSettings::SetWidthRange( SCCOL nCol1, SCCOL nCol2, sal_uInt16 n
 
     // We need to apply flag values individually since all flag values are aggregated for each column.
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        ApplyColFlag(nCol, EXC_COLROW_USED);
+        ApplyColFlag(nCol, ExcColRowFlags::Used);
 }
 
 void XclImpColRowSettings::HideCol( SCCOL nCol )
@@ -93,7 +88,7 @@ void XclImpColRowSettings::HideCol( SCCOL nCol )
     if (!ValidCol(nCol))
         return;
 
-    ApplyColFlag(nCol, EXC_COLROW_HIDDEN);
+    ApplyColFlag(nCol, ExcColRowFlags::Hidden);
 }
 
 void XclImpColRowSettings::HideColRange( SCCOL nCol1, SCCOL nCol2 )
@@ -102,7 +97,7 @@ void XclImpColRowSettings::HideColRange( SCCOL nCol1, SCCOL nCol2 )
     nCol1 = ::std::min( nCol1, nCol2 );
 
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        ApplyColFlag(nCol, EXC_COLROW_HIDDEN);
+        ApplyColFlag(nCol, ExcColRowFlags::Hidden);
 }
 
 void XclImpColRowSettings::SetDefHeight( sal_uInt16 nDefHeight, sal_uInt16 nFlags )
@@ -125,12 +120,12 @@ void XclImpColRowSettings::SetHeight( SCROW nScRow, sal_uInt16 nHeight )
     sal_uInt16 nRawHeight = nHeight & EXC_ROW_HEIGHTMASK;
     bool bDefHeight = ::get_flag( nHeight, EXC_ROW_FLAGDEFHEIGHT ) || (nRawHeight == 0);
     maRowHeights.insert_back(nScRow, nScRow+1, nRawHeight);
-    sal_uInt8 nFlagVal = 0;
+    ExcColRowFlags nFlagVal = ExcColRowFlags::NONE;
     if (!maRowFlags.search(nScRow, nFlagVal).second)
         return;
 
-    ::set_flag(nFlagVal, EXC_COLROW_USED);
-    ::set_flag(nFlagVal, EXC_COLROW_DEFAULT, bDefHeight);
+    ::set_flag(nFlagVal, ExcColRowFlags::Used);
+    ::set_flag(nFlagVal, ExcColRowFlags::Default, bDefHeight);
 
     maRowFlags.insert_back(nScRow, nScRow+1, nFlagVal);
 
@@ -145,12 +140,12 @@ void XclImpColRowSettings::SetRowSettings( SCROW nScRow, sal_uInt16 nHeight, sal
 
     SetHeight(nScRow, nHeight);
 
-    sal_uInt8 nFlagVal = 0;
+    ExcColRowFlags nFlagVal = ExcColRowFlags::NONE;
     if (!maRowFlags.search(nScRow, nFlagVal).second)
         return;
 
     if (::get_flag(nFlags, EXC_ROW_UNSYNCED))
-        ::set_flag(nFlagVal, EXC_COLROW_MAN);
+        ::set_flag(nFlagVal, ExcColRowFlags::Man);
 
     maRowFlags.insert_back(nScRow, nScRow+1, nFlagVal);
 
@@ -163,11 +158,11 @@ void XclImpColRowSettings::SetManualRowHeight( SCROW nScRow )
     if (!ValidRow(nScRow))
         return;
 
-    sal_uInt8 nFlagVal = 0;
+    ExcColRowFlags nFlagVal = ExcColRowFlags::NONE;
     if (!maRowFlags.search(nScRow, nFlagVal).second)
         return;
 
-    ::set_flag(nFlagVal, EXC_COLROW_MAN);
+    nFlagVal |= ExcColRowFlags::Man;
     maRowFlags.insert_back(nScRow, nScRow+1, nFlagVal);
 }
 
@@ -196,7 +191,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     for( SCCOL nCol = 0; nCol <= MAXCOL; ++nCol )
     {
         sal_uInt16 nWidth = mnDefWidth;
-        if (GetColFlag(nCol, EXC_COLROW_USED))
+        if (GetColFlag(nCol, ExcColRowFlags::Used))
         {
             sal_uInt16 nTmp;
             if (maColWidths.search_tree(nCol, nTmp).second)
@@ -208,7 +203,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
             document, until filters and outlines are inserted. */
         if( nWidth == 0 )
         {
-            ApplyColFlag(nCol, EXC_COLROW_HIDDEN);
+            ApplyColFlag(nCol, ExcColRowFlags::Hidden);
             nWidth = mnDefWidth;
         }
         rDoc.SetColWidthOnly( nCol, nScTab, nWidth );
@@ -228,18 +223,18 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
 
     ColRowFlagsType::const_iterator itrFlags = maRowFlags.begin(), itrFlagsEnd = maRowFlags.end();
     SCROW nPrevRow = -1;
-    sal_uInt8 nPrevFlags = 0;
+    ExcColRowFlags nPrevFlags = ExcColRowFlags::NONE;
     for (; itrFlags != itrFlagsEnd; ++itrFlags)
     {
         SCROW nRow = itrFlags->first;
-        sal_uInt8 nFlags = itrFlags->second;
+        ExcColRowFlags nFlags = itrFlags->second;
         if (nPrevRow >= 0)
         {
             sal_uInt16 nHeight = 0;
 
-            if (::get_flag(nPrevFlags, EXC_COLROW_USED))
+            if (nPrevFlags & ExcColRowFlags::Used)
             {
-                if (::get_flag(nPrevFlags, EXC_COLROW_DEFAULT))
+                if (nPrevFlags & ExcColRowFlags::Default)
                 {
                     nHeight = mnDefHeight;
                     rDoc.SetRowHeightOnly(nPrevRow, nRow-1, nScTab, nHeight);
@@ -263,7 +258,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
                     }
                 }
 
-                if (::get_flag(nPrevFlags, EXC_COLROW_MAN))
+                if (nPrevFlags & ExcColRowFlags::Man)
                     rDoc.SetManualHeight(nPrevRow, nRow-1, nScTab, true);
             }
             else
@@ -286,7 +281,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
 
     // hide the columns
     for( SCCOL nCol = 0; nCol <= MAXCOL; ++nCol )
-        if (GetColFlag(nCol, EXC_COLROW_HIDDEN))
+        if (GetColFlag(nCol, ExcColRowFlags::Hidden))
             rDoc.ShowCol( nCol, nScTab, false );
 
     // #i38093# rows hidden by filter need extra flag
@@ -345,10 +340,10 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
         rDoc.ShowRows( mnLastScRow + 1, MAXROW, nScTab, false );
 }
 
-void XclImpColRowSettings::ApplyColFlag(SCCOL nCol, sal_uInt8 nNewVal)
+void XclImpColRowSettings::ApplyColFlag(SCCOL nCol, ExcColRowFlags nNewVal)
 {
     // Get the original flag value.
-    sal_uInt8 nFlagVal = 0;
+    ExcColRowFlags nFlagVal = ExcColRowFlags::NONE;
     std::pair<ColRowFlagsType::const_iterator,bool> r = maColFlags.search(nCol, nFlagVal);
     if (!r.second)
         // Search failed.
@@ -360,14 +355,14 @@ void XclImpColRowSettings::ApplyColFlag(SCCOL nCol, sal_uInt8 nNewVal)
     maColFlags.insert(r.first, nCol, nCol+1, nFlagVal);
 }
 
-bool XclImpColRowSettings::GetColFlag(SCCOL nCol, sal_uInt8 nMask) const
+bool XclImpColRowSettings::GetColFlag(SCCOL nCol, ExcColRowFlags nMask) const
 {
-    sal_uInt8 nFlagVal = 0;
+    ExcColRowFlags nFlagVal = ExcColRowFlags::NONE;
     if (!maColFlags.search(nCol, nFlagVal).second)
         return false;
         // Search failed.
 
-    return ::get_flag(nFlagVal, nMask);
+    return bool(nFlagVal & nMask);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

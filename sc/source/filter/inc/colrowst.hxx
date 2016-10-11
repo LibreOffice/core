@@ -22,6 +22,19 @@
 
 #include "xiroot.hxx"
 #include <mdds/flat_segment_tree.hpp>
+#include <o3tl/typed_flags_set.hxx>
+
+enum class ExcColRowFlags : sal_uInt8 {
+    NONE         = 0x00,
+    Used         = 0x01,
+    Default      = 0x02,
+    Hidden       = 0x04,
+    Man          = 0x08,
+};
+namespace o3tl {
+    template<> struct typed_flags<ExcColRowFlags> : is_typed_flags<ExcColRowFlags, 0x0f> {};
+}
+
 
 class XclImpColRowSettings : protected XclImpRoot
 {
@@ -46,13 +59,13 @@ public:
     void                ConvertHiddenFlags( SCTAB nScTab );
 
 private:
-    void ApplyColFlag(SCCOL nCol, sal_uInt8 nNewVal);
-    bool GetColFlag(SCCOL nCol, sal_uInt8 nMask) const;
+    void ApplyColFlag(SCCOL nCol, ExcColRowFlags nNewVal);
+    bool GetColFlag(SCCOL nCol, ExcColRowFlags nMask) const;
 
 private:
-    typedef ::mdds::flat_segment_tree<SCROW, sal_uInt16> WidthHeightStoreType;
-    typedef ::mdds::flat_segment_tree<SCROW, sal_uInt8>  ColRowFlagsType;
-    typedef ::mdds::flat_segment_tree<SCROW, bool>       RowHiddenType;
+    typedef ::mdds::flat_segment_tree<SCROW, sal_uInt16>      WidthHeightStoreType;
+    typedef ::mdds::flat_segment_tree<SCROW, ExcColRowFlags>  ColRowFlagsType;
+    typedef ::mdds::flat_segment_tree<SCROW, bool>            RowHiddenType;
 
     WidthHeightStoreType maColWidths;
     ColRowFlagsType      maColFlags;
