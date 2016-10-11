@@ -69,13 +69,11 @@ VCLXAccessibleListItem::VCLXAccessibleListItem(sal_Int32 _nIndexInParent, const 
     , m_nClientId(0)
     , m_xParent(_xParent)
 {
-    if (m_xParent.is())
-    {
-        m_xParentContext = m_xParent->getAccessibleContext();
-        ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent->getListBoxHelper();
-        if (pListBoxHelper)
-            m_sEntryText = pListBoxHelper->GetEntry((sal_uInt16)_nIndexInParent);
-    }
+    assert(m_xParent.is());
+    m_xParentContext = m_xParent->getAccessibleContext();
+    ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent->getListBoxHelper();
+    if (pListBoxHelper)
+        m_sEntryText = pListBoxHelper->GetEntry((sal_uInt16)_nIndexInParent);
 }
 
 VCLXAccessibleListItem::~VCLXAccessibleListItem()
