@@ -33,6 +33,7 @@
 #include <svx/xlnedit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/svdomeas.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -204,6 +205,11 @@ void FuConstRectangle::Activate()
         case SID_LINE_ARROWS:
             aNewPointer = Pointer( PointerStyle::DrawLine );
             aObjKind = OBJ_LINE;
+            break;
+
+        case SID_DRAW_MEASURELINE:
+            aNewPointer = Pointer( PointerStyle::DrawLine );
+            aObjKind = OBJ_MEASURE;
             break;
 
         case SID_DRAW_RECT:
@@ -420,6 +426,19 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
 
                 break;
             }
+
+            case SID_DRAW_MEASURELINE:
+            {
+                if(dynamic_cast<const SdrMeasureObj*>( pObj) != nullptr)
+                {
+                    sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
+                    static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aStart.X(), nYMiddle), 0);
+                    static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aEnd.X(), nYMiddle), 1);
+                }
+
+                break;
+            }
+
             case SID_DRAW_CAPTION:
             case SID_DRAW_CAPTION_VERTICAL:
             {
