@@ -301,7 +301,7 @@ long ScColumn::GetNeededSize(
                     bAddMargin = false;
                     //  only to the right:
                     //TODO: differ on direction up/down (only Text/whole height)
-                    if ( pPattern->GetRotateDir( pCondSet ) == SC_ROTDIR_RIGHT )
+                    if ( pPattern->GetRotateDir( pCondSet ) == ScRotateDir::Right )
                         nWidth += (long)( pDocument->GetRowHeight( nRow,nTab ) *
                                             nPPT * nCosAbs / nSinAbs );
                 }
@@ -474,7 +474,7 @@ long ScColumn::GetNeededSize(
             {
                 nWidth = (long) ( pDocument->GetColWidth( nCol,nTab ) * nPPT );
                 bAddMargin = false;
-                if ( pPattern->GetRotateDir( pCondSet ) == SC_ROTDIR_RIGHT )
+                if ( pPattern->GetRotateDir( pCondSet ) == ScRotateDir::Right )
                     nWidth += (long)( pDocument->GetRowHeight( nRow,nTab ) *
                                         nPPT * nCosAbs / nSinAbs );
             }

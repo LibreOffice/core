@@ -634,8 +634,8 @@ void ScOutputData::FindRotated()
 
                 if ( pPattern )     // column isn't hidden
                 {
-                    sal_uInt8 nDir = pPattern->GetRotateDir( pCondSet );
-                    if (nDir != SC_ROTDIR_NONE)
+                    ScRotateDir nDir = pPattern->GetRotateDir( pCondSet );
+                    if (nDir != ScRotateDir::NONE)
                     {
                         pInfo->nRotateDir = nDir;
                         bAnyRotated = true;
@@ -646,12 +646,12 @@ void ScOutputData::FindRotated()
     }
 }
 
-static sal_uInt16 lcl_GetRotateDir( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
+static ScRotateDir lcl_GetRotateDir( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
     const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
 
-    sal_uInt16 nRet = SC_ROTDIR_NONE;
+    ScRotateDir nRet = ScRotateDir::NONE;
 
     long nAttrRotate = pPattern->GetRotateVal( pCondSet );
     if ( nAttrRotate )
@@ -660,19 +660,19 @@ static sal_uInt16 lcl_GetRotateDir( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SC
                     pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
 
         if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
-            nRet = SC_ROTDIR_STANDARD;
+            nRet = ScRotateDir::Standard;
         else if ( eRotMode == SVX_ROTATE_MODE_CENTER )
-            nRet = SC_ROTDIR_CENTER;
+            nRet = ScRotateDir::Center;
         else if ( eRotMode == SVX_ROTATE_MODE_TOP || eRotMode == SVX_ROTATE_MODE_BOTTOM )
         {
             long nRot180 = nAttrRotate % 18000;     // 1/100 degree
             if ( nRot180 == 9000 )
-                nRet = SC_ROTDIR_CENTER;
+                nRet = ScRotateDir::Center;
             else if ( ( eRotMode == SVX_ROTATE_MODE_TOP && nRot180 < 9000 ) ||
                       ( eRotMode == SVX_ROTATE_MODE_BOTTOM && nRot180 > 9000 ) )
-                nRet = SC_ROTDIR_LEFT;
+                nRet = ScRotateDir::Left;
             else
-                nRet = SC_ROTDIR_RIGHT;
+                nRet = ScRotateDir::Right;
         }
     }
 
@@ -686,10 +686,10 @@ static const SvxBrushItem* lcl_FindBackground( ScDocument* pDoc, SCCOL nCol, SCR
     const SvxBrushItem* pBackground = static_cast<const SvxBrushItem*>(
                             &pPattern->GetItem( ATTR_BACKGROUND, pCondSet ));
 
-    sal_uInt16 nDir = lcl_GetRotateDir( pDoc, nCol, nRow, nTab );
+    ScRotateDir nDir = lcl_GetRotateDir( pDoc, nCol, nRow, nTab );
 
     // treat CENTER like RIGHT
-    if ( nDir == SC_ROTDIR_RIGHT || nDir == SC_ROTDIR_CENTER )
+    if ( nDir == ScRotateDir::Right || nDir == ScRotateDir::Center )
     {
         // text goes to the right -> take background from the left
         while ( nCol > 0 && lcl_GetRotateDir( pDoc, nCol, nRow, nTab ) == nDir &&
@@ -701,7 +701,7 @@ static const SvxBrushItem* lcl_FindBackground( ScDocument* pDoc, SCCOL nCol, SCR
             pBackground = static_cast<const SvxBrushItem*>(&pPattern->GetItem( ATTR_BACKGROUND, pCondSet ));
         }
     }
-    else if ( nDir == SC_ROTDIR_LEFT )
+    else if ( nDir == ScRotateDir::Left )
     {
         // text goes to the left -> take background from the right
         while ( nCol < MAXCOL && lcl_GetRotateDir( pDoc, nCol, nRow, nTab ) == nDir &&
@@ -1073,7 +1073,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     if ( bPagebreakMode && !pInfo->bPrinted )
                         pBackground = ScGlobal::GetProtectedBrushItem();
 
-                    if ( pInfo->nRotateDir > SC_ROTDIR_STANDARD &&
+                    if ( pInfo->nRotateDir > ScRotateDir::Standard &&
                             pBackground->GetColor().GetTransparency() != 255 &&
                             !bCellContrast )
                     {
@@ -1452,16 +1452,16 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
 // Line below the cell
 
 static const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
-                        SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nRotDir,
+                        SCCOL nCol, SCROW nRow, SCTAB nTab, ScRotateDir nRotDir,
                         bool bTopLine )
 {
-    if ( nRotDir != SC_ROTDIR_LEFT && nRotDir != SC_ROTDIR_RIGHT )
+    if ( nRotDir != ScRotateDir::Left && nRotDir != ScRotateDir::Right )
         return nullptr;
 
     bool bFound = false;
     while (!bFound)
     {
-        if ( nRotDir == SC_ROTDIR_LEFT )
+        if ( nRotDir == ScRotateDir::Left )
         {
             // text to the left -> line from the right
             if ( nCol < MAXCOL )
@@ -1580,7 +1580,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
 
                 CellInfo* pInfo = &rThisRowInfo.pCellInfo[nArrX];
                 long nColWidth = pRowInfo[0].pCellInfo[nArrX].nWidth;
-                if ( pInfo->nRotateDir > SC_ROTDIR_STANDARD &&
+                if ( pInfo->nRotateDir > ScRotateDir::Standard &&
                         !pInfo->bHOverlapped && !pInfo->bVOverlapped )
                 {
                     pPattern = pInfo->pPatternAttr;
@@ -1806,14 +1806,14 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
             {
                 sal_uInt16 nArrX = nX + 1;
                 CellInfo& rInfo = rThisRowInfo.pCellInfo[nArrX];
-                if ( rInfo.nRotateDir > SC_ROTDIR_STANDARD &&
+                if ( rInfo.nRotateDir > ScRotateDir::Standard &&
                         !rInfo.bHOverlapped && !rInfo.bVOverlapped )
                 {
                     size_t nCol = lclGetArrayColFromCellInfoX( nArrX, nX1, nX2, bLayoutRTL );
 
                     // horizontal: extend adjacent line
                     // (only when the rotated cell has a border)
-                    sal_uInt16 nDir = rInfo.nRotateDir;
+                    ScRotateDir nDir = rInfo.nRotateDir;
                     if ( rArray.GetCellStyleTop( nCol, nRow ).Prim() )
                     {
                         svx::frame::Style aStyle( lcl_FindHorLine( mpDoc, nX, nY, nTab, nDir, true ), mnPPTY );

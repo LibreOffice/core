@@ -4694,7 +4694,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                 if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
 
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
-                if ( pInfo->nRotateDir != SC_ROTDIR_NONE )
+                if ( pInfo->nRotateDir != ScRotateDir::NONE )
                 {
                     SCROW nY = pThisRowInfo->nRowNo;
 
@@ -5027,7 +5027,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 {
                                     nGridWidth = aCellSize.Width() +
                                             std::abs((long) ( aCellSize.Height() * nCos / nSin ));
-                                    bNegative = ( pInfo->nRotateDir == SC_ROTDIR_LEFT );
+                                    bNegative = ( pInfo->nRotateDir == ScRotateDir::Left );
                                     if ( bLayoutRTL )
                                         bNegative = !bNegative;
                                 }

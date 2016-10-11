@@ -38,11 +38,9 @@ class Color;
 
 class ScPatternAttr;
 
-const sal_uInt8 SC_ROTDIR_NONE       = 0;
-const sal_uInt8 SC_ROTDIR_STANDARD   = 1;
-const sal_uInt8 SC_ROTDIR_LEFT       = 2;
-const sal_uInt8 SC_ROTDIR_RIGHT      = 3;
-const sal_uInt8 SC_ROTDIR_CENTER     = 4;
+enum class ScRotateDir : sal_uInt8 {
+    NONE, Standard, Left, Right, Center
+};
 
 const sal_uInt8 SC_CLIPMARK_NONE     = 0;
 const sal_uInt8 SC_CLIPMARK_LEFT     = 1;
@@ -110,7 +108,7 @@ struct CellInfo
         , eVShadowPart(SC_SHADOW_HSTART)
         , nClipMark(SC_CLIPMARK_NONE)
         , nWidth(0)
-        , nRotateDir(SC_ROTDIR_NONE)
+        , nRotateDir(ScRotateDir::NONE)
         , bMarked(false)
         , bEmptyCellText(false)
         , bMerged(false)
@@ -151,9 +149,9 @@ struct CellInfo
 
     ScShadowPart                eHShadowPart : 4;           // shadow effective for drawing
     ScShadowPart                eVShadowPart : 4;
-    sal_uInt8                        nClipMark;
-    sal_uInt16                      nWidth;
-    sal_uInt8                        nRotateDir;
+    sal_uInt8                   nClipMark;
+    sal_uInt16                  nWidth;
+    ScRotateDir                 nRotateDir;
 
     bool                        bMarked : 1;
     bool                        bEmptyCellText : 1;

@@ -1969,14 +1969,14 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
 {
     //  Return value = new nArrY
 
-    sal_uInt8 nRotDir = pPattern->GetRotateDir( pCondSet );
-    if ( nRotDir != SC_ROTDIR_NONE )
+    ScRotateDir nRotDir = pPattern->GetRotateDir( pCondSet );
+    if ( nRotDir != ScRotateDir::NONE )
     {
         bool bHit = true;
         if ( nCol+1 < nX1 )                             // column to the left
-            bHit = ( nRotDir != SC_ROTDIR_LEFT );
+            bHit = ( nRotDir != ScRotateDir::Left );
         else if ( nCol > nX2+1 )                        // column to the right
-            bHit = ( nRotDir != SC_ROTDIR_RIGHT );      // SC_ROTDIR_STANDARD may now also be extended to the left
+            bHit = ( nRotDir != ScRotateDir::Right );      // ScRotateDir::Standard may now also be extended to the left
 
         if ( bHit )
         {
@@ -1991,7 +1991,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
                 //TODO: limit !!!
                 //TODO: additional factor for varying PPT X/Y !!!
 
-                // for SC_ROTDIR_LEFT this gives a negative value,
+                // for ScRotateDir::Left this gives a negative value,
                 // if the Modus is considered
                 nFactor = -fabs( nCos / nSin );
             }

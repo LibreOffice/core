@@ -34,6 +34,7 @@ class Fraction;
 class ScStyleSheet;
 class SvNumberFormatter;
 class ScDocument;
+enum class ScRotateDir : sal_uInt8;
 
 ///  how to treat COL_AUTO in GetFont:
 
@@ -132,7 +133,7 @@ public:
                                                 const SfxItemSet* pCondSet ) const;
 
     long                    GetRotateVal( const SfxItemSet* pCondSet ) const;
-    sal_uInt8                   GetRotateDir( const SfxItemSet* pCondSet ) const;
+    ScRotateDir             GetRotateDir( const SfxItemSet* pCondSet ) const;
 
     void                    SetKey(sal_uInt64 nKey);
     sal_uInt64              GetKey() const;
