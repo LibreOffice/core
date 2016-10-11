@@ -127,7 +127,7 @@
 
       <node oor:name="SdCustomAnimationDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Custom Animation</value>
+          <value xml:lang="en-US">Animation</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>SdCustomAnimationDeck</value>
@@ -864,7 +864,7 @@
 
       <node oor:name="SdCustomAnimationPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Custom Animation</value>
+          <value xml:lang="en-US">Animation</value>
         </prop>
         <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
           <value>true</value>
