@@ -45,6 +45,9 @@ OString OutHex(sal_uLong nHex, sal_uInt8 nLen)
 // (it only talks about "Unicode character", but then explains how values of N
 // greater than 32767 will be expressed as negative signed 16-bit numbers, so
 // that smells like \uN is limited to BMP).
+// However the "Mathematics" section has an example that shows the code point
+// U+1D44E being encoded as UTF-16 surrogate pair "\u-10187?\u-9138?", so
+// sal_Unicode actually works fine here.
 OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pSuccess, bool bUnicode)
 {
     if (pSuccess)
