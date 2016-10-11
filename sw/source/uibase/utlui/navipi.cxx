@@ -941,7 +941,7 @@ void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
             SwWrtShell* pWrtShell = pActView->GetWrtShellPtr();
             m_aContentTree->SetActiveShell(pWrtShell);
             bool bGlobal = IsGlobalDoc();
-            m_aContentToolBox->EnableItem(FN_GLOBAL_SWITCH, bGlobal);
+            m_aContentToolBox->ShowItem(FN_GLOBAL_SWITCH, bGlobal);
             if( (!bGlobal && IsGlobalMode()) ||
                     (!IsGlobalMode() && m_pConfig->IsGlobalActive()) )
             {
