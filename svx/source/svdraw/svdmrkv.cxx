@@ -72,7 +72,7 @@ class ImplMarkingOverlay
     bool                                            mbUnmarking : 1;
 
 public:
-    ImplMarkingOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos, bool bUnmarking = false);
+    ImplMarkingOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos, bool bUnmarking);
     ~ImplMarkingOverlay();
 
     void SetSecondPosition(const basegfx::B2DPoint& rNewPosition);

@@ -95,8 +95,8 @@ namespace drawinglayer
                 const basegfx::B2DPoint& rBasePosition,
                 sal_uInt16 nCenterX,
                 sal_uInt16 nCenterY,
-                double fShearX = 0.0,
-                double fRotation = 0.0);
+                double fShearX,
+                double fRotation);
 
             // data access
             const BitmapEx& getBitmapEx() const { return maBitmapEx; }

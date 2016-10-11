@@ -89,7 +89,7 @@ public:
                           Action _eAction,
                           const css::uno::Reference< css::container::XIndexContainer >& xCont,
                           const css::uno::Reference< css::uno::XInterface >& xElem,
-                          sal_Int32 nIdx = -1);
+                          sal_Int32 nIdx);
     virtual ~FmUndoContainerAction() override;
 
     virtual void Undo() override;

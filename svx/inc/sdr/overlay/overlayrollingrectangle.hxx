@@ -46,7 +46,7 @@ namespace sdr
             OverlayRollingRectangleStriped(
                 const basegfx::B2DPoint& rBasePos,
                 const basegfx::B2DPoint& rSecondPos,
-                bool bExtendedLines = false,
+                bool bExtendedLines,
                 bool bShowBounds = true);
             virtual ~OverlayRollingRectangleStriped() override;
 

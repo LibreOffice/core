@@ -36,7 +36,7 @@ public:
     sal_uInt16          nResize;
     sal_uInt16          nPoints;
 
-    ImpXPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize=16 );
+    ImpXPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize=16 );
     ImpXPolygon( const ImpXPolygon& rImpXPoly );
     ~ImpXPolygon();
 

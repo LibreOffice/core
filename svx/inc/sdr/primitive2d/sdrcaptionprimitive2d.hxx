@@ -51,8 +51,8 @@ namespace drawinglayer
                 const ::basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
                 const ::basegfx::B2DPolygon& rTail,
-                double fCornerRadiusX = 0.0,
-                double fCornerRadiusY = 0.0);
+                double fCornerRadiusX,
+                double fCornerRadiusY);
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
