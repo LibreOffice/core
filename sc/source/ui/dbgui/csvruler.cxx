@@ -118,24 +118,24 @@ void ScCsvRuler::setPosSizePixel(
 
 void ScCsvRuler::ApplyLayout( const ScCsvLayoutData& rOldData )
 {
-    ScCsvDiff nDiff = GetLayoutData().GetDiff( rOldData ) & (CSV_DIFF_HORIZONTAL | CSV_DIFF_RULERCURSOR);
-    if( nDiff == CSV_DIFF_EQUAL ) return;
+    ScCsvDiff nDiff = GetLayoutData().GetDiff( rOldData ) & (ScCsvDiff::HorizontalMask | ScCsvDiff::RulerCursor);
+    if( nDiff == ScCsvDiff::Equal ) return;
 
     DisableRepaint();
-    if( nDiff & CSV_DIFF_HORIZONTAL )
+    if( nDiff & ScCsvDiff::HorizontalMask )
     {
         InitSizeData();
         if( GetRulerCursorPos() >= GetPosCount() )
             MoveCursor( GetPosCount() - 1 );
     }
-    if( nDiff & CSV_DIFF_RULERCURSOR )
+    if( nDiff & ScCsvDiff::RulerCursor )
     {
         ImplInvertCursor( rOldData.mnPosCursor );
         ImplInvertCursor( GetRulerCursorPos() );
     }
     EnableRepaint();
 
-    if( nDiff & CSV_DIFF_POSOFFSET )
+    if( nDiff & ScCsvDiff::PosOffset )
         AccSendVisibleEvent();
 }
 

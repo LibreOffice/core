@@ -26,6 +26,7 @@
 #include "address.hxx"
 #include "csvsplits.hxx"
 #include <com/sun/star/uno/Reference.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class ScAccessibleCsvControl;
 namespace com { namespace sun { namespace star { namespace accessibility {
@@ -88,23 +89,26 @@ enum ScMoveMode
 };
 
 /** Flags for comparison of old and new control layout data. */
-typedef sal_uInt32 ScCsvDiff;
+enum class ScCsvDiff : sal_uInt32 {
+    Equal          = 0x0000,
+    PosCount       = 0x0001,
+    PosOffset      = 0x0002,
+    HeaderWidth    = 0x0004,
+    CharWidth      = 0x0008,
+    LineCount      = 0x0010,
+    LineOffset     = 0x0020,
+    HeaderHeight   = 0x0040,
+    LineHeight     = 0x0080,
+    RulerCursor    = 0x0100,
+    GridCursor     = 0x0200,
 
-const ScCsvDiff CSV_DIFF_EQUAL          = 0x00000000;
-const ScCsvDiff CSV_DIFF_POSCOUNT       = 0x00000001;
-const ScCsvDiff CSV_DIFF_POSOFFSET      = 0x00000002;
-const ScCsvDiff CSV_DIFF_HDRWIDTH       = 0x00000004;
-const ScCsvDiff CSV_DIFF_CHARWIDTH      = 0x00000008;
-const ScCsvDiff CSV_DIFF_LINECOUNT      = 0x00000010;
-const ScCsvDiff CSV_DIFF_LINEOFFSET     = 0x00000020;
-const ScCsvDiff CSV_DIFF_HDRHEIGHT      = 0x00000040;
-const ScCsvDiff CSV_DIFF_LINEHEIGHT     = 0x00000080;
-const ScCsvDiff CSV_DIFF_RULERCURSOR    = 0x00000100;
-const ScCsvDiff CSV_DIFF_GRIDCURSOR     = 0x00000200;
+    HorizontalMask = PosCount | PosOffset | HeaderWidth | CharWidth,
+    VerticalMask   = LineCount | LineOffset | HeaderHeight | LineHeight
+};
+namespace o3tl {
+    template<> struct typed_flags<ScCsvDiff> : is_typed_flags<ScCsvDiff, 0x03ff> {};
+}
 
-const ScCsvDiff CSV_DIFF_HORIZONTAL     = CSV_DIFF_POSCOUNT | CSV_DIFF_POSOFFSET | CSV_DIFF_HDRWIDTH | CSV_DIFF_CHARWIDTH;
-const ScCsvDiff CSV_DIFF_VERTICAL       = CSV_DIFF_LINECOUNT | CSV_DIFF_LINEOFFSET | CSV_DIFF_HDRHEIGHT | CSV_DIFF_LINEHEIGHT;
-const ScCsvDiff CSV_DIFF_CURSOR         = CSV_DIFF_RULERCURSOR | CSV_DIFF_GRIDCURSOR;
 
 /** A structure containing all layout data valid for both ruler and data grid
     (i.e. scroll position or column width). */
@@ -142,7 +146,7 @@ struct ScCsvLayoutData
 
 inline bool operator==( const ScCsvLayoutData& rData1, const ScCsvLayoutData& rData2 )
 {
-    return rData1.GetDiff( rData2 ) == CSV_DIFF_EQUAL;
+    return rData1.GetDiff( rData2 ) == ScCsvDiff::Equal;
 }
 
 inline bool operator!=( const ScCsvLayoutData& rData1, const ScCsvLayoutData& rData2 )

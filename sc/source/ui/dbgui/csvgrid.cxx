@@ -136,17 +136,17 @@ void ScCsvGrid::UpdateOffsetX()
 void ScCsvGrid::ApplyLayout( const ScCsvLayoutData& rOldData )
 {
     ScCsvDiff nDiff = GetLayoutData().GetDiff( rOldData );
-    if( nDiff == CSV_DIFF_EQUAL ) return;
+    if( nDiff == ScCsvDiff::Equal ) return;
 
     DisableRepaint();
 
-    if( nDiff & CSV_DIFF_RULERCURSOR )
+    if( nDiff & ScCsvDiff::RulerCursor )
     {
         ImplInvertCursor( rOldData.mnPosCursor );
         ImplInvertCursor( GetRulerCursorPos() );
     }
 
-    if( nDiff & CSV_DIFF_POSCOUNT )
+    if( nDiff & ScCsvDiff::PosCount )
     {
         if( GetPosCount() < rOldData.mnPosCount )
         {
@@ -159,21 +159,21 @@ void ScCsvGrid::ApplyLayout( const ScCsvLayoutData& rOldData )
         maColStates.resize( maSplits.Count() - 1 );
     }
 
-    if( nDiff & CSV_DIFF_LINEOFFSET )
+    if( nDiff & ScCsvDiff::LineOffset )
     {
         Execute( CSVCMD_UPDATECELLTEXTS );
         UpdateOffsetX();
     }
 
-    ScCsvDiff nHVDiff = nDiff & (CSV_DIFF_HORIZONTAL | CSV_DIFF_VERTICAL);
-    if( nHVDiff == CSV_DIFF_POSOFFSET )
+    ScCsvDiff nHVDiff = nDiff & (ScCsvDiff::HorizontalMask | ScCsvDiff::VerticalMask);
+    if( nHVDiff == ScCsvDiff::PosOffset )
         ImplDrawHorzScrolled( rOldData.mnPosOffset );
-    else if( nHVDiff != CSV_DIFF_EQUAL )
+    else if( nHVDiff != ScCsvDiff::Equal )
         InvalidateGfx();
 
     EnableRepaint();
 
-    if( nDiff & (CSV_DIFF_POSOFFSET | CSV_DIFF_LINEOFFSET) )
+    if( nDiff & (ScCsvDiff::PosOffset | ScCsvDiff::LineOffset) )
         AccSendVisibleEvent();
 }
 
