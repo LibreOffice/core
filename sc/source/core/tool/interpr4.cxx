@@ -2401,7 +2401,7 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix(
 
     rDouble = 0.0;
     rString = svl::SharedString::getEmptyString();
-    ScMatValType nMatValType = SC_MATVAL_EMPTY;
+    ScMatValType nMatValType = ScMatValType::Empty;
 
     ScMatrixRef pMat;
     StackVar eType = GetStackType();

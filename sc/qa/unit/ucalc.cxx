@@ -1562,7 +1562,7 @@ struct AllZeroMatrix
 {
     void operator() (SCSIZE /*nCol*/, SCSIZE /*nRow*/, const ScMatrixValue& rVal) const
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of numeric type", SC_MATVAL_VALUE, rVal.nType);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of numeric type", (int)ScMatValType::Value, (int)rVal.nType);
         ASSERT_DOUBLES_EQUAL_MESSAGE("element value must be zero", 0.0, rVal.fVal);
     }
 };
@@ -1571,7 +1571,7 @@ struct PartiallyFilledZeroMatrix
 {
     void operator() (SCSIZE nCol, SCSIZE nRow, const ScMatrixValue& rVal) const
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of numeric type", SC_MATVAL_VALUE, rVal.nType);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of numeric type", (int)ScMatValType::Value, (int)rVal.nType);
         if (1 <= nCol && nCol <= 2 && 2 <= nRow && nRow <= 8)
         {
             ASSERT_DOUBLES_EQUAL_MESSAGE("element value must be 3.0", 3.0, rVal.fVal);
@@ -1587,7 +1587,7 @@ struct AllEmptyMatrix
 {
     void operator() (SCSIZE /*nCol*/, SCSIZE /*nRow*/, const ScMatrixValue& rVal) const
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of empty type", SC_MATVAL_EMPTY, rVal.nType);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of empty type", (int)ScMatValType::Empty, (int)rVal.nType);
         ASSERT_DOUBLES_EQUAL_MESSAGE("value of \"empty\" element is expected to be zero", 0.0, rVal.fVal);
     }
 };
@@ -1598,27 +1598,27 @@ struct PartiallyFilledEmptyMatrix
     {
         if (nCol == 1 && nRow == 1)
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of boolean type", SC_MATVAL_BOOLEAN, rVal.nType);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of boolean type", (int)ScMatValType::Boolean, (int)rVal.nType);
             ASSERT_DOUBLES_EQUAL_MESSAGE("element value is not what is expected", 1.0, rVal.fVal);
         }
         else if (nCol == 4 && nRow == 5)
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of value type", SC_MATVAL_VALUE, rVal.nType);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of value type", (int)ScMatValType::Value, (int)rVal.nType);
             ASSERT_DOUBLES_EQUAL_MESSAGE("element value is not what is expected", -12.5, rVal.fVal);
         }
         else if (nCol == 8 && nRow == 2)
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of value type", SC_MATVAL_STRING, rVal.nType);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of value type", (int)ScMatValType::String, (int)rVal.nType);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("element value is not what is expected", OUString("Test"), rVal.aStr.getString());
         }
         else if (nCol == 8 && nRow == 11)
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of empty path type", SC_MATVAL_EMPTYPATH, rVal.nType);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of empty path type", (int)ScMatValType::EmptyPath, (int)rVal.nType);
             ASSERT_DOUBLES_EQUAL_MESSAGE("value of \"empty\" element is expected to be zero", 0.0, rVal.fVal);
         }
         else
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of empty type", SC_MATVAL_EMPTY, rVal.nType);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of empty type", (int)ScMatValType::Empty, (int)rVal.nType);
             ASSERT_DOUBLES_EQUAL_MESSAGE("value of \"empty\" element is expected to be zero", 0.0, rVal.fVal);
         }
     }

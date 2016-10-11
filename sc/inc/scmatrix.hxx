@@ -70,7 +70,7 @@ struct ScMatrixValue
     /// Only valid if ScMatrix methods indicate that this is a boolean
     bool GetBoolean() const         { return fVal != 0.0; }
 
-    ScMatrixValue() : fVal(0.0), nType(SC_MATVAL_EMPTY) {}
+    ScMatrixValue() : fVal(0.0), nType(ScMatValType::Empty) {}
 
     ScMatrixValue(const ScMatrixValue& r) :
         fVal(r.fVal), aStr(r.aStr), nType(r.nType) {}
@@ -82,8 +82,8 @@ struct ScMatrixValue
 
         switch (nType)
         {
-            case SC_MATVAL_VALUE:
-            case SC_MATVAL_BOOLEAN:
+            case ScMatValType::Value:
+            case ScMatValType::Boolean:
                 return fVal == r.fVal;
             break;
             default:
@@ -176,19 +176,19 @@ public:
     /// Value or boolean.
     inline static bool IsValueType( ScMatValType nType )
     {
-        return nType <= SC_MATVAL_BOOLEAN;
+        return nType <= ScMatValType::Boolean;
     }
 
     /// Boolean.
     inline static bool IsBooleanType( ScMatValType nType )
     {
-        return nType == SC_MATVAL_BOOLEAN;
+        return nType == ScMatValType::Boolean;
     }
 
     /// String, empty or empty path, but not value nor boolean.
     inline static bool IsNonValueType( ScMatValType nType )
     {
-        return (nType & SC_MATVAL_NONVALUE) != 0;
+        return bool(nType & ScMatValType::NonvalueMask);
     }
 
     /** String, but not empty or empty path or any other type.
@@ -196,19 +196,19 @@ public:
         IsNonValueType was named IsStringType. */
     inline static bool IsRealStringType( ScMatValType nType )
     {
-        return (nType & SC_MATVAL_NONVALUE) == SC_MATVAL_STRING;
+        return (nType & ScMatValType::NonvalueMask) == ScMatValType::String;
     }
 
     /// Empty, but not empty path or any other type.
     inline static bool IsEmptyType( ScMatValType nType )
     {
-        return (nType & SC_MATVAL_NONVALUE) == SC_MATVAL_EMPTY;
+        return (nType & ScMatValType::NonvalueMask) == ScMatValType::Empty;
     }
 
     /// Empty path, but not empty or any other type.
     inline static bool IsEmptyPathType( ScMatValType nType )
     {
-        return (nType & SC_MATVAL_NONVALUE) == SC_MATVAL_EMPTYPATH;
+        return (nType & ScMatValType::NonvalueMask) == ScMatValType::EmptyPath;
     }
 
     ScMatrix() : nRefCnt(0), mbCloneIfConst(true) {}

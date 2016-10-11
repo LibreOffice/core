@@ -35,13 +35,17 @@ typedef ::boost::intrusive_ptr<const ScMatrix>  ScConstMatrixRef;
 namespace formula { class FormulaToken; }
 typedef ::boost::intrusive_ptr<formula::FormulaToken> ScTokenRef;
 
-typedef sal_uInt8 ScMatValType;
-const ScMatValType SC_MATVAL_VALUE     = 0x00;
-const ScMatValType SC_MATVAL_BOOLEAN   = 0x01;
-const ScMatValType SC_MATVAL_STRING    = 0x02;
-const ScMatValType SC_MATVAL_EMPTY     = SC_MATVAL_STRING | 0x04; // STRING plus flag
-const ScMatValType SC_MATVAL_EMPTYPATH = SC_MATVAL_EMPTY | 0x08;  // EMPTY plus flag
-const ScMatValType SC_MATVAL_NONVALUE  = SC_MATVAL_EMPTYPATH;     // mask of all non-value bits
+enum class ScMatValType : sal_uInt8 {
+    Value        = 0x00,
+    Boolean      = 0x01,
+    String       = 0x02,
+    Empty        = String | 0x04, // STRING plus flag
+    EmptyPath    = Empty | 0x08,  // EMPTY plus flag
+    NonvalueMask = EmptyPath      // mask of all non-value bits
+};
+namespace o3tl{
+    template<> struct typed_flags<ScMatValType> : o3tl::is_typed_flags<ScMatValType, 0x0f> {};
+}
 
 struct ScFormulaCellGroup;
 typedef ::boost::intrusive_ptr<ScFormulaCellGroup> ScFormulaCellGroupRef;

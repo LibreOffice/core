@@ -582,7 +582,7 @@ double ScMatrixImpl::GetDouble( SCSIZE nIndex) const
 double ScMatrixImpl::GetDoubleWithStringConversion(SCSIZE nC, SCSIZE nR) const
 {
     ScMatrixValue aMatVal = Get(nC, nR);
-    if (aMatVal.nType == SC_MATVAL_STRING)
+    if (aMatVal.nType == ScMatValType::String)
         return convertStringToValue( pErrorInterpreter, aMatVal.aStr.getString());
     return aMatVal.fVal;
 }
@@ -682,15 +682,15 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
         switch (eType)
         {
             case mdds::mtm::element_boolean:
-                aVal.nType = SC_MATVAL_BOOLEAN;
+                aVal.nType = ScMatValType::Boolean;
                 aVal.fVal = double(maMat.get_boolean(aPos));
             break;
             case mdds::mtm::element_numeric:
-                aVal.nType = SC_MATVAL_VALUE;
+                aVal.nType = ScMatValType::Value;
                 aVal.fVal = maMat.get_numeric(aPos);
             break;
             case mdds::mtm::element_string:
-                aVal.nType = SC_MATVAL_STRING;
+                aVal.nType = ScMatValType::String;
                 aVal.aStr = maMat.get_string(aPos);
             break;
             case mdds::mtm::element_empty:
@@ -699,11 +699,11 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
                 switch (maMatFlag.get_type(nR, nC))
                 {
                     case mdds::mtm::element_empty:
-                        aVal.nType = SC_MATVAL_EMPTY;
+                        aVal.nType = ScMatValType::Empty;
                     break;
                     case mdds::mtm::element_numeric:
                         aVal.nType = maMatFlag.get<TMatFlag>(nR, nC)
-                            == SC_MATFLAG_EMPTYPATH ? SC_MATVAL_EMPTYPATH : SC_MATVAL_EMPTY;
+                            == SC_MATFLAG_EMPTYPATH ? ScMatValType::EmptyPath : ScMatValType::Empty;
                     break;
                     default:
                         assert(false);

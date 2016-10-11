@@ -512,20 +512,20 @@ bool XclImpExtName::CreateOleData(ScDocument& rDoc, const OUString& rUrl,
             ScMatrixValue aVal = rCache.Get(j, i);
             switch (aVal.nType)
             {
-                case SC_MATVAL_BOOLEAN:
+                case ScMatValType::Boolean:
                 {
                     bool b = aVal.GetBoolean();
                     ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(b ? 1.0 : 0.0));
                     xTab->setCell(nCol, nRow, pToken, 0, false);
                 }
                 break;
-                case SC_MATVAL_VALUE:
+                case ScMatValType::Value:
                 {
                     ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(aVal.fVal));
                     xTab->setCell(nCol, nRow, pToken, 0, false);
                 }
                 break;
-                case SC_MATVAL_STRING:
+                case ScMatValType::String:
                 {
                     const svl::SharedString aStr( aVal.GetString());
                     ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken(aStr));

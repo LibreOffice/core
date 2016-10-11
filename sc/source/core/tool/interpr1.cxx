@@ -1964,7 +1964,7 @@ void ScInterpreter::ScIsLogical()
             double fVal;
             svl::SharedString aStr;
             ScMatValType nMatValType = GetDoubleOrStringFromMatrix( fVal, aStr);
-            bRes = (nMatValType == SC_MATVAL_BOOLEAN);
+            bRes = (nMatValType == ScMatValType::Boolean);
         }
         break;
         default:
@@ -3151,14 +3151,14 @@ void ScInterpreter::ScValue()
                 aInputString = aSS.getString();
                 switch (nType)
                 {
-                    case SC_MATVAL_EMPTY:
+                    case ScMatValType::Empty:
                         fVal = 0.0;
                         SAL_FALLTHROUGH;
-                    case SC_MATVAL_VALUE:
-                    case SC_MATVAL_BOOLEAN:
+                    case ScMatValType::Value:
+                    case ScMatValType::Boolean:
                         PushDouble( fVal);
                         return;
-                    case SC_MATVAL_STRING:
+                    case ScMatValType::String:
                         // evaluated below
                         break;
                     default:

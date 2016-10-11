@@ -3140,7 +3140,7 @@ void ScInterpreter::ScHyperLink()
     {
         double fVal = 0.0;
         svl::SharedString aStr;
-        ScMatValType nResultType = SC_MATVAL_STRING;
+        ScMatValType nResultType = ScMatValType::String;
 
         if ( nParamCount == 2 )
         {
@@ -3148,7 +3148,7 @@ void ScInterpreter::ScHyperLink()
             {
                 case svDouble:
                     fVal = GetDouble();
-                    nResultType = SC_MATVAL_VALUE;
+                    nResultType = ScMatValType::Value;
                 break;
                 case svString:
                     aStr = GetString();
@@ -3162,7 +3162,7 @@ void ScInterpreter::ScHyperLink()
 
                     ScRefCellValue aCell(*pDok, aAdr);
                     if (aCell.hasEmptyValue())
-                        nResultType = SC_MATVAL_EMPTY;
+                        nResultType = ScMatValType::Empty;
                     else
                     {
                         FormulaError nErr = GetCellErrCode(aCell);
@@ -3171,7 +3171,7 @@ void ScInterpreter::ScHyperLink()
                         else if (aCell.hasNumeric())
                         {
                             fVal = GetCellValue(aAdr, aCell);
-                            nResultType = SC_MATVAL_VALUE;
+                            nResultType = ScMatValType::Value;
                         }
                         else
                             GetCellString(aStr, aCell);
@@ -3186,7 +3186,7 @@ void ScInterpreter::ScHyperLink()
                     Pop();
                     // mimic xcl
                     fVal = 0.0;
-                    nResultType = SC_MATVAL_VALUE;
+                    nResultType = ScMatValType::Value;
                 break;
                 default:
                     PopError();
@@ -3198,7 +3198,7 @@ void ScInterpreter::ScHyperLink()
         if (nGlobalError != FormulaError::NONE)
         {
             fVal = CreateDoubleError( nGlobalError);
-            nResultType = SC_MATVAL_VALUE;
+            nResultType = ScMatValType::Value;
         }
         if (nParamCount == 2 || nGlobalError != FormulaError::NONE)
         {
