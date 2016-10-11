@@ -58,11 +58,11 @@ class FmFilterAdapter;
 
 class FmFilterData
 {
-    FmParentData*           m_pParent;
+    FmParentData*    m_pParent;
     OUString         m_aText;
 
 public:
-    FmFilterData(FmParentData* pParent = nullptr, const OUString& rText = OUString())
+    FmFilterData(FmParentData* pParent, const OUString& rText = OUString())
         :m_pParent( pParent )
         ,m_aText( rText )
     {}

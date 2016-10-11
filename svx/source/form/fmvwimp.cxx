@@ -1130,7 +1130,7 @@ namespace
 {
     void lcl_insertIntoFormComponentHierarchy_throw( const FmFormView& _rView, const SdrUnoObj& _rSdrObj,
         const Reference< XDataSource >& _rxDataSource, const OUString& _rDataSourceName,
-        const OUString& _rCommand, const sal_Int32 _nCommandType = -1 )
+        const OUString& _rCommand, const sal_Int32 _nCommandType )
     {
         FmFormPage& rPage = static_cast< FmFormPage& >( *_rView.GetSdrPageView()->GetPage() );
 

@@ -243,7 +243,7 @@ public:
     FmFormData(
         const css::uno::Reference< css::form::XForm >& _rxForm,
         const ImageList& _rNormalImages,
-        FmFormData* _pParent = nullptr
+        FmFormData* _pParent
     );
 
     FmFormData( const FmFormData& rFormData );
