@@ -101,6 +101,7 @@
 #include <vcl/settings.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
+#include <sfx2/safemode.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <basic/sbstar.hxx>
@@ -2138,7 +2139,7 @@ void Desktop::OpenClients()
     bool bAllowRecoveryAndSessionManagement = ( !rArgs.IsNoRestore() ) && ( !rArgs.IsHeadless()  );
 
     // Enter safe mode if requested
-    if (rArgs.IsSafeMode())
+    if (rArgs.IsSafeMode() || sfx2::SafeMode::hasFlag())
         handleSafeMode();
 
 

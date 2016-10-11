@@ -127,6 +127,7 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/safemode.hxx>
 
 #include <comphelper/types.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -311,6 +312,7 @@ namespace
     IMPL_LINK_NOARG(SafeModeQueryDialog, RestartHdl, Button*, void)
     {
         EndDialog(RET_OK);
+        sfx2::SafeMode::putFlag();
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         css::task::OfficeRestartManager::get(xContext)->requestRestart(
             css::uno::Reference< css::task::XInteractionHandler >());

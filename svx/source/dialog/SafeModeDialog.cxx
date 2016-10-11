@@ -10,9 +10,9 @@
 #include "SafeModeDialog.hxx"
 
 #include <config_folders.h>
-
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
+#include <sfx2/safemode.hxx>
 
 SafeModeDialog::SafeModeDialog(vcl::Window* pParent):
     Dialog(pParent, "SafeModeDialog", "svx/ui/safemodedialog.ui")
@@ -60,6 +60,7 @@ IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
     {
         Close();
     }
+    sfx2::SafeMode::removeFlag();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
