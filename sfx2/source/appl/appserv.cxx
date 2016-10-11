@@ -58,6 +58,7 @@
 #include <svtools/restartdialog.hxx>
 #include <svl/visitem.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <desktop/safemode.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <tools/diagnose_ex.h>
@@ -311,6 +312,7 @@ namespace
     IMPL_LINK_NOARG(SafeModeQueryDialog, RestartHdl, Button*, void)
     {
         EndDialog(RET_OK);
+        desktop::SafeMode::putFlag();
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         css::task::OfficeRestartManager::get(xContext)->requestRestart(
             css::uno::Reference< css::task::XInteractionHandler >());

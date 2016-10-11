@@ -61,6 +61,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     fwe \
     i18nlangtag \
     i18nutil \
+    safemode \
     sal \
     salhelper \
     sax \

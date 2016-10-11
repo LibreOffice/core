@@ -576,6 +576,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(USING_X11),recentfile) \
 	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
 	sdbc2 \
+	safemode \
 	sofficeapp \
 	srtrs1 \
 	$(if $(filter $(OS),WNT),sysdtrans) \
