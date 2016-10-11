@@ -76,15 +76,15 @@ using namespace com::sun::star;
 
 namespace {
 
-void lcl_LOKRemoveEditView(ScTabViewShell* pTabViewShell, ScSplitPos eWhich)
+void lcl_LOKRemoveWindow(ScTabViewShell* pTabViewShell, ScSplitPos eWhich)
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
-        auto lRemoveEditView =
+        auto lRemoveWindows =
                 [pTabViewShell, eWhich] (ScTabViewShell* pOtherViewShell)
-                { pOtherViewShell->RemoveEditViewFromOtherView(pTabViewShell, eWhich); };
+                { pOtherViewShell->RemoveWindowFromForeignEditView(pTabViewShell, eWhich); };
 
-        SfxLokHelper::forEachOtherView(pTabViewShell, lRemoveEditView);
+        SfxLokHelper::forEachOtherView(pTabViewShell, lRemoveWindows);
     }
 }
 
@@ -987,13 +987,13 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         }
         else
         {
-            lcl_LOKRemoveEditView(GetViewShell(), eWhich);
+            lcl_LOKRemoveWindow(GetViewShell(), eWhich);
             pEditView[eWhich]->SetEditEngine(pNewEngine);
         }
 
         if (pEditView[eWhich]->GetWindow() != pWin)
         {
-            lcl_LOKRemoveEditView(GetViewShell(), eWhich);
+            lcl_LOKRemoveWindow(GetViewShell(), eWhich);
             pEditView[eWhich]->SetWindow(pWin);
             OSL_FAIL("EditView Window has changed");
         }
@@ -1006,6 +1006,23 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         {
             pEditView[eWhich]->RegisterViewShell(pViewShell);
         }
+    }
+
+    // add windows from other views
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScTabViewShell* pThisViewShell = GetViewShell();
+        SCTAB nThisTabNo = GetTabNo();
+        auto lAddWindows =
+                [pThisViewShell, nThisTabNo, eWhich] (ScTabViewShell* pOtherViewShell)
+                {
+                    ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
+                    SCTAB nOtherTabNo = rOtherViewData.GetTabNo();
+                    if (nThisTabNo == nOtherTabNo)
+                        pOtherViewShell->AddWindowToForeignEditView(pThisViewShell, eWhich);
+                };
+
+        SfxLokHelper::forEachOtherView(pThisViewShell, lAddWindows);
     }
 
     //  bei IdleFormat wird manchmal ein Cursor gemalt, wenn die View schon weg ist (23576)
@@ -1163,23 +1180,6 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     pEditView[eWhich]->Invalidate();            //  needed?
     //  needed, wenn position changed
-
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        ScTabViewShell* pThisViewShell = GetViewShell();
-        SCTAB nThisTabNo = GetTabNo();
-        auto lAddEditView =
-                [pThisViewShell, nThisTabNo, eWhich] (ScTabViewShell* pOtherViewShell)
-                {
-                    ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
-                    SCTAB nOtherTabNo = rOtherViewData.GetTabNo();
-                    if (nThisTabNo == nOtherTabNo)
-                        pOtherViewShell->AddEditViewToOtherView(pThisViewShell, eWhich);
-                };
-
-        SfxLokHelper::forEachOtherView(pThisViewShell, lAddEditView);
-    }
-
 }
 
 IMPL_LINK( ScViewData, EditEngineHdl, EditStatus&, rStatus, void )
@@ -1379,6 +1379,9 @@ void ScViewData::EditGrowX()
         else if ( !bAsianVertical && !bGrowToLeft && !bGrowCentered )
             aArea.Left() = nOldRight;
         pWin->Invalidate(aArea);
+
+        // invalidate other views
+        pCurView->InvalidateOtherViewWindows(aArea);
     }
 }
 
@@ -1459,6 +1462,9 @@ void ScViewData::EditGrowY( bool bInitial )
 
         aArea.Top() = nOldBottom;
         pWin->Invalidate(aArea);
+
+        // invalidate other views
+        pCurView->InvalidateOtherViewWindows(aArea);
     }
 }
 
@@ -1470,7 +1476,7 @@ void ScViewData::ResetEditView()
         {
             if (bEditActive[i])
             {
-                lcl_LOKRemoveEditView(GetViewShell(), (ScSplitPos)(i));
+                lcl_LOKRemoveWindow(GetViewShell(), (ScSplitPos)(i));
                 pEngine = pEditView[i]->GetEditEngine();
                 pEngine->RemoveView(pEditView[i]);
                 pEditView[i]->SetOutputArea( Rectangle() );

@@ -491,8 +491,8 @@ public:
     void            InvalidateAttribs();
 
     void            OnLibreOfficeKitTabChanged();
-    void            AddEditViewToOtherView(SfxViewShell* pViewShell, ScSplitPos eWhich);
-    void            RemoveEditViewFromOtherView(SfxViewShell* pViewShell, ScSplitPos eWhich);
+    void            AddWindowToForeignEditView(SfxViewShell* pViewShell, ScSplitPos eWhich);
+    void            RemoveWindowFromForeignEditView(SfxViewShell* pViewShell, ScSplitPos eWhich);
     void            MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW nRow );
     void            KillEditView( bool bNoPaint );
     void            UpdateEditView();
