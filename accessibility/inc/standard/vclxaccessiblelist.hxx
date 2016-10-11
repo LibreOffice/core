@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <functional>
-#include "standard/vclxaccessiblelistitem.hxx"
 #include <standard/vclxaccessibleedit.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
@@ -136,6 +135,7 @@ public:
 
     void UpdateFocus_Impl_Acc ( sal_Int32 nPos, bool b_IsDropDownList) ;
     static void NotifyListItem(css::uno::Any& val);
+    ::accessibility::IComboListBoxHelper* getListBoxHelper() { return m_pListBoxHelper; }
 protected:
     BoxType     m_aBoxType;
     ::accessibility::IComboListBoxHelper* m_pListBoxHelper;

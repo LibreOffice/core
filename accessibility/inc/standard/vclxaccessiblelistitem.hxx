@@ -30,6 +30,7 @@
 #include <cppuhelper/compbase6.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/accessibletexthelper.hxx>
+#include <standard/vclxaccessiblelist.hxx>
 
 // forward ---------------------------------------------------------------
 
@@ -39,11 +40,6 @@ namespace com { namespace sun { namespace star { namespace awt {
     struct Size;
     class XFocusListener;
 } } } }
-
-namespace accessibility
-{
-    class IComboListBoxHelper;
-}
 
 // class VCLXAccessibleListItem ------------------------------------------
 
@@ -69,9 +65,8 @@ private:
 protected:
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                          m_nClientId;
-    ::accessibility::IComboListBoxHelper*       m_pListBoxHelper;
 
-    css::uno::Reference< css::accessibility::XAccessible >        m_xParent;
+    css::uno::Reference< VCLXAccessibleList >                     m_xParent;
     css::uno::Reference< css::accessibility::XAccessibleContext > m_xParentContext;
 
 protected:
@@ -87,16 +82,13 @@ protected:
 
 public:
     /** OAccessibleBase needs a valid view
-        @param  _pListBoxHelper
-            is the list- or combobox for which we implement an accessible object
         @param  _nIndexInParent
             is the position of the entry inside the listbox
         @param  _xParent
             is our parent accessible object
     */
-    VCLXAccessibleListItem( ::accessibility::IComboListBoxHelper* _pListBoxHelper,
-                            sal_Int32 _nIndexInParent,
-                            const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
+    VCLXAccessibleListItem(sal_Int32 _nIndexInParent,
+                           const css::uno::Reference< VCLXAccessibleList >& _xParent);
 
     void                    NotifyAccessibleEvent(  sal_Int16 _nEventId, const css::uno::Any& _aOldValue, const css::uno::Any& _aNewValue );
 

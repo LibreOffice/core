@@ -507,7 +507,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 nPos)
         m_aAccessibleChildren.resize(nPos + 1);
 
         // insert into the container
-        xChild = new VCLXAccessibleListItem(m_pListBoxHelper, nPos, this);
+        xChild = new VCLXAccessibleListItem(nPos, this);
         m_aAccessibleChildren[nPos] = xChild;
     }
     else
@@ -516,7 +516,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 nPos)
         // check if position is empty and can be used else we have to adjust all entries behind this
         if (!xChild.is())
         {
-            xChild = new VCLXAccessibleListItem(m_pListBoxHelper, nPos, this);
+            xChild = new VCLXAccessibleListItem(nPos, this);
             m_aAccessibleChildren[nPos] = xChild;
         }
     }
