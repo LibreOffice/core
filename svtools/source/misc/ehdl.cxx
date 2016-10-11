@@ -243,8 +243,8 @@ struct ErrorResource_Impl : private Resource
 
     ~ErrorResource_Impl() { FreeResource(); }
 
-    operator ResString() { return ResString( aResId ); }
-    operator bool()      { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
+    ResString GetResString() { return ResString( aResId ); }
+    operator bool()          { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
 
 };
 
@@ -266,7 +266,7 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
         ErrorResource_Impl aEr(aId, (sal_uInt16)lClassId);
         if(aEr)
         {
-            rStr = static_cast<ResString>(aEr).GetString();
+            rStr = aEr.GetResString().GetString();
         }
     }
 }
@@ -293,7 +293,7 @@ bool SfxErrorHandler::GetErrorString(
         ErrorResource_Impl aEr(aResId, (sal_uInt16)lErrId);
         if(aEr)
         {
-            ResString aErrorString(aEr);
+            ResString aErrorString(aEr.GetResString());
 
             sal_uInt16 nResFlags = aErrorString.GetFlags();
             if ( nResFlags )
@@ -362,7 +362,7 @@ bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
         ErrorResource_Impl aTestEr( aResId, nCtxId );
         if ( aTestEr )
         {
-            rStr = static_cast<ResString>(aTestEr).GetString();
+            rStr = aTestEr.GetResString().GetString();
             rStr = rStr.replaceAll("$(ARG1)", aArg1);
             bRet = true;
         }
@@ -377,7 +377,7 @@ bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
             sal_uInt16 nId = ( nErrId & ERRCODE_WARNING_MASK ) ? ERRCTX_WARNING : ERRCTX_ERROR;
             ResId aSfxResId( RID_ERRCTX, *pMgr );
             ErrorResource_Impl aEr( aSfxResId, nId );
-            rStr = rStr.replaceAll("$(ERR)", static_cast<ResString>(aEr).GetString());
+            rStr = rStr.replaceAll("$(ERR)", aEr.GetResString().GetString());
         }
     }
 

@@ -99,11 +99,6 @@ bool RscId::operator > ( const RscId& rRscId ) const
     return GetNumber() > rRscId.GetNumber();
 }
 
-RscId::operator sal_Int32() const
-{
-    return GetNumber();
-}
-
 OString RscId::GetName() const
 {
     OStringBuffer aStr;

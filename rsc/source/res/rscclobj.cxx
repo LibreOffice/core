@@ -95,14 +95,14 @@ ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey )
 
 sal_uInt32 ObjNode::GetId() const
 {
-    return (sal_uInt32)(long)aRscId;
+    return aRscId.GetNumber();
 }
 
 bool ObjNode::IsConsistent()
 {
     bool bRet = true;
 
-    if( (long)aRscId > 0x7FFF || (long)aRscId < 1 )
+    if( aRscId.GetNumber() > 0x7FFF || aRscId.GetNumber() < 1 )
     {
         bRet = false;
     }
