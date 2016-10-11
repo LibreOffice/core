@@ -106,7 +106,7 @@ if __name__ == '__main__':
     if "-d" in opts or "--debug" in opts:
         uitest.config.use_sleep = True
 
-    result = unittest.TextTestRunner(verbosity=2).run(test_suite)
+    result = unittest.TextTestRunner(stream=sys.stdout, verbosity=2).run(test_suite)
     print("Tests run: %d" % result.testsRun)
     print("Tests failed: %d" % len(result.failures))
     print("Tests errors: %d" % len(result.errors))
