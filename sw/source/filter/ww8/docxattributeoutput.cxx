@@ -4165,25 +4165,34 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
     }
 }
 
-void DocxAttributeOutput::ClearRelIdCache()
+void DocxAttributeOutput::PopRelIdCache()
 {
-    m_aRelIdCache.clear();
-    m_aSdrRelIdCache.clear();
+    if (!m_aRelIdCache.empty())
+        m_aRelIdCache.pop();
+    if (!m_aSdrRelIdCache.empty())
+        m_aSdrRelIdCache.pop();
+}
+
+void DocxAttributeOutput::PushRelIdCache()
+{
+    m_aRelIdCache.push(std::map<const Graphic*, OString>());
+    m_aSdrRelIdCache.push(std::map<BitmapChecksum, OUString>());
 }
 
 OUString DocxAttributeOutput::FindRelId(BitmapChecksum nChecksum)
 {
     OUString aRet;
 
-    if (m_aSdrRelIdCache.find(nChecksum) != m_aSdrRelIdCache.end())
-        aRet = m_aSdrRelIdCache[nChecksum];
+    if (!m_aSdrRelIdCache.empty() && m_aSdrRelIdCache.top().find(nChecksum) != m_aSdrRelIdCache.top().end())
+        aRet = m_aSdrRelIdCache.top()[nChecksum];
 
     return aRet;
 }
 
 void DocxAttributeOutput::CacheRelId(BitmapChecksum nChecksum, const OUString& rRelId)
 {
-     m_aSdrRelIdCache[nChecksum] = rRelId;
+    if (!m_aSdrRelIdCache.empty())
+        m_aSdrRelIdCache.top()[nChecksum] = rRelId;
 }
 
 void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj )
@@ -4221,9 +4230,9 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         else
             pGraphic = pOLENode->GetGraphic();
 
-        if (m_aRelIdCache.find(pGraphic) != m_aRelIdCache.end())
+        if (!m_aRelIdCache.empty() && m_aRelIdCache.top().find(pGraphic) != m_aRelIdCache.top().end())
             // We already have a RelId for this Graphic.
-            aRelId = m_aRelIdCache[pGraphic];
+            aRelId = m_aRelIdCache.top()[pGraphic];
         else
         {
             // Not in cache, then need to write it.
@@ -4232,7 +4241,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             OUString aImageId = m_rDrawingML.WriteImage( *pGraphic );
 
             aRelId = OUStringToOString( aImageId, RTL_TEXTENCODING_UTF8 );
-            m_aRelIdCache[pGraphic] = aRelId;
+            if (!m_aRelIdCache.empty())
+                m_aRelIdCache.top()[pGraphic] = aRelId;
         }
 
         nImageType = XML_embed;
@@ -8503,6 +8513,10 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
     , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
     , m_bParagraphSdtHasId(false)
 {
+    // Push initial items to the RelId cache. In case the document contains no
+    // special streams (headers, footers, etc.) then these items are used
+    // during the full export.
+    PushRelIdCache();
 }
 
 DocxAttributeOutput::~DocxAttributeOutput()

@@ -738,14 +738,14 @@ void DocxExport::WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const
 
     DocxTableExportContext aTableExportContext;
     m_pAttrOutput->pushToTableExportContext(aTableExportContext);
-    // do the work
-    WriteHeaderFooterText( rFormat, bHeader );
-    m_pAttrOutput->popFromTableExportContext(aTableExportContext);
-    m_pAttrOutput->EndParaSdtBlock();
-
     //When the stream changes the cache which is maintained for the graphics in case of alternate content is not cleared.
     //So clearing the alternate content graphic cache.
-    m_pAttrOutput->ClearRelIdCache();
+    m_pAttrOutput->PushRelIdCache();
+    // do the work
+    WriteHeaderFooterText( rFormat, bHeader );
+    m_pAttrOutput->PopRelIdCache();
+    m_pAttrOutput->popFromTableExportContext(aTableExportContext);
+    m_pAttrOutput->EndParaSdtBlock();
 
     // switch the serializer back
     m_pAttrOutput->SetSerializer( m_pDocumentFS );

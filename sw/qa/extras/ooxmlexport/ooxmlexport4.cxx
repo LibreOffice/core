@@ -946,6 +946,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf83227, "tdf83227.docx")
     CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("word/media/image2.png")));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf103001, "tdf103001.docx")
+{
+    // The same image is featured in the header and in the body text, make sure
+    // the header relation is still written, even when caching is enabled.
+    if (!mbExported)
+        return;
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    // This failed: header reused the RelId of the body text, even if RelIds
+    // are local to their stream.
+    CPPUNIT_ASSERT(xNameAccess->hasByName("word/_rels/header1.xml.rels"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf92521, "tdf92521.odt")
 {
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
