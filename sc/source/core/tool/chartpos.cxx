@@ -168,13 +168,10 @@ void ScChartPositioner::GlueState()
     Another optimization would be to store only used rows/columns in the array, but
     would mean another iteration of the RangeList indirect access to the array. */
 
-    const sal_uInt8 nHole = 0;
-    const sal_uInt8 nOccu = 1;
-    const sal_uInt8 nFree = 2;
-    const sal_uInt8 nGlue = 3;
-    sal_uInt8* p;
-    std::unique_ptr<sal_uInt8[]> pA(new sal_uInt8[ nCR ]);
-    memset( pA.get(), 0, nCR * sizeof(sal_uInt8) );
+    enum class CellState : sal_uInt8 { Hole, Occupied, Free, Glue };
+    CellState* p;
+    std::unique_ptr<CellState[]> pA(new CellState[ nCR ]);
+    memset( pA.get(), 0, nCR * sizeof(CellState) );
 
     SCCOL nCol, nCol1, nCol2;
     SCROW nRow, nRow1, nRow2;
@@ -189,7 +186,7 @@ void ScChartPositioner::GlueState()
         {
             p = pA.get() + (sal_uLong)nCol * nR + nRow1;
             for ( nRow = nRow1; nRow <= nRow2; nRow++, p++ )
-                *p = nOccu;
+                *p = CellState::Occupied;
         }
     }
     bool bGlue = true;
@@ -200,7 +197,7 @@ void ScChartPositioner::GlueState()
         p = pA.get() + (sal_uLong)nCol * nR;
         for ( nRow = 0; bGlue && nRow < nR; nRow++, p++ )
         {
-            if ( *p == nOccu )
+            if ( *p == CellState::Occupied )
             {   // If there's one right in the middle, we can't combine.
                 // If it were at the edge, we could combine, if in this Column
                 // in every set line, one is set.
@@ -210,11 +207,11 @@ void ScChartPositioner::GlueState()
                     nRow = nR;
             }
             else
-                *p = nFree;
+                *p = CellState::Free;
         }
-        if ( bGlue && *(p = (pA.get() + ((((sal_uLong)nCol+1) * nR) - 1))) == nFree )
+        if ( bGlue && *(p = (pA.get() + ((((sal_uLong)nCol+1) * nR) - 1))) == CellState::Free )
         {   // mark column as totally unused
-            *p = nGlue;
+            *p = CellState::Glue;
             bGlueCols = true; // one unused column at least
         }
     }
@@ -225,7 +222,7 @@ void ScChartPositioner::GlueState()
         p = pA.get() + nRow;
         for ( nCol = 0; bGlue && nCol < nC; nCol++, p+=nR )
         {
-            if ( *p == nOccu )
+            if ( *p == CellState::Occupied )
             {
                 if ( nCol > 0 && nRow > 0 )
                     bGlue = false; // nRow==0 can be DummyUpperLeft
@@ -233,11 +230,11 @@ void ScChartPositioner::GlueState()
                     nCol = nC;
             }
             else
-                *p = nFree;
+                *p = CellState::Free;
         }
-        if ( bGlue && *(p = (pA.get() + ((((sal_uLong)nC-1) * nR) + nRow))) == nFree )
+        if ( bGlue && *(p = (pA.get() + ((((sal_uLong)nC-1) * nR) + nRow))) == CellState::Free )
         {   // mark row as totally unused
-            *p = nGlue;
+            *p = CellState::Glue;
             bGlueRows = true; // one unused row at least
         }
     }
@@ -247,7 +244,7 @@ void ScChartPositioner::GlueState()
     for ( sal_uLong n = 1; bGlue && n < nCR; n++, p++ )
     {   // An untouched field means we could neither reach it through rows nor columns,
         // thus we can't combine anything
-        if ( *p == nHole )
+        if ( *p == CellState::Hole )
             bGlue = false;
     }
     if ( bGlue )
@@ -258,7 +255,7 @@ void ScChartPositioner::GlueState()
             eGlue = SC_CHARTGLUE_ROWS;
         else
             eGlue = SC_CHARTGLUE_COLS;
-        if ( pA[0] != nOccu )
+        if ( pA[0] != CellState::Occupied )
             bDummyUpperLeft = true;
     }
     else
