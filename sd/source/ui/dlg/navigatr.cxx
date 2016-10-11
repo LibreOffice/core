@@ -65,9 +65,8 @@ static const sal_uInt16 nShowAllShapesFilter=2;
  */
 SdNavigatorWin::SdNavigatorWin(
     vcl::Window* pParent,
-    const SdResId& rSdResId,
     SfxBindings* pInBindings)
-    : vcl::Window( pParent, rSdResId )
+    : vcl::Window( pParent, SdResId(FLT_NAVIGATOR) )
     , maToolbox ( VclPtr<ToolBox>::Create( this, SdResId( 1 ) ) )
     , maTlbObjects( VclPtr<SdPageObjsTLB>::Create( this, SdResId( TLB_OBJECTS ) ) )
     , maLbDocs ( VclPtr<ListBox>::Create( this, SdResId( LB_DOCS ) ) )

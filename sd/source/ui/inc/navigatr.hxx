@@ -88,10 +88,7 @@ public:
             update is necessary.  When <FALSE/> the navigator will
             rely on others to trigger updates.
     */
-    SdNavigatorWin(
-        vcl::Window* pParent,
-        const SdResId& rSdResId,
-        SfxBindings* pBindings);
+    SdNavigatorWin(vcl::Window* pParent, SfxBindings* pBindings);
     void SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest);
     virtual ~SdNavigatorWin() override;
     virtual void                dispose() override;

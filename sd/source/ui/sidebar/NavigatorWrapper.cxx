@@ -33,9 +33,7 @@ NavigatorWrapper::NavigatorWrapper (
     : Control(pParent, 0),
       mrViewShellBase(rViewShellBase),
       maNavigator(VclPtr<SdNavigatorWin>::Create(
-        this,
-        SdResId(FLT_NAVIGATOR),
-        pBindings))
+        this, pBindings))
 {
     maNavigator->SetUpdateRequestFunctor(
             [this] () { return this->UpdateNavigator(); });
