@@ -62,7 +62,7 @@ programfiles=$(basename -a $(echo ${files} | grep -o '/program/[^/]* '))
 
 # whitelists should contain only system libraries that have a good reputation
 # of maintaining ABI stability
-globalwhitelist="ld-linux-x86-64.so.2 libc.so.6 libm.so.6 libdl.so.2 libpthread.so.0 librt.so.1 libutil.so.1 libnsl.so.1 libcrypt.so.1 libgcc_s.so.1 libstdc++.so.6 libz.so.1 libfontconfig.so.1 libfreetype.so.6 libxml.so.2 libxslt.so.1 libexslt.so.0"
+globalwhitelist="ld-linux-x86-64.so.2 libc.so.6 libm.so.6 libdl.so.2 libpthread.so.0 librt.so.1 libutil.so.1 libnsl.so.1 libcrypt.so.1 libgcc_s.so.1 libstdc++.so.6 libz.so.1 libfontconfig.so.1 libfreetype.so.6 libxml2.so.2 libxslt.so.1 libexslt.so.0"
 x11whitelist="libX11.so.6 libXext.so.6 libSM.so.6 libICE.so.6 libXinerama.so.1 libXrender.so.1 libXrandr.so.2 libcairo.so.2"
 openglwhitelist="libGL.so.1"
 giowhitelist="libgio-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
