@@ -1467,7 +1467,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         if ( aDAVOptions.getHttpResponseStatusCode() != SC_GONE &&
                              !aDAVOptions.isHeadAllowed() )
                         {
-                            throw DAVException( DAVException::DAV_HTTP_ERROR, "405 Not Implemented", 405 );
+                            throw DAVException( DAVException::DAV_HTTP_ERROR, "405 Not Implemented", SC_METHOD_NOT_ALLOWED );
                         }
                         // if HEAD is enabled on this site
                         // check if there is a relevant HTTP response status code cached
@@ -1552,8 +1552,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                                 aLastException.getStatus();
                             aDAVOptionsException.setHttpResponseStatusCode( ResponseStatusCode );
                             aDAVOptionsException.setHttpResponseStatusText( aLastException.getData() );
-                            aStaticDAVOptionsCache.updateCachedOption( aDAVOptionsException,
-                                                                       m_nOptsCacheLifeNotFound );
+                            aStaticDAVOptionsCache.addDAVOptions( aDAVOptionsException,
+                                                                  m_nOptsCacheLifeNotFound );
 
                             if ( !shouldAccessNetworkAfterException( aLastException ) )
                             {
