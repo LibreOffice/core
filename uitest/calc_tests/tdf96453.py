@@ -11,16 +11,13 @@ import os
 import pathlib
 
 from uitest.uihelper.common import get_state_as_dict
+from uitest.path import get_srcdir_url
+
 from libreoffice.calc.document import get_sheet_from_doc
 from libreoffice.calc.conditional_format import get_conditional_format_from_sheet
 
-def get_data_dir():
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    return os.path.join(current_dir, "data")
-
 def get_url_for_data_file(file_name):
-    path = os.path.join(get_data_dir(), file_name)
-    return pathlib.Path(path).as_uri()
+    return get_srcdir_url() + "/uitest/calc_tests/data/" + file_name
 
 class ConditionalFormatDlgTest(UITestCase):
 

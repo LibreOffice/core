@@ -11,18 +11,13 @@ from libreoffice.uno.eventlistener import EventListener
 from uitest.framework import UITestCase
 
 from uitest.debug import sleep
+from uitest.path import get_srcdir_url
 
 import time
 import os
-import pathlib
-
-def get_data_dir():
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    return os.path.join(current_dir, "data")
 
 def get_url_for_data_file(file_name):
-    path = os.path.join(get_data_dir(), file_name)
-    return pathlib.Path(path).as_uri()
+    return get_srcdir_url() + "/uitest/demo_ui/data/" + file_name
 
 class HandleFiles(UITestCase):
 
