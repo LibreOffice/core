@@ -208,7 +208,7 @@ protected:
 
 public:
     SvxFontNameBox_Impl( vcl::Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame
-        , WinBits nStyle = WB_SORT
+        , WinBits nStyle
         );
     virtual ~SvxFontNameBox_Impl() override;
     virtual void dispose() override;

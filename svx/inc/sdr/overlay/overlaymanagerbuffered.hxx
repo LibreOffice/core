@@ -62,7 +62,7 @@ namespace sdr
 
             OverlayManagerBuffered(
                 OutputDevice& rOutputDevice,
-                bool bRefreshWithPreRendering = false);
+                bool bRefreshWithPreRendering);
             virtual ~OverlayManagerBuffered() override;
 
         public:

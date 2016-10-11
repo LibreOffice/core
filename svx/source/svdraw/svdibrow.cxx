@@ -166,7 +166,7 @@ class ImpItemEdit: public Edit
     VclPtr<SdrItemBrowserControl>     pBrowse;
 
 public:
-    ImpItemEdit(vcl::Window* pParent, SdrItemBrowserControl* pBrowse_, WinBits nBits=0)
+    ImpItemEdit(vcl::Window* pParent, SdrItemBrowserControl* pBrowse_, WinBits nBits)
     :   Edit(pParent, nBits),
         pBrowse(pBrowse_)
     {}
