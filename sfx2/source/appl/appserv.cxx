@@ -119,6 +119,7 @@
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <sfx2/templatedlg.hxx>
+#include <sfx2/safemode.hxx>
 
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
@@ -279,6 +280,7 @@ namespace
     IMPL_LINK(SafeModeQueryDialog, RestartHdl, Button*, /* pButton */)
     {
         EndDialog(RET_OK);
+        sfx2::SafeMode::putFlag();
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         css::task::OfficeRestartManager::get(xContext)->requestRestart(
             css::uno::Reference< css::task::XInteractionHandler >());
