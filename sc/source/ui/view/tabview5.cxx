@@ -163,18 +163,18 @@ ScTabView::~ScTabView()
     {
         ScTabViewShell* pThisViewShell = GetViewData().GetViewShell();
 
-        auto lRemoveEditView =
+        auto lRemoveWindows =
                 [pThisViewShell] (ScTabViewShell* pOtherViewShell)
                 {
                     ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
                     for (int k = 0; k < 4; ++k)
                     {
                         if (rOtherViewData.HasEditView((ScSplitPos)(k)))
-                            pThisViewShell->RemoveEditViewFromOtherView(pOtherViewShell, (ScSplitPos)(k));
+                            pThisViewShell->RemoveWindowFromForeignEditView(pOtherViewShell, (ScSplitPos)(k));
                     }
                 };
 
-        SfxLokHelper::forEachOtherView(pThisViewShell, lRemoveEditView);
+        SfxLokHelper::forEachOtherView(pThisViewShell, lRemoveWindows);
     }
 
     aViewData.KillEditView();           // solange GridWin's noch existieren

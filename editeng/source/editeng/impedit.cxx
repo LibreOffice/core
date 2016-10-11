@@ -1150,8 +1150,10 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         pOutWin->Scroll( nRealDiffX, nRealDiffY, aRect, ScrollFlags::Clip );
 
         if (comphelper::LibreOfficeKit::isActive())
+        {
             // Need to invalidate the window, otherwise no tile will be re-painted.
-            pOutWin->Invalidate();
+            pEditView->Invalidate();
+        }
 
         pOutWin->Update();
         pCrsr->SetPos( pCrsr->GetPos() + Point( nRealDiffX, nRealDiffY ) );
