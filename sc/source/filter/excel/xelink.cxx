@@ -657,12 +657,6 @@ private:
 
 // Excel sheet indexes ========================================================
 
-const sal_uInt8 EXC_TABBUF_IGNORE   = 0x01;     /// Sheet will be ignored completely.
-const sal_uInt8 EXC_TABBUF_EXTERN   = 0x02;     /// Sheet is linked externally.
-const sal_uInt8 EXC_TABBUF_SKIPMASK = 0x0F;     /// Sheet will be skipped, if any flag is set.
-const sal_uInt8 EXC_TABBUF_VISIBLE  = 0x10;     /// Sheet is visible.
-const sal_uInt8 EXC_TABBUF_SELECTED = 0x20;     /// Sheet is selected.
-const sal_uInt8 EXC_TABBUF_MIRRORED = 0x40;     /// Sheet is mirrored (right-to-left).
 
 XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -690,13 +684,13 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
         // ignored sheets (skipped by export, with invalid Excel sheet index)
         if( rDoc.IsScenario( nScTab ) )
         {
-            SetFlag( nScTab, EXC_TABBUF_IGNORE );
+            SetFlag( nScTab, ExcTabBufFlags::Ignore );
         }
 
         // external sheets (skipped, but with valid Excel sheet index for ref's)
         else if( rDoc.GetLinkMode( nScTab ) == ScLinkMode::VALUE )
         {
-            SetFlag( nScTab, EXC_TABBUF_EXTERN );
+            SetFlag( nScTab, ExcTabBufFlags::Extern );
         }
 
         // exported sheets
@@ -713,14 +707,14 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
                nFirstVisScTab = nScTab;
 
             // sheet visible (only exported sheets)
-            SetFlag( nScTab, EXC_TABBUF_VISIBLE, rDoc.IsVisible( nScTab ) );
+            SetFlag( nScTab, ExcTabBufFlags::Visible, rDoc.IsVisible( nScTab ) );
 
             // sheet selected (only exported sheets)
             if( const ScExtTabSettings* pTabSett = rDocOpt.GetTabSettings( nScTab ) )
-                SetFlag( nScTab, EXC_TABBUF_SELECTED, pTabSett->mbSelected );
+                SetFlag( nScTab, ExcTabBufFlags::Selected, pTabSett->mbSelected );
 
             // sheet mirrored (only exported sheets)
-            SetFlag( nScTab, EXC_TABBUF_MIRRORED, rDoc.IsLayoutRTL( nScTab ) );
+            SetFlag( nScTab, ExcTabBufFlags::Mirrored, rDoc.IsLayoutRTL( nScTab ) );
         }
     }
 
@@ -737,15 +731,15 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
         {
             // no exportable sheet at all -> use active sheet and export it
             nFirstVisScTab = nDisplScTab;
-            SetFlag( nFirstVisScTab, EXC_TABBUF_SKIPMASK, false ); // clear skip flags
+            SetFlag( nFirstVisScTab, ExcTabBufFlags::SkipMask, false ); // clear skip flags
         }
-        SetFlag( nFirstVisScTab, EXC_TABBUF_VISIBLE ); // must be visible, even if originally hidden
+        SetFlag( nFirstVisScTab, ExcTabBufFlags::Visible ); // must be visible, even if originally hidden
     }
 
     // find currently displayed sheet
     if( !IsExportTab( nDisplScTab ) )   // selected sheet not exported (i.e. scenario) -> use first visible
         nDisplScTab = nFirstVisScTab;
-    SetFlag( nDisplScTab, EXC_TABBUF_VISIBLE | EXC_TABBUF_SELECTED );
+    SetFlag( nDisplScTab, ExcTabBufFlags::Visible | ExcTabBufFlags::Selected );
 
     // number of selected sheets
     for( nScTab = 0; nScTab < mnScCnt; ++nScTab )
@@ -766,24 +760,24 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
 bool XclExpTabInfo::IsExportTab( SCTAB nScTab ) const
 {
     /*  Check sheet index before to avoid assertion in GetFlag(). */
-    return (nScTab < mnScCnt && nScTab >= 0) && !GetFlag( nScTab, EXC_TABBUF_SKIPMASK );
+    return (nScTab < mnScCnt && nScTab >= 0) && !GetFlag( nScTab, ExcTabBufFlags::SkipMask );
 }
 
 bool XclExpTabInfo::IsExternalTab( SCTAB nScTab ) const
 {
     /*  Check sheet index before to avoid assertion (called from formula
         compiler also for deleted references). */
-    return (nScTab < mnScCnt && nScTab >= 0) && GetFlag( nScTab, EXC_TABBUF_EXTERN );
+    return (nScTab < mnScCnt && nScTab >= 0) && GetFlag( nScTab, ExcTabBufFlags::Extern );
 }
 
 bool XclExpTabInfo::IsVisibleTab( SCTAB nScTab ) const
 {
-    return GetFlag( nScTab, EXC_TABBUF_VISIBLE );
+    return GetFlag( nScTab, ExcTabBufFlags::Visible );
 }
 
 bool XclExpTabInfo::IsSelectedTab( SCTAB nScTab ) const
 {
-    return GetFlag( nScTab, EXC_TABBUF_SELECTED );
+    return GetFlag( nScTab, ExcTabBufFlags::Selected );
 }
 
 bool XclExpTabInfo::IsDisplayedTab( SCTAB nScTab ) const
@@ -794,7 +788,7 @@ bool XclExpTabInfo::IsDisplayedTab( SCTAB nScTab ) const
 
 bool XclExpTabInfo::IsMirroredTab( SCTAB nScTab ) const
 {
-    return GetFlag( nScTab, EXC_TABBUF_MIRRORED );
+    return GetFlag( nScTab, ExcTabBufFlags::Mirrored );
 }
 
 OUString XclExpTabInfo::GetScTabName( SCTAB nScTab ) const
@@ -814,17 +808,22 @@ SCTAB XclExpTabInfo::GetRealScTab( SCTAB nSortedScTab ) const
     return (nSortedScTab < mnScCnt && nSortedScTab >= 0) ? maFromSortedVec[ nSortedScTab ] : SCTAB_INVALID;
 }
 
-bool XclExpTabInfo::GetFlag( SCTAB nScTab, sal_uInt8 nFlags ) const
+bool XclExpTabInfo::GetFlag( SCTAB nScTab, ExcTabBufFlags nFlags ) const
 {
     OSL_ENSURE( nScTab < mnScCnt && nScTab >= 0, "XclExpTabInfo::GetFlag - sheet out of range" );
-    return (nScTab < mnScCnt && nScTab >= 0) && ::get_flag( maTabInfoVec[ nScTab ].mnFlags, nFlags );
+    return (nScTab < mnScCnt && nScTab >= 0) && (maTabInfoVec[ nScTab ].mnFlags & nFlags);
 }
 
-void XclExpTabInfo::SetFlag( SCTAB nScTab, sal_uInt8 nFlags, bool bSet )
+void XclExpTabInfo::SetFlag( SCTAB nScTab, ExcTabBufFlags nFlags, bool bSet )
 {
     OSL_ENSURE( nScTab < mnScCnt && nScTab >= 0, "XclExpTabInfo::SetFlag - sheet out of range" );
     if( nScTab < mnScCnt && nScTab >= 0 )
-        ::set_flag( maTabInfoVec[ nScTab ].mnFlags, nFlags, bSet );
+    {
+        if (bSet)
+            maTabInfoVec[ nScTab ].mnFlags |= nFlags;
+        else
+            maTabInfoVec[ nScTab ].mnFlags &= ~nFlags;
+    }
 }
 
 void XclExpTabInfo::CalcXclIndexes()
