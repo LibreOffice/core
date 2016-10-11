@@ -289,13 +289,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
             // convert to window coordinates ....
             aClipRect = pView->pImpEditView->GetWindowPos( aClipRect );
             pView->GetWindow()->Invalidate( aClipRect );
-
-            EditView::OutWindowSet& rOutWindowSet = pView->GetOtherViewWindows();
-            for (auto pWin: rOutWindowSet)
-            {
-                if (pWin)
-                    pWin->Invalidate(aClipRect);
-            }
+            pView->InvalidateOtherViewWindows( aClipRect );
         }
     }
 

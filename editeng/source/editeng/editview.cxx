@@ -173,10 +173,10 @@ EditEngine* EditView::GetEditEngine() const
     return pImpEditView->pEditEngine;
 }
 
-void EditView::Invalidate()
+Rectangle EditView::GetInvalidateRect() const
 {
     if ( !pImpEditView->DoInvalidateMore() )
-        pImpEditView->GetWindow()->Invalidate( pImpEditView->aOutArea );
+        return pImpEditView->aOutArea;
     else
     {
         Rectangle aRect( pImpEditView->aOutArea );
@@ -185,8 +185,27 @@ void EditView::Invalidate()
         aRect.Right() += nMore;
         aRect.Top() -= nMore;
         aRect.Bottom() += nMore;
-        pImpEditView->GetWindow()->Invalidate( aRect );
+        return aRect;
     }
+}
+
+void EditView::InvalidateOtherViewWindows( const Rectangle& rInvRect )
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        for (auto& pWin: GetOtherViewWindows())
+        {
+            if (pWin)
+                pWin->Invalidate( rInvRect );
+        }
+    }
+}
+
+void EditView::Invalidate()
+{
+    const Rectangle& rInvRect = GetInvalidateRect();
+    pImpEditView->GetWindow()->Invalidate( rInvRect );
+    InvalidateOtherViewWindows( rInvRect );
 }
 
 void EditView::SetReadOnly( bool bReadOnly )
