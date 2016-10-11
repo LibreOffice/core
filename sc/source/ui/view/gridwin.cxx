@@ -147,10 +147,6 @@
 using namespace css;
 using namespace css::uno;
 
-const sal_uInt8 SC_NESTEDBUTTON_NONE = 0;
-const sal_uInt8 SC_NESTEDBUTTON_DOWN = 1;
-const sal_uInt8 SC_NESTEDBUTTON_UP   = 2;
-
 #define SC_AUTOFILTER_ALL       0
 #define SC_AUTOFILTER_TOP10     1
 #define SC_AUTOFILTER_CUSTOM    2
@@ -442,7 +438,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
             nCursorHideCount( 0 ),
             nButtonDown( 0 ),
             nMouseStatus( SC_GM_NONE ),
-            nNestedButtonState( SC_NESTEDBUTTON_NONE ),
+            nNestedButtonState( ScNestedButtonState::NONE ),
             nDPField( 0 ),
             pDragDPObj( nullptr ),
             nRFIndex( 0 ),
@@ -1524,14 +1520,14 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
 
 void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    nNestedButtonState = SC_NESTEDBUTTON_DOWN;
+    nNestedButtonState = ScNestedButtonState::Down;
 
     MouseEventState aState;
     HandleMouseButtonDown(rMEvt, aState);
     if (aState.mbActivatePart)
         pViewData->GetView()->ActivatePart(eWhich);
 
-    if ( nNestedButtonState == SC_NESTEDBUTTON_UP )
+    if ( nNestedButtonState == ScNestedButtonState::Up )
     {
         // #i41690# If an object is deactivated from MouseButtonDown, it might reschedule,
         // so MouseButtonUp comes before the MouseButtonDown call is finished. In this case,
@@ -1543,7 +1539,7 @@ void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
         if ( IsTracking() )
             EndTracking();      // normally done in VCL as part of MouseButtonUp handling
     }
-    nNestedButtonState = SC_NESTEDBUTTON_NONE;
+    nNestedButtonState = ScNestedButtonState::NONE;
 }
 
 bool ScGridWindow::IsCellCoveredByText(SCsCOL nPosX, SCsROW nPosY, SCTAB nTab, SCsCOL &rTextStartPosX)
@@ -1964,8 +1960,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     // #i41690# detect a MouseButtonUp call from within MouseButtonDown
     // (possible through Reschedule from storing an OLE object that is deselected)
 
-    if ( nNestedButtonState == SC_NESTEDBUTTON_DOWN )
-        nNestedButtonState = SC_NESTEDBUTTON_UP;
+    if ( nNestedButtonState == ScNestedButtonState::Down )
+        nNestedButtonState = ScNestedButtonState::Up;
 
     if (nButtonDown != rMEvt.GetButtons())
         nMouseStatus = SC_GM_IGNORE;            // reset and return

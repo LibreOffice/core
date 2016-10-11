@@ -143,7 +143,8 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     sal_uInt16              nButtonDown;
     sal_uInt8               nMouseStatus;
-    sal_uInt8               nNestedButtonState;     // track nested button up/down calls
+    enum class ScNestedButtonState { NONE, Down, Up };
+    ScNestedButtonState     nNestedButtonState;     // track nested button up/down calls
 
     long                    nDPField;
     ScDPObject*             pDragDPObj; //! name?
