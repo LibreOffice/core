@@ -1431,11 +1431,6 @@ void XMLFilterListBox::dispose()
     SvTabListBox::dispose();
 }
 
-void XMLFilterListBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
-{
-    SvTabListBox::Paint(rRenderContext, rRect);
-}
-
 IMPL_LINK_NOARG( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTreeListBox*, void )
 {
     m_pHeaderBar->SetOffset( -GetXOffset() );
