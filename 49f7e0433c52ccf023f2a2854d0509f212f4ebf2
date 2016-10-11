@@ -34,6 +34,24 @@
       "revId": "49f7e0433c52ccf023f2a2854d0509f212f4ebf2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_f0b3c008",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-10-11T16:49:35Z",
+      "side": 1,
+      "message": "Will the whole KernArray thing is very simplistic and it does not communicate much information from VCL to callers. But here you are basically doing a text processing operation (adding spaces between characters, aka grapheme clusters), so no knowledge from VCL is needed as it can all be done based on the character properties.\n\nI think we should do the right thing then measure performance and see if we need to speed things up, otherwise it is just premature optimization.",
+      "parentUuid": "7a77a97e_102bdc31",
+      "revId": "49f7e0433c52ccf023f2a2854d0509f212f4ebf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
