@@ -61,15 +61,15 @@ OUString WpADOConnection::GetConnectionString() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_ConnectionString(&aBSTR);
-    return aBSTR;
+    pInterface->get_ConnectionString(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 sal_Bool WpADOConnection::PutConnectionString(const OUString &aCon) const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(aCon);
-    sal_Bool bErg = SUCCEEDED(pInterface->put_ConnectionString(bstr));
+    sal_Bool bErg = SUCCEEDED(pInterface->put_ConnectionString(bstr.asBSTR()));
 
     return bErg;
 }
@@ -112,7 +112,7 @@ sal_Bool WpADOConnection::Execute(const OUString& _CommandText,OLEVariant& Recor
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString sStr1(_CommandText);
-    sal_Bool bErg = SUCCEEDED(pInterface->Execute(sStr1,&RecordsAffected,Options,(_ADORecordset**)ppiRset));
+    sal_Bool bErg = SUCCEEDED(pInterface->Execute(sStr1.asBSTR(),&RecordsAffected,Options,(_ADORecordset**)ppiRset));
     return bErg;
 }
 
@@ -141,7 +141,7 @@ sal_Bool WpADOConnection::Open(const OUString& ConnectionString, const OUString&
     OLEString sStr1(ConnectionString);
     OLEString sStr2(UserID);
     OLEString sStr3(Password);
-    sal_Bool bErg = SUCCEEDED(pInterface->Open(sStr1,sStr2,sStr3,Options));
+    sal_Bool bErg = SUCCEEDED(pInterface->Open(sStr1.asBSTR(),sStr2.asBSTR(),sStr3.asBSTR(),Options));
     return bErg;
 }
 
@@ -154,15 +154,15 @@ sal_Bool WpADOConnection::GetErrors(ADOErrors** pErrors)
 OUString WpADOConnection::GetDefaultDatabase() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
-    OLEString aBSTR; pInterface->get_DefaultDatabase(&aBSTR);
-    return aBSTR;
+    OLEString aBSTR; pInterface->get_DefaultDatabase(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 sal_Bool WpADOConnection::PutDefaultDatabase(const OUString& _bstr)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_bstr);
-    sal_Bool bErg = SUCCEEDED(pInterface->put_DefaultDatabase(bstr));
+    sal_Bool bErg = SUCCEEDED(pInterface->put_DefaultDatabase(bstr.asBSTR()));
 
     return bErg;
 }
@@ -226,15 +226,15 @@ sal_Bool WpADOConnection::put_Mode(const ConnectModeEnum &eNum)
 OUString WpADOConnection::get_Provider() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
-    OLEString aBSTR; pInterface->get_Provider(&aBSTR);
-    return aBSTR;
+    OLEString aBSTR; pInterface->get_Provider(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 sal_Bool WpADOConnection::put_Provider(const OUString& _bstr)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_bstr);
-    return SUCCEEDED(pInterface->put_Provider(bstr));
+    return SUCCEEDED(pInterface->put_Provider(bstr.asBSTR()));
 }
 
 sal_Int32 WpADOConnection::get_State() const
@@ -255,8 +255,8 @@ OUString WpADOConnection::get_Version() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Version(&aBSTR);
-    return aBSTR;
+    pInterface->get_Version(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 sal_Bool WpADOCommand::putref_ActiveConnection( WpADOConnection *pCon)
@@ -291,7 +291,7 @@ void WpADOCommand::Create()
         hr = pInterface2->CreateInstanceLic(  pOuter,
                                             NULL,
                                             ADOS::IID_ADOCOMMAND_21,
-                                            ADOS::GetKeyStr(),
+                                            ADOS::GetKeyStr().asBSTR(),
                                             (void**) &pCommand);
 
         if( !FAILED( hr ) )
@@ -316,15 +316,15 @@ OUString WpADOCommand::get_CommandText() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_CommandText(&aBSTR);
-    return aBSTR;
+    pInterface->get_CommandText(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 sal_Bool WpADOCommand::put_CommandText(const OUString &aCon)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(aCon);
-    sal_Bool bErg = SUCCEEDED(pInterface->put_CommandText(bstr));
+    sal_Bool bErg = SUCCEEDED(pInterface->put_CommandText(bstr.asBSTR()));
 
     return bErg;
 }
@@ -368,7 +368,7 @@ ADOParameter* WpADOCommand::CreateParameter(const OUString &_bstr,DataTypeEnum T
     OSL_ENSURE(pInterface,"Interface is null!");
     ADOParameter* pPara = NULL;
     OLEString bstr(_bstr);
-    sal_Bool bErg = SUCCEEDED(pInterface->CreateParameter(bstr,Type,Direction,nSize,Value,&pPara));
+    sal_Bool bErg = SUCCEEDED(pInterface->CreateParameter(bstr.asBSTR(),Type,Direction,nSize,Value,&pPara));
 
     return bErg ? pPara : NULL;
 }
@@ -400,15 +400,15 @@ OUString WpADOCommand::GetName() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Name(&aBSTR);
-    return aBSTR;
+    pInterface->get_Name(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 sal_Bool WpADOCommand::put_Name(const OUString& _Name)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_Name);
-    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
 
     return bErg;
 }
@@ -422,16 +422,16 @@ OUString WpADOError::GetDescription() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Description(&aBSTR);
-    return aBSTR;
+    pInterface->get_Description(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
  OUString WpADOError::GetSource() const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Source(&aBSTR);
-    return aBSTR;
+    pInterface->get_Source(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
  sal_Int32 WpADOError::GetNumber() const
@@ -446,8 +446,8 @@ OUString WpADOError::GetDescription() const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_SQLState(&aBSTR);
-    return aBSTR;
+    pInterface->get_SQLState(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
  sal_Int32 WpADOError::GetNativeError() const
@@ -505,8 +505,8 @@ OUString WpADOField::GetName() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Name(&aBSTR);
-    return aBSTR;
+    pInterface->get_Name(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
  DataTypeEnum WpADOField::GetADOType() const
@@ -658,8 +658,8 @@ sal_Bool WpADOProperty::PutValue(const OLEVariant &aValVar)
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Name(&aBSTR);
-    return aBSTR;
+    pInterface->get_Name(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
  DataTypeEnum WpADOProperty::GetADOType() const
@@ -699,7 +699,7 @@ sal_Bool WpADOProperty::PutValue(const OLEVariant &aValVar)
         hr = pInterface2->CreateInstanceLic(  pOuter,
                                             NULL,
                                             ADOS::IID_ADORECORDSET_21,
-                                            ADOS::GetKeyStr(),
+                                            ADOS::GetKeyStr().asBSTR(),
                                             (void**) &pRec);
 
         if( !FAILED( hr ) )
@@ -947,8 +947,8 @@ WpADOProperties WpADORecordset::get_Properties() const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Name(&aBSTR);
-    return aBSTR;
+    pInterface->get_Name(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
  DataTypeEnum WpADOParameter::GetADOType() const
@@ -1031,30 +1031,30 @@ OUString WpADOColumn::get_Name() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Name(&aBSTR);
-    return aBSTR;
+    pInterface->get_Name(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 OUString WpADOColumn::get_RelatedColumn() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_RelatedColumn(&aBSTR);
-    return aBSTR;
+    pInterface->get_RelatedColumn(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 void WpADOColumn::put_Name(const OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
-    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
     (void)bErg;
 }
 void WpADOColumn::put_RelatedColumn(const OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
-    sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedColumn(bstr));
+    sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedColumn(bstr.asBSTR()));
     (void)bErg;
 }
 
@@ -1150,15 +1150,15 @@ OUString WpADOKey::get_Name() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Name(&aBSTR);
-    return aBSTR;
+    pInterface->get_Name(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 void WpADOKey::put_Name(const OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
-    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
     (void)bErg;
 }
 
@@ -1180,15 +1180,15 @@ OUString WpADOKey::get_RelatedTable() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_RelatedTable(&aBSTR);
-    return aBSTR;
+    pInterface->get_RelatedTable(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 void WpADOKey::put_RelatedTable(const OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
-    sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedTable(bstr));
+    sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedTable(bstr.asBSTR()));
     (void)bErg;
 }
 
@@ -1234,15 +1234,15 @@ OUString WpADOIndex::get_Name() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Name(&aBSTR);
-    return aBSTR;
+    pInterface->get_Name(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 void WpADOIndex::put_Name(const OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
-    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
     (void)bErg;
 }
 
@@ -1356,15 +1356,15 @@ OUString WpADOTable::get_Name() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Name(&aBSTR);
-    return aBSTR;
+    pInterface->get_Name(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 void WpADOTable::put_Name(const OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
-    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
     (void)bErg;
 }
 
@@ -1372,8 +1372,8 @@ OUString WpADOTable::get_Type() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Type(&aBSTR);
-    return aBSTR;
+    pInterface->get_Type(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 WpADOColumns WpADOTable::get_Columns() const
@@ -1430,8 +1430,8 @@ OUString WpADOView::get_Name() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
-    pInterface->get_Name(&aBSTR);
-    return aBSTR;
+    pInterface->get_Name(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 void WpADOView::get_Command(OLEVariant& _rVar) const
@@ -1448,14 +1448,14 @@ void WpADOView::put_Command(OLEVariant& _rVar)
 OUString WpADOGroup::get_Name() const
 {
     OLEString aBSTR;
-    pInterface->get_Name(&aBSTR);
-    return aBSTR;
+    pInterface->get_Name(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 void WpADOGroup::put_Name(const OUString& _rName)
 {
     OLEString bstr(_rName);
-    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
     (void)bErg;
 }
 
@@ -1493,14 +1493,14 @@ WpADOUsers WpADOGroup::get_Users( )
 OUString WpADOUser::get_Name() const
 {
     OLEString aBSTR;
-    pInterface->get_Name(&aBSTR);
-    return aBSTR;
+    pInterface->get_Name(aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 void WpADOUser::put_Name(const OUString& _rName)
 {
     OLEString bstr(_rName);
-    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
     (void)bErg;
 }
 
@@ -1508,7 +1508,7 @@ sal_Bool WpADOUser::ChangePassword(const OUString& _rPwd,const OUString& _rNewPw
 {
     OLEString sStr1(_rPwd);
     OLEString sStr2(_rNewPwd);
-    sal_Bool bErg = SUCCEEDED(pInterface->ChangePassword(sStr1,sStr2));
+    sal_Bool bErg = SUCCEEDED(pInterface->ChangePassword(sStr1.asBSTR(),sStr2.asBSTR()));
     return bErg;
 }
 

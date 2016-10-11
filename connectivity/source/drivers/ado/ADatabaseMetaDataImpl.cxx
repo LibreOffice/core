@@ -549,8 +549,8 @@ OUString WpADOCatalog::GetObjectOwner(const OUString& _rName, ObjectTypeEnum _eN
     _rVar.setNoArg();
     OLEString aBSTR;
     OLEString sStr1(_rName);
-    pInterface->GetObjectOwner(sStr1,_eNum,_rVar,&aBSTR);
-    return aBSTR;
+    pInterface->GetObjectOwner(sStr1.asBSTR(),_eNum,_rVar,aBSTR.getAddress());
+    return aBSTR.asOUString();
 }
 
 void OAdoTable::fillPropertyValues()

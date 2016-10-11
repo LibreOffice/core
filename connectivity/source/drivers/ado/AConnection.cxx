@@ -71,7 +71,7 @@ OConnection::OConnection(ODriver*   _pDriver) throw(SQLException, RuntimeExcepti
         hr = pIUnknown->CreateInstanceLic(  pOuter,
                                             NULL,
                                             ADOS::IID_ADOCONNECTION_21,
-                                            ADOS::GetKeyStr(),
+                                            ADOS::GetKeyStr().asBSTR(),
                                             (void**) &pCon);
 
         if( !FAILED( hr ) )

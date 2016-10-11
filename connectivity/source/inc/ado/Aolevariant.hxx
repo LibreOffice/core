@@ -64,9 +64,9 @@ namespace connectivity
             OLEString& operator=(const OUString& _rSrc);
             OLEString& operator=(const BSTR& _rSrc);
             OLEString& operator=(const OLEString& _rSrc);
-            operator OUString() const;
-            operator BSTR() const;
-            BSTR* operator &();
+            OUString asOUString() const;
+            BSTR asBSTR() const;
+            BSTR* getAddress();
             sal_Int32 length() const;
         };
 
