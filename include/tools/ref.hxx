@@ -31,7 +31,7 @@
 namespace tools {
 
 /** T must be a class that extends SvRefBase */
-template<typename T> class SAL_DLLPUBLIC_RTTI SvRef {
+template<typename T> class SAL_DLLPUBLIC_RTTI SvRef final {
 public:
     SvRef(): pObj(nullptr) {}
 
