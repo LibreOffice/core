@@ -155,15 +155,18 @@ const sal_Char cDataSourceName[] = "DataSourceName";
 const sal_Char cSelection[] = "Selection";
 const sal_Char cActiveConnection[] = "ActiveConnection";
 
-#define EMIT_SW_EVENT(type, shell) \
-        SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_##type, \
-            SwDocShell::GetEventName(STR_SW_EVENT_##type), shell))
-
 namespace {
 
 void rescheduleGui() {
     for( sal_uInt16 i = 0; i < 25; i++)
         Application::Reschedule();
+}
+
+void lcl_emitEvent(sal_uInt16 nEventId, sal_Int32 nStrId, SfxObjectShell* pDocShell)
+{
+    SfxGetpApp()->NotifyEvent(SfxEventHint(nEventId,
+                                           SwDocShell::GetEventName(nStrId),
+                                           pDocShell));
 }
 
 }
@@ -1395,7 +1398,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 pWorkShell->CalcLayout();
             }
 
-            EMIT_SW_EVENT(FIELD_MERGE, xWorkDocSh);
+            lcl_emitEvent(SW_EVENT_FIELD_MERGE, STR_SW_EVENT_FIELD_MERGE, xWorkDocSh);
 
             // tdf#92324: Allow ExpFields update only by explicit instruction to avoid
             // database cursor movement on any other fields update, for example during
@@ -1405,7 +1408,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             pWorkShell->SwViewShell::UpdateFields();
             pWorkShell->LockExpFields();
 
-            EMIT_SW_EVENT(FIELD_MERGE_FINISHED, xWorkDocSh);
+            lcl_emitEvent(SW_EVENT_FIELD_MERGE_FINISHED, STR_SW_EVENT_FIELD_MERGE_FINISHED, xWorkDocSh);
 
             // also emit MailMergeEvent on XInterface if possible
             const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
@@ -2865,7 +2868,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         // SfxObjectShellRef is ok, since there should be no control over the document lifetime here
         SfxObjectShellRef xDocShell = rSh.GetView().GetViewFrame()->GetObjectShell();
 
-        EMIT_SW_EVENT(MAIL_MERGE, xDocShell.get());
+        lcl_emitEvent(SW_EVENT_MAIL_MERGE, STR_SW_EVENT_MAIL_MERGE, xDocShell.get());
 
         // prepare mail merge descriptor
         SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), rSh, aDescriptor );
@@ -2879,7 +2882,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
 
         Merge( aMergeDesc );
 
-        EMIT_SW_EVENT(MAIL_MERGE_END, xDocShell.get());
+        lcl_emitEvent(SW_EVENT_MAIL_MERGE_END, STR_SW_EVENT_MAIL_MERGE_END, xDocShell.get());
 
         // reset the cursor inside
         xResSet = nullptr;
