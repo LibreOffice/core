@@ -76,6 +76,7 @@
 #include <com/sun/star/office/Quickstart.hpp>
 
 #include <desktop/exithelper.h>
+#include <desktop/safemode.hxx>
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/configuration.hxx>
@@ -2138,7 +2139,7 @@ void Desktop::OpenClients()
     bool bAllowRecoveryAndSessionManagement = ( !rArgs.IsNoRestore() ) && ( !rArgs.IsHeadless()  );
 
     // Enter safe mode if requested
-    if (rArgs.IsSafeMode())
+    if (rArgs.IsSafeMode() || SafeMode::hasFlag())
         handleSafeMode();
 
 

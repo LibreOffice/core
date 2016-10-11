@@ -56,6 +56,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     editeng \
     i18nlangtag \
     $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
+    safemode \
     sal \
     salhelper \
     sb \
