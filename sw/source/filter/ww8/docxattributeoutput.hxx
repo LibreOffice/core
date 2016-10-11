@@ -371,7 +371,8 @@ public:
 
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
-    void ClearRelIdCache();
+    void PushRelIdCache();
+    void PopRelIdCache();
     /// End possibly opened paragraph sdt block.
     void EndParaSdtBlock();
 
@@ -915,9 +916,9 @@ private:
     bool m_setFootnote;
 
     /// RelId <-> Graphic* cache, so that in case of alternate content, the same graphic only gets written once.
-    std::map<const Graphic*, OString> m_aRelIdCache;
+    std::stack< std::map<const Graphic*, OString> > m_aRelIdCache;
     /// RelId <-> BitmapChecksum cache, similar to m_aRelIdCache, but used for non-Writer graphics, handled in oox.
-    std::map<BitmapChecksum, OUString> m_aSdrRelIdCache;
+    std::stack< std::map<BitmapChecksum, OUString> > m_aSdrRelIdCache;
 
     /// members to control the existence of grabbagged SDT properties in the paragraph
     sal_Int32 m_nParagraphSdtPrToken;
