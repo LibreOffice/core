@@ -737,7 +737,7 @@ void SAL_CALL SlideShow::end()
                         if (xDrawView.is())
                             xDrawView->setCurrentPage(
                                 Reference<XDrawPage>(
-                                    mpDoc->GetSdPage(xController->getRestoreSlide(), PK_STANDARD)->getUnoPage(),
+                                    mpDoc->GetSdPage(xController->getRestoreSlide(), PageKind::Standard)->getUnoPage(),
                                     UNO_QUERY));
                     }
                 }
@@ -1059,7 +1059,7 @@ void SlideShow::StartInPlacePresentation()
                 FrameView* pFrameView = pMainViewShell->GetFrameView();
                 pFrameView->SetPresentationViewShellId(SID_VIEWSHELL1);
                 pFrameView->SetPreviousViewShellType (pMainViewShell->GetShellType());
-                pFrameView->SetPageKind (PK_STANDARD);
+                pFrameView->SetPageKind (PageKind::Standard);
             }
 
             pHelper->RequestView( FrameworkHelper::msImpressViewURL, FrameworkHelper::msCenterPaneURL );

@@ -201,7 +201,7 @@ void SdDocPreviewWin::updateViewSettings()
 
     if(pDoc)
     {
-        SdPage * pPage = pDoc->GetSdPage( mnShowPage, PK_STANDARD );
+        SdPage * pPage = pDoc->GetSdPage( mnShowPage, PageKind::Standard );
         if( pPage )
         {
             SdrOutliner& rOutl = pDoc->GetDrawOutliner();

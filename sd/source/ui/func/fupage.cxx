@@ -135,7 +135,7 @@ void FuPage::DoExecute( SfxRequest& )
     {
         mbMasterPage = mpDrawViewShell->GetEditMode() == EditMode::MasterPage;
         // we don't really want to format page background with SID_ATTR_PAGE[_SIZE] slots
-        mbDisplayBackgroundTabPage = ( mpDrawViewShell->GetPageKind() == PK_STANDARD) &&
+        mbDisplayBackgroundTabPage = ( mpDrawViewShell->GetPageKind() == PageKind::Standard) &&
                                       ( nSlotId != SID_ATTR_PAGE_SIZE) && ( nSlotId != SID_ATTR_PAGE );
         mpPage = mpDrawViewShell->getCurrentPage();
     }
@@ -375,7 +375,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
             {
                 // But don't ask in notice-view, because we can't change the background of
                 // notice-masterpage (at the moment)
-                if( ePageKind != PK_NOTES )
+                if( ePageKind != PageKind::Notes )
                 {
                     ScopedVclPtrInstance<MessageDialog> aQuestionBox(
                         pParent, SD_RESSTR(STR_PAGE_BACKGROUND_TXT),

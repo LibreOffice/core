@@ -176,9 +176,9 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         mnSelectedPage = pFrameView->GetSelectedPage();
         mnSelectedPageOnLoad = pFrameView->GetSelectedPageOnLoad();
         meEditMode = pFrameView->GetViewShEditMode();
-        // meStandardEditMode = pFrameView->GetViewShEditMode(PK_STANDARD);
-        // meNotesEditMode = pFrameView->GetViewShEditMode(PK_NOTES);
-        // meHandoutEditMode = pFrameView->GetViewShEditMode(PK_HANDOUT);
+        // meStandardEditMode = pFrameView->GetViewShEditMode(PageKind::Standard);
+        // meNotesEditMode = pFrameView->GetViewShEditMode(PageKind::Notes);
+        // meHandoutEditMode = pFrameView->GetViewShEditMode(PageKind::Handout);
         SetViewShEditModeOnLoad(pFrameView->GetViewShEditModeOnLoad());
         mbLayerMode = pFrameView->IsLayerMode();
         mbQuickEdit = pFrameView->IsQuickEdit();
@@ -206,8 +206,8 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         mbNoColors = true;
         mbNoAttribs = false;
         maVisArea = Rectangle( Point(), Size(0, 0) );
-        mePageKind = PK_STANDARD;
-        mePageKindOnLoad = PK_STANDARD;
+        mePageKind = PageKind::Standard;
+        mePageKindOnLoad = PageKind::Standard;
         mnSelectedPage = 0;
         mnSelectedPageOnLoad = 0;
         meEditMode = EditMode::Page;
@@ -422,9 +422,9 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
 
     aUserData.addValue( sUNO_View_SlidesPerRow, makeAny( (sal_Int16)GetSlidesPerRow() ) );
     aUserData.addValue( sUNO_View_EditMode, makeAny( (sal_Int32)GetViewShEditMode() ) );
-    // aUserData.addValue( sUNO_View_EditModeStandard, makeAny( (sal_Int32)GetViewShEditMode( PK_STANDARD ) ) );
-    // aUserData.addValue( sUNO_View_EditModeNotes, makeAny( (sal_Int32)GetViewShEditMode( PK_NOTES ) ) );
-    // aUserData.addValue( sUNO_View_EditModeHandout, makeAny( (sal_Int32)GetViewShEditMode( PK_HANDOUT ) ) );
+    // aUserData.addValue( sUNO_View_EditModeStandard, makeAny( (sal_Int32)GetViewShEditMode( PageKind::Standard ) ) );
+    // aUserData.addValue( sUNO_View_EditModeNotes, makeAny( (sal_Int32)GetViewShEditMode( PageKind::Notes ) ) );
+    // aUserData.addValue( sUNO_View_EditModeHandout, makeAny( (sal_Int32)GetViewShEditMode( PageKind::Handout ) ) );
 
     {
         const Rectangle aVisArea = GetVisArea();

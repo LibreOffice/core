@@ -313,7 +313,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
         //TODO/LATER: looks a little bit strange!
         if( ( GetCreateMode() == SfxObjectCreateMode::EMBEDDED ) && SfxObjectShell::GetVisArea( ASPECT_CONTENT ).IsEmpty() )
         {
-            SdPage* pPage = mpDoc->GetSdPage( 0, PK_STANDARD );
+            SdPage* pPage = mpDoc->GetSdPage( 0, PageKind::Standard );
 
             if( pPage )
                 SetVisArea( Rectangle( pPage->GetAllObjBoundRect() ) );
@@ -768,7 +768,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
             // or the handout view.
             PageKind eNewPageKind = pPage->GetPageKind();
 
-            if( (eNewPageKind != PK_STANDARD) && (mpDoc->GetDocumentType() == DocumentType::Draw) )
+            if( (eNewPageKind != PageKind::Standard) && (mpDoc->GetDocumentType() == DocumentType::Draw) )
                 return false;
 
             if (eNewPageKind != pDrawViewShell->GetPageKind())
@@ -778,13 +778,13 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
                 OUString sViewURL;
                 switch (eNewPageKind)
                 {
-                    case PK_STANDARD:
+                    case PageKind::Standard:
                         sViewURL = FrameworkHelper::msImpressViewURL;
                         break;
-                    case PK_NOTES:
+                    case PageKind::Notes:
                         sViewURL = FrameworkHelper::msNotesViewURL;
                         break;
-                    case PK_HANDOUT:
+                    case PageKind::Handout:
                         sViewURL = FrameworkHelper::msHandoutViewURL;
                         break;
                     default:
@@ -996,10 +996,10 @@ bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 
         if (aLayoutName.isEmpty())
         {
-            sal_uInt32 nCount = mpDoc->GetMasterSdPageCount(PK_STANDARD);
+            sal_uInt32 nCount = mpDoc->GetMasterSdPageCount(PageKind::Standard);
             for (sal_uInt32 i = 0; i < nCount; ++i)
             {
-                OUString aOldPageLayoutName = mpDoc->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName();
+                OUString aOldPageLayoutName = mpDoc->GetMasterSdPage(i, PageKind::Standard)->GetLayoutName();
                 OUString aNewLayoutName = aLayoutName;
                 // Don't add suffix for the first master page
                 if( i > 0 )

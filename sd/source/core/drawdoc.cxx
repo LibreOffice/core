@@ -496,10 +496,10 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
         pNewStylePool->CopyCellSheets(*pOldStylePool);
         pNewStylePool->CopyTableStyles(*pOldStylePool);
 
-        for (sal_uInt16 i = 0; i < GetMasterSdPageCount(PK_STANDARD); i++)
+        for (sal_uInt16 i = 0; i < GetMasterSdPageCount(PageKind::Standard); i++)
         {
             // Move with all of the master page's layouts
-            OUString aOldLayoutName(const_cast<SdDrawDocument*>(this)->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName());
+            OUString aOldLayoutName(const_cast<SdDrawDocument*>(this)->GetMasterSdPage(i, PageKind::Standard)->GetLayoutName());
             aOldLayoutName = aOldLayoutName.copy( 0, aOldLayoutName.indexOf( SD_LT_SEPARATOR ) );
             SdStyleSheetVector aCreatedSheets;
             pNewStylePool->CopyLayoutSheets(aOldLayoutName, *pOldStylePool, aCreatedSheets );
@@ -588,7 +588,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
         CheckMasterPages();
 
-        if ( GetMasterSdPageCount(PK_STANDARD) > 1 )
+        if ( GetMasterSdPageCount(PageKind::Standard) > 1 )
             RemoveUnnecessaryMasterPages( nullptr, true, false );
 
         for ( sal_uInt16 i = 0; i < GetPageCount(); i++ )
@@ -670,10 +670,10 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
         // create missing layout style sheets for broken documents
         //         that where created with the 5.2
-        nPageCount = GetMasterSdPageCount( PK_STANDARD );
+        nPageCount = GetMasterSdPageCount( PageKind::Standard );
         for (nPage = 0; nPage < nPageCount; nPage++)
         {
-            SdPage* pPage = GetMasterSdPage(nPage, PK_STANDARD);
+            SdPage* pPage = GetMasterSdPage(nPage, PageKind::Standard);
             pSPool->CreateLayoutStyleSheets( pPage->GetName(), true );
         }
 
@@ -696,11 +696,11 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     mbNewOrLoadCompleted = true;
 
     // Update all linked pages
-    sal_uInt16 nMaxSdPages = GetSdPageCount(PK_STANDARD);
+    sal_uInt16 nMaxSdPages = GetSdPageCount(PageKind::Standard);
 
     for (sal_uInt16 nSdPage=0; nSdPage < nMaxSdPages; nSdPage++)
     {
-        SdPage* pPage = GetSdPage(nSdPage, PK_STANDARD);
+        SdPage* pPage = GetSdPage(nSdPage, PageKind::Standard);
 
         if (pPage && !pPage->GetFileName().isEmpty() && pPage->GetBookmarkName().getLength())
         {

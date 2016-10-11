@@ -560,7 +560,7 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
     SdPage* pCurrentPage = GetCurrentPage();
 
     const bool bReadOnly = mrBase.GetDocShell()->IsReadOnly();
-    const bool bWrongPageKind = (pCurrentPage == nullptr) || (pCurrentPage->GetPageKind() != PK_STANDARD);
+    const bool bWrongPageKind = (pCurrentPage == nullptr) || (pCurrentPage->GetPageKind() != PageKind::Standard);
 
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
 
@@ -1102,10 +1102,10 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
     {
         if( bForeward )
         {
-            if( nPageNum >= mpDoc->GetSdPageCount(PK_STANDARD)-1 )
+            if( nPageNum >= mpDoc->GetSdPageCount(PageKind::Standard)-1 )
             {
                 // we reached end of draw pages, start with master pages (skip handout master for draw)
-                return mpDoc->GetMasterSdPage( (mpDoc->GetDocumentType() == DocumentType::Impress) ? 0 : 1, PK_STANDARD );
+                return mpDoc->GetMasterSdPage( (mpDoc->GetDocumentType() == DocumentType::Impress) ? 0 : 1, PageKind::Standard );
             }
             nPageNum++;
         }
@@ -1116,13 +1116,13 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
 
             nPageNum--;
         }
-        return mpDoc->GetSdPage(nPageNum, PK_STANDARD);
+        return mpDoc->GetSdPage(nPageNum, PageKind::Standard);
     }
     else
     {
         if( bForeward )
         {
-            if( nPageNum >= mpDoc->GetMasterSdPageCount(PK_STANDARD)-1 )
+            if( nPageNum >= mpDoc->GetMasterSdPageCount(PageKind::Standard)-1 )
             {
                 return nullptr;   // we reached the end, there is nothing more to see here
             }
@@ -1133,24 +1133,24 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
             if( nPageNum == (mpDoc->GetDocumentType() == DocumentType::Impress ? 0 : 1) )
             {
                 // we reached beginning of master pages, start with end if pages
-                return mpDoc->GetSdPage( mpDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD );
+                return mpDoc->GetSdPage( mpDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard );
             }
 
             nPageNum--;
         }
-        return mpDoc->GetMasterSdPage(nPageNum,PK_STANDARD);
+        return mpDoc->GetMasterSdPage(nPageNum,PageKind::Standard);
     }
 }
 
 SdPage* AnnotationManagerImpl::GetFirstPage()
 {
     // return first drawing page
-    return mpDoc->GetSdPage(0, PK_STANDARD );
+    return mpDoc->GetSdPage(0, PageKind::Standard );
 }
 
 SdPage* AnnotationManagerImpl::GetLastPage()
 {
-    return mpDoc->GetMasterSdPage( mpDoc->GetMasterSdPageCount(PK_STANDARD) - 1, PK_STANDARD );
+    return mpDoc->GetMasterSdPage( mpDoc->GetMasterSdPageCount(PageKind::Standard) - 1, PageKind::Standard );
 }
 
 SdPage* AnnotationManagerImpl::GetCurrentPage()

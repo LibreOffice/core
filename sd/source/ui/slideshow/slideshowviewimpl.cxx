@@ -333,7 +333,7 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
         aOutputSize.Height() = (long)( aOutputSize.Height() / 1.03 );
     }
 
-    SdPage* pP = mpDoc->GetSdPage( 0, PK_STANDARD );
+    SdPage* pP = mpDoc->GetSdPage( 0, PageKind::Standard );
     Size aPageSize( pP->GetSize() );
 
     const double page_ratio = (double)aPageSize.Width() / (double)aPageSize.Height();

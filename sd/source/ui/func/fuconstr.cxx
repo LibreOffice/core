@@ -317,7 +317,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         const bool bForceFillStyle, const bool bForceNoFillStyle )
 {
     SdPage* pPage = static_cast<SdPage*>(mpView->GetSdrPageView()->GetPage());
-    if ( pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD &&
+    if ( pPage->IsMasterPage() && pPage->GetPageKind() == PageKind::Standard &&
          mpDoc->GetDocumentType() == DocumentType::Impress )
     {
         /**********************************************

@@ -950,12 +950,12 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     {
         bool bDisable = true;
         sal_uInt16 i = 0;
-        sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
+        sal_uInt16 nCount = GetDoc()->GetSdPageCount(PageKind::Standard);
         pOlView->SetSelectedPages();
 
         while (i < nCount && bDisable)
         {
-            SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
+            SdPage* pPage = GetDoc()->GetSdPage(i, PageKind::Standard);
 
             if (pPage->IsSelected())
             {
@@ -997,12 +997,12 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     {
         bool bDisable = true;
         sal_uInt16 i = 0;
-        sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
+        sal_uInt16 nCount = GetDoc()->GetSdPageCount(PageKind::Standard);
         pOlView->SetSelectedPages();
 
         while (i < nCount && bDisable)
         {
-            SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
+            SdPage* pPage = GetDoc()->GetSdPage(i, PageKind::Standard);
 
             if (pPage->IsSelected())
             {
@@ -1043,11 +1043,11 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_PRESENTATION ) )
     {
         bool bDisable = true;
-        sal_uInt16 nCount = GetDoc()->GetSdPageCount( PK_STANDARD );
+        sal_uInt16 nCount = GetDoc()->GetSdPageCount( PageKind::Standard );
 
         for( sal_uInt16 i = 0; i < nCount && bDisable; i++ )
         {
-            SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
+            SdPage* pPage = GetDoc()->GetSdPage(i, PageKind::Standard);
 
             if( !pPage->IsExcluded() )
                 bDisable = false;
@@ -1227,7 +1227,7 @@ void OutlineViewShell::ReadFrameViewData(FrameView* pView)
         rOutl.SetControlWord(nCntrl & ~EEControlBits::NOCOLORS);
 
     sal_uInt16 nPage = mpFrameView->GetSelectedPage();
-    pLastPage = GetDoc()->GetSdPage( nPage, PK_STANDARD );
+    pLastPage = GetDoc()->GetSdPage( nPage, PageKind::Standard );
     pOlView->SetActualPage(pLastPage);
 }
 
@@ -1293,7 +1293,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
     // page view and layout
 
-    sal_uInt16  nPageCount = GetDoc()->GetSdPageCount( PK_STANDARD );
+    sal_uInt16  nPageCount = GetDoc()->GetSdPageCount( PageKind::Standard );
     OUString  aPageStr, aLayoutStr;
 
     ::sd::Window*   pWin        = GetActiveWindow();
@@ -1329,10 +1329,10 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
                 nPos++;
         }
 
-        if( nPos >= GetDoc()->GetSdPageCount( PK_STANDARD ) )
+        if( nPos >= GetDoc()->GetSdPageCount( PageKind::Standard ) )
             nPos = 0;
 
-        SdrPage* pPage = GetDoc()->GetSdPage( (sal_uInt16) nPos, PK_STANDARD );
+        SdrPage* pPage = GetDoc()->GetSdPage( (sal_uInt16) nPos, PageKind::Standard );
 
         aPageStr = SD_RESSTR(STR_SD_PAGE_COUNT);
 
@@ -1763,7 +1763,7 @@ sal_uLong OutlineViewShell::ReadRtf(SvStream& rInput, const OUString& rBaseURL)
 
     bRet = rOutl.Read( rInput, rBaseURL, EE_FORMAT_RTF, GetDocSh()->GetHeaderAttributes() );
 
-    SdPage* pPage = GetDoc()->GetSdPage( GetDoc()->GetSdPageCount(PK_STANDARD) - 1, PK_STANDARD );
+    SdPage* pPage = GetDoc()->GetSdPage( GetDoc()->GetSdPageCount(PageKind::Standard) - 1, PageKind::Standard );
     SfxStyleSheet* pTitleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
     SfxStyleSheet* pOutlSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
 
@@ -1882,9 +1882,9 @@ void OutlineViewShell::GetState (SfxItemSet& rSet)
 void OutlineViewShell::SetCurrentPage (SdPage* pPage)
 {
     // Adapt the selection of the model.
-    for (sal_uInt16 i=0; i<GetDoc()->GetSdPageCount(PK_STANDARD); i++)
+    for (sal_uInt16 i=0; i<GetDoc()->GetSdPageCount(PageKind::Standard); i++)
         GetDoc()->SetSelected(
-            GetDoc()->GetSdPage(i, PK_STANDARD),
+            GetDoc()->GetSdPage(i, PageKind::Standard),
             false);
     GetDoc()->SetSelected (pPage, true);
 

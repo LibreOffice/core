@@ -283,7 +283,7 @@ OUString SdPageObjsTLB::getAltLongDescText(SvTreeListEntry* pEntry , bool isAltT
     for( pageNo = 0;  pageNo < maxPages; pageNo++ )
     {
         const SdPage* pPage = static_cast<const SdPage*>( mpDoc->GetPage( pageNo ) );
-        if( pPage->GetPageKind() != PK_STANDARD ) continue;
+        if( pPage->GetPageKind() != PageKind::Standard ) continue;
         if( pPage->GetName() !=  ParentName ) continue;
         SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
         while( aIter.IsMore() )
@@ -515,8 +515,8 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, bool bAllPages,
     while( nPage < nMaxPages )
     {
         const SdPage* pPage = static_cast<const SdPage*>( mpDoc->GetPage( nPage ) );
-        if(  (mbShowAllPages || pPage->GetPageKind() == PK_STANDARD)
-             && !(pPage->GetPageKind()==PK_HANDOUT)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
+        if(  (mbShowAllPages || pPage->GetPageKind() == PageKind::Standard)
+             && !(pPage->GetPageKind()==PageKind::Handout)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
         {
             bool bPageExluded = pPage->IsExcluded();
 
@@ -800,7 +800,7 @@ void SdPageObjsTLB::SetShowAllShapes (
 }
 
 /**
- * Checks if the pages (PK_STANDARD) of a doc and the objects on the pages
+ * Checks if the pages (PageKind::Standard) of a doc and the objects on the pages
  * are identical to the TreeLB.
  * If a doc is provided, this will be the used doc (important by more than
  * one document).
@@ -824,7 +824,7 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
     while( nPage < nMaxPages )
     {
         const SdPage* pPage = static_cast<const SdPage*>( mpDoc->GetPage( nPage ) );
-        if( pPage->GetPageKind() == PK_STANDARD )
+        if( pPage->GetPageKind() == PageKind::Standard )
         {
             if( !pEntry )
                 return false;
@@ -918,7 +918,7 @@ void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
             while( nPage < nMaxPages )
             {
                 SdPage* pPage = static_cast<SdPage*>( mpBookmarkDoc->GetPage( nPage ) );
-                if( pPage->GetPageKind() == PK_STANDARD )
+                if( pPage->GetPageKind() == PageKind::Standard )
                 {
                     pPageEntry = InsertEntry( pPage->GetName(),
                                               aImgPage,
@@ -1194,7 +1194,7 @@ void SdPageObjsTLB::DoDrag()
 
         if( eDragType == NAVIGATOR_DRAGTYPE_LINK )
             nDNDActions = DND_ACTION_LINK;  // Either COPY *or* LINK, never both!
-        else if (mpDoc->GetSdPageCount(PK_STANDARD) == 1)
+        else if (mpDoc->GetSdPageCount(PageKind::Standard) == 1)
         {
             // Can not move away the last slide in a document.
             nDNDActions = DND_ACTION_COPY;

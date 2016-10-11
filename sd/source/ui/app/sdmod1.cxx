@@ -638,10 +638,10 @@ void OutlineToImpressFinalizer::operator() (bool)
 
         // Call UpdatePreview once for every slide to resync the
         // document with the outliner of the OutlineViewShell.
-        sal_uInt16 nPageCount (mrDocument.GetSdPageCount(PK_STANDARD));
+        sal_uInt16 nPageCount (mrDocument.GetSdPageCount(PageKind::Standard));
         for (sal_uInt16 nIndex=0; nIndex<nPageCount; nIndex++)
         {
-            SdPage* pPage = mrDocument.GetSdPage(nIndex, PK_STANDARD);
+            SdPage* pPage = mrDocument.GetSdPage(nIndex, PageKind::Standard);
             // Make the page the actual page so that the
             // following UpdatePreview() call accesses the
             // correct paragraphs.
@@ -649,7 +649,7 @@ void OutlineToImpressFinalizer::operator() (bool)
             pOutlineShell->UpdatePreview(pPage, true);
         }
         // Select the first slide.
-        SdPage* pPage = mrDocument.GetSdPage(0, PK_STANDARD);
+        SdPage* pPage = mrDocument.GetSdPage(0, PageKind::Standard);
         pView->SetActualPage(pPage);
         pOutlineShell->UpdatePreview(pPage, true);
     }

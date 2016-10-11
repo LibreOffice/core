@@ -251,7 +251,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_ASSIGN_LAYOUT:
         {
-            pShell->mpImpl->AssignLayout( rRequest, PK_STANDARD );
+            pShell->mpImpl->AssignLayout( rRequest, PageKind::Standard );
             rRequest.Done ();
         }
         break;
@@ -967,7 +967,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
             pPageToRename->SetName( rName );
 
             // also rename notes-page
-            SdPage* pNotesPage = pDocument->GetSdPage( nPageId, PK_NOTES );
+            SdPage* pNotesPage = pDocument->GetSdPage( nPageId, PageKind::Notes );
             if (pNotesPage != nullptr)
                 pNotesPage->SetName (rName);
         }
@@ -975,7 +975,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
     else
     {
         // rename MasterPage -> rename LayoutTemplate
-        pPageToRename = pDocument->GetMasterSdPage( nPageId, PK_STANDARD );
+        pPageToRename = pDocument->GetMasterSdPage( nPageId, PageKind::Standard );
         if (pPageToRename != nullptr)
         {
             const OUString aOldLayoutName( pPageToRename->GetLayoutName() );
@@ -1035,7 +1035,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
         {
             pNewPage = pShell->CreateOrDuplicatePage (
                 rRequest,
-                PK_STANDARD,
+                PageKind::Standard,
                 nInsertionIndex>=0
                     ? mrSlideSorter.GetModel().GetPageDescriptor(nInsertionIndex)->GetPage()
                         : nullptr);
@@ -1057,7 +1057,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
 
                 // Create shapes for the default layout.
                 pNewPage = pDocument->GetMasterSdPage(
-                    (sal_uInt16)(nInsertionIndex+1), PK_STANDARD);
+                    (sal_uInt16)(nInsertionIndex+1), PageKind::Standard);
                 pNewPage->CreateTitleAndLayout (true,true);
             }
         }
@@ -1106,7 +1106,7 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
     {
         aPagesToSelect.push_back(
             mrSlideSorter.GetViewShell()->CreateOrDuplicatePage(
-                rRequest, PK_STANDARD, *iPage, nInsertPosition));
+                rRequest, PageKind::Standard, *iPage, nInsertPosition));
     }
     aPagesToDuplicate.clear();
 

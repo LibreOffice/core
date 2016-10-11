@@ -45,21 +45,21 @@ MasterLayoutDialog::MasterLayoutDialog( vcl::Window* pParent, SdDrawDocument* pD
 
     if( mpCurrentPage == nullptr )
     {
-        mpCurrentPage = pDoc->GetMasterSdPage( 0, PK_STANDARD );
+        mpCurrentPage = pDoc->GetMasterSdPage( 0, PageKind::Standard );
         OSL_FAIL( "MasterLayoutDialog::MasterLayoutDialog() - no current page?" );
     }
 
     switch( mpCurrentPage->GetPageKind() )
     {
-        case PK_STANDARD:
+        case PageKind::Standard:
         {
             mpCBHeader->Enable(false);
             mpCBPageNumber->SetText(mpCBSlideNumber->GetText());
             break;
         }
-        case PK_NOTES:
+        case PageKind::Notes:
             break;
-        case PK_HANDOUT:
+        case PageKind::Handout:
             break;
     }
 
@@ -100,7 +100,7 @@ void MasterLayoutDialog::applyChanges()
 {
     mpDoc->BegUndo(GetText());
 
-    if( (mpCurrentPage->GetPageKind() != PK_STANDARD) && (mbOldHeader != (bool) mpCBHeader->IsChecked() ) )
+    if( (mpCurrentPage->GetPageKind() != PageKind::Standard) && (mbOldHeader != (bool) mpCBHeader->IsChecked() ) )
     {
         if( mbOldHeader )
             remove( PRESOBJ_HEADER );

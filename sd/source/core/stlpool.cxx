@@ -121,9 +121,9 @@ SdStyleSheetPool::SdStyleSheetPool(SfxItemPool const& _rPool, SdDrawDocument* pD
             msTableFamilyName = xNamed->getName();
 
         // create presentation families, one for each master page
-        const sal_uInt16 nCount = mpDoc->GetMasterSdPageCount(PK_STANDARD);
+        const sal_uInt16 nCount = mpDoc->GetMasterSdPageCount(PageKind::Standard);
         for( sal_uInt16 nPage = 0; nPage < nCount; ++nPage )
-            AddStyleFamily( mpDoc->GetMasterSdPage(nPage,PK_STANDARD) );
+            AddStyleFamily( mpDoc->GetMasterSdPage(nPage,PageKind::Standard) );
 
     }
 }

@@ -76,7 +76,7 @@ void PresentationViewShell::InitInterface_Impl()
 
 
 PresentationViewShell::PresentationViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, FrameView* pFrameView)
-: DrawViewShell( pFrame, rViewShellBase, pParentWindow, PK_STANDARD, pFrameView)
+: DrawViewShell( pFrame, rViewShellBase, pParentWindow, PageKind::Standard, pFrameView)
 {
     if( GetDocSh() && GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         maOldVisArea = GetDocSh()->GetVisArea( ASPECT_CONTENT );

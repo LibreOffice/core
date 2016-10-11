@@ -247,7 +247,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         const SfxUInt32Item* pLayout = rRequest.GetArg<SfxUInt32Item>(ID_VAL_WHATLAYOUT);
         if( pLayout )
         {
-            if (ePageKind == PK_NOTES)
+            if (ePageKind == PageKind::Notes)
             {
                 eNotesLayout   = (AutoLayout) pLayout->GetValue ();
             }
@@ -269,7 +269,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
 
         if (CHECK_RANGE (AUTOLAYOUT_START, (AutoLayout) pLayout->GetValue (), AUTOLAYOUT_END))
         {
-            if (ePageKind == PK_NOTES)
+            if (ePageKind == PageKind::Notes)
             {
                 aNotesPageName = pPageName->GetValue ();
                 eNotesLayout   = (AutoLayout) pLayout->GetValue ();
@@ -352,9 +352,9 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                     sal_uInt16 nPageCount (pDocument->GetSdPageCount(ePageKind));
                     for (sal_uInt16 i=0; i<nPageCount; i++)
                     {
-                        pDocument->GetSdPage(i, PK_STANDARD)->SetSelected(
+                        pDocument->GetSdPage(i, PageKind::Standard)->SetSelected(
                             i == nNewPageIndex);
-                        pDocument->GetSdPage(i, PK_NOTES)->SetSelected(
+                        pDocument->GetSdPage(i, PageKind::Notes)->SetSelected(
                             i == nNewPageIndex);
                     }
                     // Move the selected page to the head of the document
@@ -393,14 +393,14 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     }
     SdPage* pNewPage = nullptr;
     if(nNewPageIndex != 0xffff)
-        pNewPage = pDocument->GetSdPage(nNewPageIndex, PK_STANDARD);
+        pNewPage = pDocument->GetSdPage(nNewPageIndex, PageKind::Standard);
 
     if( bUndo )
     {
         if( pNewPage )
         {
             pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pNewPage));
-            pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pDocument->GetSdPage (nNewPageIndex, PK_NOTES)));
+            pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pDocument->GetSdPage (nNewPageIndex, PageKind::Notes)));
         }
 
         pDrView->EndUndo();

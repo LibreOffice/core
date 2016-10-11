@@ -91,7 +91,7 @@ bool SdCGMFilter::Import()
             if( ( nRetValue &~0xff000000 ) != 0xffffff )    // maybe the backgroundcolor is already white
             {                                               // so we must not set a master page
                 mrDocument.StopWorkStartupDelay();
-                SdPage* pSdPage = mrDocument.GetMasterSdPage(0, PK_STANDARD);
+                SdPage* pSdPage = mrDocument.GetMasterSdPage(0, PageKind::Standard);
 
                 if(pSdPage)
                 {

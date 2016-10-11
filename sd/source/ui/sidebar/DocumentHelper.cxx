@@ -92,10 +92,10 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
         // Check if a master page with the same name as that of the given
         // master page already exists.
         bool bPageExists (false);
-        sal_uInt16 nMasterPageCount(rTargetDocument.GetMasterSdPageCount(PK_STANDARD));
+        sal_uInt16 nMasterPageCount(rTargetDocument.GetMasterSdPageCount(PageKind::Standard));
         for (sal_uInt16 nMaster=0; nMaster<nMasterPageCount; nMaster++)
         {
-            SdPage* pCandidate = rTargetDocument.GetMasterSdPage (nMaster, PK_STANDARD);
+            SdPage* pCandidate = rTargetDocument.GetMasterSdPage (nMaster, PageKind::Standard);
             if (pMasterPage!=nullptr
                 && pCandidate->GetName() == pMasterPage->GetName())
             {
@@ -120,8 +120,8 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
 
         // Set a layout.
         SdPage* pSlide = rTargetDocument.GetSdPage(
-            rTargetDocument.GetSdPageCount(PK_STANDARD)-1,
-            PK_STANDARD);
+            rTargetDocument.GetSdPageCount(PageKind::Standard)-1,
+            PageKind::Standard);
         if (pSlide == nullptr)
             break;
         pSlide->SetAutoLayout(AUTOLAYOUT_TITLE, true);
@@ -139,7 +139,7 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
         // Make the connection from the new slide to the master page
         // (and do the same for the notes page.)
         rTargetDocument.SetMasterPage (
-            rTargetDocument.GetSdPageCount(PK_STANDARD)-1,
+            rTargetDocument.GetSdPageCount(PageKind::Standard)-1,
             pNewMasterPage->GetName(),
             &rTargetDocument,
             false, // Connect the new master page with the new slide but
@@ -165,17 +165,17 @@ SdPage* DocumentHelper::GetSlideForMasterPage (SdPage* pMasterPage)
 
     // Iterate over all pages and check if it references the given master
     // page.
-    if (pDocument!=nullptr && pDocument->GetSdPageCount(PK_STANDARD) > 0)
+    if (pDocument!=nullptr && pDocument->GetSdPageCount(PageKind::Standard) > 0)
     {
         // In most cases a new slide has just been inserted so start with
         // the last page.
-        sal_uInt16 nPageIndex (pDocument->GetSdPageCount(PK_STANDARD)-1);
+        sal_uInt16 nPageIndex (pDocument->GetSdPageCount(PageKind::Standard)-1);
         bool bFound (false);
         while ( ! bFound)
         {
             pCandidate = pDocument->GetSdPage(
                 nPageIndex,
-                PK_STANDARD);
+                PageKind::Standard);
             if (pCandidate != nullptr)
             {
                 if (static_cast<SdPage*>(&pCandidate->TRG_GetMasterPage())
@@ -432,10 +432,10 @@ void DocumentHelper::AssignMasterPageToPage (
     {
         // Find first slide that uses the master page.
         SdPage* pSlide = nullptr;
-        sal_uInt16 nPageCount = pDocument->GetSdPageCount(PK_STANDARD);
+        sal_uInt16 nPageCount = pDocument->GetSdPageCount(PageKind::Standard);
         for (sal_uInt16 nPage=0; nPage<nPageCount&&pSlide==nullptr; nPage++)
         {
-            SdrPage* pCandidate = pDocument->GetSdPage(nPage,PK_STANDARD);
+            SdrPage* pCandidate = pDocument->GetSdPage(nPage,PageKind::Standard);
             if (pCandidate != nullptr
                 && pCandidate->TRG_HasMasterPage()
                 && &(pCandidate->TRG_GetMasterPage()) == pPage)

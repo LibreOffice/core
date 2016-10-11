@@ -296,7 +296,7 @@ bool TabControl::StartRenaming()
 {
     bool bOK = false;
 
-    if (pDrViewSh->GetPageKind() == PK_STANDARD)
+    if (pDrViewSh->GetPageKind() == PageKind::Standard)
     {
         bOK = true;
 

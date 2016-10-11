@@ -401,7 +401,7 @@ void SlideSorterViewShell::FuTemporary (SfxRequest& rRequest)
                 mpImpl->ProcessModifyPageSlot (
                     rRequest,
                     pCurrentPage,
-                    PK_STANDARD);
+                    PageKind::Standard);
             Cancel();
             rRequest.Done ();
         }
@@ -752,7 +752,7 @@ void SlideSorterViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
     {
         std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
         DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
-        if (pDrawViewShell != nullptr && pDrawViewShell->GetPageKind() == PK_HANDOUT)
+        if (pDrawViewShell != nullptr && pDrawViewShell->GetPageKind() == PageKind::Handout)
         {
             rSet.DisableItem( SID_MOVE_PAGE_FIRST );
             rSet.DisableItem( SID_MOVE_PAGE_UP );
@@ -813,7 +813,7 @@ void SlideSorterViewShell::ExecMovePageDown (SfxRequest& /*rReq*/)
     sal_uInt16 lastSelectedPageNo = SyncPageSelectionToDocument(xSelection).second;
 
     // Get page number of the last page
-    sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
+    sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PageKind::Standard);
 
     // Now compute human page number from internal page number
     lastSelectedPageNo = (lastSelectedPageNo - 1) / 2;
@@ -842,7 +842,7 @@ void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
     SyncPageSelectionToDocument(xSelection);
 
     // Get page number of the last page
-    sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
+    sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PageKind::Standard);
 
     // Move to position after last page No (=Number of pages - 1)
     GetDoc()->MovePages( nNoOfPages - 1 );
@@ -854,7 +854,7 @@ void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
 {
     std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
-    if (pDrawViewShell != nullptr && pDrawViewShell->GetPageKind() == PK_HANDOUT)
+    if (pDrawViewShell != nullptr && pDrawViewShell->GetPageKind() == PageKind::Handout)
     {
         rSet.DisableItem( SID_MOVE_PAGE_LAST );
         rSet.DisableItem( SID_MOVE_PAGE_DOWN );
@@ -868,7 +868,7 @@ void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
     sal_uInt16 lastSelectedPageNo = SyncPageSelectionToDocument(xSelection).second;
 
     // Get page number of the last page
-    sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
+    sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PageKind::Standard);
 
     // Now compute human page number from internal page number
     lastSelectedPageNo = (lastSelectedPageNo - 1) / 2;
@@ -881,10 +881,10 @@ void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
 
 void SlideSorterViewShell::PostMoveSlidesActions(const std::shared_ptr<SlideSorterViewShell::PageSelection> &rpSelection)
 {
-    sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
+    sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PageKind::Standard);
     for (sal_uInt16 nPage = 0; nPage < nNoOfPages; nPage++)
     {
-        SdPage* pPage = GetDoc()->GetSdPage(nPage, PK_STANDARD);
+        SdPage* pPage = GetDoc()->GetSdPage(nPage, PageKind::Standard);
         GetDoc()->SetSelected(pPage, false);
     }
 

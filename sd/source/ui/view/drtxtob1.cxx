@@ -328,7 +328,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 if (pPageView)
                 {
                     SdPage* pPage = static_cast<SdPage*>(pPageView->GetPage());
-                    bMasterPage = pPage && (pPage->GetPageKind() == PK_STANDARD) && pPage->IsMasterPage();
+                    bMasterPage = pPage && (pPage->GetPageKind() == PageKind::Standard) && pPage->IsMasterPage();
                 }
 
                 if (!bMasterPage)

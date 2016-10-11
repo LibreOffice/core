@@ -95,7 +95,7 @@ void ModifyPageUndoAction::Undo()
         {
             mpPage->SetName(maOldName);
 
-            if (mpPage->GetPageKind() == PK_STANDARD)
+            if (mpPage->GetPageKind() == PageKind::Standard)
             {
                 SdPage* pNotesPage = static_cast<SdPage*>(mpDoc->GetPage(mpPage->GetPageNum() + 1));
                 pNotesPage->SetName(maOldName);
@@ -138,7 +138,7 @@ void ModifyPageUndoAction::Redo()
         {
             mpPage->SetName(maNewName);
 
-            if (mpPage->GetPageKind() == PK_STANDARD)
+            if (mpPage->GetPageKind() == PageKind::Standard)
             {
                 SdPage* pNotesPage = static_cast<SdPage*>(mpDoc->GetPage(mpPage->GetPageNum() + 1));
                 pNotesPage->SetName(maNewName);

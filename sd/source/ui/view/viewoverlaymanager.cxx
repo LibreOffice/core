@@ -464,7 +464,7 @@ bool ViewOverlayManager::CreateTags()
 
     SdPage* pPage = aMainShell.get() ? aMainShell->getCurrentPage() : nullptr;
 
-    if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
+    if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PageKind::Standard) )
     {
         const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
 

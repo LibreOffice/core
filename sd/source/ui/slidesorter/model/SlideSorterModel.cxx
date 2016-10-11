@@ -278,7 +278,7 @@ void SlideSorterModel::Resync()
     // Check if document and this model really differ.
     bool bIsUpToDate (true);
     SdDrawDocument* pDocument = GetDocument();
-    if (pDocument!=nullptr && maPageDescriptors.size()==pDocument->GetSdPageCount(PK_STANDARD))
+    if (pDocument!=nullptr && maPageDescriptors.size()==pDocument->GetSdPageCount(PageKind::Standard))
     {
         for (sal_Int32 nIndex=0,nCount=maPageDescriptors.size(); nIndex<nCount; ++nIndex)
         {
@@ -527,7 +527,7 @@ bool SlideSorterModel::NotifyPageEvent (const SdrPage* pSdrPage)
 
     // We are only interested in pages that are currently served by this
     // model.
-    if (pPage->GetPageKind() != PK_STANDARD)
+    if (pPage->GetPageKind() != PageKind::Standard)
         return false;
     if (pPage->IsMasterPage() != (meEditMode==EditMode::MasterPage))
         return false;
@@ -636,9 +636,9 @@ SdPage* SlideSorterModel::GetPage (const sal_Int32 nSdIndex) const
     if (pModel != nullptr)
     {
         if (meEditMode == EditMode::Page)
-            return pModel->GetSdPage ((sal_uInt16)nSdIndex, PK_STANDARD);
+            return pModel->GetSdPage ((sal_uInt16)nSdIndex, PageKind::Standard);
         else
-            return pModel->GetMasterSdPage ((sal_uInt16)nSdIndex, PK_STANDARD);
+            return pModel->GetMasterSdPage ((sal_uInt16)nSdIndex, PageKind::Standard);
     }
     else
         return nullptr;

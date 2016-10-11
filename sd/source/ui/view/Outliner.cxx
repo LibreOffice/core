@@ -161,7 +161,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, OutlinerMode nMode )
       mpTextObj(nullptr),
       mnText(0),
       mpParaObj(nullptr),
-      meStartViewMode(PK_STANDARD),
+      meStartViewMode(PageKind::Standard),
       meStartEditMode(EditMode::Page),
       mnStartPageIndex((sal_uInt16)-1),
       mpStartEditedObject(nullptr),
@@ -1332,14 +1332,14 @@ void Outliner::SetViewMode (PageKind ePageKind)
         OUString sViewURL;
         switch (ePageKind)
         {
-            case PK_STANDARD:
+            case PageKind::Standard:
             default:
                 sViewURL = framework::FrameworkHelper::msImpressViewURL;
                 break;
-            case PK_NOTES:
+            case PageKind::Notes:
                 sViewURL = framework::FrameworkHelper::msNotesViewURL;
                 break;
-            case PK_HANDOUT:
+            case PageKind::Handout:
                 sViewURL = framework::FrameworkHelper::msHandoutViewURL;
                 break;
         }

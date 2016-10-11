@@ -261,7 +261,7 @@ void SdTransferable::CreateData()
     {
         mbOwnView = true;
 
-        SdPage* pPage = mpSdDrawDocument->GetSdPage(0, PK_STANDARD);
+        SdPage* pPage = mpSdDrawDocument->GetSdPage(0, PageKind::Standard);
 
         if( 1 == pPage->GetObjCount() )
             CreateObjectReplacement( pPage->GetObj( 0 ) );
@@ -302,7 +302,7 @@ void SdTransferable::CreateData()
         SdrModel*           pOldModel = mpSdView->GetModel();
         SdStyleSheetPool*   pOldStylePool = static_cast<SdStyleSheetPool*>( pOldModel->GetStyleSheetPool() );
         SdStyleSheetPool*   pNewStylePool = static_cast<SdStyleSheetPool*>( mpSdDrawDocumentIntern->GetStyleSheetPool() );
-        SdPage*             pPage = mpSdDrawDocumentIntern->GetSdPage( 0, PK_STANDARD );
+        SdPage*             pPage = mpSdDrawDocumentIntern->GetSdPage( 0, PageKind::Standard );
         OUString            aOldLayoutName( pOldPage->GetLayoutName() );
 
         pPage->SetSize( pOldPage->GetSize() );
@@ -322,7 +322,7 @@ void SdTransferable::CreateData()
         mpSdDrawDocumentIntern && mpSdViewIntern &&
         mpSdDrawDocumentIntern->GetPageCount() )
     {
-        SdPage* pPage = mpSdDrawDocumentIntern->GetSdPage( 0, PK_STANDARD );
+        SdPage* pPage = mpSdDrawDocumentIntern->GetSdPage( 0, PageKind::Standard );
 
         if( 1 == mpSdDrawDocumentIntern->GetPageCount() )
         {
@@ -723,7 +723,7 @@ void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmar
 
         if( mpSdViewIntern )
         {
-            SdPage* pPage = mpSdDrawDocument->GetSdPage( 0, PK_STANDARD );
+            SdPage* pPage = mpSdDrawDocument->GetSdPage( 0, PageKind::Standard );
 
             if( pPage )
             {

@@ -513,8 +513,8 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         pPage->SetPaperBin( nPaperBin );
         pPage->SetBackgroundFullSize( bBackgroundFullSize );
 
-        if ( ePageKind == PK_STANDARD )
-            GetDoc()->GetMasterSdPage(i, PK_NOTES)->CreateTitleAndLayout();
+        if ( ePageKind == PageKind::Standard )
+            GetDoc()->GetMasterSdPage(i, PageKind::Notes)->CreateTitleAndLayout();
 
         pPage->CreateTitleAndLayout();
     }
@@ -561,9 +561,9 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         pPage->SetPaperBin( nPaperBin );
         pPage->SetBackgroundFullSize( bBackgroundFullSize );
 
-        if ( ePageKind == PK_STANDARD )
+        if ( ePageKind == PageKind::Standard )
         {
-            SdPage* pNotesPage = GetDoc()->GetSdPage(i, PK_NOTES);
+            SdPage* pNotesPage = GetDoc()->GetSdPage(i, PageKind::Notes);
             pNotesPage->SetAutoLayout( pNotesPage->GetAutoLayout() );
         }
 
@@ -571,8 +571,8 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     }
 
     // adjust handout page to new format of the standard page
-    if( (ePageKind == PK_STANDARD) || (ePageKind == PK_HANDOUT) )
-        GetDoc()->GetSdPage(0, PK_HANDOUT)->CreateTitleAndLayout(true);
+    if( (ePageKind == PageKind::Standard) || (ePageKind == PageKind::Handout) )
+        GetDoc()->GetSdPage(0, PageKind::Handout)->CreateTitleAndLayout(true);
 
     // handed over undo group to undo manager
     pViewShell->GetViewFrame()->GetObjectShell()

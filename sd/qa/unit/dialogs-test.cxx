@@ -188,7 +188,7 @@ const SfxItemSet& SdDialogsTest::getSfxItemSetFromSdrObject()
     {
         SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
         CPPUNIT_ASSERT(pDrawDoc);
-        SdPage* pSdPage = pDrawDoc->GetSdPage(0, PK_STANDARD);
+        SdPage* pSdPage = pDrawDoc->GetSdPage(0, PageKind::Standard);
         CPPUNIT_ASSERT(pSdPage);
         SdrObject* pSdrObj = pSdPage->GetObj(0);
         CPPUNIT_ASSERT(pSdrObj);
@@ -401,7 +401,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
             // CreateMorphDlg(vcl::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
-            SdPage* pSdPage = pDrawDoc->GetSdPage(0, PK_STANDARD);
+            SdPage* pSdPage = pDrawDoc->GetSdPage(0, PageKind::Standard);
             CPPUNIT_ASSERT(pSdPage);
             SdrObject* pSdrObj = pSdPage->GetObj(0);
             // using one SdrObject is okay, none crashes
@@ -566,7 +566,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
             // CreateMasterLayoutDialog(vcl::Window* pParent, SdDrawDocument* pDoc, SdPage*) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
-            SdPage* pSdPage = pDrawDoc->GetSdPage(0, PK_STANDARD);
+            SdPage* pSdPage = pDrawDoc->GetSdPage(0, PageKind::Standard);
             CPPUNIT_ASSERT(pSdPage);
             pRetval = getSdAbstractDialogFactory()->CreateMasterLayoutDialog(
                 Application::GetDefDialogParent(),
@@ -585,7 +585,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
             //   cases
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
-            SdPage* pSdPage = pDrawDoc->GetSdPage(0, PK_STANDARD);
+            SdPage* pSdPage = pDrawDoc->GetSdPage(0, PageKind::Standard);
             CPPUNIT_ASSERT(pSdPage);
             pRetval = getSdAbstractDialogFactory()->CreateHeaderFooterDialog(
                 getViewShell(),

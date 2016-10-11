@@ -684,7 +684,7 @@ Reference< drawing::XDrawPage > SdPhotoAlbumDialog::appendNewSlide(AutoLayout aL
     Reference< drawing::XDrawPage > xSlide; // Create the slide
     Reference< container::XIndexAccess > xIndexAccess( xDrawPages, uno::UNO_QUERY );
     xSlide = xDrawPages->insertNewByIndex( xIndexAccess->getCount() );
-    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
+    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard);
     pSlide->SetAutoLayout(aLayout, true); // Set the layout here
     return xSlide;
 }
@@ -759,7 +759,7 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
     CapSize.Height() = aPageSize.Height/6;
     CapPos.X() = 0;
     CapPos.Y() = aPageSize.Height - CapSize.Height();
-    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD );
+    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard );
 
     // try to get existing PresObj
     const Rectangle rRect(CapPos,CapSize);

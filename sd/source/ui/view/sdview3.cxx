@@ -642,7 +642,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         else
         {
             SdDrawDocument* pWorkModel = const_cast<SdDrawDocument*>(pOwnData->GetWorkDocument());
-            SdPage*         pWorkPage = pWorkModel->GetSdPage( 0, PK_STANDARD );
+            SdPage*         pWorkPage = pWorkModel->GetSdPage( 0, PageKind::Standard );
 
             pWorkPage->SetRectsDirty();
 
@@ -657,7 +657,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             {
                 SdPage* pP = static_cast< SdPage* >( pWorkModel->GetPage( (sal_uInt16) i ) );
 
-                if( pP->GetPageKind() != PK_STANDARD )
+                if( pP->GetPageKind() != PageKind::Standard )
                     pWorkModel->DeletePage( (sal_uInt16) i );
             }
 
@@ -702,10 +702,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 if( bReturn )
                 {
-                    if( pModel->GetSdPage( 0, PK_STANDARD )->GetObjCount() == 1 )
+                    if( pModel->GetSdPage( 0, PageKind::Standard )->GetObjCount() == 1 )
                     {
                         // only one object
-                        SdrObject*      pObj = pModel->GetSdPage( 0, PK_STANDARD )->GetObj( 0 );
+                        SdrObject*      pObj = pModel->GetSdPage( 0, PageKind::Standard )->GetObj( 0 );
                         SdrObject*      pPickObj2 = nullptr;
                         SdrPageView*    pPV = nullptr;
                         PickObj( rPos, getHitTolLog(), pPickObj2, pPV );
@@ -809,7 +809,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 if( !bChanged )
                 {
-                    SdrPage* pWorkPage = pModel->GetSdPage( 0, PK_STANDARD );
+                    SdrPage* pWorkPage = pModel->GetSdPage( 0, PageKind::Standard );
 
                     pWorkPage->SetRectsDirty();
 
@@ -883,7 +883,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 if( xDocShRef->DoLoad( pMedium ) )
                 {
                     SdDrawDocument* pModel = xDocShRef->GetDoc();
-                    SdPage*         pWorkPage = pModel->GetSdPage( 0, PK_STANDARD );
+                    SdPage*         pWorkPage = pModel->GetSdPage( 0, PageKind::Standard );
 
                     pWorkPage->SetRectsDirty();
 
@@ -901,7 +901,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     {
                         SdPage* pP = static_cast< SdPage* >( pModel->GetPage( (sal_uInt16) i ) );
 
-                        if( pP->GetPageKind() != PK_STANDARD )
+                        if( pP->GetPageKind() != PageKind::Standard )
                             pModel->DeletePage( (sal_uInt16) i );
                     }
 
@@ -1212,7 +1212,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             {
                 const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
                 SdrPage*                pWorkPage = const_cast<SdrPage*>( ( pWorkModel->GetPageCount() > 1 ) ?
-                                                    pWorkModel->GetSdPage( 0, PK_STANDARD ) :
+                                                    pWorkModel->GetSdPage( 0, PageKind::Standard ) :
                                                     pWorkModel->GetPage( 0 ) );
 
                 pWorkPage->SetRectsDirty();
@@ -1244,7 +1244,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         {
             const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
             SdrPage*                pWorkPage = const_cast<SdrPage*>( ( pWorkModel->GetPageCount() > 1 ) ?
-                                                pWorkModel->GetSdPage( 0, PK_STANDARD ) :
+                                                pWorkModel->GetSdPage( 0, PageKind::Standard ) :
                                                 pWorkModel->GetPage( 0 ) );
 
             pWorkPage->SetRectsDirty();
@@ -1293,7 +1293,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             {
                 const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
                 SdrPage*                pWorkPage = const_cast<SdrPage*>( ( pWorkModel->GetPageCount() > 1 ) ?
-                                                    pWorkModel->GetSdPage( 0, PK_STANDARD ) :
+                                                    pWorkModel->GetSdPage( 0, PageKind::Standard ) :
                                                     pWorkModel->GetPage( 0 ) );
 
                 pWorkPage->SetRectsDirty();

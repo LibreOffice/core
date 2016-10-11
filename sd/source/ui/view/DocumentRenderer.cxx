@@ -943,7 +943,7 @@ namespace {
             const DrawModeFlags nDrawMode,
             const Orientation eOrientation,
             const sal_uInt16 nPaperTray)
-            : PrinterPage(PK_HANDOUT, rMapMode, false, rsPageString,
+            : PrinterPage(PageKind::Handout, rMapMode, false, rsPageString,
                 rPageStringOffset, nDrawMode, eOrientation, nPaperTray),
               mnHandoutPageIndex(nHandoutPageIndex),
               maPageIndices(rPageIndices)
@@ -959,7 +959,7 @@ namespace {
             const SetOfByte& rVisibleLayers,
             const SetOfByte& rPrintableLayers) const override
         {
-            SdPage& rHandoutPage (*rDocument.GetSdPage(0, PK_HANDOUT));
+            SdPage& rHandoutPage (*rDocument.GetSdPage(0, PageKind::Handout));
 
             Reference< css::beans::XPropertySet > xHandoutPage( rHandoutPage.getUnoPage(), UNO_QUERY );
             const OUString sPageNumber( "Number" );
@@ -985,11 +985,11 @@ namespace {
                  ++iPageIndex)
             {
                 // Check if the page still exists.
-                if (*iPageIndex >= rDocument.GetSdPageCount(PK_STANDARD))
+                if (*iPageIndex >= rDocument.GetSdPageCount(PageKind::Standard))
                     continue;
 
                 SdrPageObj* pPageObj = (*aPageObjIter++);
-                pPageObj->SetReferencedPage(rDocument.GetSdPage(*iPageIndex, PK_STANDARD));
+                pPageObj->SetReferencedPage(rDocument.GetSdPage(*iPageIndex, PageKind::Standard));
             }
 
             // if there are more page objects than pages left, set the rest to invisible
@@ -1085,7 +1085,7 @@ namespace {
             const DrawModeFlags nDrawMode,
             const Orientation eOrientation,
             const sal_uInt16 nPaperTray)
-            : PrinterPage(PK_HANDOUT, rMapMode, false, rsPageString,
+            : PrinterPage(PageKind::Handout, rMapMode, false, rsPageString,
                 rPageStringOffset, nDrawMode, eOrientation, nPaperTray),
               mpParaObject(pParaObject)
         {
@@ -1460,7 +1460,7 @@ private:
             // Draw and Notes should usually use specified paper size when printing
             if (!mpOptions->IsPrinterPreferred(mrBase.GetDocShell()->GetDocumentType()))
             {
-                aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PK_STANDARD)->GetSize();
+                aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PageKind::Standard)->GetSize();
                 maPrintSize = awt::Size(aInfo.maPrintSize.Width(),
                                         aInfo.maPrintSize.Height());
             }
@@ -1491,9 +1491,9 @@ private:
             }
 
             if (mpOptions->IsDraw())
-                PrepareStdOrNotes(PK_STANDARD, aInfo);
+                PrepareStdOrNotes(PageKind::Standard, aInfo);
             if (mpOptions->IsNotes())
-                PrepareStdOrNotes(PK_NOTES, aInfo);
+                PrepareStdOrNotes(PageKind::Notes, aInfo);
             if (mpOptions->IsHandout())
             {
                 InitHandoutTemplate();
@@ -1535,7 +1535,7 @@ private:
 
         // first, prepare handout page (not handout master)
 
-        SdPage* pHandout = rModel.GetSdPage(0, PK_HANDOUT);
+        SdPage* pHandout = rModel.GetSdPage(0, PageKind::Handout);
         if( !pHandout )
             return;
 
@@ -1644,7 +1644,7 @@ private:
         long nPageH = aOutRect.GetHeight();
 
         std::vector< sal_Int32 > aPages;
-        sal_Int32 nPageCount = mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
+        sal_Int32 nPageCount = mrBase.GetDocument()->GetSdPageCount(PageKind::Standard);
         StringRangeEnumerator::getRangesFromString(
             mpOptions->GetPrinterSelection(nPageCount, GetCurrentPageIndex()),
             aPages, 0, nPageCount-1);
@@ -1658,7 +1658,7 @@ private:
             sal_Int32 nH (0);
             while (nH < nPageH && nIndex<nCount)
             {
-                SdPage* pPage = GetFilteredPage(aPages[nIndex], PK_STANDARD);
+                SdPage* pPage = GetFilteredPage(aPages[nIndex], PageKind::Standard);
                 ++nIndex;
                 if (pPage == nullptr)
                     continue;
@@ -1770,7 +1770,7 @@ private:
     {
         SdDrawDocument* pDocument = mrBase.GetDocument();
         OSL_ASSERT(pDocument != nullptr);
-        SdPage& rHandoutPage (*pDocument->GetSdPage(0, PK_HANDOUT));
+        SdPage& rHandoutPage (*pDocument->GetSdPage(0, PageKind::Handout));
 
         const bool bScalePage (mpOptions->IsPageSize());
 
@@ -1834,7 +1834,7 @@ private:
                 ++nShapeCount;
         }
 
-        const sal_uInt16 nPageCount = mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
+        const sal_uInt16 nPageCount = mrBase.GetDocument()->GetSdPageCount(PageKind::Standard);
         const sal_uInt16 nHandoutPageCount = nShapeCount ? (nPageCount + nShapeCount - 1) / nShapeCount : 0;
         pViewShell->SetPrintedHandoutPageCount( nHandoutPageCount );
         mrBase.GetDocument()->setHandoutPageCount( nHandoutPageCount );
@@ -1853,7 +1853,7 @@ private:
             ++it;
             bLastLoop = (it == itEnd);
 
-            if (GetFilteredPage(nPageIndex, PK_STANDARD))
+            if (GetFilteredPage(nPageIndex, PageKind::Standard))
                 aPageIndices.push_back(nPageIndex);
             else if (!bLastLoop)
                 continue;
@@ -1915,7 +1915,7 @@ private:
         std::shared_ptr<ViewShell> pViewShell (mrBase.GetMainViewShell());
         pViewShell->WriteFrameViewData();
 
-        sal_Int32 nPageCount = mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
+        sal_Int32 nPageCount = mrBase.GetDocument()->GetSdPageCount(PageKind::Standard);
         StringRangeEnumerator aRangeEnum(
             mpOptions->GetPrinterSelection(nPageCount, GetCurrentPageIndex()),
             0, nPageCount-1);

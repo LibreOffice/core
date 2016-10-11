@@ -474,7 +474,7 @@ void SlideBackground::populateMasterSlideDropdown()
     for( sal_uInt16 nLayout = 0; nLayout < nCount; nLayout++ )
     {
         SdPage* pMaster = static_cast<SdPage*>(pDoc->GetMasterPage(nLayout));
-        if( pMaster->GetPageKind() == PK_STANDARD)
+        if( pMaster->GetPageKind() == PageKind::Standard)
         {
             OUString aLayoutName(pMaster->GetLayoutName());
             aLayoutName = aLayoutName.copy(0,aLayoutName.indexOf(SD_LT_SEPARATOR));
@@ -911,9 +911,9 @@ IMPL_LINK_NOARG(SlideBackground, AssignMasterPage, ListBox&, void)
     if (!pDoc)
         return;
     sal_uInt16 nSelectedPage = SDRPAGE_NOTFOUND;
-    for( sal_uInt16 nPage = 0; nPage < pDoc->GetSdPageCount(PK_STANDARD); nPage++ )
+    for( sal_uInt16 nPage = 0; nPage < pDoc->GetSdPageCount(PageKind::Standard); nPage++ )
     {
-        if (pDoc->GetSdPage(nPage,PK_STANDARD)->IsSelected())
+        if (pDoc->GetSdPage(nPage,PageKind::Standard)->IsSelected())
         {
             nSelectedPage = nPage;
             break;

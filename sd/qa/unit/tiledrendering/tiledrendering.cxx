@@ -645,7 +645,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
     };
 
     // the document has 1 slide
-    CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
+    CPPUNIT_ASSERT(pDoc->GetSdPageCount(PageKind::Standard) == 1);
 
     uno::Sequence<beans::PropertyValue> aArgs;
 
@@ -716,7 +716,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
     }
 
     // the document has 1 slide
-    CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
+    CPPUNIT_ASSERT(pDoc->GetSdPageCount(PageKind::Standard) == 1);
 
     comphelper::LibreOfficeKit::setActive(false);
 }

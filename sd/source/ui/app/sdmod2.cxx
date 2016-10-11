@@ -104,7 +104,7 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
                 nPgNum++;
         }
 
-        pPage = pViewSh->GetDoc()->GetSdPage( (sal_uInt16)nPgNum, PK_STANDARD );
+        pPage = pViewSh->GetDoc()->GetSdPage( (sal_uInt16)nPgNum, PageKind::Standard );
     }
     else
     {
@@ -232,7 +232,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         {
             int nPgNum;
 
-            if( (pPage->GetPageKind() == PK_HANDOUT) && pViewSh )
+            if( (pPage->GetPageKind() == PageKind::Handout) && pViewSh )
             {
                 nPgNum = pViewSh->GetPrintedHandoutPageNum();
             }
@@ -300,7 +300,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 
         if( !bMasterView )
         {
-            if( pPage && (pPage->GetPageKind() == PK_HANDOUT) && pViewSh )
+            if( pPage && (pPage->GetPageKind() == PageKind::Handout) && pViewSh )
             {
                 nPageCount = pViewSh->GetPrintedHandoutPageCount();
             }
@@ -499,7 +499,7 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     sal_Int32  nY;
     if( pDocSh )
     {
-        SdrPage* pPage = static_cast<SdrPage*>(pDoc->GetSdPage(0, PK_STANDARD));
+        SdrPage* pPage = static_cast<SdrPage*>(pDoc->GetSdPage(0, PageKind::Standard));
         Size aSize(pPage->GetSize());
         nW = aSize.Width();
         nH = aSize.Height();

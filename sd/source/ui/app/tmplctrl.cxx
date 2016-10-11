@@ -106,12 +106,12 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
 
         ScopedVclPtrInstance<SdTemplatePopup_Impl> aPop;
         {
-            const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
+            const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
 
             sal_uInt16 nCount = 0;
             for( sal_uInt16 nPage = 0; nPage < nMasterCount; ++nPage )
             {
-                SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PK_STANDARD);
+                SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PageKind::Standard);
                 if( pMaster )
                     aPop->InsertItem( ++nCount, pMaster->GetName() );
             }
@@ -120,7 +120,7 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
             sal_uInt16 nCurrId = aPop->GetCurId()-1;
             if( nCurrId < nMasterCount )
             {
-                SdPage* pMaster = pDoc->GetMasterSdPage(nCurrId, PK_STANDARD);
+                SdPage* pMaster = pDoc->GetMasterSdPage(nCurrId, PageKind::Standard);
                 SfxStringItem aStyle( ATTR_PRESLAYOUT_NAME, pMaster->GetName() );
                 pViewFrame->GetDispatcher()->ExecuteList(
                     SID_PRESENTATION_LAYOUT, SfxCallMode::SLOT, { &aStyle });

@@ -826,9 +826,9 @@ IMPL_LINK( View, ExecuteNavigatorDrop, void*, p, void )
 
         if( !pPage->IsMasterPage() )
         {
-            if( pPage->GetPageKind() == PK_STANDARD )
+            if( pPage->GetPageKind() == PageKind::Standard )
                 nPgPos = pPage->GetPageNum() + 2;
-            else if( pPage->GetPageKind() == PK_NOTES )
+            else if( pPage->GetPageKind() == PageKind::Notes )
                 nPgPos = pPage->GetPageNum() + 1;
         }
 

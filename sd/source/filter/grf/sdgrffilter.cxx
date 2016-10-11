@@ -190,7 +190,7 @@ bool SdGRFFilter::Import()
             if( mrDocument.GetPageCount() == 0 )
                 mrDocument.CreateFirstPages();
 
-            SdPage*     pPage = mrDocument.GetSdPage( 0, PK_STANDARD );
+            SdPage*     pPage = mrDocument.GetSdPage( 0, PageKind::Standard );
             Point       aPos;
             Size        aPagSize( pPage->GetSize() );
             Size        aGrfSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
@@ -241,17 +241,17 @@ bool SdGRFFilter::Export()
     SdPage* pPage = nullptr;
     sd::DrawViewShell*  pDrawViewShell = dynamic_cast<::sd::DrawViewShell* >(mrDocShell.GetViewShell() );
 
-    PageKind ePageKind = PK_STANDARD;
+    PageKind ePageKind = PageKind::Standard;
     if( pDrawViewShell )
     {
         ePageKind = pDrawViewShell->GetPageKind();
-        if( PK_HANDOUT == ePageKind )
-            pPage = mrDocument.GetSdPage( 0, PK_HANDOUT );
+        if( PageKind::Handout == ePageKind )
+            pPage = mrDocument.GetSdPage( 0, PageKind::Handout );
         else
             pPage = pDrawViewShell->GetActualPage();
     }
     else
-        pPage = mrDocument.GetSdPage( 0, PK_STANDARD );
+        pPage = mrDocument.GetSdPage( 0, PageKind::Standard );
 
     if ( pPage )
     {

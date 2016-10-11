@@ -402,9 +402,9 @@ sal_Int32 ReadThroughComponent(
 //numbering level matches that of the outline level it previews
 void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
 {
-    for (sal_uInt16 i = 0; i < pDoc->GetMasterSdPageCount(PK_STANDARD); ++i)
+    for (sal_uInt16 i = 0; i < pDoc->GetMasterSdPageCount(PageKind::Standard); ++i)
     {
-        SdPage *pMasterPage = pDoc->GetMasterSdPage(i, PK_STANDARD);
+        SdPage *pMasterPage = pDoc->GetMasterSdPage(i, PageKind::Standard);
         SdrObject* pMasterOutline = pMasterPage->GetPresObj(PRESOBJ_OUTLINE);
         if (!pMasterOutline)
             continue;

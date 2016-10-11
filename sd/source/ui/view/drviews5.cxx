@@ -250,12 +250,12 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
         if ( pPageView->GetLockedLayers() != pView->GetLockedLayers() )
             pPageView->SetLockedLayers( pView->GetLockedLayers() );
 
-        if (mePageKind == PK_NOTES)
+        if (mePageKind == PageKind::Notes)
         {
             if (pPageView->GetHelpLines() != pView->GetNotesHelpLines())
                 pPageView->SetHelpLines( pView->GetNotesHelpLines() );
         }
-        else if (mePageKind == PK_HANDOUT)
+        else if (mePageKind == PageKind::Handout)
         {
             if (pPageView->GetHelpLines() != pView->GetHandoutHelpLines())
                 pPageView->SetHelpLines( pView->GetHandoutHelpLines() );
@@ -272,7 +272,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
 
     sal_uInt16 nSelectedPage = 0;
 
-    if (mePageKind != PK_HANDOUT)
+    if (mePageKind != PageKind::Handout)
     {
         nSelectedPage = pView->GetSelectedPage();
     }
@@ -350,7 +350,7 @@ void DrawViewShell::WriteFrameViewData()
     Rectangle aVisArea = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
     mpFrameView->SetVisArea(aVisArea);
 
-    if( mePageKind == PK_HANDOUT )
+    if( mePageKind == PageKind::Handout )
         mpFrameView->SetSelectedPage(0);
     else
     {
@@ -373,11 +373,11 @@ void DrawViewShell::WriteFrameViewData()
         if ( mpFrameView->GetLockedLayers() != pPageView->GetLockedLayers() )
             mpFrameView->SetLockedLayers( pPageView->GetLockedLayers() );
 
-        if (mePageKind == PK_NOTES)
+        if (mePageKind == PageKind::Notes)
         {
             mpFrameView->SetNotesHelpLines( pPageView->GetHelpLines() );
         }
-        else if (mePageKind == PK_HANDOUT)
+        else if (mePageKind == PageKind::Handout)
         {
             mpFrameView->SetHandoutHelpLines( pPageView->GetHelpLines() );
         }
@@ -483,12 +483,12 @@ void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans
     {
         mePageKind = mpFrameView->GetPageKind();
 
-        if (mePageKind == PK_NOTES)
+        if (mePageKind == PageKind::Notes)
         {
             SetHelpId( SID_NOTES_MODE );
             GetActiveWindow()->SetHelpId( CMD_SID_NOTES_MODE );
         }
-        else if (mePageKind == PK_HANDOUT)
+        else if (mePageKind == PageKind::Handout)
         {
             SetHelpId( SID_HANDOUT_MASTER_MODE );
             GetActiveWindow()->SetHelpId( CMD_SID_HANDOUT_MASTER_MODE );

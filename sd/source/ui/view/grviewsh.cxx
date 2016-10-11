@@ -38,7 +38,7 @@ GraphicViewShell::GraphicViewShell (
         pFrame,
         rViewShellBase,
         pParentWindow,
-        PK_STANDARD,
+        PageKind::Standard,
         pFrameView)
 {
     ConstructGraphicViewShell();

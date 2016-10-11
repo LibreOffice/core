@@ -234,7 +234,7 @@ void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
 
     SdPage* pPage = static_cast<SdPage*>(pPageView->GetPage());
     //only show these in a normal master page
-    if (!pPage || (pPage->GetPageKind() != PK_STANDARD) || !pPage->IsMasterPage())
+    if (!pPage || (pPage->GetPageKind() != PageKind::Standard) || !pPage->IsMasterPage())
         return nullptr;
 
     OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
@@ -314,7 +314,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             SdPage* pPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
 
-            if( pPage && (pPage->GetPageKind() == PK_STANDARD) && !pPage->IsMasterPage() )
+            if( pPage && (pPage->GetPageKind() == PageKind::Standard) && !pPage->IsMasterPage() )
             {
                 SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
 
@@ -355,7 +355,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             SdPage* pPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
 
-            if( pPage && (pPage->GetPageKind() == PK_STANDARD) && !pPage->IsMasterPage() )
+            if( pPage && (pPage->GetPageKind() == PageKind::Standard) && !pPage->IsMasterPage() )
             {
                 SdrObject* pObj = pPage->GetPresObj(PRESOBJ_TITLE);
 
@@ -397,11 +397,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         SfxItemState::DEFAULT == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
     {
         bool bDisable = true;
-        sal_uInt16 nCount = GetDoc()->GetSdPageCount( PK_STANDARD );
+        sal_uInt16 nCount = GetDoc()->GetSdPageCount( PageKind::Standard );
 
         for( sal_uInt16 i = 0; i < nCount && bDisable; i++ )
         {
-            SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
+            SdPage* pPage = GetDoc()->GetSdPage(i, PageKind::Standard);
 
             if( !pPage->IsExcluded() )
                 bDisable = false;
@@ -675,14 +675,14 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if (mePageKind == PK_HANDOUT)
+    if (mePageKind == PageKind::Handout)
     {
         rSet.DisableItem(SID_PRESENTATION_LAYOUT);
         rSet.DisableItem(SID_SELECT_BACKGROUND);
         rSet.DisableItem(SID_SAVE_BACKGROUND);
     }
 
-    if (mePageKind == PK_NOTES)
+    if (mePageKind == PageKind::Notes)
     {
         rSet.DisableItem(SID_INSERTPAGE);
         rSet.DisableItem(SID_RENAMEPAGE);
@@ -701,7 +701,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_LAYERMODE);
         rSet.DisableItem(SID_INSERTFILE);
     }
-    else if (mePageKind == PK_HANDOUT)
+    else if (mePageKind == PageKind::Handout)
     {
         rSet.DisableItem(SID_INSERTPAGE);
         rSet.DisableItem(SID_DUPLICATE_PAGE);
@@ -765,20 +765,20 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         /**********************************************************************
         * Background page mode
         **********************************************************************/
-        if (mePageKind == PK_STANDARD)
+        if (mePageKind == PageKind::Standard)
         {
             rSet.Put(SfxBoolItem(SID_SLIDE_MASTER_MODE, true));
             rSet.Put(SfxBoolItem(SID_NOTES_MASTER_MODE, false));
             rSet.Put(SfxBoolItem(SID_HANDOUT_MASTER_MODE, false));
 
         }
-        else if (mePageKind == PK_NOTES)
+        else if (mePageKind == PageKind::Notes)
         {
             rSet.Put(SfxBoolItem(SID_SLIDE_MASTER_MODE, false));
             rSet.Put(SfxBoolItem(SID_NOTES_MASTER_MODE, true));
             rSet.Put(SfxBoolItem(SID_HANDOUT_MASTER_MODE, false));
         }
-        else if (mePageKind == PK_HANDOUT)
+        else if (mePageKind == PageKind::Handout)
         {
             rSet.Put(SfxBoolItem(SID_SLIDE_MASTER_MODE, false));
             rSet.Put(SfxBoolItem(SID_NOTES_MASTER_MODE, false));
@@ -796,8 +796,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         if (maTabControl->GetPageCount() == 1 ||
             meEditMode == EditMode::MasterPage     ||
-            mePageKind == PK_NOTES          ||
-            mePageKind == PK_HANDOUT        ||
+            mePageKind == PageKind::Notes          ||
+            mePageKind == PageKind::Handout        ||
             (GetShellType()!=ST_DRAW&&IsLayerModeActive()))
         {
             if (rSet.GetItemState(SID_DELETE_PAGE) == SfxItemState::DEFAULT)
@@ -1565,13 +1565,13 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     rSet.Put(SfxBoolItem(SID_OUTLINE_MODE, false));
     rSet.Put(SfxBoolItem(SID_SLIDE_MASTER_MODE, false));
     rSet.Put(SfxBoolItem(SID_NOTES_MASTER_MODE, false));
-    if (mePageKind == PK_NOTES)
+    if (mePageKind == PageKind::Notes)
     {
         rSet.Put(SfxBoolItem(SID_DRAWINGMODE, false));
         rSet.Put(SfxBoolItem(SID_NOTES_MODE, true));
         rSet.Put(SfxBoolItem(SID_HANDOUT_MASTER_MODE, false));
     }
-    else if (mePageKind == PK_HANDOUT)
+    else if (mePageKind == PageKind::Handout)
     {
         rSet.Put(SfxBoolItem(SID_DRAWINGMODE, false));
         rSet.Put(SfxBoolItem(SID_NOTES_MODE, false));

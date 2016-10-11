@@ -571,7 +571,7 @@ void Listener::HandleModelChange (const SdrPage* pPage)
     // in a sane state, not just in the middle of a larger change.
     SdDrawDocument* pDocument (mrSlideSorter.GetModel().GetDocument());
     if (pDocument != nullptr
-        && pDocument->GetMasterSdPageCount(PK_STANDARD) == pDocument->GetMasterSdPageCount(PK_NOTES))
+        && pDocument->GetMasterSdPageCount(PageKind::Standard) == pDocument->GetMasterSdPageCount(PageKind::Notes))
     {
         // A model change can make updates of some text fields necessary
         // (like page numbers and page count.)  Invalidate all previews in
@@ -606,11 +606,11 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
     // pages that are linked to this master page.
     if (pPage->IsMasterPage())
     {
-        for (sal_uInt16 nIndex=0,nCount=pDocument->GetSdPageCount(PK_STANDARD);
+        for (sal_uInt16 nIndex=0,nCount=pDocument->GetSdPageCount(PageKind::Standard);
              nIndex<nCount;
              ++nIndex)
         {
-            const SdPage* pCandidate = pDocument->GetSdPage(nIndex, PK_STANDARD);
+            const SdPage* pCandidate = pDocument->GetSdPage(nIndex, PageKind::Standard);
             if (pCandidate!=nullptr && pCandidate->TRG_HasMasterPage())
             {
                 if (&pCandidate->TRG_GetMasterPage() == pPage)

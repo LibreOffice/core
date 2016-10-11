@@ -150,8 +150,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     const SfxUInt32Item* pWhatKind = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATKIND);
 
                     sal_Int32 nWhatPage = (sal_Int32)pWhatPage->GetValue ();
-                    sal_Int32 nWhatKind = (sal_Int32)pWhatKind->GetValue ();
-                    if (! CHECK_RANGE (PK_STANDARD, nWhatKind, PK_HANDOUT))
+                    PageKind nWhatKind = (PageKind)pWhatKind->GetValue ();
+                    if (! (nWhatKind >= PageKind::Standard && nWhatKind <= PageKind::Handout))
                     {
 #if HAVE_FEATURE_SCRIPTING
                         StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
@@ -161,7 +161,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     }
                     else if (meEditMode != EditMode::MasterPage)
                     {
-                        if (! CHECK_RANGE (0, nWhatPage, GetDoc()->GetSdPageCount((PageKind)nWhatKind)))
+                        if (! CHECK_RANGE (0, nWhatPage, GetDoc()->GetSdPageCount(nWhatKind)))
                         {
 #if HAVE_FEATURE_SCRIPTING
                             StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
@@ -237,18 +237,18 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_PAGEMODE:  // BASIC
         {
 
-            const SfxItemSet *pArgs = rReq.GetArgs ();
+            const SfxItemSet *pArgs = rReq.GetArgs();
 
-            if ( pArgs && pArgs->Count () == 2)
+            if (pArgs && pArgs->Count () == 2)
             {
                 const SfxBoolItem* pIsActive = rReq.GetArg<SfxBoolItem>(ID_VAL_ISACTIVE);
                 const SfxUInt32Item* pWhatKind = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATKIND);
 
-                sal_Int32 nWhatKind = (sal_Int32)pWhatKind->GetValue ();
-                if (CHECK_RANGE (PK_STANDARD, nWhatKind, PK_HANDOUT))
+                PageKind nWhatKind = (PageKind)pWhatKind->GetValue();
+                if ( nWhatKind >= PageKind::Standard && nWhatKind <= PageKind::Handout)
                 {
-                    mbIsLayerModeActive = pIsActive->GetValue ();
-                    mePageKind = (PageKind) nWhatKind;
+                    mbIsLayerModeActive = pIsActive->GetValue();
+                    mePageKind = nWhatKind;
                 }
             }
 

@@ -95,10 +95,10 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         // rename
         pPageToRename->SetName( rName );
 
-        if( ePageKind == PK_STANDARD )
+        if( ePageKind == PageKind::Standard )
         {
             // also rename notes-page
-            SdPage* pNotesPage = GetDoc()->GetSdPage( nPageId - 1, PK_NOTES );
+            SdPage* pNotesPage = GetDoc()->GetSdPage( nPageId - 1, PageKind::Notes );
             pNotesPage->SetName( rName );
         }
     }

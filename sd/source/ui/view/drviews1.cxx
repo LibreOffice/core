@@ -343,7 +343,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             pLayerBar->EndEditMode();
         maTabControl->EndEditMode();
 
-        if (mePageKind == PK_HANDOUT)
+        if (mePageKind == PageKind::Handout)
         {
             // at handouts only allow MasterPage
             eEMode = EditMode::MasterPage;
@@ -958,11 +958,11 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 mpFrameView->SetPrintableLayers( pPageView->GetPrintableLayers() );
                 mpFrameView->SetLockedLayers( pPageView->GetLockedLayers() );
 
-                if (mePageKind == PK_NOTES)
+                if (mePageKind == PageKind::Notes)
                 {
                     mpFrameView->SetNotesHelpLines( pPageView->GetHelpLines() );
                 }
-                else if (mePageKind == PK_HANDOUT)
+                else if (mePageKind == PageKind::Handout)
                 {
                     mpFrameView->SetHandoutHelpLines( pPageView->GetHelpLines() );
                 }
@@ -985,11 +985,11 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 pNewPageView->SetPrintableLayers( mpFrameView->GetPrintableLayers() );
                 pNewPageView->SetLockedLayers( mpFrameView->GetLockedLayers() );
 
-                if (mePageKind == PK_NOTES)
+                if (mePageKind == PageKind::Notes)
                 {
                     pNewPageView->SetHelpLines( mpFrameView->GetNotesHelpLines() );
                 }
-                else if (mePageKind == PK_HANDOUT)
+                else if (mePageKind == PageKind::Handout)
                 {
                     pNewPageView->SetHelpLines( mpFrameView->GetHandoutHelpLines() );
                 }
@@ -1019,11 +1019,11 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 mpFrameView->SetPrintableLayers( pPageView->GetPrintableLayers() );
                 mpFrameView->SetLockedLayers( pPageView->GetLockedLayers() );
 
-                if (mePageKind == PK_NOTES)
+                if (mePageKind == PageKind::Notes)
                 {
                     mpFrameView->SetNotesHelpLines( pPageView->GetHelpLines() );
                 }
-                else if (mePageKind == PK_HANDOUT)
+                else if (mePageKind == PageKind::Handout)
                 {
                     mpFrameView->SetHandoutHelpLines( pPageView->GetHelpLines() );
                 }
@@ -1054,11 +1054,11 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 pNewPageView->SetPrintableLayers( mpFrameView->GetPrintableLayers() );
                 pNewPageView->SetLockedLayers( mpFrameView->GetLockedLayers() );
 
-                if (mePageKind == PK_NOTES)
+                if (mePageKind == PageKind::Notes)
                 {
                     pNewPageView->SetHelpLines( mpFrameView->GetNotesHelpLines() );
                 }
-                else if (mePageKind == PK_HANDOUT)
+                else if (mePageKind == PageKind::Handout)
                 {
                     pNewPageView->SetHelpLines( mpFrameView->GetHandoutHelpLines() );
                 }
@@ -1078,7 +1078,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 maTabControl->SetPageText(nSelectedPage+1, aLayoutName);
             }
 
-            if( mePageKind == PK_HANDOUT )
+            if( mePageKind == PageKind::Handout )
             {
                 // set pages for all available handout presentation objects
                 sd::ShapeList& rShapeList = pMaster->GetPresentationShapeList();
@@ -1089,7 +1089,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 {
                     if( pMaster->GetPresObjKind(pObj) == PRESOBJ_HANDOUT )
                     {
-                        // #i105146# We want no content to be displayed for PK_HANDOUT,
+                        // #i105146# We want no content to be displayed for PageKind::Handout,
                         // so just never set a page as content
                         static_cast<SdrPageObj*>(pObj)->SetReferencedPage(nullptr);
                     }

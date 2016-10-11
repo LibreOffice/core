@@ -363,11 +363,11 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
         if (pPage && !pPage->IsMasterPage())
         {
-            if (pPage->GetPageKind() == PK_STANDARD)
+            if (pPage->GetPageKind() == PageKind::Standard)
             {
                 nPos = pPage->GetPageNum() + 2;
             }
-            else if (pPage->GetPageKind() == PK_NOTES)
+            else if (pPage->GetPageKind() == PageKind::Notes)
             {
                 nPos = pPage->GetPageNum() + 1;
             }
@@ -577,7 +577,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
             nPage++;
         pPara = rDocliner.GetParagraph( nPos - 1 );
     }
-    SdPage* pPage = mpDoc->GetSdPage(nPage, PK_STANDARD);
+    SdPage* pPage = mpDoc->GetSdPage(nPage, PageKind::Standard);
     aLayoutName = pPage->GetLayoutName();
     sal_Int32 nIndex = aLayoutName.indexOf(SD_LT_SEPARATOR);
     if( nIndex != -1 )

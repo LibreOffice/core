@@ -230,15 +230,15 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     DocumentType eDocType = GetDoc()->GetDocumentType(); // RTTI does not work here
     switch (mePageKind)
     {
-        case PK_STANDARD:
+        case PageKind::Standard:
             meShellType = ST_IMPRESS;
             break;
 
-        case PK_NOTES:
+        case PageKind::Notes:
             meShellType = ST_NOTES;
             break;
 
-        case PK_HANDOUT:
+        case PageKind::Handout:
             meShellType = ST_HANDOUT;
             break;
     }
@@ -284,7 +284,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     }
     else
     {
-        if (mePageKind == PK_NOTES)
+        if (mePageKind == PageKind::Notes)
         {
             SetHelpId( SID_NOTES_MODE );
             GetActiveWindow()->SetHelpId( CMD_SID_NOTES_MODE );
@@ -292,7 +292,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
             // AutoLayouts have to be created
             GetDoc()->StopWorkStartupDelay();
         }
-        else if (mePageKind == PK_HANDOUT)
+        else if (mePageKind == PageKind::Handout)
         {
             SetHelpId( SID_HANDOUT_MASTER_MODE );
             GetActiveWindow()->SetHelpId( CMD_SID_HANDOUT_MASTER_MODE );
@@ -456,9 +456,9 @@ void DrawViewShell::SetupPage (Size &rSize,
                 pPage->SetLwrBorder(nLower);
             }
 
-            if ( mePageKind == PK_STANDARD )
+            if ( mePageKind == PageKind::Standard )
             {
-                GetDoc()->GetMasterSdPage(i, PK_NOTES)->CreateTitleAndLayout();
+                GetDoc()->GetMasterSdPage(i, PageKind::Notes)->CreateTitleAndLayout();
             }
 
             pPage->CreateTitleAndLayout();
@@ -488,9 +488,9 @@ void DrawViewShell::SetupPage (Size &rSize,
                 pPage->SetLwrBorder(nLower);
             }
 
-            if ( mePageKind == PK_STANDARD )
+            if ( mePageKind == PageKind::Standard )
             {
-                SdPage* pNotesPage = GetDoc()->GetSdPage(i, PK_NOTES);
+                SdPage* pNotesPage = GetDoc()->GetSdPage(i, PageKind::Notes);
                 pNotesPage->SetAutoLayout( pNotesPage->GetAutoLayout() );
             }
 
@@ -498,9 +498,9 @@ void DrawViewShell::SetupPage (Size &rSize,
         }
     }
 
-    if ( mePageKind == PK_STANDARD )
+    if ( mePageKind == PageKind::Standard )
     {
-        SdPage* pHandoutPage = GetDoc()->GetSdPage(0, PK_HANDOUT);
+        SdPage* pHandoutPage = GetDoc()->GetSdPage(0, PageKind::Handout);
         pHandoutPage->CreateTitleAndLayout(true);
     }
 
@@ -768,13 +768,13 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
     svx::sidebar::SelectionAnalyzer::ViewType eViewType (svx::sidebar::SelectionAnalyzer::ViewType::Standard);
     switch (mePageKind)
     {
-        case PK_HANDOUT:
+        case PageKind::Handout:
             eViewType = svx::sidebar::SelectionAnalyzer::ViewType::Handout;
             break;
-        case PK_NOTES:
+        case PageKind::Notes:
             eViewType = svx::sidebar::SelectionAnalyzer::ViewType::Notes;
             break;
-        case PK_STANDARD:
+        case PageKind::Standard:
             if (meEditMode == EditMode::MasterPage)
                 eViewType = svx::sidebar::SelectionAnalyzer::ViewType::Master;
             else

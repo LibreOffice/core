@@ -340,7 +340,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 &rFrame,
                 *mpBase,
                 &rWindow,
-                PK_STANDARD,
+                PageKind::Standard,
                 pFrameView));
         pViewShell->GetContentWindow()->set_id("impress_win");
     }
@@ -371,7 +371,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 &rFrame,
                 *mpBase,
                 &rWindow,
-                PK_NOTES,
+                PageKind::Notes,
                 pFrameView));
         pViewShell->GetContentWindow()->set_id("notes_win");
     }
@@ -382,7 +382,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 &rFrame,
                 *mpBase,
                 &rWindow,
-                PK_HANDOUT,
+                PageKind::Handout,
                 pFrameView));
         pViewShell->GetContentWindow()->set_id("handout_win");
     }

@@ -416,7 +416,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     {
         nExample = nTarget - 1;
 
-        sal_uInt16 nPageCount = mrDoc.GetSdPageCount( PK_STANDARD );
+        sal_uInt16 nPageCount = mrDoc.GetSdPageCount( PageKind::Standard );
         if( nExample >= nPageCount )
             nExample = nPageCount - 1;
     }
@@ -428,7 +428,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     **********************************************************************/
 
     // this page is exemplary
-    SdPage* pExample = mrDoc.GetSdPage((sal_uInt16)nExample, PK_STANDARD);
+    SdPage* pExample = mrDoc.GetSdPage((sal_uInt16)nExample, PageKind::Standard);
     SdPage* pPage = mrDoc.AllocSdPage(false);
 
     pPage->SetLayoutName(pExample->GetLayoutName());
@@ -465,12 +465,12 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     /**********************************************************************
     |* now the notes page
     \*********************************************************************/
-    pExample = mrDoc.GetSdPage((sal_uInt16)nExample, PK_NOTES);
+    pExample = mrDoc.GetSdPage((sal_uInt16)nExample, PageKind::Notes);
     SdPage* pNotesPage = mrDoc.AllocSdPage(false);
 
     pNotesPage->SetLayoutName(pExample->GetLayoutName());
 
-    pNotesPage->SetPageKind(PK_NOTES);
+    pNotesPage->SetPageKind(PageKind::Notes);
 
     // insert (notes page)
     mrDoc.InsertPage(pNotesPage, (sal_uInt16)(nTarget) * 2 + 2);
@@ -696,7 +696,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner, void )
 
         if(nPos >= 0)
         {
-            SdPage*pPage = mrDoc.GetSdPage( (sal_uInt16) nPos, PK_STANDARD);
+            SdPage*pPage = mrDoc.GetSdPage( (sal_uInt16) nPos, PageKind::Standard);
 
             if(pPage && pPage->GetPresObj(PRESOBJ_TEXT))
                 pOutliner->SetDepth( pPara, 0 );
@@ -716,7 +716,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner, void )
 
     if( nPos >= 0 )
     {
-        SdPage* pPage = mrDoc.GetSdPage( (sal_uInt16) nPos, PK_STANDARD );
+        SdPage* pPage = mrDoc.GetSdPage( (sal_uInt16) nPos, PageKind::Standard );
 
         if( pPage )
         {
@@ -832,7 +832,7 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner, void )
         if( ::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )                     // one page?
         {
             maOldParaOrder.push_back(pPara);
-            SdPage* pPage = mrDoc.GetSdPage(nPos, PK_STANDARD);
+            SdPage* pPage = mrDoc.GetSdPage(nPos, PageKind::Standard);
 
             fiter = std::find(maSelectedParas.begin(),maSelectedParas.end(),pPara);
 
@@ -897,7 +897,7 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner, void )
     sal_uInt16 nPageCount = (sal_uInt16)maSelectedParas.size();
     while (nPageCount)
     {
-        SdPage* pPage = mrDoc.GetSdPage(nPosNewOrder, PK_STANDARD);
+        SdPage* pPage = mrDoc.GetSdPage(nPosNewOrder, PageKind::Standard);
         pPage->SetSelected(false);
         nPosNewOrder++;
         nPageCount--;
@@ -1063,12 +1063,12 @@ void OutlineView::FillOutliner()
     mrOutliner.SetUpdateMode(false);
 
     Paragraph* pTitleToSelect = nullptr;
-    sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PK_STANDARD);
+    sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
 
     // fill outliner with paragraphs from slides title & (outlines|subtitles)
     for (sal_uInt16 nPage = 0; nPage < nPageCount; nPage++)
     {
-        SdPage*     pPage = mrDoc.GetSdPage(nPage, PK_STANDARD);
+        SdPage*     pPage = mrDoc.GetSdPage(nPage, PageKind::Standard);
         Paragraph * pPara = nullptr;
 
         // take text from title shape
@@ -1210,7 +1210,7 @@ SdPage* OutlineView::GetActualPage()
     if( pCurrent )
         return pCurrent;
 
-    return mrDoc.GetSdPage( 0, PK_STANDARD );
+    return mrDoc.GetSdPage( 0, PageKind::Standard );
 }
 
 SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
@@ -1226,8 +1226,8 @@ SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
             nPageToSelect++;
     }
 
-    if( nPageToSelect < (sal_uInt32)mrDoc.GetSdPageCount( PK_STANDARD ) )
-        return mrDoc.GetSdPage( (sal_uInt16)nPageToSelect, PK_STANDARD );
+    if( nPageToSelect < (sal_uInt32)mrDoc.GetSdPageCount( PageKind::Standard ) )
+        return mrDoc.GetSdPage( (sal_uInt16)nPageToSelect, PageKind::Standard );
 
     return nullptr;
 }
@@ -1310,7 +1310,7 @@ void OutlineView::SetSelectedPages()
     {
         if( ::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )                     // one page
         {
-            SdPage* pPage = mrDoc.GetSdPage(nPos, PK_STANDARD);
+            SdPage* pPage = mrDoc.GetSdPage(nPos, PageKind::Standard);
             DBG_ASSERT(pPage!=nullptr,
                 "Trying to select non-existing page OutlineView::SetSelectedPages()");
 
@@ -1491,12 +1491,12 @@ void OutlineView::UpdateDocument()
 {
     OutlineViewPageChangesGuard aGuard(this);
 
-    const sal_uInt32 nPageCount = mrDoc.GetSdPageCount(PK_STANDARD);
+    const sal_uInt32 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
     Paragraph* pPara = mrOutliner.GetParagraph( 0 );
     sal_uInt32 nPage;
     for (nPage = 0; nPage < nPageCount; nPage++)
     {
-        SdPage* pPage = mrDoc.GetSdPage( (sal_uInt16)nPage, PK_STANDARD);
+        SdPage* pPage = mrDoc.GetSdPage( (sal_uInt16)nPage, PageKind::Standard);
         mrDoc.SetSelected(pPage, false);
 
         mrOutlineViewShell.UpdateTitleObject( pPage, pPara );

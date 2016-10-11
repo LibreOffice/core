@@ -101,11 +101,12 @@ enum AutoLayout
     AUTOLAYOUT_END
 };
 
-enum PageKind
+enum class PageKind
 {
-    PK_STANDARD,
-    PK_NOTES,
-    PK_HANDOUT
+    Standard,
+    Notes,
+    Handout,
+    LAST = Handout
 };
 
 enum class EditMode

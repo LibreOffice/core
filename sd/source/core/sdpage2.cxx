@@ -318,7 +318,7 @@ void SdPage::ConnectLink()
     sfx2::LinkManager* pLinkManager = pModel!=nullptr ? pModel->GetLinkManager() : nullptr;
 
     if (pLinkManager && !mpPageLink && !maFileName.isEmpty() && !maBookmarkName.isEmpty() &&
-        mePageKind==PK_STANDARD && !IsMasterPage() &&
+        mePageKind==PageKind::Standard && !IsMasterPage() &&
         static_cast<SdDrawDocument*>(pModel)->IsNewOrLoadCompleted())
     {
         /**********************************************************************
@@ -636,14 +636,14 @@ void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const
     const char* pPageKind = nullptr;
     switch (mePageKind)
     {
-    case PK_STANDARD:
-        pPageKind = "PK_STANDARD";
+    case PageKind::Standard:
+        pPageKind = "PageKind::Standard";
     break;
-    case PK_NOTES:
-        pPageKind = "PK_NOTES";
+    case PageKind::Notes:
+        pPageKind = "PageKind::Notes";
         break;
-    case PK_HANDOUT:
-        pPageKind = "PK_HANDOUT";
+    case PageKind::Handout:
+        pPageKind = "PageKind::Handout";
         break;
     }
     if (pPageKind)

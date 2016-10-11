@@ -254,7 +254,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
             {
                 // only for handout page, else this frame will be created for each
                 // page preview object in SlideSorter and PagePane
-                if(pObjectsSdPage && PK_HANDOUT == pObjectsSdPage->GetPageKind())
+                if(pObjectsSdPage && PageKind::Handout == pObjectsSdPage->GetPageKind())
                 {
                     bCreateOutline = true;
                 }
@@ -308,7 +308,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                         {
                             case PRESOBJ_TITLE:
                             {
-                                if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PK_STANDARD)
+                                if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PageKind::Standard)
                                 {
                                     static OUString aTitleAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_TITLE));
                                     aObjectString = aTitleAreaStr;
@@ -348,7 +348,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                             }
                             case PRESOBJ_SLIDENUMBER:
                             {
-                                if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PK_STANDARD)
+                                if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PageKind::Standard)
                                 {
                                     static OUString aSlideAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_SLIDE));
                                     aObjectString = aSlideAreaStr;

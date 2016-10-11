@@ -388,11 +388,11 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     }
     if (aRealStyle.isEmpty())
     {
-        SdPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
+        SdPage* pPage = pDoc->GetSdPage(0, PageKind::Standard);
 
         if (pPage)
         {
-            aRealStyle = pDoc->GetSdPage(0, PK_STANDARD)->GetLayoutName();
+            aRealStyle = pDoc->GetSdPage(0, PageKind::Standard)->GetLayoutName();
         }
         else
         {

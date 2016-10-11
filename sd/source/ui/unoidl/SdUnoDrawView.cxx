@@ -550,9 +550,9 @@ Any SdUnoDrawView::getDrawViewMode() const
     Any aRet;
     switch( mrDrawViewShell.GetPageKind() )
     {
-    case PK_NOTES:  aRet <<= DrawViewMode_NOTES; break;
-    case PK_HANDOUT: aRet <<= DrawViewMode_HANDOUT; break;
-    case PK_STANDARD: aRet <<= DrawViewMode_DRAW; break;
+    case PageKind::Notes:  aRet <<= DrawViewMode_NOTES; break;
+    case PageKind::Handout: aRet <<= DrawViewMode_HANDOUT; break;
+    case PageKind::Standard: aRet <<= DrawViewMode_DRAW; break;
     }
     return aRet;
 }

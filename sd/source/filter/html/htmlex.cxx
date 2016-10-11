@@ -596,7 +596,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     }
 
     // calculate image sizes
-    SdPage* pPage = mpDoc->GetSdPage(0, PK_STANDARD);
+    SdPage* pPage = mpDoc->GetSdPage(0, PageKind::Standard);
     Size aTmpSize( pPage->GetSize() );
     double dRatio=((double)aTmpSize.Width())/aTmpSize.Height();
 
@@ -610,15 +610,15 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     maExportPath = aINetURLObj.GetPartBeforeLastName(); // with trailing '/'
     maIndex = aINetURLObj.GetLastName();
 
-    mnSdPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
+    mnSdPageCount = mpDoc->GetSdPageCount( PageKind::Standard );
     for( sal_uInt16 nPage = 0; nPage < mnSdPageCount; nPage++ )
     {
-        pPage = mpDoc->GetSdPage( nPage, PK_STANDARD );
+        pPage = mpDoc->GetSdPage( nPage, PageKind::Standard );
 
         if( mbHiddenSlides || !pPage->IsExcluded() )
         {
             maPages.push_back( pPage );
-            maNotesPages.push_back( mpDoc->GetSdPage( nPage, PK_NOTES ) );
+            maNotesPages.push_back( mpDoc->GetSdPage( nPage, PageKind::Notes ) );
         }
     }
     mnSdPageCount = maPages.size();
@@ -803,7 +803,7 @@ void HtmlExport::ExportHtml()
 void HtmlExport::SetDocColors( SdPage* pPage )
 {
     if( pPage == nullptr )
-        pPage = mpDoc->GetSdPage(0, PK_STANDARD);
+        pPage = mpDoc->GetSdPage(0, PageKind::Standard);
 
     svtools::ColorConfig aConfig;
     maVLinkColor = Color(aConfig.GetColorValue(svtools::LINKSVISITED).nColor);
@@ -2208,7 +2208,7 @@ OUString const & HtmlExport::getDocumentTitle()
         {
             // if there is a non-empty title object, use their first passage
             // as page title
-            SdPage* pSdPage = mpDoc->GetSdPage(0, PK_STANDARD);
+            SdPage* pSdPage = mpDoc->GetSdPage(0, PageKind::Standard);
             SdrObject* pTitleObj = pSdPage->GetPresObj(PRESOBJ_TITLE);
             if (pTitleObj && !pTitleObj->IsEmptyPresObj())
             {

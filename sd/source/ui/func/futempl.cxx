@@ -513,7 +513,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if( pDrawViewShell )
                         {
                             PageKind ePageKind = pDrawViewShell->GetPageKind();
-                            if( ePageKind == PK_NOTES || ePageKind == PK_HANDOUT )
+                            if( ePageKind == PageKind::Notes || ePageKind == PageKind::Handout )
                             {
                                 SdPage* pPage = mpViewShell->GetActualPage();
 

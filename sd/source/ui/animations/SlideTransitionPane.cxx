@@ -1031,11 +1031,11 @@ IMPL_LINK_NOARG(SlideTransitionPane, ApplyToAllButtonClicked, Button*, void)
     ::sd::slidesorter::SharedPageSelection pPages (
         new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
 
-    sal_uInt16 nPageCount = mpDrawDoc->GetSdPageCount( PK_STANDARD );
+    sal_uInt16 nPageCount = mpDrawDoc->GetSdPageCount( PageKind::Standard );
     pPages->reserve( nPageCount );
     for( sal_uInt16 i=0; i<nPageCount; ++i )
     {
-        SdPage * pPage = mpDrawDoc->GetSdPage( i, PK_STANDARD );
+        SdPage * pPage = mpDrawDoc->GetSdPage( i, PageKind::Standard );
         if( pPage )
             pPages->push_back( pPage );
     }

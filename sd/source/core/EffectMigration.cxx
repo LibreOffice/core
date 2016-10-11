@@ -1431,9 +1431,9 @@ void EffectMigration::DocumentLoaded(SdDrawDocument & rDoc)
 {
     if (DocumentType::Draw == rDoc.GetDocumentType())
         return; // no animations in Draw
-    for (sal_uInt16 n = 0; n < rDoc.GetSdPageCount(PK_STANDARD); ++n)
+    for (sal_uInt16 n = 0; n < rDoc.GetSdPageCount(PageKind::Standard); ++n)
     {
-        SdPage *const pPage = rDoc.GetSdPage(n, PK_STANDARD);
+        SdPage *const pPage = rDoc.GetSdPage(n, PageKind::Standard);
         if (pPage->hasAnimationNode())
         {
             // this will force the equivalent of the MainSequence::onTimerHdl
@@ -1442,9 +1442,9 @@ void EffectMigration::DocumentLoaded(SdDrawDocument & rDoc)
             pPage->getMainSequence()->getRootNode();
         }
     }
-    for (sal_uInt16 n = 0; n < rDoc.GetMasterSdPageCount(PK_STANDARD); ++n)
+    for (sal_uInt16 n = 0; n < rDoc.GetMasterSdPageCount(PageKind::Standard); ++n)
     {
-        SdPage *const pPage = rDoc.GetMasterSdPage(n, PK_STANDARD);
+        SdPage *const pPage = rDoc.GetMasterSdPage(n, PageKind::Standard);
         if (pPage->hasAnimationNode())
         {
             pPage->getMainSequence()->getRootNode();

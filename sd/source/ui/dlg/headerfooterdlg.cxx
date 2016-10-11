@@ -175,12 +175,12 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pPar
 
     SdPage* pSlide;
     SdPage* pNotes;
-    if( pCurrentPage->GetPageKind() == PK_STANDARD )
+    if( pCurrentPage->GetPageKind() == PageKind::Standard )
     {
         pSlide = pCurrentPage;
         pNotes = static_cast<SdPage*>(pDoc->GetPage( pCurrentPage->GetPageNum() + 1 ));
     }
-    else if( pCurrentPage->GetPageKind() == PK_NOTES )
+    else if( pCurrentPage->GetPageKind() == PageKind::Notes )
     {
         pNotes = pCurrentPage;
         pSlide = static_cast<SdPage*>(pDoc->GetPage( pCurrentPage->GetPageNum() -1 ));
@@ -189,8 +189,8 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pPar
     else
     {
         // handout
-        pSlide = pDoc->GetSdPage( 0, PK_STANDARD );
-        pNotes = pDoc->GetSdPage( 0, PK_NOTES );
+        pSlide = pDoc->GetSdPage( 0, PageKind::Standard );
+        pNotes = pDoc->GetSdPage( 0, PageKind::Notes );
         mpCurrentPage = nullptr;
     }
 
@@ -228,7 +228,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pPar
 
     maSlideSettings = pSlide->getHeaderFooterSettings();
 
-    const HeaderFooterSettings& rTitleSettings = mpDoc->GetSdPage(0, PK_STANDARD)->getHeaderFooterSettings();
+    const HeaderFooterSettings& rTitleSettings = mpDoc->GetSdPage(0, PageKind::Standard)->getHeaderFooterSettings();
     bool bNotOnTitle = !rTitleSettings.mbFooterVisible && !rTitleSettings.mbSlideNumberVisible && !rTitleSettings.mbDateTimeVisible;
 
     mpSlideTabPage->init( maSlideSettings, bNotOnTitle );
@@ -324,19 +324,19 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
         // apply to all slides
         if( bToAll )
         {
-            int nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
+            int nPageCount = mpDoc->GetSdPageCount( PageKind::Standard );
             int nPage;
             for( nPage = 0; nPage < nPageCount; nPage++ )
             {
-                SdPage* pPage = mpDoc->GetSdPage( (sal_uInt16)nPage, PK_STANDARD );
+                SdPage* pPage = mpDoc->GetSdPage( (sal_uInt16)nPage, PageKind::Standard );
                 change( pUndoGroup, pPage, aNewSettings );
             }
         }
         else
         {
             // apply only to the current slide
-            DBG_ASSERT( mpCurrentPage && mpCurrentPage->GetPageKind() == PK_STANDARD, "no current page to apply to!" );
-            if( mpCurrentPage && (mpCurrentPage->GetPageKind() == PK_STANDARD) )
+            DBG_ASSERT( mpCurrentPage && mpCurrentPage->GetPageKind() == PageKind::Standard, "no current page to apply to!" );
+            if( mpCurrentPage && (mpCurrentPage->GetPageKind() == PageKind::Standard) )
             {
                 change( pUndoGroup, mpCurrentPage, aNewSettings );
             }
@@ -347,13 +347,13 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
     if( bNewNotOnTitle )
     {
         // just hide them, plain simple UI feature
-        HeaderFooterSettings aTempSettings = mpDoc->GetSdPage( 0, PK_STANDARD )->getHeaderFooterSettings();
+        HeaderFooterSettings aTempSettings = mpDoc->GetSdPage( 0, PageKind::Standard )->getHeaderFooterSettings();
 
         aTempSettings.mbFooterVisible = false;
         aTempSettings.mbSlideNumberVisible = false;
         aTempSettings.mbDateTimeVisible = false;
 
-        change( pUndoGroup, mpDoc->GetSdPage( 0, PK_STANDARD ), aTempSettings );
+        change( pUndoGroup, mpDoc->GetSdPage( 0, PageKind::Standard ), aTempSettings );
     }
 
     // now notes settings
@@ -365,17 +365,17 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
     if( !bForceSlides || !(aNewSettings == maNotesHandoutSettings) )
     {
         // first set to all notes pages
-        int nPageCount = mpDoc->GetSdPageCount( PK_NOTES );
+        int nPageCount = mpDoc->GetSdPageCount( PageKind::Notes );
         int nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {
-            SdPage* pPage = mpDoc->GetSdPage( (sal_uInt16)nPage, PK_NOTES );
+            SdPage* pPage = mpDoc->GetSdPage( (sal_uInt16)nPage, PageKind::Notes );
 
             change( pUndoGroup, pPage, aNewSettings );
         }
 
         // and last but not least to the handout page
-        change( pUndoGroup, mpDoc->GetMasterSdPage( 0, PK_HANDOUT ), aNewSettings );
+        change( pUndoGroup, mpDoc->GetMasterSdPage( 0, PageKind::Handout ), aNewSettings );
     }
 
     // give the undo group to the undo manager
@@ -416,7 +416,7 @@ HeaderFooterTabPage::HeaderFooterTabPage( vcl::Window* pWindow, SdDrawDocument* 
     get(mpCTPreview, "preview");
     mpCTPreview->init( pActualPage ?
             (pActualPage->IsMasterPage() ? pActualPage : static_cast<SdPage*>(&(pActualPage->TRG_GetMasterPage()))) :
-            (pDoc->GetMasterSdPage( 0, bHandoutMode ? PK_NOTES : PK_STANDARD )) );
+            (pDoc->GetMasterSdPage( 0, bHandoutMode ? PageKind::Notes : PageKind::Standard )) );
 
     if( mbHandoutMode )
     {
@@ -591,26 +591,26 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
         // if set, set it on all notes master pages
         if( bSet )
         {
-            sal_uInt16 nPageCount = mpDoc->GetMasterSdPageCount( PK_NOTES );
+            sal_uInt16 nPageCount = mpDoc->GetMasterSdPageCount( PageKind::Notes );
             sal_uInt16 nPage;
             for( nPage = 0; nPage < nPageCount; nPage++ )
             {
-                GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PK_NOTES ) );
+                GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PageKind::Notes ) );
             }
         }
 
         // #i119985# and set it, or just get it from the notes master page
-        GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( 0, PK_NOTES ) );
+        GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( 0, PageKind::Notes ) );
     }
     else
     {
         // get the language from the first master page
         // or set it to all master pages
-        sal_uInt16 nPageCount = bSet ? mpDoc->GetMasterSdPageCount( PK_NOTES ) : 1;
+        sal_uInt16 nPageCount = bSet ? mpDoc->GetMasterSdPageCount( PageKind::Notes ) : 1;
         sal_uInt16 nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {
-            GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PK_STANDARD ) );
+            GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PageKind::Standard ) );
         }
     }
 }
@@ -799,7 +799,7 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     if (nullptr != mpMaster)
     {
         SdrTextObj* pMasterTitle = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_TITLE));
-        SdrTextObj* pMasterOutline = static_cast<SdrTextObj*>(mpMaster->GetPresObj(mpMaster->GetPageKind() == PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE));
+        SdrTextObj* pMasterOutline = static_cast<SdrTextObj*>(mpMaster->GetPresObj(mpMaster->GetPageKind() == PageKind::Notes ? PRESOBJ_NOTES : PRESOBJ_OUTLINE));
         SdrTextObj* pHeader = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_HEADER));
         SdrTextObj* pFooter = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_FOOTER));
         SdrTextObj* pDate = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_DATETIME));

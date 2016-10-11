@@ -314,10 +314,10 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
 
     // fill Listbox with page names of Docs
     for( long nPage = 0L;
-         nPage < rDoc.GetSdPageCount( PK_STANDARD );
+         nPage < rDoc.GetSdPageCount( PageKind::Standard );
          nPage++ )
     {
-        SdPage* pPage = rDoc.GetSdPage( (sal_uInt16) nPage, PK_STANDARD );
+        SdPage* pPage = rDoc.GetSdPage( (sal_uInt16) nPage, PageKind::Standard );
         OUString aStr( pPage->GetName() );
         m_pLbPages->InsertEntry( aStr );
     }
@@ -419,7 +419,7 @@ void SdDefineCustomShowDlg::ClickButtonHdl2(void* p)
 
                 m_pLbCustomPages->Select( pEntry );
                 SdPage* pPage = rDoc.GetSdPage( (sal_uInt16) m_pLbPages->
-                                    GetSelectEntryPos( i ), PK_STANDARD );
+                                    GetSelectEntryPos( i ), PageKind::Standard );
                 pEntry->SetUserData( pPage );
 
                 if( nPosCP != TREELIST_APPEND )

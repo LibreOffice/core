@@ -584,10 +584,10 @@ bool ImplSdPPTImport::Import()
                 bool bNotesMaster = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bNotesMaster;
                 bool bStarDrawFiller = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bStarDrawFiller;
 
-                PageKind ePgKind = ( bNotesMaster ) ? PK_NOTES : PK_STANDARD;
+                PageKind ePgKind = ( bNotesMaster ) ? PageKind::Notes : PageKind::Standard;
                 bool bHandout = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bHandoutMaster;
                 if ( bHandout )
-                    ePgKind = PK_HANDOUT;
+                    ePgKind = PageKind::Handout;
 
                 pPage->SetPageKind( ePgKind );
                 pSdrModel->InsertMasterPage( static_cast<SdrPage*>(pPage) );
@@ -630,7 +630,7 @@ bool ImplSdPPTImport::Import()
                     OUString aLayoutName( SD_RESSTR( STR_LAYOUT_DEFAULT_NAME ) );
                     if ( nMasterNum > 2 )
                     {
-                        if ( ePgKind == PK_STANDARD )
+                        if ( ePgKind == PageKind::Standard )
                         {   // standard page: create new presentation layout
                             aLayoutName = SD_RESSTR( STR_LAYOUT_DEFAULT_TITLE_NAME );
                             aLayoutName += OUString::number( (sal_Int32)( ( nMasterNum + 1 ) / 2 - 1 ) );
@@ -645,7 +645,7 @@ bool ImplSdPPTImport::Import()
                     pPage->SetLayoutName( aLayoutName );
 
                     // set stylesheets
-                    if ( pPage->GetPageKind() == PK_STANDARD )
+                    if ( pPage->GetPageKind() == PageKind::Standard )
                     {
                         TSS_Type nTitleInstance = TSS_Type::PageTitle;
                         TSS_Type nOutlinerInstance = TSS_Type::Body;
@@ -708,7 +708,7 @@ bool ImplSdPPTImport::Import()
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                         }
                     }
-                    else if ( ePgKind == PK_NOTES )
+                    else if ( ePgKind == PageKind::Notes )
                     {
                         pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_NOTES );
                         if ( pSheet )
@@ -869,7 +869,7 @@ bool ImplSdPPTImport::Import()
                 pObj = pMPage->GetObj( 0 );
                 if ( pObj && pObj->GetObjIdentifier() == OBJ_RECT )
                 {
-                    if ( pMPage->GetPageKind() == PK_STANDARD )
+                    if ( pMPage->GetPageKind() == PageKind::Standard )
                     {
                         // transform data from imported background object to new form
                         // and delete the object. It was used as container to transport
@@ -909,7 +909,7 @@ bool ImplSdPPTImport::Import()
         sal_uInt16          nPageNum = nAktPageNum;
 
         SdPage* pHandoutPage = static_cast<SdPage*>(MakeBlancPage( false ));
-        pHandoutPage->SetPageKind( PK_HANDOUT );
+        pHandoutPage->SetPageKind( PageKind::Handout );
         pSdrModel->InsertPage( pHandoutPage );
 
         sal_uInt16 nPageAnz = GetPageCount();
@@ -930,11 +930,11 @@ bool ImplSdPPTImport::Import()
                         pMasterPersist = &(*pPageList)[ nMasterNum ];
                     pPage->SetLayoutName(static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetLayoutName());
                 }
-                pPage->SetPageKind( PK_STANDARD );
+                pPage->SetPageKind( PageKind::Standard );
                 pSdrModel->InsertPage( pPage );         // SJ: #i29625# because of form controls, the
                 ImportPage( pPage, pMasterPersist );    //  page must be inserted before importing
                 SetHeaderFooterPageSettings( pPage, pMasterPersist );
-                // CWS preseng01: pPage->SetPageKind( PK_STANDARD );
+                // CWS preseng01: pPage->SetPageKind( PageKind::Standard );
 
                 DffRecordHeader aPageHd;
                 if ( SeekToAktPage( &aPageHd ) )
@@ -1015,7 +1015,7 @@ bool ImplSdPPTImport::Import()
                             pMasterPersist2 = &(*pPageList)[ nNotesMasterNum ];
                         pNotesPage->SetLayoutName( static_cast<SdPage&>(pNotesPage->TRG_GetMasterPage()).GetLayoutName() );
                     }
-                    pNotesPage->SetPageKind( PK_NOTES );
+                    pNotesPage->SetPageKind( PageKind::Notes );
                     pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
                     pSdrModel->InsertPage( pNotesPage );        // SJ: #i29625# because of form controls, the
                     ImportPage( pNotesPage, pMasterPersist2 );  // page must be inserted before importing
@@ -1024,7 +1024,7 @@ bool ImplSdPPTImport::Import()
                 }
                 else
                 {
-                    pNotesPage->SetPageKind( PK_NOTES );
+                    pNotesPage->SetPageKind( PageKind::Notes );
                     pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
                     pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, true );
                     pSdrModel->InsertPage( pNotesPage );
@@ -1050,7 +1050,7 @@ bool ImplSdPPTImport::Import()
             for ( nMaster = 1; nMaster < nMasterCount; nMaster++ )
             {
                 SdPage* pMaster = static_cast<SdPage*>( pSdrModel->GetMasterPage( nMaster ) );
-                if ( pMaster->GetPageKind() == PK_STANDARD )
+                if ( pMaster->GetPageKind() == PageKind::Standard )
                 {
                     SetPageNum( nMaster, PPT_MASTERPAGE );
                     if ( !pFoundMaster )
@@ -1080,12 +1080,12 @@ bool ImplSdPPTImport::Import()
     bOk = mpDoc->CreateMissingNotesAndHandoutPages();
     if ( bOk )
     {
-        for ( i = 0; i < mpDoc->GetSdPageCount( PK_STANDARD ); i++ )
+        for ( i = 0; i < mpDoc->GetSdPageCount( PageKind::Standard ); i++ )
         {
 
             // set AutoLayout
             SetPageNum( i );
-            SdPage* pPage = mpDoc->GetSdPage( i, PK_STANDARD );
+            SdPage* pPage = mpDoc->GetSdPage( i, PageKind::Standard );
             AutoLayout eAutoLayout = AUTOLAYOUT_NONE;
             const PptSlideLayoutAtom* pSlideLayout = GetSlideLayoutAtom();
             if ( pSlideLayout )
@@ -1203,14 +1203,14 @@ bool ImplSdPPTImport::Import()
         }
 
         // handout master page: auto layout
-        SdPage* pHandoutMPage = mpDoc->GetMasterSdPage( 0, PK_HANDOUT );
+        SdPage* pHandoutMPage = mpDoc->GetMasterSdPage( 0, PageKind::Handout );
         pHandoutMPage->SetAutoLayout( AUTOLAYOUT_HANDOUT6, true, true );
     }
 
     sal_uInt32 nSlideCount = GetPageCount();
     for ( i = 0; ( i < nSlideCount) && ( i < maSlideNameList.size() ); i++ )
     {
-        SdPage* pPage = mpDoc->GetSdPage( i, PK_STANDARD );
+        SdPage* pPage = mpDoc->GetSdPage( i, PageKind::Standard );
         OUString &aName = maSlideNameList[ i ];
         if ( pPage )
         {
@@ -1235,7 +1235,7 @@ bool ImplSdPPTImport::Import()
             if ( pFrameView )
             {
                 sal_uInt16  nSelectedPage = 0;
-                PageKind    ePageKind = PK_STANDARD;
+                PageKind    ePageKind = PageKind::Standard;
                 EditMode    eEditMode = EditMode::Page;
 
                 switch ( aUserEditAtom.eLastViewType )
@@ -1259,7 +1259,7 @@ bool ImplSdPPTImport::Import()
                         SAL_FALLTHROUGH;
                     case 2 :    // master
                     {
-                        ePageKind = PK_STANDARD;
+                        ePageKind = PageKind::Standard;
                         eEditMode = EditMode::MasterPage;
                     }
                     break;
@@ -1267,10 +1267,10 @@ bool ImplSdPPTImport::Import()
                         eEditMode = EditMode::MasterPage;
                         SAL_FALLTHROUGH;
                     case 3 :    // notes
-                        ePageKind = PK_NOTES;
+                        ePageKind = PageKind::Notes;
                     break;
                     case 4 :    // handout
-                        ePageKind = PK_HANDOUT;
+                        ePageKind = PageKind::Handout;
                     break;
                     default :
                     case 1 :    // normal
@@ -1315,7 +1315,7 @@ bool ImplSdPPTImport::Import()
                                         sal_uInt16 nPage = pPageList->FindPage( nPageNumber );
                                         if ( nPage != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                                         {
-                                            SdPage* pPage = mpDoc->GetSdPage( nPage, PK_STANDARD );
+                                            SdPage* pPage = mpDoc->GetSdPage( nPage, PageKind::Standard );
                                             if ( pPage )
                                             {
                                                 pSdCustomShow->PagesVector().push_back( pPage );
@@ -1393,7 +1393,7 @@ bool ImplSdPPTImport::Import()
 
         if ( nStartSlide && ( nStartSlide <= GetPageCount() ) )
         {
-            SdPage* pPage = mpDoc->GetSdPage( nStartSlide - 1, PK_STANDARD );
+            SdPage* pPage = mpDoc->GetSdPage( nStartSlide - 1, PageKind::Standard );
             if ( pPage )
                 rPresSettings.maPresPage = pPage->GetName();
         }
@@ -1509,8 +1509,8 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
 {
     sal_uLong nFilePosMerk = rStCtrl.Tell();
 
-    // set PageKind at page (up to now only PK_STANDARD or PK_NOTES)
-    if ( pPage->GetPageKind() == PK_STANDARD )
+    // set PageKind at page (up to now only PageKind::Standard or PageKind::Notes)
+    if ( pPage->GetPageKind() == PageKind::Standard )
     {
         PptSlidePersistList* pPersistList = GetPageList( eAktPageKind );
         PptSlidePersistEntry* pActualSlidePersist = ( pPersistList && ( nAktPageNum < pPersistList->size() ) )
@@ -2316,7 +2316,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 if ( !aPresentationText.isEmpty() )
                     pPage->SetObjText( pText, pOutl, ePresKind, aPresentationText );
 
-                if ( pPage->GetPageKind() != PK_NOTES && pPage->GetPageKind() != PK_HANDOUT)
+                if ( pPage->GetPageKind() != PageKind::Notes && pPage->GetPageKind() != PageKind::Handout)
                 {
                     SfxStyleSheet* pSheet2( pPage->GetStyleSheetForPresObj( ePresKind ) );
                     if ( pSheet2 )

@@ -95,11 +95,11 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
 {
     // Create a set of names of the master pages used by the document.
     MasterPageObserver::MasterPageNameSet aCurrentNames;
-    sal_uInt16 nMasterPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
+    sal_uInt16 nMasterPageCount = mrDocument.GetMasterSdPageCount(PageKind::Standard);
     sal_uInt16 nIndex;
     for (nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
-        SdPage* pMasterPage = mrDocument.GetMasterSdPage (nIndex, PK_STANDARD);
+        SdPage* pMasterPage = mrDocument.GetMasterSdPage (nIndex, PageKind::Standard);
         if (pMasterPage != nullptr)
             aCurrentNames.insert (pMasterPage->GetName());
     }

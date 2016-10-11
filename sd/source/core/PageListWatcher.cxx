@@ -40,17 +40,17 @@ void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
 
         switch(pCandidate->GetPageKind())
         {
-            case PK_STANDARD:
+            case PageKind::Standard:
             {
                 maPageVectorStandard.push_back(pCandidate);
                 break;
             }
-            case PK_NOTES:
+            case PageKind::Notes:
             {
                 maPageVectorNotes.push_back(pCandidate);
                 break;
             }
-            case PK_HANDOUT:
+            case PageKind::Handout:
             {
                 DBG_ASSERT(!mpHandoutPage, "ImpPageListWatcher::ImpRecreateSortedPageListOnDemand: Two Handout pages in PageList of Model (!)");
                 mpHandoutPage = pCandidate;
@@ -85,29 +85,29 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
 
     switch(ePgKind)
     {
-        case PK_STANDARD:
+        case PageKind::Standard:
         {
             if( nPgNum < (sal_uInt32)maPageVectorStandard.size() )
                 pRetval = maPageVectorStandard[nPgNum];
             else
             {
                 SAL_WARN( "sd.core",
-                          "ImpPageListWatcher::GetSdPage(PK_STANDARD): page number " << nPgNum << " >= " << maPageVectorStandard.size() );
+                          "ImpPageListWatcher::GetSdPage(PageKind::Standard): page number " << nPgNum << " >= " << maPageVectorStandard.size() );
             }
             break;
         }
-        case PK_NOTES:
+        case PageKind::Notes:
         {
             if( nPgNum < (sal_uInt32)maPageVectorNotes.size() )
                 pRetval = maPageVectorNotes[nPgNum];
             else
             {
                 SAL_WARN( "sd.core",
-                          "ImpPageListWatcher::GetSdPage(PK_NOTES): page number " << nPgNum << " >= " << maPageVectorNotes.size() );
+                          "ImpPageListWatcher::GetSdPage(PageKind::Notes): page number " << nPgNum << " >= " << maPageVectorNotes.size() );
             }
             break;
         }
-        case PK_HANDOUT:
+        case PageKind::Handout:
         {
 //          #11420# for models used to transfer drawing shapes via clipboard it's ok to not have a handout page
             DBG_ASSERT(nPgNum == 0L, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
@@ -136,17 +136,17 @@ sal_uInt32 ImpPageListWatcher::GetSdPageCount(PageKind ePgKind)
 
     switch(ePgKind)
     {
-        case PK_STANDARD:
+        case PageKind::Standard:
         {
             nRetval = maPageVectorStandard.size();
             break;
         }
-        case PK_NOTES:
+        case PageKind::Notes:
         {
             nRetval = maPageVectorNotes.size();
             break;
         }
-        case PK_HANDOUT:
+        case PageKind::Handout:
         {
             if(mpHandoutPage)
             {
@@ -170,7 +170,7 @@ sal_uInt32 ImpPageListWatcher::GetVisibleSdPageCount()
     for(sal_uInt32 a(0L); a < nPageCount; a++)
     {
         SdPage* pCandidate = ImpGetPage(a);
-        if ((pCandidate->GetPageKind() == PK_STANDARD)&&(!pCandidate->IsExcluded())) nVisiblePageCount++;
+        if ((pCandidate->GetPageKind() == PageKind::Standard)&&(!pCandidate->IsExcluded())) nVisiblePageCount++;
     }
     return nVisiblePageCount;
 }

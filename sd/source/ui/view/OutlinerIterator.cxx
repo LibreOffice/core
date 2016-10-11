@@ -39,7 +39,7 @@ namespace sd { namespace outliner {
 IteratorPosition::IteratorPosition()
 : mnText(0)
 , mnPageIndex(-1)
-, mePageKind(PK_STANDARD)
+, mePageKind(PageKind::Standard)
 , meEditMode(EditMode::Page)
 {
 }
@@ -237,12 +237,12 @@ Iterator OutlinerContainer::CreateDocumentIterator (
         default:
             if (bDirectionIsForward)
             {
-                ePageKind = PK_STANDARD;
+                ePageKind = PageKind::Standard;
                 eEditMode = EditMode::Page;
             }
             else
             {
-                ePageKind = PK_HANDOUT;
+                ePageKind = PageKind::Handout;
                 eEditMode = EditMode::MasterPage;
             }
             break;
@@ -250,12 +250,12 @@ Iterator OutlinerContainer::CreateDocumentIterator (
         case END:
             if (bDirectionIsForward)
             {
-                ePageKind = PK_HANDOUT;
+                ePageKind = PageKind::Handout;
                 eEditMode = EditMode::MasterPage;
             }
             else
             {
-                ePageKind = PK_STANDARD;
+                ePageKind = PageKind::Standard;
                 eEditMode = EditMode::Page;
             }
             break;
@@ -270,7 +270,7 @@ Iterator OutlinerContainer::CreateDocumentIterator (
             }
             else
             {
-                ePageKind = PK_STANDARD;
+                ePageKind = PageKind::Standard;
                 eEditMode = EditMode::Page;
             }
             break;
@@ -367,7 +367,7 @@ IteratorImplBase::IteratorImplBase(SdDrawDocument* pDocument,
     }
     else
     {
-        maPosition.mePageKind = PK_STANDARD;
+        maPosition.mePageKind = PageKind::Standard;
         maPosition.meEditMode = EditMode::Page;
     }
 }
@@ -754,16 +754,16 @@ void DocumentIteratorImpl::GotoNextText()
             // Switch to next view mode.
             else
             {
-                if (maPosition.mePageKind == PK_HANDOUT)
+                if (maPosition.mePageKind == PageKind::Handout)
                     // Not really necessary but makes things more clear.
                     bSetToOnePastLastPage = true;
                 else
                 {
                     maPosition.meEditMode = EditMode::Page;
-                    if (maPosition.mePageKind == PK_STANDARD)
-                        maPosition.mePageKind = PK_NOTES;
-                    else if (maPosition.mePageKind == PK_NOTES)
-                        maPosition.mePageKind = PK_HANDOUT;
+                    if (maPosition.mePageKind == PageKind::Standard)
+                        maPosition.mePageKind = PageKind::Notes;
+                    else if (maPosition.mePageKind == PageKind::Notes)
+                        maPosition.mePageKind = PageKind::Handout;
                     SetPage (0);
                 }
             }
@@ -783,15 +783,15 @@ void DocumentIteratorImpl::GotoNextText()
             // Switch to previous view mode.
             else
             {
-                if (maPosition.mePageKind == PK_STANDARD)
+                if (maPosition.mePageKind == PageKind::Standard)
                     SetPage (-1);
                 else
                 {
                     maPosition.meEditMode = EditMode::MasterPage;
-                    if (maPosition.mePageKind == PK_HANDOUT)
-                        maPosition.mePageKind = PK_NOTES;
-                    else if (maPosition.mePageKind == PK_NOTES)
-                        maPosition.mePageKind = PK_STANDARD;
+                    if (maPosition.mePageKind == PageKind::Handout)
+                        maPosition.mePageKind = PageKind::Notes;
+                    else if (maPosition.mePageKind == PageKind::Notes)
+                        maPosition.mePageKind = PageKind::Standard;
                     bSetToOnePastLastPage = true;
                 }
             }

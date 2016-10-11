@@ -330,12 +330,12 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
         SdDrawDocument* pDataDoc = pDataDocSh->GetDoc();
 
         if (pDataDoc!=nullptr
-            && pDataDoc->GetSdPageCount(PK_STANDARD))
+            && pDataDoc->GetSdPageCount(PageKind::Standard))
         {
             const SolarMutexGuard aGuard;
 
             bMergeMasterPages = (pDataDoc != rModel.GetDocument());
-            nInsertPageCount = pDataDoc->GetSdPageCount( PK_STANDARD );
+            nInsertPageCount = pDataDoc->GetSdPageCount( PageKind::Standard );
             rModel.GetDocument()->InsertBookmarkAsPage(
                 std::vector<OUString>(),
                 nullptr,
