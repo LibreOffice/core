@@ -46,6 +46,14 @@ SvStream& Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
     return rStream.WriteCharPtr( pStr );
 }
 
+// Ideally, this function should work on (sal_uInt32) Unicode scalar values
+// instead of (sal_Unicode) UTF-16 code units.  However, at least "Rich Text
+// Format (RTF) Specification Version 1.9.1" available at
+// <https://www.microsoft.com/en-us/download/details.aspx?id=10725> does not
+// look like it allows non-BMP Unicode characters >= 0x10000 in the \uN notation
+// (it only talks about "Unicode character", but then explains how values of N
+// greater than 32767 will be expressed as negative signed 16-bit numbers, so
+// that smells like \uN is limited to BMP).
 SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
     int *pUCMode, rtl_TextEncoding eDestEnc, bool bWriteHelpFile)
 {
