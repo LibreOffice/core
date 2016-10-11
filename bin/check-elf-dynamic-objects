@@ -12,7 +12,51 @@
 
 set -euo pipefail
 
-files=$(find "${INSTDIR}" -type f)
+PARA=1
+check_path="${INSTDIR:-.}/program"
+
+while [ "${1:-}" != "" ]; do
+    parm=${1%%=*}
+    arg=${1#*=}
+    has_arg=
+    if [ "${1}" != "${parm?}" ] ; then
+        has_arg=1
+    else
+        arg=""
+    fi
+
+    case "${parm}" in
+        --dir|-d)
+	    if [ "$has_arg" ] ; then
+		check_path=$arg
+	    else
+		shift
+		check_path=$1
+	    fi
+            ;;
+        -p)
+	    # this sound counter intuitive. but the idea
+            # is to possibly support -p <n>
+            # in the mean time 0 = nolimit and -p 1 would mean
+            # the current default: serialize
+            PARA=0
+            ;;
+        -*)
+            die "Invalid option $1"
+            ;;
+        *)
+            if [ "$DO_NEW" = 1 ] ; then
+                REPO="$1"
+            else
+                die "Invalid argument $1"
+            fi
+            ;;
+    esac
+    shift
+done
+
+
+files=$(find "${check_path}" -type f)
 # all RPATHs should point to ${INSTDIR}/program so that's the files they find
 programfiles=$(basename -a $(echo ${files} | grep -o '/program/[^/]* '))
 
@@ -29,10 +73,10 @@ kde4whitelist="libkio.so.5 libkfile.so.4 libkdeui.so.5 libkdecore.so.5 libQtNetw
 avahiwhitelist="libdbus-glib-1.so.2 libdbus-1.so.3 libgobject-2.0.so.0 libglib-2.0.so.0 libavahi-common.so.3 libavahi-client.so.3"
 kerberoswhitelist="libgssapi_krb5.so.2 libcom_err.so.2 libkrb5.so.3"
 
-status=0
+check_one_file()
+{
+local file="$1"
 
-for file in ${files}
-do
     skip=0
     whitelist="${globalwhitelist}"
     case "${file}" in
@@ -132,7 +176,28 @@ do
             esac
         fi
     fi
-done
+}
+status=0
 
+if [ "$PARA" = "1" ] ; then
+    for file in ${files}
+    do
+	check_one_file $file
+    done
+else
+    rm -f check_elf.out
+    for file in ${files}
+    do
+	(
+	check_one_file $file
+	)>> check_elf.out &
+    done
+
+    if [ -s check_elf.out ] ; then
+	cat check_elf.out
+	status=1
+    fi
+    rm check_elf.out
+fi
 exit ${status}
 
