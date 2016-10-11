@@ -29,9 +29,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <deque>
-#include <utility>
-
 class NumberFormatCodeMapper : public cppu::WeakImplHelper
 <
     css::i18n::XNumberFormatCode,
@@ -58,15 +55,19 @@ public:
 
 private:
     osl::Mutex maMutex;
-    css::uno::Reference < css::i18n::XLocaleData4 > m_xLocaleData;
-    typedef std::pair< css::lang::Locale, css::uno::Sequence< css::i18n::FormatElement > > FormatElementCacheItem;
-    std::deque < FormatElementCacheItem > m_aFormatElementCache;
+    css::lang::Locale aLocale;
+    css::uno::Reference < css::uno::XComponentContext > mxContext;
+    css::uno::Sequence< css::i18n::FormatElement > aFormatSeq;
+    css::uno::Reference < css::i18n::XLocaleData4 > mxLocaleData;
+    bool bFormatsValid;
 
-    const css::uno::Sequence< css::i18n::FormatElement >& getFormats( const css::lang::Locale& rLocale );
+    void setupLocale( const css::lang::Locale& rLocale );
+    void getFormats( const css::lang::Locale& rLocale );
     static OUString mapElementTypeShortToString(sal_Int16 formatType);
     static sal_Int16 mapElementTypeStringToShort(const OUString& formatType);
     static OUString mapElementUsageShortToString(sal_Int16 formatUsage);
     static sal_Int16 mapElementUsageStringToShort(const OUString& formatUsage);
+    void createLocaleDataObject();
 };
 
 
