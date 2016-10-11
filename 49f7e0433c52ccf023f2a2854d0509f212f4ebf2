@@ -16,6 +16,24 @@
       "revId": "49f7e0433c52ccf023f2a2854d0509f212f4ebf2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_102bdc31",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2016-10-11T15:15:06Z",
+      "side": 1,
+      "message": "Yes, it\u0027s a little hacky but very efficient. It is valid result returned from GetTextArray(). Without it I\u0027ll have to determine grapheme cluster again, which might have been done in vcl. On the other hand, vcl has to define the meaning of the hidden characters in returned kernArray no matter whether I\u0027m using it here. So why forbid using it? Any suggestion to improve it so that it doesn\u0027t repeat counting in writer and vcl?",
+      "parentUuid": "7a77a97e_85f96c50",
+      "revId": "49f7e0433c52ccf023f2a2854d0509f212f4ebf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
