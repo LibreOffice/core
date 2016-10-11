@@ -130,7 +130,7 @@ local file="$1"
         ;;
     esac
     if test "${skip}" = 0 && readelf -d "${file}" &> /dev/null ; then
-        rpath=$(readelf -d "${file}" | grep '(RPATH)' || true)
+        rpath=$(readelf -d "${file}" | grep '(\(RPATH\|RUNPATH\))' || true)
         neededs=$(readelf -d "${file}" | grep '(NEEDED)' | sed -e 's/.*\[\(.*\)\]$/\1/')
         neededsinternal=
         for needed in ${neededs}
