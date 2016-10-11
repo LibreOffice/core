@@ -67,7 +67,7 @@ public:
 
     SvRef & operator =(SvRef const & rObj)
     {
-        if (rObj.pObj != 0) {
+        if (rObj.pObj != nullptr) {
             rObj.pObj->AddNextRef();
         }
         T * pRefObj = pObj;
@@ -218,13 +218,13 @@ public:
     inline               SvCompatWeakRef( T* pObj )
                          {  if( pObj ) _xHdl = pObj->GetHdl(); }
     inline SvCompatWeakRef& operator = ( T * pObj )
-                         {  _xHdl = pObj ? pObj->GetHdl() : 0; return *this; }
+                         {  _xHdl = pObj ? pObj->GetHdl() : nullptr; return *this; }
     inline bool          Is() const
                          { return _xHdl.Is() && _xHdl->GetObj(); }
     inline T*            operator -> () const
-                         { return _xHdl.Is() ? _xHdl->GetObj() : 0; }
+                         { return _xHdl.Is() ? _xHdl->GetObj() : nullptr; }
     inline operator T* () const
-                         { return _xHdl.Is() ? _xHdl->GetObj() : 0; }
+                         { return _xHdl.Is() ? _xHdl->GetObj() : nullptr; }
 };
 
 #endif
