@@ -1120,7 +1120,8 @@ callback (gpointer pData)
     {
     case LOK_CALLBACK_INVALIDATE_TILES:
     {
-        if (pCallback->m_aPayload != "EMPTY")
+        g_warning("callback: LOK_CALLBACK_INVALIDATE_TILES: %s ", pCallback->m_aPayload.c_str());
+        if (pCallback->m_aPayload.find("EMPTY") != 0) // payload doesn't start with "EMPTY"
         {
             GdkRectangle aRectangle = payloadToRectangle(pDocView, pCallback->m_aPayload.c_str());
             setTilesInvalid(pDocView, aRectangle);
