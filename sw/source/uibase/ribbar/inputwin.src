@@ -30,7 +30,6 @@ ToolBox RID_TBX_FORMULA
 {
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 600 , 14 ) ;
-    HelpID = HID_CALC_TOOLBOX ;
     SVLook = TRUE ;
     Border = TRUE ;
     ItemList =

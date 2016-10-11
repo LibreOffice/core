@@ -148,8 +148,6 @@
 // More Help-IDs
 #define HID_EDIT_FORMULA                                        "SW_HID_EDIT_FORMULA"
 
-#define HID_CALC_TOOLBOX                                        "SW_HID_CALC_TOOLBOX"
-
 #define HID_AUTOFORMAT_REJECT                                   "SW_HID_AUTOFORMAT_REJECT"
 #define HID_AUTOFORMAT_ACCEPT                                   "SW_HID_AUTOFORMAT_ACCEPT"
 #define HID_AUTOFORMAT_EDIT_CHG                                 "SW_HID_AUTOFORMAT_EDIT_CHG"
