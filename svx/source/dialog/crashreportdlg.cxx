@@ -15,6 +15,7 @@
 #include <rtl/bootstrap.hxx>
 #include <desktop/crashreport.hxx>
 #include <desktop/minidump.hxx>
+#include <sfx2/safemode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 
@@ -104,7 +105,7 @@ IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn, void)
     // Check whether to go to safe mode
     if (mpCBSafeMode->IsChecked())
     {
-        //TODO: Actually set the safe mode, currently it's only restarting
+        sfx2::SafeMode::putFlag();
         css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         css::task::OfficeRestartManager::get(xContext)->requestRestart(
             css::uno::Reference< css::task::XInteractionHandler >());
