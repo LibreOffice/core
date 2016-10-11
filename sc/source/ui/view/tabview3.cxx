@@ -1915,12 +1915,12 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     }
 }
 
-void ScTabView::AddEditViewToOtherView(SfxViewShell* pViewShell, ScSplitPos eWhich)
+void ScTabView::AddWindowToForeignEditView(SfxViewShell* pViewShell, ScSplitPos eWhich)
 {
     aExtraEditViewManager.Add(pViewShell, eWhich);
 }
 
-void ScTabView::RemoveEditViewFromOtherView(SfxViewShell* pViewShell, ScSplitPos eWhich)
+void ScTabView::RemoveWindowFromForeignEditView(SfxViewShell* pViewShell, ScSplitPos eWhich)
 {
     aExtraEditViewManager.Remove(pViewShell, eWhich);
 }
@@ -1942,7 +1942,7 @@ void ScTabView::OnLibreOfficeKitTabChanged()
                         {
                             if (rOtherViewData.HasEditView( (ScSplitPos)(i)))
                             {
-                                pThisViewShell->AddEditViewToOtherView(pOtherViewShell, (ScSplitPos)(i));
+                                pThisViewShell->AddWindowToForeignEditView(pOtherViewShell, (ScSplitPos)(i));
                             }
                         }
                     }
@@ -1952,7 +1952,7 @@ void ScTabView::OnLibreOfficeKitTabChanged()
                         {
                             if (rOtherViewData.HasEditView( (ScSplitPos)(i)))
                             {
-                                pThisViewShell->RemoveEditViewFromOtherView(pOtherViewShell, (ScSplitPos)(i));
+                                pThisViewShell->RemoveWindowFromForeignEditView(pOtherViewShell, (ScSplitPos)(i));
                             }
                         }
                     }
@@ -2044,6 +2044,7 @@ void ScTabView::KillEditView( bool bNoPaint )
     SCROW nRow2 = aViewData.GetEditEndRow();
     bool bPaint[4];
     bool bNotifyAcc = false;
+    Rectangle aRectangle[4];
 
     bool bExtended = nRow1 != nRow2;                    // column is painted to the end anyway
 
@@ -2054,7 +2055,12 @@ void ScTabView::KillEditView( bool bNoPaint )
     {
         bPaint[i] = aViewData.HasEditView( (ScSplitPos) i );
         if (bPaint[i])
+        {
             bNotifyAcc = true;
+
+            EditView* pView = aViewData.GetEditView( (ScSplitPos) i );
+            aRectangle[i] = pView->GetInvalidateRect();
+        }
     }
 
     // #108931#; notify accessibility before all things happen
@@ -2070,8 +2076,26 @@ void ScTabView::KillEditView( bool bNoPaint )
 
                 pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
 
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    const Rectangle& rInvRect = aRectangle[i];
+                    pGridWin[i]->Invalidate(rInvRect);
+
+                    // invalidate other views
+                    auto lInvalidateWindows =
+                            [&rInvRect] (ScTabView* pTabView)
+                            {
+                                for (ScGridWindow* pWin: pTabView->pGridWin)
+                                {
+                                    if (pWin)
+                                        pWin->Invalidate(rInvRect);
+                                }
+                            };
+
+                    SfxLokHelper::forEachOtherView(GetViewData().GetViewShell(), lInvalidateWindows);
+                }
                 // #i73567# the cell still has to be repainted
-                if (bExtended || ( bAtCursor && !bNoPaint ))
+                else if (bExtended || ( bAtCursor && !bNoPaint ))
                 {
                     pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2 );
                     pGridWin[i]->UpdateSelectionOverlay();
