@@ -48,12 +48,12 @@ public:
     GraphicDocShell (
         SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED,
         bool bSdDataObj=false,
-        DocumentType=DOCUMENT_TYPE_DRAW);
+        DocumentType=DocumentType::Draw);
 
     GraphicDocShell (
         SfxModelFlags nModelCreationFlags,
         bool bSdDataObj=false,
-        DocumentType=DOCUMENT_TYPE_DRAW);
+        DocumentType=DocumentType::Draw);
 
     virtual ~GraphicDocShell() override;
 };

@@ -546,7 +546,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
                 pPage->SetSize( pRefPage->GetSize() );
                 pPage->SetBorder( pRefPage->GetLftBorder(), pRefPage->GetUppBorder(), pRefPage->GetRgtBorder(), pRefPage->GetLwrBorder() );
             }
-            else if (meDocType == DOCUMENT_TYPE_DRAW)
+            else if (meDocType == DocumentType::Draw)
             {
                 // Draw: always use default size with margins
                 pPage->SetSize(aDefSize);
@@ -647,7 +647,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         if( bClipboard )
             pNotesMPage->SetLayoutName( pPage->GetLayoutName() );
 
-        if( !pRefPage && (meDocType != DOCUMENT_TYPE_DRAW) )
+        if( !pRefPage && (meDocType != DocumentType::Draw) )
             pPage->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
 
         mpWorkStartupTimer = new Timer("DrawWorkStartupTimer");

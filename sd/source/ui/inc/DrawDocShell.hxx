@@ -60,18 +60,18 @@ public:
     DrawDocShell (
         SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED,
         bool bSdDataObj=false,
-        DocumentType=DOCUMENT_TYPE_IMPRESS);
+        DocumentType=DocumentType::Impress);
 
     DrawDocShell (
         SfxModelFlags nModelCreationFlags,
         bool bSdDataObj=false,
-        DocumentType=DOCUMENT_TYPE_IMPRESS);
+        DocumentType=DocumentType::Impress);
 
     DrawDocShell (
         SdDrawDocument* pDoc,
         SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED,
         bool bSdDataObj=false,
-        DocumentType=DOCUMENT_TYPE_IMPRESS);
+        DocumentType=DocumentType::Impress);
     virtual ~DrawDocShell() override;
 
     void                    UpdateRefDevice();

@@ -227,7 +227,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
     }
     case SID_TABLEDESIGN:
     {
-        if( GetDoc() && (GetDoc()->GetDocumentType() == DOCUMENT_TYPE_DRAW) )
+        if( GetDoc() && (GetDoc()->GetDocumentType() == DocumentType::Draw) )
         {
             // in draw open a modal dialog since we have no tool pane yet
             showTableDesignDialog( GetActiveWindow(), GetViewShellBase() );

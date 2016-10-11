@@ -482,7 +482,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 case SID_INSERT_OBJECT :
                 {
                     aServerLst.FillInsertObjects();
-                    if (mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW)
+                    if (mpDoc->GetDocumentType() == DocumentType::Draw)
                     {
                         aServerLst.Remove( GraphicDocShell::Factory().GetClassId() );
                     }

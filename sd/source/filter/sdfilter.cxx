@@ -46,7 +46,7 @@ SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell )
 ,   mrMedium( rMedium )
 ,   mrDocShell( rDocShell )
 ,   mrDocument( *rDocShell.GetDoc() )
-,   mbIsDraw( rDocShell.GetDocumentType() == DOCUMENT_TYPE_DRAW )
+,   mbIsDraw( rDocShell.GetDocumentType() == DocumentType::Draw )
 {
 }
 

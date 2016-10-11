@@ -131,14 +131,14 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
 {
     SdOptions* pOptions = nullptr;
 
-    if (eDocType == DOCUMENT_TYPE_DRAW)
+    if (eDocType == DocumentType::Draw)
     {
         if (!pDrawOptions)
             pDrawOptions = new SdOptions( SDCFG_DRAW );
 
         pOptions = pDrawOptions;
     }
-    else if (eDocType == DOCUMENT_TYPE_IMPRESS)
+    else if (eDocType == DocumentType::Impress)
     {
         if (!pImpressOptions)
             pImpressOptions = new SdOptions( SDCFG_IMPRESS );
@@ -190,7 +190,7 @@ tools::SvRef<SotStorageStream> SdModule::GetOptionStream( const OUString& rOptio
 
         OUString        aStmName;
 
-        if( DOCUMENT_TYPE_DRAW == eType )
+        if( DocumentType::Draw == eType )
             aStmName = "Draw_";
         else
             aStmName = "Impress_";

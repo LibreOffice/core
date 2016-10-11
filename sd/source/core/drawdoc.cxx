@@ -195,7 +195,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     pOptions->GetScale( nX, nY );
 
     // Allow UI scale only for draw documents.
-    if( eType == DOCUMENT_TYPE_DRAW )
+    if( eType == DocumentType::Draw )
         SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( nX, nY ) );  // user-defined
     else
         SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( 1, 1 ) );    // default
@@ -287,7 +287,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         nCntrl &= ~EEControlBits::ONLINESPELLING;
 
     nCntrl &= ~ EEControlBits::ULSPACESUMMATION;
-    if ( meDocType != DOCUMENT_TYPE_IMPRESS )
+    if ( meDocType != DocumentType::Impress )
         SetSummationOfParagraphs( false );
     else
     {
@@ -476,7 +476,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
         SfxObjectShell*   pObj = nullptr;
         ::sd::DrawDocShell*     pNewDocSh = nullptr;
 
-        if( meDocType == DOCUMENT_TYPE_IMPRESS )
+        if( meDocType == DocumentType::Impress )
             mpCreatingTransferable->SetDocShell( new ::sd::DrawDocShell(
                 SfxObjectCreateMode::EMBEDDED, true, meDocType ) );
         else

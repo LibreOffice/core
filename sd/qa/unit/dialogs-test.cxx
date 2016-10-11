@@ -272,7 +272,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
             // supports the 'Screenshot interface'
             pRetval = getSdAbstractDialogFactory()->CreateSdPublishingDlg(
                 Application::GetDefDialogParent(),
-                DOCUMENT_TYPE_IMPRESS);
+                DocumentType::Impress);
             break;
         }
         case 1:
@@ -450,7 +450,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
             aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_FULLSCREEN, rPresentationSettings.mbFullScreen));
             aDlgSet.Put(SfxUInt32Item(ATTR_PRESENT_PAUSE_TIMEOUT, rPresentationSettings.mnPauseTimeout));
             aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_SHOW_PAUSELOGO, rPresentationSettings.mbShowPauseLogo));
-            //SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+            //SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
             aDlgSet.Put(SfxInt32Item(ATTR_PRESENT_DISPLAY, 0 /*pOptions->GetDisplay()*/));
             pRetval = getSdAbstractDialogFactory()->CreateSdStartPresentationDlg(
                 Application::GetDefDialogParent(),

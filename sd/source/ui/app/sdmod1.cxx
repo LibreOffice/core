@@ -406,7 +406,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
         {
             ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
 
-            if( pViewShell && (pDocShell->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) )
+            if( pViewShell && (pDocShell->GetDocumentType() == DocumentType::Impress) )
             {
                 // add our event listener as soon as possible
                 Application::AddEventListener( LINK( this, SdModule, EventListenerHdl ) );
@@ -436,7 +436,7 @@ IMPL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, voi
                         ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
 
                         // #i97925# start the presentation if and only if an Impress document is focused
-                        if( pViewShell && (pDocShell->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) )
+                        if( pViewShell && (pDocShell->GetDocumentType() == DocumentType::Impress) )
                             pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION );
                     }
                     break;
@@ -488,7 +488,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         if ( pFrmItem )
             xTargetFrame = pFrmItem->GetFrame();
 
-        SdOptions* pOpt = GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+        SdOptions* pOpt = GetSdOptions(DocumentType::Impress);
         bool bStartWithTemplate = pOpt->IsStartWithTemplate();
 
         bool bNewDocDirect = rReq.GetSlot() == SID_NEWSD;
@@ -537,7 +537,7 @@ SfxFrame* SdModule::CreateEmptyDocument( const Reference< XFrame >& i_rFrame )
 
     SfxObjectShellLock xDocShell;
     ::sd::DrawDocShell* pNewDocSh;
-    xDocShell = pNewDocSh = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD,false,DOCUMENT_TYPE_IMPRESS);
+    xDocShell = pNewDocSh = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD,false,DocumentType::Impress);
     pNewDocSh->DoInitNew();
     SdDrawDocument* pDoc = pNewDocSh->GetDoc();
     if (pDoc)

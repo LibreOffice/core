@@ -1429,7 +1429,7 @@ void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
 
 void EffectMigration::DocumentLoaded(SdDrawDocument & rDoc)
 {
-    if (DOCUMENT_TYPE_DRAW == rDoc.GetDocumentType())
+    if (DocumentType::Draw == rDoc.GetDocumentType())
         return; // no animations in Draw
     for (sal_uInt16 n = 0; n < rDoc.GetSdPageCount(PK_STANDARD); ++n)
     {

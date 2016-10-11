@@ -784,7 +784,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                 {
                     bOk = true;
                     bChanged = true;
-                    if ( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+                    if ( pDoc->GetDocumentType() == DocumentType::Impress )
                     {
                         EEControlBits nSum = bIsSummationOfParagraphs ? EEControlBits::ULSPACESUMMATION : EEControlBits::NONE;
                         EEControlBits nCntrl;

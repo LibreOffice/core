@@ -114,10 +114,10 @@ enum EditMode
     EM_MASTERPAGE
 };
 
-enum DocumentType
+enum class DocumentType
 {
-    DOCUMENT_TYPE_IMPRESS,
-    DOCUMENT_TYPE_DRAW
+    Impress,
+    Draw
 };
 
 enum NavigatorDragType

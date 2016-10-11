@@ -688,7 +688,7 @@ void SlideTransitionPane::updateControls()
         mpMF_ADVANCE_AUTO_AFTER->SetValue( aEffect.mfTime * 100.0);
     }
 
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
     mpCB_AUTO_PREVIEW->Check( pOptions->IsPreviewTransitions() );
 
     mbUpdatingControls = false;
@@ -1154,7 +1154,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, LoopSoundBoxChecked, Button*, void)
 
 IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked, Button*, void)
 {
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
     pOptions->SetPreviewTransitions( mpCB_AUTO_PREVIEW->IsChecked() );
 }
 

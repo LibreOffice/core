@@ -56,7 +56,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
 
     SfxObjectShell* pShell =
         new ::sd::GraphicDocShell(
-            _nCreationFlags, false, DOCUMENT_TYPE_DRAW );
+            _nCreationFlags, false, DocumentType::Draw );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
@@ -85,7 +85,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance
 
     SfxObjectShell* pShell =
         new ::sd::DrawDocShell(
-            _nCreationFlags, false, DOCUMENT_TYPE_IMPRESS );
+            _nCreationFlags, false, DocumentType::Impress );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 

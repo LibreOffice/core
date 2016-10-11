@@ -529,7 +529,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
     if (nLength)
     {
         SdDrawDocument* pDrawDocument = dynamic_cast<SdDrawDocument*>(GetModel());
-        const bool bImpress = pDrawDocument && pDrawDocument->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
+        const bool bImpress = pDrawDocument && pDrawDocument->GetDocumentType() == DocumentType::Impress;
 
         bool bBool = false;
         sal_Int32 nInt32 = 0;

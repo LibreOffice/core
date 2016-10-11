@@ -263,7 +263,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     aNewAttr.Put( aULSpaceItem );
 
     // Applikation
-    bool bScale = mpDoc->GetDocumentType() != DOCUMENT_TYPE_DRAW;
+    bool bScale = mpDoc->GetDocumentType() != DocumentType::Draw;
     aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT1, bScale ) );
 
     bool bFullSize = mpPage->IsMasterPage() ?

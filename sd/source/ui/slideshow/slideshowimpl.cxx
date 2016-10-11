@@ -530,7 +530,7 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 
     mbUsePen = maPresSettings.mbMouseAsPen;
 
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
     if( pOptions )
     {
         mnUserPaintColor = pOptions->GetPresentationPenColor();
@@ -543,7 +543,7 @@ SlideshowImpl::~SlideshowImpl()
     SdModule *pModule = SD_MOD();
     //rhbz#806663 SlideshowImpl can outlive SdModule
     SdOptions* pOptions = pModule ?
-        pModule->GetSdOptions(DOCUMENT_TYPE_IMPRESS) : nullptr;
+        pModule->GetSdOptions(DocumentType::Impress) : nullptr;
     if( pOptions )
     {
         pOptions->SetPresentationPenColor(mnUserPaintColor);

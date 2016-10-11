@@ -165,7 +165,7 @@ namespace {
 
         bool IsPrinterPreferred(DocumentType eDocType) const
         {
-            bool bIsDraw = eDocType == DOCUMENT_TYPE_DRAW;
+            bool bIsDraw = eDocType == DocumentType::Draw;
             return IsTilePage() || IsPageSize() || IsBooklet() || (!bIsDraw && !IsNotes());
         }
 
@@ -1163,7 +1163,7 @@ public:
         , mpPrintView()
         , mbHasOrientationWarningBeenShown(false)
     {
-        DialogCreator aCreator( mrBase, mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS, GetCurrentPageIndex() );
+        DialogCreator aCreator( mrBase, mrBase.GetDocShell()->GetDocumentType() == DocumentType::Impress, GetCurrentPageIndex() );
         m_aUIProperties = aCreator.GetDialogControls();
         maSlidesPerPage = aCreator.GetSlidesPerPage();
 

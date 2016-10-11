@@ -318,7 +318,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
 {
     SdPage* pPage = static_cast<SdPage*>(mpView->GetSdrPageView()->GetPage());
     if ( pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD &&
-         mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+         mpDoc->GetDocumentType() == DocumentType::Impress )
     {
         /**********************************************
         * Objects was created on the slide master page

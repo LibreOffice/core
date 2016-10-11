@@ -271,8 +271,8 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         }
         else
         {
-            DocumentType eDocType = pDoc ? pDoc->GetDocumentType() : DOCUMENT_TYPE_IMPRESS;
-            aRepresentation = ( ( eDocType == DOCUMENT_TYPE_IMPRESS )
+            DocumentType eDocType = pDoc ? pDoc->GetDocumentType() : DocumentType::Impress;
+            aRepresentation = ( ( eDocType == DocumentType::Impress )
                                 ? SdResId(STR_FIELD_PLACEHOLDER_SLIDENAME).toString()
                                 : SdResId(STR_FIELD_PLACEHOLDER_PAGENAME).toString() );
         }
@@ -414,9 +414,9 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     SdDrawDocument* pDoc = nullptr;
 
     // Here we set the DocType of the option dialog (not document!)
-    DocumentType eDocType = DOCUMENT_TYPE_IMPRESS;
+    DocumentType eDocType = DocumentType::Impress;
     if( nSlot == SID_SD_GRAPHIC_OPTIONS )
-        eDocType = DOCUMENT_TYPE_DRAW;
+        eDocType = DocumentType::Draw;
 
     if (pDocSh)
     {
@@ -540,9 +540,9 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
     SdDrawDocument* pDoc = nullptr;
     // Here we set the DocType of the option dialog (not document!)
-    DocumentType eDocType = DOCUMENT_TYPE_IMPRESS;
+    DocumentType eDocType = DocumentType::Impress;
     if( nSlot == SID_SD_GRAPHIC_OPTIONS )
-        eDocType = DOCUMENT_TYPE_DRAW;
+        eDocType = DocumentType::Draw;
 
     ::sd::ViewShell* pViewShell = nullptr;
 

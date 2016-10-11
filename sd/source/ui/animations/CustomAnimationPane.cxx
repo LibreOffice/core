@@ -745,7 +745,7 @@ void CustomAnimationPane::updateControls()
     mpPBMoveUp->Enable(mxView.is() &&  bEnableUp);
     mpPBMoveDown->Enable(mxView.is() && bEnableDown);
 
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
     mpCBAutoPreview->Check( pOptions->IsPreviewChangedEffects() );
 
     updateMotionPathTags();
@@ -2165,7 +2165,7 @@ void CustomAnimationPane::implControlHdl(Control* pControl )
         onPreview( true );
     else if( pControl == mpCBAutoPreview )
     {
-        SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+        SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
         pOptions->SetPreviewChangedEffects( mpCBAutoPreview->IsChecked() );
     }
 }

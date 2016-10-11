@@ -100,7 +100,7 @@ public:
 };
 
 SdHtmlOptionsDialog::SdHtmlOptionsDialog() :
-    meDocType   ( DOCUMENT_TYPE_DRAW )
+    meDocType   ( DocumentType::Draw )
 {
 }
 
@@ -223,12 +223,12 @@ void SdHtmlOptionsDialog::setSourceDocument( const Reference< XComponent >& xDoc
     {
         if ( xServiceInfo->supportsService( "com.sun.star.presentation.PresentationDocument" ) )
         {
-            meDocType = DOCUMENT_TYPE_IMPRESS;
+            meDocType = DocumentType::Impress;
             return;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.drawing.DrawingDocument" ) )
         {
-            meDocType = DOCUMENT_TYPE_DRAW;
+            meDocType = DocumentType::Draw;
             return;
         }
     }

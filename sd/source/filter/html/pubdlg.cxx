@@ -364,7 +364,7 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
     get(pNextPageButton, "nextPageButton");
     get(pFinishButton, "finishButton");
 
-    m_bImpress = eDocType == DOCUMENT_TYPE_IMPRESS;
+    m_bImpress = eDocType == DocumentType::Impress;
 
     Size aSize(LogicToPixel(Size(60, 50), MapUnit::MapAppFont));
     get(pPage2_Standard_FB, "standardFBImage");

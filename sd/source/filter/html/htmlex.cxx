@@ -405,7 +405,7 @@ HtmlExport::~HtmlExport()
 // get common export parameters from item set
 void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams )
 {
-    mbImpress = mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
+    mbImpress = mpDoc->GetDocumentType() == DocumentType::Impress;
 
     sal_Int32 nArgs = rParams.getLength();
     const PropertyValue* pParams = rParams.getConstArray();
@@ -813,7 +813,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
 
     SfxStyleSheet* pSheet = nullptr;
 
-    if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+    if( mpDoc->GetDocumentType() == DocumentType::Impress )
     {
         // default text color from the outline template of the first page
         pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_OUTLINE);

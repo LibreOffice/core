@@ -816,8 +816,8 @@ bool SdDrawDocument::InsertBookmarkAsPage(
         sal_uInt16 nSdPageEnd = GetSdPageCount(PK_STANDARD) - nSdPageCount +
                             nSdPageStart - 1;
         const bool bRemoveEmptyPresObj =
-                (pBookmarkDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) &&
-                (GetDocumentType() == DOCUMENT_TYPE_DRAW);
+                (pBookmarkDoc->GetDocumentType() == DocumentType::Impress) &&
+                (GetDocumentType() == DocumentType::Draw);
 
         if( bReplace )
         {
@@ -1789,8 +1789,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             pNotesMaster->SetOrientation( rOldNotesMaster.GetOrientation() );
             pNotesMaster->SetAutoLayout(pNotesMaster->GetAutoLayout());
 
-            if( (pSourceDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) &&
-                (GetDocumentType() == DOCUMENT_TYPE_DRAW) )
+            if( (pSourceDoc->GetDocumentType() == DocumentType::Impress) &&
+                (GetDocumentType() == DocumentType::Draw) )
             {
                 pMaster->RemoveEmptyPresentationObjects();
                 pNotesMaster->RemoveEmptyPresentationObjects();

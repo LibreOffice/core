@@ -1220,7 +1220,7 @@ bool Outliner::ShowWrapArroundDialog()
         return false;
 
     // The question text depends on the search direction.
-    bool bImpress = mpDrawDocument && mpDrawDocument->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
+    bool bImpress = mpDrawDocument && mpDrawDocument->GetDocumentType() == DocumentType::Impress;
 
     sal_uInt16 nStringId;
     if (mbDirectionIsForward)

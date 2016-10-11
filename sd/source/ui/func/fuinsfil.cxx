@@ -147,7 +147,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
         aFileDialog.SetTitle( SD_RESSTR(STR_DLG_INSERT_PAGES_FROM_FILE) );
 
-        if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+        if( mpDoc->GetDocumentType() == DocumentType::Impress )
         {
             aOwnCont = "simpress";
             aOtherCont = "sdraw";
@@ -170,7 +170,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 lcl_AddFilter( aFilterVector, pFilter );
 
                 // get template filter
-                if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+                if( mpDoc->GetDocumentType() == DocumentType::Impress )
                     pFilter = DrawDocShell::Factory().GetTemplateFilter();
                 else
                     pFilter = GraphicDocShell::Factory().GetTemplateFilter();

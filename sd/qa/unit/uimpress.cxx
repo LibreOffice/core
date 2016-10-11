@@ -68,7 +68,7 @@ Test::Test()
 
 void Test::setUp()
 {
-    m_pDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, nullptr);
+    m_pDoc = new SdDrawDocument(DocumentType::Impress, nullptr);
 }
 
 void Test::tearDown()

@@ -277,7 +277,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     // Use configuration of FrameView
     ReadFrameViewData(mpFrameView);
 
-    if( eDocType == DOCUMENT_TYPE_DRAW )
+    if( eDocType == DocumentType::Draw )
     {
         SetHelpId( SD_IF_SDGRAPHICVIEWSHELL );
         GetActiveWindow()->SetHelpId( HID_SDGRAPHICVIEWSHELL );

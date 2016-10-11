@@ -464,7 +464,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
     bool bStandardPaint = true;
 
     SdDrawDocument* pDoc = mpDocShell->GetDoc();
-    if( pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
+    if( pDoc && pDoc->GetDocumentType() == DocumentType::Impress)
     {
         rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( pDoc ) );
         if(xSlideshow.is() && xSlideshow->isRunning())

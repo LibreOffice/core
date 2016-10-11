@@ -211,7 +211,7 @@ SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell, bool bClipBo
     mpDocShell( pShell ),
     mpDoc( pShell ? pShell->GetDoc() : nullptr ),
     mbDisposed(false),
-    mbImpressDoc( pShell && pShell->GetDoc() && pShell->GetDoc()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ),
+    mbImpressDoc( pShell && pShell->GetDoc() && pShell->GetDoc()->GetDocumentType() == DocumentType::Impress ),
     mbClipBoard( bClipBoard ),
     mpPropSet( ImplGetDrawModelPropertySet() )
 {
@@ -230,7 +230,7 @@ SdXImpressDocument::SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard ) 
     mpDocShell( nullptr ),
     mpDoc( pDoc ),
     mbDisposed(false),
-    mbImpressDoc( pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ),
+    mbImpressDoc( pDoc && pDoc->GetDocumentType() == DocumentType::Impress ),
     mbClipBoard( bClipBoard ),
     mpPropSet( ImplGetDrawModelPropertySet() )
 {
@@ -3297,7 +3297,7 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
         return aSeq;
     }
 
-    if( pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW )
+    if( pDoc->GetDocumentType() == DocumentType::Draw )
     {
         const sal_uInt16 nMaxPages = pDoc->GetSdPageCount( PK_STANDARD );
         const sal_uInt16 nMaxMasterPages = pDoc->GetMasterSdPageCount( PK_STANDARD );
@@ -3376,7 +3376,7 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw(std::exc
     sal_uInt16 nPage;
     SdPage* pPage;
 
-    const bool bDraw = pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW;
+    const bool bDraw = pDoc->GetDocumentType() == DocumentType::Draw;
 
     // standard pages
     for( nPage = 0; nPage < nMaxPages; nPage++ )
