@@ -1571,8 +1571,8 @@ static FormulaToken* convertToToken( ScDocument* pHostDoc, ScDocument* pSrcDoc, 
             }
             else
             {
-                svl::SharedString aStr = pFCell->GetString();
-                return new formula::FormulaStringToken(aStr);
+                svl::SharedString aSS = pHostDoc->GetSharedStringPool().intern( pFCell->GetString().getString());
+                return new formula::FormulaStringToken(aSS);
             }
         }
         default:
