@@ -8,7 +8,6 @@
 from uitest.framework import UITestCase
 
 import os
-import pathlib
 
 from uitest.uihelper.common import get_state_as_dict
 from uitest.path import get_srcdir_url
