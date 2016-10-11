@@ -2173,9 +2173,14 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
             2) Ensure that it is a text node and not in a fly.
             3) If the anchor is associated with a text node with empty text then we ignore.
         */
-        if ( rNode.IsTextNode() && aStr != aStringForImage && !aStr.isEmpty() &&
-            !rNode.GetFlyFormat() && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()))
+        if( rNode.IsTextNode()
+            && aStr != aStringForImage && !aStr.isEmpty()
+            && !rNode.GetFlyFormat()
+            && !IsInTable()
+            && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()) )
+        {
             bPostponeWritingText = true ;
+        }
 
         nStateOfFlyFrame = aAttrIter.OutFlys( nAktPos );
         AttrOutput().SetStateOfFlyFrame( nStateOfFlyFrame );
