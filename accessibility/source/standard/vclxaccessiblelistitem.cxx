@@ -61,7 +61,7 @@ using namespace ::com::sun::star;
 
 // Ctor() and Dtor()
 
-VCLXAccessibleListItem::VCLXAccessibleListItem(sal_Int32 _nIndexInParent, const Reference< VCLXAccessibleList >& _xParent)
+VCLXAccessibleListItem::VCLXAccessibleListItem(sal_Int32 _nIndexInParent, const rtl::Reference< VCLXAccessibleList >& _xParent)
     : VCLXAccessibleListItem_BASE(m_aMutex)
     , m_nIndexInParent(_nIndexInParent)
     , m_bSelected(false)
@@ -214,7 +214,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleParent(  
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return m_xParent;
+    return m_xParent.get();
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)

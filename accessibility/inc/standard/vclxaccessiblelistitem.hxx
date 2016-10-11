@@ -66,7 +66,7 @@ protected:
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                          m_nClientId;
 
-    css::uno::Reference< VCLXAccessibleList >                     m_xParent;
+    rtl::Reference< VCLXAccessibleList >                     m_xParent;
     css::uno::Reference< css::accessibility::XAccessibleContext > m_xParentContext;
 
 protected:
@@ -88,7 +88,7 @@ public:
             is our parent accessible object
     */
     VCLXAccessibleListItem(sal_Int32 _nIndexInParent,
-                           const css::uno::Reference< VCLXAccessibleList >& _xParent);
+                           const rtl::Reference< VCLXAccessibleList >& _xParent);
 
     void                    NotifyAccessibleEvent(  sal_Int16 _nEventId, const css::uno::Any& _aOldValue, const css::uno::Any& _aNewValue );
 
