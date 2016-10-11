@@ -95,6 +95,7 @@ interface BaseSelection
     SID_LINE_CIRCLE_ARROW           [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_LINE_SQUARE_ARROW           [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_LINE_ARROWS                 [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_MEASURELINE            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_DRAWTBX_ARROWS              [ StateMethod = GetDrawState; ]
     SID_DRAW_RECT                   [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_DRAW_ELLIPSE                [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
