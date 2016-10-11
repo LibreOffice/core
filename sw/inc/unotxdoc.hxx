@@ -213,7 +213,6 @@ public:
     virtual void SAL_CALL release(  ) throw() override;
 
     //XWeak
-    virtual css::uno::Reference< css::uno::XAdapter > SAL_CALL queryAdapter(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
 
