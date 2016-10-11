@@ -776,7 +776,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
 
     if(!pCellShell) // is anyway always used
     {
-        pCellShell = new ScCellShell( &GetViewData() );
+        pCellShell = new ScCellShell( &GetViewData(), GetFrameWin());
         pCellShell->SetRepeatTarget( &aTarget );
     }
 

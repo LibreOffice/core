@@ -29,6 +29,7 @@
 #include <memory>
 #include "formatsh.hxx"
 #include "address.hxx"
+#include <vcl/window.hxx>
 
 class SvxClipboardFormatItem;
 class TransferableDataHelper;
@@ -69,6 +70,8 @@ private:
 
     RotateTransliteration m_aRotateCase;
 
+    VclPtr<vcl::Window> pFrameWin;
+
 public:
     SFX_DECL_INTERFACE(SCID_CELL_SHELL)
 
@@ -77,7 +80,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-                ScCellShell(ScViewData* pData);
+                ScCellShell(ScViewData*, vcl::Window*);
     virtual     ~ScCellShell() override;
 
     void        Execute(SfxRequest &);
@@ -102,6 +105,7 @@ public:
     void        ExecutePageSel( SfxRequest& rReq );
     void        ExecuteMove( SfxRequest& rReq );
     static void GetStateCursor( SfxItemSet& rSet );
+    vcl::Window* mGetFrameWin() { return pFrameWin; };
 };
 
 #endif
