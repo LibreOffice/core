@@ -60,7 +60,7 @@ sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Referen
         m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_USER_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     ADOUsers* pUsers = (ADOUsers*)m_aCollection;
-    pUsers->Append(OLEVariant(pUser->getImpl()),OLEString(pUser->getPassword()));
+    pUsers->Append(OLEVariant(pUser->getImpl()),OLEString(pUser->getPassword()).asBSTR());
 
     return createObject( _rForName );
 }

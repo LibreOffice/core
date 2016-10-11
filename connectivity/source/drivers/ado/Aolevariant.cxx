@@ -77,15 +77,15 @@ OLEString& OLEString::operator=(const BSTR& _rSrc)
     m_sStr = _rSrc;
     return *this;
 }
-OLEString::operator OUString() const
+OUString OLEString::asOUString() const
 {
     return (m_sStr != NULL) ? OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(m_sStr)),::SysStringLen(m_sStr)) : OUString();
 }
-OLEString::operator BSTR() const
+BSTR OLEString::asBSTR() const
 {
     return m_sStr;
 }
-BSTR* OLEString::operator &()
+BSTR* OLEString::getAddress()
 {
     return &m_sStr;
 }
@@ -427,7 +427,7 @@ OLEVariant::operator css::uno::Sequence< sal_Int8 >() const
     if(V_VT(this) == VT_BSTR)
     {
         OLEString sStr(V_BSTR(this));
-        aRet = css::uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>((const wchar_t*)sStr),sizeof(sal_Unicode)*sStr.length());
+        aRet = css::uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(sStr.asBSTR()),sizeof(sal_Unicode)*sStr.length());
     }
     else if(!isNull())
     {
