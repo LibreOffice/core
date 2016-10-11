@@ -79,6 +79,7 @@ namespace http_dav_ucp
 
         /// target time when this capability becomes stale
         sal_uInt32 m_nStaleTime;
+        sal_uInt32 m_nRequestedTimeLife;
         OUString  m_sURL;
         OUString  m_sRedirectedURL;
 
@@ -109,6 +110,9 @@ namespace http_dav_ucp
         sal_uInt32 getStaleTime() { return m_nStaleTime ; };
         void setStaleTime( const sal_uInt32 nStaleTime ) { m_nStaleTime = nStaleTime; };
 
+        sal_uInt32 getRequestedTimeLife() { return m_nRequestedTimeLife; };
+        void setRequestedTimeLife( const sal_uInt32 nRequestedTimeLife ) { m_nRequestedTimeLife = nRequestedTimeLife; };
+
         const OUString & getURL() { return m_sURL; };
         void setURL( const OUString & sURL ) { m_sURL = sURL; };
 
@@ -136,6 +140,7 @@ namespace http_dav_ucp
             m_isLocked = false;
             m_aAllowedMethods.clear();
             m_nStaleTime = 0;
+            m_nRequestedTimeLife = 0;
             m_sURL.clear();
             m_sRedirectedURL.clear();
             m_nHttpResponseStatusCode = 0;
@@ -164,8 +169,6 @@ namespace http_dav_ucp
         bool getDAVOptions( const OUString & rURL, DAVOptions & rDAVOptions );
         void removeDAVOptions( const OUString & rURL );
         void addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime );
-
-        void updateCachedOption( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime );
 
         /** return the cached value of HTTP response status code
             If the cached value is found stale, it is removed.
