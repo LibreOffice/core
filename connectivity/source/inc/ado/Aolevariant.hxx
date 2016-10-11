@@ -123,21 +123,6 @@ namespace connectivity
             VARTYPE getType() const ;
             void ChangeType(VARTYPE vartype, const OLEVariant* pSrc);
 
-
-            operator OUString() const;
-
-            operator bool()         const { return getBool() == 1; }
-            operator sal_Bool()     const { return getBool();   }
-            operator sal_Int8()     const { return getInt8();   }
-            operator sal_Int16()    const { return getInt16();  }
-            operator sal_Int32()    const { return getInt32();  }
-            operator float()        const { return getFloat();  }
-            operator double()       const { return getDouble(); }
-
-            operator css::uno::Sequence< sal_Int8 >() const;
-            operator css::util::Date() const ;
-            operator css::util::Time() const ;
-            operator css::util::DateTime()const ;
             OUString        getString()     const;
             sal_Bool        getBool()       const;
             IUnknown*       getIUnknown()   const;
@@ -149,8 +134,12 @@ namespace connectivity
             sal_uInt32      getUInt32()     const;
             float           getFloat()      const;
             double          getDouble()     const;
-            double          getDate()       const;
+            double          getDateAsDouble() const;
             CY              getCurrency()   const;
+            css::util::Date getDate()       const;
+            css::util::Time getTime()       const;
+            css::util::DateTime getDateTime() const;
+            css::uno::Sequence<sal_Int8> getByteSequence() const;
             SAFEARRAY*      getUI1SAFEARRAYPtr() const;
             css::uno::Any makeAny() const;
 

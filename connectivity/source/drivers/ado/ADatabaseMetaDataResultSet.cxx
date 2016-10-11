@@ -177,7 +177,7 @@ Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinar
     aField.get_Value(m_aValue);
     if(m_aValue.isNull())
         return NULL;
-    return new SequenceInputStream(m_aValue);
+    return new SequenceInputStream(m_aValue.getByteSequence());
 }
 
 Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
@@ -194,10 +194,10 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
     if ( !m_aValueRange.empty()  && columnIndex == 11 && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end() )
     {
         getValue(2);
-        if ( static_cast<sal_Int16>(m_aValue) != adCurrency )
+        if ( m_aValue.getInt16() != adCurrency )
             return sal_False;
     }
-    return getValue(columnIndex);
+    return getValue(columnIndex).getBool();
 }
 
 
@@ -212,35 +212,35 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
     if(m_aValue.isNull())
         return 0;
     if ( !m_aValueRange.empty() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-        return (sal_Int8)(*m_aValueRangeIter).second[(sal_Int32)m_aValue];
+        return (sal_Int8)(*m_aValueRangeIter).second[m_aValue.getInt32()];
     else if(m_aStrValueRange.size() && (m_aStrValueRangeIter = m_aStrValueRange.find(columnIndex)) != m_aStrValueRange.end())
-        return (sal_Int8)(*m_aStrValueRangeIter).second[m_aValue];
+        return (sal_Int8)(*m_aStrValueRangeIter).second[m_aValue.getString()];
 
-    return m_aValue;
+    return m_aValue.getInt8();
 }
 
 
 Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getByteSequence();
 }
 
 
 css::util::Date SAL_CALL ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDate();
 }
 
 
 double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDouble();
 }
 
 
 float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getFloat();
 }
 
 
@@ -256,11 +256,11 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
         return 0;
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-        return (*m_aValueRangeIter).second[(sal_Int32)m_aValue];
+        return (*m_aValueRangeIter).second[m_aValue.getInt32()];
     else if(m_aStrValueRange.size() && (m_aStrValueRangeIter = m_aStrValueRange.find(columnIndex)) != m_aStrValueRange.end())
-        return (*m_aStrValueRangeIter).second[m_aValue];
+        return (*m_aStrValueRangeIter).second[m_aValue.getString()];
 
-    return m_aValue;
+    return m_aValue.getInt32();
 }
 
 
@@ -343,11 +343,11 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
         return 0;
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-        return (sal_Int16)(*m_aValueRangeIter).second[(sal_Int32)m_aValue];
+        return (sal_Int16)(*m_aValueRangeIter).second[m_aValue.getInt32()];
     else if(m_aStrValueRange.size() && (m_aStrValueRangeIter = m_aStrValueRange.find(columnIndex)) != m_aStrValueRange.end())
-        return (sal_Int16)(*m_aStrValueRangeIter).second[m_aValue];
+        return (sal_Int16)(*m_aStrValueRangeIter).second[m_aValue.getString()];
 
-    return m_aValue;
+    return m_aValue.getInt16();
 }
 
 
@@ -362,21 +362,21 @@ OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
     if(m_aValue.isNull())
         return OUString();
     if(m_aIntValueRange.size() && (m_aIntValueRangeIter = m_aIntValueRange.find(columnIndex)) != m_aIntValueRange.end())
-        return (*m_aIntValueRangeIter).second[m_aValue];
+        return (*m_aIntValueRangeIter).second[m_aValue.getInt32()];
 
-    return m_aValue;
+    return m_aValue.getString();
 }
 
 
 css::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getTime();
 }
 
 
 css::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDateTime();
 }
 
 

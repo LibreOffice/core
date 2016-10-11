@@ -139,7 +139,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
                 OTools::putValue(aProps,OUString("Jet OLEDB:ODBC Parsing"),true);
                 OLEVariant aVar(OTools::getValue(aProps,OUString("Jet OLEDB:Engine Type")));
                 if(!aVar.isNull() && !aVar.isEmpty())
-                    m_nEngineType = aVar;
+                    m_nEngineType = aVar.getInt32();
             }
             buildTypeInfo();
             //bErg = TRUE;
@@ -437,30 +437,30 @@ void OConnection::buildTypeInfo() throw( SQLException)
             {
                 sal_Int32 nPos = 1;
                 OExtendedTypeInfo* aInfo            = new OExtendedTypeInfo();
-                aInfo->aSimpleType.aTypeName        = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->eType                        = (DataTypeEnum)(sal_Int32)ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.aTypeName        = ADOS::getField(pRecordset,nPos++).get_Value().getString();
+                aInfo->eType                        = (DataTypeEnum)(sal_Int32)ADOS::getField(pRecordset,nPos++).get_Value().getInt32();
                 if ( aInfo->eType == adWChar && aInfo->aSimpleType.aTypeName == s_sVarChar )
                     aInfo->eType = adVarWChar;
                 aInfo->aSimpleType.nType            = (sal_Int16)ADOS::MapADOType2Jdbc(static_cast<DataTypeEnum>(aInfo->eType));
-                aInfo->aSimpleType.nPrecision       = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.aLiteralPrefix   = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.aLiteralSuffix   = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.aCreateParams    = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.bNullable        = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.bCaseSensitive   = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.nSearchType      = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.bUnsigned        = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.bCurrency        = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.bAutoIncrement   = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.aLocalTypeName   = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.nMinimumScale    = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.nMaximumScale    = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.nPrecision       = ADOS::getField(pRecordset,nPos++).get_Value().getInt32();
+                aInfo->aSimpleType.aLiteralPrefix   = ADOS::getField(pRecordset,nPos++).get_Value().getString();
+                aInfo->aSimpleType.aLiteralSuffix   = ADOS::getField(pRecordset,nPos++).get_Value().getString();
+                aInfo->aSimpleType.aCreateParams    = ADOS::getField(pRecordset,nPos++).get_Value().getString();
+                aInfo->aSimpleType.bNullable        = ADOS::getField(pRecordset,nPos++).get_Value().getBool();
+                aInfo->aSimpleType.bCaseSensitive   = ADOS::getField(pRecordset,nPos++).get_Value().getBool();
+                aInfo->aSimpleType.nSearchType      = ADOS::getField(pRecordset,nPos++).get_Value().getInt16();
+                aInfo->aSimpleType.bUnsigned        = ADOS::getField(pRecordset,nPos++).get_Value().getBool();
+                aInfo->aSimpleType.bCurrency        = ADOS::getField(pRecordset,nPos++).get_Value().getBool();
+                aInfo->aSimpleType.bAutoIncrement   = ADOS::getField(pRecordset,nPos++).get_Value().getBool();
+                aInfo->aSimpleType.aLocalTypeName   = ADOS::getField(pRecordset,nPos++).get_Value().getString();
+                aInfo->aSimpleType.nMinimumScale    = ADOS::getField(pRecordset,nPos++).get_Value().getInt16();
+                aInfo->aSimpleType.nMaximumScale    = ADOS::getField(pRecordset,nPos++).get_Value().getInt16();
                 if ( adCurrency == aInfo->eType && !aInfo->aSimpleType.nMaximumScale)
                 {
                     aInfo->aSimpleType.nMinimumScale = 4;
                     aInfo->aSimpleType.nMaximumScale = 4;
                 }
-                aInfo->aSimpleType.nNumPrecRadix    = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.nNumPrecRadix    = ADOS::getField(pRecordset,nPos++).get_Value().getInt16();
                 // Now that we have the type info, save it
                 // in the Hashtable if we don't already have an
                 // entry for this SQL type.

@@ -54,7 +54,7 @@ sal_Int32 ODatabaseMetaData::getInt32Property(const OUString& _aProperty)  throw
     ADO_PROP(_aProperty);
     sal_Int32 nValue(0);
     if(!aVar.isNull() && !aVar.isEmpty())
-        nValue = aVar;
+        nValue = aVar.getInt32();
     return nValue;
 }
 
@@ -77,7 +77,7 @@ OUString ODatabaseMetaData::getStringProperty(const OUString& _aProperty)  throw
     ADO_PROP(_aProperty);
     OUString aValue;
     if(!aVar.isNull() && !aVar.isEmpty() && aVar.getType() == VT_BSTR)
-        aValue = aVar;
+        aValue = aVar.getString();
 
     return aValue;
 }
@@ -916,7 +916,7 @@ OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  ) throw(SQLException, Runt
             WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
             WpADOField aField(aFields.GetItem(0));
             aField.get_Value(aValue);
-            aRet = aRet + (aValue.operator OUString()) + aComma;
+            aRet = aRet + aValue.getString() + aComma;
             aRecordset.MoveNext();
         }
         aRecordset.Close();

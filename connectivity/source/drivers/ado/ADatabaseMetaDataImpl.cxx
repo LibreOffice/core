@@ -63,9 +63,9 @@ void ODatabaseMetaData::fillLiterals()
         {
             WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
             WpADOField aField(aFields.GetItem(1));
-            aInfo.pwszLiteralValue = aField.get_Value();
+            aInfo.pwszLiteralValue = aField.get_Value().getString();
             aField = aFields.GetItem(5);
-            aInfo.fSupported = aField.get_Value();
+            aInfo.fSupported = aField.get_Value().getBool();
             aField = aFields.GetItem(6);
             aInfo.cchMaxLen = aField.get_Value().getUInt32();
 
@@ -567,7 +567,7 @@ void OAdoTable::fillPropertyValues()
         {
             WpADOProperties aProps = m_aTable.get_Properties();
             if(aProps.IsValid())
-                m_Description = OTools::getValue(aProps,OUString("Description"));
+                m_Description = OTools::getValue(aProps,OUString("Description")).getString();
         }
     }
 }
