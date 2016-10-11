@@ -29,6 +29,7 @@ DAVOptions::DAVOptions() :
     m_isLocked( false ),
     m_aAllowedMethods(),
     m_nStaleTime( 0 ),
+    m_nRequestedTimeLife( 0 ),
     m_sURL(),
     m_sRedirectedURL(),
     m_nHttpResponseStatusCode( 0 ),
@@ -44,6 +45,7 @@ DAVOptions::DAVOptions( const DAVOptions & rOther ) :
     m_isLocked( rOther.m_isLocked ),
     m_aAllowedMethods( rOther.m_aAllowedMethods ),
     m_nStaleTime( rOther.m_nStaleTime ),
+    m_nRequestedTimeLife( rOther.m_nRequestedTimeLife ),
     m_sURL( rOther.m_sURL ),
     m_sRedirectedURL( rOther.m_sRedirectedURL),
     m_nHttpResponseStatusCode( rOther.m_nHttpResponseStatusCode ),
@@ -64,6 +66,7 @@ DAVOptions & DAVOptions::operator=( const DAVOptions& rOpts )
     m_isHeadAllowed = rOpts.m_isHeadAllowed;
     m_aAllowedMethods = rOpts.m_aAllowedMethods;
     m_nStaleTime = rOpts.m_nStaleTime;
+    m_nRequestedTimeLife = rOpts.m_nRequestedTimeLife;
     m_sURL = rOpts.m_sURL;
     m_sRedirectedURL = rOpts.m_sRedirectedURL;
     m_nHttpResponseStatusCode = rOpts.m_nHttpResponseStatusCode;
@@ -81,6 +84,7 @@ bool DAVOptions::operator==( const DAVOptions& rOpts ) const
         m_isHeadAllowed == rOpts.m_isHeadAllowed &&
         m_aAllowedMethods == rOpts.m_aAllowedMethods &&
         m_nStaleTime == rOpts.m_nStaleTime &&
+        m_nRequestedTimeLife == rOpts.m_nRequestedTimeLife &&
         m_sURL == rOpts.m_sURL &&
         m_sRedirectedURL == rOpts.m_sRedirectedURL &&
         m_nHttpResponseStatusCode == rOpts.m_nHttpResponseStatusCode &&
@@ -153,44 +157,20 @@ void DAVOptionsCache::addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 
     OUString aRedirURL( rDAVOptions.getRedirectedURL() );
     rDAVOptions.setRedirectedURL( aRedirURL );
 
+    // check if already cached
+    DAVOptionsMap::iterator it;
+    it = m_aTheCache.find( aEncodedUrl );
+    if ( it != m_aTheCache.end() )
+    { // already in cache, check LifeTime
+        if ( (*it).second.getRequestedTimeLife() == nLifeTime )
+            return; // same lifetime, do nothing
+    }
+    // not in cache, add it
     TimeValue t1;
     osl_getSystemTime( &t1 );
     rDAVOptions.setStaleTime( t1.Seconds + nLifeTime );
 
     m_aTheCache[ aEncodedUrl ] = rDAVOptions;
-}
-
-void DAVOptionsCache::updateCachedOption( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-    OUString aURL( rDAVOptions.getURL() );
-
-    OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(aURL) ) );
-    normalizeURLLastChar( aEncodedUrl );
-    rDAVOptions.setURL( aEncodedUrl );
-
-// unchanged, it may be used to access a server
-    OUString aRedirURL( rDAVOptions.getRedirectedURL() );
-    rDAVOptions.setRedirectedURL( aRedirURL );
-
-    // check if already cached
-    DAVOptionsMap::iterator it;
-    it = m_aTheCache.find( aEncodedUrl );
-    if ( it != m_aTheCache.end() )
-    {
-        DAVOptions &opts = (*it).second;
-        // exists, set new staletime, only if remaining time is higher
-        TimeValue t1;
-        osl_getSystemTime( &t1 );
-
-        if ( ( opts.getStaleTime() - t1.Seconds ) > nLifeTime )
-        {
-            opts.setStaleTime( t1.Seconds + nLifeTime );
-        }
-        // update relevant fields
-        opts.setHttpResponseStatusCode( rDAVOptions.getHttpResponseStatusCode() );
-        opts.setHttpResponseStatusText( rDAVOptions.getHttpResponseStatusText() );
-    }
 }
 
 sal_uInt16 DAVOptionsCache::getHttpResponseStatusCode( const OUString & rURL, OUString & rHttpResponseStatusText )
