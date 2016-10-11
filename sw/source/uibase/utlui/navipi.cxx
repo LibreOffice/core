@@ -840,7 +840,7 @@ void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
             SwWrtShell* pWrtShell = pActView->GetWrtShellPtr();
             m_aContentTree->SetActiveShell(pWrtShell);
             bool bGlobal = IsGlobalDoc();
-            m_aContentToolBox->EnableItem(m_aContentToolBox->GetItemId("toggle"), bGlobal);
+            m_aContentToolBox->ShowItem(m_aContentToolBox->GetItemId("toggle"), bGlobal);
             if ((!bGlobal && IsGlobalMode()) || (!IsGlobalMode() && m_pConfig->IsGlobalActive()))
             {
                 ToggleTree();
