@@ -413,7 +413,7 @@ ERRTYPE parser( RscFileInst * pFileInst )
     EndParser();
 
     // yyparser returns 0 on success
-    if( 0 == aError )
+    if( 0 == aError.GetError() )
         aError.Clear();
     if( pFileInst->pTypCont->pEH->nErrors )
         aError = ERR_ERROR;

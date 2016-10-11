@@ -139,20 +139,20 @@ public:
     explicit HebrewDate(sal_Int32 d) { // Computes the Hebrew date from the absolute date.
     year = (d + HebrewEpoch) / 366; // Approximation from below.
     // Search forward for year from the approximation.
-    while (d >= HebrewDate(7,1,year + 1))
+    while (d >= HebrewDate(7,1,year + 1).GetAbsoluteDate())
       year++;
     // Search forward for month from either Tishri or Nisan.
-    if (d < HebrewDate(1, 1, year))
+    if (d < HebrewDate(1, 1, year).GetAbsoluteDate())
       month = 7;  //  Start at Tishri
     else
       month = 1;  //  Start at Nisan
-    while (d > HebrewDate(month, (LastDayOfHebrewMonth(month,year)), year))
+    while (d > HebrewDate(month, (LastDayOfHebrewMonth(month,year)), year).GetAbsoluteDate())
       month++;
     // Calculate the day by subtraction.
-    day = d - HebrewDate(month, 1, year) + 1;
+    day = d - HebrewDate(month, 1, year).GetAbsoluteDate() + 1;
     }
 
-    operator int() { // Computes the absolute date of Hebrew date.
+    int GetAbsoluteDate() const { // Computes the absolute date of Hebrew date.
     sal_Int32 DayInYear = day; // Days so far this month.
     if (month < 7) { // Before Tishri, so add days in prior months
              // this year before and after Nisan.
@@ -217,16 +217,16 @@ public:
     explicit GregorianDate(int d) { // Computes the Gregorian date from the absolute date.
         // Search forward year by year from approximate year
         year = d/366;
-        while (d >= GregorianDate(1,1,year+1))
+        while (d >= GregorianDate(1,1,year+1).GetAbsoluteDate())
           year++;
         // Search forward month by month from January
         month = 1;
-        while (d > GregorianDate(month, LastDayOfGregorianMonth(month,year), year))
+        while (d > GregorianDate(month, LastDayOfGregorianMonth(month,year), year).GetAbsoluteDate())
           month++;
-        day = d - GregorianDate(month,1,year) + 1;
+        day = d - GregorianDate(month,1,year).GetAbsoluteDate() + 1;
     }
 
-    operator int() { // Computes the absolute date from the Gregorian date.
+    int GetAbsoluteDate() const { // Computes the absolute date from the Gregorian date.
         int N = day;           // days this month
         for (int m = month - 1;  m > 0; m--) // days in prior months this year
           N = N + LastDayOfGregorianMonth(m, year);
@@ -251,7 +251,7 @@ void Calendar_jewish::mapFromGregorian() throw(RuntimeException)
     if (fieldValue[CalendarFieldIndex::ERA] == 0)
         y = 1 - y;
     GregorianDate Temp(fieldValue[CalendarFieldIndex::MONTH] + 1, fieldValue[CalendarFieldIndex::DAY_OF_MONTH], y);
-    HebrewDate hd(Temp);
+    HebrewDate hd(Temp.GetAbsoluteDate());
 
     fieldValue[CalendarFieldIndex::ERA] = hd.GetYear() <= 0 ? 0 : 1;
     fieldValue[CalendarFieldIndex::MONTH] = sal::static_int_cast<sal_Int16>( hd.GetMonth() - 1 );
@@ -268,7 +268,7 @@ void Calendar_jewish::mapToGregorian() throw(RuntimeException)
         if (fieldSetValue[CalendarFieldIndex::ERA] == 0)
             y = 1 - y;
         HebrewDate Temp(fieldSetValue[CalendarFieldIndex::MONTH] + 1, fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH], y);
-        GregorianDate gd(Temp);
+        GregorianDate gd(Temp.GetAbsoluteDate());
 
         fieldSetValue[CalendarFieldIndex::ERA] = gd.GetYear() <= 0 ? 0 : 1;
         fieldSetValue[CalendarFieldIndex::MONTH] = sal::static_int_cast<sal_Int16>( gd.GetMonth() - 1 );

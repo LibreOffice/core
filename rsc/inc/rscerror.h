@@ -93,11 +93,11 @@ public:
     ERRTYPE( sal_uInt32 nErr )   { nError = nErr; }
     ERRTYPE( const ERRTYPE & ) = default;
     ERRTYPE& operator = ( const ERRTYPE & rError );
-    operator sal_uInt32() const { return nError; }
+    sal_uInt32 GetError() const { return nError; }
     bool IsError() const     { return nError <= ERR_ERROREND; }
     bool IsOk() const        { return !IsError(); }
     bool IsWarning() const   { return nError >= ERR_WARNINGSTART && nError <= ERR_WARNINGEND;}
-    void Clear(){ nError = ERR_OK; }
+    void Clear()             { nError = ERR_OK; }
 };
 
 // Rsc Error

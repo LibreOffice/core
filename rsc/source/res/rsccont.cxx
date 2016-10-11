@@ -506,7 +506,7 @@ ERRTYPE RscBaseCont::SetRef( const RSCINST & rInst, const RscId & rRefId )
             aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
             aError = aTmpI.pClass->GetRef( aTmpI, &aId );
             if( aError.IsOk() )
-                aError = aTmpI.pClass->SetNumber( aTmpI, rRefId );
+                aError = aTmpI.pClass->SetNumber( aTmpI, rRefId.GetNumber() );
         }
 
         if( aError.IsError() )
@@ -534,8 +534,8 @@ bool RscBaseCont::IsConsistent( const RSCINST & rInst )
     {
         if( !bNoId )
         {
-            if( (sal_Int32)pClassData->pEntries[ i ].aName > 0x7FFF ||
-                (sal_Int32)pClassData->pEntries[ i ].aName < 1 )
+            if( (sal_Int32)pClassData->pEntries[ i ].aName.GetNumber() > 0x7FFF ||
+                (sal_Int32)pClassData->pEntries[ i ].aName.GetNumber() < 1 )
             {
                 bRet = false;
             }

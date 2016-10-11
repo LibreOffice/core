@@ -345,7 +345,7 @@ ERRTYPE RscIdRange::SetRef( const RSCINST & rInst, const RscId & rRscId )
     ERRTYPE aError;
     if( rRscId.IsId() )
     {
-        aError = SetNumber( rInst, rRscId );
+        aError = SetNumber( rInst, rRscId.GetNumber() );
         if( aError.IsOk() )
         {
             *reinterpret_cast<RscId *>(rInst.pData) = rRscId;

@@ -72,7 +72,7 @@ void RscError::StdLstErr( const char * pStr ){
 
 void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
 {
-    switch( rError )
+    switch( rError.GetError() )
     {
         case ERR_ERROR: {
             StdLstErr( "!! " );
@@ -338,7 +338,7 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
         StdLstErr( "\n" );
     }
     StdLstErr( "f" );
-    sprintf( buf, "%u", (unsigned int)rError );
+    sprintf( buf, "%u", (unsigned int)rError.GetError() );
     StdLstErr( buf );
 
     if( pFI && pTC ){
@@ -375,7 +375,7 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
 void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
                       const RscId & aId, const char * pMessage )
 {
-    if( WRN_LOCALID == rError ) // ignore warnings
+    if( WRN_LOCALID == rError.GetError() ) // ignore warnings
         return;
     if( rError.IsError() )
         nErrors++;
@@ -389,7 +389,7 @@ void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
 void RscError::FatalError( const ERRTYPE& rError, const RscId &aId,
                            const char * pMessage )
 {
-    if( ERR_USAGE != rError ){
+    if( ERR_USAGE != rError.GetError() ){
         nErrors++;
         ErrorFormat( rError, nullptr, aId );
         WriteError( rError, pMessage );

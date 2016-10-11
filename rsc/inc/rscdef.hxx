@@ -103,7 +103,6 @@ public:
             RscId& operator = ( const RscId& rRscId );
 
     static void SetNames( bool bSet = true );
-    operator sal_Int32() const;   // returns the number
     OString GetName()  const;   // returns the define
     bool    operator <  ( const RscId& rRscId ) const;
     bool    operator >  ( const RscId& rRscId ) const;

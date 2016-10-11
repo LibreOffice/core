@@ -172,7 +172,7 @@ bool DoClassHeader( RSCHEADER * pHeader, bool bMember )
     {
         if( S.IsEmpty() )
         {
-            if( (sal_Int32)aName1 < 256 )
+            if( aName1.GetNumber() < 256 )
                 pTC->pEH->Error( WRN_GLOBALID, pHeader->pClass, aName1 );
 
             if( aCopyInst.IsInst() )
@@ -197,7 +197,7 @@ bool DoClassHeader( RSCHEADER * pHeader, bool bMember )
             RSCINST aTmpI;
             ERRTYPE aError;
 
-            if( (sal_Int32)aName1 >= 256 && aName1.IsId() )
+            if( aName1.GetNumber() >= 256 && aName1.IsId() )
                 pTC->pEH->Error( WRN_LOCALID, pHeader->pClass, aName1 );
 
             aError = S.Top().pClass->GetElement( S.Top(), aName1,
@@ -209,7 +209,7 @@ bool DoClassHeader( RSCHEADER * pHeader, bool bMember )
             }
             else if( aError.IsError() )
             {
-                if( ERR_CONT_INVALIDTYPE == aError )
+                if( ERR_CONT_INVALIDTYPE == aError.GetError() )
                     pTC->pEH->Error( aError, S.Top().pClass, aName1,
                                      pHS->getString( pHeader->pClass->GetId() ).getStr() );
                 else

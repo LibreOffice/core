@@ -42,7 +42,7 @@ public:
     sal_uLong   GetFileKey() const { return lFileKey; };
     ObjNode*    Search( const RscId &rName ) const //< search the index in the b-tree
                     {
-                        return static_cast<ObjNode *>(IdNode::Search( rName ));
+                        return static_cast<ObjNode *>(IdNode::Search( rName.GetNumber() ));
                     }
     bool        Insert( ObjNode* pTN ) //< insert a new node in the b-tree
 
