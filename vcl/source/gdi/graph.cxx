@@ -33,7 +33,10 @@
 
 using namespace ::com::sun::star;
 
-static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
+namespace
+{
+
+void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
                              vcl::Font* pFont, const Bitmap* pBitmap, const BitmapEx* pBitmapEx,
                              const Point& rDestPt, const Size& rDestSize )
 {
@@ -177,6 +180,8 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
 
     pOutDev->Pop();
 }
+
+} // end anonymous namespace
 
 Graphic::Graphic()
     : mxImpGraphic(new ImpGraphic)
