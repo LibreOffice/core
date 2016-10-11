@@ -54,6 +54,8 @@
 
 #include <IDocumentContentOperations.hxx>
 
+#define ED_FORMULA          3
+
 SFX_IMPL_POS_CHILDWINDOW_WITHID( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
 
 SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
@@ -85,13 +87,13 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
         pView = pActiveView;
     pWrtShell = pView ? pView->GetWrtShellPtr() : nullptr;
 
-    InsertWindow( ED_POS, aPos.get(), ToolBoxItemBits::NONE, 0);
+    InsertWindow(ED_POS, aPos.get(), ToolBoxItemBits::NONE, 0);
     SetItemText(ED_POS, SW_RESSTR(STR_ACCESS_FORMULA_TYPE));
     aPos->SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TYPE));
     SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TOOLBAR));
     InsertSeparator ( 1 );
     InsertSeparator ();
-    InsertWindow( ED_FORMULA, aEdit.get());
+    InsertWindow(ED_FORMULA, aEdit.get());
     SetItemText(ED_FORMULA, SW_RESSTR(STR_ACCESS_FORMULA_TEXT));
     aEdit->SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TEXT));
     SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);

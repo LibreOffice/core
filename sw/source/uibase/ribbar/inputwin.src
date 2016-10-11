@@ -63,14 +63,8 @@ ToolBox RID_TBX_FORMULA
         SVLook = TRUE ;
         Center = TRUE ;
     };
-    Edit ED_FORMULA
-    {
-        Border = TRUE ;
-        TabStop = TRUE ;
-        Size = MAP_APPFONT ( 500 , 11 ) ;
-        SVLook = TRUE ;
-    };
 };
+
 Menu MN_CALC_POPUP
 {
     ItemList =
