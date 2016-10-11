@@ -65,6 +65,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( true, aDavType.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavType.getRedirectedURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavType.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavType.getRequestedTimeLife() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavType.getHttpResponseStatusCode() );
         CPPUNIT_ASSERT_EQUAL( true, aDavType.getHttpResponseStatusText().isEmpty() );
     }
@@ -83,6 +84,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLockAllowed() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getAllowedMethods().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getRequestedTimeLife() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
@@ -97,6 +99,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLockAllowed() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getAllowedMethods().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getRequestedTimeLife() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
@@ -111,6 +114,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLockAllowed() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getAllowedMethods().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getRequestedTimeLife() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
@@ -125,6 +129,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLockAllowed() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getAllowedMethods().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getRequestedTimeLife() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
@@ -142,6 +147,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLockAllowed() );
         CPPUNIT_ASSERT_EQUAL( aAllowedMethods, aDavOpt.getAllowedMethods() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getRequestedTimeLife() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
@@ -158,6 +164,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.isLockAllowed() );
         CPPUNIT_ASSERT_EQUAL( aAllowedMethods, aDavOpt.getAllowedMethods() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getRequestedTimeLife() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
@@ -173,12 +180,29 @@ namespace
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLockAllowed() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getAllowedMethods().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 12345678 ), aDavOpt.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getRequestedTimeLife() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
 
         aDavOpt.setStaleTime( 0 );
+
+        aDavOpt.setRequestedTimeLife( 300 );
+        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
+        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
+        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass3() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.isHeadAllowed() );
+        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLockAllowed() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getAllowedMethods().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 300 ), aDavOpt.getRequestedTimeLife() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
+
+        aDavOpt.setRequestedTimeLife( 0 );
 
         OUString aHTTPResponseStatusText = "522 Origin Connection Time-out";
         aDavOpt.setHttpResponseStatusCode( 522 );
@@ -191,6 +215,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( true , aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getRequestedTimeLife() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt16( 522 ), aDavOpt.getHttpResponseStatusCode() );
         CPPUNIT_ASSERT_EQUAL( aHTTPResponseStatusText, aDavOpt.getHttpResponseStatusText() );
 
@@ -207,6 +232,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLockAllowed() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getAllowedMethods().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getRequestedTimeLife() );
         CPPUNIT_ASSERT_EQUAL( aURL, aDavOpt.getURL() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
@@ -223,6 +249,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLockAllowed() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getAllowedMethods().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getRequestedTimeLife() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( aURL, aDavOpt.getRedirectedURL() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
@@ -239,6 +266,7 @@ namespace
         aDavOpt.setLocked();
         aDavOpt.setAllowedMethods( aAllowedMethods );
         aDavOpt.setStaleTime( 1234567 );
+        aDavOpt.setRequestedTimeLife( 300 );
         aDavOpt.setURL( aURL );
         aDavOpt.setRedirectedURL( aURL );
         aDavOpt.setHttpResponseStatusCode( 404 );
@@ -278,6 +306,11 @@ namespace
         aDavOpt.setStaleTime( 1234567 );
         CPPUNIT_ASSERT_EQUAL( false , aDavOpt == aDavOptTarget );
         aDavOpt.setStaleTime( 0 );
+        CPPUNIT_ASSERT_EQUAL( true , aDavOpt == aDavOptTarget );
+
+        aDavOpt.setRequestedTimeLife( 1234567 );
+        CPPUNIT_ASSERT_EQUAL( false , aDavOpt == aDavOptTarget );
+        aDavOpt.setRequestedTimeLife( 0 );
         CPPUNIT_ASSERT_EQUAL( true , aDavOpt == aDavOptTarget );
 
         aDavOpt.setHttpResponseStatusCode( 404 );
