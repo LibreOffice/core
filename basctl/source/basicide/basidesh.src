@@ -285,13 +285,6 @@ String RID_STR_SEARCHALLMODULES
 {
     Text [ en-US ] = "Do you want to replace the text in all active modules?" ;
 };
-Edit RID_EDT_WATCHEDIT
-{
-    HelpId = HID_BASICIDE_WATCHWINDOW_EDIT ;
-    Border = TRUE ;
-    SvLook = TRUE ;
-    Size = MAP_APPFONT ( 80 , 12 ) ;
-};
 ImageButton RID_IMGBTN_REMOVEWATCH
 {
     HelpId = HID_BASICIDE_REMOVEWATCH ;

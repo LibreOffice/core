@@ -1559,16 +1559,19 @@ namespace
     const sal_uInt16 ITEM_ID_TYPE = 3;
 }
 
-WatchWindow::WatchWindow (Layout* pParent) :
-    DockingWindow(pParent),
-    aWatchStr( IDEResId( RID_STR_REMOVEWATCH ) ),
-    aXEdit( VclPtr<ExtendedEdit>::Create(this, IDEResId( RID_EDT_WATCHEDIT )) ),
-    aRemoveWatchButton( VclPtr<ImageButton>::Create(this, IDEResId( RID_IMGBTN_REMOVEWATCH )) ),
-    aTreeListBox( VclPtr<WatchTreeListBox>::Create(this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS | WB_HASLINES | WB_HSCROLL | WB_TABSTOP
-                                  | WB_HASLINESATROOT | WB_HASBUTTONSATROOT) ),
-    aHeaderBar( VclPtr<HeaderBar>::Create( this, WB_BUTTONSTYLE | WB_BORDER ) )
+WatchWindow::WatchWindow (Layout* pParent)
+    : DockingWindow(pParent)
+    , aWatchStr(IDEResId( RID_STR_REMOVEWATCH))
+    , aXEdit(VclPtr<ExtendedEdit>::Create(this, WB_BORDER | WB_3DLOOK))
+    , aRemoveWatchButton(VclPtr<ImageButton>::Create(this, IDEResId(RID_IMGBTN_REMOVEWATCH)))
+    , aTreeListBox(VclPtr<WatchTreeListBox>::Create(this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS |
+                                                          WB_HASLINES | WB_HSCROLL | WB_TABSTOP |
+                                                          WB_HASLINESATROOT | WB_HASBUTTONSATROOT))
+    , aHeaderBar(VclPtr<HeaderBar>::Create(this, WB_BUTTONSTYLE | WB_BORDER))
 {
     aXEdit->SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
+    aXEdit->SetHelpId(HID_BASICIDE_WATCHWINDOW_EDIT);
+    aXEdit->SetSizePixel(aXEdit->LogicToPixel(Size(80, 12), MapUnit::MapAppFont));
     aTreeListBox->SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
 
     long nTextLen = GetTextWidth( aWatchStr ) + DWBORDER + 3;
