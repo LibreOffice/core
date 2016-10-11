@@ -674,7 +674,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
                 std::shared_ptr<DrawViewShell> pDrawViewShell(std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
                 if (pDrawViewShell.get() != nullptr)
                 {
-                    pDrawViewShell->ChangeEditMode(pPage->IsMasterPage() ? EM_MASTERPAGE : EM_PAGE, false);
+                    pDrawViewShell->ChangeEditMode(pPage->IsMasterPage() ? EditMode::MasterPage : EditMode::Page, false);
                     pDrawViewShell->SwitchPage((pPage->GetPageNum() - 1) >> 1);
 
                     SfxDispatcher* pDispatcher = getDispatcher( mrBase );

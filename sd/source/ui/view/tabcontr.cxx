@@ -182,7 +182,7 @@ sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 
         if( bInternalMove )
         {
-            if( rEvt.mbLeaving || ( pDrViewSh->GetEditMode() == EM_MASTERPAGE ) )
+            if( rEvt.mbLeaving || ( pDrViewSh->GetEditMode() == EditMode::MasterPage ) )
                 HideDropPos();
             else
             {

@@ -517,7 +517,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             {
                                 SdPage* pPage = mpViewShell->GetActualPage();
 
-                                if(pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
+                                if(pDrawViewShell->GetEditMode() == EditMode::MasterPage)
                                 {
                                     pPage = static_cast<SdPage*>((&(pPage->TRG_GetMasterPage())));
                                 }

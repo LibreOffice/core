@@ -133,7 +133,7 @@ void FuPage::DoExecute( SfxRequest& )
 
     if( mpDrawViewShell )
     {
-        mbMasterPage = mpDrawViewShell->GetEditMode() == EM_MASTERPAGE;
+        mbMasterPage = mpDrawViewShell->GetEditMode() == EditMode::MasterPage;
         // we don't really want to format page background with SID_ATTR_PAGE[_SIZE] slots
         mbDisplayBackgroundTabPage = ( mpDrawViewShell->GetPageKind() == PK_STANDARD) &&
                                       ( nSlotId != SID_ATTR_PAGE_SIZE) && ( nSlotId != SID_ATTR_PAGE );

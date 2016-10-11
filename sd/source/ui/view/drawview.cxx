@@ -134,7 +134,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
     bool bOk = false;
 
     // is there a masterpage edit?
-    if ( mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE )
+    if ( mpDrawViewShell && mpDrawViewShell->GetEditMode() == EditMode::MasterPage )
     {
         SfxStyleSheetBasePool* pStShPool = mrDoc.GetStyleSheetPool();
         SdPage& rPage = *mpDrawViewShell->getCurrentPage();
@@ -430,7 +430,7 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
     bool bResult = true;
 
     // is there a masterpage edit?
-    if (mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE)
+    if (mpDrawViewShell && mpDrawViewShell->GetEditMode() == EditMode::MasterPage)
     {
         if (IsPresObjSelected(false))
         {

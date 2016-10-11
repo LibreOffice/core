@@ -2346,7 +2346,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
                   ::sd::DrawViewShell*>(pViewSh);
 
             EditMode eMode = pDrawViewSh->GetEditMode();
-            if( eMode == EM_PAGE )
+            if( eMode == EditMode::Page )
             {
                 bool bLayer = pDrawViewSh->IsLayerModeActive();
 
@@ -3063,7 +3063,7 @@ void SAL_CALL SdMasterPage::setName( const OUString& rName )
                   static_cast< ::sd::DrawViewShell*>(pViewSh);
 
             EditMode eMode = pDrawViewSh->GetEditMode();
-            if( eMode == EM_MASTERPAGE )
+            if( eMode == EditMode::MasterPage )
             {
                 bool bLayer = pDrawViewSh->IsLayerModeActive();
 

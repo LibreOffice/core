@@ -108,10 +108,10 @@ enum PageKind
     PK_HANDOUT
 };
 
-enum EditMode
+enum class EditMode
 {
-    EM_PAGE,
-    EM_MASTERPAGE
+    Page,
+    MasterPage
 };
 
 enum class DocumentType

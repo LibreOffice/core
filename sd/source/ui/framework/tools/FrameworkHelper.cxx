@@ -620,11 +620,11 @@ void FrameworkHelper::HandleModeChangeSlot (
         }
 
         // Compute requested mode
-        EditMode eEMode = EM_PAGE;
+        EditMode eEMode = EditMode::Page;
         if (nSlotId == SID_SLIDE_MASTER_MODE
             || nSlotId == SID_NOTES_MASTER_MODE
             || nSlotId == SID_HANDOUT_MASTER_MODE)
-            eEMode = EM_MASTERPAGE;
+            eEMode = EditMode::MasterPage;
         // Ensure we have the expected view shell
         if (!(xView.is() && xView->getResourceId()->getResourceURL().equals(sRequestedView)))
 

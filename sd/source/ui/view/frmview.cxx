@@ -210,11 +210,11 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         mePageKindOnLoad = PK_STANDARD;
         mnSelectedPage = 0;
         mnSelectedPageOnLoad = 0;
-        meEditMode = EM_PAGE;
-        // meStandardEditMode = EM_PAGE;
-        // meNotesEditMode = EM_PAGE;
-        // meHandoutEditMode = EM_MASTERPAGE;
-        SetViewShEditModeOnLoad(EM_PAGE);
+        meEditMode = EditMode::Page;
+        // meStandardEditMode = EditMode::Page;
+        // meNotesEditMode = EditMode::Page;
+        // meHandoutEditMode = EditMode::MasterPage;
+        SetViewShEditModeOnLoad(EditMode::Page);
         mbLayerMode = false;
         SetEliminatePolyPoints(false);
         mbDoubleClickTextEdit = false;
@@ -877,7 +877,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
             }
         }
 
-        SetViewShEditModeOnLoad(EM_PAGE);
+        SetViewShEditModeOnLoad(EditMode::Page);
 
         const Fraction aSnapGridWidthX( aSnapGridWidthXNum, aSnapGridWidthXDom );
         const Fraction aSnapGridWidthY( aSnapGridWidthYNum, aSnapGridWidthYDom );

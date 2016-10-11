@@ -692,7 +692,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_ANIMATION_OBJECTS);
         rSet.DisableItem(SID_ANIMATION_EFFECTS);
 
-        if (meEditMode == EM_MASTERPAGE)
+        if (meEditMode == EditMode::MasterPage)
             rSet.DisableItem(SID_MODIFYPAGE);
 
         rSet.DisableItem(SID_SELECT_BACKGROUND);
@@ -721,7 +721,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
     else
     {
-        if (meEditMode == EM_MASTERPAGE)
+        if (meEditMode == EditMode::MasterPage)
         {
             rSet.DisableItem(SID_INSERTPAGE);
             rSet.DisableItem(SID_DUPLICATE_PAGE);
@@ -741,7 +741,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_RENAMELAYER );
     }
 
-    if (meEditMode == EM_PAGE)
+    if (meEditMode == EditMode::Page)
     {
         /**********************************************************************
         * page mode
@@ -795,7 +795,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         || SfxItemState::DEFAULT == rSet.GetItemState( SID_DELETE_MASTER_PAGE ) )
     {
         if (maTabControl->GetPageCount() == 1 ||
-            meEditMode == EM_MASTERPAGE     ||
+            meEditMode == EditMode::MasterPage     ||
             mePageKind == PK_NOTES          ||
             mePageKind == PK_HANDOUT        ||
             (GetShellType()!=ST_DRAW&&IsLayerModeActive()))
@@ -1545,7 +1545,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             SfxItemSet aMergedAttr(GetDoc()->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0);
             SdStyleSheet* pStyleSheet = pPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
-            MergePageBackgroundFilling(pPage, pStyleSheet, meEditMode == EM_MASTERPAGE, aMergedAttr);
+            MergePageBackgroundFilling(pPage, pStyleSheet, meEditMode == EditMode::MasterPage, aMergedAttr);
             if (drawing::FillStyle_BITMAP == static_cast<const XFillStyleItem&>(aMergedAttr.Get(XATTR_FILLSTYLE)).GetValue())
             {
                 bDisableSaveBackground = false;

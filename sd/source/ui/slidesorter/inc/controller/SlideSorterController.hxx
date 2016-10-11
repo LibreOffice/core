@@ -245,11 +245,11 @@ private:
     bool mbPostModelChangePending;
 
     /** This array stores the indices of the  selected page descriptors at
-        the time when the edit mode is switched to EM_MASTERPAGE.  With this
-        we can restore the selection when switching back to EM_PAGE mode.
+        the time when the edit mode is switched to EditMode::MasterPage.  With this
+        we can restore the selection when switching back to EditMode::Page mode.
     */
     ::std::vector<SdPage*> maSelectionBeforeSwitch;
-    /// The current page before the edit mode is switched to EM_MASTERPAGE.
+    /// The current page before the edit mode is switched to EditMode::MasterPage.
     int mnCurrentPageBeforeSwitch;
 
     /** The master page to select after the edit mode is changed.  This

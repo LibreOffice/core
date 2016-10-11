@@ -94,7 +94,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     if (DrawViewShell *pShell = dynamic_cast<DrawViewShell*>(mpViewShell))
     {
         EditMode eEditMode = pShell->GetEditMode();
-        if (eEditMode == EM_MASTERPAGE)
+        if (eEditMode == EditMode::MasterPage)
             bOnMaster = true;
     }
 

@@ -226,7 +226,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     // to set it in order to resync frame view and this view.
     mpFrameView->SetPageKind(eInitialPageKind);
     mePageKind = eInitialPageKind;
-    meEditMode = EM_PAGE;
+    meEditMode = EditMode::Page;
     DocumentType eDocType = GetDoc()->GetDocumentType(); // RTTI does not work here
     switch (mePageKind)
     {
@@ -265,13 +265,13 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     /* In order to set the correct EditMode of the FrameView, we select another
        one (small trick).  */
-    if (mpFrameView->GetViewShEditMode(/*mePageKind*/) == EM_PAGE)
+    if (mpFrameView->GetViewShEditMode(/*mePageKind*/) == EditMode::Page)
     {
-        meEditMode = EM_MASTERPAGE;
+        meEditMode = EditMode::MasterPage;
     }
     else
     {
-        meEditMode = EM_PAGE;
+        meEditMode = EditMode::Page;
     }
 
     // Use configuration of FrameView
@@ -775,7 +775,7 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
             eViewType = svx::sidebar::SelectionAnalyzer::ViewType::Notes;
             break;
         case PK_STANDARD:
-            if (meEditMode == EM_MASTERPAGE)
+            if (meEditMode == EditMode::MasterPage)
                 eViewType = svx::sidebar::SelectionAnalyzer::ViewType::Master;
             else
                 eViewType = svx::sidebar::SelectionAnalyzer::ViewType::Standard;

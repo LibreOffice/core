@@ -1236,7 +1236,7 @@ bool ImplSdPPTImport::Import()
             {
                 sal_uInt16  nSelectedPage = 0;
                 PageKind    ePageKind = PK_STANDARD;
-                EditMode    eEditMode = EM_PAGE;
+                EditMode    eEditMode = EditMode::Page;
 
                 switch ( aUserEditAtom.eLastViewType )
                 {
@@ -1260,11 +1260,11 @@ bool ImplSdPPTImport::Import()
                     case 2 :    // master
                     {
                         ePageKind = PK_STANDARD;
-                        eEditMode = EM_MASTERPAGE;
+                        eEditMode = EditMode::MasterPage;
                     }
                     break;
                     case 5 :    // notes master
-                        eEditMode = EM_MASTERPAGE;
+                        eEditMode = EditMode::MasterPage;
                         SAL_FALLTHROUGH;
                     case 3 :    // notes
                         ePageKind = PK_NOTES;

@@ -162,7 +162,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, OutlinerMode nMode )
       mnText(0),
       mpParaObj(nullptr),
       meStartViewMode(PK_STANDARD),
-      meStartEditMode(EM_PAGE),
+      meStartEditMode(EditMode::Page),
       mnStartPageIndex((sal_uInt16)-1),
       mpStartEditedObject(nullptr),
       maStartSelection(),
@@ -881,14 +881,14 @@ void Outliner::DetectChange()
 
     // Detect change of page count.  Restart search at first/last page in
     // that case.
-    else if (aPosition.meEditMode == EM_PAGE
+    else if (aPosition.meEditMode == EditMode::Page
         && mpDrawDocument->GetSdPageCount(aPosition.mePageKind) != mnPageCount)
     {
         // The number of pages has changed.
         mnPageCount = mpDrawDocument->GetSdPageCount(aPosition.mePageKind);
         maObjectIterator = ::sd::outliner::OutlinerContainer(this).current();
     }
-    else if (aPosition.meEditMode == EM_MASTERPAGE
+    else if (aPosition.meEditMode == EditMode::MasterPage
         && mpDrawDocument->GetSdPageCount(aPosition.mePageKind) != mnPageCount)
     {
         // The number of master pages has changed.
@@ -1722,7 +1722,7 @@ sal_uInt16 Outliner::ShowModalMessageBox (Dialog& rMessageBox)
 //===== Outliner::Implementation ==============================================
 
 Outliner::Implementation::Implementation()
-    : meOriginalEditMode(EM_PAGE),
+    : meOriginalEditMode(EditMode::Page),
       mbOwnOutlineView(false),
       mpOutlineView(nullptr)
 {

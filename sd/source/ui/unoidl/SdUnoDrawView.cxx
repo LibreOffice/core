@@ -64,15 +64,15 @@ SdUnoDrawView::~SdUnoDrawView() throw()
 
 bool SdUnoDrawView::getMasterPageMode() const throw()
 {
-    return (mrDrawViewShell.GetEditMode() == EM_MASTERPAGE);
+    return (mrDrawViewShell.GetEditMode() == EditMode::MasterPage);
 }
 
 void SdUnoDrawView::setMasterPageMode (bool bMasterPageMode) throw()
 {
-    if ((mrDrawViewShell.GetEditMode() == EM_MASTERPAGE) != bMasterPageMode)
+    if ((mrDrawViewShell.GetEditMode() == EditMode::MasterPage) != bMasterPageMode)
     {
         mrDrawViewShell.ChangeEditMode (
-            bMasterPageMode ? EM_MASTERPAGE : EM_PAGE,
+            bMasterPageMode ? EditMode::MasterPage : EditMode::Page,
             mrDrawViewShell.IsLayerModeActive());
     }
 }

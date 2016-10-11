@@ -1092,10 +1092,10 @@ void DrawDocShell::setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage)
 {
     // Set the edit mode to either the normal edit mode or the
     // master page mode.
-    EditMode eNewEditMode = EM_PAGE;
+    EditMode eNewEditMode = EditMode::Page;
     if (isMasterPage)
     {
-        eNewEditMode = EM_MASTERPAGE;
+        eNewEditMode = EditMode::MasterPage;
     }
 
     if (eNewEditMode != pDrawViewShell->GetEditMode())

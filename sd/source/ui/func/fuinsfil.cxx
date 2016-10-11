@@ -466,7 +466,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         else
         {
             // is it a master page?
-            if (static_cast<DrawViewShell*>(mpViewShell)->GetEditMode() == EM_MASTERPAGE &&
+            if (static_cast<DrawViewShell*>(mpViewShell)->GetEditMode() == EditMode::MasterPage &&
                 !pPage->IsMasterPage())
             {
                 pPage = static_cast<SdPage*>(&(pPage->TRG_GetMasterPage()));

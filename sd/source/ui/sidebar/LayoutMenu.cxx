@@ -400,7 +400,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             {
                 DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
                 if (pDrawViewShell != nullptr)
-                    if (pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
+                    if (pDrawViewShell->GetEditMode() == EditMode::MasterPage)
                         bMasterPageMode = true;
                 break;
             }

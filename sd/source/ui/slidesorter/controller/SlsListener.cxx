@@ -484,7 +484,7 @@ void SAL_CALL Listener::propertyChange (
         bool bIsMasterPageMode = false;
         rEvent.NewValue >>= bIsMasterPageMode;
         mrController.ChangeEditMode (
-            bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
+            bIsMasterPageMode ? EditMode::MasterPage : EditMode::Page);
     }
 }
 
@@ -547,7 +547,7 @@ void Listener::UpdateEditMode()
         }
     }
     mrController.ChangeEditMode (
-        bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
+        bIsMasterPageMode ? EditMode::MasterPage : EditMode::Page);
 }
 
 void Listener::HandleModelChange (const SdrPage* pPage)

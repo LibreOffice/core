@@ -1002,7 +1002,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             // turn on default layer of MasterPage
             mpDrawView->SetActiveLayer( SD_RESSTR(STR_LAYER_BCKGRNDOBJ) );
 
-            ChangeEditMode(EM_MASTERPAGE, mbIsLayerModeActive);
+            ChangeEditMode(EditMode::MasterPage, mbIsLayerModeActive);
 
             if(HasCurrentFunction(SID_BEZIER_EDIT))
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
@@ -1026,7 +1026,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             // crash.  This seems to be some bug in the edit mode switching
             // and page switching methods.
             SwitchPage (0);
-            ChangeEditMode(EM_PAGE, IsLayerModeActive());
+            ChangeEditMode(EditMode::Page, IsLayerModeActive());
             Broadcast (
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
 

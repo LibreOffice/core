@@ -161,7 +161,7 @@ void SlideBackground::Initialize()
     {
         FrameView *pFrameView = pMainViewShell->GetFrameView();
 
-        if ( pFrameView->GetViewShEditMode() ==  EM_PAGE )
+        if ( pFrameView->GetViewShEditMode() ==  EditMode::Page )
         {
             DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
             SdPage* mpPage = pDrawViewShell->getCurrentPage();
@@ -374,7 +374,7 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                     DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
                     EditMode eMode = pDrawViewShell->GetEditMode();
 
-                    if ( eMode == EM_MASTERPAGE)
+                    if ( eMode == EditMode::MasterPage)
                     {
                         if( IsImpress() )
                         {
@@ -388,7 +388,7 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                         mpDspMasterBackground->Disable();
                         mpDspMasterObjects->Disable();
                     }
-                    else // EM_PAGE
+                    else // EditMode::Page
                     {
                         if( IsImpress() )
                         {

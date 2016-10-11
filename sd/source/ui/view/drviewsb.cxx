@@ -74,7 +74,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
     SdPage* pPageToRename = nullptr;
     PageKind ePageKind = GetPageKind();
 
-    if( GetEditMode() == EM_PAGE )
+    if( GetEditMode() == EditMode::Page )
     {
         pPageToRename = GetDoc()->GetSdPage( nPageId - 1, ePageKind );
 

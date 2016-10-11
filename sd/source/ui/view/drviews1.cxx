@@ -330,7 +330,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
         sal_uInt16 nActualPageNum = 0;
 
-        GetViewShellBase().GetDrawController().FireChangeEditMode (eEMode == EM_MASTERPAGE);
+        GetViewShellBase().GetDrawController().FireChangeEditMode (eEMode == EditMode::MasterPage);
         GetViewShellBase().GetDrawController().FireChangeLayerMode (bIsLayerModeActive);
 
         if ( mpDrawView->IsTextEdit() )
@@ -346,7 +346,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         if (mePageKind == PK_HANDOUT)
         {
             // at handouts only allow MasterPage
-            eEMode = EM_MASTERPAGE;
+            eEMode = EditMode::MasterPage;
         }
 
         GetViewShellBase().GetDrawController().BroadcastContextChange();
@@ -363,9 +363,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         // Determine whether to show the master view toolbar.  The master
         // page mode has to be active and the shell must not be a handout
         // view.
-        bool bShowMasterViewToolbar (meEditMode == EM_MASTERPAGE
+        bool bShowMasterViewToolbar (meEditMode == EditMode::MasterPage
              && GetShellType() != ViewShell::ST_HANDOUT);
-        bool bShowPresentationToolbar (meEditMode != EM_MASTERPAGE
+        bool bShowPresentationToolbar (meEditMode != EditMode::MasterPage
              && GetShellType() != ViewShell::ST_HANDOUT
              && GetShellType() != ViewShell::ST_DRAW);
 
@@ -385,7 +385,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         if (comphelper::LibreOfficeKit::isActive())
             aFillColor = COL_TRANSPARENT;
 
-        if (meEditMode == EM_PAGE)
+        if (meEditMode == EditMode::Page)
         {
             /******************************************************************
             * PAGEMODE
@@ -484,7 +484,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             maTabControl->Show();
             // Set the tab control only for draw pages.  For master page
             // this has been done already above.
-            if (meEditMode == EM_PAGE)
+            if (meEditMode == EditMode::Page)
                 maTabControl->SetCurPageId (nActualPageNum + 1);
         }
 
@@ -629,7 +629,7 @@ IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab, void )
 /// inherited from sd::ViewShell
 SdPage* DrawViewShell::getCurrentPage() const
 {
-    const sal_Int32 nPageCount = (meEditMode == EM_PAGE)?
+    const sal_Int32 nPageCount = (meEditMode == EditMode::Page)?
                                     GetDoc()->GetSdPageCount(mePageKind):
                                     GetDoc()->GetMasterSdPageCount(mePageKind);
 
@@ -638,11 +638,11 @@ SdPage* DrawViewShell::getCurrentPage() const
     if( (nPageCount < 0) || (nCurrentPage>=nPageCount) )
         nCurrentPage = 0; // play safe here
 
-    if (meEditMode == EM_PAGE)
+    if (meEditMode == EditMode::Page)
     {
         return GetDoc()->GetSdPage((sal_uInt16)nCurrentPage, mePageKind);
     }
-    else // EM_MASTERPAGE
+    else // EditMode::MasterPage
     {
         return GetDoc()->GetMasterSdPage((sal_uInt16)nCurrentPage, mePageKind);
     }
@@ -658,13 +658,13 @@ void DrawViewShell::ResetActualPage()
         return;
 
     sal_uInt16 nCurrentPage = maTabControl->GetCurPageId() - 1;
-    sal_uInt16 nPageCount   = (meEditMode == EM_PAGE)?GetDoc()->GetSdPageCount(mePageKind):GetDoc()->GetMasterSdPageCount(mePageKind);
+    sal_uInt16 nPageCount   = (meEditMode == EditMode::Page)?GetDoc()->GetSdPageCount(mePageKind):GetDoc()->GetMasterSdPageCount(mePageKind);
     if (nPageCount > 0)
         nCurrentPage = std::min((sal_uInt16)(nPageCount - 1), nCurrentPage);
     else
         nCurrentPage = 0;
 
-    if (meEditMode == EM_PAGE)
+    if (meEditMode == EditMode::Page)
     {
 
         // Update for TabControl
@@ -684,7 +684,7 @@ void DrawViewShell::ResetActualPage()
 
         maTabControl->SetCurPageId(nCurrentPage + 1);
     }
-    else // EM_MASTERPAGE
+    else // EditMode::MasterPage
     {
         SdPage* pActualPage = GetDoc()->GetMasterSdPage(nCurrentPage, mePageKind);
         maTabControl->Clear();
@@ -808,7 +808,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
     {
         // Make sure that the given page index points to an existing page.  Move
         // the index into the valid range if necessary.
-        sal_uInt16 nPageCount = (meEditMode == EM_PAGE)
+        sal_uInt16 nPageCount = (meEditMode == EditMode::Page)
             ? GetDoc()->GetSdPageCount(mePageKind)
             : GetDoc()->GetMasterSdPageCount(mePageKind);
         if (nSelectedPage >= nPageCount)
@@ -825,7 +825,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         {
             SdPage* pNewPage = nullptr;
 
-            if (meEditMode == EM_MASTERPAGE)
+            if (meEditMode == EditMode::MasterPage)
             {
                 if( GetDoc()->GetMasterSdPageCount(mePageKind) > nSelectedPage )
                     pNewPage = GetDoc()->GetMasterSdPage(nSelectedPage, mePageKind);
@@ -874,7 +874,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
         mpActualPage = nullptr;
 
-        if (meEditMode == EM_PAGE)
+        if (meEditMode == EditMode::Page)
         {
             mpActualPage = GetDoc()->GetSdPage(nSelectedPage, mePageKind);
         }
@@ -943,7 +943,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             VisAreaChanged(Rectangle(Point(), Size(1, 1)));
         }
 
-        if (meEditMode == EM_PAGE)
+        if (meEditMode == EditMode::Page)
         {
             /**********************************************************************
             * PAGEMODE
@@ -1175,7 +1175,7 @@ void DrawViewShell::ResetActualLayer()
 
             if ( aName != aBackgroundLayer )
             {
-                if (meEditMode == EM_MASTERPAGE)
+                if (meEditMode == EditMode::MasterPage)
                 {
                     // don't show page layer onto the masterpage
                     if (aName != aLayoutLayer   &&
@@ -1225,7 +1225,7 @@ void DrawViewShell::ResetActualLayer()
             }
             else
             {
-                nActiveLayer = ( meEditMode == EM_MASTERPAGE ) ? 2 : 0;
+                nActiveLayer = ( meEditMode == EditMode::MasterPage ) ? 2 : 0;
             }
 
             mpDrawView->SetActiveLayer( pLayerBar->GetPageText(nActiveLayer + 1) );

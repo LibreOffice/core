@@ -541,7 +541,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     if (SfxItemState::DEFAULT == rSet.GetItemState(SID_EXPAND_PAGE))
     {
         bool bDisable = true;
-        if (eEditMode == EM_PAGE)
+        if (eEditMode == EditMode::Page)
         {
             // At least one of the selected pages has to contain an outline
             // presentation objects in order to enable the expand page menu
@@ -584,7 +584,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     if (SfxItemState::DEFAULT == rSet.GetItemState(SID_SUMMARY_PAGE))
     {
         bool bDisable = true;
-        if (eEditMode == EM_PAGE)
+        if (eEditMode == EditMode::Page)
         {
             // At least one of the selected pages has to contain a title
             // presentation objects in order to enable the summary page menu
@@ -674,14 +674,14 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
         }
     }
 
-    if (eEditMode == EM_MASTERPAGE)
+    if (eEditMode == EditMode::MasterPage)
     {
         rSet.DisableItem(SID_ASSIGN_LAYOUT);
         rSet.DisableItem(SID_INSERTPAGE);
     }
 
     // Disable some slots when in master page mode.
-    if (eEditMode == EM_MASTERPAGE)
+    if (eEditMode == EditMode::MasterPage)
     {
         if (rSet.GetItemState(SID_INSERTPAGE) == SfxItemState::DEFAULT)
             rSet.DisableItem(SID_INSERTPAGE);
@@ -743,7 +743,7 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
         || rSet.GetItemState(SID_PASTE_SPECIAL)  == SfxItemState::DEFAULT
         || rSet.GetItemState(SID_CUT)  == SfxItemState::DEFAULT)
     {
-        if (mrSlideSorter.GetModel().GetEditMode() == EM_MASTERPAGE)
+        if (mrSlideSorter.GetModel().GetEditMode() == EditMode::MasterPage)
         {
             if (rSet.GetItemState(SID_CUT) == SfxItemState::DEFAULT)
                 rSet.DisableItem(SID_CUT);
@@ -940,7 +940,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
 
     ::svl::IUndoManager* pManager = pDocument->GetDocSh()->GetUndoManager();
 
-    if( mrSlideSorter.GetModel().GetEditMode() == EM_PAGE )
+    if( mrSlideSorter.GetModel().GetEditMode() == EditMode::Page )
     {
         model::SharedPageDescriptor pDescriptor (
             mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
@@ -1027,7 +1027,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
     PageSelector::BroadcastLock aBroadcastLock (mrSlideSorter);
 
     SdPage* pNewPage = nullptr;
-    if (mrSlideSorter.GetModel().GetEditMode() == EM_PAGE)
+    if (mrSlideSorter.GetModel().GetEditMode() == EditMode::Page)
     {
         SlideSorterViewShell* pShell = dynamic_cast<SlideSorterViewShell*>(
             mrSlideSorter.GetViewShell());

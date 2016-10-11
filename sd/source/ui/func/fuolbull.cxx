@@ -158,7 +158,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     const DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
     //Init bullet level in "Customize" tab page in bullet dialog in master page view
-    const bool bInMasterView = pDrawViewShell && pDrawViewShell->GetEditMode() == EM_MASTERPAGE;
+    const bool bInMasterView = pDrawViewShell && pDrawViewShell->GetEditMode() == EditMode::MasterPage;
     if ( bInMasterView )
     {
         SdrObject* pObj = mpView->GetTextEditObject();

@@ -256,7 +256,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                 //fdo#78151 it doesn't make sense to promote or demote outline levels in master view.
                 const DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
-                const bool bInMasterView = pDrawViewShell && pDrawViewShell->GetEditMode() == EM_MASTERPAGE;
+                const bool bInMasterView = pDrawViewShell && pDrawViewShell->GetEditMode() == EditMode::MasterPage;
 
                 if (!bInMasterView)
                 {

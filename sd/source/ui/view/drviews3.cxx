@@ -159,7 +159,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                         rReq.Ignore ();
                         break;
                     }
-                    else if (meEditMode != EM_MASTERPAGE)
+                    else if (meEditMode != EditMode::MasterPage)
                     {
                         if (! CHECK_RANGE (0, nWhatPage, GetDoc()->GetSdPageCount((PageKind)nWhatKind)))
                         {
@@ -255,7 +255,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             // turn on default layer of page
             mpDrawView->SetActiveLayer(SD_RESSTR(STR_LAYER_LAYOUT));
 
-            ChangeEditMode(EM_PAGE, mbIsLayerModeActive);
+            ChangeEditMode(EditMode::Page, mbIsLayerModeActive);
 
             Invalidate();
             rReq.Done ();
@@ -265,25 +265,23 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
         case SID_LAYERMODE:  // BASIC
         {
-            const SfxItemSet *pArgs = rReq.GetArgs ();
+            const SfxItemSet *pArgs = rReq.GetArgs();
 
-            if ( pArgs && pArgs->Count () == 2)
+            if (pArgs && pArgs->Count() == 2)
             {
-                const SfxBoolItem* pWhatLayerMode = rReq.GetArg<SfxBoolItem>(ID_VAL_ISACTIVE);
                 const SfxUInt32Item* pWhatLayer = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATLAYER);
-
-                sal_Int32 nWhatLayer = (sal_Int32)pWhatLayer->GetValue ();
-                if (CHECK_RANGE (EM_PAGE, nWhatLayer, EM_MASTERPAGE))
+                EditMode nWhatLayer = (EditMode)pWhatLayer->GetValue();
+                if (nWhatLayer == EditMode::Page || nWhatLayer == EditMode::MasterPage)
                 {
-                    mbIsLayerModeActive = pWhatLayerMode->GetValue ();
-                    meEditMode = (EditMode) nWhatLayer;
+                    mbIsLayerModeActive = rReq.GetArg<SfxBoolItem>(ID_VAL_ISACTIVE)->GetValue();
+                    meEditMode = nWhatLayer;
                 }
             }
 
             ChangeEditMode(meEditMode, !mbIsLayerModeActive);
 
             Invalidate();
-            rReq.Done ();
+            rReq.Done();
 
             break;
         }
@@ -312,7 +310,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_MASTER_LAYOUTS:
         {
             SdPage* pPage = GetActualPage();
-            if (meEditMode == EM_MASTERPAGE)
+            if (meEditMode == EditMode::MasterPage)
                 // Use the master page of the current page.
                 pPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
 

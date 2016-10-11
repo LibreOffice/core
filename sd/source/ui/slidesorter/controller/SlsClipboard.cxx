@@ -172,7 +172,7 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
     switch (rRequest.GetSlot())
     {
         case SID_CUT:
-            if (mrSlideSorter.GetModel().GetEditMode() != EM_MASTERPAGE)
+            if (mrSlideSorter.GetModel().GetEditMode() != EditMode::MasterPage)
             {
                 if(xFunc.is())
                     xFunc->DoCut();
@@ -183,7 +183,7 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
             break;
 
         case SID_COPY:
-            if (mrSlideSorter.GetModel().GetEditMode() != EM_MASTERPAGE)
+            if (mrSlideSorter.GetModel().GetEditMode() != EditMode::MasterPage)
             {
                 if(xFunc.is())
                     xFunc->DoCopy();
@@ -197,7 +197,7 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
             // Prevent redraws while inserting pages from the clipboard
             // because the intermediate inconsistent state might lead to
             // a crash.
-            if (mrSlideSorter.GetModel().GetEditMode() != EM_MASTERPAGE)
+            if (mrSlideSorter.GetModel().GetEditMode() != EditMode::MasterPage)
             {
                 view::SlideSorterView::DrawLock aLock (mrSlideSorter);
                 SelectionObserver::Context aContext (mrSlideSorter);
@@ -847,7 +847,7 @@ Clipboard::DropType Clipboard::IsDropAccepted (DropTargetHelper&) const
 
     if (pDragTransferable->IsPageTransferable())
     {
-        if (mrSlideSorter.GetModel().GetEditMode() != EM_MASTERPAGE)
+        if (mrSlideSorter.GetModel().GetEditMode() != EditMode::MasterPage)
             return DT_PAGE;
         else
             return DT_NONE;

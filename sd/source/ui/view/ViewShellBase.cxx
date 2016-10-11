@@ -1336,11 +1336,11 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         case SID_DRAWINGMODE:
                         case SID_NORMAL_MULTI_PANE_GUI:
                         case SID_NOTES_MODE:
-                            bState = pShell->GetEditMode() == EM_PAGE;
+                            bState = pShell->GetEditMode() == EditMode::Page;
                             break;
                         case SID_SLIDE_MASTER_MODE:
                         case SID_NOTES_MASTER_MODE:
-                            bState = pShell->GetEditMode() == EM_MASTERPAGE;
+                            bState = pShell->GetEditMode() == EditMode::MasterPage;
                             break;
                     }
                 }
@@ -1386,7 +1386,7 @@ void CurrentPageSetter::operator() (bool)
             // Get the current page either from the DrawPagesSupplier or the
             // MasterPagesSupplier.
             Any aPage;
-            if (pFrameView->GetViewShEditModeOnLoad() == EM_PAGE)
+            if (pFrameView->GetViewShEditModeOnLoad() == EditMode::Page)
             {
                 Reference<drawing::XDrawPagesSupplier> xPagesSupplier (
                     mrBase.GetController()->getModel(), UNO_QUERY_THROW);

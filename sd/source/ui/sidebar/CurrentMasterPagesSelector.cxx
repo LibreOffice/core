@@ -241,7 +241,7 @@ void CurrentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
     std::shared_ptr<DrawViewShell> pDrawViewShell (
         std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
     if (pDrawViewShell
-        && pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
+        && pDrawViewShell->GetEditMode() == EditMode::MasterPage)
     {
         if (rMenu.GetItemPos(SID_TP_EDIT_MASTER) != MENU_ITEM_NOTFOUND)
             rMenu.EnableItem(SID_TP_EDIT_MASTER, false);
