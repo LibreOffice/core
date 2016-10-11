@@ -2520,7 +2520,7 @@ void ScOutputData::DrawClipMarks()
             for (SCCOL nX=nX1; nX<=nX2; nX++)
             {
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
-                if (pInfo->nClipMark)
+                if (pInfo->nClipMark != ScClipMark::NONE)
                 {
                     if (pInfo->bHOverlapped || pInfo->bVOverlapped)
                     {
@@ -2595,14 +2595,14 @@ void ScOutputData::DrawClipMarks()
                     long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
                     Size aMarkSize( nMarkPixel, (nMarkPixel-1)*2 );
 
-                    if ( pInfo->nClipMark & ( bLayoutRTL ? SC_CLIPMARK_RIGHT : SC_CLIPMARK_LEFT ) )
+                    if ( pInfo->nClipMark & ( bLayoutRTL ? ScClipMark::Right : ScClipMark::Left ) )
                     {
                         //  visually left
                         Rectangle aMarkRect = aCellRect;
                         aMarkRect.Right() = aCellRect.Left()+nMarkPixel-1;
                         SvxFont::DrawArrow( *mpDev, aMarkRect, aMarkSize, aArrowFillCol, true );
                     }
-                    if ( pInfo->nClipMark & ( bLayoutRTL ? SC_CLIPMARK_LEFT : SC_CLIPMARK_RIGHT ) )
+                    if ( pInfo->nClipMark & ( bLayoutRTL ? ScClipMark::Left : ScClipMark::Right ) )
                     {
                         //  visually right
                         Rectangle aMarkRect = aCellRect;

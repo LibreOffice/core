@@ -1313,14 +1313,14 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
         //  even if rThisRowInfo isn't for nCellY (merged cells).
         if ( nRightMissing > 0 && bMarkClipped && nRightX >= nX1 && nRightX <= nX2 && !bBreak && !bCellIsValue )
         {
-            rThisRowInfo.pCellInfo[nRightX+1].nClipMark |= SC_CLIPMARK_RIGHT;
+            rThisRowInfo.pCellInfo[nRightX+1].nClipMark |= ScClipMark::Right;
             bAnyClipped = true;
             long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
             rParam.maClipRect.Right() -= nMarkPixel * nLayoutSign;
         }
         if ( nLeftMissing > 0 && bMarkClipped && nLeftX >= nX1 && nLeftX <= nX2 && !bBreak && !bCellIsValue )
         {
-            rThisRowInfo.pCellInfo[nLeftX+1].nClipMark |= SC_CLIPMARK_LEFT;
+            rThisRowInfo.pCellInfo[nLeftX+1].nClipMark |= ScClipMark::Left;
             bAnyClipped = true;
             long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
             rParam.maClipRect.Left() += nMarkPixel * nLayoutSign;
@@ -3057,7 +3057,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             else
                 pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
 
-            pClipMarkCell->nClipMark |= SC_CLIPMARK_RIGHT;      //! also allow left?
+            pClipMarkCell->nClipMark |= ScClipMark::Right;      //! also allow left?
             bAnyClipped = true;
 
             long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
@@ -3187,7 +3187,7 @@ void ScOutputData::ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, con
         else
             pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
 
-        pClipMarkCell->nClipMark |= SC_CLIPMARK_RIGHT;      //! also allow left?
+        pClipMarkCell->nClipMark |= ScClipMark::Right;      //! also allow left?
         bAnyClipped = true;
 
         const long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
@@ -4032,7 +4032,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             else
                 pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
 
-            pClipMarkCell->nClipMark |= SC_CLIPMARK_RIGHT;      //! also allow left?
+            pClipMarkCell->nClipMark |= ScClipMark::Right;      //! also allow left?
             bAnyClipped = true;
 
             long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
@@ -4379,7 +4379,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
             else
                 pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
 
-            pClipMarkCell->nClipMark |= SC_CLIPMARK_RIGHT;      //! also allow left?
+            pClipMarkCell->nClipMark |= ScClipMark::Right;      //! also allow left?
             bAnyClipped = true;
 
             long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );

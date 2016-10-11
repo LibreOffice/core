@@ -28,6 +28,7 @@
 #include "global.hxx"
 #include "colorscale.hxx"
 #include "cellvalue.hxx"
+#include <o3tl/typed_flags_set.hxx>
 
 class SfxItemSet;
 class SvxBrushItem;
@@ -42,9 +43,13 @@ enum class ScRotateDir : sal_uInt8 {
     NONE, Standard, Left, Right, Center
 };
 
-const sal_uInt8 SC_CLIPMARK_NONE     = 0;
-const sal_uInt8 SC_CLIPMARK_LEFT     = 1;
-const sal_uInt8 SC_CLIPMARK_RIGHT    = 2;
+enum class ScClipMark : sal_uInt8 {
+    NONE = 0x00, Left = 0x01, Right = 0x02
+};
+namespace o3tl {
+    template<> struct typed_flags<ScClipMark> : is_typed_flags<ScClipMark, 0x03> {};
+}
+
 const sal_uInt8 SC_CLIPMARK_SIZE     = 64;
 
 enum ScShadowPart
@@ -106,7 +111,7 @@ struct CellInfo
         , pVShadowOrigin(nullptr)
         , eHShadowPart(SC_SHADOW_HSTART)
         , eVShadowPart(SC_SHADOW_HSTART)
-        , nClipMark(SC_CLIPMARK_NONE)
+        , nClipMark(ScClipMark::NONE)
         , nWidth(0)
         , nRotateDir(ScRotateDir::NONE)
         , bMarked(false)
@@ -149,7 +154,7 @@ struct CellInfo
 
     ScShadowPart                eHShadowPart : 4;           // shadow effective for drawing
     ScShadowPart                eVShadowPart : 4;
-    sal_uInt8                   nClipMark;
+    ScClipMark                  nClipMark;
     sal_uInt16                  nWidth;
     ScRotateDir                 nRotateDir;
 
