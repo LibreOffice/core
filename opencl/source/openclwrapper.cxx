@@ -739,16 +739,14 @@ namespace {
 
 cl_device_id findDeviceIdByDeviceString(const OUString& rString, const std::vector<OpenCLPlatformInfo>& rPlatforms)
 {
-    std::vector<OpenCLPlatformInfo>::const_iterator it = rPlatforms.begin(), itEnd = rPlatforms.end();
-    for(; it != itEnd; ++it)
+    for (const OpenCLPlatformInfo& rPlatform : rPlatforms)
     {
-        std::vector<OpenCLDeviceInfo>::const_iterator itr = it->maDevices.begin(), itrEnd = it->maDevices.end();
-        for(; itr != itrEnd; ++itr)
+        for (const OpenCLDeviceInfo& rDeviceInfo : rPlatform.maDevices)
         {
-            OUString aDeviceId = it->maVendor + " " + itr->maName;
-            if(rString == aDeviceId)
+            OUString aDeviceId = rDeviceInfo.maVendor + " " + rDeviceInfo.maName;
+            if (rString == aDeviceId)
             {
-                return static_cast<cl_device_id>(itr->device);
+                return rDeviceInfo.device;
             }
         }
     }
