@@ -71,7 +71,6 @@ protected:
     virtual void        StartSplit() override;
     virtual void        SplitResize() override;
     virtual void        Split() override;
-    virtual void        Command ( const CommandEvent& rCEvt ) override;
     virtual void        MouseButtonDown ( const MouseEvent& ) override;
 
 public:
