@@ -1252,7 +1252,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
                 aPropertyValue >>= nParagraphVertAlign;
                 ModuleRes aRes(RID_STR_VERTICAL_ALIGN_CONST);
                 ResStringArray aResList(aRes);
-                if (nParagraphVertAlign < aResList.Count())
+                if (sal_uInt32(nParagraphVertAlign) < aResList.Count())
                     aControlValue <<= aResList.GetString(nParagraphVertAlign);
             }
             break;
