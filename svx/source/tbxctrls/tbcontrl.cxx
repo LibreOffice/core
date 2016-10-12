@@ -20,6 +20,7 @@
 #include <string>
 #include <utility>
 
+#include <comphelper/propertysequence.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
@@ -2624,56 +2625,24 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     m_bSplitButton(dynamic_cast< sfx2::sidebar::SidebarToolBox* >(&rTbx) == nullptr),
     m_aColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
-    // The following commands are available at the various modules
     switch( nSlotId )
     {
-        case SID_ATTR_CHAR_COLOR:
-            addStatusListener( ".uno:Color");
-            m_aPaletteManager.SetLastColor( COL_RED );
-            m_bSplitButton = true;
-            break;
-
         case SID_ATTR_CHAR_COLOR2:
             addStatusListener( ".uno:CharColorExt");
-            m_aPaletteManager.SetLastColor( COL_RED );
-            m_bSplitButton = true;
-            break;
+            SAL_FALLTHROUGH;
 
-        case SID_BACKGROUND_COLOR:
-            addStatusListener( ".uno:BackgroundColor");
-            m_aPaletteManager.SetLastColor( COL_YELLOW );
+        case SID_ATTR_CHAR_COLOR:
+            m_bSplitButton = true;
             break;
 
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             addStatusListener( ".uno:CharBackgroundExt");
-            m_aPaletteManager.SetLastColor( COL_YELLOW );
             m_bSplitButton = true;
             break;
 
-        case SID_ATTR_CHAR_BACK_COLOR:
-            addStatusListener( ".uno:CharBackColor");
-            m_aPaletteManager.SetLastColor( COL_YELLOW );
-            break;
-
         case SID_FRAME_LINECOLOR:
-            addStatusListener( ".uno:FrameLineColor");
             addStatusListener( ".uno:BorderTLBR");
             addStatusListener( ".uno:BorderBLTR");
-            m_aPaletteManager.SetLastColor( COL_BLUE );
-            break;
-
-        case SID_EXTRUSION_3D_COLOR:
-            addStatusListener( ".uno:Extrusion3DColor");
-            break;
-
-        case SID_ATTR_LINE_COLOR:
-            addStatusListener( ".uno:XLineColor");
-            m_aPaletteManager.SetLastColor( COL_DEFAULT_SHAPE_STROKE );
-            break;
-
-        case SID_ATTR_FILL_COLOR:
-            addStatusListener( ".uno:FillColor");
-            m_aPaletteManager.SetLastColor( COL_DEFAULT_SHAPE_FILLING );
             break;
     }
 
@@ -2790,60 +2759,22 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
         return;
     }
 
-    OUString aCommand;
-    OUString aParamName;
+    OUString aCommand = m_aCommandURL;
 
     switch( GetSlotId() )
     {
         case SID_ATTR_CHAR_COLOR2 :
             aCommand    = ".uno:CharColorExt";
-            aParamName  = "FontColor";
-            break;
-
-        case SID_ATTR_CHAR_COLOR  :
-            aCommand    = ".uno:Color";
-            aParamName  = "Color";
-            break;
-
-        case SID_BACKGROUND_COLOR :
-            aCommand    = ".uno:BackgroundColor";
-            aParamName  = "BackgroundColor";
             break;
 
         case SID_ATTR_CHAR_COLOR_BACKGROUND :
             aCommand    = ".uno:CharBackgroundExt";
-            aParamName  = "BackColor";
-            break;
-
-        case SID_ATTR_CHAR_BACK_COLOR :
-            aCommand    = ".uno:CharBackColor";
-            aParamName  = "CharBackColor";
-            break;
-
-        case SID_FRAME_LINECOLOR  :
-            aCommand    = ".uno:FrameLineColor";
-            aParamName  = "FrameLineColor";
-            break;
-
-        case SID_EXTRUSION_3D_COLOR:
-            aCommand    = ".uno:Extrusion3DColor";
-            aParamName  = "Extrusion3DColor";
-            break;
-
-        case SID_ATTR_LINE_COLOR:
-            aCommand    = ".uno:XLineColor";
-            aParamName  = "XLineColor";
-            break;
-
-        case SID_ATTR_FILL_COLOR:
-            aCommand    = ".uno:FillColor";
-            aParamName  = "FillColor";
             break;
     }
 
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name  = aParamName;
-    aArgs[0].Value = makeAny( (sal_uInt32)( m_aPaletteManager.GetLastColor().GetColor() ));
+    auto aArgs( comphelper::InitPropertySequence( {
+        { m_aCommandURL.copy(5), css::uno::makeAny( m_aPaletteManager.GetLastColor().GetColor() ) }
+    } ) );
     Dispatch( aCommand, aArgs );
 }
 

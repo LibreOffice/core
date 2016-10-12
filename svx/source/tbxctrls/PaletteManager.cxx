@@ -282,6 +282,7 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
 void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)
 {
     mpBtnUpdater = pBtnUpdater;
+    mLastColor = mpBtnUpdater->GetCurrentColor();
 }
 
 void PaletteManager::SetColorSelectFunction(const std::function<void(const OUString&, const Color&)>& aColorSelectFunction)

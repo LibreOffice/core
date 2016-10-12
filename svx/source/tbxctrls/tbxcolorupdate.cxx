@@ -59,6 +59,7 @@ namespace svx
                 Update(COL_BLUE);
                 break;
             case SID_ATTR_CHAR_COLOR_BACKGROUND:
+            case SID_ATTR_CHAR_BACK_COLOR:
             case SID_BACKGROUND_COLOR:
                 Update(COL_YELLOW);
                 break;
