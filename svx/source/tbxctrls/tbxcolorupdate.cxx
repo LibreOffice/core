@@ -29,17 +29,6 @@
 
 namespace svx
 {
-    //= ToolboxButtonColorUpdater
-
-    /* Note:
-       The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
-       (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
-       The initial color used by the button is set in /core/svx/source/tbxctrls/tbcontrl.cxx
-       (SvxColorToolBoxControl::SvxColorToolBoxControl())
-       and in case of writer for text(background)color also in /core/sw/source/uibase/docvw/edtwin.cxx
-       (SwEditWin::m_aTextBackColor and SwEditWin::m_aTextColor)
-     */
-
     ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(
         sal_uInt16 nId, sal_uInt16 nTbxBtnId, ToolBox* pToolBox)
         : mnBtnId(nTbxBtnId)

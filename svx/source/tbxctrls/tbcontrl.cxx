@@ -2608,15 +2608,6 @@ VclPtr<vcl::Window> SvxFontNameToolBoxControl::CreateItemWindow( vcl::Window *pP
     return pBox.get();
 }
 
-/* Note:
-   The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
-   (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
-   The initial color used by the button is set in /core/svx/source/tbxcntrls/tbcontrl.cxx
-   (SvxColorToolBoxControl::SvxColorToolBoxControl())
-   and in case of writer for text(background)color also in /core/sw/source/uibase/docvw/edtwin.cxx
-   (SwEditWin::m_aTextBackColor and SwEditWin::m_aTextColor)
- */
-
 SvxColorToolBoxControl::SvxColorToolBoxControl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
