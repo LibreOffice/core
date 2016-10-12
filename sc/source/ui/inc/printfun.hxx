@@ -162,7 +162,7 @@ private:
     bool                bLandscape;
     bool                bSourceRangeValid;
 
-    sal_uInt16              nPageUsage;
+    SvxPageUsage        nPageUsage;
     Size                aPageSize;          // Printer Twips
     const SvxBoxItem*   pBorderItem;
     const SvxBrushItem* pBackgroundItem;

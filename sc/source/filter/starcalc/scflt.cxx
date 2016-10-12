@@ -859,7 +859,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
         }
 
         SvxPageItem aPageItem(ATTR_PAGE);
-        aPageItem.SetPageUsage( SVX_PAGE_ALL );
+        aPageItem.SetPageUsage( SvxPageUsage::All );
         aPageItem.SetLandscape( pPage->Orientation != 1 );
         aPageItem.SetNumType( css::style::NumberingType::ARABIC );
         pSet->Put(aPageItem);

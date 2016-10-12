@@ -73,7 +73,7 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
     bTable(false),
     bHorz(false),
     bVert(false),
-    eUsage(SVX_PAGE_ALL)
+    eUsage(SvxPageUsage::All)
 {
     // Count in Twips by default
     SetMapMode(MapMode(MapUnit::MapTwip));
@@ -119,7 +119,7 @@ void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     Size aSz(rRenderContext.PixelToLogic(GetSizePixel()));
     long nYPos = (aSz.Height() - aSize.Height()) / 2;
 
-    if (eUsage == SVX_PAGE_ALL)
+    if (eUsage == SvxPageUsage::All)
     {
         // all pages are equal -> draw one page
         if (aSize.Width() > aSize.Height())
@@ -145,8 +145,10 @@ void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     else
     {
         // Left and right page are different -> draw two pages if possible
-        DrawPage(rRenderContext, Point(0, nYPos), false, (eUsage & SVX_PAGE_LEFT) != 0);
-        DrawPage(rRenderContext, Point(aSize.Width() + aSize.Width() / 8, nYPos), true, (eUsage & SVX_PAGE_RIGHT) != 0);
+        DrawPage(rRenderContext, Point(0, nYPos), false,
+                 eUsage == SvxPageUsage::Left || eUsage == SvxPageUsage::All || eUsage == SvxPageUsage::Mirror);
+        DrawPage(rRenderContext, Point(aSize.Width() + aSize.Width() / 8, nYPos), true,
+                 eUsage == SvxPageUsage::Right || eUsage == SvxPageUsage::All || eUsage == SvxPageUsage::Mirror);
     }
 }
 
@@ -187,7 +189,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
     long nL = nLeft;
     long nR = nRight;
 
-    if (eUsage == SVX_PAGE_MIRROR && !bSecond)
+    if (eUsage == SvxPageUsage::Mirror && !bSecond)
     {
         // turn for mirrored
         nL = nRight;

@@ -1651,17 +1651,15 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
 bool ScPrintFunc::IsMirror( long nPageNo )          // Mirror margins?
 {
-    SvxPageUsage eUsage = (SvxPageUsage) ( nPageUsage & 0x000f );
-    return ( eUsage == SVX_PAGE_MIRROR && (nPageNo & 1) );
+    return nPageUsage == SvxPageUsage::Mirror && (nPageNo & 1);
 }
 
 bool ScPrintFunc::IsLeft( long nPageNo )            // left foot notes?
 {
-    SvxPageUsage eUsage = (SvxPageUsage) ( nPageUsage & 0x000f );
     bool bLeft;
-    if (eUsage == SVX_PAGE_LEFT)
+    if (nPageUsage == SvxPageUsage::Left)
         bLeft = true;
-    else if (eUsage == SVX_PAGE_RIGHT)
+    else if (nPageUsage == SvxPageUsage::Right)
         bLeft = false;
     else
         bLeft = (nPageNo & 1) != 0;

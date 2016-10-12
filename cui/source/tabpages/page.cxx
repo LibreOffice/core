@@ -79,28 +79,28 @@ const sal_uInt16 SvxPageDescPage::pRanges[] =
 };
 // ------- Mapping page layout ------------------------------------------
 
-const sal_uInt16 aArr[] =
+const SvxPageUsage aArr[] =
 {
-    SVX_PAGE_ALL,
-    SVX_PAGE_MIRROR,
-    SVX_PAGE_RIGHT,
-    SVX_PAGE_LEFT
+    SvxPageUsage::All,
+    SvxPageUsage::Mirror,
+    SvxPageUsage::Right,
+    SvxPageUsage::Left
 };
 
 
-sal_uInt16 PageUsageToPos_Impl( sal_uInt16 nUsage )
+sal_uInt16 PageUsageToPos_Impl( SvxPageUsage nUsage )
 {
     for ( sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aArr); ++i )
-        if ( aArr[i] == ( nUsage & 0x000f ) )
+        if ( aArr[i] ==  nUsage )
             return i;
-    return SVX_PAGE_ALL;
+    return 3;
 }
 
 
-sal_uInt16 PosToPageUsage_Impl( sal_uInt16 nPos )
+SvxPageUsage PosToPageUsage_Impl( sal_uInt16 nPos )
 {
     if ( nPos >= SAL_N_ELEMENTS(aArr) )
-        return 0;
+        return SvxPageUsage::NONE;
     return aArr[nPos];
 }
 
@@ -468,7 +468,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     // general page data
     SvxNumType eNumType = css::style::NumberingType::ARABIC;
     bLandscape = ( mpDefPrinter->GetOrientation() == Orientation::Landscape );
-    sal_uInt16 nUse = (sal_uInt16)SVX_PAGE_ALL;
+    SvxPageUsage nUse = SvxPageUsage::All;
     pItem = GetItem( *rSet, SID_ATTR_PAGE );
 
     if ( pItem )
@@ -894,9 +894,9 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
 IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl, ListBox&, void)
 {
     // switch inside outside
-    const sal_uInt16 nPos = PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() );
+    const SvxPageUsage nUsage = PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() );
 
-    if ( nPos == SVX_PAGE_MIRROR )
+    if ( nUsage == SvxPageUsage::Mirror )
     {
         m_pLeftMarginLbl->Hide();
         m_pRightMarginLbl->Hide();

@@ -224,7 +224,7 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
     long nL = GetLeft();
     long nR = GetRight();
 
-    if (GetUsage() == SVX_PAGE_MIRROR && !bSecond)
+    if (GetUsage() == SvxPageUsage::Mirror && !bSecond)
     {
         // swap for mirrored
         nL = GetRight();
@@ -545,7 +545,7 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
         long nL = GetLeft();
         long nR = GetRight();
 
-        if (GetUsage() == SVX_PAGE_MIRROR && !bSecond)
+        if (GetUsage() == SvxPageUsage::Mirror && !bSecond)
         {
             // rotate for mirrored
             nL = GetRight();

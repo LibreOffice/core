@@ -46,7 +46,7 @@ ScHFPage::ScHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSe
         aDataSet    ( *rSet.GetPool(),
                        ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERRIGHT,
                        ATTR_PAGE, ATTR_PAGE, 0 ),
-        nPageUsage  ( (sal_uInt16)SVX_PAGE_ALL ),
+        nPageUsage  ( SvxPageUsage::All ),
         pStyleDlg   ( nullptr )
 {
     get(m_pBtnEdit, "buttonEdit");
@@ -201,7 +201,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
         VclPtrInstance< SfxSingleTabDialog > pDlg(this, aDataSet);
         const int nSettingsId = 42;
         bool bRightPage =   m_pCntSharedBox->IsChecked()
-                         || ( SVX_PAGE_LEFT != SvxPageUsage(nPageUsage) );
+                         || ( SvxPageUsage::Left != nPageUsage );
 
         if ( nId == SID_ATTR_PAGE_HEADERSET )
         {

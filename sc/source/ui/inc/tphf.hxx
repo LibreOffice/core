@@ -50,7 +50,7 @@ private:
     VclPtr<PushButton>   m_pBtnEdit;
     SfxItemSet           aDataSet;
     OUString             aStrPageStyle;
-    sal_uInt16           nPageUsage;
+    SvxPageUsage         nPageUsage;
     VclPtr<ScStyleDlg>   pStyleDlg;
 
     DECL_LINK( BtnHdl, Button*, void );

@@ -234,30 +234,30 @@ void FillHdFt(SwFrameFormat* pFormat, const  SfxItemSet& rSet)
 /// Convert from UseOnPage to SvxPageUsage.
 SvxPageUsage lcl_convertUseToSvx(UseOnPage nUse)
 {
-    int nRet = 0;
+    SvxPageUsage nRet = SvxPageUsage::NONE;
     if (nUse & UseOnPage::Left)
-        nRet |= SVX_PAGE_LEFT;
+        nRet = SvxPageUsage::Left;
     if (nUse & UseOnPage::Right)
-        nRet |= SVX_PAGE_RIGHT;
+        nRet = SvxPageUsage::Right;
     if ((nUse & UseOnPage::All) == UseOnPage::All)
-        nRet |= SVX_PAGE_ALL;
+        nRet = SvxPageUsage::All;
     if ((nUse & UseOnPage::Mirror) == UseOnPage::Mirror)
-        nRet |= SVX_PAGE_MIRROR;
-    return (SvxPageUsage)nRet;
+        nRet = SvxPageUsage::Mirror;
+    return nRet;
 }
 
 /// Convert from SvxPageUsage to UseOnPage.
 UseOnPage lcl_convertUseFromSvx(SvxPageUsage nUse)
 {
     UseOnPage nRet = UseOnPage::NONE;
-    if ((nUse & SVX_PAGE_LEFT) == SVX_PAGE_LEFT)
-        nRet |= UseOnPage::Left;
-    if ((nUse & SVX_PAGE_RIGHT) == SVX_PAGE_RIGHT)
-        nRet |= UseOnPage::Right;
-    if ((nUse & SVX_PAGE_ALL) == SVX_PAGE_ALL)
-        nRet |= UseOnPage::All;
-    if ((nUse & SVX_PAGE_MIRROR) == SVX_PAGE_MIRROR)
-        nRet |= UseOnPage::Mirror;
+    if (nUse == SvxPageUsage::Left)
+        nRet = UseOnPage::Left;
+    else if (nUse == SvxPageUsage::Right)
+        nRet = UseOnPage::Right;
+    else if (nUse == SvxPageUsage::All)
+        nRet = UseOnPage::All;
+    else if (nUse == SvxPageUsage::Mirror)
+        nRet = UseOnPage::Mirror;
     return nRet;
 }
 
@@ -276,8 +276,8 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     {
         const SvxPageItem& rPageItem = static_cast<const SvxPageItem&>(rSet.Get(SID_ATTR_PAGE));
 
-        const SvxPageUsage nUse = (SvxPageUsage)rPageItem.GetPageUsage();
-        if(nUse)
+        const SvxPageUsage nUse = rPageItem.GetPageUsage();
+        if(nUse != SvxPageUsage::NONE)
             rPageDesc.SetUseOn( lcl_convertUseFromSvx(nUse) );
         rPageDesc.SetLandscape(rPageItem.IsLandscape());
         SvxNumberType aNumType;
