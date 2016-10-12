@@ -25,7 +25,7 @@
 #include <avmedia/mediaitem.hxx>
 #include <svtools/miscopt.hxx>
 #include <tools/time.hxx>
-#include <vcl/toolbox.hxx>
+#include <vcl/lstbox.hxx>
 #include "mediacontrol.hrc"
 #include "helpids.hrc"
 #include "mediamisc.hxx"
@@ -271,3 +271,5 @@ Image MediaControlBase::GetImage( sal_Int32 nImageId) const
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

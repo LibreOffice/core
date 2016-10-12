@@ -22,16 +22,12 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
-#include <vcl/lstbox.hxx>
 
 #define COMBOBOX_APPEND             (SAL_MAX_INT32)
 #define COMBOBOX_ENTRY_NOTFOUND     (SAL_MAX_INT32)
 #define COMBOBOX_MAX_ENTRIES        (SAL_MAX_INT32 - 1)
 
 class UserDrawEvent;
-class ImplListBoxFloatingWindow;
-class ImplListBox;
-class ImplBtn;
 
 class VCL_DLLPUBLIC ComboBox : public Edit
 {
