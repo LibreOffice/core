@@ -66,9 +66,7 @@ namespace svt
     {
     }
 
-
     //= EditBrowserHeader
-
 
     void EditBrowserHeader::DoubleClick()
     {
@@ -84,15 +82,12 @@ namespace svt
         }
     }
 
-
     //= EditBrowseBox
-
 
     void EditBrowseBox::BrowserMouseEventPtr::Clear()
     {
         DELETEZ(pEvent);
     }
-
 
     void EditBrowseBox::BrowserMouseEventPtr::Set(const BrowserMouseEvent* pEvt, bool bIsDown)
     {
@@ -114,7 +109,6 @@ namespace svt
         }
     }
 
-
     void EditBrowseBox::impl_construct()
     {
         m_aImpl.reset(new EditBrowseBoxImpl());
@@ -128,28 +122,6 @@ namespace svt
         pCheckBoxPaint->SetPaintTransparent( true );
         pCheckBoxPaint->SetBackground();
     }
-
-
-    EditBrowseBox::EditBrowseBox(vcl::Window* pParent, const ResId& rId, EditBrowseBoxFlags nBrowserFlags, BrowserMode _nMode )
-                  :BrowseBox( pParent, rId, _nMode )
-                  ,nStartEvent(nullptr)
-                  ,nEndEvent(nullptr)
-                  ,nCellModifiedEvent(nullptr)
-                  ,m_pFocusWhileRequest(nullptr)
-                  ,nPaintRow(-1)
-                  ,nEditRow(-1)
-                  ,nOldEditRow(-1)
-                  ,nEditCol(0)
-                  ,nOldEditCol(0)
-                  ,bHasFocus(false)
-                  ,bPaintStatus(true)
-                  ,bActiveBeforeTracking( false )
-                  ,m_nBrowserFlags(nBrowserFlags)
-                  ,pHeader(nullptr)
-    {
-        impl_construct();
-    }
-
 
     EditBrowseBox::EditBrowseBox( vcl::Window* pParent, EditBrowseBoxFlags nBrowserFlags, WinBits nBits, BrowserMode _nMode )
                   :BrowseBox( pParent, nBits, _nMode )
@@ -171,12 +143,10 @@ namespace svt
         impl_construct();
     }
 
-
     void EditBrowseBox::Init()
     {
         // late construction
     }
-
 
     EditBrowseBox::~EditBrowseBox()
     {
