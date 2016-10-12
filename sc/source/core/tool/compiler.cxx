@@ -4665,7 +4665,7 @@ bool ScCompiler::HandleRange()
     {
         FormulaError nErr = pRangeData->GetErrCode();
         if( nErr != FormulaError::NONE )
-            SetError( FormulaError::NoName );
+            SetError( nErr );
         else if (mbJumpCommandReorder)
         {
             // put named formula into parentheses.
