@@ -20,37 +20,35 @@
 
 #include <sal/macros.h>
 #include "svx/ParseContext.hxx"
-#include "stringlistresource.hxx"
 #include "svx/fmresids.hrc"
 
 #include <svx/dialmgr.hxx>
 
 #include <unotools/syslocale.hxx>
+#include <tools/resary.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
 using namespace svxform;
 using namespace ::connectivity;
 
-OSystemParseContext::OSystemParseContext() : IParseContext()
+OSystemParseContext::OSystemParseContext()
+    : IParseContext()
 {
     SolarMutexGuard aGuard;
-
-    svx::StringListResource aKeywords( SVX_RES( RID_RSC_SQL_INTERNATIONAL ) );
-    aKeywords.get( m_aLocalizedKeywords );
+    ResStringArray aLocalizedKeywords(SVX_RES(RID_RSC_SQL_INTERNATIONAL));
+    for (sal_uInt32 i = 0; i < aLocalizedKeywords.Count(); ++i)
+        m_aLocalizedKeywords.push_back(aLocalizedKeywords.GetString(i));
 }
-
 
 OSystemParseContext::~OSystemParseContext()
 {
 }
 
-
 css::lang::Locale OSystemParseContext::getPreferredLocale( ) const
 {
     return SvtSysLocale().GetLanguageTag().getLocale();
 }
-
 
 OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
 {
@@ -74,7 +72,6 @@ OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
     }
     return aMsg;
 }
-
 
 OString OSystemParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) const
 {

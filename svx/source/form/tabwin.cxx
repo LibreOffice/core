@@ -21,7 +21,6 @@
 #include "tabwin.hxx"
 #include "svx/fmtools.hxx"
 #include "fmservs.hxx"
-#include "stringlistresource.hxx"
 
 #include <svx/svxids.hrc>
 #include <svx/dbaexchange.hxx>
@@ -51,6 +50,7 @@
 #include <sfx2/frame.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include "svtools/treelistentry.hxx"
+#include <tools/resary.hxx>
 #include <vcl/settings.hxx>
 
 const long STD_WIN_SIZE_X = 120;
@@ -334,18 +334,18 @@ void FmFieldWin::UpdateContent(const css::uno::Reference< css::form::XForm > & x
 
         // set prefix
         OUString  aPrefix;
-        StringListResource aPrefixes( SVX_RES( RID_RSC_TABWIN_PREFIX ) );
+        ResStringArray aPrefixes(SVX_RES(RID_RSC_TABWIN_PREFIX));
 
         switch (m_nObjectType)
         {
             case CommandType::TABLE:
-                aPrefix = aPrefixes[0];
+                aPrefix = aPrefixes.GetString(0);
                 break;
             case CommandType::QUERY:
-                aPrefix = aPrefixes[1];
+                aPrefix = aPrefixes.GetString(1);
                 break;
             default:
-                aPrefix = aPrefixes[2];
+                aPrefix = aPrefixes.GetString(2);
                 break;
         }
 

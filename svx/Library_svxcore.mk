@@ -471,7 +471,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/form/ParseContext \
     svx/source/form/sdbdatacolumn \
     svx/source/form/sqlparserclient \
-    svx/source/form/stringlistresource \
     svx/source/form/typemap \
     svx/source/form/xfm_addcondition \
     svx/source/uitest/sdrobject \
