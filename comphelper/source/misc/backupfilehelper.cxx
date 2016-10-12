@@ -13,6 +13,7 @@
 #include <rtl/bootstrap.hxx>
 #include <comphelper/backupfilehelper.hxx>
 #include <rtl/crc.h>
+#include <algorithm>
 #include <deque>
 #include <zlib.h>
 
