@@ -165,10 +165,10 @@
                               <object class="GtkLabel" id="label4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Structure:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">token</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -217,10 +217,10 @@
                               <object class="GtkLabel" id="label5">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Character style:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">charstyle</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -256,10 +256,10 @@
                               <object class="GtkLabel" id="fillcharft">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Fill character:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">fillchar</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -288,10 +288,10 @@
                               <object class="GtkLabel" id="tabstopposft">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Tab stop position:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">tabstoppos:0.00cm</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -332,10 +332,10 @@
                               <object class="GtkLabel" id="chapterentryft">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Chapter entry:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">chapterentry</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -363,10 +363,10 @@
                               <object class="GtkLabel" id="entryoutlinelevelft">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Evaluate up to level:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">entryoutlinelevel</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -391,10 +391,10 @@
                               <object class="GtkLabel" id="numberformatft">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Format:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">numberformat</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -558,7 +558,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="hyperlink">
-                                    <property name="label" translatable="yes">H_yperlink</property>
+                                    <property name="label" translatable="yes">L_ink</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -676,10 +676,10 @@
                           <object class="GtkLabel" id="mainstyleft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Character style for main entries:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">mainstyle</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
