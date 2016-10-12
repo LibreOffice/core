@@ -120,8 +120,8 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pBtnBitmap->SetClickHdl(aLink);
     m_pBtnPattern->SetClickHdl(aLink);
 
-    m_pFillTab->set_width_request(700);
-    m_pFillTab->set_height_request(400);
+    m_pFillTab->set_width_request(750);
+    m_pFillTab->set_height_request(550);
 }
 
 SvxAreaTabPage::~SvxAreaTabPage()
