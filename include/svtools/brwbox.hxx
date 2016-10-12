@@ -393,8 +393,6 @@ protected:
 public:
                     BrowseBox( vcl::Window* pParent, WinBits nBits = 0,
                                BrowserMode nMode = BrowserMode::NONE );
-                    BrowseBox( vcl::Window* pParent, const ResId& rId,
-                               BrowserMode nMode = BrowserMode::NONE );
     virtual         ~BrowseBox() override;
     virtual void    dispose() override;
 

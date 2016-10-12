@@ -110,7 +110,6 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
                 ( bHasFocus ? 0 : 1 ) + ( GetUpdateMode() ? 0 : 1 );
 }
 
-
 BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     :Control( pParent, nBits | WB_3DLOOK )
     ,DragSourceHelper( this )
@@ -119,17 +118,6 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
 {
     ConstructImpl( nMode );
 }
-
-
-BrowseBox::BrowseBox( vcl::Window* pParent, const ResId& rId, BrowserMode nMode )
-    :Control( pParent, rId )
-    ,DragSourceHelper( this )
-    ,DropTargetHelper( this )
-    ,aHScroll( VclPtr<ScrollBar>::Create(this, WinBits(WB_HSCROLL)) )
-{
-    ConstructImpl(nMode);
-}
-
 
 BrowseBox::~BrowseBox()
 {
