@@ -47,7 +47,7 @@ struct FormulaResultValue
     and memory consumption. */
 class ScFormulaResult
 {
-    enum class Multiline : sal_uInt8 {
+    enum class Multiline {
         Unknown, False, True
     };
     // Clone token if the 16-bit only reference counter is nearing it's
