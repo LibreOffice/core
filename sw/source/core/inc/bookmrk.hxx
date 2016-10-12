@@ -139,13 +139,10 @@ namespace sw {
         public:
             DdeBookmark(const SwPaM& rPaM);
 
-            const SwServerObject* GetRefObject() const
-                { return &m_aRefObj; }
-            SwServerObject* GetRefObject()
-                { return &m_aRefObj; }
+            const SwServerObject* GetRefObject() const { return m_aRefObj.get(); }
+            SwServerObject* GetRefObject() { return m_aRefObj.get(); }
 
-            bool IsServer() const
-                { return m_aRefObj.Is(); }
+            bool IsServer() const { return m_aRefObj.Is(); }
 
             void SetRefObject( SwServerObject* pObj );
 

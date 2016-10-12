@@ -3164,7 +3164,7 @@ void ScExternalRefManager::transformUnsavedRefToSavedRef( SfxObjectShell* pShell
     DocShellMap::iterator itr = maUnsavedDocShells.begin();
     while( itr != maUnsavedDocShells.end() )
     {
-        if (&(itr->second.maShell) == pShell)
+        if ( itr->second.maShell.get() == pShell )
         {
             // found that the shell is marked as unsaved
             OUString aFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
