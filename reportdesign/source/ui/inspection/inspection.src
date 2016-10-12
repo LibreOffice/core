@@ -24,65 +24,54 @@ String RID_STR_PROPPAGE_DEFAULT
 {
     Text [ en-US ] = "General" ;
 };
+
 String RID_STR_PROPPAGE_DATA
 {
     Text [ en-US ] = "Data" ;
 };
-Resource RID_STR_BOOL
+
+StringArray RID_STR_BOOL
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "No" ;
-    };
-    String 2
-    {
-        Text [ en-US ] = "Yes" ;
+        < "No" ; >;
+        < "Yes" ; >;
     };
 };
+
 String RID_STR_FORCENEWPAGE
 {
     Text [ en-US ] = "Force New Page" ;
 };
-Resource RID_STR_FORCENEWPAGE_CONST
+
+StringArray RID_STR_FORCENEWPAGE_CONST
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "None" ;
-    };
-    String 2
-    {
-        Text [ en-US ] = "Before Section" ;
-    };
-    String 3
-    {
-        Text [ en-US ] = "After Section" ;
-    };
-    String 4
-    {
-        Text [ en-US ] = "Before & After Section" ;
+        < "None" ; >;
+        < "Before Section" ; >;
+        < "After Section" ; >;
+        < "Before & After Section" ; >;
     };
 };
+
 String RID_STR_NEWROWORCOL
 {
     Text [ en-US ] = "New Row Or Column" ;
 };
+
 String RID_STR_KEEPTOGETHER
 {
     Text [ en-US ] = "Keep Together" ;
 };
-Resource RID_STR_KEEPTOGETHER_CONST
+
+StringArray RID_STR_KEEPTOGETHER_CONST
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "No" ;
-    };
-    String 2
-    {
-        Text [ en-US ] = "Whole Group" ;
-    };
-    String 3
-    {
-        Text [ en-US ] = "With First Detail" ;
+        < "No" ; >;
+        < "Whole Group" ; >;
+        < "With First Detail" ; >;
     };
 };
 String RID_STR_CANGROW
@@ -133,57 +122,44 @@ String RID_STR_GROUPKEEPTOGETHER
 {
     Text [ en-US ] = "Group keep together" ;
 };
-Resource RID_STR_GROUPKEEPTOGETHER_CONST
+
+StringArray RID_STR_GROUPKEEPTOGETHER_CONST
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Per Page" ;
-    };
-    String 2
-    {
-        Text [ en-US ] = "Per Column" ;
+        < "Per Page" ; >;
+        < "Per Column" ; >;
     };
 };
-Resource RID_STR_SECTIONPAGEBREAK_CONST
+
+StringArray RID_STR_SECTIONPAGEBREAK_CONST
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "None" ;
-    };
-    String 2
-    {
-        Text [ en-US ] = "Section" ;
-    };
-    String 3
-    {
-        Text [ en-US ] = "Automatic" ;
+        < "None" ; >;
+        < "Section" ; >;
+        < "Automatic" ; >;
     };
 };
+
 String RID_STR_PAGEHEADEROPTION
 {
     Text [ en-US ] = "Page header" ;
 };
+
 String RID_STR_PAGEFOOTEROPTION
 {
     Text [ en-US ] = "Page footer" ;
 };
-Resource RID_STR_REPORTPRINTOPTION_CONST
+
+StringArray RID_STR_REPORTPRINTOPTION_CONST
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "All Pages" ;
-    };
-    String 2
-    {
-        Text [ en-US ] = "Not With Report Header" ;
-    };
-    String 3
-    {
-        Text [ en-US ] = "Not With Report Footer" ;
-    };
-    String 4
-    {
-        Text [ en-US ] = "Not With Report Header/Footer" ;
+        < "All Pages" ; >;
+        < "Not With Report Header" ; >;
+        < "Not With Report Footer" ; >;
+        < "Not With Report Header/Footer" ; >;
     };
 };
 String RID_STR_DEEPTRAVERSING
@@ -266,41 +242,38 @@ String RID_STR_TYPE
 {
     Text [ en-US ] = "Data Field Type";
 };
-Resource RID_STR_TYPE_CONST
+
+StringArray RID_STR_TYPE_CONST
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Field or Formula";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Function";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Counter";
-    };
-    String 4
-    {
-        Text [ en-US ] = "User defined Function";
+        < "Field or Formula"; >;
+        < "Function"; >;
+        < "Counter"; >;
+        < "User defined Function"; >;
     };
 };
+
 String RID_STR_MASTERFIELDS
 {
     Text [ en-US ] = "Link master fields" ;
 };
+
 String RID_STR_DETAILFIELDS
 {
     Text [ en-US ] = "Link slave fields" ;
 };
+
 String RID_STR_EXPLANATION
 {
     Text [ en-US ] = "Charts can be used to display detailed data about the current record of the report. To do this, you can specify which columns in the chart match which columns in the report.";
 };
+
 String RID_STR_DETAILLABEL
 {
     Text [ en-US ] = "Chart" ;
 };
+
 String RID_STR_MASTERLABEL
 {
     Text [ en-US ] = "Report" ;
@@ -310,68 +283,63 @@ String RID_STR_PREVIEW_COUNT
 {
     Text [ en-US ] = "Preview Row(s)" ;
 };
+
 String RID_STR_AREA
 {
     Text [ en-US ] = "Area" ;
 };
+
 String RID_STR_MIMETYPE
 {
     Text [ en-US ] = "Report Output Format" ;
 };
+
 String RID_STR_VERTICALALIGN
 {
     Text [ en-US ] = "Vert. Alignment" ;
 };
-Resource RID_STR_VERTICAL_ALIGN_CONST
+
+StringArray RID_STR_VERTICAL_ALIGN_CONST
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Top";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Middle";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Bottom";
+        < "Top"; >;
+        < "Middle"; >;
+        < "Bottom"; >;
     };
 };
+
 String RID_STR_PARAADJUST
 {
     Text [ en-US ] = "Horz. Alignment" ;
 };
-Resource RID_STR_PARAADJUST_CONST
+
+StringArray RID_STR_PARAADJUST_CONST
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Left";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Right";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Block";
-    };
-    String 4
-    {
-        Text [ en-US ] = "Center";
+        < "Left"; >;
+        < "Right"; >;
+        < "Block"; >;
+        < "Center"; >;
     };
 };
+
 String RID_STR_F_COUNTER
 {
     Text [ en-US ] = "Counter" ;
 };
+
 String RID_STR_F_ACCUMULATION
 {
     Text [ en-US ] = "Accumulation" ;
 };
+
 String RID_STR_F_MINIMUM
 {
     Text [ en-US ] = "Minimum" ;
 };
+
 String RID_STR_F_MAXIMUM
 {
     Text [ en-US ] = "Maximum" ;

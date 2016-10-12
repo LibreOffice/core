@@ -37,6 +37,8 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
+class ResStringArray;
+
 namespace pcr
 {
 
@@ -93,6 +95,32 @@ namespace pcr
             createListBoxControl(
                 const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< OUString >& _rInitialListEntries,
+                bool _bReadOnlyControl,
+                bool _bSorted
+            );
+
+        /** creates an <member scope="css::inspection">PropertyControlType::ListBox</member>-type control
+            and fills it with initial values
+
+            @param _rxControlFactory
+                A control factory. Must not be <NULL/>.
+
+            @param  _rInitialListEntries
+                the initial values of the control
+
+            @param _bReadOnlyControl
+                determines whether the control should be read-only
+
+            @param _bSorted
+                determines whether the list entries should be sorted
+
+            @return
+                the newly created control
+        */
+        static css::uno::Reference< css::inspection::XPropertyControl >
+            createListBoxControl(
+                const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory,
+                const ResStringArray& _rInitialListEntries,
                 bool _bReadOnlyControl,
                 bool _bSorted
             );

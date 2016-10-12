@@ -35,7 +35,7 @@
 #include <com/sun/star/inspection/XStringListControl.hpp>
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <tools/diagnose_ex.h>
-#include <tools/StringListResource.hxx>
+#include <tools/resary.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>
@@ -72,9 +72,8 @@ namespace pcr
         // special handling for booleans (this will become a list)
         if ( _rProperty.Type.getTypeClass() == TypeClass_BOOLEAN )
         {
-            ::std::vector< OUString > aListEntries;
-            tools::StringListResource aRes(PcrRes(RID_RSC_ENUM_YESNO),aListEntries);
-            _out_rDescriptor.Control = createListBoxControl( _rxControlFactory, aListEntries, bReadOnlyControl, false );
+            ResStringArray aListEntries(PcrRes(RID_RSC_ENUM_YESNO));
+            _out_rDescriptor.Control = createListBoxControl(_rxControlFactory, aListEntries, bReadOnlyControl, false);
             return;
         }
 
@@ -141,13 +140,20 @@ namespace pcr
         }
     }
 
-
     Reference< XPropertyControl > PropertyHandlerHelper::createListBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< OUString >& _rInitialListEntries, bool _bReadOnlyControl, bool _bSorted )
     {
-        return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, _bSorted, true );
+        return lcl_implCreateListLikeControl(_rxControlFactory, _rInitialListEntries, _bReadOnlyControl, _bSorted, true);
     }
 
+    Reference< XPropertyControl > PropertyHandlerHelper::createListBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
+                const ResStringArray& _rInitialListEntries, bool _bReadOnlyControl, bool _bSorted )
+    {
+        std::vector<OUString> aInitialListEntries;
+        for (sal_uInt32 i = 0; i < _rInitialListEntries.Count(); ++i)
+            aInitialListEntries.push_back(_rInitialListEntries.GetString(i));
+        return lcl_implCreateListLikeControl(_rxControlFactory, aInitialListEntries, _bReadOnlyControl, _bSorted, true);
+    }
 
     Reference< XPropertyControl > PropertyHandlerHelper::createComboBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< OUString >& _rInitialListEntries, bool _bReadOnlyControl, bool _bSorted )

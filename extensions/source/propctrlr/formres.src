@@ -1226,17 +1226,15 @@ String RID_STR_TEXTTYPE
     Text [ en-US ] = "Text type";
 };
 
-Resource RID_RSC_ENUM_SHOWHIDE
+StringArray RID_RSC_ENUM_SHOWHIDE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Hide" ;
-    };
-    String 2
-    {
-        Text [ en-US ] = "Show" ;
+        < "Hide" ; >;
+        < "Show" ; >;
     };
 };
+
 String RID_STR_XML_DATA_MODEL
 {
     Text [ en-US ] = "XML data model";

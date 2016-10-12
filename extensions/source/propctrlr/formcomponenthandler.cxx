@@ -95,10 +95,10 @@
 #include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/resary.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/wrkwin.hxx>
-#include <tools/StringListResource.hxx>
 #include <sal/macros.h>
 
 #include <limits>
@@ -545,10 +545,9 @@ namespace pcr
             OUString sControlValue;
             OSL_VERIFY( _rControlValue >>= sControlValue );
 
-            ::std::vector< OUString > aListEntries;
-            tools::StringListResource aRes( PcrRes( RID_RSC_ENUM_SHOWHIDE ), aListEntries );
-            OSL_ENSURE( aListEntries.size() == 2, "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!" );
-            bool bShow = ( aListEntries.size() < 2 ) || ( sControlValue == aListEntries[1] );
+            ResStringArray aListEntries(PcrRes(RID_RSC_ENUM_SHOWHIDE));
+            OSL_ENSURE( aListEntries.Count() == 2, "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!" );
+            bool bShow = ( aListEntries.Count() < 2 ) || ( sControlValue == aListEntries.GetString(1) );
 
             aPropertyValue <<= bShow;
         }
@@ -651,15 +650,14 @@ namespace pcr
         case PROPERTY_ID_SHOW_RECORDACTIONS:
         case PROPERTY_ID_SHOW_FILTERSORT:
         {
-            ::std::vector< OUString > aListEntries;
-            tools::StringListResource aRes( PcrRes( RID_RSC_ENUM_SHOWHIDE ), aListEntries );
-            OSL_ENSURE( aListEntries.size() == 2, "FormComponentPropertyHandler::convertToControlValue: broken resource for Show/Hide!" );
+            ResStringArray aListEntries(PcrRes(RID_RSC_ENUM_SHOWHIDE));
+            OSL_ENSURE( aListEntries.Count() == 2, "FormComponentPropertyHandler::convertToControlValue: broken resource for Show/Hide!" );
 
-            if ( aListEntries.size() == 2 )
+            if (aListEntries.Count() == 2)
             {
                 OUString sControlValue =     ::comphelper::getBOOL( _rPropertyValue )
-                                                ?   aListEntries[1]
-                                                :   aListEntries[0];
+                                                ?   aListEntries.GetString(1)
+                                                :   aListEntries.GetString(0);
                 aControlValue <<= sControlValue;
             }
         }
@@ -1252,9 +1250,9 @@ namespace pcr
                 )
                 nResId = RID_RSC_ENUM_SHOWHIDE;
 
-            ::std::vector< OUString > aListEntries;
-            tools::StringListResource aRes(PcrRes(nResId),aListEntries);
-            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, false, false );
+            PcrRes aRes(nResId);
+            ResStringArray aListEntries(aRes);
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl(_rxControlFactory, aListEntries, false, false);
             bNeedDefaultStringIfVoidAllowed = true;
         }
 

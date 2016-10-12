@@ -32,15 +32,12 @@ String RID_STR_PROPPAGE_DATA
 {
     Text [ en-US ] = "Data" ;
 };
-Resource RID_RSC_ENUM_YESNO
+StringArray RID_RSC_ENUM_YESNO
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "No" ;
-    };
-    String 2
-    {
-        Text [ en-US ] = "Yes" ;
+        < "No" ; >;
+        < "Yes" ; >;
     };
 };
 String RID_STR_HELP_SECTION_LABEL
