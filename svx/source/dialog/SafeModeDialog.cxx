@@ -46,6 +46,14 @@ void SafeModeDialog::dispose()
     Dialog::dispose();
 }
 
+bool SafeModeDialog::Close()
+{
+    // Remove the safe mode flag before exiting this dialog
+    sfx2::SafeMode::removeFlag();
+
+    return Dialog::Close();
+}
+
 IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnContinue.get())
@@ -60,7 +68,6 @@ IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
     {
         Close();
     }
-    sfx2::SafeMode::removeFlag();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
