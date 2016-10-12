@@ -133,21 +133,17 @@ String RID_STR_VERTICAL_ALIGN
 {
     Text [ en-US ] = "Vert. Alignment" ;
 };
-Resource RID_RSC_ENUM_VERTICAL_ALIGN
+
+StringArray RID_RSC_ENUM_VERTICAL_ALIGN
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Top";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Middle";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Bottom";
+        < "Top"; >;
+        < "Middle"; >;
+        < "Bottom"; >;
     };
 };
+
 String RID_STR_IMAGEPOSITION
 {
     Text [ en-US ] = "Graphics alignment";
@@ -168,17 +164,16 @@ String RID_STR_ICONSIZE
 {
     Text [ en-US ] = "Icon size" ;
 };
-Resource RID_RSC_ENUM_ICONSIZE_TYPE
+
+StringArray RID_RSC_ENUM_ICONSIZE_TYPE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Small" ;
-    };
-    String 2
-    {
-        Text [ en-US ] = "Large" ;
+        < "Small" ; >;
+        < "Large" ; >;
     };
 };
+
 String RID_STR_SHOW_POSITION
 {
     Text [ en-US ] = "Positioning";
@@ -452,285 +447,157 @@ String RID_STR_SUBMIT_TARGET
     Text [ en-US ] = "Frame" ;
 };
 
-Resource RID_RSC_ENUM_BORDER_TYPE
+StringArray RID_RSC_ENUM_BORDER_TYPE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Without frame" ;
-    };
-    String 2
-    {
-        Text [ en-US ] = "3D look" ;
-    };
-    String 3
-    {
-        Text [ en-US ] = "Flat" ;
+        < "Without frame" ; >;
+        < "3D look" ; >;
+        < "Flat" ; >;
     };
 };
 
-Resource RID_RSC_ENUM_LISTSOURCE_TYPE
+StringArray RID_RSC_ENUM_LISTSOURCE_TYPE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Valuelist";
+        < "Valuelist"; >;
+        < "Table"; >;
+        < "Query"; >;
+        < "Sql"; >;
+        < "Sql [Native]"; >;
+        < "Tablefields" ; >;
     };
-    String 2
-    {
-        Text [ en-US ] = "Table";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Query";
-    };
-    String 4
-    {
-        Text [ en-US ] = "Sql";
-    };
-    String 5
-    {
-        Text [ en-US ] = "Sql [Native]";
-    };
-    String 6
-    {
-        Text [ en-US ] = "Tablefields" ;
-    };
-};
-Resource RID_RSC_ENUM_ALIGNMENT
-{
-    String 1
-    {
-        Text [ en-US ] = "Left";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Center";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Right" ;
-    };
-};
-Resource RID_RSC_ENUM_BUTTONTYPE
-{
-    String 1
-    {
-        Text [ en-US ] = "None";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Submit form";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Reset form";
-    };
-    String 4
-    {
-        Text [ en-US ] = "Open document/web page";
-    };
-    String 5
-    {
-        Text [ en-US ] = "First record";
-    };
-    String 6
-    {
-        Text [ en-US ] = "Previous record";
-    };
-    String 7
-    {
-        Text [ en-US ] = "Next record";
-    };
-    String 8
-    {
-        Text [ en-US ] = "Last record";
-    };
-    String 9
-    {
-        Text [ en-US ] = "Save record";
-    };
-    String 10
-    {
-        Text [ en-US ] = "Undo data entry";
-    };
-    String 11
-    {
-        Text [ en-US ] = "New record";
-    };
-    String 12
-    {
-        Text [ en-US ] = "Delete record";
-    };
-    String 13
-    {
-        Text [ en-US ] = "Refresh form";
-    };
-};
-Resource RID_RSC_ENUM_SUBMIT_METHOD
-{
-    String 1
-    {
-        Text [ en-US ] = "Get";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Post" ;
-    };
-};
-Resource RID_RSC_ENUM_SUBMIT_ENCODING
-{
-    String 1
-    {
-        Text [ en-US ] = "URL";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Multipart";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Text" ;
-    };
-};
-Resource RID_RSC_ENUM_DATEFORMAT_LIST
-{
-    String 1
-    {
-        Text [ en-US ] = "Standard (short)";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Standard (short YY)";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Standard (short YYYY)";
-    };
-    String 4
-    {
-        Text [ en-US ] = "Standard (long)";
-    };
-    String 5
-    {
-        Text [ en-US ] = "DD/MM/YY";
-    };
-    String 6
-    {
-        Text [ en-US ] = "MM/DD/YY";
-    };
-    String 7
-    {
-        Text [ en-US ] = "YY/MM/DD";
-    };
-    String 8
-    {
-        Text [ en-US ] = "DD/MM/YYYY";
-    };
-    String 9
-    {
-        Text [ en-US ] = "MM/DD/YYYY";
-    };
-    String 10
-    {
-        Text [ en-US ] = "YYYY/MM/DD";
-    };
-    String 11
-    {
-        Text [ en-US ] = "YY-MM-DD";
-    };
-    String 12
-    {
-        Text [ en-US ] = "YYYY-MM-DD" ;
-    };
-};
-Resource RID_RSC_ENUM_TIMEFORMAT_LIST
-{
-    String 1
-    {
-        Text [ en-US ] = "13:45";
-    };
-    String 2
-    {
-        Text [ en-US ] = "13:45:00";
-    };
-    String 3
-    {
-        Text [ en-US ] = "01:45 PM";
-    };
-    String 4
-    {
-        Text [ en-US ] = "01:45:00 PM" ;
-    };
-};
-Resource RID_RSC_ENUM_CHECKED
-{
-    String 1
-    {
-        Text [ en-US ] = "Not Selected";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Selected";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Not Defined" ;
-    };
-};
-Resource RID_RSC_ENUM_CYCLE
-{
-    String 1
-    {
-        Text [ en-US ] = "All records";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Active record";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Current page" ;
-    };
-};
-Resource RID_RSC_ENUM_NAVIGATION
-{
-    String 1
-    {
-        Text [ en-US ] = "No";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Yes";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Parent Form";
-    };
-};
-Resource RID_RSC_ENUM_SUBMIT_TARGET
-{
-    String 1 { Text = "_blank"; };
-    String 2 { Text = "_parent"; };
-    String 3 { Text = "_self"; };
-    String 4 { Text = "_top"; };
 };
 
-Resource RID_RSC_ENUM_SELECTION_TYPE
+StringArray RID_RSC_ENUM_ALIGNMENT
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "None" ;
+        < "Left"; >;
+        < "Center"; >;
+        < "Right" ; >;
     };
-    String 2
+};
+
+StringArray RID_RSC_ENUM_BUTTONTYPE
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Single" ;
+        < "None"; >;
+        < "Submit form"; >;
+        < "Reset form"; >;
+        < "Open document/web page"; >;
+        < "First record"; >;
+        < "Previous record"; >;
+        < "Next record"; >;
+        < "Last record"; >;
+        < "Save record"; >;
+        < "Undo data entry"; >;
+        < "New record"; >;
+        < "Delete record"; >;
+        < "Refresh form"; >;
     };
-    String 3
+};
+
+StringArray RID_RSC_ENUM_SUBMIT_METHOD
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Multi" ;
+        < "Get"; >;
+        < "Post" ; >;
     };
-    String 4
+};
+
+StringArray RID_RSC_ENUM_SUBMIT_ENCODING
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Range" ;
+        < "URL"; >;
+        < "Multipart"; >;
+        < "Text" ; >;
+    };
+};
+
+StringArray RID_RSC_ENUM_DATEFORMAT_LIST
+{
+    ItemList [ en-US ] =
+    {
+        < "Standard (short)"; >;
+        < "Standard (short YY)"; >;
+        < "Standard (short YYYY)"; >;
+        < "Standard (long)"; >;
+        < "DD/MM/YY"; >;
+        < "MM/DD/YY"; >;
+        < "YY/MM/DD"; >;
+        < "DD/MM/YYYY"; >;
+        < "MM/DD/YYYY"; >;
+        < "YYYY/MM/DD"; >;
+        < "YY-MM-DD"; >;
+        < "YYYY-MM-DD" ; >;
+    };
+};
+
+StringArray RID_RSC_ENUM_TIMEFORMAT_LIST
+{
+    ItemList [ en-US ] =
+    {
+        < "13:45"; >;
+        < "13:45:00"; >;
+        < "01:45 PM"; >;
+        < "01:45:00 PM" ; >;
+    };
+};
+
+StringArray RID_RSC_ENUM_CHECKED
+{
+    ItemList [ en-US ] =
+    {
+        < "Not Selected"; >;
+        < "Selected"; >;
+        < "Not Defined" ; >;
+    };
+};
+
+StringArray RID_RSC_ENUM_CYCLE
+{
+    ItemList [ en-US ] =
+    {
+        < "All records"; >;
+        < "Active record"; >;
+        < "Current page" ; >;
+    };
+};
+
+StringArray RID_RSC_ENUM_NAVIGATION
+{
+    ItemList [ en-US ] =
+    {
+        < "No"; >;
+        < "Yes"; >;
+        < "Parent Form"; >;
+    };
+};
+
+StringArray RID_RSC_ENUM_SUBMIT_TARGET
+{
+    ItemList [ en-US ] =
+    {
+        < "_blank"; >;
+        < "_parent"; >;
+        < "_self"; >;
+        < "_top"; >;
+    };
+};
+
+StringArray RID_RSC_ENUM_SELECTION_TYPE
+{
+    ItemList [ en-US ] =
+    {
+        < "None" ; >;
+        < "Single" ; >;
+        < "Multi" ; >;
+        < "Range" ; >;
     };
 
 };
@@ -955,17 +822,16 @@ String RID_STR_ORIENTATION
 {
     Text [ en-US ] = "Orientation";
 };
-Resource RID_RSC_ENUM_ORIENTATION
+
+StringArray RID_RSC_ENUM_ORIENTATION
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Horizontal";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Vertical";
+        < "Horizontal"; >;
+        < "Vertical"; >;
     };
 };
+
 String RID_STR_EVT_ADJUSTMENTVALUECHANGED
 {
     Text [ en-US ] = "While adjusting";
@@ -990,29 +856,23 @@ String RID_STR_PUSHBUTTONTYPE
 {
     Text [ en-US ] = "Button type";
 };
-Resource RID_RSC_ENUM_PUSHBUTTONTYPE
+
+StringArray RID_RSC_ENUM_PUSHBUTTONTYPE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Default";
-    };
-    String 2
-    {
-        Text [ en-US ] = "OK";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Cancel";
-    };
-    String 4
-    {
-        Text [ en-US ] = "Help";
+        < "Default"; >;
+        < "OK"; >;
+        < "Cancel"; >;
+        < "Help"; >;
     };
 };
+
 String RID_STR_UNABLETOCONNECT
 {
     Text [ en-US ] = "The connection to the data source \"$name$\" could not be established.";
 };
+
 String RID_STR_TEXT
 {
     Text [ en-US ] = "Text";
@@ -1033,15 +893,12 @@ String RID_STR_CELL_EXCHANGE_TYPE
     Text [ en-US ] = "Contents of the linked cell";
 };
 
-Resource RID_RSC_ENUM_CELL_EXCHANGE_TYPE
+StringArray RID_RSC_ENUM_CELL_EXCHANGE_TYPE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The selected entry";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Position of the selected entry";
+        < "The selected entry"; >;
+        < "Position of the selected entry"; >;
     };
 };
 
@@ -1050,19 +907,13 @@ String RID_STR_SHOW_SCROLLBARS
     Text [ en-US ] = "Scrollbars";
 };
 
-Resource RID_RSC_ENUM_TEXTTYPE
+StringArray RID_RSC_ENUM_TEXTTYPE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Single-line";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Multi-line";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Multi-line with formatting";
+        < "Single-line"; >;
+        < "Multi-line"; >;
+        < "Multi-line with formatting"; >;
     };
 };
 
@@ -1076,53 +927,36 @@ String RID_STR_LINEEND_FORMAT
     Text [ en-US ] = "Text lines end with";
 };
 
-Resource RID_RSC_ENUM_LINEEND_FORMAT
+StringArray RID_RSC_ENUM_LINEEND_FORMAT
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "LF (Unix)";
-    };
-    String 2
-    {
-        Text [ en-US ] = "CR+LF (Windows)";
+        < "LF (Unix)"; >;
+        < "CR+LF (Windows)"; >;
     };
 };
 
-Resource RID_RSC_ENUM_SCROLLBARS
+StringArray RID_RSC_ENUM_SCROLLBARS
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "None";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Horizontal";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Vertical";
-    };
-    String 4
-    {
-        Text [ en-US ] = "Both";
+        < "None"; >;
+        < "Horizontal"; >;
+        < "Vertical"; >;
+        < "Both"; >;
     };
 };
 
-Resource RID_RSC_ENUM_COMMAND_TYPE
+StringArray RID_RSC_ENUM_COMMAND_TYPE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Table";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Query";
-    };
-    String 3
-    {
-        Text [ en-US ] = "SQL command";
+        < "Table"; >;
+        < "Query"; >;
+        < "SQL command"; >;
     };
 };
+
 String RID_STR_TOGGLE
 {
     Text [ en-US ] = "Toggle";
@@ -1143,15 +977,12 @@ String RID_STR_VISUALEFFECT
     Text [ en-US ] = "Style";
 };
 
-Resource RID_RSC_ENUM_VISUALEFFECT
+StringArray RID_RSC_ENUM_VISUALEFFECT
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "3D";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Flat";
+        < "3D"; >;
+        < "Flat"; >;
     };
 };
 
@@ -1160,59 +991,23 @@ String RID_STR_BORDERCOLOR
     Text [ en-US ] = "Border color";
 };
 
-Resource RID_RSC_ENUM_IMAGE_POSITION
+StringArray RID_RSC_ENUM_IMAGE_POSITION
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Left top";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Left centered";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Left bottom";
-    };
-    String 4
-    {
-        Text [ en-US ] = "Right top";
-    };
-    String 5
-    {
-        Text [ en-US ] = "Right centered";
-    };
-    String 6
-    {
-        Text [ en-US ] = "Right bottom";
-    };
-    String 7
-    {
-        Text [ en-US ] = "Above left";
-    };
-    String 8
-    {
-        Text [ en-US ] = "Above centered";
-    };
-    String 9
-    {
-        Text [ en-US ] = "Above right";
-    };
-    String 10
-    {
-        Text [ en-US ] = "Below left";
-    };
-    String 11
-    {
-        Text [ en-US ] = "Below centered";
-    };
-    String 12
-    {
-        Text [ en-US ] = "Below right";
-    };
-    String 13
-    {
-        Text [ en-US ] = "Centered";
+        < "Left top"; >;
+        < "Left centered"; >;
+        < "Left bottom"; >;
+        < "Right top"; >;
+        < "Right centered"; >;
+        < "Right bottom"; >;
+        < "Above left"; >;
+        < "Above centered"; >;
+        < "Above right"; >;
+        < "Below left"; >;
+        < "Below centered"; >;
+        < "Below right"; >;
+        < "Centered"; >;
     };
 };
 
@@ -1285,19 +1080,13 @@ String RID_STR_XSD_WHITESPACES
     Text [ en-US ] = "Whitespaces";
 };
 
-Resource RID_RSC_ENUM_WHITESPACE_HANDLING
+StringArray RID_RSC_ENUM_WHITESPACE_HANDLING
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Preserve";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Replace";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Collapse";
+        < "Preserve"; >;
+        < "Replace"; >;
+        < "Collapse"; >;
     };
 };
 
@@ -1401,21 +1190,16 @@ String RID_STR_NOLABEL
     Text [ en-US ] = "No Label" ;
 };
 
-Resource RID_RSC_ENUM_SCALE_MODE
+StringArray RID_RSC_ENUM_SCALE_MODE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "No";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Keep Ratio";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Fit to Size";
+        < "No"; >;
+        < "Keep Ratio"; >;
+        < "Fit to Size"; >;
     };
 };
+
 String RID_STR_INPUT_REQUIRED
 {
     Text [ en-US ] = "Input required";
@@ -1426,35 +1210,23 @@ String RID_STR_WRITING_MODE
     Text [ en-US ] = "Text direction";
 };
 
-Resource RID_RSC_ENUM_WRITING_MODE
+StringArray RID_RSC_ENUM_WRITING_MODE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Left-to-right";
-    };
-    String 2
-    {
-        Text [ en-US ] = "Right-to-left";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Use superordinate object settings";
+        < "Left-to-right"; >;
+        < "Right-to-left"; >;
+        < "Use superordinate object settings"; >;
     };
 };
 
-Resource RID_RSC_ENUM_WHEEL_BEHAVIOR
+StringArray RID_RSC_ENUM_WHEEL_BEHAVIOR
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Never";
-    };
-    String 2
-    {
-        Text [ en-US ] = "When focused";
-    };
-    String 3
-    {
-        Text [ en-US ] = "Always";
+        < "Never"; >;
+        < "When focused"; >;
+        < "Always"; >;
     };
 };
 
@@ -1463,39 +1235,24 @@ String RID_STR_ANCHOR_TYPE
     Text [ en-US ] = "Anchor";
 };
 
-Resource RID_RSC_ENUM_TEXT_ANCHOR_TYPE
+StringArray RID_RSC_ENUM_TEXT_ANCHOR_TYPE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "To Paragraph";
-    };
-    String 2
-    {
-        Text [ en-US ] = "As Character";
-    };
-    String 3
-    {
-        Text [ en-US ] = "To Page";
-    };
-    String 4
-    {
-        Text [ en-US ] = "To Frame";
-    };
-    String 5
-    {
-        Text [ en-US ] = "To Character";
+        < "To Paragraph"; >;
+        < "As Character"; >;
+        < "To Page"; >;
+        < "To Frame"; >;
+        < "To Character"; >;
     };
 };
 
-Resource RID_RSC_ENUM_SHEET_ANCHOR_TYPE
+StringArray RID_RSC_ENUM_SHEET_ANCHOR_TYPE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "To Page";
-    };
-    String 2
-    {
-        Text [ en-US ] = "To Cell";
+        < "To Page"; >;
+        < "To Cell"; >;
     };
 };
 

@@ -29,7 +29,7 @@
 #include "dbustrings.hrc"
 #include "dsitems.hxx"
 #include "dsnItem.hxx"
-#include "localresaccess.hxx"
+#include "moduledbu.hxx"
 #include "optionalboolitem.hxx"
 #include "propertysetitem.hxx"
 #include "stringlistitem.hxx"

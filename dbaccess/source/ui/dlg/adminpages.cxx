@@ -26,7 +26,7 @@
 #include "dbustrings.hrc"
 #include "dsitems.hxx"
 #include "dsselect.hxx"
-#include "localresaccess.hxx"
+#include "moduledbu.hxx"
 #include "odbcconfig.hxx"
 #include "optionalboolitem.hxx"
 #include "sqlmessage.hxx"

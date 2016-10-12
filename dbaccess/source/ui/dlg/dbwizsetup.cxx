@@ -34,7 +34,6 @@
 #include <sfx2/docfilt.hxx>
 #include <unotools/ucbhelper.hxx>
 #include "generalpage.hxx"
-#include "localresaccess.hxx"
 #include "stringlistitem.hxx"
 #include "propertysetitem.hxx"
 #include <unotools/confignode.hxx>

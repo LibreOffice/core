@@ -24,7 +24,6 @@
 #include "dbustrings.hrc"
 #include "defaultobjectnamecheck.hxx"
 #include "dlgsave.hxx"
-#include "localresaccess.hxx"
 #include "uiservices.hxx"
 #include "QTableWindow.hxx"
 #include "QTableWindowData.hxx"
@@ -75,7 +74,7 @@
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/localresaccess.hxx>
+#include <tools/resary.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
@@ -223,11 +222,9 @@ namespace dbaui
         OUString lcl_getObjectResourceString( sal_uInt16 _nResId, sal_Int32 _nCommandType )
         {
             OUString sMessageText = ModuleRes( _nResId );
-            OUString sObjectType;
-            {
-                LocalResourceAccess aLocalRes( RSC_QUERY_OBJECT_TYPE, RSC_RESOURCE );
-                sObjectType = ModuleRes( (sal_uInt16)( _nCommandType + 1 ) );
-            }
+            ModuleRes aResId(RSC_QUERY_OBJECT_TYPE);
+            ResStringArray aResList(aResId);
+            OUString sObjectType = aResList.GetString(_nCommandType);
             sMessageText = sMessageText.replaceFirst( "$object$", sObjectType );
             return sMessageText;
         }

@@ -32,13 +32,13 @@
 #include <unotools/moduleoptions.hxx>
 #include "dsitems.hxx"
 #include "dbaccess_helpid.hrc"
-#include "localresaccess.hxx"
 #include <osl/process.h>
 #include <vcl/msgbox.hxx>
 #include "dbadmin.hxx"
 #include <comphelper/types.hxx>
 #include <vcl/stdtext.hxx>
 #include "sqlmessage.hxx"
+#include "moduledbu.hxx"
 #include "odbcconfig.hxx"
 #include "dsselect.hxx"
 #include <svl/filenotation.hxx>

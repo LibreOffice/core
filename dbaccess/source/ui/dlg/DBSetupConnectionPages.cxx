@@ -30,7 +30,6 @@
 #include "dsitems.hxx"
 #include "dsnItem.hxx"
 #include "dbaccess_helpid.hrc"
-#include "localresaccess.hxx"
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
@@ -51,6 +50,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include "finteraction.hxx"
+#include "moduledbu.hxx"
 #include <unotools/pathoptions.hxx>
 #include <svtools/roadmapwizard.hxx>
 #include "TextConnectionHelper.hxx"

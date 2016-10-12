@@ -28,7 +28,6 @@
 #include "dbustrings.hrc"
 #include "adminpages.hxx"
 #include "generalpage.hxx"
-#include "localresaccess.hxx"
 #include "stringlistitem.hxx"
 #include "propertysetitem.hxx"
 #include <unotools/confignode.hxx>

@@ -25,8 +25,8 @@
 #include "DbAdminImpl.hxx"
 #include "dsitems.hxx"
 #include "dbfindex.hxx"
-#include "localresaccess.hxx"
 #include "dsnItem.hxx"
+#include "moduledbu.hxx"
 
 #include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"

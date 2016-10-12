@@ -21,7 +21,6 @@
 #include "sqlmessage.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <svtools/localresaccess.hxx>
 #include "dbaccess_helpid.hrc"
 #include "dbu_resource.hrc"
 #include "dbu_dlg.hrc"

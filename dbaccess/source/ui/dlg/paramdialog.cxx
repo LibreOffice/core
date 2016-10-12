@@ -30,7 +30,6 @@
 #include <vcl/layout.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
-#include "localresaccess.hxx"
 #include <unotools/syslocale.hxx>
 
 #define EF_VISITED      0x0001

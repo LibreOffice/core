@@ -353,19 +353,13 @@ String STR_INFO_OPENING_IN_SQL_VIEW
         "(except \"SQL command\", which doesn't make sense here) will be inserted.";
 };
 
-Resource RSC_QUERY_OBJECT_TYPE
+StringArray RSC_QUERY_OBJECT_TYPE
 {
-    String 1
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The table view";
-    };
-    String 2
-    {
-        Text [ en-US ] = "The query";
-    };
-    String 3
-    {
-        Text [ en-US ] = "The SQL statement";
+        < "The table view"; >;
+        < "The query"; >;
+        < "The SQL statement"; >;
     };
 };
 

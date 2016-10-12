@@ -20,7 +20,6 @@
 #include "dsselect.hxx"
 #include "dbu_dlg.hrc"
 #include <vcl/msgbox.hxx>
-#include "localresaccess.hxx"
 #include <tools/rcid.h>
 
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>

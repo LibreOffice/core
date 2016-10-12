@@ -24,10 +24,10 @@
 #include "dsitems.hxx"
 #include "dbustrings.hrc"
 #include "dbadmin.hxx"
+#include "moduledbu.hxx"
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>
 #include <vcl/stdtext.hxx>
-#include "localresaccess.hxx"
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/waitobj.hxx>

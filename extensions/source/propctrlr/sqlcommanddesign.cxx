@@ -37,7 +37,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
-#include <svtools/localresaccess.hxx>
+#include <tools/resary.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 
@@ -261,8 +261,9 @@ namespace pcr
             Reference< XTitle> xTitle(xQueryDesign,UNO_QUERY);
             if ( xTitle.is() )
             {
-                ::svt::OLocalResourceAccess aEnumStrings( PcrRes( RID_RSC_ENUM_COMMAND_TYPE ), RSC_RESOURCE );
-                OUString sDisplayName = PcrRes(CommandType::COMMAND + 1).toString();
+                PcrRes aResId(RID_RSC_ENUM_COMMAND_TYPE);
+                ResStringArray aResList(aResId);
+                OUString sDisplayName = aResList.GetString(CommandType::COMMAND);
                 xTitle->setTitle( sDisplayName );
             }
         }

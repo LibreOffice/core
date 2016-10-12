@@ -21,7 +21,7 @@
 #include "formstrings.hxx"
 #include "formresid.hrc"
 #include "propctrlr.hrc"
-#include <svtools/localresaccess.hxx>
+#include <tools/resary.hxx>
 #include <comphelper/extract.hxx>
 #include <sal/macros.h>
 #include <algorithm>
@@ -498,20 +498,14 @@ namespace pcr
                 break;
         }
 
-        ::std::vector< OUString > aReturn;
+        std::vector< OUString > aReturn;
 
-        if ( nStringItemsResId )
+        if (nStringItemsResId)
         {
-            PcrRes aResId( nStringItemsResId );
-            ::svt::OLocalResourceAccess aEnumStrings( aResId, RSC_RESOURCE );
-
-            sal_Int16 i = 1;
-            PcrRes aLocalId( i );
-            while ( aEnumStrings.IsAvailableRes( aLocalId.SetRT( RSC_STRING ) ) )
-            {
-                aReturn.push_back( aLocalId.toString() );
-                aLocalId = PcrRes( ++i );
-            }
+            PcrRes aResId(nStringItemsResId);
+            ResStringArray aResList(aResId);
+            for (sal_uInt32 i = 0; i < aResList.Count(); ++i)
+                aReturn.push_back(aResList.GetString(i));
         }
 
         return aReturn;

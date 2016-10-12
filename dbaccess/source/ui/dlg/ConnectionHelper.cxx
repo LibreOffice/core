@@ -30,7 +30,7 @@
 #include <svl/intitem.hxx>
 #include "dsitems.hxx"
 #include "dbaccess_helpid.hrc"
-#include "localresaccess.hxx"
+#include "moduledbu.hxx"
 #include <osl/process.h>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>

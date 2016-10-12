@@ -39,7 +39,6 @@
 #include "callbacks.hxx"
 #include <dbaccess/IController.hxx>
 #include "moduledbu.hxx"
-#include <svtools/localresaccess.hxx>
 #include "svtools/treelistentry.hxx"
 #include "svtools/viewdataentry.hxx"
 #include <algorithm>
