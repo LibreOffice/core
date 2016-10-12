@@ -8,15 +8,25 @@
  */
 
 #include <sal/config.h>
-
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/deployment/XPackage.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/deployment/XExtensionManager.hpp>
+#include <com/sun/star/task/XAbortChannel.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/bootstrap.hxx>
 #include <comphelper/backupfilehelper.hxx>
 #include <rtl/crc.h>
 #include <algorithm>
 #include <deque>
+#include <vector>
 #include <zlib.h>
 
+using namespace css;
 typedef std::shared_ptr< osl::File > FileSharedPtr;
 static const sal_uInt32 BACKUP_FILE_HELPER_BLOCK_SIZE = 16384;
 
@@ -84,6 +94,403 @@ namespace
 
         return nCrc32;
     }
+
+    bool read_sal_uInt32(FileSharedPtr& rFile, sal_uInt32& rTarget)
+    {
+        sal_uInt8 aArray[4];
+        sal_uInt64 nBaseRead(0);
+
+        // read rTarget
+        if (osl::File::E_None == rFile->read(static_cast<void*>(aArray), 4, nBaseRead) && 4 == nBaseRead)
+        {
+            rTarget = (sal_uInt32(aArray[0]) << 24) + (sal_uInt32(aArray[1]) << 16) + (sal_uInt32(aArray[2]) << 8) + sal_uInt32(aArray[3]);
+            return true;
+        }
+
+        return false;
+    }
+
+    bool write_sal_uInt32(oslFileHandle& rHandle, sal_uInt32 nSource)
+    {
+        sal_uInt8 aArray[4];
+        sal_uInt64 nBaseWritten(0);
+
+        // write nSource
+        aArray[0] = sal_uInt8((nSource & 0xff000000) >> 24);
+        aArray[1] = sal_uInt8((nSource & 0x00ff0000) >> 16);
+        aArray[2] = sal_uInt8((nSource & 0x0000ff00) >> 8);
+        aArray[3] = sal_uInt8(nSource & 0x000000ff);
+
+        if (osl_File_E_None == osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) && 4 == nBaseWritten)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    bool read_OString(FileSharedPtr& rFile, OString& rTarget)
+    {
+        sal_uInt32 nLength(0);
+
+        if (!read_sal_uInt32(rFile, nLength))
+        {
+            return false;
+        }
+
+        std::vector< sal_Char > aTarget(nLength);
+        sal_uInt64 nBaseRead(0);
+
+        // read rTarget
+        if (osl::File::E_None == rFile->read(static_cast<void*>(&aTarget[0]), nLength, nBaseRead) && nLength == nBaseRead)
+        {
+            rTarget = OString(&aTarget[0], static_cast< sal_Int32 >(nLength));
+            return true;
+        }
+
+        return false;
+    }
+
+    bool write_OString(oslFileHandle& rHandle, const OString& rSource)
+    {
+        const sal_uInt32 nLength(rSource.getLength());
+
+        if (!write_sal_uInt32(rHandle, nLength))
+        {
+            return false;
+        }
+
+        sal_uInt64 nBaseWritten(0);
+
+        if (osl_File_E_None == osl_writeFile(rHandle, static_cast<const void*>(rSource.getStr()), nLength, &nBaseWritten) && nLength == nBaseWritten)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    bool fileExists(const OUString& rBaseURL)
+    {
+        if (!rBaseURL.isEmpty())
+        {
+            FileSharedPtr aBaseFile(new osl::File(rBaseURL));
+
+            return (osl::File::E_None == aBaseFile->open(osl_File_OpenFlag_Read));
+        }
+
+        return false;
+    }
+}
+
+namespace
+{
+    enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
+
+    class ExtensionInfoEntry
+    {
+    private:
+        PackageState    meState;            // REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE
+        OString         maRepositoryName;   // user|shared|bundled
+        OString         maName;
+        OString         maIdentifier;
+        OString         maVersion;
+
+    public:
+        ExtensionInfoEntry()
+        :   meState(NOT_AVAILABLE),
+            maRepositoryName(),
+            maName(),
+            maIdentifier(),
+            maVersion()
+        {
+        }
+
+        ExtensionInfoEntry(const uno::Reference< deployment::XPackage >& rxPackage)
+        :   meState(NOT_AVAILABLE),
+            maRepositoryName(OUStringToOString(rxPackage->getRepositoryName(), RTL_TEXTENCODING_ASCII_US)),
+            maName(OUStringToOString(rxPackage->getName(), RTL_TEXTENCODING_ASCII_US)),
+            maIdentifier(OUStringToOString(rxPackage->getIdentifier().Value, RTL_TEXTENCODING_ASCII_US)),
+            maVersion(OUStringToOString(rxPackage->getVersion(), RTL_TEXTENCODING_ASCII_US))
+        {
+            const beans::Optional< beans::Ambiguous< sal_Bool > > option(
+                rxPackage->isRegistered(uno::Reference< task::XAbortChannel >(),
+                uno::Reference< ucb::XCommandEnvironment >()));
+
+            if (option.IsPresent)
+            {
+                ::beans::Ambiguous< sal_Bool > const& reg = option.Value;
+
+                if (reg.IsAmbiguous)
+                {
+                    meState = AMBIGUOUS;
+                }
+                else
+                {
+                    meState = reg.Value ? REGISTERED : NOT_REGISTERED;
+                }
+            }
+            else
+            {
+                meState = NOT_AVAILABLE;
+            }
+        }
+
+        bool operator<(const ExtensionInfoEntry& rComp) const
+        {
+            if (0 == maRepositoryName.compareTo(rComp.maRepositoryName))
+            {
+                if (0 == maName.compareTo(rComp.maName))
+                {
+                    if (0 == maVersion.compareTo(rComp.maVersion))
+                    {
+                        if (0 == maIdentifier.compareTo(rComp.maIdentifier))
+                        {
+                            return meState < rComp.meState;
+                        }
+                        else
+                        {
+                            return 0 > maIdentifier.compareTo(rComp.maIdentifier);
+                        }
+                    }
+                    else
+                    {
+                        return 0 > maVersion.compareTo(rComp.maVersion);
+                    }
+                }
+                else
+                {
+                    return 0 > maName.compareTo(rComp.maName);
+                }
+            }
+            else
+            {
+                return 0 > maRepositoryName.compareTo(rComp.maRepositoryName);
+            }
+        }
+
+        bool read_entry(FileSharedPtr& rFile)
+        {
+            // read meState
+            sal_uInt32 nState(0);
+
+            if (read_sal_uInt32(rFile, nState))
+            {
+                meState = static_cast< PackageState >(nState);
+            }
+            else
+            {
+                return false;
+            }
+
+            // read maRepositoryName;
+            if (!read_OString(rFile, maRepositoryName))
+            {
+                return false;
+            }
+
+            // read maName;
+            if (!read_OString(rFile, maName))
+            {
+                return false;
+            }
+
+            // read maIdentifier;
+            if (!read_OString(rFile, maIdentifier))
+            {
+                return false;
+            }
+
+            // read maVersion;
+            if (!read_OString(rFile, maVersion))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        bool write_entry(oslFileHandle& rHandle) const
+        {
+            // write meState
+            const sal_uInt32 nState(meState);
+
+            if (!write_sal_uInt32(rHandle, nState))
+            {
+                return false;
+            }
+
+            // write maRepositoryName
+            if (!write_OString(rHandle, maRepositoryName))
+            {
+                return false;
+            }
+
+            // write maName;
+            if (!write_OString(rHandle, maName))
+            {
+                return false;
+            }
+
+            // write maIdentifier;
+            if (!write_OString(rHandle, maIdentifier))
+            {
+                return false;
+            }
+
+            // write maVersion;
+            if (!write_OString(rHandle, maVersion))
+            {
+                return false;
+            }
+
+            return true;
+        }
+    };
+
+    typedef ::std::vector< ExtensionInfoEntry > ExtensionInfoEntryVector;
+
+    class ExtensionInfo
+    {
+    private:
+        ExtensionInfoEntryVector    maEntries;
+
+    public:
+        ExtensionInfo()
+        :   maEntries()
+        {
+        }
+
+        void reset()
+        {
+            // clear all data
+            maEntries.clear();
+        }
+
+        void createCurrent()
+        {
+            // clear all data
+            reset();
+
+            // create content from current extension configuration
+            uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
+            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            uno::Reference< deployment::XExtensionManager > m_xExtensionManager = deployment::ExtensionManager::get(xContext);
+
+            try
+            {
+                xAllPackages = m_xExtensionManager->getAllExtensions(uno::Reference< task::XAbortChannel >(),
+                    uno::Reference< ucb::XCommandEnvironment >());
+            }
+            catch (const deployment::DeploymentException &)
+            {
+                return;
+            }
+            catch (const ucb::CommandFailedException &)
+            {
+                return;
+            }
+            catch (const ucb::CommandAbortedException &)
+            {
+                return;
+            }
+            catch (const lang::IllegalArgumentException & e)
+            {
+                throw uno::RuntimeException(e.Message, e.Context);
+            }
+
+            for (sal_Int32 i = 0; i < xAllPackages.getLength(); ++i)
+            {
+                uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
+
+                for (sal_Int32 j = 0; j < xPackageList.getLength(); ++j)
+                {
+                    uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
+
+                    if (xPackage.is())
+                    {
+                        maEntries.push_back(ExtensionInfoEntry(xPackage));
+                    }
+                }
+            }
+
+            if (!maEntries.empty())
+            {
+                // sort the list
+                std::sort(maEntries.begin(), maEntries.end());
+            }
+        }
+
+        bool read_entries(FileSharedPtr& rFile)
+        {
+            // read NumExtensionEntries
+            sal_uInt32 nExtEntries(0);
+
+            if (!read_sal_uInt32(rFile, nExtEntries))
+            {
+                return false;
+            }
+
+            for (sal_uInt32 a(0); a < nExtEntries; a++)
+            {
+                ExtensionInfoEntry aNewEntry;
+
+                if (aNewEntry.read_entry(rFile))
+                {
+                    maEntries.push_back(aNewEntry);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        bool write_entries(oslFileHandle& rHandle) const
+        {
+            const sal_uInt32 nExtEntries(maEntries.size());
+
+            if (!write_sal_uInt32(rHandle, nExtEntries))
+            {
+                return false;
+            }
+
+            for (const auto& a : maEntries)
+            {
+                if (!a.write_entry(rHandle))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        bool createTempFile(OUString& rTempFileName)
+        {
+            oslFileHandle aHandle;
+            bool bRetval(false);
+
+            // create current configuration
+            if (maEntries.empty())
+            {
+                createCurrent();
+            }
+
+            // open target temp file and write current configuration to it - it exists until deleted
+            if (osl::File::E_None == osl::FileBase::createTempFile(nullptr, &aHandle, &rTempFileName))
+            {
+                bRetval = write_entries(aHandle);
+
+                // close temp file - it exists until deleted
+                osl_closeFile(aHandle);
+            }
+
+            return bRetval;
+        }
+    };
 }
 
 namespace
@@ -91,12 +498,12 @@ namespace
     class PackedFileEntry
     {
     private:
-        sal_uInt32          mnFullFileSize; // size in bytes of unpacked original file
-        sal_uInt32          mnPackFileSize; // size in bytes in file backup package (smaller if compressed, same if not)
-        sal_uInt32          mnOffset;       // offset in File (zero identifies new file)
-        sal_uInt32          mnCrc32;        // checksum
-        FileSharedPtr       maFile;         // file where to find the data (at offset)
-        bool                mbDoCompress;   // flag if this file is scheduled to be compredded when written
+        sal_uInt32          mnFullFileSize;     // size in bytes of unpacked original file
+        sal_uInt32          mnPackFileSize;     // size in bytes in file backup package (smaller if compressed, same if not)
+        sal_uInt32          mnOffset;           // offset in File (zero identifies new file)
+        sal_uInt32          mnCrc32;            // checksum
+        FileSharedPtr       maFile;             // file where to find the data (at offset)
+        bool                mbDoCompress;       // flag if this file is scheduled to be compredded when written
 
         bool copy_content_straight(oslFileHandle& rTargetHandle)
         {
@@ -336,93 +743,67 @@ namespace
             return mnOffset;
         }
 
+        void setOffset(sal_uInt32 nOffset)
+        {
+            mnOffset = nOffset;
+        }
+
+        static sal_uInt32 getEntrySize()
+        {
+            return 12;
+        }
+
         sal_uInt32 getCrc32() const
         {
             return mnCrc32;
         }
 
-        bool read_header(
-            FileSharedPtr& rFile,
-            sal_uInt32 nOffset)
+        bool read_header(FileSharedPtr& rFile)
         {
-            mnOffset = nOffset;
-            maFile = rFile;
-
-            if (maFile)
+            if (!rFile)
             {
-                sal_uInt8 aArray[4];
-                sal_uInt64 nBaseRead(0);
-
-                // read and compute full file size
-                if (osl::File::E_None == maFile->read(static_cast<void*>(aArray), 4, nBaseRead) && 4 == nBaseRead)
-                {
-                    mnFullFileSize = (sal_uInt32(aArray[0]) << 24) + (sal_uInt32(aArray[1]) << 16) + (sal_uInt32(aArray[2]) << 8) + sal_uInt32(aArray[3]);
-                }
-                else
-                {
-                    return false;
-                }
-
-                // read and compute entry crc32
-                if (osl::File::E_None == maFile->read(static_cast<void*>(aArray), 4, nBaseRead) && 4 == nBaseRead)
-                {
-                    mnCrc32 = (sal_uInt32(aArray[0]) << 24) + (sal_uInt32(aArray[1]) << 16) + (sal_uInt32(aArray[2]) << 8) + sal_uInt32(aArray[3]);
-                }
-                else
-                {
-                    return false;
-                }
-
-                // read and compute packed size
-                if (osl::File::E_None == maFile->read(static_cast<void*>(aArray), 4, nBaseRead) && 4 == nBaseRead)
-                {
-                    mnPackFileSize = (sal_uInt32(aArray[0]) << 24) + (sal_uInt32(aArray[1]) << 16) + (sal_uInt32(aArray[2]) << 8) + sal_uInt32(aArray[3]);
-                }
-                else
-                {
-                    return false;
-                }
-
-                return true;
+                return false;
             }
 
-            return false;
+            maFile = rFile;
+
+            // read and compute full file size
+            if (!read_sal_uInt32(rFile, mnFullFileSize))
+            {
+                return false;
+            }
+
+            // read and compute entry crc32
+            if (!read_sal_uInt32(rFile, mnCrc32))
+            {
+                return false;
+            }
+
+            // read and compute packed size
+            if (!read_sal_uInt32(rFile, mnPackFileSize))
+            {
+                return false;
+            }
+
+            return true;
         }
 
-        bool write_header(oslFileHandle& rHandle)
+        bool write_header(oslFileHandle& rHandle) const
         {
-            sal_uInt8 aArray[4];
-            sal_uInt64 nBaseWritten(0);
-
             // write full file size
-            aArray[0] = sal_uInt8((mnFullFileSize & 0xff000000) >> 24);
-            aArray[1] = sal_uInt8((mnFullFileSize & 0x00ff0000) >> 16);
-            aArray[2] = sal_uInt8((mnFullFileSize & 0x0000ff00) >> 8);
-            aArray[3] = sal_uInt8(mnFullFileSize & 0x000000ff);
-
-            if (osl_File_E_None != osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) || 4 != nBaseWritten)
+            if (!write_sal_uInt32(rHandle, mnFullFileSize))
             {
                 return false;
             }
 
             // write crc32
-            aArray[0] = sal_uInt8((mnCrc32 & 0xff000000) >> 24);
-            aArray[1] = sal_uInt8((mnCrc32 & 0x00ff0000) >> 16);
-            aArray[2] = sal_uInt8((mnCrc32 & 0x0000ff00) >> 8);
-            aArray[3] = sal_uInt8(mnCrc32 & 0x000000ff);
-
-            if (osl_File_E_None != osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) || 4 != nBaseWritten)
+            if (!write_sal_uInt32(rHandle, mnCrc32))
             {
                 return false;
             }
 
             // write packed file size
-            aArray[0] = sal_uInt8((mnPackFileSize & 0xff000000) >> 24);
-            aArray[1] = sal_uInt8((mnPackFileSize & 0x00ff0000) >> 16);
-            aArray[2] = sal_uInt8((mnPackFileSize & 0x0000ff00) >> 8);
-            aArray[3] = sal_uInt8(mnPackFileSize & 0x000000ff);
-
-            if (osl_File_E_None != osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) || 4 != nBaseWritten)
+            if (!write_sal_uInt32(rHandle, mnPackFileSize))
             {
                 return false;
             }
@@ -509,23 +890,16 @@ namespace
                                 // if there are entries (and less than max), read them
                                 if (nEntries >= 1 && nEntries <= 10)
                                 {
-                                    // offset in souce file starts with 8 Byte for header + numEntries and
-                                    // 12 byte for each entry (size, crc32 and PackedSize)
-                                    sal_uInt32 nOffset(8 + (12 * nEntries));
-
                                     for (sal_uInt32 a(0); a < nEntries; a++)
                                     {
                                         // create new entry, read header (size, crc and PackedSize),
                                         // set offset and source file
                                         PackedFileEntry aEntry;
 
-                                        if (aEntry.read_header(aSourceFile, nOffset))
+                                        if (aEntry.read_header(aSourceFile))
                                         {
                                             // add to local data
                                             maPackedFileEntryVector.push_back(aEntry);
-
-                                            // increase offset for next entry
-                                            nOffset += aEntry.getPackFileSize();
                                         }
                                         else
                                         {
@@ -538,6 +912,21 @@ namespace
                                     {
                                         // on read error clear local data
                                         maPackedFileEntryVector.clear();
+                                    }
+                                    else
+                                    {
+                                        // calculate and set offsets to file binary content
+                                        sal_uInt32 nHeaderSize(8);
+
+                                        nHeaderSize += maPackedFileEntryVector.size() * PackedFileEntry::getEntrySize();
+
+                                        sal_uInt32 nOffset(nHeaderSize);
+
+                                        for (auto& b : maPackedFileEntryVector)
+                                        {
+                                            b.setOffset(nOffset);
+                                            nOffset += b.getPackFileSize();
+                                        }
                                     }
                                 }
                             }
@@ -571,7 +960,7 @@ namespace
                 oslFileHandle aHandle;
                 OUString aTempURL;
 
-                // open target temp file
+                // open target temp file - it exists until deleted
                 if (osl::File::E_None == osl::FileBase::createTempFile(nullptr, &aHandle, &aTempURL))
                 {
                     sal_uInt8 aArray[4];
@@ -586,27 +975,25 @@ namespace
                     if (osl_File_E_None == osl_writeFile(aHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) && 4 == nBaseWritten)
                     {
                         const sal_uInt32 nSize(maPackedFileEntryVector.size());
-                        aArray[0] = sal_uInt8((nSize & 0xff000000) >> 24);
-                        aArray[1] = sal_uInt8((nSize & 0x00ff0000) >> 16);
-                        aArray[2] = sal_uInt8((nSize & 0x0000ff00) >> 8);
-                        aArray[3] = sal_uInt8(nSize & 0x000000ff);
 
                         // write number of entries
-                        if (osl_File_E_None == osl_writeFile(aHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) && 4 == nBaseWritten)
+                        if (write_sal_uInt32(aHandle, nSize))
                         {
                             if (bRetval)
                             {
                                 // write placeholder for headers. Due to the fact that
                                 // PackFileSize for newly added files gets set during
                                 // writing the content entry, write headers after content
-                                // is written. To do so, write placeholders here. We know
-                                // the number of entries to write
-                                const sal_uInt32 nWriteSize(3 * maPackedFileEntryVector.size());
+                                // is written. To do so, write placeholders here
+                                sal_uInt32 nWriteSize(0);
+
+                                nWriteSize += maPackedFileEntryVector.size() * PackedFileEntry::getEntrySize();
+
                                 aArray[0] = aArray[1] = aArray[2] = aArray[3] = 0;
 
                                 for (sal_uInt32 a(0); bRetval && a < nWriteSize; a++)
                                 {
-                                    if (osl_File_E_None != osl_writeFile(aHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) || 4 != nBaseWritten)
+                                    if (osl_File_E_None != osl_writeFile(aHandle, static_cast<const void*>(aArray), 1, &nBaseWritten) || 1 != nBaseWritten)
                                     {
                                         bRetval = false;
                                     }
@@ -653,7 +1040,7 @@ namespace
                     }
                 }
 
-                // close temp file (in all cases)
+                // close temp file (in all cases) - it exists until deleted
                 osl_closeFile(aHandle);
 
                 if (bRetval)
@@ -690,11 +1077,17 @@ namespace
             bool bNeedToAdd(false);
             sal_uInt32 nCrc32(0);
 
-            if (!maPackedFileEntryVector.empty())
+            if (maPackedFileEntryVector.empty())
+            {
+                // no backup yet, add as 1st backup
+                bNeedToAdd = true;
+            }
+            else
             {
                 // already backups there, check if different from last entry
                 const PackedFileEntry& aLastEntry = maPackedFileEntryVector.back();
 
+                // check if file is different
                 if (aLastEntry.getFullFileSize() != static_cast<sal_uInt32>(nFileSize))
                 {
                     // different size, different file
@@ -711,11 +1104,6 @@ namespace
                         bNeedToAdd = true;
                     }
                 }
-            }
-            else
-            {
-                // no backup yet, add
-                bNeedToAdd = true;
             }
 
             if (bNeedToAdd)
@@ -829,16 +1217,89 @@ namespace comphelper
         return bRetval;
     }
 
-    rtl::OUString BackupFileHelper::getName()
-    {
-        return OUString(maBase + "/." + maName + ".pack");
-    }
-
     bool BackupFileHelper::tryPush(bool bCompress)
     {
-        if (splitBaseURL() && baseFileExists())
+        bool bDidPush(false);
+
+        if (splitBaseURL())
         {
-            PackedFile aPackedFile(getName());
+            // ensure directory existence
+            osl::Directory::createPath(getPackDirName());
+
+            // try push for base file (usually registrymodifications)
+            bDidPush = tryPush_basefile(bCompress);
+
+            // Try Push of ExtensionInfo
+            bDidPush |= tryPush_extensionInfo(bCompress);
+        }
+
+        return bDidPush;
+    }
+
+    bool BackupFileHelper::isPopPossible()
+    {
+        bool bPopPossible(false);
+
+        if (splitBaseURL())
+        {
+            // try for base file (usually registrymodifications)
+            bPopPossible = isPopPossible_basefile();
+
+            // try for ExtensionInfo
+            bPopPossible |= isPopPossible_extensionInfo();
+        }
+
+        return bPopPossible;
+    }
+
+    bool BackupFileHelper::tryPop()
+    {
+        bool bDidPop(false);
+
+        if (splitBaseURL())
+        {
+            // try for base file (usually registrymodifications)
+            bDidPop = tryPop_basefile();
+
+            // try for ExtensionInfo
+            bDidPop |= tryPop_extensionInfo();
+
+            if (bDidPop)
+            {
+                // try removal of evtl. empty directory
+                osl::Directory::remove(getPackDirName());
+            }
+        }
+
+        return bDidPop;
+    }
+
+    bool BackupFileHelper::splitBaseURL()
+    {
+        if (maBase.isEmpty() && !mrBaseURL.isEmpty())
+        {
+            // split URL at extension and at last path separator
+            maBase = splitAtLastToken(splitAtLastToken(mrBaseURL, '.', maExt), '/', maName);
+        }
+
+        return !maBase.isEmpty() && !maName.isEmpty();
+    }
+
+    const rtl::OUString BackupFileHelper::getPackDirName() const
+    {
+        return rtl::OUString(maBase + "/pack");
+    }
+
+    const rtl::OUString BackupFileHelper::getPackFileName(const rtl::OUString& rFileName) const
+    {
+        return rtl::OUString(getPackDirName() + "/" + rFileName + ".pack");
+    }
+
+    bool BackupFileHelper::tryPush_basefile(bool bCompress)
+    {
+        if (fileExists(mrBaseURL))
+        {
+            PackedFile aPackedFile(getPackFileName(maName));
             FileSharedPtr aBaseFile(new osl::File(mrBaseURL));
 
             if (aPackedFile.tryPush(aBaseFile, bCompress))
@@ -854,11 +1315,37 @@ namespace comphelper
         return false;
     }
 
-    bool BackupFileHelper::isPopPossible()
+    bool BackupFileHelper::tryPush_extensionInfo(bool bCompress)
     {
-        if (splitBaseURL() && baseFileExists())
+        ExtensionInfo aExtensionInfo;
+        OUString aTempURL;
+        bool bRetval(false);
+
+        // create current configuration and write to temp file - it exists until deleted
+        if (aExtensionInfo.createTempFile(aTempURL))
         {
-            PackedFile aPackedFile(getName());
+            PackedFile aPackedFile(getPackFileName("ExtensionInfo"));
+            FileSharedPtr aBaseFile(new osl::File(aTempURL));
+
+            if (aPackedFile.tryPush(aBaseFile, bCompress))
+            {
+                // reduce to allowed number and flush
+                aPackedFile.tryReduceToNumBackups(mnNumBackups);
+                aPackedFile.flush();
+                bRetval = true;
+            }
+        }
+
+        // delete temp file (in all cases)
+        osl::File::remove(aTempURL);
+        return bRetval;
+    }
+
+    bool BackupFileHelper::isPopPossible_basefile()
+    {
+        if (fileExists(mrBaseURL))
+        {
+            PackedFile aPackedFile(getPackFileName(maName));
 
             return !aPackedFile.empty();
         }
@@ -866,23 +1353,32 @@ namespace comphelper
         return false;
     }
 
-    bool BackupFileHelper::tryPop()
+    bool BackupFileHelper::isPopPossible_extensionInfo()
     {
-        if (splitBaseURL() && baseFileExists())
+        // extensionInfo always exists internally, no test needed
+        PackedFile aPackedFile(getPackFileName("ExtensionInfo"));
+
+        return !aPackedFile.empty();
+    }
+
+    bool BackupFileHelper::tryPop_basefile()
+    {
+        if (fileExists(mrBaseURL))
         {
-            PackedFile aPackedFile(getName());
+            // try Pop for base file (usually registrymodifications)
+            PackedFile aPackedFile(getPackFileName(maName));
 
             if (!aPackedFile.empty())
             {
                 oslFileHandle aHandle;
                 OUString aTempURL;
 
-                // open target temp file
+                // open target temp file - it exists until deleted
                 if (osl::File::E_None == osl::FileBase::createTempFile(nullptr, &aHandle, &aTempURL))
                 {
                     bool bRetval(aPackedFile.tryPop(aHandle));
 
-                    // close temp file (in all cases)
+                    // close temp file (in all cases) - it exists until deleted
                     osl_closeFile(aHandle);
 
                     if (bRetval)
@@ -908,24 +1404,58 @@ namespace comphelper
         return false;
     }
 
-    bool BackupFileHelper::splitBaseURL()
+    bool BackupFileHelper::tryPop_extensionInfo()
     {
-        if (maBase.isEmpty() && !mrBaseURL.isEmpty())
+        // extensionInfo always exists internally, no test needed
+        PackedFile aPackedFile(getPackFileName("ExtensionInfo"));
+
+        if (!aPackedFile.empty())
         {
-            // split URL at extension and at last path separator
-            maBase = splitAtLastToken(splitAtLastToken(mrBaseURL, '.', maExt), '/', maName);
-        }
+            oslFileHandle aHandle;
+            OUString aTempURL;
 
-        return !maBase.isEmpty() && !maName.isEmpty();
-    }
+            // open target temp file - it exists until deleted
+            if (osl::File::E_None == osl::FileBase::createTempFile(nullptr, &aHandle, &aTempURL))
+            {
+                bool bRetval(aPackedFile.tryPop(aHandle));
 
-    bool BackupFileHelper::baseFileExists()
-    {
-        if (!mrBaseURL.isEmpty())
-        {
-            FileSharedPtr aBaseFile(new osl::File(mrBaseURL));
+                // close temp file (in all cases) - it exists until deleted
+                osl_closeFile(aHandle);
 
-            return (osl::File::E_None == aBaseFile->open(osl_File_OpenFlag_Read));
+                if (bRetval)
+                {
+                    // last config is in temp file, load it to ExtensionInfo
+                    ExtensionInfo aLoadedExtensionInfo;
+                    FileSharedPtr aBaseFile(new osl::File(aTempURL));
+
+                    if (osl::File::E_None == aBaseFile->open(osl_File_OpenFlag_Read))
+                    {
+                        if (aLoadedExtensionInfo.read_entries(aBaseFile))
+                        {
+                            ExtensionInfo aCurrentExtensionInfo;
+
+                            aCurrentExtensionInfo.createCurrent();
+
+                            // now we have loaded and current ExtensionInfo and may react on differences
+
+
+
+
+
+                            bRetval = true;
+                        }
+                    }
+
+                    // reduce to allowed number and flush
+                    aPackedFile.tryReduceToNumBackups(mnNumBackups);
+                    aPackedFile.flush();
+                }
+
+                // delete temp file (in all cases - it may be moved already)
+                osl::File::remove(aTempURL);
+
+                return bRetval;
+            }
         }
 
         return false;
