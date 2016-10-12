@@ -1214,7 +1214,7 @@ PushButton::PushButton( vcl::Window* pParent, const ResId& rResId ) :
     WinBits nStyle = ImplInitRes( rResId );
     ImplInitPushButtonData();
     ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
+    ImplLoadRes();
 
     if ( !(nStyle & WB_HIDE) )
         Show();

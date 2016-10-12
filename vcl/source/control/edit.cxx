@@ -176,7 +176,7 @@ Edit::Edit( vcl::Window* pParent, const ResId& rResId )
     WinBits nStyle = ImplInitRes( rResId );
     ImplInitEditData();
     ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
+    ImplLoadRes();
 
     if ( !(nStyle & WB_HIDE) )
         Show();
@@ -1279,9 +1279,9 @@ void Edit::ImplSetCursorPos( sal_Int32 nChar, bool bSelect )
     ImplSetSelection( aSelection );
 }
 
-void Edit::ImplLoadRes( const ResId& rResId )
+void Edit::ImplLoadRes()
 {
-    Control::ImplLoadRes( rResId );
+    Control::ImplLoadRes();
 
     sal_uInt16 nTextLength = ReadShortRes();
     if ( nTextLength )

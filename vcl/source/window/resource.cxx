@@ -36,7 +36,7 @@ WinBits Window::ImplInitRes( const ResId& rResId )
     return nStyle;
 }
 
-WindowResHeader Window::ImplLoadResHeader( const ResId& /*rResId*/ )
+WindowResHeader Window::ImplLoadResHeader()
 {
     WindowResHeader aHeader;
 
@@ -53,9 +53,9 @@ WindowResHeader Window::ImplLoadResHeader( const ResId& /*rResId*/ )
     return aHeader;
 }
 
-void Window::ImplLoadRes( const ResId& rResId )
+void Window::ImplLoadRes()
 {
-    WindowResHeader aHeader = ImplLoadResHeader( rResId );
+    WindowResHeader aHeader = ImplLoadResHeader();
 
     SetHelpId( aHeader.aHelpId );
 

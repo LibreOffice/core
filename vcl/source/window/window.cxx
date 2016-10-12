@@ -104,7 +104,7 @@ Window::Window( vcl::Window* pParent, const ResId& rResId ) :
     rResId.SetRT( RSC_WINDOW );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle, nullptr );
-    ImplLoadRes( rResId );
+    ImplLoadRes();
 
     if ( !(nStyle & WB_HIDE) )
         Show();

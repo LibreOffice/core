@@ -122,7 +122,7 @@ FixedText::FixedText( vcl::Window* pParent, const ResId& rResId )
     rResId.SetRT( RSC_TEXT );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
+    ImplLoadRes();
 
     if ( !(nStyle & WB_HIDE) )
         Show();
@@ -843,7 +843,7 @@ WinBits FixedImage::ImplInitStyle( WinBits nStyle )
 
 void FixedImage::ImplLoadRes( const ResId& rResId )
 {
-    Control::ImplLoadRes( rResId );
+    Control::ImplLoadRes();
 
     sal_uLong nObjMask = ReadLongRes();
 

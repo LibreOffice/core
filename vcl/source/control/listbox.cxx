@@ -63,7 +63,7 @@ ListBox::ListBox( vcl::Window* pParent, const ResId& rResId ) :
     WinBits nStyle = ImplInitRes( rResId );
     ImplInitListBoxData();
     ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
+    ImplLoadRes();
 
     if ( !(nStyle & WB_HIDE ) )
         Show();
@@ -189,9 +189,9 @@ WinBits ListBox::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-void ListBox::ImplLoadRes( const ResId& rResId )
+void ListBox::ImplLoadRes()
 {
-    Control::ImplLoadRes( rResId );
+    Control::ImplLoadRes();
 
     // The resource short is actually to be treated as unsigned short.
     sal_uInt16 nResPos = static_cast<sal_uInt16>(ReadShortRes());
