@@ -153,11 +153,18 @@
             <menu:menuitem menu:id=".uno:HelpIndex"/>
             <menu:menuitem menu:id=".uno:ExtendedHelp"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Homepage"/>
             <menu:menuitem menu:id=".uno:QuestionAnswers"/>
+            <menu:menuitem menu:id=".uno:CommunitySupport"/>
+            <menu:menuitem menu:id=".uno:ProfessionalSupport"/>
             <menu:menuitem menu:id=".uno:SendFeedback"/>
             <menu:menuseparator/>
+<<<<<<< 669b5f045bef8acca2ae2c1d926bd3495fe4c50b
             <menu:menuitem menu:id=".uno:SafeMode"/>
             <menu:menuseparator/>
+=======
+            <menu:menuitem menu:id=".uno:Donate"/>
+>>>>>>> tdf#96015 improvement help menu
             <menu:menuitem menu:id=".uno:ShowLicense"/>
             <menu:menuitem menu:id=".uno:About"/>
         </menu:menupopup>

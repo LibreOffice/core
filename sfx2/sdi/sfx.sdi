@@ -5029,6 +5029,7 @@ SfxVoidItem Addons SID_ADDONS
     GroupId = GID_APPLICATION;
 ]
 
+
 SfxBoolItem ShowImeStatusWindow SID_SHOW_IME_STATUS_WINDOW
 [
     AutoUpdate = FALSE,
@@ -5081,6 +5082,8 @@ SfxVoidItem SendFeedback SID_SEND_FEEDBACK
     ToolBoxConfig = TRUE,
     GroupId = GID_APPLICATION;
 ]
+
+
 SfxVoidItem QuestionAnswers SID_Q_AND_A
 ()
 [
@@ -5094,6 +5097,97 @@ SfxVoidItem QuestionAnswers SID_Q_AND_A
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
+
+
+SfxVoidItem CommunitySupport SID_COMMUNITY_S
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
+
+
+SfxVoidItem ProfessionalSupport SID_PROFESSIONAL_S
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
+
+
+SfxVoidItem Donate SID_DONATE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
+
+
+SfxVoidItem Homepage SID_HOMEPAGE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
+
+
+SfxVoidItem UserGuides SID_USER_GUIDES
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_APPLICATION;
 ]
 
