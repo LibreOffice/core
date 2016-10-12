@@ -1561,20 +1561,6 @@ private:
     sal_Int32       nCapacity;
 };
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
-/**
- @internal
-*/
-template<>
-struct ToStringHelper< OUStringBuffer >
-    {
-    static int length( const OUStringBuffer& s ) { return s.getLength(); }
-    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringBuffer& s ) { return addDataHelper( buffer, s.getStr(), s.getLength()); }
-    static const bool allowOStringConcat = false;
-    static const bool allowOUStringConcat = true;
-    };
-#endif
-
 }
 
 #ifdef RTL_STRING_UNITTEST

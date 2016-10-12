@@ -220,16 +220,16 @@ bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
                 else if( rTok.Is( SvHash_include() ) )
                 {
                     rTok = aTokStm.GetToken_Next();
-                    OStringBuffer aName;
+                    OStringBuffer aNameBuf;
                     if( rTok.IsString() )
-                        aName.append(rTok.GetString());
+                        aNameBuf.append(rTok.GetString());
                     else if( rTok.IsChar() && rTok.GetChar() == '<' )
                     {
                         rTok = aTokStm.GetToken_Next();
                         while( !rTok.IsEof()
                           && !(rTok.IsChar() && rTok.GetChar() == '>') )
                         {
-                            aName.append(rTok.GetTokenAsString());
+                            aNameBuf.append(rTok.GetTokenAsString());
                             rTok = aTokStm.GetToken_Next();
                         }
                         if( rTok.IsEof() )
@@ -237,7 +237,8 @@ bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
                             throw SvParseException("unexpected eof in #include", rTok);
                         }
                     }
-                    if (!ReadIdFile(aName.toString()))
+                    OString aName(aNameBuf.makeStringAndClear());
+                    if (!ReadIdFile(aName))
                     {
                         throw SvParseException("cannot read file: " + aName, rTok);
                     }

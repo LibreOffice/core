@@ -293,7 +293,7 @@ OUString Model::getNodeDisplayName( const XNode_t& xNode,
             OUString sContent = xNode->getNodeValue();
             if( bDetail || ! lcl_isWhitespace( sContent ) )
             {
-                aBuffer = aBuffer + "\"" + Convert::collapseWhitespace( sContent ) + "\"";
+                aBuffer.append("\"" + Convert::collapseWhitespace( sContent ) + "\"");
             }
         }
         break;
@@ -866,7 +866,7 @@ static OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult 
         break;
 
     case XPathObjectType_XPATH_STRING:
-        aBuffer = aBuffer + "\"" + xResult->getString() + "\"";
+        aBuffer.append("\"" + xResult->getString() + "\"");
         break;
 
     case XPathObjectType_XPATH_NODESET:

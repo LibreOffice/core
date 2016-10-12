@@ -69,8 +69,6 @@ void test::oustring::StringConcat::checkConcat()
     const char d1[] = "xyz";
     CPPUNIT_ASSERT_EQUAL( OUString( "fooxyz" ), OUString( OUString( "foo" ) + d1 ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + d1 ));
-    CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUStringBuffer( "foo" ) + OUString( "bar" )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringBuffer, OUString > )), typeid( OUStringBuffer( "foo" ) + OUString( "bar" )));
 }
 
 void test::oustring::StringConcat::checkConcatAsciiL()
@@ -146,6 +144,7 @@ void test::oustring::StringConcat::checkAppend()
 void test::oustring::StringConcat::checkInvalid()
 {
     CPPUNIT_ASSERT( !INVALID_CONCAT( OUString() + OUString()));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OUStringBuffer( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OString( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OStringBuffer( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + static_cast<const char*>("b") ));

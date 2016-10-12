@@ -78,10 +78,6 @@ void test::ostring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, const char* > )), typeid( OString( "foo" ) + d3 ));
     CPPUNIT_ASSERT_EQUAL( OString( "fooabc" ), OString( OString( "foo" ) + d4 ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, char* > )), typeid( OString( "foo" ) + d4 ));
-#ifdef __GNUC__
-    CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringBuffer( "foo" ) + OString( "bar" )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringBuffer, OString > )), typeid( OStringBuffer( "foo" ) + OString( "bar" )));
-#endif
 }
 
 void test::ostring::StringConcat::checkEnsureCapacity()
@@ -141,6 +137,7 @@ void test::ostring::StringConcat::checkAppend()
 void test::ostring::StringConcat::checkInvalid()
 {
     CPPUNIT_ASSERT( !INVALID_CONCAT( OString() + OString()));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OStringBuffer( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUString( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUStringBuffer( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUStringLiteral( "b" )));

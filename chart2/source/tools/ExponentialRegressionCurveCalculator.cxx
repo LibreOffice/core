@@ -205,7 +205,7 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
             OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept, pValueLength );
             if ( aValueString != "0" )  // aValueString may be rounded to 0 if nValueLength is small
             {
-                aTmpBuf.append( aValueString + ( (m_fLogSlope < 0.0) ? OUStringBuffer(" ") : OUStringBuffer(" + ") ) );
+                aTmpBuf.append( aValueString + ( (m_fLogSlope < 0.0) ? OUStringLiteral(" ") : OUStringLiteral(" + ") ) );
             }
         }
     }
