@@ -28,19 +28,21 @@
 namespace sd
 {
 
-const sal_Int32 STLPropertyState_DEFAULT = 0;
-const sal_Int32 STLPropertyState_DIRECT = 1;
-const sal_Int32 STLPropertyState_AMBIGUOUS = 3;
+enum class STLPropertyState {
+    Default = 0,
+    Direct = 1,
+    Ambiguous = 3
+};
 
 struct STLPropertyMapEntry
 {
     css::uno::Any maValue;
-    sal_Int32 mnState;
+    STLPropertyState mnState;
 
     STLPropertyMapEntry()
-        : mnState( STLPropertyState_AMBIGUOUS ) {}
+        : mnState( STLPropertyState::Ambiguous ) {}
     explicit STLPropertyMapEntry(css::uno::Any aValue)
-        : maValue( aValue ), mnState( STLPropertyState_DEFAULT ) {}
+        : maValue( aValue ), mnState( STLPropertyState::Default ) {}
 
 };
 
@@ -58,8 +60,8 @@ public:
     void setPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue );
     css::uno::Any getPropertyValue( sal_Int32 nHandle ) const;
 
-    sal_Int32 getPropertyState( sal_Int32 nHandle ) const;
-    void setPropertyState( sal_Int32 nHandle, sal_Int32 nState );
+    STLPropertyState getPropertyState( sal_Int32 nHandle ) const;
+    void setPropertyState( sal_Int32 nHandle, STLPropertyState nState );
 
 private:
     bool findProperty( sal_Int32 nHandle, PropertyMapIter& rIter );

@@ -921,15 +921,15 @@ void addValue( STLPropertySet* pSet, sal_Int32 nHandle, const Any& rValue )
 {
     switch( pSet->getPropertyState( nHandle ) )
     {
-    case STLPropertyState_AMBIGUOUS:
+    case STLPropertyState::Ambiguous:
         // value is already ambiguous, do nothing
         break;
-    case STLPropertyState_DIRECT:
+    case STLPropertyState::Direct:
         // set to ambiguous if existing value is different
         if( rValue != pSet->getPropertyValue( nHandle ) )
-            pSet->setPropertyState( nHandle, STLPropertyState_AMBIGUOUS );
+            pSet->setPropertyState( nHandle, STLPropertyState::Ambiguous );
         break;
-    case STLPropertyState_DEFAULT:
+    case STLPropertyState::Default:
         // just set new value
         pSet->setPropertyValue( nHandle, rValue );
         break;
@@ -1260,7 +1260,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             continue;
 
         double fDuration = 0.0; // we might need this for iterate-interval
-        if( pResultSet->getPropertyState( nHandleDuration ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleDuration ) == STLPropertyState::Direct )
         {
             pResultSet->getPropertyValue( nHandleDuration ) >>= fDuration;
         }
@@ -1269,7 +1269,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             fDuration = pEffect->getDuration();
         }
 
-        if( pResultSet->getPropertyState( nHandleIterateType ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleIterateType ) == STLPropertyState::Direct )
         {
             sal_Int16 nIterateType = 0;
             pResultSet->getPropertyValue( nHandleIterateType ) >>= nIterateType;
@@ -1282,7 +1282,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pEffect->getIterateType() )
         {
-            if( pResultSet->getPropertyState( nHandleIterateInterval ) == STLPropertyState_DIRECT )
+            if( pResultSet->getPropertyState( nHandleIterateInterval ) == STLPropertyState::Direct )
             {
                 double fIterateInterval = 0.0;
                 pResultSet->getPropertyValue( nHandleIterateInterval ) >>= fIterateInterval;
@@ -1295,7 +1295,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleBegin ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleBegin ) == STLPropertyState::Direct )
         {
             double fBegin = 0.0;
             pResultSet->getPropertyValue( nHandleBegin ) >>= fBegin;
@@ -1306,7 +1306,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleDuration ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleDuration ) == STLPropertyState::Direct )
         {
             if( pEffect->getDuration() != fDuration )
             {
@@ -1315,7 +1315,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleStart ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleStart ) == STLPropertyState::Direct )
         {
             sal_Int16 nNodeType = 0;
             pResultSet->getPropertyValue( nHandleStart ) >>= nNodeType;
@@ -1326,7 +1326,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleRepeat ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleRepeat ) == STLPropertyState::Direct )
         {
             Any aRepeatCount( pResultSet->getPropertyValue( nHandleRepeat ) );
             if( aRepeatCount != pEffect->getRepeatCount() )
@@ -1336,7 +1336,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleEnd ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleEnd ) == STLPropertyState::Direct )
         {
             Any aEndValue( pResultSet->getPropertyValue( nHandleEnd ) );
             if( pEffect->getEnd() != aEndValue )
@@ -1346,7 +1346,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleRewind ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleRewind ) == STLPropertyState::Direct )
         {
             sal_Int16 nFill = 0;
             pResultSet->getPropertyValue( nHandleRewind ) >>= nFill;
@@ -1357,7 +1357,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleHasAfterEffect ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleHasAfterEffect ) == STLPropertyState::Direct )
         {
             bool bHasAfterEffect = false;
             if( pResultSet->getPropertyValue( nHandleHasAfterEffect )  >>= bHasAfterEffect )
@@ -1370,7 +1370,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleAfterEffectOnNextEffect ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleAfterEffectOnNextEffect ) == STLPropertyState::Direct )
         {
             bool bAfterEffectOnNextEffect = false;
             if(   (pResultSet->getPropertyValue( nHandleAfterEffectOnNextEffect ) >>= bAfterEffectOnNextEffect)
@@ -1381,7 +1381,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleDimColor ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleDimColor ) == STLPropertyState::Direct )
         {
             Any aDimColor( pResultSet->getPropertyValue( nHandleDimColor ) );
             if( pEffect->getDimColor() != aDimColor )
@@ -1391,7 +1391,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleAccelerate ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleAccelerate ) == STLPropertyState::Direct )
         {
             double fAccelerate = 0.0;
             pResultSet->getPropertyValue( nHandleAccelerate ) >>= fAccelerate;
@@ -1402,7 +1402,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleDecelerate ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleDecelerate ) == STLPropertyState::Direct )
         {
             double fDecelerate = 0.0;
             pResultSet->getPropertyValue( nHandleDecelerate ) >>= fDecelerate;
@@ -1413,7 +1413,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleAutoReverse ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleAutoReverse ) == STLPropertyState::Direct )
         {
             bool bAutoReverse = false;
             pResultSet->getPropertyValue( nHandleAutoReverse ) >>= bAutoReverse;
@@ -1424,7 +1424,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleProperty1Value ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleProperty1Value ) == STLPropertyState::Direct )
         {
             sal_Int32 nType = 0;
             pOldSet->getPropertyValue( nHandleProperty1Type ) >>= nType;
@@ -1432,7 +1432,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             bChanged |= setProperty1Value( nType, pEffect, pResultSet->getPropertyValue( nHandleProperty1Value ) );
         }
 
-        if( pResultSet->getPropertyState( nHandleSoundURL ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleSoundURL ) == STLPropertyState::Direct )
         {
             const Any aSoundSource( pResultSet->getPropertyValue( nHandleSoundURL ) );
 
@@ -1473,7 +1473,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleTrigger ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleTrigger ) == STLPropertyState::Direct )
         {
             Reference< XShape > xTriggerShape;
             pResultSet->getPropertyValue( nHandleTrigger ) >>= xTriggerShape;
@@ -1481,10 +1481,10 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
         }
     }
 
-    const bool bHasTextGrouping = pResultSet->getPropertyState( nHandleTextGrouping ) == STLPropertyState_DIRECT;
-    const bool bHasAnimateForm = pResultSet->getPropertyState( nHandleAnimateForm ) == STLPropertyState_DIRECT;
-    const bool bHasTextGroupingAuto = pResultSet->getPropertyState( nHandleTextGroupingAuto ) == STLPropertyState_DIRECT;
-    const bool bHasTextReverse = pResultSet->getPropertyState( nHandleTextReverse ) == STLPropertyState_DIRECT;
+    const bool bHasTextGrouping = pResultSet->getPropertyState( nHandleTextGrouping ) == STLPropertyState::Direct;
+    const bool bHasAnimateForm = pResultSet->getPropertyState( nHandleAnimateForm ) == STLPropertyState::Direct;
+    const bool bHasTextGroupingAuto = pResultSet->getPropertyState( nHandleTextGroupingAuto ) == STLPropertyState::Direct;
+    const bool bHasTextReverse = pResultSet->getPropertyState( nHandleTextReverse ) == STLPropertyState::Direct;
 
     if( bHasTextGrouping || bHasAnimateForm || bHasTextGroupingAuto || bHasTextReverse )
     {
