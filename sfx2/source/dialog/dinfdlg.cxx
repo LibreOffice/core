@@ -22,7 +22,6 @@
 #include <tools/datetime.hxx>
 #include <tools/resary.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/StringListResource.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
@@ -1410,13 +1409,11 @@ namespace
     {
         VclPtr<ComboBox> aNameBox(VclPtr<ComboBox>::Create(pParent, WB_TABSTOP|WB_DROPDOWN|
                                                                     WB_AUTOSIZE|WB_AUTOHSCROLL));
-        Point aPos(aNameBox->LogicToPixel(Point(0, 2), MapUnit::MapAppFont));
-        Size aSize(aNameBox->LogicToPixel(Size(60, 72), MapUnit::MapAppFont));
-        aNameBox->SetPosSizePixel(aPos, aSize);
-        std::vector<OUString> aList;
-        tools::StringListResource aRes(SfxResId(RID_STR_TYPE_CONST), aList);
-        for (const auto& rName : aList)
-            aNameBox->InsertEntry(rName);
+        aNameBox->SetPosSizePixel(aNameBox->LogicToPixel(Point(0, 2), MapUnit::MapAppFont),
+                                  aNameBox->LogicToPixel(Size(60, 72), MapUnit::MapAppFont));
+        ResStringArray aStrArr(SfxResId(SFX_CB_PROPERTY_STRINGARRAY));
+        for (sal_uInt32 i = 0; i < aStrArr.Count(); ++i)
+            aNameBox->InsertEntry(aStrArr.GetString(i));
         return aNameBox;
     }
 }
