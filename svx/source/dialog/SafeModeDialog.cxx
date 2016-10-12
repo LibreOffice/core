@@ -12,7 +12,13 @@
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
+#include <comphelper/processfactory.hxx>
 #include <sfx2/safemode.hxx>
+
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
+
+using namespace css;
 
 SafeModeDialog::SafeModeDialog(vcl::Window* pParent):
     Dialog(pParent, "SafeModeDialog", "svx/ui/safemodedialog.ui")
@@ -54,6 +60,12 @@ bool SafeModeDialog::Close()
     return Dialog::Close();
 }
 
+void SafeModeDialog::terminateOffice()
+{
+    uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create( comphelper::getProcessComponentContext() );
+    xDesktop->terminate();
+}
+
 IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnContinue.get())
@@ -62,7 +74,7 @@ IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
     }
     else if (pBtn == mpBtnQuit.get())
     {
-        Close();
+        terminateOffice();
     }
     else if (pBtn == mpBtnRestart.get())
     {
