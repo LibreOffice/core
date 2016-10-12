@@ -89,7 +89,6 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() ),
     mpView(nullptr),
-    meDlgUnit(GetModuleFieldUnit( GetItemSet() )),
     nFilledWidthPercent(0),
     nFilledHeightPercent(0),
     nZoomedWidthPercent(0),
