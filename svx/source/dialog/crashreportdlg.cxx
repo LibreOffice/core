@@ -60,6 +60,19 @@ void CrashReportDialog::dispose()
     Dialog::dispose();
 }
 
+bool CrashReportDialog::Close()
+{
+    // Check whether to go to safe mode
+    if (mpCBSafeMode->IsChecked())
+    {
+        sfx2::SafeMode::putFlag();
+        css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext())->requestRestart(
+            css::uno::Reference< css::task::XInteractionHandler >());
+    }
+
+    return Dialog::Close();
+}
+
 IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnSend.get())
@@ -100,15 +113,6 @@ IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn, void)
     else if (pBtn == mpBtnClose.get())
     {
         Close();
-    }
-
-    // Check whether to go to safe mode
-    if (mpCBSafeMode->IsChecked())
-    {
-        sfx2::SafeMode::putFlag();
-        css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-        css::task::OfficeRestartManager::get(xContext)->requestRestart(
-            css::uno::Reference< css::task::XInteractionHandler >());
     }
 }
 

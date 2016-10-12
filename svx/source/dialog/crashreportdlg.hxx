@@ -26,6 +26,8 @@ public:
 
     virtual void dispose() override;
 
+    virtual bool Close() override;
+
 private:
 
     VclPtr<Button> mpBtnSend;
