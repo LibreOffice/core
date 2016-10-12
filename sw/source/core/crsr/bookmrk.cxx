@@ -262,7 +262,7 @@ namespace sw { namespace mark
         {
             if(m_aRefObj->HasDataLinks())
             {
-                ::sfx2::SvLinkSource* p = &m_aRefObj;
+                ::sfx2::SvLinkSource* p = m_aRefObj.get();
                 p->SendDataChanged();
             }
             m_aRefObj->SetNoServer();

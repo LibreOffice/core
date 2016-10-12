@@ -248,7 +248,7 @@ SwSection::~SwSection()
 
         if (m_RefObj.Is())
         {
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( &m_RefObj );
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( m_RefObj.get() );
         }
 
         // If the Section is the last Client in the Format we can delete it
@@ -1275,7 +1275,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                                     sFilter, 0, pDoc->GetDocShell() );
                 if( nRet )
                 {
-                    SwDoc* pSrcDoc = static_cast<SwDocShell*>(&xDocSh)->GetDoc();
+                    SwDoc* pSrcDoc = static_cast<SwDocShell*>( xDocSh.get() )->GetDoc();
                     eOldRedlineFlags = pSrcDoc->getIDocumentRedlineAccess().GetRedlineFlags();
                     pSrcDoc->getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::ShowInsert );
                 }
@@ -1298,7 +1298,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                                 static_cast<const SfxStringItem*>(pItem)->GetValue() );
                 }
 
-                SwDoc* pSrcDoc = static_cast<SwDocShell*>(&xDocSh)->GetDoc();
+                SwDoc* pSrcDoc = static_cast<SwDocShell*>( xDocSh.get() )->GetDoc();
 
                 if( !sRange.isEmpty() )
                 {
@@ -1388,8 +1388,8 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
             {
                 if( 2 == nRet )
                     xDocSh->DoClose();
-                else if( static_cast<SwDocShell*>(&xDocSh)->GetDoc() )
-                    static_cast<SwDocShell*>(&xDocSh)->GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags(
+                else if( static_cast<SwDocShell*>( xDocSh.get() )->GetDoc() )
+                    static_cast<SwDocShell*>( xDocSh.get() )->GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags(
                                 eOldRedlineFlags );
             }
         }
@@ -1513,7 +1513,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     }
 
     SwIntrnlSectRefLink *const pLnk =
-        static_cast<SwIntrnlSectRefLink*>(& m_RefLink);
+        static_cast<SwIntrnlSectRefLink*>( m_RefLink.get() );
 
     const OUString sCmd(SwSectionData::CollapseWhiteSpaces(m_Data.GetLinkFileName()));
     pLnk->SetUpdateMode( nUpdateType );

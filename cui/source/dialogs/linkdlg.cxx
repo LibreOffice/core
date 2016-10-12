@@ -438,7 +438,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
 
             // if somebody has forgotten to deregister himself
             if( xLink.Is() )
-                pLinkMgr->Remove( &xLink );
+                pLinkMgr->Remove( xLink.get() );
 
             if( bNewLnkMgr )
             {
@@ -477,7 +477,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
                 xLink->Closed();
 
                 // if somebody has forgotten to deregister himself
-                pLinkMgr->Remove( &xLink );
+                pLinkMgr->Remove( xLink.get() );
                 bModified = true;
             }
             // then remove all selected entries

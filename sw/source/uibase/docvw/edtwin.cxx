@@ -1516,17 +1516,17 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             SbxArrayRef xArgs = new SbxArray;
             SbxVariableRef xVar = new SbxVariable;
             xVar->PutString( pFlyFormat->GetName() );
-            xArgs->Put( &xVar, 1 );
+            xArgs->Put( xVar.get(), 1 );
 
             xVar = new SbxVariable;
             if( SW_EVENT_FRM_KEYINPUT_ALPHA == nEvent )
                 xVar->PutChar( aCh );
             else
                 xVar->PutUShort( rKeyCode.GetModifier() | rKeyCode.GetCode() );
-            xArgs->Put( &xVar, 2 );
+            xArgs->Put( xVar.get(), 2 );
 
             OUString sRet;
-            rSh.ExecMacro( *pMacro, &sRet, &xArgs );
+            rSh.ExecMacro( *pMacro, &sRet, xArgs.get() );
             if( !sRet.isEmpty() && sRet.toInt32()!=0 )
                 return ;
         }
@@ -4086,27 +4086,27 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
                             xVar->PutString( pFlyFormat->GetName() );
-                            xArgs->Put( &xVar, ++nPos );
+                            xArgs->Put( xVar.get(), ++nPos );
 
                             if( SW_EVENT_FRM_RESIZE == nEvent )
                             {
                                 xVar = new SbxVariable;
                                 xVar->PutUShort( static_cast< sal_uInt16 >(g_eSdrMoveHdl) );
-                                xArgs->Put( &xVar, ++nPos );
+                                xArgs->Put( xVar.get(), ++nPos );
                             }
 
                             xVar = new SbxVariable;
                             xVar->PutLong( aDocPt.X() - aSttPt.X() );
-                            xArgs->Put( &xVar, ++nPos );
+                            xArgs->Put( xVar.get(), ++nPos );
                             xVar = new SbxVariable;
                             xVar->PutLong( aDocPt.Y() - aSttPt.Y() );
-                            xArgs->Put( &xVar, ++nPos );
+                            xArgs->Put( xVar.get(), ++nPos );
 
                             OUString sRet;
 
                             ReleaseMouse();
 
-                            rSh.ExecMacro( *pMacro, &sRet, &xArgs );
+                            rSh.ExecMacro( *pMacro, &sRet, xArgs.get() );
 
                             CaptureMouse();
 
@@ -4549,29 +4549,29 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
                             xVar->PutString( pFlyFormat->GetName() );
-                            xArgs->Put( &xVar, ++nPos );
+                            xArgs->Put( xVar.get(), ++nPos );
 
                             if( SW_EVENT_FRM_RESIZE == nEvent )
                             {
                                 xVar = new SbxVariable;
                                 xVar->PutUShort( static_cast< sal_uInt16 >(eOldSdrMoveHdl) );
-                                xArgs->Put( &xVar, ++nPos );
+                                xArgs->Put( xVar.get(), ++nPos );
                             }
 
                             xVar = new SbxVariable;
                             xVar->PutLong( aDocPt.X() - aSttPt.X() );
-                            xArgs->Put( &xVar, ++nPos );
+                            xArgs->Put( xVar.get(), ++nPos );
                             xVar = new SbxVariable;
                             xVar->PutLong( aDocPt.Y() - aSttPt.Y() );
-                            xArgs->Put( &xVar, ++nPos );
+                            xArgs->Put( xVar.get(), ++nPos );
 
                             xVar = new SbxVariable;
                             xVar->PutUShort( 1 );
-                            xArgs->Put( &xVar, ++nPos );
+                            xArgs->Put( xVar.get(), ++nPos );
 
                             ReleaseMouse();
 
-                            rSh.ExecMacro( *pMacro, nullptr, &xArgs );
+                            rSh.ExecMacro( *pMacro, nullptr, xArgs.get() );
 
                             CaptureMouse();
                         }

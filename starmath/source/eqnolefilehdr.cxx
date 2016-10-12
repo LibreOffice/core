@@ -34,7 +34,7 @@ bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
         StreamMode::STD_READ);
     if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
         return bSuccess;
-    SotStorageStream *pS = &xSrc;
+    SotStorageStream *pS = xSrc.get();
     pS->SetEndian( SvStreamEndian::LITTLE );
 
     EQNOLEFILEHDR aHdr;

@@ -3230,9 +3230,9 @@ void WW8Export::ExportDocument_Impl()
     xTableStrm->SetEndian( SvStreamEndian::LITTLE );
     xDataStrm->SetEndian( SvStreamEndian::LITTLE );
 
-    GetWriter().SetStream( & *xWwStrm );
-    pTableStrm = &xTableStrm;
-    pDataStrm = &xDataStrm;
+    GetWriter().SetStream( xWwStrm.get() );
+    pTableStrm = xTableStrm.get();
+    pDataStrm = xDataStrm.get();
 
     Strm().SetEndian( SvStreamEndian::LITTLE );
 
@@ -3311,9 +3311,9 @@ void WW8Export::ExportDocument_Impl()
     if ( bEncrypt )
     {
         SvStream *pStrmTemp, *pTableStrmTemp, *pDataStrmTemp;
-        pStrmTemp = &xWwStrm;
-        pTableStrmTemp = &xTableStrm;
-        pDataStrmTemp = &xDataStrm;
+        pStrmTemp = xWwStrm.get();
+        pTableStrmTemp = xTableStrm.get();
+        pDataStrmTemp = xDataStrm.get();
 
         if ( pDataStrmTemp && pDataStrmTemp != pStrmTemp)
             EncryptRC4(aCtx, *pDataStrm, *pDataStrmTemp);
