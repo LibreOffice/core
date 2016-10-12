@@ -1157,18 +1157,18 @@ bool SfxItemPool::IsCurrentVersionLoading() const
 
 /**
  * Saves the SfxPoolItem 'rItem' to the SvStream 'rStream':
- * either as a surrogate ('bDirect == sal_False') or directly with
+ * either as a surrogate ('bDirect == false') or directly with
  * 'rItem.Store()'.
  * Non-poolable Items are always saved directly. Items without WhichId and
  * SID-Items as well as Items that were not yet present in the file format
- * version (return sal_False) are not saved.
+ * version (return false) are not saved.
  *
  * The Item is saved to the Stream in the following manner:
  *   sal_uInt16  rItem.Which()
  *   sal_uInt16  GetSlotId( rItem.Which() ) or 0 if not available
- *   sal_uInt16  GetSurrogate( &rItem ) or SFX_ITEM_DIRECT fo '!SFX_ITEM_POOLBLE'
+ *   sal_uInt16  GetSurrogate( &rItem ) or SFX_ITEM_DIRECT for '!SFX_ITEM_POOLABLE'
  *
- * Optionally (if 'bDirect == sal_True' or '!rItem.IsPoolable()':
+ * Optionally (if 'bDirect == true' or '!rItem.IsPoolable()':
  *   sal_uInt16  rItem.GetVersion()
  *   sal_uLong   Size
  *   Size        rItem.Store()
