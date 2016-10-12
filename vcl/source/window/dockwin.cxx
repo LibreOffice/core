@@ -348,44 +348,6 @@ void DockingWindow::ImplInitSettings()
     }
 }
 
-void DockingWindow::ImplLoadRes( const ResId& rResId )
-{
-    Window::ImplLoadRes( rResId );
-
-    const sal_uInt32 nMask = ReadLongRes();
-
-    if ( (RSC_DOCKINGWINDOW_XYMAPMODE | RSC_DOCKINGWINDOW_X |
-          RSC_DOCKINGWINDOW_Y) & nMask )
-    {
-        // use Sizes of the Resource
-        Point   aPos;
-        MapUnit ePosMap = MapUnit::MapPixel;
-
-        if ( RSC_DOCKINGWINDOW_XYMAPMODE & nMask )
-            ePosMap = (MapUnit)ReadLongRes();
-
-        if ( RSC_DOCKINGWINDOW_X & nMask )
-        {
-            aPos.X() = ReadShortRes();
-            aPos.X() = ImplLogicUnitToPixelX( aPos.X(), ePosMap );
-        }
-
-        if ( RSC_DOCKINGWINDOW_Y & nMask )
-        {
-            aPos.Y() = ReadShortRes();
-            aPos.Y() = ImplLogicUnitToPixelY( aPos.Y(), ePosMap );
-        }
-
-        SetFloatingPos( aPos );
-    }
-
-    if ( nMask & RSC_DOCKINGWINDOW_FLOATING )
-    {
-        if ( ReadShortRes() != 0 )
-            SetFloatingMode( true );
-    }
-}
-
 DockingWindow::DockingWindow( WindowType nType ) :
     Window(nType)
 {
