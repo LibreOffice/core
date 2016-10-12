@@ -117,24 +117,24 @@ public:
     SfxClassificationCategory* m_pCategory;
 
     SfxClassificationParser();
-    virtual ~SfxClassificationParser() override;
+    ~SfxClassificationParser() override;
 
-    virtual void SAL_CALL startDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL startDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL endDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL endDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL startElement(const OUString& aName, const uno::Reference<xml::sax::XAttributeList>& xAttribs)
+    void SAL_CALL startElement(const OUString& aName, const uno::Reference<xml::sax::XAttributeList>& xAttribs)
     throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL endElement(const OUString& aName) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL endElement(const OUString& aName) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL characters(const OUString& aChars) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL characters(const OUString& aChars) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL processingInstruction(const OUString& aTarget, const OUString& aData) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL processingInstruction(const OUString& aTarget, const OUString& aData) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL setDocumentLocator(const uno::Reference<xml::sax::XLocator>& xLocator)
+    void SAL_CALL setDocumentLocator(const uno::Reference<xml::sax::XLocator>& xLocator)
     throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
 };
 
@@ -150,9 +150,7 @@ SfxClassificationParser::SfxClassificationParser()
 {
 }
 
-SfxClassificationParser::~SfxClassificationParser()
-{
-}
+SfxClassificationParser::~SfxClassificationParser() = default;
 
 void SAL_CALL SfxClassificationParser::startDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
@@ -188,7 +186,7 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
             OUString aIdentifier = xAttribs->getValueByName("Identifier");
 
             // Create a new category and initialize it with the data that's true for all categories.
-            m_aCategories.push_back(SfxClassificationCategory());
+            m_aCategories.emplace_back(SfxClassificationCategory());
             SfxClassificationCategory& rCategory = m_aCategories.back();
             rCategory.m_aName = aName;
             rCategory.m_aLabels["PolicyAuthority:Name"] = m_aPolicyAuthorityName;
@@ -552,9 +550,7 @@ SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::
     }
 }
 
-SfxClassificationHelper::~SfxClassificationHelper()
-{
-}
+SfxClassificationHelper::~SfxClassificationHelper() = default;
 
 const OUString& SfxClassificationHelper::GetBACName(SfxClassificationPolicyType eType)
 {
