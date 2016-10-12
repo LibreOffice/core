@@ -432,18 +432,24 @@ void XMLImportTest::testMissingNamespaceDeclaration()
 
     for (sal_uInt16 i = 0; i < sizeof( fileNames ) / sizeof( OUString ); i++)
     {
-        InputSource source;
-        source.sSystemId    = "internal";
+        try
+        {
+            InputSource source;
+            source.sSystemId    = "internal";
 
-        source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
-        m_xParser->parseStream(source);
-        const OUString rParserStr = m_xDocumentHandler->getString();
+            source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
+            m_xParser->parseStream(source);
+            const OUString rParserStr = m_xDocumentHandler->getString();
 
-        source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
-        m_xLegacyFastParser->parseStream(source);
-        const OUString rLegacyFastParserStr = m_xDocumentHandler->getString();
+            source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
+            m_xLegacyFastParser->parseStream(source);
+            const OUString rLegacyFastParserStr = m_xDocumentHandler->getString();
 
-        CPPUNIT_ASSERT_EQUAL( rParserStr, rLegacyFastParserStr );
+            CPPUNIT_ASSERT_EQUAL( rParserStr, rLegacyFastParserStr );
+        }
+        catch( SAXException )
+        {
+        }
     }
 }
 
