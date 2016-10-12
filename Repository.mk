@@ -1000,4 +1000,8 @@ $(eval $(call gb_Helper_register_uiconfigs,\
 	xmlsec \
 ))
 
+ifeq ($(gb_GBUILDSELFTEST),t)
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,gbuildselftestdep gbuildselftest))
+endif
+
 # vim: set noet sw=4 ts=4:
