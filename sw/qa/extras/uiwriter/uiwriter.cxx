@@ -1728,7 +1728,7 @@ void SwUiWriterTest::testTdf69282WithMirror()
     SwPageDesc* sPageDesc = source->MakePageDesc("SourceStyle");
     SwPageDesc* tPageDesc = target->MakePageDesc("TargetStyle");
     //Enabling Mirror
-    sPageDesc->SetUseOn(nsUseOnPage::PD_MIRROR);
+    sPageDesc->SetUseOn(UseOnPage::Mirror);
     SwFrameFormat& rSourceMasterFormat = sPageDesc->GetMaster();
     //Setting horizontal spaces on master
     SvxLRSpaceItem horizontalSpace(RES_LR_SPACE);

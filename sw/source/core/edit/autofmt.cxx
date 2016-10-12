@@ -1057,7 +1057,7 @@ bool SwAutoFormat::HasBreakAttr( const SwTextNode& rTextNd )
 
     if( SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem )
         && static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc()
-        && nsUseOnPage::PD_NONE != static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc()->GetUseOn() )
+        && UseOnPage::NONE != static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc()->GetUseOn() )
         return true;
     return false;
 }

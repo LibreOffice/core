@@ -543,7 +543,7 @@ void RtfExport::WritePageDescTable()
 
         Strm().WriteCharPtr(SAL_NEWLINE_STRING).WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSC);
         OutULong(n).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCUSE);
-        OutULong(rPageDesc.ReadUseOn());
+        OutULong((sal_uLong)rPageDesc.ReadUseOn());
 
         OutPageDescription(rPageDesc, false, false);
 
@@ -613,7 +613,7 @@ void RtfExport::ExportDocument_Impl()
     if (RedlineFlags::On & m_nOrigRedlineFlags)
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_REVISIONS);
     // Mirror margins?
-    if ((nsUseOnPage::PD_MIRROR & m_pDoc->GetPageDesc(0).ReadUseOn()) == nsUseOnPage::PD_MIRROR)
+    if ((UseOnPage::Mirror & m_pDoc->GetPageDesc(0).ReadUseOn()) == UseOnPage::Mirror)
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_MARGMIRROR);
     // Init sections
     m_pSections = new MSWordSections(*this);

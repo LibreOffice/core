@@ -4355,12 +4355,12 @@ void wwSectionManager::SetUseOn(wwSection &rSection)
     bool bMirror = mrReader.m_pWDop->fMirrorMargins ||
         mrReader.m_pWDop->doptypography.f2on1;
 
-    UseOnPage eUseBase = bMirror ? nsUseOnPage::PD_MIRROR : nsUseOnPage::PD_ALL;
+    UseOnPage eUseBase = bMirror ? UseOnPage::Mirror : UseOnPage::All;
     UseOnPage eUse = eUseBase;
     if (!mrReader.m_pWDop->fFacingPages)
-        eUse = (UseOnPage)(eUse | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE);
+        eUse |= UseOnPage::HeaderShare | UseOnPage::FooterShare;
     if (!rSection.HasTitlePage())
-        eUse = (UseOnPage)(eUse | nsUseOnPage::PD_FIRSTSHARE);
+        eUse |= UseOnPage::FirstShare;
 
     OSL_ENSURE(rSection.mpPage, "Makes no sense to call me with no pages to set");
     if (rSection.mpPage)
@@ -4533,9 +4533,9 @@ void wwSectionManager::InsertSegments()
                 *aIter = aTmpSection;
 
                 // Handle the section break
-                UseOnPage eUseOnPage = nsUseOnPage::PD_LEFT;
+                UseOnPage eUseOnPage = UseOnPage::Left;
                 if ( aIter->maSep.bkc == 4 ) // Odd ( right ) Section break
-                    eUseOnPage = nsUseOnPage::PD_RIGHT;
+                    eUseOnPage = UseOnPage::Right;
 
                 // Keep the share flags.
                 aDesc.GetPageDesc()->SetUseOn( eUseOnPage );

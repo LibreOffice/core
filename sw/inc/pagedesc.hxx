@@ -27,13 +27,15 @@
 #include <editeng/numitem.hxx>
 #include <editeng/borderline.hxx>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-
-using namespace ::com::sun::star;
+#include <o3tl/typed_flags_set.hxx>
 
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
+
+using namespace ::com::sun::star;
+
 
 class SfxPoolItem;
 class SwTextFormatColl;
@@ -121,20 +123,22 @@ public:
  * document (contents are created or removed according to SHARE-information).
  */
 
-typedef sal_uInt16 UseOnPage;
-namespace nsUseOnPage
+enum class UseOnPage : sal_uInt16
 {
-    const UseOnPage PD_NONE           = 0x0000; ///< For internal use only.
-    const UseOnPage PD_LEFT           = 0x0001;
-    const UseOnPage PD_RIGHT          = 0x0002;
-    const UseOnPage PD_ALL            = 0x0003;
-    const UseOnPage PD_MIRROR         = 0x0007;
-    const UseOnPage PD_HEADERSHARE    = 0x0040;
-    const UseOnPage PD_FOOTERSHARE    = 0x0080;
-    const UseOnPage PD_FIRSTSHARE     = 0x0100;
-    const UseOnPage PD_NOHEADERSHARE  = 0xFFBF; ///< For internal use only.
-    const UseOnPage PD_NOFOOTERSHARE  = 0xFF7F; ///< For internal use only.
-    const UseOnPage PD_NOFIRSTSHARE   = 0xFEFF;
+    NONE           = 0x0000, ///< For internal use only.
+    Left           = 0x0001,
+    Right          = 0x0002,
+    All            = 0x0003,
+    Mirror         = 0x0007,
+    HeaderShare    = 0x0040,
+    FooterShare    = 0x0080,
+    FirstShare     = 0x0100,
+    NoHeaderShare  = 0xFFBF, ///< For internal use only.
+    NoFooterShare  = 0xFF7F, ///< For internal use only.
+    NoFirstShare   = 0xFEFF
+};
+namespace o3tl {
+    template<> struct typed_flags<UseOnPage> : is_typed_flags<UseOnPage, 0xffff> {};
 }
 
 class SW_DLLPUBLIC SwPageDesc : public SwModify
@@ -206,7 +210,7 @@ public:
     bool IsHidden() const { return m_IsHidden; }
     void SetHidden(bool const bValue) { m_IsHidden = bValue; }
 
-    /// Same as WriteUseOn(), but the >= PD_HEADERSHARE part of the bitfield is not modified.
+    /// Same as WriteUseOn(), but the >= HeaderShare part of the bitfield is not modified.
     inline void      SetUseOn( UseOnPage eNew );
     inline UseOnPage GetUseOn() const;
 
@@ -296,44 +300,44 @@ inline void SwPageDesc::SetFollow( const SwPageDesc* pNew )
 
 inline bool SwPageDesc::IsHeaderShared() const
 {
-    return (m_eUse & nsUseOnPage::PD_HEADERSHARE) != 0;
+    return bool(m_eUse & UseOnPage::HeaderShare);
 }
 inline bool SwPageDesc::IsFooterShared() const
 {
-    return (m_eUse & nsUseOnPage::PD_FOOTERSHARE) != 0;
+    return bool(m_eUse & UseOnPage::FooterShare);
 }
 inline void SwPageDesc::ChgHeaderShare( bool bNew )
 {
     if ( bNew )
-        m_eUse = (UseOnPage) (m_eUse | nsUseOnPage::PD_HEADERSHARE);
+        m_eUse |= UseOnPage::HeaderShare;
     else
-        m_eUse = (UseOnPage) (m_eUse & nsUseOnPage::PD_NOHEADERSHARE);
+        m_eUse &= UseOnPage::NoHeaderShare;
 }
 inline void SwPageDesc::ChgFooterShare( bool bNew )
 {
     if ( bNew )
-        m_eUse = (UseOnPage) (m_eUse | nsUseOnPage::PD_FOOTERSHARE);
+        m_eUse |= UseOnPage::FooterShare;
     else
-        m_eUse = (UseOnPage) (m_eUse & nsUseOnPage::PD_NOFOOTERSHARE);
+        m_eUse &= UseOnPage::NoFooterShare;
 }
 inline void SwPageDesc::SetUseOn( UseOnPage eNew )
 {
-    UseOnPage eTmp = nsUseOnPage::PD_NONE;
-    if (m_eUse & nsUseOnPage::PD_HEADERSHARE)
-        eTmp = nsUseOnPage::PD_HEADERSHARE;
-    if (m_eUse & nsUseOnPage::PD_FOOTERSHARE)
-        eTmp = (UseOnPage) (eTmp | nsUseOnPage::PD_FOOTERSHARE);
-    if (m_eUse & nsUseOnPage::PD_FIRSTSHARE)
-        eTmp = (UseOnPage) (eTmp | nsUseOnPage::PD_FIRSTSHARE);
-    m_eUse = (UseOnPage) (eTmp | eNew);
+    UseOnPage eTmp = UseOnPage::NONE;
+    if (m_eUse & UseOnPage::HeaderShare)
+        eTmp = UseOnPage::HeaderShare;
+    if (m_eUse & UseOnPage::FooterShare)
+        eTmp |= UseOnPage::FooterShare;
+    if (m_eUse & UseOnPage::FirstShare)
+        eTmp |= UseOnPage::FirstShare;
+    m_eUse = eTmp | eNew;
 
 }
 inline UseOnPage SwPageDesc::GetUseOn() const
 {
     UseOnPage eRet = m_eUse;
-    eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOHEADERSHARE);
-    eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOFOOTERSHARE);
-    eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOFIRSTSHARE);
+    eRet &= UseOnPage::NoHeaderShare;
+    eRet &= UseOnPage::NoFooterShare;
+    eRet &= UseOnPage::NoFirstShare;
     return eRet;
 }
 

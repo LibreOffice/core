@@ -256,7 +256,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             rFormat.SetFormatAttr(SwFormatFooter(false));
             aDesc.ChgFooterShare(false);
 
-            aDesc.SetUseOn(nsUseOnPage::PD_ALL);                // Site numbering
+            aDesc.SetUseOn(UseOnPage::All);                // Site numbering
 
             // Set page size
             long lPgWidth, lPgHeight;

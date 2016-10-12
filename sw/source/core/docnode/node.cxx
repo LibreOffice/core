@@ -592,12 +592,12 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
                     if( SwHeaderStartNode == pSttNd->GetStartNodeType())
                     {
                         nId = RES_HEADER;
-                        eAskUse = nsUseOnPage::PD_HEADERSHARE;
+                        eAskUse = UseOnPage::HeaderShare;
                     }
                     else
                     {
                         nId = RES_FOOTER;
-                        eAskUse = nsUseOnPage::PD_FOOTERSHARE;
+                        eAskUse = UseOnPage::FooterShare;
                     }
 
                     for( size_t n = pDoc->GetPageDescCnt(); n && !pPgDesc; )

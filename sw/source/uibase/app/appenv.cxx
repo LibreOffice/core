@@ -386,7 +386,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pDesc->ChgFooterShare(false);
 
         // Page numbering
-        pDesc->SetUseOn(nsUseOnPage::PD_ALL);
+        pDesc->SetUseOn(UseOnPage::All);
 
         // Page size
         rFormat.SetFormatAttr(SwFormatFrameSize(ATT_FIX_SIZE,

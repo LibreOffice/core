@@ -107,10 +107,10 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl, Button*, void)
         bool bOk = true;
         switch(pPageDesc->GetUseOn())
         {
-            case nsUseOnPage::PD_MIRROR:
-            case nsUseOnPage::PD_ALL: break;
-            case nsUseOnPage::PD_LEFT: bOk = 0 == nUserPage % 2; break;
-            case nsUseOnPage::PD_RIGHT: bOk = 1 == nUserPage % 2; break;
+            case UseOnPage::Mirror:
+            case UseOnPage::All: break;
+            case UseOnPage::Left: bOk = 0 == nUserPage % 2; break;
+            case UseOnPage::Right: bOk = 1 == nUserPage % 2; break;
             default:; //prevent warning
         }
         if(!bOk) {

@@ -1276,10 +1276,10 @@ void MSWordSections::CheckForFacinPg( WW8Export& rWrt ) const
             else if( !( 1 & nEnde ) &&
                 pPd->GetFollow() && pPd != pPd->GetFollow() &&
                 pPd->GetFollow()->GetFollow() == pPd &&
-                (( nsUseOnPage::PD_LEFT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ) &&
-                   nsUseOnPage::PD_RIGHT == ( nsUseOnPage::PD_ALL & pPd->GetFollow()->ReadUseOn() )) ||
-                 ( nsUseOnPage::PD_RIGHT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ) &&
-                   nsUseOnPage::PD_LEFT == ( nsUseOnPage::PD_ALL & pPd->GetFollow()->ReadUseOn() )) ))
+                (( UseOnPage::Left == ( UseOnPage::All & pPd->ReadUseOn() ) &&
+                   UseOnPage::Right == ( UseOnPage::All & pPd->GetFollow()->ReadUseOn() )) ||
+                 ( UseOnPage::Right == ( UseOnPage::All & pPd->ReadUseOn() ) &&
+                   UseOnPage::Left == ( UseOnPage::All & pPd->GetFollow()->ReadUseOn() )) ))
             {
                 rWrt.pDop->fFacingPages = rWrt.pDop->fMirrorMargins = true;
                 nEnde |= 1;
@@ -1292,7 +1292,7 @@ void MSWordSections::CheckForFacinPg( WW8Export& rWrt ) const
                 nEnde |= 1;
             }
             if( !( 2 & nEnde ) &&
-                nsUseOnPage::PD_MIRROR == ( nsUseOnPage::PD_MIRROR & pPd->ReadUseOn() ))
+                UseOnPage::Mirror == ( UseOnPage::Mirror & pPd->ReadUseOn() ))
             {
                 rWrt.pDop->fSwapBordersFacingPgs =
                     rWrt.pDop->fMirrorMargins = true;
@@ -1657,16 +1657,16 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         // left-/right chain of pagedescs ?
         if ( pPd->GetFollow() && pPd != pPd->GetFollow() &&
                 pPd->GetFollow()->GetFollow() == pPd &&
-                (( nsUseOnPage::PD_LEFT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ) &&
-                   nsUseOnPage::PD_RIGHT == ( nsUseOnPage::PD_ALL & pPd->GetFollow()->ReadUseOn() )) ||
-                 ( nsUseOnPage::PD_RIGHT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ) &&
-                   nsUseOnPage::PD_LEFT == ( nsUseOnPage::PD_ALL & pPd->GetFollow()->ReadUseOn() )) ))
+                (( UseOnPage::Left == ( UseOnPage::All & pPd->ReadUseOn() ) &&
+                   UseOnPage::Right == ( UseOnPage::All & pPd->GetFollow()->ReadUseOn() )) ||
+                 ( UseOnPage::Right == ( UseOnPage::All & pPd->ReadUseOn() ) &&
+                   UseOnPage::Left == ( UseOnPage::All & pPd->GetFollow()->ReadUseOn() )) ))
         {
             bLeftRightPgChain = true;
 
             // which is the reference point? (left or right?)
             // assume it is on the right side!
-            if ( nsUseOnPage::PD_LEFT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ) )
+            if ( UseOnPage::Left == ( UseOnPage::All & pPd->ReadUseOn() ) )
             {
                 nBreakCode = 3;
                 pPd = pPd->GetFollow();
@@ -1688,9 +1688,9 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         // werden es nur linke oder nur rechte Seiten?
         if ( 2 == nBreakCode )
         {
-            if ( nsUseOnPage::PD_LEFT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ) )
+            if ( UseOnPage::Left == ( UseOnPage::All & pPd->ReadUseOn() ) )
                 nBreakCode = 3;
-            else if ( nsUseOnPage::PD_RIGHT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ) )
+            else if ( UseOnPage::Right == ( UseOnPage::All & pPd->ReadUseOn() ) )
                 nBreakCode = 4;
         }
     }

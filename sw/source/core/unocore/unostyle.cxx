@@ -2655,7 +2655,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault()
         if(pDesc)
         {
             pPageFormat = &pDesc->GetMaster();
-            pDesc->SetUseOn(nsUseOnPage::PD_ALL);
+            pDesc->SetUseOn(UseOnPage::All);
         }
         else
             pPageFormat = lcl_GetFormatForStyle(m_pDoc, xStyle, m_rEntry.m_eFamily);

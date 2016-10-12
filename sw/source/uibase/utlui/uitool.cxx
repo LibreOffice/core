@@ -232,32 +232,32 @@ void FillHdFt(SwFrameFormat* pFormat, const  SfxItemSet& rSet)
 }
 
 /// Convert from UseOnPage to SvxPageUsage.
-UseOnPage lcl_convertUseToSvx(UseOnPage nUse)
+SvxPageUsage lcl_convertUseToSvx(UseOnPage nUse)
 {
-    UseOnPage nRet = nsUseOnPage::PD_NONE;
-    if ((nUse & nsUseOnPage::PD_LEFT) == nsUseOnPage::PD_LEFT)
+    int nRet = 0;
+    if (nUse & UseOnPage::Left)
         nRet |= SVX_PAGE_LEFT;
-    if ((nUse & nsUseOnPage::PD_RIGHT) == nsUseOnPage::PD_RIGHT)
+    if (nUse & UseOnPage::Right)
         nRet |= SVX_PAGE_RIGHT;
-    if ((nUse & nsUseOnPage::PD_ALL) == nsUseOnPage::PD_ALL)
+    if ((nUse & UseOnPage::All) == UseOnPage::All)
         nRet |= SVX_PAGE_ALL;
-    if ((nUse & nsUseOnPage::PD_MIRROR) == nsUseOnPage::PD_MIRROR)
+    if ((nUse & UseOnPage::Mirror) == UseOnPage::Mirror)
         nRet |= SVX_PAGE_MIRROR;
-    return nRet;
+    return (SvxPageUsage)nRet;
 }
 
 /// Convert from SvxPageUsage to UseOnPage.
-UseOnPage lcl_convertUseFromSvx(UseOnPage nUse)
+UseOnPage lcl_convertUseFromSvx(SvxPageUsage nUse)
 {
-    UseOnPage nRet = nsUseOnPage::PD_NONE;
+    UseOnPage nRet = UseOnPage::NONE;
     if ((nUse & SVX_PAGE_LEFT) == SVX_PAGE_LEFT)
-        nRet |= nsUseOnPage::PD_LEFT;
+        nRet |= UseOnPage::Left;
     if ((nUse & SVX_PAGE_RIGHT) == SVX_PAGE_RIGHT)
-        nRet |= nsUseOnPage::PD_RIGHT;
+        nRet |= UseOnPage::Right;
     if ((nUse & SVX_PAGE_ALL) == SVX_PAGE_ALL)
-        nRet |= nsUseOnPage::PD_ALL;
+        nRet |= UseOnPage::All;
     if ((nUse & SVX_PAGE_MIRROR) == SVX_PAGE_MIRROR)
-        nRet |= nsUseOnPage::PD_MIRROR;
+        nRet |= UseOnPage::Mirror;
     return nRet;
 }
 
@@ -276,9 +276,9 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     {
         const SvxPageItem& rPageItem = static_cast<const SvxPageItem&>(rSet.Get(SID_ATTR_PAGE));
 
-        const sal_uInt16 nUse = rPageItem.GetPageUsage();
+        const SvxPageUsage nUse = (SvxPageUsage)rPageItem.GetPageUsage();
         if(nUse)
-            rPageDesc.SetUseOn( lcl_convertUseFromSvx((UseOnPage) nUse) );
+            rPageDesc.SetUseOn( lcl_convertUseFromSvx(nUse) );
         rPageDesc.SetLandscape(rPageItem.IsLandscape());
         SvxNumberType aNumType;
         aNumType.SetNumberingType( static_cast< sal_Int16 >(rPageItem.GetNumType()) );

@@ -105,7 +105,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
         const MapMode aTmpMap( MapUnit::MapTwip );
         const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
 
-        if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )    // mirrored pages
+        if( UseOnPage::Mirror == rDesc.GetUseOn() )    // mirrored pages
         {
             const SvxLRSpaceItem &rLeftLRSpace = rDesc.GetLeft().GetLRSpace();
             aPageSize.Width() += std::abs( long(rLeftLRSpace.GetLeft()) - long(rLRSpace.GetLeft()) );

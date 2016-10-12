@@ -391,7 +391,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     // Mirror at first if needed.
-    if ( rChged.GetUseOn() == nsUseOnPage::PD_MIRROR )
+    if ( rChged.GetUseOn() == UseOnPage::Mirror )
         const_cast<SwPageDesc&>(rChged).Mirror();
     else
     {

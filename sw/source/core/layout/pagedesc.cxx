@@ -48,7 +48,7 @@ SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *con
     , m_nRegHeight( 0 )
     , m_nRegAscent( 0 )
     , m_nVerticalAdjustment( drawing::TextVerticalAdjust_TOP )
-    , m_eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_FIRSTSHARE) )
+    , m_eUse( UseOnPage::All | UseOnPage::HeaderShare | UseOnPage::FooterShare | UseOnPage::FirstShare )
     , m_IsLandscape( false )
     , m_IsHidden( false )
     , m_pdList( nullptr )
@@ -324,29 +324,29 @@ bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
 
 SwFrameFormat *SwPageDesc::GetLeftFormat(bool const bFirst)
 {
-    return (nsUseOnPage::PD_LEFT & m_eUse)
+    return (UseOnPage::Left & m_eUse)
             ? ((bFirst) ? &m_FirstLeft : &m_Left)
             : nullptr;
 }
 
 SwFrameFormat *SwPageDesc::GetRightFormat(bool const bFirst)
 {
-    return (nsUseOnPage::PD_RIGHT & m_eUse)
-            ? ((bFirst) ? &m_FirstMaster : &m_Master)
+    return (UseOnPage::Right & m_eUse)
+            ? (bFirst ? &m_FirstMaster : &m_Master)
             : nullptr;
 }
 
 bool SwPageDesc::IsFirstShared() const
 {
-    return (m_eUse & nsUseOnPage::PD_FIRSTSHARE) != 0;
+    return bool(m_eUse & UseOnPage::FirstShare);
 }
 
 void SwPageDesc::ChgFirstShare( bool bNew )
 {
     if ( bNew )
-        m_eUse = (UseOnPage) (m_eUse | nsUseOnPage::PD_FIRSTSHARE);
+        m_eUse |= UseOnPage::FirstShare;
     else
-        m_eUse = (UseOnPage) (m_eUse & nsUseOnPage::PD_NOFIRSTSHARE);
+        m_eUse &= UseOnPage::NoFirstShare;
 }
 
 SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)

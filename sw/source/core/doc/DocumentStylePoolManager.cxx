@@ -1428,7 +1428,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
         {
             aSet.Put( aLR );
             aSet.Put( aUL );
-            pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL | nsUseOnPage::PD_FIRSTSHARE );
+            pNewPgDsc->SetUseOn( UseOnPage::All | UseOnPage::FirstShare );
         }
         break;
 
@@ -1438,7 +1438,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
             lcl_PutStdPageSizeIntoItemSet( &m_rDoc, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
-            pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
+            pNewPgDsc->SetUseOn( UseOnPage::All );
             if( RES_POOLPAGE_FIRST == nId )
                 pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_STANDARD ));
         }
@@ -1450,7 +1450,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
             aSet.Put( aLR );
             aSet.Put( aUL );
             bSetLeft = false;
-            pNewPgDsc->SetUseOn( nsUseOnPage::PD_LEFT );
+            pNewPgDsc->SetUseOn( UseOnPage::Left );
             // this relies on GetPageDescFromPool() not going into infinite recursion
             // (by this point RES_POOLPAGE_LEFT will not reach this place again)
             pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_RIGHT ));
@@ -1462,7 +1462,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
             aSet.Put( aLR );
             aSet.Put( aUL );
             bSetLeft = false;
-            pNewPgDsc->SetUseOn( nsUseOnPage::PD_RIGHT );
+            pNewPgDsc->SetUseOn( UseOnPage::Right );
             pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_LEFT ));
         }
         break;
@@ -1477,7 +1477,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
             aSet.Put( aLR );
             aSet.Put( aUL );
 
-            pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
+            pNewPgDsc->SetUseOn( UseOnPage::All );
             pNewPgDsc->SetLandscape( true );
         }
         break;
@@ -1491,7 +1491,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
             aSet.Put( aLR );
             aSet.Put( aUL );
 
-            pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
+            pNewPgDsc->SetUseOn( UseOnPage::All );
         }
         break;
 
@@ -1501,7 +1501,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
             lcl_PutStdPageSizeIntoItemSet( &m_rDoc, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
-            pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
+            pNewPgDsc->SetUseOn( UseOnPage::All );
             SwPageFootnoteInfo aInf( pNewPgDsc->GetFootnoteInfo() );
             aInf.SetLineWidth( 0 );
             aInf.SetTopDist( 0 );
@@ -1523,7 +1523,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
             aSet.Put( aFrameSz );
             aSet.Put( aLR );
             aSet.Put( aUL );
-            pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
+            pNewPgDsc->SetUseOn( UseOnPage::All );
             pNewPgDsc->SetLandscape( true );
         }
         break;
