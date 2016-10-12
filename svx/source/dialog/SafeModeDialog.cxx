@@ -35,6 +35,13 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent):
     mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
     mpBtnQuit->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
     mpBtnRestart->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
+
+    mpCBCustomizations->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mpCBExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mpCBFull->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+
+    // Disable restart btn until some checkbox is active
+    mpBtnRestart->Disable();
 }
 
 SafeModeDialog::~SafeModeDialog()
@@ -92,6 +99,12 @@ IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
         Close();
         applyChanges();
     }
+}
+
+IMPL_LINK(SafeModeDialog, CheckBoxHdl, CheckBox&, /*pCheckBox*/, void)
+{
+    bool bEnable = mpCBCustomizations->IsChecked() || mpCBExtensions->IsChecked() || mpCBFull->IsChecked();
+    mpBtnRestart->Enable(bEnable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,6 +41,7 @@ private:
     static void terminateOffice();
     static void applyChanges();
 
+    DECL_LINK(CheckBoxHdl, CheckBox&, void);
     DECL_LINK(BtnHdl, Button*, void);
 };
 
