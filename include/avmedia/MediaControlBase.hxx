@@ -22,6 +22,7 @@
 #include <svx/svxdllapi.h>
 #include <vcl/edit.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/slider.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <avmedia/mediawindow.hxx>
@@ -82,3 +83,5 @@ private:
 
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

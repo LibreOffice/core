@@ -34,6 +34,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/lstbox.hxx>
 #include "jobset.h"
 
 #include "unotools/localedatawrapper.hxx"
