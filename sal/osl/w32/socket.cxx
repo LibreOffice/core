@@ -262,142 +262,14 @@ static oslSocketError osl_SocketErrorFromNative(int nativeType)
 #define ERROR_FROM_NATIVE(y)    osl_SocketErrorFromNative(y)
 
 /*****************************************************************************/
-/* oslSocketDialupImpl */
-/*****************************************************************************/
-static oslSocketDialupImpl *pDialupImpl = nullptr;
-
-static oslSocketDialupImpl* osl_createSocketDialupImpl()
-{
-    oslSocketDialupImpl *pImpl;
-    pImpl = static_cast<oslSocketDialupImpl*>(rtl_allocateZeroMemory( sizeof (oslSocketDialupImpl)));
-
-    InitializeCriticalSection (&pImpl->m_hMutex);
-
-    return (pImpl);
-}
-
-static void osl_initSocketDialupImpl (oslSocketDialupImpl *pImpl)
-{
-#ifdef SOCKET_USE_AUTODIAL
-    if (pImpl)
-    {
-        HINSTANCE hModule;
-
-        EnterCriticalSection (&pImpl->m_hMutex);
-
-        hModule = LoadLibrary (INTERNET_MODULE_NAME);
-        if (!(hModule <= (HINSTANCE)HINSTANCE_ERROR))
-        {
-            pImpl->m_pfnAttemptConnect = (INTERNETATTEMPTCONNECT)
-                (GetProcAddress (hModule, "InternetAttemptConnect"));
-            pImpl->m_pfnAutodial = (INTERNETAUTODIAL)
-                (GetProcAddress (hModule, "InternetAutodial"));
-            pImpl->m_pfnAutodialHangup = (INTERNETAUTODIALHANGUP)
-                (GetProcAddress (hModule, "InternetAutodialHangup"));
-            pImpl->m_pfnGetConnectedState = (INTERNETGETCONNECTEDSTATE)
-                (GetProcAddress (hModule, "InternetGetConnectedState"));
-            pImpl->m_hModule = hModule;
-        }
-
-        LeaveCriticalSection (&pImpl->m_hMutex);
-    }
-#else
-    (void)pImpl;
-#endif
-}
-
-static void osl_destroySocketDialupImpl (oslSocketDialupImpl *pImpl)
-{
-    if (pImpl)
-    {
-        EnterCriticalSection (&pImpl->m_hMutex);
-
-        if (pImpl->m_dwFlags & INTERNET_CONNECTION_HANGUP)
-        {
-            if (pImpl->m_pfnAutodialHangup)
-            {
-                (pImpl->m_pfnAutodialHangup)(0);
-                pImpl->m_dwFlags &= ~INTERNET_CONNECTION_HANGUP;
-            }
-        }
-
-        if (pImpl->m_hModule)
-            FreeLibrary (pImpl->m_hModule);
-
-        LeaveCriticalSection (&pImpl->m_hMutex);
-        DeleteCriticalSection (&pImpl->m_hMutex);
-
-        rtl_freeMemory (pImpl);
-    }
-}
-
-static bool osl_querySocketDialupImpl()
-{
-    bool result;
-
-    if (pDialupImpl == nullptr)
-    {
-        pDialupImpl = osl_createSocketDialupImpl();
-        osl_initSocketDialupImpl (pDialupImpl);
-    }
-
-    EnterCriticalSection (&pDialupImpl->m_hMutex);
-
-    result = true;
-    if (pDialupImpl->m_pfnGetConnectedState)
-    {
-        DWORD dwFlags = 0;
-
-        result = (pDialupImpl->m_pfnGetConnectedState)(&dwFlags, 0);
-        pDialupImpl->m_dwFlags |= dwFlags;
-    }
-
-    LeaveCriticalSection (&pDialupImpl->m_hMutex);
-    return result;
-}
-
-static bool osl_attemptSocketDialupImpl()
-{
-    bool result;
-
-    if (pDialupImpl == nullptr)
-    {
-        pDialupImpl = osl_createSocketDialupImpl();
-        osl_initSocketDialupImpl (pDialupImpl);
-    }
-
-    EnterCriticalSection (&pDialupImpl->m_hMutex);
-
-    result = osl_querySocketDialupImpl();
-    if (!result)
-    {
-        result = true;
-        if (pDialupImpl->m_pfnAutodial)
-        {
-            result = (pDialupImpl->m_pfnAutodial)(0, 0);
-            if (result)
-                pDialupImpl->m_dwFlags |= INTERNET_CONNECTION_HANGUP;
-            else
-                WSASetLastError (WSAENETDOWN);
-        }
-    }
-
-    LeaveCriticalSection (&pDialupImpl->m_hMutex);
-    return result;
-}
-
-/*****************************************************************************/
 /* oslSocketImpl */
 /*****************************************************************************/
-static sal_uInt32 g_nSocketImpl = 0;
-
 #if OSL_DEBUG_LEVEL > 0
 static sal_uInt32 g_nSocketAddr = 0;
 struct LeakWarning
 {
     ~LeakWarning()
     {
-        SAL_WARN_IF( g_nSocketImpl, "sal.osl", "sal_socket: " << g_nSocketImpl << " socket instances leak" );
         SAL_WARN_IF( g_nSocketAddr, "sal.osl", "sal_socket: " << g_nSocketAddr << " socket address instances leak" );
     }
 };
@@ -409,9 +281,6 @@ oslSocket osl_createSocketImpl_(SOCKET Socket)
     oslSocket pSockImpl = static_cast<oslSocket>(rtl_allocateZeroMemory( sizeof(struct oslSocketImpl)));
     pSockImpl->m_Socket = Socket;
     pSockImpl->m_nRefCount = 1;
-
-    g_nSocketImpl++;
-
     return (pSockImpl);
 }
 
@@ -419,11 +288,6 @@ void osl_destroySocketImpl_(oslSocketImpl *pImpl)
 {
     if (pImpl)
     {
-        if (--g_nSocketImpl == 0)
-        {
-            osl_destroySocketDialupImpl (pDialupImpl);
-            pDialupImpl = nullptr;
-        }
         rtl_freeMemory (pImpl);
     }
 }
@@ -797,49 +661,46 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
     if ((strHostname == nullptr) || (strHostname->length == 0))
         return nullptr;
 
-    if (osl_attemptSocketDialupImpl())
-    {
 #if _WIN32_WINNT < _WIN32_WINNT_VISTA
-        struct hostent *he;
-        rtl_String     *Hostname= NULL;
+    struct hostent *he;
+    rtl_String     *Hostname= NULL;
 
-        rtl_uString2String(
-            &Hostname, strHostname->buffer, strHostname->length,
-            RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
+    rtl_uString2String(
+        &Hostname, strHostname->buffer, strHostname->length,
+        RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
 
-        he= gethostbyname (Hostname->buffer);
+    he= gethostbyname (Hostname->buffer);
 
-        rtl_string_release (Hostname);
-        return __osl_hostentToHostAddr (he);
+    rtl_string_release (Hostname);
+    return __osl_hostentToHostAddr (he);
 #else
-        PADDRINFOW pAddrInfo = nullptr;
-        int ret = GetAddrInfoW(
-                    strHostname->buffer, nullptr, nullptr, & pAddrInfo);
-        if (0 == ret)
+    PADDRINFOW pAddrInfo = nullptr;
+    int ret = GetAddrInfoW(
+                strHostname->buffer, nullptr, nullptr, & pAddrInfo);
+    if (0 == ret)
+    {
+        oslHostAddr pRet = nullptr;
+        for (PADDRINFOW pIter = pAddrInfo; pIter; pIter = pIter->ai_next)
         {
-            oslHostAddr pRet = nullptr;
-            for (PADDRINFOW pIter = pAddrInfo; pIter; pIter = pIter->ai_next)
+            if (AF_INET == pIter->ai_family)
             {
-                if (AF_INET == pIter->ai_family)
-                {
-                    pRet = static_cast<oslHostAddr>(
-                        rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
-                    rtl_uString_newFromStr(&pRet->pHostName, pIter->ai_canonname);
-                    pRet->pSockAddr = osl_createSocketAddr_();
-                    memcpy(& pRet->pSockAddr->m_sockaddr,
-                           pIter->ai_addr, pIter->ai_addrlen);
-                    break; // ignore other results
-                }
+                pRet = static_cast<oslHostAddr>(
+                    rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
+                rtl_uString_newFromStr(&pRet->pHostName, pIter->ai_canonname);
+                pRet->pSockAddr = osl_createSocketAddr_();
+                memcpy(& pRet->pSockAddr->m_sockaddr,
+                       pIter->ai_addr, pIter->ai_addrlen);
+                break; // ignore other results
             }
-            FreeAddrInfoW(pAddrInfo);
-            return pRet;
         }
-        else
-        {
-            SAL_INFO("sal.osl", "GetAddrInfoW failed: " << WSAGetLastError());
-        }
-#endif // _WIN32_WINNT
+        FreeAddrInfoW(pAddrInfo);
+        return pRet;
     }
+    else
+    {
+        SAL_INFO("sal.osl", "GetAddrInfoW failed: " << WSAGetLastError());
+    }
+#endif // _WIN32_WINNT
     return nullptr;
 }
 
@@ -858,37 +719,34 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr pAddr)
         if (sin->sin_addr.s_addr == htonl(INADDR_ANY))
             return nullptr;
 
-        if (osl_attemptSocketDialupImpl())
-        {
 #if _WIN32_WINNT < _WIN32_WINNT_VISTA
-            struct hostent *he;
-            he= gethostbyaddr ((const sal_Char *)&(sin->sin_addr),
-                               sizeof (sin->sin_addr),
-                               sin->sin_family);
-            return __osl_hostentToHostAddr (he);
+        struct hostent *he;
+        he= gethostbyaddr ((const sal_Char *)&(sin->sin_addr),
+                           sizeof (sin->sin_addr),
+                           sin->sin_family);
+        return __osl_hostentToHostAddr (he);
 #else
-            WCHAR buf[NI_MAXHOST];
-            int ret = GetNameInfoW(
-                        & pAddr->m_sockaddr, sizeof(struct sockaddr),
-                        buf, NI_MAXHOST,
-                        nullptr, 0, 0);
-            if (0 == ret)
-            {
-                oslHostAddr pRet = static_cast<oslHostAddr>(
-                        rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
-                rtl_uString_newFromStr(&pRet->pHostName,
-                        reinterpret_cast<sal_Unicode*>(&buf));
-                pRet->pSockAddr = osl_createSocketAddr_();
-                memcpy(& pRet->pSockAddr->m_sockaddr,
-                       & pAddr->m_sockaddr, sizeof(struct sockaddr));
-                return pRet;
-            }
-            else
-            {
-                SAL_INFO("sal.osl", "GetNameInfoW failed: " << WSAGetLastError());
-            }
-#endif // _WIN32_WINNT
+        WCHAR buf[NI_MAXHOST];
+        int ret = GetNameInfoW(
+                    & pAddr->m_sockaddr, sizeof(struct sockaddr),
+                    buf, NI_MAXHOST,
+                    nullptr, 0, 0);
+        if (0 == ret)
+        {
+            oslHostAddr pRet = static_cast<oslHostAddr>(
+                    rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
+            rtl_uString_newFromStr(&pRet->pHostName,
+                    reinterpret_cast<sal_Unicode*>(&buf));
+            pRet->pSockAddr = osl_createSocketAddr_();
+            memcpy(& pRet->pSockAddr->m_sockaddr,
+                   & pAddr->m_sockaddr, sizeof(struct sockaddr));
+            return pRet;
         }
+        else
+        {
+            SAL_INFO("sal.osl", "GetNameInfoW failed: " << WSAGetLastError());
+        }
+#endif // _WIN32_WINNT
     }
 
     return nullptr;
@@ -1287,9 +1145,6 @@ oslSocketResult SAL_CALL osl_connectSocketTo (
         return osl_Socket_Error;
 
     if (pAddr == nullptr) /* EDESTADDRREQ */
-        return osl_Socket_Error;
-
-    if (!osl_attemptSocketDialupImpl()) /* ENETDOWN */
         return osl_Socket_Error;
 
     if (pTimeout == nullptr)
