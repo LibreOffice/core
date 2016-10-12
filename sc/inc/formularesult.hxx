@@ -75,15 +75,7 @@ class ScFormulaResult
     bool                mbToken :1; // whether content of union is a token
     bool                mbEmpty :1; // empty cell result
     bool                mbEmptyDisplayedAsString :1;    // only if mbEmpty
-// GCC4.8 complains about 'ScFormulaResult::meMultiline is too small to hold all values of enum class ScFormulaResult::Multiline'
-#if defined __GNUC__ && !defined __clang__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Werror"
-#endif
     Multiline           meMultiline :2; // result is multiline
-#if defined __GNUC__ && !defined __clang__
-#pragma GCC diagnostic pop
-#endif
 
     /** Reset mnError, mbEmpty and mbEmptyDisplayedAsString to their defaults
         prior to assigning other types */
