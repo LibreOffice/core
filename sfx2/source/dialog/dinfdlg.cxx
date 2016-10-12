@@ -20,6 +20,7 @@
 #include <svl/eitem.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/datetime.hxx>
+#include <tools/resary.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/StringListResource.hxx>
 #include <vcl/layout.hxx>
@@ -1421,9 +1422,18 @@ namespace
 }
 
 CustomPropertiesTypeBox::CustomPropertiesTypeBox(vcl::Window* pParent, CustomPropertyLine* pLine)
-    : ListBox(pParent, SfxResId(SFX_LB_PROPERTY_TYPE))
+    : ListBox(pParent, WB_BORDER|WB_DROPDOWN)
     , m_pLine(pLine)
 {
+    SetPosSizePixel(LogicToPixel(Point(63, 2), MapUnit::MapAppFont),
+                    LogicToPixel(Size(60, 80), MapUnit::MapAppFont));
+    ResStringArray aStrArr(SfxResId(SFX_LB_PROPERTY_STRINGARRAY));
+    for (sal_uInt32 i = 0; i < aStrArr.Count(); ++i)
+    {
+        InsertEntry(aStrArr.GetString(i));
+        SetEntryData(i, reinterpret_cast<void*>(aStrArr.GetValue(i)));
+    }
+    SelectEntryPos(0);
 }
 
 // struct CustomPropertyLine ---------------------------------------------

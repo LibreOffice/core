@@ -152,14 +152,9 @@ Resource RID_STR_TYPE_CONST
     };
 };
 
-ListBox SFX_LB_PROPERTY_TYPE
+StringArray SFX_LB_PROPERTY_STRINGARRAY
 {
-    Pos = MAP_APPFONT ( 63 , 2 ) ;
-    Size = MAP_APPFONT ( 60 , 80 ) ;
-    DropDown = TRUE;
-    Border = TRUE;
-    CurPos = 0;
-    StringList [ en-US ] =
+    ItemList [ en-US ] =
     {
         < "Text"        ; CUSTOM_TYPE_TEXT ; > ;
         < "DateTime"    ; CUSTOM_TYPE_DATETIME ; > ;
