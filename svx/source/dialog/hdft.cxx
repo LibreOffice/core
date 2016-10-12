@@ -510,9 +510,9 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, Button *, pButton, void )
         m_pRMLbl->Enable();
         m_pRMEdit->Enable();
 
-        sal_uInt16 nUsage = m_pBspWin->GetUsage();
+        SvxPageUsage nUsage = m_pBspWin->GetUsage();
 
-        if( nUsage == SVX_PAGE_RIGHT || nUsage == SVX_PAGE_LEFT )
+        if( nUsage == SvxPageUsage::Right || nUsage == SvxPageUsage::Left )
             m_pCntSharedBox->Disable();
         else
         {
@@ -917,7 +917,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         m_pBspWin->SetBottom( 0 );
     }
 
-    sal_uInt16 nUsage = SVX_PAGE_ALL;
+    SvxPageUsage nUsage = SvxPageUsage::All;
     pItem = GetItem( rSet, SID_ATTR_PAGE );
 
     if ( pItem )
@@ -925,7 +925,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     m_pBspWin->SetUsage( nUsage );
 
-    if ( SVX_PAGE_RIGHT == nUsage || SVX_PAGE_LEFT == nUsage )
+    if ( SvxPageUsage::Right == nUsage || SvxPageUsage::Left == nUsage )
         m_pCntSharedBox->Disable();
     else
     {

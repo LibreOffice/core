@@ -117,7 +117,7 @@ PageMarginControl::PageMarginControl( sal_uInt16 nId )
     {
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
         bLandscape = static_cast<const SvxPageItem*>( pItem )->IsLandscape();
-        m_bMirrored = static_cast<const SvxPageItem*>( pItem )->GetPageUsage() == SVX_PAGE_MIRROR;
+        m_bMirrored = static_cast<const SvxPageItem*>( pItem )->GetPageUsage() == SvxPageUsage::Mirror;
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pItem );
         pSize = static_cast<const SvxSizeItem*>( pItem );
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_LRSPACE, pItem );
@@ -471,7 +471,7 @@ void PageMarginControl::ExecutePageLayoutChange( const bool bMirrored )
     if ( SfxViewFrame::Current() )
     {
         std::unique_ptr<SvxPageItem> pPageItem( new SvxPageItem( SID_ATTR_PAGE ) );
-        pPageItem->SetPageUsage( bMirrored ? SVX_PAGE_MIRROR : SVX_PAGE_ALL );
+        pPageItem->SetPageUsage( bMirrored ? SvxPageUsage::Mirror : SvxPageUsage::All );
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE,
                 SfxCallMode::RECORD, { pPageItem.get() } );
         pPageItem.reset();

@@ -1651,12 +1651,12 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
 
                         switch ( eUsage )
                         {
-                            case SVX_PAGE_LEFT:
-                            case SVX_PAGE_RIGHT:
+                            case SvxPageUsage::Left:
+                            case SvxPageUsage::Right:
                             {
                                 if ( bHeaderOn && bFooterOn )
                                     nResId = RID_SCDLG_HFEDIT;
-                                else if ( SVX_PAGE_RIGHT == eUsage )
+                                else if ( SvxPageUsage::Right == eUsage )
                                 {
                                     if ( !bHeaderOn && bFooterOn )
                                         nResId = RID_SCDLG_HFEDIT_RIGHTFOOTER;
@@ -1678,8 +1678,8 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                             }
                             break;
 
-                            case SVX_PAGE_MIRROR:
-                            case SVX_PAGE_ALL:
+                            case SvxPageUsage::Mirror:
+                            case SvxPageUsage::All:
                             default:
                             {
                                 if ( !bShareHeader && !bShareFooter )

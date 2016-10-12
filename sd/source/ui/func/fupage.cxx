@@ -238,7 +238,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
 
     SvxPageItem aPageItem( SID_ATTR_PAGE );
     aPageItem.SetDescName( mpPage->GetName() );
-    aPageItem.SetPageUsage( (SvxPageUsage) SVX_PAGE_ALL );
+    aPageItem.SetPageUsage( SvxPageUsage::All );
     aPageItem.SetLandscape( mpPage->GetOrientation() == Orientation::Landscape );
     aPageItem.SetNumType( mpDoc->GetPageNumType() );
     aNewAttr.Put( aPageItem );

@@ -41,28 +41,28 @@ using namespace ::com::sun::star;
 
 namespace sw { namespace sidebar{
 
-const sal_uInt16 aArr[] =
+const SvxPageUsage aArr[] =
 {
-    SVX_PAGE_ALL,
-    SVX_PAGE_MIRROR,
-    SVX_PAGE_RIGHT,
-    SVX_PAGE_LEFT
+    SvxPageUsage::All,
+    SvxPageUsage::Mirror,
+    SvxPageUsage::Right,
+    SvxPageUsage::Left
 };
 
 
-sal_uInt16 PageUsageToPos_Impl( sal_uInt16 nUsage )
+sal_uInt16 PageUsageToPos_Impl( SvxPageUsage nUsage )
 {
     for ( sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aArr); ++i )
-        if ( aArr[i] == ( nUsage & 0x000f ) )
+        if ( aArr[i] == nUsage )
             return i;
-    return SVX_PAGE_ALL;
+    return 3;
 }
 
 
-sal_uInt16 PosToPageUsage_Impl( sal_uInt16 nPos )
+SvxPageUsage PosToPageUsage_Impl( sal_uInt16 nPos )
 {
     if ( nPos >= SAL_N_ELEMENTS(aArr) )
-        return 0;
+        return SvxPageUsage::NONE;
     return aArr[nPos];
 }
 
@@ -357,7 +357,7 @@ void PageStylesPanel::NotifyItemUpdate(
                 SvxNumType eNumType = mpPageItem->GetNumType();
                 mpNumberSelectLB->SetSelection(eNumType);
 
-                sal_uInt16 nUse = mpPageItem->GetPageUsage();
+                SvxPageUsage nUse = mpPageItem->GetPageUsage();
                 mpLayoutSelectLB->SelectEntryPos( PageUsageToPos_Impl( nUse ) );
             }
         }

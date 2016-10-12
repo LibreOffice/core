@@ -166,8 +166,7 @@ ScHFEditActiveDlg::ScHFEditActiveDlg(
                 rCoreSet.Get(
                     rCoreSet.GetPool()->GetWhich(SID_ATTR_PAGE) ));
 
-    bool bRightPage = ( SVX_PAGE_LEFT !=
-                        SvxPageUsage(rPageItem.GetPageUsage()) );
+    bool bRightPage = SvxPageUsage::Left != rPageItem.GetPageUsage();
 
     if ( bRightPage )
     {

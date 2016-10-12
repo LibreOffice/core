@@ -28,12 +28,13 @@ using SvxNumType = sal_Int16; // css::style::NumberingType constants
   usage of the page
  --------------------------------------------------------------------*/
 
-enum SvxPageUsage
+enum class SvxPageUsage
 {
-    SVX_PAGE_LEFT           = 0x0001,
-    SVX_PAGE_RIGHT          = 0x0002,
-    SVX_PAGE_ALL            = 0x0003,
-    SVX_PAGE_MIRROR         = 0x0007
+    NONE           = 0,
+    Left           = 1,
+    Right          = 2,
+    All            = 3,
+    Mirror         = 7
 };
 
 /*--------------------------------------------------------------------
@@ -51,7 +52,7 @@ private:
     OUString            aDescName;          // name of the template
     SvxNumType          eNumType;           // enumeration
     bool                bLandscape;         // Portrait / Landscape
-    sal_uInt16          eUse;               // Layout
+    SvxPageUsage        eUse;               // Layout
 
 public:
 
@@ -75,8 +76,8 @@ public:
     virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const override;
 
     // orientation
-    sal_uInt16          GetPageUsage() const                { return eUse;       }
-    void            SetPageUsage(sal_uInt16 eU)             { eUse= eU;          }
+    SvxPageUsage    GetPageUsage() const                { return eUse;       }
+    void            SetPageUsage(SvxPageUsage eU)       { eUse= eU;          }
 
     bool            IsLandscape() const                 { return bLandscape; }
     void            SetLandscape(bool bL)               { bLandscape = bL;   }
@@ -86,7 +87,7 @@ public:
     void            SetNumType(SvxNumType eNum)         { eNumType = eNum;   }
 
     // name of the descriptor
-    void            SetDescName(const OUString& rStr)     { aDescName = rStr;  }
+    void            SetDescName(const OUString& rStr)   { aDescName = rStr;  }
 };
 
 

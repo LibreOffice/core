@@ -276,9 +276,9 @@ IMPL_LINK_NOARG(PageFormatPanel, PaperModifyMarginHdl, ListBox&, void)
     {
         ExecuteMarginLRChange( mnPageLeftMargin, mnPageRightMargin );
         ExecuteMarginULChange( mnPageTopMargin, mnPageBottomMargin );
-        if(bMirrored != (mpPageItem->GetPageUsage() == SVX_PAGE_MIRROR))
+        if(bMirrored != (mpPageItem->GetPageUsage() == SvxPageUsage::Mirror))
         {
-            mpPageItem->SetPageUsage( bMirrored ? SVX_PAGE_MIRROR : SVX_PAGE_ALL );
+            mpPageItem->SetPageUsage( bMirrored ? SvxPageUsage::Mirror : SvxPageUsage::All );
             mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE,
                                                         SfxCallMode::RECORD, { mpPageItem.get() });
         }
@@ -337,7 +337,7 @@ void PageFormatPanel::UpdateMarginBox()
     mnPageTopMargin = mpPageULMarginItem->GetUpper();
     mnPageBottomMargin = mpPageULMarginItem->GetLower();
 
-    bool bMirrored = (mpPageItem->GetPageUsage() == SVX_PAGE_MIRROR);
+    bool bMirrored = (mpPageItem->GetPageUsage() == SvxPageUsage::Mirror);
     if( IsNone(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
         mpMarginSelectBox->SelectEntryPos(0);

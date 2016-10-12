@@ -24,6 +24,7 @@
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 
 class SvxBoxItem;
+enum class SvxPageUsage;
 
 class SVX_DLLPUBLIC SvxPageWindow : public vcl::Window
 {
@@ -66,7 +67,7 @@ private:
     bool bHorz : 1;
     bool bVert : 1;
 
-    sal_uInt16 eUsage;
+    SvxPageUsage eUsage;
 
 protected:
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
@@ -143,8 +144,8 @@ public:
     long GetFtDist() const { return nFtDist; }
     long GetFtHeight() const { return nFtHeight; }
 
-    void SetUsage(sal_uInt16 eU) { eUsage = eU; }
-    sal_uInt16 GetUsage() const { return eUsage; }
+    void SetUsage(SvxPageUsage eU) { eUsage = eU; }
+    SvxPageUsage GetUsage() const { return eUsage; }
 
     void SetHeader( bool bNew ) { bHeader = bNew; }
     void SetFooter( bool bNew ) { bFooter = bNew; }
