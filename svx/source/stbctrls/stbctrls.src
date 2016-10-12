@@ -181,6 +181,11 @@ String RID_SVXSTR_ZOOM_OPTIMAL_VIEW
     Text [ en-US ] = "Optimal View" ;
 };
 
+String RID_SIDEBAR_EMPTY_PANEL_TEXT
+{
+    Text [ en-US ] = "Properties for the task that you are performing are not available for the current selection" ;
+};
+
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMNU_ZOOM
 {

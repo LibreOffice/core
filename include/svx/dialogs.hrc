@@ -196,9 +196,7 @@
 #define RID_SVXIMG_NOTCHECKED               (RID_SVX_START + 243)
 #define RID_SVXIMG_CHECKED                  (RID_SVX_START + 244)
 
-#define RID_SIDEBAR_LINE_PANEL              (RID_SVX_START + 321)
-
-#define RID_SIDEBAR_EMPTY_PANEL             (RID_SVX_START + 327)
+#define RID_SIDEBAR_EMPTY_PANEL_TEXT        (RID_SVX_START + 321)
 
 // !!! IMPORTANT: consider and update RID_SVX_FIRSTFREE when introducing new RIDs !!! (see above)
 
