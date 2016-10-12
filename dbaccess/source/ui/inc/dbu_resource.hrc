@@ -141,10 +141,6 @@
 #define RID_MENU_JOINVIEW_CONNECTION    RID_MENU_START + 16
 #define RID_MENU_JOINVIEW_TABLE         RID_MENU_START + 17
 
-// controls
-
-#define RID_DB_TAB_EDITOR               RID_CONTROL_START +  0
-
 // strings
 #define STR_TBL_TITLE                       RID_STR_GEN_START
 #define STR_ERROR_DURING_CREATION           RID_STR_GEN_START + 1

@@ -35,14 +35,16 @@ using namespace ::com::sun::star::util;
 #define HANDLE_ID 0
 
 OTableRowView::OTableRowView(vcl::Window* pParent)
-    :EditBrowseBox(pParent, ModuleRes(RID_DB_TAB_EDITOR),EditBrowseBoxFlags::NONE,
-                    BrowserMode::COLUMNSELECTION | BrowserMode::MULTISELECTION | BrowserMode::AUTOSIZE_LASTCOL |
-                    BrowserMode::KEEPHIGHLIGHT | BrowserMode::HLINES | BrowserMode::VLINES)
-    ,m_nDataPos(-1)
-    ,m_nCurrentPos(-1)
-    ,m_nCurUndoActId(0)
+    : EditBrowseBox(pParent, EditBrowseBoxFlags::NONE, WB_TABSTOP|WB_HIDE|WB_3DLOOK,
+                    BrowserMode::COLUMNSELECTION | BrowserMode::MULTISELECTION |
+                    BrowserMode::AUTOSIZE_LASTCOL | BrowserMode::KEEPHIGHLIGHT |
+                    BrowserMode::HLINES | BrowserMode::VLINES)
+    , m_nDataPos(-1)
+    , m_nCurrentPos(-1)
+    , m_nCurUndoActId(0)
 {
-
+    SetHelpId(HID_TABDESIGN_BACKGROUND);
+    SetSizePixel(LogicToPixel(Size(40, 12), MapUnit::MapAppFont));
 }
 
 void OTableRowView::Init()

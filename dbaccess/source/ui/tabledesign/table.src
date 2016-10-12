@@ -123,16 +123,6 @@ String STR_TAB_TABLE_PROPERTIES
     Text [ en-US ] = "Table properties";
 };
 
-Control RID_DB_TAB_EDITOR
-{
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 40 , 12 ) ;
-    TabStop = TRUE ;
-    SvLook = TRUE ;
-    Hide = TRUE ;
-    HelpId = HID_TABDESIGN_BACKGROUND ;
-};
-
 Menu RID_TABLEDESIGNROWPOPUPMENU
 {
     ItemList =
