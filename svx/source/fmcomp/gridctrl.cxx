@@ -2915,7 +2915,7 @@ CellController* DbGridControl::GetController(long /*nRow*/, sal_uInt16 nColumnId
 
     CellController* pReturn = nullptr;
     if (IsFilterMode())
-        pReturn = &pColumn->GetController();
+        pReturn = pColumn->GetController().get();
     else
     {
         if (::comphelper::hasProperty(FM_PROP_ENABLED, pColumn->getModel()))
@@ -2929,7 +2929,7 @@ CellController* DbGridControl::GetController(long /*nRow*/, sal_uInt16 nColumnId
 
         if ((bInsert && !pColumn->IsAutoValue()) || bUpdate)
         {
-            pReturn = &pColumn->GetController();
+            pReturn = pColumn->GetController().get();
         }
     }
     return pReturn;
@@ -3042,7 +3042,7 @@ void DbGridControl::Undo()
         EndCursorAction();
 
         m_xDataRow->SetState(m_pDataCursor, false);
-        if (&m_xPaintRow == &m_xCurrentRow)
+        if (m_xPaintRow == m_xCurrentRow)
             m_xPaintRow = m_xCurrentRow = m_xDataRow;
         else
             m_xCurrentRow = m_xDataRow;
@@ -3087,7 +3087,7 @@ void DbGridControl::resetCurrentRow()
 
         // update the rows
         m_xDataRow->SetState(m_pDataCursor, false);
-        if (&m_xPaintRow == &m_xCurrentRow)
+        if (m_xPaintRow == m_xCurrentRow)
             m_xPaintRow = m_xCurrentRow = m_xDataRow;
         else
             m_xCurrentRow = m_xDataRow;

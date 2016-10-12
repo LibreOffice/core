@@ -560,7 +560,7 @@ bool MathType::Parse(SotStorage *pStor)
         StreamMode::STD_READ);
     if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
         return false;
-    pS = &xSrc;
+    pS = xSrc.get();
     pS->SetEndian( SvStreamEndian::LITTLE );
 
     EQNOLEFILEHDR aHdr;
@@ -1921,7 +1921,7 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
         if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
             return false;
 
-        pS = &xSrc;
+        pS = xSrc.get();
         pS->SetEndian( SvStreamEndian::LITTLE );
 
         pS->SeekRel(EQNOLEFILEHDR_SIZE); //Skip 28byte Header and fill it in later

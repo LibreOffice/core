@@ -92,8 +92,6 @@ public:
 
     T * get()         const { return pObj; }
 
-    T * operator &()  const { return pObj; }
-
     T * operator ->() const { assert(pObj != nullptr); return pObj; }
 
     T & operator *()  const { assert(pObj != nullptr); return *pObj; }

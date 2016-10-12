@@ -141,7 +141,7 @@ namespace dbaui
             ODatabaseImportExport* pExport = static_cast<ODatabaseImportExport*>(pUserObject);
             if ( pExport && rxOStm.Is() )
             {
-                pExport->setStream(&rxOStm);
+                pExport->setStream(rxOStm.get());
                 return pExport->Write();
             }
         }

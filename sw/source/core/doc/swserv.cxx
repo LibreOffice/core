@@ -309,7 +309,7 @@ SwDataChanged::~SwDataChanged()
             // Any one else interested in the Object?
             if( refObj->HasDataLinks() && dynamic_cast<const SwServerObject*>( refObj.get() ) !=  nullptr)
             {
-                SwServerObject& rObj = *static_cast<SwServerObject*>(&refObj);
+                SwServerObject& rObj = *static_cast<SwServerObject*>( refObj.get() );
                 if( pPos )
                     rObj.SendDataChanged( *pPos );
                 else

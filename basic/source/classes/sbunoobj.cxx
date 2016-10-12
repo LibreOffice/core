@@ -868,7 +868,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
             return aRetType;
         }
 
-        if( nullptr != dynamic_cast<const SbxDimArray*>( &xObj) )
+        if( nullptr != dynamic_cast<const SbxDimArray*>( xObj.get() ) )
         {
             SbxBase* pObj = xObj.get();
             SbxDimArray* pArray = static_cast<SbxDimArray*>(pObj);
@@ -962,12 +962,12 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
             }
         }
         // No array, but ...
-        else if( nullptr != dynamic_cast<const SbUnoObject*>( &xObj) )
+        else if( nullptr != dynamic_cast<const SbUnoObject*>( xObj.get() ) )
         {
             aRetType = static_cast<SbUnoObject*>(xObj.get())->getUnoAny().getValueType();
         }
         // SbUnoAnyObject?
-        else if( nullptr != dynamic_cast<const SbUnoAnyObject*>( &xObj) )
+        else if( nullptr != dynamic_cast<const SbUnoAnyObject*>( xObj.get() ) )
         {
             aRetType = static_cast<SbUnoAnyObject*>(xObj.get())->getValue().getValueType();
         }
@@ -990,9 +990,9 @@ Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType
         SbxBaseRef xObj = pVar->GetObject();
         if( xObj.Is() )
         {
-            if( nullptr != dynamic_cast<const SbUnoAnyObject*>( &xObj) )
+            if( nullptr != dynamic_cast<const SbUnoAnyObject*>( xObj.get() ) )
                 return static_cast<SbUnoAnyObject*>(xObj.get())->getValue();
-            if( nullptr != dynamic_cast<const SbClassModuleObject*>( &xObj) )
+            if( nullptr != dynamic_cast<const SbClassModuleObject*>( xObj.get() ) )
             {
                 Any aRetAny;
                 SbClassModuleObject* pClassModuleObj = static_cast<SbClassModuleObject*>(xObj.get());
@@ -1000,7 +1000,7 @@ Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType
                 if( pClassModule->createCOMWrapperForIface( aRetAny, pClassModuleObj ) )
                     return aRetAny;
             }
-            if( nullptr == dynamic_cast<const SbUnoObject*>( &xObj) )
+            if( nullptr == dynamic_cast<const SbUnoObject*>( xObj.get() ) )
             {
                 // Create NativeObjectWrapper to identify object in case of callbacks
                 SbxObject* pObj = dynamic_cast<SbxObject*>( pVar->GetObject() );
@@ -1189,7 +1189,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
     if( eBaseType == SbxOBJECT )
     {
         SbxBaseRef xObj = pVar->GetObject();
-        if( xObj.Is() && nullptr != dynamic_cast<const SbUnoAnyObject*>( &xObj) )
+        if( xObj.Is() && nullptr != dynamic_cast<const SbUnoAnyObject*>( xObj.get() ) )
         {
             return static_cast<SbUnoAnyObject*>(xObj.get())->getValue();
         }
@@ -1244,11 +1244,11 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                 }
 
                 SbxBaseRef pObj = pVar->GetObject();
-                if( pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( &pObj) )
+                if( pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( pObj.get() ) )
                 {
                     aRetVal = static_cast<SbUnoObject*>(pObj.get())->getUnoAny();
                 }
-                else if( pObj.Is() && nullptr != dynamic_cast<const SbUnoStructRefObject*>( &pObj) )
+                else if( pObj.Is() && nullptr != dynamic_cast<const SbUnoStructRefObject*>( pObj.get() ) )
                 {
                     aRetVal = static_cast<SbUnoStructRefObject*>(pObj.get())->getUnoAny();
                 }
@@ -1270,7 +1270,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                 Reference< XIdlClass > xIdlClass;
 
                 SbxBaseRef pObj = pVar->GetObject();
-                if( pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( &pObj) )
+                if( pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( pObj.get() ) )
                 {
                     Any aUnoAny = static_cast<SbUnoObject*>( pObj.get() )->getUnoAny();
                     aUnoAny >>= xIdlClass;
@@ -1306,7 +1306,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
         case TypeClass_SEQUENCE:
         {
             SbxBaseRef xObj = pVar->GetObject();
-            if( xObj.Is() && nullptr != dynamic_cast<const SbxDimArray*>( &xObj) )
+            if( xObj.Is() && nullptr != dynamic_cast<const SbxDimArray*>( xObj.get() ) )
             {
                 SbxBase* pObj = xObj.get();
                 SbxDimArray* pArray = static_cast<SbxDimArray*>(pObj);
@@ -3084,7 +3084,7 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 
     // get the Uno-Object
     SbxBaseRef pObj = rPar.Get( 1 )->GetObject();
-    if( !(pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( &pObj)) )
+    if( !(pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( pObj.get() )) )
     {
         return;
     }
@@ -3148,7 +3148,7 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
         return;
     }
     SbxBaseRef pObj = rPar.Get( 1 )->GetObject();
-    if( !(pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( &pObj)) )
+    if( !(pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( pObj.get() )) )
     {
         return;
     }
@@ -3183,7 +3183,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
         return;
     }
     SbxBaseRef pObj1 = xParam1->GetObject();
-    if( !(pObj1.Is() && nullptr != dynamic_cast<const SbUnoObject*>( &pObj1 )) )
+    if( !(pObj1.Is() && nullptr != dynamic_cast<const SbUnoObject*>( pObj1.get() )) )
     {
         return;
     }
@@ -3202,7 +3202,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
         return;
     }
     SbxBaseRef pObj2 = xParam2->GetObject();
-    if( !(pObj2.Is() && nullptr != dynamic_cast<const SbUnoObject*>( &pObj2 )) )
+    if( !(pObj2.Is() && nullptr != dynamic_cast<const SbUnoObject*>( pObj2.get() )) )
     {
         return;
     }
@@ -4192,7 +4192,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
             Reference< XIdlClass > xIdlClass;
 
             SbxBaseRef pObj = pVal->GetObject();
-            if( pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( &pObj) )
+            if( pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( pObj.get() ) )
             {
                 Any aUnoAny = static_cast<SbUnoObject*>(pObj.get())->getUnoAny();
                 aUnoAny >>= xIdlClass;
@@ -4286,7 +4286,7 @@ ModuleInvocationProxy::ModuleInvocationProxy( const OUString& aPrefix, SbxObject
     , m_xScopeObj( xScopeObj )
     , m_aListeners( m_aMutex )
 {
-    m_bProxyIsClassModuleObject = xScopeObj.Is() && nullptr != dynamic_cast<const SbClassModuleObject*>( &xScopeObj );
+    m_bProxyIsClassModuleObject = xScopeObj.Is() && nullptr != dynamic_cast<const SbClassModuleObject*>( xScopeObj.get() );
 }
 
 Reference< XIntrospectionAccess > SAL_CALL ModuleInvocationProxy::getIntrospection() throw(std::exception)

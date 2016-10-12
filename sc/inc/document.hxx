@@ -687,8 +687,8 @@ public:
 
     SCTAB           GetMaxTableNumber() { return static_cast<SCTAB>(maTabs.size()) - 1; }
 
-    ScRangePairList*    GetColNameRanges() { return &xColNameRanges; }
-    ScRangePairList*    GetRowNameRanges() { return &xRowNameRanges; }
+    ScRangePairList*    GetColNameRanges() { return xColNameRanges.get(); }
+    ScRangePairList*    GetRowNameRanges() { return xRowNameRanges.get(); }
     ScRangePairListRef& GetColNameRangesRef() { return xColNameRanges; }
     ScRangePairListRef& GetRowNameRangesRef() { return xRowNameRanges; }
 

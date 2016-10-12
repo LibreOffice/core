@@ -514,7 +514,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
 
     if( ( SotClipboardFormatId::DRAWING == nFormat ) && ( SgaObjKind::SvDraw == meObjectKind ) )
     {
-        bRet = ( mxModelStream.Is() && SetObject( &mxModelStream, SotClipboardFormatId::NONE, rFlavor ) );
+        bRet = ( mxModelStream.Is() && SetObject( mxModelStream.get(), SotClipboardFormatId::NONE, rFlavor ) );
     }
     else if( ( SotClipboardFormatId::SVIM == nFormat ) && mpImageMap )
     {
