@@ -216,6 +216,8 @@ private:
     bool                bSelCtrlMouseClick:1;       // special selection handling for ctrl-mouse-click
     bool                bMoveArea:1;
 
+    bool                bGrowing;
+
     long                m_nLOKPageUpDownOffset;
 
     DECL_DLLPRIVATE_LINK_TYPED( EditEngineHdl, EditStatus&, void );
