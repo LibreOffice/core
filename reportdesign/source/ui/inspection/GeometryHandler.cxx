@@ -935,7 +935,6 @@ uno::Any GeometryHandler::getConstantValue(bool _bToControlValue,sal_uInt16 _nRe
 {
     ModuleRes aRes(_nResId);
     ResStringArray aResList(aRes);
-    std::vector<OUString> aList;
     uno::Sequence< OUString > aSeq(aResList.Count());
     for (sal_uInt32 i = 0; i < aResList.Count(); ++i)
         aSeq[i] = aResList.GetString(i);
