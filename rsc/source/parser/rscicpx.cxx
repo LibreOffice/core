@@ -664,43 +664,6 @@ RscTop * RscTypCont::InitClassMenu( RscTop * pSuper,
     return pClassMenu;
 }
 
-RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,
-                                             RscEnum * pMapUnit )
-{
-    Atom        nId;
-    RscTop *    pClassDockWindow;
-
-    // initialize class
-    nId = pHS->getID( "DockingWindow" );
-    pClassDockWindow = new RscClass( nId, RSC_DOCKINGWINDOW, pSuper );
-    pClassDockWindow->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassDockWindow );
-
-    // initialize variables
-    nId = aNmTb.Put( "_FloatingPosMapMode", VARNAME );
-    pClassDockWindow->SetVariable( nId, pMapUnit, nullptr, 0,
-                                   RSC_DOCKINGWINDOW_XYMAPMODE  );
-    nId = aNmTb.Put( "_FloatingPosX", VARNAME );
-    pClassDockWindow->SetVariable( nId, &aShort, nullptr, 0,
-                                   RSC_DOCKINGWINDOW_X );
-    nId = aNmTb.Put( "_FloatingPosY", VARNAME );
-    pClassDockWindow->SetVariable( nId, &aShort, nullptr, 0,
-                                   RSC_DOCKINGWINDOW_Y );
-    nId = aNmTb.Put( "FloatingMode", VARNAME );
-    pClassDockWindow->SetVariable( nId, &aBool, nullptr, 0,
-                                   RSC_DOCKINGWINDOW_FLOATING );
-
-    INS_WINBIT(pClassDockWindow,Moveable)
-    INS_WINBIT(pClassDockWindow,Sizeable)
-    INS_WINBIT(pClassDockWindow,EnableResizing)
-    INS_WINBIT(pClassDockWindow,Closeable)
-    INS_WINBIT(pClassDockWindow,HideWhenDeactivate);
-    INS_WINBIT(pClassDockWindow,Zoomable);
-    INS_WINBIT(pClassDockWindow,Dockable);
-
-    return pClassDockWindow;
-}
-
 RscTop * RscTypCont::InitClassSfxStyleFamilyItem( RscTop * pSuper,
                                                   RscTop * pClassBitmap,
                                                   RscTop * pClassImage,

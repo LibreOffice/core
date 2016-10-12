@@ -1410,7 +1410,6 @@ OString ResMgr::GetAutoHelpId()
     {
         // auto help ids for top level windows
         switch( pRC->pResource->GetRT() ) {
-            case RSC_DOCKINGWINDOW:     aHID.append( "DockingWindow" );    break;
             default: return OString();
         }
     }
@@ -1419,19 +1418,6 @@ OString ResMgr::GetAutoHelpId()
         // only controls with the following parents get auto help ids
         const ImpRCStack *pRC1 = StackTop(1);
         switch( pRC1->pResource->GetRT() ) {
-            case RSC_DOCKINGWINDOW:
-                // intentionally no breaks!
-                // auto help ids for controls
-                switch( pRC->pResource->GetRT() ) {
-                    case RSC_EDIT:              aHID.append( "Edit" );             break;
-                    case RSC_LISTBOX:           aHID.append( "ListBox" );          break;
-                    case RSC_PUSHBUTTON:        aHID.append( "PushButton" );       break;
-                    case RSC_IMAGEBUTTON:       aHID.append( "ImageButton" );      break;
-                    default:
-                        // no type, no auto HID
-                        return OString();
-                }
-                break;
             default:
                 return OString();
         }

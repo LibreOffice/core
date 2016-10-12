@@ -345,9 +345,6 @@ void RscTypCont::Init()
                                  (sal_uInt32)RscMenuItem::Menu );
 }
 {
-    RscTop* pClassDockingWindow = InitClassDockingWindow( pClassWindow, pMapUnit );
-    pRoot->Insert( pClassDockingWindow );
-
     RscTop* pClassSfxStyleFamilyItem = InitClassSfxStyleFamilyItem( pClassMgr,
                                                    pClassBitmap,
                                                    pClassImage,

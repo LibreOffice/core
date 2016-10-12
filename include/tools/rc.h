@@ -77,12 +77,6 @@ namespace o3tl {
     template<> struct typed_flags<RscMenuItem> : is_typed_flags<RscMenuItem, 0xd6f> {};
 }
 
-// For "DockingWindow" resources:
-#define RSC_DOCKINGWINDOW_XYMAPMODE     0x01
-#define RSC_DOCKINGWINDOW_X             0x02
-#define RSC_DOCKINGWINDOW_Y             0x04
-#define RSC_DOCKINGWINDOW_FLOATING      0x08
-
 // For "ImageButtons":
 enum class RscImageButtonFlags {
     Image           = 0x01,

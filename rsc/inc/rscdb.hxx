@@ -191,8 +191,6 @@ class RscTypCont
     RscTop *    InitClassMenuItem( RscTop * pSuper );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );
 
-    RscTop *    InitClassDockingWindow( RscTop * pSuper,
-                                        RscEnum * pMapUnit );
     RscTop *    InitClassSfxStyleFamilyItem( RscTop * pSuper,
                                              RscTop * pClassBitmap,
                                              RscTop * pClassImage,
