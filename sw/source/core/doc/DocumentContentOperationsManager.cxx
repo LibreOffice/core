@@ -1298,7 +1298,7 @@ namespace //local functions originally from docfmt.cxx
                                     false, reinterpret_cast<const SfxPoolItem**>(&pRule) ) &&
                     !pDoc->FindNumRulePtr( pRule->GetValue() ) &&
                     USHRT_MAX != (nPoolId = SwStyleNameMapper::GetPoolIdFromUIName ( pRule->GetValue(),
-                                    nsSwGetPoolIdFromName::GET_POOLID_NUMRULE )) )
+                                    SwGetPoolIdFromName::NumRule )) )
                     pDoc->getIDocumentStylePoolAccess().GetNumRuleFromPool( nPoolId );
             }
         }

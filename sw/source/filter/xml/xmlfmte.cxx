@@ -92,7 +92,7 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
                 SwStyleNameMapper::FillProgName(
                                     pPageDesc->GetName(),
                                     sName,
-                                    nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC,
+                                    SwGetPoolIdFromName::PageDesc,
                                     true);
             AddAttribute( XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME,
                           EncodeStyleName( sName ) );

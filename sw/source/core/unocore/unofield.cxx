@@ -1051,7 +1051,7 @@ OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rD
         {
             if((*pTypes)[i] == &rType)
             {
-                return SwStyleNameMapper::GetProgName( sName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                return SwStyleNameMapper::GetProgName( sName, SwGetPoolIdFromName::TxtColl );
             }
         }
     }
@@ -1065,7 +1065,7 @@ OUString SwXFieldMaster::LocalizeFormula(
 {
     const OUString sTypeName(rField.GetTyp()->GetName());
     const OUString sProgName(
-        SwStyleNameMapper::GetProgName(sTypeName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ));
+        SwStyleNameMapper::GetProgName(sTypeName, SwGetPoolIdFromName::TxtColl ));
     if(sProgName != sTypeName)
     {
         const OUString sSource = bQuery ? sTypeName : sProgName;

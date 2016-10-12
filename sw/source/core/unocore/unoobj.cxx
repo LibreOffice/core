@@ -220,7 +220,7 @@ lcl_setCharStyle(SwDoc *const pDoc, const uno::Any & rValue, SfxItemSet & rSet)
         }
         OUString sStyle;
         SwStyleNameMapper::FillUIName(uStyle, sStyle,
-                nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
+                SwGetPoolIdFromName::ChrFmt, true);
         SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
             pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
         if (!pStyle)
@@ -271,7 +271,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     rAny >>= uStyle;
     OUString sStyle;
     SwStyleNameMapper::FillUIName(uStyle, sStyle,
-            nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
+            SwGetPoolIdFromName::TxtColl, true );
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
             pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Para));
     if (!pStyle)
@@ -312,7 +312,7 @@ SwUnoCursorHelper::SetPageDesc(
     }
     OUString sDescName;
     SwStyleNameMapper::FillUIName(uDescName, sDescName,
-            nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true);
+            SwGetPoolIdFromName::PageDesc, true);
     if (!pNewDesc->GetPageDesc() ||
         (pNewDesc->GetPageDesc()->GetName() != sDescName))
     {
@@ -408,7 +408,7 @@ lcl_setDropcapCharStyle(SwPaM & rPam, SfxItemSet & rItemSet,
     }
     OUString sStyle;
     SwStyleNameMapper::FillUIName(uStyle, sStyle,
-            nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
+            SwGetPoolIdFromName::ChrFmt, true);
     SwDoc *const pDoc = rPam.GetDoc();
     //default character style must not be set as default format
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
@@ -458,13 +458,13 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
     }
     OUString sStyle;
     SwStyleNameMapper::FillUIName(sTmp, sStyle,
-            nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
+            SwGetPoolIdFromName::ChrFmt, true );
     pRuby->SetCharFormatName(sStyle);
     pRuby->SetCharFormatId(0);
     if (!sStyle.isEmpty())
     {
         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
-                sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+                sStyle, SwGetPoolIdFromName::ChrFmt);
         pRuby->SetCharFormatId(nId);
     }
     rItemSet.Put(*pRuby);

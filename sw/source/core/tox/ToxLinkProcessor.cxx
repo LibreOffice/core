@@ -58,7 +58,7 @@ ToxLinkProcessor::ObtainPoolId(const OUString& characterStyle) const
         return USHRT_MAX;
     }
     else {
-        return SwStyleNameMapper::GetPoolIdFromUIName(characterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+        return SwStyleNameMapper::GetPoolIdFromUIName(characterStyle, SwGetPoolIdFromName::ChrFmt);
     }
 }
 

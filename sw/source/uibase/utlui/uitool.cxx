@@ -397,7 +397,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             if( !pColl )
             {
                 const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
-                    rColl, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                    rColl, SwGetPoolIdFromName::TxtColl );
                 if( USHRT_MAX != nId )
                     pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
                 else
@@ -718,7 +718,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
             const sal_Int32 nPos = bSorted
                 ? InsertStringSorted(pBase->GetName(), rToFill, nOffset )
                 : rToFill.InsertEntry(pBase->GetName());
-            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), SwGetPoolIdFromName::ChrFmt );
             rToFill.SetEntryData( nPos, reinterpret_cast<void*>(nPoolId));
         }
         pBase = pPool->Next();

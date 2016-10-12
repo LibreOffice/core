@@ -1002,7 +1002,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         {
             OUString sTmp;
             rAny >>= sTmp;
-            SetPar1( SwStyleNameMapper::GetUIName( sTmp, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
+            SetPar1( SwStyleNameMapper::GetUIName( sTmp, SwGetPoolIdFromName::TxtColl ) );
         }
         break;
     case FIELD_PROP_PAR2:
@@ -1070,7 +1070,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= (sal_Int16)nSeqNo;
         break;
     case FIELD_PROP_PAR1:
-        rAny <<= OUString ( SwStyleNameMapper::GetProgName(GetPar1(), nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
+        rAny <<= OUString ( SwStyleNameMapper::GetProgName(GetPar1(), SwGetPoolIdFromName::TxtColl ) );
         break;
     case FIELD_PROP_PAR2:
         {

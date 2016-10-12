@@ -1231,7 +1231,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     if( !pColl )
                     {
                         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
-                            sTmplNm, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                            sTmplNm, SwGetPoolIdFromName::TxtColl );
                         if( USHRT_MAX != nId )
                             pColl = rSh.GetTextCollFromPool( nId );
                         else

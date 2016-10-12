@@ -145,7 +145,7 @@ bool SwFormatDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             OUString sName;
             if(GetCharFormat())
                 sName = SwStyleNameMapper::GetProgName(
-                        GetCharFormat()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                        GetCharFormat()->GetName(), SwGetPoolIdFromName::ChrFmt );
             rVal <<= sName;
         }
         break;
@@ -223,7 +223,7 @@ bool SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 
 bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
-    OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
+    OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), SwGetPoolIdFromName::NumRule );
     rVal <<= sRet;
     return true;
 }
@@ -232,7 +232,7 @@ bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     OUString uName;
     rVal >>= uName;
-    SetValue(SwStyleNameMapper::GetUIName(uName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE));
+    SetValue(SwStyleNameMapper::GetUIName(uName, SwGetPoolIdFromName::NumRule));
     return true;
 }
 

@@ -526,7 +526,7 @@ bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
         return true;
 
     const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
-        rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
+        rName, SwGetPoolIdFromName::TxtColl);
     if(nId != USHRT_MAX &&
         ! rSh.GetTextCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())
         return true;

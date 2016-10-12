@@ -22,18 +22,15 @@
 /* When using the NameMapper to translate pool ids to UI or programmatic
  * names, this enum is used to define which family is required */
 
-typedef sal_uInt16 SwGetPoolIdFromName;
-
-namespace nsSwGetPoolIdFromName
-{
-    const SwGetPoolIdFromName GET_POOLID_TXTCOLL  = 0x01;
-    const SwGetPoolIdFromName GET_POOLID_CHRFMT   = 0x02;
-    const SwGetPoolIdFromName GET_POOLID_FRMFMT   = 0x04;
-    const SwGetPoolIdFromName GET_POOLID_PAGEDESC = 0x08;
-    const SwGetPoolIdFromName GET_POOLID_NUMRULE  = 0x10;
-    const SwGetPoolIdFromName GET_POOLID_TABSTYLE = 0x20;
-    const SwGetPoolIdFromName GET_POOLID_CELLSTYLE= 0x40;
-}
+enum class SwGetPoolIdFromName : sal_uInt16 {
+    TxtColl  = 0x01,
+    ChrFmt   = 0x02,
+    FrmFmt   = 0x04,
+    PageDesc = 0x08,
+    NumRule  = 0x10,
+    TabStyle = 0x20,
+    CellStyle= 0x40
+};
 
 #endif
 

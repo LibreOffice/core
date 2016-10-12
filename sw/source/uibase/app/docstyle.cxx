@@ -141,7 +141,7 @@ static SwCharFormat* lcl_FindCharFormat( SwDoc& rDoc,
 
         if( !pFormat && bCreate )
         {   // explore Pool
-            const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+            const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::ChrFmt);
             if(nId != USHRT_MAX)
                 pFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool(nId);
         }
@@ -177,7 +177,7 @@ static SwTextFormatColl* lcl_FindParaFormat(  SwDoc& rDoc,
         pColl = rDoc.FindTextFormatCollByName( rName );
         if( !pColl && bCreate )
         {   // explore Pool
-            const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
+            const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::TxtColl);
             if(nId != USHRT_MAX)
                 pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(nId);
         }
@@ -214,7 +214,7 @@ static SwFrameFormat* lcl_FindFrameFormat(   SwDoc& rDoc,
         pFormat = rDoc.FindFrameFormatByName( rName );
         if( !pFormat && bCreate )
         {   // explore Pool
-            const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT);
+            const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::FrmFmt);
             if(nId != USHRT_MAX)
                 pFormat = rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool(nId);
         }
@@ -249,7 +249,7 @@ static const SwPageDesc* lcl_FindPageDesc( SwDoc&  rDoc,
         pDesc = rDoc.FindPageDesc(rName);
         if( !pDesc && bCreate )
         {
-            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC);
+            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::PageDesc);
             if(nId != USHRT_MAX)
                 pDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(nId);
         }
@@ -283,7 +283,7 @@ static const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
         pRule = rDoc.FindNumRulePtr( rName );
         if( !pRule && bCreate )
         {
-            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE);
+            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::NumRule);
             if(nId != USHRT_MAX)
                 pRule = rDoc.getIDocumentStylePoolAccess().GetNumRuleFromPool(nId);
         }
@@ -345,7 +345,7 @@ static const SwBoxAutoFormat* lcl_FindCellStyle(SwDoc& rDoc, const OUString& rNa
                     const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
                     const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
                     OUString sBoxFormatName;
-                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, nsSwGetPoolIdFromName::GET_POOLID_CELLSTYLE, true);
+                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, SwGetPoolIdFromName::CellStyle, true);
                     sBoxFormatName += rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
                     if (rName == sBoxFormatName)
                         pFormat = &rBoxFormat;
@@ -740,17 +740,17 @@ const OUString&  SwDocStyleSheet::GetParent() const
         {
         case SfxStyleFamily::Char:
             pFormat = rDoc.FindCharFormatByName( aName );
-            eGetType = nsSwGetPoolIdFromName::GET_POOLID_CHRFMT;
+            eGetType = SwGetPoolIdFromName::ChrFmt;
             break;
 
         case SfxStyleFamily::Para:
             pFormat = rDoc.FindTextFormatCollByName( aName );
-            eGetType = nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL;
+            eGetType = SwGetPoolIdFromName::TxtColl;
             break;
 
         case SfxStyleFamily::Frame:
             pFormat = rDoc.FindFrameFormatByName( aName );
-            eGetType = nsSwGetPoolIdFromName::GET_POOLID_FRMFMT;
+            eGetType = SwGetPoolIdFromName::FrmFmt;
             break;
 
         case SfxStyleFamily::Page:
@@ -1563,7 +1563,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     SwNumRule* pRule = rDoc.FindNumRulePtr( sNumRule );
                     if( !pRule )
                     {   // Numbering rule not in use yet.
-                        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sNumRule, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
+                        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sNumRule, SwGetPoolIdFromName::NumRule );
                         if( USHRT_MAX != nPoolId ) // It's a standard numbering rule
                         {
                             rDoc.getIDocumentStylePoolAccess().GetNumRuleFromPool( nPoolId ); // Create numbering rule (physical)
@@ -1897,7 +1897,7 @@ bool SwDocStyleSheet::FillStyleSheet(
                                             RES_POOLCOLL_TEXT_BEGIN ] )
                 nPoolId = 0;
             else
-                nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::ChrFmt );
         }
 
         bRet = nullptr != pCharFormat || USHRT_MAX != nPoolId;
@@ -1922,7 +1922,7 @@ bool SwDocStyleSheet::FillStyleSheet(
             if( pColl )
                 PresetFollow( pColl->GetNextTextFormatColl().GetName() );
             else if( !bCreate )
-                nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::TxtColl );
 
             bRet = nullptr != pColl || USHRT_MAX != nPoolId;
 
@@ -1943,7 +1943,7 @@ bool SwDocStyleSheet::FillStyleSheet(
         }
         pFormat = pFrameFormat;
         if( !bCreate && !pFormat )
-            nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT );
+            nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::FrmFmt );
 
         bRet = nullptr != pFrameFormat || USHRT_MAX != nPoolId;
 
@@ -1972,7 +1972,7 @@ bool SwDocStyleSheet::FillStyleSheet(
                 aHelpFile.clear();
         }
         else if( !bCreate )
-            nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
+            nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::PageDesc );
         SetMask( (USER_FMT & nPoolId) ? SFXSTYLEBIT_USERDEF : 0 );
 
         bRet = nullptr != pDesc || USHRT_MAX != nPoolId;
@@ -2001,7 +2001,7 @@ bool SwDocStyleSheet::FillStyleSheet(
                 aHelpFile.clear();
         }
         else if( !bCreate )
-            nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
+            nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::NumRule );
         SetMask( (USER_FMT & nPoolId) ? SFXSTYLEBIT_USERDEF : 0 );
 
         bRet = nullptr != pNumRule || USHRT_MAX != nPoolId;
@@ -2284,7 +2284,7 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
         if( !pCharFormat &&
             nullptr == (pCharFormat = lcl_FindCharFormat( rDoc, aName, nullptr, false )) )
         {
-            nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+            nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::ChrFmt );
             return USHRT_MAX == nId ? 0 : nId;
         }
         pTmpFormat = pCharFormat;
@@ -2294,7 +2294,7 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
         if( !pColl &&
             nullptr == ( pColl = lcl_FindParaFormat( rDoc, aName, nullptr, false )) )
         {
-            nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+            nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::TxtColl );
             return USHRT_MAX == nId ? 0 : nId;
         }
         pTmpFormat = pColl;
@@ -2304,7 +2304,7 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
         if( !pFrameFormat &&
             nullptr == ( pFrameFormat = lcl_FindFrameFormat( rDoc, aName, nullptr, false ) ) )
         {
-            nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT );
+            nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::FrmFmt );
             return USHRT_MAX == nId ? 0 : nId;
         }
         pTmpFormat = pFrameFormat;
@@ -2314,7 +2314,7 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
         if( !pDesc &&
             nullptr == ( pDesc = lcl_FindPageDesc( rDoc, aName, nullptr, false ) ) )
         {
-            nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
+            nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::PageDesc );
             return USHRT_MAX == nId ? 0 : nId;
         }
 
@@ -2327,7 +2327,7 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
         if( !pNumRule &&
             nullptr == ( pNumRule = lcl_FindNumRule( rDoc, aName, nullptr, false ) ) )
         {
-            nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
+            nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::NumRule );
             return USHRT_MAX == nId ? 0 : nId;
         }
 
@@ -2756,7 +2756,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             if( ! rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
                 AppendStyleList(SwStyleNameMapper::GetChrFormatUINameArray(),
                                 bIsSearchUsed, bSearchHidden, bOnlyHidden,
-                                nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, cCHAR);
+                                SwGetPoolIdFromName::ChrFmt, cCHAR);
             else
             {
                 aLst.Append( cCHAR, SwStyleNameMapper::GetChrFormatUINameArray()[
@@ -2770,7 +2770,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             }
             AppendStyleList(SwStyleNameMapper::GetHTMLChrFormatUINameArray(),
                                 bIsSearchUsed, bSearchHidden, bOnlyHidden,
-                                nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, cCHAR);
+                                SwGetPoolIdFromName::ChrFmt, cCHAR);
         }
     }
 
@@ -2873,19 +2873,19 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         bAll = ( nSMask & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE;
         if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_TEXT )
             AppendStyleList(SwStyleNameMapper::GetTextUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, cPARA );
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA );
         if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_CHAPTER )
             AppendStyleList(SwStyleNameMapper::GetDocUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, cPARA ) ;
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
         if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_LIST )
             AppendStyleList(SwStyleNameMapper::GetListsUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, cPARA ) ;
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
         if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_IDX )
             AppendStyleList(SwStyleNameMapper::GetRegisterUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, cPARA ) ;
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
         if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_EXTRA )
             AppendStyleList(SwStyleNameMapper::GetExtraUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, cPARA ) ;
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
         if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_CONDCOLL )
         {
             if( !bIsSearchUsed ||
@@ -2899,7 +2899,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                         (SWSTYLEBIT_HTML | SFXSTYLEBIT_USERDEF) )
         {
             AppendStyleList(SwStyleNameMapper::GetHTMLUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, cPARA ) ;
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
             if( !bAll )
             {
                 // then also the ones, that we are mapping:
@@ -2967,7 +2967,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         // PoolFormate
         if ( bAll )
             AppendStyleList(SwStyleNameMapper::GetFrameFormatUINameArray(),
-                                    bIsSearchUsed, bSearchHidden, bOnlyHidden, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, cFRAME);
+                                    bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::FrmFmt, cFRAME);
     }
 
     if( nSearchFamily == SfxStyleFamily::Page ||
@@ -2996,7 +2996,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         }
         if ( bAll )
             AppendStyleList(SwStyleNameMapper::GetPageDescUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, cPAGE);
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::PageDesc, cPAGE);
     }
 
     if( nSearchFamily == SfxStyleFamily::Pseudo ||
@@ -3027,7 +3027,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         }
         if ( bAll )
             AppendStyleList(SwStyleNameMapper::GetNumRuleUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE, cNUMRULE);
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::NumRule, cNUMRULE);
     }
 
     if( nSearchFamily == SfxStyleFamily::Table ||
@@ -3069,7 +3069,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
                 const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
                 OUString sBoxFormatName;
-                SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, nsSwGetPoolIdFromName::GET_POOLID_CELLSTYLE, true);
+                SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, SwGetPoolIdFromName::CellStyle, true);
                 sBoxFormatName += rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
                 aLst.Append( cCELLSTYLE, sBoxFormatName );
             }
@@ -3129,45 +3129,45 @@ SfxStyleSheetBase* SwStyleSheetIterator::Find(const OUString& rName)
 
 void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
                                             bool bTestUsed, bool bTestHidden, bool bOnlyHidden,
-                                            sal_uInt16 nSection, char cType )
+                                            SwGetPoolIdFromName nSection, char cType )
 {
     SwDoc& rDoc = static_cast<SwDocStyleSheetPool*>(pBasePool)->GetDoc();
     bool bUsed = false;
     for (const auto & i : rList)
     {
         bool bHidden = false;
-        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(i, (SwGetPoolIdFromName)nSection);
+        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(i, nSection);
         switch ( nSection )
         {
-            case nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL:
+            case SwGetPoolIdFromName::TxtColl:
                 {
                     bUsed = rDoc.getIDocumentStylePoolAccess().IsPoolTextCollUsed( nId );
                     SwFormat* pFormat = rDoc.FindTextFormatCollByName( i );
                     bHidden = pFormat && pFormat->IsHidden( );
                 }
                 break;
-            case nsSwGetPoolIdFromName::GET_POOLID_CHRFMT:
+            case SwGetPoolIdFromName::ChrFmt:
                 {
                     bUsed = rDoc.getIDocumentStylePoolAccess().IsPoolFormatUsed( nId );
                     SwFormat* pFormat = rDoc.FindCharFormatByName( i );
                     bHidden = pFormat && pFormat->IsHidden( );
                 }
                 break;
-            case nsSwGetPoolIdFromName::GET_POOLID_FRMFMT:
+            case SwGetPoolIdFromName::FrmFmt:
                 {
                     bUsed = rDoc.getIDocumentStylePoolAccess().IsPoolFormatUsed( nId );
                     SwFormat* pFormat = rDoc.FindFrameFormatByName( i );
                     bHidden = pFormat && pFormat->IsHidden( );
                 }
                 break;
-            case nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC:
+            case SwGetPoolIdFromName::PageDesc:
                 {
                     bUsed = rDoc.getIDocumentStylePoolAccess().IsPoolPageDescUsed( nId );
                     SwPageDesc* pPgDesc = rDoc.FindPageDesc(i);
                     bHidden = pPgDesc && pPgDesc->IsHidden( );
                 }
                 break;
-            case nsSwGetPoolIdFromName::GET_POOLID_NUMRULE:
+            case SwGetPoolIdFromName::NumRule:
                 {
                     SwNumRule* pRule = rDoc.FindNumRulePtr( i );
                     bUsed = pRule && SwDoc::IsUsed( *pRule );

@@ -38,6 +38,7 @@ class SwFrameFormat;
 class SwNumRule;
 class SwTableAutoFormat;
 class SwBoxAutoFormat;
+enum class SwGetPoolIdFromName : sal_uInt16;
 
 // Temporary StyleSheet.
 class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
@@ -170,7 +171,7 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
                                         bool        bUsed,
                                         bool        bTestHidden,
                                         bool        bOnlyHidden,
-                                        sal_uInt16  nSection,
+                                        SwGetPoolIdFromName nSection,
                                         char        cType);
 
 public:

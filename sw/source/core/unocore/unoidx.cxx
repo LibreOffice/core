@@ -770,7 +770,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         {
             OUString aString;
             SwStyleNameMapper::FillUIName(lcl_AnyToString(rValue),
-                aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
+                aString, SwGetPoolIdFromName::ChrFmt, true);
             rTOXBase.SetMainEntryCharStyle( aString );
         }
         break;
@@ -806,7 +806,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         {
             OUString aString;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
-                aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
+                aString, SwGetPoolIdFromName::TxtColl, true);
             bForm = true;
             // Header is on Pos 0
             aForm.SetTemplate( 0, aString );
@@ -821,7 +821,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             OUString aString;
             bForm = true;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
-                aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
+                aString, SwGetPoolIdFromName::TxtColl, true);
             aForm.SetTemplate( 1, aString );
         }
         break;
@@ -845,7 +845,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             const sal_uInt16 nLPos = rTOXBase.GetType() == TOX_INDEX ? 2 : 1;
             OUString aString;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
-                aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
+                aString, SwGetPoolIdFromName::TxtColl, true);
             aForm.SetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1, aString );
         }
         break;
@@ -1102,7 +1102,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 SwStyleNameMapper::FillProgName(
                         pTOXBase->GetMainEntryCharStyle(),
                         aString,
-                        nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,
+                        SwGetPoolIdFromName::ChrFmt,
                         true);
                 aRet <<= aString;
             }
@@ -1143,7 +1143,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 //Header steht an Pos 0
                 OUString aString;
                 SwStyleNameMapper::FillProgName(rForm.GetTemplate( 0 ), aString,
-                        nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
+                        SwGetPoolIdFromName::TxtColl, true );
                 aRet <<= aString;
             }
             break;
@@ -1153,7 +1153,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 SwStyleNameMapper::FillProgName(
                         rForm.GetTemplate( 1 ),
                         aString,
-                        nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
+                        SwGetPoolIdFromName::TxtColl,
                         true);
                 aRet <<= aString;
             }
@@ -1175,7 +1175,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 SwStyleNameMapper::FillProgName(
                         rForm.GetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1),
                         aString,
-                        nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
+                        SwGetPoolIdFromName::TxtColl,
                         true);
                 aRet <<= aString;
             }
@@ -2693,7 +2693,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
             sSetStyles += OUStringLiteral1(TOX_STYLE_DELIMITER);
         }
         SwStyleNameMapper::FillUIName(pStyles[i], aString,
-                nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
+                SwGetPoolIdFromName::TxtColl, true);
         sSetStyles +=  aString;
     }
     rTOXBase.SetStyleNames(sSetStyles, static_cast<sal_uInt16>(nIndex));
@@ -2731,7 +2731,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         SwStyleNameMapper::FillProgName(
             rStyles.getToken(0, TOX_STYLE_DELIMITER, nPos),
             aString,
-            nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
+            SwGetPoolIdFromName::TxtColl,
             true);
         pStyles[i] = aString;
     }
@@ -2861,11 +2861,11 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 SwStyleNameMapper::FillUIName(
                         lcl_AnyToString(pProperties[j].Value),
                         sCharStyleName,
-                        nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,
+                        SwGetPoolIdFromName::ChrFmt,
                         true);
                 aToken.sCharStyleName = sCharStyleName;
                 aToken.nPoolId = SwStyleNameMapper::GetPoolIdFromUIName (
-                    sCharStyleName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                    sCharStyleName, SwGetPoolIdFromName::ChrFmt );
             }
             else if ( pProperties[j].Name == "TabStopRightAligned" )
             {
@@ -3034,7 +3034,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         SwStyleNameMapper::FillProgName(
                         aToken.sCharStyleName,
                         aProgCharStyle,
-                        nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,
+                        SwGetPoolIdFromName::ChrFmt,
                         true );
         switch(aToken.eTokenType)
         {

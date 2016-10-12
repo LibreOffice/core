@@ -268,11 +268,11 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
 
     // set valid settings first
     OUString sEntry = m_pVisitedLB->GetSelectEntry();
-    sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+    sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, SwGetPoolIdFromName::ChrFmt);
     aINetFormat.SetVisitedFormatAndId( sEntry, nId );
 
     sEntry = m_pNotVisitedLB->GetSelectEntry();
-    nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+    nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, SwGetPoolIdFromName::ChrFmt);
     aINetFormat.SetINetFormatAndId( sEntry, nId );
 
     if( pINetItem && !pINetItem->GetMacroTable().empty() )

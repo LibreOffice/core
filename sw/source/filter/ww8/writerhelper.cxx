@@ -54,7 +54,6 @@
 #include <IDocumentStylePoolAccess.hxx>
 
 using namespace com::sun::star;
-using namespace nsSwGetPoolIdFromName;
 
 namespace
 {
@@ -491,7 +490,7 @@ namespace sw
             {
                 // Collection not found, try in Pool ?
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
-                    nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
+                    SwGetPoolIdFromName::TxtColl);
                 if (n != SAL_MAX_UINT16)       // found or standard
                     pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(n, false);
             }
@@ -505,7 +504,7 @@ namespace sw
             {
                 // Collection not found, try in Pool ?
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
-                    nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+                    SwGetPoolIdFromName::ChrFmt);
                 if (n != SAL_MAX_UINT16)       // found or standard
                     pFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool(n);
             }

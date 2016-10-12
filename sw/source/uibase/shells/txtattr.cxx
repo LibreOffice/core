@@ -226,14 +226,14 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                 OSL_ENSURE( false, "<SwTextShell::ExecCharAttrArgs(..)> - unexpected visited character format ID at hyperlink attribute" );
                 aINetFormat.SetVisitedFormatAndId(
                         aINetFormat.GetVisitedFormat(),
-                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFormat.GetVisitedFormat(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ) );
+                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFormat.GetVisitedFormat(), SwGetPoolIdFromName::ChrFmt ) );
             }
             if ( USHRT_MAX == aINetFormat.GetINetFormatId() )
             {
                 OSL_ENSURE( false, "<SwTextShell::ExecCharAttrArgs(..)> - unexpected unvisited character format ID at hyperlink attribute" );
                 aINetFormat.SetINetFormatAndId(
                         aINetFormat.GetINetFormat(),
-                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFormat.GetINetFormat(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ) );
+                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFormat.GetINetFormat(), SwGetPoolIdFromName::ChrFmt ) );
             }
 
             if ( pColl )
