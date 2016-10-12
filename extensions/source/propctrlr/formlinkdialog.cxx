@@ -30,7 +30,6 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/builderfactory.hxx>
-#include <svtools/localresaccess.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

@@ -30,7 +30,6 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <tools/debug.hxx>
-#include <svtools/localresaccess.hxx>
 #include <comphelper/interaction.hxx>
 #include <connectivity/dbtools.hxx>
 #include <vcl/stdtext.hxx>

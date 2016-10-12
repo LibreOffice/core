@@ -42,7 +42,6 @@
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
-#include <svtools/localresaccess.hxx>
 #include <sal/macros.h>
 
 #include <algorithm>

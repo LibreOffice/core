@@ -23,7 +23,6 @@
 #include "componentmodule.hxx"
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
-#include <svtools/localresaccess.hxx>
 #include "typeselectionpage.hxx"
 #include "admininvokationpage.hxx"
 #include "tableselectionpage.hxx"

@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/diagnose.h>
 #include <sfx2/styfitem.hxx>
-#include <svtools/localresaccess.hxx>
+#include <tools/rc.hxx>
+#include <tools/rcid.h>
 #include <tools/debug.hxx>
-
 
 // Implementierung des Resource-Konstruktors
 
@@ -111,10 +112,44 @@ SfxStyleFamilies::~SfxStyleFamilies()
     aEntryList.clear();
 }
 
+namespace
+{
+    class OLocalResourceAccess : public Resource
+    {
+    protected:
+        ResMgr*     m_pManager;
+
+    public:
+        OLocalResourceAccess( const ResId& _rId )
+            :Resource( _rId.SetAutoRelease( false ) )
+            ,m_pManager( _rId.GetResMgr() )
+        {
+        }
+
+        OLocalResourceAccess(const ResId& _rId, RESOURCE_TYPE _rType)
+            :Resource(_rId.SetRT(_rType).SetAutoRelease(false))
+            ,m_pManager(_rId.GetResMgr())
+        {
+            OSL_ENSURE( m_pManager != nullptr, "OLocalResourceAccess::OLocalResourceAccess: invalid resource manager!" );
+        }
+
+        ~OLocalResourceAccess()
+        {
+            if ( m_pManager )
+                m_pManager->Increment( m_pManager->GetRemainSize() );
+            FreeResource();
+        }
+
+        bool IsAvailableRes( const ResId& _rId ) const
+        {
+            return Resource::IsAvailableRes( _rId );
+        }
+    };
+}
 
 void SfxStyleFamilies::updateImages( const ResId& _rId )
 {
-    ::svt::OLocalResourceAccess aLocalRes( _rId );
+    OLocalResourceAccess aLocalRes( _rId );
 
     // check if the image list is present
     ResId aImageListId( (sal_uInt16) 1, *_rId.GetResMgr() );

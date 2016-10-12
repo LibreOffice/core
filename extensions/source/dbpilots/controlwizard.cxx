@@ -40,7 +40,6 @@
 #include <vcl/msgbox.hxx>
 #include <comphelper/interaction.hxx>
 #include <vcl/stdtext.hxx>
-#include <svtools/localresaccess.hxx>
 #include <connectivity/conncleanup.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <tools/urlobj.hxx>
