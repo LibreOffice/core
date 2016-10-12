@@ -22,6 +22,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbc/IndexType.hpp>
+#include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <comphelper/property.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
@@ -872,13 +873,13 @@ sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& bookmark1, const Any
     sal_Int32 nPos2 = 0;
     bookmark2 >>= nPos2;
     if(nPos1 == nPos2)  // they should be equal
-        return sal_True;
+        return css::sdbcx::CompareBookmark::EQUAL;
 
     OSL_ENSURE((nPos1 >= 0 && nPos1 < (sal_Int32)m_aBookmarks.size()) || (nPos1 >= 0 && nPos2 < (sal_Int32)m_aBookmarks.size()),"Invalid Index for vector");
 
     CompareEnum eNum;
     m_pRecordSet->CompareBookmarks(m_aBookmarks[nPos1],m_aBookmarks[nPos2],&eNum);
-    return ((sal_Int32)eNum) +1;
+    return ((sal_Int32)eNum) - 1;
 }
 
 sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
