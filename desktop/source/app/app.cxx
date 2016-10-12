@@ -832,6 +832,42 @@ OUString    Desktop::CreateErrorMsgString(
     return MakeStartupErrorMessage( aMsg );
 }
 
+// helper method to test if SecureUserConfig is active, detect the num copies
+// and extract the User's config directory URL
+bool testSecureUserConfigActive(sal_uInt16& rnSecureUserConfigNumCopies, OUString& raUserConfigDir)
+{
+    // read configuration from soffice.ini
+    if(comphelper::BackupFileHelper::getSecureUserConfig(rnSecureUserConfigNumCopies))
+    {
+        // try to asccess user layer configuration file
+        OUString conf("${CONFIGURATION_LAYERS}");
+        rtl::Bootstrap::expandMacros(conf);
+        const OUString aTokenUser("user:");
+        sal_Int32 nStart(conf.indexOf(aTokenUser));
+
+        if (-1 != nStart)
+        {
+            nStart += aTokenUser.getLength();
+            sal_Int32 nEnd(conf.indexOf(' ', nStart));
+
+            if (-1 == nEnd)
+            {
+                nEnd = conf.getLength();
+            }
+
+            raUserConfigDir = conf.copy(nStart, nEnd - nStart);
+            raUserConfigDir.startsWith("!", &raUserConfigDir);
+        }
+
+        if (!raUserConfigDir.isEmpty())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Desktop::HandleBootstrapErrors(
     BootstrapError aBootstrapError, OUString const & aErrorMessage )
 {
@@ -965,75 +1001,50 @@ void Desktop::HandleBootstrapErrors(
     }
     else if ( aBootstrapError == BE_OFFICECONFIG_BROKEN )
     {
-        // test restore of registrymodifications
+        // test if SecureUserConfig is active
         sal_uInt16 nSecureUserConfigNumCopies(0);
+        OUString aUserConfigDir;
         bool bFireOriginalError(true);
 
-        // read configuration from soffice.ini
-        const bool bSecureUserConfig(comphelper::BackupFileHelper::getSecureUserConfig(nSecureUserConfigNumCopies));
-
-        if (bSecureUserConfig)
+        if (testSecureUserConfigActive(nSecureUserConfigNumCopies, aUserConfigDir))
         {
-            // try to asccess user layer configuration file
-            OUString conf("${CONFIGURATION_LAYERS}");
-            rtl::Bootstrap::expandMacros(conf);
-            const OUString aTokenUser("user:");
-            sal_Int32 nStart(conf.indexOf(aTokenUser));
-            OUString aUser;
+            comphelper::BackupFileHelper aBackupFileHelper(aUserConfigDir, nSecureUserConfigNumCopies);
 
-            if (-1 != nStart)
+            if (aBackupFileHelper.isPopPossible())
             {
-                nStart += aTokenUser.getLength();
-                sal_Int32 nEnd(conf.indexOf(' ', nStart));
+                // for linux (and probably others?) we need to instantiate XDesktop2
+                // to be able to open a *.ui-file based dialog, so do this here locally.
+                // does no harm on win, so better always do this (in error case only anyways)
+                Reference< XComponentContext > xLocalContext = ::comphelper::getProcessComponentContext();
+                Reference< XDesktop2 > xDesktop = css::frame::Desktop::create(xLocalContext);
 
-                if (-1 == nEnd)
+                ScopedVclPtrInstance< MessageDialog > aQueryShouldRestore(
+                    Application::GetDefDialogParent(),
+                    "QueryTryToRestoreConfigurationDialog",
+                    "desktop/ui/querytrytorestoreconfigurationdialog.ui");
+
+                if (aQueryShouldRestore.get())
                 {
-                    nEnd = conf.getLength();
-                }
-
-                aUser = conf.copy(nStart, nEnd - nStart);
-                aUser.startsWith("!", &aUser);
-            }
-
-            if (!aUser.isEmpty())
-            {
-                comphelper::BackupFileHelper aBackupFileHelper(aUser, nSecureUserConfigNumCopies);
-
-                if (aBackupFileHelper.isPopPossible())
-                {
-                    // for linux (and probably others?) we need to instantiate XDesktop2
-                    // to be able to open a *.ui-file based dialog, so do this here locally.
-                    // does no harm on win, so better always do this (in error case only anyways)
-                    Reference< XComponentContext > xLocalContext = ::comphelper::getProcessComponentContext();
-                    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create(xLocalContext);
-
-                    ScopedVclPtrInstance< MessageDialog > aQueryShouldRestore(
-                        Application::GetDefDialogParent(),
-                        "QueryTryToRestoreConfigurationDialog",
-                        "desktop/ui/querytrytorestoreconfigurationdialog.ui");
-
-                    if (aQueryShouldRestore.get())
+                    if (!aErrorMessage.isEmpty())
                     {
-                        if (!aErrorMessage.isEmpty())
-                        {
-                            OUString aPrimaryText(aQueryShouldRestore->get_primary_text());
+                        OUString aPrimaryText(aQueryShouldRestore->get_primary_text());
 
-                            aPrimaryText += "\n(\"" + aErrorMessage + "\")";
-                            aQueryShouldRestore->set_primary_text(aPrimaryText);
-                        }
+                        aPrimaryText += "\n(\"" + aErrorMessage + "\")";
+                        aQueryShouldRestore->set_primary_text(aPrimaryText);
+                    }
 
-                        if (RET_YES == aQueryShouldRestore->Execute())
-                        {
-                            aBackupFileHelper.tryPop();
-                            bFireOriginalError = false;
-                        }
+                    if (RET_YES == aQueryShouldRestore->Execute())
+                    {
+                        aBackupFileHelper.tryPop();
+                        bFireOriginalError = false;
                     }
                 }
             }
         }
 
         // set flag at BackupFileHelper to be able to know if _exit was called and
-        // actions are executed after this
+        // actions are executed after this. This method we are in will not return,
+        // but end up in a _exit() call
         comphelper::BackupFileHelper::setExitWasCalled();
 
         if (bFireOriginalError)
@@ -1842,7 +1853,34 @@ int Desktop::doShutdown()
 
     // remove temp directory
     RemoveTemporaryDirectory();
+
+    // flush evtl. configuration changes so that all config files in user
+    // dir are written
     FlushConfiguration();
+
+    if (pExecGlobals->bRestartRequested)
+    {
+        // a restart is already requested, usually due to a configuration change
+        // that needs a restart to get active. If this is the case, do not try
+        // to use SecureUserConfig to safe this still untested new configuration
+    }
+    else
+    {
+        // Test if SecureUserConfig is active. If yes and we are at this point, regular shutdown
+        // is in progress and the currently used configuration was working. Try to secure this
+        // working configuration for later eventually necessary restores
+        sal_uInt16 nSecureUserConfigNumCopies(0);
+        OUString aUserConfigDir;
+
+        if (testSecureUserConfigActive(nSecureUserConfigNumCopies, aUserConfigDir))
+        {
+            // try to push registrymodifications.xcu
+            comphelper::BackupFileHelper aBackupFileHelper(aUserConfigDir, nSecureUserConfigNumCopies);
+
+            aBackupFileHelper.tryPush();
+        }
+    }
+
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)
     // with the solar mutex unlocked, to avoid deadlock:
     {
