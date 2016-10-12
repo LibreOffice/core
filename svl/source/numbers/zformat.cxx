@@ -3265,6 +3265,16 @@ bool SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
         case NF_KEY_AAA :
         case NF_KEY_AAAA :
             return true;
+        case NF_KEY_G :
+        case NF_KEY_GG :
+        case NF_KEY_GGG :
+            // tdf#103060 Make "G", "GG", and "GGG" print the era from gengou
+            // by default under Japanese locale.
+            if (rLoc().getLanguageTag().getLanguageType() == LANGUAGE_JAPANESE)
+                return true;
+            break;
+        default:
+            break;
         }
     }
     return false;

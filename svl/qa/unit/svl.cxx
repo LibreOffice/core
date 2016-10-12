@@ -60,6 +60,7 @@ public:
     void testSharedStringPoolPurge();
     void testFdo60915();
     void testI116701();
+    void testTdf103060();
     void testDateInput();
     void testIsNumberFormat();
     void testUserDefinedNumberFormats();
@@ -71,6 +72,7 @@ public:
     CPPUNIT_TEST(testSharedStringPoolPurge);
     CPPUNIT_TEST(testFdo60915);
     CPPUNIT_TEST(testI116701);
+    CPPUNIT_TEST(testTdf103060);
     CPPUNIT_TEST(testDateInput);
     CPPUNIT_TEST(testIsNumberFormat);
     CPPUNIT_TEST(testUserDefinedNumberFormats);
@@ -481,6 +483,25 @@ void Test::testI116701()
         0x0022, 0x65E5, 0x0022
     };
     sCode = OUString(CODE2, SAL_N_ELEMENTS(CODE2));
+    checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+}
+
+void Test::testTdf103060()
+{
+    LanguageType eLang = LANGUAGE_JAPANESE;
+    OUString sCode, sExpected;
+    double fPreviewNumber = 42655; // equals 2016-10-12
+    SvNumberFormatter aFormatter(m_xContext, eLang);
+    sCode = "G";
+    sExpected = "H"; // Heisei era
+    checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+    sCode = "GG";
+    const sal_Unicode EXPECTED_G2[] = {0x5E73};
+    sExpected = OUString(EXPECTED_G2, SAL_N_ELEMENTS(EXPECTED_G2));
+    checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+    sCode = "GGG";
+    const sal_Unicode EXPECTED_G3[] = {0x5E73, 0x6210};
+    sExpected = OUString(EXPECTED_G3, SAL_N_ELEMENTS(EXPECTED_G3));
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
 }
 
