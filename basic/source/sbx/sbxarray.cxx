@@ -293,7 +293,7 @@ void SbxArray::Remove( SbxVariable* pVar )
     {
         for( size_t i = 0; i < mVarEntries.size(); i++ )
         {
-            if (&mVarEntries[i].mpVar == pVar)
+            if (mVarEntries[i].mpVar.get() == pVar)
             {
                 Remove( i ); break;
             }
@@ -359,7 +359,7 @@ SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
 
         if (rEntry.mpVar->IsVisible() && rEntry.mpVar->GetUserData() == nData)
         {
-            p = &rEntry.mpVar;
+            p = rEntry.mpVar.get();
             p->ResetFlag( SbxFlagBits::ExtFound );
             break;  // JSM 1995-10-06
         }
@@ -417,7 +417,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
             && (t == SbxClassType::DontCare || rEntry.mpVar->GetClass() == t)
             && (rEntry.mpVar->GetName().equalsIgnoreAsciiCase(rName)))
         {
-            p = &rEntry.mpVar;
+            p = rEntry.mpVar.get();
             p->ResetFlag(SbxFlagBits::ExtFound);
             break;
         }

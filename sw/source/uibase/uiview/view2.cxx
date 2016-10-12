@@ -2266,9 +2266,9 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
             m_pWrtShell->EnterStdMode(); // delete selections
 
             if( bCompare )
-                nFound = m_pWrtShell->CompareDoc( *static_cast<SwDocShell*>(&xDocSh)->GetDoc() );
+                nFound = m_pWrtShell->CompareDoc( *static_cast<SwDocShell*>( xDocSh.get() )->GetDoc() );
             else
-                nFound = m_pWrtShell->MergeDoc( *static_cast<SwDocShell*>(&xDocSh)->GetDoc() );
+                nFound = m_pWrtShell->MergeDoc( *static_cast<SwDocShell*>( xDocSh.get() )->GetDoc() );
 
             m_pWrtShell->EndAllAction();
 

@@ -94,7 +94,7 @@ void InsertionIndicatorOverlay::Create (const SdTransferable* pTransferable)
         nSelectionCount = pTransferable->GetPageBookmarks().size();
     else
     {
-        DrawDocShell* pDataDocShell = dynamic_cast<DrawDocShell*>(&pTransferable->GetDocShell());
+        DrawDocShell* pDataDocShell = dynamic_cast<DrawDocShell*>(pTransferable->GetDocShell().get());
         if (pDataDocShell != nullptr)
         {
             SdDrawDocument* pDataDocument = pDataDocShell->GetDoc();
