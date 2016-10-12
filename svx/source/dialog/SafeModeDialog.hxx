@@ -39,6 +39,7 @@ private:
     VclPtr<CheckBox> mpCBFull;
 
     static void terminateOffice();
+    static void applyChanges();
 
     DECL_LINK(BtnHdl, Button*, void);
 };

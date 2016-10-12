@@ -17,6 +17,8 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/task/OfficeRestartManager.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 
 using namespace css;
 
@@ -66,6 +68,15 @@ void SafeModeDialog::terminateOffice()
     xDesktop->terminate();
 }
 
+void SafeModeDialog::applyChanges()
+{
+    // TODO: Apply apply changes
+
+    // Then restart
+    css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext())->requestRestart(
+        css::uno::Reference< css::task::XInteractionHandler >());
+}
+
 IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnContinue.get())
@@ -79,6 +90,7 @@ IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
     else if (pBtn == mpBtnRestart.get())
     {
         Close();
+        applyChanges();
     }
 }
 
