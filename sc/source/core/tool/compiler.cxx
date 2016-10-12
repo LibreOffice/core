@@ -4442,6 +4442,7 @@ ScRangeData* ScCompiler::GetRangeData( const FormulaToken& rToken ) const
 
 bool ScCompiler::HandleRange()
 {
+    ScTokenArray* pNew;
     const ScRangeData* pRangeData = GetRangeData( *mpToken);
     if (pRangeData)
     {
@@ -4450,7 +4451,6 @@ bool ScCompiler::HandleRange()
             SetError( errNoName );
         else if (mbJumpCommandReorder)
         {
-            ScTokenArray* pNew;
             // put named formula into parentheses.
             // But only if there aren't any yet, parenthetical
             // ocSep doesn't work, e.g. SUM((...;...))
@@ -4491,7 +4491,15 @@ bool ScCompiler::HandleRange()
         }
     }
     else
-        SetError(errNoName);
+    {
+        // No ScRangeData for an already compiled token can happen in BIFF .xls
+        // import if the original range is not present in the document.
+        pNew = new ScTokenArray;
+        pNew->Add( new FormulaErrorToken(errNoName));
+        PushTokenArray( pNew, true );
+        pNew->Reset();
+        return GetToken();
+    }
     return true;
 }
 
