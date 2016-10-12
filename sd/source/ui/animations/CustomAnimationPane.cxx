@@ -310,12 +310,12 @@ void CustomAnimationPane::addListener()
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
-        tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
-        | tools::EventMultiplexerEvent::EID_CURRENT_PAGE
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
-        | tools::EventMultiplexerEvent::EID_DISPOSING
-        | tools::EventMultiplexerEvent::EID_END_TEXT_EDIT);
+        EventMultiplexerEventId::EditViewSelection
+        | EventMultiplexerEventId::CurrentPageChanged
+        | EventMultiplexerEventId::MainViewRemoved
+        | EventMultiplexerEventId::MainViewAdded
+        | EventMultiplexerEventId::Disposing
+        | EventMultiplexerEventId::EndTextEdit);
 }
 
 void CustomAnimationPane::removeListener()
@@ -329,15 +329,15 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
 {
     switch (rEvent.meEventId)
     {
-        case tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION:
+        case EventMultiplexerEventId::EditViewSelection:
             onSelectionChanged();
             break;
 
-        case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
+        case EventMultiplexerEventId::CurrentPageChanged:
             onChangeCurrentPage();
             break;
 
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
+        case EventMultiplexerEventId::MainViewAdded:
             // At this moment the controller may not yet been set at model
             // or ViewShellBase.  Take it from the view shell passed with
             // the event.
@@ -352,21 +352,22 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
                 }
             }
             SAL_FALLTHROUGH;
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
+        case EventMultiplexerEventId::MainViewRemoved:
             mxView = nullptr;
             mxCurrentPage = nullptr;
             updateControls();
             break;
 
-        case tools::EventMultiplexerEvent::EID_DISPOSING:
+        case EventMultiplexerEventId::Disposing:
             mxView.clear();
             onSelectionChanged();
             onChangeCurrentPage();
             break;
-        case tools::EventMultiplexerEvent::EID_END_TEXT_EDIT:
+        case EventMultiplexerEventId::EndTextEdit:
             if( mpMainSequence.get() && rEvent.mpUserData )
                 mpCustomAnimationList->update( mpMainSequence );
             break;
+        default: break;
     }
 }
 

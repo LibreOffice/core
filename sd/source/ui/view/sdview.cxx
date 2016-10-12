@@ -665,7 +665,7 @@ bool View::SdrBeginTextEdit(
     bool bMasterPage = pPage && pPage->IsMasterPage();
 
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
-        sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, static_cast<void*>(pObj) );
+        EventMultiplexerEventId::BeginTextEdit, static_cast<void*>(pObj) );
 
     if( pOutl==nullptr && pObj )
         pOutl = SdrMakeOutliner(OutlinerMode::TextObject, *pObj->GetModel());
@@ -801,7 +801,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
     }
 
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
-        sd::tools::EventMultiplexerEvent::EID_END_TEXT_EDIT,
+        EventMultiplexerEventId::EndTextEdit,
         static_cast<void*>(xObj.get()) );
 
     if( xObj.is() )

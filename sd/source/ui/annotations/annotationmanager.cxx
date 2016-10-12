@@ -868,10 +868,10 @@ void AnnotationManagerImpl::addListener()
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
-        tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
-        | tools::EventMultiplexerEvent::EID_CURRENT_PAGE
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
+        EventMultiplexerEventId::EditViewSelection
+        | EventMultiplexerEventId::CurrentPageChanged
+        | EventMultiplexerEventId::MainViewRemoved
+        | EventMultiplexerEventId::MainViewAdded);
 }
 
 void AnnotationManagerImpl::removeListener()
@@ -885,20 +885,22 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
 {
     switch (rEvent.meEventId)
     {
-        case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
-        case tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION:
+        case EventMultiplexerEventId::CurrentPageChanged:
+        case EventMultiplexerEventId::EditViewSelection:
             onSelectionChanged();
             break;
 
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
+        case EventMultiplexerEventId::MainViewRemoved:
             mxView.clear();
             onSelectionChanged();
             break;
 
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
+        case EventMultiplexerEventId::MainViewAdded:
             mxView.set( mrBase.GetController(), UNO_QUERY );
             onSelectionChanged();
             break;
+
+        default: break;
     }
 }
 

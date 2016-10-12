@@ -538,9 +538,9 @@ ToolBarManager::Implementation::Implementation (
     Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
     mpEventMultiplexer->AddEventListener(
         aLink,
-        tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
-        | tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED
-        | tools::EventMultiplexerEvent::EID_PANE_MANAGER_DYING);
+        EventMultiplexerEventId::ControllerAttached
+        | EventMultiplexerEventId::ControllerDetached
+        | EventMultiplexerEventId::PaneManagerDying);
 }
 
 /** The order of statements is important.
@@ -867,19 +867,21 @@ IMPL_LINK(ToolBarManager::Implementation,EventMultiplexerCallback,
     SolarMutexGuard g;
     switch (rEvent.meEventId)
     {
-        case tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED:
+        case EventMultiplexerEventId::ControllerAttached:
             if (mnPendingSetValidCall == nullptr)
                 mnPendingSetValidCall
                     = Application::PostUserEvent(LINK(this,Implementation,SetValidCallback));
             break;
 
-        case tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED:
+        case EventMultiplexerEventId::ControllerDetached:
             SetValid(false);
             break;
 
-        case tools::EventMultiplexerEvent::EID_PANE_MANAGER_DYING:
+        case EventMultiplexerEventId::PaneManagerDying:
             SetValid(false);
             break;
+
+        default: break;
     }
 }
 

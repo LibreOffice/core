@@ -75,13 +75,13 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
 {
     Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     rBase.GetEventMultiplexer()->AddEventListener(aLink,
-        sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE
-        | sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL
-        | sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER
-        | sd::tools::EventMultiplexerEvent::EID_PAGE_ORDER
-        | sd::tools::EventMultiplexerEvent::EID_SHAPE_CHANGED
-        | sd::tools::EventMultiplexerEvent::EID_SHAPE_INSERTED
-        | sd::tools::EventMultiplexerEvent::EID_SHAPE_REMOVED);
+        EventMultiplexerEventId::CurrentPageChanged
+        | EventMultiplexerEventId::EditModeNormal
+        | EventMultiplexerEventId::EditModeMaster
+        | EventMultiplexerEventId::PageOrder
+        | EventMultiplexerEventId::ShapeChanged
+        | EventMultiplexerEventId::ShapeInserted
+        | EventMultiplexerEventId::ShapeRemoved);
 }
 
 CurrentMasterPagesSelector::~CurrentMasterPagesSelector()
@@ -255,14 +255,14 @@ IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
 {
     switch (rEvent.meEventId)
     {
-        case sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
-        case sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL:
-        case sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER:
-        case sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION:
+        case EventMultiplexerEventId::CurrentPageChanged:
+        case EventMultiplexerEventId::EditModeNormal:
+        case EventMultiplexerEventId::EditModeMaster:
+        case EventMultiplexerEventId::SlideSortedSelection:
             UpdateSelection();
             break;
 
-        case sd::tools::EventMultiplexerEvent::EID_PAGE_ORDER:
+        case EventMultiplexerEventId::PageOrder:
             // This is tricky.  If a master page is removed, moved, or
             // added we have to wait until both the notes master page
             // and the standard master page have been removed, moved,
@@ -274,11 +274,12 @@ IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
                 MasterPagesSelector::Fill();
             break;
 
-        case sd::tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
-        case sd::tools::EventMultiplexerEvent::EID_SHAPE_INSERTED:
-        case sd::tools::EventMultiplexerEvent::EID_SHAPE_REMOVED:
-           InvalidatePreview(static_cast<const SdPage*>(rEvent.mpUserData));
+        case EventMultiplexerEventId::ShapeChanged:
+        case EventMultiplexerEventId::ShapeInserted:
+        case EventMultiplexerEventId::ShapeRemoved:
+            InvalidatePreview(static_cast<const SdPage*>(rEvent.mpUserData));
             break;
+        default: break;
     }
 }
 

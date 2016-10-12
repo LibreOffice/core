@@ -424,11 +424,11 @@ void TableDesignWidget::addListener()
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
-        tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
-        | tools::EventMultiplexerEvent::EID_CURRENT_PAGE
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
-        | tools::EventMultiplexerEvent::EID_DISPOSING);
+        EventMultiplexerEventId::EditViewSelection
+        | EventMultiplexerEventId::CurrentPageChanged
+        | EventMultiplexerEventId::MainViewRemoved
+        | EventMultiplexerEventId::MainViewAdded
+        | EventMultiplexerEventId::Disposing);
 }
 
 void TableDesignWidget::removeListener()
@@ -442,20 +442,22 @@ IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
 {
     switch (rEvent.meEventId)
     {
-        case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
-        case tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION:
+        case EventMultiplexerEventId::CurrentPageChanged:
+        case EventMultiplexerEventId::EditViewSelection:
             onSelectionChanged();
             break;
 
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
+        case EventMultiplexerEventId::MainViewRemoved:
             mxView.clear();
             onSelectionChanged();
             break;
 
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
+        case EventMultiplexerEventId::MainViewAdded:
             mxView.set( mrBase.GetController(), UNO_QUERY );
             onSelectionChanged();
             break;
+
+        default: break;
     }
 }
 

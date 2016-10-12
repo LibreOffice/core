@@ -399,11 +399,11 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 , mnUpdateTagsEvent( nullptr )
 {
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer()->AddEventListener(aLink, tools::EventMultiplexerEvent::EID_CURRENT_PAGE
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
-        | tools::EventMultiplexerEvent::EID_VIEW_ADDED
-        | tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT
-        | tools::EventMultiplexerEvent::EID_END_TEXT_EDIT );
+    mrBase.GetEventMultiplexer()->AddEventListener(aLink, EventMultiplexerEventId::CurrentPageChanged
+        | EventMultiplexerEventId::MainViewAdded
+        | EventMultiplexerEventId::ViewAdded
+        | EventMultiplexerEventId::BeginTextEdit
+        | EventMultiplexerEventId::EndTextEdit );
 
     StartListening( *mrBase.GetDocShell() );
 }
@@ -506,13 +506,14 @@ IMPL_LINK(ViewOverlayManager,EventMultiplexerListener,
 {
     switch (rEvent.meEventId)
     {
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
-        case tools::EventMultiplexerEvent::EID_VIEW_ADDED:
-        case tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT:
-        case tools::EventMultiplexerEvent::EID_END_TEXT_EDIT:
-        case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
+        case EventMultiplexerEventId::MainViewAdded:
+        case EventMultiplexerEventId::ViewAdded:
+        case EventMultiplexerEventId::BeginTextEdit:
+        case EventMultiplexerEventId::EndTextEdit:
+        case EventMultiplexerEventId::CurrentPageChanged:
             UpdateTags();
             break;
+        default: break;
     }
 }
 

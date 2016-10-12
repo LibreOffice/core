@@ -69,11 +69,11 @@ public:
 
     void AddEventListener (
         const Link<EventMultiplexerEvent&,void>& rCallback,
-        EventMultiplexerEvent::EventId aEventTypes);
+        EventMultiplexerEventId aEventTypes);
 
     void RemoveEventListener (
         const Link<EventMultiplexerEvent&,void>& rCallback,
-        EventMultiplexerEvent::EventId aEventTypes);
+        EventMultiplexerEventId aEventTypes);
 
     void CallListeners (EventMultiplexerEvent& rEvent);
 
@@ -118,7 +118,7 @@ protected:
 
 private:
     ViewShellBase& mrBase;
-    typedef ::std::pair<Link<EventMultiplexerEvent&,void>,EventMultiplexerEvent::EventId> ListenerDescriptor;
+    typedef ::std::pair<Link<EventMultiplexerEvent&,void>,EventMultiplexerEventId> ListenerDescriptor;
     typedef ::std::vector<ListenerDescriptor> ListenerList;
     ListenerList maListeners;
 
@@ -139,7 +139,7 @@ private:
     void DisconnectFromController();
 
     void CallListeners (
-        EventMultiplexerEvent::EventId eId,
+        EventMultiplexerEventId eId,
         void* pUserData = nullptr);
 
     /** This method throws a DisposedException when the object has already been
@@ -177,20 +177,20 @@ EventMultiplexer::~EventMultiplexer()
 
 void EventMultiplexer::AddEventListener (
     const Link<EventMultiplexerEvent&,void>& rCallback,
-    EventMultiplexerEvent::EventId aEventTypes)
+    EventMultiplexerEventId aEventTypes)
 {
     mpImpl->AddEventListener (rCallback, aEventTypes);
 }
 
 void EventMultiplexer::RemoveEventListener (
     const Link<EventMultiplexerEvent&,void>& rCallback,
-    EventMultiplexerEvent::EventId aEventTypes)
+    EventMultiplexerEventId aEventTypes)
 {
     mpImpl->RemoveEventListener (rCallback, aEventTypes);
 }
 
 void EventMultiplexer::MultiplexEvent(
-    EventMultiplexerEvent::EventId eEventId,
+    EventMultiplexerEventId eEventId,
     void* pUserData )
 {
     EventMultiplexerEvent aEvent(eEventId, pUserData);
@@ -307,7 +307,7 @@ void EventMultiplexer::Implementation::ReleaseListeners()
 
 void EventMultiplexer::Implementation::AddEventListener (
     const Link<EventMultiplexerEvent&,void>& rCallback,
-    EventMultiplexerEvent::EventId aEventTypes)
+    EventMultiplexerEventId aEventTypes)
 {
     ListenerList::iterator iListener (maListeners.begin());
     ListenerList::const_iterator iEnd (maListeners.end());
@@ -327,7 +327,7 @@ void EventMultiplexer::Implementation::AddEventListener (
 
 void EventMultiplexer::Implementation::RemoveEventListener (
     const Link<EventMultiplexerEvent&,void>& rCallback,
-    EventMultiplexerEvent::EventId aEventTypes)
+    EventMultiplexerEventId aEventTypes)
 {
     ListenerList::iterator iListener (maListeners.begin());
     ListenerList::const_iterator iEnd (maListeners.end());
@@ -339,7 +339,7 @@ void EventMultiplexer::Implementation::RemoveEventListener (
         // Update the event type set.
         iListener->second &= ~aEventTypes;
         // When no events remain in the set then remove the listener.
-        if (iListener->second == EID_EMPTY_SET)
+        if (iListener->second == EventMultiplexerEventId::NONE)
             maListeners.erase (iListener);
     }
 }
@@ -488,16 +488,16 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
 
     if ( rEvent.PropertyName == aCurrentPagePropertyName )
     {
-        CallListeners(EventMultiplexerEvent::EID_CURRENT_PAGE);
+        CallListeners(EventMultiplexerEventId::CurrentPageChanged);
     }
     else if ( rEvent.PropertyName == aEditModePropertyName )
     {
         bool bIsMasterPageMode (false);
         rEvent.NewValue >>= bIsMasterPageMode;
         if (bIsMasterPageMode)
-            CallListeners(EventMultiplexerEvent::EID_EDIT_MODE_MASTER);
+            CallListeners(EventMultiplexerEventId::EditModeMaster);
         else
-            CallListeners(EventMultiplexerEvent::EID_EDIT_MODE_NORMAL);
+            CallListeners(EventMultiplexerEventId::EditModeNormal);
     }
 }
 
@@ -513,19 +513,19 @@ void SAL_CALL EventMultiplexer::Implementation::frameAction (
         {
             case frame::FrameAction_COMPONENT_DETACHING:
                 DisconnectFromController();
-                CallListeners (EventMultiplexerEvent::EID_CONTROLLER_DETACHED);
+                CallListeners (EventMultiplexerEventId::ControllerDetached);
                 break;
 
             case frame::FrameAction_COMPONENT_REATTACHED:
-                CallListeners (EventMultiplexerEvent::EID_CONTROLLER_DETACHED);
+                CallListeners (EventMultiplexerEventId::ControllerDetached);
                 DisconnectFromController();
                 ConnectToController();
-                CallListeners (EventMultiplexerEvent::EID_CONTROLLER_ATTACHED);
+                CallListeners (EventMultiplexerEventId::ControllerAttached);
                 break;
 
             case frame::FrameAction_COMPONENT_ATTACHED:
                 ConnectToController();
-                CallListeners (EventMultiplexerEvent::EID_CONTROLLER_ATTACHED);
+                CallListeners (EventMultiplexerEventId::ControllerAttached);
                 break;
 
             default:
@@ -539,7 +539,7 @@ void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
     const lang::EventObject& )
     throw (css::uno::RuntimeException, std::exception)
 {
-    CallListeners (EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION);
+    CallListeners (EventMultiplexerEventId::EditViewSelection);
 }
 
 //===== drawing::framework::XConfigurationChangeListener ==================
@@ -555,12 +555,12 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
         case ResourceActivationEvent:
             if (rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix))
             {
-                CallListeners (EventMultiplexerEvent::EID_VIEW_ADDED);
+                CallListeners (EventMultiplexerEventId::ViewAdded);
 
                 if (rEvent.ResourceId->isBoundToURL(
                     FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
                 {
-                    CallListeners (EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
+                    CallListeners (EventMultiplexerEventId::MainViewAdded);
                 }
 
                 // Add selection change listener at slide sorter.
@@ -582,12 +582,10 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
         case ResourceDeactivationEvent:
             if (rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix))
             {
-                CallListeners (EventMultiplexerEvent::EID_VIEW_REMOVED);
-
                 if (rEvent.ResourceId->isBoundToURL(
                     FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
                 {
-                    CallListeners (EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED);
+                    CallListeners (EventMultiplexerEventId::MainViewRemoved);
                 }
 
                 // Remove selection change listener from slide sorter.  Add
@@ -608,7 +606,7 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
             break;
 
         case ConfigurationUpdateEvent:
-            CallListeners (EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
+            CallListeners (EventMultiplexerEventId::ConfigurationUpdated);
             break;
     }
 
@@ -616,7 +614,7 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
 
 void SAL_CALL EventMultiplexer::Implementation::disposing()
 {
-    CallListeners (EventMultiplexerEvent::EID_DISPOSING);
+    CallListeners (EventMultiplexerEventId::Disposing);
     ReleaseListeners();
 }
 
@@ -642,25 +640,25 @@ void EventMultiplexer::Implementation::Notify (
         {
             case SdrHintKind::ModelCleared:
             case SdrHintKind::PageOrderChange:
-                CallListeners (EventMultiplexerEvent::EID_PAGE_ORDER);
+                CallListeners (EventMultiplexerEventId::PageOrder);
                 break;
 
             case SdrHintKind::SwitchToPage:
-                CallListeners (EventMultiplexerEvent::EID_CURRENT_PAGE);
+                CallListeners (EventMultiplexerEventId::CurrentPageChanged);
                 break;
 
             case SdrHintKind::ObjectChange:
-                CallListeners(EventMultiplexerEvent::EID_SHAPE_CHANGED,
+                CallListeners(EventMultiplexerEventId::ShapeChanged,
                     const_cast<void*>(static_cast<const void*>(pSdrHint->GetPage())));
                 break;
 
             case SdrHintKind::ObjectInserted:
-                CallListeners(EventMultiplexerEvent::EID_SHAPE_INSERTED,
+                CallListeners(EventMultiplexerEventId::ShapeInserted,
                     const_cast<void*>(static_cast<const void*>(pSdrHint->GetPage())));
                 break;
 
             case SdrHintKind::ObjectRemoved:
-                CallListeners(EventMultiplexerEvent::EID_SHAPE_REMOVED,
+                CallListeners(EventMultiplexerEventId::ShapeRemoved,
                     const_cast<void*>(static_cast<const void*>(pSdrHint->GetPage())));
                 break;
             default:
@@ -675,7 +673,7 @@ void EventMultiplexer::Implementation::Notify (
 }
 
 void EventMultiplexer::Implementation::CallListeners (
-    EventMultiplexerEvent::EventId eId,
+    EventMultiplexerEventId eId,
     void* pUserData)
 {
     EventMultiplexerEvent aEvent(eId, pUserData);
@@ -689,20 +687,20 @@ void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEv
     ListenerList::const_iterator iListenerEnd (aCopyListeners.end());
     for (; iListener!=iListenerEnd; ++iListener)
     {
-        if ((iListener->second && rEvent.meEventId))
+        if (iListener->second & rEvent.meEventId)
             iListener->first.Call(rEvent);
     }
 }
 
 IMPL_LINK_NOARG(EventMultiplexer::Implementation, SlideSorterSelectionChangeListener, LinkParamNone*, void)
 {
-    CallListeners(EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION);
+    CallListeners(EventMultiplexerEventId::SlideSortedSelection);
 }
 
 //===== EventMultiplexerEvent =================================================
 
 EventMultiplexerEvent::EventMultiplexerEvent (
-    EventId eEventId,
+    EventMultiplexerEventId eEventId,
     const void* pUserData)
     : meEventId(eEventId),
       mpUserData(pUserData)

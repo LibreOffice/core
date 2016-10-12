@@ -129,8 +129,8 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
     mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->AddEventListener(
         aLink,
-        tools::EventMultiplexerEvent::EID_CURRENT_PAGE
-        | tools::EventMultiplexerEvent::EID_PAGE_ORDER);
+        EventMultiplexerEventId::CurrentPageChanged
+        | EventMultiplexerEventId::PageOrder);
 
     LanguageType eLang = mrOutliner.GetDefaultLanguage();
     maPageNumberFont = OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE, eLang, GetDefaultFontFlags::NONE );
@@ -1427,11 +1427,11 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
 {
     switch (rEvent.meEventId)
     {
-        case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
+        case EventMultiplexerEventId::CurrentPageChanged:
             SetActualPage(mrOutlineViewShell.GetActualPage());
             break;
 
-        case tools::EventMultiplexerEvent::EID_PAGE_ORDER:
+        case EventMultiplexerEventId::PageOrder:
             if (dynamic_cast<Outliner&>(mrOutliner).GetIgnoreCurrentPageChangesLevel()==0)
             {
                 if (((mrDoc.GetPageCount()-1)%2) == 0)
@@ -1444,6 +1444,8 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
                 }
             }
             break;
+
+        default: break;
     }
 }
 

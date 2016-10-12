@@ -169,13 +169,13 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
 
     Link<::sd::tools::EventMultiplexerEvent&,void> aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->AddEventListener(aEventListenerLink,
-        ::sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE
-        | ::sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION
-        | ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
-        | ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | ::sd::tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED
-        | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL
-        | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER);
+        EventMultiplexerEventId::CurrentPageChanged
+        | EventMultiplexerEventId::SlideSortedSelection
+        | EventMultiplexerEventId::MainViewAdded
+        | EventMultiplexerEventId::MainViewRemoved
+        | EventMultiplexerEventId::ConfigurationUpdated
+        | EventMultiplexerEventId::EditModeNormal
+        | EventMultiplexerEventId::EditModeMaster);
 
     Window::SetHelpId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS);
     SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
@@ -710,21 +710,21 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
 {
     switch (rEvent.meEventId)
     {
-        case ::sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
-        case ::sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION:
+        case EventMultiplexerEventId::CurrentPageChanged:
+        case EventMultiplexerEventId::SlideSortedSelection:
             if ( ! mbSelectionUpdatePending)
                 UpdateSelection();
             break;
 
-        case ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
+        case EventMultiplexerEventId::MainViewAdded:
             mbIsMainViewChangePending = true;
             break;
 
-        case ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
+        case EventMultiplexerEventId::MainViewRemoved:
             HideFocus();
             break;
 
-        case ::sd::tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED:
+        case EventMultiplexerEventId::ConfigurationUpdated:
             if (mbIsMainViewChangePending)
             {
                 mbIsMainViewChangePending = false;

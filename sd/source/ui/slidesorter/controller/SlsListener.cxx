@@ -128,11 +128,11 @@ Listener::Listener (
         Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this, Listener, EventMultiplexerCallback));
         mpBase->GetEventMultiplexer()->AddEventListener(
             aLink,
-            tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-            | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
-            | tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
-            | tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED
-            | tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
+            EventMultiplexerEventId::MainViewRemoved
+            | EventMultiplexerEventId::MainViewAdded
+            | EventMultiplexerEventId::ControllerAttached
+            | EventMultiplexerEventId::ControllerDetached
+            | EventMultiplexerEventId::ConfigurationUpdated);
     }
 }
 
@@ -188,11 +188,11 @@ void Listener::ReleaseListeners()
         Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this, Listener, EventMultiplexerCallback));
         mpBase->GetEventMultiplexer()->RemoveEventListener(
             aLink,
-            tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-            | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
-            | tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
-            | tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED
-            | tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
+            EventMultiplexerEventId::MainViewRemoved
+            | EventMultiplexerEventId::MainViewAdded
+            | EventMultiplexerEventId::ControllerAttached
+            | EventMultiplexerEventId::ControllerDetached
+            | EventMultiplexerEventId::ConfigurationUpdated);
     }
 }
 
@@ -348,7 +348,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
 {
     switch (rEvent.meEventId)
     {
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
+        case EventMultiplexerEventId::MainViewRemoved:
         {
             if (mpBase != nullptr)
             {
@@ -359,11 +359,11 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         }
         break;
 
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
+        case EventMultiplexerEventId::MainViewAdded:
             mbIsMainViewChangePending = true;
             break;
 
-        case tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED:
+        case EventMultiplexerEventId::ConfigurationUpdated:
             if (mbIsMainViewChangePending && mpBase != nullptr)
             {
                 mbIsMainViewChangePending = false;
@@ -376,7 +376,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
             }
             break;
 
-        case tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED:
+        case EventMultiplexerEventId::ControllerAttached:
         {
             ConnectToController();
             //            mrController.GetPageSelector().GetCoreSelection();
@@ -384,17 +384,17 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         }
         break;
 
-        case tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED:
+        case EventMultiplexerEventId::ControllerDetached:
             DisconnectFromController();
             break;
 
-        case tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
-        case tools::EventMultiplexerEvent::EID_SHAPE_INSERTED:
-        case tools::EventMultiplexerEvent::EID_SHAPE_REMOVED:
+        case EventMultiplexerEventId::ShapeChanged:
+        case EventMultiplexerEventId::ShapeInserted:
+        case EventMultiplexerEventId::ShapeRemoved:
             HandleShapeModification(static_cast<const SdrPage*>(rEvent.mpUserData));
             break;
 
-        case tools::EventMultiplexerEvent::EID_END_TEXT_EDIT:
+        case EventMultiplexerEventId::EndTextEdit:
             if (rEvent.mpUserData != nullptr)
             {
                 const SdrObject* pObject = static_cast<const SdrObject*>(rEvent.mpUserData);

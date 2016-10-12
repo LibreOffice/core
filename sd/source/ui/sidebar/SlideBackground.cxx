@@ -332,14 +332,14 @@ void SlideBackground::addListener()
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this, SlideBackground, EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
-        tools::EventMultiplexerEvent::EID_CURRENT_PAGE |
-        tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED |
-        tools::EventMultiplexerEvent::EID_SHAPE_CHANGED |
-        tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL |
-        tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER |
-        tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION |
-        tools::EventMultiplexerEvent::EID_END_TEXT_EDIT |
-        tools::EventMultiplexerEvent::EID_VIEW_ADDED);
+        EventMultiplexerEventId::CurrentPageChanged |
+        EventMultiplexerEventId::MainViewAdded |
+        EventMultiplexerEventId::ShapeChanged |
+        EventMultiplexerEventId::EditModeNormal |
+        EventMultiplexerEventId::EditModeMaster |
+        EventMultiplexerEventId::EditViewSelection |
+        EventMultiplexerEventId::EndTextEdit |
+        EventMultiplexerEventId::ViewAdded);
 }
 
 void SlideBackground::removeListener()
@@ -355,15 +355,15 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
     {
         // add more events as per requirement
         // Master Page change triggers a shape change event. Solves sync problem.
-        case tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
+        case EventMultiplexerEventId::ShapeChanged:
             populateMasterSlideDropdown();
             break;
-        case tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL:
-        case tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER:
+        case EventMultiplexerEventId::EditModeNormal:
+        case EventMultiplexerEventId::EditModeMaster:
             mbEditModeChangePending = true;
             break;
-        case tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION:
-        case tools::EventMultiplexerEvent::EID_END_TEXT_EDIT:
+        case EventMultiplexerEventId::EditViewSelection:
+        case EventMultiplexerEventId::EndTextEdit:
         {
             if (mbEditModeChangePending)
             {
@@ -407,7 +407,7 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
             }
         }
         break;
-        case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
+        case EventMultiplexerEventId::CurrentPageChanged:
         {
             static sal_uInt16 SidArray[] = {
                 SID_ATTR_PAGE_COLOR,
@@ -422,7 +422,7 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
             GetBindings()->Invalidate( SidArray );
         }
         break;
-        case tools::EventMultiplexerEvent::EID_VIEW_ADDED:
+        case EventMultiplexerEventId::ViewAdded:
         {
             if(!mbTitle)
             {

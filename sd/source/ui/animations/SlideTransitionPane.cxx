@@ -957,12 +957,12 @@ void SlideTransitionPane::addListener()
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
-        tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
-        | tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION
-        | tools::EventMultiplexerEvent::EID_CURRENT_PAGE
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
-        | tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
+        EventMultiplexerEventId::EditViewSelection
+        | EventMultiplexerEventId::SlideSortedSelection
+        | EventMultiplexerEventId::CurrentPageChanged
+        | EventMultiplexerEventId::MainViewRemoved
+        | EventMultiplexerEventId::MainViewAdded
+        | EventMultiplexerEventId::ConfigurationUpdated);
 }
 
 void SlideTransitionPane::removeListener()
@@ -976,26 +976,26 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
 {
     switch (rEvent.meEventId)
     {
-        case tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION:
+        case EventMultiplexerEventId::EditViewSelection:
             onSelectionChanged();
             break;
 
-        case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
-        case tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION:
+        case EventMultiplexerEventId::CurrentPageChanged:
+        case EventMultiplexerEventId::SlideSortedSelection:
             onChangeCurrentPage();
             break;
 
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
+        case EventMultiplexerEventId::MainViewRemoved:
             mxView.clear();
             onSelectionChanged();
             onChangeCurrentPage();
             break;
 
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
+        case EventMultiplexerEventId::MainViewAdded:
             mbIsMainViewChangePending = true;
             break;
 
-        case tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED:
+        case EventMultiplexerEventId::ConfigurationUpdated:
             if (mbIsMainViewChangePending)
             {
                 mbIsMainViewChangePending = false;
@@ -1013,7 +1013,7 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
             break;
 
         default:
-            if (rEvent.meEventId != tools::EventMultiplexerEvent::EID_DISPOSING)
+            if (rEvent.meEventId != EventMultiplexerEventId::Disposing)
             {
                 onSelectionChanged();
                 onChangeCurrentPage();

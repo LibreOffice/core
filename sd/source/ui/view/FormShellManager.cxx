@@ -60,9 +60,9 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
     Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
     mrBase.GetEventMultiplexer()->AddEventListener(
         aLink,
-        sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
-        | sd::tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
+        EventMultiplexerEventId::MainViewRemoved
+        | EventMultiplexerEventId::MainViewAdded
+        | EventMultiplexerEventId::ConfigurationUpdated);
 
     RegisterAtCenterPane();
 }
@@ -202,15 +202,15 @@ IMPL_LINK(FormShellManager, ConfigurationUpdateHandler, sd::tools::EventMultiple
 {
     switch (rEvent.meEventId)
     {
-        case sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
+        case EventMultiplexerEventId::MainViewRemoved:
             UnregisterAtCenterPane();
             break;
 
-        case sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
+        case EventMultiplexerEventId::MainViewAdded:
             mbIsMainViewChangePending = true;
             break;
 
-        case sd::tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED:
+        case EventMultiplexerEventId::ConfigurationUpdated:
             if (mbIsMainViewChangePending)
             {
                 mbIsMainViewChangePending = false;
