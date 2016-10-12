@@ -494,7 +494,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             else
                 aLang = utl::ConfigManager::getLocale().copy(0,ix);
 
-            OUString sURL("http://hub.libreoffice.org/forum/?&LOlang=" + aLang);
+            OUString sURL("http://ask.libreoffice.org/" + aLang);
             try
             {
                 uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
@@ -506,6 +506,82 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
             break;
         }
+
+        case SID_COMMUNITY_S:
+        {
+            OUString sURL("http://www.libreoffice.org/get-help/community-support/");
+            try
+            {
+                uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+                    css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+                xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+            break;
+        }
+
+        case SID_PROFESSIONAL_S:
+        {
+            OUString sURL("http://www.libreoffice.org/get-help/professional-support/");
+            try
+            {
+                uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+                    css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+                xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+            break;
+        }
+
+        case SID_DONATE:
+        {
+            OUString sURL("http://www.libreoffice.org/donate/");
+            try
+            {
+                uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+                    css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+                xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+            break;
+        }
+
+        case SID_HOMEPAGE:
+        {
+            OUString sURL("http://www.libreoffice.org/");
+            try
+            {
+                uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+                    css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+                xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+            break;
+        }
+
+        case SID_USER_GUIDES:
+        {
+            OUString sURL("http://www.libreoffice.org/get-help/documentation/");
+            try
+            {
+                uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+                    css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+                xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+            break;
+        }
+
         case SID_SHOW_LICENSE:
         {
             ScopedVclPtrInstance< LicenseDialog > aDialog;
