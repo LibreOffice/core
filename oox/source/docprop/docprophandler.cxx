@@ -216,6 +216,10 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
     switch( m_nBlock )
     {
     case EXTPR_TOKEN( Characters ):
+        aName = "NonWhitespaceCharacterCount";
+        break;
+
+    case EXTPR_TOKEN( CharactersWithSpaces ):
         aName = "CharacterCount";
         break;
 
@@ -513,6 +517,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     break;
 
                 case EXTPR_TOKEN( Characters ):
+                case EXTPR_TOKEN( CharactersWithSpaces ):
                 case EXTPR_TOKEN( Pages ):
                 case EXTPR_TOKEN( Words ):
                 case EXTPR_TOKEN( Paragraphs ):
@@ -589,7 +594,6 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                     break;
 
-                case EXTPR_TOKEN( CharactersWithSpaces ):
                 case EXTPR_TOKEN( Lines ):
                 case EXTPR_TOKEN( DigSig ):
                 case EXTPR_TOKEN( HeadingPairs ):
