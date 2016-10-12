@@ -193,8 +193,6 @@ class RscTypCont
 
     RscTop *    InitClassDockingWindow( RscTop * pSuper,
                                         RscEnum * pMapUnit );
-    RscTop *    InitClassToolBoxItem(RscTop * pSuper);
-    RscTop *    InitClassToolBox( RscTop * pSuper, RscTop * pClassToolBoxItem );
     RscTop *    InitClassSfxStyleFamilyItem( RscTop * pSuper,
                                              RscTop * pClassBitmap,
                                              RscTop * pClassImage,

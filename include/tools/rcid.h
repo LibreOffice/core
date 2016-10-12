@@ -59,8 +59,6 @@
 
 #define RSC_FIXEDIMAGE          (RSC_NOTYPE + 0x5a)
 
-#define RSC_TOOLBOXITEM         (RSC_NOTYPE + 0x70)
-#define RSC_TOOLBOX             (RSC_NOTYPE + 0x71)
 #define RSC_DOCKINGWINDOW       (RSC_NOTYPE + 0x72)
 
 #define RSC_STRINGARRAY         (RSC_NOTYPE + 0x79)

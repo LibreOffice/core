@@ -1537,38 +1537,6 @@ void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
     }
 }
 
-void ToolBox::ImplLoadRes( const ResId& rResId )
-{
-    ResMgr* pMgr = rResId.GetResMgr();
-    if( ! pMgr )
-        return;
-
-    DockingWindow::ImplLoadRes( rResId );
-
-    RscToolboxFlags nObjMask = (RscToolboxFlags)ReadLongRes();
-
-    if ( nObjMask & RscToolboxFlags::ButtonType )
-        SetButtonType( (ButtonType)ReadLongRes() );
-
-    if ( nObjMask & RscToolboxFlags::Align )
-        SetAlign( (WindowAlign)ReadLongRes() );
-
-    if ( nObjMask & RscToolboxFlags::LineCount )
-        SetLineCount( sal::static_int_cast<sal_uInt16>(ReadLongRes()) );
-
-    if ( nObjMask & RscToolboxFlags::ItemList )
-    {
-        sal_uLong nEle = ReadLongRes();
-
-        // insert item
-        for ( sal_uLong i = 0; i < nEle; i++ )
-        {
-            InsertItem( ResId( static_cast<RSHEADER_TYPE *>(GetClassRes()), *pMgr ) );
-            IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
-        }
-    }
-}
-
 void ToolBox::doDeferredInit(WinBits nBits)
 {
     VclPtr<vcl::Window> pParent = mpDialogParent;
@@ -1582,28 +1550,6 @@ ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :
 {
     ImplInitToolBoxData();
     ImplInit( pParent, nStyle );
-}
-
-ToolBox::ToolBox( vcl::Window* pParent, const ResId& rResId ) :
-    DockingWindow( WINDOW_TOOLBOX )
-{
-    SAL_INFO( "vcl.window", "vcl: ToolBox::ToolBox( vcl::Window* pParent, const ResId& rResId )" );
-    ImplInitToolBoxData();
-
-    rResId.SetRT( RSC_TOOLBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    // calculate size of floating windows and switch if the
-    // toolbox is initially in floating mode
-    if ( ImplIsFloatingMode() )
-        mbHorz = true;
-    else
-        Resize();
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
 }
 
 ToolBox::ToolBox(vcl::Window* pParent, const OString& rID,

@@ -173,7 +173,6 @@ private:
     SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
     using DockingWindow::ImplInitSettings;
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SAL_DLLPRIVATE void            ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( sal_uInt16 nId ) const;
     SAL_DLLPRIVATE bool            ImplCalcItem();
     SAL_DLLPRIVATE sal_uInt16      ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz );
@@ -257,8 +256,7 @@ protected:
     }
 
 public:
-    ToolBox( vcl::Window* pParent, WinBits nStyle = 0 );
-    ToolBox( vcl::Window* pParent, const ResId& rResId );
+    ToolBox(vcl::Window* pParent, WinBits nStyle = 0);
     ToolBox(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
         const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual             ~ToolBox() override;
@@ -294,7 +292,6 @@ public:
     virtual Size        GetOptimalSize() const override;
     virtual void        doDeferredInit(WinBits nBits) override;
 
-    void                InsertItem( const ResId& rResId );
     /// Insert a command (like '.uno:Save').
     virtual void        InsertItem( const OUString& rCommand,
                                     const css::uno::Reference<css::frame::XFrame>& rFrame,
