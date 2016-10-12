@@ -45,11 +45,12 @@ bool SafeMode::removeFlag()
 
 OUString SafeMode::getFileName()
 {
-    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/safemode");
+    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/");
     rtl::Bootstrap::expandMacros(url);
 
     OUString aProfilePath;
     FileBase::getSystemPathFromFileURL(url, aProfilePath);
+    FileBase::getAbsoluteFileURL(url, "safemode", aProfilePath);
     return aProfilePath;
 }
 
