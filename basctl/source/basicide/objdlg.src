@@ -19,11 +19,6 @@
 
 #include <objdlg.hrc>
 
-Control RID_TLB_MACROS
-{
-    TabStop = TRUE ;
-};
-
 String RID_BASICIDE_OBJCAT
 {
     Text [en-US] = "Object Catalog";

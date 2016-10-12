@@ -28,10 +28,10 @@
 namespace basctl
 {
 
-ObjectCatalog::ObjectCatalog (vcl::Window* pParent) :
-    DockingWindow(pParent),
-    aTitle(VclPtr<FixedText>::Create(this)),
-    aTree(VclPtr<TreeListBox>::Create(this, IDEResId(RID_TLB_MACROS)))
+ObjectCatalog::ObjectCatalog (vcl::Window* pParent)
+    : DockingWindow(pParent)
+    , aTitle(VclPtr<FixedText>::Create(this))
+    , aTree(VclPtr<TreeListBox>::Create(this, WB_TABSTOP))
 {
     SetHelpId("basctl:FloatingWindow:RID_BASICIDE_OBJCAT");
     SetText(IDEResId(RID_BASICIDE_OBJCAT).toString());
