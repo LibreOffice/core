@@ -36,4 +36,12 @@ $(eval $(call gb_Module_add_screenshot_targets,xmlsecurity,\
     CppunitTest_xmlsecurity_dialogs_test \
 ))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
+$(eval $(call gb_Module_add_targets,xmlsecurity,\
+    Executable_pdfverify \
+))
+
+endif
+
 # vim: set noet sw=4 ts=4:

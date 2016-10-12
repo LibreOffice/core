@@ -1,0 +1,1539 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <iostream>
+#include <map>
+#include <memory>
+#include <vector>
+
+#include <comphelper/scopeguard.hxx>
+#include <osl/file.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+#include <sal/log.hxx>
+#include <sal/main.h>
+#include <sal/types.h>
+#include <tools/stream.hxx>
+
+#ifdef XMLSEC_CRYPTO_NSS
+#include <cert.h>
+#include <cms.h>
+#include <nss.h>
+#include <sechash.h>
+#endif
+
+using namespace com::sun::star;
+
+namespace xmlsecurity
+{
+namespace pdfio
+{
+
+/// A byte range in a PDF file.
+class PDFElement
+{
+public:
+    virtual bool Read(SvStream& rStream) = 0;
+    virtual ~PDFElement() { }
+};
+
+class PDFTrailerElement;
+class PDFObjectElement;
+
+/// In-memory representation of an on-disk PDF document.
+class PDFDocument
+{
+    /// This vector owns all elements.
+    std::vector< std::unique_ptr<PDFElement> > m_aElements;
+    // List of object offsets we know.
+    std::vector<size_t> m_aXRef;
+    PDFTrailerElement* m_pTrailer;
+
+    static int AsHex(char ch);
+
+public:
+    PDFDocument();
+    static OString ReadKeyword(SvStream& rStream);
+    static size_t FindStartXRef(SvStream& rStream);
+    void ReadXRef(SvStream& rStream);
+    static void SkipWhitespace(SvStream& rStream);
+    size_t GetObjectOffset(size_t nIndex) const;
+    const std::vector< std::unique_ptr<PDFElement> >& GetElements();
+    std::vector<PDFObjectElement*> GetPages();
+
+    bool Read(SvStream& rStream);
+    std::vector<PDFObjectElement*> GetSignatureWidgets();
+    /// Return value is about if we can determine a result, bDigestMatch is about the actual result.
+    static bool ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, bool& bDigestMatch);
+};
+
+/// A one-liner comment.
+class PDFCommentElement : public PDFElement
+{
+    OString m_aComment;
+
+public:
+    bool Read(SvStream& rStream) override;
+};
+
+/// Numbering object: an integer or a real.
+class PDFNumberElement : public PDFElement
+{
+    double m_fValue;
+
+public:
+    bool Read(SvStream& rStream) override;
+    double GetValue() const;
+};
+
+class PDFReferenceElement;
+
+/// Indirect object: something with a unique ID.
+class PDFObjectElement : public PDFElement
+{
+    PDFDocument& m_rDoc;
+    double m_fObjectValue;
+    double m_fGenerationValue;
+    std::map<OString, PDFElement*> m_aDictionary;
+
+public:
+    PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue);
+    bool Read(SvStream& rStream) override;
+    PDFElement* Lookup(const OString& rDictionaryKey);
+    PDFObjectElement* LookupObject(const OString& rDictionaryKey);
+    double GetObjectValue() const;
+    double GetGenerationValue() const;
+};
+
+/// Dictionary object: a set key-value pairs.
+class PDFDictionaryElement : public PDFElement
+{
+public:
+    bool Read(SvStream& rStream) override;
+
+    static void Parse(const std::vector< std::unique_ptr<PDFElement> >& rElements, PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary);
+    static PDFElement* Lookup(const std::map<OString, PDFElement*>& rDictionary, const OString& rKey);
+};
+
+/// End of a dictionary: '>>'.
+class PDFEndDictionaryElement : public PDFElement
+{
+public:
+    bool Read(SvStream& rStream) override;
+};
+
+/// Name object: a key string.
+class PDFNameElement : public PDFElement
+{
+    OString m_aValue;
+public:
+    bool Read(SvStream& rStream) override;
+    const OString& GetValue() const;
+};
+
+/// Reference object: something with a unique ID.
+class PDFReferenceElement : public PDFElement
+{
+    PDFDocument& m_rDoc;
+    int m_fObjectValue;
+    int m_fGenerationValue;
+
+public:
+    PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue);
+    bool Read(SvStream& rStream) override;
+    /// Assuming the reference points to a number object, return its value.
+    double LookupNumber(SvStream& rStream) const;
+    /// Lookup referenced object, without assuming anything about its contents.
+    PDFObjectElement* LookupObject() const;
+};
+
+/// Stream object: a byte array with a known length.
+class PDFStreamElement : public PDFElement
+{
+    size_t m_nLength;
+
+public:
+    PDFStreamElement(size_t nLength);
+    bool Read(SvStream& rStream) override;
+};
+
+/// End of a stream: 'endstream' keyword.
+class PDFEndStreamElement : public PDFElement
+{
+public:
+    bool Read(SvStream& rStream) override;
+};
+
+/// End of a object: 'endobj' keyword.
+class PDFEndObjectElement : public PDFElement
+{
+public:
+    bool Read(SvStream& rStream) override;
+};
+
+/// Array object: a list.
+class PDFArrayElement : public PDFElement
+{
+    std::vector<PDFElement*> m_aElements;
+public:
+    bool Read(SvStream& rStream) override;
+    void PushBack(PDFElement* pElement);
+    const std::vector<PDFElement*>& GetElements();
+};
+
+/// End of an array: ']'.
+class PDFEndArrayElement : public PDFElement
+{
+public:
+    bool Read(SvStream& rStream) override;
+};
+
+/// Boolean object: a 'true' or a 'false'.
+class PDFBooleanElement : public PDFElement
+{
+public:
+    PDFBooleanElement(bool bValue);
+    bool Read(SvStream& rStream) override;
+};
+
+/// Null object: the 'null' singleton.
+class PDFNullElement : public PDFElement
+{
+public:
+    bool Read(SvStream& rStream) override;
+};
+
+/// Hex string: in <AABB> form.
+class PDFHexStringElement : public PDFElement
+{
+    OString m_aValue;
+public:
+    bool Read(SvStream& rStream) override;
+    const OString& GetValue() const;
+};
+
+/// Literal string: in (asdf) form.
+class PDFLiteralStringElement : public PDFElement
+{
+    OString m_aValue;
+public:
+    bool Read(SvStream& rStream) override;
+};
+
+/// The trailer signleton is at the end of the doc.
+class PDFTrailerElement : public PDFElement
+{
+    PDFDocument& m_rDoc;
+    std::map<OString, PDFElement*> m_aDictionary;
+
+public:
+    PDFTrailerElement(PDFDocument& rDoc);
+    bool Read(SvStream& rStream) override;
+    PDFElement* Lookup(const OString& rDictionaryKey);
+};
+
+PDFDocument::PDFDocument()
+    : m_pTrailer(nullptr)
+{
+}
+
+bool PDFDocument::Read(SvStream& rStream)
+{
+    // First look up the offset of the xref table.
+    size_t nStartXRef = FindStartXRef(rStream);
+    SAL_INFO("xmlsecurity.pdfio", "PDFDocument::Read: nStartXRef is " << nStartXRef);
+    if (nStartXRef == 0)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: found no xref statrt offset");
+        return false;
+    }
+    rStream.Seek(nStartXRef);
+    char ch;
+    ReadXRef(rStream);
+
+    // Then we can tokenize the stream.
+    rStream.Seek(0);
+    bool bInXRef = false;
+    while (true)
+    {
+        rStream.ReadChar(ch);
+        if (rStream.IsEof())
+            break;
+
+        switch (ch)
+        {
+        case '%':
+        {
+            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFCommentElement()));
+            rStream.SeekRel(-1);
+            if (!m_aElements.back()->Read(rStream))
+                return false;
+            break;
+        }
+        case '<':
+        {
+            // Dictionary or hex string.
+            rStream.ReadChar(ch);
+            rStream.SeekRel(-2);
+            if (ch == '<')
+                m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFDictionaryElement()));
+            else
+                m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFHexStringElement()));
+            if (!m_aElements.back()->Read(rStream))
+                return false;
+            break;
+        }
+        case '>':
+        {
+            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFEndDictionaryElement()));
+            rStream.SeekRel(-1);
+            if (!m_aElements.back()->Read(rStream))
+                return false;
+            break;
+        }
+        case '[':
+        {
+            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFArrayElement()));
+            rStream.SeekRel(-1);
+            if (!m_aElements.back()->Read(rStream))
+                return false;
+            break;
+        }
+        case ']':
+        {
+            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFEndArrayElement()));
+            rStream.SeekRel(-1);
+            if (!m_aElements.back()->Read(rStream))
+                return false;
+            break;
+        }
+        case '/':
+        {
+            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFNameElement()));
+            rStream.SeekRel(-1);
+            if (!m_aElements.back()->Read(rStream))
+                return false;
+            break;
+        }
+        case '(':
+        {
+            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFLiteralStringElement()));
+            rStream.SeekRel(-1);
+            if (!m_aElements.back()->Read(rStream))
+                return false;
+            break;
+        }
+        default:
+        {
+            if (isdigit(ch) || ch == '-')
+            {
+                // Numbering object: an integer or a real.
+                m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFNumberElement()));
+                rStream.SeekRel(-1);
+                if (!m_aElements.back()->Read(rStream))
+                    return false;
+            }
+            else if (isalpha(ch))
+            {
+                // Possible keyword, like "obj".
+                rStream.SeekRel(-1);
+                OString aKeyword = ReadKeyword(rStream);
+
+                bool bObj = aKeyword == "obj";
+                if (bObj || aKeyword == "R")
+                {
+                    size_t nElements = m_aElements.size();
+                    if (nElements < 2)
+                    {
+                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: expected at least two tokens before 'obj' or 'R' keyword");
+                        return false;
+                    }
+
+                    auto pObjectNumber = dynamic_cast<PDFNumberElement*>(m_aElements[nElements - 2].get());
+                    auto pGenerationNumber = dynamic_cast<PDFNumberElement*>(m_aElements[nElements - 1].get());
+                    if (!pObjectNumber || !pGenerationNumber)
+                    {
+                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: missing object or generation number before 'obj' or 'R' keyword");
+                        return false;
+                    }
+
+                    if (bObj)
+                        m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFObjectElement(*this, pObjectNumber->GetValue(), pGenerationNumber->GetValue())));
+                    else
+                        m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFReferenceElement(*this, pObjectNumber->GetValue(), pGenerationNumber->GetValue())));
+                    if (!m_aElements.back()->Read(rStream))
+                        return false;
+                }
+                else if (aKeyword == "stream")
+                {
+                    // Look up the length of the stream from the parent object's dictionary.
+                    size_t nLength = 0;
+                    for (size_t nElement = 0; nElement < m_aElements.size(); ++nElement)
+                    {
+                        // Iterate in reverse order.
+                        size_t nIndex = m_aElements.size() - nElement - 1;
+                        PDFElement* pElement = m_aElements[nIndex].get();
+                        auto pObjectElement = dynamic_cast<PDFObjectElement*>(pElement);
+                        if (!pObjectElement)
+                            continue;
+
+                        PDFElement* pLookup = pObjectElement->Lookup("Length");
+                        auto pReference = dynamic_cast<PDFReferenceElement*>(pLookup);
+                        if (pReference)
+                        {
+                            // Length is provided as a reference.
+                            nLength = pReference->LookupNumber(rStream);
+                            break;
+                        }
+
+                        auto pNumber = dynamic_cast<PDFNumberElement*>(pLookup);
+                        if (pNumber)
+                        {
+                            // Length is provided directly.
+                            nLength = pNumber->GetValue();
+                            break;
+                        }
+
+                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: found no Length key for stream keyword");
+                        return false;
+                    }
+
+                    PDFDocument::SkipWhitespace(rStream);
+                    m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFStreamElement(nLength)));
+                    if (!m_aElements.back()->Read(rStream))
+                        return false;
+                }
+                else if (aKeyword == "endstream")
+                {
+                    m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFEndStreamElement()));
+                    if (!m_aElements.back()->Read(rStream))
+                        return false;
+                }
+                else if (aKeyword == "endobj")
+                {
+                    m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFEndObjectElement()));
+                    if (!m_aElements.back()->Read(rStream))
+                        return false;
+                }
+                else if (aKeyword == "true" || aKeyword == "false")
+                    m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFBooleanElement(aKeyword.toBoolean())));
+                else if (aKeyword == "null")
+                    m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFNullElement()));
+                else if (aKeyword == "xref")
+                    // Allow 'f' and 'n' keywords.
+                    bInXRef = true;
+                else if (bInXRef && (aKeyword == "f" || aKeyword == "n"))
+                {
+                }
+                else if (aKeyword == "trailer")
+                {
+                    m_pTrailer = new PDFTrailerElement(*this);
+                    m_aElements.push_back(std::unique_ptr<PDFElement>(m_pTrailer));
+                }
+                else if (aKeyword == "startxref")
+                {
+                }
+                else
+                {
+                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: unexpected '" << aKeyword << "' keyword");
+                    return false;
+                }
+            }
+            else
+            {
+                if (!isspace(ch))
+                {
+                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: unexpected character: " << ch);
+                    return false;
+                }
+            }
+            break;
+        }
+        }
+    }
+
+    return true;
+}
+
+OString PDFDocument::ReadKeyword(SvStream& rStream)
+{
+    OStringBuffer aBuf;
+    char ch;
+    rStream.ReadChar(ch);
+    while (isalpha(ch))
+    {
+        aBuf.append(ch);
+        rStream.ReadChar(ch);
+        if (rStream.IsEof())
+            break;
+    }
+    rStream.SeekRel(-1);
+    return aBuf.toString();
+}
+
+size_t PDFDocument::FindStartXRef(SvStream& rStream)
+{
+    // Find the "startxref" token, somewhere near the end of the document.
+    std::vector<char> aBuf(1024);
+    rStream.Seek(STREAM_SEEK_TO_END);
+    rStream.SeekRel(-1 * aBuf.size());
+    size_t nBeforePeek = rStream.Tell();
+    size_t nSize = rStream.ReadBytes(aBuf.data(), aBuf.size());
+    rStream.Seek(nBeforePeek);
+    if (nSize != aBuf.size())
+        aBuf.resize(nSize);
+    OString aPrefix("startxref");
+    char* pOffset = strstr(aBuf.data(), aPrefix.getStr());
+    if (!pOffset)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::FindStartXRef: found no startxref");
+        return 0;
+    }
+
+    rStream.SeekRel(pOffset - aBuf.data() + aPrefix.getLength());
+    if (rStream.IsEof())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::FindStartXRef: unexpected end of stream after startxref");
+        return 0;
+    }
+
+    PDFDocument::SkipWhitespace(rStream);
+    PDFNumberElement aNumber;
+    if (!aNumber.Read(rStream))
+        return 0;
+    return aNumber.GetValue();
+}
+
+void PDFDocument::ReadXRef(SvStream& rStream)
+{
+    if (ReadKeyword(rStream) != "xref")
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: xref is not the first keyword");
+        return;
+    }
+
+    PDFDocument::SkipWhitespace(rStream);
+    PDFNumberElement aFirstObject;
+    if (!aFirstObject.Read(rStream))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read first object number");
+        return;
+    }
+
+    if (aFirstObject.GetValue() != 0)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: expected first object number == 0");
+        return;
+    }
+
+    PDFDocument::SkipWhitespace(rStream);
+    PDFNumberElement aNumberOfEntries;
+    if (!aNumberOfEntries.Read(rStream))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read number of entries");
+        return;
+    }
+
+    if (aNumberOfEntries.GetValue() <= 0)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: expected one or more entries");
+        return;
+    }
+
+    size_t nSize = aNumberOfEntries.GetValue();
+    for (size_t nEntry = 0; nEntry < nSize; ++nEntry)
+    {
+        PDFDocument::SkipWhitespace(rStream);
+        PDFNumberElement aOffset;
+        if (!aOffset.Read(rStream))
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read offset");
+            return;
+        }
+
+        PDFDocument::SkipWhitespace(rStream);
+        PDFNumberElement aGenerationNumber;
+        if (!aGenerationNumber.Read(rStream))
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read genration number");
+            return;
+        }
+
+        PDFDocument::SkipWhitespace(rStream);
+        OString aKeyword = ReadKeyword(rStream);
+        if (aKeyword != "f" && aKeyword != "n")
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: unexpected keyword");
+            return;
+        }
+        m_aXRef.push_back(aOffset.GetValue());
+    }
+}
+
+void PDFDocument::SkipWhitespace(SvStream& rStream)
+{
+    char ch = 0;
+
+    while (true)
+    {
+        rStream.ReadChar(ch);
+        if (rStream.IsEof())
+            break;
+
+        if (!isspace(ch))
+        {
+            rStream.SeekRel(-1);
+            return;
+        }
+    }
+}
+
+size_t PDFDocument::GetObjectOffset(size_t nIndex) const
+{
+    if (nIndex >= m_aXRef.size())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetObjectOffset: wanted to look up index #" << nIndex);
+        return 0;
+    }
+
+    return m_aXRef[nIndex];
+}
+
+const std::vector< std::unique_ptr<PDFElement> >& PDFDocument::GetElements()
+{
+    return m_aElements;
+}
+
+std::vector<PDFObjectElement*> PDFDocument::GetPages()
+{
+    std::vector<PDFObjectElement*> aRet;
+
+    if (!m_pTrailer)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetPages: found no trailer");
+        return aRet;
+    }
+
+    auto pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"));
+    if (!pRoot)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetPages: trailer has no Root key");
+        return aRet;
+    }
+
+    PDFObjectElement* pCatalog = pRoot->LookupObject();
+    if (!pCatalog)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetPages: trailer has no catalog");
+        return aRet;
+    }
+
+    PDFObjectElement* pPages = pCatalog->LookupObject("Pages");
+    if (!pPages)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetPages: catalog has no pages");
+        return aRet;
+    }
+
+    auto pKids = dynamic_cast<PDFArrayElement*>(pPages->Lookup("Kids"));
+    if (!pKids)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetPages: pages has no kids");
+        return aRet;
+    }
+
+    for (const auto& pKid : pKids->GetElements())
+    {
+        auto pReference = dynamic_cast<PDFReferenceElement*>(pKid);
+        if (!pReference)
+            continue;
+
+        aRet.push_back(pReference->LookupObject());
+    }
+
+    return aRet;
+}
+
+std::vector<PDFObjectElement*> PDFDocument::GetSignatureWidgets()
+{
+    std::vector<PDFObjectElement*> aRet;
+
+    std::vector<PDFObjectElement*> aPages = GetPages();
+
+    for (const auto& pPage : aPages)
+    {
+        auto pAnnots = dynamic_cast<PDFArrayElement*>(pPage->Lookup("Annots"));
+        if (!pAnnots)
+            continue;
+
+        for (const auto& pAnnot : pAnnots->GetElements())
+        {
+            auto pReference = dynamic_cast<PDFReferenceElement*>(pAnnot);
+            if (!pReference)
+                continue;
+
+            PDFObjectElement* pAnnotObject = pReference->LookupObject();
+            if (!pAnnotObject)
+                continue;
+
+            auto pFT = dynamic_cast<PDFNameElement*>(pAnnotObject->Lookup("FT"));
+            if (!pFT || pFT->GetValue() != "Sig")
+                continue;
+
+            aRet.push_back(pAnnotObject);
+        }
+    }
+
+    return aRet;
+}
+
+int PDFDocument::AsHex(char ch)
+{
+    int nRet = 0;
+    if (isdigit(ch))
+        nRet = ch - '0';
+    else
+    {
+        if (ch >= 'a' && ch <= 'f')
+            nRet = ch - 'a';
+        else if (ch >= 'A' && ch <= 'F')
+            nRet = ch - 'A';
+        else
+            return -1;
+        nRet += 10;
+    }
+    return nRet;
+}
+
+bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, bool& bDigestMatch)
+{
+    PDFObjectElement* pValue = pSignature->LookupObject("V");
+    if (!pValue)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: no value");
+        return false;
+    }
+
+    auto pContents = dynamic_cast<PDFHexStringElement*>(pValue->Lookup("Contents"));
+    if (!pContents)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: no contents");
+        return false;
+    }
+
+    auto pByteRange = dynamic_cast<PDFArrayElement*>(pValue->Lookup("ByteRange"));
+    if (!pByteRange || pByteRange->GetElements().size() < 2)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: no byte range or too few elements");
+        return false;
+    }
+
+    auto pSubFilter = dynamic_cast<PDFNameElement*>(pValue->Lookup("SubFilter"));
+    if (!pSubFilter || pSubFilter->GetValue() != "adbe.pkcs7.detached")
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: no or unsupported sub-filter");
+        return false;
+    }
+
+    // At this point there is no obviously missing info to validate the
+    // signature, so let's turn the hex dump of the signature into a memory
+    // stream.
+    const OString& rSignatureHex = pContents->GetValue();
+    size_t nSignatureHexLen = rSignatureHex.getLength();
+    std::vector<unsigned char> aSignature;
+    {
+        int nByte = 0;
+        int nCount = 2;
+        for (size_t i = 0; i < nSignatureHexLen; ++i)
+        {
+            nByte = nByte << 4;
+            sal_Int8 nParsed = AsHex(rSignatureHex[i]);
+            if (nParsed == -1)
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: invalid hex value");
+                return false;
+            }
+            nByte += nParsed;
+            --nCount;
+            if (!nCount)
+            {
+                aSignature.push_back(nByte);
+                nCount = 2;
+                nByte = 0;
+            }
+        }
+    }
+
+#ifdef XMLSEC_CRYPTO_NSS
+    // Validate the signature.
+
+    const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
+    if (!pEnv)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: no mozilla cert folder");
+        return false;
+    }
+
+    if (NSS_Init(pEnv) != SECSuccess)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: NSS_Init() failed");
+        return false;
+    }
+
+    SECItem aSignatureItem;
+    aSignatureItem.data = aSignature.data();
+    aSignatureItem.len = aSignature.size();
+    NSSCMSMessage* pCMSMessage = NSS_CMSMessage_CreateFromDER(&aSignatureItem,
+                                 /*cb=*/nullptr,
+                                 /*cb_arg=*/nullptr,
+                                 /*pwfn=*/nullptr,
+                                 /*pwfn_arg=*/nullptr,
+                                 /*decrypt_key_cb=*/nullptr,
+                                 /*decrypt_key_cb_arg=*/nullptr);
+    if (!NSS_CMSMessage_IsSigned(pCMSMessage))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: message is not signed");
+        return false;
+    }
+
+    NSSCMSContentInfo* pCMSContentInfo = NSS_CMSMessage_ContentLevel(pCMSMessage, 0);
+    if (!pCMSContentInfo)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: NSS_CMSMessage_ContentLevel() failed");
+        return false;
+    }
+
+    NSSCMSSignedData* pCMSSignedData = static_cast<NSSCMSSignedData*>(NSS_CMSContentInfo_GetContent(pCMSContentInfo));
+    if (!pCMSSignedData)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: NSS_CMSContentInfo_GetContent() failed");
+        return false;
+    }
+
+    NSSCMSSignerInfo* pCMSSignerInfo = NSS_CMSSignedData_GetSignerInfo(pCMSSignedData, 0);
+    if (!pCMSSignerInfo)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: NSS_CMSSignedData_GetSignerInfo() failed");
+        return false;
+    }
+
+    SECItem aAlgorithm = NSS_CMSSignedData_GetDigestAlgs(pCMSSignedData)[0]->algorithm;
+    HASH_HashType eHashType = HASH_GetHashTypeByOidTag(SECOID_FindOIDTag(&aAlgorithm));
+    HASHContext* pHASHContext = HASH_Create(eHashType);
+    if (!pHASHContext)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: HASH_Create() failed");
+        return false;
+    }
+
+    // We have a hash, update it with the byte ranges.
+    size_t nByteRangeOffset = 0;
+    const std::vector<PDFElement*>& rByteRangeElements = pByteRange->GetElements();
+    for (size_t i = 0; i < rByteRangeElements.size(); ++i)
+    {
+        auto pNumber = dynamic_cast<PDFNumberElement*>(rByteRangeElements[i]);
+        if (!pNumber)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: signature offset and length has to be a number");
+            return false;
+        }
+
+        if (i % 2 == 0)
+        {
+            nByteRangeOffset = pNumber->GetValue();
+            continue;
+        }
+
+        rStream.Seek(nByteRangeOffset);
+        size_t nByteRangeLength = pNumber->GetValue();
+
+        // And now hash this byte range.
+        const int nChunkLen = 4096;
+        std::vector<unsigned char> aBuffer(nChunkLen);
+        for (size_t nByte = 0; nByte < nByteRangeLength;)
+        {
+            size_t nRemainingSize = nByteRangeLength - nByte;
+            if (nRemainingSize < nChunkLen)
+            {
+                rStream.ReadBytes(aBuffer.data(), nRemainingSize);
+                HASH_Update(pHASHContext, aBuffer.data(), nRemainingSize);
+                nByte = nByteRangeLength;
+            }
+            else
+            {
+                rStream.ReadBytes(aBuffer.data(), nChunkLen);
+                HASH_Update(pHASHContext, aBuffer.data(), nChunkLen);
+                nByte += nChunkLen;
+            }
+        }
+    }
+
+    // Find out what is the expected length of the hash.
+    unsigned int nMaxResultLen = 0;
+    switch (SECOID_FindOIDTag(&aAlgorithm))
+    {
+    case SEC_OID_SHA1:
+        nMaxResultLen = 20;
+        break;
+    default:
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: unrecognized algorithm");
+        return false;
+    }
+
+    auto pActualResultBuffer = static_cast<unsigned char*>(PORT_Alloc(nMaxResultLen));
+    unsigned int nActualResultLen;
+    HASH_End(pHASHContext, pActualResultBuffer, &nActualResultLen, nMaxResultLen);
+
+    if (!NSS_CMSSignerInfo_GetSigningCertificate(pCMSSignerInfo, CERT_GetDefaultCertDB()))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: NSS_CMSSignerInfo_GetSigningCertificate() failed");
+        return false;
+    }
+
+    SECItem* pContentInfoContentData = pCMSSignedData->contentInfo.content.data;
+    if (pContentInfoContentData && pContentInfoContentData->data)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: expected nullptr content info");
+        return false;
+    }
+
+    SECItem aActualResultItem;
+    aActualResultItem.data = pActualResultBuffer;
+    aActualResultItem.len = nActualResultLen;
+    bDigestMatch = NSS_CMSSignerInfo_Verify(pCMSSignerInfo, &aActualResultItem, nullptr) == SECSuccess;
+
+    // Everything went fine
+    PORT_Free(pActualResultBuffer);
+    HASH_Destroy(pHASHContext);
+    NSS_CMSSignerInfo_Destroy(pCMSSignerInfo);
+    if (NSS_Shutdown() != SECSuccess)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: NSS_Shutdown() failed");
+        return false;
+    }
+
+    return true;
+#else
+    // Not implemented.
+    (void)rStream;
+    (void)bDigestMatch;
+
+    return false;
+#endif
+}
+
+bool PDFCommentElement::Read(SvStream& rStream)
+{
+    // Read from (including) the % char till (excluding) the end of the line.
+    OStringBuffer aBuf;
+    char ch;
+    rStream.ReadChar(ch);
+    while (!rStream.IsEof())
+    {
+        if (ch == 0x0a)
+        {
+            m_aComment = aBuf.makeStringAndClear();
+            SAL_INFO("xmlsecurity.pdfio", "PDFCommentElement::Read: m_aComment is '" << m_aComment << "'");
+            return true;
+        }
+        aBuf.append(ch);
+        rStream.ReadChar(ch);
+    }
+
+    return false;
+}
+
+bool PDFNumberElement::Read(SvStream& rStream)
+{
+    OStringBuffer aBuf;
+    char ch;
+    rStream.ReadChar(ch);
+    while (!rStream.IsEof())
+    {
+        if (!isdigit(ch) && ch != '-')
+        {
+            rStream.SeekRel(-1);
+            m_fValue = aBuf.makeStringAndClear().toDouble();
+            SAL_INFO("xmlsecurity.pdfio", "PDFNumberElement::Read: m_fValue is '" << m_fValue << "'");
+            return true;
+        }
+        aBuf.append(ch);
+        rStream.ReadChar(ch);
+    }
+
+    return false;
+}
+
+PDFBooleanElement::PDFBooleanElement(bool /*bValue*/)
+{
+}
+
+bool PDFBooleanElement::Read(SvStream& /*rStream*/)
+{
+    return true;
+}
+
+bool PDFNullElement::Read(SvStream& /*rStream*/)
+{
+    return true;
+}
+
+bool PDFHexStringElement::Read(SvStream& rStream)
+{
+    char ch;
+    rStream.ReadChar(ch);
+    if (ch != '<')
+    {
+        SAL_INFO("xmlsecurity.pdfio", "PDFHexStringElement::Read: expected '<' as first character");
+        return false;
+    }
+    rStream.ReadChar(ch);
+
+    OStringBuffer aBuf;
+    while (!rStream.IsEof())
+    {
+        if (ch == '>')
+        {
+            m_aValue = aBuf.makeStringAndClear();
+            SAL_INFO("xmlsecurity.pdfio", "PDFHexStringElement::Read: m_aValue length is " << m_aValue.getLength());
+            return true;
+        }
+        aBuf.append(ch);
+        rStream.ReadChar(ch);
+    }
+
+    return false;
+}
+
+const OString& PDFHexStringElement::GetValue() const
+{
+    return m_aValue;
+}
+
+bool PDFLiteralStringElement::Read(SvStream& rStream)
+{
+    char ch;
+    rStream.ReadChar(ch);
+    if (ch != '(')
+    {
+        SAL_INFO("xmlsecurity.pdfio", "PDFHexStringElement::Read: expected '(' as first character");
+        return false;
+    }
+    rStream.ReadChar(ch);
+
+    OStringBuffer aBuf;
+    while (!rStream.IsEof())
+    {
+        if (ch == ')')
+        {
+            m_aValue = aBuf.makeStringAndClear();
+            SAL_INFO("xmlsecurity.pdfio", "PDFLiteralStringElement::Read: m_aValue is '" << m_aValue << "'");
+            return true;
+        }
+        aBuf.append(ch);
+        rStream.ReadChar(ch);
+    }
+
+    return false;
+}
+
+PDFTrailerElement::PDFTrailerElement(PDFDocument& rDoc)
+    : m_rDoc(rDoc)
+{
+}
+
+bool PDFTrailerElement::Read(SvStream& /*rStream*/)
+{
+    return true;
+}
+
+PDFElement* PDFTrailerElement::Lookup(const OString& rDictionaryKey)
+{
+    if (m_aDictionary.empty())
+        PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
+
+    return PDFDictionaryElement::Lookup(m_aDictionary, rDictionaryKey);
+}
+
+
+double PDFNumberElement::GetValue() const
+{
+    return m_fValue;
+}
+
+PDFObjectElement::PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue)
+    : m_rDoc(rDoc),
+      m_fObjectValue(fObjectValue),
+      m_fGenerationValue(fGenerationValue)
+{
+}
+
+bool PDFObjectElement::Read(SvStream& /*rStream*/)
+{
+    SAL_INFO("xmlsecurity.pdfio", "PDFObjectElement::Read: " << m_fObjectValue << " " << m_fGenerationValue << " obj");
+    return true;
+}
+
+void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> >& rElements, PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary)
+{
+    if (!rDictionary.empty())
+        return;
+
+    // Find out where the dictionary for this object starts.
+    size_t nIndex = 0;
+    for (size_t i = 0; i < rElements.size(); ++i)
+    {
+        if (rElements[i].get() == pThis)
+        {
+            nIndex = i;
+            break;
+        }
+    }
+
+    OString aName;
+    std::vector<PDFNumberElement*> aNumbers;
+    // The array value we're in -- if any.
+    PDFArrayElement* pArray = nullptr;
+    for (size_t i = nIndex; i < rElements.size(); ++i)
+    {
+        auto pName = dynamic_cast<PDFNameElement*>(rElements[i].get());
+        if (pName)
+        {
+            if (!aNumbers.empty())
+            {
+                rDictionary[aName] = aNumbers.back();
+                aName.clear();
+                aNumbers.clear();
+            }
+
+            if (aName.isEmpty())
+            {
+                // Remember key.
+                aName = pName->GetValue();
+            }
+            else
+            {
+                // Name-name key-value.
+                rDictionary[aName] = pName;
+                aName.clear();
+            }
+            continue;
+        }
+
+        auto pArr = dynamic_cast<PDFArrayElement*>(rElements[i].get());
+        if (pArr)
+        {
+            pArray = pArr;
+            continue;
+        }
+
+        if (pArray && dynamic_cast<PDFEndArrayElement*>(rElements[i].get()))
+        {
+            if (!aNumbers.empty())
+            {
+                for (auto& pNumber : aNumbers)
+                    pArray->PushBack(pNumber);
+                aNumbers.clear();
+            }
+            rDictionary[aName] = pArray;
+            aName.clear();
+            pArray = nullptr;
+            continue;
+        }
+
+        auto pReference = dynamic_cast<PDFReferenceElement*>(rElements[i].get());
+        if (pReference)
+        {
+            if (!pArray)
+            {
+                rDictionary[aName] = pReference;
+                aName.clear();
+            }
+            else
+            {
+                pArray->PushBack(pReference);
+            }
+            aNumbers.clear();
+            continue;
+        }
+
+        auto pLiteralString = dynamic_cast<PDFLiteralStringElement*>(rElements[i].get());
+        if (pLiteralString)
+        {
+            rDictionary[aName] = pLiteralString;
+            aName.clear();
+            continue;
+        }
+
+        auto pHexString = dynamic_cast<PDFHexStringElement*>(rElements[i].get());
+        if (pHexString)
+        {
+            rDictionary[aName] = pHexString;
+            aName.clear();
+            continue;
+        }
+
+        if (dynamic_cast<PDFEndDictionaryElement*>(rElements[i].get()))
+            break;
+
+        if (dynamic_cast<PDFEndObjectElement*>(rElements[i].get()))
+            break;
+
+        // Just remember this, so that in case it's not a reference parameter,
+        // we can handle it later.
+        auto pNumber = dynamic_cast<PDFNumberElement*>(rElements[i].get());
+        if (pNumber)
+            aNumbers.push_back(pNumber);
+    }
+
+    if (!aNumbers.empty())
+    {
+        rDictionary[aName] = aNumbers.back();
+        aName.clear();
+        aNumbers.clear();
+    }
+}
+
+PDFElement* PDFDictionaryElement::Lookup(const std::map<OString, PDFElement*>& rDictionary, const OString& rKey)
+{
+    auto it = rDictionary.find(rKey);
+    if (it == rDictionary.end())
+        return nullptr;
+
+    return it->second;
+}
+
+PDFElement* PDFObjectElement::Lookup(const OString& rDictionaryKey)
+{
+    if (m_aDictionary.empty())
+        PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
+
+    return PDFDictionaryElement::Lookup(m_aDictionary, rDictionaryKey);
+}
+
+PDFObjectElement* PDFObjectElement::LookupObject(const OString& rDictionaryKey)
+{
+    auto pKey = dynamic_cast<PDFReferenceElement*>(Lookup(rDictionaryKey));
+    if (!pKey)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFObjectElement::LookupObject: no such key with reference value: " << rDictionaryKey);
+        return nullptr;
+    }
+
+    return pKey->LookupObject();
+}
+
+double PDFObjectElement::GetObjectValue() const
+{
+    return m_fObjectValue;
+}
+
+double PDFObjectElement::GetGenerationValue() const
+{
+    return m_fGenerationValue;
+}
+
+PDFReferenceElement::PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue)
+    : m_rDoc(rDoc),
+      m_fObjectValue(fObjectValue),
+      m_fGenerationValue(fGenerationValue)
+{
+}
+
+bool PDFReferenceElement::Read(SvStream& /*rStream*/)
+{
+    SAL_INFO("xmlsecurity.pdfio", "PDFReferenceElement::Read: " << m_fObjectValue << " " << m_fGenerationValue << " R");
+    return true;
+}
+
+double PDFReferenceElement::LookupNumber(SvStream& rStream) const
+{
+    size_t nOffset = m_rDoc.GetObjectOffset(m_fObjectValue);
+    if (nOffset == 0)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFReferenceElement::LookupNumber: found no offset for object #" << m_fObjectValue);
+        return 0;
+    }
+
+    sal_uInt64 nOrigPos = rStream.Tell();
+    comphelper::ScopeGuard g([&]()
+    {
+        rStream.Seek(nOrigPos);
+    });
+
+    rStream.Seek(nOffset);
+    {
+        PDFDocument::SkipWhitespace(rStream);
+        PDFNumberElement aNumber;
+        bool bRet = aNumber.Read(rStream);
+        if (!bRet || aNumber.GetValue() != m_fObjectValue)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFReferenceElement::LookupNumber: offset points to not matching object");
+            return 0;
+        }
+    }
+
+    {
+        PDFDocument::SkipWhitespace(rStream);
+        PDFNumberElement aNumber;
+        bool bRet = aNumber.Read(rStream);
+        if (!bRet || aNumber.GetValue() != m_fGenerationValue)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFReferenceElement::LookupNumber: offset points to not matching generation");
+            return 0;
+        }
+    }
+
+    {
+        PDFDocument::SkipWhitespace(rStream);
+        OString aKeyword = PDFDocument::ReadKeyword(rStream);
+        if (aKeyword != "obj")
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFReferenceElement::LookupNumber: offset doesn't point to an obj keyword");
+            return 0;
+        }
+    }
+
+    PDFDocument::SkipWhitespace(rStream);
+    PDFNumberElement aNumber;
+    if (!aNumber.Read(rStream))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFReferenceElement::LookupNumber: failed to read referenced number");
+        return 0;
+    }
+
+    return aNumber.GetValue();
+}
+
+PDFObjectElement* PDFReferenceElement::LookupObject() const
+{
+    const std::vector< std::unique_ptr<PDFElement> >& rElements = m_rDoc.GetElements();
+    for (const auto& rElement : rElements)
+    {
+        auto* pObjectElement = dynamic_cast<PDFObjectElement*>(rElement.get());
+        if (!pObjectElement)
+            continue;
+
+        if (pObjectElement->GetObjectValue() != m_fObjectValue)
+            continue;
+
+        if (pObjectElement->GetGenerationValue() != m_fGenerationValue)
+            continue;
+
+        return pObjectElement;
+    }
+
+    return nullptr;
+}
+
+bool PDFDictionaryElement::Read(SvStream& rStream)
+{
+    char ch;
+    rStream.ReadChar(ch);
+    if (ch != '<')
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDictionaryElement::Read: unexpected character: " << ch);
+        return false;
+    }
+
+    if (rStream.IsEof())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDictionaryElement::Read: unexpected end of file");
+        return false;
+    }
+
+    rStream.ReadChar(ch);
+    if (ch != '<')
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDictionaryElement::Read: unexpected character: " << ch);
+        return false;
+    }
+
+    SAL_INFO("xmlsecurity.pdfio", "PDFDictionaryElement::Read: '<<'");
+
+    return true;
+}
+
+bool PDFEndDictionaryElement::Read(SvStream& rStream)
+{
+    char ch;
+    rStream.ReadChar(ch);
+    if (ch != '>')
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFEndDictionaryElement::Read: unexpected character: " << ch);
+        return false;
+    }
+
+    if (rStream.IsEof())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFEndDictionaryElement::Read: unexpected end of file");
+        return false;
+    }
+
+    rStream.ReadChar(ch);
+    if (ch != '>')
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFEndDictionaryElement::Read: unexpected character: " << ch);
+        return false;
+    }
+
+    SAL_INFO("xmlsecurity.pdfio", "PDFEndDictionaryElement::Read: '>>'");
+
+    return true;
+}
+
+bool PDFNameElement::Read(SvStream& rStream)
+{
+    char ch;
+    rStream.ReadChar(ch);
+    if (ch != '/')
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFNameElement::Read: unexpected character: " << ch);
+        return false;
+    }
+
+    if (rStream.IsEof())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFNameElement::Read: unexpected end of file");
+        return false;
+    }
+
+    // Read till the first white-space.
+    OStringBuffer aBuf;
+    rStream.ReadChar(ch);
+    while (!rStream.IsEof())
+    {
+        if (isspace(ch) || ch == '/' || ch == '[' || ch == '<' || ch == '(')
+        {
+            rStream.SeekRel(-1);
+            m_aValue = aBuf.makeStringAndClear();
+            SAL_INFO("xmlsecurity.pdfio", "PDFNameElement::Read: m_aValue is '" << m_aValue << "'");
+            return true;
+        }
+        aBuf.append(ch);
+        rStream.ReadChar(ch);
+    }
+
+    return false;
+}
+
+const OString& PDFNameElement::GetValue() const
+{
+    return m_aValue;
+}
+
+PDFStreamElement::PDFStreamElement(size_t nLength)
+    : m_nLength(nLength)
+{
+}
+
+bool PDFStreamElement::Read(SvStream& rStream)
+{
+    SAL_INFO("xmlsecurity.pdfio", "PDFStreamElement::Read: length is " << m_nLength);
+    rStream.SeekRel(m_nLength);
+
+    return rStream.good();
+}
+
+bool PDFEndStreamElement::Read(SvStream& /*rStream*/)
+{
+    return true;
+}
+
+bool PDFEndObjectElement::Read(SvStream& /*rStream*/)
+{
+    return true;
+}
+
+bool PDFArrayElement::Read(SvStream& rStream)
+{
+    char ch;
+    rStream.ReadChar(ch);
+    if (ch != '[')
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFArrayElement::Read: unexpected character: " << ch);
+        return false;
+    }
+
+    SAL_INFO("xmlsecurity.pdfio", "PDFArrayElement::Read: '['");
+
+    return true;
+}
+
+void PDFArrayElement::PushBack(PDFElement* pElement)
+{
+    m_aElements.push_back(pElement);
+}
+
+const std::vector<PDFElement*>& PDFArrayElement::GetElements()
+{
+    return m_aElements;
+}
+
+bool PDFEndArrayElement::Read(SvStream& rStream)
+{
+    char ch;
+    rStream.ReadChar(ch);
+    if (ch != ']')
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFEndArrayElement::Read: unexpected character: " << ch);
+        return false;
+    }
+
+    SAL_INFO("xmlsecurity.pdfio", "PDFEndArrayElement::Read: ']'");
+
+    return true;
+}
+
+
+} // namespace pdfio
+} // namespace xmlsecurity
+
+SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
+{
+    if (nArgc < 2)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "not enough parameters");
+        return 1;
+    }
+
+    OUString aURL;
+    osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pArgv[1]), aURL);
+
+    SvFileStream aStream(aURL, StreamMode::READ);
+    xmlsecurity::pdfio::PDFDocument aDocument;
+    if (!aDocument.Read(aStream))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "failed to read the document");
+        return 1;
+    }
+
+    std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
+    if (aSignatures.empty())
+        std::cerr << "found no signatures" << std::endl;
+    else
+    {
+        std::cerr << "found " << aSignatures.size() << " signatures" << std::endl;
+        for (size_t i = 0; i < aSignatures.size(); ++i)
+        {
+            bool bDigestMatch;
+            if (!xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], bDigestMatch))
+            {
+                SAL_WARN("xmlsecurity.pdfio", "failed to determine digest match");
+                return 1;
+            }
+
+            std::cerr << "signature #" << i << ": digest match? " << bDigestMatch << std::endl;
+        }
+    }
+
+    return 0;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

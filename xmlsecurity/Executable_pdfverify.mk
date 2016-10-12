@@ -1,0 +1,41 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+$(eval $(call gb_Executable_Executable,pdfverify))
+
+$(eval $(call gb_Executable_use_sdk_api,pdfverify))
+
+$(eval $(call gb_Executable_set_include,pdfverify,\
+    $$(INCLUDE) \
+))
+
+$(eval $(call gb_Executable_use_libraries,pdfverify,\
+    comphelper \
+    sal \
+    tl \
+))
+
+$(eval $(call gb_Executable_add_exception_objects,pdfverify,\
+    xmlsecurity/source/pdfio/pdfverify \
+))
+
+ifeq ($(OS)-$(COM),WNT-MSC)
+$(eval $(call gb_Executable_add_defs,pdfverify,\
+    -DXMLSEC_CRYPTO_MSCRYPTO \
+))
+else
+$(eval $(call gb_Executable_add_defs,pdfverify,\
+    -DXMLSEC_CRYPTO_NSS \
+))
+$(eval $(call gb_Executable_use_externals,pdfverify,\
+    nss3 \
+))
+endif
+
+# vim:set noet sw=4 ts=4:
