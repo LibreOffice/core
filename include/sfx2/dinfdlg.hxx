@@ -289,12 +289,7 @@ private:
     CustomPropertyLine*             m_pLine;
 
 public:
-    CustomPropertiesTypeBox(vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine)
-        : ListBox(pParent, rResId)
-        , m_pLine(pLine)
-    {
-    }
-
+    CustomPropertiesTypeBox(vcl::Window* pParent, CustomPropertyLine* pLine);
     CustomPropertyLine*      GetLine() const { return m_pLine; }
 };
 

@@ -1420,10 +1420,16 @@ namespace
     }
 }
 
+CustomPropertiesTypeBox::CustomPropertiesTypeBox(vcl::Window* pParent, CustomPropertyLine* pLine)
+    : ListBox(pParent, SfxResId(SFX_LB_PROPERTY_TYPE))
+    , m_pLine(pLine)
+{
+}
+
 // struct CustomPropertyLine ---------------------------------------------
 CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_aNameBox      ( makeComboBox(pParent) ),
-    m_aTypeBox      ( VclPtr<CustomPropertiesTypeBox>::Create(pParent, SfxResId( SFX_LB_PROPERTY_TYPE ), this) ),
+    m_aTypeBox      ( VclPtr<CustomPropertiesTypeBox>::Create(pParent, this) ),
     m_aValueEdit    ( VclPtr<CustomPropertiesEdit>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_LEFT, this ) ),
     m_aDateField    ( VclPtr<CustomPropertiesDateField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
     m_aTimeField    ( VclPtr<CustomPropertiesTimeField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
