@@ -244,7 +244,7 @@ SwTable::~SwTable()
     {
         SwDoc* pDoc = GetFrameFormat()->GetDoc();
         if( !pDoc->IsInDtor() )         // then remove from the list
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( &m_xRefObj );
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( m_xRefObj.get() );
 
         m_xRefObj->Closed();
     }

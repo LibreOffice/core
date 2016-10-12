@@ -373,7 +373,7 @@ void SvLinkSource::RemoveAllDataAdvise( SvBaseLink * pLink )
 {
     SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
     for( SvLinkSource_Entry_Impl* p = aIter.Curr(); p; p = aIter.Next() )
-        if( p->bIsDataSink && &p->xSink == pLink )
+        if( p->bIsDataSink && p->xSink.get() == pLink )
         {
             pImpl->aArr.DeleteAndDestroy( p );
         }
@@ -390,7 +390,7 @@ void SvLinkSource::RemoveConnectAdvise( SvBaseLink * pLink )
 {
     SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
     for( SvLinkSource_Entry_Impl* p = aIter.Curr(); p; p = aIter.Next() )
-        if( !p->bIsDataSink && &p->xSink == pLink )
+        if( !p->bIsDataSink && p->xSink.get() == pLink )
         {
             pImpl->aArr.DeleteAndDestroy( p );
         }

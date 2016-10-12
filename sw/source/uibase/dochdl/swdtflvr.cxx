@@ -242,7 +242,7 @@ SwTransferable::~SwTransferable()
     // the DDELink still needs the WrtShell!
     if( m_xDdeLink.Is() )
     {
-        static_cast<SwTrnsfrDdeLink*>(&m_xDdeLink)->Disconnect( true );
+        static_cast<SwTrnsfrDdeLink*>( m_xDdeLink.get() )->Disconnect( true );
         m_xDdeLink.Clear();
     }
 
@@ -522,7 +522,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         {
         case SotClipboardFormatId::LINK:
             if( m_xDdeLink.Is() )
-                bOK = SetObject( &m_xDdeLink, SWTRANSFER_OBJECTTYPE_DDE, rFlavor );
+                bOK = SetObject( m_xDdeLink.get(), SWTRANSFER_OBJECTTYPE_DDE, rFlavor );
             break;
 
         case SotClipboardFormatId::OBJECTDESCRIPTOR:
@@ -1659,7 +1659,7 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
             }
             else
             {
-                pStream = &xStrm;
+                pStream = xStrm.get();
                 if( SotClipboardFormatId::RTF == nFormat )
                     pRead = SwReaderWriter::GetRtfReader();
                 else if( !pRead )
@@ -3733,7 +3733,7 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
         // the mark is still a DdeBookmark
         // we replace it with a Bookmark, so it will get saved etc.
         ::sw::mark::IMark* const pMark = ppMark->get();
-        ::sfx2::SvLinkSource* p = &refObj;
+        ::sfx2::SvLinkSource* p = refObj.get();
         SwServerObject& rServerObject = dynamic_cast<SwServerObject&>(*p);
 
         // collecting state of old mark
