@@ -77,49 +77,6 @@ namespace o3tl {
     template<> struct typed_flags<RscMenuItem> : is_typed_flags<RscMenuItem, 0xd6f> {};
 }
 
-// For "Field" resources:
-
-enum class RscNumFormatterFlags {
-    Min            = 0x01,
-    Max            = 0x02,
-    StrictFormat   = 0x04,
-    DecimalDigits  = 0x10,
-    Value          = 0x20,
-};
-namespace o3tl {
-    template<> struct typed_flags<RscNumFormatterFlags> : is_typed_flags<RscNumFormatterFlags, 0x37> {};
-}
-
-#define NUMERICFIELD_FIRST              0x01
-#define NUMERICFIELD_LAST               0x02
-#define NUMERICFIELD_SPINSIZE           0x04
-
-// For "ToolBoxItem" resources:
-enum class RscToolboxItemFlags {
-    Id              = 0x0001,
-    Type            = 0x0002,
-    Status          = 0x0004,
-    HelpId          = 0x0008,
-    Text            = 0x0010,
-    Disable         = 0x0100,
-    Hide            = 0x0400,
-    Command         = 0x0800
-};
-namespace o3tl {
-    template<> struct typed_flags<RscToolboxItemFlags> : is_typed_flags<RscToolboxItemFlags, 0xd1f> {};
-}
-
-// For "ToolBox" resources:
-enum class RscToolboxFlags {
-    ButtonType          = 0x01,
-    Align               = 0x02,
-    LineCount           = 0x04,
-    ItemList            = 0x80
-};
-namespace o3tl {
-    template<> struct typed_flags<RscToolboxFlags> : is_typed_flags<RscToolboxFlags, 0x87> {};
-}
-
 // For "DockingWindow" resources:
 #define RSC_DOCKINGWINDOW_XYMAPMODE     0x01
 #define RSC_DOCKINGWINDOW_X             0x02
