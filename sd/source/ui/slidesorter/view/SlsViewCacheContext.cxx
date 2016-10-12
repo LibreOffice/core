@@ -65,8 +65,8 @@ void ViewCacheContext::NotifyPreviewCreation (
 
 bool ViewCacheContext::IsIdle()
 {
-    sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(mrSlideSorter.GetContentWindow()));
-    if (nIdleState == tools::IdleDetection::IDET_IDLE)
+    tools::IdleState nIdleState (tools::IdleDetection::GetIdleState(mrSlideSorter.GetContentWindow()));
+    if (nIdleState == tools::IdleState::Idle)
         return true;
     else
         return false;

@@ -33,25 +33,25 @@ using namespace ::com::sun::star;
 
 namespace sd { namespace tools {
 
-sal_Int32 IdleDetection::GetIdleState (const vcl::Window* pWindow)
+IdleState IdleDetection::GetIdleState (const vcl::Window* pWindow)
 {
-    sal_Int32 nResult (CheckInputPending() | CheckSlideShowRunning());
+    IdleState nResult (CheckInputPending() | CheckSlideShowRunning());
     if (pWindow != nullptr)
         nResult |= CheckWindowPainting(*pWindow);
     return nResult;
 }
 
-sal_Int32 IdleDetection::CheckInputPending()
+IdleState IdleDetection::CheckInputPending()
 {
     if (Application::AnyInput(VclInputFlags::MOUSE | VclInputFlags::KEYBOARD | VclInputFlags::PAINT))
-        return IDET_SYSTEM_EVENT_PENDING;
+        return IdleState::SystemEventPending;
     else
-        return IDET_IDLE;
+        return IdleState::Idle;
 }
 
-sal_Int32 IdleDetection::CheckSlideShowRunning()
+IdleState IdleDetection::CheckSlideShowRunning()
 {
-    sal_Int32 eResult (IDET_IDLE);
+    IdleState eResult (IdleState::Idle);
 
     bool bIsSlideShowShowing = false;
 
@@ -83,9 +83,9 @@ sal_Int32 IdleDetection::CheckSlideShowRunning()
             if( xSlideShow.is() && xSlideShow->isRunning() )
             {
                 if (xSlideShow->isFullScreen())
-                    eResult |= IDET_FULL_SCREEN_SHOW_ACTIVE;
+                    eResult |= IdleState::FullScreenShowActive;
                 else
-                    eResult |= IDET_WINDOW_SHOW_ACTIVE;
+                    eResult |= IdleState::WindowShowActive;
             }
         }
     }
@@ -93,12 +93,12 @@ sal_Int32 IdleDetection::CheckSlideShowRunning()
     return eResult;
 }
 
-sal_Int32 IdleDetection::CheckWindowPainting (const vcl::Window& rWindow)
+IdleState IdleDetection::CheckWindowPainting (const vcl::Window& rWindow)
 {
     if (rWindow.IsInPaint())
-        return IDET_WINDOW_PAINTING;
+        return IdleState::WindowPainting;
     else
-        return IDET_IDLE;
+        return IdleState::Idle;
 }
 
 } } // end of namespace ::sd::tools
