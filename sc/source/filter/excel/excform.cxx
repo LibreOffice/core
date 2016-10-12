@@ -131,7 +131,7 @@ void ImportExcel::Formula(
                 rDoc.getDoc().EnsureTable(aScPos.Tab());
                 rDoc.setFormulaCell(aScPos, pCell);
                 pCell->SetNeedNumberFormat(false);
-                if (!rtl::math::isNan(fCurVal))
+                if (rtl::math::isFinite(fCurVal))
                     pCell->SetResultDouble(fCurVal);
 
                 GetXFRangeBuffer().SetXF(aScPos, nXF);
@@ -173,7 +173,7 @@ void ImportExcel::Formula(
         if( eErr != ConvOK )
             ExcelToSc::SetError( *pCell, eErr );
 
-        if (!rtl::math::isNan(fCurVal))
+        if (rtl::math::isFinite(fCurVal))
             pCell->SetResultDouble(fCurVal);
     }
 

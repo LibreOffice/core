@@ -1182,7 +1182,7 @@ void XclExpCrn::WriteBool( XclExpStream& rStrm, bool bValue )
 
 void XclExpCrn::WriteDouble( XclExpStream& rStrm, double fValue )
 {
-    if( ::rtl::math::isNan( fValue ) )
+    if( !::rtl::math::isFinite( fValue ) )
     {
         FormulaError nScError = GetDoubleErrorValue(fValue);
         WriteError( rStrm, XclTools::GetXclErrorCode( nScError ) );
