@@ -1386,57 +1386,6 @@ OString ResMgr::ReadByteString()
     return aRet;
 }
 
-OString ResMgr::GetAutoHelpId()
-{
-    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-
-    if( pFallbackResMgr )
-        return pFallbackResMgr->GetAutoHelpId();
-
-    OSL_ENSURE( nCurStack, "resource stack empty in Auto help id generation" );
-    if( nCurStack < 1 || nCurStack > 2 )
-        return OString();
-
-    // prepare HID, start with resource prefix
-    OStringBuffer aHID( 32 );
-    aHID.append( OUStringToOString( pImpRes->aPrefix, RTL_TEXTENCODING_UTF8 ) );
-    aHID.append( '.' );
-
-    // append type
-    const ImpRCStack *pRC = StackTop();
-    OSL_ENSURE( pRC, "missing resource stack level" );
-
-    if ( nCurStack == 1 )
-    {
-        // auto help ids for top level windows
-        switch( pRC->pResource->GetRT() ) {
-            default: return OString();
-        }
-    }
-    else
-    {
-        // only controls with the following parents get auto help ids
-        const ImpRCStack *pRC1 = StackTop(1);
-        switch( pRC1->pResource->GetRT() ) {
-            default:
-                return OString();
-        }
-    }
-
-    // append resource id hierarchy
-    for( int nOff = nCurStack-1; nOff >= 0; nOff-- )
-    {
-        aHID.append( '.' );
-        pRC = StackTop( nOff );
-
-        OSL_ENSURE( pRC->pResource, "missing resource in resource stack level !" );
-        if( pRC->pResource )
-            aHID.append( sal_Int32( pRC->pResource->GetId() ) );
-    }
-
-    return aHID.makeStringAndClear();
-}
-
 void ResMgr::SetReadStringHook( ResHookProc pProc )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );

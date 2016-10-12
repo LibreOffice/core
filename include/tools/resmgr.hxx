@@ -192,10 +192,7 @@ public:
     sal_Int16           ReadShort();
     sal_Int32           ReadLong();
     OUString            ReadString();
-    OString        ReadByteString();
-
-    /// Generate auto help ID for current resource stack
-    OString        GetAutoHelpId();
+    OString             ReadByteString();
 
     static void         SetReadStringHook( ResHookProc pProc );
     static ResHookProc  GetReadStringHook();

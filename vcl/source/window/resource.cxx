@@ -24,16 +24,6 @@
 
 #include "window.h"
 
-static OString ImplAutoHelpID( ResMgr* pResMgr )
-{
-    OString aRet;
-
-    if( pResMgr && Application::IsAutoHelpIdEnabled() )
-        aRet = pResMgr->GetAutoHelpId();
-
-    return aRet;
-}
-
 namespace vcl {
 
 WinBits Window::ImplInitRes( const ResId& rResId )
@@ -46,17 +36,11 @@ WinBits Window::ImplInitRes( const ResId& rResId )
     return nStyle;
 }
 
-WindowResHeader Window::ImplLoadResHeader( const ResId& rResId )
+WindowResHeader Window::ImplLoadResHeader( const ResId& /*rResId*/ )
 {
     WindowResHeader aHeader;
 
     aHeader.nObjMask = (RscWindowFlags)ReadLongRes();
-
-    // we need to calculate auto helpids before the resource gets closed
-    // if the resource  only contains flags, it will be closed before we try to read a help id
-    // so we always create an auto help id that might be overwritten later
-    // HelpId
-    aHeader.aHelpId = ImplAutoHelpID( rResId.GetResMgr() );
 
     // ResourceStyle
     aHeader.nRSStyle = (RSWND)ReadLongRes();
