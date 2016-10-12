@@ -19,9 +19,29 @@ namespace sfx2 {
 class SFX2_DLLPUBLIC SafeMode
 {
 public:
+    /**
+     * Write a flag file to the user profile indicating that the next launch should be in safe mode.
+     *
+     * @return Whether the file could be written successfully
+     */
     static bool putFlag();
+
+    /**
+     * Check the existence of the safe mode flag file.
+     *
+     * @return Whether the flag file for the safe mode exists
+     */
     static bool hasFlag();
+
+    /**
+     * Remove the flag file for the safe mode.
+     *
+     * @return Whether the flag file could be removed successfully
+     */
     static bool removeFlag();
+
+private:
+    /** Returns the path of the safe mode flag file.*/
     static OUString getFileName();
 };
 
