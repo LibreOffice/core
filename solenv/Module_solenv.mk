@@ -21,4 +21,10 @@ $(eval $(call gb_Module_add_targets,solenv,\
 ))
 endif
 
+ifneq ($(DISABLE_PYTHON),TRUE)
+$(eval $(call gb_Module_add_subsequentcheck_targets,solenv,\
+	PythonTest_solenv_python \
+))
+endif
+
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
