@@ -38,6 +38,8 @@ private:
     VclPtr<CheckBox> mpCBCustomizations;
     VclPtr<CheckBox> mpCBFull;
 
+    static void terminateOffice();
+
     DECL_LINK(BtnHdl, Button*, void);
 };
 
