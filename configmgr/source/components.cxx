@@ -613,18 +613,22 @@ Components::Components(
 
 Components::~Components()
 {
-    // get flag if _exit was already called which is a sign to not to secure user config
+    // get flag if _exit was already called which is a sign to not secure user config.
+    // this is used for win only currently where calling _exit() unfortunately still
+    // calls destructors (what is not wanted). May be needed for other systems, too
+    // (unknown yet) but can do no harm
     const bool bExitWasCalled(comphelper::BackupFileHelper::getExitWasCalled());
 
 #ifndef WNT
     // we can add a SAL_WARN here for other systems where the destructor gets called after
-    // an _exit() call - which should not happen. Still safe - the getExitWasCalled() is
-    // used, but a hint that _exit behaves different on a system
+    // an _exit() call. Still safe - the getExitWasCalled() is used, but a hint that _exit
+    // behaves different on a system
     SAL_WARN_IF(bExitWasCalled, "configmgr", "Components::~Components() called after _exit() call");
 #endif
 
     if (bExitWasCalled)
     {
+        // do not write, re-join thereads
         osl::MutexGuard g(*lock_);
 
         if (writeThread_.is())
@@ -634,29 +638,12 @@ Components::~Components()
     }
     else
     {
+        // write changes
         flushModifications();
     }
 
     for (WeakRootSet::iterator i(roots_.begin()); i != roots_.end(); ++i) {
         (*i)->setAlive(false);
-    }
-
-    if (!bExitWasCalled &&
-        ModificationTarget::File == modificationTarget_ &&
-        !modificationFileUrl_.isEmpty())
-    {
-        // test backup of registrymodifications
-        sal_uInt16 nSecureUserConfigNumCopies(0);
-
-        // read configuration from soffice.ini
-        const bool bSecureUserConfig(comphelper::BackupFileHelper::getSecureUserConfig(nSecureUserConfigNumCopies));
-
-        if (bSecureUserConfig)
-        {
-            comphelper::BackupFileHelper aBackupFileHelper(modificationFileUrl_, nSecureUserConfigNumCopies);
-
-            aBackupFileHelper.tryPush();
-        }
     }
 }
 

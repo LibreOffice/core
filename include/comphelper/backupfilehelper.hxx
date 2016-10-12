@@ -144,8 +144,14 @@ namespace comphelper
     private:
         // internal helper methods
         bool splitBaseURL();
-        bool baseFileExists();
-        rtl::OUString getName();
+        const rtl::OUString getPackDirName() const;
+        const rtl::OUString getPackFileName(const rtl::OUString& rFileName) const;
+        bool tryPush_basefile(bool bCompress);
+        bool tryPush_extensionInfo(bool bCompress);
+        bool isPopPossible_basefile();
+        bool isPopPossible_extensionInfo();
+        bool tryPop_basefile();
+        bool tryPop_extensionInfo();
     };
 }
 
