@@ -27,7 +27,7 @@
 #define RID_POPUP_BRKPROPS              ( RID_BASICIDE_START + 11 )
 #define RID_POPUP_TABBAR                ( RID_BASICIDE_START + 12 )
 
-#define RID_IMGBTN_REMOVEWATCH          ( RID_BASICIDE_START +  8 )
+#define RID_IMG_REMOVEWATCH             ( RID_BASICIDE_START +  8 )
 #define RID_IMG_INSTALLATION            ( RID_BASICIDE_START + 20 )
 #define RID_IMG_DOCUMENT                ( RID_BASICIDE_START + 22 )
 #define RID_IMG_MODLIB                  ( RID_BASICIDE_START + 24 )
@@ -103,7 +103,8 @@
 #define RID_STR_SHAREMACROS             ( RID_BASICIDE_START + 75 )
 #define RID_STR_SHAREDIALOGS            ( RID_BASICIDE_START + 76 )
 #define RID_STR_SHAREMACROSDIALOGS      ( RID_BASICIDE_START + 77 )
-//free slots
+//free slot
+#define RID_STR_REMOVEWATCHTIP          ( RID_BASICIDE_START + 79 )
 #define RID_STR_QUERYREPLACEMACRO       ( RID_BASICIDE_START + 80 )
 #define RID_STR_FILENAME                ( RID_BASICIDE_START + 81 )
 #define RID_STR_APPENDLIBS              ( RID_BASICIDE_START + 82 )

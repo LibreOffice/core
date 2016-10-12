@@ -1563,7 +1563,7 @@ WatchWindow::WatchWindow (Layout* pParent)
     : DockingWindow(pParent)
     , aWatchStr(IDEResId( RID_STR_REMOVEWATCH))
     , aXEdit(VclPtr<ExtendedEdit>::Create(this, WB_BORDER | WB_3DLOOK))
-    , aRemoveWatchButton(VclPtr<ImageButton>::Create(this, IDEResId(RID_IMGBTN_REMOVEWATCH)))
+    , aRemoveWatchButton(VclPtr<ImageButton>::Create(this, WB_SMALLSTYLE))
     , aTreeListBox(VclPtr<WatchTreeListBox>::Create(this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS |
                                                           WB_HASLINES | WB_HSCROLL | WB_TABSTOP |
                                                           WB_HASLINESATROOT | WB_HASBUTTONSATROOT))
@@ -1584,6 +1584,9 @@ WatchWindow::WatchWindow (Layout* pParent)
     aRemoveWatchButton->Disable();
     aRemoveWatchButton->SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
     aRemoveWatchButton->SetPosPixel( Point( nTextLen + aXEdit->GetSizePixel().Width() + 4, 2 ) );
+    aRemoveWatchButton->SetHelpId(HID_BASICIDE_REMOVEWATCH);
+    aRemoveWatchButton->SetModeImage(Image(IDEResId(RID_IMG_REMOVEWATCH)));
+    aRemoveWatchButton->SetQuickHelpText(IDEResId(RID_STR_REMOVEWATCHTIP));
     Size aSz( aRemoveWatchButton->GetModeImage().GetSizePixel() );
     aSz.Width() += 6;
     aSz.Height() += 6;

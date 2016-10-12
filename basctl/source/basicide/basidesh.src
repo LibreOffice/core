@@ -285,16 +285,6 @@ String RID_STR_SEARCHALLMODULES
 {
     Text [ en-US ] = "Do you want to replace the text in all active modules?" ;
 };
-ImageButton RID_IMGBTN_REMOVEWATCH
-{
-    HelpId = HID_BASICIDE_REMOVEWATCH ;
-    SmallStyle = TRUE ;
-    ButtonImage = Image
-    {
-        ImageBitmap = Bitmap { File = "baswatr.png" ; };
-    };
-    QuickHelpText [ en-US ] = "Remove Watch" ;
-};
 
 String RID_STR_REMOVEWATCH
 {
@@ -486,6 +476,16 @@ Image RID_IMG_DIALOG
 {
     ImageBitmap = Bitmap { File = "im30823.png"; };
 };
+Image RID_IMG_REMOVEWATCH
+{
+    ImageBitmap = Bitmap { File = "baswatr.png" ; };
+};
+
+String RID_STR_REMOVEWATCHTIP
+{
+    Text [ en-US ] = "Remove Watch" ;
+};
+
 String RID_STR_QUERYREPLACEMACRO
 {
     Text [ en-US ] = "Do you want to overwrite the XX macro?" ;
