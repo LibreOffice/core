@@ -341,7 +341,7 @@ void RefCounting::checkUnoReference(QualType qt, const Decl* decl, const std::st
                 "uno::Reference " + rDeclName + " with template parameter that does not contain ::static_type() "
                 + qt.getAsString()
                 + ", parent is " + rParentName
-                + ", should probably be using rtl::Reference instead"
+                + ", should probably be using rtl::Reference instead",
                 decl->getLocation())
               << decl->getSourceRange();
         }
