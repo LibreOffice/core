@@ -353,6 +353,7 @@ void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
     const SvxGradientListItem* pGradientListItem = aSet.GetItem<SvxGradientListItem>(SID_GRADIENT_LIST, false);
     const SvxHatchListItem* pHatchingListItem = aSet.GetItem<SvxHatchListItem>(SID_HATCH_LIST, false);
     const SvxBitmapListItem* pBitmapListItem = aSet.GetItem<SvxBitmapListItem>(SID_BITMAP_LIST, false);
+    const SvxPatternListItem* pPatternListItem = aSet.GetItem<SvxPatternListItem>(SID_PATTERN_LIST, false);
 
     if (pColorListItem)
         SetColorList(pColorListItem->GetColorList());
@@ -362,6 +363,8 @@ void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
         SetHatchingList(pHatchingListItem->GetHatchList());
     if (pBitmapListItem)
         SetBitmapList(pBitmapListItem->GetBitmapList());
+    if (pPatternListItem)
+        SetPatternList(pPatternListItem->GetPatternList());
 }
 
 void SvxAreaTabPage::PointChanged( vcl::Window* , RectPoint )
