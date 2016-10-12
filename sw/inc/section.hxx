@@ -213,8 +213,8 @@ public:
 
     // Data server methods.
     void SetRefObject( SwServerObject* pObj );
-    const SwServerObject* GetObject() const {  return & m_RefObj; }
-          SwServerObject* GetObject()       {  return & m_RefObj; }
+    const SwServerObject* GetObject() const {  return m_RefObj.get(); }
+          SwServerObject* GetObject()       {  return m_RefObj.get(); }
     bool IsServer() const                   {  return m_RefObj.Is(); }
 
     // Methods for linked ranges.

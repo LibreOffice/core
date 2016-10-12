@@ -1596,11 +1596,11 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
             return false;
     }
     // #115826: Exclude ProcedureProperties to avoid call to Property Get procedure
-    else if( nullptr != dynamic_cast<const SbProcedureProperty*>( &refVar) )
+    else if( nullptr != dynamic_cast<const SbProcedureProperty*>( refVar.get() ) )
         return false;
 
     SbxObjectRef xValObj = static_cast<SbxObject*>(refVal->GetObject());
-    if( !xValObj.Is() || nullptr != dynamic_cast<const SbUnoAnyObject*>( &xValObj) )
+    if( !xValObj.Is() || nullptr != dynamic_cast<const SbUnoAnyObject*>( xValObj.get() ) )
         return false;
 
     SbUnoObject* pUnoVal =  dynamic_cast<SbUnoObject*>( xValObj.get() );
@@ -1911,7 +1911,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
         }
         if ( bDimAsNew )
         {
-            if( nullptr == dynamic_cast<const SbxObject*>( &refVar) )
+            if( nullptr == dynamic_cast<const SbxObject*>( refVar.get() ) )
             {
                 SbxBase* pValObjBase = refVal->GetObject();
                 if( pValObjBase == nullptr )
@@ -2398,9 +2398,9 @@ void SbiRuntime::StepARGV()
         SbxVariableRef pVal = PopVar();
 
         // Before fix of #94916:
-        if( nullptr != dynamic_cast<const SbxMethod*>( &pVal)
-            || nullptr != dynamic_cast<const SbUnoProperty*>( &pVal)
-            || nullptr != dynamic_cast<const SbProcedureProperty*>( &pVal) )
+        if( nullptr != dynamic_cast<const SbxMethod*>( pVal.get() )
+            || nullptr != dynamic_cast<const SbUnoProperty*>( pVal.get() )
+            || nullptr != dynamic_cast<const SbProcedureProperty*>( pVal.get() ) )
         {
             // evaluate methods and properties!
             SbxVariable* pRes = new SbxVariable( *pVal );
@@ -2807,7 +2807,10 @@ void SbiRuntime::StepARGN( sal_uInt32 nOp1 )
     {
         OUString aAlias( pImg->GetString( static_cast<short>( nOp1 ) ) );
         SbxVariableRef pVal = PopVar();
-        if( bVBAEnabled && ( nullptr != dynamic_cast<const SbxMethod*>( &pVal) || nullptr != dynamic_cast<const SbUnoProperty*>( &pVal) || nullptr != dynamic_cast<const SbProcedureProperty*>( &pVal) ) )
+        if( bVBAEnabled &&
+                ( nullptr != dynamic_cast<const SbxMethod*>( pVal.get())
+                  || nullptr != dynamic_cast<const SbUnoProperty*>( pVal.get())
+                  || nullptr != dynamic_cast<const SbProcedureProperty*>( pVal.get()) ) )
         {
             // named variables ( that are Any especially properties ) can be empty at this point and need a broadcast
             if ( pVal->GetType() == SbxEMPTY )
@@ -3186,7 +3189,7 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
     SbxDataType t = refVal->GetType();
     SbxVariable* pVal = refVal.get();
     // we don't know the type of uno properties that are (maybevoid)
-    if ( t == SbxEMPTY && nullptr != dynamic_cast<const SbUnoProperty*>( &refVal) )
+    if ( t == SbxEMPTY && nullptr != dynamic_cast<const SbUnoProperty*>( refVal.get() ) )
     {
         SbUnoProperty* pProp = static_cast<SbUnoProperty*>(pVal);
         t = pProp->getRealType();
@@ -3675,7 +3678,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                 {
                     // Check for default method with named parameters
                     SbxBaseRef xObj = p->GetObject();
-                    if (SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>(&xObj))
+                    if (SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>( xObj.get() ))
                     {
                         Any aAny = pUnoObj->getUnoAny();
 

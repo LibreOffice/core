@@ -131,7 +131,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
             FStatHelper::IsDocument( aUrl.GetMainURL( INetURLObject::NO_DECODE ) ))
         {
             // file exists, so create connection without an update
-            static_cast<SwBaseLink*>(&refLink)->Connect();
+            static_cast<SwBaseLink*>( refLink.get() )->Connect();
         }
     }
 }
@@ -172,7 +172,7 @@ bool SwGrfNode::ReRead(
                 if( nNewType != refLink->GetObjType() )
                 {
                     refLink->Disconnect();
-                    static_cast<SwBaseLink*>(&refLink)->SetObjType( nNewType );
+                    static_cast<SwBaseLink*>( refLink.get() )->SetObjType( nNewType );
                 }
             }
 
@@ -214,7 +214,7 @@ bool SwGrfNode::ReRead(
                 else if ( bNewGrf )
                 {
                     //TODO refLink->setInputStream(getInputStream());
-                    static_cast<SwBaseLink*>(&refLink)->SwapIn();
+                    static_cast<SwBaseLink*>( refLink.get() )->SwapIn();
                 }
             }
             onGraphicChanged();
@@ -249,7 +249,7 @@ bool SwGrfNode::ReRead(
                 onGraphicChanged();
                 bReadGrf = true;
                 // create connection without update, as we have the graphic
-                static_cast<SwBaseLink*>(&refLink)->Connect();
+                static_cast<SwBaseLink*>( refLink.get() )->Connect();
             }
             else if( pGrfObj )
             {
@@ -258,7 +258,7 @@ bool SwGrfNode::ReRead(
                 onGraphicChanged();
                 bReadGrf = true;
                 // create connection without update, as we have the graphic
-                static_cast<SwBaseLink*>(&refLink)->Connect();
+                static_cast<SwBaseLink*>( refLink.get() )->Connect();
             }
             else
             {
@@ -268,7 +268,7 @@ bool SwGrfNode::ReRead(
                 onGraphicChanged();
                 if ( bNewGrf )
                 {
-                    static_cast<SwBaseLink*>(&refLink)->SwapIn();
+                    static_cast<SwBaseLink*>( refLink.get() )->SwapIn();
                 }
             }
         }

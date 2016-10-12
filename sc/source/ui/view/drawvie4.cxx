@@ -126,7 +126,7 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
         ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
         uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-        pTransferObj->SetDrawPersist( &aDragShellRef );    // keep persist for ole objects alive
+        pTransferObj->SetDrawPersist( aDragShellRef.get() );    // keep persist for ole objects alive
         pTransferObj->SetDragSource( this );               // copies selection
 
         SC_MOD()->SetDragObject( nullptr, pTransferObj );     // for internal D&D

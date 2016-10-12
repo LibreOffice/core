@@ -579,7 +579,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                 }
 
                 maDocShellRef->SetVisArea( maVisArea );
-                bOK = SetObject( &maDocShellRef, SDTRANSFER_OBJECTTYPE_DRAWOLE, rFlavor );
+                bOK = SetObject( maDocShellRef.get(), SDTRANSFER_OBJECTTYPE_DRAWOLE, rFlavor );
 
                 mpSdDrawDocumentIntern->SetSwapGraphicsMode( nOldSwapMode );
             }

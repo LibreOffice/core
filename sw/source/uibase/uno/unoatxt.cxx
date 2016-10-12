@@ -751,7 +751,7 @@ void SwXAutoTextEntry::implFlushDocument( bool _bCloseDoc )
         if ( _bCloseDoc )
         {
             // stop listening at the document
-            EndListening( *&xDocSh );
+            EndListening( *xDocSh );
 
             xDocSh->DoClose();
             xDocSh.Clear();
@@ -761,7 +761,7 @@ void SwXAutoTextEntry::implFlushDocument( bool _bCloseDoc )
 
 void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
 {
-    if ( &_rBC == &xDocSh )
+    if ( &_rBC == xDocSh.get() )
     {   // it's our document
         if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&_rHint))
         {
@@ -769,7 +769,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
             {
                 implFlushDocument();
                 xBodyText = nullptr;
-                EndListening( *&xDocSh );
+                EndListening( *xDocSh );
                 xDocSh.Clear();
             }
         }
@@ -780,7 +780,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
                 // our document is dying (possibly because we're shuting down, and the document was notified
                 // earlier than we are?)
                 // stop listening at the docu
-                EndListening( *&xDocSh );
+                EndListening( *xDocSh );
                 // and release our reference
                 xDocSh.Clear();
             }
@@ -796,7 +796,7 @@ void SwXAutoTextEntry::GetBodyText ()
     OSL_ENSURE( xDocSh.Is(), "SwXAutoTextEntry::GetBodyText: unexpected: no doc returned by EditGroupDoc!" );
 
     // start listening at the document
-    StartListening( *&xDocSh );
+    StartListening( *xDocSh );
 
     pBodyText = new SwXBodyText ( xDocSh->GetDoc() );
     xBodyText.set( *pBodyText, uno::UNO_QUERY);

@@ -5440,7 +5440,7 @@ sal_uLong SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableS
                 m_pWwFib->m_fWhichTableStm ? SL::a1Table : SL::a0Table),
                 StreamMode::STD_READ);
 
-            m_pTableStream = &rTableStream;
+            m_pTableStream = rTableStream.get();
             m_pTableStream->SetEndian( SvStreamEndian::LITTLE );
 
             rDataStream = m_pStg->OpenSotStream(OUString(SL::aData),
@@ -5448,7 +5448,7 @@ sal_uLong SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableS
 
             if (rDataStream.Is() && SVSTREAM_OK == rDataStream->GetError())
             {
-                m_pDataStream = &rDataStream;
+                m_pDataStream = rDataStream.get();
                 m_pDataStream->SetEndian(SvStreamEndian::LITTLE);
             }
             else
@@ -6218,7 +6218,7 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, co
         if( pStg.Is() )
         {
             nRet = OpenMainStream( refStrm, nOldBuffSize );
-            pIn = &refStrm;
+            pIn = refStrm.get();
         }
         else
         {

@@ -431,7 +431,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 
     // Get dialog
     SbxBaseRef pObj = rPar.Get( 1 )->GetObject();
-    if( !(pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( &pObj )) )
+    if( !(pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( pObj.get() )) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;

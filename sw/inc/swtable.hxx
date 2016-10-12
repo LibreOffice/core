@@ -308,8 +308,8 @@ public:
 
     // Data server methods.
     void SetRefObject( SwServerObject* );
-    const SwServerObject* GetObject() const     {  return &m_xRefObj; }
-          SwServerObject* GetObject()           {  return &m_xRefObj; }
+    const SwServerObject* GetObject() const     {  return m_xRefObj.get(); }
+          SwServerObject* GetObject()           {  return m_xRefObj.get(); }
 
     // Fill data for chart.
     void UpdateCharts() const;
