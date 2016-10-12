@@ -155,6 +155,26 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
     ]
+    SID_COMMUNITY_S
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
+    SID_PROFESSIONAL_S
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
+    SID_DONATE
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
+    SID_HOMEPAGE
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
+    SID_USER_GUIDES
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
     SID_SHOW_LICENSE
     [
         ExecMethod = MiscExec_Impl ;
