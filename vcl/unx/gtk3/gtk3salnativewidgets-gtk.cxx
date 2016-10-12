@@ -2427,7 +2427,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpSpinDownStyle = createStyleContext(GtkControlPart::SpinButtonDownButton, mpSpinStyle);
 
     /* NoteBook */
-    mpNotebookStyle = createStyleContext(GtkControlPart::Notebook);
+    mpNotebookStyle = createStyleContext(GtkControlPart::Notebook, gtk_widget_get_style_context(mpWindow));
     mpNotebookStackStyle = createStyleContext(GtkControlPart::NotebookStack, mpNotebookStyle);
     mpNotebookHeaderStyle = createStyleContext(GtkControlPart::NotebookHeader, mpNotebookStyle);
     mpNotebookHeaderTabsStyle = createStyleContext(GtkControlPart::NotebookHeaderTabs, mpNotebookHeaderStyle);
