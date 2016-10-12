@@ -151,13 +151,17 @@
     <menu:menu menu:id=".uno:HelpMenu">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:HelpIndex"/>
-            <menu:menuitem menu:id=".uno:ExtendedHelp"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:QuestionAnswers"/>
-            <menu:menuitem menu:id=".uno:SendFeedback"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ShowLicense"/>
-            <menu:menuitem menu:id=".uno:About"/>
+	    <menu:menuitem menu:id=".uno:ExtendedHelp"/>
+	    <menu:menuseparator/>
+	    <menu:menuitem menu:id=".uno:Homepage"/>
+	    <menu:menuitem menu:id=".uno:QuestionAnswers"/>
+	    <menu:menuitem menu:id=".uno:CommunitySupport"/>
+	    <menu:menuitem menu:id=".uno:ProfessionalSupport"/>
+	    <menu:menuitem menu:id=".uno:SendFeedback"/>
+	    <menu:menuseparator/>
+	    <menu:menuitem menu:id=".uno:Donate"/>
+	    <menu:menuitem menu:id=".uno:ShowLicense"/>
+	    <menu:menuitem menu:id=".uno:About"/>
         </menu:menupopup>
     </menu:menu>
 </menu:menubar>

@@ -4886,7 +4886,32 @@
       </node>
       <node oor:name=".uno:QuestionAnswers" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Get help online...</value>
+          <value xml:lang="en-US">Questions and Answers...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:CommunitySupport" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Community support...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ProfessionalSupport" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Professional support...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Donate" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Donate to %PRODUCTNAME...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Homepage" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">%PRODUCTNAME homepage</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:UserGuides" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">User Guides...</value>
         </prop>
       </node>
       <node oor:name=".uno:ShowLicense" oor:op="replace">
