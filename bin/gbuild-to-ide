@@ -1659,7 +1659,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         # create meta .pro.user file
         qt_meta_pro_user_file = 'lo.pro.user'
         try:
-            with open(qt_meta_pro_user_file, mode) as fmprouser:
+            with open(qt_meta_pro_user_file, 'w') as fmprouser:
                 fmprouser.write(self.generate_meta_pro_user_content())
             self._log("created %s\n" % qt_meta_pro_user_file)
 
