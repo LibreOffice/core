@@ -60,9 +60,10 @@
 #include <gridwin.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <boost/checked_delete.hpp>
+#include <comphelper/flagguard.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/lok.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
@@ -356,6 +357,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         bPagebreak  ( false ),
         bSelCtrlMouseClick( false ),
         bMoveArea ( false ),
+        bGrowing (false),
         m_nLOKPageUpDownOffset( 0 )
 {
     mpMarkData->SelectOneTable(0); // Sync with nTabNo
@@ -447,6 +449,7 @@ ScViewData::ScViewData( const ScViewData& rViewData ) :
         bPagebreak  ( rViewData.bPagebreak ),
         bSelCtrlMouseClick( rViewData.bSelCtrlMouseClick ),
         bMoveArea ( rViewData.bMoveArea ),
+        bGrowing( rViewData.bGrowing ),
         m_nLOKPageUpDownOffset( rViewData.m_nLOKPageUpDownOffset )
 {
 
@@ -1201,6 +1204,16 @@ IMPL_LINK( ScViewData, EditEngineHdl, EditStatus&, rStatus, void )
 
 void ScViewData::EditGrowX()
 {
+    // It is insane to call EditGrowX while the output area is already growing.
+    // That could occur because of the call to SetDefaultItem later.
+    // We end up with wrong start/end edit columns and the changes
+    // to the output area performed by the inner call to this method are
+    // useless since they are discarded by the outer call.
+    if (bGrowing)
+        return;
+
+    comphelper::FlagRestorationGuard aFlagGuard(bGrowing, true);
+
     ScDocument* pLocalDoc = GetDocument();
 
     ScSplitPos eWhich = GetActivePart();
@@ -1387,6 +1400,11 @@ void ScViewData::EditGrowX()
 
 void ScViewData::EditGrowY( bool bInitial )
 {
+    if (bGrowing)
+        return;
+
+    comphelper::FlagRestorationGuard aFlagGuard(bGrowing, true);
+
     ScSplitPos eWhich = GetActivePart();
     ScVSplitPos eVWhich = WhichV(eWhich);
     EditView* pCurView = pEditView[eWhich];
