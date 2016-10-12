@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_6bf181cd",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-10-12T23:02:04Z",
+      "side": 1,
+      "message": "What is the value of m_aRectangle\u0027s members? What string will the payload have for an EMPTY invalidatetiles message?",
+      "revId": "040db117318a971d4b12df27f1bcd0bbfb458ddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
