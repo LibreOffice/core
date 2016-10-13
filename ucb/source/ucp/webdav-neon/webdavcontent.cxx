@@ -3943,6 +3943,26 @@ Content::ResourceType Content::getResourceType(
         {
             rResAccess->resetUri();
 
+            // first check if the cached error can be mapped to DAVException::DAV_HTTP_TIMEOUT or mapped to DAVException::DAV_HTTP_CONNECT
+            if ( aDAVOptions.getHttpResponseStatusCode() == USC_CONNECTION_TIMED_OUT )
+            {
+                // behave same as DAVException::DAV_HTTP_TIMEOUT or DAVException::DAV_HTTP_CONNECT was thrown
+                try
+                {
+                    // extract host name and connection port
+                    NeonUri   theUri( rURL );
+                    OUString  aHostName  = theUri.GetHost();
+                    sal_Int32 nPort      = theUri.GetPort();
+                    throw DAVException( DAVException::DAV_HTTP_TIMEOUT,
+                                        NeonUri::makeConnectionEndPointString( aHostName,
+                                                                               nPort ) );
+                }
+                catch ( DAVException& exp )
+                {
+                    cancelCommandExecution( exp, xEnv );
+                }
+            }
+
             if ( aDAVOptions.getHttpResponseStatusCode() != SC_NOT_FOUND &&
                  aDAVOptions.getHttpResponseStatusCode() != SC_GONE ) // the cached OPTIONS can have SC_GONE
             {
@@ -4045,6 +4065,12 @@ void Content::getResourceOptions(
                     // probably a new bit stating 'timed out' should be added to opts var?
                     // in any case abort the command
                     SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_TIMEOUT or DAV_HTTP_CONNECT for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                    // cache the internal unofficial status code
+
+                    aDAVOptions.setHttpResponseStatusCode( USC_CONNECTION_TIMED_OUT );
+                    // used only internally, so the text doesn't really matter..
+                    aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
+                                                          m_nOptsCacheLifeNotFound );
                     cancelCommandExecution( e, xEnv );
                     // unreachable
                 }
