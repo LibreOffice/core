@@ -24,6 +24,7 @@
 #include <macrosecurity.hxx>
 #include <biginteger.hxx>
 #include <global.hrc>
+#include <pdfsignaturehelper.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -259,6 +260,14 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 {
     if (!rxStorage.is())
     {
+        if (xSignStream.is())
+        {
+            // Something not ZIP-based, try PDF.
+            PDFSignatureHelper aSignatureHelper;
+            if (aSignatureHelper.ReadAndVerifySignature(xSignStream))
+                return aSignatureHelper.GetDocumentSignatureInformations();
+        }
+
         SAL_WARN( "xmlsecurity.comp", "Error, no XStorage provided");
         return Sequence<css::security::DocumentSignatureInformation>();
     }

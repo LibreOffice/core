@@ -13,29 +13,18 @@ $(eval $(call gb_Executable_use_sdk_api,pdfverify))
 
 $(eval $(call gb_Executable_set_include,pdfverify,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/xmlsecurity/inc \
 ))
 
 $(eval $(call gb_Executable_use_libraries,pdfverify,\
     comphelper \
     sal \
     tl \
+    xmlsecurity \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,pdfverify,\
     xmlsecurity/source/pdfio/pdfverify \
 ))
-
-ifeq ($(OS)-$(COM),WNT-MSC)
-$(eval $(call gb_Executable_add_defs,pdfverify,\
-    -DXMLSEC_CRYPTO_MSCRYPTO \
-))
-else
-$(eval $(call gb_Executable_add_defs,pdfverify,\
-    -DXMLSEC_CRYPTO_NSS \
-))
-$(eval $(call gb_Executable_use_externals,pdfverify,\
-    nss3 \
-))
-endif
 
 # vim:set noet sw=4 ts=4:
