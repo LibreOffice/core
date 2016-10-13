@@ -276,13 +276,16 @@ void GtkPrintWrapper::print_unix_dialog_add_custom_tab(GtkPrintUnixDialog* dialo
 
 GtkPrinter* GtkPrintWrapper::print_unix_dialog_get_selected_printer(GtkPrintUnixDialog* dialog) const
 {
+    GtkPrinter* pRet = nullptr;
 #if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_unix_dialog_get_selected_printer);
-    return (*m_print_unix_dialog_get_selected_printer)(dialog);
+    pRet = (*m_print_unix_dialog_get_selected_printer)(dialog);
 #else
     (void) this; // loplugin:staticmethods
-    return gtk_print_unix_dialog_get_selected_printer(dialog);
+    pRet = gtk_print_unix_dialog_get_selected_printer(dialog);
 #endif
+    g_object_ref(G_OBJECT(pRet));
+    return pRet;
 }
 
 void GtkPrintWrapper::print_unix_dialog_set_manual_capabilities(GtkPrintUnixDialog* dialog, GtkPrintCapabilities capabilities) const
