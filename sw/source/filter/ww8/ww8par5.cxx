@@ -2328,10 +2328,21 @@ bool CanUseRemoteLink(const OUString &rGrfName)
         ::ucbhelper::Content aCnt(rGrfName,
                                   static_cast< ucb::XCommandEnvironment* >(pCommandEnv),
                                   comphelper::getProcessComponentContext());
-        OUString   aTitle;
 
-        aCnt.getPropertyValue("Title") >>= aTitle;
-        bUseRemote = !aTitle.isEmpty();
+        if ( !INetURLObject( rGrfName ).isAnyKnownWebDAVScheme() )
+        {
+            OUString   aTitle;
+            aCnt.getPropertyValue("Title") >>= aTitle;
+            bUseRemote = !aTitle.isEmpty();
+        }
+        else
+        {
+            // is a link to a WebDAV resource
+            // need to use MediaType to check for link usability
+            OUString   aMediaType;
+            aCnt.getPropertyValue("MediaType") >>= aMediaType;
+            bUseRemote = !aMediaType.isEmpty();
+        }
     }
     catch ( ... )
     {
