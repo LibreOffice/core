@@ -1077,32 +1077,30 @@ void View::onAccessibilityOptionsChanged()
     }
 }
 
-IMPL_LINK( View, OnParagraphInsertedHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( View, OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, aParam, void )
 {
-    Paragraph* pPara = pOutliner->GetHdlParagraph();
     SdrObject* pObj = GetTextEditObject();
 
-    if( pPara && pObj )
+    if( aParam.pPara && pObj )
     {
         SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
         if( pPage )
-            pPage->onParagraphInserted( pOutliner, pPara, pObj );
+            pPage->onParagraphInserted( aParam.pOutliner, aParam.pPara, pObj );
     }
 }
 
 /**
  * Handler for the deletion of the pages (paragraphs).
  */
-IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, aParam, void )
 {
-    Paragraph* pPara = pOutliner->GetHdlParagraph();
     SdrObject* pObj = GetTextEditObject();
 
-    if( pPara && pObj )
+    if( aParam.pPara && pObj )
     {
         SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
         if( pPage )
-            pPage->onParagraphRemoving( pOutliner, pPara, pObj );
+            pPage->onParagraphRemoving( aParam.pOutliner, aParam.pPara, pObj );
     }
 }
 

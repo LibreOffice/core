@@ -229,8 +229,8 @@ public:
     SdrObject* GetSelectedSingleObject(SdPage* pPage);
 
 protected:
-    DECL_LINK( OnParagraphInsertedHdl, ::Outliner *, void );
-    DECL_LINK( OnParagraphRemovingHdl, ::Outliner *, void );
+    DECL_LINK( OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, void );
+    DECL_LINK( OnParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, void );
 
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfo ) override;
     virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfo ) override;
