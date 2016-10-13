@@ -2621,49 +2621,45 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     sal_uInt16 nId,
     ToolBox& rTbx ):
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    maColorSelectFunction(PaletteManager::DispatchColorCommand)
+    m_bSplitButton(dynamic_cast< sfx2::sidebar::SidebarToolBox* >(&rTbx) == nullptr),
+    m_aColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
-    if ( dynamic_cast< sfx2::sidebar::SidebarToolBox* >(&rTbx) )
-        bSidebarType = true;
-    else
-        bSidebarType = false;
-
     // The following commands are available at the various modules
     switch( nSlotId )
     {
         case SID_ATTR_CHAR_COLOR:
             addStatusListener( ".uno:Color");
-            mPaletteManager.SetLastColor( COL_RED );
-            bSidebarType = false;
+            m_aPaletteManager.SetLastColor( COL_RED );
+            m_bSplitButton = true;
             break;
 
         case SID_ATTR_CHAR_COLOR2:
             addStatusListener( ".uno:CharColorExt");
-            mPaletteManager.SetLastColor( COL_RED );
-            bSidebarType = false;
+            m_aPaletteManager.SetLastColor( COL_RED );
+            m_bSplitButton = true;
             break;
 
         case SID_BACKGROUND_COLOR:
             addStatusListener( ".uno:BackgroundColor");
-            mPaletteManager.SetLastColor( COL_YELLOW );
+            m_aPaletteManager.SetLastColor( COL_YELLOW );
             break;
 
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             addStatusListener( ".uno:CharBackgroundExt");
-            mPaletteManager.SetLastColor( COL_YELLOW );
-            bSidebarType = false;
+            m_aPaletteManager.SetLastColor( COL_YELLOW );
+            m_bSplitButton = true;
             break;
 
         case SID_ATTR_CHAR_BACK_COLOR:
             addStatusListener( ".uno:CharBackColor");
-            mPaletteManager.SetLastColor( COL_YELLOW );
+            m_aPaletteManager.SetLastColor( COL_YELLOW );
             break;
 
         case SID_FRAME_LINECOLOR:
             addStatusListener( ".uno:FrameLineColor");
             addStatusListener( ".uno:BorderTLBR");
             addStatusListener( ".uno:BorderBLTR");
-            mPaletteManager.SetLastColor( COL_BLUE );
+            m_aPaletteManager.SetLastColor( COL_BLUE );
             break;
 
         case SID_EXTRUSION_3D_COLOR:
@@ -2672,22 +2668,18 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
 
         case SID_ATTR_LINE_COLOR:
             addStatusListener( ".uno:XLineColor");
-            mPaletteManager.SetLastColor( COL_DEFAULT_SHAPE_STROKE );
+            m_aPaletteManager.SetLastColor( COL_DEFAULT_SHAPE_STROKE );
             break;
 
         case SID_ATTR_FILL_COLOR:
             addStatusListener( ".uno:FillColor");
-            mPaletteManager.SetLastColor( COL_DEFAULT_SHAPE_FILLING );
+            m_aPaletteManager.SetLastColor( COL_DEFAULT_SHAPE_FILLING );
             break;
     }
 
-    if ( bSidebarType )
-        rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-    else
-        rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
-
+    rTbx.SetItemBits( nId, rTbx.GetItemBits( nId ) | ( m_bSplitButton ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
     m_xBtnUpdater.reset( new svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
-    mPaletteManager.SetBtnUpdater( m_xBtnUpdater.get() );
+    m_aPaletteManager.SetBtnUpdater( m_xBtnUpdater.get() );
 }
 
 SvxColorToolBoxControl::~SvxColorToolBoxControl()
@@ -2696,8 +2688,8 @@ SvxColorToolBoxControl::~SvxColorToolBoxControl()
 
 void SvxColorToolBoxControl::setColorSelectFunction(const ColorSelectFunction& aColorSelectFunction)
 {
-    maColorSelectFunction = aColorSelectFunction;
-    mPaletteManager.SetColorSelectFunction(aColorSelectFunction);
+    m_aColorSelectFunction = aColorSelectFunction;
+    m_aPaletteManager.SetColorSelectFunction(aColorSelectFunction);
 }
 
 VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
@@ -2706,13 +2698,13 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
         VclPtr<SvxColorWindow_Impl>::Create(
 
                             m_aCommandURL,
-                            mPaletteManager,
-                            maBorderColorStatus,
+                            m_aPaletteManager,
+                            m_aBorderColorStatus,
                             GetSlotId(),
                             m_xFrame,
                             SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ),
                             &GetToolBox(),
-                            maColorSelectFunction);
+                            m_aColorSelectFunction);
 
     switch( GetSlotId() )
     {
@@ -2746,7 +2738,7 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
         FloatWinPopupFlags::AllowTearOff|FloatWinPopupFlags::NoAppFocusClose );
     pColorWin->StartSelection();
     SetPopupWindow( pColorWin );
-    if ( !bSidebarType )
+    if ( m_bSplitButton )
         pColorWin->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
     return pColorWin;
 }
@@ -2754,7 +2746,7 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
 IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const Color&, rColor, void)
 {
     m_xBtnUpdater->Update( rColor );
-    mPaletteManager.SetLastColor( rColor );
+    m_aPaletteManager.SetLastColor( rColor );
 }
 
 void SvxColorToolBoxControl::StateChanged(
@@ -2762,7 +2754,7 @@ void SvxColorToolBoxControl::StateChanged(
 {
     if ( nSID == SID_ATTR_CHAR_COLOR_EXT || nSID == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT )
         SfxToolBoxControl::StateChanged( nSID, eState, pState );
-    else if ( bSidebarType )
+    else if ( !m_bSplitButton )
     {
         Color aColor( COL_TRANSPARENT );
 
@@ -2770,8 +2762,8 @@ void SvxColorToolBoxControl::StateChanged(
           || nSID == SID_ATTR_BORDER_DIAG_TLBR
           || nSID == SID_ATTR_BORDER_DIAG_BLTR )
         {
-            maBorderColorStatus.StateChanged( nSID, eState, pState );
-            aColor = maBorderColorStatus.GetColor();
+            m_aBorderColorStatus.StateChanged( nSID, eState, pState );
+            aColor = m_aBorderColorStatus.GetColor();
         }
         else if ( SfxItemState::DEFAULT <= eState && pState )
         {
@@ -2783,13 +2775,13 @@ void SvxColorToolBoxControl::StateChanged(
                 aColor = static_cast< const XFillColorItem* >(pState)->GetColorValue();
         }
         m_xBtnUpdater->Update( aColor );
-        mPaletteManager.SetLastColor(aColor);
+        m_aPaletteManager.SetLastColor(aColor);
     }
 }
 
 void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
 {
-    if ( bSidebarType )
+    if ( !m_bSplitButton )
     {
         // Open the popup also when Enter key is pressed.
         css::uno::Reference< css::awt::XWindow > xWin = createPopupWindow();
@@ -2851,17 +2843,17 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
 
     Sequence< PropertyValue > aArgs( 1 );
     aArgs[0].Name  = aParamName;
-    aArgs[0].Value = makeAny( (sal_uInt32)( mPaletteManager.GetLastColor().GetColor() ));
+    aArgs[0].Value = makeAny( (sal_uInt32)( m_aPaletteManager.GetLastColor().GetColor() ));
     Dispatch( aCommand, aArgs );
 }
 
 sal_Bool SvxColorToolBoxControl::opensSubToolbar()
     throw (css::uno::RuntimeException, std::exception)
 {
-    // For a split button (i.e. bSidebarType == false), we mark this controller as
-    // a sub-toolbar controller, so we get notified (through updateImage method) on
-    // button image changes, and could redraw the last used color on top of it.
-    return !bSidebarType;
+    // For a split button, we mark this controller as a sub-toolbar controller,
+    // so we get notified (through updateImage method) on button image changes,
+    // and could redraw the last used color on top of it.
+    return m_bSplitButton;
 }
 
 void SvxColorToolBoxControl::updateImage()
@@ -2871,7 +2863,7 @@ void SvxColorToolBoxControl::updateImage()
     if ( !!aImage )
     {
         GetToolBox().SetItemImage( GetId(), aImage );
-        m_xBtnUpdater->Update( mPaletteManager.GetLastColor(), true );
+        m_xBtnUpdater->Update( m_aPaletteManager.GetLastColor(), true );
     }
 }
 

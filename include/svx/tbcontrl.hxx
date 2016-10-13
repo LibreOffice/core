@@ -232,10 +232,10 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
     using SfxToolBoxControl::StateChanged;
 
     std::unique_ptr<svx::ToolboxButtonColorUpdater> m_xBtnUpdater;
-    PaletteManager mPaletteManager;
-    BorderColorStatus maBorderColorStatus;
-    bool bSidebarType;
-    ColorSelectFunction maColorSelectFunction;
+    PaletteManager m_aPaletteManager;
+    BorderColorStatus m_aBorderColorStatus;
+    bool m_bSplitButton;
+    ColorSelectFunction m_aColorSelectFunction;
     DECL_LINK(SelectedHdl, const Color&, void);
 public:
     SFX_DECL_TOOLBOX_CONTROL();
