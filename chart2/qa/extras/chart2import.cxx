@@ -40,6 +40,7 @@ public:
     void testDOCChartSeries();
     void testDOCXChartSeries();
     void testPPTXChartSeries();
+    void testPPTXSparseChartSeries();
     /**
      * Original data contains 3 series but 2 of them are hidden. For now, we
      * detect and skip those hidden series on import (since we don't support
@@ -103,6 +104,7 @@ public:
     CPPUNIT_TEST(testDOCXChartSeries);
     CPPUNIT_TEST(testPPTChartSeries);
     CPPUNIT_TEST(testPPTXChartSeries);
+    CPPUNIT_TEST(testPPTXSparseChartSeries);
     CPPUNIT_TEST(testPPTXHiddenDataSeries);
     CPPUNIT_TEST(testPPTXPercentageNumberFormats);
     CPPUNIT_TEST(testPPTXStackedNonStackedYAxis);
@@ -392,6 +394,28 @@ void Chart2ImportTest::testPPTXChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), aLabels[1][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), aLabels[2][0].get<OUString>());
+}
+
+void Chart2ImportTest::testPPTXSparseChartSeries()
+{
+    //test chart series sparse data for pptx
+    load("/chart2/qa/extras/data/pptx/", "sparse-chart.pptx");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xCT.is());
+
+    std::vector<std::vector<double> > aValues = getDataSeriesYValuesFromChartType(xCT);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aValues.size());
+    CPPUNIT_ASSERT_EQUAL(0.0,  aValues[0][0]);
+    CPPUNIT_ASSERT_EQUAL(2.5,  aValues[0][1]);
+    CPPUNIT_ASSERT_EQUAL(3.5,  aValues[0][2]);
+    CPPUNIT_ASSERT_EQUAL(0.0,  aValues[0][3]);
+    CPPUNIT_ASSERT_EQUAL(-2.4, aValues[1][0]);
+    CPPUNIT_ASSERT_EQUAL(0.0,  aValues[1][1]);
+    CPPUNIT_ASSERT_EQUAL(0.0,  aValues[1][2]);
+    CPPUNIT_ASSERT_EQUAL(-2.8, aValues[1][3]);
 }
 
 void Chart2ImportTest::testPPTXHiddenDataSeries()

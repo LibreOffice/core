@@ -133,11 +133,10 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
         if( !rDataSeq.maData.empty() )
         {
             // create a single-row array from constant source data
-            Matrix< Any > aMatrix( rDataSeq.maData.size(), 1 );
-            Matrix< Any >::iterator aMIt = aMatrix.begin();
-            // TODO: how to handle missing values in the map?
-            for( DataSequenceModel::AnyMap::const_iterator aDIt = rDataSeq.maData.begin(), aDEnd = rDataSeq.maData.end(); aDIt != aDEnd; ++aDIt, ++aMIt )
-                *aMIt = aDIt->second;
+            Matrix< Any > aMatrix( rDataSeq.mnPointCount, 1 );
+            for( DataSequenceModel::AnyMap::const_iterator aDIt = rDataSeq.maData.begin(), aDEnd = rDataSeq.maData.end(); aDIt != aDEnd; ++aDIt )
+                *aMatrix.at(aDIt->first, 0) = aDIt->second;
+
             aRangeRep = lclGenerateApiArray( aMatrix );
         }
 
