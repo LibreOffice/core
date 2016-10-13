@@ -22,26 +22,63 @@
 
 using namespace css;
 
-SafeModeDialog::SafeModeDialog(vcl::Window* pParent):
-    Dialog(pParent, "SafeModeDialog", "svx/ui/safemodedialog.ui")
+SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
+:   Dialog(pParent, "SafeModeDialog", "svx/ui/safemodedialog.ui"),
+
+    mpBtnContinue(),
+    mpBtnQuit(),
+    mpBtnRestart(),
+
+    mpCBCheckProfilesafeConfig(),
+    mpCBCheckProfilesafeExtensions(),
+    mpCBDisableAllExtensions(),
+    mpCBResetCustomizations(),
+    mpCBResetWholeUserProfile(),
+
+    maBackupFileHelper()
 {
     get(mpBtnContinue, "btn_continue");
     get(mpBtnQuit, "btn_quit");
     get(mpBtnRestart, "btn_restart");
-    get(mpCBCustomizations, "check_customizations");
-    get(mpCBExtensions, "check_extensions");
-    get(mpCBFull, "check_full");
+
+    get(mpCBCheckProfilesafeConfig, "check_profilesafe_config");
+    get(mpCBCheckProfilesafeExtensions, "check_profilesafe_extensions");
+    get(mpCBDisableAllExtensions, "check_disable_all_extensions");
+    get(mpCBResetCustomizations, "check_reset_customizations");
+    get(mpCBResetWholeUserProfile, "check_reset_whole_userprofile");
 
     mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
     mpBtnQuit->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
     mpBtnRestart->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
 
-    mpCBCustomizations->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
-    mpCBExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
-    mpCBFull->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mpCBCheckProfilesafeConfig->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mpCBCheckProfilesafeExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mpCBDisableAllExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mpCBResetCustomizations->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mpCBResetWholeUserProfile->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
 
     // Disable restart btn until some checkbox is active
     mpBtnRestart->Disable();
+
+    if (!maBackupFileHelper.isPopPossible())
+    {
+        mpCBCheckProfilesafeConfig->Disable();
+    }
+
+    if (!maBackupFileHelper.isPopPossibleExtensionInfo())
+    {
+        mpCBCheckProfilesafeExtensions->Disable();
+    }
+
+    if (comphelper::BackupFileHelper::isTryDisableAllExtensionsPossible())
+    {
+        mpCBDisableAllExtensions->Disable();
+    }
+
+    if (maBackupFileHelper.isTryResetCustomizationsPossible())
+    {
+        mpCBResetCustomizations->Disable();
+    }
 }
 
 SafeModeDialog::~SafeModeDialog()
@@ -54,9 +91,12 @@ void SafeModeDialog::dispose()
     mpBtnContinue.clear();
     mpBtnQuit.clear();
     mpBtnRestart.clear();
-    mpCBCustomizations.clear();
-    mpCBExtensions.clear();
-    mpCBFull.clear();
+
+    mpCBCheckProfilesafeConfig.clear();
+    mpCBCheckProfilesafeExtensions.clear();
+    mpCBDisableAllExtensions.clear();
+    mpCBResetCustomizations.clear();
+    mpCBResetWholeUserProfile.clear();
 
     Dialog::dispose();
 }
@@ -80,7 +120,37 @@ void SafeModeDialog::terminateOffice()
 
 void SafeModeDialog::applyChanges()
 {
-    // TODO: Apply apply changes
+    if (mpCBCheckProfilesafeConfig->IsChecked())
+    {
+        // reset UserConfiguration to last known working state
+        // ProfileSafeMode/BackupFileHelper
+        maBackupFileHelper.tryPop();
+    }
+
+    if (mpCBCheckProfilesafeExtensions->IsChecked())
+    {
+        // reset State of installed Extensions to last known working state
+        // ProfileSafeMode/BackupFileHelper
+        maBackupFileHelper.tryPopExtensionInfo();
+    }
+
+    if (mpCBDisableAllExtensions->IsChecked())
+    {
+        // Disable all extensions
+        comphelper::BackupFileHelper::tryDisableAllExtensions();
+    }
+
+    if (mpCBResetCustomizations->IsChecked())
+    {
+        // Reset customizations (Settings and UserInterface modifications)
+        maBackupFileHelper.tryResetCustomizations();
+    }
+
+    if (mpCBResetWholeUserProfile->IsChecked())
+    {
+        // Reset the whole UserProfile
+        maBackupFileHelper.tryResetUserProfile();
+    }
 
     // Then restart
     css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext())->requestRestart(
@@ -106,7 +176,13 @@ IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
 
 IMPL_LINK(SafeModeDialog, CheckBoxHdl, CheckBox&, /*pCheckBox*/, void)
 {
-    bool bEnable = mpCBCustomizations->IsChecked() || mpCBExtensions->IsChecked() || mpCBFull->IsChecked();
+    const bool bEnable(
+        mpCBCheckProfilesafeConfig->IsChecked() ||
+        mpCBCheckProfilesafeExtensions->IsChecked() ||
+        mpCBDisableAllExtensions->IsChecked() ||
+        mpCBResetCustomizations->IsChecked() ||
+        mpCBResetWholeUserProfile->IsChecked());
+
     mpBtnRestart->Enable(bEnable);
 }
 
