@@ -72,11 +72,24 @@ Global Const ERRTABLECREATION		=	1551
 Global Const ERRFIELDCREATION		=	1552
 Global Const ERRSUBFORMNOTFOUND		=	1553
 Global Const ERRWINDOW				=	1554
+Global Const ERRCOMPATIBILITY		=	1555
+Global Const ERRPRECISION			=	1556
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Global Const DBCONNECTBASE			=	1			&apos;	Connection from Base document (OpenConnection)
 Global Const DBCONNECTFORM			=	2			&apos;	Connection from a database-aware form (OpenConnection)
 Global Const DBCONNECTANY			=	3			&apos;	Connection from any document for data access only (OpenDatabase)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Global Const DBMS_UNKNOWN			=	0
+Global Const DBMS_HSQLDB1			=	1
+Global Const DBMS_HSQLDB2			=	2
+Global Const DBMS_FIREBIRD			=	3
+Global Const DBMS_MSACCESS2003		=	4
+Global Const DBMS_MSACCESS2007		=	5
+Global Const DBMS_MYSQL				=	6
+Global Const DBMS_POSTGRES			=	7
+Global Const DBMS_SQLITE			=	8
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Global Const COLLALLDIALOGS 		= &quot;ALLDIALOGS&quot;
@@ -1039,7 +1052,12 @@ Const cstThisSub = &quot;OpenConnection&quot;
 				vDocContainer.DbConnect = DBCONNECTBASE
 				._DbConnect = DBCONNECTBASE
 				Set .MetaData = .Connection.MetaData
-				._ReadOnly = .Connection.isReadOnly()
+				._LoadMetadata()
+				If .MetaData.DatabaseProductName = &quot;MySQL&quot; Then
+					._ReadOnly = .MetaData.isReadOnly()
+				Else
+					._ReadOnly = .Connection.isReadOnly()		&apos;	Always True in Mysql ??
+				End If
 				Set .Document = oComponent
 				.Title = oComponent.Title
 				.URL = vDocContainer.URL
@@ -1064,6 +1082,7 @@ Const cstThisSub = &quot;OpenConnection&quot;
 					Set .Connection = .Form.ActiveConnection	&apos;	Might be Nothing in Windows at AOO/LO startup (not met in Linux)
 					If Not IsNull(.Connection) Then
 						Set .MetaData = .Connection.MetaData
+						._LoadMetadata()
 						._ReadOnly = .Connection.isReadOnly()
 						TraceLog(TRACEANY, .MetaData.getDatabaseProductName() &amp; &quot; &quot; &amp; .MetaData.getDatabaseProductVersion, False)
 					End If
@@ -1163,6 +1182,7 @@ Const cstThisSub = &quot;OpenDatabase&quot;
 	Set odbDatabase.Connection = oBaseSource.getConnection(pvUser, pvPassword)
 	If Not IsNull(odbDatabase.Connection) Then				&apos;	Null when standalone and target db does not exist
 		Set odbDatabase.MetaData = odbDatabase.Connection.MetaData
+		odbDatabase._LoadMetadata()
 	Else
 		Goto Trace_Error
 	End If

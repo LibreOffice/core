@@ -816,7 +816,7 @@ Public Function _AppendChunk(ByVal psFieldName As String, ByRef pvChunk As Varia
 
 	If _ErrorHandler() Then On Local Error GoTo Error_Function
 Dim oFileAccess As Object
-Dim i As Integer, oChunk As Object, iChunk As Integer, sRandom As String
+Dim i As Integer, oChunk As Object, iChunk As Integer
 
 	&apos;	Do nothing if chunk meaningless
 	_AppendChunk = False
@@ -844,8 +844,7 @@ Dim i As Integer, oChunk As Object, iChunk As Integer, sRandom As String
 		If Not .ChunksRequested Then		&apos;	First chunk
 			.ChunksRequested = True
 			.ChunkType = piChunkType
-			sRandom = Right(&quot;000000&quot; &amp; Int(999999 * Rnd), 6)
-			.FileName = DoCmd._getTempDirectoryURL() &amp; &quot;/&quot; &amp; &quot;A2B_TEMP_&quot; &amp; _Name &amp; &quot;_&quot; &amp; sRandom
+			.FileName = Utils._GetRandomFileName(_Name)
 			Set oFileAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 			.FileHandler = oFileAccess.openFileWrite(.FileName)
 		End If

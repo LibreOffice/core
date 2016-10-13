@@ -38,7 +38,7 @@ Dim i As Integer, vNewList() As Variant, vNumeric() As Variant, iSize As Integer
 		vNewList = Array(pvTypes)
 	End If
 	
-	vNumeric = Array(vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBigint, vbDecimal)
+	vNumeric = Array(vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBigint, vbDecimal, vbBoolean)
 	
 	iSize = UBound(vNewlist)
 	ReDim Preserve vNewList(iSize + UBound(vNumeric) + 1)
@@ -115,7 +115,6 @@ Dim iVarType As Integer
 	If VarType(pvItem) = vbCurrency Or VarType(pvItem) = vbDecimal Or VarType(pvItem) = vbBigint Then pvItem = CDbl(pvItem)
 
 Exit_Function:
-Const cstObject = &quot;[com.sun.star.script.NativeObjectWrapper]&quot;
 	If Not _CheckArgument Then
 		If IsMissing(pvError) Then pvError = True
 		If pvError Then
@@ -198,7 +197,7 @@ Dim oPip As Object, sLocation As String
 End Function	&apos;	ExtensionLocation
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Private Function _getResultSetColumnValue(poResultSet As Object _
+Private Function _GetResultSetColumnValue(poResultSet As Object _
 											, ByVal piColIndex As Integer _
 											, Optional ByVal pbReturnBinary As Boolean _
 											) As Variant
@@ -207,7 +206,7 @@ REM get the data for the column specified by ColIndex
 REM If pbReturnBinary = False (default) then return length of binary field
 REM get type name from metadata
 	
-Dim vValue As Variant, sType As String, vDateTime As Variant, oValue As Object
+Dim vValue As Variant, iType As Integer, vDateTime As Variant, oValue As Object
 Dim bNullable As Boolean, lSize As Long
 Const cstMaxTextLength = 65535
 Const cstMaxBinlength = 2 * 65535
@@ -215,15 +214,15 @@ Const cstMaxBinlength = 2 * 65535
 	On Local Error Goto 0			&apos;	Disable error handler
 	vValue = Null					&apos;	Default value if error
 	If IsMissing(pbReturnBinary) Then pbReturnBinary = False
-	With poResultSet
-		sType = .MetaData.getColumnTypeName(piColIndex)
-		bNullable = ( .MetaData.IsNullable(piColIndex) = com.sun.star.sdbc.ColumnValue.NULLABLE )
-		Select Case sType
-			Case &quot;ARRAY&quot;:							vValue = .getArray(piColIndex)
-			Case &quot;BINARY&quot;, &quot;VARBINARY&quot;, &quot;LONGVARBINARY&quot;, &quot;BLOB&quot;
-													Set oValue = .getBinaryStream(piColIndex)
+	With com.sun.star.sdbc.DataType
+		iType = poResultSet.MetaData.getColumnType(piColIndex)
+		bNullable = ( poResultSet.MetaData.IsNullable(piColIndex) = com.sun.star.sdbc.ColumnValue.NULLABLE )
+		Select Case iType
+			Case .ARRAY						:		vValue = poResultSet.getArray(piColIndex)
+			Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
+													Set oValue = poResultSet.getBinaryStream(piColIndex)
 													If bNullable Then
-														If Not .wasNull() Then
+														If Not poResultSet.wasNull() Then
 															If Not _hasUNOMethod(oValue, &quot;getLength&quot;) Then	&apos;	When no recordset
 																lSize = cstMaxBinLength
 															Else
@@ -233,57 +232,58 @@ Const cstMaxBinlength = 2 * 65535
 																vValue = Array()
 																oValue.readBytes(vValue, lSize)
 															Else	&apos;	Return length of field, not content
+																vValue = lSize
 															End If
 														End If
 													End If
 													oValue.closeInput()
-			Case &quot;BIT&quot;, &quot;BOOLEAN&quot;:					vValue = .getBoolean(piColIndex)
-			Case &quot;BYTE&quot;:							vValue = .getByte(piColIndex)
-			Case &quot;BYTES&quot;:							vValue = .getBytes(piColIndex)
-			Case &quot;DATE&quot;:							vDateTime = .getDate(piColIndex)
-													If Not .wasNull() Then vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day))
-			Case &quot;DOUBLE&quot;, &quot;REAL&quot;:					vValue = .getDouble(piColIndex)
-			Case &quot;FLOAT&quot;:							vValue = .getFloat(piColIndex)
-			Case &quot;INTEGER&quot;, &quot;SMALLINT&quot;:				vValue = .getInt(piColIndex)
-			Case &quot;LONG&quot;, &quot;BIGINT&quot;: 					vValue = .getLong(piColIndex)
-			Case &quot;DECIMAL&quot;, &quot;NUMERIC&quot;:				vValue = .getDouble(piColIndex)
-			Case &quot;NULL&quot;:							vValue = .getNull(piColIndex)
-			Case &quot;OBJECT&quot;:							vValue = Null	&apos;	.getObject(piColIndex)	does not work that well in Basic ...
-			Case &quot;REF&quot;:								vValue = .getRef(piColIndex)
-			Case &quot;SHORT&quot;, &quot;TINYINT&quot;:				vValue = .getShort(piColIndex)
-			Case &quot;CHAR&quot;, &quot;VARCHAR&quot;:					vValue = .getString(piColIndex)
-			Case &quot;LONGVARCHAR&quot;, &quot;CLOB&quot;
-													Set oValue = .getCharacterStream(piColIndex)
+			Case .BIT, .BOOLEAN				:		vValue = poResultSet.getBoolean(piColIndex)
+			Case .DATE						:		vDateTime = poResultSet.getDate(piColIndex)
+													If Not poResultSet.wasNull() Then vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day))
+			Case .DISTINCT, .OBJECT, .OTHER, .STRUCT
+													vValue = Null
+			Case .DOUBLE, .REAL				:		vValue = poResultSet.getDouble(piColIndex)
+			Case .FLOAT						:		vValue = poResultSet.getFloat(piColIndex)
+			Case .INTEGER, .SMALLINT		:		vValue = poResultSet.getInt(piColIndex)
+			Case .BIGINT					:		vValue = poResultSet.getLong(piColIndex)
+			Case .DECIMAL, .NUMERIC			:		vValue = poResultSet.getDouble(piColIndex)
+			Case .SQLNULL					:		vValue = poResultSet.getNull(piColIndex)
+			Case .OBJECT, .OTHER, .STRUCT	:		vValue = Null
+			Case .REF						:		vValue = poResultSet.getRef(piColIndex)
+			Case .TINYINT					:		vValue = poResultSet.getShort(piColIndex)
+			Case .CHAR, .VARCHAR			:		vValue = poResultSet.getString(piColIndex)
+			Case .LONGVARCHAR, .CLOB
+													Set oValue = poResultSet.getCharacterStream(piColIndex)
 													If bNullable Then
-														If Not .wasNull() Then
+														If Not poResultSet.wasNull() Then
 															If Not _hasUNOMethod(oValue, &quot;getLength&quot;) Then	&apos;	When no recordset
 																lSize = cstMaxTextLength
 															Else
 																lSize = CLng(oValue.getLength())
 															End If
 															oValue.closeInput()
-															If lSize &lt;= cstMaxBinLength Then vValue = .getString(piColIndex) Else vValue = &quot;&quot;
+															If lSize &lt;= cstMaxBinLength Then vValue = poResultSet.getString(piColIndex) Else vValue = &quot;&quot;
 														End If
 													Else
 														oValue.closeInput()
 													End If
-			Case &quot;TIME&quot;:							vDateTime = .getTime(piColIndex)
-													If Not .wasNull() Then vValue = TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
-			Case &quot;TIMESTAMP&quot;:						vDateTime = .getTimeStamp(piColIndex)
-													If Not .wasNull() Then vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day)) _
+			Case .TIME						:		vDateTime = poResultSet.getTime(piColIndex)
+													If Not poResultSet.wasNull() Then vValue = TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
+			Case .TIMESTAMP					:		vDateTime = poResultSet.getTimeStamp(piColIndex)
+													If Not poResultSet.wasNull() Then vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day)) _
 																+ TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
 			Case Else
-				vValue = .getString(piColIndex)						&apos;GIVE STRING A TRY
+				vValue = poResultSet.getString(piColIndex)						&apos;GIVE STRING A TRY
 				If IsNumeric(vValue) Then vValue = Val(vValue)		&apos;Required when type = &quot;&quot;, sometimes numeric fields are returned as strings (query/MSAccess)
 		End Select
 		If bNullable Then
-			If .wasNull() Then vValue = Null
+			If poResultSet.wasNull() Then vValue = Null
 		End If
 	End With
 	
-	_getResultSetColumnValue = vValue
+	_GetResultSetColumnValue = vValue
 	
-End Function	&apos;	getResultSetColumnValue		V 1.5.0
+End Function	&apos;	GetResultSetColumnValue		V 1.5.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _FinalProperty(psShortcut As String) As String
@@ -327,6 +327,16 @@ Dim sProdName as String
 End Function	&apos;	GetProductName		V1.0.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _GetRandomFileName(ByVal psName As String) As String
+&apos;	Return the full name of a random temporary file suffixed by psName
+
+Dim sRandom As String
+	sRandom = Right(&quot;000000&quot; &amp; Int(999999 * Rnd), 6)
+	_GetRandomFileName = Utils._getTempDirectoryURL() &amp; &quot;/&quot; &amp; &quot;A2B_TEMP_&quot; &amp; psName &amp; &quot;_&quot; &amp; sRandom
+
+End Function	&apos;	GetRandomFileName
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _GetRegistryKeyContent(sKeyName as string, Optional bforUpdate as Boolean) As Variant
 &apos;Implement ConfigurationProvider service
 &apos;Derived from Tools library
@@ -343,6 +353,27 @@ Dim aNodePath(0) as new com.sun.star.beans.PropertyValue
 		_GetRegistryKeyContent() = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, aNodePath())
 	End If
 End Function	&apos;	GetRegistryKeyContent	V0.8.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _getTempDirectoryURL()	As String
+&apos;	Return the temporary directory defined in the OO Options (Paths)
+Dim sDirectory As String, oSettings As Object, oPathSettings As Object	
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	
+	_getTempDirectoryURL = &quot;&quot;
+	oPathSettings = createUnoService( &quot;com.sun.star.util.PathSettings&quot; )
+	sDirectory = oPathSettings.GetPropertyValue( &quot;Temp&quot; )
+	
+	_getTempDirectoryURL = sDirectory
+
+Exit_Function:
+	Exit Function
+Error_Function:
+	TraceError(&quot;ERROR&quot;, Err, &quot;_getTempDirectoryURL&quot;, Erl)
+	_getTempDirectoryURL = &quot;&quot;
+	Goto Exit_Function
+End Function	&apos;	_getTempDirectoryURL		V0.8.5
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _getUNOTypeName(pvObject As Variant) As String
@@ -493,6 +524,20 @@ Dim iLength As Integer
 End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _IsBinaryType(ByVal lType As Long) As Boolean
+
+	With com.sun.star.sdbc.DataType
+		Select Case lType
+			Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
+				_IsBinaryType = True
+			Case Else
+				_IsBinaryType = False
+		End Select
+	End With
+
+End Function	&apos;	IsBinaryType	V1.6.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _IsPseudo(pvObject As Variant, ByVal pvType As Variant) As Boolean
 &apos;	Test pvObject:	does it exist ?
 &apos;					is the _Type item = one of the proposed pvTypes ?
@@ -542,7 +587,7 @@ Dim oDoc As Object, oForms As Variant
 					End If
 				End If
 			Case OBJDATABASE
-				If ._DbConnect = DBCONNECTFORM Then bPseudoExists = True Else bPseudoExists = .Document.CurrentController.IsConnected
+				If ._DbConnect = DBCONNECTFORM Then bPseudoExists = True Else bPseudoExists = Not IsNull(.Connection)
 			Case OBJDIALOG
 				If ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of dialog name
 					bPseudoExists = ( _A2B_.hasItem(COLLALLDIALOGS, ._Name) )
@@ -652,7 +697,7 @@ Dim lChar As Long, sByte1 As String, sByte2 As String, sByte3 As String
 			_PercentEncode = psChar
 		Case Asc(&quot;-&quot;), Asc(&quot;.&quot;), Asc(&quot;_&quot;), Asc(&quot;~&quot;)
 			_PercentEncode = psChar
-		Case Asc(&quot;!&quot;), Asc(&quot;$&quot;), Asc(&quot;&amp;&quot;), Asc(&quot;&apos;&quot;), Asc(&quot;(&quot;), Asc(&quot;)&quot;), Asc(&quot;*&quot;), Asc(&quot;+&quot;), Asc(&quot;,&quot;), Asc(&quot;;&quot;), Asc(&quot;=&quot;)	&apos;	Reserved characters used as delimiter in query strings
+		Case Asc(&quot;!&quot;), Asc(&quot;$&quot;), Asc(&quot;&amp;&quot;), Asc(&quot;&apos;&quot;), Asc(&quot;(&quot;), Asc(&quot;)&quot;), Asc(&quot;*&quot;), Asc(&quot;+&quot;), Asc(&quot;,&quot;), Asc(&quot;;&quot;), Asc(&quot;=&quot;)	&apos;	Reserved characters used as delimitors in query strings
 			_PercentEncode = psChar
 		Case Asc(&quot; &quot;), Asc(&quot;%&quot;)
 			_PercentEncode = &quot;%&quot; &amp; Right(&quot;00&quot; &amp; Hex(lChar), 2)
@@ -829,6 +874,81 @@ Dim sTrim As String, vTrim() As Variant, i As Integer, j As Integer, iCount As I
 	_TrimArray() = vTrim()
 
 End Function	&apos;	TrimArray	V0.9.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _UpdateResultSetColumnValue(piRDBMS As Integer _
+											, poResultSet As Object _
+											, ByVal piColIndex As Integer _
+											, ByVal pvValue As Variant _
+											) As Boolean
+REM store the pvValue for the column specified by ColIndex
+REM get type name from metadata
+	
+Dim iType As Integer, vDateTime As Variant, oValue As Object
+Dim bNullable As Boolean, lSize As Long, iValueType As Integer, sValueTypeName As String
+Const cstMaxTextLength = 65535
+Const cstMaxBinlength = 2 * 65535
+
+	On Local Error Goto 0			&apos;	Disable error handler
+	_UpdateResultSetColumnValue = False
+	With com.sun.star.sdbc.DataType
+		iType = poResultSet.MetaData.getColumnType(piColIndex)
+		iValueType = VarType(pvValue)
+		sValueTypeName = UCase(poResultSet.MetaData.getColumnTypeName(piColIndex))
+		bNullable = ( poResultSet.MetaData.IsNullable(piColIndex) = com.sun.star.sdbc.ColumnValue.NULLABLE )
+
+		If bNullable And IsNull(pvValue) Then
+			poResultSet.updateNull(piColIndex)
+		Else
+			Select Case iType
+				Case .ARRAY, .DISTINCT, .OBJECT, .OTHER, .REF, .SQLNULL, .STRUCT
+														poResultSet.updateNull(piColIndex)
+				Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
+														poResultSet.updateBytes(piColIndex, pvValue)
+				Case .BIT, .BOOLEAN				:		poResultSet.updateBoolean(piColIndex, pvValue)
+				Case .DATE						:		vDateTime = CreateUnoStruct(&quot;com.sun.star.util.Date&quot;)
+														vDateTime.Year = Year(pvValue)
+														vDateTime.Month = Month(pvValue)
+														vDateTime.Day = Day(pvValue)
+														poResultSet.updateDate(piColIndex, vDateTime)
+				Case .DECIMAL, .NUMERIC			:		poResultSet.updateDouble(piColIndex, pvValue)
+				Case .DOUBLE, .REAL				:		poResultSet.updateDouble(piColIndex, pvValue)
+				Case .FLOAT						:		poResultSet.updateFloat(piColIndex, pvValue)
+				Case .INTEGER, .SMALLINT		:		poResultSet.updateInt(piColIndex, pvValue)
+				Case .BIGINT					:		poResultSet.updateLong(piColIndex, pvValue)
+				Case .DECIMAL, .NUMERIC			:		poResultSet.updateDouble(piColIndex, pvValue)
+				Case .TINYINT					:		poResultSet.updateShort(piColIndex, pvValue)
+				Case .CHAR, .VARCHAR, .LONGVARCHAR, .CLOB
+														If piRDBMS = DBMS_SQLITE And InStr(sValueTypeName, &quot;BINARY&quot;) &gt;0 Then		&apos;	Sqlite exception ... !
+															poResultSet.updateBytes(piColIndex, pvValue)
+														Else
+															poResultSet.updateString(piColIndex, pvValue)
+														End If
+				Case .TIME						:		vDateTime = CreateUnoStruct(&quot;com.sun.star.util.Time&quot;)
+														vDateTime.Hours = Hour(pvValue)
+														vDateTime.Minutes = Minute(pvValue)
+														vDateTime.Seconds = Second(pvValue)
+														&apos;vDateTime.HundredthSeconds = 0
+														poResultSet.updateTime(piColIndex, vDateTime)
+				Case .TIMESTAMP					:		vDateTime = CreateUnoStruct(&quot;com.sun.star.util.DateTime&quot;)
+														vDateTime.Year = Year(pvValue)
+														vDateTime.Month = Month(pvValue)
+														vDateTime.Day = Day(pvValue)
+														vDateTime.Hours = Hour(pvValue)
+														vDateTime.Minutes = Minute(pvValue)
+														vDateTime.Seconds = Second(pvValue)
+														&apos;vDateTime.HundredthSeconds = 0
+														poResultSet.updateTimestamp(piColIndex, vDateTime)
+				Case Else
+					If bNullable Then poResultSet.updateNull(piColIndex)
+			End Select
+		End If
+
+	End With
+	
+	_UpdateResultSetColumnValue = True
+	
+End Function	&apos;	UpdateResultSetColumnValue		V 1.6.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _URLEncode(ByVal psToEncode As String) As String

@@ -23,6 +23,13 @@ Private	Connection				As Object				&apos;	com.sun.star.sdbc.drivers.OConnectionW
 Private	URL						As String
 Private _ReadOnly				As Boolean
 Private	MetaData				As Object				&apos;	interface XDatabaseMetaData
+Private _RDBMS					As Integer				&apos;	DBMS constants
+Private _ColumnTypes()			As Variant				&apos;	Part of Metadata.GetTypeInfo()
+Private _ColumnTypeNames()		As Variant
+Private _ColumnPrecisions()		As Variant
+Private _ColumnTypesReference()	As Variant
+Private _ColumnTypesAlias()		As Variant				&apos;	To what should a field whose origin is another DBMS be converted ? See DataTypes By RDBMS.ods
+Private _BinaryStream			As Boolean				&apos;	False = binary fields must NOT be streamed f.i. via ReadAllBytes or WriteAllBytes
 Private	Form					As Object				&apos;	com.sun.star.form.XForm
 Private FormName				As String
 Private RecordsetMax			As Integer
@@ -41,6 +48,13 @@ Private Sub Class_Initialize()
 	URL = &quot;&quot;
 	_ReadOnly = False
 	Set MetaData = Nothing
+	_RDBMS = DBMS_UNKNOWN
+	_ColumnTypes = Array()
+	_ColumnTypeNames = Array()
+	_ColumnPrecisions = Array()
+	_ColumnTypesReference = Array()
+	_ColumnTypesAlias() = Array()
+	_BinaryStream = False
 	Set Form = Nothing
 	FormName = &quot;&quot;
 	RecordsetMax = 0
@@ -1059,6 +1073,119 @@ Error_Function:		&apos;	Item by key aborted
 	_hasRecordset = False
 	GoTo Exit_Function
 End Function	&apos;	_hasRecordset	V0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Sub _LoadMetadata()
+&apos;	Load essentially getTypeInfo() results from Metadata
+
+Dim sProduct As String
+Dim iInfo As Integer, oTypeInfo As Object, sName As String, lType As Integer
+
+Const cstMaxInfo = 40
+	ReDim _ColumnTypes(0 To cstMaxInfo)
+	ReDim _ColumnTypeNames(0 To cstMaxInfo)
+	ReDim _ColumnPrecisions(0 To cstMaxInfo)
+Const cstHSQLDB1 = &quot;HSQL Database Engine 1.&quot;
+Const cstHSQLDB2 = &quot;HSQL Database Engine 2.&quot;
+Const cstMSAccess2003 = &quot;MS Jet 0&quot;
+Const cstMSAccess2007 = &quot;MS Jet 04.&quot;
+Const cstMYSQL = &quot;MySQL&quot;
+Const cstPOSTGRES = &quot;PostgreSQL&quot;
+Const cstSQLITE = &quot;SQLite&quot;
+
+	With com.sun.star.sdbc.DataType
+		_ColumnTypesReference = Array( _
+			.ARRAY _
+			, .BIGINT _
+			, .BINARY _
+			, .BIT _
+			, .BLOB _
+			, .BOOLEAN _
+			, .CHAR _
+			, .CLOB _
+			, .DATE _
+			, .DECIMAL _
+			, .DISTINCT _
+			, .DOUBLE _
+			, .FLOAT _
+			, .INTEGER _
+			, .LONGVARBINARY _
+			, .LONGVARCHAR _
+			, .NUMERIC _
+			, .OBJECT _
+			, .OTHER _
+			, .REAL _
+			, .REF _
+			, .SMALLINT _
+			, .SQLNULL _
+			, .STRUCT _
+			, .TIME _
+			, .TIMESTAMP _
+			, .TINYINT _
+			, .VARBINARY _
+			, .VARCHAR _
+		)
+	End With
+
+	With Metadata
+		sProduct = .getDatabaseProductName() &amp; &quot; &quot; &amp; .getDatabaseProductVersion
+		Select Case True
+			Case Len(sProduct) &gt; Len(cstHSQLDB1) And Left(sProduct, Len(cstHSQLDB1)) = cstHSQLDB1
+				_RDBMS = DBMS_HSQLDB1
+				_ColumnTypesAlias = Array(0, -5, -2, 16, -4, 16, 1, -1, 91, 3, 0, 8, 6, 4, -4, -1, 2, 0, 0, 7, 0, 5, 0, 0, 92, 93, -6, -3, 12)
+				_BinaryStream = True
+			Case Len(sProduct) &gt; Len(cstHSQLDB2) And Left(sProduct, Len(cstHSQLDB2)) = cstHSQLDB2
+				_RDBMS = DBMS_HSQLDB2
+				_ColumnTypesAlias = Array(0, -5, -3, -7, 2004, 16, 1, 2005, 91, 3, 0, 8, 8, 4, -3, 12, 2, 0, 0, 8, 0, 5, 0, 0, 92, 93, -6, -3, 12)
+				_BinaryStream = True
+			Case Len(sProduct) &gt; Len(cstMSAccess2007) And Left(sProduct, Len(cstMSAccess2007)) = cstMSAccess2007
+				_RDBMS = DBMS_MSACCESS2007
+				_ColumnTypesAlias = Array(0, 4, -2, 16, -2, 16, 12, 12, 93, 8, 0, 8, 6, 4, -3, 12, 2, 0, 0, 8, 0, 5, 0, 0, 93, 93, -6, -2, 12)
+				_BinaryStream = True
+			Case Len(sProduct) &gt; Len(cstMSAccess2003) And Left(sProduct, Len(cstMSAccess2003)) = cstMSAccess2003
+				_RDBMS = DBMS_MSACCESS2003
+				_ColumnTypesAlias = Array(0, 4, -2, 16, -2, 16, 12, 12, 93, 8, 0, 8, 6, 4, -3, 12, 2, 0, 0, 8, 0, 5, 0, 0, 93, 93, -6, -2, 12)
+				_BinaryStream = True
+			Case Len(sProduct) &gt; Len(cstMYSQL) And Left(sProduct, Len(cstMYSQL)) = cstMYSQL
+				_RDBMS = DBMS_MYSQL
+				_ColumnTypesAlias = Array(0, -5, -2, -7, -4, -7, 1, -1, 91, 3, 0, 8, 8, 4, -4, -1, 2, 0, 0, 7, 0, 5, 0, 0, 92, 93, -6, -3, -1)
+				_BinaryStream = False
+			Case Len(sProduct) &gt; Len(cstPOSTGRES) And Left(sProduct, Len(cstPOSTGRES)) = cstPOSTGRES
+				_RDBMS = DBMS_POSTGRES
+				_ColumnTypesAlias = Array(0, -5, -3, 16, -3, 16, 1, 12, 91, 8, 0, 8, 8, 4, -3, 12, 2, 0, 0, 7, 0, 5, 0, 0, 92, 93, 4, -3, 12)
+				_BinaryStream = True
+			Case Len(sProduct) &gt; Len(cstSQLITE) And Left(sProduct, Len(cstSQLITE)) = cstSQLITE
+				_RDBMS = DBMS_SQLITE
+				_ColumnTypesAlias = Array(0, -5, -4, -7, -4, -7, 1, -1, 91, 8, 0, 8, 6, 4, -4, -1, 8, 0, 0, 8, 0, 5, 0, 0, 92, 93, -6, -4, 12)
+				_BinaryStream = True
+			Case Else		&apos;	Firebird TODO
+				_RDBMS = DBMS_UNKNOWN
+				_BinaryStream = True
+		End Select
+
+		iInfo = -1
+		Set oTypeInfo = MetaData.getTypeInfo()
+		With oTypeInfo
+			.next()
+			Do While Not .isAfterLast() And iInfo &lt; cstMaxInfo
+				sName = .getString(1)
+				lType = .getLong(2)
+				If _RDBMS = DBMS_POSTGRES And (Left(sName, 1) &lt;&gt; &quot;_&quot; Or lType &lt;&gt; -1) Then		&apos;	Skip
+				Else
+					iInfo = iInfo + 1
+					_ColumnTypeNames(iInfo) = sName
+					_ColumnTypes(iInfo) = lType
+					_ColumnPrecisions(iInfo) = .getLong(3)
+				End If
+				.next()
+			Loop
+		End With
+		ReDim Preserve _ColumnTypes(0 To iInfo)
+		ReDim Preserve _ColumnTypeNames(0 To iInfo)
+		ReDim Preserve _ColumnPrecisions(0 To iInfo)
+	End With
+
+End Sub			&apos;	_LoadMetadata	V1.6.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _OutputBooleanToHTML(ByVal pbBool As Boolean) As String

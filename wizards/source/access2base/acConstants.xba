@@ -8,7 +8,7 @@ REM ============================================================================
 Option Explicit
 
 REM Access2Base -----------------------------------------------------
-Global Const Access2Base_Version = &quot;1.5.0&quot;
+Global Const Access2Base_Version = &quot;1.6.0&quot;
 
 REM AcCloseSave
 REM -----------------------------------------------------------------
@@ -87,6 +87,7 @@ Global Const vbUShort = 18
 Global Const vbULong = 19
 Global Const vbBigint = 35
 Global Const vbDecimal = 37
+Global Const vbArray = 8192
 
 REM MsgBox constants
 REM -----------------------------------------------------------------

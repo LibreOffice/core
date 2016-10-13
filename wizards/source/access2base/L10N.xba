@@ -78,6 +78,8 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRFIELDCREATION		:	sLocal = &quot;Field &apos;%0&apos; could not be created&quot;
 				Case &quot;ERR&quot; &amp; ERRSUBFORMNOTFOUND		:	sLocal = &quot;Subform &apos;%0&apos; not found in parent form &apos;%1&apos;&quot;
 				Case &quot;ERR&quot; &amp; ERRWINDOW				:	sLocal = &quot;Current window is not a document&quot;
+				Case &quot;ERR&quot; &amp; ERRCOMPATIBILITY		:	sLocal = &quot;Field &apos;%0&apos; could not be converted due to incompatibility of field types between database systems&quot;
+				Case &quot;ERR&quot; &amp; ERRPRECISION			:	sLocal = &quot;Field &apos;%0&apos; could not be loaded in record #%1 due to capacity shortage&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;OBJECT&quot;						:	sLocal = &quot;Object&quot;
 				Case &quot;TABLE&quot;						:	sLocal = &quot;Table&quot;
@@ -187,6 +189,8 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRFIELDCREATION		:	sLocal = &quot;Le champ &apos;%0&apos; n&apos;a pas pu être créé&quot;
 				Case &quot;ERR&quot; &amp; ERRSUBFORMNOTFOUND		:	sLocal = &quot;Sous-formulaire &apos;%0&apos; non trouvé dans le formulaire parent &apos;%1&apos;&quot;
 				Case &quot;ERR&quot; &amp; ERRWINDOW				:	sLocal = &quot;La fenêtre courante n&apos;est pas un document&quot;
+				Case &quot;ERR&quot; &amp; ERRCOMPATIBILITY		:	sLocal = &quot;Le champ &apos;%0&apos; n&apos;a pas pu être converti à cause d&apos;une incompatibilité entre les types de champs supportés par les systèmes de bases de données respectifs&quot;
+				Case &quot;ERR&quot; &amp; ERRPRECISION			:	sLocal = &quot;Le champ &apos;%0&apos; n&apos;a pas pu être chargé dans l&apos;enregistrement #%1 par manque de capacité&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;OBJECT&quot;						:	sLocal = &quot;Objet&quot;
 				Case &quot;TABLE&quot;						:	sLocal = &quot;Table&quot;

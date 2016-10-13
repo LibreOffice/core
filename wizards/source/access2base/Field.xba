@@ -151,7 +151,7 @@ Dim iChunkType As Integer
 		Select Case Column.Type			&apos;	DOES NOT WORK FOR CHARACTER TYPES
 &apos;			Case .CHAR, .VARCHAR, .LONGVARCHAR, .CLOB
 &apos;				iChunkType = vbString
-			Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
+			Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB, .CHAR	&apos;	.CHAR added for Sqlite3
 				iChunkType = vbByte
 			Case Else
 				Goto Trace_Error
