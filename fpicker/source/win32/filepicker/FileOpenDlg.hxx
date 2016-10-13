@@ -32,10 +32,6 @@
 // into our build environment if have stolen the definition
 // for the new OPENFILENAME structure from the new headers
 
-#ifndef _CDSIZEOF_STRUCT
-#define _CDSIZEOF_STRUCT(structname, member)  (((int)((LPBYTE)(&((structname*)0)->member) - ((LPBYTE)((structname*)0)))) + sizeof(((structname*)0)->member))
-#endif
-
 typedef struct _tagOFNA {
    DWORD        lStructSize;
    HWND         hwndOwner;
@@ -99,19 +95,6 @@ typedef _LPOPENFILENAMEW _LPOPENFILENAME;
 typedef _OPENFILENAMEA _OPENFILENAME;
 typedef _LPOPENFILENAMEA _LPOPENFILENAME;
 #endif // UNICODE
-
-#if (_WIN32_WINNT >= 0x0500)
-    #define _OPENFILENAME_SIZE_VERSION_400A  _CDSIZEOF_STRUCT(_OPENFILENAMEA,lpTemplateName)
-    #define _OPENFILENAME_SIZE_VERSION_400W  _CDSIZEOF_STRUCT(_OPENFILENAMEW,lpTemplateName)
-    #ifdef UNICODE
-        #define _OPENFILENAME_SIZE_VERSION_400  _OPENFILENAME_SIZE_VERSION_400W
-    #else
-        #define _OPENFILENAME_SIZE_VERSION_400  _OPENFILENAME_SIZE_VERSION_400A
-    #endif // !UNICODE
-#else
-    #error _WIN32_WINNT seems not to be valid.
-#endif // (_WIN32_WINNT >= 0x0500)
-
 
 // A simple wrapper class around the Win32 GetOpenFileName API.
 // This class is not thread-safe and only one instance at a
