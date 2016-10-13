@@ -30,9 +30,6 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-typedef ::std::list< OString >               StringList;
-typedef ::std::vector< OString >             StringVector;
-typedef ::std::set< OString >    StringSet;
 
 class AstDeclaration;
 

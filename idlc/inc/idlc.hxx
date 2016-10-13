@@ -132,7 +132,7 @@ private:
     sal_uInt32          m_offsetStart;
     sal_uInt32          m_offsetEnd;
     ParseState          m_parseState;
-    StringSet           m_includes;
+    std::set< OString >           m_includes;
 };
 
 

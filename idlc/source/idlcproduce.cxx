@@ -39,7 +39,7 @@
 
 using namespace ::osl;
 
-StringList* pCreatedDirectories = nullptr;
+std::list< OString >* pCreatedDirectories = nullptr;
 
 static bool checkOutputPath(const OString& completeName)
 {
@@ -83,7 +83,7 @@ static bool checkOutputPath(const OString& completeName)
             } else
             {
                 if ( !pCreatedDirectories )
-                    pCreatedDirectories = new StringList();
+                    pCreatedDirectories = new std::list< OString >();
                 pCreatedDirectories->push_front(buffer.getStr());
             }
         }
@@ -96,8 +96,8 @@ static bool cleanPath()
 {
     if ( pCreatedDirectories )
     {
-        StringList::iterator iter = pCreatedDirectories->begin();
-        StringList::iterator end = pCreatedDirectories->end();
+        std::list< OString >::iterator iter = pCreatedDirectories->begin();
+        std::list< OString >::iterator end = pCreatedDirectories->end();
         while ( iter != end )
         {
 //#ifdef SAL_UNX

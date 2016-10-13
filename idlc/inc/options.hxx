@@ -64,14 +64,14 @@ public:
     const OString&   getOption(const OString& option)
         throw( IllegalArgument );
 
-    const StringVector& getInputFiles() const { return m_inputFiles; }
+    const std::vector< OString >& getInputFiles() const { return m_inputFiles; }
     bool readStdin() const { return m_stdin; }
     bool verbose() const { return m_verbose; }
     bool quiet() const { return m_quiet; }
 
 protected:
     OString  m_program;
-    StringVector    m_inputFiles;
+    std::vector< OString >    m_inputFiles;
     bool            m_stdin;
     bool            m_verbose;
     bool            m_quiet;
