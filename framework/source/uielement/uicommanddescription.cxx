@@ -120,8 +120,8 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         {
             CmdToInfoMap() : bPopup( false ),
                              bCommandNameCreated( false ),
-                             nProperties( 0 ),
-                             nIsExperimental(0) {}
+                             nIsExperimental( 0 ),
+                             nProperties( 0 ) {}
 
             OUString            aLabel;
             OUString            aContextLabel;
