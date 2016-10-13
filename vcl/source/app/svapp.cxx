@@ -1233,6 +1233,13 @@ OUString Application::GetHWOSConfInfo()
         aDetails.append( VclResId(SV_APP_DEFAULT).toString() );
     aDetails.append( "; " );
 
+#ifdef LINUX
+    // Only linux has different backends, so don't show blank for others.
+    aDetails.append( VclResId(SV_APP_VCLBACKEND).toString() );
+    aDetails.append( GetToolkitName() );
+    aDetails.append( "; " );
+#endif
+
     return aDetails.makeStringAndClear();
 }
 

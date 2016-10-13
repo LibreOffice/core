@@ -183,6 +183,7 @@
 #define SV_APP_UIRENDER                             10802
 #define SV_APP_GL                                   10803
 #define SV_APP_DEFAULT                              10804
+#define SV_APP_VCLBACKEND                           10805
 
 #define SV_ICON_SIZE48_START                        20000
 #define SV_ICON_SIZE32_START                        21000
