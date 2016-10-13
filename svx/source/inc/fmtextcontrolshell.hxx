@@ -74,7 +74,6 @@ namespace svx
     };
 
     class FmTextControlShell :public IFocusObserver
-                             ,public ISlotInvalidator
                              ,public IContextRequestObserver
     {
     private:
@@ -136,6 +135,8 @@ namespace svx
         */
         void    designModeChanged( bool _bNewDesignMode );
 
+        void    Invalidate( SfxSlotId _nSlot );
+
     protected:
         // IFocusObserver
         virtual void    focusGained( const css::awt::FocusEvent& _rEvent ) override;
@@ -144,10 +145,6 @@ namespace svx
         // IContextRequestObserver
         virtual void    contextMenuRequested( const css::awt::MouseEvent& _rEvent ) override;
 
-        // ISlotInvalidator
-        virtual void    Invalidate( SfxSlotId _nSlot ) override;
-
-    protected:
         enum AttributeSet { eCharAttribs, eParaAttribs };
         void    executeAttributeDialog( AttributeSet _eSet, SfxRequest& _rReq );
         void    executeSelectAll( );

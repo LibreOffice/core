@@ -30,6 +30,7 @@
 
 namespace svx
 {
+    class FmTextControlShell;
 
     typedef ::cppu::WeakImplHelper <   css::frame::XStatusListener
                                     >   FmTextControlFeature_Base;
@@ -42,7 +43,7 @@ namespace svx
         css::util::URL                  m_aFeatureURL;
         css::uno::Any                   m_aFeatureState;
         SfxSlotId                       m_nSlotId;
-        ISlotInvalidator*               m_pInvalidator;
+        FmTextControlShell*             m_pInvalidator;
         bool                            m_bFeatureEnabled;
 
     public:
@@ -56,7 +57,7 @@ namespace svx
             const css::uno::Reference< css::frame::XDispatch >& _rxDispatcher,
             const css::util::URL& _rFeatureURL,
             SfxSlotId _nId,
-            ISlotInvalidator* _pInvalidator
+            FmTextControlShell* _pInvalidator
         );
 
         /// determines whether the feature we're responsible for is currently enabled

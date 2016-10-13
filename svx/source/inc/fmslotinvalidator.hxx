@@ -23,15 +23,6 @@
 namespace svx
 {
     typedef sal_uInt16 SfxSlotId;
-
-    class ISlotInvalidator
-    {
-    public:
-        virtual void    Invalidate( SfxSlotId _nSlot ) = 0;
-
-    protected:
-        ~ISlotInvalidator() {}
-    };
 }
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX

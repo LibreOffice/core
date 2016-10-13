@@ -351,7 +351,6 @@ merge svx::IContextRequestObserver with svx::FmTextControlShell
 merge svx::IControllerFeatureInvalidation with FmXFormShell
 merge svx::IFocusObserver with svx::FmTextControlShell
 merge svx::IPropertyValueProvider with svx::PropertyValueProvider
-merge svx::ISlotInvalidator with svx::FmTextControlShell
 merge svx::RegistrationItemSetHolder with svx::DatabaseRegistrationDialog
 merge svx::sidebar::SvxShapeCommandsMap with svx::sidebar::DefaultShapesPanel
 merge svxform::(anonymous namespace)::IScript with svxform::(anonymous namespace)::NewStyleUNOScript
