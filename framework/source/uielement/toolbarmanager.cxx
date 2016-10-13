@@ -1025,6 +1025,12 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         aProp[i].Value >>= nStyle;
                 }
 
+                if (vcl::CommandInfoProvider::Instance().IsExperimental(aCommandURL, m_aModuleIdentifier) &&
+                    !SvtMiscOptions().IsExperimentalMode())
+                {
+                    continue;
+                }
+
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
                     OUString aString(vcl::CommandInfoProvider::Instance().GetLabelForCommand(aCommandURL, m_xFrame));
