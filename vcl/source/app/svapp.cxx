@@ -1213,6 +1213,10 @@ OUString Application::GetHWOSConfInfo()
         aDetails.append( VclResId(SV_APP_DEFAULT).toString() );
     aDetails.append( "; " );
 
+    aDetails.append( VclResId(SV_APP_VCLBACKEND).toString() );
+    aDetails.append( GetToolkitName() );
+    aDetails.append( "; " );
+
     return aDetails.makeStringAndClear();
 }
 
