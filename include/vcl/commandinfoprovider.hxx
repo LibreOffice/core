@@ -101,6 +101,11 @@ public:
     bool IsRotated(const OUString& rsCommandName);
     bool IsMirrored(const OUString& rsCommandName);
 
+    /** Returns whether the command is experimental. */
+    bool IsExperimental(
+        const OUString& rsCommandName,
+        const OUString& rModuleName);
+
     /** Do not call.  Should be part of a local and hidden interface.
     */
     void SetFrame (const css::uno::Reference<css::frame::XFrame>& rxFrame);

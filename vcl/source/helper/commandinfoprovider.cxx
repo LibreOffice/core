@@ -300,6 +300,36 @@ bool CommandInfoProvider::IsMirrored(const OUString& rsCommandName)
     return ResourceHasKey("private:resource/image/commandmirrorimagelist", rsCommandName);
 }
 
+bool CommandInfoProvider::IsExperimental(const OUString& rsCommandName,
+                                         const OUString& rModuleName)
+{
+    Sequence<beans::PropertyValue> aProperties;
+    try
+    {
+        if( rModuleName.getLength() > 0)
+        {
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+            Reference<container::XNameAccess> xUICommandLabels;
+            if (xNameAccess->getByName( rModuleName ) >>= xUICommandLabels )
+                xUICommandLabels->getByName(rsCommandName) >>= aProperties;
+
+            for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
+            {
+                if (aProperties[nIndex].Name == "IsExperimental")
+                {
+                    sal_Int32 nValue;
+                    aProperties[nIndex].Value >>= nValue;
+                    return nValue == 1;
+                }
+            }
+        }
+    }
+    catch (Exception&)
+    {
+    }
+    return false;
+}
+
 void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
 {
     if (rxFrame != mxCachedDataFrame)
