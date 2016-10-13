@@ -196,6 +196,7 @@ void FuConstRectangle::Activate()
     switch (aSfxRequest.GetSlot() )
     {
         case SID_DRAW_LINE:
+        case SID_DRAW_XLINE:
         case SID_LINE_ARROW_END:
         case SID_LINE_ARROW_CIRCLE:
         case SID_LINE_ARROW_SQUARE:
@@ -403,6 +404,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
         switch(nID)
         {
             case SID_DRAW_LINE:
+            case SID_DRAW_XLINE:
             case SID_LINE_ARROW_END:
             case SID_LINE_ARROW_CIRCLE:
             case SID_LINE_ARROW_SQUARE:
