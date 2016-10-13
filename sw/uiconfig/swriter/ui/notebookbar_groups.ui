@@ -225,7 +225,7 @@
       <object class="GtkMenuItem" id="bold">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Stron Emphasis</property>
+        <property name="label" translatable="yes">Strong Emphasis</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -271,11 +271,9 @@
                     <property name="spacing">3</property>
                     <child>
                       <object class="GtkButton" id="newb">
-                        <property name="label" translatable="yes">New</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Create a new document</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="action_name">.uno:AddDirect</property>
@@ -292,11 +290,9 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="openb">
-                        <property name="label" translatable="yes">Open</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Open a document</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="action_name">.uno:Open</property>
@@ -325,7 +321,6 @@
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkButton" id="saveb">
-                        <property name="label" translatable="yes">Save</property>
                         <property name="width_request">60</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -358,7 +353,6 @@
                     <property name="spacing">3</property>
                     <child>
                       <object class="GtkButton" id="printb">
-                        <property name="label" translatable="yes">Print</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -378,13 +372,12 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="pdfb">
-                        <property name="label" translatable="yes">PDF</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
-                        <property name="action_name">.uno:ExportToPDF</property>
+                        <property name="action_name">.uno:ExportDirectToPDF</property>
                         <property name="image">pdfi</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>
@@ -480,11 +473,9 @@
                     <property name="spacing">3</property>
                     <child>
                       <object class="GtkButton" id="undob">
-                        <property name="label" translatable="yes">Undo</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Create a new document</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="action_name">.uno:Undo</property>
@@ -501,11 +492,9 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="copyb">
-                        <property name="label" translatable="yes">Copy</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Open a document</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="action_name">.uno:Copy</property>
@@ -535,7 +524,6 @@
                     <property name="spacing">3</property>
                     <child>
                       <object class="GtkButton" id="redob">
-                        <property name="label" translatable="yes">Redo</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -555,7 +543,6 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="pasteb">
-                        <property name="label" translatable="yes">Paste</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -681,6 +668,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="sfxlo-SidebarToolBox" id="font">
+                            <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
                               <object class="GtkToolButton" id="fontname">
@@ -706,7 +694,7 @@
                         <child>
                           <object class="svtlo-FontNameBox" id="fontnamelist">
                             <property name="height_request">36</property>
-                            <property name="visible">True</property>
+                            <property name="visible">False</property>
                             <property name="can_focus">False</property>
                           </object>
                           <packing>
@@ -733,7 +721,7 @@
                           <object class="svtlo-FontSizeBox" id="fontsizelist">
                             <property name="width_request">60</property>
                             <property name="height_request">30</property>
-                            <property name="visible">True</property>
+                            <property name="visible">False</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="hexpand">True</property>
@@ -746,6 +734,7 @@
                         </child>
                         <child>
                           <object class="sfxlo-SidebarToolBox" id="fontheight">
+                            <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="hexpand">True</property>
@@ -874,7 +863,6 @@
                     <property name="spacing">3</property>
                     <child>
                       <object class="GtkButton" id="leftb">
-                        <property name="label" translatable="yes">Left</property>
                         <property name="height_request">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -893,7 +881,6 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="centerb">
-                        <property name="label" translatable="yes">Center</property>
                         <property name="height_request">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -911,7 +898,6 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="rightb">
-                        <property name="label" translatable="yes">Right</property>
                         <property name="height_request">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -942,7 +928,6 @@
                     <property name="spacing">3</property>
                     <child>
                       <object class="GtkButton" id="boldb">
-                        <property name="label" translatable="yes">Bold</property>
                         <property name="height_request">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -961,7 +946,6 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="italicsb">
-                        <property name="label" translatable="yes">Italic</property>
                         <property name="height_request">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -979,7 +963,6 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="underlineb">
-                        <property name="label" translatable="yes">Underline</property>
                         <property name="height_request">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -1106,7 +1089,6 @@
                     <property name="spacing">3</property>
                     <child>
                       <object class="GtkButton" id="bulletsb">
-                        <property name="label" translatable="yes">Bullets</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1124,7 +1106,6 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="numberingb">
-                        <property name="label" translatable="yes">Numbering</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1287,7 +1268,6 @@
                                 <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
                                 <property name="action_name">.uno:InsertTable</property>
-                                <property name="label" translatable="yes">Table</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -1359,7 +1339,6 @@
                         <property name="spacing">3</property>
                         <child>
                           <object class="GtkButton" id="imageb">
-                            <property name="label" translatable="yes">Image</property>
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -1376,7 +1355,6 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="chartb">
-                            <property name="label" translatable="yes">Chart</property>
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -1394,7 +1372,6 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="commentb">
-                            <property name="label" translatable="yes">Comment</property>
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
