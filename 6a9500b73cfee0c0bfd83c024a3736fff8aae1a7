@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_fd40f809",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-10-13T14:34:29Z",
+      "side": 1,
+      "message": "this extra line is a bit superfluous here",
+      "revId": "6a9500b73cfee0c0bfd83c024a3736fff8aae1a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
