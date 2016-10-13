@@ -951,64 +951,23 @@ void Desktop::HandleBootstrapErrors(
     }
     else if ( aBootstrapError == BE_OFFICECONFIG_BROKEN )
     {
-        bool bFireOriginalError(true);
-        comphelper::BackupFileHelper aBackupFileHelper;
-
-        // crerate BackupFileHelper and check if active and if pop is possible
-        if (aBackupFileHelper.isPopPossible())
-        {
-            // for linux (and probably others?) we need to instantiate XDesktop2
-            // to be able to open a *.ui-file based dialog, so do this here locally.
-            // does no harm on win, so better always do this (in error case only anyways)
-            Reference< XComponentContext > xLocalContext = ::comphelper::getProcessComponentContext();
-            Reference< XDesktop2 > xDesktop = css::frame::Desktop::create(xLocalContext);
-
-            ScopedVclPtrInstance< MessageDialog > aQueryShouldRestore(
-                Application::GetDefDialogParent(),
-                "QueryTryToRestoreConfigurationDialog",
-                "desktop/ui/querytrytorestoreconfigurationdialog.ui");
-
-            if (aQueryShouldRestore.get())
-            {
-                if (!aErrorMessage.isEmpty())
-                {
-                    OUString aPrimaryText(aQueryShouldRestore->get_primary_text());
-
-                    aPrimaryText += "\n(\"" + aErrorMessage + "\")";
-                    aQueryShouldRestore->set_primary_text(aPrimaryText);
-                }
-
-                if (RET_YES == aQueryShouldRestore->Execute())
-                {
-                    aBackupFileHelper.tryPop();
-                    bFireOriginalError = false;
-                }
-            }
-        }
-
         // set flag at BackupFileHelper to be able to know if _exit was called and
         // actions are executed after this. This method we are in will not return,
         // but end up in a _exit() call
         comphelper::BackupFileHelper::setExitWasCalled();
 
-        if (bFireOriginalError)
-        {
-            OUString msg(
-                GetMsgString(
-                STR_CONFIG_ERR_ACCESS_GENERAL,
-                ("A general error occurred while accessing your central"
-                " configuration.")));
-            if (!aErrorMessage.isEmpty()) {
-                msg += "\n(\"" + aErrorMessage + "\")";
-            }
-            FatalError(MakeStartupErrorMessage(msg));
+        // enter safe mode, too
+        sfx2::SafeMode::putFlag();
+
+        OUString msg(
+            GetMsgString(
+            STR_CONFIG_ERR_ACCESS_GENERAL,
+            ("A general error occurred while accessing your central"
+            " configuration. SafeMode is initiated.")));
+        if (!aErrorMessage.isEmpty()) {
+            msg += "\n(\"" + aErrorMessage + "\")";
         }
-        else
-        {
-            // Already presented all information to the user.
-            // just do what FatalError does at it's end
-            _exit(EXITHELPER_FATAL_ERROR);
-        }
+        FatalError(MakeStartupErrorMessage(msg));
     }
     else if ( aBootstrapError == BE_USERINSTALL_FAILED )
     {
@@ -1824,6 +1783,7 @@ int Desktop::doShutdown()
         comphelper::BackupFileHelper aBackupFileHelper;
 
         aBackupFileHelper.tryPush();
+        aBackupFileHelper.tryPushExtensionInfo();
     }
 
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)

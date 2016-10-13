@@ -15,6 +15,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/vclmedit.hxx>
+#include <comphelper/backupfilehelper.hxx>
 
 class SafeModeDialog : public Dialog
 {
@@ -34,12 +35,17 @@ private:
     VclPtr<Button> mpBtnQuit;
     VclPtr<Button> mpBtnRestart;
 
-    VclPtr<CheckBox> mpCBExtensions;
-    VclPtr<CheckBox> mpCBCustomizations;
-    VclPtr<CheckBox> mpCBFull;
+    VclPtr<CheckBox> mpCBCheckProfilesafeConfig;
+    VclPtr<CheckBox> mpCBCheckProfilesafeExtensions;
+    VclPtr<CheckBox> mpCBDisableAllExtensions;
+    VclPtr<CheckBox> mpCBResetCustomizations;
+    VclPtr<CheckBox> mpCBResetWholeUserProfile;
+
+    // local BackupFileHelper for handling possible restores
+    comphelper::BackupFileHelper maBackupFileHelper;
 
     static void terminateOffice();
-    static void applyChanges();
+    void applyChanges();
 
     DECL_LINK(CheckBoxHdl, CheckBox&, void);
     DECL_LINK(BtnHdl, Button*, void);

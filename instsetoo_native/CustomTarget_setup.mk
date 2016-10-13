@@ -108,7 +108,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 #  SecureUserConfig :           boolean - switches securing on/off - default false
 #  SecureUserConfigCompress :   boolean - defines if backup data will be compressed - default true
 #  SecureUserConfigNumCopies :  integer - defines how many compressed copies of saved content will be kept - default 2
-#  SecureUserConfigMode:        integer - defines what to secure, default is 0
+#  SecureUserConfigMode:        integer - defines what to secure, default is 1
 #                                           0 : only registrymodifications.xcu
 #                                           1 : a selected amount of user-defined configs
 #                                           2 : everything in the user config directory
@@ -131,7 +131,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'SecureUserConfig=true' \
 		&& echo 'SecureUserConfigCompress=true' \
 		&& echo 'SecureUserConfigNumCopies=2' \
-		&& echo 'SecureUserConfigMode=0' \
+		&& echo 'SecureUserConfigMode=1' \
         && echo 'SecureUserConfigExtensions=true' \
 	) > $@
 
