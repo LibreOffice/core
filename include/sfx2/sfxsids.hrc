@@ -38,8 +38,6 @@
 #define SID_DOCKWIN_8               SID_DOCKWIN_START+8
 #define SID_DOCKWIN_9               SID_DOCKWIN_START+9
 
-#define SID_UNKNOWN                         SID_SFX_START
-
 // default-ids for application
 #define SID_QUITAPP                         (SID_SFX_START + 300)
 #define SID_ABOUT                           (SID_SFX_START + 301)
