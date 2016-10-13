@@ -30,12 +30,18 @@ static bool bUnityMode = false;
 /*
  * This function generates a unique command name for each menu item
  */
-static gchar* GetCommandForItem(GtkSalMenuItem* pSalMenuItem)
+static gchar* GetCommandForItem(GtkSalMenu* pParentMenu, sal_uInt16 nItemId)
 {
     OString aCommand("window-");
-    aCommand = aCommand + OString::number(reinterpret_cast<unsigned long>(pSalMenuItem->mpParentMenu));
-    aCommand = aCommand + "-" + OString::number(pSalMenuItem->mnId);
+    aCommand = aCommand + OString::number(reinterpret_cast<unsigned long>(pParentMenu));
+    aCommand = aCommand + "-" + OString::number(nItemId);
     return g_strdup(aCommand.getStr());
+}
+
+static gchar* GetCommandForItem(GtkSalMenuItem* pSalMenuItem)
+{
+    return GetCommandForItem(pSalMenuItem->mpParentMenu,
+                             pSalMenuItem->mnId);
 }
 
 bool GtkSalMenu::PrepUpdate()
@@ -308,6 +314,27 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
 
     // Delete unused commands.
     RemoveUnusedCommands( pActionGroup, pOldCommandList, pNewCommandList );
+
+    // Resolves: tdf#103166 if the menu is empty, add a disabled
+    // <No Selection Possible> placeholder.
+    sal_Int32 nSectionsCount = g_menu_model_get_n_items(G_MENU_MODEL(pLOMenu));
+    gint nItemsCount = 0;
+    for (nSection = 0; nSection < nSectionsCount; ++nSection)
+    {
+        nItemsCount += g_lo_menu_get_n_items_from_section(pLOMenu, nSection);
+        if (nItemsCount)
+            break;
+    }
+    if (!nItemsCount)
+    {
+        gchar* aNativeCommand = GetCommandForItem(this, 0xFFFF);
+        OUString aPlaceholderText(VclResId(SV_RESID_STRING_NOSELECTIONPOSSIBLE));
+        g_lo_menu_insert_in_section(pLOMenu, nSection-1, 0,
+                                    OUStringToOString(aPlaceholderText, RTL_TEXTENCODING_UTF8).getStr());
+        NativeSetItemCommand(nSection-1, 0, 0xFFFF, aNativeCommand, MenuItemBits::NONE, false, false);
+        NativeSetEnableItem(aNativeCommand, false);
+        g_free(aNativeCommand);
+    }
 }
 
 void GtkSalMenu::Update()
