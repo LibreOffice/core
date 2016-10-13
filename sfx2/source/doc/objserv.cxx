@@ -102,6 +102,8 @@
 #include <sfx2/saveastemplatedlg.hxx>
 #include <memory>
 #include <cppuhelper/implbase.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -1291,7 +1293,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
     uno::Reference< security::XDocumentDigitalSignatures > xLocSigner = xSigner;
 
     bool bSupportsSigning = GetMedium() && GetMedium()->GetFilter() && GetMedium()->GetFilter()->GetSupportsSigning();
-    if (GetMedium() && !GetMedium()->GetName().isEmpty() && (IsOwnStorageFormat(*GetMedium()) || bSupportsSigning) && GetMedium()->GetStorage().is())
+    if (GetMedium() && !GetMedium()->GetName().isEmpty() && ((IsOwnStorageFormat(*GetMedium()) && GetMedium()->GetStorage().is()) || bSupportsSigning))
     {
         try
         {
@@ -1315,8 +1317,22 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
                 aResult = xLocSigner->verifyScriptingContentSignatures( GetMedium()->GetZipStorageToSign_Impl(),
                                                                 uno::Reference< io::XInputStream >() );
             else
-                aResult = xLocSigner->verifyDocumentContentSignatures( GetMedium()->GetZipStorageToSign_Impl(),
-                                                                uno::Reference< io::XInputStream >() );
+            {
+                if (GetMedium()->GetStorage().is())
+                {
+                    // Something ZIP-based.
+                    aResult = xLocSigner->verifyDocumentContentSignatures( GetMedium()->GetZipStorageToSign_Impl(),
+                                                                    uno::Reference< io::XInputStream >() );
+                }
+                else
+                {
+                    // Not ZIP-based, e.g. PDF.
+                    SvStream* pStream = utl::UcbStreamHelper::CreateStream(GetMedium()->GetName(), StreamMode::READ);
+                    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+                    uno::Reference<io::XInputStream> xInputStream(xStream, uno::UNO_QUERY);
+                    aResult = xLocSigner->verifyDocumentContentSignatures(uno::Reference<embed::XStorage>(), xInputStream);
+                }
+            }
         }
         catch( css::uno::Exception& )
         {
