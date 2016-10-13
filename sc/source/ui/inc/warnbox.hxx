@@ -22,34 +22,17 @@
 
 #include <vcl/msgbox.hxx>
 
-/** Message box with warning image and "Do not show again" checkbox. */
-class ScCbWarningBox : public WarningBox
+/** Warning box for "Replace cell contents?".
+    With warning image and "Do not show again" checkbox. */
+class ScReplaceWarnBox : public WarningBox
 {
 public:
-    /** @param rMsgStr  Resource ID for the message text. */
-                                ScCbWarningBox( vcl::Window* pParent, const OUString& rMsgStr );
+                                ScReplaceWarnBox( vcl::Window* pParent );
 
     /** Opens dialog if IsDialogEnabled() returns true.
         @descr  If after executing the dialog the checkbox "Do not show again" is set,
                 the method DisableDialog() will be called. */
     virtual sal_Int16           Execute() override;
-
-    /** Called before executing the dialog. If this method returns false, the dialog will not be opened. */
-    virtual bool                IsDialogEnabled();
-    /** Called, when dialog is exited and the option "Do not show again" is set. */
-    virtual void                DisableDialog();
-};
-
-/** Warning box for "Replace cell contents?". */
-class ScReplaceWarnBox : public ScCbWarningBox
-{
-public:
-                                ScReplaceWarnBox( vcl::Window* pParent );
-
-    /** Reads the configuration key "ReplaceCellsWarning". */
-    virtual bool                IsDialogEnabled() override;
-    /** Sets the configuration key "ReplaceCellsWarning" to false. */
-    virtual void                DisableDialog() override;
 };
 
 #endif

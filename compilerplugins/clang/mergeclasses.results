@@ -92,7 +92,6 @@ merge SalPrinter with PspSalPrinter
 merge SalSession with (anonymous namespace)::IceSalSession
 merge SalSystem with SalGenericSystem
 merge ScBiffReader with ScQProReader
-merge ScCbWarningBox with ScReplaceWarnBox
 merge ScDBFunc with ScTabViewShell
 merge ScDPCache::DBConnector with (anonymous namespace)::DBConnector
 merge ScDocFunc with ScDocFuncDirect
