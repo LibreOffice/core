@@ -1371,7 +1371,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         &&  GetMedium()->GetFilter()
         &&  !GetMedium()->GetName().isEmpty()
         &&  (   (!GetMedium()->GetFilter()->IsOwnFormat() && !GetMedium()->GetFilter()->GetSupportsSigning())
-            ||  !GetMedium()->HasStorage_Impl()
+            ||  (GetMedium()->GetFilter()->IsOwnFormat() && !GetMedium()->HasStorage_Impl())
             )
         )
     {
@@ -1382,7 +1382,8 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
 
     // check whether the document is signed
     ImplGetSignatureState(); // document signature
-    ImplGetSignatureState( true ); // script signature
+    if (GetMedium() && GetMedium()->GetFilter() && GetMedium()->GetFilter()->IsOwnFormat())
+        ImplGetSignatureState( true ); // script signature
     bool bHasSign = ( pImpl->nScriptingSignatureState != SignatureState::NOSIGNATURES || pImpl->nDocumentSignatureState != SignatureState::NOSIGNATURES );
 
     // the target ODF version on saving
