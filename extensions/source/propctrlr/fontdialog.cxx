@@ -21,7 +21,6 @@
 #include "fontdialog.hxx"
 #include "formresid.hrc"
 #include "modulepcr.hxx"
-#include "formlocalid.hrc"
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/types.hxx>

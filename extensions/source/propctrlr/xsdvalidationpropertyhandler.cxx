@@ -26,7 +26,6 @@
 #include "xsddatatypes.hxx"
 #include "modulepcr.hxx"
 #include "formresid.hrc"
-#include "formlocalid.hrc"
 #include "propctrlr.hrc"
 #include "newdatatype.hxx"
 #include "xsdvalidationhelper.hxx"

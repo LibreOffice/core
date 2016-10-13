@@ -18,7 +18,6 @@
  */
 
 #include "formresid.hrc"
-#include "formlocalid.hrc"
 
 String RID_STR_EDITMASK
 {
