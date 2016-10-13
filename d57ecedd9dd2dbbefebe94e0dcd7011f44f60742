@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_cb67f523",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-10-13T14:02:41Z",
+      "side": 1,
+      "message": "Ouch, please don\u0027t copy\u0027n\u0027paste the code so much (if you look at all the switch-cases you\u0027ve added, you\u0027ll see the code is almost identical and the only difference is URL). \n\nHere is what to do instead:",
+      "revId": "d57ecedd9dd2dbbefebe94e0dcd7011f44f60742",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_0b72cde5",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-10-13T14:02:41Z",
+      "side": 1,
+      "message": "Make this whole block a separate function, for example openURL( const OUString \u0026rURL) ... maybe it can even be a static function ... It will take URL from the passed argument and do this xSystemShellExecute dance with it.\n\nThen, you\u0027ll just call it in all switch-cases below",
+      "revId": "d57ecedd9dd2dbbefebe94e0dcd7011f44f60742",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
