@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_fd6c780a",
+        "filename": "vcl/source/app/svapp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2016-10-13T20:45:21Z",
+      "side": 1,
+      "message": "how about enclosing this in:\n\n#if defined(LINUX)\n...\n#endif\n\nso it\u0027s only displayed in Linux?",
+      "revId": "4887cc5edd4960c075193bbc7405b9d021ea0b5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_dd67bc23",
+        "filename": "vcl/source/src/app.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2016-10-13T20:45:21Z",
+      "side": 1,
+      "message": "should be SV_APP_VCLBACKEND, right?",
+      "range": {
+        "startLine": 37,
+        "startChar": 7,
+        "endLine": 37,
+        "endChar": 21
+      },
+      "revId": "4887cc5edd4960c075193bbc7405b9d021ea0b5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
