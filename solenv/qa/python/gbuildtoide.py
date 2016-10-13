@@ -16,15 +16,19 @@ import tempfile
 
 
 class CheckGbuildToIde(unittest.TestCase):
+    def setUp(self):
+        self.tempwork = tempfile.mkdtemp()
+
+    def tearDown(self):
+        subprocess.check_call(['rm', '-rf', self.tempwork])
 
     def test_gbuildtoide(self):
-        tempwork = tempfile.mkdtemp()
         os.chdir(os.path.join(os.environ['SRCDIR'], 'solenv', 'qa', 'python', 'selftest'))
-        subprocess.check_call(['make', 'gbuildtoide', 'WORKDIR=%s' % tempwork])
-        jsonfiles = os.listdir(os.path.join(tempwork, 'GbuildToIde', 'Library'))
+        subprocess.check_call(['make', 'gbuildtoide', 'WORKDIR=%s' % self.tempwork])
+        jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToIde', 'Library'))
         gbuildlibs = []
         for jsonfilename in jsonfiles:
-            with open(os.path.join(tempwork, 'GbuildToIde', 'Library', jsonfilename), 'r') as f:
+            with open(os.path.join(self.tempwork, 'GbuildToIde', 'Library', jsonfilename), 'r') as f:
                 gbuildlibs.append(json.load(f))
         foundlibs = set()
         for lib in gbuildlibs:
@@ -43,10 +47,10 @@ class CheckGbuildToIde(unittest.TestCase):
                 self.assertTrue(False)
         self.assertEqual(foundlibs, set(['gbuildselftest', 'gbuildselftestdep']))
         self.assertEqual(len(foundlibs), 2)
-        jsonfiles = os.listdir(os.path.join(tempwork, 'GbuildToIde', 'Executable'))
+        jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToIde', 'Executable'))
         gbuildexes = []
         for jsonfilename in jsonfiles:
-            with open(os.path.join(tempwork, 'GbuildToIde', 'Executable', jsonfilename), 'r') as f:
+            with open(os.path.join(self.tempwork, 'GbuildToIde', 'Executable', jsonfilename), 'r') as f:
                 gbuildexes.append(json.load(f))
         foundexes = set()
         for exe in gbuildexes:
