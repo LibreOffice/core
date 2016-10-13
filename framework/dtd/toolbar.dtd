@@ -29,7 +29,6 @@
 <!ATTLIST toolbar:toolbaritem
 	xlink:href CDATA #REQUIRED
 	toolbar:visible %boolean; "true"
-	toolbar:text CDATA #IMPLIED
 	toolbar:style CDATA #IMPLIED
 	toolbar:helpid CDATA #IMPLIED
 >
