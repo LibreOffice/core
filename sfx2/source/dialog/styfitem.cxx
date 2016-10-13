@@ -126,13 +126,6 @@ namespace
         {
         }
 
-        OLocalResourceAccess(const ResId& _rId, RESOURCE_TYPE _rType)
-            :Resource(_rId.SetRT(_rType).SetAutoRelease(false))
-            ,m_pManager(_rId.GetResMgr())
-        {
-            OSL_ENSURE( m_pManager != nullptr, "OLocalResourceAccess::OLocalResourceAccess: invalid resource manager!" );
-        }
-
         ~OLocalResourceAccess()
         {
             if ( m_pManager )
