@@ -495,6 +495,7 @@ void SwView::GetDrawState(SfxItemSet &rSet)
         switch(nWhich)
         {
         case SID_DRAW_LINE:
+        case SID_DRAW_XLINE:
         case SID_LINE_ARROW_END:
         case SID_LINE_ARROW_CIRCLE:
         case SID_LINE_ARROW_SQUARE:
