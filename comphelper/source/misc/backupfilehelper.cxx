@@ -225,6 +225,18 @@ namespace
         return false;
     }
 
+    bool dirExists(const OUString& rDirURL)
+    {
+        if (!rDirURL.isEmpty())
+        {
+            osl::Directory aDirectory(rDirURL);
+
+            return (osl::FileBase::E_None == aDirectory.open());
+        }
+
+        return false;
+    }
+
     void scanDirsAndFiles(
         const OUString& rDirURL,
         std::set< OUString >& rDirs,
@@ -268,6 +280,39 @@ namespace
                 }
             }
         }
+    }
+
+    bool deleteDirRecursively(const OUString& rDirURL)
+    {
+        std::set< OUString > aDirs;
+        std::set< std::pair< OUString, OUString > > aFiles;
+
+        scanDirsAndFiles(
+            rDirURL,
+            aDirs,
+            aFiles);
+
+        for (const auto& dir : aDirs)
+        {
+            const OUString aNewDirURL(rDirURL + "/" + dir);
+
+            deleteDirRecursively(aNewDirURL);
+        }
+
+        for (const auto& file : aFiles)
+        {
+            OUString aNewFileURL(rDirURL + "/" + file.first);
+
+            if (!file.second.isEmpty())
+            {
+                aNewFileURL += ".";
+                aNewFileURL += file.second;
+            }
+
+            osl::File::remove(aNewFileURL);
+        }
+
+        return osl::FileBase::E_None == osl::Directory::remove(rDirURL);
     }
 }
 
@@ -434,6 +479,11 @@ namespace
 
             return true;
         }
+
+        bool isEnabled() const
+        {
+            return REGISTERED == meState;
+        }
     };
 
     typedef ::std::vector< ExtensionInfoEntry > ExtensionInfoEntryVector;
@@ -577,6 +627,91 @@ namespace
             }
 
             return bRetval;
+        }
+
+        bool areThereEnabledExtensions() const
+        {
+            for (const auto& a : maEntries)
+            {
+                if (a.isEnabled())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        static void disableAll()
+        {
+            // create content from current extension configuration
+            uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
+            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            uno::Reference< deployment::XExtensionManager > m_xExtensionManager = deployment::ExtensionManager::get(xContext);
+
+            try
+            {
+                xAllPackages = m_xExtensionManager->getAllExtensions(uno::Reference< task::XAbortChannel >(),
+                    uno::Reference< ucb::XCommandEnvironment >());
+            }
+            catch (const deployment::DeploymentException &)
+            {
+                return;
+            }
+            catch (const ucb::CommandFailedException &)
+            {
+                return;
+            }
+            catch (const ucb::CommandAbortedException &)
+            {
+                return;
+            }
+            catch (const lang::IllegalArgumentException & e)
+            {
+                throw uno::RuntimeException(e.Message, e.Context);
+            }
+
+            for (sal_Int32 i = 0; i < xAllPackages.getLength(); ++i)
+            {
+                uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
+
+                for (sal_Int32 j = 0; j < xPackageList.getLength(); ++j)
+                {
+                    uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
+
+                    if (xPackage.is())
+                    {
+                        const beans::Optional< beans::Ambiguous< sal_Bool > > option(
+                            xPackage->isRegistered(uno::Reference< task::XAbortChannel >(),
+                            uno::Reference< ucb::XCommandEnvironment >()));
+                        bool bEnabled(false);
+
+                        if (option.IsPresent)
+                        {
+                            ::beans::Ambiguous< sal_Bool > const& reg = option.Value;
+
+                            if (!reg.IsAmbiguous)
+                            {
+                                bEnabled = reg.Value;
+                            }
+                        }
+
+                        if (bEnabled)
+                        {
+                            try
+                            {
+                                m_xExtensionManager->disableExtension(
+                                    xPackage,
+                                    uno::Reference< task::XAbortChannel >(),
+                                    uno::Reference< ucb::XCommandEnvironment >());
+                            }
+                            catch (const ::ucb::CommandAbortedException &)
+                            {
+                            }
+                        }
+                    }
+                }
+            }
         }
     };
 }
@@ -1272,7 +1407,7 @@ namespace comphelper
         maDirs(),
         maFiles(),
         mnNumBackups(2),
-        mnMode(0),
+        mnMode(1),
         mbActive(false),
         mbExtensions(true),
         mbCompress(true)
@@ -1386,12 +1521,20 @@ namespace comphelper
                     maUserConfigBaseURL,
                     aPackURL);
             }
+        }
 
-            // Try Push of ExtensionInfo
-            if (mbExtensions)
-            {
-                bDidPush |= tryPush_extensionInfo(aPackURL);
-            }
+        return bDidPush;
+    }
+
+    bool BackupFileHelper::tryPushExtensionInfo()
+    {
+        bool bDidPush(false);
+
+        if (mbActive && mbExtensions)
+        {
+            const OUString aPackURL(getPackURL());
+
+            bDidPush = tryPush_extensionInfo(aPackURL);
         }
 
         return bDidPush;
@@ -1417,12 +1560,20 @@ namespace comphelper
                     maUserConfigBaseURL,
                     aPackURL);
             }
+        }
 
-            // try for ExtensionInfo
-            if (mbExtensions)
-            {
-                bPopPossible |= isPopPossible_extensionInfo(aPackURL);
-            }
+        return bPopPossible;
+    }
+
+    bool BackupFileHelper::isPopPossibleExtensionInfo()
+    {
+        bool bPopPossible(false);
+
+        if (mbActive && mbExtensions)
+        {
+            const OUString aPackURL(getPackURL());
+
+            bPopPossible = isPopPossible_extensionInfo(aPackURL);
         }
 
         return bPopPossible;
@@ -1449,11 +1600,25 @@ namespace comphelper
                     aPackURL);
             }
 
-            // try for ExtensionInfo
-            if (mbExtensions)
+            if (bDidPop)
             {
-                bDidPop |= tryPop_extensionInfo(aPackURL);
+                // try removal of evtl. empty directory
+                osl::Directory::remove(aPackURL);
             }
+        }
+
+        return bDidPop;
+    }
+
+    bool BackupFileHelper::tryPopExtensionInfo()
+    {
+        bool bDidPop(false);
+
+        if (mbActive && mbExtensions)
+        {
+            const OUString aPackURL(getPackURL());
+
+            bDidPop = tryPop_extensionInfo(aPackURL);
 
             if (bDidPop)
             {
@@ -1463,6 +1628,53 @@ namespace comphelper
         }
 
         return bDidPop;
+    }
+
+    bool BackupFileHelper::isTryDisableAllExtensionsPossible()
+    {
+        // return true if there is an eabled extension that can be disabled
+        ExtensionInfo aCurrentExtensionInfo;
+
+        aCurrentExtensionInfo.createCurrent();
+        return aCurrentExtensionInfo.areThereEnabledExtensions();
+    }
+
+    void BackupFileHelper::tryDisableAllExtensions()
+    {
+        // disable all still enabled extensions. No need to
+        // createCurrent() again, just do it now
+        ExtensionInfo::disableAll();
+    }
+
+    bool BackupFileHelper::isTryResetCustomizationsPossible()
+    {
+        // return true if not all of the customization selection dirs are deleted
+        return
+            dirExists(maUserConfigBaseURL + "/config") ||                      // UI config stuff
+            dirExists(maUserConfigBaseURL + "/registry") ||                    // most of the registry stuff
+            dirExists(maUserConfigBaseURL + "/psprint") ||                     // not really needed, can be abandoned
+            dirExists(maUserConfigBaseURL + "/store") ||                       // not really needed, can be abandoned
+            dirExists(maUserConfigBaseURL + "/temp") ||                        // not really needed, can be abandoned
+            dirExists(maUserConfigBaseURL + "/pack") ||                        // own backup dir
+            fileExists(maUserConfigBaseURL + "/registrymodifications.xcu");    // personal registry stuff
+    }
+
+    void BackupFileHelper::tryResetCustomizations()
+    {
+        // delete all of the customization selection dirs
+        deleteDirRecursively(maUserConfigBaseURL + "/config");
+        deleteDirRecursively(maUserConfigBaseURL + "/registry");
+        deleteDirRecursively(maUserConfigBaseURL + "/psprint");
+        deleteDirRecursively(maUserConfigBaseURL + "/store");
+        deleteDirRecursively(maUserConfigBaseURL + "/temp");
+        deleteDirRecursively(maUserConfigBaseURL + "/pack");
+        osl::File::remove(maUserConfigBaseURL + "/registrymodifications.xcu");
+    }
+
+    void BackupFileHelper::tryResetUserProfile()
+    {
+        // completely delete the current UserProfile
+        deleteDirRecursively(maUserConfigBaseURL);
     }
 
     /////////////////// helpers ///////////////////////
@@ -1839,24 +2051,28 @@ namespace comphelper
             return;
         }
 
+        // Information about the configuration and the role/purpose of directories in
+        // the UserConfiguration is taken from: https://wiki.documentfoundation.org/UserProfile
+
         // fill dir and file info list to work with dependent on work mode
         switch (mnMode)
         {
         case 0:
         {
-            // add registrymodifications (the orig file in maInitialBaseURL)
+            // simple mode: add just registrymodifications
+            // (the orig file in maInitialBaseURL)
             maFiles.insert(std::pair< OUString, OUString >(maRegModName, maExt));
             break;
         }
         case 1:
         {
-            // add registrymodifications (the orig file in maInitialBaseURL)
-            maFiles.insert(std::pair< OUString, OUString >(maRegModName, maExt));
-
-            // Add a selection of dirs containing User-Defined and thus
-            // valuable configuration information (see https://wiki.documentfoundation.org/UserProfile).
+            // defined mode: Add a selection of dirs containing User-Defined and thus
+            // valuable configuration information.
             // This is clearly discussable in every single point and may be adapted/corrected
             // over time. Main focus is to secure User-Defined/adapted values
+
+            // add registrymodifications (the orig file in maInitialBaseURL)
+            maFiles.insert(std::pair< OUString, OUString >(maRegModName, maExt));
 
             // User-defined substitution table (Tools/AutoCorrect)
             maDirs.insert("autocorr");
@@ -1891,6 +2107,7 @@ namespace comphelper
             // Questionable - where and how is Extension stuff held and how
             // does this interact with enabled/disabled states which are extra handled?
             // Keep out of business until deeper evaluated
+            //
             // maDirs.insert("extensions");
             // maDirs.insert("uno-packages");
             break;
@@ -1913,6 +2130,10 @@ namespace comphelper
 
             // not really needed, can be abandoned
             maDirs.erase("temp");
+
+            // exclude own backup dir to avoid recursion
+            maDirs.erase("pack");
+
             break;
         }
         }
