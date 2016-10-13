@@ -1095,6 +1095,8 @@ bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C()
     if (a == 0.0 || b == 0.0)
         return false;
     const double d = fabs(a - b);
+    if (!rtl::math::isFinite(d))
+        return false;   // Nan or Inf involved
     if (d > ((a = fabs(a)) * e44) || d > ((b = fabs(b)) * e44))
         return false;
     if (isRepresentableInteger(d) && isRepresentableInteger(a) && isRepresentableInteger(b))
