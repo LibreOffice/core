@@ -72,12 +72,14 @@ $(eval $(call gb_Library_add_defs,xmlsecurity,\
     -DXMLSEC_CRYPTO_MSCRYPTO \
 ))
 else
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Library_add_defs,xmlsecurity,\
     -DXMLSEC_CRYPTO_NSS \
 ))
 $(eval $(call gb_Library_use_externals,xmlsecurity,\
     nss3 \
 ))
+endif # BUILD_TYPE=DESKTOP
 endif
 
 # vim: set noet sw=4 ts=4:

@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <vector>
 
