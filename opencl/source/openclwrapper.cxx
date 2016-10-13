@@ -103,8 +103,54 @@ OString getCacheFolder()
 
 }
 
+bool initializeCommandQueue(GPUEnv& aGpuEnv)
+{
+    OpenCLZone zone;
+
+    cl_int nState;
+    cl_command_queue command_queue[OPENCL_CMDQUEUE_SIZE];
+
+    for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
+    {
+        command_queue[i] = clCreateCommandQueue(aGpuEnv.mpContext, aGpuEnv.mpDevID, 0, &nState);
+        if (nState != CL_SUCCESS)
+            SAL_WARN("opencl", "clCreateCommandQueue failed: " << errorString(nState));
+
+        if (command_queue[i] == nullptr || nState != CL_SUCCESS)
+        {
+            // Release all command queues created so far.
+            for (int j = 0; j <= i; ++j)
+            {
+                if (command_queue[j])
+                {
+                    clReleaseCommandQueue(command_queue[j]);
+                    command_queue[j] = nullptr;
+                }
+            }
+
+            clReleaseContext(aGpuEnv.mpContext);
+            SAL_WARN("opencl", "failed to set/switch opencl device");
+            return false;
+        }
+
+        SAL_INFO("opencl", "Created command queue " << command_queue[i] << " for context " << aGpuEnv.mpContext);
+    }
+
+    for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
+    {
+        aGpuEnv.mpCmdQueue[i] = command_queue[i];
+    }
+    aGpuEnv.mbCommandQueueInitialized = true;
+    return true;
+}
+
 void setKernelEnv( KernelEnv *envInfo )
 {
+    if (!gpuEnv.mbCommandQueueInitialized)
+    {
+        initializeCommandQueue(gpuEnv);
+    }
+
     envInfo->mpkContext = gpuEnv.mpContext;
     envInfo->mpkProgram = gpuEnv.mpArryPrograms[0];
 
@@ -265,8 +311,7 @@ bool initOpenCLAttr( OpenCLEnv * env )
 
     gpuEnv.mnIsUserCreated = 1;
 
-    for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
-        gpuEnv.mpCmdQueue[i] = env->mpOclCmdQueue[i];
+    gpuEnv.mbCommandQueueInitialized = false;
 
     gpuEnv.mnCmdQueuePos = 0; // default to 0.
 
@@ -765,7 +810,6 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
 
     cl_context context;
     cl_platform_id platformId;
-    cl_command_queue command_queue[OPENCL_CMDQUEUE_SIZE];
 
     {
         OpenCLZone zone;
@@ -790,33 +834,6 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         }
         SAL_INFO("opencl", "Created context " << context << " for platform " << platformId << ", device " << pDeviceId);
 
-        for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
-        {
-            command_queue[i] = clCreateCommandQueue(
-                context, pDeviceId, 0, &nState);
-            if (nState != CL_SUCCESS)
-                SAL_WARN("opencl", "clCreateCommandQueue failed: " << errorString(nState));
-
-            if (command_queue[i] == nullptr || nState != CL_SUCCESS)
-            {
-                // Release all command queues created so far.
-                for (int j = 0; j <= i; ++j)
-                {
-                    if (command_queue[j])
-                    {
-                        clReleaseCommandQueue(command_queue[j]);
-                        command_queue[j] = nullptr;
-                    }
-                }
-
-                clReleaseContext(context);
-                SAL_WARN("opencl", "failed to set/switch opencl device");
-                return false;
-            }
-
-            SAL_INFO("opencl", "Created command queue " << command_queue[i] << " for context " << context);
-        }
-
         OString sDeviceID = getDeviceInfoString(pDeviceId, CL_DEVICE_VENDOR) + " " + getDeviceInfoString(pDeviceId, CL_DRIVER_VERSION);
         rOutSelectedDeviceVersionIDString = OStringToOUString(sDeviceID, RTL_TEXTENCODING_UTF8);
     }
@@ -824,13 +841,11 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
     setOpenCLCmdQueuePosition(0); // Call this just to avoid the method being deleted from unused function deleter.
 
     releaseOpenCLEnv(&gpuEnv);
+
     OpenCLEnv env;
     env.mpOclPlatformID = platformId;
     env.mpOclContext = context;
     env.mpOclDevsID = pDeviceId;
-
-    for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
-        env.mpOclCmdQueue[i] = command_queue[i];
 
     initOpenCLAttr(&env);
 

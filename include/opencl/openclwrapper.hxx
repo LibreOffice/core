@@ -42,6 +42,7 @@ struct OPENCL_DLLPUBLIC GPUEnv
     cl_context mpContext;
     cl_device_id mpDevID;
     cl_command_queue mpCmdQueue[OPENCL_CMDQUEUE_SIZE];
+    bool mbCommandQueueInitialized;
     cl_program mpArryPrograms[MAX_CLFILE_NUM]; //one program object maps one kernel source file
     int mnIsUserCreated; // 1: created , 0:no create and needed to create by opencl wrapper
     int mnCmdQueuePos;
