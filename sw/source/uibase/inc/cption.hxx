@@ -20,15 +20,10 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CPTION_HXX
 
 #include <svx/stddlg.hxx>
-
 #include <vcl/fixed.hxx>
-
 #include <vcl/lstbox.hxx>
-
 #include <vcl/edit.hxx>
-
 #include <vcl/group.hxx>
-
 #include <vcl/button.hxx>
 #include <actctrl.hxx>
 
@@ -41,12 +36,11 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-class SwFieldMgr;
-class SwView;
-
 #include <wrtsh.hxx>
 #include "optload.hxx"
-#include "swlbox.hxx"
+
+class SwFieldMgr;
+class SwView;
 
 class TextFilterAutoConvert : public TextFilter
 {

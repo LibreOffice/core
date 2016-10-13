@@ -714,15 +714,15 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
                 SwFieldType *pType = pMgr->GetFieldType( USHRT_MAX, i );
                 if( pType->Which() == RES_SETEXPFLD &&
                     static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
-                    m_pCategoryBox->InsertSwEntry(SwBoxEntry(pType->GetName()));
+                    m_pCategoryBox->InsertSwEntry(pType->GetName());
             }
         }
         else
         {
-            m_pCategoryBox->InsertSwEntry(SwBoxEntry(m_sIllustration));
-            m_pCategoryBox->InsertSwEntry(SwBoxEntry(m_sTable));
-            m_pCategoryBox->InsertSwEntry(SwBoxEntry(m_sText));
-            m_pCategoryBox->InsertSwEntry(SwBoxEntry(m_sDrawing));
+            m_pCategoryBox->InsertSwEntry(m_sIllustration);
+            m_pCategoryBox->InsertSwEntry(m_sTable);
+            m_pCategoryBox->InsertSwEntry(m_sText);
+            m_pCategoryBox->InsertSwEntry(m_sDrawing);
         }
 
         if(!pOpt->GetCategory().isEmpty())
@@ -742,7 +742,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
                 case TABLE_CAP:         nPos = 2;   break;
                 case FRAME_CAP:         nPos = 3;   break;
             }
-            m_pCategoryBox->SetText(m_pCategoryBox->GetSwEntry(nPos).GetName());
+            m_pCategoryBox->SetText(m_pCategoryBox->GetSwEntry(nPos));
         }
 
         for (sal_Int32 i = 0; i < m_pFormatBox->GetEntryCount(); i++)
@@ -930,11 +930,66 @@ void SwCaptionOptPage::InvalidatePreview()
     m_pPreview->SetPreviewText(aStr);
 }
 
+CaptionComboBox::CaptionComboBox(vcl::Window* pParent, WinBits nStyle)
+    : ComboBox(pParent, nStyle)
+{
+    // create administration for the resource's Stringlist
+    sal_Int32 nSize = GetEntryCount();
+    for( sal_Int32 i=0; i < nSize; ++i )
+    {
+        m_EntryList.push_back(ComboBox::GetEntry(i));
+    }
+}
+
+CaptionComboBox::~CaptionComboBox()
+{
+}
+
+sal_Int32 CaptionComboBox::InsertEntry(const OUString& rStr, sal_Int32)
+{
+    InsertSwEntry(rStr);
+    return 0;
+}
+
+void CaptionComboBox::InsertSwEntry(const OUString& rEntry)
+{
+    InsertSorted(rEntry);
+}
+
+void CaptionComboBox::InsertSorted(OUString const& rEntry)
+{
+    ComboBox::InsertEntry(rEntry);
+    sal_Int32 nPos = ComboBox::GetEntryPos(rEntry);
+    m_EntryList.insert(m_EntryList.begin() + nPos, rEntry);
+}
+
+void CaptionComboBox::RemoveEntryAt(sal_Int32 const nPos)
+{
+    if (nPos < 0 || static_cast<size_t>(nPos) >= m_EntryList.size())
+        return;
+
+    // Remove old element
+    ComboBox::RemoveEntryAt(nPos);
+
+    // Don't add new entries to the list
+    // add to DelEntryList
+    m_DelEntryList.push_back(m_EntryList[nPos]);
+    m_EntryList.erase(m_EntryList.begin() + nPos);
+}
+
+const OUString& CaptionComboBox::GetSwEntry(sal_Int32 const nPos) const
+{
+    if (0 <= nPos && static_cast<size_t>(nPos) < m_EntryList.size())
+        return m_EntryList[nPos];
+
+    return aDefault;
+}
+
 // Description: ComboBox without Spaces
 void CaptionComboBox::KeyInput(const KeyEvent& rEvt)
 {
     if (rEvt.GetKeyCode().GetCode() != KEY_SPACE)
-        SwComboBox::KeyInput(rEvt);
+        ComboBox::KeyInput(rEvt);
 }
 
 VCL_BUILDER_DECL_FACTORY(CaptionComboBox)

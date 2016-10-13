@@ -27,7 +27,6 @@
 #include <svtools/simptabl.hxx>
 #include <pam.hxx>
 
-#include "swlbox.hxx"
 #include "IMark.hxx"
 
 class SwWrtShell;

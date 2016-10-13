@@ -29,7 +29,6 @@
 #include <svx/strarray.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/checklbx.hxx>
-#include <swlbox.hxx>
 #include <caption.hxx>
 
 class SwFieldMgr;
@@ -80,15 +79,27 @@ public:
     SwCaptionOptDlg(vcl::Window* pParent, const SfxItemSet& rSet);
 };
 
-class CaptionComboBox : public SwComboBox
+class CaptionComboBox : public ComboBox
 {
+    std::vector<OUString> m_EntryList;
+    std::vector<OUString> m_DelEntryList;
+    OUString              aDefault;
+
+    void InsertSorted(OUString const& rEntry);
+
 protected:
     virtual void KeyInput( const KeyEvent& ) override;
 
 public:
-    CaptionComboBox(vcl::Window* pParent, WinBits nStyle)
-        : SwComboBox(pParent, nStyle)
-    {}
+    CaptionComboBox(vcl::Window* pParent, WinBits nStyle);
+    virtual ~CaptionComboBox() override;
+
+    void                    InsertSwEntry(const OUString&);
+    virtual sal_Int32       InsertEntry(const OUString& rStr, sal_Int32 = COMBOBOX_APPEND) override;
+
+    virtual void            RemoveEntryAt(sal_Int32 nPos) override;
+
+    const OUString&         GetSwEntry(sal_Int32) const;
 };
 
 class SwCaptionPreview : public vcl::Window

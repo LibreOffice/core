@@ -148,7 +148,6 @@ merge SvxCSS1Parser with SwCSS1Parser
 merge SvxRTFParser with EditRTFParser
 merge SvxShapeMaster with SdXShape
 merge SwAccessibleFrame with SwAccessibleContext
-merge SwComboBox with CaptionComboBox
 merge SwCursorShell with SwEditShell
 merge SwEditShell with SwFEShell
 merge SwFEShell with SwWrtShell
