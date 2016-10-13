@@ -42,14 +42,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
         std::cerr << "found " << aSignatures.size() << " signatures" << std::endl;
         for (size_t i = 0; i < aSignatures.size(); ++i)
         {
-            bool bDigestMatch;
-            if (!xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], bDigestMatch))
+            SignatureInformation aInfo(i);
+            if (!xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], aInfo))
             {
                 SAL_WARN("xmlsecurity.pdfio", "failed to determine digest match");
                 return 1;
             }
 
-            std::cerr << "signature #" << i << ": digest match? " << bDigestMatch << std::endl;
+            bool bSuccess = aInfo.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+            std::cerr << "signature #" << i << ": digest match? " << bSuccess << std::endl;
         }
     }
 

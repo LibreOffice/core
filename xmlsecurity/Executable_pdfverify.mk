@@ -18,6 +18,7 @@ $(eval $(call gb_Executable_set_include,pdfverify,\
 
 $(eval $(call gb_Executable_use_libraries,pdfverify,\
     comphelper \
+    cppu \
     sal \
     tl \
     xmlsecurity \
