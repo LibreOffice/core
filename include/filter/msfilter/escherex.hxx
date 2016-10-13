@@ -966,7 +966,7 @@ public:
     void                WriteDggAtom( SvStream& rStrm ) const;
 
     /** Called if a picture shall be written and no picture stream is set at
-        class ImplEscherExSdr.
+        class ImplEESdrWriter.
 
         On first invokation, this function calls the virtual member function
         ImplQueryPictureStream(). The return value will be cached internally
@@ -1015,13 +1015,13 @@ private:
 
 class SdrObject;
 class SdrPage;
-class ImplEscherExSdr;
+class ImplEESdrWriter;
 
 class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
 {
     protected:
         std::shared_ptr<EscherExGlobal>           mxGlobal;
-        ::std::unique_ptr< ImplEscherExSdr > mpImplEscherExSdr;
+        ::std::unique_ptr< ImplEESdrWriter > mpImplEESdrWriter;
         SvStream*                   mpOutStrm;
         bool                        mbOwnsStrm;
         sal_uInt32                  mnStrmStartOfs;
@@ -1056,7 +1056,7 @@ public:
     EscherGraphicProvider& GetGraphicProvider() { return *mxGlobal; }
 
     /** Called if a picture shall be written and no picture stream is set at
-        class ImplEscherExSdr.
+        class ImplEESdrWriter.
      */
     inline SvStream*    QueryPictureStream() { return mxGlobal->QueryPictureStream(); }
 

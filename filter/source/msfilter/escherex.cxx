@@ -4975,7 +4975,7 @@ EscherEx::EscherEx(const std::shared_ptr<EscherExGlobal>& rxGlobal, SvStream* pO
         mbOwnsStrm = true;
     }
     mnStrmStartOfs = mpOutStrm->Tell();
-    mpImplEscherExSdr.reset( new ImplEscherExSdr( *this ) );
+    mpImplEESdrWriter.reset( new ImplEESdrWriter( *this ) );
 }
 
 EscherEx::~EscherEx()
@@ -5295,7 +5295,7 @@ sal_uInt32 EscherEx::EnterGroup( const OUString& rShapeName, const Rectangle* pB
         if ( mnGroupLevel > 1 )
             AddChildAnchor( aRect );
 
-        EscherExHostAppData* pAppData = mpImplEscherExSdr->ImplGetHostData();
+        EscherExHostAppData* pAppData = mpImplEESdrWriter->ImplGetHostData();
         if( pAppData )
         {
             if ( mnGroupLevel <= 1 )

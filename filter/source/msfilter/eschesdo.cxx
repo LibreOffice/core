@@ -69,8 +69,12 @@ ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
     , mpPicStrm(nullptr)
     , mpHostAppData(nullptr)
     , mbIsTitlePossible(false)
+    , mpSdrPage( nullptr )
+    , mpSolverContainer( nullptr )
 {
 }
+
+
 
 Point ImplEESdrWriter::ImplMapPoint( const Point& rPoint )
 {
@@ -833,18 +837,9 @@ void ImplEESdrWriter::ImplWritePage(
     }
 }
 
-ImplEscherExSdr::ImplEscherExSdr( EscherEx& rEx )
-        :
-        ImplEESdrWriter( rEx ),
-        mpSdrPage( nullptr ),
-        mpSolverContainer( nullptr )
+ImplEESdrWriter::~ImplEESdrWriter()
 {
-}
-
-
-ImplEscherExSdr::~ImplEscherExSdr()
-{
-    DBG_ASSERT( !mpSolverContainer, "ImplEscherExSdr::~ImplEscherExSdr: unwritten SolverContainer" );
+    DBG_ASSERT( !mpSolverContainer, "ImplEESdrWriter::~ImplEESdrWriter: unwritten SolverContainer" );
     Reference<css::lang::XComponent> xComp(mXDrawPage, UNO_QUERY);
     if (xComp.is())
         xComp->dispose();
@@ -852,7 +847,7 @@ ImplEscherExSdr::~ImplEscherExSdr()
 }
 
 
-bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
+bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
 {
     SvxDrawPage* pSvxDrawPage;
     if ( mpSdrPage != &rPage || !mXDrawPage.is() )
@@ -880,7 +875,7 @@ bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
     return pSvxDrawPage != nullptr;
 }
 
-bool ImplEscherExSdr::ImplInitUnoShapes( const Reference< XShapes >& rxShapes )
+bool ImplEESdrWriter::ImplInitUnoShapes( const Reference< XShapes >& rxShapes )
 {
     // eventually write SolverContainer of current page, deletes the Solver
     ImplFlushSolverContainer();
@@ -899,7 +894,7 @@ bool ImplEscherExSdr::ImplInitUnoShapes( const Reference< XShapes >& rxShapes )
     return true;
 }
 
-void ImplEscherExSdr::ImplExitPage()
+void ImplEESdrWriter::ImplExitPage()
 {
     // close all groups before the solver container is written
     while( mpEscherEx->GetGroupLevel() )
@@ -910,7 +905,7 @@ void ImplEscherExSdr::ImplExitPage()
 }
 
 
-void ImplEscherExSdr::ImplFlushSolverContainer()
+void ImplEESdrWriter::ImplFlushSolverContainer()
 {
     if ( mpSolverContainer )
     {
@@ -920,43 +915,43 @@ void ImplEscherExSdr::ImplFlushSolverContainer()
     }
 }
 
-void ImplEscherExSdr::ImplWriteCurrentPage()
+void ImplEESdrWriter::ImplWriteCurrentPage()
 {
-    assert(mpSolverContainer && "ImplEscherExSdr::ImplWriteCurrentPage: no SolverContainer");
+    assert(mpSolverContainer && "ImplEESdrWriter::ImplWriteCurrentPage: no SolverContainer");
     ImplWritePage( *mpSolverContainer );
     ImplExitPage();
 }
 
-sal_uInt32 ImplEscherExSdr::ImplWriteTheShape( ImplEESdrObject& rObj , bool ooxmlExport )
+sal_uInt32 ImplEESdrWriter::ImplWriteTheShape( ImplEESdrObject& rObj , bool ooxmlExport )
 {
-    assert(mpSolverContainer && "ImplEscherExSdr::ImplWriteShape: no SolverContainer");
+    assert(mpSolverContainer && "ImplEESdrWriter::ImplWriteShape: no SolverContainer");
     return ImplWriteShape( rObj, *mpSolverContainer, ooxmlExport );
 }
 
 void EscherEx::AddSdrPage( const SdrPage& rPage )
 {
-    if ( mpImplEscherExSdr->ImplInitPage( rPage ) )
-        mpImplEscherExSdr->ImplWriteCurrentPage();
+    if ( mpImplEESdrWriter->ImplInitPage( rPage ) )
+        mpImplEESdrWriter->ImplWriteCurrentPage();
 }
 
 void EscherEx::AddUnoShapes( const Reference< XShapes >& rxShapes )
 {
-    if ( mpImplEscherExSdr->ImplInitUnoShapes( rxShapes ) )
-        mpImplEscherExSdr->ImplWriteCurrentPage();
+    if ( mpImplEESdrWriter->ImplInitUnoShapes( rxShapes ) )
+        mpImplEESdrWriter->ImplWriteCurrentPage();
 }
 
 sal_uInt32 EscherEx::AddSdrObject( const SdrObject& rObj, bool ooxmlExport )
 {
-    ImplEESdrObject aObj( *mpImplEscherExSdr, rObj, mbOOXML );
+    ImplEESdrObject aObj( *mpImplEESdrWriter, rObj, mbOOXML );
     if( aObj.IsValid() )
-        return mpImplEscherExSdr->ImplWriteTheShape( aObj, ooxmlExport );
+        return mpImplEESdrWriter->ImplWriteTheShape( aObj, ooxmlExport );
     return 0;
 }
 
 
 void EscherEx::EndSdrObjectPage()
 {
-    mpImplEscherExSdr->ImplExitPage();
+    mpImplEESdrWriter->ImplExitPage();
 }
 
 EscherExHostAppData* EscherEx::StartShape( const Reference< XShape >& /* rShape */, const Rectangle* /*pChildAnchor*/ )
@@ -999,7 +994,7 @@ const SdrObject* EscherEx::GetSdrObject( const Reference< XShape >& rShape )
 }
 
 
-ImplEESdrObject::ImplEESdrObject( ImplEscherExSdr& rEx,
+ImplEESdrObject::ImplEESdrObject( ImplEESdrWriter& rEx,
                                     const SdrObject& rObj, bool bOOXML ) :
     mnShapeId( 0 ),
     mnTextSize( 0 ),

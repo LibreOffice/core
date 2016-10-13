@@ -71,7 +71,6 @@ merge IXFAttrList with XFSaxAttrList
 merge IXFStream with XFSaxStream
 merge IXFStyle with XFStyle
 merge IconChoicePage with SvxHyperlinkTabPageBase
-merge ImplEESdrWriter with ImplEscherExSdr
 merge ImplGlyphFallbackFontSubstitution with FcGlyphFallbackSubstitution
 merge ImplPreMatchFontSubstitution with FcPreMatchSubstitution
 merge LwpDLList with LwpParaProperty
