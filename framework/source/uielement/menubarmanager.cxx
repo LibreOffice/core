@@ -1653,6 +1653,12 @@ void MenuBarManager::FillMenu(
                         aProp[i].Value >>= bEnabled;
                 }
 
+                if (vcl::CommandInfoProvider::Instance().IsExperimental(aCommandURL, rModuleIdentifier) &&
+                    !SvtMiscOptions().IsExperimentalMode())
+                {
+                    continue;
+                }
+
                 if ( nType == css::ui::ItemType::DEFAULT )
                 {
                     pMenu->InsertItem( nId, aLabel );
