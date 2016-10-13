@@ -532,7 +532,7 @@ SalLayout* CairoTextRender::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackL
     if( mpServerFont[ nFallbackLevel ]
     && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
     {
-        if (getenv("SAL_USE_COMMON_LAYOUT"))
+        if (SalLayout::UseCommonLayout())
         {
             pLayout = new CommonSalLayout(*mpServerFont[nFallbackLevel]);
         }
