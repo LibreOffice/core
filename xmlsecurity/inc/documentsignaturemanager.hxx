@@ -21,8 +21,12 @@
 #define INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX
 
 #include "xmlsecuritydllapi.h"
+
+#include <memory>
+
 #include <sigstruct.hxx>
 #include <xmlsignaturehelper.hxx>
+#include <pdfsignaturehelper.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <documentsignaturehelper.hxx>
@@ -35,6 +39,7 @@ public:
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::embed::XStorage> mxStore;
     XMLSignatureHelper maSignatureHelper;
+    std::unique_ptr<PDFSignatureHelper> mpPDFSignatureHelper;
     SignatureInformations maCurrentSignatureInformations;
     DocumentSignatureMode meSignatureMode;
     css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > m_manifest;
@@ -59,6 +64,8 @@ public:
     void read(bool bUseTempStream, bool bCacheLastSignature = true);
     /// Write signatures back to the persistent storage.
     void write();
+    /// Lazy creation of PDF helper.
+    PDFSignatureHelper& getPDFSignatureHelper();
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX

@@ -52,7 +52,7 @@ bool PDFSignatureHelper::ReadAndVerifySignature(const uno::Reference<io::XInputS
 
     for (size_t i = 0; i < aSignatures.size(); ++i)
     {
-        security::DocumentSignatureInformation aInfo;
+        SignatureInformation aInfo(i);
 
         bool bDigestMatch;
         if (!xmlsecurity::pdfio::PDFDocument::ValidateSignature(*pStream, aSignatures[i], bDigestMatch))
@@ -61,16 +61,33 @@ bool PDFSignatureHelper::ReadAndVerifySignature(const uno::Reference<io::XInputS
             continue;
         }
 
-        aInfo.SignatureIsValid = bDigestMatch;
+        if (bDigestMatch)
+            aInfo.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+        else
+            aInfo.nStatus = xml::crypto::SecurityOperationStatus_UNKNOWN;
         m_aSignatureInfos.push_back(aInfo);
     }
 
     return true;
 }
 
-uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDocumentSignatureInformations()
+SignatureInformations PDFSignatureHelper::GetSignatureInformations() const
 {
-    return comphelper::containerToSequence(m_aSignatureInfos);
+    return m_aSignatureInfos;
+}
+
+uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDocumentSignatureInformations() const
+{
+    uno::Sequence<security::DocumentSignatureInformation> aRet(m_aSignatureInfos.size());
+
+    for (size_t i = 0; i < m_aSignatureInfos.size(); ++i)
+    {
+        const SignatureInformation& rInternal = m_aSignatureInfos[i];
+        security::DocumentSignatureInformation& rExternal = aRet[i];
+        rExternal.SignatureIsValid = rInternal.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+    }
+
+    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

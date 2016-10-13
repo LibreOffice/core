@@ -13,13 +13,13 @@
 
 #include <xmlsecuritydllapi.h>
 
-#include <vector>
-
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
+
+#include <sigstruct.hxx>
 
 /// Handles signatures of a PDF file.
 class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
@@ -27,12 +27,13 @@ class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     css::uno::Reference<css::xml::crypto::XSEInitializer> m_xSEInitializer;
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> m_xSecurityContext;
-    std::vector<css::security::DocumentSignatureInformation> m_aSignatureInfos;
+    SignatureInformations m_aSignatureInfos;
 
 public:
     PDFSignatureHelper(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext);
     bool ReadAndVerifySignature(const css::uno::Reference<css::io::XInputStream>& xInputStream);
-    css::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformations();
+    css::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformations() const;
+    SignatureInformations GetSignatureInformations() const;
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_PDFSIGNATUREHELPER_HXX
