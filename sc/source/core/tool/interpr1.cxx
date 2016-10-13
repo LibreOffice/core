@@ -5317,450 +5317,476 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
     sal_uInt8 nParamCount = GetByte();
     sal_uInt8 nQueryCount = nParamCount / 2;
 
-    bool bCheck;
-    if ( eFunc == ifCOUNTIFS )
-        bCheck = (nParamCount >= 2) && (nParamCount % 2 == 0);
-    else
-        bCheck = (nParamCount >= 3) && (nParamCount % 2 == 1);
+    std::vector<sal_uInt8> aResArray;
+    size_t nRowSize = 0;
+    size_t nColSize = 0;
+    double fVal = 0.0;
+    double fSum = 0.0;
+    double fMem = 0.0;
+    double fRes = 0.0;
+    double fCount = 0.0;
+    double fMin = std::numeric_limits<double>::max();
+    double fMax = std::numeric_limits<double>::min();
+    short nParam = 1;
+    size_t nRefInList = 0;
+    SCCOL nDimensionCols = 0;
+    SCROW nDimensionRows = 0;
 
-    if ( !bCheck )
+    while (nParamCount > 1 && nGlobalError == FormulaError::NONE)
     {
-        SetError( FormulaError::ParameterExpected);
-    }
-    else
-    {
-        std::vector<sal_uInt8> aResArray;
-        size_t nRowSize = 0;
-        size_t nColSize = 0;
-        double fVal = 0.0;
-        double fSum = 0.0;
-        double fMem = 0.0;
-        double fRes = 0.0;
-        double fCount = 0.0;
-        double fMin = std::numeric_limits<double>::max();
-        double fMax = std::numeric_limits<double>::min();
-        short nParam = 1;
-        size_t nRefInList = 0;
-        SCCOL nDimensionCols = 0;
-        SCROW nDimensionRows = 0;
-
-        while (nParamCount > 1 && nGlobalError == FormulaError::NONE)
+        // take criteria
+        svl::SharedString aString;
+        fVal = 0.0;
+        bool bIsString = true;
+        switch ( GetStackType() )
         {
-            // take criteria
-            svl::SharedString aString;
-            fVal = 0.0;
-            bool bIsString = true;
-            switch ( GetStackType() )
-            {
-                case svDoubleRef :
-                case svSingleRef :
-                    {
-                        ScAddress aAdr;
-                        if ( !PopDoubleRefOrSingleRef( aAdr ) )
-                            return 0;
+            case svDoubleRef :
+            case svSingleRef :
+                {
+                    ScAddress aAdr;
+                    if ( !PopDoubleRefOrSingleRef( aAdr ) )
+                        return 0;
 
-                        ScRefCellValue aCell(*pDok, aAdr);
-                        switch (aCell.meType)
-                        {
-                            case CELLTYPE_VALUE :
-                                fVal = GetCellValue(aAdr, aCell);
-                                bIsString = false;
-                                break;
-                            case CELLTYPE_FORMULA :
-                                if (aCell.mpFormula->IsValue())
-                                {
-                                    fVal = GetCellValue(aAdr, aCell);
-                                    bIsString = false;
-                                }
-                                else
-                                    GetCellString(aString, aCell);
-                                break;
-                            case CELLTYPE_STRING :
-                            case CELLTYPE_EDIT :
-                                GetCellString(aString, aCell);
-                                break;
-                            default:
-                                fVal = 0.0;
-                                bIsString = false;
-                        }
-                    }
-                    break;
-                case svString:
-                    aString = GetString();
-                    break;
-                case svMatrix :
-                case svExternalDoubleRef:
+                    ScRefCellValue aCell(*pDok, aAdr);
+                    switch (aCell.meType)
                     {
-                        ScMatValType nType = GetDoubleOrStringFromMatrix( fVal, aString);
-                        bIsString = ScMatrix::IsNonValueType( nType);
-                    }
-                    break;
-                case svExternalSingleRef:
-                    {
-                        ScExternalRefCache::TokenRef pToken;
-                        PopExternalSingleRef(pToken);
-                        if (nGlobalError == FormulaError::NONE)
-                        {
-                            if (pToken->GetType() == svDouble)
+                        case CELLTYPE_VALUE :
+                            fVal = GetCellValue(aAdr, aCell);
+                            bIsString = false;
+                            break;
+                        case CELLTYPE_FORMULA :
+                            if (aCell.mpFormula->IsValue())
                             {
-                                fVal = pToken->GetDouble();
+                                fVal = GetCellValue(aAdr, aCell);
                                 bIsString = false;
                             }
                             else
-                                aString = pToken->GetString();
-                        }
+                                GetCellString(aString, aCell);
+                            break;
+                        case CELLTYPE_STRING :
+                        case CELLTYPE_EDIT :
+                            GetCellString(aString, aCell);
+                            break;
+                        default:
+                            fVal = 0.0;
+                            bIsString = false;
                     }
-                    break;
-                default:
+                }
+                break;
+            case svString:
+                aString = GetString();
+                break;
+            case svMatrix :
+            case svExternalDoubleRef:
+                {
+                    ScMatValType nType = GetDoubleOrStringFromMatrix( fVal, aString);
+                    bIsString = ScMatrix::IsNonValueType( nType);
+                }
+                break;
+            case svExternalSingleRef:
+                {
+                    ScExternalRefCache::TokenRef pToken;
+                    PopExternalSingleRef(pToken);
+                    if (nGlobalError == FormulaError::NONE)
                     {
-                        fVal = GetDouble();
-                        bIsString = false;
-                    }
-            }
-
-            if (nGlobalError != FormulaError::NONE)
-                return 0;   // and bail out, no need to evaluate other arguments
-
-            // take range
-            nParam = 1;
-            nRefInList = 0;
-            SCCOL nCol1 = 0;
-            SCROW nRow1 = 0;
-            SCTAB nTab1 = 0;
-            SCCOL nCol2 = 0;
-            SCROW nRow2 = 0;
-            SCTAB nTab2 = 0;
-            ScMatrixRef pQueryMatrix;
-            switch ( GetStackType() )
-            {
-                case svRefList :
-                    {
-                        ScRange aRange;
-                        PopDoubleRef( aRange, nParam, nRefInList);
-                        aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-                    }
-                    break;
-                case svDoubleRef :
-                    PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-                    break;
-                case svSingleRef :
-                    PopSingleRef( nCol1, nRow1, nTab1 );
-                    nCol2 = nCol1;
-                    nRow2 = nRow1;
-                    nTab2 = nTab1;
-                    break;
-                case svMatrix:
-                case svExternalSingleRef:
-                case svExternalDoubleRef:
-                    {
-                        pQueryMatrix = PopMatrix();
-                        if (!pQueryMatrix)
+                        if (pToken->GetType() == svDouble)
                         {
-                            SetError( FormulaError::IllegalParameter);
-                            return 0;
+                            fVal = pToken->GetDouble();
+                            bIsString = false;
                         }
-                        nCol1 = 0;
-                        nRow1 = 0;
-                        nTab1 = 0;
-                        SCSIZE nC, nR;
-                        pQueryMatrix->GetDimensions( nC, nR);
-                        nCol2 = static_cast<SCCOL>(nC - 1);
-                        nRow2 = static_cast<SCROW>(nR - 1);
-                        nTab2 = 0;
+                        else
+                            aString = pToken->GetString();
                     }
-                    break;
-                default:
-                    SetError( FormulaError::IllegalParameter);
-                    return 0;
-            }
-            if ( nTab1 != nTab2 )
-            {
-                SetError( FormulaError::IllegalArgument);
-                return 0;
-            }
-
-            // All reference ranges must be of same dimension and size.
-            if (!nDimensionCols)
-                nDimensionCols = nCol2 - nCol1 + 1;
-            if (!nDimensionRows)
-                nDimensionRows = nRow2 - nRow1 + 1;
-            if ((nDimensionCols != (nCol2 - nCol1 + 1)) || (nDimensionRows != (nRow2 - nRow1 + 1)))
-            {
-                SetError ( FormulaError::IllegalArgument);
-                return 0;
-            }
-
-            // recalculate matrix values
-            if (nGlobalError != FormulaError::NONE)
-                return 0;
-
-            // initialize temporary result matrix
-            if (aResArray.empty())
-            {
-                nColSize = nCol2 - nCol1 + 1;
-                nRowSize = nRow2 - nRow1 + 1;
-                aResArray.resize(nColSize*nRowSize, 0);
-            }
-
-            ScQueryParam rParam;
-            rParam.nRow1       = nRow1;
-            rParam.nRow2       = nRow2;
-
-            ScQueryEntry& rEntry = rParam.GetEntry(0);
-            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            rEntry.bDoQuery = true;
-            if (!bIsString)
-            {
-                rItem.meType = ScQueryEntry::ByValue;
-                rItem.mfVal = fVal;
-                rEntry.eOp = SC_EQUAL;
-            }
-            else
-            {
-                rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0, pFormatter);
-                if (rItem.meType == ScQueryEntry::ByString)
-                    rParam.eSearchType = DetectSearchType(rItem.maString.getString(), pDok);
-            }
-            ScAddress aAdr;
-            aAdr.SetTab( nTab1 );
-            rParam.nCol1  = nCol1;
-            rParam.nCol2  = nCol2;
-            rEntry.nField = nCol1;
-            SCsCOL nColDiff = -nCol1;
-            SCsROW nRowDiff = -nRow1;
-            if (pQueryMatrix)
-            {
-                // Never case-sensitive.
-                sc::CompareOptions aOptions( pDok, rEntry, rParam.eSearchType);
-                ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
-                if (nGlobalError != FormulaError::NONE || !pResultMatrix)
-                {
-                    SetError( FormulaError::IllegalParameter);
-                    return 0;
                 }
-
-                // result matrix is filled with boolean values.
-                std::vector<double> aResValues;
-                pResultMatrix->GetDoubleArray(aResValues);
-                if (aResArray.size() != aResValues.size())
+                break;
+            default:
                 {
-                    SetError( FormulaError::IllegalParameter);
-                    return 0;
+                    fVal = GetDouble();
+                    bIsString = false;
                 }
+        }
 
-                std::vector<sal_uInt8>::iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
-                std::vector<double>::const_iterator itThisRes = aResValues.begin();
-                for (; itRes != itResEnd; ++itRes, ++itThisRes)
-                    *itRes += *itThisRes;
-            }
-            else
-            {
-                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, false);
-                // Increment Entry.nField in iterator when switching to next column.
-                aCellIter.SetAdvanceQueryParamEntryField( true );
-                if ( aCellIter.GetFirst() )
+        if (nGlobalError != FormulaError::NONE)
+            return 0;   // and bail out, no need to evaluate other arguments
+
+        // take range
+        nParam = 1;
+        nRefInList = 0;
+        SCCOL nCol1 = 0;
+        SCROW nRow1 = 0;
+        SCTAB nTab1 = 0;
+        SCCOL nCol2 = 0;
+        SCROW nRow2 = 0;
+        SCTAB nTab2 = 0;
+        ScMatrixRef pQueryMatrix;
+        switch ( GetStackType() )
+        {
+            case svRefList :
                 {
-                    do
+                    ScRange aRange;
+                    PopDoubleRef( aRange, nParam, nRefInList);
+                    aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+                }
+                break;
+            case svDoubleRef :
+                PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                break;
+            case svSingleRef :
+                PopSingleRef( nCol1, nRow1, nTab1 );
+                nCol2 = nCol1;
+                nRow2 = nRow1;
+                nTab2 = nTab1;
+                break;
+            case svMatrix:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+                {
+                    pQueryMatrix = PopMatrix();
+                    if (!pQueryMatrix)
                     {
-                        size_t nC = aCellIter.GetCol() + nColDiff;
-                        size_t nR = aCellIter.GetRow() + nRowDiff;
-                        ++aResArray[nC*nRowSize+nR];
-                    } while ( aCellIter.GetNext() );
+                        SetError( FormulaError::IllegalParameter);
+                        return 0;
+                    }
+                    nCol1 = 0;
+                    nRow1 = 0;
+                    nTab1 = 0;
+                    SCSIZE nC, nR;
+                    pQueryMatrix->GetDimensions( nC, nR);
+                    nCol2 = static_cast<SCCOL>(nC - 1);
+                    nRow2 = static_cast<SCROW>(nR - 1);
+                    nTab2 = 0;
                 }
+                break;
+            default:
+                SetError( FormulaError::IllegalParameter);
+                return 0;
+        }
+        if ( nTab1 != nTab2 )
+        {
+            SetError( FormulaError::IllegalArgument);
+            return 0;
+        }
+
+        // All reference ranges must be of same dimension and size.
+        if (!nDimensionCols)
+            nDimensionCols = nCol2 - nCol1 + 1;
+        if (!nDimensionRows)
+            nDimensionRows = nRow2 - nRow1 + 1;
+        if ((nDimensionCols != (nCol2 - nCol1 + 1)) || (nDimensionRows != (nRow2 - nRow1 + 1)))
+        {
+            SetError ( FormulaError::IllegalArgument);
+            return 0;
+        }
+
+        // recalculate matrix values
+        if (nGlobalError != FormulaError::NONE)
+            return 0;
+
+        // initialize temporary result matrix
+        if (aResArray.empty())
+        {
+            nColSize = nCol2 - nCol1 + 1;
+            nRowSize = nRow2 - nRow1 + 1;
+            aResArray.resize(nColSize*nRowSize, 0);
+        }
+
+        ScQueryParam rParam;
+        rParam.nRow1       = nRow1;
+        rParam.nRow2       = nRow2;
+
+        ScQueryEntry& rEntry = rParam.GetEntry(0);
+        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        rEntry.bDoQuery = true;
+        if (!bIsString)
+        {
+            rItem.meType = ScQueryEntry::ByValue;
+            rItem.mfVal = fVal;
+            rEntry.eOp = SC_EQUAL;
+        }
+        else
+        {
+            rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0, pFormatter);
+            if (rItem.meType == ScQueryEntry::ByString)
+                rParam.eSearchType = DetectSearchType(rItem.maString.getString(), pDok);
+        }
+        ScAddress aAdr;
+        aAdr.SetTab( nTab1 );
+        rParam.nCol1  = nCol1;
+        rParam.nCol2  = nCol2;
+        rEntry.nField = nCol1;
+        SCsCOL nColDiff = -nCol1;
+        SCsROW nRowDiff = -nRow1;
+        if (pQueryMatrix)
+        {
+            // Never case-sensitive.
+            sc::CompareOptions aOptions( pDok, rEntry, rParam.eSearchType);
+            ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
+            if (nGlobalError != FormulaError::NONE || !pResultMatrix)
+            {
+                SetError( FormulaError::IllegalParameter);
+                return 0;
             }
-            nParamCount -= 2;
+
+            // result matrix is filled with boolean values.
+            std::vector<double> aResValues;
+            pResultMatrix->GetDoubleArray(aResValues);
+            if (aResArray.size() != aResValues.size())
+            {
+                SetError( FormulaError::IllegalParameter);
+                return 0;
+            }
+
+            std::vector<sal_uInt8>::iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+            std::vector<double>::const_iterator itThisRes = aResValues.begin();
+            for (; itRes != itResEnd; ++itRes, ++itThisRes)
+                *itRes += *itThisRes;
+        }
+        else
+        {
+            ScQueryCellIterator aCellIter(pDok, nTab1, rParam, false);
+            // Increment Entry.nField in iterator when switching to next column.
+            aCellIter.SetAdvanceQueryParamEntryField( true );
+            if ( aCellIter.GetFirst() )
+            {
+                do
+                {
+                    size_t nC = aCellIter.GetCol() + nColDiff;
+                    size_t nR = aCellIter.GetRow() + nRowDiff;
+                    ++aResArray[nC*nRowSize+nR];
+                } while ( aCellIter.GetNext() );
+            }
+        }
+        nParamCount -= 2;
+    }
+
+    if (nGlobalError != FormulaError::NONE)
+        return 0;   // bail out
+
+    // main range - only for AVERAGEIFS, SUMIFS, MINIFS and MAXIFS
+    if (nParamCount == 1)
+    {
+        nParam = 1;
+        nRefInList = 0;
+        bool bNull = true;
+        SCCOL nMainCol1 = 0;
+        SCROW nMainRow1 = 0;
+        SCTAB nMainTab1 = 0;
+        SCCOL nMainCol2 = 0;
+        SCROW nMainRow2 = 0;
+        SCTAB nMainTab2 = 0;
+        ScMatrixRef pMainMatrix;
+        switch ( GetStackType() )
+        {
+            case svRefList :
+                {
+                    ScRange aRange;
+                    PopDoubleRef( aRange, nParam, nRefInList);
+                    aRange.GetVars( nMainCol1, nMainRow1, nMainTab1, nMainCol2, nMainRow2, nMainTab2);
+                }
+                break;
+            case svDoubleRef :
+                PopDoubleRef( nMainCol1, nMainRow1, nMainTab1, nMainCol2, nMainRow2, nMainTab2 );
+                break;
+            case svSingleRef :
+                PopSingleRef( nMainCol1, nMainRow1, nMainTab1 );
+                nMainCol2 = nMainCol1;
+                nMainRow2 = nMainRow1;
+                nMainTab2 = nMainTab1;
+                break;
+            case svMatrix:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+                {
+                    pMainMatrix = PopMatrix();
+                    if (!pMainMatrix)
+                    {
+                        SetError( FormulaError::IllegalParameter);
+                        return 0;
+                    }
+                    nMainCol1 = 0;
+                    nMainRow1 = 0;
+                    nMainTab1 = 0;
+                    SCSIZE nC, nR;
+                    pMainMatrix->GetDimensions( nC, nR);
+                    nMainCol2 = static_cast<SCCOL>(nC - 1);
+                    nMainRow2 = static_cast<SCROW>(nR - 1);
+                    nMainTab2 = 0;
+                }
+                break;
+            default:
+                SetError( FormulaError::IllegalParameter);
+                return 0;
+        }
+        if ( nMainTab1 != nMainTab2 )
+        {
+            SetError( FormulaError::IllegalArgument);
+            return 0;
+        }
+
+        // All reference ranges must be of same dimension and size.
+        if ((nDimensionCols != (nMainCol2 - nMainCol1 + 1)) || (nDimensionRows != (nMainRow2 - nMainRow1 + 1)))
+        {
+            SetError ( FormulaError::IllegalArgument);
+            return 0;
         }
 
         if (nGlobalError != FormulaError::NONE)
             return 0;   // bail out
 
-        // main range - only for AVERAGEIFS, SUMIFS, MINIFS and MAXIFS
-        if (nParamCount == 1)
+        // end-result calculation
+        ScAddress aAdr;
+        aAdr.SetTab( nMainTab1 );
+        if (pMainMatrix)
         {
-            nParam = 1;
-            nRefInList = 0;
-            bool bNull = true;
-            SCCOL nMainCol1 = 0;
-            SCROW nMainRow1 = 0;
-            SCTAB nMainTab1 = 0;
-            SCCOL nMainCol2 = 0;
-            SCROW nMainRow2 = 0;
-            SCTAB nMainTab2 = 0;
-            ScMatrixRef pMainMatrix;
-            switch ( GetStackType() )
-            {
-                case svRefList :
-                    {
-                        ScRange aRange;
-                        PopDoubleRef( aRange, nParam, nRefInList);
-                        aRange.GetVars( nMainCol1, nMainRow1, nMainTab1, nMainCol2, nMainRow2, nMainTab2);
-                    }
-                    break;
-                case svDoubleRef :
-                    PopDoubleRef( nMainCol1, nMainRow1, nMainTab1, nMainCol2, nMainRow2, nMainTab2 );
-                    break;
-                case svSingleRef :
-                    PopSingleRef( nMainCol1, nMainRow1, nMainTab1 );
-                    nMainCol2 = nMainCol1;
-                    nMainRow2 = nMainRow1;
-                    nMainTab2 = nMainTab1;
-                    break;
-                case svMatrix:
-                case svExternalSingleRef:
-                case svExternalDoubleRef:
-                    {
-                        pMainMatrix = PopMatrix();
-                        if (!pMainMatrix)
-                        {
-                            SetError( FormulaError::IllegalParameter);
-                            return 0;
-                        }
-                        nMainCol1 = 0;
-                        nMainRow1 = 0;
-                        nMainTab1 = 0;
-                        SCSIZE nC, nR;
-                        pMainMatrix->GetDimensions( nC, nR);
-                        nMainCol2 = static_cast<SCCOL>(nC - 1);
-                        nMainRow2 = static_cast<SCROW>(nR - 1);
-                        nMainTab2 = 0;
-                    }
-                    break;
-                default:
-                    SetError( FormulaError::IllegalParameter);
-                    return 0;
-            }
-            if ( nMainTab1 != nMainTab2 )
+            std::vector<double> aMainValues;
+            pMainMatrix->GetDoubleArray(aMainValues, false); // Map empty values to NaN's.
+            if (aResArray.size() != aMainValues.size())
             {
                 SetError( FormulaError::IllegalArgument);
                 return 0;
             }
 
-            // All reference ranges must be of same dimension and size.
-            if ((nDimensionCols != (nMainCol2 - nMainCol1 + 1)) || (nDimensionRows != (nMainRow2 - nMainRow1 + 1)))
+            std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+            std::vector<double>::const_iterator itMain = aMainValues.begin();
+            for (; itRes != itResEnd; ++itRes, ++itMain)
             {
-                SetError ( FormulaError::IllegalArgument);
-                return 0;
-            }
+                if (*itRes != nQueryCount)
+                    continue;
 
-            if (nGlobalError != FormulaError::NONE)
-                return 0;   // bail out
+                fVal = *itMain;
+                if (GetDoubleErrorValue(fVal) == FormulaError::ElementNaN)
+                    continue;
 
-            // end-result calculation
-            ScAddress aAdr;
-            aAdr.SetTab( nMainTab1 );
-            if (pMainMatrix)
-            {
-                std::vector<double> aMainValues;
-                pMainMatrix->GetDoubleArray(aMainValues, false); // Map empty values to NaN's.
-                if (aResArray.size() != aMainValues.size())
+                ++fCount;
+                if (bNull && fVal != 0.0)
                 {
-                    SetError( FormulaError::IllegalArgument);
-                    return 0;
+                    bNull = false;
+                    fMem = fVal;
                 }
-
-                std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
-                std::vector<double>::const_iterator itMain = aMainValues.begin();
-                for (; itRes != itResEnd; ++itRes, ++itMain)
-                {
-                    if (*itRes != nQueryCount)
-                        continue;
-
-                    fVal = *itMain;
-                    if (GetDoubleErrorValue(fVal) == FormulaError::ElementNaN)
-                        continue;
-
-                    ++fCount;
-                    if (bNull && fVal != 0.0)
-                    {
-                        bNull = false;
-                        fMem = fVal;
-                    }
-                    else
-                        fSum += fVal;
-                    if ( fMin > fVal )
-                        fMin = fVal;
-                    if ( fMax < fVal )
-                        fMax = fVal;
-                }
+                else
+                    fSum += fVal;
+                if ( fMin > fVal )
+                    fMin = fVal;
+                if ( fMax < fVal )
+                    fMax = fVal;
             }
-            else
+        }
+        else
+        {
+            std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin();
+            for (size_t nCol = 0; nCol < nColSize; ++nCol)
             {
-                std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin();
-                for (size_t nCol = 0; nCol < nColSize; ++nCol)
+                for (size_t nRow = 0; nRow < nRowSize; ++nRow, ++itRes)
                 {
-                    for (size_t nRow = 0; nRow < nRowSize; ++nRow, ++itRes)
+                    if (*itRes == nQueryCount)
                     {
-                        if (*itRes == nQueryCount)
+                        aAdr.SetCol( static_cast<SCCOL>(nCol) + nMainCol1);
+                        aAdr.SetRow( static_cast<SCROW>(nRow) + nMainRow1);
+                        ScRefCellValue aCell(*pDok, aAdr);
+                        if (aCell.hasNumeric())
                         {
-                            aAdr.SetCol( static_cast<SCCOL>(nCol) + nMainCol1);
-                            aAdr.SetRow( static_cast<SCROW>(nRow) + nMainRow1);
-                            ScRefCellValue aCell(*pDok, aAdr);
-                            if (aCell.hasNumeric())
+                            fVal = GetCellValue(aAdr, aCell);
+                            ++fCount;
+                            if ( bNull && fVal != 0.0 )
                             {
-                                fVal = GetCellValue(aAdr, aCell);
-                                ++fCount;
-                                if ( bNull && fVal != 0.0 )
-                                {
-                                    bNull = false;
-                                    fMem = fVal;
-                                }
-                                else
-                                    fSum += fVal;
-                                if ( fMin > fVal )
-                                    fMin = fVal;
-                                if ( fMax < fVal )
-                                    fMax = fVal;
+                                bNull = false;
+                                fMem = fVal;
                             }
+                            else
+                                fSum += fVal;
+                            if ( fMin > fVal )
+                                fMin = fVal;
+                            if ( fMax < fVal )
+                                fMax = fVal;
                         }
                     }
                 }
             }
         }
-        else
-        {
-            std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
-            for (; itRes != itResEnd; ++itRes)
-                if (*itRes == nQueryCount)
-                    ++fCount;
-        }
-
-        switch( eFunc )
-        {
-            case ifSUMIFS:     fRes = ::rtl::math::approxAdd( fSum, fMem ); break;
-            case ifAVERAGEIFS: fRes = div( ::rtl::math::approxAdd( fSum, fMem ), fCount); break;
-            case ifCOUNTIFS:   fRes = fCount; break;
-            case ifMINIFS:     fRes = ( fMin < std::numeric_limits<double>::max() ? fMin : 0 ); break;
-            case ifMAXIFS:     fRes = ( fMax > std::numeric_limits<double>::min() ? fMax : 0 ); break;
-            default: ; // nothing
-        }
-        return fRes;
     }
-    return 0;
+    else
+    {
+        std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+        for (; itRes != itResEnd; ++itRes)
+            if (*itRes == nQueryCount)
+                ++fCount;
+    }
+
+    switch( eFunc )
+    {
+        case ifSUMIFS:     fRes = ::rtl::math::approxAdd( fSum, fMem ); break;
+        case ifAVERAGEIFS: fRes = div( ::rtl::math::approxAdd( fSum, fMem ), fCount); break;
+        case ifCOUNTIFS:   fRes = fCount; break;
+        case ifMINIFS:     fRes = ( fMin < std::numeric_limits<double>::max() ? fMin : 0 ); break;
+        case ifMAXIFS:     fRes = ( fMax > std::numeric_limits<double>::min() ? fMax : 0 ); break;
+        default: ; // nothing
+    }
+    return fRes;
 }
 
 void ScInterpreter::ScSumIfs()
 {
+    sal_uInt8 nParamCount = GetByte();
+
+    if (nParamCount < 3 || (nParamCount % 2 != 1))
+    {
+        SetError( FormulaError::ParameterExpected);
+        return;
+    }
+
     PushDouble( IterateParametersIfs( ifSUMIFS));
 }
 
 void ScInterpreter::ScAverageIfs()
 {
+    sal_uInt8 nParamCount = GetByte();
+
+    if (nParamCount < 3 || (nParamCount % 2 != 1))
+    {
+        SetError( FormulaError::ParameterExpected);
+        return;
+    }
+
     PushDouble( IterateParametersIfs( ifAVERAGEIFS));
 }
 
 void ScInterpreter::ScCountIfs()
 {
+    sal_uInt8 nParamCount = GetByte();
+
+    if (nParamCount < 2 || (nParamCount % 2 != 0))
+    {
+        SetError( FormulaError::ParameterExpected);
+        return;
+    }
+
     PushDouble( IterateParametersIfs( ifCOUNTIFS));
 }
 
 void ScInterpreter::ScMinIfs_MS()
 {
+    sal_uInt8 nParamCount = GetByte();
+
+    if (nParamCount < 3 || (nParamCount % 2 != 1))
+    {
+        SetError( FormulaError::ParameterExpected);
+        return;
+    }
+
     PushDouble( IterateParametersIfs( ifMINIFS ) );
 }
 
 
 void ScInterpreter::ScMaxIfs_MS()
 {
+    sal_uInt8 nParamCount = GetByte();
+
+    if (nParamCount < 3 || (nParamCount % 2 != 1))
+    {
+        SetError( FormulaError::ParameterExpected);
+        return;
+    }
+
     PushDouble( IterateParametersIfs( ifMAXIFS ) );
 }
 
