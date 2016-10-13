@@ -76,9 +76,10 @@
 using namespace ::com::sun::star;
 
 class WW8SelBoxInfo
-    : public std::vector<SwTableBox*>
 {
 private:
+    std::vector<SwTableBox*> m_vBoxes;
+
     WW8SelBoxInfo(WW8SelBoxInfo const&) = delete;
     WW8SelBoxInfo& operator=(WW8SelBoxInfo const&) = delete;
 
@@ -90,6 +91,12 @@ public:
     WW8SelBoxInfo(short nXCenter, short nWidth)
         : nGroupXStart( nXCenter ), nGroupWidth( nWidth ), bGroupLocked(false)
     {}
+
+    size_t size() const { return m_vBoxes.size(); }
+
+    SwTableBox* operator[]( size_t nIndex ) { return m_vBoxes[nIndex]; }
+
+    void push_back( SwTableBox* pBox ) { m_vBoxes.push_back(pBox); }
 };
 
 WW8TabBandDesc::WW8TabBandDesc()
