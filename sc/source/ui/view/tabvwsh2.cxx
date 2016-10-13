@@ -218,6 +218,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             break;
 
         case SID_DRAW_LINE:
+        case SID_DRAW_XLINE:
         case SID_LINE_ARROW_END:
         case SID_LINE_ARROW_CIRCLE:
         case SID_LINE_ARROW_SQUARE:
@@ -369,6 +370,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
                 break;
 
             case SID_DRAW_LINE:
+            case SID_DRAW_XLINE:
             case SID_LINE_ARROW_END:
             case SID_LINE_ARROW_CIRCLE:
             case SID_LINE_ARROW_SQUARE:

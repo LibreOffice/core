@@ -308,7 +308,9 @@ bool FuPoor::doConstructOrthogonal() const
             return bIsMediaSelected;
         }
     }
-    else if (aSfxRequest.GetSlot() == SID_DRAW_XPOLYGON || aSfxRequest.GetSlot() == SID_DRAW_XPOLYGON_NOFILL)
+    else if (aSfxRequest.GetSlot() == SID_DRAW_XPOLYGON
+          || aSfxRequest.GetSlot() == SID_DRAW_XPOLYGON_NOFILL
+          || aSfxRequest.GetSlot() == SID_DRAW_XLINE)
         return true;
 
     return false;
