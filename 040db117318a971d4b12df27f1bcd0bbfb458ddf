@@ -16,6 +16,24 @@
       "revId": "040db117318a971d4b12df27f1bcd0bbfb458ddf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_8bc17d31",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2016-10-13T06:11:30Z",
+      "side": 1,
+      "message": "The default constructed one:\ninline Rectangle::Rectangle()\n{\n    nLeft \u003d nTop \u003d 0;\n    nRight \u003d nBottom \u003d RECT_EMPTY;\n}\n\nand in such a case the value is used only for pthe IsEmpty() check.\n\nThe payload sent to the client is the same passed to CallbackFlushHandler::queue",
+      "parentUuid": "7a77a97e_6bf181cd",
+      "revId": "040db117318a971d4b12df27f1bcd0bbfb458ddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
