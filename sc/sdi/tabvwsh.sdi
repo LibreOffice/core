@@ -88,6 +88,7 @@ interface BaseSelection
 
     SID_OBJECT_SELECT               [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_DRAW_LINE                   [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_XLINE                  [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_LINE_ARROW_END              [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_LINE_ARROW_CIRCLE           [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_LINE_ARROW_SQUARE           [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
