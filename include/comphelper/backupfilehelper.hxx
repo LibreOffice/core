@@ -16,6 +16,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <memory>
+#include <set>
 
 namespace comphelper
 {
@@ -59,11 +60,20 @@ namespace comphelper
     {
     private:
         // internal data
-        const OUString&                 mrBaseURL;
-        sal_uInt16                      mnNumBackups;
-        OUString                        maBase;
-        OUString                        maName;
-        OUString                        maExt;
+        OUString                maInitialBaseURL;
+        OUString                maUserConfigBaseURL;
+        OUString                maRegModName;
+        OUString                maExt;
+
+        std::set< OUString >    maDirs;
+        std::set< std::pair< OUString, OUString > > maFiles;
+
+        sal_uInt16              mnNumBackups;
+        sal_uInt16              mnMode;
+
+        bool                    mbActive;
+        bool                    mbExtensions;
+        bool                    mbCompress;
 
         // internal flag if _exit() was called already - a hint to evtl.
         // not create copies of potentially not well-defined data. This
@@ -78,36 +88,15 @@ namespace comphelper
         static sal_uInt16   mnMaxAllowedBackups;
 
     public:
-        /** Constructor to handle Backups of the given file
-         *
-         *  @param  rxContext
-         *          ComponentContext to use internally; needs to be handed
-         *          over due to usages after DeInit() and thus no access
-         *          anymore using comphelper::getProcessComponentContext()
-         *  @param  rBaseURL
-         *          URL to an existing file that needs to be backed up
-         *
-         *  @param  nNumBackups
-         *          Specifies the maximum number of backups to allow for
-         *          the file. This value gets truncated to [1..max] where
-         *          max currently is 10 and defined in the implementation.
-         *          It is used in tryPush() and tryPop() calls to cleanup/
-         *          reduce the number of existing backups
+        /** Constructor to handle Backups of the given file, will internally
+         *  detect configuration values and URL to initial registrymodifications
+         *  and thus the User configuration directory
          */
-        BackupFileHelper(
-            const OUString& rBaseURL,
-            sal_uInt16 nNumBackups = 5);
+        BackupFileHelper();
 
         // allow to set static global flag when app had to call _exit()
         static void setExitWasCalled();
         static bool getExitWasCalled();
-
-        // static helper to read config values - these are derived from
-        // soffice.ini due to cui not being available in all cases. The
-        // boolean SecureUserConfig is returned.
-        // Default for SecureUserConfig is false
-        // Default for SecureUserConfigNumCopies is 0 (zero)
-        static bool getSecureUserConfig(sal_uInt16& rnSecureUserConfigNumCopies);
 
         /** tries to create a new backup, if there is none yet, or if the
          *  last differs from the base file. It will then put a new verion
@@ -115,14 +104,10 @@ namespace comphelper
          *  Also may cleanup older backups when NumBackups given in the
          *  constructor has changed.
          *
-         *  @param  bCompress
-         *          Defines if the new backup will be compressed when
-         *          added. Default is true
-         *
          *  @return bool
          *          returns true if a new backup was actually created
          */
-        bool tryPush(bool bCompress = true);
+        bool tryPush();
 
         /** finds out if a restore is possible
          *
@@ -143,15 +128,27 @@ namespace comphelper
 
     private:
         // internal helper methods
-        bool splitBaseURL();
-        const rtl::OUString getPackDirName() const;
-        const rtl::OUString getPackFileName(const rtl::OUString& rFileName) const;
-        bool tryPush_basefile(bool bCompress);
-        bool tryPush_extensionInfo(bool bCompress);
-        bool isPopPossible_basefile();
-        bool isPopPossible_extensionInfo();
-        bool tryPop_basefile();
-        bool tryPop_extensionInfo();
+        const rtl::OUString getPackURL() const;
+
+        // file push helpers
+        bool tryPush_Files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, const OUString& rSourceURL, const OUString& rTargetURL);
+        bool tryPush_file(const OUString& rSourceURL, const OUString& rTargetURL, const OUString& rName, const OUString& rExt);
+
+        // file pop possibilities helper
+        bool isPopPossible_files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, const OUString& rSourceURL, const OUString& rTargetURL);
+        static bool isPopPossible_file(const OUString& rSourceURL, const OUString& rTargetURL, const OUString& rName, const OUString& rExt);
+
+        // file pop helpers
+        bool tryPop_files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, const OUString& rSourceURL, const OUString& rTargetURL);
+        bool tryPop_file(const OUString& rSourceURL, const OUString& rTargetURL, const OUString& rName, const OUString& rExt);
+
+        // ExtensionInfo helpers
+        bool tryPush_extensionInfo(const OUString& rTargetURL);
+        static bool isPopPossible_extensionInfo(const OUString& rTargetURL);
+        bool tryPop_extensionInfo(const OUString& rTargetURL);
+
+        // FileDirInfo helpers
+        void fillDirFileInfo();
     };
 }
 
