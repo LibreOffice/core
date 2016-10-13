@@ -16,6 +16,7 @@
 #include <tools/stream.hxx>
 
 #include <xmlsecuritydllapi.h>
+#include <sigstruct.hxx>
 
 namespace xmlsecurity
 {
@@ -58,8 +59,8 @@ public:
 
     bool Read(SvStream& rStream);
     std::vector<PDFObjectElement*> GetSignatureWidgets();
-    /// Return value is about if we can determine a result, bDigestMatch is about the actual result.
-    static bool ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, bool& bDigestMatch);
+    /// Return value is about if we can determine a result, rInformation is about the actual result.
+    static bool ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation);
 };
 
 } // namespace pdfio

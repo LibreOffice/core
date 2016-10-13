@@ -13,11 +13,14 @@
 #include <memory>
 #include <vector>
 
+#include <com/sun/star/uno/Sequence.hxx>
+
 #include <comphelper/scopeguard.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <sax/tools/converter.hxx>
 
 #ifdef XMLSEC_CRYPTO_NSS
 #include <cert.h>
@@ -674,7 +677,7 @@ int PDFDocument::AsHex(char ch)
     return nRet;
 }
 
-bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, bool& bDigestMatch)
+bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation)
 {
     PDFObjectElement* pValue = pSignature->LookupObject("V");
     if (!pValue)
@@ -841,11 +844,22 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     unsigned int nActualResultLen;
     HASH_End(pHASHContext, pActualResultBuffer, &nActualResultLen, nMaxResultLen);
 
-    if (!NSS_CMSSignerInfo_GetSigningCertificate(pCMSSignerInfo, CERT_GetDefaultCertDB()))
+    CERTCertificate* pCertificate = NSS_CMSSignerInfo_GetSigningCertificate(pCMSSignerInfo, CERT_GetDefaultCertDB());
+    if (!pCertificate)
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: NSS_CMSSignerInfo_GetSigningCertificate() failed");
         return false;
     }
+    else
+    {
+        uno::Sequence<sal_Int8> aDerCert(pCertificate->derCert.len);
+        for (size_t i = 0; i < pCertificate->derCert.len; ++i)
+            aDerCert[i] = pCertificate->derCert.data[i];
+        OUStringBuffer aBuffer;
+        sax::Converter::encodeBase64(aBuffer, aDerCert);
+        rInformation.ouX509Certificate = aBuffer.makeStringAndClear();
+    }
+
 
     SECItem* pContentInfoContentData = pCMSSignedData->contentInfo.content.data;
     if (pContentInfoContentData && pContentInfoContentData->data)
@@ -857,7 +871,8 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     SECItem aActualResultItem;
     aActualResultItem.data = pActualResultBuffer;
     aActualResultItem.len = nActualResultLen;
-    bDigestMatch = NSS_CMSSignerInfo_Verify(pCMSSignerInfo, &aActualResultItem, nullptr) == SECSuccess;
+    if (NSS_CMSSignerInfo_Verify(pCMSSignerInfo, &aActualResultItem, nullptr) == SECSuccess)
+        rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
     // Everything went fine
     PORT_Free(pActualResultBuffer);
@@ -868,7 +883,7 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
 #else
     // Not implemented.
     (void)rStream;
-    (void)bDigestMatch;
+    (void)rInformation;
 
     return false;
 #endif
