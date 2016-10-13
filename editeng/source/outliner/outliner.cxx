@@ -89,10 +89,9 @@ Paragraph* Outliner::Insert(const OUString& rText, sal_Int32 nAbsPos, sal_Int16 
         if( pPara->GetDepth() != nDepth )
         {
             nDepthChangedHdlPrevDepth = pPara->GetDepth();
-            mnDepthChangeHdlPrevFlags = pPara->nFlags;
+            ParaFlag nPrevFlags = pPara->nFlags;
             pPara->SetDepth( nDepth );
-            pHdlParagraph = pPara;
-            DepthChangedHdl();
+            DepthChangedHdl(pPara, nPrevFlags);
         }
         pPara->nFlags |= ParaFlag::HOLDDEPTH;
         SetText( rText, pPara );
@@ -107,8 +106,7 @@ Paragraph* Outliner::Insert(const OUString& rText, sal_Int32 nAbsPos, sal_Int16 
         pEditEngine->InsertParagraph( nAbsPos, OUString() );
         DBG_ASSERT(pPara==pParaList->GetParagraph(nAbsPos),"Insert:Failed");
         ImplInitDepth( nAbsPos, nDepth, false );
-        pHdlParagraph = pPara;
-        ParagraphInsertedHdl();
+        ParagraphInsertedHdl(pPara);
         pPara->nFlags |= ParaFlag::HOLDDEPTH;
         SetText( rText, pPara );
         ImplBlockInsertionCallbacks( false );
@@ -151,8 +149,7 @@ void Outliner::ParagraphInserted( sal_Int32 nPara )
         if( !pEditEngine->IsInUndo() )
         {
             ImplCalcBulletText( nPara, true, false );
-            pHdlParagraph = pPara;
-            ParagraphInsertedHdl();
+            ParagraphInsertedHdl(pPara);
         }
     }
 }
@@ -171,8 +168,7 @@ void Outliner::ParagraphDeleted( sal_Int32 nPara )
 
     if( !pEditEngine->IsInUndo() )
     {
-        pHdlParagraph = pPara;
-        ParagraphRemovingHdl();
+        ParagraphRemovingHdl(pPara);
     }
 
     pParaList->Remove( nPara );
@@ -253,8 +249,7 @@ void Outliner::SetDepth( Paragraph* pPara, sal_Int16 nNewDepth )
     if ( nNewDepth != pPara->GetDepth() )
     {
         nDepthChangedHdlPrevDepth = pPara->GetDepth();
-        mnDepthChangeHdlPrevFlags = pPara->nFlags;
-        pHdlParagraph = pPara;
+        ParaFlag nPrevFlags = pPara->nFlags;
 
         sal_Int32 nPara = GetAbsPos( pPara );
         ImplInitDepth( nPara, nNewDepth, true );
@@ -263,7 +258,7 @@ void Outliner::SetDepth( Paragraph* pPara, sal_Int16 nNewDepth )
         if ( ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
             ImplSetLevelDependendStyleSheet( nPara );
 
-        DepthChangedHdl();
+        DepthChangedHdl(pPara, nPrevFlags);
     }
 }
 
@@ -472,8 +467,7 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
             {
                 pParaList->Insert( pPara, nInsPos );
                 pEditEngine->InsertParagraph( nInsPos, aStr );
-                pHdlParagraph = pPara;
-                ParagraphInsertedHdl();
+                ParagraphInsertedHdl(pPara);
             }
             else
             {
@@ -777,7 +771,6 @@ bool Outliner::Expand( Paragraph* pPara )
             pUndo->pParas = nullptr;
             pUndo->nCount = pParaList->GetAbsPos( pPara );
         }
-        pHdlParagraph = pPara;
         pParaList->Expand( pPara );
         InvalidateBullet(pParaList->GetAbsPos(pPara));
         if( bUndo )
@@ -807,7 +800,6 @@ bool Outliner::Collapse( Paragraph* pPara )
             pUndo->nCount = pParaList->GetAbsPos( pPara );
         }
 
-        pHdlParagraph = pPara;
         pParaList->Collapse( pPara );
         InvalidateBullet(pParaList->GetAbsPos(pPara));
         if( bUndo )
@@ -1185,17 +1177,15 @@ void Outliner::ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount )
         if( ImplGetOutlinerMode() != OutlinerMode::TextObject )
         {
             nDepthChangedHdlPrevDepth = pPara->GetDepth();
-            mnDepthChangeHdlPrevFlags = pPara->nFlags;
+            ParaFlag nPrevFlags = pPara->nFlags;
 
             ImpConvertEdtToOut( nStartPara );
-
-            pHdlParagraph = pPara;
 
             if( nStartPara == nStart )
             {
                 // the existing paragraph has changed depth or flags
-                if( (pPara->GetDepth() != nDepthChangedHdlPrevDepth) || (pPara->nFlags != mnDepthChangeHdlPrevFlags) )
-                    DepthChangedHdl();
+                if( (pPara->GetDepth() != nDepthChangedHdlPrevDepth) || (pPara->nFlags != nPrevFlags) )
+                    DepthChangedHdl(pPara, nPrevFlags);
             }
         }
         else // EditEngine mode
@@ -1254,10 +1244,8 @@ bool Outliner::ImpCanDeleteSelectedPages( OutlinerView* pCurView )
 }
 
 Outliner::Outliner(SfxItemPool* pPool, OutlinerMode nMode)
-    : pHdlParagraph(nullptr)
-    , mnFirstSelPage(0)
+    : mnFirstSelPage(0)
     , nDepthChangedHdlPrevDepth(0)
-    , mnDepthChangeHdlPrevFlags(ParaFlag::NONE)
     , nMaxDepth(9)
     , nMinDepth(-1)
     , nFirstPage(1)
@@ -1351,24 +1339,24 @@ size_t Outliner::GetViewCount() const
     return aViewList.size();
 }
 
-void Outliner::ParagraphInsertedHdl()
+void Outliner::ParagraphInsertedHdl(Paragraph* pPara)
 {
     if( !IsInUndo() )
-        aParaInsertedHdl.Call( this );
+        aParaInsertedHdl.Call( { this, pPara } );
 }
 
 
-void Outliner::ParagraphRemovingHdl()
+void Outliner::ParagraphRemovingHdl(Paragraph* pPara)
 {
     if( !IsInUndo() )
-        aParaRemovingHdl.Call( this );
+        aParaRemovingHdl.Call( { this, pPara } );
 }
 
 
-void Outliner::DepthChangedHdl()
+void Outliner::DepthChangedHdl(Paragraph* pPara, ParaFlag nPrevFlags)
 {
     if( !IsInUndo() )
-        aDepthChangedHdl.Call( this );
+        aDepthChangedHdl.Call( { this, pPara, nPrevFlags } );
 }
 
 
@@ -1744,7 +1732,6 @@ bool Outliner::ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 _nFi
 
     nDepthChangedHdlPrevDepth = nPages;
     mnFirstSelPage = _nFirstPage;
-    pHdlParagraph = nullptr;
     return RemovingPagesHdl( pCurView );
 }
 

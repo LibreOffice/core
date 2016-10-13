@@ -468,19 +468,18 @@ void OutlinerView::Indent( short nDiff )
             {
                             // Notify App
                 pOwner->nDepthChangedHdlPrevDepth = nOldDepth;
-                pOwner->mnDepthChangeHdlPrevFlags = pPara->nFlags;
-                pOwner->pHdlParagraph = pPara;
+                ParaFlag nPrevFlags = pPara->nFlags;
 
                 if( bPage )
                     pPara->RemoveFlag( ParaFlag::ISPAGE );
                 else
                     pPara->SetFlag( ParaFlag::ISPAGE );
 
-                pOwner->DepthChangedHdl();
+                pOwner->DepthChangedHdl(pPara, nPrevFlags);
                 pOwner->pEditEngine->QuickMarkInvalid( ESelection( nPara, 0, nPara, 0 ) );
 
                 if( bUndo )
-                    pOwner->InsertUndo( new OutlinerUndoChangeParaFlags( pOwner, nPara, pOwner->mnDepthChangeHdlPrevFlags, pPara->nFlags ) );
+                    pOwner->InsertUndo( new OutlinerUndoChangeParaFlags( pOwner, nPara, nPrevFlags, pPara->nFlags ) );
 
                 continue;
             }
@@ -532,8 +531,7 @@ void OutlinerView::Indent( short nDiff )
             }
 
             pOwner->nDepthChangedHdlPrevDepth = nOldDepth;
-            pOwner->mnDepthChangeHdlPrevFlags = pPara->nFlags;
-            pOwner->pHdlParagraph = pPara;
+            ParaFlag nPrevFlags = pPara->nFlags;
 
             pOwner->ImplInitDepth( nPara, nNewDepth, true );
             pOwner->ImplCalcBulletText( nPara, false, false );
@@ -542,7 +540,7 @@ void OutlinerView::Indent( short nDiff )
                 pOwner->ImplSetLevelDependendStyleSheet( nPara );
 
             // Notify App
-            pOwner->DepthChangedHdl();
+            pOwner->DepthChangedHdl(pPara, nPrevFlags);
         }
         else
         {
@@ -816,7 +814,6 @@ sal_Int32 OutlinerView::ImpCalcSelectedPages( bool bIncludeFirstSelected )
     if( nPages )
     {
         pOwner->nDepthChangedHdlPrevDepth = nPages;
-        pOwner->pHdlParagraph = nullptr;
         pOwner->mnFirstSelPage = nFirstPage;
     }
 

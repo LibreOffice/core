@@ -582,6 +582,10 @@ namespace o3tl
 
 class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 {
+public:
+    struct ParagraphHdlParam { Outliner* pOutliner; Paragraph* pPara; };
+    struct DepthChangeHdlParam { Outliner* pOutliner; Paragraph* pPara; ParaFlag nPrevFlags; };
+private:
     friend class OutlinerView;
     friend class OutlinerEditEng;
     friend class OutlinerParaObject;
@@ -597,13 +601,12 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     ParagraphList*      pParaList;
     ViewList            aViewList;
 
-    Paragraph*          pHdlParagraph;
     sal_Int32           mnFirstSelPage;
     Link<DrawPortionInfo*,void> aDrawPortionHdl;
     Link<DrawBulletInfo*,void>     aDrawBulletHdl;
-    Link<Outliner*,void>           aParaInsertedHdl;
-    Link<Outliner*,void>           aParaRemovingHdl;
-    Link<Outliner*,void>           aDepthChangedHdl;
+    Link<ParagraphHdlParam,void>   aParaInsertedHdl;
+    Link<ParagraphHdlParam,void>   aParaRemovingHdl;
+    Link<DepthChangeHdlParam,void> aDepthChangedHdl;
     Link<Outliner*,void>           aBeginMovingHdl;
     Link<Outliner*,void>           aEndMovingHdl;
     Link<OutlinerView*,bool>       aIndentingPagesHdl;
@@ -615,7 +618,6 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     Link<PasteOrDropInfos*,void>   maEndPasteOrDropHdl;
 
     sal_Int32           nDepthChangedHdlPrevDepth;
-    ParaFlag            mnDepthChangeHdlPrevFlags;
     sal_Int16           nMaxDepth;
     const sal_Int16     nMinDepth;
     sal_Int32           nFirstPage;
@@ -757,15 +759,13 @@ public:
     void            ClearModifyFlag();
     bool            IsModified() const;
 
-    Paragraph*      GetHdlParagraph() const { return pHdlParagraph; }
+    void            ParagraphInsertedHdl(Paragraph*);
+    void            SetParaInsertedHdl(const Link<ParagraphHdlParam,void>& rLink){aParaInsertedHdl=rLink;}
+    const Link<ParagraphHdlParam,void>& GetParaInsertedHdl() const { return aParaInsertedHdl; }
 
-    void            ParagraphInsertedHdl();
-    void            SetParaInsertedHdl(const Link<Outliner*,void>& rLink){aParaInsertedHdl=rLink;}
-    const Link<Outliner*,void>& GetParaInsertedHdl() const { return aParaInsertedHdl; }
-
-    void            ParagraphRemovingHdl();
-    void            SetParaRemovingHdl(const Link<Outliner*,void>& rLink){aParaRemovingHdl=rLink;}
-    const Link<Outliner*,void>& GetParaRemovingHdl() const { return aParaRemovingHdl; }
+    void            ParagraphRemovingHdl(Paragraph*);
+    void            SetParaRemovingHdl(const Link<ParagraphHdlParam,void>& rLink){aParaRemovingHdl=rLink;}
+    const Link<ParagraphHdlParam,void>& GetParaRemovingHdl() const { return aParaRemovingHdl; }
 
     NonOverflowingText *GetNonOverflowingText() const;
     OverflowingText *GetOverflowingText() const;
@@ -775,11 +775,10 @@ public:
     OutlinerParaObject *GetEmptyParaObject() const;
 
 
-    void            DepthChangedHdl();
-    void            SetDepthChangedHdl(const Link<Outliner*,void>& rLink){aDepthChangedHdl=rLink;}
-    const Link<Outliner*,void>& GetDepthChangedHdl() const { return aDepthChangedHdl; }
+    void            DepthChangedHdl(Paragraph*, ParaFlag nPrevFlags);
+    void            SetDepthChangedHdl(const Link<DepthChangeHdlParam,void>& rLink){aDepthChangedHdl=rLink;}
+    const Link<DepthChangeHdlParam,void>& GetDepthChangedHdl() const { return aDepthChangedHdl; }
     sal_Int16       GetPrevDepth() const { return static_cast<sal_Int16>(nDepthChangedHdlPrevDepth); }
-    ParaFlag        GetPrevFlags() const { return mnDepthChangeHdlPrevFlags; }
 
     bool            RemovingPagesHdl( OutlinerView* );
     void            SetRemovingPagesHdl(const Link<OutlinerView*,bool>& rLink){aRemovingPagesHdl=rLink;}

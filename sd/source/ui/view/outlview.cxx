@@ -358,7 +358,7 @@ Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
 /**
  * Handler for inserting pages (paragraphs)
  */
-IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( OutlineView, ParagraphInsertedHdl, Outliner::ParagraphHdlParam, aParam, void )
 {
     // we get calls to this handler during binary insert of drag and drop contents but
     // we ignore it here and handle it later in OnEndPasteOrDrop()
@@ -366,17 +366,15 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner, void )
     {
         OutlineViewPageChangesGuard aGuard(this);
 
-        Paragraph* pPara = pOutliner->GetHdlParagraph();
-
-        sal_Int32 nAbsPos = mrOutliner.GetAbsPos( pPara );
+        sal_Int32 nAbsPos = mrOutliner.GetAbsPos( aParam.pPara );
 
         UpdateParagraph( nAbsPos );
 
         if( (nAbsPos == 0) ||
-            ::Outliner::HasParaFlag(pPara,ParaFlag::ISPAGE) ||
+            ::Outliner::HasParaFlag(aParam.pPara, ParaFlag::ISPAGE) ||
             ::Outliner::HasParaFlag(mrOutliner.GetParagraph( nAbsPos-1 ), ParaFlag::ISPAGE) )
         {
-            InsertSlideForParagraph( pPara );
+            InsertSlideForParagraph( aParam.pPara );
         }
     }
 }
@@ -498,13 +496,13 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 /**
  * Handler for deleting pages (paragraphs)
  */
-IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, aParam, void )
 {
     DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::ParagraphRemovingHdl(), model change without undo?!" );
 
     OutlineViewPageChangesGuard aGuard(this);
 
-    Paragraph* pPara = pOutliner->GetHdlParagraph();
+    Paragraph* pPara = aParam.pPara;
     if( ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
     {
         // how many titles are in front of the title paragraph in question?
@@ -547,7 +545,7 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner, void )
                 mnPagesProcessed = 0;
             }
         }
-        pOutliner->UpdateFields();
+        aParam.pOutliner->UpdateFields();
     }
 }
 
@@ -555,14 +553,15 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner, void )
  * Handler for changing the indentation depth of paragraphs (requires inserting
  * or deleting of pages in some cases)
  */
-IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam, void )
 {
     DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::DepthChangedHdl(), no undo for model change?!" );
 
     OutlineViewPageChangesGuard aGuard(this);
 
-    Paragraph* pPara = pOutliner->GetHdlParagraph();
-    if( ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) && ((pOutliner->GetPrevFlags() & ParaFlag::ISPAGE) == ParaFlag::NONE) )
+    Paragraph* pPara = aParam.pPara;
+    ::Outliner* pOutliner = aParam.pOutliner;
+    if( ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) && ((aParam.nPrevFlags & ParaFlag::ISPAGE) == ParaFlag::NONE) )
     {
         // the current paragraph is transformed into a slide
 
@@ -603,7 +602,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner, void )
             }
         }
 
-        ParagraphInsertedHdl(pOutliner);
+        ParagraphInsertedHdl( { aParam.pOutliner, aParam.pPara } );
 
         mnPagesProcessed++;
 
@@ -630,7 +629,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner, void )
         }
         pOutliner->UpdateFields();
     }
-    else if( !::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) && ((pOutliner->GetPrevFlags() & ParaFlag::ISPAGE) != ParaFlag::NONE) )
+    else if( !::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) && ((aParam.nPrevFlags & ParaFlag::ISPAGE) != ParaFlag::NONE) )
     {
         // the paragraph was a page but now becomes a normal paragraph
 
@@ -1353,9 +1352,9 @@ void OutlineView::SetLinks()
  */
 void OutlineView::ResetLinks() const
 {
-    mrOutliner.SetParaInsertedHdl(Link<::Outliner*,void>());
-    mrOutliner.SetParaRemovingHdl(Link<::Outliner*,void>());
-    mrOutliner.SetDepthChangedHdl(Link<::Outliner*,void>());
+    mrOutliner.SetParaInsertedHdl(Link<::Outliner::ParagraphHdlParam,void>());
+    mrOutliner.SetParaRemovingHdl(Link<::Outliner::ParagraphHdlParam,void>());
+    mrOutliner.SetDepthChangedHdl(Link<::Outliner::DepthChangeHdlParam,void>());
     mrOutliner.SetBeginMovingHdl(Link<::Outliner*,void>());
     mrOutliner.SetEndMovingHdl(Link<::Outliner*,void>());
     mrOutliner.SetStatusEventHdl(Link<EditStatus&,void>());
