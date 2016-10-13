@@ -72,7 +72,7 @@ char* UnicodeToAnsiString( wchar_t* pUniString )
 void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
     HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
-    if( !( hModule <= ( HINSTANCE )HINSTANCE_ERROR ) )
+    if( hModule )
     {
         DllNativeRegProc pNativeProc = ( DllNativeRegProc )GetProcAddress( hModule, "DllRegisterServerNative" );
         if( pNativeProc!=NULL )
@@ -99,7 +99,7 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
 void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
     HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
-    if( !( hModule <= ( HINSTANCE )HINSTANCE_ERROR ) )
+    if( hModule )
     {
         DllNativeUnregProc pNativeProc = ( DllNativeUnregProc )GetProcAddress( hModule, "DllUnregisterServerNative" );
         if( pNativeProc!=NULL )
