@@ -263,7 +263,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
         if (xSignStream.is())
         {
             // Something not ZIP-based, try PDF.
-            PDFSignatureHelper aSignatureHelper;
+            PDFSignatureHelper aSignatureHelper(mxCtx);
             if (aSignatureHelper.ReadAndVerifySignature(xSignStream))
                 return aSignatureHelper.GetDocumentSignatureInformations();
         }
