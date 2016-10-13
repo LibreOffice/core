@@ -228,7 +228,10 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     SAL_WARN_IF( !bInit, "xmlsecurity.comp", "Error initializing security context!" );
     if ( bInit )
     {
-        aSignaturesDialog->SetStorage( rxStorage );
+        if (rxStorage.is())
+            // Something ZIP based: ODF or OOXML.
+            aSignaturesDialog->SetStorage( rxStorage );
+
         aSignaturesDialog->SetSignatureStream( xSignStream );
         if ( aSignaturesDialog->Execute() )
         {

@@ -3519,8 +3519,18 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                 if ( !pImpl->xStream.is() )
                     throw uno::RuntimeException();
 
-                xWriteableZipStor = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImpl->xStream );
-                if ( !xWriteableZipStor.is() )
+                bool bODF = GetFilter()->IsOwnFormat();
+                try
+                {
+                    xWriteableZipStor = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImpl->xStream );
+                }
+                catch (const io::IOException& rException)
+                {
+                    if (bODF)
+                        SAL_WARN("sfx.doc", "ODF stream is not a zip storage: " << rException.Message);
+                }
+
+                if ( !xWriteableZipStor.is() && bODF )
                     throw uno::RuntimeException();
 
                 uno::Reference< embed::XStorage > xMetaInf;
@@ -3581,7 +3591,7 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                             bChanges = true;
                         }
                     }
-                    else
+                    else if (xWriteableZipStor.is())
                     {
                         // OOXML.
                         uno::Reference<io::XStream> xStream;
@@ -3595,6 +3605,14 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                             Commit();
                             bChanges = true;
                         }
+                    }
+                    else
+                    {
+                        // Something not based: e.g. PDF.
+                        SvStream* pStream = utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ);
+                        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+                        if (xSigner->signDocumentContent(uno::Reference<embed::XStorage>(), xStream))
+                            bChanges = true;
                     }
                 }
             }
