@@ -222,15 +222,13 @@ class BorderColorStatus
 public:
     BorderColorStatus();
     ~BorderColorStatus();
-    void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
+    bool statusChanged( const css::frame::FeatureStateEvent& rEvent );
     Color GetColor();
 };
 
 typedef std::function<void(const OUString&, const Color&)> ColorSelectFunction;
 class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 {
-    using SfxToolBoxControl::StateChanged;
-
     std::unique_ptr<svx::ToolboxButtonColorUpdater> m_xBtnUpdater;
     PaletteManager m_aPaletteManager;
     BorderColorStatus m_aBorderColorStatus;
@@ -242,8 +240,9 @@ public:
     SvxColorToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);
     virtual ~SvxColorToolBoxControl() override;
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
     virtual void Select(sal_uInt16 nSelectModifier) override;
 

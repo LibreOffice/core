@@ -35,8 +35,6 @@ class BorderColorStatus;
 
 class SvxColorWindow_Impl : public SfxPopupWindow
 {
-    using FloatingWindow::StateChanged;
-
 private:
     const sal_uInt16    theSlotId;
     VclPtr<SvxColorValueSet>   mpColorSet;
@@ -76,7 +74,7 @@ public:
     void                StartSelection();
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    virtual void        statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     void SetSelectedHdl( const Link<const Color&, void>& rLink ) { maSelectedLink = rLink; }
 };

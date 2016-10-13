@@ -50,8 +50,6 @@ class SvxPopupWindowListBox;
 
 class SvxPopupWindowListBox: public SfxPopupWindow
 {
-    using FloatingWindow::StateChanged;
-
     VclPtr<ListBox> m_pListBox;
     ToolBox &       rToolBox;
     bool            bUserSel;
@@ -64,8 +62,7 @@ public:
 
     // SfxPopupWindow
     virtual void                PopupModeEnd() override;
-    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState ) override;
+    virtual void                statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     inline ListBox &            GetListBox()    { return *m_pListBox; }
 
@@ -118,11 +115,10 @@ void SvxPopupWindowListBox::PopupModeEnd()
 }
 
 
-void SvxPopupWindowListBox::StateChanged(
-        sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxPopupWindowListBox::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
-    rToolBox.EnableItem( nTbxId, ( SfxToolBoxControl::GetItemState( pState ) != SfxItemState::DISABLED) );
-    SfxPopupWindow::StateChanged( nSID, eState, pState );
+    rToolBox.EnableItem( nTbxId, rEvent.IsEnabled );
+    SfxPopupWindow::statusChanged( rEvent );
 }
 
 SvxListBoxControl::SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )

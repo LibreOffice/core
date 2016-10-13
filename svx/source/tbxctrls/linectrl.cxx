@@ -483,15 +483,15 @@ void SvxLineEndWindow::StartSelection()
 }
 
 
-void SvxLineEndWindow::StateChanged(
-    sal_uInt16 nSID, SfxItemState, const SfxPoolItem* pState )
+void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
-    if ( nSID == SID_LINEEND_LIST )
+    if ( rEvent.FeatureURL.Complete == ".uno:LineEndListState" )
     {
         // The list of line ends (LineEndList) has changed
-        if ( pState && dynamic_cast<const SvxLineEndListItem*>( pState) !=  nullptr)
+        css::uno::Reference< css::uno::XWeak > xWeak;
+        if ( rEvent.State >>= xWeak )
         {
-            pLineEndList = static_cast<const SvxLineEndListItem*>(pState)->GetLineEndList();
+            pLineEndList.set( static_cast< XLineEndList* >( xWeak.get() ) );
             DBG_ASSERT( pLineEndList.is(), "LineEndList not found" );
 
             aLineEndSet->Clear();

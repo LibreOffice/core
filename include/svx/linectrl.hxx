@@ -77,8 +77,6 @@ public:
 
 class SvxLineEndWindow : public SfxPopupWindow
 {
-    using FloatingWindow::StateChanged;
-
 private:
     XLineEndListRef pLineEndList;
     VclPtr<ValueSet> aLineEndSet;
@@ -116,8 +114,7 @@ public:
 
     void            StartSelection();
 
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) override;
+    virtual void    statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 };
 
 

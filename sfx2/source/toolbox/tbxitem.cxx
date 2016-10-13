@@ -754,121 +754,7 @@ SfxFrameStatusListener::~SfxFrameStatusListener()
 void SAL_CALL SfxFrameStatusListener::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 throw ( css::uno::RuntimeException, std::exception )
 {
-    SfxViewFrame* pViewFrame = nullptr;
-    Reference < XController > xController;
-
-    SolarMutexGuard aGuard;
-    if ( m_xFrame.is() )
-        xController = m_xFrame->getController();
-
-    Reference < XDispatchProvider > xProvider( xController, UNO_QUERY );
-    if ( xProvider.is() )
-    {
-        Reference < XDispatch > xDisp = xProvider->queryDispatch( rEvent.FeatureURL, OUString(), 0 );
-        if ( xDisp.is() )
-        {
-            Reference< XUnoTunnel > xTunnel( xDisp, UNO_QUERY );
-            SfxOfficeDispatch* pDisp = nullptr;
-            if ( xTunnel.is() )
-            {
-                sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
-                pDisp = reinterpret_cast< SfxOfficeDispatch* >( sal::static_int_cast< sal_IntPtr >( nImplementation ));
-            }
-
-            if ( pDisp )
-                pViewFrame = pDisp->GetDispatcher_Impl()->GetFrame();
-        }
-    }
-
-    sal_uInt16 nSlotId = 0;
-    SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( pViewFrame );
-    const SfxSlot* pSlot = rPool.GetUnoSlot( rEvent.FeatureURL.Path );
-    if ( pSlot )
-        nSlotId = pSlot->GetSlotId();
-
-    if ( nSlotId > 0 )
-    {
-        if ( rEvent.Requery )
-        {
-            // requery for the notified state
-            addStatusListener( rEvent.FeatureURL.Complete );
-        }
-        else
-        {
-            SfxItemState eState = SfxItemState::DISABLED;
-            SfxPoolItem* pItem = nullptr;
-            if ( rEvent.IsEnabled )
-            {
-                eState = SfxItemState::DEFAULT;
-                css::uno::Type aType = rEvent.State.getValueType();
-
-                if ( aType == cppu::UnoType<void>::get() )
-                {
-                    pItem = new SfxVoidItem( nSlotId );
-                    eState = SfxItemState::UNKNOWN;
-                }
-                else if ( aType == cppu::UnoType<bool>::get() )
-                {
-                    bool bTemp = false;
-                    rEvent.State >>= bTemp ;
-                    pItem = new SfxBoolItem( nSlotId, bTemp );
-                }
-                else if ( aType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get())
-                {
-                    sal_uInt16 nTemp = 0;
-                    rEvent.State >>= nTemp ;
-                    pItem = new SfxUInt16Item( nSlotId, nTemp );
-                }
-                else if ( aType == cppu::UnoType<sal_uInt32>::get() )
-                {
-                    sal_uInt32 nTemp = 0;
-                    rEvent.State >>= nTemp ;
-                    pItem = new SfxUInt32Item( nSlotId, nTemp );
-                }
-                else if ( aType == cppu::UnoType<OUString>::get() )
-                {
-                    OUString sTemp ;
-                    rEvent.State >>= sTemp ;
-                    pItem = new SfxStringItem( nSlotId, sTemp );
-                }
-                else if ( aType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
-                {
-                    ItemStatus aItemStatus;
-                    rEvent.State >>= aItemStatus;
-                    SfxItemState tmpState = (SfxItemState) aItemStatus.State;
-                    // make sure no-one tries to send us a combination of states
-                    if (tmpState != SfxItemState::UNKNOWN && tmpState != SfxItemState::DISABLED &&
-                        tmpState != SfxItemState::READONLY && tmpState != SfxItemState::DONTCARE &&
-                        tmpState != SfxItemState::DEFAULT && tmpState != SfxItemState::SET)
-                        throw css::uno::RuntimeException("unknown status");
-                    eState = tmpState;
-                    pItem = new SfxVoidItem( nSlotId );
-                }
-                else if ( aType == cppu::UnoType< css::frame::status::Visibility>::get() )
-                {
-                    Visibility aVisibilityStatus;
-                    rEvent.State >>= aVisibilityStatus;
-                    pItem = new SfxVisibilityItem( nSlotId, aVisibilityStatus.bVisible );
-                }
-                else
-                {
-                    if ( pSlot )
-                        pItem = pSlot->GetType()->CreateItem();
-                    if ( pItem )
-                    {
-                        pItem->SetWhich( nSlotId );
-                        pItem->PutValue( rEvent.State, 0 );
-                    }
-                    else
-                        pItem = new SfxVoidItem( nSlotId );
-                }
-            }
-
-            if ( m_pCallee )
-                m_pCallee->StateChanged( nSlotId, eState, pItem );
-            delete pItem;
-        }
-    }
+    m_pCallee->statusChanged( rEvent );
 }
 
 SfxPopupWindow::SfxPopupWindow(
@@ -1060,22 +946,9 @@ void SfxPopupWindow::StartCascading()
 }
 
 
-void SfxPopupWindow::StateChanged(
-    sal_uInt16 /*nSID*/,
-    SfxItemState eState,
-    const SfxPoolItem* /*pState*/ )
-/*  [Description]
-
-    See also <SfxControllerItem::StateChanged()>. In addition the Popup
-    will become hidden when eState==SfxItemState::DISABLED and in all other
-    cases it will be shown again if it is floating. In general this requires
-    to call the Base class.
-
-    Due to the parent the presentation mode is handled in a special way.
-*/
-
+void SfxPopupWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
-    if ( SfxItemState::DISABLED == eState )
+    if ( !rEvent.IsEnabled )
     {
         Hide();
     }

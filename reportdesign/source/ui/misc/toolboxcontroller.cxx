@@ -38,7 +38,6 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svx/tbcontrl.hxx>
-#include <editeng/colritem.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 
@@ -195,12 +194,7 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
             {
                 case SID_ATTR_CHAR_COLOR2:
                 case SID_BACKGROUND_COLOR:
-                    {
-                        util::Color nColor(COL_TRANSPARENT);
-                        Event.State >>= nColor;
-                        SvxColorItem aColorItem(::Color(nColor), 1);
-                        static_cast<SvxColorToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SfxItemState::SET : SfxItemState::DISABLED,&aColorItem);
-                    }
+                    m_pToolbarController->statusChanged( Event );
                     break;
                 case SID_ATTR_CHAR_FONT:
                     {

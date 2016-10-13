@@ -95,10 +95,7 @@ protected:
     void                    UnbindListener();
     void                    AddStatusListener( const OUString& rCommandURL );
 
-    // SfxStatusListenerInterface
-    using FloatingWindow::StateChanged;
-    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                          const SfxPoolItem* pState );
+    virtual void            statusChanged( const css::frame::FeatureStateEvent& rEvent );
 
 public:
                             SfxPopupWindow( sal_uInt16 nId,
