@@ -303,7 +303,7 @@ void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerLi
     if( !xListener.is() )
     {
         throw RuntimeException("addContainerListener called with null xListener",
-                               static_cast< cppu::OWeakObject * >(this));
+                                static_cast< cppu::OWeakObject * >(this));
     }
     maContainerListeners.addInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
@@ -313,7 +313,8 @@ void SAL_CALL NameContainer::removeContainerListener( const Reference< XContaine
 {
     if( !xListener.is() )
     {
-        throw RuntimeException();
+        throw RuntimeException("removeContainerListener called with null xListener",
+                                static_cast< cppu::OWeakObject * >(this));
     }
     maContainerListeners.removeInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
@@ -324,7 +325,8 @@ void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListen
 {
     if( !xListener.is() )
     {
-        throw RuntimeException();
+        throw RuntimeException("addChangesListener called with null xListener",
+                                static_cast< cppu::OWeakObject * >(this));
     }
     maChangesListeners.addInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
@@ -334,7 +336,8 @@ void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesLis
 {
     if( !xListener.is() )
     {
-        throw RuntimeException();
+        throw RuntimeException("removeChangesListener called with null xListener",
+                                static_cast< cppu::OWeakObject * >(this));
     }
     maChangesListeners.removeInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
