@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_dd86dc64",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-10-13T13:51:09Z",
+      "side": 1,
+      "message": "Try to avoid adding white space in a patch, it is disturbing when doing review and does nothing to the code",
+      "revId": "728e1d47227a469813aa465c1a9af4af4ccc3370",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
