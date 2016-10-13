@@ -31,7 +31,7 @@
     <value>com.sun.star.comp.Writer.XmlFilterAdaptor</value>
    </prop>
    <prop oor:name="Flags" oor:type="oor:string-list">
-    <value>3RDPARTYFILTER ALIEN IMPORT PREFERRED</value>
+    <value>3RDPARTYFILTER ALIEN IMPORT PREFERRED SUPPORTSSIGNING</value>
    </prop>
    <prop oor:name="Type" oor:type="xs:string">
     <value>pdf_Portable_Document_Format</value>

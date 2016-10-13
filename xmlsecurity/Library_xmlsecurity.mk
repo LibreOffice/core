@@ -57,12 +57,27 @@ $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 	xmlsecurity/source/helper/documentsignaturemanager \
 	xmlsecurity/source/helper/ooxmlsecparser \
 	xmlsecurity/source/helper/ooxmlsecexporter \
+	xmlsecurity/source/helper/pdfsignaturehelper \
 	xmlsecurity/source/helper/xmlsignaturehelper2 \
 	xmlsecurity/source/helper/xmlsignaturehelper \
 	xmlsecurity/source/helper/xsecctl \
 	xmlsecurity/source/helper/xsecparser \
 	xmlsecurity/source/helper/xsecsign \
 	xmlsecurity/source/helper/xsecverify \
+	xmlsecurity/source/pdfio/pdfdocument \
 ))
+
+ifeq ($(OS)-$(COM),WNT-MSC)
+$(eval $(call gb_Library_add_defs,xmlsecurity,\
+    -DXMLSEC_CRYPTO_MSCRYPTO \
+))
+else
+$(eval $(call gb_Library_add_defs,xmlsecurity,\
+    -DXMLSEC_CRYPTO_NSS \
+))
+$(eval $(call gb_Library_use_externals,xmlsecurity,\
+    nss3 \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
