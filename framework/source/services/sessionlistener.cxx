@@ -125,8 +125,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override
     {
-        css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.SessionListener" };
-        return aSeq;
+        return {"com.sun.star.frame.SessionListener"};
     }
 
     virtual void SAL_CALL disposing(const css::lang::EventObject&) throw (css::uno::RuntimeException, std::exception) override;
