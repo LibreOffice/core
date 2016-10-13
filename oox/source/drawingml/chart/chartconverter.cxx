@@ -132,12 +132,24 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
         OUString aRangeRep;
         if( !rDataSeq.maData.empty() )
         {
+            int offset = 0;
+            int size = -1;
+
             // create a single-row array from constant source data
-            Matrix< Any > aMatrix( rDataSeq.maData.size(), 1 );
-            Matrix< Any >::iterator aMIt = aMatrix.begin();
-            // TODO: how to handle missing values in the map?
-            for( DataSequenceModel::AnyMap::const_iterator aDIt = rDataSeq.maData.begin(), aDEnd = rDataSeq.maData.end(); aDIt != aDEnd; ++aDIt, ++aMIt )
-                *aMIt = aDIt->second;
+            fprintf(stderr, "--> [ChartConverter::createDataSequence]: %s, size:%d points:%d\n", OUStringToOString(rRole, RTL_TEXTENCODING_UTF8).getStr(), rDataSeq.maData.size(), rDataSeq.mnPointCount);
+            size = (rDataSeq.mnPointCount < 0) ?  rDataSeq.maData.size() : rDataSeq.mnPointCount; // Hack: for test strict.docx which does not even open on Word 2010...
+            Matrix< Any > aMatrix( size, 1 );
+            if(rRole == "label")
+                offset = -1;                     // Hack: labels starts with offset 1
+            if(rRole == "values-y" && rDataSeq.mnPointCount > 0)
+                *aMatrix.at(0, 0) = uno::Any(0); // Hack: import of sequence starting with uno::Any(void) will result in empty sequence as a whole
+
+            for( DataSequenceModel::AnyMap::const_iterator aDIt = rDataSeq.maData.begin(), aDEnd = rDataSeq.maData.end(); aDIt != aDEnd; ++aDIt )
+            {
+                fprintf(stderr, "--> [ChartConverter::createDataSequence]: %s, %d/%d\n", OUStringToOString(rRole, RTL_TEXTENCODING_UTF8).getStr(), aDIt->first, rDataSeq.mnPointCount);
+                *aMatrix.at(aDIt->first+offset, 0) = aDIt->second;
+            }
+
             aRangeRep = lclGenerateApiArray( aMatrix );
         }
 
