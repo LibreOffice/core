@@ -8,6 +8,8 @@
 
 ifneq ($(filter gbuildtoide,$(MAKECMDGOALS)),)
 
+gb_FULLDEPS:=
+
 gbuildtoide:
 	true
 
