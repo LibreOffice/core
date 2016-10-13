@@ -432,9 +432,9 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
         {
             DocumentSignatureAlgorithm mode = DocumentSignatureHelper::getDocumentAlgorithm(
                 m_sODFVersion, maSignatureManager.maCurrentSignatureInformations[n]);
-            std::vector< OUString > aElementsToBeVerified =
-                DocumentSignatureHelper::CreateElementList(
-                maSignatureManager.mxStore, maSignatureManager.meSignatureMode, mode);
+            std::vector< OUString > aElementsToBeVerified;
+            if (maSignatureManager.mxStore.is())
+                aElementsToBeVerified = DocumentSignatureHelper::CreateElementList(maSignatureManager.mxStore, maSignatureManager.meSignatureMode, mode);
 
             const SignatureInformation& rInfo = maSignatureManager.maCurrentSignatureInformations[n];
             //First we try to get the certificate which is embedded in the XML Signature

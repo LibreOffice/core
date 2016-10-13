@@ -47,6 +47,17 @@ DocumentSignatureManager::~DocumentSignatureManager()
 {
 }
 
+PDFSignatureHelper& DocumentSignatureManager::getPDFSignatureHelper()
+{
+    // It is important to create this only when dealing with PDF, in case both
+    // this and XMLSignatureHelper is created, xmlsec gets confused, and
+    // doesn't get correct result.
+    if (!mpPDFSignatureHelper)
+        mpPDFSignatureHelper.reset(new PDFSignatureHelper(mxContext));
+
+    return *mpPDFSignatureHelper;
+}
+
 /* Using the zip storage, we cannot get the properties "MediaType" and "IsEncrypted"
     We use the manifest to find out if a file is xml and if it is encrypted.
     The parameter is an encoded uri. However, the manifest contains paths. Therefore
@@ -331,19 +342,30 @@ void DocumentSignatureManager::read(bool bUseTempStream, bool bCacheLastSignatur
 {
     maCurrentSignatureInformations.clear();
 
-    maSignatureHelper.StartMission();
-
-    SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(embed::ElementModes::READ, bUseTempStream);
-    if (aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML && aStreamHelper.xSignatureStream.is())
+    if (mxStore.is())
     {
-        uno::Reference< io::XInputStream > xInputStream(aStreamHelper.xSignatureStream, uno::UNO_QUERY);
-        maSignatureHelper.ReadAndVerifySignature(xInputStream);
-    }
-    else if (aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML && aStreamHelper.xSignatureStorage.is())
-        maSignatureHelper.ReadAndVerifySignatureStorage(aStreamHelper.xSignatureStorage, bCacheLastSignature);
-    maSignatureHelper.EndMission();
+        // ZIP-based: ODF or OOXML.
+        maSignatureHelper.StartMission();
 
-    maCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
+        SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(embed::ElementModes::READ, bUseTempStream);
+        if (aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML && aStreamHelper.xSignatureStream.is())
+        {
+            uno::Reference< io::XInputStream > xInputStream(aStreamHelper.xSignatureStream, uno::UNO_QUERY);
+            maSignatureHelper.ReadAndVerifySignature(xInputStream);
+        }
+        else if (aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML && aStreamHelper.xSignatureStorage.is())
+            maSignatureHelper.ReadAndVerifySignatureStorage(aStreamHelper.xSignatureStorage, bCacheLastSignature);
+        maSignatureHelper.EndMission();
+
+        maCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
+    }
+    else
+    {
+        // Something not ZIP based, try PDF.
+        uno::Reference<io::XInputStream> xInputStream(mxSignatureStream, uno::UNO_QUERY);
+        if (getPDFSignatureHelper().ReadAndVerifySignature(xInputStream))
+            maCurrentSignatureInformations = getPDFSignatureHelper().GetSignatureInformations();
+    }
 }
 
 void DocumentSignatureManager::write()
