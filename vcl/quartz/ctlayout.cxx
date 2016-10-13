@@ -782,7 +782,7 @@ void CTLayout::Simplify( bool /*bIsBase*/ ) {}
 
 SalLayout* CoreTextStyle::GetTextLayout() const
 {
-    if (getenv("SAL_USE_COMMON_LAYOUT"))
+    if (SalLayout::UseCommonLayout())
         return new CommonSalLayout(*this);
     else
         return new CTLayout( this);
