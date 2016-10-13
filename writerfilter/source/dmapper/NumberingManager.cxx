@@ -38,9 +38,6 @@
 
 using namespace com::sun::star;
 
-#define MAKE_PROPVAL(NameId, Value) \
-    beans::PropertyValue(getPropertyName(NameId), 0, uno::makeAny(Value), beans::PropertyState_DIRECT_VALUE )
-
 #define NUMBERING_MAX_LEVELS    10
 
 
@@ -48,6 +45,11 @@ namespace writerfilter {
 namespace dmapper {
 
 //---------------------------------------------------  Utility functions
+template <typename T>
+beans::PropertyValue lcl_makePropVal(PropertyIds nNameID, T aValue)
+{
+    return {getPropertyName(nNameID), 0, uno::makeAny(aValue), beans::PropertyState_DIRECT_VALUE};
+}
 
 sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps, const OUString& sName )
 {
@@ -239,7 +241,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     std::vector<beans::PropertyValue> aNumberingProperties;
 
     if( m_nIStartAt >= 0)
-        aNumberingProperties.push_back( MAKE_PROPVAL(PROP_START_WITH, (sal_Int16)m_nIStartAt) );
+        aNumberingProperties.push_back(lcl_makePropVal<sal_Int16>(PROP_START_WITH, m_nIStartAt) );
 
     sal_Int16 nNumberFormat = ConversionHelper::ConvertNumberingType(m_nNFC);
     if( m_nNFC >= 0)
@@ -250,11 +252,11 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
             // w:lvlText is empty, that means no numbering in Word.
             // CHAR_SPECIAL is handled separately below.
             nNumberFormat = style::NumberingType::NUMBER_NONE;
-        aNumberingProperties.push_back( MAKE_PROPVAL(PROP_NUMBERING_TYPE, nNumberFormat ));
+        aNumberingProperties.push_back(lcl_makePropVal(PROP_NUMBERING_TYPE, nNumberFormat));
     }
 
     if( m_nJC >= 0 && m_nJC <= sal::static_int_cast<sal_Int32>(sizeof(aWWToUnoAdjust) / sizeof(sal_Int16)) )
-        aNumberingProperties.push_back( MAKE_PROPVAL(PROP_ADJUST, aWWToUnoAdjust[m_nJC]));
+        aNumberingProperties.push_back(lcl_makePropVal(PROP_ADJUST, aWWToUnoAdjust[m_nJC]));
 
     if( !isOutlineNumbering())
     {
@@ -263,21 +265,21 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
         {
             if (!m_sBulletChar.isEmpty())
             {
-                aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, m_sBulletChar.copy(0,1)));
+                aNumberingProperties.push_back(lcl_makePropVal(PROP_BULLET_CHAR, m_sBulletChar.copy(0, 1)));
             }
             else
             {
                 // If w:lvlText's value is null - set bullet char to zero.
-                aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, sal_Unicode(0x0)));
+                aNumberingProperties.push_back(lcl_makePropVal<sal_Unicode>(PROP_BULLET_CHAR, 0));
             }
         }
         if (!m_sGraphicURL.isEmpty())
-            aNumberingProperties.push_back(MAKE_PROPVAL(PROP_GRAPHIC_URL, m_sGraphicURL));
+            aNumberingProperties.push_back(lcl_makePropVal(PROP_GRAPHIC_URL, m_sGraphicURL));
         if (m_sGraphicBitmap.is())
-            aNumberingProperties.push_back(MAKE_PROPVAL(PROP_GRAPHIC_BITMAP, m_sGraphicBitmap));
+            aNumberingProperties.push_back(lcl_makePropVal(PROP_GRAPHIC_BITMAP, m_sGraphicBitmap));
     }
 
-    aNumberingProperties.push_back( MAKE_PROPVAL( PROP_LISTTAB_STOP_POSITION, m_nTabstop ) );
+    aNumberingProperties.push_back(lcl_makePropVal(PROP_LISTTAB_STOP_POSITION, m_nTabstop));
 
     //TODO: handling of nFLegal?
     //TODO: nFNoRestart lower levels do not restart when higher levels are incremented, like:
@@ -291,14 +293,14 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     if( m_nFWord6 > 0) //Word 6 compatibility
     {
         if( m_nFPrev == 1)
-            aNumberingProperties.push_back( MAKE_PROPVAL( PROP_PARENT_NUMBERING, (sal_Int16) NUMBERING_MAX_LEVELS ));
+            aNumberingProperties.push_back(lcl_makePropVal<sal_Int16>(PROP_PARENT_NUMBERING, NUMBERING_MAX_LEVELS));
         //TODO: prefixing space     nFPrevSpace;     - has not been used in WW8 filter
     }
 
 //    TODO: sRGBXchNums;     array of inherited numbers
 
 //  nXChFollow; following character 0 - tab, 1 - space, 2 - nothing
-    aNumberingProperties.push_back( MAKE_PROPVAL( PROP_LEVEL_FOLLOW, m_nXChFollow ));
+    aNumberingProperties.push_back(lcl_makePropVal(PROP_LEVEL_FOLLOW, m_nXChFollow));
 
     const int nIds = 5;
     PropertyIds aReadIds[nIds] =
