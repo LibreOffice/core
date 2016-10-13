@@ -1001,7 +1001,8 @@ $(eval $(call gb_Helper_register_uiconfigs,\
 ))
 
 ifeq ($(gb_GBUILDSELFTEST),t)
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,gbuildselftestdep gbuildselftest))
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, gbuildselftestdep gbuildselftest))
+$(eval $(call gb_Helper_register_executables,NONE, gbuildselftestexe))
 endif
 
 # vim: set noet sw=4 ts=4:

@@ -7,12 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,gbuildtoidetest))
+$(eval $(call gb_Executable_Executable,gbuildselftestexe))
 
-$(eval $(call gb_Module_add_targets,gbuildtoidetest,\
-	Library_gbuildselftestdep \
-	Library_gbuildselftest \
-	Executable_gbuildselftestexe \
+$(eval $(call gb_Executable_add_exception_objects,gbuildselftestexe,\
+	solenv/qa/python/selftest/selftestexeobject \
 ))
 
-# vim: set shiftwidth=4 tabstop=4 noexpandtab:
+# vim: set noet sw=4 ts=4:

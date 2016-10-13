@@ -41,9 +41,9 @@ printf '}\n' >> $(WORKDIR)/GbuildToIde/$(2)
 endef
 
 define gb_Postprocess_register_target
-gbuildtoide : $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(3)))
+gbuildtoide : $(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3)))
 
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(3))): $(gb_Helper_MISCDUMMY) foo
+$(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3))): $(gb_Helper_MISCDUMMY) foo
 endef
 
 endif

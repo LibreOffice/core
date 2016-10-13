@@ -34,7 +34,6 @@ class CheckGbuildToIde(unittest.TestCase):
         gbuildlibs = []
         for jsonfilename in jsonfiles:
             with open(os.path.join(tempwork, 'GbuildToIde', 'Library', jsonfilename), 'r') as f:
-                print('loading %s' % jsonfilename)
                 gbuildlibs.append(json.load(f))
         foundlibs = set()
         for lib in gbuildlibs:
@@ -53,6 +52,19 @@ class CheckGbuildToIde(unittest.TestCase):
                 self.assertTrue(False)
         self.assertEqual(foundlibs, set(['gbuildselftest', 'gbuildselftestdep']))
         self.assertEqual(len(foundlibs), 2)
+        jsonfiles = os.listdir(os.path.join(tempwork, 'GbuildToIde', 'Executable'))
+        gbuildexes = []
+        for jsonfilename in jsonfiles:
+            with open(os.path.join(tempwork, 'GbuildToIde', 'Executable', jsonfilename), 'r') as f:
+                gbuildexes.append(json.load(f))
+        foundexes = set()
+        for exe in gbuildexes:
+            if exe['LINKTARGET'].find('gbuildselftestexe') != -1:
+                foundexes.add('gbuildselftestexe')
+            else:
+                self.assertTrue(False)
+        self.assertEqual(foundexes, set(['gbuildselftestexe']))
+        self.assertEqual(len(foundexes), 1)
 
 if __name__ == "__main__":
     unittest.main()
