@@ -106,15 +106,21 @@ namespace comphelper
          *
          *  @return bool
          *          returns true if a new backup was actually created
+         *
+         * tryPushExtensionInfo is the specialized version for ExtensionInfo
          */
         bool tryPush();
+        bool tryPushExtensionInfo();
 
         /** finds out if a restore is possible
          *
          *  @return bool
          *          returns true if a restore to an older backup is possible
+         *
+         * isPopPossibleExtensionInfo is the specialized version for ExtensionInfo
          */
         bool isPopPossible();
+        bool isPopPossibleExtensionInfo();
 
         /** tries to execute a restore. Will overwrite the base file
          *  in that case and take one version off the 'stack' of copies.
@@ -123,8 +129,25 @@ namespace comphelper
          *
          *  @return bool
          *          returns true if a restore was actually created
+         *
+         * tryPopExtensionInfo is the specialized version for ExtensionInfo
          */
         bool tryPop();
+        bool tryPopExtensionInfo();
+
+        /** tries to iterate the extensions and to disable all of them
+        */
+        static bool isTryDisableAllExtensionsPossible();
+        static void tryDisableAllExtensions();
+
+        /** resets User-Customizations like Settings and UserInterface modifications
+        */
+        bool isTryResetCustomizationsPossible();
+        void tryResetCustomizations();
+
+        /** resets the whole UserProfile
+        */
+        void tryResetUserProfile();
 
     private:
         // internal helper methods
