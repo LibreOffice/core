@@ -34,4 +34,9 @@ String SV_APP_DEFAULT
     Text [ en-US ] = "default";
 };
 
+String SV_APP_VCLBACKEND
+{
+    Text [ en-US ] = "VCL: ";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
