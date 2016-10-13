@@ -82,6 +82,11 @@ interface TextEditView : BaseTextEditView
         ExecMethod = ExecDraw ;
         StateMethod = GetDrawState ;
     ]
+    SID_DRAW_XLINE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
     SID_LINE_ARROW_END
     [
         ExecMethod = ExecDraw ;

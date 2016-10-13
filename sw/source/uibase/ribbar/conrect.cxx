@@ -167,6 +167,7 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
     case SID_LINE_SQUARE_ARROW:
     case SID_LINE_ARROWS:
     case SID_DRAW_LINE:
+    case SID_DRAW_XLINE:
         m_pWin->SetSdrDrawMode(OBJ_LINE);
         break;
 

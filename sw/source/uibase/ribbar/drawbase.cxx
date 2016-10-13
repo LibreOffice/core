@@ -621,7 +621,7 @@ Point  SwDrawBase::GetDefaultCenterPos()
 // #i33136#
 bool SwDrawBase::doConstructOrthogonal() const
 {
-    return ( m_nSlotId == SID_DRAW_XPOLYGON || m_nSlotId == SID_DRAW_XPOLYGON_NOFILL );
+    return ( m_nSlotId == SID_DRAW_XPOLYGON || m_nSlotId == SID_DRAW_XPOLYGON_NOFILL || m_nSlotId == SID_DRAW_XLINE );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
