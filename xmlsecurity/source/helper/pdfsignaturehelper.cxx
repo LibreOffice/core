@@ -11,6 +11,8 @@
 
 #include <memory>
 
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
+
 #include <comphelper/sequence.hxx>
 #include <tools/stream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -18,6 +20,15 @@
 #include <pdfio/pdfdocument.hxx>
 
 using namespace ::com::sun::star;
+
+PDFSignatureHelper::PDFSignatureHelper(const uno::Reference<uno::XComponentContext>& xComponentContext)
+    : m_xComponentContext(xComponentContext)
+{
+    m_xSEInitializer = xml::crypto::SEInitializer::create(m_xComponentContext);
+    if (m_xSEInitializer.is())
+        // This initializes nss / mscrypto.
+        m_xSecurityContext = m_xSEInitializer->createSecurityContext(OUString());
+}
 
 bool PDFSignatureHelper::ReadAndVerifySignature(const uno::Reference<io::XInputStream>& xInputStream)
 {

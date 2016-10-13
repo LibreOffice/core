@@ -734,20 +734,8 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     }
 
 #ifdef XMLSEC_CRYPTO_NSS
-    // Validate the signature.
-
-    const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
-    if (!pEnv)
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: no mozilla cert folder");
-        return false;
-    }
-
-    if (NSS_Init(pEnv) != SECSuccess)
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: NSS_Init() failed");
-        return false;
-    }
+    // Validate the signature. No need to call NSS_Init() here, assume that the
+    // caller did that already.
 
     SECItem aSignatureItem;
     aSignatureItem.data = aSignature.data();
@@ -875,11 +863,6 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     PORT_Free(pActualResultBuffer);
     HASH_Destroy(pHASHContext);
     NSS_CMSSignerInfo_Destroy(pCMSSignerInfo);
-    if (NSS_Shutdown() != SECSuccess)
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: NSS_Shutdown() failed");
-        return false;
-    }
 
     return true;
 #else
