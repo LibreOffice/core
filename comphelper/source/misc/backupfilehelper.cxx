@@ -27,11 +27,12 @@
 #include <zlib.h>
 
 using namespace css;
-typedef std::shared_ptr< osl::File > FileSharedPtr;
 static const sal_uInt32 BACKUP_FILE_HELPER_BLOCK_SIZE = 16384;
 
 namespace
 {
+    typedef std::shared_ptr< osl::File > FileSharedPtr;
+
     OUString splitAtLastToken(const OUString& rSrc, sal_Unicode aToken, OUString& rRight)
     {
         const sal_Int32 nIndex(rSrc.lastIndexOf(aToken));
@@ -170,6 +171,41 @@ namespace
         return false;
     }
 
+    OUString createFileURL(const OUString& rURL, const OUString& rName, const OUString& rExt)
+    {
+        OUString aRetval;
+
+        if (!rURL.isEmpty() && !rName.isEmpty())
+        {
+            aRetval = rURL;
+            aRetval += "/";
+            aRetval += rName;
+
+            if (!rExt.isEmpty())
+            {
+                aRetval += ".";
+                aRetval += rExt;
+            }
+        }
+
+        return aRetval;
+    }
+
+    OUString createPackURL(const OUString& rURL, const OUString& rName)
+    {
+        OUString aRetval;
+
+        if (!rURL.isEmpty() && !rName.isEmpty())
+        {
+            aRetval = rURL;
+            aRetval += "/";
+            aRetval += rName;
+            aRetval += ".pack";
+        }
+
+        return aRetval;
+    }
+
     bool fileExists(const OUString& rBaseURL)
     {
         if (!rBaseURL.isEmpty())
@@ -180,6 +216,51 @@ namespace
         }
 
         return false;
+    }
+
+    void scanDirsAndFiles(
+        const OUString& rDirURL,
+        std::set< OUString >& rDirs,
+        std::set< std::pair< OUString, OUString > >& rFiles)
+    {
+        if (!rDirURL.isEmpty())
+        {
+            osl::Directory aDirectory(rDirURL);
+
+            if (osl::FileBase::E_None == aDirectory.open())
+            {
+                osl::DirectoryItem aDirectoryItem;
+
+                while (osl::FileBase::E_None == aDirectory.getNextItem(aDirectoryItem))
+                {
+                    osl::FileStatus aFileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName);
+
+                    if (osl::FileBase::E_None == aDirectoryItem.getFileStatus(aFileStatus))
+                    {
+                        if (aFileStatus.isDirectory())
+                        {
+                            const OUString aFileName(aFileStatus.getFileName());
+
+                            if (!aFileName.isEmpty())
+                            {
+                                rDirs.insert(aFileName);
+                            }
+                        }
+                        else if (aFileStatus.isRegular())
+                        {
+                            OUString aFileName(aFileStatus.getFileName());
+                            OUString aExtension;
+                            aFileName = splitAtLastToken(aFileName, '.', aExtension);
+
+                            if (!aFileName.isEmpty())
+                            {
+                                rFiles.insert(std::pair< OUString, OUString >(aFileName, aExtension));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -1176,15 +1257,96 @@ namespace comphelper
     sal_uInt16 BackupFileHelper::mnMaxAllowedBackups = 10;
     bool BackupFileHelper::mbExitWasCalled = false;
 
-    BackupFileHelper::BackupFileHelper(
-        const OUString& rBaseURL,
-        sal_uInt16 nNumBackups)
-    :   mrBaseURL(rBaseURL),
-        mnNumBackups(::std::min(::std::max(nNumBackups, sal_uInt16(1)), mnMaxAllowedBackups)),
-        maBase(),
-        maName(),
-        maExt()
+    BackupFileHelper::BackupFileHelper()
+        : maInitialBaseURL(),
+        maUserConfigBaseURL(),
+        maRegModName(),
+        maExt(),
+        maDirs(),
+        maFiles(),
+        mnNumBackups(2),
+        mnMode(0),
+        mbActive(false),
+        mbExtensions(true),
+        mbCompress(true)
     {
+        OUString sTokenOut;
+
+        // read configuration item 'SecureUserConfig' -> bool on/off
+        if (rtl::Bootstrap::get("SecureUserConfig", sTokenOut))
+        {
+            mbActive = sTokenOut.toBoolean();
+        }
+
+        if (mbActive && rtl::Bootstrap::get("SecureUserConfigNumCopies", sTokenOut))
+        {
+            const sal_uInt16 nConfigNumCopies(static_cast<sal_uInt16>(sTokenOut.toUInt32()));
+
+            // limit to range [1..mnMaxAllowedBackups]
+            mnNumBackups = ::std::min(::std::max(nConfigNumCopies, mnNumBackups), mnMaxAllowedBackups);
+        }
+
+        if (mbActive && rtl::Bootstrap::get("SecureUserConfigMode", sTokenOut))
+        {
+            const sal_uInt16 nMode(static_cast<sal_uInt16>(sTokenOut.toUInt32()));
+
+            // limit to range [0..2]
+            mnMode = ::std::min(nMode, sal_uInt16(2));
+        }
+
+        if (mbActive && rtl::Bootstrap::get("SecureUserConfigExtensions", sTokenOut))
+        {
+            mbExtensions = sTokenOut.toBoolean();
+        }
+
+        if (mbActive && rtl::Bootstrap::get("SecureUserConfigCompress", sTokenOut))
+        {
+            mbCompress = sTokenOut.toBoolean();
+        }
+
+        if (mbActive)
+        {
+            // try to access user layer configuration file URL, the one that
+            // points to registrymodifications.xcu
+            OUString conf("${CONFIGURATION_LAYERS}");
+            rtl::Bootstrap::expandMacros(conf);
+            const OUString aTokenUser("user:");
+            sal_Int32 nStart(conf.indexOf(aTokenUser));
+
+            if (-1 != nStart)
+            {
+                nStart += aTokenUser.getLength();
+                sal_Int32 nEnd(conf.indexOf(' ', nStart));
+
+                if (-1 == nEnd)
+                {
+                    nEnd = conf.getLength();
+                }
+
+                maInitialBaseURL = conf.copy(nStart, nEnd - nStart);
+                maInitialBaseURL.startsWith("!", &maInitialBaseURL);
+            }
+
+            if (maInitialBaseURL.isEmpty())
+            {
+                // if not found, we are out of business
+                mbActive = false;
+            }
+        }
+
+        if (mbActive)
+        {
+            // split to path_to_user_config (maUserConfigBaseURL),
+            // name_of_regMod (maRegModName)
+            // and extension (maExt)
+            if (maUserConfigBaseURL.isEmpty() && !maInitialBaseURL.isEmpty())
+            {
+                // split URL at extension and at last path separator
+                maUserConfigBaseURL = splitAtLastToken(splitAtLastToken(maInitialBaseURL, '.', maExt), '/', maRegModName);
+            }
+
+            mbActive = !maUserConfigBaseURL.isEmpty() && !maRegModName.isEmpty();
+        }
     }
 
     void BackupFileHelper::setExitWasCalled()
@@ -1197,40 +1359,32 @@ namespace comphelper
         return mbExitWasCalled;
     }
 
-    bool BackupFileHelper::getSecureUserConfig(sal_uInt16& rnSecureUserConfigNumCopies)
-    {
-        // init to not active
-        bool bRetval(false);
-        rnSecureUserConfigNumCopies = 0;
-        OUString sTokenOut;
-
-        if (rtl::Bootstrap::get("SecureUserConfig", sTokenOut))
-        {
-            bRetval = sTokenOut.toBoolean();
-        }
-
-        if (bRetval && rtl::Bootstrap::get("SecureUserConfigNumCopies", sTokenOut))
-        {
-            rnSecureUserConfigNumCopies = static_cast< sal_uInt16 >(sTokenOut.toUInt32());
-        }
-
-        return bRetval;
-    }
-
-    bool BackupFileHelper::tryPush(bool bCompress)
+    bool BackupFileHelper::tryPush()
     {
         bool bDidPush(false);
 
-        if (splitBaseURL())
+        if (mbActive)
         {
-            // ensure directory existence
-            osl::Directory::createPath(getPackDirName());
+            const OUString aPackURL(getPackURL());
 
-            // try push for base file (usually registrymodifications)
-            bDidPush = tryPush_basefile(bCompress);
+            // ensure dir and file vectors
+            fillDirFileInfo();
+
+            // proccess all files in question recursively
+            if (!maDirs.empty() || !maFiles.empty())
+            {
+                bDidPush = tryPush_Files(
+                    maDirs,
+                    maFiles,
+                    maUserConfigBaseURL,
+                    aPackURL);
+            }
 
             // Try Push of ExtensionInfo
-            bDidPush |= tryPush_extensionInfo(bCompress);
+            if (mbExtensions)
+            {
+                bDidPush |= tryPush_extensionInfo(aPackURL);
+            }
         }
 
         return bDidPush;
@@ -1240,13 +1394,28 @@ namespace comphelper
     {
         bool bPopPossible(false);
 
-        if (splitBaseURL())
+        if (mbActive)
         {
-            // try for base file (usually registrymodifications)
-            bPopPossible = isPopPossible_basefile();
+            const OUString aPackURL(getPackURL());
+
+            // ensure dir and file vectors
+            fillDirFileInfo();
+
+            // proccess all files in question recursively
+            if (!maDirs.empty() || !maFiles.empty())
+            {
+                bPopPossible = isPopPossible_files(
+                    maDirs,
+                    maFiles,
+                    maUserConfigBaseURL,
+                    aPackURL);
+            }
 
             // try for ExtensionInfo
-            bPopPossible |= isPopPossible_extensionInfo();
+            if (mbExtensions)
+            {
+                bPopPossible |= isPopPossible_extensionInfo(aPackURL);
+            }
         }
 
         return bPopPossible;
@@ -1256,53 +1425,116 @@ namespace comphelper
     {
         bool bDidPop(false);
 
-        if (splitBaseURL())
+        if (mbActive)
         {
-            // try for base file (usually registrymodifications)
-            bDidPop = tryPop_basefile();
+            const OUString aPackURL(getPackURL());
+
+            // ensure dir and file vectors
+            fillDirFileInfo();
+
+            // proccess all files in question recursively
+            if (!maDirs.empty() || !maFiles.empty())
+            {
+                bDidPop = tryPop_files(
+                    maDirs,
+                    maFiles,
+                    maUserConfigBaseURL,
+                    aPackURL);
+            }
 
             // try for ExtensionInfo
-            bDidPop |= tryPop_extensionInfo();
+            if (mbExtensions)
+            {
+                bDidPop |= tryPop_extensionInfo(aPackURL);
+            }
 
             if (bDidPop)
             {
                 // try removal of evtl. empty directory
-                osl::Directory::remove(getPackDirName());
+                osl::Directory::remove(aPackURL);
             }
         }
 
         return bDidPop;
     }
 
-    bool BackupFileHelper::splitBaseURL()
+    /////////////////// helpers ///////////////////////
+
+    const rtl::OUString BackupFileHelper::getPackURL() const
     {
-        if (maBase.isEmpty() && !mrBaseURL.isEmpty())
+        return rtl::OUString(maUserConfigBaseURL + "/pack");
+    }
+
+    /////////////////// file push helpers ///////////////////////
+
+    bool BackupFileHelper::tryPush_Files(
+        const std::set< OUString >& rDirs,
+        const std::set< std::pair< OUString, OUString > >& rFiles,
+        const OUString& rSourceURL, // source dir without trailing '/'
+        const OUString& rTargetURL  // target dir without trailing '/'
+        )
+    {
+        bool bDidPush(false);
+        osl::Directory::createPath(rTargetURL);
+
+        // proccess files
+        for (const auto& file : rFiles)
         {
-            // split URL at extension and at last path separator
-            maBase = splitAtLastToken(splitAtLastToken(mrBaseURL, '.', maExt), '/', maName);
+            bDidPush |= tryPush_file(
+                rSourceURL,
+                rTargetURL,
+                file.first,
+                file.second);
         }
 
-        return !maBase.isEmpty() && !maName.isEmpty();
-    }
-
-    const rtl::OUString BackupFileHelper::getPackDirName() const
-    {
-        return rtl::OUString(maBase + "/pack");
-    }
-
-    const rtl::OUString BackupFileHelper::getPackFileName(const rtl::OUString& rFileName) const
-    {
-        return rtl::OUString(getPackDirName() + "/" + rFileName + ".pack");
-    }
-
-    bool BackupFileHelper::tryPush_basefile(bool bCompress)
-    {
-        if (fileExists(mrBaseURL))
+        // proccess dirs
+        for (const auto& dir : rDirs)
         {
-            PackedFile aPackedFile(getPackFileName(maName));
-            FileSharedPtr aBaseFile(new osl::File(mrBaseURL));
+            OUString aNewSourceURL(rSourceURL + "/" + dir);
+            OUString aNewTargetURL(rTargetURL + "/" + dir);
+            std::set< OUString > aNewDirs;
+            std::set< std::pair< OUString, OUString > > aNewFiles;
 
-            if (aPackedFile.tryPush(aBaseFile, bCompress))
+            scanDirsAndFiles(
+                aNewSourceURL,
+                aNewDirs,
+                aNewFiles);
+
+            if (!aNewDirs.empty() || !aNewFiles.empty())
+            {
+                bDidPush |= tryPush_Files(
+                    aNewDirs,
+                    aNewFiles,
+                    aNewSourceURL,
+                    aNewTargetURL);
+            }
+        }
+
+        if (!bDidPush)
+        {
+            // try removal of evtl. empty directory
+            osl::Directory::remove(rTargetURL);
+        }
+
+        return bDidPush;
+    }
+
+    bool BackupFileHelper::tryPush_file(
+        const OUString& rSourceURL, // source dir without trailing '/'
+        const OUString& rTargetURL, // target dir without trailing '/'
+        const OUString& rName,      // filename
+        const OUString& rExt        // extension (or empty)
+        )
+    {
+        const OUString aFileURL(createFileURL(rSourceURL, rName, rExt));
+
+        if (fileExists(aFileURL))
+        {
+            const OUString aPackURL(createPackURL(rTargetURL, rName));
+            PackedFile aPackedFile(aPackURL);
+            FileSharedPtr aBaseFile(new osl::File(aFileURL));
+
+            if (aPackedFile.tryPush(aBaseFile, mbCompress))
             {
                 // reduce to allowed number and flush
                 aPackedFile.tryReduceToNumBackups(mnNumBackups);
@@ -1315,37 +1547,66 @@ namespace comphelper
         return false;
     }
 
-    bool BackupFileHelper::tryPush_extensionInfo(bool bCompress)
+    /////////////////// file pop possibilities helper ///////////////////////
+
+    bool BackupFileHelper::isPopPossible_files(
+        const std::set< OUString >& rDirs,
+        const std::set< std::pair< OUString, OUString > >& rFiles,
+        const OUString& rSourceURL, // source dir without trailing '/'
+        const OUString& rTargetURL  // target dir without trailing '/'
+        )
     {
-        ExtensionInfo aExtensionInfo;
-        OUString aTempURL;
-        bool bRetval(false);
+        bool bPopPossible(false);
 
-        // create current configuration and write to temp file - it exists until deleted
-        if (aExtensionInfo.createTempFile(aTempURL))
+        // proccess files
+        for (const auto& file : rFiles)
         {
-            PackedFile aPackedFile(getPackFileName("ExtensionInfo"));
-            FileSharedPtr aBaseFile(new osl::File(aTempURL));
+            bPopPossible |= isPopPossible_file(
+                rSourceURL,
+                rTargetURL,
+                file.first,
+                file.second);
+        }
 
-            if (aPackedFile.tryPush(aBaseFile, bCompress))
+        // proccess dirs
+        for (const auto& dir : rDirs)
+        {
+            OUString aNewSourceURL(rSourceURL + "/" + dir);
+            OUString aNewTargetURL(rTargetURL + "/" + dir);
+            std::set< OUString > aNewDirs;
+            std::set< std::pair< OUString, OUString > > aNewFiles;
+
+            scanDirsAndFiles(
+                aNewSourceURL,
+                aNewDirs,
+                aNewFiles);
+
+            if (!aNewDirs.empty() || !aNewFiles.empty())
             {
-                // reduce to allowed number and flush
-                aPackedFile.tryReduceToNumBackups(mnNumBackups);
-                aPackedFile.flush();
-                bRetval = true;
+                bPopPossible |= isPopPossible_files(
+                    aNewDirs,
+                    aNewFiles,
+                    aNewSourceURL,
+                    aNewTargetURL);
             }
         }
 
-        // delete temp file (in all cases)
-        osl::File::remove(aTempURL);
-        return bRetval;
+        return bPopPossible;
     }
 
-    bool BackupFileHelper::isPopPossible_basefile()
+    bool BackupFileHelper::isPopPossible_file(
+        const OUString& rSourceURL, // source dir without trailing '/'
+        const OUString& rTargetURL, // target dir without trailing '/'
+        const OUString& rName,      // filename
+        const OUString& rExt        // extension (or empty)
+        )
     {
-        if (fileExists(mrBaseURL))
+        const OUString aFileURL(createFileURL(rSourceURL, rName, rExt));
+
+        if (fileExists(aFileURL))
         {
-            PackedFile aPackedFile(getPackFileName(maName));
+            const OUString aPackURL(createPackURL(rTargetURL, rName));
+            PackedFile aPackedFile(aPackURL);
 
             return !aPackedFile.empty();
         }
@@ -1353,20 +1614,73 @@ namespace comphelper
         return false;
     }
 
-    bool BackupFileHelper::isPopPossible_extensionInfo()
-    {
-        // extensionInfo always exists internally, no test needed
-        PackedFile aPackedFile(getPackFileName("ExtensionInfo"));
+    /////////////////// file pop helpers ///////////////////////
 
-        return !aPackedFile.empty();
+    bool BackupFileHelper::tryPop_files(
+        const std::set< OUString >& rDirs,
+        const std::set< std::pair< OUString, OUString > >& rFiles,
+        const OUString& rSourceURL, // source dir without trailing '/'
+        const OUString& rTargetURL  // target dir without trailing '/'
+        )
+    {
+        bool bDidPop(false);
+
+        // proccess files
+        for (const auto& file : rFiles)
+        {
+            bDidPop |= tryPop_file(
+                rSourceURL,
+                rTargetURL,
+                file.first,
+                file.second);
+        }
+
+        // proccess dirs
+        for (const auto& dir : rDirs)
+        {
+            OUString aNewSourceURL(rSourceURL + "/" + dir);
+            OUString aNewTargetURL(rTargetURL + "/" + dir);
+            std::set< OUString > aNewDirs;
+            std::set< std::pair< OUString, OUString > > aNewFiles;
+
+            scanDirsAndFiles(
+                aNewSourceURL,
+                aNewDirs,
+                aNewFiles);
+
+            if (!aNewDirs.empty() || !aNewFiles.empty())
+            {
+                bDidPop |= tryPop_files(
+                    aNewDirs,
+                    aNewFiles,
+                    aNewSourceURL,
+                    aNewTargetURL);
+            }
+        }
+
+        if (bDidPop)
+        {
+            // try removal of evtl. empty directory
+            osl::Directory::remove(rTargetURL);
+        }
+
+        return bDidPop;
     }
 
-    bool BackupFileHelper::tryPop_basefile()
+    bool BackupFileHelper::tryPop_file(
+        const OUString& rSourceURL, // source dir without trailing '/'
+        const OUString& rTargetURL, // target dir without trailing '/'
+        const OUString& rName,      // filename
+        const OUString& rExt        // extension (or empty)
+        )
     {
-        if (fileExists(mrBaseURL))
+        const OUString aFileURL(createFileURL(rSourceURL, rName, rExt));
+
+        if (fileExists(aFileURL))
         {
-            // try Pop for base file (usually registrymodifications)
-            PackedFile aPackedFile(getPackFileName(maName));
+            // try Pop for base file
+            const OUString aPackURL(createPackURL(rTargetURL, rName));
+            PackedFile aPackedFile(aPackURL);
 
             if (!aPackedFile.empty())
             {
@@ -1385,8 +1699,8 @@ namespace comphelper
                     {
                         // copy over existing file by first deleting original
                         // and moving the temp file to old original
-                        osl::File::remove(mrBaseURL);
-                        osl::File::move(aTempURL, mrBaseURL);
+                        osl::File::remove(aFileURL);
+                        osl::File::move(aTempURL, aFileURL);
 
                         // reduce to allowed number and flush
                         aPackedFile.tryReduceToNumBackups(mnNumBackups);
@@ -1404,10 +1718,55 @@ namespace comphelper
         return false;
     }
 
-    bool BackupFileHelper::tryPop_extensionInfo()
+    /////////////////// ExtensionInfo helpers ///////////////////////
+
+    bool BackupFileHelper::tryPush_extensionInfo(
+        const OUString& rTargetURL // target dir without trailing '/'
+        )
+    {
+        ExtensionInfo aExtensionInfo;
+        OUString aTempURL;
+        bool bRetval(false);
+
+        // create current configuration and write to temp file - it exists until deleted
+        if (aExtensionInfo.createTempFile(aTempURL))
+        {
+            const OUString aPackURL(createPackURL(rTargetURL, "ExtensionInfo"));
+            PackedFile aPackedFile(aPackURL);
+            FileSharedPtr aBaseFile(new osl::File(aTempURL));
+
+            if (aPackedFile.tryPush(aBaseFile, mbCompress))
+            {
+                // reduce to allowed number and flush
+                aPackedFile.tryReduceToNumBackups(mnNumBackups);
+                aPackedFile.flush();
+                bRetval = true;
+            }
+        }
+
+        // delete temp file (in all cases)
+        osl::File::remove(aTempURL);
+        return bRetval;
+    }
+
+    bool BackupFileHelper::isPopPossible_extensionInfo(
+        const OUString& rTargetURL // target dir without trailing '/'
+        )
     {
         // extensionInfo always exists internally, no test needed
-        PackedFile aPackedFile(getPackFileName("ExtensionInfo"));
+        const OUString aPackURL(createPackURL(rTargetURL, "ExtensionInfo"));
+        PackedFile aPackedFile(aPackURL);
+
+        return !aPackedFile.empty();
+    }
+
+    bool BackupFileHelper::tryPop_extensionInfo(
+        const OUString& rTargetURL // target dir without trailing '/'
+        )
+    {
+        // extensionInfo always exists internally, no test needed
+        const OUString aPackURL(createPackURL(rTargetURL, "ExtensionInfo"));
+        PackedFile aPackedFile(aPackURL);
 
         if (!aPackedFile.empty())
         {
@@ -1436,7 +1795,9 @@ namespace comphelper
 
                             aCurrentExtensionInfo.createCurrent();
 
-                            // now we have loaded and current ExtensionInfo and may react on differences
+                            // now we have loaded last_working (aLoadedExtensionInfo) and
+                            // current (aCurrentExtensionInfo) ExtensionInfo and may react on
+                            // differences by de/activating these as needed
 
 
 
@@ -1459,6 +1820,95 @@ namespace comphelper
         }
 
         return false;
+    }
+
+    /////////////////// FileDirInfo helpers ///////////////////////
+
+    void BackupFileHelper::fillDirFileInfo()
+    {
+        if (!maDirs.empty() || !maFiles.empty())
+        {
+            // already done
+            return;
+        }
+
+        // fill dir and file info list to work with dependent on work mode
+        switch (mnMode)
+        {
+        case 0:
+        {
+            // add registrymodifications (the orig file in maInitialBaseURL)
+            maFiles.insert(std::pair< OUString, OUString >(maRegModName, maExt));
+            break;
+        }
+        case 1:
+        {
+            // add registrymodifications (the orig file in maInitialBaseURL)
+            maFiles.insert(std::pair< OUString, OUString >(maRegModName, maExt));
+
+            // Add a selection of dirs containing User-Defined and thus
+            // valuable configuration information (see https://wiki.documentfoundation.org/UserProfile).
+            // This is clearly discussable in every single point and may be adapted/corrected
+            // over time. Main focus is to secure User-Defined/adapted values
+
+            // User-defined substitution table (Tools/AutoCorrect)
+            maDirs.insert("autocorr");
+
+            // User-Defined AutoText (Edit/AutoText)
+            maDirs.insert("autotext");
+
+            // User-defined Macros
+            maDirs.insert("basic");
+
+            // User-adapted toolbars for modules
+            maDirs.insert("config");
+
+            // Initial and User-defined Databases
+            maDirs.insert("database");
+
+            // User-Defined Galleries
+            maDirs.insert("gallery");
+
+            // most part of registry files
+            maDirs.insert("registry");
+
+            // User-Defined Scripts
+            maDirs.insert("Scripts");
+
+            // Template files
+            maDirs.insert("template");
+
+            // Custom Dictionaries
+            maDirs.insert("wordbook");
+
+            // Questionable - where and how is Extension stuff held and how
+            // does this interact with enabled/disabled states which are extra handled?
+            // Keep out of business until deeper evaluated
+            // maDirs.insert("extensions");
+            // maDirs.insert("uno-packages");
+            break;
+        }
+        case 2:
+        {
+            // whole directory. To do so, scan directory and exclude some dirs
+            // from which we know they do not need to be secured explicitely. This
+            // should alrteady include registrymodifications, too.
+            scanDirsAndFiles(
+                maUserConfigBaseURL,
+                maDirs,
+                maFiles);
+
+            // not really needed, can be abandoned
+            maDirs.erase("psprint");
+
+            // not really needed, can be abandoned
+            maDirs.erase("store");
+
+            // not really needed, can be abandoned
+            maDirs.erase("temp");
+            break;
+        }
+        }
     }
 }
 
