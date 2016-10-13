@@ -25,8 +25,6 @@
 
 #include <process.h>
 #include <memory>
-#include "SolarMutex.hxx"
-
 
 using namespace com::sun::star;
 using ::com::sun::star::ui::dialogs::XFilePickerListener;
