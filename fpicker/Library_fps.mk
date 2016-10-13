@@ -78,7 +78,6 @@ $(eval $(call gb_Library_add_exception_objects,fps,\
 	fpicker/source/win32/filepicker/helppopupwindow \
 	fpicker/source/win32/filepicker/previewadapter \
 	fpicker/source/win32/filepicker/previewbase \
-	fpicker/source/win32/filepicker/SolarMutex \
 	fpicker/source/win32/filepicker/VistaFilePicker \
 	fpicker/source/win32/filepicker/VistaFilePickerEventHandler \
 	fpicker/source/win32/filepicker/VistaFilePickerImpl \
