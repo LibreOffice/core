@@ -64,19 +64,16 @@ struct CurTOXType
     CurTOXType (TOXTypes t) : eType (t), nIndex (0) {};
 };
 
-class SwOLENames : public Resource
+class SwOLENames
 {
-    ResStringArray      aNamesAry;
+    ResStringArray aNamesAry;
 public:
-    SwOLENames(const ResId& rResId) :
-        Resource(rResId),
-        aNamesAry(ResId(1,*rResId.GetResMgr()))
+    SwOLENames(const ResId& rResId)
+        : aNamesAry(rResId)
     {
-        FreeResource();
     }
 
-    ResStringArray&     GetNames() { return aNamesAry;}
-
+    ResStringArray& GetNames() { return aNamesAry;}
 };
 
 #endif

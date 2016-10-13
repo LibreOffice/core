@@ -132,31 +132,29 @@ String STR_TOKEN_HELP_AUTHORITY
 {
     Text [ en-US ] = "Bibliography entry: ";
 };
+
 String STR_CHARSTYLE
 {
     Text [ en-US ] = "Character Style: ";
 };
 
-Resource RES_SRCTYPES
+StringArray RES_SRCTYPES
 {
-    StringArray 1
+    /* ids from tox.hxx
+    TOO_MATH        = 0x01,
+    TOO_CHART       = 0x02,
+    TOO_IMAGE       = 0x04,
+    TOO_CALC        = 0x08,
+    TOO_DRAW_IMPRESS= 0x10,
+    TOO_OTHER       = 0x80
+    */
+    ItemList [ en-US ] =
     {
-        /* ids from tox.hxx
-        TOO_MATH        = 0x01,
-        TOO_CHART       = 0x02,
-        TOO_IMAGE       = 0x04,
-        TOO_CALC        = 0x08,
-        TOO_DRAW_IMPRESS= 0x10,
-        TOO_OTHER       = 0x80
-        */
-        ItemList [ en-US ] =
-        {
-            < "%PRODUCTNAME Math" ;                 1;> ;
-            < "%PRODUCTNAME Chart" ;            2;> ;
-            < "%PRODUCTNAME Calc" ;                 8;> ;
-            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
-            < "Other OLE Objects";  128;> ;
-        };
+        < "%PRODUCTNAME Math" ;  1;> ;
+        < "%PRODUCTNAME Chart" ; 2;> ;
+        < "%PRODUCTNAME Calc" ;  8;> ;
+        < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
+        < "Other OLE Objects";   128;> ;
     };
 };
 
