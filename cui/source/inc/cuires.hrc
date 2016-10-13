@@ -106,7 +106,6 @@
 // treeopt
 #define RID_SVXPAGE_COLOR                   (RID_SVX_START +  60)
 #define OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE      ( RID_OFA_START + 256 )
-#define RID_OFADLG_OPTIONS_TREE_PAGES   (RID_OFA_START + 116)
 
 // options
 #define RID_SVXPAGE_ONLINEUPDATE            (RID_SVX_START + 298)

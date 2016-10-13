@@ -1105,7 +1105,6 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 }
 
 OfaPageResource::OfaPageResource() :
-    Resource(CUI_RES(RID_OFADLG_OPTIONS_TREE_PAGES)),
     aGeneralDlgAry(CUI_RES(SID_GENERAL_OPTIONS)),
     aInetDlgAry(CUI_RES(SID_INET_DLG)),
     aLangDlgAry(CUI_RES(SID_LANGUAGE_OPTIONS)),
@@ -1119,7 +1118,6 @@ OfaPageResource::OfaPageResource() :
     aFilterDlgAry(CUI_RES(SID_FILTER_DLG)),
     aDatasourcesDlgAry(CUI_RES(SID_SB_STARBASEOPTIONS))
 {
-    FreeResource();
 }
 
 SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )

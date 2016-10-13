@@ -194,7 +194,7 @@ public:
 
 // class OfaPageResource -------------------------------------------------
 
-class OfaPageResource : public Resource
+class OfaPageResource
 {
     ResStringArray      aGeneralDlgAry;
     ResStringArray      aInetDlgAry;
