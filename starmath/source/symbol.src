@@ -23,99 +23,25 @@
 // is the localized version of all symbols that is show in the Ui,
 // for Export they have to be in English. The transition between
 // both lists is done with GetExportSymbolName() and GetUiSymbolName().
-Resource RID_LOCALIZED_NAMES
+StringArray RID_EXPORT_SYMBOLSET_NAMES
 {
-    StringArray RID_EXPORT_SYMBOLSET_NAMES
+    ItemList =
     {
-        ItemList =
-        {
-            < "Greek" ; > ;
-            < "Special" ; > ;
-        };
+        < "Greek" ; > ;
+        < "Special" ; > ;
     };
-    StringArray RID_UI_SYMBOLSET_NAMES
-    {
-        ItemList [ en-US ] =
-        {
-            < "Greek" ; > ;
-            < "Special" ; > ;
-        };
-    };
-    StringArray RID_EXPORT_SYMBOL_NAMES
-    {
-        ItemList =
-        {
-            < "alpha" ; > ;
-            < "ALPHA" ; > ;
-            < "beta" ; > ;
-            < "BETA" ; > ;
-            < "gamma" ; > ;
-            < "GAMMA" ; > ;
-            < "delta" ; > ;
-            < "DELTA" ; > ;
-            < "epsilon" ; > ;
-            < "EPSILON" ; > ;
-            < "zeta" ; > ;
-            < "ZETA" ; > ;
-            < "eta" ; > ;
-            < "ETA" ; > ;
-            < "theta" ; > ;
-            < "THETA" ; > ;
-            < "iota" ; > ;
-            < "IOTA" ; > ;
-            < "kappa" ; > ;
-            < "KAPPA" ; > ;
-            < "lambda" ; > ;
-            < "LAMBDA" ; > ;
-            < "mu" ; > ;
-            < "MU" ; > ;
-            < "nu" ; > ;
-            < "NU" ; > ;
-            < "xi" ; > ;
-            < "XI" ; > ;
-            < "omicron" ; > ;
-            < "OMICRON" ; > ;
-            < "pi" ; > ;
-            < "PI" ; > ;
-            < "rho" ; > ;
-            < "RHO" ; > ;
-            < "sigma" ; > ;
-            < "SIGMA" ; > ;
-            < "tau" ; > ;
-            < "TAU" ; > ;
-            < "upsilon" ; > ;
-            < "UPSILON" ; > ;
-            < "phi" ; > ;
-            < "PHI" ; > ;
-            < "chi" ; > ;
-            < "CHI" ; > ;
-            < "psi" ; > ;
-            < "PSI" ; > ;
-            < "omega" ; > ;
-            < "OMEGA" ; > ;
-            < "varepsilon" ; > ;
-            < "vartheta" ; > ;
-            < "varpi" ; > ;
-            < "varrho" ; > ;
-            < "varsigma" ; > ;
-            < "varphi" ; > ;
-            < "element" ; > ;
-            < "noelement" ; > ;
-            < "strictlylessthan" ; > ;
-            < "strictlygreaterthan" ; > ;
-            < "notequal" ; > ;
-            < "identical" ; > ;
-            < "tendto" ; > ;
-            < "infinite" ; > ;
-            < "angle" ; > ;
-            < "perthousand" ; > ;
-            < "and" ; > ;
-            < "or" ; > ;
-        };
-    };
-    StringArray RID_UI_SYMBOL_NAMES
-    {
+};
+StringArray RID_UI_SYMBOLSET_NAMES
+{
     ItemList [ en-US ] =
+    {
+        < "Greek" ; > ;
+        < "Special" ; > ;
+    };
+};
+StringArray RID_EXPORT_SYMBOL_NAMES
+{
+    ItemList =
     {
         < "alpha" ; > ;
         < "ALPHA" ; > ;
@@ -184,6 +110,77 @@ Resource RID_LOCALIZED_NAMES
         < "and" ; > ;
         < "or" ; > ;
     };
+};
+StringArray RID_UI_SYMBOL_NAMES
+{
+    ItemList [ en-US ] =
+    {
+        < "alpha" ; > ;
+        < "ALPHA" ; > ;
+        < "beta" ; > ;
+        < "BETA" ; > ;
+        < "gamma" ; > ;
+        < "GAMMA" ; > ;
+        < "delta" ; > ;
+        < "DELTA" ; > ;
+        < "epsilon" ; > ;
+        < "EPSILON" ; > ;
+        < "zeta" ; > ;
+        < "ZETA" ; > ;
+        < "eta" ; > ;
+        < "ETA" ; > ;
+        < "theta" ; > ;
+        < "THETA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
+        < "kappa" ; > ;
+        < "KAPPA" ; > ;
+        < "lambda" ; > ;
+        < "LAMBDA" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
+        < "nu" ; > ;
+        < "NU" ; > ;
+        < "xi" ; > ;
+        < "XI" ; > ;
+        < "omicron" ; > ;
+        < "OMICRON" ; > ;
+        < "pi" ; > ;
+        < "PI" ; > ;
+        < "rho" ; > ;
+        < "RHO" ; > ;
+        < "sigma" ; > ;
+        < "SIGMA" ; > ;
+        < "tau" ; > ;
+        < "TAU" ; > ;
+        < "upsilon" ; > ;
+        < "UPSILON" ; > ;
+        < "phi" ; > ;
+        < "PHI" ; > ;
+        < "chi" ; > ;
+        < "CHI" ; > ;
+        < "psi" ; > ;
+        < "PSI" ; > ;
+        < "omega" ; > ;
+        < "OMEGA" ; > ;
+        < "varepsilon" ; > ;
+        < "vartheta" ; > ;
+        < "varpi" ; > ;
+        < "varrho" ; > ;
+        < "varsigma" ; > ;
+        < "varphi" ; > ;
+        < "element" ; > ;
+        < "noelement" ; > ;
+        < "strictlylessthan" ; > ;
+        < "strictlygreaterthan" ; > ;
+        < "notequal" ; > ;
+        < "identical" ; > ;
+        < "tendto" ; > ;
+        < "infinite" ; > ;
+        < "angle" ; > ;
+        < "perthousand" ; > ;
+        < "and" ; > ;
+        < "or" ; > ;
     };
 };
 

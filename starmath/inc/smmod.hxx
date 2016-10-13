@@ -60,7 +60,7 @@ public:
 
 #define SM_RESSTR(x) SmResId(x).toString()
 
-class SmLocalizedSymbolData : public Resource
+class SmLocalizedSymbolData
 {
     ResStringArray      aUiSymbolNamesAry;
     ResStringArray      aExportSymbolNamesAry;
