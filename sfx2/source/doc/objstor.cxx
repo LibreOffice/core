@@ -1871,6 +1871,8 @@ bool SfxObjectShell::ConnectTmpStorage_Impl(
             SetError( ERRCODE_IO_GENERAL, OSL_LOG_PREFIX );
         }
     }
+    else if (!GetMedium()->GetFilter()->IsOwnFormat())
+        bResult = true;
 
     return bResult;
 }
