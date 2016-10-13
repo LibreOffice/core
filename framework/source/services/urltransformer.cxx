@@ -54,8 +54,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override
     {
-        css::uno::Sequence< OUString > aRet { "com.sun.star.util.URLTransformer" };
-        return aRet;
+        return {"com.sun.star.util.URLTransformer"};
     }
 
     virtual sal_Bool SAL_CALL parseStrict( css::util::URL& aURL )
