@@ -21,17 +21,19 @@ import unittest
 import json
 import os
 import os.path
+import tempfile
 
 
 class CheckGbuildToIde(unittest.TestCase):
 
     def test_gbuildtoide(self):
+        tempwork = tempfile.mkdtemp()
         os.chdir(os.path.join(os.environ['SRCDIR'], 'solenv', 'qa', 'python', 'selftest'))
-        subprocess.check_call(['make', 'gbuildtoide'])
-        jsonfiles = os.listdir(os.path.join(os.environ['WORKDIR'], 'GbuildToIde', 'Library'))
+        subprocess.check_call(['make', 'gbuildtoide', 'WORKDIR=%s' % tempwork])
+        jsonfiles = os.listdir(os.path.join(tempwork, 'GbuildToIde', 'Library'))
         gbuildlibs = []
         for jsonfilename in jsonfiles:
-            with open(os.path.join(os.environ['WORKDIR'], 'GbuildToIde', 'Library', jsonfilename), 'r') as f:
+            with open(os.path.join(tempwork, 'GbuildToIde', 'Library', jsonfilename), 'r') as f:
                 print('loading %s' % jsonfilename)
                 gbuildlibs.append(json.load(f))
         foundlibs = set()
