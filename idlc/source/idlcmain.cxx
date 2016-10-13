@@ -72,14 +72,14 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             idlc()->reset();
         }
-        StringVector const & files = options.getInputFiles();
+        std::vector< OString > const & files = options.getInputFiles();
         if ( options.verbose() )
         {
             fprintf( stdout, "%s: compiling %i source files ... \n",
                 options.getProgramName().getStr(), (int)files.size() );
             fflush( stdout );
         }
-        for (StringVector::const_iterator i(files.begin());
+        for (std::vector< OString >::const_iterator i(files.begin());
              i != files.end() && nErrors == 0; ++i)
         {
             OString sysFileName( convertToAbsoluteSystemPath(*i) );
