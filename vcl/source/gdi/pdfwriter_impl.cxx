@@ -3539,7 +3539,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                 "<</Type/Font/Subtype/Type1/BaseFont/" );
             appendName( aInfo.m_aPSName, aLine );
             aLine.append( "\n" );
-            if( !pFont->IsSymbolFont() &&  pEncoding == nullptr )
+            if( !pFont->IsSymbolFont() && ( pEncoding == nullptr || pFont->GetCharSet() == RTL_TEXTENCODING_MS_1252 ))
                 aLine.append( "/Encoding/WinAnsiEncoding\n" );
             if( nToUnicodeStream )
             {
