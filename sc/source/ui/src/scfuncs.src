@@ -8346,7 +8346,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             HID_FUNC_HYPGEOMVERT;
-            4;  0;  0;  0;  0;
+            5;  0;  0;  0;  0; 1;
             0;
         };
         String 2 // Name of Parameter 1
@@ -8380,6 +8380,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 9 // Description of Parameter 4
         {
             Text [ en-US ] = "The population size." ;
+        };
+        String 10 // Name of Parameter 5
+        {
+            Text [ en-US ] = "Cumulative" ;
+        };
+        String 11 // Description of Parameter 5
+        {
+            Text [ en-US ] = "Cumulated. TRUE calculates the cumulative distribution function, FALSE the probability mass function." ;
         };
     };
      // -=*# Resource for function HYPGEOM.DIST #*=-

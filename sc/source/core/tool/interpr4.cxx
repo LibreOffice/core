@@ -4209,8 +4209,8 @@ StackVar ScInterpreter::Interpret()
                 case ocCombinA          : ScCombinA();                  break;
                 case ocPermut           : ScPermut();                   break;
                 case ocPermutationA     : ScPermutationA();             break;
-                case ocHypGeomDist      : ScHypGeomDist();              break;
-                case ocHypGeomDist_MS   : ScHypGeomDist_MS();           break;
+                case ocHypGeomDist      : ScHypGeomDist( 4 );           break;
+                case ocHypGeomDist_MS   : ScHypGeomDist( 5 );           break;
                 case ocLogNormDist      : ScLogNormDist( 1 );           break;
                 case ocLogNormDist_MS   : ScLogNormDist( 4 );           break;
                 case ocTDist            : ScTDist();                    break;
