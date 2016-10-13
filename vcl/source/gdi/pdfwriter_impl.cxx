@@ -11182,6 +11182,36 @@ bool PDFWriterImpl::writeJPG( JPGEmit& rObject )
     return true;
 }
 
+namespace
+{
+    unsigned char reverseByte(unsigned char b)
+    {
+        b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+        b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+        b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+        return b;
+    }
+
+    //tdf#103051 convert any N1BitLsbPal to N1BitMsbPal
+    Bitmap getExportBitmap(const Bitmap &rBitmap)
+    {
+        Bitmap::ScopedReadAccess pAccess(const_cast<Bitmap&>(rBitmap));
+        const sal_uLong nFormat = pAccess->GetScanlineFormat();
+        if (nFormat != BMP_FORMAT_1BIT_LSB_PAL)
+            return rBitmap;
+        Bitmap aNewBmp(rBitmap);
+        Bitmap::ScopedWriteAccess xWriteAcc(aNewBmp);
+        const int nScanLineBytes = (pAccess->Width() + 7U) / 8U;
+        for (long nY = 0L; nY < xWriteAcc->Height(); ++nY)
+        {
+            Scanline pBitSwap = xWriteAcc->GetScanline(nY);
+            for (int x = 0; x < nScanLineBytes; ++x)
+                pBitSwap[x] = reverseByte(pBitSwap[x]);
+        }
+        return aNewBmp;
+    }
+}
+
 bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 {
     CHECK_RETURN( updateObject( rObject.m_nObject ) );
@@ -11191,7 +11221,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     bool    bWriteMask = false;
     if( ! bMask )
     {
-        aBitmap = rObject.m_aBitmap.GetBitmap();
+        aBitmap = getExportBitmap(rObject.m_aBitmap.GetBitmap());
         if( rObject.m_aBitmap.IsAlpha() )
         {
             if( m_aContext.Version >= PDFWriter::PDF_1_4 )
@@ -11220,13 +11250,13 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     {
         if( m_aContext.Version < PDFWriter::PDF_1_4 || ! rObject.m_aBitmap.IsAlpha() )
         {
-            aBitmap = rObject.m_aBitmap.GetMask();
+            aBitmap = getExportBitmap(rObject.m_aBitmap.GetMask());
             aBitmap.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
             DBG_ASSERT( aBitmap.GetBitCount() == 1, "mask conversion failed" );
         }
         else if( aBitmap.GetBitCount() != 8 )
         {
-            aBitmap = rObject.m_aBitmap.GetAlpha().GetBitmap();
+            aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlpha().GetBitmap());
             aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
             DBG_ASSERT( aBitmap.GetBitCount() == 8, "alpha mask conversion failed" );
         }
