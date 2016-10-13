@@ -550,11 +550,9 @@ void SwFrameCtrlWindow::Resize()
     pExampleFrame->ClearDocument();
 }
 
-MenuResource::MenuResource(const ResId& rResId) :
-    Resource(rResId),
-    aMenuArray(ResId(1,*rResId.GetResMgr()))
+MenuResource::MenuResource(const ResId& rResId)
+    : aMenuArray(rResId)
 {
-    FreeResource();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

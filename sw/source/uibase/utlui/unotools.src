@@ -26,16 +26,13 @@ String STR_SERVICE_UNAVAILABLE
     Text [ en-US ] = "The following service is not available: ";
 };
 
-Resource RES_FRMEX_MENU
+StringArray RES_FRMEX_MENU
 {
-    StringArray 1
-    {
     ItemList [ en-US ] =
     {
-            < "~Zoom" ;         ST_MENU_ZOOM; > ;
-        < "~Upwards" ;  ST_MENU_UP;     > ;
-        < "Do~wnwards" ;    ST_MENU_DOWN; > ;
-    };
+        < "~Zoom" ;  ST_MENU_ZOOM; > ;
+        < "~Upwards" ;  ST_MENU_UP; > ;
+        < "Do~wnwards" ;  ST_MENU_DOWN; > ;
     };
 };
 
