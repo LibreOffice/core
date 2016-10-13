@@ -91,6 +91,10 @@ const sal_uInt16 SC_HTTP_VERSION_NOT_SUPPORTED       = 505;
 // DAV extensions (<https://tools.ietf.org/html/rfc4918#section-11>)
 const sal_uInt16 SC_INSUFFICIENT_STORAGE             = 507;
 
+// unofficial status codes only used internally by LO
+// used to cache the connection time out event
+const sal_uInt16 USC_CONNECTION_TIMED_OUT            = 908;
+
 
 class DAVException : public std::exception
 {
