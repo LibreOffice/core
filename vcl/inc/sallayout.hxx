@@ -201,6 +201,8 @@ public:
     virtual std::shared_ptr<vcl::TextLayoutCache>
         CreateTextLayoutCache(OUString const&) const;
 
+    static bool     UseCommonLayout();
+
 protected:
     // used by layout engines
                     SalLayout();

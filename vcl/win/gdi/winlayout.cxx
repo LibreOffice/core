@@ -3826,7 +3826,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     const WinFontFace& rFontFace = *mpWinFontData[ nFallbackLevel ];
     WinFontInstance& rFontInstance = *mpWinFontEntry[ nFallbackLevel ];
 
-    if (getenv("SAL_USE_COMMON_LAYOUT"))
+    if (SalLayout::UseCommonLayout())
     {
         return new CommonSalLayout(this, rFontInstance, rFontFace);
     }
