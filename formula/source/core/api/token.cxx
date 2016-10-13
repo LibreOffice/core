@@ -1111,10 +1111,12 @@ inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp )
         case ocPoissonDist:
         case ocNormDist:
         case ocLogNormDist:
+        case ocHypGeomDist:
 
         case ocDBCount:
         case ocDBCount2:
             return true;
+
         default:
             return false;
     }
@@ -1241,6 +1243,14 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                         {
                             pNewArr->AddOpCode( ocSep );
                             pNewArr->AddDouble( 1.0 );      // 3rd, standard deviation = 1.0
+                        }
+                        break;
+
+                    case ocHypGeomDist:
+                        if ( mnCurArg == 3 )
+                        {
+                            pNewArr->AddOpCode( ocSep );
+                            pNewArr->AddDouble( 0.0 );      // 5th, Cumulative = false()
                         }
                         break;
 
@@ -1513,6 +1523,12 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
             {
                 FormulaToken *pToken = new FormulaToken( svByte,
                         ( pCur->GetOpCode() == ocCeil ? ocCeil_Math : ocFloor_Math ) );
+                pNewArr->Add( pToken );
+            }
+            else if ( pCur->GetOpCode() == ocHypGeomDist &&
+                      rConv.getConvention() == MissingConvention::FORMULA_MISSING_CONVENTION_OOXML )
+            {
+                FormulaToken *pToken = new FormulaToken( svByte, ocHypGeomDist_MS );
                 pNewArr->Add( pToken );
             }
             else

@@ -1844,39 +1844,21 @@ static void lcl_PutFactorialElements( ::std::vector< double >& cn, double fLower
 
     @see #i47296#
 
- */
-void ScInterpreter::ScHypGeomDist()
-{
-    if ( !MustHaveParamCount( GetByte(), 4 ) )
-        return;
-
-    double N = ::rtl::math::approxFloor(GetDouble());
-    double M = ::rtl::math::approxFloor(GetDouble());
-    double n = ::rtl::math::approxFloor(GetDouble());
-    double x = ::rtl::math::approxFloor(GetDouble());
-
-    if( (x < 0.0) || (n < x) || (M < x) || (N < n) || (N < M) || (x < n - N + M) )
-    {
-        PushIllegalArgument();
-        return;
-    }
-
-    PushDouble( GetHypGeomDist( x, n, M, N ) );
-}
-
-/** Calculates a value of the hypergeometric distribution (Excel 2010 function).
-
-    This function has an extra argument bCumulative as compared to ScHypGeomDist(),
-    which only calculates the non-cumulative distribution.
+    This function has an extra argument bCumulative,
+    which only calculates the non-cumulative distribution and
+    which is optional in Calc and mandatory with Excel's HYPGEOM.DIST()
 
     @see fdo#71722
-*/
-void ScInterpreter::ScHypGeomDist_MS()
+    @see tdf#102948, make Calc function ODFF1.2-compliant
+
+ */
+void ScInterpreter::ScHypGeomDist( int nMinParamCount )
 {
-    if ( !MustHaveParamCount( GetByte(), 5 ) )
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, nMinParamCount, 5 ) )
         return;
 
-    bool bCumulative = GetBool();
+    bool bCumulative = ( nParamCount == 5 && GetBool() );
     double N = ::rtl::math::approxFloor(GetDouble());
     double M = ::rtl::math::approxFloor(GetDouble());
     double n = ::rtl::math::approxFloor(GetDouble());
