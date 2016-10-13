@@ -811,10 +811,7 @@ OUString SAL_CALL OResultSet::getImplementationName() throw ( RuntimeException, 
 Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames()
     throw( RuntimeException, std::exception)
 {
-     Sequence< OUString > aSupported(2);
-    aSupported[0] = "com.sun.star.sdbc.ResultSet";
-    aSupported[1] = "com.sun.star.sdbcx.ResultSet";
-    return aSupported;
+    return {"com.sun.star.sdbc.ResultSet","com.sun.star.sdbcx.ResultSet"};
 }
 
 sal_Bool SAL_CALL OResultSet::supportsService(const OUString& _rServiceName)
