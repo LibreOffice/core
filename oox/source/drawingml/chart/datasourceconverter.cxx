@@ -69,7 +69,7 @@ Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUSt
         if(!bFirst)
         {
             mrModel.maData.clear();
-            mrModel.maData.insert(std::make_pair<sal_Int32, Any>(1, Any(aTitle.makeStringAndClear())));
+            mrModel.maData.insert(std::make_pair<sal_Int32, Any>(0, Any(aTitle.makeStringAndClear())));
         }
     }
     xDataSeq = getChartConverter().createDataSequence(getChartDocument()->getDataProvider(), mrModel, rRole);
