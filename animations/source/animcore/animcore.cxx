@@ -100,9 +100,6 @@ namespace animcore
 {
 
 
-typedef ::std::list< Reference< XAnimationNode > > ChildList_t;
-
-
 class AnimationNodeBase :   public XAnimateMotion,
                             public XAnimateColor,
                             public XTransitionFilter,
@@ -344,14 +341,14 @@ private:
     double  mfIterateInterval;
 
     /** sorted list of child nodes for XTimeContainer*/
-    ChildList_t             maChildren;
+    std::list< Reference< XAnimationNode > >    maChildren;
 };
 
 
 class TimeContainerEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
 public:
-    explicit TimeContainerEnumeration( const ChildList_t &rChildren );
+    explicit TimeContainerEnumeration( const std::list< Reference< XAnimationNode > > &rChildren );
     virtual ~TimeContainerEnumeration() override;
 
     // Methods
@@ -360,16 +357,16 @@ public:
 
 private:
     /** sorted list of child nodes */
-    ChildList_t             maChildren;
+    std::list< Reference< XAnimationNode > >    maChildren;
 
     /** current iteration position */
-    ChildList_t::iterator   maIter;
+    std::list< Reference< XAnimationNode > >::iterator   maIter;
 
     /** our first, last and only protection from mutli-threads! */
     Mutex                   maMutex;
 };
 
-TimeContainerEnumeration::TimeContainerEnumeration( const ChildList_t &rChildren )
+TimeContainerEnumeration::TimeContainerEnumeration( const std::list< Reference< XAnimationNode > > &rChildren )
 : maChildren( rChildren )
 {
     maIter = maChildren.begin();
@@ -1202,8 +1199,8 @@ Reference< XCloneable > SAL_CALL AnimationNode::createClone() throw (RuntimeExce
             Reference< XTimeContainer > xContainer( xNewNode, UNO_QUERY );
             if( xContainer.is() )
             {
-                ChildList_t::iterator aIter( maChildren.begin() );
-                ChildList_t::iterator aEnd( maChildren.end() );
+                std::list< Reference< XAnimationNode > >::iterator aIter( maChildren.begin() );
+                std::list< Reference< XAnimationNode > >::iterator aEnd( maChildren.end() );
                 while( aIter != aEnd )
                 {
                     Reference< XCloneable > xCloneable((*aIter++), UNO_QUERY );
@@ -1799,7 +1796,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertBefore( const Referenc
     if( !newChild.is() || !refChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator before = ::std::find(maChildren.begin(), maChildren.end(), refChild);
+    std::list< Reference< XAnimationNode > >::iterator before = ::std::find(maChildren.begin(), maChildren.end(), refChild);
     if( before == maChildren.end() )
         throw NoSuchElementException();
 
@@ -1824,7 +1821,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertAfter( const Reference
     if( !newChild.is() || !refChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator before = ::std::find(maChildren.begin(), maChildren.end(), refChild);
+    std::list< Reference< XAnimationNode > >::iterator before = ::std::find(maChildren.begin(), maChildren.end(), refChild);
     if( before == maChildren.end() )
         throw NoSuchElementException();
 
@@ -1853,7 +1850,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::replaceChild( const Referenc
     if( !newChild.is() || !oldChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator replace = ::std::find(maChildren.begin(), maChildren.end(), oldChild);
+    std::list< Reference< XAnimationNode > >::iterator replace = ::std::find(maChildren.begin(), maChildren.end(), oldChild);
     if( replace == maChildren.end() )
         throw NoSuchElementException();
 
@@ -1881,7 +1878,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::removeChild( const Reference
     if( !oldChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator old = ::std::find(maChildren.begin(), maChildren.end(), oldChild);
+    std::list< Reference< XAnimationNode > >::iterator old = ::std::find(maChildren.begin(), maChildren.end(), oldChild);
     if( old == maChildren.end() )
         throw NoSuchElementException();
 
