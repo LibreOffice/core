@@ -18,7 +18,7 @@ foo:
 	true
 
 define gb_LinkTarget__command
-mkdir -p $(WORKDIR)/GbuildToIde/Library
+mkdir -p $(WORKDIR)/GbuildToIde/$(dir $(2))
 printf '{"LINKTARGET": "%s"' '$(2)' > $(WORKDIR)/GbuildToIde/$(2)
 printf ', "ILIBTARGET": "%s"' '$(ILIBTARGET)' >> $(WORKDIR)/GbuildToIde/$(2)
 printf ', "COBJECTS": "%s"' '$(COBJECTS)' >> $(WORKDIR)/GbuildToIde/$(2)
@@ -44,7 +44,6 @@ define gb_Postprocess_register_target
 gbuildtoide : $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(3)))
 
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(3))): $(gb_Helper_MISCDUMMY) foo
-
 endef
 
 endif
