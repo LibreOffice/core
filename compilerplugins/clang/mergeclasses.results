@@ -145,7 +145,6 @@ merge SvXMLExportItemMapper with SwXMLTableItemMapper_Impl
 merge SvXMLImportItemMapper with SwXMLImportTableItemMapper_Impl
 merge SvXMLItemSetContext with SwXMLItemSetContext_Impl
 merge SvxCSS1Parser with SwCSS1Parser
-merge SvxListBoxControl with SvxUndoRedoControl
 merge SvxRTFParser with EditRTFParser
 merge SvxShapeMaster with SdXShape
 merge SwAccessibleFrame with SwAccessibleContext

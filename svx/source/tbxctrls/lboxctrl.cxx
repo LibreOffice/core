@@ -121,34 +121,7 @@ void SvxPopupWindowListBox::statusChanged( const css::frame::FeatureStateEvent& 
     SfxPopupWindow::statusChanged( rEvent );
 }
 
-SvxListBoxControl::SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
-    :SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pPopupWin   ( nullptr )
-{
-    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
-    rTbx.Invalidate();
-}
-
-
-SvxListBoxControl::~SvxListBoxControl()
-{}
-
-VclPtr<SfxPopupWindow> SvxListBoxControl::CreatePopupWindow()
-{
-    OSL_FAIL( "not implemented" );
-    return nullptr;
-}
-
-
-void SvxListBoxControl::StateChanged(
-        sal_uInt16, SfxItemState, const SfxPoolItem* pState )
-{
-    GetToolBox().EnableItem( GetId(),
-                            SfxItemState::DISABLED != GetItemState(pState) );
-}
-
-
-IMPL_LINK_NOARG(SvxListBoxControl, PopupModeEndHdl, FloatingWindow*, void)
+IMPL_LINK_NOARG(SvxUndoRedoControl, PopupModeEndHdl, FloatingWindow*, void)
 {
     if( pPopupWin && FloatWinPopupFlags::NONE == pPopupWin->GetPopupModeFlags()  &&
         pPopupWin->IsUserSelected() )
@@ -165,7 +138,7 @@ IMPL_LINK_NOARG(SvxListBoxControl, PopupModeEndHdl, FloatingWindow*, void)
 }
 
 
-void SvxListBoxControl::Impl_SetInfo( sal_Int32 nCount )
+void SvxUndoRedoControl::Impl_SetInfo( sal_Int32 nCount )
 {
     DBG_ASSERT( pPopupWin, "NULL pointer, PopupWindow missing" );
 
@@ -184,7 +157,7 @@ void SvxListBoxControl::Impl_SetInfo( sal_Int32 nCount )
 }
 
 
-IMPL_LINK_NOARG(SvxListBoxControl, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxUndoRedoControl, SelectHdl, ListBox&, void)
 {
     if (pPopupWin)
     {
@@ -205,7 +178,8 @@ IMPL_LINK_NOARG(SvxListBoxControl, SelectHdl, ListBox&, void)
 SFX_IMPL_TOOLBOX_CONTROL( SvxUndoRedoControl, SfxStringItem );
 
 SvxUndoRedoControl::SvxUndoRedoControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
-    : SvxListBoxControl( nSlotId, nId, rTbx )
+    :SfxToolBoxControl( nSlotId, nId, rTbx ),
+    pPopupWin   ( nullptr )
 {
     rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
@@ -233,7 +207,8 @@ void SvxUndoRedoControl::StateChanged(
             const OUString& aQuickHelpText = rItem.GetValue();
             rBox.SetQuickHelpText( GetId(), aQuickHelpText );
         }
-        SvxListBoxControl::StateChanged( nSID, eState, pState );
+        GetToolBox().EnableItem( GetId(),
+                                SfxItemState::DISABLED != GetItemState(pState) );
     }
     else
     {
