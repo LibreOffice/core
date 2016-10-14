@@ -203,7 +203,7 @@ void SAL_CALL OWeakConnectionPoint::removeReference(const Reference< XReference 
 // Accidentally occurs in msvc mapfile = > had to be outlined.
 OWeakObject::OWeakObject()
     : m_refCount( 0 ),
-      m_pWeakConnectionPoint( 0 )
+      m_pWeakConnectionPoint( nullptr )
 {
 }
 #endif
