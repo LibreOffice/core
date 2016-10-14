@@ -593,19 +593,16 @@ STDMETHODIMP CMAccessible::get_accHelpTopic(BSTR *, VARIANT, long *)
 
 static void GetMnemonicChar( const ::rtl::OUString& aStr, WCHAR* wStr)
 {
-    int  nLen    = aStr.pData->length;
-    int  i       = 0;
-    WCHAR* text = aStr.pData->buffer;
-
-    while ( i < nLen )
-    {
-        if ( text[i] == L'~' )
-            if ( text[i+1] != L'~' )
-            {
-                wStr[0] = text[i+1];
-                break;
-            }
-            i++;
+    for (sal_Int32 i = 0;; i += 2) {
+        i = aStr.indexOf('~', i);
+        if (i == -1 || i == aStr.getLength() - 1) {
+            break;
+        }
+        auto c = aStr[i + 1];
+        if (c != '~') {
+            *wStr = c;
+            break;
+        }
     }
 }
 
