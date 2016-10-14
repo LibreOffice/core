@@ -61,33 +61,33 @@ Reference<XInterface> SAL_CALL OleServer_CreateInstance( const Reference<XMultiS
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL oleautobridge_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     OUString aImplName( OUString::createFromAscii( pImplName ) );
     Reference< XSingleServiceFactory > xFactory;
     Sequence<OUString> seqServiceNames;
     if (pServiceManager && aImplName.equals(  reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleConverter2")  ))
     {
-        xFactory=  createSingleFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
-                                         OUString("com.sun.star.comp.ole.OleConverter2"),
+        xFactory=  createSingleFactory( static_cast< XMultiServiceFactory*>(pServiceManager),
+                                         "com.sun.star.comp.ole.OleConverter2",
                                          ConverterProvider_CreateInstance2, seqServiceNames );
     }
     else if (pServiceManager && aImplName.equals(  reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleConverterVar1")  ))
     {
-        xFactory= createSingleFactory( reinterpret_cast<XMultiServiceFactory*>(pServiceManager),
-                                       OUString("com.sun.star.comp.ole.OleConverterVar1"),
+        xFactory= createSingleFactory( static_cast<XMultiServiceFactory*>(pServiceManager),
+                                       "com.sun.star.comp.ole.OleConverterVar1",
                                        ConverterProvider_CreateInstanceVar1, seqServiceNames );
     }
     else if(pServiceManager && aImplName.equals(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleClient")))
     {
-        xFactory= createSingleFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
-                                       OUString("com.sun.star.comp.ole.OleClient"),
+        xFactory= createSingleFactory( static_cast< XMultiServiceFactory*>(pServiceManager),
+                                       "com.sun.star.comp.ole.OleClient",
                                        OleClient_CreateInstance, seqServiceNames );
     }
     else if(pServiceManager && aImplName.equals(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleServer")))
     {
-        xFactory= createOneInstanceFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
-                                            OUString("com.sun.star.comp.ole.OleServer"),
+        xFactory= createOneInstanceFactory( static_cast< XMultiServiceFactory*>(pServiceManager),
+                                            "com.sun.star.comp.ole.OleServer",
                                             OleServer_CreateInstance, seqServiceNames );
     }
 

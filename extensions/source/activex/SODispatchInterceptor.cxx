@@ -90,7 +90,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatch( IDispatch FAR* aURL,
     {
         if( !m_xSlave )
         {
-            *retVal = NULL;
+            *retVal = nullptr;
             return S_OK;
         }
 
@@ -101,9 +101,9 @@ STDMETHODIMP SODispatchInterceptor::queryDispatch( IDispatch FAR* aURL,
         aArgs[2] = CComVariant( aURL );
 
         hr = ExecuteFunc( m_xSlave, L"queryDispatch", aArgs, 3, &aResult );
-        if( !SUCCEEDED( hr ) || aResult.vt != VT_DISPATCH || aResult.pdispVal == NULL )
+        if( !SUCCEEDED( hr ) || aResult.vt != VT_DISPATCH || aResult.pdispVal == nullptr )
         {
-            *retVal = NULL;
+            *retVal = nullptr;
             return S_OK;
         }
 
@@ -143,7 +143,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, 
             CComVariant pValues[3];
             hr = GetPropertiesFromIDisp( pElem, pMemberNames, pValues, 3 );
             if( !SUCCEEDED( hr ) ) return hr;
-            if( pValues[0].vt != VT_DISPATCH || pValues[0].pdispVal == NULL
+            if( pValues[0].vt != VT_DISPATCH || pValues[0].pdispVal == nullptr
              || pValues[1].vt != VT_BSTR || pValues[2].vt != VT_I4 )
                 return E_FAIL;
 
@@ -164,7 +164,7 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
     CComVariant pValue;
     HRESULT hr = GetPropertiesFromIDisp( aURL, &pUrlName, &pValue, 1 );
     if( !SUCCEEDED( hr ) ) return hr;
-    if( pValue.vt != VT_BSTR || pValue.bstrVal == NULL )
+    if( pValue.vt != VT_BSTR || pValue.bstrVal == nullptr )
         return E_FAIL;
 
     USES_CONVERSION;
@@ -184,7 +184,7 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
         {
             CComVariant pVarElem;
             SafeArrayGetElement( aArgs, &ind, &pVarElem );
-            if( pVarElem.vt == VT_DISPATCH && pVarElem.pdispVal != NULL )
+            if( pVarElem.vt == VT_DISPATCH && pVarElem.pdispVal != nullptr )
             {
                 OLECHAR const * pMemberNames[2] = { L"Name", L"Value" };
                 CComVariant pValues[2];

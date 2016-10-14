@@ -22,7 +22,7 @@
 
 // JScriptValue
 
-JScriptValue::JScriptValue(): m_bOutParam(0), m_bInOutParam(0)
+JScriptValue::JScriptValue(): m_bOutParam(false), m_bInOutParam(false)
 {
 }
 
