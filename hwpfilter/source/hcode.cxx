@@ -1377,7 +1377,7 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
             }
         }
     }
-    for (unsigned int i = 0; i < strlen(src); i++)
+    for (size_t i = 0; i < strlen(src); i++)
     {
         if (src[i] == '\\') {
             ret.push_back('/');
