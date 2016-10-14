@@ -51,17 +51,17 @@ using namespace cppu;
 void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* pAccessible )
 {
     //get SystemData from window
-    VCLXWindow* pvclwindow = (VCLXWindow*)pAccessible;
+    VCLXWindow* pvclwindow = static_cast<VCLXWindow*>(pAccessible);
     vcl::Window* window = pvclwindow->GetWindow();
     // The SalFrame of window may be destructed at this time
-    const SystemEnvData* systemdata = NULL;
+    const SystemEnvData* systemdata = nullptr;
     try
     {
         systemdata = window->GetSystemData();
     }
     catch(...)
     {
-        systemdata = NULL;
+        systemdata = nullptr;
     }
     Reference<css::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
     if(!xContext.is())
@@ -69,12 +69,12 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
 
     css::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
     //Only AccessibleContext exist, add all listeners
-    if(pAccessibleContext != NULL && systemdata != NULL)
+    if(pAccessibleContext != nullptr && systemdata != nullptr)
     {
         accManagerAgent.SaveTopWindowHandle(
                 reinterpret_cast<sal_Int64>(systemdata->hWnd), pAccessible);
 
-        AddAllListeners(pAccessible,NULL,(HWND)systemdata->hWnd);
+        AddAllListeners(pAccessible,nullptr,systemdata->hWnd);
 
         if( window->GetStyle() & WB_MOVEABLE )
             accManagerAgent.IncreaseState( pAccessible, (unsigned short) -1 /* U_MOVEBLE */ );
@@ -140,7 +140,7 @@ void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAcc
         return;
     }
     css::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
-    if(pAccessibleContext == NULL)
+    if(pAccessibleContext == nullptr)
     {
         return;
     }
@@ -174,12 +174,12 @@ void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAcc
         = pAccessibleContext->getAccessibleChild(i);
 
         css::accessibility::XAccessible* mpAccessible = mxAccessible.get();
-        if(mpAccessible != NULL)
+        if(mpAccessible != nullptr)
         {
             Reference<css::accessibility::XAccessibleContext> mxAccessibleContext
             = mpAccessible->getAccessibleContext();
             css::accessibility::XAccessibleContext* mpContext = mxAccessibleContext.get();
-            if(mpContext != NULL)
+            if(mpContext != nullptr)
                 AddAllListeners( mpAccessible, pAccessible, pWND);
         }
     }
@@ -204,7 +204,7 @@ void AccTopWindowListener::windowClosed( const css::lang::EventObject& e ) throw
 
     Reference< css::accessibility::XAccessible > xAccessible ( e.Source, UNO_QUERY );
     css::accessibility::XAccessible* pAccessible = xAccessible.get();
-    if ( pAccessible == NULL)
+    if ( pAccessible == nullptr)
         return;
 
     Reference<css::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
@@ -215,7 +215,7 @@ void AccTopWindowListener::windowClosed( const css::lang::EventObject& e ) throw
     css::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
 
     short role = -1;
-    if(pAccessibleContext != NULL)
+    if(pAccessibleContext != nullptr)
     {
         role = pAccessibleContext->getAccessibleRole();
 

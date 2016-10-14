@@ -50,7 +50,7 @@ STDMETHODIMP CAccComponentBase::get_locationInParent(long *x, long *y)
 
     try
     {
-        if (x == NULL || y == NULL)
+        if (x == nullptr || y == nullptr)
             return E_INVALIDARG;
         // #CHECK XInterface#
         if(!pRXComp.is())
@@ -80,7 +80,7 @@ STDMETHODIMP CAccComponentBase::get_locationOnScreen(long *x, long *y)
 
     try
     {
-        if (x == NULL || y == NULL)
+        if (x == nullptr || y == nullptr)
             return E_INVALIDARG;
         // #CHECK XInterface#
         if(!pRXComp.is())
@@ -109,7 +109,7 @@ STDMETHODIMP CAccComponentBase::grabFocus(boolean * success)
 
     ENTER_PROTECTED_BLOCK
 
-    if (success == NULL)
+    if (success == nullptr)
         return E_INVALIDARG;
     // #CHECK XInterface#
     if(!pRXComp.is())
@@ -135,7 +135,7 @@ STDMETHODIMP CAccComponentBase::get_foreground(IA2Color * foreground)
 
     ENTER_PROTECTED_BLOCK
 
-    if (foreground == NULL)
+    if (foreground == nullptr)
         return E_INVALIDARG;
     // #CHECK XInterface#
     if(!pRXComp.is())
@@ -160,7 +160,7 @@ STDMETHODIMP CAccComponentBase::get_background(IA2Color * background)
 
     ENTER_PROTECTED_BLOCK
 
-    if (background == NULL)
+    if (background == nullptr)
         return E_INVALIDARG;
     // #CHECK XInterface#
     if(!pRXComp.is())
@@ -187,7 +187,7 @@ STDMETHODIMP CAccComponentBase::put_XInterface(hyper pXInterface)
 
     CUNOXWrapper::put_XInterface(pXInterface);
     //special query.
-    if(pUNOInterface == NULL)
+    if(pUNOInterface == nullptr)
         return E_FAIL;
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
     if( !pRContext.is() )
@@ -196,7 +196,7 @@ STDMETHODIMP CAccComponentBase::put_XInterface(hyper pXInterface)
     }
     Reference<XAccessibleComponent> pRXI(pRContext,UNO_QUERY);
     if( !pRXI.is() )
-        pRXComp = NULL;
+        pRXComp = nullptr;
     else
         pRXComp = pRXI.get();
 

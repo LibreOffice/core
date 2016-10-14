@@ -77,85 +77,92 @@ public:
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(IAccessibleApplication)
     COM_INTERFACE_ENTRY(IServiceProvider)
-    COM_INTERFACE_ENTRY_FUNC_BLIND(NULL,_SmartQI)
+    COM_INTERFACE_ENTRY_FUNC_BLIND(NULL,SmartQI_)
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
     END_COM_MAP()
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
     // IMAccessible
-    STDMETHOD(put_accValue)(VARIANT varChild,BSTR szValue);
-    STDMETHOD(put_accName)(VARIANT varChild,BSTR szName);
-    STDMETHOD(accDoDefaultAction)(VARIANT varChild);
-    STDMETHOD(accHitTest)(long xLeft,long yTop,VARIANT *pvarChild);
-    STDMETHOD(accNavigate)(long navDir,VARIANT varStart,VARIANT *pvarEndUpAt);
-    STDMETHOD(accLocation)(long *pxLeft,long *pyTop,long *pcxWidth,long *pcyHeight,VARIANT varChild);
-    STDMETHOD(accSelect)(long flagsSelect,VARIANT varChild);
-    STDMETHOD(get_accDefaultAction)( VARIANT varChild,BSTR *pszDefaultAction);
-    STDMETHOD(get_accSelection)(VARIANT *pvarChildren);
-    STDMETHOD(get_accFocus)(VARIANT *pvarChild);
-    STDMETHOD(get_accKeyboardShortcut)( VARIANT varChild,BSTR *pszKeyboardShortcut);
-    STDMETHOD(get_accHelpTopic)(BSTR *pszHelpFile,VARIANT varChild,long *pidTopic);
-    STDMETHOD(get_accHelp)(VARIANT varChild,BSTR *pszHelp);
-    STDMETHOD(get_accState)(VARIANT varChild,VARIANT *pvarState);
-    STDMETHOD(get_accRole)(VARIANT varChild,VARIANT *pvarRole);
-    STDMETHOD(get_accDescription)(VARIANT varChild,BSTR *pszDescription);
-    STDMETHOD(get_accValue)( VARIANT varChild,BSTR *pszValue);
-    STDMETHOD(get_accName)(VARIANT varChild,BSTR *pszName);
-    STDMETHOD(get_accChild)(VARIANT varChild,IDispatch **ppdispChild);
-    STDMETHOD(get_accChildCount)(long *pcountChildren);
-    STDMETHOD(get_accParent)( IDispatch **ppdispParent);
+    STDMETHOD(put_accValue)(VARIANT varChild,BSTR szValue) override;
+    STDMETHOD(put_accName)(VARIANT varChild,BSTR szName) override;
+    STDMETHOD(accDoDefaultAction)(VARIANT varChild) override;
+    STDMETHOD(accHitTest)(long xLeft,long yTop,VARIANT *pvarChild) override;
+    STDMETHOD(accNavigate)(long navDir,VARIANT varStart,VARIANT *pvarEndUpAt) override;
+    STDMETHOD(accLocation)(long *pxLeft,long *pyTop,long *pcxWidth,long *pcyHeight,VARIANT varChild) override;
+    STDMETHOD(accSelect)(long flagsSelect,VARIANT varChild) override;
+    STDMETHOD(get_accDefaultAction)( VARIANT varChild,BSTR *pszDefaultAction) override;
+    STDMETHOD(get_accSelection)(VARIANT *pvarChildren) override;
+    STDMETHOD(get_accFocus)(VARIANT *pvarChild) override;
+    STDMETHOD(get_accKeyboardShortcut)( VARIANT varChild,BSTR *pszKeyboardShortcut) override;
+    STDMETHOD(get_accHelpTopic)(BSTR *pszHelpFile,VARIANT varChild,long *pidTopic) override;
+    STDMETHOD(get_accHelp)(VARIANT varChild,BSTR *pszHelp) override;
+    STDMETHOD(get_accState)(VARIANT varChild,VARIANT *pvarState) override;
+    STDMETHOD(get_accRole)(VARIANT varChild,VARIANT *pvarRole) override;
+    STDMETHOD(get_accDescription)(VARIANT varChild,BSTR *pszDescription) override;
+    STDMETHOD(get_accValue)( VARIANT varChild,BSTR *pszValue) override;
+    STDMETHOD(get_accName)(VARIANT varChild,BSTR *pszName) override;
+    STDMETHOD(get_accChild)(VARIANT varChild,IDispatch **ppdispChild) override;
+    STDMETHOD(get_accChildCount)(long *pcountChildren) override;
+    STDMETHOD(get_accParent)( IDispatch **ppdispParent) override;
 
     // methods which are defined only in the IAccessible2
     // These methods only declare here, and their implementation bodies are empty now.
-    STDMETHOD(get_nRelations)( long __RPC_FAR *nRelations) ;
-    STDMETHOD(get_relation)( long relationIndex, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation) ;
-    STDMETHOD(get_relations)( long maxRelations, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation, long __RPC_FAR *nRelations) ;
-    STDMETHOD(role)(long __RPC_FAR *role);
+    STDMETHOD(get_nRelations)( long __RPC_FAR *nRelations) override;
+    STDMETHOD(get_relation)( long relationIndex, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation) override;
+    STDMETHOD(get_relations)( long maxRelations, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation, long __RPC_FAR *nRelations) override;
+    STDMETHOD(role)(long __RPC_FAR *role) override;
     STDMETHOD(get_nActions)(long __RPC_FAR *nActions);
-    STDMETHOD(scrollTo)(enum IA2ScrollType scrollType);
-    STDMETHOD(scrollToPoint)(enum IA2CoordinateType coordinateType, long x, long y);
-    STDMETHOD(get_groupPosition)(long __RPC_FAR *groupLevel,long __RPC_FAR *similarItemsInGroup,long __RPC_FAR *positionInGroup);
-    STDMETHOD(get_states)( AccessibleStates __RPC_FAR *states );
-    STDMETHOD(get_extendedRole)( BSTR __RPC_FAR *extendedRole );
-    STDMETHOD(get_localizedExtendedRole)( BSTR __RPC_FAR *localizedExtendedRole );
-    STDMETHOD(get_nExtendedStates)( long __RPC_FAR *nExtendedStates);
-    STDMETHOD(get_extendedStates)( long maxExtendedStates, BSTR __RPC_FAR *__RPC_FAR *extendedStates, long __RPC_FAR *nExtendedStates);
-    STDMETHOD(get_localizedExtendedStates)(long maxLocalizedExtendedStates,BSTR __RPC_FAR *__RPC_FAR *localizedExtendedStates,long __RPC_FAR *nLocalizedExtendedStates);
-    STDMETHOD(get_uniqueID)(long __RPC_FAR *uniqueID);
-    STDMETHOD(get_windowHandle)(HWND __RPC_FAR *windowHandle);
-    STDMETHOD(get_indexInParent)( long __RPC_FAR *accParentIndex );
-    STDMETHOD(get_locale)( IA2Locale __RPC_FAR *locale );
-    STDMETHOD(get_attributes)(/*[out]*/ BSTR *pAttr);
+    STDMETHOD(scrollTo)(enum IA2ScrollType scrollType) override;
+    STDMETHOD(scrollToPoint)(enum IA2CoordinateType coordinateType, long x, long y) override;
+    STDMETHOD(get_groupPosition)(long __RPC_FAR *groupLevel,long __RPC_FAR *similarItemsInGroup,long __RPC_FAR *positionInGroup) override;
+    STDMETHOD(get_states)( AccessibleStates __RPC_FAR *states ) override;
+    STDMETHOD(get_extendedRole)( BSTR __RPC_FAR *extendedRole ) override;
+    STDMETHOD(get_localizedExtendedRole)( BSTR __RPC_FAR *localizedExtendedRole ) override;
+    STDMETHOD(get_nExtendedStates)( long __RPC_FAR *nExtendedStates) override;
+    STDMETHOD(get_extendedStates)( long maxExtendedStates, BSTR __RPC_FAR *__RPC_FAR *extendedStates, long __RPC_FAR *nExtendedStates) override;
+    STDMETHOD(get_localizedExtendedStates)(long maxLocalizedExtendedStates,BSTR __RPC_FAR *__RPC_FAR *localizedExtendedStates,long __RPC_FAR *nLocalizedExtendedStates) override;
+    STDMETHOD(get_uniqueID)(long __RPC_FAR *uniqueID) override;
+    STDMETHOD(get_windowHandle)(HWND __RPC_FAR *windowHandle) override;
+    STDMETHOD(get_indexInParent)( long __RPC_FAR *accParentIndex ) override;
+    STDMETHOD(get_locale)( IA2Locale __RPC_FAR *locale ) override;
+    STDMETHOD(get_attributes)(/*[out]*/ BSTR *pAttr) override;
 
     //IServiceProvider.
-    STDMETHOD(QueryService)(REFGUID guidService, REFIID riid, void** ppvObject);
+    STDMETHOD(QueryService)(REFGUID guidService, REFIID riid, void** ppvObject) override;
 
     //IAccessibleApplication
-    STDMETHOD(get_appName)(BSTR __RPC_FAR *name);
-    STDMETHOD(get_appVersion)(BSTR __RPC_FAR *version);
-    STDMETHOD(get_toolkitName)(BSTR __RPC_FAR *name);
-    STDMETHOD(get_toolkitVersion)(BSTR __RPC_FAR *version);
+    STDMETHOD(get_appName)(BSTR __RPC_FAR *name) override;
+    STDMETHOD(get_appVersion)(BSTR __RPC_FAR *version) override;
+    STDMETHOD(get_toolkitName)(BSTR __RPC_FAR *name) override;
+    STDMETHOD(get_toolkitVersion)(BSTR __RPC_FAR *version) override;
 
     // methods which are defined only in IMAccessible
     // These methods are provided for UNO management system.
     // The UNO management system use these methods to put Accessibility
     // information to COM.
-    STDMETHOD(Put_XAccName)(const OLECHAR __RPC_FAR *pszName);
-    STDMETHOD(Put_XAccRole)(unsigned short pRole);
-    STDMETHOD(DecreaseState)(DWORD pXSate);
-    STDMETHOD(IncreaseState)(DWORD pXSate);
-    STDMETHOD(SetState)(DWORD pXSate);
-    STDMETHOD(Put_XAccDescription)(const OLECHAR __RPC_FAR *pszDescription);
-    STDMETHOD(Put_XAccValue)(const OLECHAR __RPC_FAR *pszAccValue);
-    STDMETHOD(Put_XAccLocation)(const Location sLocation);
-    STDMETHOD(Put_XAccFocus)(long dChildID);
-    STDMETHOD(Put_XAccParent)(IMAccessible __RPC_FAR *pIParent);
-    STDMETHOD(Put_XAccWindowHandle)(HWND hwnd);
-    STDMETHOD(Put_XAccChildID)(long dChildID);
-    STDMETHOD(Put_XAccAgent)(hyper pAgent);
-    STDMETHOD(NotifyDestroy)(BOOL isDestroy);
-    STDMETHOD(Put_ActionDescription)( const OLECHAR* szAction);
-    STDMETHOD(SetDefaultAction)(hyper pAction);
-    STDMETHOD(GetUNOInterface)(hyper*);
-    STDMETHOD(SetXAccessible)(hyper);
+    STDMETHOD(Put_XAccName)(const OLECHAR __RPC_FAR *pszName) override;
+    STDMETHOD(Put_XAccRole)(unsigned short pRole) override;
+    STDMETHOD(DecreaseState)(DWORD pXSate) override;
+    STDMETHOD(IncreaseState)(DWORD pXSate) override;
+    STDMETHOD(SetState)(DWORD pXSate) override;
+    STDMETHOD(Put_XAccDescription)(const OLECHAR __RPC_FAR *pszDescription) override;
+    STDMETHOD(Put_XAccValue)(const OLECHAR __RPC_FAR *pszAccValue) override;
+    STDMETHOD(Put_XAccLocation)(const Location sLocation) override;
+    STDMETHOD(Put_XAccFocus)(long dChildID) override;
+    STDMETHOD(Put_XAccParent)(IMAccessible __RPC_FAR *pIParent) override;
+    STDMETHOD(Put_XAccWindowHandle)(HWND hwnd) override;
+    STDMETHOD(Put_XAccChildID)(long dChildID) override;
+    STDMETHOD(Put_XAccAgent)(hyper pAgent) override;
+    STDMETHOD(NotifyDestroy)(BOOL isDestroy) override;
+    STDMETHOD(Put_ActionDescription)( const OLECHAR* szAction) override;
+    STDMETHOD(SetDefaultAction)(hyper pAction) override;
+    STDMETHOD(GetUNOInterface)(hyper*) override;
+    STDMETHOD(SetXAccessible)(hyper) override;
 
 private:
     OLECHAR* m_pszName;
@@ -207,16 +214,16 @@ private:
                 int size);
     HRESULT DeSelectMutipleChildren(css::accessibility::XAccessible** pItem,
                 int size);
-    css::accessibility::XAccessibleContext* GetContextByXAcc(
+    static css::accessibility::XAccessibleContext* GetContextByXAcc(
             css::accessibility::XAccessible* pXAcc);
     css::uno::Reference<css::accessibility::XAccessibleSelection> GetSelection();
     // end accSelect implementation methods
-    BOOL GetXInterfaceFromXAccessible(css::accessibility::XAccessible*,
+    static BOOL GetXInterfaceFromXAccessible(css::accessibility::XAccessible*,
             css::uno::XInterface**, int);
     HRESULT WINAPI SmartQI(void* pv, REFIID iid, void** ppvObject);
 
 public:
-    STDMETHOD(Get_XAccChildID)(/*[out,retval]*/ long* childID);
+    STDMETHOD(Get_XAccChildID)(/*[out,retval]*/ long* childID) override;
     // AccObjectManagerAgent is a management object in UNO, here keep its pointer for
     // the implementation of accNavigate when descendant manage happens for List,Tree, or Table
     // AccObjectManagerAgent and the following UNO objects XAccessble,XAccessibleSelection,
@@ -229,10 +236,10 @@ public:
     BOOL m_bRequiresSave;
     XGUIDToComObjHash m_containedObjects;
 
-    static HRESULT WINAPI _SmartQI(void* pv,
+    static HRESULT WINAPI SmartQI_(void* pv,
                                    REFIID iid, void** ppvObject, DWORD_PTR)
     {
-        return ((CMAccessible*)pv)->SmartQI(pv,iid,ppvObject);
+        return static_cast<CMAccessible*>(pv)->SmartQI(pv,iid,ppvObject);
     }
 
     static void get_OLECHARFromAny(css::uno::Any& pAny, OLECHAR* pChar);

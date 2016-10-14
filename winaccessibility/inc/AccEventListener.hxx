@@ -45,7 +45,7 @@ protected:
     AccObjectManagerAgent* pAgent;
 public:
     AccEventListener( css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
-    virtual ~AccEventListener();
+    virtual ~AccEventListener() override;
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException) override;

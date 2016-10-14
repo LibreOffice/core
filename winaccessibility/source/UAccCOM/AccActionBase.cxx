@@ -50,57 +50,6 @@ CAccActionBase::~CAccActionBase()
 {}
 
 /**
- * Helper function used for getting default action by UNO role.
- *
- * @param    pRContext    UNO context interface pointer.
- * @param    pRet         the corresponding string to be returned.
- */
-void GetDfActionByUNORole(XAccessibleContext* pRContext, BSTR* pRet)
-{
-    // #CHECK#
-    if(pRContext == NULL || pRet == NULL)
-    {
-        return;
-    }
-
-    long Role = pRContext->getAccessibleRole();
-
-    switch(Role)
-    {
-    case PUSH_BUTTON:
-        *pRet = ::SysAllocString(PRESS_STR);
-        break;
-    case RADIO_BUTTON:
-    case MENU_ITEM:
-    case LIST_ITEM:
-        *pRet = ::SysAllocString(SELECT_STR);
-        break;
-    case CHECK_BOX:
-        {
-            Reference< XAccessibleStateSet > pRState = pRContext->getAccessibleStateSet();
-            if( !pRState.is() )
-            {
-                return;
-            }
-
-            Sequence<short> pStates = pRState->getStates();
-            int count = pStates.getLength();
-            *pRet = ::SysAllocString(CHECK_STR);
-            for( int iIndex = 0;iIndex < count;iIndex++ )
-            {
-                if( pStates[iIndex] == AccessibleStateType::CHECKED )
-                {
-                    SAFE_SYSFREESTRING(*pRet);
-                    *pRet = ::SysAllocString(UNCHECK_STR);
-                    break;
-                }
-            }
-            break;
-        }
-    }
-}
-
-/**
  * Returns the number of action.
  *
  * @param    nActions    the number of action.
@@ -112,7 +61,7 @@ STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long* nActions)
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if( pRXAct.is() && nActions != NULL )
+    if( pRXAct.is() && nActions != nullptr )
     {
         *nActions = GetXInterface()->getAccessibleActionCount();
         return S_OK;
@@ -157,7 +106,7 @@ STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *de
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if(description == NULL)
+    if(description == nullptr)
         return E_INVALIDARG;
 
     // #CHECK XInterface#
@@ -168,7 +117,7 @@ STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *de
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);
-    *description = SysAllocString((OLECHAR*)ouStr.getStr());
+    *description = SysAllocString(ouStr.getStr());
 
     return S_OK;
 
@@ -219,10 +168,10 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
 
     OLECHAR wString[64];
 
-    *keyBinding = (BSTR*)::CoTaskMemAlloc(nCount*sizeof(BSTR));
+    *keyBinding = static_cast<BSTR*>(::CoTaskMemAlloc(nCount*sizeof(BSTR)));
 
     // #CHECK Memory Allocation#
-    if(*keyBinding == NULL)
+    if(*keyBinding == nullptr)
         return E_FAIL;
 
     for( int index = 0;index < nCount;index++ )
@@ -253,7 +202,7 @@ STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterface)
     CUNOXWrapper::put_XInterface(pXInterface);
 
     //special query.
-    if(pUNOInterface == NULL)
+    if(pUNOInterface == nullptr)
         return E_FAIL;
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
     if( !pRContext.is() )
@@ -261,7 +210,7 @@ STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterface)
 
     Reference<XAccessibleAction> pRXI(pRContext,UNO_QUERY);
     if( !pRXI.is() )
-        pRXAct = NULL;
+        pRXAct = nullptr;
     else
         pRXAct = pRXI.get();
     return S_OK;
@@ -278,7 +227,7 @@ STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterface)
 void CAccActionBase::GetkeyBindingStrByXkeyBinding( const Sequence< KeyStroke > &keySet, OLECHAR* pString )
 {
     // #CHECK#
-    if(pString == NULL)
+    if(pString == nullptr)
         return;
 
     for( int iIndex = 0;iIndex < keySet.getLength();iIndex++ )
@@ -381,7 +330,7 @@ OLECHAR const * CAccActionBase::getOLECHARFromKeyCode(long key)
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 

@@ -62,7 +62,7 @@ public:
         /* [retval][out] */ long __RPC_FAR *nBinding);
 
     // Override of IUNOXWrapper.
-    STDMETHOD(put_XInterface)(hyper pXInterface);
+    STDMETHOD(put_XInterface)(hyper pXInterface) override;
 
     static void GetkeyBindingStrByXkeyBinding( const css::uno::Sequence< css::awt::KeyStroke > &keySet, OLECHAR* pString );
 

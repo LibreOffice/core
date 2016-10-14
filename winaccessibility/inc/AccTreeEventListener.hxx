@@ -36,10 +36,10 @@ class AccTreeEventListener: public AccDescendantManagerEventListener
 {
 public:
     AccTreeEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
-    virtual ~AccTreeEventListener();
+    virtual ~AccTreeEventListener() override;
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException) override;
 
     //for active descendant changed event
     virtual void HandleActiveDescendantChangedEvent(

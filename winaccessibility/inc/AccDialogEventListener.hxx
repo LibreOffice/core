@@ -35,7 +35,7 @@ class AccDialogEventListener: public AccEventListener
 {
 public:
     AccDialogEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
-    virtual ~AccDialogEventListener();
+    virtual ~AccDialogEventListener() override;
 
     //AccessibleEventListener
     virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException) override;

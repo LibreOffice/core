@@ -57,7 +57,7 @@ private:
     short               m_accRole;
     long                m_resID;
     HWND                m_pParantID;
-    sal_Bool                m_bShouldDestroy; //avoid access COM interface when acc object is deleted
+    bool                m_bShouldDestroy; //avoid access COM interface when acc object is deleted
     IMAccessible*       m_pIMAcc;
     AccObject*          m_pParentObj;
     IAccChildList       m_childrenList;
@@ -80,10 +80,10 @@ private:
 
 public:
 
-    AccObject ( css::accessibility::XAccessible* pXAcc = NULL,AccObjectManagerAgent* pAgent = NULL ,AccEventListener* accListener=NULL);
+    AccObject ( css::accessibility::XAccessible* pXAcc = nullptr,AccObjectManagerAgent* pAgent = nullptr ,AccEventListener* accListener=nullptr);
     virtual ~AccObject();
 
-    sal_Bool UpdateAccessibleInfoFromUnoToMSAA(  ); //implement accessible information mapping
+    bool UpdateAccessibleInfoFromUnoToMSAA(  ); //implement accessible information mapping
     void UpdateDefaultAction();
 
     IMAccessible*  GetIMAccessible();   //return COM interface in acc object
@@ -106,8 +106,8 @@ public:
     void DeleteChild( AccObject* pChild );
     AccObject* NextChild();
 
-    void NotifyDestroy(sal_Bool ifDelete);
-    sal_Bool  ifShouldDestroy();
+    void NotifyDestroy(bool ifDelete);
+    bool ifShouldDestroy();
 
     void  DecreaseState(short xState );//call COM interface DecreaseState method
     void  IncreaseState( short xState );//call COM interface IncreaseState method

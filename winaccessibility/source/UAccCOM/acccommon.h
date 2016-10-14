@@ -25,21 +25,21 @@ struct ltComp
 {
     bool operator()(REFGUID  rguid1, REFGUID  rguid2) const
     {
-        if(((PLONG) &rguid1)[0] < ((PLONG) &rguid2)[0])
+        if(reinterpret_cast<LONG const *>(&rguid1)[0] < reinterpret_cast<LONG const *>(&rguid2)[0])
             return TRUE;
-        else if(((PLONG) &rguid1)[0] > ((PLONG) &rguid2)[0])
+        else if(reinterpret_cast<LONG const *>(&rguid1)[0] > reinterpret_cast<LONG const *>(&rguid2)[0])
             return FALSE;
-        if(((PLONG) &rguid1)[1] < ((PLONG) &rguid2)[1])
+        if(reinterpret_cast<LONG const *>(&rguid1)[1] < reinterpret_cast<LONG const *>(&rguid2)[1])
             return TRUE;
-        else if(((PLONG) &rguid1)[1] > ((PLONG) &rguid2)[1])
+        else if(reinterpret_cast<LONG const *>(&rguid1)[1] > reinterpret_cast<LONG const *>(&rguid2)[1])
             return FALSE;
-        if(((PLONG) &rguid1)[2] < ((PLONG) &rguid2)[2])
+        if(reinterpret_cast<LONG const *>(&rguid1)[2] < reinterpret_cast<LONG const *>(&rguid2)[2])
             return TRUE;
-        else if(((PLONG) &rguid1)[2] > ((PLONG) &rguid2)[2])
+        else if(reinterpret_cast<LONG const *>(&rguid1)[2] > reinterpret_cast<LONG const *>(&rguid2)[2])
             return FALSE;
-        if(((PLONG) &rguid1)[3] < ((PLONG) &rguid2)[3])
+        if(reinterpret_cast<LONG const *>(&rguid1)[3] < reinterpret_cast<LONG const *>(&rguid2)[3])
             return TRUE;
-        else if(((PLONG) &rguid1)[3] > ((PLONG) &rguid2)[3])
+        else if(reinterpret_cast<LONG const *>(&rguid1)[3] > reinterpret_cast<LONG const *>(&rguid2)[3])
             return FALSE;
         return FALSE;
     }
@@ -62,7 +62,7 @@ enum DM_NIR {
 template<typename T, typename Ifc> HRESULT
 createInstance(REFIID iid, Ifc ** ppIfc)
 {
-    return CComCreator< CComObject<T> >::CreateInstance(0, iid, (void**)ppIfc);
+    return CComCreator< CComObject<T> >::CreateInstance(0, iid, reinterpret_cast<void**>(ppIfc));
 }
 
 #endif

@@ -36,7 +36,7 @@ class AccMenuEventListener: public AccComponentEventListener
 {
 public:
     AccMenuEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
-    virtual ~AccMenuEventListener();
+    virtual ~AccMenuEventListener() override;
 
     //AccessibleEventListener
     virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException) override;

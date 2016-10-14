@@ -45,8 +45,8 @@ class ATL_NO_VTABLE CEnumVariant :
 public:
     CEnumVariant()
             :m_lLBound(0),
-            pUNOInterface(NULL),
-            m_pXAccessibleSelection(NULL)
+            pUNOInterface(nullptr),
+            m_pXAccessibleSelection(nullptr)
     {
         m_lCurrent = m_lLBound;
     }
@@ -60,31 +60,38 @@ public:
     BEGIN_COM_MAP(CEnumVariant)
     COM_INTERFACE_ENTRY(IEnumVariant)
     COM_INTERFACE_ENTRY(IEnumVARIANT)
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
     END_COM_MAP()
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
     // IEnumVariant
 public:
 
-    STDMETHOD(ClearEnumeration)();
+    STDMETHOD(ClearEnumeration)() override;
 
     // IEnumVARIANT
 
 
-    HRESULT STDMETHODCALLTYPE Next(ULONG cElements,VARIANT __RPC_FAR *pvar,ULONG __RPC_FAR *pcElementFetched);
+    HRESULT STDMETHODCALLTYPE Next(ULONG cElements,VARIANT __RPC_FAR *pvar,ULONG __RPC_FAR *pcElementFetched) override;
 
 
-    HRESULT STDMETHODCALLTYPE Skip(ULONG cElements);
+    HRESULT STDMETHODCALLTYPE Skip(ULONG cElements) override;
 
 
-    HRESULT STDMETHODCALLTYPE Reset( void);
+    HRESULT STDMETHODCALLTYPE Reset( void) override;
 
 
-    HRESULT STDMETHODCALLTYPE Clone(IEnumVARIANT __RPC_FAR *__RPC_FAR *ppenum);
+    HRESULT STDMETHODCALLTYPE Clone(IEnumVARIANT __RPC_FAR *__RPC_FAR *ppenum) override;
 
     // IEnumVariant
 
 
-    HRESULT STDMETHODCALLTYPE PutSelection(hyper pXSelection);
+    HRESULT STDMETHODCALLTYPE PutSelection(hyper pXSelection) override;
 
 
     static HRESULT STDMETHODCALLTYPE Create(CEnumVariant __RPC_FAR *__RPC_FAR *ppenum);

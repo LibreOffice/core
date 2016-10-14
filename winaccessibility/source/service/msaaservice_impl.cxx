@@ -64,32 +64,32 @@ private:
 
 public:
     MSAAServiceImpl ();
-    virtual ~MSAAServiceImpl();
+    virtual ~MSAAServiceImpl() override;
 
     // XComponent - as used by VCL to lifecycle manage this bridge.
     virtual void SAL_CALL dispose()
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) override
     { /* dummy */ }
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) override
     { /* dummy */ }
 
     // XMSAAService
     virtual sal_Int64 SAL_CALL getAccObjectPtr(
             sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL handleWindowOpened(sal_Int64)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 /**
@@ -306,9 +306,9 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
             create_MSAAServiceImpl, getImplementationName_MSAAServiceImpl,
             getSupportedServiceNames_MSAAServiceImpl,
             ::cppu::createSingleComponentFactory,
-            0, 0
+            nullptr, 0
         },
-        { 0, 0, 0, 0, 0, 0 }
+        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
     };
 }
 

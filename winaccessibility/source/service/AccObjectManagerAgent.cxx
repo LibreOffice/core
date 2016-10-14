@@ -177,7 +177,7 @@ bool
 AccObjectManagerAgent::InsertChildrenAccObj(XAccessible* pXAcc, sal_Int64 pWnd)
 {
     if( pWinManager )
-        return pWinManager->InsertChildrenAccObj( pXAcc, HWND((void*)pWnd) );
+        return pWinManager->InsertChildrenAccObj( pXAcc, HWND(reinterpret_cast<void*>(pWnd)) );
 
     return false;
 }
@@ -262,7 +262,7 @@ bool AccObjectManagerAgent::NotifyAccEvent(short pEvent, XAccessible* pXAcc)
 bool AccObjectManagerAgent::IsContainer( XAccessible* pXAcc )
 {
     if(pWinManager)
-        return pWinManager->IsContainer(pXAcc);
+        return AccObjectWinManager::IsContainer(pXAcc);
 
     return false;
 }
@@ -277,7 +277,7 @@ IMAccessible* AccObjectManagerAgent::GetIMAccByXAcc(XAccessible* pXAcc)
     if(pWinManager)
         return pWinManager->GetIMAccByXAcc(pXAcc);
 
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -312,7 +312,7 @@ bool AccObjectManagerAgent::GetIAccessibleFromXAccessible(
 {
     if(pWinManager)
     {
-        *ppXI = (IAccessible*)pWinManager->GetIMAccByXAcc(pXAcc);
+        *ppXI = reinterpret_cast<IAccessible*>(pWinManager->GetIMAccByXAcc(pXAcc));
         if(*ppXI)
             return true;
     }
@@ -324,7 +324,7 @@ XAccessible* AccObjectManagerAgent::GetParentXAccessible( XAccessible* pXAcc )
     if(pWinManager)
         return pWinManager->GetParentXAccessible( pXAcc );
 
-    return NULL;
+    return nullptr;
 }
 
 short AccObjectManagerAgent::GetParentRole( XAccessible* pXAcc )
@@ -359,7 +359,7 @@ bool AccObjectManagerAgent::IsSpecialToolboItem(XAccessible* pXAcc)
 short AccObjectManagerAgent::GetRole(XAccessible* pXAcc)
 {
     if(pWinManager)
-        return pWinManager->GetRole( pXAcc );
+        return AccObjectWinManager::GetRole( pXAcc );
 
     return -1;
 }
@@ -370,7 +370,7 @@ XAccessible* AccObjectManagerAgent::GetAccDocByAccTopWin( XAccessible* pXAcc )
     {
         return pWinManager->GetAccDocByAccTopWin( pXAcc );
     }
-    return NULL;
+    return nullptr;
 }
 bool AccObjectManagerAgent::IsTopWinAcc(XAccessible* pXAcc)
 {
@@ -384,7 +384,7 @@ bool AccObjectManagerAgent::IsTopWinAcc(XAccessible* pXAcc)
 bool AccObjectManagerAgent::IsStateManageDescendant(XAccessible* pXAcc)
 {
     if(pWinManager)
-        return pWinManager->IsStateManageDescendant( pXAcc );
+        return AccObjectWinManager::IsStateManageDescendant( pXAcc );
 
     return false;
 }

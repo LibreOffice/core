@@ -63,7 +63,7 @@ using namespace com::sun::star::uno;
    * @return
    */
 AccObjectWinManager::AccObjectWinManager( AccObjectManagerAgent* Agent ):
-        oldFocus( NULL ),
+        oldFocus( nullptr ),
         pAgent( Agent )
 {
 }
@@ -96,7 +96,7 @@ AccObjectWinManager::~AccObjectWinManager()
 LRESULT
 AccObjectWinManager::Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam)
 {
-    IMAccessible* pRetIMAcc = NULL;
+    IMAccessible* pRetIMAcc = nullptr;
 
     if(lParam == OBJID_CLIENT )
     {
@@ -126,12 +126,12 @@ AccObjectWinManager::Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam)
    */
 AccObject* AccObjectWinManager::GetAccObjByXAcc( XAccessible* pXAcc)
 {
-    if( pXAcc == NULL)
-        return NULL;
+    if( pXAcc == nullptr)
+        return nullptr;
 
-    XIdToAccObjHash::iterator pIndTemp = XIdAccList.find( (void*)pXAcc );
+    XIdToAccObjHash::iterator pIndTemp = XIdAccList.find( pXAcc );
     if ( pIndTemp == XIdAccList.end() )
-        return NULL;
+        return nullptr;
 
     return &(pIndTemp->second);
 }
@@ -145,8 +145,8 @@ AccObject* AccObjectWinManager::GetTopWindowAccObj(HWND hWnd)
 {
     XHWNDToXAccHash::iterator iterResult =HwndXAcc.find(hWnd);
     if(iterResult == HwndXAcc.end())
-        return NULL;
-    XAccessible* pXAcc = (XAccessible*)(iterResult->second);
+        return nullptr;
+    XAccessible* pXAcc = static_cast<XAccessible*>(iterResult->second);
     return GetAccObjByXAcc(pXAcc);
 }
 
@@ -156,23 +156,23 @@ AccObject* AccObjectWinManager::GetTopWindowAccObj(HWND hWnd)
    * @param state Customize Interface
    * @return The terminate result that identifies if the call is successful.
    */
-sal_Bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
+bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
 {
     Reference< XAccessibleContext > pRContext;
 
-    if( pXAcc == NULL)
-        return sal_False;
+    if( pXAcc == nullptr)
+        return false;
 
 
     pRContext = pXAcc->getAccessibleContext();
     if( !pRContext.is() )
-        return sal_False;
+        return false;
 
 
     AccObject* selfAccObj= GetAccObjByXAcc(pXAcc);
 
-    if(selfAccObj==NULL)
-        return sal_False;
+    if(selfAccObj==nullptr)
+        return false;
 
     long dChildID = selfAccObj->GetResID();
     HWND hAcc = selfAccObj->GetParentHWND();
@@ -312,7 +312,7 @@ sal_Bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
         break;
     }
 
-    return sal_True;
+    return true;
 }
 
 /**
@@ -323,14 +323,14 @@ sal_Bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
 XAccessible* AccObjectWinManager::GetParentXAccessible( XAccessible* pXAcc )
 {
     AccObject* pObj= GetAccObjByXAcc(pXAcc);
-    if( pObj ==NULL )
-        return NULL;
+    if( pObj ==nullptr )
+        return nullptr;
     if(pObj->GetParentObj())
     {
         pObj = pObj->GetParentObj();
         return pObj->GetXAccessible().get();
     }
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -341,7 +341,7 @@ XAccessible* AccObjectWinManager::GetParentXAccessible( XAccessible* pXAcc )
 short AccObjectWinManager::GetParentRole( XAccessible* pXAcc )
 {
     AccObject* pObj= GetAccObjByXAcc(pXAcc);
-    if( pObj ==NULL )
+    if( pObj ==nullptr )
         return -1;
     if(pObj->GetParentObj())
     {
@@ -384,23 +384,23 @@ int AccObjectWinManager::UpdateAccSelection(XAccessible* pXAcc)
 {
     Reference< XAccessibleContext > pRContext;
 
-    if( pXAcc == NULL)
-        return sal_False;
+    if( pXAcc == nullptr)
+        return 0;
 
     pRContext = pXAcc->getAccessibleContext();
     if( !pRContext.is() )
-        return sal_False;
+        return 0;
 
     Reference< XAccessibleSelection > pRSelection(pRContext,UNO_QUERY);
     if( !pRSelection.is() )
-        return sal_False;
+        return 0;
 
     AccObject* pAccObj = GetAccObjByXAcc(pXAcc);
-    if(pAccObj==NULL)
-        return sal_False;
+    if(pAccObj==nullptr)
+        return 0;
 
-    Reference<XAccessible> pRChild = NULL;
-    AccObject* pAccChildObj = NULL;
+    Reference<XAccessible> pRChild = nullptr;
+    AccObject* pAccChildObj = nullptr;
     int selectNum= pRSelection->getSelectedAccessibleChildCount();
 
     IAccSelectionList oldSelection = pAccObj->GetSelection();
@@ -439,7 +439,7 @@ int AccObjectWinManager::UpdateAccSelection(XAccessible* pXAcc)
 
         pAccObj->AddSelect(index, pAccChildObj);
 
-        if(pAccChildObj != NULL)
+        if(pAccChildObj != nullptr)
             NotifyWinEvent(EVENT_OBJECT_SELECTIONADD,pAccObj->GetParentHWND(), OBJID_CLIENT,pAccChildObj->GetResID());
     }
 
@@ -447,8 +447,8 @@ int AccObjectWinManager::UpdateAccSelection(XAccessible* pXAcc)
     while(iter!=oldSelection.end())
     {
         pAccObj->GetSelection().erase(iter->first);
-        pAccChildObj = (AccObject*)(iter->second);
-        if(pAccChildObj != NULL)
+        pAccChildObj = iter->second;
+        if(pAccChildObj != nullptr)
             NotifyWinEvent(EVENT_OBJECT_SELECTIONREMOVE,pAccObj->GetParentHWND(), OBJID_CLIENT,pAccChildObj->GetResID());
         ++iter;
     }
@@ -494,8 +494,8 @@ void AccObjectWinManager::DeleteFromHwndXAcc(XAccessible* pXAcc )
    */
 void AccObjectWinManager::DeleteChildrenAccObj(XAccessible* pXAcc)
 {
-    AccObject* currentObj=NULL;
-    AccObject* childObj=NULL;
+    AccObject* currentObj=nullptr;
+    AccObject* childObj=nullptr;
 
     currentObj =  GetAccObjByXAcc( pXAcc);
     if(currentObj)
@@ -521,7 +521,7 @@ void AccObjectWinManager::DeleteChildrenAccObj(XAccessible* pXAcc)
    */
 void AccObjectWinManager::DeleteAccObj( XAccessible* pXAcc )
 {
-    if( pXAcc == NULL )
+    if( pXAcc == nullptr )
         return;
     XIdToAccObjHash::iterator temp = XIdAccList.find(pXAcc);
     if( temp != XIdAccList.end() )
@@ -561,10 +561,10 @@ void AccObjectWinManager::DeleteAccObj( XAccessible* pXAcc )
 void AccObjectWinManager::DeleteAccListener( AccObject*  pAccObj )
 {
     AccEventListener* listener = pAccObj->getListener();
-    if( listener==NULL )
+    if( listener==nullptr )
         return;
     listener->RemoveMeFromBroadcaster();
-    pAccObj->SetListener(NULL);
+    pAccObj->SetListener(nullptr);
 }
 
 /**
@@ -583,19 +583,19 @@ inline long AccObjectWinManager::ImpleGenerateResID()
    * @param pWnd  Top Window handle
    * @return The calling result.
    */
-sal_Bool AccObjectWinManager::InsertChildrenAccObj( css::accessibility::XAccessible* pXAcc,
+bool AccObjectWinManager::InsertChildrenAccObj( css::accessibility::XAccessible* pXAcc,
         HWND pWnd)
 {
     if(!IsContainer(pXAcc))
-        return sal_False;
+        return false;
 
     Reference< XAccessibleContext > pRContext;
 
-    if( pXAcc == NULL)
-        return sal_False;
+    if( pXAcc == nullptr)
+        return false;
     pRContext = pXAcc->getAccessibleContext();
     if( !pRContext.is() )
-        return sal_False;
+        return false;
 
     short role = pRContext->getAccessibleRole();
 
@@ -606,7 +606,7 @@ sal_Bool AccObjectWinManager::InsertChildrenAccObj( css::accessibility::XAccessi
     {
         if(IsStateManageDescendant(pXAcc))
         {
-            return sal_True;
+            return true;
         }
     }
 
@@ -616,14 +616,14 @@ sal_Bool AccObjectWinManager::InsertChildrenAccObj( css::accessibility::XAccessi
         Reference<XAccessible> mxAccessible
         = pRContext->getAccessibleChild(i);
         XAccessible* mpAccessible = mxAccessible.get();
-        if(mpAccessible != NULL)
+        if(mpAccessible != nullptr)
         {
             InsertAccObj( mpAccessible,pXAcc,pWnd );
             InsertChildrenAccObj(mpAccessible,pWnd);
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 /**
@@ -655,9 +655,9 @@ void AccObjectWinManager::InsertAccChildNode( AccObject* pCurObj, AccObject* pPa
    * @param pWnd Top window handle.
    * @return
    */
-sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentXAcc,HWND pWnd )
+bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentXAcc,HWND pWnd )
 {
-    XIdToAccObjHash::iterator itXacc = XIdAccList.find( (void*)pXAcc );
+    XIdToAccObjHash::iterator itXacc = XIdAccList.find( pXAcc );
     if (itXacc != XIdAccList.end() )
     {
         short nCurRole =GetRole(pXAcc);
@@ -669,27 +669,27 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
                     pObjParent->GetXAccessible().is() &&
                     pObjParent->GetXAccessible().get() != pParentXAcc)
             {
-                XIdToAccObjHash::iterator itXaccParent  = XIdAccList.find( (void*)pParentXAcc );
+                XIdToAccObjHash::iterator itXaccParent  = XIdAccList.find( pParentXAcc );
                 if(itXaccParent != XIdAccList.end())
                 {
                     objXacc.SetParentObj(&(itXaccParent->second));
                 }
             }
         }
-        return sal_False;
+        return false;
     }
 
 
     Reference< XAccessibleContext > pRContext;
 
-    if( pXAcc == NULL)
-        return sal_False;
+    if( pXAcc == nullptr)
+        return false;
 
     pRContext = pXAcc->getAccessibleContext();
     if( !pRContext.is() )
-        return sal_False;
+        return false;
 
-    if( pWnd == NULL )
+    if( pWnd == nullptr )
     {
         if(pParentXAcc)
         {
@@ -697,13 +697,13 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
             if(pObj)
                 pWnd = pObj->GetParentHWND();
         }
-        if( pWnd == NULL )
-            return sal_False;
+        if( pWnd == nullptr )
+            return false;
     }
 
     AccObject pObj( pXAcc,pAgent );
-    if( pObj.GetIMAccessible() == NULL )
-        return sal_False;
+    if( pObj.GetIMAccessible() == nullptr )
+        return false;
     pObj.SetResID( this->ImpleGenerateResID());
     pObj.SetParentHWND( pWnd );
 
@@ -725,7 +725,7 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
     ::rtl::Reference<AccEventListener> const pListener =
         CreateAccEventListener(pXAcc);
     if (!pListener.is())
-        return sal_False;
+        return false;
     Reference<XAccessibleComponent> xComponent(pRContext,UNO_QUERY);
     Reference<XAccessibleEventBroadcaster> broadcaster(xComponent,UNO_QUERY);
     if (broadcaster.is())
@@ -734,10 +734,10 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
         broadcaster->addAccessibleEventListener(xListener);
     }
     else
-        return sal_False;
+        return false;
 
-    XIdAccList.insert( XIdToAccObjHash::value_type( (void*)pXAcc, pObj ));
-    XIdToAccObjHash::iterator pIndTemp = XIdAccList.find( (void*)pXAcc );
+    XIdAccList.insert( XIdToAccObjHash::value_type( pXAcc, pObj ));
+    XIdToAccObjHash::iterator pIndTemp = XIdAccList.find( pXAcc );
     XResIdAccList.insert(XResIdToAccObjHash::value_type(pObj.GetResID(),&(pIndTemp->second)));
 
     AccObject* pCurObj = GetAccObjByXAcc(pXAcc);
@@ -750,7 +750,7 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
     InsertAccChildNode(pCurObj,pParentObj,pWnd);
     if( pCurObj )
         pCurObj->UpdateAccessibleInfoFromUnoToMSAA();
-    return sal_True;
+    return true;
 }
 
 
@@ -762,7 +762,7 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
    */
 void AccObjectWinManager::SaveTopWindowHandle(HWND hWnd, css::accessibility::XAccessible* pXAcc)
 {
-    HwndXAcc.insert( XHWNDToXAccHash::value_type( hWnd,(void*)pXAcc ) );
+    HwndXAcc.insert( XHWNDToXAccHash::value_type( hWnd,pXAcc ) );
 }
 
 
@@ -1023,7 +1023,7 @@ void  AccObjectWinManager::SetRole( XAccessible* pXAcc, long Role )
    * @param pAccessible XAccessible interface.
    * @return If XAccessible object is container.
    */
-sal_Bool AccObjectWinManager::IsContainer(XAccessible* pAccessible)
+bool AccObjectWinManager::IsContainer(XAccessible* pAccessible)
 {
     try
     {
@@ -1067,27 +1067,27 @@ sal_Bool AccObjectWinManager::IsContainer(XAccessible* pAccessible)
                 case /*AccessibleRole::*/TOOL_BAR:
                 case /*AccessibleRole::*/VIEW_PORT:
                 case /*AccessibleRole::*/SHAPE:
-                    return sal_True;
+                    return true;
                     break;
                 case /*AccessibleRole::*/COLUMN_HEADER:
                 case /*AccessibleRole::*/TABLE:
                     if(!IsStateManageDescendant(pAccessible))
-                        return sal_True;
+                        return true;
                     break;
                 case /*AccessibleRole::*/MENU:
-                    return sal_True;
+                    return true;
                     break;
                 default:
-                    return sal_False;
+                    return false;
                 }
             }
         }
     }
     catch(...)
     {
-        return sal_False;
+        return false;
     }
-    return sal_False;
+    return false;
 }
 
 /**
@@ -1104,18 +1104,18 @@ bool AccObjectWinManager::IsStateManageDescendant(XAccessible* pAccessible)
         {
             Reference< XAccessibleStateSet > pRState = xContext->getAccessibleStateSet();
             if( !pRState.is() )
-                return sal_False;
+                return false;
 
             Sequence<short> pStates = pRState->getStates();
             int count = pStates.getLength();
             for( int iIndex = 0;iIndex < count;iIndex++ )
             {
                 if(pStates[iIndex] == /*AccessibleStateType::*/MANAGES_DESCENDANTS)
-                    return sal_True;
+                    return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 /**
@@ -1132,7 +1132,7 @@ IMAccessible* AccObjectWinManager::GetIMAccByXAcc(XAccessible* pXAcc)
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -1145,13 +1145,13 @@ IMAccessible * AccObjectWinManager::GetIAccessibleFromResID(long resID)
 {
     XResIdToAccObjHash::iterator pIndTemp = XResIdAccList.find( resID );
     if ( pIndTemp == XResIdAccList.end() )
-        return NULL;
+        return nullptr;
 
     AccObject* pObj = pIndTemp->second;
 
     if(pObj->GetIMAccessible())
         return pObj->GetIMAccessible();
-    return NULL;
+    return nullptr;
 }
 /**
    * Notify some object will be destroyed.
@@ -1163,7 +1163,7 @@ void AccObjectWinManager::NotifyDestroy(XAccessible* pXAcc)
     AccObject* accObj = GetAccObjByXAcc(pXAcc);
     if(accObj)
     {
-        accObj->NotifyDestroy(sal_True);
+        accObj->NotifyDestroy(true);
     }
 }
 
@@ -1212,7 +1212,7 @@ bool AccObjectWinManager::IsSpecialToolboItem(css::accessibility::XAccessible* p
 
 short AccObjectWinManager::GetRole(css::accessibility::XAccessible* pXAcc)
 {
-    assert(pXAcc != NULL);
+    assert(pXAcc != nullptr);
     Reference<css::accessibility::XAccessibleContext> xContext(pXAcc->getAccessibleContext(),UNO_QUERY);
     if(xContext.is())
     {
@@ -1230,7 +1230,7 @@ XAccessible* AccObjectWinManager::GetAccDocByHWND(HWND pWnd)
         return aIter->second;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 XAccessible* AccObjectWinManager::GetAccDocByAccTopWin( XAccessible* pXAcc )
@@ -1246,7 +1246,7 @@ bool AccObjectWinManager::IsTopWinAcc( css::accessibility::XAccessible* pXAcc )
     AccObject* pAccObj = GetAccObjByXAcc( pXAcc );
     if ( pAccObj )
     {
-        bRet = ( pAccObj->GetParentObj() == NULL );
+        bRet = ( pAccObj->GetParentObj() == nullptr );
     }
     return bRet;
 }
