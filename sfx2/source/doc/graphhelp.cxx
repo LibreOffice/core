@@ -94,7 +94,7 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
         if ( pStream )
         {
             Graphic aGraph( *pGDIMeta );
-            sal_Bool bFailed = (sal_Bool)GraphicConverter::Export( *pStream, aGraph, ConvertDataFormat::EMF );
+            bool bFailed = GraphicConverter::Export( *pStream, aGraph, ConvertDataFormat::EMF );
             pStream->Flush();
             delete pStream;
 
@@ -120,7 +120,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
     {
         SvMemoryStream* pStream = new SvMemoryStream( 65535, 65535 );
         Graphic aGraph( *pGDIMeta );
-        sal_Bool bFailed = (sal_Bool)GraphicConverter::Export( *pStream, aGraph, ConvertDataFormat::WMF );
+        bool bFailed = GraphicConverter::Export( *pStream, aGraph, ConvertDataFormat::WMF );
         pStream->Flush();
         if ( !bFailed )
         {
@@ -128,7 +128,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
             if ( nLength > 22 )
             {
                 HMETAFILE hMeta = SetMetaFileBitsEx( nLength - 22,
-                                ( reinterpret_cast< const unsigned char*>( pStream->GetData() ) ) + 22 );
+                                ( static_cast< const unsigned char*>( pStream->GetData() ) ) + 22 );
 
                 if ( hMeta )
                 {
@@ -136,7 +136,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
 
                     if ( hMemory )
                     {
-                           METAFILEPICT* pMF = (METAFILEPICT*)GlobalLock( hMemory );
+                           METAFILEPICT* pMF = static_cast<METAFILEPICT*>(GlobalLock( hMemory ));
 
                            pMF->hMF = hMeta;
                            pMF->mm = MM_ANISOTROPIC;
@@ -159,7 +159,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
                         }
 
                         GlobalUnlock( hMemory );
-                        pResult = (void*)hMemory;
+                        pResult = static_cast<void*>(hMemory);
                     }
                     else
                            DeleteMetaFile( hMeta );

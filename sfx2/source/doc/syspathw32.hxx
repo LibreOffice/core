@@ -17,18 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "syspath.hxx"
-#include <syspathw32.hxx>
+#ifndef INCLUDED_SFX2_SOURCE_DOC_SYSPATHW32_HXX
+#define INCLUDED_SFX2_SOURCE_DOC_SYSPATHW32_HXX
 
-bool SystemPath::GetUserTemplateLocation(sal_Unicode* pFolder, int nSize )
-{
-#ifdef _WIN32
-    return ::GetUserTemplateLocation( pFolder, nSize );
-#else
-    (void)pFolder;
-    (void)nSize;
-    return false;
+#include <sal/config.h>
+
+#include <sal/types.h>
+
+#if defined _WIN32
+bool GetUserTemplateLocation(sal_Unicode *, int nSize);
 #endif
-}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

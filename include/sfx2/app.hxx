@@ -141,7 +141,7 @@ public:
 
     // DDE
 #if defined(_WIN32)
-    long                        DdeExecute( const OUString& rCmd );
+    static long                 DdeExecute( const OUString& rCmd );
 #endif
     bool                        InitializeDde();
     const DdeService*           GetDdeService() const;
