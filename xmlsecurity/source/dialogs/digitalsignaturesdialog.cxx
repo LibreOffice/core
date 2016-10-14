@@ -508,9 +508,11 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             }
             //Check if the signature is a "old" document signature, that is, which was created
             //by an version of OOo previous to 3.2
+            // If there is no storage, then it's pointless to check storage
+            // stream references.
             else if (maSignatureManager.meSignatureMode == SignatureModeDocumentContent
-                && bSigValid && bCertValid && !DocumentSignatureHelper::isOOo3_2_Signature(
-                maSignatureManager.maCurrentSignatureInformations[n]))
+                && bSigValid && bCertValid && (maSignatureManager.mxStore.is() && !DocumentSignatureHelper::isOOo3_2_Signature(
+                maSignatureManager.maCurrentSignatureInformations[n])))
             {
                 aImage = m_pSigsNotvalidatedImg->GetImage();
                 bAllNewSignatures &= false;
