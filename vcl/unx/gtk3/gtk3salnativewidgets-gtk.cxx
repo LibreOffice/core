@@ -726,6 +726,7 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
     return aButtonRect;
 }
 
+#define FALLBACK_ARROW_SIZE 11 * 0.85
 void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
                                     const Rectangle& rControlRectangle,
                                     ControlType nType,
@@ -749,7 +750,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
     if (AllSettings::GetLayoutRTL())
         aEditBoxRect.SetPos( Point( areaRect.Left() + buttonRect.GetWidth(), areaRect.Top() ) );
 
-    gint arrow_width, arrow_height;
+    gint arrow_width = FALLBACK_ARROW_SIZE, arrow_height = FALLBACK_ARROW_SIZE;
     if (nType == ControlType::Combobox)
     {
         gtk_style_context_get(mpComboboxButtonArrowStyle,
