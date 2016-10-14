@@ -49,8 +49,8 @@ int main(int argc, char* argv[])
 
         if (hmod)
         {
-            lpfnDllRegisterServer lpfn_register = (lpfnDllRegisterServer)GetProcAddress(
-                hmod, "DllRegisterServer");
+            lpfnDllRegisterServer lpfn_register = reinterpret_cast<lpfnDllRegisterServer>(GetProcAddress(
+                hmod, "DllRegisterServer"));
 
             if (lpfn_register)
                 lpfn_register();
@@ -64,8 +64,8 @@ int main(int argc, char* argv[])
 
         if (hmod)
         {
-            lpfnDllUnregisterServer lpfn_unregister = (lpfnDllUnregisterServer)GetProcAddress(
-                hmod, "DllUnregisterServer");
+            lpfnDllUnregisterServer lpfn_unregister = reinterpret_cast<lpfnDllUnregisterServer>(GetProcAddress(
+                hmod, "DllUnregisterServer"));
 
             if (lpfn_unregister)
                 lpfn_unregister();

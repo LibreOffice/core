@@ -58,9 +58,9 @@ CInfoTip::~CInfoTip()
 
 HRESULT STDMETHODCALLTYPE CInfoTip::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
-    *ppvObject = 0;
+    *ppvObject = nullptr;
 
-    IUnknown* pUnk = 0;
+    IUnknown* pUnk = nullptr;
 
     if (IID_IUnknown == riid || IID_IQueryInfo == riid)
     {
@@ -120,14 +120,14 @@ DWORD getSizeOfFile( char* FileName )
     HANDLE hFile = CreateFile(StringToWString(FileName).c_str(),            // open file
                         GENERIC_READ,                                       // open for reading
                         FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE, // share for all operations
-                        NULL,                                               // no security
+                        nullptr,                                            // no security
                         OPEN_EXISTING,                                      // existing file only
                         FILE_ATTRIBUTE_NORMAL,                              // normal file
-                        NULL);                                              // no attr. template
+                        nullptr);                                           // no attr. template
 
     if (hFile != INVALID_HANDLE_VALUE)
     {
-        DWORD dwSize = GetFileSize( HANDLE(hFile), NULL );
+        DWORD dwSize = GetFileSize( HANDLE(hFile), nullptr );
         CloseHandle( HANDLE(hFile) );
         return dwSize;
     }
@@ -148,7 +148,7 @@ std::wstring formatSizeOfFile( DWORD dwSize )
         return StringToWString( buffer ).append(StringToWString("B"));
     }
 
-    char *buffer=NULL;
+    char *buffer=nullptr;
     int  decimal, sign;
     double dFileSize = (double)dwSize/(double)KB;
 
@@ -281,7 +281,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
     if (SUCCEEDED(hr))
     {
         size_t len = sizeof(wchar_t) * msg.length() + sizeof(wchar_t);
-        wchar_t* pMem = reinterpret_cast<wchar_t*>(lpMalloc->Alloc(len));
+        wchar_t* pMem = static_cast<wchar_t*>(lpMalloc->Alloc(len));
 
         ZeroMemory(pMem, len);
 

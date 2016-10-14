@@ -67,7 +67,7 @@ long BufferStream::stell ()
     Move.QuadPart = 0;
     NewPosition.QuadPart = 0;
 
-    hr = ((IStream *)stream)->Seek (Move, STREAM_SEEK_CUR, &NewPosition);
+    hr = stream->Seek (Move, STREAM_SEEK_CUR, &NewPosition);
     if (hr == S_OK)
         return (long) NewPosition.QuadPart;
     else
@@ -96,7 +96,7 @@ long BufferStream::sseek (long offset, int origin)
         return -1;
     }
 
-    hr = stream->Seek (Move, dwOrigin, NULL);
+    hr = stream->Seek (Move, dwOrigin, nullptr);
     if (hr == S_OK)
         return 0;
     else
@@ -104,7 +104,7 @@ long BufferStream::sseek (long offset, int origin)
 }
 
 FileStream::FileStream(const char *filename) :
-    file(0)
+    file(nullptr)
 {
     // fdo#67534: avoid locking to not interfere with soffice opening the file
     file = _fsopen(filename, "rb", _SH_DENYNO);

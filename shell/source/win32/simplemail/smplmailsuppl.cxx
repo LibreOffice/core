@@ -59,7 +59,7 @@ Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
        if a mail client is available */
     Reference<XSimpleMailClient> xSmplMailClient;
     HMODULE handle = LoadLibrary("mapi32.dll");
-    if ((handle != INVALID_HANDLE_VALUE) && (handle != NULL))
+    if ((handle != INVALID_HANDLE_VALUE) && (handle != nullptr))
     {
         FreeLibrary(handle);
         xSmplMailClient.set(new CSmplMailClient());

@@ -40,11 +40,11 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             REFIID riid,
-            void __RPC_FAR *__RPC_FAR *ppvObject);
+            void __RPC_FAR *__RPC_FAR *ppvObject) override;
 
-    virtual ULONG STDMETHODCALLTYPE AddRef();
+    virtual ULONG STDMETHODCALLTYPE AddRef() override;
 
-    virtual ULONG STDMETHODCALLTYPE Release();
+    virtual ULONG STDMETHODCALLTYPE Release() override;
 
 
     // IClassFactory methods
@@ -53,9 +53,9 @@ public:
     virtual HRESULT STDMETHODCALLTYPE CreateInstance(
             IUnknown __RPC_FAR *pUnkOuter,
             REFIID riid,
-            void __RPC_FAR *__RPC_FAR *ppvObject);
+            void __RPC_FAR *__RPC_FAR *ppvObject) override;
 
-    virtual HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock);
+    virtual HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock) override;
 
     static bool IsLocked();
 

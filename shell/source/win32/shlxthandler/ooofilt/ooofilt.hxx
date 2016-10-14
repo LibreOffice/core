@@ -75,57 +75,57 @@ public:
     // From IUnknown
     virtual  SCODE STDMETHODCALLTYPE  QueryInterface(
         REFIID riid,
-        void  ** ppvObject);
-    virtual  ULONG STDMETHODCALLTYPE  AddRef();
-    virtual  ULONG STDMETHODCALLTYPE  Release();
+        void  ** ppvObject) override;
+    virtual  ULONG STDMETHODCALLTYPE  AddRef() override;
+    virtual  ULONG STDMETHODCALLTYPE  Release() override;
 
     // From IFilter
     virtual  SCODE STDMETHODCALLTYPE  Init(
         ULONG grfFlags,
         ULONG cAttributes,
         FULLPROPSPEC const * aAttributes,
-        ULONG * pFlags);
+        ULONG * pFlags) override;
     virtual  SCODE STDMETHODCALLTYPE  GetChunk(
-        STAT_CHUNK * pStat);
+        STAT_CHUNK * pStat) override;
     virtual  SCODE STDMETHODCALLTYPE  GetText(
         ULONG * pcwcBuffer,
-        WCHAR * awcBuffer);
+        WCHAR * awcBuffer) override;
 
     virtual  SCODE STDMETHODCALLTYPE  GetValue(
-        PROPVARIANT ** ppPropValue);
+        PROPVARIANT ** ppPropValue) override;
 
     virtual  SCODE STDMETHODCALLTYPE  BindRegion(
         FILTERREGION origPos,
         REFIID riid,
-        void ** ppunk);
+        void ** ppunk) override;
 
     // From IPersistFile
     virtual  SCODE STDMETHODCALLTYPE  GetClassID(
-        CLSID * pClassID);
-    virtual  SCODE STDMETHODCALLTYPE  IsDirty();
+        CLSID * pClassID) override;
+    virtual  SCODE STDMETHODCALLTYPE  IsDirty() override;
     virtual  SCODE STDMETHODCALLTYPE  Load(
         LPCWSTR pszFileName,
-        DWORD dwMode);
+        DWORD dwMode) override;
     virtual  SCODE STDMETHODCALLTYPE  Save(
         LPCWSTR pszFileName,
-        BOOL fRemember);
+        BOOL fRemember) override;
 
     virtual  SCODE STDMETHODCALLTYPE  SaveCompleted(
-        LPCWSTR pszFileName);
+        LPCWSTR pszFileName) override;
 
     virtual  SCODE STDMETHODCALLTYPE  GetCurFile(
-        LPWSTR  * ppszFileName);
+        LPWSTR  * ppszFileName) override;
 
     // From IPersistStream
     virtual SCODE STDMETHODCALLTYPE  Load(
-        IStream *pStm);
+        IStream *pStm) override;
 
     virtual SCODE STDMETHODCALLTYPE Save(
         IStream *pStm,
-        BOOL fClearDirty);
+        BOOL fClearDirty) override;
 
     virtual SCODE STDMETHODCALLTYPE  GetSizeMax(
-        ULARGE_INTEGER *pcbSize);
+        ULARGE_INTEGER *pcbSize) override;
 
 
 private:
@@ -165,18 +165,18 @@ public:
     // From IUnknown
     virtual  SCODE STDMETHODCALLTYPE  QueryInterface(
         REFIID riid,
-        void  ** ppvObject);
+        void  ** ppvObject) override;
 
-    virtual  ULONG STDMETHODCALLTYPE  AddRef();
-    virtual  ULONG STDMETHODCALLTYPE  Release();
+    virtual  ULONG STDMETHODCALLTYPE  AddRef() override;
+    virtual  ULONG STDMETHODCALLTYPE  Release() override;
 
     // From IClassFactory
     virtual  SCODE STDMETHODCALLTYPE  CreateInstance(
         IUnknown * pUnkOuter,
-        REFIID riid, void  ** ppvObject);
+        REFIID riid, void  ** ppvObject) override;
 
     virtual  SCODE STDMETHODCALLTYPE  LockServer(
-        BOOL fLock);
+        BOOL fLock) override;
 
 private:
     friend SCODE STDMETHODCALLTYPE DllGetClassObject(

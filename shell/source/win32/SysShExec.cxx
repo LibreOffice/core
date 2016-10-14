@@ -176,7 +176,7 @@ namespace
     const OUString    JUMP_MARK_HTML(".html#");
     const sal_Unicode HASH_MARK      = (sal_Unicode)'#';
 
-    bool has_jump_mark(const OUString& system_path, sal_Int32* jmp_mark_start = NULL)
+    bool has_jump_mark(const OUString& system_path, sal_Int32* jmp_mark_start = nullptr)
     {
         sal_Int32 jmp_mark = std::max<int>(
             system_path.lastIndexOf(JUMP_MARK_HTM),
@@ -240,7 +240,7 @@ CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext
      * Once this changed, we can remove the uninitialize call.
      */
     CoUninitialize();
-    CoInitialize( NULL );
+    CoInitialize( nullptr );
 }
 
 void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
@@ -266,8 +266,8 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         if (!(uri.is() && uri->isAbsolute()))
         {
             throw css::lang::IllegalArgumentException(
-                OUString("XSystemShellExecute.execute URIS_ONLY with"
-                         " non-absolute URI reference ")
+                "XSystemShellExecute.execute URIS_ONLY with"
+                         " non-absolute URI reference "
                  + aCommand,
                 static_cast< cppu::OWeakObject * >(this), 0);
         }
@@ -306,7 +306,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 
     SetLastError( 0 );
 
-    sal_Bool bRet = ShellExecuteExW(&sei) ? sal_True : sal_False;
+    bool bRet = ShellExecuteExW(&sei);
 
     if (!bRet && (nFlags & NO_SYSTEM_ERROR_MESSAGE))
     {

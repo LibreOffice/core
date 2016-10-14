@@ -119,9 +119,9 @@ WinInetBackend::WinInetBackend()
             LPINTERNET_PROXY_INFO lpi = &pi;
             DWORD dwLength = sizeof (INTERNET_PROXY_INFO);
             BOOL ok = lpfnInternetQueryOption(
-                NULL,
+                nullptr,
                 INTERNET_OPTION_PROXY,
-                (LPVOID)lpi,
+                lpi,
                 &dwLength );
             if (!ok)
             {
@@ -136,12 +136,12 @@ WinInetBackend::WinInetBackend()
                     // alloca is nice because it is fast and we don't
                     // have to free the allocated memory, it will be
                     // automatically done
-                    lpi = reinterpret_cast< LPINTERNET_PROXY_INFO >(
+                    lpi = static_cast< LPINTERNET_PROXY_INFO >(
                         alloca( dwLength ) );
                     ok = lpfnInternetQueryOption(
-                        NULL,
+                        nullptr,
                         INTERNET_OPTION_PROXY,
-                        (LPVOID)lpi,
+                        lpi,
                         &dwLength );
                     if (!ok)
                     {
@@ -218,13 +218,10 @@ WinInetBackend::WinInetBackend()
 
 
                 ProxyEntry aTypeIndepProxy = FindProxyEntry( aProxyList, OUString());
-                ProxyEntry aHttpProxy = FindProxyEntry( aProxyList, OUString(
-                    "http"  ) );
-                ProxyEntry aHttpsProxy  = FindProxyEntry( aProxyList, OUString(
-                    "https"  ) );
+                ProxyEntry aHttpProxy = FindProxyEntry( aProxyList, "http" );
+                ProxyEntry aHttpsProxy  = FindProxyEntry( aProxyList, "https" );
 
-                ProxyEntry aFtpProxy  = FindProxyEntry( aProxyList, OUString(
-                    "ftp"  ) );
+                ProxyEntry aFtpProxy  = FindProxyEntry( aProxyList, "ftp" );
 
                 if( aTypeIndepProxy.Server.getLength() )
                 {
