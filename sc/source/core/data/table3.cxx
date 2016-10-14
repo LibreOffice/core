@@ -2490,11 +2490,12 @@ public:
                 else
                 {
                     OUString aQueryStr = rItem.maString.getString();
+                    const LanguageType nLang = ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
                     OUString aCell( mpTransliteration->transliterate(
-                        aCellStr.getString(), ScGlobal::eLnge, 0, aCellStr.getLength(),
+                        aCellStr.getString(), nLang, 0, aCellStr.getLength(),
                         nullptr ) );
                     OUString aQuer( mpTransliteration->transliterate(
-                        aQueryStr, ScGlobal::eLnge, 0, aQueryStr.getLength(),
+                        aQueryStr, nLang, 0, aQueryStr.getLength(),
                         nullptr ) );
                     sal_Int32 nIndex = (rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH) ?
                         (aCell.getLength() - aQuer.getLength()) : 0;
