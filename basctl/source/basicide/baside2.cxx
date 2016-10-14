@@ -1444,14 +1444,6 @@ void ModulWindowLayout::Paint (vcl::RenderContext& rRenderContext, Rectangle con
     rRenderContext.DrawText(Point(), IDEResId(RID_STR_NOMODULE).toString());
 }
 
-// virtual
-void ModulWindowLayout::DataChanged (DataChangedEvent const& rDCEvt)
-{
-    Layout::DataChanged(rDCEvt);
-    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
-        aSyntaxColors.SettingsChanged();
-}
-
 void ModulWindowLayout::Activating (BaseWindow& rChild)
 {
     assert(dynamic_cast<ModulWindow*>(&rChild));
@@ -1511,31 +1503,12 @@ ModulWindowLayout::SyntaxColors::SyntaxColors () :
 {
     aConfig.AddListener(this);
 
-    aColors[TokenType::Unknown] =
-    aColors[TokenType::Whitespace] =
-    aColors[TokenType::EOL] =
-        Application::GetSettings().GetStyleSettings().GetFieldTextColor();
-
     NewConfig(true);
 }
 
 ModulWindowLayout::SyntaxColors::~SyntaxColors ()
 {
     aConfig.RemoveListener(this);
-}
-
-void ModulWindowLayout::SyntaxColors::SettingsChanged ()
-{
-    Color const aColor = Application::GetSettings().GetStyleSettings().GetFieldTextColor();
-    if (aColor != aColors[TokenType::Unknown])
-    {
-        aColors[TokenType::Unknown] =
-        aColors[TokenType::Whitespace] =
-        aColors[TokenType::EOL] =
-            aColor;
-        if (pEditor)
-            pEditor->UpdateSyntaxHighlighting();
-    }
 }
 
 // virtual
@@ -1554,14 +1527,36 @@ void ModulWindowLayout::SyntaxColors::NewConfig (bool bFirst)
     }
     const vIds[] =
     {
+        { TokenType::Unknown,     svtools::FONTCOLOR },
         { TokenType::Identifier,  svtools::BASICIDENTIFIER },
+        { TokenType::Whitespace,  svtools::FONTCOLOR },
         { TokenType::Number,      svtools::BASICNUMBER },
         { TokenType::String,      svtools::BASICSTRING },
+        { TokenType::EOL,         svtools::FONTCOLOR },
         { TokenType::Comment,     svtools::BASICCOMMENT },
         { TokenType::Error,       svtools::BASICERROR },
         { TokenType::Operator,    svtools::BASICOPERATOR },
         { TokenType::Keywords,    svtools::BASICKEYWORD },
     };
+
+    Color aDocColor = aConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    if (bFirst || aDocColor != m_aBackgroundColor)
+    {
+        m_aBackgroundColor = aDocColor;
+        if (!bFirst && pEditor)
+        {
+            pEditor->SetBackground(Wallpaper(m_aBackgroundColor));
+            pEditor->Invalidate();
+        }
+    }
+
+    Color aFontColor = aConfig.GetColorValue(svtools::FONTCOLOR).nColor;
+    if (bFirst || aFontColor != m_aFontColor)
+    {
+        m_aFontColor = aFontColor;
+        if (!bFirst && pEditor)
+            pEditor->ChangeFontColor(m_aFontColor);
+    }
 
     bool bChanged = false;
     for (unsigned i = 0; i != SAL_N_ELEMENTS(vIds); ++i)
