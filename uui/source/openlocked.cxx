@@ -42,7 +42,7 @@ OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, ResMgr* pResMgr, c
     // other similar ones. But hey, it was about this dialog that the
     // customer complained. You who read this and feel the itch, feel
     // free to fix the problem in a better way.
-    EnableAlwaysOnTop( true );
+    EnableAlwaysOnTop();
 #endif
 }
 
