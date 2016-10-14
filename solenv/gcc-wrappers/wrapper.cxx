@@ -129,7 +129,7 @@ string processccargs(vector<string> rawargs) {
         }
         else if(!(*i).compare(0,2,"-D")) {
             // need to re-escape strings for preprocessor
-            for(size_t pos=(*i).find("\"",0); pos!=string::npos; pos=(*i).find("\"",pos)) {
+            for(size_t pos=(*i).find("\""); pos!=string::npos; pos=(*i).find("\"",pos)) {
                 (*i).replace(pos,0,"\\");
                 pos+=2;
             }
@@ -202,12 +202,12 @@ int startprocess(string command, string args) {
 
     if(!CreateProcess(nullptr, // Process Name
         cmdlineBuf, // Command Line
-        NULL, // Process Handle not Inheritable
-        NULL, // Thread Handle not Inheritable
+        nullptr, // Process Handle not Inheritable
+        nullptr, // Thread Handle not Inheritable
         TRUE, // Handles are Inherited
         0, // No creation flags
-        NULL, // Environment for process
-        NULL, // Use same starting directory
+        nullptr, // Environment for process
+        nullptr, // Use same starting directory
         &si, // Startup Info
         &pi) // Process Information
         ) {
@@ -223,7 +223,7 @@ int startprocess(string command, string args) {
     DWORD readlen, writelen, ret;
     HANDLE stdout_handle=GetStdHandle(STD_OUTPUT_HANDLE);
     while(true) {
-        int success=ReadFile(childout_read,buffer,BUFLEN,&readlen,NULL);
+        int success=ReadFile(childout_read,buffer,BUFLEN,&readlen,nullptr);
         // check if the child process has exited
         if(GetLastError()==ERROR_BROKEN_PIPE)
             break;
@@ -232,7 +232,7 @@ int startprocess(string command, string args) {
             exit(1);
         }
         if(readlen!=0) {
-            WriteFile(stdout_handle,buffer,readlen,&writelen,NULL);
+            WriteFile(stdout_handle,buffer,readlen,&writelen,nullptr);
         }
     }
     WaitForSingleObject(pi.hProcess, INFINITE);
