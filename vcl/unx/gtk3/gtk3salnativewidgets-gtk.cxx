@@ -53,8 +53,10 @@ GtkStyleContext* GtkSalGraphics::mpSpinUpStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSpinDownStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpComboboxStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpComboboxButtonStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpComboboxButtonArrowStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpListboxStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpListboxButtonStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpListboxButtonArrowStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpFrameInStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpFrameOutStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpFixedHoriLineStyle = nullptr;
@@ -744,8 +746,21 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
     if (AllSettings::GetLayoutRTL())
         aEditBoxRect.SetPos( Point( areaRect.Left() + buttonRect.GetWidth(), areaRect.Top() ) );
 
-    arrowRect.SetSize( Size( (gint)(ARROW_SIZE),
-                             (gint)(ARROW_SIZE) ) );
+    gint arrow_width, arrow_height;
+    if (nType == ControlType::Combobox)
+    {
+        gtk_style_context_get(mpComboboxButtonArrowStyle,
+            gtk_style_context_get_state(mpComboboxButtonArrowStyle),
+            "min-width", &arrow_width, "min-height", &arrow_height, NULL);
+    }
+    else if (nType == ControlType::Listbox)
+    {
+        gtk_style_context_get(mpListboxButtonArrowStyle,
+            gtk_style_context_get_state(mpListboxButtonArrowStyle),
+            "min-width", &arrow_width, "min-height", &arrow_height, NULL);
+    }
+
+    arrowRect.SetSize(Size(arrow_width, arrow_height));
     arrowRect.SetPos( Point( buttonRect.Left() + (gint)((buttonRect.GetWidth() - arrowRect.GetWidth()) / 2),
                              buttonRect.Top() + (gint)((buttonRect.GetHeight() - arrowRect.GetHeight()) / 2) ) );
 
@@ -790,7 +805,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
                          (buttonRect.Top() - areaRect.Top()),
                          buttonRect.GetWidth(), buttonRect.GetHeight() );
 
-        gtk_render_arrow(mpComboboxStyle, cr,
+        gtk_render_arrow(mpComboboxButtonArrowStyle, cr,
                          G_PI,
                          (arrowRect.Left() - areaRect.Left()), (arrowRect.Top() - areaRect.Top()),
                          arrowRect.GetWidth() );
@@ -825,7 +840,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
                              0, 0,
                              areaRect.GetWidth(), areaRect.GetHeight());
 
-            gtk_render_arrow(mpListboxStyle, cr,
+            gtk_render_arrow(mpListboxButtonArrowStyle, cr,
                              G_PI,
                              (arrowRect.Left() - areaRect.Left()), (arrowRect.Top() - areaRect.Top()),
                              arrowRect.GetWidth() );
@@ -889,6 +904,14 @@ static GtkStyleContext* createStyleContext(GtkControlPart ePart, GtkStyleContext
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_RADIO);
 #endif
         break;
+    case GtkControlPart::Arrow:
+            gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
+#if GTK_CHECK_VERSION(3, 19, 2)
+            gtk_widget_path_iter_set_object_name(path, -1, "arrow");
+#else
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
+#endif
+            break;
     case GtkControlPart::Entry:
             gtk_widget_path_append_type(path, GTK_TYPE_ENTRY);
 #if GTK_CHECK_VERSION(3, 19, 2)
@@ -2437,12 +2460,14 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gComboBox = gtk_combo_box_text_new_with_entry();
     getStyleContext(&mpComboboxStyle, gComboBox);
     mpComboboxButtonStyle = createStyleContext(GtkControlPart::Button, mpComboboxStyle);
+    mpComboboxButtonArrowStyle = createStyleContext(GtkControlPart::Arrow, mpComboboxButtonStyle);
 
     /* Listbox */
     gListBox = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gListBox), "sample");
     getStyleContext(&mpListboxStyle, gListBox);
     mpListboxButtonStyle = createStyleContext(GtkControlPart::Button, mpListboxStyle);
+    mpListboxButtonArrowStyle = createStyleContext(GtkControlPart::Arrow, mpListboxButtonStyle);
 
     /* Frames */
     mpFrameOutStyle = mpFrameInStyle = createStyleContext(GtkControlPart::FrameBorder);

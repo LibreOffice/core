@@ -40,6 +40,7 @@ enum class GtkControlPart
     RadioButton,
     RadioButtonRadio,
     Entry,
+    Arrow,
     SpinButton,
     SpinButtonUpButton,
     SpinButtonDownButton,
@@ -131,8 +132,10 @@ private:
     static GtkStyleContext *mpSeparatorMenuItemStyle;
     static GtkStyleContext *mpComboboxStyle;
     static GtkStyleContext *mpComboboxButtonStyle;
+    static GtkStyleContext *mpComboboxButtonArrowStyle;
     static GtkStyleContext *mpListboxStyle;
     static GtkStyleContext *mpListboxButtonStyle;
+    static GtkStyleContext *mpListboxButtonArrowStyle;
     static GtkStyleContext *mpFrameInStyle;
     static GtkStyleContext *mpFrameOutStyle;
     static GtkStyleContext *mpFixedHoriLineStyle;
