@@ -147,7 +147,6 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/svdde/ddecli \
     svl/source/svdde/ddedata \
-    svl/source/svdde/ddeinf \
     svl/source/svdde/ddestrg \
     svl/source/svdde/ddesvr \
 ))
