@@ -244,11 +244,11 @@ javaFrameworkError jfw_startVM(
                 {
                     // If no JRE has been selected then we do not select one. This function shall then
                     //return JFW_E_NO_SELECT
-                    if (aInfo != NULL &&
+                    if (aInfo != nullptr &&
                         (aInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE) == 0)
                     {
                         //has the user manually selected a JRE?
-                        if (settings.getJavaInfoAttrAutoSelect() == true)
+                        if (settings.getJavaInfoAttrAutoSelect())
                         {
                             // if not then the automatism has previously selected a JRE
                             //without accessibility support. We return JFW_E_NO_SELECT
