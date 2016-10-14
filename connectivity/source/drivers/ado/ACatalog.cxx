@@ -39,7 +39,7 @@ OCatalog::OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon) : connectivity::sd
 OCatalog::~OCatalog()
 {
     if(m_aCatalog.IsValid())
-        m_aCatalog.putref_ActiveConnection(NULL);
+        m_aCatalog.putref_ActiveConnection(nullptr);
     m_aCatalog.clear();
 }
 

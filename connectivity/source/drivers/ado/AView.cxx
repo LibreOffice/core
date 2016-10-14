@@ -36,14 +36,14 @@ using namespace com::sun::star::sdbc;
 
 //  IMPLEMENT_SERVICE_INFO(OAdoView,"com.sun.star.sdbcx.AView","com.sun.star.sdbcx.View");
 
-OAdoView::OAdoView(sal_Bool _bCase,ADOView* _pView) : OView_ADO(_bCase,NULL)
+OAdoView::OAdoView(bool _bCase,ADOView* _pView) : OView_ADO(_bCase,nullptr)
 ,m_aView(_pView)
 {
 }
 
 Sequence< sal_Int8 > OAdoView::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -86,7 +86,7 @@ void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
                     m_aView.get_Command(aVar);
                     if(!aVar.isNull() && !aVar.isEmpty())
                     {
-                        ADOCommand* pCom = (ADOCommand*)aVar.getIDispatch();
+                        ADOCommand* pCom = static_cast<ADOCommand*>(aVar.getIDispatch());
                         OLEString aBSTR;
                         pCom->get_CommandText(aBSTR.getAddress());
                         rValue <<= aBSTR.asOUString();

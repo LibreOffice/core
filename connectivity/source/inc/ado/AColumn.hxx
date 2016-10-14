@@ -34,7 +34,7 @@ namespace connectivity
             WpADOColumn     m_aColumn;
             OConnection*    m_pConnection;
             OUString m_ReferencedColumn;
-            sal_Bool        m_IsAscending;
+            bool            m_IsAscending;
 
             void fillPropertyValues();
         protected:
@@ -42,16 +42,16 @@ namespace connectivity
                                     sal_Int32 nHandle,
                                     const css::uno::Any& rValue
                                      )
-                                     throw (css::uno::Exception);
+                                     throw (css::uno::Exception) override;
         public:
-            OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn);
-            OAdoColumn(sal_Bool _bCase,OConnection* _pConnection);
+            OAdoColumn(bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn);
+            OAdoColumn(bool _bCase,OConnection* _pConnection);
             // ODescriptor
-            virtual void construct();
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
+            virtual void construct() override;
+            virtual void SAL_CALL acquire() throw() override;
+            virtual void SAL_CALL release() throw() override;
             // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException);
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             WpADOColumn     getColumnImpl() const;

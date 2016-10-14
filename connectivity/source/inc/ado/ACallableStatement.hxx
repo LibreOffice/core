@@ -40,9 +40,9 @@ namespace connectivity
             OLEVariant          m_aValue;
         public:
             DECLARE_SERVICE_INFO();
-            virtual ~OCallableStatement() {} ;
+            virtual ~OCallableStatement() override {} ;
             // a Constructor, that is needed for when Returning the Object is needed:
-            OCallableStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const OUString& sql );
+            OCallableStatement( OConnection* _pConnection,const OTypeInfoMap& TypeInfo,const OUString& sql );
 
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException) override;
             virtual void SAL_CALL acquire() throw() override;

@@ -41,7 +41,7 @@ using namespace com::sun::star::container;
 sdbcx::ObjectType OViews::createObject(const OUString& _rName)
 {
     OAdoView* pView = new OAdoView(isCaseSensitive(),m_aCollection.GetItem(_rName));
-    pView->setNew(sal_False);
+    pView->setNew(false);
     return pView;
 }
 
@@ -59,8 +59,8 @@ Reference< XPropertySet > OViews::createDescriptor()
 // XAppend
 sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    OAdoView* pView = NULL;
-    if ( !getImplementation( pView, descriptor ) || pView == NULL )
+    OAdoView* pView = nullptr;
+    if ( !getImplementation( pView, descriptor ) || pView == nullptr )
         m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_VIEW_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     WpADOCommand aCommand;
@@ -71,7 +71,7 @@ sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Referen
     OUString sName( _rForName );
     aCommand.put_Name(sName);
     aCommand.put_CommandText(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND))));
-    ADOViews* pViews = (ADOViews*)m_aCollection;
+    ADOViews* pViews = static_cast<ADOViews*>(m_aCollection);
     if(FAILED(pViews->Append(OLEString(sName).asBSTR(),aCommand)))
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 

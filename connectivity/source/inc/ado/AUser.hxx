@@ -41,30 +41,30 @@ namespace connectivity
                             sal_Int32 nHandle,
                             const css::uno::Any& rValue
                          )
-                         throw (css::uno::Exception);
+                         throw (css::uno::Exception) override;
             virtual void SAL_CALL getFastPropertyValue(
                                     css::uno::Any& rValue,
                                     sal_Int32 nHandle
-                                         ) const;
+                                         ) const override;
         public:
-            virtual void refreshGroups();
+            virtual void refreshGroups() override;
         public:
-            OAdoUser(OCatalog* _pParent,sal_Bool _bCase,    ADOUser* _pUser=NULL);
-            OAdoUser(OCatalog* _pParent,sal_Bool _bCase,  const OUString& _Name);
+            OAdoUser(OCatalog* _pParent,bool _bCase,    ADOUser* _pUser=nullptr);
+            OAdoUser(OCatalog* _pParent,bool _bCase,  const OUString& Name);
 
             // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException);
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
+            virtual void SAL_CALL acquire() throw() override;
+            virtual void SAL_CALL release() throw() override;
 
             // XUser
-            virtual void SAL_CALL changePassword( const OUString& objPassword, const OUString& newPassword ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            virtual void SAL_CALL changePassword( const OUString& objPassword, const OUString& newPassword ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
             // XAuthorizable
-            virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-            virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-            virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
 
             WpADOUser getImpl() const { return m_aUser;}
         };
@@ -78,14 +78,14 @@ namespace connectivity
         protected:
             OUString m_Password;
             // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
             // OPropertySetHelper
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
         public:
-            OUserExtend(OCatalog* _pParent,sal_Bool _bCase,ADOUser* _pUser=NULL);
-            OUserExtend(OCatalog* _pParent,sal_Bool _bCase,const OUString& _Name);
+            OUserExtend(OCatalog* _pParent,bool _bCase,ADOUser* _pUser=nullptr);
+            OUserExtend(OCatalog* _pParent,bool _bCase,const OUString& Name);
 
-            virtual void construct();
+            virtual void construct() override;
             OUString getPassword() const { return m_Password;}
         };
     }

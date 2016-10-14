@@ -34,14 +34,14 @@ namespace connectivity
             OConnection*    m_pConnection;
 
         public:
-            virtual void refreshTables();
-            virtual void refreshViews() ;
-            virtual void refreshGroups();
-            virtual void refreshUsers() ;
+            virtual void refreshTables() override;
+            virtual void refreshViews() override;
+            virtual void refreshGroups() override;
+            virtual void refreshUsers() override;
 
         public:
             OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon);
-            ~OCatalog();
+            ~OCatalog() override;
 
             OConnection*        getConnection()     const { return m_pConnection;   }
             sdbcx::OCollection* getPrivateTables()  const { return m_pTables;       }

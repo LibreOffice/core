@@ -76,7 +76,7 @@ namespace connectivity
         class WpADOView : public WpOLEBase<ADOView>
         {
         public:
-            WpADOView(ADOView* pInt=NULL)   :   WpOLEBase<ADOView>(pInt){}
+            WpADOView(ADOView* pInt=nullptr)   :   WpOLEBase<ADOView>(pInt){}
             WpADOView(const WpADOView& rhs) : WpOLEBase<ADOView>(rhs) {}
 
             inline WpADOView& operator=(const WpADOView& rhs)
@@ -90,7 +90,7 @@ namespace connectivity
         class WpADOGroup : public WpOLEBase<ADOGroup>
         {
         public:
-            WpADOGroup(ADOGroup* pInt=NULL) :   WpOLEBase<ADOGroup>(pInt){}
+            WpADOGroup(ADOGroup* pInt=nullptr) :   WpOLEBase<ADOGroup>(pInt){}
             WpADOGroup(const WpADOGroup& rhs) : WpOLEBase<ADOGroup>(rhs) {}
 
             inline WpADOGroup& operator=(const WpADOGroup& rhs)
@@ -103,7 +103,7 @@ namespace connectivity
             RightsEnum GetPermissions(
                 /* [in] */ const OLEVariant& Name,
                 /* [in] */ ObjectTypeEnum ObjectType);
-            sal_Bool SetPermissions(
+            bool SetPermissions(
                 /* [in] */ const OLEVariant& Name,
                 /* [in] */ ObjectTypeEnum ObjectType,
                 /* [in] */ ActionEnum Action,
@@ -114,7 +114,7 @@ namespace connectivity
         class WpADOUser : public WpOLEBase<_ADOUser>
         {
         public:
-            WpADOUser(_ADOUser* pInt=NULL)  :   WpOLEBase<_ADOUser>(pInt){}
+            WpADOUser(_ADOUser* pInt=nullptr)  :   WpOLEBase<_ADOUser>(pInt){}
             WpADOUser(const WpADOUser& rhs) : WpOLEBase<_ADOUser>(rhs) {}
 
             inline WpADOUser& operator=(const WpADOUser& rhs)
@@ -124,12 +124,12 @@ namespace connectivity
 
             OUString get_Name() const;
             void put_Name(const OUString& _rName);
-            sal_Bool ChangePassword(const OUString& _rPwd,const OUString& _rNewPwd);
+            bool ChangePassword(const OUString& _rPwd,const OUString& _rNewPwd);
             WpADOGroups get_Groups();
             RightsEnum GetPermissions(
                 /* [in] */ const OLEVariant& Name,
                 /* [in] */ ObjectTypeEnum ObjectType);
-            sal_Bool SetPermissions(
+            bool SetPermissions(
                 /* [in] */ const OLEVariant& Name,
                 /* [in] */ ObjectTypeEnum ObjectType,
                 /* [in] */ ActionEnum Action,

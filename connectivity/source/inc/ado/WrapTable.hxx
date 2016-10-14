@@ -30,7 +30,7 @@ namespace connectivity
         class WpADOTable : public WpOLEBase<_ADOTable>
         {
         public:
-            WpADOTable(_ADOTable* pInt=NULL)    :   WpOLEBase<_ADOTable>(pInt){}
+            WpADOTable(_ADOTable* pInt=nullptr)    :   WpOLEBase<_ADOTable>(pInt){}
             WpADOTable(const WpADOTable& rhs) : WpOLEBase<_ADOTable>(rhs) {}
 
             inline WpADOTable& operator=(const WpADOTable& rhs)

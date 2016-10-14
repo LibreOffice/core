@@ -37,12 +37,12 @@ using namespace com::sun::star::sdbcx;
 
 void WpADOGroup::Create()
 {
-    ADOGroup* pGroup = NULL;
+    ADOGroup* pGroup = nullptr;
     HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOGROUP_25,
-                          NULL,
+                          nullptr,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOGROUP_25,
-                          (void**)&pGroup );
+                          reinterpret_cast<void**>(&pGroup) );
 
 
     if( !FAILED( hr ) )
@@ -52,7 +52,7 @@ void WpADOGroup::Create()
     }
 }
 
-OAdoGroup::OAdoGroup(OCatalog* _pParent,sal_Bool _bCase,    ADOGroup* _pGroup) : OGroup_ADO(_bCase),m_pCatalog(_pParent)
+OAdoGroup::OAdoGroup(OCatalog* _pParent,bool _bCase,    ADOGroup* _pGroup) : OGroup_ADO(_bCase),m_pCatalog(_pParent)
 {
     construct();
     if(_pGroup)
@@ -62,11 +62,11 @@ OAdoGroup::OAdoGroup(OCatalog* _pParent,sal_Bool _bCase,    ADOGroup* _pGroup) :
 
 }
 
-OAdoGroup::OAdoGroup(OCatalog* _pParent,sal_Bool _bCase, const OUString& _Name) : OGroup_ADO(_Name,_bCase),m_pCatalog(_pParent)
+OAdoGroup::OAdoGroup(OCatalog* _pParent,bool _bCase, const OUString& Name) : OGroup_ADO(Name,_bCase),m_pCatalog(_pParent)
 {
     construct();
     m_aGroup.Create();
-    m_aGroup.put_Name(_Name);
+    m_aGroup.put_Name(Name);
 }
 
 void OAdoGroup::refreshUsers()
@@ -84,7 +84,7 @@ void OAdoGroup::refreshUsers()
 
 Sequence< sal_Int8 > OAdoGroup::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

@@ -45,34 +45,34 @@ using namespace com::sun::star::sdbcx;
 IMPLEMENT_SERVICE_INFO(OConnection,"com.sun.star.sdbcx.AConnection","com.sun.star.sdbc.Connection");
 
 OConnection::OConnection(ODriver*   _pDriver) throw(SQLException, RuntimeException)
-                         : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
-                         m_xCatalog(NULL),
+                         : OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this),
+                         m_xCatalog(nullptr),
                          m_pDriver(_pDriver),
-                         m_pAdoConnection(NULL),
-                         m_pCatalog(NULL),
+                         m_pAdoConnection(nullptr),
+                         m_pCatalog(nullptr),
                          m_nEngineType(0),
-                         m_bClosed(sal_False),
-                         m_bAutocommit(sal_True)
+                         m_bClosed(false),
+                         m_bAutocommit(true)
 {
     osl_atomic_increment( &m_refCount );
 
-    IClassFactory2* pIUnknown   = NULL;
+    IClassFactory2* pIUnknown   = nullptr;
     HRESULT         hr;
     hr = CoGetClassObject( ADOS::CLSID_ADOCONNECTION_21,
                           CLSCTX_INPROC_SERVER,
-                          NULL,
+                          nullptr,
                           IID_IClassFactory2,
-                          (void**)&pIUnknown );
+                          reinterpret_cast<void**>(&pIUnknown) );
 
     if( !FAILED( hr ) )
     {
-        ADOConnection *pCon         = NULL;
-        IUnknown *pOuter     = NULL;
+        ADOConnection *pCon         = nullptr;
+        IUnknown *pOuter     = nullptr;
         hr = pIUnknown->CreateInstanceLic(  pOuter,
-                                            NULL,
+                                            nullptr,
                                             ADOS::IID_ADOCONNECTION_21,
                                             ADOS::GetKeyStr().asBSTR(),
-                                            (void**) &pCon);
+                                            reinterpret_cast<void**>(&pCon));
 
         if( !FAILED( hr ) )
         {
@@ -108,18 +108,18 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         aDSN = aDSN.copy(7);
 
     sal_Int32 nTimeout = 20;
-    sal_Bool bSilent = sal_True;
+    sal_Bool bSilent = true;
     const PropertyValue *pIter  = info.getConstArray();
     const PropertyValue *pEnd   = pIter + info.getLength();
     for(;pIter != pEnd;++pIter)
     {
-        if(pIter->Name.equalsAscii("Timeout"))
+        if(pIter->Name == "Timeout")
             pIter->Value >>= nTimeout;
-        else if(pIter->Name.equalsAscii("Silent"))
+        else if(pIter->Name == "Silent")
             pIter->Value >>= bSilent;
-        else if(pIter->Name.equalsAscii("user"))
+        else if(pIter->Name == "user")
             pIter->Value >>= aUID;
-        else if(pIter->Name.equalsAscii("password"))
+        else if(pIter->Name == "password")
             pIter->Value >>= aPWD;
     }
     try
@@ -209,7 +209,7 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& _sql ) throw(SQLExcept
         OTools::putValue(aProps,OUString("Jet OLEDB:ODBC Parsing"),true);
         WpADOCommand aCommand;
         aCommand.Create();
-        aCommand.put_ActiveConnection((IDispatch*)*m_pAdoConnection);
+        aCommand.put_ActiveConnection(static_cast<IDispatch*>(*m_pAdoConnection));
         aCommand.put_CommandText(sql);
         sql = aCommand.get_CommandText();
     }
@@ -385,7 +385,7 @@ Reference< css::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) th
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL OConnection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
@@ -425,7 +425,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
         VARIANT_BOOL bIsAtBOF;
         pRecordset->get_BOF(&bIsAtBOF);
 
-        sal_Bool bOk = sal_True;
+        bool bOk = true;
         if ( bIsAtBOF == VARIANT_TRUE )
             bOk = SUCCEEDED(pRecordset->MoveNext());
 
@@ -479,10 +479,10 @@ void OConnection::disposing()
 
     OConnection_BASE::disposing();
 
-    m_bClosed   = sal_True;
+    m_bClosed   = true;
     m_xMetaData = css::uno::WeakReference< css::sdbc::XDatabaseMetaData>();
     m_xCatalog  = css::uno::WeakReference< css::sdbcx::XTablesSupplier>();
-    m_pDriver   = NULL;
+    m_pDriver   = nullptr;
 
     m_pAdoConnection->Close();
 
@@ -493,7 +493,7 @@ void OConnection::disposing()
     m_aTypeInfo.clear();
 
     delete m_pAdoConnection;
-    m_pAdoConnection = NULL;
+    m_pAdoConnection = nullptr;
 
     dispose_ChildImpl();
 }
@@ -509,7 +509,7 @@ sal_Int64 SAL_CALL OConnection::getSomething( const css::uno::Sequence< sal_Int8
 
 Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -527,10 +527,10 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
                            const OUString& _sTypeName,
                            sal_Int32 _nPrecision,
                            sal_Int32 _nScale,
-                           sal_Bool& _brForceToType)
+                           bool& _brForceToType)
 {
-    const OExtendedTypeInfo* pTypeInfo = NULL;
-    _brForceToType = sal_False;
+    const OExtendedTypeInfo* pTypeInfo = nullptr;
+    _brForceToType = false;
     // search for type
     ::std::pair<OTypeInfoMap::const_iterator, OTypeInfoMap::const_iterator> aPair = _rTypeInfo.equal_range(_nType);
     OTypeInfoMap::const_iterator aIter = aPair.first;
@@ -580,14 +580,14 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
 
             // we can not assert here because we could be in d&d
             pTypeInfo = aPair.first->second;
-            _brForceToType = sal_True;
+            _brForceToType = true;
         }
         else
             pTypeInfo = aIter->second;
     }
     else if ( _sTypeName.getLength() )
     {
-        ::comphelper::UStringMixEqual aCase(sal_False);
+        ::comphelper::UStringMixEqual aCase(false);
         // search for typeinfo where the typename is equal _sTypeName
         OTypeInfoMap::const_iterator aFind = ::std::find_if(_rTypeInfo.begin(), _rTypeInfo.end(),
             [&aCase, &_sTypeName] (const OTypeInfoMap::value_type& typeInfo) {

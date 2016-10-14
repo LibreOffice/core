@@ -37,7 +37,7 @@ using namespace com::sun::star::bridge::oleautomation;
 using namespace connectivity::ado;
 
 OLEString::OLEString()
-    :m_sStr(NULL)
+    :m_sStr(nullptr)
 {
 }
 OLEString::OLEString(const BSTR& _sBStr)
@@ -79,7 +79,7 @@ OLEString& OLEString::operator=(const BSTR& _rSrc)
 }
 OUString OLEString::asOUString() const
 {
-    return (m_sStr != NULL) ? OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(m_sStr)),::SysStringLen(m_sStr)) : OUString();
+    return (m_sStr != nullptr) ? OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(m_sStr)),::SysStringLen(m_sStr)) : OUString();
 }
 BSTR OLEString::asBSTR() const
 {
@@ -91,7 +91,7 @@ BSTR* OLEString::getAddress()
 }
 sal_Int32 OLEString::length() const
 {
-    return (m_sStr != NULL) ? ::SysStringLen(m_sStr) : 0;
+    return (m_sStr != nullptr) ? ::SysStringLen(m_sStr) : 0;
 }
 
 OLEVariant::OLEVariant()
@@ -101,13 +101,13 @@ OLEVariant::OLEVariant()
 OLEVariant::OLEVariant(const VARIANT& varSrc)
 {
     ::VariantInit(this);
-    HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(&varSrc));
+    HRESULT eRet = ::VariantCopy(this, &varSrc);
     OSL_ENSURE(eRet == S_OK,"Error while copying an ado variant!");
 }
 OLEVariant::OLEVariant(const OLEVariant& varSrc)
 {
     ::VariantInit(this);
-    HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(static_cast<const VARIANT*>(&varSrc)));
+    HRESULT eRet = ::VariantCopy(this, static_cast<const VARIANT*>(&varSrc));
     OSL_ENSURE(eRet == S_OK,"Error while copying an ado variant!");
 }
 
@@ -147,7 +147,7 @@ OLEVariant::OLEVariant(const css::util::DateTime& x )
     vt      = VT_DATE;
     dblVal  = ::dbtools::DBTypeConversion::toDouble(x,css::util::Date(30,12,1899));
 }
-OLEVariant::OLEVariant(const float &x)
+OLEVariant::OLEVariant(float x)
 {
     VariantInit(this);
     vt      = VT_R4;
@@ -187,7 +187,7 @@ OLEVariant::OLEVariant(const css::uno::Sequence< sal_Int8 >& x)
 
 OLEVariant& OLEVariant::operator=(const OLEVariant& varSrc)
 {
-    HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(static_cast<const VARIANT*>(&varSrc)));
+    HRESULT eRet = ::VariantCopy(this, static_cast<const VARIANT*>(&varSrc));
     OSL_ENSURE(eRet == S_OK,"Error while copying an ado variant!");
     return *this;
 }
@@ -195,7 +195,7 @@ OLEVariant& OLEVariant::operator=(const OLEVariant& varSrc)
 
 OLEVariant& OLEVariant::operator=(const tagVARIANT& varSrc)
 {
-    HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(&varSrc));
+    HRESULT eRet = ::VariantCopy(this, &varSrc);
     OSL_ENSURE(eRet == S_OK,"Error while copying an ado variant!");
 
     return *this;
@@ -205,7 +205,7 @@ OLEVariant& OLEVariant::operator=(const tagVARIANT& varSrc)
 
 OLEVariant& OLEVariant::operator=(const VARIANT* pSrc)
 {
-    HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(pSrc));
+    HRESULT eRet = ::VariantCopy(this, pSrc);
     OSL_ENSURE(eRet == S_OK,"Error while copying an ado variant!");
 
     return *this;
@@ -265,7 +265,7 @@ void OLEVariant::setCurrency(double aCur)
     vt = VT_CY;
     set(aCur*10000);
 }
-void OLEVariant::setBool(sal_Bool b)
+void OLEVariant::setBool(bool b)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
@@ -328,8 +328,8 @@ void OLEVariant::setIDispatch(IDispatch* pDispInterface)
 }
 
 
-sal_Bool OLEVariant::isNull() const  {  return (vt == VT_NULL);     }
-sal_Bool OLEVariant::isEmpty() const {  return (vt == VT_EMPTY);    }
+bool OLEVariant::isNull() const  {  return (vt == VT_NULL);     }
+bool OLEVariant::isEmpty() const {  return (vt == VT_EMPTY);    }
 
 VARTYPE OLEVariant::getType() const { return vt; }
 
@@ -346,7 +346,7 @@ css::util::DateTime OLEVariant::getDateTime() const
     return isNull() ? css::util::DateTime() : ::dbtools::DBTypeConversion::toDateTime(getDateAsDouble(),css::util::Date(30,12,1899));
 }
 
-VARIANT_BOOL OLEVariant::VariantBool(sal_Bool bEinBoolean)
+VARIANT_BOOL OLEVariant::VariantBool(bool bEinBoolean)
 {
     return (bEinBoolean ? VARIANT_TRUE : VARIANT_FALSE);
 }
@@ -395,7 +395,7 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
 
     // If pDest is NULL, convert type in place
 
-    if (pSrc == NULL)
+    if (pSrc == nullptr)
         pSrc = this;
 
     if  (   ( this != pSrc )
@@ -403,7 +403,7 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
         )
     {
         if ( FAILED( ::VariantChangeType(   static_cast< VARIANT* >( this ),
-                                            const_cast< VARIANT* >( static_cast< const VARIANT* >( pSrc ) ),
+                                            static_cast< const VARIANT* >( pSrc ),
                                             0,
                                             vartype ) ) )
         {
@@ -411,7 +411,7 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
             const OUString sError( aResources.getResourceString(STR_TYPE_NOT_CONVERT));
             throw css::sdbc::SQLException(
                 sError,
-                NULL,
+                nullptr,
                 OUString( "S1000" ),
                 1000,
                 css::uno::Any()
@@ -462,18 +462,18 @@ css::uno::Sequence< sal_Int8 > OLEVariant::getByteSequence() const
     return aRet;
 }
 
-sal_Bool OLEVariant::getBool() const
+bool OLEVariant::getBool() const
 {
     if (V_VT(this) == VT_BOOL)
-        return V_BOOL(this) == VARIANT_TRUE ? sal_True : sal_False;
+        return V_BOOL(this) == VARIANT_TRUE;
     if(isNull())
-        return sal_False;
+        return false;
 
     OLEVariant varDest;
 
     varDest.ChangeType(VT_BOOL, this);
 
-    return V_BOOL(&varDest) == VARIANT_TRUE ? sal_True : sal_False;
+    return V_BOOL(&varDest) == VARIANT_TRUE;
 }
 
 IUnknown* OLEVariant::getIUnknown() const
@@ -483,7 +483,7 @@ IUnknown* OLEVariant::getIUnknown() const
         return V_UNKNOWN(this);
     }
     if(isNull())
-        return NULL;
+        return nullptr;
 
     OLEVariant varDest;
 
@@ -501,7 +501,7 @@ IDispatch* OLEVariant::getIDispatch() const
     }
 
     if(isNull())
-        return NULL;
+        return nullptr;
 
     OLEVariant varDest;
 
@@ -650,7 +650,7 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
         return V_ARRAY(this);
 
     if(isNull())
-        return 0;
+        return nullptr;
     OLEVariant varDest;
 
     varDest.ChangeType((VT_ARRAY|VT_UI1), this);

@@ -46,10 +46,10 @@ ODriver::ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _
     : ODriver_BASE(m_aMutex)
     ,m_xORB(_xORB)
 {
-     if ( FAILED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)) )
+     if ( FAILED(CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED)) )
      {
          CoUninitialize();
-         int h = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+         int h = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
          (void)h;
          ++h;
      }
@@ -58,7 +58,7 @@ ODriver::ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _
 ODriver::~ODriver()
 {
     CoUninitialize();
-    CoInitialize(NULL);
+    CoInitialize(nullptr);
 }
 
 void ODriver::disposing()
@@ -117,7 +117,7 @@ Sequence< OUString > SAL_CALL ODriver::getSupportedServiceNames(  ) throw(Runtim
 Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     if ( ! acceptsURL(url) )
-        return NULL;
+        return nullptr;
 
     // we need to wrap the connection as the construct call might throw
     std::unique_ptr<OConnection> pCon(new OConnection(this));
@@ -159,21 +159,21 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("IgnoreDriverPrivileges")
                 ,OUString("Ignore the privileges from the database driver.")
-                ,sal_False
+                ,false
                 ,OUString( "false" )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("EscapeDateTime")
                 ,OUString("Escape date time format.")
-                ,sal_False
+                ,false
                 ,OUString( "true" )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("TypeInfoSettings")
                 ,OUString("Defines how the type info of the database metadata should be manipulated.")
-                ,sal_False
+                ,false
                 ,OUString( )
                 ,Sequence< OUString > ())
         );
@@ -199,7 +199,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
     if (ODriver_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    OConnection* pConnection = NULL;
+    OConnection* pConnection = nullptr;
     Reference< css::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
     if(xTunnel.is())
     {
@@ -207,7 +207,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
 
         for (OWeakRefArray::const_iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
         {
-            if ((OConnection*) Reference< XConnection >::query(i->get().get()).get() == pSearchConnection)
+            if (static_cast<OConnection*>(Reference< XConnection >::query(i->get().get()).get()) == pSearchConnection)
             {
                 pConnection = pSearchConnection;
                 break;
@@ -216,7 +216,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
 
     }
 
-    Reference< XTablesSupplier > xTab = NULL;
+    Reference< XTablesSupplier > xTab = nullptr;
     if(pConnection)
     {
         WpADOCatalog aCatalog;
@@ -242,7 +242,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const OUS
 
 void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
-    ADOErrors *pErrors = NULL;
+    ADOErrors *pErrors = nullptr;
     _pAdoCon->get_Errors(&pErrors);
     if(!pErrors)
         return; // no error found
@@ -258,7 +258,7 @@ void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >&
         aException.ErrorCode = 1000;
         for (sal_Int32 i = nLen-1; i>=0; --i)
         {
-            ADOError *pError = NULL;
+            ADOError *pError = nullptr;
             pErrors->get_Item(OLEVariant(i),&pError);
             WpADOError aErr(pError);
             OSL_ENSURE(pError,"No error in collection found! BAD!");
