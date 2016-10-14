@@ -40,7 +40,7 @@ PyRef ustring2PyUnicode( const OUString & str )
     PyRef ret;
 #if Py_UNICODE_SIZE == 2
     // YD force conversion since python/2 uses wchar_t
-    ret = PyRef( PyUnicode_FromUnicode( (const Py_UNICODE*)str.getStr(), str.getLength() ), SAL_NO_ACQUIRE );
+    ret = PyRef( PyUnicode_FromUnicode( str.getStr(), str.getLength() ), SAL_NO_ACQUIRE );
 #else
     OString sUtf8(OUStringToOString(str, RTL_TEXTENCODING_UTF8));
     ret = PyRef( PyUnicode_DecodeUTF8( sUtf8.getStr(), sUtf8.getLength(), nullptr) , SAL_NO_ACQUIRE );
@@ -60,7 +60,7 @@ OUString pyString2ustring( PyObject *pystr )
     if( PyUnicode_Check( pystr ) )
     {
 #if Py_UNICODE_SIZE == 2
-    ret = OUString( (sal_Unicode * ) PyUnicode_AS_UNICODE( pystr ) );
+    ret = OUString( PyUnicode_AS_UNICODE( pystr ) );
 #else
 #if PY_MAJOR_VERSION >= 3
     Py_ssize_t size(0);
