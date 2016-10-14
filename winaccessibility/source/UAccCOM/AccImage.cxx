@@ -49,14 +49,14 @@ STDMETHODIMP CAccImage::get_description(BSTR * description)
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if (description == NULL)
+    if (description == nullptr)
         return E_INVALIDARG;
     if( !pRXImg.is() )
         return E_FAIL;
 
     ::rtl::OUString ouStr = GetXInterface()->getAccessibleImageDescription();
     SAFE_SYSFREESTRING(*description);
-    *description = SysAllocString((OLECHAR*)ouStr.getStr());
+    *description = SysAllocString(ouStr.getStr());
 
     return S_OK;
 
@@ -91,7 +91,7 @@ STDMETHODIMP CAccImage::put_XInterface(hyper pXInterface)
 
     CUNOXWrapper::put_XInterface(pXInterface);
     //special query.
-    if(pUNOInterface == NULL)
+    if(pUNOInterface == nullptr)
         return E_FAIL;
 
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
@@ -101,7 +101,7 @@ STDMETHODIMP CAccImage::put_XInterface(hyper pXInterface)
     }
     Reference<XAccessibleImage> pRXI(pRContext,UNO_QUERY);
     if( !pRXI.is() )
-        pRXImg = NULL;
+        pRXImg = nullptr;
     else
         pRXImg = pRXI.get();
     return S_OK;

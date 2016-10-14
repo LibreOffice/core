@@ -50,7 +50,7 @@ STDMETHODIMP CAccValue::get_currentValue(VARIANT * currentValue)
 
     ENTER_PROTECTED_BLOCK
 
-    if (currentValue == NULL)
+    if (currentValue == nullptr)
         return E_INVALIDARG;
     if ( !pRXVal.is() )
         return E_FAIL;
@@ -94,35 +94,35 @@ STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
 
     case VT_BOOL:
         {
-            css::uno::Type     typeInfo(TypeClass_BOOLEAN, (sal_Char *)"bool");
+            css::uno::Type     typeInfo(TypeClass_BOOLEAN, "bool");
             anyVal.setValue(&value.boolVal, typeInfo);
         }
         break;
 
     case VT_I2:
         {
-            css::uno::Type     typeInfo(TypeClass_SHORT, (sal_Char *)"short");
+            css::uno::Type     typeInfo(TypeClass_SHORT, "short");
             anyVal.setValue(&value.iVal, typeInfo);
         }
         break;
 
     case VT_I4:
         {
-            css::uno::Type     typeInfo(TypeClass_LONG, (sal_Char *)"long");
+            css::uno::Type     typeInfo(TypeClass_LONG, "long");
             anyVal.setValue(&value.lVal, typeInfo);
         }
         break;
 
     case VT_R4:
         {
-            css::uno::Type     typeInfo(TypeClass_FLOAT, (sal_Char *)"float");
+            css::uno::Type     typeInfo(TypeClass_FLOAT, "float");
             anyVal.setValue(&value.fltVal, typeInfo);
         }
         break;
 
     case VT_R8:
         {
-            css::uno::Type     typeInfo(TypeClass_DOUBLE, (sal_Char *)"double");
+            css::uno::Type     typeInfo(TypeClass_DOUBLE, "double");
             anyVal.setValue(&value.dblVal, typeInfo);
         }
         break;
@@ -156,7 +156,7 @@ STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumValue)
 
     ENTER_PROTECTED_BLOCK
 
-    if (maximumValue == NULL)
+    if (maximumValue == nullptr)
         return E_INVALIDARG;
     if ( !pRXVal.is() )
         return E_FAIL;
@@ -182,7 +182,7 @@ STDMETHODIMP CAccValue::get_minimumValue(VARIANT *mininumValue)
 
     ENTER_PROTECTED_BLOCK
 
-    if (mininumValue == NULL)
+    if (mininumValue == nullptr)
         return E_FAIL;
     if ( !pRXVal.is() )
         return E_FAIL;
@@ -210,7 +210,7 @@ STDMETHODIMP CAccValue::put_XInterface(hyper pXInterface)
 
     CUNOXWrapper::put_XInterface(pXInterface);
     //special query.
-    if(pUNOInterface == NULL)
+    if(pUNOInterface == nullptr)
         return E_FAIL;
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
     if( !pRContext.is() )
@@ -219,7 +219,7 @@ STDMETHODIMP CAccValue::put_XInterface(hyper pXInterface)
     }
     Reference<XAccessibleValue> pRXI(pRContext,UNO_QUERY);
     if( !pRXI.is() )
-        pRXVal = NULL;
+        pRXVal = nullptr;
     else
         pRXVal = pRXI.get();
     return S_OK;

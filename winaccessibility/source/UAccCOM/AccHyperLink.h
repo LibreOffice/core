@@ -39,7 +39,7 @@ public:
     CAccHyperLink()
     {
             }
-    ~CAccHyperLink()
+    ~CAccHyperLink() override
     {
             }
 
@@ -47,14 +47,21 @@ public:
     COM_INTERFACE_ENTRY(IAccessibleAction)
     COM_INTERFACE_ENTRY(IAccessibleHyperlink)
     COM_INTERFACE_ENTRY(IUNOXWrapper)
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
     END_COM_MAP()
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
     DECLARE_NO_REGISTRY()
 
-    static HRESULT WINAPI _SmartQI(void* pv,
+    static HRESULT WINAPI SmartQI_(void* pv,
                                    REFIID iid, void** ppvObject, DWORD_PTR)
     {
-        return ((CAccHyperLink*)pv)->SmartQI(iid,ppvObject);
+        return static_cast<CAccHyperLink*>(pv)->SmartQI(iid,ppvObject);
     }
 
     HRESULT SmartQI(REFIID iid, void** ppvObject)
@@ -69,19 +76,19 @@ public:
     // IAccessibleAction
 
     // Returns the number of action.
-    STDMETHOD(nActions)(/*[out,retval]*/long* nActions);
+    STDMETHOD(nActions)(/*[out,retval]*/long* nActions) override;
 
     // Performs specified action on the object.
-    STDMETHOD(doAction)(/* [in] */ long actionIndex);
+    STDMETHOD(doAction)(/* [in] */ long actionIndex) override;
 
     // get the action name
-    STDMETHOD(get_name)( long actionIndex, BSTR __RPC_FAR *name);
+    STDMETHOD(get_name)( long actionIndex, BSTR __RPC_FAR *name) override;
 
     // get the localized action name
-    STDMETHOD(get_localizedName)( long actionIndex, BSTR __RPC_FAR *localizedName);
+    STDMETHOD(get_localizedName)( long actionIndex, BSTR __RPC_FAR *localizedName) override;
 
     // Gets description of specified action.
-    STDMETHOD(get_description)(long actionIndex,BSTR __RPC_FAR *description);
+    STDMETHOD(get_description)(long actionIndex,BSTR __RPC_FAR *description) override;
 
     // Returns key binding object (if any) associated with specified action
     // key binding is string.
@@ -90,34 +97,34 @@ public:
         /* [in] */ long actionIndex,
         /* [in] */ long nMaxBinding,
         /* [length_is][length_is][size_is][size_is][out] */ BSTR __RPC_FAR *__RPC_FAR *keyBinding,
-        /* [retval][out] */ long __RPC_FAR *nBinding);
+        /* [retval][out] */ long __RPC_FAR *nBinding) override;
 
     // IAccessibleHyperlink
 
     // get an object, e.g. BSTR or image object, that is overloaded with link behavior
     STDMETHOD(get_anchor)(/* [in] */ long index,
-                                     /* [retval][out] */ VARIANT __RPC_FAR *anchor);
+                                     /* [retval][out] */ VARIANT __RPC_FAR *anchor) override;
 
     // get an object representing the target of the link, usually a BSTR of the URI
     STDMETHOD(get_anchorTarget)(/* [in] */ long index,
-                                           /* [retval][out] */ VARIANT __RPC_FAR *anchorTarget);
+                                           /* [retval][out] */ VARIANT __RPC_FAR *anchorTarget) override;
 
     // Returns the index at which the textual representation of the
     // hyperlink (group) starts.
-    STDMETHOD(get_startIndex)(/* [retval][out] */ long __RPC_FAR *index);
+    STDMETHOD(get_startIndex)(/* [retval][out] */ long __RPC_FAR *index) override;
 
     // Returns the index at which the textual representation of the
     // hyperlink (group) ends.
-    STDMETHOD(get_endIndex)(/* [retval][out] */ long __RPC_FAR *index);
+    STDMETHOD(get_endIndex)(/* [retval][out] */ long __RPC_FAR *index) override;
 
     // Returns whether the document referenced by this links is still valid.
-    STDMETHOD(get_valid)(/* [retval][out] */ boolean __RPC_FAR *valid);
+    STDMETHOD(get_valid)(/* [retval][out] */ boolean __RPC_FAR *valid) override;
 
     // Override of IUNOXWrapper.
-    STDMETHOD(put_XInterface)(hyper pXInterface);
+    STDMETHOD(put_XInterface)(hyper pXInterface) override;
 
     // Override of IUNOXWrapper.
-    STDMETHOD(put_XSubInterface)(hyper pXSubInterface);
+    STDMETHOD(put_XSubInterface)(hyper pXSubInterface) override;
 
 private:
 

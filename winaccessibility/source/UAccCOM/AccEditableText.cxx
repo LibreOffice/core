@@ -113,7 +113,7 @@ STDMETHODIMP CAccEditableText::insertText(long offset, BSTR * text)
 
     ENTER_PROTECTED_BLOCK
 
-    if (text == NULL)
+    if (text == nullptr)
         return E_INVALIDARG;
 
     if( !pRXEdtTxt.is() )
@@ -191,7 +191,7 @@ STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset, BST
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if (text == NULL)
+    if (text == nullptr)
         return E_INVALIDARG;
     if( !pRXEdtTxt.is() )
         return E_FAIL;
@@ -220,7 +220,7 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if (attributes == NULL)
+    if (attributes == nullptr)
         return E_INVALIDARG;
     if( !pRXEdtTxt.is() )
         return E_FAIL;
@@ -238,7 +238,7 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
     while(nIndex >= 0);
 
     Sequence< PropertyValue > beanSeq(vecAttr.size());
-    for(unsigned int i = 0; i < vecAttr.size(); i ++)
+    for(std::vector<OUString>::size_type i = 0; i < vecAttr.size(); i ++)
     {
         ::rtl::OUString attr = vecAttr[i];
         sal_Int32 nPos = attr.indexOf(':');
@@ -489,7 +489,7 @@ STDMETHODIMP CAccEditableText::put_XInterface(hyper pXInterface)
 
     CUNOXWrapper::put_XInterface(pXInterface);
     //special query.
-    if(pUNOInterface == NULL)
+    if(pUNOInterface == nullptr)
         return E_FAIL;
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
     if( !pRContext.is() )
@@ -498,7 +498,7 @@ STDMETHODIMP CAccEditableText::put_XInterface(hyper pXInterface)
     }
     Reference<XAccessibleEditableText> pRXI(pRContext,UNO_QUERY);
     if( !pRXI.is() )
-        pRXEdtTxt = NULL;
+        pRXEdtTxt = nullptr;
     else
         pRXEdtTxt = pRXI.get();
     return S_OK;

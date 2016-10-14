@@ -78,17 +78,6 @@ STDMETHODIMP CAccHypertext::get_caretOffset(long * offset)
 }
 
 /**
-   * Get character count.
-   * @param nCharacters  Variant to accept character count.
-   * @return Result.
-*/
-STDMETHODIMP CAccHypertext::get_characterCount(long * nCharacters)
-{
-
-    return CAccTextBase::get_characterCount(nCharacters);
-}
-
-/**
    * Get character extents.
    * @param offset  Offset.
    * @param x Variant to accept x position.
@@ -290,7 +279,7 @@ STDMETHODIMP CAccHypertext::get_nHyperlinks(long *hyperlinkCount)
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if(hyperlinkCount == NULL)
+    if(hyperlinkCount == nullptr)
         return E_INVALIDARG;
     // #CHECK XInterface#
     if(!pHyperText.is())
@@ -317,7 +306,7 @@ STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAccessibleHyperlink **hype
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if(hyperlink == NULL)
+    if(hyperlink == nullptr)
         return E_INVALIDARG;
     // #CHECK XInterface#
     if(!pHyperText.is())
@@ -328,16 +317,16 @@ STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAccessibleHyperlink **hype
     Reference<XAccessibleHyperlink> pRLink = pHyperText->getHyperLink(index);
     if(!pRLink.is())
     {
-        *hyperlink = NULL;
+        *hyperlink = nullptr;
         return E_FAIL;
     }
 
-    IAccessibleHyperlink* plink = NULL;
+    IAccessibleHyperlink* plink = nullptr;
     HRESULT hr = createInstance<CAccHyperLink>(IID_IAccessibleHyperlink, &plink);
     if( SUCCEEDED(hr) )
     {
-        IUNOXWrapper* wrapper = NULL;
-        plink->QueryInterface(IID_IUNOXWrapper, (void**)&wrapper);
+        IUNOXWrapper* wrapper = nullptr;
+        plink->QueryInterface(IID_IUNOXWrapper, reinterpret_cast<void**>(&wrapper));
         if(wrapper)
         {
             wrapper->put_XSubInterface(reinterpret_cast<hyper>(pRLink.get()));
@@ -365,7 +354,7 @@ STDMETHODIMP CAccHypertext::get_hyperlinkIndex(long charIndex, long *hyperlinkIn
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if(hyperlinkIndex == NULL)
+    if(hyperlinkIndex == nullptr)
         return E_INVALIDARG;
     // #CHECK XInterface#
     if(!pHyperText.is())
@@ -392,7 +381,7 @@ STDMETHODIMP CAccHypertext::put_XInterface(hyper pXInterface)
 
     CAccTextBase::put_XInterface(pXInterface);
     //special query.
-    if(pUNOInterface == NULL)
+    if(pUNOInterface == nullptr)
         return E_FAIL;
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
     if( !pRContext.is() )
@@ -401,7 +390,7 @@ STDMETHODIMP CAccHypertext::put_XInterface(hyper pXInterface)
     }
     Reference<XAccessibleHypertext> pRXI(pRContext,UNO_QUERY);
     if( !pRXI.is() )
-        pHyperText = NULL;
+        pHyperText = nullptr;
     else
         pHyperText = pRXI.get();
     return S_OK;

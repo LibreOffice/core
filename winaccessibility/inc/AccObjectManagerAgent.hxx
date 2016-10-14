@@ -53,7 +53,7 @@ public:
     virtual void DeleteAccObj( css::accessibility::XAccessible* pXAcc );
     virtual IMAccessible*  GetIMAccByXAcc(css::accessibility::XAccessible* pXAcc);
 
-    bool NotifyAccEvent(short pEvent = 0, css::accessibility::XAccessible* pXAcc = 0);
+    bool NotifyAccEvent(short pEvent = 0, css::accessibility::XAccessible* pXAcc = nullptr);
 
     bool InsertChildrenAccObj(css::accessibility::XAccessible* pXAcc,
                               sal_Int64 pWnd=0);
@@ -63,7 +63,7 @@ public:
     void  IncreaseState( css::accessibility::XAccessible* pXAcc,unsigned short pState );
     void  UpdateState( css::accessibility::XAccessible* pXAcc );
 
-    void  UpdateLocation( css::accessibility::XAccessible* pXAcc,
+    static void UpdateLocation( css::accessibility::XAccessible* pXAcc,
                           long Top = 0,long left = 0,long width = 0,long height = 0 );
     void  UpdateAction( css::accessibility::XAccessible* pXAcc );
 

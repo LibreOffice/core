@@ -95,7 +95,7 @@ throw (css::uno::RuntimeException)
  */
 void AccParagraphEventListener::HandleCaretChangedEvent(Any, Any)
 {
-    pAgent->UpdateLocation(m_xAccessible.get());
+    AccObjectManagerAgent::UpdateLocation(m_xAccessible.get());
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_CARETCHANGE, m_xAccessible.get());
 }
 

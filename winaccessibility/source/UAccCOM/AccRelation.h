@@ -50,29 +50,36 @@ public:
     BEGIN_COM_MAP(CAccRelation)
     COM_INTERFACE_ENTRY(IAccessibleRelation)
     COM_INTERFACE_ENTRY(IUNOXWrapper)
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
     END_COM_MAP()
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
     // IAccessibleRelation
 public:
     // IAccessibleRelation
 
     // Gets what the type of relation is.
-    STDMETHOD(get_relationType)(BSTR * relationType);
+    STDMETHOD(get_relationType)(BSTR * relationType) override;
 
     // Gets what the type of localized relation is.
-    STDMETHOD(get_localizedRelationType)(BSTR * relationType);
+    STDMETHOD(get_localizedRelationType)(BSTR * relationType) override;
 
     // Gets how many targets this relation have.
-    STDMETHOD(get_nTargets)(long * nTargets);
+    STDMETHOD(get_nTargets)(long * nTargets) override;
 
     // Gets one accessible relation target.
-    STDMETHOD(get_target)(long targetIndex, IUnknown * * target);
+    STDMETHOD(get_target)(long targetIndex, IUnknown * * target) override;
 
     // Gets multiple accessible relation targets.
-    STDMETHOD(get_targets)(long maxTargets, IUnknown * * target, long * nTargets);
+    STDMETHOD(get_targets)(long maxTargets, IUnknown * * target, long * nTargets) override;
 
     // Override of IUNOXWrapper.
-    STDMETHOD(put_XSubInterface)(hyper pXSubInterface);
+    STDMETHOD(put_XSubInterface)(hyper pXSubInterface) override;
 
     //static OLECHAR* getRelationTypeOLECHAR(int type);
     static BSTR getRelationTypeBSTR(int type);

@@ -46,8 +46,8 @@ public:
     {   }
 
     // IUNOXWrapper
-    STDMETHOD(put_XInterface)(hyper pXInterface);
-    STDMETHOD(put_XSubInterface)(hyper);
+    STDMETHOD(put_XInterface)(hyper pXInterface) override;
+    STDMETHOD(put_XSubInterface)(hyper) override;
 
 protected:
     ~CUNOXWrapper() {}

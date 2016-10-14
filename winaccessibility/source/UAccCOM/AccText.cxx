@@ -71,17 +71,6 @@ STDMETHODIMP CAccText::get_caretOffset(long * offset)
 }
 
 /**
-   * Get character count.
-   * @param nCharacters  Variant to accept character count.
-   * @return Result.
-*/
-STDMETHODIMP CAccText::get_characterCount(long * nCharacters)
-{
-
-    return CAccTextBase::get_characterCount(nCharacters);
-}
-
-/**
    * Get character extents.
    * @param offset  Offset.
    * @param x Variant to accept x position.
@@ -273,17 +262,6 @@ STDMETHODIMP CAccText::scrollSubstringTo(long startIndex, long endIndex,enum IA2
 {
 
     return CAccTextBase::scrollSubstringTo(startIndex, endIndex,scrollType);
-}
-
-/**
-   * Put UNO interface.
-   * @param pXInterface UNO interface.
-   * @return Result.
-*/
-STDMETHODIMP CAccText::put_XInterface(hyper pXInterface)
-{
-
-    return CAccTextBase::put_XInterface(pXInterface);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -66,15 +66,4 @@ STDMETHODIMP CAccComponent::get_background(IA2Color * background)
     return CAccComponentBase::get_background(background);
 }
 
-/**
- * Override of IUNOXWrapper.
- *
- * @param    pXInterface    the pointer of UNO interface.
- */
-STDMETHODIMP CAccComponent::put_XInterface(hyper pXInterface)
-{
-
-    return CAccComponentBase::put_XInterface(pXInterface);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

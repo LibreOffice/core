@@ -39,7 +39,7 @@ class AccContainerEventListener: public AccEventListener
 {
 public:
     AccContainerEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
-    virtual ~AccContainerEventListener();
+    virtual ~AccContainerEventListener() override;
 
     //AccessibleEventListener
     virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException) override;
@@ -69,7 +69,7 @@ public:
     virtual void SetComponentState(short state, bool enable) override;
     virtual void FireStatePropertyChange(short state, bool set) override;
     virtual void FireStateFocusedChange(bool enable) override;
-    virtual bool IsEditable(css::uno::Reference<css::accessibility::XAccessibleContext> xContext);
+    virtual bool IsEditable(css::uno::Reference<css::accessibility::XAccessibleContext> const & xContext);
 
     // update all children's state
     void UpdateAllChildrenState( css::accessibility::XAccessible* pXAccessible);

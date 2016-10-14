@@ -102,16 +102,6 @@ STDMETHODIMP CAccAction::get_keyBinding(
 }
 
 /**
- * Override of IUNOXWrapper.
- *
- * @param    pXInterface    the pointer of UNO interface.
- */
-STDMETHODIMP CAccAction::put_XInterface(hyper pXInterface)
-{
-
-    return CAccActionBase::put_XInterface(pXInterface);
-}
-/**
    * Put UNO interface.
    * @param pXSubInterface XAccessibleHyperlink interface.
    * @return Result.

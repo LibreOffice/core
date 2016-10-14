@@ -118,7 +118,7 @@ STDMETHODIMP CAccHyperLink::get_anchor(/* [in] */ long index,
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if(anchor == NULL)
+    if(anchor == nullptr)
     {
         return E_INVALIDARG;
     }
@@ -150,7 +150,7 @@ STDMETHODIMP CAccHyperLink::get_anchorTarget(/* [in] */ long index,
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if(anchorTarget == NULL)
+    if(anchorTarget == nullptr)
     {
         return E_INVALIDARG;
     }
@@ -182,7 +182,7 @@ STDMETHODIMP CAccHyperLink::get_startIndex(/* [retval][out] */ long __RPC_FAR *i
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if(index == NULL)
+    if(index == nullptr)
     {
         return E_INVALIDARG;
     }
@@ -205,7 +205,7 @@ STDMETHODIMP CAccHyperLink::get_endIndex(/* [retval][out] */ long __RPC_FAR *ind
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if(index == NULL)
+    if(index == nullptr)
     {
         return E_INVALIDARG;
     }
@@ -233,7 +233,7 @@ STDMETHODIMP CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR *val
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
-    if(valid == NULL)
+    if(valid == nullptr)
     {
         return E_INVALIDARG;
     }
@@ -262,7 +262,7 @@ STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterface)
 
     CAccActionBase::put_XInterface(pXInterface);
     //special query.
-    if(pUNOInterface != NULL)
+    if(pUNOInterface != nullptr)
     {
         Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
         if( !pRContext.is() )
@@ -272,7 +272,7 @@ STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterface)
         Reference<XAccessibleHyperlink> pRXI(pRContext,UNO_QUERY);
         if( !pRXI.is() )
         {
-            pRXLink = NULL;
+            pRXLink = nullptr;
         }
         else
             pRXLink = pRXI.get();

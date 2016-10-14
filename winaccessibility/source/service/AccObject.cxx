@@ -158,10 +158,10 @@ const short ROLE_TABLE[][2] =
 AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
                      AccEventListener* pListener) :
         m_resID     (NULL),
-        m_pParantID (NULL),
-        m_bShouldDestroy(sal_False),
-        m_pIMAcc    (NULL),
-        m_pParentObj(NULL),
+        m_pParantID (nullptr),
+        m_bShouldDestroy(false),
+        m_pIMAcc    (nullptr),
+        m_pParentObj(nullptr),
         m_pListener (pListener),
         m_xAccRef( pAcc )
 {
@@ -184,10 +184,10 @@ AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
    */
 AccObject::~AccObject()
 {
-    m_pIMAcc = NULL;
-    m_xAccRef = NULL;
-    m_xAccActionRef = NULL;
-    m_xAccContextRef = NULL;
+    m_pIMAcc = nullptr;
+    m_xAccRef = nullptr;
+    m_xAccActionRef = nullptr;
+    m_xAccContextRef = nullptr;
 }
 
 
@@ -231,7 +231,7 @@ void AccObject::DeleteChild( AccObject* pChild )
     {
         m_childrenList.erase(iter);
         if(m_pIMAcc)
-            pChild->SetParentObj(NULL);
+            pChild->SetParentObj(nullptr);
     }
 }
 
@@ -271,7 +271,7 @@ void  AccObject::UpdateName( )
         return;
     }
 
-    if( ( TEXT_FRAME == m_accRole   ) && ( m_pParentObj !=NULL )&& ( SCROLL_PANE == m_pParentObj -> m_accRole ) )
+    if( ( TEXT_FRAME == m_accRole   ) && ( m_pParentObj !=nullptr )&& ( SCROLL_PANE == m_pParentObj -> m_accRole ) )
         m_pIMAcc->Put_XAccName( m_pParentObj->m_xAccContextRef->getAccessibleName().getStr() );
     //IAccessibility2 Implementation 2009-----
     if ( PARAGRAPH == m_accRole)
@@ -329,7 +329,7 @@ void  AccObject::UpdateAction()
    */
 void AccObject::UpdateValue()
 {
-    if( NULL == m_pIMAcc  || !m_xAccContextRef.is() )
+    if( nullptr == m_pIMAcc  || !m_xAccContextRef.is() )
     {
         assert(false);
         return ;
@@ -382,7 +382,7 @@ void  AccObject::SetValue( Any pAny )
     unsigned short pUNumberString[100];
     memset( pUNumberString, 0 , sizeof( pUNumberString) );
 
-    if( NULL == m_pIMAcc || !m_xAccContextRef.is() )
+    if( nullptr == m_pIMAcc || !m_xAccContextRef.is() )
     {
         assert(false);
         return ;
@@ -414,7 +414,7 @@ void  AccObject::SetValue( Any pAny )
         break ;
     // Added by Li Xing, only the checkbox in tree should have the value.
     case CHECK_BOX:
-        if( ( m_pParentObj !=NULL ) && (TREE == m_pParentObj->m_accRole || TREE_ITEM == m_pParentObj->m_accRole ))
+        if( ( m_pParentObj !=nullptr ) && (TREE == m_pParentObj->m_accRole || TREE_ITEM == m_pParentObj->m_accRole ))
             m_pIMAcc->Put_XAccValue( GetMAccessibleValueFromAny(pAny).getStr() );
         break;
     default:
@@ -429,7 +429,7 @@ void  AccObject::SetValue( Any pAny )
 {
     ::rtl::OUString strValue;
 
-    if(NULL == m_pIMAcc)
+    if(nullptr == m_pIMAcc)
         return strValue;
 
     if(pAny.getValueType() == cppu::UnoType<cppu::UnoUnsignedShortType>::get() )
@@ -498,7 +498,7 @@ void  AccObject::SetValue( Any pAny )
    */
 void  AccObject::SetName( Any pAny)
 {
-    if( NULL == m_pIMAcc )
+    if( nullptr == m_pIMAcc )
         return ;
 
     m_pIMAcc->Put_XAccName( GetMAccessibleValueFromAny(pAny).getStr() );
@@ -512,7 +512,7 @@ void  AccObject::SetName( Any pAny)
    */
 void  AccObject::SetDescription( Any pAny )
 {
-    if( NULL == m_pIMAcc )
+    if( nullptr == m_pIMAcc )
         return ;
     m_pIMAcc->Put_XAccDescription( GetMAccessibleValueFromAny(pAny).getStr() );
 }
@@ -524,7 +524,7 @@ void  AccObject::SetDescription( Any pAny )
    */
 void  AccObject::SetRole( short Role )
 {
-    if( NULL == m_pIMAcc )
+    if( nullptr == m_pIMAcc )
         return ;
     m_pIMAcc->Put_XAccRole( Role );
 }
@@ -617,8 +617,8 @@ DWORD AccObject::GetMSAAStateFromUNO(short xState)
         break;
     case  EXPANDABLE:
         {
-            sal_Bool isExpanded = sal_True;
-            sal_Bool isExpandable = sal_True;
+            sal_Bool isExpanded = true;
+            sal_Bool isExpandable = true;
             if( Role == PUSH_BUTTON || Role == TOGGLE_BUTTON  || BUTTON_DROPDOWN == Role )
             {
                 IState = STATE_SYSTEM_HASPOPUP;
@@ -666,7 +666,7 @@ DWORD AccObject::GetMSAAStateFromUNO(short xState)
    */
 void  AccObject::DecreaseState( short xState )
 {
-    if( NULL == m_pIMAcc )
+    if( nullptr == m_pIMAcc )
     {
         return;
     }
@@ -682,7 +682,7 @@ void  AccObject::DecreaseState( short xState )
         {
             if (Role == TOGGLE_BUTTON || Role == PUSH_BUTTON || BUTTON_DROPDOWN == Role)
             {
-                if( ( m_pParentObj !=NULL ) && (TOOL_BAR == m_pParentObj->m_accRole ) )
+                if( ( m_pParentObj !=nullptr ) && (TOOL_BAR == m_pParentObj->m_accRole ) )
                     return;
             }
         }
@@ -709,7 +709,7 @@ void  AccObject::DecreaseState( short xState )
    */
 void AccObject::IncreaseState( short xState )
 {
-    if( NULL == m_pIMAcc )
+    if( nullptr == m_pIMAcc )
     {
         assert(false);
         return;
@@ -741,7 +741,7 @@ AccObject* AccObject::NextChild()
     IAccChildList::iterator pInd = m_childrenList.begin();
     if( pInd != m_childrenList.end() )
         return  *pInd;
-    return NULL;
+    return nullptr;
 }
 /**
    * update action description desc
@@ -837,27 +837,27 @@ void AccObject::UpdateState()
     Sequence<short> pStates = pRState->getStates();
     int count = pStates.getLength();
 
-    sal_Bool isEnable = sal_False;
-    sal_Bool isShowing = sal_False;
-    sal_Bool isEditable = sal_False;
-    sal_Bool isVisible = sal_False;
-    sal_Bool isFocusable = sal_False;
+    bool isEnable = false;
+    bool isShowing = false;
+    bool isEditable = false;
+    bool isVisible = false;
+    bool isFocusable = false;
 
     for( int iIndex = 0;iIndex < count;iIndex++ )
     {
         if( pStates[iIndex] == ENABLED )
-            isEnable = sal_True;
+            isEnable = true;
         else if( pStates[iIndex] == SHOWING)
-            isShowing = sal_True;
+            isShowing = true;
         else if( pStates[iIndex] == VISIBLE)
-            isVisible = sal_True;
+            isVisible = true;
         else if( pStates[iIndex] == EDITABLE )
-            isEditable = sal_True;
+            isEditable = true;
         else if (pStates[iIndex] == FOCUSABLE)
-            isFocusable = sal_True;
+            isFocusable = true;
         IncreaseState( pStates[iIndex]);
     }
-    sal_Bool bIsMenuItem = m_accRole == MENU_ITEM || m_accRole == RADIO_MENU_ITEM || m_accRole == CHECK_MENU_ITEM;
+    bool bIsMenuItem = m_accRole == MENU_ITEM || m_accRole == RADIO_MENU_ITEM || m_accRole == CHECK_MENU_ITEM;
 
     if(bIsMenuItem)
     {
@@ -922,7 +922,7 @@ void AccObject::UpdateState()
         {
             if( SEPARATOR == Role  )
             {
-                if( ( m_pParentObj != NULL ) && ( MENU == m_pParentObj->m_accRole  || POPUP_MENU == m_pParentObj->m_accRole ))
+                if( ( m_pParentObj != nullptr ) && ( MENU == m_pParentObj->m_accRole  || POPUP_MENU == m_pParentObj->m_accRole ))
                     IncreaseState( FOCUSABLE );
             }
 
@@ -957,7 +957,7 @@ void AccObject::UpdateState()
         {
             if  ( Role == TOGGLE_BUTTON || Role == PUSH_BUTTON || BUTTON_DROPDOWN == Role)
             {
-                if(( m_pParentObj != NULL )&& (TOOL_BAR ==  m_pParentObj->m_accRole ) )
+                if(( m_pParentObj != nullptr )&& (TOOL_BAR ==  m_pParentObj->m_accRole ) )
                     IncreaseState( FOCUSABLE );
                 else
                     DecreaseState( FOCUSABLE );
@@ -1023,12 +1023,12 @@ void AccObject::UpdateLocation()
    * @param
    * @return If the method is correctly processed.
    */
-sal_Bool AccObject:: UpdateAccessibleInfoFromUnoToMSAA ( )
+bool AccObject:: UpdateAccessibleInfoFromUnoToMSAA ( )
 {
-    if( NULL == m_pIMAcc || !m_xAccContextRef.is()  )
+    if( nullptr == m_pIMAcc || !m_xAccContextRef.is()  )
     {
         assert(false);
-        return sal_False;
+        return false;
     }
 
     UpdateName();
@@ -1043,7 +1043,7 @@ sal_Bool AccObject:: UpdateAccessibleInfoFromUnoToMSAA ( )
 
     UpdateState();
 
-    return sal_True;
+    return true;
 }
 
 /*
@@ -1094,8 +1094,8 @@ void AccObject::unsetFocus()
 
 void AccObject::GetExpandedState( sal_Bool* isExpandable, sal_Bool* isExpanded)
 {
-    *isExpanded = sal_False;
-    *isExpandable = sal_False;
+    *isExpanded = false;
+    *isExpandable = false;
 
     if( !m_xAccContextRef.is() )
     {
@@ -1114,16 +1114,16 @@ void AccObject::GetExpandedState( sal_Bool* isExpandable, sal_Bool* isExpanded)
     {
         if( EXPANDED == pStates[iIndex]  )
         {
-            *isExpanded = sal_True;
+            *isExpanded = true;
         }
         else if( EXPANDABLE == pStates[iIndex]  )
         {
-            *isExpandable = sal_True;
+            *isExpandable = true;
         }
     }
 }
 
-void AccObject::NotifyDestroy(sal_Bool ifDelete)
+void AccObject::NotifyDestroy(bool ifDelete)
 {
     m_bShouldDestroy=ifDelete;
     if(m_pIMAcc)
@@ -1142,7 +1142,7 @@ void AccObject::SetParentObj(AccObject* pParentAccObj)
         }
         else
         {
-            m_pIMAcc->Put_XAccParent(NULL);
+            m_pIMAcc->Put_XAccParent(nullptr);
         }
     }
 }
@@ -1193,7 +1193,7 @@ AccObject* AccObject::GetParentObj()
 {
     return m_pParentObj;
 }
-sal_Bool  AccObject::ifShouldDestroy()
+bool  AccObject::ifShouldDestroy()
 {
     return m_bShouldDestroy;
 }
