@@ -157,7 +157,6 @@ merge SwNumberTreeNode with SwNodeNum
 merge SwSelPaintRects with SwShellCursor
 merge SwSidebarItem with SwAnnotationItem
 merge SwTextAdjuster with SwTextCursor
-merge SwTextAttrIterator with SwLanguageIterator
 merge SwUnoCursor with SwUnoTableCursor
 merge SwXParaFrameEnumeration with SwXParaFrameEnumerationImpl
 merge SwXParagraphEnumeration with SwXParagraphEnumerationImpl

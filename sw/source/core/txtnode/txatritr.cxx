@@ -93,15 +93,19 @@ bool SwScriptIterator::Next()
     return bRet;
 }
 
-SwTextAttrIterator::SwTextAttrIterator( const SwTextNode& rTNd, sal_uInt16 nWhchId,
+SwLanguageIterator::SwLanguageIterator( const SwTextNode& rTNd,
                                         sal_Int32 nStt )
-    : aSIter( rTNd.GetText(), nStt ), rTextNd( rTNd ),
-      pParaItem( nullptr ), nAttrPos( 0 ), nChgPos( nStt ), nWhichId( nWhchId )
+    : aSIter( rTNd.GetText(), nStt ),
+      rTextNd( rTNd ),
+      pParaItem( nullptr ),
+      nAttrPos( 0 ),
+      nChgPos( nStt ),
+      nWhichId( RES_CHRATR_LANGUAGE )
 {
     SearchNextChg();
 }
 
-bool SwTextAttrIterator::Next()
+bool SwLanguageIterator::Next()
 {
     bool bRet = false;
     if (nChgPos < aSIter.GetText().getLength())
@@ -150,7 +154,7 @@ bool SwTextAttrIterator::Next()
     return bRet;
 }
 
-void SwTextAttrIterator::AddToStack( const SwTextAttr& rAttr )
+void SwLanguageIterator::AddToStack( const SwTextAttr& rAttr )
 {
     size_t nIns = 0;
     const sal_Int32 nEndPos = *rAttr.End();
@@ -161,7 +165,7 @@ void SwTextAttrIterator::AddToStack( const SwTextAttr& rAttr )
     aStack.insert( aStack.begin() + nIns, &rAttr );
 }
 
-void SwTextAttrIterator::SearchNextChg()
+void SwLanguageIterator::SearchNextChg()
 {
     sal_uInt16 nWh = 0;
     if( nChgPos == aSIter.GetScriptChgPos() )

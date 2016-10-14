@@ -48,38 +48,28 @@ public:
     const OUString& GetText() const { return m_rText; }
 };
 
-class SwTextAttrIterator
+class SwLanguageIterator
 {
-    SwScriptIterator aSIter;
-    std::deque<const SwTextAttr*> aStack;
-    const SwTextNode& rTextNd;
-    const SfxPoolItem *pParaItem, *pCurItem;
-    size_t nAttrPos;
-    sal_Int32 nChgPos;
-    sal_uInt16 nWhichId;
+    SwScriptIterator    aSIter;
+    std::deque<const SwTextAttr*>
+                        aStack;
+    const SwTextNode&   rTextNd;
+    const SfxPoolItem*  pParaItem;
+    const SfxPoolItem*  pCurItem;
+    size_t              nAttrPos;
+    sal_Int32           nChgPos;
+    sal_uInt16          nWhichId;
 
     void AddToStack( const SwTextAttr& rAttr );
     void SearchNextChg();
 
 public:
-    SwTextAttrIterator( const SwTextNode& rTextNd, sal_uInt16 nWhichId,
-                        sal_Int32 nStart );
+    SwLanguageIterator( const SwTextNode& rTextNd, sal_Int32 nStart );
 
-    bool Next();
-
-    const SfxPoolItem& GetAttr() const  { return *pCurItem; }
-    sal_Int32 GetChgPos() const        { return nChgPos; }
-};
-
-class SwLanguageIterator : public SwTextAttrIterator
-{
-public:
-    SwLanguageIterator( const SwTextNode& rTextNode, sal_Int32 nStart )
-        : SwTextAttrIterator( rTextNode, RES_CHRATR_LANGUAGE, nStart )
-    {}
-
-    sal_uInt16 GetLanguage() const
-        { return static_cast<const SvxLanguageItem&>(GetAttr()).GetValue(); }
+    bool               Next();
+    sal_Int32          GetChgPos() const        { return nChgPos; }
+    sal_uInt16         GetLanguage() const
+        { return static_cast<const SvxLanguageItem&>(*pCurItem).GetValue(); }
 };
 
 #endif
