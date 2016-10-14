@@ -320,7 +320,8 @@ public:
     // Use OPTIONS method to retrieve the type of the Web resource
     void getResourceOptions( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                              DAVOptions& rDAVOptions,
-                             const std::unique_ptr< DAVResourceAccess > & rResAccess )
+                             const std::unique_ptr< DAVResourceAccess > & rResAccess,
+                             bool * networkAccessAllowed = nullptr)
         throw ( css::uno::Exception, std::exception );
 
     static bool isResourceAvailable( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
@@ -328,6 +329,7 @@ public:
                                      DAVOptions& rDAVOptions );
 
     static void removeCachedPropertyNames( const OUString & rURL );
+
 };
 
 }
