@@ -485,7 +485,7 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
     if ( SvtMiscOptions().UseSystemFileDialog() )
     {
         delete m_pFileDlg;
-        m_pFileDlg = NULL;
+        m_pFileDlg = nullptr;
     }
 #endif
 

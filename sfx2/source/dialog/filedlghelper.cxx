@@ -1628,6 +1628,8 @@ void FileDialogHelper_Impl::verifyPath()
         maPath = SvtPathOptions().GetWorkPath();
         mxFileDlg->setDisplayDirectory( maPath );
     }
+#else
+    (void) this;
 #endif
 }
 

@@ -28,10 +28,12 @@
 
 #include <shlobj.h>
 
-static bool _SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )
+#include <syspathw32.hxx>
+
+static bool SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )
 {
     LPITEMIDLIST    pidl;
-    HRESULT         hHdl = SHGetSpecialFolderLocation( NULL, nFolderID, &pidl );
+    HRESULT         hHdl = SHGetSpecialFolderLocation( nullptr, nFolderID, &pidl );
 
     if( hHdl == NOERROR )
     {
@@ -65,10 +67,10 @@ typedef unsigned short sal_uInt16;
     typedef sal_uInt16          sal_Unicode;
 #endif
 
-extern "C" bool GetUserTemplateLocation(sal_Unicode* pFolder, int nSize)
+bool GetUserTemplateLocation(sal_Unicode* pFolder, int nSize)
 {
 #ifdef _WIN32
-    return _SHGetSpecialFolderW32( CSIDL_TEMPLATES, reinterpret_cast<LPWSTR>(pFolder), nSize );
+    return SHGetSpecialFolderW32( CSIDL_TEMPLATES, reinterpret_cast<LPWSTR>(pFolder), nSize );
 #else
     (void)pFolder;
     (void)nSize;
