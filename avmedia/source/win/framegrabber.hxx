@@ -34,24 +34,22 @@ class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,
 public:
 
     explicit FrameGrabber( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
-    ~FrameGrabber();
+    ~FrameGrabber() override;
 
     bool    create( const OUString& rURL );
 
     // XFrameGrabber
-    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (css::uno::RuntimeException) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException) override;
 
 private:
 
     css::uno::Reference< css::lang::XMultiServiceFactory >    mxMgr;
     OUString                                                  maURL;
-
-    IMediaDet* implCreateMediaDet( const OUString& rURL ) const;
 };
 
 } // namespace win

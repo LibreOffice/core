@@ -52,7 +52,7 @@ namespace avmedia { namespace win {
 FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
 {
-    ::CoInitialize( NULL );
+    ::CoInitialize( nullptr );
 }
 
 
@@ -61,12 +61,13 @@ FrameGrabber::~FrameGrabber()
     ::CoUninitialize();
 }
 
+namespace {
 
-IMediaDet* FrameGrabber::implCreateMediaDet( const OUString& rURL ) const
+IMediaDet* implCreateMediaDet( const OUString& rURL )
 {
-    IMediaDet* pDet = NULL;
+    IMediaDet* pDet = nullptr;
 
-    if( SUCCEEDED( CoCreateInstance( CLSID_MediaDet, NULL, CLSCTX_INPROC_SERVER, IID_IMediaDet, (void**) &pDet ) ) )
+    if( SUCCEEDED( CoCreateInstance( CLSID_MediaDet, nullptr, CLSCTX_INPROC_SERVER, IID_IMediaDet, reinterpret_cast<void**>(&pDet) ) ) )
     {
         OUString aLocalStr;
 
@@ -76,7 +77,7 @@ IMediaDet* FrameGrabber::implCreateMediaDet( const OUString& rURL ) const
             if( !SUCCEEDED( pDet->put_Filename( ::SysAllocString( reinterpret_cast<LPCOLESTR>(aLocalStr.getStr()) ) ) ) )
             {
                 pDet->Release();
-                pDet = NULL;
+                pDet = nullptr;
             }
         }
     }
@@ -84,6 +85,7 @@ IMediaDet* FrameGrabber::implCreateMediaDet( const OUString& rURL ) const
     return pDet;
 }
 
+}
 
 bool FrameGrabber::create( const OUString& rURL )
 {
@@ -94,7 +96,7 @@ bool FrameGrabber::create( const OUString& rURL )
     {
         maURL = rURL;
         pDet->Release();
-        pDet = NULL;
+        pDet = nullptr;
     }
     else
         maURL.clear();
@@ -153,27 +155,27 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 
                 if( aMediaType.cbFormat != 0 )
                 {
-                    ::CoTaskMemFree( (PVOID) aMediaType.pbFormat );
+                    ::CoTaskMemFree( aMediaType.pbFormat );
                     aMediaType.cbFormat = 0;
-                    aMediaType.pbFormat = NULL;
+                    aMediaType.pbFormat = nullptr;
                 }
 
-                if( aMediaType.pUnk != NULL )
+                if( aMediaType.pUnk != nullptr )
                 {
                     aMediaType.pUnk->Release();
-                    aMediaType.pUnk = NULL;
+                    aMediaType.pUnk = nullptr;
                 }
             }
 
             if( ( nWidth > 0 ) && ( nHeight > 0 ) &&
-                SUCCEEDED( pDet->GetBitmapBits( 0, &nSize, NULL, nWidth, nHeight ) ) &&
+                SUCCEEDED( pDet->GetBitmapBits( 0, &nSize, nullptr, nWidth, nHeight ) ) &&
                 ( nSize > 0  ) )
             {
                 char* pBuffer = new char[ nSize ];
 
                 try
                 {
-                    if( SUCCEEDED( pDet->GetBitmapBits( fMediaTime, NULL, pBuffer, nWidth, nHeight ) ) )
+                    if( SUCCEEDED( pDet->GetBitmapBits( fMediaTime, nullptr, pBuffer, nWidth, nHeight ) ) )
                     {
                         SvMemoryStream  aMemStm( pBuffer, nSize, StreamMode::READ | StreamMode::WRITE );
                         Bitmap          aBmp;
