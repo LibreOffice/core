@@ -42,20 +42,27 @@ public:
     BEGIN_COM_MAP(UnoTypeWrapper)
         COM_INTERFACE_ENTRY(IDispatch)
         COM_INTERFACE_ENTRY(IUnoTypeWrapper)
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
     END_COM_MAP()
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
     // IDispatch -------------------------------------------
-    STDMETHOD( GetTypeInfoCount)(UINT *pctinfo);
+    STDMETHOD( GetTypeInfoCount)(UINT *pctinfo) override;
 
     STDMETHOD( GetTypeInfo)( UINT iTInfo,
                              LCID lcid,
-                             ITypeInfo **ppTInfo);
+                             ITypeInfo **ppTInfo) override;
 
     STDMETHOD( GetIDsOfNames)( REFIID riid,
                                LPOLESTR *rgszNames,
                                UINT cNames,
                                LCID lcid,
-                               DISPID *rgDispId);
+                               DISPID *rgDispId) override;
 
     STDMETHOD( Invoke)( DISPID dispIdMember,
                         REFIID riid,
@@ -64,10 +71,10 @@ public:
                         DISPPARAMS *pDispParams,
                         VARIANT *pVarResult,
                         EXCEPINFO *pExcepInfo,
-                        UINT *puArgErr);
+                        UINT *puArgErr) override;
     // IUnoTypeWrapper --------------------------------------
-    STDMETHOD(put_Name)(BSTR val);
-    STDMETHOD(get_Name)(BSTR* pVal);
+    STDMETHOD(put_Name)(BSTR val) override;
+    STDMETHOD(get_Name)(BSTR* pVal) override;
 
     CComBSTR m_sName;
 };

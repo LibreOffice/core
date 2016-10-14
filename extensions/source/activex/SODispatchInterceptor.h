@@ -51,14 +51,21 @@ class SODispatchInterceptor :
     CSOActiveX*         m_xParentControl;
     CRITICAL_SECTION    mMutex;
 public:
-    SODispatchInterceptor() : m_xParentControl( NULL ) { InitializeCriticalSection(&mMutex); }
+    SODispatchInterceptor() : m_xParentControl( nullptr ) { InitializeCriticalSection(&mMutex); }
     virtual ~SODispatchInterceptor() { ATLASSERT( !m_xParentControl ); DeleteCriticalSection(&mMutex); }
 
 BEGIN_COM_MAP(SODispatchInterceptor)
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(ISODispatchInterceptor)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
 END_COM_MAP()
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 DECLARE_NOT_AGGREGATABLE(SODispatchInterceptor)
 // Remove the comment from the line above if you don't want your object to
 // support aggregation.
@@ -76,38 +83,38 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SODISPATCHINTERCEPTOR)
     void ClearParent()
     {
         EnterCriticalSection( &mMutex );
-        m_xParentControl = NULL;
+        m_xParentControl = nullptr;
         LeaveCriticalSection( &mMutex );
     }
 
 // ISupportsErrorInfo
-    STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
+    STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid) override;
 
 // ISODispatchInterceptor
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getSlaveDispatchProvider(
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retVal)
+            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retVal) override
         {
             *retVal = m_xSlave;
             return S_OK;
         }
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setSlaveDispatchProvider(
-            /* [in] */ IDispatch __RPC_FAR *xNewDispatchProvider)
+            /* [in] */ IDispatch __RPC_FAR *xNewDispatchProvider) override
         {
             m_xSlave = xNewDispatchProvider;
             return S_OK;
         }
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getMasterDispatchProvider(
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retVal)
+            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retVal) override
         {
             *retVal = m_xMaster;
             return S_OK;
         }
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setMasterDispatchProvider(
-            /* [in] */ IDispatch __RPC_FAR *xNewSupplier)
+            /* [in] */ IDispatch __RPC_FAR *xNewSupplier) override
         {
             m_xMaster = xNewSupplier;
             return S_OK;
@@ -117,29 +124,29 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SODISPATCHINTERCEPTOR)
             /* [in] */ IDispatch __RPC_FAR *aURL,
             /* [in] */ BSTR aTargetFrameName,
             /* [in] */ long nSearchFlags,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retVal);
+            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retVal) override;
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE queryDispatches(
             /* [in] */ SAFEARRAY __RPC_FAR * aDescripts,
-            /* [retval][out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *retVal);
+            /* [retval][out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *retVal) override;
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE dispatch(
             /* [in] */ IDispatch __RPC_FAR *aURL,
-            /* [in] */ SAFEARRAY __RPC_FAR * aArgs);
+            /* [in] */ SAFEARRAY __RPC_FAR * aArgs) override;
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE addStatusListener(
             /* [in] */ IDispatch __RPC_FAR *xControl,
-            /* [in] */ IDispatch __RPC_FAR *aURL);
+            /* [in] */ IDispatch __RPC_FAR *aURL) override;
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeStatusListener(
             /* [in] */ IDispatch __RPC_FAR *xControl,
-            /* [in] */ IDispatch __RPC_FAR *aURL);
+            /* [in] */ IDispatch __RPC_FAR *aURL) override;
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getInterceptedURLs(
-            /* [retval][out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *pVal);
+            /* [retval][out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *pVal) override;
 
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Bridge_implementedInterfaces(
-            /* [retval][out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *pVal)
+            /* [retval][out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *pVal) override
         {
             *pVal = SafeArrayCreateVector( VT_BSTR, 0, 4 );
 

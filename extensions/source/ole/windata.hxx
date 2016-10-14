@@ -61,13 +61,13 @@ public:
 
     explicit VarDesc(ITypeInfo* pTypeInfo) :
       m_pTypeInfo(pTypeInfo),
-      m_pVarDesc(NULL)
+      m_pVarDesc(nullptr)
    {
        OSL_ASSERT(pTypeInfo);
    }
    ~VarDesc()
    {
-      if (m_pVarDesc != NULL)
+      if (m_pVarDesc != nullptr)
       {
          m_pTypeInfo->ReleaseVarDesc(m_pVarDesc);
       }
@@ -101,7 +101,7 @@ public:
 
     explicit FuncDesc(ITypeInfo * pTypeInfo) :
         m_pTypeInfo(pTypeInfo),
-        m_pFuncDesc(NULL)
+        m_pFuncDesc(nullptr)
         {
             OSL_ASSERT(pTypeInfo);
         }
@@ -134,17 +134,17 @@ public:
     FUNCDESC* Detach()
     {
         FUNCDESC* pDesc = m_pFuncDesc;
-        m_pFuncDesc = NULL;
+        m_pFuncDesc = nullptr;
         return pDesc;
     }
 
     void ReleaseFUNCDESC()
     {
-        if (m_pFuncDesc != NULL)
+        if (m_pFuncDesc != nullptr)
         {
             m_pTypeInfo->ReleaseFuncDesc(m_pFuncDesc);
         }
-        m_pFuncDesc = NULL;
+        m_pFuncDesc = nullptr;
     }
 };
 //Wrapper for EXCEPINFO structure
@@ -159,11 +159,11 @@ public:
    }
    ~ExcepInfo()
    {
-         if (bstrSource != NULL)
+         if (bstrSource != nullptr)
          ::SysFreeString(bstrSource);
-      if (bstrDescription != NULL)
+      if (bstrDescription != nullptr)
         ::SysFreeString(bstrDescription);
-      if (bstrHelpFile != NULL)
+      if (bstrHelpFile != nullptr)
         ::SysFreeString(bstrHelpFile);
    }
 };
@@ -179,13 +179,13 @@ public:
 
     explicit TypeAttr(ITypeInfo* pTypeInfo) :
       m_pTypeInfo( pTypeInfo ),
-      m_pTypeAttr( NULL )
+      m_pTypeAttr( nullptr )
    {
        OSL_ASSERT(pTypeInfo);
    }
    ~TypeAttr() throw()
    {
-        if (m_pTypeAttr != NULL)
+        if (m_pTypeAttr != nullptr)
         {
             m_pTypeInfo->ReleaseTypeAttr(m_pTypeAttr);
         }

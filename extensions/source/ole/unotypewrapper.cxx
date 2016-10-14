@@ -114,7 +114,7 @@ STDMETHODIMP UnoTypeWrapper::Invoke( DISPID dispIdMember,
                          EXCEPINFO* /*pExcepInfo*/,
                          UINT* /*puArgErr*/)
 {
-    if (pDispParams == NULL)
+    if (pDispParams == nullptr)
         return DISP_E_EXCEPTION;
 
     if( pDispParams->cNamedArgs)
@@ -127,7 +127,7 @@ STDMETHODIMP UnoTypeWrapper::Invoke( DISPID dispIdMember,
     case DISPID_VALUE: // DISPID_VALUE
         if (wFlags & DISPATCH_PROPERTYGET)
         {
-            if (pVarResult == NULL)
+            if (pVarResult == nullptr)
             {
                 ret = E_POINTER;
                 break;
