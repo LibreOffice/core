@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchRecorder.hpp>
 #include <com/sun/star/frame/DispatchRecorderSupplier.hpp>
+#include <com/sun/star/frame/InfobarType.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -1300,7 +1301,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     sal_Int32 iLast = sLastVersion.getToken(0,'.').toInt32() * 10 + sLastVersion.getToken(1,'.').toInt32();
                     if ((iCurrent > iLast) && !Application::IsHeadlessModeEnabled() && !bIsUITest)
                     {
-                        VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", SfxResId(STR_WHATSNEW_TEXT), InfoBarType::Info);
+                        VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", "", SfxResId(STR_WHATSNEW_TEXT), InfobarType_Info);
                         if (pInfoBar)
                         {
                             VclPtrInstance<PushButton> xWhatsNewButton(&GetWindow());
@@ -1342,7 +1343,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     bUpdateLastTimeGetInvolvedShown = true;
 
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("getinvolved", SfxResId(STR_GET_INVOLVED_TEXT), InfoBarType::Info);
+                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("getinvolved", "", SfxResId(STR_GET_INVOLVED_TEXT), InfobarType_Info);
 
                     VclPtrInstance<PushButton> xGetInvolvedButton(&GetWindow());
                     xGetInvolvedButton->SetText(SfxResId(STR_GET_INVOLVED_BUTTON));
@@ -1369,7 +1370,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     bUpdateLastTimeDonateShown = true;
 
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("donate", SfxResId(STR_DONATE_TEXT), InfoBarType::Info);
+                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("donate", "", SfxResId(STR_DONATE_TEXT), InfobarType_Info);
 
                     VclPtrInstance<PushButton> xDonateButton(&GetWindow());
                     xDonateButton->SetText(SfxResId(STR_DONATE_BUTTON));
@@ -1396,7 +1397,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     bool bSignPDF = IsSignPDF(m_xObjSh);
 
-                    auto pInfoBar = AppendInfoBar("readonly", SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT), InfoBarType::Info);
+                    auto pInfoBar = AppendInfoBar("readonly", "", SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT), InfobarType_Info);
                     if (pInfoBar)
                     {
                         if (bSignPDF)
@@ -3283,22 +3284,23 @@ void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
 }
 
 VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar(const OUString& sId,
-                                               const OUString& sMessage,
-                                               InfoBarType aInfoBarType)
+                                               const OUString& sPrimaryMessage,
+                                               const OUString& sSecondaryMessage,
+                                               InfobarType aInfobarType, bool bShowCloseButton)
 {
     SfxChildWindow* pChild = GetChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
     if (!pChild)
         return nullptr;
 
     SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
-    auto pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, aInfoBarType, WB_LEFT | WB_VCENTER);
+    auto pInfoBar = pInfoBarContainer->appendInfoBar(sId, sPrimaryMessage, sSecondaryMessage,
+                                                     aInfobarType, WB_LEFT | WB_VCENTER, bShowCloseButton);
     ShowChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
     return pInfoBar;
 }
 
-void SfxViewFrame::UpdateInfoBar( const OUString& sId,
-                           const OUString& sMessage,
-                           InfoBarType eType )
+void SfxViewFrame::UpdateInfoBar(const OUString& sId, const OUString& sPrimaryMessage,
+                                 const OUString& sSecondaryMessage, InfobarType eType)
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 
@@ -3313,7 +3315,7 @@ void SfxViewFrame::UpdateInfoBar( const OUString& sId,
         auto pInfoBar = pInfoBarContainer->getInfoBar(sId);
 
         if (pInfoBar)
-             pInfoBar->Update(sMessage, eType);
+             pInfoBar->Update(sPrimaryMessage, sSecondaryMessage, eType);
     }
 }
 
