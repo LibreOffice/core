@@ -47,7 +47,7 @@ namespace
 
     CTRL_SETVALUE_FUNCTION_T ListboxSetValueFunctionTable[] =
     {
-        NULL,
+        nullptr,
         ListboxAddItem,
         ListboxAddItems,
         ListboxDeleteItem,
@@ -59,12 +59,12 @@ namespace
 
     CTRL_GETVALUE_FUNCTION_T ListboxGetValueFunctionTable[] =
     {
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
         ListboxGetItems,
         ListboxGetSelectedItem,
         ListboxGetSelectedItemIndex
@@ -72,28 +72,28 @@ namespace
     const size_t SIZE_LISTBOX_GETVALUE_ACTION_TABLE =
         SAL_N_ELEMENTS( ListboxGetValueFunctionTable );
 
-    struct _ENTRY
+    struct ENTRY
     {
         LPVOID lpFunctionTable;
         size_t TableSize;
     };
 
     // an array of function tables, one for each control class
-    _ENTRY CtrlClassSetValueFunctionTable[] =
+    ENTRY CtrlClassSetValueFunctionTable[] =
     {
-        { NULL, 0 },
+        { nullptr, 0 },
         { CheckboxSetValueFunctionTable, SIZE_CHECKBOX_SETVALUE_FUNCTION_TABLE },
         { ListboxSetValueFunctionTable, SIZE_LISTBOX_SETVALUE_FUNCTION_TABLE },
-        { NULL, 0 }
+        { nullptr, 0 }
     };
 
     // an array of function tables, one for each control class
-    _ENTRY CtrlClassGetValueFunctionTable[] =
+    ENTRY CtrlClassGetValueFunctionTable[] =
     {
-        { NULL, 0 },
+        { nullptr, 0 },
         { CheckboxGetValueFunctionTable, SIZE_CHECKBOX_GETVALUE_FUNCTION_TABLE },
         { ListboxGetValueFunctionTable, SIZE_LISTBOX_GETVALUE_ACTION_TABLE },
-        { NULL, 0 }
+        { nullptr, 0 }
     };
 
     CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction(
@@ -102,7 +102,7 @@ namespace
         if ( !aCtrlSetValueFunctionTable ||
              aCtrlAction < 0
              || sal::static_int_cast< sal_uInt16 >(aCtrlAction) >= aTableSize )
-            return NULL;
+            return nullptr;
 
         return aCtrlSetValueFunctionTable[aCtrlAction];
     }
@@ -113,19 +113,19 @@ namespace
         if ( !aCtrlGetValueFunctionTable ||
              aCtrlAction < 0 ||
              sal::static_int_cast< sal_uInt16 >(aCtrlAction) >= aTableSize )
-            return NULL;
+            return nullptr;
 
         return aCtrlGetValueFunctionTable[aCtrlAction];
     }
 
     inline
-    _ENTRY SAL_CALL GetCtrlClassSetValueFunctionTable( CTRL_CLASS aCtrlClass )
+    ENTRY SAL_CALL GetCtrlClassSetValueFunctionTable( CTRL_CLASS aCtrlClass )
     {
         return CtrlClassSetValueFunctionTable[aCtrlClass];
     }
 
     inline
-    _ENTRY SAL_CALL GetCtrlClassGetValueFunctionTable( CTRL_CLASS aCtrlClass )
+    ENTRY SAL_CALL GetCtrlClassGetValueFunctionTable( CTRL_CLASS aCtrlClass )
     {
         return CtrlClassGetValueFunctionTable[aCtrlClass];
     }
@@ -147,22 +147,22 @@ namespace
 
 CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction( CTRL_CLASS aCtrlClass, sal_Int16 aCtrlAction )
 {
-    _ENTRY aEntry =
+    ENTRY aEntry =
         GetCtrlClassSetValueFunctionTable( aCtrlClass );
 
     return GetCtrlSetValueFunction(
-        reinterpret_cast< CTRL_SETVALUE_FUNCTION_T* >( aEntry.lpFunctionTable ),
+        static_cast< CTRL_SETVALUE_FUNCTION_T* >( aEntry.lpFunctionTable ),
         aEntry.TableSize,
         aCtrlAction );
 }
 
 CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass, sal_Int16 aCtrlAction )
 {
-    _ENTRY aEntry =
+    ENTRY aEntry =
         GetCtrlClassGetValueFunctionTable( aCtrlClass );
 
     return GetCtrlGetValueFunction(
-        reinterpret_cast< CTRL_GETVALUE_FUNCTION_T* >( aEntry.lpFunctionTable ),
+        static_cast< CTRL_GETVALUE_FUNCTION_T* >( aEntry.lpFunctionTable ),
         aEntry.TableSize,
         aCtrlAction );
 }

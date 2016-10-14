@@ -31,7 +31,7 @@ using ::com::sun::star::ui::dialogs::XFilePickerListener;
 
 
 CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelper) :
-    m_hThread(0),
+    m_hThread(nullptr),
     m_bRun(false),
     m_ThreadId(0),
     m_rBroadcastHelper(rBroadcastHelper),
@@ -39,22 +39,22 @@ CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelpe
     m_ResumeNotifying(m_hEvents[1])
 {
     // m_NotifyEvent
-    m_hEvents[0] = CreateEvent(0,       /* no security */
+    m_hEvents[0] = CreateEvent(nullptr, /* no security */
                                true,    /* manual reset */
                                false,   /* initial state not signaled */
-                               0);      /* automatic name */
+                               nullptr); /* automatic name */
 
     // m_ResumeNotifying
-    m_hEvents[1] = CreateEvent(0,       /* no security */
+    m_hEvents[1] = CreateEvent(nullptr, /* no security */
                                true,    /* manual reset */
                                false,   /* initial state not signaled */
-                               0);      /* automatic name */
+                               nullptr); /* automatic name */
 }
 
 
 CAsyncEventNotifier::~CAsyncEventNotifier()
 {
-    OSL_ENSURE(0 == m_hThread,"Thread not stopped, destroying this instance leads to desaster");
+    OSL_ENSURE(nullptr == m_hThread,"Thread not stopped, destroying this instance leads to desaster");
 
     CloseHandle(m_hEvents[0]);
     CloseHandle(m_hEvents[1]);
@@ -98,10 +98,10 @@ bool SAL_CALL CAsyncEventNotifier::startup(bool bCreateSuspended)
         if (!bCreateSuspended)
             SetEvent(m_ResumeNotifying);
 
-        m_hThread = (HANDLE)_beginthreadex(
-            NULL, 0, CAsyncEventNotifier::ThreadProc, this, 0, &m_ThreadId);
+        m_hThread = reinterpret_cast<HANDLE>(_beginthreadex(
+            nullptr, 0, CAsyncEventNotifier::ThreadProc, this, 0, &m_ThreadId));
 
-        OSL_ASSERT(0 != m_hThread);
+        OSL_ASSERT(nullptr != m_hThread);
 
         if (m_hThread)
             m_bRun = true;
@@ -144,7 +144,7 @@ void SAL_CALL CAsyncEventNotifier::shutdown()
     aGuard.reset();
 
     CloseHandle(m_hThread);
-    m_hThread = 0;
+    m_hThread = nullptr;
 }
 
 
@@ -250,7 +250,7 @@ unsigned int WINAPI CAsyncEventNotifier::ThreadProc(LPVOID pParam)
 {
     osl_setThreadName("fpicker CAsyncEventNotifier::run()");
 
-    CAsyncEventNotifier* pInst = reinterpret_cast< CAsyncEventNotifier* >(pParam);
+    CAsyncEventNotifier* pInst = static_cast< CAsyncEventNotifier* >(pParam);
     OSL_ASSERT(pInst);
 
     pInst->run();

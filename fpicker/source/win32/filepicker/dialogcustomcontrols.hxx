@@ -36,8 +36,8 @@ class CDummyCustomControl : public CCustomControl
 public:
     CDummyCustomControl(HWND aControlHandle, HWND aParentHandle);
 
-    virtual void SAL_CALL Align();
-    virtual void SAL_CALL SetFont(HFONT hFont);
+    virtual void SAL_CALL Align() override;
+    virtual void SAL_CALL SetFont(HFONT hFont) override;
 };
 
 
@@ -46,7 +46,7 @@ class CDialogCustomControlBase : public CCustomControl
 protected:
     CDialogCustomControlBase(HWND aControlHandle, HWND aParentHandle);
 
-    virtual void SAL_CALL SetFont(HFONT hFont);
+    virtual void SAL_CALL SetFont(HFONT hFont) override;
 
     // aligns the specific control class to a reference
     // buddy
@@ -64,7 +64,7 @@ class CStaticCustomControl : public CDialogCustomControlBase
 public:
     CStaticCustomControl(HWND aControlHandle, HWND aParentHandle);
 
-    virtual void SAL_CALL Align();
+    virtual void SAL_CALL Align() override;
 };
 
 
@@ -73,7 +73,7 @@ class CPushButtonCustomControl : public CDialogCustomControlBase
 public:
     CPushButtonCustomControl(HWND aControlHandle, HWND aParentHandle);
 
-    virtual void SAL_CALL Align();
+    virtual void SAL_CALL Align() override;
 };
 
 
@@ -82,7 +82,7 @@ class CComboboxCustomControl : public CDialogCustomControlBase
 public:
     CComboboxCustomControl(HWND aControlHandle, HWND aParentHandle);
 
-    virtual void SAL_CALL Align();
+    virtual void SAL_CALL Align() override;
 };
 
 
@@ -91,7 +91,7 @@ class CCheckboxCustomControl : public CDialogCustomControlBase
 public:
     CCheckboxCustomControl(HWND aControlHandle, HWND aParentHandle);
 
-    virtual void SAL_CALL Align();
+    virtual void SAL_CALL Align() override;
 };
 
 #endif

@@ -47,16 +47,16 @@ public:
 
 
     virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory )
-        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException ) override;
 
     virtual OUString SAL_CALL getDisplayDirectory( )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException ) override;
 
     virtual OUString SAL_CALL getDirectory( )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException ) override;
 
 protected:
-    virtual void SAL_CALL onSelChanged( const OUString& aNewPath );
+    virtual void SAL_CALL onSelChanged( const OUString& aNewPath ) override;
 
 private:
     CFolderPicker*  m_pFolderPicker;

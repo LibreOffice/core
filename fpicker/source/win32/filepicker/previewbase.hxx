@@ -57,22 +57,22 @@ public:
     virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage )
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL setShowState( sal_Bool bShowState )
+    virtual bool SAL_CALL setShowState( bool bShowState )
         throw (css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL getShowState()
+    virtual bool SAL_CALL getShowState()
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL getImage(sal_Int16& aImageFormat,css::uno::Any& aImage);
 
-    sal_Bool SAL_CALL getImaginaryShowState() const;
+    bool SAL_CALL getImaginaryShowState() const;
 
     virtual HWND SAL_CALL getWindowHandle() const;
 
 protected:
     css::uno::Any m_ImageData;
     sal_Int16     m_ImageFormat;
-    sal_Bool      m_bShowState;
+    bool          m_bShowState;
 };
 
 
