@@ -112,7 +112,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     // SetExtent() is called only for objects that require it,
     // it should not be called for MSWord documents to workaround problem i49369
     // If cached size is not set, that means that this is the size initialization, so there is no need to set the real size
-    sal_Bool bAllowToSetExtent =
+    bool bAllowToSetExtent =
       ( ( getStatus( nAspect ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE )
       && !MimeConfigurationHelper::ClassIDsEqual(m_aClassID, MimeConfigurationHelper::GetSequenceClassID(MSO_WW8_CLASSID))
       && m_bHasCachedSize );
@@ -136,12 +136,12 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
         aGuard.clear();
         try {
             m_pOleComponent->SetExtent( aSizeToSet, nAspect ); // will throw an exception in case of failure
-            m_bHasSizeToSet = sal_False;
+            m_bHasSizeToSet = false;
         }
         catch( const uno::Exception& )
         {
             // some objects do not allow to set the size even in running state
-            m_bHasSizeToSet = sal_True;
+            m_bHasSizeToSet = true;
             m_aSizeToSet = aSizeToSet;
             m_nAspectToSet = nAspect;
         }
@@ -205,7 +205,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 
                 bool bBackToLoaded = false;
 
-                sal_Bool bSuccess = sal_False;
+                bool bSuccess = false;
                 if ( getCurrentState() == embed::EmbedStates::LOADED )
                 {
                     SAL_WARN( "embeddedobj.ole", "Loaded object has no cached size!" );
@@ -229,7 +229,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 {
                     // first try to get size using replacement image
                     aSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
-                    bSuccess = sal_True;
+                    bSuccess = true;
                 }
                 catch( const uno::Exception& )
                 {
@@ -255,7 +255,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                     {
                         // second try the cached replacement image
                         aSize = m_pOleComponent->GetCachedExtent( nAspect ); // will throw an exception in case of failure
-                        bSuccess = sal_True;
+                        bSuccess = true;
                     }
                     catch( const uno::Exception& )
                     {
@@ -268,7 +268,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                     {
                         // third try the size reported by the object
                         aSize = m_pOleComponent->GetReccomendedExtent( nAspect ); // will throw an exception in case of failure
-                        bSuccess = sal_True;
+                        bSuccess = true;
                     }
                     catch( const uno::Exception& )
                     {
@@ -284,7 +284,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 
                 m_aCachedSize = aSize;
                 m_nCachedAspect = nAspect;
-                m_bHasCachedSize = sal_True;
+                m_bHasCachedSize = true;
 
                 aResult = m_aCachedSize;
             }

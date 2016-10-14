@@ -108,31 +108,31 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 
 // this constructor let object be initialized from clipboard
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-: m_pOleComponent( NULL )
-, m_pInterfaceContainer( NULL )
-, m_bReadOnly( sal_False )
+: m_pOleComponent( nullptr )
+, m_pInterfaceContainer( nullptr )
+, m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
 , m_nUpdateMode( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xFactory( xFactory )
-, m_bWaitSaveCompleted( sal_False )
-, m_bNewVisReplInStream( sal_True )
-, m_bStoreLoaded( sal_False )
-, m_bVisReplInitialized( sal_False )
-, m_bVisReplInStream( sal_False )
-, m_bStoreVisRepl( sal_False )
-, m_bIsLink( sal_False )
-, m_bHasCachedSize( sal_False )
+, m_bWaitSaveCompleted( false )
+, m_bNewVisReplInStream( true )
+, m_bStoreLoaded( false )
+, m_bVisReplInitialized( false )
+, m_bVisReplInStream( false )
+, m_bStoreVisRepl( false )
+, m_bIsLink( false )
+, m_bHasCachedSize( false )
 , m_nCachedAspect( 0 )
-, m_bHasSizeToSet( sal_False )
+, m_bHasSizeToSet( false )
 , m_nAspectToSet( 0 )
-, m_bGotStatus( sal_False )
+, m_bGotStatus( false )
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
-, m_pOwnView( NULL )
-, m_bFromClipboard( sal_True )
-, m_bTriedConversion( sal_False )
+, m_pOwnView( nullptr )
+, m_bFromClipboard( true )
+, m_bTriedConversion( false )
 {
 }
 #endif
@@ -185,13 +185,13 @@ void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEve
 }
 #ifdef _WIN32
 
-void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState )
+void OleEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState )
 {
     if ( m_pInterfaceContainer )
     {
         ::cppu::OInterfaceContainerHelper* pContainer = m_pInterfaceContainer->getContainer(
                             cppu::UnoType<embed::XStateChangeListener>::get());
-        if ( pContainer != NULL )
+        if ( pContainer != nullptr )
         {
             lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
             ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -202,7 +202,7 @@ void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sa
                 {
                     try
                     {
-                        ((embed::XStateChangeListener*)pIterator.next())->changingState( aSource, nOldState, nNewState );
+                        static_cast<embed::XStateChangeListener*>(pIterator.next())->changingState( aSource, nOldState, nNewState );
                     }
                     catch( const uno::Exception& )
                     {
@@ -213,7 +213,7 @@ void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sa
                 {
                        try
                     {
-                        ((embed::XStateChangeListener*)pIterator.next())->stateChanged( aSource, nOldState, nNewState );
+                        static_cast<embed::XStateChangeListener*>(pIterator.next())->stateChanged( aSource, nOldState, nNewState );
                     }
                     catch( const uno::Exception& )
                     {
@@ -237,7 +237,7 @@ void OleEmbeddedObject::GetRidOfComponent()
         m_pOleComponent->removeCloseListener( m_xClosePreventer );
         try
         {
-            m_pOleComponent->close( sal_False );
+            m_pOleComponent->close( false );
         }
         catch( const uno::Exception& )
         {
@@ -249,7 +249,7 @@ void OleEmbeddedObject::GetRidOfComponent()
 
         m_pOleComponent->disconnectEmbeddedObject();
         m_pOleComponent->release();
-        m_pOleComponent = NULL;
+        m_pOleComponent = nullptr;
     }
 #endif
 }
@@ -386,7 +386,7 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     }
 
 #if defined(_WIN32)
-    if (m_pOleComponent != 0)
+    if (m_pOleComponent != nullptr)
     {
         return uno::Reference< util::XCloseable >( static_cast< ::cppu::OWeakObject* >( m_pOleComponent ), uno::UNO_QUERY );
     }

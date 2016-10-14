@@ -484,7 +484,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
 
         sal_Int32 nOldState = m_nObjectState;
         aGuard.clear();
-        StateChangeNotification_Impl( sal_True, nOldState, nNewState );
+        StateChangeNotification_Impl( true, nOldState, nNewState );
         aGuard.reset();
 
         try
@@ -506,7 +506,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 }
 
                 aGuard.clear();
-                StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+                StateChangeNotification_Impl( false, nOldState, m_nObjectState );
                 aGuard.reset();
             }
             else if ( nNewState == embed::EmbedStates::RUNNING || nNewState == embed::EmbedStates::ACTIVE )
@@ -523,7 +523,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                     SwitchComponentToRunningState_Impl();
                     m_nObjectState = embed::EmbedStates::RUNNING;
                     aGuard.clear();
-                    StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+                    StateChangeNotification_Impl( false, nOldState, m_nObjectState );
                     aGuard.reset();
 
                     if ( m_pOleComponent && m_bHasSizeToSet )
@@ -531,7 +531,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                         aGuard.clear();
                         try {
                             m_pOleComponent->SetExtent( m_aSizeToSet, m_nAspectToSet );
-                            m_bHasSizeToSet = sal_False;
+                            m_bHasSizeToSet = false;
                         }
                         catch( const uno::Exception& ) {}
                         aGuard.reset();
@@ -556,7 +556,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                         aGuard.clear();
                         try {
                             m_pOleComponent->SetExtent( m_aSizeToSet, m_nAspectToSet );
-                            m_bHasSizeToSet = sal_False;
+                            m_bHasSizeToSet = false;
                         }
                         catch( uno::Exception& ) {}
                         aGuard.reset();
@@ -583,7 +583,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         catch( uno::Exception& )
         {
             aGuard.clear();
-            StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+            StateChangeNotification_Impl( false, nOldState, m_nObjectState );
             throw;
         }
     }
@@ -803,7 +803,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             m_pOleComponent->ExecuteVerb( nVerbID );
 
             // ==== the STAMPIT related solution =============================
-            sal_Bool bModifiedOnExecution = m_aVerbExecutionController.EndControlExecution_WasModified();
+            bool bModifiedOnExecution = m_aVerbExecutionController.EndControlExecution_WasModified();
 
             // this workaround is implemented for STAMPIT object
             // if object was modified during verb execution it is saved here
@@ -818,7 +818,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
 
             aGuard.clear();
-            StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+            StateChangeNotification_Impl( false, nOldState, m_nObjectState );
             throw;
         }
 
@@ -1081,7 +1081,7 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
 
         m_nStatus = m_pOleComponent->GetMiscStatus( nAspect );
         m_nStatusAspect = nAspect;
-        m_bGotStatus = sal_True;
+        m_bGotStatus = true;
         nResult = m_nStatus;
     }
 #endif

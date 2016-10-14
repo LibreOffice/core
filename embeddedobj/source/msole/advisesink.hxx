@@ -38,15 +38,15 @@ public:
     virtual ~OleWrapperAdviseSink();
 
     void disconnectOleComponent();
-    STDMETHODIMP QueryInterface(REFIID, void**);
-    STDMETHODIMP_(ULONG) AddRef();
-    STDMETHODIMP_(ULONG) Release();
+    STDMETHODIMP QueryInterface(REFIID, void**) override;
+    STDMETHODIMP_(ULONG) AddRef() override;
+    STDMETHODIMP_(ULONG) Release() override;
 
-    STDMETHODIMP_(void)  OnDataChange(LPFORMATETC, LPSTGMEDIUM);
-    STDMETHODIMP_(void)  OnViewChange(DWORD, LONG);
-    STDMETHODIMP_(void)  OnRename(LPMONIKER);
-    STDMETHODIMP_(void)  OnSave();
-    STDMETHODIMP_(void)  OnClose();
+    STDMETHODIMP_(void)  OnDataChange(LPFORMATETC, LPSTGMEDIUM) override;
+    STDMETHODIMP_(void)  OnViewChange(DWORD, LONG) override;
+    STDMETHODIMP_(void)  OnRename(LPMONIKER) override;
+    STDMETHODIMP_(void)  OnSave() override;
+    STDMETHODIMP_(void)  OnClose() override;
 };
 
 #endif
