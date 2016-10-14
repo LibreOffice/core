@@ -714,7 +714,7 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
     gtk_style_context_get_padding( mpButtonStyle, gtk_style_context_get_state(mpButtonStyle), &padding);
 
     gint nArrowWidth = FALLBACK_ARROW_SIZE;
-    if (gtk_check_version(3, 19, 2) == nullptr)
+    if (gtk_check_version(3, 20, 0) == nullptr)
     {
         gtk_style_context_get(mpComboboxButtonArrowStyle,
             gtk_style_context_get_state(mpComboboxButtonArrowStyle),
@@ -775,7 +775,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
         aEditBoxRect.SetPos( Point( areaRect.Left() + buttonRect.GetWidth(), areaRect.Top() ) );
 
     gint arrow_width = FALLBACK_ARROW_SIZE, arrow_height = FALLBACK_ARROW_SIZE;
-    if (gtk_check_version(3, 19, 2) == nullptr)
+    if (gtk_check_version(3, 20, 0) == nullptr)
     {
         if (nType == ControlType::Combobox)
         {
@@ -1311,7 +1311,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             renderType = RenderType::BackgroundAndFrame;
             break;
         case ControlPart::MenuItemCheckMark:
-            if (gtk_check_version(3, 19, 2) == nullptr)
+            if (gtk_check_version(3, 20, 0) == nullptr)
                 context = mpCheckMenuItemStyle;
             else
             {
@@ -1326,7 +1326,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             }
             break;
         case ControlPart::MenuItemRadioMark:
-            if (gtk_check_version(3, 19, 2) == nullptr)
+            if (gtk_check_version(3, 20, 0) == nullptr)
                 context = mpRadioMenuItemStyle;
             else
             {
@@ -1346,7 +1346,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             renderType = RenderType::MenuSeparator;
             break;
         case ControlPart::SubmenuArrow:
-            if (gtk_check_version(3, 19, 2) == nullptr)
+            if (gtk_check_version(3, 20, 0) == nullptr)
                 context = mpMenuItemArrowStyle;
             else
             {
@@ -1506,7 +1506,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     if (nType == ControlType::TabItem)
     {
         GtkBorder margin;
-        if (gtk_check_version(3, 19, 2) == nullptr)
+        if (gtk_check_version(3, 20, 0) == nullptr)
         {
             gtk_style_context_get_margin(mpNotebookHeaderTabsTabStyle,
                                          gtk_style_context_get_state(mpNotebookHeaderTabsTabStyle), &margin);
@@ -2095,7 +2095,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetVisitedLinkColor(getColor(text_color));
 #endif
 
-    if (gtk_check_version(3, 19, 2) == nullptr)
+    if (gtk_check_version(3, 20, 0) == nullptr)
     {
         GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabStyle;
 

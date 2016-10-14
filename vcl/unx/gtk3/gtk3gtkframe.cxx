@@ -2070,8 +2070,8 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
     if (!m_pWindow)
         return;
 
-#if GTK_CHECK_VERSION(3, 19, 2)
-    if (gtk_check_version(3, 19, 2) == nullptr)
+#if GTK_CHECK_VERSION(3, 20, 0)
+    if (gtk_check_version(3, 20, 0) == nullptr)
     {
         GdkSeat* pSeat = gdk_display_get_default_seat(getGdkDisplay());
         if (bGrab)
