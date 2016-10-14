@@ -238,7 +238,7 @@ public:
     }
 
 protected:
-    virtual void SAL_CALL run()
+    virtual void SAL_CALL run() override
     {
         osl_setThreadName("dbaui::ProcessTerminationWait");
 
@@ -271,8 +271,8 @@ bool OOdbcManagement::manageDataSources_async()
     // (and note this whole functionality is supported on Windows only, ATM)
     OUString sExecutableName( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/odbcconfig.exe" );
     ::rtl::Bootstrap::expandMacros( sExecutableName ); //TODO: detect failure
-    oslProcess hProcessHandle(0);
-    oslProcessError eError = osl_executeProcess( sExecutableName.pData, NULL, 0, 0, NULL, NULL, NULL, 0, &hProcessHandle );
+    oslProcess hProcessHandle(nullptr);
+    oslProcessError eError = osl_executeProcess( sExecutableName.pData, nullptr, 0, 0, nullptr, nullptr, nullptr, 0, &hProcessHandle );
     if ( eError != osl_Process_E_None )
         return false;
 

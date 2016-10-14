@@ -59,15 +59,11 @@
 #include <connectivity/CommonTools.hxx>
 #include <sfx2/docfilt.hxx>
 #include "dsnItem.hxx"
-#if defined(_WIN32)
-#define _ADO_DATALINK_BROWSE_
-#endif
 
-#ifdef _ADO_DATALINK_BROWSE_
+#if defined _WIN32
 #include <vcl/sysdata.hxx>
 #include "adodatalinks.hxx"
-#endif //_ADO_DATALINK_BROWSE_
-
+#endif
 
 namespace dbaui
 {
