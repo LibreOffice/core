@@ -61,8 +61,8 @@ namespace dxcanvas
     }
 
     SpriteCanvasHelper::SpriteCanvasHelper() :
-        mpSpriteSurface( NULL ),
-        mpRedrawManager( NULL ),
+        mpSpriteSurface( nullptr ),
+        mpRedrawManager( nullptr ),
         mpRenderModule(),
         mpSurfaceProxy(),
         mpBackBuffer(),
@@ -101,8 +101,8 @@ namespace dxcanvas
 
         mpBackBuffer.reset();
         mpRenderModule.reset();
-        mpRedrawManager = NULL;
-        mpSpriteSurface = NULL;
+        mpRedrawManager = nullptr;
+        mpSpriteSurface = nullptr;
 
         // forward to base
         CanvasHelper::disposing();

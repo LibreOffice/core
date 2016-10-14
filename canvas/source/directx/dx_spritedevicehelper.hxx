@@ -63,8 +63,8 @@ namespace dxcanvas
             const css::geometry::IntegerSize2D&                                        size );
 
         void        destroyBuffers(  );
-        sal_Bool  showBuffer( bool bIsVisible, sal_Bool bUpdateAll );
-        sal_Bool  switchBuffer( bool bIsVisible, sal_Bool bUpdateAll );
+        bool showBuffer( bool bIsVisible, bool bUpdateAll );
+        bool switchBuffer( bool bIsVisible, bool bUpdateAll );
 
         const IDXRenderModuleSharedPtr& getRenderModule() const { return mpRenderModule; }
         const DXSurfaceBitmapSharedPtr& getBackBuffer() const { return mpBackBuffer; }

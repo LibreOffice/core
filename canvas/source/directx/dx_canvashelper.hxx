@@ -236,7 +236,7 @@ namespace dxcanvas
         /// Provides the Gdiplus::Graphics to render into
         GraphicsProviderSharedPtr                  mpGraphicsProvider;
 
-        bool needOutput() const { return mpGraphicsProvider.get() != NULL; };
+        bool needOutput() const { return mpGraphicsProvider.get() != nullptr; };
 
         // returns transparency of color
         void setupGraphicsState( GraphicsSharedPtr&                              rGraphics,

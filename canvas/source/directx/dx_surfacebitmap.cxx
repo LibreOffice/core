@@ -55,12 +55,12 @@ namespace dxcanvas
         // implementation of the 'IColorBuffer' interface
         public:
 
-            virtual sal_uInt8* lock() const;
-            virtual void       unlock() const;
-            virtual sal_uInt32 getWidth() const;
-            virtual sal_uInt32 getHeight() const;
-            virtual sal_uInt32 getStride() const;
-            virtual Format     getFormat() const;
+            virtual sal_uInt8* lock() const override;
+            virtual void       unlock() const override;
+            virtual sal_uInt32 getWidth() const override;
+            virtual sal_uInt32 getHeight() const override;
+            virtual sal_uInt32 getStride() const override;
+            virtual Format     getFormat() const override;
 
         private:
 
@@ -71,9 +71,9 @@ namespace dxcanvas
 
         sal_uInt8* DXColorBuffer::lock() const
         {
-            if(SUCCEEDED(mpSurface->LockRect(&maLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
+            if(SUCCEEDED(mpSurface->LockRect(&maLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 return static_cast<sal_uInt8 *>(maLockedRect.pBits);
-            return NULL;
+            return nullptr;
         }
 
         void DXColorBuffer::unlock() const
@@ -119,12 +119,12 @@ namespace dxcanvas
         // implementation of the 'IColorBuffer' interface
         public:
 
-            virtual sal_uInt8* lock() const;
-            virtual void       unlock() const;
-            virtual sal_uInt32 getWidth() const;
-            virtual sal_uInt32 getHeight() const;
-            virtual sal_uInt32 getStride() const;
-            virtual Format     getFormat() const;
+            virtual sal_uInt8* lock() const override;
+            virtual void       unlock() const override;
+            virtual sal_uInt32 getWidth() const override;
+            virtual sal_uInt32 getHeight() const override;
+            virtual sal_uInt32 getStride() const override;
+            virtual Format     getFormat() const override;
 
         private:
 
@@ -139,14 +139,14 @@ namespace dxcanvas
             aBmpData.Height = maSize.getY();
             aBmpData.Stride = 4*aBmpData.Width;
             aBmpData.PixelFormat = PixelFormat32bppARGB;
-            aBmpData.Scan0 = NULL;
+            aBmpData.Scan0 = nullptr;
             const Gdiplus::Rect aRect( 0,0,aBmpData.Width,aBmpData.Height );
             if( Gdiplus::Ok != mpGDIPlusBitmap->LockBits( &aRect,
                                                           Gdiplus::ImageLockModeRead,
                                                           PixelFormat32bppARGB,
                                                           &aBmpData ) )
             {
-                return NULL;
+                return nullptr;
             }
 
             return static_cast<sal_uInt8*>(aBmpData.Scan0);
@@ -314,7 +314,7 @@ namespace dxcanvas
         BitmapSharedPtr pResult;
 
         D3DLOCKED_RECT aLockedRect;
-        if(SUCCEEDED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
+        if(SUCCEEDED(mpSurface->LockRect(&aLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
         {
             // decide about the format we pass the gdi+, the directx surface is always
             // 32bit, either with or without alpha component.
@@ -324,7 +324,7 @@ namespace dxcanvas
             pResult.reset(new Gdiplus::Bitmap( maSize.getX(),maSize.getY(),
                                                 aLockedRect.Pitch,
                                                 nFormat,
-                                                (BYTE *)aLockedRect.pBits ));
+                                                static_cast<BYTE *>(aLockedRect.pBits) ));
 
             mpSurface->UnlockRect();
         }
@@ -453,7 +453,7 @@ namespace dxcanvas
             uno::Sequence< sal_Int8 > aRes(nWidth*nHeight*4);
 
             D3DLOCKED_RECT aLockedRect;
-            if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
+            if(FAILED(mpSurface->LockRect(&aLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 return uno::Sequence< sal_Int8 >();
             D3DSURFACE_DESC aDesc;
             if(FAILED(mpSurface->GetDesc(&aDesc)))
@@ -461,8 +461,8 @@ namespace dxcanvas
 
             assert(aDesc.Format == D3DFMT_A8R8G8B8 || aDesc.Format == D3DFMT_X8R8G8B8);
 
-            sal_uInt8 *pSrc = (sal_uInt8 *)((((BYTE *)aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1);
-            sal_uInt8 *pDst = (sal_uInt8 *)aRes.getArray();
+            sal_uInt8 *pSrc = (static_cast<BYTE *>(aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1;
+            sal_uInt8 *pDst = reinterpret_cast<sal_uInt8 *>(aRes.getArray());
             sal_uInt32 nSegmentSizeInBytes = nWidth*4;
             for(sal_uInt32 y=0; y<nHeight; ++y)
             {
@@ -474,7 +474,7 @@ namespace dxcanvas
             if(rBitmapLayout.ColorSpace->getComponentTags().getArray()[0] == rendering::ColorComponentTag::RGB_RED &&
                rBitmapLayout.ColorSpace->getComponentTags().getArray()[2] == rendering::ColorComponentTag::RGB_BLUE)
             {
-                pDst = (sal_uInt8 *)aRes.getArray();
+                pDst = reinterpret_cast<sal_uInt8 *>(aRes.getArray());
                 for(sal_uInt32 y=0; y<nHeight; ++y)
                 {
                     sal_uInt8* pPixel = pDst;
@@ -511,7 +511,7 @@ namespace dxcanvas
             aBmpData.Height      = rect.Y2-rect.Y1;
             aBmpData.Stride      = 4*aBmpData.Width;
             aBmpData.PixelFormat = PixelFormat32bppARGB;
-            aBmpData.Scan0       = (void*)data.getConstArray();
+            aBmpData.Scan0       = const_cast<sal_Int8 *>(data.getConstArray());
 
             // TODO(F1): Support more pixel formats natively
 
@@ -536,11 +536,11 @@ namespace dxcanvas
 
             // lock the directx surface to receive the pointer to the surface memory.
             D3DLOCKED_RECT aLockedRect;
-            if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
+            if(FAILED(mpSurface->LockRect(&aLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 throw uno::RuntimeException();
 
-            sal_uInt8 *pSrc = (sal_uInt8 *)data.getConstArray();
-            sal_uInt8 *pDst = (sal_uInt8 *)((((BYTE *)aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1);
+            sal_uInt8 const *pSrc = reinterpret_cast<sal_uInt8 const *>(data.getConstArray());
+            sal_uInt8 *pDst = (static_cast<BYTE *>(aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1;
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
             for(sal_uInt32 y=0; y<nHeight; ++y)
             {
@@ -593,10 +593,10 @@ namespace dxcanvas
 
             // lock the directx surface to receive the pointer to the surface memory.
             D3DLOCKED_RECT aLockedRect;
-            if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
+            if(FAILED(mpSurface->LockRect(&aLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 throw uno::RuntimeException();
 
-            sal_uInt32 *pDst = (sal_uInt32 *)((((BYTE *)aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
+            sal_uInt32 *pDst = reinterpret_cast<sal_uInt32 *>((static_cast<BYTE *>(aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
             *pDst = aColor.GetValue();
             mpSurface->UnlockRect();
         }
@@ -636,10 +636,10 @@ namespace dxcanvas
 
             // lock the directx surface to receive the pointer to the surface memory.
             D3DLOCKED_RECT aLockedRect;
-            if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
+            if(FAILED(mpSurface->LockRect(&aLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 throw uno::RuntimeException();
 
-            sal_uInt32 *pDst = (sal_uInt32 *)((((BYTE *)aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
+            sal_uInt32 *pDst = reinterpret_cast<sal_uInt32 *>((static_cast<BYTE *>(aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
             Gdiplus::Color aColor(*pDst);
             mpSurface->UnlockRect();
 

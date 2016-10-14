@@ -84,7 +84,7 @@ namespace dxcanvas
         {
             // sorry, no BitmapEx here...
             case 0:
-                aRes = css::uno::Any( reinterpret_cast<sal_Int64>( (BitmapEx*) NULL ) );
+                aRes = css::uno::Any( reinterpret_cast<sal_Int64>( nullptr ) );
                 break;
 
             case 1:
@@ -103,7 +103,7 @@ namespace dxcanvas
                 {
                     // need to copy&convert the bitmap, since dx
                     // canvas uses inline alpha channel
-                    HDC hScreenDC=GetDC(NULL);
+                    HDC hScreenDC=GetDC(nullptr);
                     const basegfx::B2IVector aSize(mpBitmap->getSize());
                     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hScreenDC,
                                                                  aSize.getX(),
@@ -132,7 +132,7 @@ namespace dxcanvas
                     aBmpData.Height      = aSize.getY();
                     aBmpData.Stride      = 4*aBmpData.Width;
                     aBmpData.PixelFormat = PixelFormat32bppARGB;
-                    aBmpData.Scan0       = NULL;
+                    aBmpData.Scan0       = nullptr;
                     const Gdiplus::Rect aRect( 0,0,aSize.getX(),aSize.getY() );
                     BitmapSharedPtr pGDIPlusBitmap=mpBitmap->getBitmap();
                     if( Gdiplus::Ok != pGDIPlusBitmap->LockBits( &aRect,
@@ -146,7 +146,7 @@ namespace dxcanvas
 
                     // now aBmpData.Scan0 contains our bits - push
                     // them into HBITMAP, ignoring alpha
-                    SetDIBits( hScreenDC, hBmpBitmap, 0, aSize.getY(), aBmpData.Scan0, (PBITMAPINFO)&aBIH, DIB_RGB_COLORS );
+                    SetDIBits( hScreenDC, hBmpBitmap, 0, aSize.getY(), aBmpData.Scan0, reinterpret_cast<PBITMAPINFO>(&aBIH), DIB_RGB_COLORS );
 
                     pGDIPlusBitmap->UnlockBits( &aBmpData );
 
@@ -170,7 +170,7 @@ namespace dxcanvas
 
                     // need to copy&convert the bitmap, since dx
                     // canvas uses inline alpha channel
-                    HDC hScreenDC=GetDC(NULL);
+                    HDC hScreenDC=GetDC(nullptr);
                     const basegfx::B2IVector aSize(mpBitmap->getSize());
                     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hScreenDC, aSize.getX(), aSize.getY() );
                     if( !hBmpBitmap )
@@ -193,7 +193,7 @@ namespace dxcanvas
                     aBmpData.Height      = aSize.getY();
                     aBmpData.Stride      = 4*aBmpData.Width;
                     aBmpData.PixelFormat = PixelFormat32bppARGB;
-                    aBmpData.Scan0       = NULL;
+                    aBmpData.Scan0       = nullptr;
                     const Gdiplus::Rect aRect( 0,0,aSize.getX(),aSize.getY() );
                     BitmapSharedPtr pGDIPlusBitmap=mpBitmap->getBitmap();
                     if( Gdiplus::Ok != pGDIPlusBitmap->LockBits( &aRect,
@@ -208,7 +208,7 @@ namespace dxcanvas
                     // copy only alpha channel to pAlphaBits
                     const sal_Int32 nScanWidth((aSize.getX() + 3) & ~3);
                     std::unique_ptr<sal_uInt8[]> pAlphaBits( new sal_uInt8[nScanWidth*aSize.getY()] );
-                    const sal_uInt8* pInBits=(sal_uInt8*)aBmpData.Scan0;
+                    const sal_uInt8* pInBits=static_cast<sal_uInt8*>(aBmpData.Scan0);
                     pInBits+=3;
                     for( sal_Int32 y=0; y<aSize.getY(); ++y )
                     {
@@ -225,7 +225,7 @@ namespace dxcanvas
                     // set bits to newly create HBITMAP
                     SetDIBits( hScreenDC, hBmpBitmap, 0,
                                aSize.getY(), pAlphaBits.get(),
-                               (PBITMAPINFO)&aDIB, DIB_RGB_COLORS );
+                               reinterpret_cast<PBITMAPINFO>(&aDIB), DIB_RGB_COLORS );
 
                     uno::Sequence< uno::Any > args(1);
                     args[0] = uno::Any( sal_Int64(hBmpBitmap) );

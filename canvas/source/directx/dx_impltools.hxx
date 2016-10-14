@@ -84,8 +84,7 @@ namespace dxcanvas
         ::basegfx::B2DPoint b2dPointFromGdiPlusPointF( const Gdiplus::PointF& );
         ::basegfx::B2DRange b2dRangeFromGdiPlusRectF( const Gdiplus::RectF& );
 
-        css::uno::Sequence< double > argbToDoubleSequence( const Gdiplus::ARGB& rColor );
-        css::uno::Sequence< sal_Int8 > argbToIntSequence( const Gdiplus::ARGB& rColor );
+        css::uno::Sequence< sal_Int8 > argbToIntSequence( Gdiplus::ARGB rColor );
         Gdiplus::ARGB sequenceToArgb( const css::uno::Sequence< sal_Int8 >& rColor );
         Gdiplus::ARGB sequenceToArgb( const css::uno::Sequence< double >&  rColor );
 

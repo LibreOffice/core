@@ -100,7 +100,7 @@ namespace dxcanvas
 
     CanvasHelper::CanvasHelper() :
         mpGdiPlusUser( GDIPlusUser::createInstance() ),
-        mpDevice( NULL ),
+        mpDevice( nullptr ),
         mpGraphicsProvider(),
         maOutputOffset()
     {
@@ -109,7 +109,7 @@ namespace dxcanvas
     void CanvasHelper::disposing()
     {
         mpGraphicsProvider.reset();
-        mpDevice = NULL;
+        mpDevice = nullptr;
         mpGdiPlusUser.reset();
     }
 
@@ -316,7 +316,7 @@ namespace dxcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokePolyPolygon( const rendering::XCanvas*                            /*pCanvas*/,
@@ -385,7 +385,7 @@ namespace dxcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas*                            /*pCanvas*/,
@@ -396,7 +396,7 @@ namespace dxcanvas
                                                                                            const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
         // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTextureMappedPolyPolygon( const rendering::XCanvas*                           /*pCanvas*/,
@@ -408,7 +408,7 @@ namespace dxcanvas
                                                                                                 const rendering::StrokeAttributes&                  /*strokeAttributes*/ )
     {
         // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas*                            /*pCanvas*/,
@@ -418,7 +418,7 @@ namespace dxcanvas
                                                                                    const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
         // TODO
-        return uno::Reference< rendering::XPolyPolygon2D >(NULL);
+        return uno::Reference< rendering::XPolyPolygon2D >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
@@ -446,7 +446,7 @@ namespace dxcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTextureMappedPolyPolygon( const rendering::XCanvas*                             /*pCanvas*/,
@@ -457,7 +457,7 @@ namespace dxcanvas
                                                                                               const uno::Reference< geometry::XMapping2D >&         /*xMapping*/ )
     {
         // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    /*pCanvas*/,
@@ -531,7 +531,7 @@ namespace dxcanvas
                 "CanvasHelper::drawText(): GDI+ call failed" );
         }
 
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       /*pCanvas*/,
@@ -558,7 +558,7 @@ namespace dxcanvas
                                false );
         }
 
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   /*pCanvas*/,
@@ -595,7 +595,7 @@ namespace dxcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const rendering::XCanvas*                      pCanvas,
@@ -640,14 +640,12 @@ namespace dxcanvas
                                                      pBitmap->GetWidth(),
                                                      pBitmap->GetHeight(),
                                                      Gdiplus::UnitPixel,
-                                                     &aImgAttr,
-                                                     NULL,
-                                                     NULL ),
+                                                     &aImgAttr ),
                 "CanvasHelper::drawBitmapModulated(): GDI+ call failed" );
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XGraphicDevice > CanvasHelper::getDevice()

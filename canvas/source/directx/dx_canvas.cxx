@@ -65,7 +65,7 @@ namespace dxcanvas
         GraphicsSharedPtr mpGraphics;
     public:
         explicit GraphicsProviderImpl( Gdiplus::Graphics* pGraphics ) : mpGraphics( pGraphics ) {}
-        virtual GraphicsSharedPtr getGraphics() { return mpGraphics; }
+        virtual GraphicsSharedPtr getGraphics() override { return mpGraphics; }
     };
 
     Canvas::Canvas( const uno::Sequence< uno::Any >&                aArguments,
@@ -103,7 +103,7 @@ namespace dxcanvas
         sal_Int64 nPtr = 0;
         maArguments[0] >>= nPtr;
         OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
-        ENSURE_ARG_OR_THROW( pOutDev != NULL,"Canvas::initialize: invalid OutDev pointer" );
+        ENSURE_ARG_OR_THROW( pOutDev != nullptr,"Canvas::initialize: invalid OutDev pointer" );
 
         // setup helper
         maDeviceHelper.init( pSysData->hDC, pOutDev, *this );
@@ -164,7 +164,7 @@ namespace dxcanvas
         sal_Int64 nPtr = 0;
         maArguments[0] >>= nPtr;
         OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
-        ENSURE_ARG_OR_THROW( pOutDev != NULL,"Canvas::initialize: invalid OutDev pointer" );
+        ENSURE_ARG_OR_THROW( pOutDev != nullptr,"Canvas::initialize: invalid OutDev pointer" );
 
         // setup helper
         maDeviceHelper.init( pSysData->hDC, pOutDev, *this );
@@ -174,7 +174,7 @@ namespace dxcanvas
         // here. for this, check whether the HDC has a bitmap
         // selected.
         HBITMAP hBmp;
-        hBmp=(HBITMAP)GetCurrentObject(pSysData->hDC, OBJ_BITMAP);
+        hBmp=static_cast<HBITMAP>(GetCurrentObject(pSysData->hDC, OBJ_BITMAP));
         if( !hBmp || GetObjectType(pSysData->hDC) != OBJ_MEMDC )
         {
             throw lang::NoSupportException( "Passed HDC is no mem DC/has no bitmap selected!");
@@ -183,7 +183,7 @@ namespace dxcanvas
         mpTarget.reset( new DXBitmap(
                             BitmapSharedPtr(
                                 Gdiplus::Bitmap::FromHBITMAP(
-                                    hBmp, 0) ),
+                                    hBmp, nullptr) ),
                             false ));
 
         maCanvasHelper.setTarget( mpTarget );
