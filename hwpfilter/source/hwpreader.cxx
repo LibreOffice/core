@@ -1721,7 +1721,7 @@ void HwpReader::makePageStyle()
              if( hwpinfo.back_info.type == 1 ){
 #ifdef _WIN32
                  padd("xlink:href", sXML_CDATA,
-                      reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr((uchar*) urltowin(hwpinfo.back_info.filename).c_str()).c_str())));
+                      reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltowin(hwpinfo.back_info.filename).c_str())).c_str())));
 #else
                  padd("xlink:href", sXML_CDATA,
                     reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(hwpinfo.back_info.filename).c_str())).c_str())));
@@ -3732,7 +3732,7 @@ void HwpReader::makeHyperText(TxtBox * hbox)
           ::std::string const tmp = hstr2ksstr(hypert->bookmark);
           ::std::string const tmp2 = hstr2ksstr(kstr2hstr(
 #ifdef _WIN32
-              (uchar *) urltowin((char *)hypert->filename).c_str()).c_str());
+              reinterpret_cast<uchar const *>(urltowin(reinterpret_cast<char *>(hypert->filename)).c_str())).c_str());
 #else
               reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hypert->filename)).c_str())).c_str());
 #endif
@@ -3891,7 +3891,7 @@ void HwpReader::makePicture(Picture * hbox)
             if ( hbox->pictype == PICTYPE_FILE ){
 #ifdef _WIN32
                 sprintf(buf, "file:///%s", hbox->picinfo.picun.path );
-                padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr((uchar *) buf).c_str())));
+                padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar *>(buf)).c_str())));
 #else
                 padd("xlink:href", sXML_CDATA,
                     reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(hbox->picinfo.picun.path).c_str())).c_str())));
@@ -3926,19 +3926,19 @@ void HwpReader::makePicture(Picture * hbox)
                              wchar_t pathname[200];
 
                              MultiByteToWideChar(CP_ACP, 0, hbox->picinfo.picole.embname, -1, pathname, 200);
-                             int rc = hwpfile.oledata->pis->OpenStorage(pathname, 0,
-                                     STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_TRANSACTED, NULL, 0, &srcsto);
+                             int rc = hwpfile.oledata->pis->OpenStorage(pathname, nullptr,
+                                     STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_TRANSACTED, nullptr, 0, &srcsto);
                              if (rc != S_OK) {
                                  rchars("");
                              }
                              else{
-                                 rc = OleLoad(srcsto, IID_IUnknown, NULL, (LPVOID*)&pObj);
+                                 rc = OleLoad(srcsto, IID_IUnknown, nullptr, reinterpret_cast<LPVOID*>(&pObj));
                                  if( rc != S_OK ){
                                      srcsto->Release();
                                      rchars("");
                                  }
                                  else{
-                                     std::shared_ptr<char> pStr(base64_encode_string( (uchar *)pObj, strlen((char *)pObj)), Free<char>());
+                                     std::shared_ptr<char> pStr(base64_encode_string( reinterpret_cast<uchar *>(pObj), strlen(reinterpret_cast<char *>(pObj))), Free<char>());
                                      rchars(ascii(pStr.get()));
                                      pObj->Release();
                                      srcsto->Release();

@@ -120,7 +120,7 @@ void OlePicture::Read(HWPFile & hwpf)
     char tname[200];
     wchar_t wtname[200];
     tmpnam(tname);
-    if (0 == (fp = fopen(tname, "wb")))
+    if (nullptr == (fp = fopen(tname, "wb")))
     {
          delete [] data;
          return;
@@ -129,10 +129,10 @@ void OlePicture::Read(HWPFile & hwpf)
     delete [] data;
     fclose(fp);
     MultiByteToWideChar(CP_ACP, 0, tname, -1, wtname, 200);
-    if( StgOpenStorage(wtname, NULL,
+    if( StgOpenStorage(wtname, nullptr,
                     STGM_READWRITE|STGM_SHARE_EXCLUSIVE|STGM_TRANSACTED,
-                    NULL, 0, &pis) != S_OK ) {
-         pis = 0;
+                    nullptr, 0, &pis) != S_OK ) {
+         pis = nullptr;
          unlink(tname);
          return;
     }
