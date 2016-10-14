@@ -47,7 +47,7 @@ namespace avmedia { namespace win {
 
 LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
-    Player* pPlayer = (Player*) ::GetWindowLongPtr( hWnd, 0 );
+    Player* pPlayer = reinterpret_cast<Player*>(::GetWindowLongPtr( hWnd, 0 ));
     bool    bProcessed = true;
 
     if( pPlayer )
@@ -73,7 +73,7 @@ bool isWindowsVistaOrHigher()
 {
 // the Win32 SDK 8.1 deprecates GetVersionEx()
 #ifdef _WIN32_WINNT_WINBLUE
-    return IsWindowsVistaOrGreater() ? true : false;
+    return IsWindowsVistaOrGreater();
 #else
     // POST: return true if we are at least on Windows Vista
     OSVERSIONINFO osvi;
@@ -88,23 +88,23 @@ bool isWindowsVistaOrHigher()
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     Player_BASE(m_aMutex),
     mxMgr( rxMgr ),
-    mpGB( NULL ),
-    mpOMF( NULL ),
-    mpMC( NULL ),
-    mpME( NULL ),
-    mpMS( NULL ),
-    mpMP( NULL ),
-    mpBA( NULL ),
-    mpBV( NULL ),
-    mpVW( NULL ),
-    mpEV( NULL ),
+    mpGB( nullptr ),
+    mpOMF( nullptr ),
+    mpMC( nullptr ),
+    mpME( nullptr ),
+    mpMS( nullptr ),
+    mpMP( nullptr ),
+    mpBA( nullptr ),
+    mpBV( nullptr ),
+    mpVW( nullptr ),
+    mpEV( nullptr ),
     mnUnmutedVolume( 0 ),
-    mnFrameWnd( 0 ),
+    mnFrameWnd( nullptr ),
     mbMuted( false ),
     mbLooping( false ),
     mbAddWindow( true )
 {
-    ::CoInitialize( NULL );
+    ::CoInitialize( nullptr );
 }
 
 
@@ -161,31 +161,31 @@ bool Player::create( const OUString& rURL )
     HRESULT hR;
     bool    bRet = false;
 
-    if( SUCCEEDED( hR = CoCreateInstance( CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void**) &mpGB ) ) )
+    if( SUCCEEDED( hR = CoCreateInstance( CLSID_FilterGraph, nullptr, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, reinterpret_cast<void**>(&mpGB) ) ) )
     {
         // Don't use the overlay mixer on Windows Vista
         // It disables the desktop composition as soon as RenderFile is called
         // also causes some other problems: video rendering is not reliable
-        if( !isWindowsVistaOrHigher() && SUCCEEDED( CoCreateInstance( CLSID_OverlayMixer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**) &mpOMF ) ) )
+        if( !isWindowsVistaOrHigher() && SUCCEEDED( CoCreateInstance( CLSID_OverlayMixer, nullptr, CLSCTX_INPROC_SERVER, IID_IBaseFilter, reinterpret_cast<void**>(&mpOMF) ) ) )
         {
             mpGB->AddFilter( mpOMF, L"com_sun_star_media_OverlayMixerFilter" );
 
-            if( !SUCCEEDED( mpOMF->QueryInterface( IID_IDDrawExclModeVideo, (void**) &mpEV ) ) )
-                mpEV = NULL;
+            if( !SUCCEEDED( mpOMF->QueryInterface( IID_IDDrawExclModeVideo, reinterpret_cast<void**>(&mpEV) ) ) )
+                mpEV = nullptr;
         }
 
-        if( SUCCEEDED( hR = mpGB->RenderFile( reinterpret_cast<LPCWSTR>(rURL.getStr()), NULL ) ) &&
-            SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaControl, (void**) &mpMC ) ) &&
-            SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaEventEx, (void**) &mpME ) ) &&
-            SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaSeeking, (void**) &mpMS ) ) &&
-            SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaPosition, (void**) &mpMP ) ) )
+        if( SUCCEEDED( hR = mpGB->RenderFile( reinterpret_cast<LPCWSTR>(rURL.getStr()), nullptr ) ) &&
+            SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaControl, reinterpret_cast<void**>(&mpMC) ) ) &&
+            SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaEventEx, reinterpret_cast<void**>(&mpME) ) ) &&
+            SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaSeeking, reinterpret_cast<void**>(&mpMS) ) ) &&
+            SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaPosition, reinterpret_cast<void**>(&mpMP) ) ) )
         {
             // Video interfaces
-            mpGB->QueryInterface( IID_IVideoWindow, (void**) &mpVW );
-            mpGB->QueryInterface( IID_IBasicVideo, (void**) &mpBV );
+            mpGB->QueryInterface( IID_IVideoWindow, reinterpret_cast<void**>(&mpVW) );
+            mpGB->QueryInterface( IID_IBasicVideo, reinterpret_cast<void**>(&mpBV) );
 
             // Audio interface
-            mpGB->QueryInterface( IID_IBasicAudio, (void**) &mpBA );
+            mpGB->QueryInterface( IID_IBasicAudio, reinterpret_cast<void**>(&mpBA) );
 
             if( mpBA )
                 mpBA->put_Volume( mnUnmutedVolume );
@@ -213,7 +213,7 @@ void Player::setNotifyWnd( HWND nNotifyWnd )
 {
     mbAddWindow = false;
     if( mpME )
-        mpME->SetNotifyWindow( (OAHWND) nNotifyWnd, WM_GRAPHNOTIFY, reinterpret_cast< LONG_PTR>( this ) );
+        mpME->SetNotifyWindow( reinterpret_cast<OAHWND>(nNotifyWnd), WM_GRAPHNOTIFY, reinterpret_cast< LONG_PTR>( this ) );
 }
 
 
@@ -253,31 +253,31 @@ void SAL_CALL Player::start(  )
     {
         if ( mbAddWindow )
         {
-            static WNDCLASS* mpWndClass = NULL;
+            static WNDCLASS* mpWndClass = nullptr;
             if ( !mpWndClass )
             {
                 mpWndClass = new WNDCLASS;
 
                 memset( mpWndClass, 0, sizeof( *mpWndClass ) );
-                mpWndClass->hInstance = GetModuleHandle( NULL );
+                mpWndClass->hInstance = GetModuleHandle( nullptr );
                 mpWndClass->cbWndExtra = sizeof( DWORD );
                 mpWndClass->lpfnWndProc = MediaPlayerWndProc_2;
                 mpWndClass->lpszClassName = "com_sun_star_media_Sound_Player";
-                mpWndClass->hbrBackground = (HBRUSH) ::GetStockObject( BLACK_BRUSH );
-                mpWndClass->hCursor = ::LoadCursor( NULL, IDC_ARROW );
+                mpWndClass->hbrBackground = static_cast<HBRUSH>(::GetStockObject( BLACK_BRUSH ));
+                mpWndClass->hCursor = ::LoadCursor( nullptr, IDC_ARROW );
 
                 ::RegisterClass( mpWndClass );
             }
             if ( !mnFrameWnd )
             {
-                mnFrameWnd = ::CreateWindow( mpWndClass->lpszClassName, NULL,
+                mnFrameWnd = ::CreateWindow( mpWndClass->lpszClassName, nullptr,
                                            0,
                                            0, 0, 0, 0,
-                                           (HWND) NULL, NULL, mpWndClass->hInstance, 0 );
+                                           nullptr, nullptr, mpWndClass->hInstance, nullptr );
                 if ( mnFrameWnd )
                 {
                     ::ShowWindow(mnFrameWnd, SW_HIDE);
-                    ::SetWindowLongPtr( mnFrameWnd, 0, (LONG_PTR) this );
+                    ::SetWindowLongPtr( mnFrameWnd, 0, reinterpret_cast<LONG_PTR>(this) );
                     // mpVW->put_Owner( (OAHWND) mnFrameWnd );
                     setNotifyWnd( mnFrameWnd );
                 }

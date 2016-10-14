@@ -43,13 +43,13 @@ namespace avmedia { namespace win {
 
 static ::osl::Mutex& ImplGetOwnStaticMutex()
 {
-    static ::osl::Mutex* pMutex = NULL;
+    static ::osl::Mutex* pMutex = nullptr;
 
-    if( pMutex == NULL )
+    if( pMutex == nullptr )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
-        if( pMutex == NULL )
+        if( pMutex == nullptr )
         {
             static ::osl::Mutex aMutex;
             pMutex = &aMutex;
@@ -61,7 +61,7 @@ static ::osl::Mutex& ImplGetOwnStaticMutex()
 
 LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
-    Window* pWindow = (Window*) ::GetWindowLongPtr( hWnd, 0 );
+    Window* pWindow = reinterpret_cast<Window*>(::GetWindowLongPtr( hWnd, 0 ));
     bool    bProcessed = true;
 
     if( pWindow )
@@ -159,18 +159,18 @@ LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM n
 
 WNDCLASS* lcl_getWndClass()
 {
-    static WNDCLASS* s_pWndClass = NULL;
+    static WNDCLASS* s_pWndClass = nullptr;
     if ( !s_pWndClass )
     {
         s_pWndClass = new WNDCLASS;
 
         memset( s_pWndClass, 0, sizeof( *s_pWndClass ) );
-        s_pWndClass->hInstance = GetModuleHandle( NULL );
+        s_pWndClass->hInstance = GetModuleHandle( nullptr );
         s_pWndClass->cbWndExtra = sizeof( DWORD );
         s_pWndClass->lpfnWndProc = MediaPlayerWndProc;
         s_pWndClass->lpszClassName = "com_sun_star_media_PlayerWnd";
-        s_pWndClass->hbrBackground = (HBRUSH) ::GetStockObject( BLACK_BRUSH );
-        s_pWndClass->hCursor = ::LoadCursor( NULL, IDC_ARROW );
+        s_pWndClass->hbrBackground = static_cast<HBRUSH>(::GetStockObject( BLACK_BRUSH ));
+        s_pWndClass->hCursor = ::LoadCursor( nullptr, IDC_ARROW );
 
         ::RegisterClass( s_pWndClass );
     }
@@ -182,8 +182,8 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Playe
     maListeners( maMutex ),
     meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
     mrPlayer( rPlayer ),
-    mnFrameWnd( 0 ),
-    mnParentWnd( 0 ),
+    mnFrameWnd( nullptr ),
+    mnParentWnd( nullptr ),
     mnPointerType( awt::SystemPointer::ARROW )
 {
     ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
@@ -297,17 +297,17 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
 
         mnParentWnd = reinterpret_cast<HWND>(nWnd);
 
-        mnFrameWnd = ::CreateWindow( mpWndClass->lpszClassName, NULL,
+        mnFrameWnd = ::CreateWindow( mpWndClass->lpszClassName, nullptr,
                                            WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
                                            aRect.X, aRect.Y, aRect.Width, aRect.Height,
-                                           mnParentWnd, NULL, mpWndClass->hInstance, 0 );
+                                           mnParentWnd, nullptr, mpWndClass->hInstance, nullptr );
 
         if( mnFrameWnd )
         {
-            ::SetWindowLongPtr( mnFrameWnd, 0, (LONG_PTR) this );
+            ::SetWindowLongPtr( mnFrameWnd, 0, reinterpret_cast<LONG_PTR>(this) );
 
-                        pVideoWindow->put_Owner( (OAHWND) mnFrameWnd );
-                        pVideoWindow->put_MessageDrain( (OAHWND) mnFrameWnd );
+                        pVideoWindow->put_Owner( reinterpret_cast<OAHWND>(mnFrameWnd) );
+                        pVideoWindow->put_MessageDrain( reinterpret_cast<OAHWND>(mnFrameWnd) );
                         pVideoWindow->put_WindowStyle( WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN );
 
                         mrPlayer.setNotifyWnd( mnFrameWnd );
@@ -317,7 +317,7 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
         }
     }
 
-    return( mnFrameWnd != 0 );
+    return( mnFrameWnd != nullptr );
 }
 
 void Window::processGraphEvent()
@@ -340,13 +340,13 @@ void Window::updatePointer()
         break;
     }
 
-    ::SetCursor( ::LoadCursor( NULL, pCursorName ) );
+    ::SetCursor( ::LoadCursor( nullptr, pCursorName ) );
 }
 
 void SAL_CALL Window::update(  )
     throw (uno::RuntimeException)
 {
-    ::RedrawWindow( (HWND) mnFrameWnd, NULL, NULL, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE  );
+    ::RedrawWindow( mnFrameWnd, nullptr, nullptr, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE  );
 }
 
 sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
