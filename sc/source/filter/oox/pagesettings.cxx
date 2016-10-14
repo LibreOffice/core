@@ -425,15 +425,14 @@ private:
 
 private:
     typedef ::std::vector< HFPortionInfo >  HFPortionInfoVec;
-    typedef ::std::set< OString >           OStringSet;
-
+ 
     const OUString      maPageNumberService;
     const OUString      maPageCountService;
     const OUString      maSheetNameService;
     const OUString      maFileNameService;
     const OUString      maDateTimeService;
-    const OStringSet    maBoldNames;            /// All names for bold font style in lowercase UTF-8.
-    const OStringSet    maItalicNames;          /// All names for italic font style in lowercase UTF-8.
+    const std::set< OString >    maBoldNames;            /// All names for bold font style in lowercase UTF-8.
+    const std::set< OString >    maItalicNames;          /// All names for italic font style in lowercase UTF-8.
     HFPortionInfoVec    maPortions;
     HFPortionId         meCurrPortion;          /// Identifier of current H/F portion.
     OUStringBuffer      maBuffer;               /// Text data to append to current text range.
