@@ -215,7 +215,17 @@ PDFDocument::PDFDocument()
 
 bool PDFDocument::Read(SvStream& rStream)
 {
-    // First look up the offset of the xref table.
+    // Check file magic.
+    std::vector<sal_Int8> aHeader(5);
+    rStream.Seek(0);
+    rStream.ReadBytes(aHeader.data(), aHeader.size());
+    if (aHeader[0] != '%' || aHeader[1] != 'P' || aHeader[2] != 'D' || aHeader[3] != 'F' || aHeader[4] != '-')
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: header mismatch");
+        return false;
+    }
+
+    // Look up the offset of the xref table.
     size_t nStartXRef = FindStartXRef(rStream);
     SAL_INFO("xmlsecurity.pdfio", "PDFDocument::Read: nStartXRef is " << nStartXRef);
     if (nStartXRef == 0)
