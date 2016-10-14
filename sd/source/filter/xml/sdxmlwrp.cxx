@@ -411,7 +411,7 @@ void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
         OutlinerParaObject* pOutlParaObj = pMasterOutline->GetOutlinerParaObject();
         if (!pOutlParaObj)
             continue;
-        ::sd::Outliner* pOutliner = pDoc->GetInternalOutliner();
+        SdOutliner* pOutliner = pDoc->GetInternalOutliner();
         pOutliner->Clear();
         pOutliner->SetText(*pOutlParaObj);
         bool bInconsistent = false;

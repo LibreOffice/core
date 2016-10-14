@@ -988,7 +988,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
                 if( pDoc == nullptr)
                     break;
 
-                ::sd::Outliner* pOutliner = pDoc->GetInternalOutliner();
+                SdOutliner* pOutliner = pDoc->GetInternalOutliner();
                 DBG_ASSERT( pOutliner, "no outliner?" );
                 if( pOutliner == nullptr )
                     break;

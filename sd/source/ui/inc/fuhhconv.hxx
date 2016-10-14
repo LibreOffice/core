@@ -22,9 +22,9 @@
 
 #include "fupoor.hxx"
 
-namespace sd {
+class SdOutliner;
 
-class Outliner;
+namespace sd {
 
 class FuHangulHanjaConversion : public FuPoor
 {
@@ -42,7 +42,7 @@ public:
 protected:
     virtual ~FuHangulHanjaConversion() override;
 
-    Outliner*   pSdOutliner;
+    SdOutliner*     pSdOutliner;
     bool            bOwnOutliner;
 
 private:

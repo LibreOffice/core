@@ -62,7 +62,7 @@ rtl::Reference<FuPoor> FuSummaryPage::Create( ViewShell* pViewSh, ::sd::Window* 
 
 void FuSummaryPage::DoExecute( SfxRequest& )
 {
-    ::sd::Outliner* pOutl = nullptr;
+    SdOutliner* pOutl = nullptr;
     SdPage* pSummaryPage = nullptr;
     sal_uInt16 i = 0;
     sal_uInt16 nFirstPage = SDRPAGE_NOTFOUND;
@@ -159,7 +159,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                     pNotesPage->setHeaderFooterSettings(pActualNotesPage->getHeaderFooterSettings());
 
-                    pOutl = new ::sd::Outliner( mpDoc, OutlinerMode::OutlineObject );
+                    pOutl = new SdOutliner( mpDoc, OutlinerMode::OutlineObject );
                     pOutl->SetUpdateMode(false);
                     pOutl->EnableUndo(false);
 

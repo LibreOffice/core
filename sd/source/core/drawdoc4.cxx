@@ -743,7 +743,7 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
     {
         StopOnlineSpelling();
 
-        ::sd::Outliner* pOutl = GetInternalOutliner();
+        SdOutliner* pOutl = GetInternalOutliner();
 
         Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
@@ -878,7 +878,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
     if (pObj && pObj->GetOutlinerParaObject() /* && pObj != pView->GetTextEditObject() */)
     {
         mbHasOnlineSpellErrors = false;
-        ::sd::Outliner* pOutl = GetInternalOutliner();
+        SdOutliner* pOutl = GetInternalOutliner();
         pOutl->SetUpdateMode(true);
         Link<EditStatus&,void> aEvtHdl = pOutl->GetStatusEventHdl();
         pOutl->SetStatusEventHdl(LINK(this, SdDrawDocument, OnlineSpellEventHdl));

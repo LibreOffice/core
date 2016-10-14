@@ -28,11 +28,11 @@
 #include <vector>
 
 class SdDrawDocument;
+class SdOutliner;
 
 namespace sd {
 
 class ViewShell;
-class Outliner;
 
 namespace outliner {
 
@@ -141,14 +141,14 @@ private:
     std::unique_ptr<IteratorImplBase> mxIterator;
 };
 
-/** This class wraps the <type>Outliner</type> class and represents it as
+/** This class wraps the <type>SdOutliner</type> class and represents it as
     a container of <type>SdrObject</type> objects.  Its main purpose is to
     provide iterators for certain sub-sets of those objects.  These sub-sets
     are a) the set of the currently selected objects, b) all objects in the
     current view, and c) all objects in all views.
 
     <p>The direction of the returned iterators depends on the underlying
-    <type>Outliner</type> object and is usually set in the search
+    <type>SdOutliner</type> object and is usually set in the search
     dialog.</p>
 */
 class OutlinerContainer
@@ -159,7 +159,7 @@ public:
             The outliner that is represented by the new object as
             <type>SdrObject</type> container.
     */
-    OutlinerContainer (::sd::Outliner* pOutliner);
+    OutlinerContainer (SdOutliner* pOutliner);
 
     /** Return an iterator that points to the first object of one of the
         sets described above.  This takes also into account the direction of
@@ -193,7 +193,7 @@ public:
 
 private:
     /// The wrapped outliner that is represented as object container.
-    ::sd::Outliner* mpOutliner;
+    SdOutliner* mpOutliner;
 
     /** Create an iterator.  The object pointed to depends on the search
         direction retrieved from the outliner object

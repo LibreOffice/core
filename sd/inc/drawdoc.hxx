@@ -58,9 +58,9 @@ namespace com
 namespace sd
 {
     class FrameView;
-    class Outliner;
 }
 
+class SdOutliner;
 class Timer;
 class SfxObjectShell;
 class SdPage;
@@ -141,8 +141,8 @@ public:
     SAL_DLLPRIVATE bool getDocReadOnly() const { return bReadOnly; }
 private:
     OUString            msDocAccTitle;
-    ::sd::Outliner*     mpOutliner;          ///< local outliner for outline mode
-    ::sd::Outliner*     mpInternalOutliner;  ///< internal outliner for creation of text objects
+    SdOutliner*     mpOutliner;          ///< local outliner for outline mode
+    SdOutliner*     mpInternalOutliner;  ///< internal outliner for creation of text objects
     Timer*              mpWorkStartupTimer;
     Idle*               mpOnlineSpellingIdle;
     sd::ShapeList*      mpOnlineSpellingList;
@@ -215,8 +215,8 @@ public:
 
     SAL_DLLPRIVATE SfxItemPool&        GetPool() { return( *pItemPool ); }
 
-    SAL_DLLPRIVATE ::sd::Outliner* GetOutliner(bool bCreateOutliner=true);
-    ::sd::Outliner* GetInternalOutliner(bool bCreateOutliner=true);
+    SAL_DLLPRIVATE SdOutliner* GetOutliner(bool bCreateOutliner=true);
+    SdOutliner* GetInternalOutliner(bool bCreateOutliner=true);
 
     SAL_DLLPRIVATE ::sd::DrawDocShell*     GetDocSh() const { return mpDocSh; }
 

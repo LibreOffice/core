@@ -87,8 +87,8 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
     if (pActualPage)
     {
-        ::sd::Outliner* pOutl =
-              new ::sd::Outliner( mpDoc, OutlinerMode::OutlineObject );
+        SdOutliner* pOutl =
+              new SdOutliner( mpDoc, OutlinerMode::OutlineObject );
         pOutl->SetUpdateMode(false);
         pOutl->EnableUndo(false);
 

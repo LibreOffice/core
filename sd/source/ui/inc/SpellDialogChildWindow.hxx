@@ -22,9 +22,9 @@
 
 #include <svx/SpellDialogChildWindow.hxx>
 
-namespace sd {
+class SdOutliner;
 
-class Outliner;
+namespace sd {
 
 /** This derivation of the svx::SpellDialogChildWindow base class
     provides Draw and Impress specific implementations of
@@ -70,7 +70,7 @@ private:
     /** This outliner is used to do the main work of iterating over a
         document and finding sentences with spelling errors.
     */
-    Outliner* mpSdOutliner;
+    SdOutliner* mpSdOutliner;
 
     /** When this flag is <TRUE/> then eventually we have to destroy
         the outliner in mpSdOutliner.

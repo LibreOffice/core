@@ -76,7 +76,7 @@ void FuSearch::DoExecute( SfxRequest& )
     if ( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr )
     {
         bOwnOutliner = true;
-        pSdOutliner = new ::sd::Outliner( mpDoc, OutlinerMode::TextObject );
+        pSdOutliner = new SdOutliner( mpDoc, OutlinerMode::TextObject );
     }
     else if ( dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr )
     {
@@ -114,7 +114,7 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
             pSdOutliner->EndSpelling();
 
             bOwnOutliner = true;
-            pSdOutliner = new ::sd::Outliner( mpDoc, OutlinerMode::TextObject );
+            pSdOutliner = new SdOutliner( mpDoc, OutlinerMode::TextObject );
             pSdOutliner->PrepareSpelling();
         }
         else if ( pSdOutliner && dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr && bOwnOutliner )

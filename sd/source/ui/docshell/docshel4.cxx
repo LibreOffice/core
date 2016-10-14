@@ -225,12 +225,12 @@ void DrawDocShell::UpdateRefDevice()
         }
         mpDoc->SetRefDevice( pRefDevice.get() );
 
-        ::sd::Outliner* pOutl = mpDoc->GetOutliner( false );
+        SdOutliner* pOutl = mpDoc->GetOutliner( false );
 
         if( pOutl )
             pOutl->SetRefDevice( pRefDevice );
 
-        ::sd::Outliner* pInternalOutl = mpDoc->GetInternalOutliner( false );
+        SdOutliner* pInternalOutl = mpDoc->GetInternalOutliner( false );
 
         if( pInternalOutl )
             pInternalOutl->SetRefDevice( pRefDevice );

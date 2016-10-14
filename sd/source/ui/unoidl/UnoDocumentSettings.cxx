@@ -794,7 +794,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                         SdrOutliner& rOutl = pDocument->GetDrawOutliner();
                         nCntrl = rOutl.GetControlWord() &~ EEControlBits::ULSPACESUMMATION;
                         rOutl.SetControlWord( nCntrl | nSum );
-                        ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
+                        SdOutliner* pOutl = pDocument->GetOutliner( false );
                         if( pOutl )
                         {
                             nCntrl = pOutl->GetControlWord() &~ EEControlBits::ULSPACESUMMATION;
@@ -822,7 +822,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
                     SdrOutliner& rOutl = pDocument->GetDrawOutliner();
                     rOutl.SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
-                    ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
+                    SdOutliner* pOutl = pDocument->GetOutliner( false );
                     if( pOutl )
                     {
                         pOutl->SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
@@ -847,7 +847,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
                     SdrOutliner& rOutl = pDocument->GetDrawOutliner();
                     rOutl.SetKernAsianPunctuation( bAsianPunct );
-                    ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
+                    SdOutliner* pOutl = pDocument->GetOutliner( false );
                     if( pOutl )
                     {
                         pOutl->SetKernAsianPunctuation( bAsianPunct );

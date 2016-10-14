@@ -139,7 +139,7 @@ void Iterator::Reverse()
 
 //===== IteratorFactory =======================================================
 
-OutlinerContainer::OutlinerContainer (Outliner* pOutliner)
+OutlinerContainer::OutlinerContainer (SdOutliner* pOutliner)
 : mpOutliner(pOutliner)
 {
 }

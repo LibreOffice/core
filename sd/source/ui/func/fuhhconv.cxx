@@ -65,7 +65,7 @@ FuHangulHanjaConversion::FuHangulHanjaConversion (
     if ( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr )
     {
         bOwnOutliner = true;
-        pSdOutliner = new Outliner( mpDoc, OutlinerMode::TextObject );
+        pSdOutliner = new SdOutliner( mpDoc, OutlinerMode::TextObject );
     }
     else if ( dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr )
     {
@@ -112,7 +112,7 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
             pSdOutliner->EndConversion();
 
             bOwnOutliner = true;
-            pSdOutliner = new Outliner( mpDoc, OutlinerMode::TextObject );
+            pSdOutliner = new SdOutliner( mpDoc, OutlinerMode::TextObject );
             pSdOutliner->BeginConversion();
         }
         else if ( pSdOutliner && dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr && bOwnOutliner )

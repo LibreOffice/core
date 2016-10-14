@@ -439,7 +439,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
            - the draw outliner of the drawing engine has to draw something in
              between
            - the global outliner could be used in SdPage::CreatePresObj */
-        std::unique_ptr<SdrOutliner> pOutliner(new ::sd::Outliner( mpDoc, OutlinerMode::TextObject ));
+        std::unique_ptr<SdrOutliner> pOutliner(new SdOutliner( mpDoc, OutlinerMode::TextObject ));
 
         // set reference device
         pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
