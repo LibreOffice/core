@@ -39,7 +39,7 @@ class Point;
 class Size;
 class SfxChildWindow;
 class SfxInfoBarWindow;
-enum class InfoBarType;
+enum class InfobarType;
 
 class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
 {
@@ -153,11 +153,14 @@ public:
         and position of each button will be changed: only the width will remain unchanged.
       */
     VclPtr<SfxInfoBarWindow> AppendInfoBar(const OUString& sId,
-                                    const OUString& sMessage,
-                                    InfoBarType aInfoBarType);
+                                    const OUString& sPrimaryMessage,
+                                    const OUString& sSecondaryMessage,
+                                    InfobarType aInfobarType,
+                                    bool bShowCloseButton=true);
     void              RemoveInfoBar(const OUString& sId);
-    void              UpdateInfoBar(const OUString& sId,
-                               const OUString& sMessage, InfoBarType eType);
+    void              UpdateInfoBar(const OUString& sId, const OUString& sPrimaryMessage,
+                                    const OUString& sSecondaryMessage,
+                                    InfobarType eType);
     bool              HasInfoBarWithID(const OUString& sId);
 
     SAL_DLLPRIVATE void GetDocNumber_Impl();
