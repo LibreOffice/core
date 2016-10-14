@@ -980,13 +980,13 @@ void Databases::cascadingStylesheet( const OUString& Language,
                     {
                         aCSS = "highcontrastblack";
                         #ifdef _WIN32
-                        HKEY hKey = NULL;
+                        HKEY hKey = nullptr;
                         LONG lResult = RegOpenKeyExA( HKEY_CURRENT_USER, "Control Panel\\Accessibility\\HighContrast", 0, KEY_QUERY_VALUE, &hKey );
                         if ( ERROR_SUCCESS == lResult )
                         {
                             CHAR szBuffer[1024];
                             DWORD nSize = sizeof( szBuffer );
-                            lResult = RegQueryValueExA( hKey, "High Contrast Scheme", NULL, NULL, (LPBYTE)szBuffer, &nSize );
+                            lResult = RegQueryValueExA( hKey, "High Contrast Scheme", nullptr, nullptr, reinterpret_cast<LPBYTE>(szBuffer), &nSize );
                             if ( ERROR_SUCCESS == lResult && nSize > 0 )
                             {
                                 szBuffer[nSize] = '\0';
