@@ -39,7 +39,7 @@ std::wstring GetOfficeInstallationPathW(MSIHANDLE handle)
     {
         sz++; // space for the final '\0'
         DWORD nbytes = sz * sizeof(WCHAR);
-        PWSTR buff = reinterpret_cast<PWSTR>(_alloca(nbytes));
+        PWSTR buff = static_cast<PWSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
         MsiGetPropertyW(handle, L"INSTALLLOCATION", buff, &sz);
         progpath = buff;
@@ -57,7 +57,7 @@ std::wstring GetOfficeProductNameW(MSIHANDLE handle)
     {
         sz++; // space for the final '\0'
         DWORD nbytes = sz * sizeof(WCHAR);
-        PWSTR buff = reinterpret_cast<PWSTR>(_alloca(nbytes));
+        PWSTR buff = static_cast<PWSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
         MsiGetPropertyW(handle, L"ProductName", buff, &sz);
         productname = buff;
@@ -75,7 +75,7 @@ std::wstring GetQuickstarterLinkNameW(MSIHANDLE handle)
     {
         sz++; // space for the final '\0'
         DWORD nbytes = sz * sizeof(WCHAR);
-        PWSTR buff = reinterpret_cast<PWSTR>(_alloca(nbytes));
+        PWSTR buff = static_cast<PWSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
         MsiGetPropertyW(handle, L"Quickstarterlinkname", buff, &sz);
         quickstarterlinkname = buff;
@@ -84,7 +84,7 @@ std::wstring GetQuickstarterLinkNameW(MSIHANDLE handle)
     {
         sz++; // space for the final '\0'
         DWORD nbytes = sz * sizeof(WCHAR);
-        PWSTR buff = reinterpret_cast<PWSTR>(_alloca(nbytes));
+        PWSTR buff = static_cast<PWSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
         MsiGetPropertyW(handle, L"ProductName", buff, &sz);
         quickstarterlinkname = buff;
@@ -94,14 +94,14 @@ std::wstring GetQuickstarterLinkNameW(MSIHANDLE handle)
 
 inline bool IsValidHandle( HANDLE handle )
 {
-    return NULL != handle && INVALID_HANDLE_VALUE != handle;
+    return nullptr != handle && INVALID_HANDLE_VALUE != handle;
 }
 
-static DWORD WINAPI _GetModuleFileNameExW( HANDLE hProcess, HMODULE hModule, PWSTR lpFileName, DWORD nSize )
+static DWORD WINAPI GetModuleFileNameExW_( HANDLE hProcess, HMODULE hModule, PWSTR lpFileName, DWORD nSize )
 {
     typedef DWORD (WINAPI *FN_PROC)( HANDLE hProcess, HMODULE hModule, LPWSTR lpFileName, DWORD nSize );
 
-    static FN_PROC  lpProc = NULL;
+    static FN_PROC  lpProc = nullptr;
 
     if ( !lpProc )
     {
@@ -128,7 +128,7 @@ std::wstring GetProcessImagePathW( DWORD dwProcessId )
     {
         WCHAR szPathBuffer[MAX_PATH] = L"";
 
-        if ( _GetModuleFileNameExW( hProcess, NULL, szPathBuffer, sizeof(szPathBuffer)/sizeof(szPathBuffer[0]) ) )
+        if ( GetModuleFileNameExW_( hProcess, nullptr, szPathBuffer, sizeof(szPathBuffer)/sizeof(szPathBuffer[0]) ) )
             sImagePath = szPathBuffer;
 
         CloseHandle( hProcess );

@@ -64,7 +64,7 @@ static const CHAR* g_Extensions[] =
     ".dpt",     // Kingsoft Presentation Template
     ".vsd",     // Visio 2000/XP/2003 document
     ".vst",     // Visio 2000/XP/2003 template
-    0
+    nullptr
 };
 
 static const int WORD_START = 0;
@@ -97,7 +97,7 @@ static inline void OutputDebugStringFormatA( LPCSTR, ... )
 static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
 {
     BOOL    bRet = false;
-    HKEY    hKey = NULL;
+    HKEY    hKey = nullptr;
     LONG    lResult = RegOpenKeyExA( HKEY_CLASSES_ROOT, lpSubKey, 0, KEY_QUERY_VALUE, &hKey );
 
     if ( ERROR_SUCCESS == lResult )
@@ -105,7 +105,7 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
         CHAR    szBuffer[1024];
         DWORD   nSize = sizeof( szBuffer );
 
-        lResult = RegQueryValueExA( hKey, "", NULL, NULL, (LPBYTE)szBuffer, &nSize );
+        lResult = RegQueryValueExA( hKey, "", nullptr, nullptr, reinterpret_cast<LPBYTE>(szBuffer), &nSize );
         if ( ERROR_SUCCESS == lResult && nSize > 0 )
         {
             szBuffer[nSize] = '\0';
@@ -145,7 +145,7 @@ bool GetMsiPropA( MSIHANDLE handle, LPCSTR name, /*out*/std::string& value )
     {
         sz++;
         DWORD nbytes = sz * sizeof(CHAR);
-        LPSTR buff = reinterpret_cast<LPSTR>(_alloca(nbytes));
+        LPSTR buff = static_cast<LPSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
         MsiGetPropertyA(handle, name, buff, &sz);
         value = buff;
@@ -179,7 +179,7 @@ static void registerForExtension( MSIHANDLE handle, const int nIndex, bool bRegi
 
 static void saveOldRegistration( LPCSTR lpSubKey )
 {
-    HKEY    hKey = NULL;
+    HKEY    hKey = nullptr;
     LONG    lResult = RegOpenKeyExA( HKEY_CLASSES_ROOT, lpSubKey, 0,
                                      KEY_QUERY_VALUE|KEY_SET_VALUE, &hKey );
 
@@ -188,7 +188,7 @@ static void saveOldRegistration( LPCSTR lpSubKey )
         CHAR    szBuffer[1024];
         DWORD   nSize = sizeof( szBuffer );
 
-        lResult = RegQueryValueExA( hKey, "", NULL, NULL, (LPBYTE)szBuffer, &nSize );
+        lResult = RegQueryValueExA( hKey, "", nullptr, nullptr, reinterpret_cast<LPBYTE>(szBuffer), &nSize );
         if ( ERROR_SUCCESS == lResult )
         {
             szBuffer[nSize] = '\0';
@@ -198,20 +198,20 @@ static void saveOldRegistration( LPCSTR lpSubKey )
             {
                 // Save the old association
                 RegSetValueExA( hKey, "LOBackupAssociation", 0,
-                                REG_SZ, (LPBYTE)szBuffer, nSize );
+                                REG_SZ, reinterpret_cast<LPBYTE>(szBuffer), nSize );
                 // Also save what the old association means, just so we can try to verify
                 // if/when restoring it that the old application still exists
-                HKEY hKey2 = NULL;
+                HKEY hKey2 = nullptr;
                 lResult = RegOpenKeyExA( HKEY_CLASSES_ROOT, szBuffer, 0,
                                          KEY_QUERY_VALUE, &hKey2 );
                 if ( ERROR_SUCCESS == lResult )
                 {
                     nSize = sizeof( szBuffer );
-                    lResult = RegQueryValueExA( hKey2, "", NULL, NULL, (LPBYTE)szBuffer, &nSize );
+                    lResult = RegQueryValueExA( hKey2, "", nullptr, nullptr, reinterpret_cast<LPBYTE>(szBuffer), &nSize );
                     if ( ERROR_SUCCESS == lResult )
                     {
                         RegSetValueExA( hKey, "LOBackupAssociationDeref", 0,
-                                        REG_SZ, (LPBYTE)szBuffer, nSize );
+                                        REG_SZ, reinterpret_cast<LPBYTE>(szBuffer), nSize );
                     }
                     RegCloseKey( hKey2 );
                 }
@@ -224,7 +224,7 @@ static void saveOldRegistration( LPCSTR lpSubKey )
 static void registerForExtensions( MSIHANDLE handle, BOOL bRegisterAll )
 { // Check all file extensions
     int nIndex = 0;
-    while ( g_Extensions[nIndex] != 0 )
+    while ( g_Extensions[nIndex] != nullptr )
     {
         saveOldRegistration( g_Extensions[nIndex] );
 
@@ -240,7 +240,7 @@ static bool checkSomeExtensionInRegistry( const int nStart, const int nEnd )
     int nIndex = nStart;
     bool bFound = false;
 
-    while ( !bFound && (nIndex < nEnd) && (g_Extensions[nIndex] != 0) )
+    while ( !bFound && (nIndex < nEnd) && (g_Extensions[nIndex] != nullptr) )
     {
         bFound = ! CheckExtensionInRegistry( g_Extensions[nIndex] );
 
@@ -256,7 +256,7 @@ static void registerSomeExtensions( MSIHANDLE handle, const int nStart, const in
 { // Check all file extensions
     int nIndex = nStart;
 
-    while ( (nIndex < nEnd) && (g_Extensions[nIndex] != 0) )
+    while ( (nIndex < nEnd) && (g_Extensions[nIndex] != nullptr) )
     {
         registerForExtension( handle, nIndex++, bRegister );
     }
@@ -457,7 +457,7 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
 
 static void restoreOldRegistration( LPCSTR lpSubKey )
 {
-    HKEY    hKey = NULL;
+    HKEY    hKey = nullptr;
     LONG    lResult = RegOpenKeyExA( HKEY_CLASSES_ROOT, lpSubKey, 0,
                                      KEY_QUERY_VALUE|KEY_SET_VALUE, &hKey );
 
@@ -466,11 +466,11 @@ static void restoreOldRegistration( LPCSTR lpSubKey )
         CHAR    szBuffer[1024];
         DWORD   nSize = sizeof( szBuffer );
 
-        lResult = RegQueryValueExA( hKey, "LOBackupAssociation", NULL, NULL,
-                                    (LPBYTE)szBuffer, &nSize );
+        lResult = RegQueryValueExA( hKey, "LOBackupAssociation", nullptr, nullptr,
+                                    reinterpret_cast<LPBYTE>(szBuffer), &nSize );
         if ( ERROR_SUCCESS == lResult )
         {
-            HKEY hKey2 = NULL;
+            HKEY hKey2 = nullptr;
             lResult = RegOpenKeyExA( HKEY_CLASSES_ROOT, szBuffer, 0,
                                      KEY_QUERY_VALUE, &hKey2 );
             if ( ERROR_SUCCESS == lResult )
@@ -478,21 +478,21 @@ static void restoreOldRegistration( LPCSTR lpSubKey )
                 CHAR   szBuffer2[1024];
                 DWORD  nSize2 = sizeof( szBuffer2 );
 
-                lResult = RegQueryValueExA( hKey2, "", NULL, NULL, (LPBYTE)szBuffer2, &nSize2 );
+                lResult = RegQueryValueExA( hKey2, "", nullptr, nullptr, reinterpret_cast<LPBYTE>(szBuffer2), &nSize2 );
                 if ( ERROR_SUCCESS == lResult )
                 {
                     CHAR   szBuffer3[1024];
                     DWORD  nSize3 = sizeof( szBuffer3 );
 
                     // Try to verify that the old association is OK to restore
-                    lResult = RegQueryValueExA( hKey, "LOBackupAssociationDeref", NULL, NULL,
-                                                (LPBYTE)szBuffer3, &nSize3 );
+                    lResult = RegQueryValueExA( hKey, "LOBackupAssociationDeref", nullptr, nullptr,
+                                                reinterpret_cast<LPBYTE>(szBuffer3), &nSize3 );
                     if ( ERROR_SUCCESS == lResult )
                     {
                         if ( nSize2 == nSize3 && strcmp (szBuffer2, szBuffer3) == 0)
                         {
                             // Yep. So restore it
-                            RegSetValueExA( hKey, "", 0, REG_SZ, (LPBYTE)szBuffer, nSize );
+                            RegSetValueExA( hKey, "", 0, REG_SZ, reinterpret_cast<LPBYTE>(szBuffer), nSize );
                         }
                     }
                 }
@@ -510,7 +510,7 @@ extern "C" UINT __stdcall RestoreRegAllMSDoc( MSIHANDLE /*handle*/ )
     OutputDebugStringFormatA( "RestoreRegAllMSDoc\n" );
 
     int nIndex = 0;
-    while ( g_Extensions[nIndex] != 0 )
+    while ( g_Extensions[nIndex] != nullptr )
     {
         restoreOldRegistration( g_Extensions[nIndex] );
         ++nIndex;

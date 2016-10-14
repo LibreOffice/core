@@ -32,7 +32,7 @@ extern "C" UINT __stdcall RemoveQuickstarterLink( MSIHANDLE hMSI )
 {
     WCHAR    szStartupPath[MAX_PATH];
 
-    if ( SHGetSpecialFolderPathW( NULL, szStartupPath, CSIDL_STARTUP, FALSE ) )
+    if ( SHGetSpecialFolderPathW( nullptr, szStartupPath, CSIDL_STARTUP, FALSE ) )
     {
         std::wstring sQuickstartLinkPath = szStartupPath;
 

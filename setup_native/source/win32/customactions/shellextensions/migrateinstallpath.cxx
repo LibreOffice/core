@@ -38,7 +38,7 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
 
     if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"INSTALLLOCATION", NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"INSTALLLOCATION", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
         {
             sInstDir = szValue;
             MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
@@ -49,7 +49,7 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
     }
     else if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"INSTALLLOCATION", NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"INSTALLLOCATION", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
         {
             sInstDir = szValue;
             MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
