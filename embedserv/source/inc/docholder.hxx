@@ -90,7 +90,7 @@ private:
 
     CComPtr< IDispatch > m_pIDispatch;
 
-    sal_Bool m_bLink;
+    bool m_bLink;
 
 
     css::uno::Reference< css::frame::XFrame2 > DocumentFrame();
@@ -101,7 +101,7 @@ private:
 
     void ClearInterceptorInternally();
 
-    void LoadDocInFrame( sal_Bool bPluginMode );
+    void LoadDocInFrame( bool bPluginMode );
 public:
 
 
@@ -122,7 +122,7 @@ public:
         const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
         const ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl >& xOleAccess );
 
-    ~DocumentHolder();
+    ~DocumentHolder() override;
 
     // Methods for inplace activation
 
@@ -136,19 +136,19 @@ public:
     BOOL InPlaceMenuCreate();
     BOOL InPlaceMenuDestroy();
 
-    void OpenIntoWindow();
-    BOOL Undo();
+    static void OpenIntoWindow();
+    static BOOL Undo();
 
     // further methods
 
     void SetDocument(
         const css::uno::Reference< css::frame::XModel >& xDoc,
-        sal_Bool bLink = sal_False
+        bool bLink = false
     );
 
-    sal_Bool ExecuteSuspendCloseFrame();
+    bool ExecuteSuspendCloseFrame();
 
-    void DisconnectFrameDocument( sal_Bool bComplete = sal_False );
+    void DisconnectFrameDocument( bool bComplete = false );
     void CloseDocument();
     void CloseFrame();
     void ClearInterceptor();
@@ -164,8 +164,8 @@ public:
     void OnPosRectChanged(LPRECT lpRect) const;
     void show();
 
-    sal_Bool HasFrame() { return m_xFrame.is(); }
-    sal_Bool IsLink() { return m_bLink; }
+    bool HasFrame() { return m_xFrame.is(); }
+    bool IsLink() { return m_bLink; }
 
     /** hides the document window, even in case of an external container
      *  side managed window.
@@ -198,7 +198,7 @@ public:
     // XEventListener
     virtual void SAL_CALL
     disposing( const css::lang::EventObject& aSource )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException ) override;
 
     // XCloseListener
     virtual void SAL_CALL
@@ -208,13 +208,13 @@ public:
     )
         throw(
             css::util::CloseVetoException
-        );
+        ) override;
 
     virtual void SAL_CALL
     notifyClosing(
         const css::lang::EventObject& aSource
     )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException ) override;
 
     // XTerminateListener
     virtual void SAL_CALL
@@ -223,13 +223,13 @@ public:
     )
         throw(
             css::frame::TerminationVetoException
-        );
+        ) override;
 
     virtual void SAL_CALL
     notifyTermination(
         const css::lang::EventObject& aSource
     )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException ) override;
 
 
     // XModifyListener
@@ -239,7 +239,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     // XDockingAreaAcceptor
 
@@ -249,7 +249,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual sal_Bool SAL_CALL
     requestDockingAreaSpace(
@@ -257,7 +257,7 @@ public:
     )
         throw(
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     setDockingAreaSpace(
@@ -265,7 +265,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 };
 
 #endif

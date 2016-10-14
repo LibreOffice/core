@@ -26,7 +26,7 @@ STDMETHODIMP EmbedDocument_Impl::GetWindow(HWND *hWnd)
     OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
 
     *hWnd = m_pDocHolder->GetTopMostWinHandle();
-    if(*hWnd != NULL)
+    if(*hWnd != nullptr)
         return NOERROR;
     else
         return ERROR;

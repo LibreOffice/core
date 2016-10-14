@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 // EmbedDocument_Impl
 
 
-sal_uInt64 EmbedDocument_Impl::getMetaFileHandle_Impl( sal_Bool isEnhMeta )
+sal_uInt64 EmbedDocument_Impl::getMetaFileHandle_Impl( bool isEnhMeta )
 {
     sal_uInt64 pResult = NULL;
 
@@ -85,13 +85,13 @@ STDMETHODIMP EmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pM
         if ( !( pFormatetc->tymed & TYMED_ENHMF ) )
             return DV_E_TYMED;
 
-        HENHMETAFILE hMeta = reinterpret_cast<HENHMETAFILE>( getMetaFileHandle_Impl( sal_True ) );
+        HENHMETAFILE hMeta = reinterpret_cast<HENHMETAFILE>( getMetaFileHandle_Impl( true ) );
 
         if ( hMeta )
         {
             pMedium->tymed = TYMED_ENHMF;
             pMedium->hEnhMetaFile = hMeta;
-            pMedium->pUnkForRelease = NULL;
+            pMedium->pUnkForRelease = nullptr;
 
             return S_OK;
         }
@@ -103,13 +103,13 @@ STDMETHODIMP EmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pM
           if ( !( pFormatetc->tymed & TYMED_MFPICT ) )
             return DV_E_TYMED;
 
-        HGLOBAL hMeta = reinterpret_cast<HGLOBAL>( getMetaFileHandle_Impl( sal_False ) );
+        HGLOBAL hMeta = reinterpret_cast<HGLOBAL>( getMetaFileHandle_Impl( false ) );
 
         if ( hMeta )
         {
             pMedium->tymed = TYMED_MFPICT;
             pMedium->hMetaFilePict = hMeta;
-            pMedium->pUnkForRelease = NULL;
+            pMedium->pUnkForRelease = nullptr;
 
             return S_OK;
         }
@@ -126,7 +126,7 @@ STDMETHODIMP EmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pM
                 return DV_E_TYMED;
 
             CComPtr< IStorage > pNewStg;
-            HRESULT hr = StgCreateDocfile( NULL, STGM_CREATE | STGM_READWRITE | STGM_DELETEONRELEASE, 0, &pNewStg );
+            HRESULT hr = StgCreateDocfile( nullptr, STGM_CREATE | STGM_READWRITE | STGM_DELETEONRELEASE, 0, &pNewStg );
             if ( FAILED( hr ) || !pNewStg ) return STG_E_MEDIUMFULL;
 
             hr = SaveTo_Impl( pNewStg );
@@ -135,7 +135,7 @@ STDMETHODIMP EmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pM
             pMedium->tymed = TYMED_ISTORAGE;
             pMedium->pstg = pNewStg;
             pMedium->pstg->AddRef();
-            pMedium->pUnkForRelease = ( IUnknown* )pNewStg;
+            pMedium->pUnkForRelease = static_cast<IUnknown*>(pNewStg);
 
             return S_OK;
         }
@@ -171,7 +171,7 @@ STDMETHODIMP EmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGMEDIUM 
         if ( FAILED( hr ) ) return STG_E_MEDIUMFULL;
 
         pMedium->tymed = TYMED_ISTORAGE;
-        pMedium->pUnkForRelease = NULL;
+        pMedium->pUnkForRelease = nullptr;
 
         return S_OK;
     }
@@ -225,7 +225,7 @@ STDMETHODIMP EmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pFormatetcIn
     if ( !pFormatetcIn || !pFormatetcOut )
         return DV_E_FORMATETC;
 
-    pFormatetcOut->ptd = NULL;
+    pFormatetcOut->ptd = nullptr;
     pFormatetcOut->cfFormat = pFormatetcIn->cfFormat;
     pFormatetcOut->dwAspect = DVASPECT_CONTENT;
 
@@ -272,7 +272,7 @@ STDMETHODIMP EmbedDocument_Impl::DAdvise( FORMATETC * pFormatetc, DWORD advf, IA
         if ( !SUCCEEDED( CreateDataAdviseHolder( &m_pDAdviseHolder ) ) || !m_pDAdviseHolder )
             return E_OUTOFMEMORY;
 
-    return m_pDAdviseHolder->Advise( (IDataObject*)this, pFormatetc, advf, pAdvSink, pdwConnection );
+    return m_pDAdviseHolder->Advise( static_cast<IDataObject*>(this), pFormatetc, advf, pAdvSink, pdwConnection );
 }
 
 STDMETHODIMP EmbedDocument_Impl::DUnadvise( DWORD dwConnection )

@@ -94,7 +94,7 @@ namespace winwrap {
         void GetTrueRect(LPRECT lpTrueRect) const;
         BOOL SetCursor(HWND hWnd,UINT nHitTest) const;
         BOOL Track(HWND hWnd,POINT point,BOOL bAllowInvert = FALSE,
-                   HWND hWndClipTo = NULL);
+                   HWND hWndClipTo = nullptr);
 //         BOOL TrackRubberBand(HWND hWnd,POINT point,BOOL bAllowInvert = TRUE);
         int HitTest(POINT point) const;
         int NormalizeHit(int nHandle) const;
@@ -123,7 +123,7 @@ protected:
         void GetHandleRect(int nHandle,RECT* pHandleRect) const;
         void GetModifyPointers(
             int nHandle,int**ppx, int**ppy, int* px, int*py);
-        virtual int GetHandleSize(LPRECT lpRect = NULL) const;
+        virtual int GetHandleSize(LPRECT lpRect = nullptr) const;
         BOOL TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo);
         void Construct();
     };
