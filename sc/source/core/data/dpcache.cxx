@@ -153,9 +153,8 @@ struct Bucket
     ScDPItemData maValue;
     SCROW mnOrderIndex;
     SCROW mnDataIndex;
-    SCROW mnValueSortIndex;
     Bucket(const ScDPItemData& rValue, SCROW nData) :
-        maValue(rValue), mnOrderIndex(0), mnDataIndex(nData), mnValueSortIndex(0) {}
+        maValue(rValue), mnOrderIndex(0), mnDataIndex(nData) {}
 };
 
 #if DEBUG_PIVOT_TABLE
@@ -167,7 +166,7 @@ struct PrintBucket : std::unary_function<Bucket, void>
 {
     void operator() (const Bucket& v) const
     {
-        cout << "value: " << v.maValue.GetValue() << "  order index: " << v.mnOrderIndex << "  data index: " << v.mnDataIndex << "  value sort index: " << v.mnValueSortIndex << endl;
+        cout << "value: " << v.maValue.GetValue() << "  order index: " << v.mnOrderIndex << "  data index: " << v.mnDataIndex << endl;
     }
 };
 
@@ -181,11 +180,11 @@ struct LessByValue : std::binary_function<Bucket, Bucket, bool>
     }
 };
 
-struct LessByValueSortIndex : std::binary_function<Bucket, Bucket, bool>
+struct LessByOrderIndex : std::binary_function<Bucket, Bucket, bool>
 {
     bool operator() (const Bucket& left, const Bucket& right) const
     {
-        return left.mnValueSortIndex < right.mnValueSortIndex;
+        return left.mnOrderIndex < right.mnOrderIndex;
     }
 };
 
@@ -227,17 +226,6 @@ public:
     }
 };
 
-class TagValueSortOrder : public std::unary_function<Bucket, void>
-{
-    SCROW mnCurIndex;
-public:
-    TagValueSortOrder() : mnCurIndex(0) {}
-    void operator() (Bucket& v)
-    {
-        v.mnValueSortIndex = mnCurIndex++;
-    }
-};
-
 void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
 {
     if (aBuckets.empty())
@@ -245,9 +233,6 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
 
     // Sort by the value.
     std::sort(aBuckets.begin(), aBuckets.end(), LessByValue());
-
-    // Remember this sort order.
-    std::for_each(aBuckets.begin(), aBuckets.end(), TagValueSortOrder());
 
     {
         // Set order index such that unique values have identical index value.
@@ -273,7 +258,7 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
     std::for_each(aBuckets.begin(), aBuckets.end(), PushBackOrderIndex(rField.maData));
 
     // Sort by the value again.
-    std::sort(aBuckets.begin(), aBuckets.end(), LessByValueSortIndex());
+    std::sort(aBuckets.begin(), aBuckets.end(), LessByOrderIndex());
 
     // Unique by value.
     std::vector<Bucket>::iterator itUniqueEnd =
