@@ -17,29 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_OLEPERSIST_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_OLEPERSIST_HXX
+#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_GRAPHCONVERT_HXX
+#define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_GRAPHCONVERT_HXX
 
 #include <sal/config.h>
 
-#include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
-    namespace io { class XInputStream; }
-    namespace lang { class XMultiServiceFactory; }
-} } }
+namespace com { namespace sun { namespace star { namespace uno {
+    class Any;
+} } } }
 
-OUString GetNewTempFileURL_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
-
-OUString GetNewFilledTempFile_Impl(
-    css::uno::Reference<css::io::XInputStream > const & xInStream,
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & xFactory)
-    throw (css::io::IOException, css::uno::RuntimeException);
-
-bool KillFile_Impl( const OUString& aURL, const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
+bool ConvertBufferToFormat(
+    void * pBuf, sal_uInt32 nBufSize, OUString const & aFormatShortName,
+    css::uno::Any & aResult);
 
 #endif
 

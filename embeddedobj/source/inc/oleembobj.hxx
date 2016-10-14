@@ -55,7 +55,7 @@ class VerbExecutionController
     bool m_bWasEverActive;
     bool m_bVerbExecutionInProgress;
     oslThreadIdentifier m_nVerbExecutionThreadIdentifier;
-    sal_Bool m_bChangedOnVerbExecution;
+    bool m_bChangedOnVerbExecution;
 #endif
 
 public:
@@ -66,13 +66,13 @@ public:
     , m_bWasEverActive( false )
     , m_bVerbExecutionInProgress( false )
     , m_nVerbExecutionThreadIdentifier( 0 )
-    , m_bChangedOnVerbExecution( sal_False )
+    , m_bChangedOnVerbExecution( false )
 #endif
     {}
 
 #ifdef _WIN32
     void StartControlExecution();
-    sal_Bool EndControlExecution_WasModified();
+    bool EndControlExecution_WasModified();
     void ModificationNotificationIsDone();
     // no need to lock anything to check the value of the numeric members
     bool CanDoNotification() { return ( !m_bVerbExecutionInProgress && !m_bWasEverActive && !m_nNotificationLock ); }
@@ -211,13 +211,13 @@ protected:
 #endif
     void MakeEventListenerNotification_Impl( const OUString& aEventName );
 #ifdef _WIN32
-    void StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState );
+    void StateChangeNotification_Impl( bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState );
     css::uno::Reference< css::io::XOutputStream > GetStreamForSaving();
 
 
     css::uno::Sequence< sal_Int32 > GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState );
 
-    css::uno::Sequence< sal_Int32 > GetReachableStatesList_Impl(
+    static css::uno::Sequence< sal_Int32 > GetReachableStatesList_Impl(
                         const css::uno::Sequence< css::embed::VerbDescriptor >& aVerbList );
 #endif
 
@@ -241,7 +241,7 @@ protected:
                             bool bSaveAs )
         throw ( css::uno::Exception );
 #ifdef _WIN32
-    void StoreObjectToStream( css::uno::Reference< css::io::XOutputStream > xOutStream )
+    void StoreObjectToStream( css::uno::Reference< css::io::XOutputStream > const & xOutStream )
         throw ( css::uno::Exception );
 #endif
     void InsertVisualCache_Impl(
@@ -264,11 +264,11 @@ protected:
                     bool bAllowRepair50 = false )
         throw ();
 #ifdef _WIN32
-    sal_Bool SaveObject_Impl();
-    sal_Bool OnShowWindow_Impl( sal_Bool bShow );
-    void CreateOleComponent_Impl( OleComponent* pOleComponent = NULL );
-    void CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent = NULL );
-    void CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent = NULL );
+    bool SaveObject_Impl();
+    bool OnShowWindow_Impl( bool bShow );
+    void CreateOleComponent_Impl( OleComponent* pOleComponent = nullptr );
+    void CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent = nullptr );
+    void CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent = nullptr );
     OUString CreateTempURLEmpty_Impl();
     OUString GetTempURL_Impl();
     void SetObjectIsLink_Impl( bool bIsLink ) { m_bIsLink = bIsLink; }
@@ -298,7 +298,7 @@ public:
     virtual ~OleEmbeddedObject() override;
 
 #ifdef _WIN32
-    void OnIconChanged_Impl();
+    static void OnIconChanged_Impl();
     void OnViewChanged_Impl();
     void OnClosed_Impl();
 #endif

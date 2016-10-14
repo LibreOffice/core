@@ -34,6 +34,7 @@
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
 
+#include <graphconvert.hxx>
 #include "mtnotification.hxx"
 #include "oleembobj.hxx"
 
@@ -41,7 +42,7 @@
 using namespace ::com::sun::star;
 
 
-sal_Bool ConvertBufferToFormat( void* pBuf,
+bool ConvertBufferToFormat( void* pBuf,
                                 sal_uInt32 nBufSize,
                                 const OUString& aMimeType,
                                 uno::Any& aResult )
@@ -56,11 +57,11 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
         if (rFilter.CanImportGraphic(OUString(), aMemoryStream, GRFILTER_FORMAT_DONTKNOW, &nRetFormat) == GRFILTER_OK &&
                 rFilter.GetImportFormatMediaType(nRetFormat) == aMimeType)
         {
-            aResult <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemoryStream.GetData() ), aMemoryStream.Seek( STREAM_SEEK_TO_END ) );
-            return sal_True;
+            aResult <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemoryStream.GetData() ), aMemoryStream.Seek( STREAM_SEEK_TO_END ) );
+            return true;
         }
 
-        uno::Sequence < sal_Int8 > aData( (sal_Int8*)pBuf, nBufSize );
+        uno::Sequence < sal_Int8 > aData( static_cast<sal_Int8*>(pBuf), nBufSize );
         uno::Reference < io::XInputStream > xIn = new comphelper::SequenceInputStream( aData );
         try
         {
@@ -80,15 +81,15 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
                 aOutMediaProperties[1].Value <<= aMimeType;
 
                 xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
-                aResult <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aNewStream.GetData() ), aNewStream.Seek( STREAM_SEEK_TO_END ) );
-                return sal_True;
+                aResult <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aNewStream.GetData() ), aNewStream.Seek( STREAM_SEEK_TO_END ) );
+                return true;
             }
         }
         catch (const uno::Exception&)
         {}
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -116,7 +117,7 @@ void SAL_CALL MainThreadNotificationRequest::notify (const uno::Any& ) throw (un
                 else if ( m_nAspect == embed::Aspects::MSOLE_CONTENT )
                     m_pObject->OnViewChanged_Impl();
                 else if ( m_nAspect == embed::Aspects::MSOLE_ICON )
-                    m_pObject->OnIconChanged_Impl();
+                    OleEmbeddedObject::OnIconChanged_Impl();
             }
         }
         catch( const uno::Exception& )
