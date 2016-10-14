@@ -2195,10 +2195,10 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
         if( aDdeTextFmt == "CSV" ||
             aDdeTextFmt == "FCSV" )
             aObj.SetSeparator( ',' );
-        return aObj.ImportData( rMimeType, rValue );
+        return ScImportExport::ImportData( rMimeType, rValue );
     }
     ScImportExport aObj( &aDocument, rItem );
-    return aObj.IsRef() && aObj.ImportData( rMimeType, rValue );
+    return aObj.IsRef() && ScImportExport::ImportData( rMimeType, rValue );
 }
 #endif
 
