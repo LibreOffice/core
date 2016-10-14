@@ -98,7 +98,7 @@ namespace dxcanvas
             aRightBottom*= aTextureTransform;
 
             Gdiplus::RectF aBounds;
-            rFillPath->GetBounds( &aBounds, NULL, NULL );
+            rFillPath->GetBounds( &aBounds );
 
             // now, we potentially have to enlarge our gradient area
             // atop and below the transformed [0,1]x[0,1] unit rect,
@@ -602,7 +602,7 @@ namespace dxcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 }
 

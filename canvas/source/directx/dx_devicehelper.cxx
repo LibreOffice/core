@@ -44,9 +44,9 @@ using namespace ::com::sun::star;
 namespace dxcanvas
 {
     DeviceHelper::DeviceHelper() :
-        mpDevice( NULL ),
-        mnHDC(0),
-        mpOutDev(0)
+        mpDevice( nullptr ),
+        mnHDC(nullptr),
+        mpOutDev(nullptr)
     {
     }
 
@@ -65,9 +65,9 @@ namespace dxcanvas
     void DeviceHelper::disposing()
     {
         // release all references
-        mnHDC = 0;
-        mpDevice = NULL;
-        mpOutDev = 0;
+        mnHDC = nullptr;
+        mpDevice = nullptr;
+        mpOutDev = nullptr;
     }
 
     geometry::RealSize2D DeviceHelper::getPhysicalResolution()

@@ -43,7 +43,7 @@ namespace dxcanvas
 {
     SpriteDeviceHelper::SpriteDeviceHelper() :
         DeviceHelper(),
-        mpSpriteCanvas( NULL ),
+        mpSpriteCanvas( nullptr ),
         mpBackBuffer(),
         mpSurfaceProxyManager(),
         mpRenderModule()
@@ -102,7 +102,7 @@ namespace dxcanvas
         mpBackBuffer.reset();
         mpSurfaceProxyManager.reset();
         mpRenderModule.reset();
-        mpSpriteCanvas = NULL;
+        mpSpriteCanvas = nullptr;
 
         DeviceHelper::disposing();
     }
@@ -163,16 +163,16 @@ namespace dxcanvas
         // _always_ will have exactly one backbuffer
     }
 
-    sal_Bool SpriteDeviceHelper::showBuffer( bool, sal_Bool )
+    bool SpriteDeviceHelper::showBuffer( bool, bool )
     {
         SAL_WARN("canvas.directx", "Not supposed to be called, handled by SpriteCanvas");
-        return sal_False;
+        return false;
     }
 
-    sal_Bool SpriteDeviceHelper::switchBuffer( bool, sal_Bool )
+    bool SpriteDeviceHelper::switchBuffer( bool, bool )
     {
         SAL_WARN("canvas.directx", "Not supposed to be called, handled by SpriteCanvas");
-        return sal_False;
+        return false;
     }
 
     uno::Any SpriteDeviceHelper::isAccelerated() const
@@ -209,7 +209,7 @@ namespace dxcanvas
         if( mpRenderModule )
             return mpRenderModule->getHWND();
         else
-            return 0;
+            return nullptr;
     }
 
     void SpriteDeviceHelper::dumpScreenContent() const

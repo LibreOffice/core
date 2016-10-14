@@ -89,7 +89,7 @@ namespace dxcanvas
         awt::Rectangle aRect;
         maArguments[2] >>= aRect;
 
-        sal_Bool bIsFullscreen( sal_False );
+        sal_Bool bIsFullscreen( false );
         maArguments[3] >>= bIsFullscreen;
 
         // setup helper
@@ -123,7 +123,7 @@ namespace dxcanvas
         // avoid repaints on hidden window (hidden: not mapped to
         // screen). Return failure, since the screen really has _not_
         // been updated (caller should try again later)
-        return !mbIsVisible ? false : SpriteCanvasBaseT::showBuffer( bUpdateAll );
+        return mbIsVisible && SpriteCanvasBaseT::showBuffer( bUpdateAll );
     }
 
     sal_Bool SAL_CALL SpriteCanvas::switchBuffer( sal_Bool bUpdateAll ) throw (uno::RuntimeException)
@@ -133,7 +133,7 @@ namespace dxcanvas
         // avoid repaints on hidden window (hidden: not mapped to
         // screen). Return failure, since the screen really has _not_
         // been updated (caller should try again later)
-        return !mbIsVisible ? false : SpriteCanvasBaseT::switchBuffer( bUpdateAll );
+        return mbIsVisible && SpriteCanvasBaseT::switchBuffer( bUpdateAll );
     }
 
     sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll ) throw (uno::RuntimeException)
@@ -143,7 +143,7 @@ namespace dxcanvas
         // avoid repaints on hidden window (hidden: not mapped to
         // screen). Return failure, since the screen really has _not_
         // been updated (caller should try again later)
-        return !mbIsVisible ? false : maCanvasHelper.updateScreen(
+        return mbIsVisible && maCanvasHelper.updateScreen(
             ::basegfx::unotools::b2IRectangleFromAwtRectangle(maBounds),
             bUpdateAll,
             mbSurfaceDirty );

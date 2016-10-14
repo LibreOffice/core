@@ -120,7 +120,7 @@ namespace dxcanvas
             // background buffer.
 
             // log output pos in device pixel
-            SAL_INFO("canva.directx", "SpriteHelper::redraw(): output pos is (" <<
+            SAL_INFO("canvas.directx", "SpriteHelper::redraw(): output pos is (" <<
                      rPos.getX() << "," << rPos.getY() << ")" );
 
             const ::basegfx::B2DVector&                        rSize( getSizePixel() );

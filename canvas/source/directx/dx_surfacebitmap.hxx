@@ -40,11 +40,11 @@ namespace dxcanvas
         bool resize( const ::basegfx::B2IVector& rSize );
         void clear();
 
-        virtual GraphicsSharedPtr         getGraphics();
+        virtual GraphicsSharedPtr         getGraphics() override;
 
-        virtual BitmapSharedPtr           getBitmap() const;
-        virtual ::basegfx::B2IVector      getSize() const;
-        virtual bool                      hasAlpha() const;
+        virtual BitmapSharedPtr           getBitmap() const override;
+        virtual ::basegfx::B2IVector      getSize() const override;
+        virtual bool                      hasAlpha() const override;
 
         COMReference<surface_type>              getSurface() const { return mpSurface; }
 
@@ -66,21 +66,21 @@ namespace dxcanvas
 
         virtual css::uno::Sequence< sal_Int8 > getData(
             css::rendering::IntegerBitmapLayout&       bitmapLayout,
-            const css::geometry::IntegerRectangle2D&   rect );
+            const css::geometry::IntegerRectangle2D&   rect ) override;
 
         virtual void setData(
             const css::uno::Sequence< sal_Int8 >&      data,
             const css::rendering::IntegerBitmapLayout& bitmapLayout,
-            const css::geometry::IntegerRectangle2D&   rect );
+            const css::geometry::IntegerRectangle2D&   rect ) override;
 
         virtual void setPixel(
             const css::uno::Sequence< sal_Int8 >&      color,
             const css::rendering::IntegerBitmapLayout& bitmapLayout,
-            const css::geometry::IntegerPoint2D&       pos );
+            const css::geometry::IntegerPoint2D&       pos ) override;
 
         virtual css::uno::Sequence< sal_Int8 > getPixel(
             css::rendering::IntegerBitmapLayout&       bitmapLayout,
-            const css::geometry::IntegerPoint2D&       pos );
+            const css::geometry::IntegerPoint2D&       pos ) override;
 
     private:
         void init();
