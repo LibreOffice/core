@@ -49,17 +49,17 @@ CXNotifyingDataObject::CXNotifyingDataObject(
 
 STDMETHODIMP CXNotifyingDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
 {
-    if ( NULL == ppvObject )
+    if ( nullptr == ppvObject )
         return E_INVALIDARG;
 
     HRESULT hr = E_NOINTERFACE;
 
-    *ppvObject = NULL;
+    *ppvObject = nullptr;
     if ( ( __uuidof( IUnknown ) == iid ) ||
          ( __uuidof( IDataObject ) == iid ) )
     {
         *ppvObject = static_cast< IUnknown* >( this );
-        ( (LPUNKNOWN)*ppvObject )->AddRef( );
+        static_cast<LPUNKNOWN>(*ppvObject)->AddRef( );
         hr = S_OK;
     }
 

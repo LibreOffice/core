@@ -50,34 +50,21 @@ public:
     // XDataFormatTranslator
 
     virtual css::uno::Any SAL_CALL getSystemDataTypeFromDataFlavor( const css::datatransfer::DataFlavor& aDataFlavor )
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException) override;
 
     virtual css::datatransfer::DataFlavor SAL_CALL getDataFlavorFromSystemDataType( const css::uno::Any& aSysDataType )
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException) override;
 
     // XServiceInfo
 
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException) override;
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(css::uno::RuntimeException);
-
-private:
-    void SAL_CALL findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, css::datatransfer::DataFlavor& aDataFlavor ) const;
-    void SAL_CALL findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, css::datatransfer::DataFlavor& aDataFlavor ) const;
-    void SAL_CALL findStandardFormatIdForCharset( const OUString& aCharset, css::uno::Any& aAny ) const;
-    void SAL_CALL setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, css::uno::Any& aAny ) const;
-    void SAL_CALL findStdFormatIdOrNativeFormatNameForFullMediaType(
-        const css::uno::Reference< css::datatransfer::XMimeContentTypeFactory >& aRefXMimeFactory,
-        const OUString& aFullMediaType, css::uno::Any& aAny ) const;
-
-    sal_Bool isTextPlainMediaType( const OUString& fullMediaType ) const;
-
-    css::datatransfer::DataFlavor SAL_CALL mkDataFlv( const OUString& cnttype, const OUString& hpname, css::uno::Type dtype );
+        throw(css::uno::RuntimeException) override;
 
 private:
     const css::uno::Reference< css::uno::XComponentContext >  m_xContext;

@@ -38,19 +38,19 @@ class TargetDropContext: public WeakImplHelper<XDropTargetDropContext>
 
 public:
     explicit TargetDropContext(DropTarget* pTarget);
-    ~TargetDropContext();
+    ~TargetDropContext() override;
     TargetDropContext( const TargetDropContext&) = delete;
     TargetDropContext &operator= ( const TargetDropContext&) = delete;
 
     // XDropTargetDragContext
     virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation )
-        throw( RuntimeException);
+        throw( RuntimeException) override;
     virtual void SAL_CALL rejectDrop(  )
-        throw( RuntimeException);
+        throw( RuntimeException) override;
 
     // XDropTargetDropContext (inherits XDropTargetDragContext)
     virtual void SAL_CALL dropComplete( sal_Bool success )
-        throw(  RuntimeException);
+        throw(  RuntimeException) override;
 };
 #endif
 

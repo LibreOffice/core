@@ -147,7 +147,7 @@ void SAL_CALL ClipboardManager::dispose()
     ClearableMutexGuard aGuard( rBHelper.rMutex );
     if (!rBHelper.bDisposed && !rBHelper.bInDispose)
     {
-        rBHelper.bInDispose = sal_True;
+        rBHelper.bInDispose = true;
         aGuard.clear();
 
         // give everyone a chance to save his clipboard instance
@@ -182,8 +182,8 @@ void SAL_CALL ClipboardManager::dispose()
             }
         }
 
-        rBHelper.bDisposed = sal_True;
-        rBHelper.bInDispose = sal_False;
+        rBHelper.bDisposed = true;
+        rBHelper.bInDispose = false;
     }
 }
 
@@ -199,7 +199,7 @@ void SAL_CALL  ClipboardManager::disposing( const EventObject& event )
 Reference< XInterface > SAL_CALL ClipboardManager_createInstance(
     const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/)
 {
-    return Reference < XInterface >( ( OWeakObject * ) new ClipboardManager());
+    return Reference < XInterface >(static_cast<OWeakObject *>(new ClipboardManager()));
 }
 
 Sequence< OUString > SAL_CALL ClipboardManager_getSupportedServiceNames()

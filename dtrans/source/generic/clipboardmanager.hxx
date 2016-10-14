@@ -45,7 +45,7 @@ namespace dtrans
 
         const OUString m_aDefaultName;
 
-        virtual ~ClipboardManager();
+        virtual ~ClipboardManager() override;
     protected:
         using WeakComponentImplHelperBase::disposing;
     public:
@@ -57,27 +57,27 @@ namespace dtrans
          */
 
         virtual OUString SAL_CALL getImplementationName(  )
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException) override;
 
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException) override;
 
         /*
          * XComponent
          */
 
         virtual void SAL_CALL dispose()
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException) override;
 
         /*
          * XEventListener
          */
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException) override;
 
         /*
          * XClipboardManager
@@ -85,18 +85,18 @@ namespace dtrans
 
         virtual css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL getClipboard( const OUString& aName )
             throw(css::container::NoSuchElementException,
-                  css::uno::RuntimeException);
+                  css::uno::RuntimeException) override;
 
         virtual void SAL_CALL addClipboard( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard )
             throw(css::lang::IllegalArgumentException,
                   css::container::ElementExistException,
-                  css::uno::RuntimeException);
+                  css::uno::RuntimeException) override;
 
         virtual void SAL_CALL removeClipboard( const OUString& aName )
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL listClipboardNames(  )
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException) override;
 
     };
 
