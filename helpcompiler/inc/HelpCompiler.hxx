@@ -93,7 +93,7 @@ namespace fs
         {
             OUString ustrSystemPath;
             osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
-            return (wchar_t const *) ustrSystemPath.getStr();
+            return ustrSystemPath.getStr();
         }
 #endif
         std::string toUTF8() const
