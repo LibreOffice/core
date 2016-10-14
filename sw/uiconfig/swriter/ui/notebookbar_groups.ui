@@ -262,7 +262,6 @@
                 <property name="height_request">78</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
                 <child>
                   <object class="GtkBox" id="box10">
                     <property name="visible">True</property>
@@ -417,7 +416,7 @@
             </child>
             <child>
               <object class="GtkLabel" id="filegrouplabel">
-                <property name="height_request">20</property>
+                <property name="height_request">15</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">File</property>
@@ -464,7 +463,6 @@
                 <property name="height_request">78</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
                 <child>
                   <object class="GtkBox" id="box2">
                     <property name="visible">True</property>
@@ -588,7 +586,7 @@
             </child>
             <child>
               <object class="GtkLabel" id="clipboardgrouplabel">
-                <property name="height_request">20</property>
+                <property name="height_request">15</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Clipboard</property>
@@ -634,7 +632,6 @@
               <object class="GtkBox" id="fomatgroupbuttons">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
                 <child>
                   <object class="GtkButton" id="paragraphstyleb:stylemenu">
                     <property name="label" translatable="yes">Style</property>
@@ -1149,7 +1146,7 @@
             </child>
             <child>
               <object class="GtkLabel" id="fomatgrouplabel">
-                <property name="height_request">20</property>
+                <property name="height_request">15</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Format</property>
@@ -1212,7 +1209,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="tablegrouplabel">
-                    <property name="height_request">20</property>
+                    <property name="height_request">15</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Table</property>
@@ -1250,7 +1247,6 @@
                     <property name="height_request">78</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkBox" id="box15">
                         <property name="visible">True</property>
@@ -1414,7 +1410,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="insertgrouplabel">
-                    <property name="height_request">20</property>
+                    <property name="height_request">15</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Insert</property>
@@ -1463,7 +1459,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="imagegrouplabel">
-                    <property name="height_request">20</property>
+                    <property name="height_request">15</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Image</property>
