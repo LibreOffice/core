@@ -79,6 +79,7 @@ public:
     }
 };
 
+#if !defined _WIN32
 class FailTest : public Test
 {
 public:
@@ -112,6 +113,7 @@ public:
         finish();
     }
 };
+#endif
 
 DECLARE_OOXMLIMPORT_TEST(testImageHyperlink, "image-hyperlink.docx")
 {

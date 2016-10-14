@@ -507,7 +507,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
 #if defined(_WIN32)
     OutputDevice *pWin = rSh.GetWin() ?
                          rSh.GetWin() :
-                         GetpApp()->GetDefaultDevice();
+                         Application::GetDefaultDevice();
     if ( pWin )
     {
         MapMode aTmpMap( MapUnit::MapTwip );

@@ -965,7 +965,7 @@ void SwPostItMgr::MakeVisible(const SwSidebarWin* pPostIt )
 {
     long aPage = -1;
     // we don't know the page yet, lets find it ourselves
-    for (unsigned long n=0;n<mPages.size();n++)
+    for (std::vector<SwPostItPageItem*>::size_type n=0;n<mPages.size();n++)
     {
         if (mPages[n]->mList->size()>0)
         {
