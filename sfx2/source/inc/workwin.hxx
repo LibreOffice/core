@@ -222,6 +222,8 @@ protected:
     OUString                m_aTbxTypeName;
     OUString                m_aProgressBarResName;
     css::uno::Reference< css::lang::XComponent > m_xLayoutManagerListener;
+    SfxFrame*               pMasterFrame;
+    SfxFrame*               pFrame;
 
 protected:
     void                    CreateChildWin_Impl(SfxChildWin_Impl*,bool);
@@ -229,13 +231,13 @@ protected:
     void                    Sort_Impl();
     SfxChild_Impl*          FindChild_Impl( const vcl::Window& rWindow ) const;
     bool                    RequestTopToolSpacePixel_Impl( SvBorder aBorder );
-    virtual Rectangle       GetTopRect_Impl();
+    Rectangle               GetTopRect_Impl();
     SvBorder                Arrange_Impl();
     void                    SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
     static bool             IsPluginMode( SfxObjectShell* pObjShell );
 
 public:
-                            SfxWorkWindow( vcl::Window *pWin, SfxBindings& rBindings, SfxWorkWindow* pParent = nullptr);
+                            SfxWorkWindow( vcl::Window* pWin, SfxFrame* pFrm, SfxFrame* pMaster );
     virtual                 ~SfxWorkWindow();
     SfxBindings&            GetBindings()
                             { return *pBindings; }
@@ -260,7 +262,7 @@ public:
     void                    ShowChildren_Impl();
     void                    HideChildren_Impl();
     bool                    PrepareClose_Impl();
-    virtual void            ArrangeChildren_Impl( bool bForce = true );
+    void                    ArrangeChildren_Impl( bool bForce = true );
     void                    DeleteControllers_Impl();
     void                    HidePopups_Impl(bool bHide, bool bParent, sal_uInt16 nId=0);
     void                    ConfigChild_Impl(SfxChildIdentifier,
@@ -272,7 +274,8 @@ public:
     void                    SetFullScreen_Impl( bool bSet ) { bIsFullScreen = bSet; }
 
     // Methods for Objectbars
-    virtual void            UpdateObjectBars_Impl();
+    void                    UpdateObjectBars_Impl();
+    void                    UpdateObjectBars_Impl2();
     void                    ResetObjectBars_Impl();
     void                    SetObjectBar_Impl(sal_uInt16 nPos, sal_uInt32 nResId,
                                     SfxInterface *pIFace);
@@ -306,18 +309,6 @@ public:
     css::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator();
     css::uno::Reference< css::frame::XFrame > GetFrameInterface();
 };
-
-class SfxFrameWorkWin_Impl : public SfxWorkWindow
-{
-    SfxFrame*           pMasterFrame;
-    SfxFrame*           pFrame;
-public:
-                        SfxFrameWorkWin_Impl( vcl::Window* pWin, SfxFrame* pFrm, SfxFrame* pMaster );
-    virtual void        ArrangeChildren_Impl( bool bForce = true ) override;
-    virtual void        UpdateObjectBars_Impl() override;
-    virtual Rectangle   GetTopRect_Impl() override;
-};
-
 
 #endif
 

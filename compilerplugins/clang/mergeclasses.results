@@ -131,7 +131,6 @@ merge SfxModelSubComponent with sfx2::DocumentUndoManager
 merge SfxMultiFixRecordWriter with SfxMultiVarRecordWriter
 merge SfxSingleRecordReader with SfxMultiRecordReader
 merge SfxSingleRecordWriter with SfxMultiFixRecordWriter
-merge SfxWorkWindow with SfxFrameWorkWin_Impl
 merge SmFontPickList with SmFontPickListBox
 merge StarSymbolToMSMultiFont with StarSymbolToMSMultiFontImpl
 merge StgAvlIterator with StgIterator

@@ -461,14 +461,49 @@ void SfxWorkWindow::Sort_Impl()
 
 // constructor for workwin of a Frame
 
-SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMaster )
-    : SfxWorkWindow(
-        pWin,
-        pFrm->GetCurrentViewFrame()->GetBindings(),
-        pFrm->GetParentFrame() ? pFrm->GetParentFrame()->GetWorkWindow_Impl() : nullptr )
-    , pMasterFrame( pMaster )
-    , pFrame( pFrm )
+SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMaster ) :
+    pParent( pFrm->GetParentFrame() ? pFrm->GetParentFrame()->GetWorkWindow_Impl() : nullptr ),
+    pBindings(&pFrm->GetCurrentViewFrame()->GetBindings()),
+    pWorkWin (pWin),
+    pConfigShell( nullptr ),
+    pActiveChild( nullptr ),
+    nUpdateMode(SFX_VISIBILITY_STANDARD),
+    nChildren( 0 ),
+    nOrigMode( 0 ),
+    bSorted( true ),
+    bDockingAllowed(true),
+    bInternalDockingAllowed(true),
+    bAllChildrenVisible(true),
+#if HAVE_FEATURE_DESKTOP
+    bIsFullScreen( false ),
+    bShowStatusBar( true ),
+#else
+    bIsFullScreen( sal_True ),
+    bShowStatusBar( sal_False ),
+#endif
+    m_nLock( 0 ),
+    m_aStatusBarResName( "private:resource/statusbar/statusbar" ),
+    m_aLayoutManagerPropName( "LayoutManager" ),
+    m_aTbxTypeName( "private:resource/toolbar/" ),
+    m_aProgressBarResName( "private:resource/progressbar/progressbar" ),
+    pMasterFrame( pMaster ),
+    pFrame( pFrm )
 {
+    DBG_ASSERT (pBindings, "No Bindings!");
+
+    pBindings->SetWorkWindow_Impl( this );
+
+    // For the ObjectBars a integral place in the Childlist is reserved,
+    // so that they always come in a defined order.
+    aChildren.insert( aChildren.begin(), SFX_OBJECTBAR_MAX, nullptr );
+
+    // create and initialize layout manager listener
+    Reference< css::frame::XFrame > xFrame = GetFrameInterface();
+    LayoutManagerListener* pLayoutManagerListener = new LayoutManagerListener( this );
+    m_xLayoutManagerListener.set( static_cast< cppu::OWeakObject* >( pLayoutManagerListener ),
+                                  css::uno::UNO_QUERY );
+    pLayoutManagerListener->setFrame( xFrame );
+
     pConfigShell = pFrm->GetCurrentViewFrame();
     if ( pConfigShell && pConfigShell->GetObjectShell() )
     {
@@ -494,51 +529,6 @@ SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( vcl::Window *pWin, SfxFrame *pFrm, S
 
     nOrigMode = SFX_VISIBILITY_STANDARD;
     nUpdateMode = SFX_VISIBILITY_STANDARD;
-}
-
-
-// Constructor of the base class
-
-SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxBindings& rB, SfxWorkWindow* pParentWorkwin ) :
-    pParent( pParentWorkwin ),
-    pBindings(&rB),
-    pWorkWin (pWin),
-    pConfigShell( nullptr ),
-    pActiveChild( nullptr ),
-    nUpdateMode(SFX_VISIBILITY_STANDARD),
-    nChildren( 0 ),
-    nOrigMode( 0 ),
-    bSorted( true ),
-    bDockingAllowed(true),
-    bInternalDockingAllowed(true),
-    bAllChildrenVisible(true),
-#if HAVE_FEATURE_DESKTOP
-    bIsFullScreen( false ),
-    bShowStatusBar( true ),
-#else
-    bIsFullScreen( sal_True ),
-    bShowStatusBar( sal_False ),
-#endif
-    m_nLock( 0 ),
-    m_aStatusBarResName( "private:resource/statusbar/statusbar" ),
-    m_aLayoutManagerPropName( "LayoutManager" ),
-    m_aTbxTypeName( "private:resource/toolbar/" ),
-    m_aProgressBarResName( "private:resource/progressbar/progressbar" )
-{
-    DBG_ASSERT (pBindings, "No Bindings!");
-
-    pBindings->SetWorkWindow_Impl( this );
-
-    // For the ObjectBars a integral place in the Childlist is reserved,
-    // so that they always come in a defined order.
-    aChildren.insert( aChildren.begin(), SFX_OBJECTBAR_MAX, nullptr );
-
-    // create and initialize layout manager listener
-    Reference< css::frame::XFrame > xFrame = GetFrameInterface();
-    LayoutManagerListener* pLayoutManagerListener = new LayoutManagerListener( this );
-    m_xLayoutManagerListener.set( static_cast< cppu::OWeakObject* >( pLayoutManagerListener ),
-                                  css::uno::UNO_QUERY );
-    pLayoutManagerListener->setFrame( xFrame );
 }
 
 
@@ -669,14 +659,9 @@ void SfxWorkWindow::DeleteControllers_Impl()
 }
 
 
-// Virtual method for placing the child window.
+// for placing the child window.
 
-void SfxWorkWindow::ArrangeChildren_Impl( bool /*bForce*/)
-{
-    Arrange_Impl();
-}
-
-void SfxFrameWorkWin_Impl::ArrangeChildren_Impl( bool bForce )
+void SfxWorkWindow::ArrangeChildren_Impl( bool bForce )
 {
     if ( pFrame->IsClosing_Impl() || ( m_nLock && !bForce ))
         return;
@@ -1079,7 +1064,7 @@ bool SfxWorkWindow::IsVisible_Impl( sal_uInt16 nMode ) const
     }
 }
 
-void SfxFrameWorkWin_Impl::UpdateObjectBars_Impl()
+void SfxWorkWindow::UpdateObjectBars_Impl()
 {
     if ( pFrame->IsClosing_Impl() )
         return;
@@ -1087,11 +1072,11 @@ void SfxFrameWorkWin_Impl::UpdateObjectBars_Impl()
     SfxWorkWindow *pWork = pParent;
     while ( pWork )
     {
-        pWork->SfxWorkWindow::UpdateObjectBars_Impl();
+        pWork->UpdateObjectBars_Impl2();
         pWork = pWork->GetParent_Impl();
     }
 
-    SfxWorkWindow::UpdateObjectBars_Impl();
+    UpdateObjectBars_Impl2();
 
     {
         pWork = pParent;
@@ -1164,16 +1149,16 @@ css::uno::Reference< css::frame::XFrame > SfxWorkWindow::GetFrameInterface()
     SfxDispatcher* pDispatcher( GetBindings().GetDispatcher() );
     if ( pDispatcher )
     {
-        SfxViewFrame* pFrame = pDispatcher->GetFrame();
-        if ( pFrame )
-           xFrame = pFrame->GetFrame().GetFrameInterface();
+        SfxViewFrame* pViewFrame = pDispatcher->GetFrame();
+        if ( pViewFrame )
+           xFrame = pViewFrame->GetFrame().GetFrameInterface();
     }
 
     return xFrame;
 }
 
 
-void SfxWorkWindow::UpdateObjectBars_Impl()
+void SfxWorkWindow::UpdateObjectBars_Impl2()
 {
     // Lock SplitWindows (which means suppressing the Resize-Reaction of the
     // DockingWindows)
@@ -1205,9 +1190,9 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 
     if ( pDispatcher )
     {
-        SfxViewFrame* pFrame = pDispatcher->GetFrame();
-        if ( pFrame )
-           bPluginMode = IsPluginMode( pFrame->GetObjectShell() );
+        SfxViewFrame* pViewFrame = pDispatcher->GetFrame();
+        if ( pViewFrame )
+           bPluginMode = IsPluginMode( pViewFrame->GetObjectShell() );
     }
 
     // Iterate over all Toolboxes
@@ -2197,20 +2182,10 @@ void SfxWorkWindow::ResetChildWindows_Impl()
     }
 }
 
-
-// Virtual method that returns the size of the area (client area) of the
+// returns the size of the area (client area) of the
 // parent windows, in which the ChildWindow can be fitted.
 
 Rectangle SfxWorkWindow::GetTopRect_Impl()
-{
-    return Rectangle (Point(), pWorkWin->GetOutputSizePixel() );
-}
-
-
-// Virtual method that returns the size of the area (client area) of the
-// parent windows, in which the ChildWindow can be fitted.
-
-Rectangle SfxFrameWorkWin_Impl::GetTopRect_Impl()
 {
     return pMasterFrame->GetTopOuterRectPixel_Impl();
 }
@@ -2239,18 +2214,18 @@ void SfxWorkWindow::SaveStatus_Impl(SfxChildWindow *pChild, const SfxChildWinInf
 void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
 {
     SfxDispatcher *pDisp = pBindings->GetDispatcher_Impl();
-    SfxViewFrame *pFrame = pDisp ? pDisp->GetFrame() :nullptr;
-    SfxModule *pMod = pFrame ? SfxModule::GetActiveModule(pFrame) :nullptr;
+    SfxViewFrame *pViewFrame = pDisp ? pDisp->GetFrame() :nullptr;
+    SfxModule *pMod = pViewFrame ? SfxModule::GetActiveModule(pViewFrame) :nullptr;
 
     OUString sModule;
-    if (pFrame)
+    if (pViewFrame)
     {
         try
         {
             using namespace ::com::sun::star;
             uno::Reference< frame::XModuleManager2 > xModuleManager(
                 frame::ModuleManager::create(::comphelper::getProcessComponentContext()));
-            sModule = xModuleManager->identify(pFrame->GetFrame().GetFrameInterface());
+            sModule = xModuleManager->identify(pViewFrame->GetFrame().GetFrameInterface());
             SvtModuleOptions::EFactory eFac = SvtModuleOptions::ClassifyFactoryByServiceName(sModule);
             sModule = SvtModuleOptions::GetFactoryShortName(eFac);
         }
