@@ -1166,6 +1166,7 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                             pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=true()
                         }
                         break;
+                    case ocLogInv:
                     case ocLogNormDist:
                         if ( mnCurArg == 0 )
                         {
@@ -1231,6 +1232,7 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                         }
                         break;
 
+                    case ocLogInv:
                     case ocLogNormDist:
                         if ( mnCurArg == 0 )
                         {
