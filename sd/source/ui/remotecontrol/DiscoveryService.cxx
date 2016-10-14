@@ -138,9 +138,11 @@ void DiscoveryService::setupSockets()
 
     rc = setsockopt( mSocket, IPPROTO_IP, IP_ADD_MEMBERSHIP,
     #ifdef _WIN32
-        (const char*)
+        reinterpret_cast<const char*>(&multicastRequest),
+    #else
+        &multicastRequest,
     #endif
-        &multicastRequest, sizeof(multicastRequest));
+        sizeof(multicastRequest));
 
     if (rc)
     {

@@ -1336,7 +1336,7 @@ void SAL_CALL BluetoothServer::run()
     aAddr.btAddr = 0;
     aAddr.serviceClassId = GUID_NULL;
     aAddr.port = BT_PORT_ANY; // Select any free socket.
-    if ( bind( aSocket, (SOCKADDR*) &aAddr, sizeof(aAddr) ) == SOCKET_ERROR )
+    if ( bind( aSocket, reinterpret_cast<SOCKADDR*>(&aAddr), sizeof(aAddr) ) == SOCKET_ERROR )
     {
         closesocket( aSocket );
         WSACleanup();
@@ -1372,7 +1372,7 @@ void SAL_CALL BluetoothServer::run()
         L"LibreOffice Impress Remote Control");
     aRecord.lpszComment = const_cast<wchar_t *>(
         L"Remote control of presentations over bluetooth.");
-    aRecord.lpServiceClassId = (LPGUID) &SerialPortServiceClass_UUID;
+    aRecord.lpServiceClassId = const_cast<LPGUID>(&SerialPortServiceClass_UUID);
     aRecord.dwNameSpace = NS_BTH;
     aRecord.dwNumberOfCsAddrs = 1;
     aRecord.lpcsaBuffer = &aAddrInfo;
@@ -1396,7 +1396,7 @@ void SAL_CALL BluetoothServer::run()
     while ( true )
     {
         SOCKET socket;
-        if ( (socket = accept(aSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) == INVALID_SOCKET )
+        if ( (socket = accept(aSocket, reinterpret_cast<sockaddr*>(&aRemoteAddr), &aRemoteAddrLen)) == INVALID_SOCKET )
         {
             closesocket( aSocket );
             WSACleanup();

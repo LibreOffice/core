@@ -5,7 +5,7 @@
 
 void sd::WINNetworkService::setup()
 {
-    DNSServiceErrorType err = DNSServiceRegister(&client, 0, 0, NULL, kREG_TYPE, "local", NULL, 1599, 1, "", NULL, this );
+    DNSServiceErrorType err = DNSServiceRegister(&client, 0, 0, nullptr, kREG_TYPE, "local", nullptr, 1599, 1, "", nullptr, this );
 
     if (kDNSServiceErr_NoError != err)
         SAL_WARN("sdremote.wifi", "DNSServiceRegister failed: " << err);
