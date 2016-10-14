@@ -59,7 +59,7 @@ protected:
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, css::uno::Any* pValue )
         throw (css::uno::RuntimeException, css::beans::UnknownPropertyException, css::lang::WrappedTargetException, std::exception) override;
 public:
-    explicit SmModel( SfxObjectShell *pObjSh = nullptr );
+    explicit SmModel( SfxObjectShell *pObjSh );
     virtual ~SmModel() throw () override;
 
     //XInterface

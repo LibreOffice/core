@@ -140,9 +140,9 @@ struct OStorePageDescriptor
     /** Construction.
      */
     explicit OStorePageDescriptor (
-        sal_uInt32 nAddr = STORE_PAGE_NULL,
-        sal_uInt16 nSize = 0,
-        sal_uInt16 nUsed = 0)
+        sal_uInt32 nAddr,
+        sal_uInt16 nSize,
+        sal_uInt16 nUsed)
         : m_nAddr (store::htonl(nAddr)),
           m_nSize (store::htons(nSize)),
           m_nUsed (store::htons(nUsed))

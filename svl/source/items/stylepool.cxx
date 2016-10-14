@@ -351,7 +351,7 @@ private:
     SfxItemSet* mpIgnorableItems;
 public:
     // #i86923#
-    explicit StylePoolImpl( SfxItemSet* pIgnorableItems = nullptr )
+    explicit StylePoolImpl( SfxItemSet* pIgnorableItems )
         : maRoot(),
           mpIgnorableItems( pIgnorableItems != nullptr
                             ? pIgnorableItems->Clone( false )

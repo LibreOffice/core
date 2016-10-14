@@ -436,8 +436,8 @@ public:
                                                 // reference is destroyed
     bool                        m_bIsOLEStorage;// an OLEStorage on a UCBStorageStream makes this an Autocommit-stream
 
-                                UCBStorageStream_Impl( const OUString&, StreamMode, UCBStorageStream*, bool, const OString* pKey=nullptr,
-                                                       bool bRepair = false, Reference< XProgressHandler > const & xProgress = Reference< XProgressHandler >() );
+                                UCBStorageStream_Impl( const OUString&, StreamMode, UCBStorageStream*, bool, const OString* pKey,
+                                                       bool bRepair, Reference< XProgressHandler > const & xProgress );
 
     void                        Free();
     bool                        Init();
@@ -500,7 +500,7 @@ public:
                                 UCBStorage_Impl( const ::ucbhelper::Content&, const OUString&, StreamMode, UCBStorage*, bool,
                                                  bool, bool = false, Reference< XProgressHandler > const & = Reference< XProgressHandler >() );
                                 UCBStorage_Impl( const OUString&, StreamMode, UCBStorage*, bool, bool,
-                                                 bool = false, Reference< XProgressHandler > const & = Reference< XProgressHandler >() );
+                                                 bool, Reference< XProgressHandler > const & );
                                 UCBStorage_Impl( SvStream&, UCBStorage*, bool );
     void                        Init();
     sal_Int16                   Commit();

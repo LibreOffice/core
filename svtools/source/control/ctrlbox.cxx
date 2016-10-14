@@ -444,8 +444,10 @@ private:
 
 public:
     ImpLineListData( BorderWidthImpl aWidthImpl, sal_uInt16 nStyle,
-            long nMinWidth=0, Color ( *pColor1Fn ) ( Color ) = &sameColor,
-            Color ( *pColor2Fn ) ( Color ) = &sameColor, Color ( *pColorDistFn ) ( Color, Color ) = &sameDistColor );
+            long nMinWidth,
+            Color ( *pColor1Fn ) ( Color ),
+            Color ( *pColor2Fn ) ( Color ),
+            Color ( *pColorDistFn ) ( Color, Color ) );
 
     /** Returns the computed width of the line 1 in twips. */
     long GetLine1ForWidth( long nWidth ) { return m_aWidthImpl.GetLine1( nWidth ); }

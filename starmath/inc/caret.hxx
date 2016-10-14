@@ -99,9 +99,9 @@ private:
 
 /** An entry in SmCaretPosGraph */
 struct SmCaretPosGraphEntry{
-    SmCaretPosGraphEntry(SmCaretPos pos = SmCaretPos(),
-                       SmCaretPosGraphEntry* left = nullptr,
-                       SmCaretPosGraphEntry* right = nullptr){
+    SmCaretPosGraphEntry(SmCaretPos pos,
+                         SmCaretPosGraphEntry* left,
+                         SmCaretPosGraphEntry* right) {
         CaretPos = pos;
         Left = left;
         Right = right;

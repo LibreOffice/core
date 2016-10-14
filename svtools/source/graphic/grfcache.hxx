@@ -53,8 +53,8 @@ private:
 public:
 
                             GraphicCache(
-                                sal_uLong nDisplayCacheSize = 10000000UL,
-                                sal_uLong nMaxObjDisplayCacheSize = 2400000UL
+                                sal_uLong nDisplayCacheSize,
+                                sal_uLong nMaxObjDisplayCacheSize
                             );
 
                             ~GraphicCache();

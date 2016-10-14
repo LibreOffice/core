@@ -39,7 +39,7 @@ public:
 
     inline Permission(
         t_type type,
-        ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() )
+        ::rtl::Reference< Permission > const & next )
         : m_next( next )
         , m_type( type )
         {}

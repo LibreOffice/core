@@ -160,7 +160,7 @@ struct OStoreBTreeNodeData : public store::PageData
 
     /** Construction.
     */
-    explicit OStoreBTreeNodeData (sal_uInt16 nPageSize = self::thePageSize);
+    explicit OStoreBTreeNodeData (sal_uInt16 nPageSize);
 
     /** guard (external representation).
     */

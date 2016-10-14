@@ -40,7 +40,7 @@ typedef std::vector< RoadmapItem* > HL_Vector;
 class IDLabel :  public FixedText
 {
 public:
-    IDLabel( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
+    IDLabel( vcl::Window* _pParent, WinBits _nWinStyle );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 

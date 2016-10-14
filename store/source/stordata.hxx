@@ -75,7 +75,7 @@ struct OStoreDataPageData : public store::PageData
 
     /** Construction.
     */
-    explicit OStoreDataPageData (sal_uInt16 nPageSize = self::thePageSize)
+    explicit OStoreDataPageData (sal_uInt16 nPageSize)
         : base (nPageSize)
     {
         base::m_aGuard.m_nMagic = store::htonl(self::theTypeId);

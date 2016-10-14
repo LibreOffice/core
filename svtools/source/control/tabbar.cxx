@@ -311,7 +311,7 @@ bool ImplTabButton::PreNotify(NotifyEvent& rNotifyEvent)
 class ImplTabSizer : public vcl::Window
 {
 public:
-                    ImplTabSizer( TabBar* pParent, WinBits nWinStyle = 0 );
+                    ImplTabSizer( TabBar* pParent, WinBits nWinStyle );
 
     TabBar*         GetParent() const { return static_cast<TabBar*>(Window::GetParent()); }
 
@@ -392,7 +392,7 @@ private:
                     DECL_LINK( ImplEndTimerHdl, Idle*, void );
 
 public:
-                    TabBarEdit( TabBar* pParent, WinBits nWinStyle = 0 );
+                    TabBarEdit( TabBar* pParent, WinBits nWinStyle );
 
     TabBar*         GetParent() const { return static_cast<TabBar*>(Window::GetParent()); }
 

@@ -51,7 +51,7 @@ struct Entry
     static void   operator delete (void *, void *) {}
 
     // Construction
-    explicit Entry (std::shared_ptr<PageData> const & rxPage = std::shared_ptr<PageData>(), sal_uInt32 nOffset = STORE_PAGE_NULL)
+    explicit Entry (std::shared_ptr<PageData> const & rxPage, sal_uInt32 nOffset)
         : m_xPage(rxPage), m_nOffset(nOffset), m_pNext(nullptr)
     {}
 

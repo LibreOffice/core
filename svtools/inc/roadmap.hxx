@@ -50,7 +50,7 @@ protected:
     void            implInit(vcl::RenderContext& rRenderContext);
 
 public:
-    ORoadmap( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
+    ORoadmap( vcl::Window* _pParent, WinBits _nWinStyle );
     virtual ~ORoadmap( ) override;
     virtual void dispose() override;
 
