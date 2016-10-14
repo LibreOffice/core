@@ -128,7 +128,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
        and calls on such construct produce
        a stack overflow.
      */
-    if (GetProp( hWnd, OLD_PROC_KEY )==0)
+    if (GetProp( hWnd, OLD_PROC_KEY )==NULL)
     {
         hFuncPtr = SetWindowLongPtr( hWnd, GWLP_WNDPROC, (LONG_PTR)OpenOfficeWndProc );
         SetProp( hWnd, OLD_PROC_KEY, (HANDLE)hFuncPtr );
