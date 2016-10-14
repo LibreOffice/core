@@ -292,6 +292,26 @@ static GtkWidget* gMenuItemMenuBarWidget;
 static GtkWidget* gCheckMenuItemWidget;
 static GtkWidget* gTreeViewWidget;
 
+namespace
+{
+    void render_common(GtkStyleContext *pContext, cairo_t *cr, const Rectangle &rIn)
+    {
+        Rectangle aRect(rIn);
+        GtkBorder margin;
+        gtk_style_context_get_margin(pContext, gtk_style_context_get_state(pContext), &margin);
+
+        aRect.Left() += margin.left;
+        aRect.Top() += margin.top;
+        aRect.Right() -= margin.right;
+        aRect.Bottom() -= margin.bottom;
+
+        gtk_render_background(pContext, cr, aRect.Left(), aRect.Top(),
+                                            aRect.GetWidth(), aRect.GetHeight());
+        gtk_render_frame(pContext, cr, aRect.Left(), aRect.Top(),
+                                       aRect.GetWidth(), aRect.GetHeight());
+    }
+}
+
 void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                     cairo_t *cr,
                                     const Rectangle& rControlRectangle,
@@ -770,7 +790,9 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
                              buttonRect.Top() + (gint)((buttonRect.GetHeight() - arrowRect.GetHeight()) / 2) ) );
 
 
-    if ( nType == ControlType::Combobox )
+    Rectangle aRect(Point(0, 0), Size(areaRect.GetWidth(), areaRect.GetHeight()));
+
+    if (nType == ControlType::Combobox)
     {
         gtk_style_context_save(mpComboboxButtonStyle);
         gtk_style_context_set_state(mpComboboxButtonStyle, flags);
@@ -784,31 +806,17 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
             else
                 gtk_style_context_set_junction_sides(mpEntryStyle, GTK_JUNCTION_RIGHT);
 
-            gtk_render_background(mpComboboxStyle, cr,
-                                  0, 0,
-                                  areaRect.GetWidth(), areaRect.GetHeight());
-            gtk_render_frame(mpComboboxStyle, cr,
-                             0, 0,
-                             areaRect.GetWidth(), areaRect.GetHeight());
-            gtk_render_background(mpEntryStyle, cr,
-                                  (aEditBoxRect.Left() - areaRect.Left()),
-                                  (aEditBoxRect.Top() - areaRect.Top()),
-                                  aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
-            gtk_render_frame(mpEntryStyle, cr,
-                             (aEditBoxRect.Left() - areaRect.Left()),
-                             (aEditBoxRect.Top() - areaRect.Top()),
-                             aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
+            render_common(mpComboboxStyle, cr, aRect);
+            Rectangle aEntryRect(Point(aEditBoxRect.Left() - areaRect.Left(),
+                                 aEditBoxRect.Top() - areaRect.Top()),
+                                 Size(aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight()));
+            render_common(mpEntryStyle, cr, aEntryRect);
             gtk_style_context_set_junction_sides(mpEntryStyle, eJuncSides);
         }
 
-        gtk_render_background(mpComboboxButtonStyle, cr,
-                              (buttonRect.Left() - areaRect.Left()),
-                              (buttonRect.Top() - areaRect.Top()),
-                              buttonRect.GetWidth(), buttonRect.GetHeight() );
-        gtk_render_frame(mpComboboxButtonStyle, cr,
-                         (buttonRect.Left() - areaRect.Left()),
-                         (buttonRect.Top() - areaRect.Top()),
-                         buttonRect.GetWidth(), buttonRect.GetHeight() );
+        Rectangle aButtonRect(Point(buttonRect.Left() - areaRect.Left(), buttonRect.Top() - areaRect.Top()),
+                              Size(buttonRect.GetWidth(), buttonRect.GetHeight()));
+        render_common(mpComboboxButtonStyle, cr, aButtonRect);
 
         gtk_render_arrow(mpComboboxButtonArrowStyle, cr,
                          G_PI,
@@ -831,19 +839,8 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
             gtk_style_context_save(mpListboxButtonStyle);
             gtk_style_context_set_state(mpListboxButtonStyle, flags);
 
-            gtk_render_background(mpListboxStyle, cr,
-                                  0, 0,
-                                  areaRect.GetWidth(), areaRect.GetHeight());
-            gtk_render_frame(mpListboxStyle, cr,
-                             0, 0,
-                             areaRect.GetWidth(), areaRect.GetHeight());
-
-            gtk_render_background(mpListboxButtonStyle, cr,
-                                  0, 0,
-                                  areaRect.GetWidth(), areaRect.GetHeight());
-            gtk_render_frame(mpListboxButtonStyle, cr,
-                             0, 0,
-                             areaRect.GetWidth(), areaRect.GetHeight());
+            render_common(mpListboxStyle, cr, aRect);
+            render_common(mpListboxButtonStyle, cr, aRect);
 
             gtk_render_arrow(mpListboxButtonArrowStyle, cr,
                              G_PI,
