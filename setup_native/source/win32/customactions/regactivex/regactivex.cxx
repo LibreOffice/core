@@ -43,13 +43,16 @@ typedef int ( __stdcall * DllNativeUnregProc ) ( int, BOOL, BOOL );
 
 BOOL UnicodeEquals( wchar_t const * pStr1, wchar_t const * pStr2 )
 {
-    if ( pStr1 == NULL && pStr2 == NULL )
+    if ( pStr1 == nullptr && pStr2 == nullptr )
         return TRUE;
-    else if ( pStr1 == NULL || pStr2 == NULL )
+    else if ( pStr1 == nullptr || pStr2 == nullptr )
         return FALSE;
 
     while( *pStr1 == *pStr2 && *pStr1 && *pStr2 )
-        pStr1++, pStr2++;
+    {
+        pStr1++;
+        pStr2++;
+    }
 
     return ( *pStr1 == 0 && *pStr2 == 0 );
 }
@@ -58,12 +61,12 @@ BOOL UnicodeEquals( wchar_t const * pStr1, wchar_t const * pStr2 )
 char* UnicodeToAnsiString( wchar_t* pUniString )
 {
     int len = WideCharToMultiByte(
-        CP_ACP, 0, pUniString, -1, 0, 0, 0, 0 );
+        CP_ACP, 0, pUniString, -1, nullptr, 0, nullptr, nullptr );
 
-    char* buff = reinterpret_cast<char*>( malloc( len ) );
+    char* buff = static_cast<char*>( malloc( len ) );
 
     WideCharToMultiByte(
-        CP_ACP, 0, pUniString, -1, buff, len, 0, 0 );
+        CP_ACP, 0, pUniString, -1, buff, len, nullptr, nullptr );
 
     return buff;
 }
@@ -71,17 +74,17 @@ char* UnicodeToAnsiString( wchar_t* pUniString )
 
 void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
-    HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
+    HINSTANCE hModule = LoadLibraryExA( pActiveXPath, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH );
     if( hModule )
     {
-        DllNativeRegProc pNativeProc = ( DllNativeRegProc )GetProcAddress( hModule, "DllRegisterServerNative" );
-        if( pNativeProc!=NULL )
+        DllNativeRegProc pNativeProc = reinterpret_cast<DllNativeRegProc>(GetProcAddress( hModule, "DllRegisterServerNative" ));
+        if( pNativeProc!=nullptr )
         {
             int nLen = strlen( pActiveXPath );
             int nRemoveLen = strlen( "\\so_activex.dll" );
             if ( nLen > nRemoveLen )
             {
-                char* pProgramPath = reinterpret_cast<char*>( malloc( nLen - nRemoveLen + 1 ) );
+                char* pProgramPath = static_cast<char*>( malloc( nLen - nRemoveLen + 1 ) );
                 strncpy( pProgramPath, pActiveXPath, nLen - nRemoveLen );
                 pProgramPath[ nLen - nRemoveLen ] = 0;
 
@@ -98,11 +101,11 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
 
 void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
-    HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
+    HINSTANCE hModule = LoadLibraryExA( pActiveXPath, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH );
     if( hModule )
     {
-        DllNativeUnregProc pNativeProc = ( DllNativeUnregProc )GetProcAddress( hModule, "DllUnregisterServerNative" );
-        if( pNativeProc!=NULL )
+        DllNativeUnregProc pNativeProc = reinterpret_cast<DllNativeUnregProc>(GetProcAddress( hModule, "DllUnregisterServerNative" ));
+        if( pNativeProc!=nullptr )
             ( *pNativeProc )( nMode, InstallForAllUser, InstallFor64Bit );
 
         FreeLibrary( hModule );
@@ -117,7 +120,7 @@ BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
     {
            sz++;
            DWORD nbytes = sz * sizeof( wchar_t );
-           wchar_t* buff = reinterpret_cast<wchar_t*>( malloc( nbytes ) );
+           wchar_t* buff = static_cast<wchar_t*>( malloc( nbytes ) );
            ZeroMemory( buff, nbytes );
            MsiGetPropertyW( hMSI, pPropName, buff, &sz );
            *ppValue = buff;
@@ -131,7 +134,7 @@ BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 
 BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
 {
-    wchar_t* pProgPath = NULL;
+    wchar_t* pProgPath = nullptr;
     if ( GetMsiPropW( hMSI, L"INSTALLLOCATION", &pProgPath ) && pProgPath )
        {
         char* pCharProgPath = UnicodeToAnsiString( pProgPath );
@@ -139,7 +142,7 @@ BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
         if ( pCharProgPath )
         {
             int nLen = strlen( pCharProgPath );
-            *ppActiveXPath = reinterpret_cast<char*>( malloc( nLen + 23 ) );
+            *ppActiveXPath = static_cast<char*>( malloc( nLen + 23 ) );
             strncpy( *ppActiveXPath, pCharProgPath, nLen );
             strncpy( (*ppActiveXPath) + nLen, "program\\so_activex.dll", 22 );
             (*ppActiveXPath)[nLen+22] = 0;
@@ -258,7 +261,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
 BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
-    wchar_t* pVal = NULL;
+    wchar_t* pVal = nullptr;
     if ( GetMsiPropW( hMSI, L"ALLUSERS", &pVal ) && pVal )
     {
         bResult = UnicodeEquals( pVal , L"1" );
@@ -272,7 +275,7 @@ BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
-    wchar_t* pVal = NULL;
+    wchar_t* pVal = nullptr;
     if ( GetMsiPropW( hMSI, L"VersionNT64", &pVal ) && pVal )
     {
         bResult = TRUE;
@@ -295,7 +298,7 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
         BOOL bInstallForAllUser = MakeInstallForAllUsers( hMSI );
         BOOL bInstallFor64Bit = MakeInstallFor64Bit( hMSI );
 
-        char* pActiveXPath = NULL;
+        char* pActiveXPath = nullptr;
         if ( GetActiveXControlPath( hMSI, &pActiveXPath ) && pActiveXPath
         && GetDelta( hMSI, nOldInstallMode, nInstallMode, nDeinstallMode ) )
         {
@@ -336,7 +339,7 @@ extern "C" UINT __stdcall DeinstallActiveXControl( MSIHANDLE hMSI )
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_o_Activexcontrol", &current_state, &future_state ) )
     {
-        char* pActiveXPath = NULL;
+        char* pActiveXPath = nullptr;
         if ( current_state == INSTALLSTATE_LOCAL && GetActiveXControlPath( hMSI, &pActiveXPath ) && pActiveXPath )
         {
             BOOL bInstallForAllUser = MakeInstallForAllUsers( hMSI );

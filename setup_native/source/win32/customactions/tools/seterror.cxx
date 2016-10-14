@@ -65,17 +65,17 @@ void SetMsiErrorCode( int nErrorCode )
                     FALSE,                  // do not inherit the name
                     sMemMapName );          // name of mapping object
 
-    if ( hMapFile == NULL )                 // can not set error code
+    if ( hMapFile == nullptr )                 // can not set error code
     {
         OutputDebugStringFormatW( L"Could not open map file (%d).\n", GetLastError() );
         return;
     }
 
-    pBuf = (int*) MapViewOfFile( hMapFile,   // handle to map object
+    pBuf = static_cast<int*>(MapViewOfFile( hMapFile,   // handle to map object
                         FILE_MAP_ALL_ACCESS, // read/write permission
                         0,
                         0,
-                        sizeof( int ) );
+                        sizeof( int ) ));
     if ( pBuf )
     {
         *pBuf = nErrorCode;

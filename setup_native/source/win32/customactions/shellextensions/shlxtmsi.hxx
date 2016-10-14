@@ -44,7 +44,7 @@ static inline std::wstring GetMsiPropertyW( MSIHANDLE handle, const std::wstring
     if ( MsiGetPropertyW( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
     {
         DWORD nBytes = ++nChars * sizeof(WCHAR);
-        PWSTR buffer = reinterpret_cast<PWSTR>(_alloca(nBytes));
+        PWSTR buffer = static_cast<PWSTR>(_alloca(nBytes));
         ZeroMemory( buffer, nBytes );
         MsiGetPropertyW( handle, sProperty.c_str(), buffer, &nChars );
         result = buffer;
@@ -60,7 +60,7 @@ static inline void SetMsiPropertyW( MSIHANDLE handle, const std::wstring& sPrope
 
 static inline void UnsetMsiPropertyW( MSIHANDLE handle, const std::wstring& sProperty )
 {
-    MsiSetPropertyW( handle, sProperty.c_str(), NULL );
+    MsiSetPropertyW( handle, sProperty.c_str(), nullptr );
 }
 
 #endif // INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_SHELLEXTENSIONS_SHLXTMSI_HXX
