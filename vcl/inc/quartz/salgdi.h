@@ -102,6 +102,8 @@ public:
     hb_font_t* GetHbFont() const { return mpHbFont; }
     void       SetHbFont(hb_font_t* pHbFont) const { mpHbFont = pHbFont; }
 
+    CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
+
     const CoreTextFontFace*  mpFontData;
     /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
     float               mfFontStretch;
@@ -113,11 +115,6 @@ private:
     /// CoreText text style object
     CFMutableDictionaryRef  mpStyleDict;
     mutable hb_font_t*      mpHbFont;
-
-    friend class CTLayout;
-    friend class AquaSalGraphics;
-    friend class CommonSalLayout;
-    CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
 };
 
 // TODO: move into cross-platform headers
@@ -172,8 +169,8 @@ protected:
     RGBAColor                               maFillColor;
 
     // Device Font settings
-    const CoreTextFontFace*                 mpFontData;
-    CoreTextStyle*                          mpTextStyle;
+    const CoreTextFontFace*                 mpFontData[MAX_FALLBACK];
+    CoreTextStyle*                          mpTextStyle[MAX_FALLBACK];
     RGBAColor                               maTextColor;
     /// allows text to be rendered without antialiasing
     bool                                    mbNonAntialiasedText;

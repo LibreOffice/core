@@ -42,6 +42,8 @@
 #include "impfontcharmap.hxx"
 #include "impfontmetricdata.hxx"
 #include "CommonSalLayout.hxx"
+#include "outdev.h"
+#include "PhysicalFontCollection.hxx"
 
 #ifdef MACOSX
 #include "osx/salframe.h"
@@ -54,6 +56,49 @@
 #include "sft.hxx"
 
 using namespace vcl;
+
+class CoreTextGlyphFallbackSubstititution
+:    public ImplGlyphFallbackFontSubstitution
+{
+public:
+    bool FindFontSubstitute(FontSelectPattern&, OUString&) const override;
+};
+
+bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rPattern,
+    OUString& rMissingChars) const
+{
+    bool bFound = false;
+    CoreTextStyle rStyle(rPattern);
+    CTFontRef pFont = static_cast<CTFontRef>(CFDictionaryGetValue(rStyle.GetStyleDict(), kCTFontAttributeName));
+    CFStringRef pStr = CreateCFString(rMissingChars);
+    if (pStr)
+    {
+        CTFontRef pFallback = CTFontCreateForString(pFont, pStr, CFRangeMake(0, CFStringGetLength(pStr)));
+        if (pFallback)
+        {
+            bFound = true;
+
+            CTFontDescriptorRef pDesc = CTFontCopyFontDescriptor(pFallback);
+            FontAttributes rAttr = DevFontFromCTFontDescriptor(pDesc, nullptr);
+
+            rPattern.maSearchName = rAttr.GetFamilyName();
+
+            rPattern.SetWeight(rAttr.GetWeight());
+            rPattern.SetItalic(rAttr.GetItalic());
+            rPattern.SetPitch(rAttr.GetPitch());
+            rPattern.SetWidthType(rAttr.GetWidthType());
+
+            SalData* pSalData = GetSalData();
+            if (pSalData->mpFontList)
+                rPattern.mpFontData = pSalData->mpFontList->GetFontDataFromId(reinterpret_cast<sal_IntPtr>(pDesc));
+
+            CFRelease(pFallback);
+        }
+        CFRelease(pStr);
+    }
+
+    return bFound;
+}
 
 CoreTextFontFace::CoreTextFontFace( const CoreTextFontFace& rSrc )
   : PhysicalFontFace( rSrc )
@@ -245,8 +290,6 @@ AquaSalGraphics::AquaSalGraphics()
     , mxClipPath( nullptr )
     , maLineColor( COL_WHITE )
     , maFillColor( COL_BLACK )
-    , mpFontData( nullptr )
-    , mpTextStyle( nullptr )
     , maTextColor( COL_BLACK )
     , mbNonAntialiasedText( false )
     , mbPrinter( false )
@@ -258,6 +301,12 @@ AquaSalGraphics::AquaSalGraphics()
 #endif
 {
     SAL_INFO( "vcl.quartz", "AquaSalGraphics::AquaSalGraphics() this=" << this );
+
+    for (int i = 0; i < MAX_FALLBACK; ++i)
+    {
+        mpTextStyle[i] = nullptr;
+        mpFontData[i] = nullptr;
+    }
 }
 
 AquaSalGraphics::~AquaSalGraphics()
@@ -270,7 +319,8 @@ AquaSalGraphics::~AquaSalGraphics()
         CGPathRelease( mxClipPath );
     }
 
-    delete mpTextStyle;
+    for (int i = 0; i < MAX_FALLBACK; ++i)
+        delete mpTextStyle[i];
 
     if( mpXorEmulation )
         delete mpXorEmulation;
@@ -308,9 +358,12 @@ void AquaSalGraphics::SetTextColor( SalColor nSalColor )
     // SAL_ DEBUG(std::hex << nSalColor << std::dec << "={" << maTextColor.GetRed() << ", " << maTextColor.GetGreen() << ", " << maTextColor.GetBlue() << ", " << maTextColor.GetAlpha() << "}");
 }
 
-void AquaSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int /*nFallbackLevel*/ )
+void AquaSalGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel)
 {
-    mpTextStyle->GetFontMetric( rxFontMetric );
+    if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
+    {
+        mpTextStyle[nFallbackLevel]->GetFontMetric(rxFontMetric);
+    }
 }
 
 static bool AddTempDevFont(const OUString& rFontFileURL)
@@ -387,6 +440,12 @@ void AquaSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 
     // Copy all PhysicalFontFace objects contained in the SystemFontList
     pSalData->mpFontList->AnnounceFonts( *pFontCollection );
+
+    if (SalLayout::UseCommonLayout())
+    {
+        static CoreTextGlyphFallbackSubstititution aSubstFallback;
+        pFontCollection->SetFallbackHook(&aSubstFallback);
+    }
 }
 
 void AquaSalGraphics::ClearDevFontCache()
@@ -404,14 +463,24 @@ bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
 
 bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
 {
-    const bool bRC = mpTextStyle->GetGlyphOutline( aGlyphId, rPolyPoly );
-    return bRC;
+    const int nFallbackLevel = aGlyphId >> GF_FONTSHIFT;
+    if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
+    {
+        const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphOutline(aGlyphId, rPolyPoly);
+        return bRC;
+    }
+    return false;
 }
 
 bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
-    const bool bRC = mpTextStyle->GetGlyphBoundRect( aGlyphId, rRect );
-    return bRC;
+    const int nFallbackLevel = aGlyphId >> GF_FONTSHIFT;
+    if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
+    {
+        const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphBoundRect(aGlyphId, rRect);
+        return bRC;
+    }
+    return false;
 }
 
 void AquaSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
@@ -449,60 +518,71 @@ void AquaSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
     CGContextRestoreGState(context);
 }
 
-void AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
+void AquaSalGraphics::SetFont(FontSelectPattern* pReqFont, int nFallbackLevel)
 {
     // release the text style
-    delete mpTextStyle;
-    mpTextStyle = nullptr;
+    for (int i = nFallbackLevel; i < MAX_FALLBACK; ++i)
+    {
+        delete mpTextStyle[i];
+        mpTextStyle[i] = nullptr;
+    }
 
     // handle NULL request meaning: release-font-resources request
     if( !pReqFont )
     {
-        mpFontData = nullptr;
+        mpFontData[nFallbackLevel] = nullptr;
         return;
     }
 
     // update the text style
-    mpFontData = static_cast<const CoreTextFontFace*>( pReqFont->mpFontData );
-    mpTextStyle = new CoreTextStyle( *pReqFont );
+    mpFontData[nFallbackLevel] = static_cast<const CoreTextFontFace*>(pReqFont->mpFontData);
+    mpTextStyle[nFallbackLevel] = new CoreTextStyle(*pReqFont);
 
     SAL_INFO("vcl.ct",
             "SetFont"
-               " to "     << mpFontData->GetFamilyName()
-            << ", "       << mpFontData->GetStyleName()
-            << " fontid=" << mpFontData->GetFontId()
+               " to "     << mpFontData[nFallbackLevel]->GetFamilyName()
+            << ", "       << mpFontData[nFallbackLevel]->GetStyleName()
+            << " fontid=" << mpFontData[nFallbackLevel]->GetFontId()
             << " for "    << pReqFont->GetFamilyName()
             << ", "       << pReqFont->GetStyleName()
             << " weight=" << pReqFont->GetWeight()
             << " slant="  << pReqFont->GetItalic()
             << " size="   << pReqFont->mnHeight << "x" << pReqFont->mnWidth
             << " orientation=" << pReqFont->mnOrientation
+            << " fallback level " << nFallbackLevel
             );
 }
 
-SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int /*nFallbackLevel*/ )
+SalLayout* AquaSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
-    SalLayout* pSalLayout = mpTextStyle->GetTextLayout();
+    SalLayout* pSalLayout = nullptr;
+    if (mpTextStyle[nFallbackLevel])
+    {
+        if (SalLayout::UseCommonLayout())
+            pSalLayout = new CommonSalLayout(*mpTextStyle[nFallbackLevel]);
+        else
+            pSalLayout = mpTextStyle[nFallbackLevel]->GetTextLayout();
+    }
     return pSalLayout;
 }
 
 const FontCharMapRef AquaSalGraphics::GetFontCharMap() const
 {
-    if( !mpFontData )
+    if (!mpFontData[0])
     {
         FontCharMapRef xFontCharMap( new FontCharMap() );
         return xFontCharMap;
     }
 
-    return mpFontData->GetFontCharMap();
+    return mpFontData[0]->GetFontCharMap();
 }
 
 bool AquaSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
-    if( !mpFontData )
+    if (!mpFontData[0])
         return false;
 
-    return mpFontData->GetFontCapabilities(rFontCapabilities);
+    return mpFontData[0]->GetFontCapabilities(rFontCapabilities);
 }
 
 // fake a SFNT font directory entry for a font table
@@ -772,7 +852,8 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
             free( const_cast<TTSimpleGlyphMetrics *>(pGlyphMetrics) );
         }
 
-        FontCharMapRef xFCMap = mpFontData->GetFontCharMap();
+        CoreTextFontFace rCTFontData(*pFontData, pFontData->GetFontId());
+        FontCharMapRef xFCMap = rCTFontData.GetFontCharMap();
         SAL_WARN_IF( !xFCMap.Is() || !xFCMap->GetCharCount(), "vcl", "no charmap" );
 
         // get unicode<->glyph encoding

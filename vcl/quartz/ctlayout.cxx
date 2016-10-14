@@ -28,7 +28,6 @@
 #include "quartz/ctfonts.hxx"
 #include "CTRunData.hxx"
 #include "quartz/utils.h"
-#include "CommonSalLayout.hxx"
 
 
 class CTLayout : public SalLayout
@@ -782,10 +781,7 @@ void CTLayout::Simplify( bool /*bIsBase*/ ) {}
 
 SalLayout* CoreTextStyle::GetTextLayout() const
 {
-    if (SalLayout::UseCommonLayout())
-        return new CommonSalLayout(*this);
-    else
-        return new CTLayout( this);
+    return new CTLayout( this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
