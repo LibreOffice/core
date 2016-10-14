@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_c036efb3",
+        "filename": "cui/source/inc/cuigaldlg.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-14T06:35:45Z",
+      "side": 1,
+      "message": "when editing, please try (where possible) to preserve existing alignment",
+      "revId": "0eeeaf0d2fb3067076ac8da85a05319a0d61e8df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
