@@ -195,16 +195,16 @@ OGenericUnoController::OGenericUnoController(const Reference< XComponentContext 
 
 OGenericUnoController::OGenericUnoController()
     :OGenericUnoController_Base( getMutex() )
-    ,m_pView(NULL)
+    ,m_pView(nullptr)
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
     ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
     ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
     ,m_aCurrentFrame( *this )
-    ,m_bPreview(sal_False)
-    ,m_bReadOnly(sal_False)
-    ,m_bCurrentlyModified(sal_False)
+    ,m_bPreview(false)
+    ,m_bReadOnly(false)
+    ,m_bCurrentlyModified(false)
 {
     SAL_WARN("dbaccess.ui", "OGenericUnoController::OGenericUnoController: illegal call!" );
     // This ctor only exists because the MSVC compiler complained about an unresolved external

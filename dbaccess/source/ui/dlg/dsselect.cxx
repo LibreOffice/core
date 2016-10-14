@@ -79,6 +79,9 @@ void ODatasourceSelectDialog::dispose()
     m_pDatasource.clear();
     m_pOk.clear();
     m_pCancel.clear();
+#if defined HAVE_ODBC_ADMINISTRATION
+    m_pManageDatasources.clear();
+#endif
     ModalDialog::dispose();
 }
 
@@ -93,7 +96,7 @@ bool ODatasourceSelectDialog::Close()
 {
 #ifdef HAVE_ODBC_ADMINISTRATION
     if ( m_pODBCManagement.get() && m_pODBCManagement->isRunning() )
-        return sal_False;
+        return false;
 #endif
 
     return ModalDialog::Close();
