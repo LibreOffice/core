@@ -2500,11 +2500,12 @@ public:
                 else
                 {
                     OUString aQueryStr = rItem.maString.getString();
+                    const LanguageType aLnge = ScGlobal::GetpLocaleData()->getLanguageTag().getLanguageType(true);
                     OUString aCell( mpTransliteration->transliterate(
-                        aCellStr.getString(), ScGlobal::eLnge, 0, aCellStr.getLength(),
+                        aCellStr.getString(), aLnge, 0, aCellStr.getLength(),
                         nullptr ) );
                     OUString aQuer( mpTransliteration->transliterate(
-                        aQueryStr, ScGlobal::eLnge, 0, aQueryStr.getLength(),
+                        aQueryStr, aLnge, 0, aQueryStr.getLength(),
                         nullptr ) );
                     sal_Int32 nIndex = (rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH) ?
                         (aCell.getLength() - aQuer.getLength()) : 0;
