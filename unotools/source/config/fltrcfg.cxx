@@ -292,19 +292,9 @@ bool SvtFilterOptions_Impl::IsFlag( sal_uLong nFlag ) const
     return bRet;
 }
 
-SvtFilterOptions::SvtFilterOptions() :
-    ConfigItem( "Office.Common/Filter/Microsoft" ),
-    pImpl(new SvtFilterOptions_Impl)
-{
-    EnableNotification(GetPropertyNames());
-    Load();
-}
+namespace {
 
-SvtFilterOptions::~SvtFilterOptions()
-{
-}
-
-const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
+const Sequence<OUString>& GetPropertyNames()
 {
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
@@ -333,6 +323,20 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
             pNames[i] = OUString::createFromAscii(aPropNames[i]);
     }
     return aNames;
+}
+
+}
+
+SvtFilterOptions::SvtFilterOptions() :
+    ConfigItem( "Office.Common/Filter/Microsoft" ),
+    pImpl(new SvtFilterOptions_Impl)
+{
+    EnableNotification(GetPropertyNames());
+    Load();
+}
+
+SvtFilterOptions::~SvtFilterOptions()
+{
 }
 
 static sal_uLong lcl_GetFlag(sal_Int32 nProp)
