@@ -15,12 +15,16 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <sax/tools/converter.hxx>
+#include <unotools/calendarwrapper.hxx>
+#include <unotools/datetime.hxx>
+#include <xmloff/xmluconv.hxx>
 
 #ifdef XMLSEC_CRYPTO_NSS
 #include <cert.h>
@@ -860,6 +864,28 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
         rInformation.ouX509Certificate = aBuffer.makeStringAndClear();
     }
 
+    PRTime nSigningTime;
+    if (NSS_CMSSignerInfo_GetSigningTime(pCMSSignerInfo, &nSigningTime) != SECSuccess)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: NSS_CMSSignerInfo_GetSigningTime() failed");
+        return false;
+    }
+    else
+    {
+        // First convert the UNIX timestamp to an ISO8601 string.
+        OUStringBuffer aBuffer;
+        uno::Reference<uno::XComponentContext> xComponentContext = comphelper::getProcessComponentContext();
+        CalendarWrapper aCalendarWrapper(xComponentContext);
+        // nSigningTime is in microseconds.
+        SvXMLUnitConverter::convertDateTime(aBuffer, static_cast<double>(nSigningTime) / 1000000 / tools::Time::secondPerDay, aCalendarWrapper.getEpochStart().GetUNODate());
+
+        // Then convert this string to a local UNO DateTime.
+        util::DateTime aUNODateTime;
+        utl::ISO8601parseDateTime(aBuffer.toString(), aUNODateTime);
+        DateTime aDateTime(aUNODateTime);
+        aDateTime.ConvertToLocalTime();
+        rInformation.stDateTime = aDateTime.GetUNODateTime();
+    }
 
     SECItem* pContentInfoContentData = pCMSSignedData->contentInfo.content.data;
     if (pContentInfoContentData && pContentInfoContentData->data)
