@@ -67,7 +67,9 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnPatternListState ( ChangeType::NONE ),
     mnGradientListState ( ChangeType::NONE ),
     mnHatchingListState ( ChangeType::NONE ),
-    mnPos( 0 )
+    mnPos( 0 ),
+    mnPageType( PageType::Area ),
+    mbAreaTP( false )
 {
     m_nAreaTabPage = AddTabPage( "RID_SVXPAGE_AREA", SvxAreaTabPage::Create, nullptr );
 
