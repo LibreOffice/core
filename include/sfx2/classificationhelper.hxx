@@ -17,6 +17,8 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/infobar.hxx>
 
+#include <com/sun/star/frame/InfobarType.hpp>
+
 namespace com::sun::star::beans { class XPropertyContainer; }
 namespace com::sun::star::document { class XDocumentProperties; }
 
@@ -73,7 +75,7 @@ public:
     OUString GetHigherClass(const OUString& first, const OUString& second);
     /// If GetImpactScale() and GetImpactLevel*() will return something meaningful.
     bool HasImpactLevel();
-    InfoBarType GetImpactLevelType();
+    css::frame::InfobarType GetImpactLevelType();
     /// Larger value means more confidential.
     sal_Int32 GetImpactLevel();
     /// Comparing the GetImpactLevel() result is only meaningful when the impact scale is the same.
