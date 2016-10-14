@@ -353,7 +353,7 @@ struct RectangleAndPart
         if (rPayload.find("EMPTY") == 0) // payload starts with "EMPTY"
         {
             if (comphelper::LibreOfficeKit::isPartInInvalidation())
-                aRet.m_nPart = std::stol(rPayload.substr(6));
+                aRet.m_nPart = OString(rPayload.substr(6).c_str()).toInt32();
 
             return aRet;
         }
