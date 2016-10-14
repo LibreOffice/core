@@ -209,6 +209,7 @@ bool Scheduler::ProcessTaskScheduling( IdleRunPolicy eIdleRunPolicy )
     ImplSchedulerData *pPrevMostUrgent = nullptr;
     ImplSchedulerData *pMostUrgent = nullptr;
     sal_uInt64         nMinPeriod = InfiniteTimeoutMs;
+    bool               bIsNestedCall = false;
 
     DBG_TESTSOLARMUTEX();
 
@@ -226,7 +227,10 @@ bool Scheduler::ProcessTaskScheduling( IdleRunPolicy eIdleRunPolicy )
 
         // Skip invoked task
         if ( pSchedulerData->mbInScheduler )
+        {
+            bIsNestedCall = true;
             goto next_entry;
+        }
 
         // Can this task be removed from scheduling?
         if ( !pSchedulerData->mpScheduler )
@@ -239,6 +243,7 @@ bool Scheduler::ProcessTaskScheduling( IdleRunPolicy eIdleRunPolicy )
             pSchedulerData->mpNext = pSVData->mpFreeSchedulerData;
             pSVData->mpFreeSchedulerData = pSchedulerData;
             pSchedulerData = pNextSchedulerData;
+            pSVData->mbTaskRemoved = true;
             continue;
         }
 
@@ -265,6 +270,10 @@ next_entry:
 
     assert( !pSchedulerData );
 
+    // We just have to handle removed tasks for nested calls
+    if ( !bIsNestedCall )
+        pSVData->mbTaskRemoved = false;
+
     if ( pMostUrgent )
     {
         assert( pPrevMostUrgent != pMostUrgent );
@@ -277,6 +286,14 @@ next_entry:
         SAL_INFO_IF( !pMostUrgent->mpScheduler, "vcl.schedule", tools::Time::GetSystemTicks()
                      << " " << pMostUrgent <<  "  tag-rm" );
 
+        // If there were some tasks removed, our list pointers may be invalid,
+        // except pMostUrgent, which is protected by mbInScheduler
+        if ( pSVData->mbTaskRemoved )
+        {
+            nMinPeriod = ImmediateTimeoutMs;
+            pPrevSchedulerData = pMostUrgent;
+        }
+
         // do some simple round-robin scheduling
         // nothing to do, if we're already the last element
         if ( pMostUrgent->mpScheduler )
@@ -286,6 +303,19 @@ next_entry:
 
             if ( pMostUrgent->mpNext )
             {
+                // see ^^^^^
+                if ( pSVData->mbTaskRemoved )
+                {
+                    pPrevMostUrgent = pSVData->mpFirstSchedulerData;
+                    if ( pPrevMostUrgent != pMostUrgent )
+                    {
+                        while ( pPrevMostUrgent && pPrevMostUrgent->mpNext != pMostUrgent )
+                            pPrevMostUrgent = pPrevMostUrgent->mpNext;
+                        assert( pPrevMostUrgent );
+                    }
+                    else
+                        pPrevMostUrgent = nullptr;
+                }
                 if ( pPrevMostUrgent )
                     pPrevMostUrgent->mpNext = pMostUrgent->mpNext;
                 else
