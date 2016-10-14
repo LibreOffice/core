@@ -444,7 +444,19 @@ public:
     EditView*       GetEditView( ScSplitPos eWhich ) const
                                         { return pEditView[eWhich]; }
 
+    /**
+     * Extend the output area for the edit engine view in a horizontal
+     * direction as needed.
+     */
     void            EditGrowX();
+
+    /**
+     * Extend the output area for the edit engine view in a vertical direction
+     * as needed.
+     *
+     * @param bInitial when true, then the call originates from a brand-new
+     *                 edit engine instance.
+     */
     void            EditGrowY( bool bInitial = false );
 
     ScSplitPos      GetEditActivePart() const       { return eEditActivePart; }

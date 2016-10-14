@@ -1212,6 +1212,7 @@ void ScViewData::EditGrowX()
         static_cast<ScEditEngineDefaulter*>( pCurView->GetEditEngine() );
     vcl::Window* pWin = pCurView->GetWindow();
 
+    // Get the left- and right-most column positions.
     SCCOL nLeft = GetPosX(eHWhich);
     SCCOL nRight = nLeft + VisibleCellsX(eHWhich);
 
@@ -1219,7 +1220,7 @@ void ScViewData::EditGrowX()
     Rectangle   aArea = pCurView->GetOutputArea();
     long        nOldRight = aArea.Right();
 
-    //  Margin ist schon bei der urspruenglichen Breite beruecksichtigt
+    // Margin is already included in the original width.
     long nTextWidth = pEngine->CalcTextWidth();
 
     bool bChanged = false;
