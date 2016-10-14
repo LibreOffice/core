@@ -51,15 +51,15 @@ class EmbedDocument_Impl
 {
 protected:
     css::uno::Sequence< css::beans::PropertyValue >
-                fillArgsForLoading_Impl( css::uno::Reference< css::io::XInputStream > xStream,
+                fillArgsForLoading_Impl( css::uno::Reference< css::io::XInputStream > const & xStream,
                                          DWORD nStreamMode,
-                                         LPCOLESTR pFilePath = NULL );
+                                         LPCOLESTR pFilePath = nullptr );
     css::uno::Sequence< css::beans::PropertyValue >
-                fillArgsForStoring_Impl( css::uno::Reference< css::io::XOutputStream > xStream );
+                fillArgsForStoring_Impl( css::uno::Reference< css::io::XOutputStream > const & xStream );
 
     HRESULT SaveTo_Impl( IStorage* pStg );
 
-    sal_uInt64 getMetaFileHandle_Impl( sal_Bool isEnhMeta );
+    sal_uInt64 getMetaFileHandle_Impl( bool isEnhMeta );
 
 public:
     EmbedDocument_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& smgr,
@@ -67,78 +67,78 @@ public:
     virtual ~EmbedDocument_Impl();
 
     /* IUnknown methods */
-    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
-    STDMETHOD_(ULONG, AddRef)();
-    STDMETHOD_(ULONG, Release)();
+    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj) override;
+    STDMETHOD_(ULONG, AddRef)() override;
+    STDMETHOD_(ULONG, Release)() override;
 
     /* IPersistMethod */
-    STDMETHOD(GetClassID)(CLSID *pClassID);
+    STDMETHOD(GetClassID)(CLSID *pClassID) override;
 
     /* IPersistStorage methods */
-    STDMETHOD(IsDirty) ();
-    STDMETHOD(InitNew) ( IStorage *pStg );
-    STDMETHOD(Load) ( IStorage* pStr );
-    STDMETHOD(Save) ( IStorage *pStgSave, BOOL fSameAsLoad );
-    STDMETHOD(SaveCompleted) ( IStorage *pStgNew );
-    STDMETHOD(HandsOffStorage) (void);
+    STDMETHOD(IsDirty) () override;
+    STDMETHOD(InitNew) ( IStorage *pStg ) override;
+    STDMETHOD(Load) ( IStorage* pStr ) override;
+    STDMETHOD(Save) ( IStorage *pStgSave, BOOL fSameAsLoad ) override;
+    STDMETHOD(SaveCompleted) ( IStorage *pStgNew ) override;
+    STDMETHOD(HandsOffStorage) (void) override;
 
     /* IDataObject methods */
-    STDMETHOD(GetData) ( FORMATETC * pFormatetc, STGMEDIUM * pMedium );
-    STDMETHOD(GetDataHere) ( FORMATETC * pFormatetc, STGMEDIUM * pMedium );
-    STDMETHOD(QueryGetData) ( FORMATETC * pFormatetc );
-    STDMETHOD(GetCanonicalFormatEtc) ( FORMATETC * pFormatetcIn, FORMATETC * pFormatetcOut );
-    STDMETHOD(SetData) ( FORMATETC * pFormatetc, STGMEDIUM * pMedium, BOOL fRelease );
-    STDMETHOD(EnumFormatEtc) ( DWORD dwDirection, IEnumFORMATETC ** ppFormatetc );
-    STDMETHOD(DAdvise) ( FORMATETC * pFormatetc, DWORD advf, IAdviseSink * pAdvSink, DWORD * pdwConnection );
-    STDMETHOD(DUnadvise) ( DWORD dwConnection );
-    STDMETHOD(EnumDAdvise) ( IEnumSTATDATA ** ppenumAdvise );
+    STDMETHOD(GetData) ( FORMATETC * pFormatetc, STGMEDIUM * pMedium ) override;
+    STDMETHOD(GetDataHere) ( FORMATETC * pFormatetc, STGMEDIUM * pMedium ) override;
+    STDMETHOD(QueryGetData) ( FORMATETC * pFormatetc ) override;
+    STDMETHOD(GetCanonicalFormatEtc) ( FORMATETC * pFormatetcIn, FORMATETC * pFormatetcOut ) override;
+    STDMETHOD(SetData) ( FORMATETC * pFormatetc, STGMEDIUM * pMedium, BOOL fRelease ) override;
+    STDMETHOD(EnumFormatEtc) ( DWORD dwDirection, IEnumFORMATETC ** ppFormatetc ) override;
+    STDMETHOD(DAdvise) ( FORMATETC * pFormatetc, DWORD advf, IAdviseSink * pAdvSink, DWORD * pdwConnection ) override;
+    STDMETHOD(DUnadvise) ( DWORD dwConnection ) override;
+    STDMETHOD(EnumDAdvise) ( IEnumSTATDATA ** ppenumAdvise ) override;
 
     /* IOleObject methods */
-    STDMETHOD(SetClientSite) ( IOleClientSite* pSite );
-    STDMETHOD(GetClientSite) ( IOleClientSite** pSite );
-    STDMETHOD(SetHostNames) ( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj );
-    STDMETHOD(Close) ( DWORD dwSaveOption);
-    STDMETHOD(SetMoniker) ( DWORD dwWhichMoniker, IMoniker *pmk );
-    STDMETHOD(GetMoniker) ( DWORD dwAssign, DWORD dwWhichMoniker, IMoniker **ppmk );
-    STDMETHOD(InitFromData) ( IDataObject *pDataObject, BOOL fCreation, DWORD dwReserved );
-    STDMETHOD(GetClipboardData) ( DWORD dwReserved, IDataObject **ppDataObject );
-    STDMETHOD(DoVerb) ( LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSite, LONG lindex, HWND hwndParent, LPCRECT lprcPosRect );
-    STDMETHOD(EnumVerbs) ( IEnumOLEVERB **ppEnumOleVerb );
-    STDMETHOD(Update) ();
-    STDMETHOD(IsUpToDate) ();
-    STDMETHOD(GetUserClassID) ( CLSID *pClsid );
-    STDMETHOD(GetUserType) ( DWORD dwFormOfType, LPOLESTR *pszUserType );
-    STDMETHOD(SetExtent) ( DWORD dwDrawAspect, SIZEL *psizel );
-    STDMETHOD(GetExtent) ( DWORD dwDrawAspect, SIZEL *psizel );
-    STDMETHOD(Advise) ( IAdviseSink *pAdvSink, DWORD *pdwConnection );
-    STDMETHOD(Unadvise) ( DWORD dwConnection );
-    STDMETHOD(EnumAdvise) ( IEnumSTATDATA **ppenumAdvise );
-    STDMETHOD(GetMiscStatus) ( DWORD dwAspect, DWORD *pdwStatus );
-    STDMETHOD(SetColorScheme) ( LOGPALETTE *pLogpal );
+    STDMETHOD(SetClientSite) ( IOleClientSite* pSite ) override;
+    STDMETHOD(GetClientSite) ( IOleClientSite** pSite ) override;
+    STDMETHOD(SetHostNames) ( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj ) override;
+    STDMETHOD(Close) ( DWORD dwSaveOption) override;
+    STDMETHOD(SetMoniker) ( DWORD dwWhichMoniker, IMoniker *pmk ) override;
+    STDMETHOD(GetMoniker) ( DWORD dwAssign, DWORD dwWhichMoniker, IMoniker **ppmk ) override;
+    STDMETHOD(InitFromData) ( IDataObject *pDataObject, BOOL fCreation, DWORD dwReserved ) override;
+    STDMETHOD(GetClipboardData) ( DWORD dwReserved, IDataObject **ppDataObject ) override;
+    STDMETHOD(DoVerb) ( LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSite, LONG lindex, HWND hwndParent, LPCRECT lprcPosRect ) override;
+    STDMETHOD(EnumVerbs) ( IEnumOLEVERB **ppEnumOleVerb ) override;
+    STDMETHOD(Update) () override;
+    STDMETHOD(IsUpToDate) () override;
+    STDMETHOD(GetUserClassID) ( CLSID *pClsid ) override;
+    STDMETHOD(GetUserType) ( DWORD dwFormOfType, LPOLESTR *pszUserType ) override;
+    STDMETHOD(SetExtent) ( DWORD dwDrawAspect, SIZEL *psizel ) override;
+    STDMETHOD(GetExtent) ( DWORD dwDrawAspect, SIZEL *psizel ) override;
+    STDMETHOD(Advise) ( IAdviseSink *pAdvSink, DWORD *pdwConnection ) override;
+    STDMETHOD(Unadvise) ( DWORD dwConnection ) override;
+    STDMETHOD(EnumAdvise) ( IEnumSTATDATA **ppenumAdvise ) override;
+    STDMETHOD(GetMiscStatus) ( DWORD dwAspect, DWORD *pdwStatus ) override;
+    STDMETHOD(SetColorScheme) ( LOGPALETTE *pLogpal ) override;
 
     /* IOleInPlaceObject methods */
-    STDMETHOD(GetWindow)(HWND *);
-    STDMETHOD(ContextSensitiveHelp)(BOOL);
-    STDMETHOD(InPlaceDeactivate)();
-    STDMETHOD(UIDeactivate)();
-    STDMETHOD(SetObjectRects)(LPCRECT, LPCRECT);
-    STDMETHOD(ReactivateAndUndo)();
+    STDMETHOD(GetWindow)(HWND *) override;
+    STDMETHOD(ContextSensitiveHelp)(BOOL) override;
+    STDMETHOD(InPlaceDeactivate)() override;
+    STDMETHOD(UIDeactivate)() override;
+    STDMETHOD(SetObjectRects)(LPCRECT, LPCRECT) override;
+    STDMETHOD(ReactivateAndUndo)() override;
 
     /* IPersistFile methods */
-    STDMETHOD(Load) ( LPCOLESTR pszFileName, DWORD dwMode );
-    STDMETHOD(Save) ( LPCOLESTR pszFileName, BOOL fRemember );
-    STDMETHOD(SaveCompleted) ( LPCOLESTR pszFileName );
-    STDMETHOD(GetCurFile) ( LPOLESTR *ppszFileName );
+    STDMETHOD(Load) ( LPCOLESTR pszFileName, DWORD dwMode ) override;
+    STDMETHOD(Save) ( LPCOLESTR pszFileName, BOOL fRemember ) override;
+    STDMETHOD(SaveCompleted) ( LPCOLESTR pszFileName ) override;
+    STDMETHOD(GetCurFile) ( LPOLESTR *ppszFileName ) override;
 
     /* IDispatch methods */
-    STDMETHOD(GetTypeInfoCount) ( unsigned int FAR*  pctinfo );
-    STDMETHOD(GetTypeInfo) ( unsigned int iTInfo, LCID lcid, ITypeInfo FAR* FAR* ppTInfo );
-    STDMETHOD(GetIDsOfNames) ( REFIID riid, OLECHAR FAR* FAR* rgszNames, unsigned int cNames, LCID lcid, DISPID FAR* rgDispId );
-    STDMETHOD(Invoke) ( DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pDispParams, VARIANT FAR* pVarResult, EXCEPINFO FAR* pExcepInfo, unsigned int FAR* puArgErr );
+    STDMETHOD(GetTypeInfoCount) ( unsigned int FAR*  pctinfo ) override;
+    STDMETHOD(GetTypeInfo) ( unsigned int iTInfo, LCID lcid, ITypeInfo FAR* FAR* ppTInfo ) override;
+    STDMETHOD(GetIDsOfNames) ( REFIID riid, OLECHAR FAR* FAR* rgszNames, unsigned int cNames, LCID lcid, DISPID FAR* rgDispId ) override;
+    STDMETHOD(Invoke) ( DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pDispParams, VARIANT FAR* pVarResult, EXCEPINFO FAR* pExcepInfo, unsigned int FAR* puArgErr ) override;
 
     /* IExternalConnection methods */
-    virtual DWORD STDMETHODCALLTYPE AddConnection( DWORD extconn, DWORD reserved);
-    virtual DWORD STDMETHODCALLTYPE ReleaseConnection( DWORD extconn, DWORD reserved, BOOL fLastReleaseCloses);
+    virtual DWORD STDMETHODCALLTYPE AddConnection( DWORD extconn, DWORD reserved) override;
+    virtual DWORD STDMETHODCALLTYPE ReleaseConnection( DWORD extconn, DWORD reserved, BOOL fLastReleaseCloses) override;
 
     // c++ - methods
 
@@ -164,7 +164,7 @@ protected:
     CComPtr< IStream >                  m_pExtStream;
     GUID                                m_guid;
 
-    sal_Bool                            m_bIsDirty;
+    bool                                m_bIsDirty;
 
     CComPtr< IOleClientSite >           m_pClientSite;
     CComPtr< IDataAdviseHolder >        m_pDAdviseHolder;
@@ -174,23 +174,23 @@ protected:
 
     ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > m_xOwnAccess;
 
-    sal_Bool                            m_bIsInVerbHandling;
+    bool                                m_bIsInVerbHandling;
 };
 
 class BooleanGuard_Impl
 {
-    sal_Bool& m_bValue;
+    bool& m_bValue;
 
 public:
-    BooleanGuard_Impl( sal_Bool& bValue )
+    BooleanGuard_Impl( bool& bValue )
     : m_bValue( bValue )
     {
-        m_bValue = sal_True;
+        m_bValue = true;
     }
 
     ~BooleanGuard_Impl()
     {
-        m_bValue = sal_False;
+        m_bValue = false;
     }
 };
 

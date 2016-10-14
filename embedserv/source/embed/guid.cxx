@@ -24,6 +24,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
+#include <guid.hxx>
+
 OUString getStorageTypeFromGUID_Impl( GUID* guid )
 {
     if ( *guid == OID_WriterTextServer )

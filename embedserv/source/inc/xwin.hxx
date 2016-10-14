@@ -38,7 +38,7 @@ public:
 
     ContainerWindowWrapper(HWND aHwnd);
 
-    ~ ContainerWindowWrapper();
+    ~ ContainerWindowWrapper() override;
 
 
     // XComponent
@@ -48,7 +48,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     addEventListener(
@@ -56,7 +56,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     removeEventListener(
@@ -64,7 +64,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
 
     // XSystemDependentWindowPeer
@@ -76,7 +76,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     // XWindow
 
@@ -89,14 +89,14 @@ public:
         sal_Int16 Flags
     )
         throw (
-            css::uno::RuntimeException);
+            css::uno::RuntimeException) override;
 
     virtual css::awt::Rectangle SAL_CALL
     getPosSize(
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     setVisible(
@@ -104,7 +104,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     setEnable(
@@ -112,14 +112,14 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     setFocus(
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     addWindowListener(
@@ -127,7 +127,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     removeWindowListener(
@@ -135,7 +135,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     addFocusListener(
@@ -143,7 +143,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     removeFocusListener(
@@ -151,7 +151,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     addKeyListener(
@@ -160,7 +160,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     removeKeyListener(
@@ -168,7 +168,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     addMouseListener(
@@ -176,7 +176,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     removeMouseListener(
@@ -185,7 +185,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     addMouseMotionListener(
@@ -194,7 +194,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     removeMouseMotionListener(
@@ -202,7 +202,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     addPaintListener(
@@ -210,7 +210,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
     virtual void SAL_CALL
     removePaintListener(
@@ -218,7 +218,7 @@ public:
     )
         throw (
             css::uno::RuntimeException
-        );
+        ) override;
 
 
 private:

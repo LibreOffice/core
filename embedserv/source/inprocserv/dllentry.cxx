@@ -42,7 +42,7 @@ static const GUID* guidList[ SUPPORTED_FACTORIES_NUM ] = {
     &OID_MathOASISServer
 };
 
-static HINSTANCE g_hInstance = NULL;
+static HINSTANCE g_hInstance = nullptr;
 static ULONG g_nObj = 0;
 static ULONG g_nLock = 0;
 
@@ -93,7 +93,7 @@ namespace {
         HRESULT hRes = E_FAIL;
         if ( pLibrary && nLen )
         {
-            HKEY hKey = NULL;
+            HKEY hKey = nullptr;
 
             hRes = S_OK;
             for ( int nInd = 0; nInd < SUPPORTED_FACTORIES_NUM; nInd++ )
@@ -109,14 +109,14 @@ namespace {
                 {
                     if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE, pSubKey, &hKey ) )
                     {
-                        if ( ERROR_SUCCESS == RegSetValueEx( hKey, "", 0, REG_SZ, (const BYTE*)pLibrary, nLen ) )
+                        if ( ERROR_SUCCESS == RegSetValueEx( hKey, "", 0, REG_SZ, reinterpret_cast<const BYTE*>(pLibrary), nLen ) )
                             bLocalSuccess = TRUE;
                     }
 
                     if ( hKey )
                     {
                         RegCloseKey( hKey );
-                        hKey = NULL;
+                        hKey = nullptr;
                     }
                 }
 
@@ -144,13 +144,13 @@ public:
     virtual ~InprocEmbedProvider_Impl();
 
     /* IUnknown methods */
-    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
-    STDMETHOD_(ULONG, AddRef)();
-    STDMETHOD_(ULONG, Release)();
+    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj) override;
+    STDMETHOD_(ULONG, AddRef)() override;
+    STDMETHOD_(ULONG, Release)() override;
 
     /* IClassFactory methods */
-    STDMETHOD(CreateInstance)(IUnknown FAR* punkOuter, REFIID riid, void FAR* FAR* ppv);
-    STDMETHOD(LockServer)(int fLock);
+    STDMETHOD(CreateInstance)(IUnknown FAR* punkOuter, REFIID riid, void FAR* FAR* ppv) override;
+    STDMETHOD(LockServer)(int fLock) override;
 
 protected:
 
@@ -186,7 +186,7 @@ STDAPI INPROC_DLLPUBLIC DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID*
                 return E_NOINTERFACE;
 
             *ppv = new inprocserv::InprocEmbedProvider_Impl( rclsid );
-            ((LPUNKNOWN)*ppv)->AddRef();
+            static_cast<LPUNKNOWN>(*ppv)->AddRef();
             return S_OK;
          }
 
@@ -270,17 +270,17 @@ STDMETHODIMP InprocEmbedProvider_Impl::QueryInterface( REFIID riid, void FAR* FA
     if(IsEqualIID(riid, IID_IUnknown))
     {
         AddRef();
-        *ppv = (IUnknown*) this;
+        *ppv = static_cast<IUnknown*>(this);
         return S_OK;
     }
     else if (IsEqualIID(riid, IID_IClassFactory))
     {
         AddRef();
-        *ppv = (IClassFactory*) this;
+        *ppv = static_cast<IClassFactory*>(this);
         return S_OK;
     }
 
-    *ppv = NULL;
+    *ppv = nullptr;
     return E_NOINTERFACE;
 }
 
@@ -307,18 +307,16 @@ STDMETHODIMP InprocEmbedProvider_Impl::CreateInstance(IUnknown FAR* punkOuter,
     // TODO/LATER: should the aggregation be supported?
     // if ( punkOuter != NULL && riid != IID_IUnknown )
     //     return E_NOINTERFACE;
-    if ( punkOuter != NULL )
+    if ( punkOuter != nullptr )
         return CLASS_E_NOAGGREGATION;
 
     InprocEmbedDocument_Impl* pEmbedDocument = new InprocEmbedDocument_Impl( m_guid );
     pEmbedDocument->AddRef();
-    HRESULT hr = pEmbedDocument->Init();
-    if ( SUCCEEDED( hr ) )
-        hr = pEmbedDocument->QueryInterface( riid, ppv );
+    HRESULT hr = pEmbedDocument->QueryInterface( riid, ppv );
     pEmbedDocument->Release();
 
     if ( !SUCCEEDED( hr ) )
-        *ppv = NULL;
+        *ppv = nullptr;
 
     return hr;
 }

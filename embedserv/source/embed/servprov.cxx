@@ -50,7 +50,7 @@ class CurThreadData
         CurThreadData();
         virtual ~CurThreadData();
 
-        sal_Bool SAL_CALL setData(void *pData);
+        bool SAL_CALL setData(void *pData);
 
         void* SAL_CALL getData();
 
@@ -60,7 +60,7 @@ class CurThreadData
 
 CurThreadData::CurThreadData()
 {
-    m_hKey = osl_createThreadKey( (oslThreadKeyCallbackFunction)NULL );
+    m_hKey = osl_createThreadKey( nullptr );
 }
 
 CurThreadData::~CurThreadData()
@@ -68,7 +68,7 @@ CurThreadData::~CurThreadData()
     osl_destroyThreadKey(m_hKey);
 }
 
-sal_Bool CurThreadData::setData(void *pData)
+bool CurThreadData::setData(void *pData)
 {
     OSL_ENSURE( m_hKey, "No thread key!\n" );
     return (osl_setThreadKeyData(m_hKey, pData));
@@ -84,16 +84,16 @@ void o2u_attachCurrentThread()
 {
     static CurThreadData oleThreadData;
 
-    if ( oleThreadData.getData() != 0 )
+    if ( oleThreadData.getData() != nullptr )
     {
-        HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
+        HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
         if (!SUCCEEDED(hr))
         {   // FIXME: is it a problem that this ends up in STA currently?
             assert(RPC_E_CHANGED_MODE == hr);
             SAL_INFO("embedserv.ole",
                     "CoInitializeEx fail: probably thread is in STA already?");
         }
-        oleThreadData.setData((void*)sal_True);
+        oleThreadData.setData(reinterpret_cast<void*>(true));
     }
 }
 
@@ -151,7 +151,7 @@ EmbedProviderFactory_Impl::~EmbedProviderFactory_Impl()
 {
 }
 
-sal_Bool EmbedProviderFactory_Impl::registerClass()
+bool EmbedProviderFactory_Impl::registerClass()
 {
     HRESULT hresult;
 
@@ -167,7 +167,7 @@ sal_Bool EmbedProviderFactory_Impl::registerClass()
     return (hresult == NOERROR);
 }
 
-sal_Bool EmbedProviderFactory_Impl::deregisterClass()
+bool EmbedProviderFactory_Impl::deregisterClass()
 {
     HRESULT hresult = CoRevokeClassObject( m_factoryHandle );
 
@@ -179,17 +179,17 @@ STDMETHODIMP EmbedProviderFactory_Impl::QueryInterface(REFIID riid, void FAR* FA
     if(IsEqualIID(riid, IID_IUnknown))
     {
         AddRef();
-        *ppv = (IUnknown*) (IClassFactory*) this;
+        *ppv = static_cast<IUnknown*>(static_cast<IClassFactory*>(this));
         return NOERROR;
     }
     else if (IsEqualIID(riid, IID_IClassFactory))
     {
         AddRef();
-        *ppv = (IClassFactory*) this;
+        *ppv = static_cast<IClassFactory*>(this);
         return NOERROR;
     }
 
-    *ppv = NULL;
+    *ppv = nullptr;
     return ResultFromScode(E_NOINTERFACE);
 }
 
@@ -214,9 +214,9 @@ STDMETHODIMP EmbedProviderFactory_Impl::CreateInstance(IUnknown FAR* punkOuter,
                                                        REFIID riid,
                                                        void FAR* FAR* ppv)
 {
-    punkOuter = NULL;
+    punkOuter = nullptr;
 
-    IUnknown* pEmbedDocument = (IUnknown*)(IPersistStorage*)( new EmbedDocument_Impl( m_xFactory, &m_guid ) );
+    IUnknown* pEmbedDocument = static_cast<IUnknown*>(static_cast<IPersistStorage*>( new EmbedDocument_Impl( m_xFactory, &m_guid ) ));
 
     return pEmbedDocument->QueryInterface( riid, ppv );
 }
