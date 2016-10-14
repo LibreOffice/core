@@ -621,7 +621,7 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
         DWORD nNameLen = sizeof(bufVersion);
 
         // Iterate over all subkeys of HKEY_LOCAL_MACHINE\Software\JavaSoft\Java Runtime Environment
-        while (RegEnumKeyExW(hRoot, dwIndex, bufVersion, &nNameLen, NULL, NULL, NULL, &fileTime) != ERROR_NO_MORE_ITEMS)
+        while (RegEnumKeyExW(hRoot, dwIndex, bufVersion, &nNameLen, nullptr, nullptr, nullptr, &fileTime) != ERROR_NO_MORE_ITEMS)
         {
             HKEY    hKey;
             // Open a Java Runtime Environment sub key, e.g. "1.4.0"
@@ -631,14 +631,14 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
                 DWORD   dwTmpPathLen= 0;
                 // Get the path to the JavaHome every JRE entry
                 // Find out how long the string for JavaHome is and allocate memory to hold the path
-                if( RegQueryValueExW(hKey, L"JavaHome", 0, &dwType, NULL, &dwTmpPathLen)== ERROR_SUCCESS)
+                if( RegQueryValueExW(hKey, L"JavaHome", nullptr, &dwType, nullptr, &dwTmpPathLen)== ERROR_SUCCESS)
                 {
-                    char* szTmpPath= (char *) malloc( dwTmpPathLen);
+                    unsigned char* szTmpPath= static_cast<unsigned char *>(malloc( dwTmpPathLen));
                     // Get the path for the runtime lib
-                    if(RegQueryValueExW(hKey, L"JavaHome", 0, &dwType, (unsigned char*) szTmpPath, &dwTmpPathLen) == ERROR_SUCCESS)
+                    if(RegQueryValueExW(hKey, L"JavaHome", nullptr, &dwType, szTmpPath, &dwTmpPathLen) == ERROR_SUCCESS)
                     {
                         // There can be several version entries referring with the same JavaHome,e.g 1.4 and 1.4.1
-                        OUString usHome((sal_Unicode*) szTmpPath);
+                        OUString usHome(reinterpret_cast<sal_Unicode*>(szTmpPath));
                         // check if there is already an entry with the same JavaHomeruntime lib
                         // if so, we use the one with the more accurate version
                         OUString usHomeUrl;
