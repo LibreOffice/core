@@ -777,6 +777,54 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
             rInformation.ouDescription = aBuffer.makeStringAndClear();
     }
 
+    // Build a list of offset-length pairs, representing the signed bytes.
+    std::vector<std::pair<size_t, size_t>> aByteRanges;
+    size_t nByteRangeOffset = 0;
+    const std::vector<PDFElement*>& rByteRangeElements = pByteRange->GetElements();
+    for (size_t i = 0; i < rByteRangeElements.size(); ++i)
+    {
+        auto pNumber = dynamic_cast<PDFNumberElement*>(rByteRangeElements[i]);
+        if (!pNumber)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: signature offset and length has to be a number");
+            return false;
+        }
+
+        if (i % 2 == 0)
+        {
+            nByteRangeOffset = pNumber->GetValue();
+            continue;
+        }
+        size_t nByteRangeLength = pNumber->GetValue();
+        aByteRanges.push_back(std::make_pair(nByteRangeOffset, nByteRangeLength));
+    }
+
+    // Detect if the byte ranges don't cover everything, but the signature itself.
+    if (aByteRanges.size() < 2)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: expected 2 byte ranges");
+        return false;
+    }
+    if (aByteRanges[0].first != 0)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: first range start is not 0");
+        return false;
+    }
+    // 2 is the leading "<" and the trailing ">" around the hex string.
+    size_t nSignatureLength = pContents->GetValue().getLength() + 2;
+    if (aByteRanges[1].first != (aByteRanges[0].second + nSignatureLength))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: second range start is not the end of the signature");
+        return false;
+    }
+    rStream.Seek(STREAM_SEEK_TO_END);
+    size_t nFileEnd = rStream.Tell();
+    if ((aByteRanges[1].first + aByteRanges[1].second) != nFileEnd)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: second range end is not the end of the file");
+        return false;
+    }
+
     // At this point there is no obviously missing info to validate the
     // signature.
     std::vector<unsigned char> aSignature = PDFDocument::DecodeHexString(pContents);
@@ -837,37 +885,21 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     }
 
     // We have a hash, update it with the byte ranges.
-    size_t nByteRangeOffset = 0;
-    const std::vector<PDFElement*>& rByteRangeElements = pByteRange->GetElements();
-    for (size_t i = 0; i < rByteRangeElements.size(); ++i)
+    for (const auto& rByteRange : aByteRanges)
     {
-        auto pNumber = dynamic_cast<PDFNumberElement*>(rByteRangeElements[i]);
-        if (!pNumber)
-        {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: signature offset and length has to be a number");
-            return false;
-        }
-
-        if (i % 2 == 0)
-        {
-            nByteRangeOffset = pNumber->GetValue();
-            continue;
-        }
-
-        rStream.Seek(nByteRangeOffset);
-        size_t nByteRangeLength = pNumber->GetValue();
+        rStream.Seek(rByteRange.first);
 
         // And now hash this byte range.
         const int nChunkLen = 4096;
         std::vector<unsigned char> aBuffer(nChunkLen);
-        for (size_t nByte = 0; nByte < nByteRangeLength;)
+        for (size_t nByte = 0; nByte < rByteRange.second;)
         {
-            size_t nRemainingSize = nByteRangeLength - nByte;
+            size_t nRemainingSize = rByteRange.second - nByte;
             if (nRemainingSize < nChunkLen)
             {
                 rStream.ReadBytes(aBuffer.data(), nRemainingSize);
                 HASH_Update(pHASHContext, aBuffer.data(), nRemainingSize);
-                nByte = nByteRangeLength;
+                nByte = rByteRange.second;
             }
             else
             {
