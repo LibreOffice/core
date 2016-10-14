@@ -60,14 +60,10 @@
 #include <tools/diagnose_ex.h>
 #include <sfx2/docfilt.hxx>
 
-#if defined(_WIN32)
-#define _ADO_DATALINK_BROWSE_
-#endif
-
-#ifdef _ADO_DATALINK_BROWSE_
+#if defined _WIN32
 #include <vcl/sysdata.hxx>
 #include "adodatalinks.hxx"
-#endif //_ADO_DATALINK_BROWSE_
+#endif
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <comphelper/processfactory.hxx>
@@ -266,17 +262,17 @@ namespace dbaui
                     return;
             }
             break;
-#ifdef _ADO_DATALINK_BROWSE_
+#if defined _WIN32
             case  ::dbaccess::DST_ADO:
             {
                 OUString sOldDataSource=getURLNoPrefix();
                 OUString sNewDataSource;
                 HWND hWnd = GetParent()->GetSystemData()->hWnd;
-                sNewDataSource = getAdoDatalink((LONG_PTR)hWnd,sOldDataSource);
+                sNewDataSource = getAdoDatalink(reinterpret_cast<LONG_PTR>(hWnd),sOldDataSource);
                 if ( !sNewDataSource.isEmpty() )
                 {
                     setURLNoPrefix(sNewDataSource);
-                    SetRoadmapStateValue(sal_True);
+                    SetRoadmapStateValue(true);
                     callModifiedHdl();
                 }
                 else
