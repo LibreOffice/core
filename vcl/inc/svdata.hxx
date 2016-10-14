@@ -318,6 +318,7 @@ struct ImplSVData
     ImplSchedulerData*      mpFirstSchedulerData = nullptr; // list of all running tasks
     ImplSchedulerData*      mpFreeSchedulerData = nullptr;  // list of all deleted tasks for reuse
     bool                    mbNeedsReschedule = false;      // was the list of tasks changed?
+    bool                    mbTaskRemoved = false;          // was a task removed
     sal_uInt64              mnTimerPeriod = 0;              // current timer period / sleep time
     sal_uInt64              mnLastUpdate = 0;               // last scheduler time
     SalTimer*               mpSalTimer = nullptr;           // interface to sal event loop/timers
