@@ -96,7 +96,7 @@ extern "C" void * SAL_CALL allocExec(
         p = nullptr;
     }
 #elif defined SAL_W32
-    p = VirtualAlloc(0, n, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+    p = VirtualAlloc(nullptr, n, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 #endif
     if (p != nullptr) {
         *size = n;
