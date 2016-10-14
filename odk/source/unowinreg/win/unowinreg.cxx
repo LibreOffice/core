@@ -38,11 +38,11 @@ extern "C" JNIEXPORT jboolean JNICALL
     JNIEnv *env, jclass, jlongArray hkresult)
 {
     jboolean ret = JNI_FALSE;
-    PHKEY phkey = (PHKEY)env->GetLongArrayElements(hkresult, 0);
-    if (RegOpenKeyEx(HKEY_CLASSES_ROOT, NULL, 0, KEY_READ, phkey)
+    auto phkey = env->GetLongArrayElements(hkresult, nullptr);
+    if (RegOpenKeyEx(HKEY_CLASSES_ROOT, nullptr, 0, KEY_READ, reinterpret_cast<PHKEY>(phkey))
         == ERROR_SUCCESS)
         ret = JNI_TRUE;
-    env->ReleaseLongArrayElements(hkresult, (jlong *)phkey, 0);
+    env->ReleaseLongArrayElements(hkresult, phkey, 0);
     return ret;
 }
 
@@ -51,11 +51,11 @@ extern "C" JNIEXPORT jboolean JNICALL
     JNIEnv *env, jclass, jlongArray hkresult)
 {
     jboolean ret = JNI_FALSE;
-    PHKEY phkey = (PHKEY)env->GetLongArrayElements(hkresult, 0);
-    if (RegOpenKeyEx(HKEY_CURRENT_CONFIG, NULL, 0, KEY_READ, phkey)
+    auto phkey = env->GetLongArrayElements(hkresult, nullptr);
+    if (RegOpenKeyEx(HKEY_CURRENT_CONFIG, nullptr, 0, KEY_READ, reinterpret_cast<PHKEY>(phkey))
         == ERROR_SUCCESS)
         ret = JNI_TRUE;
-    env->ReleaseLongArrayElements(hkresult, (jlong *)phkey, 0);
+    env->ReleaseLongArrayElements(hkresult, phkey, 0);
     return ret;
 }
 
@@ -64,11 +64,11 @@ extern "C" JNIEXPORT jboolean JNICALL
     JNIEnv *env, jclass, jlongArray hkresult)
 {
     jboolean ret = JNI_FALSE;
-    PHKEY phkey = (PHKEY)env->GetLongArrayElements(hkresult, 0);
-    if (RegOpenKeyEx(HKEY_CURRENT_USER, NULL, 0, KEY_READ, phkey)
+    auto phkey = env->GetLongArrayElements(hkresult, nullptr);
+    if (RegOpenKeyEx(HKEY_CURRENT_USER, nullptr, 0, KEY_READ, reinterpret_cast<PHKEY>(phkey))
         == ERROR_SUCCESS)
         ret = JNI_TRUE;
-    env->ReleaseLongArrayElements(hkresult, (jlong *)phkey, 0);
+    env->ReleaseLongArrayElements(hkresult, phkey, 0);
     return ret;
 }
 
@@ -77,11 +77,11 @@ extern "C" JNIEXPORT jboolean JNICALL
     JNIEnv *env, jclass, jlongArray hkresult)
 {
     jboolean ret = JNI_FALSE;
-    PHKEY phkey = (PHKEY)env->GetLongArrayElements(hkresult, 0);
-    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, NULL, 0, KEY_READ, phkey)
+    auto phkey = env->GetLongArrayElements(hkresult, nullptr);
+    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, nullptr, 0, KEY_READ, reinterpret_cast<PHKEY>(phkey))
         == ERROR_SUCCESS)
         ret = JNI_TRUE;
-    env->ReleaseLongArrayElements(hkresult, (jlong *)phkey, 0);
+    env->ReleaseLongArrayElements(hkresult, phkey, 0);
     return ret;
 }
 
@@ -90,10 +90,10 @@ extern "C" JNIEXPORT jboolean JNICALL
     JNIEnv *env, jclass, jlongArray hkresult)
 {
     jboolean ret = JNI_FALSE;
-    PHKEY phkey = (PHKEY)env->GetLongArrayElements(hkresult, 0);
-    if (RegOpenKeyEx(HKEY_USERS, NULL, 0, KEY_READ, phkey) == ERROR_SUCCESS)
+    auto phkey = env->GetLongArrayElements(hkresult, nullptr);
+    if (RegOpenKeyEx(HKEY_USERS, nullptr, 0, KEY_READ, reinterpret_cast<PHKEY>(phkey)) == ERROR_SUCCESS)
         ret = JNI_TRUE;
-    env->ReleaseLongArrayElements(hkresult, (jlong *)phkey, 0);
+    env->ReleaseLongArrayElements(hkresult, phkey, 0);
     return ret;
 }
 
@@ -102,13 +102,13 @@ extern "C" JNIEXPORT jboolean JNICALL
     JNIEnv *env, jclass, jlong parent, jstring name, jlongArray hkresult)
 {
     jboolean ret = JNI_FALSE;
-    const char *namestr = env->GetStringUTFChars(name, 0);
-    PHKEY phkey = (PHKEY)env->GetLongArrayElements(hkresult, 0);
-    if (RegOpenKeyEx((HKEY)parent, namestr, 0, KEY_READ, phkey)
+    const char *namestr = env->GetStringUTFChars(name, nullptr);
+    auto phkey = env->GetLongArrayElements(hkresult, nullptr);
+    if (RegOpenKeyEx(reinterpret_cast<HKEY>(parent), namestr, 0, KEY_READ, reinterpret_cast<PHKEY>(phkey))
         == ERROR_SUCCESS)
         ret = JNI_TRUE;
     env->ReleaseStringUTFChars(name, namestr);
-    env->ReleaseLongArrayElements(hkresult, (jlong *)phkey, 0);
+    env->ReleaseLongArrayElements(hkresult, phkey, 0);
     return ret;
 }
 
@@ -118,7 +118,7 @@ extern "C" JNIEXPORT jboolean JNICALL
     JNIEnv *, jclass, jlong hkey)
 {
     jboolean ret = JNI_FALSE;
-    if (RegCloseKey((HKEY)hkey) == ERROR_SUCCESS)
+    if (RegCloseKey(reinterpret_cast<HKEY>(hkey)) == ERROR_SUCCESS)
         ret = JNI_TRUE;
     return ret;
 }
@@ -129,17 +129,17 @@ extern "C" JNIEXPORT jboolean
     jbyteArray data, jlongArray size)
 {
     jboolean ret = JNI_FALSE;
-    const char* valuestr = env->GetStringUTFChars(value, 0);
-    LPDWORD ptype = (LPDWORD)env->GetLongArrayElements(type, 0);
-    LPBYTE  pdata = (LPBYTE)env->GetByteArrayElements(data, 0);
-    LPDWORD psize = (LPDWORD)env->GetLongArrayElements(size, 0);
-    if (RegQueryValueEx((HKEY)hkey, valuestr, NULL, ptype, pdata, psize)
+    const char* valuestr = env->GetStringUTFChars(value, nullptr);
+    auto ptype = env->GetLongArrayElements(type, nullptr);
+    auto pdata = env->GetByteArrayElements(data, nullptr);
+    auto psize = env->GetLongArrayElements(size, nullptr);
+    if (RegQueryValueEx(reinterpret_cast<HKEY>(hkey), valuestr, nullptr, reinterpret_cast<LPDWORD>(ptype), reinterpret_cast<LPBYTE>(pdata), reinterpret_cast<LPDWORD>(psize))
         == ERROR_SUCCESS)
         ret = JNI_TRUE;
     env->ReleaseStringUTFChars(value, valuestr);
-    env->ReleaseLongArrayElements(type, (jlong *)ptype, 0);
-    env->ReleaseByteArrayElements(data, (jbyte *)pdata, 0);
-    env->ReleaseLongArrayElements(size, (jlong *)psize, 0);
+    env->ReleaseLongArrayElements(type, ptype, 0);
+    env->ReleaseByteArrayElements(data, pdata, 0);
+    env->ReleaseLongArrayElements(size, psize, 0);
     return ret;
 }
 
@@ -150,27 +150,23 @@ extern "C" JNIEXPORT jboolean JNICALL
     jlongArray maxValueLen, jlongArray secDescriptor)
 {
     jboolean ret = JNI_FALSE;
-    LPDWORD psubkeys = (LPDWORD)env->GetLongArrayElements(subkeys, 0);
-    LPDWORD pmaxSubkeyLen =
-        (LPDWORD)env->GetLongArrayElements(maxSubkeyLen, 0);
-    LPDWORD pvalues = (LPDWORD)env->GetLongArrayElements(values, 0);
-    LPDWORD pmaxValueNameLen =
-        (LPDWORD)env->GetLongArrayElements(maxValueNameLen, 0);
-    LPDWORD pmaxValueLen =
-        (LPDWORD)env->GetLongArrayElements(maxValueLen, 0);
-    LPDWORD psecDescriptor =
-        (LPDWORD)env->GetLongArrayElements(secDescriptor, 0);
+    auto psubkeys = env->GetLongArrayElements(subkeys, nullptr);
+    auto pmaxSubkeyLen = env->GetLongArrayElements(maxSubkeyLen, nullptr);
+    auto pvalues = env->GetLongArrayElements(values, nullptr);
+    auto pmaxValueNameLen = env->GetLongArrayElements(maxValueNameLen, nullptr);
+    auto pmaxValueLen = env->GetLongArrayElements(maxValueLen, nullptr);
+    auto psecDescriptor = env->GetLongArrayElements(secDescriptor, nullptr);
     FILETIME ft;
-    if (RegQueryInfoKey((HKEY)hkey, NULL, NULL, NULL, psubkeys, pmaxSubkeyLen,
-                        NULL, pvalues, pmaxValueNameLen, pmaxValueLen,
-                        psecDescriptor, &ft) == ERROR_SUCCESS)
+    if (RegQueryInfoKey(reinterpret_cast<HKEY>(hkey), nullptr, nullptr, nullptr, reinterpret_cast<LPDWORD>(psubkeys), reinterpret_cast<LPDWORD>(pmaxSubkeyLen),
+                        nullptr, reinterpret_cast<LPDWORD>(pvalues), reinterpret_cast<LPDWORD>(pmaxValueNameLen), reinterpret_cast<LPDWORD>(pmaxValueLen),
+                        reinterpret_cast<LPDWORD>(psecDescriptor), &ft) == ERROR_SUCCESS)
         ret = JNI_TRUE;
-    env->ReleaseLongArrayElements(subkeys, (jlong*)psubkeys, 0);
-    env->ReleaseLongArrayElements(maxSubkeyLen, (jlong*)pmaxSubkeyLen, 0);
-    env->ReleaseLongArrayElements(values, (jlong*)pvalues, 0);
-    env->ReleaseLongArrayElements(maxValueNameLen, (jlong*)pmaxValueNameLen, 0);
-    env->ReleaseLongArrayElements(maxValueLen, (jlong*)pmaxValueLen, 0);
-    env->ReleaseLongArrayElements(secDescriptor, (jlong*)psecDescriptor, 0);
+    env->ReleaseLongArrayElements(subkeys, psubkeys, 0);
+    env->ReleaseLongArrayElements(maxSubkeyLen, pmaxSubkeyLen, 0);
+    env->ReleaseLongArrayElements(values, pvalues, 0);
+    env->ReleaseLongArrayElements(maxValueNameLen, pmaxValueNameLen, 0);
+    env->ReleaseLongArrayElements(maxValueLen, pmaxValueLen, 0);
+    env->ReleaseLongArrayElements(secDescriptor, psecDescriptor, 0);
     return ret;
 }
 
