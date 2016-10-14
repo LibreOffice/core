@@ -42,7 +42,7 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-static bool cpp_call(
+bool cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,
     typelib_TypeDescriptionReference * pReturnTypeRef,
@@ -72,12 +72,12 @@ static bool cpp_call(
     int nCppParamIndex = 0;
 
     // Return type
-    typelib_TypeDescription * pReturnTD = NULL;
+    typelib_TypeDescription * pReturnTD = nullptr;
     TYPELIB_DANGER_GET( &pReturnTD, pReturnTypeRef );
     assert(pReturnTD);
 
     // 'this'
-    void * pAdjustedThisPtr = (void **)( pThis->getCppI() ) + aVtableSlot.offset;
+    void * pAdjustedThisPtr = reinterpret_cast<void **>( pThis->getCppI() ) + aVtableSlot.offset;
     aCppParams[nCppParamIndex++].p = pAdjustedThisPtr;
 
     enum class ReturnKind { Void, Simple, Complex, ComplexConvert };
@@ -110,7 +110,7 @@ static bool cpp_call(
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
 
-        typelib_TypeDescription * pParamTD = NULL;
+        typelib_TypeDescription * pParamTD = nullptr;
         TYPELIB_DANGER_GET( &pParamTD, rParam.pTypeRef );
 
         if ( !rParam.bOut &&
@@ -186,12 +186,12 @@ static bool cpp_call(
         // expects. (The callee is not actually varargs, of course.)
 
         sal_Int64 (*pIMethod)(sal_Int64, ...) =
-            (sal_Int64 (*)(sal_Int64, ...))
-            (*((sal_uInt64 **)pAdjustedThisPtr))[aVtableSlot.index];
+            reinterpret_cast<sal_Int64 (*)(sal_Int64, ...)>(
+                (*static_cast<sal_uInt64 **>(pAdjustedThisPtr))[aVtableSlot.index]);
 
         double (*pFMethod)(sal_Int64, ...) =
-            (double (*)(sal_Int64, ...))
-            (*((sal_uInt64 **)pAdjustedThisPtr))[aVtableSlot.index];
+            reinterpret_cast<double (*)(sal_Int64, ...)>(
+                (*static_cast<sal_uInt64 **>(pAdjustedThisPtr))[aVtableSlot.index]);
 
         // Pass parameters 2..4 as if it was a floating-point value so
         // that it gets put in both XMM and integer registers per the
@@ -245,7 +245,7 @@ static bool cpp_call(
     }
 
     // No exception occurred
-    *ppUnoExc = NULL;
+    *ppUnoExc = nullptr;
 
     // Reconvert temporary params
     while ( nTempIndexes-- )
@@ -260,7 +260,7 @@ static bool cpp_call(
             if ( pParams[nIndex].bOut ) // Inout
             {
                 ::uno_destructData(
-                    pUnoArgs[nIndex], pParamTD, 0 ); // Destroy UNO value
+                    pUnoArgs[nIndex], pParamTD, nullptr ); // Destroy UNO value
                 ::uno_copyAndConvertData(
                     pUnoArgs[nIndex], aCppParams[nCppIndex].p, pParamTD,
                     pThis->getBridge()->getCpp2Uno() );
@@ -285,7 +285,7 @@ static bool cpp_call(
     case ReturnKind::Void:
         break;
     case ReturnKind::Simple:
-        *(sal_Int64*)pUnoReturn = uRetVal.i;
+        *static_cast<sal_Int64*>(pUnoReturn) = uRetVal.i;
         break;
     case ReturnKind::Complex:
         assert(uRetVal.p == pUnoReturn);
@@ -330,7 +330,7 @@ void unoInterfaceProxyDispatch(
     {
 #if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
-        sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberTD)->nPosition;
+        sal_Int32 nMemberPos = reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberTD)->nPosition;
         assert(nMemberPos < pTypeDescr->nAllMembers);
 #endif
         VtableSlot aVtableSlot(
@@ -343,8 +343,8 @@ void unoInterfaceProxyDispatch(
             // Is GET
             cpp_call(
                 pThis, aVtableSlot,
-                ((typelib_InterfaceAttributeTypeDescription *)pMemberTD)->pAttributeTypeRef,
-                0, NULL, // no params
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(pMemberTD)->pAttributeTypeRef,
+                0, nullptr, // no params
                 pReturn, pArgs, ppException );
         }
         else
@@ -352,11 +352,11 @@ void unoInterfaceProxyDispatch(
             // Is SET
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
-                ((typelib_InterfaceAttributeTypeDescription *)pMemberTD)->pAttributeTypeRef;
-            aParam.bIn      = sal_True;
-            aParam.bOut     = sal_False;
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(pMemberTD)->pAttributeTypeRef;
+            aParam.bIn      = true;
+            aParam.bOut     = false;
 
-            typelib_TypeDescriptionReference * pReturnTypeRef = NULL;
+            typelib_TypeDescriptionReference * pReturnTypeRef = nullptr;
             OUString aVoidName("void");
             typelib_typedescriptionreference_new(
                 &pReturnTypeRef, typelib_TypeClass_VOID, aVoidName.pData );
@@ -377,7 +377,7 @@ void unoInterfaceProxyDispatch(
     {
 #if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
-        sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberTD)->nPosition;
+        sal_Int32 nMemberPos = reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberTD)->nPosition;
         assert(nMemberPos < pTypeDescr->nAllMembers);
 #endif
         VtableSlot aVtableSlot(
@@ -391,34 +391,34 @@ void unoInterfaceProxyDispatch(
         // Standard calls
         case 1: // Acquire UNO interface
             (*pUnoI->acquire)( pUnoI );
-            *ppException = 0;
+            *ppException = nullptr;
             break;
         case 2: // Release UNO interface
             (*pUnoI->release)( pUnoI );
-            *ppException = 0;
+            *ppException = nullptr;
             break;
         case 0: // queryInterface() opt
         {
-            typelib_TypeDescription * pTD = NULL;
-            TYPELIB_DANGER_GET( &pTD, reinterpret_cast< Type * >( pArgs[0] )->getTypeLibType() );
+            typelib_TypeDescription * pTD = nullptr;
+            TYPELIB_DANGER_GET( &pTD, static_cast< Type * >( pArgs[0] )->getTypeLibType() );
 
             if ( pTD )
             {
-                uno_Interface * pInterface = NULL;
+                uno_Interface * pInterface = nullptr;
                 (*pThis->getBridge()->getUnoEnv()->getRegisteredInterface)(
                     pThis->getBridge()->getUnoEnv(),
-                    (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
+                    reinterpret_cast<void **>(&pInterface), pThis->oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
 
                 if ( pInterface )
                 {
                     ::uno_any_construct(
-                        reinterpret_cast< uno_Any * >( pReturn ),
-                        &pInterface, pTD, 0 );
+                        static_cast< uno_Any * >( pReturn ),
+                        &pInterface, pTD, nullptr );
                     (*pInterface->release)( pInterface );
 
                     TYPELIB_DANGER_RELEASE( pTD );
 
-                    *ppException = 0;
+                    *ppException = nullptr;
                     break;
                 }
                 TYPELIB_DANGER_RELEASE( pTD );
@@ -428,15 +428,15 @@ void unoInterfaceProxyDispatch(
         default:
             if ( ! cpp_call(
                      pThis, aVtableSlot,
-                     ((typelib_InterfaceMethodTypeDescription *)pMemberTD)->pReturnTypeRef,
-                     ((typelib_InterfaceMethodTypeDescription *)pMemberTD)->nParams,
-                     ((typelib_InterfaceMethodTypeDescription *)pMemberTD)->pParams,
+                     reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberTD)->pReturnTypeRef,
+                     reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberTD)->nParams,
+                     reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberTD)->pParams,
                      pReturn, pArgs, ppException ) )
             {
                 RuntimeException aExc( "Too many parameters!" );
 
                 Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
-                ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );
+                ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), nullptr );
             }
         }
         break;
@@ -447,7 +447,7 @@ void unoInterfaceProxyDispatch(
 
         Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
         // Binary identical null reference (whatever that comment means...)
-        ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );
+        ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), nullptr );
     }
     }
 }

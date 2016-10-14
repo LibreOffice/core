@@ -22,10 +22,7 @@
 #include <windows.h>
 #pragma warning(pop)
 
-
-void dso_init();
-void dso_exit();
-
+#include <cppinterfaceproxy.hxx>
 
 extern "C" BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpvReserved)
 {
