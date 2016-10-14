@@ -175,7 +175,7 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
 
     result = osl_executeProcess_WithRedirectedIO(url.pData,
     pArgs, nArgs, osl_Process_HIDDEN,
-        pSecurity, 0, 0, 0, pProcess, pIn, pOut, pErr);
+        pSecurity, nullptr, nullptr, 0, pProcess, pIn, pOut, pErr);
 #else
     result = osl_executeProcess_WithRedirectedIO(rProgName.pData,
         pArgs, nArgs, osl_Process_SEARCHPATH | osl_Process_HIDDEN,
