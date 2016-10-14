@@ -1391,7 +1391,7 @@ static bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxT
 
                             if( aSeq.getLength() )
                             {
-                                FILEGROUPDESCRIPTOR* pFDesc = (FILEGROUPDESCRIPTOR*) aSeq.getConstArray();
+                                FILEGROUPDESCRIPTOR const * pFDesc = reinterpret_cast<FILEGROUPDESCRIPTOR const *>(aSeq.getConstArray());
 
                                 if( pFDesc->cItems )
                                 {
