@@ -7,11 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <pdfio/pdfdocument.hxx>
-
-#include <sal/main.h>
-#include <osl/file.hxx>
 #include <iostream>
+
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
+
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/bootstrap.hxx>
+#include <osl/file.hxx>
+#include <sal/main.h>
+
+#include <pdfio/pdfdocument.hxx>
 
 using namespace com::sun::star;
 
@@ -22,6 +29,14 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
         SAL_WARN("xmlsecurity.pdfio", "not enough parameters");
         return 1;
     }
+
+    // Initialize nss / mscrypto.
+    uno::Reference<uno::XComponentContext> xComponentContext = cppu::defaultBootstrap_InitialComponentContext();
+    uno::Reference<lang::XMultiComponentFactory> xMultiComponentFactory = xComponentContext->getServiceManager();
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xMultiComponentFactory, uno::UNO_QUERY);;
+    comphelper::setProcessServiceFactory(xMultiServiceFactory);
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xComponentContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
 
     OUString aURL;
     osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pArgv[1]), aURL);
