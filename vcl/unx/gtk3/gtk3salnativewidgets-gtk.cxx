@@ -694,7 +694,7 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
     gint nArrowWidth;
     gtk_style_context_get(mpComboboxButtonArrowStyle,
         gtk_style_context_get_state(mpComboboxButtonArrowStyle),
-        "min-width", &nArrowWidth, NULL);
+        "min-width", &nArrowWidth, nullptr);
 
     gint nButtonWidth = nArrowWidth + padding.left + padding.right;
     if( nPart == ControlPart::ButtonDown )
@@ -755,13 +755,13 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
     {
         gtk_style_context_get(mpComboboxButtonArrowStyle,
             gtk_style_context_get_state(mpComboboxButtonArrowStyle),
-            "min-width", &arrow_width, "min-height", &arrow_height, NULL);
+            "min-width", &arrow_width, "min-height", &arrow_height, nullptr);
     }
     else if (nType == ControlType::Listbox)
     {
         gtk_style_context_get(mpListboxButtonArrowStyle,
             gtk_style_context_get_state(mpListboxButtonArrowStyle),
-            "min-width", &arrow_width, "min-height", &arrow_height, NULL);
+            "min-width", &arrow_width, "min-height", &arrow_height, nullptr);
     }
 
     arrowRect.SetSize(Size(arrow_width, arrow_height));
