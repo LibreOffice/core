@@ -830,10 +830,8 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const LockFileEntry& aData, bool b
 {
     sal_Int8 nResult = LOCK_UI_NOLOCK;
 
-    if( aData[LockFileComponent::OOOUSERNAME] == aData[LockFileComponent::SYSUSERNAME] ||
-                                      aData[LockFileComponent::OOOUSERNAME].isEmpty()  ||
-                                      aData[LockFileComponent::SYSUSERNAME].isEmpty()
-                                    )
+    // tdf#92817: Simple check for empty lock file that needs to be deleted
+    if( aData[LockFileComponent::OOOUSERNAME].isEmpty() && aData[LockFileComponent::SYSUSERNAME].isEmpty() )
         bOwnLock=true;
 
     // show the interaction regarding the document opening
