@@ -48,7 +48,7 @@ class InitializedOleGuard
 public:
     InitializedOleGuard()
     {
-        if ( !SUCCEEDED( OleInitialize( NULL ) ) )
+        if ( !SUCCEEDED( OleInitialize( nullptr ) ) )
             throw css::uno::RuntimeException();
     }
 
@@ -169,11 +169,11 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 
 
     ::osl::Module aOleDlgLib;
-    if( !aOleDlgLib.load( OUString( "oledlg" ) ))
+    if( !aOleDlgLib.load( "oledlg" ))
         throw uno::RuntimeException();
 
-    OleUIInsertObjectA_Type * pInsertFct = (OleUIInsertObjectA_Type *)
-                                aOleDlgLib.getSymbol( OUString( "OleUIInsertObjectA" ));
+    OleUIInsertObjectA_Type * pInsertFct = reinterpret_cast<OleUIInsertObjectA_Type *>(
+                                aOleDlgLib.getSymbol( "OleUIInsertObjectA" ));
     if( !pInsertFct )
         throw uno::RuntimeException();
 
@@ -231,20 +231,20 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
                                     uno::UNO_QUERY );
         }
 
-        if ( ( io.dwFlags & IOF_CHECKDISPLAYASICON) && io.hMetaPict != NULL )
+        if ( ( io.dwFlags & IOF_CHECKDISPLAYASICON) && io.hMetaPict != nullptr )
         {
-            METAFILEPICT* pMF = ( METAFILEPICT* )GlobalLock( io.hMetaPict );
+            METAFILEPICT* pMF = static_cast<METAFILEPICT*>(GlobalLock( io.hMetaPict ));
             if ( pMF )
             {
-                sal_uInt32 nBufSize = GetMetaFileBitsEx( pMF->hMF, 0, NULL );
+                sal_uInt32 nBufSize = GetMetaFileBitsEx( pMF->hMF, 0, nullptr );
                 uno::Sequence< sal_Int8 > aMetafile( nBufSize + 22 );
-                sal_uInt8* pBuf = (sal_uInt8*)( aMetafile.getArray() );
-                *( (long* )pBuf ) = 0x9ac6cdd7L;
-                *( (short* )( pBuf+6 )) = ( SHORT ) 0;
-                *( (short* )( pBuf+8 )) = ( SHORT ) 0;
-                *( (short* )( pBuf+10 )) = ( SHORT ) pMF->xExt;
-                *( (short* )( pBuf+12 )) = ( SHORT ) pMF->yExt;
-                *( (short* )( pBuf+14 )) = ( USHORT ) 2540;
+                sal_Int8* pBuf = aMetafile.getArray();
+                *reinterpret_cast<long*>( pBuf ) = 0x9ac6cdd7L;
+                *reinterpret_cast<short*>( pBuf+6 ) = ( SHORT ) 0;
+                *reinterpret_cast<short*>( pBuf+8 ) = ( SHORT ) 0;
+                *reinterpret_cast<short*>( pBuf+10 ) = ( SHORT ) pMF->xExt;
+                *reinterpret_cast<short*>( pBuf+12 ) = ( SHORT ) pMF->yExt;
+                *reinterpret_cast<short*>( pBuf+14 ) = ( USHORT ) 2540;
 
                 if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize, pBuf+22 ) )
                 {

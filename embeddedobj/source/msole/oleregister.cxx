@@ -54,7 +54,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL emboleobj_component_getFactory(
         // the following service makes sense only on windows
         else if ( aImplName.equals( MSOLEDialogObjectCreator::impl_staticGetImplementationName() ) )
         {
-            xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
+            xFactory= ::cppu::createOneInstanceFactory( static_cast< lang::XMultiServiceFactory*>( pServiceManager ),
                                                 MSOLEDialogObjectCreator::impl_staticGetImplementationName(),
                                                 MSOLEDialogObjectCreator::impl_staticCreateSelfInstance,
                                                 MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames() );

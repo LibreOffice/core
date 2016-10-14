@@ -169,7 +169,7 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStora
 
         xParentStorage->copyStreamElementData( aEntryName, xTempStream );
 
-        xTempFile->setPropertyValue("RemoveFile", uno::makeAny( sal_False ) );
+        xTempFile->setPropertyValue("RemoveFile", uno::makeAny( false ) );
         uno::Any aUrl = xTempFile->getPropertyValue("Uri");
         aUrl >>= aResult;
     }
@@ -216,22 +216,22 @@ void VerbExecutionController::StartControlExecution()
     // the class is used to detect STAMPIT object, that can never be active
     if ( !m_bVerbExecutionInProgress && !m_bWasEverActive )
     {
-        m_bVerbExecutionInProgress = sal_True;
+        m_bVerbExecutionInProgress = true;
         m_nVerbExecutionThreadIdentifier = osl::Thread::getCurrentIdentifier();
-        m_bChangedOnVerbExecution = sal_False;
+        m_bChangedOnVerbExecution = false;
     }
 }
 
 
-sal_Bool VerbExecutionController::EndControlExecution_WasModified()
+bool VerbExecutionController::EndControlExecution_WasModified()
 {
     osl::MutexGuard aGuard( m_aVerbExecutionMutex );
 
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     if ( m_bVerbExecutionInProgress && m_nVerbExecutionThreadIdentifier == osl::Thread::getCurrentIdentifier() )
     {
         bResult = m_bChangedOnVerbExecution;
-        m_bVerbExecutionInProgress = sal_False;
+        m_bVerbExecutionInProgress = false;
     }
 
     return bResult;
@@ -243,7 +243,7 @@ void VerbExecutionController::ModificationNotificationIsDone()
     osl::MutexGuard aGuard( m_aVerbExecutionMutex );
 
     if ( m_bVerbExecutionInProgress && osl::Thread::getCurrentIdentifier() == m_nVerbExecutionThreadIdentifier )
-        m_bChangedOnVerbExecution = sal_True;
+        m_bChangedOnVerbExecution = true;
 }
 #endif
 
@@ -736,7 +736,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
 
                                     try
                                     {
-                                        CreateOleComponentAndLoad_Impl( NULL );
+                                        CreateOleComponentAndLoad_Impl();
                                         m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
                                     }
                                     catch( const uno::Exception& )
@@ -803,16 +803,16 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
 
 #ifdef _WIN32
 
-sal_Bool OleEmbeddedObject::SaveObject_Impl()
+bool OleEmbeddedObject::SaveObject_Impl()
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if ( m_xClientSite.is() )
     {
         try
         {
             m_xClientSite->saveObject();
-            bResult = sal_True;
+            bResult = true;
         }
         catch( const uno::Exception& )
         {
@@ -823,16 +823,16 @@ sal_Bool OleEmbeddedObject::SaveObject_Impl()
 }
 
 
-sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
+bool OleEmbeddedObject::OnShowWindow_Impl( bool bShow )
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     SAL_WARN_IF( m_nObjectState == -1, "embeddedobj.ole", "The object has no persistence!" );
     SAL_WARN_IF( m_nObjectState == embed::EmbedStates::LOADED, "embeddedobj.ole", "The object get OnShowWindow in loaded state!" );
     if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
-        return sal_False;
+        return false;
 
     // the object is either activated or deactivated
     sal_Int32 nOldState = m_nObjectState;
@@ -842,13 +842,13 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
         m_aVerbExecutionController.ObjectIsActive();
 
         aGuard.clear();
-        StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+        StateChangeNotification_Impl( false, nOldState, m_nObjectState );
     }
     else if ( !bShow && m_nObjectState == embed::EmbedStates::ACTIVE )
     {
         m_nObjectState = embed::EmbedStates::RUNNING;
         aGuard.clear();
-        StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+        StateChangeNotification_Impl( false, nOldState, m_nObjectState );
     }
 
     if ( m_xClientSite.is() )
@@ -856,7 +856,7 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
         try
         {
             m_xClientSite->visibilityChanged( bShow );
-            bResult = sal_True;
+            bResult = true;
         }
         catch( const uno::Exception& )
         {
@@ -899,7 +899,7 @@ void OleEmbeddedObject::OnViewChanged_Impl()
         // The view is changed while the object is in running state, save the new object
         m_xCachedVisualRepresentation.clear();
         SaveObject_Impl();
-        MakeEventListenerNotification_Impl( OUString( "OnVisAreaChanged" ) );
+        MakeEventListenerNotification_Impl( "OnVisAreaChanged" );
     }
 
 }
@@ -914,7 +914,7 @@ void OleEmbeddedObject::OnClosed_Impl()
     {
         sal_Int32 nOldState = m_nObjectState;
         m_nObjectState = embed::EmbedStates::LOADED;
-        StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+        StateChangeNotification_Impl( false, nOldState, m_nObjectState );
     }
 }
 
@@ -1027,7 +1027,7 @@ uno::Reference< io::XOutputStream > OleEmbeddedObject::GetStreamForSaving()
 }
 
 
-void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream > xOutStream )
+void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream > const & xOutStream )
     throw ( uno::Exception )
 {
     // this method should be used only on windows
@@ -1167,13 +1167,13 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         if ( !xTargetStream.is() )
             throw io::IOException(); //TODO: access denied
 
-        SetStreamMediaType_Impl( xTargetStream, OUString( "application/vnd.sun.star.oleobject" ));
+        SetStreamMediaType_Impl( xTargetStream, "application/vnd.sun.star.oleobject" );
         uno::Reference< io::XOutputStream > xOutStream = xTargetStream->getOutputStream();
         if ( !xOutStream.is() )
             throw io::IOException(); //TODO: access denied
 
         StoreObjectToStream( xOutStream );
-        bVisReplIsStored = sal_True;
+        bVisReplIsStored = true;
 
         if ( bSaveAs )
         {
@@ -1188,7 +1188,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
             if ( xTmpCVRepresentation.is() )
             {
                 xCachedVisualRepresentation = xTmpCVRepresentation;
-                bNeedLocalCache = sal_False;
+                bNeedLocalCache = false;
             }
         }
     }
@@ -1375,7 +1375,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         {
             // the object should be initialized from clipboard
             // inpossibility to initialize the object means error here
-            CreateOleComponentFromClipboard_Impl( NULL );
+            CreateOleComponentFromClipboard_Impl();
             m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
             m_pOleComponent->RunObject();
             m_nObjectState = embed::EmbedStates::RUNNING;
@@ -1387,7 +1387,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             // will be detected by olecomponent
             try
             {
-                CreateOleComponentAndLoad_Impl( NULL );
+                CreateOleComponentAndLoad_Impl();
                 m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
             }
             catch( const uno::Exception& )
@@ -1759,14 +1759,14 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 #ifdef _WIN32
     if ( m_nObjectState != embed::EmbedStates::LOADED && m_pOleComponent && m_pOleComponent->IsDirty() )
     {
-        bStoreLoaded = sal_False;
+        bStoreLoaded = false;
 
         OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
 
         if ( !m_xObjectStream.is() )
             throw io::IOException(); //TODO: access denied
 
-        SetStreamMediaType_Impl( m_xObjectStream, OUString( "application/vnd.sun.star.oleobject" ));
+        SetStreamMediaType_Impl( m_xObjectStream, "application/vnd.sun.star.oleobject" );
         uno::Reference< io::XOutputStream > xOutStream = m_xObjectStream->getOutputStream();
         if ( !xOutStream.is() )
             throw io::IOException(); //TODO: access denied
@@ -1777,7 +1777,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         // the replacement is changed probably, and it must be in the object stream
         if ( !m_pOleComponent->IsWorkaroundActive() )
             m_xCachedVisualRepresentation.clear();
-        SetVisReplInStream( sal_True );
+        SetVisReplInStream( true );
     }
 #endif
 
@@ -2015,7 +2015,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
             m_nObjectState = nTargetState;
         }
 
-        m_bIsLink = sal_False;
+        m_bIsLink = false;
         m_aLinkURL.clear();
     }
     else
