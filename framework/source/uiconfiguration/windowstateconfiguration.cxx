@@ -1284,8 +1284,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override
     {
-        css::uno::Sequence< OUString > aSeq { "com.sun.star.ui.WindowStateConfiguration" };
-        return aSeq;
+        return {"com.sun.star.ui.WindowStateConfiguration"};
     }
 
     // XNameAccess
