@@ -46,6 +46,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import javax.swing.JToolBar;
+import javax.swing.BorderFactory;
+
 public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
 
     private JFrame frame;
@@ -271,21 +274,21 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
         );
 
         String[] labels = {"Run", "Clear", "Save", "Close","Undo","Redo"};
-        JPanel p = new JPanel();
-        p.setLayout(new FlowLayout());
-
+        JToolBar toolbar = new JToolBar();
+        toolbar.setRollover(true);
         for (String label : labels) {
             JButton b = new JButton(label);
+            b.setToolTipText(label);
             b.addActionListener(this);
-            p.add(b);
-
+            toolbar.add(b);
+            toolbar.addSeparator();
             if (label.equals("Save") && filename == null) {
                 b.setEnabled(false);
             }
         }
 
         frame.getContentPane().add((JComponent)view, BorderLayout.CENTER);
-        frame.add(p, BorderLayout.NORTH);
+        frame.add(toolbar, BorderLayout.NORTH);
         frame.pack();
         frame.setSize(590, 480);
         frame.setLocation(300, 200);
