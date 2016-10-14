@@ -97,7 +97,7 @@ TempFile::~TempFile() {
 oslFileError TempFile::closeWithoutUnlink() {
     flush();
     oslFileError e = osl_closeFile(handle);
-    handle = 0;
+    handle = nullptr;
     closed = true;
     return e;
 }
