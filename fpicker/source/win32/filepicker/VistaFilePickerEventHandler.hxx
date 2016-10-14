@@ -67,32 +67,32 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         // IUnknown
 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID rIID    ,
-                                                         void** ppObject);
-        virtual ULONG STDMETHODCALLTYPE AddRef();
-        virtual ULONG STDMETHODCALLTYPE Release();
+                                                         void** ppObject) override;
+        virtual ULONG STDMETHODCALLTYPE AddRef() override;
+        virtual ULONG STDMETHODCALLTYPE Release() override;
 
 
         // IFileDialogEvents
 
 
-        STDMETHODIMP OnFileOk(IFileDialog* pDialog);
+        STDMETHODIMP OnFileOk(IFileDialog* pDialog) override;
 
         STDMETHODIMP OnFolderChanging(IFileDialog* pDialog,
-                                      IShellItem*  pFolder);
+                                      IShellItem*  pFolder) override;
 
-        STDMETHODIMP OnFolderChange(IFileDialog* pDialog);
+        STDMETHODIMP OnFolderChange(IFileDialog* pDialog) override;
 
-        STDMETHODIMP OnSelectionChange(IFileDialog* pDialog);
+        STDMETHODIMP OnSelectionChange(IFileDialog* pDialog) override;
 
         STDMETHODIMP OnShareViolation(IFileDialog*                 pDialog  ,
                                       IShellItem*                  pItem    ,
-                                      FDE_SHAREVIOLATION_RESPONSE* pResponse);
+                                      FDE_SHAREVIOLATION_RESPONSE* pResponse) override;
 
-        STDMETHODIMP OnTypeChange(IFileDialog* pDialog);
+        STDMETHODIMP OnTypeChange(IFileDialog* pDialog) override;
 
         STDMETHODIMP OnOverwrite(IFileDialog*            pDialog  ,
                                  IShellItem*             pItem    ,
-                                 FDE_OVERWRITE_RESPONSE* pResponse);
+                                 FDE_OVERWRITE_RESPONSE* pResponse) override;
 
 
         // IFileDialogControlEvents
@@ -100,17 +100,17 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
 
         STDMETHODIMP OnItemSelected(IFileDialogCustomize* pCustomize,
                                     DWORD                 nIDCtl    ,
-                                    DWORD                 nIDItem   );
+                                    DWORD                 nIDItem   ) override;
 
         STDMETHODIMP OnButtonClicked(IFileDialogCustomize* pCustomize,
-                                     DWORD                 nIDCtl    );
+                                     DWORD                 nIDCtl    ) override;
 
         STDMETHODIMP OnCheckButtonToggled(IFileDialogCustomize* pCustomize,
                                           DWORD                 nIDCtl    ,
-                                          BOOL                  bChecked  );
+                                          BOOL                  bChecked  ) override;
 
         STDMETHODIMP OnControlActivating(IFileDialogCustomize* pCustomize,
-                                         DWORD                 nIDCtl    );
+                                         DWORD                 nIDCtl    ) override;
 
 
         // XFilePickerNotifier

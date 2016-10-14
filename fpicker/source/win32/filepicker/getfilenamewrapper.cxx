@@ -41,17 +41,17 @@ namespace /* private */
 
     class CurDirGuard
     {
-        sal_Bool m_bValid;
+        bool m_bValid;
         wchar_t* m_pBuffer;
         DWORD m_nBufLen;
 
     public:
         CurDirGuard()
-        : m_bValid( sal_False )
-        , m_pBuffer( NULL )
+        : m_bValid( false )
+        , m_pBuffer( nullptr )
         , m_nBufLen( 0 )
         {
-            m_nBufLen = GetCurrentDirectoryW( 0, NULL );
+            m_nBufLen = GetCurrentDirectoryW( 0, nullptr );
             if ( m_nBufLen )
             {
                 m_pBuffer = new wchar_t[m_nBufLen];
@@ -89,7 +89,7 @@ namespace /* private */
                 }
 
                 delete [] m_pBuffer;
-                m_pBuffer = NULL;
+                m_pBuffer = nullptr;
             }
 
             if ( !bDirSet )
@@ -132,9 +132,9 @@ namespace /* private */
         CurDirGuard aGuard;
 
         GetFileNameParam* lpgfnp =
-            reinterpret_cast<GetFileNameParam*>(pParam);
+            static_cast<GetFileNameParam*>(pParam);
 
-        HRESULT hr = OleInitialize( NULL );
+        HRESULT hr = OleInitialize( nullptr );
 
         if (lpgfnp->m_bOpen)
             lpgfnp->m_bRet = GetOpenFileName(lpgfnp->m_lpofn);
@@ -160,7 +160,7 @@ namespace /* private */
         unsigned         id;
 
         HANDLE hThread = reinterpret_cast<HANDLE>(
-            _beginthreadex(0, 0, ThreadProc, &gfnp, 0, &id));
+            _beginthreadex(nullptr, 0, ThreadProc, &gfnp, 0, &id));
 
         SAL_WARN_IF( !hThread, "fpicker", "could not create STA thread");
 
@@ -180,7 +180,7 @@ namespace /* private */
 
     bool IsMTA()
     {
-        HRESULT hr = CoInitialize(NULL);
+        HRESULT hr = CoInitialize(nullptr);
 
         if (RPC_E_CHANGED_MODE == hr)
             return true;
@@ -215,7 +215,7 @@ bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAME lpofn)
     {
         CurDirGuard aGuard;
 
-        HRESULT hr = OleInitialize( NULL );
+        HRESULT hr = OleInitialize( nullptr );
 
         bRet = GetOpenFileName(lpofn);
         m_ExtendedDialogError = CommDlgExtendedError();

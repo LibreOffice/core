@@ -68,7 +68,7 @@ struct EnumParam
 
 CWinFileOpenImpl::CWinFileOpenImpl(
     CFilePicker* aFilePicker,
-    sal_Bool bFileOpenDialog,
+    bool bFileOpenDialog,
     sal_uInt32 dwFlags,
     sal_uInt32 dwTemplateId,
     HINSTANCE hInstance) :
@@ -77,7 +77,7 @@ CWinFileOpenImpl::CWinFileOpenImpl(
     m_Preview(new CPreviewAdapter(hInstance)),
     m_CustomControls(CCustomControlFactory::CreateCustomControlContainer()),
     m_FilePicker(aFilePicker),
-    m_bInitialSelChanged(sal_True),
+    m_bInitialSelChanged(true),
     m_HelpPopupWindow(hInstance, m_hwndFileOpenDlg),
     m_ExecuteFilePickerState(new CExecuteFilePickerState()),
     m_NonExecuteFilePickerState(new CNonExecuteFilePickerState())
@@ -176,7 +176,7 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::execute(  ) throw(uno::RuntimeException)
 void SAL_CALL CWinFileOpenImpl::appendFilter(const OUString& aTitle, const OUString& aFilter)
     throw(IllegalArgumentException, uno::RuntimeException)
 {
-    sal_Bool bRet = m_filterContainer->addFilter(aTitle, aFilter);
+    bool bRet = m_filterContainer->addFilter(aTitle, aFilter);
 
     if (!bRet)
         throw IllegalArgumentException(
@@ -294,7 +294,7 @@ uno::Any SAL_CALL CWinFileOpenImpl::getValue(sal_Int16 aControlId, sal_Int16 aCo
 
 // enables a custom template element
 
-void SAL_CALL CWinFileOpenImpl::enableControl(sal_Int16 ControlID, sal_Bool bEnable)
+void SAL_CALL CWinFileOpenImpl::enableControl(sal_Int16 ControlID, bool bEnable)
     throw(uno::RuntimeException)
 {
     OSL_ASSERT(m_FilePickerState);
@@ -323,7 +323,7 @@ OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
 uno::Sequence<sal_Int16> SAL_CALL CWinFileOpenImpl::getSupportedImageFormats()
     throw (uno::RuntimeException)
 {
-    return m_Preview->getSupportedImageFormats();
+    return CPreviewAdapter::getSupportedImageFormats();
 }
 
 sal_Int32 SAL_CALL CWinFileOpenImpl::getTargetColorDepth()
@@ -350,13 +350,13 @@ void SAL_CALL CWinFileOpenImpl::setImage(sal_Int16 aImageFormat, const uno::Any&
     m_Preview->setImage(aImageFormat,aImage);
 }
 
-sal_Bool SAL_CALL CWinFileOpenImpl::setShowState(sal_Bool bShowState)
+bool SAL_CALL CWinFileOpenImpl::setShowState(bool bShowState)
         throw (uno::RuntimeException)
 {
     return m_Preview->setShowState(bShowState);
 }
 
-sal_Bool SAL_CALL CWinFileOpenImpl::getShowState()
+bool SAL_CALL CWinFileOpenImpl::getShowState()
     throw (uno::RuntimeException)
 {
     return m_Preview->getShowState();
@@ -372,7 +372,7 @@ void SAL_CALL CWinFileOpenImpl::cancel()
             m_hwndFileOpenDlg,
             WM_COMMAND,
             MAKEWPARAM(IDCANCEL,BN_CLICKED),
-            (LPARAM)GetDlgItem(m_hwndFileOpenDlg, IDCANCEL));
+            reinterpret_cast<LPARAM>(GetDlgItem(m_hwndFileOpenDlg, IDCANCEL)));
         SAL_WARN_IF(0 == ret, "fpicker", "ERROR: PostMessage() failed!");
     }
 }
@@ -392,7 +392,7 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::getFocused()
     return sal::static_int_cast< sal_Int16 >(nID);
 }
 
-inline sal_Bool SAL_CALL CWinFileOpenImpl::IsCustomControlHelpRequested(LPHELPINFO lphi) const
+inline bool SAL_CALL CWinFileOpenImpl::IsCustomControlHelpRequested(LPHELPINFO lphi)
 {
     return ((lphi->iCtrlId != IDOK) && (lphi->iCtrlId != IDCANCEL) && (lphi->iCtrlId < ctlFirst));
 }
@@ -414,7 +414,7 @@ LRESULT CALLBACK CWinFileOpenImpl::SubClassFunc(
     {
         LPHELPINFO lphi = reinterpret_cast<LPHELPINFO>(lParam);
 
-        if (pImpl->IsCustomControlHelpRequested(lphi))
+        if (CWinFileOpenImpl::IsCustomControlHelpRequested(lphi))
             pImpl->onCustomControlHelpRequest(lphi);
         else
             lResult = CallWindowProc(
@@ -444,7 +444,7 @@ LRESULT CALLBACK CWinFileOpenImpl::SubClassFunc(
             reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
             hWnd,wMessage,wParam,lParam);
 
-        pImpl->onWMShow((sal_Bool)wParam);
+        pImpl->onWMShow(bool(wParam));
         break;
 
     case WM_NCDESTROY:
@@ -506,12 +506,12 @@ void SAL_CALL CWinFileOpenImpl::CacheControlState(HWND hWnd)
 
 BOOL CALLBACK CWinFileOpenImpl::EnumChildWndProc(HWND hWnd, LPARAM lParam)
 {
-    EnumParam* enumParam    = (EnumParam*)lParam;
+    EnumParam* enumParam    = reinterpret_cast<EnumParam*>(lParam);
     CWinFileOpenImpl* pImpl = enumParam->m_instance;
 
     OSL_ASSERT(pImpl);
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     switch(enumParam->m_action)
     {
@@ -526,7 +526,7 @@ BOOL CALLBACK CWinFileOpenImpl::EnumChildWndProc(HWND hWnd, LPARAM lParam)
 
     default:
         // should not end here
-        OSL_ASSERT(sal_False);
+        OSL_ASSERT(false);
     }
 
     return bRet;
@@ -541,7 +541,7 @@ sal_uInt32 SAL_CALL CWinFileOpenImpl::onFileOk()
     EnumChildWindows(
         m_hwndFileOpenDlgChild,
         CWinFileOpenImpl::EnumChildWndProc,
-        (LPARAM)&enumParam);
+        reinterpret_cast<LPARAM>(&enumParam));
 
     return 0;
 }
@@ -597,14 +597,14 @@ void CWinFileOpenImpl::EnlargeStdControlLabels() const
     int gap = rcOkButton.left - rcFileNameBox.right;
     gap = (gap > MAX_GAP) ? gap - MAX_GAP : gap;
 
-    ScreenToClient(m_hwndFileOpenDlg, (LPPOINT)&rcFileNameBox);
+    ScreenToClient(m_hwndFileOpenDlg, reinterpret_cast<LPPOINT>(&rcFileNameBox));
     MoveWindow(hFileNameBox, rcFileNameBox.left + gap + OFFSET, rcFileNameBox.top, w - OFFSET, h, true);
 
     RECT rcFilterBox;
     GetWindowRect(hFilterBox, &rcFilterBox);
     w = rcFilterBox.right - rcFilterBox.left;
     h = rcFilterBox.bottom - rcFilterBox.top;
-    ScreenToClient(m_hwndFileOpenDlg, (LPPOINT)&rcFilterBox);
+    ScreenToClient(m_hwndFileOpenDlg, reinterpret_cast<LPPOINT>(&rcFilterBox));
     MoveWindow(hFilterBox, rcFilterBox.left + gap + OFFSET, rcFilterBox.top, w - OFFSET, h, true);
 
     // get the new window rect
@@ -616,14 +616,14 @@ void CWinFileOpenImpl::EnlargeStdControlLabels() const
 
     w = rcFilterBoxLabel.right - rcFilterBoxLabel.left + offset;
     h = rcFilterBoxLabel.bottom - rcFilterBoxLabel.top;
-    ScreenToClient(m_hwndFileOpenDlg, (LPPOINT)&rcFilterBoxLabel);
+    ScreenToClient(m_hwndFileOpenDlg, reinterpret_cast<LPPOINT>(&rcFilterBoxLabel));
     MoveWindow(hFilterBoxLabel, rcFilterBoxLabel.left, rcFilterBoxLabel.top, w, h, true);
 
     RECT rcFileNameBoxLabel;
     GetWindowRect(hFileNameBoxLabel, &rcFileNameBoxLabel);
     w = rcFileNameBoxLabel.right - rcFileNameBoxLabel.left + offset;
     h = rcFileNameBoxLabel.bottom - rcFileNameBoxLabel.top;
-    ScreenToClient(m_hwndFileOpenDlg, (LPPOINT)&rcFileNameBoxLabel);
+    ScreenToClient(m_hwndFileOpenDlg, reinterpret_cast<LPPOINT>(&rcFileNameBoxLabel));
     MoveWindow(hFileNameBoxLabel, rcFileNameBoxLabel.left, rcFileNameBoxLabel.top, w, h, true);
 }
 
@@ -651,7 +651,7 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
     EnumChildWindows(
         m_hwndFileOpenDlgChild,
         CWinFileOpenImpl::EnumChildWndProc,
-        (LPARAM)&enumParam);
+        reinterpret_cast<LPARAM>(&enumParam));
 
     m_ExecuteFilePickerState->initFilePickerControls(
         m_NonExecuteFilePickerState->getControlCommand());
@@ -719,7 +719,7 @@ void CWinFileOpenImpl::onWMSize()
     m_FilePicker->dialogSizeChanged();
 }
 
-void CWinFileOpenImpl::onWMShow(sal_Bool bShow)
+void CWinFileOpenImpl::onWMShow(bool bShow)
 {
     m_Preview->notifyParentShow(bShow);
 }
@@ -785,7 +785,7 @@ void SAL_CALL CWinFileOpenImpl::SetDefaultExtension()
     if (hwndChkSaveWithExt)
     {
         uno::Any aAny = CheckboxGetState(hwndChkSaveWithExt);
-        sal_Bool bChecked = *reinterpret_cast<const sal_Bool*>(aAny.getValue());
+        bool bChecked = *static_cast<const sal_Bool*>(aAny.getValue());
 
         if (bChecked)
         {
@@ -842,7 +842,7 @@ void SAL_CALL CWinFileOpenImpl::InitialSetDefaultName()
         SetWindowTextW(hFileNameBox, reinterpret_cast<PCWSTR>(m_defaultName.getStr()));
     }
 
-    m_bInitialSelChanged = sal_False;
+    m_bInitialSelChanged = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

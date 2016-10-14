@@ -26,7 +26,7 @@
 
 
 CControlCommand::CControlCommand( sal_Int16 aControlId ) :
-    m_NextCommand( NULL ),
+    m_NextCommand( nullptr ),
     m_aControlId( aControlId )
 {
 }
@@ -114,7 +114,7 @@ CControlCommandResult* SAL_CALL CValueControlCommand::handleRequest( CControlCom
          (value_request->getControlId( ) == getControlId( )) &&
          (value_request->getControlAction( ) == m_aControlAction) )
     {
-        result = new CValueCommandResult( sal_True, m_aValue );
+        result = new CValueCommandResult( true, m_aValue );
     }
     else
     {
@@ -175,7 +175,7 @@ CControlCommandResult* SAL_CALL CLabelControlCommand::handleRequest( CControlCom
     if ( !value_request &&
          (aRequest->getControlId( ) == getControlId( )) )
     {
-        result = new CLabelCommandResult( sal_True, m_aLabel );
+        result = new CLabelCommandResult( true, m_aLabel );
     }
     else
     {
@@ -202,7 +202,7 @@ OUString SAL_CALL CLabelControlCommand::getLabel( ) const
 
 CEnableControlCommand::CEnableControlCommand(
         sal_Int16 aControlId,
-        sal_Bool bEnable ) :
+        bool bEnable ) :
     CControlCommand( aControlId ),
     m_bEnable( bEnable )
 {

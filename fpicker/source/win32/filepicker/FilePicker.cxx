@@ -201,14 +201,14 @@ void CFilePicker::resumeEventNotification()
 
 void SAL_CALL CFilePicker::setMultiSelectionMode(sal_Bool bMode) throw(uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
     m_pImpl->setMultiSelectionMode(bMode);
 }
 
 void SAL_CALL CFilePicker::setTitle(const OUString& aTitle) throw(uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
     m_pImpl->setTitle(aTitle);
 }
@@ -216,7 +216,7 @@ void SAL_CALL CFilePicker::setTitle(const OUString& aTitle) throw(uno::RuntimeEx
 void SAL_CALL CFilePicker::appendFilter(const OUString& aTitle, const OUString& aFilter)
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
     m_pImpl->appendFilter(aTitle, aFilter);
 }
@@ -224,14 +224,14 @@ void SAL_CALL CFilePicker::appendFilter(const OUString& aTitle, const OUString& 
 void SAL_CALL CFilePicker::setCurrentFilter(const OUString& aTitle)
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
     m_pImpl->setCurrentFilter(aTitle);
 }
 
 OUString SAL_CALL CFilePicker::getCurrentFilter() throw(uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->getCurrentFilter();
 }
@@ -239,7 +239,7 @@ OUString SAL_CALL CFilePicker::getCurrentFilter() throw(uno::RuntimeException)
 void SAL_CALL CFilePicker::appendFilterGroup(const OUString& sGroupTitle, const uno::Sequence<beans::StringPair>& aFilters)
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
     m_pImpl->appendFilterGroup(sGroupTitle, aFilters);
 }
@@ -247,7 +247,7 @@ void SAL_CALL CFilePicker::appendFilterGroup(const OUString& sGroupTitle, const 
 void SAL_CALL CFilePicker::setDefaultName(const OUString& aName)
     throw(uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
     m_pImpl->setDefaultName(aName);
 }
@@ -255,28 +255,28 @@ void SAL_CALL CFilePicker::setDefaultName(const OUString& aName)
 void SAL_CALL CFilePicker::setDisplayDirectory(const OUString& aDirectory)
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
     m_pImpl->setDisplayDirectory(aDirectory);
 }
 
 OUString SAL_CALL CFilePicker::getDisplayDirectory() throw(uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->getDisplayDirectory();
 }
 
 uno::Sequence<OUString> SAL_CALL CFilePicker::getFiles() throw(uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->getFiles();
 }
 
 uno::Sequence< OUString > SAL_CALL CFilePicker::getSelectedFiles() throw (uno::RuntimeException, std::exception)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
 
     const uno::Sequence< OUString > lSource = m_pImpl->getFiles();
@@ -301,7 +301,7 @@ uno::Sequence< OUString > SAL_CALL CFilePicker::getSelectedFiles() throw (uno::R
             OUStringBuffer sFull(256);
 
             sFull.append     (sPath);
-            sFull.appendAscii("/"  );
+            sFull.append("/"  );
             sFull.append     (sFile);
 
             lTarget.push_back(sFull.makeStringAndClear());
@@ -313,7 +313,7 @@ uno::Sequence< OUString > SAL_CALL CFilePicker::getSelectedFiles() throw (uno::R
 
 sal_Int16 SAL_CALL CFilePicker::execute() throw(uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
 
     sal_Int16 ret;
 
@@ -342,7 +342,7 @@ sal_Int16 SAL_CALL CFilePicker::execute() throw(uno::RuntimeException)
 void SAL_CALL CFilePicker::setValue(sal_Int16 aControlId, sal_Int16 aControlAction, const uno::Any& aValue)
     throw(uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
 
     osl::MutexGuard aGuard(m_aMutex);
     m_pImpl->setValue(aControlId, aControlAction, aValue);
@@ -351,7 +351,7 @@ void SAL_CALL CFilePicker::setValue(sal_Int16 aControlId, sal_Int16 aControlActi
 uno::Any SAL_CALL CFilePicker::getValue(sal_Int16 aControlId, sal_Int16 aControlAction)
     throw(uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
 
     osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->getValue(aControlId, aControlAction);
@@ -360,7 +360,7 @@ uno::Any SAL_CALL CFilePicker::getValue(sal_Int16 aControlId, sal_Int16 aControl
 void SAL_CALL CFilePicker::enableControl(sal_Int16 aControlId, sal_Bool bEnable)
 throw(uno::RuntimeException)
 {
-    OSL_ASSERT( 0 != m_pImpl.get( ) );
+    OSL_ASSERT( nullptr != m_pImpl.get( ) );
 
     osl::MutexGuard aGuard( m_aMutex );
     m_pImpl->enableControl( aControlId, bEnable );
@@ -369,7 +369,7 @@ throw(uno::RuntimeException)
 void SAL_CALL CFilePicker::setLabel(sal_Int16 aControlId, const OUString& aLabel)
     throw (uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
 
     osl::MutexGuard aGuard(m_aMutex);
     m_pImpl->setLabel(aControlId, aLabel);
@@ -378,7 +378,7 @@ void SAL_CALL CFilePicker::setLabel(sal_Int16 aControlId, const OUString& aLabel
 OUString SAL_CALL CFilePicker::getLabel(sal_Int16 aControlId)
     throw (uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
 
     osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->getLabel(aControlId);
@@ -386,7 +386,7 @@ OUString SAL_CALL CFilePicker::getLabel(sal_Int16 aControlId)
 
 uno::Sequence<sal_Int16> SAL_CALL CFilePicker::getSupportedImageFormats() throw (uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
 
     osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->getSupportedImageFormats();
@@ -394,7 +394,7 @@ uno::Sequence<sal_Int16> SAL_CALL CFilePicker::getSupportedImageFormats() throw 
 
 sal_Int32 SAL_CALL CFilePicker::getTargetColorDepth() throw (uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
 
     osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->getTargetColorDepth();
@@ -402,7 +402,7 @@ sal_Int32 SAL_CALL CFilePicker::getTargetColorDepth() throw (uno::RuntimeExcepti
 
 sal_Int32 SAL_CALL CFilePicker::getAvailableWidth() throw (uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
 
     osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->getAvailableWidth();
@@ -410,7 +410,7 @@ sal_Int32 SAL_CALL CFilePicker::getAvailableWidth() throw (uno::RuntimeException
 
 sal_Int32 SAL_CALL CFilePicker::getAvailableHeight() throw (uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
 
     osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->getAvailableHeight();
@@ -419,7 +419,7 @@ sal_Int32 SAL_CALL CFilePicker::getAvailableHeight() throw (uno::RuntimeExceptio
 void SAL_CALL CFilePicker::setImage(sal_Int16 aImageFormat, const uno::Any& aImage)
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
 
     osl::MutexGuard aGuard(m_aMutex);
     m_pImpl->setImage(aImageFormat, aImage);
@@ -427,7 +427,7 @@ void SAL_CALL CFilePicker::setImage(sal_Int16 aImageFormat, const uno::Any& aIma
 
 sal_Bool SAL_CALL CFilePicker::setShowState(sal_Bool bShowState) throw (uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
 
     osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->setShowState(bShowState);
@@ -435,7 +435,7 @@ sal_Bool SAL_CALL CFilePicker::setShowState(sal_Bool bShowState) throw (uno::Run
 
 sal_Bool SAL_CALL CFilePicker::getShowState() throw (uno::RuntimeException)
 {
-    OSL_ASSERT(0 != m_pImpl.get());
+    OSL_ASSERT(nullptr != m_pImpl.get());
 
     osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->getShowState();
@@ -462,36 +462,36 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
     sal_Int16 templateId = -1;
     aAny >>= templateId;
 
-    sal_Bool   bFileOpenDialog  = sal_True;
+    bool   bFileOpenDialog  = true;
     sal_uInt32 winResTemplateId = 0;
 
     switch ( templateId )
     {
     case FILEOPEN_SIMPLE:
-        bFileOpenDialog = sal_True;
+        bFileOpenDialog = true;
         break;
 
     case FILESAVE_SIMPLE:
-        bFileOpenDialog = sal_False;
+        bFileOpenDialog = false;
         break;
 
     case FILESAVE_AUTOEXTENSION_PASSWORD:
-        bFileOpenDialog = sal_False;
+        bFileOpenDialog = false;
         winResTemplateId = TMPL2000_FILESAVE_AUTOEXT_PASSWORD_BOX_ID;
         break;
 
     case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
-        bFileOpenDialog = sal_False;
+        bFileOpenDialog = false;
         winResTemplateId = TMPL2000_AUTOEXT_PASSWORD_FILTEROPTION_BOX;
         break;
 
     case FILESAVE_AUTOEXTENSION_SELECTION:
-        bFileOpenDialog = sal_False;
+        bFileOpenDialog = false;
         winResTemplateId = TMPL2000_AUTOEXT_SELECTION_BOX;
         break;
 
     case FILESAVE_AUTOEXTENSION_TEMPLATE:
-        bFileOpenDialog = sal_False;
+        bFileOpenDialog = false;
         winResTemplateId = TMPL2000_FILEOPEN_AUTOEXT_TEMPLATE_BOX_ID;
         break;
 
@@ -514,7 +514,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
         break;
 
     case FILESAVE_AUTOEXTENSION:
-        bFileOpenDialog = sal_False;
+        bFileOpenDialog = false;
         winResTemplateId = TMPL2000_FILESAVE_AUTOEXT;
         break;
 

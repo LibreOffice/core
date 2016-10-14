@@ -47,32 +47,32 @@ class CDIBPreview : public PreviewBase
 public:
 
     // ctor
-    CDIBPreview(HINSTANCE instance,HWND parent,sal_Bool bShowWindow = sal_False);
+    CDIBPreview(HINSTANCE instance,HWND parent,bool bShowWindow = false);
 
     // dtor
-    virtual ~CDIBPreview( );
+    virtual ~CDIBPreview( ) override;
 
     // preview interface implementation
 
     virtual sal_Int32 SAL_CALL getTargetColorDepth()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     virtual sal_Int32 SAL_CALL getAvailableWidth()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     virtual sal_Int32 SAL_CALL getAvailableHeight()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     virtual void SAL_CALL setImage(sal_Int16 aImageFormat, const css::uno::Any& aImage)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) override;
 
-    virtual sal_Bool SAL_CALL setShowState(sal_Bool bShowState)
-        throw (css::uno::RuntimeException);
+    virtual bool SAL_CALL setShowState(bool bShowState)
+        throw (css::uno::RuntimeException) override;
 
-    virtual sal_Bool SAL_CALL getShowState()
-        throw (css::uno::RuntimeException);
+    virtual bool SAL_CALL getShowState()
+        throw (css::uno::RuntimeException) override;
 
-    virtual HWND SAL_CALL getWindowHandle() const;
+    virtual HWND SAL_CALL getWindowHandle() const override;
 
 private:
     virtual void SAL_CALL onPaint( HWND hWnd, HDC hDC );

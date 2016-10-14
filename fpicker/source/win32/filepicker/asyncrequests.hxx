@@ -155,7 +155,7 @@ class AsyncRequests : private ::cppu::BaseMutex
 
         /** does nothing special / excepting to make sure our class won't be inline .-)
          */
-        virtual ~AsyncRequests();
+        virtual ~AsyncRequests() override;
 
 
         /** @todo document me
@@ -191,11 +191,11 @@ class AsyncRequests : private ::cppu::BaseMutex
          *  waiting for requests. Every request will be executed synchronously
          *  in blocked mode.
          */
-        virtual void SAL_CALL run();
+        virtual void SAL_CALL run() override;
 
     private:
 
-        sal_Bool m_bFinish;
+        bool m_bFinish;
         RequestHandlerRef m_rHandler;
         RequestQueue m_lRequests;
         osl::Condition maWait;

@@ -37,7 +37,7 @@ public:
 public:
     explicit CFilePickerEventNotification(EventListenerMethod_t EventListenerMethod);
 
-    virtual void SAL_CALL notifyEventListener( css::uno::Reference< css::uno::XInterface > xListener );
+    virtual void SAL_CALL notifyEventListener( css::uno::Reference< css::uno::XInterface > xListener ) override;
 
 private:
     EventListenerMethod_t m_EventListenerMethod;
@@ -54,7 +54,7 @@ public:
 
     explicit CFilePickerParamEventNotification(EventListenerMethod_t EventListenerMethod, const css::ui::dialogs::FilePickerEvent& FilePickerEvent);
 
-    virtual void SAL_CALL notifyEventListener( css::uno::Reference< css::uno::XInterface > xListener );
+    virtual void SAL_CALL notifyEventListener( css::uno::Reference< css::uno::XInterface > xListener ) override;
 
 private:
     EventListenerMethod_t             m_EventListenerMethod;

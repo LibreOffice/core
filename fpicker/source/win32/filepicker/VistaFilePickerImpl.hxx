@@ -141,21 +141,21 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         // ctor/dtor - nothing special
 
                  VistaFilePickerImpl();
-        virtual ~VistaFilePickerImpl();
+        virtual ~VistaFilePickerImpl() override;
 
 
         // RequestHandler
 
 
-        virtual void before();
-        virtual void doRequest(const RequestRef& rRequest);
-        virtual void after();
+        virtual void before() override;
+        virtual void doRequest(const RequestRef& rRequest) override;
+        virtual void after() override;
 
 
         // IVistaFilePickerInternalNotify
 
-        virtual void onAutoExtensionChanged (bool bChecked);
-        virtual bool onFileTypeChanged( UINT nTypeIndex );
+        virtual void onAutoExtensionChanged (bool bChecked) override;
+        virtual bool onFileTypeChanged( UINT nTypeIndex ) override;
 
     private:
 
@@ -237,7 +237,7 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
 
         /// implementation of request E_GET_CONTROL_LABEL
-        void impl_sta_GetControlLabel(const RequestRef& rRequest);
+        static void impl_sta_GetControlLabel(const RequestRef& rRequest);
 
 
         /// implementation of request E_ENABLE_CONTROL
@@ -307,9 +307,9 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
 
         /// @todo document me
-        sal_Bool m_bInExecute;
+        bool m_bInExecute;
 
-        sal_Bool m_bWasExecuted;
+        bool m_bWasExecuted;
 
         // handle to parent window
         HWND m_hParentWindow;

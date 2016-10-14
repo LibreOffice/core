@@ -269,7 +269,7 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSelectedFiles()
     // if we want to show a modal window, the calling thread needs to process messages
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::PROCESS_MESSAGES);
 
-    const sal_Bool bOK          = rRequest->getArgumentOrDefault(PROP_DIALOG_SHOW_RESULT, (sal_Bool)sal_False                  );
+    const bool bOK          = rRequest->getArgumentOrDefault(PROP_DIALOG_SHOW_RESULT, false );
                      m_lLastFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES    , css::uno::Sequence< OUString >());
 
     ::sal_Int16 nResult = css::ui::dialogs::ExecutableDialogResults::CANCEL;
@@ -378,13 +378,13 @@ void SAL_CALL VistaFilePicker::setImage(      sal_Int16      /*nImageFormat*/,
 sal_Bool SAL_CALL VistaFilePicker::setShowState(sal_Bool /*bShowState*/)
     throw (css::uno::RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL VistaFilePicker::getShowState()
     throw (css::uno::RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
@@ -400,26 +400,26 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
     sal_Int32         nTemplate = -1;
     lArguments[0] >>= nTemplate;
 
-    sal_Bool  bFileOpenDialog = sal_True;
+    bool bFileOpenDialog = true;
     ::sal_Int32 nFeatures       = 0;
 
     switch(nTemplate)
     {
         case css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE :
         {
-            bFileOpenDialog = sal_True;
+            bFileOpenDialog = true;
         }
         break;
 
         case css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE :
         {
-            bFileOpenDialog = sal_False;
+            bFileOpenDialog = false;
         }
         break;
 
         case css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD :
         {
-            bFileOpenDialog  = sal_False;
+            bFileOpenDialog  = false;
             nFeatures        |= FEATURE_AUTOEXTENSION;
             nFeatures        |= FEATURE_PASSWORD;
         }
@@ -427,7 +427,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
 
         case css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS :
         {
-            bFileOpenDialog = sal_False;
+            bFileOpenDialog = false;
             nFeatures        |= FEATURE_AUTOEXTENSION;
             nFeatures        |= FEATURE_PASSWORD;
             nFeatures        |= FEATURE_FILTEROPTIONS;
@@ -436,7 +436,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
 
         case css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION :
         {
-            bFileOpenDialog  = sal_False;
+            bFileOpenDialog  = false;
             nFeatures        |= FEATURE_AUTOEXTENSION;
             nFeatures        |= FEATURE_SELECTION;
         }
@@ -444,7 +444,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
 
         case css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE :
         {
-            bFileOpenDialog  = sal_False;
+            bFileOpenDialog  = false;
             nFeatures        |= FEATURE_AUTOEXTENSION;
             nFeatures        |= FEATURE_TEMPLATE;
         }
@@ -452,7 +452,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
 
         case css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE :
         {
-            bFileOpenDialog  = sal_True;
+            bFileOpenDialog  = true;
             nFeatures        |= FEATURE_LINK;
             nFeatures        |= FEATURE_PREVIEW;
             nFeatures        |= FEATURE_IMAGETEMPLATE;
@@ -461,14 +461,14 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
 
         case css::ui::dialogs::TemplateDescription::FILEOPEN_PLAY :
         {
-            bFileOpenDialog  = sal_True;
+            bFileOpenDialog  = true;
             nFeatures        |= FEATURE_PLAY;
         }
         break;
 
         case css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PLAY :
         {
-            bFileOpenDialog  = sal_True;
+            bFileOpenDialog  = true;
             nFeatures        |= FEATURE_LINK;
             nFeatures        |= FEATURE_PLAY;
         }
@@ -476,7 +476,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
 
         case css::ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION :
         {
-            bFileOpenDialog  = sal_True;
+            bFileOpenDialog  = true;
             nFeatures        |= FEATURE_READONLY;
             nFeatures        |= FEATURE_VERSION;
         }
@@ -484,7 +484,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
 
         case css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW :
         {
-            bFileOpenDialog  = sal_True;
+            bFileOpenDialog  = true;
             nFeatures        |= FEATURE_LINK;
             nFeatures        |= FEATURE_PREVIEW;
         }
@@ -492,14 +492,14 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
 
         case css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION :
         {
-            bFileOpenDialog  = sal_False;
+            bFileOpenDialog  = false;
             nFeatures        |= FEATURE_AUTOEXTENSION;
         }
         break;
 
         case css::ui::dialogs::TemplateDescription::FILEOPEN_PREVIEW :
         {
-            bFileOpenDialog  = sal_True;
+            bFileOpenDialog  = true;
             nFeatures        |= FEATURE_PREVIEW;
         }
         break;

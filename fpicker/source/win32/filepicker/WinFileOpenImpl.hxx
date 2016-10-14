@@ -46,12 +46,12 @@ class CWinFileOpenImpl : public CFileOpenDialog
 public:
     CWinFileOpenImpl(
         CFilePicker* aFilePicker,
-        sal_Bool bFileOpenDialog = sal_True,
+        bool bFileOpenDialog = true,
         sal_uInt32 dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
         sal_uInt32 dwTemplateId = 0,
-        HINSTANCE hInstance = 0 );
+        HINSTANCE hInstance = nullptr );
 
-    virtual ~CWinFileOpenImpl( );
+    virtual ~CWinFileOpenImpl( ) override;
 
     // XExecutableDialog
 
@@ -60,13 +60,13 @@ public:
     // XFilePicker
 
     virtual void SAL_CALL setDefaultName( const OUString& aName )
-        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getFiles(  )
         throw(css::uno::RuntimeException );
 
     virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory )
-        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException ) override;
 
     virtual OUString SAL_CALL getDisplayDirectory( ) throw ( css::uno::RuntimeException );
 
@@ -94,7 +94,7 @@ public:
     virtual css::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
         throw( css::uno::RuntimeException );
 
-    virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable )
+    virtual void SAL_CALL enableControl( sal_Int16 aControlId, bool bEnable )
         throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL setLabel( sal_Int16 aControlId, const OUString& aLabel )
@@ -120,10 +120,10 @@ public:
     virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage )
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL setShowState( sal_Bool bShowState )
+    virtual bool SAL_CALL setShowState( bool bShowState )
         throw (css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL getShowState( )
+    virtual bool SAL_CALL getShowState( )
         throw (css::uno::RuntimeException);
 
     // XCancelable
@@ -133,33 +133,33 @@ public:
     // Implementation details
 
 protected:
-    sal_Int16 SAL_CALL getFocused( );
+    static sal_Int16 SAL_CALL getFocused( );
 
-    virtual bool SAL_CALL preModal( );
-    virtual void SAL_CALL postModal( sal_Int16 nDialogResult );
+    virtual bool SAL_CALL preModal( ) override;
+    virtual void SAL_CALL postModal( sal_Int16 nDialogResult ) override;
 
-    virtual sal_uInt32 SAL_CALL onFileOk();
-    virtual void SAL_CALL onSelChanged( HWND hwndListBox );
+    virtual sal_uInt32 SAL_CALL onFileOk() override;
+    virtual void SAL_CALL onSelChanged( HWND hwndListBox ) override;
 
     // only called back if OFN_EXPLORER is set
-    virtual void SAL_CALL onInitDone();
-    virtual void SAL_CALL onFolderChanged();
-    virtual void SAL_CALL onTypeChanged( sal_uInt32 nFilterIndex );
+    virtual void SAL_CALL onInitDone() override;
+    virtual void SAL_CALL onFolderChanged() override;
+    virtual void SAL_CALL onTypeChanged( sal_uInt32 nFilterIndex ) override;
 
     // call base class method first when overriding
-    virtual void SAL_CALL onInitDialog( HWND hwndDlg );
+    virtual void SAL_CALL onInitDialog( HWND hwndDlg ) override;
 
-    virtual sal_uInt32 SAL_CALL onCtrlCommand( HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode );
+    virtual sal_uInt32 SAL_CALL onCtrlCommand( HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode ) override;
 
     void onWMSize();
-    void onWMShow(sal_Bool bShow);
+    void onWMShow(bool bShow);
     void onWMWindowPosChanged();
     void onCustomControlHelpRequest(LPHELPINFO lphi);
 
 private:
     inline void SAL_CALL appendFilterGroupSeparator( );
 
-    inline sal_Bool SAL_CALL IsCustomControlHelpRequested(LPHELPINFO lphi) const;
+    static inline bool SAL_CALL IsCustomControlHelpRequested(LPHELPINFO lphi);
 
     void EnlargeStdControlLabels() const;
 
@@ -184,7 +184,7 @@ private:
     CFilePicker*                            m_FilePicker;
     WNDPROC                                 m_pfnOldDlgProc;
     OUString                                m_defaultName;
-    sal_Bool                                m_bInitialSelChanged;
+    bool                                    m_bInitialSelChanged;
     CHelpPopupWindow                        m_HelpPopupWindow;
     CFilePickerState*                       m_FilePickerState;
     CExecuteFilePickerState*                m_ExecuteFilePickerState;
