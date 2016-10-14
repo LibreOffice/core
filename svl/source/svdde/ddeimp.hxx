@@ -44,8 +44,6 @@ public:
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
     static HDDEDATA CALLBACK SvrCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
-    static HDDEDATA CALLBACK InfCallback
-           ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
     static DdeService*      FindService( HSZ );
     static DdeTopic*        FindTopic( DdeService&, HSZ );
     static DdeItem*         FindItem( DdeTopic&, HSZ );
