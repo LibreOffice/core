@@ -75,13 +75,13 @@ int main(int argc, char ** argv, char **) {
 int wmain(int argc, wchar_t ** argv, wchar_t **) {
 #endif
     wchar_t path[MAX_PATH];
-    DWORD n = GetModuleFileNameW(NULL, path, MAX_PATH);
+    DWORD n = GetModuleFileNameW(nullptr, path, MAX_PATH);
     if (n == 0 || n >= MAX_PATH) {
         exit(EXIT_FAILURE);
     }
     wchar_t * pathEnd = tools::filename(path);
     *pathEnd = L'\0';
-    n = GetEnvironmentVariableW(L"UNO_PATH", NULL, 0);
+    n = GetEnvironmentVariableW(L"UNO_PATH", nullptr, 0);
     if (n == 0) {
         if (GetLastError() != ERROR_ENVVAR_NOT_FOUND ||
             !SetEnvironmentVariableW(L"UNO_PATH", path))
@@ -94,21 +94,21 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     wchar_t * bootstrapEnd = tools::buildPath(
         bootstrap + MY_LENGTH(L"vnd.sun.star.pathname:"), path, pathEnd,
         MY_STRING(L"fundamental.ini"));
-    if (bootstrapEnd == NULL) {
+    if (bootstrapEnd == nullptr) {
         exit(EXIT_FAILURE);
     }
     wchar_t pythonpath2[MAX_PATH];
     wchar_t * pythonpath2End = tools::buildPath(
         pythonpath2, path, pathEnd,
         MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING L"\\lib"));
-    if (pythonpath2End == NULL) {
+    if (pythonpath2End == nullptr) {
         exit(EXIT_FAILURE);
     }
     wchar_t pythonpath3[MAX_PATH];
     wchar_t * pythonpath3End = tools::buildPath(
         pythonpath3, path, pathEnd,
         MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING L"\\lib\\site-packages"));
-    if (pythonpath3End == NULL) {
+    if (pythonpath3End == nullptr) {
         exit(EXIT_FAILURE);
     }
 #ifdef __MINGW32__
@@ -123,14 +123,14 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     wchar_t pythonhome[MAX_PATH];
     wchar_t * pythonhomeEnd = tools::buildPath(
         pythonhome, path, pathEnd, MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING));
-    if (pythonhomeEnd == NULL) {
+    if (pythonhomeEnd == nullptr) {
         exit(EXIT_FAILURE);
     }
     wchar_t pythonexe[MAX_PATH];
     wchar_t * pythonexeEnd = tools::buildPath(
         pythonexe, path, pathEnd,
         MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING L"\\bin\\python.exe"));
-    if (pythonexeEnd == NULL) {
+    if (pythonexeEnd == nullptr) {
         exit(EXIT_FAILURE);
     }
     std::size_t clSize = MY_LENGTH(L"\"") + 4 * (pythonexeEnd - pythonexe) +
@@ -161,13 +161,13 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
 #endif
     }
     *cp = L'\0';
-    n = GetEnvironmentVariableW(L"PATH", NULL, 0);
+    n = GetEnvironmentVariableW(L"PATH", nullptr, 0);
     wchar_t * orig;
     if (n == 0) {
         if (GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
             exit(EXIT_FAILURE);
         }
-        orig = (wchar_t *)L"";
+        orig = const_cast<wchar_t *>(L"");
     } else {
         orig = new wchar_t[n];
         if (GetEnvironmentVariableW(L"PATH", orig, n) != n - 1)
@@ -188,12 +188,12 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         delete [] orig;
     }
     delete [] value;
-    n = GetEnvironmentVariableW(L"PYTHONPATH", NULL, 0);
+    n = GetEnvironmentVariableW(L"PYTHONPATH", nullptr, 0);
     if (n == 0) {
         if (GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
             exit(EXIT_FAILURE);
         }
-        orig = (wchar_t *)L"";
+        orig = const_cast<wchar_t *>(L"");
     } else {
         orig = new wchar_t[n];
         if (GetEnvironmentVariableW(L"PYTHONPATH", orig, n) != n - 1)
@@ -229,7 +229,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     if (!SetEnvironmentVariableW(L"PYTHONHOME", pythonhome)) {
         exit(EXIT_FAILURE);
     }
-    n = GetEnvironmentVariableW(L"URE_BOOTSTRAP", NULL, 0);
+    n = GetEnvironmentVariableW(L"URE_BOOTSTRAP", nullptr, 0);
     if (n == 0) {
         if (GetLastError() != ERROR_ENVVAR_NOT_FOUND ||
             !SetEnvironmentVariableW(L"URE_BOOTSTRAP", bootstrap))
@@ -242,8 +242,8 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     startinfo.cb = sizeof (STARTUPINFOW);
     PROCESS_INFORMATION procinfo;
     if (!CreateProcessW(
-            pythonexe, cl, NULL, NULL, FALSE, CREATE_UNICODE_ENVIRONMENT, NULL,
-            NULL, &startinfo, &procinfo)) {
+            pythonexe, cl, nullptr, nullptr, FALSE, CREATE_UNICODE_ENVIRONMENT, nullptr,
+            nullptr, &startinfo, &procinfo)) {
         exit(EXIT_FAILURE);
     }
     WaitForSingleObject(procinfo.hProcess,INFINITE);
