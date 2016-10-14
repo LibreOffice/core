@@ -519,7 +519,7 @@ void SwSrcEditWindow::CreateTextEngine()
     m_pVScrollbar->Show();
 
     m_pTextEngine = new ExtTextEngine;
-    m_pTextView = new ExtTextView( m_pTextEngine, m_pOutWin );
+    m_pTextView = new TextView( m_pTextEngine, m_pOutWin );
     m_pTextView->SetAutoIndentMode(true);
     m_pOutWin->SetTextView(m_pTextView);
 

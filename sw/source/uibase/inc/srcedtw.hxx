@@ -35,12 +35,12 @@ class ScrollBar;
 class SwSrcView;
 class SwSrcEditWindow;
 class TextEngine;
-class ExtTextView;
+class TextView;
 class DataChangedEvent;
 
 class TextViewOutWin : public vcl::Window
 {
-    ExtTextView*    pTextView;
+    TextView*    pTextView;
 
 protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
@@ -55,7 +55,7 @@ public:
         TextViewOutWin(vcl::Window* pParent, WinBits nBits) :
             Window(pParent, nBits), pTextView(nullptr){}
 
-    void    SetTextView( ExtTextView* pView ) {pTextView = pView;}
+    void    SetTextView( TextView* pView ) {pTextView = pView;}
 
 };
 
@@ -64,7 +64,7 @@ class SwSrcEditWindow : public vcl::Window, public SfxListener
 private:
     class ChangesListener;
     friend class ChangesListener;
-    ExtTextView*    m_pTextView;
+    TextView*       m_pTextView;
     ExtTextEngine*  m_pTextEngine;
 
     VclPtr<TextViewOutWin> m_pOutWin;
@@ -121,7 +121,7 @@ public:
     void            Read(SvStream& rInput) { m_pTextEngine->Read(rInput); }
     void            Write(SvStream& rOutput) { m_pTextEngine->Write(rOutput); }
 
-    ExtTextView*    GetTextView()
+    TextView*       GetTextView()
                         {return m_pTextView;}
     TextEngine*     GetTextEngine()
                         {return m_pTextEngine;}

@@ -35,7 +35,7 @@ class TextWindow : public vcl::Window
 {
 private:
     ExtTextEngine*  mpExtTextEngine;
-    ExtTextView*    mpExtTextView;
+    TextView*       mpExtTextView;
 
     bool            mbInMBDown;
     bool            mbFocusSelectionHide;
@@ -49,7 +49,7 @@ public:
     virtual void    dispose() override;
 
     ExtTextEngine*  GetTextEngine() const { return mpExtTextEngine; }
-    ExtTextView*    GetTextView() const { return mpExtTextView; }
+    TextView*       GetTextView() const { return mpExtTextView; }
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -715,7 +715,7 @@ TextWindow::TextWindow( vcl::Window* pParent ) : Window( pParent )
     if( pParent->GetStyle() & WB_BORDER )
         mpExtTextEngine->SetLeftMargin( 2 );
     mpExtTextEngine->SetLocale( GetSettings().GetLanguageTag().getLocale() );
-    mpExtTextView = new ExtTextView( mpExtTextEngine, this );
+    mpExtTextView = new TextView( mpExtTextEngine, this );
     mpExtTextEngine->InsertView( mpExtTextView );
     mpExtTextEngine->EnableUndo( true );
     mpExtTextView->ShowCursor();
@@ -1532,7 +1532,7 @@ ExtTextEngine* VclMultiLineEdit::GetTextEngine() const
     return pImpVclMEdit->GetTextWindow()->GetTextEngine();
 }
 
-ExtTextView* VclMultiLineEdit::GetTextView() const
+TextView* VclMultiLineEdit::GetTextView() const
 {
     return pImpVclMEdit->GetTextWindow()->GetTextView();
 }

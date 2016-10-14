@@ -162,7 +162,6 @@ merge SwXParagraphEnumeration with SwXParagraphEnumerationImpl
 merge SwXTextRanges with SwXTextRangesImpl
 merge TextObj with TextObjBinary
 merge TextRenderImpl with CairoTextRender
-merge TextView with ExtTextView
 merge UniqueIndexImpl with UniqueIndex
 merge ValueGetter with CellValueGetter
 merge ValueSetter with CellValueSetter

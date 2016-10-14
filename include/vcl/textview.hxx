@@ -39,11 +39,18 @@ class SelectionEngine;
 class VirtualDevice;
 struct TextDDInfo;
 
-namespace com { namespace sun { namespace star { namespace datatransfer { namespace clipboard {
-    class XClipboard;
-}}}}}
+namespace com { namespace sun { namespace star {
+    namespace datatransfer { namespace clipboard {
+        class XClipboard;
+    } }
+    namespace util {
+        struct SearchOptions;
+    }
+}}}
+
 
 struct ImpTextView;
+class ExtTextEngine;
 
 class VCL_DLLPUBLIC TextView : public vcl::unohelper::DragAndDropClient
 {
@@ -51,7 +58,6 @@ class VCL_DLLPUBLIC TextView : public vcl::unohelper::DragAndDropClient
     friend class        TextUndo;
     friend class        TextUndoManager;
     friend class        TextSelFunctionSet;
-    friend class        ExtTextView;
 
 private:
     std::unique_ptr<ImpTextView>  mpImpl;
@@ -60,6 +66,7 @@ private:
     TextView&           operator=( const TextView& ) = delete;
 
 protected:
+    bool                ImpIndentBlock( bool bRight );
     void                ShowSelection();
     void                HideSelection();
     void                ShowSelection( const TextSelection& rSel );
@@ -95,7 +102,7 @@ protected:
             using       DragAndDropClient::dragOver;
 
 public:
-                        TextView( TextEngine* pEng, vcl::Window* pWindow );
+                        TextView( ExtTextEngine* pEng, vcl::Window* pWindow );
     virtual            ~TextView() override;
 
     TextEngine*         GetTextEngine() const;
@@ -139,7 +146,7 @@ public:
     void                Undo();
     void                Redo();
 
-    bool            Read( SvStream& rInput );
+    bool                Read( SvStream& rInput );
 
     void                SetStartDocPos( const Point& rPos );
     const Point&        GetStartDocPos() const;
@@ -148,18 +155,18 @@ public:
     Point               GetWindowPos( const Point& rDocPos ) const;
 
     void                SetInsertMode( bool bInsert );
-    bool            IsInsertMode() const;
+    bool                IsInsertMode() const;
 
     void                SetAutoIndentMode( bool bAutoIndent );
 
     void                SetReadOnly( bool bReadOnly );
-    bool            IsReadOnly() const;
+    bool                IsReadOnly() const;
 
     void                SetAutoScroll( bool bAutoScroll );
-    bool            IsAutoScroll() const;
+    bool                IsAutoScroll() const;
 
-    bool            SetCursorAtPoint( const Point& rPointPixel );
-    bool            IsSelectionAtPoint( const Point& rPointPixel );
+    bool                SetCursorAtPoint( const Point& rPointPixel );
+    bool                IsSelectionAtPoint( const Point& rPointPixel );
 
     void                SetPaintSelection( bool bPaint);
 
@@ -194,6 +201,14 @@ public:
         if enabled, -1 otherwise.
      */
     sal_Int32           GetLineNumberOfCursorInSelection() const;
+
+    bool                MatchGroup();
+
+    bool                Search( const css::util::SearchOptions& rSearchOptions, bool bForward );
+    sal_uInt16          Replace( const css::util::SearchOptions& rSearchOptions, bool bAll, bool bForward );
+
+    bool                IndentBlock();
+    bool                UnindentBlock();
 };
 
 #endif
