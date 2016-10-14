@@ -128,6 +128,7 @@ void ScExtraEditViewManager::Apply(SfxViewShell* pViewShell, ScSplitPos eWhich)
 template<ScExtraEditViewManager::ModifierTagType ModifierTag>
 void ScExtraEditViewManager::Modifier(ScGridWindow* /*pWin*/)
 {
+    (void)this;
     SAL_WARN("sc", "ScExtraEditViewManager::Modifier<ModifierTag>: non-specialized version should not be invoked.");
 }
 
