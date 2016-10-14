@@ -43,7 +43,7 @@ BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
        {
            sz++;
            DWORD nbytes = sz * sizeof( wchar_t );
-           wchar_t* buff = reinterpret_cast<wchar_t*>( malloc( nbytes ) );
+           wchar_t* buff = static_cast<wchar_t*>( malloc( nbytes ) );
            ZeroMemory( buff, nbytes );
            MsiGetPropertyW( hMSI, pPropName, buff, &sz );
            *ppValue = buff;
@@ -77,7 +77,7 @@ extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
 {
     // MessageBoxW(NULL, L"CheckVersions", L"Information", MB_OK | MB_ICONINFORMATION);
 
-    wchar_t* pVal = NULL;
+    wchar_t* pVal = nullptr;
 
     if ( GetMsiPropW( hMSI, L"NEWPRODUCTS", &pVal ) && pVal )
     {
@@ -86,7 +86,7 @@ extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
             SetMsiErrorCode( MSI_ERROR_NEW_VERSION_FOUND );
         free( pVal );
     }
-    pVal = NULL;
+    pVal = nullptr;
     if ( GetMsiPropW( hMSI, L"OLDPRODUCTS", &pVal ) && pVal )
     {
         OutputDebugStringFormatW( L"DEBUG: OLDPRODUCTS found [%s]", pVal );
@@ -94,7 +94,7 @@ extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
             SetMsiErrorCode( MSI_ERROR_OLD_VERSION_FOUND );
         free( pVal );
     }
-    pVal = NULL;
+    pVal = nullptr;
 
     return ERROR_SUCCESS;
 }

@@ -33,7 +33,7 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
 
 // the Win32 SDK 8.1 deprecates GetVersionEx()
 #ifdef _WIN32_WINNT_WINBLUE
-    bool const bIsVistaOrLater = IsWindowsVistaOrGreater() ? true : false;
+    bool const bIsVistaOrLater = IsWindowsVistaOrGreater();
 #else
     OSVERSIONINFO   osverinfo;
     osverinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);

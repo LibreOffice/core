@@ -54,7 +54,7 @@ namespace
 
     string Invert(const string& str)
     {
-        char* buff = reinterpret_cast<char*>(_alloca(str.length()));
+        char* buff = static_cast<char*>(_alloca(str.length()));
         strncpy(buff, str.c_str(), str.length());
 
         char* front = buff;
@@ -108,7 +108,7 @@ namespace
         if (MsiGetPropertyA(handle, sProperty.c_str(), szDummy, &nChars) == ERROR_MORE_DATA)
         {
             DWORD nBytes = ++nChars * sizeof(CHAR);
-            LPSTR buffer = reinterpret_cast<LPSTR>(_alloca(nBytes));
+            LPSTR buffer = static_cast<LPSTR>(_alloca(nBytes));
             ZeroMemory( buffer, nBytes );
             MsiGetPropertyA( handle, sProperty.c_str(), buffer, &nChars );
             result = buffer;
@@ -123,7 +123,7 @@ namespace
 
     inline void UnsetMsiPropertyA(MSIHANDLE handle, const string& sProperty)
     {
-        MsiSetPropertyA(handle, sProperty.c_str(), NULL);
+        MsiSetPropertyA(handle, sProperty.c_str(), nullptr);
     }
 
     inline void SetMsiPropertyA(MSIHANDLE handle, const string& sProperty)
@@ -141,9 +141,9 @@ namespace
             DWORD lLongestSubKey;
 
             if (RegQueryInfoKeyA(
-                hKey, NULL, NULL, NULL, &nSubKeys, &lLongestSubKey, NULL, NULL, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
+                hKey, nullptr, nullptr, nullptr, &nSubKeys, &lLongestSubKey, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr) == ERROR_SUCCESS)
             {
-                LPSTR buffer = reinterpret_cast<LPSTR>(_alloca(lLongestSubKey + 1));
+                LPSTR buffer = static_cast<LPSTR>(_alloca(lLongestSubKey + 1));
 
                 for (DWORD i = 0; i < nSubKeys; i++)
                 {
