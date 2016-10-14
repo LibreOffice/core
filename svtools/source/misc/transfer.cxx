@@ -801,7 +801,7 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
         case SotClipboardFormatId::FILEGRPDESCRIPTOR:
         {
             Sequence< sal_Int8 >    aSeq( sizeof( FILEGROUPDESCRIPTOR ) );
-            FILEGROUPDESCRIPTOR*    pFDesc = (FILEGROUPDESCRIPTOR*) aSeq.getArray();
+            FILEGROUPDESCRIPTOR*    pFDesc = reinterpret_cast<FILEGROUPDESCRIPTOR*>(aSeq.getArray());
             FILEDESCRIPTOR&         rFDesc1 = pFDesc->fgd[ 0 ];
 
             pFDesc->cItems = 1;
@@ -810,7 +810,7 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 
             OStringBuffer aStr(OUStringToOString(
                 rBmk.GetDescription(), eSysCSet));
-            for( sal_uInt16 nChar = 0; nChar < aStr.getLength(); ++nChar )
+            for( sal_Int32 nChar = 0; nChar < aStr.getLength(); ++nChar )
                 if( strchr( "\\/:*?\"<>|", aStr[nChar] ) )
                     aStr.remove(nChar--, 1);
 
@@ -1877,7 +1877,7 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
 
             if (aSeq.getLength())
             {
-                FILEGROUPDESCRIPTOR* pFDesc = (FILEGROUPDESCRIPTOR*) aSeq.getConstArray();
+                FILEGROUPDESCRIPTOR const * pFDesc = reinterpret_cast<FILEGROUPDESCRIPTOR const *>(aSeq.getConstArray());
 
                 if( pFDesc->cItems )
                 {
@@ -1900,7 +1900,7 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
                             {
                                 aSeq = GetSequence(aFileContentFlavor, OUString());
                                 if (aSeq.getLength())
-                                    pStream.reset(new SvMemoryStream( (sal_Char*) aSeq.getConstArray(), aSeq.getLength(), StreamMode::STD_READ ));
+                                    pStream.reset(new SvMemoryStream( const_cast<sal_Int8 *>(aSeq.getConstArray()), aSeq.getLength(), StreamMode::STD_READ ));
                             }
                         }
 
