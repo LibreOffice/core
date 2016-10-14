@@ -1683,7 +1683,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                             aStaticDAVOptionsCache.addDAVOptions( aDAVOptionsException,
                                                                   m_nOptsCacheLifeNotFound );
 
-                            if ( !shouldAccessNetworkAfterException( aLastException ) )
+                            if ( ResponseStatusCode != SC_GONE && !shouldAccessNetworkAfterException( aLastException ) )
                             {
                                 cancelCommandExecution( aLastException, xEnv );
                                 // unreachable
