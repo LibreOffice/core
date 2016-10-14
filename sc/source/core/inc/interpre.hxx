@@ -106,15 +106,6 @@ enum ScIterFuncIf
     ifAVERAGEIF                         // Conditional average
 };
 
-enum ScIterFuncIfs
-{
-    ifSUMIFS,     // Multi-Conditional sum
-    ifAVERAGEIFS, // Multi-Conditional average
-    ifCOUNTIFS,   // Multi-Conditional count
-    ifMINIFS,     // Multi-Conditional minimum
-    ifMAXIFS      // Multi-Conditional maximum
-};
-
 enum ScETSType
 {
     etsAdd,
