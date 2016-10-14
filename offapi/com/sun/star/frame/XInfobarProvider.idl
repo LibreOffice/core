@@ -1,0 +1,94 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_frame_XInfobarProvider_idl__
+#define __com_sun_star_frame_XInfobarProvider_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/StringPair.idl>
+#include <com/sun/star/frame/InfobarType.idl>
+
+module com {  module sun {  module star {  module frame {
+
+/** Allows to add Infobars to a frame.
+
+    @since LibreOffice 6.4
+ */
+interface XInfobarProvider: uno::XInterface
+{
+    /** Creates and displays a new Infobar.
+
+        @param id
+            The ID by which this Infobar is recognized.
+            You can remove the Infobar afterwards using this ID.
+
+        @param primaryMessage
+            The (short) primary message.
+            Will appear at the start of the infobar in bold letters.
+            May be empty.
+
+        @param secondaryMessage
+            The (longer) secondary message.
+            Will appear in normal letters after the primaryMessage
+
+        @param infobarType
+            The type of the Infobar.
+
+        @param actionButtons
+            A sequence of action buttons.
+            The buttons will be added from Right to Left at the right side of the info bar.
+            Each button is represented by a StringPair.
+            StringPair::First represents the button label, while
+            StringPair::Second represents the button URL which will be called on button click.
+            The URL can be any URL, either external (http://libreoffice.org), or internal (.uno:Save),
+            or from your extension (service:your.example.Extension?anyAction).
+
+        @param showCloseButton
+            The type of the Infobar.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            If an Infobar with the same ID already exists
+     */
+    void appendInfobar(
+        [in] string id,
+        [in] string primaryMessage,
+        [in] string secondaryMessage,
+        [in] InfobarType infobarType,
+        [in] sequence<beans::StringPair> actionButtons,
+        [in] boolean showCloseButton)
+        raises(com::sun::star::lang::IllegalArgumentException);
+
+    /** Updates an existing Infobar.
+
+        @see appendInfobar for parameter documentation.
+     */
+    void updateInfobar(
+        [in] string id,
+        [in] string primaryMessage,
+        [in] string secondaryMessage,
+        [in] InfobarType infobarType)
+        raises(com::sun::star::container::NoSuchElementException);
+
+    /** Removes an existing Infobar.
+
+        @param id
+            The ID which was used when creating this Infobar.
+
+        @throws com::sun::star::container::NoSuchElementException
+            If no such Infobar exists (it might have been closed by the user already)
+     */
+    void removeInfobar([in] string id) raises(com::sun::star::container::NoSuchElementException);
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -109,6 +109,10 @@ using namespace ::com::sun::star;
 
 #include <svx/xdef.hxx>
 
+#include <com/sun/star/frame/InfobarType.hpp>
+
+using namespace css::frame;
+
 void ScDocShell::ReloadAllLinks()
 {
     m_aDocument.SetLinkFormulaNeedingCheck(false);
@@ -495,7 +499,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if (pViewFrame)
                     {
                         pViewFrame->RemoveInfoBar("enablecontent");
-                        auto pInfoBar = pViewFrame->AppendInfoBar("enablecontent", ScResId(STR_RELOAD_TABLES), InfoBarType::Warning);
+                        auto pInfoBar = pViewFrame->AppendInfoBar("enablecontent", "", ScResId(STR_RELOAD_TABLES), InfobarType_Warning);
                         if (pInfoBar)
                         {
                             VclPtrInstance<PushButton> xBtn(&pViewFrame->GetWindow());

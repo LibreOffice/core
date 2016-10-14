@@ -17,6 +17,7 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/frame/InfobarType.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -46,6 +47,7 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;
+using namespace com::sun::star::frame;
 
 namespace
 {
@@ -693,11 +695,11 @@ bool SfxClassificationHelper::HasDocumentFooter()
     return it != rCategory.m_aLabels.end() && !it->second.isEmpty();
 }
 
-InfoBarType SfxClassificationHelper::GetImpactLevelType()
+InfobarType SfxClassificationHelper::GetImpactLevelType()
 {
-    InfoBarType aRet;
+    InfobarType aRet;
 
-    aRet = InfoBarType::Warning;
+    aRet = InfobarType_Warning;
 
     auto itCategory = m_pImpl->m_aCategory.find(SfxClassificationPolicyType::IntellectualProperty);
     if (itCategory == m_pImpl->m_aCategory.end())
@@ -718,22 +720,22 @@ InfoBarType SfxClassificationHelper::GetImpactLevelType()
     if (aScale == "UK-Cabinet")
     {
         if (aLevel == "0")
-            aRet = InfoBarType::Success;
+            aRet = InfobarType_Success;
         else if (aLevel == "1")
-            aRet = InfoBarType::Warning;
+            aRet = InfobarType_Warning;
         else if (aLevel == "2")
-            aRet = InfoBarType::Warning;
+            aRet = InfobarType_Warning;
         else if (aLevel == "3")
-            aRet = InfoBarType::Danger;
+            aRet = InfobarType_Danger;
     }
     else if (aScale == "FIPS-199")
     {
         if (aLevel == "Low")
-            aRet = InfoBarType::Success;
+            aRet = InfobarType_Success;
         else if (aLevel == "Moderate")
-            aRet = InfoBarType::Warning;
+            aRet = InfobarType_Warning;
         else if (aLevel == "High")
-            aRet = InfoBarType::Danger;
+            aRet = InfobarType_Danger;
     }
     return aRet;
 }
@@ -890,7 +892,7 @@ void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
         aMessage = aMessage.replaceFirst("%1", aBACName);
 
         rViewFrame.RemoveInfoBar("classification");
-        rViewFrame.AppendInfoBar("classification", aMessage, GetImpactLevelType());
+        rViewFrame.AppendInfoBar("classification", "", aMessage, GetImpactLevelType());
     }
 }
 
