@@ -11,7 +11,7 @@
 #define INCLUDED_OPENCL_INC_OPENCL_DEVICE_SELECTION_H
 
 #ifdef _MSC_VER
-#define _CRT_SECURE_NO_WARNINGS
+//#define _CRT_SECURE_NO_WARNINGS
 #endif
 
 #include <stdlib.h>
