@@ -95,8 +95,8 @@ void Test::testCompareTo()
 
     OString s1(str1, 2);
     OString s2(str2, 2);
-    CPPUNIT_ASSERT(s1.compareTo(s1) == 0);
-    CPPUNIT_ASSERT(s2.compareTo(s2) == 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), s1.compareTo(s1));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), s2.compareTo(s2));
     CPPUNIT_ASSERT(s1.compareTo(s2) < 0);
     CPPUNIT_ASSERT(s2.compareTo(s1) > 0);
     CPPUNIT_ASSERT(s1.compareTo(OString(s2 + "y")) < 0);

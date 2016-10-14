@@ -266,7 +266,7 @@ void DesktopLOKTest::testGetStyles()
     std::stringstream aStream(pJSON);
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT( aTree.size() > 0 );
-    CPPUNIT_ASSERT( aTree.get_child("commandName").get_value<std::string>() == ".uno:StyleApply" );
+    CPPUNIT_ASSERT_EQUAL( std::string(".uno:StyleApply"), aTree.get_child("commandName").get_value<std::string>()  );
 
     boost::property_tree::ptree aValues = aTree.get_child("commandValues");
     CPPUNIT_ASSERT( aValues.size() > 0 );
@@ -300,7 +300,7 @@ void DesktopLOKTest::testGetFonts()
     std::stringstream aStream(pJSON);
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT( aTree.size() > 0 );
-    CPPUNIT_ASSERT( aTree.get_child("commandName").get_value<std::string>() == ".uno:CharFontName" );
+    CPPUNIT_ASSERT_EQUAL( std::string(".uno:CharFontName"), aTree.get_child("commandName").get_value<std::string>() );
 
     boost::property_tree::ptree aValues = aTree.get_child("commandValues");
     CPPUNIT_ASSERT( aValues.size() > 0 );
