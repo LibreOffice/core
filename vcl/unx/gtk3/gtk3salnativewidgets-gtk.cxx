@@ -52,10 +52,15 @@ GtkStyleContext* GtkSalGraphics::mpSpinStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSpinUpStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSpinDownStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpComboboxStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpComboboxBoxStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpComboboxEntryStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpComboboxButtonStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpComboboxButtonBoxStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpComboboxButtonArrowStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpListboxStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpListboxBoxStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpListboxButtonStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpListboxButtonBoxStyle= nullptr;
 GtkStyleContext* GtkSalGraphics::mpListboxButtonArrowStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpFrameInStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpFrameOutStyle = nullptr;
@@ -294,8 +299,10 @@ static GtkWidget* gTreeViewWidget;
 
 namespace
 {
-    void render_common(GtkStyleContext *pContext, cairo_t *cr, const Rectangle &rIn)
+    Rectangle render_common(GtkStyleContext *pContext, cairo_t *cr, const Rectangle &rIn, GtkStateFlags flags)
     {
+        gtk_style_context_set_state(pContext, flags);
+
         Rectangle aRect(rIn);
         GtkBorder margin;
         gtk_style_context_get_margin(pContext, gtk_style_context_get_state(pContext), &margin);
@@ -309,6 +316,17 @@ namespace
                                             aRect.GetWidth(), aRect.GetHeight());
         gtk_render_frame(pContext, cr, aRect.Left(), aRect.Top(),
                                        aRect.GetWidth(), aRect.GetHeight());
+
+        GtkBorder border, padding;
+        gtk_style_context_get_border(pContext, gtk_style_context_get_state(pContext), &border);
+        gtk_style_context_get_padding(pContext, gtk_style_context_get_state(pContext), &padding);
+
+        aRect.Left() += border.left + padding.left;
+        aRect.Top() += border.top + padding.top;
+        aRect.Right() -= border.right + padding.right;
+        aRect.Bottom() -= border.bottom + padding.bottom;
+
+        return aRect;
     }
 }
 
@@ -766,8 +784,6 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
     areaRect = rControlRectangle;
 
     buttonRect = NWGetComboBoxButtonRect( nType, ControlPart::ButtonDown, areaRect );
-    if( nPart == ControlPart::ButtonDown )
-        buttonRect.Left() += 1;
 
     Rectangle        aEditBoxRect( areaRect );
     aEditBoxRect.SetSize( Size( areaRect.GetWidth() - buttonRect.GetWidth(), aEditBoxRect.GetHeight() ) );
@@ -800,36 +816,39 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
 
     if (nType == ControlType::Combobox)
     {
-        gtk_style_context_save(mpComboboxButtonStyle);
-        gtk_style_context_set_state(mpComboboxButtonStyle, flags);
-
         if( nPart == ControlPart::Entire )
         {
-            GtkJunctionSides eJuncSides = gtk_style_context_get_junction_sides(mpEntryStyle);
-            gtk_style_context_set_state(mpEntryStyle, flags);
-            if (AllSettings::GetLayoutRTL())
-                gtk_style_context_set_junction_sides(mpEntryStyle, GTK_JUNCTION_LEFT);
-            else
-                gtk_style_context_set_junction_sides(mpEntryStyle, GTK_JUNCTION_RIGHT);
-
-            render_common(mpComboboxStyle, cr, aRect);
+            render_common(mpComboboxStyle, cr, aRect, flags);
+            render_common(mpComboboxBoxStyle, cr, aRect, flags);
             Rectangle aEntryRect(Point(aEditBoxRect.Left() - areaRect.Left(),
                                  aEditBoxRect.Top() - areaRect.Top()),
                                  Size(aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight()));
-            render_common(mpEntryStyle, cr, aEntryRect);
-            gtk_style_context_set_junction_sides(mpEntryStyle, eJuncSides);
+
+            GtkJunctionSides eJuncSides = gtk_style_context_get_junction_sides(mpComboboxEntryStyle);
+            if (AllSettings::GetLayoutRTL())
+                gtk_style_context_set_junction_sides(mpComboboxEntryStyle, GTK_JUNCTION_LEFT);
+            else
+                gtk_style_context_set_junction_sides(mpComboboxEntryStyle, GTK_JUNCTION_RIGHT);
+            render_common(mpComboboxEntryStyle, cr, aEntryRect, flags);
+            gtk_style_context_set_junction_sides(mpComboboxEntryStyle, eJuncSides);
         }
 
         Rectangle aButtonRect(Point(buttonRect.Left() - areaRect.Left(), buttonRect.Top() - areaRect.Top()),
                               Size(buttonRect.GetWidth(), buttonRect.GetHeight()));
-        render_common(mpComboboxButtonStyle, cr, aButtonRect);
+        GtkJunctionSides eJuncSides = gtk_style_context_get_junction_sides(mpComboboxButtonStyle);
+        if (AllSettings::GetLayoutRTL())
+            gtk_style_context_set_junction_sides(mpComboboxButtonStyle, GTK_JUNCTION_RIGHT);
+        else
+            gtk_style_context_set_junction_sides(mpComboboxButtonStyle, GTK_JUNCTION_LEFT);
+        Rectangle aContentsRect = render_common(mpComboboxButtonStyle, cr, aButtonRect, flags);
+        gtk_style_context_set_junction_sides(mpComboboxButtonStyle, eJuncSides);
+        render_common(mpComboboxButtonBoxStyle, cr, aContentsRect, flags);
+        render_common(mpComboboxButtonArrowStyle, cr, aContentsRect, flags);
 
         gtk_render_arrow(mpComboboxButtonArrowStyle, cr,
                          G_PI,
                          (arrowRect.Left() - areaRect.Left()), (arrowRect.Top() - areaRect.Top()),
                          arrowRect.GetWidth() );
-
-        gtk_style_context_restore(mpComboboxButtonStyle);
     }
     else if (nType == ControlType::Listbox)
     {
@@ -842,28 +861,59 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
         }
         else
         {
-            gtk_style_context_save(mpListboxButtonStyle);
-            gtk_style_context_set_state(mpListboxButtonStyle, flags);
+            render_common(mpListboxStyle, cr, aRect, flags);
+            render_common(mpListboxBoxStyle, cr, aRect, flags);
 
-            render_common(mpListboxStyle, cr, aRect);
-            render_common(mpListboxButtonStyle, cr, aRect);
+            Rectangle aContentsRect = render_common(mpListboxButtonStyle, cr, aRect, flags);
+            render_common(mpListboxButtonBoxStyle, cr, aContentsRect, flags);
+            render_common(mpListboxButtonArrowStyle, cr, aContentsRect, flags);
 
             gtk_render_arrow(mpListboxButtonArrowStyle, cr,
                              G_PI,
                              (arrowRect.Left() - areaRect.Left()), (arrowRect.Top() - areaRect.Top()),
                              arrowRect.GetWidth() );
-
-            gtk_style_context_restore(mpListboxButtonStyle);
         }
     }
 }
 
 typedef void (*gtk_widget_path_iter_set_object_nameFunc)(GtkWidgetPath *, guint, const char*);
 
-static GtkStyleContext* createNewStyleContext(gtk_widget_path_iter_set_object_nameFunc set_object_name,
-                                              GtkControlPart ePart, GtkStyleContext* parent)
+static void appendComboEntry(GtkWidgetPath* pSiblingsPath, gtk_widget_path_iter_set_object_nameFunc set_object_name)
 {
-    GtkWidgetPath *path = parent ? gtk_widget_path_copy(gtk_style_context_get_path(parent)) : gtk_widget_path_new();
+    gtk_widget_path_append_type(pSiblingsPath, GTK_TYPE_ENTRY);
+    set_object_name(pSiblingsPath, -1, "entry");
+    gtk_widget_path_iter_add_class(pSiblingsPath, -1, "combo");
+}
+
+static void appendComboButton(GtkWidgetPath* pSiblingsPath, gtk_widget_path_iter_set_object_nameFunc set_object_name)
+{
+    gtk_widget_path_append_type(pSiblingsPath, GTK_TYPE_BUTTON);
+    set_object_name(pSiblingsPath, -1, "button");
+    gtk_widget_path_iter_add_class(pSiblingsPath, -1, "combo");
+}
+
+static GtkWidgetPath* buildLTRComboSiblingsPath(gtk_widget_path_iter_set_object_nameFunc set_object_name)
+{
+    GtkWidgetPath* pSiblingsPath = gtk_widget_path_new();
+
+    appendComboEntry(pSiblingsPath, set_object_name);
+    appendComboButton(pSiblingsPath, set_object_name);
+
+    return pSiblingsPath;
+}
+
+static GtkWidgetPath* buildRTLComboSiblingsPath(gtk_widget_path_iter_set_object_nameFunc set_object_name)
+{
+    GtkWidgetPath* pSiblingsPath = gtk_widget_path_new();
+
+    appendComboButton(pSiblingsPath, set_object_name);
+    appendComboEntry(pSiblingsPath, set_object_name);
+
+    return pSiblingsPath;
+}
+
+static void appendPathElement(GtkWidgetPath* path, GtkControlPart ePart, gtk_widget_path_iter_set_object_nameFunc set_object_name)
+{
     switch (ePart)
     {
         case GtkControlPart::Button:
@@ -898,6 +948,68 @@ static GtkStyleContext* createNewStyleContext(gtk_widget_path_iter_set_object_na
         case GtkControlPart::Entry:
             gtk_widget_path_append_type(path, GTK_TYPE_ENTRY);
             set_object_name(path, -1, "entry");
+            break;
+        case GtkControlPart::Combobox:
+        case GtkControlPart::Listbox:
+            gtk_widget_path_append_type(path, G_TYPE_NONE);
+            set_object_name(path, -1, "combobox");
+            break;
+        case GtkControlPart::ComboboxBox:
+        case GtkControlPart::ListboxBox:
+            gtk_widget_path_append_type(path, G_TYPE_NONE);
+            set_object_name(path, -1, "box");
+            gtk_widget_path_iter_add_class(path, -1, "horizontal");
+            gtk_widget_path_iter_add_class(path, -1, "linked");
+            break;
+        case GtkControlPart::ComboboxBoxEntry:
+        {
+            GtkWidgetPath* pSiblingsPath;
+            if (AllSettings::GetLayoutRTL())
+            {
+                pSiblingsPath = buildRTLComboSiblingsPath(set_object_name);
+                gtk_widget_path_append_with_siblings(path, pSiblingsPath, 1);
+            }
+            else
+            {
+                pSiblingsPath = buildLTRComboSiblingsPath(set_object_name);
+                gtk_widget_path_append_with_siblings(path, pSiblingsPath, 0);
+            }
+            gtk_widget_path_unref(pSiblingsPath);
+            break;
+        }
+        case GtkControlPart::ComboboxBoxButton:
+        {
+            GtkWidgetPath* pSiblingsPath;
+            if (AllSettings::GetLayoutRTL())
+            {
+                pSiblingsPath = buildRTLComboSiblingsPath(set_object_name);
+                gtk_widget_path_append_with_siblings(path, pSiblingsPath, 0);
+            }
+            else
+            {
+                pSiblingsPath = buildLTRComboSiblingsPath(set_object_name);
+                gtk_widget_path_append_with_siblings(path, pSiblingsPath, 1);
+            }
+            gtk_widget_path_unref(pSiblingsPath);
+            break;
+        }
+        case GtkControlPart::ListboxBoxButton:
+        {
+            GtkWidgetPath* pSiblingsPath = gtk_widget_path_new();
+
+            gtk_widget_path_append_type(pSiblingsPath, GTK_TYPE_BUTTON);
+            set_object_name(pSiblingsPath, -1, "button");
+            gtk_widget_path_iter_add_class(pSiblingsPath, -1, "combo");
+
+            gtk_widget_path_append_with_siblings(path, pSiblingsPath, 0);
+            gtk_widget_path_unref(pSiblingsPath);
+            break;
+        }
+        case GtkControlPart::ComboboxBoxButtonBox:
+        case GtkControlPart::ListboxBoxButtonBox:
+            gtk_widget_path_append_type(path, G_TYPE_NONE);
+            set_object_name(path, -1, "box");
+            gtk_widget_path_iter_add_class(path, -1, "horizontal");
             break;
         case GtkControlPart::SpinButton:
             gtk_widget_path_append_type(path, GTK_TYPE_SPIN_BUTTON);
@@ -1015,6 +1127,14 @@ static GtkStyleContext* createNewStyleContext(gtk_widget_path_iter_set_object_na
             gtk_widget_path_iter_add_class(path, -1, "frame");
             break;
     }
+}
+
+static GtkStyleContext* createNewStyleContext(gtk_widget_path_iter_set_object_nameFunc set_object_name,
+                                              GtkControlPart ePart, GtkStyleContext* parent)
+{
+    GtkWidgetPath *path = parent ? gtk_widget_path_copy(gtk_style_context_get_path(parent)) : gtk_widget_path_new();
+
+    appendPathElement(path, ePart, set_object_name);
 
     GtkStyleContext* context = gtk_style_context_new();
     gtk_style_context_set_path(context, path);
@@ -1059,8 +1179,27 @@ static GtkStyleContext* createOldStyleContext(GtkControlPart ePart, GtkStyleCont
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
             break;
         case GtkControlPart::Entry:
+        case GtkControlPart::ComboboxBoxEntry:
             gtk_widget_path_append_type(path, GTK_TYPE_ENTRY);
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_ENTRY);
+            break;
+        case GtkControlPart::Combobox:
+            gtk_widget_path_append_type(path, GTK_TYPE_COMBO_BOX_TEXT);
+            break;
+        case GtkControlPart::Listbox:
+            gtk_widget_path_append_type(path, GTK_TYPE_COMBO_BOX);
+            break;
+            break;
+        case GtkControlPart::ComboboxBoxButton:
+        case GtkControlPart::ListboxBoxButton:
+            gtk_widget_path_append_type(path, GTK_TYPE_TOGGLE_BUTTON);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
+            gtk_widget_path_iter_add_class(path, -1, "the-button-in-the-combobox");
+            break;
+        case GtkControlPart::ComboboxBox:
+        case GtkControlPart::ListboxBox:
+        case GtkControlPart::ComboboxBoxButtonBox:
+        case GtkControlPart::ListboxBoxButtonBox:
             break;
         case GtkControlPart::SpinButton:
             gtk_widget_path_append_type(path, GTK_TYPE_SPIN_BUTTON);
@@ -2415,8 +2554,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
         reinterpret_cast<gtk_widget_path_iter_set_object_nameFunc>(osl_getAsciiFunctionSymbol(nullptr,
             "gtk_widget_path_iter_set_object_name"));
 
-    fprintf(stderr, "set_object_name is %p\n", set_object_name);
-
     gCacheWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gDumbContainer = gtk_fixed_new();
     gtk_container_add(GTK_CONTAINER(gCacheWindow), gDumbContainer);
@@ -2509,16 +2646,23 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     /* Combobox */
     gComboBox = gtk_combo_box_text_new_with_entry();
-    getStyleContext(&mpComboboxStyle, gComboBox);
-    mpComboboxButtonStyle = createStyleContext(set_object_name, GtkControlPart::Button, mpComboboxStyle);
-    mpComboboxButtonArrowStyle = createStyleContext(set_object_name, GtkControlPart::Arrow, mpComboboxButtonStyle);
+    gtk_container_add(GTK_CONTAINER(gDumbContainer), gComboBox);
+    mpComboboxStyle = createStyleContext(set_object_name, GtkControlPart::Combobox);
+    mpComboboxBoxStyle = createStyleContext(set_object_name, GtkControlPart::ComboboxBox, mpComboboxStyle);
+    mpComboboxEntryStyle = createStyleContext(set_object_name, GtkControlPart::ComboboxBoxEntry, mpComboboxBoxStyle);
+    mpComboboxButtonStyle = createStyleContext(set_object_name, GtkControlPart::ComboboxBoxButton, mpComboboxBoxStyle);
+    mpComboboxButtonBoxStyle = createStyleContext(set_object_name, GtkControlPart::ComboboxBoxButtonBox, mpComboboxButtonStyle);
+    mpComboboxButtonArrowStyle = createStyleContext(set_object_name, GtkControlPart::Arrow, mpComboboxButtonBoxStyle);
 
     /* Listbox */
     gListBox = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gListBox), "sample");
-    getStyleContext(&mpListboxStyle, gListBox);
-    mpListboxButtonStyle = createStyleContext(set_object_name, GtkControlPart::Button, mpListboxStyle);
-    mpListboxButtonArrowStyle = createStyleContext(set_object_name, GtkControlPart::Arrow, mpListboxButtonStyle);
+    gtk_container_add(GTK_CONTAINER(gDumbContainer), gListBox);
+    mpListboxStyle = createStyleContext(set_object_name, GtkControlPart::Listbox);
+    mpListboxBoxStyle = createStyleContext(set_object_name, GtkControlPart::ListboxBox, mpListboxStyle);
+    mpListboxButtonStyle = createStyleContext(set_object_name, GtkControlPart::ListboxBoxButton, mpListboxBoxStyle);
+    mpListboxButtonBoxStyle = createStyleContext(set_object_name, GtkControlPart::ListboxBoxButtonBox, mpListboxButtonStyle);
+    mpListboxButtonArrowStyle = createStyleContext(set_object_name, GtkControlPart::Arrow, mpListboxButtonBoxStyle);
 
     /* Frames */
     mpFrameOutStyle = mpFrameInStyle = createStyleContext(set_object_name, GtkControlPart::FrameBorder);
