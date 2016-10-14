@@ -169,8 +169,6 @@ void ComboBox::ImplCalcEditHeight()
 
 void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
-    ImplInitStyle( nStyle );
-
     bool bNoBorder = ( nStyle & WB_NOBORDER ) != 0;
     if ( !(nStyle & WB_DROPDOWN) )
     {
