@@ -43,7 +43,8 @@ Transliteration_caseignore::loadModule( TransliterationModules modName, const Lo
     throw(RuntimeException, std::exception)
 {
     moduleLoaded = (TransliterationModules) (moduleLoaded|modName);
-    aLocale = rLocale;
+    if (aLocale != rLocale)
+        aLocale = rLocale;
 }
 
 sal_Int16 SAL_CALL Transliteration_caseignore::getType() throw(RuntimeException, std::exception)

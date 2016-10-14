@@ -107,38 +107,40 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
     bool bLoad = bFirstCall;
     bFirstCall = false;
 
-    if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::SENTENCE_CASE )
+    switch( static_cast< sal_Int32 >(nType) )
     {
-        if( bLoad )
-            loadModuleByImplName("SENTENCE_CASE", nLang);
-    }
-    else if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::TITLE_CASE )
-    {
-        if( bLoad )
-            loadModuleByImplName("TITLE_CASE", nLang);
-    }
-    else if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::TOGGLE_CASE )
-    {
-        if( bLoad )
-            loadModuleByImplName("TOGGLE_CASE", nLang);
-    }
-    else
-    {
-        if( aLanguageTag.getLanguageType() != nLang )
-        {
-            setLanguageLocaleImpl( nLang );
-            if( !bLoad )
-                bLoad = needLanguageForTheMode();
-        }
-        if( bLoad )
-            loadModuleImpl();
+        case TransliterationModulesExtra::SENTENCE_CASE:
+            if( bLoad )
+                loadModuleByImplName("SENTENCE_CASE", nLang);
+        break;
+        case TransliterationModulesExtra::TITLE_CASE:
+            if( bLoad )
+                loadModuleByImplName("TITLE_CASE", nLang);
+        break;
+        case TransliterationModulesExtra::TOGGLE_CASE:
+            if( bLoad )
+                loadModuleByImplName("TOGGLE_CASE", nLang);
+        break;
+        default:
+            if( (aLanguageTag.getLanguageType() != nLang)
+                && ((LANGUAGE_SYSTEM != nLang) || (!aLanguageTag.isSystemLocale())) )
+            {
+                setLanguageLocaleImpl( nLang );
+                if( !bLoad )
+                    bLoad = needLanguageForTheMode();
+            }
+            if( bLoad )
+                loadModuleImpl();
     }
 }
 
 void TransliterationWrapper::loadModuleImpl() const
 {
     if ( bFirstCall )
+    {
         const_cast<TransliterationWrapper*>(this)->setLanguageLocaleImpl( LANGUAGE_SYSTEM );
+        bFirstCall = false;
+    }
 
     try
     {
@@ -149,8 +151,6 @@ void TransliterationWrapper::loadModuleImpl() const
     {
         SAL_WARN( "unotools.i18n", "loadModuleImpl: Exception caught " << e.Message );
     }
-
-    bFirstCall = false;
 }
 
 void TransliterationWrapper::loadModuleByImplName(const OUString& rModuleName,
