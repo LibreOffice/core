@@ -680,7 +680,6 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
     cairo_translate(cr, rControlRectangle.Left(), rControlRectangle.Top());
 }
 
-#define ARROW_SIZE 11 * 0.85
 Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
                                                    ControlPart nPart,
                                                    Rectangle aAreaRect )
@@ -692,7 +691,11 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
     GtkBorder padding;
     gtk_style_context_get_padding( mpButtonStyle, gtk_style_context_get_state(mpButtonStyle), &padding);
 
-    gint nArrowWidth = ARROW_SIZE;
+    gint nArrowWidth;
+    gtk_style_context_get(mpComboboxButtonArrowStyle,
+        gtk_style_context_get_state(mpComboboxButtonArrowStyle),
+        "min-width", &nArrowWidth, NULL);
+
     gint nButtonWidth = nArrowWidth + padding.left + padding.right;
     if( nPart == ControlPart::ButtonDown )
     {
