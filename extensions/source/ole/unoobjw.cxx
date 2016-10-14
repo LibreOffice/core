@@ -68,8 +68,8 @@ extern "C" const GUID IID_IDispatchEx;
 namespace ole_adapter
 {
 std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > UnoObjToWrapperMap;
-static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
-static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
+static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
+static bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
 static HRESULT mapCannotConvertException(const CannotConvertException &e, unsigned int * puArgErr);
 
 /* Does not throw any exceptions.
@@ -77,7 +77,7 @@ static HRESULT mapCannotConvertException(const CannotConvertException &e, unsign
  */
 static void writeExcepinfo(EXCEPINFO * pInfo, const OUString& message)
 {
-    if (pInfo != NULL)
+    if (pInfo != nullptr)
     {
         pInfo->wCode = UNO_2_OLE_EXCEPTIONCODE;
         pInfo->bstrSource = SysAllocString(L"[automation bridge] ");
@@ -96,7 +96,7 @@ InterfaceOleWrapper_Impl::~InterfaceOleWrapper_Impl()
 {
     MutexGuard guard(getBridgeMutex());
     // remove entries in global map
-    IT_Uno it= UnoObjToWrapperMap.find( (sal_uIntPtr) m_xOrigin.get());
+    IT_Uno it= UnoObjToWrapperMap.find( reinterpret_cast<sal_uIntPtr>(m_xOrigin.get()));
     if(it != UnoObjToWrapperMap.end())
         UnoObjToWrapperMap.erase(it);
 }
@@ -111,17 +111,17 @@ STDMETHODIMP InterfaceOleWrapper_Impl::QueryInterface(REFIID riid, LPVOID FAR * 
     if(IsEqualIID(riid, IID_IUnknown))
     {
         AddRef();
-        *ppv = (IUnknown*) (IDispatch*) this;
+        *ppv = static_cast<IUnknown*>(static_cast<IDispatch*>(this));
     }
     else if (IsEqualIID(riid, IID_IDispatch))
     {
         AddRef();
-        *ppv = (IDispatch*) this;
+        *ppv = static_cast<IDispatch*>(this);
     }
     else if( IsEqualIID( riid, __uuidof( IUnoObjectWrapper)))
     {
         AddRef();
-        *ppv= (IUnoObjectWrapper*) this;
+        *ppv= static_cast<IUnoObjectWrapper*>(this);
     }
     else
         ret= E_NOINTERFACE;
@@ -271,15 +271,15 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
     }
     catch(const BridgeRuntimeError&)
     {
-        OSL_ASSERT(0);
+        OSL_ASSERT(false);
     }
     catch(const Exception&)
     {
-        OSL_ASSERT(0);
+        OSL_ASSERT(false);
     }
     catch(...)
     {
-        OSL_ASSERT(0);
+        OSL_ASSERT(false);
     }
 
     return ret;
@@ -375,10 +375,10 @@ void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
 
                 OLECHAR const * sindex= L"0";
                 DISPID id2;
-                DISPPARAMS noParams= {0,0,0,0};
+                DISPPARAMS noParams= {nullptr,nullptr,0,0};
                 if(SUCCEEDED( hr= pdisp->GetIDsOfNames( IID_NULL, const_cast<OLECHAR **>(&sindex), 1, LOCALE_USER_DEFAULT, &id2)))
                     hr= pdisp->Invoke( id2, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET,
-                                       & noParams, & varParam, NULL, NULL);
+                                       & noParams, & varParam, nullptr, nullptr);
                 if( FAILED( hr))
                 {
                     throw BridgeRuntimeError(
@@ -398,15 +398,15 @@ void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
         else if(info.eMemberType == MemberType_PROPERTY)
             variantToAny( & varParam, anyParam, info.aType);
         else
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
 
         pParams[countArgs - (i + 1)]= anyParam;
     }// end for / iterating over all parameters
 }
 
-sal_Bool  InterfaceOleWrapper_Impl::getInvocationInfoForCall( DISPID id, InvocationInfo& info)
+bool  InterfaceOleWrapper_Impl::getInvocationInfoForCall( DISPID id, InvocationInfo& info)
 {
-    sal_Bool bTypesAvailable= sal_False;
+    bool bTypesAvailable= false;
 
     if( !m_xInvocation.is() )return false;
     Reference<XInvocation2> inv2( m_xInvocation, UNO_QUERY);
@@ -437,23 +437,23 @@ sal_Bool  InterfaceOleWrapper_Impl::getInvocationInfoForCall( DISPID id, Invocat
         // of letters. First we assume that the name which was passed into
         // GetIDsOfNames is correct. If we won't get information with that
         // name then we have the invocation service use the XExactName interface.
-        sal_Bool validInfo= sal_True;
+        bool validInfo= true;
         InvocationInfo invInfo;
         try{
-            invInfo= inv2->getInfoForName( sMemberName, sal_False);
+            invInfo= inv2->getInfoForName( sMemberName, false);
         }
         catch(const IllegalArgumentException&)
         {
-            validInfo= sal_False;
+            validInfo= false;
         }
 
         if( ! validInfo)
         {
-            invInfo= inv2->getInfoForName( sMemberName, sal_True);
+            invInfo= inv2->getInfoForName( sMemberName, true);
         }
         if( invInfo.aName.pData)
         {
-            bTypesAvailable= sal_True;
+            bTypesAvailable= true;
             info= invInfo;
         }
     }
@@ -481,7 +481,7 @@ Any SAL_CALL InterfaceOleWrapper_Impl::createBridge(const Any& modelDepObject,
         {
             if( xInt == Reference<XInterface>( static_cast<XWeak*>( this), UNO_QUERY))
             {
-                VARIANT *pVar= (VARIANT*)CoTaskMemAlloc( sizeof( VARIANT));
+                VARIANT *pVar= static_cast<VARIANT*>(CoTaskMemAlloc( sizeof( VARIANT)));
                 if( pVar)
                 {
                     pVar->vt= VT_DISPATCH;
@@ -536,7 +536,7 @@ Reference<XInterface> InterfaceOleWrapper_Impl::createComWrapperInstance()
 bool getType( const BSTR name, Type & type)
 {
     bool ret = false;
-    typelib_TypeDescription * pDesc= NULL;
+    typelib_TypeDescription * pDesc= nullptr;
     OUString str( reinterpret_cast<const sal_Unicode*>(name));
     typelib_typedescription_getByName( &pDesc, str.pData );
     if( pDesc)
@@ -548,9 +548,9 @@ bool getType( const BSTR name, Type & type)
     return ret;
 }
 
-static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
+static bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
 {
-    sal_Bool ret = sal_False;
+    bool ret = false;
     HRESULT hr;
 
     // Handle JScriptValue objects and JScript out params ( Array object )
@@ -575,7 +575,7 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
                     && varBool == VARIANT_TRUE))
             {
                 if( SUCCEEDED( spValueDest->Set( CComVariant(), *pSource)))
-                    ret= sal_True;
+                    ret= true;
             }
         }
         else if (pDest->vt == VT_DISPATCH)// VT_DISPATCH -> JScript out param
@@ -595,7 +595,7 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
                 DISPID dwDispID;
                 if( SUCCEEDED( spDispEx->GetDispID( nullProp, fdexNameEnsure, &dwDispID)))
                 {
-                    DISPPARAMS dispparams = {NULL, NULL, 1, 1};
+                    DISPPARAMS dispparams = {nullptr, nullptr, 1, 1};
                     dispparams.rgvarg = pSource;
                     DISPID dispidPut = DISPID_PROPERTYPUT;
                     dispparams.rgdispidNamedArgs = &dispidPut;
@@ -603,12 +603,12 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
                     if (pSource->vt == VT_UNKNOWN || pSource->vt == VT_DISPATCH ||
                         (pSource->vt & VT_ARRAY) || (pSource->vt & VT_BYREF))
                         hr = spDispEx->InvokeEx(dwDispID, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYPUTREF,
-                                                &dispparams, NULL, NULL, NULL);
+                                                &dispparams, nullptr, nullptr, nullptr);
                     else
                         hr= spDispEx->InvokeEx(dwDispID, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYPUT,
-                                               &dispparams, NULL, NULL, NULL);
+                                               &dispparams, nullptr, nullptr, nullptr);
                     if( SUCCEEDED(hr))
-                        ret= sal_True;
+                        ret= true;
                 }
             }
         }
@@ -626,10 +626,10 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
 // Thus we are in charge of freeing an eventual value contained by the inner VARIANT
 // Please note: VariantCopy doesn't free a VT_BYREF value
 // The out parameters are expected to have always a valid type
-static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
+static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
 {
     HRESULT hr;
-    sal_Bool ret = FALSE;
+    bool ret = false;
     // Out parameter must be VT_BYREF
     if ((V_VT(pDest) & VT_BYREF) != 0 )
     {
@@ -643,7 +643,7 @@ static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
             // VT_DISPATCH, VT_UNKNOWN, VT_ARRAY, VT_BSTR in the VARIANT that
             // is contained in pDest are released by VariantCopy
             VariantCopy(V_VARIANTREF(pDest), pSource);
-            ret = sal_True;
+            ret = true;
         }
         else
         {
@@ -653,13 +653,13 @@ static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
                 if ((oleTypeFlags & VT_ARRAY) != 0)
                 {
                     // In / Out Param
-                    if( *V_ARRAYREF(pDest) != NULL)
+                    if( *V_ARRAYREF(pDest) != nullptr)
                         hr= SafeArrayCopyData( V_ARRAY(pSource), *V_ARRAYREF(pDest));
                     else
                         // Out Param
-                        hr= SafeArrayCopy(V_ARRAY(pSource), V_ARRAYREF(pDest)) == NOERROR;
+                        hr= SafeArrayCopy(V_ARRAY(pSource), V_ARRAYREF(pDest));
                     if( SUCCEEDED( hr))
-                        ret = sal_True;
+                        ret = true;
                 }
                 else
                 {
@@ -669,92 +669,92 @@ static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
                     case VT_I2:
                     {
                         *V_I2REF(pDest) = V_I2(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     }
                     case VT_I4:
                         *V_I4REF(pDest) = V_I4(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_R4:
                         *V_R4REF(pDest) = V_R4(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_R8:
                         *V_R8REF(pDest) = V_R8(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_CY:
                         *V_CYREF(pDest) = V_CY(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_DATE:
                         *V_DATEREF(pDest) = V_DATE(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_BSTR:
                         SysFreeString( *pDest->pbstrVal);
 
                         *V_BSTRREF(pDest) = SysAllocString(V_BSTR(pSource));
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_DISPATCH:
-                        if (*V_DISPATCHREF(pDest) != NULL)
+                        if (*V_DISPATCHREF(pDest) != nullptr)
                             (*V_DISPATCHREF(pDest))->Release();
 
                         *V_DISPATCHREF(pDest) = V_DISPATCH(pSource);
 
-                        if (*V_DISPATCHREF(pDest) != NULL)
+                        if (*V_DISPATCHREF(pDest) != nullptr)
                             (*V_DISPATCHREF(pDest))->AddRef();
 
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_ERROR:
                         *V_ERRORREF(pDest) = V_ERROR(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_BOOL:
                         *V_BOOLREF(pDest) = V_BOOL(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_UNKNOWN:
-                        if (*V_UNKNOWNREF(pDest) != NULL)
+                        if (*V_UNKNOWNREF(pDest) != nullptr)
                             (*V_UNKNOWNREF(pDest))->Release();
 
                         *V_UNKNOWNREF(pDest) = V_UNKNOWN(pSource);
 
-                        if (*V_UNKNOWNREF(pDest) != NULL)
+                        if (*V_UNKNOWNREF(pDest) != nullptr)
                             (*V_UNKNOWNREF(pDest))->AddRef();
 
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_I1:
                         *V_I1REF(pDest) = V_I1(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_UI1:
                         *V_UI1REF(pDest) = V_UI1(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_UI2:
                         *V_UI2REF(pDest) = V_UI2(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_UI4:
                         *V_UI4REF(pDest) = V_UI4(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_INT:
                         *V_INTREF(pDest) = V_INT(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_UINT:
                         *V_UINTREF(pDest) = V_UINT(pSource);
-                        ret = sal_True;
+                        ret = true;
                         break;
                     case VT_DECIMAL:
                         memcpy(pDest->pdecVal, pSource, sizeof(DECIMAL));
-                        ret = sal_True;
+                        ret = true;
                         break;
                     default:
                         break;
@@ -776,7 +776,7 @@ static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
 
                     SysFreeString( *pDest->pbstrVal);
                     *pDest->pbstrVal= SysAllocString( buff);
-                    ret = sal_True;
+                    ret = true;
                 }
             }
         }
@@ -797,7 +797,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
 
     try
     {
-        sal_Bool bHandled= sal_False;
+        bool bHandled= false;
         ret= InvokeGeneral( dispidMember,  wFlags, pdispparams, pvarResult,  pexcepinfo,
                             puArgErr, bHandled);
         if( bHandled)
@@ -829,7 +829,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
                     ret=  doGetProperty( pdispparams, pvarResult,
                                          pexcepinfo, d.name);
                 }
-                else if ((flags & DISPATCH_PROPERTYPUT || flags & DISPATCH_PROPERTYPUTREF) != 0)
+                else if ((flags & DISPATCH_PROPERTYPUT) != 0 || (flags & DISPATCH_PROPERTYPUTREF) != 0)
                 {
                     if (pdispparams->cArgs != 1)
                         ret = DISP_E_BADPARAMCOUNT;
@@ -915,7 +915,7 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
         }
 
         // write back return value
-        if (pvarResult != NULL)
+        if (pvarResult != nullptr)
             anyToVariant(pvarResult, returnValue);
     }
     catch(const IllegalArgumentException & e) //XInvocation::invoke
@@ -1004,7 +1004,7 @@ HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * /*pdispparams*/, V
 }
 
 HRESULT InterfaceOleWrapper_Impl::doSetProperty( DISPPARAMS * /*pdispparams*/, VARIANT * /*pvarResult*/,
-                                        EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString& name, Sequence<Any> params)
+                                        EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString& name, Sequence<Any> const & params)
 {
     HRESULT ret= S_OK;
 
@@ -1022,7 +1022,7 @@ HRESULT InterfaceOleWrapper_Impl::doSetProperty( DISPPARAMS * /*pdispparams*/, V
     }
     catch(const InvocationTargetException &e)
     {
-        if (pexcepinfo != NULL)
+        if (pexcepinfo != nullptr)
         {
             Any org = e.TargetException;
 
@@ -1042,7 +1042,7 @@ HRESULT InterfaceOleWrapper_Impl::doSetProperty( DISPPARAMS * /*pdispparams*/, V
 
 HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned short wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
-                         unsigned int * /*puArgErr*/, sal_Bool& bHandled)
+                         unsigned int * /*puArgErr*/, bool& bHandled)
 {
     HRESULT ret= S_OK;
     try
@@ -1051,9 +1051,9 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
 // is that we put an object into an Array object ( out parameter). We have to return
 // IDispatch otherwise the object cannot be accessed from the Script.
         if( dispidMember == DISPID_VALUE && wFlags == DISPATCH_PROPERTYGET
-            && m_defaultValueType != VT_EMPTY && pvarResult != NULL)
+            && m_defaultValueType != VT_EMPTY && pvarResult != nullptr)
         {
-            bHandled= sal_True;
+            bHandled= true;
             if( m_defaultValueType == VT_DISPATCH)
             {
                 pvarResult->vt= VT_DISPATCH;
@@ -1066,7 +1066,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
         // function: _GetValueObject
         else if( dispidMember == DISPID_JSCRIPT_VALUE_FUNC)
         {
-            bHandled= sal_True;
+            bHandled= true;
             if( !pvarResult)
                 ret= E_POINTER;
             CComObject< JScriptValue>* pValue;
@@ -1086,8 +1086,8 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
         }
         else if( dispidMember == DISPID_GET_STRUCT_FUNC)
         {
-            bHandled= sal_True;
-            sal_Bool bStruct= sal_False;
+            bHandled= true;
+            bool bStruct= false;
 
 
             Reference<XIdlReflection> xRefl = theCoreReflection::get(comphelper::getComponentContext(m_smgr));
@@ -1106,15 +1106,15 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
                     if( var.vt == VT_DISPATCH)
                     {
                         VariantCopy( pvarResult, & var);
-                        bStruct= sal_True;
+                        bStruct= true;
                     }
                 }
             }
-            ret= bStruct == sal_True ? S_OK : DISP_E_EXCEPTION;
+            ret= bStruct ? S_OK : DISP_E_EXCEPTION;
         }
         else if (dispidMember == DISPID_CREATE_TYPE_FUNC)
         {
-            bHandled= sal_True;
+            bHandled= true;
             if( !pvarResult)
                 ret= E_POINTER;
             // the first parameter is in DISPPARAMS rgvargs contains the name of the struct.
@@ -1126,7 +1126,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
 
             //check if the provided name represents a valid type
             Type type;
-            if (getType(arg.bstrVal, type) == false)
+            if (!getType(arg.bstrVal, type))
             {
                 writeExcepinfo(pexcepinfo,OUString(
                                    "[automation bridge] A UNO type with the name " +
@@ -1134,7 +1134,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
                 return DISP_E_EXCEPTION;
             }
 
-            if (createUnoTypeWrapper(arg.bstrVal, pvarResult) == false)
+            if (!createUnoTypeWrapper(arg.bstrVal, pvarResult))
             {
                 writeExcepinfo(pexcepinfo, "[automation bridge] InterfaceOleWrapper_Impl::InvokeGeneral\n"
                                            "Could not initialize UnoTypeWrapper object!");
@@ -1313,7 +1313,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
     HRESULT ret = S_OK;
     try
     {
-        sal_Bool bHandled= sal_False;
+        bool bHandled= false;
         ret= InvokeGeneral( dispidMember,  wFlags, pdispparams, pvarResult,  pexcepinfo,
                             puArgErr, bHandled);
         if( bHandled)
@@ -1498,7 +1498,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                     {
                         // Remember the name as not existing
                         // and remove the MemberInfo
-                        m_badNameMap[info.name]= sal_False;
+                        m_badNameMap[info.name]= false;
                         m_idToMemberInfoMap.erase( it_MemberInfo);
                     }
                 } // if( ! info.flags )
@@ -1556,7 +1556,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
 }
 
 HRESULT UnoObjectWrapperRemoteOpt::methodInvoke( DISPID /*dispidMember*/, DISPPARAMS * /*pdispparams*/, VARIANT * /*pvarResult*/,
-                              EXCEPINFO * /*pexcepinfo*/, unsigned int * /*puArgErr*/, Sequence<Any>)
+                              EXCEPINFO * /*pexcepinfo*/, unsigned int * /*puArgErr*/, Sequence<Any> const &)
 {
     return S_OK;
 }
@@ -1565,7 +1565,7 @@ HRESULT UnoObjectWrapperRemoteOpt::methodInvoke( DISPID /*dispidMember*/, DISPPA
 static HRESULT mapCannotConvertException(const CannotConvertException &e, unsigned int * puArgErr)
 {
     HRESULT ret;
-    sal_Bool bWriteIndex= sal_True;
+    bool bWriteIndex= true;
 
     switch ( e.Reason)
     {
@@ -1601,11 +1601,11 @@ static HRESULT mapCannotConvertException(const CannotConvertException &e, unsign
             break;
         default:
             ret = E_UNEXPECTED;
-            bWriteIndex= sal_False;
+            bWriteIndex= false;
             break;
     }
 
-    if( bWriteIndex &&  puArgErr != NULL)
+    if( bWriteIndex &&  puArgErr != nullptr)
         *puArgErr = e.ArgumentIndex;
     return ret;
 }

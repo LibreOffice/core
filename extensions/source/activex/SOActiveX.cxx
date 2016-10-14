@@ -44,18 +44,18 @@
 
 void OutputError_Impl( HWND hw, HRESULT ErrorCode )
 {
-    void* sMessage;
+    LPTSTR sMessage;
     FormatMessageA(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM,
-        NULL,
+        nullptr,
         ErrorCode,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-        (LPTSTR) &sMessage,
+        reinterpret_cast<LPTSTR>(&sMessage),
         0,
-        NULL
+        nullptr
     );
-    ::MessageBoxA( hw, (LPCTSTR)sMessage, NULL, MB_OK | MB_ICONINFORMATION );
+    ::MessageBoxA( hw, sMessage, nullptr, MB_OK | MB_ICONINFORMATION );
     LocalFree( sMessage );
 }
 
@@ -72,12 +72,12 @@ HRESULT ExecuteFunc( IDispatch* idispUnoObject,
     HRESULT hr = idispUnoObject->GetIDsOfNames( IID_NULL, const_cast<OLECHAR **>(&sFuncName), 1, LOCALE_USER_DEFAULT, &id);
     if( !SUCCEEDED( hr ) ) return hr;
 
-    DISPPARAMS dispparams= { params, 0, count, 0};
+    DISPPARAMS dispparams= { params, nullptr, count, 0};
 
     // DEBUG
     EXCEPINFO myInfo;
     hr = idispUnoObject->Invoke( id, IID_NULL,LOCALE_USER_DEFAULT, DISPATCH_METHOD,
-                    &dispparams, pResult, &myInfo, 0);
+                    &dispparams, pResult, &myInfo, nullptr);
 
     // for debugging purposes
     // USES_CONVERSION;
@@ -100,7 +100,7 @@ HRESULT GetIDispByFunc( IDispatch* idispUnoObject,
     HRESULT hr = ExecuteFunc( idispUnoObject, sFuncName, params, count, &result );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    if( result.vt != VT_DISPATCH || result.pdispVal == NULL )
+    if( result.vt != VT_DISPATCH || result.pdispVal == nullptr )
         return E_FAIL;
 
     pdispResult = CComPtr<IDispatch>( result.pdispVal );
@@ -151,27 +151,27 @@ CSOActiveX::CSOActiveX()
 , mCurFileUrl( L"private:factory/swriter" )
 , mbLoad( FALSE )
 , mbViewOnly( TRUE )
-, mParentWin( NULL )
-, mOffWin( NULL )
-, mpDispatchInterceptor( NULL )
+, mParentWin( nullptr )
+, mOffWin( nullptr )
+, mpDispatchInterceptor( nullptr )
 , mnVersion( SO_NOT_DETECTED )
 , mbReadyForActivation( FALSE )
 , mbDrawLocked( FALSE )
 {
     CLSID clsFactory = {0x82154420,0x0FBF,0x11d4,{0x83, 0x13,0x00,0x50,0x04,0x52,0x6A,0xB4}};
-    HRESULT hr = CoCreateInstance( clsFactory, NULL, CLSCTX_ALL, __uuidof(IDispatch), (void**)&mpDispFactory);
+    HRESULT hr = CoCreateInstance( clsFactory, nullptr, CLSCTX_ALL, __uuidof(IDispatch), reinterpret_cast<void**>(&mpDispFactory));
     if( !SUCCEEDED( hr ) )
-        OutputError_Impl( NULL, hr );
+        OutputError_Impl( nullptr, hr );
 
     mPWinClass.style            = CS_HREDRAW|CS_VREDRAW;
     mPWinClass.lpfnWndProc      = ::DefWindowProc;
     mPWinClass.cbClsExtra       = 0;
     mPWinClass.cbWndExtra       = 0;
-    mPWinClass.hInstance        = (HINSTANCE) GetModuleHandle(NULL); //myInstance;
-    mPWinClass.hIcon            = NULL;
-    mPWinClass.hCursor          = NULL;
-    mPWinClass.hbrBackground    = (HBRUSH) COLOR_BACKGROUND;
-    mPWinClass.lpszMenuName     = NULL;
+    mPWinClass.hInstance        = GetModuleHandle(nullptr); //myInstance;
+    mPWinClass.hIcon            = nullptr;
+    mPWinClass.hCursor          = nullptr;
+    mPWinClass.hbrBackground    = reinterpret_cast<HBRUSH>(COLOR_BACKGROUND);
+    mPWinClass.lpszMenuName     = nullptr;
     mPWinClass.lpszClassName    = STAROFFICE_WINDOWCLASS;
 
     RegisterClass(&mPWinClass);
@@ -203,7 +203,7 @@ HRESULT CSOActiveX::Cleanup()
 
         mpDispatchInterceptor->ClearParent();
         mpDispatchInterceptor->Release();
-        mpDispatchInterceptor = NULL;
+        mpDispatchInterceptor = nullptr;
     }
 
     mpDispTempFile = CComPtr< IDispatch >();
@@ -211,7 +211,7 @@ HRESULT CSOActiveX::Cleanup()
 
     if( mpInstanceLocker )
     {
-        ExecuteFunc( mpInstanceLocker, L"dispose", NULL, 0, &dummyResult );
+        ExecuteFunc( mpInstanceLocker, L"dispose", nullptr, 0, &dummyResult );
         mpInstanceLocker = CComPtr< IDispatch >();
     }
 
@@ -238,7 +238,7 @@ HRESULT CSOActiveX::Cleanup()
             if( SUCCEEDED( hr ) )
             {
                 // the following call will let the closing happen
-                hr = ExecuteFunc( pDispDocumentCloser, L"dispose", NULL, 0, &dummyResult );
+                hr = ExecuteFunc( pDispDocumentCloser, L"dispose", nullptr, 0, &dummyResult );
                 bCloserActivated = SUCCEEDED( hr );
             }
         }
@@ -248,7 +248,7 @@ HRESULT CSOActiveX::Cleanup()
             CComVariant aPropVar;
             aPropVar.vt = VT_BOOL; aPropVar.boolVal = VARIANT_TRUE;
             if ( !SUCCEEDED( ExecuteFunc( mpDispFrame, L"close", &aPropVar, 1, &dummyResult ) ) )
-                ExecuteFunc( mpDispFrame, L"dispose", NULL, 0, &dummyResult );
+                ExecuteFunc( mpDispFrame, L"dispose", nullptr, 0, &dummyResult );
         }
 
         mpDispFrame = CComPtr< IDispatch >();
@@ -273,7 +273,7 @@ HRESULT CSOActiveX::TerminateOffice()
 
     // create tree of frames
     CComPtr<IDispatch> pdispChildren;
-    hr = GetIDispByFunc( pdispDesktop, L"getFrames", NULL, 0, pdispChildren );
+    hr = GetIDispByFunc( pdispDesktop, L"getFrames", nullptr, 0, pdispChildren );
     if( !pdispChildren || !SUCCEEDED( hr ) ) return hr;
 
     CComVariant aFrames;
@@ -287,7 +287,7 @@ HRESULT CSOActiveX::TerminateOffice()
             // there is no frames open
             // TODO: check whether the frames are hidden if they are open?
             CComVariant dummyResult;
-            hr = ExecuteFunc( pdispDesktop, L"terminate", NULL, 0, &dummyResult );
+            hr = ExecuteFunc( pdispDesktop, L"terminate", nullptr, 0, &dummyResult );
         }
     }
 
@@ -317,7 +317,7 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG /*pErrorLog*/ 
     mnVersion = GetVersionConnected();
 
     IPropertyBag2* pPropBag2;
-    HRESULT hr = pPropBag->QueryInterface( IID_IPropertyBag2, (void**)&pPropBag2 );
+    HRESULT hr = pPropBag->QueryInterface( IID_IPropertyBag2, reinterpret_cast<void**>(&pPropBag2) );
     //ATLASSERT( hr >= 0 );
 
     if( !SUCCEEDED( hr ) )
@@ -347,7 +347,7 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG /*pErrorLog*/ 
     HRESULT*     hvs = new HRESULT[aNum];
     hr = pPropBag2->Read( aNum,
                           aPropNames,
-                          NULL,
+                          nullptr,
                           aVal,
                           hvs );
     //ATLASSERT( hr >= 0 );
@@ -454,7 +454,7 @@ HRESULT CSOActiveX::SetLayoutManagerProps()
     CComVariant pVarLayoutMgr;
     OLECHAR const * sLMPropName = L"LayoutManager";
     HRESULT hr = GetPropertiesFromIDisp( mpDispFrame, &sLMPropName, &pVarLayoutMgr, 1 );
-    if( pVarLayoutMgr.vt != VT_DISPATCH || pVarLayoutMgr.pdispVal == NULL )
+    if( pVarLayoutMgr.vt != VT_DISPATCH || pVarLayoutMgr.pdispVal == nullptr )
         return E_FAIL;
 
       CComPtr<IDispatch> pdispLM( pVarLayoutMgr.pdispVal );
@@ -558,7 +558,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
 
     // create tree of frames
     CComPtr<IDispatch> pdispChildren;
-    hr = GetIDispByFunc( pdispDesktop, L"getFrames", NULL, 0, pdispChildren );
+    hr = GetIDispByFunc( pdispDesktop, L"getFrames", nullptr, 0, pdispChildren );
     if( !SUCCEEDED( hr ) ) return hr;
 
     // insert new frame into desctop hierarchy
@@ -604,7 +604,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
         // the third sequence element
         nInitInd = 2;
         CComPtr<IDispatch> pdispValueObj;
-        hr = GetIDispByFunc( mpDispFactory, L"Bridge_GetValueObject", NULL, 0, pdispValueObj );
+        hr = GetIDispByFunc( mpDispFactory, L"Bridge_GetValueObject", nullptr, 0, pdispValueObj );
         if( !SUCCEEDED( hr ) || !pdispValueObj ) return hr;
 
         CComVariant aValueArgs[2];
@@ -747,7 +747,7 @@ void CSOActiveX::CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* /*
                 if ( SUCCEEDED( hr ) )
                 {
                     for( DWORD ix = 0; ix < dwSize; ix++ )
-                        ((BYTE*)(pDataArray->pvData))[ix] = pBytes[ix];
+                        static_cast<BYTE*>(pDataArray->pvData)[ix] = pBytes[ix];
                     hr = SafeArrayUnlock( pDataArray );
                     if ( SUCCEEDED( hr ) )
                     {
@@ -809,15 +809,15 @@ HRESULT CSOActiveX::LoadURLToFrame( )
 
     // try to get the model and set the presetation specific property, the setting will fail for other document formats
     CComPtr<IDispatch> pdispController;
-    hr = GetIDispByFunc( mpDispFrame, L"getController", NULL, 0, pdispController );
+    hr = GetIDispByFunc( mpDispFrame, L"getController", nullptr, 0, pdispController );
     if ( SUCCEEDED( hr ) && pdispController )
     {
         CComPtr<IDispatch> pdispModel;
-        hr = GetIDispByFunc( pdispController, L"getModel", NULL, 0, pdispModel );
+        hr = GetIDispByFunc( pdispController, L"getModel", nullptr, 0, pdispModel );
         if ( SUCCEEDED( hr ) && pdispModel )
         {
             CComPtr<IDispatch> pdispPres;
-            hr = GetIDispByFunc( pdispModel, L"getPresentation", NULL, 0, pdispPres );
+            hr = GetIDispByFunc( pdispModel, L"getPresentation", nullptr, 0, pdispPres );
             if ( SUCCEEDED( hr ) && pdispPres )
             {
                 // this is a presentation
@@ -831,7 +831,7 @@ HRESULT CSOActiveX::LoadURLToFrame( )
                 if ( SUCCEEDED( hr ) )
                 {
                     CComVariant dummyResult;
-                    ExecuteFunc( pdispPres, L"Start", NULL, 0, &dummyResult );
+                    ExecuteFunc( pdispPres, L"Start", nullptr, 0, &dummyResult );
                 }
             }
         }
@@ -1001,9 +1001,9 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
                                 di.prcBounds->right - di.prcBounds->left,
                                 di.prcBounds->bottom - di.prcBounds->top,
                                 mParentWin,
-                                NULL,
-                                NULL,
-                                NULL );
+                                nullptr,
+                                nullptr,
+                                nullptr );
 
             ::ShowWindow( mOffWin, SW_SHOW );
         }
@@ -1086,7 +1086,7 @@ HRESULT CSOActiveX::OnDraw( ATL_DRAWINFO& di )
 {
     // fallback that is activated by the parent class
     if ( di.hdcDraw )
-        FillRect( di.hdcDraw, (RECT*)di.prcBounds, (HBRUSH)COLOR_BACKGROUND );
+        FillRect( di.hdcDraw, reinterpret_cast<RECT const *>(di.prcBounds), reinterpret_cast<HBRUSH>(COLOR_BACKGROUND) );
 
     return S_OK;
 }
@@ -1116,7 +1116,7 @@ STDMETHODIMP CSOActiveX::SetClientSite( IOleClientSite* aClientSite )
         {
             aServiceProvider->QueryService( SID_SInternetExplorer,
                                             IID_IWebBrowser,
-                                            (void**)&mWebBrowser2 );
+                                            reinterpret_cast<void**>(&mWebBrowser2) );
 //          ATLASSERT( mWebBrowser2 );
             if( mWebBrowser2 )
                 AtlAdvise( mWebBrowser2, GetUnknown(), DIID_DWebBrowserEvents2, &mCookie );
