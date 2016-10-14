@@ -25,6 +25,7 @@ namespace pdfio
 
 class PDFTrailerElement;
 class PDFObjectElement;
+class PDFHexStringElement;
 
 /// A byte range in a PDF file.
 class PDFElement
@@ -44,6 +45,8 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     PDFTrailerElement* m_pTrailer;
 
     static int AsHex(char ch);
+    /// Decode a hex dump.
+    static std::vector<unsigned char> DecodeHexString(PDFHexStringElement* pElement);
 
 public:
     PDFDocument();
