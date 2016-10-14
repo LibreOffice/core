@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_9373734d",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-10-14T16:52:27Z",
+      "side": 1,
+      "message": "Since this is, if I count correctly, 3rd case of opening an external URL in this class - SID_Q_AND_A, SID_SEND_FEEDBACK and this one - it\u0027d be better to make try-catch block below a separate function that takes (reference to) OUString URL as an argument and actually does the opening.\n\nTo reduce duplicated code",
+      "revId": "c39ba058db92a77cd645359922da201195541426",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
