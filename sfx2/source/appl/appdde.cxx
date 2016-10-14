@@ -77,11 +77,11 @@ public:
 
 namespace
 {
-    sal_Bool lcl_IsDocument( const OUString& rContent )
+    bool lcl_IsDocument( const OUString& rContent )
     {
         using namespace com::sun::star;
 
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         INetURLObject aObj( rContent );
         DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NotValid, "Invalid URL!" );
 
@@ -121,7 +121,7 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
     // The Topic rNm is sought, do we have it?
     // First only loop over the ObjectShells to find those
     // with the specific name:
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     OUString sNm( rNm.toAsciiLowerCase() );
     SfxObjectShell* pShell = SfxObjectShell::GetFirst();
     while( pShell )
@@ -145,17 +145,17 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
         {
             // File exists? then try to load it:
             SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::NO_DECODE ) );
-            SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, sal_True);
+            SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, true);
 
-            SfxBoolItem aSilent(SID_SILENT, sal_True);
+            SfxBoolItem aSilent(SID_SILENT, true);
             SfxDispatcher* pDispatcher = SfxGetpApp()->GetDispatcher_Impl();
             const SfxPoolItem* pRet = pDispatcher->ExecuteList(SID_OPENDOC,
                     SfxCallMode::SYNCHRON,
                     { &aName, &aNewView, &aSilent });
 
             if( pRet && dynamic_cast< const SfxViewFrameItem *>( pRet ) !=  nullptr &&
-                ((SfxViewFrameItem*)pRet)->GetFrame() &&
-                0 != ( pShell = ((SfxViewFrameItem*)pRet)
+                static_cast<SfxViewFrameItem const *>(pRet)->GetFrame() &&
+                nullptr != ( pShell = static_cast<SfxViewFrameItem const *>(pRet)
                     ->GetFrame()->GetObjectShell() ) )
             {
                 SfxGetpApp()->AddDdeTopic( pShell );
@@ -190,7 +190,7 @@ OUString ImplDdeService::Topics()
 
 bool ImplDdeService::SysTopicExecute( const OUString* pStr )
 {
-    return SfxGetpApp()->DdeExecute( *pStr );
+    return SfxApplication::DdeExecute( *pStr );
 }
 #endif
 
@@ -243,7 +243,7 @@ namespace {
     rCmd = "Open(\"d:\doc\doc.sdw\")"
     rEvent = "Open"
 */
-sal_Bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
+bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
                            ApplicationEvent::Type eType )
 {
     OUString sEvent(rEvent + "(");
@@ -299,11 +299,11 @@ sal_Bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
             }
 
             GetpApp()->AppEvent( ApplicationEvent(eType, aData) );
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 }
@@ -466,7 +466,7 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 
     // prevent double submit
     OUString sShellNm;
-    sal_Bool bFnd = sal_False;
+    bool bFnd = false;
     for (size_t n = pImpl->pDocTopics->size(); n;)
     {
         if( (*pImpl->pDocTopics)[ --n ]->pSh == pSh )
@@ -474,7 +474,7 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
             // If the document is untitled, is still a new Topic is created!
             if( !bFnd )
             {
-                bFnd = sal_True;
+                bFnd = true;
                 sShellNm = pSh->GetTitle(SFX_TITLE_FULLNAME).toAsciiLowerCase();
             }
             OUString sNm( (*pImpl->pDocTopics)[ n ]->GetName() );
@@ -534,13 +534,13 @@ DdeData* SfxDdeDocTopic_Impl::Get(SotClipboardFormatId nFormat)
         return &aData;
     }
     aSeq.realloc( 0 );
-    return 0;
+    return nullptr;
 }
 
 bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
 {
     aSeq = css::uno::Sequence< sal_Int8 >(
-                            (sal_Int8*)pData->getData(), pData->getSize() );
+                            static_cast<sal_Int8 const *>(pData->getData()), pData->getSize() );
     bool bRet;
     if( aSeq.getLength() )
     {

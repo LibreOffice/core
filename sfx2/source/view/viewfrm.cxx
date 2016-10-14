@@ -212,30 +212,6 @@ bool SfxViewFrame::IsDowning_Impl() const
     return m_pImpl->bIsDowning;
 }
 
-class SfxViewNotificatedFrameList_Impl :
-    public SfxListener, public SfxViewFrameArr_Impl
-{
-public:
-
-    void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-};
-
-void SfxViewNotificatedFrameList_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
-{
-    switch( rHint.GetId() )
-    {
-        case SFX_HINT_DYING:
-            SfxViewFrame* pFrame = dynamic_cast<SfxViewFrame*>(&rBC);
-            if( pFrame )
-            {
-                iterator it = std::find( begin(), end(), pFrame );
-                if( it != end() )
-                    erase( it );
-            }
-        break;
-    }
-}
-
 void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 {
     SfxFrame *pParent = GetFrame().GetParentFrame();

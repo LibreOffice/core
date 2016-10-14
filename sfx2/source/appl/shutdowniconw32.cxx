@@ -74,9 +74,9 @@ using ::com::sun::star::beans::PropertyValue;
 
 #define SFX_TASKBAR_NOTIFICATION    WM_USER+1
 
-static HWND  aListenerWindow = NULL;
-static HWND  aExecuterWindow = NULL;
-static HMENU popupMenu = NULL;
+static HWND  aListenerWindow = nullptr;
+static HWND  aExecuterWindow = nullptr;
+static HMENU popupMenu = nullptr;
 
 static void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis);
 static void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis);
@@ -89,7 +89,7 @@ typedef struct tagMYITEM
 } MYITEM;
 
 
-static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text, int& pos, int bOwnerdraw, const OUString& module )
+static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text, int& pos, bool bOwnerdraw, const OUString& module )
 {
     MENUITEMINFOW mi;
     memset( &mi, 0, sizeof( MENUITEMINFOW ) );
@@ -113,7 +113,7 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
             pMyItem->text = text;
             pMyItem->iconId = iconId;
             pMyItem->module = module;
-            mi.dwItemData = (DWORD_PTR) pMyItem;
+            mi.dwItemData = reinterpret_cast<DWORD_PTR>(pMyItem);
         }
         else
         {
@@ -121,7 +121,7 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
             mi.fType=MFT_STRING;
             mi.fState=MFS_ENABLED;
             mi.wID = id;
-            mi.dwTypeData = (LPWSTR) text.getStr();
+            mi.dwTypeData = const_cast<sal_Unicode *>(text.getStr());
             mi.cch = text.getLength();
         }
 
@@ -144,7 +144,7 @@ static HMENU createSystrayMenu( )
     OSL_ENSURE( pShutdownIcon, "ShutdownIcon instance empty!");
 
     if( !pShutdownIcon )
-        return NULL;
+        return nullptr;
 
     // collect the URLs of the entries in the File/New menu
     ::std::set< OUString > aFileNewAppsAvailable;
@@ -194,7 +194,7 @@ static HMENU createSystrayMenu( )
             continue;
 
         addMenuItem( hMenu, aMenuItems[i].nMenuItemID, aMenuItems[i].nMenuIconID,
-            pShutdownIcon->GetUrlDescription( sURL ), pos, true, "" );
+            ShutdownIcon::GetUrlDescription( sURL ), pos, true, "" );
     }
 
 
@@ -202,7 +202,7 @@ static HMENU createSystrayMenu( )
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true, "");
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, "" );
-    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, OUString("SHELL32"));
+    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, "SHELL32");
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, "" );
     addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false, "" );
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, "" );
@@ -228,7 +228,7 @@ static void deleteSystrayMenu( HMENU hMenu )
 
     while( GetMenuItemInfoW( hMenu, pos++, true, &mi ) )
     {
-        MYITEM *pMyItem = (MYITEM*) mi.dwItemData;
+        MYITEM *pMyItem = reinterpret_cast<MYITEM*>(mi.dwItemData);
         if( pMyItem )
         {
             (pMyItem->text).clear();
@@ -247,9 +247,9 @@ static void addTaskbarIcon( HWND hWnd )
 
     // add taskbar icon
     NOTIFYICONDATAW nid;
-    nid.hIcon = (HICON)LoadImageA( GetModuleHandle( NULL ), MAKEINTRESOURCE( ICON_LO_DEFAULT ),
+    nid.hIcon = static_cast<HICON>(LoadImageA( GetModuleHandle( nullptr ), MAKEINTRESOURCE( ICON_LO_DEFAULT ),
         IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
-        LR_DEFAULTCOLOR | LR_SHARED );
+        LR_DEFAULTCOLOR | LR_SHARED ));
 
     wcsncpy( nid.szTip, reinterpret_cast<LPCWSTR>(strTip.getStr()), 64 );
 
@@ -281,7 +281,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
                 // create the menu
                 if( !popupMenu )
-                    if( (popupMenu = createSystrayMenu( )) == NULL )
+                    if( (popupMenu = createSystrayMenu( )) == nullptr )
                         return -1;
 
                 // and the icon
@@ -289,16 +289,16 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
                 // disable shutdown
                 ShutdownIcon::getInstance()->SetVeto( true );
-                ShutdownIcon::getInstance()->addTerminateListener();
+                ShutdownIcon::addTerminateListener();
             }
             return 0;
 
         case WM_MEASUREITEM:
-            OnMeasureItem(hWnd, (LPMEASUREITEMSTRUCT) lParam);
+            OnMeasureItem(hWnd, reinterpret_cast<LPMEASUREITEMSTRUCT>(lParam));
             return TRUE;
 
         case WM_DRAWITEM:
-            OnDrawItem(hWnd, (LPDRAWITEMSTRUCT) lParam);
+            OnDrawItem(hWnd, reinterpret_cast<LPDRAWITEMSTRUCT>(lParam));
             return TRUE;
 
         case SFX_TASKBAR_NOTIFICATION:
@@ -306,7 +306,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             {
                 case WM_LBUTTONDBLCLK:
                 {
-                    BOOL const ret = PostMessage(aExecuterWindow, WM_COMMAND, IDM_TEMPLATE, (LPARAM)hWnd);
+                    BOOL const ret = PostMessage(aExecuterWindow, WM_COMMAND, IDM_TEMPLATE, reinterpret_cast<LPARAM>(hWnd));
                     SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
                     break;
                 }
@@ -324,7 +324,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     EnableMenuItem( popupMenu, IDM_OPEN, MF_BYCOMMAND | (ShutdownIcon::bModalMode ? MF_GRAYED : MF_ENABLED) );
                     EnableMenuItem( popupMenu, IDM_TEMPLATE, MF_BYCOMMAND | (ShutdownIcon::bModalMode ? MF_GRAYED : MF_ENABLED) );
                     int m = TrackPopupMenuEx( popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
-                                              pt.x, pt.y, hWnd, NULL );
+                                              pt.x, pt.y, hWnd, nullptr );
                     BOOL const ret = PostMessage( hWnd, 0, 0, 0 );
                     SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
                     switch( m )
@@ -351,7 +351,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                             break;
                     }
 
-                    BOOL const ret2 = PostMessage(aExecuterWindow, WM_COMMAND, m, (LPARAM)hWnd);
+                    BOOL const ret2 = PostMessage(aExecuterWindow, WM_COMMAND, m, reinterpret_cast<LPARAM>(hWnd));
                     SAL_WARN_IF(0 == ret2, "sfx.appl", "ERROR: PostMessage() failed!");
                 }
                 break;
@@ -377,7 +377,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 nid.uID = ID_QUICKSTART;
                 Shell_NotifyIconA(NIM_DELETE, &nid);
 
-                BOOL const ret = PostMessage(aExecuterWindow, WM_COMMAND, IDM_EXIT, (LPARAM)hWnd);
+                BOOL const ret = PostMessage(aExecuterWindow, WM_COMMAND, IDM_EXIT, reinterpret_cast<LPARAM>(hWnd));
                 SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
             }
             else
@@ -404,22 +404,22 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                         ShutdownIcon::FileOpen();
                 break;
                 case IDM_WRITER:
-                    ShutdownIcon::OpenURL( OUString( WRITER_URL  ), OUString( "_default"  ) );
+                    ShutdownIcon::OpenURL( WRITER_URL, "_default" );
                 break;
                 case IDM_CALC:
-                    ShutdownIcon::OpenURL( OUString( CALC_URL  ), OUString( "_default"  ) );
+                    ShutdownIcon::OpenURL( CALC_URL, "_default" );
                 break;
                 case IDM_IMPRESS:
-                    ShutdownIcon::OpenURL( OUString( IMPRESS_WIZARD_URL  ), OUString( "_default"  ) );
+                    ShutdownIcon::OpenURL( IMPRESS_WIZARD_URL, "_default" );
                 break;
                 case IDM_DRAW:
-                    ShutdownIcon::OpenURL( OUString( DRAW_URL  ), OUString( "_default"  ) );
+                    ShutdownIcon::OpenURL( DRAW_URL, "_default" );
                 break;
                 case IDM_BASE:
-                    ShutdownIcon::OpenURL( OUString( BASE_URL  ), OUString( "_default"  ) );
+                    ShutdownIcon::OpenURL( BASE_URL, "_default" );
                 break;
                 case IDM_MATH:
-                    ShutdownIcon::OpenURL( OUString( MATH_URL  ), OUString( "_default"  ) );
+                    ShutdownIcon::OpenURL( MATH_URL, "_default" );
                 break;
                 case IDM_TEMPLATE:
                     if ( !ShutdownIcon::bModalMode )
@@ -456,15 +456,15 @@ DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
         CW_USEDEFAULT,              // vertical position of window
         CW_USEDEFAULT,              // window width
         CW_USEDEFAULT,              // window height
-        (HWND) NULL,                // handle to parent or owner window
-        NULL,                       // menu handle or child identifier
-        (HINSTANCE) GetModuleHandle( NULL ),    // handle to application instance
-        NULL                        // window-creation data
+        nullptr,                    // handle to parent or owner window
+        nullptr,                    // menu handle or child identifier
+        GetModuleHandle( nullptr ), // handle to application instance
+        nullptr                     // window-creation data
         );
 
     MSG msg;
 
-    while ( GetMessage( &msg, NULL, 0, 0 ) )
+    while ( GetMessage( &msg, nullptr, 0, 0 ) )
     {
         TranslateMessage( &msg );
         DispatchMessage( &msg );
@@ -484,13 +484,13 @@ void win32_init_sys_tray()
         listenerClass.lpfnWndProc   = listenerWndProc;
         listenerClass.cbClsExtra    = 0;
         listenerClass.cbWndExtra    = 0;
-        listenerClass.hInstance     = (HINSTANCE) GetModuleHandle( NULL );
-        listenerClass.hIcon         = NULL;
-        listenerClass.hCursor       = NULL;
-        listenerClass.hbrBackground = NULL;
-        listenerClass.lpszMenuName  = NULL;
+        listenerClass.hInstance     = GetModuleHandle( nullptr );
+        listenerClass.hIcon         = nullptr;
+        listenerClass.hCursor       = nullptr;
+        listenerClass.hbrBackground = nullptr;
+        listenerClass.lpszMenuName  = nullptr;
         listenerClass.lpszClassName = QUICKSTART_CLASSNAME;
-        listenerClass.hIconSm       = NULL;
+        listenerClass.hIconSm       = nullptr;
 
         RegisterClassExA(&listenerClass);
 
@@ -500,13 +500,13 @@ void win32_init_sys_tray()
         executerClass.lpfnWndProc   = executerWndProc;
         executerClass.cbClsExtra    = 0;
         executerClass.cbWndExtra    = 0;
-        executerClass.hInstance     = (HINSTANCE) GetModuleHandle( NULL );
-        executerClass.hIcon         = NULL;
-        executerClass.hCursor       = NULL;
-        executerClass.hbrBackground = NULL;
-        executerClass.lpszMenuName  = NULL;
+        executerClass.hInstance     = GetModuleHandle( nullptr );
+        executerClass.hIcon         = nullptr;
+        executerClass.hCursor       = nullptr;
+        executerClass.hbrBackground = nullptr;
+        executerClass.lpszMenuName  = nullptr;
         executerClass.lpszClassName = EXECUTER_WINDOWCLASS;
-        executerClass.hIconSm       = NULL;
+        executerClass.hIconSm       = nullptr;
 
         RegisterClassExA( &executerClass );
 
@@ -518,14 +518,14 @@ void win32_init_sys_tray()
             CW_USEDEFAULT,              // vertical position of window
             CW_USEDEFAULT,              // window width
             CW_USEDEFAULT,              // window height
-            (HWND) NULL,                // handle to parent or owner window
-            NULL,                       // menu handle or child identifier
-            (HINSTANCE) GetModuleHandle( NULL ),    // handle to application instance
-            NULL                        // window-creation data
+            nullptr,                    // handle to parent or owner window
+            nullptr,                    // menu handle or child identifier
+            GetModuleHandle( nullptr ), // handle to application instance
+            nullptr                     // window-creation data
             );
 
         DWORD   dwThreadId;
-        CreateThread( NULL, 0, SystrayThread, NULL, 0, &dwThreadId );
+        CreateThread( nullptr, 0, SystrayThread, nullptr, 0, &dwThreadId );
     }
 }
 
@@ -537,19 +537,19 @@ void win32_shutdown_sys_tray()
         if( IsWindow( aListenerWindow ) )
         {
             DestroyWindow( aListenerWindow );
-            aListenerWindow = NULL;
+            aListenerWindow = nullptr;
             DestroyWindow( aExecuterWindow );
-            aExecuterWindow = NULL;
+            aExecuterWindow = nullptr;
         }
-        UnregisterClassA( QUICKSTART_CLASSNAME, GetModuleHandle( NULL ) );
-        UnregisterClassA( EXECUTER_WINDOWCLASS, GetModuleHandle( NULL ) );
+        UnregisterClassA( QUICKSTART_CLASSNAME, GetModuleHandle( nullptr ) );
+        UnregisterClassA( EXECUTER_WINDOWCLASS, GetModuleHandle( nullptr ) );
     }
 }
 
 
 void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
 {
-    MYITEM *pMyItem = (MYITEM *) lpmis->itemData;
+    MYITEM *pMyItem = reinterpret_cast<MYITEM *>(lpmis->itemData);
     HDC hdc = GetDC(hwnd);
     SIZE size;
 
@@ -557,12 +557,12 @@ void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
     memset(&ncm, 0, sizeof(ncm));
     ncm.cbSize = sizeof(ncm);
 
-    SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, (PVOID) &ncm, 0);
+    SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
 
     // Assume every menu item can be default and printed bold
     ncm.lfMenuFont.lfWeight = FW_BOLD;
 
-    HFONT hfntOld = (HFONT) SelectObject(hdc, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
+    HFONT hfntOld = static_cast<HFONT>(SelectObject(hdc, CreateFontIndirect( &ncm.lfMenuFont )));
 
     GetTextExtentPoint32W(hdc, reinterpret_cast<LPCWSTR>(pMyItem->text.getStr()),
             pMyItem->text.getLength(), &size);
@@ -577,7 +577,7 @@ void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
 
 void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
 {
-    MYITEM *pMyItem = (MYITEM *) lpdis->itemData;
+    MYITEM *pMyItem = reinterpret_cast<MYITEM *>(lpdis->itemData);
     COLORREF clrPrevText, clrPrevBkgnd;
     HFONT hfntOld;
     HBRUSH hbrOld;
@@ -601,7 +601,7 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     else
         clrPrevBkgnd = SetBkColor( lpdis->hDC, GetSysColor(COLOR_MENU) );
 
-    hbrOld = (HBRUSH)SelectObject( lpdis->hDC, CreateSolidBrush( GetBkColor( lpdis->hDC ) ) );
+    hbrOld = static_cast<HBRUSH>(SelectObject( lpdis->hDC, CreateSolidBrush( GetBkColor( lpdis->hDC ) ) ));
 
     // Fill background
     PatBlt(lpdis->hDC, aRect.left, aRect.top, aRect.right-aRect.left, aRect.bottom-aRect.top, PATCOPY);
@@ -613,28 +613,28 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
 
     int     cx = GetSystemMetrics( SM_CXSMICON );
     int     cy = GetSystemMetrics( SM_CYSMICON );
-    HICON   hIcon( 0 );
-    HMODULE hModule( GetModuleHandle( NULL ) );
+    HICON   hIcon( nullptr );
+    HMODULE hModule( GetModuleHandle( nullptr ) );
 
     if ( pMyItem->module.getLength() > 0 )
     {
         LPCWSTR pModuleName = reinterpret_cast<LPCWSTR>( pMyItem->module.getStr() );
         hModule = GetModuleHandleW( pModuleName );
-        if ( hModule == NULL )
+        if ( hModule == nullptr )
         {
             LoadLibraryW( pModuleName );
             hModule = GetModuleHandleW( pModuleName );
         }
     }
 
-    hIcon = (HICON) LoadImageA( hModule, MAKEINTRESOURCE( pMyItem->iconId ),
+    hIcon = static_cast<HICON>(LoadImageA( hModule, MAKEINTRESOURCE( pMyItem->iconId ),
                                 IMAGE_ICON, cx, cy,
-                                LR_DEFAULTCOLOR | LR_SHARED );
+                                LR_DEFAULTCOLOR | LR_SHARED ));
 
 
     HBRUSH hbrIcon = CreateSolidBrush( GetSysColor( COLOR_GRAYTEXT ) );
 
-    DrawStateW( lpdis->hDC, (HBRUSH)hbrIcon, (DRAWSTATEPROC)NULL, (LPARAM)hIcon, (WPARAM)0, x, y+(height-cy)/2, 0, 0, DST_ICON | (fDisabled ? (fSelected ? DSS_MONO : DSS_DISABLED) : DSS_NORMAL) );
+    DrawStateW( lpdis->hDC, hbrIcon, nullptr, reinterpret_cast<LPARAM>(hIcon), (WPARAM)0, x, y+(height-cy)/2, 0, 0, DST_ICON | (fDisabled ? (fSelected ? DSS_MONO : DSS_DISABLED) : DSS_NORMAL) );
 
     DeleteObject( hbrIcon );
 
@@ -645,19 +645,19 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     memset(&ncm, 0, sizeof(ncm));
     ncm.cbSize = sizeof(ncm);
 
-    SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, (PVOID) &ncm, 0);
+    SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
 
     // Print default menu entry with bold font
     if ( lpdis->itemState & ODS_DEFAULT )
         ncm.lfMenuFont.lfWeight = FW_BOLD;
 
-    hfntOld = (HFONT) SelectObject(lpdis->hDC, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
+    hfntOld = static_cast<HFONT>(SelectObject(lpdis->hDC, CreateFontIndirect( &ncm.lfMenuFont )));
 
 
     SIZE    size;
     GetTextExtentPointW( lpdis->hDC, reinterpret_cast<LPCWSTR>(pMyItem->text.getStr()), pMyItem->text.getLength(), &size );
 
-    DrawStateW( lpdis->hDC, (HBRUSH)NULL, (DRAWSTATEPROC)NULL, (LPARAM)pMyItem->text.getStr(), (WPARAM)0, aRect.left, aRect.top + (height - size.cy)/2, 0, 0, DST_TEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) );
+    DrawStateW( lpdis->hDC, nullptr, nullptr, reinterpret_cast<LPARAM>(pMyItem->text.getStr()), (WPARAM)0, aRect.left, aRect.top + (height - size.cy)/2, 0, 0, DST_TEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) );
 
     // Restore the original font and colors.
     DeleteObject( SelectObject( lpdis->hDC, hbrOld ) );
@@ -670,7 +670,7 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
 // code from setup2 project
 
 
-void _SHFree( void *pv )
+void SHFree_( void *pv )
 {
     IMalloc *pMalloc;
     if( NOERROR == SHGetMalloc(&pMalloc) )
@@ -680,14 +680,14 @@ void _SHFree( void *pv )
     }
 }
 
-#define ALLOC(type, n) ((type *) HeapAlloc(GetProcessHeap(), 0, sizeof(type) * n ))
+#define ALLOC(type, n) static_cast<type *>(HeapAlloc(GetProcessHeap(), 0, sizeof(type) * n ))
 #define FREE(p) HeapFree(GetProcessHeap(), 0, p)
 
-static OUString _SHGetSpecialFolder( int nFolderID )
+static OUString SHGetSpecialFolder( int nFolderID )
 {
 
     LPITEMIDLIST    pidl;
-    HRESULT         hHdl = SHGetSpecialFolderLocation( NULL, nFolderID, &pidl );
+    HRESULT         hHdl = SHGetSpecialFolderLocation( nullptr, nFolderID, &pidl );
     OUString        aFolder;
 
     if( hHdl == NOERROR )
@@ -699,14 +699,14 @@ static OUString _SHGetSpecialFolder( int nFolderID )
         aFolder = OUString( reinterpret_cast<const sal_Unicode*>(lpFolderA) );
 
         FREE( lpFolderA );
-        _SHFree( pidl );
+        SHFree_( pidl );
     }
     return aFolder;
 }
 
 OUString ShutdownIcon::GetAutostartFolderNameW32()
 {
-    return _SHGetSpecialFolder(CSIDL_STARTUP);
+    return SHGetSpecialFolder(CSIDL_STARTUP);
 }
 
 static HRESULT WINAPI SHCoCreateInstance( LPVOID lpszReserved, REFCLSID clsid, LPUNKNOWN pUnkUnknown, REFIID iid, LPVOID *ppv )
@@ -714,11 +714,11 @@ static HRESULT WINAPI SHCoCreateInstance( LPVOID lpszReserved, REFCLSID clsid, L
     HRESULT hResult = E_NOTIMPL;
     HMODULE hModShell = GetModuleHandle( "SHELL32" );
 
-    if ( hModShell != NULL )
+    if ( hModShell != nullptr )
     {
         typedef HRESULT (WINAPI *SHCoCreateInstance_PROC)( LPVOID lpszReserved, REFCLSID clsid, LPUNKNOWN pUnkUnknwon, REFIID iid, LPVOID *ppv );
 
-        SHCoCreateInstance_PROC lpfnSHCoCreateInstance = (SHCoCreateInstance_PROC)GetProcAddress( hModShell, MAKEINTRESOURCE(102) );
+        SHCoCreateInstance_PROC lpfnSHCoCreateInstance = reinterpret_cast<SHCoCreateInstance_PROC>(GetProcAddress( hModShell, MAKEINTRESOURCE(102) ));
 
         if ( lpfnSHCoCreateInstance )
             hResult = lpfnSHCoCreateInstance( lpszReserved, clsid, pUnkUnknown, iid, ppv );
@@ -734,10 +734,10 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
     CLSID clsid_ShellLink = CLSID_ShellLink;
     CLSID clsid_IShellLink = IID_IShellLink;
 
-    hres = CoCreateInstance( clsid_ShellLink, NULL, CLSCTX_INPROC_SERVER,
-                             clsid_IShellLink, (void**)&psl );
+    hres = CoCreateInstance( clsid_ShellLink, nullptr, CLSCTX_INPROC_SERVER,
+                             clsid_IShellLink, reinterpret_cast<void**>(&psl) );
     if( FAILED(hres) )
-        hres = SHCoCreateInstance( NULL, clsid_ShellLink, NULL, clsid_IShellLink, (void**)&psl );
+        hres = SHCoCreateInstance( nullptr, clsid_ShellLink, nullptr, clsid_IShellLink, reinterpret_cast<void**>(&psl) );
 
     if( SUCCEEDED(hres) )
     {
@@ -749,7 +749,7 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
             psl->SetArguments( OUStringToOString(rParameter, osl_getThreadTextEncoding()).getStr() );
 
         CLSID clsid_IPersistFile = IID_IPersistFile;
-        hres = psl->QueryInterface( clsid_IPersistFile, (void**)&ppf );
+        hres = psl->QueryInterface( clsid_IPersistFile, reinterpret_cast<void**>(&ppf) );
 
         if( SUCCEEDED(hres) )
         {
@@ -783,7 +783,7 @@ static bool FileExistsW( LPCWSTR lpPath )
 bool ShutdownIcon::IsQuickstarterInstalled()
 {
     wchar_t aPath[_MAX_PATH];
-    GetModuleFileNameW( NULL, aPath, _MAX_PATH-1);
+    GetModuleFileNameW( nullptr, aPath, _MAX_PATH-1);
 
     OUString aOfficepath( reinterpret_cast<const sal_Unicode*>(aPath) );
     int i = aOfficepath.lastIndexOf((sal_Char) '\\');
@@ -799,7 +799,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
 void ShutdownIcon::EnableAutostartW32( const OUString &aShortcut )
 {
     wchar_t aPath[_MAX_PATH];
-    GetModuleFileNameW( NULL, aPath, _MAX_PATH-1);
+    GetModuleFileNameW( nullptr, aPath, _MAX_PATH-1);
 
     OUString aOfficepath( reinterpret_cast<const sal_Unicode*>(aPath) );
     int i = aOfficepath.lastIndexOf((sal_Char) '\\');
