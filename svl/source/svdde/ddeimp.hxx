@@ -41,9 +41,9 @@ class DdeInternal
 {
 public:
     static HDDEDATA CALLBACK CliCallback
-           ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
+           ( UINT, UINT, HCONV, HSZ, HSZ, HDDEDATA, ULONG_PTR, ULONG_PTR );
     static HDDEDATA CALLBACK SvrCallback
-           ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
+           ( UINT, UINT, HCONV, HSZ, HSZ, HDDEDATA, ULONG_PTR, ULONG_PTR );
     static DdeService*      FindService( HSZ );
     static DdeTopic*        FindTopic( DdeService&, HSZ );
     static DdeItem*         FindItem( DdeTopic&, HSZ );
@@ -66,7 +66,7 @@ public:
                 DdeString( DWORD, const OUString& );
                 ~DdeString();
 
-    int         operator==( HSZ );
+    bool        operator==( HSZ );
     HSZ getHSZ();
     OUString toOUString() const { return m_aString; }
 };
@@ -75,8 +75,8 @@ public:
 struct DdeDataImp
 {
     HDDEDATA        hData;
-    LPBYTE          pData;
-    long            nData;
+    void const *    pData;
+    DWORD           nData;
     SotClipboardFormatId nFmt;
 };
 
@@ -99,7 +99,7 @@ public:
         : nRefCount(0)
         , hDdeInstSvr(0)
         , nInstanceSvr(0)
-        , pServicesSvr(NULL)
+        , pServicesSvr(nullptr)
         , hDdeInstCli(0)
         , nInstanceCli(0)
     {
