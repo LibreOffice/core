@@ -94,8 +94,6 @@ private:
     class ProgressInfo;
     std::unique_ptr<ProgressInfo> pProgress;
 
-    virtual void DataChanged(DataChangedEvent const & rDCEvt) override;
-
     using           Window::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -156,6 +154,7 @@ public:
 
     bool            CanModify() { return ImpCanModify(); }
 
+    void            ChangeFontColor( Color aColor );
     void            UpdateSyntaxHighlighting ();
 
     bool            GetProcedureName(OUString& rLine, OUString& rProcType, OUString& rProcName) const;
@@ -428,6 +427,8 @@ public:
 public:
     void BasicAddWatch (OUString const&);
     void BasicRemoveWatch ();
+    Color GetBackgroundColor () const { return aSyntaxColors.GetBackgroundColor(); }
+    Color GetFontColor () const { return aSyntaxColors.GetFontColor(); }
     Color GetSyntaxColor (TokenType eType) const { return aSyntaxColors.GetColor(eType); }
 
 protected:
@@ -443,9 +444,7 @@ private:
     VclPtr<WatchWindow> aWatchWindow;
     VclPtr<StackWindow> aStackWindow;
     ObjectCatalog& rObjectCatalog;
-private:
-    virtual void DataChanged (DataChangedEvent const& rDCEvt) override;
-private:
+
     // SyntaxColors -- stores Basic syntax highlighting colors
     class SyntaxColors : public utl::ConfigurationListener
     {
@@ -454,8 +453,9 @@ private:
         virtual ~SyntaxColors () override;
     public:
         void SetActiveEditor (EditorWindow* pEditor_) { pEditor = pEditor_; }
-        void SettingsChanged ();
     public:
+        Color GetBackgroundColor () const { return m_aBackgroundColor; };
+        Color GetFontColor () const { return m_aFontColor; }
         Color GetColor (TokenType eType) const { return aColors[eType]; }
 
     private:
@@ -463,6 +463,8 @@ private:
         void NewConfig (bool bFirst);
 
     private:
+        Color m_aBackgroundColor;
+        Color m_aFontColor;
         // the color values (the indexes are TokenType, see comphelper/syntaxhighlight.hxx)
         o3tl::enumarray<TokenType, Color> aColors;
         // the configuration
