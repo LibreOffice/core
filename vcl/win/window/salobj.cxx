@@ -61,12 +61,12 @@ WinSalObject* ImplFindSalObject( HWND hWndChild )
         pObject = pObject->mpNextObject;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
 {
-    WinSalFrame* pFrame = NULL;
+    WinSalFrame* pFrame = nullptr;
     WinSalObject* pObject = ImplFindSalObject( hWnd );
     if ( pObject )
     {
@@ -92,7 +92,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 
     if ( (nCode >= 0) && lParam )
     {
-        CWPSTRUCT* pData = (CWPSTRUCT*)lParam;
+        CWPSTRUCT* pData = reinterpret_cast<CWPSTRUCT*>(lParam);
         if ( (pData->message != WM_KEYDOWN) &&
              (pData->message != WM_KEYUP) )
             pSalData->mnSalObjWantKeyEvt = 0;
@@ -108,7 +108,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
                 pObject->mhLastFocusWnd = pData->hwnd;
                 if ( ImplSalYieldMutexTryToAcquire() )
                 {
-                    pObject->CallCallback( SalObjEvent::GetFocus, 0 );
+                    pObject->CallCallback( SalObjEvent::GetFocus, nullptr );
                     ImplSalYieldMutexRelease();
                 }
                 else
@@ -121,14 +121,14 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
         else if ( pData->message == WM_KILLFOCUS )
         {
             pObject = ImplFindSalObject( pData->hwnd );
-            if ( pObject && !ImplFindSalObject( (HWND)pData->wParam ) )
+            if ( pObject && !ImplFindSalObject( reinterpret_cast<HWND>(pData->wParam) ) )
             {
                 // only call LoseFocus, if truly no child window gets the focus
-                if ( !pData->wParam || !ImplFindSalObject( (HWND)pData->wParam ) )
+                if ( !pData->wParam || !ImplFindSalObject( reinterpret_cast<HWND>(pData->wParam) ) )
                 {
                     if ( ImplSalYieldMutexTryToAcquire() )
                     {
-                        pObject->CallCallback( SalObjEvent::LoseFocus, 0 );
+                        pObject->CallCallback( SalObjEvent::LoseFocus, nullptr );
                         ImplSalYieldMutexRelease();
                     }
                     else
@@ -138,7 +138,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
                     }
                 }
                 else
-                    pObject->mhLastFocusWnd = (HWND)pData->wParam;
+                    pObject->mhLastFocusWnd = reinterpret_cast<HWND>(pData->wParam);
             }
         }
     }
@@ -286,7 +286,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
                 ImplSalYieldMutexAcquireWithWait();
                 pSysObj = GetSalObjWindowPtr( hWnd );
                 if ( pSysObj && !pSysObj->IsMouseTransparent() )
-                    pSysObj->CallCallback( SalObjEvent::ToTop, 0 );
+                    pSysObj->CallCallback( SalObjEvent::ToTop, nullptr );
                 ImplSalYieldMutexRelease();
             }
             }
@@ -309,7 +309,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             if ( ImplSalYieldMutexTryToAcquire() )
             {
                 pSysObj = GetSalObjWindowPtr( hWnd );
-                pSysObj->CallCallback( SalObjEvent::ToTop, 0 );
+                pSysObj->CallCallback( SalObjEvent::ToTop, nullptr );
                 ImplSalYieldMutexRelease();
                 rDef = FALSE;
             }
@@ -330,7 +330,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
                     nEvent = SalObjEvent::GetFocus;
                 else
                     nEvent = SalObjEvent::LoseFocus;
-                pSysObj->CallCallback( nEvent, 0 );
+                pSysObj->CallCallback( nEvent, nullptr );
                 ImplSalYieldMutexRelease();
             }
             else
@@ -347,7 +347,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             if ( hWndChild )
             {
                 SetWindowPos( hWndChild,
-                              0, 0,  0, (int)LOWORD( lParam ), (int)HIWORD( lParam ),
+                              nullptr, 0,  0, (int)LOWORD( lParam ), (int)HIWORD( lParam ),
                               SWP_NOZORDER | SWP_NOACTIVATE );
             }
             }
@@ -359,8 +359,8 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             // Window-Instanz am Windowhandle speichern
             // Can also be used for the W-Version, because the struct
             // to access lpCreateParams is the same structure
-            CREATESTRUCTA* pStruct = (CREATESTRUCTA*)lParam;
-            pSysObj = (WinSalObject*)pStruct->lpCreateParams;
+            CREATESTRUCTA* pStruct = reinterpret_cast<CREATESTRUCTA*>(lParam);
+            pSysObj = static_cast<WinSalObject*>(pStruct->lpCreateParams);
             SetSalObjWindowPtr( hWnd, pSysObj );
             // set HWND already here,
             // as instance data might be used during CreateWindow() events
@@ -475,17 +475,17 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
         aWndClassEx.cbClsExtra      = 0;
         aWndClassEx.cbWndExtra      = SAL_OBJECT_WNDEXTRA;
         aWndClassEx.hInstance       = pSalData->mhInst;
-        aWndClassEx.hIcon           = 0;
-        aWndClassEx.hIconSm         = 0;
-        aWndClassEx.hCursor         = LoadCursor( 0, IDC_ARROW );
-        aWndClassEx.hbrBackground   = 0;
-        aWndClassEx.lpszMenuName    = 0;
+        aWndClassEx.hIcon           = nullptr;
+        aWndClassEx.hIconSm         = nullptr;
+        aWndClassEx.hCursor         = LoadCursor( nullptr, IDC_ARROW );
+        aWndClassEx.hbrBackground   = nullptr;
+        aWndClassEx.lpszMenuName    = nullptr;
         aWndClassEx.lpszClassName   = SAL_OBJECT_CLASSNAMEA;
         if ( RegisterClassExA( &aWndClassEx ) )
         {
             // Clean background first because of plugins.
             aWndClassEx.cbWndExtra      = 0;
-            aWndClassEx.hbrBackground   = (HBRUSH)(COLOR_WINDOW+1);
+            aWndClassEx.hbrBackground   = reinterpret_cast<HBRUSH>(COLOR_WINDOW+1);
             aWndClassEx.lpfnWndProc     = SalSysObjChildWndProcA;
             aWndClassEx.lpszClassName   = SAL_OBJECT_CHILDCLASSNAMEA;
             if ( RegisterClassExA( &aWndClassEx ) )
@@ -503,10 +503,10 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
         // animations .
         HWND hWnd = CreateWindowExA( 0, SAL_OBJECT_CLASSNAMEA, "",
                                      WS_CHILD | WS_CLIPSIBLINGS, 0, 0, 0, 0,
-                                     pParent->mhWnd, 0,
-                                     pInst->mhInst, (void*)pObject );
+                                     pParent->mhWnd, nullptr,
+                                     pInst->mhInst, pObject );
 
-        HWND hWndChild = 0;
+        HWND hWndChild = nullptr;
         if ( hWnd )
         {
             // #135235# Explicitely stack SystemChildWindows in
@@ -517,8 +517,8 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
             hWndChild = CreateWindowExA( 0, SAL_OBJECT_CHILDCLASSNAMEA, "",
                                          WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
                                          0, 0, 0, 0,
-                                         hWnd, 0,
-                                         pInst->mhInst, NULL );
+                                         hWnd, nullptr,
+                                         pInst->mhInst, nullptr );
         }
 
         if ( !hWndChild )
@@ -533,7 +533,7 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
             MessageBoxA(NULL, msg, "CreateWindowExA failed", MB_OK);
 #endif
             delete pObject;
-            return NULL;
+            return nullptr;
         }
 
         if ( hWnd )
@@ -545,18 +545,18 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 WinSalObject::WinSalObject()
 {
     SalData* pSalData = GetSalData();
 
-    mhWnd           = 0;
-    mhWndChild      = 0;
-    mhLastFocusWnd  = 0;
+    mhWnd           = nullptr;
+    mhWndChild      = nullptr;
+    mhLastFocusWnd  = nullptr;
     maSysData.nSize = sizeof( SystemEnvData );
-    mpStdClipRgnData    = NULL;
+    mpStdClipRgnData    = nullptr;
 
     // Insert object in objectlist
     mpNextObject = pSalData->mpFirstObject;
@@ -586,7 +586,7 @@ WinSalObject::~WinSalObject()
     }
 
     // Cache-Daten zerstoeren
-    delete [] (BYTE*)mpStdClipRgnData;
+    delete [] reinterpret_cast<BYTE*>(mpStdClipRgnData);
 
     HWND hWndParent = ::GetParent( mhWnd );
 
@@ -605,7 +605,7 @@ WinSalObject::~WinSalObject()
 
 void WinSalObject::ResetClipRegion()
 {
-    SetWindowRgn( mhWnd, 0, TRUE );
+    SetWindowRgn( mhWnd, nullptr, TRUE );
 }
 
 void WinSalObject::BeginSetClipRegion( sal_uLong nRectCount )
@@ -614,17 +614,17 @@ void WinSalObject::BeginSetClipRegion( sal_uLong nRectCount )
     if ( nRectCount < SAL_CLIPRECT_COUNT )
     {
         if ( !mpStdClipRgnData )
-            mpStdClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+(SAL_CLIPRECT_COUNT*sizeof(RECT))];
+            mpStdClipRgnData = reinterpret_cast<RGNDATA*>(new BYTE[sizeof(RGNDATA)-1+(SAL_CLIPRECT_COUNT*sizeof(RECT))]);
         mpClipRgnData = mpStdClipRgnData;
     }
     else
-        mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
+        mpClipRgnData = reinterpret_cast<RGNDATA*>(new BYTE[sizeof(RGNDATA)-1+nRectBufSize]);
     mpClipRgnData->rdh.dwSize     = sizeof( RGNDATAHEADER );
     mpClipRgnData->rdh.iType      = RDH_RECTANGLES;
     mpClipRgnData->rdh.nCount     = nRectCount;
     mpClipRgnData->rdh.nRgnSize  = nRectBufSize;
     SetRectEmpty( &(mpClipRgnData->rdh.rcBound) );
-    mpNextClipRect        = (RECT*)(&(mpClipRgnData->Buffer));
+    mpNextClipRect        = reinterpret_cast<RECT*>(&(mpClipRgnData->Buffer));
     mbFirstClipRect       = TRUE;
 }
 
@@ -679,9 +679,9 @@ void WinSalObject::EndSetClipRegion()
     else
     {
         sal_uLong nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
-        hRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
+        hRegion = ExtCreateRegion( nullptr, nSize, mpClipRgnData );
         if ( mpClipRgnData != mpStdClipRgnData )
-            delete [] (BYTE*)mpClipRgnData;
+            delete [] reinterpret_cast<BYTE*>(mpClipRgnData);
     }
 
     SAL_WARN_IF( !hRegion, "vcl", "SalObject::EndSetClipRegion() - Can't create ClipRegion" );
@@ -697,7 +697,7 @@ void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
         ShowWindow( mhWnd, SW_HIDE );
         nStyle |= SWP_SHOWWINDOW;
     }
-    SetWindowPos( mhWnd, 0,
+    SetWindowPos( mhWnd, nullptr,
                   (int)nX, (int)nY, (int)nWidth, (int)nHeight,
                   SWP_NOZORDER | SWP_NOACTIVATE | nStyle );
 }

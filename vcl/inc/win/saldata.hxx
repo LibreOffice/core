@@ -59,8 +59,8 @@ public:
     ~SalData();
 
     // native widget framework
-    void    initNWF();
-    void    deInitNWF();
+    static void initNWF();
+    static void deInitNWF();
 
     // fill maVKMap;
     void initKeyCodeMap();
@@ -151,7 +151,7 @@ struct HDCCache
 };
 
 void ImplClearHDCCache( SalData* pData );
-HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp = 0 );
+HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp = nullptr );
 void ImplReleaseCachedDC( sal_uLong nID );
 
 bool ImplAddTempFont( SalData&, const OUString& rFontFileURL );
@@ -273,22 +273,22 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 
 inline void SetWindowPtr( HWND hWnd, WinSalFrame* pThis )
 {
-    SetWindowLongPtr( hWnd, SAL_FRAME_THIS, (LONG_PTR)pThis );
+    SetWindowLongPtr( hWnd, SAL_FRAME_THIS, reinterpret_cast<LONG_PTR>(pThis) );
 }
 
 inline WinSalFrame* GetWindowPtr( HWND hWnd )
 {
-    return (WinSalFrame*)GetWindowLongPtrW( hWnd, SAL_FRAME_THIS );
+    return reinterpret_cast<WinSalFrame*>(GetWindowLongPtrW( hWnd, SAL_FRAME_THIS ));
 }
 
 inline void SetSalObjWindowPtr( HWND hWnd, WinSalObject* pThis )
 {
-    SetWindowLongPtr( hWnd, SAL_OBJECT_THIS, (LONG_PTR)pThis );
+    SetWindowLongPtr( hWnd, SAL_OBJECT_THIS, reinterpret_cast<LONG_PTR>(pThis) );
 }
 
 inline WinSalObject* GetSalObjWindowPtr( HWND hWnd )
 {
-    return (WinSalObject*)GetWindowLongPtr( hWnd, SAL_OBJECT_THIS );
+    return reinterpret_cast<WinSalObject*>(GetWindowLongPtr( hWnd, SAL_OBJECT_THIS ));
 }
 
 #endif // INCLUDED_VCL_INC_WIN_SALDATA_HXX

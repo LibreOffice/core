@@ -67,7 +67,7 @@ bool GetKeyValue(const WCHAR* keyLocation, const WCHAR* keyName, OUString& destS
                 // We only use this for vram size
                 dwcbData = sizeof(dValue);
                 result = RegQueryValueExW(key, keyName, nullptr, &resultType,
-                        (LPBYTE)&dValue, &dwcbData);
+                        reinterpret_cast<LPBYTE>(&dValue), &dwcbData);
                 if (result == ERROR_SUCCESS && resultType == REG_DWORD)
                 {
                     dValue = dValue / 1024 / 1024;
@@ -86,7 +86,7 @@ bool GetKeyValue(const WCHAR* keyLocation, const WCHAR* keyName, OUString& destS
                 dwcbData = sizeof(wCharValue);
 
                 result = RegQueryValueExW(key, keyName, nullptr, &resultType,
-                        (LPBYTE)wCharValue, &dwcbData);
+                        reinterpret_cast<LPBYTE>(wCharValue), &dwcbData);
                 if (result == ERROR_SUCCESS && resultType == REG_MULTI_SZ)
                 {
                     // This bit here could probably be cleaner.
@@ -401,8 +401,8 @@ private:
 }
 
 bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList(std::vector<wgl::DriverInfo>& aDeviceInfos,
-                                                      OUString sDriverVersion, OUString sAdapterVendorID,
-                                                      OUString sAdapterDeviceID, uint32_t nWindowsVersion)
+                                                      OUString const & sDriverVersion, OUString const & sAdapterVendorID,
+                                                      OUString const & sAdapterDeviceID, uint32_t nWindowsVersion)
 {
     uint64_t driverVersion;
     wgl::ParseDriverVersion(sDriverVersion, driverVersion);
@@ -509,7 +509,7 @@ OUString getCacheFolder()
     return url;
 }
 
-void writeToLog(SvStream& rStrm, const char* pKey, const OUString rVal)
+void writeToLog(SvStream& rStrm, const char* pKey, const OUString & rVal)
 {
     rStrm.WriteCharPtr(pKey);
     rStrm.WriteCharPtr(": ");
@@ -636,7 +636,7 @@ void WinOpenGLDeviceInfo::GetData()
                         &devinfoData,
                         SPDRP_DRIVER,
                         nullptr,
-                        (PBYTE)value,
+                        reinterpret_cast<PBYTE>(value),
                         sizeof(value),
                         nullptr))
             {
@@ -648,7 +648,7 @@ void WinOpenGLDeviceInfo::GetData()
                     /* we've found the driver we're looking for */
                     dwcbData = sizeof(value);
                     result = RegQueryValueExW(key, L"DriverVersion", nullptr, nullptr,
-                            (LPBYTE)value, &dwcbData);
+                            reinterpret_cast<LPBYTE>(value), &dwcbData);
                     if (result == ERROR_SUCCESS)
                     {
                         maDriverVersion = OUString(value);
@@ -660,7 +660,7 @@ void WinOpenGLDeviceInfo::GetData()
                     }
                     dwcbData = sizeof(value);
                     result = RegQueryValueExW(key, L"DriverDate", nullptr, nullptr,
-                            (LPBYTE)value, &dwcbData);
+                            reinterpret_cast<LPBYTE>(value), &dwcbData);
                     if (result == ERROR_SUCCESS)
                     {
                         maDriverDate = value;
@@ -725,7 +725,7 @@ void WinOpenGLDeviceInfo::GetData()
                             &devinfoData,
                             SPDRP_DRIVER,
                             nullptr,
-                            (PBYTE)value,
+                            reinterpret_cast<PBYTE>(value),
                             sizeof(value),
                             nullptr))
                 {
@@ -736,7 +736,7 @@ void WinOpenGLDeviceInfo::GetData()
                     {
                         dwcbData = sizeof(value);
                         result = RegQueryValueExW(key, L"MatchingDeviceId", nullptr,
-                                nullptr, (LPBYTE)value, &dwcbData);
+                                nullptr, reinterpret_cast<LPBYTE>(value), &dwcbData);
                         if (result != ERROR_SUCCESS)
                         {
                             continue;
@@ -765,7 +765,7 @@ void WinOpenGLDeviceInfo::GetData()
                         }
                         dwcbData = sizeof(value);
                         result = RegQueryValueExW(key, L"DriverVersion", nullptr, nullptr,
-                                (LPBYTE)value, &dwcbData);
+                                reinterpret_cast<LPBYTE>(value), &dwcbData);
                         if (result != ERROR_SUCCESS)
                         {
                             RegCloseKey(key);
@@ -774,7 +774,7 @@ void WinOpenGLDeviceInfo::GetData()
                         aDriverVersion2 = value;
                         dwcbData = sizeof(value);
                         result = RegQueryValueExW(key, L"DriverDate", nullptr, nullptr,
-                                (LPBYTE)value, &dwcbData);
+                                reinterpret_cast<LPBYTE>(value), &dwcbData);
                         if (result != ERROR_SUCCESS)
                         {
                             RegCloseKey(key);
@@ -783,12 +783,12 @@ void WinOpenGLDeviceInfo::GetData()
                         aDriverDate2 = value;
                         dwcbData = sizeof(value);
                         result = RegQueryValueExW(key, L"Device Description", nullptr,
-                                nullptr, (LPBYTE)value, &dwcbData);
+                                nullptr, reinterpret_cast<LPBYTE>(value), &dwcbData);
                         if (result != ERROR_SUCCESS)
                         {
                             dwcbData = sizeof(value);
                             result = RegQueryValueExW(key, L"DriverDesc", nullptr, nullptr,
-                                    (LPBYTE)value, &dwcbData);
+                                    reinterpret_cast<LPBYTE>(value), &dwcbData);
                         }
                         RegCloseKey(key);
                         if (result == ERROR_SUCCESS)
@@ -816,7 +816,7 @@ void WinOpenGLDeviceInfo::GetData()
 // Macro for assigning a device vendor id to a string.
 #define DECLARE_VENDOR_ID(name, deviceId) \
     case name: \
-        *mpDeviceVendors[id] = OUString(deviceId); \
+        *mpDeviceVendors[id] = deviceId; \
 break;
 
 OUString WinOpenGLDeviceInfo::GetDeviceVendor(wgl::DeviceVendor id)
@@ -866,7 +866,7 @@ void WinOpenGLDeviceInfo::FillBlacklist()
     }
     catch (...)
     {
-        SAL_WARN("vcl.opengl.win", "error parsing blacklist");
+        SAL_WARN("vcl.opengl", "error parsing blacklist");
         maDriverInfo.clear();
     }
 }

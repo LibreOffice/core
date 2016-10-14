@@ -153,9 +153,7 @@ uint64_t getVersion(const OString& rString)
     return nVersion;
 }
 
-}
-
-void WinBlocklistParser::handleDevices(wgl::DriverInfo& rDriver, xmlreader::XmlReader& rReader)
+void handleDevices(wgl::DriverInfo& rDriver, xmlreader::XmlReader& rReader)
 {
     int nLevel = 1;
     bool bInMsg = false;
@@ -210,6 +208,8 @@ void WinBlocklistParser::handleDevices(wgl::DriverInfo& rDriver, xmlreader::XmlR
             }
         }
     }
+}
+
 }
 
 void WinBlocklistParser::handleEntry(wgl::DriverInfo& rDriver, xmlreader::XmlReader& rReader)
@@ -271,7 +271,7 @@ void WinBlocklistParser::handleEntry(wgl::DriverInfo& rDriver, xmlreader::XmlRea
         else
         {
             OString aAttrName(name.begin, name.length);
-            SAL_WARN("vcl.opengl.win", "unsupported attribute: " << aAttrName);
+            SAL_WARN("vcl.opengl", "unsupported attribute: " << aAttrName);
         }
     }
 

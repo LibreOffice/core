@@ -256,10 +256,6 @@ BlendFrameCache* ImplGetBlendFrameCache()
 }
 
 #ifdef _WIN32
-bool HasAtHook();
-#endif
-
-#ifdef _WIN32
 bool ImplInitAccessBridge()
 {
     ImplSVData* pSVData = ImplGetSVData();

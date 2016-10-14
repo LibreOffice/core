@@ -68,7 +68,7 @@ demo_font_create (
 #endif
 		  demo_atlas_t *atlas)
 {
-  demo_font_t *font = (demo_font_t *) calloc (1, sizeof (demo_font_t));
+  demo_font_t *font = static_cast<demo_font_t *>(calloc (1, sizeof (demo_font_t)));
   font->refcount = 1;
 
   font->face = face;
@@ -191,7 +191,7 @@ encode_glyph (demo_font_t      *font,
   matrix.eM22.value = 1;
   matrix.eM22.fract = 0;
 
-  DWORD size = GetGlyphOutlineW (hdc, glyph_index, GGO_NATIVE|GGO_GLYPH_INDEX, &glyph_metrics, 0, NULL, &matrix);
+  DWORD size = GetGlyphOutlineW (hdc, glyph_index, GGO_NATIVE|GGO_GLYPH_INDEX, &glyph_metrics, 0, nullptr, &matrix);
   if (size == GDI_ERROR)
     die ("GetGlyphOutlineW failed");
   std::vector<char> buf(size);
@@ -199,7 +199,7 @@ encode_glyph (demo_font_t      *font,
   if (size == GDI_ERROR)
     die ("GetGlyphOutlineW failed");
 
-  size = GetGlyphOutlineW (hdc, glyph_index, GGO_METRICS|GGO_GLYPH_INDEX, &glyph_metrics, 0, NULL, &matrix);
+  size = GetGlyphOutlineW (hdc, glyph_index, GGO_METRICS|GGO_GLYPH_INDEX, &glyph_metrics, 0, nullptr, &matrix);
   if (size == GDI_ERROR)
     die ("GetGlyphOutlineW failed");
 
@@ -215,10 +215,10 @@ encode_glyph (demo_font_t      *font,
   glyphy_arc_accumulator_reset (font->acc);
   glyphy_arc_accumulator_set_tolerance (font->acc, tolerance);
   glyphy_arc_accumulator_set_callback (font->acc,
-				       (glyphy_arc_endpoint_accumulator_callback_t) accumulate_endpoint,
+				       reinterpret_cast<glyphy_arc_endpoint_accumulator_callback_t>(accumulate_endpoint),
 				       &endpoints);
 
-  if (0 != glyphy_windows(outline_decompose) ((TTPOLYGONHEADER *) buf.data(), buf.size(), font->acc))
+  if (0 != glyphy_windows(outline_decompose) (reinterpret_cast<TTPOLYGONHEADER *>(buf.data()), buf.size(), font->acc))
     die ("Failed converting glyph outline to arcs");
 #endif
 
@@ -240,14 +240,14 @@ encode_glyph (demo_font_t      *font,
   }
 
   if (SCALE != 1.)
-    for (unsigned int i = 0; i < endpoints.size (); i++)
+    for (std::vector<glyphy_arc_endpoint_t>::size_type i = 0; i < endpoints.size (); i++)
     {
       endpoints[i].p.x /= SCALE;
       endpoints[i].p.y /= SCALE;
     }
 
   double avg_fetch_achieved;
-  if (!glyphy_arc_list_encode_blob (endpoints.size () ? &endpoints[0] : NULL, endpoints.size (),
+  if (!glyphy_arc_list_encode_blob (endpoints.size () ? &endpoints[0] : nullptr, endpoints.size (),
 				    buffer,
 				    buffer_len,
 				    faraway / SCALE,
@@ -270,7 +270,7 @@ encode_glyph (demo_font_t      *font,
   *advance = glyph_metrics.gmCellIncX / (double) upem; /* ??? */
 #endif
 
-  if (0)
+  if (false)
     LOGI ("gid%3u: endpoints%3d; err%3g%%; tex fetch%4.1f; mem%4.1fkb\n",
 	  glyph_index,
 	  (unsigned int) glyphy_arc_accumulator_get_num_endpoints (font->acc),
@@ -286,7 +286,7 @@ encode_glyph (demo_font_t      *font,
 }
 
 static void
-_demo_font_upload_glyph (demo_font_t *font,
+demo_font_upload_glyph (demo_font_t *font,
 			 unsigned int glyph_index,
 			 glyph_info_t *glyph_info)
 {
@@ -315,7 +315,7 @@ demo_font_lookup_glyph (demo_font_t  *font,
 			glyph_info_t *glyph_info)
 {
   if (font->glyph_cache->find (glyph_index) == font->glyph_cache->end ()) {
-    _demo_font_upload_glyph (font, glyph_index, glyph_info);
+    demo_font_upload_glyph (font, glyph_index, glyph_info);
     (*font->glyph_cache)[glyph_index] = *glyph_info;
   } else
     *glyph_info = (*font->glyph_cache)[glyph_index];

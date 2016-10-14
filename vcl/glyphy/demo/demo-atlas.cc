@@ -45,10 +45,10 @@ demo_atlas_create (unsigned int w,
 {
   TRACE();
 
-  demo_atlas_t *at = (demo_atlas_t *) calloc (1, sizeof (demo_atlas_t));
+  demo_atlas_t *at = static_cast<demo_atlas_t *>(calloc (1, sizeof (demo_atlas_t)));
   at->refcount = 1;
 
-  glGetIntegerv (GL_ACTIVE_TEXTURE, (GLint *) &at->tex_unit);
+  glGetIntegerv (GL_ACTIVE_TEXTURE, reinterpret_cast<GLint *>(&at->tex_unit));
   glGenTextures (1, &at->tex_name);
   at->tex_w = w;
   at->tex_h = h;
@@ -62,7 +62,7 @@ demo_atlas_create (unsigned int w,
   glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-  gl(TexImage2D) (GL_TEXTURE_2D, 0, GL_RGBA, at->tex_w, at->tex_h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+  gl(TexImage2D) (GL_TEXTURE_2D, 0, GL_RGBA, at->tex_w, at->tex_h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
   return at;
 }
@@ -95,7 +95,7 @@ void
 demo_atlas_set_uniforms (demo_atlas_t *at)
 {
   GLuint program;
-  glGetIntegerv (GL_CURRENT_PROGRAM, (GLint *) &program);
+  glGetIntegerv (GL_CURRENT_PROGRAM, reinterpret_cast<GLint *>(&program));
 
   glUniform4i (glGetUniformLocation (program, "u_atlas_info"),
 	       at->tex_w, at->tex_h, at->item_w, at->item_h_q);

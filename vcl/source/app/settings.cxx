@@ -2441,15 +2441,15 @@ bool MiscSettings::GetEnableATToolSupport() const
             DWORD cbData = sizeof(Data);
 
             if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
-                NULL, &dwType, Data, &cbData) )
+                nullptr, &dwType, Data, &cbData) )
             {
                 switch (dwType)
                 {
                     case REG_SZ:
-                        mxData->mnEnableATT = ((0 == stricmp((const char *) Data, "1")) || (0 == stricmp((const char *) Data, "true"))) ? TRISTATE_TRUE : TRISTATE_FALSE;
+                        mxData->mnEnableATT = ((0 == stricmp(reinterpret_cast<const char *>(Data), "1")) || (0 == stricmp(reinterpret_cast<const char *>(Data), "true"))) ? TRISTATE_TRUE : TRISTATE_FALSE;
                         break;
                     case REG_DWORD:
-                        switch (((DWORD *) Data)[0]) {
+                        switch (reinterpret_cast<DWORD *>(Data)[0]) {
                         case 0:
                             mxData->mnEnableATT = TRISTATE_FALSE;
                             break;
@@ -2513,18 +2513,18 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
             DWORD cbData = sizeof(Data);
 
             if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
-                NULL,   &dwType, Data, &cbData) )
+                nullptr,   &dwType, Data, &cbData) )
             {
                 switch (dwType)
                 {
                     case REG_SZ:
                         RegSetValueEx(hkey, "SupportAssistiveTechnology",
                             0, dwType,
-                            bEnable ? (sal_uInt8 *) "true" : (sal_uInt8 *) "false",
+                            reinterpret_cast<sal_uInt8 const *>(bEnable ? "true" : "false"),
                             bEnable ? sizeof("true") : sizeof("false"));
                         break;
                     case REG_DWORD:
-                        ((DWORD *) Data)[0] = bEnable ? 1 : 0;
+                        reinterpret_cast<DWORD *>(Data)[0] = bEnable ? 1 : 0;
                         RegSetValueEx(hkey, "SupportAssistiveTechnology",
                             0, dwType, Data, sizeof(DWORD));
                         break;
@@ -2538,8 +2538,8 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
         }
 
         vcl::SettingsConfigItem::get()->
-            setValue( OUString( "Accessibility"  ),
-                      OUString( "EnableATToolSupport"  ),
+            setValue( "Accessibility",
+                      "EnableATToolSupport",
                       bEnable ? OUString("true") : OUString("false" ) );
         mxData->mnEnableATT = bEnable ? TRISTATE_TRUE : TRISTATE_FALSE;
     }

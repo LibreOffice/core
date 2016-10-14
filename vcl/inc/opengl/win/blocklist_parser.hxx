@@ -24,7 +24,6 @@ public:
 
 private:
     void handleEntry(wgl::DriverInfo& rDriver, xmlreader::XmlReader& rReader);
-    void handleDevices(wgl::DriverInfo& rDriver, xmlreader::XmlReader& rReader);
     void handleList(xmlreader::XmlReader& rReader);
     void handleContent(xmlreader::XmlReader& rReader);
 

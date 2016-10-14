@@ -46,7 +46,7 @@ public:
     long                    mnHeight;
 
     WinSalVirtualDevice();
-    virtual ~WinSalVirtualDevice();
+    virtual ~WinSalVirtualDevice() override;
 
     virtual SalGraphics*            AcquireGraphics() override;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) override;

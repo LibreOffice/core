@@ -31,9 +31,9 @@ public:
 };
 
 GLWinWindow::GLWinWindow()
-    : hWnd(NULL)
-    , hDC(NULL)
-    , hRC(NULL)
+    : hWnd(nullptr)
+    , hDC(nullptr)
+    , hRC(nullptr)
 {
 }
 
@@ -70,7 +70,7 @@ void WinOpenGLContext::resetCurrent()
 
     OpenGLZone aZone;
 
-    wglMakeCurrent(NULL, NULL);
+    wglMakeCurrent(nullptr, nullptr);
 }
 
 bool WinOpenGLContext::isCurrent()
@@ -82,7 +82,7 @@ bool WinOpenGLContext::isCurrent()
 
 bool WinOpenGLContext::isAnyCurrent()
 {
-    return wglGetCurrentContext() != NULL;
+    return wglGetCurrentContext() != nullptr;
 }
 
 void WinOpenGLContext::makeCurrent()
@@ -140,11 +140,11 @@ void WinOpenGLContext::destroyCurrentContext()
         if (itr != g_vShareList.end())
             g_vShareList.erase(itr);
 
-        if (wglGetCurrentContext() != NULL)
-            wglMakeCurrent(NULL, NULL);
+        if (wglGetCurrentContext() != nullptr)
+            wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext( m_aGLWin.hRC );
         ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
-        m_aGLWin.hRC = 0;
+        m_aGLWin.hRC = nullptr;
     }
 }
 
@@ -174,14 +174,14 @@ bool InitTempWindow(HWND& hwnd, int width, int height, const PIXELFORMATDESCRIPT
     wc.style = 0;
     wc.lpfnWndProc = WndProc;
     wc.cbClsExtra = wc.cbWndExtra = 0;
-    wc.hInstance = NULL;
-    wc.hIcon = NULL;
-    wc.hCursor = NULL;
-    wc.hbrBackground = NULL;
-    wc.lpszMenuName = NULL;
-    wc.lpszClassName = (LPCSTR)"GLRenderer";
+    wc.hInstance = nullptr;
+    wc.hIcon = nullptr;
+    wc.hCursor = nullptr;
+    wc.hbrBackground = nullptr;
+    wc.lpszMenuName = nullptr;
+    wc.lpszClassName = "GLRenderer";
     RegisterClass(&wc);
-    hwnd = CreateWindow(wc.lpszClassName, NULL, WS_DISABLED, 0, 0, width, height, NULL, NULL, wc.hInstance, NULL);
+    hwnd = CreateWindow(wc.lpszClassName, nullptr, WS_DISABLED, 0, 0, width, height, nullptr, nullptr, wc.hInstance, nullptr);
     glWin.hDC = GetDC(hwnd);
 
     int nPixelFormat = ChoosePixelFormat(glWin.hDC, &pfd);
@@ -208,7 +208,7 @@ bool InitTempWindow(HWND& hwnd, int width, int height, const PIXELFORMATDESCRIPT
     ret = wglMakeCurrent(glWin.hDC, glWin.hRC);
     if(!ret)
     {
-        wglMakeCurrent(NULL, NULL);
+        wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext(glWin.hRC);
         ReleaseDC(hwnd, glWin.hDC);
         DestroyWindow(hwnd);
@@ -223,18 +223,18 @@ bool WGLisExtensionSupported(const char *extension)
     OpenGLZone aZone;
 
     const size_t extlen = strlen(extension);
-    const char *supported = NULL;
+    const char *supported = nullptr;
 
     // Try to use wglGetExtensionStringARB on current DC, if possible
     PROC wglGetExtString = wglGetProcAddress("wglGetExtensionsStringARB");
 
     if (wglGetExtString)
-        supported = ((char*(__stdcall*)(HDC))wglGetExtString)(wglGetCurrentDC());
+        supported = reinterpret_cast<char*(__stdcall*)(HDC)>(wglGetExtString)(wglGetCurrentDC());
     // If that failed, try standard OpenGL extensions string
-    if (supported == NULL)
-        supported = (char*)glGetString(GL_EXTENSIONS);
+    if (supported == nullptr)
+        supported = reinterpret_cast<char const *>(glGetString(GL_EXTENSIONS));
     // If that failed too, must be no extensions supported
-    if (supported == NULL)
+    if (supported == nullptr)
         return false;
 
     // Begin examination at start of string, increment by 1 on false match
@@ -243,8 +243,8 @@ bool WGLisExtensionSupported(const char *extension)
         // Advance p up to the next possible match
         p = strstr(p, extension);
 
-        if (p == NULL)
-            return 0; // No Match
+        if (p == nullptr)
+            return false; // No Match
 
         // Make sure that match is at the start of the string or that
         // the previous char is a space, or else we could accidentally
@@ -253,7 +253,7 @@ bool WGLisExtensionSupported(const char *extension)
         // Also, make sure that the following character is space or null
         // or else "wglExtensionTwo" might match "wglExtension"
         if ((p==supported || p[-1]==' ') && (p[extlen]=='\0' || p[extlen]==' '))
-            return 1; // Match
+            return true; // Match
     }
 }
 
@@ -262,7 +262,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
 {
     OpenGLZone aZone;
 
-    HWND hWnd = NULL;
+    HWND hWnd = nullptr;
     GLWinWindow glWin;
     // Create a temp window to check whether support multi-sample, if support, get the format
     if (!InitTempWindow(hWnd, 32, 32, pfd, glWin))
@@ -275,17 +275,17 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     if (!WGLisExtensionSupported("WGL_ARB_multisample"))
     {
         SAL_WARN("vcl.opengl", "Device doesn't support multisample");
-        wglMakeCurrent(NULL, NULL);
+        wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext(glWin.hRC);
         ReleaseDC(hWnd, glWin.hDC);
         DestroyWindow(hWnd);
         return false;
     }
     // Get our pixel format
-    PFNWGLCHOOSEPIXELFORMATARBPROC fn_wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
+    PFNWGLCHOOSEPIXELFORMATARBPROC fn_wglChoosePixelFormatARB = reinterpret_cast<PFNWGLCHOOSEPIXELFORMATARBPROC>(wglGetProcAddress("wglChoosePixelFormatARB"));
     if (!fn_wglChoosePixelFormatARB)
     {
-        wglMakeCurrent(NULL, NULL);
+        wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext(glWin.hRC);
         ReleaseDC(hWnd, glWin.hDC);
         DestroyWindow(hWnd);
@@ -341,7 +341,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     {
         bArbMultisampleSupported = true;
         rPixelFormat = pixelFormat;
-        wglMakeCurrent(NULL, NULL);
+        wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext(glWin.hRC);
         ReleaseDC(hWnd, glWin.hDC);
         DestroyWindow(hWnd);
@@ -355,14 +355,14 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     {
         bArbMultisampleSupported = true;
         rPixelFormat = pixelFormat;
-        wglMakeCurrent(NULL, NULL);
+        wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext(glWin.hRC);
         ReleaseDC(hWnd, glWin.hDC);
         DestroyWindow(hWnd);
         return bArbMultisampleSupported;
     }
     // Return the valid format
-    wglMakeCurrent(NULL, NULL);
+    wglMakeCurrent(nullptr, nullptr);
     wglDeleteContext(glWin.hRC);
     ReleaseDC(hWnd, glWin.hDC);
     DestroyWindow(hWnd);
@@ -555,7 +555,7 @@ bool WinOpenGLContext::ImplInit()
     }
 
     HGLRC hTempRC = wglCreateContext(m_aGLWin.hDC);
-    if (hTempRC == NULL)
+    if (hTempRC == nullptr)
     {
         SAL_WARN("vcl.opengl", "wglCreateContext failed: "<< WindowsErrorString(GetLastError()));
         if (bFirstCall)
@@ -581,13 +581,13 @@ bool WinOpenGLContext::ImplInit()
         return false;
     }
 
-    HGLRC hSharedCtx = 0;
+    HGLRC hSharedCtx = nullptr;
     if (!g_vShareList.empty())
         hSharedCtx = g_vShareList.front();
 
     if (!wglCreateContextAttribsARB)
     {
-        wglMakeCurrent(NULL, NULL);
+        wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext(hTempRC);
         if (bFirstCall)
             disableOpenGLAndTerminateForRestart();
@@ -605,10 +605,10 @@ bool WinOpenGLContext::ImplInit()
         0
     };
     m_aGLWin.hRC = wglCreateContextAttribsARB(m_aGLWin.hDC, hSharedCtx, attribs);
-    if (m_aGLWin.hRC == 0)
+    if (m_aGLWin.hRC == nullptr)
     {
         SAL_WARN("vcl.opengl", "wglCreateContextAttribsARB failed: "<< WindowsErrorString(GetLastError()));
-        wglMakeCurrent(NULL, NULL);
+        wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext(hTempRC);
         if (bFirstCall)
             disableOpenGLAndTerminateForRestart();
@@ -618,7 +618,7 @@ bool WinOpenGLContext::ImplInit()
 
     if (!compiledShaderBinariesWork())
     {
-        wglMakeCurrent(NULL, NULL);
+        wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext(hTempRC);
         if (bFirstCall)
             disableOpenGLAndTerminateForRestart();
@@ -626,7 +626,7 @@ bool WinOpenGLContext::ImplInit()
         return false;
     }
 
-    wglMakeCurrent(NULL, NULL);
+    wglMakeCurrent(nullptr, nullptr);
     wglDeleteContext(hTempRC);
 
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))

@@ -80,7 +80,7 @@ demo_shader_add_glyph_vertices (const glyphy_point_t        &p,
     double _vx = p.x + font_size * ((1-_cx) * gi->extents.min_x + _cx * gi->extents.max_x); \
     double _vy = p.y - font_size * ((1-_cy) * gi->extents.min_y + _cy * gi->extents.max_y); \
     glyph_vertex_encode (_vx, _vy, _cx, _cy, gi, &v[_cx * 2 + _cy]); \
-  } while (0)
+  } while (false)
   ENCODE_CORNER (0, 0);
   ENCODE_CORNER (0, 1);
   ENCODE_CORNER (1, 0);
@@ -120,7 +120,7 @@ compile_shader (GLenum         type,
   if (!(shader = glCreateShader (type)))
     return shader;
 
-  glShaderSource (shader, count, sources, 0);
+  glShaderSource (shader, count, sources, nullptr);
   glCompileShader (shader);
 
   glGetShaderiv (shader, GL_COMPILE_STATUS, &compiled);
@@ -131,8 +131,8 @@ compile_shader (GLenum         type,
     glGetShaderiv (shader, GL_INFO_LOG_LENGTH, &info_len);
 
     if (info_len > 0) {
-      char *info_log = (char*) malloc (info_len);
-      glGetShaderInfoLog (shader, info_len, NULL, info_log);
+      char *info_log = static_cast<char*>(malloc (info_len));
+      glGetShaderInfoLog (shader, info_len, nullptr, info_log);
 
       LOGW ("%s\n", info_log);
       free (info_log);
@@ -167,8 +167,8 @@ link_program (GLuint vshader,
     glGetProgramiv (program, GL_INFO_LOG_LENGTH, &info_len);
 
     if (info_len > 0) {
-      char *info_log = (char*) malloc (info_len);
-      glGetProgramInfoLog (program, info_len, NULL, info_log);
+      char *info_log = static_cast<char*>(malloc (info_len));
+      glGetProgramInfoLog (program, info_len, nullptr, info_log);
 
       LOGW ("%s\n", info_log);
       free (info_log);

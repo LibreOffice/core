@@ -41,7 +41,7 @@ class WinLayout : public SalLayout
 {
 public:
                         WinLayout(HDC, const WinFontFace&, WinFontInstance&, bool bUseOpenGL);
-    virtual             ~WinLayout();
+    virtual             ~WinLayout() override;
     virtual void        InitFont() const override;
     void                SetFontScale( float f ) { mfFontScale = f; }
     HFONT               DisableFontScaling() const;
@@ -72,7 +72,7 @@ class SimpleWinLayout : public WinLayout
 {
 public:
                     SimpleWinLayout(HDC, const WinFontFace&, WinFontInstance&, bool bUseOpenGL);
-    virtual         ~SimpleWinLayout();
+    virtual         ~SimpleWinLayout() override;
 
     virtual bool    LayoutText( ImplLayoutArgs& ) override;
     virtual void    AdjustLayout( ImplLayoutArgs& ) override;
@@ -81,8 +81,8 @@ public:
     virtual bool    CacheGlyphs(SalGraphics& rGraphics) const override;
     virtual bool    DrawCachedGlyphs(SalGraphics& rGraphics) const override;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
-                                   DeviceCoordinate* pGlyphAdvances, int* pCharIndexes,
-                                   const PhysicalFontFace** pFallbackFonts = NULL ) const override;
+                                   DeviceCoordinate* pGlyphAdvances = nullptr, int* pCharIndexes = nullptr,
+                                   const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
 
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
@@ -123,8 +123,8 @@ public:
     virtual bool    CacheGlyphs(SalGraphics& rGraphics) const override;
     virtual bool    DrawCachedGlyphs(SalGraphics& rGraphics) const override;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
-                                   DeviceCoordinate* pGlyphAdvances, int* pCharPosAry,
-                                   const PhysicalFontFace** pFallbackFonts = NULL ) const override;
+                                   DeviceCoordinate* pGlyphAdvances = nullptr, int* pCharPosAry = nullptr,
+                                   const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
 
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
@@ -138,7 +138,7 @@ public:
     virtual void    DisableGlyphInjection( bool bDisable ) override { mbDisableGlyphInjection = bDisable; }
 
 protected:
-    virtual         ~UniscribeLayout();
+    virtual         ~UniscribeLayout() override;
 
     void            Justify( DeviceCoordinate nNewWidth );
     void            ApplyDXArray( const ImplLayoutArgs& );
@@ -192,7 +192,7 @@ public:
     GraphiteLayoutWinImpl(const gr_face * pFace, WinFontInstance & rFont)
         throw()
     : GraphiteLayout(pFace), mrFont(rFont) {};
-    virtual ~GraphiteLayoutWinImpl() throw() {};
+    virtual ~GraphiteLayoutWinImpl() throw() override {};
     virtual sal_GlyphId getKashidaGlyph(int & rWidth) override;
 private:
     WinFontInstance & mrFont;
@@ -207,7 +207,7 @@ private:
     mutable GraphiteLayoutWinImpl maImpl;
 public:
     GraphiteWinLayout(HDC hDC, const WinFontFace& rWFD, WinFontInstance& rWFE, bool bUseOpenGL) throw();
-    virtual ~GraphiteWinLayout();
+    virtual ~GraphiteWinLayout() override;
 
     // used by upper layers
     virtual bool  LayoutText( ImplLayoutArgs& ) override;    // first step of layout
@@ -217,15 +217,15 @@ public:
     virtual bool  DrawCachedGlyphs(SalGraphics& rGraphics) const override;
 
     // methods using string indexing
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra=0, int nFactor=1) const override;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
 
     virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
 
     // methods using glyph indexing
     virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,
-                                DeviceCoordinate* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
-                                const PhysicalFontFace** pFallbackFonts = NULL ) const override;
+                                DeviceCoordinate* pGlyphAdvAry = nullptr, int* pCharPosAry = nullptr,
+                                const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
 
     // used by glyph+font+script fallback
     virtual void    MoveGlyph( int nStart, long nNewXPos ) override;

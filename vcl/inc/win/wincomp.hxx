@@ -27,72 +27,72 @@
 
 inline HPEN SelectPen( HDC hDC, HPEN hPen )
 {
-    return (HPEN)SelectObject( hDC, (HGDIOBJ)hPen );
+    return static_cast<HPEN>(SelectObject( hDC, static_cast<HGDIOBJ>(hPen) ));
 }
 
 inline void DeletePen( HPEN hPen )
 {
-    DeleteObject( (HGDIOBJ)hPen );
+    DeleteObject( static_cast<HGDIOBJ>(hPen) );
 }
 
 inline HPEN GetStockPen( int nObject )
 {
-    return (HPEN)GetStockObject( nObject );
+    return static_cast<HPEN>(GetStockObject( nObject ));
 }
 
 inline HBRUSH SelectBrush( HDC hDC, HBRUSH hBrush )
 {
-    return (HBRUSH)SelectObject( hDC, (HGDIOBJ)hBrush );
+    return static_cast<HBRUSH>(SelectObject( hDC, static_cast<HGDIOBJ>(hBrush) ));
 }
 
 inline void DeleteBrush( HBRUSH hBrush )
 {
-    DeleteObject( (HGDIOBJ)hBrush );
+    DeleteObject( static_cast<HGDIOBJ>(hBrush) );
 }
 
 inline HBRUSH GetStockBrush( int nObject )
 {
-    return (HBRUSH)GetStockObject( nObject );
+    return static_cast<HBRUSH>(GetStockObject( nObject ));
 }
 
 inline HFONT SelectFont( HDC hDC, HFONT hFont )
 {
-    return (HFONT)SelectObject( hDC, (HGDIOBJ)hFont );
+    return static_cast<HFONT>(SelectObject( hDC, static_cast<HGDIOBJ>(hFont) ));
 }
 
 inline void DeleteFont( HFONT hFont )
 {
-    DeleteObject( (HGDIOBJ)hFont );
+    DeleteObject( static_cast<HGDIOBJ>(hFont) );
 }
 
 inline HFONT GetStockFont( int nObject )
 {
-    return (HFONT)GetStockObject( nObject );
+    return static_cast<HFONT>(GetStockObject( nObject ));
 }
 
 inline HBITMAP SelectBitmap( HDC hDC, HBITMAP hBitmap )
 {
-    return (HBITMAP)SelectObject( hDC, (HGDIOBJ)hBitmap );
+    return static_cast<HBITMAP>(SelectObject( hDC, static_cast<HGDIOBJ>(hBitmap) ));
 }
 
 inline void DeleteBitmap( HBITMAP hBitmap )
 {
-    DeleteObject( (HGDIOBJ)hBitmap );
+    DeleteObject( static_cast<HGDIOBJ>(hBitmap) );
 }
 
 inline void DeleteRegion( HRGN hRegion )
 {
-    DeleteObject( (HGDIOBJ)hRegion );
+    DeleteObject( static_cast<HGDIOBJ>(hRegion) );
 }
 
 inline HPALETTE GetStockPalette( int nObject )
 {
-    return (HPALETTE)GetStockObject( nObject );
+    return static_cast<HPALETTE>(GetStockObject( nObject ));
 }
 
 inline void DeletePalette( HPALETTE hPalette )
 {
-    DeleteObject( (HGDIOBJ)hPalette );
+    DeleteObject( static_cast<HGDIOBJ>(hPalette) );
 }
 
 inline void SetWindowStyle( HWND hWnd, DWORD nStyle )
@@ -127,47 +127,47 @@ inline BOOL IsMaximized( HWND hWnd )
 
 inline void SetWindowFont( HWND hWnd, HFONT hFont, BOOL bRedraw )
 {
-    SendMessage( hWnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM((UINT)bRedraw,0) );
+    SendMessage( hWnd, WM_SETFONT, reinterpret_cast<WPARAM>(hFont), MAKELPARAM((UINT)bRedraw,0) );
 }
 
 inline HFONT GetWindowFont( HWND hWnd )
 {
-    return (HFONT) SendMessage( hWnd, WM_GETFONT, 0, 0 );
+    return reinterpret_cast<HFONT>(SendMessage( hWnd, WM_GETFONT, 0, 0 ));
 }
 
 inline void SetClassCursor( HWND hWnd, HCURSOR hCursor )
 {
-    SetClassLongPtr( hWnd, GCLP_HCURSOR, (LONG_PTR)hCursor );
+    SetClassLongPtr( hWnd, GCLP_HCURSOR, reinterpret_cast<LONG_PTR>(hCursor) );
 }
 
 inline HCURSOR GetClassCursor( HWND hWnd )
 {
-    return (HCURSOR)GetClassLongPtr( hWnd, GCLP_HCURSOR );
+    return reinterpret_cast<HCURSOR>(GetClassLongPtr( hWnd, GCLP_HCURSOR ));
 }
 
 inline void SetClassIcon( HWND hWnd, HICON hIcon )
 {
-    SetClassLongPtr( hWnd, GCLP_HICON, (LONG_PTR)hIcon );
+    SetClassLongPtr( hWnd, GCLP_HICON, reinterpret_cast<LONG_PTR>(hIcon) );
 }
 
 inline HICON GetClassIcon( HWND hWnd )
 {
-    return (HICON)GetClassLongPtr( hWnd, GCLP_HICON );
+    return reinterpret_cast<HICON>(GetClassLongPtr( hWnd, GCLP_HICON ));
 }
 
 inline HBRUSH SetClassBrush( HWND hWnd, HBRUSH hBrush )
 {
-    return (HBRUSH)SetClassLongPtr( hWnd, GCLP_HBRBACKGROUND, (LONG_PTR)hBrush );
+    return reinterpret_cast<HBRUSH>(SetClassLongPtr( hWnd, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(hBrush) ));
 }
 
 inline HBRUSH GetClassBrush( HWND hWnd )
 {
-    return (HBRUSH)GetClassLongPtr( hWnd, GCLP_HBRBACKGROUND );
+    return reinterpret_cast<HBRUSH>(GetClassLongPtr( hWnd, GCLP_HBRBACKGROUND ));
 }
 
 inline HINSTANCE GetWindowInstance( HWND hWnd )
 {
-    return (HINSTANCE)GetWindowLongPtr( hWnd, GWLP_HINSTANCE );
+    return reinterpret_cast<HINSTANCE>(GetWindowLongPtr( hWnd, GWLP_HINSTANCE ));
 }
 
 

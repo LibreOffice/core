@@ -36,7 +36,7 @@ struct demo_buffer_t {
 demo_buffer_t *
 demo_buffer_create (void)
 {
-  demo_buffer_t *buffer = (demo_buffer_t *) calloc (1, sizeof (demo_buffer_t));
+  demo_buffer_t *buffer = static_cast<demo_buffer_t *>(calloc (1, sizeof (demo_buffer_t)));
   buffer->refcount = 1;
 
   buffer->vertices = new std::vector<glyph_vertex_t>;
@@ -114,7 +114,7 @@ demo_buffer_add_text (demo_buffer_t        *buffer,
   glyphy_point_t top_left = buffer->cursor;
   buffer->cursor.y += font_size /* * font->ascent */;
   unsigned int unicode;
-  for (const unsigned char *p = (const unsigned char *) utf8; *p; p++) {
+  for (const unsigned char *p = reinterpret_cast<const unsigned char *>(utf8); *p; p++) {
     if (*p < 128) {
       unicode = *p;
     } else {
@@ -181,11 +181,11 @@ demo_buffer_draw (demo_buffer_t *buffer)
   GLuint a_glyph_vertex_loc = glGetAttribLocation (program, "a_glyph_vertex");
   glBindBuffer (GL_ARRAY_BUFFER, buffer->buf_name);
   if (buffer->dirty) {
-    glBufferData (GL_ARRAY_BUFFER,  sizeof (glyph_vertex_t) * buffer->vertices->size (), (const char *) &(*buffer->vertices)[0], GL_STATIC_DRAW);
+    glBufferData (GL_ARRAY_BUFFER,  sizeof (glyph_vertex_t) * buffer->vertices->size (), &(*buffer->vertices)[0], GL_STATIC_DRAW);
     buffer->dirty = false;
   }
   glEnableVertexAttribArray (a_glyph_vertex_loc);
-  glVertexAttribPointer (a_glyph_vertex_loc, 4, GL_FLOAT, GL_FALSE, sizeof (glyph_vertex_t), 0);
+  glVertexAttribPointer (a_glyph_vertex_loc, 4, GL_FLOAT, GL_FALSE, sizeof (glyph_vertex_t), nullptr);
   glDrawArrays (GL_TRIANGLES, 0, buffer->vertices->size ());
   glDisableVertexAttribArray (a_glyph_vertex_loc);
 }

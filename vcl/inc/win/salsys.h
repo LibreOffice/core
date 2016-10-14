@@ -48,7 +48,7 @@ private:
     unsigned int                            m_nPrimary;
 public:
     WinSalSystem() : m_nPrimary( 0 ) {}
-    virtual ~WinSalSystem();
+    virtual ~WinSalSystem() override;
 
     virtual unsigned int GetDisplayScreenCount() override;
     virtual unsigned int GetDisplayBuiltInScreen() override;

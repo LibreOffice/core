@@ -104,7 +104,7 @@ bool WinSalSystem::initMonitors()
         aDev.cb = sizeof( aDev );
         DWORD nDevice = 0;
         std::unordered_map< OUString, int, OUStringHash > aDeviceStringCount;
-        while( EnumDisplayDevicesW( NULL, nDevice++, &aDev, 0 ) )
+        while( EnumDisplayDevicesW( nullptr, nDevice++, &aDev, 0 ) )
         {
             if( (aDev.StateFlags & DISPLAY_DEVICE_ACTIVE)
                 && !(aDev.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER) ) // sort out non/disabled monitors
@@ -122,8 +122,8 @@ bool WinSalSystem::initMonitors()
                                                        Rectangle() ) );
             }
         }
-        HDC aDesktopRC = GetDC( NULL );
-        EnumDisplayMonitors( aDesktopRC, NULL, ImplEnumMonitorProc, reinterpret_cast<LPARAM>(this) );
+        HDC aDesktopRC = GetDC( nullptr );
+        EnumDisplayMonitors( aDesktopRC, nullptr, ImplEnumMonitorProc, reinterpret_cast<LPARAM>(this) );
 
         // append monitor numbers to name strings
         std::unordered_map< OUString, int, OUStringHash > aDevCount( aDeviceStringCount );
@@ -136,7 +136,7 @@ bool WinSalSystem::initMonitors()
                 int nInstance = aDeviceStringCount[ rDev ] - (-- aDevCount[ rDev ] );
                 OUStringBuffer aBuf( rDev.getLength() + 8 );
                 aBuf.append( rDev );
-                aBuf.appendAscii( " (" );
+                aBuf.append( " (" );
                 aBuf.append( sal_Int32( nInstance ) );
                 aBuf.append( ')' );
                 m_aMonitors[ i ].m_aName = aBuf.makeStringAndClear();
@@ -171,7 +171,7 @@ int WinSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& r
 
     ImplHideSplash();
     return MessageBoxW(
-        0,
+        nullptr,
         reinterpret_cast<LPCWSTR>(rMessage.getStr()),
         reinterpret_cast<LPCWSTR>(rTitle.getStr()),
         nFlags);
