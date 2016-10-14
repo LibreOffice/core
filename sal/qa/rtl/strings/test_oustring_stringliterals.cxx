@@ -276,8 +276,8 @@ void test::oustring::StringLiterals::checkUtf16() {
     CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"def"), s2);
     CPPUNIT_ASSERT(s1.endsWithIgnoreAsciiCase(u"EFDE", &s2));
     CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"d"), s2);
-    CPPUNIT_ASSERT(s1 == u"defde");
-    CPPUNIT_ASSERT(u"defde" == s1);
+    CPPUNIT_ASSERT(bool(s1 == u"defde"));
+    CPPUNIT_ASSERT(bool(u"defde" == s1));
     CPPUNIT_ASSERT(s1 != u"abc");
     CPPUNIT_ASSERT(u"abc" != s1);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), s1.indexOf(u"de", 1));
