@@ -3720,7 +3720,7 @@ Content::ResourceType Content::getResourceType(
     DAVOptions aDAVOptions;
 
     {
-        getResourceOptions( xEnv, aDAVOptions, rResAccess );
+        getResourceOptions( xEnv, aDAVOptions, rResAccess, networkAccessAllowed );
 
         // at least class one is needed
         if( aDAVOptions.isClass1() )
@@ -3931,7 +3931,8 @@ void Content::initOptsCacheLifeTime()
 void Content::getResourceOptions(
                     const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                     DAVOptions& rDAVOptions,
-                    const std::unique_ptr< DAVResourceAccess > & rResAccess )
+                    const std::unique_ptr< DAVResourceAccess > & rResAccess,
+                    bool * networkAccessAllowed )
 {
     OUString aRedirURL;
     OUString aTargetURL = rResAccess->getURL();
@@ -3990,8 +3991,25 @@ void Content::getResourceOptions(
                     // used only internally, so the text doesn't really matter..
                     aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                           m_nOptsCacheLifeNotFound );
-                    cancelCommandExecution( e, xEnv );
-                    // unreachable
+                    if ( networkAccessAllowed != nullptr )
+                    {
+                        *networkAccessAllowed = *networkAccessAllowed
+                            && shouldAccessNetworkAfterException(e);
+                    }
+                }
+                break;
+                case DAVException::DAV_HTTP_LOOKUP:
+                {
+                    SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_LOOKUP for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                    aDAVOptions.setHttpResponseStatusCode( USC_LOOKUP_FAILED );
+                    // used only internally, so the text doesn't really matter..
+                    aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
+                                                          m_nOptsCacheLifeNotFound );
+                    if ( networkAccessAllowed != nullptr )
+                    {
+                        *networkAccessAllowed = *networkAccessAllowed
+                            && shouldAccessNetworkAfterException(e);
+                    }
                 }
                 break;
                 case DAVException::DAV_HTTP_AUTH:
@@ -4002,6 +4020,29 @@ void Content::getResourceOptions(
                     //   she cancelled the credentials request.
                     //   this is not actually an error, it means only that for current user this is a standard web,
                     //   though possibly DAV enabled
+                    aDAVOptions.setHttpResponseStatusCode( USC_AUTH_FAILED );
+                    // used only internally, so the text doesn't really matter..
+                    aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
+                                                          m_nOptsCacheLifeNotFound );
+                    if ( networkAccessAllowed != nullptr )
+                    {
+                        *networkAccessAllowed = *networkAccessAllowed
+                            && shouldAccessNetworkAfterException(e);
+                    }
+                }
+                break;
+                case DAVException::DAV_HTTP_AUTHPROXY:
+                {
+                    SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_AUTHPROXY for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                    aDAVOptions.setHttpResponseStatusCode( USC_AUTHPROXY_FAILED );
+                    // used only internally, so the text doesn't really matter..
+                    aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
+                                                          m_nOptsCacheLifeNotFound );
+                    if ( networkAccessAllowed != nullptr )
+                    {
+                        *networkAccessAllowed = *networkAccessAllowed
+                            && shouldAccessNetworkAfterException(e);
+                    }
                 }
                 break;
                 case DAVException::DAV_HTTP_ERROR:
@@ -4052,8 +4093,14 @@ void Content::getResourceOptions(
                                 nLifeTime = m_nOptsCacheLifeNotImpl;
                             }
                             else
+                            {
                                 SAL_WARN( "ucb.ucp.webdav", "OPTIONS - SC_NOT_FOUND for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
-
+                                if ( networkAccessAllowed != nullptr )
+                                {
+                                    *networkAccessAllowed = *networkAccessAllowed
+                                        && shouldAccessNetworkAfterException(e);
+                                }
+                            }
                             aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                                   nLifeTime );
                         }
@@ -4085,6 +4132,23 @@ void Content::getResourceOptions(
                 }
                 break;
             }
+        }
+    }
+    else
+    {
+        // check current response status code, perhaps we need to set networkAccessAllowed
+        sal_uInt16 CachedResponseStatusCode = aDAVOptions.getHttpResponseStatusCode();
+        if ( networkAccessAllowed != nullptr &&
+             ( ( CachedResponseStatusCode == SC_NOT_FOUND ) ||
+               ( CachedResponseStatusCode == SC_GONE ) ||
+               ( CachedResponseStatusCode == USC_CONNECTION_TIMED_OUT ) ||
+               ( CachedResponseStatusCode == USC_LOOKUP_FAILED ) ||
+               ( CachedResponseStatusCode == USC_AUTH_FAILED ) ||
+               ( CachedResponseStatusCode == USC_AUTHPROXY_FAILED )
+                 )
+            )
+        {
+            *networkAccessAllowed = *networkAccessAllowed && false;
         }
     }
     rDAVOptions = aDAVOptions;
