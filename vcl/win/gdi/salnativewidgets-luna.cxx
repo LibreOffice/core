@@ -84,7 +84,6 @@ private:
 public:
     VisualStylesAPI();
     ~VisualStylesAPI();
-    bool IsAvailable()  { return (mhModule != NULL); }
 
     HTHEME OpenThemeData( HWND hwnd, LPCWSTR pszClassList );
     HRESULT CloseThemeData( HTHEME hTheme );
@@ -98,26 +97,26 @@ public:
 static VisualStylesAPI vsAPI;
 
 VisualStylesAPI::VisualStylesAPI()
-    : lpfnOpenThemeData( NULL ),
-      lpfnCloseThemeData( NULL ),
-      lpfnGetThemeBackgroundContentRect( NULL ),
-      lpfnDrawThemeBackground( NULL ),
-      lpfnDrawThemeText( NULL ),
-      lpfnGetThemePartSize( NULL ),
-      lpfnIsThemeActive( NULL )
+    : lpfnOpenThemeData( nullptr ),
+      lpfnCloseThemeData( nullptr ),
+      lpfnGetThemeBackgroundContentRect( nullptr ),
+      lpfnDrawThemeBackground( nullptr ),
+      lpfnDrawThemeText( nullptr ),
+      lpfnGetThemePartSize( nullptr ),
+      lpfnIsThemeActive( nullptr )
 {
     OUString aLibraryName( "uxtheme.dll" );
     mhModule = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
 
     if ( mhModule )
     {
-        lpfnOpenThemeData = (OpenThemeData_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "OpenThemeData" );
-        lpfnCloseThemeData = (CloseThemeData_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "CloseThemeData" );
-        lpfnGetThemeBackgroundContentRect = (GetThemeBackgroundContentRect_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "GetThemeBackgroundContentRect" );
-        lpfnDrawThemeBackground = (DrawThemeBackground_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "DrawThemeBackground" );
-        lpfnDrawThemeText = (DrawThemeText_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "DrawThemeText" );
-        lpfnGetThemePartSize = (GetThemePartSize_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "GetThemePartSize" );
-        lpfnIsThemeActive = (IsThemeActive_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "IsThemeActive" );
+        lpfnOpenThemeData = reinterpret_cast<OpenThemeData_Proc_T>(osl_getAsciiFunctionSymbol( mhModule, "OpenThemeData" ));
+        lpfnCloseThemeData = reinterpret_cast<CloseThemeData_Proc_T>(osl_getAsciiFunctionSymbol( mhModule, "CloseThemeData" ));
+        lpfnGetThemeBackgroundContentRect = reinterpret_cast<GetThemeBackgroundContentRect_Proc_T>(osl_getAsciiFunctionSymbol( mhModule, "GetThemeBackgroundContentRect" ));
+        lpfnDrawThemeBackground = reinterpret_cast<DrawThemeBackground_Proc_T>(osl_getAsciiFunctionSymbol( mhModule, "DrawThemeBackground" ));
+        lpfnDrawThemeText = reinterpret_cast<DrawThemeText_Proc_T>(osl_getAsciiFunctionSymbol( mhModule, "DrawThemeText" ));
+        lpfnGetThemePartSize = reinterpret_cast<GetThemePartSize_Proc_T>(osl_getAsciiFunctionSymbol( mhModule, "GetThemePartSize" ));
+        lpfnIsThemeActive = reinterpret_cast<IsThemeActive_Proc_T>(osl_getAsciiFunctionSymbol( mhModule, "IsThemeActive" ));
     }
 }
 
@@ -132,7 +131,7 @@ HTHEME VisualStylesAPI::OpenThemeData( HWND hwnd, LPCWSTR pszClassList )
     if(lpfnOpenThemeData)
         return (*lpfnOpenThemeData) (hwnd, pszClassList);
     else
-        return NULL;
+        return nullptr;
 }
 
 HRESULT VisualStylesAPI::CloseThemeData( HTHEME hTheme )
@@ -213,7 +212,7 @@ static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
     if( GetSalData()->mbThemeChanged )
     {
         // throw away invalid theme handles
-        GetSalData()->deInitNWF();
+        SalData::deInitNWF();
         GetSalData()->mbThemeChanged = false;
     }
 
@@ -222,7 +221,7 @@ static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
         return iter->second;
     // theme not found -> add it to map
     HTHEME hTheme = vsAPI.OpenThemeData( hWnd, name );
-    if( hTheme != NULL )
+    if( hTheme != nullptr )
         aThemeMap[name] = hTheme;
     return hTheme;
 }
@@ -235,7 +234,7 @@ static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
  */
 bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
-    HTHEME hTheme = NULL;
+    HTHEME hTheme = nullptr;
 
     switch( nType )
     {
@@ -333,11 +332,11 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 hTheme = getThemeHandle( mhWnd, L"TreeView" );
             break;
         default:
-            hTheme = NULL;
+            hTheme = nullptr;
             break;
     }
 
-    return (hTheme != NULL);
+    return (hTheme != nullptr);
 }
 
 /*
@@ -358,7 +357,7 @@ bool WinSalGraphics::hitTestNativeControl( ControlType,
 
 bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, const OUString& aStr)
 {
-    HRESULT hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, 0);
+    HRESULT hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
 
     if( aStr.getLength() )
     {
@@ -375,7 +374,7 @@ bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, cons
 Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& /* aRect */, THEMESIZE eTS = TS_TRUE )
 {
     SIZE aSz;
-    HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, NULL, eTS, &aSz ); // TS_TRUE returns optimal size
+    HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, nullptr, eTS, &aSz ); // TS_TRUE returns optimal size
     if( hr == S_OK )
         return Rectangle( 0, 0, aSz.cx, aSz.cy );
     else
@@ -474,9 +473,9 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
 
         // and a darker horizontal line under that
         HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xb0, 0xb0, 0xb0 ) );
-        HPEN hOrigPen = (HPEN) SelectObject(hDC, hpen);
+        HPEN hOrigPen = static_cast<HPEN>(SelectObject(hDC, hpen));
 
-        MoveToEx( hDC, rc.left, gradient_bottom, NULL );
+        MoveToEx( hDC, rc.left, gradient_bottom, nullptr );
         LineTo( hDC, rc.right, gradient_bottom );
 
         SelectObject(hDC, hOrigPen);
@@ -500,9 +499,9 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
             from_y = to_y = rc.top;
 
             HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xb0, 0xb0, 0xb0 ) );
-            HPEN hOrigPen = (HPEN) SelectObject(hDC, hpen);
+            HPEN hOrigPen = static_cast<HPEN>(SelectObject(hDC, hpen));
 
-            MoveToEx( hDC, from_x, from_y, NULL );
+            MoveToEx( hDC, from_x, from_y, nullptr );
             LineTo( hDC, to_x, to_y );
 
             SelectObject(hDC, hOrigPen);
@@ -516,7 +515,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlPart nPart,
                             ControlState nState,
                             const ImplControlValue& aValue,
-                            OUString aCaption )
+                            OUString const & aCaption )
 {
     // a listbox dropdown is actually a combobox dropdown
     if( nType == ControlType::Listbox )
@@ -548,7 +547,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 iState = ABS_UPHOT;
             else
                 iState = ABS_UPNORMAL;
-            hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, 0);
+            hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             return (hr == S_OK);
         }
         if( nPart == ControlPart::ButtonDown )
@@ -562,7 +561,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 iState = ABS_DOWNHOT;
             else
                 iState = ABS_DOWNNORMAL;
-            hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, 0);
+            hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             return (hr == S_OK);
         }
         if( nPart == ControlPart::ButtonLeft )
@@ -576,7 +575,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 iState = ABS_LEFTHOT;
             else
                 iState = ABS_LEFTNORMAL;
-            hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, 0);
+            hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             return (hr == S_OK);
         }
         if( nPart == ControlPart::ButtonRight )
@@ -590,7 +589,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 iState = ABS_RIGHTHOT;
             else
                 iState = ABS_RIGHTNORMAL;
-            hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, 0);
+            hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             return (hr == S_OK);
         }
         if( nPart == ControlPart::ThumbHorz || nPart == ControlPart::ThumbVert )
@@ -606,18 +605,18 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 iState = SCRBS_NORMAL;
 
             SIZE sz;
-            vsAPI.GetThemePartSize(hTheme, hDC, iPart, iState, NULL, TS_MIN, &sz);
-            vsAPI.GetThemePartSize(hTheme, hDC, iPart, iState, NULL, TS_TRUE, &sz);
-            vsAPI.GetThemePartSize(hTheme, hDC, iPart, iState, NULL, TS_DRAW, &sz);
+            vsAPI.GetThemePartSize(hTheme, hDC, iPart, iState, nullptr, TS_MIN, &sz);
+            vsAPI.GetThemePartSize(hTheme, hDC, iPart, iState, nullptr, TS_TRUE, &sz);
+            vsAPI.GetThemePartSize(hTheme, hDC, iPart, iState, nullptr, TS_DRAW, &sz);
 
-            hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, 0);
+            hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             // paint gripper on thumb if enough space
             if( ( (nPart == ControlPart::ThumbVert) && (rc.bottom-rc.top > 12) ) ||
                 ( (nPart == ControlPart::ThumbHorz) && (rc.right-rc.left > 12) ) )
             {
                 iPart = (nPart == ControlPart::ThumbHorz) ? SBP_GRIPPERHORZ : SBP_GRIPPERVERT;
                 iState = 0;
-                vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, 0);
+                vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             }
             return (hr == S_OK);
         }
@@ -640,7 +639,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 iState = SCRBS_HOT;
             else
                 iState = SCRBS_NORMAL;
-            hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, 0);
+            hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             return (hr == S_OK);
         }
     }
@@ -648,7 +647,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     {
         if( aValue.getType() == ControlType::SpinButtons )
         {
-            const SpinbuttonValue* pValue = (aValue.getType() == ControlType::SpinButtons) ? static_cast<const SpinbuttonValue*>(&aValue) : NULL;
+            const SpinbuttonValue* pValue = (aValue.getType() == ControlType::SpinButtons) ? static_cast<const SpinbuttonValue*>(&aValue) : nullptr;
 
             RECT rect;
             ImplConvertSpinbuttonValues( pValue->mnUpperPart, pValue->mnUpperState, pValue->maUpperRect, &iPart, &iState, &rect );
@@ -1165,7 +1164,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
                                         const OUString& aCaption )
 {
     bool bOk = false;
-    HTHEME hTheme = NULL;
+    HTHEME hTheme = nullptr;
 
     Rectangle buttonRect = rControlRegion;
     Rectangle cacheRect = rControlRegion;
@@ -1187,7 +1186,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     }
 
     ControlCacheKey aControlCacheKey(nType, nPart, nState, keySize);
-    if (pImpl != NULL && pImpl->TryRenderCachedNativeControl(aControlCacheKey, buttonRect.Left(), buttonRect.Top()))
+    if (pImpl != nullptr && pImpl->TryRenderCachedNativeControl(aControlCacheKey, buttonRect.Left(), buttonRect.Top()))
     {
         return true;
     }
@@ -1271,7 +1270,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
             }
             break;
         default:
-            hTheme = NULL;
+            hTheme = nullptr;
             break;
     }
 
@@ -1286,7 +1285,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
 
     OUString aCaptionStr(aCaption.replace('~', '&')); // translate mnemonics
 
-    if (pImpl == NULL)
+    if (pImpl == nullptr)
     {
         // set default text alignment
         int ta = SetTextAlign(getHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);

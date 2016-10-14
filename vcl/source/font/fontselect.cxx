@@ -91,7 +91,7 @@ FontSelectPattern::FontSelectPattern( const PhysicalFontFace& rFontData,
     const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
     : FontSelectPatternAttributes(rFontData, rSize, fExactHeight, nOrientation, bVertical)
     , mpFontData( &rFontData )
-    , mpFontInstance( NULL )
+    , mpFontInstance( nullptr )
 {
 }
 #endif

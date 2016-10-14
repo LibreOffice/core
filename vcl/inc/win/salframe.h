@@ -84,7 +84,7 @@ public:
     void updateScreenNumber();
 public:
     WinSalFrame();
-    virtual ~WinSalFrame();
+    virtual ~WinSalFrame() override;
 
     virtual SalGraphics*        AcquireGraphics() override;
     virtual void                ReleaseGraphics( SalGraphics* pGraphics ) override;
@@ -138,7 +138,7 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
 // get foreign key names
 namespace vcl_sal {
     OUString getKeysReplacementName(
-        OUString pLang,
+        OUString const & pLang,
         LONG nSymbol );
 }
 

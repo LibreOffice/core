@@ -37,7 +37,7 @@ public:
     WinSalObject*           mpNextObject;           // pointer to next object
 
     WinSalObject();
-    virtual ~WinSalObject();
+    virtual ~WinSalObject() override;
 
     virtual void                    ResetClipRegion() override;
     virtual void                    BeginSetClipRegion( sal_uIntPtr nRects ) override;

@@ -5622,15 +5622,15 @@ void ToolBox::ImplDisableFlatButtons()
             DWORD cbData = sizeof(Data);
 
             if( ERROR_SUCCESS == RegQueryValueEx(hkey, "DisableFlatToolboxButtons",
-                NULL, &dwType, Data, &cbData) )
+                nullptr, &dwType, Data, &cbData) )
             {
                 switch (dwType)
                 {
                     case REG_SZ:
-                        bValue = ((0 == stricmp((const char *) Data, "1")) || (0 == stricmp((const char *) Data, "true")));
+                        bValue = ((0 == stricmp(reinterpret_cast<const char *>(Data), "1")) || (0 == stricmp(reinterpret_cast<const char *>(Data), "true")));
                         break;
                     case REG_DWORD:
-                        bValue = (bool)(((DWORD *) Data)[0]);
+                        bValue = (bool)(reinterpret_cast<DWORD *>(Data)[0]);
                         break;
                 }
             }

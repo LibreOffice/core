@@ -99,7 +99,7 @@ void VclComplexTextTest::testTdf95650()
 
     OutputDevice *pOutDev = static_cast< OutputDevice * >(pWin.get());
     // Check that the following executes without failing assertion
-    pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, 0, SalLayoutFlags::BiDiRtl, nullptr);
+    pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, nullptr, SalLayoutFlags::BiDiRtl);
 }
 #endif
 

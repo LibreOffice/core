@@ -127,11 +127,11 @@
 
 
 #define gl(name) \
-	for (GLint __ee, __ii = 0; \
-	     __ii < 1; \
-	     (__ii++, \
-	      (__ee = glGetError()) && \
-	      (reportGLerror (__ee, #name, __LINE__, __FILE__), 0))) \
+	for (GLint ee_, ii_ = 0; \
+	     ii_ < 1; \
+	     (ii_++, \
+	      (ee_ = glGetError()) && \
+	      (reportGLerror (ee_, #name, __LINE__, __FILE__), 0))) \
 	  gl##name
 
 

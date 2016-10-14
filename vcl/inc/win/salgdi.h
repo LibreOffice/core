@@ -83,7 +83,7 @@ public:
     explicit                WinFontFace( const FontAttributes&,
                                 int nFontHeight, BYTE eWinCharSet,
                                 BYTE nPitchAndFamily  );
-    virtual                 ~WinFontFace();
+    virtual                 ~WinFontFace() override;
 
     virtual PhysicalFontFace* Clone() const override;
     virtual LogicalFontInstance* CreateFontInstance( FontSelectPattern& ) const override;
@@ -258,7 +258,7 @@ public:
 public:
     explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd,
                             SalGeometryProvider *pProvider);
-    virtual ~WinSalGraphics();
+    virtual ~WinSalGraphics() override;
 
     SalGraphicsImpl* GetImpl() const override;
     bool isPrinter() const;

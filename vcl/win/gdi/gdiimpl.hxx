@@ -51,7 +51,7 @@ public:
 
     explicit WinSalGraphicsImpl(WinSalGraphics& rParent);
 
-    virtual ~WinSalGraphicsImpl();
+    virtual ~WinSalGraphicsImpl() override;
 
     virtual void Init() override;
 

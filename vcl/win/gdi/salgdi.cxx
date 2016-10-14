@@ -51,8 +51,8 @@ struct SysColorEntry
     SysColorEntry*  pNext;
 };
 
-static SysColorEntry* pFirstSysColor = NULL;
-static SysColorEntry* pActSysColor = NULL;
+static SysColorEntry* pFirstSysColor = nullptr;
+static SysColorEntry* pActSysColor = nullptr;
 
 // Blue7
 static PALETTEENTRY aImplExtraColor1 =
@@ -117,10 +117,10 @@ void ImplInitSalGDI()
     memset( pSalData->mpHDCCache, 0, CACHESIZE_HDC * sizeof( HDCCache ) );
 
     // initialize temporary font list
-    pSalData->mpTempFontItem = NULL;
+    pSalData->mpTempFontItem = nullptr;
 
     // support palettes for 256 color displays
-    HDC hDC = GetDC( 0 );
+    HDC hDC = GetDC( nullptr );
     int nBitsPixel = GetDeviceCaps( hDC, BITSPIXEL );
     int nPlanes = GetDeviceCaps( hDC, PLANES );
     int nRasterCaps = GetDeviceCaps( hDC, RASTERCAPS );
@@ -131,9 +131,9 @@ void ImplInitSalGDI()
         // test if we have to dither
         HDC         hMemDC = ::CreateCompatibleDC( hDC );
         HBITMAP     hMemBmp = ::CreateCompatibleBitmap( hDC, 8, 8 );
-        HBITMAP     hBmpOld = (HBITMAP) ::SelectObject( hMemDC, hMemBmp );
+        HBITMAP     hBmpOld = static_cast<HBITMAP>(::SelectObject( hMemDC, hMemBmp ));
         HBRUSH      hMemBrush = ::CreateSolidBrush( PALETTERGB( 175, 171, 169 ) );
-        HBRUSH      hBrushOld = (HBRUSH) ::SelectObject( hMemDC, hMemBrush );
+        HBRUSH      hBrushOld = static_cast<HBRUSH>(::SelectObject( hMemDC, hMemBrush ));
         bool        bDither16 = TRUE;
 
         ::PatBlt( hMemDC, 0, 0, 8, 8, PATCOPY );
@@ -144,8 +144,10 @@ void ImplInitSalGDI()
                 if( ::GetPixel( hMemDC, nX, nY ) != aCol )
                     bDither16 = FALSE;
 
-        ::SelectObject( hMemDC, hBrushOld ), ::DeleteObject( hMemBrush );
-        ::SelectObject( hMemDC, hBmpOld ), ::DeleteObject( hMemBmp );
+        ::SelectObject( hMemDC, hBrushOld );
+        ::DeleteObject( hMemBrush );
+        ::SelectObject( hMemDC, hBmpOld );
+        ::DeleteObject( hMemBmp );
         ::DeleteDC( hMemDC );
 
         if( bDither16 )
@@ -154,14 +156,14 @@ void ImplInitSalGDI()
             long n;
 
             pSalData->mhDitherDIB = GlobalAlloc( GMEM_FIXED, sizeof( BITMAPINFOHEADER ) + 192 );
-            pSalData->mpDitherDIB = (BYTE*) GlobalLock( pSalData->mhDitherDIB );
+            pSalData->mpDitherDIB = static_cast<BYTE*>(GlobalLock( pSalData->mhDitherDIB ));
             pSalData->mpDitherDiff = new long[ 256 ];
             pSalData->mpDitherLow = new BYTE[ 256 ];
             pSalData->mpDitherHigh = new BYTE[ 256 ];
             pSalData->mpDitherDIBData = pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER );
             memset( pSalData->mpDitherDIB, 0, sizeof( BITMAPINFOHEADER ) );
 
-            BITMAPINFOHEADER* pBIH = (BITMAPINFOHEADER*) pSalData->mpDitherDIB;
+            BITMAPINFOHEADER* pBIH = reinterpret_cast<BITMAPINFOHEADER*>(pSalData->mpDitherDIB);
 
             pBIH->biSize = sizeof( BITMAPINFOHEADER );
             pBIH->biWidth = 8;
@@ -189,7 +191,7 @@ void ImplInitSalGDI()
         sal_uLong           nTotalCount = DITHER_MAX_SYSCOLOR + nDitherPalCount + DITHER_EXTRA_COLORS;
 
         // create logical palette
-        pLogPal = (LOGPALETTE*) new char[ sizeof( LOGPALETTE ) + ( nTotalCount * sizeof( PALETTEENTRY ) ) ];
+        pLogPal = reinterpret_cast<LOGPALETTE*>(new char[ sizeof( LOGPALETTE ) + ( nTotalCount * sizeof( PALETTEENTRY ) ) ]);
         pLogPal->palVersion = 0x0300;
         pLogPal->palNumEntries = (sal_uInt16) nTotalCount;
         pPalEntry = pLogPal->palPalEntry;
@@ -219,7 +221,7 @@ void ImplInitSalGDI()
 
         // create palette
         pSalData->mhDitherPal = CreatePalette( pLogPal );
-        delete[] (char*) pLogPal;
+        delete[] reinterpret_cast<char*>(pLogPal);
 
         if( pSalData->mhDitherPal )
         {
@@ -228,15 +230,15 @@ void ImplInitSalGDI()
             long n;
 
             pSalData->mhDitherDIB = GlobalAlloc( GMEM_FIXED, nSize );
-            pSalData->mpDitherDIB = (BYTE*) GlobalLock( pSalData->mhDitherDIB );
+            pSalData->mpDitherDIB = static_cast<BYTE*>(GlobalLock( pSalData->mhDitherDIB ));
             pSalData->mpDitherDiff = new long[ 256 ];
             pSalData->mpDitherLow = new BYTE[ 256 ];
             pSalData->mpDitherHigh = new BYTE[ 256 ];
             pSalData->mpDitherDIBData = pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER ) + ( 256 * sizeof( short ) );
             memset( pSalData->mpDitherDIB, 0, sizeof( BITMAPINFOHEADER ) );
 
-            BITMAPINFOHEADER*   pBIH = (BITMAPINFOHEADER*) pSalData->mpDitherDIB;
-            short*              pColors = (short*) ( pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER ) );
+            BITMAPINFOHEADER*   pBIH = reinterpret_cast<BITMAPINFOHEADER*>(pSalData->mpDitherDIB);
+            short*              pColors = reinterpret_cast<short*>( pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER ) );
 
             pBIH->biSize = sizeof( BITMAPINFOHEADER );
             pBIH->biWidth = 8;
@@ -261,7 +263,7 @@ void ImplInitSalGDI()
         ImplUpdateSysColorEntries();
     }
 
-    ReleaseDC( 0, hDC );
+    ReleaseDC( nullptr, hDC );
 }
 
 void ImplFreeSalGDI()
@@ -282,14 +284,14 @@ void ImplFreeSalGDI()
     if ( pSalData->mh50Brush )
     {
         DeleteBrush( pSalData->mh50Brush );
-        pSalData->mh50Brush = 0;
+        pSalData->mh50Brush = nullptr;
     }
 
     // delete 50% Bitmap
     if ( pSalData->mh50Bmp )
     {
         DeleteBitmap( pSalData->mh50Bmp );
-        pSalData->mh50Bmp = 0;
+        pSalData->mh50Bmp = nullptr;
     }
 
     ImplClearHDCCache( pSalData );
@@ -299,7 +301,7 @@ void ImplFreeSalGDI()
     if ( pSalData->mhDitherPal )
     {
         DeleteObject( pSalData->mhDitherPal );
-        pSalData->mhDitherPal = 0;
+        pSalData->mhDitherPal = nullptr;
     }
 
     // delete buffers for dithering DIB patterns, if necessary
@@ -307,7 +309,7 @@ void ImplFreeSalGDI()
     {
         GlobalUnlock( pSalData->mhDitherDIB );
         GlobalFree( pSalData->mhDitherDIB );
-        pSalData->mhDitherDIB = 0;
+        pSalData->mhDitherDIB = nullptr;
         delete[] pSalData->mpDitherDiff;
         delete[] pSalData->mpDitherLow;
         delete[] pSalData->mpDitherHigh;
@@ -321,11 +323,11 @@ void ImplFreeSalGDI()
         delete pEntry;
         pEntry = pTmp;
     }
-    pFirstSysColor = NULL;
+    pFirstSysColor = nullptr;
 
     // delete icon cache
     SalIcon* pIcon = pSalData->mpFirstIcon;
-    pSalData->mpFirstIcon = NULL;
+    pSalData->mpFirstIcon = nullptr;
     while( pIcon )
     {
         SalIcon* pTmp = pIcon->pNext;
@@ -394,13 +396,13 @@ static void ImplInsertSysColorEntry( int nSysIndex )
         {
             pActSysColor = pFirstSysColor = new SysColorEntry;
             pFirstSysColor->nRGB = nRGB;
-            pFirstSysColor->pNext = NULL;
+            pFirstSysColor->pNext = nullptr;
         }
         else
         {
             pActSysColor = pActSysColor->pNext = new SysColorEntry;
             pActSysColor->nRGB = nRGB;
-            pActSysColor->pNext = NULL;
+            pActSysColor->pNext = nullptr;
         }
     }
 }
@@ -415,7 +417,7 @@ void ImplUpdateSysColorEntries()
         delete pEntry;
         pEntry = pTmp;
     }
-    pActSysColor = pFirstSysColor = NULL;
+    pActSysColor = pFirstSysColor = nullptr;
 
     // create new sys color list
     ImplInsertSysColorEntry( COLOR_ACTIVEBORDER );
@@ -464,7 +466,7 @@ void WinSalGraphics::InitGraphics()
 void WinSalGraphics::DeInitGraphics()
 {
     // clear clip region
-    SelectClipRgn( getHDC(), 0 );
+    SelectClipRgn( getHDC(), nullptr );
     // select default objects
     if ( mhDefPen )
         SelectPen( getHDC(), mhDefPen );
@@ -483,7 +485,7 @@ HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
 
     if( !pC->mhDC )
     {
-        HDC hDC = GetDC( 0 );
+        HDC hDC = GetDC( nullptr );
 
         // create new DC with DefaultBitmap
         pC->mhDC = CreateCompatibleDC( hDC );
@@ -495,15 +497,15 @@ HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
         }
 
         pC->mhSelBmp = CreateCompatibleBitmap( hDC, CACHED_HDC_DEFEXT, CACHED_HDC_DEFEXT );
-        pC->mhDefBmp = (HBITMAP) SelectObject( pC->mhDC, pC->mhSelBmp );
+        pC->mhDefBmp = static_cast<HBITMAP>(SelectObject( pC->mhDC, pC->mhSelBmp ));
 
-        ReleaseDC( 0, hDC );
+        ReleaseDC( nullptr, hDC );
     }
 
     if ( hBmp )
         SelectObject( pC->mhDC, pC->mhActBmp = hBmp );
     else
-        pC->mhActBmp = 0;
+        pC->mhActBmp = nullptr;
 
     return pC->mhDC;
 }
@@ -537,8 +539,8 @@ void ImplClearHDCCache( SalData* pData )
 }
 
 OpenGLCompatibleDC::OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height)
-    : mhBitmap(0)
-    , mpData(NULL)
+    : mhBitmap(nullptr)
+    , mpData(nullptr)
     , maRects(0, 0, width, height, x, y, width, height)
 {
     WinSalGraphics& rWinGraphics = static_cast<WinSalGraphics&>(rGraphics);
@@ -555,11 +557,11 @@ OpenGLCompatibleDC::OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int
 
     // move the origin so that we always paint at 0,0 - to keep the bitmap
     // small
-    OffsetViewportOrgEx(mhCompatibleDC, -x, -y, NULL);
+    OffsetViewportOrgEx(mhCompatibleDC, -x, -y, nullptr);
 
     mhBitmap = WinSalVirtualDevice::ImplCreateVirDevBitmap(mhCompatibleDC, width, height, 32, reinterpret_cast<void **>(&mpData));
 
-    mhOrigBitmap = (HBITMAP) SelectObject(mhCompatibleDC, mhBitmap);
+    mhOrigBitmap = static_cast<HBITMAP>(SelectObject(mhCompatibleDC, mhBitmap));
 }
 
 OpenGLCompatibleDC::~OpenGLCompatibleDC()
@@ -585,10 +587,10 @@ void OpenGLCompatibleDC::fill(sal_uInt32 color)
 OpenGLTexture* OpenGLCompatibleDC::getTexture()
 {
     if (!mpImpl)
-        return NULL;
+        return nullptr;
 
     // turn what's in the mpData into a texture
-    return new OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, reinterpret_cast<sal_uInt8*>(mpData));
+    return new OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, mpData);
 }
 
 bool OpenGLCompatibleDC::copyToTexture(OpenGLTexture& aTexture)
@@ -600,21 +602,21 @@ bool OpenGLCompatibleDC::copyToTexture(OpenGLTexture& aTexture)
 }
 
 WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd, SalGeometryProvider *pProvider):
-    mhLocalDC(0),
+    mhLocalDC(nullptr),
     mbPrinter(eType == WinSalGraphics::PRINTER),
     mbVirDev(eType == WinSalGraphics::VIRTUAL_DEVICE),
     mbWindow(eType == WinSalGraphics::WINDOW),
     mbScreen(bScreen),
     mhWnd(hWnd),
     mfCurrentFontScale(1.0),
-    mhRegion(0),
-    mhDefPen(0),
-    mhDefBrush(0),
-    mhDefFont(0),
-    mhDefPal(0),
-    mpStdClipRgnData(NULL),
+    mhRegion(nullptr),
+    mhDefPen(nullptr),
+    mhDefBrush(nullptr),
+    mhDefFont(nullptr),
+    mhDefPal(nullptr),
+    mpStdClipRgnData(nullptr),
     mbFontKernInit(false),
-    mpFontKernPairs(NULL),
+    mpFontKernPairs(nullptr),
     mnFontKernPairCount(0),
     mnPenWidth(GSL_PEN_WIDTH)
 {
@@ -625,9 +627,9 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
 
     for( int i = 0; i < MAX_FALLBACK; ++i )
     {
-        mhFonts[ i ] = 0;
-        mpWinFontData[ i ]  = NULL;
-        mpWinFontEntry[ i ] = NULL;
+        mhFonts[ i ] = nullptr;
+        mpWinFontData[ i ]  = nullptr;
+        mpWinFontEntry[ i ] = nullptr;
         mfFontScale[ i ] = 1.0;
     }
 }
@@ -640,11 +642,11 @@ WinSalGraphics::~WinSalGraphics()
     if ( mhRegion )
     {
         DeleteRegion( mhRegion );
-        mhRegion = 0;
+        mhRegion = nullptr;
     }
 
     // delete cache data
-    delete [] (BYTE*)mpStdClipRgnData;
+    delete [] reinterpret_cast<BYTE*>(mpStdClipRgnData);
 
     delete [] mpFontKernPairs;
 }
@@ -818,7 +820,7 @@ bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* 
     return mpImpl->drawPolyPolygonBezier( nPoly, pPoints, pPtAry, pFlgAry );
 }
 
-static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, sal_uLong nComp, sal_uLong nSize )
+static BYTE* ImplSearchEntry( BYTE* pSource, BYTE const * pDest, sal_uLong nComp, sal_uLong nSize )
 {
     while ( nComp-- >= nSize )
     {
@@ -832,13 +834,13 @@ static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, sal_uLong nComp, sal_u
             return pSource;
         pSource++;
     }
-    return NULL;
+    return nullptr;
 }
 
 static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
 {
     bool    bRetValue = FALSE;
-    BYTE* pDest = ImplSearchEntry( pSource, (BYTE*)"%%BoundingBox:", nSize, 14 );
+    BYTE* pDest = ImplSearchEntry( pSource, reinterpret_cast<BYTE const *>("%%BoundingBox:"), nSize, 14 );
     if ( pDest )
     {
         nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
@@ -907,11 +909,11 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
     {
         int nEscape = POSTSCRIPT_PASSTHROUGH;
 
-        if ( Escape( getHDC(), QUERYESCSUPPORT, sizeof( int ), ( LPSTR )&nEscape, 0 ) )
+        if ( Escape( getHDC(), QUERYESCSUPPORT, sizeof( int ), reinterpret_cast<LPSTR>(&nEscape), nullptr ) )
         {
             double  nBoundingBox[4];
 
-            if ( ImplGetBoundingBox( nBoundingBox, (BYTE*)pPtr, nSize ) )
+            if ( ImplGetBoundingBox( nBoundingBox, static_cast<BYTE*>(pPtr), nSize ) )
             {
                 OStringBuffer aBuf( POSTSCRIPT_BUFSIZE );
 
@@ -959,8 +961,8 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                 // TODO: Handle more than one rectangle here (take
                 // care, the buffer can handle only POSTSCRIPT_BUFSIZE
                 // characters!)
-                if ( mhRegion != 0 &&
-                     mpStdClipRgnData != NULL &&
+                if ( mhRegion != nullptr &&
+                     mpStdClipRgnData != nullptr &&
                      mpClipRgnData == mpStdClipRgnData &&
                      mpClipRgnData->rdh.nCount == 1 )
                 {
@@ -990,8 +992,8 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
 
                 // #107797# Write out buffer
 
-                *((sal_uInt16*)aBuf.getStr()) = (sal_uInt16)( aBuf.getLength() - 2 );
-                Escape ( getHDC(), nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
+                *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = (sal_uInt16)( aBuf.getLength() - 2 );
+                Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
 
                 // #107797# Write out EPS transformation code
 
@@ -1009,8 +1011,8 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                 aBuf.append( nY - ( dM22 * nBoundingBox[3] ) );
                 aBuf.append( "] concat\n"
                              "%%BeginDocument:\n" );
-                *((sal_uInt16*)aBuf.getStr()) = (sal_uInt16)( aBuf.getLength() - 2 );
-                Escape ( getHDC(), nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
+                *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = (sal_uInt16)( aBuf.getLength() - 2 );
+                Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
 
                 // #107797# Write out actual EPS content
 
@@ -1023,9 +1025,9 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                         nDoNow = POSTSCRIPT_BUFSIZE - 2;
                     // the following is based on the string buffer allocation
                     // of size POSTSCRIPT_BUFSIZE at construction time of aBuf
-                    *((sal_uInt16*)aBuf.getStr()) = (sal_uInt16)nDoNow;
-                    memcpy( (void*)(aBuf.getStr() + 2), (BYTE*)pPtr + nSize - nToDo, nDoNow );
-                    sal_uLong nResult = Escape ( getHDC(), nEscape, nDoNow + 2, (LPTSTR)aBuf.getStr(), 0 );
+                    *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = (sal_uInt16)nDoNow;
+                    memcpy( const_cast<char *>(aBuf.getStr() + 2), static_cast<BYTE*>(pPtr) + nSize - nToDo, nDoNow );
+                    sal_uLong nResult = Escape ( getHDC(), nEscape, nDoNow + 2, aBuf.getStr(), nullptr );
                     if (!nResult )
                         break;
                     nToDo -= nResult;
@@ -1039,8 +1041,8 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                              "count op_count_salWin sub {pop} repeat\n"
                              "countdictstack dict_count_salWin sub {end} repeat\n"
                              "b4_Inc_state_salWin restore\n\n" );
-                *((sal_uInt16*)aBuf.getStr()) = (sal_uInt16)( aBuf.getLength() - 2 );
-                Escape ( getHDC(), nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
+                *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = (sal_uInt16)( aBuf.getLength() - 2 );
+                Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
                 bRetValue = TRUE;
             }
         }
@@ -1053,7 +1055,7 @@ SystemGraphicsData WinSalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
     aRes.nSize = sizeof(aRes);
-    aRes.hDC = const_cast< WinSalGraphics* >(this)->getHDC();
+    aRes.hDC = getHDC();
     return aRes;
 }
 

@@ -51,7 +51,7 @@ public:
     bool                   mbGraphics;             // is Graphics used
 public:
     WinSalInfoPrinter();
-    virtual ~WinSalInfoPrinter();
+    virtual ~WinSalInfoPrinter() override;
 
     virtual SalGraphics*            AcquireGraphics() override;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) override;
@@ -86,7 +86,7 @@ public:
 
 public:
     WinSalPrinter();
-    virtual ~WinSalPrinter();
+    virtual ~WinSalPrinter() override;
 
     using SalPrinter::StartJob;
     virtual bool                    StartJob( const OUString* pFileName,

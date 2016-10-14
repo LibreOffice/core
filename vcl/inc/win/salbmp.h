@@ -62,7 +62,7 @@ public:
     HGLOBAL             ImplGethDIB() const { return mhDIB; }
     HBITMAP             ImplGethDDB() const { return mhDDB; }
 
-    std::shared_ptr< Gdiplus::Bitmap > ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource = 0) const;
+    std::shared_ptr< Gdiplus::Bitmap > ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource = nullptr) const;
 
     static HGLOBAL      ImplCreateDIB( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
     static HANDLE       ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB );
@@ -73,7 +73,7 @@ public:
 public:
 
                         WinSalBitmap();
-    virtual             ~WinSalBitmap();
+    virtual             ~WinSalBitmap() override;
 
 public:
 

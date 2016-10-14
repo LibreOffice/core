@@ -68,35 +68,35 @@ bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
         {
             rIcon       = pSalIcon->hIcon;
             rSmallIcon  = pSalIcon->hSmallIcon;
-            return (rSmallIcon != 0);
+            return (rSmallIcon != nullptr);
         }
     }
 
     // Try at first to load the icons from the application exe file
-    rIcon = (HICON)LoadImage( pSalData->mhInst, MAKEINTRESOURCE( nId ),
+    rIcon = static_cast<HICON>(LoadImage( pSalData->mhInst, MAKEINTRESOURCE( nId ),
                                            IMAGE_ICON, GetSystemMetrics( SM_CXICON ), GetSystemMetrics( SM_CYICON ),
-                                           LR_DEFAULTCOLOR );
+                                           LR_DEFAULTCOLOR ));
     if ( !rIcon )
     {
         // If the application don't provide these icons, then we try
         // to load the icon from the VCL resource
-        rIcon = (HICON)LoadImage( aSalShlData.mhInst, MAKEINTRESOURCE( nId ),
+        rIcon = static_cast<HICON>(LoadImage( aSalShlData.mhInst, MAKEINTRESOURCE( nId ),
                                            IMAGE_ICON, GetSystemMetrics( SM_CXICON ), GetSystemMetrics( SM_CYICON ),
-                                           LR_DEFAULTCOLOR );
+                                           LR_DEFAULTCOLOR ));
         if ( rIcon )
         {
-            rSmallIcon = (HICON)LoadImage( aSalShlData.mhInst, MAKEINTRESOURCE( nId ),
+            rSmallIcon = static_cast<HICON>(LoadImage( aSalShlData.mhInst, MAKEINTRESOURCE( nId ),
                                            IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
-                                           LR_DEFAULTCOLOR );
+                                           LR_DEFAULTCOLOR ));
         }
         else
-            rSmallIcon = 0;
+            rSmallIcon = nullptr;
     }
     else
     {
-        rSmallIcon = (HICON)LoadImage( pSalData->mhInst, MAKEINTRESOURCE( nId ),
+        rSmallIcon = static_cast<HICON>(LoadImage( pSalData->mhInst, MAKEINTRESOURCE( nId ),
                                        IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
-                                       LR_DEFAULTCOLOR );
+                                       LR_DEFAULTCOLOR ));
     }
 
     if( rIcon )
@@ -110,7 +110,7 @@ bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
         pSalData->mpFirstIcon = pSalIcon;
     }
 
-    return (rSmallIcon != 0);
+    return (rSmallIcon != nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -280,6 +280,10 @@ public:
         { return m_pProc ? long(m_pProc( m_pWindow, nEvent, pEvent )) : 0; }
 };
 
+#ifdef _WIN32
+bool HasAtHook();
+#endif
+
 #endif // INCLUDED_VCL_INC_SALFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
