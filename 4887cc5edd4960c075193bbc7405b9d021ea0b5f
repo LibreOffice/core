@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_d3edeb26",
+        "filename": "vcl/source/app/svapp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-10-14T15:13:40Z",
+      "side": 1,
+      "message": "Interesting what it\u0027d show in Windows. Would it be totally useless? I rather not add special cases if it\u0027s not harmful, just to avoid confusing people who might compare them.",
+      "parentUuid": "7a77a97e_fd6c780a",
+      "revId": "4887cc5edd4960c075193bbc7405b9d021ea0b5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_dd67bc23",
         "filename": "vcl/source/src/app.src",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2016-10-13T20:45:21Z",
       "side": 1,
       "message": "should be SV_APP_VCLBACKEND, right?",
+      "range": {
+        "startLine": 37,
+        "startChar": 7,
+        "endLine": 37,
+        "endChar": 21
+      },
+      "revId": "4887cc5edd4960c075193bbc7405b9d021ea0b5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_f3f2e705",
+        "filename": "vcl/source/src/app.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-10-14T15:13:40Z",
+      "side": 1,
+      "message": "Done. Last minute typo :)",
+      "parentUuid": "7a77a97e_dd67bc23",
       "range": {
         "startLine": 37,
         "startChar": 7,
