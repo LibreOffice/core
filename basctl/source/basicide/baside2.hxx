@@ -26,9 +26,6 @@
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
 
-class ExtTextEngine;
-class ExtTextView;
-class SvxSearchItem;
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 
@@ -50,6 +47,9 @@ class SvxSearchItem;
 #include <comphelper/syntaxhighlight.hxx>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 
+class ExtTextEngine;
+class TextView;
+class SvxSearchItem;
 namespace com { namespace sun { namespace star { namespace beans {
     class XMultiPropertySet;
 } } } }
@@ -74,8 +74,8 @@ friend class CodeCompleteListBox;
 private:
     class ChangesListener;
 
-    std::unique_ptr<ExtTextView>   pEditView;
-    std::unique_ptr<ExtTextEngine> pEditEngine;
+    std::unique_ptr<TextView>        pEditView;
+    std::unique_ptr<ExtTextEngine>   pEditEngine;
     ModulWindow&                     rModulWindow;
 
     rtl::Reference< ChangesListener > listener_;
@@ -139,7 +139,7 @@ public:
     virtual void    dispose() override;
 
     ExtTextEngine*  GetEditEngine() const   { return pEditEngine.get(); }
-    ExtTextView*    GetEditView() const     { return pEditView.get(); }
+    TextView*       GetEditView() const     { return pEditView.get(); }
 
     void            CreateProgress( const OUString& rText, sal_uLong nRange );
     void            DestroyProgress();
@@ -389,7 +389,7 @@ public:
     LineNumberWindow&   GetLineNumberWindow()   { return m_aXEditorWindow->GetLineNumberWindow(); }
     ScrollBar&          GetEditVScrollBar()     { return m_aXEditorWindow->GetEWVScrollBar(); }
     ExtTextEngine*      GetEditEngine()         { return GetEditorWindow().GetEditEngine(); }
-    ExtTextView*        GetEditView()           { return GetEditorWindow().GetEditView(); }
+    TextView*           GetEditView()           { return GetEditorWindow().GetEditView(); }
     BreakPointList&     GetBreakPoints()        { return GetBreakPointWindow().GetBreakPoints(); }
     ModulWindowLayout&  GetLayout ()            { return m_rLayout; }
 
@@ -486,7 +486,7 @@ private:
 
     void SetMatchingEntries(); // sets the visible entries based on aFuncBuffer variable
     void HideAndRestoreFocus();
-    ExtTextView* GetParentEditView();
+    TextView* GetParentEditView();
 
 public:
     explicit CodeCompleteListBox( CodeCompleteWindow* pPar );

@@ -954,7 +954,7 @@ void EditorWindow::CreateEditEngine()
         return;
 
     pEditEngine.reset(new ExtTextEngine);
-    pEditView.reset(new ExtTextView(pEditEngine.get(), this));
+    pEditView.reset(new TextView(pEditEngine.get(), this));
     pEditView->SetAutoIndentMode(true);
     pEditEngine->SetUpdateMode(false);
     pEditEngine->InsertView(pEditView.get());
@@ -2632,7 +2632,7 @@ IMPL_LINK_NOARG(CodeCompleteListBox, ImplSelectHdl, ListBox&, void)
     pCodeCompleteWindow->pParent->GrabFocus();
 }
 
-ExtTextView* CodeCompleteListBox::GetParentEditView()
+TextView* CodeCompleteListBox::GetParentEditView()
 {
     return pCodeCompleteWindow->pParent->GetEditView();
 }

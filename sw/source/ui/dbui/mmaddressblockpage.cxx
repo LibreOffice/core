@@ -1423,7 +1423,7 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
 void AddressMultiLineEdit::InsertNewEntry( const OUString& rStr )
 {
     // insert new entry after current selected one.
-    ExtTextView* pTextView = GetTextView();
+    TextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const sal_uInt32 nPara = rSelection.GetStart().GetPara();
     sal_Int32 nIndex = rSelection.GetEnd().GetIndex();
@@ -1453,7 +1453,7 @@ void AddressMultiLineEdit::InsertNewEntryAtPosition( const OUString& rStr, sal_u
     SetText( GetAddress() );
     //select the newly inserted/moved element
     TextSelection aEntrySel(aInsertPos);
-    ExtTextView* pTextView = GetTextView();
+    TextView* pTextView = GetTextView();
     pTextView->SetSelection(aEntrySel);
     m_aSelectionLink.Call(*this);
 }
@@ -1461,7 +1461,7 @@ void AddressMultiLineEdit::InsertNewEntryAtPosition( const OUString& rStr, sal_u
 void AddressMultiLineEdit::RemoveCurrentEntry()
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
-    ExtTextView* pTextView = GetTextView();
+    TextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
     if(pBeginAttrib &&
@@ -1480,7 +1480,7 @@ void AddressMultiLineEdit::RemoveCurrentEntry()
 void AddressMultiLineEdit::MoveCurrentItem(MoveItemFlags nMove)
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
-    ExtTextView* pTextView = GetTextView();
+    TextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
     if(pBeginAttrib &&
@@ -1555,7 +1555,7 @@ MoveItemFlags  AddressMultiLineEdit::IsCurrentItemMoveable()
 {
     MoveItemFlags nRet = MoveItemFlags::NONE;
     ExtTextEngine* pTextEngine = GetTextEngine();
-    ExtTextView* pTextView = GetTextView();
+    TextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
     if(pBeginAttrib &&
@@ -1575,7 +1575,7 @@ MoveItemFlags  AddressMultiLineEdit::IsCurrentItemMoveable()
 bool AddressMultiLineEdit::HasCurrentItem()
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
-    ExtTextView* pTextView = GetTextView();
+    TextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
     return (pBeginAttrib &&
@@ -1586,7 +1586,7 @@ bool AddressMultiLineEdit::HasCurrentItem()
 OUString AddressMultiLineEdit::GetCurrentItem()
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
-    ExtTextView* pTextView = GetTextView();
+    TextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
     if(pBeginAttrib &&
@@ -1603,7 +1603,7 @@ OUString AddressMultiLineEdit::GetCurrentItem()
 void AddressMultiLineEdit::SelectCurrentItem()
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
-    ExtTextView* pTextView = GetTextView();
+    TextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
     if(pBeginAttrib &&

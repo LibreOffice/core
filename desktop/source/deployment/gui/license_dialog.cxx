@@ -157,7 +157,7 @@ bool LicenseView::IsEndReached() const
 {
     bool bEndReached;
 
-    ExtTextView*    pView = GetTextView();
+    TextView*       pView = GetTextView();
     ExtTextEngine*  pEdit = GetTextEngine();
     const long      nHeight = pEdit->GetTextHeight();
     Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();

@@ -22,6 +22,7 @@
 #include <vcl/settings.hxx>
 #include <textdoc.hxx>
 #include <vcl/textdata.hxx>
+#include <vcl/xtextedt.hxx>
 #include <textdat2.hxx>
 
 #include <svl/undo.hxx>
@@ -33,22 +34,21 @@
 #include <sot/formats.hxx>
 #include <svl/urlbmk.hxx>
 
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-
-#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-
-#include <com/sun/star/i18n/WordType.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <vcl/unohelp.hxx>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchFlags.hpp>
 
 #include <vcl/edit.hxx>
 
@@ -145,7 +145,7 @@ sal_Bool TETextDataObject::isDataFlavorSupported( const css::datatransfer::DataF
 
 struct ImpTextView
 {
-    TextEngine*         mpTextEngine;
+    ExtTextEngine*      mpTextEngine;
 
     VclPtr<vcl::Window> mpWindow;
     TextSelection       maSelection;
@@ -177,7 +177,7 @@ struct ImpTextView
     bool                mbCursorAtEndOfLine;
 };
 
-TextView::TextView( TextEngine* pEng, vcl::Window* pWindow ) :
+TextView::TextView( ExtTextEngine* pEng, vcl::Window* pWindow ) :
     mpImpl(new ImpTextView)
 {
     pWindow->EnableRTL( false );
@@ -2246,5 +2246,176 @@ bool                TextView::IsInsertMode() const
 { return mpImpl->mbInsertMode; }
 void                TextView::SupportProtectAttribute(bool bSupport)
 { mpImpl->mbSupportProtectAttribute = bSupport;}
+
+bool TextView::MatchGroup()
+{
+    TextSelection aTmpSel( GetSelection() );
+    aTmpSel.Justify();
+    if ( ( aTmpSel.GetStart().GetPara() != aTmpSel.GetEnd().GetPara() ) ||
+         ( ( aTmpSel.GetEnd().GetIndex() - aTmpSel.GetStart().GetIndex() ) > 1 ) )
+    {
+        return false;
+    }
+
+    TextSelection aMatchSel = static_cast<ExtTextEngine*>(GetTextEngine())->MatchGroup( aTmpSel.GetStart() );
+    if ( aMatchSel.HasRange() )
+        SetSelection( aMatchSel );
+
+    return aMatchSel.HasRange();
+}
+
+bool TextView::Search( const css::util::SearchOptions& rSearchOptions, bool bForward )
+{
+    bool bFound = false;
+    TextSelection aSel( GetSelection() );
+    if ( static_cast<ExtTextEngine*>(GetTextEngine())->Search( aSel, rSearchOptions, bForward ) )
+    {
+        bFound = true;
+        // First add the beginning of the word to the selection,
+        // so that the whole word is in the visible region.
+        SetSelection( aSel.GetStart() );
+        ShowCursor( true, false );
+    }
+    else
+    {
+        aSel = GetSelection().GetEnd();
+    }
+
+    SetSelection( aSel );
+    ShowCursor();
+
+    return bFound;
+}
+
+sal_uInt16 TextView::Replace( const css::util::SearchOptions& rSearchOptions, bool bAll, bool bForward )
+{
+    sal_uInt16 nFound = 0;
+
+    if ( !bAll )
+    {
+        if ( GetSelection().HasRange() )
+        {
+            InsertText( rSearchOptions.replaceString );
+            nFound = 1;
+            Search( rSearchOptions, bForward ); // right away to the next
+        }
+        else
+        {
+            if( Search( rSearchOptions, bForward ) )
+                nFound = 1;
+        }
+    }
+    else
+    {
+        // the writer replaces all, from beginning to end
+
+        ExtTextEngine* pTextEngine = static_cast<ExtTextEngine*>(GetTextEngine());
+
+        // HideSelection();
+        TextSelection aSel;
+
+        bool bSearchInSelection = (0 != (rSearchOptions.searchFlag & css::util::SearchFlags::REG_NOT_BEGINOFLINE) );
+        if ( bSearchInSelection )
+        {
+            aSel = GetSelection();
+            aSel.Justify();
+        }
+
+        TextSelection aSearchSel( aSel );
+
+        bool bFound = pTextEngine->Search( aSel, rSearchOptions );
+        if ( bFound )
+            pTextEngine->UndoActionStart();
+        while ( bFound )
+        {
+            nFound++;
+
+            TextPaM aNewStart = pTextEngine->ImpInsertText( aSel, rSearchOptions.replaceString );
+            aSel = aSearchSel;
+            aSel.GetStart() = aNewStart;
+            bFound = pTextEngine->Search( aSel, rSearchOptions );
+        }
+        if ( nFound )
+        {
+            SetSelection( aSel.GetStart() );
+            pTextEngine->FormatAndUpdate( this );
+            pTextEngine->UndoActionEnd();
+        }
+    }
+    return nFound;
+}
+
+bool TextView::ImpIndentBlock( bool bRight )
+{
+    bool bDone = false;
+
+    TextSelection aSel = GetSelection();
+    aSel.Justify();
+
+    HideSelection();
+    GetTextEngine()->UndoActionStart();
+
+    const sal_uInt32 nStartPara = aSel.GetStart().GetPara();
+    sal_uInt32 nEndPara = aSel.GetEnd().GetPara();
+    if ( aSel.HasRange() && !aSel.GetEnd().GetIndex() )
+    {
+        nEndPara--; // do not indent
+    }
+
+    for ( sal_uInt32 nPara = nStartPara; nPara <= nEndPara; ++nPara )
+    {
+        if ( bRight )
+        {
+            // add tabs
+            GetTextEngine()->ImpInsertText( TextPaM( nPara, 0 ), '\t' );
+            bDone = true;
+        }
+        else
+        {
+            // remove Tabs/Blanks
+            OUString aText = GetTextEngine()->GetText( nPara );
+            if ( !aText.isEmpty() && (
+                    ( aText[ 0 ] == '\t' ) ||
+                    ( aText[ 0 ] == ' ' ) ) )
+            {
+                GetTextEngine()->ImpDeleteText( TextSelection( TextPaM( nPara, 0 ), TextPaM( nPara, 1 ) ) );
+                bDone = true;
+            }
+        }
+    }
+
+    GetTextEngine()->UndoActionEnd();
+
+    bool bRange = aSel.HasRange();
+    if ( bRight )
+    {
+        ++aSel.GetStart().GetIndex();
+        if ( bRange && ( aSel.GetEnd().GetPara() == nEndPara ) )
+            ++aSel.GetEnd().GetIndex();
+    }
+    else
+    {
+        if ( aSel.GetStart().GetIndex() )
+            --aSel.GetStart().GetIndex();
+        if ( bRange && aSel.GetEnd().GetIndex() )
+            --aSel.GetEnd().GetIndex();
+    }
+
+    ImpSetSelection( aSel );
+    GetTextEngine()->FormatAndUpdate( this );
+
+    return bDone;
+}
+
+bool TextView::IndentBlock()
+{
+    return ImpIndentBlock( true );
+}
+
+bool TextView::UnindentBlock()
+{
+    return ImpIndentBlock( false );
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

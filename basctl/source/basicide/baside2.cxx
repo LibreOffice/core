@@ -560,7 +560,7 @@ void ModulWindow::BasicToggleBreakPointEnabled()
 {
     AssertValidEditEngine();
 
-    ExtTextView* pView = GetEditView();
+    TextView* pView = GetEditView();
     if ( pView )
     {
         TextSelection aSel = pView->GetSelection();
@@ -1211,7 +1211,7 @@ sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem,
 
     // one could also relinquish syntaxhighlighting/formatting instead of the stupid replace-everything...
     AssertValidEditEngine();
-    ExtTextView* pView = GetEditView();
+    TextView* pView = GetEditView();
     TextSelection aSel;
     if ( bFromStart )
     {
