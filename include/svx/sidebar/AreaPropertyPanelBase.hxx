@@ -157,8 +157,6 @@ protected:
 
     css::uno::Reference<css::frame::XFrame>                 mxFrame;
 
-    sfx2::sidebar::SidebarController* mpSidebarController;
-
     DECL_LINK_TYPED(SelectFillTypeHdl, ListBox&, void );
     DECL_LINK_TYPED(SelectFillAttrHdl, ListBox&, void );
     DECL_LINK_TYPED(ChangeTrgrTypeHdl_Impl, ListBox&, void);
