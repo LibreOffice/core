@@ -310,8 +310,7 @@ sal_Bool GenericPopupToolbarController::supportsService(OUString const & rServic
 css::uno::Sequence<OUString> GenericPopupToolbarController::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
-    return aRet;
+    return {"com.sun.star.frame.ToolbarController"};
 }
 
 ToolBoxItemBits GenericPopupToolbarController::getDropDownStyle() const
@@ -515,8 +514,7 @@ sal_Bool SaveToolbarController::supportsService( OUString const & rServiceName )
 css::uno::Sequence< OUString > SaveToolbarController::getSupportedServiceNames()
     throw ( css::uno::RuntimeException )
 {
-    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
-    return aRet;
+    return {"com.sun.star.frame.ToolbarController"};
 }
 
 class NewToolbarController : public PopupMenuToolbarController
@@ -565,8 +563,7 @@ sal_Bool NewToolbarController::supportsService(OUString const & rServiceName)
 css::uno::Sequence<OUString> NewToolbarController::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
-    return aRet;
+    return {"com.sun.star.frame.ToolbarController"};
 }
 
 void SAL_CALL NewToolbarController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
