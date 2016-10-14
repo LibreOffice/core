@@ -94,6 +94,11 @@ const sal_uInt16 SC_INSUFFICIENT_STORAGE             = 507;
 // unofficial status codes only used internally by LO
 // used to cache the connection time out event
 const sal_uInt16 USC_CONNECTION_TIMED_OUT            = 908;
+    // name resolution failed
+const sal_uInt16 USC_LOOKUP_FAILED                   = 909;
+const sal_uInt16 USC_AUTH_FAILED                     = 910;
+const sal_uInt16 USC_AUTHPROXY_FAILED                = 911;
+
 
 
 class DAVException : public std::exception
