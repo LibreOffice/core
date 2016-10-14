@@ -2617,6 +2617,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XFrames \
 	XFramesSupplier \
 	XGlobalEventBroadcaster \
+	XInfobarProvider \
 	XInterceptorInfo \
 	XLayoutManager \
 	XLayoutManager2 \

@@ -52,6 +52,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XInfobarProvider.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/frame/LayoutManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -113,8 +114,8 @@ class Frame:
         css::awt::XTopWindowListener, css::awt::XFocusListener,
         css::document::XActionLockable, css::util::XCloseable,
         css::frame::XComponentLoader, css::frame::XTitle,
-        css::frame::XTitleChangeBroadcaster, css::beans::XPropertySet,
-        css::beans::XPropertySetInfo>
+        css::frame::XTitleChangeBroadcaster, css::frame::XInfobarProvider,
+        css::beans::XPropertySet, css::beans::XPropertySetInfo>
 {
 public:
 
@@ -337,6 +338,12 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setLayoutManager(const css::uno::Reference < css::uno::XInterface > & )
         throw (css::uno::RuntimeException, std::exception) override;
+
+    // XInfobarProvider
+
+    virtual void SAL_CALL createInfobar(const OUString& id,
+                                        const ::rtl::OUString& message )
+        throw (::css::uno::RuntimeException, ::std::exception) override;
 
     // XPropertySet
     virtual css::uno::Reference < css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
@@ -1948,6 +1955,13 @@ void SAL_CALL Frame::setLayoutManager(const css::uno::Reference<css::uno::XInter
     checkDisposed();
     SolarMutexGuard g;
     m_xLayoutManager.set(p1, css::uno::UNO_QUERY);
+}
+
+void SAL_CALL Frame::createInfobar(const OUString& id,
+                            const ::rtl::OUString& message )
+        throw (::css::uno::RuntimeException, ::std::exception)
+{
+    SAL_DEBUG("createInfobar; id: "<< id << " msg: "<< message );
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Frame::getPropertySetInfo()
