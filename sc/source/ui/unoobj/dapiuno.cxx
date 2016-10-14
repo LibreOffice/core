@@ -1385,7 +1385,6 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     mpDPObject->SetSaveData(aSaveData);
     ScSheetSourceDesc aSheetDesc(pDocSh ? &pDocSh->GetDocument() : nullptr);
     mpDPObject->SetSheetDesc(aSheetDesc);
-    mpDPObject->GetSource();
 }
 
 ScDataPilotDescriptor::~ScDataPilotDescriptor()
