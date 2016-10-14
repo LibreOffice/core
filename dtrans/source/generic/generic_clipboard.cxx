@@ -33,7 +33,7 @@ using ::dtrans::GenericClipboard;
 
 GenericClipboard::GenericClipboard() :
     WeakComponentImplHelper< XClipboardEx, XClipboardNotifier, XServiceInfo, XInitialization > (m_aMutex),
-    m_bInitialized(sal_False)
+    m_bInitialized(false)
 {
 }
 
@@ -156,7 +156,7 @@ Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames()
 Reference< XInterface > SAL_CALL GenericClipboard_createInstance(
     const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/)
 {
-    return Reference < XInterface >( ( OWeakObject * ) new GenericClipboard());
+    return Reference < XInterface >(static_cast<OWeakObject *>(new GenericClipboard()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

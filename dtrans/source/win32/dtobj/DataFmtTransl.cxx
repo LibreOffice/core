@@ -154,7 +154,7 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& a
     return aFlavor;
 }
 
-CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformatName( const OUString& aClipFmtName ) const
+CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformatName( const OUString& aClipFmtName )
 {
     // check parameter
     if ( !aClipFmtName.getLength( ) )
@@ -164,7 +164,7 @@ CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformatName( const 
     return getFormatEtcForClipformat( cf );
 }
 
-OUString CDataFormatTranslator::getClipboardFormatName( CLIPFORMAT aClipformat ) const
+OUString CDataFormatTranslator::getClipboardFormatName( CLIPFORMAT aClipformat )
 {
     OSL_PRECOND( CF_INVALID != aClipformat, "Invalid clipboard format" );
 
@@ -174,9 +174,9 @@ OUString CDataFormatTranslator::getClipboardFormatName( CLIPFORMAT aClipformat )
     return OUString( wBuff, nLen );
 }
 
-CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT cf ) const
+CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT cf )
 {
-    CFormatEtc fetc( cf, TYMED_NULL, NULL, DVASPECT_CONTENT );
+    CFormatEtc fetc( cf, TYMED_NULL, nullptr, DVASPECT_CONTENT );
 
     switch( cf )
     {
@@ -207,34 +207,34 @@ CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT
     return fetc;
 }
 
-sal_Bool SAL_CALL CDataFormatTranslator::isOemOrAnsiTextFormat( CLIPFORMAT cf ) const
+bool SAL_CALL CDataFormatTranslator::isOemOrAnsiTextFormat( CLIPFORMAT cf )
 {
     return ( (cf == CF_TEXT) || (cf == CF_OEMTEXT) );
 }
 
-sal_Bool SAL_CALL CDataFormatTranslator::isUnicodeTextFormat( CLIPFORMAT cf ) const
+bool SAL_CALL CDataFormatTranslator::isUnicodeTextFormat( CLIPFORMAT cf )
 {
     return ( cf == CF_UNICODETEXT );
 }
 
-sal_Bool SAL_CALL CDataFormatTranslator::isTextFormat( CLIPFORMAT cf ) const
+bool SAL_CALL CDataFormatTranslator::isTextFormat( CLIPFORMAT cf )
 {
     return ( isOemOrAnsiTextFormat( cf ) || isUnicodeTextFormat( cf ) );
 }
 
-sal_Bool SAL_CALL CDataFormatTranslator::isHTMLFormat( CLIPFORMAT cf ) const
+bool SAL_CALL CDataFormatTranslator::isHTMLFormat( CLIPFORMAT cf )
 {
     OUString clipFormatName = getClipboardFormatName( cf );
     return ( clipFormatName == HTML_FORMAT_NAME_WINDOWS );
 }
 
-sal_Bool SAL_CALL CDataFormatTranslator::isTextHtmlFormat( CLIPFORMAT cf ) const
+bool SAL_CALL CDataFormatTranslator::isTextHtmlFormat( CLIPFORMAT cf )
 {
     OUString clipFormatName = getClipboardFormatName( cf );
     return ( clipFormatName.equalsIgnoreAsciiCase( HTML_FORMAT_NAME_SOFFICE ) );
 }
 
-OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat ) const
+OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat )
 {
     OSL_ASSERT( isOemOrAnsiTextFormat( aClipformat ) );
 
@@ -254,7 +254,7 @@ OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromLCID( LCID lcid, CLIP
                     PRE_OEM_CODEPAGE );
     }
     else // CF_UNICODE
-        OSL_ASSERT( sal_False );
+        OSL_ASSERT( false );
 
     return charset;
 }

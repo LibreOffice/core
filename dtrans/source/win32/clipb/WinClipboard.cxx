@@ -69,7 +69,7 @@ Reference< XTransferable > SAL_CALL CWinClipboard::getContents( ) throw( Runtime
         throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
-    if ( NULL != m_pImpl.get( ) )
+    if ( nullptr != m_pImpl.get( ) )
         return m_pImpl->getContents( );
 
     return Reference< XTransferable >( );
@@ -85,7 +85,7 @@ void SAL_CALL CWinClipboard::setContents( const Reference< XTransferable >& xTra
         throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
-    if ( NULL != m_pImpl.get( ) )
+    if ( nullptr != m_pImpl.get( ) )
         m_pImpl->setContents( xTransferable, xClipboardOwner );
 }
 
@@ -95,7 +95,7 @@ OUString SAL_CALL CWinClipboard::getName(  ) throw( RuntimeException )
         throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
-    if ( NULL != m_pImpl.get( ) )
+    if ( nullptr != m_pImpl.get( ) )
         return m_pImpl->getName( );
 
     return OUString("");
@@ -111,7 +111,7 @@ void SAL_CALL CWinClipboard::flushClipboard( ) throw( RuntimeException )
         throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
-    if ( NULL != m_pImpl.get( ) )
+    if ( nullptr != m_pImpl.get( ) )
         m_pImpl->flushClipboard( );
 }
 
@@ -123,8 +123,8 @@ sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities(  ) throw( RuntimeExce
         throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
-    if ( NULL != m_pImpl.get( ) )
-        return m_pImpl->getRenderingCapabilities( );
+    if ( nullptr != m_pImpl.get( ) )
+        return CWinClipbImpl::getRenderingCapabilities( );
 
     return 0;
 }

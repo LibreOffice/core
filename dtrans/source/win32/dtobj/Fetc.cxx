@@ -24,7 +24,7 @@
 CFormatEtc::CFormatEtc(  )
 {
     m_FormatEtc.cfFormat = 0;
-    m_FormatEtc.ptd      = NULL;
+    m_FormatEtc.ptd      = nullptr;
     m_FormatEtc.dwAspect = 0;
     m_FormatEtc.lindex   = -1;
     m_FormatEtc.tymed    = TYMED_NULL;
@@ -109,7 +109,7 @@ void CFormatEtc::getTargetDevice( DVTARGETDEVICE** lpDvTargetDevice ) const
     OSL_ASSERT( lpDvTargetDevice );
     OSL_ASSERT( !IsBadWritePtr( lpDvTargetDevice, sizeof( DVTARGETDEVICE ) ) );
 
-    *lpDvTargetDevice = NULL;
+    *lpDvTargetDevice = nullptr;
 
     if ( m_FormatEtc.ptd )
         *lpDvTargetDevice = CopyTargetDevice( m_FormatEtc.ptd );
@@ -153,14 +153,14 @@ void CFormatEtc::setLindex( LONG lindex )
     m_FormatEtc.lindex = lindex;
 }
 
-sal_Int32 operator==( const CFormatEtc& lhs, const CFormatEtc& rhs )
+bool operator==( const CFormatEtc& lhs, const CFormatEtc& rhs )
 {
     return CompareFormatEtc( &lhs.m_FormatEtc, &rhs.m_FormatEtc );
 }
 
-sal_Int32 operator!=( const CFormatEtc& lhs, const CFormatEtc& rhs )
+bool operator!=( const CFormatEtc& lhs, const CFormatEtc& rhs )
 {
-    return ( ( lhs == rhs ) != 1 );
+    return !( lhs == rhs );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

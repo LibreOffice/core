@@ -53,14 +53,14 @@ extern "C"
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL ftransl_component_getFactory( const sal_Char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
 {
-    void* pRet = 0;
+    void* pRet = nullptr;
 
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS { SERVICE_NAME };
 
         Reference< XSingleServiceFactory > xFactory ( createOneInstanceFactory(
-            reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
+            static_cast< XMultiServiceFactory* > ( pSrvManager ),
             OUString::createFromAscii( pImplName ),
             createInstance,
             aSNS ) );

@@ -33,7 +33,7 @@ int CalcBuffSizeForTextConversion( UINT code_page, LPCSTR lpMultiByteString, int
                                 0,
                                 lpMultiByteString,
                                 nLen,
-                                NULL,
+                                nullptr,
                                 0 ) * sizeof( sal_Unicode ) );
 }
 
@@ -45,10 +45,10 @@ int CalcBuffSizeForTextConversion( UINT code_page, LPCWSTR lpWideCharString, int
                                 0,
                                 lpWideCharString,
                                 nLen,
-                                NULL,
+                                nullptr,
                                 0,
-                                NULL,
-                                NULL );
+                                nullptr,
+                                nullptr );
 }
 
 // converts text in one code page into unicode text
@@ -62,7 +62,7 @@ int MultiByteToWideCharEx( UINT cp_src,
                            BOOL bEnsureTrailingZero )
 {
     OSL_ASSERT( IsValidCodePage( cp_src ) );
-    OSL_ASSERT( NULL != lpMultiByteString );
+    OSL_ASSERT( nullptr != lpMultiByteString );
 
     // calculate the required buff size
     int reqSize = CalcBuffSizeForTextConversion( cp_src, lpMultiByteString, lenStr );
@@ -96,7 +96,7 @@ int WideCharToMultiByteEx( UINT cp_dest,
                            BOOL bEnsureTrailingZero )
 {
     OSL_ASSERT( IsValidCodePage( cp_dest ) );
-    OSL_ASSERT( NULL != lpWideCharString );
+    OSL_ASSERT( nullptr != lpWideCharString );
 
     // calculate the required buff size
     int reqSize = CalcBuffSizeForTextConversion( cp_dest, lpWideCharString, lenStr );
@@ -117,8 +117,8 @@ int WideCharToMultiByteEx( UINT cp_dest,
                                 lenStr,
                                 static_cast< LPSTR >( ptrHGlob.GetMemPtr( ) ),
                                 ptrHGlob.MemSize( ),
-                                NULL,
-                                NULL );
+                                nullptr,
+                                nullptr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,7 @@
 
 CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
     m_rIDataObjectOrg( rIDataObject ),
-    m_hGlobal( NULL ),
+    m_hGlobal( nullptr ),
     m_nRefCnt( 0 )
 {
 
@@ -45,7 +45,7 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
     // that it can be unmarshaled multiple times when this
     // class will be used from another apartment
     IStreamPtr pStm;
-    HRESULT hr = CreateStreamOnHGlobal( 0, KEEP_HGLOB_ON_RELEASE, &pStm );
+    HRESULT hr = CreateStreamOnHGlobal( nullptr, KEEP_HGLOB_ON_RELEASE, &pStm );
 
     OSL_ENSURE( E_INVALIDARG != hr, "invalid args passed to CreateStreamOnHGlobal" );
 
@@ -56,7 +56,7 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
             __uuidof(IDataObject),
             static_cast<LPUNKNOWN>(m_rIDataObjectOrg.get()),
             MSHCTX_LOCAL,
-            NULL,
+            nullptr,
             MSHLFLAGS_TABLEWEAK );
 
         OSL_ENSURE( CO_E_NOTINITIALIZED != hr_marshal, "COM is not initialized" );
@@ -79,8 +79,8 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
 
             HGLOBAL hGlobal =
                 GlobalFree(m_hGlobal);
-            OSL_ENSURE(NULL == hGlobal, "GlobalFree failed");
-            m_hGlobal = NULL;
+            OSL_ENSURE(nullptr == hGlobal, "GlobalFree failed");
+            m_hGlobal = nullptr;
         }
     }
 }
@@ -106,18 +106,18 @@ CAPNDataObject::~CAPNDataObject( )
 
 STDMETHODIMP CAPNDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
 {
-    OSL_ASSERT( NULL != ppvObject );
+    OSL_ASSERT( nullptr != ppvObject );
 
-    if ( NULL == ppvObject )
+    if ( nullptr == ppvObject )
         return E_INVALIDARG;
 
     HRESULT hr = E_NOINTERFACE;
-    *ppvObject = NULL;
+    *ppvObject = nullptr;
 
     if ( ( __uuidof( IUnknown ) == iid ) || ( __uuidof( IDataObject ) == iid ) )
     {
         *ppvObject = static_cast< IUnknown* >( this );
-        ( (LPUNKNOWN)*ppvObject )->AddRef( );
+        static_cast<LPUNKNOWN>(*ppvObject)->AddRef( );
         hr = S_OK;
     }
 
@@ -309,9 +309,9 @@ CAPNDataObject::operator IDataObject*( )
 
 HRESULT CAPNDataObject::MarshalIDataObjectIntoCurrentApartment( IDataObject** ppIDataObj )
 {
-    OSL_ASSERT(NULL != ppIDataObj);
+    OSL_ASSERT(nullptr != ppIDataObj);
 
-    *ppIDataObj = NULL;
+    *ppIDataObj = nullptr;
     HRESULT hr = E_FAIL;
 
     if (m_hGlobal)
@@ -323,7 +323,7 @@ HRESULT CAPNDataObject::MarshalIDataObjectIntoCurrentApartment( IDataObject** pp
 
         if (SUCCEEDED(hr))
         {
-            hr = CoUnmarshalInterface(pStm.get(), __uuidof(IDataObject), (void**)ppIDataObj);
+            hr = CoUnmarshalInterface(pStm.get(), __uuidof(IDataObject), reinterpret_cast<void**>(ppIDataObj));
             OSL_ENSURE(CO_E_NOTINITIALIZED != hr, "COM is not initialized");
         }
     }

@@ -53,9 +53,9 @@ public:
     // removes the formatetc at pos
     void SAL_CALL removeAllFormatEtc( );
 
-    sal_Bool SAL_CALL hasFormatEtc( const CFormatEtc& fetc ) const;
+    bool SAL_CALL hasFormatEtc( const CFormatEtc& fetc ) const;
 
-    sal_Bool SAL_CALL hasElements( ) const;
+    bool SAL_CALL hasElements( ) const;
 
     // begin enumeration
     void SAL_CALL beginEnumFormatEtc( );
@@ -67,7 +67,7 @@ public:
     sal_uInt32 SAL_CALL nextFormatEtc( LPFORMATETC lpFetc, sal_uInt32 aNum = 1 );
 
     // skips the specified number of elements in the container
-    sal_Bool SAL_CALL skipFormatEtc( sal_uInt32 aNum );
+    bool SAL_CALL skipFormatEtc( sal_uInt32 aNum );
 
 protected:
     typedef std::vector< CFormatEtc > FormatEtcMap_t;
@@ -102,32 +102,31 @@ public:
     void SAL_CALL RegisterFormats( const css::uno::Reference< css::datatransfer::XTransferable >& aXTransferable,
                                    CFormatEtcContainer& aFormatEtcContainer );
 
-    sal_Bool   SAL_CALL hasSynthesizedLocale( ) const;
-    LCID       SAL_CALL getSynthesizedLocale( ) const;
-    sal_uInt32 SAL_CALL getRegisteredTextCodePage( ) const;
+    bool   SAL_CALL hasSynthesizedLocale( ) const;
+    static LCID SAL_CALL getSynthesizedLocale( );
+    static sal_uInt32 SAL_CALL getRegisteredTextCodePage( );
     css::datatransfer::DataFlavor SAL_CALL getRegisteredTextFlavor( ) const;
 
-    sal_Bool  SAL_CALL isSynthesizeableFormat( const CFormatEtc& aFormatEtc ) const;
-    sal_Bool  SAL_CALL needsToSynthesizeAccompanyFormats( const CFormatEtc& aFormatEtc ) const;
+    static bool SAL_CALL isSynthesizeableFormat( const CFormatEtc& aFormatEtc );
+    static bool SAL_CALL needsToSynthesizeAccompanyFormats( const CFormatEtc& aFormatEtc );
 
 private:
-    sal_Bool      SAL_CALL isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) const;
     OUString SAL_CALL getCharsetFromDataFlavor( const css::datatransfer::DataFlavor& aFlavor );
 
-    sal_Bool SAL_CALL hasUnicodeFlavor(
+    bool SAL_CALL hasUnicodeFlavor(
         const css::uno::Reference< css::datatransfer::XTransferable >& aXTransferable ) const;
 
-    sal_Bool SAL_CALL findLocaleForTextCodePage( );
+    static bool SAL_CALL findLocaleForTextCodePage( );
 
-    static sal_Bool SAL_CALL isLocaleOemCodePage( LCID lcid, sal_uInt32 codepage );
-    static sal_Bool SAL_CALL isLocaleAnsiCodePage( LCID lcid, sal_uInt32 codepage );
-    static sal_Bool SAL_CALL isLocaleCodePage( LCID lcid, LCTYPE lctype, sal_uInt32 codepage );
+    static bool SAL_CALL isLocaleOemCodePage( LCID lcid, sal_uInt32 codepage );
+    static bool SAL_CALL isLocaleAnsiCodePage( LCID lcid, sal_uInt32 codepage );
+    static bool SAL_CALL isLocaleCodePage( LCID lcid, LCTYPE lctype, sal_uInt32 codepage );
 
     static BOOL CALLBACK EnumLocalesProc( LPSTR lpLocaleStr );
 
 private:
     const CDataFormatTranslator&             m_DataFormatTranslator;
-    sal_Bool                                 m_bHasSynthesizedLocale;
+    bool                                     m_bHasSynthesizedLocale;
     css::datatransfer::DataFlavor            m_RegisteredTextFlavor;
 
     const css::uno::Reference< css::uno::XComponentContext >  m_xContext;

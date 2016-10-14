@@ -33,9 +33,9 @@
 
 // target device and formatetc helper
 void      SAL_CALL DeleteTargetDevice(DVTARGETDEVICE* ptd);
-sal_Bool  SAL_CALL CopyFormatEtc(LPFORMATETC petcDest, LPFORMATETC petcSrc);
+bool  SAL_CALL CopyFormatEtc(LPFORMATETC petcDest, LPFORMATETC petcSrc);
 sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLeft, const FORMATETC* pFetcRight);
-sal_Bool  SAL_CALL CompareTargetDevice(DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* ptdRight);
+bool  SAL_CALL CompareTargetDevice(DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* ptdRight);
 DVTARGETDEVICE* SAL_CALL CopyTargetDevice(DVTARGETDEVICE* ptdSrc);
 
 // some codepage helper functions
@@ -68,7 +68,7 @@ OUString SAL_CALL getMimeCharsetFromLocaleId(
 
 // returns true, if a given codepage is an oem codepage
 
-sal_Bool SAL_CALL IsOEMCP( sal_uInt32 codepage );
+bool SAL_CALL IsOEMCP( sal_uInt32 codepage );
 
 // converts a codepage into a string representation
 

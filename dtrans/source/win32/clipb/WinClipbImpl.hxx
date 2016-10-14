@@ -61,7 +61,7 @@ protected:
 
     // XClipboardEx
 
-    sal_Int8 SAL_CALL getRenderingCapabilities(  ) throw( css::uno::RuntimeException );
+    static sal_Int8 SAL_CALL getRenderingCapabilities(  ) throw( css::uno::RuntimeException );
 
     // XFlushableClipboard
 
