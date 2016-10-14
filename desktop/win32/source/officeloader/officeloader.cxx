@@ -79,9 +79,9 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     DWORD   dwExitCode = (DWORD)-1;
 
     BOOL    fSuccess = FALSE;
-    LPTSTR  lpCommandLine = NULL;
+    LPTSTR  lpCommandLine = nullptr;
     int argc = 0;
-    LPTSTR * argv = NULL;
+    LPTSTR * argv = nullptr;
     bool bFirst = true;
     WCHAR cwd[MAX_PATH];
     DWORD cwdLen = GetCurrentDirectoryW(MAX_PATH, cwd);
@@ -159,11 +159,11 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         fSuccess = CreateProcess(
             szTargetFileName,
             lpCommandLine,
-            NULL,
-            NULL,
+            nullptr,
+            nullptr,
             TRUE,
             0,
-            NULL,
+            nullptr,
             szIniDirectory,
             &aStartupInfo,
             &aProcessInfo );
@@ -183,7 +183,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                 {
                     MSG msg;
 
-                    PeekMessage( &msg, NULL, 0, 0, PM_REMOVE );
+                    PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE );
                 }
             } while ( WAIT_OBJECT_0 + 1 == dwWaitResult );
 

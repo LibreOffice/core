@@ -1136,7 +1136,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
 #if defined UNX
                 aHelpURLBuffer.append("&System=UNX");
 #elif defined WNT
-                aHelpURLBuffer.appendAscii("&System=WIN");
+                aHelpURLBuffer.append("&System=WIN");
 #endif
                 ApplicationEvent* pAppEvent = new ApplicationEvent(
                     ApplicationEvent::Type::OpenHelpUrl,

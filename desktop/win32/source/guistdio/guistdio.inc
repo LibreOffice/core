@@ -57,7 +57,7 @@ DWORD passOutputToConsole(HANDLE readPipe, HANDLE console)
 
     DWORD dwToRead = sizeof(aBuffer);
     BYTE * pBuffer = aBuffer;
-    while ( ReadFile( hReadPipe, pBuffer, dwToRead, &dwRead, NULL ) )
+    while ( ReadFile( hReadPipe, pBuffer, dwToRead, &dwRead, nullptr ) )
     {
         //If the previous ReadFile call read an odd number of bytes, then the last one was
         //put at the front of the buffer. We increase the number of read bytes by one to reflect
@@ -66,13 +66,13 @@ DWORD passOutputToConsole(HANDLE readPipe, HANDLE console)
             dwRead++;
         //We must make sure that only complete wchar_t|s are written. WriteConsolse takes
         //the number of wchar_t|s as argument. ReadFile, however, reads bytes.
-        bIncompleteWchar = (dwRead % 2) ? true : false;
+        bIncompleteWchar = (dwRead % 2) != 0;
         if (bIncompleteWchar)
         {
             //To test this case, give aBuffer a small odd size, e.g. aBuffer[3]
             //The last byte, which is the incomplete wchar_t (half of it), will not be written.
             (void) WriteConsoleW( console, aBuffer,
-                (dwRead - 1) / 2, &dwWritten, NULL );
+                (dwRead - 1) / 2, &dwWritten, nullptr );
 
             //Move the last byte to the front of the buffer, so that it is the start of the
             //next string
@@ -90,7 +90,7 @@ DWORD passOutputToConsole(HANDLE readPipe, HANDLE console)
             dwToRead = sizeof(aBuffer);
             pBuffer = aBuffer;
             (void) WriteConsoleW( console,
-                aBuffer, dwRead / 2, &dwWritten, NULL );
+                aBuffer, dwRead / 2, &dwWritten, nullptr );
         }
     }
 
@@ -102,7 +102,7 @@ DWORD passOutputToConsole(HANDLE readPipe, HANDLE console)
 #ifdef UNOPKG
 DWORD WINAPI OutputThread( LPVOID pParam )
 {
-    return passOutputToConsole((HANDLE)pParam, GetStdHandle( STD_OUTPUT_HANDLE ));
+    return passOutputToConsole(static_cast<HANDLE>(pParam), GetStdHandle( STD_OUTPUT_HANDLE ));
 }
 
 #else
@@ -128,7 +128,7 @@ DWORD WINAPI OutputThread( LPVOID pParam )
 #ifdef UNOPKG
 DWORD WINAPI ErrorThread( LPVOID pParam )
 {
-    return passOutputToConsole((HANDLE)pParam, GetStdHandle( STD_ERROR_HANDLE ));
+    return passOutputToConsole(static_cast<HANDLE>(pParam), GetStdHandle( STD_ERROR_HANDLE ));
 }
 
 #else
@@ -156,7 +156,7 @@ DWORD WINAPI ErrorThread( LPVOID pParam )
 DWORD WINAPI InputThread( LPVOID pParam )
 {
     DWORD   dwRead = 0;
-    HANDLE  hWritePipe = (HANDLE)pParam;
+    HANDLE  hWritePipe = static_cast<HANDLE>(pParam);
 
     //We need to read in the complete input until we encounter a new line before
     //converting to Unicode. This is necessary because the input string can use
@@ -167,19 +167,19 @@ DWORD WINAPI InputThread( LPVOID pParam )
     //Characters may have one or multiple bytes and different byte ordering
     //can be used (little and big endian);
     int cNewLine = WideCharToMultiByte(
-        GetConsoleCP(), 0, L"\r\n", 2, NULL, 0, NULL, NULL);
+        GetConsoleCP(), 0, L"\r\n", 2, nullptr, 0, nullptr, nullptr);
     char * mbBuff = new char[cNewLine];
     WideCharToMultiByte(
-        GetConsoleCP(), 0, L"\r\n", 2, mbBuff, cNewLine, NULL, NULL);
+        GetConsoleCP(), 0, L"\r\n", 2, mbBuff, cNewLine, nullptr, nullptr);
 
     const DWORD dwBufferSize = 256;
-    char* readBuf = (char*) malloc(dwBufferSize);
+    char* readBuf = static_cast<char*>(malloc(dwBufferSize));
     int readAll = 0;
     DWORD curBufSize = dwBufferSize;
 
     while ( ReadFile( GetStdHandle( STD_INPUT_HANDLE ),
                       readBuf + readAll,
-                      curBufSize - readAll, &dwRead, NULL ) )
+                      curBufSize - readAll, &dwRead, nullptr ) )
     {
         readAll += dwRead;
         int lastBufSize = curBufSize;
@@ -187,7 +187,7 @@ DWORD WINAPI InputThread( LPVOID pParam )
         if (readAll > curBufSize * 0.7)
         {
             curBufSize *= 2;
-            readBuf = (char *) realloc(readBuf, curBufSize);
+            readBuf = static_cast<char *>(realloc(readBuf, curBufSize));
         }
 
         //If the buffer was filled completely then
@@ -206,7 +206,7 @@ DWORD WINAPI InputThread( LPVOID pParam )
         }
         //Obtain the size of the buffer for the converted string.
         int sizeWBuf = MultiByteToWideChar(
-            GetConsoleCP(), MB_PRECOMPOSED, readBuf, readAll, NULL, 0);
+            GetConsoleCP(), MB_PRECOMPOSED, readBuf, readAll, nullptr, 0);
 
         wchar_t * wideBuf = new wchar_t[sizeWBuf];
 
@@ -215,7 +215,7 @@ DWORD WINAPI InputThread( LPVOID pParam )
             GetConsoleCP(), MB_PRECOMPOSED, readBuf, readAll, wideBuf, sizeWBuf);
 
         DWORD   dwWritten;
-        (void)WriteFile( hWritePipe, wideBuf, sizeWBuf * 2, &dwWritten, NULL );
+        (void)WriteFile( hWritePipe, wideBuf, sizeWBuf * 2, &dwWritten, nullptr );
 
         delete[] wideBuf;
         readAll = 0;
@@ -297,7 +297,7 @@ int _tmain( int, _TCHAR ** )
 
     HANDLE  hOutputRead, hOutputWrite;
 
-    if ( CreatePipe( &hOutputRead, &hOutputWrite, NULL, 0 ) )
+    if ( CreatePipe( &hOutputRead, &hOutputWrite, nullptr, 0 ) )
     {
         HANDLE  hTemp;
 
@@ -312,7 +312,7 @@ int _tmain( int, _TCHAR ** )
 
     HANDLE  hErrorRead, hErrorWrite;
 
-    if ( CreatePipe( &hErrorRead, &hErrorWrite, NULL, 0 ) )
+    if ( CreatePipe( &hErrorRead, &hErrorWrite, nullptr, 0 ) )
     {
         HANDLE  hTemp;
 
@@ -327,7 +327,7 @@ int _tmain( int, _TCHAR ** )
 
     HANDLE  hInputRead, hInputWrite;
 
-    if ( CreatePipe( &hInputRead, &hInputWrite, NULL, 0 ) )
+    if ( CreatePipe( &hInputRead, &hInputWrite, nullptr, 0 ) )
     {
         HANDLE  hTemp;
 
@@ -342,7 +342,7 @@ int _tmain( int, _TCHAR ** )
 
     TCHAR               szModuleFileName[MAX_PATH];
 
-    GetModuleFileName( NULL, szModuleFileName, MAX_PATH );
+    GetModuleFileName( nullptr, szModuleFileName, MAX_PATH );
     _TCHAR  *lpLastDot = _tcsrchr( szModuleFileName, '.' );
     if ( lpLastDot && 0 == _tcsicmp( lpLastDot, _T(".COM") ) )
     {
@@ -357,12 +357,12 @@ int _tmain( int, _TCHAR ** )
     BOOL    fSuccess = CreateProcess(
         szTargetFileName,
         GetCommandLine(),
-        NULL,
-        NULL,
+        nullptr,
+        nullptr,
         TRUE,
         0,
-        NULL,
-        NULL,
+        nullptr,
+        nullptr,
         &aStartupInfo,
         &aProcessInfo );
 
@@ -381,14 +381,14 @@ int _tmain( int, _TCHAR ** )
 
         DWORD   dwOutputThreadId, dwErrorThreadId, dwInputThreadId;
 
-        HANDLE  hOutputThread = CreateThread( NULL, 0, OutputThread, (LPVOID)hOutputRead, 0, &dwOutputThreadId );
-        HANDLE  hErrorThread = CreateThread( NULL, 0, OutputThread, (LPVOID)hErrorRead, 0, &dwErrorThreadId );
-        HANDLE  hInputThread = CreateThread( NULL, 0, InputThread, (LPVOID)hInputWrite, 0, &dwInputThreadId );
+        HANDLE  hOutputThread = CreateThread( nullptr, 0, OutputThread, static_cast<LPVOID>(hOutputRead), 0, &dwOutputThreadId );
+        HANDLE  hErrorThread = CreateThread( nullptr, 0, OutputThread, static_cast<LPVOID>(hErrorRead), 0, &dwErrorThreadId );
+        HANDLE  hInputThread = CreateThread( nullptr, 0, InputThread, static_cast<LPVOID>(hInputWrite), 0, &dwInputThreadId );
 
         // Create thread that wait until child process entered input idle
 
         DWORD   dwWaitForUIThreadId;
-        HANDLE  hWaitForUIThread = CreateThread( NULL, 0, WaitForUIThread, (LPVOID)aProcessInfo.hProcess, 0, &dwWaitForUIThreadId );
+        HANDLE  hWaitForUIThread = CreateThread( nullptr, 0, WaitForUIThread, static_cast<LPVOID>(aProcessInfo.hProcess), 0, &dwWaitForUIThreadId );
 
         HANDLE  hObjects[] =
             {
