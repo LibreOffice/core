@@ -36,12 +36,12 @@
 namespace desktop_win32 {
 
 void getPaths(WCHAR * binPath, WCHAR * iniDirectory) {
-    if (!GetModuleFileNameW(NULL, iniDirectory, MAX_PATH)) {
-        LPWSTR buf = NULL;
+    if (!GetModuleFileNameW(nullptr, iniDirectory, MAX_PATH)) {
+        LPWSTR buf = nullptr;
         FormatMessageW(
-            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL,
-            GetLastError(), 0, reinterpret_cast< LPWSTR >(&buf), 0, NULL);
-        MessageBoxW(NULL, buf, NULL, MB_OK | MB_ICONERROR);
+            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr,
+            GetLastError(), 0, reinterpret_cast< LPWSTR >(&buf), 0, nullptr);
+        MessageBoxW(nullptr, buf, nullptr, MB_OK | MB_ICONERROR);
         LocalFree(buf);
         TerminateProcess(GetCurrentProcess(), 255);
     }

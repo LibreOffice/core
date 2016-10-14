@@ -2070,7 +2070,7 @@ void Desktop::OpenClients()
 #if defined UNX
             aHelpURLBuffer.append("&System=UNX");
 #elif defined WNT
-            aHelpURLBuffer.appendAscii("&System=WIN");
+            aHelpURLBuffer.append("&System=WIN");
 #endif
             Application::GetHelp()->Start(
                 aHelpURLBuffer.makeStringAndClear(), nullptr);
@@ -2664,7 +2664,7 @@ void Desktop::CheckFirstRun( )
         HKEY hKey;
         if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  "Software\\LibreOffice", &hKey ) )
         {
-            if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("RunQuickstartAtFirstStart"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+            if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("RunQuickstartAtFirstStart"), nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
             {
                 css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 css::office::Quickstart::createAutoStart(xContext, true/*Quickstart*/, true/*bAutostart*/);

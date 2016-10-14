@@ -19,17 +19,32 @@
 
 // QuickStart.cpp : Defines the entry point for the application.
 
+#include <sal/config.h>
 
-#include "StdAfx.h"
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <shellapi.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
+
 #include "resource.h"
 #include <systools/win32/uwinapi.h>
 #include <systools/win32/qswin32.h>
+
 #include <stdio.h>
+#include <stdlib.h>
+#include <malloc.h>
+#include <memory.h>
+#include <tchar.h>
 
 bool SofficeRuns()
 {
     // check for soffice by searching the communication window
-    return ( FindWindowEx( NULL, NULL, QUICKSTART_CLASSNAME, NULL ) == NULL ) ? false : true;
+    return FindWindowEx( nullptr, nullptr, QUICKSTART_CLASSNAME, nullptr ) != nullptr;
 }
 
 bool launchSoffice( )
@@ -39,7 +54,7 @@ bool launchSoffice( )
         char filename[_MAX_PATH + 1];
 
         filename[_MAX_PATH] = 0;
-        GetModuleFileName( NULL, filename, _MAX_PATH ); // soffice resides in the same dir
+        GetModuleFileName( nullptr, filename, _MAX_PATH ); // soffice resides in the same dir
         char *p = strrchr( filename, '\\' );
         if ( !p )
             return false;
@@ -72,7 +87,7 @@ int APIENTRY WinMain(HINSTANCE /*hInstance*/,
     {
         if ( 0 == strcmp( __argv[i], "--killtray" ) )
         {
-            HWND hwndTray = FindWindow( QUICKSTART_CLASSNAME, NULL );
+            HWND hwndTray = FindWindow( QUICKSTART_CLASSNAME, nullptr );
 
             if ( hwndTray )
             {

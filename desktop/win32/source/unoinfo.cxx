@@ -39,7 +39,7 @@
 namespace {
 
 wchar_t * getBrandPath(wchar_t * path) {
-    DWORD n = GetModuleFileNameW(NULL, path, MAX_PATH);
+    DWORD n = GetModuleFileNameW(nullptr, path, MAX_PATH);
     if (n == 0 || n >= MAX_PATH) {
         exit(EXIT_FAILURE);
     }
@@ -59,7 +59,7 @@ void writePath(
     wchar_t path[MAX_PATH];
     wchar_t * end = tools::buildPath(
         path, frontBegin, frontEnd, backBegin, backLength);
-    if (end == NULL) {
+    if (end == nullptr) {
         exit(EXIT_FAILURE);
     }
     std::size_t n = (end - path) * sizeof (wchar_t);

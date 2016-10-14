@@ -69,7 +69,7 @@ static int GenericMain()
     bool hasRedirect =
         tools::buildPath(
             redirect, szIniDirectory, szIniDirectory + iniDirLen,
-            MY_STRING(L"redirect.ini")) != NULL &&
+            MY_STRING(L"redirect.ini")) != nullptr &&
         (GetBinaryType(redirect, &dummy) || // cheaper check for file existence?
          GetLastError() != ERROR_FILE_NOT_FOUND);
     LPTSTR cl1 = GetCommandLine();
@@ -101,11 +101,11 @@ static int GenericMain()
     BOOL fSuccess = CreateProcess(
         szTargetFileName,
         cl2,
-        NULL,
-        NULL,
+        nullptr,
+        nullptr,
         TRUE,
         0,
-        NULL,
+        nullptr,
         szIniDirectory,
         &aStartupInfo,
         &aProcessInfo );
@@ -127,7 +127,7 @@ static int GenericMain()
             {
                 MSG msg;
 
-                PeekMessage( &msg, NULL, 0, 0, PM_REMOVE );
+                PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE );
             }
         } while ( WAIT_OBJECT_0 + 1 == dwWaitResult );
 

@@ -34,10 +34,15 @@ namespace desktop
     public:
         CmdlineHelpDialog();
 
+        ~CmdlineHelpDialog() override;
+
         VclPtr<FixedText>   m_pftHead;
         VclPtr<FixedText>   m_pftLeft;
         VclPtr<FixedText>   m_pftRight;
         VclPtr<FixedText>   m_pftBottom;
+
+    private:
+        void dispose() override;
     };
 #endif
 }
