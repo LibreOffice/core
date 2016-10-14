@@ -318,8 +318,8 @@ bool CommandInfoProvider::IsExperimental(const OUString& rsCommandName,
                 if (aProperties[nIndex].Name == "IsExperimental")
                 {
                     sal_Int32 nValue;
-                    aProperties[nIndex].Value >>= nValue;
-                    return nValue == 1;
+                    return (aProperties[nIndex].Value >>= nValue)
+                        && nValue == 1;
                 }
             }
         }
