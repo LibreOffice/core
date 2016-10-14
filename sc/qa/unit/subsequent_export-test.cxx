@@ -141,7 +141,9 @@ public:
     void testCeilingFloorXLS();
     void testCeilingFloorODS();
 
+#if !defined _WIN32
     void testRelativePaths();
+#endif
     void testSheetProtection();
 
     void testPivotTableXLSX();
@@ -151,7 +153,9 @@ public:
     void testLinkedGraphicRT();
     void testImageWithSpecialID();
 
+#if !defined _WIN32
     void testSupBookVirtualPath();
+#endif
     void testSheetLocalRangeNameXLS();
     void testSheetTextBoxHyperlink();
     void testFontSize();
@@ -2622,6 +2626,7 @@ void ScExportTest::testCeilingFloorODS()
     testCeilingFloor(FORMAT_ODS);
 }
 
+#if !defined _WIN32
 void ScExportTest::testRelativePaths()
 {
     ScDocShellRef xDocSh = loadDoc("fdo79305.", FORMAT_ODS);
@@ -2634,6 +2639,7 @@ void ScExportTest::testRelativePaths()
     // make sure that the URL is relative
     CPPUNIT_ASSERT(aURL.startsWith(".."));
 }
+#endif
 
 namespace {
 
@@ -3025,6 +3031,7 @@ void ScExportTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
+#if !defined _WIN32
 void ScExportTest::testSupBookVirtualPath()
 {
     ScDocShellRef xShell = loadDoc("external-ref.", FORMAT_XLS);
@@ -3041,6 +3048,7 @@ void ScExportTest::testSupBookVirtualPath()
 
     xDocSh->DoClose();
 }
+#endif
 
 void ScExportTest::testLinkedGraphicRT()
 {
