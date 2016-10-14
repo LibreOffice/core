@@ -38,38 +38,38 @@ namespace connectivity
 
         protected:
             void fillPropertyValues();
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue)throw (css::uno::Exception);
+            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue)throw (css::uno::Exception) override;
 
         public:
-            virtual void refreshColumns();
-            virtual void refreshKeys();
-            virtual void refreshIndexes();
+            virtual void refreshColumns() override;
+            virtual void refreshKeys() override;
+            virtual void refreshIndexes() override;
 
             // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing();
+            virtual void SAL_CALL disposing() override;
 
         public:
-            OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable);
-            OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog);
+            OAdoTable(sdbcx::OCollection* _pTables,bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable);
+            OAdoTable(sdbcx::OCollection* _pTables,bool _bCase,OCatalog* _pCatalog);
 
 
-            virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException);
+            virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException) override;
             OUString getSchema() const { return m_SchemaName; }
-            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const;
+            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
             // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException);
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
+            virtual void SAL_CALL acquire() throw() override;
+            virtual void SAL_CALL release() throw() override;
             // XRename
-            virtual void SAL_CALL rename( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException);
+            virtual void SAL_CALL rename( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException) override;
 
             // XAlterTable
-            virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::container::NoSuchElementException, css::uno::RuntimeException);
-            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+            virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::container::NoSuchElementException, css::uno::RuntimeException) override;
+            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException) override;
 
-            sal_Bool create() throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            bool create() throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
             WpADOTable getImpl() const { return m_aTable;}
             OCatalog* getCatalog() const { return m_pCatalog; }

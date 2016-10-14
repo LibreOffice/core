@@ -74,22 +74,22 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  ORes
                         ,m_pRecordSet(_pRecordSet)
                         ,m_pStmt(pStmt)
                         ,m_xStatement(*pStmt)
-                        ,m_xMetaData(NULL)
+                        ,m_xMetaData(nullptr)
                         ,m_nRowPos(0)
-                        ,m_bEOF(sal_False)
-                        ,m_bOnFirstAfterOpen(sal_False)
+                        ,m_bEOF(false)
+                        ,m_bOnFirstAfterOpen(false)
 {
 }
 
 OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
                         ,OPropertySetHelper(OResultSet_BASE::rBHelper)
                         ,m_pRecordSet(_pRecordSet)
-                        ,m_pStmt(NULL)
-                        ,m_xStatement(NULL)
-                        ,m_xMetaData(NULL)
+                        ,m_pStmt(nullptr)
+                        ,m_xStatement(nullptr)
+                        ,m_xMetaData(nullptr)
                         ,m_nRowPos(0)
-                        ,m_bEOF(sal_False)
-                        ,m_bOnFirstAfterOpen(sal_False)
+                        ,m_bEOF(false)
+                        ,m_bOnFirstAfterOpen(false)
 {
 }
 
@@ -202,13 +202,13 @@ Reference< css::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int
     // else we ask for a bytesequence
     aField.get_Value(m_aValue);
 
-    return m_aValue.isNull() ? NULL : new ::comphelper::SequenceInputStream(m_aValue.getByteSequence());
+    return m_aValue.isNull() ? nullptr : new ::comphelper::SequenceInputStream(m_aValue.getByteSequence());
 }
 
 Reference< css::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getCharacterStream", *this );
-    return NULL;
+    return nullptr;
 }
 
 OLEVariant OResultSet::getValue(sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -297,27 +297,27 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
 Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getArray", *this );
-    return NULL;
+    return nullptr;
 }
 
 
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getClob", *this );
-    return NULL;
+    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getBlob", *this );
-    return NULL;
+    return nullptr;
 }
 
 
 Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRef", *this );
-    return NULL;
+    return nullptr;
 }
 
 
@@ -377,7 +377,7 @@ sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
@@ -398,7 +398,7 @@ void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 
     if(last())
         next();
-    m_bEOF = sal_True;
+    m_bEOF = true;
 }
 
 
@@ -422,10 +422,10 @@ sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
     if(SUCCEEDED(m_pRecordSet->MoveFirst()))
     {
         m_nRowPos = 1;
-        m_bOnFirstAfterOpen = sal_False;
-        return sal_True;
+        m_bOnFirstAfterOpen = false;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -435,11 +435,11 @@ sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    sal_Bool bRet = SUCCEEDED(m_pRecordSet->MoveLast());
+    bool bRet = SUCCEEDED(m_pRecordSet->MoveLast());
     if(bRet)
     {
         m_pRecordSet->get_RecordCount(&m_nRowPos);
-        m_bOnFirstAfterOpen = sal_False;
+        m_bOnFirstAfterOpen = false;
     }
     return bRet;
 }
@@ -453,7 +453,7 @@ sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, Runt
     if(!row)                 // absolute with zero not allowed
         ::dbtools::throwFunctionSequenceException(*this);
 
-    sal_Bool bCheck = sal_True;
+    bool bCheck = true;
     if(row < 0)
     {
         bCheck = SUCCEEDED(m_pRecordSet->MoveLast());
@@ -473,7 +473,7 @@ sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, Runt
             m_nRowPos = row;
     }
     if(bCheck)
-        m_bOnFirstAfterOpen = sal_False;
+        m_bOnFirstAfterOpen = false;
     return bCheck;
 }
 
@@ -488,11 +488,11 @@ sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, Runt
     sal_Int32 nNewPos = row;
     if ( m_bOnFirstAfterOpen && nNewPos > 0 )
         --nNewPos;
-    sal_Bool bRet = SUCCEEDED(m_pRecordSet->Move(row,aEmpty));
+    bool bRet = SUCCEEDED(m_pRecordSet->Move(row,aEmpty));
     if(bRet)
     {
         m_nRowPos += row;
-        m_bOnFirstAfterOpen = sal_False;
+        m_bOnFirstAfterOpen = false;
     }
     return bRet;
 }
@@ -502,11 +502,11 @@ sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    sal_Bool bRet = SUCCEEDED(m_pRecordSet->MovePrevious());
+    bool bRet = SUCCEEDED(m_pRecordSet->MovePrevious());
     if(bRet)
     {
         --m_nRowPos;
-        m_bOnFirstAfterOpen = sal_False;
+        m_bOnFirstAfterOpen = false;
     }
     return bRet;
 }
@@ -525,9 +525,9 @@ sal_Bool SAL_CALL OResultSet::rowDeleted(  ) throw(SQLException, RuntimeExceptio
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    RecordStatusEnum eRec;
-    m_pRecordSet->get_Status((sal_Int32*)&eRec);
-    sal_Bool  bRet = (eRec & adRecDeleted) == adRecDeleted;
+    sal_Int32 eRec;
+    m_pRecordSet->get_Status(&eRec);
+    bool  bRet = (RecordStatusEnum(eRec) & adRecDeleted) == adRecDeleted;
     if(bRet)
         --m_nRowPos;
     return bRet;
@@ -538,9 +538,9 @@ sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeExcepti
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    RecordStatusEnum eRec;
-    m_pRecordSet->get_Status((sal_Int32*)&eRec);
-    sal_Bool  bRet = (eRec & adRecNew) == adRecNew;
+    sal_Int32 eRec;
+    m_pRecordSet->get_Status(&eRec);
+    bool  bRet = (RecordStatusEnum(eRec) & adRecNew) == adRecNew;
     if(bRet)
         ++m_nRowPos;
     return bRet;
@@ -552,9 +552,9 @@ sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeExceptio
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    RecordStatusEnum eRec;
-    m_pRecordSet->get_Status((sal_Int32*)&eRec);
-    return (eRec & adRecModified) == adRecModified;
+    sal_Int32 eRec;
+    m_pRecordSet->get_Status(&eRec);
+    return (RecordStatusEnum(eRec) & adRecModified) == adRecModified;
 }
 
 
@@ -581,10 +581,10 @@ sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     if(m_bOnFirstAfterOpen)
     {
-        m_bOnFirstAfterOpen = sal_False;
+        m_bOnFirstAfterOpen = false;
         ++m_nRowPos;
     }
     else
@@ -662,7 +662,7 @@ void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    m_pRecordSet->Delete(adAffectCurrent);
+    m_pRecordSet->Delete();
     m_pRecordSet->UpdateBatch(adAffectCurrent);
 }
 
@@ -798,7 +798,7 @@ void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    m_pRecordSet->Resync(adAffectCurrent,adResyncAllValues);
+    m_pRecordSet->Resync(adAffectCurrent);
 }
 
 void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw(SQLException, RuntimeException)
@@ -885,11 +885,11 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, Runtim
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    ADOProperties* pProps = NULL;
+    ADOProperties* pProps = nullptr;
     m_pRecordSet->get_Properties(&pProps);
     WpADOProperties aProps;
     aProps.setWithOutAddRef(pProps);
-    ADOS::ThrowException(*((OConnection*)m_pStmt->getConnection().get())->getConnection(),*this);
+    ADOS::ThrowException(*static_cast<OConnection*>(m_pStmt->getConnection().get())->getConnection(),*this);
     OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
 
     WpADOProperty aProp(aProps.GetItem(OUString("Bookmarks Ordered")));
@@ -897,9 +897,9 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, Runtim
     if(aProp.IsValid())
         aVar = aProp.GetValue();
     else
-        ADOS::ThrowException(*((OConnection*)m_pStmt->getConnection().get())->getConnection(),*this);
+        ADOS::ThrowException(*static_cast<OConnection*>(m_pStmt->getConnection().get())->getConnection(),*this);
 
-    sal_Bool bValue(sal_False);
+    bool bValue(false);
     if(!aVar.isNull() && !aVar.isEmpty())
         bValue = aVar.getBool();
     return bValue;
@@ -1010,7 +1010,7 @@ sal_Int32 OResultSet::getResultSetType() const
     return nValue;
 }
 
-sal_Int32 OResultSet::getFetchDirection() const
+sal_Int32 OResultSet::getFetchDirection()
     throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return FetchDirection::FORWARD;
@@ -1024,7 +1024,7 @@ sal_Int32 OResultSet::getFetchSize() const
     return nValue;
 }
 
-OUString OResultSet::getCursorName() const
+OUString OResultSet::getCursorName()
     throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return OUString();
@@ -1069,7 +1069,7 @@ void OResultSet::setFetchSize(sal_Int32 _par0)
 
 ::cppu::IPropertyArrayHelper & OResultSet::getInfoHelper()
 {
-    return *const_cast<OResultSet*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool OResultSet::convertFastPropertyValue(
@@ -1094,7 +1094,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
         default:
             ;
     }
-    return sal_False;
+    return false;
 }
 
 void OResultSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)

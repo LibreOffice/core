@@ -28,7 +28,7 @@ namespace connectivity
         class WpADOIndex : public WpOLEBase<_ADOIndex>
         {
         public:
-            WpADOIndex(_ADOIndex* pInt=NULL)    :   WpOLEBase<_ADOIndex>(pInt){}
+            WpADOIndex(_ADOIndex* pInt=nullptr)    :   WpOLEBase<_ADOIndex>(pInt){}
             WpADOIndex(const WpADOIndex& rhs) : WpOLEBase<_ADOIndex>(rhs) {}
 
             inline WpADOIndex& operator=(const WpADOIndex& rhs)
@@ -38,12 +38,12 @@ namespace connectivity
 
             OUString get_Name() const;
             void            put_Name(const OUString& _rName);
-            sal_Bool        get_Clustered() const;
-            void            put_Clustered(sal_Bool _b);
-            sal_Bool        get_Unique() const;
-            void            put_Unique(sal_Bool _b);
-            sal_Bool        get_PrimaryKey() const;
-            void            put_PrimaryKey(sal_Bool _b);
+            bool            get_Clustered() const;
+            void            put_Clustered(bool _b);
+            bool            get_Unique() const;
+            void            put_Unique(bool _b);
+            bool            get_PrimaryKey() const;
+            void            put_PrimaryKey(bool _b);
             WpADOColumns    get_Columns() const;
         };
     }

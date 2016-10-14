@@ -84,11 +84,11 @@ namespace connectivity
         private:
 
             sal_Int32 getQueryTimeOut()         const throw(css::sdbc::SQLException, css::uno::RuntimeException);
-            sal_Int32 getMaxFieldSize()         const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            static sal_Int32 getMaxFieldSize() throw(css::sdbc::SQLException, css::uno::RuntimeException);
             sal_Int32 getMaxRows()              const throw(css::sdbc::SQLException, css::uno::RuntimeException);
             sal_Int32 getResultSetConcurrency() const throw(css::sdbc::SQLException, css::uno::RuntimeException);
             sal_Int32 getResultSetType()        const throw(css::sdbc::SQLException, css::uno::RuntimeException);
-            sal_Int32 getFetchDirection()       const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            static sal_Int32 getFetchDirection() throw(css::sdbc::SQLException, css::uno::RuntimeException);
             sal_Int32 getFetchSize()            const throw(css::sdbc::SQLException, css::uno::RuntimeException);
             OUString getCursorName()     const throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
@@ -173,7 +173,7 @@ namespace connectivity
         public:
             // a Constructor, that is needed for when Returning the Object is needed:
             OStatement( OConnection* _pConnection) : OStatement_Base( _pConnection){};
-            ~OStatement();
+            ~OStatement() override;
 
             DECLARE_SERVICE_INFO();
 

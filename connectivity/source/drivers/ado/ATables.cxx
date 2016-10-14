@@ -64,8 +64,8 @@ Reference< XPropertySet > OTables::createDescriptor()
 // XAppend
 sdbcx::ObjectType OTables::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
-    OAdoTable* pTable = NULL;
-    if ( !getImplementation( pTable, descriptor ) || pTable == NULL )
+    OAdoTable* pTable = nullptr;
+    if ( !getImplementation( pTable, descriptor ) || pTable == nullptr )
         m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_TABLE_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
@@ -89,7 +89,7 @@ void OTables::appendNew(const OUString& _rsNewTable)
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     m_aCollection.Refresh();
 
-    insertElement(_rsNewTable,NULL);
+    insertElement(_rsNewTable,nullptr);
 
     // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rsNewTable), Any(), Any());

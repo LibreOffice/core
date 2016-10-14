@@ -88,7 +88,7 @@ namespace connectivity
             OLEVariant(const css::util::Date& x );
             OLEVariant(const css::util::Time& x );
             OLEVariant(const css::util::DateTime& x );
-            OLEVariant(const float &x);
+            OLEVariant(float x);
             OLEVariant(const double &x);
             OLEVariant(IDispatch* pDispInterface);
             OLEVariant(const css::uno::Sequence< sal_Int8 >& x);
@@ -107,7 +107,7 @@ namespace connectivity
             void setDate(DATE d)                    ;
             void setChar(unsigned char a)           ;
             void setCurrency(double aCur)           ;
-            void setBool(sal_Bool b)                ;
+            void setBool(bool b)                    ;
             void setString(const OUString& us) ;
             void setNoArg()                         ;
 
@@ -117,14 +117,14 @@ namespace connectivity
 
             void setUI1SAFEARRAYPtr(SAFEARRAY* pSafeAr);
             void setArray(SAFEARRAY* pSafeArray, VARTYPE vtType);
-            sal_Bool isNull() const  ;
-            sal_Bool isEmpty() const ;
+            bool isNull() const  ;
+            bool isEmpty() const ;
 
             VARTYPE getType() const ;
             void ChangeType(VARTYPE vartype, const OLEVariant* pSrc);
 
             OUString        getString()     const;
-            sal_Bool        getBool()       const;
+            bool            getBool()       const;
             IUnknown*       getIUnknown()   const;
             IDispatch*      getIDispatch()  const;
             sal_uInt8       getByte()       const;
@@ -143,7 +143,7 @@ namespace connectivity
             SAFEARRAY*      getUI1SAFEARRAYPtr() const;
             css::uno::Any makeAny() const;
 
-            static VARIANT_BOOL VariantBool(sal_Bool bEinBoolean);
+            static VARIANT_BOOL VariantBool(bool bEinBoolean);
 
         private:
             void CHS();

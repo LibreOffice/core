@@ -53,7 +53,7 @@ using namespace ::std;
 
 OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(m_aMutex)
                                                         ,OPropertySetHelper(OStatement_BASE::rBHelper)
-                                                        ,OSubComponent<OStatement_Base, OStatement_BASE>((::cppu::OWeakObject*)_pConnection, this)
+                                                        ,OSubComponent<OStatement_Base, OStatement_BASE>(static_cast<cppu::OWeakObject*>(_pConnection), this)
                                                         ,m_pConnection(_pConnection)
                                                         ,m_nMaxRows(0)
                                                         ,m_nFetchSize(1)
@@ -94,11 +94,11 @@ void OStatement_Base::disposing()
     disposeResultSet();
 
     if ( m_Command.IsValid() )
-        m_Command.putref_ActiveConnection( NULL );
+        m_Command.putref_ActiveConnection( nullptr );
     m_Command.clear();
 
     if ( m_RecordSet.IsValid() )
-        m_RecordSet.PutRefDataSource( NULL );
+        m_RecordSet.PutRefDataSource( nullptr );
     m_RecordSet.clear();
 
     if (m_pConnection)
@@ -243,10 +243,10 @@ void OStatement_Base::assignRecordSet( ADORecordset* _pRS )
     m_RecordSet = WpADORecordset( _pRS );
 
     if ( aOldRS.IsValid() )
-        aOldRS.PutRefDataSource( NULL );
+        aOldRS.PutRefDataSource( nullptr );
 
     if ( m_RecordSet.IsValid() )
-        m_RecordSet.PutRefDataSource( (IDispatch*)m_Command );
+        m_RecordSet.PutRefDataSource( static_cast<IDispatch*>(m_Command) );
 }
 
 sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql ) throw(SQLException, RuntimeException)
@@ -261,7 +261,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql ) throw(SQLExcep
 
     try
     {
-        ADORecordset* pSet = NULL;
+        ADORecordset* pSet = nullptr;
         CHECK_RETURN(m_Command.put_CommandText(sql))
         CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,adCmdText,&pSet))
 
@@ -287,7 +287,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const OUString& 
 
     reset();
 
-    m_xResultSet = WeakReference<XResultSet>(NULL);
+    m_xResultSet = WeakReference<XResultSet>(nullptr);
 
     WpADORecordset aSet;
     aSet.Create();
@@ -322,7 +322,7 @@ Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLEx
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    return (Reference< XConnection >)m_pConnection;
+    return static_cast<Reference< XConnection >>(m_pConnection);
 }
 
 
@@ -357,22 +357,22 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
 
 
     if ( m_RecordSet.IsValid() )
-        m_RecordSet.PutRefDataSource( NULL );
+        m_RecordSet.PutRefDataSource( nullptr );
     m_RecordSet.clear();
     m_RecordSet.Create();
 
     CHECK_RETURN(m_Command.put_CommandText(aBatchSql))
     if ( m_RecordSet.IsValid() )
-        m_RecordSet.PutRefDataSource((IDispatch*)m_Command);
+        m_RecordSet.PutRefDataSource(static_cast<IDispatch*>(m_Command));
 
     CHECK_RETURN(m_RecordSet.UpdateBatch(adAffectAll))
 
-    ADORecordset* pSet=NULL;
+    ADORecordset* pSet=nullptr;
     Sequence< sal_Int32 > aRet(nLen);
     sal_Int32* pArray = aRet.getArray();
     for(sal_Int32 j=0;j<nLen;++j)
     {
-        pSet = NULL;
+        pSet = nullptr;
         OLEVariant aRecordsAffected;
         if(m_RecordSet.NextRecordset(aRecordsAffected,&pSet) && pSet)
         {
@@ -396,7 +396,7 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const OUString& sql ) throw(S
     reset();
 
     try {
-        ADORecordset* pSet = NULL;
+        ADORecordset* pSet = nullptr;
         CHECK_RETURN(m_Command.put_CommandText(sql))
         CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,adCmdText|adExecuteNoRecords,&pSet))
     }
@@ -453,7 +453,7 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
 
     try
     {
-        ADORecordset* pSet=NULL;
+        ADORecordset* pSet=nullptr;
         OLEVariant aRecordsAffected;
         if(m_RecordSet.IsValid() && m_RecordSet.NextRecordset(aRecordsAffected,&pSet) && pSet)
             assignRecordSet( pSet );
@@ -499,7 +499,7 @@ sal_Int32 OStatement_Base::getMaxRows() const throw(SQLException, RuntimeExcepti
 {
     ADO_LONGPTR nRet=-1;
     if(!(m_RecordSet.IsValid() && m_RecordSet.get_MaxRecords(nRet)))
-        ::dbtools::throwFunctionSequenceException(NULL);
+        ::dbtools::throwFunctionSequenceException(nullptr);
     return nRet;
 }
 
@@ -540,7 +540,7 @@ sal_Int32 OStatement_Base::getResultSetType() const throw(SQLException, RuntimeE
     return nValue;
 }
 
-sal_Int32 OStatement_Base::getFetchDirection() const throw(SQLException, RuntimeException)
+sal_Int32 OStatement_Base::getFetchDirection() throw(SQLException, RuntimeException)
 {
     return FetchDirection::FORWARD;
 }
@@ -550,7 +550,7 @@ sal_Int32 OStatement_Base::getFetchSize() const throw(SQLException, RuntimeExcep
     return m_nFetchSize;
 }
 
-sal_Int32 OStatement_Base::getMaxFieldSize() const throw(SQLException, RuntimeException)
+sal_Int32 OStatement_Base::getMaxFieldSize() throw(SQLException, RuntimeException)
 {
     return 0;
 }
@@ -677,7 +677,7 @@ void OStatement_Base::setCursorName(const OUString &_par0) throw(SQLException, R
 
 ::cppu::IPropertyArrayHelper & OStatement_Base::getInfoHelper()
 {
-    return *const_cast<OStatement_Base*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool OStatement_Base::convertFastPropertyValue(
@@ -687,9 +687,9 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
                             const Any& rValue )
                                 throw (css::lang::IllegalArgumentException)
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
-    sal_Bool bValidAdoRS = m_RecordSet.IsValid();
+    bool bValidAdoRS = m_RecordSet.IsValid();
         // some of the properties below, when set, are remembered in a member, and applied in the next execute
         // For these properties, the record set does not need to be valid to allow setting them.
         // For all others (where the values are forwarded to the ADO RS directly), the recordset must be valid.
@@ -727,7 +727,7 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
     }
     catch( const Exception& e )
     {
-        bModified = sal_True;   // will ensure that the property is set
+        bModified = true;   // will ensure that the property is set
         OSL_FAIL( "OStatement_Base::convertFastPropertyValue: caught something strange!" );
         (void)e;
     }
@@ -800,7 +800,7 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
             rValue <<= getFetchSize();
             break;
         case PROPERTY_ID_ESCAPEPROCESSING:
-            rValue <<= sal_True;
+            rValue <<= true;
             break;
         case PROPERTY_ID_USEBOOKMARKS:
         default:

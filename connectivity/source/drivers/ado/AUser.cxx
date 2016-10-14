@@ -34,7 +34,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 
-OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase, ADOUser* _pUser)
+OAdoUser::OAdoUser(OCatalog* _pParent,bool _bCase, ADOUser* _pUser)
     : OUser_TYPEDEF(_bCase)
     ,m_pCatalog(_pParent)
 {
@@ -46,13 +46,13 @@ OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase, ADOUser* _pUser)
         m_aUser.Create();
 }
 
-OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase,   const OUString& _Name)
-    : OUser_TYPEDEF(_Name,_bCase)
+OAdoUser::OAdoUser(OCatalog* _pParent,bool _bCase,   const OUString& Name)
+    : OUser_TYPEDEF(Name,_bCase)
     , m_pCatalog(_pParent)
 {
     construct();
     m_aUser.Create();
-    m_aUser.put_Name(_Name);
+    m_aUser.put_Name(Name);
 }
 
 void OAdoUser::refreshGroups()
@@ -68,7 +68,7 @@ void OAdoUser::refreshGroups()
 
 Sequence< sal_Int8 > OAdoUser::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -122,13 +122,13 @@ void OAdoUser::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
     }
 }
 
-OUserExtend::OUserExtend(OCatalog* _pParent,sal_Bool _bCase,    ADOUser* _pUser)
+OUserExtend::OUserExtend(OCatalog* _pParent,bool _bCase,    ADOUser* _pUser)
     : OAdoUser(_pParent,_bCase,_pUser)
 {
 }
 
-OUserExtend::OUserExtend(OCatalog* _pParent,sal_Bool _bCase, const OUString& _Name)
-    : OAdoUser(_pParent,_bCase,_Name)
+OUserExtend::OUserExtend(OCatalog* _pParent,bool _bCase, const OUString& Name)
+    : OAdoUser(_pParent,_bCase,Name)
 {
 }
 

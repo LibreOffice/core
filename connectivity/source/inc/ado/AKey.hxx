@@ -37,27 +37,27 @@ namespace connectivity
             OConnection*    m_pConnection;
         protected:
             void fillPropertyValues();
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue)throw (css::uno::Exception);
+            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue)throw (css::uno::Exception) override;
         public:
-            virtual void refreshColumns();
+            virtual void refreshColumns() override;
         public:
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
-            OAdoKey(sal_Bool _bCase,OConnection* _pConnection,ADOKey* _pKey);
-            OAdoKey(sal_Bool _bCase,OConnection* _pConnection);
+            virtual void SAL_CALL acquire() throw() override;
+            virtual void SAL_CALL release() throw() override;
+            OAdoKey(bool _bCase,OConnection* _pConnection,ADOKey* _pKey);
+            OAdoKey(bool _bCase,OConnection* _pConnection);
 
             // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException);
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             WpADOKey        getImpl() const { return m_aKey;}
             // map the update/delete rules
-            static RuleEnum Map2Rule(const sal_Int32& _eNum);
+            static RuleEnum Map2Rule(sal_Int32 _eNum);
             static sal_Int32 MapRule(const RuleEnum& _eNum);
 
             // map the keytypes
             static sal_Int32 MapKeyRule(const KeyTypeEnum& _eNum);
-            static KeyTypeEnum Map2KeyRule(const sal_Int32& _eNum);
+            static KeyTypeEnum Map2KeyRule(sal_Int32 _eNum);
         };
     }
 }

@@ -52,9 +52,9 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.APreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const OUString& sql)
+OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInfoMap& TypeInfo,const OUString& sql)
     : OStatement_Base( _pConnection )
-    ,m_aTypeInfo(_TypeInfo)
+    ,m_aTypeInfo(TypeInfo)
 {
     osl_atomic_increment( &m_refCount );
 
@@ -89,7 +89,7 @@ OPreparedStatement::~OPreparedStatement()
     {
         OSL_FAIL( "OPreparedStatement::~OPreparedStatement: not disposed!" );
         m_pParameters->Release();
-        m_pParameters = NULL;
+        m_pParameters = nullptr;
     }
 }
 
@@ -124,7 +124,7 @@ m_xMetaData.clear();
     if (m_pParameters)
     {
         m_pParameters->Release();
-        m_pParameters = NULL;
+        m_pParameters = nullptr;
     }
     OStatement_Base::disposing();
 }
@@ -151,7 +151,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
 
     // Call SQLExecute
     try {
-        ADORecordset* pSet=NULL;
+        ADORecordset* pSet=nullptr;
         CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,adCmdUnknown,&pSet))
         m_RecordSet = WpADORecordset(pSet);
     }
@@ -171,7 +171,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    ADORecordset* pSet=NULL;
+    ADORecordset* pSet=nullptr;
     CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,adCmdUnknown,&pSet))
     if ( VT_ERROR == m_RecordsAffected.getType() )
     {
@@ -184,7 +184,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 }
 
 void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEnum& _eType,
-                                      const sal_Int32& _nSize,const OLEVariant& _Val) throw(SQLException, RuntimeException)
+                                      sal_Int32 _nSize,const OLEVariant& Val) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -195,12 +195,12 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
     if(nCount < (parameterIndex-1))
     {
         OUString sDefaultName = "parame" + OUString::number(parameterIndex);
-        ADOParameter* pParam = m_Command.CreateParameter(sDefaultName,_eType,adParamInput,_nSize,_Val);
+        ADOParameter* pParam = m_Command.CreateParameter(sDefaultName,_eType,adParamInput,_nSize,Val);
         if(pParam)
         {
             m_pParameters->Append(pParam);
 #if OSL_DEBUG_LEVEL > 0
-            pParam = NULL;
+            pParam = nullptr;
             m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
             WpADOParameter aParam(pParam);
             if(pParam)
@@ -213,7 +213,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
     }
     else
     {
-        ADOParameter* pParam = NULL;
+        ADOParameter* pParam = nullptr;
         m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
         WpADOParameter aParam(pParam);
         if(pParam)
@@ -228,10 +228,10 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
 
             if ( adVarBinary == eType && aParam.GetAttributes() == adParamLong )
             {
-                aParam.AppendChunk(_Val);
+                aParam.AppendChunk(Val);
             }
             else
-                CHECK_RETURN(aParam.PutValue(_Val));
+                CHECK_RETURN(aParam.PutValue(Val));
         }
     }
     ADOS::ThrowException(*m_pConnection->getConnection(),*this);
@@ -247,7 +247,7 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQ
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    return (Reference< XConnection >)m_pConnection;
+    return static_cast<Reference< XConnection >>(m_pConnection);
 }
 
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException)
@@ -427,7 +427,7 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
         aVal.setEmpty();
         for(sal_Int32 i=0;i<nCount;++i)
         {
-            ADOParameter* pParam = NULL;
+            ADOParameter* pParam = nullptr;
             m_pParameters->get_Item(OLEVariant(i),&pParam);
             WpADOParameter aParam(pParam);
             if(pParam)
