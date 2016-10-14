@@ -67,7 +67,7 @@ namespace {
 //     </node>
 // </item>
 
-void dumpWindowsRegistryKey(HKEY hKey, OUString aKeyName, TempFile &aFileHandle)
+void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFileHandle)
 {
     HKEY hCurKey;
 
@@ -77,7 +77,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString aKeyName, TempFile &aFileHandle)
         DWORD nValues = 0;
         DWORD nLongestValueNameLen, nLongestValueLen;
         // Query the number of subkeys
-        RegQueryInfoKeyW(hCurKey, NULL, NULL, NULL, &nSubKeys, NULL, NULL, &nValues, &nLongestValueNameLen, &nLongestValueLen, NULL, NULL);
+        RegQueryInfoKeyW(hCurKey, nullptr, nullptr, nullptr, &nSubKeys, nullptr, nullptr, &nValues, &nLongestValueNameLen, &nLongestValueLen, nullptr, nullptr);
         if(nSubKeys)
         {
             //Look for subkeys in this key
@@ -88,7 +88,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString aKeyName, TempFile &aFileHandle)
                 DWORD buffSize=MAX_KEY_LENGTH;
                 OUString aSubkeyName;
                 //Get subkey name
-                RegEnumKeyExW(hCurKey, i, buffKeyName, &buffSize, NULL, NULL, NULL, NULL);
+                RegEnumKeyExW(hCurKey, i, buffKeyName, &buffSize, nullptr, nullptr, nullptr, nullptr);
 
                 //Make up full key name
                 if(aKeyName.isEmpty())
@@ -114,13 +114,13 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString aKeyName, TempFile &aFileHandle)
                 DWORD nValueNameLen = nLongestValueNameLen + 1;
                 DWORD nValueLen = nLongestValueLen + 1;
 
-                RegEnumValueW(hCurKey, i, pValueName, &nValueNameLen, NULL, NULL, (LPBYTE)pValue, &nValueLen);
+                RegEnumValueW(hCurKey, i, pValueName, &nValueNameLen, nullptr, nullptr, reinterpret_cast<LPBYTE>(pValue), &nValueLen);
                 const wchar_t wsValue[] = L"Value";
                 const wchar_t wsFinal[] = L"Final";
 
                 if(!wcscmp(pValueName, wsValue))
                     aValue = OUString(pValue);
-                if(!wcscmp(pValueName, wsFinal) && *(DWORD*)pValue == 1)
+                if(!wcscmp(pValueName, wsFinal) && *reinterpret_cast<DWORD*>(pValue) == 1)
                     bFinal = true;
             }
             sal_Int32 aLastSeparator = aKeyName.lastIndexOf('\\');
@@ -198,7 +198,7 @@ bool dumpWindowsRegistry(OUString* pFileURL, WinRegType eType)
     }
 
     TempFile aFileHandle;
-    switch (osl::FileBase::createTempFile(0, &aFileHandle.handle, pFileURL)) {
+    switch (osl::FileBase::createTempFile(nullptr, &aFileHandle.handle, pFileURL)) {
     case osl::FileBase::E_None:
         break;
     case osl::FileBase::E_ACCES:

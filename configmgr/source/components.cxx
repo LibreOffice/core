@@ -560,7 +560,7 @@ Components::Components(
             }
             OUString aTempFileURL;
             if (dumpWindowsRegistry(&aTempFileURL, eType)) {
-                parseFileLeniently(&parseXcuFile, aTempFileURL, layer, 0, 0, 0);
+                parseFileLeniently(&parseXcuFile, aTempFileURL, layer, nullptr, nullptr, nullptr);
                 osl::File::remove(aTempFileURL);
             }
             ++layer; //TODO: overflow
