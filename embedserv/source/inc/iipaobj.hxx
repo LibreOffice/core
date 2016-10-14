@@ -41,19 +41,19 @@ public:
     virtual ~CIIAObj();
 
     /* IUnknown methods */
-    STDMETHODIMP QueryInterface(REFIID, LPVOID FAR * ppvObj);
-    STDMETHODIMP_(ULONG) AddRef();
-    STDMETHODIMP_(ULONG) Release();
+    STDMETHODIMP QueryInterface(REFIID, LPVOID FAR * ppvObj) override;
+    STDMETHODIMP_(ULONG) AddRef() override;
+    STDMETHODIMP_(ULONG) Release() override;
 
     /* IOleInPlaceActiveObject methods */
-    STDMETHODIMP GetWindow(HWND *);
-    STDMETHODIMP ContextSensitiveHelp(BOOL);
+    STDMETHODIMP GetWindow(HWND *) override;
+    STDMETHODIMP ContextSensitiveHelp(BOOL) override;
     STDMETHODIMP TranslateAccelerator(LPMSG);
-    STDMETHODIMP OnFrameWindowActivate(BOOL);
-    STDMETHODIMP OnDocWindowActivate(BOOL);
+    STDMETHODIMP OnFrameWindowActivate(BOOL) override;
+    STDMETHODIMP OnDocWindowActivate(BOOL) override;
     STDMETHODIMP ResizeBorder(LPCRECT, LPOLEINPLACEUIWINDOW
-                              , BOOL);
-    STDMETHODIMP EnableModeless(BOOL);
+                              , BOOL) override;
+    STDMETHODIMP EnableModeless(BOOL) override;
 
 
 private:

@@ -33,27 +33,27 @@ template< class T > class ComSmart
         if ( m_pInterface )
         {
             T* pInterface = m_pInterface;
-            m_pInterface = NULL;
+            m_pInterface = nullptr;
             pInterface->Release();
         }
     }
 
 public:
     ComSmart()
-    : m_pInterface( NULL )
+    : m_pInterface( nullptr )
     {}
 
     ComSmart( const ComSmart<T>& rObj )
     : m_pInterface( rObj.m_pInterface )
     {
-        if ( m_pInterface != NULL )
+        if ( m_pInterface != nullptr )
             m_pInterface->AddRef();
     }
 
     explicit ComSmart( T* pInterface )
     : m_pInterface( pInterface )
     {
-         if ( m_pInterface != NULL )
+         if ( m_pInterface != nullptr )
             m_pInterface->AddRef();
     }
 
@@ -68,7 +68,7 @@ public:
 
         m_pInterface = rObj.m_pInterface;
 
-        if ( m_pInterface != NULL )
+        if ( m_pInterface != nullptr )
             m_pInterface->AddRef();
 
         return *this;
@@ -80,7 +80,7 @@ public:
 
         m_pInterface = pInterface;
 
-        if ( m_pInterface != NULL )
+        if ( m_pInterface != nullptr )
             m_pInterface->AddRef();
 
         return *this;
@@ -100,7 +100,7 @@ public:
     {
         OwnRelease();
 
-        m_pInterface = NULL;
+        m_pInterface = nullptr;
 
         return &m_pInterface;
     }

@@ -35,7 +35,7 @@ class EmbedServer_Impl: public cppu::WeakImplHelper<css::lang::XServiceInfo>
 {
 public:
     EmbedServer_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory > &xFactory );
-    virtual ~EmbedServer_Impl();
+    virtual ~EmbedServer_Impl() override;
 
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;
@@ -59,17 +59,17 @@ public:
     EmbedProviderFactory_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory, const GUID* pGuid);
     virtual ~EmbedProviderFactory_Impl();
 
-    sal_Bool registerClass();
-    sal_Bool deregisterClass();
+    bool registerClass();
+    bool deregisterClass();
 
     /* IUnknown methods */
-    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
-    STDMETHOD_(ULONG, AddRef)();
-    STDMETHOD_(ULONG, Release)();
+    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj) override;
+    STDMETHOD_(ULONG, AddRef)() override;
+    STDMETHOD_(ULONG, Release)() override;
 
     /* IClassFactory methods */
-    STDMETHOD(CreateInstance)(IUnknown FAR* punkOuter, REFIID riid, void FAR* FAR* ppv);
-    STDMETHOD(LockServer)(int fLock);
+    STDMETHOD(CreateInstance)(IUnknown FAR* punkOuter, REFIID riid, void FAR* FAR* ppv) override;
+    STDMETHOD(LockServer)(int fLock) override;
 
 protected:
 
