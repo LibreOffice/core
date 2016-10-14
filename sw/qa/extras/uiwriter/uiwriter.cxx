@@ -707,22 +707,26 @@ void SwUiWriterTest::testFdo74981()
     SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFieldType(0, RES_INPUTFLD)), OUString("foo"), OUString("bar"), 0, 0);
     pWrtShell->Insert(aField);
 
-    // expect hints
-    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
-    SwTextNode* pTextNode = aIdx.GetNode().GetTextNode();
-    CPPUNIT_ASSERT(pTextNode->HasHints());
+    {
+        // expect hints
+        SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+        SwTextNode* pTextNode = aIdx.GetNode().GetTextNode();
+        CPPUNIT_ASSERT(pTextNode->HasHints());
+    }
 
     // go to the begin of the paragraph and split this node
     pWrtShell->Left(CRSR_SKIP_CHARS, false, 100, false);
     pWrtShell->SplitNode();
 
-    // expect only the second paragraph to have hints
-    aIdx = SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
-    pTextNode = aIdx.GetNode().GetTextNode();
-    CPPUNIT_ASSERT(pTextNode->HasHints());
-    --aIdx;
-    pTextNode = aIdx.GetNode().GetTextNode();
-    CPPUNIT_ASSERT(!pTextNode->HasHints());
+    {
+        // expect only the second paragraph to have hints
+        SwNodeIndex aIdx(SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1));
+        SwTextNode* pTextNode = aIdx.GetNode().GetTextNode();
+        CPPUNIT_ASSERT(pTextNode->HasHints());
+        --aIdx;
+        pTextNode = aIdx.GetNode().GetTextNode();
+        CPPUNIT_ASSERT(!pTextNode->HasHints());
+    }
 }
 
 void SwUiWriterTest::testTdf98512()
