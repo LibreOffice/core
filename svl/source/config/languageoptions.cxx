@@ -226,17 +226,17 @@ bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptTyp
 {
     bool isInstalled = false;
 #ifdef _WIN32
-    int nLayouts = GetKeyboardLayoutList(0, NULL);
+    int nLayouts = GetKeyboardLayoutList(0, nullptr);
     if (nLayouts > 0)
     {
-        HKL *lpList = (HKL*)LocalAlloc(LPTR, (nLayouts * sizeof(HKL)));
+        HKL *lpList = static_cast<HKL*>(LocalAlloc(LPTR, (nLayouts * sizeof(HKL))));
         if (lpList)
         {
             nLayouts = GetKeyboardLayoutList(nLayouts, lpList);
 
             for(int i = 0; i < nLayouts; ++i)
             {
-                LCID lang = MAKELCID((WORD)((DWORD_PTR)lpList[i] & 0xffff), SORT_DEFAULT);
+                LCID lang = MAKELCID((WORD)(reinterpret_cast<DWORD_PTR>(lpList[i]) & 0xffff), SORT_DEFAULT);
                 if (MsLangId::getScriptType(lang) == scriptType)
                 {
                     isInstalled = true;

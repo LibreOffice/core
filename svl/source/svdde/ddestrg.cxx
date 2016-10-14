@@ -26,14 +26,14 @@
 DdeString::DdeString( DWORD hDdeInst, const sal_Unicode* p )
     : m_aString(p)
 {
-    hString = DdeCreateStringHandle( hDdeInst, (LPTSTR)p, CP_WINUNICODE );
+    hString = DdeCreateStringHandle( hDdeInst, p, CP_WINUNICODE );
     hInst = hDdeInst;
 }
 
 DdeString::DdeString( DWORD hDdeInst, const OUString& r)
     : m_aString(r)
 {
-    hString = DdeCreateStringHandle( hDdeInst, (LPTSTR)r.getStr(), CP_WINUNICODE );
+    hString = DdeCreateStringHandle( hDdeInst, r.getStr(), CP_WINUNICODE );
     hInst = hDdeInst;
 }
 
@@ -43,7 +43,7 @@ DdeString::~DdeString()
         DdeFreeStringHandle( hInst, hString );
 }
 
-int DdeString::operator==( HSZ h )
+bool DdeString::operator==( HSZ h )
 {
     return( !DdeCmpStringHandles( hString, h ) );
 }

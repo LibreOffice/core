@@ -33,17 +33,17 @@
 DdeData::DdeData()
 {
     pImp = new DdeDataImp;
-    pImp->hData = NULL;
+    pImp->hData = nullptr;
     pImp->nData = 0;
-    pImp->pData = NULL;
+    pImp->pData = nullptr;
     pImp->nFmt = SotClipboardFormatId::STRING;
 }
 
 DdeData::DdeData(const void* p, long n, SotClipboardFormatId f)
 {
     pImp = new DdeDataImp;
-    pImp->hData = NULL;
-    pImp->pData = (LPBYTE)p;
+    pImp->hData = nullptr;
+    pImp->pData = p;
     pImp->nData = n;
     pImp->nFmt  = f;
 }
@@ -51,8 +51,8 @@ DdeData::DdeData(const void* p, long n, SotClipboardFormatId f)
 DdeData::DdeData( const OUString& s )
 {
     pImp = new DdeDataImp;
-    pImp->hData = NULL;
-    pImp->pData = (LPBYTE)s.getStr();
+    pImp->hData = nullptr;
+    pImp->pData = s.getStr();
     pImp->nData = s.getLength()+1;
     pImp->nFmt = SotClipboardFormatId::STRING;
 }
@@ -77,7 +77,7 @@ DdeData::~DdeData()
 void DdeData::Lock()
 {
     if ( pImp->hData )
-        pImp->pData = DdeAccessData( pImp->hData, (LPDWORD) &pImp->nData );
+        pImp->pData = DdeAccessData( pImp->hData, &pImp->nData );
 }
 
 SotClipboardFormatId DdeData::GetFormat() const
@@ -107,7 +107,7 @@ DdeData& DdeData::operator = ( const DdeData& rData )
         DdeData tmp( rData );
         delete pImp;
         pImp = tmp.pImp;
-        tmp.pImp = NULL;
+        tmp.pImp = nullptr;
     }
 
     return *this;
