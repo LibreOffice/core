@@ -58,9 +58,9 @@ SAL_CALL XMLSignature_MSCryptImpl::generate(
 ) throw( css::xml::crypto::XMLSignatureException,
          css::uno::SecurityException )
 {
-    xmlSecKeysMngrPtr pMngr = NULL ;
-    xmlSecDSigCtxPtr pDsigCtx = NULL ;
-    xmlNodePtr pNode = NULL ;
+    xmlSecKeysMngrPtr pMngr = nullptr ;
+    xmlSecDSigCtxPtr pDsigCtx = nullptr ;
+    xmlNodePtr pNode = nullptr ;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -74,8 +74,8 @@ SAL_CALL XMLSignature_MSCryptImpl::generate(
          throw RuntimeException() ;
     }
 
-    SecurityEnvironment_MSCryptImpl* pSecEnv = ( SecurityEnvironment_MSCryptImpl* )xSecTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ) ;
-    if( pSecEnv == NULL )
+    SecurityEnvironment_MSCryptImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_MSCryptImpl*>(xSecTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ));
+    if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
     //Get the xml node
@@ -89,8 +89,8 @@ SAL_CALL XMLSignature_MSCryptImpl::generate(
         throw RuntimeException() ;
     }
 
-    XMLElementWrapper_XmlSecImpl* pElement = ( XMLElementWrapper_XmlSecImpl* )xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ) ;
-    if( pElement == NULL ) {
+    XMLElementWrapper_XmlSecImpl* pElement = reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ));
+    if( pElement == nullptr ) {
         throw RuntimeException() ;
     }
 
@@ -113,7 +113,7 @@ SAL_CALL XMLSignature_MSCryptImpl::generate(
 
     //Create Signature context
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
-    if( pDsigCtx == NULL )
+    if( pDsigCtx == nullptr )
     {
         //throw XMLSignatureException() ;
         pSecEnv->destroyKeysManager( pMngr );
@@ -154,9 +154,9 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
 ) throw( css::uno::RuntimeException,
          css::uno::SecurityException,
          css::xml::crypto::XMLSignatureException ) {
-    xmlSecKeysMngrPtr pMngr = NULL ;
-    xmlSecDSigCtxPtr pDsigCtx = NULL ;
-    xmlNodePtr pNode = NULL ;
+    xmlSecKeysMngrPtr pMngr = nullptr ;
+    xmlSecDSigCtxPtr pDsigCtx = nullptr ;
+    xmlNodePtr pNode = nullptr ;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -173,8 +173,8 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
          throw RuntimeException() ;
     }
 
-    SecurityEnvironment_MSCryptImpl* pSecEnv = ( SecurityEnvironment_MSCryptImpl* )xSecTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ) ;
-    if( pSecEnv == NULL )
+    SecurityEnvironment_MSCryptImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_MSCryptImpl*>(xSecTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ));
+    if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
     //Get the xml node
@@ -187,8 +187,8 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
         throw RuntimeException() ;
     }
 
-    XMLElementWrapper_XmlSecImpl* pElement = ( XMLElementWrapper_XmlSecImpl* )xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ) ;
-    if( pElement == NULL )
+    XMLElementWrapper_XmlSecImpl* pElement = reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ));
+    if( pElement == nullptr )
         throw RuntimeException() ;
 
     pNode = pElement->getNativeElement() ;
@@ -210,7 +210,7 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
 
     //Create Signature context
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
-    if( pDsigCtx == NULL )
+    if( pDsigCtx == nullptr )
     {
         pSecEnv->destroyKeysManager( pMngr );
         clearErrorRecorder();
@@ -275,9 +275,9 @@ sal_Bool SAL_CALL XMLSignature_MSCryptImpl::supportsService( const OUString& ser
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
         if( *( pArray + i ) == serviceName )
-            return sal_True ;
+            return true ;
     }
-    return sal_False ;
+    return false ;
 }
 
 /* XServiceInfo */

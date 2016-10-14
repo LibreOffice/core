@@ -47,7 +47,7 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
 
     public:
         X509Certificate_MSCryptImpl() ;
-        virtual ~X509Certificate_MSCryptImpl() ;
+        virtual ~X509Certificate_MSCryptImpl() override;
 
         //Methods from XCertificate
         virtual sal_Int16 SAL_CALL getVersion() throw ( css::uno::RuntimeException) override;
@@ -87,7 +87,7 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
         //Helper methods
         void setMswcryCert( const CERT_CONTEXT* cert ) ;
         const CERT_CONTEXT* getMswcryCert() const ;
-        void setRawCert( css::uno::Sequence< sal_Int8 > rawCert ) throw ( css::uno::RuntimeException) ;
+        void setRawCert( css::uno::Sequence< sal_Int8 > const & rawCert ) throw ( css::uno::RuntimeException) ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_X509CERTIFICATE_MSCRYPTIMPL_HXX

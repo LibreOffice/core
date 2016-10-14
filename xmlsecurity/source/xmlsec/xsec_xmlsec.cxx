@@ -73,7 +73,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_xmlsec_component_getFactory( const sal_
 
 #if defined( XMLSEC_CRYPTO_MSCRYPTO )
         pRet = mscrypt_component_getFactory( pImplName, pServiceManager, pRegistryKey ) ;
-        if( pRet != NULL )
+        if( pRet != nullptr )
             return pRet ;
 #endif
     }

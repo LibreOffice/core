@@ -75,7 +75,7 @@ void* SAL_CALL nss_component_getFactory( const sal_Char* pImplName , void* pServ
         if( ONSSInitializer_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory.set( createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 ONSSInitializer_createInstance, ONSSInitializer_getSupportedServiceNames() ) );
         }

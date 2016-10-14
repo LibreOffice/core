@@ -36,7 +36,7 @@ using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
 XMLSecurityContext_MSCryptImpl::XMLSecurityContext_MSCryptImpl()
     ://m_pKeysMngr( NULL ) ,
-     m_xSecurityEnvironment( NULL )
+     m_xSecurityEnvironment( nullptr )
 {
     //Init xmlsec library
     if( xmlSecInit() < 0 ) {
@@ -126,9 +126,9 @@ sal_Bool SAL_CALL XMLSecurityContext_MSCryptImpl::supportsService( const OUStrin
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
         if( *( pArray + i ) == serviceName )
-            return sal_True ;
+            return true ;
     }
-    return sal_False ;
+    return false ;
 }
 
 /* XServiceInfo */

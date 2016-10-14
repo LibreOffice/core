@@ -45,41 +45,41 @@ class XMLSecurityContext_MSCryptImpl : public ::cppu::WeakImplHelper<
 
     public:
         XMLSecurityContext_MSCryptImpl();
-        virtual ~XMLSecurityContext_MSCryptImpl();
+        virtual ~XMLSecurityContext_MSCryptImpl() override;
 
         //Methods from XXMLSecurityContext
         virtual sal_Int32 SAL_CALL addSecurityEnvironment(
             const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment
-            ) throw (css::security::SecurityInfrastructureException, css::uno::RuntimeException);
+            ) throw (css::security::SecurityInfrastructureException, css::uno::RuntimeException) override;
 
         virtual ::sal_Int32 SAL_CALL getSecurityEnvironmentNumber(  )
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException) override;
 
         virtual css::uno::Reference<
             css::xml::crypto::XSecurityEnvironment > SAL_CALL
             getSecurityEnvironmentByIndex( ::sal_Int32 index )
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException) override;
 
         virtual css::uno::Reference<
             css::xml::crypto::XSecurityEnvironment > SAL_CALL
             getSecurityEnvironment(  )
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException) override;
 
         virtual ::sal_Int32 SAL_CALL getDefaultSecurityEnvironmentIndex(  )
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException) override;
 
         virtual void SAL_CALL setDefaultSecurityEnvironmentIndex( sal_Int32 nDefaultEnvIndex )
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException) override;
 
 
         //Methods from XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException ) ;
+        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException ) override;
 
         virtual sal_Bool SAL_CALL supportsService(
             const OUString& ServiceName
-        ) throw( css::uno::RuntimeException ) ;
+        ) throw( css::uno::RuntimeException ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException ) ;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException ) override;
 
         //Helper for XServiceInfo
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;

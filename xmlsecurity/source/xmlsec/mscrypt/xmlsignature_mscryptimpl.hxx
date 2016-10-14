@@ -43,30 +43,30 @@ class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper<
 
     public:
         explicit XMLSignature_MSCryptImpl(const css::uno::Reference<css::lang::XMultiServiceFactory >& rFactory);
-        virtual ~XMLSignature_MSCryptImpl() ;
+        virtual ~XMLSignature_MSCryptImpl() override;
 
         //Methods from XXMLSignature
         virtual css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > SAL_CALL generate(
             const css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate >& aTemplate ,
             const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aEnvironment
         ) throw( css::xml::crypto::XMLSignatureException,
-                 css::uno::SecurityException) ;
+                 css::uno::SecurityException) override;
 
         virtual css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > SAL_CALL validate(
             const css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate >& aTemplate ,
             const css::uno::Reference< css::xml::crypto::XXMLSecurityContext >& aContext
         ) throw( css::uno::RuntimeException,
                  css::uno::SecurityException,
-                 css::xml::crypto::XMLSignatureException);
+                 css::xml::crypto::XMLSignatureException) override;
 
         //Methods from XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException ) ;
+        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException ) override;
 
         virtual sal_Bool SAL_CALL supportsService(
             const OUString& ServiceName
-        ) throw( css::uno::RuntimeException ) ;
+        ) throw( css::uno::RuntimeException ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException ) ;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException ) override;
 
         //Helper for XServiceInfo
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
