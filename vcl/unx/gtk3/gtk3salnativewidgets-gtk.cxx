@@ -714,9 +714,12 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
     gtk_style_context_get_padding( mpButtonStyle, gtk_style_context_get_state(mpButtonStyle), &padding);
 
     gint nArrowWidth = FALLBACK_ARROW_SIZE;
-    gtk_style_context_get(mpComboboxButtonArrowStyle,
-        gtk_style_context_get_state(mpComboboxButtonArrowStyle),
-        "min-width", &nArrowWidth, nullptr);
+    if (gtk_check_version(3, 19, 2) == nullptr)
+    {
+        gtk_style_context_get(mpComboboxButtonArrowStyle,
+            gtk_style_context_get_state(mpComboboxButtonArrowStyle),
+            "min-width", &nArrowWidth, nullptr);
+    }
 
     gint nButtonWidth = nArrowWidth + padding.left + padding.right;
     if( nPart == ControlPart::ButtonDown )
@@ -772,17 +775,20 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
         aEditBoxRect.SetPos( Point( areaRect.Left() + buttonRect.GetWidth(), areaRect.Top() ) );
 
     gint arrow_width = FALLBACK_ARROW_SIZE, arrow_height = FALLBACK_ARROW_SIZE;
-    if (nType == ControlType::Combobox)
+    if (gtk_check_version(3, 19, 2) == nullptr)
     {
-        gtk_style_context_get(mpComboboxButtonArrowStyle,
-            gtk_style_context_get_state(mpComboboxButtonArrowStyle),
-            "min-width", &arrow_width, "min-height", &arrow_height, nullptr);
-    }
-    else if (nType == ControlType::Listbox)
-    {
-        gtk_style_context_get(mpListboxButtonArrowStyle,
-            gtk_style_context_get_state(mpListboxButtonArrowStyle),
-            "min-width", &arrow_width, "min-height", &arrow_height, nullptr);
+        if (nType == ControlType::Combobox)
+        {
+            gtk_style_context_get(mpComboboxButtonArrowStyle,
+                gtk_style_context_get_state(mpComboboxButtonArrowStyle),
+                "min-width", &arrow_width, "min-height", &arrow_height, nullptr);
+        }
+        else if (nType == ControlType::Listbox)
+        {
+            gtk_style_context_get(mpListboxButtonArrowStyle,
+                gtk_style_context_get_state(mpListboxButtonArrowStyle),
+                "min-width", &arrow_width, "min-height", &arrow_height, nullptr);
+        }
     }
 
     arrowRect.SetSize(Size(arrow_width, arrow_height));
