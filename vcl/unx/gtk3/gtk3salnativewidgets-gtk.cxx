@@ -852,6 +852,8 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
     }
 }
 
+#if GTK_CHECK_VERSION(3, 19, 2)
+
 static GtkStyleContext* createStyleContext(GtkControlPart ePart, GtkStyleContext* parent = nullptr)
 {
     GtkWidgetPath *path = parent ? gtk_widget_path_copy(gtk_style_context_get_path(parent)) : gtk_widget_path_new();
@@ -859,291 +861,150 @@ static GtkStyleContext* createStyleContext(GtkControlPart ePart, GtkStyleContext
     {
         case GtkControlPart::Button:
             gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "button");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
-#endif
             break;
         case GtkControlPart::LinkButton:
             gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "button");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
-#endif
             gtk_widget_path_iter_add_class(path, -1, "link");
             break;
         case GtkControlPart::CheckButton:
             gtk_widget_path_append_type(path, GTK_TYPE_CHECK_BUTTON);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "checkbutton");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_CHECK);
-#endif
             break;
         case GtkControlPart::CheckButtonCheck:
             gtk_widget_path_append_type(path, GTK_TYPE_CHECK_BUTTON);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "check");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_CHECK);
-#endif
             break;
         case GtkControlPart::RadioButton:
             gtk_widget_path_append_type(path, GTK_TYPE_RADIO_BUTTON);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "radiobutton");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_RADIO);
-#endif
             break;
         case GtkControlPart::RadioButtonRadio:
             gtk_widget_path_append_type(path, GTK_TYPE_RADIO_BUTTON);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "radio");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_RADIO);
-#endif
-        break;
-    case GtkControlPart::Arrow:
-            gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
-#if GTK_CHECK_VERSION(3, 19, 2)
-            gtk_widget_path_iter_set_object_name(path, -1, "arrow");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
-#endif
             break;
-    case GtkControlPart::Entry:
+        case GtkControlPart::Arrow:
+            gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
+            gtk_widget_path_iter_set_object_name(path, -1, "arrow");
+            break;
+        case GtkControlPart::Entry:
             gtk_widget_path_append_type(path, GTK_TYPE_ENTRY);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "entry");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_ENTRY);
-#endif
             break;
         case GtkControlPart::SpinButton:
             gtk_widget_path_append_type(path, GTK_TYPE_SPIN_BUTTON);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "spinbutton");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SPINBUTTON);
-#endif
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
             break;
         case GtkControlPart::SpinButtonUpButton:
         case GtkControlPart::SpinButtonDownButton:
             gtk_widget_path_append_type(path, GTK_TYPE_SPIN_BUTTON);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "button");
             gtk_widget_path_iter_add_class(path, -1, ePart == GtkControlPart::SpinButtonUpButton ? "up" : "down");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SPINBUTTON);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
-#endif
             break;
         case GtkControlPart::ScrollbarVertical:
         case GtkControlPart::ScrollbarHorizontal:
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "scrollbar");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
-#endif
             gtk_widget_path_iter_add_class(path, -1, ePart == GtkControlPart::ScrollbarVertical ? "vertical" : "horizontal");
             break;
         case GtkControlPart::ScrollbarContents:
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "contents");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, "contents");
-#endif
             break;
         case GtkControlPart::ScrollbarTrough:
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "trough");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_TROUGH);
-#endif
             break;
         case GtkControlPart::ScrollbarSlider:
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "slider");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SLIDER);
-#endif
             break;
         case GtkControlPart::ScrollbarButton:
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "button");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
-#endif
             break;
         case GtkControlPart::ProgressBar:
             gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "progressbar");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_PROGRESSBAR);
-#endif
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
             break;
         case GtkControlPart::ProgressBarTrough:
             gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "trough");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_PROGRESSBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_TROUGH);
-#endif
             break;
         case GtkControlPart::ProgressBarProgress:
             gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "progress");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_PROGRESSBAR);
-#endif
             break;
         case GtkControlPart::MenuBar:
             gtk_widget_path_append_type(path, GTK_TYPE_MENU_BAR);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "menubar");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUBAR);
-#endif
             break;
         case GtkControlPart::MenuItem:
             gtk_widget_path_append_type(path, GTK_TYPE_MENU_ITEM);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "menuitem");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUITEM);
-#endif
             break;
         case GtkControlPart::MenuItemArrow:
             gtk_widget_path_append_type(path, GTK_TYPE_MENU_ITEM);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "arrow");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_ARROW);
-#endif
             break;
         case GtkControlPart::Menu:
             gtk_widget_path_append_type(path, GTK_TYPE_MENU);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "menu");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENU);
-#endif
             break;
         case GtkControlPart::CheckMenuItem:
             gtk_widget_path_append_type(path, GTK_TYPE_CHECK_MENU_ITEM);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "menuitem");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUITEM);
-#endif
             break;
         case GtkControlPart::CheckMenuItemCheck:
             gtk_widget_path_append_type(path, GTK_TYPE_CHECK_MENU_ITEM);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "check");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_CHECK);
-#endif
             break;
         case GtkControlPart::RadioMenuItem:
             gtk_widget_path_append_type(path, GTK_TYPE_RADIO_MENU_ITEM);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "menuitem");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUITEM);
-#endif
             break;
         case GtkControlPart::RadioMenuItemRadio:
             gtk_widget_path_append_type(path, GTK_TYPE_RADIO_MENU_ITEM);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "radio");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_RADIO);
-#endif
             break;
         case GtkControlPart::SeparatorMenuItem:
             gtk_widget_path_append_type(path, GTK_TYPE_SEPARATOR_MENU_ITEM);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "menuitem");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUITEM);
-#endif
             break;
         case GtkControlPart::SeparatorMenuItemSeparator:
             gtk_widget_path_append_type(path, GTK_TYPE_SEPARATOR_MENU_ITEM);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "separator");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SEPARATOR);
-#endif
             break;
         case GtkControlPart::Notebook:
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "notebook");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_NOTEBOOK);
-#endif
-            gtk_widget_path_iter_add_class(path, -1, "frame");
             break;
         case GtkControlPart::NotebookStack:
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "stack");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_NOTEBOOK);
-#endif
             break;
         case GtkControlPart::NotebookHeader:
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "header");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HEADER);
-#endif
             gtk_widget_path_iter_add_class(path, -1, "frame");
             gtk_widget_path_iter_add_class(path, -1, "top");
             break;
         case GtkControlPart::NotebookHeaderTabs:
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "tabs");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HEADER);
-#endif
             gtk_widget_path_iter_add_class(path, -1, "top");
             break;
         case GtkControlPart::NotebookHeaderTabsTab:
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "tab");
-#else
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HEADER);
-#endif
             gtk_widget_path_iter_add_class(path, -1, "top");
             break;
         case GtkControlPart::FrameBorder:
             gtk_widget_path_append_type(path, GTK_TYPE_FRAME);
-#if GTK_CHECK_VERSION(3, 19, 2)
             gtk_widget_path_iter_set_object_name(path, -1, "frame");
-#endif
             gtk_widget_path_iter_add_class(path, -1, "frame");
             break;
     }
@@ -1153,15 +1014,185 @@ static GtkStyleContext* createStyleContext(GtkControlPart ePart, GtkStyleContext
     gtk_style_context_set_parent(context, parent);
     gtk_widget_path_unref (path);
 
-#if !GTK_CHECK_VERSION(3, 19, 2)
+    return context;
+}
+
+#else
+
+static GtkStyleContext* createStyleContext(GtkControlPart ePart, GtkStyleContext* parent = nullptr)
+{
+    GtkWidgetPath *path = parent ? gtk_widget_path_copy(gtk_style_context_get_path(parent)) : gtk_widget_path_new();
+    switch (ePart)
+    {
+        case GtkControlPart::Button:
+            gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
+            break;
+        case GtkControlPart::LinkButton:
+            gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
+            gtk_widget_path_iter_add_class(path, -1, "link");
+            break;
+        case GtkControlPart::CheckButton:
+            gtk_widget_path_append_type(path, GTK_TYPE_CHECK_BUTTON);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_CHECK);
+            break;
+        case GtkControlPart::CheckButtonCheck:
+            gtk_widget_path_append_type(path, GTK_TYPE_CHECK_BUTTON);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_CHECK);
+            break;
+        case GtkControlPart::RadioButton:
+            gtk_widget_path_append_type(path, GTK_TYPE_RADIO_BUTTON);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_RADIO);
+            break;
+        case GtkControlPart::RadioButtonRadio:
+            gtk_widget_path_append_type(path, GTK_TYPE_RADIO_BUTTON);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_RADIO);
+            break;
+        case GtkControlPart::Arrow:
+            gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
+            break;
+        case GtkControlPart::Entry:
+            gtk_widget_path_append_type(path, GTK_TYPE_ENTRY);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_ENTRY);
+            break;
+        case GtkControlPart::SpinButton:
+            gtk_widget_path_append_type(path, GTK_TYPE_SPIN_BUTTON);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SPINBUTTON);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
+            break;
+        case GtkControlPart::SpinButtonUpButton:
+        case GtkControlPart::SpinButtonDownButton:
+            gtk_widget_path_append_type(path, GTK_TYPE_SPIN_BUTTON);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SPINBUTTON);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
+            break;
+        case GtkControlPart::ScrollbarVertical:
+        case GtkControlPart::ScrollbarHorizontal:
+            gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
+            gtk_widget_path_iter_add_class(path, -1, ePart == GtkControlPart::ScrollbarVertical ? "vertical" : "horizontal");
+            break;
+        case GtkControlPart::ScrollbarContents:
+            gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
+            gtk_widget_path_iter_add_class(path, -1, "contents");
+            break;
+        case GtkControlPart::ScrollbarTrough:
+            gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_TROUGH);
+            break;
+        case GtkControlPart::ScrollbarSlider:
+            gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SLIDER);
+            break;
+        case GtkControlPart::ScrollbarButton:
+            gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
+            break;
+        case GtkControlPart::ProgressBar:
+            gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_PROGRESSBAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
+            break;
+        case GtkControlPart::ProgressBarTrough:
+            gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_PROGRESSBAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_TROUGH);
+            break;
+        case GtkControlPart::ProgressBarProgress:
+            gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_PROGRESSBAR);
+            break;
+        case GtkControlPart::MenuBar:
+            gtk_widget_path_append_type(path, GTK_TYPE_MENU_BAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUBAR);
+            break;
+        case GtkControlPart::MenuItem:
+            gtk_widget_path_append_type(path, GTK_TYPE_MENU_ITEM);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUITEM);
+            break;
+        case GtkControlPart::MenuItemArrow:
+            gtk_widget_path_append_type(path, GTK_TYPE_MENU_ITEM);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_ARROW);
+            break;
+        case GtkControlPart::Menu:
+            gtk_widget_path_append_type(path, GTK_TYPE_MENU);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENU);
+            break;
+        case GtkControlPart::CheckMenuItem:
+            gtk_widget_path_append_type(path, GTK_TYPE_CHECK_MENU_ITEM);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUITEM);
+            break;
+        case GtkControlPart::CheckMenuItemCheck:
+            gtk_widget_path_append_type(path, GTK_TYPE_CHECK_MENU_ITEM);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_CHECK);
+            break;
+        case GtkControlPart::RadioMenuItem:
+            gtk_widget_path_append_type(path, GTK_TYPE_RADIO_MENU_ITEM);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUITEM);
+            break;
+        case GtkControlPart::RadioMenuItemRadio:
+            gtk_widget_path_append_type(path, GTK_TYPE_RADIO_MENU_ITEM);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_RADIO);
+            break;
+        case GtkControlPart::SeparatorMenuItem:
+            gtk_widget_path_append_type(path, GTK_TYPE_SEPARATOR_MENU_ITEM);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUITEM);
+            break;
+        case GtkControlPart::SeparatorMenuItemSeparator:
+            gtk_widget_path_append_type(path, GTK_TYPE_SEPARATOR_MENU_ITEM);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SEPARATOR);
+            break;
+        case GtkControlPart::Notebook:
+            gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_NOTEBOOK);
+            gtk_widget_path_iter_add_class(path, -1, "frame");
+            break;
+        case GtkControlPart::NotebookStack:
+            gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_NOTEBOOK);
+            break;
+        case GtkControlPart::NotebookHeader:
+            gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HEADER);
+            gtk_widget_path_iter_add_class(path, -1, "frame");
+            gtk_widget_path_iter_add_class(path, -1, "top");
+            break;
+        case GtkControlPart::NotebookHeaderTabs:
+            gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HEADER);
+            gtk_widget_path_iter_add_class(path, -1, "top");
+            break;
+        case GtkControlPart::NotebookHeaderTabsTab:
+            gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HEADER);
+            gtk_widget_path_iter_add_class(path, -1, "top");
+            break;
+        case GtkControlPart::FrameBorder:
+            gtk_widget_path_append_type(path, GTK_TYPE_FRAME);
+            gtk_widget_path_iter_add_class(path, -1, "frame");
+            break;
+    }
+
+    GtkStyleContext* context = gtk_style_context_new();
+    gtk_style_context_set_path(context, path);
+    gtk_style_context_set_parent(context, parent);
+    gtk_widget_path_unref (path);
+
     if (ePart == GtkControlPart::NotebookHeaderTabsTab)
     {
         gtk_style_context_add_region(context, GTK_STYLE_REGION_TAB, GTK_REGION_ONLY);
     }
-#endif
 
     return context;
 }
+
+#endif
 
 #if GTK_CHECK_VERSION(3,13,7)
 #   define CHECKED GTK_STATE_FLAG_CHECKED
