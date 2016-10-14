@@ -41,7 +41,8 @@ OUString SAL_CALL transliteration_commonclass::getName() throw(RuntimeException,
 void SAL_CALL transliteration_commonclass::loadModule( TransliterationModules /*modName*/, const Locale& rLocale )
 throw(RuntimeException, std::exception)
 {
-    aLocale = rLocale;
+    if (aLocale != rLocale)
+        aLocale = rLocale;
 }
 
 
