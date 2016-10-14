@@ -40,7 +40,7 @@ HRESULT STDMETHODCALLTYPE IDropTargetImpl::QueryInterface( REFIID riid, void  **
 {
     if( !ppvObject)
         return E_POINTER;
-    *ppvObject= NULL;
+    *ppvObject= nullptr;
 
     if( riid == __uuidof( IUnknown))
         *ppvObject= static_cast<IUnknown*>( this);

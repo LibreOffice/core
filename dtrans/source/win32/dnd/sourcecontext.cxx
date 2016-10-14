@@ -75,20 +75,20 @@ void SAL_CALL SourceContext::transferablesFlavorsChanged(  )
 
 // non -interface functions
 // Fires XDragSourceListener::dragDropEnd events.
-void SourceContext::fire_dragDropEnd( sal_Bool success, sal_Int8 effect)
+void SourceContext::fire_dragDropEnd( bool success, sal_Int8 effect)
 {
 
     DragSourceDropEvent e;
 
-    if( success == sal_True)
+    if( success )
     {
         e.DropAction=  effect;
-        e.DropSuccess= sal_True;
+        e.DropSuccess= true;
     }
     else
     {
         e.DropAction= ACTION_NONE;
-        e.DropSuccess= sal_False;
+        e.DropSuccess= false;
     }
     e.DragSource= m_dragSource;
     e.DragSourceContext= static_cast<XDragSourceContext*>( this);

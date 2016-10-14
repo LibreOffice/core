@@ -35,7 +35,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL dtrans_component_getFactory(
     void * /*pRegistryKey*/
 )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     if (pServiceManager)
     {
@@ -44,7 +44,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL dtrans_component_getFactory(
         if (rtl_str_compare( pImplName, CLIPBOARDMANAGER_IMPLEMENTATION_NAME ) == 0)
         {
             xFactory = createOneInstanceFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 ClipboardManager_createInstance,
                 ClipboardManager_getSupportedServiceNames() );
@@ -52,7 +52,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL dtrans_component_getFactory(
         else if (rtl_str_compare( pImplName, GENERIC_CLIPBOARD_IMPLEMENTATION_NAME ) == 0)
         {
             xFactory = createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 GenericClipboard_createInstance,
                 GenericClipboard_getSupportedServiceNames() );

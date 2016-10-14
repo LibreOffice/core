@@ -545,6 +545,7 @@ certain functionality.
 @li @c cppcanvas
 @li @c cppcanvas.emf
 @li @c drawinglayer
+@li @c dtrans
 @li @c helpcompiler
 @li @c jvmaccess
 @li @c lingucomponent

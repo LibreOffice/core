@@ -43,7 +43,7 @@ class CFormatEtc
 public:
     CFormatEtc( );
     explicit CFormatEtc( const FORMATETC& aFormatEtc );
-    CFormatEtc( CLIPFORMAT cf, DWORD tymed = TYMED_HGLOBAL, DVTARGETDEVICE* ptd = NULL, DWORD dwAspect = DVASPECT_CONTENT, LONG lindex = -1 );
+    CFormatEtc( CLIPFORMAT cf, DWORD tymed = TYMED_HGLOBAL, DVTARGETDEVICE* ptd = nullptr, DWORD dwAspect = DVASPECT_CONTENT, LONG lindex = -1 );
     CFormatEtc( const CFormatEtc& theOther );
 
     ~CFormatEtc( );
@@ -69,12 +69,12 @@ public:
 private:
     FORMATETC m_FormatEtc;
 
-    friend sal_Int32 operator==( const CFormatEtc& lhs, const CFormatEtc& rhs );
-    friend sal_Int32 operator!=( const CFormatEtc& lhs, const CFormatEtc& rhs );
+    friend bool operator==( const CFormatEtc& lhs, const CFormatEtc& rhs );
+    friend bool operator!=( const CFormatEtc& lhs, const CFormatEtc& rhs );
 };
 
-sal_Int32 operator==( const CFormatEtc& lhs, const CFormatEtc& rhs );
-sal_Int32 operator!=( const CFormatEtc& lhs, const CFormatEtc& rhs );
+bool operator==( const CFormatEtc& lhs, const CFormatEtc& rhs );
+bool operator!=( const CFormatEtc& lhs, const CFormatEtc& rhs );
 
 #endif
 

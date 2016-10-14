@@ -47,18 +47,18 @@ public:
     css::datatransfer::DataFlavor getDataFlavorFromFormatEtc(
         const FORMATETC& aFormatEtc, LCID lcid = GetThreadLocale( ) ) const;
 
-    CFormatEtc    SAL_CALL getFormatEtcForClipformat( CLIPFORMAT cf ) const;
-    CFormatEtc    SAL_CALL getFormatEtcForClipformatName( const OUString& aClipFmtName ) const;
-    OUString SAL_CALL getClipboardFormatName( CLIPFORMAT aClipformat ) const;
+    static CFormatEtc SAL_CALL getFormatEtcForClipformat( CLIPFORMAT cf );
+    static CFormatEtc SAL_CALL getFormatEtcForClipformatName( const OUString& aClipFmtName );
+    static OUString SAL_CALL getClipboardFormatName( CLIPFORMAT aClipformat );
 
-    sal_Bool SAL_CALL isHTMLFormat( CLIPFORMAT cf ) const;
-    sal_Bool SAL_CALL isTextHtmlFormat( CLIPFORMAT cf ) const;
-    sal_Bool SAL_CALL isOemOrAnsiTextFormat( CLIPFORMAT cf ) const;
-    sal_Bool SAL_CALL isUnicodeTextFormat( CLIPFORMAT cf ) const;
-    sal_Bool SAL_CALL isTextFormat( CLIPFORMAT cf ) const;
+    static bool SAL_CALL isHTMLFormat( CLIPFORMAT cf );
+    static bool SAL_CALL isTextHtmlFormat( CLIPFORMAT cf );
+    static bool SAL_CALL isOemOrAnsiTextFormat( CLIPFORMAT cf );
+    static bool SAL_CALL isUnicodeTextFormat( CLIPFORMAT cf );
+    static bool SAL_CALL isTextFormat( CLIPFORMAT cf );
 
 private:
-    OUString SAL_CALL getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat ) const;
+    static OUString SAL_CALL getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat );
 
 private:
     css::uno::Reference< css::datatransfer::XDataFormatTranslator >   m_XDataFormatTranslator;
