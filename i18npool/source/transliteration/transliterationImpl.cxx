@@ -44,16 +44,16 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #define ERROR RuntimeException()
 
 #define TmItem1( name ) \
-  {TransliterationModules_##name, TransliterationModulesNew_##name, #name}
+  {TransliterationModules_##name, TransliterationModulesNew_##name, OUString(TRLT_IMPLNAME_PREFIX) + OUString(#name)}
 
 #define TmItem2( name ) \
-  {(TransliterationModules)0, TransliterationModulesNew_##name, #name}
+  {(TransliterationModules)0, TransliterationModulesNew_##name, OUString(TRLT_IMPLNAME_PREFIX) + OUString(#name)}
 
 // Ignore Module list
 static struct TMlist {
   TransliterationModules        tm;
   TransliterationModulesNew     tmn;
-  const sal_Char               *implName;
+  OUString               implName;
 } TMlist[] = {                                  //      Modules      ModulesNew
   TmItem1 (IGNORE_CASE),                        // 0. (1<<8        256) (7)
   TmItem1 (IGNORE_WIDTH),                       // 1. (1<<9        512) (8)
@@ -130,7 +130,7 @@ static struct TMlist {
 //  TmItem2 (NumToCharEstern_Arabic_Indic),// () (68)
 //  TmItem2 (NumToCharIndic),           // () (69)
 //  TmItem2 (NumToCharThai),            // () (70)
-  {(TransliterationModules)0, (TransliterationModulesNew)0,  nullptr}
+  {(TransliterationModules)0, (TransliterationModulesNew)0,  OUString()}
 };
 
 // Constructor/Destructor
@@ -185,7 +185,7 @@ TransliterationImpl::loadModule( TransliterationModules modType, const Locale& r
                 TransliterationModules_IGNORE_CASE_MASK : TransliterationModules_IGNORE_MASK;
         for (sal_Int16 i = 0; TMlist[i].tm & mask; i++) {
             if (modType & TMlist[i].tm)
-                if (loadModuleByName(OUString::createFromAscii(TMlist[i].implName),
+                if (loadModuleByName(TMlist[i].implName,
                                                 bodyCascade[numCascade], rLocale))
                     numCascade++;
         }
@@ -202,7 +202,7 @@ TransliterationImpl::loadModule( TransliterationModules modType, const Locale& r
     } else if (modType&TransliterationModules_NON_IGNORE_MASK) {
         for (sal_Int16 i = 0; TMlist[i].tm; i++) {
             if (TMlist[i].tm == modType) {
-                if (loadModuleByName(OUString::createFromAscii(TMlist[i].implName), bodyCascade[numCascade], rLocale))
+                if (loadModuleByName(TMlist[i].implName, bodyCascade[numCascade], rLocale))
                     numCascade++;
                 break;
             }
@@ -227,7 +227,7 @@ TransliterationImpl::loadModuleNew( const Sequence < TransliterationModulesNew >
                 else if (mask == (sal_Int32) TransliterationModules_IGNORE_MASK &&
                         (TMlist[i].tm&TransliterationModules_IGNORE_MASK) == 0)
                     throw ERROR; // could not mess up ignore trans. with non_ignore trans.
-                if (loadModuleByName(OUString::createFromAscii(TMlist[j].implName), bodyCascade[numCascade], rLocale))
+                if (loadModuleByName(TMlist[j].implName, bodyCascade[numCascade], rLocale))
                     numCascade++;
                 break;
             }
@@ -595,7 +595,7 @@ namespace
     class theTransBodyMutex : public rtl::Static<osl::Mutex, theTransBodyMutex> {};
 }
 
-void TransliterationImpl::loadBody( OUString &implName, Reference<XExtendedTransliteration>& body )
+void TransliterationImpl::loadBody( const OUString &implName, Reference<XExtendedTransliteration>& body )
     throw (RuntimeException)
 {
     assert(!implName.isEmpty());
@@ -614,20 +614,17 @@ bool SAL_CALL
 TransliterationImpl::loadModuleByName( const OUString& implName,
         Reference<XExtendedTransliteration>& body, const Locale& rLocale) throw(RuntimeException)
 {
-    OUString cname = TRLT_IMPLNAME_PREFIX + implName;
-    loadBody(cname, body);
+    loadBody(implName, body);
     if (body.is()) {
         body->loadModule((TransliterationModules)0, rLocale); // toUpper/toLoad need rLocale
 
         // if the module is ignore case/kana/width, load caseignore for equals/compareString mothed
         for (sal_Int16 i = 0; i < 3; i++) {
-            if (implName.equalsAscii(TMlist[i].implName)) {
+            if (implName == TMlist[i].implName) {
                 if (i == 0) // current module is caseignore
                     body->loadModule(TMlist[0].tm, rLocale); // caseignore need to setup module name
                 if (! caseignore.is()) {
-                    OUString bname = TRLT_IMPLNAME_PREFIX +
-                                OUString::createFromAscii(TMlist[0].implName);
-                    loadBody(bname, caseignore);
+                    loadBody(TMlist[0].implName, caseignore);
                 }
                 if (caseignore.is())
                     caseignore->loadModule(TMlist[i].tm, rLocale);
