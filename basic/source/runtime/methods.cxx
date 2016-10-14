@@ -420,7 +420,7 @@ RTLFUNC(CurDir)
         }
     }
     char* pBuffer = new char[ _MAX_PATH ];
-    if ( _getdcwd( nCurDir, pBuffer, _MAX_PATH ) != 0 )
+    if ( _getdcwd( nCurDir, pBuffer, _MAX_PATH ) != nullptr )
     {
         rPar.Get(0)->PutString( OUString::createFromAscii( pBuffer ) );
     }
