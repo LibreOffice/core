@@ -693,7 +693,7 @@ SfxFilterFlags MimeConfigurationHelper::GetFilterFlags( const OUString& aFilterN
 bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
                         uno::Sequence< beans::PropertyValue >& aMediaDescr )
 {
-    OUString aFilterName = UpdateMediaDescriptorWithFilterName( aMediaDescr, sal_False );
+    OUString aFilterName = UpdateMediaDescriptorWithFilterName( aMediaDescr, false );
     if ( !aFilterName.isEmpty() )
     {
         SfxFilterFlags nFlags = GetFilterFlags( aFilterName );
