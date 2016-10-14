@@ -310,7 +310,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
 #ifdef UNX // don't compress by default on unix as ghostscript is unable to read LZW compressed eps
     mbCompression = false;
 #else
-    mbCompression = sal_True;
+    mbCompression = true;
 #endif
     mnTextMode = 0;         // default0 : export glyph outlines
 
