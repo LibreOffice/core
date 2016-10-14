@@ -570,7 +570,7 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
 #endif
     }
 
-    PDFEntry* pRet = NULL;
+    PDFEntry* pRet = nullptr;
     unsigned int nEntries = aGrammar.m_aObjectStack.size();
     if( nEntries == 1 )
     {
@@ -597,14 +597,14 @@ PDFEntry* PDFReader::read( const char* pFileName )
        So for the time being bite the bullet and read the whole file.
        FIXME: give Spirit 2.x another try when we upgrade boost again.
     */
-    PDFEntry* pRet = NULL;
+    PDFEntry* pRet = nullptr;
     FILE* fp = fopen( pFileName, "rb" );
     if( fp )
     {
         fseek( fp, 0, SEEK_END );
         unsigned int nLen = (unsigned int)ftell( fp );
         fseek( fp, 0, SEEK_SET );
-        char* pBuf = (char*)rtl_allocateMemory( nLen );
+        char* pBuf = static_cast<char*>(rtl_allocateMemory( nLen ));
         if( pBuf )
         {
             fread( pBuf, 1, nLen, fp );
