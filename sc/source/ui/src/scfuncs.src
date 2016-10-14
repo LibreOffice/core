@@ -7600,7 +7600,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             HID_FUNC_LOGINV;
-            3;  0;  0;  0;
+            3;  0;  1;  1;
             0;
         };
         String 2 // Name of Parameter 1

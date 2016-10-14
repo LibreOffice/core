@@ -1736,6 +1736,7 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
         break;
 
         case ocLogNormDist:
+        case ocLogInv:
             switch( nParamCount )
              {
                 // LOGNORMDIST function needs 3 parameters in Excel

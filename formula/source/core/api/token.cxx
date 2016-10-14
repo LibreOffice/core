@@ -1069,6 +1069,7 @@ inline bool MissingConventionODF::isRewriteNeeded( OpCode eOp ) const
         case ocGammaDist:
         case ocPoissonDist:
         case ocAddress:
+        case ocLogInv:
         case ocLogNormDist:
         case ocNormDist:
             return true;
@@ -1113,6 +1114,7 @@ inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp )
         case ocFDist_LT:
         case ocPoissonDist:
         case ocNormDist:
+        case ocLogInv:
         case ocLogNormDist:
         case ocHypGeomDist:
 
@@ -1171,6 +1173,7 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                             pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=true()
                         }
                         break;
+                    case ocLogInv:
                     case ocLogNormDist:
                         if ( mnCurArg == 0 )
                         {
@@ -1236,6 +1239,7 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                         }
                         break;
 
+                    case ocLogInv:
                     case ocLogNormDist:
                         if ( mnCurArg == 0 )
                         {

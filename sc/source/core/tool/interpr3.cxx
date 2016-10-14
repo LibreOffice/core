@@ -2147,15 +2147,16 @@ void ScInterpreter::ScSNormInv()
 
 void ScInterpreter::ScLogNormInv()
 {
-    if ( MustHaveParamCount( GetByte(), 3 ) )
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 1, 3 ) )
     {
-        double sigma = GetDouble();                 // Stdabw
-        double mue = GetDouble();                   // Mittelwert
-        double y = GetDouble();                     // y
-        if (sigma <= 0.0 || y <= 0.0 || y >= 1.0)
+        double fSigma = ( nParamCount == 3 ? GetDouble() : 1.0 );  // Stddev
+        double fMue = ( nParamCount >= 2 ? GetDouble() : 0.0 );    // Mean
+        double fP = GetDouble();                                   // p
+        if ( fSigma <= 0.0 || fP <= 0.0 || fP >= 1.0 )
             PushIllegalArgument();
         else
-            PushDouble(exp(mue+sigma*gaussinv(y)));
+            PushDouble( exp( fMue + fSigma * gaussinv( fP ) ) );
     }
 }
 
