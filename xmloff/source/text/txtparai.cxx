@@ -1585,6 +1585,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         pContext = new XMLCharContext( rImport, nPrefix,
                                                rLocalName, xAttrList,
                                                0x0020, true );
+        rIgnoreLeadingSpace = false;
         break;
 
     case XML_TOK_TEXT_HYPERLINK:
