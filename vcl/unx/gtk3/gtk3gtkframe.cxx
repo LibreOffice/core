@@ -2071,17 +2071,23 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
         return;
 
 #if GTK_CHECK_VERSION(3, 19, 2)
-    GdkSeat* pSeat = gdk_display_get_default_seat(getGdkDisplay());
-    if (bGrab)
+    if (gtk_check_version(3, 19, 2) == nullptr)
     {
-        gdk_seat_grab(pSeat, widget_get_window(getMouseEventWidget()), GDK_SEAT_CAPABILITY_ALL_POINTING,
-                      bOwnerEvents, nullptr, nullptr, nullptr, nullptr);
+        GdkSeat* pSeat = gdk_display_get_default_seat(getGdkDisplay());
+        if (bGrab)
+        {
+            gdk_seat_grab(pSeat, widget_get_window(getMouseEventWidget()), GDK_SEAT_CAPABILITY_ALL_POINTING,
+                          bOwnerEvents, nullptr, nullptr, nullptr, nullptr);
+        }
+        else
+        {
+            gdk_seat_ungrab(pSeat);
+        }
+        return;
     }
-    else
-    {
-        gdk_seat_ungrab(pSeat);
-    }
-#else
+#endif
+
+    //else older gtk3
     const int nMask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
 
     GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
@@ -2095,7 +2101,6 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
     {
         gdk_device_ungrab(pPointer, gtk_get_current_event_time());
     }
-#endif
 }
 
 void GtkSalFrame::CaptureMouse( bool bCapture )
