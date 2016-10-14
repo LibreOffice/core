@@ -681,6 +681,37 @@ int PDFDocument::AsHex(char ch)
     return nRet;
 }
 
+std::vector<unsigned char> PDFDocument::DecodeHexString(PDFHexStringElement* pElement)
+{
+    std::vector<unsigned char> aRet;
+    const OString& rHex = pElement->GetValue();
+    size_t nHexLen = rHex.getLength();
+    {
+        int nByte = 0;
+        int nCount = 2;
+        for (size_t i = 0; i < nHexLen; ++i)
+        {
+            nByte = nByte << 4;
+            sal_Int8 nParsed = AsHex(rHex[i]);
+            if (nParsed == -1)
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::DecodeHexString: invalid hex value");
+                return aRet;
+            }
+            nByte += nParsed;
+            --nCount;
+            if (!nCount)
+            {
+                aRet.push_back(nByte);
+                nCount = 2;
+                nByte = 0;
+            }
+        }
+    }
+
+    return aRet;
+}
+
 bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation)
 {
     PDFObjectElement* pValue = pSignature->LookupObject("V");
@@ -711,33 +742,38 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
         return false;
     }
 
-    // At this point there is no obviously missing info to validate the
-    // signature, so let's turn the hex dump of the signature into a memory
-    // stream.
-    const OString& rSignatureHex = pContents->GetValue();
-    size_t nSignatureHexLen = rSignatureHex.getLength();
-    std::vector<unsigned char> aSignature;
+    // Reason / comment / description is optional.
+    auto pReason = dynamic_cast<PDFHexStringElement*>(pValue->Lookup("Reason"));
+    if (pReason)
     {
-        int nByte = 0;
-        int nCount = 2;
-        for (size_t i = 0; i < nSignatureHexLen; ++i)
+        // See appendUnicodeTextString() for the export equivalent of this.
+        std::vector<unsigned char> aReason = PDFDocument::DecodeHexString(pReason);
+        OUStringBuffer aBuffer;
+        sal_uInt16 nByte = 0;
+        for (size_t i = 0; i < aReason.size(); ++i)
         {
-            nByte = nByte << 4;
-            sal_Int8 nParsed = AsHex(rSignatureHex[i]);
-            if (nParsed == -1)
+            if (i % 2 == 0)
+                nByte = aReason[i];
+            else
             {
-                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: invalid hex value");
-                return false;
-            }
-            nByte += nParsed;
-            --nCount;
-            if (!nCount)
-            {
-                aSignature.push_back(nByte);
-                nCount = 2;
-                nByte = 0;
+                sal_Unicode nUnicode;
+                nUnicode = (nByte << 8);
+                nUnicode |= aReason[i];
+                aBuffer.append(nUnicode);
             }
         }
+
+        if (!aBuffer.isEmpty())
+            rInformation.ouDescription = aBuffer.makeStringAndClear();
+    }
+
+    // At this point there is no obviously missing info to validate the
+    // signature.
+    std::vector<unsigned char> aSignature = PDFDocument::DecodeHexString(pContents);
+    if (aSignature.empty())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: empty contents");
+        return false;
     }
 
 #ifdef XMLSEC_CRYPTO_NSS
