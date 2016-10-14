@@ -110,7 +110,7 @@ private:
     HWND            m_hwnd;
     HWND            m_hwndParent;
     HINSTANCE       m_hInstance;
-    sal_Bool        m_bWndClassRegistered;
+    bool            m_bWndClassRegistered;
     OUString m_HelpText;
     HBITMAP         m_hBitmapShadow;
     HBRUSH          m_hBrushShadow;

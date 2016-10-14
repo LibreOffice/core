@@ -64,20 +64,20 @@ VistaFilePickerEventHandler::~VistaFilePickerEventHandler()
 HRESULT STDMETHODCALLTYPE VistaFilePickerEventHandler::QueryInterface(REFIID rIID    ,
                                                                       void** ppObject)
 {
-    *ppObject=NULL;
+    *ppObject=nullptr;
 
     if ( rIID == IID_IUnknown )
-        *ppObject = (IUnknown*)(IFileDialogEvents*)this;
+        *ppObject = static_cast<IUnknown*>(static_cast<IFileDialogEvents*>(this));
 
     if ( rIID == IID_IFileDialogEvents )
-        *ppObject = (IFileDialogEvents*)this;
+        *ppObject = static_cast<IFileDialogEvents*>(this);
 
     if ( rIID == IID_IFileDialogControlEvents )
-        *ppObject = (IFileDialogControlEvents*)this;
+        *ppObject = static_cast<IFileDialogControlEvents*>(this);
 
-    if ( *ppObject != NULL )
+    if ( *ppObject != nullptr )
     {
-        ((IUnknown*)*ppObject)->AddRef();
+        static_cast<IUnknown*>(*ppObject)->AddRef();
         return S_OK;
     }
 
@@ -248,13 +248,13 @@ public:
     AsyncPickerEvents()
     {}
 
-    virtual ~AsyncPickerEvents()
+    virtual ~AsyncPickerEvents() override
     {}
 
-    virtual void before()
+    virtual void before() override
     {}
 
-    virtual void doRequest(const RequestRef& rRequest)
+    virtual void doRequest(const RequestRef& rRequest) override
     {
         const ::sal_Int32 nEventID   = rRequest->getRequest();
         const ::sal_Int16 nControlID = rRequest->getArgumentOrDefault(PROP_CONTROL_ID, (::sal_Int16)0);
@@ -292,7 +292,7 @@ public:
         }
     }
 
-    virtual void after()
+    virtual void after() override
     {}
 };
 

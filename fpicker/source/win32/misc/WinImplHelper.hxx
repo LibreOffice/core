@@ -73,7 +73,7 @@ void SAL_CALL CheckboxSetState(
 // ending strings used in some Win32 functions
 // e.g. Filter\0*.txt\0\0
 // the returned length excludes the last '\0'
-sal_uInt32 SAL_CALL _wcslenex( const sal_Unicode* pStr );
+sal_uInt32 SAL_CALL wcslenex( const sal_Unicode* pStr );
 
 
 // converts a soffice label to a windows label

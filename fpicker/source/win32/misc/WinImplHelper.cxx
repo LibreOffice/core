@@ -58,7 +58,7 @@ bool SAL_CALL IsWindowsVistaOrNewer()
 {
 // the Win32 SDK 8.1 deprecates GetVersionEx()
 #ifdef _WIN32_WINNT_WINBLUE
-    return IsWindowsVistaOrGreater() ? true : false;
+    return IsWindowsVistaOrGreater();
 #else
     OSVERSIONINFO osvi;
     osvi.dwOSVersionInfoSize = sizeof(osvi);
@@ -244,7 +244,7 @@ Any SAL_CALL ListboxGetItems( HWND hwnd )
     {
         aItemList.realloc( nItemCount );
 
-        for ( sal_Int32 i = 0; i < nItemCount; i++ )
+        for ( LRESULT i = 0; i < nItemCount; i++ )
         {
             aItemList[i] = ListboxGetString( hwnd, i );
         }
@@ -293,12 +293,12 @@ void SAL_CALL CheckboxSetState(
             rXInterface,
             aArgPos );
 
-    sal_Bool bCheckState = *reinterpret_cast< const sal_Bool* >( aState.getValue( ) );
+    bool bCheckState = *static_cast< const sal_Bool* >( aState.getValue( ) );
     WPARAM wParam = bCheckState ? BST_CHECKED : BST_UNCHECKED;
     SendMessageW( hwnd, BM_SETCHECK, wParam, 0 );
 }
 
-sal_uInt32 SAL_CALL _wcslenex( const sal_Unicode* pStr )
+sal_uInt32 SAL_CALL wcslenex( const sal_Unicode* pStr )
 {
     if ( !pStr )
         return 0;

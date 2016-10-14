@@ -34,14 +34,14 @@
 class CCustomControlContainer : public CCustomControl
 {
 public:
-    virtual ~CCustomControlContainer();
+    virtual ~CCustomControlContainer() override;
 
-    virtual void SAL_CALL Align();
-    virtual void SAL_CALL SetFont(HFONT hFont);
+    virtual void SAL_CALL Align() override;
+    virtual void SAL_CALL SetFont(HFONT hFont) override;
 
-    virtual void SAL_CALL AddControl(CCustomControl* aCustomControl);
-    virtual void SAL_CALL RemoveControl(CCustomControl* aCustomControl);
-    virtual void SAL_CALL RemoveAllControls();
+    virtual void SAL_CALL AddControl(CCustomControl* aCustomControl) override;
+    virtual void SAL_CALL RemoveControl(CCustomControl* aCustomControl) override;
+    virtual void SAL_CALL RemoveAllControls() override;
 
 private:
     typedef std::list<CCustomControl*> ControlContainer_t;

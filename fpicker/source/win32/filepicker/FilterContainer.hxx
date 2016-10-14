@@ -43,14 +43,14 @@ public:
     // returns true if the filter was successfully added
     // returns false if duplicates are not allowed and
     // the filter is already in the container
-    sal_Bool SAL_CALL addFilter(
+    bool SAL_CALL addFilter(
         const OUString& aName,
         const OUString& aFilter,
-        sal_Bool bAllowDuplicates = sal_False );
+        bool bAllowDuplicates = false );
 
     // delete the specified filter returns true on
     // success and false if the filter was not found
-    sal_Bool SAL_CALL delFilter( const OUString& aName );
+    bool SAL_CALL delFilter( const OUString& aName );
 
     // the number of filter already added
     sal_Int32 SAL_CALL numFilter( );
@@ -61,8 +61,8 @@ public:
     // retrieve a filter from the container both methods
     // return true on success and false if the specified
     // filter was not found
-    sal_Bool SAL_CALL getFilter( const OUString& aName, OUString& theFilter ) const;
-    sal_Bool SAL_CALL getFilter( sal_Int32 aIndex, OUString& theFilter ) const;
+    bool SAL_CALL getFilter( const OUString& aName, OUString& theFilter ) const;
+    bool SAL_CALL getFilter( sal_Int32 aIndex, OUString& theFilter ) const;
 
     // returns the position of the specified filter or -1
     // if the filter was not found
@@ -72,7 +72,7 @@ public:
     void SAL_CALL beginEnumFilter( );
 
     // returns true if another filter has been retrieved
-    sal_Bool SAL_CALL getNextFilter( FILTER_ENTRY_T& nextFilterEntry );
+    bool SAL_CALL getNextFilter( FILTER_ENTRY_T& nextFilterEntry );
 
     // cache current filter
     void SAL_CALL setCurrentFilter( const OUString& aName );
@@ -93,7 +93,7 @@ private:
 private:
     FILTER_VECTOR_T                 m_vFilters;
     FILTER_VECTOR_T::const_iterator m_iter;
-    sal_Bool                        m_bIterInitialized;
+    bool                            m_bIterInitialized;
     OUString                 m_sCurrentFilter;
 };
 
