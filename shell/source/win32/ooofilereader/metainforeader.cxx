@@ -248,7 +248,7 @@ void CMetaInfoReader::start_element(
 {
     //get appropriate Xml Tag Builder using MetaInfoBuilderFactory;
     ITag* pTagBuilder = chooseTagReader( local_name,attributes );
-    assert( pTagBuilder!= NULL );
+    assert( pTagBuilder!= nullptr );
     pTagBuilder->startTag( );
     m_TagBuilderStack.push( pTagBuilder );
 

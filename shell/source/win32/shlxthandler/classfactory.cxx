@@ -51,7 +51,7 @@ CClassFactory::~CClassFactory()
 
 HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
-    *ppvObject = 0;
+    *ppvObject = nullptr;
 
     if (IID_IUnknown == riid || IID_IClassFactory == riid)
     {
@@ -90,10 +90,10 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject)
 {
-    if ((pUnkOuter != NULL))
+    if ((pUnkOuter != nullptr))
         return CLASS_E_NOAGGREGATION;
 
-    IUnknown* pUnk = 0;
+    IUnknown* pUnk = nullptr;
 
     if (CLSID_PROPERTYSHEET_HANDLER == m_Clsid)
         pUnk = static_cast<IShellExtInit*>(new CPropertySheet());
@@ -107,7 +107,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
     else if (CLSID_THUMBVIEWER_HANDLER == m_Clsid)
         pUnk = static_cast<IExtractImage*>(new CThumbviewer());
 
-    if (0 == pUnk)
+    if (nullptr == pUnk)
     {
         return E_OUTOFMEMORY;
     }

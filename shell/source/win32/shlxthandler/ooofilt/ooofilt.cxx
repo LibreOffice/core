@@ -80,8 +80,8 @@ using ::std::min;
 
 COooFilter::COooFilter() :
     m_lRefs(1),
-    m_pContentReader(NULL),
-    m_pMetaInfoReader(NULL),
+    m_pContentReader(nullptr),
+    m_pMetaInfoReader(nullptr),
     m_eState(FilteringContent),
     m_ulUnicodeBufferLen(0),
     m_ulUnicodeCharsRead(0),
@@ -92,8 +92,8 @@ COooFilter::COooFilter() :
     m_fEof(FALSE),
     m_ChunkPosition(0),
     m_cAttributes(0),
-    m_pAttributes(0),
-    m_pStream(NULL)
+    m_pAttributes(nullptr),
+    m_pStream(nullptr)
 
 {
     InterlockedIncrement( &g_lInstances );
@@ -129,23 +129,23 @@ SCODE STDMETHODCALLTYPE COooFilter::QueryInterface(
     REFIID riid,
     void  ** ppvObject)
 {
-    IUnknown *pUnkTemp = 0;
+    IUnknown *pUnkTemp = nullptr;
     if ( IID_IFilter == riid )
-        pUnkTemp = (IUnknown *)(IFilter *)this;
+        pUnkTemp = static_cast<IUnknown *>(static_cast<IFilter *>(this));
     else if ( IID_IPersistFile == riid )
-        pUnkTemp = (IUnknown *)(IPersistFile *)this;
+        pUnkTemp = static_cast<IUnknown *>(static_cast<IPersistFile *>(this));
     else if ( IID_IPersist == riid )
-        pUnkTemp = (IUnknown *)(IPersist *)(IPersistFile *)this;
+        pUnkTemp = static_cast<IUnknown *>(static_cast<IPersist *>(static_cast<IPersistFile *>(this)));
     else if (IID_IPersistStream == riid)
-        pUnkTemp = (IUnknown *)(IPersistStream *)this;
+        pUnkTemp = static_cast<IUnknown *>(static_cast<IPersistStream *>(this));
     else if ( IID_IUnknown == riid )
-        pUnkTemp = (IUnknown *)(IPersist *)(IPersistFile *)this;
+        pUnkTemp = static_cast<IUnknown *>(static_cast<IPersist *>(static_cast<IPersistFile *>(this)));
     else
     {
-        *ppvObject = NULL;
+        *ppvObject = nullptr;
         return E_NOINTERFACE;
     }
-    *ppvObject = (void  *)pUnkTemp;
+    *ppvObject = pUnkTemp;
     pUnkTemp->AddRef();
     return S_OK;
 }
@@ -213,18 +213,18 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
         if ( m_cAttributes > 0 )
         {
             delete[] m_pAttributes;
-            m_pAttributes = 0;
+            m_pAttributes = nullptr;
             m_cAttributes = 0;
         }
         if( 0 < cAttributes )
         {
             // Filter properties specified in aAttributes
-            if ( 0 == aAttributes )
+            if ( nullptr == aAttributes )
                 return E_INVALIDARG;
             m_pAttributes = new CFullPropSpec[cAttributes];
             m_cAttributes = cAttributes;
             // Is caller want to filter contents?
-            CFullPropSpec *pAttrib = (CFullPropSpec *) aAttributes;
+            CFullPropSpec const *pAttrib = reinterpret_cast<CFullPropSpec const *>(aAttributes);
             ULONG ulNumAttr;
             for ( ulNumAttr = 0 ; ulNumAttr < cAttributes; ulNumAttr++ )
             {
@@ -474,8 +474,8 @@ SCODE STDMETHODCALLTYPE COooFilter::GetValue(PROPVARIANT ** ppPropValue)
     {
         if ( m_cAttributes == 0 || ( m_ulCurrentPropertyNum == m_ulPropertyNum ) )
             return FILTER_E_NO_MORE_VALUES;
-        PROPVARIANT *pPropVar = (PROPVARIANT *) CoTaskMemAlloc( sizeof (PROPVARIANT) );
-        if ( pPropVar == 0 )
+        PROPVARIANT *pPropVar = static_cast<PROPVARIANT *>(CoTaskMemAlloc( sizeof (PROPVARIANT) ));
+        if ( pPropVar == nullptr )
             return E_OUTOFMEMORY;
         ::std::wstring wsTagName= GetMetaInfoNameFromPropertyId( m_pAttributes[m_ulCurrentPropertyNum].GetPropertyPropid() );
         if ( wsTagName == EMPTY_STRING )
@@ -484,7 +484,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetValue(PROPVARIANT ** ppPropValue)
         pPropVar->vt = VT_LPWSTR;
         size_t cw = wsTagData.length() + 1; // reserve one for the '\0'
         pPropVar->pwszVal = static_cast<WCHAR*>( CoTaskMemAlloc(cw*sizeof(WCHAR)) );
-        if (pPropVar->pwszVal == 0)
+        if (pPropVar->pwszVal == nullptr)
         {
             CoTaskMemFree(pPropVar);
             return E_OUTOFMEMORY;
@@ -691,7 +691,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetCurFile(LPWSTR * ppszFileName)
     if ( EMPTY_STRING == m_pwszFileName )
         return E_FAIL;
     else
-        *ppszFileName = (LPWSTR)m_pwszFileName.c_str();
+        *ppszFileName = const_cast<LPWSTR>(m_pwszFileName.c_str());
     return S_OK;
 }
 
@@ -733,15 +733,15 @@ SCODE STDMETHODCALLTYPE COooFilterCF::QueryInterface(REFIID riid, void  ** ppvOb
     IUnknown *pUnkTemp;
 
     if ( IID_IClassFactory == riid )
-        pUnkTemp = (IUnknown *)(IClassFactory *)this;
+        pUnkTemp = static_cast<IUnknown *>(static_cast<IClassFactory *>(this));
     else if ( IID_IUnknown == riid )
-        pUnkTemp = (IUnknown *)this;
+        pUnkTemp = static_cast<IUnknown *>(this);
     else
     {
-        *ppvObject = NULL;
+        *ppvObject = nullptr;
         return E_NOINTERFACE;
     }
-    *ppvObject = (void  *)pUnkTemp;
+    *ppvObject = pUnkTemp;
     pUnkTemp->AddRef();
     return S_OK;
 }
@@ -795,8 +795,8 @@ SCODE STDMETHODCALLTYPE COooFilterCF::CreateInstance(
     REFIID riid,
     void  * * ppvObject)
 {
-    COooFilter *pIUnk = 0;
-    if ( 0 != pUnkOuter )
+    COooFilter *pIUnk = nullptr;
+    if ( nullptr != pUnkOuter )
         return CLASS_E_NOAGGREGATION;
     pIUnk = new COooFilter();
     if ( SUCCEEDED( pIUnk->QueryInterface( riid , ppvObject ) ) )
@@ -886,13 +886,13 @@ extern "C" SCODE STDMETHODCALLTYPE DllGetClassObject(
     void **    ppvObj
 )
 {
-    COooFilterCF* pImpl = 0;
-    IUnknown *pResult = 0;
+    COooFilterCF* pImpl = nullptr;
+    IUnknown *pResult = nullptr;
 
     if ( CLSID_COooFilter == cid )
     {
         pImpl = new COooFilterCF;
-        pResult = (IUnknown *) pImpl;
+        pResult = static_cast<IUnknown *>(pImpl);
     }
     else
         return CLASS_E_CLASSNOTAVAILABLE;

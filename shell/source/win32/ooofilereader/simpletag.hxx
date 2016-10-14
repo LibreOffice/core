@@ -34,13 +34,13 @@ class CSimpleTag : public ITag
         CSimpleTag(){};
         explicit CSimpleTag( const XmlTagAttributes_t& attributes ):m_SimpleAttributes(attributes){}
 
-        virtual void startTag();
-        virtual void endTag();
-        virtual void addCharacters(const std::wstring& characters);
-        virtual void addAttributes(const XmlTagAttributes_t& attributes);
-        virtual std::wstring getTagContent();
+        virtual void startTag() override;
+        virtual void endTag() override;
+        virtual void addCharacters(const std::wstring& characters) override;
+        virtual void addAttributes(const XmlTagAttributes_t& attributes) override;
+        virtual std::wstring getTagContent() override;
 
-        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & attrname );
+        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & attrname ) override;
 
     private:
         std::wstring       m_SimpleContent;

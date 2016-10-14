@@ -45,27 +45,27 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             REFIID riid,
-            void __RPC_FAR *__RPC_FAR *ppvObject);
+            void __RPC_FAR *__RPC_FAR *ppvObject) override;
 
-    virtual ULONG STDMETHODCALLTYPE AddRef();
+    virtual ULONG STDMETHODCALLTYPE AddRef() override;
 
-    virtual ULONG STDMETHODCALLTYPE Release();
+    virtual ULONG STDMETHODCALLTYPE Release() override;
 
 
     // IShellExtInit
 
 
     virtual HRESULT STDMETHODCALLTYPE Initialize(
-        LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hkeyProgID);
+        LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hkeyProgID) override;
 
 
     // IShellPropSheetExt
 
 
-    virtual HRESULT STDMETHODCALLTYPE AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
+    virtual HRESULT STDMETHODCALLTYPE AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam) override;
 
     virtual HRESULT STDMETHODCALLTYPE ReplacePage(
-        UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam);
+        UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam) override;
 
 private:
     // Windows callback functions

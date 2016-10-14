@@ -40,12 +40,12 @@ class CAutoStyleTag : public ITag
         CAutoStyleTag():m_CurrentStyleLocalePair( EMPTY_STYLELOCALE_PAIR ){}
         explicit CAutoStyleTag(const XmlTagAttributes_t& attributes);
 
-        virtual void startTag();
-        virtual void endTag();
-        virtual void addCharacters(const std::wstring& characters);
-        virtual void addAttributes(const XmlTagAttributes_t& attributes);
-        virtual std::wstring getTagContent(){ return EMPTY_STRING; };
-        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & /*attrname*/ ){ return ::std::wstring() ; }
+        virtual void startTag() override;
+        virtual void endTag() override;
+        virtual void addCharacters(const std::wstring& characters) override;
+        virtual void addAttributes(const XmlTagAttributes_t& attributes) override;
+        virtual std::wstring getTagContent() override { return EMPTY_STRING; };
+        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & /*attrname*/ ) override { return ::std::wstring() ; }
 
         void setStyle( ::std::wstring const & Style );
         void setLocale(const LocaleSet_t& Locale);

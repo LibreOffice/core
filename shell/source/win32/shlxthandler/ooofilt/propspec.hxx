@@ -59,13 +59,12 @@ public:
     ~CFullPropSpec();
     // Memory allocation
     void * operator new( size_t size );
-    inline void * operator new( size_t size, void * p );
     void   operator delete( void * p );
     inline FULLPROPSPEC * CastToStruct();
     inline FULLPROPSPEC const * CastToStruct() const;
     // Comparators
-    int operator==( CFullPropSpec const & prop ) const;
-    int operator!=( CFullPropSpec const & prop ) const;
+    bool operator==( CFullPropSpec const & prop ) const;
+    bool operator!=( CFullPropSpec const & prop ) const;
     // Member variable access
     inline void SetPropSet( GUID const & guidPropSet );
     inline GUID const & GetPropSet() const;
@@ -87,10 +86,6 @@ inline void * CFullPropSpec::operator new( size_t size )
     void * p = CoTaskMemAlloc( size );
     return p;
 }
-inline void * CFullPropSpec::operator new( size_t /*size*/, void * p )
-{
-    return p;
-}
 inline void CFullPropSpec::operator delete( void * p )
 {
     if ( p )
@@ -99,7 +94,7 @@ inline void CFullPropSpec::operator delete( void * p )
 inline BOOL CFullPropSpec::IsValid() const
 {
     return ( _psProperty.ulKind == PRSPEC_PROPID ||
-             0 != _psProperty.lpwstr );
+             nullptr != _psProperty.lpwstr );
 }
 inline void CFullPropSpec::SetPropSet( GUID const & guidPropSet )
 {

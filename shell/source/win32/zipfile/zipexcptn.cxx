@@ -56,7 +56,7 @@ ZipException::ZipException(int Error) :
 */
 const char* ZipException::what() const throw()
 {
-    return 0;
+    return nullptr;
 }
 
 
@@ -64,7 +64,7 @@ const char* ZipException::what() const throw()
 */
 Win32Exception::Win32Exception(int Error) :
     RuntimeException(Error),
-    m_MsgBuff(0)
+    m_MsgBuff(nullptr)
 {
 }
 
@@ -82,18 +82,21 @@ Win32Exception::~Win32Exception() throw()
 */
 const char* Win32Exception::what() const throw()
 {
-    FormatMessageA(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_FROM_SYSTEM |
-        FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
-        GetErrorCode(),
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-        (LPSTR) &m_MsgBuff,
-        0,
-        NULL);
+    if (m_MsgBuff == nullptr)
+    {
+        FormatMessageA(
+            FORMAT_MESSAGE_ALLOCATE_BUFFER |
+            FORMAT_MESSAGE_FROM_SYSTEM |
+            FORMAT_MESSAGE_IGNORE_INSERTS,
+            nullptr,
+            GetErrorCode(),
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            reinterpret_cast<LPSTR>(&m_MsgBuff),
+            0,
+            nullptr);
+    }
 
-    return reinterpret_cast<char*>(m_MsgBuff);
+    return m_MsgBuff;
 }
 
 

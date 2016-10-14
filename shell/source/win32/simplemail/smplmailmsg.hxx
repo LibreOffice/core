@@ -35,52 +35,52 @@ public:
     CSmplMailMsg( );
 
     virtual void SAL_CALL setBody( const ::rtl::OUString& aBody )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     virtual ::rtl::OUString SAL_CALL getBody(  )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
 
     virtual void SAL_CALL setRecipient( const OUString& aRecipient )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     virtual OUString SAL_CALL getRecipient(  )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
 
     virtual void SAL_CALL setCcRecipient( const css::uno::Sequence< OUString >& aCcRecipient )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getCcRecipient(  )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
 
     virtual void SAL_CALL setBccRecipient( const css::uno::Sequence< OUString >& aBccRecipient )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getBccRecipient(  )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
 
     virtual void SAL_CALL setOriginator( const OUString& aOriginator )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     virtual OUString SAL_CALL getOriginator(  )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
 
     virtual void SAL_CALL setSubject( const OUString& aSubject )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     virtual OUString SAL_CALL getSubject(  )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
 
     virtual void SAL_CALL setAttachement( const css::uno::Sequence< OUString >& aAttachement )
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getAttachement(  )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
 private:
     OUString                        m_aBody;

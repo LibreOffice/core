@@ -33,7 +33,7 @@
 // Module global
 
 long g_DllRefCnt = 0;
-HINSTANCE g_hModule = NULL;
+HINSTANCE g_hModule = nullptr;
 
 namespace /* private */
 {
@@ -331,7 +331,7 @@ STDAPI DllRegisterServer()
         hr = E_FAIL;
 
     // notify the Shell that something has changed
-    SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);
+    SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
 
     return hr;
 }
@@ -361,14 +361,14 @@ STDAPI DllUnregisterServer()
     UnapproveShellExtension(CLSID_THUMBVIEWER_HANDLER);
 
     // notify the Shell that something has changed
-    SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);
+    SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
 
     return hr;
 }
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 {
-    *ppv = 0;
+    *ppv = nullptr;
 
     if ((rclsid != CLSID_INFOTIP_HANDLER) &&
         (rclsid != CLSID_COLUMN_HANDLER) &&
