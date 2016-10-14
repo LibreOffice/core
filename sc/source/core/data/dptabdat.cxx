@@ -225,6 +225,7 @@ void ScDPTableData::GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 
                                 const vector<long>& rDims, vector<SCROW>& rItemData)
 {
     sal_Int32 nDimSize = rDims.size();
+    rItemData.reserve(rItemData.size() + nDimSize);
     for (sal_Int32 i = 0; i < nDimSize; ++i)
     {
         long nDim = rDims[i];
