@@ -227,7 +227,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     bDelayHighlight(true),
     pCodeCompleteWnd(VclPtr<CodeCompleteWindow>::Create(this))
 {
-    SetBackground(Wallpaper(GetSettings().GetStyleSettings().GetFieldColor()));
+    SetBackground(Wallpaper(rModulWindow.GetLayout().GetBackgroundColor()));
     SetPointer( Pointer( PointerStyle::Text ) );
     SetHelpId( HID_BASICIDE_EDITORWINDOW );
 
@@ -1033,34 +1033,6 @@ void EditorWindow::CreateEditEngine()
         rModulWindow.SetReadOnly(true);
 }
 
-// virtual
-void EditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
-{
-    Window::DataChanged(rDCEvt);
-    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS
-        && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
-    {
-        Color aColor(GetSettings().GetStyleSettings().GetFieldColor());
-        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
-        if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetFieldColor())
-        {
-            SetBackground(Wallpaper(aColor));
-            Invalidate();
-        }
-        if (pEditEngine != nullptr)
-        {
-            aColor = GetSettings().GetStyleSettings().GetFieldTextColor();
-            if (!pOldSettings || aColor !=
-                    pOldSettings-> GetStyleSettings().GetFieldTextColor())
-            {
-                vcl::Font aFont(pEditEngine->GetFont());
-                aFont.SetColor(aColor);
-                pEditEngine->SetFont(aFont);
-            }
-        }
-    }
-}
-
 void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if (TextHint const* pTextHint = dynamic_cast<TextHint const*>(&rHint))
@@ -1206,6 +1178,16 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
     }
 }
 
+void EditorWindow::ChangeFontColor( Color aColor )
+{
+    if (pEditEngine)
+    {
+        vcl::Font aFont(pEditEngine->GetFont());
+        aFont.SetColor(aColor);
+        pEditEngine->SetFont(aFont);
+    }
+}
+
 void EditorWindow::UpdateSyntaxHighlighting ()
 {
     const sal_uInt32 nCount = pEditEngine->GetParagraphCount();
@@ -1225,7 +1207,7 @@ void EditorWindow::ImplSetFont()
     }
     Size aFontSize(0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get());
     vcl::Font aFont(sFontName, aFontSize);
-    aFont.SetColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());
+    aFont.SetColor(rModulWindow.GetLayout().GetFontColor());
     SetPointFont(*this, aFont); // FIXME RenderContext
     aFont = GetFont();
 
