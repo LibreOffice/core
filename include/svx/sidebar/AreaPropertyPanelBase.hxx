@@ -156,8 +156,6 @@ protected:
 
     css::uno::Reference<css::frame::XFrame>                 mxFrame;
 
-    sfx2::sidebar::SidebarController* mpSidebarController;
-
     DECL_LINK(SelectFillTypeHdl, ListBox&, void );
     DECL_LINK(SelectFillAttrHdl, ListBox&, void );
     DECL_LINK(ChangeGradientAngle, Edit&, void);

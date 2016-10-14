@@ -93,8 +93,7 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       maImgLinear(SVX_RES(IMG_LINEAR)),
       mpFloatTransparenceItem(),
       mpTransparanceItem(),
-      mxFrame(rxFrame),
-      mpSidebarController()
+      mxFrame(rxFrame)
 {
     get(mpColorTextFT,    "filllabel");
     get(mpLbFillType,     "fillstyle");
@@ -189,8 +188,6 @@ void AreaPropertyPanelBase::Initialize()
     mpBTNGradient->SetItemImage(nIdGradient,maImgLinear);
     mpBTNGradient->Hide();
     mpBmpImport->SetClickHdl( LINK(this, AreaPropertyPanelBase, ClickImportBitmapHdl));
-    mpSidebarController = sfx2::sidebar::SidebarController::GetSidebarControllerForFrame(mxFrame);
-    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::SetTransparency(sal_uInt16 nVal)
@@ -477,8 +474,6 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
     {
         mpLbFillType->Selected();
     }
-
-    mpSidebarController->NotifyResize();
 }
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillAttrHdl, ListBox&, void)
@@ -636,7 +631,6 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
             break;
         }
     }
-    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::ImpUpdateTransparencies()
@@ -889,7 +883,6 @@ void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefault, const
     mpToolBoxColor->Hide();
     meLastXFS = static_cast<sal_uInt16>(-1);
     mpStyleItem.reset();
-    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefault, const XFillGradientItem* pItem)
@@ -928,7 +921,6 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefault, co
             mpLbFillGradTo->SetNoSelection();
         }
     }
-    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefault, const XFillHatchItem* pItem)
@@ -959,7 +951,6 @@ void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefault, const
             mpLbFillAttr->SetNoSelection();
         }
     }
-    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::updateFillColor(bool bDefault, const XFillColorItem* pItem)
@@ -976,7 +967,6 @@ void AreaPropertyPanelBase::updateFillColor(bool bDefault, const XFillColorItem*
         mpLbFillType->SelectEntryPos(SOLID);
         Update();
     }
-    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefault, const XFillBitmapItem* pItem)
@@ -1009,7 +999,6 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefault, cons
             mpLbFillAttr->SetNoSelection();
         }
     }
-    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::NotifyItemUpdate(
@@ -1305,7 +1294,6 @@ void AreaPropertyPanelBase::Update()
                 OSL_ENSURE(false, "Non supported FillType (!)");
             break;
         }
-        mpSidebarController->NotifyResize();
 }
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, ModifyTransSliderHdl, Slider*, void)
