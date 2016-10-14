@@ -134,10 +134,6 @@ namespace {
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
 
-static const sal_Int8 LOCK_UI_NOLOCK = 0;
-static const sal_Int8 LOCK_UI_SUCCEEDED = 1;
-static const sal_Int8 LOCK_UI_TRY = 2;
-
 bool IsSystemFileLockingUsed()
 {
 #if HAVE_FEATURE_MACOSX_SANDBOX
@@ -838,9 +834,9 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
 // not for some URL scheme belongs in UCB, not here.
 
 
-sal_Int8 SfxMedium::ShowLockedDocumentDialog( const LockFileEntry& aData, bool bIsLoading, bool bOwnLock )
+SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEntry& aData, bool bIsLoading, bool bOwnLock )
 {
-    sal_Int8 nResult = LOCK_UI_NOLOCK;
+    ShowLockResult nResult = ShowLockResult::NoLock;
 
     if( aData[LockFileComponent::OOOUSERNAME] == aData[LockFileComponent::SYSUSERNAME] ||
                                       aData[LockFileComponent::OOOUSERNAME].isEmpty()  ||
@@ -907,7 +903,7 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const LockFileEntry& aData, bool b
                 GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, true ) );
             }
             else if ( bOwnLock )
-                nResult = LOCK_UI_SUCCEEDED;
+                nResult = ShowLockResult::Succeeded;
         }
         else // if ( XSelected == aContinuations[1] )
         {
@@ -919,7 +915,7 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const LockFileEntry& aData, bool b
             if ( bIsLoading )
                 GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
             else
-                nResult = LOCK_UI_TRY;
+                nResult = ShowLockResult::Try;
         }
     }
     else
@@ -983,7 +979,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
 
             if ( !bResult && !IsReadOnly() )
             {
-                sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
+                ShowLockResult bUIStatus = ShowLockResult::NoLock;
                 do
                 {
                     if( !bResult )
@@ -1053,7 +1049,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                         catch( uno::Exception& )
                         {}
                     }
-                } while( !bResult && bUIStatus == LOCK_UI_TRY );
+                } while( !bResult && bUIStatus == ShowLockResult::Try );
             }
 
             pImpl->m_bLocked = bResult;
@@ -1161,7 +1157,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                         }
                     }
 
-                    sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
+                    ShowLockResult bUIStatus = ShowLockResult::NoLock;
 
                     // check whether system file locking has been used, the default value is false
                     bool bUseSystemLock = comphelper::isFileUrl( pImpl->m_aLogicName ) && IsSystemFileLockingUsed();
@@ -1267,7 +1263,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                                 if ( !bResult && !bNoUI )
                                 {
                                     bUIStatus = ShowLockedDocumentDialog( aData, bLoading, bOwnLock );
-                                    if ( bUIStatus == LOCK_UI_SUCCEEDED )
+                                    if ( bUIStatus == ShowLockResult::Succeeded )
                                     {
                                         // take the ownership over the lock file
                                         bResult = aLockFile.OverwriteOwnLockFile();
@@ -1280,7 +1276,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                         catch( const uno::Exception& )
                         {
                         }
-                    } while( !bResult && bUIStatus == LOCK_UI_TRY );
+                    } while( !bResult && bUIStatus == ShowLockResult::Try );
 
                     pImpl->m_bLocked = bResult;
                 }
