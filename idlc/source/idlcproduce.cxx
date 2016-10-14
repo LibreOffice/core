@@ -71,7 +71,7 @@ static bool checkOutputPath(const OString& completeName)
 #if defined(SAL_UNX)
             if (mkdir(buffer.getStr(), 0777) == -1)
 #else
-            if (mkdir((char*)buffer.getStr()) == -1)
+            if (mkdir(buffer.getStr()) == -1)
 #endif
             {
                 if (errno == ENOENT)
