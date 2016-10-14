@@ -471,7 +471,7 @@ void writeConsoleWithStream(OUString const & sText, HANDLE stream)
 {
     DWORD nWrittenChars = 0;
     WriteFile(stream, sText.getStr(),
-        sText.getLength() * 2, &nWrittenChars, NULL);
+        sText.getLength() * 2, &nWrittenChars, nullptr);
 }
 #else
 void writeConsoleWithStream(OUString const & sText, FILE * stream)
@@ -506,7 +506,7 @@ OUString readConsole()
     sal_Unicode aBuffer[1024];
     DWORD   dwRead = 0;
     //unopkg.com feeds unopkg.exe with wchar_t|s
-    if (ReadFile( GetStdHandle(STD_INPUT_HANDLE), &aBuffer, sizeof(aBuffer), &dwRead, NULL ) )
+    if (ReadFile( GetStdHandle(STD_INPUT_HANDLE), &aBuffer, sizeof(aBuffer), &dwRead, nullptr ) )
     {
         OSL_ASSERT((dwRead % 2) == 0);
         OUString value( aBuffer, dwRead / 2);

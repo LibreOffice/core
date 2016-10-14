@@ -173,12 +173,12 @@ namespace desktop
                     RTL_TEXTENCODING_ASCII_US).getStr());
 #else
         // rest gets a dialog box
-        CmdlineHelpDialog aDlg;
-        aDlg.m_pftHead->SetText(aHelpMessage_version + aHelpMessage_head);
-        aDlg.m_pftLeft->SetText(aHelpMessage_left);
-        aDlg.m_pftRight->SetText(aHelpMessage_right);
-        aDlg.m_pftBottom->SetText(aHelpMessage_bottom);
-        aDlg.Execute();
+        ScopedVclPtrInstance<CmdlineHelpDialog> aDlg;
+        aDlg->m_pftHead->SetText(aHelpMessage_version + aHelpMessage_head);
+        aDlg->m_pftLeft->SetText(aHelpMessage_left);
+        aDlg->m_pftRight->SetText(aHelpMessage_right);
+        aDlg->m_pftBottom->SetText(aHelpMessage_bottom);
+        aDlg->Execute();
 #endif
     }
 
@@ -190,23 +190,37 @@ namespace desktop
         fprintf(stdout, "%s", OUStringToOString(aVersionMsg, RTL_TEXTENCODING_ASCII_US).getStr());
 #else
         // Just re-use the help dialog for now.
-        CmdlineHelpDialog aDlg;
-        aDlg.m_pftHead->SetText(aVersionMsg);
-        aDlg.m_pftLeft->SetText("");
-        aDlg.m_pftRight->SetText("");
-        aDlg.m_pftBottom->SetText("");
-        aDlg.Execute();
+        ScopedVclPtrInstance<CmdlineHelpDialog> aDlg;
+        aDlg->m_pftHead->SetText(aVersionMsg);
+        aDlg->m_pftLeft->SetText("");
+        aDlg->m_pftRight->SetText("");
+        aDlg->m_pftBottom->SetText("");
+        aDlg->Execute();
 #endif
     }
 
 #ifndef UNX
     CmdlineHelpDialog::CmdlineHelpDialog()
-    : ModalDialog( NULL, "CmdLineHelp", "desktop/ui/cmdlinehelp.ui" )
+    : ModalDialog( nullptr, "CmdLineHelp", "desktop/ui/cmdlinehelp.ui" )
     {
         get(m_pftHead, "header");
         get(m_pftLeft, "left");
         get(m_pftRight, "right");
         get(m_pftBottom, "bottom");
+    }
+
+    CmdlineHelpDialog::~CmdlineHelpDialog()
+    {
+        disposeOnce();
+    }
+
+    void CmdlineHelpDialog::dispose()
+    {
+        m_pftHead.disposeAndClear();
+        m_pftLeft.disposeAndClear();
+        m_pftRight.disposeAndClear();
+        m_pftBottom.disposeAndClear();
+        ModalDialog::dispose();
     }
 #endif
 }
