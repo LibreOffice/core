@@ -9,6 +9,224 @@
  	memcpy(s1, s, length);
        }
        if (s != sStatic)
+--- poppler/Form.cc
++++ poppler/Form.cc
+@@ -463,12 +463,11 @@
+ // FormField
+ //========================================================================
+ 
+-FormField::FormField(PDFDoc *docA, Object *aobj, const Ref& aref, FormField *parentA, std::set<int> *usedParents, FormFieldType ty)
++FormField::FormField(PDFDoc *docA, Object *aobj, const Ref& aref, FormField *parentA, FormFieldType ty)
+ {
+   doc = docA;
+   xref = doc->getXRef();
+   aobj->copy(&obj);
+-  Dict* dict = obj.getDict();
+   ref.num = ref.gen = 0;
+   type = ty;
+   parent = parentA;
+@@ -483,7 +482,11 @@
+   hasQuadding = gFalse;
+ 
+   ref = aref;
++}
+ 
++void FormField::init(std::set<int> *usedParents)
++{
++  Dict* dict = obj.getDict();
+   Object obj1;
+   //childs
+   if (dict->lookup("Kids", &obj1)->isArray()) {
+@@ -803,9 +806,15 @@
+ //------------------------------------------------------------------------
+ // FormFieldButton
+ //------------------------------------------------------------------------
+-FormFieldButton::FormFieldButton(PDFDoc *docA, Object *aobj, const Ref& ref, FormField *parent, std::set<int> *usedParents)
+-  : FormField(docA, aobj, ref, parent, usedParents, formButton)
++FormFieldButton::FormFieldButton(PDFDoc *docA, Object *aobj, const Ref& ref, FormField *parent)
++  : FormField(docA, aobj, ref, parent, formButton)
+ {
++}
++
++void FormFieldButton::init(std::set<int> *usedParents)
++{
++  FormField::init(usedParents);
++
+   Dict* dict = obj.getDict();
+   active_child = -1;
+   noAllOff = false;
+@@ -983,9 +992,15 @@
+ //------------------------------------------------------------------------
+ // FormFieldText
+ //------------------------------------------------------------------------
+-FormFieldText::FormFieldText(PDFDoc *docA, Object *aobj, const Ref& ref, FormField *parent, std::set<int> *usedParents)
+-  : FormField(docA, aobj, ref, parent, usedParents, formText)
++FormFieldText::FormFieldText(PDFDoc *docA, Object *aobj, const Ref& ref, FormField *parent)
++  : FormField(docA, aobj, ref, parent, formText)
+ {
++}
++
++void FormFieldText::init(std::set<int> *usedParents)
++{
++  FormField::init(usedParents);
++
+   Dict* dict = obj.getDict();
+   Object obj1;
+   content = NULL;
+@@ -1076,9 +1091,15 @@
+ //------------------------------------------------------------------------
+ // FormFieldChoice
+ //------------------------------------------------------------------------
+-FormFieldChoice::FormFieldChoice(PDFDoc *docA, Object *aobj, const Ref& ref, FormField *parent, std::set<int> *usedParents)
+-  : FormField(docA, aobj, ref, parent, usedParents, formChoice)
++FormFieldChoice::FormFieldChoice(PDFDoc *docA, Object *aobj, const Ref& ref, FormField *parent)
++  : FormField(docA, aobj, ref, parent, formChoice)
+ {
++}
++
++void FormFieldChoice::init(std::set<int> *usedParents)
++{
++  FormField::init(usedParents);
++
+   numChoices = 0;
+   choices = NULL;
+   editedChoice = NULL;
+@@ -1379,9 +1400,15 @@
+ //------------------------------------------------------------------------
+ // FormFieldSignature
+ //------------------------------------------------------------------------
+-FormFieldSignature::FormFieldSignature(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent, std::set<int> *usedParents)
+-  : FormField(docA, dict, ref, parent, usedParents, formSignature)
++FormFieldSignature::FormFieldSignature(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent)
++  : FormField(docA, dict, ref, parent, formSignature)
+ {
++}
++
++void FormFieldSignature::init(std::set<int> *usedParents)
++{
++  FormField::init(usedParents);
++
+   signature = NULL;
+ 
+   signature_info = new SignatureInfo();
+@@ -1691,15 +1718,15 @@
+     FormField *field;
+ 
+     if (Form::fieldLookup(obj->getDict (), "FT", &obj2)->isName("Btn")) {
+-      field = new FormFieldButton(docA, obj, pref, parent, usedParents);
++      field = FormFieldButton::create(docA, obj, pref, parent, usedParents);
+     } else if (obj2.isName("Tx")) {
+-      field = new FormFieldText(docA, obj, pref, parent, usedParents);
++      field = FormFieldText::create(docA, obj, pref, parent, usedParents);
+     } else if (obj2.isName("Ch")) {
+-      field = new FormFieldChoice(docA, obj, pref, parent, usedParents);
++      field = FormFieldChoice::create(docA, obj, pref, parent, usedParents);
+     } else if (obj2.isName("Sig")) {
+-      field = new FormFieldSignature(docA, obj, pref, parent, usedParents);
++      field = FormFieldSignature::create(docA, obj, pref, parent, usedParents);
+     } else { //we don't have an FT entry => non-terminal field
+-      field = new FormField(docA, obj, pref, parent, usedParents);
++      field = FormField::create(docA, obj, pref, parent, usedParents);
+     }
+     obj2.free();
+ 
+--- poppler/Form.h
++++ poppler/Form.h
+@@ -264,8 +264,16 @@
+ //------------------------------------------------------------------------
+ 
+ class FormField {
+-public:
+-  FormField(PDFDoc *docA, Object *aobj, const Ref& aref, FormField *parent, std::set<int> *usedParents, FormFieldType t=formUndef);
++protected:
++  FormField(PDFDoc *docA, Object *aobj, const Ref& aref, FormField *parent, FormFieldType t);
++  void init(std::set<int> *usedParents);
++public:
++  static FormField *create(PDFDoc *docA, Object *aobj, const Ref& aref, FormField *parent, std::set<int> *usedParents, FormFieldType t=formUndef)
++  {
++    FormField *f = new FormField(docA, aobj, aref, parent, t);
++    f->init(usedParents);
++    return f;
++  }
+ 
+   virtual ~FormField();
+ 
+@@ -338,8 +346,16 @@
+ //------------------------------------------------------------------------
+ 
+ class FormFieldButton: public FormField {
+-public:
+-  FormFieldButton(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent, std::set<int> *usedParents);
++private:
++  FormFieldButton(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent);
++  void init(std::set<int> *usedParents);
++public:
++  static FormFieldButton *create(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent, std::set<int> *usedParents)
++  {
++    FormFieldButton *f = new FormFieldButton(docA, dict, ref, parent);
++    f->init(usedParents);
++    return f;
++  }
+ 
+   FormButtonType getButtonType () { return btype; }
+ 
+@@ -384,8 +400,16 @@
+ //------------------------------------------------------------------------
+ 
+ class FormFieldText: public FormField {
+-public:
+-  FormFieldText(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent, std::set<int> *usedParents);
++private:
++  FormFieldText(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent);
++  void init(std::set<int> *usedParents);
++public:
++  static FormFieldText *create(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent, std::set<int> *usedParents)
++  {
++    FormFieldText *f = new FormFieldText(docA, dict, ref, parent);
++    f->init(usedParents);
++    return f;
++  }
+   
+   GooString* getContent () { return content; }
+   GooString* getContentCopy ();
+@@ -422,8 +446,16 @@
+ //------------------------------------------------------------------------
+ 
+ class FormFieldChoice: public FormField {
+-public:
+-  FormFieldChoice(PDFDoc *docA, Object *aobj, const Ref& ref, FormField *parent, std::set<int> *usedParents);
++private:
++  FormFieldChoice(PDFDoc *docA, Object *aobj, const Ref& ref, FormField *parent);
++  void init(std::set<int> *usedParents);
++public:
++  static FormFieldChoice *create(PDFDoc *docA, Object *aobj, const Ref& ref, FormField *parent, std::set<int> *usedParents)
++  {
++    FormFieldChoice *f = new FormFieldChoice(docA, aobj, ref, parent);
++    f->init(usedParents);
++    return f;
++  }
+ 
+   virtual ~FormFieldChoice();
+ 
+@@ -491,8 +523,16 @@
+ //------------------------------------------------------------------------
+ 
+ class FormFieldSignature: public FormField {
+-public:
+-  FormFieldSignature(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent, std::set<int> *usedParents);
++private:
++  FormFieldSignature(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent);
++  void init(std::set<int> *usedParents);
++public:
++  static FormFieldSignature *create(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent, std::set<int> *usedParents)
++  {
++    FormFieldSignature *f = new FormFieldSignature(docA, dict, ref, parent);
++    f->init(usedParents);
++    return f;
++  }
+ 
+   SignatureInfo *validateSignature(bool doVerifyCert, bool forceRevalidation);
+ 
 --- poppler/Stream.cc
 +++ poppler/Stream.cc
 @@ -2966,12 +2966,12 @@
