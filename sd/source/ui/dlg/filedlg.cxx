@@ -273,9 +273,9 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
     mpImpl->AddFilter( aDescr, "*.svx");
 #else
     aDescr = SD_RESSTR(STR_WAV_FILE);
-    mpImpl->AddFilter( aDescr, OUString("*.wav;*.mp3;*.ogg" ));
+    mpImpl->AddFilter( aDescr, "*.wav;*.mp3;*.ogg" );
     aDescr = SD_RESSTR(STR_MIDI_FILE);
-    mpImpl->AddFilter( aDescr, OUString("*.mid" ));
+    mpImpl->AddFilter( aDescr, "*.mid" );
 #endif
 }
 
