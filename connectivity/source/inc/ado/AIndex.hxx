@@ -35,16 +35,16 @@ namespace connectivity
             OConnection*    m_pConnection;
         protected:
             void fillPropertyValues();
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue)throw (css::uno::Exception);
+            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue)throw (css::uno::Exception) override;
         public:
-            virtual void refreshColumns();
+            virtual void refreshColumns() override;
         public:
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
-            OAdoIndex(sal_Bool _bCase,  OConnection* _pConnection,ADOIndex* _pIndex);
-            OAdoIndex(sal_Bool _bCase,  OConnection* _pConnection);
+            virtual void SAL_CALL acquire() throw() override;
+            virtual void SAL_CALL release() throw() override;
+            OAdoIndex(bool _bCase,  OConnection* _pConnection,ADOIndex* _pIndex);
+            OAdoIndex(bool _bCase,  OConnection* _pConnection);
             // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException);
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             WpADOIndex      getImpl() const { return m_aIndex;}

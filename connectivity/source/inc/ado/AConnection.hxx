@@ -66,8 +66,8 @@ namespace connectivity
             WpADOConnection*            m_pAdoConnection;
             OCatalog*                   m_pCatalog;
             sal_Int32                   m_nEngineType;
-            sal_Bool                    m_bClosed;
-            sal_Bool                    m_bAutocommit;
+            bool                        m_bClosed;
+            bool                        m_bAutocommit;
 
         protected:
             void buildTypeInfo() throw( css::sdbc::SQLException);
@@ -75,7 +75,7 @@ namespace connectivity
 
             OConnection(ODriver*        _pDriver) throw(css::sdbc::SQLException, css::uno::RuntimeException);
             //  OConnection(const SQLHANDLE _pConnectionHandle);
-            ~OConnection();
+            ~OConnection() override;
             void construct(const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
 
             void closeAllStatements () throw( css::sdbc::SQLException);
@@ -124,7 +124,7 @@ namespace connectivity
             {
                 if ( m_xCatalog.get().is() )
                     return m_pCatalog;
-                return NULL;
+                return nullptr;
             }
 
             sal_Int32 getEngineType()   const { return m_nEngineType; }
@@ -135,7 +135,7 @@ namespace connectivity
                                const OUString& _sTypeName,
                                sal_Int32 _nPrecision,
                                sal_Int32 _nScale,
-                               sal_Bool& _brForceToType);
+                               bool& _brForceToType);
         };
     }
 }

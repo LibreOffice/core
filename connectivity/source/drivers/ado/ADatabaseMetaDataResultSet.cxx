@@ -53,12 +53,12 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet
     :ODatabaseMetaDataResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
     ,m_pRecordSet(_pRecordSet)
-    ,m_aStatement(NULL)
-    ,m_xMetaData(NULL)
+    ,m_aStatement(nullptr)
+    ,m_xMetaData(nullptr)
     ,m_nRowPos(0)
-    ,m_bWasNull(sal_False)
-    ,m_bEOF(sal_False)
-    ,m_bOnFirstAfterOpen(sal_False)
+    ,m_bWasNull(false)
+    ,m_bEOF(false)
+    ,m_bOnFirstAfterOpen(false)
 {
     osl_atomic_increment( &m_refCount );
     m_aColMapping.push_back(-1);
@@ -70,7 +70,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet
         m_bOnFirstAfterOpen = bIsAtBOF != VARIANT_TRUE;
     }
     else
-        m_bOnFirstAfterOpen = sal_False;
+        m_bOnFirstAfterOpen = false;
     osl_atomic_decrement( &m_refCount );
     //  allocBuffer();
 }
@@ -89,7 +89,7 @@ void ODatabaseMetaDataResultSet::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     if(m_pRecordSet)
         m_pRecordSet->Close();
-    m_aStatement    = NULL;
+    m_aStatement    = nullptr;
 m_xMetaData.clear();
 }
 
@@ -176,14 +176,14 @@ Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinar
     // else we ask for a bytesequence
     aField.get_Value(m_aValue);
     if(m_aValue.isNull())
-        return NULL;
+        return nullptr;
     return new SequenceInputStream(m_aValue.getByteSequence());
 }
 
 Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getCharacterStream", *this );
-    return NULL;
+    return nullptr;
 }
 
 
@@ -195,7 +195,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
     {
         getValue(2);
         if ( m_aValue.getInt16() != adCurrency )
-            return sal_False;
+            return false;
     }
     return getValue(columnIndex).getBool();
 }
@@ -295,27 +295,27 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
-    return NULL;
+    return nullptr;
 }
 
 
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
-    return NULL;
+    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
-    return NULL;
+    return nullptr;
 }
 
 
 Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
-    return NULL;
+    return nullptr;
 }
 
 
@@ -412,7 +412,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  ) throw(SQLException, Run
     checkRecordSet();
 
 
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL ODatabaseMetaDataResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
@@ -437,7 +437,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::afterLast(  ) throw(SQLException, Runt
 
     if(last())
         next();
-    m_bEOF = sal_True;
+    m_bEOF = true;
 }
 
 
@@ -459,9 +459,9 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  ) throw(SQLException, Runt
 
 
     if(!m_pRecordSet)
-        return sal_False;
+        return false;
 
-    sal_Bool bRet = SUCCEEDED(m_pRecordSet->MoveFirst());
+    bool bRet = SUCCEEDED(m_pRecordSet->MoveFirst());
     if ( bRet )
         m_nRowPos = 1;
     return bRet;
@@ -474,7 +474,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  ) throw(SQLException, Runti
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
 
 
-    return m_pRecordSet && SUCCEEDED(m_pRecordSet->MoveLast()) ? sal_True : sal_False;
+    return m_pRecordSet && SUCCEEDED(m_pRecordSet->MoveLast());
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
@@ -487,12 +487,12 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row ) throw(SQ
     {
         OLEVariant aEmpty;
         aEmpty.setNoArg();
-        sal_Bool bRet = SUCCEEDED(m_pRecordSet->Move(row,aEmpty));
+        bool bRet = SUCCEEDED(m_pRecordSet->Move(row,aEmpty));
         if(bRet)
             m_nRowPos = row;
         return bRet;
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
@@ -502,11 +502,11 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row ) throw(SQ
 
 
     if(!m_pRecordSet)
-        return sal_False;
+        return false;
 
     OLEVariant aEmpty;
     aEmpty.setNoArg();
-    sal_Bool bRet = SUCCEEDED(m_pRecordSet->Move(row,aEmpty));
+    bool bRet = SUCCEEDED(m_pRecordSet->Move(row,aEmpty));
     if(bRet)
         m_nRowPos += row;
     return bRet;
@@ -519,9 +519,9 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  ) throw(SQLException, R
 
 
     if(!m_pRecordSet)
-        return sal_False;
+        return false;
 
-    sal_Bool bRet = SUCCEEDED(m_pRecordSet->MovePrevious());
+    bool bRet = SUCCEEDED(m_pRecordSet->MovePrevious());
     if(bRet)
         --m_nRowPos;
     return bRet;
@@ -541,9 +541,9 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  ) throw(SQLException,
     checkRecordSet();
 
 
-    RecordStatusEnum eRec;
-    m_pRecordSet->get_Status((sal_Int32*)&eRec);
-    return (eRec & adRecDeleted) == adRecDeleted;
+    sal_Int32 eRec;
+    m_pRecordSet->get_Status(&eRec);
+    return (RecordStatusEnum(eRec) & adRecDeleted) == adRecDeleted;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
@@ -553,9 +553,9 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  ) throw(SQLException
     checkRecordSet();
 
 
-    RecordStatusEnum eRec;
-    m_pRecordSet->get_Status((sal_Int32*)&eRec);
-    return (eRec & adRecNew) == adRecNew;
+    sal_Int32 eRec;
+    m_pRecordSet->get_Status(&eRec);
+    return (RecordStatusEnum(eRec) & adRecNew) == adRecNew;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
@@ -566,9 +566,9 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  ) throw(SQLException,
     checkRecordSet();
 
 
-    RecordStatusEnum eRec;
-    m_pRecordSet->get_Status((sal_Int32*)&eRec);
-    return (eRec & adRecModified) == adRecModified;
+    sal_Int32 eRec;
+    m_pRecordSet->get_Status(&eRec);
+    return (RecordStatusEnum(eRec) & adRecModified) == adRecModified;
 }
 
 
@@ -579,7 +579,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  ) throw(SQLExcepti
 
 
     if(!m_pRecordSet)
-        return sal_True;
+        return true;
 
     VARIANT_BOOL bIsAtBOF;
     m_pRecordSet->get_BOF(&bIsAtBOF);
@@ -594,12 +594,12 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, Runti
 
 
     if(!m_pRecordSet)
-        return sal_False;
+        return false;
 
     if(m_bOnFirstAfterOpen)
     {
-        m_bOnFirstAfterOpen = sal_False;
-        return sal_True;
+        m_bOnFirstAfterOpen = false;
+        return true;
     }
     else
         return SUCCEEDED(m_pRecordSet->MoveNext());
@@ -625,7 +625,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::refreshRow(  ) throw(SQLException, Run
     checkRecordSet();
 
 
-    m_pRecordSet->Resync(adAffectCurrent,adResyncAllValues);
+    m_pRecordSet->Resync(adAffectCurrent);
 }
 
 
@@ -649,19 +649,19 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  ) throw(SQLException, Run
     return Any();
 }
 
-sal_Int32 ODatabaseMetaDataResultSet::getResultSetConcurrency() const
+sal_Int32 ODatabaseMetaDataResultSet::getResultSetConcurrency()
     throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return ResultSetConcurrency::READ_ONLY;
 }
 
-sal_Int32 ODatabaseMetaDataResultSet::getResultSetType() const
+sal_Int32 ODatabaseMetaDataResultSet::getResultSetType()
     throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return ResultSetType::FORWARD_ONLY;
 }
 
-sal_Int32 ODatabaseMetaDataResultSet::getFetchDirection() const
+sal_Int32 ODatabaseMetaDataResultSet::getFetchDirection()
     throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return FetchDirection::FORWARD;
@@ -676,7 +676,7 @@ sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const
     return nValue;
 }
 
-OUString ODatabaseMetaDataResultSet::getCursorName() const
+OUString ODatabaseMetaDataResultSet::getCursorName()
     throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return OUString();
@@ -718,7 +718,7 @@ void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
 
 ::cppu::IPropertyArrayHelper & ODatabaseMetaDataResultSet::getInfoHelper()
 {
-    return *const_cast<ODatabaseMetaDataResultSet*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool ODatabaseMetaDataResultSet::convertFastPropertyValue(
@@ -741,7 +741,7 @@ sal_Bool ODatabaseMetaDataResultSet::convertFastPropertyValue(
         default:
             ;
     }
-    return sal_False;
+    return false;
 }
 
 void ODatabaseMetaDataResultSet::setFastPropertyValue_NoBroadcast(
@@ -1105,7 +1105,7 @@ void ODatabaseMetaDataResultSet::setCrossReferenceMap()
     m_xMetaData = pMetaData;
 }
 
-void ODatabaseMetaDataResultSet::setTypeInfoMap(sal_Bool _bJetEngine)
+void ODatabaseMetaDataResultSet::setTypeInfoMap(bool _bJetEngine)
 {
     sal_Int32 i=1;
     for(;i<19;i++)

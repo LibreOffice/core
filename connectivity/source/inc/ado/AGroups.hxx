@@ -34,16 +34,16 @@ namespace connectivity
             OCatalog*   m_pCatalog;
         protected:
 
-            virtual sdbcx::ObjectType createObject(const OUString& _rName);
-            virtual void impl_refresh() throw(css::uno::RuntimeException);
-            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor();
-            virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor );
-            virtual void dropObject(sal_Int32 _nPos,const OUString& _sElementName);
+            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+            virtual void impl_refresh() throw(css::uno::RuntimeException) override;
+            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+            virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+            virtual void dropObject(sal_Int32 _nPos,const OUString& _sElementName) override;
         public:
             OGroups(OCatalog* _pParent,
                      ::osl::Mutex& _rMutex,
                      const TStringVector &_rVector,
-                     const WpADOGroups& _rCollection,sal_Bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
+                     const WpADOGroups& _rCollection,bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
                     ,m_aCollection(_rCollection)
                     ,m_pCatalog(_pParent)
             {

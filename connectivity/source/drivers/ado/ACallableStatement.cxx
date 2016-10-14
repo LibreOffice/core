@@ -31,15 +31,15 @@ using namespace com::sun::star::container;
 IMPLEMENT_SERVICE_INFO(OCallableStatement,"com.sun.star.sdbcx.ACallableStatement","com.sun.star.sdbc.CallableStatement");
 
 #define GET_PARAM()                                                 \
-    ADOParameter* pParam = NULL;                                    \
+    ADOParameter* pParam = nullptr;                                 \
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);      \
     if(pParam)                                                      \
         pParam->get_Value(&m_aValue);
 
 //************ Class: java.sql.CallableStatement
 
-OCallableStatement::OCallableStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const OUString& sql )
-                : OPreparedStatement( _pConnection, _TypeInfo, sql )
+OCallableStatement::OCallableStatement( OConnection* _pConnection,const OTypeInfoMap& TypeInfo,const OUString& sql )
+                : OPreparedStatement( _pConnection, TypeInfo, sql )
 {
     m_Command.put_CommandType(adCmdStoredProc);
 }
@@ -147,7 +147,7 @@ OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex ) throw(S
 
 void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
-    ADOParameter* pParam = NULL;
+    ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
     if(pParam)
     {
@@ -158,7 +158,7 @@ void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex
 
 void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
-    ADOParameter* pParam = NULL;
+    ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
     if(pParam)
     {
@@ -172,40 +172,40 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
 Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getBinaryStream", *this );
-    return NULL;
+    return nullptr;
 }
 
 Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getCharacterStream", *this );
-    return NULL;
+    return nullptr;
 }
 
 
 Reference< XArray > SAL_CALL OCallableStatement::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getArray", *this );
-    return NULL;
+    return nullptr;
 }
 
 
 Reference< XClob > SAL_CALL OCallableStatement::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getClob", *this );
-    return NULL;
+    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL OCallableStatement::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getBlob", *this );
-    return NULL;
+    return nullptr;
 }
 
 
 Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 /*columnIndex*/) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRef", *this );
-    return NULL;
+    return nullptr;
 }
 
 

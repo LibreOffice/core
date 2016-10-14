@@ -28,7 +28,7 @@ namespace connectivity
         class WpADOCatalog : public WpOLEBase<_ADOCatalog>
         {
         public:
-            WpADOCatalog(_ADOCatalog* pInt = NULL)  :   WpOLEBase<_ADOCatalog>(pInt){}
+            WpADOCatalog(_ADOCatalog* pInt = nullptr)  :   WpOLEBase<_ADOCatalog>(pInt){}
             WpADOCatalog(const WpADOCatalog& rhs) : WpOLEBase<_ADOCatalog>(rhs) {}
 
             inline WpADOCatalog& operator=(const WpADOCatalog& rhs)

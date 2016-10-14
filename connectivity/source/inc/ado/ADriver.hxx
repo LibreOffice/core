@@ -53,10 +53,10 @@ namespace connectivity
 
         public:
             ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _xORB);
-            ~ODriver();
+            ~ODriver() override;
 
             // OComponentHelper
-            virtual void SAL_CALL disposing();
+            virtual void SAL_CALL disposing() override;
             // XInterface
             static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
             static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
@@ -66,20 +66,20 @@ namespace connectivity
             void impl_checkURL_throw(const OUString& _sUrl);
 
             // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException);
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException);
+            virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException) override;
+            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException) override;
+            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException) override;
 
             // XDriver
-            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-            virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw(css::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw(css::uno::RuntimeException);
+            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw(css::uno::RuntimeException) override;
+            virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw(css::uno::RuntimeException) override;
 
             // XDataDefinitionSupplier
-            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const css::uno::Reference< css::sdbc::XConnection >& connection ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const css::uno::Reference< css::sdbc::XConnection >& connection ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
         };
     }
 

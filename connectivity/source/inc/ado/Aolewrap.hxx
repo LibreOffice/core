@@ -51,7 +51,7 @@ namespace connectivity
             void clear();
 
 
-            sal_Bool IsValid() const;
+            bool IsValid() const;
             operator IDispatch*();
 
         };
@@ -74,7 +74,7 @@ namespace connectivity
             T* pInterface;
 
         public:
-            WpOLEBase(T* pInt = NULL) : WpBase(pInt),pInterface(pInt){}
+            WpOLEBase(T* pInt = nullptr) : WpBase(pInt),pInterface(pInt){}
 
 
             //inline
@@ -98,7 +98,7 @@ namespace connectivity
             {
             }
 
-            virtual ~WpOLEBase()
+            virtual ~WpOLEBase() override
             {
             }
 
@@ -132,7 +132,7 @@ namespace connectivity
             using WpOLEBase<Ts>::IsValid;
             // Ctors, operator=
             // They only call the superclass
-            WpOLECollection(Ts* pInt=NULL):WpOLEBase<Ts>(pInt){}
+            WpOLECollection(Ts* pInt=nullptr):WpOLEBase<Ts>(pInt){}
             WpOLECollection(const WpOLECollection& rhs) : WpOLEBase<Ts>(rhs) {}
             inline WpOLECollection& operator=(const WpOLECollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
@@ -206,18 +206,18 @@ namespace connectivity
             // Ctors, operator=
             // They only call the superclass
             using WpOLEBase<Ts>::pInterface;
-            WpOLEAppendCollection(Ts* pInt=NULL):WpOLECollection<Ts,T,WrapT>(pInt){}
+            WpOLEAppendCollection(Ts* pInt=nullptr):WpOLECollection<Ts,T,WrapT>(pInt){}
             WpOLEAppendCollection(const WpOLEAppendCollection& rhs) : WpOLECollection<Ts, T, WrapT>(rhs) {}
             inline WpOLEAppendCollection& operator=(const WpOLEAppendCollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
 
 
-            inline sal_Bool Append(const WrapT& aWrapT)
+            inline bool Append(const WrapT& aWrapT)
             {
-                return SUCCEEDED(pInterface->Append(OLEVariant((T*)aWrapT)));
+                return SUCCEEDED(pInterface->Append(OLEVariant(static_cast<T*>(aWrapT))));
             };
 
-            inline sal_Bool Delete(const OUString& sName)
+            inline bool Delete(const OUString& sName)
             {
                 return SUCCEEDED(pInterface->Delete(OLEVariant(sName)));
             };

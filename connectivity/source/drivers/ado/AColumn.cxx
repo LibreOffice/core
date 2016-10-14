@@ -37,12 +37,12 @@ using namespace com::sun::star::sdbc;
 
 void WpADOColumn::Create()
 {
-    _ADOColumn* pColumn = NULL;
+    _ADOColumn* pColumn = nullptr;
     HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOCOLUMN_25,
-                          NULL,
+                          nullptr,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOCOLUMN_25,
-                          (void**)&pColumn );
+                          reinterpret_cast<void**>(&pColumn) );
 
 
     if( !FAILED( hr ) )
@@ -52,7 +52,7 @@ void WpADOColumn::Create()
     }
 }
 
-OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn)
+OAdoColumn::OAdoColumn(bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn)
     : connectivity::sdbcx::OColumn(_bCase)
     ,m_pConnection(_pConnection)
 {
@@ -63,7 +63,7 @@ OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pC
     fillPropertyValues();
 }
 
-OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection)
+OAdoColumn::OAdoColumn(bool _bCase,OConnection* _pConnection)
     : connectivity::sdbcx::OColumn(_bCase)
     ,m_pConnection(_pConnection)
 {
@@ -77,7 +77,7 @@ OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection)
 
 Sequence< sal_Int8 > OAdoColumn::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -111,7 +111,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
 {
     if(m_aColumn.IsValid())
     {
-        const sal_Char* pAdoPropertyName = NULL;
+        const sal_Char* pAdoPropertyName = nullptr;
 
         switch(nHandle)
         {
@@ -205,14 +205,14 @@ void OAdoColumn::fillPropertyValues()
             m_Scale = 4;
         m_Type              = ADOS::MapADOType2Jdbc(eType);
 
-        sal_Bool bForceTo = sal_True;
+        bool bForceTo = true;
         const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
         const OExtendedTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),eType,OUString(),m_Precision,m_Scale,bForceTo);
         if ( pTypeInfo )
             m_TypeName = pTypeInfo->aSimpleType.aTypeName;
         else if ( eType == adVarBinary && ADOS::isJetEngine(m_pConnection->getEngineType()) )
         {
-            ::comphelper::UStringMixEqual aCase(sal_False);
+            ::comphelper::UStringMixEqual aCase(false);
             OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(), pTypeInfoMap->end(),
                 [&aCase] (const OTypeInfoMap::value_type& typeInfo) {
                     return aCase(typeInfo.second->getDBName(), OUString("VarBinary"));
@@ -244,7 +244,7 @@ void OAdoColumn::fillPropertyValues()
 
             if ( aProps.IsValid() )
             {
-                m_IsAutoIncrement = OTools::getValue( aProps, OUString("Autoincrement") ).getBool() == 1;
+                m_IsAutoIncrement = OTools::getValue( aProps, OUString("Autoincrement") ).getBool();
 
                 m_Description = OTools::getValue( aProps, OUString("Description") ).getString();
 

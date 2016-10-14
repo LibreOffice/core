@@ -43,7 +43,7 @@ namespace connectivity
                                     public  css::lang::XServiceInfo
 
         {
-            void setParameter(sal_Int32 parameterIndex, const DataTypeEnum& _eType,const sal_Int32& _nSize,const OLEVariant& _Val)
+            void setParameter(sal_Int32 parameterIndex, const DataTypeEnum& _eType, sal_Int32 _nSize,const OLEVariant& Val)
                                         throw(css::sdbc::SQLException, css::uno::RuntimeException);
             void replaceParameterNodeName(  OSQLParseNode* _pNode,
                                             const OUString& _sDefaultName,
@@ -56,12 +56,12 @@ namespace connectivity
             const OTypeInfoMap& m_aTypeInfo;
             ADOParameters*      m_pParameters;
 
-            virtual ~OPreparedStatement();
+            virtual ~OPreparedStatement() override;
 
         public:
             DECLARE_SERVICE_INFO();
             // a Constructor, that is needed for when Returning the Object is needed:
-            OPreparedStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const OUString& sql);
+            OPreparedStatement( OConnection* _pConnection,const OTypeInfoMap& TypeInfo,const OUString& sql);
 
             virtual void SAL_CALL acquire() throw() override;
             virtual void SAL_CALL release() throw() override;

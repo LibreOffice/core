@@ -44,7 +44,7 @@ using namespace ::com::sun::star::uno;
 
 void ODatabaseMetaData::fillLiterals()
 {
-    ADORecordset *pRecordset = NULL;
+    ADORecordset *pRecordset = nullptr;
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
     m_pADOConnection->OpenSchema(adSchemaDBInfoLiterals,vtEmpty,vtEmpty,&pRecordset);
@@ -91,11 +91,11 @@ sal_Int32 ODatabaseMetaData::getMaxSize(sal_uInt32 _nId)
     return nSize;
 }
 
-sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId)
+bool ODatabaseMetaData::isCapable(sal_uInt32 _nId)
 {
     if(m_aLiteralInfo.empty())
         fillLiterals();
-    sal_Bool bSupported = sal_False;
+    bool bSupported = false;
     ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
     if(aIter != m_aLiteralInfo.end())
         bSupported = (*aIter).second.fSupported;
@@ -259,14 +259,14 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 co
 {
     if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isSearchable();
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isAutoIncrement();
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
@@ -302,7 +302,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32
 {
     if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isCaseSensitive();
-    return sal_True;
+    return true;
 }
 
 
@@ -314,10 +314,10 @@ OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 c
 }
 
 
-ObjectTypeEnum OAdoGroup::MapObjectType(sal_Int32 _ObjType)
+ObjectTypeEnum OAdoGroup::MapObjectType(sal_Int32 ObjType)
 {
     ObjectTypeEnum eNumType= adPermObjTable;
-    switch(_ObjType)
+    switch(ObjType)
     {
         case PrivilegeObject::TABLE:
             break;
@@ -360,43 +360,43 @@ RightsEnum OAdoGroup::Map2Right(sal_Int32 _eNum)
 {
     sal_Int32 nRight = adRightNone;
         if(_eNum & Privilege::SELECT)
-        nRight |= adRightRead;
+            nRight |= adRightRead;
 
         if(_eNum & Privilege::INSERT)
-        nRight |= adRightInsert;
+            nRight |= adRightInsert;
 
         if(_eNum & Privilege::UPDATE)
-        nRight |= adRightUpdate;
+            nRight |= adRightUpdate;
 
         if(_eNum & Privilege::DELETE)
-        nRight |= adRightDelete;
+            nRight |= adRightDelete;
 
         if(_eNum & Privilege::READ)
-        nRight |= adRightReadDesign;
+            nRight |= adRightReadDesign;
 
         if(_eNum & Privilege::CREATE)
-        nRight |= adRightCreate;
+            nRight |= adRightCreate;
 
         if(_eNum & Privilege::ALTER)
-        nRight |= adRightWriteDesign;
+            nRight |= adRightWriteDesign;
 
         if(_eNum & Privilege::REFERENCE)
-        nRight |= adRightReference;
+            nRight |= adRightReference;
 
         if(_eNum & Privilege::DROP)
-        nRight |= adRightDrop;
+            nRight |= adRightDrop;
 
     return (RightsEnum)nRight;
 }
 
 void WpADOIndex::Create()
 {
-    _ADOIndex* pIndex = NULL;
+    _ADOIndex* pIndex = nullptr;
     HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOINDEX_25,
-                          NULL,
+                          nullptr,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOINDEX_25,
-                          (void**)&pIndex );
+                          reinterpret_cast<void**>(&pIndex) );
 
 
     if( !FAILED( hr ) )
@@ -419,12 +419,12 @@ void OAdoIndex::fillPropertyValues()
 
 void WpADOKey::Create()
 {
-    _ADOKey* pKey = NULL;
+    _ADOKey* pKey = nullptr;
     HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOKEY_25,
-                          NULL,
+                          nullptr,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOKEY_25,
-                          (void**)&pKey );
+                          reinterpret_cast<void**>(&pKey) );
 
 
     if( !FAILED( hr ) )
@@ -467,7 +467,7 @@ sal_Int32 OAdoKey::MapRule(const RuleEnum& _eNum)
     return eNum;
 }
 
-RuleEnum OAdoKey::Map2Rule(const sal_Int32& _eNum)
+RuleEnum OAdoKey::Map2Rule(sal_Int32 _eNum)
 {
     RuleEnum eNum = adRINone;
     switch(_eNum)
@@ -506,7 +506,7 @@ sal_Int32 OAdoKey::MapKeyRule(const KeyTypeEnum& _eNum)
     return nKeyType;
 }
 
-KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum)
+KeyTypeEnum OAdoKey::Map2KeyRule(sal_Int32 _eNum)
 {
     KeyTypeEnum eNum( adKeyPrimary );
     switch(_eNum)
@@ -528,12 +528,12 @@ KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum)
 
 void WpADOTable::Create()
 {
-    _ADOTable* pTable = NULL;
+    _ADOTable* pTable = nullptr;
     HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOTABLE_25,
-                          NULL,
+                          nullptr,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOTABLE_25,
-                          (void**)&pTable );
+                          reinterpret_cast<void**>(&pTable) );
 
 
     if( !FAILED( hr ) )
@@ -574,12 +574,12 @@ void OAdoTable::fillPropertyValues()
 
 void WpADOUser::Create()
 {
-    _ADOUser* pUser = NULL;
+    _ADOUser* pUser = nullptr;
     HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOUSER_25,
-                          NULL,
+                          nullptr,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOUSER_25,
-                          (void**)&pUser );
+                          reinterpret_cast<void**>(&pUser) );
 
 
     if( !FAILED( hr ) )
