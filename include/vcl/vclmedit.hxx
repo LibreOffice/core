@@ -28,7 +28,7 @@
 class ImpVclMEdit;
 class Timer;
 class ExtTextEngine;
-class ExtTextView;
+class TextView;
 
 class VCL_DLLPUBLIC VclMultiLineEdit : public Edit
 {
@@ -53,7 +53,7 @@ protected:
     static WinBits  ImplInitStyle( WinBits nStyle );
 
     ExtTextEngine*  GetTextEngine() const;
-    ExtTextView*    GetTextView() const;
+    TextView*       GetTextView() const;
     ScrollBar*      GetVScrollBar() const;
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;

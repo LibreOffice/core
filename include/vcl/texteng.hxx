@@ -79,7 +79,6 @@ class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
     friend class        TextView;
     friend class        TextSelFunctionSet;
     friend class        ExtTextEngine;
-    friend class        ExtTextView;
 
     friend class        TextUndo;
     friend class        TextUndoManager;

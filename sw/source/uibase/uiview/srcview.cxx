@@ -570,7 +570,7 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
                                                   bool bApi,
                                                   bool bRecursive)
 {
-    ExtTextView* pTextView = aEditWin->GetTextView();
+    TextView* pTextView = aEditWin->GetTextView();
     TextSelection aSel;
     TextPaM aPaM;
 
