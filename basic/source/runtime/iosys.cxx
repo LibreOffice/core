@@ -744,7 +744,7 @@ void SbiIoSystem::Shutdown()
         vcl::Window* pParent = Application::GetDefDialogParent();
         ScopedVclPtrInstance<MessBox>( pParent, WinBits( WB_OK ), OUString(), aOut )->Execute();
 #else
-        ScopedVclPtrInstance<MessBox>( GetpApp()->GetDefDialogParent(), WinBits( WB_OK ), OUString(), aOut )->Execute();
+        ScopedVclPtrInstance<MessBox>( Application::GetDefDialogParent(), WinBits( WB_OK ), OUString(), aOut )->Execute();
 #endif
     }
     aOut.clear();

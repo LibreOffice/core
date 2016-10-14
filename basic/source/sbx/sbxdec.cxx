@@ -92,28 +92,28 @@ void releaseDecimalPtr( SbxDecimal*& rpDecimal )
 
 bool SbxDecimal::operator -= ( const SbxDecimal &r )
 {
-    HRESULT hResult = VarDecSub( &maDec, (LPDECIMAL)&r.maDec, &maDec );
+    HRESULT hResult = VarDecSub( &maDec, const_cast<LPDECIMAL>(&r.maDec), &maDec );
     bool bRet = ( hResult == S_OK );
     return bRet;
 }
 
 bool SbxDecimal::operator += ( const SbxDecimal &r )
 {
-    HRESULT hResult = VarDecAdd( &maDec, (LPDECIMAL)&r.maDec, &maDec );
+    HRESULT hResult = VarDecAdd( &maDec, const_cast<LPDECIMAL>(&r.maDec), &maDec );
     bool bRet = ( hResult == S_OK );
     return bRet;
 }
 
 bool SbxDecimal::operator /= ( const SbxDecimal &r )
 {
-    HRESULT hResult = VarDecDiv( &maDec, (LPDECIMAL)&r.maDec, &maDec );
+    HRESULT hResult = VarDecDiv( &maDec, const_cast<LPDECIMAL>(&r.maDec), &maDec );
     bool bRet = ( hResult == S_OK );
     return bRet;
 }
 
 bool SbxDecimal::operator *= ( const SbxDecimal &r )
 {
-    HRESULT hResult = VarDecMul( &maDec, (LPDECIMAL)&r.maDec, &maDec );
+    HRESULT hResult = VarDecMul( &maDec, const_cast<LPDECIMAL>(&r.maDec), &maDec );
     bool bRet = ( hResult == S_OK );
     return bRet;
 }
@@ -135,7 +135,7 @@ bool SbxDecimal::isZero()
 
 SbxDecimal::CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight )
 {
-    HRESULT hResult = VarDecCmp( (LPDECIMAL)&rLeft.maDec, (LPDECIMAL)&rRight.maDec );
+    HRESULT hResult = VarDecCmp( const_cast<LPDECIMAL>(&rLeft.maDec), const_cast<LPDECIMAL>(&rRight.maDec) );
     SbxDecimal::CmpResult eRes = (SbxDecimal::CmpResult)hResult;
     return eRes;
 }
@@ -226,11 +226,11 @@ bool SbxDecimal::setString( OUString* pOUString )
                 pBuffer[i] = ',';
             i++;
         }
-        hResult = VarDecFromStr( (OLECHAR*)pBuffer.get(), nLANGID, 0, &maDec );
+        hResult = VarDecFromStr( pBuffer.get(), nLANGID, 0, &maDec );
     }
     else
     {
-        hResult = VarDecFromStr( (OLECHAR*)pOUString->getStr(), nLANGID, 0, &maDec );
+        hResult = VarDecFromStr( pOUString->getStr(), nLANGID, 0, &maDec );
     }
     bRet = ( hResult == S_OK );
     return bRet;
@@ -356,7 +356,7 @@ void SbxDecimal::getString( OUString& rString )
 
     OLECHAR sz[100];
     BSTR aBStr = SysAllocString( sz );
-    if( aBStr != NULL )
+    if( aBStr != nullptr )
     {
         HRESULT hResult = VarBstrFromDec( &maDec, nLANGID, 0, &aBStr );
         if( hResult == S_OK )

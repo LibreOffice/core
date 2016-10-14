@@ -151,7 +151,7 @@ void VBATest::testMiscOLEStuff()
             fprintf(stderr, "macro result for %s\n", macroSource[ i ] );
             fprintf(stderr, "macro returned:\n%s\n", OUStringToOString( pReturn->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
-        CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.get() != NULL );
+        CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.get() != nullptr );
         CPPUNIT_ASSERT_MESSAGE("Result not as expected", pReturn->GetOUString() == "OK" );
     }
 #else

@@ -285,7 +285,7 @@ RTLFUNC(CDec)
     (void)bWrite;
 
 #ifdef _WIN32
-    SbxDecimal* pDec = NULL;
+    SbxDecimal* pDec = nullptr;
     if ( rPar.Count() == 2 )
     {
         SbxVariable *pSbxVariable = rPar.Get(1);
