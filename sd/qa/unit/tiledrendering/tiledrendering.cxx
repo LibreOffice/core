@@ -30,6 +30,7 @@
 #include <svl/srchitem.hxx>
 #include <comphelper/lok.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/svdoutl.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
@@ -77,6 +78,7 @@ public:
     void testCreateViewTextCursor();
     void testPostKeyEventInvalidation();
     void testTdf81754();
+    void testTdf103083();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -106,6 +108,7 @@ public:
     CPPUNIT_TEST(testCreateViewTextCursor);
     CPPUNIT_TEST(testPostKeyEventInvalidation);
     CPPUNIT_TEST(testTdf81754);
+    CPPUNIT_TEST(testTdf103083);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1324,6 +1327,73 @@ void SdTiledRenderingTest::testTdf81754()
     CPPUNIT_ASSERT_EQUAL(OUString("Somethingxx"), aEdit.GetText(0));
 
     xDocShRef->DoClose();
+}
+
+/**
+ * tests a cut/paste bug around bullet items in a list
+ */
+void SdTiledRenderingTest::testTdf103083()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("tdf103083.fodp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+
+    SdrObject* pObject1 = pActualPage->GetObj(1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_OUTLINETEXT), pObject1->GetObjIdentifier());
+    SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
+
+    SdrView* pView = pViewShell->GetView();
+
+    // select contents of bullet item
+    Rectangle aRect = pTextObject->GetCurrentBoundRect();
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      1, MOUSE_LEFT, 0);
+    pView->SdrBeginTextEdit(pTextObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView.SetSelection(ESelection(2, 0, 2, 33)); // start para, start char, end para, end char.
+    CPPUNIT_ASSERT_EQUAL(OUString("They have all the same formatting"), rEditView.GetSelected());
+    SdrOutliner* pOutliner = pView->GetTextEditOutliner();
+    CPPUNIT_ASSERT_EQUAL(OUString("No-Logo Content~LT~Gliederung 2"),
+                         pOutliner->GetStyleSheet(2)->GetName());
+    const SfxItemSet& rParagraphItemSet1 = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(2);
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)3, rParagraphItemSet1.Count());
+
+    // cut contents of bullet item
+    comphelper::dispatchCommand(".uno:Cut", uno::Sequence<beans::PropertyValue>());
+
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView2.SetSelection(ESelection(2, 0, 2, 10)); // start para, start char, end para, end char.
+    CPPUNIT_ASSERT_EQUAL(OUString(""), rEditView2.GetSelected());
+
+    // paste contents of bullet item
+    comphelper::dispatchCommand(".uno:Paste", uno::Sequence<beans::PropertyValue>());
+
+    // send an ESC key to trigger the commit of the edit to the main model
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    pView->SdrBeginTextEdit(pTextObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    pOutliner = pView->GetTextEditOutliner();
+    EditView& rEditView3 = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView3.SetSelection(ESelection(2, 0, 2, 33)); // start para, start char, end para, end char.
+    CPPUNIT_ASSERT_EQUAL(OUString("They have all the same formatting"), rEditView3.GetSelected());
+    CPPUNIT_ASSERT_EQUAL(OUString("No-Logo Content~LT~Gliederung 2"),
+                         pOutliner->GetStyleSheet(2)->GetName());
+
+    const SfxItemSet& rParagraphItemSet2 = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(2);
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)3, rParagraphItemSet2.Count());
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);

@@ -1230,44 +1230,15 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
     if( pOutliner && pTextObj && pTextObj->GetPage() )
     {
         SdPage* pPage = static_cast< SdPage* >( pTextObj->GetPage() );
-
-        SfxStyleSheet* pStyleSheet = nullptr;
-
         const PresObjKind eKind = pPage->GetPresObjKind(pTextObj);
-        if( eKind != PRESOBJ_NONE )
-            pStyleSheet = pPage->GetStyleSheetForPresObj(eKind);
-        else
-            pStyleSheet = pTextObj->GetStyleSheet();
-
-        if( eKind == PRESOBJ_OUTLINE )
+        // outline kinds are taken care of in Outliner::ImplSetLevelDependendStyleSheet
+        if( eKind != PRESOBJ_OUTLINE )
         {
-            // for outline shapes, set the correct outline style sheet for each
-            // new paragraph, depending on the paragraph depth
-            SfxStyleSheetBasePool* pStylePool = GetDoc().GetStyleSheetPool();
-
-            for ( sal_Int32 nPara = pInfo->nStartPara; nPara <= pInfo->nEndPara; nPara++ )
-            {
-                sal_Int16 nDepth = pOutliner->GetDepth( nPara );
-
-                SfxStyleSheet* pStyle = nullptr;
-                if( nDepth > 0 )
-                {
-                    OUString aStyleSheetName( pStyleSheet->GetName() );
-                    if (!aStyleSheetName.isEmpty())
-                        aStyleSheetName = aStyleSheetName.copy(0, aStyleSheetName.getLength() - 1);
-                    aStyleSheetName += OUString::number( nDepth );
-                    pStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() ) );
-                    DBG_ASSERT( pStyle, "sd::View::OnEndPasteOrDrop(), Style not found!" );
-                }
-
-                if( !pStyle )
-                    pStyle = pStyleSheet;
-
-                pOutliner->SetStyleSheet( nPara, pStyle );
-            }
-        }
-        else
-        {
+            SfxStyleSheet* pStyleSheet = nullptr;
+            if( eKind != PRESOBJ_NONE )
+                pStyleSheet = pPage->GetStyleSheetForPresObj(eKind);
+            else
+                pStyleSheet = pTextObj->GetStyleSheet();
             // just put the object style on each new paragraph
             for ( sal_Int32 nPara = pInfo->nStartPara; nPara <= pInfo->nEndPara; nPara++ )
             {
