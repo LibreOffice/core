@@ -1478,6 +1478,8 @@
             <array>
                 <string>org.openoffice.text</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>text.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1490,6 +1492,8 @@
             <array>
                 <string>org.oasis-open.opendocument.text</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>oasis-text.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1502,6 +1506,8 @@
             <array>
                 <string>org.openoffice.spreadsheet</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>spreadsheet.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1514,6 +1520,8 @@
             <array>
                 <string>org.oasis-open.opendocument.spreadsheet</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>oasis-spreadsheet.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1526,6 +1534,8 @@
             <array>
                 <string>org.openoffice.presentation</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>presentation.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1538,6 +1548,8 @@
             <array>
                 <string>org.oasis-open.opendocument.presentation</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>oasis-presentation.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1550,6 +1562,8 @@
             <array>
                 <string>org.openoffice.graphics</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>drawing.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1562,6 +1576,8 @@
             <array>
                 <string>org.oasis-open.opendocument.graphics</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>oasis-drawing.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1586,6 +1602,8 @@
             <array>
                 <string>org.openoffice.text-master</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>master-document.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1598,6 +1616,8 @@
             <array>
                 <string>org.oasis-open.opendocument.text-master</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>oasis-master-document.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1610,6 +1630,8 @@
             <array>
                 <string>org.openoffice.formula</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>formula.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1622,6 +1644,8 @@
             <array>
                 <string>org.oasis-open.opendocument.formula</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>oasis-formula.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1634,6 +1658,8 @@
             <array>
                 <string>org.openoffice.text-template</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>text-template.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1646,6 +1672,8 @@
             <array>
                 <string>org.oasis-open.opendocument.text-template</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>oasis-text-template.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1670,6 +1698,8 @@
             <array>
                 <string>org.openoffice.spreadsheet-template</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>spreadsheet-template.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1682,6 +1712,8 @@
             <array>
                 <string>org.oasis-open.opendocument.spreadsheet-template</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>oasis-spreadsheet-template.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1694,6 +1726,8 @@
             <array>
                 <string>org.openoffice.presentation-template</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>presentation-template.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1706,6 +1740,8 @@
             <array>
                 <string>org.oasis-open.opendocument.presentation-template</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>oasis-presentation-template.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1718,6 +1754,8 @@
             <array>
                 <string>org.openoffice.graphics-template</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>drawing-template.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1730,6 +1768,8 @@
             <array>
                 <string>org.oasis-open.opendocument.graphics-template</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>oasis-drawing-template.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1742,6 +1782,8 @@
             <array>
                 <string>org.oasis-open.opendocument.database</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>oasis-database.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
@@ -1754,6 +1796,8 @@
             <array>
                 <string>org.openoffice.extension</string>
             </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>extension.icns</string>
         </dict>
         <dict>
             <key>CFBundleTypeName</key>
