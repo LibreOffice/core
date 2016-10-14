@@ -98,7 +98,7 @@ WCHAR * buildPath(
         return p;
     } else {
         SetLastError(ERROR_FILENAME_EXCED_RANGE);
-        return NULL;
+        return nullptr;
     }
 }
 

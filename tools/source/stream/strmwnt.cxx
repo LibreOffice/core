@@ -40,7 +40,7 @@ public:
 
                 StreamData()
                 {
-                    hFile = 0;
+                    hFile = nullptr;
                 }
 };
 
@@ -138,7 +138,7 @@ std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )
     DWORD nCount = 0;
     if( IsOpen() )
     {
-        bool bResult = ReadFile(pInstanceData->hFile,(LPVOID)pData,nSize,&nCount,NULL);
+        bool bResult = ReadFile(pInstanceData->hFile,pData,nSize,&nCount,nullptr);
         if( !bResult )
         {
             std::size_t nTestError = GetLastError();
@@ -153,7 +153,7 @@ std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
     DWORD nCount = 0;
     if( IsOpen() )
     {
-        if(!WriteFile(pInstanceData->hFile,(LPVOID)pData,nSize,&nCount,NULL))
+        if(!WriteFile(pInstanceData->hFile,pData,nSize,&nCount,nullptr))
             SetError(::GetSvError( GetLastError() ) );
     }
     return nCount;
@@ -168,9 +168,9 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
     {
         if( nPos != STREAM_SEEK_TO_END )
             // 64-Bit files are not supported
-            nNewPos=SetFilePointer(pInstanceData->hFile,nPos,NULL,FILE_BEGIN);
+            nNewPos=SetFilePointer(pInstanceData->hFile,nPos,nullptr,FILE_BEGIN);
         else
-            nNewPos=SetFilePointer(pInstanceData->hFile,0L,NULL,FILE_END);
+            nNewPos=SetFilePointer(pInstanceData->hFile,0L,nullptr,FILE_END);
 
         if( nNewPos == 0xFFFFFFFF )
         {
@@ -318,10 +318,10 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
         aFileNameA.getStr(),
         nAccessMode,
         nShareMode,
-        (LPSECURITY_ATTRIBUTES)NULL,
+        nullptr,
         nOpenAction,
         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
-        (HANDLE) NULL
+        nullptr
     );
 
     if(  pInstanceData->hFile!=INVALID_HANDLE_VALUE && (
@@ -352,10 +352,10 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
                 aFileNameA.getStr(),
                 GENERIC_READ,
                 nShareMode,
-                (LPSECURITY_ATTRIBUTES)NULL,
+                nullptr,
                 nOpenAction,
                 FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
-                (HANDLE) NULL
+                nullptr
             );
             if( GetLastError() == ERROR_ALREADY_EXISTS )
                 SetLastError( ERROR_SUCCESS );
@@ -407,18 +407,18 @@ void SvFileStream::SetSize(sal_uInt64 const nSize)
 
     if( IsOpen() )
     {
-        int bError = false;
+        bool bError = false;
         HANDLE hFile = pInstanceData->hFile;
-        DWORD const nOld = SetFilePointer( hFile, 0L, NULL, FILE_CURRENT );
+        DWORD const nOld = SetFilePointer( hFile, 0L, nullptr, FILE_CURRENT );
         if( nOld != 0xffffffff )
         {
-            if( SetFilePointer(hFile,nSize,NULL,FILE_BEGIN ) != 0xffffffff)
+            if( SetFilePointer(hFile,nSize,nullptr,FILE_BEGIN ) != 0xffffffff)
             {
                 bool bSucc = SetEndOfFile( hFile );
                 if( !bSucc )
                     bError = true;
             }
-            if( SetFilePointer( hFile,nOld,NULL,FILE_BEGIN ) == 0xffffffff)
+            if( SetFilePointer( hFile,nOld,nullptr,FILE_BEGIN ) == 0xffffffff)
                 bError = true;
         }
         if( bError )

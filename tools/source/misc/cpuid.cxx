@@ -24,7 +24,7 @@ namespace
 #include <intrin.h>
 void getCpuId(uint32_t array[4])
 {
-    __cpuid((int*)array, 1);
+    __cpuid(reinterpret_cast<int*>(array), 1);
 }
 #else
 #include <cpuid.h>
