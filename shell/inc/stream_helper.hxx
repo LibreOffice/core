@@ -28,10 +28,10 @@ class BufferStream : public StreamInterface
 {
 public:
     BufferStream(IStream *str);
-    ~BufferStream();
-    unsigned long sread (unsigned char *vuf, unsigned long size);
-    long stell ();
-    long sseek (long offset, int origin);
+    ~BufferStream() override;
+    unsigned long sread (unsigned char *vuf, unsigned long size) override;
+    long stell () override;
+    long sseek (long offset, int origin) override;
 private:
     IStream *stream;
 };
@@ -40,10 +40,10 @@ class FileStream : public StreamInterface
 {
 public:
     FileStream(const char *filename);
-    ~FileStream();
-    unsigned long sread (unsigned char *buf, unsigned long size);
-    long stell ();
-    long sseek (long offset, int origin);
+    ~FileStream() override;
+    unsigned long sread (unsigned char *buf, unsigned long size) override;
+    long stell () override;
+    long sseek (long offset, int origin) override;
 private:
     FILE *file;
 };

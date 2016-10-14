@@ -86,7 +86,7 @@ class writer_document_statistic_reader : public document_statistic_reader
 protected:
     writer_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 
-    virtual void fill_description_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list);
+    virtual void fill_description_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list) override;
 
     friend document_statistic_reader_ptr create_document_statistic_reader(
         const std::string& document_name, CMetaInfoReader* meta_info_accessor);
@@ -98,7 +98,7 @@ class calc_document_statistic_reader : public document_statistic_reader
 protected:
     calc_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 
-    virtual void fill_description_section( CMetaInfoReader *meta_info_accessor,statistic_group_list_t* group_list);
+    virtual void fill_description_section( CMetaInfoReader *meta_info_accessor,statistic_group_list_t* group_list) override;
 
     friend document_statistic_reader_ptr create_document_statistic_reader(
         const std::string& document_name, CMetaInfoReader* meta_info_accessor);
@@ -110,7 +110,7 @@ class draw_impress_math_document_statistic_reader : public document_statistic_re
 protected:
     draw_impress_math_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 
-    virtual void fill_description_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list);
+    virtual void fill_description_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list) override;
 
     friend document_statistic_reader_ptr create_document_statistic_reader(
         const std::string& document_name, CMetaInfoReader* meta_info_accessor);

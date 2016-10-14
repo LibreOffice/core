@@ -51,17 +51,17 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             REFIID riid,
-            void __RPC_FAR *__RPC_FAR *ppvObject);
+            void __RPC_FAR *__RPC_FAR *ppvObject) override;
 
-    virtual ULONG STDMETHODCALLTYPE AddRef();
+    virtual ULONG STDMETHODCALLTYPE AddRef() override;
 
-    virtual ULONG STDMETHODCALLTYPE Release();
+    virtual ULONG STDMETHODCALLTYPE Release() override;
 
 
     // IExtractImage methods
 
 
-    virtual HRESULT STDMETHODCALLTYPE Extract(HBITMAP *phBmpImage);
+    virtual HRESULT STDMETHODCALLTYPE Extract(HBITMAP *phBmpImage) override;
 
     virtual HRESULT STDMETHODCALLTYPE GetLocation(
         LPWSTR pszPathBuffer,
@@ -69,36 +69,33 @@ public:
         DWORD *pdwPriority,
         const SIZE *prgSize,
         DWORD dwRecClrDepth,
-        DWORD *pdwFlags);
+        DWORD *pdwFlags) override;
 
 
     // IPersist methods
 
 
-    virtual HRESULT STDMETHODCALLTYPE GetClassID(CLSID* pClassID);
+    virtual HRESULT STDMETHODCALLTYPE GetClassID(CLSID* pClassID) override;
 
 
     // IPersistFile methods
 
 
-    virtual HRESULT STDMETHODCALLTYPE IsDirty();
+    virtual HRESULT STDMETHODCALLTYPE IsDirty() override;
 
     virtual HRESULT STDMETHODCALLTYPE Load(
             /* [in] */ LPCOLESTR pszFileName,
-            /* [in] */ DWORD dwMode);
+            /* [in] */ DWORD dwMode) override;
 
     virtual HRESULT STDMETHODCALLTYPE Save(
             /* [unique][in] */ LPCOLESTR pszFileName,
-            /* [in] */ BOOL fRemember);
+            /* [in] */ BOOL fRemember) override;
 
     virtual HRESULT STDMETHODCALLTYPE SaveCompleted(
-            /* [unique][in] */ LPCOLESTR pszFileName);
+            /* [unique][in] */ LPCOLESTR pszFileName) override;
 
     virtual HRESULT STDMETHODCALLTYPE GetCurFile(
-            /* [out] */ LPOLESTR __RPC_FAR *ppszFileName);
-
-private:
-    Gdiplus::Rect CalcScaledAspectRatio(const Gdiplus::Rect& src, const Gdiplus::Rect& dest);
+            /* [out] */ LPOLESTR __RPC_FAR *ppszFileName) override;
 
 private:
     long         ref_count_;

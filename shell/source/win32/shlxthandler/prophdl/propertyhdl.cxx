@@ -37,7 +37,7 @@
 // Module global
 
 long g_DllRefCnt = 0;
-HINSTANCE g_hModule = NULL;
+HINSTANCE g_hModule = nullptr;
 
 // Map of property keys to the locations of their value(s) in the .??? XML schema
 struct PROPERTYMAP
@@ -61,7 +61,7 @@ size_t gPropertyMapTableSize = SAL_N_ELEMENTS(g_rgPROPERTYMAP);
 
 CPropertyHdl::CPropertyHdl( long nRefCnt ) :
     m_RefCnt( nRefCnt ),
-    m_pCache( NULL )
+    m_pCache( nullptr )
 {
     OutputDebugStringFormatA( "CPropertyHdl: CTOR\n" );
     InterlockedIncrement( &g_DllRefCnt );
@@ -73,7 +73,7 @@ CPropertyHdl::~CPropertyHdl()
     if ( m_pCache )
     {
         m_pCache->Release();
-        m_pCache = NULL;
+        m_pCache = nullptr;
     }
     InterlockedDecrement( &g_DllRefCnt );
 }
@@ -83,7 +83,7 @@ CPropertyHdl::~CPropertyHdl()
 
 HRESULT STDMETHODCALLTYPE CPropertyHdl::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
-    *ppvObject = 0;
+    *ppvObject = nullptr;
 
     if (IID_IUnknown == riid || IID_IPropertyStore == riid)
     {
@@ -216,7 +216,7 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfM
 
         BufferStream tmpStream(pStream);
 
-        CMetaInfoReader *pMetaInfoReader = NULL;
+        CMetaInfoReader *pMetaInfoReader = nullptr;
 
         try
         {
@@ -234,31 +234,9 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfM
     return S_OK;
 }
 
+namespace {
 
-void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
-{
-    OutputDebugStringFormatA( "CPropertyHdl: LoadProperties\n" );
-    PROPVARIANT propvarValues;
-
-    for ( UINT i = 0; i < (UINT)gPropertyMapTableSize; ++i )
-    {
-        PropVariantClear( &propvarValues );
-        HRESULT hr = GetItemData( pMetaInfoReader, i, &propvarValues);
-        if (hr == S_OK)
-        {
-            // coerce the value(s) to the appropriate type for the property key
-            hr = PSCoerceToCanonicalValue( g_rgPROPERTYMAP[i].key, &propvarValues );
-            if (SUCCEEDED(hr))
-            {
-                // cache the value(s) loaded
-                hr = m_pCache->SetValueAndState( g_rgPROPERTYMAP[i].key, &propvarValues, PSC_NORMAL );
-            }
-        }
-    }
-}
-
-
-HRESULT CPropertyHdl::GetItemData( CMetaInfoReader *pMetaInfoReader, UINT nIndex, PROPVARIANT *pVarData )
+HRESULT GetItemData( CMetaInfoReader *pMetaInfoReader, UINT nIndex, PROPVARIANT *pVarData )
 {
     switch (nIndex) {
     case 0: {
@@ -302,6 +280,29 @@ HRESULT CPropertyHdl::GetItemData( CMetaInfoReader *pMetaInfoReader, UINT nIndex
     return S_FALSE;
 }
 
+}
+
+void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
+{
+    OutputDebugStringFormatA( "CPropertyHdl: LoadProperties\n" );
+    PROPVARIANT propvarValues;
+
+    for ( UINT i = 0; i < (UINT)gPropertyMapTableSize; ++i )
+    {
+        PropVariantClear( &propvarValues );
+        HRESULT hr = GetItemData( pMetaInfoReader, i, &propvarValues);
+        if (hr == S_OK)
+        {
+            // coerce the value(s) to the appropriate type for the property key
+            hr = PSCoerceToCanonicalValue( g_rgPROPERTYMAP[i].key, &propvarValues );
+            if (SUCCEEDED(hr))
+            {
+                // cache the value(s) loaded
+                hr = m_pCache->SetValueAndState( g_rgPROPERTYMAP[i].key, &propvarValues, PSC_NORMAL );
+            }
+        }
+    }
+}
 
 //                              CClassFactory
 
@@ -327,7 +328,7 @@ CClassFactory::~CClassFactory()
 
 HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface( REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject )
 {
-    *ppvObject = 0;
+    *ppvObject = nullptr;
 
     if ( IID_IUnknown == riid || IID_IClassFactory == riid )
     {
@@ -365,15 +366,15 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject)
 {
-    if ( pUnkOuter != NULL )
+    if ( pUnkOuter != nullptr )
         return CLASS_E_NOAGGREGATION;
 
-    IUnknown* pUnk = 0;
+    IUnknown* pUnk = nullptr;
 
     if ( CLSID_PROPERTY_HANDLER == m_Clsid )
         pUnk = static_cast<IPropertyStore*>( new CPropertyHdl() );
 
-    if (0 == pUnk)
+    if (nullptr == pUnk)
     {
         return E_OUTOFMEMORY;
     }
@@ -407,7 +408,7 @@ bool CClassFactory::IsLocked()
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 {
     OutputDebugStringFormatA( "DllGetClassObject.\n" );
-    *ppv = 0;
+    *ppv = nullptr;
 
     if ( rclsid != CLSID_PROPERTY_HANDLER )
         return CLASS_E_CLASSNOTAVAILABLE;

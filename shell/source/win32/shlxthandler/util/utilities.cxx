@@ -33,9 +33,9 @@ const wchar_t SPACE_CHAR = L' ';
 static std::wstring StringToWString(const std::string& String, int codepage)
 {
     int len = MultiByteToWideChar(
-        codepage, 0, String.c_str(), -1, 0, 0);
+        codepage, 0, String.c_str(), -1, nullptr, 0);
 
-    wchar_t* buff = reinterpret_cast<wchar_t*>(
+    wchar_t* buff = static_cast<wchar_t*>(
         _alloca(len * sizeof(wchar_t)));
 
     MultiByteToWideChar(
@@ -47,13 +47,13 @@ static std::wstring StringToWString(const std::string& String, int codepage)
 static std::string WStringToString(const std::wstring& String, int codepage)
 {
     int len = WideCharToMultiByte(
-        codepage, 0, String.c_str(), -1, 0, 0, 0, 0);
+        codepage, 0, String.c_str(), -1, nullptr, 0, nullptr, nullptr);
 
-    char* buff = reinterpret_cast<char*>(
+    char* buff = static_cast<char*>(
         _alloca(len * sizeof(char)));
 
     WideCharToMultiByte(
-        codepage, 0, String.c_str(), -1, buff, len, 0, 0);
+        codepage, 0, String.c_str(), -1, buff, len, nullptr, nullptr);
 
     return std::string(buff);
 }
@@ -104,7 +104,7 @@ bool is_windows_xp_or_above()
 {
 // the Win32 SDK 8.1 deprecates GetVersionEx()
 #ifdef _WIN32_WINNT_WINBLUE
-    return IsWindowsXPOrGreater() ? true : false;
+    return IsWindowsXPOrGreater();
 #else
     OSVERSIONINFO osvi;
     ZeroMemory(&osvi, sizeof(osvi));
@@ -153,7 +153,7 @@ bool HasOnlySpaces(const std::wstring& String)
 std::wstring getShortPathName( const std::wstring& aLongName )
 {
     std::wstring shortName = aLongName;
-    long         length    = GetShortPathNameW( aLongName.c_str(), NULL, 0 );
+    long         length    = GetShortPathNameW( aLongName.c_str(), nullptr, 0 );
 
     if ( length != 0 )
     {

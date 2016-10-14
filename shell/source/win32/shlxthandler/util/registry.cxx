@@ -43,7 +43,7 @@ bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, co
     // open or create the desired key
     char dummy[] = "";
     int rc = RegCreateKeyExA(
-        RootKey, const_cast<char*>(KeyName), 0, dummy, REG_OPTION_NON_VOLATILE, KEY_WRITE, 0, &hSubKey, 0);
+        RootKey, KeyName, 0, dummy, REG_OPTION_NON_VOLATILE, KEY_WRITE, nullptr, &hSubKey, nullptr);
 
     if (ERROR_SUCCESS == rc)
     {
@@ -78,13 +78,13 @@ bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
         DWORD nMaxSubKeyLen;
 
         rc = RegQueryInfoKeyA(
-            hKey, 0, 0, 0, 0,
+            hKey, nullptr, nullptr, nullptr, nullptr,
             &nMaxSubKeyLen,
-            0, 0, 0, 0, 0, 0);
+            nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 
         nMaxSubKeyLen++; // space for trailing '\0'
 
-        SubKey = reinterpret_cast<char*>(
+        SubKey = static_cast<char*>(
             _alloca(nMaxSubKeyLen*sizeof(char)));
 
         while (ERROR_SUCCESS == rc)
@@ -96,7 +96,7 @@ bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
                 0,       // always index zero
                 SubKey,
                 &nLen,
-                0, 0, 0, 0);
+                nullptr, nullptr, nullptr, nullptr);
 
             if (ERROR_NO_MORE_ITEMS == rc)
             {
@@ -130,7 +130,7 @@ bool HasSubkeysRegistryKey(HKEY RootKey, const char* KeyName, /* out */ bool& bR
     {
         DWORD nSubKeys = 0;
 
-        rc = RegQueryInfoKeyA(hKey, 0, 0, 0, &nSubKeys, 0, 0, 0, 0, 0, 0, 0);
+        rc = RegQueryInfoKeyA(hKey, nullptr, nullptr, nullptr, &nSubKeys, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 
         bResult = (nSubKeys > 0);
     }
@@ -142,7 +142,7 @@ bool HasSubkeysRegistryKey(HKEY RootKey, const char* KeyName, /* out */ bool& bR
 std::string ClsidToString(const CLSID& clsid)
 {
     // Get CLSID
-    LPOLESTR wszCLSID = NULL;
+    LPOLESTR wszCLSID = nullptr;
     StringFromCLSID(clsid, &wszCLSID);
 
     char buff[39];
@@ -170,7 +170,7 @@ bool QueryRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, 
     if (ERROR_SUCCESS == rc)
     {
         rc = RegQueryValueExA(
-            hKey, ValueName, NULL, NULL, (LPBYTE)pszData,&dwBufLen);
+            hKey, ValueName, nullptr, nullptr, reinterpret_cast<LPBYTE>(pszData),&dwBufLen);
 
         RegCloseKey(hKey);
     }

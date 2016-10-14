@@ -80,9 +80,9 @@ protected:
         const std::wstring& column1_title,
         const std::wstring& column2_title);
 
-    virtual void setup_list_view();
-    virtual void insert_group(const std::wstring& name);
-    virtual void insert_item(const std::wstring& title, const std::wstring& value, bool is_editable);
+    virtual void setup_list_view() override;
+    virtual void insert_group(const std::wstring& name) override;
+    virtual void insert_item(const std::wstring& title, const std::wstring& value, bool is_editable) override;
 
 private:
     int  group_count_;

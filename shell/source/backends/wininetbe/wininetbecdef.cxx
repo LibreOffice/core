@@ -41,10 +41,10 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
         WinInetBackend::getBackendName,
         WinInetBackend::getBackendServiceNames,
         cppu::createSingleComponentFactory,
-        NULL,
+        nullptr,
         0
     },
-    { NULL, NULL, NULL, NULL, NULL, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 } ;
 
 

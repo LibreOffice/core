@@ -46,7 +46,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL syssh_component_getFactory(
         const sal_Char* pImplName, void*, void* /*pRegistryKey*/ )
 {
-    void* pRet = 0;
+    void* pRet = nullptr;
 
     if ( 0 == rtl_str_compare( pImplName, SYSSHEXEC_IMPL_NAME ) )
     {

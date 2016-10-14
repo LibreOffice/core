@@ -152,9 +152,9 @@ void initMapiMessage(
     ZeroMemory(pMapiMessage, sizeof(MapiMessage));
 
     try {
-         rtl_uString *subject = NULL;
-         rtl_uString_newFromAscii(&subject, const_cast<char*>(gSubject.c_str()));
-         rtl_uString *decoded_subject = NULL;
+         rtl_uString *subject = nullptr;
+         rtl_uString_newFromAscii(&subject, gSubject.c_str());
+         rtl_uString *decoded_subject = nullptr;
          rtl_uriDecode(subject, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8, &decoded_subject);
          OUString ou_subject(decoded_subject);
          pMapiMessage->lpszSubject = strdup(OUStringToOString(ou_subject, osl_getThreadTextEncoding(), RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr());
@@ -162,9 +162,9 @@ void initMapiMessage(
     catch (...) {
     pMapiMessage->lpszSubject = const_cast<char*>(gSubject.c_str());
     }
-    pMapiMessage->lpszNoteText = (gBody.length() ? const_cast<char*>(gBody.c_str()) : NULL);
+    pMapiMessage->lpszNoteText = (gBody.length() ? const_cast<char*>(gBody.c_str()) : nullptr);
     pMapiMessage->lpOriginator = aMapiOriginator;
-    pMapiMessage->lpRecips = aMapiRecipientList.size() ? &aMapiRecipientList[0] : 0;
+    pMapiMessage->lpRecips = aMapiRecipientList.size() ? &aMapiRecipientList[0] : nullptr;
     pMapiMessage->nRecipCount = aMapiRecipientList.size();
     pMapiMessage->lpFiles = &aMapiAttachmentList[0];
     pMapiMessage->nFileCount = aMapiAttachmentList.size();
@@ -274,7 +274,7 @@ int main(int argc, char* argv[])
         initMapiOriginator(&mapiOriginator);
         initRecipientList(&mapiRecipientList);
         initAttachmentList(&mapiAttachmentList);
-        initMapiMessage((gFrom.length() ? &mapiOriginator : NULL), mapiRecipientList, mapiAttachmentList, &mapiMsg);
+        initMapiMessage((gFrom.length() ? &mapiOriginator : nullptr), mapiRecipientList, mapiAttachmentList, &mapiMsg);
 
         ulRet = mapi.MAPISendMail(hSession, 0, &mapiMsg, gMapiFlags, 0);
 
@@ -306,33 +306,33 @@ int main(int argc, char* argv[])
         std::ostringstream oss;
 
         if (gFrom.length() > 0)
-            oss << "--from" << " " << gFrom << std::endl;
+            oss << "--from " << gFrom << std::endl;
 
         if (gSubject.length() > 0)
-            oss << "--subject" << " " << gSubject << std::endl;
+            oss << "--subject " << gSubject << std::endl;
 
         if (gBody.length() > 0)
-            oss << "--body" << " " << gBody << std::endl;
+            oss << "--body " << gBody << std::endl;
 
         StringListIterator_t iter = gTo.begin();
         StringListIterator_t iter_end = gTo.end();
         for (/**/;iter != iter_end; ++iter)
-            oss << "--to" << " " << *iter << std::endl;
+            oss << "--to " << *iter << std::endl;
 
         iter = gCc.begin();
         iter_end = gCc.end();
         for (/**/;iter != iter_end; ++iter)
-            oss << "--cc" << " " << *iter << std::endl;
+            oss << "--cc " << *iter << std::endl;
 
         iter = gBcc.begin();
         iter_end = gBcc.end();
         for (/**/;iter != iter_end; ++iter)
-            oss << "--bcc" << " " << *iter << std::endl;
+            oss << "--bcc " << *iter << std::endl;
 
         iter = gAttachments.begin();
         iter_end = gAttachments.end();
         for (/**/;iter != iter_end; ++iter)
-            oss << "--attach" << " " << *iter << std::endl;
+            oss << "--attach " << *iter << std::endl;
 
         if (gMapiFlags & MAPI_DIALOG)
             oss << "--mapi-dialog" << std::endl;
@@ -340,7 +340,7 @@ int main(int argc, char* argv[])
         if (gMapiFlags & MAPI_LOGON_UI)
             oss << "--mapi-logon-ui" << std::endl;
 
-        MessageBox(NULL, oss.str().c_str(), "Arguments", MB_OK | MB_ICONINFORMATION);
+        MessageBox(nullptr, oss.str().c_str(), "Arguments", MB_OK | MB_ICONINFORMATION);
     }
 #endif
 
