@@ -511,7 +511,7 @@ void CopyToOLEMenu(HMENU hOrig,WORD origPos,HMENU hDest,WORD destPos)
     subMenu = GetSubMenu(hOrig,origPos);
     GetMenuString(hOrig,origPos,buffer,256,MF_BYPOSITION);
     InsertMenu(hDest,destPos,uTemp,
-               (UINT)subMenu,LPCTSTR(buffer));
+               reinterpret_cast<UINT_PTR>(subMenu),LPCTSTR(buffer));
 
     MENUITEMINFOW mi;
     memset(&mi,0,sizeof(mi));
