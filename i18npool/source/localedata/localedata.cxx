@@ -520,7 +520,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
             aBuf.append( SAL_DLLPREFIX ).appendAscii(i.pLib).append( SAL_DLLEXTENSION );
 #else
             aBuf.ensureCapacity(strlen(i.pLib) + 4);    // mostly "*.dll"
-            aBuf.appendAscii(i.pLib).appendAscii( SAL_DLLEXTENSION );
+            aBuf.appendAscii(i.pLib).append( SAL_DLLEXTENSION );
 #endif
             osl::Module *module = new osl::Module();
             if ( module->loadRelative(&thisModule, aBuf.makeStringAndClear()) )
