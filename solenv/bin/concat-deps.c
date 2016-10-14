@@ -28,7 +28,6 @@
 #endif /* Def _AIX */
 
 #ifdef _MSC_VER
-#define __windows
 #undef CORE_BIG_ENDIAN
 #define CORE_LITTLE_ENDIAN
 #endif /* Def _MSC_VER */
@@ -80,7 +79,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#ifdef __windows
+#ifdef _MSC_VER
 #include <io.h>
 #else
 #include <unistd.h>
@@ -89,7 +88,7 @@
 #include <config_options.h>
 
 /* modes */
-#ifdef __windows
+#ifdef _MSC_VER
 #define FILE_O_RDONLY     _O_RDONLY
 #define FILE_O_BINARY     _O_BINARY
 #define PATHNCMP _strnicmp /* MSVC converts paths to lower-case sometimes? */
