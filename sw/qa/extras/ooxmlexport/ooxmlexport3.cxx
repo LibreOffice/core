@@ -52,6 +52,8 @@
 
 #include <string>
 
+#if !defined(_WIN32)
+
 class Test : public SwModelTestBase
 {
 public:
@@ -72,8 +74,6 @@ protected:
         return (OString(filename).endsWith(".docx") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
     }
 };
-
-#if !defined(_WIN32)
 
 DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
 {

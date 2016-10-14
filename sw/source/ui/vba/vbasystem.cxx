@@ -96,12 +96,12 @@ uno::Any PrivateProfileStringListener::getValueEvent()
     {
         // get key/value from windows register
 #ifdef _WIN32
-        HKEY hBaseKey = NULL;
+        HKEY hBaseKey = nullptr;
         OString sSubKey;
         lcl_getRegKeyInfo( maGroupName, hBaseKey, sSubKey );
-        if( hBaseKey != NULL )
+        if( hBaseKey != nullptr )
         {
-            HKEY hKey = NULL;
+            HKEY hKey = nullptr;
             LONG lResult;
             LPCTSTR lpSubKey = TEXT( sSubKey.getStr());
             TCHAR szBuffer[1024];
@@ -110,7 +110,7 @@ uno::Any PrivateProfileStringListener::getValueEvent()
             if( ERROR_SUCCESS == lResult )
             {
                 LPCTSTR lpValueName = TEXT(maKey.getStr());
-                lResult = RegQueryValueEx( hKey, lpValueName, NULL, NULL, (LPBYTE)szBuffer, &cbData );
+                lResult = RegQueryValueEx( hKey, lpValueName, nullptr, nullptr, reinterpret_cast<LPBYTE>(szBuffer), &cbData );
                 RegCloseKey( hKey );
                 sValue = OUString::createFromAscii(szBuffer);
             }
@@ -141,21 +141,21 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
     {
         //set value into windows register
 #ifdef _WIN32
-        HKEY hBaseKey = NULL;
+        HKEY hBaseKey = nullptr;
         OString sSubKey;
         lcl_getRegKeyInfo( maGroupName, hBaseKey, sSubKey );
-        if( hBaseKey != NULL )
+        if( hBaseKey != nullptr )
         {
-            HKEY hKey = NULL;
+            HKEY hKey = nullptr;
             LONG lResult;
             LPCTSTR lpSubKey = TEXT( sSubKey.getStr());
-            lResult = RegCreateKeyEx( hBaseKey, lpSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL );
+            lResult = RegCreateKeyEx( hBaseKey, lpSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, nullptr, &hKey, nullptr );
             if( ERROR_SUCCESS == lResult )
             {
                 OString aUTF8Value = OUStringToOString( aValue, RTL_TEXTENCODING_UTF8 );
                 DWORD cbData = sizeof(TCHAR) * (_tcslen(aUTF8Value.getStr()) + 1);
                 LPCTSTR lpValueName = TEXT(maKey.getStr());
-                lResult = RegSetValueEx( hKey, lpValueName, 0 /* Reserved */, REG_SZ, (LPBYTE)aUTF8Value.getStr(), cbData );
+                lResult = RegSetValueEx( hKey, lpValueName, 0 /* Reserved */, REG_SZ, reinterpret_cast<BYTE const *>(aUTF8Value.getStr()), cbData );
                 RegCloseKey( hKey );
             }
         }

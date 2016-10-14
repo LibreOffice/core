@@ -53,6 +53,8 @@
 
 #include <string>
 
+#if !defined(_WIN32)
+
 class Test : public SwModelTestBase
 {
 public:
@@ -93,8 +95,6 @@ protected:
         return std::find(vWhitelist.begin(), vWhitelist.end(), filename) != vWhitelist.end();
     }
 };
-
-#if !defined(_WIN32)
 
 DECLARE_OOXMLEXPORT_TEST(testPageGraphicBackground, "page-graphic-background.odt")
 {
