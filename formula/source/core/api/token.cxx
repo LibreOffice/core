@@ -1231,6 +1231,7 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                         }
                         break;
 
+                    case ocLogInv:
                     case ocLogNormDist:
                         if ( mnCurArg == 0 )
                         {
