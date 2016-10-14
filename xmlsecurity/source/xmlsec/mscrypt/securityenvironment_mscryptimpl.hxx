@@ -73,7 +73,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         HCERTSTORE                          m_hCaSystemStore;
 
         //Enable default system cryptography setting
-        sal_Bool                            m_bEnableDefault ;
+        bool                                m_bEnableDefault ;
 
         //External keys
         std::list< HCRYPTKEY >              m_tSymKeyList ;
@@ -85,16 +85,16 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
 
     public:
         explicit SecurityEnvironment_MSCryptImpl( const css::uno::Reference< css::lang::XMultiServiceFactory >& aFactory ) ;
-        virtual ~SecurityEnvironment_MSCryptImpl() ;
+        virtual ~SecurityEnvironment_MSCryptImpl() override;
 
         //Methods from XSecurityEnvironment
         virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates()
-            throw(  css::uno::SecurityException , css::uno::RuntimeException ) ;
+            throw(  css::uno::SecurityException , css::uno::RuntimeException ) override;
 
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate(
             const OUString& issuerName,
             const css::uno::Sequence< sal_Int8 >& serialNumber )
-            throw( css::uno::SecurityException , css::uno::RuntimeException ) ;
+            throw( css::uno::SecurityException , css::uno::RuntimeException ) override;
 
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate(
             const OUString& issuerName,
@@ -103,38 +103,38 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
 
         virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath(
             const css::uno::Reference< css::security::XCertificate >& beginCert )
-            throw(  css::uno::SecurityException , css::uno::RuntimeException ) ;
+            throw(  css::uno::SecurityException , css::uno::RuntimeException ) override;
 
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromRaw(
             const css::uno::Sequence< sal_Int8 >& rawCertificate )
-            throw( css::uno::SecurityException , css::uno::RuntimeException ) ;
+            throw( css::uno::SecurityException , css::uno::RuntimeException ) override;
 
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii(
             const OUString& asciiCertificate )
-            throw( css::uno::SecurityException , css::uno::RuntimeException ) ;
+            throw( css::uno::SecurityException , css::uno::RuntimeException ) override;
 
         virtual ::sal_Int32 SAL_CALL verifyCertificate(
             const css::uno::Reference< css::security::XCertificate >& xCert,
             const css::uno::Sequence< css::uno::Reference<
             css::security::XCertificate > >& intermediateCertificates)
-            throw (css::uno::SecurityException, css::uno::RuntimeException) ;
+            throw (css::uno::SecurityException, css::uno::RuntimeException) override;
 
         virtual ::sal_Int32 SAL_CALL getCertificateCharacters(
             const css::uno::Reference< css::security::XCertificate >& xCert )
-            throw (css::uno::SecurityException, css::uno::RuntimeException) ;
+            throw (css::uno::SecurityException, css::uno::RuntimeException) override;
 
         virtual OUString SAL_CALL getSecurityEnvironmentInformation(  )
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException) override;
 
 
         //Methods from XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException ) ;
+        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException ) override;
 
         virtual sal_Bool SAL_CALL supportsService(
             const OUString& ServiceName
-        ) throw( css::uno::RuntimeException ) ;
+        ) throw( css::uno::RuntimeException ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException ) ;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException ) override;
 
         //Helper for XServiceInfo
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
@@ -151,7 +151,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
 
         //Methods from XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException) override;
 
         static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
         static SecurityEnvironment_MSCryptImpl* getImplementation( const css::uno::Reference< css::uno::XInterface >& rObj ) ;
@@ -176,8 +176,8 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
 
         virtual HCRYPTKEY getPriKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        virtual void enableDefaultCrypt( sal_Bool enable ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
-        virtual sal_Bool defaultEnabled() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        virtual void enableDefaultCrypt( bool enable ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        virtual bool defaultEnabled() throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
         //Native methods
         virtual xmlSecKeysMngrPtr createKeysManager() throw( css::uno::Exception , css::uno::RuntimeException ) ;

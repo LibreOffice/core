@@ -35,7 +35,7 @@ using ::com::sun::star::security::XCertificateExtension ;
 
 
 SanExtensionImpl::SanExtensionImpl() :
-    m_critical( sal_False )
+    m_critical( false )
 {
 }
 
@@ -63,7 +63,7 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
     {
         CERT_ALT_NAME_INFO *subjectName;
         DWORD size;
-        CryptDecodeObjectEx(X509_ASN_ENCODING, X509_ALTERNATE_NAME, (unsigned char*) m_xExtnValue.getArray(), m_xExtnValue.getLength(), CRYPT_DECODE_ALLOC_FLAG | CRYPT_DECODE_NOCOPY_FLAG, NULL,&subjectName, &size);
+        CryptDecodeObjectEx(X509_ASN_ENCODING, X509_ALTERNATE_NAME, reinterpret_cast<unsigned char*>(m_xExtnValue.getArray()), m_xExtnValue.getLength(), CRYPT_DECODE_ALLOC_FLAG | CRYPT_DECODE_NOCOPY_FLAG, nullptr,&subjectName, &size);
 
         CertAltNameEntry* arrCertAltNameEntry = new CertAltNameEntry[subjectName->cAltEntry];
 
@@ -90,11 +90,11 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
                 }
             case CERT_ALT_NAME_RFC822_NAME :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_RFC822_NAME;
-                arrCertAltNameEntry[i].Value <<= OUString((const sal_Unicode*)pEntry->pwszRfc822Name);
+                arrCertAltNameEntry[i].Value <<= OUString(pEntry->pwszRfc822Name);
                 break;
             case CERT_ALT_NAME_DNS_NAME :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_DNS_NAME;
-                arrCertAltNameEntry[i].Value <<= OUString((const sal_Unicode*)pEntry->pwszDNSName);
+                arrCertAltNameEntry[i].Value <<= OUString(pEntry->pwszDNSName);
                 break;
             case CERT_ALT_NAME_DIRECTORY_NAME :
                 {
@@ -103,7 +103,7 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
                 }
             case CERT_ALT_NAME_URL :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_URL;
-                arrCertAltNameEntry[i].Value <<= OUString((const sal_Unicode*)pEntry->pwszURL);
+                arrCertAltNameEntry[i].Value <<= OUString(pEntry->pwszURL);
                 break;
             case CERT_ALT_NAME_IP_ADDRESS :
                 {

@@ -52,32 +52,32 @@ private:
 
 public:
     explicit SEInitializer_MSCryptImpl(const css::uno::Reference< css::uno::XComponentContext > &rxContext);
-    virtual ~SEInitializer_MSCryptImpl();
+    virtual ~SEInitializer_MSCryptImpl() override;
 
     /* XSEInitializer */
     virtual css::uno::Reference< css::xml::crypto::XXMLSecurityContext >
         SAL_CALL createSecurityContext( const OUString& certDB )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     virtual void SAL_CALL freeSecurityContext( const css::uno::Reference<
         css::xml::crypto::XXMLSecurityContext >& securityContext )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) override;
 };
 
 OUString SEInitializer_MSCryptImpl_getImplementationName()
     throw ( css::uno::RuntimeException );
 
-sal_Bool SAL_CALL SEInitializer_MSCryptImpl_supportsService( const OUString& ServiceName )
+bool SAL_CALL SEInitializer_MSCryptImpl_supportsService( const OUString& ServiceName )
     throw ( css::uno::RuntimeException );
 
 css::uno::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames(  )

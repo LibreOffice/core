@@ -64,7 +64,7 @@ Sequence< sal_Int8 > numericStringToBigInteger ( const OUString& numeral )
         }
 
         Sequence< sal_Int8 > integer( length ) ;
-        for( unsigned int i = 0 ; i < length ; i ++ )
+        for( xmlSecSize i = 0 ; i < length ; i ++ )
         {
             integer[i] = *( bnInteger + i ) ;
         }
