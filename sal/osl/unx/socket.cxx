@@ -945,7 +945,9 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
         char const * addr = reinterpret_cast<char const *>(&sin->sin_addr);
             // at least some Androids apparently have a gethostbyaddr with char*
             // instead of void* argument
-        he= gethostbyaddr(addr,
+            //gethostbyaddr is no longer thread safe on Unix,
+            //replace with gethostbyaddr_r, which is.
+        he= gethostbyaddr_r(addr,
                           sizeof (sin->sin_addr),
                           sin->sin_family);
         return hostentToHostAddr (he);
