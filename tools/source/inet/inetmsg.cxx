@@ -32,7 +32,7 @@
 void INetMIMEMessage::SetHeaderField_Impl (
     const OString &rName,
     const OUString &rValue,
-    sal_uIntPtr &rnIndex)
+    size_t &rnIndex)
 {
     INetMIMEOutputSink aSink;
     INetMIME::writeHeaderFieldBody (
