@@ -30,7 +30,7 @@ use File::Basename;
 use File::Copy qw(copy);
 use File::Path qw(make_path);
 require File::Temp;
-use File::Temp ();
+use File::Temp qw(tempdir);
 
 #### globals ####
 
@@ -355,7 +355,7 @@ sub optimize_zip_layout($)
 sub copy_images($)
 {
     my ($zip_hash_ref) = @_;
-    my $dir = File::Temp->newdir();
+    my $dir = tempdir();
     foreach (keys %$zip_hash_ref) {
         my $path = $zip_hash_ref->{$_} . "/$_";
         my $outpath = $dir . "/$_";
