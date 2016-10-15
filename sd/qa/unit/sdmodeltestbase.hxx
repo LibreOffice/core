@@ -18,7 +18,7 @@
 #include <unotest/macros_test.hxx>
 
 #include "drawdoc.hxx"
-#include "../source/ui/inc/DrawDocShell.hxx"
+#include "DrawDocShell.hxx"
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/color.hxx>

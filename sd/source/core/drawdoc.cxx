@@ -92,7 +92,7 @@
 #include "sdresid.hxx"
 #include "cusshow.hxx"
 #include "customshowlist.hxx"
-#include "../ui/inc/DrawDocShell.hxx"
+#include "DrawDocShell.hxx"
 #include "../ui/inc/GraphicDocShell.hxx"
 #include "../ui/inc/sdxfer.hxx"
 #include "../ui/inc/ViewShell.hxx"

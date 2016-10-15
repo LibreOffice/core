@@ -30,7 +30,7 @@
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
 
-#include "../../ui/inc/DrawDocShell.hxx"
+#include "DrawDocShell.hxx"
 
 #include "sdxmlwrp.hxx"
 #include "strmname.h"

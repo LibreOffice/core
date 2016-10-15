@@ -56,7 +56,7 @@
 #include "../ui/inc/unmovss.hxx"
 #include "../ui/inc/unchss.hxx"
 #include "../ui/inc/unprlout.hxx"
-#include "../ui/inc/DrawDocShell.hxx"
+#include "DrawDocShell.hxx"
 #include "../ui/inc/GraphicDocShell.hxx"
 #include "../ui/inc/ViewShell.hxx"
 #include "../ui/inc/View.hxx"

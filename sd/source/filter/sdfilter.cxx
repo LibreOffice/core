@@ -27,7 +27,7 @@
 #include <sfx2/progress.hxx>
 #include <svl/itemset.hxx>
 
-#include "../ui/inc/DrawDocShell.hxx"
+#include "DrawDocShell.hxx"
 #include "../ui/inc/strings.hrc"
 
 #include "sdresid.hxx"
