@@ -203,17 +203,6 @@ friend class SfxStyleControllerItem_Impl;
     SVX_DLLPRIVATE SfxStyleFamily GetActFamily();
 };
 
-class SVX_DLLPUBLIC SvxFontNameToolBoxControl : public SfxToolBoxControl
-{
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-    SvxFontNameToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
-
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
-    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
-};
-
 class BorderColorStatus
 {
     Color maColor;

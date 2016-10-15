@@ -46,6 +46,7 @@
 #include <svl/isethint.hxx>
 #include <sfx2/querystatus.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -116,7 +117,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxStyleToolBoxControl, SfxTemplateItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxFontNameToolBoxControl, SvxFontItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxCurrencyToolBoxControl, SfxBoolItem );
 
@@ -216,7 +216,7 @@ public:
     virtual void dispose() override;
 
     void            FillList();
-    void            Update( const SvxFontItem* pFontItem );
+    void            Update( const css::awt::FontDescriptor* pFontDesc );
     sal_uInt16      GetListCount() { return nFtCount; }
     void            Clear() { FontNameBox::Clear(); nFtCount = 0; }
     void            Fill( const FontList* pList )
@@ -1021,15 +1021,15 @@ IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent&, event,
     }
 }
 
-void SvxFontNameBox_Impl::Update( const SvxFontItem* pFontItem )
+void SvxFontNameBox_Impl::Update( const css::awt::FontDescriptor* pFontDesc )
 {
-    if ( pFontItem )
+    if ( pFontDesc )
     {
-        aCurFont.SetFamilyName  ( pFontItem->GetFamilyName() );
-        aCurFont.SetFamily      ( pFontItem->GetFamily() );
-        aCurFont.SetStyleName   ( pFontItem->GetStyleName() );
-        aCurFont.SetPitch       ( pFontItem->GetPitch() );
-        aCurFont.SetCharSet     ( pFontItem->GetCharSet() );
+        aCurFont.SetFamilyName  ( pFontDesc->Name );
+        aCurFont.SetFamily      ( FontFamily( pFontDesc->Family ) );
+        aCurFont.SetStyleName   ( pFontDesc->StyleName );
+        aCurFont.SetPitch       ( FontPitch( pFontDesc->Pitch ) );
+        aCurFont.SetCharSet     ( rtl_TextEncoding( pFontDesc->CharSet ) );
     }
     OUString aCurName = aCurFont.GetFamilyName();
     if ( GetText() != aCurName )
@@ -2554,24 +2554,42 @@ VclPtr<vcl::Window> SvxStyleToolBoxControl::CreateItemWindow( vcl::Window *pPare
     return pBox.get();
 }
 
-SvxFontNameToolBoxControl::SvxFontNameToolBoxControl(
-                                            sal_uInt16          nSlotId,
-                                            sal_uInt16          nId,
-                                            ToolBox&        rTbx )
-    :   SfxToolBoxControl( nSlotId, nId, rTbx )
+class SvxFontNameToolBoxControl : public cppu::ImplInheritanceHelper< svt::ToolboxController,
+                                                                      css::lang::XServiceInfo >
+{
+public:
+    SvxFontNameToolBoxControl();
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+
+    // XToolbarController
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent ) throw ( css::uno::RuntimeException, std::exception ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException, std::exception ) override;
+};
+
+SvxFontNameToolBoxControl::SvxFontNameToolBoxControl()
 {
 }
 
-void SvxFontNameToolBoxControl::StateChanged(
-    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
+void SvxFontNameToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+    throw ( css::uno::RuntimeException, std::exception )
 {
-    sal_uInt16               nId    = GetId();
-    ToolBox&             rTbx   = GetToolBox();
-    SvxFontNameBox_Impl* pBox   = static_cast<SvxFontNameBox_Impl*>(rTbx.GetItemWindow( nId ));
+    SolarMutexGuard aGuard;
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( !getToolboxId( nId, &pToolBox ) )
+        return;
+
+    SvxFontNameBox_Impl* pBox = static_cast<SvxFontNameBox_Impl*>(pToolBox->GetItemWindow( nId ));
 
     DBG_ASSERT( pBox, "Control not found!" );
 
-    if ( SfxItemState::DISABLED == eState )
+    if ( !rEvent.IsEnabled )
     {
         pBox->Disable();
         pBox->Update( nullptr );
@@ -2580,28 +2598,51 @@ void SvxFontNameToolBoxControl::StateChanged(
     {
         pBox->Enable();
 
-        if ( SfxItemState::DEFAULT == eState )
-        {
-            const SvxFontItem* pFontItem = dynamic_cast< const SvxFontItem* >( pState );
-
-            DBG_ASSERT( pFontItem, "svx::SvxFontNameToolBoxControl::StateChanged(), wrong item type!" );
-            if( pFontItem )
-                pBox->Update( pFontItem );
-        }
+        css::awt::FontDescriptor aFontDesc;
+        if ( rEvent.State >>= aFontDesc )
+            pBox->Update( &aFontDesc );
         else
             pBox->SetText( "" );
         pBox->SaveValue();
     }
 
-    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
+    pToolBox->EnableItem( nId, rEvent.IsEnabled );
 }
 
-VclPtr<vcl::Window> SvxFontNameToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+css::uno::Reference< css::awt::XWindow > SvxFontNameToolBoxControl::createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent )
+    throw ( css::uno::RuntimeException, std::exception )
 {
-    VclPtrInstance<SvxFontNameBox_Impl> pBox( pParent,
+    SolarMutexGuard aGuard;
+    VclPtrInstance<SvxFontNameBox_Impl> pBox( VCLUnoHelper::GetWindow( rParent ),
                                               Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
                                               m_xFrame,0);
-    return pBox.get();
+    return VCLUnoHelper::GetInterface( pBox );
+}
+
+OUString SvxFontNameToolBoxControl::getImplementationName()
+    throw ( css::uno::RuntimeException, std::exception )
+{
+    return OUString( "com.sun.star.comp.svx.FontNameToolBoxControl" );
+}
+
+sal_Bool SvxFontNameToolBoxControl::supportsService( const OUString& rServiceName )
+    throw ( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, rServiceName );
+}
+
+css::uno::Sequence< OUString > SvxFontNameToolBoxControl::getSupportedServiceNames()
+    throw ( css::uno::RuntimeException, std::exception )
+{
+    return { "com.sun.star.frame.ToolbarController" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation(
+    css::uno::XComponentContext*,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire( new SvxFontNameToolBoxControl() );
 }
 
 SvxColorToolBoxControl::SvxColorToolBoxControl(
