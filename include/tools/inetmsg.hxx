@@ -83,7 +83,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessage
     OString                 m_aBoundary;
 
     OUString GetHeaderValue_Impl (
-        sal_uIntPtr nIndex) const
+        size_t nIndex) const
     {
         if ( nIndex < m_aHeaderList.size() ) {
             return INetMIME::decodeHeaderFieldBody(m_aHeaderList[ nIndex ]->GetValue());
@@ -93,7 +93,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessage
     }
 
     void SetHeaderField_Impl (
-        const INetMessageHeader &rHeader, sal_uIntPtr &rnIndex)
+        const INetMessageHeader &rHeader, size_t &rnIndex)
     {
         INetMessageHeader *p = new INetMessageHeader (rHeader);
         if (m_aHeaderList.size() <= rnIndex)
@@ -111,7 +111,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessage
     void SetHeaderField_Impl (
         const OString &rName,
         const OUString &rValue,
-        sal_uIntPtr &rnIndex);
+        size_t &rnIndex);
 
     bool IsMessage() const
     {
@@ -126,9 +126,9 @@ public:
     INetMIMEMessage();
     ~INetMIMEMessage();
 
-    sal_uIntPtr GetHeaderCount() const { return m_aHeaderList.size(); }
+    size_t GetHeaderCount() const { return m_aHeaderList.size(); }
 
-    INetMessageHeader GetHeaderField (sal_uIntPtr nIndex) const
+    INetMessageHeader GetHeaderField (size_t nIndex) const
     {
         if ( nIndex < m_aHeaderList.size() ) {
             return INetMessageHeader( *m_aHeaderList[ nIndex ] );
@@ -168,7 +168,7 @@ public:
         return aType.matchIgnoreAsciiCase("multipart/");
     }
 
-    INetMIMEMessage* GetChild (sal_uIntPtr nIndex) const
+    INetMIMEMessage* GetChild (size_t nIndex) const
     {
         return ( nIndex < aChildren.size() ) ? aChildren[ nIndex ] : nullptr;
     }
