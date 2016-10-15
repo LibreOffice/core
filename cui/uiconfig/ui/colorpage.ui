@@ -49,12 +49,12 @@
                   <object class="GtkBox" id="box7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
                     <property name="spacing">3</property>
                     <child>
                       <object class="GtkLabel" id="label21">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0</property>
                         <property name="label" translatable="yes">Palette :</property>
@@ -94,6 +94,7 @@
                       <object class="GtkLabel" id="label20">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_top">6</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Recent Colors</property>
                       </object>
@@ -188,6 +189,21 @@
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
                         <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label22">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="margin_top">6</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Custom Colors</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">2</property>
                         <property name="height">1</property>
                       </packing>
                     </child>
