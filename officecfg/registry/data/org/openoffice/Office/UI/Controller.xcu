@@ -1137,15 +1137,15 @@
           <value>com.sun.star.report.ReportToolboxController</value>
         </prop>
       </node>
-      <node oor:name="c14" oor:op="replace" install:module="reportbuilder">
+      <node oor:name="FontNameToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:CharFontName</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.report.ReportToolboxController</value>
+          <value>com.sun.star.comp.svx.FontNameToolBoxControl</value>
         </prop>
       </node>
       <node oor:name="OpenToolbarController" oor:op="replace">

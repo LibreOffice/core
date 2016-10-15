@@ -34,9 +34,6 @@
 #include <svtools/menuoptions.hxx>
 #include <osl/mutex.hxx>
 #include <svx/svxids.hrc>
-#define ITEMID_FONT         3
-#include <editeng/fontitem.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <svx/tbcontrl.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
@@ -87,7 +84,6 @@ Reference< XInterface > OToolboxController::create(Reference< XComponentContext 
 OToolboxController::OToolboxController(const Reference< XComponentContext >& _rxORB)
     : m_pToolbarController(nullptr)
     ,m_nToolBoxId(1)
-    ,m_nSlotId(0)
 {
     osl_atomic_increment(&m_refCount);
     m_xContext = _rxORB;
@@ -137,21 +133,16 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
                 break;
             }
         }
-        if ( m_aCommandURL == ".uno:CharFontName" )
-        {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:CharFontName"),true));
-            m_pToolbarController = new SvxFontNameToolBoxControl/*SvxStyleToolBoxControl*/(m_nSlotId = SID_ATTR_CHAR_FONT,m_nToolBoxId,*pToolBox);
-        }
-        else if ( m_aCommandURL == ".uno:FontColor" || m_aCommandURL == ".uno:Color" )
+        if ( m_aCommandURL == ".uno:FontColor" || m_aCommandURL == ".uno:Color" )
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:FontColor"),true));
             m_aStates.insert(TCommandState::value_type(OUString(".uno:Color"),true));
-            m_pToolbarController = new SvxColorToolBoxControl(m_nSlotId = SID_ATTR_CHAR_COLOR2,m_nToolBoxId,*pToolBox);
+            m_pToolbarController = new SvxColorToolBoxControl(SID_ATTR_CHAR_COLOR2,m_nToolBoxId,*pToolBox);
         }
         else
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:BackgroundColor"),true));
-            m_pToolbarController = new SvxColorToolBoxControl(m_nSlotId = SID_BACKGROUND_COLOR,m_nToolBoxId,*pToolBox);
+            m_pToolbarController = new SvxColorToolBoxControl(SID_BACKGROUND_COLOR,m_nToolBoxId,*pToolBox);
         }
 
         TCommandState::const_iterator aIter = m_aStates.begin();
@@ -169,43 +160,8 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     TCommandState::iterator aFind = m_aStates.find( Event.FeatureURL.Complete );
-    if ( aFind != m_aStates.end() )
-    {
-        aFind->second = Event.IsEnabled;
-        if ( m_pToolbarController.is() )
-        {
-            // All other status events will be processed here
-            ToolBox& rTb = m_pToolbarController->GetToolBox();
-            for ( sal_uInt16 i = 0; i < rTb.GetItemCount(); i++ )
-            {
-                sal_uInt16 nId = rTb.GetItemId( i );
-                if ( nId == 0 )
-                    continue;
-
-                OUString aCmd = rTb.GetItemCommand( nId );
-                if ( aCmd == Event.FeatureURL.Complete )
-                {
-                    // Enable/disable item
-                    rTb.EnableItem( nId, Event.IsEnabled );
-                }
-            }
-
-            switch(m_nSlotId)
-            {
-                case SID_ATTR_CHAR_COLOR2:
-                case SID_BACKGROUND_COLOR:
-                    m_pToolbarController->statusChanged( Event );
-                    break;
-                case SID_ATTR_CHAR_FONT:
-                    {
-                        SvxFontItem aItem(ITEMID_FONT);
-                        aItem.PutValue(Event.State, 0);
-                        static_cast<SvxFontNameToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SfxItemState::DEFAULT : SfxItemState::DISABLED,&aItem);
-                    }
-                    break;
-            }
-        }
-    }
+    if ( aFind != m_aStates.end() && m_pToolbarController.is() )
+        m_pToolbarController->statusChanged( Event );
 }
 
 Reference< awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException, std::exception)
@@ -229,7 +185,7 @@ void SAL_CALL OToolboxController::execute( sal_Int16 KeyModifier ) throw (uno::R
 
 sal_Bool SAL_CALL OToolboxController::opensSubToolbar() throw (uno::RuntimeException, std::exception)
 {
-    return ( m_nSlotId != SID_ATTR_CHAR_FONT );
+    return true;
 }
 
 OUString SAL_CALL OToolboxController::getSubToolbarName() throw (uno::RuntimeException, std::exception)
@@ -248,25 +204,6 @@ void SAL_CALL OToolboxController::updateImage(  ) throw (uno::RuntimeException, 
     if ( m_pToolbarController.is() )
         m_pToolbarController->updateImage();
 }
-
-uno::Reference< awt::XWindow > SAL_CALL OToolboxController::createItemWindow( const uno::Reference< awt::XWindow >& _xParent)
-throw (uno::RuntimeException, std::exception)
-{
-    uno::Reference< awt::XWindow > xWindow;
-    if ( m_pToolbarController.is() )
-    {
-        switch(m_nSlotId)
-        {
-            case SID_ATTR_CHAR_FONT:
-                xWindow = VCLUnoHelper::GetInterface(static_cast<SvxFontNameToolBoxControl*>(m_pToolbarController.get())->CreateItemWindow(VCLUnoHelper::GetWindow(_xParent)));
-                break;
-            default:
-                ;
-        }
-    }
-    return xWindow;
-}
-
 
 } // rptui
 

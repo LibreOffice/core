@@ -314,7 +314,6 @@ void SwDLL::RegisterControls()
     SvxColorToolBoxControl::RegisterControl(SID_ATTR_FILL_COLOR, pMod);
     SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_BACK_COLOR, pMod);
 
-    SvxFontNameToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONT, pMod );
     SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR, pMod );
     SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2, pMod );
     SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND, pMod );
