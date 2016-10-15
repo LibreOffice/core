@@ -35,6 +35,142 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/sc_grow.png</property>
   </object>
+  <object class="GtkMenu" id="imagestylemenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="imagestyledefault">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Default</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylegray">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Grayscale</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylebw">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Black and White</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylewater">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Watermark</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="imagemenusep1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylecorrectionbc20m">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">-20% Brightness &amp; Contrast</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylecorrectionb20m">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">-20% Brightness</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylecorrectionc20m">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">-20% Contrast</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylecorrectiondefault">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">0% Brightness &amp; Contrast</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylecorrectionb20p">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">+20% Brightness</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylecorrectionc20p">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">+20% Contrast</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylecorrectionbc20p">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">+20% Brightness &amp; Contrast</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="imagemenusep2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylecolorred">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Colorize Red</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylecolorblue">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Colorize Blue</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylecolorgreen">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Colorize Green</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="imagestylecolororange">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Colorize Orange</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkImage" id="italicsi">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -109,6 +245,11 @@
       </object>
     </child>
   </object>
+  <object class="GtkImage" id="locki">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_protect.png</property>
+  </object>
   <object class="GtkImage" id="newi">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -154,6 +295,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_redo.png</property>
     <property name="pixel_size">24</property>
+  </object>
+  <object class="GtkImage" id="reseti">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_advancedmode.png</property>
   </object>
   <object class="GtkImage" id="righti">
     <property name="visible">True</property>
@@ -235,6 +381,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_undo.png</property>
     <property name="pixel_size">24</property>
+  </object>
+  <object class="GtkImage" id="wrapi">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_wrapon.png</property>
   </object>
   <object class="GtkGrid" id="NotebookBar">
     <property name="visible">True</property>
@@ -1467,7 +1618,7 @@
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkButton" id="imagestyleb">
+                      <object class="GtkButton" id="imagestyleb:imagestylemenu">
                         <property name="label" translatable="yes">Style</property>
                         <property name="height_request">78</property>
                         <property name="visible">True</property>
@@ -1498,6 +1649,7 @@
                             <property name="vexpand">True</property>
                             <property name="action_name">.uno:Crop</property>
                             <property name="relief">none</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1514,7 +1666,9 @@
                             <property name="receives_default">True</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
+                            <property name="image">reseti</property>
                             <property name="relief">none</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1542,6 +1696,7 @@
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:InsertCaptionDialog</property>
                             <property name="relief">none</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1556,7 +1711,9 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="image">wrapi</property>
                             <property name="relief">none</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1571,7 +1728,9 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="image">locki</property>
                             <property name="relief">none</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
