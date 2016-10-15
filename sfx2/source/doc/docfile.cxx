@@ -394,8 +394,11 @@ util::DateTime SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
     {
         try
         {
-            uno::Reference< css::ucb::XCommandEnvironment > xDummyEnv;
-            ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
+            // add a default css::ucb::XCommandEnvironment
+            // in order to have the WebDAV UCP provider manage http/https authentication correctly
+            ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ),
+                                           utl::UCBContentHelper::getDefaultCommandEnvironment(),
+                                           comphelper::getProcessComponentContext() );
 
             aContent.getPropertyValue("DateModified") >>= pImpl->m_aDateTime;
             pImpl->m_bGotDateTime = true;
