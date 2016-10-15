@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
@@ -46,6 +47,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <comphelper/simplefileaccessinteraction.hxx>
 #include <osl/file.hxx>
 #include <rtl/string.h>
 #include <rtl/ustring.h>
@@ -118,6 +120,22 @@ DateTime convert(css::util::DateTime const & dt) {
     return DateTime(dt);
 }
 
+}
+
+css::uno::Reference< css::ucb::XCommandEnvironment > utl::UCBContentHelper::getDefaultCommandEnvironment()
+{
+    css::uno::Reference< css::task::XInteractionHandler > xIH(
+        css::task::InteractionHandler::createWithParent(
+            comphelper::getProcessComponentContext(), nullptr ) );
+
+    css::uno::Reference< css::ucb::XProgressHandler > xProgress;
+    ucbhelper::CommandEnvironment* pCommandEnv =
+        new ::ucbhelper::CommandEnvironment(
+            new comphelper::SimpleFileAccessInteraction( xIH ), xProgress );
+
+    css::uno::Reference < css::ucb::XCommandEnvironment > xEnv(
+        static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY );
+    return xEnv;
 }
 
 bool utl::UCBContentHelper::IsDocument(OUString const & url) {

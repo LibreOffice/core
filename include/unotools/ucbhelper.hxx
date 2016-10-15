@@ -80,6 +80,36 @@ UNOTOOLS_DLLPUBLIC bool IsSubPath(
 UNOTOOLS_DLLPUBLIC bool EqualURLs(
     OUString const & url1, OUString const & url2);
 
+/**
+* Returns a default XCommandEnvironment to be used
+* when creating a ucbhelper::Content.
+*
+* Due to the way the WebDAV UCP provider works, an interaction handler
+* is always needed:
+* 1) to activate the credential dialog or to provide the cached credentials
+* whenever the server requests them;
+*
+* 2) in case of ssl connection (https) to activate the dialog to show the
+* certificate if said certificate looks wrong or dubious.
+*
+* This helper provides the XCommandEnvironment with an interaction
+* handler that intercepts:
+* 1) css::ucb::AuthenticationRequest()
+* 2) css::ucb::CertificateValidationRequest()
+* 3) css::ucb::InteractiveIOException()
+* 4) css::ucb::UnsupportedDataSinkException()
+*
+* Exception 1) and 2) will be passed to the UI handler, e.g. shown to
+* the user for interaction.
+*
+* Exception 3) and 4) will be have a default 'Abort' result.
+* See comphelper::StillReadWriteInteraction for details.
+* comphelper::StillReadWriteInteraction was introduced in
+* commit bbe51f039dffca2506ea542feb78571b6358b981.
+*/
+UNOTOOLS_DLLPUBLIC
+    css::uno::Reference< css::ucb::XCommandEnvironment > getDefaultCommandEnvironment();
+
 } }
 
 #endif
