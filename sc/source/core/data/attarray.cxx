@@ -1815,7 +1815,7 @@ bool ScAttrArray::GetFirstVisibleAttr( SCROW& rFirstRow ) const
     return bFound;
 }
 
-// size (rows) of a range of attributes after cell content where the search is stopped
+// Number of rows after the search will be stopped
 // (more than a default page size, 2*42 because it's as good as any number)
 
 const SCROW SC_VISATTR_STOP = 84;
@@ -1860,13 +1860,16 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const
         if ( nAttrStartRow <= nLastData )
             nAttrStartRow = nLastData + 1;
         SCROW nAttrSize = pData[nEndPos].nRow + 1 - nAttrStartRow;
-        if ( nAttrSize >= SC_VISATTR_STOP )
-            break;  // while, ignore this range and below
-        else if ( pData[nEndPos].pPattern->IsVisible() )
+        if ( pData[nEndPos].pPattern->IsVisible() )
         {
             rLastRow = pData[nEndPos].nRow;
             bFound = true;
         }
+        // We are not ignoring range for current column,
+        // if it is larger than SC_VISATTR_STOP, because it is still in default page size range.
+        // We are not checking next columns, due to performance reasons.
+        if ( nAttrSize >= SC_VISATTR_STOP )
+            break;
         nPos = nEndPos + 1;
     }
 
