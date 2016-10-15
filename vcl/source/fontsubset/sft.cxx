@@ -1738,7 +1738,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     } else if (version == T_otto) {                         /* PS-OpenType font */
         tdoffset = 0;
     } else if (version == T_ttcf) {                         /* TrueType collection */
-        if (GetUInt32(t->ptr, 4, 1) != 0x00010000) {
+        if (GetUInt32(t->ptr, 4, 1) == 0x00000000) {
             CloseTTFont(t);
             return SF_TTFORMAT;
         }
