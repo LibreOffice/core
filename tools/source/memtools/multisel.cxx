@@ -247,10 +247,10 @@ void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
     Range* pRange;
     long nOld;
 
-    sal_uIntPtr nTmpMin = rIndexRange.Min();
-    sal_uIntPtr nTmpMax = rIndexRange.Max();
-    sal_uIntPtr nCurMin = FirstSelected();
-    sal_uIntPtr nCurMax = LastSelected();
+    sal_Int32 nTmpMin = rIndexRange.Min();
+    sal_Int32 nTmpMax = rIndexRange.Max();
+    long nCurMin = FirstSelected();
+    long nCurMax = LastSelected();
     DBG_ASSERT(aTotRange.IsInside(nTmpMax), "selected index out of range" );
     DBG_ASSERT(aTotRange.IsInside(nTmpMin), "selected index out of range" );
 

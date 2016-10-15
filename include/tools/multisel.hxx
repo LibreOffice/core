@@ -37,7 +37,7 @@ private:
     Range           aTotRange;  // total range of indexes
     sal_uIntPtr     nCurSubSel; // index in aSels of current selected index
     long            nCurIndex;  // current selected entry
-    sal_uIntPtr     nSelCount;  // number of selected indexes
+    long            nSelCount;  // number of selected indexes
     bool            bInverseCur;// inverse cursor
     bool            bCurValid;  // are nCurIndex and nCurSubSel valid
     bool            bSelectNew; // auto-select newly inserted indexes
@@ -60,7 +60,7 @@ public:
     void            Select( const Range& rIndexRange, bool bSelect = true );
     bool            IsSelected( long nIndex ) const;
     bool            IsAllSelected() const
-                        { return nSelCount == sal_uIntPtr(aTotRange.Len()); }
+                        { return nSelCount == long(aTotRange.Len()); }
     long            GetSelectCount() const { return nSelCount; }
 
     void            SetTotalRange( const Range& rTotRange );
