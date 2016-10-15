@@ -341,9 +341,9 @@ sal_uInt16 SfxDocumentTemplates::GetRegionCount() const
     if ( !pImp->Construct() )
         return 0;
 
-    sal_uIntPtr nCount = pImp->GetRegionCount();
+    sal_uInt16 nCount = pImp->GetRegionCount();
 
-    return (sal_uInt16) nCount;
+    return nCount;
 }
 
 
@@ -368,12 +368,12 @@ sal_uInt16 SfxDocumentTemplates::GetCount
         return 0;
 
     RegionData_Impl *pData = pImp->GetRegion( nRegion );
-    sal_uIntPtr            nCount = 0;
+    sal_uInt16            nCount = 0;
 
     if ( pData )
         nCount = pData->GetCount();
 
-    return (sal_uInt16) nCount;
+    return nCount;
 }
 
 
@@ -1152,16 +1152,16 @@ bool SfxDocumentTemplates::GetLogicNames
     DocTempl_EntryData_Impl  *pEntry = nullptr;
     bool         bFound = false;
 
-    sal_uIntPtr nCount = GetRegionCount();
+    sal_uInt16 nCount = GetRegionCount();
 
-    for ( sal_uIntPtr i=0; !bFound && (i<nCount); i++ )
+    for ( sal_uInt16 i=0; !bFound && (i<nCount); i++ )
     {
         pData = pImp->GetRegion( i );
         if ( pData )
         {
-            sal_uIntPtr nChildCount = pData->GetCount();
+            sal_uInt16 nChildCount = pData->GetCount();
 
-            for ( sal_uIntPtr j=0; !bFound && (j<nChildCount); j++ )
+            for ( sal_uInt16 j=0; !bFound && (j<nChildCount); j++ )
             {
                 pEntry = pData->GetEntry( j );
                 if ( pEntry && pEntry->GetTargetURL() == aPath )
