@@ -24,12 +24,6 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/sc_insertobjectchart.png</property>
   </object>
-  <object class="GtkImage" id="copyi">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_copy.png</property>
-    <property name="pixel_size">24</property>
-  </object>
   <object class="GtkImage" id="growi">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -275,7 +269,7 @@
   <object class="GtkImage" id="pastei">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_paste.png</property>
+    <property name="pixbuf">cmd/32/paste.png</property>
     <property name="pixel_size">24</property>
   </object>
   <object class="GtkImage" id="pdfi">
@@ -372,6 +366,156 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Strong Emphasis</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkImage" id="tablecolumnsi">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_entirecolumn.png</property>
+  </object>
+  <object class="GtkMenu" id="tablemenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="tablestylenone">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">None</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="tablestyledefault">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Default</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="tablestyle1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Style 1</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="tablestyle2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Style 2</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="tablestyle3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Style 3</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="tablestyle4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Style 4</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkImage" id="tablerowsi">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_entirerow.png</property>
+  </object>
+  <object class="GtkImage" id="tablestylei">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_designerdialog.png</property>
+  </object>
+  <object class="GtkMenu" id="tcolumnmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+  </object>
+  <object class="GtkMenu" id="trowmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="rowmenuaddup">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertRowsBefore</property>
+        <property name="label" translatable="yes">Insert Rows Above</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="rowmenuadddown">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertRowsAfter</property>
+        <property name="label" translatable="yes">Insert Rows Below</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="rowmenusep1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="rowmenudel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:DeleteRows</property>
+        <property name="label" translatable="yes">Delete Rows</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="rowmenuselect">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:EntireRow</property>
+        <property name="label" translatable="yes">Select Rows</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="rowmenusep2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="rowmenuheight">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SetRowHeight</property>
+        <property name="label" translatable="yes">Row Height...</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="rowmenuoptimalrow">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SetOptimalRowHeight</property>
+        <property name="label" translatable="yes">Optimal Row Height</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="rowmenudistribute">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:DistributeRows</property>
+        <property name="label" translatable="yes">Distribute Rows Evenly</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -502,14 +646,14 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">3</property>
                     <child>
-                      <object class="GtkButton" id="printb">
+                      <object class="GtkButton" id="pdfb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
-                        <property name="action_name">.uno:Print</property>
-                        <property name="image">printi</property>
+                        <property name="action_name">.uno:ExportDirectToPDF</property>
+                        <property name="image">pdfi</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>
                         <property name="always_show_image">True</property>
@@ -521,14 +665,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="pdfb">
+                      <object class="GtkButton" id="printb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
-                        <property name="action_name">.uno:ExportDirectToPDF</property>
-                        <property name="image">pdfi</property>
+                        <property name="action_name">.uno:Print</property>
+                        <property name="image">printi</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>
                         <property name="always_show_image">True</property>
@@ -614,6 +758,7 @@
                 <property name="height_request">78</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="spacing">3</property>
                 <child>
                   <object class="GtkBox" id="box2">
                     <property name="visible">True</property>
@@ -621,35 +766,17 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">3</property>
                     <child>
-                      <object class="GtkButton" id="undob">
+                      <object class="GtkButton" id="pasteb">
+                        <property name="width_request">70</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="valign">center</property>
+                        <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="action_name">.uno:Undo</property>
-                        <property name="image">undoi</property>
+                        <property name="action_name">.uno:Paste</property>
+                        <property name="image">pastei</property>
                         <property name="relief">none</property>
-                        <property name="xalign">0</property>
-                        <property name="always_show_image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="copyb">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="action_name">.uno:Copy</property>
-                        <property name="image">copyi</property>
-                        <property name="relief">none</property>
-                        <property name="xalign">0</property>
+                        <property name="image_position">top</property>
                         <property name="always_show_image">True</property>
                       </object>
                       <packing>
@@ -691,14 +818,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="pasteb">
+                      <object class="GtkButton" id="undob">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
-                        <property name="action_name">.uno:Paste</property>
-                        <property name="image">pastei</property>
+                        <property name="action_name">.uno:Undo</property>
+                        <property name="image">undoi</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>
                         <property name="always_show_image">True</property>
@@ -783,10 +910,11 @@
               <object class="GtkBox" id="fomatgroupbuttons">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="spacing">3</property>
                 <child>
                   <object class="GtkButton" id="paragraphstyleb:stylemenu">
                     <property name="label" translatable="yes">Style</property>
-                    <property name="width_request">60</property>
+                    <property name="width_request">70</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -813,7 +941,7 @@
                       <object class="GtkBox" id="box14">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
+                        <property name="valign">center</property>
                         <child>
                           <object class="sfxlo-SidebarToolBox" id="font">
                             <property name="visible">True</property>
@@ -842,7 +970,6 @@
                         <child>
                           <object class="svtlo-FontNameBox" id="fontnamelist">
                             <property name="height_request">36</property>
-                            <property name="visible">False</property>
                             <property name="can_focus">False</property>
                           </object>
                           <packing>
@@ -862,14 +989,12 @@
                       <object class="GtkBox" id="box7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
+                        <property name="valign">center</property>
                         <property name="spacing">4</property>
                         <child>
                           <object class="svtlo-FontSizeBox" id="fontsizelist">
                             <property name="width_request">60</property>
                             <property name="height_request">30</property>
-                            <property name="visible">False</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="hexpand">True</property>
@@ -1350,13 +1475,226 @@
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
                     <child>
-                      <placeholder/>
+                      <object class="GtkButton" id="tablestyleb:tablemenu">
+                        <property name="label" translatable="yes">Style</property>
+                        <property name="width_request">70</property>
+                        <property name="height_request">78</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="image">tablestylei</property>
+                        <property name="relief">none</property>
+                        <property name="image_position">top</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkBox" id="tabelgrid2">
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkButton" id="tablerowsb:trowmenu">
+                            <property name="label" translatable="yes">Rows</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="image">tablerowsi</property>
+                            <property name="relief">none</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="tablecolumnsb:tcolumnmenu">
+                            <property name="label" translatable="yes">Columns</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="image">tablecolumnsi</property>
+                            <property name="relief">none</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkBox" id="tablegrid3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="tableborder1">
+                            <property name="height_request">26</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkMenuToolButton" id="borderstyleb">
+                                <property name="use_action_appearance">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:SetBorderStyle</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="pack_type">end</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="tableborder2">
+                            <property name="height_request">26</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkMenuToolButton" id="borderlineb">
+                                <property name="use_action_appearance">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:LineStyle</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="pack_type">end</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="tableborder3">
+                            <property name="height_request">26</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkMenuToolButton" id="bordercolorb">
+                                <property name="use_action_appearance">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:FrameLineColor</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="pack_type">end</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="tablegrid4">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">1</property>
+                        <child>
+                          <object class="GtkButton" id="topb">
+                            <property name="height_request">25</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:CellVertTop</property>
+                            <property name="relief">none</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="vcenterb">
+                            <property name="height_request">25</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:CellVertCenter</property>
+                            <property name="relief">none</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="bottomb">
+                            <property name="height_request">25</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:CellVertBottom</property>
+                            <property name="relief">none</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
