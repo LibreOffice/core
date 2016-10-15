@@ -40,7 +40,7 @@
 
 #include "../../ui/inc/strings.hrc"
 #include "../../ui/inc/DrawViewShell.hxx"
-#include "../../ui/inc/DrawDocShell.hxx"
+#include "DrawDocShell.hxx"
 #include "../../ui/inc/ClientView.hxx"
 #include "../../ui/inc/FrameView.hxx"
 

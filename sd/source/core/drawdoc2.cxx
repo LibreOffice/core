@@ -63,7 +63,7 @@
 #include "cusshow.hxx"
 #include "undo/undomanager.hxx"
 
-#include "../ui/inc/DrawDocShell.hxx"
+#include "DrawDocShell.hxx"
 #include "../ui/inc/FrameView.hxx"
 #include "../ui/inc/cfgids.hxx"
 #include "../ui/inc/strings.hrc"

@@ -29,7 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <editeng/outliner.hxx>
 
-#include "../ui/inc/DrawDocShell.hxx"
+#include "DrawDocShell.hxx"
 #include <editeng/eeitem.hxx>
 
 #include <vcl/settings.hxx>

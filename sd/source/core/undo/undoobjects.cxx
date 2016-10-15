@@ -24,7 +24,7 @@
 #include "undoanim.hxx"
 #include "../../ui/inc/ViewShell.hxx"
 #include "../../ui/inc/ViewShellBase.hxx"
-#include "../../ui/inc/DrawDocShell.hxx"
+#include "DrawDocShell.hxx"
 
 using namespace sd;
 

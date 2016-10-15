@@ -42,7 +42,7 @@
 #include "anminfo.hxx"
 
 #include "../ui/inc/strings.hrc"
-#include "../ui/inc/DrawDocShell.hxx"
+#include "DrawDocShell.hxx"
 
 #include <tools/tenccvt.hxx>
 #include <svl/itemset.hxx>
