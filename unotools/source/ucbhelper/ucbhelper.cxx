@@ -78,7 +78,7 @@ ucbhelper::Content content(OUString const & url) {
 ucbhelper::Content content(INetURLObject const & url) {
     return ucbhelper::Content(
         url.GetMainURL(INetURLObject::NO_DECODE),
-        css::uno::Reference<css::ucb::XCommandEnvironment>(),
+        utl::UCBContentHelper::getDefaultCommandEnvironment(),
         comphelper::getProcessComponentContext());
 }
 
