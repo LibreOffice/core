@@ -33,7 +33,6 @@
 typedef ::std::list< ::rtl::OString >               StringList;
 typedef ::std::set< ::rtl::OString >    StringSet;
 
-
 // FileStream
 
 class FileStream

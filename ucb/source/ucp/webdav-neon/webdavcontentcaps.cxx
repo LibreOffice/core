@@ -313,8 +313,7 @@ uno::Sequence< beans::Property > Content::getProperties(
         xProvider.set( m_pProvider );
     }
 
-    typedef std::set< OUString > StringSet;
-    StringSet aPropSet;
+    std::set< OUString > aPropSet;
 
     // No server access for just created (not yet committed) objects.
     // Only a minimal set of properties supported at this stage.
