@@ -174,7 +174,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                     OUString presetTextWarp;
                     if ( aGeoPropSeq[ i ].Value >>= presetTextWarp )
                     {
-                        aPropertyMap.setProperty( PROP_PresetTextWarp, Any( presetTextWarp ) );
+                        aPropertyMap.setProperty( PROP_PresetTextWarp, presetTextWarp );
                     }
                 }
             }

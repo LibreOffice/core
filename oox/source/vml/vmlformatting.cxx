@@ -830,7 +830,7 @@ void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper&
     aFormat.Location = table::ShadowLocation_BOTTOM_RIGHT;
     // The width of the shadow is the average of the x and y values, see SwWW8ImplReader::MatchSdrItemsIntoFlySet().
     aFormat.ShadowWidth = ((nOffsetX + nOffsetY) / 2);
-    rPropMap.setProperty(PROP_ShadowFormat, uno::makeAny(aFormat));
+    rPropMap.setProperty(PROP_ShadowFormat, aFormat);
 }
 
 TextpathModel::TextpathModel()
