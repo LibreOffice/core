@@ -2582,7 +2582,7 @@ bool SfxBaseModel::getBoolPropertyValue( const OUString& rName ) throw ( Runtime
             try
             {
                 ::ucbhelper::Content aContent( pMedium->GetName( ),
-                    Reference<ucb::XCommandEnvironment>(),
+                    utl::UCBContentHelper::getDefaultCommandEnvironment(),
                     comphelper::getProcessComponentContext() );
                 Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
                 if ( xProps->hasPropertyByName( rName ) )
