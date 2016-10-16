@@ -486,7 +486,7 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
     uno::Sequence<uno::Any> aSeq(6);
     beans::PropertyValue aParam;
     aParam.Name = "ParentWindow";
-    aParam.Value <<= m_xContext->getValueByName("DialogParentWindow");
+    aParam.Value = m_xContext->getValueByName("DialogParentWindow");
     aSeq[0] <<= aParam;
     aParam.Name = "Detail";
     aParam.Value <<= m_xDataProvider;
@@ -519,7 +519,7 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
     uno::Sequence<uno::Any> aSeq(2);
     beans::PropertyValue aParam;
     aParam.Name = "ParentWindow";
-    aParam.Value <<= m_xContext->getValueByName("DialogParentWindow");
+    aParam.Value = m_xContext->getValueByName("DialogParentWindow");
     aSeq[0] <<= aParam;
     aParam.Name = "ChartModel";
     aParam.Value <<= m_xChartModel;

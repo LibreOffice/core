@@ -247,7 +247,7 @@ namespace dbaui
 
                         OUString sValue;
                         pValues->Value >>= sValue;
-                        pValues->Value <<= m_aPredicateInput.getPredicateValue( sValue, xParamAsSet );
+                        pValues->Value = m_aPredicateInput.getPredicateValue( sValue, xParamAsSet );
                     }
                 }
                 catch(Exception&)

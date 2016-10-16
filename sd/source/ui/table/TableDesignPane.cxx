@@ -279,7 +279,7 @@ void TableDesignWidget::onSelectionChanged()
             {
                 Reference< XShapes > xShapes( aSel, UNO_QUERY );
                 if( xShapes.is() && (xShapes->getCount() == 1) )
-                    aSel <<= xShapes->getByIndex(0);
+                    aSel = xShapes->getByIndex(0);
             }
 
             Reference< XShapeDescriptor > xDesc( aSel, UNO_QUERY );

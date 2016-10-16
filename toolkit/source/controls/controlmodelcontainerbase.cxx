@@ -606,7 +606,7 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
 
     ContainerEvent aEvent;
     aEvent.Source = *this;
-    aEvent.Element <<= aElement;
+    aEvent.Element = aElement;
     aEvent.Accessor <<= aName;
     maContainerListeners.elementInserted( aEvent );
 
