@@ -1624,7 +1624,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
 
     uno::Any aStorageSource;
     if ( xStream.is() )
-        aStorageSource <<= aStorageSource;
+        aStorageSource = aStorageSource;
     else if ( !sURL.isEmpty() )
         aStorageSource <<= sURL;
     else
@@ -2705,7 +2705,7 @@ uno::Any SAL_CALL OReportDefinition::getTransferData( const datatransfer::DataFl
     {
         try
         {
-            aResult <<= getPreferredVisualRepresentation(0).Data;
+            aResult = getPreferredVisualRepresentation(0).Data;
         }
         catch (const uno::Exception &)
         {

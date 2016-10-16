@@ -1035,11 +1035,11 @@ bool AddonsOptions_Impl::ReadStatusBarItem(
     if (( aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_URL ] >>= aURL ) && aURL.getLength() > 0 )
     {
         aStatusbarItem[ OFFSET_STATUSBARITEM_URL        ].Value <<= aURL;
-        aStatusbarItem[ OFFSET_STATUSBARITEM_TITLE      ].Value <<= aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_TITLE     ];
-        aStatusbarItem[ OFFSET_STATUSBARITEM_CONTEXT    ].Value <<= aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_CONTEXT   ];
-        aStatusbarItem[ OFFSET_STATUSBARITEM_ALIGN      ].Value <<= aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_ALIGN     ];
-        aStatusbarItem[ OFFSET_STATUSBARITEM_AUTOSIZE   ].Value <<= aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_AUTOSIZE  ];
-        aStatusbarItem[ OFFSET_STATUSBARITEM_OWNERDRAW  ].Value <<= aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_OWNERDRAW ];
+        aStatusbarItem[ OFFSET_STATUSBARITEM_TITLE      ].Value = aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_TITLE     ];
+        aStatusbarItem[ OFFSET_STATUSBARITEM_CONTEXT    ].Value = aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_CONTEXT   ];
+        aStatusbarItem[ OFFSET_STATUSBARITEM_ALIGN      ].Value = aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_ALIGN     ];
+        aStatusbarItem[ OFFSET_STATUSBARITEM_AUTOSIZE   ].Value = aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_AUTOSIZE  ];
+        aStatusbarItem[ OFFSET_STATUSBARITEM_OWNERDRAW  ].Value = aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_OWNERDRAW ];
 
         // Configuration uses hyper for long. Therefore transform into sal_Int32
         sal_Int64 nValue( 0 );
@@ -1080,7 +1080,7 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
             aMenuItem[ OFFSET_MENUITEM_URL              ].Value <<= aPopupMenuURL;
             aMenuItem[ OFFSET_MENUITEM_TARGET           ].Value <<= m_aEmpty;
             aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Value <<= aPopupMenuImageId;
-            aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Value <<= aMenuItemNodePropValues[ OFFSET_MENUITEM_CONTEXT ];
+            aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Value = aMenuItemNodePropValues[ OFFSET_MENUITEM_CONTEXT ];
 
             // Continue to read the sub menu nodes
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
@@ -1100,9 +1100,9 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
              ReadAndAssociateImages( aStrValue, aMenuImageId );
 
             aMenuItem[ OFFSET_MENUITEM_URL              ].Value <<= aStrValue;
-            aMenuItem[ OFFSET_MENUITEM_TARGET           ].Value <<= aMenuItemNodePropValues[ OFFSET_MENUITEM_TARGET         ];
+            aMenuItem[ OFFSET_MENUITEM_TARGET           ].Value = aMenuItemNodePropValues[ OFFSET_MENUITEM_TARGET         ];
             aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Value <<= aMenuImageId;
-            aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Value <<= aMenuItemNodePropValues[ OFFSET_MENUITEM_CONTEXT        ];
+            aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Value = aMenuItemNodePropValues[ OFFSET_MENUITEM_CONTEXT        ];
             aMenuItem[ OFFSET_MENUITEM_SUBMENU          ].Value <<= Sequence< Sequence< PropertyValue > >(); // Submenu set!
 
             bResult = true;
@@ -1145,7 +1145,7 @@ bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequ
             OUString aPopupMenuURL = GeneratePrefixURL();
 
             aPopupMenu[ OFFSET_POPUPMENU_URL        ].Value <<= aPopupMenuURL;
-            aPopupMenu[ OFFSET_POPUPMENU_CONTEXT    ].Value <<= aPopupMenuNodePropValues[ OFFSET_POPUPMENU_CONTEXT ];
+            aPopupMenu[ OFFSET_POPUPMENU_CONTEXT    ].Value = aPopupMenuNodePropValues[ OFFSET_POPUPMENU_CONTEXT ];
 
             // Continue to read the sub menu nodes
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
@@ -1214,10 +1214,10 @@ bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, 
 
             aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Value <<= aURL;
             aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Value <<= aTitle;
-            aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Value <<= aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_TARGET      ];
+            aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Value = aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_TARGET      ];
             aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Value <<= aImageId;
-            aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Value <<= aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_CONTEXT     ];
-            aToolBarItem[ OFFSET_TOOLBARITEM_CONTROLTYPE        ].Value <<= aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_CONTROLTYPE ];
+            aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Value = aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_CONTEXT     ];
+            aToolBarItem[ OFFSET_TOOLBARITEM_CONTROLTYPE        ].Value = aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_CONTROLTYPE ];
 
             // Configuration uses hyper for long. Therefore transform into sal_Int32
             sal_Int64 nValue( 0 );

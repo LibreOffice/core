@@ -1481,7 +1481,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
             eResult = inspection::InteractiveSelectionResult_ObtainedValue;
             beans::PropertyChangeEvent aScopeEvent;
             aScopeEvent.PropertyName = PROPERTY_FILLCOLOR;
-            aScopeEvent.NewValue <<= xShape->getPropertyValue(PROPERTY_FILLCOLOR);
+            aScopeEvent.NewValue = xShape->getPropertyValue(PROPERTY_FILLCOLOR);
             m_aPropertyListeners.notify( aScopeEvent, &beans::XPropertyChangeListener::propertyChange );
         }
         return eResult;

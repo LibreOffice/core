@@ -215,7 +215,7 @@ Any DefinedNameBase::getReference( const ScAddress& rBaseAddr ) const
                 Any aRefAny = lclConvertReference( aApiExtRef.Reference, rBaseAddr, nRelFlags );
                 if( aRefAny.hasValue() )
                 {
-                    aApiExtRef.Reference <<= aRefAny;
+                    aApiExtRef.Reference = aRefAny;
                     return Any( aApiExtRef );
                 }
             }

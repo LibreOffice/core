@@ -922,7 +922,7 @@ int lcl_setitem_index( PyUNO *me, PyObject *pKey, PyObject *pValue )
 
         try
         {
-            aValue <<= runtime.pyObject2Any( pValue );
+            aValue = runtime.pyObject2Any( pValue );
         }
         catch ( const css::uno::RuntimeException )
         {
@@ -1043,7 +1043,7 @@ int lcl_setitem_slice( PyUNO *me, PyObject *pKey, PyObject *pValue )
                 Any aItem;
                 try
                 {
-                    aItem <<= runtime.pyObject2Any( rItem.get() );
+                    aItem = runtime.pyObject2Any( rItem.get() );
                 }
                 catch ( const css::uno::RuntimeException )
                 {
@@ -1102,7 +1102,7 @@ int lcl_setitem_string( PyUNO *me, PyObject *pKey, PyObject *pValue )
         isTuple = PyTuple_Check( pValue );
         try
         {
-            aValue <<= runtime.pyObject2Any( pValue );
+            aValue = runtime.pyObject2Any( pValue );
         }
         catch( const css::uno::RuntimeException )
         {
@@ -1301,7 +1301,7 @@ int PyUNO_contains( PyObject *self, PyObject *pKey )
         Any aValue;
         try
         {
-            aValue <<= runtime.pyObject2Any( pKey );
+            aValue = runtime.pyObject2Any( pKey );
         }
         catch( const css::uno::RuntimeException )
         {

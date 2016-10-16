@@ -490,7 +490,7 @@ uno::Any StringRepresentation::convertStringToSimple( const OUString& _rValue,co
                     if ( *pIter == _rValue )
                     {
                         OSL_ENSURE(i < m_aConstants.getLength() ,"StringRepresentation::convertSimpleToString: Index is not in range of m_aValues");
-                        aReturn <<= m_aConstants[i]->getConstantValue();
+                        aReturn = m_aConstants[i]->getConstantValue();
                         break;
                     }
                 }
