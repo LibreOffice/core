@@ -827,7 +827,7 @@ void GetAdjustmentValues( std::vector< css::beans::PropertyValue >& rDest,      
         css::drawing::EnhancedCustomShapeAdjustmentValue aAdj;
         if ( aParameter.Type == css::drawing::EnhancedCustomShapeParameterType::NORMAL )
         {
-            aAdj.Value <<= aParameter.Value;
+            aAdj.Value = aParameter.Value;
             aAdj.State = beans::PropertyState_DIRECT_VALUE;
         }
         else

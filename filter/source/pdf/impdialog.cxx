@@ -486,7 +486,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     else if( mbSelectionIsChecked )
     {
         aRet[ nLength - nElementAdded ].Name = "Selection";
-        aRet[ nLength - nElementAdded ].Value <<= maSelection;
+        aRet[ nLength - nElementAdded ].Value = maSelection;
         nElementAdded--;
     }
 

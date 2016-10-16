@@ -132,7 +132,7 @@ void SdtHelper::createDateControl(OUString& rContentText, const beans::PropertyV
     aGrabBag["OriginalContent"] <<= rContentText;
     aGrabBag["DateFormat"] <<= sDateFormat;
     aGrabBag["Locale"] <<= m_sLocale.makeStringAndClear();
-    aGrabBag["CharFormat"] <<= rCharFormat.Value;
+    aGrabBag["CharFormat"] = rCharFormat.Value;
     // merge in properties like ooxml:CT_SdtPr_alias and friends.
     aGrabBag.update(comphelper::SequenceAsHashMap(comphelper::containerToSequence(m_aGrabBag)));
     // and empty the property list, so they won't end up on the next sdt as well

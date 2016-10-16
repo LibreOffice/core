@@ -406,7 +406,7 @@ void OAddFieldWindow::fillDescriptor(SvTreeListEntry* _pSelected,svx::ODataAcces
         ColumnInfo* pInfo = static_cast<ColumnInfo*>(_pSelected->GetUserData());
         _rDescriptor[ svx::DataAccessDescriptorProperty::ColumnName ]         <<= pInfo->sColumnName;
         if ( m_xColumns->hasByName( pInfo->sColumnName ) )
-            _rDescriptor[ svx::DataAccessDescriptorProperty::ColumnObject ] <<= m_xColumns->getByName(pInfo->sColumnName);
+            _rDescriptor[ svx::DataAccessDescriptorProperty::ColumnObject ] = m_xColumns->getByName(pInfo->sColumnName);
     }
 }
 

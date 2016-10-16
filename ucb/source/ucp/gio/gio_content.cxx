@@ -749,7 +749,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ((bOk = doSetFileInfo(pNewInfo)))
             {
                 for (sal_Int32 i = 0; i < nChanged; ++i)
-                    aRet[ i ] <<= getBadArgExcept();
+                    aRet[ i ] = getBadArgExcept();
             }
         }
 

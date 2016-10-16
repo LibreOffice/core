@@ -180,7 +180,7 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
         aEvent.Base <<= aEvent.Source;
         aEvent.Changes.realloc( 1 );
         aEvent.Changes[ 0 ].Accessor <<= aName;
-        aEvent.Changes[ 0 ].Element <<= aElement;
+        aEvent.Changes[ 0 ].Element = aElement;
         aEvent.Changes[ 0 ].ReplacedElement = aOldElement;
         maChangesListeners.notifyEach( &XChangesListener::changesOccurred, aEvent );
     }
@@ -233,7 +233,7 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
         aEvent.Base <<= aEvent.Source;
         aEvent.Changes.realloc( 1 );
         aEvent.Changes[ 0 ].Accessor <<= aName;
-        aEvent.Changes[ 0 ].Element <<= aElement;
+        aEvent.Changes[ 0 ].Element = aElement;
         maChangesListeners.notifyEach( &XChangesListener::changesOccurred, aEvent );
     }
 }

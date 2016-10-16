@@ -145,7 +145,7 @@ public:
             if( detectInnerValue( aValue, bHasAmbiguousValue ) )
             {
                 if(bHasAmbiguousValue)
-                    m_aOuterValue <<= m_aDefaultValue;
+                    m_aOuterValue = m_aDefaultValue;
                 else
                     m_aOuterValue <<= aValue;
             }

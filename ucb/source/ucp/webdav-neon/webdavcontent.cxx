@@ -2167,7 +2167,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             aNewTitle.clear();
 
             // Set error .
-            aRet[ nTitlePos ] <<= MapDAVException( e, true );
+            aRet[ nTitlePos ] = MapDAVException( e, true );
         }
     }
 

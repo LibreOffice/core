@@ -814,7 +814,7 @@ shell::setv( const OUString& aUnqPath,
         seqChanged[ propChanged   ].PropertyName = values[i].Name;
         seqChanged[ propChanged   ].PropertyHandle   = -1;
         seqChanged[ propChanged   ].Further   = false;
-        seqChanged[ propChanged   ].OldValue <<= aAny;
+        seqChanged[ propChanged   ].OldValue = aAny;
         seqChanged[ propChanged++ ].NewValue = values[i].Value;
 
         it1->setValue( values[i].Value );  // Put the new value into the local cash
