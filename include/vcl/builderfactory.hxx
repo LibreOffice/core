@@ -31,6 +31,16 @@
         rRet = VclPtr<typeName>::Create(pParent,arg1); \
     }
 
+#define VCL_BUILDER_FACTORY_CONSTRUCTOR(typeName,arg2) \
+    VCL_BUILDER_DECL_FACTORY(typeName) \
+    { \
+        OString sBorder = VclBuilder::extractCustomProperty(rMap); \
+        WinBits wb = arg2; \
+        if (!sBorder.isEmpty()) \
+            wb |= WB_BORDER; \
+        rRet = VclPtr<typeName>::Create(pParent,wb); \
+    }
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
