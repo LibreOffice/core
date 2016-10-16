@@ -92,6 +92,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_check_xcell_ranges_query,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    uui/util/uui \
 	svtools/util/svt \
 ))
 
