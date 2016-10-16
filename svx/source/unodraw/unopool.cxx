@@ -353,7 +353,7 @@ uno::Any SAL_CALL SvxUnoDrawPool::queryAggregation( const uno::Type & rType )
     else if( rType == cppu::UnoType<beans::XMultiPropertySet>::get())
         aAny <<= uno::Reference< beans::XMultiPropertySet >(this);
     else
-        aAny <<= OWeakAggObject::queryAggregation( rType );
+        aAny = OWeakAggObject::queryAggregation( rType );
 
     return aAny;
 }

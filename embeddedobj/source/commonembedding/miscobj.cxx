@@ -369,7 +369,7 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
         return uno::Any(&p, rType);
     }
     else
-        aReturn <<= ::cppu::queryInterface(
+        aReturn = ::cppu::queryInterface(
                     rType,
                     static_cast< embed::XInplaceObject* >( this ),
                     static_cast< embed::XVisualObject* >( this ),

@@ -69,7 +69,7 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
 {
     uno::Any aReturn;
 
-    aReturn <<= ::cppu::queryInterface
+    aReturn = ::cppu::queryInterface
                 (   rType
                     ,   static_cast<lang::XTypeProvider*> ( this )
                     ,   static_cast<io::XStream*> ( this )
@@ -81,7 +81,7 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
 
     if ( m_xSeekable.is() )
     {
-        aReturn <<= ::cppu::queryInterface
+        aReturn = ::cppu::queryInterface
                 (   rType
                     ,   static_cast<io::XSeekable*> ( this ) );
 
@@ -91,7 +91,7 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
 
     if ( m_xInputStream.is() )
     {
-        aReturn <<= ::cppu::queryInterface
+        aReturn = ::cppu::queryInterface
                 (   rType
                     ,   static_cast<io::XInputStream*> ( this ) );
 
@@ -100,7 +100,7 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
     }
     if ( m_xOutputStream.is() )
     {
-        aReturn <<= ::cppu::queryInterface
+        aReturn = ::cppu::queryInterface
                 (   rType
                     ,   static_cast<io::XOutputStream*> ( this ) );
 
@@ -109,7 +109,7 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
     }
     if ( m_xTruncate.is() )
     {
-        aReturn <<= ::cppu::queryInterface
+        aReturn = ::cppu::queryInterface
                 (   rType
                     ,   static_cast<io::XTruncate*> ( this ) );
 
@@ -118,7 +118,7 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
     }
     if ( m_xAsyncOutputMonitor.is() )
     {
-        aReturn <<= ::cppu::queryInterface
+        aReturn = ::cppu::queryInterface
                 (   rType
                     ,   static_cast<io::XAsyncOutputMonitor*> ( this ) );
 

@@ -255,7 +255,7 @@ uno::Any SAL_CALL FSStorage::queryInterface( const uno::Type& rType )
         throw( uno::RuntimeException, std::exception )
 {
     uno::Any aReturn;
-    aReturn <<= ::cppu::queryInterface
+    aReturn = ::cppu::queryInterface
                 (   rType
                 ,   static_cast<lang::XTypeProvider*> ( this )
                 ,   static_cast<embed::XStorage*> ( this )
