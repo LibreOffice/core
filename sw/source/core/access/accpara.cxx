@@ -504,8 +504,8 @@ void SwAccessibleParagraph::InvalidateCursorPos_()
         if(m_bLastHasSelection || bCurSelection )
         {
             aEvent.EventId = AccessibleEventId::TEXT_SELECTION_CHANGED;
-            aEvent.OldValue <<= uno::Any();
-            aEvent.NewValue <<= uno::Any();
+            aEvent.OldValue.clear();
+            aEvent.NewValue.clear();
             FireAccessibleEvent(aEvent);
         }
         m_bLastHasSelection =bCurSelection;

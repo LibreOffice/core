@@ -530,14 +530,14 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 sal_uInt16 nTab = rViewData.GetTabNo();
                 ScRange aMarkRange;
                 refScMarkData.GetMarkArea(aMarkRange);
-                aEvent.OldValue <<= css::uno::Any();
+                aEvent.OldValue.clear();
                 //Mark All
                 if ( !bNewPosCellFocus &&
                     (bNewMarked || bIsMark || bIsMultMark ) &&
                     aMarkRange == ScRange( 0,0,nTab, MAXCOL,MAXROW,nTab ) )
                 {
                     aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-                    aEvent.NewValue <<= css::uno::Any();
+                    aEvent.NewValue.clear();
                     CommitChange(aEvent);
                     return ;
                 }
@@ -569,7 +569,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         if( !bSelSmaller )
                         {
                             aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-                            aEvent.NewValue <<= css::uno::Any();
+                            aEvent.NewValue.clear();
                             CommitChange(aEvent);
                         }
                         m_aLastWithInMarkRange = aMarkRange;
@@ -627,7 +627,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         if(CalcScRangeListDifferenceMax(mpMarkedRanges,&m_LastMarkedRanges,10,vecNew))
                         {
                             aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-                            aEvent.NewValue <<= css::uno::Any();
+                            aEvent.NewValue.clear();
                             CommitChange(aEvent);
                         }
                         else
@@ -723,7 +723,6 @@ void ScAccessibleSpreadsheet::RemoveSelection(ScMarkData &refScMarkData)
 {
     AccessibleEventObject aEvent;
     aEvent.Source = uno::Reference< XAccessible >(this);
-    aEvent.OldValue <<= css::uno::Any();
     MAP_ADDR_XACC::iterator miRemove = m_mapSelectionSend.begin();
     for(;  miRemove != m_mapSelectionSend.end() ;)
     {
@@ -1610,7 +1609,7 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
             if ( nNewSize > 10 )
             {
                 aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-                aEvent.NewValue <<= css::uno::Any();
+                aEvent.NewValue.clear();
                 CommitChange(aEvent);
             }
             else
@@ -1646,7 +1645,6 @@ void ScAccessibleSpreadsheet::RemoveFormulaSelection(bool bRemoveAll )
 {
     AccessibleEventObject aEvent;
     aEvent.Source = uno::Reference< XAccessible >(this);
-    aEvent.OldValue <<= css::uno::Any();
     MAP_ADDR_XACC::iterator miRemove = m_mapFormulaSelectionSend.begin();
     for(;  miRemove != m_mapFormulaSelectionSend.end() ;)
     {

@@ -1700,11 +1700,11 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             aSeq[1] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetRight(), bConvert) );
             aSeq[2] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetBottom(), bConvert) );
             aSeq[3] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetTop(), bConvert) );
-            aSeq[4] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( GetSmallestDistance()) : GetSmallestDistance()));
-            aSeq[5] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nTopDist ) : nTopDist ));
-            aSeq[6] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nBottomDist ) : nBottomDist ));
-            aSeq[7] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nLeftDist ) : nLeftDist ));
-            aSeq[8] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nRightDist ) : nRightDist ));
+            aSeq[4] = uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( GetSmallestDistance()) : GetSmallestDistance()));
+            aSeq[5] = uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nTopDist ) : nTopDist ));
+            aSeq[6] = uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nBottomDist ) : nBottomDist ));
+            aSeq[7] = uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nLeftDist ) : nLeftDist ));
+            aSeq[8] = uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nRightDist ) : nRightDist ));
             rVal = uno::makeAny( aSeq );
             return true;
         }
@@ -3088,7 +3088,7 @@ bool SvxLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemId ) const
     nMemId &= ~CONVERT_TWIPS;
     if ( nMemId == 0 )
     {
-        rVal <<= uno::makeAny( SvxBoxItem::SvxLineToLine(pLine, bConvert) );
+        rVal = uno::makeAny( SvxBoxItem::SvxLineToLine(pLine, bConvert) );
         return true;
     }
     else if ( pLine )
