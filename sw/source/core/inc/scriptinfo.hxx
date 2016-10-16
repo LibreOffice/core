@@ -353,6 +353,12 @@ public:
                                   long nSpaceAdd = 0 );
 
     static sal_Int32 CountCJKCharacters( const OUString &rText, sal_Int32 nPos, sal_Int32 nEnd, LanguageType aLang);
+
+    static void CJKJustify( const OUString& rText, long* pKernArray,
+                                  long* pScrArray, sal_Int32 nStt,
+                                  sal_Int32 nLen, LanguageType aLang,
+                                  long nSpaceAdd );
+
     static SwScriptInfo* GetScriptInfo( const SwTextNode& rNode,
                                         bool bAllowInvalid = false );
 
