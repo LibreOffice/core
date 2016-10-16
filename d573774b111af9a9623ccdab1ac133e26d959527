@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_51e71312",
+        "filename": "desktop/source/lib/lokandroid.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-10-16T12:09:55Z",
+      "side": 1,
+      "message": "How does this change the code ? you make 2 lines out of 1 working line.",
+      "revId": "d573774b111af9a9623ccdab1ac133e26d959527",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
