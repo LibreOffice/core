@@ -947,7 +947,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             beans::PropertyValue aRet;
             uno::Sequence<beans::PropertyValue> aGrabBag(1);
             aRet.Name = "ParaFrameProperties";
-            aRet.Value <<= uno::Any(rAppendContext.pLastParagraphProperties->IsFrameMode());
+            aRet.Value = uno::makeAny(rAppendContext.pLastParagraphProperties->IsFrameMode());
             aGrabBag[0] = aRet;
             aFrameProperties.push_back(comphelper::makePropertyValue("FrameInteropGrabBag", aGrabBag));
 
@@ -1986,7 +1986,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                             uno::Sequence<beans::PropertyValue> aShapeGrabBag(1);
                             beans::PropertyValue aRet;
                             aRet.Name = "SdtEndBefore";
-                            aRet.Value <<= uno::makeAny(true);
+                            aRet.Value = uno::makeAny(true);
                             aShapeGrabBag[0] = aRet;
                             xShapePropertySet->setPropertyValue("InteropGrabBag",uno::makeAny(aShapeGrabBag));
                         }
@@ -4774,7 +4774,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
                 uno::Sequence<beans::PropertyValue> aFrameGrabBag(1);
                 beans::PropertyValue aRet;
                 aRet.Name = "SdtEndBefore";
-                aRet.Value <<= uno::makeAny(true);
+                aRet.Value = uno::makeAny(true);
                 aFrameGrabBag[0] = aRet;
                 xPropertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aFrameGrabBag));
             }

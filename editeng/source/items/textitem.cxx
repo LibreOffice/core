@@ -1792,7 +1792,7 @@ bool SvxBackgroundColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) c
     {
         case MID_GRAPHIC_TRANSPARENT:
         {
-            rVal <<= css::uno::makeAny<bool>(aColor.GetTransparency() == 0xff);
+            rVal = css::uno::makeAny<bool>(aColor.GetTransparency() == 0xff);
             break;
         }
         default:

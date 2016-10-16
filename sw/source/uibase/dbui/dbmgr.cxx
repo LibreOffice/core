@@ -2666,7 +2666,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
         break;
     case DBCONN_MSJET:
     case DBCONN_MSACE:
-        aSuppressVersionsAny <<= uno::makeAny(true);
+        aSuppressVersionsAny = uno::makeAny(true);
         break;
     }
 
