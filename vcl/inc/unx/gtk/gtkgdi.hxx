@@ -45,40 +45,50 @@ enum class GtkControlPart
     ComboboxBoxEntry,
     ComboboxBoxButton,
     ComboboxBoxButtonBox,
+    ComboboxBoxButtonBoxArrow,
     Listbox,
     ListboxBox,
     ListboxBoxButton,
     ListboxBoxButtonBox,
-    Arrow,
+    ListboxBoxButtonBoxArrow,
     SpinButton,
     SpinButtonUpButton,
     SpinButtonDownButton,
     ScrollbarVertical,
+    ScrollbarVerticalContents,
+    ScrollbarVerticalTrough,
+    ScrollbarVerticalSlider,
+    ScrollbarVerticalButton,
     ScrollbarHorizontal,
-    ScrollbarContents,
-    ScrollbarTrough,
-    ScrollbarSlider,
-    ScrollbarButton,
+    ScrollbarHorizontalContents,
+    ScrollbarHorizontalTrough,
+    ScrollbarHorizontalSlider,
+    ScrollbarHorizontalButton,
     ProgressBar,
     ProgressBarTrough,
     ProgressBarProgress,
-    MenuBar,
-    MenuItem,
-    MenuItemArrow,
-    Menu,
-    CheckMenuItem,
-    CheckMenuItemCheck,
-    RadioMenuItem,
-    RadioMenuItemRadio,
-    SeparatorMenuItem,
-    SeparatorMenuItemSeparator,
     Notebook,
     NotebookHeader,
     NotebookStack,
     NotebookHeaderTabs,
     NotebookHeaderTabsTab,
     FrameBorder,
+    MenuBar,
+    MenuBarItem,
+    MenuWindow,
+    Menu,
+    MenuItem,
+    MenuItemLabel,
+    MenuItemArrow,
+    CheckMenuItem,
+    CheckMenuItemCheck,
+    RadioMenuItem,
+    RadioMenuItemRadio,
+    SeparatorMenuItem,
+    SeparatorMenuItemSeparator,
 };
+
+typedef void (*gtk_widget_path_iter_set_object_nameFunc)(GtkWidgetPath *, guint, const char*);
 
 class GtkSalGraphics : public SvpSalGraphics
 {
@@ -107,6 +117,9 @@ public:
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
 
     virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+
+    static GtkStyleContext* createNewContext(GtkControlPart ePart, gtk_widget_path_iter_set_object_nameFunc set_object_name);
+    static GtkStyleContext* createOldContext(GtkControlPart ePart);
 private:
     GtkWidget       *mpWindow;
     static GtkStyleContext *mpButtonStyle;
@@ -127,18 +140,12 @@ private:
     static GtkStyleContext *mpToolButtonStyle;
     static GtkStyleContext *mpToolbarSeperatorStyle;
     static GtkStyleContext *mpCheckButtonStyle;
+    static GtkStyleContext *mpCheckButtonCheckStyle;
     static GtkStyleContext *mpRadioButtonStyle;
-    static GtkStyleContext *mpMenuBarStyle;
-    static GtkStyleContext *mpMenuBarItemStyle;
-    static GtkStyleContext *mpMenuStyle;
+    static GtkStyleContext *mpRadioButtonRadioStyle;
     static GtkStyleContext *mpSpinStyle;
     static GtkStyleContext *mpSpinUpStyle;
     static GtkStyleContext *mpSpinDownStyle;
-    static GtkStyleContext *mpMenuItemStyle;
-    static GtkStyleContext *mpMenuItemArrowStyle;
-    static GtkStyleContext *mpCheckMenuItemStyle;
-    static GtkStyleContext *mpRadioMenuItemStyle;
-    static GtkStyleContext *mpSeparatorMenuItemStyle;
     static GtkStyleContext *mpComboboxStyle;
     static GtkStyleContext *mpComboboxBoxStyle;
     static GtkStyleContext *mpComboboxEntryStyle;
@@ -164,6 +171,19 @@ private:
     static GtkStyleContext *mpNotebookHeaderTabsStyle;
     static GtkStyleContext *mpNotebookHeaderTabsTabStyle;
     static GtkStyleContext *mpNotebookHeaderTabsTabLabelStyle;
+    static GtkStyleContext *mpMenuBarStyle;
+    static GtkStyleContext *mpMenuBarItemStyle;
+    static GtkStyleContext *mpMenuWindowStyle;
+    static GtkStyleContext *mpMenuStyle;
+    static GtkStyleContext *mpMenuItemStyle;
+    static GtkStyleContext *mpMenuItemLabelStyle;
+    static GtkStyleContext *mpMenuItemArrowStyle;
+    static GtkStyleContext *mpCheckMenuItemStyle;
+    static GtkStyleContext *mpCheckMenuItemCheckStyle;
+    static GtkStyleContext *mpRadioMenuItemStyle;
+    static GtkStyleContext *mpRadioMenuItemRadioStyle;
+    static GtkStyleContext *mpSeparatorMenuItemStyle;
+    static GtkStyleContext *mpSeparatorMenuItemSeparatorStyle;
 
     static Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );
     static Rectangle NWGetSpinButtonRect( ControlPart nPart, Rectangle aAreaRect);
