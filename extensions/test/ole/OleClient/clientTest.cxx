@@ -144,8 +144,8 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     arArgs[0] <<= (sal_Int32) 123;
     Sequence<Any> seqPositional2(arArgs, 1);
 
-    arArgs[0] <<= Any();
-    arArgs[1] <<= Any();
+    arArgs[0].clear();
+    arArgs[1].clear();
     Sequence<Any> seqPositional3(arArgs, 2);
 
     arArgs[0] <<= (sal_Int32) 123;
@@ -172,7 +172,7 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     arArgs1[3] <<= arg4;
     Sequence<Any> seqMix(arArgs1, 4);
 
-    arArgs1[0] <<= Any();
+    arArgs1[0].clear();
     arArgs1[1] <<= (sal_Int32) 456;
     arArgs1[2] <<= arg4;
     Sequence<Any> seqMix2(arArgs1, 3);
@@ -184,7 +184,7 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     Sequence<Any> seqMixOut(arArgs1, 4);
 
     arArgs1[0] <<= SCode(DISP_E_PARAMNOTFOUND);
-    arArgs1[1] <<= Any();
+    arArgs1[1].clear();
     arArgs1[2] <<= arg4;
     Sequence<Any> seqMix2Out(arArgs1, 3);
 
@@ -455,17 +455,17 @@ bool doPropertyWithArgumentTest(const Reference<XInvocation> & inv)
     Sequence<Any> seqOut;
 
     Any arMultiArgs[3];
-    arMultiArgs[0] <<= makeAny((sal_Int32) 0);
-    arMultiArgs[1] <<= makeAny((sal_Int32) 0);
+    arMultiArgs[0] = makeAny((sal_Int32) 0);
+    arMultiArgs[1] = makeAny((sal_Int32) 0);
     arMultiArgs[2] <<= PropertyPutArgument(makeAny((sal_Int32) 0));
     Sequence<Any> seqMultiArgPut0(arMultiArgs, 3);
 
-    arMultiArgs[0] <<= makeAny((sal_Int32) 1);
-    arMultiArgs[1] <<= makeAny((sal_Int32) 2);
+    arMultiArgs[0] = makeAny((sal_Int32) 1);
+    arMultiArgs[1] = makeAny((sal_Int32) 2);
     arMultiArgs[2] <<= PropertyPutArgument(makeAny((sal_Int32) 3));
     Sequence<Any> seqMultiArgPut1(arMultiArgs, 3);
 
-    arMultiArgs[0] <<= makeAny((sal_Int32) 1);
+    arMultiArgs[0] = makeAny((sal_Int32) 1);
     arMultiArgs[1] <<= PropertyPutArgument(makeAny((sal_Int32) 3));
     Sequence<Any> seqMultiArgPut2(arMultiArgs, 2);
 
@@ -477,26 +477,26 @@ bool doPropertyWithArgumentTest(const Reference<XInvocation> & inv)
     arMultiArgs[1] <<= NamedArgument(OUString(L"val3"), makeAny((sal_Int32) 3));
     Sequence<Any> seqMultiArgPut4(arMultiArgs, 2);
 
-    arMultiArgs[0] <<= makeAny((sal_Int32) 0);
-    arMultiArgs[1] <<= makeAny((sal_Int32) 0);
+    arMultiArgs[0] = makeAny((sal_Int32) 0);
+    arMultiArgs[1] = makeAny((sal_Int32) 0);
     Sequence<Any> seqMultiArgGet0(arMultiArgs, 2);
 
-    arMultiArgs[0] <<= makeAny((sal_Int32) 1);
-    arMultiArgs[1] <<= makeAny((sal_Int32) 2);
+    arMultiArgs[0] = makeAny((sal_Int32) 1);
+    arMultiArgs[1] = makeAny((sal_Int32) 2);
     Sequence<Any> seqMultiArgGet1(arMultiArgs, 2);
     Sequence<Any> seqMultiArgGet2(arMultiArgs, 1);
 
 
-    arMultiArgs[0] <<= makeAny((sal_Int32) 0);
+    arMultiArgs[0] = makeAny((sal_Int32) 0);
     arMultiArgs[1] <<= PropertyPutArgument(makeAny((sal_Int32) 0));
     Sequence<Any> seqMultiArgPut5(arMultiArgs, 2);
 
-    arMultiArgs[0] <<= makeAny((sal_Int32) 1);
+    arMultiArgs[0] = makeAny((sal_Int32) 1);
     arMultiArgs[1] <<= PropertyPutArgument(makeAny((sal_Int32) 2));
     Sequence<Any> seqMultiArgPut6(arMultiArgs, 2);
 
-    arMultiArgs[0] <<= Any();
-    arMultiArgs[1] <<= Any();
+    arMultiArgs[0].clear();
+    arMultiArgs[1].clear();
     Sequence<Any> seqMultiVoid(arMultiArgs, 2);
 
     arMultiArgs[0] = makeAny((sal_Int32) 0);

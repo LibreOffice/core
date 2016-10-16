@@ -469,7 +469,7 @@ void SigningTest::test96097Calc()
     aTempFileSaveCopy.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> descSaveACopy(2);
     descSaveACopy[0].Name = "SaveACopy";
-    descSaveACopy[0].Value <<= uno::makeAny(true);
+    descSaveACopy[0].Value = uno::makeAny(true);
     descSaveACopy[1].Name = "FilterName";
     descSaveACopy[1].Value <<= OUString("calc8");
     xDocStorable->storeToURL(aTempFileSaveCopy.GetURL(), descSaveACopy);
@@ -517,7 +517,7 @@ void SigningTest::test96097Doc()
     aTempFileSaveCopy.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> descSaveACopy(2);
     descSaveACopy[0].Name = "SaveACopy";
-    descSaveACopy[0].Value <<= uno::makeAny(true);
+    descSaveACopy[0].Value = uno::makeAny(true);
     descSaveACopy[1].Name = "FilterName";
     descSaveACopy[1].Value <<= OUString("writer8");
     xDocStorable->storeToURL(aTempFileSaveCopy.GetURL(), descSaveACopy);

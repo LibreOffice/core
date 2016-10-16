@@ -1046,7 +1046,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         {
             aInitArguments[0] <<= nTemplateDescription;
             if ( mpPreferredParentWindow )
-                aInitArguments[1] <<= makeAny( VCLUnoHelper::GetInterface( mpPreferredParentWindow ) );
+                aInitArguments[1] = makeAny( VCLUnoHelper::GetInterface( mpPreferredParentWindow ) );
         }
         else
         {

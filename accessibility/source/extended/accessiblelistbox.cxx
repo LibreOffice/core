@@ -137,19 +137,19 @@ namespace accessibility
                     }
                     if( pBox && (pBox->HasFocus() || bNeedFocus) )
                     {
-                        uno::Any aOldValue, aNewValue;
+                        uno::Any aNewValue;
                         SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                         if ( pEntry )
                         {
                             AccessibleListBoxEntry* pEntryFocus =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
                             if (pEntryFocus && pEntryFocus->GetSvLBoxEntry() == pEntry)
                             {
-                                aOldValue <<= uno::Any();
                                 aNewValue <<= m_xFocusedChild;
-                                NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
+                                NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, uno::Any(), aNewValue );
                                 return ;
                             }
 
+                            uno::Any aOldValue;
                             aOldValue <<= m_xFocusedChild;
 
                             MAP_ENTRY::iterator mi = m_mapEntry.find(pEntry);
@@ -170,9 +170,8 @@ namespace accessibility
                         }
                         else
                         {
-                            aOldValue <<= uno::Any();
                             aNewValue <<= AccessibleStateType::FOCUSED;
-                            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+                            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), aNewValue );
                         }
                     }
                 }
