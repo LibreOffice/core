@@ -1866,7 +1866,7 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
     uno::Any aReturn;
 
     // common interfaces
-    aReturn <<= ::cppu::queryInterface
+    aReturn = ::cppu::queryInterface
                 (   rType
                     ,   static_cast<lang::XTypeProvider*> ( this )
                     ,   static_cast<io::XInputStream*> ( this )
@@ -1883,14 +1883,14 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        aReturn <<= ::cppu::queryInterface
+        aReturn = ::cppu::queryInterface
                     (   rType
                         ,   static_cast<embed::XEncryptionProtectedSource2*> ( this )
                         ,   static_cast<embed::XEncryptionProtectedSource*> ( this ) );
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
-        aReturn <<= ::cppu::queryInterface
+        aReturn = ::cppu::queryInterface
                     (   rType
                         ,   static_cast<embed::XRelationshipAccess*> ( this ) );
     }
@@ -1900,7 +1900,7 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
 
     if ( m_bTransacted )
     {
-        aReturn <<= ::cppu::queryInterface
+        aReturn = ::cppu::queryInterface
                     (   rType
                         ,   static_cast<embed::XTransactedObject*> ( this )
                         ,   static_cast<embed::XTransactionBroadcaster*> ( this ) );
