@@ -1268,14 +1268,8 @@ void DDListBox::dispose()
     SvTreeListBox::dispose();
 }
 
-VCL_BUILDER_DECL_FACTORY(DDListBox)
-{
-    WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<DDListBox>::Create(pParent, nWinStyle);
-}
+    WinBits mWinStyle = WB_TABSTOP;
+    VCL_BUILDER_FACTORY_CONSTRUCTOR(DDListBox, mWinStyle)
 
 void DDListBox::SetAddressDialog(SwCustomizeAddressBlockDialog *pParent)
 {
