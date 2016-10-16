@@ -28,6 +28,7 @@
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <utility>
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct PropertyValue;
@@ -72,9 +73,12 @@ public:
         if( nPropId < 0 )
             return false;
 
-        maProperties[ nPropId ] <<= rValue;
+        maProperties[ nPropId ] = std::move( css::uno::makeAny( rValue ) );
         return true;
     }
+
+    /** setAnyProperty should be used */
+    bool                setProperty( sal_Int32, const css::uno::Any ) = delete;
 
     css::uno::Any       getProperty( sal_Int32 nPropId );
 
