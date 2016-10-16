@@ -110,7 +110,7 @@ namespace xmloff
         OUString sValue;
 
         // loop through all the properties which are yet to be exported
-        for (   StringSet::const_iterator aProperty = m_aRemainingProps.begin();
+        for (   std::set< OUString >::const_iterator aProperty = m_aRemainingProps.begin();
                 aProperty != m_aRemainingProps.end();
                 ++aProperty
             )

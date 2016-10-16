@@ -55,14 +55,14 @@ public:
     const OString&      getOption(const ::rtl::OString& option) const
         throw( IllegalArgument );
 
-    const StringVector& getInputFiles() { return m_inputFiles;}
+    const std::vector< OUString >& getInputFiles() { return m_inputFiles;}
 
-    inline const StringVector& getExtraInputFiles() const
+    inline const std::vector< OUString >& getExtraInputFiles() const
         { return m_extra_input_files; }
 protected:
     ::rtl::OString  m_program;
-    StringVector    m_inputFiles;
-    StringVector    m_extra_input_files;
+    std::vector< OUString >    m_inputFiles;
+    std::vector< OUString >    m_extra_input_files;
     OptionMap       m_options;
 };
 

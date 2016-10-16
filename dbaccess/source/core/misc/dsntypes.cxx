@@ -86,8 +86,8 @@ OUString ODsnTypeCollection::cutPrefix(const OUString& _sURL) const
 {
     OUString sRet;
     OUString sOldPattern;
-    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
-    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
+    std::std::vector< OUString >::const_iterator aIter = m_aDsnPrefixes.begin();
+    std::std::vector< OUString >::const_iterator aEnd = m_aDsnPrefixes.end();
 
     for(;aIter != aEnd;++aIter)
     {
@@ -111,8 +111,8 @@ OUString ODsnTypeCollection::getPrefix(const OUString& _sURL) const
 {
     OUString sRet;
     OUString sOldPattern;
-    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
-    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
+    std::std::vector< OUString >::const_iterator aIter = m_aDsnPrefixes.begin();
+    std::std::vector< OUString >::const_iterator aEnd = m_aDsnPrefixes.end();
     for(;aIter != aEnd;++aIter)
     {
         WildCard aWildCard(*aIter);
@@ -140,8 +140,8 @@ bool ODsnTypeCollection::isConnectionUrlRequired(const OUString& _sURL) const
 {
     OUString sRet;
     OUString sOldPattern;
-    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
-    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
+    std::std::vector< OUString >::const_iterator aIter = m_aDsnPrefixes.begin();
+    std::std::vector< OUString >::const_iterator aEnd = m_aDsnPrefixes.end();
     for(;aIter != aEnd;++aIter)
     {
         WildCard aWildCard(*aIter);
@@ -488,8 +488,8 @@ void ODsnTypeCollection::fillPageIds(const OUString& _sURL,::std::vector<sal_Int
 OUString ODsnTypeCollection::getType(const OUString& _sURL) const
 {
     OUString sOldPattern;
-    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
-    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
+    std::std::vector< OUString >::const_iterator aIter = m_aDsnPrefixes.begin();
+    std::std::vector< OUString >::const_iterator aEnd = m_aDsnPrefixes.end();
     for(;aIter != aEnd;++aIter)
     {
         WildCard aWildCard(*aIter);
@@ -505,8 +505,8 @@ sal_Int32 ODsnTypeCollection::getIndexOf(const OUString& _sURL) const
 {
     sal_Int32 nRet = -1;
     OUString sOldPattern;
-    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
-    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
+    std::std::vector< OUString >::const_iterator aIter = m_aDsnPrefixes.begin();
+    std::std::vector< OUString >::const_iterator aEnd = m_aDsnPrefixes.end();
     for(sal_Int32 i = 0;aIter != aEnd;++aIter,++i)
     {
         WildCard aWildCard(*aIter);

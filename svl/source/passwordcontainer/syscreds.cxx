@@ -120,7 +120,7 @@ namespace
         return false;
     }
 
-    bool findURL( StringSet const & rContainer, OUString const & aURL, OUString & aResult )
+    bool findURL( std::set< OUString > const & rContainer, OUString const & aURL, OUString & aResult )
     {
         // TODO: This code is actually copied from svl/source/passwordcontainer.cxx
         if( !rContainer.empty() && !aURL.isEmpty() )
@@ -132,7 +132,7 @@ namespace
             do
             {
                 // first look for <url>/somename and then look for <url>/somename/...
-                StringSet::const_iterator aIter = rContainer.find( aUrl );
+                std::set< OUString >::const_iterator aIter = rContainer.find( aUrl );
                 if( aIter != rContainer.end() )
                 {
                     aResult = *aIter;
@@ -241,8 +241,8 @@ uno::Sequence< OUString > SysCredentialsConfig::list( bool bOnlyPersistent )
                      + ( bOnlyPersistent ? 0 : m_aMemContainer.size() );
     uno::Sequence< OUString > aResult( nCount );
 
-    StringSet::const_iterator it = m_aCfgContainer.begin();
-    StringSet::const_iterator end = m_aCfgContainer.end();
+    std::set< OUString >::const_iterator it = m_aCfgContainer.begin();
+    std::set< OUString >::const_iterator end = m_aCfgContainer.end();
     sal_Int32 n = 0;
 
     while ( it != end )
