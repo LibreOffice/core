@@ -1163,7 +1163,7 @@ void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassMod
     SbModule* pModule = rItem.m_pModule;
     if( pModule->pClassData != nullptr )
     {
-        StringVector& rReqTypes = pModule->pClassData->maRequiredTypes;
+        std::vector< OUString >& rReqTypes = pModule->pClassData->maRequiredTypes;
         if( rReqTypes.size() > 0 )
         {
             for( const auto& rStr : rReqTypes )

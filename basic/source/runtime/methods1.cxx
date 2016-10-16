@@ -1757,7 +1757,7 @@ RTLFUNC(Split)
 
     OUString aExpression = rPar.Get(1)->GetOUString();
     short nArraySize = 0;
-    StringVector vRet;
+    std::vector< OUString > vRet;
     if( !aExpression.isEmpty() )
     {
         OUString aDelim;
