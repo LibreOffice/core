@@ -28,7 +28,7 @@
 #include <svl/itemset.hxx>
 
 #include "DrawDocShell.hxx"
-#include "../ui/inc/strings.hrc"
+#include "strings.hrc"
 
 #include "sdresid.hxx"
 #include "pres.hxx"

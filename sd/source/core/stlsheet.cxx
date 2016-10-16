@@ -50,8 +50,8 @@
 #include "app.hrc"
 #include "glob.hxx"
 #include "helpids.h"
-#include "../ui/inc/DrawViewShell.hxx"
-#include "../ui/inc/ViewShellBase.hxx"
+#include "DrawViewShell.hxx"
+#include "ViewShellBase.hxx"
 #include <editeng/boxitem.hxx>
 
 #include <memory>

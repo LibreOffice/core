@@ -64,9 +64,9 @@
 #include "undo/undomanager.hxx"
 
 #include "DrawDocShell.hxx"
-#include "../ui/inc/FrameView.hxx"
-#include "../ui/inc/cfgids.hxx"
-#include "../ui/inc/strings.hrc"
+#include "FrameView.hxx"
+#include "cfgids.hxx"
+#include "strings.hrc"
 
 #include "PageListWatcher.hxx"
 #include <vcl/virdev.hxx>

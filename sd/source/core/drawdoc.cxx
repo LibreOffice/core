@@ -93,11 +93,11 @@
 #include "cusshow.hxx"
 #include "customshowlist.hxx"
 #include "DrawDocShell.hxx"
-#include "../ui/inc/GraphicDocShell.hxx"
-#include "../ui/inc/sdxfer.hxx"
-#include "../ui/inc/ViewShell.hxx"
-#include "../ui/inc/optsitem.hxx"
-#include "../ui/inc/FrameView.hxx"
+#include "GraphicDocShell.hxx"
+#include "sdxfer.hxx"
+#include "ViewShell.hxx"
+#include "optsitem.hxx"
+#include "FrameView.hxx"
 #include <undo/undomanager.hxx>
 
 #include <tools/tenccvt.hxx>
