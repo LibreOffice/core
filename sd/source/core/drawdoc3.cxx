@@ -53,16 +53,16 @@
 #include "customshowlist.hxx"
 #include "sdxfer.hxx"
 
-#include "../ui/inc/unmovss.hxx"
-#include "../ui/inc/unchss.hxx"
-#include "../ui/inc/unprlout.hxx"
+#include "unmovss.hxx"
+#include "unchss.hxx"
+#include "unprlout.hxx"
 #include "DrawDocShell.hxx"
-#include "../ui/inc/GraphicDocShell.hxx"
-#include "../ui/inc/ViewShell.hxx"
-#include "../ui/inc/View.hxx"
-#include "../ui/inc/ViewShellBase.hxx"
-#include "../ui/inc/cfgids.hxx"
-#include "../ui/inc/strings.hrc"
+#include "GraphicDocShell.hxx"
+#include "ViewShell.hxx"
+#include "View.hxx"
+#include "ViewShellBase.hxx"
+#include "cfgids.hxx"
+#include "strings.hrc"
 
 using namespace ::com::sun::star;
 

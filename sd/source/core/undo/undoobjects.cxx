@@ -22,8 +22,8 @@
 #include "CustomAnimationEffect.hxx"
 #include "drawdoc.hxx"
 #include "undoanim.hxx"
-#include "../../ui/inc/ViewShell.hxx"
-#include "../../ui/inc/ViewShellBase.hxx"
+#include "ViewShell.hxx"
+#include "ViewShellBase.hxx"
 #include "DrawDocShell.hxx"
 
 using namespace sd;

@@ -41,7 +41,7 @@
 #include "pglink.hxx"
 #include "anminfo.hxx"
 
-#include "../ui/inc/strings.hrc"
+#include "strings.hrc"
 #include "DrawDocShell.hxx"
 
 #include <tools/tenccvt.hxx>

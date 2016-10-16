@@ -28,7 +28,7 @@
 
 #include <svx/unoprov.hxx>
 
-#include "../ui/inc/strings.hrc"
+#include "strings.hrc"
 #include "stlfamily.hxx"
 #include "stlsheet.hxx"
 #include "sdresid.hxx"
