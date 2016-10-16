@@ -2161,7 +2161,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
     uno::Any aReturn;
 
     // common interfaces
-    aReturn <<= ::cppu::queryInterface
+    aReturn = ::cppu::queryInterface
                 (   rType
                 ,   static_cast<lang::XTypeProvider*> ( this )
                 ,   static_cast<embed::XStorage*> ( this )
@@ -2178,7 +2178,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
     if ( aReturn.hasValue() )
         return aReturn ;
 
-    aReturn <<= ::cppu::queryInterface
+    aReturn = ::cppu::queryInterface
                 (   rType
                 ,   static_cast<embed::XHierarchicalStorageAccess*> ( this )
                 ,   static_cast<embed::XHierarchicalStorageAccess2*> ( this ) );
@@ -2190,7 +2190,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
     {
         if ( m_pData->m_bIsRoot )
         {
-            aReturn <<= ::cppu::queryInterface
+            aReturn = ::cppu::queryInterface
                         (   rType
                         ,   static_cast<embed::XStorageRawAccess*> ( this )
                         ,   static_cast<embed::XEncryptionProtectedSource*> ( this )
@@ -2199,14 +2199,14 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
         }
         else
         {
-            aReturn <<= ::cppu::queryInterface
+            aReturn = ::cppu::queryInterface
                         (   rType
                         ,   static_cast<embed::XStorageRawAccess*> ( this ) );
         }
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
-        aReturn <<= ::cppu::queryInterface
+        aReturn = ::cppu::queryInterface
                     (   rType
                     ,   static_cast<embed::XRelationshipAccess*> ( this ) );
     }

@@ -60,7 +60,7 @@ uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
     else if( rType == cppu::UnoType<lang::XUnoTunnel>::get())
         aAny <<= uno::Reference< lang::XUnoTunnel >(this);
     else
-        aAny <<= ::unographic::GraphicDescriptor::queryAggregation( rType );
+        aAny = ::unographic::GraphicDescriptor::queryAggregation( rType );
 
     return aAny;
 }
