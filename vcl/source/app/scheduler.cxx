@@ -34,15 +34,20 @@ void ImplSchedulerData::Invoke()
     if (mbDelete || mbInScheduler )
         return;
 
-    // prepare Scheduler Object for deletion after handling
-    mpScheduler->SetDeletionFlags();
-
     // tdf#92036 Reset the period to avoid re-firing immediately.
     mpScheduler->mpSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
 
-    // invoke it
+    // Setting the delete flag while not being in the scheduler
+    // risks getting deleted before we execute (and segfault when we do).
     mbInScheduler = true;
+
+    // prepare Scheduler Object for deletion after handling
+    mpScheduler->SetDeletionFlags();
+
+    // invoke it
     mpScheduler->Invoke();
+
+    // Now we aren't running and ready for deletion.
     mbInScheduler = false;
 }
 
@@ -207,6 +212,7 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
     pSchedulerData = pSVData->mpFirstSchedulerData;
     while ( pSchedulerData )
     {
+        //FIXME: This traversal is not thread safe. See Scheduler::Start().
         ImplSchedulerData *pNext = pSchedulerData->mpNext;
 
         // Should Task be released from scheduling?
@@ -281,9 +287,12 @@ void Scheduler::Start()
     if ( !mpSchedulerData )
     {
         // insert Scheduler
-        mpSchedulerData                = new ImplSchedulerData;
-        mpSchedulerData->mpScheduler   = this;
-        mpSchedulerData->mbInScheduler = false;
+        ImplSchedulerData* pSchedulerData = new ImplSchedulerData;
+        pSchedulerData->mpScheduler   = this;
+        pSchedulerData->mbInScheduler = false;
+        pSchedulerData->mbDelete      = false;
+        pSchedulerData->mnUpdateTime  = tools::Time::GetSystemTicks();
+        pSchedulerData->mpNext = nullptr;
 
         // insert last due to SFX!
         ImplSchedulerData* pPrev = nullptr;
@@ -293,14 +302,22 @@ void Scheduler::Start()
             pPrev = pData;
             pData = pData->mpNext;
         }
-        mpSchedulerData->mpNext = nullptr;
+
+        //FIXME: CalculateMinimumTimeout could have removed pPrev and we leak (or worse).
         if ( pPrev )
-            pPrev->mpNext = mpSchedulerData;
+            pPrev->mpNext = pSchedulerData;
         else
-            pSVData->mpFirstSchedulerData = mpSchedulerData;
+            pSVData->mpFirstSchedulerData = pSchedulerData;
+
+        // Assign only when complete.
+        // Otherwise, we race with CalculateMinimumTimeout.
+        mpSchedulerData = pSchedulerData;
     }
-    mpSchedulerData->mbDelete      = false;
-    mpSchedulerData->mnUpdateTime  = tools::Time::GetSystemTicks();
+    else
+    {
+        mpSchedulerData->mbDelete      = false;
+        mpSchedulerData->mnUpdateTime  = tools::Time::GetSystemTicks();
+    }
 }
 
 void Scheduler::Stop()
