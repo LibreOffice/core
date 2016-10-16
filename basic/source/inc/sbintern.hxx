@@ -43,15 +43,13 @@ public:
     virtual SbxObject* CreateObject( const OUString& ) override;
 };
 
-typedef ::std::vector< OUString > StringVector;
-
 struct SbClassData
 {
     SbxArrayRef     mxIfaces;
 
     // types this module depends on because of use in Dim As New <type>
     // needed for initialization order of class modules
-    StringVector    maRequiredTypes;
+    std::vector< OUString >    maRequiredTypes;
 
     SbClassData();
     ~SbClassData()
