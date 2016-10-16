@@ -171,9 +171,8 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
     {
     if( context.getDiagnostics().hasErrorOccurred())
         return;
-    char const*const mainFileName = context.getSourceManager().getFileEntryForID(context.getSourceManager().getMainFileID())->getName();
-    size_t const len = strlen(mainFileName);
-    if (len > 3 && strncmp(mainFileName + len - 3, ".ii", 3) == 0)
+    StringRef const mainFileName = context.getSourceManager().getFileEntryForID(context.getSourceManager().getMainFileID())->getName();
+    if (mainFileName.endswith(".ii"))
     {
         report(DiagnosticsEngine::Fatal,
             "input file has suffix .ii: \"%0\"\nhighly suspicious, probably ccache generated, this will break warning suppressions; export CCACHE_CPP2=1 to prevent this") << mainFileName;
@@ -201,11 +200,12 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         string modifyFile;
         const char* pathWarning = NULL;
         bool bSkip = false;
-        if( strncmp( e->getName(), WORKDIR "/", strlen( WORKDIR "/" )) == 0 )
+        StringRef const name = e->getName();
+        if( name.startswith(WORKDIR "/") )
             pathWarning = "modified source in workdir/ : %0";
-        else if( strcmp( SRCDIR, BUILDDIR ) != 0 && strncmp( e->getName(), BUILDDIR "/", strlen( BUILDDIR "/" )) == 0 )
+        else if( strcmp( SRCDIR, BUILDDIR ) != 0 && name.startswith(BUILDDIR "/") )
             pathWarning = "modified source in build dir : %0";
-        else if( strncmp( e->getName(), SRCDIR "/", strlen( SRCDIR "/" )) == 0 )
+        else if( name.startswith(SRCDIR "/") )
             ; // ok
         else
             {
@@ -213,7 +213,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             bSkip = true;
             }
         if( modifyFile.empty())
-            modifyFile = e->getName();
+            modifyFile = name;
         // Check whether the modified file is in the wanted scope
         if( scope == "mainfile" )
             {
@@ -229,7 +229,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             }
         // Warn only now, so that files not in scope do not cause warnings.
         if( pathWarning != NULL )
-            report( DiagnosticsEngine::Warning, pathWarning ) << e->getName();
+            report( DiagnosticsEngine::Warning, pathWarning ) << name;
         if( bSkip )
             continue;
         char* filename = new char[ modifyFile.length() + 100 ];
