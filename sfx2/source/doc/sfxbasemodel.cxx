@@ -3942,7 +3942,7 @@ OUString SAL_CALL SfxBaseModel::getTitle()
         {
             try {
                 ::ucbhelper::Content aContent( pMedium->GetName(),
-                    Reference<ucb::XCommandEnvironment>(),
+                    utl::UCBContentHelper::getDefaultCommandEnvironment(),
                     comphelper::getProcessComponentContext() );
                 const Reference < beans::XPropertySetInfo > xProps
                      = aContent.getProperties();
