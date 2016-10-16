@@ -324,7 +324,7 @@ css::uno::Any VCLXGraphicControl::getProperty( const OUString& PropertyName ) th
         break;
         default:
         {
-            aProp <<= VCLXWindow::getProperty( PropertyName );
+            aProp = VCLXWindow::getProperty( PropertyName );
         }
         break;
     }
@@ -561,7 +561,7 @@ css::uno::Any VCLXButton::getProperty( const OUString& PropertyName ) throw(css:
             break;
             default:
             {
-                aProp <<= VCLXGraphicControl::getProperty( PropertyName );
+                aProp = VCLXGraphicControl::getProperty( PropertyName );
             }
         }
     }
@@ -1000,7 +1000,7 @@ css::uno::Any VCLXCheckBox::getProperty( const OUString& PropertyName ) throw(cs
                 break;
             default:
             {
-                aProp <<= VCLXGraphicControl::getProperty( PropertyName );
+                aProp = VCLXGraphicControl::getProperty( PropertyName );
             }
         }
     }
@@ -1178,7 +1178,7 @@ css::uno::Any VCLXRadioButton::getProperty( const OUString& PropertyName ) throw
                 break;
             default:
             {
-                aProp <<= VCLXGraphicControl::getProperty( PropertyName );
+                aProp = VCLXGraphicControl::getProperty( PropertyName );
             }
         }
     }
@@ -1951,7 +1951,7 @@ css::uno::Any VCLXListBox::getProperty( const OUString& PropertyName ) throw(css
             break;
             default:
             {
-                aProp <<= VCLXWindow::getProperty( PropertyName );
+                aProp = VCLXWindow::getProperty( PropertyName );
             }
         }
     }
@@ -2512,7 +2512,7 @@ uno::Any SAL_CALL VCLXMultiPage::getProperty( const OUString& PropertyName ) thr
         }
         break;
         default:
-            aProp <<= VCLXContainer::getProperty( PropertyName );
+            aProp = VCLXContainer::getProperty( PropertyName );
     }
     return aProp;
 }
@@ -3078,7 +3078,7 @@ css::uno::Any VCLXFixedHyperlink::getProperty( const OUString& PropertyName ) th
 
             default:
             {
-                aProp <<= VCLXWindow::getProperty( PropertyName );
+                aProp = VCLXWindow::getProperty( PropertyName );
             }
         }
     }
@@ -3663,7 +3663,7 @@ css::uno::Any VCLXScrollBar::getProperty( const OUString& PropertyName ) throw(c
 
             default:
             {
-                aProp <<= VCLXWindow::getProperty( PropertyName );
+                aProp = VCLXWindow::getProperty( PropertyName );
             }
         }
     }
@@ -4388,7 +4388,7 @@ css::uno::Any VCLXComboBox::getProperty( const OUString& PropertyName ) throw(cs
             break;
             default:
             {
-                aProp <<= VCLXEdit::getProperty( PropertyName );
+                aProp = VCLXEdit::getProperty( PropertyName );
             }
         }
     }
@@ -4701,7 +4701,7 @@ css::uno::Any VCLXFormattedSpinField::getProperty( const OUString& PropertyName 
             break;
             default:
             {
-                aProp <<= VCLXSpinField::getProperty( PropertyName );
+                aProp = VCLXSpinField::getProperty( PropertyName );
             }
         }
     }
@@ -4889,7 +4889,7 @@ css::uno::Any VCLXDateField::getProperty( const OUString& PropertyName ) throw(c
             break;
             default:
             {
-                aProp <<= VCLXFormattedSpinField::getProperty( PropertyName );
+                aProp = VCLXFormattedSpinField::getProperty( PropertyName );
             }
         }
     }
@@ -5359,7 +5359,7 @@ css::uno::Any VCLXTimeField::getProperty( const OUString& PropertyName ) throw(c
             break;
             default:
             {
-                aProp <<= VCLXFormattedSpinField::getProperty( PropertyName );
+                aProp = VCLXFormattedSpinField::getProperty( PropertyName );
             }
         }
     }
@@ -5702,7 +5702,7 @@ css::uno::Any VCLXNumericField::getProperty( const OUString& PropertyName ) thro
             break;
             default:
             {
-                aProp <<= VCLXFormattedSpinField::getProperty( PropertyName );
+                aProp = VCLXFormattedSpinField::getProperty( PropertyName );
             }
         }
     }
@@ -5951,7 +5951,7 @@ css::uno::Any VCLXMetricField::getProperty( const OUString& PropertyName ) throw
                 break;
             default:
             {
-                aProp <<= VCLXFormattedSpinField::getProperty( PropertyName );
+                aProp = VCLXFormattedSpinField::getProperty( PropertyName );
                 break;
             }
         }
@@ -6309,7 +6309,7 @@ css::uno::Any VCLXCurrencyField::getProperty( const OUString& PropertyName ) thr
             break;
             default:
             {
-                aProp <<= VCLXFormattedSpinField::getProperty( PropertyName );
+                aProp = VCLXFormattedSpinField::getProperty( PropertyName );
             }
         }
     }
@@ -6480,7 +6480,7 @@ css::uno::Any VCLXPatternField::getProperty( const OUString& PropertyName ) thro
             break;
             default:
             {
-                aProp <<= VCLXFormattedSpinField::getProperty( PropertyName );
+                aProp = VCLXFormattedSpinField::getProperty( PropertyName );
             }
         }
     }

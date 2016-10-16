@@ -162,7 +162,7 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
             throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
         ContainerEvent aEvent;
         aEvent.Source = *this;
-        aEvent.Element <<= aElement;
+        aEvent.Element = aElement;
         aEvent.Accessor <<= OUString::number(nIndex);
         maContainerListeners.elementInserted( aEvent );
     }

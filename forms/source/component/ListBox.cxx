@@ -255,7 +255,7 @@ namespace frm
         switch (_nHandle)
         {
         case PROPERTY_ID_BOUNDCOLUMN:
-            _rValue <<= m_aBoundColumn;
+            _rValue = m_aBoundColumn;
             break;
 
         case PROPERTY_ID_LISTSOURCETYPE:

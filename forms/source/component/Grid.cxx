@@ -470,7 +470,7 @@ void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) co
             rValue <<= (sal_Int16)m_nBorder;
             break;
         case PROPERTY_ID_BORDERCOLOR:
-            rValue <<= m_aBorderColor;
+            rValue = m_aBorderColor;
             break;
         case PROPERTY_ID_DEFAULTCONTROL:
             rValue <<= m_aDefaultControl;

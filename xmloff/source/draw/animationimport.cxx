@@ -521,7 +521,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
                     aEventTrigger = rValue.copy( 0, nPos );
 
                     // convert offset
-                    aEvent.Offset <<= convertTiming( rValue.copy( nPos + 1 ) );
+                    aEvent.Offset = convertTiming( rValue.copy( nPos + 1 ) );
                 }
 
                 nPos = aEventTrigger.indexOf( (sal_Unicode)'.' );

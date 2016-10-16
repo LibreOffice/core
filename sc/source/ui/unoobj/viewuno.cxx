@@ -1284,7 +1284,7 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
             ScDocument& rDoc = pDocSh->GetDocument();
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
             uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= getSelection();
+            aArgs[ 0 ] = getSelection();
             xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
         }
         catch( uno::Exception& )
@@ -1753,7 +1753,7 @@ void ScTabViewObj::SelectionChanged()
         {
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
             uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= getSelection();
+            aArgs[ 0 ] = getSelection();
             xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
         }
         catch( uno::Exception& )

@@ -4475,7 +4475,7 @@ Reference< XInterface > createComListener( const Any& aControlAny, const OUStrin
     Reference< XInvocation > xProxy = new ModuleInvocationProxy( aPrefix, xScopeObj );
 
     Sequence<Any> args( 3 );
-    args[0] <<= aControlAny;
+    args[0] = aControlAny;
     args[1] <<= aVBAType;
     args[2] <<= xProxy;
 

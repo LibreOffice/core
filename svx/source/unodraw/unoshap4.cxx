@@ -691,7 +691,7 @@ bool SvxPluginShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
             uno::Reference < beans::XPropertySet > xSet( static_cast<SdrOle2Obj*>(mpObj.get())->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if( xSet.is() )
             {
-                rValue <<= xSet->getPropertyValue( rName );
+                rValue = xSet->getPropertyValue( rName );
             }
         }
         return true;
@@ -768,7 +768,7 @@ bool SvxFrameShape::getPropertyValueImpl(const OUString& rName, const SfxItemPro
             uno::Reference < beans::XPropertySet > xSet( static_cast<SdrOle2Obj*>(mpObj.get())->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if( xSet.is() )
             {
-                rValue <<= xSet->getPropertyValue( rName );
+                rValue = xSet->getPropertyValue( rName );
             }
         }
         return true;

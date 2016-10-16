@@ -2885,7 +2885,7 @@ RTLFUNC(NPV)
     aValues >>= sValues[ 0 ];
     aValues <<= sValues;
 
-    aParams[ 1 ] <<= aValues;
+    aParams[ 1 ] = aValues;
 
     CallFunctionAccessFunction( aParams, "NPV", rPar.Get( 0 ) );
 }
@@ -2959,7 +2959,7 @@ RTLFUNC(MIRR)
     aValues >>= sValues[ 0 ];
     aValues <<= sValues;
 
-    aParams[ 0 ] <<= aValues;
+    aParams[ 0 ] = aValues;
     aParams[ 1 ] = makeAny( rPar.Get(2)->GetDouble() );
     aParams[ 2 ] = makeAny( rPar.Get(3)->GetDouble() );
 
@@ -2997,7 +2997,7 @@ RTLFUNC(IRR)
     }
 
     Sequence< Any > aParams( 2 );
-    aParams[ 0 ] <<= aValues;
+    aParams[ 0 ] = aValues;
     aParams[ 1 ] <<= guess;
 
     CallFunctionAccessFunction( aParams, "IRR", rPar.Get( 0 ) );

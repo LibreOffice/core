@@ -804,7 +804,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
     {
         if ( ( mAny >>= aXIndexReplace ) && nNumberingDepth < aXIndexReplace->getCount() )
         {
-            mAny <<= aXIndexReplace->getByIndex( nNumberingDepth );
+            mAny = aXIndexReplace->getByIndex( nNumberingDepth );
             auto aPropertySequence = o3tl::doAccess<css::uno::Sequence<css::beans::PropertyValue>>(mAny);
 
             const css::beans::PropertyValue* pPropValue = aPropertySequence->getConstArray();

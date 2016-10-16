@@ -58,7 +58,7 @@ css::beans::PropertyValues OptimizationStats::GetStatusSequence()
     while( aIter != maStats.end() )
     {
         aStatsSequence[ i ].Name = TKGet( (*aIter).first );
-        aStatsSequence[ i++ ].Value <<= (*aIter++).second;
+        aStatsSequence[ i++ ].Value = (*aIter++).second;
     }
     return aStatsSequence;
 }

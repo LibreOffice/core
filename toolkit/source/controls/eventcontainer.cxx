@@ -103,7 +103,7 @@ void ScriptEventContainer::replaceByName( const OUString& aName, const Any& aEle
     // Fire event
     ContainerEvent aEvent;
     aEvent.Source = *this;
-    aEvent.Element <<= aElement;
+    aEvent.Element = aElement;
     aEvent.ReplacedElement = aOldElement;
     aEvent.Accessor <<= aName;
     maContainerListeners.elementReplaced( aEvent );
@@ -134,7 +134,7 @@ void ScriptEventContainer::insertByName( const OUString& aName, const Any& aElem
     // Fire event
     ContainerEvent aEvent;
     aEvent.Source = *this;
-    aEvent.Element <<= aElement;
+    aEvent.Element = aElement;
     aEvent.Accessor <<= aName;
     maContainerListeners.elementInserted( aEvent );
 }

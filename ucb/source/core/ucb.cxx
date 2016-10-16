@@ -672,7 +672,7 @@ Any SAL_CALL UniversalContentBroker::execute(
                 Environment );
             // Unreachable
         }
-        aRet <<= checkIn( aCheckinArg, Environment );
+        aRet = checkIn( aCheckinArg, Environment );
     }
     else
     {

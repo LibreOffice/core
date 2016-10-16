@@ -502,7 +502,7 @@ css::uno::Any VCLXMultiLineEdit::getProperty( const OUString& PropertyName ) thr
             break;
             default:
             {
-                aProp <<= VCLXWindow::getProperty( PropertyName );
+                aProp = VCLXWindow::getProperty( PropertyName );
             }
         }
     }
@@ -967,16 +967,16 @@ css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName ) th
         {
             case BASEPROPERTY_EFFECTIVE_MIN:
             case BASEPROPERTY_VALUEMIN_DOUBLE:
-                aReturn <<= GetMinValue();
+                aReturn = GetMinValue();
                 break;
 
             case BASEPROPERTY_EFFECTIVE_MAX:
             case BASEPROPERTY_VALUEMAX_DOUBLE:
-                aReturn <<= GetMaxValue();
+                aReturn = GetMaxValue();
                 break;
 
             case BASEPROPERTY_EFFECTIVE_DEFAULT:
-                aReturn <<= GetDefaultValue();
+                aReturn = GetDefaultValue();
                 break;
 
             case BASEPROPERTY_TREATASNUMBER:
@@ -985,7 +985,7 @@ css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName ) th
 
             case BASEPROPERTY_EFFECTIVE_VALUE:
             case BASEPROPERTY_VALUE_DOUBLE:
-                aReturn <<= GetValue();
+                aReturn = GetValue();
                 break;
 
             case BASEPROPERTY_VALUESTEP_DOUBLE:
@@ -1014,7 +1014,7 @@ css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName ) th
             break;
 
             default:
-                aReturn <<= VCLXSpinField::getProperty(PropertyName);
+                aReturn = VCLXSpinField::getProperty(PropertyName);
         }
     }
     return aReturn;
@@ -2269,7 +2269,7 @@ css::uno::Any VCLXProgressBar::getProperty( const OUString& PropertyName ) throw
             }
             break;
             default:
-                aProp <<= VCLXWindow::getProperty( PropertyName );
+                aProp = VCLXWindow::getProperty( PropertyName );
                 break;
         }
     }

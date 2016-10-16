@@ -1242,7 +1242,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
                         pItem->QueryValue( aVal, aIt->nMemberId );
                         aProperties.realloc( nCount + 1 );
                         aProperties[ nCount ].Name = aIt->sName;
-                        aProperties[ nCount ].Value <<= aVal;
+                        aProperties[ nCount ].Value = aVal;
                         ++nCount;
                     }
                     ++aIt;

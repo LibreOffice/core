@@ -1049,7 +1049,7 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
         for ( int i = index; i < _rArguments.getLength(); i++)
         {
             NamedValue namedValue;
-            aArguments[i] <<= _rArguments[i];
+            aArguments[i] = _rArguments[i];
 
             if (aArguments[i] >>= namedValue )
             {
