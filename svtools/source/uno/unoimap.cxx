@@ -326,7 +326,7 @@ Any SAL_CALL SvUnoImageMapObject::queryAggregation( const Type & rType )
     else if( rType == cppu::UnoType<XUnoTunnel>::get())
         aAny <<= Reference< XUnoTunnel >(this);
     else
-        aAny <<= OWeakAggObject::queryAggregation( rType );
+        aAny = OWeakAggObject::queryAggregation( rType );
 
     return aAny;
 }
