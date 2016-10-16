@@ -1703,7 +1703,7 @@ bool SfxObjectShell::SaveTo_Impl
     {
         try
         {
-            ::ucbhelper::Content aContent( rMedium.GetName(), css::uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+            ::ucbhelper::Content aContent( rMedium.GetName(), utl::UCBContentHelper::getDefaultCommandEnvironment(), comphelper::getProcessComponentContext() );
             css::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
