@@ -789,7 +789,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         try
         {
-            ::ucbhelper::Content aContent( pMedium->GetName(), css::uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+            ::ucbhelper::Content aContent( pMedium->GetName(), utl::UCBContentHelper::getDefaultCommandEnvironment(), comphelper::getProcessComponentContext() );
             css::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
