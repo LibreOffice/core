@@ -805,19 +805,19 @@ Reference< XShape > const & Shape::createAndInsert(
                 // TextFrames have BackColor, not FillColor
                 if (aShapeProps.hasProperty(PROP_FillColor))
                 {
-                    aShapeProps.setProperty(PROP_BackColor, aShapeProps.getProperty(PROP_FillColor));
+                    aShapeProps.setAnyProperty(PROP_BackColor, aShapeProps.getProperty(PROP_FillColor));
                     aShapeProps.erase(PROP_FillColor);
                 }
                 // TextFrames have BackColorTransparency, not FillTransparence
                 if (aShapeProps.hasProperty(PROP_FillTransparence))
                 {
-                    aShapeProps.setProperty(PROP_BackColorTransparency, aShapeProps.getProperty(PROP_FillTransparence));
+                    aShapeProps.setAnyProperty(PROP_BackColorTransparency, aShapeProps.getProperty(PROP_FillTransparence));
                     aShapeProps.erase(PROP_FillTransparence);
                 }
                 // TextFrames have BackGrahicURL, not FillBitmapURL
                 if (aShapeProps.hasProperty(PROP_FillBitmapURL))
                 {
-                    aShapeProps.setProperty(PROP_BackGraphicURL, aShapeProps.getProperty(PROP_FillBitmapURL));
+                    aShapeProps.setAnyProperty(PROP_BackGraphicURL, aShapeProps.getProperty(PROP_FillBitmapURL));
                     aShapeProps.erase(PROP_FillBitmapURL);
                 }
                 if (aShapeProps.hasProperty(PROP_FillBitmapName))
@@ -840,7 +840,7 @@ Reference< XShape > const & Shape::createAndInsert(
                         aBorderLine.Color = aShapeProps.getProperty(PROP_LineColor).get<sal_Int32>();
                         if (aLineProperties.moLineWidth.has())
                             aBorderLine.LineWidth = convertEmuToHmm(aLineProperties.moLineWidth.get());
-                        aShapeProps.setProperty(nBorder, uno::makeAny(aBorderLine));
+                        aShapeProps.setProperty(nBorder, aBorderLine);
                     }
                     aShapeProps.erase(PROP_LineColor);
                 }
@@ -913,12 +913,12 @@ Reference< XShape > const & Shape::createAndInsert(
                         aFormat.Location = nLocation;
                     }
                     aFormat.ShadowWidth = *oShadowDistance;
-                    aShapeProps.setProperty(PROP_ShadowFormat, uno::makeAny(aFormat));
+                    aShapeProps.setProperty(PROP_ShadowFormat, aFormat);
                 }
             }
             else if (mbTextBox)
             {
-                aShapeProps.setProperty(PROP_TextBox, uno::makeAny(true));
+                aShapeProps.setProperty(PROP_TextBox, true);
             }
 
             if (aServiceName != "com.sun.star.text.TextFrame" && isLinkedTxbx())

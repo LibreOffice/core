@@ -511,7 +511,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
                 aBorderLine.Color = aPropMap.getProperty(PROP_LineColor).get<sal_Int32>();
                 if (oLineWidth)
                     aBorderLine.LineWidth = *oLineWidth;
-                aPropMap.setProperty(nBorder, uno::makeAny(aBorderLine));
+                aPropMap.setProperty(nBorder, aBorderLine);
             }
             aPropMap.erase(PROP_LineColor);
         }
