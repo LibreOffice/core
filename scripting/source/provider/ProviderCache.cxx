@@ -200,7 +200,7 @@ ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeExcepti
         details.provider.set(
             details.factory->createInstanceWithArgumentsAndContext( m_Sctx, m_xContext ), UNO_QUERY_THROW );
     }
-    catch ( RuntimeException& e )
+    catch ( Exception& e )
     {
         ::rtl::OUString temp = ::rtl::OUString::createFromAscii("ProviderCache::createProvider() Error creating provider from factory!!!");
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
