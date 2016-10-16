@@ -110,7 +110,7 @@ std::string to_string(T x)
     return stream.str();
 }
 
-long stol( const std::string& str, std::size_t* /*pos*/ = 0, int base = 10 );
+long stol( const std::string& str, std::size_t* /*pos*/ = 0, int base = 10 )
 {
     char* end;
     return strtol(str.c_str(), &end, base);
