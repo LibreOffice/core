@@ -2628,7 +2628,7 @@ void SfxBaseModel::loadCmisProperties( )
         try
         {
             ::ucbhelper::Content aContent( pMedium->GetName( ),
-                Reference<ucb::XCommandEnvironment>(),
+                utl::UCBContentHelper::getDefaultCommandEnvironment(),
                 comphelper::getProcessComponentContext() );
             Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
             OUString aCmisProps( "CmisProperties" );
