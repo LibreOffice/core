@@ -71,7 +71,7 @@ OUString canonic(OUString const & url) {
 ucbhelper::Content content(OUString const & url) {
     return ucbhelper::Content(
         canonic(url),
-        css::uno::Reference<css::ucb::XCommandEnvironment>(),
+        utl::UCBContentHelper::getDefaultCommandEnvironment(),
         comphelper::getProcessComponentContext());
 }
 
