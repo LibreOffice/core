@@ -144,7 +144,7 @@ namespace accessibility
                             AccessibleListBoxEntry* pEntryFocus =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
                             if (pEntryFocus && pEntryFocus->GetSvLBoxEntry() == pEntry)
                             {
-                                aOldValue <<= uno::Any();
+                                aOldValue = uno::Any();
                                 aNewValue <<= m_xFocusedChild;
                                 NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
                                 return ;
@@ -170,7 +170,7 @@ namespace accessibility
                         }
                         else
                         {
-                            aOldValue <<= uno::Any();
+                            aOldValue = uno::Any();
                             aNewValue <<= AccessibleStateType::FOCUSED;
                             NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
                         }
