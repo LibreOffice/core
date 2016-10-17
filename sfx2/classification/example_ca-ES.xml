@@ -33,7 +33,7 @@
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Footer</baf:Identifier>
-                    <baf:Value>Aquest contingut és de caràcter confidencial. No ho distribuïu externament sense autorització.</baf:Value>
+                    <baf:Value>Aquest contingut és de caràcter confidencial. No el distribuïu externament sense autorització.</baf:Value>
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Watermark</baf:Identifier>
@@ -53,7 +53,7 @@
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Footer</baf:Identifier>
-                    <baf:Value>Aquest contingut és només d’ús intern. No ho distribuïu externament.</baf:Value>
+                    <baf:Value>Aquest contingut és només d’ús intern. No el distribuïu externament.</baf:Value>
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Watermark</baf:Identifier>
