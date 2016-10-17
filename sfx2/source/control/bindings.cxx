@@ -1443,12 +1443,6 @@ IMPL_LINK( SfxBindings, NextJob, Timer *, pTimer, void )
 
 bool SfxBindings::NextJob_Impl(Timer * pTimer)
 {
-#ifdef DBG_UTIL
-    // on Windows very often C++ Exceptions (GPF etc.) are caught by MSVCRT
-    // or another MS library try to get them here
-    try
-    {
-#endif
     const unsigned MAX_INPUT_DELAY = 200;
 
     DBG_ASSERT( pImpl->pCaches != nullptr, "SfxBindings not initialized" );
@@ -1539,16 +1533,6 @@ bool SfxBindings::NextJob_Impl(Timer * pTimer)
     pImpl->bInNextJob = false;
     Broadcast(SfxHint(SFX_HINT_UPDATEDONE));
     return true;
-#ifdef DBG_UTIL
-    }
-    catch (...)
-    {
-        OSL_FAIL("C++ exception caught!");
-        pImpl->bInNextJob = false;
-    }
-
-    return false;
-#endif
 }
 
 
