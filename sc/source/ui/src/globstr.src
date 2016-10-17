@@ -2031,7 +2031,7 @@ Resource RID_GLOBSTR
     };
     String STR_CLICKHYPERLINK
     {
-        Text [ en-US ] = "click to open hyperlink:";
+        Text [ en-US ] = "click to open link:";
     };
 
     String STR_PRINT_PREVIEW_NODATA
