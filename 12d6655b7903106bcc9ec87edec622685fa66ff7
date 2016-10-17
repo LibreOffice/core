@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_acef2caf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-10-17T10:32:23Z",
+      "side": 1,
+      "message": "Please remove this \"Changes to be commited\" list from your commit message.\nIt adds no value.",
+      "revId": "12d6655b7903106bcc9ec87edec622685fa66ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_6cf51482",
+        "filename": "sc/source/ui/src/globstr.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-10-17T10:32:23Z",
+      "side": 1,
+      "message": "Please use lowercase as it was before.",
+      "revId": "12d6655b7903106bcc9ec87edec622685fa66ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_8cf27099",
+        "filename": "sd/uiconfig/simpress/ui/publishingdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-10-17T10:32:23Z",
+      "side": 1,
+      "message": "You should keep \"L\" as accelerator.",
+      "revId": "12d6655b7903106bcc9ec87edec622685fa66ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
