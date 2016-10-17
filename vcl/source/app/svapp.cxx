@@ -1372,11 +1372,6 @@ void Application::EnableAutoHelpId()
     ImplGetSVData()->maHelpData.mbAutoHelpId = true;
 }
 
-bool Application::IsAutoHelpIdEnabled()
-{
-    return ImplGetSVData()->maHelpData.mbAutoHelpId;
-}
-
 OUString Application::GetToolkitName()
 {
     ImplSVData* pSVData = ImplGetSVData();

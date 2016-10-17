@@ -188,23 +188,12 @@ bool BiffInputStream::startNextRecord()
     return isInRecord();
 }
 
-bool BiffInputStream::startRecordByHandle( sal_Int64 nRecHandle )
-{
-    rewindToRecord( nRecHandle );
-    return startNextRecord();
-}
-
 void BiffInputStream::rewindRecord()
 {
     rewindToRecord( mnRecHandle );
 }
 
 // decoder --------------------------------------------------------------------
-
-void BiffInputStream::setDecoder( const BiffDecoderRef& rxDecoder )
-{
-    maRecBuffer.setDecoder( rxDecoder );
-}
 
 void BiffInputStream::enableDecoder()
 {

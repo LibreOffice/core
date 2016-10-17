@@ -18,12 +18,11 @@
  */
 
 #include "PageSizeControl.hxx"
-#include "PagePropertyPanel.hxx"
 
 #include <cmdid.h>
 #include <swtypes.hxx>
 #include <svx/svxids.hrc>
-
+#include <svx/pageitem.hxx>
 #include <svx/sidebar/ValueSetWithTextControl.hxx>
 
 #include <rtl/character.hxx>

@@ -1169,30 +1169,6 @@ VCL_BUILDER_DECL_FACTORY(HatchingLB)
     rRet = pListBox;
 }
 
-void HatchingLB::Fill( const XHatchListRef &pList )
-{
-    if( !pList.is() )
-        return;
-
-    mpList = pList;
-    long nCount = pList->Count();
-
-    SetUpdateMode( false );
-
-    for( long i = 0; i < nCount; i++ )
-    {
-        const XHatchEntry* pEntry = pList->GetHatch(i);
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
-        if( !aBitmap.IsEmpty() )
-            InsertEntry(pEntry->GetName(), Image(aBitmap));
-        else
-            InsertEntry( pEntry->GetName() );
-    }
-
-    AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( true );
-}
-
 // Fills the listbox (provisional) with strings
 
 void FillAttrLB::Fill( const XHatchListRef &pList )
@@ -1232,52 +1208,6 @@ VCL_BUILDER_DECL_FACTORY(GradientLB)
     VclPtrInstance<GradientLB> pListBox(pParent, nWinStyle);
     pListBox->EnableAutoSize(true);
     rRet = pListBox;
-}
-
-void GradientLB::Fill( const XGradientListRef &pList )
-{
-    if( !pList.is() )
-        return;
-
-    mpList = pList;
-    long nCount = pList->Count();
-
-    SetUpdateMode( false );
-
-    for( long i = 0; i < nCount; i++ )
-    {
-        const XGradientEntry* pEntry = pList->GetGradient(i);
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
-        if( !aBitmap.IsEmpty() )
-            InsertEntry(pEntry->GetName(), Image(aBitmap));
-        else
-            InsertEntry( pEntry->GetName() );
-    }
-
-    AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( true );
-}
-
-void GradientLB::SelectEntryByList( const XGradientListRef &pList, const OUString& rStr,
-                                    const XGradient& rGradient )
-{
-    long nCount = pList.get() ? pList->Count() : 0;
-    const XGradientEntry* pEntry;
-    bool bFound = false;
-    OUString aStr;
-
-    long i;
-    for( i = 0; i < nCount && !bFound; i++ )
-    {
-        pEntry = pList->GetGradient( i );
-
-        aStr = pEntry->GetName();
-
-        if( rStr == aStr && rGradient == pEntry->GetGradient() )
-            bFound = true;
-    }
-    if( bFound )
-        SelectEntryPos( (sal_uInt16) ( i - 1 ) );
 }
 
 // Fills the listbox (provisional) with strings
@@ -1375,31 +1305,6 @@ namespace
         }
     }
 } // end of anonymous namespace
-
-void BitmapLB::Fill( const XBitmapListRef &pList )
-{
-    if( !pList.is() )
-        return;
-
-    mpList = pList;
-    const XBitmapEntry* pEntry;
-    const long nCount(pList->Count());
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
-
-    SetUpdateMode(false);
-
-    for(long i(0); i < nCount; i++)
-    {
-        pEntry = pList->GetBitmap(i);
-        maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
-        formatBitmapExToSize(maBitmapEx, aSize);
-        InsertEntry(pEntry->GetName(), Image(maBitmapEx));
-    }
-
-    AdaptDropDownLineCountToMaximum();
-    SetUpdateMode(true);
-}
 
 FillAttrLB::FillAttrLB(vcl::Window* pParent, WinBits aWB)
 :   ColorListBox(pParent, aWB)

@@ -110,8 +110,6 @@ public:
     int             getSelectedEntryId() const;
     int             getHighlightedEntryId() const;
 
-    void            highlightFirstEntry();
-
 protected:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 

@@ -18,7 +18,6 @@
  */
 
 #include "PageColumnControl.hxx"
-#include "PagePropertyPanel.hxx"
 
 #include <cmdid.h>
 #include <swtypes.hxx>

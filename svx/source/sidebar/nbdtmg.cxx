@@ -451,48 +451,6 @@ bool BulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)
     return bRet;
 }
 
-sal_Unicode BulletsTypeMgr::GetBulChar(sal_uInt16 nIndex)
-{
-    sal_Unicode cChar;
-    //sal_uInt16 nLength = 0;
-    //nLength = sizeof(pActualBullets)/sizeof(BulletsSettings_Impl);
-
-    if ( nIndex >= DEFAULT_BULLET_TYPES )
-        cChar = ' ';
-    else
-        cChar = pActualBullets[nIndex]->cBulletChar;
-
-    /*if( AllSettings::GetLayoutRTL() )
-    {
-        nLength = sizeof(aDynamicRTLBulletTypes)/sizeof(sal_Unicode);
-
-        if ( nIndex >= nLength )
-            cChar = ' ';
-        else
-            cChar = aDynamicRTLBulletTypes[nIndex];
-    }else
-    {
-        nLength = sizeof(aDynamicBulletTypes)/sizeof(sal_Unicode);
-
-        if ( nIndex >= nLength )
-            cChar = ' ';
-        else
-            cChar = aDynamicBulletTypes[nIndex];
-    }*/
-
-    return cChar;
-}
-vcl::Font BulletsTypeMgr::GetBulCharFont(sal_uInt16 nIndex)
-{
-    vcl::Font aRet;
-    if ( nIndex >= DEFAULT_BULLET_TYPES )
-        aRet = lcl_GetDefaultBulletFont();
-    else
-        aRet = pActualBullets[nIndex]->aFont;
-
-    return aRet;
-}
-
 // Numbering Type lib
 NumberingTypeMgr::NumberingTypeMgr()
     : NBOTypeMgrBase()

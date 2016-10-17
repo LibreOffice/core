@@ -760,46 +760,6 @@ void SvxColorTabPage::FillUserData()
 }
 
 
-void SvxColorTabPage::SetupForViewFrame( SfxViewFrame *pViewFrame )
-{
-    const OfaRefItem<XColorList> *pPtr = nullptr;
-    if ( pViewFrame != nullptr && pViewFrame->GetDispatcher() )
-        pPtr = static_cast<const OfaRefItem<XColorList> *>(pViewFrame->
-            GetDispatcher()->Execute( SID_GET_COLORLIST,
-                                      SfxCallMode::SYNCHRON ));
-    pColorList = pPtr ? pPtr->GetValue() : XColorList::GetStdColorList();
-
-    //SetPos( &pShadow->nUnknownPos );
-    //SetColorChgd( &pShadow->nChangeType );
-    Construct();
-}
-
-void SvxColorTabPage::SaveToViewFrame( SfxViewFrame *pViewFrame )
-{
-    if( !pColorList.is() )
-        return;
-
-    if( !pViewFrame )
-        return;
-
-    // notify current viewframe that it uses the same color table
-    if ( !pViewFrame->GetDispatcher() )
-        return;
-
-    const OfaRefItem<XColorList> * pPtr;
-    pPtr = static_cast<const OfaRefItem<XColorList>*>(pViewFrame->GetDispatcher()->Execute( SID_GET_COLORLIST, SfxCallMode::SYNCHRON ));
-    if( pPtr )
-    {
-        XColorListRef pReference = pPtr->GetValue();
-
-        if( pReference.is() &&
-            pReference->GetPath() == pColorList->GetPath() &&
-            pReference->GetName() == pColorList->GetName() )
-            SfxObjectShell::Current()->PutItem( SvxColorListItem( pColorList,
-                                                                  SID_COLOR_TABLE ) );
-    }
-}
-
 void SvxColorTabPage::SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef )
 {
     (void) t;

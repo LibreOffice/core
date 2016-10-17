@@ -28,8 +28,6 @@
 
 namespace sw { namespace sidebar {
 
-class PagePropertyPanel;
-
 class PageColumnControl : public SfxPopupWindow
 {
 public:

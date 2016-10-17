@@ -1860,7 +1860,6 @@ public:
         const ScMarkData* pMarkData = nullptr );
 
     SC_DLLPUBLIC SvNumberFormatter* GetFormatTable() const;
-    SC_DLLPUBLIC SvNumberFormatter* CreateFormatTable() const;
 
     /** Sort a range of data. */
     void Sort(

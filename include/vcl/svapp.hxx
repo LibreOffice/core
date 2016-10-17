@@ -1108,14 +1108,6 @@ public:
     */
     static void                 EnableAutoHelpId();
 
-    /** Determines if auto-help is enabled or disabled.
-
-     @return true if auto-help is enabled, false if it is disabled.
-
-     @see EnableAutoHelpId
-    */
-    static bool                 IsAutoHelpIdEnabled();
-
     ///@}
 
     /** @name Dialogs

@@ -174,7 +174,6 @@ class TreeListBox : public SvTreeListBox, public DocumentEventListener
 private:
     sal_uInt16 nMode;
     DocumentEventNotifier m_aNotifier;
-    void            Init();
     void            SetEntryBitmaps( SvTreeListEntry * pEntry, const Image& rImage );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
 
@@ -204,7 +203,6 @@ protected:
     virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) override;
 
 public:
-    TreeListBox(vcl::Window* pParent, const ResId& rRes);
     TreeListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~TreeListBox() override;
     virtual void    dispose() override;

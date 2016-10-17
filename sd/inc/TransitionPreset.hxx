@@ -46,8 +46,6 @@ public:
     static const TransitionPresetList& getTransitionPresetList();
     static bool importTransitionPresetList( TransitionPresetList& rList );
 
-    void apply( SdPage* pSlide ) const;
-
     sal_Int16 getTransition() const { return mnTransition; }
     sal_Int16 getSubtype() const { return mnSubtype; }
     bool getDirection() const { return mbDirection; }

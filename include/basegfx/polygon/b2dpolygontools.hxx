@@ -137,9 +137,6 @@ namespace basegfx
         // Subdivide all contained curves. Use angleBound value if given.
         BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByAngle(const B2DPolygon& rCandidate, double fAngleBound = 0.0);
 
-        // #i37443# Subdivide all contained curves.
-        BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByCount(const B2DPolygon& rCandidate, sal_uInt32 nCount);
-
         // This version works with two points and vectors to define the
         // edges for the cut test.
         BASEGFX_DLLPUBLIC CutFlagValue findCut(

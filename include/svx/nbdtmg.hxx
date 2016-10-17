@@ -102,41 +102,6 @@ class  SVX_DLLPUBLIC BulletsSettings_Impl:public BulletsSettings
         virtual ~BulletsSettings_Impl() override {}
 };
 
-class  SVX_DLLPUBLIC GrfBulDataRelation: public BulletsSettings
-{
-    public:
-        OUString    sGrfName;
-        sal_uInt16  nTabIndex;
-        sal_uInt16  nGallaryIndex;
-        const Graphic*  pGrfObj;
-        Size aSize;
-    GrfBulDataRelation(NBType eTy):
-        BulletsSettings(eTy),
-        nTabIndex((sal_uInt16)0xFFFF),
-        nGallaryIndex((sal_uInt16)0xFFFF),
-        pGrfObj(nullptr),
-        aSize(0,0)
-    {}
-    virtual ~GrfBulDataRelation() override {}
-};
-
-class  SVX_DLLPUBLIC MixBulletsSettings_Impl
-{
-    public:
-        NBType          eType;
-        sal_uInt16          nIndex; //index in the tab page display
-        sal_uInt16          nIndexDefault;
-        BulletsSettings*    pBullets;
-    public:
-        MixBulletsSettings_Impl(NBType eTy) :
-            eType(eTy),
-            nIndex((sal_uInt16)0xFFFF),
-            nIndexDefault((sal_uInt16)0xFFFF),
-            pBullets(nullptr)
-            {}
-        ~MixBulletsSettings_Impl(){}
-};
-
 class  SVX_DLLPUBLIC NumberSettings_Impl
 {
     public:
@@ -230,8 +195,6 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
         virtual void ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault=false,bool isResetSize=false) override;
         virtual OUString GetDescription(sal_uInt16 nIndex,bool isDefault=false) override;
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
-        static sal_Unicode GetBulChar(sal_uInt16 nIndex);
-        static vcl::Font GetBulCharFont(sal_uInt16 nIndex);
         static BulletsTypeMgr& GetInstance();
 };
 

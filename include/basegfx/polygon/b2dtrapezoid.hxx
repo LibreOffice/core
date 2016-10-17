@@ -104,14 +104,6 @@ namespace basegfx
             const B2DPolygon& rPolygon,
             double fLineWidth);
 
-        // create trapezoids for all edges of the given polyPolygon. The closed state of
-        // the tools::PolyPolygon is taken into account. If curves are contaned, the default
-        // AdaptiveSubdivision will be used.
-        BASEGFX_DLLPUBLIC void createLineTrapezoidFromB2DPolyPolygon(
-            B2DTrapezoidVector& ro_Result,
-            const B2DPolyPolygon& rPolyPolygon,
-            double fLineWidth);
-
     } // end of namespace tools
 } // end of namespace basegfx
 

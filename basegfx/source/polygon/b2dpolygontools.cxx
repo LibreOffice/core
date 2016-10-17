@@ -40,7 +40,6 @@
 // #i37443#
 #define ANGLE_BOUND_START_VALUE     (2.25)
 #define ANGLE_BOUND_MINIMUM_VALUE   (0.1)
-#define COUNT_SUBDIVIDE_DEFAULT     (4)
 #ifdef DBG_UTIL
 static double fAngleBoundStartValue = ANGLE_BOUND_START_VALUE;
 #endif
@@ -296,71 +295,6 @@ namespace basegfx
                         {
                             // call adaptive subdivide
                             aBezier.adaptiveSubdivideByAngle(aRetval, fAngleBound);
-                        }
-                        else
-                        {
-                            // add non-curved edge
-                            aRetval.append(aBezier.getEndPoint());
-                        }
-
-                        // prepare next step
-                        aBezier.setStartPoint(aBezier.getEndPoint());
-                    }
-
-                    if(rCandidate.isClosed())
-                    {
-                        // set closed flag and correct last point (which is added double now).
-                        closeWithGeometryChange(aRetval);
-                    }
-                }
-
-                return aRetval;
-            }
-            else
-            {
-                return rCandidate;
-            }
-        }
-
-        B2DPolygon adaptiveSubdivideByCount(const B2DPolygon& rCandidate, sal_uInt32 nCount)
-        {
-            if(rCandidate.areControlPointsUsed())
-            {
-                const sal_uInt32 nPointCount(rCandidate.count());
-                B2DPolygon aRetval;
-
-                if(nPointCount)
-                {
-                    // prepare edge-oriented loop
-                    const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
-                    B2DCubicBezier aBezier;
-                    aBezier.setStartPoint(rCandidate.getB2DPoint(0));
-
-                    // perf: try to avoid too many realloctions by guessing the result's pointcount
-                    aRetval.reserve(nPointCount*4);
-
-                    // add start point (always)
-                    aRetval.append(aBezier.getStartPoint());
-
-                    // #i37443# prepare convenient count if none was given
-                    if(0 == nCount)
-                    {
-                        nCount = COUNT_SUBDIVIDE_DEFAULT;
-                    }
-
-                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
-                    {
-                        // get next and control points
-                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
-                        aBezier.setEndPoint(rCandidate.getB2DPoint(nNextIndex));
-                        aBezier.setControlPointA(rCandidate.getNextControlPoint(a));
-                        aBezier.setControlPointB(rCandidate.getPrevControlPoint(nNextIndex));
-                        aBezier.testAndSolveTrivialBezier();
-
-                        if(aBezier.isBezier())
-                        {
-                            // call adaptive subdivide
-                            aBezier.adaptiveSubdivideByCount(aRetval, nCount);
                         }
                         else
                         {

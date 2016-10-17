@@ -143,18 +143,6 @@ public:
      */
     bool                startNextRecord();
 
-    /** Sets stream pointer to the start of the content of the specified record.
-
-        The handle of the current record can be received and stored using the
-        function getRecHandle() for later usage with this function. The record
-        handle is equivalent to the position of the underlying binary stream,
-        thus the function can be used to perform a hard seek to a specific
-        position, if it is sure that a record starts exactly at this position.
-
-        @return  False = no record found (invalid handle passed).
-     */
-    bool                startRecordByHandle( sal_Int64 nRecHandle );
-
     /** Sets stream pointer before current record and invalidates stream.
 
         The next call to startNextRecord() will start again the current record.
@@ -166,12 +154,6 @@ public:
     void                rewindRecord();
 
     // decoder ----------------------------------------------------------------
-
-    /** Sets a new decoder object.
-
-        Enables decryption of record contents for the rest of the stream.
-     */
-    void                setDecoder( const BiffDecoderRef& rxDecoder );
 
     /** Enables/disables usage of current decoder.
 

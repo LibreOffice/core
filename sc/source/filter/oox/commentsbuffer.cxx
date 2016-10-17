@@ -35,7 +35,6 @@
 #include "drawingfragment.hxx"
 #include <svx/sdtaitm.hxx>
 #include "unitconverter.hxx"
-#include "drawingmanager.hxx"
 
 #include <com/sun/star/text/XText.hpp>
 

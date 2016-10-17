@@ -108,8 +108,6 @@ public:
     static void     reorderWithinParent(std::vector< vcl::Window*>& rChilds, bool bIsButtonBox);
     static void     reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition);
 
-    const css::uno::Reference<css::frame::XFrame>& getFrame() { return m_xFrame; }
-
     /// return UI-File name (without '.ui')
     const OString& getUIFile() const
     {

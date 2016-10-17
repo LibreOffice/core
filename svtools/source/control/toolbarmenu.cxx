@@ -674,12 +674,6 @@ Size ToolbarMenu::implCalcSize()
 }
 
 
-void ToolbarMenu::highlightFirstEntry()
-{
-    implChangeHighlightEntry( 0 );
-}
-
-
 void ToolbarMenu::GetFocus()
 {
     if( mpImpl && mpImpl->mnHighlightedEntry == -1 )

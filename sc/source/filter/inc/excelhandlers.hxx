@@ -93,41 +93,6 @@ public:
     virtual void        importRecord( BiffInputStream& rStrm ) = 0;
 };
 
-class BiffFragmentHandler
-{
-public:
-    /** Opens the stream with the passed full name. */
-    explicit            BiffFragmentHandler(
-                            const ::oox::core::FilterBase& rFilter,
-                            const OUString& rStrmName );
-
-    virtual             ~BiffFragmentHandler();
-
-protected:
-    /** Returns the BIFF input stream of this fragment. */
-    inline BiffInputStream& getInputStream() { return *mxBiffStrm; }
-
-    /** Skips the current fragment up to its trailing EOF record.
-
-        Skips all records until next EOF record. When this function returns,
-        stream points to the EOF record, and the next call of startNextRecord()
-        at the stream will start the record following the EOF record.
-
-        Embedded fragments enclosed in BOF/EOF records (e.g. embedded chart
-        objects) are skipped correctly.
-
-        @return  True = stream points to the EOF record of the current fragment.
-     */
-    bool                skipFragment();
-
-private:
-    typedef std::shared_ptr< BinaryXInputStream >   XInputStreamRef;
-    typedef std::shared_ptr< BiffInputStream >      BiffInputStreamRef;
-
-    XInputStreamRef     mxXInStrm;
-    BiffInputStreamRef  mxBiffStrm;
-};
-
 } // namespace xls
 } // namespace oox
 

@@ -427,11 +427,6 @@ void SvxNumberFormat::SetGraphic( const OUString& rName )
     aGraphicSize.Width() = aGraphicSize.Height() = 0;
 }
 
-void SvxNumberFormat::SetVertOrient(sal_Int16 eSet)
-{
-    eVertOrient = eSet;
-}
-
 sal_Int16    SvxNumberFormat::GetVertOrient() const
 {
     return eVertOrient;

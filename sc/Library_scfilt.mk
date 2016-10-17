@@ -178,7 +178,6 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/defnamesbuffer \
 	sc/source/filter/oox/drawingbase \
 	sc/source/filter/oox/drawingfragment \
-	sc/source/filter/oox/drawingmanager \
 	sc/source/filter/oox/excelchartconverter \
 	sc/source/filter/oox/excelhandlers \
 	sc/source/filter/oox/excelvbaproject \

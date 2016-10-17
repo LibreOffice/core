@@ -71,30 +71,6 @@ void BinSingleRef2d::setBiff12Data( sal_uInt16 nCol, sal_Int32 nRow, bool bRelat
         mnRow -= (BIFF12_TOK_REF_ROWMASK + 1);
 }
 
-void BinSingleRef2d::setBiff2Data( sal_uInt8 nCol, sal_uInt16 nRow, bool bRelativeAsOffset )
-{
-    mnCol = nCol;
-    mnRow = nRow & BIFF_TOK_REF_ROWMASK;
-    mbColRel = getFlag( nRow, BIFF_TOK_REF_COLREL );
-    mbRowRel = getFlag( nRow, BIFF_TOK_REF_ROWREL );
-    if( bRelativeAsOffset && mbColRel && (mnCol >= 0x80) )
-        mnCol -= 0x100;
-    if( bRelativeAsOffset && mbRowRel && (mnRow > (BIFF_TOK_REF_ROWMASK >> 1)) )
-        mnRow -= (BIFF_TOK_REF_ROWMASK + 1);
-}
-
-void BinSingleRef2d::setBiff8Data( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelativeAsOffset )
-{
-    mnCol = nCol & BIFF_TOK_REF_COLMASK;
-    mnRow = nRow;
-    mbColRel = getFlag( nCol, BIFF_TOK_REF_COLREL );
-    mbRowRel = getFlag( nCol, BIFF_TOK_REF_ROWREL );
-    if( bRelativeAsOffset && mbColRel && (mnCol > (BIFF_TOK_REF_COLMASK >> 1)) )
-        mnCol -= (BIFF_TOK_REF_COLMASK + 1);
-    if( bRelativeAsOffset && mbRowRel && (mnRow >= 0x8000) )
-        mnRow -= 0x10000;
-}
-
 void BinSingleRef2d::readBiff12Data( SequenceInputStream& rStrm, bool bRelativeAsOffset )
 {
     sal_Int32 nRow;

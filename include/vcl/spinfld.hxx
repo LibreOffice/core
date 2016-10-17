@@ -56,8 +56,6 @@ private:
     SAL_DLLPRIVATE void   ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rectangle& rDDArea, Rectangle& rSpinUpArea, Rectangle& rSpinDownArea );
 
 protected:
-    explicit        SpinField( WindowType nTyp );
-
     virtual bool    Notify( NotifyEvent& rNEvt ) override;
 
     void            EndDropDown();

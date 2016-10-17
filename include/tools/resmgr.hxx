@@ -94,10 +94,6 @@ private:
     TOOLS_DLLPRIVATE void incStack();
     TOOLS_DLLPRIVATE void decStack();
 
-    TOOLS_DLLPRIVATE const ImpRCStack * StackTop( sal_uInt32 nOff = 0 ) const
-    {
-        return (((int)nOff >= nCurStack) ? nullptr : &aStack[nCurStack-nOff]);
-    }
     TOOLS_DLLPRIVATE void  Init( const OUString& rFileName );
 
     TOOLS_DLLPRIVATE ResMgr( InternalResMgr * pImp );

@@ -91,8 +91,6 @@ protected:
     sal_uInt16              GetId() const { return m_nId; }
     const css::uno::Reference< css::frame::XFrame >& GetFrame() const { return m_xFrame; }
 
-    void                    BindListener();
-    void                    UnbindListener();
     void                    AddStatusListener( const OUString& rCommandURL );
 
     virtual void            statusChanged( const css::frame::FeatureStateEvent& rEvent );

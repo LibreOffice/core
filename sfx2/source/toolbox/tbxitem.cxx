@@ -855,22 +855,6 @@ void SfxPopupWindow::GetOrCreateStatusListener()
 }
 
 
-void SfxPopupWindow::BindListener()
-{
-    GetOrCreateStatusListener();
-    if ( m_xStatusListener.is() )
-        m_pStatusListener->bindListener();
-}
-
-
-void SfxPopupWindow::UnbindListener()
-{
-    GetOrCreateStatusListener();
-    if ( m_xStatusListener.is() )
-        m_pStatusListener->unbindListener();
-}
-
-
 void SfxPopupWindow::AddStatusListener( const OUString& rCommandURL )
 {
     GetOrCreateStatusListener();

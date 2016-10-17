@@ -49,15 +49,6 @@ public:
 
     ValueSetWithTextControl(Window* pParent, WinBits nBits);
 
-    // add item for control type IMAGE_TEXT
-    // if control type does not match IMAGE_TEXT no item is added.
-    // @param pItemHelpText
-    // help text is optional. if not provided, it is the same as the item text
-    void AddItem(
-        const Image& rItemImage,
-        const OUString& rItemText,
-        const OUString* pItemHelpText );
-
     // add item for control type TEXT_TEXT
     // if control type does not match TEXT_TEXT no item is added.
     void AddItem(

@@ -72,8 +72,6 @@ public:
                             const css::uno::Reference< css::util::XNumberFormats >& rxNumFmts,
                             const css::lang::Locale& rFromLocale );
     sal_uLong fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
-    /** Writes the number format to the passed property map. */
-    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
 private:
     NumFmtModel         maModel;

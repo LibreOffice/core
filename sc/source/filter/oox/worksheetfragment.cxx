@@ -31,7 +31,6 @@
 #include "commentsfragment.hxx"
 #include "condformatcontext.hxx"
 #include "drawingfragment.hxx"
-#include "drawingmanager.hxx"
 #include "externallinkbuffer.hxx"
 #include "pagesettings.hxx"
 #include "pivottablefragment.hxx"
