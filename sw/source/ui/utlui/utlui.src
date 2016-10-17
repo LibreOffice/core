@@ -137,7 +137,7 @@ String STR_EVENT_MOUSEOVER_OBJECT
 };
 String STR_EVENT_MOUSECLICK_OBJECT
 {
-    Text [ en-US ] = "Trigger hyperlink" ;
+    Text [ en-US ] = "Trigger Link" ;
 };
 String STR_EVENT_MOUSEOUT_OBJECT
 {
@@ -201,7 +201,7 @@ String STR_CONTENT_TYPE_REGION
 };
 String STR_CONTENT_TYPE_URLFIELD
 {
-    Text [ en-US ] = "Hyperlinks" ;
+    Text [ en-US ] = "Links" ;
 };
 String STR_CONTENT_TYPE_REFERENCE
 {
@@ -281,7 +281,7 @@ String STR_CONTENT_TYPE_SINGLE_REGION
 };
 String STR_CONTENT_TYPE_SINGLE_URLFIELD
 {
-    Text [ en-US ] = "Hyperlink" ;
+    Text [ en-US ] = "Link" ;
 };
 String STR_CONTENT_TYPE_SINGLE_REFERENCE
 {

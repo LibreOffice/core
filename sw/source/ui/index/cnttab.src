@@ -122,11 +122,11 @@ String STR_TOKEN_HELP_CHAPTER_INFO
 };
 String STR_TOKEN_HELP_LINK_START
 {
-    Text [ en-US ] = "Hyperlink start";
+    Text [ en-US ] = "Link start";
 };
 String STR_TOKEN_HELP_LINK_END
 {
-    Text [ en-US ] = "Hyperlink end";
+    Text [ en-US ] = "Link end";
 };
 String STR_TOKEN_HELP_AUTHORITY
 {

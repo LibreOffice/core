@@ -106,7 +106,7 @@ String RID_STR_DATATYPE_STRING
 
 String RID_STR_DATATYPE_URL
 {
-    Text [ en-US ] = "Hyperlink";
+    Text [ en-US ] = "Link";
 };
 
 String RID_STR_DATATYPE_BOOLEAN
