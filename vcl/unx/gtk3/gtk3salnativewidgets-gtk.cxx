@@ -2471,7 +2471,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetGroupFont( aFont );
 
     aFont.SetWeight( WEIGHT_BOLD );
-    aStyleSet.SetTabFont( aFont );  //pull from notebook style?
     aStyleSet.SetTitleFont( aFont );
     aStyleSet.SetFloatTitleFont( aFont );
 
@@ -2608,6 +2607,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetTabTextColor(aTextColor);
+        aStyleSet.SetTabFont(getFont(mpNotebookHeaderTabsTabLabelStyle, rSettings.GetUILanguageTag().getLocale()));
     }
 
     // mouse over text colors
