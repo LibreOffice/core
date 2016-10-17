@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_2cd6bcc5",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 4675,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-10-17T12:56:30Z",
+      "side": 1,
+      "message": "What does this mean? We already have a link to the documentation, which opens the Wiki if the help is not installed.",
+      "revId": "27c178b784d55e908c3d5ac77bc88644698558dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_6cd8b4f0",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-10-17T12:56:30Z",
+      "side": 1,
+      "message": "Have a look at http://opengrok.libreoffice.org/xref/core/sfx2/source/appl/openuriexternally.cxx#31 , maybe you can use that instead.",
+      "revId": "27c178b784d55e908c3d5ac77bc88644698558dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
