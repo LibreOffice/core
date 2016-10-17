@@ -11,6 +11,7 @@
 
 #include <memory>
 
+#include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <comphelper/sequence.hxx>
@@ -82,6 +83,22 @@ uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDoc
         security::DocumentSignatureInformation& rExternal = aRet[i];
         rExternal.SignatureIsValid = rInternal.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
         rExternal.Signer = xSecurityEnvironment->createCertificateFromAscii(rInternal.ouX509Certificate);
+
+        // Verify certificate.
+        if (rExternal.Signer.is())
+        {
+            try
+            {
+                rExternal.CertificateStatus = xSecurityEnvironment->verifyCertificate(rExternal.Signer, {});
+            }
+            catch (const uno::SecurityException& rException)
+            {
+                SAL_WARN("xmlsecurity.helper", "failed to verify certificate: " << rException.Message);
+                rExternal.CertificateStatus = security::CertificateValidity::INVALID;
+            }
+        }
+        else
+            rExternal.CertificateStatus = security::CertificateValidity::INVALID;
     }
 
     return aRet;
