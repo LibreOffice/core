@@ -1499,7 +1499,7 @@ css::lang::Locale SAL_CALL
         SfxDocumentMetaData::getLanguage() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
-    css::lang::Locale loc( LanguageTag( getMetaText("dc:language")).getLocale( false));
+    css::lang::Locale loc( LanguageTag::convertToLocale( getMetaText("dc:language"), false));
     return loc;
 }
 

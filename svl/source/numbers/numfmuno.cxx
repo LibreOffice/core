@@ -713,7 +713,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
         }
         else if (aPropertyName == PROPERTYNAME_LOCALE)
         {
-            lang::Locale aLocale( LanguageTag( pFormat->GetLanguage()).getLocale( false));
+            lang::Locale aLocale( LanguageTag::convertToLocale( pFormat->GetLanguage(), false));
             aRet <<= aLocale;
         }
         else if (aPropertyName == PROPERTYNAME_TYPE)
