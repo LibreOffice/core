@@ -54,6 +54,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
+#include <sfx2/safemode.hxx>
 #include <map>
 
 using namespace desktop;
@@ -124,6 +125,9 @@ void Desktop::RegisterServices(Reference< XComponentContext > const & context)
     {
         // interpret command line arguments
         CommandLineArgs& rCmdLine = GetCommandLineArgs();
+
+        if (rCmdLine.IsSafeMode() || sfx2::SafeMode::hasFlag())
+            Application::EnableSafeMode();
 
         // Headless mode for FAT Office
         bool bHeadlessMode = rCmdLine.IsHeadless();
