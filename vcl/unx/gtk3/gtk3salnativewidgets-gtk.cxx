@@ -143,6 +143,7 @@ enum class RenderType {
     Expander,
     Icon,
     Progress,
+    TabItem,
     Focus
 };
 
@@ -1576,18 +1577,16 @@ GtkStyleContext* GtkSalGraphics::createOldContext(GtkControlPart ePart)
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderTabsTabStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_LABEL);
-            GtkStyleContext* pRet = makeContext(path, mpNotebookHeaderTabsTabStyle);
-            gtk_style_context_add_class(pRet, "active-page");
-            return pRet;
+            gtk_widget_path_iter_add_class(path, -1, "active-page");
+            return makeContext(path, mpNotebookHeaderTabsTabStyle);
         }
         case GtkControlPart::NotebookHeaderTabsTabHoverLabel:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderTabsTabStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_LABEL);
-            GtkStyleContext* pRet = makeContext(path, mpNotebookHeaderTabsTabStyle);
-            gtk_style_context_add_class(pRet, "prelight-page");
-            return pRet;
+            gtk_widget_path_iter_add_class(path, -1, "prelight-page");
+            return makeContext(path, mpNotebookHeaderTabsTabStyle);
         }
         case GtkControlPart::FrameBorder:
         {
@@ -1939,6 +1938,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         context = mpNotebookHeaderTabsTabStyle;
         if (nState & ControlState::SELECTED)
             flags = (GtkStateFlags) (flags | ACTIVE_TAB());
+        renderType = RenderType::TabItem;
         break;
     case ControlType::WindowBackground:
         context = gtk_widget_get_style_context(mpWindow);
@@ -2013,26 +2013,6 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     long nHeight = rControlRegion.GetHeight();
 
     style_context_set_state(context, flags);
-    if (nType == ControlType::TabItem)
-    {
-        GtkBorder margin;
-        if (gtk_check_version(3, 20, 0) == nullptr)
-        {
-            gtk_style_context_get_margin(mpNotebookHeaderTabsTabStyle,
-                                         gtk_style_context_get_state(mpNotebookHeaderTabsTabStyle), &margin);
-        }
-        else
-        {
-            gint initial_gap(0);
-            gtk_style_context_get_style(mpNotebookStyle,
-                                    "initial-gap", &initial_gap,
-                                    nullptr);
-
-            margin.left = margin.right = initial_gap/2;
-        }
-        nX += margin.left;
-        nWidth -= (margin.left + margin.right);
-    }
 
     if (styleClass)
     {
@@ -2133,6 +2113,21 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         }
 
         break;
+    }
+    case RenderType::TabItem:
+    {
+        if (gtk_check_version(3, 20, 0) != nullptr)
+        {
+            gint initial_gap(0);
+            gtk_style_context_get_style(mpNotebookStyle,
+                                    "initial-gap", &initial_gap,
+                                    nullptr);
+
+            nX += initial_gap/2;
+            nWidth -= initial_gap;
+        }
+        Rectangle aRect(Point(nX, nY), Size(nWidth, nHeight));
+        render_common(mpNotebookHeaderTabsTabStyle, cr, aRect, flags);
     }
     default:
         break;
