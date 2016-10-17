@@ -31,7 +31,7 @@ String RID_SVXSTR_HYPDLG_MACROACT1
 };
 String RID_SVXSTR_HYPDLG_MACROACT2
 {
-    Text [ en-US ] = "Trigger hyperlink" ;
+    Text [ en-US ] = "Trigger link" ;
 };
 String RID_SVXSTR_HYPDLG_MACROACT3
 {
