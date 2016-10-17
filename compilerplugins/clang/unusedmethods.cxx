@@ -12,6 +12,8 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include <unordered_map>
+
 
 #include "clang/AST/Attr.h"
 
@@ -42,8 +44,6 @@ to auto-remove the method declarations
 Note that the actual process may involve a fair amount of undoing, hand editing, and general messing around
 to get it to work :-)
 
-TODO deal with calls to superclass/member constructors from other constructors, so
-     we can find unused constructors
 */
 
 namespace {
@@ -69,8 +69,7 @@ static std::set<MyFuncInfo> callSet;
 static std::set<MyFuncInfo> definitionSet;
 // for the "unused return type" analysis
 static std::set<MyFuncInfo> usedReturnSet;
-// for the "unnecessary public" analysis
-static std::set<MyFuncInfo> publicDefinitionSet;
+// for the "can be private" analysis
 static std::set<MyFuncInfo> calledFromOutsideSet;
 
 
@@ -96,7 +95,7 @@ public:
         // for the "unused return type" analysis
         for (const MyFuncInfo & s : usedReturnSet)
             output += "usedReturn:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
-        // for the "unnecessary public" analysis
+        // for the "method can be private" analysis
         for (const MyFuncInfo & s : calledFromOutsideSet)
             output += "outside:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
         ofstream myfile;
@@ -116,6 +115,8 @@ private:
     void logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet);
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
     std::string fullyQualifiedName(const FunctionDecl* functionDecl);
+    std::string toString(SourceLocation loc);
+    void functionTouchedFromExpr( const FunctionDecl* calleeFunctionDecl, const Expr* expr );
 };
 
 MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
@@ -163,12 +164,18 @@ MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
         aInfo.nameAndParams += " const";
     }
 
-    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( functionDecl->getLocation() );
-    StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
-    aInfo.sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
-    normalizeDotDotInFilePath(aInfo.sourceLocation);
+    aInfo.sourceLocation = toString( functionDecl->getLocation() );
 
     return aInfo;
+}
+
+std::string UnusedMethods::toString(SourceLocation loc)
+{
+    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
+    StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
+    std::string sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
+    normalizeDotDotInFilePath(sourceLocation);
+    return sourceLocation;
 }
 
 std::string UnusedMethods::fullyQualifiedName(const FunctionDecl* functionDecl)
@@ -197,13 +204,13 @@ std::string UnusedMethods::fullyQualifiedName(const FunctionDecl* functionDecl)
     return ret;
 }
 
+// For virtual/overriding methods, we need to pretend we called the root method(s),
+// so that they get marked as used.
 void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet)
 {
     functionDecl = functionDecl->getCanonicalDecl();
     bool bCalledSuperMethod = false;
     if (isa<CXXMethodDecl>(functionDecl)) {
-        // For virtual/overriding methods, we need to pretend we called the root method(s),
-        // so that they get marked as used.
         const CXXMethodDecl* methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
         for(CXXMethodDecl::method_iterator it = methodDecl->begin_overridden_methods();
             it != methodDecl->end_overridden_methods(); ++it)
@@ -221,9 +228,6 @@ void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl, std::
             funcSet.insert(niceName(functionDecl));
     }
 }
-
-// prevent recursive templates from blowing up the stack
-static std::set<std::string> traversedFunctionSet;
 
 bool UnusedMethods::VisitCallExpr(CallExpr* expr)
 {
@@ -247,18 +251,11 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
     }
 
 gotfunc:
-    // if we see a call to a function, it may effectively create new code,
-    // if the function is templated. However, if we are inside a template function,
-    // calling another function on the same template, the same problem occurs.
-    // Rather than tracking all of that, just traverse anything we have not already traversed.
-    if (traversedFunctionSet.insert(fullyQualifiedName(calleeFunctionDecl)).second)
-        TraverseFunctionDecl(calleeFunctionDecl);
-
     logCallToRootMethods(calleeFunctionDecl, callSet);
 
     const Stmt* parent = parentStmt(expr);
 
-    // Now do the checks necessary for the "unnecessary public" analysis
+    // Now do the checks necessary for the "can be private" analysis
     CXXMethodDecl* calleeMethodDecl = dyn_cast<CXXMethodDecl>(calleeFunctionDecl);
     if (calleeMethodDecl && calleeMethodDecl->getAccess() == AS_public)
     {
@@ -304,6 +301,10 @@ bool UnusedMethods::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr
     const CXXConstructorDecl* constructorDecl = constructExpr->getConstructor();
     constructorDecl = constructorDecl->getCanonicalDecl();
 
+    if (!constructorDecl->getLocation().isValid() || ignoreLocation(constructorDecl)) {
+        return true;
+    }
+
     logCallToRootMethods(constructorDecl, callSet);
 
     return true;
@@ -311,16 +312,10 @@ bool UnusedMethods::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr
 
 bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
 {
-    functionDecl = functionDecl->getCanonicalDecl();
-    const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(functionDecl);
-
-    // ignore method overrides, since the call will show up as being directed to the root method
-    if (methodDecl && (methodDecl->size_overridden_methods() != 0 || methodDecl->hasAttr<OverrideAttr>())) {
-        return true;
-    }
+    const FunctionDecl* canonicalFunctionDecl = functionDecl->getCanonicalDecl();
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              functionDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
+                              canonicalFunctionDecl->getNameInfo().getLoc()))) {
         return true;
     }
     if (isa<CXXDestructorDecl>(functionDecl)) {
@@ -332,15 +327,17 @@ bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
     if (isa<CXXConstructorDecl>(functionDecl) && dyn_cast<CXXConstructorDecl>(functionDecl)->isCopyConstructor()) {
         return true;
     }
-
-    if( functionDecl->getLocation().isValid() && !ignoreLocation( functionDecl )
-        && !functionDecl->isExternC())
-    {
-        MyFuncInfo funcInfo = niceName(functionDecl);
+    if (!canonicalFunctionDecl->getLocation().isValid() || ignoreLocation(canonicalFunctionDecl)) {
+        return true;
+    }
+    // ignore method overrides, since the call will show up as being directed to the root method
+    const CXXMethodDecl* methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
+    if (methodDecl && (methodDecl->size_overridden_methods() != 0 || methodDecl->hasAttr<OverrideAttr>())) {
+        return true;
+    }
+    if (!functionDecl->isExternC()) {
+        MyFuncInfo funcInfo = niceName(canonicalFunctionDecl);
         definitionSet.insert(funcInfo);
-        if (functionDecl->getAccess() == AS_public) {
-            publicDefinitionSet.insert(funcInfo);
-        }
     }
     return true;
 }
@@ -348,12 +345,12 @@ bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
 // this catches places that take the address of a method
 bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 {
-    const Decl* functionDecl = declRefExpr->getDecl();
-    if (!isa<FunctionDecl>(functionDecl)) {
+    const FunctionDecl* functionDecl = dyn_cast<FunctionDecl>(declRefExpr->getDecl());
+    if (!functionDecl) {
         return true;
     }
-    logCallToRootMethods(dyn_cast<FunctionDecl>(functionDecl)->getCanonicalDecl(), callSet);
-    logCallToRootMethods(dyn_cast<FunctionDecl>(functionDecl)->getCanonicalDecl(), usedReturnSet);
+    logCallToRootMethods(functionDecl->getCanonicalDecl(), callSet);
+    logCallToRootMethods(functionDecl->getCanonicalDecl(), usedReturnSet);
     return true;
 }
 

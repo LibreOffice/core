@@ -325,7 +325,7 @@ bool InlineableMethods::isCalleeFunctionInteresting(const FunctionDecl* function
     return true;
 }
 
-loplugin::Plugin::Registration< InlineableMethods > X("inlineablemethods", true);
+loplugin::Plugin::Registration< InlineableMethods > X("inlineablemethods", false);
 
 }
 
