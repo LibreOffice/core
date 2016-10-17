@@ -307,9 +307,9 @@ XRow_impl::getObject(
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
         throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
-    uno::Any  Value;
     osl::MutexGuard aGuard( m_aMutex );
-    m_nWasNull = ::convert<uno::Any>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
+    uno::Any Value = m_aValueMap[columnIndex - 1];
+    m_nWasNull = !Value.hasValue();
     return Value;
 }
 
