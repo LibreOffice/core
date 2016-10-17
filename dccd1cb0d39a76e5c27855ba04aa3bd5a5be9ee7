@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_8cc8b076",
+        "filename": "include/oox/helper/propertymap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-17T08:08:42Z",
+      "side": 1,
+      "message": "group this include with the existing block of standard header includes",
+      "revId": "dccd1cb0d39a76e5c27855ba04aa3bd5a5be9ee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_acc56c5c",
+        "filename": "include/oox/helper/propertymap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-17T08:08:42Z",
+      "side": 1,
+      "message": "* the result of makeAny already is an xvalue, no need for std::move here\n\n* why not stick with the existing \u003c\u003c\u003d?",
+      "revId": "dccd1cb0d39a76e5c27855ba04aa3bd5a5be9ee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_cca0e8a8",
+        "filename": "include/oox/helper/propertymap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-17T08:08:42Z",
+      "side": 1,
+      "message": "make the parameter \u0027Any const \u0026\u0027 (or drop the redundant top-level const, but that might trigger a loplugin:passstuffbyref)",
+      "revId": "dccd1cb0d39a76e5c27855ba04aa3bd5a5be9ee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
