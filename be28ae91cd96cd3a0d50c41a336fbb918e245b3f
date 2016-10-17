@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_ccb9c8ee",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-17T07:51:04Z",
+      "side": 1,
+      "message": "was it ever thread safe?",
+      "revId": "be28ae91cd96cd3a0d50c41a336fbb918e245b3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_ecbe84d3",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-17T07:51:04Z",
+      "side": 1,
+      "message": "* this comment only makes sense in the context of the change, not in the context of the resulting changed code, so it shouldn\u0027t appear in the code\n\n* if you add a comment preceding the commented-on code, a nifty trick is to end the comment in a colon; that way, it is clear to the reader that the comment is about what follows it\n\n* the already existing comment here uses \"//\" followed by a space (and unfortunately doesn\u0027t end in a colon); try to be consistent with the immediately surrounding code",
+      "revId": "be28ae91cd96cd3a0d50c41a336fbb918e245b3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
