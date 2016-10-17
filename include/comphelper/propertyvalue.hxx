@@ -11,6 +11,8 @@
 #define INCLUDED_COMPHELPER_PROPERTYVALUE_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <type_traits>
+#include <utility>
 
 namespace comphelper
 {
@@ -19,19 +21,27 @@ namespace comphelper
  * Creates a beans::PropertyValue easily, i.e. you can write:
  *
  * function(comphelper::makePropertyValue("Foo", nBar));
- *
- * instead of writing 3 extra lines to set the name and value of the beans::PropertyValue.
  */
-template<typename T> css::beans::PropertyValue makePropertyValue(const OUString& rName, const T& rValue)
+template<typename T, typename std::enable_if<!std::is_same<T, css::uno::Any>::value &&
+                                             !std::is_same<T, sal_Int16>::value, int>::type = 0>
+css::beans::PropertyValue makePropertyValue(const OUString& rName, T&& rValue)
 {
-    css::beans::PropertyValue aValue;
-    aValue.Name = rName;
-    aValue.Value <<= rValue;
-    return aValue;
+    return {rName, 0, css::uno::makeAny<T>(std::forward<T>(rValue)), css::beans::PropertyState_DIRECT_VALUE};
+}
+
+// workaround for MSVC 2013: if makePropertyValue<sal_Int16> is called with sal_Int32 rValue
+// it cannot convert argument from ´sal_Int32´ to ´sal_Int16 &&´
+css::beans::PropertyValue makePropertyValue(const OUString& rName, const sal_Int16& rValue)
+{
+    return {rName, 0, css::uno::makeAny<sal_Int16>(rValue), css::beans::PropertyState_DIRECT_VALUE};
+}
+
+css::beans::PropertyValue makePropertyValue(const OUString& rName, const css::uno::Any& rValue)
+{
+    return {rName, 0, rValue, css::beans::PropertyState_DIRECT_VALUE};
 }
 
 }
-
 #endif // INCLUDED_COMPHELPER_PROPERTYVALUE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
