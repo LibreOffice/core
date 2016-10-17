@@ -1653,15 +1653,19 @@ namespace
 {
     GtkStateFlags CHECKED()
     {
+#if GTK_CHECK_VERSION(3,14,0)
         if (gtk_check_version(3, 14, 0) == nullptr)
             return GTK_STATE_FLAG_CHECKED;
+#endif
         return GTK_STATE_FLAG_ACTIVE;
     }
 
     GtkStateFlags ACTIVE_TAB()
     {
+#if GTK_CHECK_VERSION(3,20,0)
         if (gtk_check_version(3, 20, 0) == nullptr)
             return GTK_STATE_FLAG_CHECKED;
+#endif
         return GTK_STATE_FLAG_ACTIVE;
     }
 }
