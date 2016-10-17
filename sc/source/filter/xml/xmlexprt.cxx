@@ -1218,7 +1218,34 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxLanguageItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                // Export multiple entries.
+                sal_Int32 nIndexLanguage, nIndexCountry, nIndexScript, nIndexTag;
+                switch (p->Which())
+                {
+                    case EE_CHAR_LANGUAGE:
+                        nIndexLanguage = xMapper->GetEntryIndex( XML_NAMESPACE_FO, "language", 0);
+                        nIndexCountry = xMapper->GetEntryIndex( XML_NAMESPACE_FO, "country", 0);
+                        nIndexScript = xMapper->GetEntryIndex( XML_NAMESPACE_FO, "script", 0);
+                        nIndexTag = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "rfc-language-tag", 0);
+                    break;
+                    case EE_CHAR_LANGUAGE_CJK:
+                        nIndexLanguage = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "language-asian", 0);
+                        nIndexCountry = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "country-asian", 0);
+                        nIndexScript = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "script-asian", 0);
+                        nIndexTag = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "rfc-language-tag-asian", 0);
+                    break;
+                    case EE_CHAR_LANGUAGE_CTL:
+                        nIndexLanguage = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "language-complex", 0);
+                        nIndexCountry = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "country-complex", 0);
+                        nIndexScript = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "script-complex", 0);
+                        nIndexTag = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "rfc-language-tag-complex", 0);
+                    break;
+                }
+                assert( nIndexLanguage >= 0 && nIndexCountry >= 0 && nIndexScript >= 0 && nIndexTag >= 0);
+                rPropStates.push_back( XMLPropertyState( nIndexLanguage, aAny));
+                rPropStates.push_back( XMLPropertyState( nIndexCountry, aAny));
+                rPropStates.push_back( XMLPropertyState( nIndexScript, aAny));
+                rPropStates.push_back( XMLPropertyState( nIndexTag, aAny));
             }
             break;
             default:
