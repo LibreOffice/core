@@ -2118,10 +2118,9 @@ Any SAL_CALL CachedContentResultSet
     }
     //@todo: pay attention to typeMap
     const Any& rValue = m_aCache.getAny( nRow, columnIndex );
-    Any aRet;
     m_bLastReadWasFromCache = true;
-    m_bLastCachedReadWasNull = !( rValue >>= aRet );
-    return aRet;
+    m_bLastCachedReadWasNull = !rValue.hasValue();
+    return rValue;
 }
 
 //virtual
