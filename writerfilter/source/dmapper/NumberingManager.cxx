@@ -16,6 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+
+#include <utility>
+
 #include "ConversionHelper.hxx"
 #include "NumberingManager.hxx"
 #include "StyleSheetTable.hxx"
@@ -46,9 +51,9 @@ namespace dmapper {
 
 //---------------------------------------------------  Utility functions
 template <typename T>
-beans::PropertyValue lcl_makePropVal(PropertyIds nNameID, T aValue)
+beans::PropertyValue lcl_makePropVal(PropertyIds nNameID, T && aValue)
 {
-    return {getPropertyName(nNameID), 0, uno::makeAny(aValue), beans::PropertyState_DIRECT_VALUE};
+    return {getPropertyName(nNameID), 0, uno::makeAny(std::forward<T>(aValue)), beans::PropertyState_DIRECT_VALUE};
 }
 
 sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps, const OUString& sName )
