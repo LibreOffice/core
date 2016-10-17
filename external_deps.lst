@@ -289,7 +289,7 @@ if (WITH_CATB_FONTS==YES)
 if (WITH_CATB_FONTS == YES)
     MD5 = 1725634df4bb3dcb1b2c91a6175f8789
     name = GentiumBasic_1102.zip
-    URL1 = http://software.sil.org/downloads/gentium/GentiumBasic_1102.zip
+    URL1 = http://software.sil.org/downloads/d/gentium/GentiumBasic_1102.zip
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_HYPH!=YES)
