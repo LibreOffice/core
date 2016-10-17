@@ -120,6 +120,7 @@ bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &r
 void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
 {
     if (getenv("SAL_DISABLE_OPENCL") ||
+        Application::IsSafeModeEnabled() ||
         !officecfg::Office::Common::Misc::UseOpenCL::get())
         return;
 
