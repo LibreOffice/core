@@ -60,8 +60,6 @@ namespace connectivity
             virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            virtual void SAL_CALL acquire() throw() override;
-            virtual void SAL_CALL release() throw() override;
             // XRename
             virtual void SAL_CALL rename( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException) override;
 

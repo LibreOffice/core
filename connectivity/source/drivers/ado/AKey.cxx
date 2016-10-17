@@ -142,16 +142,4 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
     OKey_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 
-
-void SAL_CALL OAdoKey::acquire() throw()
-{
-    OKey_ADO::acquire();
-}
-
-void SAL_CALL OAdoKey::release() throw()
-{
-    OKey_ADO::release();
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

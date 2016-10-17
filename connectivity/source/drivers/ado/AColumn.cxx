@@ -259,16 +259,4 @@ WpADOColumn OAdoColumn::getColumnImpl() const
     return m_aColumn;
 }
 
-
-void SAL_CALL OAdoColumn::acquire() throw()
-{
-    OColumn_ADO::acquire();
-}
-
-void SAL_CALL OAdoColumn::release() throw()
-{
-    OColumn_ADO::release();
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

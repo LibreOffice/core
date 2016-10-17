@@ -48,8 +48,6 @@ namespace connectivity
             OAdoColumn(bool _bCase,OConnection* _pConnection);
             // ODescriptor
             virtual void construct() override;
-            virtual void SAL_CALL acquire() throw() override;
-            virtual void SAL_CALL release() throw() override;
             // css::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();

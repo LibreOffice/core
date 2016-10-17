@@ -39,8 +39,6 @@ namespace connectivity
         public:
             virtual void refreshColumns() override;
         public:
-            virtual void SAL_CALL acquire() throw() override;
-            virtual void SAL_CALL release() throw() override;
             OAdoIndex(bool _bCase,  OConnection* _pConnection,ADOIndex* _pIndex);
             OAdoIndex(bool _bCase,  OConnection* _pConnection);
             // css::lang::XUnoTunnel

@@ -99,15 +99,4 @@ void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
         OView_ADO::getFastPropertyValue(rValue,nHandle);
 }
 
-void SAL_CALL OAdoView::acquire() throw()
-{
-    OView_ADO::acquire();
-}
-
-void SAL_CALL OAdoView::release() throw()
-{
-    OView_ADO::release();
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

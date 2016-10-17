@@ -162,16 +162,4 @@ void SAL_CALL OAdoGroup::revokePrivileges( const OUString& objName, sal_Int32 ob
     m_aGroup.SetPermissions(objName,MapObjectType(objType),adAccessDeny,Map2Right(objPrivileges));
 }
 
-
-void SAL_CALL OAdoGroup::acquire() throw()
-{
-    OGroup_ADO::acquire();
-}
-
-void SAL_CALL OAdoGroup::release() throw()
-{
-    OGroup_ADO::release();
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

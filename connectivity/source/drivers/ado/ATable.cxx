@@ -229,16 +229,6 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
     OTable_TYPEDEF::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 
-void SAL_CALL OAdoTable::acquire() throw()
-{
-    OTable_TYPEDEF::acquire();
-}
-
-void SAL_CALL OAdoTable::release() throw()
-{
-    OTable_TYPEDEF::release();
-}
-
 OUString SAL_CALL OAdoTable::getName() throw(css::uno::RuntimeException)
 {
       return m_aTable.get_Name();

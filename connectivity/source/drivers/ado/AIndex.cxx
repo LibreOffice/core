@@ -130,15 +130,4 @@ void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
     sdbcx::OIndex::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 
-void SAL_CALL OAdoIndex::acquire() throw()
-{
-    sdbcx::OIndex::acquire();
-}
-
-void SAL_CALL OAdoIndex::release() throw()
-{
-    sdbcx::OIndex::release();
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

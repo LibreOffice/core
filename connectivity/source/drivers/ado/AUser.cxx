@@ -151,17 +151,6 @@ cppu::IPropertyArrayHelper & OUserExtend::getInfoHelper()
     return *OUserExtend_PROP::getArrayHelper();
 }
 
-
-void SAL_CALL OAdoUser::acquire() throw()
-{
-    OUser_TYPEDEF::acquire();
-}
-
-void SAL_CALL OAdoUser::release() throw()
-{
-    OUser_TYPEDEF::release();
-}
-
 sal_Int32 SAL_CALL OAdoUser::getPrivileges( const OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);

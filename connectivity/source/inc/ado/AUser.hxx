@@ -55,9 +55,6 @@ namespace connectivity
             // css::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
-            virtual void SAL_CALL acquire() throw() override;
-            virtual void SAL_CALL release() throw() override;
-
             // XUser
             virtual void SAL_CALL changePassword( const OUString& objPassword, const OUString& newPassword ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
             // XAuthorizable

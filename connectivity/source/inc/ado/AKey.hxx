@@ -41,8 +41,6 @@ namespace connectivity
         public:
             virtual void refreshColumns() override;
         public:
-            virtual void SAL_CALL acquire() throw() override;
-            virtual void SAL_CALL release() throw() override;
             OAdoKey(bool _bCase,OConnection* _pConnection,ADOKey* _pKey);
             OAdoKey(bool _bCase,OConnection* _pConnection);
 
