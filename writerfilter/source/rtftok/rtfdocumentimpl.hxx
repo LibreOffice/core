@@ -413,11 +413,7 @@ public:
         return *m_pMapperStream;
     }
     void setSuperstream(RTFDocumentImpl* pSuperstream);
-    void setStreamType(Id nId);
-    void setAuthor(OUString& rAuthor);
     void setAuthorInitials(OUString& rAuthorInitials);
-    void setIgnoreFirst(OUString& rIgnoreFirst);
-    void seek(sal_uInt64 nPos);
     const css::uno::Reference<css::lang::XMultiServiceFactory>& getModelFactory()
     {
         return m_xModelFactory;

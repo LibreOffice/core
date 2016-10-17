@@ -271,7 +271,7 @@ OOXMLDocumentImpl::getSubStream(const OUString & rId)
     writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor));
     pTemp->setModel(mxModel);
     pTemp->setDrawPage(mxDrawPage);
-    pTemp->setIsSubstream( true );
+    pTemp->mbIsSubstream = true;
     return pRet;
 }
 

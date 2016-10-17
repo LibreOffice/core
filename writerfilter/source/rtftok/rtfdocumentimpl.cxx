@@ -308,16 +308,6 @@ void RTFDocumentImpl::setSuperstream(RTFDocumentImpl* pSuperstream)
     m_pSuperstream = pSuperstream;
 }
 
-void RTFDocumentImpl::setStreamType(Id nId)
-{
-    m_nStreamType = nId;
-}
-
-void RTFDocumentImpl::setAuthor(OUString& rAuthor)
-{
-    m_aAuthor = rAuthor;
-}
-
 void RTFDocumentImpl::setAuthorInitials(OUString& rAuthorInitials)
 {
     m_aAuthorInitials = rAuthorInitials;
@@ -333,11 +323,6 @@ void RTFDocumentImpl::finishSubstream()
     checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
 }
 
-void RTFDocumentImpl::setIgnoreFirst(OUString& rIgnoreFirst)
-{
-    m_aIgnoreFirst = rIgnoreFirst;
-}
-
 void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId)
 {
     OUString aStr;
@@ -349,11 +334,11 @@ void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString& rIgno
     // Seek to header position, parse, then seek back.
     auto pImpl = std::make_shared<RTFDocumentImpl>(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator, m_rMediaDescriptor);
     pImpl->setSuperstream(this);
-    pImpl->setStreamType(nId);
-    pImpl->setIgnoreFirst(rIgnoreFirst);
+    pImpl->m_nStreamType = nId;
+    pImpl->m_aIgnoreFirst = rIgnoreFirst;
     if (!m_aAuthor.isEmpty())
     {
-        pImpl->setAuthor(m_aAuthor);
+        pImpl->m_aAuthor = m_aAuthor;
         m_aAuthor.clear();
     }
     if (!m_aAuthorInitials.isEmpty())
@@ -362,7 +347,7 @@ void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString& rIgno
         m_aAuthorInitials.clear();
     }
     pImpl->m_nDefaultFontIndex = m_nDefaultFontIndex;
-    pImpl->seek(nPos);
+    pImpl->Strm().Seek(nPos);
     SAL_INFO("writerfilter", "substream start");
     Mapper().substream(nId, pImpl);
     SAL_INFO("writerfilter", "substream end");
@@ -633,11 +618,6 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
         Mapper().endSectionGroup();
     m_bNeedPar = false;
     m_bNeedSect = false;
-}
-
-void RTFDocumentImpl::seek(sal_uInt64 const nPos)
-{
-    Strm().Seek(nPos);
 }
 
 sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)

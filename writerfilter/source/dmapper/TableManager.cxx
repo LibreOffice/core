@@ -257,7 +257,7 @@ void TableManager::endParagraphGroup()
         {
             endOfRowAction();
             mTableDataStack.top()->endRow(getRowProps());
-            resetRowProps();
+            mState.resetRowProps();
         }
 
         else if (isInCell())
@@ -270,7 +270,7 @@ void TableManager::endParagraphGroup()
                 closeCell(getHandle());
             }
         }
-        resetCellProps();
+        mState.resetCellProps();
     }
 }
 
@@ -321,7 +321,7 @@ void TableManager::resolveCurrentTable()
             SAL_WARN("writerfilter", "resolving of current table failed with: " << e.Message);
         }
     }
-    resetTableProps();
+    mState.resetTableProps();
     clearData();
 
 #ifdef DEBUG_WRITERFILTER

@@ -216,11 +216,6 @@ protected:
         mState.setCellProps(pProps);
     }
 
-    void resetCellProps()
-    {
-        mState.resetCellProps();
-    }
-
 public:
     TablePropertyMapPtr getRowProps()
     {
@@ -232,10 +227,6 @@ public:
         mState.setRowProps(pProps);
     }
 
-    void resetRowProps()
-    {
-        mState.resetRowProps();
-    }
 
 protected:
     void setInCell(bool bInCell)
@@ -276,11 +267,6 @@ protected:
     void setTableProps(TablePropertyMapPtr pProps)
     {
         mState.setTableProps(pProps);
-    }
-
-    void resetTableProps()
-    {
-        mState.resetTableProps();
     }
 
     const css::uno::Reference<css::text::XTextRange>& getHandle()

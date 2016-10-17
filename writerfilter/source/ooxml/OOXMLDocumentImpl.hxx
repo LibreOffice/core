@@ -87,7 +87,6 @@ protected:
                    Id aType,
                    const sal_Int32 nNoteId);
 
-    void setIsSubstream( bool bSubstream ) { mbIsSubstream = bSubstream; };
     void resolveCustomXmlStream(Stream & rStream);
     void resolveActiveXStream(Stream & rStream);
     void resolveGlossaryStream(Stream & rStream);
