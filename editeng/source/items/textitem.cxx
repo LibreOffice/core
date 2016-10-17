@@ -2412,7 +2412,7 @@ bool SvxLanguageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= (sal_Int16)(GetValue());
         break;
         case MID_LANG_LOCALE:
-            lang::Locale aRet( LanguageTag( GetValue()).getLocale( false));
+            lang::Locale aRet( LanguageTag::convertToLocale( GetValue(), false));
             rVal <<= aRet;
         break;
     }
