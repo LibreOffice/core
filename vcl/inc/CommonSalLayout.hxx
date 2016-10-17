@@ -50,9 +50,10 @@ class CommonSalLayout : public GenericSalLayout
 #else
     ServerFont&             mrServerFont;
 #endif
-    OString mLang;
-    hb_feature_t * mpFeatures;
-    unsigned int mnFeats;
+
+    void                    ParseFeatures(const OUString& name);
+    OString                 msLanguage;
+    std::vector<hb_feature_t> maFeatures;
 
 public:
 #if defined(_WIN32)
@@ -66,7 +67,6 @@ public:
     const ServerFont&       getFontData() const { return mrServerFont; };
 #endif
 
-    void                    ParseFeatures(OUString name);
     void                    SetNeedFallback(ImplLayoutArgs&, sal_Int32, bool);
     void                    AdjustLayout(ImplLayoutArgs&) override;
     bool                    LayoutText(ImplLayoutArgs&) override;

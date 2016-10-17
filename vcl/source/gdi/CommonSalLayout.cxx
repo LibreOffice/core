@@ -126,18 +126,16 @@ static hb_unicode_funcs_t* getUnicodeFuncs()
 }
 #endif
 
-void CommonSalLayout::ParseFeatures(OUString name)
+void CommonSalLayout::ParseFeatures(const OUString& name)
 {
-    mnFeats = 0;
-    mpFeatures = 0;
-    mLang = OString("");
+    int nFeatures = 0;
     int nStart = name.indexOf(':');
     if (nStart < 0)
         return;
     OString oName = OUStringToOString(name, RTL_TEXTENCODING_ASCII_US);
     for (int nNext = nStart; nNext > 0; nNext = name.indexOf('&', nNext + 1))
     {
-        if (name.match("lang=", nNext+1))
+        if (name.match("lang=", nNext + 1))
         {
             int endamp = name.indexOf('&', nNext+1);
             int enddelim = name.indexOf(' ', nNext+1);
@@ -151,23 +149,23 @@ void CommonSalLayout::ParseFeatures(OUString name)
                 end = endamp;
             else
                 end = enddelim;
-            mLang = oName.copy(nNext+6, end-nNext-6);
+            msLanguage = oName.copy(nNext + 6, end - nNext - 6);
         }
         else
-            ++mnFeats;
+            ++nFeatures;
     }
-    if (mnFeats == 0)
+    if (nFeatures == 0)
         return;
 
-    mpFeatures = new hb_feature_t[mnFeats];
-    mnFeats = 0;
-    for (int nThis = nStart, nNext = name.indexOf('&', nStart+1); nThis > 0; nThis = nNext, nNext = name.indexOf('&', nNext + 1))
+    maFeatures.reserve(nFeatures);
+    for (int nThis = nStart, nNext = name.indexOf('&', nStart + 1); nThis > 0; nThis = nNext, nNext = name.indexOf('&', nNext + 1))
     {
-        if (!name.match("lang=", nThis+1))
+        if (!name.match("lang=", nThis + 1))
         {
             int end = nNext > 0 ? nNext : name.getLength();
-            if (hb_feature_from_string(oName.getStr() + nThis + 1, end - nThis - 1, &mpFeatures[mnFeats]))
-                ++mnFeats;
+            hb_feature_t aFeature;
+            if (hb_feature_from_string(oName.getStr() + nThis + 1, end - nThis - 1, &aFeature))
+                maFeatures.push_back(aFeature);
         }
     }
 }
@@ -463,9 +461,9 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             int nRunLen = nEndRunPos - nMinRunPos;
             aHbScript = hb_icu_script_to_script(aScriptRun.maScript);
 
-            // hb_language_from_string() accept ISO639-3 language tag except for Chinese.
-            LanguageTag &rTag = rArgs.maLanguageTag;
-            OString sLanguage = mLang.getLength() ? mLang : OUStringToOString(rTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
+            OString sLanguage = msLanguage;
+            if (sLanguage.isEmpty())
+                sLanguage = OUStringToOString(rArgs.maLanguageTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
 
             bool bVertical = false;
             if ((rArgs.mnFlags & SalLayoutFlags::Vertical) &&
@@ -498,7 +496,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 #if HB_VERSION_ATLEAST(0, 9, 42)
             hb_buffer_set_cluster_level(pHbBuffer, HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS);
 #endif
-            hb_shape(mpHbFont, pHbBuffer, mpFeatures, mnFeats);
+            hb_shape(mpHbFont, pHbBuffer, maFeatures.data(), maFeatures.size());
 
             int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
             hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
