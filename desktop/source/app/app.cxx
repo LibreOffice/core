@@ -2088,8 +2088,9 @@ void Desktop::OpenClients()
     bool bAllowRecoveryAndSessionManagement = ( !rArgs.IsNoRestore() ) && ( !rArgs.IsHeadless()  );
 
     // Enter safe mode if requested
-    if (rArgs.IsSafeMode() || sfx2::SafeMode::hasFlag())
+    if (Application::IsSafeModeEnabled()) {
         handleSafeMode();
+    }
 
 
 #if HAVE_FEATURE_BREAKPAD

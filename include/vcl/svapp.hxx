@@ -1282,6 +1282,12 @@ public:
     */
     static bool                 IsEventTestingModeEnabled();
 
+    /** Set safe mode to enabled */
+    static void                 EnableSafeMode();
+
+    /** Determines if safe mode is enabled */
+    static bool                 IsSafeModeEnabled();
+
     ///@}
 
     /** @name IME Status Window Control
