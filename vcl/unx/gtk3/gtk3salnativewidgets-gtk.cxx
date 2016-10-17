@@ -21,6 +21,7 @@
 
 #include <boost/optional.hpp>
 
+GtkStyleContext* GtkSalGraphics::mpWindowStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpLinkButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpEntryStyle = nullptr;
@@ -69,6 +70,9 @@ GtkStyleContext* GtkSalGraphics::mpNotebookStackStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpNotebookHeaderStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpNotebookHeaderTabsStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpNotebookHeaderTabsTabStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpNotebookHeaderTabsTabLabelStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpNotebookHeaderTabsTabActiveLabelStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpNotebookHeaderTabsTabHoverLabelStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpMenuBarStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpMenuBarItemStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpMenuWindowStyle = nullptr;
@@ -930,9 +934,10 @@ static GtkWidgetPath* buildRTLComboSiblingsPath(gtk_widget_path_iter_set_object_
     return pSiblingsPath;
 }
 
-static GtkStyleContext* makeContext(GtkWidgetPath *pPath, GtkStyleContext *pParent)
+GtkStyleContext* GtkSalGraphics::makeContext(GtkWidgetPath *pPath, GtkStyleContext *pParent)
 {
     GtkStyleContext* context = gtk_style_context_new();
+    gtk_style_context_set_screen(context, gtk_window_get_screen(GTK_WINDOW(mpWindow)));
     gtk_style_context_set_path(context, pPath);
     gtk_style_context_set_parent(context, pParent);
     gtk_widget_path_unref(pPath);
@@ -943,6 +948,14 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
 {
     switch (ePart)
     {
+        case GtkControlPart::ToplevelWindow:
+        {
+            GtkWidgetPath *path = gtk_widget_path_new();
+            gtk_widget_path_append_type(path, G_TYPE_NONE);
+            set_object_name(path, -1, "window");
+            gtk_widget_path_iter_add_class(path, -1, "background");
+            return makeContext(path, nullptr);
+        }
         case GtkControlPart::Button:
         {
             GtkWidgetPath *path = gtk_widget_path_new();
@@ -1225,6 +1238,16 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
             gtk_widget_path_iter_add_class(path, -1, "top");
             return makeContext(path, mpNotebookHeaderTabsStyle);
         }
+        case GtkControlPart::NotebookHeaderTabsTabLabel:
+        {
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderTabsTabStyle));
+            gtk_widget_path_append_type(path, G_TYPE_NONE);
+            set_object_name(path, -1, "label");
+            return makeContext(path, mpNotebookHeaderTabsTabStyle);
+        }
+        case GtkControlPart::NotebookHeaderTabsTabActiveLabel:
+        case GtkControlPart::NotebookHeaderTabsTabHoverLabel:
+            return mpNotebookHeaderTabsTabLabelStyle;
         case GtkControlPart::FrameBorder:
         {
             GtkWidgetPath *path = gtk_widget_path_new();
@@ -1339,6 +1362,13 @@ GtkStyleContext* GtkSalGraphics::createOldContext(GtkControlPart ePart)
 {
     switch (ePart)
     {
+        case GtkControlPart::ToplevelWindow:
+        {
+            GtkWidgetPath *path = gtk_widget_path_new();
+            gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
+            gtk_widget_path_iter_add_class(path, -1, "background");
+            return makeContext(path, nullptr);
+        }
         case GtkControlPart::Button:
         {
             GtkWidgetPath *path = gtk_widget_path_new();
@@ -1508,11 +1538,11 @@ GtkStyleContext* GtkSalGraphics::createOldContext(GtkControlPart ePart)
         }
         case GtkControlPart::Notebook:
         {
-            GtkWidgetPath *path = gtk_widget_path_new();
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpWindowStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_NOTEBOOK);
             gtk_widget_path_iter_add_class(path, -1, "frame");
-            return makeContext(path, nullptr);
+            return makeContext(path, mpWindowStyle);
         }
         case GtkControlPart::NotebookStack:
             return mpNotebookStyle;
@@ -1521,7 +1551,7 @@ GtkStyleContext* GtkSalGraphics::createOldContext(GtkControlPart ePart)
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookStyle));
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HEADER);
             gtk_widget_path_iter_add_class(path, -1, "top");
-            return makeContext(path, nullptr);
+            return makeContext(path, gtk_style_context_get_parent(mpNotebookStyle));
         }
         case GtkControlPart::NotebookHeaderTabs:
             return mpNotebookHeaderStyle;
@@ -1531,9 +1561,33 @@ GtkStyleContext* GtkSalGraphics::createOldContext(GtkControlPart ePart)
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HEADER);
             gtk_widget_path_iter_add_class(path, -1, "top");
-            GtkStyleContext* pContext = makeContext(path, mpNotebookHeaderTabsStyle);
-            gtk_style_context_add_region(pContext, GTK_STYLE_REGION_TAB, GTK_REGION_ONLY);
-            return pContext;
+            gtk_widget_path_iter_add_region(path, -1, GTK_STYLE_REGION_TAB, static_cast<GtkRegionFlags>(GTK_REGION_EVEN | GTK_REGION_FIRST));
+            return makeContext(path, mpNotebookHeaderTabsStyle);
+        }
+        case GtkControlPart::NotebookHeaderTabsTabLabel:
+        {
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderTabsTabStyle));
+            gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_LABEL);
+            return makeContext(path, mpNotebookHeaderTabsTabStyle);
+        }
+        case GtkControlPart::NotebookHeaderTabsTabActiveLabel:
+        {
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderTabsTabStyle));
+            gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_LABEL);
+            GtkStyleContext* pRet = makeContext(path, mpNotebookHeaderTabsTabStyle);
+            gtk_style_context_add_class(pRet, "active-page");
+            return pRet;
+        }
+        case GtkControlPart::NotebookHeaderTabsTabHoverLabel:
+        {
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderTabsTabStyle));
+            gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_LABEL);
+            GtkStyleContext* pRet = makeContext(path, mpNotebookHeaderTabsTabStyle);
+            gtk_style_context_add_class(pRet, "prelight-page");
+            return pRet;
         }
         case GtkControlPart::FrameBorder:
         {
@@ -1645,12 +1699,12 @@ GtkStyleContext* GtkSalGraphics::createOldContext(GtkControlPart ePart)
     return mpButtonStyle;
 }
 
-static GtkStyleContext* createStyleContext(gtk_widget_path_iter_set_object_nameFunc set_object_name,
-                                           GtkControlPart ePart)
+GtkStyleContext* GtkSalGraphics::createStyleContext(gtk_widget_path_iter_set_object_nameFunc set_object_name,
+                                                    GtkControlPart ePart)
 {
     if (set_object_name)
-        return GtkSalGraphics::createNewContext(ePart, set_object_name);
-    return GtkSalGraphics::createOldContext(ePart);
+        return createNewContext(ePart, set_object_name);
+    return createOldContext(ePart);
 }
 
 namespace
@@ -2418,7 +2472,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetGroupFont( aFont );
 
     aFont.SetWeight( WEIGHT_BOLD );
-    aStyleSet.SetTabFont( aFont );  //pull from notebook style + GTK_STYLE_REGION_TAB ?
+    aStyleSet.SetTabFont( aFont );  //pull from notebook style?
     aStyleSet.SetTitleFont( aFont );
     aStyleSet.SetFloatTitleFont( aFont );
 
@@ -2549,64 +2603,30 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetVisitedLinkColor(getColor(text_color));
 #endif
 
-    if (gtk_check_version(3, 20, 0) == nullptr)
     {
-        GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabStyle;
-
+        GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabLabelStyle;
         style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
         gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetTabTextColor(aTextColor);
+    }
 
-        // mouse over text colors
+    // mouse over text colors
+    {
+        GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabHoverLabelStyle;
         style_context_set_state(pCStyle, GTK_STATE_FLAG_PRELIGHT);
         gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetTabRolloverTextColor(aTextColor);
+    }
 
+    {
+        GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabActiveLabelStyle;
         style_context_set_state(pCStyle, ACTIVE_TAB());
         gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetTabHighlightTextColor(aTextColor);
     }
-    else
-    {
-        GtkStyleContext *pCStyle = gtk_style_context_new();
-        gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
-        GtkWidgetPath *pCPath = gtk_widget_path_new();
-        guint pos = gtk_widget_path_append_type(pCPath, GTK_TYPE_NOTEBOOK);
-        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_NOTEBOOK);
-        gtk_widget_path_iter_add_region(pCPath, pos, GTK_STYLE_REGION_TAB, static_cast<GtkRegionFlags>(GTK_REGION_EVEN | GTK_REGION_FIRST));
-        pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
-#if GTK_CHECK_VERSION(3,16,0)
-        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_LABEL);
-#endif
-        pCStyle = gtk_style_context_new();
-        gtk_style_context_set_path(pCStyle, pCPath);
-        gtk_widget_path_free(pCPath);
-
-        style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
-        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
-        aTextColor = getColor( text_color );
-        aStyleSet.SetTabTextColor(aTextColor);
-
-        // mouse over text colors
-        gtk_style_context_add_class(pCStyle, "prelight-page");
-        style_context_set_state(pCStyle, GTK_STATE_FLAG_PRELIGHT);
-        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
-        gtk_style_context_remove_class(pCStyle, "prelight-page");
-        aTextColor = getColor( text_color );
-        aStyleSet.SetTabRolloverTextColor(aTextColor);
-
-        gtk_style_context_add_class(pCStyle, "active-page");
-        style_context_set_state(pCStyle, GTK_STATE_FLAG_ACTIVE);
-        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
-        gtk_style_context_remove_class(pCStyle, "active-page");
-        aTextColor = getColor( text_color );
-        aStyleSet.SetTabHighlightTextColor(aTextColor);
-
-        g_object_unref( pCStyle );
-     }
 
     // get cursor blink time
     gboolean blink = false;
@@ -2877,6 +2897,8 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     gEntryBox = gtk_entry_new();
     gtk_container_add(GTK_CONTAINER(gDumbContainer), gEntryBox);
+
+    mpWindowStyle = createStyleContext(set_object_name, GtkControlPart::ToplevelWindow);
     mpEntryStyle = createStyleContext(set_object_name, GtkControlPart::Entry);
 
     getStyleContext(&mpTextViewStyle, gtk_text_view_new());
@@ -2928,6 +2950,9 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpNotebookHeaderStyle = createStyleContext(set_object_name, GtkControlPart::NotebookHeader);
     mpNotebookHeaderTabsStyle = createStyleContext(set_object_name, GtkControlPart::NotebookHeaderTabs);
     mpNotebookHeaderTabsTabStyle = createStyleContext(set_object_name, GtkControlPart::NotebookHeaderTabsTab);
+    mpNotebookHeaderTabsTabLabelStyle = createStyleContext(set_object_name, GtkControlPart::NotebookHeaderTabsTabLabel);
+    mpNotebookHeaderTabsTabActiveLabelStyle = createStyleContext(set_object_name, GtkControlPart::NotebookHeaderTabsTabActiveLabel);
+    mpNotebookHeaderTabsTabHoverLabelStyle = createStyleContext(set_object_name, GtkControlPart::NotebookHeaderTabsTabHoverLabel);
 
     /* Combobox */
     gComboBox = gtk_combo_box_text_new_with_entry();
