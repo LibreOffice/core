@@ -82,11 +82,6 @@ class ButtonBox
             if(nPos != -1)
                 SelectButtonImpl(nPos);
         }
-        void clear()
-        {
-            mnCurrentButton = NO_BUTTON_SELECTED;
-            maButtonList.clear();
-        };
 };
 
 enum class PageType
@@ -146,14 +141,6 @@ public:
     void                SetNewColorList( XColorListRef const & pColorList )
                             { mpNewColorList = pColorList; }
     const XColorListRef&  GetNewColorList() const { return mpNewColorList; }
-
-    const XGradientListRef&  GetNewGradientList() const
-                            { return mpNewGradientList; }
-
-    const XHatchListRef&  GetNewHatchingList() const
-                            { return mpNewHatchingList; }
-
-    const XBitmapListRef& GetNewBitmapList() const { return mpNewBitmapList; }
 };
 
 /************************************************************************/
@@ -430,7 +417,6 @@ private:
     DECL_LINK( ChangeAutoStepHdl_Impl, CheckBox&, void );
     DECL_LINK( ModifiedSliderHdl_Impl, Slider*, void );
     void ModifiedHdl_Impl(void*);
-    long CheckChanges_Impl();
 
     void SetControlState_Impl( css::awt::GradientStyle eXGS );
     sal_Int32 SearchGradientList(const OUString& rGradientName);
@@ -605,7 +591,6 @@ public:
     void    Construct();
 
     static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
-    static const sal_uInt16* GetRanges() { return pBitmapRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
@@ -661,7 +646,6 @@ private:
     DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );
     DECL_LINK( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
 
-    long CheckChanges_Impl();
     sal_Int32 SearchPatternList(const OUString& rPatternName);
 
 public:
@@ -802,8 +786,6 @@ public:
     void             SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
     void    SetPos( sal_Int32* pInPos ) { pPos = pInPos; }
     void    SetColorList( const XColorListRef& pColList );
-    void    SaveToViewFrame( SfxViewFrame *pViewFrame );
-    void    SetupForViewFrame( SfxViewFrame *pViewFrame );
 
 
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }

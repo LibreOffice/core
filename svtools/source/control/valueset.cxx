@@ -55,7 +55,10 @@ enum
 
 }
 
-void ValueSet::ImplInit()
+ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle ) :
+    Control( pParent, nWinStyle ),
+    maVirDev( VclPtr<VirtualDevice>::Create(*this) ),
+    maColor( COL_TRANSPARENT )
 {
     mpNoneItem.reset(nullptr);
     mxScrollBar.reset(nullptr);
@@ -95,13 +98,6 @@ void ValueSet::ImplInit()
     ImplInitSettings( true, true, true );
 }
 
-ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle ) :
-    Control( pParent, nWinStyle ),
-    maVirDev( VclPtr<VirtualDevice>::Create(*this) ),
-    maColor( COL_TRANSPARENT )
-{
-    ImplInit();
-}
 
 VCL_BUILDER_DECL_FACTORY(ValueSet)
 {
@@ -112,14 +108,6 @@ VCL_BUILDER_DECL_FACTORY(ValueSet)
        nWinBits |= WB_BORDER;
 
     rRet = VclPtr<ValueSet>::Create(pParent, nWinBits);
-}
-
-ValueSet::ValueSet( vcl::Window* pParent, const ResId& rResId ) :
-    Control( pParent, rResId ),
-    maVirDev( VclPtr<VirtualDevice>::Create(*this) ),
-    maColor( COL_TRANSPARENT )
-{
-    ImplInit();
 }
 
 ValueSet::~ValueSet()

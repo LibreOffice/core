@@ -1178,39 +1178,6 @@ namespace basegfx
             }
         }
 
-        void createLineTrapezoidFromB2DPolyPolygon(
-            B2DTrapezoidVector& ro_Result,
-            const B2DPolyPolygon& rPolyPolygon,
-            double fLineWidth)
-        {
-            if(fTools::lessOrEqual(fLineWidth, 0.0))
-            {
-                return;
-            }
-
-            // ensure there are no curves used
-            B2DPolyPolygon aSource(rPolyPolygon);
-
-            if(aSource.areControlPointsUsed())
-            {
-                aSource = aSource.getDefaultAdaptiveSubdivision();
-            }
-
-            const sal_uInt32 nCount(aSource.count());
-
-            if(!nCount)
-            {
-                return;
-            }
-
-            for(sal_uInt32 a(0); a < nCount; a++)
-            {
-                createLineTrapezoidFromB2DPolygon(
-                    ro_Result,
-                    aSource.getB2DPolygon(a),
-                    fLineWidth);
-            }
-        }
 
     } // end of namespace tools
 } // end of namespace basegfx

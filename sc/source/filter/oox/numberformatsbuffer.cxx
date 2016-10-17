@@ -1970,11 +1970,6 @@ sal_uLong NumberFormat::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs 
     return nScNumFmt;
 }
 
-void NumberFormat::writeToPropertyMap( PropertyMap& rPropMap ) const
-{
-    rPropMap.setProperty( PROP_NumberFormat, maApiData.mnIndex);
-}
-
 NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper )
     : WorkbookHelper(rHelper)
     , mnHighestId(0)

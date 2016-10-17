@@ -37,9 +37,6 @@ public:
     explicit            BiffDecoderBase();
     virtual             ~BiffDecoderBase() override;
 
-    /** Derived classes return a clone of the decoder for usage in new streams. */
-    inline BiffDecoderBase* clone() { return implClone(); }
-
     /** Implementation of the ::comphelper::IDocPasswordVerifier interface. */
     virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const OUString& rPassword, css::uno::Sequence< css::beans::NamedValue >& o_rEncryptionData ) override;
     virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& o_rEncryptionData ) override;

@@ -37,35 +37,6 @@ ValueSetWithTextControl::ValueSetWithTextControl(Window* pParent, WinBits nBits)
     SetColCount();
 }
 
-void ValueSetWithTextControl::AddItem(
-    const Image& rItemImage,
-    const OUString& rItemText,
-    const OUString* pItemHelpText )
-{
-    if ( meControlType != ControlType::ImageText )
-    {
-        return;
-    }
-
-    ValueSetWithTextItem aItem;
-    aItem.maItemImage = rItemImage;
-    aItem.maSelectedItemImage = rItemImage;
-
-    if ( GetDPIScaleFactor() > 1 )
-    {
-        BitmapEx b = aItem.maItemImage.GetBitmapEx();
-        b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
-        aItem.maItemImage = Image(b);
-    }
-
-    aItem.maItemText = rItemText;
-
-    maItems.push_back( aItem );
-
-    InsertItem( maItems.size() );
-    SetItemText( maItems.size(),
-                    (pItemHelpText != nullptr) ? *pItemHelpText : rItemText );
-}
 
 void ValueSetWithTextControl::AddItem(
     const OUString& rItemText,

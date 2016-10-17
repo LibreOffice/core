@@ -338,12 +338,6 @@ void SpinField::ImplInit(vcl::Window* pParent, WinBits nWinStyle)
     }
 }
 
-SpinField::SpinField(WindowType nTyp) :
-    Edit(nTyp)
-{
-    ImplInitSpinFieldData();
-}
-
 SpinField::SpinField(vcl::Window* pParent, WinBits nWinStyle) :
     Edit(WINDOW_SPINFIELD)
 {

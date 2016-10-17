@@ -88,31 +88,6 @@ private:
     bool                mbInRecord;
 };
 
-class BiffPivotCacheRecordsContext : public BiffWorksheetContextBase
-{
-public:
-    explicit            BiffPivotCacheRecordsContext(
-                            const WorksheetHelper& rHelper,
-                            const PivotCache& rPivotCache );
-
-    /** Reads the current record from stream and tries to insert a cell into
-        the source data sheet. */
-    virtual void        importRecord( BiffInputStream& rStrm ) override;
-
-private:
-    void                startNextRow();
-
-private:
-    typedef ::std::vector< sal_Int32 > ColumnIndexVector;
-
-    const PivotCache&   mrPivotCache;
-    ColumnIndexVector   maUnsharedCols; /// Column indexes of all unshared cache fields.
-    size_t              mnColIdx;       /// Current index into maUnsharedCols.
-    sal_Int32           mnRowIdx;       /// Current row in source data (0-based).
-    bool                mbHasShared;    /// True = pivot cache contains fields with shared items.
-    bool                mbInRow;        /// True = a data row has been started.
-};
-
 } // namespace xls
 } // namespace oox
 

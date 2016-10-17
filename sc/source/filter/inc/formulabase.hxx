@@ -234,8 +234,6 @@ struct BinSingleRef2d
     explicit            BinSingleRef2d();
 
     void                setBiff12Data( sal_uInt16 nCol, sal_Int32 nRow, bool bRelativeAsOffset );
-    void                setBiff2Data( sal_uInt8 nCol, sal_uInt16 nRow, bool bRelativeAsOffset );
-    void                setBiff8Data( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelativeAsOffset );
 
     void                readBiff12Data( SequenceInputStream& rStrm, bool bRelativeAsOffset );
 };

@@ -47,26 +47,6 @@ BiffWorksheetContextBase::BiffWorksheetContextBase( const WorksheetHelper& rHelp
 {
 }
 
-BiffFragmentHandler::BiffFragmentHandler( const FilterBase& rFilter, const OUString& rStrmName )
-{
-    // do not automatically close the root stream (indicated by empty stream name)
-    bool bRootStrm = rStrmName.isEmpty();
-    mxXInStrm.reset( new BinaryXInputStream( rFilter.openInputStream( rStrmName ), !bRootStrm ) );
-    mxBiffStrm.reset( new BiffInputStream( *mxXInStrm ) );
-}
-
-BiffFragmentHandler::~BiffFragmentHandler()
-{
-}
-
-bool BiffFragmentHandler::skipFragment()
-{
-    while( mxBiffStrm->startNextRecord() && (mxBiffStrm->getRecId() != BIFF_ID_EOF) )
-        if( BiffHelper::isBofRecord( *mxBiffStrm ) )
-            skipFragment();
-    return !mxBiffStrm->isEof() && (mxBiffStrm->getRecId() == BIFF_ID_EOF);
-}
-
 } // namespace xls
 } // namespace oox
 

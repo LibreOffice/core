@@ -93,7 +93,6 @@ struct BinAddress
     inline explicit     BinAddress( const ScAddress& rAddr ) : mnCol( rAddr.Col() ), mnRow( rAddr.Row() ) {}
 
     void                read( SequenceInputStream& rStrm );
-    void                read( BiffInputStream& rStrm );
 };
 
 inline bool operator<( const BinAddress& rL, const BinAddress& rR )
@@ -114,7 +113,6 @@ struct BinRange
     BinAddress          maLast;
 
     void                read( SequenceInputStream& rStrm );
-    void                read( BiffInputStream& rStrm );
 };
 
 inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRange& orRange )

@@ -272,17 +272,6 @@ const TransitionPresetList& TransitionPreset::getTransitionPresetList()
     return theTransitionPresetList::get().getList();
 }
 
-void TransitionPreset::apply( SdPage* pSlide ) const
-{
-    if( pSlide )
-    {
-        pSlide->setTransitionType( mnTransition );
-        pSlide->setTransitionSubtype( mnSubtype );
-        pSlide->setTransitionDirection( mbDirection );
-        pSlide->setTransitionFadeColor( mnFadeColor );
-    }
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

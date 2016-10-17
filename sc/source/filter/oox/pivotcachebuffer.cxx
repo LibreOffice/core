@@ -102,28 +102,9 @@ const sal_uInt8 BIFF12_PCDEFINITION_SUPPORTDRILL    = 0x08;
 const sal_uInt8 BIFF12_PCDWBSOURCE_HASRELID         = 0x01;
 const sal_uInt8 BIFF12_PCDWBSOURCE_HASSHEET         = 0x02;
 
-const sal_uInt16 BIFF_PC_NOSTRING                   = 0xFFFF;
-
-const sal_uInt16 BIFF_PCDFIELD_HASITEMS             = 0x0001;
-const sal_uInt16 BIFF_PCDFIELD_HASPARENT            = 0x0008;
-const sal_uInt16 BIFF_PCDFIELD_RANGEGROUP           = 0x0010;
-const sal_uInt16 BIFF_PCDFIELD_ISNUMERIC            = 0x0020;
-const sal_uInt16 BIFF_PCDFIELD_HASSEMIMIXED         = 0x0080;
-const sal_uInt16 BIFF_PCDFIELD_HASLONGINDEX         = 0x0200;
-const sal_uInt16 BIFF_PCDFIELD_HASNONDATE           = 0x0400;
-const sal_uInt16 BIFF_PCDFIELD_HASDATE              = 0x0800;
-const sal_uInt16 BIFF_PCDFIELD_SERVERFIELD          = 0x2000;
-const sal_uInt16 BIFF_PCDFIELD_NOUNIQUEITEMS        = 0x4000;
-
 const sal_uInt16 BIFF_PCDFRANGEPR_AUTOSTART         = 0x0001;
 const sal_uInt16 BIFF_PCDFRANGEPR_AUTOEND           = 0x0002;
 
-const sal_uInt16 BIFF_PCDEFINITION_SAVEDATA         = 0x0001;
-const sal_uInt16 BIFF_PCDEFINITION_INVALID          = 0x0002;
-const sal_uInt16 BIFF_PCDEFINITION_REFRESHONLOAD    = 0x0004;
-const sal_uInt16 BIFF_PCDEFINITION_OPTIMIZEMEMORY   = 0x0008;
-const sal_uInt16 BIFF_PCDEFINITION_BACKGROUNDQUERY  = 0x0010;
-const sal_uInt16 BIFF_PCDEFINITION_ENABLEREFRESH    = 0x0020;
 
 /** Adjusts the weird date format read from binary streams.
 
@@ -626,63 +607,6 @@ void PivotCacheField::importPCDFGroupItem( sal_Int32 nRecId, SequenceInputStream
     maGroupItems.importItem( nRecId, rStrm );
 }
 
-void PivotCacheField::importPCDField( BiffInputStream& rStrm )
-{
-    sal_uInt16 nFlags, nGroupItems, nBaseItems, nSharedItems;
-    rStrm >> nFlags;
-    maFieldGroupModel.mnParentField  = rStrm.readuInt16();
-    maFieldGroupModel.mnBaseField    = rStrm.readuInt16();
-    rStrm.skip( 2 );    // number of unique items (either shared or group)
-    rStrm >> nGroupItems >> nBaseItems >> nSharedItems;
-    maFieldModel.maName = rStrm.readByteStringUC( getTextEncoding() );
-
-    maFieldModel.mbServerField          = getFlag( nFlags, BIFF_PCDFIELD_SERVERFIELD );
-    maFieldModel.mbUniqueList           = !getFlag( nFlags, BIFF_PCDFIELD_NOUNIQUEITEMS );
-    maSharedItemsModel.mbHasSemiMixed   = getFlag( nFlags, BIFF_PCDFIELD_HASSEMIMIXED );
-    maSharedItemsModel.mbHasNonDate     = getFlag( nFlags, BIFF_PCDFIELD_HASNONDATE );
-    maSharedItemsModel.mbHasDate        = getFlag( nFlags, BIFF_PCDFIELD_HASDATE );
-    maSharedItemsModel.mbIsNumeric      = getFlag( nFlags, BIFF_PCDFIELD_ISNUMERIC );
-    maSharedItemsModel.mbHasLongIndexes = getFlag( nFlags, BIFF_PCDFIELD_HASLONGINDEX );
-    maFieldGroupModel.mbRangeGroup      = getFlag( nFlags, BIFF_PCDFIELD_RANGEGROUP );
-
-    // in BIFF, presence of parent group field is denoted by a flag
-    if( !getFlag( nFlags, BIFF_PCDFIELD_HASPARENT ) )
-        maFieldGroupModel.mnParentField = -1;
-
-    // following PCDFSQLTYPE record contains SQL type
-    if( (rStrm.getNextRecId() == BIFF_ID_PCDFSQLTYPE) && rStrm.startNextRecord() )
-        maFieldModel.mnSqlType = rStrm.readInt16();
-
-    // read group items, if any
-    if( nGroupItems > 0 )
-    {
-        SAL_WARN_IF(
-            !getFlag(nFlags, BIFF_PCDFIELD_HASITEMS), "sc.filter",
-            "PivotCacheField::importPCDField - missing items flag");
-        maGroupItems.importItemList( rStrm, nGroupItems );
-
-        sal_uInt16 nNextRecId = rStrm.getNextRecId();
-        bool bHasRangePr = nNextRecId == BIFF_ID_PCDFRANGEPR;
-        bool bHasDiscretePr = nNextRecId == BIFF_ID_PCDFDISCRETEPR;
-
-        OSL_ENSURE( bHasRangePr || bHasDiscretePr, "PivotCacheField::importPCDField - missing group properties record" );
-        OSL_ENSURE( bHasRangePr == maFieldGroupModel.mbRangeGroup, "PivotCacheField::importPCDField - invalid range grouping flag" );
-        if( bHasRangePr && rStrm.startNextRecord() )
-            importPCDFRangePr( rStrm );
-        else if( bHasDiscretePr && rStrm.startNextRecord() )
-            importPCDFDiscretePr( rStrm );
-    }
-
-    // read the shared items, if any
-    if( nSharedItems > 0 )
-    {
-        SAL_WARN_IF(
-            !getFlag(nFlags, BIFF_PCDFIELD_HASITEMS), "sc.filter",
-            "PivotCacheField::importPCDField - missing items flag");
-        maSharedItems.importItemList( rStrm, nSharedItems );
-    }
-}
-
 void PivotCacheField::importPCDFRangePr( BiffInputStream& rStrm )
 {
     sal_uInt16 nFlags;
@@ -1165,30 +1089,6 @@ void PivotCache::importPCDSheetSource( SequenceInputStream& rStrm, const Relatio
 
     // resolve URL of external document
     maTargetUrl = rRelations.getExternalTargetFromRelId( maSheetSrcModel.maRelId );
-}
-
-void PivotCache::importPCDefinition( BiffInputStream& rStrm )
-{
-    sal_uInt16 nFlags, nUserNameLen;
-    rStrm >> maDefModel.mnRecords;
-    rStrm.skip( 2 );    // repeated cache ID
-    rStrm >> nFlags;
-    rStrm.skip( 2 );    // unused
-    rStrm >> maDefModel.mnDatabaseFields;
-    rStrm.skip( 6 );    // total field count, report record count, (repeated) cache type
-    rStrm >> nUserNameLen;
-    if( nUserNameLen != BIFF_PC_NOSTRING )
-        maDefModel.maRefreshedBy = rStrm.readCharArrayUC( nUserNameLen, getTextEncoding() );
-
-    maDefModel.mbInvalid          = getFlag( nFlags, BIFF_PCDEFINITION_INVALID );
-    maDefModel.mbSaveData         = getFlag( nFlags, BIFF_PCDEFINITION_SAVEDATA );
-    maDefModel.mbRefreshOnLoad    = getFlag( nFlags, BIFF_PCDEFINITION_REFRESHONLOAD );
-    maDefModel.mbOptimizeMemory   = getFlag( nFlags, BIFF_PCDEFINITION_OPTIMIZEMEMORY );
-    maDefModel.mbEnableRefresh    = getFlag( nFlags, BIFF_PCDEFINITION_ENABLEREFRESH );
-    maDefModel.mbBackgroundQuery  = getFlag( nFlags, BIFF_PCDEFINITION_BACKGROUNDQUERY );
-
-    if( (rStrm.getNextRecId() == BIFF_ID_PCDEFINITION2) && rStrm.startNextRecord() )
-        rStrm >> maDefModel.mfRefreshedDate;
 }
 
 PivotCacheField& PivotCache::createCacheField( bool bInitDatabaseField )

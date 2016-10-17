@@ -41,8 +41,6 @@ static const long MINBODY = 284; //0.5 cm in twips
 
 namespace sw { namespace sidebar {
 
-class PagePropertyPanel;
-
 class PageMarginControl : public SfxPopupWindow
 {
 public:

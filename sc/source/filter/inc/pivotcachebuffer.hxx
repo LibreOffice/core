@@ -242,8 +242,6 @@ public:
     /** Imports one or more group items from the passed record. */
     void                importPCDFGroupItem( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
-    /** Imports pivot cache field settings from the PCDFIELD record. */
-    void                importPCDField( BiffInputStream& rStrm );
     /** Imports numeric grouping settings from the PCDFRANGEPR record. */
     void                importPCDFRangePr( BiffInputStream& rStrm );
     /** Imports the mapping between group items and base items from the PCDFDISCRETEPR record. */
@@ -388,9 +386,6 @@ public:
     void                importPCDSource( SequenceInputStream& rStrm );
     /** Reads sheet source settings from the PCDSHEETSOURCE record. */
     void                importPCDSheetSource( SequenceInputStream& rStrm, const ::oox::core::Relations& rRelations );
-
-    /** Reads pivot cache global settings from the PCDEFINITION record. */
-    void                importPCDefinition( BiffInputStream& rStrm );
 
     /** Creates and returns a new pivot cache field. */
     PivotCacheField&    createCacheField( bool bInitDatabaseField = false );

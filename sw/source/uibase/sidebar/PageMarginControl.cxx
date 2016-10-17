@@ -22,11 +22,12 @@
 #include <cstdlib>
 
 #include "PageMarginControl.hxx"
-#include "PagePropertyPanel.hxx"
 #include "PropertyPanel.hrc"
 
+#include <editeng/sizeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
+#include <svx/pageitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
 

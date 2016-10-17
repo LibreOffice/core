@@ -241,8 +241,6 @@ private:
     friend class ValueItemAcc;
 
     using Control::ImplInitSettings;
-    using Window::ImplInit;
-    SVT_DLLPRIVATE void         ImplInit();
     SVT_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
@@ -281,7 +279,6 @@ protected:
 
 public:
                     ValueSet( vcl::Window* pParent, WinBits nWinStyle );
-                    ValueSet( vcl::Window* pParent, const ResId& rResId );
     virtual         ~ValueSet() override;
     virtual void    dispose() override;
 
@@ -353,7 +350,6 @@ public:
     }
     void                SaveValue() { mnSavedItemId = GetSelectItemId(); }
     sal_Int32           GetSavedValue() const { return mnSavedItemId; }
-    bool IsValueChangedFromSaved() { return mnSavedItemId != GetSelectItemId(); }
     bool IsItemSelected( sal_uInt16 nItemId ) const
     {
         return !mbNoSelection && (nItemId == mnSelItemId);

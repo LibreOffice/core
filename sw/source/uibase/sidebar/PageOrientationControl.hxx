@@ -30,8 +30,6 @@ class Button;
 
 namespace sw { namespace sidebar {
 
-class PagePropertyPanel;
-
 class PageOrientationControl : public SfxPopupWindow
 {
 public:

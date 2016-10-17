@@ -54,7 +54,6 @@
 #include "convuno.hxx"
 #include "document.hxx"
 #include "drawingfragment.hxx"
-#include "drawingmanager.hxx"
 #include "formulaparser.hxx"
 #include "pagesettings.hxx"
 #include "querytablebuffer.hxx"
