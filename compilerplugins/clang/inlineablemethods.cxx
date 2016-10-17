@@ -103,7 +103,6 @@ private:
     std::string toString(SourceLocation loc);
     void functionTouchedFromExpr( const FunctionDecl* calleeFunctionDecl, const Expr* expr );
     bool isCalleeFunctionInteresting( const FunctionDecl* );
-    void logCalledFrom(SourceLocation calleeSite, const FunctionDecl* functionDecl);
 
     // I use traverse and a member variable because I cannot find a reliable way of walking back up the AST tree using the parentStmt() stuff
     // TODO doesn't cope with nested functions
@@ -274,7 +273,7 @@ void InlineableMethods::functionTouchedFromExpr( const FunctionDecl* calleeFunct
         return;
     }
 
-    logCalledFrom(expr->getLocStart(), canonicalFunctionDecl);
+    calledFromMap.emplace(toString(expr->getLocStart()), niceName(canonicalFunctionDecl));
 
     if (const UnaryOperator* unaryOp = dyn_cast_or_null<UnaryOperator>(parentStmt(expr))) {
         if (unaryOp->getOpcode() == UO_AddrOf) {
@@ -289,14 +288,6 @@ void InlineableMethods::functionTouchedFromExpr( const FunctionDecl* calleeFunct
     {
         calledFromOutsideSet.insert(niceName(canonicalFunctionDecl));
     }
-}
-
-void InlineableMethods::logCalledFrom(SourceLocation calleeLoc, const FunctionDecl* functionDecl)
-{
-    functionDecl = functionDecl->getCanonicalDecl();
-    while (functionDecl->getTemplateInstantiationPattern())
-        functionDecl = functionDecl->getTemplateInstantiationPattern();
-    calledFromMap.emplace(toString(calleeLoc), niceName(functionDecl));
 }
 
 bool InlineableMethods::isCalleeFunctionInteresting(const FunctionDecl* functionDecl)
