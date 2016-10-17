@@ -19,15 +19,17 @@ namespace comphelper
  * Creates a beans::PropertyValue easily, i.e. you can write:
  *
  * function(comphelper::makePropertyValue("Foo", nBar));
- *
- * instead of writing 3 extra lines to set the name and value of the beans::PropertyValue.
  */
-template<typename T> css::beans::PropertyValue makePropertyValue(const OUString& rName, const T& rValue)
+template<typename T>
+css::beans::PropertyValue makePropertyValue(const OUString& rName, const T& rValue)
 {
-    css::beans::PropertyValue aValue;
-    aValue.Name = rName;
-    aValue.Value <<= rValue;
-    return aValue;
+    return {rName, 0, css::uno::makeAny(rValue), css::beans::PropertyState_DIRECT_VALUE};
+}
+
+template<>
+inline css::beans::PropertyValue makePropertyValue(const OUString& rName, const css::uno::Any& rValue)
+{
+    return {rName, 0, rValue, css::beans::PropertyState_DIRECT_VALUE};
 }
 
 }
