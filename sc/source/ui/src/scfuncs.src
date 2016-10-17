@@ -11268,7 +11268,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Hyperlink." ;
+            Text [ en-US ] = "Link." ;
         };
         ExtraData =
         {
