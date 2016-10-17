@@ -126,6 +126,52 @@ static hb_unicode_funcs_t* getUnicodeFuncs()
 }
 #endif
 
+void CommonSalLayout::ParseFeatures(OUString name)
+{
+    mnFeats = 0;
+    mpFeatures = 0;
+    mLang = OString("");
+    int nStart = name.indexOf(':');
+    if (nStart < 0)
+        return;
+    OString oName = OUStringToOString(name, RTL_TEXTENCODING_ASCII_US);
+    for (int nNext = nStart; nNext > 0; nNext = name.indexOf('&', nNext + 1))
+    {
+        if (name.match("lang=", nNext+1))
+        {
+            int endamp = name.indexOf('&', nNext+1);
+            int enddelim = name.indexOf(' ', nNext+1);
+            int end = name.getLength();
+            if (endamp < 0)
+            {
+                if (enddelim > 0)
+                    end = enddelim;
+            }
+            else if (enddelim < 0 || endamp < enddelim)
+                end = endamp;
+            else
+                end = enddelim;
+            mLang = oName.copy(nNext+6, end-nNext-6);
+        }
+        else
+            ++mnFeats;
+    }
+    if (mnFeats == 0)
+        return;
+
+    mpFeatures = new hb_feature_t[mnFeats];
+    mnFeats = 0;
+    for (int nThis = nStart, nNext = name.indexOf('&', nStart+1); nThis > 0; nThis = nNext, nNext = name.indexOf('&', nNext + 1))
+    {
+        if (!name.match("lang=", nThis+1))
+        {
+            int end = nNext > 0 ? nNext : name.getLength();
+            if (hb_feature_from_string(oName.getStr() + nThis + 1, end - nThis - 1, &mpFeatures[mnFeats]))
+                ++mnFeats;
+        }
+    }
+}
+
 #if defined(_WIN32)
 CommonSalLayout::CommonSalLayout(WinSalGraphics* WSL, WinFontInstance& rWinFontInstance, const WinFontFace& rWinFontFace)
 :   mhFont((HFONT)GetCurrentObject(WSL->getHDC(), OBJ_FONT)),
@@ -155,6 +201,7 @@ CommonSalLayout::CommonSalLayout(WinSalGraphics* WSL, WinFontInstance& rWinFontI
     }
 
     scaleHbFont(mpHbFont, mrFontSelData);
+    ParseFeatures(mrFontSelData.maTargetName);
 }
 
 void CommonSalLayout::InitFont() const
@@ -186,6 +233,7 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
     }
 
     scaleHbFont(mpHbFont, mrFontSelData);
+    ParseFeatures(mrFontSelData.maTargetName);
 }
 
 #else
@@ -205,6 +253,7 @@ CommonSalLayout::CommonSalLayout(ServerFont& rServerFont)
     }
 
     scaleHbFont(mpHbFont, mrFontSelData);
+    ParseFeatures(mrFontSelData.maTargetName);
 }
 #endif
 
@@ -416,7 +465,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
             // hb_language_from_string() accept ISO639-3 language tag except for Chinese.
             LanguageTag &rTag = rArgs.maLanguageTag;
-            OString sLanguage = OUStringToOString(rTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
+            OString sLanguage = mLang.getLength() ? mLang : OUStringToOString(rTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
 
             bool bVertical = false;
             if ((rArgs.mnFlags & SalLayoutFlags::Vertical) &&
@@ -449,7 +498,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 #if HB_VERSION_ATLEAST(0, 9, 42)
             hb_buffer_set_cluster_level(pHbBuffer, HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS);
 #endif
-            hb_shape(mpHbFont, pHbBuffer, nullptr, 0);
+            hb_shape(mpHbFont, pHbBuffer, mpFeatures, mnFeats);
 
             int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
             hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
