@@ -543,9 +543,6 @@ public:
     /// returns the deterministic version for odf export
     SvtSaveOptions::ODFSaneDefaultVersion getSaneDefaultVersion() const;
 
-    /// name of stream in package, e.g., "content.xml"
-    OUString GetStreamName() const;
-
     // FIXME: this is only for legacy stuff that has not yet been adapted
     //        to implement XMetadatable; this can write duplicate IDs!
     /// add xml:id and legacy namespace id

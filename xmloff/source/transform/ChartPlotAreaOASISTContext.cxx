@@ -49,8 +49,6 @@ public:
     virtual void StartElement( const Reference< xml::sax::XAttributeList >& rAttrList ) override;
     virtual void EndElement() override;
 
-    bool IsCategoryAxis() const { return m_bHasCategories;}
-
 private:
     ::rtl::Reference< XMLPersAttrListTContext > &   m_rCategoriesContext;
     bool                                            m_bHasCategories;
@@ -155,7 +153,7 @@ void XMLAxisOASISContext::StartElement(
 void XMLAxisOASISContext::EndElement()
 {
     // if we have categories, change the "class" attribute
-    if( IsCategoryAxis() &&
+    if( m_bHasCategories &&
         m_rCategoriesContext.is() )
     {
         OSL_ENSURE( GetAttrList().is(), "Invalid attribute list" );

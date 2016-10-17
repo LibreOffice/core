@@ -641,7 +641,7 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
-            (IsStylesOnlyMode()) ? nullptr : xDPS->getDocumentProperties());
+            !mbLoadDoc ? nullptr : xDPS->getDocumentProperties());
         pContext = new SvXMLMetaDocumentContext(*this,
                         XML_NAMESPACE_OFFICE, rLocalName,
                         xDocProps);

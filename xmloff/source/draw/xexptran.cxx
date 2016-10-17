@@ -224,13 +224,6 @@ struct ImpSdXMLExpTransObj2DMatrix : public ImpSdXMLExpTransObj2DBase
     :   ImpSdXMLExpTransObj2DBase(IMP_SDXMLEXP_TRANSOBJ2D_MATRIX), maMatrix(rNew) {}
 };
 
-// delete all entries in list
-
-void SdXMLImExTransform2D::EmptyList()
-{
-    maList.clear();
-}
-
 // add members
 
 void SdXMLImExTransform2D::AddRotate(double fNew)
@@ -357,7 +350,7 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
 void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConverter& rConv)
 {
     msString = rNew;
-    EmptyList();
+    maList.clear();
 
     if(!msString.isEmpty())
     {
@@ -602,13 +595,6 @@ struct ImpSdXMLExpTransObj3DMatrix : public ImpSdXMLExpTransObj3DBase
     :   ImpSdXMLExpTransObj3DBase(IMP_SDXMLEXP_TRANSOBJ3D_MATRIX), maMatrix(rNew) {}
 };
 
-// delete all entries in list
-
-void SdXMLImExTransform3D::EmptyList()
-{
-    maList.clear();
-}
-
 // add members
 
 void SdXMLImExTransform3D::AddMatrix(const ::basegfx::B3DHomMatrix& rNew)
@@ -777,7 +763,7 @@ SdXMLImExTransform3D::SdXMLImExTransform3D(const OUString& rNew, const SvXMLUnit
 void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConverter& rConv)
 {
     msString = rNew;
-    EmptyList();
+    maList.clear();
 
     if(!msString.isEmpty())
     {

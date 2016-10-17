@@ -297,7 +297,6 @@ public:
     static SvXMLExportPropertyMapper* CreateShapePropMapper( SvXMLExport& rExport );
 
     void enableLayerExport() { mbExportLayer = true; }
-    bool IsLayerExportEnabled() const { return mbExportLayer; }
 
     /** defines if the export should increment the progress bar or not */
     void enableHandleProgressBar() { mbHandleProgressBar = true; }

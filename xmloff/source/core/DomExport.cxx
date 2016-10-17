@@ -125,7 +125,6 @@ class DomExport: public DomVisitor
     vector<SvXMLNamespaceMap> maNamespaces;
 
     void pushNamespace();
-    void popNamespace();
     void addNamespace( const OUString& sPrefix, const OUString& sURI );
     OUString qualifiedName( const OUString& sPrefix, const OUString& sURI,
                             const OUString& sLocalName );
@@ -159,11 +158,6 @@ void DomExport::pushNamespace()
 {
     SvXMLNamespaceMap const aMap(maNamespaces.back());
     maNamespaces.push_back(aMap);
-}
-
-void DomExport::popNamespace()
-{
-    maNamespaces.pop_back();
 }
 
 void DomExport::addNamespace( const OUString& sPrefix, const OUString& sURI )
@@ -234,7 +228,7 @@ void DomExport::element( const Reference<XElement>& xElement )
 void DomExport::endElement( const Reference<XElement>& xElement )
 {
     mrExport.EndElement( qualifiedName( xElement ), false );
-    popNamespace();
+    maNamespaces.pop_back();
 }
 
 void DomExport::character( const Reference<XCharacterData>& xChars )

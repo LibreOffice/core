@@ -1929,11 +1929,6 @@ OUString SvXMLImport::GetDocumentBase() const
     return mpImpl->aDocBase.GetMainURL( INetURLObject::NO_DECODE );
 }
 
-OUString SvXMLImport::GetStreamName() const
-{
-    return mpImpl->mStreamName;
-}
-
 // Convert drawing object positions from OOo file format to OASIS (#i28749#)
 bool SvXMLImport::IsShapePositionInHoriL2R() const
 {
@@ -2009,7 +2004,7 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
                 uno::UNO_QUERY);
 //FIXME: not yet
             if (xMeta.is()) {
-                const beans::StringPair mdref( GetStreamName(), i_rXmlId );
+                const beans::StringPair mdref( mpImpl->mStreamName, i_rXmlId );
                 try {
                     xMeta->setMetadataReference(mdref);
                 } catch (lang::IllegalArgumentException &) {

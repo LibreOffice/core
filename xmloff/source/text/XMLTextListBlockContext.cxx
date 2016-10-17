@@ -75,7 +75,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     {
         XMLTextListBlockContext *pParent =
                                 static_cast<XMLTextListBlockContext *>(mxParentListBlock.get());
-        msListStyleName = pParent->GetListStyleName();
+        msListStyleName = pParent->msListStyleName;
         sParentListStyleName = msListStyleName;
         mxNumRules = pParent->GetNumRules();
         mnLevel = pParent->GetLevel() + 1;

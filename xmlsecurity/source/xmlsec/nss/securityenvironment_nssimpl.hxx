@@ -105,9 +105,6 @@ private:
 
         static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
 
-        //Native methods
-        CERTCertDBHandle* getCertDb() throw( css::uno::Exception , css::uno::RuntimeException ) ;
-
         void setCertDb( CERTCertDBHandle* aCertDb ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
         void adoptSymKey( PK11SymKey* aSymKey ) throw( css::uno::Exception , css::uno::RuntimeException ) ;

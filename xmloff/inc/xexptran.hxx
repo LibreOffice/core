@@ -51,8 +51,6 @@ class SdXMLImExTransform2D
     std::vector< std::shared_ptr< ImpSdXMLExpTransObj2DBase > > maList;
     OUString                                  msString;
 
-    void EmptyList();
-
 public:
     SdXMLImExTransform2D() {}
 
@@ -72,8 +70,6 @@ class SdXMLImExTransform3D
     // fails to compile because of incomplete type.
     std::vector< std::shared_ptr< ImpSdXMLExpTransObj3DBase > > maList;
     OUString                                  msString;
-
-    void EmptyList();
 
 public:
     SdXMLImExTransform3D() {}

@@ -102,7 +102,7 @@ OString URLParameter::getByName( const char* par )
     else if( strcmp( par,"System" ) == 0 )
         val = get_system();
     else if( strcmp( par,"HelpPrefix" ) == 0 )
-        val = get_prefix();
+        val = m_aPrefix;
 
     return OString( val.getStr(),val.getLength(),RTL_TEXTENCODING_UTF8 );
 }

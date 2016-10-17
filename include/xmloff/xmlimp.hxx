@@ -484,9 +484,6 @@ public:
     OUString GetBaseURL() const;
     OUString GetDocumentBase() const;
 
-    /// name of stream in package, e.g., "content.xml"
-    OUString GetStreamName() const;
-
     /// set the XmlId attribute of given UNO object (for RDF metadata)
     void SetXmlId(css::uno::Reference<
                   css::uno::XInterface> const & i_xIfc,

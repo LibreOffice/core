@@ -218,8 +218,6 @@ public:
 
     // Styles and AutoStyles contexts
 
-    bool IsStylesOnlyMode() const { return !mbLoadDoc; }
-
     const SvXMLTokenMap& GetDocElemTokenMap();
     const SvXMLTokenMap& GetBodyElemTokenMap();
     const SvXMLTokenMap& GetStylesElemTokenMap();

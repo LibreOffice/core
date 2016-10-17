@@ -704,7 +704,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
 
     // export layer information
-    if( IsLayerExportEnabled() )
+    if( mbExportLayer )
     {
         // check for group or scene shape and not export layer if this is one
         uno::Reference< drawing::XShapes > xShapes( xShape, uno::UNO_QUERY );

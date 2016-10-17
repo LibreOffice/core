@@ -2365,11 +2365,6 @@ SvtSaveOptions::ODFSaneDefaultVersion SvXMLExport::getSaneDefaultVersion() const
     return SvtSaveOptions::ODFSVER_LATEST;
 }
 
-OUString SvXMLExport::GetStreamName() const
-{
-    return mpImpl->mStreamName;
-}
-
 void
 SvXMLExport::AddAttributeIdLegacy(
         sal_uInt16 const nLegacyPrefix, OUString const& rValue)
@@ -2403,7 +2398,7 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
         const beans::StringPair mdref( xMeta->getMetadataReference() );
         if ( !mdref.Second.isEmpty() )
         {
-            const OUString streamName( GetStreamName() );
+            const OUString streamName = mpImpl->mStreamName;
             if ( !streamName.isEmpty() )
             {
                 if ( streamName.equals(mdref.First) )

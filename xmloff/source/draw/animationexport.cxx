@@ -518,7 +518,6 @@ public:
     static void convertPath( OUStringBuffer& sTmp, const Any& rPath );
     void convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue ) const;
     void convertTiming( OUStringBuffer& sTmp, const Any& rTiming ) const;
-    void convertSource( OUStringBuffer& sTmp, const Any& rSource ) const;
     void convertTarget( OUStringBuffer& sTmp, const Any& rTarget ) const;
 
     void prepareValue( const Any& rValue );
@@ -1564,7 +1563,7 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
         {
             if( pEvent->Source.hasValue() )
             {
-                convertSource( sTmp, pEvent->Source );
+                convertTarget( sTmp, pEvent->Source );
                 sTmp.append( '.' );
             }
 
@@ -1587,11 +1586,6 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
     {
         OSL_FAIL( "xmloff::AnimationsExporterImpl::convertTiming(), invalid value type!" );
     }
-}
-
-void AnimationsExporterImpl::convertSource( OUStringBuffer& sTmp, const Any& rSource ) const
-{
-    convertTarget( sTmp, rSource );
 }
 
 void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTarget ) const

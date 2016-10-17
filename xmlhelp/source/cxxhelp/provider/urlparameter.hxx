@@ -147,8 +147,6 @@ namespace chelp {
                 return m_aModule;
         }
 
-        const OUString& get_prefix() const { return m_aPrefix; }
-
         OUString const & get_language();
 
         OUString const & get_program();

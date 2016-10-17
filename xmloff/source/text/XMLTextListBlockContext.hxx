@@ -65,7 +65,6 @@ public:
                 const OUString& rLocalName,
                  const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
-    const OUString& GetListStyleName() const { return msListStyleName; }
     sal_Int16 GetLevel() const { return mnLevel; }
     bool IsRestartNumbering() const { return mbRestartNumbering; }
     void ResetRestartNumbering() { mbRestartNumbering = false; }
