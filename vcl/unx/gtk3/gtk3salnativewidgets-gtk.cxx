@@ -1259,10 +1259,10 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         }
         case GtkControlPart::MenuBar:
         {
-            GtkWidgetPath *path = gtk_widget_path_new();
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpWindowStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_MENU_BAR);
             set_object_name(path, -1, "menubar");
-            return makeContext(path, nullptr);
+            return makeContext(path, mpWindowStyle);
         }
         case GtkControlPart::MenuBarItem:
         {
@@ -1600,10 +1600,10 @@ GtkStyleContext* GtkSalGraphics::createOldContext(GtkControlPart ePart)
         }
         case GtkControlPart::MenuBar:
         {
-            GtkWidgetPath *path = gtk_widget_path_new();
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpWindowStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_MENU_BAR);
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUBAR);
-            return makeContext(path, nullptr);
+            return makeContext(path, mpWindowStyle);
         }
         case GtkControlPart::MenuBarItem:
         {
