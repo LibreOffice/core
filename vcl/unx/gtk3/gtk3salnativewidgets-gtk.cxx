@@ -1358,6 +1358,9 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
 #ifndef GTK_STYLE_CLASS_POPUP
 #define GTK_STYLE_CLASS_POPUP "popup"
 #endif
+#ifndef GTK_STYLE_CLASS_LABEL
+#define GTK_STYLE_CLASS_LABEL "label"
+#endif
 
 GtkStyleContext* GtkSalGraphics::createOldContext(GtkControlPart ePart)
 {
@@ -2484,9 +2487,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         guint pos = gtk_widget_path_append_type(pCPath, GTK_TYPE_WINDOW);
         gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_TOOLTIP);
         pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
-#if GTK_CHECK_VERSION(3,16,0)
         gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_LABEL);
-#endif
         pCStyle = gtk_style_context_new();
         gtk_style_context_set_path(pCStyle, pCPath);
         gtk_widget_path_free(pCPath);
