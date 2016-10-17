@@ -12,13 +12,21 @@
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
-#include <comphelper/processfactory.hxx>
 #include <sfx2/safemode.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/layout.hxx>
+#include <comphelper/anytostring.hxx>
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 
 using namespace css;
 
@@ -47,6 +55,8 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     get(mpCBResetCustomizations, "check_reset_customizations");
     get(mpCBResetWholeUserProfile, "check_reset_whole_userprofile");
 
+    get(mpBugLink, "linkbutton_bugs");
+
     mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
     mpBtnQuit->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
     mpBtnRestart->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
@@ -56,6 +66,8 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpCBDisableAllExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetCustomizations->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetWholeUserProfile->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+
+    mpBugLink->SetClickHdl(LINK(this, SafeModeDialog, HandleHyperlink));
 
     // Disable restart btn until some checkbox is active
     mpBtnRestart->Disable();
@@ -79,6 +91,11 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     {
         mpCBResetCustomizations->Disable();
     }
+
+    // Set URL for help button (module=safemode)
+    OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
+        "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=safemode");
+    mpBugLink->SetURL(sURL);
 }
 
 SafeModeDialog::~SafeModeDialog()
@@ -97,6 +114,8 @@ void SafeModeDialog::dispose()
     mpCBDisableAllExtensions.clear();
     mpCBResetCustomizations.clear();
     mpCBResetWholeUserProfile.clear();
+
+    mpBugLink.clear();
 
     Dialog::dispose();
 }
@@ -157,6 +176,30 @@ void SafeModeDialog::applyChanges()
         css::uno::Reference< css::task::XInteractionHandler >());
 }
 
+void SafeModeDialog::openWebBrowser(const OUString & sURL, const OUString &sTitle)
+{
+    if ( sURL.isEmpty() ) // Nothing to do, when the URL is empty
+        return;
+
+    try
+    {
+        uno::Reference< system::XSystemShellExecute > xSystemShellExecute(
+            system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
+        //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
+        xSystemShellExecute->execute( sURL, OUString(), system::SystemShellExecuteFlags::URIS_ONLY );
+    }
+    catch ( const uno::Exception& )
+    {
+        uno::Any exc(cppu::getCaughtException());
+        OUString msg(comphelper::anyToString(exc));
+        const SolarMutexGuard guard;
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
+        aErrorBox->SetText( sTitle );
+        aErrorBox->Execute();
+    }
+}
+
+
 IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnContinue.get())
@@ -184,6 +227,11 @@ IMPL_LINK(SafeModeDialog, CheckBoxHdl, CheckBox&, /*pCheckBox*/, void)
         mpCBResetWholeUserProfile->IsChecked());
 
     mpBtnRestart->Enable(bEnable);
+}
+
+IMPL_LINK( SafeModeDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
+{
+    SafeModeDialog::openWebBrowser( rHyperlink.GetURL(), GetText() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

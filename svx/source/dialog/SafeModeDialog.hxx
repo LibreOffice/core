@@ -15,6 +15,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/vclmedit.hxx>
+#include <vcl/fixedhyper.hxx>
 #include <comphelper/backupfilehelper.hxx>
 
 class SafeModeDialog : public Dialog
@@ -41,14 +42,18 @@ private:
     VclPtr<CheckBox> mpCBResetCustomizations;
     VclPtr<CheckBox> mpCBResetWholeUserProfile;
 
+    VclPtr<FixedHyperlink> mpBugLink;
+
     // local BackupFileHelper for handling possible restores
     comphelper::BackupFileHelper maBackupFileHelper;
 
     static void terminateOffice();
     void applyChanges();
+    static void openWebBrowser(const OUString & sURL, const OUString &sTitle);
 
     DECL_LINK(CheckBoxHdl, CheckBox&, void);
     DECL_LINK(BtnHdl, Button*, void);
+    DECL_LINK(HandleHyperlink, FixedHyperlink&, void);
 };
 
 #endif
