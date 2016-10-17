@@ -1646,6 +1646,18 @@ void Application::EnableEventTestingMode()
     bEventTestingMode = true;
 }
 
+static bool bSafeMode = false;
+
+bool Application::IsSafeModeEnabled()
+{
+    return bSafeMode;
+}
+
+void Application::EnableSafeMode()
+{
+    bSafeMode = true;
+}
+
 void Application::ShowNativeErrorBox(const OUString& sTitle  ,
                                      const OUString& sMessage)
 {

@@ -1024,6 +1024,10 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
         else if (officecfg::Office::Common::VCL::UseOpenGL::get())
             bEnable = true;
 
+        // Force disable in safe mode
+        if (Application::IsSafeModeEnabled())
+            bEnable = false;
+
         bRet = bEnable;
     }
 
