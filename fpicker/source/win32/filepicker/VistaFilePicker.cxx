@@ -315,7 +315,7 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const ::rtl::OUString& sDirec
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_GET_DIRECTORY);
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
-    const ::rtl::OUString sDirectory = rRequest->getArgumentOrDefault(PROP_FILENAME, ::rtl::OUString());
+    const ::rtl::OUString sDirectory = rRequest->getArgumentOrDefault(PROP_DIRECTORY, ::rtl::OUString());
 
     return sDirectory;
 }
