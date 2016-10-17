@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <utility>
-
 #include "ConversionHelper.hxx"
 #include "NumberingManager.hxx"
 #include "StyleSheetTable.hxx"
@@ -51,9 +49,9 @@ namespace dmapper {
 
 //---------------------------------------------------  Utility functions
 template <typename T>
-beans::PropertyValue lcl_makePropVal(PropertyIds nNameID, T && aValue)
+beans::PropertyValue lcl_makePropVal(PropertyIds nNameID, T const & aValue)
 {
-    return {getPropertyName(nNameID), 0, uno::makeAny(std::forward<T>(aValue)), beans::PropertyState_DIRECT_VALUE};
+    return {getPropertyName(nNameID), 0, uno::makeAny(aValue), beans::PropertyState_DIRECT_VALUE};
 }
 
 sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps, const OUString& sName )
