@@ -2176,7 +2176,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
         if( rNode.IsTextNode()
             && aStr != aStringForImage && !aStr.isEmpty()
             && !rNode.GetFlyFormat()
-            && !IsInTable()
+            && !(IsInTable() && !AllowPostponedTextInTable())
             && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()) )
         {
             bPostponeWritingText = true ;
