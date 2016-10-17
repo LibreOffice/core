@@ -120,7 +120,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         {
             CmdToInfoMap() : bPopup( false ),
                              bCommandNameCreated( false ),
-                             nIsExperimental( 0 ),
+                             bIsExperimental( false ),
                              nProperties( 0 ) {}
 
             OUString            aLabel;
@@ -131,7 +131,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
             OUString            aTargetURL;
             bool                bPopup : 1,
                                 bCommandNameCreated : 1;
-            sal_Int32           nIsExperimental;
+            bool                bIsExperimental;
             sal_Int32           nProperties;
         };
 
@@ -338,7 +338,7 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aComman
         aPropSeq[6].Name  = m_aPropTargetURL;
         aPropSeq[6].Value <<= pIter->second.aTargetURL;
         aPropSeq[7].Name = m_aPropIsExperimental;
-        aPropSeq[7].Value <<= pIter->second.nIsExperimental;
+        aPropSeq[7].Value <<= pIter->second.bIsExperimental;
         return makeAny( aPropSeq );
     }
 
@@ -368,7 +368,7 @@ void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _x
                     xNameAccess->getByName( m_aPropUIPopupLabel )   >>= aCmdToInfo.aPopupLabel;
                     xNameAccess->getByName( m_aPropUITooltipLabel )   >>= aCmdToInfo.aTooltipLabel;
                     xNameAccess->getByName( m_aPropUITargetURL )    >>= aCmdToInfo.aTargetURL;
-                    xNameAccess->getByName( m_aPropUIIsExperimental ) >>= aCmdToInfo.nIsExperimental;
+                    xNameAccess->getByName( m_aPropUIIsExperimental ) >>= aCmdToInfo.bIsExperimental;
                     xNameAccess->getByName( m_aPropProperties )     >>= aCmdToInfo.nProperties;
 
                     m_aCmdInfoCache.insert( CommandToInfoCache::value_type( aNameSeq[i], aCmdToInfo ));

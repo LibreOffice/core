@@ -51,9 +51,9 @@
           <desc>The actual command to use for everything except label/icon, typically when the main command doesn't map to a valid application slot.</desc>
         </info>
       </prop>
-      <prop oor:name="IsExperimental" oor:type="xs:int" oor:localized="false">
+      <prop oor:name="IsExperimental" oor:type="xs:boolean">
         <info>
-          <desc>If set to '1', this command is available only when Experimental features are activated.</desc>
+          <desc>If set to "true", this command is available only when Experimental features are activated.</desc>
         </info>
       </prop>
       <prop oor:name="Properties" oor:type="xs:int" oor:nillable="false">
