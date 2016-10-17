@@ -1478,7 +1478,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="linkButton">
-                                    <property name="label" translatable="yes">Hyper_link</property>
+                                    <property name="label" translatable="yes">_Link</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
