@@ -573,7 +573,7 @@ ScVbaFormat< Ifc... >::getLocked(  ) throw (script::BasicErrorException, uno::Ru
             else // fallback to propertyset
             {
                 util::CellProtection cellProtection;
-                mxPropertySet->getPropertyValue(sCellProt) >>= aCellProtection;
+                mxPropertySet->getPropertyValue(sCellProt) >>= cellProtection;
                 aCellProtection = uno::makeAny( cellProtection.IsLocked );
             }
         }
