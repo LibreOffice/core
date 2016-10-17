@@ -1331,6 +1331,10 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
     return nullptr;
 }
 
+#ifndef GTK_STYLE_CLASS_POPUP
+#define GTK_STYLE_CLASS_POPUP "popup"
+#endif
+
 GtkStyleContext* GtkSalGraphics::createOldContext(GtkControlPart ePart)
 {
     switch (ePart)
