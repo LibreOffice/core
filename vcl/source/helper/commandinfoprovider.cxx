@@ -317,9 +317,9 @@ bool CommandInfoProvider::IsExperimental(const OUString& rsCommandName,
             {
                 if (aProperties[nIndex].Name == "IsExperimental")
                 {
-                    sal_Int32 nValue;
-                    return (aProperties[nIndex].Value >>= nValue)
-                        && nValue == 1;
+                    bool bValue;
+                    return (aProperties[nIndex].Value >>= bValue)
+                        && bValue == true;
                 }
             }
         }
