@@ -1240,6 +1240,8 @@ const SvxFieldData* toXMLPropertyStates(
                         nIndexScript = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "script-complex", 0);
                         nIndexTag = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "rfc-language-tag-complex", 0);
                     break;
+                    default:
+                        nIndexLanguage = nIndexCountry = nIndexScript = nIndexTag = -1;
                 }
                 assert( nIndexLanguage >= 0 && nIndexCountry >= 0 && nIndexScript >= 0 && nIndexTag >= 0);
                 rPropStates.push_back( XMLPropertyState( nIndexLanguage, aAny));
