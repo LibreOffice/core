@@ -62,6 +62,7 @@
 #include "ViewShellBase.hxx"
 #include "FormShellManager.hxx"
 #include "DrawController.hxx"
+#include <comphelper/lok.hxx>
 #include <memory>
 
 namespace sd {
@@ -414,7 +415,14 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     GetDoc()->GetDrawOutliner().SetDefaultLanguage( GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ) );
 
     // Set Application Background color for usage in SdrPaintView(s)
-    mpDrawView->SetApplicationBackgroundColor(GetAppBackgroundColor());
+    svtools::ColorConfig aColorConfig;
+    Color aFillColor( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
+    if (comphelper::LibreOfficeKit::isActive())
+        aFillColor = COL_TRANSPARENT;
+    // tdf#87905 Use darker background color for master view
+    if (meEditMode == EditMode::MasterPage)
+        aFillColor.DecreaseLuminance( 64 );
+    mpDrawView->SetApplicationBackgroundColor( aFillColor );
 
     /* This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one

@@ -361,8 +361,6 @@ public:
 
     OUString GetSidebarContextName() const;
 
-    const Color& GetAppBackgroundColor() const { return mnAppBackgroundColor; }
-    void SetAppBackgroundColor( Color nNewColor )  { mnAppBackgroundColor = nNewColor; }
     bool IsInSwitchPage() { return mbIsInSwitchPage; }
 
     //move this method to ViewShell.
@@ -488,9 +486,6 @@ private:
     ::std::unique_ptr< ViewOverlayManager > mpViewOverlayManager;
 
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
-
-    // The colour of the area behind the slide (used to be called "Wiese")
-    Color mnAppBackgroundColor;
 };
 
     /// Merge the background properties together and deposit the result in rMergeAttr
