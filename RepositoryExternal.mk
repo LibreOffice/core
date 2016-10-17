@@ -2953,16 +2953,16 @@ else # !SYSTEM_FIREBIRD
 define gb_LinkTarget__use_libfbembed
 $(call gb_LinkTarget_use_package,$(1),firebird)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,firebird)/gen/Release/firebird/include \
+	-I$(call gb_UnpackedTarball_get_dir,firebird)/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/include \
 	$$(INCLUDE) \
 )
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,firebird)/gen/Release/firebird/bin/ifbclient.lib \
+	$(call gb_UnpackedTarball_get_dir,firebird)/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/bin/ifbclient.lib \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,firebird)/gen/Release/firebird/lib -lfbclient \
+	-L$(call gb_UnpackedTarball_get_dir,firebird)/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/lib -lfbclient \
 )
 endif
 

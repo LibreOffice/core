@@ -30,8 +30,8 @@ MAKE_PRE=$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/
 
 MAKE_POST=$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-			$(gb_Package_SOURCEDIR_firebird)/gen/Release/firebird/plugins/libEngine12.dylib \
-			$(gb_Package_SOURCEDIR_firebird)/gen/Release/firebird/lib/libfbclient.dylib.3.0.0)
+			$(gb_Package_SOURCEDIR_firebird)/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/plugins/libEngine12.dylib \
+			$(gb_Package_SOURCEDIR_firebird)/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/lib/libfbclient.dylib.3.0.0)
 
 $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_ExternalProject_run,build,\
@@ -76,7 +76,6 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 		&& MAKE=$(MAKE) ./configure \
 			--without-editline \
 			--with-wire-compress=no \
-			$(if $(filter-out MSC,$(COM)),$(if $(ENABLE_DEBUG),--enable-debug)) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(DISABLE_DYNLOADING), \
 				--enable-static --disable-shared \
@@ -89,9 +88,9 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 							'<' 101200)), \
 					ac_cv_func_clock_gettime=no)) \
 		&& if [ -n "$${FB_CPU_ARG}" ]; then \
-			   $(MAKE_PRE) $(MAKE) $(INVOKE_FPA) SHELL='$(SHELL)' $(MAKE_POST); \
+			   $(MAKE_PRE) $(MAKE) $(if $(ENABLE_DEBUG),Debug) $(INVOKE_FPA) SHELL='$(SHELL)' $(MAKE_POST); \
 			else \
-			   $(MAKE_PRE) $(MAKE) SHELL='$(SHELL)' $(MAKE_POST); \
+			   $(MAKE_PRE) $(MAKE) $(if $(ENABLE_DEBUG),Debug) SHELL='$(SHELL)' $(MAKE_POST); \
 			fi \
 	)
 # vim: set noet sw=4 ts=4:
