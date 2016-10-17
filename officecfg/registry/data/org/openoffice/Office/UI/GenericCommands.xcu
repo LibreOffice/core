@@ -4012,8 +4012,8 @@
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
-        <prop oor:name="IsExperimental" oor:type="xs:int">
-          <value>1</value>
+        <prop oor:name="IsExperimental" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
       </node>
       <node oor:name=".uno:TransformRotationX" oor:op="replace">
@@ -4137,8 +4137,8 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Notebookbar</value>
         </prop>
-        <prop oor:name="IsExperimental" oor:type="xs:int">
-          <value xml:lang="en-US">1</value>
+        <prop oor:name="IsExperimental" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
       </node>
       <node oor:name=".uno:Sidebar" oor:op="replace">
@@ -5890,8 +5890,8 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Toolbar Layout</value>
         </prop>
-        <prop oor:name="IsExperimental" oor:type="xs:int">
-          <value>1</value>
+        <prop oor:name="IsExperimental" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
       </node>
       <node oor:name=".uno:AvailableToolbars" oor:op="replace">
