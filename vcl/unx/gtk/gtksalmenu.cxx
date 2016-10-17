@@ -74,6 +74,28 @@ void RemoveSpareItemsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList, un
     }
 }
 
+typedef std::pair<GtkSalMenu*, sal_uInt16> MenuAndId;
+
+namespace
+{
+    MenuAndId decode_command(const gchar *action_name)
+    {
+        OString sCommand(action_name);
+
+        sal_Int32 nIndex = 0;
+        OString sWindow = sCommand.getToken(0, '-', nIndex);
+        OString sGtkSalMenu = sCommand.getToken(0, '-', nIndex);
+        OString sItemId = sCommand.getToken(0, '-', nIndex);
+
+        GtkSalMenu* pSalSubMenu = reinterpret_cast<GtkSalMenu*>(sGtkSalMenu.toInt64());
+
+        assert(sWindow == "window" && pSalSubMenu);
+        (void) sWindow;
+
+        return MenuAndId(pSalSubMenu, sItemId.toInt32());
+    }
+}
+
 void RemoveDisabledItemsFromNativeMenu(GLOMenu* pMenu, GList** pOldCommandList,
                                        sal_Int32 nSection, GActionGroup* pActionGroup)
 {
@@ -92,8 +114,23 @@ void RemoveDisabledItemsFromNativeMenu(GLOMenu* pMenu, GList** pOldCommandList,
                 if (pSubMenuModel)
                 {
                     gint nSubMenuSections = g_menu_model_get_n_items(G_MENU_MODEL(pSubMenuModel));
-                    bRemove = (nSubMenuSections == 0 ||
-                              (nSubMenuSections == 1 && g_lo_menu_get_n_items_from_section(pSubMenuModel, 0) == 0));
+                    if (nSubMenuSections == 0)
+                        bRemove = true;
+                    else if (nSubMenuSections == 1)
+                    {
+                        gint nItems = g_lo_menu_get_n_items_from_section(pSubMenuModel, 0);
+                        if (nItems == 0)
+                            bRemove = true;
+                        else if (nItems == 1)
+                        {
+                            //If the only entry is the "No Selection Possible" entry, then we are allowed
+                            //to removed it
+                            gchar* pSubCommand = g_lo_menu_get_command_from_item_in_section(pSubMenuModel, 0, 0);
+                            MenuAndId aMenuAndId(decode_command(pSubCommand));
+                            bRemove = aMenuAndId.second == 0xFFFF;
+                            g_free(pSubCommand);
+                        }
+                    }
                 }
             }
 
@@ -1038,28 +1075,6 @@ GtkSalMenu* GtkSalMenu::GetTopLevel()
     while (pMenu->mpParentSalMenu)
         pMenu = pMenu->mpParentSalMenu;
     return pMenu;
-}
-
-typedef std::pair<GtkSalMenu*, sal_uInt16> MenuAndId;
-
-namespace
-{
-    MenuAndId decode_command(const gchar *action_name)
-    {
-        OString sCommand(action_name);
-
-        sal_Int32 nIndex = 0;
-        OString sWindow = sCommand.getToken(0, '-', nIndex);
-        OString sGtkSalMenu = sCommand.getToken(0, '-', nIndex);
-        OString sItemId = sCommand.getToken(0, '-', nIndex);
-
-        GtkSalMenu* pSalSubMenu = reinterpret_cast<GtkSalMenu*>(sGtkSalMenu.toInt64());
-
-        assert(sWindow == "window" && pSalSubMenu);
-        (void) sWindow;
-
-        return MenuAndId(pSalSubMenu, sItemId.toInt32());
-    }
 }
 
 void GtkSalMenu::DispatchCommand(const gchar *pCommand)
