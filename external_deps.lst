@@ -57,7 +57,7 @@ if ( true )
 if (SYSTEM_MDDS != YES)
     MD5 = 0dd138efff4412c707e239290fb82d4f
     name = mdds_0.3.1.tar.bz2
-    URL1 = http://multidimalgorithm.googlecode.com/files/mdds_0.3.1.tar.bz2
+    URL1 = https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/multidimalgorithm/mdds_0.3.1.tar.bz2
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
  
 if (SYSTEM_LIBTEXTCAT != YES)
