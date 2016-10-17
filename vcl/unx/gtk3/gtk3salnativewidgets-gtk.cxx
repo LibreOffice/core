@@ -2353,38 +2353,8 @@ static inline ::Color getColor( const GdkRGBA& rCol )
     return ::Color( (int)(rCol.red * 0xFFFF) >> 8, (int)(rCol.green * 0xFFFF) >> 8, (int)(rCol.blue * 0xFFFF) >> 8 );
 }
 
-void GtkSalGraphics::updateSettings( AllSettings& rSettings )
+static vcl::Font getFont(GtkStyleContext* pStyle, const css::lang::Locale& rLocale)
 {
-    GtkStyleContext* pStyle = gtk_widget_get_style_context( mpWindow );
-    GtkSettings* pSettings = gtk_widget_get_settings( mpWindow );
-    StyleSettings aStyleSet = rSettings.GetStyleSettings();
-    GdkRGBA color;
-
-    // text colors
-    GdkRGBA text_color;
-    style_context_set_state(pStyle, GTK_STATE_FLAG_NORMAL);
-    gtk_style_context_get_color(pStyle, gtk_style_context_get_state(pStyle), &text_color);
-    ::Color aTextColor = getColor( text_color );
-    aStyleSet.SetDialogTextColor( aTextColor );
-    aStyleSet.SetButtonTextColor( aTextColor );
-    aStyleSet.SetRadioCheckTextColor( aTextColor );
-    aStyleSet.SetGroupTextColor( aTextColor );
-    aStyleSet.SetLabelTextColor( aTextColor );
-    aStyleSet.SetWindowTextColor( aTextColor );
-    aStyleSet.SetFieldTextColor( aTextColor );
-
-    // background colors
-    GdkRGBA background_color;
-    gtk_style_context_get_background_color(pStyle, gtk_style_context_get_state(pStyle), &background_color);
-
-    ::Color aBackColor = getColor( background_color );
-    aStyleSet.Set3DColors( aBackColor );
-    aStyleSet.SetFaceColor( aBackColor );
-    aStyleSet.SetDialogColor( aBackColor );
-    aStyleSet.SetWorkspaceColor( aBackColor );
-    aStyleSet.SetCheckedColorSpecialCase( );
-
-    // UI font
     const PangoFontDescription* font = gtk_style_context_get_font(pStyle, gtk_style_context_get_state(pStyle));
     OString    aFamily        = pango_font_description_get_family( font );
     int nPangoHeight    = pango_font_description_get_size( font );
@@ -2432,7 +2402,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 #endif
 
     // match font to e.g. resolve "Sans"
-    psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILanguageTag().getLocale() );
+    psp::PrintFontManager::get().matchFont(aInfo, rLocale);
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
@@ -2441,13 +2411,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 #endif
 
     int nPointHeight = 0;
-    /*sal_Int32 nDispDPIY = GetDisplay()->GetResolution().B();
-    static gboolean(*pAbso)(const PangoFontDescription*) =
-        (gboolean(*)(const PangoFontDescription*))osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "pango_font_description_get_size_is_absolute" );
-
-    if( pAbso && pAbso( font ) )
-        nPointHeight = (nPangoHeight * 72 + nDispDPIY*PANGO_SCALE/2) / (nDispDPIY * PANGO_SCALE);
-    else*/
         nPointHeight = nPangoHeight/PANGO_SCALE;
 
     vcl::Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
@@ -2459,6 +2422,42 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         aFont.SetItalic( aInfo.m_eItalic );
     if( aInfo.m_ePitch != PITCH_DONTKNOW )
         aFont.SetPitch( aInfo.m_ePitch );
+    return aFont;
+}
+
+void GtkSalGraphics::updateSettings( AllSettings& rSettings )
+{
+    GtkStyleContext* pStyle = gtk_widget_get_style_context( mpWindow );
+    GtkSettings* pSettings = gtk_widget_get_settings( mpWindow );
+    StyleSettings aStyleSet = rSettings.GetStyleSettings();
+    GdkRGBA color;
+
+    // text colors
+    GdkRGBA text_color;
+    style_context_set_state(pStyle, GTK_STATE_FLAG_NORMAL);
+    gtk_style_context_get_color(pStyle, gtk_style_context_get_state(pStyle), &text_color);
+    ::Color aTextColor = getColor( text_color );
+    aStyleSet.SetDialogTextColor( aTextColor );
+    aStyleSet.SetButtonTextColor( aTextColor );
+    aStyleSet.SetRadioCheckTextColor( aTextColor );
+    aStyleSet.SetGroupTextColor( aTextColor );
+    aStyleSet.SetLabelTextColor( aTextColor );
+    aStyleSet.SetWindowTextColor( aTextColor );
+    aStyleSet.SetFieldTextColor( aTextColor );
+
+    // background colors
+    GdkRGBA background_color;
+    gtk_style_context_get_background_color(pStyle, gtk_style_context_get_state(pStyle), &background_color);
+
+    ::Color aBackColor = getColor( background_color );
+    aStyleSet.Set3DColors( aBackColor );
+    aStyleSet.SetFaceColor( aBackColor );
+    aStyleSet.SetDialogColor( aBackColor );
+    aStyleSet.SetWorkspaceColor( aBackColor );
+    aStyleSet.SetCheckedColorSpecialCase( );
+
+    // UI font
+    vcl::Font aFont(getFont(pStyle, rSettings.GetUILanguageTag().getLocale()));
 
     aStyleSet.SetAppFont( aFont );
     aStyleSet.SetHelpFont( aFont );
