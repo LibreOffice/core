@@ -41,6 +41,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,wps,\
 	UnpackedTarball/libwps/src/lib/Quattro \
 	UnpackedTarball/libwps/src/lib/QuattroSpreadsheet \
 	UnpackedTarball/libwps/src/lib/WKS4 \
+	UnpackedTarball/libwps/src/lib/WKS4Format \
 	UnpackedTarball/libwps/src/lib/WKS4Spreadsheet \
 	UnpackedTarball/libwps/src/lib/WKSContentListener \
 	UnpackedTarball/libwps/src/lib/WKSParser \
@@ -63,10 +64,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,wps,\
 	UnpackedTarball/libwps/src/lib/WPSGraphicStyle \
 	UnpackedTarball/libwps/src/lib/WPSHeader \
 	UnpackedTarball/libwps/src/lib/WPSList \
+	UnpackedTarball/libwps/src/lib/WPSOLE1Parser \
 	UnpackedTarball/libwps/src/lib/WPSOLEParser \
 	UnpackedTarball/libwps/src/lib/WPSPageSpan \
 	UnpackedTarball/libwps/src/lib/WPSParagraph \
 	UnpackedTarball/libwps/src/lib/WPSParser \
+	UnpackedTarball/libwps/src/lib/WPSStream \
+	UnpackedTarball/libwps/src/lib/WPSStringStream \
 	UnpackedTarball/libwps/src/lib/WPSSubDocument \
 	UnpackedTarball/libwps/src/lib/WPSTable \
 	UnpackedTarball/libwps/src/lib/WPSTextParser \
