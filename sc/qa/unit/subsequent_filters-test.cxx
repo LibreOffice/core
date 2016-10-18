@@ -3449,15 +3449,6 @@ void ScFiltersTest::testSharedFormulaColumnLabelsODS()
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll();
 
-    // Cells C2, D2 and E2 all should contain formula groups of length 5.
-    for (SCCOL i = 2; i <= 4; ++i)
-    {
-        const ScFormulaCell* pCell = rDoc.GetFormulaCell(ScAddress(i,1,0));
-        CPPUNIT_ASSERT(pCell);
-        CPPUNIT_ASSERT(pCell->IsSharedTop());
-        CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), pCell->GetSharedLength());
-    }
-
     CPPUNIT_ASSERT_EQUAL( 5.0, rDoc.GetValue(ScAddress(2,1,0)));
     CPPUNIT_ASSERT_EQUAL(15.0, rDoc.GetValue(ScAddress(2,2,0)));
     CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(ScAddress(2,3,0)));
