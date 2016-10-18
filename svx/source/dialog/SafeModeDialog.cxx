@@ -70,12 +70,12 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
         mpCBCheckProfilesafeExtensions->Disable();
     }
 
-    if (comphelper::BackupFileHelper::isTryDisableAllExtensionsPossible())
+    if (!comphelper::BackupFileHelper::isTryDisableAllExtensionsPossible())
     {
         mpCBDisableAllExtensions->Disable();
     }
 
-    if (maBackupFileHelper.isTryResetCustomizationsPossible())
+    if (!comphelper::BackupFileHelper::isTryResetCustomizationsPossible())
     {
         mpCBResetCustomizations->Disable();
     }
@@ -143,13 +143,13 @@ void SafeModeDialog::applyChanges()
     if (mpCBResetCustomizations->IsChecked())
     {
         // Reset customizations (Settings and UserInterface modifications)
-        maBackupFileHelper.tryResetCustomizations();
+        comphelper::BackupFileHelper::tryResetCustomizations();
     }
 
     if (mpCBResetWholeUserProfile->IsChecked())
     {
         // Reset the whole UserProfile
-        maBackupFileHelper.tryResetUserProfile();
+        comphelper::BackupFileHelper::tryResetUserProfile();
     }
 
     // Then restart
