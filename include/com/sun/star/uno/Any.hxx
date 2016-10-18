@@ -203,6 +203,10 @@ inline bool Any::has() const
         cpp_release );
 }
 
+#if defined LIBO_INTERNAL_ONLY
+template<> bool Any::has<Any>() const = delete;
+#endif
+
 inline bool Any::operator == ( const Any & rAny ) const
 {
     return ::uno_type_equalData(
@@ -264,6 +268,10 @@ inline void SAL_CALL operator <<= ( Any & rAny, const rtl::OUStringConcat< C1, C
         &rAny, const_cast< rtl::OUString * >( &str ), rType.getTypeLibType(),
         cpp_acquire, cpp_release );
 }
+#endif
+
+#if defined LIBO_INTERNAL_ONLY
+template<> void SAL_CALL operator <<=(Any &, Any const &) = delete;
 #endif
 
 template< class C >
@@ -566,6 +574,9 @@ inline bool SAL_CALL operator == ( const Any & rAny, const Type & value )
 }
 // any
 
+#if defined LIBO_INTERNAL_ONLY
+template<> bool SAL_CALL operator >>=(Any const &, Any &) = delete;
+#else
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value )
 {
@@ -577,6 +588,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value )
     }
     return true;
 }
+#endif
 // interface
 
 template<>
@@ -622,6 +634,10 @@ T Any::get() const
     }
     return value;
 }
+
+#if defined LIBO_INTERNAL_ONLY
+template<> Any Any::get() const = delete;
+#endif
 
 /**
    Support for Any in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO
