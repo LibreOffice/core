@@ -62,7 +62,7 @@ void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) thr
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
-    SAL_WARN_IF( !impldbg_checkParameter_append( xFrame ), "fwk", "OFrames::append(): Invalid parameter detected!" );
+    SAL_WARN_IF( !xFrame.is(), "fwk", "OFrames::append(): Invalid parameter detected!" );
 
     // Do the follow only, if owner instance valid!
     // Lock owner for follow operations - make a "hard reference"!
@@ -85,7 +85,7 @@ void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) thr
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
-    SAL_WARN_IF( !impldbg_checkParameter_remove( xFrame ), "fwk", "OFrames::remove(): Invalid parameter detected!" );
+    SAL_WARN_IF( !xFrame.is(), "fwk", "OFrames::remove(): Invalid parameter detected!" );
 
     // Do the follow only, if owner instance valid!
     // Lock owner for follow operations - make a "hard reference"!
@@ -354,19 +354,6 @@ bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Reference<
     return xOwner.is() && pFrameContainer != nullptr;
 }
 
-// Its only allowed to add valid references to container.
-// AND - alle frames must support XFrames-interface!
-bool OFrames::impldbg_checkParameter_append( const css::uno::Reference< XFrame >& xFrame )
-{
-    return xFrame.is();
-}
-
-// Its only allowed to add valid references to container...
-// ... => You can only delete valid references!
-bool OFrames::impldbg_checkParameter_remove( const css::uno::Reference< XFrame >& xFrame )
-{
-    return xFrame.is();
-}
 
 // A search for frames must initiate with right flags.
 // Some one are superflous and not supported yet. But here we control only the range of incoming parameter!

@@ -265,12 +265,6 @@ namespace {
     }
 }
 
-void SvtExpFileDlg_Impl::ClearFilterList( )
-{
-    _pLbFilter->Clear();
-}
-
-
 void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter, const OUString& rDisplayName )
 {
     DBG_ASSERT( pFilter, "SvtExpFileDlg_Impl::SetCurFilter: invalid filter!" );
@@ -300,7 +294,7 @@ void SvtExpFileDlg_Impl::InsertFilterListEntry( const SvtFileDialogFilter_Impl* 
 void SvtExpFileDlg_Impl::InitFilterList( )
 {
     // clear the current list
-    ClearFilterList( );
+    _pLbFilter->Clear();
 
     // reinit it
     sal_uInt16 nPos = m_aFilter.size();

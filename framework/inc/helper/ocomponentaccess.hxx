@@ -160,30 +160,6 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper< css::container::XEnum
 
         css::uno::Reference< css::lang::XComponent > impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
 
-    //  debug methods
-    //  (should be private everyway!)
-
-        /*-****************************************************************************************************
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-
-            @seealso    ASSERTs in implementation!
-
-            @param      references to checking variables
-            @return     sal_False ,on invalid parameter.
-            @return     sal_True  ,otherwise
-        *//*-*****************************************************************************************************/
-
-    private:
-
-        static bool impldbg_checkParameter_OComponentAccessCtor( const css::uno::Reference< css::frame::XDesktop >& xOwner );
-
-    //  variables
-    //  (should be private everyway!)
-
-    private:
-
         css::uno::WeakReference< css::frame::XDesktop >     m_xOwner;   /// weak reference to the desktop object!
 
 };      //  class OComponentAccess

@@ -1117,7 +1117,7 @@ void SAL_CALL Desktop::addEventListener( const css::uno::Reference< css::lang::X
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Safe impossible cases
     // Method not defined for all incoming parameter.
-    SAL_WARN_IF( implcp_addEventListener( xListener ), "fwk", "Desktop::addEventListener(): Invalid parameter detected!" );
+    SAL_WARN_IF( !xListener.is(), "fwk", "Desktop::addEventListener(): Invalid parameter detected!" );
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -1129,7 +1129,7 @@ void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Safe impossible cases
     // Method not defined for all incoming parameter.
-    SAL_WARN_IF( implcp_removeEventListener( xListener ), "fwk", "Desktop::removeEventListener(): Invalid parameter detected!" );
+    SAL_WARN_IF( !xListener.is(), "fwk", "Desktop::removeEventListener(): Invalid parameter detected!" );
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
@@ -1736,18 +1736,6 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
     }
 
     return (nNonClosedFrames < 1);
-}
-
-//  We work with valid listener only.
-bool Desktop::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
-{
-    return !xListener.is();
-}
-
-//  We work with valid listener only.
-bool Desktop::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
-{
-    return !xListener.is();
 }
 
 }   // namespace framework

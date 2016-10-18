@@ -260,48 +260,28 @@ void ArgInput::UpdateAccessibleNames()
     pRefBtn->SetAccessibleName(aName);
 }
 
-void ArgInput::FxClick()
-{
-    aFxClickLink.Call(*this);
-}
-
-void ArgInput::FxFocus()
-{
-    aFxFocusLink.Call(*this);
-}
-
-void ArgInput::EdFocus()
-{
-    aEdFocusLink.Call(*this);
-}
-
-void ArgInput::EdModify()
-{
-    aEdModifyLink.Call(*this);
-}
-
 IMPL_LINK( ArgInput, FxBtnClickHdl, Button*, pBtn, void )
 {
     if(pBtn == pBtnFx)
-        FxClick();
+        aFxClickLink.Call(*this);
 }
 
 IMPL_LINK( ArgInput, FxBtnFocusHdl, Control&, rControl, void )
 {
     if(&rControl == pBtnFx)
-        FxFocus();
+        aFxFocusLink.Call(*this);
 }
 
 IMPL_LINK( ArgInput, EdFocusHdl, Control&, rControl, void )
 {
     if(&rControl == pEdArg)
-        EdFocus();
+        aEdFocusLink.Call(*this);
 }
 
 IMPL_LINK( ArgInput, EdModifyHdl, Edit&, rEdit, void )
 {
     if(&rEdit == pEdArg)
-        EdModify();
+        aEdModifyLink.Call(*this);
 }
 
 // class EditBox
@@ -339,12 +319,6 @@ void EditBox::dispose()
     pMEdit->Disable();
     pMEdit.disposeAndClear();
     Control::dispose();
-}
-
-// When the selection is changed this function will be called
-void EditBox::SelectionChanged()
-{
-    aSelChangedLink.Call(*this);
 }
 
 // When the size is changed, MultiLineEdit must be adapted..
@@ -411,7 +385,7 @@ IMPL_LINK_NOARG(EditBox, ChangedHdl, void*, void)
 
         if(aNewSel.Min()!=aOldSel.Min() || aNewSel.Max()!=aOldSel.Max())
         {
-            SelectionChanged();
+            aSelChangedLink.Call(*this);
             aOldSel=aNewSel;
         }
     }
