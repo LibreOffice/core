@@ -40,7 +40,7 @@ FeatureCommandDispatchBase::~FeatureCommandDispatchBase()
 void FeatureCommandDispatchBase::initialize()
 {
     CommandDispatch::initialize();
-    fillSupportedFeatures();
+    describeSupportedFeatures();
 }
 
 bool FeatureCommandDispatchBase::isFeatureSupported( const OUString& rCommandURL )
@@ -93,11 +93,6 @@ void FeatureCommandDispatchBase::implDescribeSupportedFeature( const sal_Char* p
     aFeature.GroupId = nGroup;
 
     m_aSupportedFeatures[ aFeature.Command ] = aFeature;
-}
-
-void FeatureCommandDispatchBase::fillSupportedFeatures()
-{
-    describeSupportedFeatures();
 }
 
 } //  namespace chart
