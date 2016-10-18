@@ -183,7 +183,7 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
 {
     MutexGuard aGuard(m_rMutex);
 
-    if ( isColumnsOutOfDate() )
+    if ( m_bColumnsOutOfDate )
     {
         // clear the current columns
         clearColumns();

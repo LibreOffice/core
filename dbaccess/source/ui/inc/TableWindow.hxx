@@ -165,15 +165,11 @@ namespace dbaui
         inline css::uno::Reference< css::container::XNameAccess > GetOriginalColumns() const { return m_pData->getColumns(); }
         inline css::uno::Reference< css::beans::XPropertySet >    GetTable() const { return m_pData->getTable(); }
 
-        SizingFlags                 GetSizingFlags() const { return m_nSizingFlags; }
         /** set the sizing flag to the direction
             @param  _rPos
                 The EndPosition after resizing.
         */
         void                        setSizingFlag(const Point& _rPos);
-        /** set the resizing flag to NONE.
-        */
-        void                        resetSizingFlag() { m_nSizingFlags = SizingFlags::NONE; }
 
         /** returns the new sizing
         */

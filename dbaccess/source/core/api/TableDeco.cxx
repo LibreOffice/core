@@ -511,7 +511,7 @@ void ODBTableDecorator::fillPrivileges() const
                 xProp->getPropertyValue(PROPERTY_CATALOGNAME)   >>= sCatalog;
                 xProp->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
                 xProp->getPropertyValue(PROPERTY_NAME)          >>= sName;
-                m_nPrivileges = ::dbtools::getTablePrivileges(getMetaData(),sCatalog,sSchema, sName);
+                m_nPrivileges = ::dbtools::getTablePrivileges(m_xMetaData, sCatalog,sSchema, sName);
             }
         }
     }

@@ -104,7 +104,7 @@ void OColumnControlModel::registerProperties()
 // XCloneable
 Reference< XCloneable > SAL_CALL OColumnControlModel::createClone( ) throw (RuntimeException, std::exception)
 {
-    return new OColumnControlModel( this, getORB() );
+    return new OColumnControlModel( this, m_xORB );
 }
 
 css::uno::Sequence<sal_Int8> OColumnControlModel::getImplementationId()

@@ -125,7 +125,6 @@ namespace dbaui
     // attribute access
     protected:
         const css::uno::Reference< css::sdbc::XRowSet >&             getRowSet()         const   { return m_xRowSet; }
-        const css::uno::Reference< css::sdbcx::XColumnsSupplier >&   getColumnsSupplier()const   { return m_xColumnsSupplier; }
         const css::uno::Reference< css::form::XLoadable >&           getLoadable()       const   { return m_xLoadable; }
 
         const css::uno::Reference< css::form::XFormComponent >&      getFormComponent()  const   { return m_xGridModel; }

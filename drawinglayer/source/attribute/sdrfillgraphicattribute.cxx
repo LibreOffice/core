@@ -86,7 +86,6 @@ namespace drawinglayer
             const basegfx::B2DVector& getRectPoint() const { return maRectPoint; }
             bool getTiling() const { return mbTiling; }
             bool getStretch() const { return mbStretch; }
-            bool getLogSize() const { return mbLogSize; }
 
             bool operator==(const ImpSdrFillGraphicAttribute& rCandidate) const
             {
@@ -98,7 +97,7 @@ namespace drawinglayer
                     && getRectPoint() == rCandidate.getRectPoint()
                     && getTiling() == rCandidate.getTiling()
                     && getStretch() == rCandidate.getStretch()
-                    && getLogSize() == rCandidate.getLogSize());
+                    && mbLogSize == rCandidate.mbLogSize);
             }
         };
 

@@ -91,8 +91,6 @@ namespace dbaui
         inline void setReferencingTable(const TTableWindowData::value_type& _pTable) { m_pReferencingTable = _pTable; }
         inline void setReferencedTable(const TTableWindowData::value_type& _pTable)  { m_pReferencedTable  = _pTable; }
 
-        const OUString& GetConnName() const { return m_aConnName; }
-
         /** Update create a new connection
 
             @return true if successful

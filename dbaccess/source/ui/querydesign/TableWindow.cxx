@@ -345,9 +345,8 @@ void OTableWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rR
 Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSize) const
 {
     Rectangle aSizingRect = Rectangle( GetPosPixel(), GetSizePixel() );
-    SizingFlags nSizingFlags = GetSizingFlags();
 
-    if( nSizingFlags & SizingFlags::Top )
+    if( m_nSizingFlags & SizingFlags::Top )
     {
         if( _rPos.Y() < 0 )
             aSizingRect.Top() = 0;
@@ -355,7 +354,7 @@ Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSiz
             aSizingRect.Top() = _rPos.Y();
     }
 
-    if( nSizingFlags & SizingFlags::Bottom )
+    if( m_nSizingFlags & SizingFlags::Bottom )
     {
         if( _rPos.Y() > _rOutputSize.Height() )
             aSizingRect.Bottom() = _rOutputSize.Height();
@@ -363,7 +362,7 @@ Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSiz
             aSizingRect.Bottom() = _rPos.Y();
     }
 
-    if( nSizingFlags & SizingFlags::Right )
+    if( m_nSizingFlags & SizingFlags::Right )
     {
         if( _rPos.X() > _rOutputSize.Width() )
             aSizingRect.Right() = _rOutputSize.Width();
@@ -371,7 +370,7 @@ Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSiz
             aSizingRect.Right() = _rPos.X();
     }
 
-    if( nSizingFlags & SizingFlags::Left )
+    if( m_nSizingFlags & SizingFlags::Left )
     {
         if( _rPos.X() < 0 )
             aSizingRect.Left() = 0;
@@ -708,7 +707,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                             m_nMoveIncrement    = 1;
                         }
                     }
-                    resetSizingFlag();
+                    m_nSizingFlags = SizingFlags::NONE;
                 }
                 else
                 {
