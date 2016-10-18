@@ -1293,7 +1293,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
         ScAddress aPreviousCell( aPos );
         aPreviousCell.IncRow( -1 );
         ScFormulaCell *pPreviousCell = pDocument->GetFormulaCell( aPreviousCell );
-        if( pPreviousCell )
+        if (pPreviousCell && pPreviousCell->GetCode()->IsShareable())
         {
             // Now try to convert to a string quickly ...
             ScCompiler aBackComp( rCxt, aPos, *(pPreviousCell->pCode) );
@@ -3765,6 +3765,9 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
 
     // are these formulas at all similar ?
     if ( GetHash() != rOther.GetHash() )
+        return NotEqual;
+
+    if (!pCode->IsShareable() || !rOther.pCode->IsShareable())
         return NotEqual;
 
     FormulaToken **pThis = pCode->GetCode();

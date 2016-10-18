@@ -118,6 +118,7 @@ protected:
     ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
     bool            bHyperLink;             // If HYPERLINK() occurs in the formula.
     bool            mbFromRangeName;        // If this array originates from a named expression
+    bool            mbShareable;            // Whether or not it can be shared with adjacent cells.
 
 protected:
     void                    Assign( const FormulaTokenArray& );
@@ -165,6 +166,16 @@ public:
 
     void SetFromRangeName( bool b ) { mbFromRangeName = b; }
     bool IsFromRangeName() const { return mbFromRangeName; }
+
+    void SetShareable( bool b ) { mbShareable = b; }
+
+    /**
+     * Check if this token array is shareable between multiple adjacent
+     * formula cells. Certain tokens may not function correctly when shared.
+     *
+     * @return true if the token array is shareable, false otherwise.
+     */
+    bool IsShareable() const { return mbShareable; }
 
     void Clear();
     void DelRPN();
