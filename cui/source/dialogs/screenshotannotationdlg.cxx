@@ -27,6 +27,8 @@
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+
+#include <comphelper/random.hxx>
 #include <vcl/pngwrite.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <tools/urlobj.hxx>
@@ -39,6 +41,44 @@
 #include <svtools/optionsdrawinglayer.hxx>
 
 using namespace com::sun::star;
+
+namespace
+{
+    OUString lcl_genRandom( const OUString &rId )
+    {
+        //FIXME: plus timestamp
+        unsigned int nRand = comphelper::rng::uniform_uint_distribution(0, 0xFFFF);
+        return OUString( rId + OUString::number( nRand ) );
+    }
+
+
+    OUString lcl_AltDescr()
+    {
+        OUString aRet = OUString("<alt xml-lang=en-US ") + OUString("id=") + lcl_genRandom("alt_id") + OUString(">") +
+                        OUString(" ") + //FIXME real dialog title or something
+                        OUString("</alt>");
+        return aRet;
+    }
+
+    OUString lcl_Image( const OUString& rScreenshotId )
+    {
+        OUString aRet = OUString("<image id=") + lcl_genRandom( "img_id" ) +
+                        OUString(" src=media/screenshots/") + rScreenshotId + OUString(".png")
+                        + OUString(">") + //FIXME width + height
+                        lcl_AltDescr() +
+                        OUString("</image>");
+        return aRet;
+    }
+
+    OUString lcl_ParagraphWithImage( const OUString& rScreenshotId )
+    {
+        OUString aRet = OUString("<paragraph id=") + lcl_genRandom( "par_id" ) +
+                        OUString(" role=\"paragraph\" xml-lang=en-US>") +
+                        lcl_Image( rScreenshotId ) +
+                        OUString("</paragraph>");
+        return aRet;
+    }
+}
 
 class ControlDataEntry
 {
@@ -196,8 +236,9 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     // copying content to clipboard is allowed
     if (mpText)
     {
-        mpText->SetText("The quick brown fox jumps over the lazy dog :)");
-        mpText->SetReadOnly();
+        OUString aHelpId = OStringToOUString( mrParentDialog.GetHelpId(), RTL_TEXTENCODING_UTF8 );
+        mpText->SetText( lcl_ParagraphWithImage( aHelpId) );
+        mpText->SetReadOnly(true);
     }
 
     // set click handler for save button
