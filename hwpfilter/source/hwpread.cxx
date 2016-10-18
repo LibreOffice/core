@@ -281,7 +281,7 @@ bool TxtBox::Read(HWPFile & hwpf)
 
     UpdateBBox(this);
 
-    ncell = NCell();
+    ncell = nCell;
     if (!(ncell > 0)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }

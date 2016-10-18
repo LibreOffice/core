@@ -84,18 +84,14 @@ void LocaleNode::addChild ( LocaleNode * node) {
         children = arrN;
     }
     children[nChildren++] = node;
-    node->setParent (this);
-}
-
-void LocaleNode::setParent ( LocaleNode * node) {
-    parent = node;
+    node->parent = this;
 }
 
 const LocaleNode* LocaleNode::getRoot() const
 {
     const LocaleNode* pRoot = nullptr;
     const LocaleNode* pParent = this;
-    while ( (pParent = pParent->getParent()) != nullptr )
+    while ( (pParent = pParent->parent) != nullptr )
         pRoot = pParent;
     return pRoot;
 }
