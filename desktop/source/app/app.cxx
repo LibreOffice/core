@@ -556,6 +556,15 @@ void Desktop::Init()
         SetBootstrapError( BE_UNO_SERVICEMANAGER, e.Message );
     }
 
+    // When we are in SafeMode we need to do changes before the configuration
+    // gets read (langselect::prepareLocale() by UNO API -> Components::Components)
+    const CommandLineArgs& rArgs = GetCommandLineArgs();
+    const bool bSafeMode(rArgs.IsSafeMode() || sfx2::SafeMode::hasFlag());
+
+    // this may prepare SafeMode or restore from it by moving data in
+    // the UserConfiguration directory
+    comphelper::BackupFileHelper::reactOnSafeMode(bSafeMode);
+
     if ( m_aBootstrapError == BE_OK )
     {
         try
