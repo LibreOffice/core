@@ -85,6 +85,9 @@ ResourceMenuController::ResourceMenuController( const css::uno::Reference< css::
             {
                 OUString aMenuName;
                 aPropValue.Value >>= aMenuName;
+                if ( aMenuName.isEmpty() )
+                    continue;
+
                 if ( m_bToolbarContainer )
                     m_aMenuURL = "private:resource/toolbar/" + aMenuName;
                 else
