@@ -1123,3 +1123,6 @@ CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Potm, gid_Module_Prg_Impress_MSO_Reg
 
 CONDITIONAL_REGISTER_DOC_EXTENSION( Uop, gid_Module_Prg_Impress_Other_Reg, uop, UOP, UNIFORM_OFFICE_FORMAT_PRESENTATION, 7, simpress.exe, open, Impress )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Cgm, gid_Module_Prg_Impress_Other_Reg, cgm, CGM, COMPUTER_GRAPHICS_METAFILE, 7, simpress.exe, open, Impress )
+
+// registering ms-powerpoint URI scheme handler
+CONDITIONAL_REGISTER_URI_HANDLER( ms-powerpoint, ms_powerpoint, gid_Module_Prg_Impress_MSO_Reg, SELECT_POWERPOINT )

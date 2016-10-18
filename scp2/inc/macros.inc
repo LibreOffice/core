@@ -544,5 +544,50 @@ File gid_File_Extra_GallFiles##id \
     Name = STRING(CONCAT3(Gallery/Files/,id,.filelist)); \
 End
 
+#define REGISTER_URI_HANDLER_IMPL(protocol,protid,modid,cond) \
+RegistryItem CONCAT2(gid_Regitem_,protid) \
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+    ModuleID = modid; \
+    Subkey = STRING(protocol); \
+    Value = "URL:" STRING(protocol) " Protocol"; \
+    cond \
+End \
+RegistryItem CONCAT3(gid_Regitem_,protid,_URL_Protocol) \
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+    ModuleID = modid; \
+    Subkey = STRING(protocol); \
+    Name = "URL Protocol"; \
+End \
+RegistryItem CONCAT3(gid_Regitem_,protid,_UseOriginalUrlEncoding) \
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+    ModuleID = modid; \
+    Subkey = STRING(protocol); \
+    Name = "UseOriginalUrlEncoding"; \
+    Value = "#1"; \
+End \
+RegistryItem CONCAT3(gid_Regitem_,protid,_DefaultIcon) \
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+    ModuleID = modid; \
+    Subkey = STRING(CONCAT2(protocol,\DefaultIcon)); \
+    Value = "<progpath>\program\soffice.bin,0"; \
+End \
+RegistryItem CONCAT3(gid_Regitem_,protid,_shell_open_command) \
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+    ModuleID = modid; \
+    Subkey = STRING(CONCAT2(protocol,\shell\open\command)); \
+    Value = "\"<progpath>\program\soffice.exe\" \"%1\""; \
+End
+
+#define REG_COND(cond) \
+    ComponentCondition = STRING(CONCAT2(cond,=1));
+
+#define REG_EMPTY_COND
+
+#define REGISTER_URI_HANDLER(protocol,protid,modid) \
+    REGISTER_URI_HANDLER_IMPL(protocol,protid,modid,REG_EMPTY_COND)
+
+#define CONDITIONAL_REGISTER_URI_HANDLER(protocol,protid,modid,cond) \
+    CONDITIONAL_MODULE_ENTRY(protid,modid) \
+    REGISTER_URI_HANDLER_IMPL(protocol,protid,gid_Module_Root_Reg_##protid,REG_COND(cond))
 
 #endif // MACROS_INC
