@@ -100,6 +100,7 @@
 #include "lwpdropcapmgr.hxx"
 #include "lwptable.hxx"
 #include "lwpcelllayout.hxx"
+#include "lwpframelayout.hxx"
 
 // boost::polymorphic_downcast checks and reports (using assert), if the
 // cast is incorrect (in debug builds).
@@ -148,11 +149,10 @@ XFParaStyle* LwpPara::GetXFParaStyle()
 /**
  * @short   get drop cap info
  */
-#include "lwpframelayout.hxx"
 void LwpPara::GatherDropcapInfo()
 {
-    SetDropcapLines(m_pDropcapLayout->GetLines());
-    SetDropcapChars(m_pDropcapLayout->GetChars());
+    m_nLines = m_pDropcapLayout->GetLines();
+    m_nChars = m_pDropcapLayout->GetChars();
 }
 /**
  * @short   get parent paragraph
@@ -593,7 +593,7 @@ LwpTabOverride* LwpPara::GetLocalTabOverride()
 */
 bool LwpPara::operator< (LwpPara& Other)
 {
-    return m_nOrdinal < Other.GetOrdinal();
+    return m_nOrdinal < Other.m_nOrdinal;
 }
 
 /**

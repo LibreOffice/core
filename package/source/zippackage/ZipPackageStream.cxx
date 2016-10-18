@@ -920,7 +920,7 @@ void ZipPackageStream::successfullyWritten( ZipEntry *pEntry )
     ZipPackageFolder::copyZipEntry( aEntry, *pEntry );
 
     // TODO/LATER: get rid of this hack ( the encrypted stream size property is changed during saving )
-    if ( IsEncrypted() )
+    if ( m_bIsEncrypted )
         setSize( m_nOwnStreamOrigSize );
 
     aEntry.nOffset *= -1;

@@ -76,7 +76,7 @@ CBenValue::ReadValueData(void * pReadBuffer, unsigned long Offset,
     unsigned long SegOffset = 0;
     *pAmtRead = 0;
     pCBenValueSegment pCurrSeg = nullptr;
-    pLtcBenContainer pContainer = GetContainer();
+    pLtcBenContainer pContainer = GetProperty()->GetContainer();
     BenByte* pBuffer = static_cast<BenByte*>(pReadBuffer);
 
     /// pReadBuffer -- pointer to buffer of read result, allocated outside this function

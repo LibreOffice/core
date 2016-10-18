@@ -68,7 +68,7 @@ CUtListElmt::CUtListElmt(pCUtList pList)
 
 CUtListElmt::~CUtListElmt()
 {
-    if (OnList())
+    if (cpNext != nullptr)
     {
         cpPrev->cpNext = cpNext;
         cpNext->cpPrev = cpPrev;

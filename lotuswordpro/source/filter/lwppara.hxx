@@ -175,8 +175,6 @@ public:
     OUString const & GetContentText(bool bAllText = false);
 
     void SetParaDropcap(bool bFlag);
-    void SetDropcapLines(sal_uInt16 number);
-    void SetDropcapChars(sal_uInt32 chars);
     void SetDropcapLayout(LwpDropcapLayout* pLayout);
 
     XFContentContainer* GetXFContainer();
@@ -186,7 +184,6 @@ public:
     void RegisterTabStyle(XFParaStyle* pXFParaStyle);
 
     LwpBulletStyleMgr* GetBulletStyleMgr();
-    sal_uInt32 GetOrdinal(){ return m_nOrdinal;}
     bool operator <(LwpPara& Other);
     bool ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout);
 
@@ -350,14 +347,6 @@ inline LwpStory* LwpPara::GetStory()
 inline void LwpPara::SetParaDropcap(bool bFlag)
 {
     m_bHasDropcap = bFlag;
-}
-inline void LwpPara::SetDropcapLines(sal_uInt16 number)
-{
-    m_nLines = number;
-}
-inline void LwpPara::SetDropcapChars(sal_uInt32 chars)
-{
-    m_nChars = chars;
 }
 inline void LwpPara::SetDropcapLayout(LwpDropcapLayout* pLayout)
 {

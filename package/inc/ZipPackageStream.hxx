@@ -77,7 +77,6 @@ private:
         throw(css::uno::RuntimeException);
 
 public:
-    bool IsEncrypted () const    { return m_bIsEncrypted;}
     bool IsPackageMember () const { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}
 
     bool IsFromManifest() const { return m_bFromManifest; }

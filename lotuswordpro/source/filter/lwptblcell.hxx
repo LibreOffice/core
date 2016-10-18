@@ -84,7 +84,6 @@ public:
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpObjectID GetNextID(){return GetNext();}
     sal_uInt8 GetColumnID(){return cColumn;}
-    const LwpObjectID& GetValueID(){return cValue;}
 
     virtual void Convert(XFCell * pCell, LwpTableLayout* pCellsMap=nullptr);
 protected:

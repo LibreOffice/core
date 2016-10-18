@@ -382,7 +382,7 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
     if(m_pLayout->HasFillerPageText(m_pPara->GetFoundry()))
     {
         XFParagraph *pPara = new XFParagraph();
-        pPara->SetStyleName(GetFillerPageStyleName());
+        pPara->SetStyleName(m_FillerPageStyleName);
         m_pPara->AddXFContent(pPara);
         rFribPtr.SetXFPara(pPara);
 
@@ -419,7 +419,7 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
     if(pFrib->HasNextFrib())
     {
         XFParagraph *pNextPara = new XFParagraph();
-        pNextPara->SetStyleName(GetStyleName());
+        pNextPara->SetStyleName(m_StyleName);
         m_pPara->AddXFContent(pNextPara);
         rFribPtr.SetXFPara(pNextPara);
     }

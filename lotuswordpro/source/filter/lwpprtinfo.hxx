@@ -74,7 +74,6 @@ public:
     ~LwpPrinterInfo(){}
 
 public:
-    static void Read(LwpObjectStream* pStrm);
     static void Skip(LwpObjectStream *pStrm);
 };
 #endif

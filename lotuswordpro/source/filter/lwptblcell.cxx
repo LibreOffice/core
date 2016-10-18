@@ -102,7 +102,7 @@ void  LwpCellList::Parse(IXFStream* /*pOutputStream*/)
 
 void LwpCellList::Convert(XFCell * pCell, LwpTableLayout* /*pCellsMap*/)
 {
-    LwpObjectID aValueID = GetValueID();
+    LwpObjectID aValueID = cValue;
     LwpNumericValue* pValue = dynamic_cast<LwpNumericValue*>(aValueID.obj().get());
     if (pValue)
     {

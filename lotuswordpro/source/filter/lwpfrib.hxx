@@ -93,8 +93,6 @@ public:
     LwpFrib* GetNext(){return m_pNext;}
     void SetNext(LwpFrib* next){m_pNext = next;}
     sal_uInt8 GetType() { return m_nFribType;}
-    void SetType(sal_uInt8 type) { m_nFribType = type;}
-    void SetEditor(sal_uInt8 editor) { m_nEditor = editor;}
     OUString GetEditor();
     XFColor GetHighlightColor();
 protected:
