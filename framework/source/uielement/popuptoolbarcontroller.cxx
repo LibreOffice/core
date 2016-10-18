@@ -272,7 +272,8 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException) override;
 
 private:
-    bool m_bSplitButton;
+    bool m_bSplitButton, m_bReplaceWithLast;
+    void functionExecuted(const OUString &rCommand) override;
     ToolBoxItemBits getDropDownStyle() const override;
 };
 
@@ -280,19 +281,21 @@ GenericPopupToolbarController::GenericPopupToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     const css::uno::Sequence< css::uno::Any >& rxArgs )
     : PopupMenuToolbarController( xContext )
-    , m_bSplitButton( false )
+    , m_bReplaceWithLast( false )
 {
     css::beans::PropertyValue aPropValue;
     for ( const auto& arg: rxArgs )
     {
         if ( ( arg >>= aPropValue ) && aPropValue.Name == "Value" )
         {
-            aPropValue.Value >>= m_aPopupCommand;
+            OUString aValue;
+            aPropValue.Value >>= aValue;
+            m_aPopupCommand = aValue.getToken(0, ';');
+            m_bReplaceWithLast = aValue.getToken(1, ';').toBoolean();
             break;
         }
     }
-    if ( !m_aPopupCommand.isEmpty() )
-        m_bSplitButton = true;
+    m_bSplitButton = m_bReplaceWithLast || !m_aPopupCommand.isEmpty();
 }
 
 OUString GenericPopupToolbarController::getImplementationName()
@@ -311,6 +314,33 @@ css::uno::Sequence<OUString> GenericPopupToolbarController::getSupportedServiceN
     throw (css::uno::RuntimeException)
 {
     return {"com.sun.star.frame.ToolbarController"};
+}
+
+void GenericPopupToolbarController::functionExecuted( const OUString& rCommand )
+{
+    if ( m_bReplaceWithLast )
+    {
+        removeStatusListener( m_aCommandURL );
+
+        OUString aRealCommand( vcl::CommandInfoProvider::Instance().GetRealCommandForCommand( rCommand, m_xFrame ) );
+        m_aCommandURL = aRealCommand.isEmpty() ? rCommand : aRealCommand;
+        addStatusListener( m_aCommandURL );
+
+        ToolBox* pToolBox = nullptr;
+        sal_uInt16 nId = 0;
+        if ( getToolboxId( nId, &pToolBox ) )
+        {
+            pToolBox->SetItemCommand( nId, rCommand );
+            pToolBox->SetHelpText( nId, OUString() ); // Will retrieve the new one from help.
+            pToolBox->SetItemText( nId, vcl::CommandInfoProvider::Instance().GetLabelForCommand( rCommand, m_xFrame ) );
+            pToolBox->SetQuickHelpText( nId, vcl::CommandInfoProvider::Instance().GetTooltipForCommand( rCommand, m_xFrame ) );
+            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( rCommand,
+                                                                                    pToolBox->GetToolboxButtonSize() == ToolBoxButtonSize::Large,
+                                                                                    m_xFrame );
+            if ( !!aImage )
+                pToolBox->SetItemImage( nId, aImage );
+        }
+    }
 }
 
 ToolBoxItemBits GenericPopupToolbarController::getDropDownStyle() const
