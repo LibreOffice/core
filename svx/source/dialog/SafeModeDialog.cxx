@@ -128,15 +128,6 @@ bool SafeModeDialog::Close()
     return Dialog::Close();
 }
 
-void SafeModeDialog::terminateOffice()
-{
-    // We are not hitting Close() in this case, need to manually remove the flag
-    sfx2::SafeMode::removeFlag();
-
-    uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create( comphelper::getProcessComponentContext() );
-    xDesktop->terminate();
-}
-
 void SafeModeDialog::applyChanges()
 {
     if (mpCBCheckProfilesafeConfig->IsChecked())
@@ -208,7 +199,8 @@ IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
     }
     else if (pBtn == mpBtnQuit.get())
     {
-        terminateOffice();
+        Close();
+        Application::Quit();
     }
     else if (pBtn == mpBtnRestart.get())
     {
