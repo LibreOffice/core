@@ -83,9 +83,6 @@ public:
     initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
         throw( css::uno::Exception,
                css::uno::RuntimeException, std::exception ) override;
-
-    const css::uno::Sequence< css::uno::Any >&
-    getInitArgs() const;
 };
 
 

@@ -130,9 +130,6 @@ private:
     const css::uno::Reference< css::awt::XWindow>&
     getParentXWindow() const;
 
-    const OUString&
-    getContextProperty();
-
     css::uno::Reference< css::task::XInteractionHandler2 >
     getInteractionHandler();
 

@@ -33,7 +33,7 @@ void SSLWarnDialog::ViewCert()
 
     xDocumentDigitalSignatures = css::security::DocumentDigitalSignatures::createDefault( m_xContext );
 
-    xDocumentDigitalSignatures.get()->showCertificate(getCert());
+    xDocumentDigitalSignatures.get()->showCertificate(m_rXCert);
 }
 
 

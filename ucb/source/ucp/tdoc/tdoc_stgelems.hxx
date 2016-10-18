@@ -81,8 +81,6 @@ public:
         const css::uno::Reference< css::embed::XStorage > & xStorageToWrap );
     virtual ~Storage() override;
 
-    bool isDocumentStorage() const { return m_bIsDocumentStorage; }
-
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface(
             const css::uno::Type& aType )

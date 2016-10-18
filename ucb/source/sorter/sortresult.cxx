@@ -1333,8 +1333,8 @@ void SortedResultSet::PropertyChanged( const PropertyChangeEvent& rEvt )
 
 void SortedResultSet::CopyData( SortedResultSet *pSource )
 {
-    const SortedEntryList& rSrcS2O = pSource->GetS2OList();
-    const SimpleList&      rSrcO2S = pSource->GetO2SList();
+    const SortedEntryList& rSrcS2O = pSource->maS2O;
+    const SimpleList&      rSrcO2S = pSource->maO2S;
 
     sal_IntPtr i, nCount;
 
@@ -1354,11 +1354,11 @@ void SortedResultSet::CopyData( SortedResultSet *pSource )
     }
 
     mnLastSort = maS2O.Count();
-    mxOther = pSource->GetResultSet();
+    mxOther = pSource->mxOriginal;
 
     if ( !mpSortInfo )
     {
-        mpSortInfo = pSource->GetSortInfo();
+        mpSortInfo = pSource->mpSortInfo;
         mbIsCopy = true;
     }
 }

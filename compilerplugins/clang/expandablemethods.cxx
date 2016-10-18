@@ -315,7 +315,7 @@ bool ExpandableMethods::isCalleeFunctionInteresting(const FunctionDecl* function
     return true;
 }
 
-loplugin::Plugin::Registration< ExpandableMethods > X("expandablemethods", false);
+loplugin::Plugin::Registration< ExpandableMethods > X("expandablemethods", true);
 
 }
 

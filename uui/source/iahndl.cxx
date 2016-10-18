@@ -977,12 +977,6 @@ UUIInteractionHelper::getParentXWindow() const
     return m_xWindowParam;
 }
 
-const OUString&
-UUIInteractionHelper::getContextProperty()
-{
-    return m_aContextParam;
-}
-
 uno::Reference< task::XInteractionHandler2 >
 UUIInteractionHelper::getInteractionHandler()
 {
