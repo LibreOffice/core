@@ -73,12 +73,6 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     DECL_LINK(BrowseHdl, Button*, void);
     DECL_LINK(RadioHdl, Button*, void);
     void SelectDefault();
-    ListBox& GetObjectTypes()
-        { return *m_pLbObjecttype; }
-    OUString GetFilePath() const
-        { return m_pEdFilepath->GetText(); }
-    bool IsLinked() const
-        { return m_pCbFilelink->IsChecked(); }
     bool IsCreateNew() const override
         { return m_pRbNewObject->IsChecked(); }
 

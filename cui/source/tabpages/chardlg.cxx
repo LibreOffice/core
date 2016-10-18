@@ -2580,12 +2580,6 @@ void SvxCharEffectsPage::DisableControls( sal_uInt16 nDisable )
     }
 }
 
-void SvxCharEffectsPage::EnableFlash()
-{
-    m_pBlinkingBtn->Show();
-}
-
-
 void SvxCharEffectsPage::SetPreviewBackgroundToCharacter()
 {
     m_bPreviewBackgroundToCharacter = true;
@@ -2603,7 +2597,7 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SVX_ENABLE_FLASH ) == SVX_ENABLE_FLASH )
-            EnableFlash();
+            m_pBlinkingBtn->Show();
         if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
             SetPreviewBackgroundToCharacter();
     }

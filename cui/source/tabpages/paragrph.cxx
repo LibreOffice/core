@@ -932,11 +932,6 @@ IMPL_LINK( SvxStdParagraphTabPage, AutoHdl_Impl, Button*, pBox, void )
     m_pFLineIndent->Enable(bEnable);
 }
 
-void SvxStdParagraphTabPage::SetPageWidth( sal_uInt16 nPageWidth )
-{
-    nWidth = nPageWidth;
-}
-
 void SvxStdParagraphTabPage::EnableAutoFirstLine()
 {
     m_pAutoCB->Show();
@@ -963,7 +958,7 @@ void    SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
     const SfxUInt32Item* pLineDistItem = aSet.GetItem<SfxUInt32Item>(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, false);
 
     if (pPageWidthItem)
-        SetPageWidth(pPageWidthItem->GetValue());
+        nWidth = pPageWidthItem->GetValue();
 
     if (pFlagSetItem )
         if (( 0x0001 & pFlagSetItem->GetValue())== 0x0001 )

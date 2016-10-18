@@ -111,8 +111,6 @@ public:
     virtual void            Reset( const SfxItemSet* rSet ) override;
     virtual void            ChangesApplied() override;
 
-
-    void                    SetPageWidth( sal_uInt16 nPageWidth );
     void                    EnableRelativeMode();
     void                    EnableRegisterMode();
     void                    EnableContextualMode();

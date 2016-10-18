@@ -367,7 +367,6 @@ private:
     DECL_LINK( ClickLoadHdl_Impl, Button*, void );
     DECL_LINK( ClickSaveHdl_Impl, Button*, void );
     DECL_LINK( SelectLineEndHdl_Impl, ListBox&, void );
-    void ChangePreviewHdl_Impl();
 
     void CheckChanges_Impl();
 

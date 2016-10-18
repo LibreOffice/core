@@ -145,7 +145,6 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    void                SetCharFormatName(const OUString& rName){sBulletCharFormatName = rName;}
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
@@ -354,7 +353,6 @@ public:
                         }
     void                SetMetric(FieldUnit eSet);
 
-    ListBox&            GetCharFmtListBox() {return *m_pCharFmtLB;}
     void                SetModified(bool bRepaint = true);
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };

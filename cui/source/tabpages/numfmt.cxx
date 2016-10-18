@@ -1784,21 +1784,6 @@ bool SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
 
     return SfxTabPage::PreNotify( rNEvt );
 }
-/*************************************************************************
-#*  Method:    SetOkHdl
-#*------------------------------------------------------------------------
-#*
-#*  Class:      SvxNumberFormatTabPage
-#*  Function:   Resets the OkHandler.
-#*  Input:      new OkHandler
-#*  Output:     ---
-#*
-#************************************************************************/
-
-void SvxNumberFormatTabPage::SetOkHdl( const Link<SfxPoolItem*,void>& rOkHandler )
-{
-    fnOkHdl = rOkHandler;
-}
 
 void SvxNumberFormatTabPage::FillCurrencyBox()
 {
@@ -1860,9 +1845,9 @@ void SvxNumberFormatTabPage::PageCreated(const SfxAllItemSet& aSet)
     const SvxNumberInfoItem* pNumberInfoItem = aSet.GetItem<SvxNumberInfoItem>(SID_ATTR_NUMBERFORMAT_INFO, false);
     const SfxLinkItem* pLinkItem = aSet.GetItem<SfxLinkItem>(SID_LINK_TYPE, false);
     if (pNumberInfoItem)
-        SetNumberFormatList(*pNumberInfoItem);
+        SetInfoItem(*pNumberInfoItem);
     if (pLinkItem)
-        SetOkHdl(pLinkItem->GetValue());
+        fnOkHdl = pLinkItem->GetValue();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

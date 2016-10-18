@@ -424,7 +424,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
         if( !xLink.Is() )
             return;
 
-        ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO | WB_DEF_YES, Closelinkmsg() );
+        ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO | WB_DEF_YES, aStrCloselinkmsg );
 
         if( RET_YES == aBox->Execute() )
         {
@@ -455,7 +455,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
     }
     else
     {
-        ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO | WB_DEF_YES, CloselinkmsgMulti() );
+        ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO | WB_DEF_YES, aStrCloselinkmsgMulti );
 
         if( RET_YES == aBox->Execute() )
         {
@@ -563,16 +563,16 @@ OUString SvBaseLinksDlg::ImplGetStateStr( const SvBaseLink& rLnk )
 {
     OUString sRet;
     if( !rLnk.GetObj() )
-        sRet = Brokenlink();
+        sRet = aStrBrokenlink;
     else if( rLnk.GetObj()->IsPending() )
     {
-        sRet = Waitinglink();
-        StartUpdateTimer();
+        sRet = aStrWaitinglink;
+        aUpdateIdle.Start();
     }
     else if( SfxLinkUpdateMode::ALWAYS == rLnk.GetUpdateMode() )
-        sRet = Autolink();
+        sRet = aStrAutolink;
     else
-        sRet = Manuallink();
+        sRet = aStrManuallink;
 
     return sRet;
 }

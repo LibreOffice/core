@@ -1705,7 +1705,7 @@ void SvxPageDescPage::PageCreated(const SfxAllItemSet& aSet)
 
     if (pModeItem)
     {
-        SetMode((SvxModeType)pModeItem->GetEnumValue());
+        eMode = (SvxModeType)pModeItem->GetEnumValue();
     }
 
     if(pPaperStartItem && pPaperEndItem)

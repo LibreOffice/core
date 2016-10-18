@@ -200,7 +200,6 @@ public:
     virtual ~SvxPageDescPage() override;
     virtual void        dispose() override;
 
-    void                SetMode( SvxModeType eMType ) { eMode = eMType; }
     void                SetPaperFormatRanges( Paper eStart, Paper eEnd )
                             { ePaperStart = eStart; ePaperEnd = eEnd; }
 

@@ -209,11 +209,10 @@ short SvInsertOleDlg::Execute()
     }
 
     // fill listbox and select default
-    ListBox& rBox = GetObjectTypes();
-    rBox.SetUpdateMode( false );
+    m_pLbObjecttype->SetUpdateMode( false );
     for ( sal_uLong i = 0; i < m_pServers->Count(); i++ )
-        rBox.InsertEntry( (*m_pServers)[i].GetHumanName() );
-    rBox.SetUpdateMode( true );
+        m_pLbObjecttype->InsertEntry( (*m_pServers)[i].GetHumanName() );
+    m_pLbObjecttype->SetUpdateMode( true );
     SelectDefault();
     OUString aName;
 
@@ -225,7 +224,7 @@ short SvInsertOleDlg::Execute()
         if ( bCreateNew )
         {
             // create and insert new embedded object
-            OUString aServerName = rBox.GetSelectEntry();
+            OUString aServerName = m_pLbObjecttype->GetSelectEntry();
             const SvObjectServer* pS = m_pServers->Get( aServerName );
             if ( pS )
             {
@@ -299,12 +298,12 @@ short SvInsertOleDlg::Execute()
         }
         else
         {
-            aFileName = GetFilePath();
+            aFileName = m_pEdFilepath->GetText();
             INetURLObject aURL;
             aURL.SetSmartProtocol( INetProtocol::File );
             aURL.SetSmartURL( aFileName );
             aFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
-            bool bLink = IsLinked();
+            bool bLink = m_pCbFilelink->IsChecked();
 
             if ( !aFileName.isEmpty() )
             {
