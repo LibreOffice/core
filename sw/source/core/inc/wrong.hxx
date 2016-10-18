@@ -82,7 +82,7 @@ private:
             if (xPropertyBag.is())
             {
                 const OUString colorKey("LineColor");
-                css::uno::Any aLineColor = xPropertyBag->getValue(colorKey).get< css::uno::Any>();
+                css::uno::Any aLineColor = xPropertyBag->getValue(colorKey);
                 css::util::Color lineColor = 0;
 
                 if (aLineColor >>= lineColor)
@@ -108,7 +108,7 @@ private:
             if (xPropertyBag.is())
             {
                 const OUString typeKey("LineType");
-                css::uno::Any aLineType = xPropertyBag->getValue(typeKey).get< css::uno::Any>();
+                css::uno::Any aLineType = xPropertyBag->getValue(typeKey);
                 ::sal_Int16 lineType = 0;
 
                 if (!(aLineType >>= lineType))
