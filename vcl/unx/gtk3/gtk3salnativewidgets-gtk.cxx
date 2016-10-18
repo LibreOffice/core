@@ -2131,6 +2131,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         }
         Rectangle aRect(Point(nX, nY), Size(nWidth, nHeight));
         render_common(mpNotebookHeaderTabsTabStyle, cr, aRect, flags);
+        break;
     }
     default:
         break;
