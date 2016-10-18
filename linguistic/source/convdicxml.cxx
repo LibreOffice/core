@@ -170,7 +170,6 @@ public:
 
     const OUString &    GetRightText() const    { return aRightText; }
     const OUString &    GetLeftText() const     { return rEntryContext.GetLeftText(); }
-    ConvDic *           GetDic()                { return GetConvDicImport().GetDic(); }
 };
 
 
@@ -282,7 +281,7 @@ void ConvDicXMLRightTextContext_Impl::Characters( const OUString &rChars )
 
 void ConvDicXMLRightTextContext_Impl::EndElement()
 {
-    ConvDic *pDic = GetDic();
+    ConvDic *pDic = GetConvDicImport().GetDic();
     if (pDic)
         pDic->AddEntry( GetLeftText(), GetRightText() );
 }

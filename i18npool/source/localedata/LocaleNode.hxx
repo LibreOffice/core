@@ -88,8 +88,6 @@ class LocaleNode
     sal_Int32 nChildren;
     sal_Int32 childArrSize;
 
-    void setParent ( LocaleNode*  node);
-
 protected:
     mutable int nError;
 
@@ -106,7 +104,6 @@ public:
     void printR () const;
     virtual ~LocaleNode();
     void addChild (  LocaleNode * node);
-    const LocaleNode* getParent() const { return parent; };
     const LocaleNode* getRoot() const;
     int getError() const;
     virtual void generateCode (const OFileWriter &of) const;

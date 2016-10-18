@@ -68,9 +68,6 @@ public:
     bool            IsVariable() const;
     bool            IsMethod() const;
 
-    void    SetToggle( bool bSet ) { aToggle = bSet; }
-    void    SetAutoUpdate( bool bSet ) { aAutoUpdate = bSet; }
-    void    SetAsynchron( bool bSet ) { aAsynchron = bSet; }
     void    SetRecordPerItem( bool bSet )
             {
                 aRecordPerItem = bSet;
@@ -89,7 +86,6 @@ public:
                 if( bSet )
                     aRecordPerItem = aRecordPerSet = false;
             }
-    void    SetRecordAbsolute( bool bSet ) { aRecordAbsolute = bSet; }
 
 public:
             SvMetaObject *  MakeClone() const;
