@@ -58,14 +58,11 @@ class Stripe;
 class AbstractShapeFactory
 {
 protected:
+    css::uno::Reference< css::lang::XMultiServiceFactory>   m_xShapeFactory;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory>
-        m_xShapeFactory;
 public:
 
     enum StackPosition { Top, Bottom };
-    void setShapeFactory(css::uno::Reference< css::lang::XMultiServiceFactory> const & xFactory)
-        { m_xShapeFactory = xFactory; }
 
     static AbstractShapeFactory* getOrCreateShapeFactory(const css::uno::Reference< css::lang::XMultiServiceFactory>& xFactory);
 

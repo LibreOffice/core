@@ -310,7 +310,7 @@ void CloseableLifeTimeManager::impl_apiCallCountReachedNull()
 {
     //Mutex needs to be acquired exactly ones
     //mutex will be released inbetween in impl_doClose()
-    if( m_pCloseable && impl_shouldCloseAtNextChance() )
+    if( m_pCloseable && m_bOwnership )
         impl_doClose();
 }
 
