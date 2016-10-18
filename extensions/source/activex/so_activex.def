@@ -1,6 +1,6 @@
 ; iervp.def : Declares the module parameters.
 
-LIBRARY      "so_activex.dll"
+LIBRARY
 
 EXPORTS
 	DllCanUnloadNow     PRIVATE
