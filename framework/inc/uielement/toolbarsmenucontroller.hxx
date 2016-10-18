@@ -87,7 +87,6 @@ namespace framework
             css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > getLayoutManagerToolbars( const css::uno::Reference< css::frame::XLayoutManager >& rLayoutManager );
             css::uno::Reference< css::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );
             void addCommand( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
-            bool isContextSensitiveToolbarNonVisible() { return m_bResetActive;}
 
             css::uno::Reference< css::uno::XComponentContext >        m_xContext;
             css::uno::Reference< css::container::XNameAccess >        m_xPersistentWindowState;

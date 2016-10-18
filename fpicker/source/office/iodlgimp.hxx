@@ -192,9 +192,8 @@ public:
     inline  void            SetFilterListSelectHdl( const Link<ListBox&,void>& _rHandler );
 
     // inits the listbox for the filters from the filter list (_pFilter)
-            void            ClearFilterList( );
             void            InitFilterList( );
-    inline  bool        HasFilterListEntry( const OUString& _rFilterName );
+    inline  bool            HasFilterListEntry( const OUString& _rFilterName );
     inline  void            SelectFilterListEntry( const OUString& _rFilterName );
     inline  void            SetNoFilterListSelection( );
             void            InsertFilterListEntry( const SvtFileDialogFilter_Impl* _pFilterDesc );

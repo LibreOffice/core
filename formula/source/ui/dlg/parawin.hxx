@@ -102,7 +102,6 @@ protected:
 
         void            SliderMoved();
         void            ArgumentModified();
-        void            FxClick();
 
         void            InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, PushButton& rBtnFx,
                                         ArgEdit& rEdArg, RefButton& rRefBtn);
@@ -114,10 +113,7 @@ protected:
 
         void            SetArgName      (sal_uInt16 no,const OUString &aArg);
         void            SetArgNameFont  (sal_uInt16 no,const vcl::Font&);
-        void            SetArgVal       (sal_uInt16 no,const OUString &aArg);
 
-        void            HideParaLine(sal_uInt16 no);
-        void            ShowParaLine(sal_uInt16 no);
         void            UpdateArgDesc( sal_uInt16 nArg );
         void            UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i );
 
