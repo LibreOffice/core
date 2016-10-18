@@ -13,6 +13,8 @@
 
 #include <vector>
 
+#include <com/sun/star/security/XCertificate.hpp>
+
 #include <tools/stream.hxx>
 
 #include <xmlsecuritydllapi.h>
@@ -43,6 +45,8 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     // List of object offsets we know.
     std::vector<size_t> m_aXRef;
     PDFTrailerElement* m_pTrailer;
+    /// All editing takes place in this buffer, if it happens.
+    SvMemoryStream m_aEditBuffer;
 
     static int AsHex(char ch);
     /// Decode a hex dump.
@@ -61,6 +65,10 @@ public:
     std::vector<PDFObjectElement*> GetPages();
 
     bool Read(SvStream& rStream);
+    /// Sign the read document with xCertificate in the edit buffer.
+    bool Sign(const css::uno::Reference<css::security::XCertificate>& xCertificate);
+    /// Serializes the contents of the edit buffer.
+    bool Write(SvStream& rStream);
     std::vector<PDFObjectElement*> GetSignatureWidgets();
     /// Return value is about if we can determine a result, rInformation is about the actual result.
     static bool ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation);

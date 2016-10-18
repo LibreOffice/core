@@ -121,6 +121,8 @@ public:
     double LookupNumber(SvStream& rStream) const;
     /// Lookup referenced object, without assuming anything about its contents.
     PDFObjectElement* LookupObject() const;
+    int GetObjectValue() const;
+    int GetGenerationValue() const;
 };
 
 /// Stream object: a byte array with a known length.
@@ -213,6 +215,92 @@ PDFDocument::PDFDocument()
 {
 }
 
+bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& /*xCertificate*/)
+{
+    m_aEditBuffer.WriteCharPtr("\n");
+
+    // Write appearance object.
+    size_t nAppearanceId = m_aXRef.size();
+    m_aXRef.push_back(m_aEditBuffer.Tell());
+    m_aEditBuffer.WriteUInt32AsString(nAppearanceId);
+    m_aEditBuffer.WriteCharPtr(" 0 obj\n");
+    m_aEditBuffer.WriteCharPtr("<</Type/XObject\n/Subtype/Form\n");
+    m_aEditBuffer.WriteCharPtr("/BBox[0 0 0 0]\n/Length 0\n>>\n");
+    m_aEditBuffer.WriteCharPtr("stream\n\nendstream\nendobj\n");
+
+    // Write the xref table.
+    sal_uInt64 nXRefOffset = m_aEditBuffer.Tell();
+    m_aEditBuffer.WriteCharPtr("\nxref\n0 ");
+    m_aEditBuffer.WriteUInt32AsString(m_aXRef.size());
+    m_aEditBuffer.WriteCharPtr("\n");
+    for (size_t nObject = 0; nObject < m_aXRef.size(); ++nObject)
+    {
+        OStringBuffer aBuffer;
+        aBuffer.append(static_cast<sal_Int32>(m_aXRef[nObject]));
+        while (aBuffer.getLength() < 10)
+            aBuffer.insert(0, "0");
+        if (nObject == 0)
+            aBuffer.append(" 65535 f\n");
+        else
+            aBuffer.append(" 00000 n\n");
+        m_aEditBuffer.WriteOString(aBuffer.toString());
+    }
+
+    // Write the trailer.
+    auto pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"));
+    if (!pRoot)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: trailer has no root reference");
+        return false;
+    }
+    m_aEditBuffer.WriteCharPtr("trailer\n<</Size ");
+    m_aEditBuffer.WriteUInt32AsString(m_aXRef.size());
+    m_aEditBuffer.WriteCharPtr("/Root ");
+    m_aEditBuffer.WriteUInt32AsString(pRoot->GetObjectValue());
+    m_aEditBuffer.WriteCharPtr(" ");
+    m_aEditBuffer.WriteUInt32AsString(pRoot->GetGenerationValue());
+    m_aEditBuffer.WriteCharPtr(" R\n");
+    if (auto pInfo = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Info")))
+    {
+        m_aEditBuffer.WriteCharPtr("/Info ");
+        m_aEditBuffer.WriteUInt32AsString(pInfo->GetObjectValue());
+        m_aEditBuffer.WriteCharPtr(" ");
+        m_aEditBuffer.WriteUInt32AsString(pInfo->GetGenerationValue());
+        m_aEditBuffer.WriteCharPtr(" R\n");
+    }
+    if (auto pID = dynamic_cast<PDFArrayElement*>(m_pTrailer->Lookup("ID")))
+    {
+        const std::vector<PDFElement*>& rElements = pID->GetElements();
+        m_aEditBuffer.WriteCharPtr("/ID [ <");
+        for (size_t i = 0; i < rElements.size(); ++i)
+        {
+            auto pIDString = dynamic_cast<PDFHexStringElement*>(rElements[i]);
+            if (!pIDString)
+                continue;
+
+            m_aEditBuffer.WriteOString(pIDString->GetValue());
+            if ((i + 1) < rElements.size())
+                m_aEditBuffer.WriteCharPtr(">\n<");
+        }
+        m_aEditBuffer.WriteCharPtr("> ]\n");
+    }
+    m_aEditBuffer.WriteCharPtr(">>\n");
+
+    // Write startxref.
+    m_aEditBuffer.WriteCharPtr("startxref\n");
+    m_aEditBuffer.WriteUInt32AsString(nXRefOffset);
+    m_aEditBuffer.WriteCharPtr("\n%%EOF\n");
+
+    return true;
+}
+
+bool PDFDocument::Write(SvStream& rStream)
+{
+    m_aEditBuffer.Seek(0);
+    rStream.WriteStream(m_aEditBuffer);
+    return rStream.good();
+}
+
 bool PDFDocument::Read(SvStream& rStream)
 {
     // Check file magic.
@@ -224,6 +312,10 @@ bool PDFDocument::Read(SvStream& rStream)
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: header mismatch");
         return false;
     }
+
+    // Allow later editing of the contents in-memory.
+    rStream.Seek(0);
+    m_aEditBuffer.WriteStream(rStream);
 
     // Look up the offset of the xref table.
     size_t nStartXRef = FindStartXRef(rStream);
@@ -984,13 +1076,13 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     NSS_CMSSignerInfo_Destroy(pCMSSignerInfo);
 
     return true;
-#else
+#endif
+
     // Not implemented.
     (void)rStream;
     (void)rInformation;
 
     return false;
-#endif
 }
 
 bool PDFCommentElement::Read(SvStream& rStream)
@@ -1239,8 +1331,15 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
         auto pHexString = dynamic_cast<PDFHexStringElement*>(rElements[i].get());
         if (pHexString)
         {
-            rDictionary[aName] = pHexString;
-            aName.clear();
+            if (!pArray)
+            {
+                rDictionary[aName] = pHexString;
+                aName.clear();
+            }
+            else
+            {
+                pArray->PushBack(pHexString);
+            }
             continue;
         }
 
@@ -1395,6 +1494,16 @@ PDFObjectElement* PDFReferenceElement::LookupObject() const
     }
 
     return nullptr;
+}
+
+int PDFReferenceElement::GetObjectValue() const
+{
+    return m_fObjectValue;
+}
+
+int PDFReferenceElement::GetGenerationValue() const
+{
+    return m_fGenerationValue;
 }
 
 bool PDFDictionaryElement::Read(SvStream& rStream)
