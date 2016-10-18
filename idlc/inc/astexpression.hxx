@@ -103,8 +103,6 @@ public:
     virtual ~AstExpression();
 
     // Data Accessors
-    ExprComb getCombOperator()
-        { return m_combOperator; }
     AstExprValue* getExprValue()
         { return m_exprValue; }
 

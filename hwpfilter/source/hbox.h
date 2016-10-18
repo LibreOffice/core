@@ -376,11 +376,6 @@ struct TxtBox: public FBox
     TxtBox();
     virtual ~TxtBox() override;
 
-/**
- * @returns Count of cell.
- */
-    int NCell()   { return nCell; }
-
     virtual bool Read(HWPFile &hwpf) override;
 };
 

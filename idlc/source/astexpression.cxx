@@ -761,7 +761,7 @@ bool AstExpression::coerce(ExprType t)
 bool AstExpression::compareLong(AstExpression *pExpr)
 {
     bool bRet = false;
-    if (m_combOperator != pExpr->getCombOperator())
+    if (m_combOperator != pExpr->m_combOperator)
         return bRet;
     evaluate();
     pExpr->evaluate();

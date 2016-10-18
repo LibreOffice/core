@@ -237,24 +237,18 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 
     if( aToggle.ReadSvIdl( SvHash_Toggle(), rInStm ) )
     {
-        SetToggle( aToggle );
         bOk = true;
     }
     if( aAutoUpdate.ReadSvIdl( SvHash_AutoUpdate(), rInStm ) )
     {
-        SetAutoUpdate( aAutoUpdate );
         bOk = true;
     }
-
     if( aAsynchron.ReadSvIdl( SvHash_Asynchron(), rInStm ) )
     {
-        SetAsynchron( aAsynchron );
         bOk = true;
     }
-
     if( aRecordAbsolute.ReadSvIdl( SvHash_RecordAbsolute(), rInStm ) )
     {
-        SetRecordAbsolute( aRecordAbsolute);
         bOk = true;
     }
     if( aRecordPerItem.ReadSvIdl( SvHash_RecordPerItem(), rInStm ) )
