@@ -88,13 +88,12 @@ void OSQLMessageDialog::initialize(Sequence<Any> const & args) throw (css::uno::
 {
     OUString title;
     Reference< css::awt::XWindow > parentWindow;
-    css::uno::Any sqlException;
 
-    if ((args.getLength() == 3) && (args[0] >>= title) && (args[1] >>= parentWindow) && (args[2] >>= sqlException)) {
+    if ((args.getLength() == 3) && (args[0] >>= title) && (args[1] >>= parentWindow)) {
         Sequence<Any> s(3);
         s[0] <<= PropertyValue( "Title", -1, makeAny(title), PropertyState_DIRECT_VALUE);
         s[1] <<= PropertyValue( "ParentWindow", -1, makeAny(parentWindow), PropertyState_DIRECT_VALUE);
-        s[2] <<= PropertyValue( "SQLException", -1, sqlException, PropertyState_DIRECT_VALUE);
+        s[2] <<= PropertyValue( "SQLException", -1, args[2], PropertyState_DIRECT_VALUE);
         OGenericUnoDialog::initialize(s);
     } else {
         OGenericUnoDialog::initialize(args);

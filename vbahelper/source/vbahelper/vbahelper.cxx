@@ -758,7 +758,7 @@ uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, c
     {
         if ( aProp[i].Name.equals(aName) )
         {
-            aProp[i].Value >>= result;
+            result = aProp[i].Value;
             return result;
         }
     }

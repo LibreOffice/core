@@ -1439,8 +1439,6 @@ void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt ) t
         css::uno::Any aValue = xPropertySet->getPropertyValue("ID");
         aValue >>= nID;
 
-        css::uno::Any rVal = evt.NewValue;
-        evt.NewValue >>= rVal;
         OUString sPropertyName = evt.PropertyName;
         if ( sPropertyName == "Enabled" )
         {

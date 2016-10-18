@@ -1552,8 +1552,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         OUString aName;
         column->getPropertyValue(PROPERTY_NAME) >>= aName;
 
-        Any aValue;
-        column->getPropertyValue(PROPERTY_VALUE) >>= aValue;
+        const Any aValue = column->getPropertyValue(PROPERTY_VALUE);
 
         OUStringBuffer aSQL;
         const OUString aQuote    = m_xMetaData->getIdentifierQuoteString();
