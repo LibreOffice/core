@@ -44,7 +44,6 @@ private:
     // local BackupFileHelper for handling possible restores
     comphelper::BackupFileHelper maBackupFileHelper;
 
-    static void terminateOffice();
     void applyChanges();
 
     DECL_LINK(CheckBoxHdl, CheckBox&, void);
