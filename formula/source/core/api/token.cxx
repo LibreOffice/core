@@ -1521,14 +1521,30 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
         }
         if (bAdd)
         {
-            if ( ( pCur->GetOpCode() == ocCeil || pCur->GetOpCode() == ocFloor ) &&
+            OpCode eOp = pCur->GetOpCode();
+            if ( ( eOp == ocCeil || eOp == ocFloor ||
+                   ( eOp == ocLogNormDist && pCur->GetByte() == 4 ) ) &&
                  rConv.getConvention() == MissingConvention::FORMULA_MISSING_CONVENTION_OOXML )
             {
-                FormulaToken *pToken = new FormulaToken( svByte,
-                        ( pCur->GetOpCode() == ocCeil ? ocCeil_Math : ocFloor_Math ) );
+                switch ( eOp )
+                {
+                    case ocCeil :
+                        eOp = ocCeil_Math;
+                        break;
+                    case ocFloor :
+                        eOp = ocFloor_Math;
+                        break;
+                    case ocLogNormDist :
+                        eOp = ocLogNormDist_MS;
+                        break;
+                    default :
+                        eOp = ocNone;
+                        break;
+                }
+                FormulaToken *pToken = new FormulaToken( svByte, eOp );
                 pNewArr->Add( pToken );
             }
-            else if ( pCur->GetOpCode() == ocHypGeomDist &&
+            else if ( eOp == ocHypGeomDist &&
                       rConv.getConvention() == MissingConvention::FORMULA_MISSING_CONVENTION_OOXML )
             {
                 FormulaToken *pToken = new FormulaToken( svByte, ocHypGeomDist_MS );
