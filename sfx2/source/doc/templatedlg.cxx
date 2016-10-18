@@ -557,10 +557,11 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, MoveClickHdl, Button*, void)
 
     size_t nItemId = 0;
 
-    if(aDlg->Execute() == RET_OK)
+    if (aDlg->Execute() == RET_OK)
     {
         OUString sCategory = aDlg->GetSelectedCategory();
         bool bIsNewCategory = aDlg->IsNewCategoryCreated();
+        aDlg.disposeAndClear();
         if(bIsNewCategory)
         {
             if (!sCategory.isEmpty())
@@ -596,10 +597,11 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
     ScopedVclPtrInstance<SfxTemplateCategoryDialog> aDlg;
     aDlg->SetCategoryLBEntries(mpLocalView->getFolderNames());
 
-    if(aDlg->Execute() == RET_OK)
+    if (aDlg->Execute() == RET_OK)
     {
         OUString sCategory = aDlg->GetSelectedCategory();
         bool bIsNewCategory = aDlg->IsNewCategoryCreated();
+        aDlg.disposeAndClear();
         if(bIsNewCategory)
         {
             if(mpLocalView->createRegion(sCategory))
@@ -1146,10 +1148,10 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
     aDlg->SetText(SfxResId(STR_CATEGORY_DELETE).toString());
     aDlg->SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT).toString());
 
-    if(aDlg->Execute() == RET_OK)
+    if (aDlg->Execute() == RET_OK)
     {
         OUString sCategory = aDlg->GetSelectedCategory();
-        aDlg->Close();
+        aDlg.disposeAndClear();
         ScopedVclPtrInstance< MessageDialog > popupDlg(this, SfxResId(STR_QMSG_SEL_FOLDER_DELETE),
             VclMessageType::Question, VCL_BUTTONS_YES_NO);
 
