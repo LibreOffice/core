@@ -71,7 +71,7 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
 
     m_pReferencingTable = rConnData.m_pReferencingTable;
     m_pReferencedTable = rConnData.m_pReferencedTable;
-    m_aConnName = rConnData.GetConnName();
+    m_aConnName = rConnData.m_aConnName;
 
     // clear line list
     ResetConnLines();

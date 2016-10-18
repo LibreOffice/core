@@ -60,7 +60,6 @@ protected:
     virtual ~OQueryDescriptor_Base();
 
     void        setColumnsOutOfDate( bool _bOutOfDate = true );
-    bool    isColumnsOutOfDate() const { return m_bColumnsOutOfDate; }
 
     sal_Int32   getColumnCount() const { return m_pColumns ? m_pColumns->getCount() : 0; }
     void        clearColumns( );

@@ -209,7 +209,7 @@ IClipboardTest* OTableFieldDescWin::getActiveChild() const
             pTest = getGenPage();
             break;
         default:
-            pTest = getHelpBar();
+            pTest = m_pHelpBar;
             break;
     }
     return pTest;

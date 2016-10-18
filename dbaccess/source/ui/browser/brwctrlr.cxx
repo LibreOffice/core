@@ -1754,18 +1754,17 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(bool bFilter)
     Reference< XSingleSelectQueryComposer > xParser = createParser_nothrow();
     try
     {
-        Reference< css::sdbcx::XColumnsSupplier> xSup = getColumnsSupplier();
         Reference< XConnection> xCon(xFormSet->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
         if(bFilter)
         {
-            ScopedVclPtrInstance< DlgFilterCrit > aDlg( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() );
+            ScopedVclPtrInstance< DlgFilterCrit > aDlg( getBrowserView(), getORB(), xCon, xParser, m_xColumnsSupplier->getColumns() );
             if ( !aDlg->Execute() )
                 return; // if so we don't need to update the grid
             aDlg->BuildWherePart();
         }
         else
         {
-            ScopedVclPtrInstance< DlgOrderCrit > aDlg( getBrowserView(),xCon,xParser,xSup->getColumns() );
+            ScopedVclPtrInstance< DlgOrderCrit > aDlg( getBrowserView(),xCon,xParser, m_xColumnsSupplier->getColumns() );
             if(!aDlg->Execute())
             {
                 return; // if so we don't need to actualize the grid

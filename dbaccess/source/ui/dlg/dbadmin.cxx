@@ -79,7 +79,7 @@ void ODbAdminDialog::dispose()
 short ODbAdminDialog::Ok()
 {
     SfxTabDialog::Ok();
-    disabledUI();
+    m_bUIEnabled = false;
     return ( AR_LEAVE_MODIFIED == implApplyChanges() ) ? RET_OK : RET_CANCEL;
         // TODO : AR_ERROR is not handled correctly, we always close the dialog here
 }
@@ -244,7 +244,7 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
     if ( !m_pImpl->saveChanges(*m_pExampleSet) )
         return AR_KEEP;
 
-    if ( isUIEnabled() )
+    if ( m_bUIEnabled )
         ShowPage(GetCurPageId());
         // This does the usual ActivatePage, so the pages can save their current status.
         // This way, next time they're asked what has changed since now and here, they really

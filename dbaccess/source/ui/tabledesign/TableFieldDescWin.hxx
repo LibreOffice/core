@@ -87,7 +87,6 @@ namespace dbaui
         virtual void paste() override;
 
         inline OFieldDescGenWin* getGenPage() const { return m_pGenPage; }
-        inline OTableDesignHelpBar* getHelpBar() const { return m_pHelpBar; }
 
     };
 }

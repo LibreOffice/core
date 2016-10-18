@@ -103,10 +103,6 @@ protected:
     virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) override;
     virtual short Ok() override;
 
-protected:
-    inline bool isUIEnabled() const { return m_bUIEnabled; }
-    inline void     disabledUI() { m_bUIEnabled = false; }
-
 private:
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
     void impl_selectDataSource(const css::uno::Any& _aDataSourceName);
