@@ -105,6 +105,9 @@ namespace desktop
         "      open the specified documents in viewer-(readonly-)mode.\n"\
         "--show <presentation>\n"\
         "      open the specified presentation and start it immediately\n"\
+        "--language=<language_tag>\n"\
+        "      Override the UI language with the given locale\n"\
+        "      Eg. --language=fr\n"\
         "--accept=<accept-string>\n"\
         "      Specify an UNO connect-string to create an UNO acceptor through which\n"\
         "      other programs can connect to access the API\n"\
