@@ -298,27 +298,38 @@ void ResultSetImplHelper::init( sal_Bool bStatic )
 
     if ( !m_bInitDone )
     {
-        if ( bStatic )
+        try
         {
-            // virtual... derived class fills m_xResultSet1
-            initStatic();
+            if ( bStatic )
+            {
+                // virtual... derived class fills m_xResultSet1
+                initStatic();
 
-            OSL_ENSURE( m_xResultSet1.is(),
-                        "ResultSetImplHelper::init - No 1st result set!" );
-            m_bStatic = sal_True;
+                OSL_ENSURE( m_xResultSet1.is(),
+                            "ResultSetImplHelper::init - No 1st result set!" );
+                m_bStatic = sal_True;
+            }
+            else
+            {
+                // virtual... derived class fills m_xResultSet1 and m_xResultSet2
+                initDynamic();
+
+                OSL_ENSURE( m_xResultSet1.is(),
+                            "ResultSetImplHelper::init - No 1st result set!" );
+                OSL_ENSURE( m_xResultSet2.is(),
+                            "ResultSetImplHelper::init - No 2nd result set!" );
+                m_bStatic = sal_False;
+            }
+            m_bInitDone = sal_True;
         }
-        else
+        catch ( uno::RuntimeException const &runtimeException )
         {
-            // virtual... derived class fills m_xResultSet1 and m_xResultSet2
-            initDynamic();
-
-            OSL_ENSURE( m_xResultSet1.is(),
-                        "ResultSetImplHelper::init - No 1st result set!" );
-            OSL_ENSURE( m_xResultSet2.is(),
-                        "ResultSetImplHelper::init - No 2nd result set!" );
-            m_bStatic = sal_False;
+            throw runtimeException;
         }
-        m_bInitDone = sal_True;
+        catch ( uno::Exception const &exception )
+        {
+            throw uno::RuntimeException( exception.Message, uno::Reference< XInterface >() );
+        }
     }
 }
 
