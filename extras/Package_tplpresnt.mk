@@ -10,9 +10,6 @@
 $(eval $(call gb_Package_Package,extras_tplpresnt,$(SRCDIR)/extras/source/templates/presnt))
 
 $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/template/common/presnt,\
-	AbstractGreen.otp \
-	AbstractRed.otp \
-	AbstractYellow.otp \
 	BrightBlue.otp \
 	DNA.otp \
 	Inspiration.otp \
