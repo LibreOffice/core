@@ -445,7 +445,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 if ( rFilterData[ nData ].Name == "PageRange" )
                     rFilterData[ nData ].Value >>= aPageRange;
                 else if ( rFilterData[ nData ].Name == "Selection" )
-                    rFilterData[ nData ].Value >>= aSelection;
+                    aSelection = rFilterData[ nData ].Value;
                 else if ( rFilterData[ nData ].Name == "UseLosslessCompression" )
                     rFilterData[ nData ].Value >>= mbUseLosslessCompression;
                 else if ( rFilterData[ nData ].Name == "Quality" )

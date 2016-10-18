@@ -133,7 +133,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
         {
             Reference< view::XSelectionSupplier > xView( xController, UNO_QUERY );
             if( xView.is() )
-                xView->getSelection() >>= maSelection;
+                maSelection = xView->getSelection();
         }
     }
     catch(const RuntimeException &)

@@ -1495,7 +1495,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
         }
 
         if( mpSet->getPropertyState( nHandleSoundURL ) != STLPropertyState::Ambiguous )
-            mpSet->getPropertyValue( nHandleSoundURL  ) >>= aOldSoundURL;
+            aOldSoundURL = mpSet->getPropertyValue( nHandleSoundURL  );
 
         if( aNewSoundURL != aOldSoundURL )
             pSet->setPropertyValue( nHandleSoundURL, aNewSoundURL );

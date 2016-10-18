@@ -753,16 +753,14 @@ void setDefaultPropByIntrospection( const uno::Any& aObj, const uno::Any& aValue
 
 uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName )
 {
-    uno::Any result;
     for ( sal_Int32 i = 0; i < aProp.getLength(); i++ )
     {
         if ( aProp[i].Name.equals(aName) )
         {
-            aProp[i].Value >>= result;
-            return result;
+            return aProp[i].Value;
         }
     }
-    return result;
+    return uno::Any();
 }
 
 bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const uno::Any& aValue )

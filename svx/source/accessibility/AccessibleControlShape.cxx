@@ -888,7 +888,7 @@ AccessibleControlShape* SAL_CALL AccessibleControlShape::GetLabeledByControlShap
         // get the "label by" property value of the control
         if (::comphelper::hasProperty(rAccLabelControlProperty, m_xControlModel))
         {
-            m_xControlModel->getPropertyValue( rAccLabelControlProperty ) >>= sCtlLabelBy;
+            sCtlLabelBy = m_xControlModel->getPropertyValue(rAccLabelControlProperty);
             if( sCtlLabelBy.hasValue() )
             {
                 Reference< XPropertySet >  xAsSet (sCtlLabelBy, UNO_QUERY);
