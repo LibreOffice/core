@@ -27,7 +27,7 @@ def normalizeTypeParams( line ):
 
 # The parsing here is designed to avoid grabbing stuff which is mixed in from gbuild.
 # I have not yet found a way of suppressing the gbuild output.
-with io.open("loplugin.inlineablemethods.log", "rb", buffering=1024*1024) as txt:
+with io.open("loplugin.expandablemethods.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "definition:":
@@ -142,7 +142,7 @@ for d in definitionSet:
     tmp4set.add((method, definitionToSourceLocationMap[d]))
 
 # print output, sorted by name and line number
-with open("loplugin.inlineablemethods.report", "wt") as f:
+with open("loplugin.expandablemethods.report", "wt") as f:
     for t in sort_set_by_natural_key(tmp4set):
         f.write(t[1] + "\n")
         f.write("    " + t[0] + "\n")

@@ -21,7 +21,8 @@
 #include "compat.hxx"
 
 /**
- Methods that are only called from inside their own class, and are only called from one spot
+ Find methods that are only called from inside their own class, and are only called from one spot.
+ They are candidates to be removed and have their code inlined into the call site.
 
 
  TODO if a method has only one call-site, and that call site is inside a constructor
@@ -54,11 +55,11 @@ static std::set<MyFuncInfo> largeFunctionSet;
 static std::set<MyFuncInfo> addressOfSet;
 
 
-class InlineableMethods:
-    public RecursiveASTVisitor<InlineableMethods>, public loplugin::Plugin
+class ExpandableMethods:
+    public RecursiveASTVisitor<ExpandableMethods>, public loplugin::Plugin
 {
 public:
-    explicit InlineableMethods(InstantiationData const & data): Plugin(data) {}
+    explicit ExpandableMethods(InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override
     {
@@ -80,7 +81,7 @@ public:
         for (const MyFuncInfo & s : addressOfSet)
             output += "addrof:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
         ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.inlineablemethods.log", ios::app | ios::out);
+        myfile.open( SRCDIR "/loplugin.expandablemethods.log", ios::app | ios::out);
         myfile << output;
         myfile.close();
     }
@@ -105,11 +106,10 @@ private:
     bool isCalleeFunctionInteresting( const FunctionDecl* );
 
     // I use traverse and a member variable because I cannot find a reliable way of walking back up the AST tree using the parentStmt() stuff
-    // TODO doesn't cope with nested functions
-    const FunctionDecl* mpTraversingFunction = nullptr;
+    std::vector<const FunctionDecl*> maTraversingFunctions;
 };
 
-MyFuncInfo InlineableMethods::niceName(const FunctionDecl* functionDecl)
+MyFuncInfo ExpandableMethods::niceName(const FunctionDecl* functionDecl)
 {
     if (functionDecl->getInstantiatedFromMemberFunction())
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
@@ -159,7 +159,7 @@ MyFuncInfo InlineableMethods::niceName(const FunctionDecl* functionDecl)
     return aInfo;
 }
 
-std::string InlineableMethods::toString(SourceLocation loc)
+std::string ExpandableMethods::toString(SourceLocation loc)
 {
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
     StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
@@ -168,7 +168,7 @@ std::string InlineableMethods::toString(SourceLocation loc)
     return sourceLocation;
 }
 
-bool InlineableMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
+bool ExpandableMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
 {
     const FunctionDecl* canonicalFunctionDecl = functionDecl->getCanonicalDecl();
     if (!isCalleeFunctionInteresting(canonicalFunctionDecl)) {
@@ -209,43 +209,43 @@ bool InlineableMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
     return true;
 }
 
-bool InlineableMethods::TraverseFunctionDecl( FunctionDecl* p )
+bool ExpandableMethods::TraverseFunctionDecl( FunctionDecl* p )
 {
-    mpTraversingFunction = p;
+    maTraversingFunctions.push_back(p);
     bool ret = RecursiveASTVisitor::TraverseFunctionDecl(p);
-    mpTraversingFunction = nullptr;
+    maTraversingFunctions.pop_back();
     return ret;
 }
-bool InlineableMethods::TraverseCXXMethodDecl( CXXMethodDecl* p )
+bool ExpandableMethods::TraverseCXXMethodDecl( CXXMethodDecl* p )
 {
-    mpTraversingFunction = p;
+    maTraversingFunctions.push_back(p);
     bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(p);
-    mpTraversingFunction = nullptr;
+    maTraversingFunctions.pop_back();
     return ret;
 }
-bool InlineableMethods::TraverseCXXConstructorDecl( CXXConstructorDecl* p )
+bool ExpandableMethods::TraverseCXXConstructorDecl( CXXConstructorDecl* p )
 {
-    mpTraversingFunction = p;
+    maTraversingFunctions.push_back(p);
     bool ret = RecursiveASTVisitor::TraverseCXXConstructorDecl(p);
-    mpTraversingFunction = nullptr;
+    maTraversingFunctions.pop_back();
     return ret;
 }
-bool InlineableMethods::TraverseCXXConversionDecl( CXXConversionDecl* p )
+bool ExpandableMethods::TraverseCXXConversionDecl( CXXConversionDecl* p )
 {
-    mpTraversingFunction = p;
+    maTraversingFunctions.push_back(p);
     bool ret = RecursiveASTVisitor::TraverseCXXConversionDecl(p);
-    mpTraversingFunction = nullptr;
+    maTraversingFunctions.pop_back();
     return ret;
 }
-bool InlineableMethods::TraverseCXXDestructorDecl( CXXDestructorDecl* p )
+bool ExpandableMethods::TraverseCXXDestructorDecl( CXXDestructorDecl* p )
 {
-    mpTraversingFunction = p;
+    maTraversingFunctions.push_back(p);
     bool ret = RecursiveASTVisitor::TraverseCXXDestructorDecl(p);
-    mpTraversingFunction = nullptr;
+    maTraversingFunctions.pop_back();
     return ret;
 }
 
-bool InlineableMethods::VisitMemberExpr( const MemberExpr* memberExpr )
+bool ExpandableMethods::VisitMemberExpr( const MemberExpr* memberExpr )
 {
     const FunctionDecl* functionDecl = dyn_cast<FunctionDecl>(memberExpr->getMemberDecl());
     if (functionDecl) {
@@ -254,7 +254,7 @@ bool InlineableMethods::VisitMemberExpr( const MemberExpr* memberExpr )
     return true;
 }
 
-bool InlineableMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
+bool ExpandableMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 {
     const FunctionDecl* functionDecl = dyn_cast<FunctionDecl>(declRefExpr->getDecl());
     if (functionDecl) {
@@ -263,9 +263,9 @@ bool InlineableMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     return true;
 }
 
-void InlineableMethods::functionTouchedFromExpr( const FunctionDecl* calleeFunctionDecl, const Expr* expr )
+void ExpandableMethods::functionTouchedFromExpr( const FunctionDecl* calleeFunctionDecl, const Expr* expr )
 {
-    if (!mpTraversingFunction) {
+    if (maTraversingFunctions.empty()) {
         return;
     }
     const FunctionDecl* canonicalFunctionDecl = calleeFunctionDecl->getCanonicalDecl();
@@ -282,7 +282,7 @@ void InlineableMethods::functionTouchedFromExpr( const FunctionDecl* calleeFunct
     }
 
     const CXXMethodDecl* calleeMethodDecl = dyn_cast<CXXMethodDecl>(calleeFunctionDecl);
-    const CXXMethodDecl* callsiteParentMethodDecl = dyn_cast<CXXMethodDecl>(mpTraversingFunction);
+    const CXXMethodDecl* callsiteParentMethodDecl = dyn_cast<CXXMethodDecl>(maTraversingFunctions.back());
     if (!callsiteParentMethodDecl
         || calleeMethodDecl->getParent() != callsiteParentMethodDecl->getParent())
     {
@@ -290,7 +290,7 @@ void InlineableMethods::functionTouchedFromExpr( const FunctionDecl* calleeFunct
     }
 }
 
-bool InlineableMethods::isCalleeFunctionInteresting(const FunctionDecl* functionDecl)
+bool ExpandableMethods::isCalleeFunctionInteresting(const FunctionDecl* functionDecl)
 {
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(functionDecl)) {
@@ -315,7 +315,7 @@ bool InlineableMethods::isCalleeFunctionInteresting(const FunctionDecl* function
     return true;
 }
 
-loplugin::Plugin::Registration< InlineableMethods > X("inlineablemethods", false);
+loplugin::Plugin::Registration< ExpandableMethods > X("expandablemethods", false);
 
 }
 
