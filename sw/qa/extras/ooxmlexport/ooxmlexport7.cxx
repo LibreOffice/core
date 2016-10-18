@@ -1137,6 +1137,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103389, "tdf103389.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp/wps:spPr/a:prstGeom", "prst", "rect");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf95031, "tdf95031.docx")
+{
+    // This was 494, in-numbering paragraph's automating spacing was handled as visible spacing, while it should not.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(3), "ParaTopMargin"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
