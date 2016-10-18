@@ -39,7 +39,6 @@ private:
 protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    void            SelectionChanged();
     virtual void    Resize() override;
     virtual void    GetFocus() override;
 
@@ -100,13 +99,6 @@ private:
     DECL_LINK( FxBtnFocusHdl, Control&, void );
     DECL_LINK( EdFocusHdl, Control&, void );
     DECL_LINK( EdModifyHdl, Edit&, void );
-
-protected:
-
-    void    FxClick();
-    void    FxFocus();
-    void    EdFocus();
-    void    EdModify();
 
 public:
 

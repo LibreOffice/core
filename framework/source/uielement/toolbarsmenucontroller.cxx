@@ -737,7 +737,7 @@ void SAL_CALL ToolbarsMenuController::itemActivated( const css::awt::MenuEvent& 
             // Special code to determine the enable/disable state of this command
             FeatureStateEvent aFeatureStateEvent;
             aFeatureStateEvent.FeatureURL.Complete = aCmdVector[i];
-            aFeatureStateEvent.IsEnabled = isContextSensitiveToolbarNonVisible();
+            aFeatureStateEvent.IsEnabled = m_bResetActive; // is context sensitive toolbar non visible
             statusChanged( aFeatureStateEvent );
         }
     }

@@ -223,7 +223,7 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
             SetArgName( i, pFuncDesc->getParameterName(nRealArg) );
     }
     if (nArg<nArgs)
-        SetArgVal(i,aParaArray[nArg]);
+        aArgInput[i].SetArgVal(aParaArray[nArg]);
 }
 
 ParaWin::~ParaWin()
@@ -398,21 +398,6 @@ void ParaWin::SetArgNameFont(sal_uInt16 no,const vcl::Font& aFont)
     aArgInput[no].SetArgNameFont(aFont);
 }
 
-void ParaWin::SetArgVal(sal_uInt16 no,const OUString& aText)
-{
-    aArgInput[no].SetArgVal(aText);
-}
-
-void ParaWin::HideParaLine(sal_uInt16 no)
-{
-    aArgInput[no].Hide();
-}
-
-void ParaWin::ShowParaLine(sal_uInt16 no)
-{
-    aArgInput[no].Show();
-}
-
 void ParaWin::SetEdFocus()
 {
     UpdateArgDesc(0);
@@ -492,11 +477,12 @@ void ParaWin::UpdateParas()
         for ( i=0; (i<nArgs) && (i<4); i++ )
         {
             UpdateArgInput( nOffset, i );
-            ShowParaLine(i);
+            aArgInput[i].Show();
         }
     }
 
-    for ( i=nArgs; i<4; i++ ) HideParaLine(i);
+    for ( i=nArgs; i<4; i++ )
+        aArgInput[i].Hide();
 }
 
 
@@ -542,12 +528,6 @@ void ParaWin::ArgumentModified()
     aArgModifiedLink.Call(*this);
 }
 
-void ParaWin::FxClick()
-{
-    aFxLink.Call(*this);
-}
-
-
 IMPL_LINK( ParaWin, GetFxHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
@@ -565,7 +545,7 @@ IMPL_LINK( ParaWin, GetFxHdl, ArgInput&, rPtr, void )
     {
         aArgInput[nEdFocus].SetArgSelection(Selection(0,SELECTION_MAX ));
         nActiveLine=nEdFocus+nOffset;
-        FxClick();
+        aFxLink.Call(*this);
     }
 }
 

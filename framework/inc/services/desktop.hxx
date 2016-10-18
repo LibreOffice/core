@@ -386,21 +386,10 @@ class Desktop : private cppu::BaseMutex,
          */
         bool impl_closeFrames(bool bAllowUI);
 
-    //  debug methods
-    //  (should be private every time!)
-
     private:
-
-        static bool implcp_addEventListener         ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
-        static bool implcp_removeEventListener      ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
 
         bool m_bIsTerminated;  /// check flag to protect us against dispose before terminate!
                                     /// see dispose() for further information!
-
-    //  variables
-    //  (should be private every time!)
-
-    private:
 
         css::uno::Reference< css::uno::XComponentContext >              m_xContext;               /// reference to factory, which has create this instance
         FrameContainer                                                  m_aChildTaskContainer;    /// array of child tasks (children of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
