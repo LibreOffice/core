@@ -233,7 +233,7 @@ void RscTypCont::Init()
     aWinBits.SetConstant( nStdPopupId, sal::static_int_cast<sal_Int32>(WB_STDPOPUP) );
 }
 {
-    InitLangType();
+    aLangType.Init( aNmTb );
     aBaseLst.push_back( pFieldUnits      = InitFieldUnitsType() );
     aBaseLst.push_back( pColor           = InitColor() );
     aBaseLst.push_back( pMapUnit         = InitMapUnit() );

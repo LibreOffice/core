@@ -167,7 +167,7 @@ namespace rptui
 
         if ( !_arguments.hasElements() )
         {   // constructor: "createDefault()"
-            createDefault();
+            m_bConstructed = true;
             return;
         }
 
@@ -183,11 +183,6 @@ namespace rptui
         throw lang::IllegalArgumentException( OUString(), *this, 0 );
     }
 
-
-    void DefaultComponentInspectorModel::createDefault()
-    {
-        m_bConstructed = true;
-    }
 
     void DefaultComponentInspectorModel::createWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines )
     {
