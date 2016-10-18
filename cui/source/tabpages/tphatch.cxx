@@ -170,8 +170,10 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
         if( *m_pnColorListState & ChangeType::CHANGED ||
             *m_pnColorListState & ChangeType::MODIFIED )
         {
-            if( *m_pnColorListState & ChangeType::CHANGED )
-                m_pColorList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewColorList();
+            SvxAreaTabDialog* pArea = (*m_pnColorListState & ChangeType::CHANGED) ?
+                dynamic_cast<SvxAreaTabDialog*>(GetParentDialog()) : nullptr;
+            if (pArea)
+                m_pColorList = pArea->GetNewColorList();
 
             // LbLineColor
             nPos = m_pLbLineColor->GetSelectEntryPos();
