@@ -232,7 +232,102 @@ PDFDocument::PDFDocument()
 {
 }
 
-bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& /*xCertificate*/)
+#ifdef XMLSEC_CRYPTO_NSS
+static NSSCMSMessage* CreateCMSMessage(PRTime nTime,
+                                       NSSCMSSignedData** ppCMSSignedData,
+                                       NSSCMSSignerInfo** ppCMSSigner,
+                                       CERTCertificate* pCertificate,
+                                       SECItem* pDigest)
+{
+    NSSCMSMessage* pResult = NSS_CMSMessage_Create(nullptr);
+    if (!pResult)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CreateCMSMessage: NSS_CMSMessage_Create() failed");
+        return nullptr;
+    }
+
+    *ppCMSSignedData = NSS_CMSSignedData_Create(pResult);
+    if (!*ppCMSSignedData)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CreateCMSMessage: NSS_CMSSignedData_Create() failed");
+        return nullptr;
+    }
+
+    NSSCMSContentInfo* pCMSContentInfo = NSS_CMSMessage_GetContentInfo(pResult);
+    if (NSS_CMSContentInfo_SetContent_SignedData(pResult, pCMSContentInfo, *ppCMSSignedData) != SECSuccess)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CreateCMSMessage: NSS_CMSContentInfo_SetContent_SignedData() failed");
+        return nullptr;
+    }
+
+    pCMSContentInfo = NSS_CMSSignedData_GetContentInfo(*ppCMSSignedData);
+
+    // No detached data.
+    if (NSS_CMSContentInfo_SetContent_Data(pResult, pCMSContentInfo, nullptr, PR_TRUE) != SECSuccess)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CreateCMSMessage: NSS_CMSContentInfo_SetContent_Data() failed");
+        return nullptr;
+    }
+
+    *ppCMSSigner = NSS_CMSSignerInfo_Create(pResult, pCertificate, SEC_OID_SHA1);
+    if (!*ppCMSSigner)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CreateCMSMessage: NSS_CMSSignerInfo_Create() failed");
+        return nullptr;
+    }
+
+    if (NSS_CMSSignerInfo_AddSigningTime(*ppCMSSigner, nTime) != SECSuccess)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CreateCMSMessage: NSS_CMSSignerInfo_AddSigningTime() failed");
+        return nullptr;
+    }
+
+    if (NSS_CMSSignerInfo_IncludeCerts(*ppCMSSigner, NSSCMSCM_CertChain, certUsageEmailSigner) != SECSuccess)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CreateCMSMessage: NSS_CMSSignerInfo_IncludeCerts() failed");
+        return nullptr;
+    }
+
+    if (NSS_CMSSignedData_AddCertificate(*ppCMSSignedData, pCertificate) != SECSuccess)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CreateCMSMessage: NSS_CMSSignedData_AddCertificate() failed");
+        return nullptr;
+    }
+
+    if (NSS_CMSSignedData_AddSignerInfo(*ppCMSSignedData, *ppCMSSigner) != SECSuccess)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CreateCMSMessage: NSS_CMSSignedData_AddSignerInfo() failed");
+        return nullptr;
+    }
+
+    if (NSS_CMSSignedData_SetDigestValue(*ppCMSSignedData, SEC_OID_SHA1, pDigest) != SECSuccess)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CreateCMSMessage: NSS_CMSSignedData_SetDigestValue() failed");
+        return nullptr;
+    }
+
+    return pResult;
+}
+
+static char* PasswordCallback(PK11SlotInfo* /*pSlot*/, PRBool /*bRetry*/, void* pArg)
+{
+    return PL_strdup(static_cast<char*>(pArg));
+}
+
+static void AppendHex(sal_Int8 nInt, OStringBuffer& rBuffer)
+{
+    static const sal_Char pHexDigits[] =
+    {
+        '0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+    };
+    rBuffer.append(pHexDigits[(nInt >> 4) & 15]);
+    rBuffer.append(pHexDigits[nInt & 15]);
+}
+
+#endif
+
+bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificate)
 {
     m_aEditBuffer.WriteCharPtr("\n");
 
@@ -357,7 +452,7 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& /*xCertific
 
     // Write the xref table.
     sal_uInt64 nXRefOffset = m_aEditBuffer.Tell();
-    m_aEditBuffer.WriteCharPtr("\nxref\n0 ");
+    m_aEditBuffer.WriteCharPtr("xref\n0 ");
     m_aEditBuffer.WriteUInt32AsString(m_aXRef.size());
     m_aEditBuffer.WriteCharPtr("\n");
     for (size_t nObject = 0; nObject < m_aXRef.size(); ++nObject)
@@ -423,7 +518,109 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& /*xCertific
     aByteRangeBuffer.append(" ]");
     m_aEditBuffer.WriteOString(aByteRangeBuffer.toString());
 
+    // Create the PKCS#7 object.
+    css::uno::Sequence<sal_Int8> aDerEncoded = xCertificate->getEncoded();
+    if (!aDerEncoded.hasElements())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: empty certificate");
+        return false;
+    }
+
+    sal_Int8* pDerEncoded = aDerEncoded.getArray();
+    sal_Int32 nDerEncoded = aDerEncoded.getLength();
+
+#ifdef XMLSEC_CRYPTO_NSS
+    CERTCertificate* pCertificate = CERT_DecodeCertFromPackage(reinterpret_cast<char*>(pDerEncoded), nDerEncoded);
+    if (!pCertificate)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: CERT_DecodeCertFromPackage() failed");
+        return false;
+    }
+
+    HASHContext* pHASHContext = HASH_Create(HASH_AlgSHA1);
+    if (!pHASHContext)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: HASH_Create() failed");
+        return false;
+    }
+
+    HASH_Begin(pHASHContext);
+
+    m_aEditBuffer.Seek(0);
+    sal_uInt64 nBufferSize = nSignatureContentOffset - 1;
+    std::unique_ptr<char[]> aBuffer(new char[nBufferSize]);
+    m_aEditBuffer.ReadBytes(aBuffer.get(), nBufferSize);
+    HASH_Update(pHASHContext, reinterpret_cast<const unsigned char*>(aBuffer.get()), nBufferSize);
+
+    m_aEditBuffer.Seek(nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
+    nBufferSize = nLastByteRangeLength;
+    aBuffer.reset(new char[nBufferSize]);
+    m_aEditBuffer.ReadBytes(aBuffer.get(), nBufferSize);
+    HASH_Update(pHASHContext, reinterpret_cast<const unsigned char*>(aBuffer.get()), nBufferSize);
+
+    SECItem aDigestItem;
+    unsigned char aDigest[SHA1_LENGTH];
+    aDigestItem.data = aDigest;
+    HASH_End(pHASHContext, aDigestItem.data, &aDigestItem.len, SHA1_LENGTH);
+    HASH_Destroy(pHASHContext);
+
+    PRTime nNow = PR_Now();
+    NSSCMSSignedData* pCMSSignedData;
+    NSSCMSSignerInfo* pCMSSignerInfo;
+    NSSCMSMessage* pCMSMessage = CreateCMSMessage(nNow, &pCMSSignedData, &pCMSSignerInfo, pCertificate, &aDigestItem);
+    if (!pCMSMessage)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: CreateCMSMessage() failed");
+        return false;
+    }
+
+    char* pPass = strdup("");
+    SECItem aCMSOutputItem;
+    aCMSOutputItem.data = nullptr;
+    aCMSOutputItem.len = 0;
+    PLArenaPool* pAreanaPool = PORT_NewArena(10000);
+    NSSCMSEncoderContext* pCMSEncoderContext;
+
+    pCMSEncoderContext = NSS_CMSEncoder_Start(pCMSMessage, nullptr, nullptr, &aCMSOutputItem, pAreanaPool, PasswordCallback, pPass, nullptr, nullptr, nullptr, nullptr);
+
+    if (!pCMSEncoderContext)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: NSS_CMSEncoder_Start() failed");
+        return false;
+    }
+
+    if (NSS_CMSEncoder_Finish(pCMSEncoderContext) != SECSuccess)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: NSS_CMSEncoder_Finish() failed");
+        return false;
+    }
+
+    free(pPass);
+
+    if (aCMSOutputItem.len * 2 > MAX_SIGNATURE_CONTENT_LENGTH)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: not enough space to write the signature");
+        return false;
+    }
+
+    OStringBuffer aCMSHexBuffer;
+    for (unsigned int i = 0; i < aCMSOutputItem.len; ++i)
+        AppendHex(aCMSOutputItem.data[i], aCMSHexBuffer);
+    assert(aCMSHexBuffer.getLength() <= MAX_SIGNATURE_CONTENT_LENGTH);
+
+    m_aEditBuffer.Seek(nSignatureContentOffset);
+    m_aEditBuffer.WriteOString(aCMSHexBuffer.toString());
+
+    NSS_CMSMessage_Destroy(pCMSMessage);
+
     return true;
+#endif
+
+    // Not implemented.
+    (void)pDerEncoded;
+    (void)nDerEncoded;
+
+    return false;
 }
 
 bool PDFDocument::Write(SvStream& rStream)
@@ -1667,8 +1864,11 @@ double PDFReferenceElement::LookupNumber(SvStream& rStream) const
 PDFObjectElement* PDFReferenceElement::LookupObject() const
 {
     const std::vector< std::unique_ptr<PDFElement> >& rElements = m_rDoc.GetElements();
-    for (const auto& rElement : rElements)
+    // Iterate in reverse order, so in case an incremental update adds a newer
+    // version, we find it.
+    for (int i = rElements.size() - 1; i >= 0; --i)
     {
+        const std::unique_ptr<PDFElement>& rElement = rElements[i];
         auto* pObjectElement = dynamic_cast<PDFObjectElement*>(rElement.get());
         if (!pObjectElement)
             continue;
