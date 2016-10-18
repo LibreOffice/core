@@ -238,7 +238,7 @@ bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet* )
     nTransliterationFlags = GetTransliterationFlags_Impl();
     bool bModified = nOldVal != nTransliterationFlags;
 
-    if (!IsSaveOptions())
+    if (!bSaveOptions)
         return bModified;
 
     bModified = false;

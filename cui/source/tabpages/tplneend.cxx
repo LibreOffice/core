@@ -305,12 +305,6 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl, ListBox&, void)
 }
 
 
-void SvxLineEndDefTabPage::ChangePreviewHdl_Impl()
-{
-    m_pCtlPreview->Invalidate();
-}
-
-
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbLineEnds->GetSelectEntryPos();
@@ -518,7 +512,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 
             *pnLineEndListState |= ChangeType::MODIFIED;
 
-            ChangePreviewHdl_Impl();
+            m_pCtlPreview->Invalidate();
         }
     }
     // determine button state

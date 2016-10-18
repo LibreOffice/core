@@ -525,13 +525,10 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
 
 void SvxBulletPickTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-
     const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
 
     if (pBulletCharFmt)
-        SetCharFormatName( pBulletCharFmt->GetValue());
-
-
+        sBulletCharFormatName = pBulletCharFmt->GetValue();
 }
 
 
@@ -3610,11 +3607,10 @@ void SvxNumOptionsTabPage::PageCreated(const SfxAllItemSet& aSet)
 
     if (pListItem)
     {
-        ListBox& myCharFmtLB = GetCharFmtListBox();
         const std::vector<OUString> &aList = pListItem->GetList();
         sal_uInt32 nCount = aList.size();
         for(sal_uInt32 i = 0; i < nCount; i++)
-            myCharFmtLB.InsertEntry(aList[i]);
+            m_pCharFmtLB->InsertEntry(aList[i]);
     }
     if (pMetricItem)
         SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));

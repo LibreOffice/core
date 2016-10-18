@@ -47,7 +47,6 @@ class SvPasteObjectDialog : public ModalDialog
     OUString        aObjName;
 
     ListBox&        ObjectLB()      { return *m_pLbInsertList; }
-    FixedText&      ObjectSource()  { return *m_pFtObjectSource; }
 
     void            SelectObject();
     DECL_LINK( SelectHdl, ListBox&, void );

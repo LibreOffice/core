@@ -198,10 +198,8 @@ private:
         Chapter(vcl::Window *pGrid, unsigned nYPos, const OUString& sDisplayName);
         ~Chapter();
         void dispose() { m_pText.disposeAndClear(); }
-    public:
         void SetBackground(const Wallpaper& W) { m_pText->SetBackground(W); }
         void Show(const Wallpaper& rBackWall);
-        void Hide();
     };
 
     // Entry -- a color config entry:
@@ -290,7 +288,7 @@ ColorConfigWindow_Impl::Chapter::Chapter(FixedText* pText, bool bShow)
     : m_pText(pText)
 {
     if (!bShow)
-        Hide();
+        m_pText->Hide();
 }
 
 // ctor for extended groups
@@ -316,11 +314,6 @@ void ColorConfigWindow_Impl::Chapter::Show(Wallpaper const& rBackWall)
     // background
     m_pText->SetBackground(rBackWall);
     m_pText->Show();
-}
-
-void ColorConfigWindow_Impl::Chapter::Hide ()
-{
-    m_pText->Hide();
 }
 
 

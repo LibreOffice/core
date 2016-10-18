@@ -384,8 +384,6 @@ class OptionsUserData
 {
     sal_uLong   nVal;
 
-    void    SetModified();
-
 public:
     explicit OptionsUserData( sal_uLong nUserData ) : nVal( nUserData ) {}
     OptionsUserData( sal_uInt16 nEID,
@@ -421,13 +419,8 @@ void OptionsUserData::SetNumericValue( sal_uInt8 nNumVal )
     {
         nVal &= 0xffffff00;
         nVal |= (nNumVal);
-        SetModified();
+        nVal |= (sal_uLong)1 << 11; // mark as modified
     }
-}
-
-void OptionsUserData::SetModified()
-{
-    nVal |=  (sal_uLong)1 << 11;
 }
 
 // class BrwString_Impl -------------------------------------------------

@@ -194,7 +194,7 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
         aTypeName = convertLineEnd(aTypeName, GetSystemLineEnd());
     }
 
-    ObjectSource().SetText( aTypeName );
+    m_pFtObjectSource->SetText( aTypeName );
 
     if( Dialog::Execute() == RET_OK )
     {

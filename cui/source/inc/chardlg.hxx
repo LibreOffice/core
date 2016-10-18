@@ -243,7 +243,6 @@ public:
     virtual void        ChangesApplied() override;
 
     void                DisableControls( sal_uInt16 nDisable );
-    void                EnableFlash();
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;

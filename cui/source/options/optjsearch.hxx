@@ -66,7 +66,6 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
 
-    bool                IsSaveOptions() const           { return bSaveOptions; }
     void                EnableSaveOptions( bool bVal )  { bSaveOptions = bVal; }
 
     sal_Int32               GetTransliterationFlags() const { return nTransliterationFlags; }

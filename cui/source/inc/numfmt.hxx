@@ -79,10 +79,7 @@ public:
     virtual DeactivateRC    DeactivatePage  ( SfxItemSet* pSet ) override;
 
     void                    SetInfoItem( const SvxNumberInfoItem& rItem );
-    void                    SetNumberFormatList( const SvxNumberInfoItem& rItem )
-                                { SetInfoItem( rItem ); }
 
-    void                    SetOkHdl( const Link<SfxPoolItem*,void>& rOkHandler );
     void                    HideLanguage(bool bFlag=true);
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;

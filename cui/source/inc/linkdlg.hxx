@@ -78,14 +78,6 @@ class SvBaseLinksDlg : public ModalDialog
     void SetType( sfx2::SvBaseLink& rLink, sal_uLong nPos, SfxLinkUpdateMode nType );
     void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uLong nPos = TREELIST_APPEND, bool bSelect = false);
 
-    void StartUpdateTimer()         { aUpdateIdle.Start(); }
-
-    OUString&       Autolink()      { return aStrAutolink; }
-    OUString&       Manuallink()    { return aStrManuallink; }
-    OUString&       Brokenlink()    { return aStrBrokenlink; }
-    OUString&       Closelinkmsg()  { return aStrCloselinkmsg; }
-    OUString&       CloselinkmsgMulti() { return aStrCloselinkmsgMulti; }
-    OUString&       Waitinglink()   { return aStrWaitinglink; }
     void SetManager( sfx2::LinkManager* );
 
 public:
