@@ -4470,6 +4470,12 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                     --nFunction;
             }
             break;
+            case ocColRowName:
+            case ocColRowNameAuto:
+                // The current implementation of column / row labels doesn't
+                // function correctly in grouped cells.
+                aArr.SetShareable(false);
+            break;
             default:
             break;
         }
@@ -5359,8 +5365,10 @@ bool ScCompiler::HandleColRowName()
             {
                 ScSingleRefData aRefData;
                 aRefData.InitAddress( aRange.aStart );
-                aRefData.SetColRel( true );
-                aRefData.SetRowRel( true );
+                if ( bColName )
+                    aRefData.SetColRel( true );
+                else
+                    aRefData.SetRowRel( true );
                 aRefData.SetAddress(aRange.aStart, aPos);
                 pNew->AddSingleReference( aRefData );
             }
@@ -5368,10 +5376,16 @@ bool ScCompiler::HandleColRowName()
             {
                 ScComplexRefData aRefData;
                 aRefData.InitRange( aRange );
-                aRefData.Ref1.SetColRel( true );
-                aRefData.Ref2.SetColRel( true );
-                aRefData.Ref1.SetRowRel( true );
-                aRefData.Ref2.SetRowRel( true );
+                if ( bColName )
+                {
+                    aRefData.Ref1.SetColRel( true );
+                    aRefData.Ref2.SetColRel( true );
+                }
+                else
+                {
+                    aRefData.Ref1.SetRowRel( true );
+                    aRefData.Ref2.SetRowRel( true );
+                }
                 aRefData.SetRange(aRange, aPos);
                 if ( bInList )
                     pNew->AddDoubleReference( aRefData );

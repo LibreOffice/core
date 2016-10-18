@@ -1299,7 +1299,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
         ScAddress aPreviousCell( aPos );
         aPreviousCell.IncRow( -1 );
         ScFormulaCell *pPreviousCell = pDocument->GetFormulaCell( aPreviousCell );
-        if( pPreviousCell )
+        if (pPreviousCell && pPreviousCell->GetCode()->IsShareable())
         {
             // Build formula string using the tokens from the previous cell,
             // but use the current cell position.
@@ -3825,6 +3825,9 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
 
     // are these formulas at all similar ?
     if ( GetHash() != rOther.GetHash() )
+        return NotEqual;
+
+    if (!pCode->IsShareable() || !rOther.pCode->IsShareable())
         return NotEqual;
 
     FormulaToken **pThis = pCode->GetCode();

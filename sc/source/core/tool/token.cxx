@@ -1796,6 +1796,7 @@ ScTokenArray* ScTokenArray::Clone() const
     p->mnHashValue = mnHashValue;
     p->meVectorState = meVectorState;
     p->mbFromRangeName = mbFromRangeName;
+    p->mbShareable = mbShareable;
 
     FormulaToken** pp;
     if( nLen )
