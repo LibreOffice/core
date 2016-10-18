@@ -253,6 +253,11 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
         GtkSalMenuItem *pSalMenuItem = GetItemAtPos( nItem );
         sal_uInt16 nId = pSalMenuItem->mnId;
 
+        // PopupMenu::ImplExecute might add <No Selection Possible> entry to top-level
+        // popup menu, but we have our own implementation below, so skip that one.
+        if ( nId == 0xFFFF )
+            continue;
+
         if ( pSalMenuItem->mnType == MenuItemType::SEPARATOR )
         {
             // Delete extra items from current section.
