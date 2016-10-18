@@ -1100,7 +1100,7 @@ namespace basctl
         {
             const ScriptDocument aCheck = ScriptDocument( doc->xModel );
             if  (   _rUrlOrCaption == aCheck.getTitle()
-                ||  _rUrlOrCaption == aCheck.getURL()
+                ||  _rUrlOrCaption == aCheck.m_pImpl->getURL()
                 )
             {
                 aDocument = aCheck;
@@ -1510,12 +1510,6 @@ namespace basctl
     OUString ScriptDocument::getTitle() const
     {
         return m_pImpl->getTitle();
-    }
-
-
-    OUString ScriptDocument::getURL() const
-    {
-        return m_pImpl->getURL();
     }
 
 

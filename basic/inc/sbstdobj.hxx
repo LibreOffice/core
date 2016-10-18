@@ -90,7 +90,6 @@ public:
     bool     IsUnderline() const { return bUnderline; }
     void     SetSize( sal_uInt16 nS ) { nSize = nS; }
     sal_uInt16 GetSize() const { return nSize; }
-    void     SetFontName( const OUString& rName ) { aName = rName; }
     const OUString& GetFontName() const { return aName; }
 };
 
