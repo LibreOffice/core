@@ -2048,10 +2048,37 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
                         rControlRegion.GetWidth() - 1, rControlRegion.GetHeight() / 2);
         break;
     case RenderType::ToolbarSeparator:
-        gtk_render_line(context, cr,
-                        rControlRegion.GetWidth() / 2, rControlRegion.GetHeight() * 0.2,
-                        rControlRegion.GetWidth() / 2, rControlRegion.GetHeight() * 0.8 );
+    {
+        const bool bNewStyle = gtk_check_version(3, 20, 0) == nullptr;
+
+        gint nSeparatorWidth = 1;
+
+        if (bNewStyle)
+        {
+            gtk_style_context_get(context,
+                gtk_style_context_get_state(context),
+                "min-width", &nSeparatorWidth, nullptr);
+        }
+
+        gint nHalfSeparatorWidth = nSeparatorWidth / 2;
+        gint nHalfRegionWidth = rControlRegion.GetWidth() / 2;
+
+        nX = nX + nHalfRegionWidth - nHalfSeparatorWidth;
+        nWidth = nSeparatorWidth;
+        nY = rControlRegion.GetHeight() * 0.1;
+        nHeight = rControlRegion.GetHeight() - (2 * nY);
+
+        if (bNewStyle)
+        {
+            gtk_render_background(context, cr, nX, nY, nSeparatorWidth, nHeight);
+            gtk_render_frame(context, cr, nX, nY, nSeparatorWidth, nHeight);
+        }
+        else
+        {
+            gtk_render_line(context, cr, nX, nY, nX, nY + nHeight);
+        }
         break;
+    }
     case RenderType::Separator:
         if (nPart == ControlPart::SeparatorHorz)
             gtk_render_line(context, cr, 0, nHeight / 2, nWidth - 1, nHeight / 2);
@@ -2903,6 +2930,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpLinkButtonStyle = createStyleContext(set_object_name, GtkControlPart::LinkButton);
 
     GtkWidget* pToolbar = gtk_toolbar_new();
+    gtk_container_add(GTK_CONTAINER(gDumbContainer), pToolbar);
     mpToolbarStyle = gtk_widget_get_style_context(pToolbar);
     gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
     gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_TOOLBAR);
