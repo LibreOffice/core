@@ -715,7 +715,9 @@ void SpinField::Resize()
 
             // adjust position and size of the edit field
             if (GetNativeControlRegion(ControlType::Spinbox, ControlPart::SubEdit, aArea, ControlState::NONE,
-                                       aControlValue, OUString(), aBound, aContent))
+                                       aControlValue, OUString(), aBound, aContent) &&
+                // there is just no useful native support for spinfields with dropdown
+                !(GetStyle() & WB_DROPDOWN))
             {
                 // convert back from border space to local coordinates
                 aPoint = pBorder->ScreenToOutputPixel(OutputToScreenPixel(aPoint));
