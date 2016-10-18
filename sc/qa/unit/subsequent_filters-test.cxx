@@ -221,6 +221,7 @@ public:
     void testSharedFormulaXLSB();
     void testSharedFormulaXLS();
     void testSharedFormulaColumnLabelsODS();
+    void testSharedFormulaColumnRowLabelsODS();
     void testExternalRefCacheXLSX();
     void testExternalRefCacheODS();
     void testHybridSharedStringODS();
@@ -333,6 +334,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaXLSB);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaColumnLabelsODS);
+    CPPUNIT_TEST(testSharedFormulaColumnRowLabelsODS);
     CPPUNIT_TEST(testExternalRefCacheXLSX);
     CPPUNIT_TEST(testExternalRefCacheODS);
     CPPUNIT_TEST(testHybridSharedStringODS);
@@ -3466,6 +3468,45 @@ void ScFiltersTest::testSharedFormulaColumnLabelsODS()
     CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(ScAddress(4,3,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(ScAddress(4,4,0)));
     CPPUNIT_ASSERT_EQUAL(5.0, rDoc.GetValue(ScAddress(4,5,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testSharedFormulaColumnRowLabelsODS()
+{
+    ScDocShellRef xDocSh = loadDoc("shared-formula/column-row-labels.", FORMAT_ODS);
+
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll();
+
+    // Expected output in each of the three ranges.
+    //
+    // +---+---+---+
+    // | 1 | 4 | 7 |
+    // +---+---+---+
+    // | 2 | 5 | 8 |
+    // +---+---+---+
+    // | 3 | 6 | 9 |
+    // +---+---+---+
+
+    auto aCheckFunc = [&](SCCOL nStartCol, SCROW nStartRow)
+    {
+        double fExpected = 1.0;
+        for (SCCOL nCol = 0; nCol <= 2; ++nCol)
+        {
+            for (SCROW nRow = 0; nRow <= 2; ++nRow)
+            {
+                ScAddress aPos(nStartCol+nCol, nStartRow+nRow, 0);
+                CPPUNIT_ASSERT_EQUAL(fExpected, rDoc.GetValue(aPos));
+                fExpected += 1.0;
+            }
+        }
+    };
+
+    aCheckFunc(5, 1); // F2:H4
+    aCheckFunc(9, 1); // J2:L4
+    aCheckFunc(1, 6); // B7:D9
 
     xDocSh->DoClose();
 }
