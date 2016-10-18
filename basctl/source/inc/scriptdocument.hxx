@@ -471,12 +471,6 @@ namespace basctl
         */
         OUString    getTitle() const;
 
-        /** returns the URL of the document
-
-            to be used for valid documents only
-        */
-        OUString    getURL() const;
-
         /** determines whether the document is currently the one-and-only application-wide active document
         */
         bool        isActive() const;

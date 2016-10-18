@@ -109,10 +109,6 @@ class SbiExprNode final {           // operators (and operands)
     void  CollectBits();            // converting numbers to strings
     bool  IsOperand()
         { return eNodeType != SbxNODE && eNodeType != SbxTYPEOF && eNodeType != SbxNEW; }
-    bool  IsTypeOf()
-        { return eNodeType == SbxTYPEOF; }
-    bool  IsNew()
-        { return eNodeType == SbxNEW; }
     bool  IsNumber();
     bool  IsLvalue();               // true, if usable as Lvalue
     void  GenElement( SbiCodeGen&, SbiOpcode );
@@ -132,12 +128,7 @@ public:
         { return eNodeType == SbxSTRVAL || eNodeType == SbxNUMVAL; }
     void ConvertToIntConstIfPossible();
     bool IsVariable();
-    bool  IsUnary()
-        { return pLeft && !pRight; }
-    bool  IsBinary()
-        { return pLeft && pRight; }
 
-    SbiExprNode* GetWithParent()            { return pWithParent; }
     void SetWithParent( SbiExprNode* p )    { pWithParent = p; }
 
     SbxDataType GetType()           { return eType; }
