@@ -3621,10 +3621,12 @@ void ServiceType::dumpHppFile(
                                 u2b(j.name), "param",
                                 codemaker::cpp::IdentifierTranslationMode::NonGlobal));
                         sal_Int32 rank;
-                        if (m_typeMgr->getSort(
-                                b2u(codemaker::UnoType::decompose(
-                                        u2b(j.type), &rank)))
-                            == codemaker::UnoType::Sort::Char)
+                        if (resolveOuterTypedefs(j.type) == "any") {
+                            o << "= " << param;
+                        } else if (m_typeMgr->getSort(
+                                       b2u(codemaker::UnoType::decompose(
+                                               u2b(j.type), &rank)))
+                                   == codemaker::UnoType::Sort::Char)
                         {
                             o << "= ::css::uno::Any(&" << param
                               << ", ::cppu::UnoType< ";
