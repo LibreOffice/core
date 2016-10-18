@@ -423,8 +423,10 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value );
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const Type & value );
 // any
+#if !defined LIBO_INTERNAL_ONLY
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value );
+#endif
 // interface
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value );

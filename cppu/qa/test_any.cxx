@@ -287,10 +287,6 @@ void Test::testVoid() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
-    }
-    {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Sequence<rtl::OUString>", !(a >>= b) && b.getLength() == 2);
@@ -375,10 +371,6 @@ void Test::testBoolean() {
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Type",
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
-    }
-    {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
@@ -472,10 +464,6 @@ void Test::testByte() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
-    }
-    {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Sequence<rtl::OUString>",
@@ -565,10 +553,6 @@ void Test::testShort() {
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Type",
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
-    }
-    {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
@@ -664,10 +648,6 @@ void Test::testUnsignedShort() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
-    }
-    {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Sequence<rtl::OUString>",
@@ -753,10 +733,6 @@ void Test::testLong() {
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Type",
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
-    }
-    {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
@@ -846,10 +822,6 @@ void Test::testUnsignedLong() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
-    }
-    {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Sequence<rtl::OUString>",
@@ -935,10 +907,6 @@ void Test::testHyper() {
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Type",
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
-    }
-    {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
@@ -1028,10 +996,6 @@ void Test::testUnsignedHyper() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
-    }
-    {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Sequence<rtl::OUString>",
@@ -1119,10 +1083,6 @@ void Test::testFloat() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
-    }
-    {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Sequence<rtl::OUString>",
@@ -1208,10 +1168,6 @@ void Test::testDouble() {
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Type",
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
-    }
-    {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
@@ -1306,10 +1262,6 @@ void Test::testChar() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
-    }
-    {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Sequence<rtl::OUString>",
@@ -1397,10 +1349,6 @@ void Test::testString() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
-    }
-    {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Sequence<rtl::OUString>",
@@ -1485,10 +1433,6 @@ void Test::testType() {
         css::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Type", (a >>= b) && b == cppu::UnoType<sal_Int32>::get());
-    }
-    {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
@@ -1579,10 +1523,6 @@ void Test::testSequence() {
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Type",
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
-    }
-    {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
@@ -1678,10 +1618,6 @@ void Test::testEnum() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
-    }
-    {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Sequence<rtl::OUString>",
@@ -1771,10 +1707,6 @@ void Test::testStruct() {
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Type",
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
-    }
-    {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
@@ -1889,10 +1821,6 @@ void Test::testException() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
-    }
-    {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Sequence<rtl::OUString>",
@@ -1999,10 +1927,6 @@ void Test::testInterface() {
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
     }
     {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
-    }
-    {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Sequence<rtl::OUString>",
@@ -2105,10 +2029,6 @@ void Test::testNull() {
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Type",
             !(a >>= b) && b == cppu::UnoType<OUString>::get());
-    }
-    {
-        css::uno::Any b(rtl::OUString("2"));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);

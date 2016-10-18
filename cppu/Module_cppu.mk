@@ -21,6 +21,7 @@ $(eval $(call gb_Module_add_targets,cppu,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,cppu,\
+	CppunitTest_cppu_any-external \
 	CppunitTest_cppu_qa_any \
 	CppunitTest_cppu_qa_recursion \
 	CppunitTest_cppu_qa_reference \
