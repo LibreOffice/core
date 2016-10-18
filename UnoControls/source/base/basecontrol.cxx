@@ -196,7 +196,7 @@ Any SAL_CALL BaseControl::queryAggregation( const Type& aType ) throw( RuntimeEx
 
 OUString SAL_CALL BaseControl::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return impl_getStaticImplementationName();
+    return OUString();
 }
 
 //  XServiceInfo
@@ -210,7 +210,7 @@ sal_Bool SAL_CALL BaseControl::supportsService( const OUString& sServiceName ) t
 
 Sequence< OUString > SAL_CALL BaseControl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    return impl_getStaticSupportedServiceNames();
+    return Sequence< OUString >();
 }
 
 //  XComponent
@@ -700,22 +700,6 @@ void SAL_CALL BaseControl::windowShown( const EventObject& /*aEvent*/ ) throw( R
 
 void SAL_CALL BaseControl::windowHidden( const EventObject& /*aEvent*/ ) throw( RuntimeException, std::exception )
 {
-}
-
-//  impl but public method to register service in DLL
-//  (In this BASE-implementation not implemented! Overwrite it in derived classes.)
-
-const Sequence< OUString > BaseControl::impl_getStaticSupportedServiceNames()
-{
-    return Sequence< OUString >();
-}
-
-//  impl but public method to register service in DLL
-//  (In this BASE-implementation not implemented! Overwrite it in derived classes.)
-
-const OUString BaseControl::impl_getStaticImplementationName()
-{
-    return OUString();
 }
 
 //  protected method

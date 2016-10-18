@@ -186,7 +186,7 @@ UcbStore::createPropertySetRegistry( const OUString& )
     {
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
         if ( !m_pImpl->m_xTheRegistry.is() )
-            m_pImpl->m_xTheRegistry = new PropertySetRegistry( m_xContext, getInitArgs() );
+            m_pImpl->m_xTheRegistry = new PropertySetRegistry( m_xContext, m_pImpl->m_aInitArgs );
     }
 
     return m_pImpl->m_xTheRegistry;
@@ -204,11 +204,6 @@ void SAL_CALL UcbStore::initialize( const Sequence< Any >& aArguments )
     m_pImpl->m_aInitArgs = aArguments;
 }
 
-
-const Sequence< Any >& UcbStore::getInitArgs() const
-{
-    return m_pImpl->m_aInitArgs;
-}
 
 
 // PropertySetRegistry_Impl.

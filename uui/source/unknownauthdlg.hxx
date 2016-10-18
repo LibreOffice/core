@@ -49,11 +49,6 @@ public:
     virtual ~UnknownAuthDialog() override;
     virtual void dispose() override;
 
-    const css::uno::Reference< css::security::XCertificate >& getCert()
-    {
-        return m_rXCert;
-    }
-
     void setDescriptionText(const OUString &rText)
     {
         set_primary_text(rText);

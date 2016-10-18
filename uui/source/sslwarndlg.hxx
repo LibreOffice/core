@@ -42,8 +42,6 @@ public:
         const css::uno::Reference< css::security::XCertificate >& rXCert,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    const css::uno::Reference< css::security::XCertificate >& getCert() { return m_rXCert; }
-
     virtual void response(short nResponseId) override;
 
     void setDescription1Text(const OUString &aText) { set_primary_text(aText); }

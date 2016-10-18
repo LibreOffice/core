@@ -31,7 +31,6 @@ typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XMultiPage > Mul
 
 class ScVbaMultiPage : public MultiPageImpl_BASE
 {
-    static css::uno::Reference< css::container::XIndexAccess > getPages( sal_Int32 nPages );
 public:
     ScVbaMultiPage(
         const css::uno::Reference< ov::XHelperInterface >& xParent,

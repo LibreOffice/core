@@ -51,11 +51,6 @@ public:
         return ( mnPages > 0 );
     }
 };
-uno::Reference< container::XIndexAccess >
-ScVbaMultiPage::getPages( sal_Int32 nPages )
-{
-    return new PagesImpl( nPages );
-}
 
 ScVbaMultiPage::ScVbaMultiPage(
         const uno::Reference< ov::XHelperInterface >& xParent,
@@ -99,7 +94,7 @@ ScVbaMultiPage::Pages( const uno::Any& index ) throw (uno::RuntimeException, std
 {
     // get the container model
     uno::Reference< container::XNameContainer > xContainer( m_xProps, uno::UNO_QUERY_THROW );
-    uno::Reference< XCollection > xColl( new ScVbaPages( this, mxContext, getPages( xContainer->getElementNames().getLength() ) ) );
+    uno::Reference< XCollection > xColl( new ScVbaPages( this, mxContext, new PagesImpl( xContainer->getElementNames().getLength() ) ) );
     if ( !index.hasValue() )
         return uno::makeAny( xColl );
     return xColl->Item( index, uno::Any() );

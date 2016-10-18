@@ -46,7 +46,6 @@ private:
 
 public:
     ScVbaCommandBarControls( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, VbaCommandBarHelperRef const & pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl ) throw( css::uno::RuntimeException );
-    bool IsMenu(){ return m_bIsMenu; }
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;

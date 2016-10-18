@@ -45,7 +45,7 @@ IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl, Button*, void)
     uno::Reference< css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures(
         css::security::DocumentDigitalSignatures::createDefault(m_xContext) );
 
-    xDocumentDigitalSignatures.get()->showCertificate(getCert());
+    xDocumentDigitalSignatures.get()->showCertificate(m_rXCert);
 }
 
 

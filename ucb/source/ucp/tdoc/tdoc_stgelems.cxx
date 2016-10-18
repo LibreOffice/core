@@ -119,7 +119,7 @@ Storage::~Storage()
         m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
 
     // Never dispose a document storage. Not owner!
-    if ( !isDocumentStorage() )
+    if ( !m_bIsDocumentStorage )
     {
         if ( m_xWrappedComponent.is() )
         {

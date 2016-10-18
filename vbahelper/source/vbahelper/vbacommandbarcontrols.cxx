@@ -208,7 +208,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
     uno::Sequence< beans::PropertyValue > aProps;
     OUString sHelpUrl;
     sal_uInt16 nItemType = 0;
-    if( IsMenu() )
+    if( m_bIsMenu )
     {
         aProps = CreateMenuItemData( sCommandUrl, sHelpUrl, sLabel, nItemType, aSubMenu, true, true );
     }

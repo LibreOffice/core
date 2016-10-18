@@ -249,7 +249,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             return;
 
         //TODO! remove this backwards compatibility?
-        OUString aContext(getContextProperty());
+        OUString aContext(m_aContextParam);
         if (aContext.isEmpty() && nErrorCode != 0)
         {
             SolarMutexGuard aGuard;
