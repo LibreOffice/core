@@ -88,10 +88,6 @@ class MzString
         const char*   c_str() const;
         operator  char*()         { return const_cast<char *>(c_str()); }
 
-// If it is not possible to use the constructor with an initial
-// allocation size, use the following member to set the size.
-        bool      resize(int len);
-
 // Assignment
         MzString  &operator = (const MzString &s);
         MzString  &operator = (const char *s);

@@ -372,7 +372,7 @@ bool AstAttribute::dumpBlob(
     OUString name(OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8));
     rBlob.setFieldData(
         index, getDocumentation(), OUString(), accessMode, name,
-        OStringToOUString(getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
+        OStringToOUString(m_pType->getRelativName(), RTL_TEXTENCODING_UTF8),
         RTConstValue());
     dumpExceptions(
         rBlob, m_getDocumentation, m_getExceptions, RTMethodMode::ATTRIBUTE_GET,

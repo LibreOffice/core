@@ -111,8 +111,6 @@ protected:
 
     virtual void Output(const OString & rOutput)=0;
 
-    static void Error(const OString &rError);
-
 private:
     void ExecuteAnalyzedToken( int nToken, char *pToken );
     void AddText(

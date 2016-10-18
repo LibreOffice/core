@@ -67,8 +67,6 @@ public:
     DeclList::size_type getSetExceptionCount() const
     { return m_setExceptions.size(); }
 
-    AstType const * getType() const
-        { return m_pType; }
     bool isReadonly() const
         { return ((m_flags & AF_READONLY) == AF_READONLY); }
     bool isOptional() const
