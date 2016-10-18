@@ -99,9 +99,9 @@ SwFrameFormat *FindFrameFormat( SdrObject *pObj )
 {
     SwFrameFormat* pRetval = nullptr;
 
-    if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
+    if (SwVirtFlyDrawObj* pFlyDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
     {
-       pRetval = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFormat();
+       pRetval = pFlyDrawObj->GetFormat();
     }
     else
     {
