@@ -676,3 +676,6 @@ RegistryItem gid_Regitem_Software_RegisteredApplications
     Value = "SOFTWARE\%MANUFACTURER\%PRODUCTNAME\%PRODUCTVERSION\Capabilities";
 	Styles = ();
 End
+
+// registering vnd.libreoffice.command URI scheme handler
+REGISTER_URI_HANDLER( vnd.libreoffice.command, vnd_libreoffice_command, gid_Module_Root )
