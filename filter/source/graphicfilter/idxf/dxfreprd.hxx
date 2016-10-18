@@ -111,7 +111,6 @@ private:
                          DXFBoundingBox & rBox);
 
     bool isTextEncodingSet() const { return mEnc != RTL_TEXTENCODING_DONTKNOW; }
-    bool isTextEncodingUTF8() const { return mEnc == RTL_TEXTENCODING_UTF8; }
 };
 
 

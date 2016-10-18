@@ -49,7 +49,6 @@ private:
     void onExportBrowse();
     void onExportCurrentDocument();
     void onImportBrowse();
-    void onImportRecentDocument();
     void initDialog();
 
     css::uno::Reference< css::lang::XComponent > getFrontMostDocument( const OUString& rServiceName );

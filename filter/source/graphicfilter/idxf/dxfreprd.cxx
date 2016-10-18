@@ -252,7 +252,7 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                     continue;
 
                 // If we already use UTF8, then don't update encoding anymore
-                if (isTextEncodingUTF8())
+                if (mEnc == RTL_TEXTENCODING_UTF8)
                     continue;
                 // FIXME: we really need a whole table of
                 // $DWGCODEPAGE to encodings mappings

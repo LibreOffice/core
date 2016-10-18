@@ -153,7 +153,7 @@ IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, Button *, pButton, void )
     }
     else if (m_pPBClose == pButton)
     {
-        onClose();
+        Close();
     }
 
     m_bIsClosable = true;
@@ -974,11 +974,6 @@ void XMLFilterSettingsDialog::onOpen()
         ScopedVclPtrInstance< InfoBox > aBox(this, aMsg );
         aBox->Execute();
     }
-}
-
-void XMLFilterSettingsDialog::onClose()
-{
-    Close();
 }
 
 bool XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )

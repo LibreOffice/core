@@ -135,28 +135,18 @@ void OComponentEventThread::addEvent( const EventObject* _pEvt,
     m_aCond.set();
 }
 
-void OComponentEventThread::implStarted( )
-{
-    acquire( );
-}
-
-void OComponentEventThread::implTerminated( )
-{
-    release( );
-}
-
 void SAL_CALL OComponentEventThread::onTerminated()
 {
     OComponentEventThread_TBASE::onTerminated();
 
-    implTerminated( );
+    release( );
 }
 
 void OComponentEventThread::run()
 {
     osl_setThreadName("frm::OComponentEventThread");
 
-    implStarted( );
+    acquire( );
 
     // Hold on to ourselves, so that we're not deleted if a dispose is called at some point in time
     css::uno::Reference<css::uno::XInterface> xThis(static_cast<XWeak*>(this));

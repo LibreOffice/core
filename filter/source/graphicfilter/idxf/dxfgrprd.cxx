@@ -154,7 +154,7 @@ sal_uInt16 DXFGroupReader::Read()
     if ( !bStatus )
     {
         nG = 0;
-        SetS();
+        S = "EOF";
         if ( nGCount != 0xffffffff )
         {
             // InfoBox(NULL,String("Error in group # ")+String(nGCount)).Execute();
@@ -163,11 +163,6 @@ sal_uInt16 DXFGroupReader::Read()
     }
     nLastG = nG;
     return nG;
-}
-
-void DXFGroupReader::SetS()
-{
-    S = "EOF";
 }
 
 long DXFGroupReader::ReadI()

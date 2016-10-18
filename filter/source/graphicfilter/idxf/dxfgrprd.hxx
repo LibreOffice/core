@@ -59,11 +59,6 @@ public:
         // This read must have returned a group code for datatype String.
         // If not NULL is returend
 
-    // The following methods can change the current values of group codes
-    // (e.g. to set default values, before 'blindly' reading lots of groups)
-
-    void SetS(); // (will be copied)
-
 private:
 
     long   ReadI();

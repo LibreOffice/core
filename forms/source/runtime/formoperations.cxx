@@ -1113,7 +1113,7 @@ namespace frm
 
     void FormOperations::impl_checkDisposed_throw() const
     {
-        if ( impl_isDisposed_nothrow() )
+        if ( !m_xCursor.is() )
             throw DisposedException( OUString(), *const_cast< FormOperations* >( this ) );
     }
 

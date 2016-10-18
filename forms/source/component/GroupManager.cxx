@@ -62,7 +62,7 @@ OGroupCompAcc::OGroupCompAcc(const Reference<XPropertySet>& rxElement, const OGr
 
 bool OGroupCompAcc::operator==( const OGroupCompAcc& rCompAcc ) const
 {
-    return (m_xComponent == rCompAcc.GetComponent());
+    return m_xComponent == rCompAcc.m_xComponent;
 }
 
 class OGroupCompAccLess : public ::std::binary_function<OGroupCompAcc, OGroupCompAcc, sal_Bool>

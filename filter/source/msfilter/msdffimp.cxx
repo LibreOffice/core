@@ -178,7 +178,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     sal_uLong nPos = rStm.Tell();
     rStm.WriteInt32( 0 );
 
-    if( GetFormat() == SotClipboardFormatId::GDIMETAFILE && pMtf )
+    if( nFormat == SotClipboardFormatId::GDIMETAFILE && pMtf )
     {
         // Always to 1/100 mm, until Mtf-Solution found
         // Assumption (no scaling, no origin translation)
