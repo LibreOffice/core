@@ -70,12 +70,12 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
         mpCBCheckProfilesafeExtensions->Disable();
     }
 
-    if (comphelper::BackupFileHelper::isTryDisableAllExtensionsPossible())
+    if (!comphelper::BackupFileHelper::isTryDisableAllExtensionsPossible())
     {
         mpCBDisableAllExtensions->Disable();
     }
 
-    if (maBackupFileHelper.isTryResetCustomizationsPossible())
+    if (!maBackupFileHelper.isTryResetCustomizationsPossible())
     {
         mpCBResetCustomizations->Disable();
     }
