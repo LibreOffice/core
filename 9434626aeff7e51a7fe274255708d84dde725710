@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_67744dcf",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-10-18T12:40:34Z",
+      "side": 1,
+      "message": "You can use Application::IsSafeModeEnabled() instead of checking both options here.",
+      "revId": "9434626aeff7e51a7fe274255708d84dde725710",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
