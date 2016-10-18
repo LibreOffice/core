@@ -304,8 +304,7 @@ css::uno::Any SAL_CALL VistaFilePicker::getValue(::sal_Int16 nControlId    ,
     rRequest->setArgument(PROP_CONTROL_ACTION, nControlAction);
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
-    const css::uno::Any aValue = rRequest->getArgumentOrDefault(PROP_CONTROL_VALUE, css::uno::Any());
-    return aValue;
+    return rRequest->getValue(PROP_CONTROL_VALUE);
 }
 
 void SAL_CALL VistaFilePicker::enableControl(::sal_Int16 nControlId,

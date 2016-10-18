@@ -421,8 +421,8 @@ protected:
     T getProperty( const uno::Any& obj, const OUString& name ) const
     {
         uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY_THROW );
-        T data = T();
-        if (!(properties->getPropertyValue(name) >>= data))
+        T data;
+        if (!css::uno::fromAny(properties->getPropertyValue(name), &data))
         {
             CPPUNIT_FAIL("the property is of unexpected type or void");
         }
