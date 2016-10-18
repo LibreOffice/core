@@ -114,7 +114,6 @@ public:
 private:
     void logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet);
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
-    std::string fullyQualifiedName(const FunctionDecl* functionDecl);
     std::string toString(SourceLocation loc);
     void functionTouchedFromExpr( const FunctionDecl* calleeFunctionDecl, const Expr* expr );
 };
@@ -176,32 +175,6 @@ std::string UnusedMethods::toString(SourceLocation loc)
     std::string sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
     normalizeDotDotInFilePath(sourceLocation);
     return sourceLocation;
-}
-
-std::string UnusedMethods::fullyQualifiedName(const FunctionDecl* functionDecl)
-{
-    std::string ret = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
-    ret += " ";
-    if (isa<CXXMethodDecl>(functionDecl)) {
-        const CXXRecordDecl* recordDecl = dyn_cast<CXXMethodDecl>(functionDecl)->getParent();
-        ret += recordDecl->getQualifiedNameAsString();
-        ret += "::";
-    }
-    ret += functionDecl->getNameAsString() + "(";
-    bool bFirst = true;
-    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
-        if (bFirst)
-            bFirst = false;
-        else
-            ret += ",";
-        ret += pParmVarDecl->getType().getCanonicalType().getAsString();
-    }
-    ret += ")";
-    if (isa<CXXMethodDecl>(functionDecl) && dyn_cast<CXXMethodDecl>(functionDecl)->isConst()) {
-        ret += " const";
-    }
-
-    return ret;
 }
 
 // For virtual/overriding methods, we need to pretend we called the root method(s),
