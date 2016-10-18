@@ -293,8 +293,7 @@ void InlineableMethods::functionTouchedFromExpr( const FunctionDecl* calleeFunct
 bool InlineableMethods::isCalleeFunctionInteresting(const FunctionDecl* functionDecl)
 {
     // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              functionDecl->getNameInfo().getLoc()))) {
+    if (isInUnoIncludeFile(functionDecl)) {
         return false;
     }
     if (isa<CXXDestructorDecl>(functionDecl)) {

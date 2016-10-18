@@ -312,12 +312,11 @@ bool UnusedMethods::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr
 
 bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
 {
-    const FunctionDecl* canonicalFunctionDecl = functionDecl->getCanonicalDecl();
     // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              canonicalFunctionDecl->getNameInfo().getLoc()))) {
+    if (isInUnoIncludeFile(functionDecl)) {
         return true;
     }
+    const FunctionDecl* canonicalFunctionDecl = functionDecl->getCanonicalDecl();
     if (isa<CXXDestructorDecl>(functionDecl)) {
         return true;
     }

@@ -170,6 +170,11 @@ bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const {
            || name.startswith(WORKDIR "/"));
 }
 
+bool Plugin::isInUnoIncludeFile(const FunctionDecl* functionDecl) const {
+    return isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
+             functionDecl->getCanonicalDecl()->getNameInfo().getLoc()));
+}
+
 namespace
 {
 class ParentBuilder

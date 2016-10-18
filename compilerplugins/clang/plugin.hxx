@@ -75,6 +75,7 @@ class Plugin
          which is not allowed to be changed.
         */
         bool isInUnoIncludeFile(SourceLocation spellingLocation) const;
+        bool isInUnoIncludeFile(const FunctionDecl*) const;
 
         static void normalizeDotDotInFilePath(std::string&);
     private:

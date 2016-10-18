@@ -234,8 +234,7 @@ bool CountUsersOfDefaultParams::VisitFunctionDecl( const FunctionDecl* functionD
         return true;
     }
     // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              functionDecl->getNameInfo().getLoc()))) {
+    if (isInUnoIncludeFile(functionDecl)) {
         return true;
     }
     if (isa<CXXDestructorDecl>(functionDecl)) {

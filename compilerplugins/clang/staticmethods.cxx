@@ -87,7 +87,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (isa<CXXConstructorDecl>(pCXXMethodDecl) || isa<CXXDestructorDecl>(pCXXMethodDecl) || isa<CXXConversionDecl>(pCXXMethodDecl)) {
         return true;
     }
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(pCXXMethodDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
+    if (isInUnoIncludeFile(pCXXMethodDecl)) {
         return true;
     }
     if ( pCXXMethodDecl != pCXXMethodDecl->getCanonicalDecl() ) {

@@ -97,8 +97,7 @@ bool RemoveVirtuals::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl )
         return true;
     }
     // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              functionDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
+    if (isInUnoIncludeFile(functionDecl)) {
         return true;
     }
 

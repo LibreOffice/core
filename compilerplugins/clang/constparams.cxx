@@ -52,8 +52,7 @@ bool ConstParams::VisitFunctionDecl(FunctionDecl * functionDecl)
         return true;
     }
     // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              functionDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
+    if (isInUnoIncludeFile(functionDecl)) {
         return true;
     }
     // TODO ignore these for now, requires some extra work

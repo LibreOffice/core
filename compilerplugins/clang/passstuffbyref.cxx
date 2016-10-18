@@ -205,8 +205,7 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
         }
     }
     // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              functionDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
+    if (isInUnoIncludeFile(functionDecl)) {
         return;
     }
     // these functions are passed as parameters to another function
@@ -245,8 +244,7 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     }
 
     // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              functionDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
+    if (isInUnoIncludeFile(functionDecl)) {
         return;
     }
     loplugin::DeclCheck dc(functionDecl);

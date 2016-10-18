@@ -154,8 +154,7 @@ bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* methodDecl )
     }
     if (methodDecl->size_overridden_methods() == 0) {
         // ignore stuff that forms part of the stable URE interface
-        if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                                  methodDecl->getNameInfo().getLoc()))) {
+        if (isInUnoIncludeFile(methodDecl)) {
             return true;
         }
         // ignore templates and template instantiations,

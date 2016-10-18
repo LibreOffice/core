@@ -479,9 +479,7 @@ bool SalBool::VisitParmVarDecl(ParmVarDecl const * decl) {
         if (f != nullptr) { // e.g.: typedef sal_Bool (* FuncPtr )( sal_Bool );
             f = f->getCanonicalDecl();
             if (!(hasCLanguageLinkageType(f)
-                  || (isInUnoIncludeFile(
-                          compiler.getSourceManager().getSpellingLoc(
-                              f->getNameInfo().getLoc()))
+                  || (isInUnoIncludeFile(f)
                       && (!f->isInlined() || f->hasAttr<DeprecatedAttr>()
                           || decl->getType()->isReferenceType()
                           || hasBoolOverload(f, false)))
@@ -654,9 +652,7 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
         OverrideKind k = getOverrideKind(f);
         if (k != OverrideKind::YES
             && !(hasCLanguageLinkageType(f)
-                 || (isInUnoIncludeFile(
-                         compiler.getSourceManager().getSpellingLoc(
-                             f->getNameInfo().getLoc()))
+                 || (isInUnoIncludeFile(f)
                      && (!f->isInlined() || f->hasAttr<DeprecatedAttr>()))))
         {
             SourceLocation loc { decl->getLocStart() };

@@ -152,7 +152,7 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
         return true;
     }
     SourceLocation canonicalLoc = pFunctionDecl->getCanonicalDecl()->getNameInfo().getLoc();
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(canonicalLoc))) {
+    if (isInUnoIncludeFile(pFunctionDecl)) {
         return true;
     }
 

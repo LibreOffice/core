@@ -100,7 +100,7 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
     if (ignoreLocation(functionDecl))
         return;
     // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(functionDecl->getLocation())))
+    if (isInUnoIncludeFile(functionDecl))
         return;
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( functionDecl->getLocation() );
     StringRef filename = compiler.getSourceManager().getFilename(expansionLoc);
