@@ -1438,9 +1438,7 @@ bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
     {
         case TypeClass_ANY:
         {
-            Any aInnerValue;
-            _rValue >>= aInnerValue;
-            bSuccessfullyReRouted = implUpdateObject(_rxUpdatedObject, _nColumnIndex, aInnerValue);
+            bSuccessfullyReRouted = implUpdateObject(_rxUpdatedObject, _nColumnIndex, _rValue);
         }
         break;
 
@@ -1546,9 +1544,7 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
 
         case TypeClass_ANY:
         {
-            Any aInnerValue;
-            _rValue >>= aInnerValue;
-            bSuccessfullyReRouted = implSetObject(_rxParameters, _nColumnIndex, aInnerValue);
+            bSuccessfullyReRouted = implSetObject(_rxParameters, _nColumnIndex, _rValue);
         }
         break;
 

@@ -208,7 +208,7 @@ void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry*
 
             case UNOGRAPHIC_RENDERDATA:
             {
-                *pValues >>= maRenderData;
+                 maRenderData = *pValues;
             }
             break;
         }
