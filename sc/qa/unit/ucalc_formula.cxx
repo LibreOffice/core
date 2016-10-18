@@ -2764,6 +2764,20 @@ void Test::testFormulaRefUpdateNameExpandRef()
     m_pDoc->SetValue(ScAddress(0,3,0), 4.0);
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,6,0)));
 
+    // Insert a new column at column 2, which should not expand the named
+    // range as it is only one column wide.
+    rFunc.InsertCells(ScRange(1,0,0,1,MAXROW,0), &aMark, INS_INSCOLS_BEFORE, false, true);
+    pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pName);
+    pName->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    CPPUNIT_ASSERT_EQUAL(OUString("$A$1:$A$4"), aSymbol);
+
+    // Make sure the referenced area has not changed.
+    m_pDoc->SetValue(ScAddress(0,3,0), 2.0);
+    CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+    m_pDoc->SetValue(ScAddress(1,3,0), 2.0);
+    CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+
     // Clear the document and start over.
     m_pDoc->GetRangeName()->clear();
     clearSheet(m_pDoc, 0);
