@@ -127,7 +127,6 @@ public:
 
     bool operator==( const OGroupCompAcc& rCompAcc ) const;
 
-    inline const css::uno::Reference< css::beans::XPropertySet>&  GetComponent() const { return m_xComponent; }
     const OGroupComp&   GetGroupComponent() const { return m_aGroupComp; }
 };
 

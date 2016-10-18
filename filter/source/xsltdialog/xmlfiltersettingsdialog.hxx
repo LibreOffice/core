@@ -100,7 +100,6 @@ public:
     void    onDelete();
     void    onSave();
     void    onOpen();
-    void    onClose();
 
     void    updateStates();
 

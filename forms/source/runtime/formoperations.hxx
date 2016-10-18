@@ -149,10 +149,6 @@ namespace frm
         void    createWithFormController( const css::uno::Reference< css::form::runtime::XFormController >& _rxController );
         void    createWithForm( const css::uno::Reference< css::form::XForm >& _rxForm );
 
-        /** determines whether or not we're already disposed
-        */
-        inline bool impl_isDisposed_nothrow() const { return !m_xCursor.is(); }
-
         /** checks whether the instance is already disposed, and throws an exception if so
         */
         void        impl_checkDisposed_throw() const;

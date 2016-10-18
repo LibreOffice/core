@@ -44,12 +44,6 @@ protected:
     typedef std::map<OUString,T> map_t;
     map_t maItems;
 
-
-    bool hasItems()
-    {
-        return ! maItems.empty();
-    }
-
     typename map_t::const_iterator findItem( const OUString& rName )
     {
         return maItems.find( rName );
@@ -99,7 +93,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements()
         throw( css::uno::RuntimeException, std::exception ) override
     {
-        return hasItems();
+        return ! maItems.empty();
     }
 
 

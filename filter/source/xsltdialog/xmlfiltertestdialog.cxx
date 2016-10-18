@@ -587,11 +587,6 @@ void XMLFilterTestDialog::onImportBrowse()
     initDialog();
 }
 
-void XMLFilterTestDialog::onImportRecentDocument()
-{
-    import( m_sImportRecentFile );
-}
-
 void XMLFilterTestDialog::import( const OUString& rURL )
 {
     try
@@ -671,7 +666,7 @@ IMPL_LINK(XMLFilterTestDialog, ClickHdl_Impl, Button *, pButton, void )
     }
     else if (m_pPBRecentFile == pButton)
     {
-        onImportRecentDocument();
+        import( m_sImportRecentFile );
     }
     else if (m_pPBClose == pButton)
     {

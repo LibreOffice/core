@@ -29,7 +29,7 @@ MIP::MIP()
     resetRequired();
     resetRelevant();
     resetConstraint();
-    resetCalculate();
+    mbHasCalculate = false;
     resetTypeName();
 }
 
@@ -37,32 +37,32 @@ void MIP::inherit( const MIP& rMip )
 {
     if( ! mbHasReadonly )
     {
-        mbHasReadonly = rMip.hasReadonly();
+        mbHasReadonly = rMip.mbHasReadonly;
         mbReadonly = rMip.isReadonly();
     }
     if( ! mbHasRequired )
     {
-        mbHasRequired = rMip.hasRequired();
+        mbHasRequired = rMip.mbHasRequired;
         mbRequired = rMip.isRequired();
     }
     if( ! mbHasRelevant )
     {
-        mbHasRelevant = rMip.hasRelevant();
+        mbHasRelevant = rMip.mbHasRelevant;
         mbRelevant = rMip.isRelevant();
     }
     if( ! mbHasConstraint )
     {
-        mbHasConstraint = rMip.hasConstraint();
+        mbHasConstraint = rMip.mbHasConstraint;
         mbConstraint = rMip.isConstraint();
         msConstraintExplanation = rMip.getConstraintExplanation();
     }
     if( ! mbHasCalculate )
     {
-        mbHasCalculate = rMip.hasCalculate();
+        mbHasCalculate = rMip.mbHasCalculate;
     }
     if( ! mbHasTypeName )
     {
-        mbHasTypeName = rMip.hasTypeName();
+        mbHasTypeName = rMip.mbHasTypeName;
         msTypeName = rMip.getTypeName();
     }
 }
@@ -89,7 +89,6 @@ void MIP::resetConstraint()       { mbHasConstraint = false; mbConstraint = true
 void MIP::setConstraintExplanation( const OUString& s ) { msConstraintExplanation = s; }
 
 void MIP::setHasCalculate( bool b ) { mbHasCalculate = b; }
-void MIP::resetCalculate()        { mbHasCalculate = false; }
 
 void MIP::setTypeName( const OUString& s ) { msTypeName = s; mbHasTypeName = true; }
 void MIP::resetTypeName()         { msTypeName.clear(); mbHasTypeName = false; }

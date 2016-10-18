@@ -50,7 +50,6 @@ public:
                     delete pMtf;
                 pMtf = new GDIMetaFile( rMtf );
             }
-    SotClipboardFormatId GetFormat() const { return nFormat; }
     void                 SetAspect( sal_uInt16 nAsp ) { nAspect = nAsp; }
     void                 SetAdviseFlags( sal_uLong nAdv ) { nAdvFlags = nAdv; }
     void                 SetSize( const Size & rSize ) { aSize = rSize; }

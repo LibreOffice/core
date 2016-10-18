@@ -101,9 +101,6 @@ public:
     void SAL_CALL operator delete( void * p ) throw() { osl::Thread::operator delete(p); }
 
 private:
-    void    implStarted( );
-    void    implTerminated( );
-
     void    impl_clearEventQueue();
 };
 
