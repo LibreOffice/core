@@ -575,9 +575,6 @@ public:
 private:
     std::map <key_type,mapped_type,key_compare> maMap;
 public:
-#if OSL_DEBUG_LEVEL > 0
-    iterator begin() { return maMap.begin(); }
-#endif
     iterator end() { return maMap.end(); }
     iterator find(const key_type& key) { return maMap.find(key); }
     std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
@@ -1732,22 +1729,6 @@ SwAccessibleMap::~SwAccessibleMap()
         osl::MutexGuard aGuard( maEventMutex );
 #if OSL_DEBUG_LEVEL > 0
         assert(!(mpEvents || mpEventMap));
-        if( mpEvents )
-        {
-            SwAccessibleEventList_Impl::iterator aIter = mpEvents->begin();
-            while( aIter != mpEvents->end() )
-            {
-                ++aIter;
-            }
-        }
-        if( mpEventMap )
-        {
-            SwAccessibleEventMap_Impl::iterator aIter = mpEventMap->begin();
-            while( aIter != mpEventMap->end() )
-            {
-                ++aIter;
-            }
-        }
 #endif
         delete mpEventMap;
         mpEventMap = nullptr;
