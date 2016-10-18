@@ -165,11 +165,6 @@ Atom RscLangEnum::AddLanguage( const char* pLang, RscNameTable& rNames )
     return nResult;
 }
 
-void RscTypCont::InitLangType()
-{
-    aLangType.Init( aNmTb );
-}
-
 RscEnum * RscTypCont::InitFieldUnitsType()
 {
     RscEnum * pFieldUnits;

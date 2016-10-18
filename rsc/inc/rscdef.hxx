@@ -136,7 +136,6 @@ protected:
     void        IncRef(){ nRefCount++; }
     void        DecRef();
     void        DefineToNumber();
-    void        SetName(const OString& rNewName) { m_aName = rNewName; }
 
     using StringNode::Search;
 public:

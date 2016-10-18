@@ -94,7 +94,6 @@ namespace rptui
 
         void Lock();
         void UnLock();
-        bool IsLocked() const;
 
         void Clear();
     private:

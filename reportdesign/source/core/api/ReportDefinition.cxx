@@ -2034,17 +2034,15 @@ uno::Reference< uno::XComponentContext > OReportDefinition::getContext()
     return m_aProps->m_xContext;
 }
 
-std::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel() const
-{
-    return m_pImpl->m_pReportModel;
-}
-
 std::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel(const uno::Reference< report::XReportDefinition >& _xReportDefinition)
 {
     std::shared_ptr<rptui::OReportModel> pReportModel;
     uno::Reference< lang::XUnoTunnel > xUT( _xReportDefinition, uno::UNO_QUERY );
     if( xUT.is() )
-        pReportModel = reinterpret_cast<OReportDefinition*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( OReportDefinition::getUnoTunnelImplementationId())))->getSdrModel();
+        pReportModel = reinterpret_cast<OReportDefinition*>(
+                           sal::static_int_cast<sal_uIntPtr>(
+                               xUT->getSomething( OReportDefinition::getUnoTunnelImplementationId()))
+                        )->m_pImpl->m_pReportModel;
     return pReportModel;
 }
 

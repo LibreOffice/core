@@ -154,7 +154,7 @@ void RscDefine::DefineToNumber()
 {
     delete pExp;
     pExp = nullptr;
-    SetName(OString::number(lId));
+    m_aName = OString::number(lId);
 }
 
 void RscDefine::Evaluate()

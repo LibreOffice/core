@@ -151,7 +151,7 @@ public:
         (void) _rEvent;
         ::osl::ClearableMutexGuard aGuard( m_pImpl->m_aMutex );
 
-        if ( IsLocked() )
+        if ( m_pImpl->m_nLocks != 0 )
             return;
 
         m_aFormattedFieldBeautifier.notifyPropertyChange(_rEvent);
@@ -171,12 +171,6 @@ void OXReportControllerObserver::UnLock()
 
     osl_atomic_decrement( &m_pImpl->m_nLocks );
 }
-
-bool OXReportControllerObserver::IsLocked() const
-{
-    return m_pImpl->m_nLocks != 0;
-}
-
 
 void OXReportControllerObserver::AddSection(const uno::Reference< report::XSection > & _xSection)
 {
