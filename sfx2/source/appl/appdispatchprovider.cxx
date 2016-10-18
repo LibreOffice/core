@@ -132,6 +132,8 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     const OUString& /*sTargetFrameName*/,
     FrameSearchFlags /*eSearchFlags*/ ) throw( RuntimeException, std::exception )
 {
+    SolarMutexGuard guard;
+
     sal_uInt16                  nId( 0 );
     bool                bMasterCommand( false );
     Reference < XDispatch > xDisp;
