@@ -326,6 +326,31 @@ template<typename T> inline Any toAny(T const & value);
 
 template<> inline Any toAny(Any const & value);
 
+#if defined LIBO_INTERNAL_ONLY
+
+/** Extract a value from an Any, if necessary.
+
+    The difference to operator >>= is that operator >>= cannot be called with an
+    Any as right-hand side (in LIBO_INTERNAL_ONLY), while fromAny just passes on
+    the given Any (and always succeeds) in the specialization for T = Any.
+
+    @tparam T  any type representing a UNO type
+
+    @param any  any Any value
+
+    @param value  a non-null pointer, receiving the extracted value if
+    extraction succeeded (and left unmodified otherwise)
+
+    @return  true iff extraction succeeded
+
+    @since LibreOffice 5.3
+*/
+template<typename T> inline bool fromAny(Any const & any, T * value);
+
+template<> inline bool fromAny(Any const & any, Any * value);
+
+#endif
+
 class BaseReference;
 
 /** Template binary <<= operator to set the value of an any.
@@ -423,8 +448,10 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value );
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const Type & value );
 // any
+#if !defined LIBO_INTERNAL_ONLY
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value );
+#endif
 // interface
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value );

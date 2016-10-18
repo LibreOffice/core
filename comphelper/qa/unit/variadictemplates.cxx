@@ -43,7 +43,7 @@ inline void extract(
             OUString( "No such argument available!"),
             xErrorContext, static_cast<sal_Int16>(nArg) );
     }
-    if (! (seq[nArg] >>= v)) {
+    if (! fromAny(seq[nArg], &v)) {
         OUStringBuffer buf;
         buf.append( "Cannot extract ANY { " );
         buf.append( seq[nArg].getValueType().getTypeName() );
