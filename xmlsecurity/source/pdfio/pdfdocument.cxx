@@ -17,6 +17,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
@@ -71,6 +72,10 @@ class PDFObjectElement : public PDFElement
     double m_fObjectValue;
     double m_fGenerationValue;
     std::map<OString, PDFElement*> m_aDictionary;
+    /// Position after the '<<' token.
+    sal_uInt64 m_nDictionaryOffset;
+    /// Length of the dictionary buffer till (before) the '<<' token.
+    sal_uInt64 m_nDictionaryLength;
 
 public:
     PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue);
@@ -79,12 +84,20 @@ public:
     PDFObjectElement* LookupObject(const OString& rDictionaryKey);
     double GetObjectValue() const;
     double GetGenerationValue() const;
+    void SetDictionaryOffset(sal_uInt64 nDictionaryOffset);
+    sal_uInt64 GetDictionaryOffset();
+    void SetDictionaryLength(sal_uInt64 nDictionaryLength);
+    sal_uInt64 GetDictionaryLength();
 };
 
 /// Dictionary object: a set key-value pairs.
 class PDFDictionaryElement : public PDFElement
 {
+    /// Offset after the '>>' token.
+    sal_uInt64 m_nLocation;
+
 public:
+    PDFDictionaryElement();
     bool Read(SvStream& rStream) override;
 
     static void Parse(const std::vector< std::unique_ptr<PDFElement> >& rElements, PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary);
@@ -94,8 +107,12 @@ public:
 /// End of a dictionary: '>>'.
 class PDFEndDictionaryElement : public PDFElement
 {
+    /// Offset before the '>>' token.
+    sal_uInt64 m_nLocation;
 public:
+    PDFEndDictionaryElement();
     bool Read(SvStream& rStream) override;
+    sal_uInt64 GetLocation() const;
 };
 
 /// Name object: a key string.
@@ -219,14 +236,124 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& /*xCertific
 {
     m_aEditBuffer.WriteCharPtr("\n");
 
+    // Write signature object.
+    sal_Int32 nSignatureId = m_aXRef.size();
+    sal_uInt64 nSignatureOffset = m_aEditBuffer.Tell();
+    m_aXRef.push_back(nSignatureOffset);
+    OStringBuffer aSigBuffer;
+    aSigBuffer.append(nSignatureId);
+    aSigBuffer.append(" 0 obj\n");
+    aSigBuffer.append("<</Contents <");
+    sal_Int64 nSignatureContentOffset = nSignatureOffset + aSigBuffer.getLength();
+    // Reserve space for the PKCS#7 object.
+    const int MAX_SIGNATURE_CONTENT_LENGTH = 50000;
+    OStringBuffer aContentFiller(MAX_SIGNATURE_CONTENT_LENGTH);
+    comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
+    aSigBuffer.append(aContentFiller.makeStringAndClear());
+    aSigBuffer.append(">\n/Type/Sig/SubFilter/adbe.pkcs7.detached");
+    // Byte range: we can write offset1-length1 and offset2 right now, will
+    // write length2 later.
+    aSigBuffer.append(" /ByteRange [ 0 ");
+    // -1 and +1 is the leading "<" and the trailing ">" around the hex string.
+    aSigBuffer.append(nSignatureContentOffset - 1);
+    aSigBuffer.append(" ");
+    aSigBuffer.append(nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
+    aSigBuffer.append(" ");
+    sal_uInt64 nSignatureLastByteRangeOffset = nSignatureOffset + aSigBuffer.getLength();
+    // We don't know how many bytes we need for the last ByteRange value, this
+    // should be enough.
+    OStringBuffer aByteRangeFiller;
+    comphelper::string::padToLength(aByteRangeFiller, 100, ' ');
+    aSigBuffer.append(aByteRangeFiller.makeStringAndClear());
+    // Finish the Sig obj.
+    aSigBuffer.append(" /Filter/Adobe.PPKMS");
+    aSigBuffer.append(" >>\nendobj\n\n");
+    m_aEditBuffer.WriteOString(aSigBuffer.toString());
+
     // Write appearance object.
-    size_t nAppearanceId = m_aXRef.size();
+    sal_Int32 nAppearanceId = m_aXRef.size();
     m_aXRef.push_back(m_aEditBuffer.Tell());
     m_aEditBuffer.WriteUInt32AsString(nAppearanceId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<</Type/XObject\n/Subtype/Form\n");
     m_aEditBuffer.WriteCharPtr("/BBox[0 0 0 0]\n/Length 0\n>>\n");
-    m_aEditBuffer.WriteCharPtr("stream\n\nendstream\nendobj\n");
+    m_aEditBuffer.WriteCharPtr("stream\n\nendstream\nendobj\n\n");
+
+    // Write the Annot object, references nSignatureId and nAppearanceId.
+    sal_Int32 nAnnotId = m_aXRef.size();
+    m_aXRef.push_back(m_aEditBuffer.Tell());
+    m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+    m_aEditBuffer.WriteCharPtr(" 0 obj\n");
+    m_aEditBuffer.WriteCharPtr("<</Type/Annot/Subtype/Widget/F 132\n");
+    m_aEditBuffer.WriteCharPtr("/Rect[0 0 0 0]\n");
+    m_aEditBuffer.WriteCharPtr("/FT/Sig\n");
+    std::vector<PDFObjectElement*> aPages = GetPages();
+    if (aPages.empty())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: found no pages");
+        return false;
+    }
+    PDFObjectElement* pFirstPage = aPages[0];
+    m_aEditBuffer.WriteCharPtr("/P ");
+    m_aEditBuffer.WriteUInt32AsString(pFirstPage->GetObjectValue());
+    m_aEditBuffer.WriteCharPtr(" 0 R\n");
+    m_aEditBuffer.WriteCharPtr("/T(Signature1)\n");
+    m_aEditBuffer.WriteCharPtr("/V ");
+    m_aEditBuffer.WriteUInt32AsString(nSignatureId);
+    m_aEditBuffer.WriteCharPtr(" 0 R\n");
+    m_aEditBuffer.WriteCharPtr("/DV ");
+    m_aEditBuffer.WriteUInt32AsString(nSignatureId);
+    m_aEditBuffer.WriteCharPtr(" 0 R\n");
+    m_aEditBuffer.WriteCharPtr("/AP<<\n/N ");
+    m_aEditBuffer.WriteUInt32AsString(nAppearanceId);
+    m_aEditBuffer.WriteCharPtr(" 0 R\n>>\n");
+    m_aEditBuffer.WriteCharPtr(">>\nendobj\n\n");
+
+    // Write the updated first page object, references nAnnotId.
+    sal_uInt32 nFirstPageId = pFirstPage->GetObjectValue();
+    if (nFirstPageId >= m_aXRef.size())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: invalid first page obj id");
+        return false;
+    }
+    m_aXRef[nFirstPageId] = m_aEditBuffer.Tell();
+    m_aEditBuffer.WriteUInt32AsString(nFirstPageId);
+    m_aEditBuffer.WriteCharPtr(" 0 obj\n");
+    m_aEditBuffer.WriteCharPtr("<<");
+    m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pFirstPage->GetDictionaryOffset(), pFirstPage->GetDictionaryLength());
+    m_aEditBuffer.WriteCharPtr("/Annots[");
+    m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+    m_aEditBuffer.WriteCharPtr(" 0 R]");
+    m_aEditBuffer.WriteCharPtr(">>\nendobj\n\n");
+
+    // Write the updated Catalog object, references nAnnotId.
+    auto pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"));
+    if (!pRoot)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: trailer has no root reference");
+        return false;
+    }
+    PDFObjectElement* pCatalog = pRoot->LookupObject();
+    if (!pCatalog)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: invalid catalog reference");
+        return false;
+    }
+    sal_uInt32 nCatalogId = pCatalog->GetObjectValue();
+    if (nCatalogId >= m_aXRef.size())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: invalid catalog obj id");
+        return false;
+    }
+    m_aXRef[nCatalogId] = m_aEditBuffer.Tell();
+    m_aEditBuffer.WriteUInt32AsString(nCatalogId);
+    m_aEditBuffer.WriteCharPtr(" 0 obj\n");
+    m_aEditBuffer.WriteCharPtr("<<");
+    m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pCatalog->GetDictionaryOffset(), pCatalog->GetDictionaryLength());
+    m_aEditBuffer.WriteCharPtr("/AcroForm<</Fields[\n");
+    m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+    m_aEditBuffer.WriteCharPtr(" 0 R\n]/SigFlags 3>>\n");
+    m_aEditBuffer.WriteCharPtr(">>\nendobj\n\n");
 
     // Write the xref table.
     sal_uInt64 nXRefOffset = m_aEditBuffer.Tell();
@@ -247,12 +374,6 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& /*xCertific
     }
 
     // Write the trailer.
-    auto pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"));
-    if (!pRoot)
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: trailer has no root reference");
-        return false;
-    }
     m_aEditBuffer.WriteCharPtr("trailer\n<</Size ");
     m_aEditBuffer.WriteUInt32AsString(m_aXRef.size());
     m_aEditBuffer.WriteCharPtr("/Root ");
@@ -290,6 +411,17 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& /*xCertific
     m_aEditBuffer.WriteCharPtr("startxref\n");
     m_aEditBuffer.WriteUInt32AsString(nXRefOffset);
     m_aEditBuffer.WriteCharPtr("\n%%EOF\n");
+
+    // Finalize the signature, now that we know the total file size.
+    // Calculate the length of the last byte range.
+    sal_uInt64 nFileEnd = m_aEditBuffer.Tell();
+    sal_Int64 nLastByteRangeLength = nFileEnd - (nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
+    // Write the length to the buffer.
+    m_aEditBuffer.Seek(nSignatureLastByteRangeOffset);
+    OStringBuffer aByteRangeBuffer;
+    aByteRangeBuffer.append(nLastByteRangeLength);
+    aByteRangeBuffer.append(" ]");
+    m_aEditBuffer.WriteOString(aByteRangeBuffer.toString());
 
     return true;
 }
@@ -1227,7 +1359,9 @@ double PDFNumberElement::GetValue() const
 PDFObjectElement::PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue)
     : m_rDoc(rDoc),
       m_fObjectValue(fObjectValue),
-      m_fGenerationValue(fGenerationValue)
+      m_fGenerationValue(fGenerationValue),
+      m_nDictionaryOffset(0),
+      m_nDictionaryLength(0)
 {
 }
 
@@ -1237,10 +1371,17 @@ bool PDFObjectElement::Read(SvStream& /*rStream*/)
     return true;
 }
 
+PDFDictionaryElement::PDFDictionaryElement()
+    : m_nLocation(0)
+{
+}
+
 void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> >& rElements, PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary)
 {
     if (!rDictionary.empty())
         return;
+
+    auto pThisObject = dynamic_cast<PDFObjectElement*>(pThis);
 
     // Find out where the dictionary for this object starts.
     size_t nIndex = 0;
@@ -1257,8 +1398,33 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
     std::vector<PDFNumberElement*> aNumbers;
     // The array value we're in -- if any.
     PDFArrayElement* pArray = nullptr;
+    sal_uInt64 nDictionaryOffset = 0;
+    int nDictionaryDepth = 0;
     for (size_t i = nIndex; i < rElements.size(); ++i)
     {
+        // Dictionary tokens can be nested, track enter/leave.
+        if (auto pDictionary = dynamic_cast<PDFDictionaryElement*>(rElements[i].get()))
+        {
+            if (++nDictionaryDepth == 1)
+            {
+                // First dictionary start, track start offset.
+                nDictionaryOffset = pDictionary->m_nLocation;
+                if (pThisObject)
+                    pThisObject->SetDictionaryOffset(nDictionaryOffset);
+            }
+        }
+
+        if (auto pEndDictionary = dynamic_cast<PDFEndDictionaryElement*>(rElements[i].get()))
+        {
+            if (--nDictionaryDepth == 0)
+            {
+                // Last dictionary end, track length and stop parsing.
+                if (pThisObject)
+                    pThisObject->SetDictionaryLength(pEndDictionary->GetLocation() - nDictionaryOffset);
+                break;
+            }
+        }
+
         auto pName = dynamic_cast<PDFNameElement*>(rElements[i].get());
         if (pName)
         {
@@ -1343,9 +1509,6 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
             continue;
         }
 
-        if (dynamic_cast<PDFEndDictionaryElement*>(rElements[i].get()))
-            break;
-
         if (dynamic_cast<PDFEndObjectElement*>(rElements[i].get()))
             break;
 
@@ -1401,6 +1564,32 @@ double PDFObjectElement::GetObjectValue() const
 double PDFObjectElement::GetGenerationValue() const
 {
     return m_fGenerationValue;
+}
+
+void PDFObjectElement::SetDictionaryOffset(sal_uInt64 nDictionaryOffset)
+{
+    m_nDictionaryOffset = nDictionaryOffset;
+}
+
+sal_uInt64 PDFObjectElement::GetDictionaryOffset()
+{
+    if (m_aDictionary.empty())
+        PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
+
+    return m_nDictionaryOffset;
+}
+
+void PDFObjectElement::SetDictionaryLength(sal_uInt64 nDictionaryLength)
+{
+    m_nDictionaryLength = nDictionaryLength;
+}
+
+sal_uInt64 PDFObjectElement::GetDictionaryLength()
+{
+    if (m_aDictionary.empty())
+        PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
+
+    return m_nDictionaryLength;
 }
 
 PDFReferenceElement::PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue)
@@ -1529,13 +1718,26 @@ bool PDFDictionaryElement::Read(SvStream& rStream)
         return false;
     }
 
+    m_nLocation = rStream.Tell();
+
     SAL_INFO("xmlsecurity.pdfio", "PDFDictionaryElement::Read: '<<'");
 
     return true;
 }
 
+PDFEndDictionaryElement::PDFEndDictionaryElement()
+    : m_nLocation(0)
+{
+}
+
+sal_uInt64 PDFEndDictionaryElement::GetLocation() const
+{
+    return m_nLocation;
+}
+
 bool PDFEndDictionaryElement::Read(SvStream& rStream)
 {
+    m_nLocation = rStream.Tell();
     char ch;
     rStream.ReadChar(ch);
     if (ch != '>')
