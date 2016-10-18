@@ -1885,7 +1885,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
             Reference< XInterface > xComListener;
 
             SbxBase* pObj = refVal->GetObject();
-            SbUnoObject* pUnoObj = (pObj != nullptr) ? dynamic_cast<SbUnoObject*>( pObj ) : nullptr;
+            SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>( pObj );
             if( pUnoObj != nullptr )
             {
                 Any aControlAny = pUnoObj->getUnoAny();
@@ -3189,10 +3189,12 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
     SbxDataType t = refVal->GetType();
     SbxVariable* pVal = refVal.get();
     // we don't know the type of uno properties that are (maybevoid)
-    if ( t == SbxEMPTY && nullptr != dynamic_cast<const SbUnoProperty*>( refVal.get() ) )
+    if ( t == SbxEMPTY )
     {
-        SbUnoProperty* pProp = static_cast<SbUnoProperty*>(pVal);
-        t = pProp->getRealType();
+        if ( auto pProp = dynamic_cast<SbUnoProperty*>( refVal.get() ) )
+        {
+            t = pProp->getRealType();
+        }
     }
     if( t == SbxOBJECT )
     {

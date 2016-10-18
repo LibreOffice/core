@@ -1011,9 +1011,8 @@ bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) con
     bool bLoaded = false;
     if( xNew.Is() )
     {
-        if( nullptr != dynamic_cast<const StarBASIC*>( xNew.get() ) )
+        if( auto pNew = dynamic_cast<StarBASIC*>( xNew.get() ) )
         {
-            StarBASIC* pNew = static_cast<StarBASIC*>( xNew.get() );
             // Use the Parent of the old BASICs
             if( rOldBasic.Is() )
             {
