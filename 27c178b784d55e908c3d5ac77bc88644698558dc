@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_c2734fb3",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 4675,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-10-18T13:40:02Z",
+      "side": 1,
+      "message": "Yes \u0027Documentation\u0027 is a word that would encompass both help and user guides. So i\u0027ve suggested in the bug report we use \u0027User Guides\u0027 to link to this non-help documentation.",
+      "parentUuid": "7a77a97e_2cd6bcc5",
+      "revId": "27c178b784d55e908c3d5ac77bc88644698558dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_6cd8b4f0",
         "filename": "sfx2/source/appl/appserv.cxx",
         "patchSetId": 2
