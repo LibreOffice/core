@@ -1242,6 +1242,11 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                             pNewArr->AddOpCode( ocSep );
                             pNewArr->AddDouble( 1.0 );      // 3rd, standard deviation = 1.0
                         }
+                        if (mnCurArg <= 2)
+                        {
+                            pNewArr->AddOpCode( ocSep );
+                            pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=true()
+                        }
                         break;
 
                     case ocRound:
@@ -1508,11 +1513,26 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
         }
         if (bAdd)
         {
-            if ( ( pCur->GetOpCode() == ocCeil || pCur->GetOpCode() == ocFloor ) &&
+            if ( ( pCur->GetOpCode() == ocCeil || pCur->GetOpCode() == ocFloor || pCur->GetOpCode() == ocLogNormDist ) &&
                  rConv.getConvention() == MissingConvention::FORMULA_MISSING_CONVENTION_OOXML )
             {
-                FormulaToken *pToken = new FormulaToken( svByte,
-                        ( pCur->GetOpCode() == ocCeil ? ocCeil_Math : ocFloor_Math ) );
+                OpCode eOp;
+                switch ( pCur->GetOpCode() )
+                {
+                    case ocCeil :
+                        eOp = ocCeil_Math;
+                        break;
+                    case ocFloor :
+                        eOp = ocFloor_Math;
+                        break;
+                    case ocLogNormDist :
+                        eOp = ocLogNormDist_MS;
+                        break;
+                    default :
+                        eOp = ocNone;
+                        break;
+                }
+                FormulaToken *pToken = new FormulaToken( svByte, eOp );
                 pNewArr->Add( pToken );
             }
             else
