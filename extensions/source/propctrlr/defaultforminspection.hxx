@@ -66,7 +66,6 @@ namespace pcr
 
     protected:
         // Service constructors
-        void    createDefault();
         void    createWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines );
     };
 

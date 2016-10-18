@@ -243,9 +243,6 @@ public:
     MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pDatMan);
     virtual ~MappingDialog_Impl() override;
     virtual void dispose() override;
-
-    void    SetModified() {bModified = true;}
-
 };
 
 static sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
@@ -433,7 +430,7 @@ IMPL_LINK(MappingDialog_Impl, ListBoxSelectHdl, ListBox&, rListBox, void)
                 aListBoxe->SelectEntryPos(0);
         }
     }
-    SetModified();
+    bModified = true;
 }
 
 IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl, Button*, void)

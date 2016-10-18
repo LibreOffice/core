@@ -320,7 +320,7 @@ namespace pcr
         StlSyntaxSequence< Any > arguments( _arguments );
         if ( arguments.empty() )
         {   // constructor: "createDefault()"
-            createDefault();
+            m_bConstructed = true;
             return;
         }
 
@@ -334,12 +334,6 @@ namespace pcr
         }
 
         throw IllegalArgumentException( OUString(), *this, 0 );
-    }
-
-
-    void OPropertyBrowserController::createDefault()
-    {
-        m_bConstructed = true;
     }
 
 

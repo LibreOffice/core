@@ -56,7 +56,6 @@ namespace logging
         );
 
     public:
-        bool    getIsInitialized() const { return m_bInitialized; }
         void    setIsInitialized() { m_bInitialized = true; }
 
         bool    getEncoding(        OUString& _out_rEncoding ) const;

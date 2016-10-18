@@ -131,8 +131,6 @@ namespace editeng
     public:
                 void        DoDocumentConversion( );
 
-        inline  bool        IsByCharacter( ) const { return m_bByCharacter; }
-
         inline  bool        IsValid() const { return m_xConverter.is(); }
 
         inline LanguageType GetSourceLang() const   { return m_nSourceLang; }
@@ -328,7 +326,7 @@ namespace editeng
 
         sal_Int32 nLength = m_sCurrentPortion.getLength() - nStartSearch;
         m_nCurrentConversionType = implGetConversionType();
-        m_nCurrentConversionOption = IsByCharacter() ? CHARACTER_BY_CHARACTER : css::i18n::TextConversionOption::NONE;
+        m_nCurrentConversionOption = m_bByCharacter ? CHARACTER_BY_CHARACTER : css::i18n::TextConversionOption::NONE;
         if( m_bIgnorePostPositionalWord )
             m_nCurrentConversionOption = m_nCurrentConversionOption | IGNORE_POST_POSITIONAL_WORD;
 
