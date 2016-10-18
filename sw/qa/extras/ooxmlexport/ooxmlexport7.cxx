@@ -1126,6 +1126,13 @@ DECLARE_OOXMLEXPORT_TEST(testFlipAndRotateCustomShape, "flip_and_rotate.odt")
 #endif
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf95031, "tdf95031.docx")
+{
+    // This was 494, in-numbering paragraph's automating spacing was handled as visible spacing, while it should not.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(3), "ParaTopMargin"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

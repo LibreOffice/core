@@ -614,6 +614,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             if  (nIntValue) // If auto spacing is set, then only store set value in InteropGrabBag
             {
+                if (m_pImpl->GetTopContext()->isSet(PROP_NUMBERING_RULES))
+                    // Numbering is set -> auto space is 0.
+                    default_spacing = 0;
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ) );
             }
             else
@@ -636,6 +639,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             if  (nIntValue) // If auto spacing is set, then only store set value in InteropGrabBag
             {
+                if (m_pImpl->GetTopContext()->isSet(PROP_NUMBERING_RULES))
+                    // Numbering is set -> auto space is 0.
+                    default_spacing = 0;
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ) );
             }
             else
