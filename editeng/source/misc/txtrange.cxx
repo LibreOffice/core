@@ -139,8 +139,6 @@ public:
     void Concat( const tools::PolyPolygon* pPoly );
     // inlines
     void NoteLast() { if( bMultiple ) NoteRange( nAct == nFirst ); }
-    void SetClosed( const bool bNew ){ bClosed = bNew; }
-    bool IsClosed() const { return bClosed; }
     void SetConcat( const bool bNew ){ bConcat = bNew; }
     bool IsConcat() const { return bConcat; }
 };
@@ -311,7 +309,7 @@ void SvxBoundArgs::Calc( const tools::PolyPolygon& rPoly )
         if( nCount )
         {
             const Point& rNull = rPol[ 0 ];
-            SetClosed( IsConcat() || ( rNull == rPol[ nCount - 1 ] ) );
+            bClosed = IsConcat() || ( rNull == rPol[ nCount - 1 ] );
             nLast = Area( rNull );
             if( nLast & 12 )
             {
@@ -393,7 +391,7 @@ void SvxBoundArgs::Calc( const tools::PolyPolygon& rPoly )
                             NoteFarPoint( A(rNext), B(rNext)-nUpper, nUpDiff );
                     }
                     nLast = nNext;
-                    if( ++nIdx == nCount && !IsClosed() )
+                    if( ++nIdx == nCount && !bClosed )
                     {
                         if( !( nNext & 12 ) )
                             NoteLast();

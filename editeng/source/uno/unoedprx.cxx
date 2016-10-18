@@ -103,7 +103,6 @@ public:
     void SetBulletOffset( sal_Int32 nOffset, sal_Int32 nLen ) { mnBulletOffset = nOffset; mnBulletLen = nLen; }
     sal_Int32 GetBulletOffset() const { return mnBulletOffset; }
     sal_Int32 GetBulletLen() const { return mnBulletLen; }
-    void AreInBullet() { mbInBullet = true; }
     bool InBullet() const { return mbInBullet; }
 
     /// returns false if the given range is non-editable (e.g. contains bullets or _parts_ of fields)
@@ -245,7 +244,7 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
 
         if( nIndex < nBulletLen )
         {
-            AreInBullet();
+            mbInBullet = true;
             SetBulletOffset( nIndex, nBulletLen );
             mnEEIndex = 0;
             return;

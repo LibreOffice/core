@@ -147,9 +147,6 @@ namespace pcr
     protected:
         virtual ~CachedInspectorUI() override;
 
-        /// determines whether the instance is already disposed
-        inline bool isDisposed() const { return m_bDisposed; }
-
         /// throws an exception if the component is already disposed
         void checkDisposed() const;
 
@@ -207,7 +204,7 @@ namespace pcr
 
     void CachedInspectorUI::checkDisposed() const
     {
-        if ( isDisposed() )
+        if (m_bDisposed)
             throw DisposedException();
     }
 

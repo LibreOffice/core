@@ -388,7 +388,6 @@ namespace pcr
 
     private:
         // constructors
-        void    createDefault();
         void    createWithModel( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _rxModel );
     };
 

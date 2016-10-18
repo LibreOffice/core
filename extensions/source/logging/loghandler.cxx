@@ -75,7 +75,7 @@ namespace logging
     {
         m_rMutex.acquire();
 
-        if ( !getIsInitialized() )
+        if ( !m_bInitialized )
             throw DisposedException("component not initialized" );
 
         if ( m_rBHelper.bDisposed )

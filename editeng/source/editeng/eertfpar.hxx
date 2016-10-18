@@ -63,8 +63,6 @@ public:
 
     virtual SvParserState   CallParser() override;
 
-    vcl::Font       GetDefFont()                        { return GetFont( nDefFont ); }
-
     EditPaM         GetCurPaM() const                   { return aCurSel.Max(); }
 };
 

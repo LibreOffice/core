@@ -107,8 +107,6 @@ namespace pcr
                                     virtual ~OBrowserListBox() override;
         virtual void                dispose() override;
 
-        void                        UpdateAll();
-
         void                        ActivateListBox( bool _bActive );
 
         sal_uInt16                  CalcVisibleLines();

@@ -325,7 +325,6 @@ public:
 
     vcl::Window*    GetWindow() const           { return pOutWin; }
 
-    EESelectionMode GetSelectionMode() const    { return eSelectionMode; }
     void            SetSelectionMode( EESelectionMode eMode );
 
     inline const Pointer&   GetPointer();

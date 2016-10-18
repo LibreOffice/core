@@ -623,12 +623,6 @@ namespace pcr
     }
 
 
-    void OBrowserListBox::UpdateAll()
-    {
-        Resize();
-    }
-
-
     void OBrowserListBox::DisableUpdate()
     {
         m_bUpdate = false;
@@ -638,7 +632,7 @@ namespace pcr
     void OBrowserListBox::EnableUpdate()
     {
         m_bUpdate = true;
-        UpdateAll();
+        Resize();
     }
 
 

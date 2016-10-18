@@ -196,7 +196,7 @@ void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild)
 
 void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, OutputDevice* pTargetDevice )
 {
-    if ( GetSelectionMode() == EE_SELMODE_HIDDEN )
+    if ( eSelectionMode == EE_SELMODE_HIDDEN )
         return;
 
     // It must be ensured before rendering the selection, that the contents of
