@@ -1,0 +1,10 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+1: Heiko Tietze <tietze.heiko@googlemail.com>
+Verified+1: Yousuf Philips <philipz85@hotmail.com>
+Code-Review+2: Björn Michaelsen <bjoern.michaelsen@canonical.com>
+Code-Review+2: Samuel Mehrbrodt <Samuel.Mehrbrodt@cib.de>
+Submitted-by: Samuel Mehrbrodt <Samuel.Mehrbrodt@cib.de>
+Submitted-at: Tue, 18 Oct 2016 12:52:04 +0000
+Reviewed-on: https://gerrit.libreoffice.org/29537
+Project: core
+Branch: refs/heads/master
