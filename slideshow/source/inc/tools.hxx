@@ -316,7 +316,7 @@ namespace slideshow
             try {
                 const css::uno::Any& a(
                     xPropSet->getPropertyValue( propName ) );
-                bool const bRet = (a >>= rValue);
+                bool const bRet = css::uno::fromAny(a, &rValue);
 #if OSL_DEBUG_LEVEL > 0
                 if( !bRet )
                     OSL_TRACE( "%s: while retrieving property %s, cannot extract Any of type %s\n",

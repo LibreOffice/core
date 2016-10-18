@@ -94,6 +94,10 @@ class Request
             return m_lArguments.getUnpackedValueOrDefault(sName, aDefault);
         }
 
+        css::uno::Any getValue(OUString const & key) const
+        {
+            return m_lArguments.getValue(key);
+        }
 
         void wait(::sal_Int32 nMilliSeconds = WAIT_INFINITE);
 

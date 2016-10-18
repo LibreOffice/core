@@ -1055,7 +1055,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
 {
     ::sal_Int16   nId     = rRequest->getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID    );
     ::sal_Int16   nAction = rRequest->getArgumentOrDefault(PROP_CONTROL_ACTION, INVALID_CONTROL_ACTION);
-    css::uno::Any aValue  = rRequest->getArgumentOrDefault(PROP_CONTROL_VALUE , css::uno::Any()       );
+    css::uno::Any aValue  = rRequest->getValue(PROP_CONTROL_VALUE);
 
     // don't check for right values here ...
     // most parameters are optional !

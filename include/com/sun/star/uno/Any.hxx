@@ -203,6 +203,10 @@ inline bool Any::has() const
         cpp_release );
 }
 
+#if defined LIBO_INTERNAL_ONLY
+template<> bool Any::has<Any>() const = delete;
+#endif
+
 inline bool Any::operator == ( const Any & rAny ) const
 {
     return ::uno_type_equalData(
@@ -232,6 +236,21 @@ template<> Any makeAny(sal_uInt16 const & value)
 template<typename T> Any toAny(T const & value) { return makeAny(value); }
 
 template<> Any toAny(Any const & value) { return value; }
+
+#if defined LIBO_INTERNAL_ONLY
+
+template<typename T> bool fromAny(Any const & any, T * value) {
+    assert(value != nullptr);
+    return any >>= *value;
+}
+
+template<> bool fromAny(Any const & any, Any * value) {
+    assert(value != nullptr);
+    *value = any;
+    return true;
+}
+
+#endif
 
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value )
@@ -264,6 +283,10 @@ inline void SAL_CALL operator <<= ( Any & rAny, const rtl::OUStringConcat< C1, C
         &rAny, const_cast< rtl::OUString * >( &str ), rType.getTypeLibType(),
         cpp_acquire, cpp_release );
 }
+#endif
+
+#if defined LIBO_INTERNAL_ONLY
+template<> void SAL_CALL operator <<=(Any &, Any const &) = delete;
 #endif
 
 template< class C >
@@ -566,6 +589,9 @@ inline bool SAL_CALL operator == ( const Any & rAny, const Type & value )
 }
 // any
 
+#if defined LIBO_INTERNAL_ONLY
+template<> bool SAL_CALL operator >>=(Any const &, Any &) = delete;
+#else
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value )
 {
@@ -577,6 +603,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value )
     }
     return true;
 }
+#endif
 // interface
 
 template<>
@@ -622,6 +649,10 @@ T Any::get() const
     }
     return value;
 }
+
+#if defined LIBO_INTERNAL_ONLY
+template<> Any Any::get() const = delete;
+#endif
 
 /**
    Support for Any in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO
