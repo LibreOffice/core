@@ -239,7 +239,12 @@ void Menu::Deactivate()
     {
         MenuItemData* pData = pItemList->GetDataFromPos( --n );
         if ( pData->bIsTemporary )
+        {
+            if ( ImplGetSalMenu() )
+                ImplGetSalMenu()->RemoveItem( n );
+
             pItemList->Remove( n );
+        }
     }
 
     bInCallback = true;
