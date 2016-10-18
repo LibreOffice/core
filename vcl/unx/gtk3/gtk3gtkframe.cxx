@@ -1240,7 +1240,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         }
         else if( (nStyle & SalFrameStyleFlags::TOOLWINDOW ) )
         {
-            eType = GDK_WINDOW_TYPE_HINT_UTILITY;
+            eType = GDK_WINDOW_TYPE_HINT_DIALOG;
             gtk_window_set_skip_taskbar_hint( GTK_WINDOW(m_pWindow), true );
         }
         else if( (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) )
