@@ -60,11 +60,6 @@ namespace comphelper
     {
     private:
         // internal data
-        OUString                maInitialBaseURL;
-        OUString                maUserConfigBaseURL;
-        OUString                maRegModName;
-        OUString                maExt;
-
         std::set< OUString >    maDirs;
         std::set< std::pair< OUString, OUString > > maFiles;
 
@@ -84,8 +79,24 @@ namespace comphelper
         // after _exit()
         static bool         mbExitWasCalled;
 
+        // internal detector if SafeModeName dir exists
+        static bool         mbSafeModeDirExists;
+
         // internal upper limit (max) of allowed backups
         static sal_uInt16   mnMaxAllowedBackups;
+
+        // path to User's configuration directory and derived strings
+        static OUString     maInitialBaseURL;
+        static OUString     maUserConfigBaseURL;
+        static OUString     maUserConfigWorkURL;
+        static OUString     maRegModName;
+        static OUString     maExt;
+
+        // get path to User's configuration directory (created on-demand)
+        static const OUString& getInitialBaseURL();
+
+        // the name of the SafeMode directory for temporary processing
+        static const OUString& getSafeModeName();
 
     public:
         /** Constructor to handle Backups of the given file, will internally
@@ -97,6 +108,11 @@ namespace comphelper
         // allow to set static global flag when app had to call _exit()
         static void setExitWasCalled();
         static bool getExitWasCalled();
+
+        // This call initializes the state of the UserDirectory as needed, it may
+        // initialize to SafeMode configuration or return from it by moving files
+        // in that directory
+        static void reactOnSafeMode(bool bSafeMode);
 
         /** tries to create a new backup, if there is none yet, or if the
          *  last differs from the base file. It will then put a new verion
@@ -142,16 +158,16 @@ namespace comphelper
 
         /** resets User-Customizations like Settings and UserInterface modifications
         */
-        bool isTryResetCustomizationsPossible();
-        void tryResetCustomizations();
+        static bool isTryResetCustomizationsPossible();
+        static void tryResetCustomizations();
 
         /** resets the whole UserProfile
         */
-        void tryResetUserProfile();
+        static void tryResetUserProfile();
 
     private:
         // internal helper methods
-        const rtl::OUString getPackURL() const;
+        static const rtl::OUString getPackURL();
 
         // file push helpers
         bool tryPush_Files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, const OUString& rSourceURL, const OUString& rTargetURL);
