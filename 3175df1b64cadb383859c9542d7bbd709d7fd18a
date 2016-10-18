@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_0712b962",
+        "filename": "sd/source/ui/view/drviews5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-10-18T13:18:34Z",
+      "side": 1,
+      "message": "So this was my very first solution as well (when I implemented the fix for tdf#87905). However I decided against it, since reading configuration on every repaint brings some performance penalty\n\nSo I\u0027d fix this in a different way, if at all possible, in particular add some \"configuration changed\" listener and do invalidate and repaint only iff the colour config changes\n\nHowever, I don\u0027t know yet where to add such a listener ...",
+      "revId": "3175df1b64cadb383859c9542d7bbd709d7fd18a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
