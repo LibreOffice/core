@@ -105,17 +105,8 @@ LwpObjectFactory::LwpObjectFactory(LwpSvStream* pSvStream)
 
 LwpObjectFactory::~LwpObjectFactory()
 {
-    if(!m_IdToObjList.empty())
-        ClearObjectMap();
 }
 
-/**
- * @descr       clear object map and delete all objects
-*/
-void LwpObjectFactory::ClearObjectMap()
-{
-    m_IdToObjList.clear();
-}
 /**
  * @descr       read the index manager
 */

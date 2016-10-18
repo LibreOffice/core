@@ -77,7 +77,6 @@ public:
     virtual ~LwpFribCHBlock() override {}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpCHBlkMarker* GetMarker();
-    sal_uInt8 GetType(){return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
     void XFConvert(XFContentContainer* pXFPara,LwpStory* pStory);
 private:
@@ -151,7 +150,6 @@ public:
     virtual ~LwpFribRubyMarker() override {}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpRubyMarker* GetMarker();
-    sal_uInt8 GetType(){return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
     void XFConvert(XFContentContainer* pXFPara);
     void RegisterStyle(LwpFoundry* pFoundry) override;

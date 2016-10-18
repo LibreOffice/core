@@ -65,12 +65,6 @@ XFFontFactory::XFFontFactory()
 
 XFFontFactory::~XFFontFactory()
 {
-    Reset();
-}
-
-void XFFontFactory::Reset()
-{
-    s_aFonts.clear();
 }
 
 void XFFontFactory::AddFont(rtl::Reference<XFFont> const & pFont)

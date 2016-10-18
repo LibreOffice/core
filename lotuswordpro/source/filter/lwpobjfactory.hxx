@@ -105,7 +105,6 @@ private:
     typedef std::unordered_map<LwpObjectID, rtl::Reference<LwpObject>, hashFunc, eqFunc> LwpIdToObjMap;
     LwpIdToObjMap m_IdToObjList;
     LwpIndexManager m_IndexMgr;
-    void ClearObjectMap();
 
 protected:
     rtl::Reference<LwpObject> FindObject(const LwpObjectID &objID);

@@ -81,12 +81,6 @@ public:
     ~XFFontFactory();
     XFFontFactory(const XFFontFactory&){}
 
-public:
-    /**
-     * @descr   Clear all fonts, this is called when load a file.
-     */
-    void    Reset();
-
 private:
     /**
      * @descr   Add a font. if there exist a font with same properties with pFont, them the font object

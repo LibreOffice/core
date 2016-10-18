@@ -273,7 +273,6 @@ public: // Internal methods
 
     inline pCBenValueSegment GetNextValueSegment(pCBenValueSegment
       pCurrValueSegment);
-    inline pLtcBenContainer GetContainer();
     CUtList& GetValueSegments() { return cValueSegments; }
 
 private: // Data
@@ -337,8 +336,6 @@ inline pCBenValueSegment CBenValue::GetNextValueSegment(pCBenValueSegment
   pCurrValueSegment)
 { return static_cast<pCBenValueSegment>( cValueSegments.GetNextOrNULL(pCurrValueSegment) ); }
 
-inline pLtcBenContainer CBenValue::GetContainer()
-{ return GetProperty()->GetContainer(); }
 
 class CBenNamedObject : public CBenObject
 {

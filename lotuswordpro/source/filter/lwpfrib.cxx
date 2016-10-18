@@ -204,8 +204,8 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
         newFrib->SetModifiers(pModInfo);
     }
 
-    newFrib->SetType(fribtype);
-    newFrib->SetEditor(editID);
+    newFrib->m_nFribType = fribtype;
+    newFrib->m_nEditor = editID;
     newFrib->Read(pObjStrm, friblen);
     return newFrib;
 }
