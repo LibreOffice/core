@@ -3421,28 +3421,36 @@ bool adjustDoubleRefInName(
     {
         if (rCxt.mnRowDelta > 0 && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel())
         {
-            // Check and see if we should expand the range at the top.
-            ScRange aSelectedRange = getSelectedRange(rCxt);
             ScRange aAbs = rRef.toAbs(rPos);
-            if (aSelectedRange.Intersects(aAbs))
+            // Expand only if at least two rows tall.
+            if (aAbs.aStart.Row() < aAbs.aEnd.Row())
             {
-                // Selection intersects the referenced range. Only expand the
-                // bottom position.
-                rRef.IncEndRowSticky(rCxt.mnRowDelta, rPos);
-                return true;
+                // Check and see if we should expand the range at the top.
+                ScRange aSelectedRange = getSelectedRange(rCxt);
+                if (aSelectedRange.Intersects(aAbs))
+                {
+                    // Selection intersects the referenced range. Only expand the
+                    // bottom position.
+                    rRef.IncEndRowSticky(rCxt.mnRowDelta, rPos);
+                    return true;
+                }
             }
         }
         if (rCxt.mnColDelta > 0 && !rRef.Ref1.IsColRel() && !rRef.Ref2.IsColRel())
         {
-            // Check and see if we should expand the range at the left.
-            ScRange aSelectedRange = getSelectedRange(rCxt);
             ScRange aAbs = rRef.toAbs(rPos);
-            if (aSelectedRange.Intersects(aAbs))
+            // Expand only if at least two columns wide.
+            if (aAbs.aStart.Col() < aAbs.aEnd.Col())
             {
-                // Selection intersects the referenced range. Only expand the
-                // right position.
-                rRef.IncEndColSticky(rCxt.mnColDelta, rPos);
-                return true;
+                // Check and see if we should expand the range at the left.
+                ScRange aSelectedRange = getSelectedRange(rCxt);
+                if (aSelectedRange.Intersects(aAbs))
+                {
+                    // Selection intersects the referenced range. Only expand the
+                    // right position.
+                    rRef.IncEndColSticky(rCxt.mnColDelta, rPos);
+                    return true;
+                }
             }
         }
     }
@@ -3666,8 +3674,11 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                         {
                             // Check if we could expand range reference by the bottom
                             // edge. For named expressions, we only expand absolute
-                            // references.
-                            if (!rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel() && aAbs.aEnd.Row()+1 == rCxt.maRange.aStart.Row())
+                            // references. Reference must be at least two rows
+                            // tall.
+                            if (!rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel() &&
+                                    aAbs.aStart.Row() < aAbs.aEnd.Row() &&
+                                    aAbs.aEnd.Row()+1 == rCxt.maRange.aStart.Row())
                             {
                                 // Expand by the bottom edge.
                                 rRef.Ref2.IncRow(rCxt.mnRowDelta);
@@ -3678,8 +3689,11 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                         {
                             // Check if we could expand range reference by the right
                             // edge. For named expressions, we only expand absolute
-                            // references.
-                            if (!rRef.Ref1.IsColRel() && !rRef.Ref2.IsColRel() && aAbs.aEnd.Col()+1 == rCxt.maRange.aStart.Col())
+                            // references. Reference must be at least two
+                            // columns wide.
+                            if (!rRef.Ref1.IsColRel() && !rRef.Ref2.IsColRel() &&
+                                    aAbs.aStart.Col() < aAbs.aEnd.Col() &&
+                                    aAbs.aEnd.Col()+1 == rCxt.maRange.aStart.Col())
                             {
                                 // Expand by the right edge.
                                 rRef.Ref2.IncCol(rCxt.mnColDelta);
