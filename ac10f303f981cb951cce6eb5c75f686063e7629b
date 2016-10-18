@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_e2edab26",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-10-18T14:39:15Z",
+      "side": 1,
+      "message": "\u0027?\u0026\u0027 -\u003e you can remove the \u0027\u0026\u0027.\nThe \u0027?\u0027 starts the first parameter, the \u0027\u0026\u0027 separates the following parameters",
+      "revId": "ac10f303f981cb951cce6eb5c75f686063e7629b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
