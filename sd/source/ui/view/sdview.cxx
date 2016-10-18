@@ -1207,24 +1207,25 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
     /* Style Sheet handling */
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( GetTextEditObject() );
     SdrOutliner* pOutliner = GetTextEditOutliner();
-    if( pOutliner && pTextObj && pTextObj->GetPage() )
+    if( !pOutliner || !pTextObj || !pTextObj->GetPage() )
+        return;
+
+    SdPage* pPage = static_cast< SdPage* >( pTextObj->GetPage() );
+    const PresObjKind eKind = pPage->GetPresObjKind(pTextObj);
+
+    // outline kinds are taken care of in Outliner::ImplSetLevelDependendStyleSheet
+    if( eKind == PRESOBJ_OUTLINE )
+        return;
+
+    SfxStyleSheet* pStyleSheet = nullptr;
+    if( eKind != PRESOBJ_NONE )
+        pStyleSheet = pPage->GetStyleSheetForPresObj(eKind);
+    else
+         pStyleSheet = pTextObj->GetStyleSheet();
+    // just put the object style on each new paragraph
+    for ( sal_Int32 nPara = pInfo->nStartPara; nPara <= pInfo->nEndPara; nPara++ )
     {
-        SdPage* pPage = static_cast< SdPage* >( pTextObj->GetPage() );
-        const PresObjKind eKind = pPage->GetPresObjKind(pTextObj);
-        // outline kinds are taken care of in Outliner::ImplSetLevelDependendStyleSheet
-        if( eKind != PRESOBJ_OUTLINE )
-        {
-            SfxStyleSheet* pStyleSheet = nullptr;
-            if( eKind != PRESOBJ_NONE )
-                pStyleSheet = pPage->GetStyleSheetForPresObj(eKind);
-            else
-                pStyleSheet = pTextObj->GetStyleSheet();
-            // just put the object style on each new paragraph
-            for ( sal_Int32 nPara = pInfo->nStartPara; nPara <= pInfo->nEndPara; nPara++ )
-            {
-                pOutliner->SetStyleSheet( nPara, pStyleSheet );
-            }
-        }
+        pOutliner->SetStyleSheet( nPara, pStyleSheet );
     }
 }
 
