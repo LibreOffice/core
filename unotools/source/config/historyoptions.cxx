@@ -306,10 +306,10 @@ Sequence< Sequence<PropertyValue> > SvtHistoryOptions_Impl::GetList(EHistoryType
             xItemList->getByName(sUrl) >>= xSet;
             seqProperties[s_nOffsetURL  ].Value <<= sUrl;
 
-            xSet->getPropertyValue(s_sFilter)   >>= seqProperties[s_nOffsetFilter   ].Value;
-            xSet->getPropertyValue(s_sTitle)    >>= seqProperties[s_nOffsetTitle    ].Value;
-            xSet->getPropertyValue(s_sPassword) >>= seqProperties[s_nOffsetPassword ].Value;
-            xSet->getPropertyValue(s_sThumbnail)>>= seqProperties[s_nOffsetThumbnail].Value;
+            seqProperties[s_nOffsetFilter   ].Value = xSet->getPropertyValue(s_sFilter);
+            seqProperties[s_nOffsetTitle    ].Value = xSet->getPropertyValue(s_sTitle);
+            seqProperties[s_nOffsetPassword ].Value = xSet->getPropertyValue(s_sPassword);
+            seqProperties[s_nOffsetThumbnail].Value = xSet->getPropertyValue(s_sThumbnail);
             aRet[nCount++] = seqProperties;
         }
         catch(const uno::Exception& ex)
