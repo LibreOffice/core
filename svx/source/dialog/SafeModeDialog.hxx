@@ -47,7 +47,6 @@ private:
     // local BackupFileHelper for handling possible restores
     comphelper::BackupFileHelper maBackupFileHelper;
 
-    static void terminateOffice();
     void applyChanges();
     static void openWebBrowser(const OUString & sURL, const OUString &sTitle);
 
