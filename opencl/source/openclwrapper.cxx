@@ -32,6 +32,8 @@
 
 #include <cmath>
 
+#include <officecfg/Office/Common.hxx>
+
 #ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>
@@ -64,7 +66,8 @@ namespace opencl {
 GPUEnv gpuEnv;
 sal_uInt64 kernelFailures = 0;
 
-namespace {
+namespace
+{
 
 bool bIsInited = false;
 
@@ -704,7 +707,9 @@ bool createPlatformInfo(cl_platform_id nPlatformId, OpenCLPlatformInfo& rPlatfor
 const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo()
 {
     static std::vector<OpenCLPlatformInfo> aPlatforms;
-    if(!aPlatforms.empty())
+
+    // return early if we already initialized or can't use OpenCL
+    if (!aPlatforms.empty() || !canUseOpenCL())
         return aPlatforms;
 
     int status = clewInit(OPENCL_DLL_NAME);
@@ -785,9 +790,16 @@ void findDeviceInfoFromDeviceId(cl_device_id aDeviceId, size_t& rDeviceId, size_
 
 }
 
+bool canUseOpenCL()
+{
+    if (getenv("SAL_DISABLE_OPENCL") || !officecfg::Office::Common::Misc::UseOpenCL::get())
+        return false;
+    return true;
+}
+
 bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEvaluation, OUString& rOutSelectedDeviceVersionIDString)
 {
-    if(fillOpenCLInfo().empty() || getenv("SAL_DISABLE_OPENCL"))
+    if (!canUseOpenCL() || fillOpenCLInfo().empty())
         return false;
 
     cl_device_id pDeviceId = nullptr;
@@ -863,6 +875,9 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
 
 void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId)
 {
+    if (!canUseOpenCL())
+        return;
+
     int status = clewInit(OPENCL_DLL_NAME);
     if (status < 0)
         return;
