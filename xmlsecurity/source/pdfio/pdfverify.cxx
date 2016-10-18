@@ -38,10 +38,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xComponentContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
 
-    OUString aURL;
-    osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pArgv[1]), aURL);
+    OUString aInURL;
+    osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pArgv[1]), aInURL);
+    OUString aOutURL;
+    if (nArgc > 2)
+        osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pArgv[2]), aOutURL);
 
-    SvFileStream aStream(aURL, StreamMode::READ);
+    SvFileStream aStream(aInURL, StreamMode::READ);
     xmlsecurity::pdfio::PDFDocument aDocument;
     if (!aDocument.Read(aStream))
     {
@@ -49,24 +52,51 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
         return 1;
     }
 
-    std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
-    if (aSignatures.empty())
-        std::cerr << "found no signatures" << std::endl;
-    else
+    if (aOutURL.isEmpty())
     {
-        std::cerr << "found " << aSignatures.size() << " signatures" << std::endl;
-        for (size_t i = 0; i < aSignatures.size(); ++i)
+        // Verify.
+        std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
+        if (aSignatures.empty())
+            std::cerr << "found no signatures" << std::endl;
+        else
         {
-            SignatureInformation aInfo(i);
-            if (!xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], aInfo))
+            std::cerr << "found " << aSignatures.size() << " signatures" << std::endl;
+            for (size_t i = 0; i < aSignatures.size(); ++i)
             {
-                SAL_WARN("xmlsecurity.pdfio", "failed to determine digest match");
-                return 1;
-            }
+                SignatureInformation aInfo(i);
+                if (!xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], aInfo))
+                {
+                    SAL_WARN("xmlsecurity.pdfio", "failed to determine digest match");
+                    return 1;
+                }
 
-            bool bSuccess = aInfo.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
-            std::cerr << "signature #" << i << ": digest match? " << bSuccess << std::endl;
+                bool bSuccess = aInfo.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+                std::cerr << "signature #" << i << ": digest match? " << bSuccess << std::endl;
+            }
         }
+
+        return 0;
+    }
+
+    // Sign.
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
+    uno::Sequence<uno::Reference<security::XCertificate>> aCertificates = xSecurityEnvironment->getPersonalCertificates();
+    if (!aCertificates.hasElements())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "no signing certificates found");
+        return 1;
+    }
+    if (!aDocument.Sign(aCertificates[0]))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "failed to sign");
+        return 1;
+    }
+
+    SvFileStream aOutStream(aOutURL, StreamMode::WRITE | StreamMode::TRUNC);
+    if (!aDocument.Write(aOutStream))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "failed to write the document");
+        return 1;
     }
 
     return 0;
