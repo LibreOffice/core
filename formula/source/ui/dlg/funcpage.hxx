@@ -31,6 +31,7 @@
 
 #include <vector>
 #include "formula/omoduleclient.hxx"
+#include <vcl/combobox.hxx>
 
 namespace formula
 {
@@ -61,8 +62,10 @@ private:
     OModuleClient            m_aModuleClient;
     Link<FuncPage&,void>     aDoubleClickLink;
     Link<FuncPage&,void>     aSelectionLink;
+    Link<FuncPage&, void>    aModifyLink;
     VclPtr<ListBox>          m_pLbCategory;
     VclPtr<FormulaListBox>   m_pLbFunction;
+    VclPtr<Edit>        m_plbFunctionSearchString;
     const IFunctionManager*  m_pFunctionManager;
 
     ::std::vector< TFunctionDesc >  aLRUList;
@@ -72,10 +75,12 @@ private:
     void impl_addFunctions(const IFunctionCategory* _pCategory);
                     DECL_LINK( SelHdl, ListBox&, void );
                     DECL_LINK(DblClkHdl, ListBox&, void);
+                    DECL_LINK(ModifyHdl, Edit&, void);
 
 protected:
 
     void            UpdateFunctionList();
+    void            UpdateFunctionListOnSearch(OUString str);
     void            InitLRUList();
 
 
@@ -99,6 +104,8 @@ public:
     void            SetDoubleClickHdl( const Link<FuncPage&,void>& rLink ) { aDoubleClickLink = rLink; }
 
     void            SetSelectHdl( const Link<FuncPage&,void>& rLink ) { aSelectionLink = rLink; }
+
+    void            SetModifyHdl(const Link<FuncPage&, void>& rLink) { aModifyLink = rLink; }
 
 };
 
