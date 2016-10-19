@@ -31,7 +31,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
     }
 
     // Initialize nss / mscrypto.
-    uno::Reference<uno::XComponentContext> xComponentContext = cppu::defaultBootstrap_InitialComponentContext();
+    uno::Reference<uno::XComponentContext> xComponentContext;
+    try
+    {
+        xComponentContext = cppu::defaultBootstrap_InitialComponentContext();
+    }
+    catch (const uno::RuntimeException& rException)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "cppu::defaultBootstrap_InitialComponentContext() failed: " << rException.Message);
+        return 1;
+    }
     uno::Reference<lang::XMultiComponentFactory> xMultiComponentFactory = xComponentContext->getServiceManager();
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xMultiComponentFactory, uno::UNO_QUERY);;
     comphelper::setProcessServiceFactory(xMultiServiceFactory);
