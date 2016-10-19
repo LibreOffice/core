@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.19.0 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -607,7 +607,7 @@
                     <property name="top_attach">7</property>
                   </packing>
                 </child>
-                 <child>
+                <child>
                   <object class="GtkCheckButton" id="emptypages">
                     <property name="label" translatable="yes">Exp_ort automatically inserted blank pages</property>
                     <property name="visible">True</property>
@@ -649,7 +649,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">9</property>
+                    <property name="top_attach">10</property>
                   </packing>
                 </child>
                 <child>
