@@ -1811,7 +1811,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
     if ( nFlags & InsertDeleteFlags::ATTRIB )
     {
         if ( nFlags & InsertDeleteFlags::CONTENTS )
-            ForgetFormatArea();
+            bFormatValid = false;
         else
             StartFormatArea();              // delete attribute is also attribute-change
     }

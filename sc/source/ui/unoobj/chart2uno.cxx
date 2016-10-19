@@ -2958,7 +2958,7 @@ void ScChart2DataSequence::ExternalRefListener::notify(sal_uInt16 nFileId, ScExt
         }
         break;
         case ScExternalRefManager::LINK_BROKEN:
-            removeFileId(nFileId);
+            maFileIds.erase(nFileId);
         break;
     }
 }
@@ -2966,11 +2966,6 @@ void ScChart2DataSequence::ExternalRefListener::notify(sal_uInt16 nFileId, ScExt
 void ScChart2DataSequence::ExternalRefListener::addFileId(sal_uInt16 nFileId)
 {
     maFileIds.insert(nFileId);
-}
-
-void ScChart2DataSequence::ExternalRefListener::removeFileId(sal_uInt16 nFileId)
-{
-    maFileIds.erase(nFileId);
 }
 
 uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()

@@ -40,7 +40,6 @@ public:
     ScBiffReader( SfxMedium& rMedium );
     ~ScBiffReader();
     bool recordsLeft() { return mpStream && !mpStream->IsEof(); }
-    bool IsEndOfFile() { return mbEndOfFile; }
     bool nextRecord();
 };
 #endif

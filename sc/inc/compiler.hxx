@@ -171,8 +171,6 @@ public:
     formula::FormulaToken* CreateToken() const;   // create typified token
 
     static sal_Int32 GetStrLen( const sal_Unicode* pStr ); // as long as a "string" is an array
-    static size_t GetStrLenBytes( sal_Int32 nLen )
-        { return nLen * sizeof(sal_Unicode); }
 };
 
 class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
@@ -262,7 +260,6 @@ private:
         const char* pOriginal;              // programmatical name
         const char* pUpper;                 // upper case programmatical name
     } g_aAddInMap[];
-    static const AddInMap* GetAddInMap();
     static size_t GetAddInMapCount();
 
     ScDocument* pDoc;

@@ -155,7 +155,6 @@ protected:
 
 private:
     bool isSelected() const;
-    bool isFocused() const;
 
     void updateStates();
 

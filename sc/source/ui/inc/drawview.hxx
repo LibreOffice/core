@@ -127,8 +127,6 @@ public:
     /** Locks/unlocks the background layer that contains background objects.
         Unlocked layer is required to be able to edit the objects. */
     inline void     LockBackgroundLayer( bool bLock ) { LockCalcLayer( SC_LAYER_BACK, bLock ); }
-    /** Unlocks the background layer that contains background objects. */
-    inline void     UnlockBackgroundLayer() { LockBackgroundLayer( false ); }
 
     /** Locks/unlocks the internal layer that contains caption objects of cell notes.
         Unlocked layer is required to be able to edit the contained objects. */

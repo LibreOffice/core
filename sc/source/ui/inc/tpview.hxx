@@ -124,9 +124,6 @@ public:
     using SfxTabPage::DeactivatePage;
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
-
-    void                SetDocument(ScDocument* pPtr){pDoc = pPtr;}
-
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPVIEW_HXX

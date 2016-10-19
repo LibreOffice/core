@@ -73,8 +73,6 @@ public:
 
     static void GetDefaultFormulaSeparators(OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow);
 
-    static const LocaleDataWrapper& GetLocaleDataWrapper();
-
     ScFormulaOptions&  operator=  ( const ScFormulaOptions& rCpy );
     bool               operator== ( const ScFormulaOptions& rOpt ) const;
     bool               operator!= ( const ScFormulaOptions& rOpt ) const;

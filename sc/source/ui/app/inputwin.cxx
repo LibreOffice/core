@@ -1140,12 +1140,11 @@ static void lcl_ModifyRTLVisArea( EditView* pEditView )
 void ScTextWnd::InitEditEngine()
 {
     ScFieldEditEngine* pNew;
-    ScTabViewShell* pViewSh = GetViewShell();
     ScDocShell* pDocSh = nullptr;
-    if ( pViewSh )
+    if ( mpViewShell )
     {
-        pDocSh = pViewSh->GetViewData().GetDocShell();
-        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
+        pDocSh = mpViewShell->GetViewData().GetDocShell();
+        ScDocument* pDoc = mpViewShell->GetViewData().GetDocument();
         pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
     }
     else

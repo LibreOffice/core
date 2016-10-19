@@ -124,8 +124,6 @@ protected:
 
     void InitEditEngine();
 
-    ScTabViewShell* GetViewShell() { return mpViewShell;}
-
     typedef ::std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
 
     OUString    aString;

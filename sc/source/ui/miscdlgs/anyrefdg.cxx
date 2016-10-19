@@ -840,7 +840,7 @@ bool ScRefHandler::LeaveRefMode()
 
     lcl_HideAllReferences();
 
-    if( Dialog *pDlg = dynamic_cast<Dialog*>( static_cast<vcl::Window*>(*this) ) )
+    if( Dialog *pDlg = dynamic_cast<Dialog*>( m_rWindow.get() ) )
         pDlg->SetModalInputMode(false);
     SetDispatcherLock( false );         //! here and in DoClose ?
 

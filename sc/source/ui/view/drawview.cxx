@@ -777,7 +777,7 @@ bool ScDrawView::SelectObject( const OUString& rName )
                 !pDoc->IsTabProtected( nTab ) &&
                 !pViewData->GetSfxDocShell()->IsReadOnly() )
         {
-            UnlockBackgroundLayer();
+            LockBackgroundLayer(false);
         }
 
         SdrPageView* pPV = GetSdrPageView();

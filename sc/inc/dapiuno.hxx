@@ -555,7 +555,6 @@ public:
     void setFunction(css::sheet::GeneralFunction Function);
     css::uno::Sequence< css::sheet::GeneralFunction > getSubtotals() const;
     void setSubtotals(const css::uno::Sequence< css::sheet::GeneralFunction >& rFunctions);
-    static OUString getCurrentPage();
     void setCurrentPage(const OUString& sPage);
     void setUseCurrentPage(bool bUse);
     const css::sheet::DataPilotFieldAutoShowInfo* getAutoShowInfo();

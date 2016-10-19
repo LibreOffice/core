@@ -108,7 +108,6 @@ class SC_DLLPUBLIC ScRefHandler :
     bool                 m_bInRefMode;
 
 public:
-    operator vcl::Window *(){ return m_rWindow.get(); }
     friend class        formula::RefButton;
     friend class        formula::RefEdit;
 

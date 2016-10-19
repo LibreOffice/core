@@ -311,7 +311,6 @@ public:
     void            ShowNote( bool bShow );
     void            EditNote();
 
-    void            ForgetFormatArea()      { bFormatValid = false; }
     bool            SelectionEditable( bool* pOnlyNotBecauseOfMatrix = nullptr );
 
     SC_DLLPUBLIC void

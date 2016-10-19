@@ -340,11 +340,6 @@ bool ScAccessibleFilterMenu::isSelected() const
     return mpWindow->isMenuItemSelected(mnMenuPos);
 }
 
-bool ScAccessibleFilterMenu::isFocused() const
-{
-    return isSelected();
-}
-
 void ScAccessibleFilterMenu::updateStates()
 {
     if (!mxStateSet.is())
@@ -361,7 +356,7 @@ void ScAccessibleFilterMenu::updateStates()
     p->insert(SENSITIVE);
     p->insert(OPAQUE);
 
-    if (isFocused())
+    if (isSelected())
         p->insert(FOCUSED);
 
     if (isSelected())

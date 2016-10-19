@@ -730,7 +730,7 @@ ScVbaFormat< Ifc... >::getNumberFormat(  ) throw (script::BasicErrorException, u
         {
             initializeNumberFormats();
 
-            sal_Int32 nNewFormat = xNumberFormatTypes->getFormatForLocale(nFormat, getDefaultLocale() );
+            sal_Int32 nNewFormat = xNumberFormatTypes->getFormatForLocale(nFormat, m_aDefaultLocale );
             OUString sFormat;
             xNumberFormats->getByKey(nNewFormat)->getPropertyValue( FORMATSTRING ) >>= sFormat;
             aFormat = uno::makeAny( sFormat );
