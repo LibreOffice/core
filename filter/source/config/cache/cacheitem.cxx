@@ -166,24 +166,6 @@ bool isSubSet(const css::uno::Any& aSubSet,
         break;
 
 
-        case css::uno::TypeClass_ANY :
-        {
-            css::uno::Any v1;
-            css::uno::Any v2;
-
-            if (
-                (aSubSet >>= v1) &&
-                (aSet    >>= v2)
-               )
-            {
-                bool bIs = (isSubSet(v1, v2));
-                FILTER_CONFIG_LOG_1_("isSubSet() ... check for packed any types => return %s\n", bIs ? "TRUE" : "FALSE")
-                return bIs;
-            }
-        }
-        break;
-
-
         case css::uno::TypeClass_STRUCT :
         {
             css::beans::PropertyValue p1;
