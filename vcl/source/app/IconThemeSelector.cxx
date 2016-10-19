@@ -84,7 +84,7 @@ IconThemeSelector::SelectIconThemeForDesktopEnvironment(
         }
         //if a dark variant is preferred, and we didn't have an exact match, then try our one and only dark theme
         if (mPreferredIconTheme.endsWith("_dark") && icon_theme_is_in_installed_themes("breeze_dark", installedThemes)) {
-            return "breeze_dark";
+            return OUString("breeze_dark");
         }
     }
 
