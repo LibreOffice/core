@@ -44,7 +44,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
     uno::Reference<lang::XMultiComponentFactory> xMultiComponentFactory = xComponentContext->getServiceManager();
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xMultiComponentFactory, uno::UNO_QUERY);;
     comphelper::setProcessServiceFactory(xMultiServiceFactory);
-    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xComponentContext);
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer;
+    try
+    {
+        xSEInitializer = xml::crypto::SEInitializer::create(xComponentContext);
+    }
+    catch (const uno::DeploymentException& rException)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "DeploymentException while creating SEInitializer: " << rException.Message);
+        return 1;
+    }
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
 
     OUString aInURL;
