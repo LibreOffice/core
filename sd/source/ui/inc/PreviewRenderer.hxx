@@ -127,7 +127,6 @@ private:
         const SdPage* pPage,
         const Size& rPixelSize,
         const bool bObeyHighContrastMode);
-    void Cleanup();
     void PaintPage (
         const SdPage* pPage,
         const bool bDisplayPresentationObjects);

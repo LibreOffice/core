@@ -234,11 +234,6 @@ CustomAnimationPresets::~CustomAnimationPresets()
 {
 }
 
-void CustomAnimationPresets::init()
-{
-    importResources();
-}
-
 Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFactory >& xServiceFactory, const OUString& rPath )
 {
     Reference< XAnimationNode > xRootNode;
@@ -552,7 +547,7 @@ const CustomAnimationPresets& CustomAnimationPresets::getCustomAnimationPresets(
         if( !mpCustomAnimationPresets )
         {
             mpCustomAnimationPresets = new sd::CustomAnimationPresets();
-            mpCustomAnimationPresets->init();
+            mpCustomAnimationPresets->importResources();
         }
     }
 

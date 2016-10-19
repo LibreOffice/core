@@ -2182,7 +2182,7 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
         const sal_Unicode*  p = aStr.getStr();
 
         nLen = aStr.getLength();
-        bool bPref = IsPrefixSupport();
+        bool bPref = bPrefixSupport;
         bool bOneChar = (bPref && nLen > 1 && (aName == p + 1));
         if (bOneChar || (bPref && nLen > 2 && (aName == p + 2) &&
                     *p == 'd' && *(p+1) == 'a'))

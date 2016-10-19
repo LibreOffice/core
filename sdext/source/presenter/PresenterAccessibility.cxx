@@ -496,7 +496,6 @@ private:
         const sal_Int32 nOldCharacterIndex,
         const sal_Int32 nNewParagraphIndex,
         const sal_Int32 nNewCharacterIndex);
-    void HandleTextChange();
 };
 
 //===== AccessibleFocusManager ================================================
@@ -1912,7 +1911,7 @@ void AccessibleNotes::SetTextView (
             [this](sal_Int32 a, sal_Int32 b, sal_Int32 c, sal_Int32 d)
                 { return this->NotifyCaretChange(a, b, c, d); });
         mpTextView->SetTextChangeBroadcaster(
-            [this]() { return this->HandleTextChange(); });
+            [this]() { return SetTextView(mpTextView); });
     }
 }
 
@@ -1975,10 +1974,6 @@ void AccessibleNotes::NotifyCaretChange (
     }
 }
 
-void AccessibleNotes::HandleTextChange()
-{
-    SetTextView(mpTextView);
-}
 
 //===== AccessibleFocusManager ================================================
 

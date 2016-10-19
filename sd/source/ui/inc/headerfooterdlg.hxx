@@ -71,7 +71,6 @@ public:
 
     void ApplyToAll();
     void Apply();
-    void Cancel();
 
     virtual short Execute() override;
 };

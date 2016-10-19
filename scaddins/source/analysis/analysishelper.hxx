@@ -473,7 +473,6 @@ public:
     virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const;
 
     inline ConvertDataClass Class() const;
-    inline bool         IsPrefixSupport() const;
 };
 
 class ConvertDataLinear : public ConvertData
@@ -657,11 +656,6 @@ inline void ComplexList::Append( Complex* p )
 inline ConvertDataClass ConvertData::Class() const
 {
     return eClass;
-}
-
-inline bool ConvertData::IsPrefixSupport() const
-{
-    return bPrefixSupport;
 }
 
 inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, double fO, ConvertDataClass e,

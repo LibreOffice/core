@@ -127,7 +127,7 @@ Image PreviewRenderer::RenderPage (
                     mpPreviewDevice->PixelToLogic(Point(0,0)),
                     mpPreviewDevice->PixelToLogic(aSize)));
 
-                Cleanup();
+                mpView->HideSdrPage();
             }
         }
         catch (const css::uno::Exception&)
@@ -270,11 +270,6 @@ bool PreviewRenderer::Initialize (
     mpPreviewDevice->Erase();
 
     return true;
-}
-
-void PreviewRenderer::Cleanup()
-{
-    mpView->HideSdrPage();
 }
 
 void PreviewRenderer::PaintPage (

@@ -65,8 +65,6 @@ public:
     void   SetName(const OUString& rName);
     const OUString& GetName() const { return aName;}
 
-    SdDrawDocument* GetDoc() const { return pDoc; }
-
     css::uno::Reference< css::uno::XInterface > getUnoCustomShow();
 };
 
