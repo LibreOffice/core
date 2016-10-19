@@ -71,7 +71,8 @@ public:
     /** Reads a CRN record (external referenced cell) at the specified address. */
     void                ReadCrn( XclImpStream& rStrm, const XclAddress& rXclPos );
 
-    void                LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheTable);
+    void                LoadCachedValues( const ScExternalRefCache::TableTypeRef& pCacheTable,
+                                          svl::SharedStringPool& rPool );
 
 private:
     typedef std::shared_ptr< XclImpCrn > XclImpCrnRef;
@@ -574,7 +575,8 @@ void XclImpSupbookTab::ReadCrn( XclImpStream& rStrm, const XclAddress& rXclPos )
     maCrnList.push_back( crnRef );
 }
 
-void XclImpSupbookTab::LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheTable)
+void XclImpSupbookTab::LoadCachedValues( const ScExternalRefCache::TableTypeRef& pCacheTable,
+        svl::SharedStringPool& rPool )
 {
     if (maCrnList.empty())
         return;
@@ -608,8 +610,8 @@ void XclImpSupbookTab::LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheT
             break;
             case EXC_CACHEDVAL_STRING:
             {
-                const OUString& rStr = pCrn->GetString();
-                ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken(rStr));
+                svl::SharedString aSS( rPool.intern( pCrn->GetString()));
+                ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken( aSS));
                 pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken, 0, false);
             }
             break;
@@ -753,7 +755,7 @@ void XclImpSupbook::LoadCachedValues()
     {
         const OUString& rTabName = (*itTab)->GetTabName();
         ScExternalRefCache::TableTypeRef pCacheTable = pRefMgr->getCacheTable(nFileId, rTabName, true);
-        (*itTab)->LoadCachedValues(pCacheTable);
+        (*itTab)->LoadCachedValues( pCacheTable, GetSharedStringPool());
         pCacheTable->setWholeTableCached();
     }
 }
