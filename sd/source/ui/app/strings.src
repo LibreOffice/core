@@ -1169,7 +1169,7 @@ String DLG_TABLEDESIGNPANE
 };
 String STR_CUSTOMANIMATIONPANE
 {
-    Text [ en-US ] = "Custom Animation";
+    Text [ en-US ] = "Animation";
 };
 String STR_SLIDE_TRANSITION_PANE
 {
