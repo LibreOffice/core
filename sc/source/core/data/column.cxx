@@ -2050,6 +2050,7 @@ class UpdateRefOnNonCopy : public std::unary_function<sc::FormulaGroupEntry, voi
     const sc::RefUpdateContext* mpCxt;
     ScDocument* mpUndoDoc;
     bool mbUpdated;
+    bool mbClipboardSource;
 
     void recompileTokenArray( ScFormulaCell& rTopCell )
     {
@@ -2154,8 +2155,11 @@ class UpdateRefOnNonCopy : public std::unary_function<sc::FormulaGroupEntry, voi
         ScAddress aPos = pTop->aPos;
         ScAddress aOldPos = aPos;
 
+        bool bCellMoved;
         if (mpCxt->maRange.In(aPos))
         {
+            bCellMoved = true;
+
             // The cell is being moved or copied to a new position. The
             // position has already been updated prior to this call.
             // Determine its original position before the move which will be
@@ -2165,6 +2169,10 @@ class UpdateRefOnNonCopy : public std::unary_function<sc::FormulaGroupEntry, voi
                 aPos.Col() - mpCxt->mnColDelta,
                 aPos.Row() - mpCxt->mnRowDelta,
                 aPos.Tab() - mpCxt->mnTabDelta);
+        }
+        else
+        {
+            bCellMoved = false;
         }
 
         bool bRecalcOnMove = pCode->IsRecalcModeOnRefMove();
@@ -2202,7 +2210,10 @@ class UpdateRefOnNonCopy : public std::unary_function<sc::FormulaGroupEntry, voi
                 p->SetDirty();
             }
 
-            fillUndoDoc(aOldPos, rGroup.mnLength, *pOldCode);
+            // Move from clipboard is Cut&Paste, then do not copy the original
+            // positions' formula cells to the Undo document.
+            if (!mbClipboardSource || !bCellMoved)
+                fillUndoDoc(aOldPos, rGroup.mnLength, *pOldCode);
         }
     }
 
@@ -2242,7 +2253,8 @@ public:
         SCCOL nCol, SCTAB nTab, const sc::RefUpdateContext* pCxt,
         ScDocument* pUndoDoc) :
         mnCol(nCol), mnTab(nTab), mpCxt(pCxt),
-        mpUndoDoc(pUndoDoc), mbUpdated(false) {}
+        mpUndoDoc(pUndoDoc), mbUpdated(false),
+        mbClipboardSource(pCxt->mrDoc.IsClipboardSource()){}
 
     void operator() ( sc::FormulaGroupEntry& rGroup )
     {

@@ -4330,6 +4330,9 @@ void checkBounds(
         {
             assert(!"can't move");
         }
+
+        // Check bounds also against the range moved into.
+        pDeletedRange = &rCxt.maRange;
     }
     else if (rCxt.meMode == URM_INSDEL &&
             ((rCxt.mnColDelta < 0 && rCxt.maRange.aStart.Col() > 0) ||
