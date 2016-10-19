@@ -1073,7 +1073,7 @@ SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTop
 
     pTPFilter->SetRedlinTable(GetViewTable());
 
-    ShowViewPage();
+    SetCurPageId(m_nViewPageId);
 
     Show();
 }
@@ -1094,11 +1094,6 @@ void SvxAcceptChgCtr::dispose()
 void SvxAcceptChgCtr::ShowFilterPage()
 {
     SetCurPageId(m_nFilterPageId);
-}
-
-void SvxAcceptChgCtr::ShowViewPage()
-{
-    SetCurPageId(m_nViewPageId);
 }
 
 SvxRedlinTable* SvxAcceptChgCtr::GetViewTable()

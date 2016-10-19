@@ -89,11 +89,6 @@ SdrPaintWindow* SdrPaintView::GetPaintWindow(sal_uInt32 nIndex) const
     return nullptr;
 }
 
-void SdrPaintView::AppendPaintWindow(SdrPaintWindow& rNew)
-{
-    maPaintWindows.push_back(&rNew);
-}
-
 void SdrPaintView::RemovePaintWindow(SdrPaintWindow& rOld)
 {
     const SdrPaintWindowVector::iterator aFindResult = ::std::find(maPaintWindows.begin(), maPaintWindows.end(), &rOld);
@@ -440,7 +435,7 @@ void SdrPaintView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window *pWin
 {
     DBG_ASSERT(pNewWin, "SdrPaintView::AddWindowToPaintView: No OutputDevice(!)");
     SdrPaintWindow* pNewPaintWindow = new SdrPaintWindow(*this, *pNewWin, pWindow);
-    AppendPaintWindow(*pNewPaintWindow);
+    maPaintWindows.push_back(pNewPaintWindow);
 
     if(mpPageView)
     {
@@ -1093,7 +1088,7 @@ bool SdrPaintView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 
 SfxStyleSheet* SdrPaintView::GetStyleSheet() const
 {
-    return GetDefaultStyleSheet();
+    return mpDefaultStyleSheet;
 }
 
 bool SdrPaintView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
@@ -1246,12 +1241,7 @@ void SdrPaintView::VisAreaChanged(const SdrPageWindow& /*rWindow*/)
 
 void SdrPaintView::onChangeColorConfig()
 {
-    SetGridColor( Color( maColorConfig.GetColorValue( svtools::DRAWGRID ).nColor ) );
-}
-
-void SdrPaintView::SetGridColor( Color aColor )
-{
-    maGridColor = aColor;
+    maGridColor = Color( maColorConfig.GetColorValue( svtools::DRAWGRID ).nColor );
 }
 
 

@@ -100,7 +100,7 @@ namespace drawinglayer
                 return true;
             }
 
-            if(hasFillGradientAttribute() && !maFillGradientAttribute->isDefault())
+            if(maFillGradientAttribute.get() && !maFillGradientAttribute->isDefault())
             {
                 return true;
             }

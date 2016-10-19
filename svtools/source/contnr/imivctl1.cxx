@@ -790,7 +790,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
         }
     }
     bool bSelected = pEntry->IsSelected();
-    bool bEditingEnabled = IsEntryEditingEnabled();
+    bool bEditingEnabled = bEntryEditingEnabled;
 
     if( rMEvt.GetClicks() == 2 )
     {
@@ -2034,7 +2034,7 @@ void SvxIconChoiceCtrl_Impl::ImpHideDDIcon()
 bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
 {
     Rectangle aDocRect( GetDocumentRect() );
-    Rectangle aVisRect( GetVisibleRect() );
+    Rectangle aVisRect( GetOutputRect() );
     if( aVisRect.IsInside( aDocRect ))
         return false;
     Size aDocSize( aDocRect.GetSize() );

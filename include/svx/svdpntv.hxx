@@ -209,8 +209,6 @@ protected:
     Color                           maGridColor;
 
     // Interface to SdrPaintWindow
-protected:
-    void AppendPaintWindow(SdrPaintWindow& rNew);
     void RemovePaintWindow(SdrPaintWindow& rOld);
     void ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
 
@@ -238,8 +236,8 @@ protected:
 
 public:
     bool ImpIsGlueVisible() { return mbGlueVisible || mbGlueVisible2 || mbGlueVisible3 || mbGlueVisible4; }
-protected:
 
+protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     void GlueInvalidate() const;
 
@@ -248,7 +246,6 @@ protected:
     // Any sub-class override this method, MUST call the base class' ModelHasChanged() method
     virtual void ModelHasChanged();
 
-protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
     SdrPaintView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
     virtual ~SdrPaintView() override;
@@ -386,7 +383,6 @@ public:
     void SetHlplVisible(bool bOn = true) { mbHlplVisible=bOn; InvalidateAllWin(); }
     void SetHlplFront(bool bOn) { mbHlplFront  =bOn; InvalidateAllWin(); }
     void SetGlueVisible(bool bOn = true) { if (mbGlueVisible!=bOn) { mbGlueVisible=bOn; if (!mbGlueVisible2 && !mbGlueVisible3 && !mbGlueVisible4) GlueInvalidate(); } }
-    void SetGridColor( Color aColor );
 
     bool IsPreviewRenderer() const { return mbPreviewRenderer; }
     void SetPreviewRenderer(bool bOn) { mbPreviewRenderer=bOn; }
@@ -435,7 +431,6 @@ public:
     void SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll);
     const SfxItemSet& GetDefaultAttr() const { return maDefaultAttr; }
     void SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
-    SfxStyleSheet* GetDefaultStyleSheet() const { return mpDefaultStyleSheet; }
 
     void SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll);
     void MergeNotPersistDefaultAttr(SfxItemSet& rAttr, bool bOnlyHardAttr) const;

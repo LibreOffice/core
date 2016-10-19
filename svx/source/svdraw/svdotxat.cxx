@@ -419,7 +419,7 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
 bool SdrTextObj::HasText() const
 {
     if( pEdtOutl )
-        return HasEditText();
+        return HasTextImpl(pEdtOutl);
 
     OutlinerParaObject* pOPO = GetOutlinerParaObject();
 

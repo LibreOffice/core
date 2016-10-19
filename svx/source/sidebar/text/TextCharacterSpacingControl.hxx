@@ -38,7 +38,6 @@ public:
     virtual ~TextCharacterSpacingControl() override;
     virtual void dispose() override;
 
-    short GetLastCustomState() { return mnLastCus;}
     long  GetLastCustomValue() { return mnCustomKern;}
 
 private:

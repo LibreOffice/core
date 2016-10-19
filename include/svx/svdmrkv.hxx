@@ -323,8 +323,6 @@ public:
     /** should only be used from outside svx for special ui elements */
     bool MarkPointHelper(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark);
 
-    // Mark all points within this rectangular alle Punkte (View coordinates)
-    void MarkPoints(const Rectangle& rRect, bool bUnmark) { MarkPoints(&rRect,bUnmark); }
     bool UnmarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,true); }
     bool IsPointMarked(const SdrHdl& rHdl) const { ForceUndirtyMrkPnt(); return rHdl.IsSelected(); }
     bool MarkAllPoints() { return MarkPoints(nullptr,false); }

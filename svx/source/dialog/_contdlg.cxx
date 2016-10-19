@@ -580,7 +580,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl, Idle *, void)
 
         SetGraphic( aUpdateGraphic );
         SetPolyPolygon( aUpdatePolyPoly );
-        SetEditingObject( pUpdateEditingObject );
+        pCheckObj = pUpdateEditingObject;
         bGraphicLinked = bUpdateGraphicLinked;
 
         aUpdateGraphic = Graphic();

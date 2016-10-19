@@ -290,7 +290,7 @@ SvStream& SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16 nItemVer
 
 SfxPoolItem* SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
-    return new SdrCustomShapeGeometryItem( GetGeometry() );
+    return new SdrCustomShapeGeometryItem( aPropSeq );
 }
 
 sal_uInt16 SdrCustomShapeGeometryItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const

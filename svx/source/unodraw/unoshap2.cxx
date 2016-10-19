@@ -1188,7 +1188,7 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
     }
     case OWN_ATTR_VALUE_POLYGONKIND:
     {
-        rValue <<= GetPolygonKind();
+        rValue <<= mePolygonKind;
         break;
     }
     default:
@@ -1306,7 +1306,7 @@ bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const OUString& rName, con
     }
     case OWN_ATTR_VALUE_POLYGONKIND:
     {
-        rValue <<= GetPolygonKind();
+        rValue <<= mePolygonKind;
         break;
     }
     default:

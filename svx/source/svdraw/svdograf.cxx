@@ -534,11 +534,6 @@ bool SdrGrafObj::IsSwappedOut() const
     return mbIsPreview || pGraphic->IsSwappedOut();
 }
 
-bool SdrGrafObj::IsCropped() const
-{
-    return aGrafInfo.IsCropped();
-}
-
 const MapMode& SdrGrafObj::GetGrafPrefMapMode() const
 {
     return pGraphic->GetPrefMapMode();
@@ -571,7 +566,7 @@ Size SdrGrafObj::getOriginalSize() const
 {
     Size aSize = GetGrafPrefSize();
 
-    if (IsCropped())
+    if (aGrafInfo.IsCropped())
     {
         long aCroppedTop = OutputDevice::LogicToLogic( aGrafInfo.GetTopCrop(), GetModel()->GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit());
         long aCroppedBottom = OutputDevice::LogicToLogic( aGrafInfo.GetBottomCrop(), GetModel()->GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit());

@@ -114,11 +114,6 @@ void SdrPageView::ClearPageWindows()
     maPageWindows.clear();
 }
 
-void SdrPageView::AppendPageWindow(SdrPageWindow& rNew)
-{
-    maPageWindows.push_back(&rNew);
-}
-
 SdrPageWindow* SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
 {
     const SdrPageWindowVector::iterator aFindResult = ::std::find(maPageWindows.begin(), maPageWindows.end(), &rOld);
@@ -173,8 +168,7 @@ SdrPageView::~SdrPageView()
 
 void SdrPageView::CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow)
 {
-    SdrPageWindow& rWindow = *(new SdrPageWindow(*this, rPaintWindow));
-    AppendPageWindow(rWindow);
+    maPageWindows.push_back(new SdrPageWindow(*this, rPaintWindow));
 }
 
 void SdrPageView::AddPaintWindowToPageView(SdrPaintWindow& rPaintWindow)

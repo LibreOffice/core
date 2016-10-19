@@ -224,10 +224,6 @@ namespace drawinglayer
             const SvxBorderLine& getBottomLine() const { return maBottomLine; }
             const SvxBorderLine& getRightLine() const { return maRightLine; }
             const SvxBorderLine& getTopLine() const { return maTopLine; }
-            bool getLeftIsOutside() const { return mbLeftIsOutside; }
-            bool getBottomIsOutside() const { return mbBottomIsOutside; }
-            bool getRightIsOutside() const { return mbRightIsOutside; }
-            bool getTopIsOutside() const { return mbTopIsOutside; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
@@ -325,7 +321,7 @@ namespace drawinglayer
                 }
             }
 
-            if(!getBottomLine().isEmpty() && getBottomIsOutside())
+            if(!getBottomLine().isEmpty() && mbBottomIsOutside)
             {
                 // create bottom line from left to right
                 const basegfx::B2DPoint aStart(getTransform() * basegfx::B2DPoint(0.0, 1.0));
@@ -446,10 +442,10 @@ namespace drawinglayer
                     && maTopFromRLine == rCompare.maTopFromRLine
                     && maBottomFromLLine == rCompare.maBottomFromLLine
                     && maBottomFromRLine == rCompare.maBottomFromRLine
-                    && getLeftIsOutside() == rCompare.getLeftIsOutside()
-                    && getBottomIsOutside() == rCompare.getBottomIsOutside()
-                    && getRightIsOutside() == rCompare.getRightIsOutside()
-                    && getTopIsOutside() == rCompare.getTopIsOutside());
+                    && mbLeftIsOutside == rCompare.mbLeftIsOutside
+                    && mbBottomIsOutside == rCompare.mbBottomIsOutside
+                    && mbRightIsOutside == rCompare.mbRightIsOutside
+                    && mbTopIsOutside == rCompare.mbTopIsOutside);
             }
 
             return false;

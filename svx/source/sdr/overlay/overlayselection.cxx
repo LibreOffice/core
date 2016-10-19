@@ -135,7 +135,7 @@ namespace sdr
                             aRetval,
                             fTransparence));
 
-                    if(getBorder())
+                    if(mbBorder)
                     {
                         const basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges()));
                         const drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(

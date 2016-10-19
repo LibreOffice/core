@@ -64,7 +64,6 @@ namespace drawinglayer
 
             // data access
             const basegfx::B2DHomMatrix& getObjectTransform() const { return maObjectTransform; }
-            sal_uInt32 getGraphicVersion() const { return mnGraphicVersion; }
 
             // provide unique ID
             DeclPrimitive2DIDBlock()

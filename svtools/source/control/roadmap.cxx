@@ -75,8 +75,6 @@ public:
 
     bool                    Contains( const vcl::Window* _pWindow ) const;
 
-    HyperLabel*             GetDescriptionHyperLabel() const { return mpDescription; }
-
 private:
     void                    ImplUpdateIndex( const ItemIndex _nIndex );
     void                    ImplUpdatePosSize();
@@ -748,7 +746,7 @@ void RoadmapItem::SetPosition(RoadmapItem* _pOldItem)
     }
     else
     {
-        Size aOldSize = _pOldItem->GetDescriptionHyperLabel()->GetSizePixel();
+        Size aOldSize = _pOldItem->mpDescription->GetSizePixel();
 
         aIDPos = _pOldItem->mpID->GetPosPixel();
         aIDPos.Y() += aOldSize.Height();

@@ -591,7 +591,6 @@ public:
     virtual ~SvxShapePolyPolygon() throw() override;
 
     // Local support functions
-    css::drawing::PolygonKind GetPolygonKind() const throw() { return mePolygonKind;}
     void SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw(css::uno::RuntimeException);
     basegfx::B2DPolyPolygon GetPolygon() const throw();
 };
@@ -618,7 +617,6 @@ public:
     virtual ~SvxShapePolyPolygonBezier() throw() override;
 
     // Local support functions
-    css::drawing::PolygonKind GetPolygonKind() const throw() { return mePolygonKind;}
     void SetPolygon(const basegfx::B2DPolyPolygon & rNew) throw(css::uno::RuntimeException);
     basegfx::B2DPolyPolygon GetPolygon() const throw();
 };

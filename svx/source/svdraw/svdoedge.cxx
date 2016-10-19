@@ -548,7 +548,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
     }
 
     // #i110649#
-    if(IsBoundRectCalculationRunning())
+    if(mbBoundRectCalculationRunning)
     {
         // This object is involved into another ImpRecalcEdgeTrack() call
         // from another SdrEdgeObj. Do not calculate again to avoid loop.

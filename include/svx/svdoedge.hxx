@@ -182,8 +182,6 @@ public:
     void SetSuppressDefaultConnect(bool bNew) { mbSuppressDefaultConnect = bNew; }
     bool GetSuppressDefaultConnect() const { return mbSuppressDefaultConnect; }
 
-    bool IsBoundRectCalculationRunning() const { return mbBoundRectCalculationRunning; }
-
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 

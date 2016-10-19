@@ -319,10 +319,6 @@ public:
     SAL_DLLPRIVATE void        SetY2KState(sal_uInt16 n);
 
 protected:
-    // activation handling
-    SAL_DLLPRIVATE inline  bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
-    SAL_DLLPRIVATE inline  void        setHasBeenActivated( ) { m_bFirstActivation = false; }
-
     // form handling
     /// load or unload the forms on a page
     SAL_DLLPRIVATE         void        loadForms( FmFormPage* _pPage, const LoadFormsFlags _nBehaviour );

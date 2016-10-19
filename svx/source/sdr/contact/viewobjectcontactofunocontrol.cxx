@@ -597,7 +597,7 @@ namespace sdr { namespace contact {
         /** determines whether our control is currently visible
             @nofail
         */
-        bool    isControlVisible() const { return impl_isControlVisible_nofail(); }
+        bool    isControlVisible() const { return m_bControlIsVisible; }
 
         /// creates an XControl for the given device and SdrUnoObj
         static bool
@@ -748,16 +748,6 @@ namespace sdr { namespace contact {
             @nofail
         */
         bool    impl_isDisposed_nofail() const { return m_pAntiImpl == nullptr; }
-
-        /** determines whether our control is currently visible
-            @nofail
-        */
-        bool    impl_isControlVisible_nofail() const { return m_bControlIsVisible; }
-
-        /** determines whether we are currently a listener at the control for design-mode relevant facets
-            @nofail
-        */
-        bool    impl_isDesignModeListening_nofail() const { return m_bIsDesignModeListening; }
 
         /** determines whether the control currently is in design mode
 
@@ -1181,7 +1171,7 @@ namespace sdr { namespace contact {
             return;
 
         SdrPageViewAccess aPVAccess( *pPageView );
-        impl_adjustControlVisibilityToLayerVisibility_throw( m_aControl, *pUnoObject, aPVAccess, impl_isControlVisible_nofail(), false/*_bForce*/ );
+        impl_adjustControlVisibilityToLayerVisibility_throw( m_aControl, *pUnoObject, aPVAccess, m_bControlIsVisible, false/*_bForce*/ );
     }
 
 
@@ -1259,7 +1249,7 @@ namespace sdr { namespace contact {
 
     void ViewObjectContactOfUnoControl_Impl::impl_switchDesignModeListening_nothrow( bool _bStart )
     {
-        if ( impl_isDesignModeListening_nofail() != _bStart )
+        if ( m_bIsDesignModeListening != _bStart )
         {
             m_bIsDesignModeListening = _bStart;
             impl_switchPropertyListening_nothrow( _bStart );

@@ -73,7 +73,6 @@ namespace {
         Node* nextItemSet( Node* pLast,
                            const bool bSkipUnusedItemSet,
                            const bool bSkipIgnorable );
-        const SfxPoolItem& getPoolItem() const { return *mpItem; }
         // #i86923#
         bool hasIgnorableChildren( const bool bCheckUsage ) const;
         const std::shared_ptr<SfxItemSet> getItemSetOfIgnorableChild(
@@ -132,8 +131,8 @@ namespace {
         std::vector<Node*>::const_iterator aIter = mChildren.begin();
         while( aIter != mChildren.end() )
         {
-            if( rItem.Which() == (*aIter)->getPoolItem().Which() &&
-                rItem == (*aIter)->getPoolItem() )
+            if( rItem.Which() == (*aIter)->mpItem->Which() &&
+                rItem == *(*aIter)->mpItem )
                 return *aIter;
             ++aIter;
         }

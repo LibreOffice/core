@@ -171,14 +171,12 @@ namespace drawinglayer
             bool isScroll() const { return mbScroll; }
             bool isInEditMode() const { return mbInEditMode; }
             bool isFixedCellHeight() const { return mbFixedCellHeight; }
-            bool isWrongSpell() const { return mbWrongSpell; }
             bool isChainable() const { return mbChainable; }
             const SdrFormTextAttribute& getSdrFormTextAttribute() const { return maSdrFormTextAttribute; }
             sal_Int32 getTextLeftDistance() const { return maTextLeftDistance; }
             sal_Int32 getTextUpperDistance() const { return maTextUpperDistance; }
             sal_Int32 getTextRightDistance() const { return maTextRightDistance; }
             sal_Int32 getTextLowerDistance() const { return maTextLowerDistance; }
-            sal_uInt32 getPropertiesVersion() const { return maPropertiesVersion; }
             SdrTextHorzAdjust getSdrTextHorzAdjust() const { return maSdrTextHorzAdjust; }
             SdrTextVertAdjust getSdrTextVertAdjust() const { return maSdrTextVertAdjust; }
 
@@ -218,7 +216,7 @@ namespace drawinglayer
                     && getTextUpperDistance() == rCandidate.getTextUpperDistance()
                     && getTextRightDistance() == rCandidate.getTextRightDistance()
                     && getTextLowerDistance() == rCandidate.getTextLowerDistance()
-                    && getPropertiesVersion() == rCandidate.getPropertiesVersion()
+                    && maPropertiesVersion == rCandidate.maPropertiesVersion
 
                     && getSdrTextHorzAdjust() == rCandidate.getSdrTextHorzAdjust()
                     && getSdrTextVertAdjust() == rCandidate.getSdrTextVertAdjust()
@@ -231,7 +229,7 @@ namespace drawinglayer
                     && isScroll() == rCandidate.isScroll()
                     && isInEditMode() == rCandidate.isInEditMode()
                     && isFixedCellHeight() == rCandidate.isFixedCellHeight()
-                    && isWrongSpell() == rCandidate.isWrongSpell() );
+                    && mbWrongSpell == rCandidate.mbWrongSpell );
             }
         };
 

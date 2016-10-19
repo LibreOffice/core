@@ -54,10 +54,10 @@ namespace sdr
                 new drawinglayer::primitive2d::OverlayRectanglePrimitive(
                     aHatchRange,
                     aColor,
-                    getTransparence(),
-                    getDiscreteGrow(),
-                    getDiscreteShrink(),
-                    getRotation()));
+                    mfTransparence,
+                    mfDiscreteGrow,
+                    mfDiscreteShrink,
+                    mfRotation));
 
             return drawinglayer::primitive2d::Primitive2DContainer { aReference };
         }

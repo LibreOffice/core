@@ -1000,7 +1000,7 @@ css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName ) th
             {
                 if (!bIsStandardSupplier)
                 {   // ansonsten void
-                    css::uno::Reference< css::util::XNumberFormatsSupplier >  xSupplier = getFormatsSupplier();
+                    css::uno::Reference< css::util::XNumberFormatsSupplier >  xSupplier = m_xCurrentSupplier.get();
                     aReturn <<= xSupplier;
                 }
             }
@@ -1018,11 +1018,6 @@ css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName ) th
         }
     }
     return aReturn;
-}
-
-css::uno::Reference< css::util::XNumberFormatsSupplier >  SVTXFormattedField::getFormatsSupplier() const
-{
-    return m_xCurrentSupplier.get();
 }
 
 css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rValue)
