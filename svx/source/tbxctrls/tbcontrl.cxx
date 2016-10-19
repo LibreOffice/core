@@ -2699,7 +2699,7 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
                             m_aBorderColorStatus,
                             GetSlotId(),
                             m_xFrame,
-                            SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ),
+                            SVX_RESSTR( RID_SVXSTR_TEXTCOLOR ),
                             &GetToolBox(),
                             m_aColorSelectFunction);
 

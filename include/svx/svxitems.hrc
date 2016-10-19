@@ -22,9 +22,6 @@
 
 #include <svl/solar.hrc>
 
-// Extras -------------------------------------------------------------------
-#define RID_SVXITEMS_EXTRAS_CHARCOLOR       (RID_SVXITEMS_START +  2)
-
 // SvxSearchItem ------------------------------------------------------------
 // Kommando
 #define RID_SVXITEMS_SEARCHCMD_FIND         (RID_SVXITEMS_START + 10)
