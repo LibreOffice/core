@@ -22,6 +22,7 @@
 
 #include <svx/fmshell.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdocapt.hxx>
 #include <svx/svdoutl.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -47,6 +48,7 @@
 #include "AccessibilityHints.hxx"
 #include "docsh.hxx"
 #include "viewuno.hxx"
+#include "postit.hxx"
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -642,6 +644,49 @@ void ScTabView::ResetBrushDocument()
     {
         SetBrushDocument( nullptr, false );
         SetActivePointer( Pointer( PointerStyle::Arrow ) );   // switch pointers also when ended with escape key
+    }
+}
+
+void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    const SdrCaptionObj* pCaption = pNote->GetCaption();
+    if (!pCaption) return;
+
+    Rectangle aRect = pCaption->GetLogicRect();
+    basegfx::B2DRange aTailRange = pCaption->getTailPolygon().getB2DRange();
+    Rectangle aTailRect(aTailRange.getMinX(), aTailRange.getMinY(),
+                        aTailRange.getMaxX(), aTailRange.getMaxY());
+    aRect.Union( aTailRect );
+
+    // This is a temporary workaround: sometime in tiled rendering mode
+    // the tip of the note arrow is misplaced by a fixed offset.
+    // The value used below is enough to get the tile, where the arrow tip is
+    // placed, invalidated.
+    const int nBorderSize = 200;
+    Rectangle aInvalidRect = aRect;
+    aInvalidRect.Left() -= nBorderSize;
+    aInvalidRect.Right() += nBorderSize;
+    aInvalidRect.Top() -= nBorderSize;
+    aInvalidRect.Bottom() += nBorderSize;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell)
+        {
+            for (auto& pWin: pTabViewShell->pGridWin)
+            {
+                if (pWin && pWin->IsVisible())
+                {
+                    pWin->Invalidate(aInvalidRect);
+                }
+            }
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
 
