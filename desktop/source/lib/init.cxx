@@ -2913,7 +2913,7 @@ int lok_preinit(const char* install_path, const char* user_profile_path)
 
 static void lo_destroy(LibreOfficeKit* pThis)
 {
-    SolarMutexGuard aGuard;
+    SolarMutexClearableGuard aGuard;
 
     bool bSuccess = false;
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
@@ -2934,6 +2934,8 @@ static void lo_destroy(LibreOfficeKit* pThis)
     {
         Application::Quit();
     }
+
+    aGuard.clear();
 
     osl_joinWithThread(pLib->maThread);
     osl_destroyThread(pLib->maThread);
