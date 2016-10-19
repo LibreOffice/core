@@ -469,6 +469,9 @@ void ScDocument::StartNeededListeners( const std::shared_ptr<const sc::ColumnSet
 
 void ScDocument::StartAllListeners( const ScRange& rRange )
 {
+    if (IsClipOrUndo() || GetNoListening())
+        return;
+
     std::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(new sc::ColumnBlockPositionSet(*this));
     sc::StartListeningContext aStartCxt(*this, pPosSet);
     sc::EndListeningContext aEndCxt(*this, pPosSet);
