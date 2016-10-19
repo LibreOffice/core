@@ -1249,7 +1249,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                           BorderColorStatus&         rBorderColorStatus,
                                           sal_uInt16                 nSlotId,
                                           const Reference< XFrame >& rFrame,
-                                          const OUString&            rWndTitle,
                                           vcl::Window*                    pParentWindow,
                                           std::function<void(const OUString&, const Color&)> const & aFunction):
 
@@ -1279,7 +1278,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         case SID_ATTR_CHAR_BACK_COLOR:
         {
             mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
-            mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
             break;
         }
         case SID_ATTR_CHAR_COLOR:
@@ -1294,34 +1292,52 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                          OUString( ".uno:AutoColorInvalid" ));
             SfxItemState eState = aQueryStatus.QueryState( pDummy );
             if( (SfxItemState::DEFAULT > eState) || ( SID_EXTRUSION_3D_COLOR == theSlotId ) )
-            {
                 mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
-                mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_TEXTCOLOR ) );
-            }
             break;
         }
-        case SID_FRAME_LINECOLOR:
+        default:
         {
             mpButtonAutoColor->Hide();
             mpAutomaticSeparator->Hide();
-            mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
-            break;
-        }
-        case SID_ATTR_LINE_COLOR:
-        {
-            mpButtonAutoColor->Hide();
-            mpAutomaticSeparator->Hide();
-            mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_LINECOLOR ) );
-            break;
-        }
-        case SID_ATTR_FILL_COLOR:
-        {
-            mpButtonAutoColor->Hide();
-            mpAutomaticSeparator->Hide();
-            mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FILLCOLOR ) );
             break;
         }
     }
+
+    OUString aWindowTitle;
+    switch ( theSlotId )
+    {
+        case SID_ATTR_CHAR_COLOR:
+        case SID_ATTR_CHAR_COLOR2:
+            aWindowTitle = SVX_RESSTR( RID_SVXSTR_TEXTCOLOR );
+            break;
+
+        case SID_ATTR_CHAR_COLOR_BACKGROUND:
+        case SID_ATTR_CHAR_BACK_COLOR:
+            aWindowTitle = SVX_RESSTR( RID_SVXSTR_EXTRAS_CHARBACKGROUND );
+            break;
+
+        case SID_BACKGROUND_COLOR:
+            aWindowTitle = SVX_RESSTR( RID_SVXSTR_BACKGROUND );
+            break;
+
+        case SID_FRAME_LINECOLOR:
+            aWindowTitle = SVX_RESSTR( RID_SVXSTR_FRAME_COLOR );
+            break;
+
+        case SID_EXTRUSION_3D_COLOR:
+            aWindowTitle = SVX_RESSTR( RID_SVXSTR_EXTRUSION_COLOR );
+            break;
+
+        case SID_ATTR_LINE_COLOR:
+            aWindowTitle = SVX_RESSTR( RID_SVXSTR_LINECOLOR );
+            break;
+
+        case SID_ATTR_FILL_COLOR:
+            aWindowTitle = SVX_RESSTR( RID_SVXSTR_FILLCOLOR );
+            break;
+    }
+    SetText( aWindowTitle );
+    mpColorSet->SetAccessibleName( aWindowTitle );
 
     mpPaletteListBox->SetStyle( mpPaletteListBox->GetStyle() | WB_BORDER | WB_AUTOSIZE );
     mpPaletteListBox->SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectPaletteHdl ) );
@@ -1342,7 +1358,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     mpRecentColorSet->SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectHdl ) );
     SetHelpId( HID_POPUP_COLOR );
     mpColorSet->SetHelpId( HID_POPUP_COLOR_CTRL );
-    SetText( rWndTitle );
 
     mrPaletteManager.ReloadColorSet(*mpColorSet);
     mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
@@ -2699,37 +2714,8 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
                             m_aBorderColorStatus,
                             GetSlotId(),
                             m_xFrame,
-                            SVX_RESSTR( RID_SVXSTR_TEXTCOLOR ),
                             &GetToolBox(),
                             m_aColorSelectFunction);
-
-    switch( GetSlotId() )
-    {
-        case SID_ATTR_CHAR_COLOR_BACKGROUND :
-        case SID_ATTR_CHAR_BACK_COLOR :
-            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_EXTRAS_CHARBACKGROUND ) );
-            break;
-
-        case SID_BACKGROUND_COLOR :
-            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
-            break;
-
-        case SID_FRAME_LINECOLOR:
-            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
-            break;
-
-        case SID_EXTRUSION_3D_COLOR:
-            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_EXTRUSION_COLOR ) );
-            break;
-
-        case SID_ATTR_LINE_COLOR:
-            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_LINECOLOR ) );
-            break;
-
-        case SID_ATTR_FILL_COLOR:
-            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_FILLCOLOR ) );
-            break;
-    }
 
     pColorWin->StartPopupMode( &GetToolBox(),
         FloatWinPopupFlags::AllowTearOff|FloatWinPopupFlags::NoAppFocusClose );

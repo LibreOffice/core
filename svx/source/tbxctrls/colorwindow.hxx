@@ -66,7 +66,6 @@ public:
                          BorderColorStatus& rBorderColorStatus,
                          sal_uInt16 nSlotId,
                          const css::uno::Reference< css::frame::XFrame >& rFrame,
-                         const OUString& rWndTitle,
                          vcl::Window* pParentWindow,
                          std::function<void(const OUString&, const Color&)> const & maColorSelectFunction);
     virtual ~SvxColorWindow_Impl() override;
