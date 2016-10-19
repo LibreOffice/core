@@ -133,6 +133,14 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
     {
         return true;
     }
+    auto loc = decl->getLocation();
+    if (compiler.getSourceManager().isMacroBodyExpansion(loc)
+        && (Lexer::getImmediateMacroName(
+                loc, compiler.getSourceManager(), compiler.getLangOpts())
+            == "MDDS_MTV_DEFINE_ELEMENT_CALLBACKS"))
+    {
+        return true;
+    }
     report(
         DiagnosticsEngine::Warning,
         (canon->isDefined()

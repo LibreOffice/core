@@ -166,8 +166,7 @@ bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const {
            || name.startswith(SRCDIR "/include/salhelper/")
            || name.startswith(SRCDIR "/include/systools/")
            || name.startswith(SRCDIR "/include/typelib/")
-           || name.startswith(SRCDIR "/include/uno/")
-           || name.startswith(WORKDIR "/"));
+           || name.startswith(SRCDIR "/include/uno/"));
 }
 
 bool Plugin::isInUnoIncludeFile(const FunctionDecl* functionDecl) const {
