@@ -4516,7 +4516,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     {
         assert(*pCopyPam->GetPoint() == rPos);
         // the Node rPos points to may be deleted so unregister ...
-        rPos.nContent = SwIndex(nullptr);
+        rPos.nContent.Assign(nullptr, 0);
         lcl_DeleteRedlines(rPam, *pCopyPam);
         rPos = *pCopyPam->GetPoint(); // ... and restore.
     }

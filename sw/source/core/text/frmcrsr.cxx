@@ -689,7 +689,7 @@ bool SwTextFrame::LeftMargin(SwPaM *pPam) const
             nIndx = 0;
         }
     }
-    pPam->GetPoint()->nContent = SwIndex( pFrame->GetTextNode(), nIndx );
+    pPam->GetPoint()->nContent.Assign(pFrame->GetTextNode(), nIndx);
     SwTextCursor::SetRightMargin( false );
     return true;
 }
@@ -730,7 +730,7 @@ bool SwTextFrame::RightMargin(SwPaM *pPam, bool bAPI) const
                 --nRightMargin;
         }
     }
-    pPam->GetPoint()->nContent = SwIndex( pFrame->GetTextNode(), nRightMargin );
+    pPam->GetPoint()->nContent.Assign(pFrame->GetTextNode(), nRightMargin);
     SwTextCursor::SetRightMargin( !bAPI );
     return true;
 }
@@ -839,8 +839,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
                     nTmpOfst = nStart;
                     aSet.SetRight( true );
                 }
-                pPam->GetPoint()->nContent =
-                      SwIndex( const_cast<SwTextFrame*>(this)->GetTextNode(), nTmpOfst );
+                pPam->GetPoint()->nContent.Assign(const_cast<SwTextFrame*>(this)->GetTextNode(), nTmpOfst);
                 return true;
             }
 

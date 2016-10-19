@@ -2769,7 +2769,7 @@ SwUndo* SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox
             }
         }
         else
-            aInsertEnd.nContent = SwIndex( nullptr );
+            aInsertEnd.nContent.Assign(nullptr, 0);
     }
     // For joined (merged) contents the start of deletion and end of insertion are identical
     // otherwise adjacent nodes.
