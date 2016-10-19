@@ -8,15 +8,6 @@
  */
 
 #include <sal/config.h>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/deployment/XPackage.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/deployment/XExtensionManager.hpp>
-#include <com/sun/star/task/XAbortChannel.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/bootstrap.hxx>
 #include <comphelper/backupfilehelper.hxx>
@@ -25,6 +16,23 @@
 #include <deque>
 #include <vector>
 #include <zlib.h>
+
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
+#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/XElement.hpp>
+#include <com/sun/star/xml/dom/XNodeList.hpp>
+#include <com/sun/star/xml/sax/XSAXSerializable.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/sax/XWriter.hpp>
+#include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/io/TempFile.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace css;
 static const sal_uInt32 BACKUP_FILE_HELPER_BLOCK_SIZE = 16384;
@@ -388,34 +396,48 @@ namespace
 
 namespace
 {
-    enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
+    enum PackageRepository { USER, SHARED, BUNDLED };
 
     class ExtensionInfoEntry
     {
     private:
-        PackageState    meState;            // REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE
-        OString         maRepositoryName;   // user|shared|bundled
-        OString         maName;
-        OString         maIdentifier;
-        OString         maVersion;
+        OString             maName;         // extension name
+        PackageRepository   maRepository;   // user|shared|bundled
+        bool                mbEnabled;      // state
 
     public:
         ExtensionInfoEntry()
-        :   meState(NOT_AVAILABLE),
-            maRepositoryName(),
-            maName(),
-            maIdentifier(),
-            maVersion()
+        :   maName(),
+            maRepository(USER),
+            mbEnabled(false)
+        {
+        }
+
+        ExtensionInfoEntry(const OString& rName, bool bEnabled)
+        :   maName(rName),
+            maRepository(USER),
+            mbEnabled(bEnabled)
         {
         }
 
         ExtensionInfoEntry(const uno::Reference< deployment::XPackage >& rxPackage)
-        :   meState(NOT_AVAILABLE),
-            maRepositoryName(OUStringToOString(rxPackage->getRepositoryName(), RTL_TEXTENCODING_ASCII_US)),
-            maName(OUStringToOString(rxPackage->getName(), RTL_TEXTENCODING_ASCII_US)),
-            maIdentifier(OUStringToOString(rxPackage->getIdentifier().Value, RTL_TEXTENCODING_ASCII_US)),
-            maVersion(OUStringToOString(rxPackage->getVersion(), RTL_TEXTENCODING_ASCII_US))
+        :   maName(OUStringToOString(rxPackage->getName(), RTL_TEXTENCODING_ASCII_US)),
+            maRepository(USER),
+            mbEnabled(false)
         {
+            // check maRepository
+            const OString aRepName(OUStringToOString(rxPackage->getRepositoryName(), RTL_TEXTENCODING_ASCII_US));
+
+            if (aRepName == "shared")
+            {
+                maRepository = SHARED;
+            }
+            else if (aRepName == "bundled")
+            {
+                maRepository = BUNDLED;
+            }
+
+            // check mbEnabled
             const beans::Optional< beans::Ambiguous< sal_Bool > > option(
                 rxPackage->isRegistered(uno::Reference< task::XAbortChannel >(),
                 uno::Reference< ucb::XCommandEnvironment >()));
@@ -424,50 +446,25 @@ namespace
             {
                 ::beans::Ambiguous< sal_Bool > const& reg = option.Value;
 
-                if (reg.IsAmbiguous)
+                if (!reg.IsAmbiguous)
                 {
-                    meState = AMBIGUOUS;
+                    mbEnabled = reg.Value;
                 }
-                else
-                {
-                    meState = reg.Value ? REGISTERED : NOT_REGISTERED;
-                }
-            }
-            else
-            {
-                meState = NOT_AVAILABLE;
             }
         }
 
         bool isSameExtension(const ExtensionInfoEntry& rComp) const
         {
-            return (0 == maRepositoryName.compareTo(rComp.maRepositoryName)
-                && 0 == maName.compareTo(rComp.maName)
-                && 0 == maVersion.compareTo(rComp.maVersion)
-                && 0 == maIdentifier.compareTo(rComp.maIdentifier));
+            return (maRepository == rComp.maRepository && 0 == maName.compareTo(rComp.maName));
         }
 
         bool operator<(const ExtensionInfoEntry& rComp) const
         {
-            if (0 == maRepositoryName.compareTo(rComp.maRepositoryName))
+            if (maRepository == rComp.maRepository)
             {
                 if (0 == maName.compareTo(rComp.maName))
                 {
-                    if (0 == maVersion.compareTo(rComp.maVersion))
-                    {
-                        if (0 == maIdentifier.compareTo(rComp.maIdentifier))
-                        {
-                            return meState < rComp.meState;
-                        }
-                        else
-                        {
-                            return 0 > maIdentifier.compareTo(rComp.maIdentifier);
-                        }
-                    }
-                    else
-                    {
-                        return 0 > maVersion.compareTo(rComp.maVersion);
-                    }
+                    return mbEnabled < rComp.mbEnabled;
                 }
                 else
                 {
@@ -476,44 +473,36 @@ namespace
             }
             else
             {
-                return 0 > maRepositoryName.compareTo(rComp.maRepositoryName);
+                return maRepository < rComp.maRepository;
             }
         }
 
         bool read_entry(FileSharedPtr& rFile)
         {
-            // read meState
+            // read maName
+            if (!read_OString(rFile, maName))
+            {
+                return false;
+            }
+
+            // read maRepository
             sal_uInt32 nState(0);
 
             if (read_sal_uInt32(rFile, nState))
             {
-                meState = static_cast< PackageState >(nState);
+                maRepository = static_cast< PackageRepository >(nState);
             }
             else
             {
                 return false;
             }
 
-            // read maRepositoryName;
-            if (!read_OString(rFile, maRepositoryName))
+            // read mbEnabled
+            if (read_sal_uInt32(rFile, nState))
             {
-                return false;
+                mbEnabled = static_cast< bool >(nState);
             }
-
-            // read maName;
-            if (!read_OString(rFile, maName))
-            {
-                return false;
-            }
-
-            // read maIdentifier;
-            if (!read_OString(rFile, maIdentifier))
-            {
-                return false;
-            }
-
-            // read maVersion;
-            if (!read_OString(rFile, maVersion))
+            else
             {
                 return false;
             }
@@ -523,34 +512,24 @@ namespace
 
         bool write_entry(oslFileHandle& rHandle) const
         {
-            // write meState
-            const sal_uInt32 nState(meState);
-
-            if (!write_sal_uInt32(rHandle, nState))
-            {
-                return false;
-            }
-
-            // write maRepositoryName
-            if (!write_OString(rHandle, maRepositoryName))
-            {
-                return false;
-            }
-
             // write maName;
             if (!write_OString(rHandle, maName))
             {
                 return false;
             }
 
-            // write maIdentifier;
-            if (!write_OString(rHandle, maIdentifier))
+            // write maRepository
+            sal_uInt32 nState(maRepository);
+
+            if (!write_sal_uInt32(rHandle, nState))
             {
                 return false;
             }
 
-            // write maVersion;
-            if (!write_OString(rHandle, maVersion))
+            // write mbEnabled
+            nState = static_cast< sal_uInt32 >(mbEnabled);
+
+            if (!write_sal_uInt32(rHandle, nState))
             {
                 return false;
             }
@@ -558,28 +537,18 @@ namespace
             return true;
         }
 
+        const OString& getName() const
+        {
+            return maName;
+        }
+
         bool isEnabled() const
         {
-            return REGISTERED == meState;
+            return mbEnabled;
         }
     };
 
     typedef ::std::vector< ExtensionInfoEntry > ExtensionInfoEntryVector;
-
-    bool containsSameExtension(
-        const ExtensionInfoEntryVector& rExtensionInfoEntryVector,
-        const ExtensionInfoEntry& rCompare)
-    {
-        for (const auto& rInfo : rExtensionInfoEntryVector)
-        {
-            if (rInfo.isSameExtension(rCompare))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     class ExtensionInfo
     {
@@ -603,7 +572,7 @@ namespace
             maEntries.clear();
         }
 
-        void createCurrent()
+        void createUsingXExtensionManager()
         {
             // clear all data
             reset();
@@ -654,6 +623,268 @@ namespace
             {
                 // sort the list
                 std::sort(maEntries.begin(), maEntries.end());
+            }
+        }
+
+    private:
+        void visitNodesXMLRead(const uno::Reference< xml::dom::XElement >& rElement)
+        {
+            if (rElement.is())
+            {
+                const OUString aTagName(rElement->getTagName());
+
+                if (aTagName == "extension")
+                {
+                    OUString aAttrUrl(rElement->getAttribute("url"));
+                    const OUString aAttrRevoked(rElement->getAttribute("revoked"));
+
+                    if (!aAttrUrl.isEmpty())
+                    {
+                        const sal_Int32 nIndex(aAttrUrl.lastIndexOf('/'));
+
+                        if (nIndex > 0 && aAttrUrl.getLength() > nIndex + 1)
+                        {
+                            aAttrUrl = aAttrUrl.copy(nIndex + 1);
+                        }
+
+                        const bool bEnabled(aAttrRevoked.isEmpty() || !aAttrRevoked.toBoolean());
+                        maEntries.push_back(
+                            ExtensionInfoEntry(
+                                OUStringToOString(aAttrUrl, RTL_TEXTENCODING_ASCII_US),
+                                bEnabled));
+                    }
+                }
+                else
+                {
+                    uno::Reference< xml::dom::XNodeList > aList = rElement->getChildNodes();
+
+                    if (aList.is())
+                    {
+                        const long nLength(aList->getLength());
+
+                        for (long a(0); a < nLength; a++)
+                        {
+                            const uno::Reference< xml::dom::XElement > aChild(aList->item(a), uno::UNO_QUERY);
+
+                            if (aChild.is())
+                            {
+                                visitNodesXMLRead(aChild);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    public:
+        void createUsingExtensionRegistryEntriesFromXML(const OUString& rUserConfigWorkURL)
+        {
+            // This is looked up for 'user' in the user|shared|bundled deployed Extensions,
+            // only the user ones seem to be able to be de/activated. The ones for user are in
+            // uno_packages/cache while the others are in /extensions/shared.
+            // This also means that all user-deployed Extensions can probably be uninstalled
+            // in safe mode by deleting the uno_packages directory and the shared|bundled
+            // ones by deleting the extensions directory.
+            const OUString aRegPath("/registry/com.sun.star.comp.deployment.bundle.PackageRegistryBackend/backenddb.xml");
+            const OUString aUnoPackagReg(rUserConfigWorkURL + "/uno_packages/cache" + aRegPath);
+
+            if (fileExists(aUnoPackagReg))
+            {
+                uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                uno::Reference< xml::dom::XDocumentBuilder > xBuilder(xml::dom::DocumentBuilder::create(xContext));
+                uno::Reference< xml::dom::XDocument > aDocument = xBuilder->parseURI(aUnoPackagReg);
+
+                if (aDocument.is())
+                {
+                    visitNodesXMLRead(aDocument->getDocumentElement());
+                }
+            }
+
+            if (!maEntries.empty())
+            {
+                // sort the list
+                std::sort(maEntries.begin(), maEntries.end());
+            }
+        }
+
+    private:
+        static bool visitNodesXMLChange(
+            const OUString& rTagToSearch,
+            const uno::Reference< xml::dom::XElement >& rElement,
+            const ExtensionInfoEntryVector& rToBeEnabled,
+            const ExtensionInfoEntryVector& rToBeDisabled)
+        {
+            bool bChanged(false);
+
+            if (rElement.is())
+            {
+                const OUString aTagName(rElement->getTagName());
+
+                if (aTagName == rTagToSearch)
+                {
+                    const OString aAttrUrl(OUStringToOString(rElement->getAttribute("url"), RTL_TEXTENCODING_ASCII_US));
+                    const OUString aAttrRevoked(rElement->getAttribute("revoked"));
+                    const bool bEnabled(aAttrRevoked.isEmpty() || !aAttrRevoked.toBoolean());
+
+                    if (!aAttrUrl.isEmpty())
+                    {
+                        for (const auto& enable : rToBeEnabled)
+                        {
+                            if (-1 != aAttrUrl.indexOf(enable.getName()))
+                            {
+                                if (!bEnabled)
+                                {
+                                    // needs to be enabled
+                                    rElement->removeAttribute("revoked");
+                                    bChanged = true;
+                                }
+                            }
+                        }
+
+                        for (const auto& disable : rToBeDisabled)
+                        {
+                            if (-1 != aAttrUrl.indexOf(disable.getName()))
+                            {
+                                if (bEnabled)
+                                {
+                                    // needs to be disabled
+                                    rElement->setAttribute("revoked", "true");
+                                    bChanged = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    uno::Reference< xml::dom::XNodeList > aList = rElement->getChildNodes();
+
+                    if (aList.is())
+                    {
+                        const long nLength(aList->getLength());
+
+                        for (long a(0); a < nLength; a++)
+                        {
+                            const uno::Reference< xml::dom::XElement > aChild(aList->item(a), uno::UNO_QUERY);
+
+                            if (aChild.is())
+                            {
+                                bChanged |= visitNodesXMLChange(
+                                    rTagToSearch,
+                                    aChild,
+                                    rToBeEnabled,
+                                    rToBeDisabled);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return bChanged;
+        }
+
+        static void visitNodesXMLChangeOneCase(
+            const OUString& rUnoPackagReg,
+            const OUString& rTagToSearch,
+            const ExtensionInfoEntryVector& rToBeEnabled,
+            const ExtensionInfoEntryVector& rToBeDisabled)
+        {
+            if (fileExists(rUnoPackagReg))
+            {
+                uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                uno::Reference< xml::dom::XDocumentBuilder > xBuilder = xml::dom::DocumentBuilder::create(xContext);
+                uno::Reference< xml::dom::XDocument > aDocument = xBuilder->parseURI(rUnoPackagReg);
+
+                if (aDocument.is())
+                {
+                    if (visitNodesXMLChange(
+                        rTagToSearch,
+                        aDocument->getDocumentElement(),
+                        rToBeEnabled,
+                        rToBeDisabled))
+                    {
+                        // did change - write back
+                        uno::Reference< xml::sax::XSAXSerializable > xSerializer(aDocument, uno::UNO_QUERY);
+
+                        if (xSerializer.is())
+                        {
+                            // create a SAXWriter
+                            uno::Reference< xml::sax::XWriter > const xSaxWriter = xml::sax::Writer::create(xContext);
+                            uno::Reference< io::XStream > xTempFile(io::TempFile::create(xContext), uno::UNO_QUERY);
+                            uno::Reference< io::XOutputStream > xOutStrm(xTempFile->getOutputStream(), uno::UNO_QUERY);
+
+                            // set output stream and do the serialization
+                            xSaxWriter->setOutputStream(uno::Reference< css::io::XOutputStream >(xOutStrm, uno::UNO_QUERY));
+                            xSerializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(xSaxWriter, uno::UNO_QUERY), uno::Sequence< beans::StringPair >());
+
+                            // get URL from temp file
+                            uno::Reference < beans::XPropertySet > xTempFileProps(xTempFile, uno::UNO_QUERY);
+                            uno::Any aUrl = xTempFileProps->getPropertyValue("Uri");
+                            OUString aTempURL;
+                            aUrl >>= aTempURL;
+
+                            // copy back file
+                            if (!aTempURL.isEmpty() && fileExists(aTempURL))
+                            {
+                                if (fileExists(rUnoPackagReg))
+                                {
+                                    osl::File::remove(rUnoPackagReg);
+                                }
+
+#if OSL_DEBUG_LEVEL > 1
+                                SAL_WARN_IF(osl::FileBase::E_None != osl::File::move(aTempURL, rUnoPackagReg), "comphelper:backupfileheler", "could not copy back modified Extension configuration file");
+#else
+                                osl::File::move(aTempURL, rUnoPackagReg);
+#endif
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    public:
+        static void changeEnableDisableStateInXML(
+            const OUString& rUserConfigWorkURL,
+            const ExtensionInfoEntryVector& rToBeEnabled,
+            const ExtensionInfoEntryVector& rToBeDisabled)
+        {
+            const OUString aRegPathFront("/uno_packages/cache/registry/com.sun.star.comp.deployment.");
+            const OUString aRegPathBack(".PackageRegistryBackend/backenddb.xml");
+            // first appearance to check
+            {
+                const OUString aUnoPackagReg(rUserConfigWorkURL + aRegPathFront + "bundle" + aRegPathBack);
+                const OUString aTagToSearch("extension");
+
+                visitNodesXMLChangeOneCase(
+                    aUnoPackagReg,
+                    aTagToSearch,
+                    rToBeEnabled,
+                    rToBeDisabled);
+            }
+
+            // second appearance to check
+            {
+                const OUString aUnoPackagReg(rUserConfigWorkURL + aRegPathFront + "configuration" + aRegPathBack);
+                const OUString aTagToSearch("configuration");
+
+                visitNodesXMLChangeOneCase(
+                    aUnoPackagReg,
+                    aTagToSearch,
+                    rToBeEnabled,
+                    rToBeDisabled);
+            }
+
+            // third appearance to check
+            {
+                const OUString aUnoPackagReg(rUserConfigWorkURL + aRegPathFront + "script" + aRegPathBack);
+                const OUString aTagToSearch("script");
+
+                visitNodesXMLChangeOneCase(
+                    aUnoPackagReg,
+                    aTagToSearch,
+                    rToBeEnabled,
+                    rToBeDisabled);
             }
         }
 
@@ -719,7 +950,7 @@ namespace
             // create current configuration
             if (maEntries.empty())
             {
-                createCurrent();
+                createUsingXExtensionManager();
             }
 
             // open target temp file and write current configuration to it - it exists until deleted
@@ -745,80 +976,6 @@ namespace
             }
 
             return false;
-        }
-
-        static void changeEnableDisableState(
-            const ExtensionInfoEntryVector& rToBeEnabled,
-            const ExtensionInfoEntryVector& rToBeDisabled)
-        {
-            // create content from current extension configuration
-            uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
-            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            uno::Reference< deployment::XExtensionManager > m_xExtensionManager = deployment::ExtensionManager::get(xContext);
-
-            try
-            {
-                xAllPackages = m_xExtensionManager->getAllExtensions(uno::Reference< task::XAbortChannel >(),
-                    uno::Reference< ucb::XCommandEnvironment >());
-            }
-            catch (const deployment::DeploymentException &)
-            {
-                return;
-            }
-            catch (const ucb::CommandFailedException &)
-            {
-                return;
-            }
-            catch (const ucb::CommandAbortedException &)
-            {
-                return;
-            }
-            catch (const lang::IllegalArgumentException & e)
-            {
-                throw uno::RuntimeException(e.Message, e.Context);
-            }
-
-            for (sal_Int32 i = 0; i < xAllPackages.getLength(); ++i)
-            {
-                uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
-
-                for (sal_Int32 j = 0; j < xPackageList.getLength(); ++j)
-                {
-                    uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
-
-                    if (xPackage.is())
-                    {
-                        const ExtensionInfoEntry aCurrent(xPackage);
-
-                        if (containsSameExtension(rToBeEnabled, aCurrent))
-                        {
-                            try
-                            {
-                                m_xExtensionManager->enableExtension(
-                                    xPackage,
-                                    uno::Reference< task::XAbortChannel >(),
-                                    uno::Reference< ucb::XCommandEnvironment >());
-                            }
-                            catch (const ::ucb::CommandAbortedException &)
-                            {
-                            }
-                        }
-                        else if (containsSameExtension(rToBeDisabled, aCurrent))
-                        {
-                            try
-                            {
-                                m_xExtensionManager->disableExtension(
-                                    xPackage,
-                                    uno::Reference< task::XAbortChannel >(),
-                                    uno::Reference< ucb::XCommandEnvironment >());
-                            }
-                            catch (const ::ucb::CommandAbortedException &)
-                            {
-                            }
-                        }
-                    }
-                }
-            }
         }
     };
 }
@@ -1817,21 +1974,26 @@ namespace comphelper
 
     bool BackupFileHelper::isTryDisableAllExtensionsPossible()
     {
-        // return true if there is an eabled extension that can be disabled
-        ExtensionInfo aCurrentExtensionInfo;
+        // check if there are still enabled extension which can be disabled,
+        // but as we are now in SafeMode, use XML infos for this since the
+        // extensions are not loaded from XExtensionManager
+        class ExtensionInfo aExtensionInfo;
 
-        aCurrentExtensionInfo.createCurrent();
-        return aCurrentExtensionInfo.areThereEnabledExtensions();
+        aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
+
+        return aExtensionInfo.areThereEnabledExtensions();
     }
 
     void BackupFileHelper::tryDisableAllExtensions()
     {
-        // disable all still enabled extensions
+        // disable all still enabled extensions,
+        // but as we are now in SafeMode, use XML infos for this since the
+        // extensions are not loaded from XExtensionManager
         ExtensionInfo aCurrentExtensionInfo;
         const ExtensionInfoEntryVector aToBeEnabled;
         ExtensionInfoEntryVector aToBeDisabled;
 
-        aCurrentExtensionInfo.createCurrent();
+        aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
 
         const ExtensionInfoEntryVector& rCurrentVector = aCurrentExtensionInfo.getExtensionInfoEntryVector();
 
@@ -1843,7 +2005,7 @@ namespace comphelper
             }
         }
 
-        ExtensionInfo::changeEnableDisableState(aToBeEnabled, aToBeDisabled);
+        ExtensionInfo::changeEnableDisableStateInXML(maUserConfigWorkURL, aToBeEnabled, aToBeDisabled);
     }
 
     bool BackupFileHelper::isTryResetCustomizationsPossible()
@@ -2210,19 +2372,20 @@ namespace comphelper
                     {
                         if (aLoadedExtensionInfo.read_entries(aBaseFile))
                         {
+                            // get current extension info, but from XML config files
                             ExtensionInfo aCurrentExtensionInfo;
 
-                            aCurrentExtensionInfo.createCurrent();
+                            aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
 
                             // now we have loaded last_working (aLoadedExtensionInfo) and
                             // current (aCurrentExtensionInfo) ExtensionInfo and may react on
                             // differences by de/activating these as needed
+                            const ExtensionInfoEntryVector& aUserEntries = aCurrentExtensionInfo.getExtensionInfoEntryVector();
                             const ExtensionInfoEntryVector& rLoadedVector = aLoadedExtensionInfo.getExtensionInfoEntryVector();
-                            const ExtensionInfoEntryVector& rCurrentVector = aCurrentExtensionInfo.getExtensionInfoEntryVector();
                             ExtensionInfoEntryVector aToBeDisabled;
                             ExtensionInfoEntryVector aToBeEnabled;
 
-                            for (const auto& rCurrentInfo : rCurrentVector)
+                            for (const auto& rCurrentInfo : aUserEntries)
                             {
                                 const ExtensionInfoEntry* pLoadedInfo = nullptr;
 
@@ -2259,11 +2422,11 @@ namespace comphelper
                                         aToBeDisabled.push_back(rCurrentInfo);
                                     }
                                 }
+                            }
 
-                                if (!aToBeDisabled.empty() || !aToBeEnabled.empty())
-                                {
-                                    ExtensionInfo::changeEnableDisableState(aToBeEnabled, aToBeDisabled);
-                                }
+                            if (!aToBeDisabled.empty() || !aToBeEnabled.empty())
+                            {
+                                ExtensionInfo::changeEnableDisableStateInXML(maUserConfigWorkURL, aToBeEnabled, aToBeDisabled);
                             }
 
                             bRetval = true;
