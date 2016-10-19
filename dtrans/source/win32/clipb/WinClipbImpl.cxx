@@ -152,7 +152,7 @@ void SAL_CALL CWinClipbImpl::flushClipboard( ) throw( RuntimeException )
     // The request is needed to prevent flushing if we are not clipboard owner (it is
     // not known what happens if we flush but aren't clipoard owner).
     // It may be possible to move the request to the clipboard STA thread by saving the
-    // DataObject and call OleIsCurrentClipboard bevore flushing.
+    // DataObject and call OleIsCurrentClipboard before flushing.
 
     if ( nullptr != m_pCurrentClipContent )
         m_MtaOleClipboard.flushClipboard( );

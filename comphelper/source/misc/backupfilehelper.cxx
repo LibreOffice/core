@@ -726,7 +726,7 @@ namespace
         sal_uInt32          mnOffset;           // offset in File (zero identifies new file)
         sal_uInt32          mnCrc32;            // checksum
         FileSharedPtr       maFile;             // file where to find the data (at offset)
-        bool                mbDoCompress;       // flag if this file is scheduled to be compredded when written
+        bool                mbDoCompress;       // flag if this file is scheduled to be compressed when written
 
         bool copy_content_straight(oslFileHandle& rTargetHandle)
         {
@@ -1632,7 +1632,7 @@ namespace comphelper
 
     bool BackupFileHelper::isTryDisableAllExtensionsPossible()
     {
-        // return true if there is an eabled extension that can be disabled
+        // return true if there is an enabled extension that can be disabled
         ExtensionInfo aCurrentExtensionInfo;
 
         aCurrentExtensionInfo.createCurrent();
@@ -2116,7 +2116,7 @@ namespace comphelper
         {
             // whole directory. To do so, scan directory and exclude some dirs
             // from which we know they do not need to be secured explicitely. This
-            // should alrteady include registrymodifications, too.
+            // should already include registrymodifications, too.
             scanDirsAndFiles(
                 maUserConfigBaseURL,
                 maDirs,

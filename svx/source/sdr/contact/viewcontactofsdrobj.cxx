@@ -128,7 +128,7 @@ void ViewContactOfSdrObj::ActionChanged()
     ViewContact::ActionChanged();
 }
 
-// override for acessing the SdrObject
+// override for accessing the SdrObject
 SdrObject* ViewContactOfSdrObj::TryToGetSdrObject() const
 {
     return &GetSdrObject();
