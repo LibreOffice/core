@@ -1221,6 +1221,8 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     if (rDoc.IsStreamValid(rPos.Tab()))
         rDoc.SetStreamValid(rPos.Tab(), false);
 
+    ScTabView::OnLOKNoteStateChanged(pNote);
+
     rDocShell.SetDocumentModified();
 
     return true;
