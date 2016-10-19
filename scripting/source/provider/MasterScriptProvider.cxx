@@ -235,7 +235,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
 throw ( provider::ScriptFrameworkErrorException,
         RuntimeException, std::exception )
 {
-    if ( !isValid() )
+    if ( !m_bIsValid )
     {
         throw provider::ScriptFrameworkErrorException(
             "MasterScriptProvider not initialised", Reference< XInterface >(),
@@ -389,7 +389,7 @@ OUString SAL_CALL
 MasterScriptProvider::getName()
         throw ( css::uno::RuntimeException, std::exception )
 {
-    if ( !isPkgProvider() )
+    if ( !m_bIsPkgMSP )
     {
         OUString sCtx = getContextString();
         if ( sCtx.startsWith( "vnd.sun.star.tdoc" ) )
@@ -421,9 +421,8 @@ MasterScriptProvider::getChildNodes()
 {
     Sequence< Reference< provider::XScriptProvider > > providers = getAllProviders();
 
-    Reference< provider::XScriptProvider > pkgProv = getPkgProvider();
     sal_Int32 size = providers.getLength();
-    bool hasPkgs = pkgProv.is();
+    bool hasPkgs = m_xMSPPkg.is();
     if ( hasPkgs  )
     {
         size++;
@@ -437,7 +436,7 @@ MasterScriptProvider::getChildNodes()
 
     if ( hasPkgs  )
     {
-        children[ provIndex ].set( pkgProv, UNO_QUERY );
+        children[ provIndex ].set( m_xMSPPkg, UNO_QUERY );
 
     }
 

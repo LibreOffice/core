@@ -1182,7 +1182,7 @@ public:
 
         if (rHint.GetId() == SFX_HINT_DYING)
         {
-            Dispose();
+            mbIsDisposed = true;
         }
     }
 
@@ -1351,11 +1351,6 @@ private:
     bool mbHasOrientationWarningBeenShown;
     std::vector<sal_Int32> maSlidesPerPage;
     awt::Size maPrintSize;
-
-    void Dispose()
-    {
-        mbIsDisposed = true;
-    }
 
     sal_Int32 GetCurrentPageIndex() const
     {

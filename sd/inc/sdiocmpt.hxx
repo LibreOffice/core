@@ -32,7 +32,6 @@ protected:
     bool                        bOpen;
 
 protected:
-    void Read();
     void Write();
 
 public:

@@ -274,7 +274,7 @@ IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyHdl, Button*, void)
 
 IMPL_LINK_NOARG(HeaderFooterDialog, ClickCancelHdl, Button*, void)
 {
-    Cancel();
+    EndDialog();
 }
 
 short HeaderFooterDialog::Execute()
@@ -297,11 +297,6 @@ void HeaderFooterDialog::Apply()
     sal_uInt16 tabId = mpTabCtrl->GetCurPageId();
     apply( false, tabId == mnSlidesId );
     EndDialog(1);
-}
-
-void HeaderFooterDialog::Cancel()
-{
-    EndDialog();
 }
 
 void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )

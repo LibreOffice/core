@@ -92,8 +92,6 @@ public:
     SAL_DLLPRIVATE CustomAnimationPresets();
     SAL_DLLPRIVATE virtual ~CustomAnimationPresets();
 
-    SAL_DLLPRIVATE void init();
-
     static const CustomAnimationPresets& getCustomAnimationPresets();
 
     SAL_DLLPRIVATE css::uno::Reference< css::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
