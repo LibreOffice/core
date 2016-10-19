@@ -267,16 +267,20 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             else if ( nEndX != aMarkRange.aEnd.Col() || nEndY != aMarkRange.aEnd.Row() )
                 aHelpStr = pDoc->GetAutoFillPreview( aMarkRange, nEndX, nEndY );
 
-            //  je nach Richtung die obere oder untere Ecke:
-            SCCOL nAddX = ( nEndX >= aMarkRange.aEnd.Col() ) ? 1 : 0;
-            SCROW nAddY = ( nEndY >= aMarkRange.aEnd.Row() ) ? 1 : 0;
-            Point aPos = aViewData.GetScrPos( nEndX+nAddX, nEndY+nAddY, aViewData.GetActivePart() );
-            aPos.X() += 8;
-            aPos.Y() += 4;
-            aPos = pWin->OutputToScreenPixel( aPos );
-            Rectangle aRect( aPos, aPos );
-            QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Top;
-            Help::ShowQuickHelp(pWin, aRect, aHelpStr, nAlign);
+            if (aHelpStr.getLength())
+            {
+                //  je nach Richtung die obere oder untere Ecke:
+                SCCOL nAddX = ( nEndX >= aMarkRange.aEnd.Col() ) ? 1 : 0;
+                SCROW nAddY = ( nEndY >= aMarkRange.aEnd.Row() ) ? 1 : 0;
+                Point aPos = aViewData.GetScrPos( nEndX+nAddX, nEndY+nAddY, aViewData.GetActivePart() );
+                aPos.X() += 8;
+                aPos.Y() += 4;
+                aPos = pWin->OutputToScreenPixel( aPos );
+                Rectangle aRect( aPos, aPos );
+                QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Top;
+                HideTip();
+                nTipVisible = Help::ShowPopover(pWin, aRect, aHelpStr, nAlign);
+            }
         }
     }
 }
