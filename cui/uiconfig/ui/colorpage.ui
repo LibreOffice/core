@@ -49,15 +49,17 @@
                   <object class="GtkBox" id="box7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
                     <property name="spacing">3</property>
                     <child>
                       <object class="GtkLabel" id="label21">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0</property>
                         <property name="label" translatable="yes">Palette :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">paletteselector</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -88,6 +90,7 @@
                   <object class="GtkBox" id="box6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_top">6</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">3</property>
                     <child>
@@ -96,6 +99,8 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Recent Colors</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">recentcolorset</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -105,11 +110,11 @@
                     </child>
                     <child>
                       <object class="svxcorelo-SvxColorValueSet" id="recentcolorset">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                  </object>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
@@ -128,6 +133,7 @@
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_top">6</property>
                     <property name="column_spacing">3</property>
                     <property name="column_homogeneous">True</property>
                     <child>
@@ -140,7 +146,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="top_attach">1</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
@@ -156,7 +162,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="top_attach">2</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
@@ -172,7 +178,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
+                        <property name="top_attach">2</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
@@ -186,8 +192,23 @@
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="top_attach">1</property>
                         <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label22">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="margin_bottom">3</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Custom Palette</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">2</property>
                         <property name="height">1</property>
                       </packing>
                     </child>
@@ -207,11 +228,11 @@
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="svxcorelo-SvxColorValueSet" id="colorset">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                  </object>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
@@ -365,10 +386,10 @@
                     </child>
                     <child>
                       <object class="svxcorelo-HexColorControl" id="hex_preset">
-                            <property name="width_request">6</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                          </object>
+                        <property name="width_request">6</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">3</property>
@@ -632,6 +653,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
+                        <property name="primary_icon_tooltip_text" translatable="yes">Blue</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
@@ -646,6 +668,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
+                        <property name="primary_icon_tooltip_text" translatable="yes">Red</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
@@ -661,7 +684,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">_B</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">B_custom</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -676,7 +698,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">_G</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">G_custom</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -691,7 +712,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">_R</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">R_custom</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -705,6 +725,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
+                        <property name="primary_icon_tooltip_text" translatable="yes">Green</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
@@ -719,6 +740,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">_Hex</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">hex_custom</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -729,10 +752,10 @@
                     </child>
                     <child>
                       <object class="svxcorelo-HexColorControl" id="hex_custom">
-                            <property name="width_request">6</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                          </object>
+                        <property name="width_request">6</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">3</property>
