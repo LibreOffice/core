@@ -77,6 +77,61 @@
 		BE2DAD301831490400A4D2F7 /* vectortoken.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vectortoken.cxx; path = ../formula/source/core/api/vectortoken.cxx; sourceTree = "<group>"; };
 		BE40143A182BEB7200731FA1 /* formulagroup.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formulagroup.cxx; path = ../sc/source/core/tool/formulagroup.cxx; sourceTree = "<group>"; };
 		BE40143B182C36B000731FA1 /* clkernelthread.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clkernelthread.cxx; path = ../sc/source/core/tool/clkernelthread.cxx; sourceTree = "<group>"; };
+		BE60B5771DB7D80200D3E1E4 /* a11yactionwrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11yactionwrapper.mm; path = ../vcl/osx/a11yactionwrapper.mm; sourceTree = "<group>"; };
+		BE60B5781DB7D80200D3E1E4 /* a11ycomponentwrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ycomponentwrapper.mm; path = ../vcl/osx/a11ycomponentwrapper.mm; sourceTree = "<group>"; };
+		BE60B5791DB7D80200D3E1E4 /* a11yfactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11yfactory.mm; path = ../vcl/osx/a11yfactory.mm; sourceTree = "<group>"; };
+		BE60B57A1DB7D80200D3E1E4 /* a11yfocuslistener.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = a11yfocuslistener.cxx; path = ../vcl/osx/a11yfocuslistener.cxx; sourceTree = "<group>"; };
+		BE60B57B1DB7D80200D3E1E4 /* a11yfocustracker.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = a11yfocustracker.cxx; path = ../vcl/osx/a11yfocustracker.cxx; sourceTree = "<group>"; };
+		BE60B57C1DB7D80200D3E1E4 /* a11ylistener.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = a11ylistener.cxx; path = ../vcl/osx/a11ylistener.cxx; sourceTree = "<group>"; };
+		BE60B57D1DB7D80200D3E1E4 /* a11yrolehelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11yrolehelper.mm; path = ../vcl/osx/a11yrolehelper.mm; sourceTree = "<group>"; };
+		BE60B57E1DB7D80200D3E1E4 /* a11yselectionwrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11yselectionwrapper.mm; path = ../vcl/osx/a11yselectionwrapper.mm; sourceTree = "<group>"; };
+		BE60B57F1DB7D80200D3E1E4 /* a11ytablewrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ytablewrapper.mm; path = ../vcl/osx/a11ytablewrapper.mm; sourceTree = "<group>"; };
+		BE60B5801DB7D80200D3E1E4 /* a11ytextattributeswrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ytextattributeswrapper.mm; path = ../vcl/osx/a11ytextattributeswrapper.mm; sourceTree = "<group>"; };
+		BE60B5811DB7D80200D3E1E4 /* a11ytextwrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ytextwrapper.mm; path = ../vcl/osx/a11ytextwrapper.mm; sourceTree = "<group>"; };
+		BE60B5821DB7D80200D3E1E4 /* a11yutil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11yutil.mm; path = ../vcl/osx/a11yutil.mm; sourceTree = "<group>"; };
+		BE60B5831DB7D80200D3E1E4 /* a11yvaluewrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11yvaluewrapper.mm; path = ../vcl/osx/a11yvaluewrapper.mm; sourceTree = "<group>"; };
+		BE60B5841DB7D80200D3E1E4 /* a11ywrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrapper.mm; path = ../vcl/osx/a11ywrapper.mm; sourceTree = "<group>"; };
+		BE60B5851DB7D80200D3E1E4 /* a11ywrapperbutton.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrapperbutton.mm; path = ../vcl/osx/a11ywrapperbutton.mm; sourceTree = "<group>"; };
+		BE60B5861DB7D80200D3E1E4 /* a11ywrappercheckbox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrappercheckbox.mm; path = ../vcl/osx/a11ywrappercheckbox.mm; sourceTree = "<group>"; };
+		BE60B5871DB7D80200D3E1E4 /* a11ywrappercombobox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrappercombobox.mm; path = ../vcl/osx/a11ywrappercombobox.mm; sourceTree = "<group>"; };
+		BE60B5881DB7D80200D3E1E4 /* a11ywrappergroup.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrappergroup.mm; path = ../vcl/osx/a11ywrappergroup.mm; sourceTree = "<group>"; };
+		BE60B5891DB7D80200D3E1E4 /* a11ywrapperlist.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrapperlist.mm; path = ../vcl/osx/a11ywrapperlist.mm; sourceTree = "<group>"; };
+		BE60B58A1DB7D80200D3E1E4 /* a11ywrapperradiobutton.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrapperradiobutton.mm; path = ../vcl/osx/a11ywrapperradiobutton.mm; sourceTree = "<group>"; };
+		BE60B58B1DB7D80200D3E1E4 /* a11ywrapperradiogroup.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrapperradiogroup.mm; path = ../vcl/osx/a11ywrapperradiogroup.mm; sourceTree = "<group>"; };
+		BE60B58C1DB7D80200D3E1E4 /* a11ywrapperrow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrapperrow.mm; path = ../vcl/osx/a11ywrapperrow.mm; sourceTree = "<group>"; };
+		BE60B58D1DB7D80200D3E1E4 /* a11ywrapperscrollarea.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrapperscrollarea.mm; path = ../vcl/osx/a11ywrapperscrollarea.mm; sourceTree = "<group>"; };
+		BE60B58E1DB7D80200D3E1E4 /* a11ywrapperscrollbar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrapperscrollbar.mm; path = ../vcl/osx/a11ywrapperscrollbar.mm; sourceTree = "<group>"; };
+		BE60B58F1DB7D80200D3E1E4 /* a11ywrappersplitter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrappersplitter.mm; path = ../vcl/osx/a11ywrappersplitter.mm; sourceTree = "<group>"; };
+		BE60B5901DB7D80200D3E1E4 /* a11ywrapperstatictext.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrapperstatictext.mm; path = ../vcl/osx/a11ywrapperstatictext.mm; sourceTree = "<group>"; };
+		BE60B5911DB7D80200D3E1E4 /* a11ywrappertabgroup.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrappertabgroup.mm; path = ../vcl/osx/a11ywrappertabgroup.mm; sourceTree = "<group>"; };
+		BE60B5921DB7D80200D3E1E4 /* a11ywrappertextarea.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrappertextarea.mm; path = ../vcl/osx/a11ywrappertextarea.mm; sourceTree = "<group>"; };
+		BE60B5931DB7D80200D3E1E4 /* a11ywrappertoolbar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ywrappertoolbar.mm; path = ../vcl/osx/a11ywrappertoolbar.mm; sourceTree = "<group>"; };
+		BE60B5941DB7D80200D3E1E4 /* clipboard.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = clipboard.cxx; path = ../vcl/osx/clipboard.cxx; sourceTree = "<group>"; };
+		BE60B5951DB7D80200D3E1E4 /* DataFlavorMapping.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DataFlavorMapping.cxx; path = ../vcl/osx/DataFlavorMapping.cxx; sourceTree = "<group>"; };
+		BE60B5961DB7D80200D3E1E4 /* documentfocuslistener.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = documentfocuslistener.cxx; path = ../vcl/osx/documentfocuslistener.cxx; sourceTree = "<group>"; };
+		BE60B5971DB7D80200D3E1E4 /* DragActionConversion.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DragActionConversion.cxx; path = ../vcl/osx/DragActionConversion.cxx; sourceTree = "<group>"; };
+		BE60B5981DB7D80200D3E1E4 /* DragSource.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DragSource.cxx; path = ../vcl/osx/DragSource.cxx; sourceTree = "<group>"; };
+		BE60B5991DB7D80200D3E1E4 /* DragSourceContext.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DragSourceContext.cxx; path = ../vcl/osx/DragSourceContext.cxx; sourceTree = "<group>"; };
+		BE60B59A1DB7D80200D3E1E4 /* DropTarget.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DropTarget.cxx; path = ../vcl/osx/DropTarget.cxx; sourceTree = "<group>"; };
+		BE60B59B1DB7D80200D3E1E4 /* HtmlFmtFlt.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HtmlFmtFlt.cxx; path = ../vcl/osx/HtmlFmtFlt.cxx; sourceTree = "<group>"; };
+		BE60B59C1DB7D80200D3E1E4 /* OSXTransferable.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OSXTransferable.cxx; path = ../vcl/osx/OSXTransferable.cxx; sourceTree = "<group>"; };
+		BE60B59D1DB7D80200D3E1E4 /* PictToBmpFlt.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PictToBmpFlt.cxx; path = ../vcl/osx/PictToBmpFlt.cxx; sourceTree = "<group>"; };
+		BE60B59E1DB7D80200D3E1E4 /* printaccessoryview.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = printaccessoryview.mm; path = ../vcl/osx/printaccessoryview.mm; sourceTree = "<group>"; };
+		BE60B59F1DB7D80200D3E1E4 /* printview.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = printview.mm; path = ../vcl/osx/printview.mm; sourceTree = "<group>"; };
+		BE60B5A01DB7D80200D3E1E4 /* saldata.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = saldata.cxx; path = ../vcl/osx/saldata.cxx; sourceTree = "<group>"; };
+		BE60B5A11DB7D80200D3E1E4 /* salframe.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = salframe.cxx; path = ../vcl/osx/salframe.cxx; sourceTree = "<group>"; };
+		BE60B5A21DB7D80200D3E1E4 /* salframeview.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = salframeview.mm; path = ../vcl/osx/salframeview.mm; sourceTree = "<group>"; };
+		BE60B5A31DB7D80200D3E1E4 /* salinst.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = salinst.cxx; path = ../vcl/osx/salinst.cxx; sourceTree = "<group>"; };
+		BE60B5A41DB7D80200D3E1E4 /* salmenu.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = salmenu.cxx; path = ../vcl/osx/salmenu.cxx; sourceTree = "<group>"; };
+		BE60B5A51DB7D80200D3E1E4 /* salnativewidgets.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = salnativewidgets.cxx; path = ../vcl/osx/salnativewidgets.cxx; sourceTree = "<group>"; };
+		BE60B5A61DB7D80200D3E1E4 /* salnsmenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = salnsmenu.mm; path = ../vcl/osx/salnsmenu.mm; sourceTree = "<group>"; };
+		BE60B5A71DB7D80200D3E1E4 /* salnstimer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = salnstimer.mm; path = ../vcl/osx/salnstimer.mm; sourceTree = "<group>"; };
+		BE60B5A81DB7D80200D3E1E4 /* salobj.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = salobj.cxx; path = ../vcl/osx/salobj.cxx; sourceTree = "<group>"; };
+		BE60B5A91DB7D80200D3E1E4 /* salprn.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = salprn.cxx; path = ../vcl/osx/salprn.cxx; sourceTree = "<group>"; };
+		BE60B5AA1DB7D80200D3E1E4 /* salsys.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = salsys.cxx; path = ../vcl/osx/salsys.cxx; sourceTree = "<group>"; };
+		BE60B5AB1DB7D80200D3E1E4 /* saltimer.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = saltimer.cxx; path = ../vcl/osx/saltimer.cxx; sourceTree = "<group>"; };
+		BE60B5AC1DB7D80200D3E1E4 /* service_entry.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = service_entry.cxx; path = ../vcl/osx/service_entry.cxx; sourceTree = "<group>"; };
+		BE60B5AD1DB7D80200D3E1E4 /* vclnsapp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = vclnsapp.mm; path = ../vcl/osx/vclnsapp.mm; sourceTree = "<group>"; };
 		BE82BE5718298DE100A447B5 /* formulacell.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formulacell.cxx; path = ../sc/source/core/data/formulacell.cxx; sourceTree = "<group>"; };
 		BE82C3AA18C86D440050EB79 /* brand.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brand.cxx; path = ../vcl/source/app/brand.cxx; sourceTree = "<group>"; };
 		BE82C3AB18C86D440050EB79 /* dndhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dndhelp.cxx; path = ../vcl/source/app/dndhelp.cxx; sourceTree = "<group>"; };
@@ -324,6 +379,68 @@
 			name = formula;
 			sourceTree = "<group>";
 		};
+		BE60B5761DB7D76C00D3E1E4 /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				BE60B5771DB7D80200D3E1E4 /* a11yactionwrapper.mm */,
+				BE60B5781DB7D80200D3E1E4 /* a11ycomponentwrapper.mm */,
+				BE60B5791DB7D80200D3E1E4 /* a11yfactory.mm */,
+				BE60B57A1DB7D80200D3E1E4 /* a11yfocuslistener.cxx */,
+				BE60B57B1DB7D80200D3E1E4 /* a11yfocustracker.cxx */,
+				BE60B57C1DB7D80200D3E1E4 /* a11ylistener.cxx */,
+				BE60B57D1DB7D80200D3E1E4 /* a11yrolehelper.mm */,
+				BE60B57E1DB7D80200D3E1E4 /* a11yselectionwrapper.mm */,
+				BE60B57F1DB7D80200D3E1E4 /* a11ytablewrapper.mm */,
+				BE60B5801DB7D80200D3E1E4 /* a11ytextattributeswrapper.mm */,
+				BE60B5811DB7D80200D3E1E4 /* a11ytextwrapper.mm */,
+				BE60B5821DB7D80200D3E1E4 /* a11yutil.mm */,
+				BE60B5831DB7D80200D3E1E4 /* a11yvaluewrapper.mm */,
+				BE60B5841DB7D80200D3E1E4 /* a11ywrapper.mm */,
+				BE60B5851DB7D80200D3E1E4 /* a11ywrapperbutton.mm */,
+				BE60B5861DB7D80200D3E1E4 /* a11ywrappercheckbox.mm */,
+				BE60B5871DB7D80200D3E1E4 /* a11ywrappercombobox.mm */,
+				BE60B5881DB7D80200D3E1E4 /* a11ywrappergroup.mm */,
+				BE60B5891DB7D80200D3E1E4 /* a11ywrapperlist.mm */,
+				BE60B58A1DB7D80200D3E1E4 /* a11ywrapperradiobutton.mm */,
+				BE60B58B1DB7D80200D3E1E4 /* a11ywrapperradiogroup.mm */,
+				BE60B58C1DB7D80200D3E1E4 /* a11ywrapperrow.mm */,
+				BE60B58D1DB7D80200D3E1E4 /* a11ywrapperscrollarea.mm */,
+				BE60B58E1DB7D80200D3E1E4 /* a11ywrapperscrollbar.mm */,
+				BE60B58F1DB7D80200D3E1E4 /* a11ywrappersplitter.mm */,
+				BE60B5901DB7D80200D3E1E4 /* a11ywrapperstatictext.mm */,
+				BE60B5911DB7D80200D3E1E4 /* a11ywrappertabgroup.mm */,
+				BE60B5921DB7D80200D3E1E4 /* a11ywrappertextarea.mm */,
+				BE60B5931DB7D80200D3E1E4 /* a11ywrappertoolbar.mm */,
+				BE60B5941DB7D80200D3E1E4 /* clipboard.cxx */,
+				BE60B5951DB7D80200D3E1E4 /* DataFlavorMapping.cxx */,
+				BE60B5961DB7D80200D3E1E4 /* documentfocuslistener.cxx */,
+				BE60B5971DB7D80200D3E1E4 /* DragActionConversion.cxx */,
+				BE60B5981DB7D80200D3E1E4 /* DragSource.cxx */,
+				BE60B5991DB7D80200D3E1E4 /* DragSourceContext.cxx */,
+				BE60B59A1DB7D80200D3E1E4 /* DropTarget.cxx */,
+				BE60B59B1DB7D80200D3E1E4 /* HtmlFmtFlt.cxx */,
+				BE60B59C1DB7D80200D3E1E4 /* OSXTransferable.cxx */,
+				BE60B59D1DB7D80200D3E1E4 /* PictToBmpFlt.cxx */,
+				BE60B59E1DB7D80200D3E1E4 /* printaccessoryview.mm */,
+				BE60B59F1DB7D80200D3E1E4 /* printview.mm */,
+				BE60B5A01DB7D80200D3E1E4 /* saldata.cxx */,
+				BE60B5A11DB7D80200D3E1E4 /* salframe.cxx */,
+				BE60B5A21DB7D80200D3E1E4 /* salframeview.mm */,
+				BE60B5A31DB7D80200D3E1E4 /* salinst.cxx */,
+				BE60B5A41DB7D80200D3E1E4 /* salmenu.cxx */,
+				BE60B5A51DB7D80200D3E1E4 /* salnativewidgets.cxx */,
+				BE60B5A61DB7D80200D3E1E4 /* salnsmenu.mm */,
+				BE60B5A71DB7D80200D3E1E4 /* salnstimer.mm */,
+				BE60B5A81DB7D80200D3E1E4 /* salobj.cxx */,
+				BE60B5A91DB7D80200D3E1E4 /* salprn.cxx */,
+				BE60B5AA1DB7D80200D3E1E4 /* salsys.cxx */,
+				BE60B5AB1DB7D80200D3E1E4 /* saltimer.cxx */,
+				BE60B5AC1DB7D80200D3E1E4 /* service_entry.cxx */,
+				BE60B5AD1DB7D80200D3E1E4 /* vclnsapp.mm */,
+			);
+			name = osx;
+			sourceTree = "<group>";
+		};
 		BE82BE5818298DEB00A447B5 /* sc */ = {
 			isa = PBXGroup;
 			children = (
@@ -364,6 +481,7 @@
 				BE2DAD2A182FAC1B00A4D2F7 /* app */,
 				BE82C40F18C86DE90050EB79 /* control */,
 				BE82C3C818C86D8B0050EB79 /* gdi */,
+				BE60B5761DB7D76C00D3E1E4 /* osx */,
 				BE2DAD29182FABD200A4D2F7 /* quartz */,
 				BE2DACF9182FAB3800A4D2F7 /* window */,
 			);
@@ -493,11 +611,11 @@
 /* Begin PBXLegacyTarget section */
 		BEC3D91E1710B11E0030AD56 /* soffice */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
+			buildArgumentsString = "build-nocheck";
 			buildConfigurationList = BEC3D9211710B11E0030AD56 /* Build configuration list for PBXLegacyTarget "soffice" */;
 			buildPhases = (
 			);
-			buildToolPath = /opt/lo/bin/make;
+			buildToolPath = make;
 			buildWorkingDirectory = ..;
 			dependencies = (
 			);
