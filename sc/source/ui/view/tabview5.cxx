@@ -22,6 +22,7 @@
 
 #include <svx/fmshell.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdocapt.hxx>
 #include <svx/svdoutl.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -47,6 +48,7 @@
 #include "AccessibilityHints.hxx"
 #include "docsh.hxx"
 #include "viewuno.hxx"
+#include "postit.hxx"
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -642,6 +644,48 @@ void ScTabView::ResetBrushDocument()
     {
         SetBrushDocument( nullptr, false );
         SetActivePointer( Pointer( PointerStyle::Arrow ) );   // switch pointers also when ended with escape key
+    }
+}
+
+void ScTabView::OnLOKNoteStateChanged(const ScAddress& rPos)
+{
+    ScDocument* pDoc = GetViewData().GetDocument();
+    if (!pDoc) return;
+    ScPostIt* pNote = pDoc->GetNote(rPos);
+    if (!pNote) return;
+    SdrCaptionObj* pCaption = pNote->GetCaption();
+    if (!pCaption) return;
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        Rectangle aRect = pCaption->GetLogicRect();
+        basegfx::B2DRange aTailRange = pCaption->getTailPolygon().getB2DRange();
+        Rectangle aTailRect(aTailRange.getMinX(), aTailRange.getMinY(),
+                            aTailRange.getMaxX(), aTailRange.getMaxY());
+        aRect.Union( aTailRect );
+        static const int nBorderSize = 200;
+
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+            if (pTabViewShell)
+            {
+                for (auto& pWin: pTabViewShell->pGridWin)
+                {
+                    if (pWin && pWin->IsVisible())
+                    {
+                        Rectangle aInvalidRect = aRect;
+                        aInvalidRect.Left() -= nBorderSize;
+                        aInvalidRect.Right() += nBorderSize;
+                        aInvalidRect.Top() -= nBorderSize;
+                        aInvalidRect.Bottom() += nBorderSize;
+                        pWin->Invalidate(aInvalidRect);
+                    }
+                }
+            }
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
     }
 }
 
