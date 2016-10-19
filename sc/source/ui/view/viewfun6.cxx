@@ -509,6 +509,12 @@ void ScViewFunc::EditNote()
             {
                 ScrollToObject( pCaption );         // make object fully visible
                 pFuText->SetInEditMode( pCaption );
+
+                ScTabViewShell* pViewShell = GetViewData().GetViewShell();
+                if (pViewShell)
+                {
+                      pViewShell->OnLOKNoteStateChanged(aPos);
+                }
             }
         }
     }
