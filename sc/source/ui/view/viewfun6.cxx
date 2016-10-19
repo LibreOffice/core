@@ -509,6 +509,7 @@ void ScViewFunc::EditNote()
             {
                 ScrollToObject( pCaption );         // make object fully visible
                 static_cast< FuText* >( pPoor )->SetInEditMode( pCaption );
+                GetViewData().GetViewShell()->OnLOKNoteStateChanged(aPos);
             }
         }
     }
