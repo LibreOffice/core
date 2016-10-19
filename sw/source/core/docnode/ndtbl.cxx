@@ -1420,7 +1420,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                     aCellNodeIdx.GetNode().m_pStartOfSection = pSttNd;
                     //skip start/end node pairs
                     if( aCellNodeIdx.GetNode().IsStartNode() )
-                        aCellNodeIdx = SwNodeIndex( *aCellNodeIdx.GetNode().EndOfSectionNode() );
+                        aCellNodeIdx.Assign(*aCellNodeIdx.GetNode().EndOfSectionNode());
                 }
 
                 // assign Section to the Box

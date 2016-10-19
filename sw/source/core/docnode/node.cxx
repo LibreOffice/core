@@ -833,7 +833,7 @@ sal_uInt8 SwNode::HasPrevNextLayNode() const
         if( IsValidNextPrevNd( aIdx.GetNode() ))
             nRet |= ND_HAS_PREV_LAYNODE;
         // #i77805# - skip section start and end nodes
-        aIdx = SwNodeIndex( *this, +1 );
+        aIdx.Assign(*this, +1);
         while ( aIdx.GetNode().IsSectionNode() ||
                 ( aIdx.GetNode().IsEndNode() &&
                   aIdx.GetNode().StartOfSectionNode()->IsSectionNode() ) )

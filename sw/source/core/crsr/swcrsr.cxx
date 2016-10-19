@@ -1965,7 +1965,10 @@ bool SwCursor::GoPrevNextCell( bool bNext, sal_uInt16 nCnt )
             (!bNext && !aCellIdx.GetNode().IsEndNode()) )
             return false;
 
-        rPtIdx = bNext ? aCellIdx : SwNodeIndex(*aCellIdx.GetNode().StartOfSectionNode());
+        if (bNext)
+            rPtIdx = aCellIdx;
+        else
+            rPtIdx.Assign(*aCellIdx.GetNode().StartOfSectionNode());
 
         pTableBoxStartNode = rPtIdx.GetNode().FindTableBoxStartNode();
         pTableBox = pTableBoxStartNode->GetTableBox();
