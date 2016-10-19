@@ -462,9 +462,9 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         while (aBuffer.getLength() < 10)
             aBuffer.insert(0, "0");
         if (nObject == 0)
-            aBuffer.append(" 65535 f\n");
+            aBuffer.append(" 65535 f \n");
         else
-            aBuffer.append(" 00000 n\n");
+            aBuffer.append(" 00000 n \n");
         m_aEditBuffer.WriteOString(aBuffer.toString());
     }
 
