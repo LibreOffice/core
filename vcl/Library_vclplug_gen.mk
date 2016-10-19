@@ -54,6 +54,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	glew \
 	glm_headers \
 	harfbuzz \
+	icu_headers \
 	icuuc \
 	valgrind \
 	Xrender \
