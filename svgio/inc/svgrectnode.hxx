@@ -54,27 +54,21 @@ namespace svgio
 
             /// x content, set if found in current context
             const SvgNumber& getX() const { return maX; }
-            void setX(const SvgNumber& rX) { maX = rX; }
 
             /// y content, set if found in current context
             const SvgNumber& getY() const { return maY; }
-            void setY(const SvgNumber& rY) { maY = rY; }
 
             /// width content, set if found in current context
             const SvgNumber& getWidth() const { return maWidth; }
-            void setWidth(const SvgNumber& rWidth) { maWidth = rWidth; }
 
             /// height content, set if found in current context
             const SvgNumber& getHeight() const { return maHeight; }
-            void setHeight(const SvgNumber& rHeight) { maHeight = rHeight; }
 
             /// Rx content, set if found in current context
             const SvgNumber& getRx() const { return maRx; }
-            void setRx(const SvgNumber& rRx) { maRx = rRx; }
 
             /// Ry content, set if found in current context
             const SvgNumber& getRy() const { return maRy; }
-            void setRy(const SvgNumber& rRy) { maRy = rRy; }
 
             /// transform content, set if found in current context
             const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }

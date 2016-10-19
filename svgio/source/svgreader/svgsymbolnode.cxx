@@ -73,7 +73,7 @@ namespace svgio
                 }
                 case SVGTokenPreserveAspectRatio:
                 {
-                    setSvgAspectRatio(readSvgAspectRatio(aContent));
+                    maSvgAspectRatio = readSvgAspectRatio(aContent);
                     break;
                 }
                 default:

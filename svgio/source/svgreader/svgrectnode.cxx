@@ -72,7 +72,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setX(aNum);
+                        maX = aNum;
                     }
                     break;
                 }
@@ -82,7 +82,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setY(aNum);
+                        maY = aNum;
                     }
                     break;
                 }
@@ -94,7 +94,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setWidth(aNum);
+                            maWidth = aNum;
                         }
                     }
                     break;
@@ -107,7 +107,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setHeight(aNum);
+                            maHeight = aNum;
                         }
                     }
                     break;
@@ -120,7 +120,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setRx(aNum);
+                            maRx = aNum;
                         }
                     }
                     break;
@@ -133,7 +133,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setRy(aNum);
+                            maRy = aNum;
                         }
                     }
                     break;

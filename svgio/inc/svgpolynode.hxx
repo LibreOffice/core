@@ -51,11 +51,7 @@ namespace svgio
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
 
-            /// type read access
-            bool isPolyline() const { return mbIsPolyline; }
-
             /// Polygon content, set if found in current context
-            const basegfx::B2DPolygon* getPolygon() const { return mpPolygon; }
             void setPolygon(const basegfx::B2DPolygon* pPolygon) { if(mpPolygon) delete mpPolygon; mpPolygon = nullptr; if(pPolygon) mpPolygon = new basegfx::B2DPolygon(*pPolygon); }
 
             /// transform content, set if found in current context

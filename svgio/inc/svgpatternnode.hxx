@@ -80,23 +80,18 @@ namespace svgio
 
             /// SvgAspectRatio content
             const SvgAspectRatio& getSvgAspectRatio() const;
-            void setSvgAspectRatio(const SvgAspectRatio& rSvgAspectRatio) { maSvgAspectRatio = rSvgAspectRatio; }
 
             /// X content, set if found in current context
             const SvgNumber& getX() const;
-            void setX(const SvgNumber& rX) { maX = rX; }
 
             /// Y content, set if found in current context
             const SvgNumber& getY() const;
-            void setY(const SvgNumber& rY) { maY = rY; }
 
             /// Width content, set if found in current context
             const SvgNumber& getWidth() const;
-            void setWidth(const SvgNumber& rWidth) { maWidth = rWidth; }
 
             /// Height content, set if found in current context
             const SvgNumber& getHeight() const;
-            void setHeight(const SvgNumber& rHeight) { maHeight = rHeight; }
 
             /// PatternUnits content
             const SvgUnits* getPatternUnits() const;

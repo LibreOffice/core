@@ -78,7 +78,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setX(aNum);
+                        maX = aNum;
                     }
                     break;
                 }
@@ -88,7 +88,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setY(aNum);
+                        maY = aNum;
                     }
                     break;
                 }
@@ -100,7 +100,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setWidth(aNum);
+                            maWidth = aNum;
                         }
                     }
                     break;
@@ -113,7 +113,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setHeight(aNum);
+                            maHeight = aNum;
                         }
                     }
                     break;
@@ -215,7 +215,7 @@ namespace svgio
                         // create OffscreenBufferRange
                         basegfx::B2DRange aOffscreenBufferRange;
 
-                        if(objectBoundingBox == getMaskUnits())
+                        if(objectBoundingBox == maMaskUnits)
                         {
                             // fractions or percentages of the bounding box of the element to which the mask is applied
                             const double fX(Unit_percent == getX().getUnit() ? getX().getNumber() * 0.01 : getX().getNumber());
@@ -241,7 +241,7 @@ namespace svgio
                                 fY + (getHeight().isSet() ? getHeight().solve(*this, ycoordinate) : 0.0));
                         }
 
-                        if(objectBoundingBox == getMaskContentUnits())
+                        if(objectBoundingBox == maMaskContentUnits)
                         {
                             // mask is object-relative, embed in content transformation
                             const drawinglayer::primitive2d::Primitive2DReference xTransform(

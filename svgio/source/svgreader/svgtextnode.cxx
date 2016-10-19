@@ -233,7 +233,7 @@ namespace svgio
 
                 if(fOpacity > 0.0)
                 {
-                    SvgTextPosition aSvgTextPosition(nullptr, *this, getSvgTextPositions());
+                    SvgTextPosition aSvgTextPosition(nullptr, *this, maSvgTextPositions);
                     drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
                     const SvgNodeVector& rChildren = getChildren();
                     const sal_uInt32 nCount(rChildren.size());

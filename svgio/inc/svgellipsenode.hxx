@@ -52,19 +52,15 @@ namespace svgio
 
             /// Cx content, set if found in current context
             const SvgNumber& getCx() const { return maCx; }
-            void setCx(const SvgNumber& rCx) { maCx = rCx; }
 
             /// Cy content, set if found in current context
             const SvgNumber& getCy() const { return maCy; }
-            void setCy(const SvgNumber& rCy) { maCy = rCy; }
 
             /// Rx content, set if found in current context
             const SvgNumber& getRx() const { return maRx; }
-            void setRx(const SvgNumber& rRx) { maRx = rRx; }
 
             /// Ry content, set if found in current context
             const SvgNumber& getRy() const { return maRy; }
-            void setRy(const SvgNumber& rRy) { maRy = rRy; }
 
             /// transform content, set if found in current context
             const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }

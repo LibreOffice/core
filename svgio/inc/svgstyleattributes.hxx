@@ -318,50 +318,36 @@ namespace svgio
 
             /// stroke content
             const basegfx::BColor* getStroke() const;
-            void setStroke(const SvgPaint& rStroke) { maStroke = rStroke; }
 
             /// stop color content
             const basegfx::BColor& getStopColor() const;
-            void setStopColor(const SvgPaint& rStopColor) { maStopColor = rStopColor; }
 
             /// stroke-width content
             SvgNumber getStrokeWidth() const;
-            void setStrokeWidth(const SvgNumber& rStrokeWidth) { maStrokeWidth = rStrokeWidth; }
 
             /// stop opacity content
             SvgNumber getStopOpacity() const;
-            void setStopOpacity(const SvgNumber& rStopOpacity) { maStopOpacity = rStopOpacity; }
 
             /// access to evtl. set fill gradient
             const SvgGradientNode* getSvgGradientNodeFill() const;
-            void setSvgGradientNodeFill(const SvgGradientNode* pNew) { mpSvgGradientNodeFill = pNew; }
 
             /// access to evtl. set fill pattern
             const SvgPatternNode* getSvgPatternNodeFill() const;
-            void setSvgPatternNodeFill(const SvgPatternNode* pNew) { mpSvgPatternNodeFill = pNew; }
 
             /// access to evtl. set stroke gradient
             const SvgGradientNode* getSvgGradientNodeStroke() const;
-            void setSvgGradientNodeStroke(const SvgGradientNode* pNew) { mpSvgGradientNodeStroke = pNew; }
 
             /// access to evtl. set stroke pattern
             const SvgPatternNode* getSvgPatternNodeStroke() const;
-            void setSvgPatternNodeStroke(const SvgPatternNode* pNew) { mpSvgPatternNodeStroke = pNew; }
 
             /// fill opacity content
             SvgNumber getFillOpacity() const;
-            void setFillOpacity(const SvgNumber& rFillOpacity) { maFillOpacity = rFillOpacity; }
 
             /// fill rule content
             FillRule getFillRule() const;
 
             /// fill StrokeDasharray content
             const SvgNumberVector& getStrokeDasharray() const;
-            void setStrokeDasharray(const SvgNumberVector& rStrokeDasharray) { maStrokeDasharray = rStrokeDasharray; }
-
-            /// #121221# StrokeDasharray needs a set state, it *may* be set to empty by purpose
-            bool getStrokeDasharraySet() const { return mbStrokeDasharraySet; }
-            void setStrokeDasharraySet(bool bNew) { mbStrokeDasharraySet = bNew; }
 
             /// StrokeDashOffset content
             SvgNumber getStrokeDashOffset() const;
@@ -381,15 +367,12 @@ namespace svgio
 
             /// StrokeOpacity content
             SvgNumber getStrokeOpacity() const;
-            void setStrokeOpacity(const SvgNumber& rStrokeOpacity) { maStrokeOpacity = rStrokeOpacity; }
 
             /// Font content
             const SvgStringVector& getFontFamily() const;
-            void setFontFamily(const SvgStringVector& rSvgStringVector) { maFontFamily = rSvgStringVector; }
 
             /// FontSize content
             void setFontSize(const FontSize aFontSize) { maFontSize = aFontSize; }
-            void setFontSizeNumber(const SvgNumber& rFontSize) { maFontSizeNumber = rFontSize; }
             SvgNumber getFontSizeNumber() const;
 
             /// FontStretch content
@@ -422,7 +405,6 @@ namespace svgio
 
             /// Color content
             const basegfx::BColor* getColor() const;
-            void setColor(const SvgPaint& rColor) { maColor = rColor; }
 
             /// Resolve current color (defaults to black if no color is specified)
             const basegfx::BColor* getCurrentColor() const;
@@ -437,11 +419,9 @@ namespace svgio
 
             // Title content
             const OUString& getTitle() const { return maTitle; }
-            void setTitle(const OUString& rNew) { maTitle = rNew; }
 
             // Desc content
             const OUString& getDesc() const { return maDesc; }
-            void setDesc(const OUString& rNew) { maDesc = rNew; }
 
             // ClipPathXLink content
             OUString getClipPathXLink() const;

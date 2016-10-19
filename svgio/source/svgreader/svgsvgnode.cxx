@@ -143,7 +143,7 @@ namespace svgio
                 }
                 case SVGTokenPreserveAspectRatio:
                 {
-                    setSvgAspectRatio(readSvgAspectRatio(aContent));
+                    maSvgAspectRatio = readSvgAspectRatio(aContent);
                     break;
                 }
                 case SVGTokenX:
@@ -152,7 +152,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setX(aNum);
+                        maX = aNum;
                     }
                     break;
                 }
@@ -162,7 +162,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setY(aNum);
+                        maY = aNum;
                     }
                     break;
                 }
@@ -174,7 +174,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setWidth(aNum);
+                            maWidth = aNum;
                         }
                     }
                     break;
@@ -187,7 +187,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setHeight(aNum);
+                            maHeight = aNum;
                         }
                     }
                     break;
@@ -198,7 +198,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setVersion(aNum);
+                        maVersion = aNum;
                     }
                     break;
                 }
