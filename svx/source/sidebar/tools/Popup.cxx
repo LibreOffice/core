@@ -74,7 +74,7 @@ void Popup::Show (ToolBox& rToolBox)
 
         mxContainer->StartPopupMode(
             aRect,
-            FloatWinPopupFlags::NoFocusClose|FloatWinPopupFlags::Down);
+            FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::Down);
         mxContainer->SetPopupModeFlags(
             mxContainer->GetPopupModeFlags()
                 | FloatWinPopupFlags::NoAppFocusClose);
