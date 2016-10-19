@@ -24,31 +24,6 @@ using namespace ::com::sun::star;
 namespace apphelper
 {
 
-const short FLAG_DEPRECATED =1;
-const short FLAG_MODEL      =2;
-
-#define WRITE_PROPERTY( MediaName, nFlags )             \
-if(rProp.Name == #MediaName) \
-{                                                       \
-    if( rProp.Value >>= MediaName )                     \
-        ISSET_##MediaName = true;                       \
-    if((nFlags & FLAG_DEPRECATED) != 0)                 \
-    {                                                   \
-        m_aDeprecatedProperties[nDeprecatedCount]=rProp;\
-        nDeprecatedCount++;                             \
-    }                                                   \
-    else                                                \
-    {                                                   \
-        m_aRegularProperties[nRegularCount]=rProp;      \
-        nRegularCount++;                                \
-        if((nFlags & FLAG_MODEL) != 0)                  \
-        {                                               \
-            m_aModelProperties[nModelCount]=rProp;      \
-            nModelCount++;                              \
-        }                                               \
-    }                                                   \
-}
-
 MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
                         beans::PropertyValue > & rMediaDescriptor )
     : m_aRegularProperties(rMediaDescriptor.getLength())
@@ -57,57 +32,241 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
     , m_aModelProperties(rMediaDescriptor.getLength())
 {
     impl_init();
-
     sal_Int32 nRegularCount = 0;
     sal_Int32 nDeprecatedCount = 0;
     sal_Int32 nAdditionalCount = 0;
     sal_Int32 nModelCount = 0;
 
+    auto addRegularProp = [this, &nRegularCount](const beans::PropertyValue& rRegularProp)
+    {
+        m_aRegularProperties[nRegularCount] = rRegularProp;
+        ++nRegularCount;
+    };
+    auto addModelProp = [this, &nModelCount, &addRegularProp](const beans::PropertyValue& rModelProp)
+    {
+        addRegularProp(rModelProp);
+        m_aModelProperties[nModelCount] = rModelProp;
+        ++nModelCount;
+    };
+    auto addDepreciatedProp = [this, &nDeprecatedCount](const beans::PropertyValue& rDeprecatedProp)
+    {
+        m_aDeprecatedProperties[nDeprecatedCount] = rDeprecatedProp;
+        ++nDeprecatedCount;
+    };
+
     //read given rMediaDescriptor and store in internal structures:
     for( sal_Int32 i= rMediaDescriptor.getLength();i--;)
     {
         const beans::PropertyValue& rProp = rMediaDescriptor[i];
-        WRITE_PROPERTY( AsTemplate, FLAG_MODEL )
-        else WRITE_PROPERTY( Author, FLAG_MODEL )
-        else WRITE_PROPERTY( CharacterSet, FLAG_MODEL )
-        else WRITE_PROPERTY( Comment, FLAG_MODEL )
-        else WRITE_PROPERTY( ComponentData, FLAG_MODEL )
-        else WRITE_PROPERTY( FileName, FLAG_DEPRECATED )
-        else WRITE_PROPERTY( FilterData, FLAG_MODEL )
-        else WRITE_PROPERTY( FilterName, FLAG_MODEL )
-        else WRITE_PROPERTY( FilterFlags, FLAG_DEPRECATED)
-        else WRITE_PROPERTY( FilterOptions, FLAG_MODEL )
-        else WRITE_PROPERTY( FrameName, FLAG_MODEL )
-        else WRITE_PROPERTY( Hidden, FLAG_MODEL )
-        else WRITE_PROPERTY( HierarchicalDocumentName, FLAG_MODEL )
-        else WRITE_PROPERTY( OutputStream, 0 )
-        else WRITE_PROPERTY( InputStream, 0 )
-        else WRITE_PROPERTY( InteractionHandler, 0 )
-        else WRITE_PROPERTY( JumpMark, 0 )
-        else WRITE_PROPERTY( MediaType, FLAG_MODEL )
-        else WRITE_PROPERTY( OpenFlags, FLAG_DEPRECATED )
-        else WRITE_PROPERTY( OpenNewView, 0 )
-        else WRITE_PROPERTY( Overwrite, FLAG_MODEL )
-        else WRITE_PROPERTY( Password, FLAG_MODEL )
-        else WRITE_PROPERTY( PosSize, 0 )
-        else WRITE_PROPERTY( PostData, 0 )
-        else WRITE_PROPERTY( PostString, FLAG_DEPRECATED )
-        else WRITE_PROPERTY( Preview, FLAG_MODEL )
-        else WRITE_PROPERTY( ReadOnly, 0 )
-        else WRITE_PROPERTY( Referer, FLAG_MODEL )
-        else WRITE_PROPERTY( SetEmbedded, 0 )
-        else WRITE_PROPERTY( Silent, 0 )
-        else WRITE_PROPERTY( StatusIndicator, 0 )
-        else WRITE_PROPERTY( Storage, FLAG_MODEL )
-        else WRITE_PROPERTY( Stream, FLAG_MODEL )
-        else WRITE_PROPERTY( TemplateName, FLAG_DEPRECATED )
-        else WRITE_PROPERTY( TemplateRegionName, FLAG_DEPRECATED )
-        else WRITE_PROPERTY( Unpacked, FLAG_MODEL )
-        else WRITE_PROPERTY( URL, FLAG_MODEL )
-        else WRITE_PROPERTY( Version, FLAG_MODEL )
-        else WRITE_PROPERTY( ViewData, FLAG_MODEL )
-        else WRITE_PROPERTY( ViewId, FLAG_MODEL )
-        else WRITE_PROPERTY( WinExtent, FLAG_DEPRECATED )
+
+        if (rProp.Name == "AsTemplate")
+        {
+            ISSET_AsTemplate = rProp.Value >>= AsTemplate;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "Author")
+        {
+            ISSET_Author = rProp.Value >>= Author;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "CharacterSet")
+        {
+            ISSET_CharacterSet = rProp.Value >>= CharacterSet;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "Comment")
+        {
+            ISSET_Comment = rProp.Value >>= Comment;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "ComponentData")
+        {
+            ComponentData = rProp.Value;
+            ISSET_ComponentData = ComponentData.hasValue();
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "FileName")
+        {
+            ISSET_FileName = rProp.Value >>= FileName;
+            addDepreciatedProp(rProp);
+        }
+        else if (rProp.Name == "FilterData")
+        {
+            FilterData = rProp.Value;
+            ISSET_FilterData = FilterData.hasValue();
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "FilterName")
+        {
+            ISSET_FilterName = rProp.Value >>= FilterName;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "FilterFlags")
+        {
+            ISSET_FilterFlags = rProp.Value >>= FilterFlags;
+            addDepreciatedProp(rProp);
+        }
+        else if (rProp.Name == "FilterOptions")
+        {
+            ISSET_FilterOptions = rProp.Value >>= FilterOptions;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "FrameName")
+        {
+            ISSET_FrameName = rProp.Value >>= FrameName;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "Hidden")
+        {
+            ISSET_Hidden = rProp.Value >>= Hidden;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "HierarchicalDocumentName")
+        {
+            ISSET_HierarchicalDocumentName = rProp.Value >>= HierarchicalDocumentName;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "OutputStream")
+        {
+            ISSET_OutputStream = rProp.Value >>= OutputStream;
+            addRegularProp(rProp);
+        }
+        else if (rProp.Name == "InputStream")
+        {
+            ISSET_InputStream = rProp.Value >>= InputStream;
+            addRegularProp(rProp);
+        }
+        else if (rProp.Name == "InteractionHandler")
+        {
+            ISSET_InteractionHandler = rProp.Value >>= InteractionHandler;
+            addRegularProp(rProp);
+        }
+        else if (rProp.Name == "JumpMark")
+        {
+            ISSET_JumpMark = rProp.Value >>= JumpMark;
+            addRegularProp(rProp);
+        }
+        else if (rProp.Name == "MediaType")
+        {
+            ISSET_MediaType = rProp.Value >>= MediaType;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "OpenFlags")
+        {
+            ISSET_OpenFlags = rProp.Value >>= OpenFlags;
+            addDepreciatedProp(rProp);
+        }
+        else if (rProp.Name == "OpenNewView")
+        {
+            ISSET_OpenNewView = rProp.Value >>= OpenNewView;
+            addRegularProp(rProp);
+        }
+        else if (rProp.Name == "Overwrite")
+        {
+            ISSET_Overwrite = rProp.Value >>= Overwrite;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "Password")
+        {
+            ISSET_Password = rProp.Value >>= Password;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "PosSize")
+        {
+            ISSET_PosSize = rProp.Value >>= PosSize;
+            addRegularProp(rProp);
+        }
+        else if (rProp.Name == "PostData")
+        {
+            ISSET_PostData = rProp.Value >>= PostData;
+            addRegularProp(rProp);
+        }
+        else if (rProp.Name == "PostString")
+        {
+            ISSET_PostString = rProp.Value >>= PostString;
+            addDepreciatedProp(rProp);
+        }
+        else if (rProp.Name == "Preview")
+        {
+            ISSET_Preview = rProp.Value >>= Preview;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "ReadOnly")
+        {
+            ISSET_ReadOnly = rProp.Value >>= ReadOnly;
+            addRegularProp(rProp);
+        }
+        else if (rProp.Name == "Referer")
+        {
+            ISSET_Referer = rProp.Value >>= Referer;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "SetEmbedded")
+        {
+            ISSET_SetEmbedded = rProp.Value >>= SetEmbedded;
+            addRegularProp(rProp);
+        }
+        else if (rProp.Name == "Silent")
+        {
+            ISSET_Silent = rProp.Value >>= Silent;
+            addRegularProp(rProp);
+        }
+        else if (rProp.Name == "StatusIndicator")
+        {
+            ISSET_StatusIndicator = rProp.Value >>= StatusIndicator;
+            addRegularProp(rProp);
+        }
+        else if (rProp.Name == "Storage")
+        {
+            ISSET_Storage = rProp.Value >>= Storage;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "Stream")
+        {
+            ISSET_Stream = rProp.Value >>= Stream;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "TemplateName")
+        {
+            ISSET_TemplateName = rProp.Value >>= TemplateName;
+            addDepreciatedProp(rProp);
+        }
+        else if (rProp.Name == "TemplateRegionName")
+        {
+            ISSET_TemplateRegionName = rProp.Value >>= TemplateRegionName;
+            addDepreciatedProp(rProp);
+        }
+        else if (rProp.Name == "Unpacked")
+        {
+            ISSET_Unpacked = rProp.Value >>= Unpacked;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "URL")
+        {
+            ISSET_URL = rProp.Value >>= URL;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "Version")
+        {
+            ISSET_Version = rProp.Value >>= Version;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "ViewData")
+        {
+            ViewData = rProp.Value;
+            ISSET_ViewData = ViewData.hasValue();
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "ViewId")
+        {
+            ISSET_ViewId = rProp.Value >>= ViewId;
+            addModelProp(rProp);
+        }
+        else if (rProp.Name == "WinExtent")
+        {
+            ISSET_WinExtent = rProp.Value >>= WinExtent;
+            addDepreciatedProp(rProp);
+        }
         else
         {
             m_aAdditionalProperties[nAdditionalCount]=rProp;
