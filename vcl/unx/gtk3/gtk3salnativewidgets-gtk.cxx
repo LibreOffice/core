@@ -2719,8 +2719,19 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // preferred icon style
     gchar* pIconThemeName = nullptr;
-    g_object_get( pSettings, "gtk-icon-theme-name", &pIconThemeName, nullptr );
-    aStyleSet.SetPreferredIconTheme( OUString::createFromAscii( pIconThemeName ) );
+    gboolean bDarkIconTheme = false;
+    g_object_get(pSettings, "gtk-icon-theme-name", &pIconThemeName,
+                            "gtk-application-prefer-dark-theme", &bDarkIconTheme,
+                            nullptr );
+    OUString sIconThemeName(OUString::createFromAscii(pIconThemeName));
+    if (sIconThemeName.endsWithIgnoreAsciiCase("-dark", &sIconThemeName) ||
+        sIconThemeName.endsWithIgnoreAsciiCase("_dark", &sIconThemeName))
+    {
+        bDarkIconTheme = true;
+    }
+    if (bDarkIconTheme)
+        sIconThemeName += "_dark";
+    aStyleSet.SetPreferredIconTheme(sIconThemeName);
     g_free( pIconThemeName );
 
     aStyleSet.SetToolbarIconSize( ToolbarIconSize::Large );
