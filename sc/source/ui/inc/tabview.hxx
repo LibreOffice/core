@@ -584,6 +584,7 @@ public:
     void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
     /// @see ScModelObj::getRowColumnHeaders().
     OUString getRowColumnHeaders(const Rectangle& rRectangle);
+    static void OnLOKNoteStateChanged(const ScPostIt* pNote);
 };
 
 #endif
