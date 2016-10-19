@@ -3050,8 +3050,7 @@ sal_Int32 ScXMLImport::GetRangeType(const OUString& sRangeType)
 
 void ScXMLImport::SetLabelRanges()
 {
-    ScMyLabelRanges* pLabelRanges = GetLabelRanges();
-    if (pLabelRanges)
+    if (pMyLabelRanges)
     {
         uno::Reference <beans::XPropertySet> xPropertySet (GetModel(), uno::UNO_QUERY);
         if (xPropertySet.is())
@@ -3067,8 +3066,8 @@ void ScXMLImport::SetLabelRanges()
                 table::CellRangeAddress aLabelRange;
                 table::CellRangeAddress aDataRange;
 
-                ScMyLabelRanges::iterator aItr = pLabelRanges->begin();
-                while (aItr != pLabelRanges->end())
+                ScMyLabelRanges::iterator aItr = pMyLabelRanges->begin();
+                while (aItr != pMyLabelRanges->end())
                 {
                     sal_Int32 nOffset1(0);
                     sal_Int32 nOffset2(0);
@@ -3084,7 +3083,7 @@ void ScXMLImport::SetLabelRanges()
                     }
 
                     delete *aItr;
-                    aItr = pLabelRanges->erase(aItr);
+                    aItr = pMyLabelRanges->erase(aItr);
                 }
             }
         }
@@ -3141,8 +3140,7 @@ public:
 
 void ScXMLImport::SetNamedRanges()
 {
-    ScMyNamedExpressions* pNamedExpressions = GetNamedExpressions();
-    if (!pNamedExpressions)
+    if (!m_pMyNamedExpressions)
         return;
 
     if (!pDoc)
@@ -3150,7 +3148,7 @@ void ScXMLImport::SetNamedRanges()
 
     // Insert the namedRanges
     ScRangeName* pRangeNames = pDoc->GetRangeName();
-    ::std::for_each(pNamedExpressions->begin(), pNamedExpressions->end(), RangeNameInserter(pDoc, *pRangeNames));
+    ::std::for_each(m_pMyNamedExpressions->begin(), m_pMyNamedExpressions->end(), RangeNameInserter(pDoc, *pRangeNames));
 }
 
 void ScXMLImport::SetSheetNamedRanges()

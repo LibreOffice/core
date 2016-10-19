@@ -459,7 +459,7 @@ VclPtr<SfxTabPage> ScTpLayoutOptions::Create( vcl::Window*          pParent,
     ScDocShell* pDocSh = dynamic_cast< ScDocShell *>( SfxObjectShell::Current() );
 
     if(pDocSh!=nullptr)
-        pNew->SetDocument(&pDocSh->GetDocument());
+        pNew->pDoc = &pDocSh->GetDocument();
     return pNew;
 }
 

@@ -128,11 +128,6 @@ bool ScAccessibleFilterMenuItem::isSelected() const
     return mpWindow->isMenuItemSelected(mnMenuPos);
 }
 
-bool ScAccessibleFilterMenuItem::isFocused() const
-{
-    return isSelected();
-}
-
 void ScAccessibleFilterMenuItem::setEnabled(bool bEnabled)
 {
     mbEnabled = bEnabled;
@@ -181,7 +176,7 @@ void ScAccessibleFilterMenuItem::updateStateSet()
     p->insert(SENSITIVE);
     p->insert(OPAQUE);
 
-    if (isFocused())
+    if (isSelected())
         p->insert(FOCUSED);
 
     if (isSelected())

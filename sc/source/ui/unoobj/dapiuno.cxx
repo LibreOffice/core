@@ -1964,7 +1964,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
     else if ( aPropertyName == SC_UNONAME_ORIENT )
         aRet <<= getOrientation();
     else if ( aPropertyName == SC_UNONAME_SELPAGE )
-        aRet <<= getCurrentPage();
+        aRet <<= OUString();
     else if ( aPropertyName == SC_UNONAME_USESELPAGE )
         aRet <<= false;
     else if ( aPropertyName == SC_UNONAME_HASAUTOSHOW )
@@ -2198,11 +2198,6 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubt
         }
         SetDPObject( pDPObj );
     }
-}
-
-OUString ScDataPilotFieldObj::getCurrentPage()
-{
-    return OUString();
 }
 
 void ScDataPilotFieldObj::setCurrentPage( const OUString& rPage )

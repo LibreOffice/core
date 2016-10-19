@@ -55,7 +55,7 @@ bool ScBiffReader::nextRecord()
     if( !recordsLeft() )
         return false;
 
-    if( IsEndOfFile() )
+    if( mbEndOfFile )
         return false;
 
     sal_uInt32 nPos = mpStream->Tell();

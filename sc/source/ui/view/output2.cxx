@@ -157,7 +157,6 @@ public:
     // This assumes that a formula cell has already been calculated.
     sal_uLong GetResultValueFormat() const { return nValueFormat;}
 
-    sal_uLong   GetValueFormat() const                  { return nValueFormat; }
     bool    GetLineBreak() const                    { return bLineBreak; }
     bool    IsRepeat() const                        { return bRepeat; }
     bool    IsShrink() const                        { return bShrink; }
@@ -498,7 +497,7 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
             maLastCell = rCell;          // store cell
 
             Color* pColor;
-            sal_uLong nFormat = GetValueFormat();
+            sal_uLong nFormat = nValueFormat;
             ScCellFormat::GetString( rCell,
                                      nFormat, aString, &pColor,
                                      *pOutput->mpDoc->GetFormatTable(),

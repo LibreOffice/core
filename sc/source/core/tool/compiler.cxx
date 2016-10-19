@@ -113,7 +113,7 @@ void ScCompiler::fillFromAddInMap( const NonConstOpCodeMapPtr& xMap,FormulaGramm
             nSymbolOffset = offsetof( AddInMap, pEnglish);
             break;
     }
-    const AddInMap* pMap = GetAddInMap();
+    const AddInMap* pMap = g_aAddInMap;
     const AddInMap* const pStop = pMap + GetAddInMapCount();
     for ( ; pMap < pStop; ++pMap)
     {

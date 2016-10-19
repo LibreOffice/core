@@ -39,7 +39,6 @@ class ScVbaFormat : public InheritedHelperInterfaceWeakImpl< Ifc... >
 typedef InheritedHelperInterfaceWeakImpl< Ifc... > ScVbaFormat_BASE;
     css::lang::Locale m_aDefaultLocale;
 protected:
-    const css::lang::Locale& getDefaultLocale() { return m_aDefaultLocale; }
     css::uno::Reference< css::beans::XPropertySet > mxPropertySet;
     css::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
     css::uno::Reference< css::util::XNumberFormats > xNumberFormats;

@@ -1098,15 +1098,12 @@ public:
         m_pMyNamedExpressions->push_back(std::unique_ptr<ScMyNamedExpression>(pMyNamedExpression));
     }
 
-    ScMyNamedExpressions* GetNamedExpressions() { return m_pMyNamedExpressions; }
-
     void AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp);
 
     void    AddLabelRange(const ScMyLabelRange* pMyLabelRange) {
         if (!pMyLabelRanges)
             pMyLabelRanges = new ScMyLabelRanges();
         pMyLabelRanges->push_back(pMyLabelRange); }
-    ScMyLabelRanges* GetLabelRanges() { return pMyLabelRanges; }
 
     void AddValidation(const ScMyImportValidation& rValidation) {
         if (!pValidations)

@@ -79,7 +79,7 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
         // the old separator set.
         return;
 
-    const LocaleDataWrapper& rLocaleData = GetLocaleDataWrapper();
+    const LocaleDataWrapper& rLocaleData = *ScGlobal::pLocaleData;
     const OUString& rDecSep  = rLocaleData.getNumDecimalSep();
     const OUString& rListSep = rLocaleData.getListSep();
 
@@ -115,11 +115,6 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
     if (cDecSep == ',')
         rSepArrayCol = ".";
     rSepArrayRow = ";";
-}
-
-const LocaleDataWrapper& ScFormulaOptions::GetLocaleDataWrapper()
-{
-    return *ScGlobal::pLocaleData;
 }
 
 ScFormulaOptions& ScFormulaOptions::operator=( const ScFormulaOptions& rCpy )

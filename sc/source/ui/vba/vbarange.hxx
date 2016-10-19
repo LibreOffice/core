@@ -196,8 +196,6 @@ public:
     virtual css::uno::Any SAL_CALL getShowDetail() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setShowDetail(const css::uno::Any& aShowDetail) throw (css::uno::RuntimeException, std::exception) override;
     // Methods
-    bool IsRows() const { return mbIsRows; }
-    bool IsColumns() const { return mbIsColumns; }
     virtual css::uno::Reference< ov::excel::XComment > SAL_CALL AddComment( const css::uno::Any& Text ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL Clear() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL ClearComments() throw (css::uno::RuntimeException, std::exception) override;

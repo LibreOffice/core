@@ -1707,9 +1707,9 @@ ScVbaRange::getCount() throw (uno::RuntimeException, std::exception)
     rowCount = xColumnRowRange->getRows()->getCount();
     colCount = xColumnRowRange->getColumns()->getCount();
 
-    if( IsRows() )
+    if( mbIsRows )
         return rowCount;
-    if( IsColumns() )
+    if( mbIsColumns )
         return colCount;
     return rowCount * colCount;
 }
