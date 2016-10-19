@@ -95,13 +95,6 @@ namespace slideshow
              */
             void leaveAnimationMode();
 
-            /** Query whether the ViewShape is currently animated
-
-                This method checks whether the ViewShape is currently in
-                animation mode.
-             */
-            bool isBackgroundDetached() const { return mbAnimationMode; }
-
 
             // render methods
 

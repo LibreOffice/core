@@ -462,7 +462,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
                 CopyMBL(rRect);
                 break;
             case RectCopyMBL::None:
-                ClearBaseline();
+                bHasBaseline = false;
                 nAlignM = (nAlignT + nAlignB) / 2;
                 break;
             case RectCopyMBL::Xor:

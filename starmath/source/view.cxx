@@ -379,7 +379,7 @@ void SmGraphicWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&
 
     rDoc.DrawFormula(rRenderContext, aPoint, true);  //! modifies aPoint to be the topleft
                                 //! corner of the formula
-    SetFormulaDrawPos(aPoint);
+    aFormulaDrawPos = aPoint;
     if (IsInlineEditEnabled())
     {
         //Draw cursor if any...

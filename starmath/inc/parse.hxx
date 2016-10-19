@@ -92,9 +92,6 @@ class SmParser
 
     void    Error(SmParseError Error);
 
-    void    ClearUsedSymbols()                              { m_aUsedSymbols.clear(); }
-    void    AddToUsedSymbols( const OUString &rSymbolName ) { m_aUsedSymbols.insert( rSymbolName ); }
-
 public:
                  SmParser();
 
