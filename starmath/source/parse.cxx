@@ -2255,7 +2255,7 @@ void SmParser::DoSpecial()
     // add symbol name to list of used symbols
     const OUString aSymbolName(m_aCurToken.aText.copy(1));
     if (!aSymbolName.isEmpty())
-        AddToUsedSymbols( aSymbolName );
+        m_aUsedSymbols.insert( aSymbolName );
 
     m_aNodeStack.push_front(o3tl::make_unique<SmSpecialNode>(m_aCurToken));
     NextToken();
@@ -2301,7 +2301,7 @@ SmParser::SmParser()
 
 SmTableNode *SmParser::Parse(const OUString &rBuffer)
 {
-    ClearUsedSymbols();
+    m_aUsedSymbols.clear();
 
     m_aBufferString = convertLineEnd(rBuffer, LINEEND_LF);
     m_nBufferIndex  = 0;

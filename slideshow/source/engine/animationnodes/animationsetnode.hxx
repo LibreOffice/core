@@ -39,7 +39,6 @@ public:
 
 private:
     virtual AnimationActivitySharedPtr createActivity() const override;
-    void implScheduleDeactivationEvent();
 };
 
 } // namespace internal

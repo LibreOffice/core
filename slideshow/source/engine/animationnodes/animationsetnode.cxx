@@ -30,11 +30,6 @@ using namespace com::sun::star;
 namespace slideshow {
 namespace internal {
 
-void AnimationSetNode::implScheduleDeactivationEvent()
-{
-    scheduleDeactivationEvent();
-}
-
 AnimationActivitySharedPtr AnimationSetNode::createActivity() const
 {
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
@@ -61,8 +56,8 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
         ENSURE_OR_THROW(
             pSelf, "cannot cast getSelf() to my type!" );
         aParms.mpEndEvent = makeEvent(
-            [pSelf] () { pSelf->implScheduleDeactivationEvent(); },
-            "AnimationSetNode::implScheduleDeactivationEvent");
+            [pSelf] () { pSelf->scheduleDeactivationEvent(); },
+            "AnimationSetNode::scheduleDeactivationEvent");
     }
 
     switch (AnimationFactory::classifyAttributeName( attrName )) {

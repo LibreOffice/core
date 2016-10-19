@@ -170,8 +170,6 @@ public:
     inline explicit     SfxOleObjectBase() : mnErrCode( ERRCODE_NONE ) {}
     virtual             ~SfxOleObjectBase();
 
-    /** Returns true, if an error code (other than ERRCODE_NONE) is set. */
-    inline bool         HasError() const { return mnErrCode != ERRCODE_NONE; }
     /** Returns the current error code. */
     inline ErrCode      GetError() const { return mnErrCode; }
 
@@ -183,7 +181,7 @@ public:
 protected:
     /** Sets the passed error code. Will be returned by Load() and Save() functions.
         Always the first error code is stored. Multiple calls have no effect. */
-    inline void         SetError( ErrCode nErrCode ) { if( !HasError() ) mnErrCode = nErrCode; }
+    inline void         SetError( ErrCode nErrCode ) { if( mnErrCode == ERRCODE_NONE ) mnErrCode = nErrCode; }
     /** Loads the passed object from the stream. Sets returned error code as own error. */
     void                LoadObject( SvStream& rStrm, SfxOleObjectBase& rObj );
     /** Saves the passed object to the stream. Sets returned error code as own error. */

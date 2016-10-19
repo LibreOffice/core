@@ -156,10 +156,6 @@ private:
     void updateShapeAttributes( double fTime,
                                 basegfx::B2DRectangle const& parentBounds );
 
-    // Access to VisibleWhenSTarted flags
-    bool IsVisibleWhenStarted() const { return mbVisibleWhenStarted; }
-    bool IsVisibleWhenStopped() const { return mbVisibleWhenStopped; }
-
     // scroll horizontal? if sal_False, scroll is vertical.
     bool ScrollHorizontal() const {
         return (drawing::TextAnimationDirection_LEFT == meDirection ||
@@ -418,7 +414,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
             fOneRelative = 1.0;
         }
 
-        if(IsVisibleWhenStarted())
+        if(mbVisibleWhenStarted)
         {
             double fRelativeStartValue, fRelativeEndValue,fRelativeDistance;
 
@@ -496,7 +492,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
             }
         }
 
-        if(IsVisibleWhenStopped())
+        if(mbVisibleWhenStopped)
         {
             double fRelativeStartValue, fRelativeEndValue, fRelativeDistance;
 

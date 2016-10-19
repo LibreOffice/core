@@ -838,7 +838,7 @@ namespace slideshow
             ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
 
             // Shall we render to a sprite, or to a plain canvas?
-            if( isBackgroundDetached() )
+            if( mbAnimationMode )
                 return renderSprite( mpViewLayer,
                                      rMtf,
                                      rArgs.maOrigBounds,

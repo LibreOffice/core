@@ -80,11 +80,6 @@ private:
     sal_uInt16 nZoom;
 
 protected:
-    void SetFormulaDrawPos(const Point &rPos)
-    {
-        aFormulaDrawPos = rPos;
-    }
-
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
     virtual void KeyInput(const KeyEvent& rKEvt) override;
     virtual void Command(const CommandEvent& rCEvt) override;
