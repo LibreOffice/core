@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/securityoptions.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>
 
@@ -376,7 +377,9 @@ bool MediaDescriptor::isStreamReadOnly() const
                 bReadOnly = true;
             else
             {
-                ::ucbhelper::Content aContent(xContent, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext());
+                ::ucbhelper::Content aContent(xContent,
+                                              utl::UCBContentHelper::getDefaultCommandEnvironment(),
+                                              comphelper::getProcessComponentContext());
                 aContent.getPropertyValue(CONTENTPROP_ISREADONLY) >>= bReadOnly;
             }
         }
