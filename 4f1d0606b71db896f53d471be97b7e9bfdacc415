@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_c49c3c6c",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-10-19T15:18:37Z",
+      "side": 1,
+      "message": "Sounds like this patch has lots of unintended changes?",
+      "revId": "4f1d0606b71db896f53d471be97b7e9bfdacc415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
