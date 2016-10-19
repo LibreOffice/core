@@ -498,8 +498,9 @@ public:
     }
 };
 
-class SwAccessibleEventList_Impl: public std::list < SwAccessibleEvent_Impl >
+class SwAccessibleEventList_Impl
 {
+    std::list<SwAccessibleEvent_Impl> maEvents;
     bool mbFiring;
 
 public:
@@ -517,6 +518,19 @@ public:
     }
 
     void MoveMissingXAccToEnd();
+
+    size_t size() const { return maEvents.size(); }
+    std::list<SwAccessibleEvent_Impl>::iterator begin() { return maEvents.begin(); }
+    std::list<SwAccessibleEvent_Impl>::iterator end() { return maEvents.end(); }
+    std::list<SwAccessibleEvent_Impl>::iterator insert( std::list<SwAccessibleEvent_Impl>::iterator aIter,
+                                                        const SwAccessibleEvent_Impl& rEvent )
+    {
+        return maEvents.insert( aIter, rEvent );
+    }
+    std::list<SwAccessibleEvent_Impl>::iterator erase( std::list<SwAccessibleEvent_Impl>::iterator aPos )
+    {
+        return maEvents.erase( aPos );
+    }
 };
 
 // see comment in SwAccessibleMap::InvalidatePosOrSize()
@@ -529,7 +543,7 @@ void SwAccessibleEventList_Impl::MoveMissingXAccToEnd()
         return;
     }
     SwAccessibleEventList_Impl lstEvent;
-    for (iterator li = begin(); li != end(); )
+    for (auto li = begin(); li != end(); )
     {
         if (li->IsNoXaccParentFrame())
         {
@@ -540,7 +554,7 @@ void SwAccessibleEventList_Impl::MoveMissingXAccToEnd()
             ++li;
     }
     OSL_ENSURE(size() + lstEvent.size() == nSize ,"");
-    insert(end(),lstEvent.begin(),lstEvent.end());
+    maEvents.insert(end(),lstEvent.begin(),lstEvent.end());
     OSL_ENSURE(size() == nSize ,"");
 }
 
@@ -567,7 +581,7 @@ class SwAccessibleEventMap_Impl
 {
 public:
     typedef SwAccessibleChild                                           key_type;
-    typedef SwAccessibleEventList_Impl::iterator                        mapped_type;
+    typedef std::list<SwAccessibleEvent_Impl>::iterator                 mapped_type;
     typedef std::pair<const key_type,mapped_type>                       value_type;
     typedef SwAccessibleChildFunc                                       key_compare;
     typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;
