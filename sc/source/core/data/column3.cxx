@@ -1922,12 +1922,15 @@ bool ScColumn::SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells 
     // Detach all formula cells that will be overwritten.
     DetachFormulaCells(aPos, rCells.size());
 
-    for (size_t i = 0, n = rCells.size(); i < n; ++i)
+    if (!pDocument->IsClipOrUndo())
     {
-        SCROW nThisRow = nRow + i;
-        sal_uInt32 nFmt = GetNumberFormat(nThisRow);
-        if ((nFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
-            rCells[i]->SetNeedNumberFormat(true);
+        for (size_t i = 0, n = rCells.size(); i < n; ++i)
+        {
+            SCROW nThisRow = nRow + i;
+            sal_uInt32 nFmt = GetNumberFormat(nThisRow);
+            if ((nFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+                rCells[i]->SetNeedNumberFormat(true);
+        }
     }
 
     std::vector<sc::CellTextAttr> aDefaults(rCells.size(), sc::CellTextAttr());
