@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_a476603c",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2016-10-19T15:31:16Z",
+      "side": 1,
+      "message": "Please follow the LO code convention of prefixing \u0027s\u0027 before string type var names and \u0027n\u0027 for integer type vars etc.",
+      "revId": "e64c5f62f3fab4f80702271bb69f419725f78312",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_24825001",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2016-10-19T15:31:16Z",
+      "side": 1,
+      "message": "this variable should be nCategoryCount.",
+      "revId": "e64c5f62f3fab4f80702271bb69f419725f78312",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_44874c0f",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2016-10-19T15:31:16Z",
+      "side": 1,
+      "message": "This would be pCategory instead.",
+      "revId": "e64c5f62f3fab4f80702271bb69f419725f78312",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_647c4821",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2016-10-19T15:31:16Z",
+      "side": 1,
+      "message": "here too.",
+      "revId": "e64c5f62f3fab4f80702271bb69f419725f78312",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_84796432",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2016-10-19T15:31:16Z",
+      "side": 1,
+      "message": "This should be sal_uInt32 for fixing the build errors in Jenkins.",
+      "revId": "e64c5f62f3fab4f80702271bb69f419725f78312",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
