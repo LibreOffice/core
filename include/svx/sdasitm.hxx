@@ -71,8 +71,6 @@ private:
             virtual bool                QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
             virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-            const css::uno::Sequence< css::beans::PropertyValue >& GetGeometry() const { return aPropSeq;}
-
             css::uno::Any* GetPropertyValueByName( const OUString& rPropName );
             const css::uno::Any* GetPropertyValueByName( const OUString& rPropName ) const;
             css::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 );

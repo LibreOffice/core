@@ -46,7 +46,6 @@ namespace drawinglayer
                 const basegfx::B2DRange& rPaintRange,
                 const basegfx::B2DRange& rDefineRange);
 
-        protected:
         public:
             SdrAllFillAttributesHelper(const Color& rColor);
             SdrAllFillAttributesHelper(const SfxItemSet& rSet);
@@ -54,7 +53,6 @@ namespace drawinglayer
 
             bool isUsed() const;
             bool hasSdrFillAttribute() const { return maFillAttribute.get(); }
-            bool hasFillGradientAttribute() const { return maFillGradientAttribute.get(); }
             bool isTransparent() const;
 
             const drawinglayer::attribute::SdrFillAttribute& getFillAttribute() const;

@@ -74,7 +74,7 @@ TextCharacterSpacingControl::~TextCharacterSpacingControl()
 
 void TextCharacterSpacingControl::dispose()
 {
-    if (GetLastCustomState() == SPACING_CLOSE_BY_CUS_EDIT)
+    if (mnLastCus == SPACING_CLOSE_BY_CUS_EDIT)
     {
         SvtViewOptions aWinOpt(E_WINDOW, SIDEBAR_SPACING_GLOBAL_VALUE);
         css::uno::Sequence<css::beans::NamedValue> aSeq

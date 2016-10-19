@@ -525,18 +525,13 @@ void SdrCaptionObj::ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPo
     rPoly=aPol;
 }
 
-void SdrCaptionObj::ImpCalcTail4(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect)
-{
-    ImpCalcTail3(rPara,rPoly,rRect);
-}
-
 void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect)
 {
     switch (rPara.eType) {
         case SdrCaptionType::Type1: ImpCalcTail1(rPara,rPoly,rRect); break;
         case SdrCaptionType::Type2: ImpCalcTail2(rPara,rPoly,rRect); break;
         case SdrCaptionType::Type3: ImpCalcTail3(rPara,rPoly,rRect); break;
-        case SdrCaptionType::Type4: ImpCalcTail4(rPara,rPoly,rRect); break;
+        case SdrCaptionType::Type4: ImpCalcTail3(rPara,rPoly,rRect); break;
     }
 }
 

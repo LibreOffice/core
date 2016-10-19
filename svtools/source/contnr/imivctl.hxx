@@ -450,7 +450,6 @@ public:
                             SvxIconChoiceCtrlEntry* pEntry
                         );
 #endif
-    bool                IsEntryEditingEnabled() const { return bEntryEditingEnabled; }
     bool                IsEntryEditing() const { return (pCurEditedEntry!=nullptr); }
     void                EditEntry( SvxIconChoiceCtrlEntry* pEntry );
     void                StopEntryEditing();
@@ -480,7 +479,6 @@ public:
     const SvxIconChoiceCtrlColumnInfo* GetColumn( sal_uInt16 nIndex ) const;
 
     Rectangle           GetDocumentRect() const { return Rectangle( Point(), aVirtOutputSize ); }
-    Rectangle           GetVisibleRect() const { return GetOutputRect(); }
 
     void                SetEntryHighlightFrame(
                             SvxIconChoiceCtrlEntry* pEntry,

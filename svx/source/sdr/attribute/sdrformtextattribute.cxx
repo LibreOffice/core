@@ -228,7 +228,6 @@ namespace drawinglayer
             sal_Int32 getFormTextStart() const { return mnFormTextStart; }
             sal_Int32 getFormTextShdwXVal() const { return mnFormTextShdwXVal; }
             sal_Int32 getFormTextShdwYVal() const { return mnFormTextShdwYVal; }
-            sal_uInt16 getFormTextShdwTransp() const { return mnFormTextShdwTransp; }
             XFormTextStyle getFormTextStyle() const { return meFormTextStyle; }
             XFormTextAdjust getFormTextAdjust() const { return meFormTextAdjust; }
             XFormTextShadow getFormTextShadow() const { return meFormTextShadow; }
@@ -245,7 +244,7 @@ namespace drawinglayer
                     && getFormTextStart() == rCandidate.getFormTextStart()
                     && getFormTextShdwXVal() == rCandidate.getFormTextShdwXVal()
                     && getFormTextShdwYVal() == rCandidate.getFormTextShdwYVal()
-                    && getFormTextShdwTransp() == rCandidate.getFormTextShdwTransp()
+                    && mnFormTextShdwTransp == rCandidate.mnFormTextShdwTransp
                     && getFormTextStyle() == rCandidate.getFormTextStyle()
                     && getFormTextAdjust() == rCandidate.getFormTextAdjust()
                     && getFormTextShadow() == rCandidate.getFormTextShadow()

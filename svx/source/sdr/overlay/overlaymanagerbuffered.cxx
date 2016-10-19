@@ -238,7 +238,7 @@ namespace sdr
                     }
                 }
 
-                if(DoRefreshWithPreRendering())
+                if(mbRefreshWithPreRendering)
                 {
                     // #i73602# ensure valid and sized mpOutputBufferDevice
                     const Size aDestinationSizePixel(mpBufferDevice->GetOutputSizePixel());

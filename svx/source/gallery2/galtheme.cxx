@@ -190,7 +190,7 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
 
 void GalleryTheme::ImplWrite()
 {
-    if( IsModified() )
+    if( pThm->IsModified() )
     {
         INetURLObject aPathURL( GetThmURL() );
 
@@ -1286,7 +1286,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     bool                bRel;
 
     rOStm.WriteUInt16( 0x0004 );
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, GetRealName(), RTL_TEXTENCODING_UTF8);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, pThm->GetThemeName(), RTL_TEXTENCODING_UTF8);
     rOStm.WriteUInt32( nCount ).WriteUInt16( osl_getThreadTextEncoding() );
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
@@ -1514,7 +1514,6 @@ void GalleryTheme::ImplSetModified( bool bModified )
     pThm->SetModified(bModified);
 }
 
-const OUString& GalleryTheme::GetRealName() const { return pThm->GetThemeName(); }
 const INetURLObject& GalleryTheme::GetThmURL() const { return pThm->GetThmURL(); }
 const INetURLObject& GalleryTheme::GetSdgURL() const { return pThm->GetSdgURL(); }
 const INetURLObject& GalleryTheme::GetSdvURL() const { return pThm->GetSdvURL(); }
@@ -1523,7 +1522,6 @@ void GalleryTheme::SetId( sal_uInt32 nNewId, bool bResetThemeName ) { pThm->SetI
 bool GalleryTheme::IsThemeNameFromResource() const { return pThm->IsNameFromResource(); }
 bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
 bool GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
-bool GalleryTheme::IsModified() const { return pThm->IsModified(); }
 
 const tools::SvRef<SotStorage>& GalleryTheme::GetSvDrawStorage() const
 {

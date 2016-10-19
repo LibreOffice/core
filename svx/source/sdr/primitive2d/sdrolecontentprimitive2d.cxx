@@ -160,7 +160,7 @@ namespace drawinglayer
 
                     // #i104867# to find out if the Graphic content of the
                     // OLE has changed, use GraphicVersion number
-                    && getGraphicVersion() == rCompare.getGraphicVersion()
+                    && mnGraphicVersion == rCompare.mnGraphicVersion
                 );
             }
 

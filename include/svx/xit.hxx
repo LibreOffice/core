@@ -58,7 +58,6 @@ public:
 
             OUString     GetName() const              { return GetValue();   }
             void         SetName(const OUString& rName) { SetValue(rName);     }
-            sal_Int32    GetIndex() const             { return nPalIndex;    }
             bool         IsIndex() const          { return (nPalIndex >= 0); }
 
     /** this static checks if the given NameOrIndex item has a unique name for its value.

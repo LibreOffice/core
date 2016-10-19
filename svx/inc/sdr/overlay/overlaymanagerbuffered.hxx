@@ -80,9 +80,6 @@ namespace sdr
 
             // invalidate the given range at local OutputDevice
             virtual void invalidateRange(const basegfx::B2DRange& rRange) override;
-
-            // access to RefreshWithPreRendering Flag
-            bool DoRefreshWithPreRendering() const { return mbRefreshWithPreRendering; }
         };
     } // end of namespace overlay
 } // end of namespace sdr

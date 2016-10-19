@@ -348,7 +348,6 @@ public:
     virtual void    dispose() override;
 
     void            ShowFilterPage();
-    void            ShowViewPage();
 
     SvxTPFilter*    GetFilterPage() { return pTPFilter;}
     SvxTPView*      GetViewPage() { return pTPView;}

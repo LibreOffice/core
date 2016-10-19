@@ -37,7 +37,6 @@ protected:
     SdrPathSegmentKind          eMarkedSegmentsKind;
 
 private:
-    SVX_DLLPRIVATE void ImpClearVars();
     SVX_DLLPRIVATE void ImpResetPolyPossibilityFlags();
     SVX_DLLPRIVATE void ImpCheckPolyPossibilities();
 

@@ -57,12 +57,6 @@ namespace sdr
                 double fRotation,
                 bool bAnimate);
 
-            // data read access
-            double getTransparence() const { return mfTransparence; }
-            double getDiscreteGrow() const { return mfDiscreteGrow; }
-            double getDiscreteShrink() const { return mfDiscreteShrink; }
-            double getRotation() const { return mfRotation; }
-
             // execute event from base class sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.
             virtual void Trigger(sal_uInt32 nTime) override;

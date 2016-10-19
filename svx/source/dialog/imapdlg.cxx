@@ -278,11 +278,6 @@ void SvxIMapDlg::SetExecState( bool bEnable )
     pOwnData->bExecState = bEnable;
 }
 
-void SvxIMapDlg::SetGraphic( const Graphic& rGraphic )
-{
-    pIMapWnd->SetGraphic( rGraphic );
-}
-
 void SvxIMapDlg::SetImageMap( const ImageMap& rImageMap )
 {
     pIMapWnd->SetImageMap( rImageMap );
@@ -737,10 +732,10 @@ IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl, Idle *, void)
             DoSave();
         }
 
-        SetGraphic( pOwnData->aUpdateGraphic );
+        pIMapWnd->SetGraphic( pOwnData->aUpdateGraphic );
         SetImageMap( pOwnData->aUpdateImageMap );
         SetTargetList( pOwnData->aUpdateTargetList );
-        SetEditingObject( pOwnData->pUpdateEditingObject );
+        pCheckObj = pOwnData->pUpdateEditingObject;
 
         // After changes => default selection
         m_pTbxIMapDlg1->CheckItem( mnSelectId );

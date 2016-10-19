@@ -129,7 +129,6 @@ public:
     SAL_DLLPRIVATE bool         ChangeObjectPos( size_t nOldPos, size_t nNewPos );
 
     const OUString&             GetName() const;
-    SAL_DLLPRIVATE const OUString& GetRealName() const;
 
     // used for building gallery themes during compilation:
     SAL_DLLPRIVATE void         SetDestDir(const OUString& rDestDir, bool bRelative)
@@ -159,7 +158,6 @@ public:
 
     bool                        IsReadOnly() const;
     bool                        IsDefault() const;
-    SAL_DLLPRIVATE bool         IsModified() const;
 
     void                        Actualize( const Link<const INetURLObject&, void>& rActualizeLink, GalleryProgress* pProgress = nullptr );
     SAL_DLLPRIVATE void         AbortActualize() { bAbortActualize = true; }

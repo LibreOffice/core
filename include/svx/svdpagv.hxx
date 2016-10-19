@@ -93,9 +93,7 @@ private:
     SdrPageWindow* mpPreparedPageWindow;
 
     // interface to SdrPageWindow
-private:
     void ClearPageWindows();
-    void AppendPageWindow(SdrPageWindow& rNew);
     SdrPageWindow* RemovePageWindow(SdrPageWindow& rOld);
 public:
     sal_uInt32 PageWindowCount() const { return maPageWindows.size(); }

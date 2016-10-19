@@ -184,7 +184,6 @@ public:
     void EndUndo();                                                   // close undo-grouping  (incl. BroadcastEdges)
     void AddUndo(SdrUndoAction* pUndo)   { mpModel->AddUndo(pUndo);    } // add action
     // only after first BegUndo or befor last EndUndo:
-    void SetUndoComment(const OUString& rComment) { mpModel->SetUndoComment(rComment); }
     void SetUndoComment(const OUString& rComment, const OUString& rObjDescr) { mpModel->SetUndoComment(rComment,rObjDescr); }
     bool IsUndoEnabled() const;
 

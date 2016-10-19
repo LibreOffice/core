@@ -3650,10 +3650,10 @@ void FmXFormShell::viewActivated( FmFormView& _rCurrentView, bool _bSyncAction /
 
     UpdateForms( true );
 
-    if ( !hasEverBeenActivated() )
+    if ( m_bFirstActivation )
     {
         m_nActivationEvent = Application::PostUserEvent( LINK( this, FmXFormShell, OnFirstTimeActivation ) );
-        setHasBeenActivated();
+        m_bFirstActivation = false;
     }
 
     // find a default "current form", if there is none, yet

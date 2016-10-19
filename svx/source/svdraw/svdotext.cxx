@@ -468,11 +468,6 @@ bool SdrTextObj::HasTextImpl( SdrOutliner* pOutliner )
     return bRet;
 }
 
-bool SdrTextObj::HasEditText() const
-{
-    return HasTextImpl( pEdtOutl );
-}
-
 void SdrTextObj::SetPage(SdrPage* pNewPage)
 {
     bool bRemove=pNewPage==nullptr && pPage!=nullptr;
@@ -2099,11 +2094,6 @@ SdrTextObj* SdrTextObj::GetPrevLinkInChain() const
     return mpPrevInChain;
 }
 
-void SdrTextObj::SetPreventChainable()
-{
-    mbIsUnchainableClone = true;
-}
-
 bool SdrTextObj::GetPreventChainable() const
 {
     // Prevent chaining it 1) during dragging && 2) when we are editing next link
@@ -2116,7 +2106,7 @@ bool SdrTextObj::GetPreventChainable() const
     SdrTextObj *pTextObjClone = dynamic_cast<SdrTextObj *>(pClone);
     if (pTextObjClone != nullptr) {
         // Avoid transferring of text for chainable object during dragging
-        pTextObjClone->SetPreventChainable();
+        pTextObjClone->mbIsUnchainableClone = true;
     }
 
     return pClone;

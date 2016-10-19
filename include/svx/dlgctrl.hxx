@@ -178,7 +178,6 @@ public:
 
     void    SetPixelColor( const Color& rCol ) { aPixelColor = rCol; }
     void    SetBackgroundColor( const Color& rCol ) { aBackgroundColor = rCol; }
-    void    SetLineColor( const Color& rCol ) { aLineColor = rCol; }
 
     sal_uInt16  GetLineCount() const { return nLines; }
 

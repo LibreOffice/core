@@ -242,7 +242,6 @@ public:
 
 class SVX_DLLPUBLIC SdrHdlColor : public SdrHdl
 {
-private:
     // size of colr markers
     Size                        aMarkerSize;
 
@@ -261,7 +260,6 @@ private:
     // help functions
     SVX_DLLPRIVATE Bitmap CreateColorDropper(Color aCol);
     SVX_DLLPRIVATE static Color GetLuminance(const Color& rCol);
-    SVX_DLLPRIVATE void CallColorChangeLink();
 
 public:
     explicit SdrHdlColor(const Point& rRef, Color aCol = Color(COL_BLACK), const Size& rSize = Size(11, 11), bool bLum = false);

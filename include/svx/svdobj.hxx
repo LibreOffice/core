@@ -389,10 +389,6 @@ protected:
     /// at the same time to avoid recomputation.
 public:
     virtual void SetRectsDirty(bool bNotMyself = false);
-protected:
-
-    // override if the class inherits from SdrObjPlusData:
-    static SdrObjPlusData* NewPlusData();
 
 protected:
     /// A derived class must override these 3 methods if it has own geometric
@@ -403,7 +399,6 @@ protected:
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 
-protected:
     virtual ~SdrObject() override;
 
 public:

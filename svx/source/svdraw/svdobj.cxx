@@ -394,11 +394,6 @@ void SdrObject::Free( SdrObject*& _rpObject )
     delete pObject;
 }
 
-SdrObjPlusData* SdrObject::NewPlusData()
-{
-    return new SdrObjPlusData;
-}
-
 void SdrObject::SetRectsDirty(bool bNotMyself)
 {
     if (!bNotMyself) {
@@ -1035,7 +1030,7 @@ void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr) co
 void SdrObject::ImpForcePlusData()
 {
     if (!pPlusData)
-        pPlusData = NewPlusData();
+        pPlusData = new SdrObjPlusData;
 }
 
 OUString SdrObject::GetAngleStr(long nAngle) const

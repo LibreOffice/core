@@ -110,7 +110,6 @@ public:
     void                SetPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     tools::PolyPolygon  GetPolyPolygon();
 
-    void                SetEditingObject( void* pObj ) { pCheckObj = pObj; }
     const void*         GetEditingObject() const { return pCheckObj; }
 
     bool                IsUndoPossible() const;

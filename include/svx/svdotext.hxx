@@ -353,7 +353,6 @@ public:
     void SetNextLinkInChain(SdrTextObj *);
     SdrTextObj *GetPrevLinkInChain() const;
     bool IsChainable() const;
-    void SetPreventChainable();
     bool GetPreventChainable() const;
     TextChain *GetTextChain() const;
 
@@ -362,8 +361,7 @@ public:
     // #i121917#
     virtual bool HasText() const override;
 
-    bool HasEditText() const;
-    bool IsTextEditActive() const { return (pEdtOutl != nullptr); }
+    bool IsTextEditActive() const { return pEdtOutl != nullptr; }
 
     /** returns the currently active text. */
     virtual SdrText* getActiveText() const;

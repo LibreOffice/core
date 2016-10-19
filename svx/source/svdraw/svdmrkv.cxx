@@ -433,7 +433,7 @@ bool SdrMarkView::EndMarkPoints()
         {
             Rectangle aRect(maDragStat.GetStart(), maDragStat.GetNow());
             aRect.Justify();
-            MarkPoints(aRect, mpMarkPointsOverlay->IsUnmarking());
+            MarkPoints(&aRect, mpMarkPointsOverlay->IsUnmarking());
 
             bRetval = true;
         }

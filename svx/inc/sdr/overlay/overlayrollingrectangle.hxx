@@ -54,12 +54,6 @@ namespace sdr
             const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
             void setSecondPosition(const basegfx::B2DPoint& rNew);
 
-            // change extended lines
-            bool getExtendedLines() const { return mbExtendedLines; }
-
-            // change show bounds
-            bool getShowBounds() const { return mbShowBounds; }
-
             // react on stripe definition change
             virtual void stripeDefinitionHasChanged() override;
         };

@@ -138,8 +138,6 @@ public:
     bool IsEPS() const;
     bool IsSwappedOut() const;
 
-    bool IsCropped() const;
-
     const MapMode&          GetGrafPrefMapMode() const;
     const Size&             GetGrafPrefSize() const;
 

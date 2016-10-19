@@ -142,9 +142,6 @@ public:
 
     void                SetExecState( bool bEnable );
 
-    void                SetGraphic( const Graphic& rGraphic );
-
-    void                SetEditingObject( void* pObj ) { pCheckObj = pObj; }
     const void*         GetEditingObject() const { return pCheckObj; }
 
     void                SetImageMap( const ImageMap& rImageMap );

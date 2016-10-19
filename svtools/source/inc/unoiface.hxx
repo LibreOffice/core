@@ -184,7 +184,6 @@ public:
     css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
 protected:
-    css::uno::Reference< css::util::XNumberFormatsSupplier >  getFormatsSupplier() const;
     void    setFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier > & xSupplier);
     sal_Int32   getFormatKey() const;
     void    setFormatKey(sal_Int32 nKey);

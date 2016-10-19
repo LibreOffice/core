@@ -157,7 +157,6 @@ public:
     FmEntryData( const FmEntryData& rEntryData );
     virtual ~FmEntryData();
 
-    void    Clear();
     void    SetText( const OUString& rText ){ aText = rText; }
     void    SetParent( FmEntryData* pParentData ){ pParent = pParentData; }
 

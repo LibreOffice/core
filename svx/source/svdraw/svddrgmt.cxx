@@ -828,7 +828,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
 void SdrDragMethod::destroyOverlayGeometry()
 {
-    clearOverlayObjectList();
+    maOverlayObjectList.clear();
 }
 
 bool SdrDragMethod::DoAddConnectorOverlays()

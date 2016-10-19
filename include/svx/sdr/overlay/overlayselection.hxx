@@ -66,7 +66,6 @@ namespace sdr
 
             // data read access
             const std::vector< basegfx::B2DRange >& getRanges() const { return maRanges; }
-            bool getBorder() const { return mbBorder; }
 
             /// override to check conditions for last createOverlayObjectPrimitive2DSequence
             virtual drawinglayer::primitive2d::Primitive2DContainer getOverlayObjectPrimitive2DSequence() const override;

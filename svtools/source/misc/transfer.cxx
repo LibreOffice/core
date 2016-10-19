@@ -1054,10 +1054,7 @@ public:
     TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener, ::osl::Mutex& _rMutex );
 
     /// determines whether we're currently listening
-    inline bool isListening() const { return !isDisposed(); }
-
-    /// determines whether the instance is disposed
-    inline bool isDisposed() const { return mpListener == nullptr; }
+    inline bool isListening() const { return mpListener != nullptr; }
 
     /// makes the instance non-functional
     void    dispose();

@@ -44,15 +44,10 @@ void SdrPolyEditView::ImpResetPolyPossibilityFlags()
     bSetMarkedSegmentsKindPossible=false;
 }
 
-void SdrPolyEditView::ImpClearVars()
-{
-    ImpResetPolyPossibilityFlags();
-}
-
 SdrPolyEditView::SdrPolyEditView(SdrModel* pModel1, OutputDevice* pOut):
     SdrEditView(pModel1,pOut)
 {
-    ImpClearVars();
+    ImpResetPolyPossibilityFlags();
 }
 
 SdrPolyEditView::~SdrPolyEditView()

@@ -51,8 +51,6 @@ private:
 
     cppu::OBroadcastHelper mrBHelper;
 
-    void disposing() throw();
-
 public:
     SvxShapeCollection() throw();
     virtual ~SvxShapeCollection() throw() override;
@@ -127,12 +125,6 @@ void SvxShapeCollection::release() throw()
 }
 
 // XComponent
-void SvxShapeCollection::disposing() throw()
-{
-    maShapeContainer.clear();
-}
-
-// XComponent
 void SvxShapeCollection::dispose()
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -166,8 +158,7 @@ void SvxShapeCollection::dispose()
             // inform all listeners to release this object
             // The listener container are automatically cleared
             mrBHelper.aLC.disposeAndClear( aEvt );
-            // notify subclasses to do their dispose
-            disposing();
+            maShapeContainer.clear();
         }
         catch(const css::uno::Exception&)
         {

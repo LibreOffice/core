@@ -979,7 +979,7 @@ void SdrEditView::DistributeMarkedObjects()
                 }
 
                 // UNDO-Comment and end of UNDO
-                SetUndoComment(ImpGetResStr(STR_DistributeMarkedObjects));
+                mpModel->SetUndoComment(ImpGetResStr(STR_DistributeMarkedObjects));
 
                 if( bUndo )
                     EndUndo();

@@ -185,7 +185,7 @@ FmEntryData::FmEntryData( FmEntryData* pParentData, const Reference< XInterface 
 
 FmEntryData::~FmEntryData()
 {
-    Clear();
+    GetChildList()->clear();
     delete pChildList;
 }
 
@@ -220,11 +220,6 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
     m_xChild = rEntryData.m_xChild;
 }
 
-
-void FmEntryData::Clear()
-{
-    GetChildList()->clear();
-}
 
 
 bool FmEntryData::IsEqualWithoutChildren( FmEntryData* pEntryData )

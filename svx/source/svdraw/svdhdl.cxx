@@ -1088,11 +1088,6 @@ Color SdrHdlColor::GetLuminance(const Color& rCol)
     return aRetval;
 }
 
-void SdrHdlColor::CallColorChangeLink()
-{
-    aColorChangeHdl.Call(this);
-}
-
 void SdrHdlColor::SetColor(Color aNew, bool bCallLink)
 {
     if(IsUseLuminance())
@@ -1108,7 +1103,7 @@ void SdrHdlColor::SetColor(Color aNew, bool bCallLink)
 
         // tell about change
         if(bCallLink)
-            CallColorChangeLink();
+            aColorChangeHdl.Call(this);
     }
 }
 
