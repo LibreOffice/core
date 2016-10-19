@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <ucbhelper/content.hxx>
+#include <unotools/ucbhelper.hxx>
 
 #include <DirectoryStream.hxx>
 #include <DocumentHandler.hxx>
@@ -132,7 +133,9 @@ throw(css::uno::RuntimeException, std::exception)
      */
     if (xContent.is())
     {
-        ucbhelper::Content aContent(xContent, Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext());
+        ucbhelper::Content aContent(xContent,
+                                    utl::UCBContentHelper::getDefaultCommandEnvironment(),
+                                    comphelper::getProcessComponentContext());
         try
         {
             if (aContent.isFolder())
