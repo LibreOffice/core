@@ -47,9 +47,6 @@ namespace svgio
 
             /// viewBox content
             void setViewBox(const basegfx::B2DRange* pViewBox) { if(mpViewBox) delete mpViewBox; mpViewBox = nullptr; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
-
-            /// SvgAspectRatio content
-            void setSvgAspectRatio(const SvgAspectRatio& rSvgAspectRatio) { maSvgAspectRatio = rSvgAspectRatio; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

@@ -75,26 +75,18 @@ namespace svgio
 
             /// SvgAspectRatio content
             const SvgAspectRatio& getSvgAspectRatio() const { return maSvgAspectRatio; }
-            void setSvgAspectRatio(const SvgAspectRatio& rSvgAspectRatio) { maSvgAspectRatio = rSvgAspectRatio; }
 
             /// x content
             const SvgNumber& getX() const { return maX; }
-            void setX(const SvgNumber& rX) { maX = rX; }
 
             /// y content
             const SvgNumber& getY() const { return maY; }
-            void setY(const SvgNumber& rY) { maY = rY; }
 
             /// width content
             const SvgNumber& getWidth() const { return maWidth; }
-            void setWidth(const SvgNumber& rWidth) { maWidth = rWidth; }
 
             /// height content
             const SvgNumber& getHeight() const { return maHeight; }
-            void setHeight(const SvgNumber& rHeight) { maHeight = rHeight; }
-
-            /// version content
-            void setVersion(const SvgNumber& rVersion) { maVersion = rVersion; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

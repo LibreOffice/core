@@ -60,17 +60,10 @@ namespace svgio
 
             /// x content
             const SvgNumber& getX() const { return maX; }
-            void setX(const SvgNumber& rX) { maX = rX; }
 
             /// y content
             const SvgNumber& getY() const { return maY; }
-            void setY(const SvgNumber& rY) { maY = rY; }
 
-            /// width content
-            void setWidth(const SvgNumber& rWidth) { maWidth = rWidth; }
-
-            /// height content
-            void setHeight(const SvgNumber& rHeight) { maHeight = rHeight; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

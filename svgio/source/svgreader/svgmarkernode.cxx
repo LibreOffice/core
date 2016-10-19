@@ -79,7 +79,7 @@ namespace svgio
                 }
                 case SVGTokenPreserveAspectRatio:
                 {
-                    setSvgAspectRatio(readSvgAspectRatio(aContent));
+                    maSvgAspectRatio = readSvgAspectRatio(aContent);
                     break;
                 }
                 case SVGTokenRefX:
@@ -88,7 +88,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setRefX(aNum);
+                        maRefX = aNum;
                     }
                     break;
                 }
@@ -98,7 +98,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setRefY(aNum);
+                        maRefY = aNum;
                     }
                     break;
                 }
@@ -125,7 +125,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setMarkerWidth(aNum);
+                            maMarkerWidth = aNum;
                         }
                     }
                     break;
@@ -138,7 +138,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setMarkerHeight(aNum);
+                            maMarkerHeight = aNum;
                         }
                     }
                     break;
@@ -151,7 +151,7 @@ namespace svgio
                     {
                         if(aContent.startsWith("auto"))
                         {
-                            setOrientAuto();
+                            mbOrientAuto = true;
                         }
                         else
                         {

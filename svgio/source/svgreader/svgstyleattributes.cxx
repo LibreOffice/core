@@ -1301,11 +1301,11 @@ namespace svgio
                         {
                             if(SVGTokenLinearGradient == pNode->getType() || SVGTokenRadialGradient == pNode->getType())
                             {
-                                setSvgGradientNodeFill(static_cast< const SvgGradientNode* >(pNode));
+                                mpSvgGradientNodeFill = static_cast< const SvgGradientNode* >(pNode);
                             }
                             else if(SVGTokenPattern == pNode->getType())
                             {
-                                setSvgPatternNodeFill(static_cast< const SvgPatternNode* >(pNode));
+                                mpSvgPatternNodeFill = static_cast< const SvgPatternNode* >(pNode);
                             }
                         }
                     }
@@ -1317,7 +1317,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setFillOpacity(SvgNumber(basegfx::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet()));
+                        maFillOpacity = SvgNumber(basegfx::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet());
                     }
                     break;
                 }
@@ -1344,7 +1344,7 @@ namespace svgio
 
                     if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent, aOpacity))
                     {
-                        setStroke(aSvgPaint);
+                        maStroke = aSvgPaint;
                         if(aOpacity.isSet())
                         {
                             setOpacity(SvgNumber(basegfx::clamp(aOpacity.getNumber(), 0.0, 1.0)));
@@ -1358,11 +1358,11 @@ namespace svgio
                         {
                             if(SVGTokenLinearGradient == pNode->getType() || SVGTokenRadialGradient  == pNode->getType())
                             {
-                                setSvgGradientNodeStroke(static_cast< const SvgGradientNode* >(pNode));
+                                mpSvgGradientNodeStroke = static_cast< const SvgGradientNode* >(pNode);
                             }
                             else if(SVGTokenPattern == pNode->getType())
                             {
-                                setSvgPatternNodeStroke(static_cast< const SvgPatternNode* >(pNode));
+                                mpSvgPatternNodeStroke = static_cast< const SvgPatternNode* >(pNode);
                             }
                         }
                     }
@@ -1380,11 +1380,11 @@ namespace svgio
                             // in the sense that *when* it is set, the parent shall not
                             // be used. Before this was only dependent on the array being
                             // empty
-                            setStrokeDasharraySet(true);
+                            mbStrokeDasharraySet = true;
                         }
                         else if(readSvgNumberVector(aContent, aVector))
                         {
-                            setStrokeDasharray(aVector);
+                            maStrokeDasharray = aVector;
                         }
                     }
                     break;
@@ -1460,7 +1460,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setStrokeOpacity(SvgNumber(basegfx::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet()));
+                        maStrokeOpacity = SvgNumber(basegfx::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet());
                     }
                     break;
                 }
@@ -1472,7 +1472,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setStrokeWidth(aNum);
+                            maStrokeWidth = aNum;
                         }
                     }
                     break;
@@ -1485,7 +1485,7 @@ namespace svgio
 
                     if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent, aOpacity))
                     {
-                        setStopColor(aSvgPaint);
+                        maStopColor = aSvgPaint;
                         if(aOpacity.isSet())
                         {
                             setOpacity(SvgNumber(basegfx::clamp(aOpacity.getNumber(), 0.0, 1.0)));
@@ -1501,7 +1501,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setStopOpacity(aNum);
+                            maStopOpacity = aNum;
                         }
                     }
                     break;
@@ -1516,7 +1516,7 @@ namespace svgio
 
                     if(readSvgStringVector(aContent, aSvgStringVector))
                     {
-                        setFontFamily(aSvgStringVector);
+                        maFontFamily = aSvgStringVector;
                     }
                     break;
                 }
@@ -1570,7 +1570,7 @@ namespace svgio
 
                             if(readSingleNumber(aContent, aNum))
                             {
-                                setFontSizeNumber(aNum);
+                                maFontSizeNumber = aNum;
                             }
                         }
                     }
@@ -1809,7 +1809,7 @@ namespace svgio
 
                     if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent, aOpacity))
                     {
-                        setColor(aSvgPaint);
+                        maColor = aSvgPaint;
                         if(aOpacity.isSet())
                         {
                             setOpacity(SvgNumber(basegfx::clamp(aOpacity.getNumber(), 0.0, 1.0)));
@@ -1852,12 +1852,12 @@ namespace svgio
                 }
                 case SVGTokenTitle:
                 {
-                    setTitle(aContent);
+                    maTitle = aContent;
                     break;
                 }
                 case SVGTokenDesc:
                 {
-                    setDesc(aContent);
+                    maDesc = aContent;
                     break;
                 }
                 case SVGTokenClipPathProperty:
@@ -2256,7 +2256,7 @@ namespace svgio
             {
                 return maStrokeDasharray;
             }
-            else if(getStrokeDasharraySet())
+            else if(mbStrokeDasharraySet)
             {
                 // #121221# is set to empty *by purpose*, do not visit parent styles
                 return maStrokeDasharray;

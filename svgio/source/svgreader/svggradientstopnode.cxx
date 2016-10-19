@@ -67,7 +67,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setOffset(aNum);
+                            maOffset = aNum;
                         }
                     }
                     break;

@@ -76,15 +76,12 @@ namespace svgio
 
             /// SvgAspectRatio content
             const SvgAspectRatio& getSvgAspectRatio() const { return maSvgAspectRatio; }
-            void setSvgAspectRatio(const SvgAspectRatio& rSvgAspectRatio) { maSvgAspectRatio = rSvgAspectRatio; }
 
             /// RefX content, set if found in current context
             const SvgNumber& getRefX() const { return maRefX; }
-            void setRefX(const SvgNumber& rRefX) { maRefX = rRefX; }
 
             /// RefY content, set if found in current context
             const SvgNumber& getRefY() const { return maRefY; }
-            void setRefY(const SvgNumber& rRefY) { maRefY = rRefY; }
 
             /// MarkerUnits content
             MarkerUnits getMarkerUnits() const { return maMarkerUnits; }
@@ -92,11 +89,9 @@ namespace svgio
 
             /// MarkerWidth content, set if found in current context
             const SvgNumber& getMarkerWidth() const { return maMarkerWidth; }
-            void setMarkerWidth(const SvgNumber& rMarkerWidth) { maMarkerWidth = rMarkerWidth; }
 
             /// MarkerHeight content, set if found in current context
             const SvgNumber& getMarkerHeight() const { return maMarkerHeight; }
-            void setMarkerHeight(const SvgNumber& rMarkerHeight) { maMarkerHeight = rMarkerHeight; }
 
             /// Angle content, set if found in current context
             double getAngle() const { return mfAngle; }
@@ -104,7 +99,6 @@ namespace svgio
 
             /// OrientAuto content, set if found in current context
             bool getOrientAuto() const { return mbOrientAuto; }
-            void setOrientAuto() { mbOrientAuto = true; }
 
         };
     } // end of namespace svgreader

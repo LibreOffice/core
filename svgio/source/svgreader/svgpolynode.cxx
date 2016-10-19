@@ -73,7 +73,7 @@ namespace svgio
                     {
                         if(aPath.count())
                         {
-                            if(!isPolyline())
+                            if(!mbIsPolyline)
                             {
                                 aPath.setClosed(true);
                             }
@@ -104,11 +104,11 @@ namespace svgio
         {
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
-            if(pStyle && getPolygon())
+            if(pStyle && mpPolygon)
             {
                 drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
 
-                pStyle->add_path(basegfx::B2DPolyPolygon(*getPolygon()), aNewTarget, nullptr);
+                pStyle->add_path(basegfx::B2DPolyPolygon(*mpPolygon), aNewTarget, nullptr);
 
                 if(!aNewTarget.empty())
                 {

@@ -69,7 +69,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setCx(aNum);
+                        maCx = aNum;
                     }
                     break;
                 }
@@ -79,7 +79,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setCy(aNum);
+                        maCy = aNum;
                     }
                     break;
                 }
@@ -91,7 +91,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setR(aNum);
+                            maR = aNum;
                         }
                     }
                     break;

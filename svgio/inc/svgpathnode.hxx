@@ -60,7 +60,6 @@ namespace svgio
 
             /// PathLength content
             const SvgNumber& getPathLength() const { return maPathLength; }
-            void setPathLength(const SvgNumber& rPathLength) { maPathLength = rPathLength; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

@@ -70,7 +70,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setX1(aNum);
+                        maX1 = aNum;
                     }
                     break;
                 }
@@ -80,7 +80,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setY1(aNum);
+                        maY1 = aNum;
                     }
                     break;
                 }
@@ -90,7 +90,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setX2(aNum);
+                        maX2 = aNum;
                     }
                     break;
                 }
@@ -100,7 +100,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setY2(aNum);
+                        maY2 = aNum;
                     }
                     break;
                 }

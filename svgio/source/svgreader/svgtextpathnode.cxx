@@ -290,7 +290,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setStartOffset(aNum);
+                            maStartOffset = aNum;
                         }
                     }
                     break;

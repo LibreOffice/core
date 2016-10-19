@@ -91,7 +91,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setPathLength(aNum);
+                        maPathLength = aNum;
                     }
                     break;
                 }
