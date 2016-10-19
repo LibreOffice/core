@@ -78,7 +78,6 @@ $(eval $(call gb_Library_add_defs,xmlsecurity,\
 ))
 $(eval $(call gb_Library_use_externals,xmlsecurity,\
     nss3 \
-    plc4 \
 ))
 endif # BUILD_TYPE=DESKTOP
 endif
