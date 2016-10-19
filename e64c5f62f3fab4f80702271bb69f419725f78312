@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_c4c19c30",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2016-10-19T16:00:13Z",
+      "side": 1,
+      "message": "Sorry typo, prefix \u0027a\u0027 before string type. so the var name would be aStr.",
+      "parentUuid": "7a77a97e_a476603c",
+      "revId": "e64c5f62f3fab4f80702271bb69f419725f78312",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_24825001",
         "filename": "formula/source/ui/dlg/funcpage.cxx",
         "patchSetId": 1
