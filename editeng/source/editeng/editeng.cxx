@@ -862,6 +862,11 @@ const EditDoc& EditEngine::GetEditDoc() const
     return pImpEditEngine->GetEditDoc();
 }
 
+void EditEngine::dumpAsXmlEditDoc(struct _xmlTextWriter* pWriter) const
+{
+    pImpEditEngine->GetEditDoc().dumpAsXml(pWriter);
+}
+
 ParaPortionList& EditEngine::GetParaPortions()
 {
     return pImpEditEngine->GetParaPortions();
