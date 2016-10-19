@@ -1639,6 +1639,7 @@ void DesktopLOKTest::testPaintPartTile()
     // the first view, so there were no invalidations.
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
 
+    Scheduler::ProcessEventsToIdle();
     mxComponent->dispose();
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
@@ -1678,6 +1679,7 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     // inserted the comment.
     CPPUNIT_ASSERT(aView1.m_aOwnCursor.IsEmpty());
 
+    Scheduler::ProcessEventsToIdle();
     mxComponent->dispose();
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
