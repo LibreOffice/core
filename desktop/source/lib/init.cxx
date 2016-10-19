@@ -912,6 +912,8 @@ void CallbackFlushHandler::removeViewStates(int viewId)
 
 static void doc_destroy(LibreOfficeKitDocument *pThis)
 {
+    SolarMutexGuard aGuard;
+
     LibLODocument_Impl *pDocument = static_cast<LibLODocument_Impl*>(pThis);
     delete pDocument;
 }
@@ -989,9 +991,9 @@ static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char
 
 static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis, const char* pURL, const char* pOptions)
 {
-    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
-
     SolarMutexGuard aGuard;
+
+    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
 
     OUString aURL(getAbsoluteURL(pURL));
     if (aURL.isEmpty())
@@ -1080,6 +1082,8 @@ static void lo_registerCallback (LibreOfficeKit* pThis,
                                  LibreOfficeKitCallback pCallback,
                                  void* pData)
 {
+    SolarMutexGuard aGuard;
+
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
 
     pLib->mpCallback = pCallback;
@@ -1088,6 +1092,8 @@ static void lo_registerCallback (LibreOfficeKit* pThis,
 
 static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
+    SolarMutexGuard aGuard;
+
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     OUString sFormat = getUString(pFormat);
@@ -1213,6 +1219,8 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
 static void doc_iniUnoCommands ()
 {
+    SolarMutexGuard aGuard;
+
     OUString sUnoCommands[] =
     {
         OUString(".uno:BackColor"),
@@ -1330,6 +1338,8 @@ static void doc_iniUnoCommands ()
 
 static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
 {
+    SolarMutexGuard aGuard;
+
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     try
@@ -1366,6 +1376,8 @@ static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
 
 static int doc_getParts (LibreOfficeKitDocument* pThis)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1378,6 +1390,8 @@ static int doc_getParts (LibreOfficeKitDocument* pThis)
 
 static int doc_getPart (LibreOfficeKitDocument* pThis)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1390,6 +1404,8 @@ static int doc_getPart (LibreOfficeKitDocument* pThis)
 
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1397,12 +1413,13 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
         return;
     }
 
-    SolarMutexGuard aGuard;
     pDoc->setPart( nPart );
 }
 
 static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1420,6 +1437,8 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
 
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1437,6 +1456,8 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
 
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1455,6 +1476,8 @@ static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
 static void doc_setPartMode(LibreOfficeKitDocument* pThis,
                             int nPartMode)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1462,7 +1485,6 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
         return;
     }
 
-    SolarMutexGuard aGuard;
 
     int nCurrentPart = pDoc->getPart();
 
@@ -1493,6 +1515,8 @@ void doc_paintTile(LibreOfficeKitDocument* pThis,
                    const int nTilePosX, const int nTilePosY,
                    const int nTileWidth, const int nTileHeight)
 {
+    SolarMutexGuard aGuard;
+
     SAL_INFO( "lok.tiledrendering", "paintTile: painting [" << nTileWidth << "x" << nTileHeight <<
               "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
               nCanvasWidth << "x" << nCanvasHeight << "]px" );
@@ -1503,8 +1527,6 @@ void doc_paintTile(LibreOfficeKitDocument* pThis,
         gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
         return;
     }
-
-    SolarMutexGuard aGuard;
 
 #if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
 
@@ -1567,6 +1589,7 @@ void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                        const int nTileWidth, const int nTileHeight)
 {
     SolarMutexGuard aGuard;
+
     SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " ["
                << nTileWidth << "x" << nTileHeight << "]@("
                << nTilePosX << ", " << nTilePosY << ") to ["
@@ -1640,6 +1663,8 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
                                 long* pWidth,
                                 long* pHeight)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (pDoc)
     {
@@ -1656,6 +1681,8 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
 static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
                                        const char* pArguments)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (pDoc)
     {
@@ -1671,6 +1698,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
                                  void* pData)
 {
     SolarMutexGuard aGuard;
+
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     int nView = SfxLokHelper::getView();
@@ -1720,6 +1748,8 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1775,6 +1805,8 @@ public:
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {
+    SolarMutexGuard aGuard;
+
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
@@ -1848,6 +1880,8 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
 static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1879,6 +1913,8 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
 
 static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1891,6 +1927,8 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
 
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMimeType, char** pUsedMimeType)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1917,6 +1955,8 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
 
 static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, const char* pData, size_t nSize)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1950,6 +1990,8 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
 
 static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1962,6 +2004,8 @@ static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, in
 
 static void doc_resetSelection(LibreOfficeKitDocument* pThis)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1971,6 +2015,7 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
 
     pDoc->resetSelection();
 }
+
 static char* getFonts (const char* pCommand)
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -2358,6 +2403,8 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
 static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth, int nTilePixelHeight,
         int nTileTwipWidth, int nTileTwipHeight)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -2370,6 +2417,8 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth
 
 static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight)
 {
+    SolarMutexGuard aGuard;
+
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -2419,6 +2468,7 @@ static int doc_getViewsCount(LibreOfficeKitDocument* /*pThis*/)
 static bool doc_getViewIds(LibreOfficeKitDocument* /*pThis*/, int* pArray, size_t nSize)
 {
     SolarMutexGuard aGuard;
+
     return SfxLokHelper::getViewIds(pArray, nSize);
 }
 
@@ -2427,6 +2477,8 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
                     int* pFontWidth,
                     int* pFontHeight)
 {
+    SolarMutexGuard aGuard;
+
     OString aSearchedFontName(pFontName);
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
@@ -2474,6 +2526,8 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
 
 static char* lo_getError (LibreOfficeKit *pThis)
 {
+    SolarMutexGuard aGuard;
+
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     OString aString = OUStringToOString(pLib->maLastExceptionMsg, RTL_TEXTENCODING_UTF8);
     char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
@@ -2488,6 +2542,8 @@ static void lo_freeError(char* pFree)
 
 static char* lo_getFilterTypes(LibreOfficeKit* pThis)
 {
+    SolarMutexGuard aGuard;
+
     LibLibreOffice_Impl* pImpl = static_cast<LibLibreOffice_Impl*>(pThis);
 
     if (!xSFactory.is())
@@ -2524,6 +2580,8 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
 
 static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t const features)
 {
+    SolarMutexGuard aGuard;
+
     LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     pLib->mOptionalFeatures = features;
     if (features & LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK)
@@ -2533,6 +2591,8 @@ static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t const feature
 static void lo_setDocumentPassword(LibreOfficeKit* pThis,
         const char* pURL, const char* pPassword)
 {
+    SolarMutexGuard aGuard;
+
     assert(pThis);
     assert(pURL);
     LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
@@ -2853,6 +2913,8 @@ int lok_preinit(const char* install_path, const char* user_profile_path)
 
 static void lo_destroy(LibreOfficeKit* pThis)
 {
+    SolarMutexGuard aGuard;
+
     bool bSuccess = false;
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     gImpl = nullptr;
