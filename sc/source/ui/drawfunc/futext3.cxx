@@ -119,6 +119,8 @@ void FuText::StopEditMode()
 
     if( pNote )
     {
+        ScTabView::OnLOKNoteStateChanged( pNote );
+
         // hide the caption object if it is in hidden state
         pNote->ShowCaptionTemp( aNotePos, false );
 
