@@ -1380,7 +1380,15 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
 
         // Then convert this string to a local UNO DateTime.
         util::DateTime aUNODateTime;
-        utl::ISO8601parseDateTime(aBuffer.toString(), aUNODateTime);
+        try
+        {
+            utl::ISO8601parseDateTime(aBuffer.toString(), aUNODateTime);
+        }
+        catch (const std::length_error&)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: failed to parse signature date string");
+            return false;
+        }
         DateTime aDateTime(aUNODateTime);
         aDateTime.ConvertToLocalTime();
         rInformation.stDateTime = aDateTime.GetUNODateTime();
