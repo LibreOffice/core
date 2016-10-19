@@ -91,7 +91,6 @@ public:
     void testCellCursor();
     void testCommandResult();
     void testWriterComments();
-    void testModifiedStatus();
     void testSheetOperations();
     void testSheetSelections();
     void testContextMenuCalc();
@@ -106,7 +105,6 @@ public:
     void testWriterCommentInsertCursor();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
-    CPPUNIT_TEST(testModifiedStatus);
     CPPUNIT_TEST(testGetStyles);
     CPPUNIT_TEST(testGetFonts);
     CPPUNIT_TEST(testCreateView);
@@ -751,69 +749,6 @@ void DesktopLOKTest::testWriterComments()
     auto xTextField = xTextPortion->getPropertyValue("TextField").get< uno::Reference<beans::XPropertySet> >();
     // This was empty, typed characters ended up in the body text.
     CPPUNIT_ASSERT_EQUAL(OUString("test"), xTextField->getPropertyValue("Content").get<OUString>());
-
-    comphelper::LibreOfficeKit::setActive(false);
-}
-
-void DesktopLOKTest::testModifiedStatus()
-{
-    LibLibreOffice_Impl aOffice;
-    comphelper::LibreOfficeKit::setActive();
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
-
-    // Type "t" and check that the document was set as modified
-    m_bModified = false;
-    m_aStateChangedCondition.reset();
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
-    Scheduler::ProcessEventsToIdle();
-    TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
-    m_aStateChangedCondition.wait(&aTimeValue);
-    Scheduler::ProcessEventsToIdle();
-    Scheduler::ProcessEventsToIdle();
-
-    // This was false, there was no callback about the modified status change.
-    CPPUNIT_ASSERT(m_bModified);
-
-    // Perform SaveAs with "TakeOwnership" option set, and check that the
-    // modification state was reset
-    m_aStateChangedCondition.reset();
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "odt", "TakeOwnership"));
-    Scheduler::ProcessEventsToIdle();
-    m_aStateChangedCondition.wait(&aTimeValue);
-    Scheduler::ProcessEventsToIdle();
-    Scheduler::ProcessEventsToIdle();
-
-    // There was no callback about the modified status change.
-    CPPUNIT_ASSERT(!m_bModified);
-
-    // Modify the document again
-    m_aStateChangedCondition.reset();
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
-    Scheduler::ProcessEventsToIdle();
-    m_aStateChangedCondition.wait(&aTimeValue);
-    Scheduler::ProcessEventsToIdle();
-    Scheduler::ProcessEventsToIdle();
-
-    // There was no callback about the modified status change.
-    CPPUNIT_ASSERT(m_bModified);
-
-    /*
-    // TODO: move this to a test where LOK is fully bootstrapped, so that we can
-    // get back the notification about ".uno:Save" too
-    // Now perform a normal "Save", and check the modified state was reset
-    // again
-    m_aStateChangedCondition.reset();
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Save", nullptr, false);
-    m_aStateChangedCondition.wait(&aTimeValue);
-    Scheduler::ProcessEventsToIdle();
-
-    // There was no callback about the modified status change.
-    CPPUNIT_ASSERT(!m_bModified);
-    */
 
     comphelper::LibreOfficeKit::setActive(false);
 }

@@ -1569,9 +1569,7 @@ bool SfxBindings::NextJob_Impl(Timer * pTimer)
     }
 
     // if possible Update all server / happens in its own time slice
-    // but process all events at once when unit testing, for reliability reasons
-    static bool bTest = getenv("LO_TESTNAME");
-    if ( pImp->bMsgDirty && !bTest )
+    if ( pImp->bMsgDirty )
     {
         UpdateSlotServer_Impl();
         return false;
