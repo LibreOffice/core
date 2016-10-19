@@ -1217,11 +1217,10 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             }
         }
 
-        css::uno::Sequence< css::uno::Any > aArgs( aMenuName.isEmpty() ? 2 : 3 );
+        css::uno::Sequence< css::uno::Any > aArgs( 3 );
         aArgs[0] <<= comphelper::makePropertyValue( "IsContextMenu", true );
         aArgs[1] <<= comphelper::makePropertyValue( "Frame", m_xFrame );
-        if ( !aMenuName.isEmpty() )
-            aArgs[2] <<= comphelper::makePropertyValue( "Value", aMenuName );
+        aArgs[2] <<= comphelper::makePropertyValue( "Value", aMenuName );
 
         css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
             m_xCC->getServiceManager()->createInstanceWithArgumentsAndContext(
