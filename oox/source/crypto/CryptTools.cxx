@@ -9,8 +9,8 @@
  */
 
 #include "oox/crypto/CryptTools.hxx"
+#include <filter/msfilter/mscodec.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include "oox/crypto/Standard2007Engine.hxx"
 
 namespace oox {
 namespace core {
@@ -267,9 +267,9 @@ sal_uInt32 Digest::getLength()
     switch(meType)
     {
         case SHA1:
-            return oox::core::SHA1_HASH_LENGTH;
+            return msfilter::SHA1_HASH_LENGTH;
         case SHA512:
-            return oox::core::SHA512_HASH_LENGTH;
+            return msfilter::SHA512_HASH_LENGTH;
         default:
             break;
     }

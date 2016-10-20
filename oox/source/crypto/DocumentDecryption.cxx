@@ -241,7 +241,7 @@ bool DocumentDecryption::readAgileEncryptionInfo(Reference< XInputStream >& xInp
         info.cipherAlgorithm == "AES" &&
         info.cipherChaining  == "ChainingModeCBC" &&
         info.hashAlgorithm   == "SHA1" &&
-        info.hashSize        == SHA1_HASH_LENGTH)
+        info.hashSize        == msfilter::SHA1_HASH_LENGTH)
     {
         return true;
     }
@@ -251,7 +251,7 @@ bool DocumentDecryption::readAgileEncryptionInfo(Reference< XInputStream >& xInp
         info.cipherAlgorithm == "AES" &&
         info.cipherChaining  == "ChainingModeCBC" &&
         info.hashAlgorithm   == "SHA512" &&
-        info.hashSize        == SHA512_HASH_LENGTH)
+        info.hashSize        == msfilter::SHA512_HASH_LENGTH)
     {
         return true;
     }
@@ -263,10 +263,10 @@ bool DocumentDecryption::readStandard2007EncryptionInfo(BinaryInputStream& rStre
 {
     Standard2007Engine* engine = new Standard2007Engine();
     mEngine.reset(engine);
-    StandardEncryptionInfo& info = engine->getInfo();
+    msfilter::StandardEncryptionInfo& info = engine->getInfo();
 
     info.header.flags = rStream.readuInt32();
-    if( getFlag( info.header.flags, ENCRYPTINFO_EXTERNAL ) )
+    if( getFlag( info.header.flags, msfilter::ENCRYPTINFO_EXTERNAL ) )
         return false;
 
     sal_uInt32 nHeaderSize = rStream.readuInt32();
@@ -297,18 +297,18 @@ bool DocumentDecryption::readStandard2007EncryptionInfo(BinaryInputStream& rStre
         return false;
 
     // check flags and algorithm IDs, required are AES128 and SHA-1
-    if( !getFlag( info.header.flags , ENCRYPTINFO_CRYPTOAPI ) )
+    if( !getFlag( info.header.flags, msfilter::ENCRYPTINFO_CRYPTOAPI ) )
         return false;
 
-    if( !getFlag( info.header.flags, ENCRYPTINFO_AES ) )
+    if( !getFlag( info.header.flags, msfilter::ENCRYPTINFO_AES ) )
         return false;
 
     // algorithm ID 0 defaults to AES128 too, if ENCRYPTINFO_AES flag is set
-    if( info.header.algId != 0 && info.header.algId != ENCRYPT_ALGO_AES128 )
+    if( info.header.algId != 0 && info.header.algId != msfilter::ENCRYPT_ALGO_AES128 )
         return false;
 
     // hash algorithm ID 0 defaults to SHA-1 too
-    if( info.header.algIdHash != 0 && info.header.algIdHash != ENCRYPT_HASH_SHA1 )
+    if( info.header.algIdHash != 0 && info.header.algIdHash != msfilter::ENCRYPT_HASH_SHA1 )
         return false;
 
     if( info.verifier.encryptedVerifierHashSize != 20 )
@@ -332,12 +332,12 @@ bool DocumentDecryption::readEncryptionInfo()
 
     switch (aVersion)
     {
-        case VERSION_INFO_2007_FORMAT:
-        case VERSION_INFO_2007_FORMAT_SP2:
+        case msfilter::VERSION_INFO_2007_FORMAT:
+        case msfilter::VERSION_INFO_2007_FORMAT_SP2:
             mCryptoType = STANDARD_2007; // Set encryption info format
             bResult = readStandard2007EncryptionInfo( aBinaryInputStream );
             break;
-        case VERSION_INFO_AGILE:
+        case msfilter::VERSION_INFO_AGILE:
             mCryptoType = AGILE; // Set encryption info format
             aBinaryInputStream.skip(4);
             bResult = readAgileEncryptionInfo( xEncryptionInfo );

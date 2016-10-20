@@ -532,6 +532,26 @@ void MSCodec_Std97::GetDocId( sal_uInt8 pDocId[16] )
         (void)memcpy( pDocId, m_pDocId, 16 );
 }
 
+EncryptionStandardHeader::EncryptionStandardHeader()
+{
+    flags        = 0;
+    sizeExtra    = 0;
+    algId        = 0;
+    algIdHash    = 0;
+    keyBits      = 0;
+    providedType = 0;
+    reserved1    = 0;
+    reserved2    = 0;
+}
+
+EncryptionVerifierAES::EncryptionVerifierAES()
+    : saltSize(SALT_LENGTH)
+    , encryptedVerifierHashSize(SHA1_HASH_LENGTH)
+{
+    memset(salt, 0, sizeof(salt));
+    memset(encryptedVerifier, 0, sizeof(encryptedVerifier));
+    memset(encryptedVerifierHash, 0, sizeof(encryptedVerifierHash));
+}
 
 }
 
