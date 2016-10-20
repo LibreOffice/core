@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_8ada4d77",
+        "filename": "sw/source/core/unocore/unocrsrhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-20T18:04:49Z",
+      "side": 1,
+      "message": "are you sure this change is sound?  it changes behavior should the originally obtained aAuthorValue contained an empty string; otherwise, it might be better to change comphelper::SequenceAsHashMap::getUnpackedValueOrDefault, using the to-be-introduced fromAny",
+      "revId": "3835d86c4aba10469601e66b800929685bbb0102",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
