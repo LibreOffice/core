@@ -48,7 +48,7 @@ bool operator < (const MyFuncInfo &lhs, const MyFuncInfo &rhs)
 
 // try to limit the voluminous output a little
 
-static std::unordered_map<std::string, MyFuncInfo> calledFromMap;
+static std::set<std::pair<std::string, MyFuncInfo>> calledFromSet;
 static std::set<MyFuncInfo> definitionSet;
 static std::set<MyFuncInfo> calledFromOutsideSet;
 static std::set<MyFuncInfo> largeFunctionSet;
@@ -73,7 +73,7 @@ public:
             output += "definition:\t" + s.access + "\t" + s.returnType + "\t" + s.nameAndParams + "\t" + s.sourceLocation + "\n";
         for (const MyFuncInfo & s : calledFromOutsideSet)
             output += "outside:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
-        for (const std::pair<std::string,MyFuncInfo> & s : calledFromMap)
+        for (const std::pair<std::string,MyFuncInfo> & s : calledFromSet)
             output += "calledFrom:\t" + s.first
                        + "\t" + s.second.returnType + "\t" + s.second.nameAndParams + "\n";
         for (const MyFuncInfo & s : largeFunctionSet)
@@ -265,15 +265,12 @@ bool ExpandableMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 
 void ExpandableMethods::functionTouchedFromExpr( const FunctionDecl* calleeFunctionDecl, const Expr* expr )
 {
-    if (maTraversingFunctions.empty()) {
-        return;
-    }
     const FunctionDecl* canonicalFunctionDecl = calleeFunctionDecl->getCanonicalDecl();
     if (!isCalleeFunctionInteresting(canonicalFunctionDecl)) {
         return;
     }
 
-    calledFromMap.emplace(toString(expr->getLocStart()), niceName(canonicalFunctionDecl));
+    calledFromSet.emplace(toString(expr->getLocStart()), niceName(canonicalFunctionDecl));
 
     if (const UnaryOperator* unaryOp = dyn_cast_or_null<UnaryOperator>(parentStmt(expr))) {
         if (unaryOp->getOpcode() == UO_AddrOf) {
@@ -282,11 +279,18 @@ void ExpandableMethods::functionTouchedFromExpr( const FunctionDecl* calleeFunct
     }
 
     const CXXMethodDecl* calleeMethodDecl = dyn_cast<CXXMethodDecl>(calleeFunctionDecl);
-    const CXXMethodDecl* callsiteParentMethodDecl = dyn_cast<CXXMethodDecl>(maTraversingFunctions.back());
-    if (!callsiteParentMethodDecl
-        || calleeMethodDecl->getParent() != callsiteParentMethodDecl->getParent())
+    if (maTraversingFunctions.empty())
     {
         calledFromOutsideSet.insert(niceName(canonicalFunctionDecl));
+    }
+    else
+    {
+        const CXXMethodDecl* callsiteParentMethodDecl = dyn_cast<CXXMethodDecl>(maTraversingFunctions.back());
+        if (!callsiteParentMethodDecl
+            || calleeMethodDecl->getParent() != callsiteParentMethodDecl->getParent())
+        {
+            calledFromOutsideSet.insert(niceName(canonicalFunctionDecl));
+        }
     }
 }
 
