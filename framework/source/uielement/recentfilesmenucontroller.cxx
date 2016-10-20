@@ -29,6 +29,7 @@
 #include <unotools/historyoptions.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/commandinfoprovider.hxx>
 
 using namespace css;
 using namespace com::sun::star::uno;
@@ -43,6 +44,7 @@ using namespace framework;
 namespace {
 
 static const char CMD_CLEAR_LIST[]   = ".uno:ClearRecentFileList";
+static const char CMD_OPEN_AS_TEMPLATE[] = ".uno:OpenTemplate";
 static const char CMD_OPEN_REMOTE[]  = ".uno:OpenRemote";
 static const char CMD_PREFIX[]       = "vnd.sun.star.popup:RecentFileList?entry=";
 static const char MENU_SHORTCUT[]     = "~N. ";
@@ -113,14 +115,14 @@ private:
 
     std::vector< RecentFile > m_aRecentFilesItems;
     bool                      m_bDisabled : 1;
-    bool                      m_bShowRemote;
+    bool                      m_bShowToolbarEntries;
 };
 
 RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext,
                                                       const uno::Sequence< uno::Any >& args ) :
     svt::PopupMenuControllerBase( xContext ),
     m_bDisabled( false ),
-    m_bShowRemote( false )
+    m_bShowToolbarEntries( false )
 {
     css::beans::PropertyValue aPropValue;
     for ( sal_Int32 i = 0; i < args.getLength(); ++i )
@@ -128,7 +130,7 @@ RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno:
         args[i] >>= aPropValue;
         if ( aPropValue.Name == "InToolbar" )
         {
-            aPropValue.Value >>= m_bShowRemote;
+            aPropValue.Value >>= m_bShowToolbarEntries;
             break;
         }
     }
@@ -238,21 +240,30 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                                         FWK_RESSTR(STR_CLEAR_RECENT_FILES_HELP) );
 
             // Open remote menu entry
-            if ( m_bShowRemote )
+            if ( m_bShowToolbarEntries )
             {
                 pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 2 ),
                                            FWK_RESSTR(STR_OPEN_REMOTE) );
                 pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 2 ),
                                                CMD_OPEN_REMOTE );
+                pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 3 ),
+                                           vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand(
+                                               CMD_OPEN_AS_TEMPLATE, m_xFrame) );
+                pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 3 ),
+                                               CMD_OPEN_AS_TEMPLATE );
             }
         }
         else
         {
-            if ( m_bShowRemote )
+            if ( m_bShowToolbarEntries )
             {
                 // Open remote menu entry
                 pVCLPopupMenu->InsertItem( 1, FWK_RESSTR(STR_OPEN_REMOTE) );
                 pVCLPopupMenu->SetItemCommand( 1, CMD_OPEN_REMOTE );
+                // Open as template menu entry
+                pVCLPopupMenu->InsertItem( 2, vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand(
+                    CMD_OPEN_AS_TEMPLATE, m_xFrame) );
+                pVCLPopupMenu->SetItemCommand( 2, CMD_OPEN_AS_TEMPLATE );
             }
             else
             {
@@ -365,6 +376,11 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
         {
             Sequence< PropertyValue > aArgsList( 0 );
             dispatchCommand( CMD_OPEN_REMOTE, aArgsList );
+        }
+        else if ( aCommand == CMD_OPEN_AS_TEMPLATE )
+        {
+            Sequence< PropertyValue > aArgsList( 0 );
+            dispatchCommand( CMD_OPEN_AS_TEMPLATE, aArgsList );
         }
         else
             executeEntry( rEvent.MenuId-1 );
