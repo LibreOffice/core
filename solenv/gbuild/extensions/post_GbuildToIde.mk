@@ -18,8 +18,7 @@ foo:
 	true
 
 define gb_LinkTarget__command
-mkdir -p $(WORKDIR)/GbuildToIde/$(dir $(2)) $(WORKDIR)/Headers/$(dir $(2))
-$(if $(filter WNT,$(OS)),mkdir -p $(dir $(call gb_WinResTarget_get_target,dummy)))
+mkdir -p $(WORKDIR)/GbuildToIde/$(dir $(2))
 printf '{"LINKTARGET": "%s"' '$(2)' > $(WORKDIR)/GbuildToIde/$(2)
 printf ', "ILIBTARGET": "%s"' '$(ILIBTARGET)' >> $(WORKDIR)/GbuildToIde/$(2)
 printf ', "COBJECTS": "%s"' '$(COBJECTS)' >> $(WORKDIR)/GbuildToIde/$(2)
