@@ -182,7 +182,7 @@ void ConfigItem::CallNotify( const css::uno::Sequence<OUString>& rPropertyNames 
     // the call is forwarded to the virtual Notify() method
     // it is pure virtual, so all classes deriving from ConfigItem have to decide how they
     // want to notify listeners
-    if(!IsInValueChange() || m_bEnableInternalNotification)
+    if(m_nInValueChange <= 0 || m_bEnableInternalNotification)
         Notify(rPropertyNames);
 }
 

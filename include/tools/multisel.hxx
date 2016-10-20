@@ -132,7 +132,6 @@ public:
     Iterator begin( const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
     Iterator end( const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
 
-    bool isValidInput() const { return mbValidInput; }
     bool hasValue( sal_Int32 nValue, const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
 
     /**

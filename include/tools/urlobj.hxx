@@ -790,10 +790,6 @@ public:
     // Data URLs:
     std::unique_ptr<SvMemoryStream> getData();
 
-    // POP3 and URLs:
-
-    static OUString GetMsgId(rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
-
     // Coding:
 
     enum Part

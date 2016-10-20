@@ -177,8 +177,6 @@ namespace utl
 
             void                    Commit();
 
-            bool IsInValueChange() const { return m_nInValueChange > 0;}
-
             ConfigItemMode GetMode() const { return m_nMode;}
     };
 }//namespace utl

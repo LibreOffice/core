@@ -93,7 +93,6 @@ public:
     const OUString& GetTemplatePath() const;
     const OUString& GetUserConfigPath() const;
     const OUString& GetWorkPath() const;
-    const OUString& GetUIConfigPath() const;
     const OUString& GetFingerprintPath() const;
     const OUString& GetClassificationPath() const;
 
