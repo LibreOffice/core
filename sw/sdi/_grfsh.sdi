@@ -80,6 +80,13 @@ interface BaseTextGraphic
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_ROTATE_GRAPHIC_180
+    [
+        ExecMethod = ExecuteRotation ;
+        StateMethod = GetAttrStateForRotation ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_ROTATE_GRAPHIC_RIGHT
     [
         ExecMethod = ExecuteRotation ;

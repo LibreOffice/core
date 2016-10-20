@@ -4395,7 +4395,22 @@ SfxVoidItem RotateLeft SID_ROTATE_GRAPHIC_LEFT
     ToolBoxConfig = TRUE,
     GroupId = GID_GRAPHIC;
 ]
+SfxVoidItem Rotate180 SID_ROTATE_GRAPHIC_180
 
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_GRAPHIC;
+]
 SfxVoidItem RotateRight SID_ROTATE_GRAPHIC_RIGHT
 
 [
