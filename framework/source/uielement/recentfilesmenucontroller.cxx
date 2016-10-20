@@ -242,6 +242,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             // Open remote menu entry
             if ( m_bShowToolbarEntries )
             {
+                pVCLPopupMenu->InsertSeparator();
                 pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 2 ),
                                            vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand(
                                                CMD_OPEN_AS_TEMPLATE, m_xFrame) );
