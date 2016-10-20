@@ -4193,14 +4193,14 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     pTempVD = pSalData->mpFirstVD;
     while ( pTempVD )
     {
-        pGraphics = pTempVD->mpGraphics;
+        pGraphics = pTempVD->getGraphics();
         if ( pGraphics->getDefPal() )
         {
             SelectPalette( pGraphics->getHDC(),
                            pGraphics->getDefPal(),
                            TRUE );
         }
-        pTempVD = pTempVD->mpNext;
+        pTempVD = pTempVD->getNext();
     }
     pTempFrame = pSalData->mpFirstFrame;
     while ( pTempFrame )
@@ -4243,13 +4243,13 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     pTempVD = pSalData->mpFirstVD;
     while ( pTempVD )
     {
-        pGraphics = pTempVD->mpGraphics;
+        pGraphics = pTempVD->getGraphics();
         if ( pGraphics->getDefPal() )
         {
             SelectPalette( pGraphics->getHDC(), hPal, TRUE );
             RealizePalette( pGraphics->getHDC() );
         }
-        pTempVD = pTempVD->mpNext;
+        pTempVD = pTempVD->getNext();
     }
     pTempFrame = pSalData->mpFirstFrame;
     while ( pTempFrame )

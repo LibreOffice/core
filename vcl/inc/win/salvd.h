@@ -29,12 +29,6 @@ class WinSalVirtualDevice : public SalVirtualDevice
 {
 private:
     HDC                     mhLocalDC;              // HDC or 0 for Cache Device
-
-public:
-    HDC getHDC() { return mhLocalDC; }
-    void setHDC(HDC aNew) { mhLocalDC = aNew; }
-
-public:
     HBITMAP                 mhBmp;                  // Memory Bitmap
     HBITMAP                 mhDefBmp;               // Default Bitmap
     WinSalGraphics*         mpGraphics;             // current VirDev graphics
@@ -44,13 +38,19 @@ public:
     bool                    mbForeignDC;            // uses a foreign DC instead of a bitmap
     long                    mnWidth;
     long                    mnHeight;
+public:
+    HDC getHDC() const { return mhLocalDC; }
+    WinSalGraphics* getGraphics() const { return mpGraphics; }
+    void setGraphics(WinSalGraphics* pVirGraphics) { mpGraphics = pVirGraphics; }
+    WinSalVirtualDevice* getNext() const { return mpNext; }
 
-    WinSalVirtualDevice();
+public:
+    WinSalVirtualDevice(HDC hDC = nullptr, HBITMAP hBMP = nullptr, sal_uInt16 nBitCount = 0, bool bForeignDC = false, long nWidth = 0, long nHeight = 0);
     virtual ~WinSalVirtualDevice() override;
 
-    virtual SalGraphics*            AcquireGraphics() override;
-    virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) override;
-    virtual bool                    SetSize( long nNewDX, long nNewDY ) override;
+    virtual SalGraphics*    AcquireGraphics() override;
+    virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
+    virtual bool            SetSize( long nNewDX, long nNewDY ) override;
 
     static HBITMAP ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppDummy);
 
