@@ -379,7 +379,7 @@ static int GetVerticalFlagsForScript(UScriptCode aScript)
             nFlag = ??;
             break;
         /* btt -90° */
-        case USCRIPT_MONGOLIAN:
+        case USCRIPT_OGHAM:
             nFlag = ??;
             break;
 #endif
