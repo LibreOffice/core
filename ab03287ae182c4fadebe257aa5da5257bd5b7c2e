@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_ca00c5ad",
+        "filename": "unotools/source/i18n/transliterationwrapper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-20T20:12:17Z",
+      "side": 1,
+      "message": "If you want to check if both, nLang and aLanguageType, are LANGUAGE_SYSTEM and act only if they are not, that can be easier and less confusing done with\n\n if (aLanguageTag.getLanguageType(false) !\u003d nLang)\n\nHowever, this checking if both are system and not doing anything if they are fails in the case that the system locale changed, so actually what is needed here is to check in that case if also the resolved system locales are identical.",
+      "revId": "ab03287ae182c4fadebe257aa5da5257bd5b7c2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
