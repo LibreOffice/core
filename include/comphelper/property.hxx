@@ -136,6 +136,30 @@ inline bool tryPropertyValue(css::uno::Any& /*out*/_rConvertedValue, css::uno::A
     return bModified;
 }
 
+/** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue for Any properties
+    @param          _rConvertedValue    the conversion result (if successful)
+    @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
+    @param          _rValueToSet        the new value which is about to be set
+    @param          _rCurrentValue      the current value of the property
+    @return         sal_True, if the value could be converted and has changed
+                    sal_False, if the value could be converted and has not changed
+    @exception      InvalidArgumentException thrown if the value wrapps a different type as the requested value
+*/
+inline bool tryPropertyValue(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*out*/_rOldValue, const css::uno::Any& _rValueToSet, const css::uno::Any& _rCurrentValue)
+{
+    bool bModified(false);
+    if (_rValueToSet.hasValue() && _rCurrentValue.hasValue() && _rValueToSet.getValueType() != _rCurrentValue.getValueType())
+        throw css::lang::IllegalArgumentException();
+
+    if (_rValueToSet != _rCurrentValue)
+    {
+        _rConvertedValue = _rValueToSet;
+        _rOldValue = _rCurrentValue;
+        bModified = true;
+    }
+    return bModified;
+}
+
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue
     @param          _rConvertedValue    the conversion result (if successful)
     @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
