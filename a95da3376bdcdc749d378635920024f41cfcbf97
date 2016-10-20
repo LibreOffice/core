@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_677c4a21",
+        "filename": "sd/source/ui/view/drviews4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2016-10-20T11:32:42Z",
+      "side": 1,
+      "message": "Yet I could not figure out why the code in DrawViewShell::MouseMove() reapplies\nbackground color config. Is it necessary at all?",
+      "revId": "a95da3376bdcdc749d378635920024f41cfcbf97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
