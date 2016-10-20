@@ -61,6 +61,7 @@
 #include <listenerquery.hxx>
 #include <listenerqueryids.hxx>
 #include <grouparealistener.hxx>
+#include <formulalogger.hxx>
 
 #if HAVE_FEATURE_OPENCL
 #include <opencl/openclwrapper.hxx>
@@ -213,6 +214,8 @@ struct DebugCalculationStacker
 #endif
 
 namespace {
+
+sc::FormulaLogger aLogger;
 
 // More or less arbitrary, of course all recursions must fit into available
 // stack space (which is what on all systems we don't know yet?). Choosing a
@@ -4030,18 +4033,25 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if (!mxGroup || !pCode)
         return false;
 
+    auto aScope = aLogger.enterGroup(*pDocument, *this);
+
     if (mxGroup->meCalcState == sc::GroupCalcDisabled)
+    {
+        aScope.addMessage("group calc disabled");
         return false;
+    }
 
     if (GetWeight() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize)
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
+        aScope.addMessage("group length below minimum threshold");
         return false;
     }
 
     if (cMatrixFlag != MM_NONE)
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
+        aScope.addMessage("matrix skipped");
         return false;
     }
 
@@ -4055,11 +4065,15 @@ bool ScFormulaCell::InterpretFormulaGroup()
         case FormulaVectorUnknown:
         default:
             // Not good.
+            aScope.addMessage("group calc disabled due to vector state");
             return false;
     }
 
     if (!ScCalcConfig::isOpenCLEnabled() && !ScCalcConfig::isSwInterpreterEnabled())
+    {
+        aScope.addMessage("opencl not enabled");
         return false;
+    }
 
     // Guard against endless recursion of Interpret() calls, for this to work
     // ScFormulaCell::InterpretFormulaGroup() must never be called through
@@ -4126,6 +4140,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
                 xGroup->mpCode = nullptr;
             }
 
+            aScope.addMessage("group token conversion failed");
             return false;
         }
 
@@ -4133,6 +4148,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
         // generate them.
         xGroup->meCalcState = mxGroup->meCalcState = sc::GroupCalcRunning;
         sc::FormulaGroupInterpreter *pInterpreter = sc::FormulaGroupInterpreter::getStatic();
+
         if (pInterpreter == nullptr ||
             !pInterpreter->interpret(*pDocument, xGroup->mpTopCell->aPos, xGroup, aCode))
         {
@@ -4147,8 +4163,12 @@ bool ScFormulaCell::InterpretFormulaGroup()
                 xGroup->mpCode = nullptr;
             }
 
+            aScope.addMessage("group interpretation unsuccessful");
             return false;
         }
+
+        aScope.setCalcComplete();
+
         if (nNumParts > 1)
         {
             xGroup->mpTopCell = nullptr;
