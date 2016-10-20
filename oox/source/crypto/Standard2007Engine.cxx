@@ -54,9 +54,9 @@ EncryptionStandardHeader::EncryptionStandardHeader()
     reserved2    = 0;
 }
 
-EncryptionVerifierAES::EncryptionVerifierAES() :
-    saltSize(SALT_LENGTH),
-    encryptedVerifierHashSize(Digest::DIGEST_LENGTH_SHA1)
+EncryptionVerifierAES::EncryptionVerifierAES()
+    : saltSize(SALT_LENGTH)
+    , encryptedVerifierHashSize(SHA1_HASH_LENGTH)
 {
     memset(salt, 0, sizeof(salt));
     memset(encryptedVerifier, 0, sizeof(encryptedVerifier));
@@ -87,12 +87,12 @@ bool Standard2007Engine::generateVerifier()
         return false;
     std::copy(encryptedVerifier.begin(), encryptedVerifier.end(), mInfo.verifier.encryptedVerifier);
 
-    vector<sal_uInt8> hash(RTL_DIGEST_LENGTH_SHA1, 0);
-    mInfo.verifier.encryptedVerifierHashSize = RTL_DIGEST_LENGTH_SHA1;
+    vector<sal_uInt8> hash(SHA1_HASH_LENGTH, 0);
+    mInfo.verifier.encryptedVerifierHashSize = SHA1_HASH_LENGTH;
     Digest::sha1(hash, verifier);
-    hash.resize(ENCRYPTED_SHA256_VERIFIER_HASH_LENGTH, 0);
+    hash.resize(SHA256_HASH_LENGTH, 0);
 
-    vector<sal_uInt8> encryptedHash(ENCRYPTED_SHA256_VERIFIER_HASH_LENGTH, 0);
+    vector<sal_uInt8> encryptedHash(SHA256_HASH_LENGTH, 0);
 
     Encrypt aEncryptorHash(mKey, iv, Crypto::AES_128_ECB);
     aEncryptorHash.update(encryptedHash, hash, hash.size());
@@ -119,13 +119,13 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
         initialData.begin() + saltSize);
 
     // use "hash" vector for result of sha1 hashing
-    vector<sal_uInt8> hash(Digest::DIGEST_LENGTH_SHA1, 0);
+    vector<sal_uInt8> hash(SHA1_HASH_LENGTH, 0);
 
     // calculate SHA1 hash of initialData
     Digest::sha1(hash, initialData);
 
     // data = iterator (4bytes) + hash
-    vector<sal_uInt8> data(Digest::DIGEST_LENGTH_SHA1 + 4, 0);
+    vector<sal_uInt8> data(SHA1_HASH_LENGTH + 4, 0);
 
     for (sal_Int32 i = 0; i < 50000; ++i)
     {
@@ -134,7 +134,7 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
         Digest::sha1(hash, data);
     }
     std::copy(hash.begin(), hash.end(), data.begin() );
-    std::fill(data.begin() + Digest::DIGEST_LENGTH_SHA1, data.end(), 0 );
+    std::fill(data.begin() + SHA1_HASH_LENGTH, data.end(), 0 );
 
     Digest::sha1(hash, data);
 
@@ -162,10 +162,10 @@ bool Standard2007Engine::generateEncryptionKey(const OUString& password)
         mInfo.verifier.encryptedVerifier + ENCRYPTED_VERIFIER_LENGTH,
         encryptedVerifier.begin());
 
-    vector<sal_uInt8> encryptedHash(ENCRYPTED_SHA256_VERIFIER_HASH_LENGTH);
+    vector<sal_uInt8> encryptedHash(SHA256_HASH_LENGTH);
     std::copy(
         mInfo.verifier.encryptedVerifierHash,
-        mInfo.verifier.encryptedVerifierHash + ENCRYPTED_SHA256_VERIFIER_HASH_LENGTH,
+        mInfo.verifier.encryptedVerifierHash + SHA256_HASH_LENGTH,
         encryptedHash.begin());
 
     vector<sal_uInt8> verifier(encryptedVerifier.size(), 0);
@@ -174,7 +174,7 @@ bool Standard2007Engine::generateEncryptionKey(const OUString& password)
     vector<sal_uInt8> verifierHash(encryptedHash.size(), 0);
     Decrypt::aes128ecb(verifierHash, encryptedHash, mKey);
 
-    vector<sal_uInt8> hash(RTL_DIGEST_LENGTH_SHA1, 0);
+    vector<sal_uInt8> hash(SHA1_HASH_LENGTH, 0);
     Digest::sha1(hash, verifier);
 
     return std::equal( hash.begin(), hash.end(), verifierHash.begin() );

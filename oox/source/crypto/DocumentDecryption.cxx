@@ -241,7 +241,7 @@ bool DocumentDecryption::readAgileEncryptionInfo(Reference< XInputStream >& xInp
         info.cipherAlgorithm == "AES" &&
         info.cipherChaining  == "ChainingModeCBC" &&
         info.hashAlgorithm   == "SHA1" &&
-        info.hashSize        == ENCRYPTED_SHA1_VERIFIER_HASH_LENGTH)
+        info.hashSize        == SHA1_HASH_LENGTH)
     {
         return true;
     }
@@ -251,7 +251,7 @@ bool DocumentDecryption::readAgileEncryptionInfo(Reference< XInputStream >& xInp
         info.cipherAlgorithm == "AES" &&
         info.cipherChaining  == "ChainingModeCBC" &&
         info.hashAlgorithm   == "SHA512" &&
-        info.hashSize        == ENCRYPTED_SHA512_VERIFIER_HASH_LENGTH )
+        info.hashSize        == SHA512_HASH_LENGTH)
     {
         return true;
     }

@@ -10,6 +10,7 @@
 
 #include "oox/crypto/CryptTools.hxx"
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include "oox/crypto/Standard2007Engine.hxx"
 
 namespace oox {
 namespace core {
@@ -196,15 +197,6 @@ sal_uInt32 Encrypt::update(vector<sal_uInt8>& output, vector<sal_uInt8>& input, 
 
 // Digest
 
-#if USE_TLS_OPENSSL
-const sal_uInt32 Digest::DIGEST_LENGTH_SHA1 = SHA_DIGEST_LENGTH;
-const sal_uInt32 Digest::DIGEST_LENGTH_SHA512 = SHA512_DIGEST_LENGTH;
-#endif
-#if USE_TLS_NSS
-const sal_uInt32 Digest::DIGEST_LENGTH_SHA1 = SHA1_LENGTH;
-const sal_uInt32 Digest::DIGEST_LENGTH_SHA512 = SHA512_LENGTH;
-#endif
-
 namespace
 {
 
@@ -275,9 +267,9 @@ sal_uInt32 Digest::getLength()
     switch(meType)
     {
         case SHA1:
-            return DIGEST_LENGTH_SHA1;
+            return oox::core::SHA1_HASH_LENGTH;
         case SHA512:
-            return DIGEST_LENGTH_SHA512;
+            return oox::core::SHA512_HASH_LENGTH;
         default:
             break;
     }
