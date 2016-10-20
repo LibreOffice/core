@@ -243,28 +243,16 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             if ( m_bShowToolbarEntries )
             {
                 pVCLPopupMenu->InsertSeparator();
-                pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 2 ),
-                                           vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand(
-                                               CMD_OPEN_AS_TEMPLATE, m_xFrame) );
-                pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 2 ),
-                                               CMD_OPEN_AS_TEMPLATE );
-                pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 3 ),
-                                           FWK_RESSTR(STR_OPEN_REMOTE) );
-                pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 3 ),
-                                               CMD_OPEN_REMOTE );
+                pVCLPopupMenu->InsertItem( CMD_OPEN_AS_TEMPLATE, m_xFrame );
+                pVCLPopupMenu->InsertItem( CMD_OPEN_REMOTE, m_xFrame );
             }
         }
         else
         {
             if ( m_bShowToolbarEntries )
             {
-                // Open as template menu entry
-                pVCLPopupMenu->InsertItem( 1, vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand(
-                    CMD_OPEN_AS_TEMPLATE, m_xFrame) );
-                pVCLPopupMenu->SetItemCommand( 1, CMD_OPEN_AS_TEMPLATE );
-                // Open remote menu entry
-                pVCLPopupMenu->InsertItem( 2, FWK_RESSTR(STR_OPEN_REMOTE) );
-                pVCLPopupMenu->SetItemCommand( 2, CMD_OPEN_REMOTE );
+                pVCLPopupMenu->InsertItem( CMD_OPEN_AS_TEMPLATE, m_xFrame );
+                pVCLPopupMenu->InsertItem( CMD_OPEN_REMOTE, m_xFrame );
             }
             else
             {
