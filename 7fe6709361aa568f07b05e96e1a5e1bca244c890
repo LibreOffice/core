@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_6ae7b112",
+        "filename": "sc/source/core/data/markarr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-20T21:00:21Z",
+      "side": 1,
+      "message": "A temporary of m_data[nInsert-1] should be created beforehand.",
+      "parentUuid": "7a77a97e_9c738db4",
+      "revId": "7fe6709361aa568f07b05e96e1a5e1bca244c890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_fc72c1ac",
         "filename": "sc/source/core/data/markarr.cxx",
         "patchSetId": 1
@@ -100,6 +118,24 @@
       "side": 1,
       "message": "Good to know, thanks.",
       "parentUuid": "7a77a97e_fc72c1ac",
+      "revId": "7fe6709361aa568f07b05e96e1a5e1bca244c890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_eab901ee",
+        "filename": "sc/source/core/data/markarr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-20T21:00:21Z",
+      "side": 1,
+      "message": "So we need to change it because MSVC2013 is a supported compiler.\n\nWill you be following up with this patch?",
+      "parentUuid": "7a77a97e_1caf7de4",
       "revId": "7fe6709361aa568f07b05e96e1a5e1bca244c890",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
