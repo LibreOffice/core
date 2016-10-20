@@ -385,6 +385,12 @@ void DocumentSignatureManager::read(bool bUseTempStream, bool bCacheLastSignatur
 
 void DocumentSignatureManager::write()
 {
+    if (!mxStore.is())
+    {
+        // Something not ZIP based, assume PDF, which is written directly in add() already.
+        return;
+    }
+
     // Export all other signatures...
     SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, false);
 
