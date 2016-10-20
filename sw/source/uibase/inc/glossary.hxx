@@ -147,7 +147,6 @@ class SwGlossaryDlg : public SvxStandardDialog
                         {rGroup = sResumeGroup; rShortName = sResumeShortName; return bResume;}
     void            SetResumeData(const OUString& rGroup, const OUString& rShortName)
                         {sResumeGroup = rGroup; sResumeShortName = rShortName; bResume = true;}
-    void            ResetResumeData() {bResume = false;}
 public:
     SwGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
     virtual ~SwGlossaryDlg() override;

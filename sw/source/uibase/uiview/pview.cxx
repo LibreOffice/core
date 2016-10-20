@@ -956,7 +956,7 @@ MOVEPAGE:
             //the direct neighbor is used
             if(GetViewShell()->IsDummyPage( nSelPage ) && GetViewShell()->IsDummyPage( --nSelPage ))
                 nSelPage +=2;
-            SetNewPage( nSelPage );
+            m_nNewPage = nSelPage;
             SfxViewFrame *pTmpFrame = GetViewFrame();
             pTmpFrame->GetBindings().Execute( SID_VIEWSHELL0, nullptr,
                                                     SfxCallMode::ASYNCHRON );
