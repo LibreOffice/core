@@ -12,6 +12,26 @@
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
+      <object class="GtkLabel" id="label2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">_Search</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">Search</property>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkEntry" id="search">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="halign">end</property>
+        <property name="editable">True</property>
+        <property name="fill">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

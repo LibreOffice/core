@@ -64,6 +64,7 @@ FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManage
 {
     get(m_pLbCategory, "category");
     get(m_pLbFunction, "function");
+    get(m_plbFunctionSearchString, "search");
     m_pLbFunction->SetStyle(m_pLbFunction->GetStyle() | WB_SORT);
     Size aSize(LogicToPixel(Size(86 , 162), MapUnit::MapAppFont));
     m_pLbFunction->set_height_request(aSize.Height());
@@ -85,6 +86,7 @@ FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManage
     m_pLbCategory->SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
     m_pLbFunction->SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
     m_pLbFunction->SetDoubleClickHdl( LINK( this, FuncPage, DblClkHdl ) );
+    m_plbFunctionSearchString->SetModifyHdl( LINK( this, FuncPage, ModifyHdl ) );
 }
 
 FuncPage::~FuncPage()
@@ -96,6 +98,7 @@ void FuncPage::dispose()
 {
     m_pLbCategory.clear();
     m_pLbFunction.clear();
+    m_plbFunctionSearchString.clear();
     TabPage::dispose();
 }
 
@@ -160,6 +163,25 @@ void FuncPage::UpdateFunctionList()
     if(IsVisible()) SelHdl(*m_pLbFunction);
 }
 
+void FuncPage::UpdateFunctionListOnSearch(OUString& aStr){
+    m_pLbFunction->Clear();
+    m_pLbFunction->SetUpdateMode(false);
+
+    const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
+
+    for (sal_uInt32 i = 0; i < nCategoryCount; i++){
+        const IFunctionCategory* pCategory = m_pFunctionManager->getCategory(i);
+        const sal_uInt32 functionCount = pCategory->getCount();
+        for (sal_uInt32 j = 0; j < functionCount; ++j) {
+            TFunctionDesc pDesc(pCategory->getFunction(j));
+            if ((pDesc->getFunctionName()).indexOf(aStr.toAsciiUpperCase()) >= 0) {
+                m_pLbFunction->SetEntryData(
+                    m_pLbFunction->InsertEntry(pDesc->getFunctionName()), const_cast<IFunctionDescription *>(pDesc));
+            }
+        }
+    }
+}
+
 IMPL_LINK( FuncPage, SelHdl, ListBox&, rLb, void )
 {
     if(&rLb==m_pLbFunction)
@@ -183,6 +205,17 @@ IMPL_LINK( FuncPage, SelHdl, ListBox&, rLb, void )
 IMPL_LINK_NOARG(FuncPage, DblClkHdl, ListBox&, void)
 {
     aDoubleClickLink.Call(*this);
+}
+
+IMPL_LINK_NOARG(FuncPage, ModifyHdl, Edit&, void)
+{
+    OUString searchStr = m_plbFunctionSearchString->GetText();
+    if (searchStr.isEmpty()){
+        UpdateFunctionList();
+    }
+    else{
+        UpdateFunctionListOnSearch(searchStr);
+    }
 }
 
 void FuncPage::SetCategory(sal_Int32 nCat)
