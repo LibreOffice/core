@@ -414,7 +414,7 @@ void XclExpTabViewSettings::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_sheetViews, FSEND );
     rWorksheet->startElement( XML_sheetView,
-            XML_windowProtection,           XclXmlUtils::ToPsz( maData.mbFrozenPanes ),
+            // OOXTODO: XML_windowProtection,
             XML_showFormulas,               XclXmlUtils::ToPsz( maData.mbShowFormulas ),
             XML_showGridLines,              XclXmlUtils::ToPsz( maData.mbShowGrid ),
             XML_showRowColHeaders,          XclXmlUtils::ToPsz( maData.mbShowHeadings ),
