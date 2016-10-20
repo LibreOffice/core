@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
+#include <com/sun/star/xml/dom/XText.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
@@ -35,6 +36,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace css;
+using namespace css::xml::dom;
+
 static const sal_uInt32 BACKUP_FILE_HELPER_BLOCK_SIZE = 16384;
 
 namespace
@@ -836,7 +839,7 @@ namespace
                                 }
 
 #if OSL_DEBUG_LEVEL > 1
-                                SAL_WARN_IF(osl::FileBase::E_None != osl::File::move(aTempURL, rUnoPackagReg), "comphelper:backupfileheler", "could not copy back modified Extension configuration file");
+                                SAL_WARN_IF(osl::FileBase::E_None != osl::File::move(aTempURL, rUnoPackagReg), "comphelper.backupfilehelper", "could not copy back modified Extension configuration file");
 #else
                                 osl::File::move(aTempURL, rUnoPackagReg);
 #endif
@@ -2071,6 +2074,82 @@ namespace comphelper
         }
 
         return aFileNames;
+    }
+
+    namespace {
+        uno::Reference<XElement> lcl_getConfigElement(const uno::Reference<XDocument>& xDocument, const OUString& rPath,
+                                  const OUString& rKey, const OUString& rValue)
+        {
+            uno::Reference< XElement > itemElement = xDocument->createElement("item");
+            itemElement->setAttribute("oor:path", rPath);
+
+            uno::Reference< XElement > propElement = xDocument->createElement("prop");
+            propElement->setAttribute("oor:name", rKey);
+            propElement->setAttribute("oor:op", "replace"); // Replace any other options
+
+            uno::Reference< XElement > valueElement = xDocument->createElement("value");
+            uno::Reference< XText > textElement = xDocument->createTextNode(rValue);
+
+            valueElement->appendChild(textElement);
+            propElement->appendChild(valueElement);
+            itemElement->appendChild(propElement);
+
+            return itemElement;
+        }
+    }
+
+    void BackupFileHelper::tryDisableHWAcceleration()
+    {
+        const OUString aRegistryModifications(maUserConfigWorkURL + "/registrymodifications.xcu");
+        if (!fileExists(aRegistryModifications))
+            return;
+
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        uno::Reference< XDocumentBuilder > xBuilder = DocumentBuilder::create(xContext);
+        uno::Reference< XDocument > xDocument = xBuilder->parseURI(aRegistryModifications);
+        uno::Reference< XElement > xRootElement = xDocument->getDocumentElement();
+
+        xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/VCL",
+                                                       "UseOpenGL", "false"));
+        xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/VCL",
+                                                       "ForceOpenGL", "false"));
+        xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/Misc",
+                                                       "UseOpenCL", "false"));
+        xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/Misc",
+                                                       "UseSwInterpreter", "false"));
+
+        // write back
+        uno::Reference< xml::sax::XSAXSerializable > xSerializer(xDocument, uno::UNO_QUERY);
+
+        if (!xSerializer.is())
+            return;
+
+        // create a SAXWriter
+        uno::Reference< xml::sax::XWriter > const xSaxWriter = xml::sax::Writer::create(xContext);
+        uno::Reference< io::XStream > xTempFile(io::TempFile::create(xContext), uno::UNO_QUERY);
+        uno::Reference< io::XOutputStream > xOutStrm(xTempFile->getOutputStream(), uno::UNO_QUERY);
+
+        // set output stream and do the serialization
+        xSaxWriter->setOutputStream(uno::Reference< css::io::XOutputStream >(xOutStrm, uno::UNO_QUERY));
+        xSerializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(xSaxWriter, uno::UNO_QUERY), uno::Sequence< beans::StringPair >());
+
+        // get URL from temp file
+        uno::Reference < beans::XPropertySet > xTempFileProps(xTempFile, uno::UNO_QUERY);
+        uno::Any aUrl = xTempFileProps->getPropertyValue("Uri");
+        OUString aTempURL;
+        aUrl >>= aTempURL;
+
+        // copy back file
+        if (aTempURL.isEmpty() || !fileExists(aTempURL))
+            return;
+
+        if (fileExists(aRegistryModifications))
+        {
+            osl::File::remove(aRegistryModifications);
+        }
+
+        int result = osl::File::move(aTempURL, aRegistryModifications);
+        SAL_WARN_IF(result != osl::FileBase::E_None, "comphelper.backupfilehelper", "could not copy back modified Extension configuration file");
     }
 
     bool BackupFileHelper::isTryResetCustomizationsPossible()
