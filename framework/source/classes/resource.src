@@ -113,11 +113,6 @@ String STR_CLEAR_RECENT_FILES_HELP
     Text [ en-US ] = "Clears the list with the most recently opened files. This action can not be undone.";
 };
 
-String STR_OPEN_REMOTE
-{
-    Text [ en-US ] = "Open Remote File";
-};
-
 String STR_REMOTE_TITLE
 {
     Text [ en-US ] = " (Remote)";

@@ -50,8 +50,7 @@
 #define STR_CLEAR_RECENT_FILES                  (RID_STR_START+23)
 #define STR_CLEAR_RECENT_FILES_HELP             (RID_STR_START+24)
 #define STR_LANGSTATUS_HINT                     (RID_STR_START+25)
-#define STR_OPEN_REMOTE                         (RID_STR_START+26)
-#define STR_REMOTE_TITLE                        (RID_STR_START+27)
+#define STR_REMOTE_TITLE                        (RID_STR_START+26)
 
 #define IMG_SAVEMODIFIED_SMALL                  (RID_IMAGE_START+0)
 #define IMG_SAVEMODIFIED_LARGE                  (RID_IMAGE_START+1)
