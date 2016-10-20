@@ -16,6 +16,24 @@
       "revId": "1e045036d99ae2f8aeb7603a77af331fb6d37bef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_e7c69a15",
+        "filename": "include/comphelper/property.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-10-20T13:24:14Z",
+      "side": 1,
+      "message": "will remove it. in case of OListBoxModel the value type is always Sequence\u003cAny\u003e anyway.",
+      "parentUuid": "7a77a97e_87cec658",
+      "revId": "1e045036d99ae2f8aeb7603a77af331fb6d37bef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
