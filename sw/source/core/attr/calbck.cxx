@@ -62,9 +62,8 @@ void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem* )
 
 void SwClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (typeid(rHint) == typeid(sw::LegacyModifyHint))
+    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        auto pLegacyHint(static_cast<const sw::LegacyModifyHint*>(&rHint));
         Modify(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
     }
 };

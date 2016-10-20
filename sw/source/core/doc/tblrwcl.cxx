@@ -2092,12 +2092,12 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
 
     pNewTable->SetTableStyleName(pTableNd->GetTable().GetTableStyleName());
 
-    if( typeid( SwDDETable) == typeid(*this))
+    if( auto pSwDDETable = dynamic_cast<const SwDDETable*>(this) )
     {
         // A DDE-Table is being copied
         // Does the new Document actually have it's FieldType?
         SwFieldType* pFieldType = pInsDoc->getIDocumentFieldsAccess().InsertFieldType(
-                                    *static_cast<const SwDDETable*>(this)->GetDDEFieldType() );
+                                    *pSwDDETable->GetDDEFieldType() );
         OSL_ENSURE( pFieldType, "unknown FieldType" );
 
         // Change the Table Pointer at the Node

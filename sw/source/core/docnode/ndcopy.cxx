@@ -270,11 +270,11 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     rTable.SetTableModel( GetTable().IsNewModel() );
 
     SwDDEFieldType* pDDEType = nullptr;
-    if( typeid(SwDDETable) == typeid( &GetTable() ))
+    if( auto pSwDDETable = dynamic_cast<const SwDDETable*>( &GetTable() ) )
     {
         // We're copying a DDE table
         // Is the field type available in the new document?
-        pDDEType = const_cast<SwDDETable&>(static_cast<const SwDDETable&>(GetTable())).GetDDEFieldType();
+        pDDEType = const_cast<SwDDETable*>(pSwDDETable)->GetDDEFieldType();
         if( pDDEType->IsDeleted() )
             pDoc->getIDocumentFieldsAccess().InsDeletedFieldType( *pDDEType );
         else

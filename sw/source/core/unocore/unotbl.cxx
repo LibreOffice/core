@@ -1150,9 +1150,8 @@ void SwXCell::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 
 void SwXCell::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if(typeid(FindUnoInstanceHint<SwTableBox, SwXCell>) == typeid(rHint))
+    if(auto pFindHint = dynamic_cast<const FindUnoInstanceHint<SwTableBox, SwXCell>*>(&rHint))
     {
-        auto* pFindHint(static_cast<const FindUnoInstanceHint<SwTableBox, SwXCell>* >(&rHint));
         if(!pFindHint->m_pCore && pFindHint->m_pCore == GetTableBox())
             pFindHint->m_pResult = this;
     }
@@ -1440,9 +1439,8 @@ void SwXTextTableRow::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 
 void SwXTextTableRow::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if(typeid(FindUnoInstanceHint<SwTableLine, SwXTextTableRow>) == typeid(rHint))
+    if(auto pFindHint = dynamic_cast<const FindUnoInstanceHint<SwTableLine, SwXTextTableRow>*>(&rHint))
     {
-        auto* pFindHint(static_cast<const FindUnoInstanceHint<SwTableLine,SwXTextTableRow>* >(&rHint));
         if(!pFindHint->m_pCore && pFindHint->m_pCore == GetTableRow())
             pFindHint->m_pResult = this;
     }
