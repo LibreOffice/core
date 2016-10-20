@@ -31,6 +31,11 @@
 
 #include <vcl/svapp.hxx>
 
+VclPtr<vcl::Window> ScCellShell::GetFrameWin()
+{
+    return pFrameWin;
+}
+
 void ScCellShell::ExecuteCursor( SfxRequest& rReq )
 {
     ScViewData* pData = GetViewData();
@@ -120,12 +125,21 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     else
         pTabViewShell->SetForceFocusOnCurCell(false);
 
+    //ScrollLock Scrolling fix Bug:46200
+    bool bScrollLock = false;
+    KeyIndicatorState eState = (ScCellShell::GetFrameWin())->GetIndicatorState();
+    if(eState & KeyIndicatorState::SCROLLLOCK)
+        bScrollLock = true;
+
     //OS: once for all should do, however!
     pTabViewShell->ExecuteInputDirect();
     switch ( nSlotId )
     {
         case SID_CURSORDOWN:
-            pTabViewShell->MoveCursorRel(   0,  nRepeat, SC_FOLLOW_LINE, bSel, bKeep );
+            if(bScrollLock)
+                pTabViewShell->ScrollY( 1, SC_SPLIT_BOTTOM );
+            else
+                pTabViewShell->MoveCursorRel( 0, nRepeat, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKDOWN:
@@ -133,7 +147,10 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         case SID_CURSORUP:
-            pTabViewShell->MoveCursorRel(   0,  -nRepeat, SC_FOLLOW_LINE, bSel, bKeep );
+            if(bScrollLock)
+                pTabViewShell->ScrollY( -1, SC_SPLIT_BOTTOM);
+            else
+                pTabViewShell->MoveCursorRel(   0,  -nRepeat, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKUP:
@@ -141,7 +158,10 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         case SID_CURSORLEFT:
-            pTabViewShell->MoveCursorRel( static_cast<SCsCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
+            if(bScrollLock)
+                pTabViewShell->ScrollX( -1, SC_SPLIT_LEFT);
+            else
+                pTabViewShell->MoveCursorRel( static_cast<SCsCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKLEFT:
@@ -149,7 +169,10 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         case SID_CURSORRIGHT:
-            pTabViewShell->MoveCursorRel(   static_cast<SCsCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
+            if(bScrollLock)
+                pTabViewShell->ScrollX( 1, SC_SPLIT_LEFT);
+            else
+                pTabViewShell->MoveCursorRel(   static_cast<SCsCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKRIGHT:
@@ -157,19 +180,51 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         case SID_CURSORPAGEDOWN:
-            pTabViewShell->MoveCursorPage(  0, nRepeat, SC_FOLLOW_FIX, bSel, bKeep );
+            if(bScrollLock)
+            {
+                SCsCOL nPageX;
+                SCsROW nPageY;
+                pTabViewShell->GetPageMoveEndPosition(0, nRepeat, nPageX, nPageY);
+                pTabViewShell->ScrollY(nPageY, SC_SPLIT_BOTTOM);
+            }
+            else
+                pTabViewShell->MoveCursorPage(  0, nRepeat, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
         case SID_CURSORPAGEUP:
-            pTabViewShell->MoveCursorPage(  0, -nRepeat, SC_FOLLOW_FIX, bSel, bKeep );
+            if(bScrollLock)
+            {
+                SCsCOL nPageX;
+                SCsROW nPageY;
+                pTabViewShell->GetPageMoveEndPosition(0, nRepeat, nPageX, nPageY);
+                pTabViewShell->ScrollY(-nPageY, SC_SPLIT_BOTTOM);
+            }
+            else
+                pTabViewShell->MoveCursorPage(  0, -nRepeat, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
         case SID_CURSORPAGERIGHT_: //XXX !!!
-            pTabViewShell->MoveCursorPage( static_cast<SCsCOL>(nRepeat), 0, SC_FOLLOW_FIX, bSel, bKeep );
+            if(bScrollLock)
+            {
+                SCsCOL nPageX;
+                SCsROW nPageY;
+                pTabViewShell->GetPageMoveEndPosition(static_cast<SCsCOL>(nRepeat), 0, nPageX, nPageY);
+                pTabViewShell->ScrollX(nPageX, SC_SPLIT_LEFT);
+            }
+            else
+                pTabViewShell->MoveCursorPage( static_cast<SCsCOL>(nRepeat), 0, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
         case SID_CURSORPAGELEFT_: //XXX !!!
-            pTabViewShell->MoveCursorPage( static_cast<SCsCOL>(-nRepeat), 0, SC_FOLLOW_FIX, bSel, bKeep );
+            if(bScrollLock)
+            {
+                SCsCOL nPageX;
+                SCsROW nPageY;
+                pTabViewShell->GetPageMoveEndPosition(static_cast<SCsCOL>(nRepeat), 0, nPageX, nPageY);
+                pTabViewShell->ScrollX(-nPageX, SC_SPLIT_LEFT);
+            }
+            else
+                pTabViewShell->MoveCursorPage( static_cast<SCsCOL>(-nRepeat), 0, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
         default:
