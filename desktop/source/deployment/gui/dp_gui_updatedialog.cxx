@@ -54,8 +54,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XAbortChannel.hpp>
 #include <com/sun/star/task/XJob.hpp>
@@ -911,10 +909,6 @@ void UpdateDialog::initDescription()
     m_pPublisherLink->Hide();
     m_pReleaseNotesLabel->Hide();
     m_pReleaseNotesLink->Hide();
-
-    Link<FixedHyperlink&,void> aLink = LINK( this, UpdateDialog, hyperlink_clicked );
-    m_pPublisherLink->SetClickHdl( aLink );
-    m_pReleaseNotesLink->SetClickHdl( aLink );
 }
 
 void UpdateDialog::clearDescription()
@@ -1306,24 +1300,6 @@ IMPL_LINK_NOARG(UpdateDialog, closeHandler, Button*, void)
 {
     m_thread->stop();
     EndDialog();
-}
-
-IMPL_LINK( UpdateDialog, hyperlink_clicked, FixedHyperlink&, rHyperlink, void )
-{
-    OUString sURL = rHyperlink.GetURL();
-    if ( sURL.isEmpty() )
-        return;
-
-    try
-    {
-        uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
-            css::system::SystemShellExecute::create(m_context) );
-        //throws lang::IllegalArgumentException, system::SystemShellExecuteException
-        xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
-    }
-    catch ( const uno::Exception& )
-    {
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

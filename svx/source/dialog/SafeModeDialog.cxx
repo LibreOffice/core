@@ -67,8 +67,6 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpCBResetCustomizations->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetWholeUserProfile->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
 
-    mpBugLink->SetClickHdl(LINK(this, SafeModeDialog, HandleHyperlink));
-
     // Disable restart btn until some checkbox is active
     mpBtnRestart->Disable();
 
@@ -167,30 +165,6 @@ void SafeModeDialog::applyChanges()
         css::uno::Reference< css::task::XInteractionHandler >());
 }
 
-void SafeModeDialog::openWebBrowser(const OUString & sURL, const OUString &sTitle)
-{
-    if ( sURL.isEmpty() ) // Nothing to do, when the URL is empty
-        return;
-
-    try
-    {
-        uno::Reference< system::XSystemShellExecute > xSystemShellExecute(
-            system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
-        //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
-        xSystemShellExecute->execute( sURL, OUString(), system::SystemShellExecuteFlags::URIS_ONLY );
-    }
-    catch ( const uno::Exception& )
-    {
-        uno::Any exc(cppu::getCaughtException());
-        OUString msg(comphelper::anyToString(exc));
-        const SolarMutexGuard guard;
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
-        aErrorBox->SetText( sTitle );
-        aErrorBox->Execute();
-    }
-}
-
-
 IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnContinue.get())
@@ -219,11 +193,6 @@ IMPL_LINK(SafeModeDialog, CheckBoxHdl, CheckBox&, /*pCheckBox*/, void)
         mpCBResetWholeUserProfile->IsChecked());
 
     mpBtnRestart->Enable(bEnable);
-}
-
-IMPL_LINK( SafeModeDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
-{
-    SafeModeDialog::openWebBrowser( rHyperlink.GetURL(), GetText() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

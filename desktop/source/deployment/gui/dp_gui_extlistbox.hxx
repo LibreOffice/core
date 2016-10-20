@@ -126,8 +126,6 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     Image m_aWarningImage;
     Image m_aDefaultImage;
 
-    Link<FixedHyperlink&,void> m_aClickHdl;
-
     VclPtr<ScrollBar>      m_pScrollBar;
 
     rtl::Reference<ExtensionRemovedListener> m_xRemoveListener;
@@ -185,7 +183,6 @@ public:
     long            PointToPos( const Point& rPos );
     void            SetScrollHdl( const Link<ScrollBar*,void>& rLink );
     void            DoScroll( long nDelta );
-    void            SetHyperlinkHdl( const Link<FixedHyperlink&,void>& rLink ){ m_aClickHdl = rLink; }
     virtual void    RecalcAll();
     void            RemoveUnlocked();
 

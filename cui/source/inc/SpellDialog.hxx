@@ -192,7 +192,6 @@ private:
     DECL_LINK( AddToDictClickHdl, Button*, void );
     DECL_LINK( LanguageSelectHdl, ListBox&, void );
     DECL_LINK( DialogUndoHdl, SpellUndoAction_Impl&, void );
-    DECL_LINK( HandleHyperlink, FixedHyperlink&, void );
 
     DECL_LINK( InitHdl, void*, void );
 
