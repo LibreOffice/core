@@ -218,10 +218,6 @@ public:
         return xTextPropMapper;
     }
 
-    const rtl::Reference < SvXMLExportPropertyMapper >& GetFramePropMapper() const
-    {
-        return xFramePropMapper;
-    }
     const rtl::Reference < SvXMLExportPropertyMapper >& GetAutoFramePropMapper() const
     {
         return xAutoFramePropMapper;

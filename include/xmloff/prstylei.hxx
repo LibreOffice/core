@@ -75,7 +75,6 @@ protected:
     static const OldFillStyleDefinitionSet& getStandardSet();
     static const OldFillStyleDefinitionSet& getHeaderSet();
     static const OldFillStyleDefinitionSet& getFooterSet();
-    static const OldFillStyleDefinitionSet& getParaSet();
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,

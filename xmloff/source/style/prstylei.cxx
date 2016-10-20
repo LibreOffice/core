@@ -177,11 +177,6 @@ const OldFillStyleDefinitionSet& XMLPropStyleContext::getFooterSet()
     return theFooterSet::get();
 }
 
-const OldFillStyleDefinitionSet& XMLPropStyleContext::getParaSet()
-{
-    return theParaSet::get();
-}
-
 SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -290,7 +285,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
 
         if(doNewDrawingLayerFillStyleDefinitionsExist(s_FillStyle))
         {
-            deactivateOldFillStyleDefinitions(getParaSet());
+            deactivateOldFillStyleDefinitions(theParaSet::get());
             bDrawingLayerFillStylesUsed = true;
         }
     }
