@@ -174,6 +174,117 @@ public:
     virtual void                Decode( sal_uInt8* pnData, std::size_t nBytes ) override;
 };
 
+class MSFILTER_DLLPUBLIC MSCodec97
+{
+public:
+    MSCodec97(rtlCipher m_hCipher);
+    virtual ~MSCodec97();
+
+    /** Initializes the algorithm with the encryption data.
+
+        @param aData
+            The sequence contains the necessary data to initialize
+            the codec.
+     */
+    virtual bool InitCodec(const css::uno::Sequence< css::beans::NamedValue >& aData) = 0;
+
+    /** Retrieves the encryption data
+
+        @return
+            The sequence contains the necessary data to initialize
+            the codec.
+     */
+    virtual css::uno::Sequence< css::beans::NamedValue > GetEncryptionData() = 0;
+
+
+    /** Rekeys the codec using the specified counter.
+
+        After reading a specific amount of data the cipher algorithm needs to
+        be rekeyed using a counter that counts the data blocks.
+
+        The block size is for example 512 Bytes for Word files and 1024 Bytes
+        for Excel files.
+
+        @precond
+            The codec must be initialized with InitKey() before this function
+            can be used.
+
+        @param nCounter
+            Block counter used to rekey the cipher.
+     */
+    virtual bool                InitCipher(sal_uInt32 nCounter) = 0;
+
+    /** Encodes a block of memory.
+
+        @see rtl_cipher_encode()
+
+        @precond
+            The codec must be initialized with InitKey() before this function
+            can be used. The destination buffer must be able to take all
+            unencoded data from the source buffer (usually this means it must be
+            as long as or longer than the source buffer).
+
+        @param pData
+            Unencrypted source data block.
+        @param nDatLen
+            Size of the passed source data block.
+        @param pBuffer
+            Destination buffer for the encrypted data.
+        @param nBufLen
+            Size of the destination buffer.
+
+        @return
+            true = Encoding was successful (no error occurred).
+    */
+    bool                Encode(const void* pData, std::size_t nDatLen,
+                               sal_uInt8* pBuffer, std::size_t nBufLen);
+
+    /** Decodes a block of memory.
+
+        @see rtl_cipher_decode()
+
+        @precond
+            The codec must be initialized with InitKey() before this function
+            can be used. The destination buffer must be able to take all
+            encoded data from the source buffer (usually this means it must be
+            as long as or longer than the source buffer).
+
+        @param pData
+            Encrypted source data block.
+        @param nDatLen
+            Size of the passed source data block.
+        @param pBuffer
+            Destination buffer for the decrypted data.
+        @param nBufLen
+            Size of the destination buffer.
+
+        @return
+            true = Decoding was successful (no error occurred).
+    */
+    bool                Decode(const void* pData, std::size_t nDatLen,
+                               sal_uInt8* pBuffer, std::size_t nBufLen);
+
+    /** Lets the cipher skip a specific amount of bytes.
+
+        This function sets the cipher to the same state as if the specified
+        amount of data has been decoded with one or more calls of Decode().
+
+        @precond
+            The codec must be initialized with InitKey() before this function
+            can be used.
+
+        @param nDatLen
+            Number of bytes to be skipped (cipher "seeks" forward).
+     */
+    bool                Skip(std::size_t nDatLen);
+
+private:
+                        MSCodec97(const MSCodec97&) = delete;
+    MSCodec97&          operator=(const MSCodec97&) = delete;
+
+protected:
+    rtlCipher           m_hCipher;
+};
 
 /** Encodes and decodes data from protected MSO 97+ documents.
 
@@ -181,7 +292,7 @@ public:
     Implementation is based on the wvDecrypt package by Caolan McNamara:
     http://www.csn.ul.ie/~caolan/docs/wvDecrypt.html
  */
-class MSFILTER_DLLPUBLIC MSCodec_Std97
+class MSFILTER_DLLPUBLIC MSCodec_Std97 :  public MSCodec97
 {
 public:
     explicit            MSCodec_Std97();
@@ -193,7 +304,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    bool                InitCodec( const css::uno::Sequence< css::beans::NamedValue >& aData );
+    virtual bool InitCodec(const css::uno::Sequence< css::beans::NamedValue >& aData) override;
 
     /** Retrieves the encryption data
 
@@ -201,7 +312,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    css::uno::Sequence< css::beans::NamedValue > GetEncryptionData();
+    virtual css::uno::Sequence<css::beans::NamedValue> GetEncryptionData() override;
 
 
     /** Initializes the algorithm with the specified password and document ID.
@@ -249,77 +360,11 @@ public:
         @param nCounter
             Block counter used to rekey the cipher.
      */
-    bool                InitCipher( sal_uInt32 nCounter );
+    virtual bool InitCipher(sal_uInt32 nCounter) override;
 
     /** Creates an MD5 digest of salt digest. */
     void               CreateSaltDigest(
                             const sal_uInt8 nSaltData[16], sal_uInt8 nSaltDigest[16] );
-
-    /** Encodes a block of memory.
-
-        @see rtl_cipher_encode()
-
-        @precond
-            The codec must be initialized with InitKey() before this function
-            can be used. The destination buffer must be able to take all
-            unencoded data from the source buffer (usually this means it must be
-            as long as or longer than the source buffer).
-
-        @param pData
-            Unencrypted source data block.
-        @param nDatLen
-            Size of the passed source data block.
-        @param pBuffer
-            Destination buffer for the encrypted data.
-        @param nBufLen
-            Size of the destination buffer.
-
-        @return
-            true = Encoding was successful (no error occurred).
-    */
-    bool                Encode(
-                            const void* pData, std::size_t nDatLen,
-                            sal_uInt8* pBuffer, std::size_t nBufLen );
-
-    /** Decodes a block of memory.
-
-        @see rtl_cipher_decode()
-
-        @precond
-            The codec must be initialized with InitKey() before this function
-            can be used. The destination buffer must be able to take all
-            encoded data from the source buffer (usually this means it must be
-            as long as or longer than the source buffer).
-
-        @param pData
-            Encrypted source data block.
-        @param nDatLen
-            Size of the passed source data block.
-        @param pBuffer
-            Destination buffer for the decrypted data.
-        @param nBufLen
-            Size of the destination buffer.
-
-        @return
-            true = Decoding was successful (no error occurred).
-    */
-    bool                Decode(
-                            const void* pData, std::size_t nDatLen,
-                            sal_uInt8* pBuffer, std::size_t nBufLen );
-
-    /** Lets the cipher skip a specific amount of bytes.
-
-        This function sets the cipher to the same state as if the specified
-        amount of data has been decoded with one or more calls of Decode().
-
-        @precond
-            The codec must be initialized with InitKey() before this function
-            can be used.
-
-        @param nDatLen
-            Number of bytes to be skipped (cipher "seeks" forward).
-     */
-    bool                Skip( std::size_t nDatLen );
 
     /** Gets salt data and salt digest.
 
@@ -349,7 +394,6 @@ private:
                         MSCodec_Std97( const MSCodec_Std97& ) = delete;
     MSCodec_Std97&      operator=( const MSCodec_Std97& ) = delete;
 
-    rtlCipher           m_hCipher;
     rtlDigest           m_hDigest;
     sal_uInt8           m_pDigestValue[ RTL_DIGEST_LENGTH_MD5 ];
     sal_uInt8           m_pDocId[16];

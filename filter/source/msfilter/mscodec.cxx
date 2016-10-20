@@ -245,27 +245,31 @@ void MSCodec_Xor95::Skip( std::size_t nBytes )
     mnOffset = (mnOffset + nBytes) & 0x0F;
 }
 
-
-MSCodec_Std97::MSCodec_Std97 ()
+MSCodec97::MSCodec97(rtlCipher hCipher)
+    : m_hCipher(hCipher)
 {
-    m_hCipher = rtl_cipher_create (
-        rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream);
-    OSL_ASSERT(m_hCipher != nullptr);
+}
 
-    m_hDigest = rtl_digest_create (
-        rtl_Digest_AlgorithmMD5);
-    OSL_ASSERT(m_hDigest != nullptr);
-
+MSCodec_Std97::MSCodec_Std97()
+    : MSCodec97(rtl_cipher_create(rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream))
+{
+    assert(m_hCipher != nullptr);
+    m_hDigest = rtl_digest_create(rtl_Digest_AlgorithmMD5);
+    assert(m_hDigest != nullptr);
     (void)memset (m_pDigestValue, 0, sizeof(m_pDigestValue));
     (void)memset (m_pDocId, 0, sizeof(m_pDocId));
 }
 
-MSCodec_Std97::~MSCodec_Std97 ()
+MSCodec97::~MSCodec97()
+{
+    rtl_cipher_destroy(m_hCipher);
+}
+
+MSCodec_Std97::~MSCodec_Std97()
 {
     (void)memset (m_pDigestValue, 0, sizeof(m_pDigestValue));
     (void)memset (m_pDocId, 0, sizeof(m_pDocId));
-    rtl_digest_destroy (m_hDigest);
-    rtl_cipher_destroy (m_hCipher);
+    rtl_digest_destroy(m_hDigest);
 }
 
 #if DEBUG_MSO_ENCRYPTION_STD97
@@ -431,7 +435,7 @@ void MSCodec_Std97::CreateSaltDigest( const sal_uInt8 nSaltData[16], sal_uInt8 n
     }
 }
 
-bool MSCodec_Std97::Encode (
+bool MSCodec97::Encode (
     const void *pData,   std::size_t nDatLen,
     sal_uInt8  *pBuffer, std::size_t nBufLen)
 {
@@ -441,7 +445,7 @@ bool MSCodec_Std97::Encode (
     return (result == rtl_Cipher_E_None);
 }
 
-bool MSCodec_Std97::Decode (
+bool MSCodec97::Decode (
     const void *pData,   std::size_t nDatLen,
     sal_uInt8  *pBuffer, std::size_t nBufLen)
 {
@@ -451,7 +455,7 @@ bool MSCodec_Std97::Decode (
     return (result == rtl_Cipher_E_None);
 }
 
-bool MSCodec_Std97::Skip( std::size_t nDatLen )
+bool MSCodec97::Skip(std::size_t nDatLen)
 {
     sal_uInt8 pnDummy[ 1024 ];
     std::size_t nDatLeft = nDatLen;
