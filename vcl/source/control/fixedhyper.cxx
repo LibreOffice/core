@@ -149,7 +149,7 @@ bool FixedHyperlink::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-IMPL_LINK(FixedHyperlink, HandleClick, FixedHyperlink&, rHyperlink, void)
+IMPL_STATIC_LINK(FixedHyperlink, HandleClick, FixedHyperlink&, rHyperlink, void)
 {
     if ( rHyperlink.m_sURL.isEmpty() ) // Nothing to do, when the URL is empty
         return;
