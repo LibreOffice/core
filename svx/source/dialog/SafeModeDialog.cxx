@@ -40,6 +40,8 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpCBCheckProfilesafeConfig(),
     mpCBCheckProfilesafeExtensions(),
     mpCBDisableAllExtensions(),
+    mpCBDeinstallUserExtensions(),
+    mpCBDeinstallAllExtensions(),
     mpCBResetCustomizations(),
     mpCBResetWholeUserProfile(),
 
@@ -52,6 +54,8 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     get(mpCBCheckProfilesafeConfig, "check_profilesafe_config");
     get(mpCBCheckProfilesafeExtensions, "check_profilesafe_extensions");
     get(mpCBDisableAllExtensions, "check_disable_all_extensions");
+    get(mpCBDeinstallUserExtensions, "check_deinstall_user_extensions");
+    get(mpCBDeinstallAllExtensions, "check_deinstall_all_extensions");
     get(mpCBResetCustomizations, "check_reset_customizations");
     get(mpCBResetWholeUserProfile, "check_reset_whole_userprofile");
 
@@ -64,6 +68,8 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpCBCheckProfilesafeConfig->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBCheckProfilesafeExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBDisableAllExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mpCBDeinstallUserExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mpCBDeinstallAllExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetCustomizations->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetWholeUserProfile->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
 
@@ -85,10 +91,22 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
         mpCBDisableAllExtensions->Disable();
     }
 
+    if (!comphelper::BackupFileHelper::isTryDeinstallUserExtensionsPossible())
+    {
+        mpCBDeinstallUserExtensions->Disable();
+    }
+
+    if (!comphelper::BackupFileHelper::isTryDeinstallAllExtensionsPossible())
+    {
+        mpCBDeinstallAllExtensions->Disable();
+    }
+
     if (!comphelper::BackupFileHelper::isTryResetCustomizationsPossible())
     {
         mpCBResetCustomizations->Disable();
     }
+
+    // no disabe of mpCBResetWholeUserProfile, always possible (as last choice)
 
     // Set URL for help button (module=safemode)
     OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
@@ -110,6 +128,8 @@ void SafeModeDialog::dispose()
     mpCBCheckProfilesafeConfig.clear();
     mpCBCheckProfilesafeExtensions.clear();
     mpCBDisableAllExtensions.clear();
+    mpCBDeinstallUserExtensions.clear();
+    mpCBDeinstallAllExtensions.clear();
     mpCBResetCustomizations.clear();
     mpCBResetWholeUserProfile.clear();
 
@@ -146,6 +166,18 @@ void SafeModeDialog::applyChanges()
     {
         // Disable all extensions
         comphelper::BackupFileHelper::tryDisableAllExtensions();
+    }
+
+    if (mpCBDeinstallUserExtensions->IsChecked())
+    {
+        // Deinstall all User Extensions (installed for User only)
+        comphelper::BackupFileHelper::tryDeinstallUserExtensions();
+    }
+
+    if (mpCBDeinstallAllExtensions->IsChecked())
+    {
+        // Deinstall all Extensions (user|shared|bundled)
+        comphelper::BackupFileHelper::tryDeinstallAllExtensions();
     }
 
     if (mpCBResetCustomizations->IsChecked())
@@ -189,6 +221,8 @@ IMPL_LINK(SafeModeDialog, CheckBoxHdl, CheckBox&, /*pCheckBox*/, void)
         mpCBCheckProfilesafeConfig->IsChecked() ||
         mpCBCheckProfilesafeExtensions->IsChecked() ||
         mpCBDisableAllExtensions->IsChecked() ||
+        mpCBDeinstallUserExtensions->IsChecked() ||
+        mpCBDeinstallAllExtensions->IsChecked() ||
         mpCBResetCustomizations->IsChecked() ||
         mpCBResetWholeUserProfile->IsChecked());
 
