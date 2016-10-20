@@ -156,6 +156,9 @@ namespace comphelper
         static bool isTryDisableAllExtensionsPossible();
         static void tryDisableAllExtensions();
 
+        // Disables OpenGL and OpenCL
+        static void tryDisableHWAcceleration();
+
         /** resets User-Customizations like Settings and UserInterface modifications
         */
         static bool isTryResetCustomizationsPossible();
