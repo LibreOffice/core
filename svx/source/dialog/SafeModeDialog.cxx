@@ -42,6 +42,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpCBDisableAllExtensions(),
     mpCBDeinstallUserExtensions(),
     mpCBDeinstallAllExtensions(),
+    mpCBDisableHWAcceleration(),
     mpCBResetCustomizations(),
     mpCBResetWholeUserProfile(),
 
@@ -56,6 +57,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     get(mpCBDisableAllExtensions, "check_disable_all_extensions");
     get(mpCBDeinstallUserExtensions, "check_deinstall_user_extensions");
     get(mpCBDeinstallAllExtensions, "check_deinstall_all_extensions");
+    get(mpCBDisableHWAcceleration, "check_disable_hw_acceleration");
     get(mpCBResetCustomizations, "check_reset_customizations");
     get(mpCBResetWholeUserProfile, "check_reset_whole_userprofile");
 
@@ -70,6 +72,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpCBDisableAllExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBDeinstallUserExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBDeinstallAllExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mpCBDisableHWAcceleration->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetCustomizations->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetWholeUserProfile->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
 
@@ -130,6 +133,7 @@ void SafeModeDialog::dispose()
     mpCBDisableAllExtensions.clear();
     mpCBDeinstallUserExtensions.clear();
     mpCBDeinstallAllExtensions.clear();
+    mpCBDisableHWAcceleration.clear();
     mpCBResetCustomizations.clear();
     mpCBResetWholeUserProfile.clear();
 
@@ -180,6 +184,11 @@ void SafeModeDialog::applyChanges()
         comphelper::BackupFileHelper::tryDeinstallAllExtensions();
     }
 
+    if (mpCBDisableHWAcceleration->IsChecked())
+    {
+        comphelper::BackupFileHelper::tryDisableHWAcceleration();
+    }
+
     if (mpCBResetCustomizations->IsChecked())
     {
         // Reset customizations (Settings and UserInterface modifications)
@@ -193,8 +202,8 @@ void SafeModeDialog::applyChanges()
     }
 
     // Then restart
-    css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext())->requestRestart(
-        css::uno::Reference< css::task::XInteractionHandler >());
+    //css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext())->requestRestart(
+    //    css::uno::Reference< css::task::XInteractionHandler >());
 }
 
 IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
@@ -210,7 +219,7 @@ IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
     }
     else if (pBtn == mpBtnRestart.get())
     {
-        Close();
+        //Close();
         applyChanges();
     }
 }
@@ -223,6 +232,7 @@ IMPL_LINK(SafeModeDialog, CheckBoxHdl, CheckBox&, /*pCheckBox*/, void)
         mpCBDisableAllExtensions->IsChecked() ||
         mpCBDeinstallUserExtensions->IsChecked() ||
         mpCBDeinstallAllExtensions->IsChecked() ||
+        mpCBDisableHWAcceleration->IsChecked() ||
         mpCBResetCustomizations->IsChecked() ||
         mpCBResetWholeUserProfile->IsChecked());
 
