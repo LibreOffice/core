@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_071d5673",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-10-20T15:24:11Z",
+      "side": 1,
+      "message": "Make it \"Layout Engine\" with space.",
+      "revId": "ab54a84ef3aa8fd8bd8337a0a2ee499892d4c7b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_27125263",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-10-20T15:24:11Z",
+      "side": 1,
+      "message": "Use SalLayout::UseCommonLayout() instead of checking the envvar directly.",
+      "revId": "ab54a84ef3aa8fd8bd8337a0a2ee499892d4c7b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
