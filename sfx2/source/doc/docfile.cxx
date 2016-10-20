@@ -3606,7 +3606,7 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                     else
                     {
                         // Something not based: e.g. PDF.
-                        SvStream* pStream = utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ);
+                        SvStream* pStream = utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ | StreamMode::WRITE);
                         uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
                         if (xSigner->signDocumentContent(uno::Reference<embed::XStorage>(), xStream))
                             bChanges = true;

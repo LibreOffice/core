@@ -209,6 +209,21 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         return false;
     }
 
+    if (!mxStore.is())
+    {
+        // Something not ZIP based, try PDF.
+        nSecurityId = getPDFSignatureHelper().GetNewSecurityId();
+        getPDFSignatureHelper().SetX509Certificate(xCert);
+        getPDFSignatureHelper().SetDescription(rDescription);
+        uno::Reference<io::XInputStream> xInputStream(mxSignatureStream, uno::UNO_QUERY);
+        if (!getPDFSignatureHelper().Sign(xInputStream))
+        {
+            SAL_WARN("xmlsecurity.helper", "PDFSignatureHelper::Sign() failed");
+            return false;
+        }
+        return true;
+    }
+
     maSignatureHelper.StartMission();
 
     nSecurityId = maSignatureHelper.GetNewSecurityId();
