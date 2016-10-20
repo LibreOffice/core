@@ -1541,16 +1541,17 @@ void DesktopLOKTest::testPaintPartTile()
 {
     // Load an impress doc of 2 slides.
     comphelper::LibreOfficeKit::setActive();
-    LibLODocument_Impl* pDocument = loadDoc("2slides.odp");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     ViewCallback aView1;
+    ViewCallback aView2;
+    std::unique_ptr<LibLODocument_Impl> xDocument(loadDoc("2slides.odp"));
+    LibLODocument_Impl* pDocument = xDocument.get();
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
     int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
 
     // Create a second view.
     pDocument->m_pDocumentClass->createView(pDocument);
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    ViewCallback aView2;
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
 
     // Go to the second slide in the second view.
@@ -1578,7 +1579,6 @@ void DesktopLOKTest::testPaintPartTile()
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
 
     Scheduler::ProcessEventsToIdle();
-    mxComponent->dispose();
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
@@ -1587,13 +1587,14 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
 {
     // Load a document and type a character into the body text of the second view.
     comphelper::LibreOfficeKit::setActive();
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     ViewCallback aView1;
+    ViewCallback aView2;
+    std::unique_ptr<LibLODocument_Impl> xDocument(loadDoc("blank_text.odt"));
+    LibLODocument_Impl* pDocument = xDocument.get();
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
     pDocument->m_pDocumentClass->createView(pDocument);
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    ViewCallback aView2;
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
@@ -1618,7 +1619,6 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     CPPUNIT_ASSERT(aView1.m_aOwnCursor.IsEmpty());
 
     Scheduler::ProcessEventsToIdle();
-    mxComponent->dispose();
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
