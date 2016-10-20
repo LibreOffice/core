@@ -2337,7 +2337,7 @@ void wwSectionManager::PrependedInlineNode(const SwPosition &rPos,
     OSL_ENSURE(!maSegments.empty(),
         "should not be possible, must be at least one segment");
     if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.nNode))
-        maSegments.back().maStart = SwNodeIndex(rNode);
+        maSegments.back().maStart.Assign(rNode);
 }
 
 void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)

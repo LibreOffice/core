@@ -2408,7 +2408,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
 void wwSectionManager::JoinNode(const SwPosition &rPos, const SwNode &rNode)
 {
     if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.nNode))
-        maSegments.back().maStart = SwNodeIndex(rNode);
+        maSegments.back().maStart.Assign(rNode);
 }
 
 bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
