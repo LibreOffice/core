@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_aa1aa915",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3273,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-20T20:34:22Z",
+      "side": 1,
+      "message": "As also noted in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d103060#c4 this shouldn\u0027t be Japanese locale specific. Any objections to remove the locale check?",
+      "revId": "3c0f59d84fd6624e7914849801c8f52ec799e4fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
