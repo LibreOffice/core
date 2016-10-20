@@ -192,28 +192,50 @@ sal_uInt16 XclImpBiff5Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
     return nRet;
 }
 
-XclImpBiff8Decrypter::XclImpBiff8Decrypter( sal_uInt8 pnSalt[ 16 ],
-        sal_uInt8 pnVerifier[ 16 ], sal_uInt8 pnVerifierHash[ 16 ] ) :
-    maSalt( pnSalt, pnSalt + 16 ),
-    maVerifier( pnVerifier, pnVerifier + 16 ),
-    maVerifierHash( pnVerifierHash, pnVerifierHash + 16 )
+XclImpBiff8Decrypter::XclImpBiff8Decrypter(const std::vector<sal_uInt8>& rSalt,
+                                           const std::vector<sal_uInt8>& rVerifier,
+                                           const std::vector<sal_uInt8>& rVerifierHash)
+    : maSalt(rSalt)
+    , maVerifier(rVerifier)
+    , maVerifierHash(rVerifierHash)
+    , mpCodec(nullptr)
 {
 }
 
-XclImpBiff8Decrypter::XclImpBiff8Decrypter( const XclImpBiff8Decrypter& rSrc ) :
-    XclImpDecrypter( rSrc ),
-    maEncryptionData( rSrc.maEncryptionData ),
-    maSalt( rSrc.maSalt ),
-    maVerifier( rSrc.maVerifier ),
-    maVerifierHash( rSrc.maVerifierHash )
+XclImpBiff8Decrypter::XclImpBiff8Decrypter(const XclImpBiff8Decrypter& rSrc)
+    : XclImpDecrypter(rSrc)
+    , maEncryptionData(rSrc.maEncryptionData)
+    , maSalt(rSrc.maSalt)
+    , maVerifier(rSrc.maVerifier)
+    , maVerifierHash(rSrc.maVerifierHash)
+    , mpCodec(nullptr)
 {
-    if( IsValid() )
-        maCodec.InitCodec( maEncryptionData );
 }
 
-XclImpBiff8Decrypter* XclImpBiff8Decrypter::OnClone() const
+XclImpBiff8StdDecrypter::XclImpBiff8StdDecrypter(const XclImpBiff8StdDecrypter& rSrc)
+    : XclImpBiff8Decrypter(rSrc)
 {
-    return new XclImpBiff8Decrypter( *this );
+    mpCodec = &maCodec;
+    if (IsValid())
+        maCodec.InitCodec(maEncryptionData);
+}
+
+XclImpBiff8StdDecrypter* XclImpBiff8StdDecrypter::OnClone() const
+{
+    return new XclImpBiff8StdDecrypter(*this);
+}
+
+XclImpBiff8CryptoAPIDecrypter::XclImpBiff8CryptoAPIDecrypter(const XclImpBiff8CryptoAPIDecrypter& rSrc)
+    : XclImpBiff8Decrypter(rSrc)
+{
+    mpCodec = &maCodec;
+    if (IsValid())
+        maCodec.InitCodec(maEncryptionData);
+}
+
+XclImpBiff8CryptoAPIDecrypter* XclImpBiff8CryptoAPIDecrypter::OnClone() const
+{
+    return new XclImpBiff8CryptoAPIDecrypter(*this);
 }
 
 uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const OUString& rPassword )
@@ -232,9 +254,9 @@ uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const
             *aIt = static_cast< sal_uInt16 >( *pcChar );
 
         // init codec
-        maCodec.InitKey( &aPassVect.front(), &maSalt.front() );
-        if ( maCodec.VerifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
-            maEncryptionData = maCodec.GetEncryptionData();
+        mpCodec->InitKey( &aPassVect.front(), &maSalt.front() );
+        if ( mpCodec->VerifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
+            maEncryptionData = mpCodec->GetEncryptionData();
     }
 
     return maEncryptionData;
@@ -247,9 +269,9 @@ bool XclImpBiff8Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::N
     if( rEncryptionData.getLength() )
     {
         // init codec
-        maCodec.InitCodec( rEncryptionData );
+        mpCodec->InitCodec( rEncryptionData );
 
-        if ( maCodec.VerifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
+        if ( mpCodec->VerifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
             maEncryptionData = rEncryptionData;
     }
 
@@ -269,13 +291,13 @@ void XclImpBiff8Decrypter::OnUpdate( std::size_t nOldStrmPos, std::size_t nNewSt
         /*  Rekey cipher, if block changed or if previous offset in same block. */
         if( (nNewBlock != nOldBlock) || (nNewOffset < nOldOffset) )
         {
-            maCodec.InitCipher( nNewBlock );
+            mpCodec->InitCipher( nNewBlock );
             nOldOffset = 0;     // reset nOldOffset for next if() statement
         }
 
         /*  Seek to correct offset. */
         if( nNewOffset > nOldOffset )
-            maCodec.Skip( nNewOffset - nOldOffset );
+            mpCodec->Skip( nNewOffset - nOldOffset );
     }
 }
 
@@ -293,9 +315,9 @@ sal_uInt16 XclImpBiff8Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
         // read the block from stream
         nRet = nRet + static_cast<sal_uInt16>(rStrm.ReadBytes(pnCurrData, nDecBytes));
         // decode the block inplace
-        maCodec.Decode( pnCurrData, nDecBytes, pnCurrData, nDecBytes );
+        mpCodec->Decode( pnCurrData, nDecBytes, pnCurrData, nDecBytes );
         if( GetOffset( rStrm.Tell() ) == 0 )
-            maCodec.InitCipher( GetBlock( rStrm.Tell() ) );
+            mpCodec->InitCipher( GetBlock( rStrm.Tell() ) );
 
         pnCurrData += nDecBytes;
         nBytesLeft = nBytesLeft - nDecBytes;

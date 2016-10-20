@@ -25,6 +25,7 @@
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
 #include <sal/types.h>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace beans { struct NamedValue; }
@@ -177,7 +178,7 @@ public:
 class MSFILTER_DLLPUBLIC MSCodec97
 {
 public:
-    MSCodec97(rtlCipher m_hCipher);
+    MSCodec97(size_t nHashLen);
     virtual ~MSCodec97();
 
     /** Initializes the algorithm with the encryption data.
@@ -186,7 +187,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    virtual bool InitCodec(const css::uno::Sequence< css::beans::NamedValue >& aData) = 0;
+    bool InitCodec(const css::uno::Sequence< css::beans::NamedValue >& aData);
 
     /** Retrieves the encryption data
 
@@ -194,8 +195,37 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    virtual css::uno::Sequence< css::beans::NamedValue > GetEncryptionData() = 0;
+    css::uno::Sequence< css::beans::NamedValue > GetEncryptionData();
 
+    /** Initializes the algorithm with the specified password and document ID.
+
+        @param pPassData
+            Wide character array containing the password. Must be zero
+            terminated, which results in a maximum length of 15 characters.
+        @param pDocId
+            Unique document identifier read from or written to the file.
+     */
+    virtual void InitKey(const sal_uInt16 pPassData[16],
+                         const sal_uInt8 pDocId[16]) = 0;
+
+
+    /** Verifies the validity of the password using the passed salt data.
+
+        @precond
+            The codec must be initialized with InitKey() before this function
+            can be used.
+
+        @param pSaltData
+            Salt data block read from the file.
+        @param pSaltDigest
+            Salt digest read from the file.
+
+        @return
+            true = Test was successful.
+     */
+    bool VerifyKey(const sal_uInt8* pSaltData, const sal_uInt8* pSaltDigest);
+
+    virtual void GetDigestFromSalt(const sal_uInt8* pSaltData, sal_uInt8* pDigest) = 0;
 
     /** Rekeys the codec using the specified counter.
 
@@ -278,12 +308,19 @@ public:
      */
     bool                Skip(std::size_t nDatLen);
 
+    /* allows to get the unique document id from the codec
+     */
+    void                GetDocId( sal_uInt8 pDocId[16] );
+
 private:
                         MSCodec97(const MSCodec97&) = delete;
     MSCodec97&          operator=(const MSCodec97&) = delete;
 
 protected:
+    size_t              m_nHashLen;
     rtlCipher           m_hCipher;
+    sal_uInt8           m_pDocId[16];
+    std::vector<sal_uInt8> m_aDigestValue;
 };
 
 /** Encodes and decodes data from protected MSO 97+ documents.
@@ -295,25 +332,8 @@ protected:
 class MSFILTER_DLLPUBLIC MSCodec_Std97 :  public MSCodec97
 {
 public:
-    explicit            MSCodec_Std97();
-                        ~MSCodec_Std97();
-
-    /** Initializes the algorithm with the encryption data.
-
-        @param aData
-            The sequence contains the necessary data to initialize
-            the codec.
-     */
-    virtual bool InitCodec(const css::uno::Sequence< css::beans::NamedValue >& aData) override;
-
-    /** Retrieves the encryption data
-
-        @return
-            The sequence contains the necessary data to initialize
-            the codec.
-     */
-    virtual css::uno::Sequence<css::beans::NamedValue> GetEncryptionData() override;
-
+    MSCodec_Std97();
+    virtual ~MSCodec_Std97() override;
 
     /** Initializes the algorithm with the specified password and document ID.
 
@@ -323,27 +343,8 @@ public:
         @param pDocId
             Unique document identifier read from or written to the file.
      */
-    void                InitKey(
-                            const sal_uInt16 pPassData[ 16 ],
-                            const sal_uInt8 pDocId[ 16 ] );
-
-    /** Verifies the validity of the password using the passed salt data.
-
-        @precond
-            The codec must be initialized with InitKey() before this function
-            can be used.
-
-        @param pSaltData
-            Salt data block read from the file.
-        @param pSaltDigest
-            Salt digest read from the file.
-
-        @return
-            true = Test was successful.
-     */
-    bool                VerifyKey(
-                            const sal_uInt8 pSaltData[ 16 ],
-                            const sal_uInt8 pSaltDigest[ 16 ] );
+    virtual void InitKey(const sal_uInt16 pPassData[16],
+                         const sal_uInt8 pDocId[16]) override;
 
     /** Rekeys the codec using the specified counter.
 
@@ -384,19 +385,24 @@ public:
                             sal_uInt8 pSaltData[16],
                             sal_uInt8 pSaltDigest[16]);
 
-    /* allows to get the unique document id from the codec
-     */
-    void                GetDocId( sal_uInt8 pDocId[16] );
-
-    void                GetDigestFromSalt( const sal_uInt8 pSaltData[16], sal_uInt8 pDigest[16] );
+    virtual void        GetDigestFromSalt(const sal_uInt8* pSaltData, sal_uInt8* pDigest) override;
 
 private:
                         MSCodec_Std97( const MSCodec_Std97& ) = delete;
     MSCodec_Std97&      operator=( const MSCodec_Std97& ) = delete;
 
     rtlDigest           m_hDigest;
-    sal_uInt8           m_pDigestValue[ RTL_DIGEST_LENGTH_MD5 ];
-    sal_uInt8           m_pDocId[16];
+};
+
+class MSFILTER_DLLPUBLIC MSCodec_CryptoAPI :  public MSCodec97
+{
+public:
+    MSCodec_CryptoAPI();
+
+    virtual void InitKey(const sal_uInt16 pPassData[16],
+                         const sal_uInt8 pDocId[16]) override;
+    virtual bool InitCipher(sal_uInt32 nCounter) override;
+    virtual void GetDigestFromSalt(const sal_uInt8* pSaltData, sal_uInt8* pDigest) override;
 };
 
 const sal_uInt32 ENCRYPTINFO_CRYPTOAPI      = 0x00000004;
@@ -459,12 +465,28 @@ struct MSFILTER_DLLPUBLIC EncryptionVerifierAES
     EncryptionVerifierAES();
 };
 
+struct MSFILTER_DLLPUBLIC EncryptionVerifierRC4
+{
+    sal_uInt32 saltSize;                                                // must be 0x00000010
+    sal_uInt8  salt[SALT_LENGTH];                                       // random generated salt value
+    sal_uInt8  encryptedVerifier[ENCRYPTED_VERIFIER_LENGTH];            // randomly generated verifier value
+    sal_uInt32 encryptedVerifierHashSize;                               // actually written hash size - depends on algorithm
+    sal_uInt8  encryptedVerifierHash[SHA1_HASH_LENGTH];                 // verifier value hash - itself also encrypted
+
+    EncryptionVerifierRC4();
+};
+
 struct MSFILTER_DLLPUBLIC StandardEncryptionInfo
 {
     EncryptionStandardHeader header;
     EncryptionVerifierAES    verifier;
 };
 
+struct MSFILTER_DLLPUBLIC RC4EncryptionInfo
+{
+    EncryptionStandardHeader header;
+    EncryptionVerifierRC4 verifier;
+};
 
 } // namespace msfilter
 

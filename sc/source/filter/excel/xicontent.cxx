@@ -64,6 +64,7 @@
 #include <memory>
 #include <utility>
 #include <o3tl/make_unique.hxx>
+#include <oox/helper/helper.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::std::unique_ptr;
@@ -1110,21 +1111,80 @@ XclImpDecrypterRef lclReadFilepass8_Standard( XclImpStream& rStrm )
     OSL_ENSURE( rStrm.GetRecLeft() == 48, "lclReadFilepass8 - wrong record size" );
     if( rStrm.GetRecLeft() == 48 )
     {
-        sal_uInt8 pnSalt[ 16 ];
-        sal_uInt8 pnVerifier[ 16 ];
-        sal_uInt8 pnVerifierHash[ 16 ];
-        rStrm.Read( pnSalt, 16 );
-        rStrm.Read( pnVerifier, 16 );
-        rStrm.Read( pnVerifierHash, 16 );
-        xDecr.reset( new XclImpBiff8Decrypter( pnSalt, pnVerifier, pnVerifierHash ) );
+        std::vector<sal_uInt8> aSalt(16);
+        std::vector<sal_uInt8> aVerifier(16);
+        std::vector<sal_uInt8> aVerifierHash(16);
+        rStrm.Read(aSalt.data(), 16);
+        rStrm.Read(aVerifier.data(), 16);
+        rStrm.Read(aVerifierHash.data(), 16);
+        xDecr.reset(new XclImpBiff8StdDecrypter(aSalt, aVerifier, aVerifierHash));
     }
     return xDecr;
 }
 
-XclImpDecrypterRef lclReadFilepass8_Strong( XclImpStream& /*rStrm*/ )
+XclImpDecrypterRef lclReadFilepass8_Strong(XclImpStream& rStream)
 {
-    // not supported
-    return XclImpDecrypterRef();
+    //Its possible there are other variants in existance but these
+    //are the defaults I get with Excel 2013
+    XclImpDecrypterRef xDecr;
+
+    msfilter::RC4EncryptionInfo info;
+
+    info.header.flags = rStream.ReaduInt32();
+    if (oox::getFlag( info.header.flags, msfilter::ENCRYPTINFO_EXTERNAL))
+        return xDecr;
+
+    sal_uInt32 nHeaderSize = rStream.ReaduInt32();
+    sal_uInt32 actualHeaderSize = sizeof(info.header);
+
+    if( (nHeaderSize < actualHeaderSize) )
+        return xDecr;
+
+    info.header.flags = rStream.ReaduInt32();
+    info.header.sizeExtra = rStream.ReaduInt32();
+    info.header.algId = rStream.ReaduInt32();
+    info.header.algIdHash = rStream.ReaduInt32();
+    info.header.keyBits = rStream.ReaduInt32();
+    info.header.providedType = rStream.ReaduInt32();
+    info.header.reserved1 = rStream.ReaduInt32();
+    info.header.reserved2 = rStream.ReaduInt32();
+
+    rStream.Ignore(nHeaderSize - actualHeaderSize);
+
+    info.verifier.saltSize = rStream.ReaduInt32();
+    if (info.verifier.saltSize != 16)
+        return xDecr;
+    rStream.Read(&info.verifier.salt, sizeof(info.verifier.salt));
+    rStream.Read(&info.verifier.encryptedVerifier, sizeof(info.verifier.encryptedVerifier));
+
+    info.verifier.encryptedVerifierHashSize = rStream.ReaduInt32();
+    if (info.verifier.encryptedVerifierHashSize != RTL_DIGEST_LENGTH_SHA1)
+        return xDecr;
+    rStream.Read(&info.verifier.encryptedVerifierHash, info.verifier.encryptedVerifierHashSize);
+
+    // check flags and algorithm IDs, required are AES128 and SHA-1
+    if (!oox::getFlag(info.header.flags, msfilter::ENCRYPTINFO_CRYPTOAPI))
+        return xDecr;
+
+    if (oox::getFlag(info.header.flags, msfilter::ENCRYPTINFO_AES))
+        return xDecr;
+
+    if (info.header.algId != msfilter::ENCRYPT_ALGO_RC4)
+        return xDecr;
+
+    // hash algorithm ID 0 defaults to SHA-1 too
+    if (info.header.algIdHash != 0 && info.header.algIdHash != msfilter::ENCRYPT_HASH_SHA1)
+        return xDecr;
+
+    xDecr.reset(new XclImpBiff8CryptoAPIDecrypter(
+        std::vector<sal_uInt8>(info.verifier.salt,
+            info.verifier.salt + SAL_N_ELEMENTS(info.verifier.salt)),
+        std::vector<sal_uInt8>(info.verifier.encryptedVerifier,
+            info.verifier.encryptedVerifier + SAL_N_ELEMENTS(info.verifier.encryptedVerifier)),
+        std::vector<sal_uInt8>(info.verifier.encryptedVerifierHash,
+            info.verifier.encryptedVerifierHash + SAL_N_ELEMENTS(info.verifier.encryptedVerifierHash))));
+
+    return xDecr;
 }
 
 XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
