@@ -91,8 +91,6 @@ public:
         const basegfx::B3DPoint& rVRP = basegfx::B3DPoint(0.0,0.0,1.0),
         const basegfx::B3DVector& rVPN = basegfx::B3DVector(0.0,0.0,1.0),
         const basegfx::B3DVector& rVUP = basegfx::B3DVector(0.0,1.0,0.0));
-    const basegfx::B3DHomMatrix& GetOrientation() { return maOrientation; }
-    const basegfx::B3DHomMatrix& GetInvOrientation() { return maInvOrientation; }
 
     // Projection
     void SetProjection(const basegfx::B3DHomMatrix& mProject);

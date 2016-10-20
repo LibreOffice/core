@@ -564,11 +564,6 @@ const OUString& SvtPathOptions::GetUserConfigPath() const
     return pImpl->GetUserConfigPath();
 }
 
-const OUString& SvtPathOptions::GetUIConfigPath() const
-{
-    return pImpl->GetUIConfigPath();
-}
-
 const OUString& SvtPathOptions::GetWorkPath() const
 {
     return pImpl->GetWorkPath();
@@ -771,7 +766,7 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
                 case PATH_TEMP:         aPath = GetTempPath();          break;
                 case PATH_TEMPLATE:     aPath = GetTemplatePath();      break;
                 case PATH_WORK:         aPath = GetWorkPath();          break;
-                case PATH_UICONFIG:     aPath = GetUIConfigPath();      break;
+                case PATH_UICONFIG:     aPath = pImpl->GetUIConfigPath(); break;
                 case PATH_FINGERPRINT:  aPath = GetFingerprintPath();   break;
                 case PATH_CLASSIFICATION: aPath = GetClassificationPath(); break;
                 // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
