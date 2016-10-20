@@ -52,8 +52,9 @@ const sal_uInt32 VERSION_INFO_AGILE         = 0x00040004;
 
 const sal_uInt32 SALT_LENGTH                    = 16;
 const sal_uInt32 ENCRYPTED_VERIFIER_LENGTH      = 16;
-const sal_uInt32 ENCRYPTED_RC4_VERIFIER_HASH_LENGTH = 20;
-const sal_uInt32 ENCRYPTED_AES_VERIFIER_HASH_LENGTH = 32;
+const sal_uInt32 ENCRYPTED_SHA1_VERIFIER_HASH_LENGTH = 20;
+const sal_uInt32 ENCRYPTED_SHA256_VERIFIER_HASH_LENGTH = 32;
+const sal_uInt32 ENCRYPTED_SHA512_VERIFIER_HASH_LENGTH = 64;
 
 struct EncryptionStandardHeader
 {
@@ -75,7 +76,7 @@ struct EncryptionVerifierAES
     sal_uInt8  salt[SALT_LENGTH];                                       // random generated salt value
     sal_uInt8  encryptedVerifier[ENCRYPTED_VERIFIER_LENGTH];            // randomly generated verifier value
     sal_uInt32 encryptedVerifierHashSize;                               // actually written hash size - depends on algorithm
-    sal_uInt8  encryptedVerifierHash[ENCRYPTED_AES_VERIFIER_HASH_LENGTH];   // verifier value hash - itself also encrypted
+    sal_uInt8  encryptedVerifierHash[ENCRYPTED_SHA256_VERIFIER_HASH_LENGTH];   // verifier value hash - itself also encrypted
 
     EncryptionVerifierAES();
 };
