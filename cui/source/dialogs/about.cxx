@@ -20,6 +20,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <sallayout.hxx>
 
 #include <tools/stream.hxx>
 #include <rtl/bootstrap.hxx>
@@ -317,6 +318,12 @@ OUString AboutDialog::GetVersionString()
         aCalcMode += "single";
     sVersion += "; " + aCalcMode;
 #endif
+
+    sVersion += "; Layout Engine: ";
+    if (SalLayout::UseCommonLayout())
+        sVersion += "new";
+    else
+        sVersion += "old";
 
     return sVersion;
 }

@@ -14,6 +14,7 @@ $(eval $(call gb_Library_set_componentfile,cui,cui/util/cui))
 $(eval $(call gb_Library_set_include,cui,\
     $$(INCLUDE) \
     -I$(SRCDIR)/cui/source/inc \
+    -I$(SRCDIR)/vcl/inc \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,cui,$(SRCDIR)/cui/inc/pch/precompiled_cui))
