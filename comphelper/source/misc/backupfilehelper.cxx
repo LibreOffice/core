@@ -1990,7 +1990,7 @@ namespace comphelper
         // but as we are now in SafeMode, use XML infos for this since the
         // extensions are not loaded from XExtensionManager
         ExtensionInfo aCurrentExtensionInfo;
-        const ExtensionInfoEntryVector aToBeEnabled;
+        const ExtensionInfoEntryVector aToBeEnabled = { };
         ExtensionInfoEntryVector aToBeDisabled;
 
         aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
