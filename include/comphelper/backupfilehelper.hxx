@@ -17,6 +17,7 @@
 #include <osl/file.hxx>
 #include <memory>
 #include <set>
+#include <vector>
 
 namespace comphelper
 {
@@ -156,6 +157,16 @@ namespace comphelper
         static bool isTryDisableAllExtensionsPossible();
         static void tryDisableAllExtensions();
 
+        /** Deinstall all User Extensions (installed for User only)
+        */
+        static bool isTryDeinstallUserExtensionsPossible();
+        static void tryDeinstallUserExtensions();
+
+        /** Deinstall all Extensions (user|shared|bundled)
+        */
+        static bool isTryDeinstallAllExtensionsPossible();
+        static void tryDeinstallAllExtensions();
+
         /** resets User-Customizations like Settings and UserInterface modifications
         */
         static bool isTryResetCustomizationsPossible();
@@ -168,6 +179,8 @@ namespace comphelper
     private:
         // internal helper methods
         static const rtl::OUString getPackURL();
+        static const std::vector< OUString >& getCustomizationDirNames();
+        static const std::vector< OUString >& getCustomizationFileNames();
 
         // file push helpers
         bool tryPush_Files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, const OUString& rSourceURL, const OUString& rTargetURL);
