@@ -145,7 +145,7 @@ void XMLTextParagraphExport::exportTextStyles( bool bUsed, bool bProg )
                        bUsed, XML_STYLE_FAMILY_TEXT_TEXT );
     // get shape export to make sure the frame family is added correctly.
     GetExport().GetShapeExport();
-    exportStyleFamily( "FrameStyles", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), GetFramePropMapper(),
+    exportStyleFamily( "FrameStyles", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xFramePropMapper,
                        bUsed, XML_STYLE_FAMILY_TEXT_FRAME);
     exportNumStyles( bUsed );
     if( !IsBlockMode() )

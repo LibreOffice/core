@@ -517,9 +517,6 @@ public:
         sal_Int32 nId,
         const css::uno::Sequence< OUString> & rMsgParams);
 
-    /** return current error flags (logical 'or' of all error flags so far) */
-    SvXMLErrorFlags GetErrorFlags()  { return mnErrorFlags; }
-
     virtual void DisposingModel();
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
