@@ -421,28 +421,26 @@ void getDefaultLocaleFromConfig(
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
     // read locale
-    css::uno::Reference<css::registry::XRegistryKey> locale = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooLocale")));
-    if(locale.is() && locale->getStringValue().getLength()) {
-        rtl::OUString language;
-        rtl::OUString country;
-
-        sal_Int32 index = locale->getStringValue().indexOf((sal_Unicode) '-');
-
+    css::uno::Reference<css::registry::XRegistryKey> ooLocale = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooLocale")));
+    css::uno::Reference<css::registry::XRegistryKey> ooSetupSystemLocale = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooSetupSystemLocale")));
+    if(ooLocale.is() && ooLocale->getStringValue().getLength()) {
+        sal_Int32 index = ooLocale->getStringValue().indexOf((sal_Unicode) '-');
         if(index >= 0) {
-            language = locale->getStringValue().copy(0, index);
-            country = locale->getStringValue().copy(index + 1);
-
+            rtl::OUString language = ooLocale->getStringValue().copy(0, index);
             if(language.getLength()) {
                 rtl::OUString prop(RTL_CONSTASCII_USTRINGPARAM("user.language="));
                 prop += language;
-
                 pjvm->pushProp(prop);
             }
-
+        }
+    }
+    if(ooSetupSystemLocale.is() && ooSetupSystemLocale->getStringValue().getLength()) {
+        sal_Int32 index = ooSetupSystemLocale->getStringValue().indexOf((sal_Unicode) '-');
+        if(index >= 0) {
+            rtl::OUString country = ooSetupSystemLocale->getStringValue().copy(index + 1);
             if(country.getLength()) {
                 rtl::OUString prop(RTL_CONSTASCII_USTRINGPARAM("user.country="));
                 prop += country;
-
                 pjvm->pushProp(prop);
             }
         }
