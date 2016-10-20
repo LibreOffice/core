@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7a77a97e_c7035e0e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-10-20T15:27:00Z",
+      "side": 1,
+      "message": "Should be “layout” here.",
+      "revId": "ab54a84ef3aa8fd8bd8337a0a2ee499892d4c7b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_071d5673",
         "filename": "cui/source/dialogs/about.cxx",
         "patchSetId": 1
