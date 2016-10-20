@@ -1037,11 +1037,11 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
         uno::Sequence<beans::PropertyValue> tableCellProperties;
         tableCellProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
         comphelper::SequenceAsHashMap aPropMap(tableCellProperties);
-        uno::Any sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", uno::Any());
-        if(!sRedlineTypeValue.has<OUString>())
+        OUString sRedlineType = aPropMap.getUnpackedValueOrDefault("RedlineType", OUString());
+        if(!sRedlineType.isEmpty())
             throw beans::UnknownPropertyException("No redline type property: ", static_cast<cppu::OWeakObject*>(this));
         // Create a 'Table Cell Redline' object
-        SwUnoCursorHelper::makeTableCellRedline(*pBox, sRedlineTypeValue.get<OUString>(), tableCellProperties);
+        SwUnoCursorHelper::makeTableCellRedline(*pBox, sRedlineType, tableCellProperties);
     }
     else
     {
@@ -1312,10 +1312,8 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
             uno::Sequence< beans::PropertyValue > tableRowProperties;
             tableRowProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
             comphelper::SequenceAsHashMap aPropMap( tableRowProperties );
-            OUString sRedlineType;
-            uno::Any sRedlineTypeValue;
-            sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", sRedlineTypeValue);
-            if( sRedlineTypeValue >>= sRedlineType )
+            OUString sRedlineType= aPropMap.getUnpackedValueOrDefault("RedlineType", OUString());
+            if( !sRedlineType.isEmpty() )
             {
                 // Create a 'Table Row Redline' object
                 SwUnoCursorHelper::makeTableRowRedline( *pLn, sRedlineType, tableRowProperties);
