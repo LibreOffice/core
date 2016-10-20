@@ -113,29 +113,6 @@ tryPropertyValueEnum(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*ou
     return bModified;
 }
 
-/** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue for boolean properties
-    @param          _rConvertedValue    the conversion result (if successful)
-    @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
-    @param          _rValueToSet        the new value which is about to be set
-    @param          _rCurrentValue      the current value of the property
-    @return         sal_True, if the value could be converted and has changed
-                    sal_False, if the value could be converted and has not changed
-    @exception      InvalidArgumentException thrown if the value could not be converted to a boolean type
-*/
-inline bool tryPropertyValue(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*out*/_rOldValue, const css::uno::Any& _rValueToSet, bool _bCurrentValue)
-{
-    bool bModified(false);
-    bool bNewValue(false);
-    ::cppu::convertPropertyValue(bNewValue, _rValueToSet);
-    if (bNewValue != _bCurrentValue)
-    {
-        _rConvertedValue <<= bNewValue;
-        _rOldValue <<= _bCurrentValue;
-        bModified = true;
-    }
-    return bModified;
-}
-
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue
     @param          _rConvertedValue    the conversion result (if successful)
     @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
