@@ -1691,7 +1691,7 @@ namespace comphelper
                 }
 
                 maInitialBaseURL = conf.copy(nStart, nEnd - nStart);
-                maInitialBaseURL.startsWith("!", &maInitialBaseURL);
+                (void)maInitialBaseURL.startsWith("!", &maInitialBaseURL);
             }
 
             if (!maInitialBaseURL.isEmpty())
