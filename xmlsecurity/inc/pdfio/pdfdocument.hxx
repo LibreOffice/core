@@ -66,7 +66,7 @@ public:
 
     bool Read(SvStream& rStream);
     /// Sign the read document with xCertificate in the edit buffer.
-    bool Sign(const css::uno::Reference<css::security::XCertificate>& xCertificate);
+    bool Sign(const css::uno::Reference<css::security::XCertificate>& xCertificate, const OUString& rDescription);
     /// Serializes the contents of the edit buffer.
     bool Write(SvStream& rStream);
     std::vector<PDFObjectElement*> GetSignatureWidgets();

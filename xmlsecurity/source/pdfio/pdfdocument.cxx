@@ -233,7 +233,7 @@ PDFDocument::PDFDocument()
 {
 }
 
-bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificate)
+bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificate, const OUString& rDescription)
 {
     m_aEditBuffer.WriteCharPtr("\n");
 
@@ -268,6 +268,14 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     aSigBuffer.append(aByteRangeFiller.makeStringAndClear());
     // Finish the Sig obj.
     aSigBuffer.append(" /Filter/Adobe.PPKMS");
+
+    if (!rDescription.isEmpty())
+    {
+        aSigBuffer.append("/Reason<");
+        vcl::PDFWriter::AppendUnicodeTextString(rDescription, aSigBuffer);
+        aSigBuffer.append(">");
+    }
+
     aSigBuffer.append(" >>\nendobj\n\n");
     m_aEditBuffer.WriteOString(aSigBuffer.toString());
 

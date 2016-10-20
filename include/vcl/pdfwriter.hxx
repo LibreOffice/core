@@ -1267,6 +1267,9 @@ The following structure describes the permissions used in PDF security
 
     /// Fill a PDF signature template.
     static bool Sign(PDFSignContext& rContext);
+
+    /// Write rString as a PDF hex string into rBuffer.
+    static void AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer);
 };
 
 }
