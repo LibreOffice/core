@@ -664,15 +664,17 @@ void SwFormatPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
         case RES_OBJECTDYING:
                 //The Pagedesc where I'm registered dies, therefore I unregister
                 //from that format. During this I get deleted!
-            if( auto pSwFormat = dynamic_cast<SwFormat*>(pDefinedIn) )
+            if( typeid(SwFormat) == typeid( pDefinedIn ))
             {
-                bool const bResult = pSwFormat->ResetFormatAttr(RES_PAGEDESC);
+                bool const bResult =
+                    static_cast<SwFormat*>(pDefinedIn)->ResetFormatAttr(RES_PAGEDESC);
                 OSL_ENSURE( bResult, "FormatPageDesc not deleted" );
                 (void) bResult; // unused in non-debug
             }
-            else if( auto pSwContentNode = dynamic_cast<SwContentNode*>(pDefinedIn) )
+            else if( typeid(SwContentNode) == typeid( pDefinedIn ))
             {
-                bool const bResult = pSwContentNode->ResetAttr(RES_PAGEDESC);
+                bool const bResult = static_cast<SwContentNode*>(pDefinedIn)
+                        ->ResetAttr(RES_PAGEDESC);
                 OSL_ENSURE( bResult, "FormatPageDesc not deleted" );
                 (void) bResult; // unused in non-debug
             }
