@@ -61,8 +61,10 @@ private:
     OModuleClient            m_aModuleClient;
     Link<FuncPage&,void>     aDoubleClickLink;
     Link<FuncPage&,void>     aSelectionLink;
+    Link<FuncPage&, void>    aModifyLink;
     VclPtr<ListBox>          m_pLbCategory;
     VclPtr<FormulaListBox>   m_pLbFunction;
+    VclPtr<Edit>             m_plbFunctionSearchString;
     const IFunctionManager*  m_pFunctionManager;
 
     ::std::vector< TFunctionDesc >  aLRUList;
@@ -72,10 +74,11 @@ private:
     void impl_addFunctions(const IFunctionCategory* _pCategory);
                     DECL_LINK( SelHdl, ListBox&, void );
                     DECL_LINK(DblClkHdl, ListBox&, void);
+                    DECL_LINK(ModifyHdl, Edit&, void);
 
 protected:
 
-    void            UpdateFunctionList();
+    void            UpdateFunctionList(const OUString&);
     void            InitLRUList();
 
 
