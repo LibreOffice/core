@@ -1,0 +1,68 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_SC_INC_FORMULALOGGER_HXX
+#define INCLUDED_SC_INC_FORMULALOGGER_HXX
+
+#include <osl/file.hxx>
+#include <memory>
+#include <vector>
+
+class ScFormulaCell;
+class ScDocument;
+
+namespace sc {
+
+class FormulaLogger
+{
+    std::unique_ptr<osl::File> mpLogFile;
+    OUString maGroupPrefix;
+    std::vector<OUString> maMessages;
+
+    void writeAscii( const char* s );
+    void writeAscii( const char* s, size_t n );
+    void write( const OUString& ou );
+    void write( sal_Int32 n );
+
+public:
+
+    /**
+     * This class is only moveable.
+     */
+    class GroupScope
+    {
+        struct Impl;
+        std::unique_ptr<Impl> mpImpl;
+
+    public:
+        GroupScope() = delete;
+        GroupScope( const GroupScope& ) = delete;
+        GroupScope& operator= ( const GroupScope& ) = delete;
+
+        GroupScope( FormulaLogger& rLogger, const OUString& rPrefix );
+        GroupScope( GroupScope&& r );
+        ~GroupScope();
+
+        void addMessage( const OUString& rName );
+
+        void setCalcComplete();
+    };
+
+    FormulaLogger( const FormulaLogger& ) = delete;
+    FormulaLogger& operator= ( const FormulaLogger& ) = delete;
+
+    FormulaLogger();
+    ~FormulaLogger();
+
+    GroupScope enterGroup( const ScDocument& rDoc, const ScFormulaCell& rCell );
+};
+
+}
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
