@@ -2586,7 +2586,7 @@ else
         AC_MSG_RESULT([internal src images for desktop])
     else
         WITH_GALLERY_BUILD=
-        AC_MSG_RESULT([disable src imgage build])
+        AC_MSG_RESULT([disable src image build])
     fi
 fi
 AC_SUBST(WITH_GALLERY_BUILD)
