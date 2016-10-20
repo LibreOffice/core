@@ -848,6 +848,10 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
     {
         aRotation = 2700;
     }
+    else if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_180)
+    {
+        aRotation = 1800;
+    }
     else
     {
         return;
@@ -862,12 +866,22 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
     rShell.ReRead(OUString(), OUString(), const_cast<const Graphic*>(&aGraphic));
 
     SwFlyFrameAttrMgr aManager(false, &rShell, rShell.IsFrameSelected() ? Frmmgr_Type::NONE : Frmmgr_Type::GRF);
-    const long nRotatedWidth = aManager.GetSize().Height();
-    const long nRotatedHeight = aManager.GetSize().Width();
-    Size aSize(nRotatedWidth, nRotatedHeight);
-    aManager.SetSize(aSize);
-    aManager.UpdateFlyFrame();
-
+    if(rReq.GetSlot() == SID_ROTATE_GRAPHIC_180)
+    {
+       const long nRotatedWidth = aManager.GetSize().Width();
+       const long nRotatedHeight = aManager.GetSize().Height();
+       Size aSize(nRotatedWidth, nRotatedHeight);
+       aManager.SetSize(aSize);
+       aManager.UpdateFlyFrame();
+    }
+    else
+    {
+       const long nRotatedWidth = aManager.GetSize().Height();
+       const long nRotatedHeight = aManager.GetSize().Width();
+       Size aSize(nRotatedWidth, nRotatedHeight);
+       aManager.SetSize(aSize);
+       aManager.UpdateFlyFrame();
+    }
     SfxItemSet aSet( rShell.GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
     rShell.GetCurAttr( aSet );
     SwCropGrf aCrop( static_cast<const SwCropGrf&>( aSet.Get(RES_GRFATR_CROPGRF) ) );
@@ -886,6 +900,13 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
         aCrop.SetTop(    aCropRectangle.Left()   );
         aCrop.SetRight(  aCropRectangle.Top()    );
         aCrop.SetBottom( aCropRectangle.Right()  );
+    }
+    else if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_180)
+    {
+        aCrop.SetLeft(   aCropRectangle.Right() );
+        aCrop.SetTop(    aCropRectangle.Bottom()   );
+        aCrop.SetRight(  aCropRectangle.Left()    );
+        aCrop.SetBottom( aCropRectangle.Top()  );
     }
 
     rShell.SetAttrItem(aCrop);
@@ -910,6 +931,7 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
         {
         case SID_ROTATE_GRAPHIC_LEFT:
         case SID_ROTATE_GRAPHIC_RIGHT:
+        case SID_ROTATE_GRAPHIC_180:
             if( rShell.GetGraphicType() == GraphicType::NONE )
             {
                 bDisable = true;
