@@ -156,6 +156,16 @@ namespace comphelper
         static bool isTryDisableAllExtensionsPossible();
         static void tryDisableAllExtensions();
 
+        /** Deinstall all User Extensions (installed for User only)
+        */
+        static bool isTryDeinstallUserExtensionsPossible();
+        static void tryDeinstallUserExtensions();
+
+        /** Deinstall all Extensions (user|shared|bundled)
+        */
+        static bool isTryDeinstallAllExtensionsPossible();
+        static void tryDeinstallAllExtensions();
+
         /** resets User-Customizations like Settings and UserInterface modifications
         */
         static bool isTryResetCustomizationsPossible();

@@ -677,7 +677,9 @@ namespace
         }
 
     public:
-        void createUsingExtensionRegistryEntriesFromXML(const OUString& rUserConfigWorkURL)
+        void createUsingExtensionRegistryEntriesFromXML(
+            const OUString& rUserConfigWorkURL,
+            bool bUser)
         {
             // This is looked up for 'user' in the user|shared|bundled deployed Extensions,
             // only the user ones seem to be able to be de/activated. The ones for user are in
@@ -686,13 +688,15 @@ namespace
             // in safe mode by deleting the uno_packages directory and the shared|bundled
             // ones by deleting the extensions directory.
             const OUString aRegPath("/registry/com.sun.star.comp.deployment.bundle.PackageRegistryBackend/backenddb.xml");
-            const OUString aUnoPackagReg(rUserConfigWorkURL + "/uno_packages/cache" + aRegPath);
+            const OUString aExtensionsReg(rUserConfigWorkURL + "/extensions/shared" + aRegPath);
+            const OUString aUnoPackageReg(rUserConfigWorkURL + "/uno_packages/cache" + aRegPath);
+            const OUString aPath(bUser ? aUnoPackageReg : aExtensionsReg);
 
-            if (fileExists(aUnoPackagReg))
+            if (fileExists(aPath))
             {
                 uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< xml::dom::XDocumentBuilder > xBuilder(xml::dom::DocumentBuilder::create(xContext));
-                uno::Reference< xml::dom::XDocument > aDocument = xBuilder->parseURI(aUnoPackagReg);
+                uno::Reference< xml::dom::XDocument > aDocument = xBuilder->parseURI(aPath);
 
                 if (aDocument.is())
                 {
@@ -1979,7 +1983,7 @@ namespace comphelper
         // extensions are not loaded from XExtensionManager
         class ExtensionInfo aExtensionInfo;
 
-        aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
+        aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, true);
 
         return aExtensionInfo.areThereEnabledExtensions();
     }
@@ -1993,7 +1997,7 @@ namespace comphelper
         const ExtensionInfoEntryVector aToBeEnabled;
         ExtensionInfoEntryVector aToBeDisabled;
 
-        aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
+        aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, true);
 
         const ExtensionInfoEntryVector& rCurrentVector = aCurrentExtensionInfo.getExtensionInfoEntryVector();
 
@@ -2006,6 +2010,38 @@ namespace comphelper
         }
 
         ExtensionInfo::changeEnableDisableStateInXML(maUserConfigWorkURL, aToBeEnabled, aToBeDisabled);
+    }
+
+    bool BackupFileHelper::isTryDeinstallUserExtensionsPossible()
+    {
+        // check if there are User Extensions installed.
+        class ExtensionInfo aExtensionInfo;
+
+        aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, true);
+
+        return !aExtensionInfo.getExtensionInfoEntryVector().empty();
+    }
+
+    void BackupFileHelper::tryDeinstallUserExtensions()
+    {
+        // delete User Extension installs
+        deleteDirRecursively(maUserConfigWorkURL + "/uno_packages");
+    }
+
+    bool BackupFileHelper::isTryDeinstallAllExtensionsPossible()
+    {
+        // check if there are other Extensions installed (shared|bundled).
+        class ExtensionInfo aExtensionInfo;
+
+        aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, false);
+
+        return !aExtensionInfo.getExtensionInfoEntryVector().empty();
+    }
+
+    void BackupFileHelper::tryDeinstallAllExtensions()
+    {
+        // delete other Extension installs (shared|bundled)
+        deleteDirRecursively(maUserConfigWorkURL + "/extensions");
     }
 
     bool BackupFileHelper::isTryResetCustomizationsPossible()
@@ -2375,7 +2411,7 @@ namespace comphelper
                             // get current extension info, but from XML config files
                             ExtensionInfo aCurrentExtensionInfo;
 
-                            aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
+                            aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, true);
 
                             // now we have loaded last_working (aLoadedExtensionInfo) and
                             // current (aCurrentExtensionInfo) ExtensionInfo and may react on
