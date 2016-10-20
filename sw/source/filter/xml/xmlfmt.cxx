@@ -387,7 +387,6 @@ public:
     // The item set may be empty!
     SfxItemSet *GetItemSet() { return pItemSet; }
 
-    const OUString& GetMasterPageName() const { return sMasterPageName; }
     bool HasMasterPageName() const { return bHasMasterPageName; }
 
     bool IsPageDescConnected() const { return bPageDescConnected; }
@@ -551,7 +550,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     // #i40788# - first determine the display name of the page style,
     // then map this name to the corresponding user interface name.
     OUString sName = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE,
-                                             GetMasterPageName() );
+                                             sMasterPageName );
     SwStyleNameMapper::FillUIName( sName,
                                    sName,
                                    SwGetPoolIdFromName::PageDesc,

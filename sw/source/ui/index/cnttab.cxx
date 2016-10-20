@@ -165,8 +165,6 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     long    m_nCurrentRow;
     bool    m_bModified;
 
-    void                            SetModified() {m_bModified = true;}
-
 protected:
     virtual bool                    SeekRow( long nRow ) override;
     virtual void                    PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const override;
@@ -3991,7 +3989,7 @@ void SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
 
 bool SwEntryBrowseBox::SaveModified()
 {
-    SetModified();
+    m_bModified = true;
     const size_t nRow = GetCurRow();
     const sal_uInt16 nCol = GetCurColumnId();
 

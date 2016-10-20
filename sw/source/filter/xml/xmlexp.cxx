@@ -98,12 +98,6 @@ SwXMLExport::SwXMLExport(
     InitItemExport();
 }
 
-void SwXMLExport::setBlockMode()
-{
-    m_bBlock = true;
-
-}
-
 sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 {
     if( !GetModel().is() )
@@ -126,7 +120,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                 if( auto b = o3tl::tryAccess<bool>(aAny) )
                 {
                     if( *b )
-                        setBlockMode();
+                        m_bBlock = true;
                 }
             }
         }

@@ -232,7 +232,6 @@ public:
     const Point& GetLastPos() const { return aLastPos; }
     void SetLastPos( const Point& rNew ) { aLastPos = rNew; }
     void SetPos( const Point& rNew ) { pHdl->SetPos( rNew ); }
-    const Point& GetPos() { return pHdl->GetPos(); }
     const Point& GetHdlPos() { return aHdlPos; }
     SdrHdl* GetHdl() const { return pHdl; }
     void ChgHdl( SdrHdl* pNew )
@@ -245,7 +244,7 @@ public:
     }
     const Point GetPosForHitTest( const OutputDevice& rOut )
     {
-        Point aHitTestPos( GetPos() );
+        Point aHitTestPos( pHdl->GetPos() );
         aHitTestPos = rOut.LogicToPixel( aHitTestPos );
         if ( bTopRightHandle )
         {

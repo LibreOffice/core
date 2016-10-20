@@ -148,10 +148,8 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
 
         if( xItemMap.Is() )
         {
-            SvXMLExportItemMapper& rItemMapper = GetTableItemMapper();
-            rItemMapper.setMapEntries( xItemMap );
-
-            GetTableItemMapper().exportXML( *this,
+            m_pTableItemMapper->setMapEntries( xItemMap );
+            m_pTableItemMapper->exportXML( *this,
                                            rFormat.GetAttrSet(),
                                            GetTwipUnitConverter(),
                                            ePropToken );

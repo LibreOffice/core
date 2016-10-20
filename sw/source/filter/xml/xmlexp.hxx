@@ -97,7 +97,6 @@ class SwXMLExport : public SvXMLExport
     virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual sal_Int32 GetDocumentSpecificSettings( std::list< SettingsGroup >& _out_rSettings ) override;
 
-    void setBlockMode();
 private:
     void DeleteTableLines();
 protected:
@@ -122,11 +121,8 @@ public:
     void ExportTableAutoStyles( const SwTableNode& rTableNd );
     void ExportTable( const SwTableNode& rTableNd );
 
-    SvXMLExportItemMapper& GetTableItemMapper() { return *m_pTableItemMapper; }
-
     bool IsShowProgress() const { return m_bShowProgress; }
     void SetShowProgress( bool b ) { m_bShowProgress = b; }
-    bool IsBlockMode() const { return m_bBlock; }
 
     // XUnoTunnel
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();

@@ -137,7 +137,6 @@ public:
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) override;
 #endif
-    sal_Int32 GetTBIDForTB(){ return tbidForTBD; }
     SwCTB*  GetCustomizationData() { return customizationDataCTB.get(); };
 };
 

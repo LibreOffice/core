@@ -99,8 +99,6 @@ class SwXMLImport: public SvXMLImport
                      const css::uno::Reference< css::text::XTextRange > & rInsertPos );
     void         setStyleInsertMode( SfxStyleFamily nFamilies,
                                      bool bOverwrite );
-    void         setBlockMode();
-    void         setOrganizerMode();
 
 protected:
 
@@ -160,9 +158,7 @@ public:
     bool IsInsertMode() const { return m_bInsert; }
     bool IsStylesOnlyMode() const { return !m_bLoadDoc; }
     bool IsBlockMode() const { return m_bBlock; }
-    bool IsOrganizerMode() const { return m_bOrganizerMode; }
 
-    inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
     inline const SvXMLImportItemMapper& GetTableItemMapper() const;
     inline       SvXMLImportItemMapper& GetTableItemMapper();
     SvXMLImportContext *CreateTableItemImportContext( sal_uInt16 nPrefix,
@@ -197,11 +193,6 @@ public:
     const SwDoc* getDoc() const;
     SwDoc* getDoc();
 };
-
-inline const SvXMLUnitConverter& SwXMLImport::GetTwipUnitConverter() const
-{
-    return *m_pTwipUnitConv;
-}
 
 inline const SvXMLImportItemMapper& SwXMLImport::GetTableItemMapper() const
 {

@@ -445,16 +445,6 @@ void SwXMLImport::setStyleInsertMode( SfxStyleFamily nFamilies,
     m_bLoadDoc = false;
 }
 
-void SwXMLImport::setBlockMode( )
-{
-    m_bBlock = true;
-}
-
-void SwXMLImport::setOrganizerMode( )
-{
-    m_bOrganizerMode = true;
-}
-
 namespace
 {
     class theSwXMLImportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXMLImportUnoTunnelId > {};
@@ -571,7 +561,7 @@ void SwXMLImport::startDocument()
             if( auto b = o3tl::tryAccess<bool>(aAny) )
             {
                 if( *b )
-                    setBlockMode();
+                    m_bBlock = true;
             }
         }
 
@@ -583,7 +573,7 @@ void SwXMLImport::startDocument()
             if( auto b = o3tl::tryAccess<bool>(aAny) )
             {
                 if( *b )
-                    setOrganizerMode();
+                    m_bOrganizerMode = true;
             }
         }
     }
@@ -978,7 +968,7 @@ XMLTextImportHelper* SwXMLImport::CreateTextImport()
     return new SwXMLTextImportHelper( GetModel(), *this, getImportInfo(),
                                       IsInsertMode(),
                                       IsStylesOnlyMode(),
-                                      IsBlockMode(), IsOrganizerMode(),
+                                      IsBlockMode(), m_bOrganizerMode,
                                       m_bPreserveRedlineFlags );
 }
 
@@ -1000,7 +990,7 @@ SvXMLImportContext *SwXMLImport::CreateFontDeclsContext(
 }
 void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
 {
-    if (IsInsertMode() || IsStylesOnlyMode() || IsBlockMode() || IsOrganizerMode() || !GetModel().is() )
+    if (IsInsertMode() || IsStylesOnlyMode() || IsBlockMode() || m_bOrganizerMode || !GetModel().is() )
         return;
 
     // this method will modify the document directly -> lock SolarMutex

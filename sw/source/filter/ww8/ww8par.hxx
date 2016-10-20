@@ -730,7 +730,6 @@ public:
         css::uno::Reference< css::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl=false );
 private:
-    sal_uInt32 GenerateObjectID() { return ++mnObjectId; }
     SwPaM *pPaM;
     sal_uInt32 mnObjectId;
 };
@@ -854,7 +853,6 @@ private:
         sal_uInt32 nNetWidth);
     bool SectionIsProtected(const wwSection &rSection) const;
     void SetLeftRight(wwSection &rSection);
-    bool IsNewDoc() const;
     /*
      The segment we're inserting, the start of the segments container, and the
      nodeindex of where we want the page break to (normally the segments start
@@ -1526,7 +1524,6 @@ private:
     bool InEqualApo(int nLvl) const;
     bool InLocalApo() const { return InEqualApo(m_nInTable); }
     bool InEqualOrHigherApo(int nLvl) const;
-    bool InAnyApo() const { return InEqualOrHigherApo(1); }
     void TabCellEnd();
     void StopTable();
     bool IsInvalidOrToBeMergedTabCell() const;

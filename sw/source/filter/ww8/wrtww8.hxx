@@ -1499,7 +1499,6 @@ public:
 
     sal_Int32 WhereNext() const { return nAktSwPos; }
     sal_uInt16 GetScript() const { return mnScript; }
-    bool IsCharRTL() const { return mbCharIsRTL; }
     bool IsParaRTL() const { return mbParaIsRTL; }
     rtl_TextEncoding GetCharSet() const { return meChrSet; }
     OUString GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
