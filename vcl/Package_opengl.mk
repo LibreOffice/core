@@ -7,35 +7,35 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,vcl_opengl_shader,$(SRCDIR)/vcl/opengl))
+$(eval $(call gb_Package_Package,vcl_opengl_shader,$(SRCDIR)/vcl/opengl/shaders))
 
 $(eval $(call gb_Package_add_files,vcl_opengl_shader,$(LIBO_ETC_FOLDER)/opengl,\
     areaHashCRC64TFragmentShader.glsl \
-	areaScaleFastFragmentShader.glsl \
-	areaScaleFragmentShader.glsl \
-	blendedTextureFragmentShader.glsl \
-	blendedTextureVertexShader.glsl \
-	dumbVertexShader.glsl \
-	diffTextureFragmentShader.glsl \
-	greyscaleFragmentShader.glsl \
+    areaScaleFastFragmentShader.glsl \
+    areaScaleFragmentShader.glsl \
+    blendedTextureFragmentShader.glsl \
+    blendedTextureVertexShader.glsl \
+    dumbVertexShader.glsl \
+    diffTextureFragmentShader.glsl \
+    greyscaleFragmentShader.glsl \
     invert50FragmentShader.glsl \
-	convolutionFragmentShader.glsl \
-	linearGradientFragmentShader.glsl \
-	combinedTextureFragmentShader.glsl \
-	combinedTextureVertexShader.glsl \
-	combinedFragmentShader.glsl \
-	combinedVertexShader.glsl \
-	lineFragmentShader.glsl \
-	lineVertexShader.glsl \
-	maskFragmentShader.glsl \
-	maskedTextureVertexShader.glsl \
-	maskedTextureFragmentShader.glsl \
-	radialGradientFragmentShader.glsl \
-	replaceColorFragmentShader.glsl \
-	solidFragmentShader.glsl \
-	textureFragmentShader.glsl \
-	textureVertexShader.glsl \
-	transformedTextureVertexShader.glsl \
+    convolutionFragmentShader.glsl \
+    linearGradientFragmentShader.glsl \
+    combinedTextureFragmentShader.glsl \
+    combinedTextureVertexShader.glsl \
+    combinedFragmentShader.glsl \
+    combinedVertexShader.glsl \
+    lineFragmentShader.glsl \
+    lineVertexShader.glsl \
+    maskFragmentShader.glsl \
+    maskedTextureVertexShader.glsl \
+    maskedTextureFragmentShader.glsl \
+    radialGradientFragmentShader.glsl \
+    replaceColorFragmentShader.glsl \
+    solidFragmentShader.glsl \
+    textureFragmentShader.glsl \
+    textureVertexShader.glsl \
+    transformedTextureVertexShader.glsl \
 ))
 
 # vim: set noet sw=4 ts=4:
