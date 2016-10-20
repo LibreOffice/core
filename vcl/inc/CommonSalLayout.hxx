@@ -20,11 +20,12 @@
 #ifndef INCLUDED_VCL_INC_COMMONSALLAYOUT_HXX
 #define INCLUDED_VCL_INC_COMMONSALLAYOUT_HXX
 
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+
 #ifdef _WIN32
 #include "win/winlayout.hxx"
 
 #elif defined(MACOSX) || defined(IOS)
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include "quartz/ctfonts.hxx"
 #include <hb-coretext.h>
 
