@@ -39,6 +39,7 @@ private:
     VclPtr<CheckBox> mpCBCheckProfilesafeConfig;
     VclPtr<CheckBox> mpCBCheckProfilesafeExtensions;
     VclPtr<CheckBox> mpCBDisableAllExtensions;
+    VclPtr<CheckBox> mpCBDisableHWAcceleration;
     VclPtr<CheckBox> mpCBResetCustomizations;
     VclPtr<CheckBox> mpCBResetWholeUserProfile;
 
