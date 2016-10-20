@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_c7b6fe3c",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-10-20T09:32:49Z",
+      "side": 1,
+      "message": "The ~ indicates the keyboard accelerator. It should be placed before the character that should be the accelerator. maybe before the 8.",
+      "revId": "44146de208e0cdb0af027d7e605fa62e5d55a84f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_67960a96",
+        "filename": "sw/source/uibase/shells/grfsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-10-20T09:32:49Z",
+      "side": 1,
+      "message": "These lines are the same in both conditions, right? Please put them out of the condition.",
+      "range": {
+        "startLine": 873,
+        "startChar": 7,
+        "endLine": 875,
+        "endChar": 33
+      },
+      "revId": "44146de208e0cdb0af027d7e605fa62e5d55a84f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
