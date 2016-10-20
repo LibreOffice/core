@@ -435,9 +435,7 @@ bool MSCodec_Std97::Encode (
     const void *pData,   std::size_t nDatLen,
     sal_uInt8  *pBuffer, std::size_t nBufLen)
 {
-    rtlCipherError result;
-
-    result = rtl_cipher_encode (
+    rtlCipherError result = rtl_cipher_encode(
         m_hCipher, pData, nDatLen, pBuffer, nBufLen);
 
     return (result == rtl_Cipher_E_None);
@@ -447,9 +445,7 @@ bool MSCodec_Std97::Decode (
     const void *pData,   std::size_t nDatLen,
     sal_uInt8  *pBuffer, std::size_t nBufLen)
 {
-    rtlCipherError result;
-
-    result = rtl_cipher_decode (
+    rtlCipherError result = rtl_cipher_decode(
         m_hCipher, pData, nDatLen, pBuffer, nBufLen);
 
     return (result == rtl_Cipher_E_None);
