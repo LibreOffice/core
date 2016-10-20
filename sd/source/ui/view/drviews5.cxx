@@ -414,7 +414,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     GetDoc()->GetDrawOutliner().SetDefaultLanguage( GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ) );
 
     // Set Application Background color for usage in SdrPaintView(s)
-    mpDrawView->SetApplicationBackgroundColor(GetAppBackgroundColor());
+    mpDrawView->SetApplicationBackgroundColor( mnAppBackgroundColor );
 
     /* This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one

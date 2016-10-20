@@ -475,6 +475,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/view/drviewsh \
 	sd/source/ui/view/drviewsi \
 	sd/source/ui/view/drviewsj \
+	sd/source/ui/view/drviewsk \
 	sd/source/ui/view/drvwshrg \
 	sd/source/ui/view/frmview \
 	sd/source/ui/view/grviewsh \
