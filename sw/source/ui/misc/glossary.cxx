@@ -1121,7 +1121,7 @@ void SwGlossaryDlg::ResumeShowAutoText()
             }
         }
     }
-    ResetResumeData();
+    bResume = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

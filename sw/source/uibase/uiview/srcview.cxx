@@ -356,7 +356,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 pMed->CloseOutStream();
                 pMed->Commit();
                 pDocShell->GetDoc()->getIDocumentState().ResetModified();
-                SourceSaved();
+                bSourceSaved = true;
                 aEditWin->ClearModifyFlag();
             }
         }

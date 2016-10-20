@@ -284,8 +284,6 @@ public:
     bool    UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase, const SfxItemSet* pSet);
 
     const SwTOXType*    GetTOXType(TOXTypes eTyp) const;
-    const SwTOXBase*    GetCurTOX();
-
 };
 
 // inlines

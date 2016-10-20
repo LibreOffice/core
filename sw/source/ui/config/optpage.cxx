@@ -1085,7 +1085,7 @@ void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)
 {
     const SfxUInt16Item* pFlagItem = aSet.GetItem<SfxUInt16Item>(SID_FONTMODE_TYPE, false);
     if (pFlagItem)
-        SetFontMode(sal::static_int_cast< sal_uInt8, sal_uInt16>( pFlagItem->GetValue()));
+        m_nFontGroup = sal::static_int_cast< sal_uInt8, sal_uInt16>( pFlagItem->GetValue() );
 }
 
 SwTableOptionsTabPage::SwTableOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
@@ -1302,7 +1302,7 @@ void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)
 {
     const SwWrtShellItem* pWrtSh = aSet.GetItem<SwWrtShellItem>(SID_WRT_SHELL, false);
     if (pWrtSh)
-        SetWrtShell(pWrtSh->GetValue());
+        m_pWrtShell = pWrtSh->GetValue();
 }
 
 SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage( vcl::Window* pParent,
@@ -1407,7 +1407,7 @@ void SwShdwCursorOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
 {
     const SwWrtShellItem* pWrtSh = aSet.GetItem<SwWrtShellItem>(SID_WRT_SHELL, false);
     if (pWrtSh)
-        SetWrtShell(pWrtSh->GetValue());
+        m_pWrtShell = pWrtSh->GetValue();
 }
 
 bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
