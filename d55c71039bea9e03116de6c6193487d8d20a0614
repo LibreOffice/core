@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_8acb2d72",
+        "filename": "sc/source/ui/unoobj/styleuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-20T21:15:26Z",
+      "side": 0,
+      "message": "Same here, continue to use getConstArray() ...",
+      "revId": "d55c71039bea9e03116de6c6193487d8d20a0614",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

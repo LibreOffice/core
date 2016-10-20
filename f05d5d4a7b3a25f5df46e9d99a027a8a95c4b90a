@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_6aced184",
+        "filename": "sc/source/ui/unoobj/styleuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-20T21:15:26Z",
+      "side": 1,
+      "message": "Actually, as aOptions is a uno::Sequence, obtaining getConstArray() first and using that in a loop instead of a const\u0026[] accessor is faster. I wouldn\u0027t change this unless it is clarified that nowadays that doesn\u0027t matter anymore..",
+      "revId": "f05d5d4a7b3a25f5df46e9d99a027a8a95c4b90a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_aac8e975",
+        "filename": "sc/source/ui/unoobj/styleuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-20T21:15:26Z",
+      "side": 1,
+      "message": "... instead of aPropertyNames[i]",
+      "range": {
+        "startLine": 1255,
+        "startChar": 44,
+        "endLine": 1255,
+        "endChar": 61
+      },
+      "revId": "f05d5d4a7b3a25f5df46e9d99a027a8a95c4b90a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
