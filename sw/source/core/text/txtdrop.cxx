@@ -934,7 +934,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
 bool SwDropPortion::Format( SwTextFormatInfo &rInf )
 {
     bool bFull = false;
-    Fix( (sal_uInt16)rInf.X() );
+    nFix = (sal_uInt16)rInf.X();
 
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
     aLayoutModeModifier.SetAuto();

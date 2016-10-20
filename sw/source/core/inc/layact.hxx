@@ -116,7 +116,6 @@ class SwLayAction
     bool RemoveEmptyBrowserPages();
 
     inline void CheckIdleEnd();
-    inline std::clock_t GetStartTicks() { return m_nStartTicks; }
 
 public:
     SwLayAction( SwRootFrame *pRt, SwViewShellImp *pImp );
@@ -130,7 +129,6 @@ public:
     bool IsWaitAllowed()        const       { return m_bWaitAllowed; }
     bool IsNextCycle()          const       { return m_bNextCycle; }
     bool IsInput()              const       { return m_bInput; }
-    bool IsWait()               const       { return nullptr != m_pWait;  }
     bool IsPaint()              const       { return m_bPaint; }
     bool IsIdle()               const       { return m_bIdle;  }
     bool IsReschedule()         const       { return m_bReschedule;  }

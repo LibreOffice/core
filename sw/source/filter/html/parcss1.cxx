@@ -84,11 +84,11 @@ sal_Unicode CSS1Parser::GetNextChar()
 
     if( c == '\n' )
     {
-        IncLineNr();
-        SetLinePos( 1L );
+        ++nlLineNr;
+        nlLinePos = 1;
     }
     else
-        IncLinePos();
+        ++nlLinePos;
 
     return c;
 }

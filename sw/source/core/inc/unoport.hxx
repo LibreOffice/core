@@ -236,9 +236,6 @@ class SwXTextPortionEnumeration
     TextRangeList_t m_Portions; // contains all portions, filled by ctor
     sw::UnoCursorPointer m_pUnoCursor;
 
-    SwUnoCursor& GetCursor() const
-        {return *m_pUnoCursor;}
-
 protected:
     virtual ~SwXTextPortionEnumeration() override;
 

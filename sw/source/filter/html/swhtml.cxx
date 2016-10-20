@@ -1055,7 +1055,7 @@ void SwHTMLParser::NextToken( int nToken )
             if( HTML_IFRAME_OFF == nToken )
             {
                 m_bCallNextToken = false;
-                EndFloatingFrame();
+                m_bInFloatingFrame = false;
             }
 
             return;

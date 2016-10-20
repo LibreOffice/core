@@ -1003,7 +1003,6 @@ public:
 
     SvxMSExportOLEObjects& GetOLEExp()      { return *m_pOLEExp; }
     SwMSConvertControls& GetOCXExp()        { return *m_pOCXExp; }
-    WW8OleMap& GetOLEMap()                  { return m_aOleMap; }
     void ExportDopTypography(WW8DopTypography &rTypo);
 
     sal_uInt16 AddRedlineAuthor( sal_uInt16 nId );

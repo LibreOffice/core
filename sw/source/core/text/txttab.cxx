@@ -384,11 +384,11 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
                 // tab stop position is outside the frame:
                 bool bAtParaEnd = rInf.GetIdx() + GetLen() == rInf.GetText().getLength();
                 if ( bFull && bTabCompat &&
-                     ( ( bTabOverflow && ( rInf.IsTabOverflow() || !IsAutoTabStop() ) ) || bAtParaEnd ) &&
+                     ( ( bTabOverflow && ( rInf.IsTabOverflow() || !bAutoTabStop ) ) || bAtParaEnd ) &&
                      GetTabPos() >= rInf.GetTextFrame()->Frame().Width() )
                 {
                     bFull = false;
-                    if ( bTabOverflow && !IsAutoTabStop() )
+                    if ( bTabOverflow && !bAutoTabStop )
                         rInf.SetTabOverflow( true );
                 }
 

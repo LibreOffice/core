@@ -58,8 +58,6 @@ public:
     WidowsAndOrphans( SwTextFrame *pFrame, const SwTwips nRst = 0,
         bool bCheckKeep = true );
     bool FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine );
-    sal_uInt16 GetWidowsLines() const
-    { return nWidLines; }
     sal_uInt16 GetOrphansLines() const
     { return nOrphLines; }
     void ClrOrphLines(){ nOrphLines = 0; }

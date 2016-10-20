@@ -205,10 +205,6 @@ class CSS1Parser
 
     bool IsEOF() const { return bEOF; }
 
-    void IncLineNr() { ++nlLineNr; }
-    sal_uInt32 IncLinePos() { return ++nlLinePos; }
-    inline void SetLinePos( sal_uInt32 nlPos ); // inline declaration below
-
     // parse parts of the grammar
     void ParseRule();
     CSS1Selector *ParseSelector();
@@ -258,11 +254,6 @@ public:
     CSS1Parser();
     virtual ~CSS1Parser();
 };
-
-inline void CSS1Parser::SetLinePos( sal_uInt32 nlPos )
-{
-    nlLinePos = nlPos;
-}
 
 #endif
 

@@ -145,12 +145,6 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
 SwNoTextFrame::SwNoTextFrame(SwNoTextNode * const pNode, SwFrame* pSib )
     : SwContentFrame( pNode, pSib )
 {
-    InitCtor();
-}
-
-/// Initialization: Currently add the Frame to the Cache
-void SwNoTextFrame::InitCtor()
-{
     mnFrameType = SwFrameType::NoTxt;
 }
 

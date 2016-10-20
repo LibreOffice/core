@@ -828,7 +828,7 @@ void SwPageFrame::Cut()
     {
         while ( pPg )
         {
-            pPg->DecrPhyPageNum();  //inline --nPhyPageNum
+            --pPg->m_nPhyPageNum;
             pPg = static_cast<SwPageFrame*>(pPg->GetNext());
         }
     }
@@ -867,7 +867,7 @@ void SwPageFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
     {
         while ( pPg )
         {
-            pPg->IncrPhyPageNum();  //inline ++nPhyPageNum
+            ++pPg->m_nPhyPageNum;
             pPg->InvalidatePos_();
             pPg->InvalidateLayout();
             pPg = static_cast<SwPageFrame*>(pPg->GetNext());

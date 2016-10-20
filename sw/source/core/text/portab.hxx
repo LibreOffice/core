@@ -37,7 +37,6 @@ public:
     bool PostFormat( SwTextFormatInfo &rInf );
     inline  bool IsFilled() const { return 0 != cFill; }
     inline  sal_uInt16 GetTabPos() const { return nTabPos; }
-    inline  bool IsAutoTabStop() const { return bAutoTabStop; }
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
