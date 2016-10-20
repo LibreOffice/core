@@ -318,6 +318,12 @@ OUString AboutDialog::GetVersionString()
     sVersion += "; " + aCalcMode;
 #endif
 
+    sVersion += "; LayoutEngine: ";
+    if (std::getenv("SAL_USE_COMMON_LAYOUT") != nullptr)
+        sVersion += "new";
+    else
+        sVersion += "old";
+
     return sVersion;
 }
 
