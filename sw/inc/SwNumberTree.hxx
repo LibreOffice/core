@@ -578,11 +578,6 @@ protected:
     SwNumberTreeNode * CreatePhantom();
 
     /**
-       Set if this node is a phantom.
-     */
-    void SetPhantom();
-
-    /**
        Return if phantoms are counted.
      */
     virtual bool IsCountPhantoms() const = 0;

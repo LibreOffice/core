@@ -576,8 +576,6 @@ public:
 
     void SetCursorAtTop( bool bFlag, bool bCenter = false )
         { m_bTopCursor = bFlag; m_bCenterCursor = bCenter; }
-    bool IsCursorAtTop() const                    { return m_bTopCursor; }
-    bool IsCursorAtCenter() const                 { return m_bCenterCursor; }
 
     bool JumpToSwMark( const OUString& rMark );
 

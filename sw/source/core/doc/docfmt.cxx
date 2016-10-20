@@ -2073,7 +2073,7 @@ void SwFrameFormats::DeleteAndDestroyAll( bool keepDefault )
     if ( _offset )
         m_PosIndex.erase( begin() + _offset, end() );
     else
-        clear();
+        m_Array.clear();
 }
 
 std::pair<SwFrameFormats::const_iterator,bool> SwFrameFormats::push_back( const value_type& x )

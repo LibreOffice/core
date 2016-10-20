@@ -52,16 +52,13 @@ public:
         SwDateTimeField(SwDateTimeFieldType* pType, sal_uInt16 nSubType = DATEFLD,
                     sal_uLong nFormat = 0, sal_uInt16 nLng = 0);
 
-        virtual sal_uInt16          GetSubType() const override;
+        virtual sal_uInt16      GetSubType() const override;
         virtual void            SetSubType(sal_uInt16 nSub) override;
 
         virtual double          GetValue() const override;
 
         virtual void            SetPar2(const OUString& rStr) override;
-        virtual OUString   GetPar2() const override;
-
-        inline bool             IsDate() const
-                                { return (nSubType & DATEFLD) != 0; }
+        virtual OUString        GetPar2() const override;
 
         inline void             SetOffset(long nMinutes)    { nOffset = nMinutes; }
         inline long             GetOffset() const           { return nOffset; }

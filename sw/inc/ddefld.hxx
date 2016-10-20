@@ -64,7 +64,6 @@ public:
     bool IsDeleted() const          { return bDeleted; }
     void SetDeleted( bool b )       { bDeleted = b; }
 
-    void UpdateNow()                { refLink->Update(); }
     void Disconnect()               { refLink->Disconnect(); }
 
     const ::sfx2::SvBaseLink& GetBaseLink() const    { return *refLink; }

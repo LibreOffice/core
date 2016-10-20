@@ -141,7 +141,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool b
             Color aOldLineColor( pOut->GetLineColor() );
         pOut->SetLineColor( Color(COL_GRAY ) );
         // to make it look nice, we subtract two pixels everywhere
-        sal_uInt16 nPix = GetPixelTwips() * 2;
+        sal_uInt16 nPix = m_nPixelTwips * 2;
         if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )
             nPix = 0;
         const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );

@@ -69,9 +69,6 @@ class SW_DLLPUBLIC SwHHCWrapper : public editeng::HangulHanjaConversion
                             SwPaM *pCursor );
     void        ChangeText_impl( const OUString &rNewText, bool bKeepAttributes );
 
-    inline bool IsDrawObj()             { return m_bIsDrawObj; }
-    inline void SetDrawObj( bool bNew ) { m_bIsDrawObj = bNew; }
-
 protected:
     virtual void    GetNextPortion( OUString& rNextPortion,
                             LanguageType& rLangOfPortion,

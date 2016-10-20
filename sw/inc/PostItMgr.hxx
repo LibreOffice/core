@@ -212,7 +212,6 @@ class SwPostItMgr: public SfxListener
         bool IsShowAnchor() { return mbIsShowAnchor;}
         unsigned long GetSidebarWidth(bool bPx = false) const;
         unsigned long GetSidebarBorderWidth(bool bPx = false) const;
-        unsigned long GetNoteWidth();
 
         void PrepareView(bool bIgnoreCount = false);
 

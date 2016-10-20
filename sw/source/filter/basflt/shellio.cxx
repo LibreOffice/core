@@ -173,7 +173,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
-        nError = po->Read( *pDoc, GetBaseURL(), *pPam, aFileName );
+        nError = po->Read( *pDoc, sBaseURL, *pPam, aFileName );
 
         // an ODF document may contain redline mode in settings.xml; save it!
         ePostReadRedlineFlags = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();

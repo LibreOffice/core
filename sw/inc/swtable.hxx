@@ -115,8 +115,6 @@ protected:
     bool m_bDontChangeModel;
 #endif
 
-    bool IsModifyLocked(){ return m_bModifyLocked;}
-
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:

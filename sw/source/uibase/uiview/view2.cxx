@@ -1927,8 +1927,8 @@ bool SwView::JumpToSwMark( const OUString& rMark )
     if( !rMark.isEmpty() )
     {
         // place bookmark at top-center
-        bool bSaveCC = IsCursorAtCenter();
-        bool bSaveCT = IsCursorAtTop();
+        bool bSaveCC = m_bCenterCursor;
+        bool bSaveCT = m_bTopCursor;
         SetCursorAtTop( true );
 
         // For scrolling the FrameSet, the corresponding shell needs to have the focus.

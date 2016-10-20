@@ -367,7 +367,7 @@ void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     else
         CheckRegistration( pOld, pNew );
 
-    if (pOldSize && pNewSize && !IsModifyLocked())
+    if (pOldSize && pNewSize && !m_bModifyLocked)
         AdjustWidths( pOldSize->GetWidth(), pNewSize->GetWidth() );
 }
 

@@ -100,7 +100,6 @@ public:
     virtual void                SetValue( const double& rVal ) override;
     virtual void                SetLanguage(sal_uInt16 nLng) override;
 
-    inline const OUString&      GetExpStr() const;
     inline void                 ChgExpStr(const OUString& rExpand);
 
     /// Called by formatting.
@@ -131,9 +130,6 @@ public:
 
 inline void SwGetExpField::ChgExpStr(const OUString& rExpand)
     { sExpand = rExpand;}
-
-inline const OUString& SwGetExpField::GetExpStr() const
-    { return sExpand;   }
 
  /// Called by formatting.
 inline bool SwGetExpField::IsInBodyText() const
@@ -406,7 +402,6 @@ public:
     virtual sal_uInt16  GetSubType() const override;
     virtual void        SetSubType(sal_uInt16 nType) override;
 
-    const OUString&     GetExpStr() const               { return sExpand; }
     void                ChgExpStr(const OUString& rStr) { sExpand = rStr; }
 
     void                CalcField( SwTableCalcPara& rCalcPara );

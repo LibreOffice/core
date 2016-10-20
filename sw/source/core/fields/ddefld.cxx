@@ -304,7 +304,7 @@ void SwDDEFieldType::RefCntChgd()
         refLink->SetVisible( pDoc->getIDocumentLinksAdministration().IsVisibleLinks() );
         pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( refLink.get() );
         if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
-            UpdateNow();
+            refLink->Update();
     }
     else
     {
