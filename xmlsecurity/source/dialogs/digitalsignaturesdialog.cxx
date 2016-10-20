@@ -244,8 +244,12 @@ void DigitalSignaturesDialog::SetSignatureStream( const css::uno::Reference < cs
 
 bool DigitalSignaturesDialog::canAddRemove()
 {
-    //m56
     bool ret = true;
+
+    if (!maSignatureManager.mxStore.is())
+        // It's always possible to append a PDF signature.
+        return ret;
+
     OSL_ASSERT(maSignatureManager.mxStore.is());
     bool bDoc1_1 = DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
     SaveODFItem item;
@@ -357,7 +361,11 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
                 return;
             mbSignaturesChanged = true;
 
-            sal_Int32 nStatus = maSignatureManager.maSignatureHelper.GetSignatureInformation( nSecurityId ).nStatus;
+            sal_Int32 nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+
+            if (maSignatureManager.mxStore.is())
+                // In the PDF case the signature information is only available after parsing.
+                nStatus = maSignatureManager.maSignatureHelper.GetSignatureInformation( nSecurityId ).nStatus;
 
             if ( nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
             {
