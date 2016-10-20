@@ -23,6 +23,8 @@
 #include <tools/link.hxx>
 #include <vcl/scheduler.hxx>
 
+class Idle;
+
 class VCL_DLLPUBLIC Timer : public Scheduler
 {
 protected:
@@ -68,6 +70,21 @@ public:
 inline void Timer::SetTimeoutHdl( const Link<Timer *, void>& rLink )
 {
     SetInvokeHandler( rLink );
+}
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Timer& timer )
+{
+    stream << (dynamic_cast<const Idle*>( &timer ) ? "Idle " : "Timer")
+           << " " << timer.IsActive() << " " << (int) timer.GetPriority()
+           << " " << timer.GetTimeout();
+
+    const sal_Char *name = timer.GetDebugName();
+    if( nullptr == name )
+        stream << " (nullptr)";
+    else
+        stream << " " << name;
 }
 
 /// An auto-timer is a multi-shot timer re-emitting itself at

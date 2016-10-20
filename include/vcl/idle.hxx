@@ -60,6 +60,13 @@ inline void Idle::SetIdleHdl( const Link<Idle*, void> &rLink )
         reinterpret_cast< Link<Timer*, void>::Stub* >( rLink.GetFunction()) ) );
 }
 
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Idle& idle )
+{
+    stream << static_cast<const Timer*>( &idle );
+}
+
 /**
  * An auto-idle is long running task processing small chunks of data, which
  * is re-scheduled multiple times.

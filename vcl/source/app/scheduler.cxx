@@ -185,13 +185,12 @@ bool Scheduler::ProcessTaskScheduling( IdleRunPolicy eIdleRunPolicy )
 
     while ( pSchedulerData )
     {
-#if OSL_DEBUG_LEVEL > 0
         const Timer *timer = dynamic_cast<Timer*>( pSchedulerData->mpScheduler );
         if ( timer )
-            SAL_INFO( "vcl.schedule", (dynamic_cast<const Idle*>( timer ) ? "Idle " : "Timer")
-                      << " " << (int) timer->GetPriority() << " " << pSchedulerData->mbInScheduler
-                      << " " << timer->GetTimeout() << " " << timer->GetDebugName() );
-#endif
+            SAL_INFO( "vcl.schedule", pSchedulerData->mbInScheduler << " " << timer );
+        else if ( pSchedulerData->mpScheduler )
+            SAL_INFO( "vcl.schedule", pSchedulerData->mbInScheduler << " " << pSchedulerData->mpScheduler );
+
         // Skip invoked task
         if ( pSchedulerData->mbInScheduler )
         {
@@ -202,6 +201,7 @@ bool Scheduler::ProcessTaskScheduling( IdleRunPolicy eIdleRunPolicy )
         // Can this task be removed from scheduling?
         if ( !pSchedulerData->mpScheduler )
         {
+            SAL_INFO( "vcl.schedule", pSchedulerData->mbInScheduler << " (deleted)" );
             ImplSchedulerData* pNextSchedulerData = pSchedulerData->mpNext;
             if ( pPrevSchedulerData )
                 pPrevSchedulerData->mpNext = pNextSchedulerData;
@@ -247,11 +247,12 @@ next_entry:
         assert( !pPrevMostUrgent || (pPrevMostUrgent->mpNext == pMostUrgent) );
 
         Scheduler *pTempScheduler = pMostUrgent->mpScheduler;
-        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " " << pMostUrgent << "  invoke     "
-                   << (int) pTempScheduler->mePriority << " " << pTempScheduler->mpDebugName );
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+             << " " << (void*) pMostUrgent << "  invoke     "
+             << (int) pTempScheduler->mePriority << " " << pTempScheduler );
         pMostUrgent->Invoke();
         SAL_INFO_IF( !pMostUrgent->mpScheduler, "vcl.schedule", tools::Time::GetSystemTicks()
-                     << " " << pMostUrgent <<  "  tag-rm     " );
+                     << " " << (void*) pMostUrgent <<  "  tag-rm" );
 
         // If there were some tasks removed, our list pointers may be invalid,
         // except pMostUrgent, which is protected by mbInScheduler
@@ -351,8 +352,9 @@ void Scheduler::Start()
         }
         else
             pSVData->mpFirstSchedulerData = mpSchedulerData;
-        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " " << mpSchedulerData
-             <<  "  added      " << (int) mePriority << " " << mpDebugName );
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+             << " " << (void*) mpSchedulerData
+             <<  "  added      " << mpSchedulerData );
     }
 
     assert( mpSchedulerData->mpScheduler == this );
@@ -366,8 +368,8 @@ void Scheduler::Stop()
         return;
     ImplSchedulerData *pData = mpSchedulerData;
     Scheduler::SetDeletionFlags();
-    SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " " << pData
-          << "  stopped    " << (int) mePriority << " " << mpDebugName );
+    SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+          << " " << (void*) pData << "  stopped    " << pData );
     assert( !mpSchedulerData );
 }
 
