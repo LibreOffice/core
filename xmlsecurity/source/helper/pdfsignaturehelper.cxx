@@ -131,7 +131,7 @@ bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStre
         return false;
     }
 
-    if (!aDocument.Sign(m_xCertificate))
+    if (!aDocument.Sign(m_xCertificate, m_aDescription))
     {
         SAL_WARN("xmlsecurity.helper", "failed to sign");
         return false;

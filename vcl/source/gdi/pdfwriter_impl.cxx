@@ -663,7 +663,7 @@ static void appendDestinationName( const OUString& rString, OStringBuffer& rBuff
 }
 //<--- i56629
 
-static void appendUnicodeTextString( const OUString& rString, OStringBuffer& rBuffer )
+void PDFWriter::AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer)
 {
     rBuffer.append( "FEFF" );
     const sal_Unicode* pStr = rString.getStr();
@@ -1872,17 +1872,17 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     OString aInfoValuesOut;
     OStringBuffer aID( 1024 );
     if( !i_rDocInfo.Title.isEmpty() )
-        appendUnicodeTextString( i_rDocInfo.Title, aID );
+        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Title, aID);
     if( !i_rDocInfo.Author.isEmpty() )
-        appendUnicodeTextString( i_rDocInfo.Author, aID );
+        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Author, aID);
     if( !i_rDocInfo.Subject.isEmpty() )
-        appendUnicodeTextString( i_rDocInfo.Subject, aID );
+        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Subject, aID);
     if( !i_rDocInfo.Keywords.isEmpty() )
-        appendUnicodeTextString( i_rDocInfo.Keywords, aID );
+        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Keywords, aID);
     if( !i_rDocInfo.Creator.isEmpty() )
-        appendUnicodeTextString( i_rDocInfo.Creator, aID );
+        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Creator, aID);
     if( !i_rDocInfo.Producer.isEmpty() )
-        appendUnicodeTextString( i_rDocInfo.Producer, aID );
+        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Producer, aID);
 
     TimeValue aTVal, aGMT;
     oslDateTime aDT;
@@ -2025,7 +2025,7 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
         }
     }
     else
-        appendUnicodeTextString( rInString, rOutBuffer );
+        PDFWriter::AppendUnicodeTextString(rInString, rOutBuffer);
     rOutBuffer.append( ">" );
 }
 
