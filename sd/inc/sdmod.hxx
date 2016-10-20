@@ -43,6 +43,7 @@ class SvNumberFormatter;
 class SfxErrorHandler;
 class SdDrawDocument;
 class SfxFrame;
+namespace svtools { class ColorConfig; }
 
 namespace sd {
 class DrawDocShell;
@@ -129,6 +130,8 @@ public:
     SdExtPropertySetInfoCache gImplDrawPropertySetInfoCache;
     SdTypesCache gImplTypesCache;
 
+    svtools::ColorConfig& GetColorConfig();
+
 protected:
 
     SdOptions*              pImpressOptions;
@@ -176,6 +179,7 @@ private:
     */
     DECL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent&, void );
 
+    std::unique_ptr<svtools::ColorConfig> mpColorConfig;
 };
 
 #define SD_MOD() ( static_cast<SdModule*>(SfxApplication::GetModule(SfxToolsModule::Draw)) )

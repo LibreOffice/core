@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <unotools/caserotate.hxx>
+#include <unotools/options.hxx>
 
 class Outliner;
 class SdPage;
@@ -65,7 +66,8 @@ class ViewOverlayManager;
 */
 class DrawViewShell
     : public ViewShell,
-      public SfxListener
+      public SfxListener,
+      public utl::ConfigurationListener
 {
 public:
     SFX_DECL_INTERFACE(SD_IF_SDDRAWVIEWSHELL)
@@ -361,8 +363,6 @@ public:
 
     OUString GetSidebarContextName() const;
 
-    const Color& GetAppBackgroundColor() const { return mnAppBackgroundColor; }
-    void SetAppBackgroundColor( Color nNewColor )  { mnAppBackgroundColor = nNewColor; }
     bool IsInSwitchPage() { return mbIsInSwitchPage; }
 
     //move this method to ViewShell.
@@ -488,6 +488,10 @@ private:
     ::std::unique_ptr< ViewOverlayManager > mpViewOverlayManager;
 
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
+
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, sal_uInt32 ) override;
+
+    void ConfigureAppBackgroundColor( svtools::ColorConfig* pColorConfig = nullptr );
 
     // The colour of the area behind the slide (used to be called "Wiese")
     Color mnAppBackgroundColor;
