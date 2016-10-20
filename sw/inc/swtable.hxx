@@ -62,10 +62,39 @@ class SwServerObject;
 
 void sw_GetTableBoxColStr( sal_uInt16 nCol, OUString& rNm );
 
-class SwTableLines : public std::vector<SwTableLine*> {
+class SwTableLines
+{
+    std::vector<SwTableLine*> m_vLines;
+
 public:
+    typedef std::vector<SwTableLine*>::size_type size_type;
+    typedef std::vector<SwTableLine*>::iterator iterator;
+    typedef std::vector<SwTableLine*>::const_iterator const_iterator;
+
     // free's any remaining child objects
     ~SwTableLines();
+
+    bool empty() const { return m_vLines.empty(); }
+    size_type size() const { return m_vLines.size(); }
+    iterator begin() { return m_vLines.begin(); }
+    const_iterator begin() const { return m_vLines.begin(); }
+    iterator end() { return m_vLines.end(); }
+    const_iterator end() const { return m_vLines.end(); }
+    SwTableLine* front() const { return m_vLines.front(); }
+    SwTableLine* back() const { return m_vLines.back(); }
+    void clear() { m_vLines.clear(); }
+    iterator erase( iterator aIt ) { return m_vLines.erase( aIt ); }
+    iterator erase( iterator aFirst, iterator aLast ) { return m_vLines.erase( aFirst, aLast ); }
+    iterator insert( iterator aIt, SwTableLine* pLine ) { return m_vLines.insert( aIt, pLine ); }
+    template<typename TInputIterator>
+    void insert( iterator aIt, TInputIterator aFirst, TInputIterator aLast )
+    {
+        m_vLines.insert( aIt, aFirst, aLast );
+    }
+    void push_back( SwTableLine* pLine ) { m_vLines.push_back( pLine ); }
+    void reserve( size_type nSize ) { m_vLines.reserve( nSize ); }
+    SwTableLine*& operator[]( size_type nPos ) { return m_vLines[ nPos ]; }
+    SwTableLine* operator[]( size_type nPos ) const { return m_vLines[ nPos ]; }
 
     // return USHRT_MAX if not found, else index of position
     sal_uInt16 GetPos(const SwTableLine* pBox) const
