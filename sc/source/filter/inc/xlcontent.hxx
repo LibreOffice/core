@@ -39,8 +39,6 @@ const sal_uInt16 EXC_ID_FILEPASS            = 0x002F;
 
 const sal_uInt16 EXC_FILEPASS_BIFF5         = 0x0000;
 const sal_uInt16 EXC_FILEPASS_BIFF8         = 0x0001;
-const sal_uInt16 EXC_FILEPASS_BIFF8_STD     = 0x0001;
-const sal_uInt16 EXC_FILEPASS_BIFF8_STRONG  = 0x0002;
 
 // (0x00FC, 0x00FF) SST, EXTSST -----------------------------------------------
 

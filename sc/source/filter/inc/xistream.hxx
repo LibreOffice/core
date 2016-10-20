@@ -119,16 +119,7 @@ private:
 /** Decrypts BIFF8 stream contents using the given document identifier. */
 class XclImpBiff8Decrypter : public XclImpDecrypter
 {
-public:
-    explicit            XclImpBiff8Decrypter( sal_uInt8 pnSalt[ 16 ],
-                            sal_uInt8 pnVerifier[ 16 ], sal_uInt8 pnVerifierHash[ 16 ] );
-
 private:
-    /** Private copy c'tor for OnClone(). */
-    explicit            XclImpBiff8Decrypter( const XclImpBiff8Decrypter& rSrc );
-
-    /** Implementation of cloning this object. */
-    virtual XclImpBiff8Decrypter* OnClone() const override;
     /** Implements password verification and initialization of the decoder. */
     virtual css::uno::Sequence< css::beans::NamedValue >
         OnVerifyPassword( const OUString& rPassword ) override;
@@ -143,12 +134,62 @@ private:
     /** Returns the block offset corresponding to the passed stream position. */
     static sal_uInt16    GetOffset( sal_Size nStrmPos );
 
+protected:
+    explicit  XclImpBiff8Decrypter(const std::vector<sal_uInt8>& rSalt,
+                                   const std::vector<sal_uInt8>& rVerifier,
+                                   const std::vector<sal_uInt8>& rVerifierHash);
+
+    explicit  XclImpBiff8Decrypter(const XclImpBiff8Decrypter& rSrc);
+
+    css::uno::Sequence< css::beans::NamedValue > maEncryptionData;
+    std::vector< sal_uInt8 > maSalt;
+    std::vector< sal_uInt8 > maVerifier;
+    std::vector< sal_uInt8 > maVerifierHash;
+    msfilter::MSCodec97* mpCodec;       /// Crypto algorithm implementation.
+};
+
+class XclImpBiff8StdDecrypter : public XclImpBiff8Decrypter
+{
+public:
+    explicit XclImpBiff8StdDecrypter(const std::vector<sal_uInt8>& rSalt,
+                                     const std::vector<sal_uInt8>& rVerifier,
+                                     const std::vector<sal_uInt8>& rVerifierHash)
+        : XclImpBiff8Decrypter(rSalt, rVerifier, rVerifierHash)
+    {
+        mpCodec = &maCodec;
+    }
+
+private:
+    /** Private copy c'tor for OnClone(). */
+    explicit XclImpBiff8StdDecrypter(const XclImpBiff8StdDecrypter& rSrc);
+
+    /** Implementation of cloning this object. */
+    virtual XclImpBiff8StdDecrypter* OnClone() const override;
+
 private:
     ::msfilter::MSCodec_Std97 maCodec;       /// Crypto algorithm implementation.
-    css::uno::Sequence< css::beans::NamedValue > maEncryptionData;
-    ::std::vector< sal_uInt8 > maSalt;
-    ::std::vector< sal_uInt8 > maVerifier;
-    ::std::vector< sal_uInt8 > maVerifierHash;
+};
+
+class XclImpBiff8CryptoAPIDecrypter : public XclImpBiff8Decrypter
+{
+public:
+    explicit XclImpBiff8CryptoAPIDecrypter(const std::vector<sal_uInt8>& rSalt,
+                                           const std::vector<sal_uInt8>& rVerifier,
+                                           const std::vector<sal_uInt8>& rVerifierHash)
+        : XclImpBiff8Decrypter(rSalt, rVerifier, rVerifierHash)
+    {
+        mpCodec = &maCodec;
+    }
+
+private:
+    /** Private copy c'tor for OnClone(). */
+    explicit XclImpBiff8CryptoAPIDecrypter(const XclImpBiff8CryptoAPIDecrypter& rSrc);
+
+    /** Implementation of cloning this object. */
+    virtual XclImpBiff8CryptoAPIDecrypter* OnClone() const override;
+
+private:
+    ::msfilter::MSCodec_CryptoAPI maCodec;       /// Crypto algorithm implementation.
 };
 
 // Stream
