@@ -51,6 +51,8 @@ bool PDFSignatureHelper::ReadAndVerifySignature(const uno::Reference<io::XInputS
     if (aSignatures.empty())
         return true;
 
+    m_aSignatureInfos.clear();
+
     for (size_t i = 0; i < aSignatures.size(); ++i)
     {
         SignatureInformation aInfo(i);
@@ -102,6 +104,48 @@ uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDoc
     }
 
     return aRet;
+}
+
+sal_Int32 PDFSignatureHelper::GetNewSecurityId() const
+{
+    return m_aSignatureInfos.size();
+}
+
+void PDFSignatureHelper::SetX509Certificate(const uno::Reference<security::XCertificate>& xCertificate)
+{
+    m_xCertificate = xCertificate;
+}
+
+void PDFSignatureHelper::SetDescription(const OUString& rDescription)
+{
+    m_aDescription = rDescription;
+}
+
+bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStream)
+{
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    xmlsecurity::pdfio::PDFDocument aDocument;
+    if (!aDocument.Read(*pStream))
+    {
+        SAL_WARN("xmlsecurity.helper", "failed to read the document");
+        return false;
+    }
+
+    if (!aDocument.Sign(m_xCertificate))
+    {
+        SAL_WARN("xmlsecurity.helper", "failed to sign");
+        return false;
+    }
+
+    uno::Reference<io::XStream> xStream(xInputStream, uno::UNO_QUERY);
+    std::unique_ptr<SvStream> pOutStream(utl::UcbStreamHelper::CreateStream(xStream, true));
+    if (!aDocument.Write(*pOutStream))
+    {
+        SAL_WARN("xmlsecurity.helper", "failed to write signed data");
+        return false;
+    }
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

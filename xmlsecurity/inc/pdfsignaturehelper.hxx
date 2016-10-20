@@ -29,11 +29,23 @@ class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> m_xSecurityContext;
     SignatureInformations m_aSignatureInfos;
 
+    css::uno::Reference<css::security::XCertificate> m_xCertificate;
+    OUString m_aDescription;
+
 public:
     PDFSignatureHelper(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext);
     bool ReadAndVerifySignature(const css::uno::Reference<css::io::XInputStream>& xInputStream);
     css::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformations() const;
     SignatureInformations GetSignatureInformations() const;
+
+    /// Return the ID of the next created signature.
+    sal_Int32 GetNewSecurityId() const;
+    /// Certificate to be used next time signing is performed.
+    void SetX509Certificate(const css::uno::Reference<css::security::XCertificate>& xCertificate);
+    /// Comment / reason to be used next time signing is performed.
+    void SetDescription(const OUString& rDescription);
+    /// Append a new signature at the end of xInputStream.
+    bool Sign(const css::uno::Reference<css::io::XInputStream>& xInputStream);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_PDFSIGNATUREHELPER_HXX
