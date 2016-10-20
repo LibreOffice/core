@@ -947,6 +947,8 @@
 #define SID_ATTR_SPECIALCHAR                            ( SID_SVX_START + 1120 )
 #define SID_ROTATE_GRAPHIC_LEFT                         ( SID_SVX_START + 1121 )
 #define SID_ROTATE_GRAPHIC_RIGHT                        ( SID_SVX_START + 1122 )
+#define SID_ROTATE_GRAPHIC_180                          ( SID_SVX_START + 1123 )
+
 
 // new slots for panels
 #define SID_ATTR_FILL_TRANSPARENCE                      ( SID_SVX_START + 1124 )
