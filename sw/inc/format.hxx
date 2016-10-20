@@ -155,9 +155,6 @@ public:
         MapUnit eCoreMetric, MapUnit ePresMetric, OUString &rText ) const
         { m_aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, rText ); }
 
-    /// Format-ID for reading/writing:
-    void   ResetWritten()    { m_bWritten = false; }
-
     /// Query / set AutoFormat-flag.
     bool IsAuto() const                 { return m_bAutoFormat; }
     void SetAuto( bool bNew )           { m_bAutoFormat = bNew; }

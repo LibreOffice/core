@@ -372,7 +372,7 @@ bool SwAuthorField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
 
     case FIELD_PROP_PAR1:
-        rAny <<= GetContent();
+        rAny <<= aContent;
         break;
 
     default:
@@ -522,7 +522,7 @@ bool SwFileNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
 
     case FIELD_PROP_PAR3:
-        rAny <<= GetContent();
+        rAny <<= aContent;
         break;
 
     default:

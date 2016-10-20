@@ -673,7 +673,7 @@ void SwPostItMgr::LayoutPostIts()
                                         + pPostIt->GetMetaHeight();
                         pPostIt->SetPosSizePixelRect( mlPageBorder ,
                                                       Y - GetInitialAnchorDistance(),
-                                                      GetNoteWidth() ,
+                                                      GetSidebarWidth(true),
                                                       aPostItHeight,
                                                       pItem->maLayoutInfo.mPosition,
                                                       mlPageEnd );
@@ -1888,11 +1888,6 @@ unsigned long SwPostItMgr::GetSidebarBorderWidth(bool bPx) const
         return 2;
     else
         return mpWrtShell->GetOut()->PixelToLogic(Size(2,0)).Width();
-}
-
-unsigned long SwPostItMgr::GetNoteWidth()
-{
-    return GetSidebarWidth(true);
 }
 
 Color SwPostItMgr::GetColorDark(sal_uInt16 aAuthorIndex)

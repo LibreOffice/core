@@ -165,7 +165,7 @@ bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         rVal <<= IsFixed();
         break;
     case FIELD_PROP_BOOL2:
-        rVal <<= IsDate();
+        rVal <<= (nSubType & DATEFLD) != 0;
         break;
     case FIELD_PROP_FORMAT:
         rVal <<= (sal_Int32)GetFormat();

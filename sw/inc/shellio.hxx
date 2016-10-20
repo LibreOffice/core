@@ -167,8 +167,6 @@ public:
     bool HasGlossaries( const Reader& );
     bool ReadGlossaries( const Reader&, SwTextBlocks&, bool bSaveRelFiles );
 
-    const OUString&     GetBaseURL() const { return sBaseURL;}
-
 protected:
     void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
     void                SetSkipImages( bool bSkipImages ) { mbSkipImages = bSkipImages; }

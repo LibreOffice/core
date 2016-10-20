@@ -198,8 +198,6 @@ public:
 
     static void Init( vcl::Window *pWin );        // Initializing of static data.
 
-    static sal_uInt16 GetPixelTwips() { return m_nPixelTwips; }
-
     inline ViewOptFlags1   GetCoreOptions() const {return m_nCoreOptions;}
     inline void     SetUIOptions( const SwViewOption& );
 

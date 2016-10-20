@@ -473,7 +473,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
 {
     m_nPass1Done++;
 
-    ClearPass1Info();
+    m_nMin = m_nMax = 0; // clear pass1 info
 
     bool bFixRelWidths = false;
     sal_uInt16 i;

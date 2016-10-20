@@ -42,8 +42,6 @@ public:
     /// "Pure virtual methods" of SfxPoolItem.
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16          GetValueCount() const override;
-
-    SwFillOrder GetFillOrder() const { return SwFillOrder(GetValue()); }
 };
 
 inline SwFormatFillOrder &SwFormatFillOrder::operator=( const SwFormatFillOrder &rCpy )
