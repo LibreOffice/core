@@ -32,8 +32,6 @@ class SwNoTextFrame: public SwContentFrame
 
     const Size& GetSize() const;
 
-    void InitCtor();
-
     void Format ( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     void PaintPicture( vcl::RenderContext*, const SwRect& ) const;
 

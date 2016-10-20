@@ -85,8 +85,8 @@
 void SwLayAction::CheckWaitCursor()
 {
     RESCHEDULE
-    if ( !IsWait() && IsWaitAllowed() && IsPaint() &&
-         ((std::clock() - GetStartTicks()) * 1000 / CLOCKS_PER_SEC >= CLOCKS_PER_SEC/2) )
+    if ( !m_pWait && IsWaitAllowed() && IsPaint() &&
+         ((std::clock() - m_nStartTicks) * 1000 / CLOCKS_PER_SEC >= CLOCKS_PER_SEC/2) )
     {
         m_pWait = new SwWait( *m_pRoot->GetFormat()->GetDoc()->GetDocShell(), true );
     }

@@ -72,7 +72,6 @@ class SwDropPortion : public SwTextPortion
     bool FormatText( SwTextFormatInfo &rInf );
     void PaintText( const SwTextPaintInfo &rInf ) const;
 
-    inline void Fix( const sal_uInt16 nNew ) { nFix = nNew; }
 public:
     SwDropPortion( const sal_uInt16 nLineCnt,
                    const sal_uInt16 nDropHeight,

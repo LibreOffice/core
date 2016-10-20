@@ -191,11 +191,11 @@ void SwFrame::SetRightLeftMargins( long nRight, long nLeft)
 /// checks the layout direction and invalidates the lower frames recursively, if necessary.
 void SwFrame::CheckDirChange()
 {
-    bool bOldVert = GetVerticalFlag();
+    bool bOldVert = mbVertical;
     bool bOldRev = IsReverse();
-    bool bOldR2L = GetRightToLeftFlag();
+    bool bOldR2L = mbRightToLeft;
     SetInvalidVert( true );
-    SetInvalidR2L( true );
+    mbInvalidR2L = true;
     bool bChg = bOldR2L != IsRightToLeft();
     bool bOldVertL2R = IsVertLR();
     if( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev || bOldVertL2R != IsVertLR() )

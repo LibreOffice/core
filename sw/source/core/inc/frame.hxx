@@ -438,14 +438,11 @@ public:
     inline bool IsVertical() const;
 
     inline bool IsVertLR() const;
-    inline bool GetVerticalFlag() const { return mbVertical; }
 
     inline void SetDerivedVert( bool bNew ){ mbDerivedVert = bNew; }
     inline void SetInvalidVert( bool bNew) { mbInvalidVert = bNew; }
     inline bool IsRightToLeft() const;
-    inline bool GetRightToLeftFlag() const { return mbRightToLeft; }
     inline void SetDerivedR2L( bool bNew ) { mbDerivedR2L  = bNew; }
-    inline void SetInvalidR2L( bool bNew ) { mbInvalidR2L  = bNew; }
 
     void CheckDirChange();
     // returns upper left frame position for LTR and
