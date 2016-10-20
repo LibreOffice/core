@@ -418,6 +418,13 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
         pTextLayout = pNewScriptRun.get();
     }
 
+    hb_buffer_t* pHbBuffer = hb_buffer_create();
+    hb_buffer_pre_allocate(pHbBuffer, nGlyphCapacity);
+#if !HB_VERSION_ATLEAST(1, 1, 0)
+    static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
+    hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
+#endif
+
     Point aCurrPos(0, 0);
     while (true)
     {
@@ -457,6 +464,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
         for (const auto& aScriptRun : aScriptSubRuns)
         {
+            hb_buffer_clear_contents(pHbBuffer);
+
             int nMinRunPos = aScriptRun.mnMin;
             int nEndRunPos = aScriptRun.mnEnd;
             int nRunLen = nEndRunPos - nMinRunPos;
@@ -479,11 +488,6 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             if (nEndRunPos == nLength)
                 nHbFlags |= HB_BUFFER_FLAG_EOT; /* End-of-text */
 
-            hb_buffer_t *pHbBuffer = hb_buffer_create();
-#if !HB_VERSION_ATLEAST(1, 1, 0)
-            static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
-            hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
-#endif
             if (bVertical)
                 hb_buffer_set_direction(pHbBuffer, HB_DIRECTION_TTB);
             else
@@ -592,10 +596,10 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
                 aCurrPos.X() += nAdvance;
             }
-
-            hb_buffer_destroy(pHbBuffer);
         }
     }
+
+    hb_buffer_destroy(pHbBuffer);
 
     // sort glyphs in visual order
     // and then in logical order (e.g. diacritics after cluster start)
