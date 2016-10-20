@@ -255,11 +255,6 @@ void SwTOXMgr::PrevTOXMark(bool bSame)
     }
 }
 
-// insert keyword index
-const SwTOXBase* SwTOXMgr::GetCurTOX()
-{
-    return pSh->GetCurTOX();
-}
 const SwTOXType* SwTOXMgr::GetTOXType(TOXTypes eTyp) const
 {
     return pSh->GetTOXType(eTyp, 0);
@@ -276,7 +271,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 {
     SwWait aWait( *pSh->GetView().GetDocShell(), true );
     bool bRet = true;
-    const SwTOXBase* pCurTOX = ppBase && *ppBase ? *ppBase : GetCurTOX();
+    const SwTOXBase* pCurTOX = ppBase && *ppBase ? *ppBase : pSh->GetCurTOX();
     SwTOXBase* pTOX = const_cast<SwTOXBase*>(pCurTOX);
 
     SwTOXBase * pNewTOX = nullptr;

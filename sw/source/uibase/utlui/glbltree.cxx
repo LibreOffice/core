@@ -1213,8 +1213,7 @@ SwNavigationPI* SwGlobalTree::GetParentWindow()
 
 IMPL_STATIC_LINK_NOARG(SwGlobalTree, ShowFrameHdl, void*, void)
 {
-    const SfxObjectShell* pShell = SwGlobalTree::GetShowShell();
-    SfxViewFrame* pFirst = pShell ? SfxViewFrame::GetFirst(pShell) : nullptr;
+    SfxViewFrame* pFirst = pShowShell ? SfxViewFrame::GetFirst(pShowShell) : nullptr;
     if (pFirst)
         pFirst->ToTop();
     SwGlobalTree::SetShowShell(nullptr);

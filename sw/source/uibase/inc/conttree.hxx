@@ -325,7 +325,6 @@ protected:
     void            GotoContent(const SwGlblDocContent*);
     sal_uInt16          GetEnableFlags() const;
 
-    static const SfxObjectShell*    GetShowShell() {return pShowShell;}
     static void     SetShowShell(const SfxObjectShell*pSet) {pShowShell = pSet;}
     DECL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, void*, void);
 

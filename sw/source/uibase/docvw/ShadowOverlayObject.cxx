@@ -59,9 +59,7 @@ public:
     {}
 
     // data access
-    const basegfx::B2DPoint& getBasePosition() const { return maBasePosition; }
     const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
-    ShadowState getShadowState() const { return maShadowState; }
 
     virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const override;
 
@@ -73,7 +71,7 @@ drawinglayer::primitive2d::Primitive2DContainer ShadowPrimitive::create2DDecompo
 {
     // get logic sizes in object coordinate system
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
-    basegfx::B2DRange aRange(getBasePosition());
+    basegfx::B2DRange aRange(maBasePosition);
 
     switch(maShadowState)
     {
@@ -155,9 +153,9 @@ bool ShadowPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
     {
         const ShadowPrimitive& rCompare = static_cast< const ShadowPrimitive& >(rPrimitive);
 
-        return (getBasePosition() == rCompare.getBasePosition()
+        return (maBasePosition == rCompare.maBasePosition
             && getSecondPosition() == rCompare.getSecondPosition()
-            && getShadowState() == rCompare.getShadowState());
+            && maShadowState == rCompare.maShadowState);
     }
 
     return false;
@@ -218,7 +216,7 @@ drawinglayer::primitive2d::Primitive2DContainer ShadowOverlayObject::createOverl
 {
     const drawinglayer::primitive2d::Primitive2DReference aReference(
         new ShadowPrimitive( getBasePosition(),
-                             GetSecondPosition(),
+                             maSecondPosition,
                              GetShadowState() ) );
     return drawinglayer::primitive2d::Primitive2DContainer { aReference };
 }
@@ -236,7 +234,7 @@ void ShadowOverlayObject::SetShadowState(ShadowState aState)
 void ShadowOverlayObject::SetPosition( const basegfx::B2DPoint& rPoint1,
                                        const basegfx::B2DPoint& rPoint2)
 {
-    if(!rPoint1.equal(getBasePosition()) || !rPoint2.equal(GetSecondPosition()))
+    if(!rPoint1.equal(getBasePosition()) || !rPoint2.equal(maSecondPosition))
     {
         maBasePosition = rPoint1;
         maSecondPosition = rPoint2;

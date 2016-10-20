@@ -386,7 +386,7 @@ SwCaptionPreview::SwCaptionPreview(vcl::Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
     , mbFontInitialized(false)
 {
-    Init();
+    maDrawPos = Point(4, 6);
 }
 
 VCL_BUILDER_DECL_FACTORY(SwCaptionPreview)
@@ -396,11 +396,6 @@ VCL_BUILDER_DECL_FACTORY(SwCaptionPreview)
     if (!sBorder.isEmpty())
        nBits |= WB_BORDER;
     rRet = VclPtr<SwCaptionPreview>::Create(pParent, nBits);
-}
-
-void SwCaptionPreview::Init()
-{
-    maDrawPos = Point(4, 6);
 }
 
 void SwCaptionPreview::ApplySettings(vcl::RenderContext& rRenderContext)

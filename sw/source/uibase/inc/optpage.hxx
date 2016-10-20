@@ -187,10 +187,6 @@ public:
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
 
-    void SetFontMode(sal_uInt8 nGroup)
-    {
-        m_nFontGroup = nGroup;
-    }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };
 
@@ -230,7 +226,6 @@ public:
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
 
-    void SetWrtShell(SwWrtShell* pSh) { m_pWrtShell = pSh; }
     virtual void PageCreated( const SfxAllItemSet& aSet) override;
 
 };
@@ -275,10 +270,6 @@ public:
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
 
-    void SetWrtShell(SwWrtShell* pSh)
-    {
-        m_pWrtShell = pSh;
-    }
     virtual void PageCreated( const SfxAllItemSet& aSet ) override;
 };
 

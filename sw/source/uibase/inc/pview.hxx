@@ -258,7 +258,6 @@ public:
     const OUString& GetNewCursorPos() const           { return m_sNewCursorPosition; }
 
     sal_uInt16 GetNewPage() const {return m_nNewPage;}
-    void SetNewPage(sal_uInt16 nSet)  {m_nNewPage = nSet;}
 
     // Handler
     void Execute(SfxRequest&);
