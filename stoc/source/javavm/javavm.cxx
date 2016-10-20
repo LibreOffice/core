@@ -424,14 +424,17 @@ void getDefaultLocaleFromConfig(
     css::uno::Reference<css::registry::XRegistryKey> ooLocale = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooLocale")));
     css::uno::Reference<css::registry::XRegistryKey> ooSetupSystemLocale = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooSetupSystemLocale")));
     if(ooLocale.is() && ooLocale->getStringValue().getLength()) {
+        rtl::OUString language;
         sal_Int32 index = ooLocale->getStringValue().indexOf((sal_Unicode) '-');
         if(index >= 0) {
-            rtl::OUString language = ooLocale->getStringValue().copy(0, index);
-            if(language.getLength()) {
-                rtl::OUString prop(RTL_CONSTASCII_USTRINGPARAM("user.language="));
-                prop += language;
-                pjvm->pushProp(prop);
-            }
+            language = ooLocale->getStringValue().copy(0, index);
+        } else {
+            language = ooLocale->getStringValue();
+        }
+        if(language.getLength()) {
+            rtl::OUString prop(RTL_CONSTASCII_USTRINGPARAM("user.language="));
+            prop += language;
+            pjvm->pushProp(prop);
         }
     }
     if(ooSetupSystemLocale.is() && ooSetupSystemLocale->getStringValue().getLength()) {
