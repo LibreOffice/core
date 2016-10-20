@@ -163,7 +163,6 @@ private:
     DECL_LINK(allHandler, CheckBox&, void);
     DECL_LINK(okHandler, Button*, void);
     DECL_LINK(closeHandler, Button*, void);
-    DECL_LINK(hyperlink_clicked, FixedHyperlink&, void);
 
     css::uno::Reference< css::uno::XComponentContext >  m_context;
     VclPtr<FixedText> m_pchecking;

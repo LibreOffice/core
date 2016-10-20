@@ -39,8 +39,6 @@
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <sfx2/app.hxx>
 #include <vcl/help.hxx>
 #include <vcl/graph.hxx>
@@ -307,8 +305,6 @@ void SpellDialog::Init_Impl()
     m_pAddToDictPB->SetClickHdl(LINK ( this, SpellDialog, AddToDictClickHdl ) );
 
     m_pLanguageLB->SetSelectHdl(LINK( this, SpellDialog, LanguageSelectHdl ) );
-
-    m_pExplainLink->SetClickHdl( LINK( this, SpellDialog, HandleHyperlink ) );
 
     // initialize language ListBox
     m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::SPELL_USED, false, false, true );
@@ -2051,30 +2047,6 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
                         SPELLUNDO_UNDO_EDIT_MODE, GetSpellDialog()->aDialogUndoLink);
     AddUndoAction(pAction);
     pSpellDialog->m_pChangePB->Enable();
-}
-
-IMPL_LINK( SpellDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
-{
-    OUString sURL=rHyperlink.GetURL();
-    OUString sTitle=GetText();
-
-    if ( sURL.isEmpty() ) // Nothing to do, when the URL is empty
-        return;
-    try
-    {
-        uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
-            css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
-        xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
-    }
-    catch ( uno::Exception& )
-    {
-        uno::Any exc( ::cppu::getCaughtException() );
-        OUString msg( ::comphelper::anyToString( exc ) );
-        const SolarMutexGuard guard;
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
-        aErrorBox->SetText(sTitle);
-        aErrorBox->Execute();
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

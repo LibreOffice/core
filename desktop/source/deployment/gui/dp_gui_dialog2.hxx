@@ -137,7 +137,6 @@ class ExtMgrDialog : public ModelessDialog,
     DECL_LINK( HandleCancelBtn, Button*, void );
     DECL_LINK( HandleCloseBtn, Button*, void );
     DECL_LINK( HandleExtTypeCbx, Button*, void );
-    DECL_LINK( HandleHyperlink, FixedHyperlink&, void );
     DECL_LINK(TimeOutHdl, Idle *, void);
     DECL_LINK( startProgress, void *, void );
     DECL_STATIC_LINK( ExtMgrDialog, Restart, void *, void );
@@ -204,7 +203,6 @@ class UpdateRequiredDialog : public ModalDialog,
     DECL_LINK( HandleCancelBtn, Button*, void );
     DECL_LINK(TimeOutHdl, Idle *, void);
     DECL_LINK( startProgress, void *, void );
-    DECL_LINK( HandleHyperlink, FixedHyperlink&, void );
 
     static bool     isEnabled( const css::uno::Reference< css::deployment::XPackage > &xPackage );
     static bool     checkDependencies( const css::uno::Reference< css::deployment::XPackage > &xPackage );

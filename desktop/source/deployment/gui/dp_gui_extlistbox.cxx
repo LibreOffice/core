@@ -481,9 +481,6 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const Rectan
         rEntry->m_pPublisher->SetText(rEntry->m_sPublisher);
         Size aSize = FixedText::CalcMinimumTextSize(rEntry->m_pPublisher);
         rEntry->m_pPublisher->SetSizePixel(aSize);
-
-        if (m_aClickHdl.IsSet())
-            rEntry->m_pPublisher->SetClickHdl( m_aClickHdl );
     }
 
     // Get max title width

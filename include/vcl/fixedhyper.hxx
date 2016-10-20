@@ -40,6 +40,8 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
         /** is position X position hitting text */
         SAL_DLLPRIVATE bool ImplIsOverText(Point rPosition);
 
+        DECL_LINK(HandleClick, FixedHyperlink&, void);
+
     protected:
         /** overwrites Window::MouseMove().
 
