@@ -522,7 +522,7 @@ bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool 
     //    Widow lines would have wrong width.
     // 2. Test formatting is only done up to the given space.
     //    we do not have any lines for widows at all.
-    if( bTst || nLineCnt - nMinLines >= GetWidowsLines() )
+    if( bTst || nLineCnt - nMinLines >= nWidLines )
     {
         if( rMaxHeight >= nLineSum )
         {

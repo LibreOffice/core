@@ -71,8 +71,6 @@ public:
     SwHTMLTableLayoutConstraints *InsertNext( SwHTMLTableLayoutConstraints *pNxt );
     SwHTMLTableLayoutConstraints* GetNext() const { return pNext; }
 
-    sal_uInt16 GetRow() const { return nRow; }
-
     sal_uInt16 GetColSpan() const { return nColSpan; }
     sal_uInt16 GetColumn() const { return nCol; }
 };
@@ -143,7 +141,7 @@ SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
     SwHTMLTableLayoutConstraints *pConstr = this;
     while( pConstr )
     {
-        if( pConstr->GetRow() > pNxt->GetRow() ||
+        if( pConstr->nRow > pNxt->nRow ||
             pConstr->GetColumn() > pNxt->GetColumn() )
             break;
         pPrev = pConstr;

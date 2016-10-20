@@ -190,8 +190,6 @@ public:
 
     inline  sal_uInt16 GetPhyPageNum() const        { return m_nPhyPageNum;}
     inline  void SetPhyPageNum( sal_uInt16 nNum )   { m_nPhyPageNum = nNum;}
-    inline  void DecrPhyPageNum()               { --m_nPhyPageNum;     }
-    inline  void IncrPhyPageNum()               { ++m_nPhyPageNum;     }
 
     /// Validate, invalidate and query the Page status
     /// Layout/Content and Fly/non-Fly respectively are inspected separately

@@ -92,8 +92,6 @@ public:
     inline sal_Int32 GetNextOffset() const { return nNextOffset; }
     inline void SetNextOffset( sal_Int32 nNew ) { nNextOffset = nNew; }
 
-    inline sal_Int32 GetNextScriptChg() const { return nNextScriptChg; }
-
     // Field cloner for SplitGlue
     virtual SwFieldPortion *Clone( const OUString &rExpand ) const;
 
@@ -189,8 +187,6 @@ public:
 
     inline bool IsAnimated() const { return bAnimated; }
     inline void SetAnimated( bool bNew ) { bAnimated = bNew; }
-    inline bool DontPaint() const { return bNoPaint; }
-    inline void SetNoPaint( bool bNew ) { bNoPaint = bNew; }
     inline void SetRelPos( SwTwips nNew ) { nYPos = nNew; }
     inline void SetId( long nNew ) const
         { const_cast<SwGrfNumPortion*>(this)->nId = nNew; }
