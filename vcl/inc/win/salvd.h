@@ -38,13 +38,13 @@ private:
     bool                    mbForeignDC;            // uses a foreign DC instead of a bitmap
     long                    mnWidth;
     long                    mnHeight;
+
 public:
     HDC getHDC() const { return mhLocalDC; }
     WinSalGraphics* getGraphics() const { return mpGraphics; }
     void setGraphics(WinSalGraphics* pVirGraphics) { mpGraphics = pVirGraphics; }
     WinSalVirtualDevice* getNext() const { return mpNext; }
 
-public:
     WinSalVirtualDevice(HDC hDC = nullptr, HBITMAP hBMP = nullptr, sal_uInt16 nBitCount = 0, bool bForeignDC = false, long nWidth = 0, long nHeight = 0);
     virtual ~WinSalVirtualDevice() override;
 
