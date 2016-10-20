@@ -6652,52 +6652,17 @@ typedef BOOL (WINAPI *PointerTo_CryptRetrieveTimeStamp)(LPCWSTR wszUrl,
 
 #endif
 
-bool PDFWriterImpl::finalizeSignature()
+bool PDFWriter::Sign(PDFSignContext& rContext)
 {
-
-    if (!m_aContext.SignCertificate.is())
-        return false;
-
-    // 1- calculate last ByteRange value
-    sal_uInt64 nOffset = ~0U;
-    CHECK_RETURN( (osl::File::E_None == m_aFile.getPos(nOffset) ) );
-
-    sal_Int64 nLastByteRangeNo = nOffset - (m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
-
-    // 2- overwrite the value to the m_nSignatureLastByteRangeNoOffset position
-    sal_uInt64 nWritten = 0;
-    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureLastByteRangeNoOffset) ) );
-    OStringBuffer aByteRangeNo( 256 );
-    aByteRangeNo.append( nLastByteRangeNo );
-    aByteRangeNo.append( " ]" );
-
-    if (m_aFile.write(aByteRangeNo.getStr(), aByteRangeNo.getLength(), nWritten) != osl::File::E_None)
-    {
-        CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset)) );
-        return false;
-    }
-
-    // 3- create the PKCS#7 object using NSS
-    css::uno::Sequence< sal_Int8 > derEncoded = m_aContext.SignCertificate->getEncoded();
-
-    if (!derEncoded.hasElements())
-        return false;
-
-    sal_Int8* n_derArray = derEncoded.getArray();
-    sal_Int32 n_derLength = derEncoded.getLength();
-
 #ifndef _WIN32
 
-    CERTCertificate *cert = CERT_DecodeCertFromPackage(reinterpret_cast<char *>(n_derArray), n_derLength);
+    CERTCertificate *cert = CERT_DecodeCertFromPackage(reinterpret_cast<char *>(rContext.m_pDerEncoded), rContext.m_nDerEncoded);
 
     if (!cert)
     {
         SAL_WARN("vcl.pdfwriter", "CERT_DecodeCertFromPackage failed");
         return false;
     }
-
-    // Prepare buffer and calculate PDF file digest
-    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, 0)) );
 
     HashContextScope hc(HASH_Create(HASH_AlgSHA1));
     if (!hc.get())
@@ -6708,23 +6673,9 @@ bool PDFWriterImpl::finalizeSignature()
 
     HASH_Begin(hc.get());
 
-    std::unique_ptr<char[]> buffer(new char[m_nSignatureContentOffset + 1]);
-    sal_uInt64 bytesRead;
+    HASH_Update(hc.get(), static_cast<const unsigned char*>(rContext.m_pByteRange1), rContext.m_nByteRange1);
 
-    //FIXME: Check if SHA1 is calculated from the correct byterange
-    CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer.get(), m_nSignatureContentOffset - 1 , bytesRead)) );
-    if (bytesRead != (sal_uInt64)m_nSignatureContentOffset - 1)
-        SAL_WARN("vcl.pdfwriter", "First buffer read failed");
-
-    HASH_Update(hc.get(), reinterpret_cast<const unsigned char*>(buffer.get()), bytesRead);
-
-    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1)) );
-    buffer.reset(new char[nLastByteRangeNo + 1]);
-    CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer.get(), nLastByteRangeNo, bytesRead)) );
-    if (bytesRead != (sal_uInt64) nLastByteRangeNo)
-        SAL_WARN("vcl.pdfwriter", "Second buffer read failed");
-
-    HASH_Update(hc.get(), reinterpret_cast<const unsigned char*>(buffer.get()), bytesRead);
+    HASH_Update(hc.get(), static_cast<const unsigned char*>(rContext.m_pByteRange2), rContext.m_nByteRange2);
 
     SECItem digest;
     unsigned char hash[SHA1_LENGTH];
@@ -6747,7 +6698,7 @@ bool PDFWriterImpl::finalizeSignature()
     if (!cms_msg)
         return false;
 
-    char *pass(strdup(OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 ).getStr()));
+    char *pass(strdup(OUStringToOString( rContext.m_aSignPassword, RTL_TEXTENCODING_UTF8 ).getStr()));
 
     TimeStampReq src;
     OStringBuffer response_buffer;
@@ -6760,7 +6711,7 @@ bool PDFWriterImpl::finalizeSignature()
     valuesp[1] = nullptr;
     SECOidData typetag;
 
-    if( !m_aContext.SignTSA.isEmpty() )
+    if( !rContext.m_aSignTSA.isEmpty() )
     {
         // Create another CMS message with the same contents as cms_msg, because it doesn't seem
         // possible to encode a message twice (once to get something to timestamp, and then after
@@ -6893,7 +6844,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         SAL_INFO("vcl.pdfwriter", "Setting curl to verbose: " << (curl_easy_setopt(curl, CURLOPT_VERBOSE, 1) == CURLE_OK ? "OK" : "FAIL"));
 
-        if ((rc = curl_easy_setopt(curl, CURLOPT_URL, OUStringToOString(m_aContext.SignTSA, RTL_TEXTENCODING_UTF8).getStr())) != CURLE_OK)
+        if ((rc = curl_easy_setopt(curl, CURLOPT_URL, OUStringToOString(rContext.m_aSignTSA, RTL_TEXTENCODING_UTF8).getStr())) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_URL) failed: " << curl_easy_strerror(rc));
             free(pass);
@@ -7100,10 +7051,90 @@ bool PDFWriterImpl::finalizeSignature()
         return false;
     }
 
-    OStringBuffer cms_hexbuffer;
-
     for (unsigned int i = 0; i < cms_output.len ; i++)
-        appendHex(cms_output.data[i], cms_hexbuffer);
+        appendHex(cms_output.data[i], rContext.m_rCMSHexBuffer);
+
+    NSS_CMSMessage_Destroy(cms_msg);
+
+    return true;
+
+#else
+    // Not implemented
+    (void)rContext;
+
+    return false;
+#endif
+}
+
+bool PDFWriterImpl::finalizeSignature()
+{
+
+    if (!m_aContext.SignCertificate.is())
+        return false;
+
+    // 1- calculate last ByteRange value
+    sal_uInt64 nOffset = ~0U;
+    CHECK_RETURN( (osl::File::E_None == m_aFile.getPos(nOffset) ) );
+
+    sal_Int64 nLastByteRangeNo = nOffset - (m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
+
+    // 2- overwrite the value to the m_nSignatureLastByteRangeNoOffset position
+    sal_uInt64 nWritten = 0;
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureLastByteRangeNoOffset) ) );
+    OStringBuffer aByteRangeNo( 256 );
+    aByteRangeNo.append( nLastByteRangeNo );
+    aByteRangeNo.append( " ]" );
+
+    if (m_aFile.write(aByteRangeNo.getStr(), aByteRangeNo.getLength(), nWritten) != osl::File::E_None)
+    {
+        CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset)) );
+        return false;
+    }
+
+    // 3- create the PKCS#7 object using NSS
+    css::uno::Sequence< sal_Int8 > derEncoded = m_aContext.SignCertificate->getEncoded();
+
+    if (!derEncoded.hasElements())
+        return false;
+
+    sal_Int8* n_derArray = derEncoded.getArray();
+    sal_Int32 n_derLength = derEncoded.getLength();
+
+#ifndef _WIN32
+
+    // Prepare buffer and calculate PDF file digest
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, 0)) );
+
+    std::unique_ptr<char[]> buffer1(new char[m_nSignatureContentOffset + 1]);
+    sal_uInt64 bytesRead1;
+
+    //FIXME: Check if SHA1 is calculated from the correct byterange
+    CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer1.get(), m_nSignatureContentOffset - 1 , bytesRead1)) );
+    if (bytesRead1 != (sal_uInt64)m_nSignatureContentOffset - 1)
+        SAL_WARN("vcl.pdfwriter", "First buffer read failed");
+
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1)) );
+    std::unique_ptr<char[]> buffer2(new char[nLastByteRangeNo + 1]);
+    sal_uInt64 bytesRead2;
+    CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer2.get(), nLastByteRangeNo, bytesRead2)) );
+    if (bytesRead2 != (sal_uInt64) nLastByteRangeNo)
+        SAL_WARN("vcl.pdfwriter", "Second buffer read failed");
+
+    OStringBuffer cms_hexbuffer;
+    PDFWriter::PDFSignContext aSignContext(cms_hexbuffer);
+    aSignContext.m_pDerEncoded = n_derArray;
+    aSignContext.m_nDerEncoded = n_derLength;
+    aSignContext.m_pByteRange1 = buffer1.get();
+    aSignContext.m_nByteRange1 = bytesRead1;
+    aSignContext.m_pByteRange2 = buffer2.get();
+    aSignContext.m_nByteRange2 = bytesRead2;
+    aSignContext.m_aSignTSA = m_aContext.SignTSA;
+    aSignContext.m_aSignPassword = m_aContext.SignPassword;
+    if (!PDFWriter::Sign(aSignContext))
+    {
+        SAL_WARN("vcl.pdfwriter", "PDFWriter::Sign() failed");
+        return false;
+    }
 
     assert(cms_hexbuffer.getLength() <= MAX_SIGNATURE_CONTENT_LENGTH);
 
@@ -7111,8 +7142,6 @@ bool PDFWriterImpl::finalizeSignature()
     nWritten = 0;
     CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset)) );
     m_aFile.write(cms_hexbuffer.getStr(), cms_hexbuffer.getLength(), nWritten);
-
-    NSS_CMSMessage_Destroy(cms_msg);
 
     CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset)) );
     return true;
