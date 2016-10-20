@@ -556,6 +556,11 @@ void Desktop::Init()
         SetBootstrapError( BE_UNO_SERVICEMANAGER, e.Message );
     }
 
+    // Check whether safe mode is enabled
+    CommandLineArgs& rCmdLine = GetCommandLineArgs();
+    if (rCmdLine.IsSafeMode() || sfx2::SafeMode::hasFlag())
+        Application::EnableSafeMode();
+
     // When we are in SafeMode we need to do changes before the configuration
     // gets read (langselect::prepareLocale() by UNO API -> Components::Components)
     // This may prepare SafeMode or restore from it by moving data in
