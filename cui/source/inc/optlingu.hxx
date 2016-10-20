@@ -81,7 +81,6 @@ class SvxEditModulesDlg : public ModalDialog
     DECL_LINK( LangSelectListBoxHdl_Impl, ListBox&, void );
     DECL_LINK( BoxCheckButtonHdl_Impl2, SvLBoxButtonData*, void );
     DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK( OpenURLHdl_Impl, FixedHyperlink&, void );
     void LangSelectHdl_Impl(ListBox*);
 
 public:
@@ -143,7 +142,6 @@ private:
     DECL_LINK( BoxDoubleClickHdl_Impl, SvTreeListBox*, bool );
     DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox*, void );
     DECL_LINK( PostDblClickHdl_Impl, void *, void);
-    DECL_LINK( OpenURLHdl_Impl, FixedHyperlink&, void );
 
     void                UpdateModulesBox_Impl();
     void                UpdateDicBox_Impl();

@@ -636,6 +636,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
     }
 }
 
+
 bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
@@ -700,12 +701,10 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     get(m_pCancelBtn, "cancel");
 
     m_pExtensionBox->InitFromDialog(this);
-    m_pExtensionBox->SetHyperlinkHdl( LINK( this, ExtMgrDialog, HandleHyperlink ) );
 
     m_pAddBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleAddBtn ) );
     m_pCloseBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCloseBtn ) );
 
-    m_pGetExtensions->SetClickHdl( LINK( this, ExtMgrDialog, HandleHyperlink ) );
     m_pCancelBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCancelBtn ) );
 
     m_pBundledCbx->SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
@@ -1073,13 +1072,6 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn, Button*, void)
 #endif
 }
 
-
-IMPL_LINK( ExtMgrDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
-{
-    openWebBrowser( rHyperlink.GetURL(), GetText() );
-}
-
-
 IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl, Idle *, void)
 {
     if ( m_bStopProgress )
@@ -1198,8 +1190,6 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
     get(m_pCancelBtn, "cancel");
     get(m_pProgressText, "progresslabel");
     get(m_pProgressBar, "progress");
-
-    m_pExtensionBox->SetHyperlinkHdl( LINK( this, UpdateRequiredDialog, HandleHyperlink ) );
 
     m_pUpdateBtn->SetClickHdl( LINK( this, UpdateRequiredDialog, HandleUpdateBtn ) );
     m_pCloseBtn->SetClickHdl( LINK( this, UpdateRequiredDialog, HandleCloseBtn ) );
@@ -1411,12 +1401,6 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn, Button*, void)
         else
             EndDialog();
     }
-}
-
-
-IMPL_LINK( UpdateRequiredDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
-{
-    openWebBrowser( rHyperlink.GetURL(), GetText() );
 }
 
 

@@ -52,7 +52,6 @@ private:
 
     DECL_LINK(CheckBoxHdl, CheckBox&, void);
     DECL_LINK(BtnHdl, Button*, void);
-    DECL_LINK(HandleHyperlink, FixedHyperlink&, void);
 };
 
 #endif

@@ -46,8 +46,6 @@
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <svtools/treelistbox.hxx>
 #include "svtools/treelistentry.hxx"
@@ -126,28 +124,6 @@ static sal_Int32 lcl_SeqGetEntryPos(
             break;
     }
     return i < nLen ? i : -1;
-}
-
-static void lcl_OpenURL( const OUString& _sURL )
-{
-    if ( !_sURL.isEmpty() )
-    {
-        OUString sURL = _sURL;
-        localizeWebserviceURI(sURL);
-        try
-        {
-            uno::Reference< uno::XComponentContext > xContext =
-                ::comphelper::getProcessComponentContext();
-            uno::Reference< css::system::XSystemShellExecute > xSystemShell(
-                css::system::SystemShellExecute::create(xContext) );
-            xSystemShell->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
-        }
-        catch( const uno::Exception& e )
-        {
-             OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-                OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
-        }
-    }
 }
 
 bool KillFile_Impl( const OUString& rURL )
@@ -1073,12 +1049,7 @@ SvxLinguTabPage::SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
     m_pLinguOptionsCLB->SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     m_pLinguOptionsCLB->SetDoubleClickHdl(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
 
-    if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode()
-            != SvtExtendedSecurityOptions::OPEN_NEVER )
-    {
-        m_pMoreDictsLink->SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
-    }
-    else
+    if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode() == SvtExtendedSecurityOptions::OPEN_NEVER )
         m_pMoreDictsLink->Hide();
 
     xProp = LinguMgr::GetLinguPropertySet();
@@ -1513,13 +1484,6 @@ IMPL_LINK_NOARG(SvxLinguTabPage, PostDblClickHdl_Impl, void*, void)
 }
 
 
-IMPL_LINK_NOARG(SvxLinguTabPage, OpenURLHdl_Impl, FixedHyperlink&, void)
-{
-    OUString sURL( m_pMoreDictsLink->GetURL() );
-    lcl_OpenURL( sURL );
-}
-
-
 IMPL_LINK( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox, void )
 {
     if (pBox == m_pLinguModulesCLB)
@@ -1832,15 +1796,8 @@ SvxEditModulesDlg::SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rD
     m_pPrioUpPB->Enable( false );
     m_pPrioDownPB->Enable( false );
 
-    if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode()
-            != SvtExtendedSecurityOptions::OPEN_NEVER )
-    {
-        m_pMoreDictsLink->SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
-    }
-    else
-    {
+    if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode() == SvtExtendedSecurityOptions::OPEN_NEVER )
         m_pMoreDictsLink->Hide();
-    }
 
     //fill language box
     Sequence< sal_Int16 > aAvailLang;
@@ -2270,13 +2227,6 @@ IMPL_LINK_NOARG(SvxEditModulesDlg, BackHdl_Impl, Button*, void)
 {
     rLinguData = *pDefaultLinguData;
     LangSelectHdl_Impl(nullptr);
-}
-
-
-IMPL_LINK_NOARG(SvxEditModulesDlg, OpenURLHdl_Impl, FixedHyperlink&, void)
-{
-    OUString sURL( m_pMoreDictsLink->GetURL() );
-    lcl_OpenURL( sURL );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
