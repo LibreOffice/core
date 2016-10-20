@@ -374,11 +374,6 @@ static int GetVerticalFlagsForScript(UScriptCode aScript)
             nFlag = GF_ROTL;
             break;
 #if 0
-        /* ttb 90° */
-        case USCRIPT_MONGOLIAN:
-        case USCRIPT_PHAGS_PA:
-            nFlag = ??;
-            break;
         /* ttb -90° */
         case USCRIPT_ORKHON:
             nFlag = ??;
@@ -388,6 +383,10 @@ static int GetVerticalFlagsForScript(UScriptCode aScript)
             nFlag = ??;
             break;
 #endif
+        /* ttb 90°, no extra rotation needed */
+        case USCRIPT_MONGOLIAN:
+        case USCRIPT_PHAGS_PA:
+        /* horizontal scripts */
         default:
             break;
     }
