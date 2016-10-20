@@ -119,37 +119,66 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     else
         pTabViewShell->SetForceFocusOnCurCell(false);
 
+    //ScrollLock Scrolling fix Bug:46200
+    bool bScrollLock = false;
+    KeyIndicatorState eState = (ScCellShell::GetFrameWin())->GetIndicatorState();
+    if(eState & KeyIndicatorState::SCROLLLOCK) bScrollLock = true;
+
     //OS: once for all should do, however!
     pTabViewShell->ExecuteInputDirect();
     switch ( nSlotId )
     {
         case SID_CURSORDOWN:
-            pTabViewShell->MoveCursorRel(   0,  nRepeat, SC_FOLLOW_LINE, bSel, bKeep );
-            break;
+            if(bScrollLock) {
+              pTabViewShell->ScrollY( 1, SC_SPLIT_BOTTOM, true );
+              break;
+            }
+            else {
+              pTabViewShell->MoveCursorRel( 0, nRepeat, SC_FOLLOW_LINE, bSel, bKeep );
+              break;
+            }
 
         case SID_CURSORBLKDOWN:
             pTabViewShell->MoveCursorArea( 0, nRepeat, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORUP:
-            pTabViewShell->MoveCursorRel(   0,  -nRepeat, SC_FOLLOW_LINE, bSel, bKeep );
-            break;
+            if(bScrollLock) {
+              pTabViewShell->ScrollY( -1, SC_SPLIT_BOTTOM, true);
+              break;
+            }
+            else {
+              pTabViewShell->MoveCursorRel(   0,  -nRepeat, SC_FOLLOW_LINE, bSel, bKeep );
+              break;
+            }
 
         case SID_CURSORBLKUP:
             pTabViewShell->MoveCursorArea( 0, -nRepeat, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORLEFT:
-            pTabViewShell->MoveCursorRel( static_cast<SCsCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
-            break;
+            if(bScrollLock) {
+              pTabViewShell->ScrollX( -1, SC_SPLIT_LEFT, true);
+              break;
+              }
+            else {
+              pTabViewShell->MoveCursorRel( static_cast<SCsCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
+              break;
+            }
 
         case SID_CURSORBLKLEFT:
             pTabViewShell->MoveCursorArea( static_cast<SCsCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORRIGHT:
-            pTabViewShell->MoveCursorRel(   static_cast<SCsCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
-            break;
+            if(bScrollLock) {
+              pTabViewShell->ScrollX( 1, SC_SPLIT_LEFT, true);
+              break;
+            }
+            else {
+              pTabViewShell->MoveCursorRel(   static_cast<SCsCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
+              break;
+            }
 
         case SID_CURSORBLKRIGHT:
             pTabViewShell->MoveCursorArea( static_cast<SCsCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_JUMP, bSel, bKeep );
