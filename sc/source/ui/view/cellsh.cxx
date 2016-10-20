@@ -73,10 +73,11 @@ void ScCellShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu("cell");
 }
 
-ScCellShell::ScCellShell(ScViewData* pData) :
+ScCellShell::ScCellShell(ScViewData* pData, VclPtr<vcl::Window> frameWin) :
     ScFormatShell(pData),
     pImpl( new CellShell_Impl() ),
-    bPastePossible(false)
+    bPastePossible(false),
+    pFrameWin(frameWin)
 {
     SetHelpId(HID_SCSHELL_CELLSH);
     SetName("Cell");
