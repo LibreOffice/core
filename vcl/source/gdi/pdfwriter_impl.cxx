@@ -7480,6 +7480,12 @@ bool PDFWriterImpl::finalizeSignature()
 #endif
 }
 
+#else // defined(ANDROID) || defined(IOS)
+bool PDFWriter::Sign(PDFSignContext& /*rContext*/)
+{
+    // Not implemented.
+    return false;
+}
 #endif
 
 sal_Int32 PDFWriterImpl::emitInfoDict( )
