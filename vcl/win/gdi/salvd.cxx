@@ -125,7 +125,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
 
     if ( bOk )
     {
-        WinSalVirtualDevice*    pVDev = new WinSalVirtualDevice;
+        WinSalVirtualDevice*    pVDev = new WinSalVirtualDevice(hDC, hBmp, nBitCount, (pData != nullptr && pData->hDC != nullptr ), nDX, nDY);
         SalData*                pSalData = GetSalData();
         WinSalGraphics*         pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE, pGraphics->isScreen(), nullptr, pVDev);
         pVirGraphics->SetLayout( SalLayoutFlags::NONE );   // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
@@ -137,22 +137,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         }
         pVirGraphics->InitGraphics();
 
-        pVDev->mnWidth = nDX;
-        pVDev->mnHeight = nDY;
-        pVDev->setHDC(hDC);
-        pVDev->mhBmp        = hBmp;
-        if( hBmp )
-            pVDev->mhDefBmp = SelectBitmap( hDC, hBmp );
-        else
-            pVDev->mhDefBmp = nullptr;
-        pVDev->mpGraphics   = pVirGraphics;
-        pVDev->mnBitCount   = nBitCount;
-        pVDev->mbGraphics   = FALSE;
-        pVDev->mbForeignDC  = (pData != nullptr && pData->hDC != nullptr );
-
-        // insert VirDev in VirDevList
-        pVDev->mpNext = pSalData->mpFirstVD;
-        pSalData->mpFirstVD = pVDev;
+        pVDev->setGraphics(pVirGraphics);
 
         return pVDev;
     }
@@ -166,18 +151,26 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     }
 }
 
-WinSalVirtualDevice::WinSalVirtualDevice()
+WinSalVirtualDevice::WinSalVirtualDevice(HDC hDC, HBITMAP hBMP, sal_uInt16 nBitCount, bool bForeignDC, long nWidth, long nHeight)
+    : mhLocalDC(hDC),          // HDC or 0 for Cache Device
+      mhBmp(hBMP),             // Memory Bitmap
+      mpGraphics(nullptr),     // current VirDev graphics
+      mnBitCount(nBitCount),   // BitCount (0 or 1)
+      mbGraphics(false),       // is Graphics used
+      mbForeignDC(bForeignDC), // uses a foreign DC instead of a bitmap
+      mnWidth(nWidth),
+      mnHeight(nHeight)
 {
-    setHDC(nullptr);            // HDC or 0 for Cache Device
-    mhBmp = nullptr;            // Memory Bitmap
-    mhDefBmp = nullptr;         // Default Bitmap
-    mpGraphics = nullptr;       // current VirDev graphics
-    mpNext = nullptr;           // next VirDev
-    mnBitCount = 0;             // BitCount (0 or 1)
-    mbGraphics = FALSE;         // is Graphics used
-    mbForeignDC = FALSE;        // uses a foreign DC instead of a bitmap
-    mnWidth = 0;
-    mnHeight = 0;
+    // Default Bitmap
+    if (hBMP)
+        mhDefBmp = SelectBitmap(hDC, hBMP);
+    else
+        mhDefBmp = nullptr;
+
+    // insert VirDev into list of virtual devices
+    SalData* pSalData = GetSalData();
+    mpNext = pSalData->mpFirstVD;
+    pSalData->mpFirstVD = this;
 }
 
 WinSalVirtualDevice::~WinSalVirtualDevice()
@@ -209,20 +202,20 @@ SalGraphics* WinSalVirtualDevice::AcquireGraphics()
         return nullptr;
 
     if ( mpGraphics )
-        mbGraphics = TRUE;
+        mbGraphics = true;
 
     return mpGraphics;
 }
 
 void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
-    mbGraphics = FALSE;
+    mbGraphics = false;
 }
 
 bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( mbForeignDC || !mhBmp )
-        return TRUE;    // ???
+        return true;    // ???
     else
     {
         void *pDummy;
@@ -243,13 +236,13 @@ bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
                 if (pImpl)
                     pImpl->Init();
             }
-            return TRUE;
+            return true;
         }
         else
         {
             mnWidth = 0;
             mnHeight = 0;
-            return FALSE;
+            return false;
         }
     }
 }
