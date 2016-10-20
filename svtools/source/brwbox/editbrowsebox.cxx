@@ -1010,7 +1010,7 @@ namespace svt
             if (bHasFocus)
                 GrabFocus(); // ensure that we have (and keep) the focus
 
-            HideAndDisable(aOldController);
+            aOldController->suspend();
 
             // update if requested
             if (bUpdate)
@@ -1247,11 +1247,6 @@ namespace svt
 
         if (RowPicturesChanges)
             InvalidateStatusCell(GetCurRow());
-    }
-
-    inline void EditBrowseBox::HideAndDisable(CellControllerRef& rController)
-    {
-        rController->suspend();
     }
 
     inline void EditBrowseBox::EnableAndShow() const

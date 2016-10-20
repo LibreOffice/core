@@ -87,8 +87,6 @@ public:
                                     bool bActive );
     virtual             ~IMapObject() {};
 
-    static sal_uInt16   GetVersion() { return IMAP_OBJ_VERSION; }
-
     virtual sal_uInt16  GetType() const = 0;
     virtual bool        IsHit( const Point& rPoint ) const = 0;
 

@@ -71,7 +71,7 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
     const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding();
 
     rOStm.WriteUInt16( GetType() );
-    rOStm.WriteUInt16( GetVersion() );
+    rOStm.WriteUInt16( IMAP_OBJ_VERSION );
     rOStm.WriteUInt16( eEncoding  );
 
     const OString aRelURL = OUStringToOString(
@@ -922,7 +922,7 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 
     // write MagicCode
     rOStm.WriteCharPtr( IMAPMAGIC );
-    rOStm.WriteUInt16( GetVersion() );
+    rOStm.WriteUInt16( IMAGE_MAP_VERSION );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aImageName, eEncoding);
     write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, OString()); //dummy
     rOStm.WriteUInt16( nCount );

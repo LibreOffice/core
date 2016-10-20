@@ -684,7 +684,7 @@ void HeaderBar::ImplStartDrag( const Point& rMousePos, bool bCommand )
             StartTracking();
             mnStartPos = rMousePos.X()-mnMouseOff;
             mnDragPos = mnStartPos;
-            StartDrag();
+            maStartDragHdl.Call( this );
             if (mbItemMode)
                 Invalidate();
             else
@@ -801,7 +801,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
         }
     }
 
-    Drag();
+    maDragHdl.Call( this );
 }
 
 void HeaderBar::ImplEndDrag( bool bCancel )
@@ -1102,16 +1102,6 @@ void HeaderBar::DataChanged( const DataChangedEvent& rDCEvt )
         ImplInitSettings( true, true, true );
         Invalidate();
     }
-}
-
-void HeaderBar::StartDrag()
-{
-    maStartDragHdl.Call( this );
-}
-
-void HeaderBar::Drag()
-{
-    maDragHdl.Call( this );
 }
 
 void HeaderBar::EndDrag()

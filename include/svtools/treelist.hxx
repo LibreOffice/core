@@ -216,7 +216,6 @@ public:
     { return aCloneLink; }
 
     SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) const; // Calls the Clone Link
-    static SvTreeListEntry* CreateEntry(); // To create Entries
 
     sal_uInt16          GetRefCount() const { return nRefCount; }
     void                SetRefCount( sal_uInt16 nRef ) { nRefCount = nRef; }

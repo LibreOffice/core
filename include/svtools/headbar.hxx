@@ -283,8 +283,6 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    void                StartDrag();
-    void                Drag();
     virtual void        EndDrag();
     virtual void        Select();
     virtual void        DoubleClick();

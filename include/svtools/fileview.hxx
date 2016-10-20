@@ -100,7 +100,6 @@ public:
     const OString&          GetHelpId( ) const;
     void                    SetSizePixel( const Size& rNewSize ) override;
     virtual void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override;
-    void                    SetSortColumn( bool bValue ) { bSortColumn = bValue; }
 
     /** initialize the view with the content of a folder given by URL, and apply an immediate filter
 

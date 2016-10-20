@@ -483,8 +483,6 @@ public:
 
     void                     SetDragOptions( sal_Int8 nOptions ) { nDragOptions = nOptions; }
 
-    static SvTreeListBox*    GetSourceView();
-
     virtual SvTreeListEntry* CloneEntry( SvTreeListEntry* pSource );
     virtual SvTreeListEntry* CreateEntry() const; // To create new Entries
 
@@ -692,7 +690,6 @@ public:
     virtual void    ModelHasRemoved( SvTreeListEntry* pEntry ) override;
     void            ModelHasEntryInvalidated( SvTreeListEntry* pEntry ) override;
 
-    void            ShowTargetEmphasis( SvTreeListEntry*, bool bShow );
     void            ScrollOutputArea( short nDeltaEntries );
 
     short           GetColumnsCount() const { return nColumns; }

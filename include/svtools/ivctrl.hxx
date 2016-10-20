@@ -261,8 +261,6 @@ public:
 
     bool                DoKeyInput( const KeyEvent& rKEvt );
 
-    bool                IsEntryEditing() const;
-
     sal_Int32               GetEntryCount() const;
     SvxIconChoiceCtrlEntry* GetEntry( sal_Int32 nPos ) const;
     sal_Int32               GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const;

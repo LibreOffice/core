@@ -103,9 +103,6 @@ public:
     // deletes all internal objects
     void                ClearImageMap();
 
-    // returns the current version number
-    static sal_uInt16   GetVersion() { return IMAGE_MAP_VERSION; }
-
     const OUString&     GetName() const { return aName; }
     void                SetName( const OUString& rName ) { aName = rName; }
 
