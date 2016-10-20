@@ -222,7 +222,6 @@ private:
     static void     SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, bool bLayoutRTL );
     static long     GetScrollBarPos( ScrollBar& rScroll );
 
-    void            GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPageX, SCsROW& rPageY);
     void            GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
                                            SCsCOL& rAreaX, SCsROW& rAreaY, ScFollowMode& rMode);
 
@@ -426,6 +425,8 @@ public:
     bool            MoveCursorKeyInput( const KeyEvent& rKeyEvent );
 
     void            FindNextUnprot( bool bShift, bool bInSelection );
+
+    void            GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPageX, SCsROW& rPageY);
 
     SC_DLLPUBLIC void SetTabNo( SCTAB nTab, bool bNew = false, bool bExtendSelection = false, bool bSameTabButMoved = false );
     void            SelectNextTab( short nDir, bool bExtendSelection );
