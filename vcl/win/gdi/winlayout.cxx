@@ -3528,7 +3528,7 @@ IDWriteFontFace* D2DWriteTextOutRenderer::GetDWriteFontFace(HDC hDC) const
     }
     catch (const std::exception& e)
     {
-        SAL_WARN("vcl.gdi.opengl", "Error in dwrite while creating font face: " << e.what());
+        SAL_WARN("vcl.gdi", "Error in dwrite while creating font face: " << e.what());
         return nullptr;
     }
     if(succeeded)

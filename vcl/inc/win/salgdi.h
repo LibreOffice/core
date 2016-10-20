@@ -358,7 +358,7 @@ private:
     sal_uLong               GetKernPairs();
 
 public:
-    sal_uLong               GetTable( const char pTagName[5], const unsigned char*&, void*&, IDWriteFontFace*& );
+    static sal_uLong        GetTable( const char pTagName[5], const unsigned char*&, void*&, IDWriteFontFace*& );
     // public SalGraphics methods, the interface to the independent vcl part
 
     // get device resolution
@@ -457,7 +457,7 @@ public:
 
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
     virtual void            DrawSalLayout( const CommonSalLayout& ) override;
-    virtual void            DrawServerFontLayout( const GenericSalLayout&, const ServerFont& ) {};
+    virtual void            DrawServerFontLayout( const GenericSalLayout&, const ServerFont& ) override {};
 
     virtual bool            supportsOperation( OutDevSupportType ) const override;
     // Query the platform layer for control support
