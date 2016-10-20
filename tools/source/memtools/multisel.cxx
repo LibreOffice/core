@@ -785,7 +785,7 @@ bool StringRangeEnumerator::getRangesFromString( const OUString& i_rPageRange,
         o_rPageVector.push_back( *it );
     }
 
-    return aEnum.isValidInput();
+    return aEnum.mbValidInput;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

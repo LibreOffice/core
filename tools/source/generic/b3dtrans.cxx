@@ -334,14 +334,14 @@ void B3dTransformationSet::SetViewportRectangle(Rectangle const & rRect, Rectang
 const basegfx::B3DPoint B3dTransformationSet::WorldToEyeCoor(const basegfx::B3DPoint& rVec)
 {
     basegfx::B3DPoint aVec(rVec);
-    aVec *= GetOrientation();
+    aVec *= maOrientation;
     return aVec;
 }
 
 const basegfx::B3DPoint B3dTransformationSet::EyeToWorldCoor(const basegfx::B3DPoint& rVec)
 {
     basegfx::B3DPoint aVec(rVec);
-    aVec *= GetInvOrientation();
+    aVec *= maInvOrientation;
     return aVec;
 }
 
