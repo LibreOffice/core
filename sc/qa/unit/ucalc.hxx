@@ -17,6 +17,7 @@
 
 struct TestImpl;
 class ScUndoPaste;
+class ScUndoCut;
 
 /**
  * Temporarily set formula grammar.
@@ -45,6 +46,7 @@ public:
     static void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption);
     static void clearRange(ScDocument* pDoc, const ScRange& rRange);
     static void clearSheet(ScDocument* pDoc, SCTAB nTab);
+    static ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo);
     static void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
     static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc);
     static void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags = InsertDeleteFlags::ALL);
@@ -328,6 +330,7 @@ public:
     void testCopyPasteSkipEmpty2();
     void testCopyPasteSkipEmptyConditionalFormatting();
     void testCutPasteRefUndo();
+    void testCutPasteGroupRefUndo();
     void testMoveRefBetweenSheets();
     void testUndoCut();
     void testMoveBlock();
@@ -629,6 +632,7 @@ public:
     CPPUNIT_TEST(testCopyPasteSkipEmpty2);
     //CPPUNIT_TEST(testCopyPasteSkipEmptyConditionalFormatting);
     CPPUNIT_TEST(testCutPasteRefUndo);
+    CPPUNIT_TEST(testCutPasteGroupRefUndo);
     CPPUNIT_TEST(testMoveRefBetweenSheets);
     CPPUNIT_TEST(testUndoCut);
     CPPUNIT_TEST(testMoveBlock);

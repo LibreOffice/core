@@ -3591,6 +3591,120 @@ void Test::testCutPasteRefUndo()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCutPasteGroupRefUndo()
+{
+    // Test that Cut&Paste part of a grouped formula adjusts references
+    // correctly and Undo works.
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Formula data in A1:A9
+    const char* aData[][1] = {
+        { "1" },
+        { "=A1+A1" },
+        { "=A2+A1" },
+        { "=A3+A2" },
+        { "=A4+A3" },
+        { "=A5+A4" },
+        { "=A6+A5" },
+        { "=A7+A6" },
+        { "=A8+A7" }
+    };
+    ScAddress aPos(0,0,0);
+    ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to insert data", aPos, aDataRange.aStart);
+
+    // Check initial data.
+    const char* aDataCheck[][2] = {
+        { "1", "" },
+        { "2", "=A1+A1" },
+        { "3", "=A2+A1" },
+        { "5", "=A3+A2" },
+        { "8", "=A4+A3" },
+        { "13", "=A5+A4" },
+        { "21", "=A6+A5" },
+        { "34", "=A7+A6" },
+        { "55", "=A8+A7" }
+    };
+    for (size_t i=0; i<SAL_N_ELEMENTS(aDataCheck); ++i)
+    {
+        OUString aString = m_pDoc->GetString(0,i,0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Initial data failure", OUString::createFromAscii(aDataCheck[i][0]), aString);
+        m_pDoc->GetFormula(0,i,0, aString);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Initial formula failure", OUString::createFromAscii(aDataCheck[i][1]), aString);
+    }
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    // Set up clip document.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, &aMark);
+    // Cut A4:A6 to clipboard with Undo.
+    std::unique_ptr<ScUndoCut> pUndoCut( cutToClip( getDocShell(), ScRange(0,3,0, 0,5,0), &aClipDoc, true));
+
+    // Check data after Cut.
+    const char* aCutCheck[] = {"1","2","3","","","","0","0","0"};
+    for (size_t i=0; i<SAL_N_ELEMENTS(aCutCheck); ++i)
+    {
+        OUString aString = m_pDoc->GetString(0,i,0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cut data failure", OUString::createFromAscii(aCutCheck[i]), aString);
+    }
+
+    // Paste to B5:B7 with Undo.
+    ScRange aPasteRange(1,4,0, 1,6,0);
+    aMark.SetMarkArea(aPasteRange);
+    ScDocument* pPasteUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    pPasteUndoDoc->InitUndoSelected( m_pDoc, aMark);
+    std::unique_ptr<ScUndoPaste> pUndoPaste( createUndoPaste( getDocShell(), aPasteRange, pPasteUndoDoc));
+    m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::ALL, pPasteUndoDoc, &aClipDoc);
+
+    // Check data after Paste.
+    const char* aPasteCheck[][4] = {
+        { "1",    "", "",       "" },
+        { "2",    "", "=A1+A1", "" },
+        { "3",    "", "=A2+A1", "" },
+        { "",     "", "",       "" },
+        { "",    "5", "",       "=A3+A2" },
+        { "",    "8", "",       "=B5+A3" },
+        { "21", "13", "=B7+B6", "=B6+B5" },
+        { "34",   "", "=A7+B7", "" },
+        { "55",   "", "=A8+A7", "" }
+    };
+    for (size_t i=0; i<SAL_N_ELEMENTS(aPasteCheck); ++i)
+    {
+        for (size_t j=0; j<2; ++j)
+        {
+            OUString aString = m_pDoc->GetString(j,i,0);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Paste data failure", OUString::createFromAscii(aPasteCheck[i][j]), aString);
+            m_pDoc->GetFormula(j,i,0, aString);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Paste formula failure", OUString::createFromAscii(aPasteCheck[i][2+j]), aString);
+        }
+    }
+
+    // Undo Paste and check, must be same as after Cut.
+    pUndoPaste->Undo();
+    for (size_t i=0; i<SAL_N_ELEMENTS(aCutCheck); ++i)
+    {
+        OUString aString = m_pDoc->GetString(0,i,0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Undo Paste data failure", OUString::createFromAscii(aCutCheck[i]), aString);
+    }
+
+    // Undo Cut and check, must be initial data.
+    pUndoCut->Undo();
+    for (size_t i=0; i<SAL_N_ELEMENTS(aDataCheck); ++i)
+    {
+        OUString aString = m_pDoc->GetString(0,i,0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Undo Cut data failure", OUString::createFromAscii(aDataCheck[i][0]), aString);
+        m_pDoc->GetFormula(0,i,0, aString);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Undo Cut formula failure", OUString::createFromAscii(aDataCheck[i][1]), aString);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testMoveRefBetweenSheets()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
@@ -6170,6 +6284,40 @@ void Test::clearSheet(ScDocument* pDoc, SCTAB nTab)
 {
     ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
     clearRange(pDoc, aRange);
+}
+
+ScUndoCut* Test::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo)
+{
+    ScDocument* pSrcDoc = &rDocSh.GetDocument();
+
+    ScClipParam aClipParam(rRange, true);
+    ScMarkData aMark;
+    aMark.SetMarkArea(rRange);
+    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
+
+    // Taken from ScViewFunc::CutToClip()
+    ScDocument* pUndoDoc = nullptr;
+    if (bCreateUndo)
+    {
+        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc->InitUndoSelected( pSrcDoc, aMark );
+        // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
+        ScRange aCopyRange = rRange;
+        aCopyRange.aStart.SetTab(0);
+        aCopyRange.aEnd.SetTab(pSrcDoc->GetTableCount()-1);
+        pSrcDoc->CopyToDocument( aCopyRange,
+                (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS,
+                false, *pUndoDoc );
+    }
+
+    aMark.MarkToMulti();
+    pSrcDoc->DeleteSelection( InsertDeleteFlags::ALL, aMark );
+    aMark.MarkToSimple();
+
+    if (pUndoDoc)
+        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, pUndoDoc );
+
+    return nullptr;
 }
 
 void Test::copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc)
