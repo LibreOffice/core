@@ -677,7 +677,9 @@ namespace
         }
 
     public:
-        void createUsingExtensionRegistryEntriesFromXML(const OUString& rUserConfigWorkURL)
+        void createUsingExtensionRegistryEntriesFromXML(
+            const OUString& rUserConfigWorkURL,
+            bool bUser)
         {
             // This is looked up for 'user' in the user|shared|bundled deployed Extensions,
             // only the user ones seem to be able to be de/activated. The ones for user are in
@@ -686,13 +688,15 @@ namespace
             // in safe mode by deleting the uno_packages directory and the shared|bundled
             // ones by deleting the extensions directory.
             const OUString aRegPath("/registry/com.sun.star.comp.deployment.bundle.PackageRegistryBackend/backenddb.xml");
-            const OUString aUnoPackagReg(rUserConfigWorkURL + "/uno_packages/cache" + aRegPath);
+            const OUString aExtensionsReg(rUserConfigWorkURL + "/extensions/shared" + aRegPath);
+            const OUString aUnoPackageReg(rUserConfigWorkURL + "/uno_packages/cache" + aRegPath);
+            const OUString aPath(bUser ? aUnoPackageReg : aExtensionsReg);
 
-            if (fileExists(aUnoPackagReg))
+            if (fileExists(aPath))
             {
                 uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< xml::dom::XDocumentBuilder > xBuilder(xml::dom::DocumentBuilder::create(xContext));
-                uno::Reference< xml::dom::XDocument > aDocument = xBuilder->parseURI(aUnoPackagReg);
+                uno::Reference< xml::dom::XDocument > aDocument = xBuilder->parseURI(aPath);
 
                 if (aDocument.is())
                 {
@@ -1907,20 +1911,6 @@ namespace comphelper
         return bPopPossible;
     }
 
-    bool BackupFileHelper::isPopPossibleExtensionInfo()
-    {
-        bool bPopPossible(false);
-
-        if (mbActive && mbExtensions)
-        {
-            const OUString aPackURL(getPackURL());
-
-            bPopPossible = isPopPossible_extensionInfo(aPackURL);
-        }
-
-        return bPopPossible;
-    }
-
     bool BackupFileHelper::tryPop()
     {
         bool bDidPop(false);
@@ -1952,6 +1942,20 @@ namespace comphelper
         return bDidPop;
     }
 
+    bool BackupFileHelper::isPopPossibleExtensionInfo()
+    {
+        bool bPopPossible(false);
+
+        if (mbActive && mbExtensions)
+        {
+            const OUString aPackURL(getPackURL());
+
+            bPopPossible = isPopPossible_extensionInfo(aPackURL);
+        }
+
+        return bPopPossible;
+    }
+
     bool BackupFileHelper::tryPopExtensionInfo()
     {
         bool bDidPop(false);
@@ -1979,7 +1983,7 @@ namespace comphelper
         // extensions are not loaded from XExtensionManager
         class ExtensionInfo aExtensionInfo;
 
-        aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
+        aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, true);
 
         return aExtensionInfo.areThereEnabledExtensions();
     }
@@ -1993,7 +1997,7 @@ namespace comphelper
         const ExtensionInfoEntryVector aToBeEnabled;
         ExtensionInfoEntryVector aToBeDisabled;
 
-        aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
+        aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, true);
 
         const ExtensionInfoEntryVector& rCurrentVector = aCurrentExtensionInfo.getExtensionInfoEntryVector();
 
@@ -2008,29 +2012,109 @@ namespace comphelper
         ExtensionInfo::changeEnableDisableStateInXML(maUserConfigWorkURL, aToBeEnabled, aToBeDisabled);
     }
 
+    bool BackupFileHelper::isTryDeinstallUserExtensionsPossible()
+    {
+        // check if there are User Extensions installed.
+        class ExtensionInfo aExtensionInfo;
+
+        aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, true);
+
+        return !aExtensionInfo.getExtensionInfoEntryVector().empty();
+    }
+
+    void BackupFileHelper::tryDeinstallUserExtensions()
+    {
+        // delete User Extension installs
+        deleteDirRecursively(maUserConfigWorkURL + "/uno_packages");
+    }
+
+    bool BackupFileHelper::isTryDeinstallAllExtensionsPossible()
+    {
+        // check if there are other Extensions installed (shared|bundled).
+        class ExtensionInfo aExtensionInfo;
+
+        aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, false);
+
+        return !aExtensionInfo.getExtensionInfoEntryVector().empty();
+    }
+
+    void BackupFileHelper::tryDeinstallAllExtensions()
+    {
+        // delete other Extension installs (shared|bundled)
+        deleteDirRecursively(maUserConfigWorkURL + "/extensions");
+    }
+
+    const std::vector< OUString >& BackupFileHelper::getCustomizationDirNames()
+    {
+        static std::vector< OUString > aDirNames;
+
+        if (aDirNames.empty())
+        {
+            aDirNames.push_back("config");     // UI config stuff
+            aDirNames.push_back("registry");   // most of the registry stuff
+            aDirNames.push_back("psprint");    // not really needed, can be abandoned
+            aDirNames.push_back("store");      // not really needed, can be abandoned
+            aDirNames.push_back("temp");       // not really needed, can be abandoned
+            aDirNames.push_back("pack");       // own backup dir
+        }
+
+        return aDirNames;
+    }
+
+    const std::vector< OUString >& BackupFileHelper::getCustomizationFileNames()
+    {
+        static std::vector< OUString > aFileNames;
+
+        if (aFileNames.empty())
+        {
+            aFileNames.push_back("registrymodifications.xcu"); // personal registry stuff
+        }
+
+        return aFileNames;
+    }
+
     bool BackupFileHelper::isTryResetCustomizationsPossible()
     {
-        // return true if not all of the customization selection dirs are deleted
-        return
-            dirExists(maUserConfigWorkURL + "/config") ||                      // UI config stuff
-            dirExists(maUserConfigWorkURL + "/registry") ||                    // most of the registry stuff
-            dirExists(maUserConfigWorkURL + "/psprint") ||                     // not really needed, can be abandoned
-            dirExists(maUserConfigWorkURL + "/store") ||                       // not really needed, can be abandoned
-            dirExists(maUserConfigWorkURL + "/temp") ||                        // not really needed, can be abandoned
-            dirExists(maUserConfigWorkURL + "/pack") ||                        // own backup dir
-            fileExists(maUserConfigWorkURL + "/registrymodifications.xcu");    // personal registry stuff
+        // return true if not all of the customization selection dirs or files are deleted
+        const std::vector< OUString >& rDirs = getCustomizationDirNames();
+
+        for (const auto& a : rDirs)
+        {
+            if (dirExists(maUserConfigWorkURL + "/" + a))
+            {
+                return true;
+            }
+        }
+
+        const std::vector< OUString >& rFiles = getCustomizationFileNames();
+
+        for (const auto& b : rFiles)
+        {
+            if (fileExists(maUserConfigWorkURL + "/" + b))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void BackupFileHelper::tryResetCustomizations()
     {
         // delete all of the customization selection dirs
-        deleteDirRecursively(maUserConfigWorkURL + "/config");
-        deleteDirRecursively(maUserConfigWorkURL + "/registry");
-        deleteDirRecursively(maUserConfigWorkURL + "/psprint");
-        deleteDirRecursively(maUserConfigWorkURL + "/store");
-        deleteDirRecursively(maUserConfigWorkURL + "/temp");
-        deleteDirRecursively(maUserConfigWorkURL + "/pack");
-        osl::File::remove(maUserConfigWorkURL + "/registrymodifications.xcu");
+        const std::vector< OUString >& rDirs = getCustomizationDirNames();
+
+        for (const auto& a : rDirs)
+        {
+            deleteDirRecursively(maUserConfigWorkURL + "/" + a);
+        }
+
+        const std::vector< OUString >& rFiles = getCustomizationFileNames();
+
+        for (const auto& b : rFiles)
+        {
+            osl::File::remove(maUserConfigWorkURL + "/" + b);
+        }
     }
 
     void BackupFileHelper::tryResetUserProfile()
@@ -2375,7 +2459,7 @@ namespace comphelper
                             // get current extension info, but from XML config files
                             ExtensionInfo aCurrentExtensionInfo;
 
-                            aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
+                            aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, true);
 
                             // now we have loaded last_working (aLoadedExtensionInfo) and
                             // current (aCurrentExtensionInfo) ExtensionInfo and may react on
