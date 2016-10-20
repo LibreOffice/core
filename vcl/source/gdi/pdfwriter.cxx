@@ -27,6 +27,17 @@ PDFWriter::AnyWidget::~AnyWidget()
 {
 }
 
+PDFWriter::PDFSignContext::PDFSignContext(OStringBuffer& rCMSHexBuffer)
+    : m_pDerEncoded(nullptr),
+      m_nDerEncoded(0),
+      m_pByteRange1(nullptr),
+      m_nByteRange1(0),
+      m_pByteRange2(nullptr),
+      m_nByteRange2(0),
+      m_rCMSHexBuffer(rCMSHexBuffer)
+{
+}
+
 PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >& xEnc )
         :
         xImplementation( new PDFWriterImpl( rContext, xEnc, *this ) )

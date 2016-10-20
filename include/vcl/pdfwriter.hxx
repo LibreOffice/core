@@ -23,6 +23,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
@@ -544,6 +545,29 @@ The following structure describes the permissions used in PDF security
     enum ColorMode
     {
         DrawColor, DrawGreyscale
+    };
+
+    /// Holds all information to be able to fill a PDF signature template.
+    struct VCL_DLLPUBLIC PDFSignContext
+    {
+        /// DER-encoded certificate buffer.
+        sal_Int8* m_pDerEncoded;
+        /// Length of m_pDerEncoded.
+        sal_Int32 m_nDerEncoded;
+        /// Bytes before the signature itself.
+        void* m_pByteRange1;
+        /// Length of m_pByteRange1.
+        sal_Int32 m_nByteRange1;
+        /// Bytes after the signature itself.
+        void* m_pByteRange2;
+        /// Length of m_pByteRange2.
+        sal_Int32 m_nByteRange2;
+        OUString m_aSignTSA;
+        OUString m_aSignPassword;
+        /// The signature (in PKCS#7 format) is written into this buffer.
+        OStringBuffer& m_rCMSHexBuffer;
+
+        PDFSignContext(OStringBuffer& rCMSHexBuffer);
     };
 
     struct PDFWriterContext
@@ -1241,6 +1265,8 @@ The following structure describes the permissions used in PDF security
     */
     void AddStream( const OUString& rMimeType, PDFOutputStream* pStream );
 
+    /// Fill a PDF signature template.
+    static bool Sign(PDFSignContext& rContext);
 };
 
 }
