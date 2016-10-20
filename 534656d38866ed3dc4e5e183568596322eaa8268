@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_a7f2e298",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-10-20T12:19:12Z",
+      "side": 1,
+      "message": "This does not look right, pElem cannot always be a null pointer, it should point at *(p+1) unless it is the end of the string.",
+      "revId": "534656d38866ed3dc4e5e183568596322eaa8268",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
