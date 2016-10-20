@@ -1220,7 +1220,7 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
                     StartTracking( StartTrackingFlags::ScrollRepeat );
                 }
                 else if ( rMouseEvent.GetClicks() == 2 )
-                    DoubleClick();
+                    maDoubleClickHdl.Call( this );
 
                 return;
             }
@@ -1565,11 +1565,6 @@ void ValueSet::DataChanged( const DataChangedEvent& rDataChangedEvent )
 void ValueSet::Select()
 {
     maSelectHdl.Call( this );
-}
-
-void ValueSet::DoubleClick()
-{
-    maDoubleClickHdl.Call( this );
 }
 
 void ValueSet::UserDraw( const UserDrawEvent& )

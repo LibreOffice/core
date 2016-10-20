@@ -716,11 +716,6 @@ css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ToolboxController:
         return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-void ToolboxController::setSupportVisibleProperty(bool bValue)
-{
-    m_bSupportVisible = bValue;
-}
-
 sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( css::uno::Any&    aConvertedValue ,
                                              css::uno::Any&        aOldValue       ,
                                              sal_Int32                        nHandle         ,
@@ -754,7 +749,7 @@ throw( css::uno::Exception, std::exception)
     {
         bool rValue(false);
         if (( aValue >>= rValue ) && m_bInitialized)
-            this->setSupportVisibleProperty( rValue );
+            m_bSupportVisible = rValue;
     }
 }
 

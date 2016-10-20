@@ -718,11 +718,6 @@ void SvTreeListBox::RemoveSelection()
         pModel->Remove(*it);
 }
 
-SvTreeListBox* SvTreeListBox::GetSourceView()
-{
-    return g_pDDSource;
-}
-
 void SvTreeListBox::RecalcViewData()
 {
     SvTreeListEntry* pEntry = First();
@@ -746,7 +741,7 @@ void SvTreeListBox::ImplShowTargetEmphasis( SvTreeListEntry* pEntry, bool bShow)
         return;
     if ( !bShow && !(nImpFlags & SvTreeListBoxFlags::TARGEMPH_VIS) )
         return;
-    ShowTargetEmphasis( pEntry, bShow );
+    pImpl->PaintDDCursor( pEntry );
     if( bShow )
         nImpFlags |= SvTreeListBoxFlags::TARGEMPH_VIS;
     else
@@ -1191,7 +1186,7 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox
 
 sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    return ExecuteDrop( rEvt, GetSourceView() );
+    return ExecuteDrop( rEvt, g_pDDSource );
 }
 
 /**
@@ -2136,11 +2131,6 @@ void SvTreeListBox::ModelHasCleared()
     AdjustEntryHeight( GetDefaultCollapsedEntryBmp() );
 
     SvListView::ModelHasCleared();
-}
-
-void SvTreeListBox::ShowTargetEmphasis( SvTreeListEntry* pEntry, bool /*bShow*/ )
-{
-    pImpl->PaintDDCursor( pEntry );
 }
 
 void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )

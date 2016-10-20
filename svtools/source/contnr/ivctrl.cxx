@@ -278,10 +278,6 @@ void SvtIconChoiceCtrl::ClickIcon()
     GetSelectedEntry();
     _aClickIconHdl.Call( this );
 }
-bool SvtIconChoiceCtrl::IsEntryEditing() const
-{
-    return _pImpl->IsEntryEditing();
-}
 
 void SvtIconChoiceCtrl::SetChoiceWithCursor()
 {
@@ -301,7 +297,7 @@ void SvtIconChoiceCtrl::KeyInput( const KeyEvent& rKEvt )
 bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
 {
     // under OS/2, we get key up/down even while editing
-    if( IsEntryEditing() )
+    if( _pImpl->IsEntryEditing() )
         return true;
     _pCurKeyEvent = const_cast<KeyEvent*>(&rKEvt);
     bool bHandled = _pImpl->KeyInput( rKEvt );

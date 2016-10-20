@@ -298,7 +298,6 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void    Select();
-    void            DoubleClick();
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     /// Insert @rImage item.

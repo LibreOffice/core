@@ -124,7 +124,6 @@ class SVT_DLLPUBLIC ToolboxController :
 
     protected:
         bool getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox );
-        void setSupportVisibleProperty(bool bValue);
         struct Listener
         {
             Listener( const css::util::URL& rURL, const css::uno::Reference< css::frame::XDispatch >& rDispatch ) :

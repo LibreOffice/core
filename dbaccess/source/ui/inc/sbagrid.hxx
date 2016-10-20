@@ -186,9 +186,6 @@ namespace dbaui
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
         void ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos);
-
-    private:
-        using FmGridHeader::StartDrag;
     };
 
     // interfaces for communication between the vcl grid control and a controller

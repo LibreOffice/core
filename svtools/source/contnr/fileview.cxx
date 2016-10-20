@@ -980,7 +980,7 @@ SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
 
     mpImpl.reset( new SvtFileView_Impl( this, xCmdEnv, nFlags, bOnlyFolder ) );
     mpImpl->mpView->ForbidEmptyText();
-    SetSortColumn( true );
+    bSortColumn = true;
 
     HeaderBar* pHeaderBar = mpImpl->mpView->GetHeaderBar();
     pHeaderBar->SetSelectHdl( LINK( this, SvtFileView, HeaderSelect_Impl ) );
