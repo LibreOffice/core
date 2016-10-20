@@ -374,6 +374,8 @@ const sal_uInt32 ENCRYPT_KEY_SIZE_AES_256   = 0x00000100;
 const sal_uInt32 ENCRYPT_PROVIDER_TYPE_AES  = 0x00000018;
 const sal_uInt32 ENCRYPT_PROVIDER_TYPE_RC4  = 0x00000001;
 
+// version of encryption info used in MS Office 1997 (major = 1, minor = 1)
+const sal_uInt32 VERSION_INFO_1997_FORMAT       = 0x00010001;
 // version of encryption info used in MS Office 2007 (major = 3, minor = 2)
 const sal_uInt32 VERSION_INFO_2007_FORMAT       = 0x00020003;
 // version of encryption info used in MS Office 2007 SP2 and older (major = 4, minor = 2)

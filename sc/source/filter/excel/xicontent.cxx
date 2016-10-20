@@ -1141,20 +1141,22 @@ XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
 
         case EXC_FILEPASS_BIFF8:
         {
-            rStrm.Ignore( 2 );
-            sal_uInt16 nSubMode(0);
-            nSubMode = rStrm.ReaduInt16();
-            switch( nSubMode )
+            sal_uInt32 nVersion = rStrm.ReaduInt32();
+            if (nVersion == msfilter::VERSION_INFO_1997_FORMAT)
             {
-                case EXC_FILEPASS_BIFF8_STD:
-                    xDecr = lclReadFilepass8_Standard( rStrm );
-                break;
-                case EXC_FILEPASS_BIFF8_STRONG:
-                    xDecr = lclReadFilepass8_Strong( rStrm );
-                break;
-                default:
-                    OSL_FAIL( "lclReadFilepass8 - unknown BIFF8 encryption sub mode" );
+                //A Version structure where Version.vMajor MUST be 0x0001,
+                //and Version.vMinor MUST be 0x0001.
+                xDecr = lclReadFilepass8_Standard(rStrm);
             }
+            else if (nVersion == msfilter::VERSION_INFO_2007_FORMAT ||
+                     nVersion == msfilter::VERSION_INFO_2007_FORMAT_SP2)
+            {
+                //Version.vMajor MUST be 0x0002, 0x0003 or 0x0004 and
+                //Version.vMinor MUST be 0x0002.
+                xDecr = lclReadFilepass8_Strong(rStrm);
+            }
+            else
+                OSL_FAIL("lclReadFilepass8 - unknown BIFF8 encryption sub mode");
         }
         break;
 
