@@ -78,6 +78,15 @@ namespace
                         OUString("</paragraph>");
         return aRet;
     }
+
+    OUString lcl_Bookmark( const OUString& rWidgetId )
+    {
+        OUString aRet = "<!-- Bookmark for widget " + rWidgetId + " -->"  + SAL_NEWLINE_STRING;
+        aRet += OUString("<bookmark xml-lang=en-US branch=hid/") + rWidgetId + OUString(" ") +
+                        lcl_genRandom( "bm_id" ) + OUString(" localize=false") +
+                        OUString("</bookmark>") + SAL_NEWLINE_STRING;
+        return aRet;
+    }
 }
 
 class ControlDataEntry
@@ -92,6 +101,8 @@ public:
     {
         return maB2IRange;
     }
+
+    const OString GetHelpId() const { return mrControl.GetHelpId(); }
 
 private:
     basegfx::B2IRange   maB2IRange;
@@ -156,6 +167,7 @@ private:
 
     // save as text
     OUString                    maSaveAsText;
+    OUString                    maMainMarkupText;
 
     // folder URL
     static OUString             maLastFolderURL;
@@ -237,7 +249,8 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     if (mpText)
     {
         OUString aHelpId = OStringToOUString( mrParentDialog.GetHelpId(), RTL_TEXTENCODING_UTF8 );
-        mpText->SetText( lcl_ParagraphWithImage( aHelpId) );
+        maMainMarkupText = lcl_ParagraphWithImage( aHelpId);
+        mpText->SetText( maMainMarkupText );
         mpText->SetReadOnly(true);
     }
 
@@ -572,6 +585,14 @@ IMPL_LINK(ScreenshotAnnotationDlg_Impl, pictureFrameListener, VclWindowEvent&, r
                         maSelected.insert(mpHilighted);
                     }
 
+                    OUString aBookmarks;
+                    for (auto&& rCandidate : maSelected)
+                    {
+                        OUString aHelpId = OStringToOUString( rCandidate->GetHelpId(), RTL_TEXTENCODING_UTF8 );
+                        aBookmarks += lcl_Bookmark( aHelpId );
+                    }
+
+                    mpText->SetText( maMainMarkupText + aBookmarks );
                     bRepaint = true;
                 }
                 break;
