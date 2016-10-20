@@ -380,10 +380,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
                 GetViewShellBase().GetToolBarManager()->ResetToolBars(ToolBarManager::TBG_COMMON_TASK);
         }
 
-        svtools::ColorConfig aColorConfig;
-        Color aFillColor( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
-        if (comphelper::LibreOfficeKit::isActive())
-            aFillColor = COL_TRANSPARENT;
+        ConfigureAppBackgroundColor();
 
         if (meEditMode == EditMode::Page)
         {
@@ -409,8 +406,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             }
 
             maTabControl->SetCurPageId(nActualPageNum + 1);
-
-            SetAppBackgroundColor( aFillColor );
 
             SwitchPage(nActualPageNum);
 
@@ -450,9 +445,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
                     nActualMasterPageNum = i;
                 }
             }
-
-            aFillColor.DecreaseLuminance( 64 );
-            SetAppBackgroundColor( aFillColor );
 
             maTabControl->SetCurPageId(nActualMasterPageNum + 1);
             SwitchPage(nActualMasterPageNum);

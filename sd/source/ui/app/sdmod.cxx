@@ -40,6 +40,7 @@
 #include <svx/svxerr.hxx>
 
 #include <svx/xmlsecctrl.hxx>
+#include <svtools/colorcfg.hxx>
 
 #include "sderror.hxx"
 #include "sdmod.hxx"
@@ -77,7 +78,8 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pNumberFormatter( nullptr ),
     bWaterCan(false),
     mpResourceContainer(new ::sd::SdGlobalResourceContainer()),
-    mbEventListenerAdded(false)
+    mbEventListenerAdded(false),
+    mpColorConfig(new svtools::ColorConfig)
 {
     SetName( "StarDraw" );  // Do not translate!
     pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
@@ -218,6 +220,11 @@ SvNumberFormatter* SdModule::GetNumberFormatter()
 OutputDevice* SdModule::GetRefDevice (::sd::DrawDocShell& )
 {
     return GetVirtualRefDevice();
+}
+
+svtools::ColorConfig& SdModule::GetColorConfig()
+{
+    return *mpColorConfig;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
