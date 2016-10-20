@@ -44,7 +44,8 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
         delete pStrm, pStrm = 0;
 
     ByteString sLine, sVersion;
-    sal_uIntPtr nStt = 0, nEnd = 0;
+    sal_Int32 nStt = -1, nEnd = -1;
+    sal_Int32 nStartFragment = 0, nEndFragment = 0;
     sal_uInt16 nIndex = 0;
 
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -59,14 +60,26 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
             nIndex = 0;
             ByteString sTmp( sLine.GetToken( 0, ':', nIndex ) );
             if( sTmp == "StartHTML" )
-                nStt = (sal_uIntPtr)(sLine.Erase( 0, nIndex ).ToInt32());
+                nStt = sLine.Erase( 0, nIndex ).ToInt32();
             else if( sTmp == "EndHTML" )
-                nEnd = (sal_uIntPtr)(sLine.Erase( 0, nIndex ).ToInt32());
+                nEnd = sLine.Erase( 0, nIndex ).ToInt32();
+            else if( sTmp == "StartFragment" )
+            {
+                nStartFragment = sLine.Erase( 0, nIndex ).ToInt32();
+                if( nStt == -1 )
+                    nStt = nStartFragment;
+            }
+            else if( sTmp == "EndFragment" )
+            {
+                nEndFragment = sLine.Erase( 0, nIndex ).ToInt32();
+                if (nEnd == -1 )
+                    nEnd = nEndFragment;
+            }
             else if( sTmp == "SourceURL" )
                 sBaseURL = String( sLine.Erase( 0, nIndex ), RTL_TEXTENCODING_UTF8);
 
-            if( nEnd && nStt &&
-                ( sBaseURL.Len() || rStream.Tell() >= nStt ))
+            if( nEnd >= 0 && nStt >= 0 &&
+                ( sBaseURL.Len() || rStream.Tell() >= (sal_uInt32)nStt ))
             {
                 bRet = sal_True;
                 break;
