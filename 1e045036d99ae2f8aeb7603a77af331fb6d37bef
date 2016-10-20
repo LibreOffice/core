@@ -34,6 +34,24 @@
       "revId": "1e045036d99ae2f8aeb7603a77af331fb6d37bef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_87d886f1",
+        "filename": "include/comphelper/property.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-20T13:29:34Z",
+      "side": 1,
+      "message": "...in which case you may get away without an explicit specialization of tryPropertyValue for Any, if you change the generic one to use fromAny that will be introduced with \u003chttps://gerrit.libreoffice.org/#/c/30022/5/\u003e (and assuming the generic one\u0027s call to cppu::convertPropertyValue also works fine for Any)",
+      "parentUuid": "7a77a97e_e7c69a15",
+      "revId": "1e045036d99ae2f8aeb7603a77af331fb6d37bef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
