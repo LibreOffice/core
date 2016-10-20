@@ -124,9 +124,6 @@ public:
         SHA512
     };
 
-    static const sal_uInt32 DIGEST_LENGTH_SHA1;
-    static const sal_uInt32 DIGEST_LENGTH_SHA512;
-
 private:
     DigestType meType;
 
