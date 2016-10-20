@@ -16,6 +16,24 @@
       "revId": "534656d38866ed3dc4e5e183568596322eaa8268",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_cae4453d",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000108
+      },
+      "writtenOn": "2016-10-20T20:46:34Z",
+      "side": 1,
+      "message": "Hmmm, can you help point the error ? My reasoning is the following:\n\n- If this is an empty string, the next loop run will go through the closing quote code and see that pElem is null, hence skip the copy to aElem.\n\n- If this is not an empty string, the following run will go through the \"else if (!pElem)\" on line 561 which will set it in a generic way.\n\nDid I miss a corner case ?",
+      "parentUuid": "7a77a97e_a7f2e298",
+      "revId": "534656d38866ed3dc4e5e183568596322eaa8268",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
