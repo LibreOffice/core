@@ -64,6 +64,7 @@ FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManage
 {
     get(m_pLbCategory, "category");
     get(m_pLbFunction, "function");
+    get(m_plbFunctionSearchString, "search");
     m_pLbFunction->SetStyle(m_pLbFunction->GetStyle() | WB_SORT);
     Size aSize(LogicToPixel(Size(86 , 162), MapUnit::MapAppFont));
     m_pLbFunction->set_height_request(aSize.Height());
@@ -85,6 +86,7 @@ FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManage
     m_pLbCategory->SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
     m_pLbFunction->SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
     m_pLbFunction->SetDoubleClickHdl( LINK( this, FuncPage, DblClkHdl ) );
+    m_plbFunctionSearchString->SetModifyHdl( LINK( this, FuncPage, ModifyHdl ) );
 }
 
 FuncPage::~FuncPage()
@@ -96,6 +98,7 @@ void FuncPage::dispose()
 {
     m_pLbCategory.clear();
     m_pLbFunction.clear();
+    m_plbFunctionSearchString.clear();
     TabPage::dispose();
 }
 
@@ -111,53 +114,71 @@ void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
     }
 }
 
-void FuncPage::UpdateFunctionList()
+//aStr is non-empty when user types in the search box to search some function
+void FuncPage::UpdateFunctionList(OUString& aStr = "")
 {
-    sal_Int32  nSelPos   = m_pLbCategory->GetSelectEntryPos();
-    const IFunctionCategory* pCategory = static_cast<const IFunctionCategory*>(m_pLbCategory->GetEntryData(nSelPos));
 
     m_pLbFunction->Clear();
     m_pLbFunction->SetUpdateMode( false );
 
+    if(aStr.isEmpty()){
+        sal_Int32  nSelPos   = m_pLbCategory->GetSelectEntryPos();
+        const IFunctionCategory* pCategory = static_cast<const IFunctionCategory*>(m_pLbCategory->GetEntryData(nSelPos));
 
-    if ( nSelPos > 0 )
-    {
-        if ( pCategory == nullptr )
+        if ( nSelPos > 0 )
         {
-            const sal_uInt32 nCount = m_pFunctionManager->getCount();
-            for(sal_uInt32 i = 0 ; i < nCount; ++i)
+            if ( pCategory == nullptr )
             {
-                impl_addFunctions(m_pFunctionManager->getCategory(i));
+                const sal_uInt32 nCount = m_pFunctionManager->getCount();
+                for(sal_uInt32 i = 0 ; i < nCount; ++i)
+                {
+                    impl_addFunctions(m_pFunctionManager->getCategory(i));
+                }
+            }
+            else
+            {
+                impl_addFunctions(pCategory);
             }
         }
-        else
+        else // LRU-List
         {
-            impl_addFunctions(pCategory);
-        }
-    }
-    else // LRU-List
-    {
-        ::std::vector< TFunctionDesc >::iterator aIter = aLRUList.begin();
-        ::std::vector< TFunctionDesc >::iterator aEnd = aLRUList.end();
+            ::std::vector< TFunctionDesc >::iterator aIter = aLRUList.begin();
+            ::std::vector< TFunctionDesc >::iterator aEnd = aLRUList.end();
 
-        for ( ; aIter != aEnd; ++aIter )
-        {
-            const IFunctionDescription* pDesc = *aIter;
-            if (pDesc)  // may be null if a function is no longer available
+            for ( ; aIter != aEnd; ++aIter )
             {
-                m_pLbFunction->SetEntryData(
-                    m_pLbFunction->InsertEntry( pDesc->getFunctionName() ), const_cast<IFunctionDescription *>(pDesc) );
+                const IFunctionDescription* pDesc = *aIter;
+                if (pDesc)  // may be null if a function is no longer available
+                {
+                    m_pLbFunction->SetEntryData(
+                        m_pLbFunction->InsertEntry( pDesc->getFunctionName() ), const_cast<IFunctionDescription *>(pDesc) );
+                }
+            }
+        }
+
+
+        m_pLbFunction->SetUpdateMode( true );
+        // Ensure no function is selected so the Next button doesn't overwrite a
+        // function that is not in the list with an arbitrary selected one.
+        m_pLbFunction->SetNoSelection();
+
+        if(IsVisible()) SelHdl(*m_pLbFunction);
+    }
+    else{
+        const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
+
+        for (sal_uInt32 i = 0; i < nCategoryCount; i++){
+            const IFunctionCategory* pCategory = m_pFunctionManager->getCategory(i);
+            const sal_uInt32 functionCount = pCategory->getCount();
+            for (sal_uInt32 j = 0; j < functionCount; ++j) {
+                TFunctionDesc pDesc(pCategory->getFunction(j));
+                if ((pDesc->getFunctionName()).indexOf(aStr.toAsciiUpperCase()) >= 0) {
+                    m_pLbFunction->SetEntryData(
+                        m_pLbFunction->InsertEntry(pDesc->getFunctionName()), const_cast<IFunctionDescription *>(pDesc));
+                }
             }
         }
     }
-
-
-    m_pLbFunction->SetUpdateMode( true );
-    // Ensure no function is selected so the Next button doesn't overwrite a
-    // function that is not in the list with an arbitrary selected one.
-    m_pLbFunction->SetNoSelection();
-
-    if(IsVisible()) SelHdl(*m_pLbFunction);
 }
 
 IMPL_LINK( FuncPage, SelHdl, ListBox&, rLb, void )
@@ -183,6 +204,12 @@ IMPL_LINK( FuncPage, SelHdl, ListBox&, rLb, void )
 IMPL_LINK_NOARG(FuncPage, DblClkHdl, ListBox&, void)
 {
     aDoubleClickLink.Call(*this);
+}
+
+IMPL_LINK_NOARG(FuncPage, ModifyHdl, Edit&, void)
+{
+    OUString searchStr = m_plbFunctionSearchString->GetText();
+    UpdateFunctionList(searchStr);
 }
 
 void FuncPage::SetCategory(sal_Int32 nCat)
