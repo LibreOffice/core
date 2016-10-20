@@ -12,7 +12,7 @@
 
 <style:style style:name="Text" style:family="table-cell" style:parent-style-name="Default"/>
     <style:style style:name="Note" style:family="table-cell" style:parent-style-name="Text">
-        <style:table-cell-properties fo:background-color="#ffffcc" fo:border="0.06pt solid #000000"/>
+        <style:table-cell-properties fo:background-color="#ffffcc" fo:border="0.75pt solid #808080"/>
         <style:text-properties fo:color="#333333"/>
     </style:style>
     <style:style style:name="Footnote" style:family="table-cell" style:parent-style-name="Text">
