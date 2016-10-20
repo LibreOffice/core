@@ -384,7 +384,7 @@ static bool lcl_isFontsizeItem( const SfxPoolItem& rItem )
 
 void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
 {
-    m_rExport.AttrOutput().RTLAndCJKState( IsCharRTL(), GetScript() );
+    m_rExport.AttrOutput().RTLAndCJKState( mbCharIsRTL, GetScript() );
 
     /*
      Depending on whether text is in CTL/CJK or Western, get the id of that

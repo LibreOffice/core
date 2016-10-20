@@ -72,12 +72,8 @@ public:
     {}
 
     // data access
-    const basegfx::B2DPolygon& getTriangle() const { return maTriangle; }
     const basegfx::B2DPolygon& getLine() const { return maLine; }
-    const basegfx::B2DPolygon& getLineTop() const { return maLineTop; }
-    AnchorState getAnchorState() const { return maAnchorState; }
     const basegfx::BColor& getColor() const { return maColor; }
-    double getDiscreteLineWidth() const { return mfDiscreteLineWidth; }
     bool getLineSolid() const { return mbLineSolid; }
 
     virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const override;
@@ -97,7 +93,7 @@ drawinglayer::primitive2d::Primitive2DContainer AnchorPrimitive::create2DDecompo
         // create triangle
         const drawinglayer::primitive2d::Primitive2DReference aTriangle(
             new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                basegfx::B2DPolyPolygon(getTriangle()),
+                basegfx::B2DPolyPolygon(maTriangle),
                 getColor()));
 
         aRetval.push_back(aTriangle);
@@ -106,7 +102,7 @@ drawinglayer::primitive2d::Primitive2DContainer AnchorPrimitive::create2DDecompo
     // prepare view-independent LineWidth and color
     const drawinglayer::attribute::LineAttribute aLineAttribute(
         getColor(),
-        getDiscreteLineWidth() * getDiscreteUnit());
+        mfDiscreteLineWidth * getDiscreteUnit());
 
     if ( AS_ALL == maAnchorState ||
          AS_START == maAnchorState )
@@ -151,7 +147,7 @@ drawinglayer::primitive2d::Primitive2DContainer AnchorPrimitive::create2DDecompo
         // the other parts are created
         const drawinglayer::primitive2d::Primitive2DReference aLineTop(
             new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
-                getLineTop(),
+                maLineTop,
                 aLineAttribute));
 
         aRetval.push_back(aLineTop);
@@ -166,12 +162,12 @@ bool AnchorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
     {
         const AnchorPrimitive& rCompare = static_cast< const AnchorPrimitive& >(rPrimitive);
 
-        return (getTriangle() == rCompare.getTriangle()
+        return (maTriangle == rCompare.maTriangle
             && getLine() == rCompare.getLine()
-            && getLineTop() == rCompare.getLineTop()
-            && getAnchorState() == rCompare.getAnchorState()
+            && maLineTop == rCompare.maLineTop
+            && maAnchorState == rCompare.maAnchorState
             && getColor() == rCompare.getColor()
-            && getDiscreteLineWidth() == rCompare.getDiscreteLineWidth()
+            && mfDiscreteLineWidth == rCompare.mfDiscreteLineWidth
             && getLineSolid() == rCompare.getLineSolid());
     }
 

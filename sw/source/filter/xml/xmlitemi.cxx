@@ -376,7 +376,7 @@ SvXMLImportContext *SwXMLImport::CreateTableItemImportContext(
     return new SwXMLItemSetContext_Impl( *this, nPrefix, rLocalName,
                                             xAttrList, rItemSet,
                                             GetTableItemMapper(),
-                                            GetTwipUnitConverter() );
+                                            *m_pTwipUnitConv );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

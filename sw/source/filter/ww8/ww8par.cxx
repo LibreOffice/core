@@ -4405,7 +4405,7 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFormatPageDesc &rPgDesc,
 SwFormatPageDesc wwSectionManager::SetSwFormatPageDesc(mySegIter &rIter,
     mySegIter &rStart, bool bIgnoreCols)
 {
-    if (IsNewDoc() && rIter == rStart)
+    if (mrReader.m_bNewDoc && rIter == rStart)
     {
         rIter->mpPage =
             mrReader.m_rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
@@ -4439,11 +4439,6 @@ SwFormatPageDesc wwSectionManager::SetSwFormatPageDesc(mySegIter &rIter,
 
     ++mnDesc;
     return aRet;
-}
-
-bool wwSectionManager::IsNewDoc() const
-{
-    return mrReader.m_bNewDoc;
 }
 
 void wwSectionManager::InsertSegments()

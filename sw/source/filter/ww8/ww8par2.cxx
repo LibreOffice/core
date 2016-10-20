@@ -564,7 +564,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     if (!bTestAllowed)
         return aRet;
 
-    aRet.mbStartApo = bNowApo && !InAnyApo(); // APO-start
+    aRet.mbStartApo = bNowApo && !InEqualOrHigherApo(1); // APO-start
     aRet.mbStopApo = InEqualOrHigherApo(nCellLevel) && !bNowApo;  // APO-end
 
     //If it happens that we are in a table, then if it's not the first cell

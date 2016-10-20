@@ -404,7 +404,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
 
 bool Customization::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
-    if ( GetTBIDForTB() == 0x25 )
+    if ( tbidForTBD == 0x25 )
         return ImportMenu( rWrapper, helper );
     if ( !customizationDataCTB.get() )
         return false;
