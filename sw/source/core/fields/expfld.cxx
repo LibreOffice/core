@@ -430,7 +430,7 @@ bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= GetExpStr();
+        rAny <<= sExpand;
         break;
     default:
         return SwField::QueryValue(rAny, nWhichId);

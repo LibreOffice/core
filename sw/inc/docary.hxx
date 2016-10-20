@@ -190,7 +190,6 @@ public:
     // frees all SwFrameFormat!
     virtual ~SwFrameFormats() override;
 
-    void clear()        { return m_Array.clear(); }
     bool empty()  const { return m_Array.empty(); }
     size_t size() const { return m_Array.size(); }
 

@@ -242,8 +242,6 @@ class SwHTMLTableLayout
     SwFrameFormat *FindFlyFrameFormat() const;
     const SwDoc *GetDoc() const { return GetAnyBoxStartNode()->GetDoc(); }
 
-    void ClearPass1Info() { m_nMin = m_nMax = 0; }
-
     void Resize_( sal_uInt16 nAbsAvail, bool bRecalc );
 
     DECL_LINK( DelayedResize_Impl, Timer*, void );

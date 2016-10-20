@@ -202,10 +202,10 @@ public:
     {}
 
     inline SwGammaGrf& operator=( const SwGammaGrf& rCopy )
-        {
-            SetValue( rCopy.GetValue() );
-            return *this;
-        }
+    {
+        nValue = rCopy.nValue;
+        return *this;
+    }
 
     // pure virtual methods from SfxEnumItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -222,7 +222,6 @@ public:
                                             sal_uInt8 nMemberId ) override;
 
     const double& GetValue() const              { return nValue; }
-    void SetValue( const double& rVal )         { nValue = rVal; }
 };
 
 class SwInvertGrf: public SfxBoolItem

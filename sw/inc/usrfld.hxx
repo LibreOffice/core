@@ -47,7 +47,6 @@ public:
            void             SetContent( const OUString& rStr, sal_uInt32 nFormat = 0 );
 
     inline bool             IsValid() const;
-    inline void             ChgValid( bool bNew );
 
            double           GetValue(SwCalc& rCalc);    // Recalculate member nValue.
     inline double           GetValue() const;
@@ -68,9 +67,6 @@ protected:
 
 inline bool SwUserFieldType::IsValid() const
     { return bValidValue; }
-
-inline void SwUserFieldType::ChgValid( bool bNew )
-    { bValidValue = bNew; }
 
 inline double SwUserFieldType::GetValue() const
     { return nValue; }

@@ -120,7 +120,7 @@ SwHHCWrapper::~SwHHCWrapper()
     // check for existence of a draw view which means that there are
     // (or previously were) draw objects present in the document.
     // I.e. we like to check those too.
-    if ( IsDrawObj() /*&& bLastRet*/ && m_pView->GetWrtShell().HasDrawView() )
+    if ( m_bIsDrawObj /*&& bLastRet*/ && m_pView->GetWrtShell().HasDrawView() )
     {
         vcl::Cursor *pSave = m_pView->GetWindow()->GetCursor();
         {
@@ -686,7 +686,7 @@ bool SwHHCWrapper::HasOtherCnt_impl()
 
 void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs, SvxSpellArea eArea )
 {
-    SetDrawObj( SvxSpellArea::Other == eArea );
+    m_bIsDrawObj = SvxSpellArea::Other == eArea;
     m_pView->SpellStart( eArea, m_bStartDone, m_bEndDone, /* [out] */ pConversionArgs );
 }
 

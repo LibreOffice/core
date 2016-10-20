@@ -42,12 +42,11 @@ public:
     inline SwTableBoxNumFormat& operator=( const SwTableBoxNumFormat& rAttr )
     {
         SetValue( rAttr.GetValue() );
-        SetAutoFlag( rAttr.GetAutoFlag() );
+        bAuto = rAttr.bAuto;
         return *this;
     }
 
     bool GetAutoFlag() const                    { return bAuto; }
-    void SetAutoFlag( bool bFlag )              { bAuto = bFlag; }
 };
 
 class SwTableBoxFormula : public SfxPoolItem, public SwTableFormula

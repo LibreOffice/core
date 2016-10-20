@@ -1443,7 +1443,7 @@ void SwXTextTableRow::SwClientNotify(const SwModify& rModify, const SfxHint& rHi
     if(typeid(FindUnoInstanceHint<SwTableLine, SwXTextTableRow>) == typeid(rHint))
     {
         auto* pFindHint(static_cast<const FindUnoInstanceHint<SwTableLine,SwXTextTableRow>* >(&rHint));
-        if(!pFindHint->m_pCore && pFindHint->m_pCore == GetTableRow())
+        if(!pFindHint->m_pCore && pFindHint->m_pCore == pLine)
             pFindHint->m_pResult = this;
     }
     else
