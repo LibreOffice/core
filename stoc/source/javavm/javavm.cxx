@@ -376,20 +376,22 @@ void getDefaultLocaleFromConfig(
         if(index >= 0) {
             language = locale->getStringValue().copy(0, index);
             country = locale->getStringValue().copy(index + 1);
+        } else {
+            language = locale->getStringValue();
+        }
 
-            if(!language.isEmpty()) {
-                OUString prop = "user.language="
-                              + language;
+        if(!language.isEmpty()) {
+            OUString prop = "user.language="
+                          + language;
 
-                pjvm->pushProp(prop);
-            }
+            pjvm->pushProp(prop);
+        }
 
-            if(!country.isEmpty()) {
-                OUString prop = "user.country="
-                              + country;
+        if(!country.isEmpty()) {
+            OUString prop = "user.country="
+                          + country;
 
-                pjvm->pushProp(prop);
-            }
+            pjvm->pushProp(prop);
         }
     }
 
