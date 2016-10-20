@@ -35,6 +35,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace css;
+using namespace css::xml::dom;
+
 static const sal_uInt32 BACKUP_FILE_HELPER_BLOCK_SIZE = 16384;
 
 namespace
@@ -2006,6 +2008,84 @@ namespace comphelper
         }
 
         ExtensionInfo::changeEnableDisableStateInXML(maUserConfigWorkURL, aToBeEnabled, aToBeDisabled);
+    }
+
+    namespace {
+        uno::Reference<XElement> lcl_getConfigElement(const uno::Reference<XDocument>& xDocument, const OUString& rPath,
+                                  const OUString& rKey, const OUString& rValue)
+        {
+            uno::Reference< XElement > itemElement = xDocument->createElement("item");
+            itemElement->setAttribute("oor:path", rPath);
+
+            uno::Reference< XElement > propElement = xDocument->createElement("prop");
+            propElement->setAttribute("oor:name", rKey);
+            propElement->setAttribute("oor:op", "replace"); // Replace any other options
+
+            uno::Reference< XElement > valueElement = xDocument->createElement("value");
+            valueElement->setNodeValue(rValue);
+
+            propElement->appendChild(valueElement);
+            itemElement->appendChild(propElement);
+            return itemElement;
+        }
+    }
+
+    void BackupFileHelper::tryDisableHWAcceleration()
+    {
+        const OUString aRegistryModifications(maUserConfigWorkURL + "/registrymodifications.xcu");
+        if (!fileExists(aRegistryModifications))
+            return;
+
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        uno::Reference< XDocumentBuilder > xBuilder = DocumentBuilder::create(xContext);
+        uno::Reference< XDocument > xDocument = xBuilder->parseURI(aRegistryModifications);
+        uno::Reference< XElement > xRootElement = xDocument->getDocumentElement();
+
+        xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/VCL",
+                                                       "UseOpenGL", "false"));
+        xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/VCL",
+                                                       "ForceOpenGL", "false"));
+        xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/Misc",
+                                                       "UseOpenCL", "false"));
+        xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/Misc",
+                                                       "UseSwInterpreter", "false"));
+
+
+        // did change - write back
+        uno::Reference< xml::sax::XSAXSerializable > xSerializer(xDocument, uno::UNO_QUERY);
+
+        if (xSerializer.is())
+        {
+            // create a SAXWriter
+            uno::Reference< xml::sax::XWriter > const xSaxWriter = xml::sax::Writer::create(xContext);
+            uno::Reference< io::XStream > xTempFile(io::TempFile::create(xContext), uno::UNO_QUERY);
+            uno::Reference< io::XOutputStream > xOutStrm(xTempFile->getOutputStream(), uno::UNO_QUERY);
+
+            // set output stream and do the serialization
+            xSaxWriter->setOutputStream(uno::Reference< css::io::XOutputStream >(xOutStrm, uno::UNO_QUERY));
+            xSerializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(xSaxWriter, uno::UNO_QUERY), uno::Sequence< beans::StringPair >());
+
+            // get URL from temp file
+            uno::Reference < beans::XPropertySet > xTempFileProps(xTempFile, uno::UNO_QUERY);
+            uno::Any aUrl = xTempFileProps->getPropertyValue("Uri");
+            OUString aTempURL;
+            aUrl >>= aTempURL;
+
+            // copy back file
+            if (!aTempURL.isEmpty() && fileExists(aTempURL))
+            {
+                if (fileExists(aRegistryModifications))
+                {
+                    osl::File::remove(aRegistryModifications);
+                }
+
+#if OSL_DEBUG_LEVEL > 1
+                SAL_WARN_IF(osl::FileBase::E_None != osl::File::move(aTempURL, aRegistryModifications), "comphelper:backupfileheler", "could not copy back modified Extension configuration file");
+#else
+                osl::File::move(aTempURL, aRegistryModifications);
+#endif
+            }
+        }
     }
 
     bool BackupFileHelper::isTryResetCustomizationsPossible()
