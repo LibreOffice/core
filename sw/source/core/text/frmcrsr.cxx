@@ -1198,8 +1198,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
                 // We make sure that we move down.
                 if( nTmpOfst <= nStart && ! bFirstOfDouble )
                     nTmpOfst = nStart + 1;
-                pPam->GetPoint()->nContent =
-                      SwIndex( const_cast<SwTextFrame*>(this)->GetTextNode(), nTmpOfst );
+                pPam->GetPoint()->nContent.Assign(const_cast<SwTextFrame*>(this)->GetTextNode(), nTmpOfst);
 
                 if ( IsVertical() )
                     const_cast<SwTextFrame*>(this)->SwapWidthAndHeight();
