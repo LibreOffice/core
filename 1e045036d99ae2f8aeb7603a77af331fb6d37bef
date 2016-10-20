@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_87cec658",
+        "filename": "include/comphelper/property.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-20T12:09:00Z",
+      "side": 1,
+      "message": "I wouldn\u0027t extend the generic logic of tryPropertyValue in a way that is tailored to the (real or assumed) needs of the calls in OListBoxModel::convertFastPropertyValue (forms/source/component/ListBox.cxx)",
+      "revId": "1e045036d99ae2f8aeb7603a77af331fb6d37bef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
