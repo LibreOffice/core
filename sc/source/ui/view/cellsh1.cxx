@@ -2195,19 +2195,27 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_INSERT_POSTIT:
         case SID_EDIT_POSTIT:
-            if ( pReqArgs )
             {
-                const SvxPostItAuthorItem&  rAuthorItem = static_cast<const SvxPostItAuthorItem&>(pReqArgs->Get( SID_ATTR_POSTIT_AUTHOR ));
-                const SvxPostItDateItem&    rDateItem   = static_cast<const SvxPostItDateItem&>(pReqArgs->Get( SID_ATTR_POSTIT_DATE ));
-                const SvxPostItTextItem&    rTextItem   = static_cast<const SvxPostItTextItem&>(pReqArgs->Get( SID_ATTR_POSTIT_TEXT ));
+                const SfxPoolItem* pAuthor;
+                const SfxPoolItem* pDate;
+                const SfxPoolItem* pText;
 
-                ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-                pTabViewShell->ReplaceNote( aPos, rTextItem.GetValue(), &rAuthorItem.GetValue(), &rDateItem.GetValue() );
+                if ( pReqArgs && pReqArgs->HasItem( SID_ATTR_POSTIT_AUTHOR, &pAuthor ) &&
+                                 pReqArgs->HasItem( SID_ATTR_POSTIT_DATE, &pDate) &&
+                                 pReqArgs->HasItem( SID_ATTR_POSTIT_TEXT, &pText) )
+                {
+                    const SvxPostItAuthorItem*  pAuthorItem = static_cast<const SvxPostItAuthorItem*>( pAuthor );
+                    const SvxPostItDateItem*    pDateItem   = static_cast<const SvxPostItDateItem*>( pDate );
+                    const SvxPostItTextItem*    pTextItem   = static_cast<const SvxPostItTextItem*>( pText );
+
+                    ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                    pTabViewShell->ReplaceNote( aPos, pTextItem->GetValue(), &pAuthorItem->GetValue(), &pDateItem->GetValue() );
+                }
+                else
+                {
+                    pTabViewShell->EditNote();                  // note object to edit
+                }
                 rReq.Done();
-            }
-            else
-            {
-                pTabViewShell->EditNote();                  // note object to edit
             }
             break;
 
