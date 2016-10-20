@@ -42,27 +42,6 @@ static const OUString lclCspName = "Microsoft Enhanced RSA and AES Cryptographic
 
 } // namespace
 
-EncryptionStandardHeader::EncryptionStandardHeader()
-{
-    flags        = 0;
-    sizeExtra    = 0;
-    algId        = 0;
-    algIdHash    = 0;
-    keyBits      = 0;
-    providedType = 0;
-    reserved1    = 0;
-    reserved2    = 0;
-}
-
-EncryptionVerifierAES::EncryptionVerifierAES() :
-    saltSize(SALT_LENGTH),
-    encryptedVerifierHashSize(Digest::DIGEST_LENGTH_SHA1)
-{
-    memset(salt, 0, sizeof(salt));
-    memset(encryptedVerifier, 0, sizeof(encryptedVerifier));
-    memset(encryptedVerifierHash, 0, sizeof(encryptedVerifierHash));
-}
-
 Standard2007Engine::Standard2007Engine() :
     CryptoEngine()
 {}
@@ -76,23 +55,23 @@ bool Standard2007Engine::generateVerifier()
     if (mKey.size() != 16)
         return false;
 
-    vector<sal_uInt8> verifier(ENCRYPTED_VERIFIER_LENGTH);
-    vector<sal_uInt8> encryptedVerifier(ENCRYPTED_VERIFIER_LENGTH);
+    vector<sal_uInt8> verifier(msfilter::ENCRYPTED_VERIFIER_LENGTH);
+    vector<sal_uInt8> encryptedVerifier(msfilter::ENCRYPTED_VERIFIER_LENGTH);
 
     lclRandomGenerateValues(&verifier[0], verifier.size());
 
     vector<sal_uInt8> iv;
     Encrypt aEncryptorVerifier(mKey, iv, Crypto::AES_128_ECB);
-    if (aEncryptorVerifier.update(encryptedVerifier, verifier) != ENCRYPTED_VERIFIER_LENGTH)
+    if (aEncryptorVerifier.update(encryptedVerifier, verifier) != msfilter::ENCRYPTED_VERIFIER_LENGTH)
         return false;
     std::copy(encryptedVerifier.begin(), encryptedVerifier.end(), mInfo.verifier.encryptedVerifier);
 
-    vector<sal_uInt8> hash(RTL_DIGEST_LENGTH_SHA1, 0);
-    mInfo.verifier.encryptedVerifierHashSize = RTL_DIGEST_LENGTH_SHA1;
+    vector<sal_uInt8> hash(msfilter::SHA1_HASH_LENGTH, 0);
+    mInfo.verifier.encryptedVerifierHashSize = msfilter::SHA1_HASH_LENGTH;
     Digest::sha1(hash, verifier);
-    hash.resize(ENCRYPTED_VERIFIER_HASH_LENGTH, 0);
+    hash.resize(msfilter::SHA256_HASH_LENGTH, 0);
 
-    vector<sal_uInt8> encryptedHash(ENCRYPTED_VERIFIER_HASH_LENGTH, 0);
+    vector<sal_uInt8> encryptedHash(msfilter::SHA256_HASH_LENGTH, 0);
 
     Encrypt aEncryptorHash(mKey, iv, Crypto::AES_128_ECB);
     aEncryptorHash.update(encryptedHash, hash, hash.size());
@@ -119,13 +98,13 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
         initialData.begin() + saltSize);
 
     // use "hash" vector for result of sha1 hashing
-    vector<sal_uInt8> hash(Digest::DIGEST_LENGTH_SHA1, 0);
+    vector<sal_uInt8> hash(msfilter::SHA1_HASH_LENGTH, 0);
 
     // calculate SHA1 hash of initialData
     Digest::sha1(hash, initialData);
 
     // data = iterator (4bytes) + hash
-    vector<sal_uInt8> data(Digest::DIGEST_LENGTH_SHA1 + 4, 0);
+    vector<sal_uInt8> data(msfilter::SHA1_HASH_LENGTH + 4, 0);
 
     for (sal_Int32 i = 0; i < 50000; ++i)
     {
@@ -134,7 +113,7 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
         Digest::sha1(hash, data);
     }
     std::copy(hash.begin(), hash.end(), data.begin() );
-    std::fill(data.begin() + Digest::DIGEST_LENGTH_SHA1, data.end(), 0 );
+    std::fill(data.begin() + msfilter::SHA1_HASH_LENGTH, data.end(), 0 );
 
     Digest::sha1(hash, data);
 
@@ -156,16 +135,16 @@ bool Standard2007Engine::generateEncryptionKey(const OUString& password)
 
     calculateEncryptionKey(password);
 
-    vector<sal_uInt8> encryptedVerifier(ENCRYPTED_VERIFIER_LENGTH);
+    vector<sal_uInt8> encryptedVerifier(msfilter::ENCRYPTED_VERIFIER_LENGTH);
     std::copy(
         mInfo.verifier.encryptedVerifier,
-        mInfo.verifier.encryptedVerifier + ENCRYPTED_VERIFIER_LENGTH,
+        mInfo.verifier.encryptedVerifier + msfilter::ENCRYPTED_VERIFIER_LENGTH,
         encryptedVerifier.begin());
 
-    vector<sal_uInt8> encryptedHash(ENCRYPTED_VERIFIER_HASH_LENGTH);
+    vector<sal_uInt8> encryptedHash(msfilter::SHA256_HASH_LENGTH);
     std::copy(
         mInfo.verifier.encryptedVerifierHash,
-        mInfo.verifier.encryptedVerifierHash + ENCRYPTED_VERIFIER_HASH_LENGTH,
+        mInfo.verifier.encryptedVerifierHash + msfilter::SHA256_HASH_LENGTH,
         encryptedHash.begin());
 
     vector<sal_uInt8> verifier(encryptedVerifier.size(), 0);
@@ -174,7 +153,7 @@ bool Standard2007Engine::generateEncryptionKey(const OUString& password)
     vector<sal_uInt8> verifierHash(encryptedHash.size(), 0);
     Decrypt::aes128ecb(verifierHash, encryptedHash, mKey);
 
-    vector<sal_uInt8> hash(RTL_DIGEST_LENGTH_SHA1, 0);
+    vector<sal_uInt8> hash(msfilter::SHA1_HASH_LENGTH, 0);
     Digest::sha1(hash, verifier);
 
     return std::equal( hash.begin(), hash.end(), verifierHash.begin() );
@@ -204,11 +183,11 @@ bool Standard2007Engine::decrypt(
 
 void Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOutputStream& rStream)
 {
-    mInfo.header.flags        = ENCRYPTINFO_AES | ENCRYPTINFO_CRYPTOAPI;
-    mInfo.header.algId        = ENCRYPT_ALGO_AES128;
-    mInfo.header.algIdHash    = ENCRYPT_HASH_SHA1;
-    mInfo.header.keyBits      = ENCRYPT_KEY_SIZE_AES_128;
-    mInfo.header.providedType = ENCRYPT_PROVIDER_TYPE_AES;
+    mInfo.header.flags        = msfilter::ENCRYPTINFO_AES | msfilter::ENCRYPTINFO_CRYPTOAPI;
+    mInfo.header.algId        = msfilter::ENCRYPT_ALGO_AES128;
+    mInfo.header.algIdHash    = msfilter::ENCRYPT_HASH_SHA1;
+    mInfo.header.keyBits      = msfilter::ENCRYPT_KEY_SIZE_AES_128;
+    mInfo.header.providedType = msfilter::ENCRYPT_PROVIDER_TYPE_AES;
 
     lclRandomGenerateValues(mInfo.verifier.salt, mInfo.verifier.saltSize);
     const sal_Int32 keyLength = mInfo.header.keyBits / 8;
@@ -222,11 +201,11 @@ void Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOu
     if (!generateVerifier())
         return;
 
-    rStream.WriteUInt32(VERSION_INFO_2007_FORMAT);
+    rStream.WriteUInt32(msfilter::VERSION_INFO_2007_FORMAT);
 
     sal_uInt32 cspNameSize = (lclCspName.getLength() * 2) + 2;
 
-    sal_uInt32 encryptionHeaderSize = static_cast<sal_uInt32>(sizeof(EncryptionStandardHeader));
+    sal_uInt32 encryptionHeaderSize = static_cast<sal_uInt32>(sizeof(msfilter::EncryptionStandardHeader));
 
     rStream.WriteUInt32( mInfo.header.flags );
     sal_uInt32 headerSize = encryptionHeaderSize + cspNameSize;
@@ -236,7 +215,7 @@ void Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOu
     rStream.writeUnicodeArray(lclCspName);
     rStream.WriteUInt16(0);
 
-    sal_uInt32 encryptionVerifierSize = static_cast<sal_uInt32>(sizeof(EncryptionVerifierAES));
+    sal_uInt32 encryptionVerifierSize = static_cast<sal_uInt32>(sizeof(msfilter::EncryptionVerifierAES));
     rStream.writeMemory(&mInfo.verifier, encryptionVerifierSize);
 }
 
