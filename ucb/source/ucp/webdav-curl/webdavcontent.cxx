@@ -1621,6 +1621,30 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                                                  m_bCollection ) );
     }
 
+    // Add a default for the properties requested but not found.
+    // Determine still missing properties, add a default.
+    // Some client function doesn't expect a void uno::Any,
+    // but instead wants some sort of default.
+    std::vector< OUString > aMissingProps;
+    if ( !xProps->containsAllNames(
+                rProperties, aMissingProps ) )
+    {
+        //
+        for ( std::vector< rtl::OUString >::const_iterator it = aMissingProps.begin();
+              it != aMissingProps.end(); ++it )
+        {
+            // For the time being only a couple of properties need to be added
+            if ( (*it) == "DateModified"  || (*it) == "DateCreated" )
+            {
+                util::DateTime aDate;
+                xProps->addProperty(
+                    (*it),
+                    uno::makeAny( aDate ),
+                    true );
+            }
+        }
+    }
+
     sal_Int32 nCount = rProperties.getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
