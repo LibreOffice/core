@@ -479,7 +479,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = isEditable() && m_bGraphicalDesign && m_vTableData.size() > 1;
             break;
         case ID_BROWSER_SAVEASDOC:
-            aReturn.bEnabled = !editingCommand() && !editingView() && (!m_bGraphicalDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
+            aReturn.bEnabled = !editingCommand() && (!m_bGraphicalDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
             break;
         case ID_BROWSER_SAVEDOC:
             aReturn.bEnabled = isEditable() && (!m_bGraphicalDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
