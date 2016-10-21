@@ -391,6 +391,9 @@ css::uno::Reference<css::chart2::XChartType> getChartType(const css::uno::Refere
 {
     css::uno::Reference<css::chart2::XChartDocument> xChartDoc(xModel, css::uno::UNO_QUERY_THROW);
     css::uno::Reference<chart2::XDiagram > xDiagram = xChartDoc->getFirstDiagram();
+    if (!xDiagram.is()) {
+        return css::uno::Reference<css::chart2::XChartType>();
+    }
 
     css::uno::Reference<css::chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, css::uno::UNO_QUERY_THROW );
 
