@@ -1836,14 +1836,9 @@ bool CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rO
     }
 }
 
-inline void CurrencyFormatter::ImplInit()
-{
-    mnType = FORMAT_CURRENCY;
-}
-
 CurrencyFormatter::CurrencyFormatter()
 {
-    ImplInit();
+    mnType = FORMAT_CURRENCY;
 }
 
 CurrencyFormatter::~CurrencyFormatter()

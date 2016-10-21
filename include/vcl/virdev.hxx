@@ -68,8 +68,6 @@ private:
      */
     SAL_DLLPRIVATE void ImplFillOpaqueRectangle( const Rectangle& rRect );
 
-    SAL_DLLPRIVATE bool ForceZeroExtleadBug() const { return mbForceZeroExtleadBug; }
-
 protected:
     virtual bool AcquireGraphics() const override;
     virtual void ReleaseGraphics( bool bRelease = true ) override;

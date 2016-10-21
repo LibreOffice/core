@@ -2180,7 +2180,7 @@ Size TabControl::GetOptimalSize() const
 
 void TabControl::queue_resize(StateChangedType eReason)
 {
-    markLayoutDirty();
+    mbLayoutDirty = true;
     Window::queue_resize(eReason);
 }
 

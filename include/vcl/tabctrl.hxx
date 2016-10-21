@@ -183,11 +183,6 @@ public:
     virtual Size calculateRequisition() const;
     void setAllocation(const Size &rAllocation);
 
-    void markLayoutDirty()
-    {
-        mbLayoutDirty = true;
-    }
-
     std::vector<sal_uInt16> GetPageIDs() const;
 
     virtual FactoryFunction GetUITestFactory() const override;

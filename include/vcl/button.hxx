@@ -130,7 +130,6 @@ protected:
     using Button::ImplGetTextStyle;
     SAL_DLLPRIVATE DrawTextFlags   ImplGetTextStyle( DrawFlags nDrawFlags ) const;
     SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SymbolType::DONTKNOW) && (meSymbol != SymbolType::IMAGE) ); }
-    SAL_DLLPRIVATE bool            IsImage() const { return Button::HasImage(); }
 
                                    PushButton( const PushButton & ) = delete;
                                    PushButton& operator=( const PushButton & )

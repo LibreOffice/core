@@ -39,11 +39,6 @@ public:
     //the rWindows alignment desires within that allocation
     static void setLayoutAllocation(vcl::Window &rWindow, const Point &rPos, const Size &rSize);
 
-    void markLayoutDirty()
-    {
-        m_bLayoutDirty = true;
-    }
-
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 protected:
     //these are the two that need to be implemented by
@@ -207,10 +202,6 @@ public:
         : VclBox(pParent, false, 0/*nSpacing*/)
         , m_eLayoutStyle(VCL_BUTTONBOX_DEFAULT_STYLE)
     {
-    }
-    void set_layout(VclButtonBoxStyle eStyle)
-    {
-        m_eLayoutStyle = eStyle;
     }
     virtual bool set_property(const OString &rKey, const OString &rValue) override;
     void sort_native_button_order();

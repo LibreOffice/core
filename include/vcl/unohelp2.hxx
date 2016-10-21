@@ -43,8 +43,6 @@ namespace vcl { namespace unohelper {
                         TextDataObject( const OUString& rText );
                         virtual ~TextDataObject() override;
 
-        OUString&       GetString() { return maText; }
-
         // css::uno::XInterface
         css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
         void          SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
