@@ -521,7 +521,7 @@ void Test::testDataEntries()
     ++it;
     CPPUNIT_ASSERT_EQUAL(OUString("Charlie"), it->GetString());
     ++it;
-    CPPUNIT_ASSERT_MESSAGE("The entries should have ended here.", it == aEntries.end());
+    CPPUNIT_ASSERT_MESSAGE("The entries should have ended here.", bool(it == aEntries.end()));
 
     aEntries.clear();
     m_pDoc->GetDataEntries(0, MAXROW, 0, aEntries); // Try at the very bottom.
@@ -535,7 +535,7 @@ void Test::testDataEntries()
     ++it;
     CPPUNIT_ASSERT_EQUAL(OUString("Charlie"), it->GetString());
     ++it;
-    CPPUNIT_ASSERT_MESSAGE("The entries should have ended here.", it == aEntries.end());
+    CPPUNIT_ASSERT_MESSAGE("The entries should have ended here.", bool(it == aEntries.end()));
 
     m_pDoc->DeleteTab(0);
 }
@@ -711,8 +711,8 @@ void Test::testCopyToDocument()
 
     // verify note
     CPPUNIT_ASSERT_MESSAGE("There should be a note in A1 destDocument", aDestDoc.HasNote(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_MESSAGE("The notes content should be the same on both documents",
-            aDestDoc.GetNote(ScAddress(0, 0, 0))->GetText() ==  m_pDoc->GetNote(ScAddress(0, 0, 0))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The notes content should be the same on both documents",
+            m_pDoc->GetNote(ScAddress(0, 0, 0))->GetText(), aDestDoc.GetNote(ScAddress(0, 0, 0))->GetText());
 
     m_pDoc->DeleteTab(0);
 }
@@ -3088,7 +3088,7 @@ void Test::testCopyPaste()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("local range 1 should now point to Sheet2.A1", aSheet2A1, aRangeLocal1);
 
     pLocal2 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
-    CPPUNIT_ASSERT_MESSAGE("local2 should not be copied", pLocal2 == nullptr);
+    CPPUNIT_ASSERT_MESSAGE("local2 should not be copied", !pLocal2);
 
     pLocal3 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL3"));
     CPPUNIT_ASSERT_MESSAGE("local range name 3 should be copied", pLocal3);
@@ -4739,7 +4739,7 @@ void Test::testNoteBasic()
     bool bInsertRow = m_pDoc->InsertRow(0, 0, MAXCOL, 0, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("failed to insert row", bInsertRow );
 
-    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(aAddr) == nullptr);
+    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", !m_pDoc->GetNote(aAddr));
     aAddr.IncRow(); // cell C4
     CPPUNIT_ASSERT_EQUAL_MESSAGE("note not there", pNote, m_pDoc->GetNote(aAddr));
 
@@ -4747,13 +4747,13 @@ void Test::testNoteBasic()
     bool bInsertCol = m_pDoc->InsertCol(0, 0, MAXROW, 0, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("failed to insert column", bInsertCol );
 
-    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(aAddr) == nullptr);
+    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", !m_pDoc->GetNote(aAddr));
     aAddr.IncCol(); // cell D4
     CPPUNIT_ASSERT_EQUAL_MESSAGE("note not there", pNote, m_pDoc->GetNote(aAddr));
 
     // Insert a new sheet to shift the current sheet to the right.
     m_pDoc->InsertTab(0, "Table2");
-    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(aAddr) == nullptr);
+    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", !m_pDoc->GetNote(aAddr));
     aAddr.IncTab(); // Move to the next sheet.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("note not there", pNote, m_pDoc->GetNote(aAddr));
 
@@ -4920,10 +4920,10 @@ void Test::testNoteLifeCycle()
 
     // Re-insert the note back to the same place.
     m_pDoc->SetNote(aPos, pNote);
-    const SdrCaptionObj* pCaption = pNote->GetOrCreateCaption(aPos);
+    SdrCaptionObj* pCaption = pNote->GetOrCreateCaption(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to create a caption object.", pCaption);
-    CPPUNIT_ASSERT_MESSAGE("This caption should belong to the drawing layer of the document.",
-                           pCaption->GetModel() == m_pDoc->GetDrawLayer());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This caption should belong to the drawing layer of the document.",
+                           m_pDoc->GetDrawLayer(), static_cast<ScDrawLayer*>(pCaption->GetModel()));
 
     // Copy B2 with note to a clipboard.
 
@@ -4935,8 +4935,8 @@ void Test::testNoteLifeCycle()
 
     ScPostIt* pClipNote = aClipDoc.GetNote(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to copy note to the clipboard.", pClipNote);
-    CPPUNIT_ASSERT_MESSAGE("Note on the clipboard should share the same caption object from the original.",
-                           pClipNote->GetCaption() == pCaption);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Note on the clipboard should share the same caption object from the original.",
+                           pCaption, pClipNote->GetCaption());
 
 
     // Move B2 to B3 with note, which creates an ScUndoDragDrop, and Undo.

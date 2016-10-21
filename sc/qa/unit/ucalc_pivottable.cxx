@@ -731,8 +731,8 @@ void Test::testPivotTableNamedSource()
     OUString aTabName;
     m_pDoc->GetName(0, aTabName);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong sheet name.", OUString("Table"), aTabName);
-    CPPUNIT_ASSERT_MESSAGE("Pivot table output is on the wrong sheet!",
-                           pDPObj->GetOutRange().aStart.Tab() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Pivot table output is on the wrong sheet!",
+                           static_cast<SCTAB>(0), pDPObj->GetOutRange().aStart.Tab());
 
     CPPUNIT_ASSERT_MESSAGE("Moving the pivot table to another sheet shouldn't have changed the cache state.",
                            pDPs->GetNameCaches().size() == 1 && pDPs->GetSheetCaches().size() == 0);
