@@ -2941,7 +2941,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpLinkButtonStyle = createStyleContext(set_object_name, GtkControlPart::LinkButton);
 
     GtkWidget* pToolbar = gtk_toolbar_new();
-    gtk_container_add(GTK_CONTAINER(gDumbContainer), pToolbar);
     mpToolbarStyle = gtk_widget_get_style_context(pToolbar);
     gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
     gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_TOOLBAR);
