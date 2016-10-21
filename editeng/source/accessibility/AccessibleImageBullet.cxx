@@ -265,7 +265,7 @@ namespace accessibility
                                                                               GetViewForwarder() );
 
             // offset from shape/cell
-            Point aOffset = GetEEOffset();
+            Point aOffset = maEEOffset;
 
             return awt::Rectangle( aScreenRect.Left() + aOffset.X(),
                                    aScreenRect.Top() + aOffset.Y(),

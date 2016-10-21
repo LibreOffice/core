@@ -70,22 +70,14 @@ public:
     virtual SvStream&       Store( SvStream & , sal_uInt16 nItemVersion ) const override;
 
     OUString            GetFullText() const;
-    sal_Unicode         GetSymbol() const { return cSymbol; }
-    const OUString&     GetPrevText() const { return aPrevText; }
-    const OUString&     GetFollowText() const { return aFollowText; }
 
-    sal_uInt16          GetStart() const { return nStart; }
     long                GetWidth() const { return nWidth; }
-    SvxBulletStyle      GetStyle() const { return nStyle; }
     const vcl::Font&    GetFont() const { return aFont; }
-    sal_uInt16          GetScale() const { return nScale; }
 
     const GraphicObject& GetGraphicObject() const;
     void                 SetGraphicObject( const GraphicObject& rGraphicObject );
 
     void                SetSymbol( sal_Unicode c) { cSymbol = c; }
-    void                SetPrevText( const OUString& rStr) { aPrevText = rStr;}
-    void                SetFollowText(const OUString& rStr) { aFollowText=rStr;}
 
     void                SetStart( sal_uInt16 nNew ) { nStart = nNew; }
     void                SetWidth( long nNew ) { nWidth = nNew; }

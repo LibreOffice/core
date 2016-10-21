@@ -379,7 +379,7 @@ void EditTextObject::Store( SvStream& rOStream ) const
     sal_uInt32 nStructSz = 0;
     rOStream.WriteUInt32( nStructSz );
 
-    StoreData( rOStream );
+    mpImpl->StoreData(rOStream);
 
     sal_uInt64 const nEndPos = rOStream.Tell();
     nStructSz = nEndPos - nStartPos - sizeof( nWhich ) - sizeof( nStructSz );
@@ -410,22 +410,12 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream )
         return nullptr;
 
     EditTextObject* pTxtObj = new EditTextObject(nullptr);
-    pTxtObj->CreateData(rIStream);
+    pTxtObj->mpImpl->CreateData(rIStream);
 
     // Make sure that the stream is left at the correct place.
     std::size_t nFullSz = sizeof( nWhich ) + sizeof( nStructSz ) + nStructSz;
     rIStream.Seek( nStartPos + nFullSz );
     return pTxtObj;
-}
-
-void EditTextObject::StoreData( SvStream& rStrm ) const
-{
-    mpImpl->StoreData(rStrm);
-}
-
-void EditTextObject::CreateData( SvStream& rStrm )
-{
-    mpImpl->CreateData(rStrm);
 }
 
 EditTextObject* EditTextObject::Clone() const

@@ -3655,7 +3655,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if (!(rVal >>= nVal))
                 return false;
 
-            SetShadingValue( nVal );
+            nShadingValue = nVal;
         }
         break;
     }
@@ -3976,12 +3976,6 @@ void SvxBrushItem::SetGraphicLink( const OUString& rNew )
 void SvxBrushItem::SetGraphicFilter( const OUString& rNew )
 {
     maStrFilter = rNew;
-}
-
-
-void SvxBrushItem::SetShadingValue( const sal_Int32 nNew )
-{
-    nShadingValue = nNew;
 }
 
 
