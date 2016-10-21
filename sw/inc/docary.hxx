@@ -66,10 +66,13 @@ public:
 };
 
 template<typename Value>
-class SwVectorModifyBase : public std::vector<Value>
+class SwVectorModifyBase
 {
 public:
+    typedef typename std::vector<Value>::iterator iterator;
     typedef typename std::vector<Value>::const_iterator const_iterator;
+    typedef typename std::vector<Value>::size_type size_type;
+    typedef typename std::vector<Value>::value_type value_type;
 
 protected:
     enum class DestructorPolicy {
@@ -78,6 +81,7 @@ protected:
     };
 
 private:
+    typename std::vector<Value> mvVals;
     const DestructorPolicy mPolicy;
 
 protected:
@@ -86,8 +90,27 @@ protected:
         : mPolicy(policy) {}
 
 public:
-    using std::vector<Value>::begin;
-    using std::vector<Value>::end;
+    bool empty() const { return mvVals.empty(); }
+    Value const& front() const { return mvVals.front(); }
+    size_t size() const { return mvVals.size(); }
+    iterator begin() { return mvVals.begin(); }
+    const_iterator begin() const { return mvVals.begin(); }
+    iterator end() { return mvVals.end(); }
+    const_iterator end() const { return mvVals.end(); }
+    void clear() { mvVals.clear(); }
+    iterator erase(const_iterator aIt) { return mvVals.erase(aIt); }
+    iterator erase(const_iterator aFirst, const_iterator aLast) { return mvVals.erase(aFirst, aLast); }
+    iterator insert(const_iterator aIt, Value const& rVal) { return mvVals.insert(aIt, rVal); }
+    template<typename TInputIterator>
+    iterator insert(const_iterator aIt, TInputIterator aFirst, TInputIterator aLast)
+    {
+        return mvVals.insert(aIt, aFirst, aLast);
+    }
+    void push_back(Value const& rVal) { mvVals.push_back(rVal); }
+    void reserve(size_type nSize) { mvVals.reserve(nSize); }
+    Value const& at(size_type nPos) const { return mvVals.at(nPos); }
+    Value const& operator[](size_type nPos) const { return mvVals[nPos]; }
+    Value& operator[](size_type nPos) { return mvVals[nPos]; }
 
     // free any remaining child objects based on mPolicy
     virtual ~SwVectorModifyBase()
@@ -129,10 +152,10 @@ protected:
 
 public:
     virtual size_t GetFormatCount() const override
-        { return std::vector<Value>::size(); }
+        { return SwVectorModifyBase<Value>::size(); }
 
     virtual Value GetFormat(size_t idx) const override
-        { return std::vector<Value>::operator[](idx); }
+        { return SwVectorModifyBase<Value>::operator[](idx); }
 
     inline size_t GetPos(const SwFormat *p) const
         { return SwVectorModifyBase<Value>::GetPos( static_cast<Value>( const_cast<SwFormat*>( p ) ) ); }
