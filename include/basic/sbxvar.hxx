@@ -77,7 +77,6 @@ class BASIC_DLLPUBLIC SbxValue : public SbxBase
 {
     // #55226 Transport additional infos
     BASIC_DLLPRIVATE SbxValue* TheRealValue( bool bObjInObjError ) const;
-    BASIC_DLLPRIVATE SbxValue* TheRealValue() const;
 protected:
     SbxValues aData; // Data
     OUString aPic;  // Picture-String
