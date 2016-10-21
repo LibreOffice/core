@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_cd1a9f6e",
+        "filename": "sw/qa/extras/ww8export/ww8export2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-10-21T12:01:45Z",
+      "side": 1,
+      "message": "Plain \"2\" should be enough here (and should fix the Windows failure), getPages() returns int, not sal_Int32).",
+      "revId": "e44700ed2783630fa397105d77051310ae6082c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
