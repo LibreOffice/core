@@ -1043,7 +1043,7 @@ Size DockingWindow::GetOptimalSize() const
 void DockingWindow::queue_resize(StateChangedType eReason)
 {
     bool bTriggerLayout = true;
-    if (hasPendingLayout() || isCalculatingInitialLayoutSize())
+    if (maLayoutIdle.IsActive() || isCalculatingInitialLayoutSize())
     {
         bTriggerLayout = false;
     }

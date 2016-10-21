@@ -1567,14 +1567,9 @@ void DateFormatter::SetShowDateCentury( bool bShowDateCentury )
 
 void DateFormatter::SetDate( const Date& rNewDate )
 {
-    SetUserDate( rNewDate );
+    ImplSetUserDate( rNewDate );
     maFieldDate = maLastDate;
     maLastDate = GetDate();
-}
-
-void DateFormatter::SetUserDate( const Date& rNewDate )
-{
-    ImplSetUserDate( rNewDate );
 }
 
 void DateFormatter::ImplSetUserDate( const Date& rNewDate, Selection* pNewSelection )
@@ -1645,7 +1640,7 @@ Date DateFormatter::GetDate() const
                     aDate = Date( Date::SYSTEM );
             }
             else
-                aDate = GetInvalidDate();
+                aDate = Date( Date::EMPTY ); // set invalid date
         }
     }
 
@@ -2478,7 +2473,7 @@ tools::Time TimeFormatter::GetTime() const
         else
         {
             if ( bAllowMailformed )
-                aTime = GetInvalidTime();
+                aTime = tools::Time( 99, 99, 99 ); // set invalid time
             else
                 aTime = maLastTime;
         }

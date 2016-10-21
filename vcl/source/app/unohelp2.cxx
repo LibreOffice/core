@@ -76,7 +76,7 @@ namespace vcl { namespace unohelper {
         SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
         if ( nT == SotClipboardFormatId::STRING )
         {
-            aAny <<= GetString();
+            aAny <<= maText;
         }
         else
         {

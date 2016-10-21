@@ -48,8 +48,6 @@ public:
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
     virtual void Command( const CommandEvent& rCEvt ) override;
 
-    bool IsInitialized() const;
-
     void Initialize();
 
 private:

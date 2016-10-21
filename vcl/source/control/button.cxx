@@ -1653,7 +1653,7 @@ Size PushButton::CalcMinimumSize() const
         else
             aSize = Size( 26, 24 );
     }
-    else if ( IsImage() && ! (ImplGetButtonState() & DrawButtonFlags::NoImage) )
+    else if ( Button::HasImage() && ! (ImplGetButtonState() & DrawButtonFlags::NoImage) )
         aSize = GetModeImage().GetSizePixel();
     if( mnDDStyle == PushButtonDropdownStyle::MenuButton )
     {

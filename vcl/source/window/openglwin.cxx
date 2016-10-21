@@ -141,14 +141,9 @@ void OpenGLWindow::setRenderer(IRenderer* pRenderer)
     mpRenderer = pRenderer;
 }
 
-bool OpenGLWindow::IsInitialized() const
-{
-    return mxImpl->IsInitialized();
-}
-
 void OpenGLWindow::Initialize()
 {
-    if (!IsInitialized())
+    if (!mxImpl->IsInitialized())
         mxImpl->Initialize();
 }
 

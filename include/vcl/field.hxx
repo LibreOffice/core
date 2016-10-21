@@ -249,9 +249,6 @@ public:
 
 class VCL_DLLPUBLIC CurrencyFormatter : public NumericFormatter
 {
-private:
-    SAL_DLLPRIVATE void     ImplInit();
-
 protected:
                             CurrencyFormatter();
     SAL_DLLPRIVATE bool     ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
@@ -329,7 +326,6 @@ public:
 
 
     void                    SetDate( const Date& rNewDate );
-    void                    SetUserDate( const Date& rNewDate );
     Date                    GetDate() const;
     void                    SetEmptyDate();
     bool                    IsEmptyDate() const;
@@ -338,8 +334,6 @@ public:
 
     static void             ExpandCentury( Date& rDate );
     static void             ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart );
-
-    static Date             GetInvalidDate() { return Date( Date::EMPTY ); }
 
     /** enables or disables the enforcement of valid values
 
@@ -413,8 +407,6 @@ public:
     tools::Time             GetTime() const;
     void                    SetEmptyTime() { FormatterBase::SetEmptyFieldValue(); }
     bool                    IsEmptyTime() const { return FormatterBase::IsEmptyFieldValue(); }
-
-    static tools::Time      GetInvalidTime() { return tools::Time( 99, 99, 99 ); }
 
     /** enables or disables the enforcement of valid values
 

@@ -166,7 +166,7 @@ void VclContainer::SetSizePixel(const Size& rAllocation)
 
 void VclContainer::queue_resize(StateChangedType eReason)
 {
-    markLayoutDirty();
+    m_bLayoutDirty = true;
     Window::queue_resize(eReason);
 }
 
@@ -716,7 +716,7 @@ bool VclButtonBox::set_property(const OString &rKey, const OString &rValue)
         {
             SAL_WARN("vcl.layout", "unknown layout style " << rValue.getStr());
         }
-        set_layout(eStyle);
+        m_eLayoutStyle = eStyle;
     }
     else
         return VclBox::set_property(rKey, rValue);

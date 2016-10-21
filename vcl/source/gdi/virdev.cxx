@@ -553,7 +553,7 @@ long VirtualDevice::GetFontExtLeading() const
 {
 #ifdef UNX
     // backwards compatible line metrics after fixing #i60945#
-    if ( ForceZeroExtleadBug() )
+    if ( mbForceZeroExtleadBug )
         return 0;
 #endif
 

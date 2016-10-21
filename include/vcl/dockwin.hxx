@@ -267,7 +267,6 @@ public:
 
     SAL_DLLPRIVATE bool    ImplStartDocking( const Point& rPos );
     SAL_DLLPRIVATE bool    isDeferredInit() const { return mbIsDefferedInit; }
-    SAL_DLLPRIVATE bool    hasPendingLayout() const { return maLayoutIdle.IsActive(); }
     virtual        void    doDeferredInit(WinBits nBits);
 protected:
                     DockingWindow( WindowType nType );
