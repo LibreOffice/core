@@ -47,7 +47,7 @@ namespace drawinglayer
 
         void CutFindProcessor::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate)
         {
-            if(getAnyHit() && maResult.size())
+            if(mbAnyHit && maResult.size())
             {
                 // stop processing as soon as a hit was recognized
                 return;

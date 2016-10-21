@@ -115,7 +115,7 @@ namespace drawinglayer
                 const MediaPrimitive2D& rCompare = static_cast<const MediaPrimitive2D&>(rPrimitive);
 
                 return (getTransform() == rCompare.getTransform()
-                    && getURL() == rCompare.getURL()
+                    && maURL == rCompare.maURL
                     && getBackgroundColor() == rCompare.getBackgroundColor()
                     && getDiscreteBorder() == rCompare.getDiscreteBorder());
             }

@@ -208,15 +208,6 @@ namespace connectivity
         */
         void traverseAll();
 
-        /** traverses selected parts of the statement tree, and fills our data with
-            the information obtained during traversal
-
-            @param _nIncludeMask
-                set of TraversalParts bits, specifying which information is to be collected.
-                Note TraversalParts is currently not
-        */
-        void traverseSome( TraversalParts _nIncludeMask );
-
         // The TableRangeMap contains all tables associated with the range name found first.
         const OSQLTables& getTables() const;
 

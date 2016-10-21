@@ -175,11 +175,6 @@ public:
 
     /** retrieves the current element in the chain, or <NULL/> if the chain has been completely
         traveled.
-    */
-    const css::sdbc::SQLException* current() const { return m_pCurrent; }
-
-    /** retrieves the current element in the chain, or <NULL/> if the chain has been completely
-        traveled.
 
         In opposite to the second <member>current</member>, this version allows typed access to
         the respective SQLException.

@@ -77,7 +77,6 @@ namespace dbtools
 
         void        startPropertyListening( const css::uno::Reference< css::beans::XPropertySet >& _rxProps );
         void        stopPropertyListening( const css::uno::Reference< css::beans::XPropertySet >& _rxEventSource );
-        bool        isPropertyListening() const { return m_bPropertyListening; }
     };
 
 

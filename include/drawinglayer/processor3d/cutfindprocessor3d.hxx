@@ -65,7 +65,6 @@ namespace drawinglayer
 
             /// data read access
             const ::std::vector< basegfx::B3DPoint >& getCutPoints() const { return maResult; }
-            bool getAnyHit() const { return mbAnyHit; }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer

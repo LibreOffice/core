@@ -298,7 +298,7 @@ const css::sdbc::SQLException* SQLExceptionIteratorHelper::next()
 {
     OSL_ENSURE( hasMoreElements(), "SQLExceptionIteratorHelper::next : invalid call (please use hasMoreElements)!" );
 
-    const css::sdbc::SQLException* pReturn = current();
+    const css::sdbc::SQLException* pReturn = m_pCurrent;
     if ( !m_pCurrent )
         return pReturn;
 
