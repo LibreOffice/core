@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_ca7445ff",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-10-21T09:08:24Z",
+      "side": 1,
+      "message": "Instead of duplicating this function, just give it the search string parameter directly and modify the function accordingly.",
+      "revId": "7c5723eb5b58738d49a3c50914df9ce93efcdc81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
