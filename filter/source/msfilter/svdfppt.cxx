@@ -351,7 +351,7 @@ void PptNotesAtom::Clear()
     nFlags = 0;
 }
 
-void PptColorSchemeAtom::Clear()
+PptColorSchemeAtom::PptColorSchemeAtom()
 {
     memset(&aData[0], 0, 32);
 }

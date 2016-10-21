@@ -270,8 +270,7 @@ struct PptColorSchemeAtom
     sal_uInt8           aData[32];
 
 public:
-                        PptColorSchemeAtom () { Clear(); }
-    void                Clear();
+                        PptColorSchemeAtom();
     Color               GetColor( sal_uInt16 nNum ) const;
 
     friend SvStream& ReadPptColorSchemeAtom(SvStream& rIn, PptColorSchemeAtom& rAtom);

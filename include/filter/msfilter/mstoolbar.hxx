@@ -98,12 +98,11 @@ public:
     Indent( bool binit = false )
     {
         if ( binit )
-            init();
+            TBBase::nIndent = 0;
         else
             TBBase::nIndent = TBBase::nIndent + 2;
     }
     ~Indent() { TBBase::nIndent = TBBase::nIndent - 2; }
-    static void init() { TBBase::nIndent = 0; }
 };
 
 

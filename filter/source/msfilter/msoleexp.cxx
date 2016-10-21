@@ -171,7 +171,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
                     aOwnGlobalName = aGlbNm;
 
                     // flags for checking if conversion is wanted at all (SaveOptions?!)
-                    if( GetFlags() & pArr->nFlag )
+                    if( nConvertFlags & pArr->nFlag )
                     {
                         pExpFilter = SfxFilterMatcher().GetFilter4FilterName(OUString::createFromAscii(pArr->pFilterNm));
                         break;
