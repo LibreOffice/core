@@ -46,6 +46,8 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     std::vector<size_t> m_aXRef;
     /// List of xref offsets we know.
     std::vector<size_t> m_aStartXRefs;
+    /// List of EOF offsets we know.
+    std::vector<size_t> m_aEOFs;
     PDFTrailerElement* m_pTrailer;
     /// All editing takes place in this buffer, if it happens.
     SvMemoryStream m_aEditBuffer;
@@ -65,6 +67,8 @@ public:
     size_t GetObjectOffset(size_t nIndex) const;
     const std::vector< std::unique_ptr<PDFElement> >& GetElements();
     std::vector<PDFObjectElement*> GetPages();
+    /// Remember the end location of an EOF token.
+    void PushBackEOF(size_t nOffset);
 
     bool Read(SvStream& rStream);
     /// Sign the read document with xCertificate in the edit buffer.
@@ -74,6 +78,8 @@ public:
     std::vector<PDFObjectElement*> GetSignatureWidgets();
     /// Return value is about if we can determine a result, rInformation is about the actual result.
     static bool ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation);
+    /// Remove the nth signature from read document in the edit buffer.
+    bool RemoveSignature(size_t nPosition);
 };
 
 } // namespace pdfio
