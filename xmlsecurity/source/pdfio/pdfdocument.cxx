@@ -1262,13 +1262,13 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     NSS_CMSSignerInfo_Destroy(pCMSSignerInfo);
 
     return true;
-#endif
-
+#else
     // Not implemented.
     (void)rStream;
     (void)rInformation;
 
     return false;
+#endif
 }
 
 bool PDFCommentElement::Read(SvStream& rStream)
