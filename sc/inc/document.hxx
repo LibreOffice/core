@@ -2276,7 +2276,7 @@ public:
      * Call this before any operations that might trigger one or more formula
      * cells to get calculated.
      */
-    void ClearFormulaContext();
+    void PrepareFormulaCalc();
 
     SvtBroadcaster* GetBroadcaster( const ScAddress& rPos );
     const SvtBroadcaster* GetBroadcaster( const ScAddress& rPos ) const;

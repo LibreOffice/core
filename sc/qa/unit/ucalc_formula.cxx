@@ -702,7 +702,7 @@ void Test::testFetchVectorRefArray()
 
     // Clear everything and start over.
     clearRange(m_pDoc, ScRange(0,0,0,MAXCOL,MAXROW,0));
-    m_pDoc->ClearFormulaContext();
+    m_pDoc->PrepareFormulaCalc();
 
     // Totally empty range in a totally empty column (Column A).
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(0,0,0), 3); // A1:A3

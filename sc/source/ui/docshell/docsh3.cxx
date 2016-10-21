@@ -86,7 +86,7 @@ void ScDocShell::PostDataChanged()
 {
     Broadcast( SfxHint( FID_DATACHANGED ) );
     SfxGetpApp()->Broadcast(SfxHint( FID_ANYDATACHANGED ));      // Navigator
-    aDocument.ClearFormulaContext();
+    aDocument.PrepareFormulaCalc();
     //! Navigator direkt benachrichtigen!
 }
 

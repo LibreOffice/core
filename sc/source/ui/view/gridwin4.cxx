@@ -515,7 +515,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     // Flag drawn formula cells "unchanged".
     rDoc.ResetChanged(ScRange(nX1, nY1, nTab, nX2, nY2, nTab));
-    rDoc.ClearFormulaContext();
+    rDoc.PrepareFormulaCalc();
 }
 
 void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
