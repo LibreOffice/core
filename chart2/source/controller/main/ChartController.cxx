@@ -311,8 +311,6 @@ OUString ChartController::GetContextName()
         return OUString("Chart");
 
     ObjectType eObjectID = ObjectIdentifier::getObjectType(aCID);
-
-    css::uno::Reference<css::chart2::XChartType> xChartType = getChartType(css::uno::Reference<css::chart2::XChartDocument>(getModel(), uno::UNO_QUERY));
     switch (eObjectID)
     {
         case OBJECTTYPE_DATA_SERIES:
@@ -327,9 +325,12 @@ OUString ChartController::GetContextName()
         case OBJECTTYPE_GRID:
             return OUString("Grid");
         case OBJECTTYPE_DIAGRAM:
-            if (xChartType.is() && xChartType->getChartType() == "com.sun.star.chart2.PieChartType")
-                return OUString("ChartElements");
-            break;
+            {
+                css::uno::Reference<css::chart2::XChartType> xChartType = getChartType(css::uno::Reference<css::chart2::XChartDocument>(getModel(), uno::UNO_QUERY));
+                if (xChartType.is() && xChartType->getChartType() == "com.sun.star.chart2.PieChartType")
+                    return OUString("ChartElements");
+                break;
+            }
         case OBJECTTYPE_DATA_CURVE:
         case OBJECTTYPE_DATA_AVERAGE_LINE:
             return OUString("Trendline");
