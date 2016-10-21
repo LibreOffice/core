@@ -31,6 +31,7 @@
 #include "ftnfrm.hxx"
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentUndoRedo.hxx>
 
 SwColumnFrame::SwColumnFrame( SwFrameFormat *pFormat, SwFrame* pSib ):
     SwFootnoteBossFrame( pFormat, pSib )
@@ -152,9 +153,12 @@ static bool lcl_AddColumns( SwLayoutFrame *pCont, sal_uInt16 nCount )
     else
     {
         bRet = true;
+        // tdf#103359, like #i32968# Inserting columns in the section causes MakeFrameFormat to put
+        // nCount objects of type SwUndoFrameFormat on the undo stack. We don't want them.
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
-            SwFrameFormat *pFormat = pDoc->MakeFrameFormat( aEmptyOUStr, pDoc->GetDfltFrameFormat());
+            SwFrameFormat *pFormat = pDoc->MakeFrameFormat(aEmptyOUStr, pDoc->GetDfltFrameFormat());
             SwColumnFrame *pTmp = new SwColumnFrame( pFormat, pCont );
             pTmp->SetMaxFootnoteHeight( nMax );
             pTmp->Paste( pCont );
