@@ -2583,7 +2583,8 @@ void XMLShapeExport::ImpExportConnectorShape(
         }
     }
 
-    if( xProps->getPropertyValue("PolyPolygonBezier") >>= aAny )
+    aAny = xProps->getPropertyValue("PolyPolygonBezier");
+    if( aAny.hasValue() )
     {
         // get PolygonBezier
         auto pSourcePolyPolygon = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(aAny);
