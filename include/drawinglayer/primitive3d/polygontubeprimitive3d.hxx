@@ -63,7 +63,6 @@ namespace drawinglayer
                 implementations for buffering the last decomposition.
              */
             const Primitive3DContainer& getLast3DDecomposition() const { return maLast3DDecomposition; }
-            void setLast3DDecomposition(const Primitive3DContainer& rNew) { maLast3DDecomposition = rNew; }
 
             /// local decomposition.
             Primitive3DContainer impCreate3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;

@@ -184,7 +184,7 @@ namespace dbtools
 
         clearConnection();
 
-        if ( isPropertyListening() )
+        if ( m_bPropertyListening )
             stopPropertyListening( Reference< XPropertySet >( _rSource.Source, UNO_QUERY ) );
     }
 

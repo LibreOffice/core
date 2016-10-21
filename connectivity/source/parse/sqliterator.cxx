@@ -336,7 +336,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
         break;
 
     OSQLParseTreeIterator aSubQueryIterator( *this, m_rParser, pSubQueryNode.get() );
-    aSubQueryIterator.traverseSome( TraversalParts::Parameters | TraversalParts::SelectColumns );
+    aSubQueryIterator.impl_traverse( TraversalParts::Parameters | TraversalParts::SelectColumns );
         // SelectColumns might also contain parameters
         // #i77635# - 2007-07-23 / frank.schoenheit@sun.com
     pSubQueryParameterColumns = aSubQueryIterator.getParameters();
@@ -1537,12 +1537,6 @@ void OSQLParseTreeIterator::traverseOnePredicate(
         traverseSearchCondition(pParseNode);
         //  if (! aIteratorStatus.IsSuccessful()) return;
     }
-}
-
-
-void OSQLParseTreeIterator::traverseSome( TraversalParts _nIncludeMask )
-{
-    impl_traverse( _nIncludeMask );
 }
 
 

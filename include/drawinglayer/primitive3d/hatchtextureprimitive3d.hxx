@@ -52,7 +52,6 @@ namespace drawinglayer
 
             /// local access methods to maBufferedDecomposition
             const Primitive3DContainer& getBuffered3DDecomposition() const { return maBuffered3DDecomposition; }
-            void setBuffered3DDecomposition(const Primitive3DContainer& rNew) { maBuffered3DDecomposition = rNew; }
 
         public:
             /// constructor

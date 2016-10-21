@@ -784,7 +784,7 @@ namespace drawinglayer
             if(getLast3DDecomposition().empty())
             {
                 const Primitive3DContainer aNewSequence(impCreate3DDecomposition(rViewInformation));
-                const_cast< PolygonTubePrimitive3D* >(this)->setLast3DDecomposition(aNewSequence);
+                const_cast< PolygonTubePrimitive3D* >(this)->maLast3DDecomposition = aNewSequence;
             }
 
             return getLast3DDecomposition();

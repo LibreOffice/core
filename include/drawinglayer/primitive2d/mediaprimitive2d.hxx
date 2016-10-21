@@ -73,7 +73,6 @@ namespace drawinglayer
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
-            const OUString& getURL() const { return maURL; }
             const basegfx::BColor& getBackgroundColor() const { return maBackgroundColor; }
             sal_uInt32 getDiscreteBorder() const { return mnDiscreteBorder; }
 
