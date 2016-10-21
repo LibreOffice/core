@@ -83,7 +83,7 @@ class Request
         void setArgument(const OUString& sName ,
                          const TArgumentType&   aValue)
         {
-            m_lArguments[sName] <<= aValue;
+            m_lArguments[sName] = css::uno::toAny(aValue);
         }
 
 

@@ -1386,14 +1386,14 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
                 {
                     PropertyPutArgument arg;
                     anyArg >>= arg;
-                    anyArg <<= arg.Value;
+                    anyArg = arg.Value;
                 }
                 // named argument
                 if (anyArg.getValueType() == cppu::UnoType<NamedArgument>::get())
                 {
                     NamedArgument aNamedArgument;
                     anyArg >>= aNamedArgument;
-                    anyArg <<= aNamedArgument.Value;
+                    anyArg = aNamedArgument.Value;
                 }
 
                 if ( nInd < aParams.getLength() && anyArg.getValueTypeClass() != TypeClass_VOID )
@@ -1858,14 +1858,14 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
             {
                 PropertyPutArgument arg;
                 anyArg >>= arg;
-                anyArg <<= arg.Value;
+                anyArg = arg.Value;
             }
             // named argument
             if (anyArg.getValueType() == cppu::UnoType<NamedArgument>::get())
             {
                 NamedArgument aNamedArgument;
                 anyArg >>= aNamedArgument;
-                anyArg <<= aNamedArgument.Value;
+                anyArg = aNamedArgument.Value;
             }
             // out param
             if (paramFlags & PARAMFLAG_FOUT &&
