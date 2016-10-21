@@ -28,7 +28,7 @@
                 <property name="vexpand">True</property>
                 <property name="resize_mode">immediate</property>
                 <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="Custom Animation ListBox-selection1"/>
+                  <object class="GtkTreeSelection" id="Animation ListBox-selection1"/>
                 </child>
               </object>
               <packing>
@@ -249,7 +249,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Select the speed of Custom Animation.</property>
+                <property name="tooltip_text" translatable="yes">Select the speed of Animation.</property>
                 <property name="hexpand">True</property>
               </object>
               <packing>
