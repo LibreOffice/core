@@ -950,7 +950,7 @@ void ConstList::implProcessConfigItemStr(
         TextInputStream& rStrm, const OUString& rKey, const OUString& rData )
 {
     if ( rKey == "default" )
-        setDefaultName( rData );
+        maDefName = rData; // Sets a default name for unknown keys.
     else if ( rKey == "quote-names" )
         setQuoteNames( StringHelper::convertStringToBool( rData ) );
     else
@@ -1275,11 +1275,6 @@ SharedConfigData::~SharedConfigData()
 {
 }
 
-void SharedConfigData::setOption( const OUString& rKey, const OUString& rData )
-{
-    maConfigData[ rKey ] = rData;
-}
-
 const OUString* SharedConfigData::getOption( const OUString& rKey ) const
 {
     ConfigDataMap::const_iterator aIt = maConfigData.find( rKey );
@@ -1329,7 +1324,7 @@ void SharedConfigData::implProcessConfigItemStr(
     else if ( rKey == "unitconverter" )
         createUnitConverter( rData );
     else
-        setOption( rKey, rData );
+        maConfigData[ rKey ] = rData;
 }
 
 bool SharedConfigData::readConfigFile( const OUString& rFileUrl )
@@ -1395,7 +1390,7 @@ void SharedConfigData::createUnitConverter( const OUString& rData )
 Config::Config( const Config& rParent ) :
     Base()  // c'tor needs to be called explicitly to avoid compiler warning
 {
-    construct( rParent );
+    *this = rParent;
 }
 
 Config::Config( const sal_Char* pcEnvVar, const FilterBase& rFilter )
@@ -1410,11 +1405,6 @@ Config::Config( const sal_Char* pcEnvVar, const Reference< XComponentContext >& 
 
 Config::~Config()
 {
-}
-
-void Config::construct( const Config& rParent )
-{
-    *this = rParent;
 }
 
 void Config::construct( const sal_Char* pcEnvVar, const FilterBase& rFilter )
