@@ -272,13 +272,6 @@ inline void SAL_CALL convertPropertyValue( double &d , const css::uno::Any &a )
     }
 }
 
-inline void SAL_CALL convertPropertyValue( ::rtl::OUString &ow , const css::uno::Any &a )
-{
-    if( !(a >>= ow) ) {
-        throw css::lang::IllegalArgumentException();
-    }
-}
-
 }     // end namespace cppu
 
 #endif

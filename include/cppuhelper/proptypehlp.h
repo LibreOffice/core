@@ -48,7 +48,6 @@ inline void SAL_CALL convertPropertyValue( sal_uInt16 & target, const css::uno::
 inline void SAL_CALL convertPropertyValue( sal_Int8 & target  , const css::uno::Any & source );
 inline void SAL_CALL convertPropertyValue( float & target     , const css::uno::Any & source );
 inline void SAL_CALL convertPropertyValue( double &target     , const css::uno::Any &source );
-inline void SAL_CALL convertPropertyValue( ::rtl::OUString &target  , const css::uno::Any &source );
 
 } // end namespace cppu
 
