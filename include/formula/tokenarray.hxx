@@ -59,13 +59,13 @@ enum class ScRecalcMode : sal_uInt8
     ONLOAD_ONCE  = 0x08,    // exclusive, once after load
     FORCED       = 0x10,    // combined, also if cell isn't visible
     ONREFMOVE    = 0x20,    // combined, if reference was moved
+    EMask        = NORMAL | ALWAYS | ONLOAD | ONLOAD_ONCE  // mask of exclusive bits
 };
 // If new bits are to be defined, AddRecalcMode has to be adjusted!
 namespace o3tl
 {
     template<> struct typed_flags<ScRecalcMode> : is_typed_flags<ScRecalcMode, 0x3f> {};
 }
-#define RECALCMODE_EMASK (ScRecalcMode(ScRecalcMode::NORMAL | ScRecalcMode::ALWAYS | ScRecalcMode::ONLOAD | ScRecalcMode::ONLOAD_ONCE))  // mask of exclusive bits
 
 namespace formula
 {
@@ -173,9 +173,9 @@ protected:
     sal_uInt16              RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount );
 
     inline  void            SetCombinedBitsRecalcMode( ScRecalcMode nBits )
-                                { nMode |= (nBits & ~RECALCMODE_EMASK); }
+                                { nMode |= (nBits & ~ScRecalcMode::EMask); }
     inline  ScRecalcMode    GetCombinedBitsRecalcMode() const
-                                { return nMode & ~RECALCMODE_EMASK; }
+                                { return nMode & ~ScRecalcMode::EMask; }
                             /** Exclusive bits already set in nMode are
                                 zero'ed, nBits may contain combined bits, but
                                 only one exclusive bit may be set! */
