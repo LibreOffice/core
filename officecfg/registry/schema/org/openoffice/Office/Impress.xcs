@@ -501,8 +501,8 @@
         <!-- OldLocation: -->
         <!-- UIHints: automatic preview checkbox in create new effect dialog -->
         <info>
-          <desc>Indicates whether a selected effect in the custom animation create dialog should be previewed.</desc>
-          <label>Automatic preview for new custom animation</label>
+          <desc>Indicates whether a selected effect in the animation create dialog should be previewed.</desc>
+          <label>Automatic preview for new animation</label>
         </info>
         <value>true</value>
       </prop>
@@ -511,8 +511,8 @@
         <!-- OldLocation: -->
         <!-- UIHints: automatic preview in custom animation panel -->
         <info>
-          <desc>Indicates whether changes in the custom animation panel should be previewed.</desc>
-          <label>Automatic preview for custom animation panel</label>
+          <desc>Indicates whether changes in the animation panel should be previewed.</desc>
+          <label>Automatic preview for animation panel</label>
         </info>
         <value>true</value>
       </prop>

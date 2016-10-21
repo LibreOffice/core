@@ -64,7 +64,7 @@
     </group>
     <group oor:name="PresetCategory">
       <info>
-        <desc>Maps a custom animation effect node to an effect category.</desc>
+        <desc>Maps an animation effect node to an effect category.</desc>
       </info>
       <prop oor:name="Label" oor:type="xs:string" oor:localized="true">
         <info>
@@ -116,7 +116,7 @@
     </group>
     <group oor:name="Presets">
       <info>
-        <desc>Contains user interface presets for custom animation effects."</desc>
+        <desc>Contains user interface presets for animation effects."</desc>
       </info>
       <set oor:name="Entrance" oor:node-type="PresetCategory">
         <info>

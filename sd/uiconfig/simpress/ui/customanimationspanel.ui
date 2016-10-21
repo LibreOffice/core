@@ -61,7 +61,7 @@
             <property name="can_focus">True</property>
             <property name="vexpand">True</property>
             <child internal-child="selection">
-              <object class="GtkTreeSelection" id="Custom Animation ListBox-selection1"/>
+              <object class="GtkTreeSelection" id="Animation ListBox-selection1"/>
             </child>
           </object>
           <packing>
@@ -442,7 +442,7 @@
         <child>
           <object class="GtkLabel" id="box1_label">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Custom Animation Deck</property>
+            <property name="label" translatable="yes">Animation Deck</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">box1</property>
           </object>
@@ -455,7 +455,7 @@
         <child>
           <object class="GtkLabel" id="custom_animation_list_label">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Custom Animation List</property>
+            <property name="label" translatable="yes">Animation List</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">custom_animation_list</property>
           </object>
