@@ -142,7 +142,7 @@ bool PropertySet::implSetPropertyValue( const OUString& rPropName, const Any& rV
 #ifdef DBG_UTIL
 void PropertySet::dump()
 {
-    PropertyMap::dump( Reference< XPropertySet >( getXPropertySet(), UNO_QUERY ) );
+    PropertyMap::dump( mxPropSet );
 }
 #endif
 

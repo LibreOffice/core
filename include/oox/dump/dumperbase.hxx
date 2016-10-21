@@ -585,8 +585,6 @@ class ConstList : public NameListBase
 public:
     explicit            ConstList( const SharedConfigData& rCfgData );
 
-    /** Sets a default name for unknown keys. */
-    void                setDefaultName( const String& rDefName ) { maDefName = rDefName; }
     /** Enables or disables automatic quotation of returned names. */
     void                setQuoteNames( bool bQuoteNames ) { mbQuoteNames = bQuoteNames; }
 
@@ -770,7 +768,6 @@ public:
     const StorageRef& getRootStorage() const { return mxRootStrg; }
     const OUString& getSysFileName() const { return maSysFileName; }
 
-    void                setOption( const OUString& rKey, const OUString& rData );
     const OUString*      getOption( const OUString& rKey ) const;
 
     template< typename ListType >
@@ -871,7 +868,6 @@ public:
 
 protected:
                         Config() {}
-    void                construct( const Config& rParent );
     void                construct(
                             const sal_Char* pcEnvVar,
                             const ::oox::core::FilterBase& rFilter );

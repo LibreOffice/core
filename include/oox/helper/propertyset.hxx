@@ -78,10 +78,6 @@ public:
     /** Returns true, if the contained XPropertySet interface is valid. */
     bool         is() const { return mxPropSet.is(); }
 
-    /** Returns the contained XPropertySet interface. */
-    const css::uno::Reference< css::beans::XPropertySet >&
-                        getXPropertySet() const { return mxPropSet; }
-
     /** Returns true, if the specified property is supported by the property set. */
     bool                hasProperty( sal_Int32 nPropId ) const;
 
