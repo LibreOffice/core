@@ -322,7 +322,7 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
     }
     else // end of line
     {
-        const XLineEndEntry* pEntry = pLineEndList->GetLineEnd( (nId - 1) / 2 );
+        const XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nId / 2 - 2 );
         pLineEndItem.reset(new XLineEndItem(pEntry->GetName(), pEntry->GetLineEnd()));
     }
 
