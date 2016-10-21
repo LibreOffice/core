@@ -120,8 +120,6 @@ public:
 
     SfxProgress*            GetProgress() const;
 
-    SfxObjectShell*         GetObjectShell() const { return m_xObjSh.get(); }
-
     void                    LockAdjustPosSizePixel()
                             { m_nAdjustPosPixelLock++; }
     void                    UnlockAdjustPosSizePixel()
@@ -182,9 +180,7 @@ public:
                                     WinBits nMessageStyle = 0);
     void              RemoveInfoBar(const OUString& sId);
 
-    SAL_DLLPRIVATE void SetDowning_Impl();
     SAL_DLLPRIVATE void GetDocNumber_Impl();
-    SAL_DLLPRIVATE bool IsDowning_Impl() const;
     SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell *pVSh );
     SAL_DLLPRIVATE void ReleaseObjectShell_Impl();
 
@@ -196,7 +192,6 @@ public:
     SAL_DLLPRIVATE void ExecHistory_Impl( SfxRequest &rReq );
     SAL_DLLPRIVATE void StateHistory_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE void ForceOuterResize_Impl();
-    SAL_DLLPRIVATE bool IsResizeInToOut_Impl() const;
     SAL_DLLPRIVATE void UpdateDocument_Impl();
 
     SAL_DLLPRIVATE void LockObjectShell_Impl();

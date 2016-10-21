@@ -614,7 +614,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     StartPrint( rProps, bIsAPI, bIsDirect );
     // FIXME: job setup
     SfxPrinter* pDocPrt = GetPrinter();
-    JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : GetJobSetup();
+    JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : JobSetup();
     Printer::PrintJob( GetPrinterController(), aJobSetup );
 }
 
@@ -897,11 +897,6 @@ VclPtr<SfxTabPage> SfxViewShell::CreatePrintOptionsPage
 bool SfxViewShell::HasPrintOptionsPage() const
 {
     return false;
-}
-
-JobSetup SfxViewShell::GetJobSetup()
-{
-    return JobSetup();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -549,7 +549,7 @@ bool SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
 SfxPoolItem* SfxFrameItem::Clone( SfxItemPool *) const
 {
     SfxFrameItem* pNew = new SfxFrameItem( wFrame);
-    pNew->SetFramePtr_Impl( pFrame );
+    pNew->pFrame = pFrame;
     return pNew;
 }
 
@@ -815,11 +815,6 @@ void SfxFrame::ReleasingComponent_Impl()
 bool SfxFrame::IsInPlace() const
 {
     return pImpl->bInPlace;
-}
-
-void SfxFrame::SetInPlace_Impl( bool bSet )
-{
-    pImpl->bInPlace = bSet;
 }
 
 void SfxFrame::Resize()

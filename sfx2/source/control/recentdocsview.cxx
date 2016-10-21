@@ -159,7 +159,7 @@ BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
 
 void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId)
 {
-    RecentDocsViewItem *pChild = new RecentDocsViewItem(*this, rURL, rTitle, rThumbnail, nId, GetThumbnailSize());
+    RecentDocsViewItem *pChild = new RecentDocsViewItem(*this, rURL, rTitle, rThumbnail, nId, mnItemMaxSize);
 
     AppendItem(pChild);
 }

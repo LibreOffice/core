@@ -152,8 +152,8 @@ void TemplateLocalView::Populate ()
             aProperties.aPath = aURL;
             aProperties.aRegionName = aRegionName;
             aProperties.aThumbnail = TemplateLocalView::fetchThumbnail(aURL,
-                                                                          getThumbnailWidth(),
-                                                                          getThumbnailHeight());
+                                                                          mnThumbnailWidth,
+                                                                          mnThumbnailHeight);
 
             pItem->maTemplates.push_back(aProperties);
             maAllTemplates.push_back(aProperties);

@@ -144,18 +144,13 @@ void SfxModalDialog::GetDialogData_Impl()
     }
 }
 
-void SfxModalDialog::init()
-{
-    GetDialogData_Impl();
-}
-
 SfxModalDialog::SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription )
 :   ModalDialog(pParent, rID, rUIXMLDescription),
     nUniqId(0), //todo: remove this member when the ResId using ctor is removed
     pInputSet(nullptr),
     pOutputSet(nullptr)
 {
-    init();
+    GetDialogData_Impl();
 }
 
 SfxModalDialog::~SfxModalDialog()
