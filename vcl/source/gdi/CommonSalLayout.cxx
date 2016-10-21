@@ -101,8 +101,8 @@ static hb_font_t* createHbFont(hb_face_t* pHbFace)
 
 static void scaleHbFont(hb_font_t* pHbFont, const FontSelectPattern& aFontSelData)
 {
-    uint64_t nXScale = aFontSelData.mnWidth << 6;
-    uint64_t nYScale = aFontSelData.mnHeight << 6;
+    unsigned int nXScale = aFontSelData.mnWidth << 6;
+    unsigned int nYScale = aFontSelData.mnHeight << 6;
 
 #if defined(_WIN32)
     // HACK to get stretched/shrunken text. TODO: Get rid of HACK
