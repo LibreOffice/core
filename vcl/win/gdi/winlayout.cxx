@@ -4004,10 +4004,8 @@ LogicalFontInstance* WinFontFace::CreateFontInstance( FontSelectPattern& rFSD ) 
     return pFontInstance;
 }
 
-void WinSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
+void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout, HDC hDC)
 {
-    HDC hDC = getHDC();
-
     if (getenv("SAL_DWRITE_COMMON_LAYOUT"))
     {
         Point aPos(0, 0);
@@ -4029,6 +4027,90 @@ void WinSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
                          1, nullptr);
         }
         SetTextAlign(hDC, oldTa);
+    }
+}
+
+void WinSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
+{
+    HDC hDC = getHDC();
+    bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
+    if (!bUseOpenGL)
+    {
+        // no OpenGL, just classic rendering
+        DrawTextLayout(rLayout, hDC);
+    }
+    else
+    {
+        // We have to render the text to a hidden texture, and draw it.
+        //
+        // Note that Windows GDI does not really support the alpha correctly
+        // when drawing - ie. it draws nothing to the alpha channel when
+        // rendering the text, even the antialiasing is done as 'real' pixels,
+        // not alpha...
+        //
+        // Luckily, this does not really limit us:
+        //
+        // To blend properly, we draw the texture, but then use it as an alpha
+        // channel for solid color (that will define the text color).  This
+        // destroys the subpixel antialiasing - turns it into 'classic'
+        // antialiasing - but that is the best we can do, because the subpixel
+        // antialiasing needs to know what is in the background: When the
+        // background is white, or white-ish, it does the subpixel, but when
+        // there is a color, it just darkens the color (and does this even
+        // when part of the character is on a colored background, and part on
+        // white).  It has to work this way, the results would look strange
+        // otherwise.
+        //
+        // For the GL rendering to work even with the subpixel antialiasing,
+        // we would need to get the current texture from the screen, let GDI
+        // draw the text to it (so that it can decide well where to use the
+        // subpixel and where not), and draw the result - but in that case we
+        // don't need alpha anyway.
+        //
+        // TODO: check the performance of this 2nd approach at some stage and
+        // switch to that if it performs well.
+
+        Rectangle aRect;
+        rLayout.GetBoundRect(*this, aRect);
+
+        WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
+
+        if (pImpl)
+        {
+            pImpl->PreDraw();
+
+            OpenGLCompatibleDC aDC(*this, aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
+
+            // we are making changes to the DC, make sure we got a new one
+            assert(aDC.getCompatibleHDC() != hDC);
+
+            RECT aWinRect = { aRect.Left(), aRect.Top(), aRect.Left() + aRect.GetWidth(), aRect.Top() + aRect.GetHeight() };
+            ::FillRect(aDC.getCompatibleHDC(), &aWinRect, static_cast<HBRUSH>(::GetStockObject(WHITE_BRUSH)));
+
+            // setup the hidden DC with black color and white background, we will
+            // use the result of the text drawing later as a mask only
+            HFONT hOrigFont = ::SelectFont(aDC.getCompatibleHDC(), static_cast<HFONT>(::GetCurrentObject(hDC, OBJ_FONT)));
+
+            ::SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
+            ::SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
+
+            UINT nTextAlign = ::GetTextAlign(hDC);
+            ::SetTextAlign(aDC.getCompatibleHDC(), nTextAlign);
+
+            COLORREF color = ::GetTextColor(hDC);
+            SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
+
+            // the actual drawing
+            DrawTextLayout(rLayout, aDC.getCompatibleHDC());
+
+            std::unique_ptr<OpenGLTexture> xTexture(aDC.getTexture());
+            if (xTexture)
+                pImpl->DrawMask(*xTexture, salColor, aDC.getTwoRect());
+
+            ::SelectFont(aDC.getCompatibleHDC(), hOrigFont);
+
+            pImpl->PostDraw();
+        }
     }
 }
 
