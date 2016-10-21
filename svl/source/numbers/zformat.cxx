@@ -3264,6 +3264,9 @@ bool SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
         case NF_KEY_RR :
         case NF_KEY_AAA :
         case NF_KEY_AAAA :
+        case NF_KEY_G :
+        case NF_KEY_GG :
+        case NF_KEY_GGG :
             return true;
         }
     }
