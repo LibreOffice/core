@@ -271,7 +271,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_SELECT_VALUE_SEQ:
-            _rValue = getCurrentMultiValue();
+            _rValue <<= getCurrentMultiValue();
             break;
 
         case PROPERTY_ID_SELECT_VALUE:
@@ -416,9 +416,17 @@ namespace frm
             break;
 
         case PROPERTY_ID_SELECT_VALUE :
-            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, getCurrentSingleValue());
+        {
+            // Any from connectivity::ORowSetValue
+            Any _rCurrentValue = getCurrentSingleValue();
+            if (_rCurrentValue != _rValue)
+            {
+                _rOldValue = _rValue;
+                _rConvertedValue = _rCurrentValue;
+                bModified = true;
+            }
             break;
-
+        }
         case PROPERTY_ID_DEFAULT_SELECT_SEQ :
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aDefaultSelectSeq);
             break;
@@ -1517,7 +1525,7 @@ namespace frm
         }
 
 
-        Any lcl_getMultiSelectedEntriesAny( const Sequence< sal_Int16 >& _rSelectSequence, const ValueList& _rStringList )
+        Sequence< Any > lcl_getMultiSelectedEntriesAny( const Sequence< sal_Int16 >& _rSelectSequence, const ValueList& _rStringList )
         {
             Sequence< Any > aSelectedEntriesValues( _rSelectSequence.getLength() );
             ::std::transform(
@@ -1526,7 +1534,7 @@ namespace frm
                 aSelectedEntriesValues.getArray(),
                 ExtractAnyFromValueList_Safe( _rStringList )
             );
-            return makeAny( aSelectedEntriesValues );
+            return aSelectedEntriesValues;
         }
     }
 
@@ -1542,7 +1550,7 @@ namespace frm
         switch ( lcl_getCurrentExchangeType( getExternalValueType() ) )
         {
         case eValueList:
-            aReturn = getCurrentMultiValue();
+            aReturn <<= getCurrentMultiValue();
             break;
 
         case eValue:
@@ -1613,9 +1621,9 @@ namespace frm
         return aCurrentValue;
     }
 
-    Any OListBoxModel::getCurrentMultiValue() const
+    Sequence< Any > OListBoxModel::getCurrentMultiValue() const
     {
-        Any aCurrentValue;
+        Sequence< Any > aCurrentValue;
 
         try
         {
@@ -1648,7 +1656,7 @@ namespace frm
             OSL_VERIFY( const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_MULTISELECTION ) >>= bMultiSelection );
 
             if ( bMultiSelection )
-                aCurrentValue = getCurrentMultiValue();
+                aCurrentValue <<= getCurrentMultiValue();
             else
                 aCurrentValue = getCurrentSingleValue();
         }

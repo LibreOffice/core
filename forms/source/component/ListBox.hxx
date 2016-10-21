@@ -209,7 +209,7 @@ protected:
 
     void init();
     css::uno::Any getCurrentSingleValue() const;
-    css::uno::Any getCurrentMultiValue() const;
+    css::uno::Sequence<css::uno::Any> getCurrentMultiValue() const;
     css::uno::Sequence< sal_Int16 > translateBindingValuesToControlValue(
         const css::uno::Sequence< const css::uno::Any > &i_aValues)
         const;
