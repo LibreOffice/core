@@ -3159,7 +3159,7 @@ ScDocShellModificator::~ScDocShellModificator()
 void ScDocShellModificator::SetDocumentModified()
 {
     ScDocument& rDoc = rDocShell.GetDocument();
-    rDoc.ClearFormulaContext();
+    rDoc.PrepareFormulaCalc();
     if ( !rDoc.IsImportingXML() )
     {
         // AutoCalcShellDisabled temporaer restaurieren

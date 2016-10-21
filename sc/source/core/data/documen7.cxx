@@ -84,7 +84,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
 
 void ScDocument::BroadcastCells( const ScRange& rRange, sal_uInt32 nHint, bool bBroadcastSingleBroadcasters )
 {
-    ClearFormulaContext();
+    PrepareFormulaCalc();
 
     if (!pBASM)
         return;    // Clipboard or Undo
