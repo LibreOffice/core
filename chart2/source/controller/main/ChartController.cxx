@@ -278,7 +278,7 @@ css::uno::Reference<css::chart2::XChartType> getChartType(
         const css::uno::Reference<css::chart2::XChartDocument>& xChartDoc)
 {
     Reference <chart2::XDiagram > xDiagram = xChartDoc->getFirstDiagram();
-    if (xDiagram == nullptr) {
+    if (!xDiagram.is()) {
         return css::uno::Reference<css::chart2::XChartType>();
     }
 
