@@ -1172,24 +1172,18 @@ void makeRedline( SwPaM& rPaM,
 
     //todo: what about REDLINE_FMTCOLL?
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
-    uno::Any aAuthorValue;
-    aAuthorValue = aPropMap.getUnpackedValueOrDefault("RedlineAuthor", aAuthorValue);
     sal_uInt16 nAuthor = 0;
     OUString sAuthor;
-    if( aAuthorValue >>= sAuthor )
+    if( aPropMap.getValue("RedlineAuthor") >>= sAuthor )
         nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
 
     OUString sComment;
-    uno::Any aCommentValue;
-    aCommentValue = aPropMap.getUnpackedValueOrDefault("RedlineComment", aCommentValue);
-
     SwRedlineData aRedlineData( eType, nAuthor );
-    if( aCommentValue >>= sComment )
+    if( aPropMap.getValue("RedlineComment") >>= sComment )
         aRedlineData.SetComment( sComment );
 
     ::util::DateTime aStamp;
-    uno::Any aDateTimeValue;
-    aDateTimeValue = aPropMap.getUnpackedValueOrDefault("RedlineDateTime", aDateTimeValue);
+    uno::Any aDateTimeValue = aPropMap.getValue("RedlineDateTime");
     if( aDateTimeValue >>= aStamp )
     {
         aRedlineData.SetTimeStamp( DateTime( aStamp));
@@ -1199,11 +1193,8 @@ void makeRedline( SwPaM& rPaM,
 
     // Read the 'Redline Revert Properties' from the parameters
     uno::Sequence< beans::PropertyValue > aRevertProperties;
-    uno::Any aRevertPropertiesValue;
-    aRevertPropertiesValue = aPropMap.getUnpackedValueOrDefault("RedlineRevertProperties", aRevertPropertiesValue);
-
     // Check if the value exists
-    if ( aRevertPropertiesValue >>= aRevertProperties )
+    if ( aPropMap.getValue("RedlineRevertProperties") >>= aRevertProperties )
     {
         int nMap = 0;
         // Make sure that paragraph format gets its own map, otherwise e.g. fill attributes are not preserved.
@@ -1297,25 +1288,18 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     }
 
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
-    uno::Any aAuthorValue;
-    aAuthorValue = aPropMap.getUnpackedValueOrDefault("RedlineAuthor", aAuthorValue);
     sal_uInt16 nAuthor = 0;
     OUString sAuthor;
-    if( aAuthorValue >>= sAuthor )
+    if( aPropMap.getValue("RedlineAuthor") >>= sAuthor )
         nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
 
     OUString sComment;
-    uno::Any aCommentValue;
-    aCommentValue = aPropMap.getUnpackedValueOrDefault("RedlineComment", aCommentValue);
-
     SwRedlineData aRedlineData( eType, nAuthor );
-    if( aCommentValue >>= sComment )
+    if( aPropMap.getValue("RedlineComment") >>= sComment )
         aRedlineData.SetComment( sComment );
 
     ::util::DateTime aStamp;
-    uno::Any aDateTimeValue;
-    aDateTimeValue = aPropMap.getUnpackedValueOrDefault("RedlineDateTime", aDateTimeValue);
-    if( aDateTimeValue >>= aStamp )
+    if( aPropMap.getValue("RedlineDateTime") >>= aStamp )
     {
        aRedlineData.SetTimeStamp(
         DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), tools::Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
@@ -1354,25 +1338,18 @@ void makeTableCellRedline( SwTableBox& rTableBox,
     }
 
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
-    uno::Any aAuthorValue;
-    aAuthorValue = aPropMap.getUnpackedValueOrDefault("RedlineAuthor", aAuthorValue);
     sal_uInt16 nAuthor = 0;
     OUString sAuthor;
-    if( aAuthorValue >>= sAuthor )
+    if( aPropMap.getValue("RedlineAuthor") >>= sAuthor )
         nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
 
     OUString sComment;
-    uno::Any aCommentValue;
-    aCommentValue = aPropMap.getUnpackedValueOrDefault("RedlineComment", aCommentValue);
-
     SwRedlineData aRedlineData( eType, nAuthor );
-    if( aCommentValue >>= sComment )
+    if( aPropMap.getValue("RedlineComment") >>= sComment )
         aRedlineData.SetComment( sComment );
 
     ::util::DateTime aStamp;
-    uno::Any aDateTimeValue;
-    aDateTimeValue = aPropMap.getUnpackedValueOrDefault("RedlineDateTime", aDateTimeValue);
-    if( aDateTimeValue >>= aStamp )
+    if( aPropMap.getValue("RedlineDateTime") >>= aStamp )
     {
        aRedlineData.SetTimeStamp(
         DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), tools::Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
