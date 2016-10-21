@@ -44,6 +44,8 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     std::vector< std::unique_ptr<PDFElement> > m_aElements;
     // List of object offsets we know.
     std::vector<size_t> m_aXRef;
+    /// List of xref offsets we know.
+    std::vector<size_t> m_aStartXRefs;
     PDFTrailerElement* m_pTrailer;
     /// All editing takes place in this buffer, if it happens.
     SvMemoryStream m_aEditBuffer;

@@ -414,6 +414,14 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         }
         m_aEditBuffer.WriteCharPtr("> ]\n");
     }
+
+    if (!m_aStartXRefs.empty())
+    {
+        // Write location of the previous cross-reference section.
+        m_aEditBuffer.WriteCharPtr("/Prev ");
+        m_aEditBuffer.WriteUInt32AsString(m_aStartXRefs.back());
+    }
+
     m_aEditBuffer.WriteCharPtr(">>\n");
 
     // Write startxref.
@@ -510,6 +518,8 @@ bool PDFDocument::Read(SvStream& rStream)
     // Then we can tokenize the stream.
     rStream.Seek(0);
     bool bInXRef = false;
+    // The next number will be an xref offset.
+    bool bInStartXRef = false;
     while (true)
     {
         rStream.ReadChar(ch);
@@ -584,10 +594,16 @@ bool PDFDocument::Read(SvStream& rStream)
             if (isdigit(ch) || ch == '-')
             {
                 // Numbering object: an integer or a real.
-                m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFNumberElement()));
+                PDFNumberElement* pNumberElement = new PDFNumberElement();
+                m_aElements.push_back(std::unique_ptr<PDFElement>(pNumberElement));
                 rStream.SeekRel(-1);
-                if (!m_aElements.back()->Read(rStream))
+                if (!pNumberElement->Read(rStream))
                     return false;
+                if (bInStartXRef)
+                {
+                    bInStartXRef = false;
+                    m_aStartXRefs.push_back(pNumberElement->GetValue());
+                }
             }
             else if (isalpha(ch))
             {
@@ -688,6 +704,7 @@ bool PDFDocument::Read(SvStream& rStream)
                 }
                 else if (aKeyword == "startxref")
                 {
+                    bInStartXRef = true;
                 }
                 else
                 {
