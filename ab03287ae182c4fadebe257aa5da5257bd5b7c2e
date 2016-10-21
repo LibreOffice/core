@@ -16,6 +16,24 @@
       "revId": "ab03287ae182c4fadebe257aa5da5257bd5b7c2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_0ae2bdd5",
+        "filename": "unotools/source/i18n/transliterationwrapper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2016-10-21T06:10:30Z",
+      "side": 1,
+      "message": "Since nLang comes from ScGlobal::eLnge:\nhttp://opengrok.libreoffice.org/xref/core/sc/source/core/data/table3.cxx#2504\n\nCould I just substitute ScGlobal::eLnge with ScGlobal::GetpLocaleData()-\u003egetLanguageTag().getLanguageType(true) to pass the resolved system locale in right away? (and then the previous changes can all be discarded)",
+      "parentUuid": "7a77a97e_ca00c5ad",
+      "revId": "ab03287ae182c4fadebe257aa5da5257bd5b7c2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
