@@ -170,12 +170,6 @@ sal_uInt16 const aTitleMap_Impl[3][2] =
 };
 
 
-void SfxObjectShell::AbortImport()
-{
-    pImpl->bIsAbortingImport = true;
-}
-
-
 bool SfxObjectShell::IsAbortingImport() const
 {
     return pImpl->bIsAbortingImport;
@@ -1341,7 +1335,7 @@ void SfxObjectShell::CancelTransfers()
 {
     if( ( pImpl->nLoadedFlags & SfxLoadedFlags::ALL ) != SfxLoadedFlags::ALL )
     {
-        AbortImport();
+        pImpl->bIsAbortingImport = true;
         if( IsLoading() )
             FinishedLoading();
     }

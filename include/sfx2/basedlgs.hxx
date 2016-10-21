@@ -55,7 +55,6 @@ private:
 
     SAL_DLLPRIVATE void SetDialogData_Impl();
     SAL_DLLPRIVATE void GetDialogData_Impl();
-    SAL_DLLPRIVATE void init();
 
 protected:
     SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription);

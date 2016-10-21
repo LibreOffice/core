@@ -173,7 +173,6 @@ public:
     SAL_DLLPRIVATE Rectangle GetTopOuterRectPixel_Impl() const;
     SAL_DLLPRIVATE void CreateWorkWindow_Impl();
     SAL_DLLPRIVATE void GrabFocusOnComponent_Impl();
-    SAL_DLLPRIVATE void SetInPlace_Impl( bool );
 
     SAL_DLLPRIVATE void PrepareForDoc_Impl( SfxObjectShell& i_rDoc );
     SAL_DLLPRIVATE void LockResize_Impl( bool bLock );
@@ -191,7 +190,6 @@ class SFX2_DLLPUBLIC SfxFrameItem: public SfxPoolItem
 {
     SfxFrame*               pFrame;
     SfxFrameWeakRef         wFrame;
-    SAL_DLLPRIVATE void SetFramePtr_Impl( SfxFrame* /*pFrameP*/ ) { pFrame = wFrame; }
 
 public:
 
