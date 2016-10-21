@@ -1123,6 +1123,8 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             const SfxStringItem* pItem = rReq.GetArg<SfxStringItem>(nSlot);
             if ( pItem )
                 pPostItMgr->Delete( pItem->GetValue() );
+            else if ( pPostItMgr->HasActiveSidebarWin() )
+                pPostItMgr->Delete( pPostItMgr->GetActiveSidebarWin()->GetAuthor() );
             break;
         }
         case FN_HIDE_NOTE:
