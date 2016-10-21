@@ -68,9 +68,6 @@ class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
 
     EditTextObject( SfxItemPool* pPool );
 
-    void StoreData( SvStream& rStrm ) const;
-    void CreateData( SvStream& rStrm );
-
 public:
     EditTextObject( const EditTextObject& r );
     virtual ~EditTextObject();

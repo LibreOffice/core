@@ -221,13 +221,13 @@ void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
     _aFont.SetFamily( aNewFont.GetFamilyType() );
     _aFont.SetStyleName( aNewFont.GetStyleName() );
     _aFont.SetColor( aNewFont.GetColor() );
-    SetSymbol( rCopyFrom.GetSymbol() );
+    SetSymbol( rCopyFrom.cSymbol );
     SetGraphicObject( rCopyFrom.GetGraphicObject() );
-    SetScale( rCopyFrom.GetScale() );
-    SetStart( rCopyFrom.GetStart() );
-    SetStyle( rCopyFrom.GetStyle() );
-    SetPrevText( rCopyFrom.GetPrevText() );
-    SetFollowText( rCopyFrom.GetFollowText() );
+    SetScale( rCopyFrom.nScale );
+    SetStart( rCopyFrom.nStart );
+    SetStyle( rCopyFrom.nStyle );
+    aPrevText = rCopyFrom.aPrevText;
+    aFollowText = rCopyFrom.aFollowText;
     SetFont( _aFont );
 }
 

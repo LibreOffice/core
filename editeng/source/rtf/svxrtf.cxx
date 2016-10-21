@@ -112,9 +112,9 @@ SvParserState SvxRTFParser::CallParser()
     if( !aColorTbl.empty() )
         ClearColorTbl();
     if (!m_FontTable.empty())
-        ClearFontTbl();
+        m_FontTable.clear();
     if (!m_StyleTable.empty())
-        ClearStyleTbl();
+        m_StyleTable.clear();
     if( !aAttrStack.empty() )
         ClearAttrStack();
 
@@ -747,16 +747,6 @@ void SvxRTFParser::ClearColorTbl()
     }
 }
 
-void SvxRTFParser::ClearFontTbl()
-{
-    m_FontTable.clear();
-}
-
-void SvxRTFParser::ClearStyleTbl()
-{
-    m_StyleTable.clear();
-}
-
 void SvxRTFParser::ClearAttrStack()
 {
     for( size_t nCnt = aAttrStack.size(); nCnt; --nCnt )
@@ -1178,7 +1168,7 @@ void SvxRTFItemStackType::MoveFullNode(const EditNodeIdx &rOldNode,
 {
     bool bSameEndAsStart = (pSttNd == pEndNd);
 
-    if (GetSttNodeIdx() == rOldNode.GetIdx())
+    if (pSttNd->GetIdx() == rOldNode.GetIdx())
     {
         delete pSttNd;
         pSttNd = rNewNode.Clone();
@@ -1186,7 +1176,7 @@ void SvxRTFItemStackType::MoveFullNode(const EditNodeIdx &rOldNode,
             pEndNd = pSttNd;
     }
 
-    if (!bSameEndAsStart && GetEndNodeIdx() == rOldNode.GetIdx())
+    if (!bSameEndAsStart && pEndNd->GetIdx() == rOldNode.GetIdx())
     {
         delete pEndNd;
         pEndNd = rNewNode.Clone();

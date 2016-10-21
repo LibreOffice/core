@@ -216,8 +216,6 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     void operator=(SvxRTFParser const&) = delete;
 
     void ClearColorTbl();
-    void ClearFontTbl();
-    void ClearStyleTbl();
     void ClearAttrStack();
 
     SvxRTFItemStackType* GetAttrSet_();  // Create new ItemStackType:s
@@ -354,9 +352,6 @@ public:
 
     void MoveFullNode(const EditNodeIdx &rOldNode,
         const EditNodeIdx &rNewNode);
-
-    sal_Int32 GetSttNodeIdx() const { return pSttNd->GetIdx(); }
-    sal_Int32 GetEndNodeIdx() const { return pEndNd->GetIdx(); }
 
     const EditNodeIdx& GetSttNode() const { return *pSttNd; }
     const EditNodeIdx& GetEndNode() const { return *pEndNd; }

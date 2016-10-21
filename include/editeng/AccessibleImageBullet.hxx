@@ -178,8 +178,6 @@ namespace accessibility
          */
         SvxViewForwarder&   GetViewForwarder() const;
 
-        const Point& GetEEOffset() const { return maEEOffset; }
-
         // the paragraph index in the edit engine (guarded by solar mutex)
         sal_Int32   mnParagraphIndex;
 
