@@ -372,14 +372,14 @@ void Test::testFormulaParseReference()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aEnd.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
-                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)) ==
-                           (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
-                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID));
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)) ==
-                            ScRefFlags::ZERO);
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)) ==
-                           (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                                                 ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                                                         ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::ZERO),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)));
 
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse("2:2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
@@ -390,14 +390,14 @@ void Test::testFormulaParseReference()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), aRange.aEnd.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aEnd.Row());
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
-                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)) ==
-                           (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
-                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID));
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)) ==
-                            ScRefFlags::ZERO);
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)) ==
-                           (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                                                 ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                                                         ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::ZERO),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)));
 
     nRes = aRange.Parse("NoQuote.B:C", m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
@@ -407,14 +407,14 @@ void Test::testFormulaParseReference()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(4), aRange.aEnd.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(2), aRange.aEnd.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
-                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)) ==
-                           (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
-                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID));
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)) ==
-                            ScRefFlags::ZERO);
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)) ==
-                           (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                                                 ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                                                         ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::ZERO),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)));
 
     // Both rows at sheet bounds and relative => convert to absolute => entire column reference.
     aRange.aStart.SetTab(0);
@@ -426,14 +426,14 @@ void Test::testFormulaParseReference()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aEnd.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
-                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)) ==
-                           (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
-                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID));
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)) ==
-                           ScRefFlags::ZERO);
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)) ==
-                           (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                                                 ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                                                         ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::ZERO),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)));
 
     // Both columns at sheet bounds and relative => convert to absolute => entire row reference.
     aRange.aStart.SetTab(0);
@@ -445,14 +445,14 @@ void Test::testFormulaParseReference()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), aRange.aEnd.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aEnd.Row());
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
-                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)) ==
-                           (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
-                ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID));
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)) ==
-                            ScRefFlags::ZERO);
-    CPPUNIT_ASSERT((nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)) ==
-                           (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                                                 ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
+                                                         ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::ZERO),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS),
+                         static_cast<sal_uInt16>(nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)));
 
     // Check for reference input conversion to and display string of entire column/row.
     {
@@ -784,7 +784,7 @@ void Test::testFormulaHashAndTag()
         if (aHashTests[i].bEqual)
         {
             os << " Error: these hashes should be equal." << endl;
-            CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), nHashVal1 == nHashVal2);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(os.str().c_str(), nHashVal1, nHashVal2);
         }
         else
         {
@@ -5129,8 +5129,8 @@ void Test::testFormulaDepTrackingDeleteRow()
     CPPUNIT_ASSERT(pBC);
     SvtBroadcaster::ListenersType* pListeners = &pBC->GetAllListeners();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A5 should have one listener.", size_t(1), pListeners->size());
-    SvtListener* pListener = pListeners->at(0);
-    CPPUNIT_ASSERT_MESSAGE("A6 should be listening to A5.", pListener == pFC);
+    const SvtListener* pListener = pListeners->at(0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A6 should be listening to A5.", static_cast<const ScFormulaCell*>(pListener), pFC);
 
     // Check initial values.
     CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0,4,0)));
@@ -5149,7 +5149,7 @@ void Test::testFormulaDepTrackingDeleteRow()
     pFC = m_pDoc->GetFormulaCell(ScAddress(0,4,0));
     CPPUNIT_ASSERT(pFC);
     pListener = pListeners->at(0);
-    CPPUNIT_ASSERT_MESSAGE("A5 should be listening to A4.", pFC == pListener);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A5 should be listening to A4.", static_cast<const ScFormulaCell*>(pListener), pFC);
 
     // Check values after row deletion.
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,3,0)));
@@ -5455,7 +5455,7 @@ void Test::testExternalRef()
 
     // Sheet2 is not referenced at all; the cache table shouldn't even exist.
     pCacheTab = pRefMgr->getCacheTable(nFileId, aExtSh2Name, false);
-    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 2 should *not* exist.", pCacheTab.get() == nullptr);
+    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 2 should *not* exist.", !pCacheTab.get());
 
     // Sheet3's row 5 is not referenced; it should not be cached.
     pCacheTab = pRefMgr->getCacheTable(nFileId, aExtSh3Name, false);
@@ -5468,7 +5468,7 @@ void Test::testExternalRef()
     // Unload the external document shell.
     xExtDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
-                           findLoadedDocShellByName(aExtDocName) == nullptr);
+                           !findLoadedDocShellByName(aExtDocName));
 
     m_pDoc->DeleteTab(0);
 }
@@ -5501,7 +5501,7 @@ void Test::testExternalRangeName()
 
     xExtDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
-                           findLoadedDocShellByName(aExtDocName) == nullptr);
+                           !findLoadedDocShellByName(aExtDocName));
     m_pDoc->DeleteTab(0);
 }
 
@@ -5657,7 +5657,7 @@ void Test::testExternalRefFunctions()
     // Unload the external document shell.
     xExtDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
-                           findLoadedDocShellByName(aExtDocName) == nullptr);
+                           !findLoadedDocShellByName(aExtDocName));
 
     m_pDoc->DeleteTab(0);
 }

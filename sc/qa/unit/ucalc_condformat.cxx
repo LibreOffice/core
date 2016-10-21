@@ -370,7 +370,7 @@ void Test::testCondCopyPasteSingleCellToRange()
             CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
             CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
             auto itr = aCondFormatIndices.find(nPastedKey);
-            CPPUNIT_ASSERT(itr == aCondFormatIndices.end());
+            CPPUNIT_ASSERT(bool(itr == aCondFormatIndices.end()));
             aCondFormatIndices.insert(nPastedKey);
         }
     }
