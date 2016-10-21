@@ -2613,6 +2613,10 @@ namespace comphelper
                 maDirs,
                 maFiles);
 
+            // should not extist, but for the case an error occurred and it got
+            // copied somehow, avoid further recurive copying/saving
+            maDirs.erase("SafeMode");
+
             // not really needed, can be abandoned
             maDirs.erase("psprint");
 
