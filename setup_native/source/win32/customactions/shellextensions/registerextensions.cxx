@@ -327,7 +327,7 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
     if ( hFindUnopkg != INVALID_HANDLE_VALUE )
     {
         // unopkg.exe exists in program directory
-        std::_tstring sCommand = sUnoPkgFile + " sync";
+        std::_tstring sCommand = "\"" + sUnoPkgFile + "\" sync";
 
         DWORD exitCode = 0;
         bool fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
