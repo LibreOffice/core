@@ -895,45 +895,6 @@ sub convert_to_unicode
 }
 
 ##################################################################
-# Windows: Setting nsis version is necessary because of small
-# changes in nsis from version 2.0.4 to 2.3.1
-##################################################################
-
-sub set_nsis_version
-{
-    my ($nshfile) = @_;
-
-    my $searchstring = "\$\{LangFileString\}"; # occurs only in nsis 2.3.1 or similar
-
-    for ( my $i = 0; $i <= $#{$nshfile}; $i++ )
-    {
-        if ( ${$nshfile}[$i] =~ /\Q$searchstring\E/ )
-        {
-            # this is nsis 2.3.1 or similar
-            $installer::globals::nsis231 = 1;
-            $installer::globals::unicodensis = 0;
-            last;
-        }
-    }
-
-    # checking unicode version
-    $searchstring = convert_to_unicode($searchstring);
-
-    for ( my $i = 0; $i <= $#{$nshfile}; $i++ )
-    {
-        if ( ${$nshfile}[$i] =~ /\Q$searchstring\E/ )
-        {
-            # this is nsis 2.3.1 or similar
-            $installer::globals::nsis231 = 1;
-            $installer::globals::unicodensis = 1;
-            last;
-        }
-    }
-
-    if ( ! $installer::globals::nsis231 ) { $installer::globals::nsis204 = 1; }
-}
-
-##################################################################
 # Windows: Including the product name into nsi template
 ##################################################################
 
@@ -1108,8 +1069,6 @@ sub put_windows_productpath_into_template
     if (length($locallangs) > $installer::globals::max_lang_length) { $locallangs = "multi lingual"; }
 
     if ( ! $installer::globals::languagepack ) { $productpath = $productpath . " (" . $locallangs . ")"; }
-
-    # if (( $installer::globals::languagepack ) && ( $installer::globals::unicodensis )) { $productpath = convert_textstring_to_utf16($productpath, $localnsisdir, "stringhelper.txt"); }
 
     replace_one_variable($templatefile, "PRODUCTPATHPLACEHOLDER", $productpath);
 }
@@ -1412,12 +1371,6 @@ sub replace_identifier_in_nshfile
 {
     my ( $nshfile, $identifier, $newstring, $nshfilename, $onelanguage ) = @_;
 
-    if ( $installer::globals::nsis231 )
-    {
-        $newstring =~ s/\\r/\$\\r/g;    # \r -> $\r  in modern nsis versions
-        $newstring =~ s/\\n/\$\\n/g;    # \n -> $\n  in modern nsis versions
-    }
-
     for ( my $i = 0; $i <= $#{$nshfile}; $i++ )
     {
         if ( ${$nshfile}[$i] =~ /\s+\Q$identifier\E\s+\"(.+)\"\s*$/ )
@@ -1609,17 +1562,9 @@ sub copy_and_translate_nsis_language_files
         installer::systemactions::copy_one_file($sourcepath, $nshfilename);
 
         # Changing the macro name in nsh file: MUI_LANGUAGEFILE_BEGIN -> MUI_LANGUAGEFILE_PACK_BEGIN
+        convert_utf16_to_utf8($nshfilename);
+        convert_utf16_to_utf8($nlffilename);
         my $nshfile = installer::files::read_file($nshfilename);
-        set_nsis_version($nshfile);
-
-        if ( $installer::globals::unicodensis )
-        {
-            $installer::logger::Lang->printf("This is Unicode NSIS!\n");
-            convert_utf16_to_utf8($nshfilename);
-            convert_utf16_to_utf8($nlffilename);
-            $nshfile = installer::files::read_file($nshfilename);   # read nsh file again
-        }
-
         replace_one_variable($nshfile, "MUI_LANGUAGEFILE_BEGIN", "MUI_LANGUAGEFILE_PACK_BEGIN");
 
         # find the ulf file for translation
@@ -1632,11 +1577,8 @@ sub copy_and_translate_nsis_language_files
         installer::files::save_file($nshfilename, $nshfile);
         installer::files::save_file($nlffilename, $nlffile);
 
-        if ( $installer::globals::unicodensis )
-        {
-            convert_utf8_to_utf16($nshfilename);
-            convert_utf8_to_utf16($nlffilename);
-        }
+        convert_utf8_to_utf16($nshfilename);
+        convert_utf8_to_utf16($nlffilename);
     }
 
 }
@@ -1666,83 +1608,20 @@ sub put_output_path_into_template
 }
 
 ##################################################################
-# Windows: Only allow specific code for nsis 2.0.4 or nsis 2.3.1
-##################################################################
-
-sub put_version_specific_code_into_template
-{
-    my ($templatefile) = @_;
-
-    my $subst204 = "";
-    my $subst231 = "";
-
-    if ( $installer::globals::nsis204 )
-    {
-        $subst231 = ";";
-    }
-    else
-    {
-        $subst204 = ";";
-    }
-
-    replace_one_variable($templatefile, "\#204\#", $subst204);
-    replace_one_variable($templatefile, "\#231\#", $subst231);
-}
-
-##################################################################
 # Windows: Finding the path to the nsis SDK
 ##################################################################
 
 sub get_path_to_nsis_sdk
 {
-    my $vol;
-    my $dir;
-    my $file;
     my $nsispath = "";
 
     if ( $ENV{'NSIS_PATH'} )
     {
         $nsispath = $ENV{'NSIS_PATH'};
     }
-    elsif ( $ENV{'SOLARROOT'} )
-    {
-        $nsispath = $ENV{'SOLARROOT'} . $installer::globals::separator . "NSIS";
-    }
-    else
-    {
-        # do we have nsis already in path ?
-        my @paths = split(/:/, $ENV{'PATH'});
-        foreach my $path (@paths)
-        {
-            $path =~ s/[\/\\]+$//; # remove trailing slashes;
-            $nsispath = $path . "/nsis";
-
-            if ( -x $nsispath )
-            {
-                $nsispath = $path;
-                last;
-            }
-            else
-            {
-                $nsispath = "";
-            }
-        }
-    }
-    if ( $ENV{'NSISSDK_SOURCE'} )
-    {
-        installer::logger::print_warning( "NSISSDK_SOURCE is deprecated. use NSIS_PATH instead.\n" );
-        $nsispath = $ENV{'NSISSDK_SOURCE'}; # overriding the NSIS SDK with NSISSDK_SOURCE
-    }
-
-#   if( ($^O =~ /cygwin/i) and $nsispath =~ /\\/ ) {
-#       # We need a POSIX path for W32-4nt-cygwin-perl
-#       $nsispath =~ s/\\/\\\\/g;
-#       chomp( $nsispath = qx{cygpath -u "$nsispath"} );
-#   }
-
     if ( $nsispath eq "" )
     {
-        $installer::logger::Info->print("... no Environment variable \"SOLARROOT\", \"NSIS_PATH\" or \"NSISSDK_SOURCE\" found and NSIS not found in path!\n");
+        $installer::logger::Info->print("... no Environment variable \"NSIS_PATH\"!\n");
     }
     elsif ( ! -d $nsispath )
     {
@@ -1833,9 +1712,7 @@ sub replace_variables
 sub get_translation_file
 {
     my ($allvariableshashref) = @_;
-    my $translationfilename = $installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::nsisfilename;
-    if ( $installer::globals::unicodensis ) { $translationfilename = $translationfilename . ".uulf"; }
-    else { $translationfilename = $translationfilename . ".mlf"; }
+    my $translationfilename = $installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::nsisfilename . ".uulf";
     if ( ! -f $translationfilename ) { installer::exiter::exit_program("ERROR: Could not find language file $translationfilename!", "get_translation_file"); }
     my $translationfile = installer::files::read_file($translationfilename);
     replace_variables($translationfile, $allvariableshashref);
@@ -2071,7 +1948,6 @@ sub create_download_sets
         put_language_list_into_template($templatefile, $languagesarrayref);
         put_nsis_path_into_template($templatefile, $localnsisdir);
         put_output_path_into_template($templatefile, $downloaddir);
-        put_version_specific_code_into_template($templatefile);
 
         my $nsifilename = save_script_file($localnsisdir, $templatefilename, $templatefile);
 

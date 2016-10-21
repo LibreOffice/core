@@ -3,6 +3,9 @@
 !define PRODUCT_PUBLISHER "PUBLISHERPLACEHOLDER"
 !define PRODUCT_WEB_SITE "WEBSITEPLACEHOLDER"
 
+; Enable Unicode
+Unicode true
+
 ; SetCompressor lzma
 SetCompressor zlib
 
@@ -212,59 +215,44 @@ FunctionEnd
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 
-#231#!macro MUI_LANGUAGE_PACK LANGUAGE
-#231#  !verbose push
-#231#  !verbose ${MUI_VERBOSE}
-#231#  !insertmacro MUI_INSERT
-#231#  LoadLanguageFile "NSISPATHPLACEHOLDER\${LANGUAGE}_pack.nlf"
-#231#  ;Set default language file for MUI and backup user setting
-#231#  !ifdef LANGFILE_DEFAULT
-#231#    !define MUI_LANGFILE_DEFAULT_TEMP "${LANGFILE_DEFAULT}"
-#231#    !undef LANGFILE_DEFAULT
-#231#  !endif
-#231#  !define LANGFILE_DEFAULT "${NSISDIR}\Contrib\Language files\English.nsh"
-#231#  ;Include language file
-#231#  !insertmacro LANGFILE_INCLUDE "NSISPATHPLACEHOLDER\${LANGUAGE}_pack.nsh"
-#231#  ;Restore user setting for default language file
-#231#  !undef LANGFILE_DEFAULT
-#231#  !ifdef MUI_LANGFILE_DEFAULT_TEMP
-#231#    !define LANGFILE_DEFAULT "${MUI_LANGFILE_DEFAULT}"
-#231#  !endif
-#231#  ;Add language to list of languages for selection dialog  
-#231#  !ifndef MUI_LANGDLL_LANGUAGES
-#231#   !define MUI_LANGDLL_LANGUAGES "'${LANGFILE_${LANGUAGE}_NAME}' '${LANG_${LANGUAGE}}' "
-#231#    !define MUI_LANGDLL_LANGUAGES_CP "'${LANGFILE_${LANGUAGE}_NAME}' '${LANG_${LANGUAGE}}' '${LANG_${LANGUAGE}_CP}' "
-#231#  !else
-#231#    !ifdef MUI_LANGDLL_LANGUAGES_TEMP
-#231#      !undef MUI_LANGDLL_LANGUAGES_TEMP
-#231#    !endif
-#231#    !define MUI_LANGDLL_LANGUAGES_TEMP "${MUI_LANGDLL_LANGUAGES}"
-#231#    !undef MUI_LANGDLL_LANGUAGES
-#231#	!ifdef MUI_LANGDLL_LANGUAGES_CP_TEMP
-#231#      !undef MUI_LANGDLL_LANGUAGES_CP_TEMP
-#231#    !endif
-#231#    !define MUI_LANGDLL_LANGUAGES_CP_TEMP "${MUI_LANGDLL_LANGUAGES_CP}"
-#231#    !undef MUI_LANGDLL_LANGUAGES_CP
-#231#    !define MUI_LANGDLL_LANGUAGES "'${LANGFILE_${LANGUAGE}_NAME}' '${LANG_${LANGUAGE}}' ${MUI_LANGDLL_LANGUAGES_TEMP}"
-#231#    !define MUI_LANGDLL_LANGUAGES_CP "'${LANGFILE_${LANGUAGE}_NAME}' '${LANG_${LANGUAGE}}' '${LANG_${LANGUAGE}_CP}' ${MUI_LANGDLL_LANGUAGES_CP_TEMP}"
-#231#  !endif
-#231#  !verbose pop
-#231#!macroend
-
-#204#!macro MUI_LANGUAGE_PACK LANGUAGE
-#204#  !verbose push
-#204#  !verbose ${MUI_VERBOSE}
-#204#  !include "NSISPATHPLACEHOLDER\${LANGUAGE}_pack.nsh"
-#204#  !verbose pop
-#204#!macroend
-
-#204#!macro MUI_LANGUAGEFILE_PACK_BEGIN LANGUAGE
-#204#  !ifndef MUI_INSERT
-#204#    !define MUI_INSERT
-#204#    !insertmacro MUI_INSERT
-#204#  !endif
-#204#  LoadLanguageFile "NSISPATHPLACEHOLDER\${LANGUAGE}_pack.nlf"
-#204#!macroend
+!macro MUI_LANGUAGE_PACK LANGUAGE
+  !verbose push
+  !verbose ${MUI_VERBOSE}
+  !insertmacro MUI_INSERT
+  LoadLanguageFile "NSISPATHPLACEHOLDER\${LANGUAGE}_pack.nlf"
+  ;Set default language file for MUI and backup user setting
+  !ifdef LANGFILE_DEFAULT
+    !define MUI_LANGFILE_DEFAULT_TEMP "${LANGFILE_DEFAULT}"
+    !undef LANGFILE_DEFAULT
+  !endif
+  !define LANGFILE_DEFAULT "${NSISDIR}\Contrib\Language files\English.nsh"
+  ;Include language file
+  !insertmacro LANGFILE_INCLUDE "NSISPATHPLACEHOLDER\${LANGUAGE}_pack.nsh"
+  ;Restore user setting for default language file
+  !undef LANGFILE_DEFAULT
+  !ifdef MUI_LANGFILE_DEFAULT_TEMP
+    !define LANGFILE_DEFAULT "${MUI_LANGFILE_DEFAULT}"
+  !endif
+  ;Add language to list of languages for selection dialog  
+  !ifndef MUI_LANGDLL_LANGUAGES
+   !define MUI_LANGDLL_LANGUAGES "'${LANGFILE_${LANGUAGE}_NAME}' '${LANG_${LANGUAGE}}' "
+    !define MUI_LANGDLL_LANGUAGES_CP "'${LANGFILE_${LANGUAGE}_NAME}' '${LANG_${LANGUAGE}}' '${LANG_${LANGUAGE}_CP}' "
+  !else
+    !ifdef MUI_LANGDLL_LANGUAGES_TEMP
+      !undef MUI_LANGDLL_LANGUAGES_TEMP
+    !endif
+    !define MUI_LANGDLL_LANGUAGES_TEMP "${MUI_LANGDLL_LANGUAGES}"
+    !undef MUI_LANGDLL_LANGUAGES
+	!ifdef MUI_LANGDLL_LANGUAGES_CP_TEMP
+      !undef MUI_LANGDLL_LANGUAGES_CP_TEMP
+    !endif
+    !define MUI_LANGDLL_LANGUAGES_CP_TEMP "${MUI_LANGDLL_LANGUAGES_CP}"
+    !undef MUI_LANGDLL_LANGUAGES_CP
+    !define MUI_LANGDLL_LANGUAGES "'${LANGFILE_${LANGUAGE}_NAME}' '${LANG_${LANGUAGE}}' ${MUI_LANGDLL_LANGUAGES_TEMP}"
+    !define MUI_LANGDLL_LANGUAGES_CP "'${LANGFILE_${LANGUAGE}_NAME}' '${LANG_${LANGUAGE}}' '${LANG_${LANGUAGE}_CP}' ${MUI_LANGDLL_LANGUAGES_CP_TEMP}"
+  !endif
+  !verbose pop
+!macroend
 
 ; Language files
 ALLLANGUAGESPLACEHOLDER
