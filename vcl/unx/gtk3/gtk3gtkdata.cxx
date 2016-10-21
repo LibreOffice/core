@@ -51,6 +51,8 @@
 #  include <gdk/gdkx.h>
 #endif
 
+#include <cppuhelper/exc_hlp.hxx>
+
 using namespace vcl_sal;
 
 /***************************************************************
@@ -478,6 +480,8 @@ SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 if( wasOneEvent )
                     bWasEvent = true;
             }
+            if (m_aException.hasValue())
+                ::cppu::throwException(m_aException);
         }
         else if( bWait )
         {

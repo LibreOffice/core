@@ -97,6 +97,7 @@ class GtkData : public SalGenericData
     GSource*     m_pUserEvent;
     osl::Mutex   m_aDispatchMutex;
     oslCondition m_aDispatchCondition;
+    css::uno::Any m_aException;
     bool         blockIdleTimeout;
 
 public:
@@ -120,6 +121,7 @@ public:
 
     inline GtkSalDisplay *GetGtkDisplay() const;
     bool BlockIdleTimeout() const { return blockIdleTimeout; }
+    void setException(const css::uno::Any& rException) { m_aException = rException; }
 };
 
 class GtkSalFrame;

@@ -37,6 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <config_gio.h>
 
@@ -2567,6 +2568,7 @@ void GtkSalFrame::closePopup()
 
 gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )
 {
+    try {
     UpdateLastInputEventTime(pEvent->time);
 
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
@@ -2612,6 +2614,12 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     if (!aDel.isDeleted())
     {
         pThis->CallCallback( nEventType, &aEvent );
+    }
+
+    } catch (css::uno::Exception &)
+    {
+        GtkData *pSalData = static_cast<GtkData*>(GetSalData());
+        pSalData->setException(::cppu::getCaughtException());
     }
 
     return true;
