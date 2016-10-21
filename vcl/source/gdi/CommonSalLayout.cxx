@@ -796,3 +796,5 @@ bool CommonSalLayout::IsKashidaPosValid(int nCharPos) const
 
     return false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
