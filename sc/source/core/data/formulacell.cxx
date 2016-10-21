@@ -2448,11 +2448,11 @@ void ScFormulaCell::SetResultError( FormulaError n )
 
 void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
 {
-    if ( (nBits & RECALCMODE_EMASK) != ScRecalcMode::NORMAL )
+    if ( (nBits & ScRecalcMode::EMask) != ScRecalcMode::NORMAL )
         SetDirtyVar();
     if ( nBits & ScRecalcMode::ONLOAD_ONCE )
     {   // OnLoadOnce is used only to set Dirty after filter import.
-        nBits = (nBits & ~RECALCMODE_EMASK) | ScRecalcMode::NORMAL;
+        nBits = (nBits & ~ScRecalcMode::EMask) | ScRecalcMode::NORMAL;
     }
     pCode->AddRecalcMode( nBits );
 }
