@@ -202,16 +202,6 @@ static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHa
     return bResult;
 }
 
-void SfxViewFrame::SetDowning_Impl()
-{
-    m_pImpl->bIsDowning = true;
-}
-
-bool SfxViewFrame::IsDowning_Impl() const
-{
-    return m_pImpl->bIsDowning;
-}
-
 void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 {
     SfxFrame *pParent = GetFrame().GetParentFrame();
@@ -1083,7 +1073,7 @@ void SfxViewFrame::SetBorderPixelImpl
 {
     m_pImpl->aBorder = rBorder;
 
-    if ( IsResizeInToOut_Impl() && !GetFrame().IsInPlace() )
+    if ( m_pImpl->bResizeInToOut && !GetFrame().IsInPlace() )
     {
         Size aSize = pVSh->GetWindow()->GetOutputSizePixel();
         if ( aSize.Width() && aSize.Height() )
@@ -1121,7 +1111,7 @@ const SvBorder& SfxViewFrame::GetBorderPixelImpl() const
 
 void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if( IsDowning_Impl())
+    if(m_pImpl->bIsDowning)
         return;
 
     // we know only SfxEventHint or simple SfxHint
@@ -1352,7 +1342,7 @@ SfxViewFrame::SfxViewFrame
 
 SfxViewFrame::~SfxViewFrame()
 {
-    SetDowning_Impl();
+    m_pImpl->bIsDowning = true;
 
     if ( SfxViewFrame::Current() == this )
         SfxViewFrame::SetViewFrame( nullptr );
@@ -1454,7 +1444,7 @@ SfxViewFrame* SfxViewFrame::GetNext
 
 SfxProgress* SfxViewFrame::GetProgress() const
 {
-    SfxObjectShell *pObjSh = GetObjectShell();
+    SfxObjectShell *pObjSh = m_xObjSh.get();
     return pObjSh ? pObjSh->GetProgress() : nullptr;
 }
 
@@ -1505,11 +1495,6 @@ void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
 void SfxViewFrame::ForceOuterResize_Impl()
 {
     m_pImpl->bResizeInToOut = true;
-}
-
-bool SfxViewFrame::IsResizeInToOut_Impl() const
-{
-    return m_pImpl->bResizeInToOut;
 }
 
 void SfxViewFrame::GetDocNumber_Impl()

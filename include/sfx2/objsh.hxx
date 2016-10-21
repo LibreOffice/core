@@ -463,7 +463,6 @@ public:
     void                        AvoidRecentDocs(bool bAvoid = true) { mbAvoidRecentDocs = bAvoid; }
 
     // Transfer IFace
-    void                        AbortImport();
     bool                        IsAbortingImport() const;
     void                        FinishedLoading( SfxLoadedFlags nWhich = SfxLoadedFlags::ALL );
     void                        TemplateDisconnectionAfterLoad();
