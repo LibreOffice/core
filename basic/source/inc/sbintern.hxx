@@ -94,7 +94,7 @@ struct SbiGlobals
     SbError         nCode;
     sal_Int32       nLine;
     sal_Int32       nCol1,nCol2;    // from... to...
-    bool            bCompiler;      // flag for compiler error
+    bool            bCompilerError; // flag for compiler error
     bool            bGlobalInitErr;
     bool            bRunInit;       // true, if RunInit active from the Basic
     OUString        aErrMsg;        // buffer for GetErrorText()

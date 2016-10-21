@@ -187,7 +187,7 @@ namespace comphelper
 
     bool OAccessibleContextHelper::isAlive() const
     {
-        return !GetBroadcastHelper().bDisposed && !GetBroadcastHelper().bInDispose;
+        return !rBHelper.bDisposed && !rBHelper.bInDispose;
     }
 
 
@@ -200,7 +200,7 @@ namespace comphelper
 
     void OAccessibleContextHelper::ensureDisposed( )
     {
-        if ( !GetBroadcastHelper().bDisposed )
+        if ( !rBHelper.bDisposed )
         {
             OSL_ENSURE( 0 == m_refCount, "OAccessibleContextHelper::ensureDisposed: this method _has_ to be called from without your dtor only!" );
             acquire();

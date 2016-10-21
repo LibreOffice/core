@@ -233,8 +233,6 @@ namespace comphelper
                     implGetParentContext();
 
         // access to the base class' broadcast helper/mutex
-        ::cppu::OBroadcastHelper&       GetBroadcastHelper()        { return rBHelper; }
-        const ::cppu::OBroadcastHelper& GetBroadcastHelper() const  { return rBHelper; }
         ::osl::Mutex&                   GetMutex()                  { return m_aMutex; }
         IMutex*                         getExternalLock( );
     };

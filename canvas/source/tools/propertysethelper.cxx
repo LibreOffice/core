@@ -76,7 +76,7 @@ namespace canvas
 
     void PropertySetHelper::addProperties( const InputMap& rMap )
     {
-        InputMap aMerged( getPropertyMap() );
+        InputMap aMerged( maMapEntries );
         aMerged.insert( aMerged.end(),
                         rMap.begin(),
                         rMap.end() );

@@ -1420,7 +1420,7 @@ SbMethod* StarBASIC::GetActiveMethod( sal_uInt16 nLevel )
 
 SbModule* StarBASIC::GetActiveModule()
 {
-    if( GetSbData()->pInst && !IsCompilerError() )
+    if( GetSbData()->pInst && !GetSbData()->bCompilerError )
     {
         return GetSbData()->pInst->GetActiveModule();
     }
@@ -1471,7 +1471,6 @@ sal_uInt16 StarBASIC::GetCol2()     { return GetSbData()->nCol2; }
 // Specific to error handler
 SbError StarBASIC::GetErrorCode()       { return GetSbData()->nCode; }
 const OUString& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
-bool StarBASIC::IsCompilerError()       { return GetSbData()->bCompiler; }
 
 // From 1996-03-29:
 // The mapping between the old and the new error codes take place by searching
@@ -1667,7 +1666,7 @@ bool StarBASIC::CError( SbError code, const OUString& rMsg,
         code = (SbError)*new StringErrorInfo( code, rMsg );
     }
     SetErrorData( code, l, c1, c2 );
-    GetSbData()->bCompiler = true;
+    GetSbData()->bCompilerError = true;
     bool bRet;
     if( GetSbData()->aErrHdl.IsSet() )
     {
@@ -1677,7 +1676,7 @@ bool StarBASIC::CError( SbError code, const OUString& rMsg,
     {
         bRet = ErrorHdl();
     }
-    GetSbData()->bCompiler = false;     // only true for error handler
+    GetSbData()->bCompilerError = false;     // only true for error handler
     return bRet;
 }
 

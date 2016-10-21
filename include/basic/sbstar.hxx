@@ -134,7 +134,6 @@ public:
     static void     MakeErrorText( SbError, const OUString& aMsg );
     static const    OUString& GetErrorText();
     static SbError  GetErrorCode();
-    static bool     IsCompilerError();
     static sal_uInt16 GetVBErrorCode( SbError nError );
     static SbError  GetSfxFromVBError( sal_uInt16 nError );
     bool            IsBreak() const             { return bBreak; }

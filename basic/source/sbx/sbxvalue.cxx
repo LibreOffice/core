@@ -192,11 +192,6 @@ void SbxValue::Broadcast( sal_uInt32 )
 // If the variable contain a variable or an object, this will be
 // addressed.
 
-SbxValue* SbxValue::TheRealValue() const
-{
-    return TheRealValue( true );
-}
-
 SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
 {
     SbxValue* p = const_cast<SbxValue*>(this);
@@ -286,7 +281,7 @@ bool SbxValue::Get( SbxValues& rRes ) const
         // If an object or a VARIANT is requested, don't search the real values
         SbxValue* p = const_cast<SbxValue*>(this);
         if( rRes.eType != SbxOBJECT && rRes.eType != SbxVARIANT )
-            p = TheRealValue();
+            p = TheRealValue( true );
         if( p )
         {
             p->Broadcast( SBX_HINT_DATAWANTED );
