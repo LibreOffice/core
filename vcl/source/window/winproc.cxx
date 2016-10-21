@@ -2091,8 +2091,12 @@ static void ImplHandleSalKeyMod( vcl::Window* pWindow, SalKeyModEvent* pEvent )
     if ( !pChild )
         return;
 
-    CommandModKeyData data( pEvent->mnModKeyCode );
-    ImplCallCommand( pChild, CommandEventId::ModKeyChange, &data );
+    // send modkey events only on modkey release
+    if ( pEvent->mnModKeyCode != 0 )
+    {
+        CommandModKeyData data( pEvent->mnModKeyCode );
+        ImplCallCommand( pChild, CommandEventId::ModKeyChange, &data );
+    }
 }
 
 static void ImplHandleInputLanguageChange( vcl::Window* pWindow )
