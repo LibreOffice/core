@@ -62,6 +62,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
     if (nArgc > 2)
         osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pArgv[2]), aOutURL);
 
+    bool bRemoveSignature = false;
+    if (nArgc > 3 && OString(pArgv[3]) == "-r")
+        bRemoveSignature = true;
+
     SvFileStream aStream(aInURL, StreamMode::READ);
     xmlsecurity::pdfio::PDFDocument aDocument;
     if (!aDocument.Read(aStream))
@@ -70,9 +74,36 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
         return 1;
     }
 
+    if (bRemoveSignature)
+    {
+        std::cerr << "removing the last signature" << std::endl;
+        std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
+        if (aSignatures.empty())
+        {
+            std::cerr << "found no signatures" << std::endl;
+            return 1;
+        }
+
+        size_t nPosition = aSignatures.size() - 1;
+        if (!aDocument.RemoveSignature(nPosition))
+        {
+            SAL_WARN("xmlsecurity.pdfio", "failed to remove signature #" << nPosition);
+            return 1;
+        }
+
+        SvFileStream aOutStream(aOutURL, StreamMode::WRITE | StreamMode::TRUNC);
+        if (!aDocument.Write(aOutStream))
+        {
+            SAL_WARN("xmlsecurity.pdfio", "failed to write the document");
+            return 1;
+        }
+
+        return 0;
+    }
+
     if (aOutURL.isEmpty())
     {
-        // Verify.
+        std::cerr << "verifying signatures" << std::endl;
         std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
         if (aSignatures.empty())
             std::cerr << "found no signatures" << std::endl;
@@ -96,7 +127,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
         return 0;
     }
 
-    // Sign.
+    std::cerr << "adding a new signature" << std::endl;
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
     uno::Sequence<uno::Reference<security::XCertificate>> aCertificates = xSecurityEnvironment->getPersonalCertificates();
     if (!aCertificates.hasElements())

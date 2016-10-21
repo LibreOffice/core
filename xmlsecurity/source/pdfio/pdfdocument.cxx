@@ -48,9 +48,11 @@ class PDFObjectElement;
 /// A one-liner comment.
 class PDFCommentElement : public PDFElement
 {
+    PDFDocument& m_rDoc;
     OString m_aComment;
 
 public:
+    PDFCommentElement(PDFDocument& rDoc);
     bool Read(SvStream& rStream) override;
 };
 
@@ -231,6 +233,30 @@ public:
 PDFDocument::PDFDocument()
     : m_pTrailer(nullptr)
 {
+}
+
+bool PDFDocument::RemoveSignature(size_t nPosition)
+{
+    std::vector<PDFObjectElement*> aSignatures = GetSignatureWidgets();
+    if (nPosition >= aSignatures.size())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::RemoveSignature: invalid nPosition");
+        return false;
+    }
+
+    if (aSignatures.size() != m_aEOFs.size() - 1)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::RemoveSignature: no 1:1 mapping between signatures and incremental updates");
+        return false;
+    }
+
+    // The EOF offset is the end of the original file, without the signature at
+    // nPosition.
+    m_aEditBuffer.Seek(m_aEOFs[nPosition]);
+    // Drop all bytes after the current position.
+    m_aEditBuffer.SetStreamSize(m_aEditBuffer.Tell() + 1);
+
+    return m_aEditBuffer.good();
 }
 
 bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificate, const OUString& rDescription)
@@ -530,7 +556,7 @@ bool PDFDocument::Read(SvStream& rStream)
         {
         case '%':
         {
-            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFCommentElement()));
+            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFCommentElement(*this)));
             rStream.SeekRel(-1);
             if (!m_aElements.back()->Read(rStream))
                 return false;
@@ -927,6 +953,11 @@ std::vector<PDFObjectElement*> PDFDocument::GetPages()
     return aRet;
 }
 
+void PDFDocument::PushBackEOF(size_t nOffset)
+{
+    m_aEOFs.push_back(nOffset);
+}
+
 std::vector<PDFObjectElement*> PDFDocument::GetSignatureWidgets()
 {
     std::vector<PDFObjectElement*> aRet;
@@ -1288,6 +1319,11 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
 #endif
 }
 
+PDFCommentElement::PDFCommentElement(PDFDocument& rDoc)
+    : m_rDoc(rDoc)
+{
+}
+
 bool PDFCommentElement::Read(SvStream& rStream)
 {
     // Read from (including) the % char till (excluding) the end of the line.
@@ -1299,6 +1335,10 @@ bool PDFCommentElement::Read(SvStream& rStream)
         if (ch == 0x0a)
         {
             m_aComment = aBuf.makeStringAndClear();
+
+            if (m_aComment.startsWith("%%EOF"))
+                m_rDoc.PushBackEOF(rStream.Tell());
+
             SAL_INFO("xmlsecurity.pdfio", "PDFCommentElement::Read: m_aComment is '" << m_aComment << "'");
             return true;
         }
