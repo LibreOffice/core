@@ -43,9 +43,6 @@ class CommonSalLayout : public GenericSalLayout
     const FontSelectPattern& mrFontSelData;
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 #ifdef _WIN32
-    HDC   mhDC;
-    HFONT mhFont;
-    D2DWriteTextOutRenderer* mpD2DRenderer;
 #elif defined(MACOSX) || defined(IOS)
     const CoreTextStyle&    mrCoreTextStyle;
 #else
@@ -58,8 +55,7 @@ class CommonSalLayout : public GenericSalLayout
 
 public:
 #if defined(_WIN32)
-    explicit                CommonSalLayout(WinSalGraphics*, WinFontInstance&, const WinFontFace&);
-    void                    InitFont() const override;
+    explicit                CommonSalLayout(HDC, WinFontInstance&, const WinFontFace&);
 #elif defined(MACOSX) || defined(IOS)
     explicit                CommonSalLayout(const CoreTextStyle&);
     const CoreTextStyle&    getFontData() const { return mrCoreTextStyle; };

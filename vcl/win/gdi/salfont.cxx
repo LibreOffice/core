@@ -1062,24 +1062,6 @@ void WinFontFace::ReadCmapTable( HDC hDC ) const
     }
 }
 
-sal_uLong WinSalGraphics::GetTable( const char pTagName[5], const unsigned char*& pResBuffer, void*& pTableContext, IDWriteFontFace*& pIDFace )
-{
-    if( !pIDFace )
-        return 0;
-    const void* pResBuf;
-    UINT32 nSize;
-    BOOL bExists;
-    HRESULT hr = S_OK;
-    const DWORD nTableTag = DWRITE_MAKE_OPENTYPE_TAG( pTagName[0], pTagName[1], pTagName[2], pTagName[3] );
-    hr = pIDFace->TryGetFontTable( nTableTag, &pResBuf, &nSize, &pTableContext, &bExists );
-    if( SUCCEEDED( hr ) && ( bExists ) )
-    {
-        pResBuffer = static_cast<const unsigned char*>(pResBuf);
-        return static_cast<sal_uLong>(nSize);
-    }
-    return 0;
-}
-
 void WinFontFace::GetFontCapabilities( HDC hDC ) const
 {
     // read this only once per font

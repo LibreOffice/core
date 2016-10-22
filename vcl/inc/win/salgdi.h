@@ -360,7 +360,6 @@ private:
     void                    DrawTextLayout(const CommonSalLayout&, HDC);
 
 public:
-    static sal_uLong        GetTable( const char pTagName[5], const unsigned char*&, void*&, IDWriteFontFace*& );
     // public SalGraphics methods, the interface to the independent vcl part
 
     // get device resolution
