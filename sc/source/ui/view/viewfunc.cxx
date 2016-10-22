@@ -1832,6 +1832,8 @@ void ScViewFunc::SetWidthOrHeight(
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
+    SCCOL nCurX = GetViewData().GetCurX();
+    SCROW nCurY = GetViewData().GetCurY();
     SCTAB nFirstTab = aMarkData.GetFirstSelected();
     SCTAB nCurTab = GetViewData().GetTabNo();
     SCTAB nTab;
@@ -1989,7 +1991,13 @@ void ScViewFunc::SetWidthOrHeight(
                         rDoc.SetRowHeightRange( nStartNo, nEndNo, nTab, nSizeTwips );
                         rDoc.SetManualHeight( nStartNo, nEndNo, nTab, true );          // height was set manually
                     }
+
                     rDoc.ShowRows( nStartNo, nEndNo, nTab, nSizeTwips != 0 );
+
+                    if (!bShow && nStartNo <= nCurY && nCurY <= nEndNo && nTab == nCurTab)
+                    {
+                        nCurY = -1;
+                    }
                 }
                 else if ( eMode==SC_SIZE_SHOW )
                 {
@@ -2010,12 +2018,16 @@ void ScViewFunc::SetWidthOrHeight(
                             rDoc.SetColWidth( nCol, nTab, nThisSize );
 
                         rDoc.ShowCol( nCol, nTab, bShow );
+
+                        if (!bShow && nCol == nCurX && nTab == nCurTab)
+                        {
+                            nCurX = -1;
+                        }
                     }
                 }
             }
 
-                                    //  adjust outline
-
+            //  adjust outline
             if (bWidth)
             {
                 if ( rDoc.UpdateOutlineCol( static_cast<SCCOL>(nStartNo),
@@ -2040,6 +2052,16 @@ void ScViewFunc::SetWidthOrHeight(
             new ScUndoWidthOrHeight(
                 pDocSh, aMarkData, nStart, nCurTab, nEnd, nCurTab,
                 pUndoDoc, aUndoRanges, pUndoTab, eMode, nSizeTwips, bWidth));
+    }
+
+    if (nCurX < 0)
+    {
+        MoveCursorRel( 1, 0, SC_FOLLOW_LINE, false, false );
+    }
+
+    if (nCurY < 0)
+    {
+        MoveCursorRel( 0, 1, SC_FOLLOW_LINE, false, false );
     }
 
     // fdo#36247 Ensure that the drawing layer's map mode scaling factors match
