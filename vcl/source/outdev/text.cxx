@@ -1236,7 +1236,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         bool bIsCJKIdeograph = false;
         for( ; pStr < pEnd; ++pStr )
         {
-            if (pStr + 1 < pEnd && rtl::isHighSurrogate( *pStr ) )
+            if (pStr + 1 < pEnd && rtl::isHighSurrogate(pStr[0]) && rtl::isLowSurrogate(pStr[1]))
             {
                 sal_uInt32 nCode = rtl::combineSurrogates( pStr[0] , pStr[1] );
                 if ( !bIsCJKIdeograph && nCode >= 0xE0100 && nCode < 0xE01F0 ) // Variation Selector Supplements
