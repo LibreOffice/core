@@ -227,7 +227,7 @@ protected:
 public:
     SwXChapterNumbering(SwDocShell& rDocSh);
 
-    void    Invalidate() {SwXNumberingRules::Invalidate();}
+    using SwXNumberingRules::Invalidate;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;

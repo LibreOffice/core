@@ -52,7 +52,7 @@ public:
     bool Connect() { return nullptr != SvBaseLink::GetRealObject(); }
 
     // Only for graphics-links (for switching between DDE / Grf-link).
-    void SetObjType( sal_uInt16 nType ) { SvBaseLink::SetObjType( nType ); }
+    using SvBaseLink::SetObjType;
 
     bool IsRecursion( const SwBaseLink* pChkLnk ) const;
     virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,

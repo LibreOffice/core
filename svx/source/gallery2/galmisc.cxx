@@ -578,11 +578,6 @@ void GalleryTransferable::ObjectReleased()
     mpURL = nullptr;
 }
 
-void GalleryTransferable::CopyToClipboard( vcl::Window* pWindow )
-{
-    TransferableHelper::CopyToClipboard( pWindow );
-}
-
 void GalleryTransferable::StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions )
 {
     INetURLObject aURL;

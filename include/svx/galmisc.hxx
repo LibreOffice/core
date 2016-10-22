@@ -181,7 +181,6 @@ protected:
     virtual void                    DragFinished( sal_Int8 nDropAction ) override;
     virtual void                    ObjectReleased() override;
 
-    void                            CopyToClipboard( vcl::Window* pWindow );
     void                            StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions );
 };
 

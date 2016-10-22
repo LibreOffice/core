@@ -80,7 +80,7 @@ public:
     bool                skipUntil( sal_uInt16 nPage)
                                 {return ::svt::RoadmapWizard::skipUntil(WizardState(nPage));}
 
-    void                    updateRoadmapItemLabel( WizardState _nState );
+    using svt::RoadmapWizard::updateRoadmapItemLabel;
 
     virtual short           Execute() override;
 };

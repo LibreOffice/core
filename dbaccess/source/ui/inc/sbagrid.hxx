@@ -230,7 +230,7 @@ namespace dbaui
 
         virtual void ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus = true) override;
         virtual void DeactivateCell(bool bUpdate = true) override;
-        void ActivateCell() { FmGridControl::ActivateCell(); }
+        using FmGridControl::ActivateCell;
 
         bool IsAllSelected() const { return (GetSelectRowCount() == GetRowCount()) && (GetRowCount() > 0); }
 

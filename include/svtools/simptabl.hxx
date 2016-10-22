@@ -98,7 +98,7 @@ public:
                             sal_uInt16 nCol=HEADERBAR_APPEND,
                             HeaderBarItemBits nBits = HeaderBarItemBits::STDSTYLE);
 
-    void            SetTabs(const long* pTabs, MapUnit = MapUnit::MapAppFont);
+    using SvHeaderTabListBox::SetTabs;
 
     void            ClearHeader();
 

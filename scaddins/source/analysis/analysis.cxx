@@ -83,8 +83,8 @@ class AnalysisResourcePublisher : public Resource
 {
 public:
     explicit        AnalysisResourcePublisher( const AnalysisResId& rId ) : Resource( rId ) {}
-    bool            IsAvailableRes( const ResId& rId ) const { return Resource::IsAvailableRes( rId ); }
-    void            FreeResource() { Resource::FreeResource(); }
+    using Resource::IsAvailableRes;
+    using Resource::FreeResource;
 };
 
 class AnalysisFuncRes : public Resource

@@ -54,9 +54,7 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    // MS VC4.0 messes things up
-    void                    SetValue( sal_uInt16 nNewVal )
-                                {SfxEnumItem::SetValue(nNewVal); }
+    using SfxEnumItem::SetValue;
     virtual bool            HasBoolValue() const override;
     virtual bool            GetBoolValue() const override;
     virtual void            SetBoolValue( bool bVal ) override;

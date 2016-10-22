@@ -44,7 +44,7 @@ public:
     virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;
 
     void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    using ConfigItem::SetModified;
 };
 
 class SwLayoutViewConfig : public utl::ConfigItem
@@ -63,7 +63,7 @@ public:
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    using ConfigItem::SetModified;
 };
 
 class SwGridConfig : public utl::ConfigItem
@@ -81,7 +81,7 @@ public:
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    using ConfigItem::SetModified;
 };
 
 class SwCursorConfig : public utl::ConfigItem
@@ -99,7 +99,7 @@ public:
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    using ConfigItem::SetModified;
 };
 
 class SwWebColorConfig : public utl::ConfigItem
@@ -116,7 +116,7 @@ public:
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    using ConfigItem::SetModified;
 };
 
 class SwMasterUsrPref : public SwViewOption

@@ -81,10 +81,8 @@ namespace svxform
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
 
     private:
-        void StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions, sal_Int32 nDragPointer = DND_POINTER_NONE )
-        {   // don't allow this base class method to be called from outside
-            TransferableHelper::StartDrag(pWindow, nDragSourceActions, nDragPointer);
-        }
+         // don't allow this base class method to be called from outside
+        using TransferableHelper::StartDrag;
     };
 
 

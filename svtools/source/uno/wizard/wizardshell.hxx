@@ -71,8 +71,8 @@ namespace svt { namespace uno
         {
             return skipBackwardUntil( impl_pageIdToState( i_nPageId ) );
         }
-        bool    travelNext()        { return WizardShell_Base::travelNext(); }
-        bool    travelPrevious()    { return WizardShell_Base::travelPrevious(); }
+        using WizardShell_Base::travelNext;
+        using WizardShell_Base::travelPrevious;
 
         void        activatePath( const sal_Int16 i_nPathID, const bool i_bFinal )
         {

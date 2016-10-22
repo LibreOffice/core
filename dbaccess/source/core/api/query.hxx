@@ -87,7 +87,7 @@ protected:
 
 // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
-    ::cppu::IPropertyArrayHelper*   getArrayHelper() { return OQuery_ArrayHelperBase::getArrayHelper(); }
+    using OQuery_ArrayHelperBase::getArrayHelper;
 
 public:
     OQuery(

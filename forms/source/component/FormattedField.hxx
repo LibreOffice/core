@@ -168,7 +168,7 @@ class OFormattedModel
         virtual void SAL_CALL keyReleased(const css::awt::KeyEvent& e) throw ( css::uno::RuntimeException, std::exception) override;
 
         // css::awt::XControl
-        virtual void SAL_CALL setDesignMode(sal_Bool bOn) throw ( css::uno::RuntimeException, std::exception) override;
+        using OBoundControl::setDesignMode;
 
         // disambiguation
         using OBoundControl::disposing;

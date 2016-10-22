@@ -317,10 +317,6 @@ protected:
         , _nRecordType(0)
     {
     }
-    void                Construct_Impl( SvStream *pStream )
-                        {
-                            SfxMiniRecordReader::Construct_Impl( pStream );
-                        }
     bool                FindHeader_Impl( sal_uInt16 nTypes, sal_uInt16 nTag );
 };
 

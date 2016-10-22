@@ -106,11 +106,6 @@ LwpPropListElement* LwpPropList::FindPropByName(const OUString& name)
     return nullptr;
 }
 
-void LwpPropList::Read(LwpObjectStream* pObjStrm)
-{
-    LwpDLVListHead::Read(pObjStrm);
-}
-
 LwpPropListElement* LwpPropList::GetFirst()
 {
     return dynamic_cast<LwpPropListElement*>(LwpDLVListHead::GetFirst().obj().get());

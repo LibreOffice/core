@@ -496,11 +496,6 @@ OleStorageObject::OleStorageObject( const ObjectBase& rParent, const StorageRef&
     construct( rParent, rxStrg, rSysPath );
 }
 
-void OleStorageObject::construct( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath )
-{
-    StorageObjectBase::construct( rParent, rxStrg, rSysPath );
-}
-
 void OleStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& /*rStrgPath*/, const OUString& rStrmName, const OUString& rSysFileName )
 {
     if ( rStrmName == "\001CompObj" )

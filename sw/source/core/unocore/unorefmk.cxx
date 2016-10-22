@@ -544,7 +544,7 @@ public:
     SwXMetaText(SwDoc & rDoc, SwXMeta & rMeta);
 
     /// make available for SwXMeta
-    void Invalidate() { SwXText::Invalidate(); };
+    using SwXText::Invalidate;
 
     // XInterface
     virtual void SAL_CALL acquire() throw() override { cppu::OWeakObject::acquire(); }

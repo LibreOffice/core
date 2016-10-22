@@ -152,7 +152,7 @@ public:
     DECLARE_XTYPEPROVIDER()
 
     // XComponent
-    virtual void SAL_CALL disposing() override;
+    using ScChartObj_Base::disposing;
 
                             // XTableChart
     virtual sal_Bool SAL_CALL getHasColumnHeaders() throw(css::uno::RuntimeException, std::exception) override;

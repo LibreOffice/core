@@ -55,7 +55,7 @@ public:
     css::uno::Sequence< css::uno::Any > GetProperties( const css::uno::Sequence< OUString >& rNames );
     bool                    PutProperties( const css::uno::Sequence< OUString >& rNames,
                                            const css::uno::Sequence< css::uno::Any>& rValues );
-    void                    SetModified();
+    using ConfigItem::SetModified;
 };
 
 class SD_DLLPUBLIC SdOptionsGeneric

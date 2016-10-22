@@ -319,8 +319,7 @@ public:
 
     Size                CalcWindowSizePixel() const;
 
-    inline void         SetHelpId( const OString& rId )    { Window::SetHelpId( rId ); }
-
+    using Window::SetHelpId;
 
     inline void         SetStartDragHdl( const Link<HeaderBar*,void>& rLink )      { maStartDragHdl = rLink; }
     inline void         SetDragHdl( const Link<HeaderBar*,void>& rLink )           { maDragHdl = rLink; }

@@ -90,10 +90,8 @@ class ScaResPublisher : public Resource
 public:
     explicit ScaResPublisher( const ScaResId& rResId ) : Resource( rResId ) {}
 
-    bool             IsAvailableRes( const ResId& rResId ) const
-                                    { return Resource::IsAvailableRes( rResId ); }
-    void                 FreeResource()
-                                    { Resource::FreeResource(); }
+    using Resource::IsAvailableRes;
+    using Resource::FreeResource;
 };
 
 

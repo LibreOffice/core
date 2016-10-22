@@ -38,7 +38,7 @@ public:
 
     void                    Load(bool bInit);
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
-    void                    SetModified() {ConfigItem::SetModified();}
+    using ConfigItem::SetModified;
 };
 
 class EDITENG_DLLPUBLIC SvxSwAutoCorrCfg : public utl::ConfigItem
@@ -55,7 +55,7 @@ public:
 
     void                    Load(bool bInit);
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
-    void                    SetModified() {ConfigItem::SetModified();}
+    using ConfigItem::SetModified;
 };
 /*--------------------------------------------------------------------
     Description:   Configuration for Auto Correction

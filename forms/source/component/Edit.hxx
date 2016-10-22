@@ -161,7 +161,7 @@ public:
     virtual void SAL_CALL keyReleased(const css::awt::KeyEvent& e) throw ( css::uno::RuntimeException, std::exception) override;
 
     // XControl
-    virtual void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& _rxToolkit, const css::uno::Reference< css::awt::XWindowPeer >& _rxParent ) throw ( css::uno::RuntimeException, std::exception ) override;
+    using OBoundControl::createPeer;
 
 private:
     DECL_LINK( OnKeyPressed, void*, void );

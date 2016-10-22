@@ -119,8 +119,8 @@ public:
 
     void                            AddScheme(const OUString& rNode);
     void                            RemoveScheme(const OUString& rNode);
-    void                            SetModified(){ConfigItem::SetModified();}
-    void                            ClearModified(){ConfigItem::ClearModified();}
+    using ConfigItem::SetModified;
+    using ConfigItem::ClearModified;
     void                            SettingsChanged();
 
     static void                     DisableBroadcast();

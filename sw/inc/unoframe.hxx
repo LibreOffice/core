@@ -188,7 +188,7 @@ public:
             CreateXTextFrame(SwDoc & rDoc, SwFrameFormat * pFrameFormat);
 
     // FIXME: EVIL HACK:  make available for SwXFrame::attachToRange
-    void SetDoc(SwDoc *const pDoc) { SwXText::SetDoc(pDoc); };
+    using SwXText::SetDoc;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL acquire(  ) throw() override;

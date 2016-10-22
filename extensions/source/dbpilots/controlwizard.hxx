@@ -104,7 +104,7 @@ namespace dbp
         virtual ~OControlWizard() override;
 
         // make the some base class methods public
-        bool    travelNext() { return OControlWizard_Base::travelNext(); }
+        using OControlWizard_Base::travelNext;
 
     public:
         const css::uno::Reference< css::uno::XComponentContext >&

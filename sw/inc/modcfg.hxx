@@ -84,7 +84,7 @@ public:
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    using ConfigItem::SetModified;
 };
 
 enum class SwCompareMode
@@ -115,7 +115,7 @@ public:
 
     virtual void    Notify( const css::uno::Sequence< OUString >& ) override { };
     void            Load();
-    void            SetModified() {ConfigItem::SetModified(); }
+    using ConfigItem::SetModified;
 };
 
 class SwInsertConfig : public utl::ConfigItem
@@ -143,7 +143,7 @@ public:
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    using ConfigItem::SetModified;
 };
 
 class SwTableConfig : public utl::ConfigItem
@@ -170,7 +170,7 @@ public:
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    using ConfigItem::SetModified;
 };
 
 class SwMiscConfig : public utl::ConfigItem
@@ -200,7 +200,7 @@ public:
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    using ConfigItem::SetModified;
 };
 
 class SW_DLLPUBLIC SwModuleOptions

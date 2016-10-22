@@ -49,13 +49,11 @@ private:
 class ScResourcePublisher : public Resource
 {
 private:
-    void FreeResource() { Resource::FreeResource(); }
+    using Resource::FreeResource;
 public:
     explicit ScResourcePublisher( const ScResId& rId ) : Resource( rId ) {}
     ~ScResourcePublisher() { FreeResource(); }
-    bool IsAvailableRes( const ResId& rId ) const
-                        { return Resource::IsAvailableRes( rId ); }
-
+    using Resource::IsAvailableRes;
 };
 
 // class ScFuncDesc:

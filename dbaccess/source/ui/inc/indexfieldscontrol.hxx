@@ -62,7 +62,7 @@ namespace dbaui
         void commitTo(IndexFields& _rFields);
 
         bool SaveModified() override;
-        bool IsModified() const override;
+        using EditBrowseBox::IsModified;
 
         const IndexFields&  GetSavedValue() const { return m_aSavedValue; }
         void                SaveValue() { m_aSavedValue = m_aFields; }
