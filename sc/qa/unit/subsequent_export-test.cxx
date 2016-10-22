@@ -61,6 +61,7 @@
 #include <formula/grammar.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/datetime.hxx>
+#include <svl/zformat.hxx>
 
 #include <test/xmltesttools.hxx>
 #include <comphelper/processfactory.hxx>
@@ -179,6 +180,7 @@ public:
     void testTdf88657();
     void testEscapeCharInNumberFormatXLSX();
     void testNatNumInNumberFormatXLSX();
+    void testExponentWithoutSignFormatXLSX();
 
     void testHiddenRepeatedRowsODS();
     void testHyperlinkTargetFrameODS();
@@ -264,6 +266,7 @@ public:
     CPPUNIT_TEST(testTdf88657);
     CPPUNIT_TEST(testEscapeCharInNumberFormatXLSX);
     CPPUNIT_TEST(testNatNumInNumberFormatXLSX);
+    CPPUNIT_TEST(testExponentWithoutSignFormatXLSX);
 
     CPPUNIT_TEST(testHiddenRepeatedRowsODS);
     CPPUNIT_TEST(testHyperlinkTargetFrameODS);
@@ -3698,6 +3701,28 @@ void ScExportTest::testNatNumInNumberFormatXLSX()
     xDocSh->DoClose();
 }
 
+void ScExportTest::testExponentWithoutSignFormatXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf102370_ExponentWithoutSign.", FORMAT_ODS);
+    CPPUNIT_ASSERT( xDocSh.Is() );
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);
+    CPPUNIT_ASSERT( xDocSh.Is() );
+
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    sal_uInt32 nNumberFormat;
+    rDoc.GetNumberFormat(0, 0, 0, nNumberFormat);
+    const SvNumberformat* pNumberFormat = rDoc.GetFormatTable()->GetEntry(nNumberFormat);
+    const OUString& rFormatStr = pNumberFormat->GetFormatstring();
+    const OUString aExpectedFormatStr = "0.00E0";
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format lost exponent without sign during Excel export", aExpectedFormatStr, rFormatStr);
+
+    xDocSh->DoClose();
+}
+
 void ScExportTest::testHiddenRepeatedRowsODS()
 {
     ScDocShellRef xDocSh = loadDoc("empty.", FORMAT_ODS);
@@ -3708,7 +3733,7 @@ void ScExportTest::testHiddenRepeatedRowsODS()
         rDoc.SetRowHidden(0, 20, 0, true);
     }
 
-    xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);  // Convert [NatNum5] to [DBNum2] in Chinese
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
     SCROW nFirstRow = 0;
     SCROW nLastRow = 0;
