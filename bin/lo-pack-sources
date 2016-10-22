@@ -85,7 +85,7 @@ sub copy_dir_filter_and_show_progress($$)
     # copy sources from git and show progress
     system ("cd $source_dir && " .
             "git archive --format=tar HEAD | " .
-            "  tar -xf - -C $target_dir --checkpoint=500 --checkpoint-action=exec=\"echo -n .\"") &&
+            "  tar -xf - -C $target_dir ") &&
         die "Error: copying failed: $!\n";
     print "\n";
 }
@@ -125,10 +125,9 @@ sub generate_lo_module_changelog($$$)
     my $log_name = "ChangeLog";
     $log_name .= "-$module_dirname{$module}" if ($module_dirname{$module});
     print "Generating changelog for $module...\n";
-#    print "1:$lo_module_clone, 2:$lo_module_release_dir, 3:$module\n";
     system ("cd $source_dir/$module_dirname{$module} && " .
             "git log --date=short --pretty='format:@%cd  %an  <%ae>  [%H]%n%n%s%n%n%e%b' | " .
-            "  sed -e 's|^\([^@]\)|\t\1|' -e 's|^@||' >$lo_module_release_topdir/$log_name" ) &&
+            "  sed -e 's/^/\t/' -e 's/^\t@//' >$lo_module_release_topdir/$log_name" ) &&
         die "Error: generating failed: $!\n";
 }
 
@@ -160,7 +159,7 @@ sub generate_tarball($$$)
 
     print "Creating $tarball...";
     # generate the tarball in the current directory; avoid "./" prefix in the stored paths; show progress
-    system ("tar -c $tar_compress_option -f $tarball -C $dir --checkpoint=500 --checkpoint-action=exec=\"echo -n .\" $lo_topdir_name") && 
+    system ("tar -c $tar_compress_option -f $tarball -C $dir $lo_topdir_name") && 
         die "Error: releasing failed: $!\n";
     print "\n";
 }
