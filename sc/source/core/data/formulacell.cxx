@@ -215,7 +215,12 @@ struct DebugCalculationStacker
 
 namespace {
 
-sc::FormulaLogger aLogger;
+
+sc::FormulaLogger& getLogger()
+{
+    static sc::FormulaLogger aLogger;
+    return aLogger;
+}
 
 // More or less arbitrary, of course all recursions must fit into available
 // stack space (which is what on all systems we don't know yet?). Choosing a
@@ -4033,7 +4038,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if (!mxGroup || !pCode)
         return false;
 
-    auto aScope = aLogger.enterGroup(*pDocument, *this);
+    auto aScope = getLogger().enterGroup(*pDocument, *this);
 
     if (mxGroup->meCalcState == sc::GroupCalcDisabled)
     {
