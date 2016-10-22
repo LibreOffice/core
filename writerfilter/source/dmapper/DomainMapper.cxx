@@ -2527,7 +2527,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     }
     break;
     case NS_ooxml::LN_tblStart:
-
+    {
         /*
          * Hack for Importing Section Properties
          * LO is not able to import section properties if first element in the
@@ -2539,8 +2539,31 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         {
             m_pImpl->AddDummyParaForTableInSection();
         }
-        m_pImpl->m_nTableDepth++;
 
+        // if first paragraph style in table has break-before-page, transfer that setting to the table itself.
+        if( m_pImpl->m_nTableDepth == 0 )
+        {
+            const uno::Any aBreakType = uno::makeAny(style::BreakType_PAGE_BEFORE);
+            const PropertyMapPtr pParagraphProps = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
+            if( pParagraphProps && pParagraphProps->isSet(PROP_PARA_STYLE_NAME) )
+            {
+                StyleSheetEntryPtr pStyle = nullptr;
+                OUString sStyleName;
+                pParagraphProps->getProperty(PROP_PARA_STYLE_NAME)->second >>= sStyleName;
+                if( !sStyleName.isEmpty() && GetStyleSheetTable() )
+                    pStyle = GetStyleSheetTable()->FindStyleSheetByStyleName( sStyleName );
+
+                if( pStyle && pStyle->pProperties
+                    && pStyle->pProperties->isSet(PROP_BREAK_TYPE)
+                    && pStyle->pProperties->getProperty(PROP_BREAK_TYPE)->second == aBreakType )
+                {
+                    pParagraphProps->Insert(PROP_BREAK_TYPE, aBreakType);
+                }
+            }
+        }
+
+        m_pImpl->m_nTableDepth++;
+    }
     break;
     case NS_ooxml::LN_tblEnd:
         m_pImpl->m_nTableDepth--;

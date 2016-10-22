@@ -39,6 +39,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92045, "tdf92045.docx")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getRun(getParagraph(1), 1), "CharFlash"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.docx")
+{
+    // the paragraph style should set table's text-flow break-before-page
+    CPPUNIT_ASSERT_EQUAL( 3, getPages() );
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
