@@ -66,6 +66,7 @@ public:
     void testTextEditViewInvalidations();
     void testGraphicInvalidate();
     void testAutoSum();
+    void testHideColRow();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -83,6 +84,7 @@ public:
     CPPUNIT_TEST(testTextEditViewInvalidations);
     CPPUNIT_TEST(testGraphicInvalidate);
     CPPUNIT_TEST(testAutoSum);
+    CPPUNIT_TEST(testHideColRow);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -835,6 +837,78 @@ void ScTiledRenderingTest::testAutoSum()
     comphelper::dispatchCommand(".uno:AutoSum", aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_sCellFormula.startsWith("=SUM("));
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testHideColRow()
+{
+    // Load a document
+    comphelper::LibreOfficeKit::setActive();
+    createDoc("small.ods");
+    {
+        uno::Sequence<beans::PropertyValue> aArgs(2);
+
+        aArgs[0].Name = OUString::fromUtf8("Col");
+        aArgs[0].Value <<= static_cast<sal_Int32>(2 - 1);
+        aArgs[1].Name = OUString::fromUtf8("Modifier");
+        aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_SHIFT);
+
+        comphelper::dispatchCommand(".uno:SelectColumn", aArgs);
+
+        aArgs[0].Name = OUString::fromUtf8("Col");
+        aArgs[0].Value <<= static_cast<sal_Int32>(3 - 1);
+        aArgs[1].Name = OUString::fromUtf8("Modifier");
+        aArgs[1].Value <<= static_cast<sal_uInt16>(0);
+
+        comphelper::dispatchCommand(".uno:SelectColumn", aArgs);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    SCCOL nOldCurX = ScDocShell::GetViewData()->GetCurX();
+    SCROW nOldCurY = ScDocShell::GetViewData()->GetCurY();
+    {
+        uno::Sequence<beans::PropertyValue> aArgs;
+        comphelper::dispatchCommand(".uno:HideColumn", aArgs);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    SCCOL nNewCurX = ScDocShell::GetViewData()->GetCurX();
+    SCROW nNewCurY = ScDocShell::GetViewData()->GetCurY();
+    CPPUNIT_ASSERT(nNewCurX > nOldCurX);
+    CPPUNIT_ASSERT_EQUAL(nOldCurY, nNewCurY);
+    {
+        uno::Sequence<beans::PropertyValue> aArgs(2);
+
+        aArgs[0].Name = OUString::fromUtf8("Row");
+        aArgs[0].Value <<= static_cast<sal_Int32>(6 - 1);
+        aArgs[1].Name = OUString::fromUtf8("Modifier");
+        aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_SHIFT);
+
+        comphelper::dispatchCommand(".uno:SelectRow", aArgs);
+
+        aArgs[0].Name = OUString::fromUtf8("Row");
+        aArgs[0].Value <<= static_cast<sal_Int32>(7 - 1);
+        aArgs[1].Name = OUString::fromUtf8("Modifier");
+        aArgs[1].Value <<= static_cast<sal_uInt16>(0);
+
+        comphelper::dispatchCommand(".uno:SelectRow", aArgs);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    nOldCurX = ScDocShell::GetViewData()->GetCurX();
+    nOldCurY = ScDocShell::GetViewData()->GetCurY();
+    {
+        uno::Sequence<beans::PropertyValue> aArgs;
+        comphelper::dispatchCommand(".uno:HideRow", aArgs);
+        Scheduler::ProcessEventsToIdle();
+    }
+    nNewCurX = ScDocShell::GetViewData()->GetCurX();
+    nNewCurY = ScDocShell::GetViewData()->GetCurY();
+    CPPUNIT_ASSERT(nNewCurY > nOldCurY);
+    CPPUNIT_ASSERT_EQUAL(nOldCurX, nNewCurX);
 
     mxComponent->dispose();
     mxComponent.clear();
