@@ -5470,7 +5470,7 @@ namespace
 
 #define WW_BLOCKSIZE 0x200
 
-    void DecryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
+    void DecryptRC4(msfilter::MSCodec97& rCtx, SvStream &rIn, SvStream &rOut)
     {
         rIn.Seek(STREAM_SEEK_TO_END);
         const std::size_t nLen = rIn.Tell();
@@ -5604,7 +5604,7 @@ namespace
         return aEncryptionData;
     }
 
-    uno::Sequence< beans::NamedValue > InitStd97Codec( ::msfilter::MSCodec_Std97& rCodec, sal_uInt8 pDocId[16], SfxMedium& rMedium )
+    uno::Sequence< beans::NamedValue > Init97Codec(msfilter::MSCodec97& rCodec, sal_uInt8 pDocId[16], SfxMedium& rMedium)
     {
         uno::Sequence< beans::NamedValue > aEncryptionData;
         const SfxUnoAnyItem* pEncryptionData = SfxItemSet::GetItem<SfxUnoAnyItem>(rMedium.GetItemSet(), SID_ENCRYPTIONDATA, false);
@@ -5656,7 +5656,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
     SvFileStream aDecryptData;
 
     bool bDecrypt = false;
-    enum {RC4, XOR, Other} eAlgo = Other;
+    enum {RC4CryptoAPI, RC4, XOR, Other} eAlgo = Other;
     if (m_pWwFib->m_fEncrypted && !nErrRet)
     {
         if (!pGloss)
@@ -5671,10 +5671,12 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                 else
                 {
                     m_pTableStream->Seek(0);
-                    sal_uInt32 nEncType;
-                    m_pTableStream->ReadUInt32( nEncType );
-                    if (nEncType == 0x10001)
+                    sal_uInt32 nEncType(0);
+                    m_pTableStream->ReadUInt32(nEncType);
+                    if (nEncType == msfilter::VERSION_INFO_1997_FORMAT)
                         eAlgo = RC4;
+                    else if (nEncType == msfilter::VERSION_INFO_2007_FORMAT || nEncType == msfilter::VERSION_INFO_2007_FORMAT_SP2)
+                        eAlgo = RC4CryptoAPI;
                 }
             }
         }
@@ -5689,6 +5691,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
         {
             switch (eAlgo)
             {
+                case RC4CryptoAPI:
                 default:
                     nErrRet = ERRCODE_SVX_READ_FILTER_CRYPT;
                     break;
@@ -5747,12 +5750,12 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         checkRead(*m_pTableStream, aSaltData, 16) &&
                         checkRead(*m_pTableStream, aSaltHash, 16);
 
-                    msfilter::MSCodec_Std97 aCtx;
+                    std::unique_ptr<msfilter::MSCodec97> xCtx(new msfilter::MSCodec_Std97);
                     // if initialization has failed the EncryptionData should be empty
                     uno::Sequence< beans::NamedValue > aEncryptionData;
                     if (bCouldReadHeaders)
-                        aEncryptionData = InitStd97Codec( aCtx, aDocId, *pMedium );
-                    if ( aEncryptionData.getLength() && aCtx.VerifyKey( aSaltData, aSaltHash ) )
+                        aEncryptionData = Init97Codec(*xCtx, aDocId, *pMedium);
+                    if (aEncryptionData.getLength() && xCtx->VerifyKey(aSaltData, aSaltHash))
                     {
                         nErrRet = 0;
 
@@ -5763,14 +5766,14 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
                         nUnencryptedHdr = m_pStrm->ReadBytes(pIn, nUnencryptedHdr);
 
-                        DecryptRC4(aCtx, *m_pStrm, aDecryptMain);
+                        DecryptRC4(*xCtx, *m_pStrm, aDecryptMain);
 
                         aDecryptMain.Seek(0);
                         aDecryptMain.WriteBytes(pIn, nUnencryptedHdr);
                         delete [] pIn;
 
                         pTempTable = MakeTemp(aDecryptTable);
-                        DecryptRC4(aCtx, *m_pTableStream, aDecryptTable);
+                        DecryptRC4(*xCtx, *m_pTableStream, aDecryptTable);
                         m_pTableStream = &aDecryptTable;
 
                         if (!m_pDataStream || m_pDataStream == m_pStrm)
@@ -5778,7 +5781,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         else
                         {
                             pTempData = MakeTemp(aDecryptData);
-                            DecryptRC4(aCtx, *m_pDataStream, aDecryptData);
+                            DecryptRC4(*xCtx, *m_pDataStream, aDecryptData);
                             m_pDataStream = &aDecryptData;
                         }
 
