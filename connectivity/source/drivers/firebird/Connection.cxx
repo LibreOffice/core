@@ -258,9 +258,8 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
 
             if (m_bIsEmbedded || m_bIsFile)
             {
-                *dpb++ = isc_dpb_trusted_auth;
-                *dpb++ = 1; // Length of data
-                *dpb++ = 1; // TRUE
+                strcpy(userName,"sysdba");
+                strcpy(userPassword,"masterkey");
             }
             else
             {
