@@ -1157,6 +1157,11 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "-575 540/697";
         checkPreviewString(aFormatter, sCode, -575.774749601315, eLang, sExpected);
     }
+    {  // tdf#102507: left alignment of denominator
+        sCode = "# ?/???";
+        sExpected = "3 1/2  ";
+        checkPreviewString(aFormatter, sCode, 3.5, eLang, sExpected);
+    }
     {  // tdf#100594: forced denominator
         sCode = "# ?/100";
         sExpected = " 6/100";
