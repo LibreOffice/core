@@ -20,6 +20,12 @@
 
 namespace sc {
 
+FormulaLogger& FormulaLogger::get()
+{
+    static FormulaLogger aLogger;
+    return aLogger;
+}
+
 struct FormulaLogger::GroupScope::Impl
 {
     FormulaLogger& mrLogger;
