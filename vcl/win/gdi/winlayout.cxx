@@ -3828,7 +3828,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 
     if (SalLayout::UseCommonLayout())
     {
-        return new CommonSalLayout(this, rFontInstance, rFontFace);
+        return new CommonSalLayout(getHDC(), rFontInstance, rFontFace);
     }
     else
     {
