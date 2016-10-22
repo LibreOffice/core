@@ -5632,6 +5632,63 @@ namespace
     }
 }
 
+//TO-DO: merge this with lclReadFilepass8_Strong in sc which uses a different
+//stream thing
+static bool lclReadCryptoAPIHeader(msfilter::RC4EncryptionInfo &info, SvStream &rStream)
+{
+    //Its possible there are other variants in existance but these
+    //are the defaults I get with Word 2013
+
+    rStream.ReadUInt32(info.header.flags);
+    if (oox::getFlag( info.header.flags, msfilter::ENCRYPTINFO_EXTERNAL))
+        return false;
+
+    sal_uInt32 nHeaderSize(0);
+    rStream.ReadUInt32(nHeaderSize);
+    sal_uInt32 actualHeaderSize = sizeof(info.header);
+
+    if (nHeaderSize < actualHeaderSize)
+        return false;
+
+    rStream.ReadUInt32(info.header.flags);
+    rStream.ReadUInt32(info.header.sizeExtra);
+    rStream.ReadUInt32(info.header.algId);
+    rStream.ReadUInt32(info.header.algIdHash);
+    rStream.ReadUInt32(info.header.keyBits);
+    rStream.ReadUInt32(info.header.providedType);
+    rStream.ReadUInt32(info.header.reserved1);
+    rStream.ReadUInt32(info.header.reserved2);
+
+    rStream.SeekRel(nHeaderSize - actualHeaderSize);
+
+    rStream.ReadUInt32(info.verifier.saltSize);
+    if (info.verifier.saltSize != msfilter::SALT_LENGTH)
+        return false;
+    rStream.ReadBytes(&info.verifier.salt, sizeof(info.verifier.salt));
+    rStream.ReadBytes(&info.verifier.encryptedVerifier, sizeof(info.verifier.encryptedVerifier));
+
+    rStream.ReadUInt32(info.verifier.encryptedVerifierHashSize);
+    if (info.verifier.encryptedVerifierHashSize != RTL_DIGEST_LENGTH_SHA1)
+        return false;
+    rStream.ReadBytes(&info.verifier.encryptedVerifierHash, info.verifier.encryptedVerifierHashSize);
+
+    // check flags and algorithm IDs, required are AES128 and SHA-1
+    if (!oox::getFlag(info.header.flags, msfilter::ENCRYPTINFO_CRYPTOAPI))
+        return false;
+
+    if (oox::getFlag(info.header.flags, msfilter::ENCRYPTINFO_AES))
+        return false;
+
+    if (info.header.algId != msfilter::ENCRYPT_ALGO_RC4)
+        return false;
+
+    // hash algorithm ID 0 defaults to SHA-1 too
+    if (info.header.algIdHash != 0 && info.header.algIdHash != msfilter::ENCRYPT_HASH_SHA1)
+        return false;
+
+    return true;
+}
+
 sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
 {
     sal_uLong nErrRet = 0;
@@ -5691,7 +5748,6 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
         {
             switch (eAlgo)
             {
-                case RC4CryptoAPI:
                 default:
                     nErrRet = ERRCODE_SVX_READ_FILTER_CRYPT;
                     break;
@@ -5740,22 +5796,35 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                 }
                 break;
                 case RC4:
+                case RC4CryptoAPI:
                 {
-                    sal_uInt8 aDocId[ 16 ];
-                    sal_uInt8 aSaltData[ 16 ];
-                    sal_uInt8 aSaltHash[ 16 ];
+                    std::unique_ptr<msfilter::MSCodec97> xCtx;
+                    msfilter::RC4EncryptionInfo info;
+                    bool bCouldReadHeaders;
 
-                    bool bCouldReadHeaders =
-                        checkRead(*m_pTableStream, aDocId, 16) &&
-                        checkRead(*m_pTableStream, aSaltData, 16) &&
-                        checkRead(*m_pTableStream, aSaltHash, 16);
+                    if (eAlgo == RC4)
+                    {
+                        xCtx.reset(new msfilter::MSCodec_Std97);
+                        assert(sizeof(info.verifier.encryptedVerifierHash) >= RTL_DIGEST_LENGTH_MD5);
+                        bCouldReadHeaders =
+                            checkRead(*m_pTableStream, info.verifier.salt, sizeof(info.verifier.salt)) &&
+                            checkRead(*m_pTableStream, info.verifier.encryptedVerifier, sizeof(info.verifier.encryptedVerifier)) &&
+                            checkRead(*m_pTableStream, info.verifier.encryptedVerifierHash, RTL_DIGEST_LENGTH_MD5);
+                    }
+                    else
+                    {
+                        xCtx.reset(new msfilter::MSCodec_CryptoAPI);
+                        bCouldReadHeaders = lclReadCryptoAPIHeader(info, *m_pTableStream);
+                    }
 
-                    std::unique_ptr<msfilter::MSCodec97> xCtx(new msfilter::MSCodec_Std97);
                     // if initialization has failed the EncryptionData should be empty
                     uno::Sequence< beans::NamedValue > aEncryptionData;
                     if (bCouldReadHeaders)
-                        aEncryptionData = Init97Codec(*xCtx, aDocId, *pMedium);
-                    if (aEncryptionData.getLength() && xCtx->VerifyKey(aSaltData, aSaltHash))
+                        aEncryptionData = Init97Codec(*xCtx, info.verifier.salt, *pMedium);
+                    else
+                        nErrRet = ERRCODE_SVX_READ_FILTER_CRYPT;
+                    if (aEncryptionData.getLength() && xCtx->VerifyKey(info.verifier.encryptedVerifier,
+                                                                       info.verifier.encryptedVerifierHash))
                     {
                         nErrRet = 0;
 
