@@ -207,6 +207,9 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         pTabView->SetDrawFuncPtr(nullptr);
     }
 
+    SfxRequest aNewReq(rReq);
+    aNewReq.SetSlot(nDrawSfxId);
+
     assert(nNewId != SID_DRAW_CHART); //#i71254# handled already above
 
     switch (nNewId)
@@ -214,7 +217,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_OBJECT_SELECT:
             // Nicht immer zurueckschalten
             if(pView->GetMarkedObjectList().GetMarkCount() == 0) SetDrawShell(bEx);
-            pTabView->SetDrawFuncPtr(new FuSelection(this, pWin, pView, pDoc, rReq));
+            pTabView->SetDrawFuncPtr(new FuSelection(this, pWin, pView, pDoc, aNewReq));
             break;
 
         case SID_DRAW_LINE:
@@ -229,12 +232,12 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
         case SID_DRAW_MEASURELINE:
-            pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, rReq));
+            pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, aNewReq));
             break;
 
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
-            pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, rReq));
+            pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, aNewReq));
             pView->SetFrameDragSingles( false );
             rBindings.Invalidate( SID_BEZIER_EDIT );
             break;
@@ -247,25 +250,25 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_BEZIER_FILL:
         case SID_DRAW_FREELINE:
         case SID_DRAW_FREELINE_NOFILL:
-            pTabView->SetDrawFuncPtr(new FuConstPolygon(this, pWin, pView, pDoc, rReq));
+            pTabView->SetDrawFuncPtr(new FuConstPolygon(this, pWin, pView, pDoc, aNewReq));
             break;
 
         case SID_DRAW_ARC:
         case SID_DRAW_PIE:
         case SID_DRAW_CIRCLECUT:
-            pTabView->SetDrawFuncPtr(new FuConstArc(this, pWin, pView, pDoc, rReq));
+            pTabView->SetDrawFuncPtr(new FuConstArc(this, pWin, pView, pDoc, aNewReq));
             break;
 
         case SID_DRAW_TEXT:
         case SID_DRAW_TEXT_VERTICAL:
         case SID_DRAW_TEXT_MARQUEE:
         case SID_DRAW_NOTEEDIT:
-            pTabView->SetDrawFuncPtr(new FuText(this, pWin, pView, pDoc, rReq));
+            pTabView->SetDrawFuncPtr(new FuText(this, pWin, pView, pDoc, aNewReq));
             break;
 
         case SID_FM_CREATE_CONTROL:
             SetDrawFormShell(true);
-            pTabView->SetDrawFuncPtr(new FuConstUnoControl(this, pWin, pView, pDoc, rReq));
+            pTabView->SetDrawFuncPtr(new FuConstUnoControl(this, pWin, pView, pDoc, aNewReq));
             nFormSfxId = nNewFormId;
             break;
 
@@ -277,7 +280,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAWTBX_CS_STAR :
         case SID_DRAW_CS_ID :
         {
-            pTabView->SetDrawFuncPtr( new FuConstCustomShape( this, pWin, pView, pDoc, rReq ));
+            pTabView->SetDrawFuncPtr( new FuConstCustomShape( this, pWin, pView, pDoc, aNewReq ));
             if ( nNewId != SID_DRAW_CS_ID )
             {
                 const SfxStringItem* pEnumCommand = rReq.GetArg<SfxStringItem>(nNewId);
