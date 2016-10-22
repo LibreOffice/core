@@ -5477,7 +5477,7 @@ namespace
 
 #define WW_BLOCKSIZE 0x200
 
-    void DecryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
+    void DecryptRC4(msfilter::MSCodec97& rCtx, SvStream &rIn, SvStream &rOut)
     {
         rIn.Seek(STREAM_SEEK_TO_END);
         const sal_Size nLen = rIn.Tell();
@@ -5611,7 +5611,7 @@ namespace
         return aEncryptionData;
     }
 
-    uno::Sequence< beans::NamedValue > InitStd97Codec( ::msfilter::MSCodec_Std97& rCodec, sal_uInt8 pDocId[16], SfxMedium& rMedium )
+    uno::Sequence< beans::NamedValue > Init97Codec(msfilter::MSCodec97& rCodec, sal_uInt8 pDocId[16], SfxMedium& rMedium)
     {
         uno::Sequence< beans::NamedValue > aEncryptionData;
         const SfxUnoAnyItem* pEncryptionData = SfxItemSet::GetItem<SfxUnoAnyItem>(rMedium.GetItemSet(), SID_ENCRYPTIONDATA, false);
@@ -5639,6 +5639,63 @@ namespace
     }
 }
 
+//TO-DO: merge this with lclReadFilepass8_Strong in sc which uses a different
+//stream thing
+static bool lclReadCryptoAPIHeader(msfilter::RC4EncryptionInfo &info, SvStream &rStream)
+{
+    //Its possible there are other variants in existance but these
+    //are the defaults I get with Word 2013
+
+    rStream.ReadUInt32(info.header.flags);
+    if (oox::getFlag( info.header.flags, msfilter::ENCRYPTINFO_EXTERNAL))
+        return false;
+
+    sal_uInt32 nHeaderSize(0);
+    rStream.ReadUInt32(nHeaderSize);
+    sal_uInt32 actualHeaderSize = sizeof(info.header);
+
+    if (nHeaderSize < actualHeaderSize)
+        return false;
+
+    rStream.ReadUInt32(info.header.flags);
+    rStream.ReadUInt32(info.header.sizeExtra);
+    rStream.ReadUInt32(info.header.algId);
+    rStream.ReadUInt32(info.header.algIdHash);
+    rStream.ReadUInt32(info.header.keyBits);
+    rStream.ReadUInt32(info.header.providedType);
+    rStream.ReadUInt32(info.header.reserved1);
+    rStream.ReadUInt32(info.header.reserved2);
+
+    rStream.SeekRel(nHeaderSize - actualHeaderSize);
+
+    rStream.ReadUInt32(info.verifier.saltSize);
+    if (info.verifier.saltSize != msfilter::SALT_LENGTH)
+        return false;
+    rStream.Read(&info.verifier.salt, sizeof(info.verifier.salt));
+    rStream.Read(&info.verifier.encryptedVerifier, sizeof(info.verifier.encryptedVerifier));
+
+    rStream.ReadUInt32(info.verifier.encryptedVerifierHashSize);
+    if (info.verifier.encryptedVerifierHashSize != RTL_DIGEST_LENGTH_SHA1)
+        return false;
+    rStream.Read(&info.verifier.encryptedVerifierHash, info.verifier.encryptedVerifierHashSize);
+
+    // check flags and algorithm IDs, required are AES128 and SHA-1
+    if (!oox::getFlag(info.header.flags, msfilter::ENCRYPTINFO_CRYPTOAPI))
+        return false;
+
+    if (oox::getFlag(info.header.flags, msfilter::ENCRYPTINFO_AES))
+        return false;
+
+    if (info.header.algId != msfilter::ENCRYPT_ALGO_RC4)
+        return false;
+
+    // hash algorithm ID 0 defaults to SHA-1 too
+    if (info.header.algIdHash != 0 && info.header.algIdHash != msfilter::ENCRYPT_HASH_SHA1)
+        return false;
+
+    return true;
+}
+
 sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
 {
     sal_uLong nErrRet = 0;
@@ -5663,7 +5720,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
     SvFileStream aDecryptData;
 
     bool bDecrypt = false;
-    enum {RC4, XOR, Other} eAlgo = Other;
+    enum {RC4CryptoAPI, RC4, XOR, Other} eAlgo = Other;
     if (m_pWwFib->fEncrypted && !nErrRet)
     {
         if (!pGloss)
@@ -5678,10 +5735,12 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                 else
                 {
                     m_pTableStream->Seek(0);
-                    sal_uInt32 nEncType;
-                    m_pTableStream->ReadUInt32( nEncType );
-                    if (nEncType == 0x10001)
+                    sal_uInt32 nEncType(0);
+                    m_pTableStream->ReadUInt32(nEncType);
+                    if (nEncType == msfilter::VERSION_INFO_1997_FORMAT)
                         eAlgo = RC4;
+                    else if (nEncType == msfilter::VERSION_INFO_2007_FORMAT || nEncType == msfilter::VERSION_INFO_2007_FORMAT_SP2)
+                        eAlgo = RC4CryptoAPI;
                 }
             }
         }
@@ -5744,22 +5803,35 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                 }
                 break;
                 case RC4:
+                case RC4CryptoAPI:
                 {
-                    sal_uInt8 aDocId[ 16 ];
-                    sal_uInt8 aSaltData[ 16 ];
-                    sal_uInt8 aSaltHash[ 16 ];
+                    std::unique_ptr<msfilter::MSCodec97> xCtx;
+                    msfilter::RC4EncryptionInfo info;
+                    bool bCouldReadHeaders;
 
-                    bool bCouldReadHeaders =
-                        checkRead(*m_pTableStream, aDocId, 16) &&
-                        checkRead(*m_pTableStream, aSaltData, 16) &&
-                        checkRead(*m_pTableStream, aSaltHash, 16);
+                    if (eAlgo == RC4)
+                    {
+                        xCtx.reset(new msfilter::MSCodec_Std97);
+                        assert(sizeof(info.verifier.encryptedVerifierHash) >= RTL_DIGEST_LENGTH_MD5);
+                        bCouldReadHeaders =
+                            checkRead(*m_pTableStream, info.verifier.salt, sizeof(info.verifier.salt)) &&
+                            checkRead(*m_pTableStream, info.verifier.encryptedVerifier, sizeof(info.verifier.encryptedVerifier)) &&
+                            checkRead(*m_pTableStream, info.verifier.encryptedVerifierHash, RTL_DIGEST_LENGTH_MD5);
+                    }
+                    else
+                    {
+                        xCtx.reset(new msfilter::MSCodec_CryptoAPI);
+                        bCouldReadHeaders = lclReadCryptoAPIHeader(info, *m_pTableStream);
+                    }
 
-                    msfilter::MSCodec_Std97 aCtx;
                     // if initialization has failed the EncryptionData should be empty
                     uno::Sequence< beans::NamedValue > aEncryptionData;
                     if (bCouldReadHeaders)
-                        aEncryptionData = InitStd97Codec( aCtx, aDocId, *pMedium );
-                    if ( aEncryptionData.getLength() && aCtx.VerifyKey( aSaltData, aSaltHash ) )
+                        aEncryptionData = Init97Codec(*xCtx, info.verifier.salt, *pMedium);
+                    else
+                        nErrRet = ERRCODE_SVX_READ_FILTER_CRYPT;
+                    if (aEncryptionData.getLength() && xCtx->VerifyKey(info.verifier.encryptedVerifier,
+                                                                       info.verifier.encryptedVerifierHash))
                     {
                         nErrRet = 0;
 
@@ -5770,14 +5842,14 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
                         nUnencryptedHdr = m_pStrm->Read(pIn, nUnencryptedHdr);
 
-                        DecryptRC4(aCtx, *m_pStrm, aDecryptMain);
+                        DecryptRC4(*xCtx, *m_pStrm, aDecryptMain);
 
                         aDecryptMain.Seek(0);
                         aDecryptMain.Write(pIn, nUnencryptedHdr);
                         delete [] pIn;
 
                         pTempTable = MakeTemp(aDecryptTable);
-                        DecryptRC4(aCtx, *m_pTableStream, aDecryptTable);
+                        DecryptRC4(*xCtx, *m_pTableStream, aDecryptTable);
                         m_pTableStream = &aDecryptTable;
 
                         if (!m_pDataStream || m_pDataStream == m_pStrm)
@@ -5785,7 +5857,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         else
                         {
                             pTempData = MakeTemp(aDecryptData);
-                            DecryptRC4(aCtx, *m_pDataStream, aDecryptData);
+                            DecryptRC4(*xCtx, *m_pDataStream, aDecryptData);
                             m_pDataStream = &aDecryptData;
                         }
 

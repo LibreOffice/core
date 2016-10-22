@@ -1147,7 +1147,7 @@ XclImpDecrypterRef lclReadFilepass8_Strong(XclImpStream& rStream)
     rStream.Ignore(nHeaderSize - actualHeaderSize);
 
     info.verifier.saltSize = rStream.ReaduInt32();
-    if (info.verifier.saltSize != 16)
+    if (info.verifier.saltSize != msfilter::SALT_LENGTH)
         return xDecr;
     rStream.Read(&info.verifier.salt, sizeof(info.verifier.salt));
     rStream.Read(&info.verifier.encryptedVerifier, sizeof(info.verifier.encryptedVerifier));
