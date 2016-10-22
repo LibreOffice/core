@@ -57,7 +57,7 @@ namespace svt { namespace table
         virtual bool        Notify(NotifyEvent& rNEvt) override;
         virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
 
-        void                SetBackground(const Wallpaper& rColor);
+        using Window::SetBackground;
 
     private:
         static void impl_hideTipWindow();

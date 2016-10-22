@@ -56,11 +56,6 @@ namespace svt { namespace table
         m_rTableControl.doPaintContent(rRenderContext, rUpdateRect);
     }
 
-    void TableDataWindow::SetBackground( const Wallpaper& rColor )
-    {
-        Window::SetBackground( rColor );
-    }
-
     void TableDataWindow::RequestHelp( const HelpEvent& rHEvt )
     {
         HelpEventMode const nHelpMode = rHEvt.GetMode();

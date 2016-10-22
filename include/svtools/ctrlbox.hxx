@@ -179,10 +179,7 @@ public:
                         { ListBox::SelectEntry( rStr ); }
     void            SelectEntry( const Color& rColor );
     Color           GetSelectEntryColor() const;
-    bool            IsEntrySelected(const OUString& rStr ) const
-    {
-        return ListBox::IsEntrySelected(rStr);
-    }
+    using ListBox::IsEntrySelected;
 
     bool            IsEntrySelected(const Color& rColor) const
     {

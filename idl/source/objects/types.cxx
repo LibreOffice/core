@@ -167,12 +167,12 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & ,
     if( rTok.Is( SvHash_interface() ) )
     {
         SetType( MetaTypeType::Interface );
-        bOk = ReadNamesSvIdl( rInStm );
+        bOk = ReadNameSvIdl( rInStm );
     }
     else if( rTok.Is( SvHash_shell() ) )
     {
         SetType( MetaTypeType::Shell );
-        bOk = ReadNamesSvIdl( rInStm );
+        bOk = ReadNameSvIdl( rInStm );
     }
     if( !bOk )
         rInStm.Seek( nTokPos );
@@ -188,11 +188,6 @@ bool SvMetaType::ReadSvIdl( SvIdlDataBase & rBase,
         return SvMetaReference::ReadSvIdl( rBase, rInStm );
     }
     return false;
-}
-
-bool SvMetaType::ReadNamesSvIdl( SvTokenStream & rInStm )
-{
-    return ReadNameSvIdl( rInStm );
 }
 
 void SvMetaType::ReadContextSvIdl( SvIdlDataBase & rBase,

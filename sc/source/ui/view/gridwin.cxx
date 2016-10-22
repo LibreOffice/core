@@ -1387,11 +1387,6 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
     }
 }
 
-void ScGridWindow::SetPointer( const Pointer& rPointer )
-{
-    Window::SetPointer( rPointer );
-}
-
 void ScGridWindow::MoveMouseStatus( ScGridWindow& rDestWin )
 {
     if (nButtonDown)

@@ -155,10 +155,8 @@ public:
 
     void                SetPageImage( sal_uInt16 nPageId, const Image& rImage );
 
-    void                SetHelpId( const OString& rId )
-                            { Control::SetHelpId( rId ); }
-    const OString&      GetHelpId() const
-                            { return Control::GetHelpId(); }
+    using Control::SetHelpId;
+    using Control::GetHelpId;
 
     void                SetActivatePageHdl( const Link<TabControl*,void>& rLink ) { maActivateHdl = rLink; }
     void                SetDeactivatePageHdl( const Link<TabControl*, bool>& rLink ) { maDeactivateHdl = rLink; }

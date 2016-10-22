@@ -40,11 +40,6 @@ SvxEditSourceHint::SvxEditSourceHint( sal_uInt32 _nId, sal_uLong nValue, sal_Int
 {
 }
 
-sal_uLong SvxEditSourceHint::GetValue() const
-{
-    return TextHint::GetValue();
-}
-
 
 ::std::unique_ptr<SfxHint> SvxEditSourceHelper::EENotification2Hint( EENotify* aNotify )
 {

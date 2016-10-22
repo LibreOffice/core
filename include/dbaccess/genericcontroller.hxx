@@ -282,7 +282,7 @@ namespace dbaui
 
 
         // attribute access
-        ::osl::Mutex&               getMutex() const            { return OGenericUnoController_MBASE::getMutex(); }
+        using OGenericUnoController_MBASE::getMutex;
         ::cppu::OBroadcastHelper&   getBroadcastHelper()        { return OGenericUnoController_Base::rBHelper; }
 
 

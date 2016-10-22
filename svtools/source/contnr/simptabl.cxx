@@ -192,11 +192,6 @@ void SvSimpleTable::SetTabs()
     }
 }
 
-void SvSimpleTable::SetTabs(const long* pTabs, MapUnit eMapUnit)
-{
-    SvHeaderTabListBox::SetTabs(pTabs,eMapUnit);
-}
-
 void SvSimpleTable::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     SvHeaderTabListBox::Paint(rRenderContext, rRect);
