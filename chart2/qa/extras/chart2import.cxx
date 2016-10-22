@@ -1137,34 +1137,34 @@ void Chart2ImportTest::testInternalDataProvider() {
     // Parse 42 array
     Reference<chart2::data::XDataSequence> xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;42;42;42}");
     Sequence<Any> xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[3]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(42.0), xSequence[0]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(42.0), xSequence[1]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(42.0), xSequence[2]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(42.0), xSequence[3]);
 
     // Parse empty first and last
     xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{\"\";42;42;\"\"}");
     xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[3]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(0.0),  xSequence[0]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(42.0), xSequence[1]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(42.0), xSequence[2]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(0.0),  xSequence[3]);
 
     // Parse empty middle
     xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;\"\";\"\";42}");
     xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[3]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(42.0), xSequence[0]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(0.0),  xSequence[1]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(0.0),  xSequence[2]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(42.0), xSequence[3]);
 
     // Parse mixed types, numeric only role
     xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;\"hello\";0;\"world\"}");
     xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[3]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(42.0), xSequence[0]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(0.0),  xSequence[1]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(0.0),  xSequence[2]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(0.0),  xSequence[3]);
 
     // Parse mixed types, mixed role
     xDataSeq = rxDataProvider->createDataSequenceByValueArray("categories", "{42;\"hello\";0;\"world\"}");
