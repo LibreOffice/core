@@ -30,6 +30,8 @@ class FormulaLogger
 
 public:
 
+    static FormulaLogger& get();
+
     /**
      * This class is only moveable.
      */
