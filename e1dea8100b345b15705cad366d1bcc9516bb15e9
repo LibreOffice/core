@@ -16,6 +16,24 @@
       "revId": "e1dea8100b345b15705cad366d1bcc9516bb15e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_6d6d0b32",
+        "filename": "stoc/source/javavm/javavm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-22T06:53:13Z",
+      "side": 0,
+      "message": "probably, but not in Java code, would be in C++ somewhere, so not useful here",
+      "parentUuid": "7a77a97e_6d26eb17",
+      "revId": "e1dea8100b345b15705cad366d1bcc9516bb15e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
