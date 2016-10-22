@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_6d26eb17",
+        "filename": "stoc/source/javavm/javavm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-10-22T02:35:20Z",
+      "side": 0,
+      "message": "This looks very smelly, don’t we already have a more robust way to parse BCP47 tags?",
+      "revId": "e1dea8100b345b15705cad366d1bcc9516bb15e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
