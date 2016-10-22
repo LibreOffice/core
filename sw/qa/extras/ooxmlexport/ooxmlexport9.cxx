@@ -46,6 +46,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95031, "tdf95031.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(3), "ParaTopMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.docx")
+{
+    // the paragraph style should set table's text-flow break-before-page
+    CPPUNIT_ASSERT_EQUAL( 3, getPages() );
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
