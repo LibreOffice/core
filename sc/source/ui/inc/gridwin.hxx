@@ -343,7 +343,7 @@ public:
 
     void            ClickExtern();
 
-    void            SetPointer( const Pointer& rPointer );
+    using Window::SetPointer;
 
     void            MoveMouseStatus( ScGridWindow &rDestWin );
 

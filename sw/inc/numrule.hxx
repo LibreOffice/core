@@ -75,7 +75,7 @@ public:
     SwCharFormat* GetCharFormat() const { return const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(GetRegisteredIn())); }
     void       SetCharFormat( SwCharFormat* );
 
-    void                    SetCharFormatName(const OUString& rSet);
+    using SvxNumberFormat::SetCharFormatName;
     virtual OUString        GetCharFormatName() const override;
 
     //For i120928,access the cp info of graphic within bullet

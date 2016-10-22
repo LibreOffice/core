@@ -301,11 +301,6 @@ void SwNumFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         CheckRegistration( pOld, pNew );
 }
 
-void SwNumFormat::SetCharFormatName(const OUString& rSet)
-{
-    SvxNumberFormat::SetCharFormatName(rSet);
-}
-
 OUString SwNumFormat::GetCharFormatName() const
 {
     if(static_cast<const SwCharFormat*>(GetRegisteredIn()))

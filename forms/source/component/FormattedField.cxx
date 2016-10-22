@@ -254,11 +254,6 @@ css::uno::Sequence<OUString>  OFormattedControl::getSupportedServiceNames() thro
     return aSupported;
 }
 
-void OFormattedControl::setDesignMode(sal_Bool bOn) throw ( css::uno::RuntimeException, std::exception)
-{
-    OBoundControl::setDesignMode(bOn);
-}
-
 void OFormattedModel::implConstruct()
 {
     // members

@@ -67,7 +67,7 @@ namespace dbaui
         virtual css::uno::Reference< css::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
+        using OSingleDocumentController_Base::disposing;
 
     private:
         ::std::unique_ptr< OSingleDocumentController_Data >   m_pData;

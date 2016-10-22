@@ -151,10 +151,7 @@ public:
         m_nLayoutType = nLayoutType;
     }
 
-    bool isInCell()
-    {
-        return TableManager::isInCell();
-    }
+    using TableManager::isInCell;
 
     void setIsInShape(bool bIsInShape);
 

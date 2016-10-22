@@ -259,11 +259,6 @@ IMPL_LINK_NOARG(OEditControl, OnKeyPressed, void*, void)
 }
 
 
-void SAL_CALL OEditControl::createPeer( const Reference< XToolkit>& _rxToolkit, const Reference< XWindowPeer>& _rxParent ) throw ( RuntimeException, std::exception )
-{
-    OBoundControl::createPeer(_rxToolkit, _rxParent);
-}
-
 
 OEditModel::OEditModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, true, true )

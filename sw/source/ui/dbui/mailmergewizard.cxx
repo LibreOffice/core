@@ -232,11 +232,6 @@ void SwMailMergeWizard::UpdateRoadmap()
     }
 }
 
-void SwMailMergeWizard::updateRoadmapItemLabel( WizardState _nState )
-{
-    svt::RoadmapWizard::updateRoadmapItemLabel( _nState );
-}
-
 short SwMailMergeWizard::Execute()
 {
     OSL_FAIL("SwMailMergeWizard cannot be executed via Dialog::Execute!\n"

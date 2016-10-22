@@ -649,13 +649,6 @@ IMPLEMENT_FORWARD_XINTERFACE2( ScChartObj, ScChartObj_Base, ScChartObj_PBase )
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ScChartObj, ScChartObj_Base, ScChartObj_PBase )
 
-// XComponent
-
-void ScChartObj::disposing()
-{
-    ScChartObj_Base::disposing();
-}
-
 // XTableChart
 
 sal_Bool SAL_CALL ScChartObj::getHasColumnHeaders() throw(uno::RuntimeException, std::exception)

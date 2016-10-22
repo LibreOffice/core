@@ -77,11 +77,6 @@ bool SdOptionsItem::PutProperties( const Sequence< OUString >& rNames, const Seq
     return ConfigItem::PutProperties( rNames, rValues );
 }
 
-void SdOptionsItem::SetModified()
-{
-    ConfigItem::SetModified();
-}
-
 SdOptionsGeneric::SdOptionsGeneric(sal_uInt16 nConfigId, const OUString& rSubTree)
     : maSubTree(rSubTree)
     , mpCfgItem( nullptr)

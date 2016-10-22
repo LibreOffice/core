@@ -759,11 +759,6 @@ void ViewShellBase::Activate (bool bIsMDIActivate)
     GetToolBarManager()->RequestUpdate();
 }
 
-void ViewShellBase::Deactivate (bool bIsMDIActivate)
-{
-    SfxViewShell::Deactivate(bIsMDIActivate);
-}
-
 void ViewShellBase::SetZoomFactor (
     const Fraction &rZoomX,
     const Fraction &rZoomY)

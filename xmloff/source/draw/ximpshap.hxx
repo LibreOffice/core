@@ -92,8 +92,7 @@ protected:
     void AddShape(OUString const & serviceName);
     void SetTransformation();
 
-    SvXMLImport& GetImport() { return SvXMLImportContext::GetImport(); }
-    const SvXMLImport& GetImport() const { return SvXMLImportContext::GetImport(); }
+    using SvXMLImportContext::GetImport;
 
     void addGluePoint( const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
 

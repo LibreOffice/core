@@ -68,12 +68,6 @@ namespace dbaui
         m_pData->m_xUndoManager->disposing();
     }
 
-    void SAL_CALL OSingleDocumentController::disposing( const EventObject& i_event ) throw( RuntimeException, std::exception )
-    {
-        // simply disambiguate
-        OSingleDocumentController_Base::disposing( i_event );
-    }
-
     void OSingleDocumentController::ClearUndoManager()
     {
         GetUndoManager().Clear();

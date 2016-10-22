@@ -13,6 +13,7 @@
 #include <fstream>
 #include <set>
 
+#include <clang/AST/CXXInheritance.h>
 #include "compat.hxx"
 #include "plugin.hxx"
 
@@ -57,6 +58,15 @@ public:
     }
 
     bool VisitCXXMethodDecl(const CXXMethodDecl *);
+
+private:
+    const CXXMethodDecl * findOverriddenOrSimilarMethodInSuperclasses(const CXXMethodDecl *);
+    bool BaseCheckCallback(
+        const CXXRecordDecl *BaseDefinition
+    #if CLANG_VERSION < 30800
+        , void *
+    #endif
+        );
 };
 
 bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
@@ -64,10 +74,17 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     if (ignoreLocation(methodDecl->getCanonicalDecl()) || !methodDecl->doesThisDeclarationHaveABody()) {
         return true;
     }
-    // if we are overriding more than one method, then this is a disambiguating override
-    if (!methodDecl->isVirtual() || methodDecl->size_overridden_methods() != 1
-        || (*methodDecl->begin_overridden_methods())->isPure()) {
+    if (isa<CXXConstructorDecl>(methodDecl) || isa<CXXDestructorDecl>(methodDecl)) {
         return true;
+    }
+
+    // if we are overriding more than one method, then this is a disambiguating override
+    if (methodDecl->isVirtual()) {
+        if (methodDecl->size_overridden_methods() != 1
+            || (*methodDecl->begin_overridden_methods())->isPure())
+        {
+            return true;
+        }
     }
     if (dyn_cast<CXXDestructorDecl>(methodDecl)) {
         return true;
@@ -90,15 +107,16 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
          return true;
 
 
-    const CXXMethodDecl* overriddenMethodDecl = *methodDecl->begin_overridden_methods();
+    const CXXMethodDecl* overriddenMethodDecl = findOverriddenOrSimilarMethodInSuperclasses(methodDecl);
+    if (!overriddenMethodDecl) {
+        return true;
+    }
 
     if (compat::getReturnType(*methodDecl).getCanonicalType()
         != compat::getReturnType(*overriddenMethodDecl).getCanonicalType())
     {
         return true;
     }
-    if (methodDecl->getAccess() == AS_public && overriddenMethodDecl->getAccess() == AS_protected)
-        return true;
 
     //TODO: check for identical exception specifications
 
@@ -179,9 +197,10 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     }
 
     report(
-            DiagnosticsEngine::Warning, "%0 virtual function just calls %1 parent",
+            DiagnosticsEngine::Warning, "%0%1 function just calls %2 parent",
             methodDecl->getSourceRange().getBegin())
         << methodDecl->getAccess()
+        << (methodDecl->isVirtual() ? " virtual" : "")
         << overriddenMethodDecl->getAccess()
         << methodDecl->getSourceRange();
     if (methodDecl->getCanonicalDecl()->getLocation() != methodDecl->getLocation()) {
@@ -193,6 +212,66 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
           << pOther->getSourceRange();
     }
     return true;
+}
+
+const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSuperclasses(const CXXMethodDecl* methodDecl)
+{
+    if (methodDecl->isVirtual()) {
+        return *methodDecl->begin_overridden_methods();
+    }
+    if (!methodDecl->getDeclName().isIdentifier()) {
+        return nullptr;
+    }
+
+    std::vector<const CXXMethodDecl*> maSimilarMethods;
+
+    auto BaseMatchesCallback = [&](const CXXBaseSpecifier *cxxBaseSpecifier, CXXBasePath& )
+    {
+        if (cxxBaseSpecifier->getAccessSpecifier() != AS_public && cxxBaseSpecifier->getAccessSpecifier() != AS_protected)
+            return false;
+        if (!cxxBaseSpecifier->getType().getTypePtr())
+            return false;
+        const CXXRecordDecl* baseCXXRecordDecl = cxxBaseSpecifier->getType()->getAsCXXRecordDecl();
+        if (!baseCXXRecordDecl)
+            return false;
+        if (baseCXXRecordDecl->isInvalidDecl())
+            return false;
+        for (const CXXMethodDecl* baseMethod : baseCXXRecordDecl->methods())
+        {
+            if (!baseMethod->getDeclName().isIdentifier() || methodDecl->getName() != baseMethod->getName()) {
+                continue;
+            }
+            if (compat::getReturnType(*methodDecl).getCanonicalType()
+                != compat::getReturnType(*baseMethod).getCanonicalType())
+            {
+                continue;
+            }
+            if (methodDecl->param_size() != baseMethod->param_size())
+                continue;
+            if (methodDecl->getNumParams() != baseMethod->getNumParams())
+                continue;
+            bool bParamsMatch = true;
+            for (unsigned i=0; i<methodDecl->param_size(); ++i)
+            {
+                if (methodDecl->parameters()[i]->getType() != baseMethod->parameters()[i]->getType())
+                {
+                    bParamsMatch = false;
+                    break;
+                }
+            }
+            if (bParamsMatch)
+                maSimilarMethods.push_back(baseMethod);
+        }
+        return false;
+    };
+
+    CXXBasePaths aPaths;
+    methodDecl->getParent()->lookupInBases(BaseMatchesCallback, aPaths);
+
+    if (maSimilarMethods.size() == 1) {
+        return maSimilarMethods[0];
+    }
+    return nullptr;
 }
 
 

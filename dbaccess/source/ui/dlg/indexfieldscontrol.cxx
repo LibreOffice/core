@@ -284,11 +284,6 @@ namespace dbaui
         return true;
     }
 
-    bool IndexFieldsControl::IsModified() const
-    {
-        return EditBrowseBox::IsModified();
-    }
-
     bool IndexFieldsControl::SaveModified()
     {
         if (!IsModified())

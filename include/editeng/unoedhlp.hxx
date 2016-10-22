@@ -48,7 +48,7 @@ public:
             SvxEditSourceHint( sal_uInt32 nId );
             SvxEditSourceHint( sal_uInt32 nId, sal_uLong nValue, sal_Int32 nStart=0, sal_Int32 nEnd=0 );
 
-    sal_uLong   GetValue() const;
+    using TextHint::GetValue;
     sal_Int32   GetStartValue() const { return mnStart;}
     sal_Int32   GetEndValue() const { return mnEnd;}
 };
