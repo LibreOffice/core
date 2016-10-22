@@ -549,7 +549,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
                     break;
             }
         }
-        else if (*p == ';' and !bInQuote)
+        else if (*p == ';' && !bInQuote)
         {
             // element separator.
             if (pElem)
