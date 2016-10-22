@@ -52,9 +52,7 @@ public:
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
     virtual sal_uInt16      GetValueCount() const override;
 
-    // MS VC4.0 kommt durcheinander
-    void                    SetValue( sal_uInt16 nNewVal )
-                                {SfxEnumItem::SetValue(nNewVal); }
+    using SfxEnumItem::SetValue;
 
     inline SvxCaseMapItem& operator=(const SvxCaseMapItem& rMap)
         {

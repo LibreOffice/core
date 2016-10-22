@@ -49,7 +49,7 @@ private:
 class ScResourcePublisher : public Resource
 {
 private:
-    void FreeResource() { Resource::FreeResource(); }
+    using Resource::FreeResource;
 public:
     explicit ScResourcePublisher( const ScResId& rId ) : Resource( rId ) {}
     ~ScResourcePublisher() { FreeResource(); }

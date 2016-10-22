@@ -144,7 +144,6 @@ protected:
     OleStorageObject() {}
 
     using               StorageObjectBase::construct;
-    void                construct( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath );
 
     virtual void        implDumpStream(
                             const css::uno::Reference< css::io::XInputStream >& rxStrm,

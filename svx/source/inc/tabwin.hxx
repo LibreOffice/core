@@ -105,9 +105,7 @@ protected:
     virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) throw( css::uno::RuntimeException, std::exception ) override;
 
 protected:
-    inline          SfxBindings&    GetBindings()       { return SfxControllerItem::GetBindings(); }
-    inline  const   SfxBindings&    GetBindings() const { return SfxControllerItem::GetBindings(); }
-
+    using SfxControllerItem::GetBindings;
     using SfxFloatingWindow::StateChanged;
 };
 

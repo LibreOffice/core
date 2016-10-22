@@ -86,7 +86,7 @@ class LwpPropList : public LwpDLVListHead
 public:
     LwpPropList(){}
     ~LwpPropList(){}
-    void Read(LwpObjectStream* pObjStrm);
+    using LwpDLVListHead::Read;
     LwpPropListElement* GetFirst();
     OUString GetNamedProperty(const OUString& name);
     OUString EnumNamedProperty(OUString& name,OUString& value);
