@@ -825,7 +825,7 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
         static const struct {
             sal_Int32 mnQuality;
             sal_Int32 mnRatio;
-        } aRatios[] = { // minium tolerable compression ratios
+        } aRatios[] = { // minimum tolerable compression ratios
             { 100, 400 }, { 95, 700 }, { 90, 1000 }, { 85, 1200 },
             { 80, 1500 }, { 75, 1700 }
         };

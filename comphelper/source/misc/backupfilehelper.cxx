@@ -2607,14 +2607,14 @@ namespace comphelper
         {
             // whole directory. To do so, scan directory and exclude some dirs
             // from which we know they do not need to be secured explicitely. This
-            // should alrteady include registrymodifications, too.
+            // should already include registrymodifications, too.
             scanDirsAndFiles(
                 maUserConfigWorkURL,
                 maDirs,
                 maFiles);
 
-            // should not extist, but for the case an error occurred and it got
-            // copied somehow, avoid further recurive copying/saving
+            // should not exist, but for the case an error occurred and it got
+            // copied somehow, avoid further recursive copying/saving
             maDirs.erase("SafeMode");
 
             // not really needed, can be abandoned
