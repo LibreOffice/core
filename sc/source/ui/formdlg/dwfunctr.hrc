@@ -19,7 +19,6 @@
 
 #define CB_CAT      1
 #define LB_FUNC     2
-#define DDLB_FUNC   3
 #define IMB_INSERT  1
 #define FI_FUNCDESC 1
 #define FT_SPLIT    2

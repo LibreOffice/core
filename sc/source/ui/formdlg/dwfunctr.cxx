@@ -60,7 +60,6 @@ ScFunctionWin::ScFunctionWin( SfxBindings* pBindingsP, vcl::Window* pParent, con
     aPrivatSplit    ( VclPtr<ScPrivatSplit>::Create( this, ResId( FT_SPLIT, *rResId.GetResMgr() ) ) ),
     aCatBox         ( VclPtr<ListBox>::Create( this, ResId( CB_CAT, *rResId.GetResMgr() ) ) ),
     aFuncList       ( VclPtr<ListBox>::Create( this, ResId( LB_FUNC, *rResId.GetResMgr() ) ) ),
-    aDDFuncList     ( VclPtr<ListBox>::Create( this, ResId( DDLB_FUNC, *rResId.GetResMgr() ) ) ),
     aInsertButton   ( VclPtr<ImageButton>::Create( this, ResId( IMB_INSERT, *rResId.GetResMgr() ) ) ),
     aFiFuncDesc     ( VclPtr<FixedText>::Create( this, ResId( FI_FUNCDESC, *rResId.GetResMgr() ) ) ),
     aOldSize        (0,0),
@@ -75,8 +74,6 @@ ScFunctionWin::ScFunctionWin( SfxBindings* pBindingsP, vcl::Window* pParent, con
 
     aFiFuncDesc->SetUpdateMode(true);
     pAllFuncList=aFuncList;
-    aDDFuncList->Disable();
-    aDDFuncList->Hide();
     nArgs=0;
     bSizeFlag=false;
     aCatBox->SetDropDownLineCount(9);
@@ -88,10 +85,8 @@ ScFunctionWin::ScFunctionWin( SfxBindings* pBindingsP, vcl::Window* pParent, con
     Link<ListBox&,void> aLink=LINK( this, ScFunctionWin, SelHdl);
     aCatBox->SetSelectHdl(aLink);
     aFuncList->SetSelectHdl(aLink);
-    aDDFuncList->SetSelectHdl(aLink);
 
     aFuncList->SetDoubleClickHdl(LINK( this, ScFunctionWin, SetSelectionHdl));
-    aDDFuncList->SetSelectHdl(aLink);
     aInsertButton->SetClickHdl(LINK( this, ScFunctionWin, SetSelectionClickHdl));
 
     Link<ScPrivatSplit&,void> a3Link=LINK( this, ScFunctionWin, SetSplitHdl);
@@ -137,7 +132,6 @@ void ScFunctionWin::dispose()
     aPrivatSplit.disposeAndClear();
     aCatBox.disposeAndClear();
     aFuncList.disposeAndClear();
-    aDDFuncList.disposeAndClear();
     aInsertButton.disposeAndClear();
     aFiFuncDesc.disposeAndClear();
     pAllFuncList.clear();
@@ -606,13 +600,13 @@ void ScFunctionWin::DoEnter()
 
 IMPL_LINK( ScFunctionWin, SelHdl, ListBox&, rLb, void )
 {
-    if ( &rLb == aCatBox.get() )
+    if (&rLb == aCatBox.get())
     {
         UpdateFunctionList();
         SetDescription();
     }
 
-    if ( &rLb == aFuncList.get() || &rLb == aDDFuncList.get() )
+    if (&rLb == aFuncList.get())
     {
         SetDescription();
     }
