@@ -670,11 +670,8 @@ IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl, Idle *, void)
     if( mpWindowImpl->mbReallyVisible )
     {
         ImplCallResize();
-        if( mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
-        {
-            mpWindowImpl->mpFrameData->maPaintIdle.Stop();
-            mpWindowImpl->mpFrameData->maPaintIdle.Invoke( nullptr );
-        }
+        if( !mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
+            mpWindowImpl->mpFrameData->maPaintIdle.Start();
     }
 }
 

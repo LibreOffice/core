@@ -179,7 +179,7 @@ namespace framework
                     const css::uno::Reference< css::uno::XComponentContext > &rComponentContext );
 
         protected:
-            DECL_LINK(AsyncLayoutHdl, Timer *, void);
+            DECL_LINK(AsyncLayoutHdl, Idle *, void);
 
         private:
 
@@ -290,7 +290,7 @@ namespace framework
             css::uno::Reference< css::container::XNameAccess >             m_xPersistentWindowStateSupplier;
             GlobalSettings*                                                m_pGlobalSettings;
             OUString                                                       m_aModuleIdentifier;
-            Timer                                                          m_aAsyncLayoutTimer;
+            Idle                                                           m_aAsyncLayoutIdle;
             ::cppu::OMultiTypeInterfaceContainerHelper                     m_aListenerContainer; // container for ALL Listener
             ToolbarLayoutManager*                                          m_pToolbarManager;
             css::uno::Reference< css::ui::XUIConfigurationListener >       m_xToolbarManager;

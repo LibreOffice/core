@@ -143,9 +143,9 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         m_xToolbarManager.set( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
     }
 
-    m_aAsyncLayoutTimer.SetTimeout( 50 );
-    m_aAsyncLayoutTimer.SetTimeoutHdl( LINK( this, LayoutManager, AsyncLayoutHdl ) );
-    m_aAsyncLayoutTimer.SetDebugName( "framework::LayoutManager m_aAsyncLayoutTimer" );
+    m_aAsyncLayoutIdle.SetPriority( SchedulerPriority::HIGH_IDLE );
+    m_aAsyncLayoutIdle.SetIdleHdl( LINK( this, LayoutManager, AsyncLayoutHdl ) );
+    m_aAsyncLayoutIdle.SetDebugName( "framework::LayoutManager m_aAsyncLayoutIdle" );
 
     registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS, LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS, css::beans::PropertyAttribute::TRANSIENT, &m_bAutomaticToolbars, cppu::UnoType<decltype(m_bAutomaticToolbars)>::get() );
     registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI, LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI, beans::PropertyAttribute::TRANSIENT, &m_bHideCurrentUI, cppu::UnoType<decltype(m_bHideCurrentUI)>::get() );
@@ -157,7 +157,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
 
 LayoutManager::~LayoutManager()
 {
-    m_aAsyncLayoutTimer.Stop();
+    m_aAsyncLayoutIdle.Stop();
     setDockingAreaAcceptor(nullptr);
     delete m_pGlobalSettings;
 }
@@ -233,13 +233,17 @@ void LayoutManager::implts_lock()
 {
     SolarMutexGuard g;
     ++m_nLockCount;
+    m_aAsyncLayoutIdle.Stop();
 }
 
 bool LayoutManager::implts_unlock()
 {
     SolarMutexGuard g;
     m_nLockCount = std::max( m_nLockCount-1, static_cast<sal_Int32>(0) );
-    return ( m_nLockCount == 0 );
+    bool bCanLayout = ( m_nLockCount == 0 );
+    if ( bCanLayout && m_bMustDoLayout )
+        m_aAsyncLayoutIdle.Start();
+    return bCanLayout;
 }
 
 void LayoutManager::implts_reset( bool bAttached )
@@ -1282,7 +1286,7 @@ throw ( RuntimeException, std::exception )
 
     // IMPORTANT: Be sure to stop layout timer if don't have a docking area acceptor!
     if ( !xDockingAreaAcceptor.is() )
-        m_aAsyncLayoutTimer.Stop();
+        m_aAsyncLayoutIdle.Stop();
 
     bool bAutomaticToolbars( m_bAutomaticToolbars );
     std::vector< Reference< awt::XWindow > > oldDockingAreaWindows;
@@ -1290,7 +1294,7 @@ throw ( RuntimeException, std::exception )
     ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
 
     if ( !xDockingAreaAcceptor.is() )
-        m_aAsyncLayoutTimer.Stop();
+        m_aAsyncLayoutIdle.Stop();
 
     // Remove listener from old docking area acceptor
     if ( m_xDockingAreaAcceptor.is() )
@@ -2277,9 +2281,9 @@ throw (RuntimeException, std::exception)
     // conform to documentation: unlock with lock count == 0 means force a layout
 
     SolarMutexClearableGuard aWriteLock;
-        if ( bDoLayout )
-                m_aAsyncLayoutTimer.Stop();
-        aWriteLock.clear();
+    if ( bDoLayout )
+        m_aAsyncLayoutIdle.Stop();
+    aWriteLock.clear();
 
     Any a( nLockCount );
     implts_notifyListeners( frame::LayoutManagerEvents::UNLOCK, a );
@@ -2681,12 +2685,8 @@ throw( uno::RuntimeException, std::exception )
         // application modules need this. So we have to check if this is the first
         // call after the async layout time expired.
         m_bMustDoLayout = true;
-        if ( !m_aAsyncLayoutTimer.IsActive() )
-        {
-            m_aAsyncLayoutTimer.Invoke();
-        }
         if ( m_nLockCount == 0 )
-            m_aAsyncLayoutTimer.Start();
+            m_aAsyncLayoutIdle.Start();
     }
     else if ( m_xFrame.is() && aEvent.Source == m_xFrame->getContainerWindow() )
     {
@@ -2753,10 +2753,9 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent ) thr
     }
 }
 
-IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl, Timer *, void)
+IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl, Idle *, void)
 {
     SolarMutexClearableGuard aReadLock;
-    m_aAsyncLayoutTimer.Stop();
 
     if( !m_xContainerWindow.is() )
         return;
