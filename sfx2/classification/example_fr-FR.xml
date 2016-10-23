@@ -3,7 +3,7 @@
     <!-- Translators: this string can be localized -->
     <baf:PolicyAuthorityName>Exemple d'autorité TSCP</baf:PolicyAuthorityName>
     <!-- Translators: this string can be localized -->
-    <baf:PolicyName>Exemple de police TSCP</baf:PolicyName>
+    <baf:PolicyName>Exemple de stratégie TSCP</baf:PolicyName>
     <baf:AdministrativeData>
         <baf:ProgramID>urn:example:tscp:1</baf:ProgramID>
     </baf:AdministrativeData>
