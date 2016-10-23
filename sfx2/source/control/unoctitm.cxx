@@ -399,7 +399,7 @@ void SfxDispatchController_Impl::addParametersToArgs( const css::util::URL& aURL
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_SHORT], 5 ))
             {
                 // SHORT support
-                rArgs[nLen].Value <<= sal_Int8( aValue.toInt32() );
+                rArgs[nLen].Value <<= sal_Int16( aValue.toInt32() );
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_HYPER], 5 ))
             {
