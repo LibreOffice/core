@@ -179,6 +179,7 @@ public:
     void testTdf88657();
     void testEscapeCharInNumberFormatXLSX();
     void testNatNumInNumberFormatXLSX();
+    void testExtendedLCID();
 
     void testHiddenRepeatedRowsODS();
     void testHyperlinkTargetFrameODS();
@@ -264,6 +265,7 @@ public:
     CPPUNIT_TEST(testTdf88657);
     CPPUNIT_TEST(testEscapeCharInNumberFormatXLSX);
     CPPUNIT_TEST(testNatNumInNumberFormatXLSX);
+    CPPUNIT_TEST(testExtendedLCID);
 
     CPPUNIT_TEST(testHiddenRepeatedRowsODS);
     CPPUNIT_TEST(testHyperlinkTargetFrameODS);
@@ -3694,6 +3696,47 @@ void ScExportTest::testNatNumInNumberFormatXLSX()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "[DBNum2][$-804]General;[RED][DBNum2][$-804]General");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testExtendedLCID()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf36038_ExtendedLCID.", FORMAT_ODS);
+    CPPUNIT_ASSERT( xDocSh.Is() );
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);
+    CPPUNIT_ASSERT( xDocSh.Is() );
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    // Check export
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "[$-107041E]DD\\-MM\\-YYYY");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[3]", "formatCode", "[$-D07041E]DD\\-MM\\-YYYY");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[4]", "formatCode", "[$-1030411]DD\\-MM\\-EE");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[5]", "formatCode", "[$-1B030411]DD\\-MM\\-EE");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[6]", "formatCode", "[$-108040D]DD\\-MM\\-YYYY");
+    //assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[7]", "formatCode", "[$-108040D]DD\\-MM\\-YYYY");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[7]", "formatCode", "[$-1060401]DD\\-MM\\-YYYY");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[8]", "formatCode", "[$-2060401]DD\\-MM\\-YYYY");
+
+    // Check import
+    ScDocument& rDoc = xDocSh->GetDocument();
+    SvNumberFormatter* pNumFormatter = rDoc.GetFormatTable();
+    sal_uInt32 nNumberFormat;
+    const OUString aLang[4] = { "[$-41E]", "[$-411]", "[$-40D]", "[$-401]" };
+    const OUString aCalendar[4] = { "[~buddhist]DD-MM-YYYY", "[~gengou]DD-MM-EE", "[~jewish]DD-MM-YYYY", "[~hijri]DD-MM-YYYY" };
+    for ( sal_Int16 nCol = 1; nCol <= 2; nCol++ )
+    {
+        for ( sal_Int16 nRow = 1; nRow <= 4; nRow++ )
+        {
+            rDoc.GetNumberFormat(nCol, nRow, 0, nNumberFormat);
+            const SvNumberformat* pNumberFormat = pNumFormatter->GetEntry(nNumberFormat);
+            const OUString& rFormatStr = pNumberFormat->GetFormatstring();
+            const OUString aExpectedFormatStr = aLang[nRow-1] + ( (nCol==2 && nRow!=3) ? OUString("[NatNum1]") : OUString("") ) + aCalendar[nRow-1];
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format lost extended LCID during Excel export", aExpectedFormatStr, rFormatStr);
+        }
+    }
 
     xDocSh->DoClose();
 }
