@@ -632,7 +632,7 @@ void writeModFile(
     // registrymodifications file, this is done based on file size in bytes and crc32.
     // Unfortunately this write is based on writing unordered map entries, which creates
     // valid and semantically equal XML-Files, bubt with different crc32 checksums. For
-    // the future usage it will be preferrable to have easily comparable config files
+    // the future usage it will be preferable to have easily comparable config files
     // which is guaranteed by writing the entries in sorted order. Indeed with this change
     // (and in the recursive writeModifications call) the same config files get written
 

@@ -218,7 +218,7 @@ public:
     bool Read(SvStream& rStream) override;
 };
 
-/// The trailer signleton is at the end of the doc.
+/// The trailer singleton is at the end of the doc.
 class PDFTrailerElement : public PDFElement
 {
     PDFDocument& m_rDoc;
@@ -854,7 +854,7 @@ void PDFDocument::ReadXRef(SvStream& rStream)
         PDFNumberElement aGenerationNumber;
         if (!aGenerationNumber.Read(rStream))
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read genration number");
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read generation number");
             return;
         }
 

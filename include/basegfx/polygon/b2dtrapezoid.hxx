@@ -97,7 +97,7 @@ namespace basegfx
             double fLineWidth);
 
         // create trapezoids for all edges of the given polygon. The closed state of
-        // the polygon is taken into account. If curves are contaned, the default
+        // the polygon is taken into account. If curves are contained, the default
         // AdaptiveSubdivision will be used.
         BASEGFX_DLLPUBLIC void createLineTrapezoidFromB2DPolygon(
             B2DTrapezoidVector& ro_Result,

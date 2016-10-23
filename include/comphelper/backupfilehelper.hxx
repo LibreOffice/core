@@ -116,7 +116,7 @@ namespace comphelper
         static void reactOnSafeMode(bool bSafeMode);
 
         /** tries to create a new backup, if there is none yet, or if the
-         *  last differs from the base file. It will then put a new verion
+         *  last differs from the base file. It will then put a new version
          *  on the 'stack' of copies and evtl. delete the oldest backup.
          *  Also may cleanup older backups when NumBackups given in the
          *  constructor has changed.

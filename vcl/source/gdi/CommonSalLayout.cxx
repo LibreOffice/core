@@ -609,7 +609,7 @@ bool CommonSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 // - In LayoutText() set KashidaJustification flag based on text script.
 // - In ApplyDXArray():
 //   * Check the above flag to decide whether to insert Kashidas or not.
-//   * For any RTL glyph that has DX adjustment, insert enough Khashidas to
+//   * For any RTL glyph that has DX adjustment, insert enough Kashidas to
 //     fill in the added space.
 
 void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)

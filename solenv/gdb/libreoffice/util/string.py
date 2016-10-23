@@ -28,7 +28,7 @@ class StringPrinterHelper(object):
             len = self.length()
             return self.make_string(data, self.encoding, len)
         else:
-            return "unintialized %s" % self.typename
+            return "uninitialized %s" % self.typename
 
     def display_hint(self):
         if self.valid():

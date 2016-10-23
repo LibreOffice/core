@@ -676,7 +676,7 @@ void SbModule::Clear()
 
 SbxVariable* SbModule::Find( const OUString& rName, SbxClassType t )
 {
-    // make sure a search in an uninstatiated class module will fail
+    // make sure a search in an uninstantiated class module will fail
     SbxVariable* pRes = SbxObject::Find( rName, t );
     if ( bIsProxyModule && !GetSbData()->bRunInit )
     {
