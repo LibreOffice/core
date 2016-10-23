@@ -17,6 +17,9 @@ class ScDocument;
 
 namespace sc {
 
+/**
+ * Outputs formula calculation log outputs to specified file.
+ */
 class FormulaLogger
 {
     std::unique_ptr<osl::File> mpLogFile;
@@ -42,6 +45,8 @@ public:
      */
     class GroupScope
     {
+        friend class FormulaLogger;
+
         struct Impl;
         std::unique_ptr<Impl> mpImpl;
 
@@ -50,13 +55,23 @@ public:
         GroupScope( const GroupScope& ) = delete;
         GroupScope& operator= ( const GroupScope& ) = delete;
 
-        GroupScope( FormulaLogger& rLogger, const OUString& rPrefix, const ScDocument& rDoc, const ScFormulaCell& rCell );
+    private:
+        GroupScope(
+            FormulaLogger& rLogger, const OUString& rPrefix,
+            const ScDocument& rDoc, const ScFormulaCell& rCell );
 
+    public:
         GroupScope( GroupScope&& r );
         ~GroupScope();
 
-        void addMessage( const OUString& rName );
+        /**
+         * Add an arbitrary message to dump to the log.
+         */
+        void addMessage( const OUString& rMsg );
 
+        /**
+         * Call this when the group calculation has finished successfullly.
+         */
         void setCalcComplete();
     };
 
