@@ -43,7 +43,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/miscdlgs/retypepassdlg.src \
     sc/source/ui/miscdlgs/conflictsdlg.src \
     sc/source/ui/miscdlgs/acredlin.src \
-    sc/source/ui/formdlg/dwfunctr.src \
     sc/source/ui/sidebar/CellAppearancePropertyPanel.src \
     sc/source/ui/StatisticsDialogs/StatisticsDialogs.src \
     sc/source/core/src/compiler.src \

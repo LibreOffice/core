@@ -26,22 +26,23 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include "anyrefdg.hxx"
 #include "global.hxx"
 #include "privsplt.hxx"
 #include "funcdesc.hxx"
 
-class ScFunctionWin : public vcl::Window
+class ScFunctionWin : public PanelLayout
 {
 
 private:
     VclPtr<ListBox>     aCatBox;
     VclPtr<ListBox>     aFuncList;
 
-    VclPtr<ImageButton> aInsertButton;
+    VclPtr<PushButton>  aInsertButton;
     VclPtr<FixedText>   aFiFuncDesc;
     const ScFuncDesc*   pFuncDesc;
-    sal_uInt16              nArgs;
+    sal_uInt16          nArgs;
 
     ::std::vector< const formula::IFunctionDescription*> aLRUList;
 
@@ -55,7 +56,7 @@ private:
                     DECL_LINK( SelHdl, ListBox&, void );
 
 public:
-    ScFunctionWin(vcl::Window* pParent, const ResId& rResId);
+    ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame> &rFrame);
 
     virtual ~ScFunctionWin() override;
     virtual void    dispose() override;

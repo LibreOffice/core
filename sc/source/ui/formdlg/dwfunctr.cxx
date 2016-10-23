@@ -36,7 +36,6 @@
 #include "appoptio.hxx"
 #include "compiler.hxx"
 
-#include "dwfunctr.hrc"
 #include "dwfunctr.hxx"
 
 /*************************************************************************
@@ -53,17 +52,16 @@
 #*
 #************************************************************************/
 
-ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const ResId& rResId) :
-    vcl::Window(pParent, rResId),
-    aCatBox         ( VclPtr<ListBox>::Create( this, ResId( CB_CAT, *rResId.GetResMgr() ) ) ),
-    aFuncList       ( VclPtr<ListBox>::Create( this, ResId( LB_FUNC, *rResId.GetResMgr() ) ) ),
-    aInsertButton   ( VclPtr<ImageButton>::Create( this, ResId( IMB_INSERT, *rResId.GetResMgr() ) ) ),
-    aFiFuncDesc     ( VclPtr<FixedText>::Create( this, ResId( FI_FUNCDESC, *rResId.GetResMgr() ) ) ),
-    pFuncDesc       (nullptr)
+ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame> &rFrame)
+    : PanelLayout(pParent, "FunctionPanel", "modules/scalc/ui/functionpanel.ui", rFrame)
+    , pFuncDesc(nullptr)
 {
-    FreeResource();
+    get(aCatBox, "category");
+    get(aFuncList, "funclist");
+    get(aInsertButton, "insert");
+    get(aFiFuncDesc, "funcdesc");
+
     InitLRUList();
-    SetStyle(GetStyle()|WB_CLIPCHILDREN);
 
     aFiFuncDesc->SetUpdateMode(true);
     nArgs=0;
@@ -106,11 +104,11 @@ ScFunctionWin::~ScFunctionWin()
 
 void ScFunctionWin::dispose()
 {
-    aCatBox.disposeAndClear();
-    aFuncList.disposeAndClear();
-    aInsertButton.disposeAndClear();
-    aFiFuncDesc.disposeAndClear();
-    vcl::Window::dispose();
+    aCatBox.clear();
+    aFuncList.clear();
+    aInsertButton.clear();
+    aFiFuncDesc.clear();
+    PanelLayout::dispose();
 }
 
 /*************************************************************************

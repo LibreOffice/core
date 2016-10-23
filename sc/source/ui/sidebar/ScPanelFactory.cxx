@@ -98,7 +98,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
         }
         else if (rsResourceURL.endsWith("/FunctionsPanel"))
         {
-            pPanel = VclPtr<ScFunctionWin>::Create(pParentWindow, ScResId(FID_FUNCTION_BOX));
+            pPanel = VclPtr<ScFunctionWin>::Create(pParentWindow, xFrame);
             nMinimumSize = 0;
         }
 
