@@ -20,13 +20,16 @@ namespace sc {
 class FormulaLogger
 {
     std::unique_ptr<osl::File> mpLogFile;
-    OUString maGroupPrefix;
     std::vector<OUString> maMessages;
+
+    sal_Int32 mnNestLevel = 0;
 
     void writeAscii( const char* s );
     void writeAscii( const char* s, size_t n );
     void write( const OUString& ou );
     void write( sal_Int32 n );
+
+    void writeNestLevel();
 
 public:
 
@@ -45,7 +48,8 @@ public:
         GroupScope( const GroupScope& ) = delete;
         GroupScope& operator= ( const GroupScope& ) = delete;
 
-        GroupScope( FormulaLogger& rLogger, const OUString& rPrefix );
+        GroupScope( FormulaLogger& rLogger, const OUString& rPrefix, const ScDocument& rDoc, const ScFormulaCell& rCell );
+
         GroupScope( GroupScope&& r );
         ~GroupScope();
 

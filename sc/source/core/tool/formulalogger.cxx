@@ -16,8 +16,6 @@
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
 
-#include <iostream>
-
 namespace sc {
 
 FormulaLogger& FormulaLogger::get()
@@ -35,28 +33,54 @@ struct FormulaLogger::GroupScope::Impl
 
     bool mbCalcComplete = false;
 
-    Impl( FormulaLogger& rLogger, const OUString& rPrefix ) :
-        mrLogger(rLogger), maPrefix(rPrefix) {}
+    Impl( FormulaLogger& rLogger, const OUString& rPrefix, const ScDocument& rDoc, const ScFormulaCell& rCell ) :
+        mrLogger(rLogger), maPrefix(rPrefix)
+    {
+        ++mrLogger.mnNestLevel;
+
+        sc::TokenStringContext aCxt(&rDoc, rDoc.GetGrammar());
+        OUString aFormula = rCell.GetCode()->CreateString(aCxt, rCell.aPos);
+
+        mrLogger.write(maPrefix);
+        mrLogger.writeNestLevel();
+
+        mrLogger.writeAscii("-- enter (formula='");
+        mrLogger.write(aFormula);
+        mrLogger.writeAscii("', size=");
+        mrLogger.write(rCell.GetSharedLength());
+        mrLogger.writeAscii(")\n");
+    }
 
     ~Impl()
     {
         for (const OUString& rMsg : maMessages)
         {
             mrLogger.write(maPrefix);
-            mrLogger.writeAscii(" * ");
+            mrLogger.writeNestLevel();
+            mrLogger.writeAscii("   * ");
             mrLogger.write(rMsg);
             mrLogger.writeAscii("\n");
         }
 
         mrLogger.write(maPrefix);
-        mrLogger.writeAscii(mbCalcComplete ? " * calculation complete\n" : " * exited without calculation\n");
+        mrLogger.writeNestLevel();
+        mrLogger.writeAscii("-- exit (");
+        if (mbCalcComplete)
+            mrLogger.writeAscii("calculation complete");
+        else
+            mrLogger.writeAscii("without calculation");
+
+        mrLogger.writeAscii(")\n");
 
         mrLogger.mpLogFile->sync();
+
+        --mrLogger.mnNestLevel;
     }
 };
 
-FormulaLogger::GroupScope::GroupScope( FormulaLogger& rLogger, const OUString& rPrefix ) :
-    mpImpl(o3tl::make_unique<Impl>(rLogger, rPrefix)) {}
+FormulaLogger::GroupScope::GroupScope(
+    FormulaLogger& rLogger, const OUString& rPrefix, const ScDocument& rDoc, const ScFormulaCell& rCell ) :
+    mpImpl(o3tl::make_unique<Impl>(rLogger, rPrefix, rDoc, rCell)) {}
 
 FormulaLogger::GroupScope::GroupScope( GroupScope&& r ) : mpImpl(std::move(r.mpImpl)) {}
 
@@ -69,7 +93,8 @@ void FormulaLogger::GroupScope::addMessage( const OUString& rMsg )
 
 void FormulaLogger::GroupScope::setCalcComplete()
 {
-    mpImpl->mbCalcComplete;
+    mpImpl->mbCalcComplete = true;
+    addMessage("calculation performed");
 }
 
 FormulaLogger::FormulaLogger() : mpLogFile(o3tl::make_unique<osl::File>("file:///home/kohei/tmp/formula.log"))
@@ -142,11 +167,23 @@ void FormulaLogger::write( sal_Int32 n )
     writeAscii(s.getStr(), s.getLength());
 }
 
+void FormulaLogger::writeNestLevel()
+{
+    // Write the nest level, but keep it only 1-character length to avoid
+    // messing up the spacing.
+    if (mnNestLevel < 10)
+        write(mnNestLevel);
+    else
+        writeAscii("!");
+
+    writeAscii(":");
+    for (sal_Int32 i = 0; i < mnNestLevel; ++i)
+        writeAscii("   ");
+}
+
 FormulaLogger::GroupScope FormulaLogger::enterGroup(
     const ScDocument& rDoc, const ScFormulaCell& rCell )
 {
-    maGroupPrefix = "formula-group: ";
-
     // Get the file name if available.
     const SfxObjectShell* pShell = rDoc.GetDocumentShell();
     const SfxMedium* pMedium = pShell->GetMedium();
@@ -154,22 +191,13 @@ FormulaLogger::GroupScope FormulaLogger::enterGroup(
     if (aName.isEmpty())
         aName = "-"; // unsaved document.
 
-    maGroupPrefix += aName;
-    maGroupPrefix += ": ";
-    maGroupPrefix += rCell.aPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc, rDoc.GetAddressConvention());
-    maGroupPrefix += ": ";
-    write(maGroupPrefix);
+    OUString aGroupPrefix = aName;
 
-    writeAscii("(formula='");
+    aGroupPrefix += ": formula-group: ";
+    aGroupPrefix += rCell.aPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc, rDoc.GetAddressConvention());
+    aGroupPrefix += ": ";
 
-    sc::TokenStringContext aCxt(&rDoc, rDoc.GetGrammar());
-    write(rCell.GetCode()->CreateString(aCxt, rCell.aPos));
-
-    writeAscii("', size=");
-    write(rCell.GetSharedLength());
-    writeAscii(")\n");
-
-    return GroupScope(*this, maGroupPrefix);
+    return GroupScope(*this, aGroupPrefix, rDoc, rCell);
 }
 
 }
