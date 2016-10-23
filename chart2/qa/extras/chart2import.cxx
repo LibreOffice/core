@@ -90,8 +90,6 @@ public:
     void testSecondaryAxisTitleDefaultRotationXLSX();
     void testAxisTitleRotationXLSX();
 
-    void testInternalDataProvider();
-
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
     CPPUNIT_TEST(testSteppedLines);
@@ -141,9 +139,6 @@ public:
     CPPUNIT_TEST(testAxisTitleDefaultRotationXLSX);
     CPPUNIT_TEST(testSecondaryAxisTitleDefaultRotationXLSX);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
-
-    CPPUNIT_TEST(testInternalDataProvider);
-
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1128,51 +1123,6 @@ void Chart2ImportTest::testAxisTitleRotationXLSX()
         CPPUNIT_ASSERT_EQUAL(270.0, nRotation);
     }
 
-}
-
-void Chart2ImportTest::testInternalDataProvider() {
-    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromImpress("/chart2/qa/extras/data/odp/", "chart.odp"), uno::UNO_QUERY_THROW);
-    const uno::Reference< chart2::data::XDataProvider >& rxDataProvider = xChartDoc->getDataProvider();
-
-    // Parse 42 array
-    Reference<chart2::data::XDataSequence> xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;42;42;42}");
-    Sequence<Any> xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[3]);
-
-    // Parse empty first and last
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{\"\";42;42;\"\"}");
-    xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[3]);
-
-    // Parse empty middle
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;\"\";\"\";42}");
-    xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[3]);
-
-    // Parse mixed types, numeric only role
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;\"hello\";0;\"world\"}");
-    xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(42), xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0),  xSequence[3]);
-
-    // Parse mixed types, mixed role
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray("categories", "{42;\"hello\";0;\"world\"}");
-    xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("42")),    xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("hello")), xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("0")),     xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("world")), xSequence[3]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);

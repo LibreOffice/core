@@ -533,7 +533,10 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
             {
                 // Opening quote.
                 bAllNumeric = false;
-                pElem = nullptr;
+                ++p;
+                if (p == pEnd)
+                    break;
+                pElem = p;
             }
             else
             {
@@ -549,7 +552,11 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
                     break;
             }
         }
-        else if (*p == ';' and !bInQuote)
+        else if (bInQuote)
+        {
+            // Do nothing.
+        }
+        else if (*p == ';')
         {
             // element separator.
             if (pElem)
