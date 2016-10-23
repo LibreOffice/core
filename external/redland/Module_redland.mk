@@ -9,7 +9,6 @@
 
 $(eval $(call gb_Module_Module,redland))
 
-ifeq ($(SYSTEM_REDLAND),)
 $(eval $(call gb_Module_add_targets,redland,\
 	UnpackedTarball_raptor \
 	UnpackedTarball_rasqal \
@@ -30,7 +29,6 @@ $(eval $(call gb_Module_add_targets,redland,\
 	ExternalProject_rasqal \
 	ExternalProject_redland \
 ))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:

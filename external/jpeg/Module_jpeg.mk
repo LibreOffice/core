@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,jpeg))
 
-ifeq ($(SYSTEM_JPEG),)
-
 $(eval $(call gb_Module_add_targets,jpeg,\
     UnpackedTarball_jpeg \
     StaticLibrary_jpeg \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

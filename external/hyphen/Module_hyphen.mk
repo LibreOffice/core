@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Module_Module,hyphen))
 
-ifeq ($(SYSTEM_HYPH),)
-
 $(eval $(call gb_Module_add_targets,hyphen,\
 	UnpackedTarball_hyphen \
 ))
@@ -28,7 +26,5 @@ $(eval $(call gb_Module_add_targets,hyphen,\
 ))
 
 endif # $(COM)
-
-endif # $(SYSTEM_HYPH)
 
 # vim: set noet sw=4 ts=4:

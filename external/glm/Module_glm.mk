@@ -9,12 +9,8 @@
 
 $(eval $(call gb_Module_Module,glm))
 
-ifeq ($(SYSTEM_GLM),)
-
 $(eval $(call gb_Module_add_targets,glm,\
 	UnpackedTarball_glm \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
