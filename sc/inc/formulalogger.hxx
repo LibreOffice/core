@@ -29,6 +29,8 @@ class FormulaLogger
     void write( const OUString& ou );
     void write( sal_Int32 n );
 
+    void sync();
+
     void writeNestLevel();
 
 public:
