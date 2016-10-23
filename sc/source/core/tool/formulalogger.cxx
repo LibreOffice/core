@@ -16,7 +16,28 @@
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
 
+#include <cstdlib>
+
 namespace sc {
+
+namespace {
+
+std::unique_ptr<osl::File> initFile()
+{
+    const char* pPath = std::getenv("LIBO_FORMULA_LOG_FILE");
+    if (!pPath)
+        return nullptr;
+
+    // Support both file:///... and system file path notations.
+    OUString aPath = OUString::createFromAscii(pPath);
+    INetURLObject aURL;
+    aURL.SetSmartURL(aPath);
+    aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
+
+    return o3tl::make_unique<osl::File>(aPath);
+}
+
+}
 
 FormulaLogger& FormulaLogger::get()
 {
@@ -72,7 +93,7 @@ struct FormulaLogger::GroupScope::Impl
 
         mrLogger.writeAscii(")\n");
 
-        mrLogger.mpLogFile->sync();
+        mrLogger.sync();
 
         --mrLogger.mnNestLevel;
     }
@@ -97,8 +118,13 @@ void FormulaLogger::GroupScope::setCalcComplete()
     addMessage("calculation performed");
 }
 
-FormulaLogger::FormulaLogger() : mpLogFile(o3tl::make_unique<osl::File>("file:///home/kohei/tmp/formula.log"))
+FormulaLogger::FormulaLogger()
 {
+    mpLogFile = initFile();
+
+    if (!mpLogFile)
+        return;
+
     osl::FileBase::RC eRC = mpLogFile->open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
 
     if (eRC == osl::FileBase::E_EXIST)
@@ -126,9 +152,8 @@ FormulaLogger::FormulaLogger() : mpLogFile(o3tl::make_unique<osl::File>("file://
         return;
     }
 
-    sal_uInt64 nBytes;
-    mpLogFile->write("---\n", 4, nBytes);
-    mpLogFile->sync();
+    writeAscii("---\n");
+    sync();
 }
 
 FormulaLogger::~FormulaLogger()
@@ -167,6 +192,14 @@ void FormulaLogger::write( sal_Int32 n )
     writeAscii(s.getStr(), s.getLength());
 }
 
+void FormulaLogger::sync()
+{
+    if (!mpLogFile)
+        return;
+
+    mpLogFile->sync();
+}
+
 void FormulaLogger::writeNestLevel()
 {
     // Write the nest level, but keep it only 1-character length to avoid
@@ -176,8 +209,8 @@ void FormulaLogger::writeNestLevel()
     else
         writeAscii("!");
 
-    writeAscii(":");
-    for (sal_Int32 i = 0; i < mnNestLevel; ++i)
+    writeAscii(": ");
+    for (sal_Int32 i = 1; i < mnNestLevel; ++i)
         writeAscii("   ");
 }
 
