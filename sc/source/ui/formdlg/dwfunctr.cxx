@@ -70,6 +70,7 @@ ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css
     aFont.SetColor(Color(COL_BLACK));
     aFiFuncDesc->SetFont(aFont);
     aFiFuncDesc->SetBackground( GetBackground() );       //! never transparent?
+    aFiFuncDesc->set_height_request(5 * aFiFuncDesc->GetTextHeight());
 
     Link<ListBox&,void> aLink=LINK( this, ScFunctionWin, SelHdl);
     aCatBox->SetSelectHdl(aLink);

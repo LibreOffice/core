@@ -1346,6 +1346,12 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         else
             xWindow = VclPtr<VclHBox>::Create(pParent);
     }
+    else if (name == "GtkPaned")
+    {
+        bVertical = extractOrientation(rMap);
+        assert(bVertical && "hori not implemented, shouldn't be hard though");
+        xWindow = VclPtr<VclVPaned>::Create(pParent);
+    }
     else if (name == "GtkHBox")
         xWindow = VclPtr<VclHBox>::Create(pParent);
     else if (name == "GtkVBox")
@@ -2992,7 +2998,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
                 xmlreader::XmlReader::Text::Raw, &name, &nsId);
             OString sValue(name.begin, name.length);
 
-            if (sKey == "expand")
+            if (sKey == "expand" || sKey == "resize")
             {
                 bool bTrue = (!sValue.isEmpty() && (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1'));
                 if (pToolBoxParent)

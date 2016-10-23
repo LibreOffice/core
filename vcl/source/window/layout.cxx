@@ -115,15 +115,23 @@ void VclContainer::setLayoutAllocation(vcl::Window &rChild, const Point &rAllocP
     setLayoutPosSize(rChild, aChildPos, aChildSize);
 }
 
+namespace
+{
+    Size subtractBorder(const vcl::Window &rWindow, const Size& rSize)
+    {
+        sal_Int32 nBorderWidth = rWindow.get_border_width();
+        sal_Int32 nLeft = rWindow.get_margin_left() + nBorderWidth;
+        sal_Int32 nTop = rWindow.get_margin_top() + nBorderWidth;
+        sal_Int32 nRight = rWindow.get_margin_right() + nBorderWidth;
+        sal_Int32 nBottom = rWindow.get_margin_bottom() + nBorderWidth;
+        Size aSize(rSize);
+        return Size(aSize.Width() + nLeft + nRight, aSize.Height() + nTop + nBottom);
+    }
+}
+
 Size VclContainer::getLayoutRequisition(const vcl::Window &rWindow)
 {
-    sal_Int32 nBorderWidth = rWindow.get_border_width();
-    sal_Int32 nLeft = rWindow.get_margin_left() + nBorderWidth;
-    sal_Int32 nTop = rWindow.get_margin_top() + nBorderWidth;
-    sal_Int32 nRight = rWindow.get_margin_right() + nBorderWidth;
-    sal_Int32 nBottom = rWindow.get_margin_bottom() + nBorderWidth;
-    Size aSize(rWindow.get_preferred_size());
-    return Size(aSize.Width() + nLeft + nRight, aSize.Height() + nTop + nBottom);
+    return subtractBorder(rWindow, rWindow.get_preferred_size());
 }
 
 void VclContainer::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
@@ -2513,6 +2521,123 @@ void MessageDialog::set_secondary_text(const OUString &rSecondaryString)
         m_pSecondaryMessage->SetText("\n" + m_sSecondaryString);
         m_pSecondaryMessage->Show(!m_sSecondaryString.isEmpty());
     }
+}
+
+VclVPaned::VclVPaned(vcl::Window *pParent, WinBits nStyle)
+    : VclContainer(pParent, nStyle)
+    , m_pSplitter(VclPtr<Splitter>::Create(this, WB_VSCROLL))
+    , m_nPosition(-1)
+{
+    m_pSplitter->SetSplitHdl(LINK(this, VclVPaned, SplitHdl));
+    m_pSplitter->SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetFaceColor()));
+    m_pSplitter->Show();
+}
+
+void VclVPaned::dispose()
+{
+    m_pSplitter.disposeAndClear();
+    VclContainer::dispose();
+}
+
+IMPL_LINK(VclVPaned, SplitHdl, Splitter*, pSplitter, void)
+{
+    double nSize = pSplitter->GetSplitPosPixel();
+    Size aSplitterSize(m_pSplitter->GetSizePixel());
+    Size aAllocation(GetSizePixel());
+    arrange(aAllocation, nSize, aAllocation.Height() - nSize - aSplitterSize.Height());
+}
+
+void VclVPaned::arrange(const Size& rAllocation, long nFirstHeight, long nSecondHeight)
+{
+    Size aSplitterSize(rAllocation.Width(), getLayoutRequisition(*m_pSplitter).Height());
+    Size aFirstChildSize(rAllocation.Width(), nFirstHeight);
+    Size aSecondChildSize(rAllocation.Width(), nSecondHeight);
+    int nElement = 0;
+    for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
+        pChild = pChild->GetWindow(GetWindowType::Next))
+    {
+        if (!pChild->IsVisible())
+            continue;
+        if (nElement == 0)
+        {
+            Point aSplitterPos(0, aFirstChildSize.Height());
+            setLayoutAllocation(*m_pSplitter, aSplitterPos, aSplitterSize);
+            set_position(aSplitterPos.Y() + aSplitterSize.Height() / 2);
+        }
+        else if (nElement == 1)
+        {
+            Point aChildPos(0, 0);
+            setLayoutAllocation(*pChild, aChildPos, aFirstChildSize);
+        }
+        else if (nElement == 2)
+        {
+            Point aChildPos(0, aFirstChildSize.Height() + aSplitterSize.Height());
+            setLayoutAllocation(*pChild, aChildPos, aSecondChildSize);
+        }
+        ++nElement;
+    }
+}
+
+void VclVPaned::setAllocation(const Size& rAllocation)
+{
+    //supporting "shrink" could be done by adjusting the allowed drag rectangle
+    m_pSplitter->SetDragRectPixel(Rectangle(Point(0, 0), rAllocation));
+    Size aSplitterSize(rAllocation.Width(), getLayoutRequisition(*m_pSplitter).Height());
+    const long nHeight = rAllocation.Height() - aSplitterSize.Height();
+
+    long nFirstHeight = 0;
+    long nSecondHeight = 0;
+    bool bFirstCanResize = true;
+    bool bSecondCanResize = true;
+    const bool bInitialAllocation = get_position() < 0;
+    int nElement = 0;
+    for (const vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
+        pChild = pChild->GetWindow(GetWindowType::Next))
+    {
+        if (!pChild->IsVisible())
+            continue;
+        if (nElement == 1)
+        {
+            if (bInitialAllocation)
+                nFirstHeight = getLayoutRequisition(*pChild).Height();
+            else
+                nFirstHeight = pChild->GetSizePixel().Height();
+            bFirstCanResize = pChild->get_expand();
+        }
+        else if (nElement == 2)
+        {
+            if (bInitialAllocation)
+                nSecondHeight = getLayoutRequisition(*pChild).Height();
+            else
+                nSecondHeight = pChild->GetSizePixel().Height();
+            bSecondCanResize = pChild->get_expand();
+        }
+        ++nElement;
+    }
+    long nHeightRequest = nFirstHeight + nSecondHeight;
+    long nHeightDiff = nHeight - nHeightRequest;
+    if (bFirstCanResize == bSecondCanResize)
+        nFirstHeight += nHeightDiff/2;
+    else if (bFirstCanResize)
+        nFirstHeight += nHeightDiff;
+    arrange(rAllocation, nFirstHeight, nSecondHeight);
+}
+
+Size VclVPaned::calculateRequisition() const
+{
+    Size aRet(0, 0);
+
+    for (const vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
+        pChild = pChild->GetWindow(GetWindowType::Next))
+    {
+        if (!pChild->IsVisible())
+            continue;
+        Size aChildSize = getLayoutRequisition(*pChild);
+        aRet.Width() = std::max(aRet.Width(), aChildSize.Width());
+        aRet.Height() += aChildSize.Height();
+    }
+
+    return aRet;
 }
 
 Size getLegacyBestSizeForChildren(const vcl::Window &rWindow)

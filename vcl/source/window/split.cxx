@@ -694,4 +694,9 @@ void Splitter::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rPaint
     }
 }
 
+Size Splitter::GetOptimalSize() const
+{
+    return LogicToPixel(Size(3, 3), MapUnit::MapAppFont);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

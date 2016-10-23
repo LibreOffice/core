@@ -16,6 +16,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/IPrioritable.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/split.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
@@ -373,6 +374,23 @@ public:
     virtual const vcl::Window *get_child() const;
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
+};
+
+class VCL_DLLPUBLIC VclVPaned : public VclContainer
+{
+private:
+    VclPtr<Splitter> m_pSplitter;
+    long m_nPosition;
+    DECL_LINK(SplitHdl, Splitter*, void);
+    void arrange(const Size& rAllocation, long nFirstHeight, long nSecondHeight);
+public:
+    VclVPaned(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN);
+    virtual ~VclVPaned() override { disposeOnce(); }
+    virtual void dispose() override;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
+    long get_position() const { return m_nPosition; }
+    void set_position(long nPosition) { m_nPosition = nPosition; }
 };
 
 class VCL_DLLPUBLIC VclFrame : public VclBin
