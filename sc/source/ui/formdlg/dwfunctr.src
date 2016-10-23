@@ -70,11 +70,6 @@ Window FID_FUNCTION_BOX
         Pos = MAP_APPFONT ( 3 , 115 ) ;
         Size = MAP_APPFONT ( 72 , 40 ) ;
     };
-    Control FT_SPLIT
-    {
-        Pos = MAP_APPFONT ( 3 , 110 ) ;
-        Size = MAP_APPFONT ( 72 , 3 ) ;
-    };
     ImageButton IMB_INSERT
     {
         HelpID = "sc:ImageButton:FID_FUNCTION_BOX:IMB_INSERT";

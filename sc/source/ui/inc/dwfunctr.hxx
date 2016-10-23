@@ -35,18 +35,11 @@ class ScFunctionWin : public vcl::Window
 {
 
 private:
-    Idle                aIdle;
-    VclPtr<ScPrivatSplit> aPrivatSplit;
     VclPtr<ListBox>     aCatBox;
     VclPtr<ListBox>     aFuncList;
 
     VclPtr<ImageButton> aInsertButton;
     VclPtr<FixedText>   aFiFuncDesc;
-    sal_uLong           nMinWidth;
-    sal_uLong           nMinHeight;
-    Size                aOldSize;
-    bool                bSizeFlag;
-    Point               aSplitterInitPos;
     const ScFuncDesc*   pFuncDesc;
     sal_uInt16              nArgs;
 
@@ -56,27 +49,15 @@ private:
     void            UpdateLRUList();
     void            DoEnter();
     void            SetDescription();
-    void            SetLeftRightSize();
-    void            SetMyWidthLeRi(Size &aNewSize);
-    void            SetMyHeightLeRi(Size &aNewSize);
-    void            UseSplitterInitPos();
 
                     DECL_LINK( SetSelectionHdl, ListBox&, void );
                     DECL_LINK( SetSelectionClickHdl, Button*, void );
                     DECL_LINK( SelHdl, ListBox&, void );
-                    DECL_LINK( SetSplitHdl, ScPrivatSplit&, void );
-                    DECL_LINK( TimerHdl, Idle*, void );
-
-protected:
-
-    virtual void    Resize() override;
-    void            SetSize();
-    virtual void    StateChanged( StateChangedType nStateChange ) override;
 
 public:
-                    ScFunctionWin(vcl::Window* pParent, const ResId& rResId);
+    ScFunctionWin(vcl::Window* pParent, const ResId& rResId);
 
-                    virtual ~ScFunctionWin() override;
+    virtual ~ScFunctionWin() override;
     virtual void    dispose() override;
 
     void            InitLRUList();

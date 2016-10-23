@@ -21,6 +21,5 @@
 #define LB_FUNC     2
 #define IMB_INSERT  1
 #define FI_FUNCDESC 1
-#define FT_SPLIT    2
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

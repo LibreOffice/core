@@ -55,25 +55,18 @@
 
 ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const ResId& rResId) :
     vcl::Window(pParent, rResId),
-    aIdle       ( "sc formdlg ScFunctionWin" ),
-    aPrivatSplit    ( VclPtr<ScPrivatSplit>::Create( this, ResId( FT_SPLIT, *rResId.GetResMgr() ) ) ),
     aCatBox         ( VclPtr<ListBox>::Create( this, ResId( CB_CAT, *rResId.GetResMgr() ) ) ),
     aFuncList       ( VclPtr<ListBox>::Create( this, ResId( LB_FUNC, *rResId.GetResMgr() ) ) ),
     aInsertButton   ( VclPtr<ImageButton>::Create( this, ResId( IMB_INSERT, *rResId.GetResMgr() ) ) ),
     aFiFuncDesc     ( VclPtr<FixedText>::Create( this, ResId( FI_FUNCDESC, *rResId.GetResMgr() ) ) ),
-    aOldSize        (0,0),
     pFuncDesc       (nullptr)
 {
     FreeResource();
     InitLRUList();
     SetStyle(GetStyle()|WB_CLIPCHILDREN);
 
-    aIdle.SetPriority(SchedulerPriority::LOWER);
-    aIdle.SetIdleHdl(LINK( this, ScFunctionWin, TimerHdl));
-
     aFiFuncDesc->SetUpdateMode(true);
     nArgs=0;
-    bSizeFlag=false;
     aCatBox->SetDropDownLineCount(9);
     vcl::Font aFont=aFiFuncDesc->GetFont();
     aFont.SetColor(Color(COL_BLACK));
@@ -87,20 +80,8 @@ ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const ResId& rResId) :
     aFuncList->SetDoubleClickHdl(LINK( this, ScFunctionWin, SetSelectionHdl));
     aInsertButton->SetClickHdl(LINK( this, ScFunctionWin, SetSelectionClickHdl));
 
-    Link<ScPrivatSplit&,void> a3Link=LINK( this, ScFunctionWin, SetSplitHdl);
-    aPrivatSplit->SetCtrModifiedHdl(a3Link);
-
-    Point aTopLeft=aCatBox->GetPosPixel();
-    OUString aString("ww");
-    Size aTxtSize( aFiFuncDesc->GetTextWidth(aString), aFiFuncDesc->GetTextHeight() );
-    nMinWidth=aTxtSize.Width()+aTopLeft.X()
-            +2*aFuncList->GetPosPixel().X();
-    nMinHeight=19*aTxtSize.Height();
     aCatBox->SelectEntryPos(0);
 
-    Range aYRange(3*aTxtSize.Height()+aFuncList->GetPosPixel().Y(),
-                GetOutputSizePixel().Height()-2*aTxtSize.Height());
-    aPrivatSplit->SetYRange(aYRange);
     SelHdl(*aCatBox.get());
 }
 
@@ -125,7 +106,6 @@ ScFunctionWin::~ScFunctionWin()
 
 void ScFunctionWin::dispose()
 {
-    aPrivatSplit.disposeAndClear();
     aCatBox.disposeAndClear();
     aFuncList.disposeAndClear();
     aInsertButton.disposeAndClear();
@@ -183,158 +163,6 @@ void ScFunctionWin::UpdateLRUList()
 }
 
 /*************************************************************************
-#*  Member:     SetSize
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScFunctionWin
-#*
-#*  Funktion:   Groesse fuer die einzelnen Controls einzustellen.
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-void ScFunctionWin::SetSize()
-{
-    SetLeftRightSize();
-}
-
-/*************************************************************************
-#*  Member:     SetLeftRightSize
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScFunctionWin
-#*
-#*  Funktion:   Groesse fuer die einzelnen Controls einstellen,
-#*              wenn Links oder Rechts angedockt wird.
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-void ScFunctionWin::SetLeftRightSize()
-{
-    if(!bSizeFlag)
-    {
-        bSizeFlag = true;
-
-        Size aDiffSize=GetSizePixel();
-        Size aNewSize=GetOutputSizePixel();
-        aDiffSize.Width()-=aNewSize.Width();
-        aDiffSize.Height()-=aNewSize.Height();
-
-        OUString aString("ww");
-        Size aTxtSize( aFuncList->GetTextWidth(aString), aFuncList->GetTextHeight() );
-
-        Range aYRange(3*aTxtSize.Height()+aFuncList->GetPosPixel().Y(),
-                    GetOutputSizePixel().Height()-2*aTxtSize.Height());
-        aPrivatSplit->SetYRange(aYRange);
-
-        if(aOldSize.Width()!=aNewSize.Width())
-            SetMyWidthLeRi(aNewSize);
-
-        if(aOldSize.Height()!=aNewSize.Height())
-            SetMyHeightLeRi(aNewSize);
-
-        aOldSize=aNewSize;
-        aNewSize.Width()+=aDiffSize.Width();
-        aNewSize.Height()+=aDiffSize.Height();
-        bSizeFlag=false;
-    }
-
-}
-
-/*************************************************************************
-#*  Member:     SetMyWidthLeRi
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScFunctionWin
-#*
-#*  Funktion:   Breite fuer die einzelnen Controls und
-#*              das Fenster einstellen,wenn Li oder Re
-#*
-#*  Input:      neue Fenstergroesse
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-void ScFunctionWin::SetMyWidthLeRi(Size &aNewSize)
-{
-    if((sal_uLong)aNewSize.Width()<nMinWidth)   aNewSize.Width()=nMinWidth;
-
-    Size aCDSize=aCatBox->GetSizePixel();
-    Size aFLSize=aFuncList->GetSizePixel();
-    Size aSplitterSize=aPrivatSplit->GetSizePixel();
-    Size aFDSize=aFiFuncDesc->GetSizePixel();
-
-    Point aCDTopLeft=aCatBox->GetPosPixel();
-    Point aFLTopLeft=aFuncList->GetPosPixel();
-
-    aCDSize.Width()=aNewSize.Width()-aCDTopLeft.X()-aFLTopLeft.X();
-    aFLSize.Width()=aNewSize.Width()-2*aFLTopLeft.X();
-    aFDSize.Width()=aFLSize.Width();
-    aSplitterSize.Width()=aFLSize.Width();
-
-    aCatBox->SetSizePixel(aCDSize);
-    aFuncList->SetSizePixel(aFLSize);
-    aPrivatSplit->SetSizePixel(aSplitterSize);
-    aFiFuncDesc->SetSizePixel(aFDSize);
-}
-
-/*************************************************************************
-#*  Member:     SetHeight
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScFunctionWin
-#*
-#*  Funktion:   Hoehe fuer die einzelnen Controls und
-#*              das Fenster einstellen bei Li oder Re
-#*
-#*  Input:      neue Fenstergroesse
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-void ScFunctionWin::SetMyHeightLeRi(Size &aNewSize)
-{
-    if((sal_uLong)aNewSize.Height()<nMinHeight) aNewSize.Height()=nMinHeight;
-
-    Size aFLSize=aFuncList->GetSizePixel();
-    Size aSplitterSize=aPrivatSplit->GetSizePixel();
-    Size aFDSize=aFiFuncDesc->GetSizePixel();
-
-    Point aFLTopLeft=aFuncList->GetPosPixel();
-    Point aSplitterTopLeft=aPrivatSplit->GetPosPixel();
-    Point aFDTopLeft=aFiFuncDesc->GetPosPixel();
-
-    long nTxtHeight = aFuncList->GetTextHeight();
-
-    short nY=(short)(3*nTxtHeight+
-        aFuncList->GetPosPixel().Y()+aSplitterSize.Height());
-
-    aFDTopLeft.Y()=aNewSize.Height()-aFDSize.Height()-4;
-    if(nY>aFDTopLeft.Y())
-    {
-        aFDSize.Height()-=nY-aFDTopLeft.Y();
-        aFDTopLeft.Y()=nY;
-    }
-    aSplitterTopLeft.Y()=aFDTopLeft.Y()-aSplitterSize.Height()-1;
-    aFLSize.Height()=aSplitterTopLeft.Y()-aFLTopLeft.Y()-1;
-
-    aFuncList->SetSizePixel(aFLSize);
-    aPrivatSplit->SetPosPixel(aSplitterTopLeft);
-    aFiFuncDesc->SetPosPixel(aFDTopLeft);
-    aFiFuncDesc->SetSizePixel(aFDSize);
-
-}
-
-/*************************************************************************
 #*  Member:     SetDescription
 #*------------------------------------------------------------------------
 #*
@@ -370,13 +198,6 @@ void ScFunctionWin::SetDescription()
         aFiFuncDesc->Update();
 
     }
-}
-
-/// override to set new size of the controls
-void ScFunctionWin::Resize()
-{
-    SetSize();
-    vcl::Window::Resize();
 }
 
 /*************************************************************************
@@ -612,68 +433,6 @@ IMPL_LINK_NOARG( ScFunctionWin, SetSelectionClickHdl, Button*, void )
 IMPL_LINK_NOARG( ScFunctionWin, SetSelectionHdl, ListBox&, void )
 {
     DoEnter();          // Uebernimmt die Eingabe
-}
-
-/*************************************************************************
-#*  Handle:     SetSplitHdl
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScFunctionWin
-#*
-#*  Funktion:   Bei einer Aenderung des Split- Controls werden die
-#*              einzelnen Controls an die neue Groesse angepasst.
-#*
-#*  Input:      Zeiger auf Control
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-IMPL_LINK( ScFunctionWin, SetSplitHdl, ScPrivatSplit&, rCtrl, void )
-{
-    if (&rCtrl == aPrivatSplit.get())
-    {
-        short nDeltaY=aPrivatSplit->GetDeltaY();
-        Size aFLSize=aFuncList->GetSizePixel();
-        Size aFDSize=aFiFuncDesc->GetSizePixel();
-        Point aFDTopLeft=aFiFuncDesc->GetPosPixel();
-
-        aFLSize.Height()+=nDeltaY;
-        aFDSize.Height()-=nDeltaY;
-        aFDTopLeft.Y()+=nDeltaY;
-        aFuncList->SetSizePixel(aFLSize);
-        aFiFuncDesc->SetPosPixel(aFDTopLeft);
-        aFiFuncDesc->SetSizePixel(aFDSize);
-    }
-}
-
-IMPL_LINK_NOARG(ScFunctionWin, TimerHdl, Idle *, void)
-{
-    OUString aString("ww");
-    Size aTxtSize( aFiFuncDesc->GetTextWidth(aString), aFiFuncDesc->GetTextHeight() );
-    Point aTopLeft=aCatBox->GetPosPixel();
-    nMinWidth=aTxtSize.Width()+aTopLeft.X() +2*aFuncList->GetPosPixel().X();
-    nMinHeight=19*aTxtSize.Height();
-    SetSize();
-}
-
-void ScFunctionWin::UseSplitterInitPos()
-{
-    if ( IsVisible() && aPrivatSplit->IsEnabled() && aSplitterInitPos != Point() )
-    {
-        aPrivatSplit->MoveSplitTo(aSplitterInitPos);
-        aSplitterInitPos = Point();     // use only once
-    }
-}
-
-void ScFunctionWin::StateChanged( StateChangedType nStateChange )
-{
-    vcl::Window::StateChanged( nStateChange );
-
-    if (nStateChange == StateChangedType::InitShow)
-    {
-        UseSplitterInitPos();           //  set initial splitter position if necessary
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
