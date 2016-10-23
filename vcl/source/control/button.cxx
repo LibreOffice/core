@@ -3777,26 +3777,6 @@ ImageButton::ImageButton( vcl::Window* pParent, WinBits nStyle ) :
     ImplInitStyle();
 }
 
-ImageButton::ImageButton( vcl::Window* pParent, const ResId& rResId ) :
-    PushButton( pParent, rResId.SetRT( RSC_IMAGEBUTTON ) )
-{
-    RscImageButtonFlags nObjMask = (RscImageButtonFlags)ReadLongRes();
-
-    if ( RscImageButtonFlags::Image & nObjMask )
-    {
-        SetModeImage( Image( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *rResId.GetResMgr() ) ) );
-        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
-    }
-
-    if ( RscImageButtonFlags::Symbol & nObjMask )
-        SetSymbol( (SymbolType)ReadLongRes() );
-
-    if ( RscImageButtonFlags::State & nObjMask )
-        SetState( (TriState)ReadLongRes() );
-
-    ImplInitStyle();
-}
-
 void ImageButton::ImplInitStyle()
 {
     WinBits nStyle = GetStyle();

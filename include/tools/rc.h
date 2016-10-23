@@ -77,16 +77,6 @@ namespace o3tl {
     template<> struct typed_flags<RscMenuItem> : is_typed_flags<RscMenuItem, 0xd6f> {};
 }
 
-// For "ImageButtons":
-enum class RscImageButtonFlags {
-    Image           = 0x01,
-    Symbol          = 0x02,
-    State           = 0x04
-};
-namespace o3tl {
-    template<> struct typed_flags<RscImageButtonFlags> : is_typed_flags<RscImageButtonFlags, 0x07> {};
-}
-
 // For "Image":
 enum class RscImageFlags {
     ImageBitmap       = 0x01,

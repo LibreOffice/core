@@ -500,7 +500,6 @@ private:
 
 public:
                  ImageButton( vcl::Window* pParent, WinBits nStyle = 0 );
-                 ImageButton( vcl::Window* pParent, const ResId& rResId );
 };
 
 class VCL_DLLPUBLIC ImageRadioButton : public RadioButton

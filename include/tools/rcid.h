@@ -49,8 +49,6 @@
 #define RSC_BUTTON              (RSC_NOTYPE + 0x45)
 #define RSC_PUSHBUTTON          (RSC_NOTYPE + 0x46)
 
-#define RSC_IMAGEBUTTON         (RSC_NOTYPE + 0x4a)
-
 #define RSC_EDIT                (RSC_NOTYPE + 0x52)
 
 #define RSC_LISTBOX             (RSC_NOTYPE + 0x55)
