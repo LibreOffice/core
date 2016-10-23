@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,openldap))
 
-ifeq ($(SYSTEM_OPENLDAP),)
-
 $(eval $(call gb_Module_add_targets,openldap,\
 	ExternalProject_openldap \
 	UnpackedTarball_openldap \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

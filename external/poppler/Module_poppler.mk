@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,poppler))
 
-ifeq ($(SYSTEM_POPPLER),)
-
 $(eval $(call gb_Module_add_targets,poppler,\
 	ExternalProject_poppler \
 	UnpackedTarball_poppler \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

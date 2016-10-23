@@ -9,14 +9,12 @@
 
 $(eval $(call gb_Module_Module,nss))
 
-ifeq ($(SYSTEM_NSS),)
 ifeq ($(filter ANDROID,$(OS)),)
 $(eval $(call gb_Module_add_targets,nss,\
 	UnpackedTarball_nss \
 	ExternalPackage_nss \
 	ExternalProject_nss \
 ))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:

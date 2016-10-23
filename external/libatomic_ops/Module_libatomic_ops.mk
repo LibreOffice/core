@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,libatomic_ops))
 
-ifeq ($(SYSTEM_LIBATOMIC_OPS),)
-
 $(eval $(call gb_Module_add_targets,libatomic_ops,\
 	ExternalProject_libatomic_ops \
 	UnpackedTarball_libatomic_ops \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,python3))
 
 ifneq ($(DISABLE_PYTHON),TRUE)
-ifeq ($(SYSTEM_PYTHON),)
 
 $(eval $(call gb_Module_add_targets,python3,\
 	UnpackedTarball_python3 \
@@ -18,7 +17,6 @@ $(eval $(call gb_Module_add_targets,python3,\
 	$(if $(filter MACOSX,$(OS)),GeneratedPackage_python3,ExternalPackage_python3) \
 ))
 
-endif
 endif
 
 # vim: set noet sw=4 ts=4:

@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,postgresql))
 
-ifeq ($(SYSTEM_POSTGRESQL),)
-
 $(eval $(call gb_Module_add_targets,postgresql,\
 	ExternalProject_postgresql \
 	UnpackedTarball_postgresql \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
