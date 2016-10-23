@@ -40,7 +40,6 @@ private:
     VclPtr<ScPrivatSplit> aPrivatSplit;
     VclPtr<ListBox>     aCatBox;
     VclPtr<ListBox>     aFuncList;
-    VclPtr<ListBox>     pAllFuncList;
 
     VclPtr<ImageButton> aInsertButton;
     VclPtr<FixedText>   aFiFuncDesc;

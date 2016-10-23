@@ -73,7 +73,6 @@ ScFunctionWin::ScFunctionWin( SfxBindings* pBindingsP, vcl::Window* pParent, con
     aIdle.SetIdleHdl(LINK( this, ScFunctionWin, TimerHdl));
 
     aFiFuncDesc->SetUpdateMode(true);
-    pAllFuncList=aFuncList;
     nArgs=0;
     bSizeFlag=false;
     aCatBox->SetDropDownLineCount(9);
@@ -134,7 +133,6 @@ void ScFunctionWin::dispose()
     aFuncList.disposeAndClear();
     aInsertButton.disposeAndClear();
     aFiFuncDesc.disposeAndClear();
-    pAllFuncList.clear();
     vcl::Window::dispose();
 }
 
@@ -357,13 +355,13 @@ void ScFunctionWin::SetDescription()
 {
     aFiFuncDesc->SetText( EMPTY_OUSTRING );
     const ScFuncDesc* pDesc =
-             static_cast<const ScFuncDesc*>(pAllFuncList->GetEntryData(
-                    pAllFuncList->GetSelectEntryPos() ));
+             static_cast<const ScFuncDesc*>(aFuncList->GetEntryData(
+                    aFuncList->GetSelectEntryPos() ));
     if (pDesc)
     {
         pDesc->initArgumentInfo();      // full argument info is needed
 
-        OUStringBuffer aBuf(pAllFuncList->GetSelectEntry());
+        OUStringBuffer aBuf(aFuncList->GetSelectEntry());
         aBuf.append(":\n\n");
         aBuf.append(pDesc->GetParamList());
         aBuf.append("\n\n");
@@ -422,8 +420,8 @@ void ScFunctionWin::UpdateFunctionList()
     sal_Int32  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
                             ? (nSelPos-1) : 0;
 
-    pAllFuncList->Clear();
-    pAllFuncList->SetUpdateMode( false );
+    aFuncList->Clear();
+    aFuncList->SetUpdateMode( false );
 
     if ( nSelPos > 0 )
     {
@@ -432,8 +430,8 @@ void ScFunctionWin::UpdateFunctionList()
         const ScFuncDesc* pDesc = pFuncMgr->First( nCategory );
         while ( pDesc )
         {
-            pAllFuncList->SetEntryData(
-                pAllFuncList->InsertEntry( *(pDesc->pFuncName) ),
+            aFuncList->SetEntryData(
+                aFuncList->InsertEntry( *(pDesc->pFuncName) ),
                 const_cast<ScFuncDesc *>(pDesc) );
             pDesc = pFuncMgr->Next();
         }
@@ -445,20 +443,20 @@ void ScFunctionWin::UpdateFunctionList()
         {
             const formula::IFunctionDescription* pDesc = *iter;
             if (pDesc)
-                pAllFuncList->SetEntryData( pAllFuncList->InsertEntry( pDesc->getFunctionName()), const_cast<formula::IFunctionDescription *>(pDesc));
+                aFuncList->SetEntryData( aFuncList->InsertEntry( pDesc->getFunctionName()), const_cast<formula::IFunctionDescription *>(pDesc));
         }
     }
 
-    pAllFuncList->SetUpdateMode( true );
+    aFuncList->SetUpdateMode( true );
 
-    if ( pAllFuncList->GetEntryCount() > 0 )
+    if ( aFuncList->GetEntryCount() > 0 )
     {
-        pAllFuncList->Enable();
-        pAllFuncList->SelectEntryPos( 0 );
+        aFuncList->Enable();
+        aFuncList->SelectEntryPos( 0 );
     }
     else
     {
-        pAllFuncList->Disable();
+        aFuncList->Disable();
     }
 }
 
@@ -482,7 +480,7 @@ void ScFunctionWin::DoEnter()
 {
     OUString aFirstArgStr;
     OUString aArgStr;
-    OUString aString=pAllFuncList->GetSelectEntry();
+    OUString aString=aFuncList->GetSelectEntry();
     SfxViewShell* pCurSh = SfxViewShell::Current();
     nArgs=0;
 
@@ -499,13 +497,13 @@ void ScFunctionWin::DoEnter()
             if (OutputDevice::isDisposed())
                 return;
             aString = "=";
-            aString += pAllFuncList->GetSelectEntry();
+            aString += aFuncList->GetSelectEntry();
             if (pHdl)
                 pHdl->ClearText();
         }
         const ScFuncDesc* pDesc =
-             static_cast<const ScFuncDesc*>(pAllFuncList->GetEntryData(
-                    pAllFuncList->GetSelectEntryPos() ));
+             static_cast<const ScFuncDesc*>(aFuncList->GetEntryData(
+                    aFuncList->GetSelectEntryPos() ));
         if (pDesc)
         {
             pFuncDesc=pDesc;
@@ -549,7 +547,7 @@ void ScFunctionWin::DoEnter()
             if (pHdl->GetEditString().isEmpty())
             {
                 aString = "=";
-                aString += pAllFuncList->GetSelectEntry();
+                aString += aFuncList->GetSelectEntry();
             }
             EditView *pEdView=pHdl->GetActiveView();
             if(pEdView!=nullptr) // @ Wegen Absturz bei Namen festlegen
