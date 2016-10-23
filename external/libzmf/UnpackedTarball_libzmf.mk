@@ -23,6 +23,8 @@ endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,libzmf, \
 	external/libzmf/0001-add-missing-include.patch.1 \
+	external/libzmf/0001-allow-build-with-boost-1.56.patch.1 \
+	external/libzmf/0001-allow-build-with-boost-1.56-part-II.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

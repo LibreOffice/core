@@ -1,0 +1,190 @@
+From 11b8d5b0c8c0461ac638aba6bc6e59e7ec5d815c Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Sun, 23 Oct 2016 19:58:35 +0200
+Subject: [PATCH] allow build with boost < 1.56, part II
+
+Change-Id: I4421847b1aa7bbb006a32dd85567b96125df6b6b
+---
+ src/lib/ZMF4Parser.cpp | 42 +++++++++++++++++++++---------------------
+ 1 file changed, 21 insertions(+), 21 deletions(-)
+
+diff --git a/src/lib/ZMF4Parser.cpp b/src/lib/ZMF4Parser.cpp
+index e23c2e5..f3f3f5d 100644
+--- a/src/lib/ZMF4Parser.cpp
++++ b/src/lib/ZMF4Parser.cpp
+@@ -269,7 +269,7 @@ boost::optional<Image> ZMF4Parser::getImageByRefId(uint32_t id)
+ ArrowPtr ZMF4Parser::getArrowByRefId(uint32_t id)
+ {
+   auto arrow = getByRefId<ArrowPtr>(id, m_arrows);
+-  return arrow ? arrow.value() : ArrowPtr();
++  return get_optional_value_or(arrow, ArrowPtr());
+ }
+ 
+ Style ZMF4Parser::readStyle()
+@@ -684,13 +684,13 @@ void ZMF4Parser::readFill()
+ 
+     Color color = readColor();
+ 
+-    m_fills[m_currentObjectHeader.id.value()] = color;
++    m_fills[get(m_currentObjectHeader.id)] = color;
+   }
+   else if (type >= 2 && type <= 7)
+   {
+     Gradient gradient = readGradient(type);
+ 
+-    m_fills[m_currentObjectHeader.id.value()] = gradient;
++    m_fills[get(m_currentObjectHeader.id)] = gradient;
+   }
+   else if (type == 8)
+   {
+@@ -723,13 +723,13 @@ void ZMF4Parser::readFill()
+ 
+     if (!image)
+     {
+-      ZMF_DEBUG_MSG(("image not found for bitmap fill ID0x%x\n", m_currentObjectHeader.id.value()));
++      ZMF_DEBUG_MSG(("image not found for bitmap fill ID0x%x\n", get(m_currentObjectHeader.id)));
+       return;
+     }
+ 
+-    imageFill.image = image.value();
++    imageFill.image = get(image);
+ 
+-    m_fills[m_currentObjectHeader.id.value()] = imageFill;
++    m_fills[get(m_currentObjectHeader.id)] = imageFill;
+   }
+   else
+   {
+@@ -756,7 +756,7 @@ void ZMF4Parser::readTransparency()
+     Transparency transparency;
+     transparency.color = readColor();
+ 
+-    m_transparencies[m_currentObjectHeader.id.value()] = transparency;
++    m_transparencies[get(m_currentObjectHeader.id)] = transparency;
+   }
+ }
+ 
+@@ -874,7 +874,7 @@ void ZMF4Parser::readPen()
+     }
+   }
+ 
+-  m_pens[m_currentObjectHeader.id.value()] = pen;
++  m_pens[get(m_currentObjectHeader.id)] = pen;
+ }
+ 
+ void ZMF4Parser::readShadow()
+@@ -926,7 +926,7 @@ void ZMF4Parser::readShadow()
+     break;
+   }
+ 
+-  m_shadows[m_currentObjectHeader.id.value()] = shadow;
++  m_shadows[get(m_currentObjectHeader.id)] = shadow;
+ }
+ 
+ void ZMF4Parser::readArrow()
+@@ -947,7 +947,7 @@ void ZMF4Parser::readArrow()
+ 
+   arrow->curves = readCurveComponents(std::bind(&ZMF4Parser::readUnscaledPoint, this));
+ 
+-  m_arrows[m_currentObjectHeader.id.value()] = arrow;
++  m_arrows[get(m_currentObjectHeader.id)] = arrow;
+ }
+ 
+ void ZMF4Parser::readBitmap()
+@@ -975,11 +975,11 @@ void ZMF4Parser::readBitmap()
+ 
+     if (image.data.empty())
+     {
+-      ZMF_DEBUG_MSG(("Failed to parse bitmap, ID 0x%x\n", m_currentObjectHeader.id.value()));
++      ZMF_DEBUG_MSG(("Failed to parse bitmap, ID 0x%x\n", get(m_currentObjectHeader.id)));
+     }
+     else
+     {
+-      m_images[m_currentObjectHeader.id.value()] = image;
++      m_images[get(m_currentObjectHeader.id)] = image;
+     }
+ 
+     seek(m_input, m_currentObjectHeader.nextObjectOffset + header.size());
+@@ -1012,7 +1012,7 @@ void ZMF4Parser::readImage()
+   {
+     m_collector.setStyle(readStyle());
+ 
+-    m_collector.collectImage(image.value().data, bbox.topLeft(), bbox.width(), bbox.height(),
++    m_collector.collectImage(get(image).data, bbox.topLeft(), bbox.width(), bbox.height(),
+                              bbox.rotation(), bbox.mirrorHorizontal(), bbox.mirrorVertical());
+   }
+ }
+@@ -1046,7 +1046,7 @@ void ZMF4Parser::readFont()
+   font.fill = style.fill;
+   font.outline = style.pen;
+ 
+-  m_fonts[m_currentObjectHeader.id.value()] = font;
++  m_fonts[get(m_currentObjectHeader.id)] = font;
+ }
+ 
+ void ZMF4Parser::readParagraphStyle()
+@@ -1098,7 +1098,7 @@ void ZMF4Parser::readParagraphStyle()
+     {
+       auto font = getFontByRefId(ref.id);
+       if (font)
+-        parStyle.font = font.value();
++        parStyle.font = get(font);
+     }
+     break;
+     default:
+@@ -1107,7 +1107,7 @@ void ZMF4Parser::readParagraphStyle()
+     }
+   }
+ 
+-  m_paragraphStyles[m_currentObjectHeader.id.value()] = parStyle;
++  m_paragraphStyles[get(m_currentObjectHeader.id)] = parStyle;
+ }
+ 
+ void ZMF4Parser::readText()
+@@ -1140,7 +1140,7 @@ void ZMF4Parser::readText()
+     uint32_t styleId = readU32(m_input);
+     auto style = getParagraphStyleByRefId(styleId);
+     if (style)
+-      paragraph.style = style.value();
++      paragraph.style = get(style);
+ 
+     skip(m_input, 4);
+   }
+@@ -1161,7 +1161,7 @@ void ZMF4Parser::readText()
+       uint32_t fontId = readU32(m_input);
+       auto font = getFontByRefId(fontId);
+       if (font)
+-        span.font = font.value();
++        span.font = get(font);
+       else
+       {
+         span.font = paragraph.style.font;
+@@ -1180,7 +1180,7 @@ void ZMF4Parser::readText()
+     }
+   }
+ 
+-  m_texts[m_currentObjectHeader.id.value()] = text;
++  m_texts[get(m_currentObjectHeader.id)] = text;
+ }
+ 
+ void ZMF4Parser::readTextFrame()
+@@ -1216,7 +1216,7 @@ void ZMF4Parser::readTextFrame()
+ 
+   if (text)
+   {
+-    m_collector.collectTextObject(text.value(), bbox.topLeft(), bbox.width(), bbox.height(), alignment, bbox.rotation());
++    m_collector.collectTextObject(get(text), bbox.topLeft(), bbox.width(), bbox.height(), alignment, bbox.rotation());
+   }
+ }
+ 
+@@ -1350,7 +1350,7 @@ void ZMF4Parser::readTable()
+       auto text = getTextByRefId(textId);
+       if (text)
+       {
+-        cell.text = text.value();
++        cell.text = get(text);
+       }
+ 
+       uint32_t rightPenRefId = readU32(m_input);
+-- 
+2.9.3
+

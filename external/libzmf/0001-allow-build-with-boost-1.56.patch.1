@@ -1,0 +1,131 @@
+From 16d921505a56745f671525310ebb4b3c58b35afe Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Sun, 23 Oct 2016 19:46:18 +0200
+Subject: [PATCH] allow build with boost < 1.56
+
+Change-Id: I81a110fc19e1540980a265c773bd840c47643d86
+---
+ src/lib/ZMFCollector.cpp | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/src/lib/ZMFCollector.cpp b/src/lib/ZMFCollector.cpp
+index 18377ff..0b2608f 100644
+--- a/src/lib/ZMFCollector.cpp
++++ b/src/lib/ZMFCollector.cpp
+@@ -218,7 +218,7 @@ public:
+ 
+     if (m_transparency)
+     {
+-      m_propList.insert("draw:opacity", m_transparency.value().opacity(), librevenge::RVNG_PERCENT);
++      m_propList.insert("draw:opacity", get(m_transparency).opacity(), librevenge::RVNG_PERCENT);
+     }
+   }
+ 
+@@ -251,7 +251,7 @@ public:
+       librevenge::RVNGPropertyList grad;
+       grad.insert("svg:offset", stop.offset, librevenge::RVNG_PERCENT);
+       grad.insert("svg:stop-color", stop.color.toString());
+-      grad.insert("svg:stop-opacity", m_transparency ? m_transparency.value().opacity() : 1.0, librevenge::RVNG_PERCENT);
++      grad.insert("svg:stop-opacity", m_transparency ? get(m_transparency).opacity() : 1.0, librevenge::RVNG_PERCENT);
+       gradientVector.append(grad);
+     }
+ 
+@@ -294,7 +294,7 @@ public:
+ 
+     if (m_transparency)
+     {
+-      m_propList.insert("draw:opacity", m_transparency.value().opacity(), librevenge::RVNG_PERCENT);
++      m_propList.insert("draw:opacity", get(m_transparency).opacity(), librevenge::RVNG_PERCENT);
+     }
+   }
+ 
+@@ -667,9 +667,9 @@ void ZMFCollector::collectText(const Text &text)
+       spanPropList.insert("fo:font-style", span.font.isItalic ? "italic" : "normal");
+       spanPropList.insert("style:text-outline", static_cast<bool>(span.font.outline));
+ 
+-      if (span.font.fill && span.font.fill.value().type() == typeid(Color))
++      if (span.font.fill && get(span.font.fill).type() == typeid(Color))
+       {
+-        auto color = boost::get<Color>(span.font.fill.value());
++        auto color = boost::get<Color>(get(span.font.fill));
+         spanPropList.insert("fo:color", color.toString());
+       }
+ 
+@@ -759,9 +759,9 @@ void ZMFCollector::collectTable(const Table &table)
+     {
+       librevenge::RVNGPropertyList cellPropList;
+ 
+-      if (cell.fill && cell.fill.value().type() == typeid(Color))
++      if (cell.fill && get(cell.fill).type() == typeid(Color))
+       {
+-        auto backgroundColor = boost::get<Color>(cell.fill.value());
++        auto backgroundColor = boost::get<Color>(get(cell.fill));
+         cellPropList.insert("fo:background-color", backgroundColor.toString());
+       }
+ 
+@@ -769,19 +769,19 @@ void ZMFCollector::collectTable(const Table &table)
+ 
+       if (cell.leftBorder)
+       {
+-        writeBorder(cellPropList, "fo:border-left", cell.leftBorder.value());
++        writeBorder(cellPropList, "fo:border-left", get(cell.leftBorder));
+       }
+       if (cell.rightBorder)
+       {
+-        writeBorder(cellPropList, "fo:border-right", cell.rightBorder.value());
++        writeBorder(cellPropList, "fo:border-right", get(cell.rightBorder));
+       }
+       if (cell.topBorder)
+       {
+-        writeBorder(cellPropList, "fo:border-top", cell.topBorder.value());
++        writeBorder(cellPropList, "fo:border-top", get(cell.topBorder));
+       }
+       if (cell.bottomBorder)
+       {
+-        writeBorder(cellPropList, "fo:border-bottom", cell.bottomBorder.value());
++        writeBorder(cellPropList, "fo:border-bottom", get(cell.bottomBorder));
+       }
+ 
+       m_painter->openTableCell(cellPropList);
+@@ -806,7 +806,7 @@ void ZMFCollector::collectImage(const librevenge::RVNGBinaryData &image, const P
+ 
+   if (m_style.transparency)
+   {
+-    propList.insert("draw:opacity", m_style.transparency.value().opacity(), librevenge::RVNG_PERCENT);
++    propList.insert("draw:opacity", get(m_style.transparency).opacity(), librevenge::RVNG_PERCENT);
+   }
+ 
+   m_painter->setStyle(propList);
+@@ -847,17 +847,17 @@ void ZMFCollector::writeStyle(librevenge::RVNGPropertyList &propList, const Styl
+ 
+   if (style.pen)
+   {
+-    writePen(propList, style.pen.value());
++    writePen(propList, get(style.pen));
+   }
+ 
+   if (style.fill && !noFill)
+   {
+-    writeFill(propList, style.fill.value());
++    writeFill(propList, get(style.fill));
+   }
+ 
+   if (style.shadow)
+   {
+-    writeShadow(propList, style.shadow.value());
++    writeShadow(propList, get(style.shadow));
+   }
+ }
+ 
+@@ -920,7 +920,7 @@ void ZMFCollector::writePen(librevenge::RVNGPropertyList &propList, const Pen &p
+ 
+   if (m_style.transparency)
+   {
+-    propList.insert("svg:stroke-opacity", m_style.transparency.value().opacity(), librevenge::RVNG_PERCENT);
++    propList.insert("svg:stroke-opacity", get(m_style.transparency).opacity(), librevenge::RVNG_PERCENT);
+   }
+ 
+   if (pen.startArrow)
+-- 
+2.9.3
+
