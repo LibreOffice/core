@@ -31,7 +31,7 @@
 #include "privsplt.hxx"
 #include "funcdesc.hxx"
 
-class ScFunctionWin : public vcl::Window, public SfxListener
+class ScFunctionWin : public vcl::Window
 {
 
 private:
@@ -81,9 +81,6 @@ public:
 
                     virtual ~ScFunctionWin() override;
     virtual void    dispose() override;
-
-    using ::vcl::Window::Notify;
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     void            InitLRUList();
 };

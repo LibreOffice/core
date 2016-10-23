@@ -90,7 +90,6 @@ ScFunctionWin::ScFunctionWin( SfxBindings* pBindingsP, vcl::Window* pParent, con
 
     Link<ScPrivatSplit&,void> a3Link=LINK( this, ScFunctionWin, SetSplitHdl);
     aPrivatSplit->SetCtrModifiedHdl(a3Link);
-    StartListening( rBindings, true );
 
     Point aTopLeft=aCatBox->GetPosPixel();
     OUString aString("ww");
@@ -127,7 +126,6 @@ ScFunctionWin::~ScFunctionWin()
 
 void ScFunctionWin::dispose()
 {
-    EndListening( rBindings );
     aPrivatSplit.disposeAndClear();
     aCatBox.disposeAndClear();
     aFuncList.disposeAndClear();
@@ -373,23 +371,6 @@ void ScFunctionWin::SetDescription()
         aFiFuncDesc->Update();
 
     }
- }
-
-/*************************************************************************
-#*  Member:     Close
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScFunctionWin
-#*
-#*  Funktion:   Aenderungen erkennen
-#*
-#*  Input:      ---
-#*
-#*  Output:     TRUE
-#*
-#************************************************************************/
-void ScFunctionWin::Notify( SfxBroadcaster&, const SfxHint& /* rHint */ )
-{
 }
 
 /// override to set new size of the controls
