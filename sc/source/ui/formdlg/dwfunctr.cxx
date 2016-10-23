@@ -53,9 +53,8 @@
 #*
 #************************************************************************/
 
-ScFunctionWin::ScFunctionWin( SfxBindings* pBindingsP, vcl::Window* pParent, const ResId& rResId ) :
+ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const ResId& rResId) :
     vcl::Window(pParent, rResId),
-    rBindings   ( *pBindingsP ),
     aIdle       ( "sc formdlg ScFunctionWin" ),
     aPrivatSplit    ( VclPtr<ScPrivatSplit>::Create( this, ResId( FT_SPLIT, *rResId.GetResMgr() ) ) ),
     aCatBox         ( VclPtr<ListBox>::Create( this, ResId( CB_CAT, *rResId.GetResMgr() ) ) ),

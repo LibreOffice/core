@@ -35,7 +35,6 @@ class ScFunctionWin : public vcl::Window
 {
 
 private:
-    SfxBindings&        rBindings;
     Idle                aIdle;
     VclPtr<ScPrivatSplit> aPrivatSplit;
     VclPtr<ListBox>     aCatBox;
@@ -75,9 +74,7 @@ protected:
     virtual void    StateChanged( StateChangedType nStateChange ) override;
 
 public:
-                    ScFunctionWin(  SfxBindings* pBindings,
-                                        vcl::Window* pParent,
-                                        const ResId& rResId );
+                    ScFunctionWin(vcl::Window* pParent, const ResId& rResId);
 
                     virtual ~ScFunctionWin() override;
     virtual void    dispose() override;
