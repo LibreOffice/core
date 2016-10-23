@@ -160,7 +160,7 @@ OColorPopup::~OColorPopup()
 void OColorPopup::dispose()
 {
     disposeBuilder();
-    m_aColorSet.clear();
+    m_aColorSet.disposeAndClear();
     m_pCondition.clear();
     FloatingWindow::dispose();
 }
