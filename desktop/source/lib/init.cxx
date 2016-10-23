@@ -356,7 +356,7 @@ struct RectangleAndPart
     static RectangleAndPart Create(const std::string& rPayload)
     {
         RectangleAndPart aRet;
-        if (rPayload.find("EMPTY") == 0) // payload starts with "EMPTY"
+        if (rPayload.compare("EMPTY") == 0) // payload starts with "EMPTY"
         {
             if (comphelper::LibreOfficeKit::isPartInInvalidation())
                 aRet.m_nPart = std::stol(rPayload.substr(6));
