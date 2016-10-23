@@ -95,7 +95,7 @@ namespace webdav_ucp
 
         /// The cached HTT response status code. It's 0 if the code was dealt with and there is no need to cache it
         sal_uInt16 m_nHttpResponseStatusCode;
-        /// The cached string with the server returned HTTP reponse status code string, corresponds to m_nHttpResponseStatusCode.
+        /// The cached string with the server returned HTTP response status code string, corresponds to m_nHttpResponseStatusCode.
         OUString  m_sHttpResponseStatusText;
 
     public:

@@ -628,7 +628,7 @@ Components::~Components()
 
     if (bExitWasCalled)
     {
-        // do not write, re-join thereads
+        // do not write, re-join threads
         osl::MutexGuard g(*lock_);
 
         if (writeThread_.is())

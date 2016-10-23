@@ -661,7 +661,7 @@ public:
     SvXMLElementExport( SvXMLExport& rExp, const OUString& rQName,
                         bool bIgnWSOutside, bool bIgnWSInside );
 
-    // Thes constructors do nothing if bDoSomething is not set
+    // These constructors do nothing if bDoSomething is not set
     SvXMLElementExport( SvXMLExport& rExp, bool bDoSomething,
                         sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,

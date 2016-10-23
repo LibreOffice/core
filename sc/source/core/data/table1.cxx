@@ -1509,7 +1509,7 @@ void ScTable::UpdateReference(
     SCROW nRow1 = rCxt.maRange.aStart.Row(), nRow2 = rCxt.maRange.aEnd.Row();
     SCTAB nTab1 = rCxt.maRange.aStart.Tab(), nTab2 = rCxt.maRange.aEnd.Tab();
 
-    // Named expressions need to be updated before formulas acessing them.
+    // Named expressions need to be updated before formulas accessing them.
     if (mpRangeName)
         mpRangeName->UpdateReference(rCxt, nTab);
 
