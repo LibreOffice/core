@@ -63,7 +63,6 @@ void RscTypCont::Init()
     RscTop   *  pClassImageList;
     RscTop   *  pClassWindow;
     RscTop   *  pClassControl;
-    RscTop   *  pClassButton;
     RscTop   *  pClassFixedText;
     RscTop   *  pClassKeyCode;
     RscTop   *  pLangClassKeyCode;
@@ -288,13 +287,6 @@ void RscTypCont::Init()
 {
     pClassControl = InitClassControl( pClassWindow );
     pRoot->Insert( pClassControl );
-
-    // initialize class
-    nId = pHS->getID( "Button" );
-    pClassButton = new RscClass( nId, RSC_BUTTON, pClassControl );
-    pClassButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassButton );
-    pRoot->Insert( pClassButton );
 }
 {
     pClassFixedText = InitClassFixedText( pClassControl );

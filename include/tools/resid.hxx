@@ -72,7 +72,6 @@ public:
     [Example]
     ResId aId( 1000 );
     aId.SetRT( RSC_WINDOW );    // settype window Window
-    aId.SetRT( RSC_BUTTON );    // will not set type Button
     //aId.GetRT() == RSC_WINDOW is true
 
     @see

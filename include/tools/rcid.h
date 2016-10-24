@@ -46,7 +46,6 @@
 #define RSC_WINDOW              (RSC_NOTYPE + 0x35)
 
 #define RSC_CONTROL             (RSC_NOTYPE + 0x44)
-#define RSC_BUTTON              (RSC_NOTYPE + 0x45)
 
 #define RSC_TEXT                (RSC_NOTYPE + 0x57)
 
