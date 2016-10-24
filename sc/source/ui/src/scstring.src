@@ -949,4 +949,9 @@ String SCSTR_UNDO_CELL_ANCHOR
     Text [ en-US ] = "Cell Anchor" ;
 };
 
+String SCSTR_CONDITION
+{
+    Text [ en-US ] = "Condition ";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

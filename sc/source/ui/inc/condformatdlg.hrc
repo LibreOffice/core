@@ -27,7 +27,6 @@
 
 #define WD_PREVIEW 26
 #define BTN_OPTIONS 30
-#define STR_CONDITION 31
 
 #define FT_RANGE 32
 #define ED_RANGE 33

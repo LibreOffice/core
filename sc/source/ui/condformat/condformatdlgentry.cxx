@@ -42,7 +42,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const S
     maFtCondNr( VclPtr<FixedText>::Create( this, ScResId( FT_COND_NR ) ) ),
     maFtCondition( VclPtr<FixedText>::Create( this, ScResId( FT_CONDITION ) ) ),
     mnIndex(0),
-    maStrCondition(ScResId( STR_CONDITION ).toString()),
+    maStrCondition(ScResId(SCSTR_CONDITION).toString()),
     maLbType( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE ) ) ),
     mpDoc(pDoc),
     maPos(rPos)

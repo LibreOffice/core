@@ -902,7 +902,7 @@
 #define SCSTR_FORMULA_AUTOCORRECTION    (STR_START + 214)
 
 #define SCSTR_RENAMEOBJECT              (STR_START + 215)
-//free slot
+#define SCSTR_CONDITION                 (STR_START + 216)
 #define SCSTR_WARN_ME_IN_FUTURE_CHECK   (STR_START + 217)
 
 // header of search result dialog
