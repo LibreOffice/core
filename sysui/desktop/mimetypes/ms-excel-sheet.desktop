@@ -22,6 +22,5 @@ Hidden=false
 Icon=
 Type=MimeType
 Patterns=*.xls
-Patterns=*.et
 MimeType=application/vnd.ms-excel
 Comment=Microsoft Excel Worksheet
