@@ -264,6 +264,12 @@ public:
     GenericPopupToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                    const css::uno::Sequence< css::uno::Any >& rxArgs );
 
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rxArgs ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException) override;
 
@@ -314,6 +320,46 @@ css::uno::Sequence<OUString> GenericPopupToolbarController::getSupportedServiceN
     throw (css::uno::RuntimeException)
 {
     return {"com.sun.star.frame.ToolbarController"};
+}
+
+void GenericPopupToolbarController::initialize( const css::uno::Sequence< css::uno::Any >& rxArgs )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
+{
+    PopupMenuToolbarController::initialize( rxArgs );
+    if ( m_bReplaceWithLast )
+        // Create early, so we can use the menu is statusChanged method.
+        createPopupMenuController();
+}
+
+void GenericPopupToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+    throw ( css::uno::RuntimeException, std::exception )
+{
+    SolarMutexGuard aGuard;
+
+    if ( m_bReplaceWithLast && !rEvent.IsEnabled && m_xPopupMenu.is() )
+    {
+        Menu* pVclMenu = VCLXMenu::GetImplementation( m_xPopupMenu )->GetMenu();
+
+        ToolBox* pToolBox = nullptr;
+        sal_uInt16 nId = 0;
+        if ( getToolboxId( nId, &pToolBox ) && pToolBox->IsItemEnabled( nId ) )
+        {
+            pVclMenu->Activate();
+            pVclMenu->Deactivate();
+        }
+
+        for ( sal_uInt16 i = 0; i < pVclMenu->GetItemCount(); ++i )
+        {
+            sal_uInt16 nItemId = pVclMenu->GetItemId( i );
+            if ( nItemId && pVclMenu->IsItemEnabled( nItemId ) && !pVclMenu->GetPopupMenu( nItemId ) )
+            {
+                functionExecuted( pVclMenu->GetItemCommand( nItemId ) );
+                return;
+            }
+        }
+    }
+
+    PopupMenuToolbarController::statusChanged( rEvent );
 }
 
 void GenericPopupToolbarController::functionExecuted( const OUString& rCommand )
