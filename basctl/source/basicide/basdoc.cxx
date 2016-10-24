@@ -17,18 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/objface.hxx>
+//#include <sfx2/app.hxx>
+//#include <sfx2/printer.hxx>
+//#include <sfx2/objface.hxx>
+
+#include "app.hxx"
+#include "printer.hxx"
+#include "objface.hxx"
 
 #include "unomodel.hxx"
 
 #include <basdoc.hxx>
 #define basctl_DocShell     // This CANNOT come before basdoc apparently
 #include <basslots.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
-#include <svx/svxids.hrc>
-#include <tools/globname.hxx>
+//#include <sfx2/sfxmodelfactory.hxx>
+//#include <svx/svxids.hrc>
+//#include <tools/globname.hxx>
+
+ #include "sfxmodelfactory.hxx"
+#include "svxids.hrc"
+#include "globname.hxx"
 
 namespace basctl
 {
