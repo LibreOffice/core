@@ -153,7 +153,6 @@ class SVT_DLLPUBLIC ColorListBox : public ListBox
 public:
                     ColorListBox( vcl::Window* pParent,
                                   WinBits nWinStyle = WB_BORDER );
-                    ColorListBox( vcl::Window* pParent, const ResId& rResId );
     virtual         ~ColorListBox() override;
     virtual void    dispose() override;
 

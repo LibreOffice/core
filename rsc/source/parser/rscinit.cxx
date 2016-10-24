@@ -66,7 +66,6 @@ void RscTypCont::Init()
     RscTop   *  pClassButton;
     RscTop   *  pClassPushButton;
     RscTop   *  pClassEdit;
-    RscTop   *  pClassListBox;
     RscTop   *  pClassFixedText;
     RscTop   *  pClassKeyCode;
     RscTop   *  pLangClassKeyCode;
@@ -308,9 +307,6 @@ void RscTypCont::Init()
     pRoot->Insert( pClassEdit );
 }
 {
-    pClassListBox = InitClassListBox( pClassControl, pLangStringLongTupelList );
-    pRoot->Insert( pClassListBox );
-
     pClassFixedText = InitClassFixedText( pClassControl );
     pRoot->Insert( pClassFixedText );
 

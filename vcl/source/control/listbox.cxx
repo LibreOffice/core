@@ -56,19 +56,6 @@ ListBox::ListBox( vcl::Window* pParent, WinBits nStyle ) : Control( WINDOW_LISTB
     ImplInit( pParent, nStyle );
 }
 
-ListBox::ListBox( vcl::Window* pParent, const ResId& rResId ) :
-    Control( WINDOW_LISTBOX )
-{
-    rResId.SetRT( RSC_LISTBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInitListBoxData();
-    ImplInit( pParent, nStyle );
-    ImplLoadRes();
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
-}
-
 ListBox::~ListBox()
 {
     disposeOnce();

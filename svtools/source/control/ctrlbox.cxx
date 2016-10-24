@@ -93,13 +93,6 @@ ColorListBox::ColorListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     SetEdgeBlending(true);
 }
 
-ColorListBox::ColorListBox( vcl::Window* pParent, const ResId& rResId ) :
-    ListBox( pParent, rResId )
-{
-    ImplInit();
-    SetEdgeBlending(true);
-}
-
 VCL_BUILDER_DECL_FACTORY(ColorListBox)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);

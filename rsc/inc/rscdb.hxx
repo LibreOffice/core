@@ -177,7 +177,6 @@ class RscTypCont
     RscTop *    InitClassControl( RscTop * pSuper );
     RscTop *    InitClassPushButton( RscTop * pSuper );
     RscTop *    InitClassEdit( RscTop * pSuper );
-    RscTop *    InitClassListBox( RscTop * pSuper, RscArray * pStrLst );
     RscTop *    InitClassFixedText( RscTop * pSuper );
     RscTop *    InitClassKeyCode( RscTop * pSuper, RscEnum * pKey );
     RscTop *    InitClassMenuItem( RscTop * pSuper );

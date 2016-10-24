@@ -304,37 +304,6 @@ RscTop * RscTypCont::InitClassEdit( RscTop * pSuper )
     return pClassEdit;
 }
 
-RscTop * RscTypCont::InitClassListBox( RscTop * pSuper, RscArray * pStrLst )
-{
-    Atom        nId;
-    RscTop *    pClassListBox;
-
-    // initialize class
-    nId = pHS->getID( "ListBox" );
-    pClassListBox = new RscClass( nId, RSC_LISTBOX, pSuper );
-    pClassListBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassListBox );
-
-    // initialize variables
-    INS_WINBIT(pClassListBox,Sort)
-    INS_WINBIT(pClassListBox,DropDown)
-    INS_WINBIT(pClassListBox,HScroll);
-    INS_WINBIT(pClassListBox,VScroll);
-    INS_WINBIT(pClassListBox,AutoSize)
-    INS_WINBIT(pClassListBox,AutoHScroll)
-
-    {
-        RSCINST aDflt = aUShort.Create( nullptr, RSCINST() );
-        aDflt.pClass->SetNumber( aDflt, (sal_uInt16)0xFFFF );
-        nId = aNmTb.Put( "CurPos", VARNAME );
-        pClassListBox->SetVariable( nId, &aUShort, &aDflt );
-    }
-    nId = aNmTb.Put( "StringList", VARNAME );
-    pClassListBox->SetVariable( nId, pStrLst );
-
-    return pClassListBox;
-}
-
 RscTop * RscTypCont::InitClassFixedText( RscTop * pSuper )
 {
     Atom        nId;

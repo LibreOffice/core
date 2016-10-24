@@ -117,7 +117,6 @@ protected:
 
 public:
     explicit            ListBox( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
-    explicit            ListBox( vcl::Window* pParent, const ResId& );
     virtual             ~ListBox() override;
     virtual void        dispose() override;
 
