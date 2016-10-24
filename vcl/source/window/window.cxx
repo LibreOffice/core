@@ -98,18 +98,6 @@ Window::Window( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle, nullptr );
 }
 
-Window::Window( vcl::Window* pParent, const ResId& rResId ) :
-    Window(WINDOW_WINDOW)
-{
-    rResId.SetRT( RSC_WINDOW );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle, nullptr );
-    ImplLoadRes();
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 #if OSL_DEBUG_LEVEL > 0
 namespace
 {

@@ -45,7 +45,6 @@ private:
     SVX_DLLPRIVATE static void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
 
 public:
-                        SvxFontPrevWindow(vcl::Window* pParent, const ResId& rId);
                         SvxFontPrevWindow(vcl::Window* pParent, WinBits nStyle);
     virtual             ~SvxFontPrevWindow() override;
     virtual void        dispose() override;

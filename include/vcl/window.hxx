@@ -790,7 +790,6 @@ public:
     // Single argument ctors shall be explicit.
     explicit                            Window( vcl::Window* pParent, WinBits nStyle = 0 );
 
-                                        Window( vcl::Window* pParent, const ResId& rResId );
     virtual                             ~Window() override;
 
     ::OutputDevice const*               GetOutDev() const;

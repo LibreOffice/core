@@ -503,14 +503,6 @@ void SvxFontPrevWindow::Init()
     SetBorderStyle(WindowBorderStyle::MONO);
 }
 
-SvxFontPrevWindow::SvxFontPrevWindow(vcl::Window* pParent, const ResId& rId)
-    : Window(pParent, rId)
-    , mbResetForeground(true)
-    , mbResetBackground(true)
-{
-    Init();
-}
-
 SvxFontPrevWindow::SvxFontPrevWindow(vcl::Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
     , mbResetForeground(true)
