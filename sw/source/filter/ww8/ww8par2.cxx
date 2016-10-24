@@ -3380,6 +3380,13 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem)
             }
         }
     }
+    // if first paragraph in table has break-before-page, transfer that setting to the table itself.
+    else if( StyleExists(m_nAktColl) )
+    {
+        const SwFormat* pStyleFormat = m_vColl[m_nAktColl].m_pFormat;
+        if( pStyleFormat && pStyleFormat->GetBreak().GetBreak() == SVX_BREAK_PAGE_BEFORE )
+            NewAttr( pStyleFormat->GetBreak() );
+    }
 
     m_pTableDesc = new WW8TabDesc( this, nStartCp );
 
