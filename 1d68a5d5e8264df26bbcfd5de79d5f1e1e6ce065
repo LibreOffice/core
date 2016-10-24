@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_33b9b4ea",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2503,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-24T18:02:48Z",
+      "side": 1,
+      "message": "Just nitpicks, I\u0027ll adapt this myself in an amended commit:\n\nInstead of obtaining the locale from ScGlobal::GetpLocaleData(), obtain it from the SvtSysLocale* ScGlobal::pSysLocale. This because SvtSysLocale is actually the determining instance on which the used LocaleData just depends.\n\nInstead of aLnge (an object instance) use nLang (numeric variable). Yes we do use eLnge throughout the code, that\u0027s likely because at the beginning someone thought the language ID would be an enum, which it is not.",
+      "revId": "1d68a5d5e8264df26bbcfd5de79d5f1e1e6ce065",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
