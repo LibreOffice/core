@@ -226,7 +226,9 @@ public:
 
     ScDocument&     GetDocument()   { return aDocument; }
     ScDocFunc&      GetDocFunc()    { return *pDocFunc; }
+#if ENABLE_TELEPATHY
     void            SetDocFunc( ScDocFunc *pDF ) { pDocFunc = pDF; }
+#endif
 
     SfxPrinter*     GetPrinter( bool bCreateIfNotExist = true );
     sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL );
