@@ -11,6 +11,7 @@
 
 #include <memory>
 
+#include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
@@ -142,6 +143,40 @@ bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStre
     if (!aDocument.Write(*pOutStream))
     {
         SAL_WARN("xmlsecurity.helper", "failed to write signed data");
+        return false;
+    }
+
+    return true;
+}
+
+bool PDFSignatureHelper::RemoveSignature(const uno::Reference<io::XInputStream>& xInputStream, sal_uInt16 nPosition)
+{
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    xmlsecurity::pdfio::PDFDocument aDocument;
+    if (!aDocument.Read(*pStream))
+    {
+        SAL_WARN("xmlsecurity.helper", "failed to read the document");
+        return false;
+    }
+
+    if (!aDocument.RemoveSignature(nPosition))
+    {
+        SAL_WARN("xmlsecurity.helper", "failed to remove signature");
+        return false;
+    }
+
+    uno::Reference<io::XStream> xStream(xInputStream, uno::UNO_QUERY);
+    uno::Reference<io::XTruncate> xTruncate(xStream, uno::UNO_QUERY);
+    if (!xTruncate.is())
+    {
+        SAL_WARN("xmlsecurity.helper", "failed to truncate");
+        return false;
+    }
+    xTruncate->truncate();
+    std::unique_ptr<SvStream> pOutStream(utl::UcbStreamHelper::CreateStream(xStream, true));
+    if (!aDocument.Write(*pOutStream))
+    {
+        SAL_WARN("xmlsecurity.helper", "failed to write without signature");
         return false;
     }
 
