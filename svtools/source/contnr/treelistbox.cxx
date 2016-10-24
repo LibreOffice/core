@@ -363,37 +363,6 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     SetSublistOpenWithLeftRight();
 }
 
-SvTreeListBox::SvTreeListBox(vcl::Window* pParent, const ResId& rResId) :
-    Control(pParent, rResId),
-    DropTargetHelper(this),
-    DragSourceHelper(this),
-    mpImpl(new SvTreeListBoxImpl(*this)),
-    mbContextBmpExpanded(false),
-    mbAlternatingRowColors(false),
-    mbUpdateAlternatingRows(false),
-    eSelMode(SelectionMode::NONE),
-    nMinWidthInChars(0),
-    mbCenterAndClipText(false)
-{
-    pTargetEntry = nullptr;
-    nImpFlags = SvTreeListBoxFlags::NONE;
-    nDragOptions = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
-    nDragDropMode = DragDropMode::NONE;
-    SvTreeList* pTempModel = new SvTreeList;
-    pTempModel->SetRefCount( 0 );
-    SetBaseModel(pTempModel);
-    pModel->InsertView( this );
-    pHdlEntry = nullptr;
-    pEdCtrl = nullptr;
-    pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
-    SetType(WINDOW_TREELISTBOX);
-
-    InitTreeView();
-    Resize();
-
-    SetSublistOpenWithLeftRight();
-}
-
 VCL_BUILDER_DECL_FACTORY(SvTreeListBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
