@@ -61,7 +61,7 @@ XSecController::XSecController( const cssu::Reference<cssu::XComponentContext>& 
     , m_bIsSAXEventKeeperConnected(false)
     , m_bIsCollectingElement(false)
     , m_bIsBlocking(false)
-    , m_nStatusOfSecurityComponents(UNINITIALIZED)
+    , m_eStatusOfSecurityComponents(InitializationState::UNINITIALIZED)
     , m_bIsSAXEventKeeperSticky(false)
     , m_pErrorMessage(nullptr)
     , m_nReservedSignatureId(0)
@@ -129,7 +129,7 @@ void XSecController::createXSecComponent( )
     /*
      * marks all security components are not available.
      */
-    m_nStatusOfSecurityComponents = FAILTOINITIALIZED;
+    m_eStatusOfSecurityComponents = InitializationState::FAILTOINITIALIZED;
     m_xXMLSignature = nullptr;
     m_xXMLDocumentWrapper = nullptr;
     m_xSAXEventKeeper = nullptr;
@@ -183,7 +183,7 @@ void XSecController::createXSecComponent( )
         xSAXEventKeeperStatusChangeBroadcaster
             ->addSAXEventKeeperStatusChangeListener( xStatusChangeListener );
 
-        m_nStatusOfSecurityComponents = INITIALIZED;
+        m_eStatusOfSecurityComponents = InitializationState::INITIALIZED;
     }
 }
 
@@ -228,12 +228,12 @@ bool XSecController::chainOn( bool bRetrievingLastEvent )
 
     if (!m_bIsSAXEventKeeperSticky && !m_bIsSAXEventKeeperConnected)
     {
-        if ( m_nStatusOfSecurityComponents == UNINITIALIZED )
+        if ( m_eStatusOfSecurityComponents == InitializationState::UNINITIALIZED )
         {
             createXSecComponent();
         }
 
-        if ( m_nStatusOfSecurityComponents == INITIALIZED )
+        if ( m_eStatusOfSecurityComponents == InitializationState::INITIALIZED )
         /*
          * if all security components are ready, chains on the SAXEventKeeper
          */
@@ -455,7 +455,7 @@ void XSecController::startMission(
 {
     m_xUriBinding = xUriBinding;
 
-    m_nStatusOfSecurityComponents = UNINITIALIZED;
+    m_eStatusOfSecurityComponents = InitializationState::UNINITIALIZED;
     m_xSecurityContext = xSecurityContext;
     m_pErrorMessage = nullptr;
 
@@ -534,7 +534,7 @@ void XSecController::endMission()
 
     for (int i=0; i<size; ++i)
     {
-        if ( m_nStatusOfSecurityComponents == INITIALIZED )
+        if ( m_eStatusOfSecurityComponents == InitializationState::INITIALIZED )
         /*
          * ResolvedListener only exist when the security components are created.
          */

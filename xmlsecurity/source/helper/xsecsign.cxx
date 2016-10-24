@@ -313,7 +313,7 @@ bool XSecController::WriteSignature(
      */
     chainOn(true);
 
-    if ( m_nStatusOfSecurityComponents == INITIALIZED )
+    if ( m_eStatusOfSecurityComponents == InitializationState::INITIALIZED )
     /*
      * if all security components are ready, add the signature
      * stream.
@@ -383,7 +383,7 @@ bool XSecController::WriteOOXMLSignature(const uno::Reference<embed::XStorage>& 
     // Chain the SAXEventKeeper to the SAX chain.
     chainOn(/*bRetrievingLastEvent=*/true);
 
-    if (m_nStatusOfSecurityComponents == INITIALIZED)
+    if (m_eStatusOfSecurityComponents == InitializationState::INITIALIZED)
     {
         m_bIsSAXEventKeeperSticky = true;
         m_xSAXEventKeeper->setNextHandler(xDocumentHandler);

@@ -46,7 +46,7 @@ namespace cssxs = com::sun::star::xml::sax;
 cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepareSignatureToRead(
     sal_Int32 nSecurityId)
 {
-    if ( m_nStatusOfSecurityComponents != INITIALIZED )
+    if ( m_eStatusOfSecurityComponents != InitializationState::INITIALIZED )
     {
         return nullptr;
     }
@@ -329,7 +329,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
 {
     /* SAL_WARN_IF( !m_xSAXEventKeeper.is(), "xmlsecurity", "the SAXEventKeeper is NULL" ); */
 
-    if ( m_nStatusOfSecurityComponents == INITIALIZED )
+    if ( m_eStatusOfSecurityComponents == InitializationState::INITIALIZED )
     /*
      * if all security components are ready, verify the signature.
      */

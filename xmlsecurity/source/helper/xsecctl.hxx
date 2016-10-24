@@ -113,13 +113,6 @@
 #define ALGO_XMLDSIGSHA256 "http://www.w3.org/2001/04/xmlenc#sha256"
 #define ALGO_RELATIONSHIP "http://schemas.openxmlformats.org/package/2006/RelationshipTransform"
 
-/*
- * status of security related components
- */
-#define UNINITIALIZED     0
-#define INITIALIZED       1
-#define FAILTOINITIALIZED 2
-
 class XSecParser;
 
 class InternalSignatureInformation
@@ -292,7 +285,11 @@ private:
      * a flag representing the current status of security related
      * components.
      */
-    sal_Int32 m_nStatusOfSecurityComponents;
+
+    /*
+     * status of security related components
+     */
+    enum class InitializationState { UNINITIALIZED, INITIALIZED, FAILTOINITIALIZED } m_eStatusOfSecurityComponents;
 
     /*
      * a flag representing whether the SAXEventKeeper need to be
