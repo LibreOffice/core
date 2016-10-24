@@ -92,8 +92,11 @@ namespace
 class ControlDataEntry
 {
 public:
-    ControlDataEntry(const basegfx::B2IRange& rB2IRange)
-        : maB2IRange(rB2IRange)
+    ControlDataEntry(
+        const vcl::Window& rControl,
+        const basegfx::B2IRange& rB2IRange)
+        : mrControl(rControl),
+        maB2IRange(rB2IRange)
     {
     }
 
@@ -102,9 +105,15 @@ public:
         return maB2IRange;
     }
 
+    const vcl::Window& getControl() const
+    {
+        return mrControl;
+    }
+
     const OString GetHelpId() const { return mrControl.GetHelpId(); }
 
 private:
+    const vcl::Window&  mrControl;
     basegfx::B2IRange   maB2IRange;
 };
 
@@ -275,7 +284,7 @@ void ScreenshotAnnotationDlg_Impl::CollectChildren(
 
         if (!aCurrentRange.isEmpty())
         {
-            rControlDataCollection.push_back(ControlDataEntry(aCurrentRange));
+            rControlDataCollection.push_back(ControlDataEntry(rCurrent, aCurrentRange));
         }
 
         for (sal_uInt16 a(0); a < rCurrent.GetChildCount(); a++)
