@@ -13,4 +13,9 @@ $(eval $(call gb_PythonTest_add_modules,solenv_python,$(SRCDIR)/solenv/qa/python
 	gbuildtoide \
 ))
 
+# force gbuildtoide.py to use the same make binary as is used here
+$(eval $(call gb_PythonTest_set_defs,solenv_python,\
+    MAKE="$(MAKE)" \
+))
+
 # vim: set noet sw=4 ts=4:

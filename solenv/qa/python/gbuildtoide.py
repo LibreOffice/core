@@ -18,13 +18,18 @@ import tempfile
 class CheckGbuildToIde(unittest.TestCase):
     def setUp(self):
         self.tempwork = tempfile.mkdtemp()
+        if os.environ['OS'] == 'WNT':
+            self.tempworkmixed = self.tempwork.replace('\\','/')
+        else:
+            self.tempworkmixed = self.tempwork
 
     def tearDown(self):
         subprocess.check_call(['rm', '-rf', self.tempwork])
 
     def test_gbuildtoide(self):
         os.chdir(os.path.join(os.environ['SRCDIR'], 'solenv', 'qa', 'python', 'selftest'))
-        subprocess.check_call(['make', 'gbuildtoide', 'WORKDIR=%s' % self.tempwork])
+        make = os.environ['MAKE']
+        subprocess.check_call([make, 'gbuildtoide', 'WORKDIR=%s' % self.tempworkmixed])
         jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToIde', 'Library'))
         gbuildlibs = []
         for jsonfilename in jsonfiles:
