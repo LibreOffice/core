@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_53c47091",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-24T12:49:23Z",
+      "side": 1,
+      "message": "Nitpick: please follow our style to place the opening brace on the next line. Here and in all cases below.",
+      "range": {
+        "startLine": 125,
+        "startChar": 22,
+        "endLine": 125,
+        "endChar": 23
+      },
+      "revId": "b967c2296064dfdcf2840e9694d634d5fab89aea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_b3bb040e",
+        "filename": "formula/source/ui/dlg/funcpage.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-24T12:49:23Z",
+      "side": 1,
+      "message": "Nitpick: please align with the other members.",
+      "revId": "b967c2296064dfdcf2840e9694d634d5fab89aea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
