@@ -55,8 +55,6 @@
 
 #define RSC_TEXT                (RSC_NOTYPE + 0x57)
 
-#define RSC_FIXEDIMAGE          (RSC_NOTYPE + 0x5a)
-
 #define RSC_STRINGARRAY         (RSC_NOTYPE + 0x79)
 
 // (RSC_NOTYPE + 0x200) - (RSC_NOTYPE + 0x300) reserved for Sfx

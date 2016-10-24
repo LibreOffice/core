@@ -360,24 +360,6 @@ RscTop * RscTypCont::InitClassFixedText( RscTop * pSuper )
     return pClassFixedText;
 }
 
-RscTop * RscTypCont::InitClassFixedImage( RscTop * pSuper, RscTop * pClassImage )
-{
-    Atom        nId;
-    RscTop *    pClassFixedImage;
-
-    // initialize class
-    nId = pHS->getID( "FixedImage" );
-    pClassFixedImage = new RscClass( nId, RSC_FIXEDIMAGE, pSuper );
-    pClassFixedImage->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassFixedImage );
-
-    // initialize variables
-    nId = aNmTb.Put( "Fixed", VARNAME );
-    pClassFixedImage->SetVariable( nId, pClassImage, nullptr, 0, RSC_FIXEDIMAGE_IMAGE );
-
-    return pClassFixedImage;
-}
-
 RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
 {
     Atom        nId;

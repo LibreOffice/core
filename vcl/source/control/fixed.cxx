@@ -841,35 +841,10 @@ WinBits FixedImage::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-void FixedImage::ImplLoadRes( const ResId& rResId )
-{
-    Control::ImplLoadRes();
-
-    sal_uLong nObjMask = ReadLongRes();
-
-    if ( RSC_FIXEDIMAGE_IMAGE & nObjMask )
-    {
-        maImage = Image( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *rResId.GetResMgr() ) );
-        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
-    }
-}
-
 FixedImage::FixedImage( vcl::Window* pParent, WinBits nStyle ) :
     Control( WINDOW_FIXEDIMAGE )
 {
     ImplInit( pParent, nStyle );
-}
-
-FixedImage::FixedImage( vcl::Window* pParent, const ResId& rResId ) :
-    Control( WINDOW_FIXEDIMAGE )
-{
-    rResId.SetRT( RSC_FIXEDIMAGE );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
 }
 
 void FixedImage::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,

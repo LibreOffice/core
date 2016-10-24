@@ -48,9 +48,6 @@ namespace o3tl {
     template<> struct typed_flags<RscWindowFlags> : is_typed_flags<RscWindowFlags, 0x37F> {};
 }
 
-// For "FixedImage" resource:
-#define RSC_FIXEDIMAGE_IMAGE            0x0001
-
 // For all menu resources:
 enum class RscMenu {
     Items                  = 0x01,

@@ -161,11 +161,8 @@ private:
 protected:
     SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                               const Point& rPos, const Size& rSize );
-    SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
-
 public:
     explicit        FixedImage( vcl::Window* pParent, WinBits nStyle = 0 );
-    explicit        FixedImage( vcl::Window* pParent, const ResId& );
 
     virtual void    ApplySettings(vcl::RenderContext&) override;
 
