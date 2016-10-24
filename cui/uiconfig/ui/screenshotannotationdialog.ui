@@ -40,6 +40,8 @@
                 <property name="name">save</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
               </object>
               <packing>
