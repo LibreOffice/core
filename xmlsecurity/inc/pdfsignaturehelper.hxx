@@ -46,6 +46,8 @@ public:
     void SetDescription(const OUString& rDescription);
     /// Append a new signature at the end of xInputStream.
     bool Sign(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+    /// Remove the signature at nPosition (and all dependent signatures) from xInputStream.
+    bool RemoveSignature(const css::uno::Reference<css::io::XInputStream>& xInputStream, sal_uInt16 nPosition);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_PDFSIGNATUREHELPER_HXX

@@ -313,6 +313,21 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
 
 void DocumentSignatureManager::remove(sal_uInt16 nPosition)
 {
+    if (!mxStore.is())
+    {
+        // Something not ZIP based, try PDF.
+        uno::Reference<io::XInputStream> xInputStream(mxSignatureStream, uno::UNO_QUERY);
+        if (!getPDFSignatureHelper().RemoveSignature(xInputStream, nPosition))
+        {
+            SAL_WARN("xmlsecurity.helper", "PDFSignatureHelper::RemoveSignature() failed");
+            return;
+        }
+
+        // Only erase when the removal was successfull, it may fail for PDF.
+        maCurrentSignatureInformations.erase(maCurrentSignatureInformations.begin() + nPosition);
+        return;
+    }
+
     maCurrentSignatureInformations.erase(maCurrentSignatureInformations.begin() + nPosition);
 
     // Export all other signatures...
