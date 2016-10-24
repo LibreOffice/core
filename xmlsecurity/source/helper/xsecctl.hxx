@@ -114,7 +114,6 @@
 #define ALGO_RELATIONSHIP "http://schemas.openxmlformats.org/package/2006/RelationshipTransform"
 
 #define CHAR_FRAGMENT           "#"
-#define CHAR_BLANK          " "
 
 
 /*

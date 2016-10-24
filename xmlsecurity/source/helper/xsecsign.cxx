@@ -196,10 +196,10 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     for(i=0; i<size; ++i)
     {
         SignatureReferenceInformation& refInfor = vReferenceInfors[i];
-        refInfor.ouDigestValue = CHAR_BLANK;
+        refInfor.ouDigestValue = " ";
     }
 
-    internalSignatureInfor.signatureInfor.ouSignatureValue = CHAR_BLANK;
+    internalSignatureInfor.signatureInfor.ouSignatureValue = " ";
 
     return xReferenceResolvedListener;
 }
