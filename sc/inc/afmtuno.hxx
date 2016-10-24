@@ -118,8 +118,7 @@ class ScAutoFormatObj : public ::cppu::WeakImplHelper<
                             css::container::XNamed,
                             css::beans::XPropertySet,
                             css::lang::XUnoTunnel,
-                            css::lang::XServiceInfo >,
-                        public SfxListener
+                            css::lang::XServiceInfo >
 {
 private:
     SfxItemPropertySet      aPropSet;
@@ -130,8 +129,6 @@ private:
 public:
                             ScAutoFormatObj(sal_uInt16 nIndex);
     virtual                 ~ScAutoFormatObj() override;
-
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // per getImplementation gerufen:
     bool                    IsInserted() const      { return nFormatIndex != SC_AFMTOBJ_INVALID; }
@@ -219,19 +216,16 @@ public:
 
 class ScAutoFormatFieldObj : public ::cppu::WeakImplHelper<
                                 css::beans::XPropertySet,
-                                css::lang::XServiceInfo >,
-                            public SfxListener
+                                css::lang::XServiceInfo >
 {
 private:
     SfxItemPropertySet      aPropSet;
-    sal_uInt16                  nFormatIndex;
-    sal_uInt16                  nFieldIndex;
+    sal_uInt16              nFormatIndex;
+    sal_uInt16              nFieldIndex;
 
 public:
                             ScAutoFormatFieldObj(sal_uInt16 nFormat, sal_uInt16 nField);
     virtual                 ~ScAutoFormatFieldObj() override;
-
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >

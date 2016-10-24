@@ -62,7 +62,6 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawin
                                                css::lang::XServiceInfo,
                                                css::lang::XUnoTunnel,
                                                css::lang::XComponent>,
-                    public SfxListener,
                     protected SvxMutexHelper
 {
  protected:
@@ -104,9 +103,6 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawin
         throw (css::uno::RuntimeException, std::exception);
 
     UNO3_GETIMPLEMENTATION_DECL( SvxDrawPage )
-
-    // SfxListener
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // XInterface
     virtual void SAL_CALL release() throw() override;

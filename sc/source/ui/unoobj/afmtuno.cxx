@@ -366,7 +366,6 @@ ScAutoFormatObj::ScAutoFormatObj(sal_uInt16 nIndex) :
     aPropSet( lcl_GetAutoFormatMap() ),
     nFormatIndex( nIndex )
 {
-    //! Listening !!!
 }
 
 ScAutoFormatObj::~ScAutoFormatObj()
@@ -388,7 +387,6 @@ void ScAutoFormatObj::InitFormat( sal_uInt16 nNewIndex )
 {
     OSL_ENSURE( nFormatIndex == SC_AFMTOBJ_INVALID, "ScAutoFormatObj::InitFormat mehrfach" );
     nFormatIndex = nNewIndex;
-    //! Listening !!!
 }
 
 // XUnoTunnel
@@ -422,11 +420,6 @@ ScAutoFormatObj* ScAutoFormatObj::getImplementation(const uno::Reference<uno::XI
     if (xUT.is())
         pRet = reinterpret_cast<ScAutoFormatObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
-}
-
-void ScAutoFormatObj::Notify( SfxBroadcaster& /* rBC */, const SfxHint& /* rHint */ )
-{
-    //  spaeter...
 }
 
 // XTableAutoFormat
@@ -627,16 +620,10 @@ ScAutoFormatFieldObj::ScAutoFormatFieldObj(sal_uInt16 nFormat, sal_uInt16 nField
     nFormatIndex( nFormat ),
     nFieldIndex( nField )
 {
-    //! Listening !!!
 }
 
 ScAutoFormatFieldObj::~ScAutoFormatFieldObj()
 {
-}
-
-void ScAutoFormatFieldObj::Notify( SfxBroadcaster& /* rBC */, const SfxHint& /* rHint */ )
-{
-    //  spaeter...
 }
 
 // beans::XPropertySet

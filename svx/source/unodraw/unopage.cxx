@@ -67,9 +67,6 @@ SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
     // register at broadcaster
     if( mpPage )
         mpModel = mpPage->GetModel();
-    if( mpModel )
-        StartListening( *mpModel );
-
 
     // create (hidden) view
     mpView = new SdrView( mpModel );
@@ -97,7 +94,6 @@ void SvxDrawPage::disposing() throw()
 {
     if( mpModel )
     {
-        EndListening( *mpModel );
         mpModel = nullptr;
     }
 
@@ -184,11 +180,6 @@ void SAL_CALL SvxDrawPage::removeEventListener( const css::uno::Reference< css::
         throw lang::DisposedException();
 
     mrBHelper.removeListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
-}
-
-// SfxListener
-void SvxDrawPage::Notify( SfxBroadcaster&, const SfxHint& /*rHint*/ )
-{
 }
 
 void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape )
@@ -877,12 +868,6 @@ void SvxDrawPage::ChangeModel( SdrModel* pNewModel )
 {
     if( pNewModel != mpModel )
     {
-        if( mpModel )
-            EndListening( *mpModel );
-
-        if( pNewModel )
-            StartListening( *pNewModel );
-
         mpModel = pNewModel;
 
         if( mpView )

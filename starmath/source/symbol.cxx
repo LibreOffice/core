@@ -91,10 +91,6 @@ bool SmSym::IsEqualInUI( const SmSym& rSymbol ) const
 
 /**************************************************************************/
 
-void SmSymbolManager::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
-{
-}
-
 
 SmSymbolManager::SmSymbolManager()
 {
@@ -102,8 +98,7 @@ SmSymbolManager::SmSymbolManager()
 }
 
 
-SmSymbolManager::SmSymbolManager(const SmSymbolManager& rSymbolSetManager) :
-    SfxListener()
+SmSymbolManager::SmSymbolManager(const SmSymbolManager& rSymbolSetManager)
 {
     m_aSymbols      = rSymbolSetManager.m_aSymbols;
     m_bModified     = true;
