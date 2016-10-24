@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_33461424",
+        "filename": "sc/source/ui/inc/cellsh.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-24T17:01:27Z",
+      "side": 1,
+      "message": "We don\u0027t use \u0027m\u0027 prefixes on member functions, this should be GetFrameWin() instead.",
+      "range": {
+        "startLine": 108,
+        "startChar": 24,
+        "endLine": 108,
+        "endChar": 36
+      },
+      "revId": "ea6661f09ab641a679d4d88652c60c6227d9c1a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_534b902b",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-24T17:01:27Z",
+      "side": 1,
+      "message": "This is not a member variable, so no \u0027m\u0027 prefix, use bScrollLock instead.",
+      "range": {
+        "startLine": 123,
+        "startChar": 9,
+        "endLine": 123,
+        "endChar": 20
+      },
+      "revId": "ea6661f09ab641a679d4d88652c60c6227d9c1a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_935528c8",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-24T17:01:27Z",
+      "side": 1,
+      "message": "Nitpick: state should be named eState instead.",
+      "range": {
+        "startLine": 124,
+        "startChar": 22,
+        "endLine": 124,
+        "endChar": 27
+      },
+      "revId": "ea6661f09ab641a679d4d88652c60c6227d9c1a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_73488c2e",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-24T17:01:27Z",
+      "side": 1,
+      "message": "mGetFrameWin() (that should had been named GetFrameWin() instead) is a member function of this class ScCellShell, so don\u0027t call it with the ScCellShell:: class name.",
+      "range": {
+        "startLine": 124,
+        "startChar": 31,
+        "endLine": 124,
+        "endChar": 56
+      },
+      "revId": "ea6661f09ab641a679d4d88652c60c6227d9c1a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_b35224dc",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-24T17:01:27Z",
+      "side": 1,
+      "message": "Why\n\n KeyIndicatorState::SCROLLLOCK \u0026 state\n\n?? instead of just if (state) (or if (eState))",
+      "range": {
+        "startLine": 125,
+        "startChar": 7,
+        "endLine": 125,
+        "endChar": 44
+      },
+      "revId": "ea6661f09ab641a679d4d88652c60c6227d9c1a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_d35de0ed",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-24T17:01:27Z",
+      "side": 1,
+      "message": "Please place\n\n mScrollLock \u003d true;\n\non the next line, or rather bScrollLock \u003d true;",
+      "range": {
+        "startLine": 125,
+        "startChar": 46,
+        "endLine": 125,
+        "endChar": 65
+      },
+      "revId": "ea6661f09ab641a679d4d88652c60c6227d9c1a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_731dec0e",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-24T17:01:27Z",
+      "side": 1,
+      "message": "Why not update the scrollbar? Here and in the following places below.",
+      "range": {
+        "startLine": 133,
+        "startChar": 58,
+        "endLine": 133,
+        "endChar": 63
+      },
+      "revId": "ea6661f09ab641a679d4d88652c60c6227d9c1a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_931a8816",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-24T17:01:27Z",
+      "side": 1,
+      "message": "The SID_CURSORPAGE... should also be handled to work with a scoll-locked PageUp/PageDown. For the delta to pass to ScrollX()/ScrollY() see sc/source/ui/view/tabview.cxx\n\n IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )\n\nthe ScrollType::PageUp and ScrollType::PageDown handling with aViewData.PrevCellsX() and aViewData.PrevCellsY()",
+      "revId": "ea6661f09ab641a679d4d88652c60c6227d9c1a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
