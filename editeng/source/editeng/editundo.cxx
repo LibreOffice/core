@@ -78,7 +78,7 @@ bool EditUndoManager::Undo()
 
     aNewSel.Min() = aNewSel.Max();
     mpEditEngine->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
-    mpEditEngine->FormatAndUpdate( mpEditEngine->GetActiveView() );
+    mpEditEngine->FormatAndUpdate( mpEditEngine->GetActiveView(), true );
 
     return bDone;
 }

@@ -4181,7 +4181,7 @@ EditSelection* ImpEditEngine::SelectParagraph( sal_Int32 nPara )
     return pSel;
 }
 
-void ImpEditEngine::FormatAndUpdate( EditView* pCurView )
+void ImpEditEngine::FormatAndUpdate( EditView* pCurView, bool bCalledFromUndo )
 {
     if ( bDowning )
         return ;
@@ -4190,6 +4190,10 @@ void ImpEditEngine::FormatAndUpdate( EditView* pCurView )
         IdleFormatAndUpdate( pCurView );
     else
     {
+        if (bCalledFromUndo)
+            // in order to make bullet points that have had their styles changed, redraw themselves
+            for ( sal_Int32 nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
+                GetParaPortions()[nPortion]->MarkInvalid( 0, 0 );
         FormatDoc();
         UpdateViews( pCurView );
     }

@@ -602,7 +602,7 @@ public:
     const ViewsType& GetEditViews() const;
 
     void SetUndoMode(bool b);
-    void FormatAndUpdate(EditView* pCurView = nullptr);
+    void FormatAndUpdate(EditView* pCurView = nullptr, bool bCalledFromUndo = false);
 
     void Undo(EditView* pView);
     void Redo(EditView* pView);
