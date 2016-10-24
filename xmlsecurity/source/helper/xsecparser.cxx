@@ -210,9 +210,9 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
     try
     {
         if (aName == TAG_DIGESTVALUE)
-            {
-                m_bInDigestValue = false;
-            }
+        {
+            m_bInDigestValue = false;
+        }
         else if ( aName == TAG_REFERENCE )
         {
             if ( m_bReferenceUnresolved )
@@ -233,7 +233,7 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
         else if ( aName == TAG_SIGNATUREVALUE )
         {
             m_pXSecController->setSignatureValue( m_ouSignatureValue );
-                m_bInSignatureValue = false;
+            m_bInSignatureValue = false;
         }
         else if (aName == TAG_X509ISSUERNAME)
         {
@@ -253,7 +253,7 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
         else if (aName == NSTAG_DC ":" TAG_DATE)
         {
             m_pXSecController->setDate( m_ouDate );
-                m_bInDate = false;
+            m_bInDate = false;
         }
         else if (aName == NSTAG_DC ":" TAG_DESCRIPTION)
         {
