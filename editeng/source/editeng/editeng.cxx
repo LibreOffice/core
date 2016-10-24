@@ -741,9 +741,9 @@ void EditEngine::SetUndoMode(bool b)
     pImpEditEngine->SetUndoMode(b);
 }
 
-void EditEngine::FormatAndUpdate(EditView* pCurView)
+void EditEngine::FormatAndUpdate(EditView* pCurView, bool bCalledFromUndo)
 {
-    pImpEditEngine->FormatAndUpdate(pCurView);
+    pImpEditEngine->FormatAndUpdate(pCurView, bCalledFromUndo);
 }
 
 void EditEngine::Undo(EditView* pView)
