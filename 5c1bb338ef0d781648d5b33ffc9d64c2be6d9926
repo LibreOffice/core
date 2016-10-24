@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_f32adc7d",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-24T08:37:09Z",
+      "side": 1,
+      "message": "this is wrong, compare only returns zero if the strings are identical, not if \"EMPTY\" is a true prefix of rPayload",
+      "revId": "5c1bb338ef0d781648d5b33ffc9d64c2be6d9926",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
