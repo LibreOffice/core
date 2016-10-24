@@ -38,7 +38,8 @@ enum ScCondFrmtEntryType
 
 }
 
-class ScCondFrmtEntry : public Control
+class ScCondFrmtEntry : public VclContainer
+                      , public VclBuilderContainer
 {
 private:
     bool mbActive;
@@ -46,6 +47,7 @@ private:
     Link<ScCondFrmtEntry&,void> maClickHdl;
 
     //general ui elements
+    VclPtr<VclContainer> maGrid;
     VclPtr<FixedText> maFtCondNr;
     VclPtr<FixedText> maFtCondition;
 
@@ -65,6 +67,8 @@ protected:
 public:
     ScCondFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos );
     virtual ~ScCondFrmtEntry() override;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
     virtual void dispose() override;
 
     virtual bool Notify( NotifyEvent& rNEvt ) override;

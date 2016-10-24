@@ -101,6 +101,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/colwidthdialog \
 	sc/uiconfig/scalc/ui/condformatmanager \
 	sc/uiconfig/scalc/ui/conditionalformatdialog \
+	sc/uiconfig/scalc/ui/conditionalentry \
 	sc/uiconfig/scalc/ui/conditionaliconset \
 	sc/uiconfig/scalc/ui/conflictsdialog \
 	sc/uiconfig/scalc/ui/consolidatedialog \

@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkGrid" id="grid">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="border_width">6</property>
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">12</property>
+    <child>
+      <object class="GtkGrid" id="grid1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="column_spacing">12</property>
+        <child>
+          <object class="GtkLabel" id="number">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="condition">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkGrid" id="grid2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="row_spacing">6</property>
+        <property name="column_spacing">12</property>
+        <property name="column_homogeneous">True</property>
+        <child>
+          <object class="GtkComboBoxText" id="type">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <items>
+              <item translatable="yes">All Cells</item>
+              <item translatable="yes">Cell value is</item>
+              <item translatable="yes">Formula is</item>
+              <item translatable="yes">Date is</item>
+            </items>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="styleft">
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Apply Style:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">style</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="style">
+            <property name="can_focus">False</property>
+            <items>
+              <item translatable="yes">New Style...</item>
+            </items>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="valueft">
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Enter a value:</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+            <property name="width">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="edcolscalemin">
+            <property name="can_focus">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="edcolscalemiddle">
+            <property name="can_focus">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="edcolscalemax">
+            <property name="can_focus">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="svtlo-ColorListBox" id="lbcolmin">
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="svtlo-ColorListBox" id="lbcolmiddle">
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="svtlo-ColorListBox" id="lbcolmax">
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="options">
+            <property name="label" translatable="yes">More Options...</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="colscalemin">
+            <property name="can_focus">False</property>
+            <items>
+              <item translatable="yes">Automatic</item>
+              <item translatable="yes">Min</item>
+              <item translatable="yes">Max</item>
+              <item translatable="yes">Percentile</item>
+              <item translatable="yes">Value</item>
+              <item translatable="yes">Percent</item>
+              <item translatable="yes">Formula</item>
+            </items>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="colscalemiddle">
+            <property name="can_focus">False</property>
+            <items>
+              <item translatable="yes">Automatic</item>
+              <item translatable="yes">Min</item>
+              <item translatable="yes">Max</item>
+              <item translatable="yes">Percentile</item>
+              <item translatable="yes">Value</item>
+              <item translatable="yes">Percent</item>
+              <item translatable="yes">Formula</item>
+            </items>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="colscalemax">
+            <property name="can_focus">False</property>
+            <items>
+              <item translatable="yes">Automatic</item>
+              <item translatable="yes">Min</item>
+              <item translatable="yes">Max</item>
+              <item translatable="yes">Percentile</item>
+              <item translatable="yes">Value</item>
+              <item translatable="yes">Percent</item>
+              <item translatable="yes">Formula</item>
+            </items>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="svxlo-SvxFontPrevWindow" id="preview:border">
+            <property name="can_focus">False</property>
+            <property name="tooltip_text" translatable="yes">Example</property>
+            <property name="hexpand">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="column_spacing">12</property>
+            <property name="column_homogeneous">True</property>
+            <child>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkComboBoxText" id="typeis">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <items>
+                      <item translatable="yes">equal to</item>
+                      <item translatable="yes">less than</item>
+                      <item translatable="yes">greater than</item>
+                      <item translatable="yes">less than or equal to</item>
+                      <item translatable="yes">greater than or equal to</item>
+                      <item translatable="yes">not equal to</item>
+                      <item translatable="yes">between</item>
+                      <item translatable="yes">not between</item>
+                      <item translatable="yes">duplicate</item>
+                      <item translatable="yes">not duplicate</item>
+                      <item translatable="yes">top 10 elements</item>
+                      <item translatable="yes">bottom 10 elements</item>
+                      <item translatable="yes">top 10 percent</item>
+                      <item translatable="yes">bottom 10 percent</item>
+                      <item translatable="yes">above average</item>
+                      <item translatable="yes">below average</item>
+                      <item translatable="yes">above or equal average</item>
+                      <item translatable="yes">below or equal average</item>
+                      <item translatable="yes">Error</item>
+                      <item translatable="yes">No Error</item>
+                      <item translatable="yes">Begins with</item>
+                      <item translatable="yes">Ends with</item>
+                      <item translatable="yes">Contains</item>
+                      <item translatable="yes">Not Contains</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="datetype">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <items>
+                      <item translatable="yes">Today</item>
+                      <item translatable="yes">Yesterday</item>
+                      <item translatable="yes">Tomorrow</item>
+                      <item translatable="yes">Last 7 days</item>
+                      <item translatable="yes">This week</item>
+                      <item translatable="yes">Last week</item>
+                      <item translatable="yes">Next week</item>
+                      <item translatable="yes">This month</item>
+                      <item translatable="yes">Last month</item>
+                      <item translatable="yes">Next month</item>
+                      <item translatable="yes">This year</item>
+                      <item translatable="yes">Last year</item>
+                      <item translatable="yes">Next year</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="colorformat">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <items>
+                      <item translatable="yes">Color Scale (2 Entries)</item>
+                      <item translatable="yes">Color Scale (3 Entries)</item>
+                      <item translatable="yes">Data Bar</item>
+                      <item translatable="yes">Icon Set</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="foruilo-RefEdit" id="val1">
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="foruilo-RefEdit" id="val2">
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="iconsettype">
+                    <property name="can_focus">False</property>
+                    <items>
+                      <item translatable="yes">3 Arrows</item>
+                      <item translatable="yes">3 Gray Arrows</item>
+                      <item translatable="yes">3 Flags</item>
+                      <item translatable="yes">3 Traffic Lights 1</item>
+                      <item translatable="yes">3 Traffic Lights 2</item>
+                      <item translatable="yes">3 Signs</item>
+                      <item translatable="yes">3 Symbols 1</item>
+                      <item translatable="yes">3 Symbols 2</item>
+                      <item translatable="yes">3 Smileys</item>
+                      <item translatable="yes">3 Stars</item>
+                      <item translatable="yes">3 Triangles</item>
+                      <item translatable="yes">3 Colored Smileys</item>
+                      <item translatable="yes">4 Arrows</item>
+                      <item translatable="yes">4 Gray Arrows</item>
+                      <item translatable="yes">4 Circles Red to Black</item>
+                      <item translatable="yes">4 Ratings</item>
+                      <item translatable="yes">4 Traffic Lights</item>
+                      <item translatable="yes">5 Arrows</item>
+                      <item translatable="yes">5 Gray Arrows</item>
+                      <item translatable="yes">5 Ratings</item>
+                      <item translatable="yes">5 Quarters</item>
+                      <item translatable="yes">5 Boxes</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="foruilo-RefEdit" id="formula">
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+      </packing>
+    </child>
+  </object>
+</interface>

@@ -8,7 +8,6 @@
  */
 
 #include "condformatdlg.hxx"
-#include "condformatdlg.hrc"
 
 #include <vcl/vclevent.hxx>
 #include <svl/style.hxx>
@@ -158,7 +157,7 @@ VCL_BUILDER_DECL_FACTORY(ScCondFormatList)
 
 Size ScCondFormatList::GetOptimalSize() const
 {
-    return LogicToPixel(Size(290, 185), MapUnit::MapAppFont);
+    return LogicToPixel(Size(300, 185), MapUnit::MapAppFont);
 }
 
 void ScCondFormatList::Resize()
