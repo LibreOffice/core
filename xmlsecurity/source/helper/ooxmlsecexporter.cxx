@@ -164,7 +164,7 @@ void OOXMLSecExporter::Impl::writeSignedInfoReferences()
                     pAttributeList->AddAttribute("Type", "http://www.w3.org/2000/09/xmldsig#Object");
                 else
                     pAttributeList->AddAttribute("Type", "http://uri.etsi.org/01903#SignedProperties");
-                pAttributeList->AddAttribute(ATTR_URI, CHAR_FRAGMENT + rReference.ouURI);
+                pAttributeList->AddAttribute(ATTR_URI, "#" + rReference.ouURI);
                 m_xDocumentHandler->startElement(TAG_REFERENCE, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
             }
             if (rReference.ouURI == "idSignedProperties")

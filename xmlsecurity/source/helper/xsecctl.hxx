@@ -113,9 +113,6 @@
 #define ALGO_XMLDSIGSHA256 "http://www.w3.org/2001/04/xmlenc#sha256"
 #define ALGO_RELATIONSHIP "http://schemas.openxmlformats.org/package/2006/RelationshipTransform"
 
-#define CHAR_FRAGMENT           "#"
-
-
 /*
  * status of security related components
  */

@@ -672,7 +672,7 @@ void XSecController::exportSignature(
                 {
                     pAttributeList->AddAttribute(
                         ATTR_URI,
-                        CHAR_FRAGMENT+refInfor.ouURI);
+                        "#" + refInfor.ouURI);
                 }
 
                 xDocumentHandler->startElement( tag_Reference, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
@@ -790,7 +790,7 @@ void XSecController::exportSignature(
                     signatureInfo.ouPropertyId);
                 pAttributeList->AddAttribute(
                     ATTR_TARGET,
-                    CHAR_FRAGMENT+signatureInfo.ouSignatureId);
+                    "#" + signatureInfo.ouSignatureId);
                 xDocumentHandler->startElement(
                     tag_SignatureProperty,
                     cssu::Reference< cssxs::XAttributeList > (pAttributeList));
@@ -831,7 +831,7 @@ void XSecController::exportSignature(
                 // SignatureProperty element.
                 pAttributeList = new SvXMLAttributeList();
                 pAttributeList->AddAttribute(ATTR_ID, signatureInfo.ouDescriptionPropertyId);
-                pAttributeList->AddAttribute(ATTR_TARGET, CHAR_FRAGMENT + signatureInfo.ouSignatureId);
+                pAttributeList->AddAttribute(ATTR_TARGET, "#" + signatureInfo.ouSignatureId);
                 xDocumentHandler->startElement(tag_SignatureProperty, uno::Reference<xml::sax::XAttributeList>(pAttributeList));
 
                 {

@@ -109,7 +109,7 @@ void SAL_CALL XSecParser::startElement(
             OUString ouUri = xAttribs->getValueByName(ATTR_URI);
             SAL_WARN_IF( ouUri == nullptr, "xmlsecurity.helper", "URI == NULL" );
 
-            if (ouUri.startsWith(CHAR_FRAGMENT))
+            if (ouUri.startsWith("#"))
             {
                 /*
                 * remove the first character '#' from the attribute value
