@@ -16,6 +16,24 @@
       "revId": "5c1bb338ef0d781648d5b33ffc9d64c2be6d9926",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_933448df",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2016-10-24T08:41:59Z",
+      "side": 1,
+      "message": "Ok then I\u0027ll revert as soon as I get home.\nFeel free to revert earlier if you want.",
+      "parentUuid": "7a77a97e_f32adc7d",
+      "revId": "5c1bb338ef0d781648d5b33ffc9d64c2be6d9926",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
