@@ -120,11 +120,6 @@ public:
 
     bool BelongsToSameList( const XMLTextNumRuleInfo& rCmp ) const;
 
-    inline bool HasSameNumRules( const XMLTextNumRuleInfo& rCmp ) const
-    {
-        return rCmp.msNumRulesName == msNumRulesName;
-    }
-
     inline bool IsContinueingPreviousSubTree() const
     {
         return mbContinueingPreviousSubTree;

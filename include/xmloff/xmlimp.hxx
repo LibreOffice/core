@@ -256,8 +256,6 @@ public:
 
     virtual ~SvXMLImport() throw() override;
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-
     // css::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument()
         throw (css::xml::sax::SAXException,

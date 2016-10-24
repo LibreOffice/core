@@ -320,14 +320,6 @@ void SvXMLNumFmtExport::AddCalendarAttr_Impl( const OUString& rCalendar )
     }
 }
 
-void SvXMLNumFmtExport::AddTextualAttr_Impl( bool bText )
-{
-    if ( bText )            // non-textual
-    {
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TEXTUAL, XML_TRUE );
-    }
-}
-
 void SvXMLNumFmtExport::AddStyleAttr_Impl( bool bLong )
 {
     if ( bLong )            // short is default
@@ -436,7 +428,10 @@ void SvXMLNumFmtExport::WriteMonthElement_Impl( const OUString& rCalendar, bool 
 
     AddCalendarAttr_Impl( rCalendar ); // adds to pAttrList
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
-    AddTextualAttr_Impl( bText );   // adds to pAttrList
+    if ( bText )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TEXTUAL, XML_TRUE );
+    }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_MONTH,
                               true, false );

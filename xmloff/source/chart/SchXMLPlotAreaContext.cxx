@@ -666,18 +666,11 @@ SchXMLPositionAttributesHelper::~SchXMLPositionAttributesHelper()
 {
 }
 
-bool SchXMLPositionAttributesHelper::hasSize() const
-{
-    return m_bHasSizeWidth && m_bHasSizeHeight;
-}
-bool SchXMLPositionAttributesHelper::hasPosition() const
-{
-    return m_bHasPositionX && m_bHasPositionY;
-}
 bool SchXMLPositionAttributesHelper::hasPosSize() const
 {
-    return hasPosition() && hasSize();
+    return (m_bHasPositionX && m_bHasPositionY) && (m_bHasSizeWidth && m_bHasSizeHeight);
 }
+
 bool SchXMLPositionAttributesHelper::isAutomatic() const
 {
     return m_bAutoSize || m_bAutoPosition;

@@ -456,18 +456,13 @@ namespace
     class theSvXMLImportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvXMLImportUnoTunnelId> {};
 }
 
-// XUnoTunnel & co
-const uno::Sequence< sal_Int8 > & SvXMLImport::getUnoTunnelId() throw()
-{
-    return theSvXMLImportUnoTunnelId::get().getSeq();
-}
-
 // XUnoTunnel
 sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw( uno::RuntimeException, std::exception )
 {
-    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),
-                                                         rId.getConstArray(), 16 ) )
+    if( rId.getLength() == 16 &&
+        0 == memcmp( theSvXMLImportUnoTunnelId::get().getSeq().getConstArray(),
+                     rId.getConstArray(), 16 ) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }

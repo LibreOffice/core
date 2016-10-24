@@ -51,8 +51,6 @@ public:
                           const sal_Char *pSubServiceName=nullptr ) throw();
     virtual ~OOo2OasisTransformer() throw() override;
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-
     // XInterface
 
     // (XInterface methods need to be implemented to disambigouate

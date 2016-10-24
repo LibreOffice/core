@@ -226,7 +226,7 @@ bool XMLTextNumRuleInfo::BelongsToSameList( const XMLTextNumRuleInfo& rCmp ) con
     }
     else
     {
-        bRet = HasSameNumRules( rCmp );
+        bRet = rCmp.msNumRulesName == msNumRulesName;
     }
 
     return bRet;

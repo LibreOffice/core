@@ -2925,8 +2925,8 @@ void XMLTextParagraphExport::_exportTextFrame(
         SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_DRAW,
                                   XML_TEXT_BOX, true, true );
 
-        // frame bound frames
-        exportFramesBoundToFrame( xTxtFrame, bIsProgress );
+        // frames bound to frame
+        exportFrameFrames( false, bIsProgress, &xTxtFrame );
 
         exportText( xTxt, false, bIsProgress, true );
     }

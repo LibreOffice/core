@@ -546,12 +546,6 @@ public:
     {
         exportPageFrames( bIsProgress );
     }
-    void exportFramesBoundToFrame(
-            const css::uno::Reference< css::text::XTextFrame >& rParentTxtFrame,
-            bool bIsProgress )
-    {
-        exportFrameFrames( false, bIsProgress, &rParentTxtFrame );
-    }
     inline const XMLTextListAutoStylePool& GetListAutoStylePool() const;
 
     void SetBlockMode( bool bSet ) { bBlock = bSet; }

@@ -56,7 +56,6 @@ private:
 
     SAL_DLLPRIVATE void AddCalendarAttr_Impl( const OUString& rCalendar );
     SAL_DLLPRIVATE void AddStyleAttr_Impl( bool bLong );
-    SAL_DLLPRIVATE void AddTextualAttr_Impl( bool bText );
     SAL_DLLPRIVATE void AddLanguageAttr_Impl( sal_Int32 nLang );
 
     SAL_DLLPRIVATE void AddToTextElement_Impl( const OUString& rString );

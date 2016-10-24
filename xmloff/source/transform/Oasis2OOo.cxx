@@ -1954,18 +1954,13 @@ namespace
     class theOasis2OOoTransformerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theOasis2OOoTransformerUnoTunnelId> {};
 }
 
-const Sequence< sal_Int8 > & Oasis2OOoTransformer::getUnoTunnelId() throw()
-{
-    return theOasis2OOoTransformerUnoTunnelId::get().getSeq();
-}
-
 // XUnoTunnel
 sal_Int64 SAL_CALL Oasis2OOoTransformer::getSomething( const Sequence< sal_Int8 >& rId )
     throw(RuntimeException, std::exception)
 {
     if( rId.getLength() == 16
-        && 0 == memcmp( getUnoTunnelId().getConstArray(),
-                                        rId.getConstArray(), 16 ) )
+        && 0 == memcmp( theOasis2OOoTransformerUnoTunnelId::get().getSeq().getConstArray(),
+                        rId.getConstArray(), 16 ) )
     {
         return reinterpret_cast< sal_Int64 >( this );
     }

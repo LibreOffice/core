@@ -44,8 +44,6 @@ public:
     Oasis2OOoTransformer () throw();
     virtual ~Oasis2OOoTransformer() throw() override;
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;

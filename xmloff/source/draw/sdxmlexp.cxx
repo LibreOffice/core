@@ -1704,14 +1704,6 @@ void SdXMLExport::ImpWritePresentationStyles()
     }
 }
 
-void SdXMLExport::SetProgress(sal_Int32 nProg)
-{
-    // set progress view
-    if(GetStatusIndicator().is())
-        GetStatusIndicator()->setValue(nProg);
-}
-
-
 void SdXMLExport::ExportMeta_()
 {
     uno::Sequence<beans::NamedValue> stats { { "ObjectCount", uno::makeAny(mnObjectCount) } };
@@ -1745,7 +1737,9 @@ void SdXMLExport::ExportContent_()
     {
         uno::Reference<drawing::XDrawPage> xDrawPage( mxDocDrawPages->getByIndex(nPageInd), uno::UNO_QUERY );
 
-        SetProgress(((nPageInd + 1) * 100) / mnDocDrawPageCount);
+        // set progress view
+        if(GetStatusIndicator().is())
+            GetStatusIndicator()->setValue(((nPageInd + 1) * 100) / mnDocDrawPageCount);
 
         if(xDrawPage.is())
         {

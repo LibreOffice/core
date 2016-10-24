@@ -65,9 +65,6 @@ public:
     css::awt::Rectangle getRectangle() const { return css::awt::Rectangle( m_aPosition.X, m_aPosition.Y, m_aSize.Width, m_aSize.Height );}
 
 private:
-    bool hasSize() const;
-    bool hasPosition() const;
-
     SvXMLImport& m_rImport;
 
     css::awt::Point m_aPosition;
