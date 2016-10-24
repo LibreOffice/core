@@ -5146,8 +5146,8 @@ void SwHTMLParser::InsertLineBreak()
                 aBreakItem = static_cast<const SvxFormatBreakItem &>(aItemSet.Get( RES_BREAK ));
                 bBreakItem = true;
             }
-            if( !aPropInfo.aId.isEmpty() )
-                InsertBookmark( aPropInfo.aId );
+            if( !aPropInfo.m_aId.isEmpty() )
+                InsertBookmark( aPropInfo.m_aId );
         }
     }
 

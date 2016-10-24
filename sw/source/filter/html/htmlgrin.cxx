@@ -557,31 +557,31 @@ IMAGE_SETEVENT:
     }
 
     // CSS1-Groesse auf "normale" Groesse umrechnen
-    switch( aPropInfo.eWidthType )
+    switch( aPropInfo.m_eWidthType )
     {
         case SVX_CSS1_LTYPE_TWIP:
-            aTwipSz.Width() = aPropInfo.nWidth;
+            aTwipSz.Width() = aPropInfo.m_nWidth;
             nWidth = 1; // != 0
             bPrcWidth = false;
             break;
         case SVX_CSS1_LTYPE_PERCENTAGE:
             aTwipSz.Width() = 0;
-            nWidth = aPropInfo.nWidth;
+            nWidth = aPropInfo.m_nWidth;
             bPrcWidth = true;
             break;
         default:
             ;
     }
-    switch( aPropInfo.eHeightType )
+    switch( aPropInfo.m_eHeightType )
     {
         case SVX_CSS1_LTYPE_TWIP:
-            aTwipSz.Height() = aPropInfo.nHeight;
+            aTwipSz.Height() = aPropInfo.m_nHeight;
             nHeight = 1;    // != 0
             bPrcHeight = false;
             break;
         case SVX_CSS1_LTYPE_PERCENTAGE:
             aTwipSz.Height() = 0;
-            nHeight = aPropInfo.nHeight;
+            nHeight = aPropInfo.m_nHeight;
             bPrcHeight = true;
             break;
         default:

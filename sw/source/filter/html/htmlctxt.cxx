@@ -443,9 +443,9 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
                         HtmlFrameFormatFlags::Box|HtmlFrameFormatFlags::Padding|HtmlFrameFormatFlags::Background|HtmlFrameFormatFlags::Direction,
                         aFrameItemSet );
 
-        InsertFlyFrame(aFrameItemSet, pContext, rPropInfo.aId);
+        InsertFlyFrame(aFrameItemSet, pContext, rPropInfo.m_aId);
         pContext->SetPopStack( true );
-        rPropInfo.aId.clear();
+        rPropInfo.m_aId.clear();
         bRet = true;
     }
 
@@ -489,7 +489,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
     // Ein DropCap-Attribut basteln, wenn auf Zeichen-Ebene vor dem
     // ersten Zeichen ein float: left vorkommt
     if( bCharLvl && !m_pPam->GetPoint()->nContent.GetIndex() &&
-        SVX_ADJUST_LEFT == rPropInfo.eFloat )
+        SVX_ADJUST_LEFT == rPropInfo.m_eFloat )
     {
         SwFormatDrop aDrop;
         aDrop.GetChars() = 1;
@@ -554,29 +554,29 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 // Abfrage ueber das Item funktioniert aber trotzdem, denn
                 // fuer negative Werte wird das Item (mit Wert 0) auch
                 // eingefuegt.
-                if( rPropInfo.bLeftMargin )
+                if( rPropInfo.m_bLeftMargin )
                 {
-                    OSL_ENSURE( rPropInfo.nLeftMargin < 0 ||
-                            rPropInfo.nLeftMargin == pLRItem->GetTextLeft(),
+                    OSL_ENSURE( rPropInfo.m_nLeftMargin < 0 ||
+                            rPropInfo.m_nLeftMargin == pLRItem->GetTextLeft(),
                             "linker Abstand stimmt nicht mit Item ueberein" );
-                    if( rPropInfo.nLeftMargin < 0 &&
-                        -rPropInfo.nLeftMargin > nOldLeft )
+                    if( rPropInfo.m_nLeftMargin < 0 &&
+                        -rPropInfo.m_nLeftMargin > nOldLeft )
                         nLeft = 0;
                     else
-                        nLeft = nOldLeft + static_cast< sal_uInt16 >(rPropInfo.nLeftMargin);
+                        nLeft = nOldLeft + static_cast< sal_uInt16 >(rPropInfo.m_nLeftMargin);
                 }
-                if( rPropInfo.bRightMargin )
+                if( rPropInfo.m_bRightMargin )
                 {
-                    OSL_ENSURE( rPropInfo.nRightMargin < 0 ||
-                            rPropInfo.nRightMargin == pLRItem->GetRight(),
+                    OSL_ENSURE( rPropInfo.m_nRightMargin < 0 ||
+                            rPropInfo.m_nRightMargin == pLRItem->GetRight(),
                             "rechter Abstand stimmt nicht mit Item ueberein" );
-                    if( rPropInfo.nRightMargin < 0 &&
-                        -rPropInfo.nRightMargin > nOldRight )
+                    if( rPropInfo.m_nRightMargin < 0 &&
+                        -rPropInfo.m_nRightMargin > nOldRight )
                         nRight = 0;
                     else
-                        nRight = nOldRight + static_cast< sal_uInt16 >(rPropInfo.nRightMargin);
+                        nRight = nOldRight + static_cast< sal_uInt16 >(rPropInfo.m_nRightMargin);
                 }
-                if( rPropInfo.bTextIndent )
+                if( rPropInfo.m_bTextIndent )
                     nIndent = pLRItem->GetTextFirstLineOfst();
 
                 // und die Werte fuer nachfolgende Absaetze merken
@@ -593,14 +593,14 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             break;
 
         case RES_UL_SPACE:
-            if( !rPropInfo.bTopMargin || !rPropInfo.bBottomMargin )
+            if( !rPropInfo.m_bTopMargin || !rPropInfo.m_bBottomMargin )
             {
                 sal_uInt16 nUpper = 0, nLower = 0;
                 GetULSpaceFromContext( nUpper, nLower );
                 SvxULSpaceItem aULSpace( *static_cast<const SvxULSpaceItem *>(pItem) );
-                if( !rPropInfo.bTopMargin )
+                if( !rPropInfo.m_bTopMargin )
                     aULSpace.SetUpper( nUpper );
-                if( !rPropInfo.bBottomMargin )
+                if( !rPropInfo.m_bBottomMargin )
                     aULSpace.SetLower( nLower );
 
                 NewAttr( &m_aAttrTab.pULSpace, aULSpace );
@@ -690,8 +690,8 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         pItem = aIter.NextItem();
     }
 
-    if( !rPropInfo.aId.isEmpty() )
-        InsertBookmark( rPropInfo.aId );
+    if( !rPropInfo.m_aId.isEmpty() )
+        InsertBookmark( rPropInfo.m_aId );
 }
 
 void SwHTMLParser::InsertAttr( HTMLAttr **ppAttr, const SfxPoolItem & rItem,
