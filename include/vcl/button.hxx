@@ -155,7 +155,6 @@ protected:
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
 public:
     explicit        PushButton( vcl::Window* pParent, WinBits nStyle = 0 );
-    explicit        PushButton( vcl::Window* pParent, const ResId& );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;

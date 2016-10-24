@@ -262,25 +262,6 @@ RscTop * RscTypCont::InitClassControl( RscTop * pSuper )
     return pClassControl;
 }
 
-RscTop * RscTypCont::InitClassPushButton( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassPushButton;
-
-    // initialize class
-    nId = pHS->getID( "PushButton" );
-    pClassPushButton = new RscClass( nId, RSC_PUSHBUTTON, pSuper );
-    pClassPushButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassPushButton );
-
-    InsWinBit( pClassPushButton, "DefButton", nDefaultId );
-    INS_WINBIT( pClassPushButton, Top )
-    INS_WINBIT( pClassPushButton, VCenter )
-    INS_WINBIT( pClassPushButton, Bottom )
-
-    return pClassPushButton;
-}
-
 RscTop * RscTypCont::InitClassFixedText( RscTop * pSuper )
 {
     Atom        nId;

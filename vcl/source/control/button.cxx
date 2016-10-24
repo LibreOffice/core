@@ -1207,19 +1207,6 @@ PushButton::PushButton( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-PushButton::PushButton( vcl::Window* pParent, const ResId& rResId ) :
-    Button( WINDOW_PUSHBUTTON )
-{
-    rResId.SetRT( RSC_PUSHBUTTON );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInitPushButtonData();
-    ImplInit( pParent, nStyle );
-    ImplLoadRes();
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 void PushButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() &&
