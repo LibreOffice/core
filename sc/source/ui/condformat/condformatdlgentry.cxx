@@ -1392,32 +1392,38 @@ IMPL_LINK_NOARG( ScDateFrmtEntry, StyleSelectHdl, ListBox&, void )
     mbIsInStyleCreate = false;
 }
 
-class ScIconSetFrmtDataEntry : public Control
+class ScIconSetFrmtDataEntry : public VclContainer
+                             , public VclBuilderContainer
 {
-    private:
-        VclPtr<FixedImage> maImgIcon;
-        VclPtr<FixedText> maFtEntry;
-        VclPtr<Edit> maEdEntry;
-        VclPtr<ListBox> maLbEntryType;
+private:
+    VclPtr<VclGrid> maGrid;
+    VclPtr<FixedImage> maImgIcon;
+    VclPtr<FixedText> maFtEntry;
+    VclPtr<Edit> maEdEntry;
+    VclPtr<ListBox> maLbEntryType;
 
-    public:
-        ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetType eType, ScDocument* pDoc,
-                sal_Int32 i, const ScColorScaleEntry* pEntry = nullptr );
-        virtual ~ScIconSetFrmtDataEntry() override;
-        virtual void dispose() override;
+public:
+    ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetType eType, ScDocument* pDoc,
+            sal_Int32 i, const ScColorScaleEntry* pEntry = nullptr );
+    virtual ~ScIconSetFrmtDataEntry() override;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
+    virtual void dispose() override;
 
-        ScColorScaleEntry* CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const;
+    ScColorScaleEntry* CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const;
 
-        void SetFirstEntry();
+    void SetFirstEntry();
 };
 
-ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetType eType, ScDocument* pDoc, sal_Int32 i, const ScColorScaleEntry* pEntry ):
-    Control( pParent, ScResId( RID_ICON_SET_ENTRY ) ),
-    maImgIcon( VclPtr<FixedImage>::Create( this, ScResId( IMG_ICON ) ) ),
-    maFtEntry( VclPtr<FixedText>::Create( this, ScResId( FT_ICON_SET_ENTRY_TEXT ) ) ),
-    maEdEntry( VclPtr<Edit>::Create( this, ScResId( ED_ICON_SET_ENTRY_VALUE ) ) ),
-    maLbEntryType( VclPtr<ListBox>::Create( this, ScResId( LB_ICON_SET_ENTRY_TYPE ) ) )
+ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(vcl::Window* pParent, ScIconSetType eType, ScDocument* pDoc, sal_Int32 i, const ScColorScaleEntry* pEntry)
+    : VclContainer(pParent)
 {
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "modules/scalc/ui/conditionaliconset.ui");
+    get(maGrid, "ConditionalIconSet");
+    get(maImgIcon, "icon");
+    get(maFtEntry, "label");
+    get(maEdEntry, "entry");
+    get(maLbEntryType, "listbox");
     maImgIcon->SetImage(Image(ScIconSetFormat::getBitmap(pDoc->GetIconSetBitmapMap(), eType, i)));
     if(pEntry)
     {
@@ -1447,7 +1453,16 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetT
     {
         maLbEntryType->SelectEntryPos(1);
     }
-    FreeResource();
+}
+
+Size ScIconSetFrmtDataEntry::calculateRequisition() const
+{
+    return getLayoutRequisition(*maGrid);
+}
+
+void ScIconSetFrmtDataEntry::setAllocation(const Size &rAllocation)
+{
+    setLayoutPosSize(*maGrid, Point(0, 0), rAllocation);
 }
 
 ScIconSetFrmtDataEntry::~ScIconSetFrmtDataEntry()
@@ -1457,11 +1472,13 @@ ScIconSetFrmtDataEntry::~ScIconSetFrmtDataEntry()
 
 void ScIconSetFrmtDataEntry::dispose()
 {
-    maImgIcon.disposeAndClear();
-    maFtEntry.disposeAndClear();
-    maEdEntry.disposeAndClear();
-    maLbEntryType.disposeAndClear();
-    Control::dispose();
+    maImgIcon.clear();
+    maFtEntry.clear();
+    maEdEntry.clear();
+    maLbEntryType.clear();
+    maGrid.clear();
+    disposeBuilder();
+    VclContainer::dispose();
 }
 
 ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const
@@ -1528,9 +1545,10 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, 
         {
             maEntries.push_back( VclPtr<ScIconSetFrmtDataEntry>::Create(
                 this, eType, pDoc, i, pIconSetFormatData->m_Entries[i].get()));
-            Point aPos = maEntries[0]->GetPosPixel();
-            aPos.Y() += maEntries[0]->GetSizePixel().Height() * i * 1.2;
-            maEntries[i]->SetPosPixel( aPos );
+            Size aSize(maEntries[0]->get_preferred_size());
+            Point aPos(0, LogicToPixel(Size(0, 35), MapMode(MapUnit::MapAppFont)).getHeight());
+            aPos.Y() += aSize.Height() * i * 1.2;
+            maEntries[i]->SetPosSizePixel(aPos, aSize);
         }
         maEntries[0]->SetFirstEntry();
     }
@@ -1576,9 +1594,10 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl, ListBox&, void )
     for(size_t i = 0; i < nElements; ++i)
     {
         maEntries.push_back( VclPtr<ScIconSetFrmtDataEntry>::Create( this, static_cast<ScIconSetType>(nPos), mpDoc, i ) );
-        Point aPos = maEntries[0]->GetPosPixel();
-        aPos.Y() += maEntries[0]->GetSizePixel().Height() * i * 1.2;
-        maEntries[i]->SetPosPixel( aPos );
+        Size aSize(maEntries[0]->get_preferred_size());
+        Point aPos(0, LogicToPixel(Size(0, 35), MapMode(MapUnit::MapAppFont)).getHeight());
+        aPos.Y() += aSize.Height() * i * 1.2;
+        maEntries[i]->SetPosSizePixel(aPos, aSize);
         maEntries[i]->Show();
     }
     maEntries[0]->SetFirstEntry();
