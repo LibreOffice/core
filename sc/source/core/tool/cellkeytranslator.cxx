@@ -22,6 +22,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
@@ -161,9 +162,10 @@ void ScCellKeywordTranslator::transKeyword(OUString& rName, const lang::Locale* 
     if ( !spInstance.get() )
         spInstance.reset( new ScCellKeywordTranslator );
 
-    LanguageType eLang = pLocale ? LanguageTag(*pLocale).makeFallback().getLanguageType() : LANGUAGE_SYSTEM;
+    LanguageType nLang = pLocale ?
+        LanguageTag(*pLocale).makeFallback().getLanguageType() : ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
     Sequence<sal_Int32> aOffsets;
-    rName = spInstance->maTransWrapper.transliterate(rName, eLang, 0, rName.getLength(), &aOffsets);
+    rName = spInstance->maTransWrapper.transliterate(rName, nLang, 0, rName.getLength(), &aOffsets);
     lclMatchKeyword(rName, spInstance->maStringNameMap, eOpCode, pLocale);
 }
 
