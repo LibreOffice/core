@@ -99,7 +99,7 @@ sub getMimedata {
     $desktop_file = $mimedir.'/'.$desktop_name.'.desktop';
     $mimetype = "";
     $glob = "";
-    open(DESKTOP_FILE, $desktop_file) || die 'Cannot open "desktop"-file.'.$!;
+    open(DESKTOP_FILE, $desktop_file) || die "Cannot open desktop-file $desktop_file. ".$!;
     while (<DESKTOP_FILE>) {
         ## get mimetype
         if (/^MimeType=/) {
