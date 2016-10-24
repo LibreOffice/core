@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_b31784ec",
+        "filename": "tools/source/memtools/multisel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-10-24T16:04:27Z",
+      "side": 1,
+      "message": "i think these should be \"long\" too...\n\nthe \"Range rIngexRange\" here is a Range from \"include/tools/gen.hxx\", *not* a StringRangeEnumerator::Range from \"multisel.hxx\".\n\nof course this is not really obvious...",
+      "revId": "f40f234ea55be735931e611ec146dc4d86a1601e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
