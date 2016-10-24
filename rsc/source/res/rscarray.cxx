@@ -422,39 +422,6 @@ ERRTYPE RscArray::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     return aError;
 }
 
-RscClassArray::RscClassArray( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
-                              RscEnum * pTypeCl )
-    : RscArray( nId, nTypeId, pSuper, pTypeCl )
-{
-}
-
-RscClassArray::~RscClassArray()
-{
-}
-
-void RscClassArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
-                                    RscTypCont * pTC, sal_uInt32 nTab,
-                                    const RscId & aId, const char * pName )
-{
-    RscArray::WriteSrcHeader( rInst, fOutput, pTC, nTab, aId, pName );
-}
-
-void RscClassArray::WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                             RscTypCont * pTC, sal_uInt32 nTab,
-                                 const char * pVarName )
-{
-    RscArray::WriteSrc( rInst, fOutput, pTC, nTab, pVarName );
-}
-
-ERRTYPE RscClassArray::WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
-                                      RscTypCont * pTC, const RscId & aId,
-                                      sal_uInt32 nDeep, bool bExtra )
-{
-    // Eigenen Typ schreiben
-    return GetSuperClass()->WriteRcHeader( rInst, aMem, pTC, aId,
-                                           nDeep, bExtra );
-}
-
 RscLangArray::RscLangArray( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
                           RscEnum * pTypeCl )
     : RscArray( nId, nTypeId, pSuper, pTypeCl )

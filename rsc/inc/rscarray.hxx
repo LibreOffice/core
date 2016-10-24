@@ -91,23 +91,6 @@ public:
                              RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
 };
 
-class RscClassArray : public RscArray
-{
-public:
-                    RscClassArray( Atom nId, sal_uInt32 nTypId,
-                                   RscTop * pSuper, RscEnum * pTypeClass );
-                    virtual ~RscClassArray() override;
-    virtual void    WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
-                                    RscTypCont * pTC, sal_uInt32 nTab,
-                                    const RscId & aId, const char * ) override;
-    void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
-    virtual ERRTYPE WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
-                                   RscTypCont * pTC, const RscId & aId,
-                                   sal_uInt32 nDeep, bool bExtra ) override;
-};
-
-
 class RscLangArray : public RscArray
 {
 public:
