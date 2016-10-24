@@ -64,7 +64,6 @@ void RscTypCont::Init()
     RscTop   *  pClassWindow;
     RscTop   *  pClassControl;
     RscTop   *  pClassKeyCode;
-    RscTop   *  pLangClassKeyCode;
 
     Atom        nId;
 
@@ -290,12 +289,6 @@ void RscTypCont::Init()
 {
     pClassKeyCode = InitClassKeyCode( pClassMgr, pKey );
     pRoot->Insert( pClassKeyCode );
-    {
-    pLangClassKeyCode = new RscClassArray( pHS->getID( "LangKeyCode" ),
-                    RSC_KEYCODE, pClassKeyCode, &aLangType );
-    aBaseLst.push_back( pLangClassKeyCode );
-    }
-
 }
 {
     RscTop* pClassMenuItem = InitClassMenuItem(pClassMgr);
