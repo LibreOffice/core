@@ -31,7 +31,6 @@
 #include <vcl/vclptr.hxx>
 
 class KeyEvent;
-class ResId;
 
 namespace vcl {
     class Window;
