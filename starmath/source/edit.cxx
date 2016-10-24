@@ -359,6 +359,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         xPopupMenu->SetSelectHdl(LINK(this, SmEditWindow, MenuSelectHdl));
 
         xPopupMenu->Execute( this, aPoint );
+        xPopupMenu.disposeAndClear();
         bForwardEvt = false;
     }
     else if (rCEvt.GetCommand() == CommandEventId::Wheel)
