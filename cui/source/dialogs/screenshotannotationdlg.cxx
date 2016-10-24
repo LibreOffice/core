@@ -54,38 +54,45 @@ namespace
 
     OUString lcl_AltDescr()
     {
-        OUString aRet = OUString("<alt xml-lang=en-US ") + OUString("id=") + lcl_genRandom("alt_id") + OUString(">") +
-                        OUString(" ") + //FIXME real dialog title or something
-                        OUString("</alt>");
-        return aRet;
+        OUString aTempl = OUString("<alt xml-lang=en-US id=%1>"
+                                   " " //FIXME real dialog title or something
+                                  "</alt>");
+        aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("alt_id") );
+
+        return aTempl;
     }
 
     OUString lcl_Image( const OUString& rScreenshotId )
     {
-        OUString aRet = OUString("<image id=") + lcl_genRandom( "img_id" ) +
-                        OUString(" src=media/screenshots/") + rScreenshotId + OUString(".png")
-                        + OUString(">") + //FIXME width + height
-                        lcl_AltDescr() +
-                        OUString("</image>");
-        return aRet;
+        OUString aTempl = OUString("<image id=%1 src=media/screenshots/%2.png>" //FIXME width + height
+                                    "%3"
+                                   "</image>");
+        aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("img_id") );
+        aTempl = aTempl.replaceFirst( "%2", rScreenshotId );
+        aTempl = aTempl.replaceFirst( "%3", lcl_AltDescr() );
+
+        return aTempl;
     }
 
     OUString lcl_ParagraphWithImage( const OUString& rScreenshotId )
     {
-        OUString aRet = OUString("<paragraph id=") + lcl_genRandom( "par_id" ) +
-                        OUString(" role=\"paragraph\" xml-lang=en-US>") +
-                        lcl_Image( rScreenshotId ) +
-                        OUString("</paragraph>");
-        return aRet;
+        OUString aTempl = OUString( "<paragraph id=%1 role=\"paragraph\" xml-lang=en-US>%2"
+                                    "</paragraph>"  SAL_NEWLINE_STRING );
+        aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("par_id") );
+        aTempl = aTempl.replaceFirst( "%2", lcl_Image(rScreenshotId) );
+
+        return aTempl;
     }
 
     OUString lcl_Bookmark( const OUString& rWidgetId )
     {
-        OUString aRet = "<!-- Bookmark for widget " + rWidgetId + " -->"  + SAL_NEWLINE_STRING;
-        aRet += OUString("<bookmark xml-lang=en-US branch=hid/") + rWidgetId + OUString(" ") +
-                        lcl_genRandom( "bm_id" ) + OUString(" localize=false") +
-                        OUString("</bookmark>") + SAL_NEWLINE_STRING;
-        return aRet;
+        OUString aTempl = "<!-- Bookmark for widget %1 -->" SAL_NEWLINE_STRING
+                          "<bookmark xml-lang=en-US branch=hid/%2 %3 localize=false </bookmark>" SAL_NEWLINE_STRING;
+        aTempl = aTempl.replaceFirst( "%1", rWidgetId );
+        aTempl = aTempl.replaceFirst( "%2", rWidgetId );
+        aTempl = aTempl.replaceFirst( "%3", lcl_genRandom("bm_id") );
+
+        return aTempl;
     }
 }
 
