@@ -580,10 +580,11 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                     {
                         OUString aQueryStr = rEntry.GetQueryItem().maString.getString();
                         css::uno::Sequence< sal_Int32 > xOff;
+                        const LanguageType nLang = ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
                         OUString aCell = pTransliteration->transliterate(
-                            aCellStr, ScGlobal::eLnge, 0, aCellStr.getLength(), &xOff);
+                            aCellStr, nLang, 0, aCellStr.getLength(), &xOff);
                         OUString aQuer = pTransliteration->transliterate(
-                            aQueryStr, ScGlobal::eLnge, 0, aQueryStr.getLength(), &xOff);
+                            aQueryStr, nLang, 0, aQueryStr.getLength(), &xOff);
                         bOk = (aCell.indexOf( aQuer ) != -1);
                     }
                     if (rEntry.eOp == SC_NOT_EQUAL)
