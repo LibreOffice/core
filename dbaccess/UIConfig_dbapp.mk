@@ -13,6 +13,10 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/dbapp,\
 	dbaccess/uiconfig/dbapp/menubar/menubar \
 ))
 
+$(eval $(call gb_UIConfig_add_popupmenufiles,modules/dbapp,\
+	dbaccess/uiconfig/dbapp/popupmenu/new \
+))
+
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/dbapp,\
 	dbaccess/uiconfig/dbapp/statusbar/statusbar \
 ))

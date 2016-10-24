@@ -367,6 +367,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Query (Design View)...</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">New ~Query (Design View)</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -374,6 +377,9 @@
       <node oor:name=".uno:DBNewQuerySql" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Query (SQL View)...</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">New Query (~SQL View)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -383,6 +389,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Table Design...</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">New ~Table Design</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -390,6 +399,9 @@
       <node oor:name=".uno:DBNewView" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">View Design...</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">New ~View Design</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

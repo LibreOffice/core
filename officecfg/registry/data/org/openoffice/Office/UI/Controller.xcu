@@ -397,6 +397,20 @@
           <value>com.sun.star.comp.framework.ToolbarModeMenuController</value>
         </prop>
       </node>
+      <node oor:name="c33" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBNewMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>new</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="ZoomToolBox" oor:op="replace">
@@ -673,7 +687,10 @@
           <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.sdb.ApplicationToolboxController</value>
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:DBNewMenu;1</value>
         </prop>
       </node>
       <node oor:name="org.libreoffice.comp.dbu.LimitBoxController" oor:op="replace">
