@@ -92,8 +92,11 @@ namespace
 class ControlDataEntry
 {
 public:
-    ControlDataEntry(const basegfx::B2IRange& rB2IRange)
-        : maB2IRange(rB2IRange)
+    ControlDataEntry(
+        const vcl::Window& rControl,
+        const basegfx::B2IRange& rB2IRange)
+        : mrControl(rControl),
+        maB2IRange(rB2IRange)
     {
     }
 
@@ -105,6 +108,7 @@ public:
     const OString GetHelpId() const { return mrControl.GetHelpId(); }
 
 private:
+    const vcl::Window&  mrControl;
     basegfx::B2IRange   maB2IRange;
 };
 
@@ -251,7 +255,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
         OUString aHelpId = OStringToOUString( mrParentDialog.GetHelpId(), RTL_TEXTENCODING_UTF8 );
         maMainMarkupText = lcl_ParagraphWithImage( aHelpId);
         mpText->SetText( maMainMarkupText );
-        mpText->SetReadOnly(true);
+        mpText->SetReadOnly();
     }
 
     // set click handler for save button
@@ -275,7 +279,7 @@ void ScreenshotAnnotationDlg_Impl::CollectChildren(
 
         if (!aCurrentRange.isEmpty())
         {
-            rControlDataCollection.push_back(ControlDataEntry(aCurrentRange));
+            rControlDataCollection.push_back(ControlDataEntry(rCurrent, aCurrentRange));
         }
 
         for (sal_uInt16 a(0); a < rCurrent.GetChildCount(); a++)
