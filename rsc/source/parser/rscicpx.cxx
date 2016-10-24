@@ -281,29 +281,6 @@ RscTop * RscTypCont::InitClassPushButton( RscTop * pSuper )
     return pClassPushButton;
 }
 
-RscTop * RscTypCont::InitClassEdit( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassEdit;
-
-    // initialize class
-    nId                     = pHS->getID( "Edit" );
-    pClassEdit = new RscClass( nId, RSC_EDIT, pSuper );
-    pClassEdit->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassEdit );
-
-    INS_WINBIT(pClassEdit,Left)
-    INS_WINBIT(pClassEdit,Center)
-    INS_WINBIT(pClassEdit,Right)
-    INS_WINBIT(pClassEdit,PassWord)
-    INS_WINBIT(pClassEdit,ReadOnly)
-
-    nId = aNmTb.Put( "MaxTextLength", VARNAME );
-    pClassEdit->SetVariable( nId, &aUShort );
-
-    return pClassEdit;
-}
-
 RscTop * RscTypCont::InitClassFixedText( RscTop * pSuper )
 {
     Atom        nId;

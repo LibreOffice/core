@@ -169,19 +169,6 @@ Edit::Edit( vcl::Window* pParent, WinBits nStyle )
     ImplInit( pParent, nStyle );
 }
 
-Edit::Edit( vcl::Window* pParent, const ResId& rResId )
-    : Control( WINDOW_EDIT )
-{
-    rResId.SetRT( RSC_EDIT );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInitEditData();
-    ImplInit( pParent, nStyle );
-    ImplLoadRes();
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 void Edit::SetWidthInChars(sal_Int32 nWidthInChars)
 {
     if (mnWidthInChars != nWidthInChars)

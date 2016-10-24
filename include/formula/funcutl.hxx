@@ -56,7 +56,6 @@ protected:
     virtual void LoseFocus() override;
 
 public:
-    RefEdit( vcl::Window* _pParent,IControlReferenceHandler* pParent, vcl::Window* pShrinkModeLabel, const ResId& rResId );
     RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits nStyle = WB_BORDER );
 
     virtual ~RefEdit() override;

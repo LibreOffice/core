@@ -176,7 +176,6 @@ class RscTypCont
                                  RscArray * pLangGeo );
     RscTop *    InitClassControl( RscTop * pSuper );
     RscTop *    InitClassPushButton( RscTop * pSuper );
-    RscTop *    InitClassEdit( RscTop * pSuper );
     RscTop *    InitClassFixedText( RscTop * pSuper );
     RscTop *    InitClassKeyCode( RscTop * pSuper, RscEnum * pKey );
     RscTop *    InitClassMenuItem( RscTop * pSuper );

@@ -65,7 +65,6 @@ void RscTypCont::Init()
     RscTop   *  pClassControl;
     RscTop   *  pClassButton;
     RscTop   *  pClassPushButton;
-    RscTop   *  pClassEdit;
     RscTop   *  pClassFixedText;
     RscTop   *  pClassKeyCode;
     RscTop   *  pLangClassKeyCode;
@@ -301,10 +300,6 @@ void RscTypCont::Init()
     // initialize class
     pClassPushButton = InitClassPushButton( pClassButton );
     pRoot->Insert( pClassPushButton );
-}
-{
-    pClassEdit = InitClassEdit( pClassControl );
-    pRoot->Insert( pClassEdit );
 }
 {
     pClassFixedText = InitClassFixedText( pClassControl );

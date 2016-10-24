@@ -167,7 +167,6 @@ public:
     SAL_DLLPRIVATE bool ImplUseNativeBorder(vcl::RenderContext& rRenderContext, WinBits nStyle);
 
     Edit( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
-    Edit( vcl::Window* pParent, const ResId& rResId );
     virtual ~Edit() override;
     virtual void dispose() override;
 
