@@ -2583,27 +2583,23 @@ void XMLShapeExport::ImpExportConnectorShape(
         }
     }
 
+    // get PolygonBezier
     aAny = xProps->getPropertyValue("PolyPolygonBezier");
-    if( aAny.hasValue() )
+    auto pSourcePolyPolygon = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(aAny);
+    if(pSourcePolyPolygon && pSourcePolyPolygon->Coordinates.getLength())
     {
-        // get PolygonBezier
-        auto pSourcePolyPolygon = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(aAny);
+        const basegfx::B2DPolyPolygon aPolyPolygon(
+            basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
+                *pSourcePolyPolygon));
+        const OUString aPolygonString(
+            basegfx::tools::exportToSvgD(
+                aPolyPolygon,
+                true,           // bUseRelativeCoordinates
+                false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now
+                true));         // bHandleRelativeNextPointCompatible
 
-        if(pSourcePolyPolygon && pSourcePolyPolygon->Coordinates.getLength())
-        {
-            const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
-                    *pSourcePolyPolygon));
-            const OUString aPolygonString(
-                basegfx::tools::exportToSvgD(
-                    aPolyPolygon,
-                    true,           // bUseRelativeCoordinates
-                    false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now
-                    true));         // bHandleRelativeNextPointCompatible
-
-            // write point array
-            mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
-        }
+        // write point array
+        mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
     }
 
     // get matrix

@@ -262,9 +262,7 @@ sal_Bool SAL_CALL FlashExportFilter::filter( const css::uno::Sequence< css::bean
 
                         if(xSelection.is())
                         {
-                            Any aSelection = xSelection->getSelection();
-                            if (aSelection.hasValue())
-                                aSelection >>= mxSelectedShapes;
+                            xSelection->getSelection() >>= mxSelectedShapes;
                         }
                     }
                 }
