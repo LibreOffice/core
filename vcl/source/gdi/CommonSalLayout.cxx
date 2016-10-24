@@ -104,6 +104,15 @@ static void scaleHbFont(hb_font_t* pHbFont, const FontSelectPattern& aFontSelDat
 }
 
 #if !HB_VERSION_ATLEAST(1, 1, 0)
+// Disabled Unicode compatibility decomposition, see fdo#66715
+static unsigned int unicodeDecomposeCompatibility(hb_unicode_funcs_t* /*ufuncs*/,
+                                                  hb_codepoint_t      /*u*/,
+                                                  hb_codepoint_t*     /*decomposed*/,
+                                                  void*               /*user_data*/)
+{
+    return 0;
+}
+
 static hb_unicode_funcs_t* getUnicodeFuncs()
 {
     static hb_unicode_funcs_t* ufuncs = hb_unicode_funcs_create(hb_icu_get_unicode_funcs());
