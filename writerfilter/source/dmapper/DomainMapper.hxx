@@ -120,9 +120,6 @@ public:
     /// Get the stored tokens and clear the internal storage.
     css::beans::PropertyValue getInteropGrabBag();
 
-    css::uno::Sequence<css::beans::PropertyValue> GetThemeFontLangProperties() const;
-    css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings() const;
-
     void HandleRedline( Sprm& rSprm );
 
 private:

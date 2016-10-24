@@ -413,7 +413,6 @@ public:
         return *m_pMapperStream;
     }
     void setSuperstream(RTFDocumentImpl* pSuperstream);
-    void setAuthorInitials(OUString& rAuthorInitials);
     const css::uno::Reference<css::lang::XMultiServiceFactory>& getModelFactory()
     {
         return m_xModelFactory;

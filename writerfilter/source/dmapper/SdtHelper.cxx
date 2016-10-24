@@ -80,7 +80,8 @@ void SdtHelper::createDropDownControl()
     xPropertySet->setPropertyValue("Dropdown", uno::makeAny(true));
     xPropertySet->setPropertyValue("StringItemList", uno::makeAny(comphelper::containerToSequence(m_aDropDownItems)));
 
-    createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), aDefaultText, m_aDropDownItems), xControlModel);
+    createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), aDefaultText, m_aDropDownItems),
+                       xControlModel, uno::Sequence<beans::PropertyValue>());
     m_aDropDownItems.clear();
 }
 
@@ -140,11 +141,6 @@ void SdtHelper::createDateControl(OUString& rContentText, const beans::PropertyV
 
     std::vector<OUString> aItems;
     createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rContentText, aItems), xControlModel, aGrabBag.getAsConstPropertyValueList());
-}
-
-void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControlModel> const& xControlModel)
-{
-    createControlShape(aSize, xControlModel, uno::Sequence<beans::PropertyValue>());
 }
 
 void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControlModel> const& xControlModel, const uno::Sequence<beans::PropertyValue>& rGrabBag)

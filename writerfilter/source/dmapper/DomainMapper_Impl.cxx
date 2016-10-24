@@ -1682,7 +1682,11 @@ void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange
     if ( m_pParaMarkerRedline.get( ) )
     {
         CreateRedline( xRange, m_pParaMarkerRedline );
-        ResetParaMarkerRedline( );
+        if ( m_pParaMarkerRedline.get( ) )
+        {
+            m_pParaMarkerRedline.reset();
+            m_currentRedline.reset();
+        }
     }
 }
 
@@ -5004,16 +5008,6 @@ void DomainMapper_Impl::RemoveTopRedline( )
     m_aRedlines.top().pop_back( );
     m_currentRedline.reset();
 }
-
-void DomainMapper_Impl::ResetParaMarkerRedline( )
-{
-    if ( m_pParaMarkerRedline.get( ) )
-    {
-        m_pParaMarkerRedline.reset();
-        m_currentRedline.reset();
-    }
-}
-
 
 void DomainMapper_Impl::ApplySettingsTable()
 {

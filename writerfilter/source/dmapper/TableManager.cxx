@@ -68,7 +68,7 @@ void TableManager::insertTableProps(const TablePropertyMapPtr& pProps)
     if (getTableProps().get() && getTableProps() != pProps)
         getTableProps()->InsertProps(pProps);
     else
-        setTableProps(pProps);
+        mState.setTableProps(pProps);
 
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().endElement();
@@ -84,7 +84,7 @@ void TableManager::insertRowProps(const TablePropertyMapPtr& pProps)
     if (getRowProps().get())
         getRowProps()->InsertProps(pProps);
     else
-        setRowProps(pProps);
+        mState.setRowProps(pProps);
 
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().endElement();
@@ -113,7 +113,7 @@ void TableManager::cellProps(const TablePropertyMapPtr& pProps)
     if (getCellProps().get())
         getCellProps()->InsertProps(pProps);
     else
-        setCellProps(pProps);
+        mState.setCellProps(pProps);
 
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().endElement();
@@ -264,7 +264,7 @@ void TableManager::endParagraphGroup()
         {
             ensureOpenCell(getCellProps());
 
-            if (isCellEnd())
+            if (mState.isCellEnd())
             {
                 endOfCellAction();
                 closeCell(getHandle());

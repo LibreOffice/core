@@ -773,7 +773,6 @@ public:
     void SetCurrentRedlineRevertProperties( const css::uno::Sequence<css::beans::PropertyValue>& aProperties );
     void SetCurrentRedlineIsRead();
     void RemoveTopRedline( );
-    void ResetParaMarkerRedline( );
     void SetCurrentRedlineInitials( const OUString& sInitials );
     bool IsFirstRun() { return m_bIsFirstRun;}
     void SetIsFirstRun(bool bval) { m_bIsFirstRun = bval;}

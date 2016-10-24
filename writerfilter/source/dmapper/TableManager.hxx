@@ -211,22 +211,11 @@ protected:
         return mState.getCellProps();
     }
 
-    void setCellProps(TablePropertyMapPtr pProps)
-    {
-        mState.setCellProps(pProps);
-    }
-
 public:
     TablePropertyMapPtr getRowProps()
     {
         return mState.getRowProps();
     }
-
-    void setRowProps(TablePropertyMapPtr pProps)
-    {
-        mState.setRowProps(pProps);
-    }
-
 
 protected:
     void setInCell(bool bInCell)
@@ -244,11 +233,6 @@ protected:
         mState.setCellEnd(bCellEnd);
     }
 
-    bool isCellEnd() const
-    {
-        return mState.isCellEnd();
-    }
-
     void setRowEnd(bool bRowEnd)
     {
         mState.setRowEnd(bRowEnd);
@@ -262,11 +246,6 @@ protected:
     TablePropertyMapPtr getTableProps()
     {
         return mState.getTableProps();
-    }
-
-    void setTableProps(TablePropertyMapPtr pProps)
-    {
-        mState.setTableProps(pProps);
     }
 
     const css::uno::Reference<css::text::XTextRange>& getHandle()

@@ -199,7 +199,7 @@ OUString URLParameter::get_the_tag()
 }
 
 
-OUString URLParameter::get_the_path()
+OUString URLParameter::get_path()
 {
     if(m_bUseDB) {
         if( ! m_bHelpDataFileRead )
@@ -227,7 +227,7 @@ OUString URLParameter::get_the_title()
 }
 
 
-OUString URLParameter::get_the_jar()
+OUString URLParameter::get_jar()
 {
     if(m_bUseDB) {
         if( ! m_bHelpDataFileRead )

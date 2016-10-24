@@ -308,11 +308,6 @@ void RTFDocumentImpl::setSuperstream(RTFDocumentImpl* pSuperstream)
     m_pSuperstream = pSuperstream;
 }
 
-void RTFDocumentImpl::setAuthorInitials(OUString& rAuthorInitials)
-{
-    m_aAuthorInitials = rAuthorInitials;
-}
-
 bool RTFDocumentImpl::isSubstream() const
 {
     return m_pSuperstream != nullptr;
@@ -343,7 +338,7 @@ void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString& rIgno
     }
     if (!m_aAuthorInitials.isEmpty())
     {
-        pImpl->setAuthorInitials(m_aAuthorInitials);
+        pImpl->m_aAuthorInitials = m_aAuthorInitials;
         m_aAuthorInitials.clear();
     }
     pImpl->m_nDefaultFontIndex = m_nDefaultFontIndex;

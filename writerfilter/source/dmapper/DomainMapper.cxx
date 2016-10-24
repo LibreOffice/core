@@ -190,9 +190,9 @@ DomainMapper::~DomainMapper()
         // Grab-bag handling
         comphelper::SequenceAsHashMap aProperties;
         // Add the saved w:themeFontLang setting
-        aProperties["ThemeFontLangProps"] = uno::makeAny(GetThemeFontLangProperties());
+        aProperties["ThemeFontLangProps"] = uno::makeAny(m_pImpl->GetSettingsTable()->GetThemeFontLangProperties());
         // Add the saved compat settings
-        aProperties["CompatSettings"] = uno::makeAny(GetCompatSettings());
+        aProperties["CompatSettings"] = uno::makeAny(m_pImpl->GetSettingsTable()->GetCompatSettings());
         uno::Reference<beans::XPropertySet> xDocProps(m_pImpl->GetTextDocument(), uno::UNO_QUERY);
         if (xDocProps.is())
         {
@@ -3673,16 +3673,6 @@ beans::PropertyValue DomainMapper::getInteropGrabBag()
     m_pImpl->m_aInteropGrabBag.clear();
     m_pImpl->m_aInteropGrabBagName.clear();
     return aRet;
-}
-
-uno::Sequence<beans::PropertyValue> DomainMapper::GetThemeFontLangProperties() const
-{
-    return m_pImpl->GetSettingsTable()->GetThemeFontLangProperties();
-}
-
-uno::Sequence<beans::PropertyValue> DomainMapper::GetCompatSettings() const
-{
-    return m_pImpl->GetSettingsTable()->GetCompatSettings();
 }
 
 void DomainMapper::HandleRedline( Sprm& rSprm )

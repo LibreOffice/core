@@ -127,13 +127,13 @@ namespace chelp {
 
         //  Not called for an directory
 
-        OUString get_path()   { return get_the_path(); }
+        OUString get_path();
 
         const OUString& get_eid() const   { return m_aEid; }
 
         OUString get_title();
 
-        OUString get_jar()      { return get_the_jar(); }
+        OUString get_jar();
 
         const OUString& get_ExtensionRegistryPath() const { return m_aExtensionRegistryPath; }
 
@@ -214,11 +214,7 @@ namespace chelp {
 
         OUString get_the_tag();
 
-        OUString get_the_path();
-
         OUString get_the_title();
-
-        OUString get_the_jar();
 
         void readHelpDataFile();
 
