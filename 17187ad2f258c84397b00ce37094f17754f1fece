@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_5341d038",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-10-24T09:12:07Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be \"masterkey\"?\n\nIn the firebird sources in file builds/install/arch-specific/win32/custom_messages.inc there is the line:\nen.PasswordNote\u003d*** Note - in Firebird 3 masterkey and masterke are different passwords. ***\n\nand it seems the default password was always intended to be  \"masterkey\", but in previous versions only the first eight characters were taken into account.\n\nSo, hmm, it seems that at least on Windows \"masterkey\" might not work with Firebird 3.0?",
+      "range": {
+        "startLine": 262,
+        "startChar": 37,
+        "endLine": 262,
+        "endChar": 46
+      },
+      "revId": "17187ad2f258c84397b00ce37094f17754f1fece",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
