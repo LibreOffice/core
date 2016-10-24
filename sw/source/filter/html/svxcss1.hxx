@@ -93,43 +93,43 @@ namespace editeng { class SvxBorderLine; }
 struct SvxCSS1BorderInfo;
 class SvxCSS1PropertyInfo
 {
-    SvxCSS1BorderInfo *aBorderInfos[4];
+    SvxCSS1BorderInfo *m_aBorderInfos[4];
 
     void DestroyBorderInfos();
 
 public:
 
-    OUString aId;             // ID fuer Bookmarks, Rahmen etc.
+    OUString m_aId;             // ID fuer Bookmarks, Rahmen etc.
 
-    bool bTopMargin : 1;
-    bool bBottomMargin : 1;
+    bool m_bTopMargin : 1;
+    bool m_bBottomMargin : 1;
 
-    bool bLeftMargin : 1;
-    bool bRightMargin : 1;
-    bool bTextIndent : 1;
+    bool m_bLeftMargin : 1;
+    bool m_bRightMargin : 1;
+    bool m_bTextIndent : 1;
 
-    SvxAdjust eFloat;
+    SvxAdjust m_eFloat;
 
-    SvxCSS1Position ePosition;
+    SvxCSS1Position m_ePosition;
 
-    sal_uInt16 nTopBorderDistance;
-    sal_uInt16 nBottomBorderDistance;
-    sal_uInt16 nLeftBorderDistance;
-    sal_uInt16 nRightBorderDistance;
+    sal_uInt16 m_nTopBorderDistance;
+    sal_uInt16 m_nBottomBorderDistance;
+    sal_uInt16 m_nLeftBorderDistance;
+    sal_uInt16 m_nRightBorderDistance;
 
-    sal_uInt16 nColumnCount;
+    sal_uInt16 m_nColumnCount;
 
-    long nLeft, nTop;
-    long nWidth, nHeight;
-    long nLeftMargin, nRightMargin;
+    long m_nLeft, m_nTop;
+    long m_nWidth, m_nHeight;
+    long m_nLeftMargin, m_nRightMargin;
 
-    SvxCSS1LengthType eLeftType, eTopType;
-    SvxCSS1LengthType eWidthType, eHeightType;
+    SvxCSS1LengthType m_eLeftType, m_eTopType;
+    SvxCSS1LengthType m_eWidthType, m_eHeightType;
 
-    SvxCSS1SizeType eSizeType;
+    SvxCSS1SizeType m_eSizeType;
 
-    SvxCSS1PageBreak ePageBreakBefore;
-    SvxCSS1PageBreak ePageBreakAfter;
+    SvxCSS1PageBreak m_ePageBreakBefore;
+    SvxCSS1PageBreak m_ePageBreakAfter;
 
     SvxCSS1PropertyInfo();
     SvxCSS1PropertyInfo( const SvxCSS1PropertyInfo& rProp );

@@ -123,10 +123,10 @@ void SwHTMLParser::NewDivision( int nToken )
                                           aItemSet, aPropInfo, &aLang, &aDir );
         if( bStyleParsed )
         {
-            if ( aPropInfo.nColumnCount >= 2 )
+            if ( aPropInfo.m_nColumnCount >= 2 )
             {
                 delete pCntxt;
-                NewMultiCol( aPropInfo.nColumnCount );
+                NewMultiCol( aPropInfo.m_nColumnCount );
                 return;
             }
             bPositioned = HTML_DIVISION_ON == nToken && !aClass.isEmpty() &&
@@ -230,7 +230,7 @@ void SwHTMLParser::NewDivision( int nToken )
                 SwPosition aNewPos( aTmpSwNodeIndex, SwIndex( pCNd, 0 ) );
                 SaveDocContext( pCntxt, HtmlContextFlags::MultiColMask, &aNewPos );
                 aId.clear();
-                aPropInfo.aId.clear();
+                aPropInfo.m_aId.clear();
             }
         }
     }
@@ -359,8 +359,8 @@ void SwHTMLParser::NewDivision( int nToken )
         pCntxt->SetSpansSection( true );
 
         // keine text::Bookmarks mit dem gleichen Namen wie Bereiche einfuegen
-        if( !aPropInfo.aId.isEmpty() && aPropInfo.aId==aName )
-            aPropInfo.aId.clear();
+        if( !aPropInfo.m_aId.isEmpty() && aPropInfo.m_aId==aName )
+            aPropInfo.m_aId.clear();
     }
     else
     {
@@ -640,7 +640,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         if( nCols < 2 )
         {
             aFlyName = aId;
-            aPropInfo.aId.clear();
+            aPropInfo.m_aId.clear();
         }
 
         InsertFlyFrame(aFrameItemSet, pCntxt, aFlyName);
@@ -746,8 +746,8 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         pCntxt->SetSpansSection( true );
 
         // Insert a bookmark if its name differs from the section's name only.
-        if( !aPropInfo.aId.isEmpty() && aPropInfo.aId==aName )
-            aPropInfo.aId.clear();
+        if( !aPropInfo.m_aId.isEmpty() && aPropInfo.m_aId==aName )
+            aPropInfo.m_aId.clear();
     }
 
     // Additional attributes must be set as hard ones.

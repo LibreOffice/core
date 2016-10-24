@@ -268,25 +268,25 @@ void SwHTMLParser::NewNumBulList( int nToken )
         {
             if( bNewNumFormat )
             {
-                if( aPropInfo.bLeftMargin )
+                if( aPropInfo.m_bLeftMargin )
                 {
                     // Der Der Default-Einzug wurde schon eingefuegt.
                     sal_uInt16 nAbsLSpace =
                         aNumFormat.GetAbsLSpace() - HTML_NUMBUL_MARGINLEFT;
-                    if( aPropInfo.nLeftMargin < 0 &&
-                        nAbsLSpace < -aPropInfo.nLeftMargin )
+                    if( aPropInfo.m_nLeftMargin < 0 &&
+                        nAbsLSpace < -aPropInfo.m_nLeftMargin )
                         nAbsLSpace = 0U;
-                    else if( aPropInfo.nLeftMargin > USHRT_MAX ||
+                    else if( aPropInfo.m_nLeftMargin > USHRT_MAX ||
                              (long)nAbsLSpace +
-                                            aPropInfo.nLeftMargin > USHRT_MAX )
+                                            aPropInfo.m_nLeftMargin > USHRT_MAX )
                         nAbsLSpace = USHRT_MAX;
                     else
-                        nAbsLSpace = nAbsLSpace + (sal_uInt16)aPropInfo.nLeftMargin;
+                        nAbsLSpace = nAbsLSpace + (sal_uInt16)aPropInfo.m_nLeftMargin;
 
                     aNumFormat.SetAbsLSpace( nAbsLSpace );
                     bChangeNumFormat = true;
                 }
-                if( aPropInfo.bTextIndent )
+                if( aPropInfo.m_bTextIndent )
                 {
                     short nTextIndent =
                         static_cast<const SvxLRSpaceItem &>(aItemSet.Get( RES_LR_SPACE ))
@@ -295,8 +295,8 @@ void SwHTMLParser::NewNumBulList( int nToken )
                     bChangeNumFormat = true;
                 }
             }
-            aPropInfo.bLeftMargin = aPropInfo.bTextIndent = false;
-            if( !aPropInfo.bRightMargin )
+            aPropInfo.m_bLeftMargin = aPropInfo.m_bTextIndent = false;
+            if( !aPropInfo.m_bRightMargin )
                 aItemSet.ClearItem( RES_LR_SPACE );
 
             // #i89812# - Perform change to list style before calling <DoPositioning(..)>,

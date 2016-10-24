@@ -142,14 +142,14 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     }
 
     // die Breite bearbeiten
-    if( SVX_CSS1_LTYPE_PERCENTAGE == rCSS1PropInfo.eWidthType )
+    if( SVX_CSS1_LTYPE_PERCENTAGE == rCSS1PropInfo.m_eWidthType )
     {
-        nPrcWidth = (sal_uInt8)rCSS1PropInfo.nWidth;
+        nPrcWidth = (sal_uInt8)rCSS1PropInfo.m_nWidth;
         aTwipSz.Width() = rTwipDfltSize.Width();
     }
-    else if( SVX_CSS1_LTYPE_TWIP== rCSS1PropInfo.eWidthType )
+    else if( SVX_CSS1_LTYPE_TWIP== rCSS1PropInfo.m_eWidthType )
     {
-        aTwipSz.Width() = rCSS1PropInfo.nWidth;
+        aTwipSz.Width() = rCSS1PropInfo.m_nWidth;
     }
     else if( bPrcWidth && rPixSize.Width() )
     {
@@ -169,14 +169,14 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     }
 
     // Hoehe bearbeiten
-    if( SVX_CSS1_LTYPE_PERCENTAGE == rCSS1PropInfo.eHeightType )
+    if( SVX_CSS1_LTYPE_PERCENTAGE == rCSS1PropInfo.m_eHeightType )
     {
-        nPrcHeight = (sal_uInt8)rCSS1PropInfo.nHeight;
+        nPrcHeight = (sal_uInt8)rCSS1PropInfo.m_nHeight;
         aTwipSz.Height() = rTwipDfltSize.Height();
     }
-    else if( SVX_CSS1_LTYPE_TWIP== rCSS1PropInfo.eHeightType )
+    else if( SVX_CSS1_LTYPE_TWIP== rCSS1PropInfo.m_eHeightType )
     {
-        aTwipSz.Height() = rCSS1PropInfo.nHeight;
+        aTwipSz.Height() = rCSS1PropInfo.m_nHeight;
     }
     else if( bPrcHeight && rPixSize.Height() )
     {
@@ -227,15 +227,15 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
         SvxLRSpaceItem aLRItem( *pLRItem );
         aLRItem.SetTextFirstLineOfst( 0 );
-        if( rCSS1PropInfo.bLeftMargin )
+        if( rCSS1PropInfo.m_bLeftMargin )
         {
             nLeftSpace = aLRItem.GetLeft();
-            rCSS1PropInfo.bLeftMargin = false;
+            rCSS1PropInfo.m_bLeftMargin = false;
         }
-        if( rCSS1PropInfo.bRightMargin )
+        if( rCSS1PropInfo.m_bRightMargin )
         {
             nRightSpace = aLRItem.GetRight();
-            rCSS1PropInfo.bRightMargin = false;
+            rCSS1PropInfo.m_bRightMargin = false;
         }
         rCSS1ItemSet.ClearItem( RES_LR_SPACE );
     }
@@ -263,15 +263,15 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     {
         // Ggf. den Erstzeilen-Einzug noch plaetten
         const SvxULSpaceItem *pULItem = static_cast<const SvxULSpaceItem *>(pItem);
-        if( rCSS1PropInfo.bTopMargin )
+        if( rCSS1PropInfo.m_bTopMargin )
         {
             nUpperSpace = pULItem->GetUpper();
-            rCSS1PropInfo.bTopMargin = false;
+            rCSS1PropInfo.m_bTopMargin = false;
         }
-        if( rCSS1PropInfo.bBottomMargin )
+        if( rCSS1PropInfo.m_bBottomMargin )
         {
             nLowerSpace = pULItem->GetLower();
-            rCSS1PropInfo.bBottomMargin = false;
+            rCSS1PropInfo.m_bBottomMargin = false;
         }
         rCSS1ItemSet.ClearItem( RES_UL_SPACE );
     }

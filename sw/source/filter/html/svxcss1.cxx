@@ -341,43 +341,43 @@ void SvxCSS1BorderInfo::SetBorderLine( SvxBoxItemLine nLine, SvxBoxItem &rBoxIte
 
 SvxCSS1PropertyInfo::SvxCSS1PropertyInfo()
 {
-    for(SvxCSS1BorderInfo* & rp : aBorderInfos)
+    for(SvxCSS1BorderInfo* & rp : m_aBorderInfos)
         rp = nullptr;
 
     Clear();
 }
 
 SvxCSS1PropertyInfo::SvxCSS1PropertyInfo( const SvxCSS1PropertyInfo& rProp ) :
-    aId( rProp.aId ),
-    bTopMargin( rProp.bTopMargin ),
-    bBottomMargin( rProp.bBottomMargin ),
-    bLeftMargin( rProp.bLeftMargin ),
-    bRightMargin( rProp.bRightMargin ),
-    bTextIndent( rProp.bTextIndent ),
-    eFloat( rProp.eFloat ),
-    ePosition( rProp.ePosition ),
-    nTopBorderDistance( rProp.nTopBorderDistance ),
-    nBottomBorderDistance( rProp.nBottomBorderDistance ),
-    nLeftBorderDistance( rProp.nLeftBorderDistance ),
-    nRightBorderDistance( rProp.nRightBorderDistance ),
-    nColumnCount( rProp.nColumnCount ),
-    nLeft( rProp.nLeft ),
-    nTop( rProp.nTop ),
-    nWidth( rProp.nWidth ),
-    nHeight( rProp.nHeight ),
-    nLeftMargin( rProp.nLeftMargin ),
-    nRightMargin( rProp.nRightMargin ),
-    eLeftType( rProp.eLeftType ),
-    eTopType( rProp.eTopType ),
-    eWidthType( rProp.eWidthType ),
-    eHeightType( rProp.eHeightType ),
-    eSizeType( rProp.eSizeType ),
-    ePageBreakBefore( rProp.ePageBreakBefore ),
-    ePageBreakAfter( rProp.ePageBreakAfter )
+    m_aId( rProp.m_aId ),
+    m_bTopMargin( rProp.m_bTopMargin ),
+    m_bBottomMargin( rProp.m_bBottomMargin ),
+    m_bLeftMargin( rProp.m_bLeftMargin ),
+    m_bRightMargin( rProp.m_bRightMargin ),
+    m_bTextIndent( rProp.m_bTextIndent ),
+    m_eFloat( rProp.m_eFloat ),
+    m_ePosition( rProp.m_ePosition ),
+    m_nTopBorderDistance( rProp.m_nTopBorderDistance ),
+    m_nBottomBorderDistance( rProp.m_nBottomBorderDistance ),
+    m_nLeftBorderDistance( rProp.m_nLeftBorderDistance ),
+    m_nRightBorderDistance( rProp.m_nRightBorderDistance ),
+    m_nColumnCount( rProp.m_nColumnCount ),
+    m_nLeft( rProp.m_nLeft ),
+    m_nTop( rProp.m_nTop ),
+    m_nWidth( rProp.m_nWidth ),
+    m_nHeight( rProp.m_nHeight ),
+    m_nLeftMargin( rProp.m_nLeftMargin ),
+    m_nRightMargin( rProp.m_nRightMargin ),
+    m_eLeftType( rProp.m_eLeftType ),
+    m_eTopType( rProp.m_eTopType ),
+    m_eWidthType( rProp.m_eWidthType ),
+    m_eHeightType( rProp.m_eHeightType ),
+    m_eSizeType( rProp.m_eSizeType ),
+    m_ePageBreakBefore( rProp.m_ePageBreakBefore ),
+    m_ePageBreakAfter( rProp.m_ePageBreakAfter )
 {
-    for( size_t i=0; i<SAL_N_ELEMENTS(aBorderInfos); ++i )
-        aBorderInfos[i] = rProp.aBorderInfos[i]
-                            ? new SvxCSS1BorderInfo( *rProp.aBorderInfos[i] )
+    for( size_t i=0; i<SAL_N_ELEMENTS(m_aBorderInfos); ++i )
+        m_aBorderInfos[i] = rProp.m_aBorderInfos[i]
+                            ? new SvxCSS1BorderInfo( *rProp.m_aBorderInfos[i] )
                             : nullptr;
 }
 
@@ -388,7 +388,7 @@ SvxCSS1PropertyInfo::~SvxCSS1PropertyInfo()
 
 void SvxCSS1PropertyInfo::DestroyBorderInfos()
 {
-    for(SvxCSS1BorderInfo* & rp : aBorderInfos)
+    for(SvxCSS1BorderInfo* & rp : m_aBorderInfos)
     {
         delete rp;
         rp = nullptr;
@@ -397,113 +397,113 @@ void SvxCSS1PropertyInfo::DestroyBorderInfos()
 
 void SvxCSS1PropertyInfo::Clear()
 {
-    aId.clear();
-    bTopMargin = bBottomMargin = false;
-    bLeftMargin = bRightMargin = bTextIndent = false;
-    nLeftMargin = nRightMargin = 0;
-    eFloat = SVX_ADJUST_END;
+    m_aId.clear();
+    m_bTopMargin = m_bBottomMargin = false;
+    m_bLeftMargin = m_bRightMargin = m_bTextIndent = false;
+    m_nLeftMargin = m_nRightMargin = 0;
+    m_eFloat = SVX_ADJUST_END;
 
-    ePosition = SVX_CSS1_POS_NONE;
-    nTopBorderDistance = nBottomBorderDistance =
-    nLeftBorderDistance = nRightBorderDistance = USHRT_MAX;
+    m_ePosition = SVX_CSS1_POS_NONE;
+    m_nTopBorderDistance = m_nBottomBorderDistance =
+    m_nLeftBorderDistance = m_nRightBorderDistance = USHRT_MAX;
 
-    nColumnCount = 0;
+    m_nColumnCount = 0;
 
-    nLeft = nTop = nWidth = nHeight = 0;
-    eLeftType = eTopType = eWidthType = eHeightType = SVX_CSS1_LTYPE_NONE;
+    m_nLeft = m_nTop = m_nWidth = m_nHeight = 0;
+    m_eLeftType = m_eTopType = m_eWidthType = m_eHeightType = SVX_CSS1_LTYPE_NONE;
 
 // Feature: PrintExt
-    eSizeType = SVX_CSS1_STYPE_NONE;
-    ePageBreakBefore = SVX_CSS1_PBREAK_NONE;
-    ePageBreakAfter = SVX_CSS1_PBREAK_NONE;
+    m_eSizeType = SVX_CSS1_STYPE_NONE;
+    m_ePageBreakBefore = SVX_CSS1_PBREAK_NONE;
+    m_ePageBreakAfter = SVX_CSS1_PBREAK_NONE;
 
     DestroyBorderInfos();
 }
 
 void SvxCSS1PropertyInfo::Merge( const SvxCSS1PropertyInfo& rProp )
 {
-    if( rProp.bTopMargin )
-        bTopMargin = true;
-    if( rProp.bBottomMargin )
-        bBottomMargin = true;
+    if( rProp.m_bTopMargin )
+        m_bTopMargin = true;
+    if( rProp.m_bBottomMargin )
+        m_bBottomMargin = true;
 
-    if( rProp.bLeftMargin )
+    if( rProp.m_bLeftMargin )
     {
-        bLeftMargin = true;
-        nLeftMargin = rProp.nLeftMargin;
+        m_bLeftMargin = true;
+        m_nLeftMargin = rProp.m_nLeftMargin;
     }
-    if( rProp.bRightMargin )
+    if( rProp.m_bRightMargin )
     {
-        bRightMargin = true;
-        nRightMargin = rProp.nRightMargin;
+        m_bRightMargin = true;
+        m_nRightMargin = rProp.m_nRightMargin;
     }
-    if( rProp.bTextIndent )
-        bTextIndent = true;
+    if( rProp.m_bTextIndent )
+        m_bTextIndent = true;
 
-    for( size_t i=0; i<SAL_N_ELEMENTS(aBorderInfos); ++i )
+    for( size_t i=0; i<SAL_N_ELEMENTS(m_aBorderInfos); ++i )
     {
-        if( rProp.aBorderInfos[i] )
+        if( rProp.m_aBorderInfos[i] )
         {
-            if( aBorderInfos[i] )
-                delete aBorderInfos[i];
+            if( m_aBorderInfos[i] )
+                delete m_aBorderInfos[i];
 
-            aBorderInfos[i] = new SvxCSS1BorderInfo( *rProp.aBorderInfos[i] );
+            m_aBorderInfos[i] = new SvxCSS1BorderInfo( *rProp.m_aBorderInfos[i] );
         }
     }
 
-    if( USHRT_MAX != rProp.nTopBorderDistance )
-        nTopBorderDistance = rProp.nTopBorderDistance;
-    if( USHRT_MAX != rProp.nBottomBorderDistance )
-        nBottomBorderDistance = rProp.nBottomBorderDistance;
-    if( USHRT_MAX != rProp.nLeftBorderDistance )
-        nLeftBorderDistance = rProp.nLeftBorderDistance;
-    if( USHRT_MAX != rProp.nRightBorderDistance )
-        nRightBorderDistance = rProp.nRightBorderDistance;
+    if( USHRT_MAX != rProp.m_nTopBorderDistance )
+        m_nTopBorderDistance = rProp.m_nTopBorderDistance;
+    if( USHRT_MAX != rProp.m_nBottomBorderDistance )
+        m_nBottomBorderDistance = rProp.m_nBottomBorderDistance;
+    if( USHRT_MAX != rProp.m_nLeftBorderDistance )
+        m_nLeftBorderDistance = rProp.m_nLeftBorderDistance;
+    if( USHRT_MAX != rProp.m_nRightBorderDistance )
+        m_nRightBorderDistance = rProp.m_nRightBorderDistance;
 
-    nColumnCount = rProp.nColumnCount;
+    m_nColumnCount = rProp.m_nColumnCount;
 
-    if( rProp.eFloat != SVX_ADJUST_END )
-        eFloat = rProp.eFloat;
+    if( rProp.m_eFloat != SVX_ADJUST_END )
+        m_eFloat = rProp.m_eFloat;
 
-    if( rProp.ePosition != SVX_CSS1_POS_NONE )
-        ePosition = rProp.ePosition;
+    if( rProp.m_ePosition != SVX_CSS1_POS_NONE )
+        m_ePosition = rProp.m_ePosition;
 
 // Feature: PrintExt
-    if( rProp.eSizeType != SVX_CSS1_STYPE_NONE )
+    if( rProp.m_eSizeType != SVX_CSS1_STYPE_NONE )
     {
-        eSizeType = rProp.eSizeType;
-        nWidth = rProp.nWidth;
-        nHeight = rProp.nHeight;
+        m_eSizeType = rProp.m_eSizeType;
+        m_nWidth = rProp.m_nWidth;
+        m_nHeight = rProp.m_nHeight;
     }
 
-    if( rProp.ePageBreakBefore != SVX_CSS1_PBREAK_NONE )
-        ePageBreakBefore = rProp.ePageBreakBefore;
+    if( rProp.m_ePageBreakBefore != SVX_CSS1_PBREAK_NONE )
+        m_ePageBreakBefore = rProp.m_ePageBreakBefore;
 
-    if( rProp.ePageBreakAfter != SVX_CSS1_PBREAK_NONE )
-        ePageBreakAfter = rProp.ePageBreakAfter;
+    if( rProp.m_ePageBreakAfter != SVX_CSS1_PBREAK_NONE )
+        m_ePageBreakAfter = rProp.m_ePageBreakAfter;
 
-    if( rProp.eLeftType != SVX_CSS1_LTYPE_NONE )
+    if( rProp.m_eLeftType != SVX_CSS1_LTYPE_NONE )
     {
-        eLeftType = rProp.eLeftType;
-        nLeft = rProp.nLeft;
+        m_eLeftType = rProp.m_eLeftType;
+        m_nLeft = rProp.m_nLeft;
     }
 
-    if( rProp.eTopType != SVX_CSS1_LTYPE_NONE )
+    if( rProp.m_eTopType != SVX_CSS1_LTYPE_NONE )
     {
-        eTopType = rProp.eTopType;
-        nTop = rProp.nTop;
+        m_eTopType = rProp.m_eTopType;
+        m_nTop = rProp.m_nTop;
     }
 
-    if( rProp.eWidthType != SVX_CSS1_LTYPE_NONE )
+    if( rProp.m_eWidthType != SVX_CSS1_LTYPE_NONE )
     {
-        eWidthType = rProp.eWidthType;
-        nWidth = rProp.nWidth;
+        m_eWidthType = rProp.m_eWidthType;
+        m_nWidth = rProp.m_nWidth;
     }
 
-    if( rProp.eHeightType != SVX_CSS1_LTYPE_NONE )
+    if( rProp.m_eHeightType != SVX_CSS1_LTYPE_NONE )
     {
-        eHeightType = rProp.eHeightType;
-        nHeight = rProp.nHeight;
+        m_eHeightType = rProp.m_eHeightType;
+        m_nHeight = rProp.m_nHeight;
     }
 }
 
@@ -518,10 +518,10 @@ SvxCSS1BorderInfo *SvxCSS1PropertyInfo::GetBorderInfo( SvxBoxItemLine nLine, boo
     case SvxBoxItemLine::RIGHT:    nPos = 3;   break;
     }
 
-    if( !aBorderInfos[nPos] && bCreate )
-        aBorderInfos[nPos] = new SvxCSS1BorderInfo;
+    if( !m_aBorderInfos[nPos] && bCreate )
+        m_aBorderInfos[nPos] = new SvxCSS1BorderInfo;
 
-    return aBorderInfos[nPos];
+    return m_aBorderInfos[nPos];
 }
 
 void SvxCSS1PropertyInfo::CopyBorderInfo( SvxBoxItemLine nSrcLine, SvxBoxItemLine nDstLine,
@@ -562,13 +562,13 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
                                       sal_uInt16 nMinBorderDist,
                                       const SvxBoxItem *pDfltItem )
 {
-    bool bChg = nTopBorderDistance != USHRT_MAX ||
-                nBottomBorderDistance != USHRT_MAX ||
-                nLeftBorderDistance != USHRT_MAX ||
-                nRightBorderDistance != USHRT_MAX;
+    bool bChg = m_nTopBorderDistance != USHRT_MAX ||
+                m_nBottomBorderDistance != USHRT_MAX ||
+                m_nLeftBorderDistance != USHRT_MAX ||
+                m_nRightBorderDistance != USHRT_MAX;
 
-    for( size_t i=0; !bChg && i<SAL_N_ELEMENTS(aBorderInfos); ++i )
-        bChg = aBorderInfos[i]!=nullptr;
+    for( size_t i=0; !bChg && i<SAL_N_ELEMENTS(m_aBorderInfos); ++i )
+        bChg = m_aBorderInfos[i]!=nullptr;
 
     if( !bChg )
         return;
@@ -593,27 +593,27 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
     if( pInfo )
         pInfo->SetBorderLine( SvxBoxItemLine::RIGHT, aBoxItem );
 
-    for( size_t i=0; i<SAL_N_ELEMENTS(aBorderInfos); ++i )
+    for( size_t i=0; i<SAL_N_ELEMENTS(m_aBorderInfos); ++i )
     {
         SvxBoxItemLine nLine = SvxBoxItemLine::TOP;
         sal_uInt16 nDist = 0;
         switch( i )
         {
         case 0: nLine = SvxBoxItemLine::TOP;
-                nDist = nTopBorderDistance;
-                nTopBorderDistance = USHRT_MAX;
+                nDist = m_nTopBorderDistance;
+                m_nTopBorderDistance = USHRT_MAX;
                 break;
         case 1: nLine = SvxBoxItemLine::BOTTOM;
-                nDist = nBottomBorderDistance;
-                nBottomBorderDistance = USHRT_MAX;
+                nDist = m_nBottomBorderDistance;
+                m_nBottomBorderDistance = USHRT_MAX;
                 break;
         case 2: nLine = SvxBoxItemLine::LEFT;
-                nDist = nLeftBorderDistance;
-                nLeftBorderDistance = USHRT_MAX;
+                nDist = m_nLeftBorderDistance;
+                m_nLeftBorderDistance = USHRT_MAX;
                 break;
         case 3: nLine = SvxBoxItemLine::RIGHT;
-                nDist = nRightBorderDistance;
-                nRightBorderDistance = USHRT_MAX;
+                nDist = m_nRightBorderDistance;
+                m_nRightBorderDistance = USHRT_MAX;
                 break;
         }
 
@@ -941,30 +941,30 @@ void SvxCSS1Parser::MergeStyles( const SfxItemSet& rSrcSet,
 
         rTargetSet.Put( rSrcSet );
 
-        if( rSrcInfo.bLeftMargin || rSrcInfo.bRightMargin ||
-            rSrcInfo.bTextIndent )
+        if( rSrcInfo.m_bLeftMargin || rSrcInfo.m_bRightMargin ||
+            rSrcInfo.m_bTextIndent )
         {
             const SvxLRSpaceItem& rNewLRSpace =
                 static_cast<const SvxLRSpaceItem&>(rSrcSet.Get( aItemIds.nLRSpace ));
 
-            if( rSrcInfo.bLeftMargin )
+            if( rSrcInfo.m_bLeftMargin )
                 aLRSpace.SetLeft( rNewLRSpace.GetLeft() );
-            if( rSrcInfo.bRightMargin )
+            if( rSrcInfo.m_bRightMargin )
                 aLRSpace.SetRight( rNewLRSpace.GetRight() );
-            if( rSrcInfo.bTextIndent )
+            if( rSrcInfo.m_bTextIndent )
                 aLRSpace.SetTextFirstLineOfst( rNewLRSpace.GetTextFirstLineOfst() );
 
             rTargetSet.Put( aLRSpace );
         }
 
-        if( rSrcInfo.bTopMargin || rSrcInfo.bBottomMargin )
+        if( rSrcInfo.m_bTopMargin || rSrcInfo.m_bBottomMargin )
         {
             const SvxULSpaceItem& rNewULSpace =
                 static_cast<const SvxULSpaceItem&>(rSrcSet.Get( aItemIds.nULSpace ));
 
-            if( rSrcInfo.bTopMargin )
+            if( rSrcInfo.m_bTopMargin )
                 aULSpace.SetUpper( rNewULSpace.GetUpper() );
-            if( rSrcInfo.bBottomMargin )
+            if( rSrcInfo.m_bBottomMargin )
                 aULSpace.SetLower( rNewULSpace.GetLower() );
 
             rTargetSet.Put( aULSpace );
@@ -1335,7 +1335,7 @@ static void ParseCSS1_column_count( const CSS1Expression *pExpr,
         double columnCount = pExpr->GetNumber();
         if ( columnCount >= 2 )
         {
-            rPropInfo.nColumnCount = columnCount;
+            rPropInfo.m_nColumnCount = columnCount;
         }
     }
 }
@@ -1998,7 +1998,7 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
             aLRItem.SetTextFirstLineOfst( nIndent );
             rItemSet.Put( aLRItem );
         }
-        rPropInfo.bTextIndent = true;
+        rPropInfo.m_bTextIndent = true;
     }
 }
 
@@ -2036,7 +2036,7 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
 
     if( bSet )
     {
-        rPropInfo.nLeftMargin = nLeft;
+        rPropInfo.m_nLeftMargin = nLeft;
         if( nLeft < 0 )
             nLeft = 0;
         const SfxPoolItem* pItem;
@@ -2053,7 +2053,7 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
             aLRItem.SetTextLeft( (sal_uInt16)nLeft );
             rItemSet.Put( aLRItem );
         }
-        rPropInfo.bLeftMargin = true;
+        rPropInfo.m_bLeftMargin = true;
     }
 }
 
@@ -2091,7 +2091,7 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
 
     if( bSet )
     {
-        rPropInfo.nRightMargin = nRight;
+        rPropInfo.m_nRightMargin = nRight;
         if( nRight < 0 )
             nRight = 0;
         const SfxPoolItem* pItem;
@@ -2108,7 +2108,7 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
             aLRItem.SetRight( (sal_uInt16)nRight );
             rItemSet.Put( aLRItem );
         }
-        rPropInfo.bRightMargin = true;
+        rPropInfo.m_bRightMargin = true;
     }
 }
 
@@ -2166,7 +2166,7 @@ static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
             aULItem.SetUpper( nUpper );
             rItemSet.Put( aULItem );
         }
-        rPropInfo.bTopMargin = true;
+        rPropInfo.m_bTopMargin = true;
     }
 }
 
@@ -2224,7 +2224,7 @@ static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
             aULItem.SetLower( nLower );
             rItemSet.Put( aULItem );
         }
-        rPropInfo.bBottomMargin = true;
+        rPropInfo.m_bBottomMargin = true;
     }
 }
 
@@ -2300,15 +2300,15 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
     {
         if( bSetMargins[3] )
         {
-            rPropInfo.bLeftMargin = true;
-            rPropInfo.nLeftMargin = nMargins[3];
+            rPropInfo.m_bLeftMargin = true;
+            rPropInfo.m_nLeftMargin = nMargins[3];
             if( nMargins[3] < 0 )
                 nMargins[3] = 0;
         }
         if( bSetMargins[1] )
         {
-            rPropInfo.bRightMargin = true;
-            rPropInfo.nRightMargin = nMargins[1];
+            rPropInfo.m_bRightMargin = true;
+            rPropInfo.m_nRightMargin = nMargins[1];
             if( nMargins[1] < 0 )
                 nMargins[1] = 0;
         }
@@ -2363,8 +2363,8 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
             rItemSet.Put( aULItem );
         }
 
-        rPropInfo.bTopMargin |= bSetMargins[0];
-        rPropInfo.bBottomMargin |= bSetMargins[2];
+        rPropInfo.m_bTopMargin |= bSetMargins[0];
+        rPropInfo.m_bBottomMargin |= bSetMargins[2];
     }
 }
 
@@ -2416,10 +2416,10 @@ static bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
     {
         switch( nWhichLine )
         {
-        case SvxBoxItemLine::TOP:      rPropInfo.nTopBorderDistance = nDist;   break;
-        case SvxBoxItemLine::BOTTOM:   rPropInfo.nBottomBorderDistance = nDist;break;
-        case SvxBoxItemLine::LEFT:     rPropInfo.nLeftBorderDistance = nDist;  break;
-        case SvxBoxItemLine::RIGHT:    rPropInfo.nRightBorderDistance = nDist; break;
+        case SvxBoxItemLine::TOP:      rPropInfo.m_nTopBorderDistance = nDist;   break;
+        case SvxBoxItemLine::BOTTOM:   rPropInfo.m_nBottomBorderDistance = nDist;break;
+        case SvxBoxItemLine::LEFT:     rPropInfo.m_nLeftBorderDistance = nDist;  break;
+        case SvxBoxItemLine::RIGHT:    rPropInfo.m_nRightBorderDistance = nDist; break;
         }
     }
 
@@ -2474,11 +2474,11 @@ static void ParseCSS1_padding( const CSS1Expression *pExpr,
         {
             if( n==0 )
             {
-                rPropInfo.nTopBorderDistance = rPropInfo.nBottomBorderDistance;
-                rPropInfo.nLeftBorderDistance = rPropInfo.nTopBorderDistance;
+                rPropInfo.m_nTopBorderDistance = rPropInfo.m_nBottomBorderDistance;
+                rPropInfo.m_nLeftBorderDistance = rPropInfo.m_nTopBorderDistance;
             }
             if( n <= 1 )
-                rPropInfo.nRightBorderDistance = rPropInfo.nLeftBorderDistance;
+                rPropInfo.m_nRightBorderDistance = rPropInfo.m_nLeftBorderDistance;
         }
 
         pExpr = pExpr->GetNext();
@@ -2780,7 +2780,7 @@ static void ParseCSS1_float( const CSS1Expression *pExpr,
     {
         sal_uInt16 nFloat;
         if( SvxCSS1Parser::GetEnum( aFloatTable, pExpr->GetString(), nFloat ) )
-            rPropInfo.eFloat = (SvxAdjust)nFloat;
+            rPropInfo.m_eFloat = (SvxAdjust)nFloat;
     }
 }
 
@@ -2795,7 +2795,7 @@ static void ParseCSS1_position( const CSS1Expression *pExpr,
     {
         sal_uInt16 nPos;
         if( SvxCSS1Parser::GetEnum( aPositionTable, pExpr->GetString(), nPos ) )
-            rPropInfo.ePosition = (SvxCSS1Position)nPos;
+            rPropInfo.m_ePosition = (SvxCSS1Position)nPos;
     }
 }
 
@@ -2848,7 +2848,7 @@ static void ParseCSS1_width( const CSS1Expression *pExpr,
                              SvxCSS1PropertyInfo& rPropInfo,
                              const SvxCSS1Parser& /*rParser*/ )
 {
-    ParseCSS1_length( pExpr, rPropInfo.nWidth, rPropInfo.eWidthType, true );
+    ParseCSS1_length( pExpr, rPropInfo.m_nWidth, rPropInfo.m_eWidthType, true );
 }
 
 static void ParseCSS1_height( const CSS1Expression *pExpr,
@@ -2856,7 +2856,7 @@ static void ParseCSS1_height( const CSS1Expression *pExpr,
                               SvxCSS1PropertyInfo& rPropInfo,
                               const SvxCSS1Parser& /*rParser*/ )
 {
-    ParseCSS1_length( pExpr, rPropInfo.nHeight, rPropInfo.eHeightType, false );
+    ParseCSS1_length( pExpr, rPropInfo.m_nHeight, rPropInfo.m_eHeightType, false );
 }
 
 static void ParseCSS1_left( const CSS1Expression *pExpr,
@@ -2864,7 +2864,7 @@ static void ParseCSS1_left( const CSS1Expression *pExpr,
                              SvxCSS1PropertyInfo& rPropInfo,
                              const SvxCSS1Parser& /*rParser*/ )
 {
-    ParseCSS1_length( pExpr, rPropInfo.nLeft, rPropInfo.eLeftType, true );
+    ParseCSS1_length( pExpr, rPropInfo.m_nLeft, rPropInfo.m_eLeftType, true );
 }
 
 static void ParseCSS1_top( const CSS1Expression *pExpr,
@@ -2872,7 +2872,7 @@ static void ParseCSS1_top( const CSS1Expression *pExpr,
                            SvxCSS1PropertyInfo& rPropInfo,
                            const SvxCSS1Parser& /*rParser*/ )
 {
-    ParseCSS1_length( pExpr, rPropInfo.nTop, rPropInfo.eTopType, false );
+    ParseCSS1_length( pExpr, rPropInfo.m_nTop, rPropInfo.m_eTopType, false );
 }
 
 // Feature: PrintExt
@@ -2892,16 +2892,16 @@ static void ParseCSS1_size( const CSS1Expression *pExpr,
                 if( SvxCSS1Parser::GetEnum( aSizeTable, pExpr->GetString(),
                                             nValue ) )
                 {
-                    rPropInfo.eSizeType = (SvxCSS1SizeType)nValue;
+                    rPropInfo.m_eSizeType = (SvxCSS1SizeType)nValue;
                 }
             }
             break;
 
         case CSS1_LENGTH:
-            rPropInfo.nHeight = pExpr->GetSLength();
+            rPropInfo.m_nHeight = pExpr->GetSLength();
             if( n==0 )
-                rPropInfo.nWidth = rPropInfo.nHeight;
-            rPropInfo.eSizeType = SVX_CSS1_STYPE_TWIP;
+                rPropInfo.m_nWidth = rPropInfo.m_nHeight;
+            rPropInfo.m_eSizeType = SVX_CSS1_STYPE_TWIP;
             break;
 
         case CSS1_PIXLENGTH:
@@ -2909,10 +2909,10 @@ static void ParseCSS1_size( const CSS1Expression *pExpr,
                 long nPHeight = (long)pExpr->GetNumber();
                 long nPWidth = n==0 ? nPHeight : 0;
                 SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
-                rPropInfo.nHeight = nPHeight;
+                rPropInfo.m_nHeight = nPHeight;
                 if( n==0 )
-                    rPropInfo.nWidth = nPWidth;
-                rPropInfo.eSizeType = SVX_CSS1_STYPE_TWIP;
+                    rPropInfo.m_nWidth = nPWidth;
+                rPropInfo.m_eSizeType = SVX_CSS1_STYPE_TWIP;
             }
             break;
 
@@ -2944,7 +2944,7 @@ static void ParseCSS1_page_break_before( const CSS1Expression *pExpr,
                                          SvxCSS1PropertyInfo& rPropInfo,
                                          const SvxCSS1Parser& /*rParser*/ )
 {
-    ParseCSS1_page_break_xxx( pExpr, rPropInfo.ePageBreakBefore );
+    ParseCSS1_page_break_xxx( pExpr, rPropInfo.m_ePageBreakBefore );
 }
 
 static void ParseCSS1_page_break_after( const CSS1Expression *pExpr,
@@ -2952,7 +2952,7 @@ static void ParseCSS1_page_break_after( const CSS1Expression *pExpr,
                                         SvxCSS1PropertyInfo& rPropInfo,
                                         const SvxCSS1Parser& /*rParser*/ )
 {
-    ParseCSS1_page_break_xxx( pExpr, rPropInfo.ePageBreakAfter );
+    ParseCSS1_page_break_xxx( pExpr, rPropInfo.m_ePageBreakAfter );
 }
 
 static void ParseCSS1_page_break_inside( const CSS1Expression *pExpr,
