@@ -132,7 +132,6 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void        ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void        ImplLoadRes();
     SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, bool bPaint = true );
     SAL_DLLPRIVATE ControlType ImplGetNativeControlType() const;
     SAL_DLLPRIVATE long        ImplGetExtraXOffset() const;

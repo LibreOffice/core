@@ -1266,15 +1266,6 @@ void Edit::ImplSetCursorPos( sal_Int32 nChar, bool bSelect )
     ImplSetSelection( aSelection );
 }
 
-void Edit::ImplLoadRes()
-{
-    Control::ImplLoadRes();
-
-    sal_uInt16 nTextLength = ReadShortRes();
-    if ( nTextLength )
-        SetMaxTextLen( nTextLength );
-}
-
 void Edit::ImplCopyToSelectionClipboard()
 {
     if ( GetSelection().Len() )

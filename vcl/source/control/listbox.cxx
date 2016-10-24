@@ -176,28 +176,6 @@ WinBits ListBox::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-void ListBox::ImplLoadRes()
-{
-    Control::ImplLoadRes();
-
-    // The resource short is actually to be treated as unsigned short.
-    sal_uInt16 nResPos = static_cast<sal_uInt16>(ReadShortRes());
-    sal_Int32 nSelPos = (nResPos == SAL_MAX_UINT16) ? LISTBOX_ENTRY_NOTFOUND : nResPos;
-    sal_Int32 nNumber = ReadLongRes();
-
-    for( sal_Int32 i = 0; i < nNumber; i++ )
-    {
-        sal_Int32 nPos = InsertEntry( ReadStringRes() );
-
-        sal_IntPtr nId = ReadLongRes();
-        if( nId )
-            SetEntryData( nPos, reinterpret_cast<void *>(nId) ); // ID as UserData
-    }
-
-    if( nSelPos < nNumber )
-        SelectEntryPos( nSelPos );
-}
-
 IMPL_LINK_NOARG(ListBox, ImplSelectHdl, LinkParamNone*, void)
 {
     bool bPopup = IsInDropDown();
