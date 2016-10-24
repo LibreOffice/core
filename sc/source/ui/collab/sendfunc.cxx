@@ -120,7 +120,7 @@ public:
         if (n > 0 && (size_t)n < getArgCount() )
         {
             OUString aUStr( maArgs[ n ] );
-            ScGlobal::EraseQuotes( aUStr );
+            ScGlobal::EraseQuotes( aUStr, '\'' );
             return aUStr;
         } else
             return OUString();
