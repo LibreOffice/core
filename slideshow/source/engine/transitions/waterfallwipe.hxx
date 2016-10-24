@@ -31,7 +31,7 @@ namespace internal {
 class WaterfallWipe : public ParametricPolyPolygon
 {
 public:
-    WaterfallWipe( sal_Int32 nElements, bool flipOnYAxis = false );
+    WaterfallWipe( sal_Int32 nElements, bool flipOnYAxis );
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 private:
     bool m_flipOnYAxis;

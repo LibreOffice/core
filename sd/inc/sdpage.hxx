@@ -151,7 +151,7 @@ protected:
 
 public:
 
-    SdPage(SdDrawDocument& rNewDoc, bool bMasterPage=false);
+    SdPage(SdDrawDocument& rNewDoc, bool bMasterPage);
     virtual ~SdPage() override;
     virtual SdrPage* Clone() const override;
     virtual SdrPage* Clone(SdrModel* pNewModel) const override;

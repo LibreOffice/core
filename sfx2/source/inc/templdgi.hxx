@@ -105,7 +105,7 @@ protected:
                 SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                 SvTreeListEntry*& rpNewParent, sal_uIntPtr& rNewChildPos) override;
 public:
-    StyleTreeListBox_Impl( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinStyle = 0);
+    StyleTreeListBox_Impl( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinStyle);
 
     void Recalc();
 

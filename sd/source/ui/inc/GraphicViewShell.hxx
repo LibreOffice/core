@@ -59,7 +59,7 @@ public:
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
         vcl::Window* pParentWindow,
-        FrameView* pFrameView = nullptr);
+        FrameView* pFrameView);
 
     virtual ~GraphicViewShell() override;
 

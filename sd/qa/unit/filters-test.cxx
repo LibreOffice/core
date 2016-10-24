@@ -69,7 +69,7 @@ bool SdFiltersTest::load(const OUString &rFilter, const OUString &rURL,
         rUserData, OUString() ));
     const_cast<SfxFilter*>(pFilter.get())->SetVersion(nFilterVersion);
 
-    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
+    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false);
     SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ);
     pSrcMed->SetFilter(pFilter);
     bool bLoaded = xDocShRef->DoLoad(pSrcMed);

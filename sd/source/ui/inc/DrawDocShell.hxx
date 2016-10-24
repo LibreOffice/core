@@ -58,19 +58,19 @@ private:
 
 public:
     DrawDocShell (
-        SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED,
-        bool bSdDataObj=false,
+        SfxObjectCreateMode eMode,
+        bool bSdDataObj,
         DocumentType=DocumentType::Impress);
 
     DrawDocShell (
         SfxModelFlags nModelCreationFlags,
-        bool bSdDataObj=false,
+        bool bSdDataObj,
         DocumentType=DocumentType::Impress);
 
     DrawDocShell (
         SdDrawDocument* pDoc,
-        SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED,
-        bool bSdDataObj=false,
+        SfxObjectCreateMode eMode,
+        bool bSdDataObj,
         DocumentType=DocumentType::Impress);
     virtual ~DrawDocShell() override;
 

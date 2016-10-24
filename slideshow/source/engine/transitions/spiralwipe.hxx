@@ -47,7 +47,7 @@ protected:
 class BoxSnakesWipe : public SpiralWipe
 {
 public:
-    BoxSnakesWipe( sal_Int32 nElements, bool fourBox = false )
+    BoxSnakesWipe( sal_Int32 nElements, bool fourBox )
         : SpiralWipe(nElements), m_fourBox(fourBox) {}
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 private:

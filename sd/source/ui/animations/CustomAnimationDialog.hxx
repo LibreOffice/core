@@ -142,7 +142,7 @@ class STLPropertySet;
 class CustomAnimationDialog : public TabDialog
 {
 public:
-    CustomAnimationDialog(vcl::Window* pParent, STLPropertySet* pSet, const OString& Page = OString());
+    CustomAnimationDialog(vcl::Window* pParent, STLPropertySet* pSet, const OString& Page);
     virtual ~CustomAnimationDialog() override;
     virtual void dispose() override;
 

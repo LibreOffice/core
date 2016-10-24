@@ -88,8 +88,8 @@ public:
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
         vcl::Window* pParentWindow,
-        PageKind ePageKind = PageKind::Standard,
-        FrameView* pFrameView = nullptr);
+        PageKind ePageKind,
+        FrameView* pFrameView);
 
     virtual ~DrawViewShell() override;
 

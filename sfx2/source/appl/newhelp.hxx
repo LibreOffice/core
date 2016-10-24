@@ -565,7 +565,7 @@ class SfxAddHelpBookmarkDialog_Impl : public ModalDialog
 private:
     VclPtr<Edit> m_pTitleED;
 public:
-    SfxAddHelpBookmarkDialog_Impl( vcl::Window* pParent, bool bRename = true );
+    SfxAddHelpBookmarkDialog_Impl( vcl::Window* pParent, bool bRename );
     virtual ~SfxAddHelpBookmarkDialog_Impl() override;
     virtual void dispose() override;
 

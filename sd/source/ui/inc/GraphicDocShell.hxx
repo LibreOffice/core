@@ -46,13 +46,13 @@ public:
     SFX_DECL_OBJECTFACTORY();
 
     GraphicDocShell (
-        SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED,
-        bool bSdDataObj=false,
+        SfxObjectCreateMode eMode,
+        bool bSdDataObj,
         DocumentType=DocumentType::Draw);
 
     GraphicDocShell (
         SfxModelFlags nModelCreationFlags,
-        bool bSdDataObj=false,
+        bool bSdDataObj,
         DocumentType=DocumentType::Draw);
 
     virtual ~GraphicDocShell() override;
