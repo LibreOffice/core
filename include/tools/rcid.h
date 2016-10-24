@@ -47,8 +47,6 @@
 
 #define RSC_CONTROL             (RSC_NOTYPE + 0x44)
 
-#define RSC_TEXT                (RSC_NOTYPE + 0x57)
-
 #define RSC_STRINGARRAY         (RSC_NOTYPE + 0x79)
 
 // (RSC_NOTYPE + 0x200) - (RSC_NOTYPE + 0x300) reserved for Sfx

@@ -63,7 +63,6 @@ void RscTypCont::Init()
     RscTop   *  pClassImageList;
     RscTop   *  pClassWindow;
     RscTop   *  pClassControl;
-    RscTop   *  pClassFixedText;
     RscTop   *  pClassKeyCode;
     RscTop   *  pLangClassKeyCode;
 
@@ -289,9 +288,6 @@ void RscTypCont::Init()
     pRoot->Insert( pClassControl );
 }
 {
-    pClassFixedText = InitClassFixedText( pClassControl );
-    pRoot->Insert( pClassFixedText );
-
     pClassKeyCode = InitClassKeyCode( pClassMgr, pKey );
     pRoot->Insert( pClassKeyCode );
     {

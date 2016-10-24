@@ -56,7 +56,6 @@ protected:
 
 public:
     explicit        FixedText( vcl::Window* pParent, WinBits nStyle = 0 );
-    explicit        FixedText( vcl::Window* pParent, const ResId& rResId );
     virtual         ~FixedText() override;
     virtual void    dispose() override;
 

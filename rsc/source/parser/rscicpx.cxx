@@ -262,31 +262,6 @@ RscTop * RscTypCont::InitClassControl( RscTop * pSuper )
     return pClassControl;
 }
 
-RscTop * RscTypCont::InitClassFixedText( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassFixedText;
-
-    // initialize class
-    nId = pHS->getID( "FixedText" );
-    pClassFixedText = new RscClass( nId, RSC_TEXT, pSuper );
-    pClassFixedText->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassFixedText );
-
-    // initialize variables
-    INS_WINBIT(pClassFixedText,Left)
-    INS_WINBIT(pClassFixedText,Center)
-    INS_WINBIT(pClassFixedText,Right)
-    INS_WINBIT(pClassFixedText,WordBreak)
-    INS_WINBIT(pClassFixedText,LeftLabel)
-    INS_WINBIT(pClassFixedText,NoLabel)
-    INS_WINBIT(pClassFixedText,Top)
-    INS_WINBIT(pClassFixedText,VCenter)
-    INS_WINBIT(pClassFixedText,Bottom)
-
-    return pClassFixedText;
-}
-
 RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
 {
     Atom        nId;

@@ -113,21 +113,6 @@ FixedText::FixedText( vcl::Window* pParent, WinBits nStyle )
     ImplInit( pParent, nStyle );
 }
 
-FixedText::FixedText( vcl::Window* pParent, const ResId& rResId )
-    : Control(WINDOW_FIXEDTEXT)
-    , m_nMaxWidthChars(-1)
-    , m_nMinWidthChars(-1)
-    , m_pMnemonicWindow(nullptr)
-{
-    rResId.SetRT( RSC_TEXT );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes();
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 DrawTextFlags FixedText::ImplGetTextStyle( WinBits nWinStyle )
 {
     DrawTextFlags nTextStyle = DrawTextFlags::Mnemonic | DrawTextFlags::EndEllipsis;
