@@ -1754,6 +1754,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pContentsLabel, "contentslabel");
     get(m_pAddCommandsButton, "add");
     get(m_pAddSeparatorButton, "addseparatorbtn");
+    get(m_pAddSubmenuButton, "addsubmenubtn");
     get(m_pModifyCommandButton, "modify");
     get(m_pDeleteCommandButton, "deletebtn");
     get(m_pResetTopLevelButton, "resetbtn");
@@ -1773,7 +1774,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     // This button is applicable only for the toolbar config tab
     m_pResetTopLevelButton->Enable( false );
     m_pResetTopLevelButton->Hide();
-    //These radio buttons are applicable only for the toolbar config tab
+    // These radio buttons are applicable only for the toolbar config tab
     m_pIconsOnlyRB->Enable( false );
     m_pTextOnlyRB->Enable( false );
     m_pIconsAndTextRB->Enable( false );
@@ -1781,6 +1782,9 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     m_pTextOnlyRB->Hide();
     m_pIconsAndTextRB->Hide();
     m_pToolbarStyleLabel->Hide();
+    // This button is applicable only for the Menus and Context Menus tabs
+    m_pAddSubmenuButton->Disable();
+    m_pAddSubmenuButton->Hide();
 }
 
 SvxConfigPage::~SvxConfigPage()
@@ -1804,6 +1808,7 @@ void SvxConfigPage::dispose()
     m_pEntries.clear();
     m_pAddCommandsButton.clear();
     m_pAddSeparatorButton.clear();
+    m_pAddSubmenuButton.clear();
     m_pModifyCommandButton.clear();
     m_pDeleteCommandButton.clear();
     m_pResetTopLevelButton.clear();
@@ -2443,6 +2448,9 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
     m_pContentsListBox->set_vexpand(true);
     m_pContentsListBox->Show();
 
+    m_pAddSubmenuButton->Enable();
+    m_pAddSubmenuButton->Show();
+
     m_pTopLevelListBox->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, SelectMenu ) );
 
@@ -2460,6 +2468,9 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
 
     m_pAddSeparatorButton->SetClickHdl  (
         LINK( this, SvxMenuConfigPage, AddSeparatorHdl ) );
+
+    m_pAddSubmenuButton->SetClickHdl  (
+        LINK( this, SvxMenuConfigPage, AddSubmenuHdl ) );
 
     m_pDeleteCommandButton->SetClickHdl  (
         LINK( this, SvxMenuConfigPage, DeleteCommandHdl ) );
@@ -2713,30 +2724,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
 IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
 {
     OString sIdent = pButton->GetCurItemIdent();
-    if (sIdent == "addsubmenu")
-    {
-        OUString aNewName;
-        OUString aDesc = CUI_RESSTR( RID_SVXSTR_SUBMENU_NAME );
-
-        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
-        pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
-        pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_ADD_SUBMENU ) );
-
-        if ( pNameDialog->Execute() == RET_OK ) {
-            pNameDialog->GetName(aNewName);
-
-            SvxConfigEntry* pNewEntryData =
-                new SvxConfigEntry( aNewName, aNewName, true );
-            pNewEntryData->SetUserDefined();
-
-            InsertEntry( pNewEntryData );
-
-            ReloadTopLevelListBox();
-
-            GetSaveInData()->SetModified();
-        }
-    }
-    else if (sIdent == "modrename")
+    if (sIdent == "modrename")
     {
         SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
         SvxConfigEntry* pEntry =
@@ -2817,6 +2805,33 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, AddSeparatorHdl, Button *, void )
 
     if ( GetSaveInData()->IsModified() )
     {
+        UpdateButtonStates();
+    }
+}
+
+IMPL_LINK_NOARG( SvxMenuConfigPage, AddSubmenuHdl, Button *, void )
+{
+    OUString aNewName;
+    OUString aDesc = CUI_RESSTR( RID_SVXSTR_SUBMENU_NAME );
+
+    VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
+    pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
+    pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_ADD_SUBMENU ) );
+
+    if ( pNameDialog->Execute() == RET_OK )
+    {
+        pNameDialog->GetName(aNewName);
+
+        SvxConfigEntry* pNewEntryData =
+            new SvxConfigEntry( aNewName, aNewName, true );
+        pNewEntryData->SetUserDefined();
+
+        InsertEntry( pNewEntryData );
+
+        ReloadTopLevelListBox();
+
+        GetSaveInData()->SetModified();
+
         UpdateButtonStates();
     }
 }
