@@ -80,6 +80,7 @@ public:
     void testTdf102223();
     void testPostKeyEventInvalidation();
     void testTdf103083();
+    void testTdf103334();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -110,6 +111,7 @@ public:
     CPPUNIT_TEST(testTdf102223);
     CPPUNIT_TEST(testPostKeyEventInvalidation);
     CPPUNIT_TEST(testTdf103083);
+    CPPUNIT_TEST(testTdf103334);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -120,6 +122,7 @@ private:
 
     uno::Reference<lang::XComponent> mxComponent;
     Rectangle m_aInvalidation;
+    Rectangle m_aMergedInvalidations;
     std::vector<Rectangle> m_aSelection;
     bool m_bFound;
     sal_Int32 m_nPart;
@@ -210,8 +213,12 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     case LOK_CALLBACK_INVALIDATE_TILES:
     {
         OUString aPayload = OUString::createFromAscii(pPayload);
-        if (aPayload != "EMPTY" && m_aInvalidation.IsEmpty())
-            lcl_convertRectangle(aPayload, m_aInvalidation);
+        if (aPayload != "EMPTY")
+        {
+            if (m_aInvalidation.IsEmpty())
+                lcl_convertRectangle(aPayload, m_aInvalidation);
+            m_aMergedInvalidations = m_aMergedInvalidations.Union(m_aInvalidation);
+        }
     }
     break;
     case LOK_CALLBACK_TEXT_SELECTION:
@@ -1403,6 +1410,61 @@ void SdTiledRenderingTest::testTdf103083()
 
     const SfxItemSet& rParagraphItemSet2 = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(2);
     CPPUNIT_ASSERT_EQUAL((sal_uInt16)3, rParagraphItemSet2.Count());
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+/**
+ * tests an undo bug around changing style of bullet items
+ */
+void SdTiledRenderingTest::testTdf103334()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("tdf103334.fodp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
+    SdPage* pActualPage = pViewShell->GetActualPage();
+
+    SdrObject* pObject1 = pActualPage->GetObj(1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TEXT), pObject1->GetObjIdentifier());
+    SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
+
+    SdrView* pView = pViewShell->GetView();
+
+    // start editing bullet items
+    Rectangle aRect = pTextObject->GetCurrentBoundRect();
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      1, MOUSE_LEFT, 0);
+    pView->SdrBeginTextEdit(pTextObject);
+
+    // clear invalidation tracker
+    m_aMergedInvalidations.SetEmpty();
+
+    // select the first bullet item
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView.SetSelection(ESelection(2, 0, 2, 100)); // start para, start char, end para, end char.
+    CPPUNIT_ASSERT_EQUAL(OUString("And then press CTRL-Z for undo"), rEditView.GetSelected());
+
+    // change the bullet items style
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"SetNumber", uno::makeAny(static_cast<sal_uInt16>(1))},
+    }));
+    comphelper::dispatchCommand(".uno:SetNumber", aPropertyValues);
+    pView->SdrEndTextEdit();
+
+    Scheduler::ProcessEventsToIdle();
+
+    /**
+     * this always gives a result of 12757x1017@(1278,3639), with or without my fix
+     */
+    std::cout << "invalid rectangle: " << m_aMergedInvalidations << std::endl;
 
     comphelper::LibreOfficeKit::setActive(false);
 }

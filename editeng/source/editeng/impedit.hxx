@@ -859,7 +859,7 @@ public:
     void            SetNotifyHdl( const Link<EENotify&,void>& rLink )     { aNotifyHdl = rLink; }
     const Link<EENotify&,void>&   GetNotifyHdl() const            { return aNotifyHdl; }
 
-    void            FormatAndUpdate( EditView* pCurView = nullptr );
+    void            FormatAndUpdate( EditView* pCurView = nullptr, bool bCalledFromUndo = false );
     inline void     IdleFormatAndUpdate( EditView* pCurView );
 
     svtools::ColorConfig& GetColorConfig();
