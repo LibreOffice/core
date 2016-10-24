@@ -29,7 +29,6 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include "anyrefdg.hxx"
 #include "global.hxx"
-#include "privsplt.hxx"
 #include "funcdesc.hxx"
 
 class ScFunctionWin : public PanelLayout

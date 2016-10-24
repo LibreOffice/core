@@ -466,7 +466,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/formdlg/dwfunctr \
     sc/source/ui/formdlg/formdata \
     sc/source/ui/formdlg/formula \
-    sc/source/ui/formdlg/privsplt \
     sc/source/ui/miscdlgs/acredlin \
     sc/source/ui/miscdlgs/anyrefdg \
     sc/source/ui/miscdlgs/autofmt \
