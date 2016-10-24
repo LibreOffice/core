@@ -230,7 +230,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/editutil \
     sc/source/core/tool/filtopt \
     sc/source/core/tool/formulagroup \
-    sc/source/core/tool/formulalogger \
     sc/source/core/tool/formulaopt \
     sc/source/core/tool/formulaparserpool \
     sc/source/core/tool/formularesult \
@@ -670,6 +669,12 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/view/waitoff \
     sc/source/ui/xmlsource/xmlsourcedlg \
 ))
+
+ifeq ($(ENABLE_FORMULA_LOGGER),TRUE)
+$(eval $(call gb_Library_add_exception_objects,sc,\
+    sc/source/core/tool/formulalogger \
+))
+endif
 
 ifneq (,$(gb_ENABLE_DBGUTIL))
 $(eval $(call gb_Library_add_exception_objects,sc,\

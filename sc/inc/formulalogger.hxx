@@ -12,10 +12,14 @@
 #include <memory>
 #include <vector>
 
+#include <config_options_calc.h>
+
 class ScFormulaCell;
 class ScDocument;
 
 namespace sc {
+
+#if ENABLE_FORMULA_LOGGER
 
 /**
  * Outputs formula calculation log outputs to specified file.
@@ -83,6 +87,35 @@ public:
 
     GroupScope enterGroup( const ScDocument& rDoc, const ScFormulaCell& rCell );
 };
+
+#else
+
+/**
+ * Dummy class with all empty inline methods.
+ */
+class FormulaLogger
+{
+public:
+
+    static FormulaLogger get()
+    {
+        return FormulaLogger();
+    }
+
+    class GroupScope
+    {
+    public:
+        void addMessage( const OUString& /*rMsg*/ ) {}
+        void setCalcComplete() {}
+    };
+
+    GroupScope enterGroup( const ScDocument& /*rDoc*/, const ScFormulaCell& /*rCell*/ )
+    {
+        return GroupScope();
+    }
+};
+
+#endif // ENABLE_FORMULA_LOGGER
 
 }
 

@@ -1515,6 +1515,13 @@ AC_ARG_ENABLE(dconf,
         [Disable the dconf configuration backend (enabled by default where
          available).]))
 
+AC_ARG_ENABLE(formula-logger,
+    AS_HELP_STRING(
+        [--enable-formula-logger],
+        [Enable formula logger for logging formula calculation flow in Calc.]
+    )
+)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -12754,6 +12761,20 @@ else
 fi
 AC_SUBST(MPL_SUBSET)
 
+dnl ===================================================================
+
+AC_MSG_CHECKING([formula logger])
+ENABLE_FORMULA_LOGGER=
+
+if test "x$enable_formula_logger" = "xyes"; then
+    AC_MSG_RESULT([yes])
+    AC_DEFINE(ENABLE_FORMULA_LOGGER)
+    ENABLE_FORMULA_LOGGER=TRUE
+else
+    AC_MSG_RESULT([no])
+fi
+
+AC_SUBST(ENABLE_FORMULA_LOGGER)
 
 dnl ===================================================================
 dnl Setting up the environment.
@@ -12927,6 +12948,7 @@ AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_opengl.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
+AC_CONFIG_HEADERS([config_host/config_options_calc.h])
 AC_CONFIG_HEADERS([config_host/config_test.h])
 AC_CONFIG_HEADERS([config_host/config_telepathy.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
