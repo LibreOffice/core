@@ -59,11 +59,18 @@ public:
 /// Numbering object: an integer or a real.
 class PDFNumberElement : public PDFElement
 {
+    /// Input file start location.
+    sal_uInt64 m_nOffset;
+    /// Input file token length.
+    sal_uInt64 m_nLength;
     double m_fValue;
 
 public:
+    PDFNumberElement();
     bool Read(SvStream& rStream) override;
     double GetValue() const;
+    sal_uInt64 GetLocation() const;
+    sal_uInt64 GetLength() const;
 };
 
 class PDFReferenceElement;
@@ -79,6 +86,10 @@ class PDFObjectElement : public PDFElement
     sal_uInt64 m_nDictionaryOffset;
     /// Length of the dictionary buffer till (before) the '<<' token.
     sal_uInt64 m_nDictionaryLength;
+    /// Position after the '/' token.
+    std::map<OString, sal_uInt64> m_aDictionaryKeyOffset;
+    /// Length of the dictionary key and value, till (before) the next token.
+    std::map<OString, sal_uInt64> m_aDictionaryKeyValueLength;
 
 public:
     PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue);
@@ -91,12 +102,16 @@ public:
     sal_uInt64 GetDictionaryOffset();
     void SetDictionaryLength(sal_uInt64 nDictionaryLength);
     sal_uInt64 GetDictionaryLength();
+    void SetDictionaryKeyOffset(const OString& rKey, sal_uInt64 nOffset);
+    sal_uInt64 GetDictionaryKeyOffset(const OString& rKey) const;
+    void SetDictionaryKeyValueLength(const OString& rKey, sal_uInt64 nLength);
+    sal_uInt64 GetDictionaryKeyValueLength(const OString& rKey) const;
 };
 
 /// Dictionary object: a set key-value pairs.
 class PDFDictionaryElement : public PDFElement
 {
-    /// Offset after the '>>' token.
+    /// Offset after the '<<' token.
     sal_uInt64 m_nLocation;
 
 public:
@@ -122,9 +137,16 @@ public:
 class PDFNameElement : public PDFElement
 {
     OString m_aValue;
+    /// Offset after the '/' token.
+    sal_uInt64 m_nLocation;
+    /// Length till the next token start.
+    sal_uInt64 m_nLength;
 public:
+    PDFNameElement();
     bool Read(SvStream& rStream) override;
     const OString& GetValue() const;
+    sal_uInt64 GetLocation() const;
+    sal_uInt64 GetLength() const;
 };
 
 /// Reference object: something with a unique ID.
@@ -172,18 +194,26 @@ public:
 /// Array object: a list.
 class PDFArrayElement : public PDFElement
 {
+    /// Location after the '[' token.
+    sal_uInt64 m_nOffset;
     std::vector<PDFElement*> m_aElements;
 public:
+    PDFArrayElement();
     bool Read(SvStream& rStream) override;
     void PushBack(PDFElement* pElement);
     const std::vector<PDFElement*>& GetElements();
+    sal_uInt64 GetOffset() const;
 };
 
 /// End of an array: ']'.
 class PDFEndArrayElement : public PDFElement
 {
+    /// Location before the ']' token.
+    sal_uInt64 m_nOffset;
 public:
+    PDFEndArrayElement();
     bool Read(SvStream& rStream) override;
+    sal_uInt64 GetOffset() const;
 };
 
 /// Boolean object: a 'true' or a 'false'.
@@ -355,11 +385,33 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.WriteUInt32AsString(nFirstPageId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<<");
-    m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pFirstPage->GetDictionaryOffset(), pFirstPage->GetDictionaryLength());
-    m_aEditBuffer.WriteCharPtr("/Annots[");
-    m_aEditBuffer.WriteUInt32AsString(nAnnotId);
-    m_aEditBuffer.WriteCharPtr(" 0 R]");
-    m_aEditBuffer.WriteCharPtr(">>\nendobj\n\n");
+    auto pAnnots = dynamic_cast<PDFArrayElement*>(pFirstPage->Lookup("Annots"));
+    if (!pAnnots)
+    {
+        // No Annots key, just write the key with a single reference.
+        m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pFirstPage->GetDictionaryOffset(), pFirstPage->GetDictionaryLength());
+        m_aEditBuffer.WriteCharPtr("/Annots[");
+        m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+        m_aEditBuffer.WriteCharPtr(" 0 R]");
+    }
+    else
+    {
+        // Annots key is already there, insert our reference at the end.
+
+        // Offset right before the end of the Annots array.
+        sal_uInt64 nAnnotsEndOffset = pFirstPage->GetDictionaryKeyOffset("Annots") + pFirstPage->GetDictionaryKeyValueLength("Annots") - 1;
+        // Length of beginning of the dictionary -> Annots end.
+        sal_uInt64 nAnnotsBeforeEndLength = nAnnotsEndOffset - pFirstPage->GetDictionaryOffset();
+        m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pFirstPage->GetDictionaryOffset(), nAnnotsBeforeEndLength);
+        m_aEditBuffer.WriteCharPtr(" ");
+        m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+        m_aEditBuffer.WriteCharPtr(" 0 R");
+        // Length of Annots end -> end of the dictionary.
+        sal_uInt64 nAnnotsAfterEndLength = pFirstPage->GetDictionaryOffset() + pFirstPage->GetDictionaryLength() - nAnnotsEndOffset;
+        m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + nAnnotsEndOffset, nAnnotsAfterEndLength);
+    }
+    m_aEditBuffer.WriteCharPtr(">>");
+    m_aEditBuffer.WriteCharPtr("\nendobj\n\n");
 
     // Write the updated Catalog object, references nAnnotId.
     auto pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"));
@@ -1349,9 +1401,17 @@ bool PDFCommentElement::Read(SvStream& rStream)
     return false;
 }
 
+PDFNumberElement::PDFNumberElement()
+    : m_nOffset(0),
+      m_nLength(0),
+      m_fValue(0)
+{
+}
+
 bool PDFNumberElement::Read(SvStream& rStream)
 {
     OStringBuffer aBuf;
+    m_nOffset = rStream.Tell();
     char ch;
     rStream.ReadChar(ch);
     while (!rStream.IsEof())
@@ -1359,6 +1419,7 @@ bool PDFNumberElement::Read(SvStream& rStream)
         if (!isdigit(ch) && ch != '-')
         {
             rStream.SeekRel(-1);
+            m_nLength = rStream.Tell() - m_nOffset;
             m_fValue = aBuf.makeStringAndClear().toDouble();
             SAL_INFO("xmlsecurity.pdfio", "PDFNumberElement::Read: m_fValue is '" << m_fValue << "'");
             return true;
@@ -1368,6 +1429,16 @@ bool PDFNumberElement::Read(SvStream& rStream)
     }
 
     return false;
+}
+
+sal_uInt64 PDFNumberElement::GetLocation() const
+{
+    return m_nOffset;
+}
+
+sal_uInt64 PDFNumberElement::GetLength() const
+{
+    return m_nLength;
 }
 
 PDFBooleanElement::PDFBooleanElement(bool /*bValue*/)
@@ -1506,6 +1577,7 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
     }
 
     OString aName;
+    sal_uInt64 nNameOffset = 0;
     std::vector<PDFNumberElement*> aNumbers;
     // The array value we're in -- if any.
     PDFArrayElement* pArray = nullptr;
@@ -1541,7 +1613,13 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
         {
             if (!aNumbers.empty())
             {
-                rDictionary[aName] = aNumbers.back();
+                PDFNumberElement* pNumber = aNumbers.back();
+                rDictionary[aName] = pNumber;
+                if (pThisObject)
+                {
+                    pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
+                    pThisObject->SetDictionaryKeyValueLength(aName, pNumber->GetLocation() + pNumber->GetLength() - nNameOffset);
+                }
                 aName.clear();
                 aNumbers.clear();
             }
@@ -1550,11 +1628,17 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
             {
                 // Remember key.
                 aName = pName->GetValue();
+                nNameOffset = pName->GetLocation();
             }
             else
             {
                 // Name-name key-value.
                 rDictionary[aName] = pName;
+                if (pThisObject)
+                {
+                    pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
+                    pThisObject->SetDictionaryKeyValueLength(aName, pName->GetLocation() + pName->GetLength() - nNameOffset);
+                }
                 aName.clear();
             }
             continue;
@@ -1567,7 +1651,8 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
             continue;
         }
 
-        if (pArray && dynamic_cast<PDFEndArrayElement*>(rElements[i].get()))
+        auto pEndArr = dynamic_cast<PDFEndArrayElement*>(rElements[i].get());
+        if (pArray && pEndArr)
         {
             if (!aNumbers.empty())
             {
@@ -1576,6 +1661,12 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
                 aNumbers.clear();
             }
             rDictionary[aName] = pArray;
+            if (pThisObject)
+            {
+                pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
+                // Include the ending ']' in the length of the key - (array)value pair length.
+                pThisObject->SetDictionaryKeyValueLength(aName, pEndArr->GetOffset() - nNameOffset + 1);
+            }
             aName.clear();
             pArray = nullptr;
             continue;
@@ -1587,6 +1678,8 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
             if (!pArray)
             {
                 rDictionary[aName] = pReference;
+                if (pThisObject)
+                    pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
                 aName.clear();
             }
             else
@@ -1601,6 +1694,8 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
         if (pLiteralString)
         {
             rDictionary[aName] = pLiteralString;
+            if (pThisObject)
+                pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
             aName.clear();
             continue;
         }
@@ -1611,6 +1706,8 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
             if (!pArray)
             {
                 rDictionary[aName] = pHexString;
+                if (pThisObject)
+                    pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
                 aName.clear();
             }
             else
@@ -1633,6 +1730,8 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
     if (!aNumbers.empty())
     {
         rDictionary[aName] = aNumbers.back();
+        if (pThisObject)
+            pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
         aName.clear();
         aNumbers.clear();
     }
@@ -1688,6 +1787,34 @@ sal_uInt64 PDFObjectElement::GetDictionaryOffset()
         PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
 
     return m_nDictionaryOffset;
+}
+
+void PDFObjectElement::SetDictionaryKeyOffset(const OString& rKey, sal_uInt64 nOffset)
+{
+    m_aDictionaryKeyOffset[rKey] = nOffset;
+}
+
+void PDFObjectElement::SetDictionaryKeyValueLength(const OString& rKey, sal_uInt64 nLength)
+{
+    m_aDictionaryKeyValueLength[rKey] = nLength;
+}
+
+sal_uInt64 PDFObjectElement::GetDictionaryKeyOffset(const OString& rKey) const
+{
+    auto it = m_aDictionaryKeyOffset.find(rKey);
+    if (it == m_aDictionaryKeyOffset.end())
+        return 0;
+
+    return it->second;
+}
+
+sal_uInt64 PDFObjectElement::GetDictionaryKeyValueLength(const OString& rKey) const
+{
+    auto it = m_aDictionaryKeyValueLength.find(rKey);
+    if (it == m_aDictionaryKeyValueLength.end())
+        return 0;
+
+    return it->second;
 }
 
 void PDFObjectElement::SetDictionaryLength(sal_uInt64 nDictionaryLength)
@@ -1878,6 +2005,12 @@ bool PDFEndDictionaryElement::Read(SvStream& rStream)
     return true;
 }
 
+PDFNameElement::PDFNameElement()
+    : m_nLocation(0),
+      m_nLength(0)
+{
+}
+
 bool PDFNameElement::Read(SvStream& rStream)
 {
     char ch;
@@ -1887,6 +2020,7 @@ bool PDFNameElement::Read(SvStream& rStream)
         SAL_WARN("xmlsecurity.pdfio", "PDFNameElement::Read: unexpected character: " << ch);
         return false;
     }
+    m_nLocation = rStream.Tell();
 
     if (rStream.IsEof())
     {
@@ -1918,6 +2052,16 @@ const OString& PDFNameElement::GetValue() const
     return m_aValue;
 }
 
+sal_uInt64 PDFNameElement::GetLocation() const
+{
+    return m_nLocation;
+}
+
+sal_uInt64 PDFNameElement::GetLength() const
+{
+    return m_nLength;
+}
+
 PDFStreamElement::PDFStreamElement(size_t nLength)
     : m_nLength(nLength)
 {
@@ -1941,6 +2085,11 @@ bool PDFEndObjectElement::Read(SvStream& /*rStream*/)
     return true;
 }
 
+PDFArrayElement::PDFArrayElement()
+    : m_nOffset(0)
+{
+}
+
 bool PDFArrayElement::Read(SvStream& rStream)
 {
     char ch;
@@ -1950,6 +2099,7 @@ bool PDFArrayElement::Read(SvStream& rStream)
         SAL_WARN("xmlsecurity.pdfio", "PDFArrayElement::Read: unexpected character: " << ch);
         return false;
     }
+    m_nOffset = rStream.Tell();
 
     SAL_INFO("xmlsecurity.pdfio", "PDFArrayElement::Read: '['");
 
@@ -1966,8 +2116,19 @@ const std::vector<PDFElement*>& PDFArrayElement::GetElements()
     return m_aElements;
 }
 
+sal_uInt64 PDFArrayElement::GetOffset() const
+{
+    return m_nOffset;
+}
+
+PDFEndArrayElement::PDFEndArrayElement()
+    : m_nOffset(0)
+{
+}
+
 bool PDFEndArrayElement::Read(SvStream& rStream)
 {
+    m_nOffset = rStream.Tell();
     char ch;
     rStream.ReadChar(ch);
     if (ch != ']')
@@ -1981,6 +2142,10 @@ bool PDFEndArrayElement::Read(SvStream& rStream)
     return true;
 }
 
+sal_uInt64 PDFEndArrayElement::GetOffset() const
+{
+    return m_nOffset;
+}
 
 } // namespace pdfio
 } // namespace xmlsecurity
