@@ -14,6 +14,7 @@ $(dir $(call gb_InstallModule_get_target,%))%/.dir :
 
 $(call gb_InstallModule_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),IMO,3)
+	$(if $(INSTALL_MODULE_DEFINED),,$(call gb_Output_error,Something depends on install module $* which does not exist.))
 	touch $@
 
 $(call gb_InstallModule_get_clean_target,%) :
@@ -23,6 +24,7 @@ $(call gb_InstallModule_get_clean_target,%) :
 define gb_InstallModule_InstallModule
 $(call gb_InstallModuleTarget_InstallModuleTarget,$(1))
 
+$(call gb_InstallModule_get_target,$(1)) : INSTALL_MODULE_DEFINED := $(true)
 $(call gb_InstallModule_get_target,$(1)) : $(call gb_InstallModuleTarget_get_target,$(1))
 $(call gb_InstallModule_get_target,$(1)) :| $(dir $(call gb_InstallModule_get_target,$(1))).dir
 $(call gb_InstallModule_get_clean_target,$(1)) : $(call gb_InstallModuleTarget_get_clean_target,$(1))
