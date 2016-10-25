@@ -16,6 +16,7 @@ $(eval $(call gb_Library_use_udk_api,javavm))
 $(eval $(call gb_Library_use_libraries,javavm,\
     cppu \
     cppuhelper \
+    i18nlangtag \
     jvmaccess \
     jvmfwk \
     sal \
