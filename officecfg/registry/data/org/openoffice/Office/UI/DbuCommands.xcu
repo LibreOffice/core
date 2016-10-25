@@ -114,6 +114,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Open Database Object...</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Open...</value>
+        </prop>
       </node>
       <node oor:name=".uno:DBTableDelete" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -275,6 +278,11 @@
       <node oor:name=".uno:DBNewFormAutoPilotWithPreSelection" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Form Wizard...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DBNewReportWithPreSelection" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Report...</value>
         </prop>
       </node>
       <node oor:name=".uno:DBNewReportAutoPilot" oor:op="replace">
