@@ -10,7 +10,6 @@
 $(eval $(call gb_InstallScript_InstallScript,setup_osl))
 
 $(eval $(call gb_InstallScript_use_modules,setup_osl,\
-	scp2/accessories \
 	scp2/base \
 	scp2/calc \
 	scp2/draw \
