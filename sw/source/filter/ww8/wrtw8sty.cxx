@@ -1613,18 +1613,19 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     {
         // if a Follow is set and it does not point to itself,
         // then there is a page chain.
-        // Falls damit eine "Erste Seite" simuliert werden soll, so
-        // koennen wir das auch als solches schreiben.
-        // Anders sieht es mit Links/Rechts wechseln aus. Dafuer muss
-        // erkannt werden, wo der Seitenwechsel statt findet. Hier ist
-        // es aber dafuer zuspaet!
-        if ( pPd->GetFollow() && pPd != pPd->GetFollow() &&
+        // If this emulates a "first page", we can detect it here and write
+        // it as title page.
+        // With Left/Right changes it's different - we have to detect where
+        // the change of pages is, but here it's too late for that!
+        // tdf#101814 if there is already a explicit first-page, no point
+        // in checking heuristics here.
+        if ( !titlePage && pPd->GetFollow() && pPd != pPd->GetFollow() &&
              pPd->GetFollow()->GetFollow() == pPd->GetFollow() &&
              ( !rSepInfo.pPDNd || pPd->IsFollowNextPageOfNode( *rSepInfo.pPDNd ) ) )
         {
             const SwPageDesc *pFollow = pPd->GetFollow();
             const SwFrameFormat& rFollowFormat = pFollow->GetMaster();
-            if ( sw::util::IsPlausableSingleWordSection( *pPdFirstPgFormat, rFollowFormat ) || titlePage )
+            if (sw::util::IsPlausableSingleWordSection(*pPdFirstPgFormat, rFollowFormat))
             {
                 if (rSepInfo.pPDNd)
                     pPdFirstPgFormat = pPd->GetPageFormatOfNode( *rSepInfo.pPDNd );
