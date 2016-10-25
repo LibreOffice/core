@@ -588,51 +588,7 @@ void RscClass::WriteSrc( const RSCINST & rInst,
     {
         if( !(VAR_HIDDEN & pVarTypeList[ i ].nVarType) )
         {
-            // hack for position and dimension
-            if( nRsc_XYMAPMODEId == pVarTypeList[ i ].nVarName ||
-                nRsc_WHMAPMODEId == pVarTypeList[ i ].nVarName )
-            {
-                if( !IsDflt( rInst.pData, i )  ||  // MapUnit
-                    !IsDflt( rInst.pData, i+1 ) || //X, Width
-                    !IsDflt( rInst.pData, i+2 ) )  //Y, Height
-                {
-                    // one value is no default
-                    for( n = 0; n < nTab; n++ )
-                        fputc( '\t', fOutput );
-
-                    if( nRsc_XYMAPMODEId == pVarTypeList[ i ].nVarName )
-                        fprintf( fOutput, "Pos = " );
-                    else
-                        fprintf( fOutput, "Size = " );
-
-                    if( !IsDflt( rInst.pData, i ) )
-                    {
-                        aTmpI = GetInstData( rInst.pData, i, true );
-                        aTmpI.pClass->WriteSrcHeader(
-                              aTmpI, fOutput, pTC, nTab, RscId(), pVarName );
-                    }
-
-                    fprintf( fOutput, "( " );
-                    aTmpI = GetInstData( rInst.pData, i+1, true );
-                    if( !aTmpI.IsInst() )
-                        aTmpI.pData = GetDfltData( i+1 );
-
-                    aTmpI.pClass->WriteSrcHeader( aTmpI, fOutput, pTC, nTab, RscId(), pVarName );
-
-                    fprintf( fOutput, ", " );
-                    aTmpI = GetInstData( rInst.pData, i+2, true );
-
-                    if( !aTmpI.IsInst() )
-                        aTmpI.pData = GetDfltData( i+2 );
-
-                    aTmpI.pClass->WriteSrcHeader(
-                              aTmpI, fOutput, pTC, nTab, RscId(), pVarName );
-                    fprintf( fOutput, " );\n" );
-                }
-                i += 2; // ignore _X, _Y or _Width, Height
-            }
-            else if( !IsDflt( rInst.pData, i )
-                     && !IsValueDflt( rInst.pData, i ) )
+            if( !IsDflt( rInst.pData, i ) && !IsValueDflt( rInst.pData, i ) )
             {
                 aTmpI = GetInstData( rInst.pData, i, true );
 
@@ -710,35 +666,12 @@ ERRTYPE RscClass::WriteInstRc( const RSCINST & rInst,
             {
                 if( !IsDflt( rInst.pData, i ) )
                 {
-                    if( nRsc_X == pVarTypeList[ i ].nVarName )
-                    {
-                        sal_Int32 nVal = GetCorrectValues( rInst, i, 0, pTC );
-                        rMem.Put( nVal );
-                    }
-                    else if( nRsc_Y == pVarTypeList[ i ].nVarName )
-                    {
-                        sal_Int32 nVal = GetCorrectValues( rInst, i, 1, pTC );
-                        rMem.Put( nVal );
-                    }
-                    else if( nRsc_WIDTH == pVarTypeList[ i ].nVarName )
-                    {
-                        sal_Int32 nVal = GetCorrectValues( rInst, i, 2, pTC );
-                        rMem.Put( nVal );
-                    }
-                    else if( nRsc_HEIGHT == pVarTypeList[ i ].nVarName )
-                    {
-                        sal_Int32 nVal = GetCorrectValues( rInst, i, 3, pTC );
-                        rMem.Put( nVal );
-                    }
-                    else
-                    {
-                        aTmpI = GetInstData( rInst.pData, i, true );
-                        // set only for variable extradata with bExtra not false
-                        aError = aTmpI.pClass->
-                            WriteRcHeader( aTmpI, rMem, pTC,
-                                           RscId(), nDeep,
-                                           (nRsc_EXTRADATA == pVarTypeList[ i ].nVarName) && bExtra );
-                    }
+                    aTmpI = GetInstData( rInst.pData, i, true );
+                    // set only for variable extradata with bExtra not false
+                    aError = aTmpI.pClass->
+                        WriteRcHeader( aTmpI, rMem, pTC,
+                                       RscId(), nDeep,
+                                       (nRsc_EXTRADATA == pVarTypeList[ i ].nVarName) && bExtra );
                     sal_uInt32 nMask = rMem.GetLong( nMaskOff );
                     nMask |= pVarTypeList[ i ].nMask;
                     rMem.PutAt( nMaskOff, nMask );
