@@ -34,6 +34,24 @@
       "revId": "e1dea8100b345b15705cad366d1bcc9516bb15e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_1edd9f42",
+        "filename": "stoc/source/javavm/javavm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-25T09:42:31Z",
+      "side": 0,
+      "message": "This *is* C++ code, the proper way would be to use LanguageTag. And this *is* smelly and *does* fail if the BCP47 tag contains a script code, for example.\n\nI\u0027ll take over and use a different approach.",
+      "parentUuid": "7a77a97e_6d6d0b32",
+      "revId": "e1dea8100b345b15705cad366d1bcc9516bb15e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
