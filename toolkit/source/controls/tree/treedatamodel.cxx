@@ -117,7 +117,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) override;
 
-    static MutableTreeNode* getImplementation( const Reference< XTreeNode >& xNode );
     static Reference< XTreeNode > getReference( MutableTreeNode* pNode )
     {
         return Reference< XTreeNode >( pNode );
@@ -276,11 +275,6 @@ MutableTreeNode::~MutableTreeNode()
 void MutableTreeNode::setParent( MutableTreeNode* pParent )
 {
     mpParent = pParent;
-}
-
-MutableTreeNode* MutableTreeNode::getImplementation( const Reference< XTreeNode >& xNode )
-{
-    return dynamic_cast< MutableTreeNode* >( xNode.get() );
 }
 
 void MutableTreeNode::broadcast_changes()
@@ -469,7 +463,7 @@ sal_Int32 SAL_CALL MutableTreeNode::getIndex( const Reference< XTreeNode >& xNod
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
 
-    MutableTreeNodeRef xImpl( MutableTreeNode::getImplementation( xNode ) );
+    MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
     if( xImpl.is() )
     {
         sal_Int32 nChildCount = maChildren.size();

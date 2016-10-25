@@ -153,8 +153,6 @@ public:
                         SvPersistStream( SvClassManager &, SvStream * pStream );
                         virtual ~SvPersistStream() override;
 
-    void                ClearStream();
-
     SvPersistBase *     GetObject( Index nIdx ) const;
     Index               GetIndex( SvPersistBase * ) const;
 

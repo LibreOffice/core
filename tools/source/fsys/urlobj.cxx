@@ -3147,9 +3147,9 @@ bool INetURLObject::checkHierarchical() const {
     }
 }
 
-bool INetURLObject::appendSegment(OUString const & rTheSegment,
-                                  EncodeMechanism eMechanism,
-                                  rtl_TextEncoding eCharset)
+bool INetURLObject::Append(OUString const & rTheSegment,
+                           EncodeMechanism eMechanism,
+                           rtl_TextEncoding eCharset)
 {
     return insertName(rTheSegment, false, LAST_SEGMENT, eMechanism, eCharset);
 }

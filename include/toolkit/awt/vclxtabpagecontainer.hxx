@@ -60,8 +60,7 @@ public:
     virtual void SAL_CALL addTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) throw (css::uno::RuntimeException, std::exception) override;
 
-    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override;
 
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;

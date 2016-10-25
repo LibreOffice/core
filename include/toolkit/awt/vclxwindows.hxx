@@ -361,8 +361,7 @@ public:
     // css::awt::XLayoutConstrains
     css::awt::Size SAL_CALL getMinimumSize() throw(css::uno::RuntimeException, std::exception) override;
 
-    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override;
 };
 
 
@@ -433,8 +432,7 @@ public:
     // css::awt::XDevice,
     css::awt::DeviceInfo SAL_CALL getInfo() throw(css::uno::RuntimeException, std::exception) override;
 
-    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override;
 
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
