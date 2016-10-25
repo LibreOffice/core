@@ -403,10 +403,6 @@ class SwDrawContact : public SwContact
         {
             return maAnchoredDrawObj.GetPageFrame();
         }
-        void SetPageFrame( SwPageFrame* _pNewPageFrame )
-        {
-            return maAnchoredDrawObj.SetPageFrame( _pNewPageFrame );
-        }
         void ChkPage();
         SwPageFrame* FindPage( const SwRect &rRect );
 

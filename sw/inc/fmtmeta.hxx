@@ -141,7 +141,6 @@ protected:
     SwFormatMeta * GetFormatMeta() const { return m_pFormat; }
     void SetFormatMeta( SwFormatMeta * const i_pFormat ) { m_pFormat = i_pFormat; };
 
-    void NotifyChangeTextNodeImpl();
     void NotifyChangeTextNode(SwTextNode *const pTextNode);
 
     css::uno::WeakReference<css::rdf::XMetadatable> const& GetXMeta() const

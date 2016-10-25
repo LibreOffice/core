@@ -1939,7 +1939,7 @@ void SwDrawContact::ChkPage()
             if ( GetPageFrame() )
                 GetPageFrame()->RemoveDrawObjFromPage( maAnchoredDrawObj );
             pPg->AppendDrawObjToPage( maAnchoredDrawObj );
-            SetPageFrame( pPg );
+            maAnchoredDrawObj.SetPageFrame( pPg );
         }
     }
 }

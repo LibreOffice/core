@@ -1202,7 +1202,7 @@ SwTableBox* SwXCell::FindBox(SwTable* pTable, SwTableBox* pBox2)
 
 double SwXCell::GetForcedNumericalValue() const
 {
-    if(table::CellContentType_TEXT != getType())
+    if(table::CellContentType_TEXT != const_cast<SwXCell*>(this)->getType())
         return getValue();
     // now we'll try to get a useful numerical value
     // from the text in the cell...

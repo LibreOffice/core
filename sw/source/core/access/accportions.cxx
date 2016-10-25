@@ -267,11 +267,6 @@ bool SwAccessiblePortionData::IsSpecialPortion( size_t nPortionNo ) const
     return IsPortionAttrSet(nPortionNo, PORATTR_SPECIAL);
 }
 
-bool SwAccessiblePortionData::IsReadOnlyPortion( size_t nPortionNo ) const
-{
-    return IsPortionAttrSet(nPortionNo, PORATTR_READONLY);
-}
-
 bool SwAccessiblePortionData::IsGrayPortionType( sal_uInt16 nType ) const
 {
     // gray portions?
@@ -729,7 +724,7 @@ bool SwAccessiblePortionData::GetEditableRange(
 
     for( size_t nPor = nStartPortion; nPor <= nLastPortion; nPor++ )
     {
-        bIsEditable &= ! IsReadOnlyPortion( nPor );
+        bIsEditable &= ! IsPortionAttrSet(nPor, PORATTR_READONLY);
     }
 
     return bIsEditable;

@@ -1666,11 +1666,6 @@ int MSWordExportBase::GetGrfIndex(const SvxBrushItem& rBrush)
     return nIndex;
 }
 
-void MSWordExportBase::AppendWordBookmark( const OUString& rName )
-{
-    AppendBookmark( BookmarkToWord( rName ) );
-}
-
 void WW8_WrtRedlineAuthor::Write( Writer& rWrt )
 {
     WW8Export & rWW8Wrt = *(static_cast<SwWW8Writer&>(rWrt).m_pExport);

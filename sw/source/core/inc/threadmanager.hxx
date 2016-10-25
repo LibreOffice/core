@@ -139,11 +139,6 @@ class ThreadManager
             }
         };
 
-        inline oslInterlockedCount RetrieveNewThreadID()
-        {
-            return osl_atomic_increment( &mnThreadIDCounter );
-        }
-
         bool StartWaitingThread();
 
         bool StartThread( const tThreadData& aThreadData );

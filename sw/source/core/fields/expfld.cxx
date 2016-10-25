@@ -1146,30 +1146,6 @@ void SwInputField::SetFormatField( SwFormatField& rFormatField )
 }
 
 
-void SwInputField::LockNotifyContentChange()
-{
-    if ( GetFormatField() != nullptr )
-    {
-        SwTextInputField* pTextInputField = dynamic_cast< SwTextInputField* >(GetFormatField()->GetTextField());
-        if ( pTextInputField != nullptr )
-        {
-            pTextInputField->LockNotifyContentChange();
-        }
-    }
-}
-
-void SwInputField::UnlockNotifyContentChange()
-{
-    if ( GetFormatField() != nullptr )
-    {
-        SwTextInputField* pTextInputField = dynamic_cast< SwTextInputField* >(GetFormatField()->GetTextField());
-        if ( pTextInputField != nullptr )
-        {
-            pTextInputField->UnlockNotifyContentChange();
-        }
-    }
-}
-
 void SwInputField::applyFieldContent( const OUString& rNewFieldContent )
 {
     if ( (nSubType & 0x00ff) == INP_TXT )
@@ -1185,10 +1161,22 @@ void SwInputField::applyFieldContent( const OUString& rNewFieldContent )
             pUserTyp->SetContent( rNewFieldContent );
 
             // trigger update of the corresponding User Fields and other related Input Fields
+            if ( GetFormatField() != nullptr )
             {
-                LockNotifyContentChange();
-                pUserTyp->UpdateFields();
-                UnlockNotifyContentChange();
+                SwTextInputField* pTextInputField = dynamic_cast< SwTextInputField* >(GetFormatField()->GetTextField());
+                if ( pTextInputField != nullptr )
+                {
+                    pTextInputField->LockNotifyContentChange();
+                }
+            }
+            pUserTyp->UpdateFields();
+            if ( GetFormatField() != nullptr )
+            {
+                SwTextInputField* pTextInputField = dynamic_cast< SwTextInputField* >(GetFormatField()->GetTextField());
+                if ( pTextInputField != nullptr )
+                {
+                    pTextInputField->UnlockNotifyContentChange();
+                }
             }
         }
     }

@@ -192,8 +192,6 @@ class SwLayNotify : public SwFrameNotify
 {
     bool bLowersComplete;
 
-    SwLayoutFrame *GetLay() { return static_cast<SwLayoutFrame*>(mpFrame); }
-
 public:
     SwLayNotify( SwLayoutFrame *pLayFrame );
     ~SwLayNotify();
@@ -206,7 +204,6 @@ class SwFlyNotify : public SwLayNotify
 {
     SwPageFrame *pOldPage;
     const SwRect aFrameAndSpace;
-    SwFlyFrame *GetFly() { return static_cast<SwFlyFrame*>(mpFrame); }
 
 public:
     SwFlyNotify( SwFlyFrame *pFlyFrame );
@@ -223,8 +220,6 @@ private:
     // #i25029#
     bool        mbInvalidatePrevPrtArea;
     bool        mbBordersJoinedWithPrev;
-
-    SwContentFrame *GetCnt();
 
 public:
     SwContentNotify( SwContentFrame *pContentFrame );

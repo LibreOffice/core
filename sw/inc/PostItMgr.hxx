@@ -189,8 +189,6 @@ class SwPostItMgr: public SfxListener
         void            InsertItem( SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus);
         void            RemoveItem( SfxBroadcaster* pBroadcast );
 
-        void            Sort();
-
     public:
         SwPostItMgr(SwView* aDoc);
         virtual ~SwPostItMgr() override;

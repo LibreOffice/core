@@ -70,7 +70,8 @@ inline const SwTextNode& SwTextINetFormat::GetTextNode() const
 
 inline SwTextNode& SwTextINetFormat::GetTextNode()
 {
-    return const_cast<SwTextNode&>( const_cast<SwTextINetFormat const*>(this)->GetTextNode() );
+    assert( m_pTextNode );
+    return *m_pTextNode;
 }
 
 #endif

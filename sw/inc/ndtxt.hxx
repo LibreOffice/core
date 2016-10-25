@@ -158,14 +158,6 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
 
     /// Start: Data collected during idle time
 
-    SAL_DLLPRIVATE void SetParaNumberOfWords( sal_uLong nTmpWords ) const;
-    SAL_DLLPRIVATE sal_uLong GetParaNumberOfWords() const;
-    SAL_DLLPRIVATE void SetParaNumberOfAsianWords( sal_uLong nTmpAsianWords ) const;
-    SAL_DLLPRIVATE sal_uLong GetParaNumberOfAsianWords() const;
-    SAL_DLLPRIVATE void SetParaNumberOfChars( sal_uLong nTmpChars ) const;
-    SAL_DLLPRIVATE sal_uLong GetParaNumberOfChars() const;
-    SAL_DLLPRIVATE void SetParaNumberOfCharsExcludingSpaces( sal_uLong nTmpChars ) const;
-    SAL_DLLPRIVATE sal_uLong GetParaNumberOfCharsExcludingSpaces() const;
     SAL_DLLPRIVATE void InitSwParaStatistics( bool bNew );
 
     /** create number for this text node, if not already existing

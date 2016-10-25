@@ -116,8 +116,6 @@ public:
         { return const_cast<SwXCell*>(this)->getValue(); };
     virtual void SAL_CALL setValue( double nValue ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::table::CellContentType SAL_CALL getType(  ) throw(css::uno::RuntimeException, std::exception) override;
-    css::table::CellContentType SAL_CALL getType(  ) const throw(css::uno::RuntimeException, std::exception)
-        { return const_cast<SwXCell*>(this)->getType(); };
     virtual sal_Int32 SAL_CALL getError(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     //XText

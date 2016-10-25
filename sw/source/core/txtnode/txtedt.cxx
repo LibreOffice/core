@@ -93,6 +93,36 @@ using namespace ::com::sun::star::smarttags;
 extern const SwTextNode *pLinguNode;
 extern       SwTextFrame  *pLinguFrame;
 
+struct SwParaIdleData_Impl
+{
+    SwWrongList* pWrong;                // for spell checking
+    SwGrammarMarkUp* pGrammarCheck;     // for grammar checking /  proof reading
+    SwWrongList* pSmartTags;
+    sal_uLong nNumberOfWords;
+    sal_uLong nNumberOfAsianWords;
+    sal_uLong nNumberOfChars;
+    sal_uLong nNumberOfCharsExcludingSpaces;
+    bool bWordCountDirty;
+    SwTextNode::WrongState eWrongDirty; ///< online spell checking needed/done?
+    bool bGrammarCheckDirty;
+    bool bSmartTagDirty;
+    bool bAutoComplDirty;               // die ACompl-Liste muss angepasst werden
+
+    SwParaIdleData_Impl() :
+        pWrong              ( nullptr ),
+        pGrammarCheck       ( nullptr ),
+        pSmartTags          ( nullptr ),
+        nNumberOfWords      ( 0 ),
+        nNumberOfAsianWords ( 0 ),
+        nNumberOfChars      ( 0 ),
+        nNumberOfCharsExcludingSpaces ( 0 ),
+        bWordCountDirty     ( true ),
+        eWrongDirty         ( SwTextNode::WrongState::TODO ),
+        bGrammarCheckDirty  ( true ),
+        bSmartTagDirty      ( true ),
+        bAutoComplDirty     ( true ) {};
+};
+
 /*
  * This has basically the same function as SwScriptInfo::MaskHiddenRanges,
  * only for deleted redlines
@@ -2000,10 +2030,13 @@ bool SwTextNode::CountWords( SwDocStat& rStat,
     if ( bCountAll && !IsWordCountDirty() )
     {
         // accumulate into DocStat record to return the values
-        rStat.nWord += GetParaNumberOfWords();
-        rStat.nAsianWord += GetParaNumberOfAsianWords();
-        rStat.nChar += GetParaNumberOfChars();
-        rStat.nCharExcludingSpaces += GetParaNumberOfCharsExcludingSpaces();
+        if (m_pParaIdleData_Impl)
+        {
+            rStat.nWord += m_pParaIdleData_Impl->nNumberOfWords;
+            rStat.nAsianWord += m_pParaIdleData_Impl->nNumberOfAsianWords;
+            rStat.nChar += m_pParaIdleData_Impl->nNumberOfChars;
+            rStat.nCharExcludingSpaces += m_pParaIdleData_Impl->nNumberOfCharsExcludingSpaces;
+        }
         return false;
     }
 
@@ -2093,10 +2126,13 @@ bool SwTextNode::CountWords( SwDocStat& rStat,
     // If counting the whole para then update cached values and mark clean
     if ( bCountAll )
     {
-        SetParaNumberOfWords( nTmpWords );
-        SetParaNumberOfAsianWords( nTmpAsianWords );
-        SetParaNumberOfChars( nTmpChars );
-        SetParaNumberOfCharsExcludingSpaces( nTmpCharsExcludingSpaces );
+        if ( m_pParaIdleData_Impl )
+        {
+            m_pParaIdleData_Impl->nNumberOfWords = nTmpWords;
+            m_pParaIdleData_Impl->nNumberOfAsianWords = nTmpAsianWords;
+            m_pParaIdleData_Impl->nNumberOfChars = nTmpChars;
+            m_pParaIdleData_Impl->nNumberOfCharsExcludingSpaces = nTmpCharsExcludingSpaces;
+        }
         SetWordCountDirty( false );
     }
     // accumulate into DocStat record to return the values
@@ -2109,36 +2145,6 @@ bool SwTextNode::CountWords( SwDocStat& rStat,
 }
 
 // Paragraph statistics start -->
-
-struct SwParaIdleData_Impl
-{
-    SwWrongList* pWrong;                // for spell checking
-    SwGrammarMarkUp* pGrammarCheck;     // for grammar checking /  proof reading
-    SwWrongList* pSmartTags;
-    sal_uLong nNumberOfWords;
-    sal_uLong nNumberOfAsianWords;
-    sal_uLong nNumberOfChars;
-    sal_uLong nNumberOfCharsExcludingSpaces;
-    bool bWordCountDirty;
-    SwTextNode::WrongState eWrongDirty; ///< online spell checking needed/done?
-    bool bGrammarCheckDirty;
-    bool bSmartTagDirty;
-    bool bAutoComplDirty;               // die ACompl-Liste muss angepasst werden
-
-    SwParaIdleData_Impl() :
-        pWrong              ( nullptr ),
-        pGrammarCheck       ( nullptr ),
-        pSmartTags          ( nullptr ),
-        nNumberOfWords      ( 0 ),
-        nNumberOfAsianWords ( 0 ),
-        nNumberOfChars      ( 0 ),
-        nNumberOfCharsExcludingSpaces ( 0 ),
-        bWordCountDirty     ( true ),
-        eWrongDirty         ( SwTextNode::WrongState::TODO ),
-        bGrammarCheckDirty  ( true ),
-        bSmartTagDirty      ( true ),
-        bAutoComplDirty     ( true ) {};
-};
 
 void SwTextNode::InitSwParaStatistics( bool bNew )
 {
@@ -2216,63 +2222,11 @@ SwWrongList* SwTextNode::GetSmartTags()
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pSmartTags : nullptr;
 }
 
-void SwTextNode::SetParaNumberOfWords( sal_uLong nNew ) const
-{
-    if ( m_pParaIdleData_Impl )
-    {
-        m_pParaIdleData_Impl->nNumberOfWords = nNew;
-    }
-}
-
-sal_uLong SwTextNode::GetParaNumberOfWords() const
-{
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfWords : 0;
-}
-
-void SwTextNode::SetParaNumberOfAsianWords( sal_uLong nNew ) const
-{
-    if ( m_pParaIdleData_Impl )
-    {
-        m_pParaIdleData_Impl->nNumberOfAsianWords = nNew;
-    }
-}
-
-sal_uLong SwTextNode::GetParaNumberOfAsianWords() const
-{
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfAsianWords : 0;
-}
-
-void SwTextNode::SetParaNumberOfChars( sal_uLong nNew ) const
-{
-    if ( m_pParaIdleData_Impl )
-    {
-        m_pParaIdleData_Impl->nNumberOfChars = nNew;
-    }
-}
-
-sal_uLong SwTextNode::GetParaNumberOfChars() const
-{
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfChars : 0;
-}
-
 void SwTextNode::SetWordCountDirty( bool bNew ) const
 {
     if ( m_pParaIdleData_Impl )
     {
         m_pParaIdleData_Impl->bWordCountDirty = bNew;
-    }
-}
-
-sal_uLong SwTextNode::GetParaNumberOfCharsExcludingSpaces() const
-{
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfCharsExcludingSpaces : 0;
-}
-
-void SwTextNode::SetParaNumberOfCharsExcludingSpaces( sal_uLong nNew ) const
-{
-    if ( m_pParaIdleData_Impl )
-    {
-        m_pParaIdleData_Impl->nNumberOfCharsExcludingSpaces = nNew;
     }
 }
 

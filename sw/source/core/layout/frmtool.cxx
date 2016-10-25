@@ -444,7 +444,7 @@ static void lcl_InvalidatePosOfLowers( SwLayoutFrame& _rLayoutFrame )
 
 SwLayNotify::~SwLayNotify()
 {
-    SwLayoutFrame *pLay = GetLay();
+    SwLayoutFrame *pLay = static_cast<SwLayoutFrame*>(mpFrame);
     SwRectFnSet aRectFnSet(pLay);
     bool bNotify = false;
     if ( pLay->Prt().SSize() != maPrt.SSize() )
@@ -623,7 +623,7 @@ SwFlyNotify::SwFlyNotify( SwFlyFrame *pFlyFrame ) :
 
 SwFlyNotify::~SwFlyNotify()
 {
-    SwFlyFrame *pFly = GetFly();
+    SwFlyFrame *pFly = static_cast<SwFlyFrame*>(mpFrame);
     if ( pFly->IsNotifyBack() )
     {
         SwViewShell *pSh = pFly->getRootFrame()->GetCurrShell();
@@ -717,11 +717,6 @@ SwFlyNotify::~SwFlyNotify()
     }
 }
 
-SwContentFrame *SwContentNotify::GetCnt()
-{
-    return static_cast<SwContentFrame*>(mpFrame);
-}
-
 SwContentNotify::SwContentNotify( SwContentFrame *pContentFrame ) :
     SwFrameNotify( pContentFrame ),
     // OD 08.01.2004 #i11859#
@@ -750,7 +745,7 @@ SwContentNotify::SwContentNotify( SwContentFrame *pContentFrame ) :
 
 SwContentNotify::~SwContentNotify()
 {
-    SwContentFrame *pCnt = GetCnt();
+    SwContentFrame *pCnt = static_cast<SwContentFrame*>(mpFrame);
     if ( bSetCompletePaintOnInvalidate )
         pCnt->SetCompletePaint();
 

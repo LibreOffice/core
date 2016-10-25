@@ -417,7 +417,6 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
     bool HasContent() const { return bHasTextContent || bHasTableContent; }
     inline void InsertContent_();
     inline void InsertContent();
-    inline void InsertContentIfNotThere();
     inline void InsertContent( SwXMLTableContext *pTable );
 
 public:
@@ -594,12 +593,6 @@ inline void SwXMLTableCellContext_Impl::InsertContent()
     InsertContent_();
 }
 
-inline void SwXMLTableCellContext_Impl::InsertContentIfNotThere()
-{
-    if( !HasContent() )
-        InsertContent();
-}
-
 inline void SwXMLTableCellContext_Impl::InsertContent(
                                                 SwXMLTableContext *pTable )
 {
@@ -659,8 +652,8 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
     }
     else
     {
-        if( GetTable()->IsValid() )
-            InsertContentIfNotThere();
+        if( GetTable()->IsValid() && !HasContent() )
+            InsertContent();
         // fdo#60842: "office:string-value" overrides text content -> no import
         if (!(m_bValueTypeIsString && m_bHasStringValue))
         {
@@ -1639,7 +1632,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     if( sStyleName.isEmpty() )
     {
         sStyleName = (*m_pRows)[m_nCurRow]->GetDefaultCellStyleName();
-        if( sStyleName.isEmpty() && HasColumnDefaultCellStyleNames() )
+        if( sStyleName.isEmpty() && m_pColumnDefaultCellStyleNames )
         {
             sStyleName = GetColumnDefaultCellStyleName( m_nCurCol );
             if( sStyleName.isEmpty() )

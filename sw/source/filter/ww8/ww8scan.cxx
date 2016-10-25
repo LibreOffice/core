@@ -1554,12 +1554,6 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     return new WW8PLCFpcd( pStr, pStr->Tell(), nPLCFfLen, 8 );
 }
 
-void WW8ScannerBase::DeletePieceTable()
-{
-    for (auto pGrppl : aPieceGrpprls)
-        delete[] pGrppl;
-}
-
 WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
     SvStream* pDataSt, WW8Fib* pWwFib )
     : pWw8Fib(pWwFib), pMainFdoa(nullptr), pHdFtFdoa(nullptr), pMainTxbx(nullptr),
@@ -1709,7 +1703,8 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
 
 WW8ScannerBase::~WW8ScannerBase()
 {
-    DeletePieceTable();
+    for (auto pGrppl : aPieceGrpprls)
+        delete[] pGrppl;
     delete pPLCFx_PCDAttrs;
     delete pPLCFx_PCD;
     delete pPieceIter;
@@ -3122,20 +3117,9 @@ void WW8PLCFx_Cp_FKP::ResetAttrStartEnd()
     bLineEnd   = false;
 }
 
-sal_uLong WW8PLCFx_Cp_FKP::GetPCDIMax() const
-{
-    return pPcd ? pPcd->GetIMax() : 0;
-}
-
 sal_uLong WW8PLCFx_Cp_FKP::GetPCDIdx() const
 {
     return pPcd ? pPcd->GetIdx() : 0;
-}
-
-void WW8PLCFx_Cp_FKP::SetPCDIdx( sal_uLong nIdx )
-{
-    if( pPcd )
-        pPcd->SetIdx( nIdx );
 }
 
 bool WW8PLCFx_Cp_FKP::SeekPos(WW8_CP nCpPos)
@@ -3357,7 +3341,7 @@ void WW8PLCFx_Cp_FKP::advance()
     if ( !bComplex || !pPcd )
         return;
 
-    if( GetPCDIdx() >= GetPCDIMax() )           // End of PLCF
+    if( GetPCDIdx() >= pPcd->GetIMax() )           // End of PLCF
     {
         nAttrStart = nAttrEnd = WW8_CP_MAX;
         return;
@@ -5261,7 +5245,8 @@ sal_uLong WW8PLCFx_Cp_FKP::GetIdx2() const
 
 void WW8PLCFx_Cp_FKP::SetIdx2( sal_uLong nIdx )
 {
-    SetPCDIdx( nIdx );
+    if( pPcd )
+        pPcd->SetIdx( nIdx );
 }
 
 void WW8PLCFx_Cp_FKP::Save( WW8PLCFxSave1& rSave ) const

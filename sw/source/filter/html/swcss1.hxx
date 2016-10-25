@@ -127,8 +127,6 @@ public:
 
     static void AddClassName( OUString& rFormatName, const OUString& rClass );
 
-    static inline void AddFirstLetterExt( OUString& rFormatName );
-
     static bool MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                  bool bAutoWidth=false );
 
@@ -159,11 +157,6 @@ public:
 
     virtual void SetDfltEncoding( rtl_TextEncoding eEnc ) override;
 };
-
-inline void SwCSS1Parser::AddFirstLetterExt( OUString& rFormatName )
-{
-    rFormatName += ".FL";   // first letter
-}
 
 inline const SwPageDesc* SwCSS1Parser::GetFirstPageDesc( bool bCreate )
 {

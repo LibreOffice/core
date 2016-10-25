@@ -21,7 +21,7 @@
 #include "swrect.hxx"
 #include "rootfrm.hxx"
 
-void SwSaveClip::Reset()
+SwSaveClip::~SwSaveClip()
 {
     // We recover the old state
     if( pOut && bChg )

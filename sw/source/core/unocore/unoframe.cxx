@@ -3626,7 +3626,7 @@ void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
     SolarMutexGuard aGuard;
 
     SwOLENode* pNd = nullptr;
-    SwFormat* pFormat = GetFormat();
+    SwFormat* pFormat = const_cast<SwFormat*>(static_cast<const SwFormat*>(GetRegisteredIn()));
     if(pFormat)
     {const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
         if(pIdx)

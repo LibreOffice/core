@@ -616,9 +616,6 @@ public:
     /// Find the bookmark name.
     static OUString GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
 
-    /// Add a bookmark converted to a Word name.
-    void AppendWordBookmark( const OUString& rName );
-
     /// Use OutputItem() on an item set according to the parameters.
     void OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, bool bChpFormat, sal_uInt16 nScript, bool bExportParentItemSet );
 

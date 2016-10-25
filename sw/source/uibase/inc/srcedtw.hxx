@@ -139,8 +139,6 @@ public:
     void            SetReadonly(bool bSet){m_bReadonly = bSet;}
     bool            IsReadonly(){return m_bReadonly;}
 
-    void            DoDelayedSyntaxHighlight( sal_uInt16 nPara );
-
     void            SetStartLine(sal_uInt16 nLine){m_nStartLine = nLine;}
 
     virtual void    Command( const CommandEvent& rCEvt ) override;
