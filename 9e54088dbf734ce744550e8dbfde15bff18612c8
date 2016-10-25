@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_7e3773e3",
+        "filename": "basctl/source/basicide/basdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-10-25T06:57:53Z",
+      "side": 1,
+      "message": "No need to keep the old includes, that is just noise.",
+      "revId": "9e54088dbf734ce744550e8dbfde15bff18612c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_9e344fdf",
+        "filename": "basctl/source/basicide/basdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-10-25T06:57:53Z",
+      "side": 1,
+      "message": "Why is this indented with 1 space ?",
+      "revId": "9e54088dbf734ce744550e8dbfde15bff18612c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
