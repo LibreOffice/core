@@ -21,7 +21,7 @@
 #include "dialog.hrc"
 #include "helpid.hrc"
 
-ImageList DLG_STYLE_DESIGNER
+ImageList RID_STYLE_DESIGNER_IMAGELIST
 {
     Prefix = "sc";
     IdList =

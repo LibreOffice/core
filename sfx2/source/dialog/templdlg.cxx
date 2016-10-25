@@ -2331,7 +2331,7 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
 
 void SfxTemplateDialog_Impl::updateNonFamilyImages()
 {
-    m_aActionTbR->SetImageList( ImageList( SfxResId( DLG_STYLE_DESIGNER ) ) );
+    m_aActionTbR->SetImageList(ImageList(SfxResId(RID_STYLE_DESIGNER_IMAGELIST)));
 }
 
 void SfxTemplateDialog_Impl::ClearFamilyList()
