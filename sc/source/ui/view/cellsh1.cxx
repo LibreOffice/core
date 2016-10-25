@@ -2531,19 +2531,24 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_AUTO_SUM:
             {
-                const OUString aFormula = pTabViewShell->DoAutoSum();
-                if (!aFormula.isEmpty())
+                bool bSubTotal = false;
+                bool bRangeFinder = false;
+                const OUString aFormula = pTabViewShell->DoAutoSum( bRangeFinder, bSubTotal );
+                if ( !aFormula.isEmpty() )
                 {
-                    ScInputHandler* pHdl = pScMod->GetInputHdl(pTabViewShell);
-                    if (pHdl)
+                    const sal_Int32 nPar = aFormula.indexOf( '(' );
+                    const sal_Int32 nLen = aFormula.getLength();
+                    ScInputHandler* pHdl = pScMod->GetInputHdl( pTabViewShell );
+
+                    if ( pHdl && nPar != -1 )
                     {
-                        if (!pScMod->IsEditMode())
+                        if ( !pScMod->IsEditMode() )
                         {
-                            pScMod->SetInputMode(SC_INPUT_TABLE);
+                            pScMod->SetInputMode( SC_INPUT_TABLE );
                         }
 
                         EditView *pEditView=pHdl->GetActiveView();
-                        if (pEditView)
+                        if ( pEditView )
                         {
                             ESelection aTextSel = pEditView->GetSelection();
                             aTextSel.nStartPos = 0;
@@ -2551,10 +2556,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             pHdl->DataChanging();
                             pEditView->SetSelection(aTextSel);
                             pEditView->InsertText(aFormula);
-                            aTextSel.nStartPos = aFormula.getLength() - 1;
-                            aTextSel.nEndPos = aFormula.getLength() - 1;
-                            pEditView->SetSelection(aTextSel);
+                            pEditView->SetSelection( bRangeFinder ? ESelection( 0, nPar + ( bSubTotal ? 3 : 1 ), 0, nLen - 1 ) : ESelection( 0, nLen - 1, 0, nLen - 1 ) );
                             pHdl->DataChanged();
+
+                            if ( bRangeFinder )
+                            {
+                                pHdl->InitRangeFinder( aFormula );
+                            }
                         }
                     }
                 }
