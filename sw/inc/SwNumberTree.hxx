@@ -480,13 +480,6 @@ protected:
                       bool bValidating = false) const;
 
     /**
-       Set this node as last valid child of its parent.
-
-       @param bValidation    see above
-     */
-    void SetLastValid(bool bValidating) const;
-
-    /**
        Return if this node is notifiable.
 
        @attention If a not is not notifiable a notify request is *not*

@@ -1070,18 +1070,11 @@ void SwNumberTreeNode::SetLastValid
                 ++aIt;
             }
 
-            SetLastValid(bValidating);
+            if (mpParent)
+            {
+                mpParent->SetLastValid(mpParent->GetIterator(this), bValidating);
+            }
         }
-    }
-}
-
-void SwNumberTreeNode::SetLastValid(bool bValidating) const
-{
-    if (mpParent)
-    {
-        tSwNumberTreeChildren::const_iterator aIt = mpParent->GetIterator(this);
-
-        mpParent->SetLastValid(aIt, bValidating);
     }
 }
 

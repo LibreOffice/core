@@ -653,8 +653,9 @@ SwTextMeta * Meta::GetTextAttr() const
 }
 
 
-void Meta::NotifyChangeTextNodeImpl()
+void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
 {
+    m_pTextNode = pTextNode;
     if (m_pTextNode && (GetRegisteredIn() != m_pTextNode))
     {
         m_pTextNode->Add(this);
@@ -663,12 +664,6 @@ void Meta::NotifyChangeTextNodeImpl()
     {
         GetRegisteredInNonConst()->Remove(this);
     }
-}
-
-void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
-{
-    m_pTextNode = pTextNode;
-    NotifyChangeTextNodeImpl();
     if (!pTextNode) // text node gone? invalidate UNO object!
     {
         SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,

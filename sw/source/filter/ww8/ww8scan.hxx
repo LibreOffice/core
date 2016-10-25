@@ -624,9 +624,7 @@ public:
         const WW8ScannerBase& rBase,  ePLCFT ePl );
     virtual ~WW8PLCFx_Cp_FKP() override;
     void ResetAttrStartEnd();
-    sal_uLong GetPCDIMax() const;
     sal_uLong GetPCDIdx() const;
-    void SetPCDIdx( sal_uLong nIdx );
     virtual sal_uLong GetIdx2() const override;
     virtual void  SetIdx2( sal_uLong nIdx ) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
@@ -1048,7 +1046,6 @@ private:
     std::vector<sal_uInt8*> aPieceGrpprls;  // attributes of Piece-Table
 
     WW8PLCFpcd* OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF );
-    void DeletePieceTable();
 
     WW8ScannerBase(const WW8ScannerBase&) = delete;
     WW8ScannerBase& operator=(const WW8ScannerBase&) = delete;

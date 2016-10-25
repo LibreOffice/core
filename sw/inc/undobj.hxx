@@ -77,7 +77,6 @@ protected:
     // the 4 methods that derived classes have to override
     // base implementation does nothing
     virtual void RepeatImpl( ::sw::RepeatContext & );
-    bool CanRepeatImpl( ::sw::RepeatContext & ) const;
 public: // should not be public, but ran into trouble in untbl.cxx
     virtual void UndoImpl( ::sw::UndoRedoContext & ) = 0;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) = 0;

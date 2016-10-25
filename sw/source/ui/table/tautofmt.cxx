@@ -88,10 +88,8 @@ private:
     void    PaintCells(vcl::RenderContext& rRenderContext);
 
     sal_uInt8           GetFormatIndex( size_t nCol, size_t nRow ) const;
-    const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
 
     void DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow);
-    void DrawStrings(vcl::RenderContext& rRenderContext);
     void DrawBackground(vcl::RenderContext& rRenderContext);
 
     void MakeFonts(sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont);
@@ -617,11 +615,6 @@ sal_uInt8 AutoFormatPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
     return pnFormatMap[ maArray.GetCellIndex( nCol, nRow, mbRTL ) ];
 }
 
-const SvxBoxItem& AutoFormatPreview::GetBoxItem( size_t nCol, size_t nRow ) const
-{
-    return aCurData.GetBoxFormat( GetFormatIndex( nCol, nRow ) ).GetBox();
-}
-
 void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow)
 {
     // Output of the cell text:
@@ -801,13 +794,6 @@ MAKENUMSTR:
 
 #undef FRAME_OFFSET
 
-void AutoFormatPreview::DrawStrings(vcl::RenderContext& rRenderContext)
-{
-    for (size_t nRow = 0; nRow < 5; ++nRow)
-        for (size_t nCol = 0; nCol < 5; ++nCol)
-            DrawString(rRenderContext, nCol, nRow);
-}
-
 void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
 {
     for (size_t nRow = 0; nRow < 5; ++nRow)
@@ -832,7 +818,9 @@ void AutoFormatPreview::PaintCells(vcl::RenderContext& rRenderContext)
         DrawBackground(rRenderContext);
 
     // 2) values
-    DrawStrings(rRenderContext);
+    for (size_t nRow = 0; nRow < 5; ++nRow)
+        for (size_t nCol = 0; nCol < 5; ++nCol)
+            DrawString(rRenderContext, nCol, nRow);
 
     // 3) border
     if (aCurData.IsFrame())
@@ -875,7 +863,7 @@ void AutoFormatPreview::CalcLineMap()
         {
             svx::frame::Style aStyle;
 
-            const SvxBoxItem& rItem = GetBoxItem( nCol, nRow );
+            const SvxBoxItem& rItem = aCurData.GetBoxFormat( GetFormatIndex( nCol, nRow ) ).GetBox();
             lclSetStyleFromBorder( aStyle, rItem.GetLeft() );
             maArray.SetCellStyleLeft( nCol, nRow, aStyle );
             lclSetStyleFromBorder( aStyle, rItem.GetRight() );

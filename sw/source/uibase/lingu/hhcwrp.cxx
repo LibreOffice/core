@@ -638,7 +638,7 @@ bool SwHHCWrapper::ConvNext_impl( )
     else if ( m_bStartDone && m_bEndDone )
     {
         // body region done, ask about special region
-        if( HasOtherCnt_impl() )
+        if( !m_bIsSelection && m_rWrtShell.HasOtherCnt() )
         {
             ConvStart_impl( m_pConvArgs, SvxSpellArea::Other );
             m_bIsOtherContent = bGoOn = true;
@@ -677,11 +677,6 @@ bool SwHHCWrapper::FindConvText_impl()
     }
     m_pWin->LeaveWait();
     return bFound;
-}
-
-bool SwHHCWrapper::HasOtherCnt_impl()
-{
-    return !m_bIsSelection && m_rWrtShell.HasOtherCnt();
 }
 
 void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs, SvxSpellArea eArea )

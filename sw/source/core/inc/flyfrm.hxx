@@ -125,7 +125,6 @@ protected:
     void Unlock()       { m_bLocked = false; }
 
     Size CalcRel( const SwFormatFrameSize &rSz ) const;
-    SwTwips CalcAutoWidth() const;
 
     SwFlyFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor );
 

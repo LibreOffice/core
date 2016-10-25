@@ -4499,14 +4499,6 @@ void WW8RStyle::ImportNewFormatStyles()
             Import1Style( i );
 }
 
-void WW8RStyle::ImportStyles()
-{
-    if (pIo->m_pWwFib->GetFIBVersion() <= ww::eWW2)
-        ImportOldFormatStyles();
-    else
-        ImportNewFormatStyles();
-}
-
 void WW8RStyle::Import()
 {
     pIo->m_pDfltTextFormatColl  = pIo->m_rDoc.GetDfltTextFormatColl();
@@ -4516,7 +4508,10 @@ void WW8RStyle::Import()
     if( pIo->m_nIniFlags & WW8FL_NO_STYLES )
         return;
 
-    ImportStyles();
+    if (pIo->m_pWwFib->GetFIBVersion() <= ww::eWW2)
+        ImportOldFormatStyles();
+    else
+        ImportNewFormatStyles();
 
     for (sal_uInt16 i = 0; i < cstd; ++i)
     {

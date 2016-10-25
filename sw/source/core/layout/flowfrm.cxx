@@ -653,7 +653,7 @@ SwTextFrame* SwContentFrame::FindMaster() const
 {
     OSL_ENSURE( IsFollow(), "SwContentFrame::FindMaster(): !IsFollow" );
 
-    const SwContentFrame* pPrec = GetPrecede();
+    const SwContentFrame* pPrec = static_cast<const SwContentFrame*>(SwFlowFrame::GetPrecede());
 
     if ( pPrec && pPrec->HasFollow() && pPrec->GetFollow() == this )
     {

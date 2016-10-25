@@ -312,15 +312,11 @@ public:
     void SAL_CALL operator delete( void * ) throw();
 };
 
-class SwXOLEListener : public cppu::WeakImplHelper
-<
-    css::util::XModifyListener
->,
+class SwXOLEListener : public cppu::WeakImplHelper<css::util::XModifyListener>,
     public SwClient
 {
     css::uno::Reference< css::frame::XModel > xOLEModel;
 
-    SwFormat*       GetFormat() const    {  return const_cast<SwFormat*>(static_cast<const SwFormat*>(GetRegisteredIn())); }
 public:
     SwXOLEListener(SwFormat& rOLEFormat, css::uno::Reference< css::frame::XModel > const & xOLE);
     virtual ~SwXOLEListener() override;

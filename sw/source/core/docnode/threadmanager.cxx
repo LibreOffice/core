@@ -74,7 +74,7 @@ oslInterlockedCount ThreadManager::AddThread(
 
     // create new thread
     tThreadData aThreadData;
-    oslInterlockedCount nNewThreadID( RetrieveNewThreadID() );
+    oslInterlockedCount nNewThreadID( osl_atomic_increment( &mnThreadIDCounter ) );
     {
         aThreadData.nThreadID = nNewThreadID;
 

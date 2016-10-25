@@ -493,7 +493,8 @@ bool SwPostItMgr::CalcRects()
 
         // show notes in right order in navigator
         //prevent Anchors during layout to overlap, e.g. when moving a frame
-        Sort();
+        if (mvPostItFields.size()>1 )
+            mvPostItFields.sort(comp_pos);
 
         // sort the items into the right page vector, so layout can be done by page
         for(std::list<SwSidebarItem*>::iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
@@ -1511,14 +1512,6 @@ void SwPostItMgr::Show()
         (*i)->bShow = true;
     }
     LayoutPostIts();
-}
-
-void SwPostItMgr::Sort()
-{
-    if (mvPostItFields.size()>1 )
-    {
-        mvPostItFields.sort(comp_pos);
-    }
 }
 
 SwSidebarWin* SwPostItMgr::GetSidebarWin( const SfxBroadcaster* pBroadcaster) const

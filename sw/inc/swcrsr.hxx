@@ -81,7 +81,6 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
     SwCursor(SwCursor const& rPaM) = delete;
 
 protected:
-    SwCursor_SavePos* CreateNewSavePos() const;
     void SaveState();
     void RestoreState();
 

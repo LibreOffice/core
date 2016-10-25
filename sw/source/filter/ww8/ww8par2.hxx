@@ -116,8 +116,6 @@ friend class SwWW8ImplReader;
     void Import1Style(sal_uInt16 nNr);
     void RecursiveReg(sal_uInt16 nNr);
 
-    void ImportStyles();
-
     void ImportNewFormatStyles();
     void ScanStyles();
     void ImportOldFormatStyles();

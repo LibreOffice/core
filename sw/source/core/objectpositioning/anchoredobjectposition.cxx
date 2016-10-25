@@ -859,7 +859,7 @@ SwTwips SwAnchoredObjectPosition::CalcRelPosX(
     // it has to be drawn aside another object, which have the same horizontal
     // position and lay below it.
     if ( dynamic_cast<const SwFlyFrame*>( &GetAnchoredObj() ) !=  nullptr &&
-         ( GetContact().ObjAnchoredAtPara() || GetContact().ObjAnchoredAtChar() ) &&
+         ( mpContact->ObjAnchoredAtPara() || mpContact->ObjAnchoredAtChar() ) &&
          ( eHoriOrient == text::HoriOrientation::LEFT || eHoriOrient == text::HoriOrientation::RIGHT ) &&
          eRelOrient != text::RelOrientation::CHAR )
     {

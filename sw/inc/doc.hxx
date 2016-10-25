@@ -828,8 +828,6 @@ public:
     const SwGrfFormatColls *GetGrfFormatColls() const     { return mpGrfFormatCollTable; }
     SwGrfFormatColl *MakeGrfFormatColl(const OUString &rFormatName,
                                     SwGrfFormatColl *pDerivedFrom);
-    SwGrfFormatColl* FindGrfFormatCollByName( const OUString& rName ) const
-        {   return static_cast<SwGrfFormatColl*>(FindFormatByName( (SwFormatsBase&)*mpGrfFormatCollTable, rName )); }
 
     // Table formatting
     const SwFrameFormats* GetTableFrameFormats() const  { return mpTableFrameFormatTable; }
@@ -1548,19 +1546,6 @@ public:
                           - false unmark the level
     */
     void MarkListLevel( const OUString& sListId,
-                        const int nListLevel,
-                        const bool bValue );
-
-    /** Marks/Unmarks a list level of a certain list
-
-        levels of a certain lists are marked now
-
-        @param rList      list whose level has to be marked/unmarked
-        @param nListLevel level to mark
-        @param bValue     - true  mark the level
-                          - false unmark the level
-     */
-    static void MarkListLevel( SwList& rList,
                         const int nListLevel,
                         const bool bValue );
 
