@@ -35,9 +35,12 @@ public:
 
     /// Test adding a new signature to a previously unsigned file.
     void testPDFAdd();
+    /// Test remove a signature from a previously signed file.
+    void testPDFRemove();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
+    CPPUNIT_TEST(testPDFRemove);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -110,6 +113,44 @@ void PDFSigningTest::testPDFAdd()
 #endif
 }
 
+void PDFSigningTest::testPDFRemove()
+{
+#ifndef _WIN32
+    // Make sure that good.pdf has 1 valid signature.
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    xmlsecurity::pdfio::PDFDocument aDocument;
+    {
+        OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
+        OUString aInURL = aSourceDir + "good.pdf";
+        SvFileStream aStream(aInURL, StreamMode::READ);
+        CPPUNIT_ASSERT(aDocument.Read(aStream));
+        std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aSignatures.size());
+        SignatureInformation aInfo(0);
+        CPPUNIT_ASSERT(xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[0], aInfo));
+    }
+
+    // Remove the signature and write out the result as remove.pdf.
+    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_signing.test.user/");
+    OUString aOutURL = aTargetDir + "remove.pdf";
+    {
+        CPPUNIT_ASSERT(aDocument.RemoveSignature(0));
+        SvFileStream aOutStream(aOutURL, StreamMode::WRITE | StreamMode::TRUNC);
+        CPPUNIT_ASSERT(aDocument.Write(aOutStream));
+    }
+
+    // Read back the pdf and make sure that it no longer has signatures.
+    {
+        SvFileStream aStream(aOutURL, StreamMode::READ);
+        xmlsecurity::pdfio::PDFDocument aVerifyDocument;
+        CPPUNIT_ASSERT(aVerifyDocument.Read(aStream));
+        std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aVerifyDocument.GetSignatureWidgets();
+        // This failed when PDFDocument::RemoveSignature() silently returned success, without doing anything.
+        CPPUNIT_ASSERT(aSignatures.empty());
+    }
+#endif
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
