@@ -172,8 +172,6 @@ class RscTypCont
     RscTop *    InitClassBitmap( RscTop * pSuper );
     RscTop *    InitClassImage( RscTop * pSuper, RscTop *pClassBitmap );
     RscTop *    InitClassImageList( RscTop * pSuper, RscCont * pStrLst );
-    RscTop *    InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
-                                 RscArray * pLangGeo );
     RscTop *    InitClassKeyCode( RscTop * pSuper, RscEnum * pKey );
     RscTop *    InitClassMenuItem( RscTop * pSuper );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );
@@ -185,9 +183,6 @@ class RscTypCont
     RscTop *    InitClassSfxTemplateDialog(  RscTop * pSuper,
                                              RscTop * pStyleFamily );
     RscTop *    InitClassSfxSlotInfo( RscTop * pSuper );
-
-    void        InsWinBit( RscTop * pClass, const OString& rName,
-                           Atom nVal );
 
 public:
     RscBool             aBool;

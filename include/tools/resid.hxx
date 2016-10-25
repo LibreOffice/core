@@ -71,8 +71,8 @@ public:
 
     [Example]
     ResId aId( 1000 );
-    aId.SetRT( RSC_WINDOW );    // settype window Window
-    //aId.GetRT() == RSC_WINDOW is true
+    aId.SetRT( RSC_RESOURCE );    // settype window Resource
+    //aId.GetRT() == RSC_RESOURCE is true
 
     @see
     ResId::GetRT2(), ResId::GetRT()

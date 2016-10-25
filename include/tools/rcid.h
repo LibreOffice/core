@@ -43,8 +43,6 @@
 #define RSC_IMAGE               (RSC_NOTYPE + 0x23)
 #define RSC_IMAGELIST           (RSC_NOTYPE + 0x24)
 
-#define RSC_WINDOW              (RSC_NOTYPE + 0x35)
-
 #define RSC_STRINGARRAY         (RSC_NOTYPE + 0x79)
 
 // (RSC_NOTYPE + 0x200) - (RSC_NOTYPE + 0x300) reserved for Sfx

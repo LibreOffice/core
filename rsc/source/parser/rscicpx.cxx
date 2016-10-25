@@ -33,23 +33,6 @@
 #include <rsclex.hxx>
 #include <rscyacc.hxx>
 
-void RscTypCont::InsWinBit( RscTop * pClass, const OString& rName,
-                            Atom nVal )
-{
-    RscClient * pClient;
-
-    // add client variables
-    aBaseLst.push_back(
-        pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, &aWinBits, nVal )
-    );
-    Atom nId = aNmTb.Put( rName.getStr(), VARNAME );
-    pClass->SetVariable( nId, pClient, nullptr,
-                         VAR_NODATAINST, 0, nWinBitVarId );
-}
-
-#define INS_WINBIT( pClass, WinBit )        \
-    InsWinBit( pClass, #WinBit, n##WinBit##Id );
-
 RscTop * RscTypCont::InitClassMgr()
 {
     RscTop      *   pClassMgr;
@@ -160,89 +143,6 @@ RscTop * RscTypCont::InitClassImageList( RscTop * pSuper, RscCont * pStrLst )
     pClassImageList->SetVariable( nId, &aUShort, nullptr, 0,
                                   (sal_uInt32)RscImageListFlags::IdCount );
     return pClassImageList;
-}
-
-RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
-                                      RscArray * pLangGeo )
-{
-    Atom        nId;
-    RscTop *    pClassWindow;
-
-    // initialize class
-    nId = pHS->getID( "Window" );
-    pClassWindow = new RscClass( nId, RSC_WINDOW, pSuper );
-    pClassWindow->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassWindow );
-
-    // initialize variables
-    {
-        RscFlag *   pFlag;
-        RscClient * pClient;
-        Atom        nVarId, nDisableId, nOutputSizeId;
-
-        aBaseLst.push_back( pFlag = new RscFlag( pHS->getID( "FlagWndExtra" ), RSC_NOTYPE ) );
-
-        // set the constants in table
-        nDisableId = pHS->getID( "RSWND_DISABLE" );
-        SETCONST( pFlag, nDisableId, RSWND::DISABLED );
-        nOutputSizeId = pHS->getID( "RSWND_OUTPUTSIZE" );
-        SETCONST( pFlag, nOutputSizeId, RSWND::CLIENTSIZE );
-
-        // add variable
-        nVarId = aNmTb.Put( "_RscExtraFlags", VARNAME );
-        pClassWindow->SetVariable( nVarId, pFlag, nullptr,
-                                                                        VAR_HIDDEN | VAR_NOENUM );
-
-        aBaseLst.push_back(
-            pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nDisableId )
-        );
-        nId = aNmTb.Put( "Disable", VARNAME );
-        pClassWindow->SetVariable( nId, pClient, nullptr,
-                                   VAR_NODATAINST, 0, nVarId );
-
-        aBaseLst.push_back(
-            pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nOutputSizeId )
-        );
-        nId = aNmTb.Put( "OutputSize", VARNAME );
-        pClassWindow->SetVariable( nId, pClient, nullptr,
-                                   VAR_NODATAINST, 0, nVarId );
-    }
-
-    pClassWindow->SetVariable( nWinBitVarId, &aWinBits, nullptr,
-                               VAR_HIDDEN | VAR_NOENUM );
-
-    INS_WINBIT(pClassWindow,Border)
-    INS_WINBIT(pClassWindow,Hide)
-    INS_WINBIT(pClassWindow,ClipChildren)
-    INS_WINBIT(pClassWindow,SVLook)
-    InsWinBit( pClassWindow, "DialogControl", nTabControlId );
-
-    nId = aNmTb.Put( "HelpID", VARNAME );
-    pClassWindow->SetVariable( nId, &aStringLiteral, nullptr, 0, (sal_uInt32)RscWindowFlags::HelpId );
-
-
-    nRsc_XYMAPMODEId = nId = aNmTb.Put( "_XYMapMode", VARNAME );
-    pClassWindow->SetVariable( nId, pMapUnit, nullptr, 0, (sal_uInt32)RscWindowFlags::XYMapMode  );
-    nRsc_X = nId = aNmTb.Put( "_X", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, (sal_uInt32)RscWindowFlags::X  );
-    nRsc_Y = nId = aNmTb.Put( "_Y", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, (sal_uInt32)RscWindowFlags::Y  );
-
-    nRsc_WHMAPMODEId = nId = aNmTb.Put( "_WHMapMode", VARNAME );
-    pClassWindow->SetVariable( nId, pMapUnit, nullptr, 0, (sal_uInt32)RscWindowFlags::WHMapMode  );
-    nRsc_WIDTH = nId = aNmTb.Put( "_Width", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, (sal_uInt32)RscWindowFlags::Width  );
-    nRsc_HEIGHT = nId = aNmTb.Put( "_Height", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, (sal_uInt32)RscWindowFlags::Height  );
-
-    nRsc_DELTALANG = nId = aNmTb.Put( "DeltaLang", VARNAME );
-    pClassWindow->SetVariable( nId, pLangGeo, nullptr, VAR_NORC | VAR_NOENUM);
-    nId = aNmTb.Put( "Text", VARNAME );
-    pClassWindow->SetVariable( nId, &aLangString, nullptr, 0, (sal_uInt32)RscWindowFlags::Text );
-    nId = aNmTb.Put( "QuickHelpText", VARNAME );
-    pClassWindow->SetVariable( nId, &aLangString, nullptr, 0, (sal_uInt32)RscWindowFlags::QuickText );
-
-    return pClassWindow;
 }
 
 RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
