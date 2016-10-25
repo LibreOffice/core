@@ -74,6 +74,7 @@ public:
 };
 
 class PDFReferenceElement;
+class PDFDictionaryElement;
 
 /// Indirect object: something with a unique ID.
 class PDFObjectElement : public PDFElement
@@ -86,10 +87,7 @@ class PDFObjectElement : public PDFElement
     sal_uInt64 m_nDictionaryOffset;
     /// Length of the dictionary buffer till (before) the '<<' token.
     sal_uInt64 m_nDictionaryLength;
-    /// Position after the '/' token.
-    std::map<OString, sal_uInt64> m_aDictionaryKeyOffset;
-    /// Length of the dictionary key and value, till (before) the next token.
-    std::map<OString, sal_uInt64> m_aDictionaryKeyValueLength;
+    PDFDictionaryElement* m_pDictionaryElement;
 
 public:
     PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue);
@@ -102,24 +100,33 @@ public:
     sal_uInt64 GetDictionaryOffset();
     void SetDictionaryLength(sal_uInt64 nDictionaryLength);
     sal_uInt64 GetDictionaryLength();
-    void SetDictionaryKeyOffset(const OString& rKey, sal_uInt64 nOffset);
-    sal_uInt64 GetDictionaryKeyOffset(const OString& rKey) const;
-    void SetDictionaryKeyValueLength(const OString& rKey, sal_uInt64 nLength);
-    sal_uInt64 GetDictionaryKeyValueLength(const OString& rKey) const;
+    PDFDictionaryElement* GetDictionary() const;
+    void SetDictionary(PDFDictionaryElement* pDictionaryElement);
 };
 
 /// Dictionary object: a set key-value pairs.
 class PDFDictionaryElement : public PDFElement
 {
+    /// Key-value pairs when the dictionary is a nested value.
+    std::map<OString, PDFElement*> m_aItems;
     /// Offset after the '<<' token.
     sal_uInt64 m_nLocation;
+    /// Position after the '/' token.
+    std::map<OString, sal_uInt64> m_aDictionaryKeyOffset;
+    /// Length of the dictionary key and value, till (before) the next token.
+    std::map<OString, sal_uInt64> m_aDictionaryKeyValueLength;
 
 public:
     PDFDictionaryElement();
     bool Read(SvStream& rStream) override;
 
-    static void Parse(const std::vector< std::unique_ptr<PDFElement> >& rElements, PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary);
+    static size_t Parse(const std::vector< std::unique_ptr<PDFElement> >& rElements, PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary);
     static PDFElement* Lookup(const std::map<OString, PDFElement*>& rDictionary, const OString& rKey);
+    void SetKeyOffset(const OString& rKey, sal_uInt64 nOffset);
+    sal_uInt64 GetKeyOffset(const OString& rKey) const;
+    void SetKeyValueLength(const OString& rKey, sal_uInt64 nLength);
+    sal_uInt64 GetKeyValueLength(const OString& rKey) const;
+    const std::map<OString, PDFElement*>& GetItems() const;
 };
 
 /// End of a dictionary: '>>'.
@@ -396,9 +403,10 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     else
     {
         // Annots key is already there, insert our reference at the end.
+        PDFDictionaryElement* pDictionary = pFirstPage->GetDictionary();
 
         // Offset right before the end of the Annots array.
-        sal_uInt64 nAnnotsEndOffset = pFirstPage->GetDictionaryKeyOffset("Annots") + pFirstPage->GetDictionaryKeyValueLength("Annots") - 1;
+        sal_uInt64 nAnnotsEndOffset = pDictionary->GetKeyOffset("Annots") + pDictionary->GetKeyValueLength("Annots") - 1;
         // Length of beginning of the dictionary -> Annots end.
         sal_uInt64 nAnnotsBeforeEndLength = nAnnotsEndOffset - pFirstPage->GetDictionaryOffset();
         m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pFirstPage->GetDictionaryOffset(), nAnnotsBeforeEndLength);
@@ -435,10 +443,44 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.WriteUInt32AsString(nCatalogId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<<");
-    m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pCatalog->GetDictionaryOffset(), pCatalog->GetDictionaryLength());
-    m_aEditBuffer.WriteCharPtr("/AcroForm<</Fields[\n");
-    m_aEditBuffer.WriteUInt32AsString(nAnnotId);
-    m_aEditBuffer.WriteCharPtr(" 0 R\n]/SigFlags 3>>\n");
+    auto pAcroForm = dynamic_cast<PDFDictionaryElement*>(pCatalog->Lookup("AcroForm"));
+    if (!pAcroForm)
+    {
+        // No AcroForm key, assume no signatures.
+        m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pCatalog->GetDictionaryOffset(), pCatalog->GetDictionaryLength());
+        m_aEditBuffer.WriteCharPtr("/AcroForm<</Fields[\n");
+        m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+        m_aEditBuffer.WriteCharPtr(" 0 R\n]/SigFlags 3>>\n");
+    }
+    else
+    {
+        // AcroForm key is already there, insert our reference at the Fields end.
+        auto it = pAcroForm->GetItems().find("Fields");
+        if (it == pAcroForm->GetItems().end())
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: AcroForm without required Fields key");
+            return false;
+        }
+
+        auto pFields = dynamic_cast<PDFArrayElement*>(it->second);
+        if (!pFields)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: AcroForm Fields is not an array");
+            return false;
+        }
+
+        // Offset right before the end of the Fields array.
+        sal_uInt64 nFieldsEndOffset = pAcroForm->GetKeyOffset("Fields") + pAcroForm->GetKeyValueLength("Fields") - 1;
+        // Length of beginning of the Catalog dictionary -> Fields end.
+        sal_uInt64 nFieldsBeforeEndLength = nFieldsEndOffset - pCatalog->GetDictionaryOffset();
+        m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pCatalog->GetDictionaryOffset(), nFieldsBeforeEndLength);
+        m_aEditBuffer.WriteCharPtr(" ");
+        m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+        m_aEditBuffer.WriteCharPtr(" 0 R");
+        // Length of Fields end -> end of the Catalog dictionary.
+        sal_uInt64 nFieldsAfterEndLength = pCatalog->GetDictionaryOffset() + pCatalog->GetDictionaryLength() - nFieldsEndOffset;
+        m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + nFieldsEndOffset, nFieldsAfterEndLength);
+    }
     m_aEditBuffer.WriteCharPtr(">>\nendobj\n\n");
 
     // Write the xref table.
@@ -1542,7 +1584,8 @@ PDFObjectElement::PDFObjectElement(PDFDocument& rDoc, double fObjectValue, doubl
       m_fObjectValue(fObjectValue),
       m_fGenerationValue(fGenerationValue),
       m_nDictionaryOffset(0),
-      m_nDictionaryLength(0)
+      m_nDictionaryLength(0),
+      m_pDictionaryElement(nullptr)
 {
 }
 
@@ -1557,12 +1600,17 @@ PDFDictionaryElement::PDFDictionaryElement()
 {
 }
 
-void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> >& rElements, PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary)
+size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> >& rElements, PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary)
 {
+    // The index of last parsed element, in case of nested dictionaries.
+    size_t nRet = 0;
+
     if (!rDictionary.empty())
-        return;
+        return nRet;
 
     auto pThisObject = dynamic_cast<PDFObjectElement*>(pThis);
+    // This is set to non-nullptr here for nested dictionaries only.
+    auto pThisDictionary = dynamic_cast<PDFDictionaryElement*>(pThis);
 
     // Find out where the dictionary for this object starts.
     size_t nIndex = 0;
@@ -1592,7 +1640,18 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
                 // First dictionary start, track start offset.
                 nDictionaryOffset = pDictionary->m_nLocation;
                 if (pThisObject)
+                {
+                    pThisObject->SetDictionary(pDictionary);
+                    pThisDictionary = pDictionary;
                     pThisObject->SetDictionaryOffset(nDictionaryOffset);
+                }
+            }
+            else
+            {
+                // Nested dictionary.
+                nIndex = PDFDictionaryElement::Parse(rElements, pDictionary, pDictionary->m_aItems);
+                rDictionary[aName] = pDictionary;
+                aName.clear();
             }
         }
 
@@ -1603,6 +1662,7 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
                 // Last dictionary end, track length and stop parsing.
                 if (pThisObject)
                     pThisObject->SetDictionaryLength(pEndDictionary->GetLocation() - nDictionaryOffset);
+                nRet = nIndex;
                 break;
             }
         }
@@ -1614,10 +1674,10 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
             {
                 PDFNumberElement* pNumber = aNumbers.back();
                 rDictionary[aName] = pNumber;
-                if (pThisObject)
+                if (pThisDictionary)
                 {
-                    pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
-                    pThisObject->SetDictionaryKeyValueLength(aName, pNumber->GetLocation() + pNumber->GetLength() - nNameOffset);
+                    pThisDictionary->SetKeyOffset(aName, nNameOffset);
+                    pThisDictionary->SetKeyValueLength(aName, pNumber->GetLocation() + pNumber->GetLength() - nNameOffset);
                 }
                 aName.clear();
                 aNumbers.clear();
@@ -1633,10 +1693,10 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
             {
                 // Name-name key-value.
                 rDictionary[aName] = pName;
-                if (pThisObject)
+                if (pThisDictionary)
                 {
-                    pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
-                    pThisObject->SetDictionaryKeyValueLength(aName, pName->GetLocation() + pName->GetLength() - nNameOffset);
+                    pThisDictionary->SetKeyOffset(aName, nNameOffset);
+                    pThisDictionary->SetKeyValueLength(aName, pName->GetLocation() + pName->GetLength() - nNameOffset);
                 }
                 aName.clear();
             }
@@ -1660,11 +1720,11 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
                 aNumbers.clear();
             }
             rDictionary[aName] = pArray;
-            if (pThisObject)
+            if (pThisDictionary)
             {
-                pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
+                pThisDictionary->SetKeyOffset(aName, nNameOffset);
                 // Include the ending ']' in the length of the key - (array)value pair length.
-                pThisObject->SetDictionaryKeyValueLength(aName, pEndArr->GetOffset() - nNameOffset + 1);
+                pThisDictionary->SetKeyValueLength(aName, pEndArr->GetOffset() - nNameOffset + 1);
             }
             aName.clear();
             pArray = nullptr;
@@ -1677,8 +1737,8 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
             if (!pArray)
             {
                 rDictionary[aName] = pReference;
-                if (pThisObject)
-                    pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
+                if (pThisDictionary)
+                    pThisDictionary->SetKeyOffset(aName, nNameOffset);
                 aName.clear();
             }
             else
@@ -1693,8 +1753,8 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
         if (pLiteralString)
         {
             rDictionary[aName] = pLiteralString;
-            if (pThisObject)
-                pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
+            if (pThisDictionary)
+                pThisDictionary->SetKeyOffset(aName, nNameOffset);
             aName.clear();
             continue;
         }
@@ -1705,8 +1765,8 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
             if (!pArray)
             {
                 rDictionary[aName] = pHexString;
-                if (pThisObject)
-                    pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
+                if (pThisDictionary)
+                    pThisDictionary->SetKeyOffset(aName, nNameOffset);
                 aName.clear();
             }
             else
@@ -1729,11 +1789,13 @@ void PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> 
     if (!aNumbers.empty())
     {
         rDictionary[aName] = aNumbers.back();
-        if (pThisObject)
-            pThisObject->SetDictionaryKeyOffset(aName, nNameOffset);
+        if (pThisDictionary)
+            pThisDictionary->SetKeyOffset(aName, nNameOffset);
         aName.clear();
         aNumbers.clear();
     }
+
+    return nRet;
 }
 
 PDFElement* PDFDictionaryElement::Lookup(const std::map<OString, PDFElement*>& rDictionary, const OString& rKey)
@@ -1788,17 +1850,17 @@ sal_uInt64 PDFObjectElement::GetDictionaryOffset()
     return m_nDictionaryOffset;
 }
 
-void PDFObjectElement::SetDictionaryKeyOffset(const OString& rKey, sal_uInt64 nOffset)
+void PDFDictionaryElement::SetKeyOffset(const OString& rKey, sal_uInt64 nOffset)
 {
     m_aDictionaryKeyOffset[rKey] = nOffset;
 }
 
-void PDFObjectElement::SetDictionaryKeyValueLength(const OString& rKey, sal_uInt64 nLength)
+void PDFDictionaryElement::SetKeyValueLength(const OString& rKey, sal_uInt64 nLength)
 {
     m_aDictionaryKeyValueLength[rKey] = nLength;
 }
 
-sal_uInt64 PDFObjectElement::GetDictionaryKeyOffset(const OString& rKey) const
+sal_uInt64 PDFDictionaryElement::GetKeyOffset(const OString& rKey) const
 {
     auto it = m_aDictionaryKeyOffset.find(rKey);
     if (it == m_aDictionaryKeyOffset.end())
@@ -1807,13 +1869,18 @@ sal_uInt64 PDFObjectElement::GetDictionaryKeyOffset(const OString& rKey) const
     return it->second;
 }
 
-sal_uInt64 PDFObjectElement::GetDictionaryKeyValueLength(const OString& rKey) const
+sal_uInt64 PDFDictionaryElement::GetKeyValueLength(const OString& rKey) const
 {
     auto it = m_aDictionaryKeyValueLength.find(rKey);
     if (it == m_aDictionaryKeyValueLength.end())
         return 0;
 
     return it->second;
+}
+
+const std::map<OString, PDFElement*>& PDFDictionaryElement::GetItems() const
+{
+    return m_aItems;
 }
 
 void PDFObjectElement::SetDictionaryLength(sal_uInt64 nDictionaryLength)
@@ -1827,6 +1894,16 @@ sal_uInt64 PDFObjectElement::GetDictionaryLength()
         PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
 
     return m_nDictionaryLength;
+}
+
+PDFDictionaryElement* PDFObjectElement::GetDictionary() const
+{
+    return m_pDictionaryElement;
+}
+
+void PDFObjectElement::SetDictionary(PDFDictionaryElement* pDictionaryElement)
+{
+    m_pDictionaryElement = pDictionaryElement;
 }
 
 PDFReferenceElement::PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue)
