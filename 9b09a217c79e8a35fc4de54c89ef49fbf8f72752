@@ -16,6 +16,24 @@
       "revId": "9b09a217c79e8a35fc4de54c89ef49fbf8f72752",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_de496790",
+        "filename": "stoc/Library_javavm.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-25T14:49:42Z",
+      "side": 1,
+      "message": "trying to address that with \u003chttps://gerrit.libreoffice.org/30272\u003e \"Move i18nlangtag lib to URELIB\"",
+      "parentUuid": "7a77a97e_9ee52faa",
+      "revId": "9b09a217c79e8a35fc4de54c89ef49fbf8f72752",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
