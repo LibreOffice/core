@@ -34,7 +34,7 @@ $(eval $(call gb_Library_use_externals,OGLTrans,\
 	glm_headers \
 ))
 
-$(eval $(call gb_Library_set_componentfile,OGLTrans,slideshow/source/engine/OGLTrans/ogltrans))
+$(eval $(call gb_Library_set_componentfile,OGLTrans,slideshow/source/engine/opengl/ogltrans))
 
 ifeq ($(strip $(OS)),MACOSX)
 
@@ -62,9 +62,9 @@ $(eval $(call gb_Library_add_libs,OGLTrans,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
-    slideshow/source/engine/OGLTrans/TransitionerImpl \
-    slideshow/source/engine/OGLTrans/TransitionImpl \
-    slideshow/source/engine/OGLTrans/Operation \
+    slideshow/source/engine/opengl/TransitionerImpl \
+    slideshow/source/engine/opengl/TransitionImpl \
+    slideshow/source/engine/opengl/Operation \
 ))
 
 # vim: set noet sw=4 ts=4:
