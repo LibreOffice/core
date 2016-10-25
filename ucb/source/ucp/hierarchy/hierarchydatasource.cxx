@@ -107,9 +107,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw( css::uno::RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw( css::uno::RuntimeException, std::exception ) override;
@@ -722,15 +719,22 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
 
 // XServiceInfo methods.
 
-
-XSERVICEINFO_NOFACTORY_IMPL_0(
-        HierarchyDataAccess,
-        OUString( "com.sun.star.comp.ucb.HierarchyDataAccess"  ) )
+OUString SAL_CALL HierarchyDataAccess::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aSNS( 2 );
-    aSNS[ 0 ] = READ_SERVICE_NAME;
-    aSNS[ 1 ] = READWRITE_SERVICE_NAME;
-    return aSNS;
+    return OUString("com.sun.star.comp.ucb.HierarchyDataAccess");
+}
+
+sal_Bool SAL_CALL HierarchyDataAccess::supportsService( const OUString& ServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+
+css::uno::Sequence< OUString > SAL_CALL HierarchyDataAccess::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return { READ_SERVICE_NAME, READWRITE_SERVICE_NAME };
 }
 
 

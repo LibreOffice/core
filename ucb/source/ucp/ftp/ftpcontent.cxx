@@ -177,11 +177,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL FTPContent::getTypes()
 OUString SAL_CALL FTPContent::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
-}
-
-OUString FTPContent::getImplementationName_Static()
-{
     return OUString( "com.sun.star.comp.FTPContent");
 }
 
@@ -194,13 +189,7 @@ sal_Bool SAL_CALL FTPContent::supportsService( const OUString& ServiceName )
 css::uno::Sequence< OUString > SAL_CALL FTPContent::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
-}
-
-css::uno::Sequence< OUString > FTPContent::getSupportedServiceNames_Static()
-{
-    css::uno::Sequence<OUString> aSNS { "com.sun.star.ucb.FTPContent" };
-    return aSNS;
+    return { "com.sun.star.ucb.FTPContent" };
 }
 
 

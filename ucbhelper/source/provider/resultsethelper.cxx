@@ -100,12 +100,23 @@ XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
 
 // XServiceInfo methods.
 
+OUString SAL_CALL ResultSetImplHelper::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return OUString( "ResultSetImplHelper" );
+}
 
-XSERVICEINFO_NOFACTORY_IMPL_1( ResultSetImplHelper,
-                               OUString(
-                                   "ResultSetImplHelper" ),
-                               DYNAMICRESULTSET_SERVICE_NAME );
+sal_Bool SAL_CALL ResultSetImplHelper::supportsService( const OUString& ServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, ServiceName );
+}
 
+css::uno::Sequence< OUString > SAL_CALL ResultSetImplHelper::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return { DYNAMICRESULTSET_SERVICE_NAME };
+}
 
 // XComponent methods.
 

@@ -164,11 +164,6 @@ SortedResultSet::~SortedResultSet()
 OUString SAL_CALL SortedResultSet::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
-}
-
-OUString SortedResultSet::getImplementationName_Static()
-{
     return OUString( "com.sun.star.comp.ucb.SortedResultSet" );
 }
 
@@ -181,13 +176,7 @@ sal_Bool SAL_CALL SortedResultSet::supportsService( const OUString& ServiceName 
 css::uno::Sequence< OUString > SAL_CALL SortedResultSet::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
-}
-
-css::uno::Sequence< OUString >SortedResultSet::getSupportedServiceNames_Static()
-{
-    css::uno::Sequence<OUString> aSNS { RESULTSET_SERVICE_NAME };
-    return aSNS;
+    return { RESULTSET_SERVICE_NAME };
 }
 
 

@@ -249,9 +249,23 @@ PropertySetRegistry::~PropertySetRegistry()
 // XServiceInfo methods.
 
 
-XSERVICEINFO_NOFACTORY_IMPL_1( PropertySetRegistry,
-                                OUString( "com.sun.star.comp.ucb.PropertySetRegistry" ),
-                                PROPSET_REG_SERVICE_NAME );
+OUString SAL_CALL PropertySetRegistry::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return OUString( "com.sun.star.comp.ucb.PropertySetRegistry" );
+}
+
+sal_Bool SAL_CALL PropertySetRegistry::supportsService( const OUString& ServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+
+css::uno::Sequence< OUString > SAL_CALL PropertySetRegistry::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return { PROPSET_REG_SERVICE_NAME };
+}
 
 
 // XPropertySetRegistry methods.
@@ -1107,10 +1121,24 @@ PersistentPropertySet::~PersistentPropertySet()
 
 // XServiceInfo methods.
 
+OUString SAL_CALL PersistentPropertySet::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return OUString( "com.sun.star.comp.ucb.PersistentPropertySet" );
+}
 
-XSERVICEINFO_NOFACTORY_IMPL_1( PersistentPropertySet,
-                                OUString( "com.sun.star.comp.ucb.PersistentPropertySet" ),
-                                PERS_PROPSET_SERVICE_NAME );
+sal_Bool SAL_CALL PersistentPropertySet::supportsService( const OUString& ServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+
+css::uno::Sequence< OUString > SAL_CALL
+PersistentPropertySet::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return { PERS_PROPSET_SERVICE_NAME };
+}
 
 
 // XComponent methods.

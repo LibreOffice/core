@@ -101,11 +101,6 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
 OUString SAL_CALL SortedDynamicResultSet::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
-}
-
-OUString SortedDynamicResultSet::getImplementationName_Static()
-{
     return OUString( "com.sun.star.comp.ucb.SortedDynamicResultSet" );
 }
 
@@ -118,13 +113,7 @@ sal_Bool SAL_CALL SortedDynamicResultSet::supportsService( const OUString& Servi
 css::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSet::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
-}
-
-css::uno::Sequence< OUString > SortedDynamicResultSet::getSupportedServiceNames_Static()
-{
-    css::uno::Sequence<OUString> aSNS { DYNAMIC_RESULTSET_SERVICE_NAME };
-    return aSNS;
+    return { DYNAMIC_RESULTSET_SERVICE_NAME };
 }
 
 // XComponent methods.

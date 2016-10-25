@@ -209,8 +209,7 @@ Reference<XContent> SAL_CALL FTPContentProvider::queryContent(
             registerNewContent(xContent);
         }
         else {
-            Reference<XContentProvider>
-                xProvider(getHttpProvider());
+            Reference<XContentProvider> xProvider(UniversalContentBroker::create( m_xContext )->queryContentProvider("http:"));
             if(xProvider.is())
                 return xProvider->queryContent(xCanonicId);
             else
@@ -286,14 +285,6 @@ bool  FTPContentProvider::setHost( const OUString& host,
         m_ServerInfo.push_back(inf);
 
     return !present;
-}
-
-
-Reference<XContentProvider> FTPContentProvider::getHttpProvider()
-    throw(RuntimeException)
-{
-    // used for access to ftp-proxy
-    return UniversalContentBroker::create( m_xContext )->queryContentProvider("http:");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

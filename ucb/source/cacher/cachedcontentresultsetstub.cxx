@@ -169,10 +169,24 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
 
 // XServiceInfo methods.
 
+OUString SAL_CALL CachedContentResultSetStub::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return OUString( "com.sun.star.comp.ucb.CachedContentResultSetStub" );
+}
 
-XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSetStub,
-                        OUString( "com.sun.star.comp.ucb.CachedContentResultSetStub" ),
-                        CACHED_CRS_STUB_SERVICE_NAME );
+sal_Bool SAL_CALL CachedContentResultSetStub::supportsService( const OUString& ServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+
+css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStub::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return { CACHED_CRS_STUB_SERVICE_NAME };
+}
+
 
 
 // XFetchProvider methods.

@@ -124,9 +124,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw( css::uno::RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
     // XPropertySetRegistry
     virtual css::uno::Reference< css::ucb::XPersistentPropertySet > SAL_CALL
     openPropertySet( const OUString& key, sal_Bool create )
@@ -196,9 +193,6 @@ public:
         throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw( css::uno::RuntimeException, std::exception ) override;
-
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // XComponent
     virtual void SAL_CALL

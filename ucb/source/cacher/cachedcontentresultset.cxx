@@ -978,11 +978,24 @@ XTYPEPROVIDER_IMPL_11( CachedContentResultSet
 
 // XServiceInfo methods.
 
+OUString SAL_CALL CachedContentResultSet::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return OUString( "com.sun.star.comp.ucb.CachedContentResultSet" );
+}
 
-XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSet,
-                               OUString(
-                            "com.sun.star.comp.ucb.CachedContentResultSet" ),
-                            CACHED_CONTENT_RESULTSET_SERVICE_NAME );
+sal_Bool SAL_CALL CachedContentResultSet::supportsService( const OUString& ServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+
+css::uno::Sequence< OUString > SAL_CALL CachedContentResultSet::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return { CACHED_CONTENT_RESULTSET_SERVICE_NAME };
+}
+
 
 
 // XPropertySet methods. ( inherited )

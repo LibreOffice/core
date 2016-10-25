@@ -214,13 +214,6 @@ Class::createServiceFactory( const css::uno::Reference< css::lang::XMultiService
 
 // Service without service factory.
 
-// Own implementation of getSupportedServiceNames_Static().
-#define XSERVICEINFO_NOFACTORY_IMPL_0( Class, ImplName )                    \
-XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
-                                                                            \
-css::uno::Sequence< OUString >                              \
-Class::getSupportedServiceNames_Static()
-
 // 1 service name
 #define XSERVICEINFO_NOFACTORY_IMPL_1( Class, ImplName, Service1 )          \
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
@@ -228,8 +221,7 @@ XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
 css::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()                                    \
 {                                                                           \
-    css::uno::Sequence< OUString > aSNS { Service1 };                       \
-    return aSNS;                                                            \
+    return { Service1 };                       \
 }
 
 // Service with service factory.
@@ -256,7 +248,7 @@ Class::getSupportedServiceNames_Static()
   css::uno::Sequence< OUString >                              \
   Class::getSupportedServiceNames_Static()                                    \
   {                                                                             \
-      return css::uno::Sequence< OUString > { Service1 };                       \
+      return { Service1 };                       \
   }
 
 // 1 service name

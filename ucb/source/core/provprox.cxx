@@ -163,10 +163,23 @@ Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()                   
 
 // XServiceInfo methods.
 
+OUString SAL_CALL UcbContentProviderProxy::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return OUString( "com.sun.star.comp.ucb.UcbContentProviderProxy" );
+}
 
-XSERVICEINFO_NOFACTORY_IMPL_1( UcbContentProviderProxy,
-                            OUString( "com.sun.star.comp.ucb.UcbContentProviderProxy" ),
-                            "com.sun.star.ucb.ContentProviderProxy" );
+sal_Bool SAL_CALL UcbContentProviderProxy::supportsService( const OUString& ServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+
+css::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxy::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return { "com.sun.star.ucb.ContentProviderProxy" };
+}
 
 
 // XContentProvider methods.
