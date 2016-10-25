@@ -379,8 +379,6 @@ protected:
 
 private:
 
-    void impl_releasePeer();
-
     OMRCListenerMultiplexerHelper* impl_getMultiplexer();
 
     css::uno::Reference< css::uno::XComponentContext >        m_xComponentContext;

@@ -120,23 +120,6 @@ namespace utl
         */
         void    read( );
 
-        /** updates the configuration data
-
-            <p>The current values in memory (your exchange locations registered using the registerXXX methods) is
-            forwarded to their respective configuration nodes.</p>
-
-            <p>Note that calling <method>write</method>(<sal_True/) is the same as calling <method>commit</method>(<TRUE/>).</p>
-
-            @precond
-                The access must have been created for update access
-
-            You must explicitly call <method>commit</method> to make your changes persistent.
-
-            @see read
-            @see commit
-        */
-        void    write();
-
         /** commits any changes done
 
             <p>Note that calling <method>write</method>(<sal_True/) is the same as calling <method>commit</method>(<TRUE/>).</p>

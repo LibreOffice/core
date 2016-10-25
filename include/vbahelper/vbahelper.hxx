@@ -254,8 +254,6 @@ public:
 
     static void basicexception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException );
 
-    static void runtimeexception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::uno::RuntimeException );
-
     static void runtimeexception( int err,  const OUString& additionalArgument ) throw( css::uno::RuntimeException );
 };
 
