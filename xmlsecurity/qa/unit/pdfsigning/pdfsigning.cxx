@@ -17,10 +17,12 @@
 
 using namespace com::sun::star;
 
+#if !defined _WIN32
 namespace
 {
 const char* DATA_DIRECTORY = "/xmlsecurity/qa/unit/pdfsigning/data/";
 }
+#endif
 
 /// Testsuite for the PDF signing feature.
 class PDFSigningTest : public test::BootstrapFixture
