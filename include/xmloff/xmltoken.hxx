@@ -156,6 +156,10 @@ namespace xmloff { namespace token {
         XML_NP_LO_EXT,
         XML_N_LO_EXT,
 
+        // change-tracking
+        XML_NP_C_EXT,
+        XML_N_C_EXT,
+
         // units
         XML_UNIT_MM,
         XML_UNIT_M,

@@ -158,6 +158,10 @@ namespace xmloff { namespace token {
         TOKEN( "loext",                           XML_NP_LO_EXT ),
         TOKEN( "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0", XML_N_LO_EXT ),
 
+        // change-tracking
+        TOKEN( "c",                        XML_NP_C_EXT ),
+        TOKEN( "https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office-collab",      XML_N_C_EXT ),
+
         // units
         TOKEN( "mm",                              XML_UNIT_MM ),
         TOKEN( "m",                               XML_UNIT_M ),

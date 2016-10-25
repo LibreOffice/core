@@ -333,7 +333,7 @@ void SvXMLExport::InitCtor_()
     }
 
     // namespaces for documents
-    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::UNDO) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_DC),    GetXMLToken(XML_N_DC),      XML_NAMESPACE_DC );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_TEXT),  GetXMLToken(XML_N_TEXT),    XML_NAMESPACE_TEXT );
@@ -359,6 +359,9 @@ void SvXMLExport::InitCtor_()
             mpNamespaceMap->Add(
                 GetXMLToken(XML_NP_LO_EXT), GetXMLToken(XML_N_LO_EXT),
                 XML_NAMESPACE_LO_EXT);
+            mpNamespaceMap->Add(
+                GetXMLToken(XML_NP_C_EXT), GetXMLToken(XML_N_C_EXT),
+                XML_NAMESPACE_C_EXT);
             mpNamespaceMap->Add( GetXMLToken(XML_NP_FIELD), GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
         }
     }

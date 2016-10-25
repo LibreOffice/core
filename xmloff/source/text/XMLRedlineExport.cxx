@@ -164,14 +164,14 @@ void XMLRedlineExport::ExportUndoChangedRegion(
         if( sUndoType == "paragraph" )
         {
             nParaIdx++;
-            rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParaIdx));
+            rExport.AddAttribute(XML_NAMESPACE_C_EXT, XML_START, "/" + rtl::OUString::number(nParaIdx));
             rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, XML_PARAGRAPH);
         }
         else
         {
-            rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParaIdx) + "/" + rtl::OUString::number(nCharStart));
+            rExport.AddAttribute(XML_NAMESPACE_C_EXT, XML_START, "/" + rtl::OUString::number(nParaIdx) + "/" + rtl::OUString::number(nCharStart));
             if( sType == sInsert || sType == sFormat )
-                rExport.AddAttribute(XML_NAMESPACE_C, XML_END, "/" + rtl::OUString::number(nParaIdx) + "/" + rtl::OUString::number(nCharEnd));
+                rExport.AddAttribute(XML_NAMESPACE_C_EXT, XML_END, "/" + rtl::OUString::number(nParaIdx) + "/" + rtl::OUString::number(nCharEnd));
             else
                 rExport.GetTextParagraphExport()->setTextDelCount( rExport.GetTextParagraphExport()->getTextDelCount() + nCharEnd - nCharStart + 1 );
             if( sType == sFormat )
