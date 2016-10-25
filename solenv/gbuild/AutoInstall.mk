@@ -53,8 +53,7 @@ $(call gb_Helper_make_userfriendly_targets,all,AutoInstall)
 
 endef
 
-# gb_AutoInstall_add_module module lib_template exe_template jar_template componentcondition
-define gb_AutoInstall_add_module
+define gb_AutoInstall__add_module
 $(call gb_AutoInstall_get_target,all) : $(call gb_AutoInstall_get_target,$(1))
 $(call gb_AutoInstall_get_clean_target,all) : $(call gb_AutoInstall_get_clean_target,$(1))
 $(call gb_Helper_make_userfriendly_targets,$(1),AutoInstall)
@@ -65,6 +64,32 @@ $(call gb_AutoInstall_get_target,$(1)) : SCP2LIBTEMPLATE := $(2)
 $(call gb_AutoInstall_get_target,$(1)) : SCP2EXETEMPLATE := $(3)
 $(call gb_AutoInstall_get_target,$(1)) : SCP2JARTEMPLATE := $(4)
 $(call gb_AutoInstall_get_target,$(1)) : SCP2COMPONENTCONDITION := $(5)
+endef
+
+# Add an installation module that is always registered.
+#
+# The registration will be checked and the build will be aborted if the
+# module is not known.
+#
+# gb_AutoInstall_add_module module lib_template exe_template jar_template componentcondition
+define gb_AutoInstall_add_module
+$(if $(filter-out undefined,\
+		$(foreach module,gb_Executable_MODULE gb_Jar_MODULE gb_Library_MODULE gb_Package_MODULE gb_SdkLinkLibrary_MODULE,\
+			$(origin $(module)_$(1)))) \
+	,,$(call gb_Output_error,Install module $(1) is not registered) \
+)
+$(call gb_AutoInstall__add_module,$(1),$(2),$(3),$(4),$(5))
+
+endef
+
+# Add an installation module that is registered conditionally.
+#
+# E.g., a windows-only library or a package built only in some build
+# configurations.
+#
+# gb_AutoInstall_add_optional_module module lib_template exe_template jar_template componentcondition
+define gb_AutoInstall_add_optional_module
+$(call gb_AutoInstall__add_module,$(1),$(2),$(3),$(4),$(5))
 
 endef
 
