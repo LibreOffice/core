@@ -33,21 +33,6 @@ namespace o3tl {
     template<> struct typed_flags<RSWND> : is_typed_flags<RSWND, 0x03> {};
 }
 
-enum class RscWindowFlags {
-    XYMapMode                = 0x0001,
-    X                        = 0x0002,
-    Y                        = 0x0004,
-    WHMapMode                = 0x0008,
-    Width                    = 0x0010,
-    Height                   = 0x0020,
-    Text                     = 0x0040,
-    QuickText                = 0x0100,
-    HelpId                   = 0x0200
-};
-namespace o3tl {
-    template<> struct typed_flags<RscWindowFlags> : is_typed_flags<RscWindowFlags, 0x37F> {};
-}
-
 // For all menu resources:
 enum class RscMenu {
     Items                  = 0x01,

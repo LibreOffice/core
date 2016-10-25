@@ -460,16 +460,6 @@ class MenuFloatingWindow;
 class LifecycleTest;
 
 namespace svt { class PopupWindowControllerImpl; }
-enum class RSWND;
-enum class RscWindowFlags;
-
-struct WindowResHeader
-{
-    RscWindowFlags nObjMask;
-    OString        aHelpId;
-    RSWND          nRSStyle;
-};
-
 enum class WindowHitTest {
     NONE        = 0x0000,
     Inside      = 0x0001,
@@ -478,7 +468,6 @@ enum class WindowHitTest {
 namespace o3tl {
     template<> struct typed_flags<WindowHitTest> : is_typed_flags<WindowHitTest, 0x0003> {};
 };
-
 
 namespace vcl {
 
