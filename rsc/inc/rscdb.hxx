@@ -36,14 +36,8 @@ class RscError;
 class RscTupel;
 class RscCont;
 class RscCmdLine;
-enum class SymbolType : sal_uInt16;
-enum class ToolBoxItemBits;
-enum class WindowBorderStyle : sal_Int16;
 enum class KeyFuncType : sal_Int32;
 enum class MenuItemBits : sal_Int16;
-enum class ToolBoxItemType;
-enum class ButtonType;
-enum class WindowAlign;
 enum class SfxStyleFamily;
 enum class MapUnit;
 
@@ -144,7 +138,6 @@ class RscTypCont
     void        Init();         // initializes classes and tables
     void        SETCONST( RscConst *, const char *, sal_uInt32 );
     void        SETCONST( RscConst *, Atom, sal_uInt32 );
-    inline void SETCONST( RscConst *p1, const char * p2, SymbolType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, KeyFuncType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, Atom p2, MenuItemBits p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, SfxStyleFamily p3 ) { SETCONST(p1, p2, static_cast<sal_uInt16>(p3)); }
