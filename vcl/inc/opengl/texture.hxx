@@ -47,7 +47,6 @@ public:
     ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData );
     ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight );
     ~ImplOpenGLTexture();
-    void Dispose();
 
     bool InsertBuffer(int nX, int nY, int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData);
 

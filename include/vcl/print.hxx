@@ -309,11 +309,6 @@ public:
     Orientation                 GetOrientation() const;
     bool                        SetDuplexMode( DuplexMode );
 
-    /**  @return The angle that a landscape page will be turned counterclockwise wrt to portrait.
-
-         The return value may be only valid for the current paper
-    */
-    int                         GetLandscapeAngle() const;
     bool                        SetPaperBin( sal_uInt16 nPaperBin );
     sal_uInt16                  GetPaperBin() const;
     bool                        SetPaper( Paper ePaper );

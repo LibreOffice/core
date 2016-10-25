@@ -241,7 +241,6 @@ public:
     inline bool             operator==( const Bitmap& rBitmap ) const;
     inline bool             operator!=( const Bitmap& rBitmap ) const;
 
-    inline bool             IsSameInstance( const Bitmap& rBmp ) const;
     bool                    IsEqual( const Bitmap& rBmp ) const;
 
     inline bool             IsEmpty() const;
@@ -770,11 +769,6 @@ inline bool Bitmap::operator==( const Bitmap& rBitmap ) const
 inline bool Bitmap::operator!=( const Bitmap& rBitmap ) const
 {
     return( rBitmap.mxImpBmp != mxImpBmp );
-}
-
-inline bool Bitmap::IsSameInstance( const Bitmap& rBitmap ) const
-{
-    return( rBitmap.mxImpBmp == mxImpBmp );
 }
 
 inline bool Bitmap::IsEmpty() const

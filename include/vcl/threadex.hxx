@@ -45,10 +45,7 @@ namespace vcl
         virtual ~SolarThreadExecutor();
 
         virtual long doIt() = 0;
-        void execute() { impl_execute(); }
-
-    private:
-        void impl_execute();
+        void execute();
     };
 
 namespace solarthread {

@@ -328,14 +328,6 @@ public:
         , m_nRowSpacing(0), m_nColumnSpacing(0)
     {
     }
-    void set_row_homogeneous(bool bHomogeneous)
-    {
-        m_bRowHomogeneous = bHomogeneous;
-    }
-    void set_column_homogeneous(bool bHomogeneous)
-    {
-        m_bColumnHomogeneous = bHomogeneous;
-    }
     bool get_row_homogeneous() const
     {
         return m_bRowHomogeneous;

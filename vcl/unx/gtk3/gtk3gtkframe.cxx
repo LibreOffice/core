@@ -2550,12 +2550,6 @@ void GtkSalFrame::StartToolKitMoveBy()
                                pEvent->button.time);
 }
 
-void GtkSalFrame::WithDrawn()
-{
-    if (isFloatGrabWindow())
-        closePopup();
-}
-
 void GtkSalFrame::closePopup()
 {
     if (!m_nFloats)
@@ -3148,7 +3142,8 @@ gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer 
     if ((pEvent->window_state.new_window_state & GDK_WINDOW_STATE_WITHDRAWN) &&
         !(pThis->m_nState & GDK_WINDOW_STATE_WITHDRAWN))
     {
-        pThis->WithDrawn();
+        if (pThis->isFloatGrabWindow())
+            closePopup();
     }
 
     pThis->m_nState = pEvent->window_state.new_window_state;

@@ -258,8 +258,6 @@ public:
 
     virtual void            Reformat() override;
 
-    OUString                GetCurrencySymbol() const;
-
     virtual void            SetValue( sal_Int64 nNewValue ) override;
     virtual sal_Int64       GetValue() const override;
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const override;

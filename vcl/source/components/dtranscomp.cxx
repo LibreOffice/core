@@ -78,7 +78,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_static();
     static Sequence< OUString > getSupportedServiceNames_static();
 
     /*
@@ -119,11 +118,6 @@ GenericClipboard::~GenericClipboard()
 {
 }
 
-OUString GenericClipboard::getImplementationName_static()
-{
-    return OUString( "com.sun.star.datatransfer.VCLGenericClipboard"  );
-}
-
 Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
 {
     Sequence< OUString > aRet { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
@@ -132,7 +126,7 @@ Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
 
 OUString GenericClipboard::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return getImplementationName_static();
+    return OUString("com.sun.star.datatransfer.VCLGenericClipboard");
 }
 
 Sequence< OUString > GenericClipboard::getSupportedServiceNames() throw( RuntimeException, std::exception )
@@ -243,17 +237,15 @@ Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Seq
 
 OUString SAL_CALL Clipboard_getImplementationName()
 {
-    #if defined UNX
     return OUString(
-    #if ! defined MACOSX
+    #if defined MACOSX
+    "com.sun.star.datatransfer.clipboard.AquaClipboard"
+    #elif defined UNX
     "com.sun.star.datatransfer.X11ClipboardSupport"
     #else
-    "com.sun.star.datatransfer.clipboard.AquaClipboard"
+    "com.sun.star.datatransfer.VCLGenericClipboard"
     #endif
      );
-    #else
-    return GenericClipboard::getImplementationName_static();
-    #endif
 }
 
 Reference< XSingleServiceFactory > SAL_CALL Clipboard_createFactory( const Reference< XMultiServiceFactory > &  )
@@ -290,7 +282,7 @@ public:
 
     OUString SAL_CALL getImplementationName()
                 throw (css::uno::RuntimeException, std::exception) override
-    { return getImplementationName_static(); }
+    { return OUString("com.sun.star.datatransfer.dnd.VclGenericDragSource"); }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException, std::exception) override
@@ -304,11 +296,6 @@ public:
     {
         Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GenericDragSource" };
         return aRet;
-    }
-
-    static OUString getImplementationName_static()
-    {
-        return OUString("com.sun.star.datatransfer.dnd.VclGenericDragSource");
     }
 };
 
@@ -345,11 +332,11 @@ void GenericDragSource::initialize( const Sequence< Any >& ) throw( Exception, s
 Sequence< OUString > SAL_CALL DragSource_getSupportedServiceNames()
 {
 #if defined MACOSX
-    return Sequence< OUString > { "com.sun.star.datatransfer.dnd.OleDragSource" };
+    return { "com.sun.star.datatransfer.dnd.OleDragSource" };
 #elif defined UNX
-    return Sequence< OUString > { "com.sun.star.datatransfer.dnd.X11DragSource" };
+    return { "com.sun.star.datatransfer.dnd.X11DragSource" };
 #else
-    return GenericDragSource::getSupportedServiceNames_static();
+    return { "com.sun.star.datatransfer.dnd.VclGenericDragSource" };
 #endif
 }
 
@@ -404,7 +391,7 @@ public:
 
     OUString SAL_CALL getImplementationName()
                 throw (css::uno::RuntimeException, std::exception) override
-    { return getImplementationName_static(); }
+    { return OUString("com.sun.star.datatransfer.dnd.VclGenericDropTarget"); }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException, std::exception) override
@@ -418,11 +405,6 @@ public:
     {
         Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GenericDropTarget" };
         return aRet;
-    }
-
-    static OUString getImplementationName_static()
-    {
-        return OUString("com.sun.star.datatransfer.dnd.VclGenericDropTarget");
     }
 };
 
@@ -473,17 +455,15 @@ Sequence< OUString > SAL_CALL DropTarget_getSupportedServiceNames()
 
 OUString SAL_CALL DropTarget_getImplementationName()
 {
-    #if defined UNX
     return OUString(
-    #if ! defined MACOSX
+    #if defined MACOSX
+    "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
+    #elif defined UNX
     "com.sun.star.datatransfer.dnd.XdndDropTarget"
     #else
-    "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
+    "com.sun.star.datatransfer.dnd.VclGenericDropTarget"
     #endif
-                     );
-    #else
-    return GenericDropTarget::getImplementationName_static();
-    #endif
+                   );
 }
 
 Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMultiServiceFactory >&  )

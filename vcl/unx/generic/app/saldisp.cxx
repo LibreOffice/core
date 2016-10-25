@@ -632,7 +632,7 @@ void SalDisplay::Init()
     if( !nMaxRequestSize_ )
         nMaxRequestSize_ = XMaxRequestSize( pDisp_ ) * 4;
 
-    SetServerVendor();
+    meServerVendor = sal_GetServerVendor(pDisp_);
     X11SalBitmap::ImplCreateCache();
 
     // - - - - - - - - - - Synchronize - - - - - - - - - - - - -

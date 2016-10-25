@@ -703,7 +703,6 @@ private:
     SAL_DLLPRIVATE void                 ImplCallPaint(const vcl::Region* pRegion, sal_uInt16 nPaintFlags);
 
     SAL_DLLPRIVATE void                 ImplCallOverlapPaint();
-    SAL_DLLPRIVATE void                 ImplPostPaint();
 
     SAL_DLLPRIVATE void                 ImplUpdateWindowPtr( vcl::Window* pWindow );
     SAL_DLLPRIVATE void                 ImplUpdateWindowPtr();
