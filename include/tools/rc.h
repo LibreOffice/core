@@ -24,14 +24,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 // Attributes in *.src files
-enum class RSWND {
-    NONE         = 0x00,
-    DISABLED     = 0x01, // "Disable" attribute
-    CLIENTSIZE   = 0x02  // "OutputSize" attribute
-};
-namespace o3tl {
-    template<> struct typed_flags<RSWND> : is_typed_flags<RSWND, 0x03> {};
-}
 
 // For all menu resources:
 enum class RscMenu {
