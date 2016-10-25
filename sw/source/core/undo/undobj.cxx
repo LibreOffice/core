@@ -249,19 +249,13 @@ void SwUndo::Repeat(SfxRepeatTarget & rContext)
 
 bool SwUndo::CanRepeat(SfxRepeatTarget & rContext) const
 {
-    ::sw::RepeatContext *const pRepeatContext(
-            dynamic_cast< ::sw::RepeatContext * >(& rContext));
-    assert(pRepeatContext);
-    return CanRepeatImpl(*pRepeatContext);
+    assert(dynamic_cast< ::sw::RepeatContext * >(& rContext));
+    (void)rContext;
+    return (REPEAT_START <= GetId()) && (GetId() < REPEAT_END);
 }
 
 void SwUndo::RepeatImpl( ::sw::RepeatContext & )
 {
-}
-
-bool SwUndo::CanRepeatImpl( ::sw::RepeatContext & ) const
-{
-    return ((REPEAT_START <= GetId()) && (GetId() < REPEAT_END));
 }
 
 OUString SwUndo::GetComment() const

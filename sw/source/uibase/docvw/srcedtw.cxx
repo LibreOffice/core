@@ -671,15 +671,6 @@ void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
     }
 }
 
-void SwSrcEditWindow::DoDelayedSyntaxHighlight( sal_uInt16 nPara )
-{
-    if ( !m_bHighlighting )
-    {
-        m_aSyntaxLineTable.insert( nPara );
-        m_aSyntaxIdle.Start();
-    }
-}
-
 void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineOff )
 {
     TextPortions aPortionList;
@@ -762,7 +753,11 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
         case TEXT_HINT_PARAINSERTED:
         case TEXT_HINT_PARACONTENTCHANGED:
-            DoDelayedSyntaxHighlight(static_cast<sal_uInt16>(pTextHint->GetValue()));
+            if ( !m_bHighlighting )
+            {
+                m_aSyntaxLineTable.insert( static_cast<sal_uInt16>(pTextHint->GetValue()) );
+                m_aSyntaxIdle.Start();
+            }
             break;
     }
 }

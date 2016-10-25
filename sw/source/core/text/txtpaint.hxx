@@ -40,19 +40,14 @@ public:
     {
     }
 
-    inline ~SwSaveClip();
+    ~SwSaveClip();
     inline void ChgClip( const SwRect &rRect, const SwTextFrame* pFrame = nullptr,
                          bool bEnlargeRect = false)
              { if( pOut ) ChgClip_( rRect, pFrame, bEnlargeRect ); }
-           void Reset();
     inline bool IsOn()  const { return bOn; }
     inline bool IsChg() const { return bChg; }
 };
 
-inline SwSaveClip::~SwSaveClip()
-{
-    Reset();
-}
 
 #ifdef DBG_UTIL
 

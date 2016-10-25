@@ -66,6 +66,7 @@
 
 using namespace ::com::sun::star;
 
+static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame );
 
 SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch ) :
     SwLayoutFrame( pFormat, pSib ),
@@ -1328,7 +1329,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
             if ( rFrameSz.GetWidthSizeType() != ATT_FIX_SIZE )
             {
                 // #i9046# Autowidth for fly frames
-                const SwTwips nAutoWidth = CalcAutoWidth();
+                const SwTwips nAutoWidth = lcl_CalcAutoWidth( *this );
                 if ( nAutoWidth )
                 {
                     if( ATT_MIN_SIZE == rFrameSz.GetWidthSizeType() )
@@ -2435,11 +2436,6 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
     }
 
     return nRet;
-}
-
-SwTwips SwFlyFrame::CalcAutoWidth() const
-{
-    return lcl_CalcAutoWidth( *this );
 }
 
 /// OD 16.04.2003 #i13147# - If called for paint and the <SwNoTextFrame> contains

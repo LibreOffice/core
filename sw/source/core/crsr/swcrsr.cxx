@@ -167,7 +167,7 @@ bool SwCursor::IsSkipOverProtectSections() const
 // own SaveObjects if needed and validate them in the virtual check routines.
 void SwCursor::SaveState()
 {
-    SwCursor_SavePos* pNew = CreateNewSavePos();
+    SwCursor_SavePos* pNew = new SwCursor_SavePos( *this );
     pNew->pNext = m_pSavePos;
     m_pSavePos = pNew;
 }
@@ -180,11 +180,6 @@ void SwCursor::RestoreState()
         m_pSavePos = m_pSavePos->pNext;
         delete pDel;
     }
-}
-
-SwCursor_SavePos* SwCursor::CreateNewSavePos() const
-{
-    return new SwCursor_SavePos( *this );
 }
 
 /// determine if point is outside of the node-array's content area

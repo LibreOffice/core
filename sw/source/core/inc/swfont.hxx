@@ -993,13 +993,8 @@ public:
     sal_uInt16 nDrawStretchText;
     sal_uInt16 nChangeFont;
 
-    inline void Reset()
-    {
-        nGetTextSize = nDrawText = nGetStretchTextSize =
-        nDrawStretchText = nChangeFont = 0;
-    }
-
-    inline SvStatistics() { Reset(); }
+    SvStatistics()
+    { nGetTextSize = nDrawText = nGetStretchTextSize = nDrawStretchText = nChangeFont = 0; }
 };
 
 // global variable, implemented in swfont.cxx

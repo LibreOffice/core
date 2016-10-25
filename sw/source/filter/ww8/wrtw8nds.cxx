@@ -2133,7 +2133,8 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
     if ( aAttrIter.RequiresImplicitBookmark() )
     {
         OUString sBkmkName =  "_toc" + OUString::number( rNode.GetIndex() );
-        AppendWordBookmark( sBkmkName );
+        // Add a bookmark converted to a Word name.
+        AppendBookmark( BookmarkToWord( sBkmkName ) );
     }
 
     const OUString& aStr( rNode.GetText() );

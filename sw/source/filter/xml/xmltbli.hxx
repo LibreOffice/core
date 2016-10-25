@@ -150,7 +150,6 @@ public:
     sal_Int32 GetColumnWidth( sal_uInt32 nCol, sal_uInt32 nColSpan ) const;
     OUString GetColumnDefaultCellStyleName( sal_uInt32 nCol ) const;
     inline sal_uInt32 GetColumnCount() const;
-    inline bool HasColumnDefaultCellStyleNames() const;
 
     bool IsInsertCellPossible() const { return m_nCurCol < GetColumnCount(); }
     bool IsInsertColPossible() const { return m_nCurCol < USHRT_MAX; }
@@ -196,11 +195,6 @@ inline sal_uInt32 SwXMLTableContext::GetColumnCount() const
 inline const SwStartNode *SwXMLTableContext::GetLastStartNode() const
 {
     return GetPrevStartNode( 0UL, GetColumnCount() );
-}
-
-inline bool SwXMLTableContext::HasColumnDefaultCellStyleNames() const
-{
-    return m_pColumnDefaultCellStyleNames != nullptr;
 }
 
 #endif

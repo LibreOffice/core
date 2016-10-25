@@ -84,7 +84,6 @@ class SwAccessiblePortionData : public SwPortionHandler
     /// Access to portion attributes
     bool IsPortionAttrSet( size_t nPortionNo, sal_uInt8 nAttr ) const;
     bool IsSpecialPortion( size_t nPortionNo ) const;
-    bool IsReadOnlyPortion( size_t nPortionNo ) const;
     bool IsGrayPortionType( sal_uInt16 nType ) const;
 
     // helper method for GetEditableRange(...):

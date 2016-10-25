@@ -2300,16 +2300,9 @@ void SwDoc::MarkListLevel( const OUString& sListId,
 
     if ( pList )
     {
-        MarkListLevel( *pList, nListLevel, bValue );
+        // Set new marked list level and notify all affected nodes of the changed mark.
+        pList->MarkListLevel( nListLevel, bValue );
     }
-}
-
-void SwDoc::MarkListLevel( SwList& rList,
-                           const int nListLevel,
-                           const bool bValue )
-{
-    // Set new marked list level and notify all affected nodes of the changed mark.
-    rList.MarkListLevel( nListLevel, bValue );
 }
 
 bool SwDoc::IsFirstOfNumRuleAtPos( const SwPosition & rPos )

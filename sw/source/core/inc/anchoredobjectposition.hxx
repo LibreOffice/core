@@ -100,10 +100,6 @@ namespace objectpositioning
         {
             return *mpAnchorFrame;
         }
-        inline SwContact& GetContact() const
-        {
-            return *mpContact;
-        }
         inline const SwFrameFormat& GetFrameFormat() const
         {
             return *mpFrameFormat;
