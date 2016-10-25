@@ -105,11 +105,11 @@ public:
     class GroupScope
     {
     public:
-        void addMessage( const OUString& /*rMsg*/ ) {}
-        void setCalcComplete() {}
+        static void addMessage( const OUString& /*rMsg*/ ) {}
+        static void setCalcComplete() {}
     };
 
-    GroupScope enterGroup( const ScDocument& /*rDoc*/, const ScFormulaCell& /*rCell*/ )
+    static GroupScope enterGroup( const ScDocument& /*rDoc*/, const ScFormulaCell& /*rCell*/ )
     {
         return GroupScope();
     }
