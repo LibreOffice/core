@@ -2646,6 +2646,18 @@ void ScExternalRefManager::maybeLinkExternalFile(sal_uInt16 nFileId)
     maLinkedDocs.insert(LinkedDocMap::value_type(nFileId, true));
 }
 
+void ScExternalRefManager::addFilesToLinkManager()
+{
+    if (maSrcFiles.empty())
+        return;
+
+    SAL_WARN_IF( maSrcFiles.size() >= SAL_MAX_UINT16,
+            "sc.ui", "ScExternalRefManager::addFilesToLinkManager: files overflow");
+    const sal_uInt16 nSize = static_cast<sal_uInt16>( std::max<size_t>( maSrcFiles.size(), SAL_MAX_UINT16));
+    for (sal_uInt16 nFileId = 0; nFileId < nSize; ++nFileId)
+        maybeLinkExternalFile( nFileId);
+}
+
 void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(const OUString& rOwnDocName)
 {
     if (maRelativeName.isEmpty())
