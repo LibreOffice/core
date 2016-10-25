@@ -56,38 +56,6 @@ RSCINST GetVarInst( const RSCINST & rInst, const char * pVarName )
     return aInst;
 }
 
-void SetNumber( const RSCINST & rInst, const char * pVarName, sal_Int32 lValue )
-{
-    RSCINST aInst;
-
-    aInst = GetVarInst( rInst, pVarName );
-
-    if( aInst.pData )
-    {
-        ERRTYPE aError;
-        aError = aInst.pClass->SetNumber( aInst, lValue );
-
-        if( aError.IsError() )
-            pTC->pEH->Error( aError, aInst.pClass, RscId() );
-    }
-}
-
-void SetConst( const RSCINST & rInst, const char * pVarName,
-               Atom nValueId, sal_Int32 nVal )
-{
-    RSCINST aInst;
-
-    aInst = GetVarInst( rInst, pVarName );
-    if( aInst.pData )
-    {
-        ERRTYPE aError;
-        aError = aInst.pClass->SetConst( aInst, nValueId, nVal );
-
-        if( aError.IsError() )
-            pTC->pEH->Error( aError, aInst.pClass, RscId() );
-    }
-}
-
 void SetString( const RSCINST & rInst, const char * pVarName, const char * pStr )
 {
     RSCINST aInst;
@@ -300,14 +268,6 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 %token LINE
 %token AUTO_ID
 %token NOT
-%token XSCALE
-%token YSCALE
-%token RGB
-%token GEOMETRY
-%token POSITION
-%token DIMENSION
-%token INZOOMOUTPUTSIZE
-%token FLOATINGPOS
 %token DEFINE
 %token INCLUDE
 %token MACROTARGET
@@ -324,7 +284,6 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 
 %type  <macrostruct>    macro_expression
 %type  <macrostruct>    id_expression
-%type  <value>                  long_expression
 %type  <string>                 string_multiline
 
 %type  <pClass>                 type
@@ -646,31 +605,6 @@ var_definitions
   | var_definitions var_definition
   ;
 
-xy_mapmode
-  : CONSTNAME
-  {
-      SetConst( S.Top(), "_XYMAPMODE", $1.hashid, $1.nValue );
-  }
-  |
-  ;
-
-wh_mapmode
-  : CONSTNAME
-  {
-      SetConst( S.Top(), "_WHMAPMODE", $1.hashid, $1.nValue );
-  }
-  |
-  ;
-
-xywh_mapmode
-  : CONSTNAME
-  {
-      SetConst( S.Top(), "_XYMAPMODE", $1.hashid, $1.nValue );
-      SetConst( S.Top(), "_WHMAPMODE", $1.hashid, $1.nValue );
-  }
-  |
-  ;
-
 var_definition
   : line_number
   | var_header var_body ';'
@@ -705,67 +639,6 @@ var_definition
           pTC->pEH->Error( aError, S.Top().pClass, aRscId );
 
       S.Pop();
-  }
-  | XSCALE '=' '(' long_expression ',' long_expression ')' ';'
-  {
-      SetNumber( S.Top(), "_XNUMERATOR", $4 );
-      SetNumber( S.Top(), "_XDENOMINATOR", $6 );
-  }
-  | YSCALE '=' '(' long_expression ',' long_expression ')' ';'
-  {
-      SetNumber( S.Top(), "_YNUMERATOR", $4 );
-      SetNumber( S.Top(), "_YDENOMINATOR", $6 );
-  }
-  | RGB '=' '(' long_expression ',' long_expression
-                                ',' long_expression ')' ';'
-  {
-      SetNumber( S.Top(), "RED", $4 );
-      SetNumber( S.Top(), "GREEN", $6 );
-      SetNumber( S.Top(), "BLUE", $8 );
-  }
-  | GEOMETRY '=' xywh_mapmode '(' long_expression ',' long_expression ','
-                                                long_expression ',' long_expression ')' ';'
-  {
-      SetNumber( S.Top(), "_X", $5 );
-      SetNumber( S.Top(), "_Y", $7 );
-      SetNumber( S.Top(), "_WIDTH", $9 );
-      SetNumber( S.Top(), "_HEIGHT", $11 );
-  }
-  | POSITION '=' xy_mapmode '(' long_expression ',' long_expression
-                                                        ')' ';'
-  {
-      SetNumber( S.Top(), "_X", $5 );
-      SetNumber( S.Top(), "_Y", $7 );
-  }
-  | DIMENSION '=' wh_mapmode '(' long_expression ',' long_expression
-                                                         ')' ';'
-  {
-      SetNumber( S.Top(), "_WIDTH", $5 );
-      SetNumber( S.Top(), "_HEIGHT", $7 );
-  }
-  | INZOOMOUTPUTSIZE '=' CONSTNAME '(' long_expression ',' long_expression
-                                                         ')' ';'
-  {
-      SetConst( S.Top(), "_ZOOMINMAPMODE", $3.hashid, $3.nValue );
-      SetNumber( S.Top(), "_ZOOMINWIDTH", $5 );
-      SetNumber( S.Top(), "_ZOOMINHEIGHT", $7 );
-  }
-  | INZOOMOUTPUTSIZE '=' '(' long_expression ',' long_expression ')' ';'
-  {
-      SetNumber( S.Top(), "_ZOOMINWIDTH", $4 );
-      SetNumber( S.Top(), "_ZOOMINHEIGHT", $6 );
-  }
-  | FLOATINGPOS '=' CONSTNAME '(' long_expression ',' long_expression
-                                                         ')' ';'
-  {
-      SetConst( S.Top(),      "_FLOATINGPOSMAPMODE", $3.hashid, $3.nValue );
-      SetNumber( S.Top(), "_FLOATINGPOSX", $5 );
-      SetNumber( S.Top(), "_FLOATINGPOSY", $7 );
-  }
-  | FLOATINGPOS '=' '(' long_expression ',' long_expression ')' ';'
-  {
-      SetNumber( S.Top(), "_FLOATINGPOSX", $4 );
-      SetNumber( S.Top(), "_FLOATINGPOSY", $6 );
   }
 ;
 
@@ -1170,16 +1043,6 @@ string_multiline
       aBuf.append( $1 );
       aBuf.append( $2 );
       $$ = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
-  }
-;
-
-long_expression
-  : macro_expression
-  {
-      if( !$1.Evaluate( &$$ ) )
-          pTC->pEH->Error( ERR_ZERODIVISION, nullptr, RscId() );
-      if( $1.IsExpression() )
-          delete $1.aExp.pExp;
   }
 ;
 

@@ -79,62 +79,6 @@ class RscTypCont
     ::std::vector< RscSysEntry* >
                         aSysLst;            // list of system resources
 
-    Atom                nWinBitVarId;       // name of the winbit variable
-    Atom                nBorderId;
-    Atom                nHideId;
-    Atom                nClipChildrenId;
-    Atom                nSizeableId;
-    Atom                nMoveableId;
-    Atom                nMinimizeId;
-    Atom                nMaximizeId;
-    Atom                nCloseableId;
-    Atom                nStdPopupId;
-    Atom                nAppId;
-    Atom                nTabstopId;
-    Atom                nGroupId;
-    Atom                nSysmodalId;
-    Atom                nLeftId;
-    Atom                nCenterId;
-    Atom                nRightId;
-    Atom                nTopId;
-    Atom                nVCenterId;
-    Atom                nBottomId;
-    Atom                nHScrollId;
-    Atom                nVScrollId;
-    Atom                nSortId;
-    Atom                nDefaultId;
-    Atom                nSVLookId;
-    Atom                nRepeatId;
-    Atom                nDropDownId;
-    Atom                nPassWordId;
-    Atom                nReadOnlyId;
-    Atom                nAutoSizeId;
-    Atom                nSpinId;
-    Atom                nTabControlId;
-    Atom                nSimpleModeId;
-    Atom                nDragId;
-    Atom                nScrollId;
-    Atom                nZoomableId;
-    Atom                nHideWhenDeactivateId;
-    Atom                nAutoHScrollId;
-    Atom                nAutoVScrollId;
-    Atom                nWordBreakId;
-    Atom                nLeftLabelId;
-    Atom                nHasLinesId;
-    Atom                nHasButtonsId;
-    Atom                nRectStyleId;
-    Atom                nLineSpacingId;
-    Atom                nSmallStyleId;
-    Atom                nEnableResizingId;
-    Atom                nDockableId;
-    Atom                nScaleId;
-    Atom                nIgnoreTabId;
-    Atom                nNoSplitDrawId;
-    Atom                nTopImageId;
-    Atom                nNoLabelId;
-    Atom                nVertId;
-    Atom                nSysWinId;
-
     void        Init();         // initializes classes and tables
     void        SETCONST( RscConst *, const char *, sal_uInt32 );
     void        SETCONST( RscConst *, Atom, sal_uInt32 );
@@ -187,7 +131,6 @@ public:
     RscIdRange          aIdLong;
     RscString           aString;
     RscString           aStringLiteral;
-    RscFlag             aWinBits;
     RscLangEnum         aLangType;
     RscLangArray        aLangString;
     RscLangArray        aLangShort;

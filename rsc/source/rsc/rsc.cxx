@@ -59,9 +59,6 @@ using comphelper::string::getTokenCount;
 OString*  pStdParType  = nullptr;
 OString*  pStdPar1     = nullptr;
 OString*  pStdPar2     = nullptr;
-OString*  pWinParType  = nullptr;
-OString*  pWinPar1     = nullptr;
-OString*  pWinPar2     = nullptr;
 sal_uInt32      nRefDeep     = 10;
 AtomContainer*  pHS          = nullptr;
 

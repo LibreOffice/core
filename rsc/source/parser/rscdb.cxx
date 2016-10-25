@@ -55,7 +55,6 @@ RscTypCont::RscTypCont( RscError * pErrHdl,
     , aIdLong( pHS->getID( "IDLONG" ), RSC_NOTYPE )
     , aString( pHS->getID( "Chars" ), RSC_NOTYPE )
     , aStringLiteral( pHS->getID( "Chars" ), RSC_NOTYPE )
-    , aWinBits( pHS->getID( "WinBits" ), RSC_NOTYPE )
     , aLangType()
     , aLangString( pHS->getID( "Lang_Chars" ), RSC_NOTYPE, &aString, &aLangType )
     , aLangShort( pHS->getID( "Lang_short" ), RSC_NOTYPE, &aShort, &aLangType )
@@ -185,7 +184,6 @@ RscTypCont::~RscTypCont()
     aNoZeroShort.Pre_dtor();
     aIdLong.Pre_dtor();
     aString.Pre_dtor();
-    aWinBits.Pre_dtor();
     aVersion.pClass->Pre_dtor();
     // sub-types
     Pre_dtorTree( pRoot );
@@ -233,7 +231,6 @@ RscTop * RscTypCont::SearchType( Atom nId )
     ELSE_IF( aNoZeroShort )
     ELSE_IF( aIdLong )
     ELSE_IF( aString )
-    ELSE_IF( aWinBits )
     ELSE_IF( aLangType )
     ELSE_IF( aLangString )
     ELSE_IF( aLangShort )
