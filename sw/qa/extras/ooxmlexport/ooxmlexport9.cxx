@@ -63,6 +63,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103389, "tdf103389.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp/wps:spPr/a:prstGeom", "prst", "rect");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf84678, "tdf84678.docx")
+{
+    // This was 0, left margin inside a shape+text wasn't imported from DOCX.
+    // 360000 EMU, but layout uses twips.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(567), parseDump("/root/page/body/txt/anchored/fly/infos/prtBounds", "left").toInt32());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
