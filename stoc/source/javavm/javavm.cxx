@@ -71,6 +71,7 @@
 #include <uno/current_context.hxx>
 #include <uno/environment.h>
 #include <jvmfwk/framework.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include "jni.h"
 
 #include <stack>
@@ -368,28 +369,25 @@ void getDefaultLocaleFromConfig(
     // read locale
     css::uno::Reference<css::registry::XRegistryKey> locale = xRegistryRootKey->openKey("L10N/ooLocale");
     if(locale.is() && !locale->getStringValue().isEmpty()) {
+        LanguageTag aLanguageTag( locale->getStringValue());
         OUString language;
+        OUString script;
         OUString country;
+        // Java knows nothing but plain old ISO language and country codes.
+        aLanguageTag.getIsoLanguageScriptCountry( language, script, country);
 
-        sal_Int32 index = locale->getStringValue().indexOf((sal_Unicode) '-');
+        if(!language.isEmpty()) {
+            OUString prop = "user.language="
+                          + language;
 
-        if(index >= 0) {
-            language = locale->getStringValue().copy(0, index);
-            country = locale->getStringValue().copy(index + 1);
+            pjvm->pushProp(prop);
+        }
 
-            if(!language.isEmpty()) {
-                OUString prop = "user.language="
-                              + language;
+        if(!country.isEmpty()) {
+            OUString prop = "user.country="
+                          + country;
 
-                pjvm->pushProp(prop);
-            }
-
-            if(!country.isEmpty()) {
-                OUString prop = "user.country="
-                              + country;
-
-                pjvm->pushProp(prop);
-            }
+            pjvm->pushProp(prop);
         }
     }
 
