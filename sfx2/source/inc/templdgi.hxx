@@ -369,8 +369,7 @@ protected:
     void Resize();
     Size GetMinOutputSizePixel();
 
-    void updateFamilyImages();
-    void updateNonFamilyImages();
+    void setNonFamilyImages();
 
 public:
     friend class SfxTemplateDialog;

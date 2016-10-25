@@ -349,7 +349,7 @@ SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Wi
 {
     OSL_ASSERT(mpBindings!=nullptr);
 
-    pImpl->updateNonFamilyImages();
+    pImpl->setNonFamilyImages();
 
     SetStyle(GetStyle() & ~WB_DOCKABLE);
 }
@@ -363,18 +363,6 @@ void SfxTemplatePanelControl::dispose()
 {
     pImpl.reset();
     Window::dispose();
-}
-
-void SfxTemplatePanelControl::DataChanged( const DataChangedEvent& _rDCEvt )
-{
-    if ( ( DataChangedEventType::SETTINGS == _rDCEvt.GetType() ) &&
-         ( AllSettingsFlags::STYLE & _rDCEvt.GetFlags() ) )
-    {
-        pImpl->updateFamilyImages();
-        pImpl->updateNonFamilyImages();
-    }
-
-    Window::DataChanged( _rDCEvt );
 }
 
 void SfxTemplatePanelControl::Resize()
@@ -2310,26 +2298,7 @@ void SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
             ToolBoxItemBits::DROPDOWNONLY|m_aActionTbR->GetItemBits( SID_STYLE_NEW_BY_EXAMPLE ));
 }
 
-void SfxTemplateDialog_Impl::updateFamilyImages()
-{
-    if ( !m_pStyleFamiliesId )
-        // we do not have a resource id to load the new images from
-        return;
-
-    // let the families collection update the images
-    pStyleFamilies->updateImages( *m_pStyleFamiliesId );
-
-    // and set the new images on our toolbox
-    size_t nLoop = pStyleFamilies->size();
-    for( ; nLoop--; )
-    {
-        const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nLoop );
-        sal_uInt16 nId = SfxTemplate::SfxFamilyIdToNId( pItem->GetFamily() );
-        m_aActionTbL->SetItemImage( nId, pItem->GetImage() );
-    }
-}
-
-void SfxTemplateDialog_Impl::updateNonFamilyImages()
+void SfxTemplateDialog_Impl::setNonFamilyImages()
 {
     m_aActionTbR->SetImageList(ImageList(SfxResId(RID_STYLE_DESIGNER_IMAGELIST)));
 }
@@ -2362,7 +2331,6 @@ SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
 
 void SfxTemplateDialog_Impl::LoadedFamilies()
 {
-    updateFamilyImages();
     Resize();
 }
 

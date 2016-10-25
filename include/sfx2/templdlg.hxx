@@ -37,7 +37,6 @@ public:
     virtual ~SfxTemplatePanelControl() override;
     virtual void dispose() override;
 
-    virtual void DataChanged( const DataChangedEvent& _rDCEvt ) override;
     virtual void Resize() override;
     virtual void StateChanged( StateChangedType nStateChange ) override;
 
