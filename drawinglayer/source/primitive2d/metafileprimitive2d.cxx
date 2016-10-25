@@ -528,7 +528,7 @@ namespace drawinglayer
         {
         protected:
             /// local decomposition.
-            virtual Primitive2DContainer create2DDecomposition(
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer,
                 const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
@@ -541,16 +541,13 @@ namespace drawinglayer
             }
         };
 
-        Primitive2DContainer NonOverlappingFillGradientPrimitive2D::create2DDecomposition(
+        void NonOverlappingFillGradientPrimitive2D::create2DDecomposition(
+            Primitive2DContainer& rContainer,
             const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(!getFillGradient().isDefault())
             {
-                return createFill(false);
-            }
-            else
-            {
-                return Primitive2DContainer();
+                createFill(rContainer, false);
             }
         }
     } // end of namespace primitive2d
@@ -3165,7 +3162,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer MetafilePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void MetafilePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             // prepare target and porperties; each will have one default entry
             TargetHolders aTargetHolders;
@@ -3214,7 +3211,7 @@ namespace drawinglayer
                 xRetval = Primitive2DContainer { aEmbeddedTransform };
             }
 
-            return xRetval;
+            rContainer.insert(rContainer.end(), xRetval.begin(), xRetval.end());
         }
 
         MetafilePrimitive2D::MetafilePrimitive2D(

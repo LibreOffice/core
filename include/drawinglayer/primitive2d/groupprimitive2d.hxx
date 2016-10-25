@@ -76,11 +76,13 @@ namespace drawinglayer
             /// data read access
             const Primitive2DContainer& getChildren() const { return maChildren; }
 
+            void getChildren(Primitive2DContainer& rContainer) const { rContainer.insert(rContainer.end(), maChildren.begin(), maChildren.end()); }
+
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
             /// local decomposition. Implementation will just return children
-            virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

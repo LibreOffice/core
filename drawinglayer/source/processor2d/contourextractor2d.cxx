@@ -183,7 +183,7 @@ namespace drawinglayer
                 default :
                 {
                     // process recursively
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    process(rCandidate);
                     break;
                 }
             }

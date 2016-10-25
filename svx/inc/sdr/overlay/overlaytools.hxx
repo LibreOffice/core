@@ -41,7 +41,7 @@ private:
     double mfRotation;
 
 protected:
-    virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
     OverlayStaticRectanglePrimitive(
@@ -87,7 +87,7 @@ namespace drawinglayer
             double                                  mfRotation;
 
         protected:
-            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             OverlayBitmapExPrimitive(
@@ -132,7 +132,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             OverlayCrosshairPrimitive(
@@ -180,7 +180,7 @@ namespace drawinglayer
             double                          mfRotation;
 
         protected:
-            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             OverlayRectanglePrimitive(
@@ -236,7 +236,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             OverlayHelplineStripedPrimitive(
@@ -281,7 +281,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             OverlayRollingRectanglePrimitive(

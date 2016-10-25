@@ -55,7 +55,7 @@ namespace drawinglayer
 
                     // encapsulate with flag and use decomposition
                     mnInText++;
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    process(rCandidate);
                     mnInText--;
 
                     break;
@@ -73,7 +73,7 @@ namespace drawinglayer
 
                     // encapsulate with flag and use decomposition
                     mnInText++;
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    process(rCandidate);
                     mnInText--;
 
                     break;
@@ -211,7 +211,7 @@ namespace drawinglayer
                 default :
                 {
                     // process recursively
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    process(rCandidate);
                     break;
                 }
             }

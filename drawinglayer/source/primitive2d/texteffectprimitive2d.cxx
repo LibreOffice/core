@@ -31,10 +31,8 @@ namespace drawinglayer
     {
         static double fDiscreteSize(1.1);
 
-        Primitive2DContainer TextEffectPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void TextEffectPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DContainer aRetval;
-
             // get the distance of one discrete units from target display. Use between 1.0 and sqrt(2) to
             // have good results on rotated objects, too
             const basegfx::B2DVector aDistance(rViewInformation.getInverseObjectToViewTransformation() *
@@ -65,7 +63,6 @@ namespace drawinglayer
                         TextEffectStyle2D::ReliefEmbossedDefault == getTextEffectStyle2D()
                         || TextEffectStyle2D::ReliefEngravedDefault == getTextEffectStyle2D());
                     basegfx::B2DHomMatrix aTransform(aBackTransform);
-                    aRetval.resize(2);
 
                     if(bEmbossed)
                     {
@@ -91,7 +88,7 @@ namespace drawinglayer
                                 getTextContent(),
                                 aBColorModifierToGray));
 
-                        aRetval[0] = Primitive2DReference(
+                        rContainer.push_back(
                             new TransformPrimitive2D(
                                 aTransform,
                                 Primitive2DContainer { xModifiedColor }));
@@ -101,7 +98,7 @@ namespace drawinglayer
                             new basegfx::BColorModifier_replace(
                                 basegfx::BColor(1.0)));
 
-                        aRetval[1] = Primitive2DReference(
+                        rContainer.push_back(
                             new ModifiedColorPrimitive2D(
                                 getTextContent(),
                                 aBColorModifierToWhite));
@@ -117,13 +114,13 @@ namespace drawinglayer
                                 getTextContent(),
                                 aBColorModifierToGray));
 
-                        aRetval[0] = Primitive2DReference(
+                        rContainer.push_back(
                             new TransformPrimitive2D(
                                 aTransform,
                                 Primitive2DContainer { xModifiedColor }));
 
                         // add original, too
-                        aRetval[1] = Primitive2DReference(new GroupPrimitive2D(getTextContent()));
+                        rContainer.push_back(new GroupPrimitive2D(getTextContent()));
                     }
 
                     break;
@@ -132,45 +129,44 @@ namespace drawinglayer
                 {
                     // create transform primitives in all directions
                     basegfx::B2DHomMatrix aTransform;
-                    aRetval.resize(9);
 
                     aTransform.set(0, 2, aDistance.getX());
                     aTransform.set(1, 2, 0.0);
-                    aRetval[0] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
+                    rContainer.push_back(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, aDiagonalDistance.getX());
                     aTransform.set(1, 2, aDiagonalDistance.getY());
-                    aRetval[1] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
+                    rContainer.push_back(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, 0.0);
                     aTransform.set(1, 2, aDistance.getY());
-                    aRetval[2] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
+                    rContainer.push_back(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, -aDiagonalDistance.getX());
                     aTransform.set(1, 2, aDiagonalDistance.getY());
-                    aRetval[3] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
+                    rContainer.push_back(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, -aDistance.getX());
                     aTransform.set(1, 2, 0.0);
-                    aRetval[4] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
+                    rContainer.push_back(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, -aDiagonalDistance.getX());
                     aTransform.set(1, 2, -aDiagonalDistance.getY());
-                    aRetval[5] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
+                    rContainer.push_back(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, 0.0);
                     aTransform.set(1, 2, -aDistance.getY());
-                    aRetval[6] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
+                    rContainer.push_back(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, aDiagonalDistance.getX());
                     aTransform.set(1, 2, -aDiagonalDistance.getY());
-                    aRetval[7] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
+                    rContainer.push_back(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     // at last, place original over it, but force to white
                     const basegfx::BColorModifierSharedPtr aBColorModifierToWhite(
                         new basegfx::BColorModifier_replace(
                             basegfx::BColor(1.0, 1.0, 1.0)));
-                    aRetval[8] = Primitive2DReference(
+                    rContainer.push_back(
                         new ModifiedColorPrimitive2D(
                             getTextContent(),
                             aBColorModifierToWhite));
@@ -178,8 +174,6 @@ namespace drawinglayer
                     break;
                 }
             }
-
-            return aRetval;
         }
 
         TextEffectPrimitive2D::TextEffectPrimitive2D(
@@ -223,7 +217,7 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DContainer TextEffectPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void TextEffectPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -243,7 +237,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rContainer, rViewInformation);
         }
 
         // provide unique ID

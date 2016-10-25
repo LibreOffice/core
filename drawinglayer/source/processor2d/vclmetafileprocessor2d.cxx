@@ -794,7 +794,7 @@ namespace drawinglayer
                     }
 
                     // process recursively and add MetaFile comment
-                    process(rGraphicPrimitive.get2DDecomposition(getViewInformation2D()));
+                    process(rGraphicPrimitive);
 
                     if(bUsingPDFExtOutDevData)
                     {
@@ -965,7 +965,7 @@ namespace drawinglayer
                         // process recursively if not done yet to export as decomposition (bitmap)
                         if(bDoProcessRecursively)
                         {
-                            process(rControlPrimitive.get2DDecomposition(getViewInformation2D()));
+                            process(rControlPrimitive);
                         }
                     }
 
@@ -1001,7 +1001,8 @@ namespace drawinglayer
                     }
 
                     // process recursively
-                    const primitive2d::Primitive2DContainer rContent = rFieldPrimitive.get2DDecomposition(getViewInformation2D());
+                    primitive2d::Primitive2DContainer rContent;
+                    rFieldPrimitive.get2DDecomposition(rContent, getViewInformation2D());
                     process(rContent);
 
                     // for the end comment the type is not relevant yet, they are all the same. Just add.
@@ -1029,7 +1030,7 @@ namespace drawinglayer
                     const OString aCommentString("XTEXT_EOL");
 
                     // process recursively and add MetaFile comment
-                    process(rLinePrimitive.get2DDecomposition(getViewInformation2D()));
+                    process(rLinePrimitive);
                     mpMetaFile->AddAction(new MetaCommentAction(aCommentString));
 
                     break;
@@ -1042,7 +1043,7 @@ namespace drawinglayer
                     const OString aCommentString("XTEXT_EOC");
 
                     // process recursively and add MetaFile comment
-                    process(rBulletPrimitive.get2DDecomposition(getViewInformation2D()));
+                    process(rBulletPrimitive);
                     mpMetaFile->AddAction(new MetaCommentAction(aCommentString));
 
                     break;
@@ -1059,7 +1060,7 @@ namespace drawinglayer
                     }
 
                     // process recursively and add MetaFile comment
-                    process(rParagraphPrimitive.get2DDecomposition(getViewInformation2D()));
+                    process(rParagraphPrimitive);
                     mpMetaFile->AddAction(new MetaCommentAction(aCommentString));
 
                     if(mpPDFExtOutDevData)
@@ -1078,7 +1079,7 @@ namespace drawinglayer
 
                     // add MetaFile comment, process recursively and add MetaFile comment
                     mpMetaFile->AddAction(new MetaCommentAction(aCommentStringA));
-                    process(rBlockPrimitive.get2DDecomposition(getViewInformation2D()));
+                    process(rBlockPrimitive);
                     mpMetaFile->AddAction(new MetaCommentAction(aCommentStringB));
 
                     break;
@@ -1269,7 +1270,7 @@ namespace drawinglayer
                         }
                         else
                         {
-                            process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                            process(rCandidate);
                         }
 
                         impEndSvtGraphicStroke(pSvtGraphicStroke);
@@ -1335,7 +1336,7 @@ namespace drawinglayer
                         }
 
                         // process sub-line geometry (evtl. filled PolyPolygons)
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        process(rCandidate);
 
                         if(bDrawmodeChange)
                         {
@@ -1434,7 +1435,7 @@ namespace drawinglayer
 
                         // Do use decomposition; encapsulate with SvtGraphicFill
                         impStartSvtGraphicFill(pSvtGraphicFill);
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        process(rCandidate);
                         impEndSvtGraphicFill(pSvtGraphicFill);
                     }
 
@@ -1452,7 +1453,7 @@ namespace drawinglayer
                         // the range which defines the hatch is different from the range of the
                         // geometry (used for writer frames). This cannot be done calling vcl, thus use
                         // decomposition here
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        process(rCandidate);
                         break;
                     }
 
@@ -1577,7 +1578,7 @@ namespace drawinglayer
                         // transfers. One more reason to *change* these to primitives.
                         // BTW: One more example how useful the principles of primitives are; the decomposition
                         // is by definition a simpler, maybe more expensive representation of the same content.
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        process(rCandidate);
                         break;
                     }
 
@@ -1589,7 +1590,7 @@ namespace drawinglayer
                         // the range which defines the gradient is different from the range of the
                         // geometry (used for writer frames). This cannot be done calling vcl, thus use
                         // decomposition here
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        process(rCandidate);
                         break;
                     }
 
@@ -1732,7 +1733,7 @@ namespace drawinglayer
                     {
                         // Use new Metafile decomposition.
                         // TODO EMF+ stuffed into METACOMMENT support required
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        process(rCandidate);
                     }
                     else
                     {
@@ -2139,7 +2140,7 @@ namespace drawinglayer
                 default :
                 {
                     // process recursively
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    process(rCandidate);
                     break;
                 }
             }

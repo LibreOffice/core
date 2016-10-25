@@ -25,9 +25,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer EpsPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void EpsPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DContainer xRetval;
             const GDIMetaFile& rSubstituteContent = getMetaFile();
 
             if( rSubstituteContent.GetActionSize() )
@@ -35,15 +34,12 @@ namespace drawinglayer
                 // the default decomposition will use the Metafile replacement visualisation.
                 // To really use the Eps data, a renderer has to know and interpret this primitive
                 // directly.
-                xRetval.resize(1);
 
-                xRetval[0] = Primitive2DReference(
+                rContainer.push_back(
                     new MetafilePrimitive2D(
                         getEpsTransform(),
                         rSubstituteContent));
             }
-
-            return xRetval;
         }
 
         EpsPrimitive2D::EpsPrimitive2D(

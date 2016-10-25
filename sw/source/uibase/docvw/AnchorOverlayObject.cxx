@@ -50,7 +50,8 @@ private:
     bool                            mbLineSolid : 1;
 
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DContainer create2DDecomposition(
+    virtual void create2DDecomposition(
+        drawinglayer::primitive2d::Primitive2DContainer& rContainer,
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
@@ -81,11 +82,10 @@ public:
     DeclPrimitive2DIDBlock()
 };
 
-drawinglayer::primitive2d::Primitive2DContainer AnchorPrimitive::create2DDecomposition(
+void AnchorPrimitive::create2DDecomposition(
+    drawinglayer::primitive2d::Primitive2DContainer& rContainer,
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
-    drawinglayer::primitive2d::Primitive2DContainer aRetval;
-
     if ( AS_TRI == maAnchorState ||
          AS_ALL == maAnchorState ||
          AS_START == maAnchorState )
@@ -96,7 +96,7 @@ drawinglayer::primitive2d::Primitive2DContainer AnchorPrimitive::create2DDecompo
                 basegfx::B2DPolyPolygon(maTriangle),
                 getColor()));
 
-        aRetval.push_back(aTriangle);
+        rContainer.push_back(aTriangle);
     }
 
     // prepare view-independent LineWidth and color
@@ -115,7 +115,7 @@ drawinglayer::primitive2d::Primitive2DContainer AnchorPrimitive::create2DDecompo
                     getLine(),
                     aLineAttribute));
 
-            aRetval.push_back(aSolidLine);
+            rContainer.push_back(aSolidLine);
         }
         else
         {
@@ -136,7 +136,7 @@ drawinglayer::primitive2d::Primitive2DContainer AnchorPrimitive::create2DDecompo
                     aLineAttribute,
                     aStrokeAttribute));
 
-            aRetval.push_back(aStrokedLine);
+            rContainer.push_back(aStrokedLine);
         }
     }
 
@@ -150,10 +150,8 @@ drawinglayer::primitive2d::Primitive2DContainer AnchorPrimitive::create2DDecompo
                 maLineTop,
                 aLineAttribute));
 
-        aRetval.push_back(aLineTop);
+        rContainer.push_back(aLineTop);
     }
-
-    return aRetval;
 }
 
 bool AnchorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const

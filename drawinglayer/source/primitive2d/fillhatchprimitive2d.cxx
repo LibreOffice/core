@@ -35,10 +35,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer FillHatchPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void FillHatchPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DContainer aRetval;
-
             if(!getFillHatch().isDefault())
             {
                 // create hatch
@@ -103,17 +101,15 @@ namespace drawinglayer
 
                 // prepare return value
                 const bool bFillBackground(getFillHatch().isFillBackground());
-                aRetval.resize(bFillBackground ? aMatrices.size() + 1L : aMatrices.size());
 
                 // evtl. create filled background
                 if(bFillBackground)
                 {
                     // create primitive for background
-                    const Primitive2DReference xRef(
+                    rContainer.push_back(
                         new PolyPolygonColorPrimitive2D(
                             basegfx::B2DPolyPolygon(
                                 basegfx::tools::createPolygonFromRect(getOutputRange())), getBColor()));
-                    aRetval[0] = xRef;
                 }
 
                 // create primitives
@@ -129,12 +125,9 @@ namespace drawinglayer
                     aNewLine.append(rMatrix * aEnd);
 
                     // create hairline
-                    const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(aNewLine, aHatchColor));
-                    aRetval[bFillBackground ? (a + 1) : a] = xRef;
+                    rContainer.push_back(new PolygonHairlinePrimitive2D(aNewLine, aHatchColor));
                 }
             }
-
-            return aRetval;
         }
 
         FillHatchPrimitive2D::FillHatchPrimitive2D(
@@ -183,7 +176,7 @@ namespace drawinglayer
             return getOutputRange();
         }
 
-        Primitive2DContainer FillHatchPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void FillHatchPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             bool bAdaptDistance(0 != getFillHatch().getMinimalDiscreteDistance());
@@ -191,12 +184,12 @@ namespace drawinglayer
             if(bAdaptDistance)
             {
                 // behave view-dependent
-                return DiscreteMetricDependentPrimitive2D::get2DDecomposition(rViewInformation);
+                DiscreteMetricDependentPrimitive2D::get2DDecomposition(rContainer, rViewInformation);
             }
             else
             {
                 // behave view-independent
-                return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
+                BufferedDecompositionPrimitive2D::get2DDecomposition(rContainer, rViewInformation);
             }
         }
 

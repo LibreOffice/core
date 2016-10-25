@@ -70,7 +70,7 @@ namespace drawinglayer
             return false;
         }
 
-        Primitive2DContainer AnimatedSwitchPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void AnimatedSwitchPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             if(!getChildren().empty())
             {
@@ -84,10 +84,8 @@ namespace drawinglayer
                 }
 
                 const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_QUERY_THROW);
-                return Primitive2DContainer { xRef };
+                rContainer.push_back(xRef);
             }
-
-            return Primitive2DContainer();
         }
 
         // provide unique ID
@@ -108,7 +106,7 @@ namespace drawinglayer
         {
         }
 
-        Primitive2DContainer AnimatedBlinkPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void AnimatedBlinkPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             if(!getChildren().empty())
             {
@@ -116,11 +114,9 @@ namespace drawinglayer
 
                 if(fState < 0.5)
                 {
-                    return getChildren();
+                    getChildren(rContainer);
                 }
             }
-
-            return Primitive2DContainer();
         }
 
         // provide unique ID
@@ -151,7 +147,7 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DContainer AnimatedInterpolatePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void AnimatedInterpolatePrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             const sal_uInt32 nSize(maMatrixStack.size());
 
@@ -198,11 +194,11 @@ namespace drawinglayer
 
                 // create new transform primitive reference, return new sequence
                 const Primitive2DReference xRef(new TransformPrimitive2D(aTargetTransform, getChildren()));
-                return Primitive2DContainer { xRef };
+                rContainer.push_back(xRef);
             }
             else
             {
-                return getChildren();
+                getChildren(rContainer);
             }
         }
 

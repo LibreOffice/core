@@ -44,7 +44,8 @@ private:
     ShadowState                 maShadowState;
 
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DContainer create2DDecomposition(
+    virtual void create2DDecomposition(
+        drawinglayer::primitive2d::Primitive2DContainer& rContainer,
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
@@ -66,11 +67,11 @@ public:
     DeclPrimitive2DIDBlock()
 };
 
-drawinglayer::primitive2d::Primitive2DContainer ShadowPrimitive::create2DDecomposition(
+void ShadowPrimitive::create2DDecomposition(
+    drawinglayer::primitive2d::Primitive2DContainer& rContainer,
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     // get logic sizes in object coordinate system
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
     basegfx::B2DRange aRange(maBasePosition);
 
     switch(maShadowState)
@@ -88,12 +89,10 @@ drawinglayer::primitive2d::Primitive2DContainer ShadowPrimitive::create2DDecompo
                 basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0),
                 2);
 
-            const drawinglayer::primitive2d::Primitive2DReference xReference(
+            rContainer.push_back(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     aRange,
                     aFillGradientAttribute));
-
-            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             break;
         }
         case SS_VIEW:
@@ -109,12 +108,10 @@ drawinglayer::primitive2d::Primitive2DContainer ShadowPrimitive::create2DDecompo
                 basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0),
                 4);
 
-            const drawinglayer::primitive2d::Primitive2DReference xReference(
+            rContainer.push_back(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     aRange,
                     aFillGradientAttribute));
-
-            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             break;
         }
         case SS_EDIT:
@@ -130,12 +127,10 @@ drawinglayer::primitive2d::Primitive2DContainer ShadowPrimitive::create2DDecompo
                 basegfx::BColor(83.0/255.0,83.0/255.0,83.0/255.0),
                 4);
 
-            const drawinglayer::primitive2d::Primitive2DReference xReference(
+            rContainer.push_back(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     aRange,
                     aFillGradientAttribute));
-
-            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             break;
         }
         default:
@@ -143,8 +138,6 @@ drawinglayer::primitive2d::Primitive2DContainer ShadowPrimitive::create2DDecompo
             break;
         }
     }
-
-    return xRetval;
 }
 
 bool ShadowPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const

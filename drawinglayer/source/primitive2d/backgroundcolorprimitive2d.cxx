@@ -33,17 +33,12 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer BackgroundColorPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void BackgroundColorPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             if(!rViewInformation.getViewport().isEmpty())
             {
                 const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(rViewInformation.getViewport()));
-                const Primitive2DReference xRef(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), getBColor()));
-                return Primitive2DContainer { xRef };
-            }
-            else
-            {
-                return Primitive2DContainer();
+                rContainer.push_back(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), getBColor()));
             }
         }
 
@@ -75,7 +70,7 @@ namespace drawinglayer
             return rViewInformation.getViewport();
         }
 
-        Primitive2DContainer BackgroundColorPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void BackgroundColorPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -92,7 +87,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rContainer, rViewInformation);
         }
 
         // provide unique ID

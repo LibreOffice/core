@@ -237,7 +237,7 @@ namespace drawinglayer
             return xRetval;
         }
 
-        Primitive2DContainer ControlPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void ControlPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             // try to create a bitmap decomposition. If that fails for some reason,
             // at least create a replacement decomposition.
@@ -248,7 +248,7 @@ namespace drawinglayer
                 xReference = createPlaceholderDecomposition(rViewInformation);
             }
 
-            return Primitive2DContainer { xReference };
+            rContainer.push_back(xReference);
         }
 
         ControlPrimitive2D::ControlPrimitive2D(
@@ -329,7 +329,7 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DContainer ControlPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void ControlPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             // this primitive is view-dependent related to the scaling. If scaling has changed,
             // destroy existing decomposition. To detect change, use size of unit size in view coordinates
@@ -352,7 +352,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rContainer, rViewInformation);
         }
 
         // provide unique ID

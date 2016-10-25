@@ -161,7 +161,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer DiscreteShadowPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void DiscreteShadowPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DContainer xRetval;
 
@@ -259,15 +259,11 @@ namespace drawinglayer
                             fBorderY + fSingleY)));
 
                 // put all in object transformation to get to target positions
-                const Primitive2DReference xTransformed(
+                rContainer.push_back(
                     new TransformPrimitive2D(
                         getTransform(),
                         xRetval));
-
-                xRetval = Primitive2DContainer { xTransformed };
             }
-
-            return xRetval;
         }
 
         DiscreteShadowPrimitive2D::DiscreteShadowPrimitive2D(

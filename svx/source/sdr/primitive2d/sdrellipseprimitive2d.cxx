@@ -35,7 +35,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer SdrEllipsePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        void SdrEllipsePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DContainer aRetval;
 
@@ -109,7 +109,7 @@ namespace drawinglayer
                     getSdrLFSTAttribute().getShadow());
             }
 
-            return aRetval;
+            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
         }
 
         SdrEllipsePrimitive2D::SdrEllipsePrimitive2D(
@@ -145,7 +145,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer SdrEllipseSegmentPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        void SdrEllipseSegmentPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DContainer aRetval;
 
@@ -228,7 +228,7 @@ namespace drawinglayer
                     getSdrLFSTAttribute().getShadow());
             }
 
-            return aRetval;
+            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
         }
 
         SdrEllipseSegmentPrimitive2D::SdrEllipseSegmentPrimitive2D(

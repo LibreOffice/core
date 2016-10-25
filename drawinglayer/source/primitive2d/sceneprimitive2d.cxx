@@ -221,7 +221,7 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DContainer ScenePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void ScenePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DContainer aRetval;
 
@@ -494,7 +494,7 @@ namespace drawinglayer
                 }
             }
 
-            return aRetval;
+            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
         }
 
         Primitive2DContainer ScenePrimitive2D::getGeometry2D() const
@@ -638,7 +638,7 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DContainer ScenePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void ScenePrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -695,7 +695,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rContainer, rViewInformation);
         }
 
         // provide unique ID

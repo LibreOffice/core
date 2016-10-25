@@ -174,6 +174,9 @@ namespace drawinglayer
              */
             virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
+            void process(const primitive2d::BasePrimitive2D& rCandidate);
+
+
         public:
             /// constructor/destructor
             explicit BaseProcessor2D(const geometry::ViewInformation2D& rViewInformation);

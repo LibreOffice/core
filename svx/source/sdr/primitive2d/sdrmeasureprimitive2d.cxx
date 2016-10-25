@@ -82,7 +82,7 @@ namespace drawinglayer
                 aLineStartEnd);
         }
 
-        Primitive2DContainer SdrMeasurePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        void SdrMeasurePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DContainer aRetval;
             rtl::Reference<SdrBlockTextPrimitive2D> xBlockText;
@@ -434,7 +434,7 @@ namespace drawinglayer
                     getSdrLSTAttribute().getShadow());
             }
 
-            return aRetval;
+            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
         }
 
         SdrMeasurePrimitive2D::SdrMeasurePrimitive2D(

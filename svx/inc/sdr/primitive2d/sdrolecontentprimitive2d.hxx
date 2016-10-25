@@ -47,7 +47,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 
         public:
             SdrOleContentPrimitive2D(

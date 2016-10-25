@@ -283,9 +283,7 @@ namespace sdr
                     // decompose immediately with neutral ViewInformation. This will
                     // layout the text to more simple TextPrimitives from drawinglayer
                     const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-
-                    drawinglayer::primitive2d::Primitive2DContainer aDecomposition(xBlockTextPrimitive->get2DDecomposition(aViewInformation2D));
-                    xRetval.insert(xRetval.end(), aDecomposition.begin(), aDecomposition.end());
+                    xBlockTextPrimitive->get2DDecomposition(xRetval, aViewInformation2D);
                 }
             }
 
