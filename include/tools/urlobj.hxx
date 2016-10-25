@@ -906,10 +906,9 @@ public:
      */
     OUString GetFileExtension() const;
 
-    inline bool Append(OUString const & rTheSegment,
+    bool Append(OUString const & rTheSegment,
                        EncodeMechanism eMechanism = WAS_ENCODED,
-                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
-    { return appendSegment(rTheSegment, eMechanism, eCharset); }
+                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     void CutLastName();
 
@@ -1094,10 +1093,6 @@ private:
     // Hierarchical Path:
 
     TOOLS_DLLPRIVATE bool checkHierarchical() const;
-
-    bool appendSegment(
-        OUString const & rTheSegment,
-        EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
     TOOLS_DLLPRIVATE SubString getSegment(
         sal_Int32 nIndex, bool bIgnoreFinalSlash) const;

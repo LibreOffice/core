@@ -69,11 +69,6 @@ SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream )
 
 SvPersistStream::~SvPersistStream()
 {
-    ClearStream();
-}
-
-void SvPersistStream::ClearStream()
-{
     if( pStm != nullptr )
     {
         SyncSysStream();

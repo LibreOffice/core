@@ -2154,7 +2154,7 @@ void SAL_CALL VCLXListBox::disposing( const EventObject& i_rEvent ) throw (Runti
 //  class VCLXMessageBox
 
 
-void VCLXMessageBox::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
+void VCLXMessageBox::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     VCLXTopWindow::ImplGetPropertyIds( rIds );
 }
@@ -2235,7 +2235,7 @@ css::awt::Size SAL_CALL VCLXMessageBox::getMinimumSize() throw(css::uno::Runtime
 
 //  class VCLXDialog
 
-void VCLXDialog::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
+void VCLXDialog::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     VCLXTopWindow::ImplGetPropertyIds( rIds );
 }

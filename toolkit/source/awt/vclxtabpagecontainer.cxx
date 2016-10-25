@@ -39,7 +39,7 @@ using namespace ::com::sun::star::view;
 
 //  class VCLXTabPageContainer
 
-void VCLXTabPageContainer::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
+void VCLXTabPageContainer::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
