@@ -29,15 +29,11 @@ endif # $(COM)
 else ifeq ($(OS),ANDROID)
 
 $(eval $(call gb_ExternalPackage_add_files,icu,$(LIBO_LIB_FOLDER),\
-	source/lib/libicudatalo.so \
-	source/lib/libicuuclo.so \
 	source/lib/libicui18nlo.so \
 ))
 
 else # $(OS) != WNT/ANDROID
 
-$(eval $(call gb_ExternalPackage_add_file,icu,$(LIBO_LIB_FOLDER)/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_file,icu,$(LIBO_LIB_FOLDER)/libicuuc$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_file,icu,$(LIBO_LIB_FOLDER)/libicui18n$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)))
 
 endif # $(OS)

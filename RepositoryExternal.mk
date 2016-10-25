@@ -998,7 +998,7 @@ gb_ExternalProject__use_liblangtag :=
 
 else # !SYSTEM_LIBLANGTAG
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_packages_for_install,ure,\
 	liblangtag_data \
 ))
 
@@ -1016,7 +1016,7 @@ endef
 
 else
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_packages_for_install,ure,\
 	liblangtag \
 ))
 
@@ -1442,7 +1442,7 @@ endef
 
 # icudata and icui18n is called icudt and icuin when built with MSVC :-/
 define gb_LinkTarget__use_icudata
-$(call gb_LinkTarget_use_package,$(1),icu)
+$(call gb_LinkTarget_use_package,$(1),icu_ure)
 
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_add_libs,$(1),\
@@ -1472,7 +1472,7 @@ endif
 endef
 
 define gb_LinkTarget__use_icuuc
-$(call gb_LinkTarget_use_package,$(1),icu)
+$(call gb_LinkTarget_use_package,$(1),icu_ure)
 
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_add_libs,$(1),\
@@ -3816,6 +3816,7 @@ ifeq ($(SYSTEM_ICU),)
 define gb_Executable__register_gendict
 $(call gb_Executable_add_runtime_dependencies,gendict,\
 	$(call gb_Package_get_target_for_build,icu) \
+	$(call gb_Package_get_target_for_build,icu_ure) \
 )
 endef
 
@@ -3958,6 +3959,7 @@ $(call gb_ExternalExecutable_set_internal,genbrk,$(WORKDIR_FOR_BUILD)/UnpackedTa
 $(call gb_ExternalExecutable_set_precommand,genbrk,$(subst $$,$$$$,$(gb_ICU_PRECOMMAND)))
 $(call gb_ExternalExecutable_add_dependencies,genbrk,\
 	$(call gb_Package_get_target_for_build,icu) \
+	$(call gb_Package_get_target_for_build,icu_ure) \
 )
 
 endef
@@ -3978,6 +3980,7 @@ $(call gb_ExternalExecutable_set_internal,genccode,$(WORKDIR_FOR_BUILD)/Unpacked
 $(call gb_ExternalExecutable_set_precommand,genccode,$(subst $$,$$$$,$(gb_ICU_PRECOMMAND)))
 $(call gb_ExternalExecutable_add_dependencies,genccode,\
 	$(call gb_Package_get_target_for_build,icu) \
+	$(call gb_Package_get_target_for_build,icu_ure) \
 )
 
 endef
@@ -3998,6 +4001,7 @@ $(call gb_ExternalExecutable_set_internal,gencmn,$(WORKDIR_FOR_BUILD)/UnpackedTa
 $(call gb_ExternalExecutable_set_precommand,gencmn,$(subst $$,$$$$,$(gb_ICU_PRECOMMAND)))
 $(call gb_ExternalExecutable_add_dependencies,gencmn,\
 	$(call gb_Package_get_target_for_build,icu) \
+	$(call gb_Package_get_target_for_build,icu_ure) \
 )
 
 endef
