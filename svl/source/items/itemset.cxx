@@ -36,9 +36,9 @@
 #include <tools/solar.h>
 #include <rtl/string.hxx>
 
-static const sal_uInt16 nInitCount = 10; // Single USHORTs => 5 pairs without '0'
-#include "nranges.cxx"
 #include "poolio.hxx"
+
+static const sal_uInt16 nInitCount = 10; // Single USHORTs => 5 pairs without '0'
 
 /**
  * Ctor for a SfxItemSet with exactly the Which Ranges, which are known to

@@ -16,15 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifdef MACOSX
-// We need an empty block in here. Otherwise, if the #ifndef INCLUDED_SVL_NRANGES_HXX
-// line is the first line, the Mac OS X version of the gcc preprocessor will
-// incorrectly optimize the inclusion process and will never include this file
-// a second time
-#endif
-
 #ifndef INCLUDED_SVL_NRANGES_HXX
 #define INCLUDED_SVL_NRANGES_HXX
+
+#include <cstdarg>
+#include <sal/types.h>
 
 class SfxUShortRanges
 {
@@ -47,6 +43,30 @@ public:
                                 operator const sal_uInt16* () const
                                 { return _pRanges; }
 };
+
+/**
+ * Creates a sal_uInt16-ranges-array in 'rpRanges' using 'nWh1' and 'nWh2' as
+ * first range, 'nNull' as terminator or start of 2nd range and 'pArgs' as
+ * remainder.
+ *
+ * It returns the number of sal_uInt16s which are contained in the described
+ * set of sal_uInt16s.
+ */
+sal_uInt16 InitializeRanges_Impl( sal_uInt16 *&rpRanges, va_list pArgs,
+                               sal_uInt16 nWh1, sal_uInt16 nWh2, sal_uInt16 nNull );
+
+/**
+ * Determines the number of sal_uInt16s in a 0-terminated array of pairs of
+ * sal_uInt16s.
+ * The terminating 0 is not included in the count.
+ */
+sal_uInt16 Count_Impl( const sal_uInt16 *pRanges );
+
+/**
+ * Determines the total number of sal_uInt16s described in a 0-terminated
+ * array of pairs of sal_uInt16s, each representing an range of sal_uInt16s.
+ */
+sal_uInt16 Capacity_Impl( const sal_uInt16 *pRanges );
 
 #endif
 

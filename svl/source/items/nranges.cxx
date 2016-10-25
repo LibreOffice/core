@@ -16,13 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <svl/nranges.hxx>
 
 #include <cassert>
+#include <cstring>
 #include <vector>
-// compiled via include from itemset.cxx only!
-#include <memory>
 
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 #ifdef DBG_UTIL
 
