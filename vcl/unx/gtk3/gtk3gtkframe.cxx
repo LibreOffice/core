@@ -4195,10 +4195,15 @@ void GtkSalFrame::startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
 
 void GtkDragSource::dragFailed()
 {
-    datatransfer::dnd::DragSourceDropEvent aEv;
-    aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
-    aEv.DropSuccess = false;
-    m_xListener->dragDropEnd(aEv);
+    if (m_xListener.is())
+    {
+        datatransfer::dnd::DragSourceDropEvent aEv;
+        aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
+        aEv.DropSuccess = false;
+        auto xListener = m_xListener;
+        m_xListener.clear();
+        xListener->dragDropEnd(aEv);
+    }
 }
 
 gboolean GtkSalFrame::signalDragFailed(GtkWidget* /*widget*/, GdkDragContext* /*context*/, GtkDragResult /*result*/, gpointer frame)
@@ -4212,10 +4217,15 @@ gboolean GtkSalFrame::signalDragFailed(GtkWidget* /*widget*/, GdkDragContext* /*
 
 void GtkDragSource::dragDelete()
 {
-    datatransfer::dnd::DragSourceDropEvent aEv;
-    aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_MOVE;
-    aEv.DropSuccess = true;
-    m_xListener->dragDropEnd(aEv);
+    if (m_xListener.is())
+    {
+        datatransfer::dnd::DragSourceDropEvent aEv;
+        aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_MOVE;
+        aEv.DropSuccess = true;
+        auto xListener = m_xListener;
+        m_xListener.clear();
+        xListener->dragDropEnd(aEv);
+    }
 }
 
 void GtkSalFrame::signalDragDelete(GtkWidget* /*widget*/, GdkDragContext* /*context*/, gpointer frame)
@@ -4228,10 +4238,15 @@ void GtkSalFrame::signalDragDelete(GtkWidget* /*widget*/, GdkDragContext* /*cont
 
 void GtkDragSource::dragEnd(GdkDragContext* context)
 {
-    datatransfer::dnd::DragSourceDropEvent aEv;
-    aEv.DropAction = GdkToVcl(gdk_drag_context_get_selected_action(context));
-    aEv.DropSuccess = gdk_drag_drop_succeeded(context);
-    m_xListener->dragDropEnd(aEv);
+    if (m_xListener.is())
+    {
+        datatransfer::dnd::DragSourceDropEvent aEv;
+        aEv.DropAction = GdkToVcl(gdk_drag_context_get_selected_action(context));
+        aEv.DropSuccess = gdk_drag_drop_succeeded(context);
+        auto xListener = m_xListener;
+        m_xListener.clear();
+        xListener->dragDropEnd(aEv);
+    }
     g_ActiveDragSource = nullptr;
 }
 
