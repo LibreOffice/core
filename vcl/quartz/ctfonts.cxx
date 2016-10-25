@@ -341,6 +341,20 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     // get font attributes
     CFDictionaryRef pAttrDict = static_cast<CFDictionaryRef>(CTFontDescriptorCopyAttribute( pFD, kCTFontTraitsAttribute ));
 
+    if (bFontEnabled && *bFontEnabled && SalLayout::UseCommonLayout())
+    {
+        // Ignore font formats not supported by CommonSalLayout.
+        int nFormat;
+        CFNumberRef pFormat = static_cast<CFNumberRef>(CTFontDescriptorCopyAttribute(pFD, kCTFontFormatAttribute));
+        CFNumberGetValue(pFormat, kCFNumberIntType, &nFormat);
+        if (nFormat == kCTFontFormatUnrecognized || nFormat == kCTFontFormatPostScript || nFormat == kCTFontFormatBitmap)
+        {
+            SAL_INFO("vcl.fonts", "Ignoring font with unsupported format: " << rDFA.GetFamilyName());
+            *bFontEnabled = false;
+        }
+        CFRelease(pFormat);
+    }
+
     // get symbolic trait
     // TODO: use other traits such as MonoSpace/Condensed/Expanded or Vertical too
     SInt64 nSymbolTrait = 0;

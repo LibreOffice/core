@@ -1532,6 +1532,15 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
             if( (nFontType & RASTER_FONTTYPE) && !(nFontType & DEVICE_FONTTYPE) )
                 return 1;
 
+        // Ignore font formats not supported by CommonSalLayout.
+        if (SalLayout::UseCommonLayout())
+            if ((nFontType & RASTER_FONTTYPE))
+            {
+                SAL_INFO("vcl.fonts", "Ignoring font with unsupported format: "
+                         << OUString(reinterpret_cast<const sal_Unicode*>(pLogFont->elfLogFont.lfFaceName)));
+                return 1;
+            }
+
         WinFontFace* pData = ImplLogMetricToDevFontDataW( pLogFont, &(pMetric->ntmTm), nFontType );
         pData->SetFontId( sal_IntPtr( pInfo->mnFontCount++ ) );
 

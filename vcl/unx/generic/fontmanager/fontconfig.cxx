@@ -25,6 +25,7 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/wrkwin.hxx>
 #include "fontinstance.hxx"
+#include "sallayout.hxx"
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/unicode.hxx>
 #include <rtl/strbuf.hxx>
@@ -119,6 +120,17 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
         FcResult eOutRes = FcPatternGetBool( pPattern, FC_OUTLINE, 0, &bOutline );
         if( (eOutRes != FcResultMatch) || (bOutline == FcFalse) )
             continue;
+        if (SalLayout::UseCommonLayout())
+        {
+            // Ignore Type 1 fonts; CommonSalLayout does not support them.
+            FcChar8* pFormat = nullptr;
+            FcResult eFormatRes = FcPatternGetString(pPattern, FC_FONTFORMAT, 0, &pFormat);
+            if ((eFormatRes == FcResultMatch) &&
+                (strcmp(reinterpret_cast<char*>(pFormat), "Type 1") == 0))
+            {
+                continue;
+            }
+        }
         FcPatternReference( pPattern );
         FcFontSetAdd( m_pOutlineSet, pPattern );
     }
