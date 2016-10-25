@@ -37,7 +37,13 @@ public:
     virtual ~PDFElement() { }
 };
 
-/// In-memory representation of an on-disk PDF document.
+/**
+ * In-memory representation of an on-disk PDF document.
+ *
+ * The PDF element list is not meant to be saved back to disk, but some
+ * elements remember their source offset / length, and based on that it's
+ * possible to modify the input file.
+ */
 class XMLSECURITY_DLLPUBLIC PDFDocument
 {
     /// This vector owns all elements.
