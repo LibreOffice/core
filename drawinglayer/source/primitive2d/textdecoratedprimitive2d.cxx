@@ -154,7 +154,7 @@ namespace drawinglayer
             // TODO: Handle Font Emphasis Above/Below
         }
 
-        Primitive2DContainer TextDecoratedPortionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void TextDecoratedPortionPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(getWordLineMode())
             {
@@ -166,7 +166,8 @@ namespace drawinglayer
                 if(!aBroken.empty())
                 {
                     // was indeed split to several words, use as result
-                    return aBroken;
+                    rContainer.insert(rContainer.end(), aBroken.begin(), aBroken.end());
+                    return;
                 }
                 else
                 {
@@ -303,7 +304,7 @@ namespace drawinglayer
                 }
             }
 
-            return aRetval;
+            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
         }
 
         TextDecoratedPortionPrimitive2D::TextDecoratedPortionPrimitive2D(

@@ -185,7 +185,7 @@ namespace drawinglayer
             virtual sal_uInt32 getPrimitive2DID() const = 0;
 
             /// The default implementation will return an empty sequence
-            virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual void get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const;
 
 
             // Methods from XPrimitive2D
@@ -258,7 +258,7 @@ namespace drawinglayer
             /** method which is to be used to implement the local decomposition of a 2D primitive. The default
                 implementation will just return an empty decomposition
              */
-            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             // constructor/destructor
@@ -270,7 +270,7 @@ namespace drawinglayer
                 overridden and the ViewInformation2D for the last decomposition need to be remembered, too, and
                 be used in the next call to decide if the buffered decomposition may be reused or not.
              */
-            virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

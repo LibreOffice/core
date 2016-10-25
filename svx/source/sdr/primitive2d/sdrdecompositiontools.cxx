@@ -438,7 +438,8 @@ namespace drawinglayer
                         // use the decomposition to force to simple text primitives, those will no longer
                         // need the outliner for formatting (alternatively it is also possible to just add
                         // pNew to aNewPrimitiveSequence)
-                        Primitive2DContainer aAnimSequence(pNew->get2DDecomposition(aViewInformation2D));
+                        Primitive2DContainer aAnimSequence;
+                        pNew->get2DDecomposition(aAnimSequence, aViewInformation2D);
                         delete pNew;
 
                         // create a new animatedInterpolatePrimitive and add it

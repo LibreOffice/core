@@ -143,7 +143,7 @@ void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::p
         case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
         case PRIMITIVE2D_ID_GROUPPRIMITIVE2D :
         {
-            process(rCandidate.get2DDecomposition(getViewInformation2D()));
+            process(rCandidate);
             break;
         }
 

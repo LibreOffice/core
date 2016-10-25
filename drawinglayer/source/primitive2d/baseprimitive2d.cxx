@@ -52,18 +52,21 @@ namespace drawinglayer
 
         basegfx::B2DRange BasePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            return get2DDecomposition(rViewInformation).getB2DRange(rViewInformation);
+            Primitive2DContainer aContainer;
+            get2DDecomposition(aContainer, rViewInformation);
+            return aContainer.getB2DRange(rViewInformation);
         }
 
-        Primitive2DContainer BasePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void BasePrimitive2D::get2DDecomposition(Primitive2DContainer& /*rContainer*/, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            return Primitive2DContainer();
         }
 
         Primitive2DSequence SAL_CALL BasePrimitive2D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException, std::exception )
         {
             const geometry::ViewInformation2D aViewInformation(rViewParameters);
-            return comphelper::containerToSequence(get2DDecomposition(aViewInformation));
+            Primitive2DContainer aContainer;
+            get2DDecomposition(aContainer, aViewInformation);
+            return comphelper::containerToSequence(aContainer);
         }
 
         css::geometry::RealRectangle2D SAL_CALL BasePrimitive2D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException, std::exception )
@@ -79,9 +82,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer BufferedDecompositionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void BufferedDecompositionPrimitive2D::create2DDecomposition(Primitive2DContainer& /*rContainer*/, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            return Primitive2DContainer();
         }
 
         BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D()
@@ -90,17 +92,18 @@ namespace drawinglayer
         {
         }
 
-        Primitive2DContainer BufferedDecompositionPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void BufferedDecompositionPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
             if(getBuffered2DDecomposition().empty())
             {
-                const Primitive2DContainer aNewSequence(create2DDecomposition(rViewInformation));
+                Primitive2DContainer aNewSequence;
+                create2DDecomposition(aNewSequence, rViewInformation);
                 const_cast< BufferedDecompositionPrimitive2D* >(this)->setBuffered2DDecomposition(aNewSequence);
             }
 
-            return getBuffered2DDecomposition();
+            rContainer.insert(rContainer.end(), getBuffered2DDecomposition().begin(), getBuffered2DDecomposition().end());
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

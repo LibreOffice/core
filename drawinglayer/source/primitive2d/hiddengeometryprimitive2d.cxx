@@ -39,9 +39,8 @@ namespace drawinglayer
             return getChildren().getB2DRange(rViewInformation);
         }
 
-        Primitive2DContainer HiddenGeometryPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void HiddenGeometryPrimitive2D::get2DDecomposition(Primitive2DContainer& /*rContainer*/, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            return Primitive2DContainer();
         }
 
         // provide unique ID

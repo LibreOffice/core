@@ -32,15 +32,12 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&
-            ) const
+        void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& ) const
         {
-            Primitive2DContainer aRetval;
-
             if(255L == getGraphicAttr().GetTransparency())
             {
                 // content is invisible, done
-                return aRetval;
+                return;
             }
 
             // do not apply mirroring from GraphicAttr to the Metafile by calling
@@ -106,14 +103,16 @@ namespace drawinglayer
 
             // create sub-content; helper takes care of correct handling of
             // bitmap, svg or metafile content
-            aRetval = create2DDecompositionOfGraphic(
+            Primitive2DContainer aRetval;
+            create2DDecompositionOfGraphic(
+                aRetval,
                 aTransformedGraphic,
                 aTransform);
 
             if(!aRetval.size())
             {
                 // content is invisible, done
-                return aRetval;
+                return;
             }
 
             if(isAdjusted || isDrawMode)
@@ -134,7 +133,7 @@ namespace drawinglayer
                 if(!aRetval.size())
                 {
                     // content is invisible, done
-                    return aRetval;
+                    return;
                 }
             }
 
@@ -182,7 +181,7 @@ namespace drawinglayer
                 aRetval = Primitive2DContainer { xPrimitive };
             }
 
-            return aRetval;
+            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
         }
 
         GraphicPrimitive2D::GraphicPrimitive2D(

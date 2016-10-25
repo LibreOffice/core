@@ -293,7 +293,7 @@ namespace drawinglayer
                             {
                                 // if line is mitered, use decomposition since mitered line
                                 // geometry may use more space than the geometry grown by half line width
-                                process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                                process(rCandidate);
                             }
                             else
                             {
@@ -535,7 +535,7 @@ namespace drawinglayer
                 default :
                 {
                     // process recursively
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    process(rCandidate);
 
                     break;
                 }

@@ -779,13 +779,14 @@ namespace sdr { namespace contact {
         typedef ::drawinglayer::primitive2d::BufferedDecompositionPrimitive2D  BufferedDecompositionPrimitive2D;
 
     protected:
-        virtual ::drawinglayer::primitive2d::Primitive2DContainer
+        virtual void
             get2DDecomposition(
+                ::drawinglayer::primitive2d::Primitive2DContainer& rContainer,
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
             ) const override;
 
-        virtual ::drawinglayer::primitive2d::Primitive2DContainer
-            create2DDecomposition(
+        virtual void create2DDecomposition(
+                ::drawinglayer::primitive2d::Primitive2DContainer& rContainer,
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
             ) const override;
 
@@ -1528,7 +1529,7 @@ namespace sdr { namespace contact {
     }
 
 
-    ::drawinglayer::primitive2d::Primitive2DContainer LazyControlCreationPrimitive2D::get2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+    void LazyControlCreationPrimitive2D::get2DDecomposition( ::drawinglayer::primitive2d::Primitive2DContainer& rContainer, const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
     #if OSL_DEBUG_LEVEL > 0
         ::basegfx::B2DVector aScale, aTranslate;
@@ -1537,11 +1538,11 @@ namespace sdr { namespace contact {
     #endif
         if ( m_pVOCImpl->hasControl() )
             impl_positionAndZoomControl( _rViewInformation );
-        return BufferedDecompositionPrimitive2D::get2DDecomposition( _rViewInformation );
+        BufferedDecompositionPrimitive2D::get2DDecomposition( rContainer, _rViewInformation );
     }
 
 
-    ::drawinglayer::primitive2d::Primitive2DContainer LazyControlCreationPrimitive2D::create2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+    void LazyControlCreationPrimitive2D::create2DDecomposition( ::drawinglayer::primitive2d::Primitive2DContainer& rContainer, const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
     #if OSL_DEBUG_LEVEL > 0
         ::basegfx::B2DVector aScale, aTranslate;
@@ -1568,17 +1569,19 @@ namespace sdr { namespace contact {
 
         // check if we already have an XControl.
         if ( !xControlModel.is() || !rControl.is() )
+        {
             // use the default mechanism. This will create a ControlPrimitive2D without
             // handing over a XControl. If not even a XControlModel exists, it will
             // create the SdrObject fallback visualisation
-            return rViewContactOfUnoControl.getViewIndependentPrimitive2DSequence();
+            drawinglayer::primitive2d::Primitive2DContainer aTmp = rViewContactOfUnoControl.getViewIndependentPrimitive2DSequence();
+            rContainer.insert(rContainer.end(), aTmp.begin(), aTmp.end());
+            return;
+        }
 
         // create a primitive and hand over the existing xControl. This will
         // allow the primitive to not need to create another one on demand.
-        const drawinglayer::primitive2d::Primitive2DReference xRetval( new ::drawinglayer::primitive2d::ControlPrimitive2D(
+        rContainer.push_back( new ::drawinglayer::primitive2d::ControlPrimitive2D(
             m_aTransformation, xControlModel, rControl.getControl() ) );
-
-        return drawinglayer::primitive2d::Primitive2DContainer { xRetval };
     }
 
 

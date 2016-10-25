@@ -62,7 +62,8 @@ void DrawinglayerBorderTest::testDoubleDecompositionSolid()
 
     // Decompose it into polygons.
     drawinglayer::geometry::ViewInformation2D aView;
-    drawinglayer::primitive2d::Primitive2DContainer aContainer = aBorder->get2DDecomposition(aView);
+    drawinglayer::primitive2d::Primitive2DContainer aContainer;
+    aBorder->get2DDecomposition(aContainer, aView);
 
     // Make sure it results in two borders as it's a double one.
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), aContainer.size());

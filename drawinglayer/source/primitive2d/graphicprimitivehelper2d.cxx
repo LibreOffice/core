@@ -323,7 +323,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             /// override to deliver the correct expected frame dependent of timing
-            virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
         };
 
         AnimatedGraphicPrimitive2D::AnimatedGraphicPrimitive2D(
@@ -392,11 +392,11 @@ namespace drawinglayer
                 && getGraphic() == pCompare->getGraphic());
         }
 
-        Primitive2DContainer AnimatedGraphicPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void AnimatedGraphicPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             if (isValidData())
             {
-                Primitive2DContainer aRetval(1);
+                Primitive2DReference aRetval;
                 const double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
                 const sal_uInt32 nLen(maAnimation.Count());
                 sal_uInt32 nIndex(basegfx::fround(fState * (double)nLen));
@@ -409,11 +409,12 @@ namespace drawinglayer
                 }
 
                 // check buffering shortcuts, may already be created
-                aRetval[0] = tryTogetFromBuffer(nIndex);
+                aRetval = tryTogetFromBuffer(nIndex);
 
-                if (aRetval[0].is())
+                if (aRetval.is())
                 {
-                    return aRetval;
+                    rContainer.push_back(aRetval);
+                    return;
                 }
 
                 // if huge size (and not the buffered 1st frame) simply
@@ -427,20 +428,19 @@ namespace drawinglayer
                 const_cast<AnimatedGraphicPrimitive2D*>(this)->createFrame(nIndex);
 
                 // try to get from buffer again, may have been added from createFrame
-                aRetval[0] = tryTogetFromBuffer(nIndex);
+                aRetval = tryTogetFromBuffer(nIndex);
 
-                if (aRetval[0].is())
+                if (aRetval.is())
                 {
-                    return aRetval;
+                    rContainer.push_back(aRetval);
+                    return;
                 }
 
                 // did not work (not buffered and not 1st frame), create from buffer
-                aRetval[0] = createFromBuffer();
+                aRetval = createFromBuffer();
 
-                return aRetval;
+                rContainer.push_back(aRetval);
             }
-
-            return Primitive2DContainer();
         }
 
     } // end of namespace primitive2d
@@ -450,7 +450,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer create2DDecompositionOfGraphic(
+        void create2DDecompositionOfGraphic(
+            Primitive2DContainer& rContainer,
             const Graphic& rGraphic,
             const basegfx::B2DHomMatrix& rTransform)
         {
@@ -546,7 +547,7 @@ namespace drawinglayer
                 }
             }
 
-            return aRetval;
+            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
         }
 
         Primitive2DContainer create2DColorModifierEmbeddingsAsNeeded(

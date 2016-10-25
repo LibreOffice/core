@@ -154,7 +154,7 @@ namespace drawinglayer
 
         protected:
             /// method which is to be used to implement the local decomposition of a 2D primitive
-            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             SwVirtFlyDrawObjPrimitive(
@@ -171,7 +171,7 @@ namespace drawinglayer
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
 
             // override to allow callbacks to wrap_DoPaintObject
-            virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
             // data read access
             const SwVirtFlyDrawObj& getSwVirtFlyDrawObj() const { return mrSwVirtFlyDrawObj; }
@@ -187,10 +187,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer SwVirtFlyDrawObjPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void SwVirtFlyDrawObjPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DContainer aRetval;
-
             if(!getOuterRange().isEmpty())
             {
                 // currently this SW object has no primitive representation. As long as this is the case,
@@ -199,15 +197,11 @@ namespace drawinglayer
                 // the old SwVirtFlyDrawObj::CheckHit implementation are handled now in SwDrawView::PickObj;
                 // this removed the 'hack' to get a view from inside model data or to react on null-tolerance
                 // as it was done in the old implementation
-                const Primitive2DReference aHitTestReference(
+                rContainer.push_back(
                     createHiddenGeometryPrimitives2D(
                         true,
                         getOuterRange()));
-
-                aRetval = Primitive2DContainer { aHitTestReference };
             }
-
-            return aRetval;
         }
 
         bool SwVirtFlyDrawObjPrimitive::operator==(const BasePrimitive2D& rPrimitive) const
@@ -228,7 +222,7 @@ namespace drawinglayer
             return getOuterRange();
         }
 
-        Primitive2DContainer SwVirtFlyDrawObjPrimitive::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void SwVirtFlyDrawObjPrimitive::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             // This is the callback to keep the FlyFrame painting in SW alive as long as it
             // is not changed to primitives. This is the method which will be called by the processors
@@ -238,7 +232,7 @@ namespace drawinglayer
             getSwVirtFlyDrawObj().wrap_DoPaintObject(rViewInformation);
 
             // call parent
-            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rContainer, rViewInformation);
         }
 
         // provide unique ID

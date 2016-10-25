@@ -54,7 +54,7 @@ OverlayStaticRectanglePrimitive::OverlayStaticRectanglePrimitive(
     , mfRotation(fRotation)
 {}
 
-Primitive2DContainer OverlayStaticRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+void OverlayStaticRectanglePrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     Primitive2DContainer aPrimitive2DSequence;
     const double fHalfWidth = maSize.getX() * getDiscreteUnit() / 2.0;
@@ -99,7 +99,7 @@ Primitive2DContainer OverlayStaticRectanglePrimitive::create2DDecomposition(cons
         }
     }
 
-    return aPrimitive2DSequence;
+    rContainer.insert(rContainer.end(), aPrimitive2DSequence.begin(), aPrimitive2DSequence.end());
 }
 
 bool OverlayStaticRectanglePrimitive::operator==(const BasePrimitive2D& rPrimitive) const
@@ -143,9 +143,8 @@ namespace drawinglayer
             mfRotation(fRotation)
         {}
 
-        Primitive2DContainer OverlayBitmapExPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void OverlayBitmapExPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DContainer aRetval;
             const Size aBitmapSize(getBitmapEx().GetSizePixel());
 
             if(aBitmapSize.Width() && aBitmapSize.Height() && basegfx::fTools::more(getDiscreteUnit(), 0.0))
@@ -183,11 +182,8 @@ namespace drawinglayer
                 // add BasePosition
                 aTransform.translate(getBasePosition().getX(), getBasePosition().getY());
 
-                const Primitive2DReference aPrimitive(new BitmapPrimitive2D(getBitmapEx(), aTransform));
-                aRetval = Primitive2DContainer { aPrimitive };
+                rContainer.push_back(new BitmapPrimitive2D(getBitmapEx(), aTransform));
             }
-
-            return aRetval;
         }
 
         bool OverlayBitmapExPrimitive::operator==( const BasePrimitive2D& rPrimitive ) const
@@ -229,20 +225,18 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        Primitive2DContainer OverlayCrosshairPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void OverlayCrosshairPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use the prepared Viewport information accessible using getViewport()
-            Primitive2DContainer aRetval;
 
             if(!getViewport().isEmpty())
             {
-                aRetval.resize(2);
                 basegfx::B2DPolygon aPolygon;
 
                 aPolygon.append(basegfx::B2DPoint(getViewport().getMinX(), getBasePosition().getY()));
                 aPolygon.append(basegfx::B2DPoint(getViewport().getMaxX(), getBasePosition().getY()));
 
-                aRetval[0] = Primitive2DReference(
+                rContainer.push_back(
                     new PolygonMarkerPrimitive2D(
                         aPolygon,
                         getRGBColorA(),
@@ -253,15 +247,13 @@ namespace drawinglayer
                 aPolygon.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMinY()));
                 aPolygon.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMaxY()));
 
-                aRetval[1] = Primitive2DReference(
+                rContainer.push_back(
                     new PolygonMarkerPrimitive2D(
                         aPolygon,
                         getRGBColorA(),
                         getRGBColorB(),
                         getDiscreteDashLength()));
             }
-
-            return aRetval;
         }
 
         bool OverlayCrosshairPrimitive::operator==( const BasePrimitive2D& rPrimitive ) const
@@ -305,7 +297,7 @@ namespace drawinglayer
             mfRotation(fRotation)
         {}
 
-        Primitive2DContainer OverlayRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void OverlayRectanglePrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DContainer aRetval;
             basegfx::B2DRange aInnerRange(getObjectRange());
@@ -392,7 +384,7 @@ namespace drawinglayer
                 }
             }
 
-            return aRetval;
+            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
         }
 
         bool OverlayRectanglePrimitive::operator==( const BasePrimitive2D& rPrimitive ) const
@@ -436,10 +428,9 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        Primitive2DContainer OverlayHelplineStripedPrimitive::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void OverlayHelplineStripedPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             // use the prepared Viewport information accessible using getViewport()
-            Primitive2DContainer aRetval;
 
             if(!getViewport().isEmpty())
             {
@@ -447,13 +438,12 @@ namespace drawinglayer
                 {
                     case HELPLINESTYLE_VERTICAL :
                     {
-                        aRetval.resize(1);
                         basegfx::B2DPolygon aLine;
 
                         aLine.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMinY()));
                         aLine.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMaxY()));
 
-                        aRetval[0] = Primitive2DReference(
+                        rContainer.push_back(
                             new PolygonMarkerPrimitive2D(
                                 aLine,
                                 getRGBColorA(),
@@ -464,13 +454,12 @@ namespace drawinglayer
 
                     case HELPLINESTYLE_HORIZONTAL :
                     {
-                        aRetval.resize(1);
                         basegfx::B2DPolygon aLine;
 
                         aLine.append(basegfx::B2DPoint(getViewport().getMinX(), getBasePosition().getY()));
                         aLine.append(basegfx::B2DPoint(getViewport().getMaxX(), getBasePosition().getY()));
 
-                        aRetval[0] = Primitive2DReference(
+                        rContainer.push_back(
                             new PolygonMarkerPrimitive2D(
                                 aLine,
                                 getRGBColorA(),
@@ -482,13 +471,12 @@ namespace drawinglayer
                     default: // case HELPLINESTYLE_POINT :
                     {
                         const double fDiscreteUnit((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
-                        aRetval.resize(2);
                         basegfx::B2DPolygon aLineA, aLineB;
 
                         aLineA.append(basegfx::B2DPoint(getBasePosition().getX(), getBasePosition().getY() - fDiscreteUnit));
                         aLineA.append(basegfx::B2DPoint(getBasePosition().getX(), getBasePosition().getY() + fDiscreteUnit));
 
-                        aRetval[0] = Primitive2DReference(
+                        rContainer.push_back(
                             new PolygonMarkerPrimitive2D(
                                 aLineA,
                                 getRGBColorA(),
@@ -498,7 +486,7 @@ namespace drawinglayer
                         aLineB.append(basegfx::B2DPoint(getBasePosition().getX() - fDiscreteUnit, getBasePosition().getY()));
                         aLineB.append(basegfx::B2DPoint(getBasePosition().getX() + fDiscreteUnit, getBasePosition().getY()));
 
-                        aRetval[1] = Primitive2DReference(
+                        rContainer.push_back(
                             new PolygonMarkerPrimitive2D(
                                 aLineB,
                                 getRGBColorA(),
@@ -509,8 +497,6 @@ namespace drawinglayer
                     }
                 }
             }
-
-            return aRetval;
         }
 
         bool OverlayHelplineStripedPrimitive::operator==( const BasePrimitive2D& rPrimitive ) const
@@ -551,61 +537,57 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        Primitive2DContainer OverlayRollingRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void OverlayRollingRectanglePrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use the prepared Viewport information accessible using getViewport()
-            Primitive2DContainer aRetval;
 
             if(!getViewport().isEmpty())
             {
                 basegfx::B2DPolygon aLine;
-                aRetval.resize(8);
 
                 // Left lines
                 aLine.append(basegfx::B2DPoint(getViewport().getMinX(), getRollingRectangle().getMinY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getRollingRectangle().getMinY()));
-                aRetval[0] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
+                rContainer.push_back(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
 
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getViewport().getMinX(), getRollingRectangle().getMaxY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getRollingRectangle().getMaxY()));
-                aRetval[1] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
+                rContainer.push_back(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
 
                 // Right lines
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getRollingRectangle().getMinY()));
                 aLine.append(basegfx::B2DPoint(getViewport().getMaxX(), getRollingRectangle().getMinY()));
-                aRetval[2] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
+                rContainer.push_back(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
 
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getRollingRectangle().getMaxY()));
                 aLine.append(basegfx::B2DPoint(getViewport().getMaxX(), getRollingRectangle().getMaxY()));
-                aRetval[3] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
+                rContainer.push_back(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
 
                 // Top lines
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getViewport().getMinY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getRollingRectangle().getMinY()));
-                aRetval[4] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
+                rContainer.push_back(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
 
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getViewport().getMinY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getRollingRectangle().getMinY()));
-                aRetval[5] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
+                rContainer.push_back(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
 
                 // Bottom lines
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getRollingRectangle().getMaxY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getViewport().getMaxY()));
-                aRetval[6] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
+                rContainer.push_back(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
 
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getRollingRectangle().getMaxY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getViewport().getMaxY()));
-                aRetval[7] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
+                rContainer.push_back(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
             }
-
-            return aRetval;
         }
 
         bool OverlayRollingRectanglePrimitive::operator==( const BasePrimitive2D& rPrimitive ) const

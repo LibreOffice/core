@@ -314,7 +314,7 @@ namespace drawinglayer
             if(!bPrimitiveAccepted)
             {
                 // let break down
-                process(rTextCandidate.get2DDecomposition(getViewInformation2D()));
+                process(rTextCandidate);
             }
         }
 
@@ -589,7 +589,7 @@ namespace drawinglayer
             if(!bPrimitiveAccepted)
             {
                 // do not accept, use decomposition
-                process(rFillBitmapCandidate.get2DDecomposition(getViewInformation2D()));
+                process(rFillBitmapCandidate);
             }
         }
 
@@ -697,7 +697,7 @@ namespace drawinglayer
             if(!bDone)
             {
                 // use default decomposition
-                process(rPolygonCandidate.get2DDecomposition(getViewInformation2D()));
+                process(rPolygonCandidate);
             }
         }
 
@@ -976,7 +976,7 @@ namespace drawinglayer
             updateViewInformation(aViewInformation2D);
 
             // process decomposed content
-            process(rPagePreviewCandidate.get2DDecomposition(getViewInformation2D()));
+            process(rPagePreviewCandidate);
 
             // restore transformations
             updateViewInformation(aLastViewInformation2D);
@@ -1247,7 +1247,7 @@ namespace drawinglayer
                 mnPolygonStrokePrimitive2D++;
 
                 // line width is big enough for standard filled polygon visualisation or zero
-                process(rPolygonStrokeCandidate.get2DDecomposition(getViewInformation2D()));
+                process(rPolygonStrokeCandidate);
 
                 // leave PolygonStrokePrimitive2D
                 mnPolygonStrokePrimitive2D--;
@@ -1286,7 +1286,7 @@ namespace drawinglayer
                     {
                         // use the decomposition which will correctly handle the
                         // fallback visualisation using full transformation (e.g. rotation)
-                        process(rEpsPrimitive2D.get2DDecomposition(getViewInformation2D()));
+                        process(rEpsPrimitive2D);
                     }
                 }
             }

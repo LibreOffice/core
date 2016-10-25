@@ -53,7 +53,7 @@ namespace drawinglayer
                     // enter a line geometry group (with or without LineEnds)
                     bool bOldState(mbInLineGeometry);
                     mbInLineGeometry = true;
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    process(rCandidate);
                     mbInLineGeometry = bOldState;
                     break;
                 }
@@ -119,7 +119,7 @@ namespace drawinglayer
                 default :
                 {
                     // process recursively
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    process(rCandidate);
                     break;
                 }
             }

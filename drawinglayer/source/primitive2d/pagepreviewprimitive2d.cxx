@@ -33,9 +33,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer PagePreviewPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void PagePreviewPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DContainer xRetval;
             Primitive2DContainer aContent(getPageContent());
 
             if(!aContent.empty()
@@ -98,12 +97,9 @@ namespace drawinglayer
                     aPageTrans = aCombined * aPageTrans;
 
                     // embed in necessary transformation to map from SdrPage to SdrPageObject
-                    const Primitive2DReference xReferenceB(new TransformPrimitive2D(aPageTrans, aContent));
-                    xRetval = Primitive2DContainer { xReferenceB };
+                    rContainer.push_back(new TransformPrimitive2D(aPageTrans, aContent));
                 }
             }
-
-            return xRetval;
         }
 
         PagePreviewPrimitive2D::PagePreviewPrimitive2D(

@@ -159,7 +159,7 @@ namespace drawinglayer
             return aContent;
         }
 
-        Primitive2DContainer PatternFillPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void PatternFillPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DContainer aRetval;
 
@@ -208,19 +208,15 @@ namespace drawinglayer
 
                         // embed result in mask
                         {
-                            const Primitive2DReference xRef(
+                            rContainer.push_back(
                                 new MaskPrimitive2D(
                                     getMask(),
                                     aRetval));
-
-                            aRetval = Primitive2DContainer { xRef };
                         }
 
                     }
                 }
             }
-
-            return aRetval;
         }
 
         PatternFillPrimitive2D::PatternFillPrimitive2D(
@@ -255,7 +251,7 @@ namespace drawinglayer
             return getMask().getB2DRange();
         }
 
-        Primitive2DContainer PatternFillPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void PatternFillPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             // The existing bufferd decomposition uses a buffer in the remembered
             // size or none if sizes are zero. Get new needed sizes which depend on
@@ -311,7 +307,7 @@ namespace drawinglayer
             }
 
             // call parent
-            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rContainer, rViewInformation);
         }
 
         // provide unique ID

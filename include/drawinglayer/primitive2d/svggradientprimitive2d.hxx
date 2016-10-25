@@ -120,7 +120,7 @@ namespace drawinglayer
 
         protected:
             /// local helpers
-            Primitive2DContainer createSingleGradientEntryFill() const;
+            void createSingleGradientEntryFill(Primitive2DContainer& rContainer) const;
             virtual void createAtom(
                 Primitive2DContainer& rTargetColor,
                 Primitive2DContainer& rTargetOpacity,
@@ -135,7 +135,8 @@ namespace drawinglayer
                 const SvgGradientEntryVector& rEntries,
                 sal_Int32 nOffset) const;
             virtual void checkPreconditions();
-            Primitive2DContainer createResult(
+            void createResult(
+                Primitive2DContainer& rContainer,
                 const Primitive2DContainer& rTargetColor,
                 const Primitive2DContainer& rTargetOpacity,
                 const basegfx::B2DHomMatrix& rUnitGradientToObject,
@@ -196,7 +197,7 @@ namespace drawinglayer
             virtual void checkPreconditions() override;
 
             /// local decomposition.
-            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor
@@ -264,7 +265,7 @@ namespace drawinglayer
             virtual void checkPreconditions() override;
 
             /// local decomposition.
-            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor
@@ -319,7 +320,7 @@ namespace drawinglayer
         protected:
 
             /// local decomposition.
-            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor
@@ -381,7 +382,7 @@ namespace drawinglayer
         protected:
 
             /// local decomposition.
-            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor

@@ -33,9 +33,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DContainer SdrOleContentPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        void SdrOleContentPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
-            Primitive2DContainer aRetval;
             const SdrOle2Obj* pSource = (mpSdrOle2Obj.is() ? static_cast< SdrOle2Obj* >(mpSdrOle2Obj.get()) : nullptr);
             bool bScaleContent(false);
             Graphic aGraphic;
@@ -98,7 +97,7 @@ namespace drawinglayer
                                 aInnerObjectMatrix,
                                 aGraphicObject,
                                 aGraphicAttr));
-                        aRetval.push_back(aGraphicPrimitive);
+                        rContainer.push_back(aGraphicPrimitive);
                     }
                 }
                 else
@@ -109,7 +108,7 @@ namespace drawinglayer
                             getObjectTransform(),
                             aGraphicObject,
                             aGraphicAttr));
-                    aRetval.push_back(aGraphicPrimitive);
+                    rContainer.push_back(aGraphicPrimitive);
                 }
 
                 // a standard gray outline is created for scaled content
@@ -125,13 +124,10 @@ namespace drawinglayer
                         aOutline.transform(getObjectTransform());
                         const drawinglayer::primitive2d::Primitive2DReference xOutline(
                             new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aVclColor.getBColor()));
-                        aRetval.push_back(xOutline);
+                        rContainer.push_back(xOutline);
                     }
                 }
             }
-
-            // get graphic and check scale content state
-            return aRetval;
         }
 
         SdrOleContentPrimitive2D::SdrOleContentPrimitive2D(

@@ -41,6 +41,13 @@ namespace drawinglayer
         {
         }
 
+        void BaseProcessor2D::process(const primitive2d::BasePrimitive2D& rCandidate)
+        {
+            primitive2d::Primitive2DContainer aContainer;
+            rCandidate.get2DDecomposition(aContainer, getViewInformation2D());
+            process(aContainer);
+        }
+
         void BaseProcessor2D::process(const primitive2d::Primitive2DContainer& rSource)
         {
             if(!rSource.empty())
