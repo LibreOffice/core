@@ -1440,9 +1440,9 @@ bool VclGrid::set_property(const OString &rKey, const OString &rValue)
     else if (rKey == "column-spacing")
         set_column_spacing(rValue.toInt32());
     else if (rKey == "row-homogeneous")
-        set_row_homogeneous(toBool(rValue));
+        m_bRowHomogeneous = toBool(rValue);
     else if (rKey == "column-homogeneous")
-        set_column_homogeneous(toBool(rValue));
+        m_bColumnHomogeneous = toBool(rValue);
     else if (rKey == "n-rows")
         /*nothing to do*/;
     else

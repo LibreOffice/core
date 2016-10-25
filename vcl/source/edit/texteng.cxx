@@ -1519,7 +1519,7 @@ void TextEngine::FormatDoc()
         {
             const long nOldParaWidth = mnCurTextWidth >= 0 ? CalcTextWidth( nPara ) : -1;
 
-            ImpFormattingParagraph( nPara );
+            Broadcast( TextHint( TEXT_HINT_FORMATPARA, nPara ) );
 
             if ( CreateLines( nPara ) )
                 bGrow = true;
@@ -1578,14 +1578,14 @@ void TextEngine::FormatDoc()
         if ( nDiff )
         {
             mbFormatted = true;
-            ImpTextHeightChanged();
+            Broadcast( TextHint( TEXT_HINT_TEXTHEIGHTCHANGED ) );
         }
     }
 
     mbIsFormatting = false;
     mbFormatted = true;
 
-    ImpTextFormatted();
+    Broadcast( TextHint( TEXT_HINT_TEXTFORMATTED ) );
 }
 
 void TextEngine::CreateAndInsertEmptyLine( sal_uInt32 nPara )
@@ -2744,21 +2744,6 @@ void TextEngine::ImpCharsInserted( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32 n
         }
     }
     Broadcast( TextHint( TEXT_HINT_PARACONTENTCHANGED, nPara ) );
-}
-
-void TextEngine::ImpFormattingParagraph( sal_uInt32 nPara )
-{
-    Broadcast( TextHint( TEXT_HINT_FORMATPARA, nPara ) );
-}
-
-void TextEngine::ImpTextHeightChanged()
-{
-    Broadcast( TextHint( TEXT_HINT_TEXTHEIGHTCHANGED ) );
-}
-
-void TextEngine::ImpTextFormatted()
-{
-    Broadcast( TextHint( TEXT_HINT_TEXTFORMATTED ) );
 }
 
 void TextEngine::Draw( OutputDevice* pDev, const Point& rPos )

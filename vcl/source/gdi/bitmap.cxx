@@ -241,8 +241,8 @@ Bitmap& Bitmap::operator=( Bitmap&& rBitmap )
 
 bool Bitmap::IsEqual( const Bitmap& rBmp ) const
 {
-    return(IsSameInstance(rBmp) || // Includes both are nullptr
-        (rBmp.mxImpBmp && mxImpBmp && mxImpBmp->ImplIsEqual(*rBmp.mxImpBmp)));
+    return rBmp.mxImpBmp == mxImpBmp || // Includes both are nullptr
+           (rBmp.mxImpBmp && mxImpBmp && mxImpBmp->ImplIsEqual(*rBmp.mxImpBmp));
 }
 
 void Bitmap::SetEmpty()

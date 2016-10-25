@@ -2381,14 +2381,6 @@ MiscSettings::~MiscSettings()
 {
 }
 
-void MiscSettings::CopyData()
-{
-    // copy if other references exist
-    if ( ! mxData.unique() ) {
-        mxData = std::make_shared<ImplMiscData>(*mxData);
-    }
-}
-
 bool MiscSettings::operator ==( const MiscSettings& rSet ) const
 {
     if ( mxData == rSet.mxData )
@@ -2548,7 +2540,10 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
 
 void MiscSettings::SetEnableLocalizedDecimalSep( bool bEnable )
 {
-    CopyData();
+    // copy if other references exist
+    if ( ! mxData.unique() ) {
+        mxData = std::make_shared<ImplMiscData>(*mxData);
+    }
     mxData->mbEnableLocalizedDecimalSep = bEnable;
 }
 
@@ -2585,14 +2580,6 @@ HelpSettings::~HelpSettings()
 {
 }
 
-void HelpSettings::CopyData()
-{
-    // copy if other references exist
-    if ( ! mxData.unique() ) {
-        mxData = std::make_shared<ImplHelpData>(*mxData);
-    }
-}
-
 bool HelpSettings::operator ==( const HelpSettings& rSet ) const
 {
     if ( mxData == rSet.mxData )
@@ -2615,7 +2602,10 @@ HelpSettings::GetTipDelay() const
 void
 HelpSettings::SetTipTimeout( sal_uLong nTipTimeout )
 {
-    CopyData();
+    // copy if other references exist
+    if ( ! mxData.unique() ) {
+        mxData = std::make_shared<ImplHelpData>(*mxData);
+    }
     mxData->mnTipTimeout = nTipTimeout;
 }
 

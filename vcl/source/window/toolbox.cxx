@@ -18,6 +18,7 @@
  */
 
 #include <vcl/toolbox.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/accel.hxx>
@@ -4518,7 +4519,14 @@ void ToolBox::statusChanged( const css::frame::FeatureStateEvent& Event )
         mbImagesMirrored = aItem.IsMirrored();
         mnImagesRotationAngle = aItem.GetRotation();
 
-        UpdateImageOrientation();
+        // update image orientation
+        for (std::vector<ImplToolItem>::const_iterator it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it)
+        {
+            if (vcl::CommandInfoProvider::Instance().IsMirrored(it->maCommandStr))
+                SetItemImageMirrorMode(it->mnId, mbImagesMirrored);
+            if (vcl::CommandInfoProvider::Instance().IsRotated(it->maCommandStr))
+                SetItemImageAngle(it->mnId, mnImagesRotationAngle);
+        }
     }
 }
 

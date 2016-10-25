@@ -79,7 +79,6 @@ private:
     void                    AddedGlyph( ServerFont&, GlyphData& );
     void                    RemovingGlyph();
     void                    UsingGlyph( ServerFont&, GlyphData& );
-    void                    GrowNotify();
 
 private:
     void                    GarbageCollect();

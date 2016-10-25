@@ -157,11 +157,6 @@ GLuint ImplOpenGLTexture::AddStencil()
 ImplOpenGLTexture::~ImplOpenGLTexture()
 {
     VCL_GL_INFO( "~OpenGLTexture " << mnTexture );
-    Dispose();
-}
-
-void ImplOpenGLTexture::Dispose()
-{
     if( mnTexture != 0 )
     {
         // During shutdown GL is already de-initialized, so we should not try to create a new context.

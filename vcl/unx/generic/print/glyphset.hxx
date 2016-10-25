@@ -41,8 +41,8 @@ class GlyphSet
 private:
 
     sal_Int32           mnFontID;
-    bool            mbVertical;
-    OString        maBaseName;
+    bool                mbVertical;
+    OString             maBaseName;
     fonttype::type      meBaseType;
     rtl_TextEncoding    mnBaseEncoding;
     bool                mbUseFontEncoding;
@@ -52,16 +52,15 @@ private:
     typedef std::unordered_map< sal_GlyphId, sal_uInt8 > glyph_map_t;
     typedef std::list< glyph_map_t > glyph_list_t;
 
-    char_list_t     maCharList;
-    glyph_list_t    maGlyphList;
+    char_list_t         maCharList;
+    glyph_list_t        maGlyphList;
 
-    OString    GetGlyphSetName (sal_Int32 nGlyphSetID);
-    OString    GetCharSetName (sal_Int32 nGlyphSetID);
-    sal_Int32       GetGlyphSetEncoding (sal_Int32 nGlyphSetID);
-    OString    GetGlyphSetEncodingName (sal_Int32 nGlyphSetID);
+    OString     GetGlyphSetName (sal_Int32 nGlyphSetID);
+    OString     GetCharSetName (sal_Int32 nGlyphSetID);
+    sal_Int32   GetGlyphSetEncoding (sal_Int32 nGlyphSetID);
+    OString     GetGlyphSetEncodingName (sal_Int32 nGlyphSetID);
 
-    OString    GetReencodedFontName (sal_Int32 nGlyphSetID);
-    void            PSDefineReencodedFont (osl::File* pOutFile,
+    void        PSDefineReencodedFont (osl::File* pOutFile,
                                            sal_Int32 nGlyphSetID);
 
     bool        GetCharID (sal_Unicode nChar,

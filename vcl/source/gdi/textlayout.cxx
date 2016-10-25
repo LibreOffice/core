@@ -87,16 +87,6 @@ namespace vcl
         long        GetTextArray( const OUString& _rText, long* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const;
         Rectangle   DrawText( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText );
 
-    protected:
-        void onBeginDrawText()
-        {
-            m_aCompleteTextRect.SetEmpty();
-        }
-        const Rectangle& onEndDrawText()
-        {
-            return m_aCompleteTextRect;
-        }
-
     private:
         OutputDevice&   m_rTargetDevice;
         OutputDevice&   m_rReferenceDevice;
@@ -268,9 +258,9 @@ namespace vcl
         // but passed pixel coordinates. So, adjust the rect.
         Rectangle aRect( m_rTargetDevice.PixelToLogic( _rRect ) );
 
-        onBeginDrawText();
+        m_aCompleteTextRect.SetEmpty();
         m_rTargetDevice.DrawText( aRect, _rText, _nStyle, _pVector, _pDisplayText, this );
-        Rectangle aTextRect = onEndDrawText();
+        Rectangle aTextRect = m_aCompleteTextRect;
 
         if ( aTextRect.IsEmpty() && !aRect.IsEmpty() )
         {

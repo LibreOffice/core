@@ -166,9 +166,6 @@ protected:
     void                ImpParagraphRemoved( sal_uInt32 nPara );
     void                ImpCharsRemoved( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32 nChars );
     void                ImpCharsInserted( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32 nChars );
-    void                ImpFormattingParagraph( sal_uInt32 nPara );
-    void                ImpTextHeightChanged();
-    void                ImpTextFormatted();
 
     DECL_LINK(    IdleFormatHdl, Idle *, void );
     void                CheckIdleFormatter();

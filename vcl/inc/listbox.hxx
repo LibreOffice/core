@@ -543,8 +543,6 @@ public:
 
     void            SetImage( const Image& rImg ) { maImage = rImg; }
 
-    void            MBDown();
-
     void            SetMBDownHdl( const Link<void*,void>& rLink ) { maMBDownHdl = rLink; }
     void            SetUserDrawHdl( const Link<UserDrawEvent*, void>& rLink ) { maUserDrawHdl = rLink; }
 
@@ -576,7 +574,6 @@ public:
                     ImplBtn( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    void    MBDown();
     void            SetMBDownHdl( const Link<void*,void>& rLink ) { maMBDownHdl = rLink; }
 };
 

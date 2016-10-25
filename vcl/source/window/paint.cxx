@@ -638,12 +638,6 @@ void Window::ImplCallOverlapPaint()
     }
 }
 
-void Window::ImplPostPaint()
-{
-    if ( !mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
-        mpWindowImpl->mpFrameData->maPaintIdle.Start();
-}
-
 IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Idle *, void)
 {
     // save paint events until layout is done
@@ -732,7 +726,8 @@ void Window::ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFl
             pParent->ImplInvalidateFrameRegion( pChildRegion, nFlags );
         }
     }
-    ImplPostPaint();
+    if ( !mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
+        mpWindowImpl->mpFrameData->maPaintIdle.Start();
 }
 
 void Window::ImplInvalidateOverlapFrameRegion( const vcl::Region& rRegion )

@@ -77,7 +77,6 @@ namespace vcl
             NupOrderType mnOrderMode;
             int mnRows;
             int mnColumns;
-            void ImplInitSettings();
         public:
             ShowNupOrderWindow( vcl::Window* pParent );
 

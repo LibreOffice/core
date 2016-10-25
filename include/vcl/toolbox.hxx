@@ -197,7 +197,6 @@ private:
     SAL_DLLPRIVATE void            ImplFillLayoutData() const;
     SAL_DLLPRIVATE bool            ImplHasClippedItems();
     SAL_DLLPRIVATE Point           ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize ) const;
-    SAL_DLLPRIVATE void            ImplExecuteCustomMenu();
     SAL_DLLPRIVATE bool            ImplIsFloatingMode() const;
     SAL_DLLPRIVATE bool            ImplIsInPopupMode() const;
     SAL_DLLPRIVATE const OUString& ImplGetHelpText( sal_uInt16 nItemId ) const;
@@ -370,7 +369,6 @@ public:
     void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image               GetItemImage( sal_uInt16 nItemId ) const;
     Image               GetItemImageOriginal( sal_uInt16 nItemId ) const;
-    void                UpdateImageOrientation();
     void                SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
     void                SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror );
     void                SetItemText( sal_uInt16 nItemId, const OUString& rText );

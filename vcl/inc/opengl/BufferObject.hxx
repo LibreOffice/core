@@ -30,7 +30,12 @@ public:
 
     virtual ~BufferObject()
     {
-        dispose();
+        if (mId)
+        {
+            glDeleteBuffers(1, &mId);
+            CHECK_GL_ERROR();
+            mId = 0;
+        }
     }
 
     void bind()
@@ -58,16 +63,6 @@ public:
             bind();
             glBufferData(BUFFER_TYPE, sizeof(TYPE) * rData.size(), rData.data(), GL_STATIC_DRAW);
             CHECK_GL_ERROR();
-        }
-    }
-
-    void dispose()
-    {
-        if (mId)
-        {
-            glDeleteBuffers(1, &mId);
-            CHECK_GL_ERROR();
-            mId = 0;
         }
     }
 

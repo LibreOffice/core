@@ -220,7 +220,8 @@ IMPL_LINK( ButtonDialog, ImplClickHdl, Button*, pBtn, void )
         if ( it->mpPushButton == pBtn )
         {
             mnCurButtonId = it->mnId;
-            Click();
+            if ( IsInExecute() )
+                EndDialog( mnCurButtonId );
             break;
         }
     }
@@ -258,12 +259,6 @@ void ButtonDialog::StateChanged( StateChangedType nType )
     }
 
     Dialog::StateChanged( nType );
-}
-
-void ButtonDialog::Click()
-{
-    if ( IsInExecute() )
-        EndDialog( GetCurButtonId() );
 }
 
 void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
