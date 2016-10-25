@@ -736,14 +736,8 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
     pCurObjShell = pViewFrame->GetObjectShell();
     pModule = pCurObjShell ? pCurObjShell->GetModule() : nullptr;
-    ResMgr* pMgr = pModule ? pModule->GetResMgr() : nullptr;
-    if (pMgr)
-    {
-        ResId aFamId( DLG_STYLE_DESIGNER, *pMgr );
-        aFamId.SetRT(RSC_SFX_STYLE_FAMILIES);
-        if (pMgr->IsAvailable(aFamId))
-            pStyleFamilies = new SfxStyleFamilies( aFamId );
-    }
+    if (pModule)
+        pStyleFamilies = pModule->CreateStyleFamilies();
     if (!pStyleFamilies)
         pStyleFamilies = new SfxStyleFamilies;
 

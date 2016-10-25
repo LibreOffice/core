@@ -37,6 +37,7 @@ class SfxObjectFactory;
 class SfxModule;
 class SfxModule_Impl;
 class SfxSlotPool;
+class SfxStyleFamilies;
 struct SfxChildWinContextFactory;
 struct SfxChildWinFactory;
 struct SfxStbCtrlFactory;
@@ -83,6 +84,8 @@ public:
                                                vcl::Window* pParent,
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
+
+    SfxStyleFamilies*           CreateStyleFamilies();
 
     static SfxModule*           GetActiveModule( SfxViewFrame* pFrame=nullptr );
     static FieldUnit            GetCurrentFieldUnit();

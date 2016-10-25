@@ -23,6 +23,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <sfx2/styfitem.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/stbitem.hxx>
@@ -289,6 +290,20 @@ FieldUnit SfxModule::GetFieldUnit() const
     if ( pItem )
         eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     return eUnit;
+}
+
+SfxStyleFamilies* SfxModule::CreateStyleFamilies()
+{
+    SfxStyleFamilies *pStyleFamilies = nullptr;
+    ResMgr* pMgr = GetResMgr();
+    if (pMgr)
+    {
+        ResId aFamId(DLG_STYLE_DESIGNER, *pMgr);
+        aFamId.SetRT(RSC_SFX_STYLE_FAMILIES);
+        if (pMgr->IsAvailable(aFamId))
+            pStyleFamilies = new SfxStyleFamilies(aFamId);
+    }
+    return pStyleFamilies;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
