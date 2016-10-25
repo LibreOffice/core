@@ -62,9 +62,9 @@ $(eval $(call gb_Library_add_libs,OGLTrans,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
-    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionerImpl \
-    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionImpl \
-    slideshow/source/engine/OGLTrans/generic/OGLTrans_Operation \
+    slideshow/source/engine/OGLTrans/TransitionerImpl \
+    slideshow/source/engine/OGLTrans/TransitionImpl \
+    slideshow/source/engine/OGLTrans/Operation \
 ))
 
 # vim: set noet sw=4 ts=4:

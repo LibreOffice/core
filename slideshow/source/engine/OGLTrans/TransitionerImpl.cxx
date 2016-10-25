@@ -65,7 +65,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/window.hxx>
 
-#include "OGLTrans_TransitionImpl.hxx"
+#include "TransitionImpl.hxx"
 
 #include <vcl/sysdata.hxx>
 
