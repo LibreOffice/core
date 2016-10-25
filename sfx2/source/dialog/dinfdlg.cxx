@@ -1232,12 +1232,11 @@ void SfxDocumentInfoDialog::AddFontTabPage()
 
 // class CustomPropertiesYesNoButton -------------------------------------
 
-CustomPropertiesYesNoButton::CustomPropertiesYesNoButton(vcl::Window* pParent, const ResId& rResId)
-    : Control(pParent, rResId)
+CustomPropertiesYesNoButton::CustomPropertiesYesNoButton(vcl::Window* pParent)
+    : Control(pParent, WB_DIALOGCONTROL | WB_BORDER)
     , m_aYesButton(VclPtr<RadioButton>::Create(this, WB_TABSTOP))
     , m_aNoButton(VclPtr<RadioButton>::Create(this, WB_TABSTOP))
 {
-    FreeResource();
     m_aYesButton->SetText(MnemonicGenerator::EraseAllMnemonicChars(Button::GetStandardText(StandardButtonType::Yes)));
     m_aYesButton->Show();
     m_aNoButton->SetText(MnemonicGenerator::EraseAllMnemonicChars(Button::GetStandardText(StandardButtonType::No)));
@@ -1443,7 +1442,7 @@ CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_sDurationFormat( SfxResId( SFX_ST_DURATION_FORMAT ).toString() ),
     m_aDurationField( VclPtr<CustomPropertiesDurationField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_READONLY, this ) ),
     m_aEditButton   ( VclPtr<CustomPropertiesEditButton>::Create(pParent, WB_TABSTOP, this) ),
-    m_aYesNoButton  ( VclPtr<CustomPropertiesYesNoButton>::Create(pParent, SfxResId( SFX_WIN_PROPERTY_YESNO )) ),
+    m_aYesNoButton  ( VclPtr<CustomPropertiesYesNoButton>::Create(pParent) ),
     m_aRemoveButton ( VclPtr<CustomPropertiesRemoveButton>::Create(pParent, 0, this) ),
     m_bIsDate       ( false ),
     m_bIsRemoved    ( false ),
@@ -1489,7 +1488,7 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_aTimeField    ( VclPtr<TimeField>::Create( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
     m_aDurationField( VclPtr<Edit>::Create( this, WB_BORDER|WB_TABSTOP|WB_READONLY ) ),
     m_aEditButton   ( VclPtr<PushButton>::Create( this, WB_TABSTOP ) ),
-    m_aYesNoButton  ( VclPtr<CustomPropertiesYesNoButton>::Create( this, SfxResId( SFX_WIN_PROPERTY_YESNO )) ),
+    m_aYesNoButton  ( VclPtr<CustomPropertiesYesNoButton>::Create(this) ),
     m_aRemoveButton ( VclPtr<ImageButton>::Create( this, 0 ) ),
     m_nScrollPos (0),
     m_pCurrentLine (nullptr),

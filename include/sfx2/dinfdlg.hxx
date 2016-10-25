@@ -361,7 +361,7 @@ private:
     VclPtr<RadioButton>             m_aNoButton;
 
 public:
-    CustomPropertiesYesNoButton( vcl::Window* pParent, const ResId& rResId );
+    CustomPropertiesYesNoButton(vcl::Window* pParent);
     virtual ~CustomPropertiesYesNoButton() override;
     virtual void dispose() override;
 
