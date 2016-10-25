@@ -366,27 +366,82 @@ void getDefaultLocaleFromConfig(
     xConfRegistry_simple->open("org.openoffice.Setup", true, false);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
-    // read locale
-    css::uno::Reference<css::registry::XRegistryKey> locale = xRegistryRootKey->openKey("L10N/ooLocale");
-    if(locale.is() && !locale->getStringValue().isEmpty()) {
-        LanguageTag aLanguageTag( locale->getStringValue());
+    // Since 1.7 Java knows DISPLAY and FORMAT locales, which match our UI and
+    // system locale. See
+    // http://hg.openjdk.java.net/jdk8u/jdk8u-dev/jdk/file/569b1b644416/src/share/classes/java/util/Locale.java
+    // https://docs.oracle.com/javase/tutorial/i18n/locale/scope.html
+    // https://docs.oracle.com/javase/7/docs/api/java/util/Locale.html
+
+    // Read UI language/locale.
+    css::uno::Reference<css::registry::XRegistryKey> xUILocale = xRegistryRootKey->openKey("L10N/ooLocale");
+    if(xUILocale.is() && !xUILocale->getStringValue().isEmpty()) {
+        LanguageTag aLanguageTag( xUILocale->getStringValue());
         OUString language;
         OUString script;
         OUString country;
-        // Java knows nothing but plain old ISO language and country codes.
+        // Java knows nothing but plain old ISO codes, unless Locale.Builder or
+        // Locale.forLanguageTag() are used, or non-standardized variant field
+        // content which we ignore.
         aLanguageTag.getIsoLanguageScriptCountry( language, script, country);
 
         if(!language.isEmpty()) {
-            OUString prop = "user.language="
-                          + language;
+            OUString prop = "user.language=" + language;
+            pjvm->pushProp(prop);
+        }
 
+        // As of Java 7 also script is supported.
+        if(!script.isEmpty()) {
+            OUString prop = "user.script=" + script;
             pjvm->pushProp(prop);
         }
 
         if(!country.isEmpty()) {
-            OUString prop = "user.country="
-                          + country;
+            OUString prop = "user.country=" + country;
+            pjvm->pushProp(prop);
+        }
 
+        // Java 7 DISPLAY category is our UI language/locale.
+        if(!language.isEmpty()) {
+            OUString prop = "user.language.display=" + language;
+            pjvm->pushProp(prop);
+        }
+
+        if(!script.isEmpty()) {
+            OUString prop = "user.script.display=" + script;
+            pjvm->pushProp(prop);
+        }
+
+        if(!country.isEmpty()) {
+            OUString prop = "user.country.display=" + country;
+            pjvm->pushProp(prop);
+        }
+    }
+
+    // Read system locale.
+    css::uno::Reference<css::registry::XRegistryKey> xLocale = xRegistryRootKey->openKey("L10N/ooSetupSystemLocale");
+    if(xLocale.is() && !xLocale->getStringValue().isEmpty()) {
+        LanguageTag aLanguageTag( xLocale->getStringValue());
+        OUString language;
+        OUString script;
+        OUString country;
+        // Java knows nothing but plain old ISO codes, unless Locale.Builder or
+        // Locale.forLanguageTag() are used, or non-standardized variant field
+        // content which we ignore.
+        aLanguageTag.getIsoLanguageScriptCountry( language, script, country);
+
+        // Java 7 FORMAT category is our system locale.
+        if(!language.isEmpty()) {
+            OUString prop = "user.language.format=" + language;
+            pjvm->pushProp(prop);
+        }
+
+        if(!script.isEmpty()) {
+            OUString prop = "user.script.format=" + script;
+            pjvm->pushProp(prop);
+        }
+
+        if(!country.isEmpty()) {
+            OUString prop = "user.country.format=" + country;
             pjvm->pushProp(prop);
         }
     }
