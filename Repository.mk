@@ -506,6 +506,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	affine_uno_uno \
 	$(if $(filter MSC,$(COM)),cli_uno) \
+	i18nlangtag \
 	$(if $(ENABLE_JAVA), \
 		java_uno \
 		jpipe \
@@ -560,7 +561,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	dict_zh \
 	embobj \
 	$(if $(ENABLE_JAVA),hsqldb) \
-	i18nlangtag \
 	i18nutil \
 	index_data \
 	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), libreofficekitgtk) \
