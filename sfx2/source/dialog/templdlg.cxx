@@ -668,7 +668,6 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     , pWindow(pW)
     , pModule(nullptr)
     , pIdle(nullptr)
-    , m_pStyleFamiliesId(nullptr)
     , pStyleFamilies(nullptr)
     , pStyleSheetPool(nullptr)
     , pTreeBox(nullptr)
@@ -742,8 +741,6 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     {
         ResId aFamId( DLG_STYLE_DESIGNER, *pMgr );
         aFamId.SetRT(RSC_SFX_STYLE_FAMILIES);
-        m_pStyleFamiliesId = new ResId( aFamId.GetId(), *pMgr );
-        m_pStyleFamiliesId->SetRT(RSC_SFX_STYLE_FAMILIES);
         if (pMgr->IsAvailable(aFamId))
             pStyleFamilies = new SfxStyleFamilies( aFamId );
     }
@@ -851,8 +848,6 @@ void SfxCommonTemplateDialog_Impl::impl_clear()
     for ( i = 0; i < COUNT_BOUND_FUNC; ++i )
         delete pBoundItems[i];
     pCurObjShell = nullptr;
-
-    DELETEZ( m_pStyleFamiliesId );
 }
 
 SfxCommonTemplateDialog_Impl::DeletionWatcher *

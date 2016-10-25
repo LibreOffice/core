@@ -175,7 +175,6 @@ protected:
     SfxModule* pModule;
     Idle* pIdle;
 
-    ResId* m_pStyleFamiliesId;
     SfxStyleFamilies* pStyleFamilies;
     SfxTemplateItem* pFamilyState[MAX_FAMILIES];
     SfxStyleSheetBasePool* pStyleSheetPool;
