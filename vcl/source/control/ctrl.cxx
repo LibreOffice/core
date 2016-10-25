@@ -53,19 +53,6 @@ Control::Control( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle, nullptr );
 }
 
-Control::Control( vcl::Window* pParent, const ResId& rResId ) :
-    Window( WINDOW_CONTROL )
-{
-    ImplInitControlData();
-    rResId.SetRT( RSC_CONTROL );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle, nullptr );
-    ImplLoadRes();
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 Control::~Control()
 {
     disposeOnce();

@@ -120,7 +120,6 @@ public:
 
 public:
     explicit        Control( vcl::Window* pParent, WinBits nWinStyle = 0 );
-    explicit        Control( vcl::Window* pParent, const ResId& );
     virtual         ~Control() override;
     virtual void    dispose() override;
 

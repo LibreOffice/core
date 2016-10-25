@@ -634,10 +634,6 @@ protected:
     SAL_DLLPRIVATE bool                 ImplSetClipFlagChildren( bool bSysObjOnlySmaller );
     SAL_DLLPRIVATE bool                 ImplSetClipFlagOverlapWindows( bool bSysObjOnlySmaller = false );
 
-    SAL_DLLPRIVATE WinBits              ImplInitRes( const ResId& rResId );
-    SAL_DLLPRIVATE WindowResHeader      ImplLoadResHeader();
-    SAL_DLLPRIVATE void                 ImplLoadRes();
-
     SAL_DLLPRIVATE void                 PushPaintHelper(PaintHelper* pHelper, vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void                 PopPaintHelper(PaintHelper* pHelper);
 
