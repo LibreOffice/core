@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_9e552fc8",
+        "filename": "cppcanvas/source/mtfrenderer/implrenderer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1580,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-25T08:27:00Z",
+      "side": 1,
+      "message": "Casting to int here and in the following three cases is wrong.  aMtfSizePixPre is of type Size (include/tools/gen.hxx), and Size::Width() returns long, not int, so the cast potentially corrupts the value.",
+      "revId": "8ae33b1652cb1e654c426350169d3bb9fa031a4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
