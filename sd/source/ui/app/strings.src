@@ -1159,6 +1159,10 @@ String STR_GRAPHICS_STYLE_FAMILY
 {
     Text [ en-US ] = "Graphic Styles";
 };
+String STR_PRESENTATIONS_STYLE_FAMILY
+{
+    Text [ en-US ] = "Presentation Styles";
+};
 String STR_CELL_STYLE_FAMILY
 {
     Text [ en-US ] = "Cell Styles";

@@ -398,4 +398,43 @@ void    SwModule::RemoveAttrPool()
     SfxItemPool::Free(m_pAttrPool);
 }
 
+SfxStyleFamilies* SwModule::CreateStyleFamilies()
+{
+    SfxStyleFamilies *pStyleFamilies = new SfxStyleFamilies;
+
+    ImageList aEntryImages(SW_RES(RID_STYLEFAMILY_IMAGELIST));
+
+    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
+                                                    SW_RESSTR(STR_PARAGRAPHSTYLEFAMILY),
+                                                    aEntryImages.GetImage(1),
+                                                    SW_RES(RID_PARAGRAPHSTYLEFAMILY)));
+
+    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Char,
+                                                    SW_RESSTR(STR_CHARACTERSTYLEFAMILY),
+                                                    aEntryImages.GetImage(2),
+                                                    SW_RES(RID_CHARACTERSTYLEFAMILY)));
+
+    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Frame,
+                                                    SW_RESSTR(STR_FRAMESTYLEFAMILY),
+                                                    aEntryImages.GetImage(3),
+                                                    SW_RES(RID_FRAMESTYLEFAMILY)));
+
+    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
+                                                    SW_RESSTR(STR_PAGESTYLEFAMILY),
+                                                    aEntryImages.GetImage(4),
+                                                    SW_RES(RID_PAGESTYLEFAMILY)));
+
+    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Pseudo,
+                                                    SW_RESSTR(STR_LISTSTYLEFAMILY),
+                                                    aEntryImages.GetImage(5),
+                                                    SW_RES(RID_LISTSTYLEFAMILY)));
+
+    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Table,
+                                                    SW_RESSTR(STR_TABLESTYLEFAMILY),
+                                                    aEntryImages.GetImage(6),
+                                                    SW_RES(RID_TABLESTYLEFAMILY)));
+
+    return pStyleFamilies;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -96,26 +96,24 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pTbLinks->Resize();  // OS: Hack for the right selection
     m_pTbLinks->SetSpaceBetweenEntries( 0 );
 
-    SfxStyleFamilies aFamilies(SW_RES(DLG_STYLE_DESIGNER));
-    const SfxStyleFamilyItem* pFamilyItem = nullptr;
-
-    size_t nCount = aFamilies.size();
-    for( size_t i = 0; i < nCount; ++i )
+    std::unique_ptr<SfxStyleFamilies> xFamilies(SW_MOD()->CreateStyleFamilies());
+    size_t nCount = xFamilies->size();
+    for (size_t j = 0; j < nCount; ++j)
     {
-        if(SfxStyleFamily::Para == (pFamilyItem = aFamilies.at( i ))->GetFamily())
-            break;
-    }
-
-    if (pFamilyItem)
-    {
-        const SfxStyleFilter& rFilterList = pFamilyItem->GetFilterList();
-        for( size_t i = 0; i < rFilterList.size(); ++i )
+        const SfxStyleFamilyItem &rFamilyItem = xFamilies->at(j);
+        if (SfxStyleFamily::Para == rFamilyItem.GetFamily())
         {
-            m_pFilterLB->InsertEntry( rFilterList[ i ]->aName);
-            sal_uInt16* pFilter = new sal_uInt16(rFilterList[i]->nFlags);
-            m_pFilterLB->SetEntryData(i, pFilter);
+            const SfxStyleFilter& rFilterList = rFamilyItem.GetFilterList();
+            for (size_t i = 0; i < rFilterList.size(); ++i)
+            {
+                m_pFilterLB->InsertEntry(rFilterList[i].aName);
+                sal_uInt16* pFilter = new sal_uInt16(rFilterList[i].nFlags);
+                m_pFilterLB->SetEntryData(i, pFilter);
+            }
+            break;
         }
     }
+
     m_pFilterLB->SelectEntryPos(1);
 
     m_pTbLinks->Show();

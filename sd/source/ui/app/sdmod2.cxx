@@ -20,6 +20,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/styfitem.hxx>
 #include <svl/inethist.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/flagitem.hxx>
@@ -797,6 +798,26 @@ VclPtr<SfxTabPage> SdModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent
     }
 
     return pRet;
+}
+
+SfxStyleFamilies* SdModule::CreateStyleFamilies()
+{
+    SfxStyleFamilies *pStyleFamilies = new SfxStyleFamilies;
+
+    ImageList aEntryImages(SdResId(RID_STYLEFAMILY_IMAGELIST));
+
+
+    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
+                                                    SD_RESSTR(STR_GRAPHICS_STYLE_FAMILY),
+                                                    aEntryImages.GetImage(1),
+                                                    SdResId(RID_GRAPHICSTYLEFAMILY)));
+
+    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Pseudo,
+                                                    SD_RESSTR(STR_PRESENTATIONS_STYLE_FAMILY),
+                                                    aEntryImages.GetImage(2),
+                                                    SdResId(RID_PRESENTATIONSTYLEFAMILY)));
+
+    return pStyleFamilies;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

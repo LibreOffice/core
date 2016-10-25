@@ -23,6 +23,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/vclmedit.hxx>
+#include <sfx2/styfitem.hxx>
 #include <sfx2/tabdlg.hxx>
 
 /* expected:
@@ -30,7 +31,6 @@
     SID_TEMPLATE_FAMILY :   In: Family of Template
 */
 
-class SfxStyleFamilies;
 class SfxStyleFamilyItem;
 class SfxStyleSheetBase;
 

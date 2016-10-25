@@ -92,7 +92,21 @@
 #define STR_WRONG_TABLENAME             (RC_APP_BEGIN + 138)
 #define STR_SRTERR                      (RC_APP_BEGIN + 139)
 
-#define APP_ACT_END                     STR_SRTERR
+#define STR_PARAGRAPHSTYLEFAMILY        (RC_APP_BEGIN + 140)
+#define STR_CHARACTERSTYLEFAMILY        (RC_APP_BEGIN + 141)
+#define STR_FRAMESTYLEFAMILY            (RC_APP_BEGIN + 142)
+#define STR_PAGESTYLEFAMILY             (RC_APP_BEGIN + 143)
+#define STR_LISTSTYLEFAMILY             (RC_APP_BEGIN + 144)
+#define STR_TABLESTYLEFAMILY            (RC_APP_BEGIN + 145)
+#define RID_PARAGRAPHSTYLEFAMILY        (RC_APP_BEGIN + 146)
+#define RID_CHARACTERSTYLEFAMILY        (RC_APP_BEGIN + 147)
+#define RID_FRAMESTYLEFAMILY            (RC_APP_BEGIN + 148)
+#define RID_PAGESTYLEFAMILY             (RC_APP_BEGIN + 149)
+#define RID_LISTSTYLEFAMILY             (RC_APP_BEGIN + 150)
+#define RID_TABLESTYLEFAMILY            (RC_APP_BEGIN + 151)
+#define RID_STYLEFAMILY_IMAGELIST       (RC_APP_BEGIN + 152)
+
+#define APP_ACT_END                RID_STYLEFAMILY_IMAGELIST
 
 #if APP_ACT_END > RC_APP_END
 #error Resource-Id Ueberlauf in #file, #line

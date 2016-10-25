@@ -292,18 +292,4 @@ FieldUnit SfxModule::GetFieldUnit() const
     return eUnit;
 }
 
-SfxStyleFamilies* SfxModule::CreateStyleFamilies()
-{
-    SfxStyleFamilies *pStyleFamilies = nullptr;
-    ResMgr* pMgr = GetResMgr();
-    if (pMgr)
-    {
-        ResId aFamId(DLG_STYLE_DESIGNER, *pMgr);
-        aFamId.SetRT(RSC_SFX_STYLE_FAMILIES);
-        if (pMgr->IsAvailable(aFamId))
-            pStyleFamilies = new SfxStyleFamilies(aFamId);
-    }
-    return pStyleFamilies;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

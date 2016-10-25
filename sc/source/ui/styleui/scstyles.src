@@ -20,43 +20,33 @@
 #include "sc.hrc"
 #include <svl/style.hrc>
 
-SfxStyleFamilies DLG_STYLE_DESIGNER
+StringArray RID_CELLSTYLEFAMILY
 {
-    StyleFamilyList =
+    ItemList [ en-US ] =
     {
-        SfxStyleFamilyItem
-        {
-            StyleFamily = SfxStyleFamily::Para ;
-            FilterList [ en-US ] =
-            {
-                < "All Styles" ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
-                < "Hidden Styles" ; SFXSTYLEBIT_HIDDEN ; > ;
-                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
-                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; >  ;
-            };
-            Text [ en-US ] = "Cell Styles" ;
-        };
-
-        SfxStyleFamilyItem
-        {
-            StyleFamily = SfxStyleFamily::Page ;
-            FilterList [ en-US ] =
-            {
-                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
-                < "Hidden Styles" ; SFXSTYLEBIT_HIDDEN ; > ;
-                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
-            };
-            Text [ en-US ] = "Page Styles" ;
-        };
+        < "All Styles" ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
+        < "Hidden Styles" ; SFXSTYLEBIT_HIDDEN ; > ;
+        < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
+        < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; >  ;
     };
+};
 
-    //  style family images are now taken from an ImageList
-    //  (for each family, there's one entry in the IdList)
-    ImageList 1 // == BMP_COLOR_NORMAL + 1
+StringArray RID_PAGESTYLEFAMILY
+{
+    ItemList [ en-US ] =
     {
-        Prefix = "sf";
-        IdList = { 1; 2; };
+        < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
+        < "Hidden Styles" ; SFXSTYLEBIT_HIDDEN ; > ;
+        < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
     };
+};
+
+//  style family images are now taken from an ImageList
+//  (for each family, there's one entry in the IdList)
+ImageList RID_STYLEFAMILY_IMAGELIST
+{
+    Prefix = "sf";
+    IdList = { 1; 2; };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

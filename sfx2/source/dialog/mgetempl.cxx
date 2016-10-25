@@ -179,7 +179,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     size_t i;
     for ( i = 0; i < nCount; ++i )
     {
-        pItem = pFamilies->at( i );
+        pItem = &(pFamilies->at(i));
 
         if ( pItem->GetFamily() == pStyle->GetFamily() )
             break;
@@ -199,17 +199,17 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
 
         for ( i = 0; i < nCount; ++i )
         {
-            SfxFilterTupel* pTupel = rList[ i ];
+            const SfxFilterTupel& rTupel = rList[ i ];
 
-            if ( pTupel->nFlags != SFXSTYLEBIT_AUTO     &&
-                 pTupel->nFlags != SFXSTYLEBIT_USED     &&
-                 pTupel->nFlags != SFXSTYLEBIT_ALL_VISIBLE &&
-                 pTupel->nFlags != SFXSTYLEBIT_ALL )
+            if ( rTupel.nFlags != SFXSTYLEBIT_AUTO     &&
+                 rTupel.nFlags != SFXSTYLEBIT_USED     &&
+                 rTupel.nFlags != SFXSTYLEBIT_ALL_VISIBLE &&
+                 rTupel.nFlags != SFXSTYLEBIT_ALL )
             {
-                m_pFilterLb->InsertEntry( pTupel->aName, nIdx );
+                m_pFilterLb->InsertEntry( rTupel.aName, nIdx );
                 m_pFilterLb->SetEntryData(nIdx, reinterpret_cast<void*>(i));
 
-                if ( ( pTupel->nFlags & nMask ) == nMask )
+                if ( ( rTupel.nFlags & nMask ) == nMask )
                     nStyleFilterIdx = nIdx;
                 ++nIdx;
             }
@@ -469,7 +469,7 @@ bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
         OSL_ENSURE( pItem, "No Item" );
         // is only possibly for user templates
-        sal_uInt16 nMask = pItem->GetFilterList()[ reinterpret_cast<size_t>(m_pFilterLb->GetEntryData( nFilterIdx )) ]->nFlags | SFXSTYLEBIT_USERDEF;
+        sal_uInt16 nMask = pItem->GetFilterList()[ reinterpret_cast<size_t>(m_pFilterLb->GetEntryData( nFilterIdx )) ].nFlags | SFXSTYLEBIT_USERDEF;
         pStyle->SetMask( nMask );
     }
     if(m_pAutoCB->IsVisible() &&

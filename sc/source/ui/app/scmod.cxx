@@ -86,6 +86,7 @@
 #include "docsh.hxx"
 #include "drwlayer.hxx"
 #include "uiitems.hxx"
+#include "globstr.hrc"
 #include "sc.hrc"
 #include "cfgids.hxx"
 #include "inputhdl.hxx"
@@ -2266,6 +2267,25 @@ bool ScModule::HasThesaurusLanguage( sal_uInt16 nLang )
     }
 
     return bHasLang;
+}
+
+SfxStyleFamilies* ScModule::CreateStyleFamilies()
+{
+    SfxStyleFamilies *pStyleFamilies = new SfxStyleFamilies;
+
+    ImageList aEntryImages(ScResId(RID_STYLEFAMILY_IMAGELIST));
+
+    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
+                                                    ScGlobal::GetRscString(STR_STYLE_FAMILY_CELL),
+                                                    aEntryImages.GetImage(1),
+                                                    ScResId(RID_CELLSTYLEFAMILY)));
+
+    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
+                                                    ScGlobal::GetRscString(STR_STYLE_FAMILY_PAGE),
+                                                    aEntryImages.GetImage(2),
+                                                    ScResId(RID_PAGESTYLEFAMILY)));
+
+    return pStyleFamilies;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

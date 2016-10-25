@@ -35,9 +35,9 @@ class SfxTemplateControllerItem;
 #include <rsc/rscsfx.hxx>
 
 #include <sfx2/childwin.hxx>
+#include <sfx2/styfitem.hxx>
 #include <sfx2/templdlg.hxx>
 
-class SfxStyleFamilies;
 class SfxStyleFamilyItem;
 class SfxTemplateItem;
 class SfxBindings;
@@ -228,7 +228,7 @@ protected:
     {}
 
     void InvalidateBindings();
-    virtual void InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pItem ) = 0;
+    virtual void InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem& rItem ) = 0;
     virtual void EnableFamilyItem( sal_uInt16 nId, bool bEnabled ) = 0;
     virtual void ClearFamilyList() = 0;
     virtual void ReplaceUpdateButtonByMenu();
@@ -360,7 +360,7 @@ protected:
     virtual void CheckItem( sal_uInt16 nMesId, bool bCheck = true ) override;
     virtual bool IsCheckedItem( sal_uInt16 nMesId ) override;
     virtual void LoadedFamilies() override;
-    virtual void InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pIten ) override;
+    virtual void InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem& rItem ) override;
     virtual void EnableFamilyItem( sal_uInt16 nId, bool bEnabled ) override;
     virtual void ClearFamilyList() override;
     virtual void ReplaceUpdateButtonByMenu() override;

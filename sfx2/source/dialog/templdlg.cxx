@@ -716,8 +716,8 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
 
 sal_uInt16 SfxCommonTemplateDialog_Impl::StyleNrToInfoOffset(sal_uInt16 nId)
 {
-    const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nId );
-    return SfxTemplate::SfxFamilyIdToNId(pItem->GetFamily())-1;
+    const SfxStyleFamilyItem& rItem = pStyleFamilies->at( nId );
+    return SfxTemplate::SfxFamilyIdToNId(rItem.GetFamily())-1;
 }
 
 void SfxTemplateDialog_Impl::EnableEdit(bool bEnable)
@@ -755,7 +755,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     for (i = 0; i < nCount; ++i)
     {
         sal_uInt16 nSlot = 0;
-        switch( pStyleFamilies->at( i )->GetFamily() )
+        switch (pStyleFamilies->at(i).GetFamily())
         {
             case SfxStyleFamily::Char:
                 nSlot = SID_STYLE_FAMILY1; break;
@@ -812,9 +812,9 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 
     for( ; nCount--; )
     {
-        const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nCount );
-        sal_uInt16 nId = SfxTemplate::SfxFamilyIdToNId( pItem->GetFamily() );
-        InsertFamilyItem( nId, pItem );
+        const SfxStyleFamilyItem &rItem = pStyleFamilies->at( nCount );
+        sal_uInt16 nId = SfxTemplate::SfxFamilyIdToNId( rItem.GetFamily() );
+        InsertFamilyItem(nId, rItem);
     }
 
     LoadedFamilies();
@@ -904,10 +904,10 @@ const SfxStyleFamilyItem *SfxCommonTemplateDialog_Impl::GetFamilyItem_Impl() con
     const size_t nCount = pStyleFamilies->size();
     for(size_t i = 0; i < nCount; ++i)
     {
-        const SfxStyleFamilyItem *pItem = pStyleFamilies->at( i );
-        sal_uInt16 nId = SfxTemplate::SfxFamilyIdToNId(pItem->GetFamily());
+        const SfxStyleFamilyItem &rItem = pStyleFamilies->at( i );
+        sal_uInt16 nId = SfxTemplate::SfxFamilyIdToNId(rItem.GetFamily());
         if(nId == nActFamily)
-            return pItem;
+            return &rItem;
     }
     return nullptr;
 }
@@ -1133,8 +1133,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
 
     const SfxStyleFamily eFam = pItem->GetFamily();
 
-    SfxFilterTupel* pT = ( nActFilter < pItem->GetFilterList().size() ? pItem->GetFilterList()[nActFilter] : nullptr );
-    sal_uInt16 nFilter     = pT ? pT->nFlags : 0;
+    sal_uInt16 nFilter (nActFilter < pItem->GetFilterList().size() ? pItem->GetFilterList()[nActFilter].nFlags : 0);
     if(!nFilter)   // automatic
         nFilter = nAppFilter;
 
@@ -1152,10 +1151,10 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
             sal_Int32 nPos = aFilterLb->InsertEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString(), 0);
             aFilterLb->SetEntryData( nPos, reinterpret_cast<void*>(SFXSTYLEBIT_ALL) );
             const SfxStyleFilter& rFilter = pItem->GetFilterList();
-            for(const SfxFilterTupel* i : rFilter)
+            for(const SfxFilterTupel& i : rFilter)
             {
-                sal_uIntPtr nFilterFlags = i->nFlags;
-                nPos = aFilterLb->InsertEntry( i->aName );
+                sal_uIntPtr nFilterFlags = i.nFlags;
+                nPos = aFilterLb->InsertEntry( i.aName );
                 aFilterLb->SetEntryData( nPos, reinterpret_cast<void*>(nFilterFlags) );
             }
             if(nActFilter < aFilterLb->GetEntryCount() - 1)
@@ -1164,8 +1163,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
             {
                 nActFilter = 0;
                 aFilterLb->SelectEntryPos(1);
-                SfxFilterTupel* pActT = ( nActFilter < rFilter.size() ) ? rFilter[ nActFilter ] : nullptr;
-                sal_uInt16 nFilterFlags = pActT ? pActT->nFlags : 0;
+                sal_uInt16 nFilterFlags = (nActFilter < rFilter.size()) ? rFilter[nActFilter].nFlags : 0;
                 pStyleSheetPool->SetSearchMask(eFam, nFilterFlags);
             }
 
@@ -1395,7 +1393,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          // other filters for automatic
          CheckItem( nActFamily );
          const SfxStyleFamilyItem *pStyleItem =  GetFamilyItem_Impl();
-         if ( pStyleItem && 0 == pStyleItem->GetFilterList()[ nActFilter ]->nFlags
+         if ( pStyleItem && 0 == pStyleItem->GetFilterList()[nActFilter].nFlags
             && nAppFilter != pItem->GetValue())
          {
              nAppFilter = pItem->GetValue();
@@ -1605,9 +1603,9 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 
         for ( size_t i = 0; i < nFilterCount; ++i )
         {
-            const SfxFilterTupel *pTupel = pFamilyItem->GetFilterList()[ i ];
+            const SfxFilterTupel &rTupel = pFamilyItem->GetFilterList()[ i ];
 
-            if ( ( pTupel->nFlags & nFilterFlags ) == nFilterFlags && pIdx )
+            if ( ( rTupel.nFlags & nFilterFlags ) == nFilterFlags && pIdx )
                 *pIdx = i;
         }
     }
@@ -1730,7 +1728,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                 sal_uInt16 nFilter;
                 if( pItem && nActFilter != SFXSTYLEBIT_ALL )
                 {
-                    nFilter = pItem->GetFilterList()[ nActFilter ]->nFlags;
+                    nFilter = pItem->GetFilterList()[nActFilter].nFlags;
                     if(!nFilter)    // automatisch
                         nFilter = nAppFilter;
                 }
@@ -1848,7 +1846,7 @@ void SfxCommonTemplateDialog_Impl::NewHdl()
         sal_uInt16 nMask;
         if( nActFilter != SFXSTYLEBIT_ALL )
         {
-            nMask = pItem->GetFilterList()[ nActFilter ]->nFlags;
+            nMask = pItem->GetFilterList()[nActFilter].nFlags;
             if(!nMask)    // automatic
                 nMask = nAppFilter;
         }
@@ -1997,8 +1995,8 @@ void SfxCommonTemplateDialog_Impl::EnableDelete()
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam = pItem->GetFamily();
         sal_uInt16 nFilter = 0;
-        if(pItem->GetFilterList().size() > nActFilter)
-            nFilter = pItem->GetFilterList()[ nActFilter ]->nFlags;
+        if (pItem->GetFilterList().size() > nActFilter)
+            nFilter = pItem->GetFilterList()[nActFilter].nFlags;
         if(!nFilter)    // automatic
             nFilter = nAppFilter;
         const SfxStyleSheetBase *pStyle =
@@ -2263,10 +2261,10 @@ void SfxTemplateDialog_Impl::EnableFamilyItem( sal_uInt16 nId, bool bEnable )
 }
 
 // Insert element into dropdown filter "Frame Styles", "List Styles", etc.
-void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId,const SfxStyleFamilyItem *pItem)
+void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId,const SfxStyleFamilyItem &rItem)
 {
     OString sHelpId;
-    switch( pItem->GetFamily() )
+    switch( rItem.GetFamily() )
     {
         case SfxStyleFamily::Char:     sHelpId = ".uno:CharStyle"; break;
         case SfxStyleFamily::Para:     sHelpId = ".uno:ParaStyle"; break;
@@ -2276,7 +2274,7 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId,const SfxStyleFamil
         case SfxStyleFamily::Table:   sHelpId = ".uno:TableStyle"; break;
         default: OSL_FAIL("unknown StyleFamily"); break;
     }
-    m_aActionTbL->InsertItem( nId, pItem->GetImage(), pItem->GetText(), ToolBoxItemBits::NONE, 0);
+    m_aActionTbL->InsertItem( nId, rItem.GetImage(), rItem.GetText(), ToolBoxItemBits::NONE, 0);
     m_aActionTbL->SetHelpId( nId, sHelpId );
 }
 

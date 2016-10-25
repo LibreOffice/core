@@ -23,6 +23,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/shell.hxx>
+#include <sfx2/styfitem.hxx>
 #include <svtools/imgdef.hxx>
 #include <sal/types.h>
 #include <tools/fldunit.hxx>
@@ -37,7 +38,6 @@ class SfxObjectFactory;
 class SfxModule;
 class SfxModule_Impl;
 class SfxSlotPool;
-class SfxStyleFamilies;
 struct SfxChildWinContextFactory;
 struct SfxChildWinFactory;
 struct SfxStbCtrlFactory;
@@ -85,7 +85,7 @@ public:
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
 
-    SfxStyleFamilies*           CreateStyleFamilies();
+    virtual SfxStyleFamilies*   CreateStyleFamilies() { return nullptr; }
 
     static SfxModule*           GetActiveModule( SfxViewFrame* pFrame=nullptr );
     static FieldUnit            GetCurrentFieldUnit();

@@ -392,29 +392,30 @@
 #define STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION    (RID_APP_START+712)
 #define STR_TASKPANEL_LAYOUT_MENU_TITLE                 (RID_APP_START+713)
 #define STR_GRAPHICS_STYLE_FAMILY                       (RID_APP_START+715)
-#define STR_OBJECTS_TREE                                (RID_APP_START+716)
-#define STR_CELL_STYLE_FAMILY                           (RID_APP_START+717)
+#define STR_PRESENTATIONS_STYLE_FAMILY                  (RID_APP_START+716)
+#define STR_OBJECTS_TREE                                (RID_APP_START+717)
+#define STR_CELL_STYLE_FAMILY                           (RID_APP_START+718)
 
-#define STR_NAVIGATOR_SHOW_NAMED_SHAPES                 (RID_APP_START+718)
-#define STR_NAVIGATOR_SHOW_ALL_SHAPES                   (RID_APP_START+719)
-#define STR_NAVIGATOR_SHAPE_BASE_NAME                   (RID_APP_START+720)
+#define STR_NAVIGATOR_SHOW_NAMED_SHAPES                 (RID_APP_START+719)
+#define STR_NAVIGATOR_SHOW_ALL_SHAPES                   (RID_APP_START+720)
+#define STR_NAVIGATOR_SHAPE_BASE_NAME                   (RID_APP_START+721)
 
-#define STR_RESET_LAYOUT                                (RID_APP_START+721)
-#define STR_INSERT_TABLE                                (RID_APP_START+722)
-#define STR_INSERT_CHART                                (RID_APP_START+723)
-#define STR_INSERT_PICTURE                              (RID_APP_START+724)
-#define STR_INSERT_MOVIE                                (RID_APP_START+725)
+#define STR_RESET_LAYOUT                                (RID_APP_START+722)
+#define STR_INSERT_TABLE                                (RID_APP_START+723)
+#define STR_INSERT_CHART                                (RID_APP_START+724)
+#define STR_INSERT_PICTURE                              (RID_APP_START+725)
+#define STR_INSERT_MOVIE                                (RID_APP_START+726)
 
-#define STRING_DRAG_AND_DROP_PAGES          (RID_APP_START+726)
-#define STRING_DRAG_AND_DROP_SLIDES         (RID_APP_START+727)
+#define STRING_DRAG_AND_DROP_PAGES          (RID_APP_START+727)
+#define STRING_DRAG_AND_DROP_SLIDES         (RID_APP_START+728)
 
-#define STR_ACC_DIALOG_DESC                             (RID_APP_START+728)
+#define STR_ACC_DIALOG_DESC                             (RID_APP_START+729)
 
-#define STR_PHOTO_ALBUM_EMPTY_WARNING                   (RID_APP_START+729)
-#define STR_PHOTO_ALBUM_TEXTBOX                   (RID_APP_START+730)
+#define STR_PHOTO_ALBUM_EMPTY_WARNING                   (RID_APP_START+730)
+#define STR_PHOTO_ALBUM_TEXTBOX                         (RID_APP_START+731)
 
-#define STR_INSERT_3D_MODEL_TITLE                       (RID_APP_START+731)
-#define STR_INSERT_3D_MODEL_ALL_SUPPORTED_FORMATS       (RID_APP_START+732)
+#define STR_INSERT_3D_MODEL_TITLE                       (RID_APP_START+732)
+#define STR_INSERT_3D_MODEL_ALL_SUPPORTED_FORMATS       (RID_APP_START+733)
 
 /******************************************************************************
 * The ids in glob.hrc start at RID_APP_START+750!
