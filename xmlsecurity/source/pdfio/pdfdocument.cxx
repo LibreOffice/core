@@ -297,6 +297,10 @@ bool PDFDocument::RemoveSignature(size_t nPosition)
 
 bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificate, const OUString& rDescription)
 {
+    // Decide what identifier to use for the new signature.
+    std::vector<PDFObjectElement*> aSignatures = GetSignatureWidgets();
+    sal_uInt32 nNextSignature = aSignatures.size() + 1;
+
     m_aEditBuffer.WriteCharPtr("\n");
 
     // Write signature object.
@@ -368,7 +372,9 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.WriteCharPtr("/P ");
     m_aEditBuffer.WriteUInt32AsString(pFirstPage->GetObjectValue());
     m_aEditBuffer.WriteCharPtr(" 0 R\n");
-    m_aEditBuffer.WriteCharPtr("/T(Signature1)\n");
+    m_aEditBuffer.WriteCharPtr("/T(Signature");
+    m_aEditBuffer.WriteUInt32AsString(nNextSignature);
+    m_aEditBuffer.WriteCharPtr(")\n");
     m_aEditBuffer.WriteCharPtr("/V ");
     m_aEditBuffer.WriteUInt32AsString(nSignatureId);
     m_aEditBuffer.WriteCharPtr(" 0 R\n");
