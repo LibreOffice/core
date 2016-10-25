@@ -331,10 +331,35 @@ void ScInputWindow::Select()
                 ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
                 if ( pViewSh )
                 {
-                    const OUString aFormula = pViewSh->DoAutoSum();
+                    bool bSubTotal = false;
+                    bool bRangeFinder = false;
+                    const OUString aFormula = pViewSh->DoAutoSum(bRangeFinder, bSubTotal);
                     if (!aFormula.isEmpty())
                     {
                         SetFuncString( aFormula );
+                        if (bRangeFinder && pScMod->IsEditMode())
+                        {
+                            ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
+                            if ( pHdl )
+                            {
+                                pHdl->InitRangeFinder( aFormula );
+
+                                //! SetSelection at the InputHandler?
+                                //! Set bSelIsRef?
+                                const sal_Int32 nOpen = aFormula.indexOf('(');
+                                const sal_Int32 nLen = aFormula.getLength();
+                                if ( nOpen != -1 && nLen > nOpen )
+                                {
+                                    ESelection aSel( 0, nOpen + (bSubTotal ? 3 : 1), 0, nLen-1 );
+                                    EditView* pTableView = pHdl->GetTableView();
+                                    if ( pTableView )
+                                        pTableView->SetSelection( aSel );
+                                    EditView* pTopView = pHdl->GetTopView();
+                                    if ( pTopView )
+                                        pTopView->SetSelection( aSel );
+                                }
+                            }
+                        }
                     }
                 }
             }

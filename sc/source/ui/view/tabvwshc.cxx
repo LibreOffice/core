@@ -598,14 +598,14 @@ bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
     return bSubTotal;
 }
 
-const OUString ScTabViewShell::DoAutoSum()
+const OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal)
 {
     OUString aFormula;
-    ScModule* pScMod = SC_MOD();
     const ScMarkData& rMark = GetViewData().GetMarkData();
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
         ScRangeList aMarkRangeList;
+        rRangeFinder = rSubTotal = false;
         rMark.FillRangeListWithMarks( &aMarkRangeList, false );
         ScDocument* pDoc = GetViewData().GetDocument();
 
@@ -660,37 +660,10 @@ const OUString ScTabViewShell::DoAutoSum()
     else // Only insert into input row
     {
         ScRangeList aRangeList;
-        const bool bDataFound = GetAutoSumArea( aRangeList );
-        const bool bSubTotal( UseSubTotal( &aRangeList ) );
+        rRangeFinder = GetAutoSumArea( aRangeList );
+        rSubTotal = UseSubTotal( &aRangeList );
         ScAddress aAddr = GetViewData().GetCurPos();
-        aFormula = GetAutoSumFormula( aRangeList, bSubTotal, aAddr );
-
-        if ( bDataFound && pScMod->IsEditMode() )
-        {
-            ScInputHandler* pHdl = pScMod->GetInputHdl( this );
-            if ( pHdl )
-            {
-                pHdl->InitRangeFinder( aFormula );
-
-                //! SetSelection at the InputHandler?
-                //! Set bSelIsRef?
-                const sal_Int32 nOpen = aFormula.indexOf('(');
-                const sal_Int32 nLen = aFormula.getLength();
-                if ( nOpen != -1 && nLen > nOpen )
-                {
-                    sal_uInt8 nAdd(1);
-                    if (bSubTotal)
-                        nAdd = 3;
-                    ESelection aSel(0,nOpen+nAdd,0,nLen-1);
-                    EditView* pTableView = pHdl->GetTableView();
-                    if (pTableView)
-                        pTableView->SetSelection(aSel);
-                    EditView* pTopView = pHdl->GetTopView();
-                    if (pTopView)
-                        pTopView->SetSelection(aSel);
-                }
-            }
-        }
+        aFormula = GetAutoSumFormula( aRangeList, rSubTotal, aAddr );
     }
     return aFormula;
 }
