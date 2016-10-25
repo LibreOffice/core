@@ -174,7 +174,6 @@ class RscTypCont
     RscTop *    InitClassImageList( RscTop * pSuper, RscCont * pStrLst );
     RscTop *    InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
                                  RscArray * pLangGeo );
-    RscTop *    InitClassControl( RscTop * pSuper );
     RscTop *    InitClassKeyCode( RscTop * pSuper, RscEnum * pKey );
     RscTop *    InitClassMenuItem( RscTop * pSuper );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );

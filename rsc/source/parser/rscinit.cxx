@@ -62,7 +62,6 @@ void RscTypCont::Init()
     RscTop   *  pClassImage;
     RscTop   *  pClassImageList;
     RscTop   *  pClassWindow;
-    RscTop   *  pClassControl;
     RscTop   *  pClassKeyCode;
 
     Atom        nId;
@@ -281,10 +280,6 @@ void RscTypCont::Init()
     pClassWindow = InitClassWindow( pClassMgr, pMapUnit,
                                     pLangGeometry );
     pRoot->Insert( pClassWindow );
-}
-{
-    pClassControl = InitClassControl( pClassWindow );
-    pRoot->Insert( pClassControl );
 }
 {
     pClassKeyCode = InitClassKeyCode( pClassMgr, pKey );

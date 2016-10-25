@@ -245,23 +245,6 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
     return pClassWindow;
 }
 
-RscTop * RscTypCont::InitClassControl( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassControl;
-
-    // initialize class
-    nId = pHS->getID( "Control" );
-    pClassControl = new RscClass( nId, RSC_CONTROL, pSuper );
-    pClassControl->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassControl );
-
-    InsWinBit( pClassControl, "TabStop", nTabstopId );
-    INS_WINBIT(pClassControl,Group)
-
-    return pClassControl;
-}
-
 RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
 {
     Atom        nId;
