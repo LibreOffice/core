@@ -725,6 +725,9 @@ public:
 
     void enableDocTimer( bool bEnable );
 
+    /** Add all known external files to the LinkManager. */
+    void addFilesToLinkManager();
+
 private:
     ScExternalRefManager(const ScExternalRefManager&) = delete;
 

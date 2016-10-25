@@ -425,6 +425,10 @@ void FormulaBuffer::finalizeImport()
         }
     }
 
+    // With formula results being set and not recalculated we need to
+    // force-trigger adding all linked external files to the LinkManager.
+    rDoc.getDoc().GetExternalRefManager()->addFilesToLinkManager();
+
     rDoc.getDoc().SetAutoNameCache(nullptr);
 
     xFormulaBar->setPosition( 1.0 );
