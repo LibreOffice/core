@@ -231,7 +231,25 @@ void SAL_CALL BaseControl::dispose() throw( RuntimeException, std::exception )
 
     // release context and peer
     m_xContext.clear();
-    impl_releasePeer();
+    if ( m_xPeer.is() )
+    {
+        if ( m_xGraphicsPeer.is() )
+        {
+            removePaintListener( this );
+            removeWindowListener( this );
+            m_xGraphicsPeer.clear();
+        }
+
+        m_xPeer->dispose();
+        m_xPeerWindow.clear();
+        m_xPeer.clear();
+
+        if ( m_pMultiplexer != nullptr )
+        {
+            // take changes on multiplexer
+            m_pMultiplexer->setPeer( Reference< XWindow >() );
+        }
+    }
 
     // release view
     if ( m_xGraphicsView.is() )
@@ -739,34 +757,6 @@ void BaseControl::impl_recalcLayout( const WindowEvent& /*aEvent*/ )
 {
     // We need as virtual function to support automatically resizing of derived controls!
     // But we make it not pure virtual because it's not necessary for all derived classes!
-}
-
-//  protected method
-
-
-//  private method
-
-void BaseControl::impl_releasePeer()
-{
-    if ( m_xPeer.is() )
-    {
-        if ( m_xGraphicsPeer.is() )
-        {
-            removePaintListener( this );
-            removeWindowListener( this );
-            m_xGraphicsPeer.clear();
-        }
-
-        m_xPeer->dispose();
-        m_xPeerWindow.clear();
-        m_xPeer.clear();
-
-        if ( m_pMultiplexer != nullptr )
-        {
-            // take changes on multiplexer
-            m_pMultiplexer->setPeer( Reference< XWindow >() );
-        }
-    }
 }
 
 //  private method

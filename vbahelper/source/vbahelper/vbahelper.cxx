@@ -1063,15 +1063,11 @@ void DebugHelper::basicexception( const css::uno::Exception& ex ) throw( css::sc
     basicexception( OUString(), ex, ERRCODE_BASIC_INTERNAL_ERROR, OUString() );
 }
 
-void DebugHelper::runtimeexception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::uno::RuntimeException )
+void DebugHelper::runtimeexception( int err,  const OUString& /*additionalArgument*/ ) throw( css::uno::RuntimeException )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
-    throw css::uno::RuntimeException( DetailedMessage.concat( " " ).concat( ex.Message ).concat(" ").concat(OUString::number(err)), css::uno::Reference< css::uno::XInterface >() );
-}
-
-void DebugHelper::runtimeexception( int err,  const OUString& additionalArgument ) throw( css::uno::RuntimeException )
-{
-    runtimeexception( OUString(), css::uno::Exception(), err, additionalArgument );
+    throw css::uno::RuntimeException( css::uno::Exception().Message + " " + OUString::number(err),
+                                      css::uno::Reference< css::uno::XInterface >() );
 }
 
 Millimeter::Millimeter():m_nMillimeter(0) {}

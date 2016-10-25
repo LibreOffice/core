@@ -74,7 +74,7 @@ namespace utl
             startComponentListening(xConfigNodeComp);
 
         if (isValid())
-            setEscape(isSetNode());
+            m_bEscapeNames = isSetNode() && Reference< XStringEscape >::query(m_xDirectAccess).is();
     }
 
     OConfigurationNode::OConfigurationNode(const OConfigurationNode& _rSource)
@@ -301,11 +301,6 @@ namespace utl
             OSL_FAIL("OConfigurationNode::openNode: caught an exception while retrieving the node!");
         }
         return OConfigurationNode();
-    }
-
-    void OConfigurationNode::setEscape(bool _bEnable)
-    {
-        m_bEscapeNames = _bEnable && Reference< XStringEscape >::query(m_xDirectAccess).is();
     }
 
     bool OConfigurationNode::isSetNode() const

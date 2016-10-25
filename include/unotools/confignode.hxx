@@ -142,13 +142,6 @@ namespace utl
         css::uno::Sequence< OUString >
                             getNodeNames() const throw();
 
-        /** enables or disables name escaping when accessing direct children<p/>
-            Escaping is disabled by default, usually you enable it for set nodes (e.g. with calling setEscape(isSetNode)).
-            Once escaping is enabled, you should not access indirect children (e.g. openNode("child/grandchild"), 'cause
-            escaping for such names may not be supported by the underlying API objects.
-            @see getEscape
-        */
-        void        setEscape(bool _bEnable);
         /** get the flag specifying the current escape behaviour
             @see setEscape
         */
