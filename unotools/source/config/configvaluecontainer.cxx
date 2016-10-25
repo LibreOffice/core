@@ -271,20 +271,14 @@ namespace utl
         );
     }
 
-    void OConfigurationValueContainer::write()
+    void OConfigurationValueContainer::commit()
     {
-        // collect the current values in the exchange locations
+        // write the current values in the exchange locations
         std::for_each(
             m_pImpl->aAccessors.begin(),
             m_pImpl->aAccessors.end(),
             UpdateToConfig( m_pImpl->aConfigRoot, m_pImpl->rMutex )
         );
-    }
-
-    void OConfigurationValueContainer::commit()
-    {
-        // write the current values in the exchange locations
-        write();
 
         // commit the changes done
         m_pImpl->aConfigRoot.commit( );
