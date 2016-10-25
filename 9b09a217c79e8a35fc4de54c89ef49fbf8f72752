@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_9ee52faa",
+        "filename": "stoc/Library_javavm.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-25T12:41:58Z",
+      "side": 1,
+      "message": "a URE lib cannot link against an OOO lib; breaks on macOS",
+      "revId": "9b09a217c79e8a35fc4de54c89ef49fbf8f72752",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
