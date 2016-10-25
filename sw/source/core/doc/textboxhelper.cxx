@@ -32,6 +32,7 @@
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
+#include <editeng/memberids.hrc>
 #include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
 #include <svl/itemiter.hxx>
@@ -354,6 +355,14 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPrope
         syncProperty(pShape, RES_TEXT_VERT_ADJUST, 0, rValue);
     else if (rPropertyName == UNO_NAME_TEXT_AUTOGROWHEIGHT)
         syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT, rValue);
+    else if (rPropertyName == UNO_NAME_TEXT_LEFTDIST)
+        syncProperty(pShape, RES_BOX, LEFT_BORDER_DISTANCE, rValue);
+    else if (rPropertyName == UNO_NAME_TEXT_RIGHTDIST)
+        syncProperty(pShape, RES_BOX, RIGHT_BORDER_DISTANCE, rValue);
+    else if (rPropertyName == UNO_NAME_TEXT_UPPERDIST)
+        syncProperty(pShape, RES_BOX, TOP_BORDER_DISTANCE, rValue);
+    else if (rPropertyName == UNO_NAME_TEXT_LOWERDIST)
+        syncProperty(pShape, RES_BOX, BOTTOM_BORDER_DISTANCE, rValue);
 }
 
 void SwTextBoxHelper::getProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberId, css::uno::Any& rValue)
@@ -490,6 +499,23 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
             break;
         case RES_TEXT_VERT_ADJUST:
             aPropertyName = UNO_NAME_TEXT_VERT_ADJUST;
+            break;
+        case RES_BOX:
+            switch (nMemberId)
+            {
+            case LEFT_BORDER_DISTANCE:
+                aPropertyName = UNO_NAME_LEFT_BORDER_DISTANCE;
+                break;
+            case RIGHT_BORDER_DISTANCE:
+                aPropertyName = UNO_NAME_RIGHT_BORDER_DISTANCE;
+                break;
+            case TOP_BORDER_DISTANCE:
+                aPropertyName = UNO_NAME_TOP_BORDER_DISTANCE;
+                break;
+            case BOTTOM_BORDER_DISTANCE:
+                aPropertyName = UNO_NAME_BOTTOM_BORDER_DISTANCE;
+                break;
+            }
             break;
         }
 
