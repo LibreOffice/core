@@ -52,8 +52,6 @@
 
 #define HID_CONFIG_SAVE                                       "SFX2_HID_CONFIG_SAVE"
 
-#define HID_CTRL_CUSTOMPROPS_YES_NO                           "SFX2_HID_CTRL_CUSTOMPROPS_YES_NO"
-
 #define HID_QUERY_LOAD_TEMPLATE                               "SFX2_HID_QUERY_LOAD_TEMPLATE"
 
 #define HID_SIDEBAR_WINDOW                                     "SFX2_HID_SIDEBAR_WINDOW"
