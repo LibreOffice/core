@@ -2216,23 +2216,23 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
     mpFS->endElementNS(  XML_a, XML_prstGeom );
 }
 
-void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
+bool DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
 {
     uno::Reference< beans::XPropertySet > aXPropSet;
     uno::Any aAny( rXShape->queryInterface(cppu::UnoType<beans::XPropertySet>::get()));
 
     if ( ! (aAny >>= aXPropSet) )
-        return;
+        return false;
 
     try
     {
         aAny = aXPropSet->getPropertyValue( "CustomShapeGeometry" );
         if ( !aAny.hasValue() )
-            return;
+            return false;
     }
     catch( const ::uno::Exception& )
     {
-        return;
+        return false;
     }
 
 
@@ -2264,7 +2264,7 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                 }
 
                 if ( !aPairs.hasElements() )
-                    return;
+                    return false;
 
                 if ( !aSegments.hasElements() )
                 {
@@ -2288,7 +2288,7 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                 if ( nExpectedPairCount > aPairs.getLength() )
                 {
                     SAL_WARN("oox", "Segments need " << nExpectedPairCount << " coordinates, but Coordinates have only " << aPairs.getLength() << " pairs.");
-                    return;
+                    return false;
                 }
 
                 mpFS->startElementNS( XML_a, XML_custGeom, FSEND );
@@ -2450,10 +2450,11 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                 mpFS->endElementNS( XML_a, XML_path );
                 mpFS->endElementNS( XML_a, XML_pathLst );
                 mpFS->endElementNS( XML_a, XML_custGeom );
+                return true;
             }
         }
     }
-
+    return false;
 }
 
 void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
