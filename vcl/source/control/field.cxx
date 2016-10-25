@@ -1845,11 +1845,6 @@ CurrencyFormatter::~CurrencyFormatter()
 {
 }
 
-OUString CurrencyFormatter::GetCurrencySymbol() const
-{
-    return ImplGetLocaleDataWrapper().getCurrSymbol();
-}
-
 void CurrencyFormatter::SetValue( sal_Int64 nNewValue )
 {
     SetUserValue( nNewValue );
@@ -1859,7 +1854,9 @@ void CurrencyFormatter::SetValue( sal_Int64 nNewValue )
 
 OUString CurrencyFormatter::CreateFieldText( sal_Int64 nValue ) const
 {
-    return ImplGetLocaleDataWrapper().getCurr( nValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
+    return ImplGetLocaleDataWrapper().getCurr( nValue, GetDecimalDigits(),
+                                               ImplGetLocaleDataWrapper().getCurrSymbol(),
+                                               IsUseThousandSep() );
 }
 
 sal_Int64 CurrencyFormatter::GetValue() const

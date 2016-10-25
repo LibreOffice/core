@@ -170,7 +170,6 @@ private:
     void WMFRecord_SetWindowOrg(const Point & rPoint);
     void WMFRecord_StretchDIB(const Point & rPoint, const Size & rSize, const Bitmap & rBitmap, sal_uInt32 nROP = 0UL );
     void WMFRecord_TextOut(const Point & rPoint, const OUString & rString);
-    void WMFRecord_EndOfFile();
     void WMFRecord_IntersectClipRect( const Rectangle& rRect);
 
     sal_uInt16 AllocHandle();

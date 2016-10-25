@@ -113,7 +113,10 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
 {
     if( eType == Type::Default )
         m_pQueueInfo = new SystemQueueInfo();
-    initSystemDefaultPaper();
+
+    m_aSystemDefaultPaper = OStringToOUString(
+        PaperInfo::toPSName(PaperInfo::getSystemDefaultPaper().getPaper()),
+        RTL_TEXTENCODING_UTF8);
 }
 
 PrinterInfoManager::~PrinterInfoManager()
@@ -122,13 +125,6 @@ PrinterInfoManager::~PrinterInfoManager()
     #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "PrinterInfoManager: destroyed Manager of type %d\n", getType() );
     #endif
-}
-
-void PrinterInfoManager::initSystemDefaultPaper()
-{
-    m_aSystemDefaultPaper = OStringToOUString(
-        PaperInfo::toPSName(PaperInfo::getSystemDefaultPaper().getPaper()),
-        RTL_TEXTENCODING_UTF8);
 }
 
 bool PrinterInfoManager::checkPrintersChanged( bool bWait )

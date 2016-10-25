@@ -78,7 +78,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_static();
     static Sequence< OUString > getSupportedServiceNames_static();
 
     /*
@@ -119,11 +118,6 @@ GenericClipboard::~GenericClipboard()
 {
 }
 
-OUString GenericClipboard::getImplementationName_static()
-{
-    return OUString( "com.sun.star.datatransfer.VCLGenericClipboard"  );
-}
-
 Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
 {
     Sequence< OUString > aRet { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
@@ -132,7 +126,7 @@ Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
 
 OUString GenericClipboard::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return getImplementationName_static();
+    return OUString("com.sun.star.datatransfer.VCLGenericClipboard");
 }
 
 Sequence< OUString > GenericClipboard::getSupportedServiceNames() throw( RuntimeException, std::exception )
@@ -290,7 +284,7 @@ public:
 
     OUString SAL_CALL getImplementationName()
                 throw (css::uno::RuntimeException, std::exception) override
-    { return getImplementationName_static(); }
+    { return OUString("com.sun.star.datatransfer.dnd.VclGenericDragSource"); }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException, std::exception) override
@@ -304,11 +298,6 @@ public:
     {
         Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GenericDragSource" };
         return aRet;
-    }
-
-    static OUString getImplementationName_static()
-    {
-        return OUString("com.sun.star.datatransfer.dnd.VclGenericDragSource");
     }
 };
 
@@ -404,7 +393,7 @@ public:
 
     OUString SAL_CALL getImplementationName()
                 throw (css::uno::RuntimeException, std::exception) override
-    { return getImplementationName_static(); }
+    { return OUString("com.sun.star.datatransfer.dnd.VclGenericDropTarget"); }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException, std::exception) override
@@ -418,11 +407,6 @@ public:
     {
         Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GenericDropTarget" };
         return aRet;
-    }
-
-    static OUString getImplementationName_static()
-    {
-        return OUString("com.sun.star.datatransfer.dnd.VclGenericDropTarget");
     }
 };
 

@@ -397,7 +397,7 @@ GlyphSet::PSDefineReencodedFont (osl::File* pOutFile, sal_Int32 nGlyphSetID)
     sal_Int32 nSize = 0;
 
     nSize += psp::appendStr ("(", pEncodingVector + nSize);
-    nSize += psp::appendStr (GetReencodedFontName(nGlyphSetID).getStr(),
+    nSize += psp::appendStr (GetReencodedFontName(GetGlyphSetEncoding(nGlyphSetID), maBaseName).getStr(),
                                   pEncodingVector + nSize);
     nSize += psp::appendStr (") cvn (", pEncodingVector + nSize);
     nSize += psp::appendStr (maBaseName.getStr(),
@@ -431,12 +431,6 @@ GlyphSet::GetReencodedFontName (rtl_TextEncoding nEnc, const OString &rFontName)
     {
         return OString();
     }
-}
-
-OString
-GlyphSet::GetReencodedFontName (sal_Int32 nGlyphSetID)
-{
-    return GetReencodedFontName (GetGlyphSetEncoding(nGlyphSetID), maBaseName);
 }
 
 void GlyphSet::DrawGlyphs(

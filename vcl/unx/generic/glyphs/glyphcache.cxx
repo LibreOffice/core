@@ -285,11 +285,6 @@ inline void GlyphCache::AddedGlyph( ServerFont& rServerFont, GlyphData& rGlyphDa
     ++mnGlyphCount;
     mnBytesUsed += sizeof( rGlyphData );
     UsingGlyph( rServerFont, rGlyphData );
-    GrowNotify();
-}
-
-void GlyphCache::GrowNotify()
-{
     if( mnBytesUsed > mnMaxSize )
         GarbageCollect();
 }
