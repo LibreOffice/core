@@ -2575,17 +2575,11 @@ ImplWin::ImplWin( vcl::Window* pParent, WinBits nWinStyle ) :
     mnItemPos = LISTBOX_ENTRY_NOTFOUND;
 }
 
-void ImplWin::MBDown()
-{
-    if (IsEnabled())
-        maMBDownHdl.Call(this);
-}
-
 void ImplWin::MouseButtonDown( const MouseEvent& )
 {
     if( IsEnabled() )
     {
-        MBDown();
+        maMBDownHdl.Call(this);
     }
 }
 
@@ -2885,18 +2879,12 @@ ImplBtn::ImplBtn( vcl::Window* pParent, WinBits nWinStyle ) :
 {
 }
 
-void ImplBtn::MBDown()
-{
-    if (IsEnabled())
-        maMBDownHdl.Call(this);
-}
-
 void ImplBtn::MouseButtonDown( const MouseEvent& )
 {
     //PushButton::MouseButtonDown( rMEvt );
     if( IsEnabled() )
     {
-        MBDown();
+        maMBDownHdl.Call(this);
         mbDown = true;
     }
 }

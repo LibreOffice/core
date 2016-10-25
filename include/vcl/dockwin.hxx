@@ -263,7 +263,6 @@ protected:
 public:
     bool            isLayoutEnabled() const;
     void            setOptimalLayoutSize();
-    bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
 
     SAL_DLLPRIVATE bool    ImplStartDocking( const Point& rPos );
     SAL_DLLPRIVATE bool    isDeferredInit() const { return mbIsDefferedInit; }

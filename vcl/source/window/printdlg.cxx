@@ -310,11 +310,6 @@ PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow( vcl::Window* i_pParent )
     , mnRows( 1 )
     , mnColumns( 1 )
 {
-    ImplInitSettings();
-}
-
-void PrintDialog::ShowNupOrderWindow::ImplInitSettings()
-{
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
 }
 

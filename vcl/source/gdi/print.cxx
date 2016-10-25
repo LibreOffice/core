@@ -1306,7 +1306,9 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
 {
     ImplJobSetup& rData = aJobSetup.ImplGetData();
 
-    int     nLandscapeAngle = GetLandscapeAngle();
+    // The angle that a landscape page will be turned counterclockwise wrt to portrait.
+    int     nLandscapeAngle = mpInfoPrinter ? mpInfoPrinter->GetLandscapeAngle( &maJobSetup.ImplGetConstData() ) : 900;
+
     int     nPaperCount     = GetPaperInfoCount();
     bool    bFound = false;
 
@@ -1594,11 +1596,6 @@ bool Printer::SetDuplexMode( DuplexMode eDuplex )
     }
 
     return true;
-}
-
-int Printer::GetLandscapeAngle() const
-{
-    return mpInfoPrinter ? mpInfoPrinter->GetLandscapeAngle( &maJobSetup.ImplGetConstData() ) : 900;
 }
 
 Paper Printer::GetPaper() const

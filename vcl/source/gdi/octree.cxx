@@ -60,17 +60,7 @@ Octree::Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors ) :
 {
     pNodeCache = new ImpNodeCache( nColors );
     memset( pReduce, 0, ( OCTREE_BITS + 1 ) * sizeof( NODE* ) );
-    ImplCreateOctree();
-}
 
-Octree::~Octree()
-{
-    ImplDeleteOctree( &pTree );
-    delete pNodeCache;
-}
-
-void Octree::ImplCreateOctree()
-{
     if( !!*pAcc )
     {
         const long      nWidth = pAcc->Width();
@@ -111,6 +101,12 @@ void Octree::ImplCreateOctree()
             }
         }
     }
+}
+
+Octree::~Octree()
+{
+    ImplDeleteOctree( &pTree );
+    delete pNodeCache;
 }
 
 void Octree::ImplDeleteOctree( NODE** ppNode )

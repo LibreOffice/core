@@ -123,7 +123,6 @@ protected:
     // if a paper is already set it will not be overwritten
     void setDefaultPaper( PPDContext& rInfo ) const;
 
-    void initSystemDefaultPaper();
 public:
 
     // there can only be one

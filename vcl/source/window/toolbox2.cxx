@@ -1067,17 +1067,6 @@ void ToolBox::SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror )
     }
 }
 
-void ToolBox::UpdateImageOrientation()
-{
-    for (std::vector<ImplToolItem>::const_iterator it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it)
-    {
-        if (vcl::CommandInfoProvider::Instance().IsMirrored(it->maCommandStr))
-            SetItemImageMirrorMode(it->mnId, mbImagesMirrored);
-        if (vcl::CommandInfoProvider::Instance().IsRotated(it->maCommandStr))
-            SetItemImageAngle(it->mnId, mnImagesRotationAngle);
-    }
-}
-
 Image ToolBox::GetItemImage(sal_uInt16 nItemId) const
 {
     ImplToolItem* pItem = ImplGetItem(nItemId);
@@ -1718,11 +1707,6 @@ IMPL_LINK( ToolBox, ImplCustomMenuListener, VclMenuEvent&, rEvent, void )
 IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
 {
     mpData->mnEventId = nullptr;
-    ImplExecuteCustomMenu();
-}
-
-void ToolBox::ImplExecuteCustomMenu()
-{
     if( IsMenuEnabled() )
     {
         if( GetMenuType() & ToolBoxMenuType::Customize )

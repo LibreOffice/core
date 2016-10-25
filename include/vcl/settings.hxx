@@ -604,9 +604,6 @@ public:
 
 class VCL_DLLPUBLIC MiscSettings
 {
-    void                            CopyData();
-
-private:
     std::shared_ptr<ImplMiscData>   mxData;
 
 public:
@@ -629,7 +626,6 @@ public:
 
 class VCL_DLLPUBLIC HelpSettings
 {
-    void                            CopyData();
     std::shared_ptr<ImplHelpData>   mxData;
 
 public:

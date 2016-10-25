@@ -109,9 +109,6 @@ private:
     void                    ImplInit( vcl::Window* pParent,
                                       WinBits nStyle, BorderWindowStyle nTypeStyle,
                                       SystemParentData* pParentData );
-    void                    ImplInit( vcl::Window* pParent,
-                                      WinBits nStyle, BorderWindowStyle nTypeStyle,
-                                      const css::uno::Any& );
 
                             ImplBorderWindow (const ImplBorderWindow &) = delete;
                             ImplBorderWindow& operator= (const ImplBorderWindow &) = delete;

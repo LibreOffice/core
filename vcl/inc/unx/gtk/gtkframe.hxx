@@ -423,8 +423,6 @@ public:
     void startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
                    GdkDragAction sourceActions, GtkTargetList* pTargetList);
 
-    void WithDrawn();
-
     static void closePopup();
 
 #endif

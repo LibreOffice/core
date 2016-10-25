@@ -838,11 +838,6 @@ void WMFWriter::TrueTextOut(const Point & rPoint, const OString& rString)
     UpdateRecordHeader();
 }
 
-void WMFWriter::WMFRecord_EndOfFile()
-{
-    WriteRecordHeader(0x00000003,0x0000);
-}
-
 void WMFWriter::WMFRecord_IntersectClipRect( const Rectangle& rRect )
 {
     WriteRecordHeader( 0x00000007, W_META_INTERSECTCLIPRECT );
@@ -1787,7 +1782,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     // Write records
     WriteRecords(rMTF);
 
-    WMFRecord_EndOfFile();
+    WriteRecordHeader(0x00000003,0x0000); // end of file
     UpdateHeader();
 
     while(pAttrStack)

@@ -351,7 +351,6 @@ public:
     const SalX11Screen& GetDefaultXScreen() const { return m_nXDefaultScreen; }
     const Size&     GetScreenSize( SalX11Screen nXScreen ) const { return getDataForScreen( nXScreen ).m_aSize; }
     srv_vendor_t    GetServerVendor() const { return meServerVendor; }
-    void            SetServerVendor() { meServerVendor = sal_GetServerVendor(pDisp_); }
     bool            IsDisplay() const { return !!pXLib_; }
     GC              GetCopyGC( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aCopyGC; }
     Pixmap          GetInvert50( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_hInvert50; }

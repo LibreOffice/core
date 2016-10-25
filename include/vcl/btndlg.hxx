@@ -57,8 +57,6 @@ public:
     virtual void        Resize() override;
     virtual void        StateChanged( StateChangedType nStateChange ) override;
 
-    void                Click();
-
     void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
 
     sal_uInt16          GetCurButtonId() const { return mnCurButtonId; }

@@ -48,7 +48,6 @@ private:
     void                        CreatePalette( NODE* pNode );
     void                        GetPalIndex( NODE* pNode );
 
-    SAL_DLLPRIVATE void         ImplCreateOctree();
     SAL_DLLPRIVATE void         ImplDeleteOctree( NODE** ppNode );
     SAL_DLLPRIVATE void         ImplAdd( NODE** ppNode );
     SAL_DLLPRIVATE void         ImplReduce();

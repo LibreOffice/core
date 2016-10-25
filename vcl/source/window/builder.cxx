@@ -2265,16 +2265,6 @@ void VclBuilder::collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rM
         rMap[sProperty] = sValue;
 }
 
-void VclBuilder::handleAdjustment(const OString &rID, stringmap &rProperties)
-{
-    m_pParserState->m_aAdjustments[rID] = rProperties;
-}
-
-void VclBuilder::handleTextBuffer(const OString &rID, stringmap &rProperties)
-{
-    m_pParserState->m_aTextBuffers[rID] = rProperties;
-}
-
 void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex)
 {
     int nLevel = 1;
@@ -2904,12 +2894,12 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
 
     if (sClass == "GtkAdjustment")
     {
-        handleAdjustment(sID, aProperties);
+        m_pParserState->m_aAdjustments[sID] = aProperties;
         return nullptr;
     }
     else if (sClass == "GtkTextBuffer")
     {
-        handleTextBuffer(sID, aProperties);
+        m_pParserState->m_aTextBuffers[sID] = aProperties;
         return nullptr;
     }
 
