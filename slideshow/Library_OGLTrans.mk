@@ -38,12 +38,6 @@ $(eval $(call gb_Library_set_componentfile,OGLTrans,slideshow/source/engine/OGLT
 
 ifeq ($(strip $(OS)),MACOSX)
 
-$(eval $(call gb_Library_add_exception_objects,OGLTrans,\
-    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionerImpl \
-    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionImpl \
-    slideshow/source/engine/OGLTrans/generic/OGLTrans_Operation \
-))
-
 $(eval $(call gb_Library_use_system_darwin_frameworks,OGLTrans,\
     Cocoa \
     GLUT \
@@ -51,29 +45,26 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,OGLTrans,\
 ))
 
 else ifeq ($(strip $(OS)),WNT)
+
 $(eval $(call gb_Library_use_system_win32_libs,OGLTrans,\
     gdi32 \
     glu32 \
     opengl32 \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,OGLTrans,\
-    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionerImpl \
-    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionImpl \
-    slideshow/source/engine/OGLTrans/generic/OGLTrans_Operation \
-))
-
 else
-$(eval $(call gb_Library_add_exception_objects,OGLTrans,\
-    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionerImpl \
-    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionImpl \
-    slideshow/source/engine/OGLTrans/generic/OGLTrans_Operation \
-))
 
 $(eval $(call gb_Library_add_libs,OGLTrans,\
 	-lGL \
 	-lX11 \
 ))
+
 endif
+
+$(eval $(call gb_Library_add_exception_objects,OGLTrans,\
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionerImpl \
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionImpl \
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_Operation \
+))
 
 # vim: set noet sw=4 ts=4:
