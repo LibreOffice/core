@@ -1092,7 +1092,7 @@ void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
     if (nCurX < 0) nCurX = 0;
     if (nCurY < 0) nCurY = 0;
     if (nCurX > MAXCOL) nCurX = MAXCOL;
-    nCurY = std::min(nCurY, comphelper::LibreOfficeKit::isActive() ? MAXTILEDROW - 1 : MAXROW);
+    nCurY = std::min(nCurY, MAXROW);
 
     HideAllCursors();
 

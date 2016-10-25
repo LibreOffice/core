@@ -1981,13 +1981,6 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
     SCTAB nTab = pViewData->GetTabNo();
 
-    if ( comphelper::LibreOfficeKit::isActive() && nPosY > MAXTILEDROW - 1 )
-    {
-        nButtonDown = 0;
-        nMouseStatus = SC_GM_NONE;
-        return;
-    }
-
     // Auto filter / pivot table / data select popup.  This shouldn't activate the part.
 
     if ( !bDouble && !bFormulaMode && rMEvt.IsLeft() )
