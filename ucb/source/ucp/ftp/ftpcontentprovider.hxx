@@ -125,10 +125,6 @@ namespace ftp
         std::vector<ServerInfo> m_ServerInfo;
 
         void init();
-
-        css::uno::Reference<css::ucb::XContentProvider> getHttpProvider()
-            throw(css::uno::RuntimeException);
-
     };  // end class FTPContentProvider
 
 }       // end namespace ftp

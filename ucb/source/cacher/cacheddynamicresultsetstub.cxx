@@ -120,10 +120,24 @@ XTYPEPROVIDER_IMPL_5( CachedDynamicResultSetStub
 
 // XServiceInfo methods.
 
+OUString SAL_CALL CachedDynamicResultSetStub::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetStub" );
+}
 
-XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSetStub,
-                        OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetStub" ),
-                        CACHED_DRS_STUB_SERVICE_NAME );
+sal_Bool SAL_CALL CachedDynamicResultSetStub::supportsService( const OUString& ServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+
+css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetStub::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return { CACHED_DRS_STUB_SERVICE_NAME };
+}
+
 
 
 // class CachedDynamicResultSetStubFactory

@@ -119,8 +119,6 @@ private:
     RegexpMapImpl< Val > * m_pMap;
     int m_nList;
     mutable bool m_bEntrySet;
-
-    void setEntry() const;
 };
 
 template< typename Val >
@@ -141,20 +139,6 @@ inline RegexpMapIterImpl< Val >::RegexpMapIterImpl(MapImpl * pTheMap,
     m_nList(nTheList),
     m_bEntrySet(false)
 {}
-
-template< typename Val >
-void RegexpMapIterImpl< Val >::setEntry() const
-{
-    if (!m_bEntrySet)
-    {
-        Entry< Val > const & rTheEntry
-            = m_nList == -1 ? *m_pMap->m_pDefault : *m_aIndex;
-        m_aEntry
-            = RegexpMapEntry< Val >(rTheEntry.m_aRegexp.getRegexp(),
-                                    const_cast< Val * >(&rTheEntry.m_aValue));
-        m_bEntrySet = true;
-    }
-}
 
 template< typename Val >
 RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMapImpl< Val > * pTheMap,
@@ -243,7 +227,15 @@ void RegexpMapIterImpl< Val >::next()
 template< typename Val >
 RegexpMapEntry< Val > & RegexpMapIterImpl< Val >::get()
 {
-    setEntry();
+    if (!m_bEntrySet)
+    {
+        Entry< Val > const & rTheEntry
+            = m_nList == -1 ? *m_pMap->m_pDefault : *m_aIndex;
+        m_aEntry
+            = RegexpMapEntry< Val >(rTheEntry.m_aRegexp.getRegexp(),
+                                    const_cast< Val * >(&rTheEntry.m_aValue));
+        m_bEntrySet = true;
+    }
     return m_aEntry;
 }
 

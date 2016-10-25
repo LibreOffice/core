@@ -190,9 +190,6 @@ public:
         throw( css::uno::RuntimeException,
                std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
     // XComponent
     virtual void SAL_CALL
     dispose() throw( css::uno::RuntimeException, std::exception ) override;
