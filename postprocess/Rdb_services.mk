@@ -216,7 +216,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		extensions/source/update/ui/updchk \
 	) \
 	$(if $(ENABLE_OPENGL_TRANSITIONS), \
-		slideshow/source/engine/OGLTrans/ogltrans \
+		slideshow/source/engine/opengl/ogltrans \
 	) \
 	$(if $(ENABLE_TDE), \
 		shell/source/backends/kdebe/tdebe1 \
