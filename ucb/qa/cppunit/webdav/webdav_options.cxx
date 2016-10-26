@@ -27,7 +27,7 @@ namespace
 
         void tearDown(  ) override;
 
-        void DAVTypesCheckInit( webdav_ucp::DAVOptions aDavType );
+        void DAVTypesCheckInit( webdav_ucp::DAVOptions& aDavType );
         void DAVTypesTest();
 
         void DAVOptsCacheTests();
@@ -51,7 +51,7 @@ namespace
     {
     }
 
-    void webdav_opts_test::DAVTypesCheckInit( webdav_ucp::DAVOptions aDavType )
+    void webdav_opts_test::DAVTypesCheckInit( webdav_ucp::DAVOptions& aDavType )
     {
         // check if the class is at reset state
         // using accessors
@@ -223,7 +223,7 @@ namespace
         aHTTPResponseStatusText.clear();
         aDavOpt.setHttpResponseStatusText( aHTTPResponseStatusText );
 
-        OUString aURL = "http://a%20fake%20url/to%20test";
+        OUString aURL = "http://my.server.org/a%20fake%20url/to%20test";
         aDavOpt.setURL( aURL );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
@@ -240,7 +240,7 @@ namespace
 
         aURL.clear();
         aDavOpt.setURL( aURL );
-        aURL = "http://a%20fake%20url/to%20test/another-url";
+        aURL = "http://my.server.org/a%20fake%20url/to%20test/another-url";
         aDavOpt.setRedirectedURL( aURL );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
@@ -257,7 +257,7 @@ namespace
 
         //check the init() function
         aAllowedMethods = "OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK";
-        aURL = "http://a%20fake%20url/to%20test/another-url";
+        aURL = "http://my.server.org/a%20fake%20url/to%20test/another-url";
         aHTTPResponseStatusText = "404 Not Found";
         aDavOpt.setClass1();
         aDavOpt.setClass2();
@@ -348,8 +348,8 @@ namespace
         webdav_ucp::DAVOptions aDavOptCached;
         // init the values
         OUString aAllowedMethods = "OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK";
-        OUString aURL = "http://a%20fake%20url/to%20test/another-url";
-        OUString aRedirectedURL = "http://a%20fake%20url/to%20test/another-url/redirected";
+        OUString aURL = "http://my.server.org/a%20fake%20url/to%20test/another-url";
+        OUString aRedirectedURL = "http://my.server.org/a%20fake%20url/to%20test/another-url/redirected";
         aDavOpt.setURL( aURL );
         aDavOpt.setRedirectedURL( aRedirectedURL );
         aDavOpt.setClass1();
