@@ -11,6 +11,7 @@ $(eval $(call gb_Module_Module,solenv))
 
 $(eval $(call gb_Module_add_targets_for_build,solenv,\
 	Executable_concat-deps \
+	Executable_gbuildtojson \
 ))
 
 ifeq ($(COM),MSC)
@@ -23,6 +24,7 @@ endif
 
 ifneq ($(DISABLE_PYTHON),TRUE)
 $(eval $(call gb_Module_add_subsequentcheck_targets,solenv,\
+	CustomTarget_gbuildtesttools \
 	PythonTest_solenv_python \
 ))
 endif
