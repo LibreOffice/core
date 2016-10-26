@@ -11,6 +11,7 @@
 #ifndef INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
 #define INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
 
+#include <map>
 #include <vector>
 
 #include <com/sun/star/security/XCertificate.hpp>
@@ -48,8 +49,10 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
 {
     /// This vector owns all elements.
     std::vector< std::unique_ptr<PDFElement> > m_aElements;
-    // List of object offsets we know.
-    std::vector<size_t> m_aXRef;
+    /// Object ID <-> object offset map.
+    std::map<size_t, size_t> m_aXRef;
+    /// Object ID <-> "are changed as part of an incremental update?" map.
+    std::map<size_t, bool> m_aXRefDirty;
     /// List of xref offsets we know.
     std::vector<size_t> m_aStartXRefs;
     /// List of EOF offsets we know.
@@ -61,6 +64,8 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     static int AsHex(char ch);
     /// Decode a hex dump.
     static std::vector<unsigned char> DecodeHexString(PDFHexStringElement* pElement);
+    /// Tokenize elements from current offset, optionally only till the next EOF.
+    bool Tokenize(SvStream& rStream, bool bPartial);
 
 public:
     PDFDocument();
@@ -76,6 +81,7 @@ public:
     /// Remember the end location of an EOF token.
     void PushBackEOF(size_t nOffset);
 
+    /// Read elements from the start of the stream till its end.
     bool Read(SvStream& rStream);
     /// Sign the read document with xCertificate in the edit buffer.
     bool Sign(const css::uno::Reference<css::security::XCertificate>& xCertificate, const OUString& rDescription);
