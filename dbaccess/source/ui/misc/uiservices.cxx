@@ -53,7 +53,6 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_OUserSettingsDialog();
         createRegistryInfo_OColumnControlModel();
         createRegistryInfo_OColumnControl();
-        createRegistryInfo_OToolboxController();
         createRegistryInfo_CopyTableWizard();
         createRegistryInfo_OTextConnectionSettingsDialog();
         createRegistryInfo_LimitBoxController();
