@@ -2343,7 +2343,8 @@ void SfxMedium::GetLockingStream_Impl()
 
 void SfxMedium::GetMedium_Impl()
 {
-    if ( !pImpl->m_pInStream )
+    if ( !pImpl->m_pInStream
+        || (!pImpl->xStream.is() && !pImpl->xInputStream.is() && !pImpl->m_xLockingStream.is() && !pImpl->m_xInputStreamToLoadFrom.is() && pImpl->bIsTemp && GetURLObject().GetProtocol() == INetProtocol::Smb) )
     {
         pImpl->bDownloadDone = false;
         Reference< css::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
