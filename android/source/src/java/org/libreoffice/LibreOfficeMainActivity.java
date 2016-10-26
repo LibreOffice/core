@@ -97,6 +97,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     }
 
     private boolean isKeyboardOpen = false;
+    private boolean isFormattingToolbarOpen = false;
+    private boolean isSearchToolbarOpen = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.w(LOGTAG, "onCreate..");
@@ -391,6 +393,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             inputMethodManager.showSoftInput(layerView, InputMethodManager.SHOW_FORCED);
         }
         isKeyboardOpen=true;
+        isSearchToolbarOpen=false;
+        isFormattingToolbarOpen=false;
         hideBottomToolbar();
     }
 
@@ -445,6 +449,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                 findViewById(R.id.toolbar_bottom).setVisibility(View.GONE);
                 findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
                 findViewById(R.id.search_toolbar).setVisibility(View.GONE);
+                isFormattingToolbarOpen=false;
+                isSearchToolbarOpen=false;
             }
         });
     }
@@ -453,10 +459,17 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                showBottomToolbar();
-                findViewById(R.id.formatting_toolbar).setVisibility(View.VISIBLE);
-                findViewById(R.id.search_toolbar).setVisibility(View.GONE);
-                hideSoftKeyboardDirect();
+                if(isFormattingToolbarOpen == true){
+                    hideBottomToolbar();
+                }else{
+                    showBottomToolbar();
+                    findViewById(R.id.formatting_toolbar).setVisibility(View.VISIBLE);
+                    findViewById(R.id.search_toolbar).setVisibility(View.GONE);
+                    hideSoftKeyboardDirect();
+                    isSearchToolbarOpen=false;
+                    isFormattingToolbarOpen=true;
+                }
+
             }
         });
     }
@@ -475,10 +488,16 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                showBottomToolbar();
-                findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
-                findViewById(R.id.search_toolbar).setVisibility(View.VISIBLE);
-                hideSoftKeyboardDirect();
+                if(isSearchToolbarOpen==true){
+                    hideBottomToolbar();
+                }else{
+                    showBottomToolbar();
+                    findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
+                    findViewById(R.id.search_toolbar).setVisibility(View.VISIBLE);
+                    hideSoftKeyboardDirect();
+                    isFormattingToolbarOpen=false;
+                    isSearchToolbarOpen=true;
+                }
             }
         });
     }
