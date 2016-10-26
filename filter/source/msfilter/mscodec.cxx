@@ -364,8 +364,7 @@ void MSCodec_CryptoAPI::InitKey (
     sal_uInt32 saltSize = 16;
 
     // Prepare initial data -> salt + password (in 16-bit chars)
-    std::vector<sal_uInt8> initialData;
-    initialData.insert(initialData.begin(), pDocId, pDocId + saltSize);
+    std::vector<sal_uInt8> initialData(pDocId, pDocId + saltSize);
 
     // Fill PassData into KeyData.
     for (sal_Int32 nInd = 0; nInd < 16 && pPassData[nInd]; ++nInd)
