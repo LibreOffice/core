@@ -214,6 +214,9 @@ void PDFSigningTest::testPDFRemoveAll()
     aManager.mxSignatureStream = xStream;
     aManager.read(/*bUseTempStream=*/false);
     std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    // This was 1 when NSS_CMSSignerInfo_GetSigningCertificate() failed, which
+    // means that we only used the locally imported certificates for
+    // verification, not the ones provided in the PDF signature data.
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
 
     // Request removal of the first signature, should imply removal of the
