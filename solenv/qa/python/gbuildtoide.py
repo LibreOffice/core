@@ -29,7 +29,8 @@ class CheckGbuildToIde(unittest.TestCase):
     def test_gbuildtoide(self):
         os.chdir(os.path.join(os.environ['SRCDIR'], 'solenv', 'qa', 'python', 'selftest'))
         # make may find instdir/program/libfreebl3.so and fall over if that was
-        del(os.environ['LD_LIBRARY_PATH']) # built with ASAN; prevent that
+	if 'LD_LIBRARY_PATH' in os.environ:
+            del(os.environ['LD_LIBRARY_PATH']) # built with ASAN; prevent that
         make = os.environ['MAKE']
         subprocess.check_call([make, 'gbuildtoide', 'WORKDIR=%s' % self.tempworkmixed])
         jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToIde', 'Library'))
@@ -70,3 +71,5 @@ class CheckGbuildToIde(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
