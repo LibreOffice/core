@@ -12,7 +12,10 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <unotools/streamwrap.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
+#include <documentsignaturemanager.hxx>
 #include <pdfio/pdfdocument.hxx>
 
 using namespace com::sun::star;
@@ -42,13 +45,16 @@ public:
     void testPDFAdd();
     /// Test signing a previously unsigned file twice.
     void testPDFAdd2();
-    /// Test remove a signature from a previously signed file.
+    /// Test removing a signature from a previously signed file.
     void testPDFRemove();
+    /// Test removing all signatures from a previously multi-signed file.
+    void testPDFRemoveAll();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
     CPPUNIT_TEST(testPDFAdd2);
     CPPUNIT_TEST(testPDFRemove);
+    CPPUNIT_TEST(testPDFRemoveAll);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -185,6 +191,38 @@ void PDFSigningTest::testPDFRemove()
         // This failed when PDFDocument::RemoveSignature() silently returned success, without doing anything.
         CPPUNIT_ASSERT(aSignatures.empty());
     }
+#endif
+}
+
+void PDFSigningTest::testPDFRemoveAll()
+{
+#ifndef _WIN32
+    // Make sure that good2.pdf has 2 valid signatures.  Unlike in
+    // testPDFRemove(), here intentionally test DocumentSignatureManager and
+    // PDFSignatureHelper code as well.
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+
+    // Copy the test document to a temporary file, as it'll be modified.
+    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_signing.test.user/");
+    OUString aOutURL = aTargetDir + "remove-all.pdf";
+    CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None, osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "2good.pdf", aOutURL));
+    // Load the test document as a storage and read its two signatures.
+    DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
+    SvStream* pStream = utl::UcbStreamHelper::CreateStream(aOutURL, StreamMode::READ | StreamMode::WRITE);
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+    aManager.mxSignatureStream = xStream;
+    aManager.read(/*bUseTempStream=*/false);
+    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
+
+    // Request removal of the first signature, should imply removal of the
+    // second chained signature as well.
+    aManager.remove(0);
+    // This was 2, Manager didn't write anything to disk when removal succeeded
+    // (instead of doing that when removal failed).
+    // Then this was 1, when the chained signature wasn't removed.
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), rInformations.size());
 #endif
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);
