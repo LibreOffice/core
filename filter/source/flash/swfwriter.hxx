@@ -109,16 +109,6 @@ sal_uInt32 getFixed( double fValue );
 
 typedef ::std::map<BitmapChecksum, sal_uInt16> ChecksumCache;
 
-/** unsigned int 16 compare operation for stl */
-struct ltuint16
-{
-  bool operator()(sal_uInt16 s1, sal_uInt16 s2) const
-  {
-    return s1 < s2;
-  }
-};
-
-
 /** container class to create bit structures */
 class BitStream
 {
@@ -159,7 +149,7 @@ public:
 
 private:
     const vcl::Font maFont;
-    std::map<sal_uInt16, sal_uInt16, ltuint16> maGlyphIndex;
+    std::map<sal_uInt16, sal_uInt16> maGlyphIndex;
     sal_uInt16 mnNextIndex;
     sal_uInt16 mnId;
     BitStream maGlyphData;
