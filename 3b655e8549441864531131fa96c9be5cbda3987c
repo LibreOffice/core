@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_19e779e5",
+        "filename": "cui/source/dialogs/dlgname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-10-26T10:07:42Z",
+      "side": 1,
+      "message": "With less code:\n\npBtnOk-\u003eEnable( !pEdtName-\u003eGetText().isEmpty() \u0026\u0026 aCheckNameHdl.Call(*this) );",
+      "revId": "3b655e8549441864531131fa96c9be5cbda3987c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
