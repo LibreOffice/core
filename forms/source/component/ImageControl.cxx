@@ -301,7 +301,7 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
 
 
 sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
-                                throw( IllegalArgumentException )
+                                throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     switch (nHandle)
     {
