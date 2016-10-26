@@ -27,8 +27,6 @@
 #include "sal/types.h"
 #include "misc.hxx"
 
-#include "logformat.hxx"
-
 #if defined ANDROID
 #include <android/log.h>
 #elif defined WNT
@@ -365,24 +363,17 @@ void sal_detail_logFormat(
     if (report(level, area)) {
         std::va_list args;
         va_start(args, format);
-        osl::detail::logFormat(level, area, where, format, args);
+        char buf[1024];
+        int const len = sizeof buf - RTL_CONSTASCII_LENGTH("...");
+        int n = vsnprintf(buf, len, format, args);
+        if (n < 0) {
+            std::strcpy(buf, "???");
+        } else if (n >= len) {
+            std::strcpy(buf + len - 1, "...");
+        }
+        log(level, area, where, buf);
         va_end(args);
     }
-}
-
-void osl::detail::logFormat(
-    sal_detail_LogLevel level, char const * area, char const * where,
-    char const * format, std::va_list arguments)
-{
-    char buf[1024];
-    int const len = sizeof buf - RTL_CONSTASCII_LENGTH("...");
-    int n = vsnprintf(buf, len, format, arguments);
-    if (n < 0) {
-        std::strcpy(buf, "???");
-    } else if (n >= len) {
-        std::strcpy(buf + len - 1, "...");
-    }
-    log(level, area, where, buf);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
