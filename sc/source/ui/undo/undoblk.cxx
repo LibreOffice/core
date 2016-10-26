@@ -2114,8 +2114,8 @@ ScUndoRemoveMerge::ScUndoRemoveMerge( ScDocShell* pNewDocShell,
 }
 
 ScUndoRemoveMerge::ScUndoRemoveMerge( ScDocShell* pNewDocShell,
-                                      ScDocument* pNewUndoDoc ) :
-    ScBlockUndo( pNewDocShell, ScRange(), SC_UNDO_SIMPLE ),
+                                      const ScRange& rRange, ScDocument* pNewUndoDoc ) :
+    ScBlockUndo( pNewDocShell, rRange, SC_UNDO_SIMPLE ),
     pUndoDoc( pNewUndoDoc )
 {
 }

@@ -902,6 +902,7 @@ public:
                                        const ScCellMergeOption& rOption,
                                        ScDocument* pNewUndoDoc );
                     ScUndoRemoveMerge( ScDocShell* pNewDocShell,
+                                       const ScRange& rRange,
                                        ScDocument* pNewUndoDoc );
     virtual         ~ScUndoRemoveMerge() override;
 

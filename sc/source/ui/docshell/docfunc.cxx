@@ -1907,7 +1907,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     {
                         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
                         pUndoDoc->InitUndo( &rDoc, *aMark.begin(), *aMark.rbegin());
-                        pUndoRemoveMerge.reset( new ScUndoRemoveMerge( &rDocShell, pUndoDoc ));
+                        pUndoRemoveMerge.reset( new ScUndoRemoveMerge( &rDocShell, rRange, pUndoDoc ));
                     }
 
                     for( ::std::vector<ScRange>::const_iterator iIter( qIncreaseRange.begin()); iIter != qIncreaseRange.end(); ++iIter )
@@ -2355,7 +2355,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     {
                         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
                         pUndoDoc->InitUndo( &rDoc, *aMark.begin(), *aMark.rbegin());
-                        pUndoRemoveMerge.reset( new ScUndoRemoveMerge( &rDocShell, pUndoDoc ));
+                        pUndoRemoveMerge.reset( new ScUndoRemoveMerge( &rDocShell, rRange, pUndoDoc ));
                     }
 
                     for( ::std::vector<ScRange>::const_iterator iIter( qDecreaseRange.begin()); iIter != qDecreaseRange.end(); ++iIter )
