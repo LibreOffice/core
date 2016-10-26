@@ -40,6 +40,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 
+
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -238,7 +239,6 @@ void XMLRedlineExport::ExportUndoChangeInfo(
         OUStringBuffer sBuf;
         ::sax::Converter::convertDateTime(sBuf, aDateTime, nullptr);
         rExport.AddAttribute(XML_NAMESPACE_DC, XML_DATE, sBuf.makeStringAndClear());
-
         SvXMLElementExport aChange(rExport, XML_NAMESPACE_OFFICE,
                                     XML_CHANGE, true, true);
         ExportUndoChangedRegion(rPropSet, nParaIdx);

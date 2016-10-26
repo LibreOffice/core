@@ -575,7 +575,7 @@ com_sun_star_comp_Writer_XMLUndoExporter_get_implementation(css::uno::XComponent
         css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLUndoExporter"),
-                SvXMLExportFlags::UNDO));
+                SvXMLExportFlags::UNDO | SvXMLExportFlags::AUTOSTYLES));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
@@ -625,7 +625,7 @@ com_sun_star_comp_Writer_XMLOasisUndoExporter_get_implementation(css::uno::XComp
         css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLOasisUndoExporter"),
-                SvXMLExportFlags::UNDO | SvXMLExportFlags::OASIS));
+                SvXMLExportFlags::UNDO | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
