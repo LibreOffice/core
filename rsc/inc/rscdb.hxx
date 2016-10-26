@@ -109,8 +109,6 @@ class RscTypCont
     RscTop *    InitClassMenuItem( RscTop * pSuper );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );
 
-    RscTop *    InitClassSfxSlotInfo( RscTop * pSuper );
-
 public:
     RscBool             aBool;
     RscRange            aShort;

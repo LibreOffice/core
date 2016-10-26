@@ -63,10 +63,6 @@ public:
 
     void            Pre_dtor() override;
     ERRTYPE         SetVariable( Atom nVarName, RscTop * pClass,
-                                 RSCINST * pDflt,
-                                 RSCVAR nVarType, SfxSlotInfo nMask,
-                                 Atom nDataBaseName = InvalidAtom ) override;
-    ERRTYPE         SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt = nullptr,
                                  RSCVAR nVarType = 0, sal_uInt32 nMask = 0,
                                  Atom nDataBaseName = InvalidAtom ) override;

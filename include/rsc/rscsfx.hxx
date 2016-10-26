@@ -19,8 +19,6 @@
 #ifndef INCLUDED_RSC_RSCSFX_HXX
 #define INCLUDED_RSC_RSCSFX_HXX
 
-#define RSC_SFX_SLOT_INFO          (0x100 + 0x203)
-
 //========== S F X =======================================
 // This is used as a flags enum in sw/, but only there,
 // so I don't pull in o3tl::typed_flags here
@@ -34,12 +32,6 @@ enum class SfxStyleFamily {
     Table   = 0x20,
     Cell    = 0x40,
     All     = 0x7fff
-};
-
-// SfxSlotInfo
-enum class SfxSlotInfo {
-    SlotName  = 0x1,
-    HelpText  = 0x2
 };
 
 #endif
