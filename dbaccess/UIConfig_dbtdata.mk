@@ -13,6 +13,10 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/dbtdata,\
 	dbaccess/uiconfig/dbtdata/menubar/menubar \
 ))
 
+$(eval $(call gb_UIConfig_add_popupmenufiles,modules/dbtdata,\
+	dbaccess/uiconfig/dbtdata/popupmenu/refreshdata \
+))
+
 $(eval $(call gb_UIConfig_add_toolbarfiles,modules/dbtdata,\
 	dbaccess/uiconfig/dbtdata/toolbar/toolbar \
 ))

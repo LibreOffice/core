@@ -515,6 +515,11 @@
           <value xml:lang="en-US">Preview</value>
         </prop>
       </node>
+      <node oor:name=".uno:DBRebuildData" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Rebuild</value>
+        </prop>
+      </node>
       <node oor:name=".uno:DBNewReport" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Report...</value>

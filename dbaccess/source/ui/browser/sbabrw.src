@@ -143,23 +143,4 @@ String STR_COULDNOTCONNECT_DATASOURCE
     Text [ en-US ] = "The connection to the data source \"$name$\" could not be established.";
 };
 
-Menu RID_MENU_REFRESH_DATA
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = ID_BROWSER_REFRESH ;
-            Text [ en-US ] = "Refresh";
-            Command = ".uno:Refresh";
-        };
-        MenuItem
-        {
-            Identifier = ID_BROWSER_REFRESH_REBUILD;
-            Command = ".uno:DBRebuildData";
-            Text [ en-US ] = "Rebuild";
-        };
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
