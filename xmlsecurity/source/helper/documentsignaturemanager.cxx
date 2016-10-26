@@ -317,14 +317,15 @@ void DocumentSignatureManager::remove(sal_uInt16 nPosition)
     {
         // Something not ZIP based, try PDF.
         uno::Reference<io::XInputStream> xInputStream(mxSignatureStream, uno::UNO_QUERY);
-        if (PDFSignatureHelper::RemoveSignature(xInputStream, nPosition))
+        if (!PDFSignatureHelper::RemoveSignature(xInputStream, nPosition))
         {
             SAL_WARN("xmlsecurity.helper", "PDFSignatureHelper::RemoveSignature() failed");
             return;
         }
 
-        // Only erase when the removal was successfull, it may fail for PDF.
-        maCurrentSignatureInformations.erase(maCurrentSignatureInformations.begin() + nPosition);
+        // Only erase when the removal was successful, it may fail for PDF.
+        // Also, erase the requested and all following signatures, as PDF signatures are always chained.
+        maCurrentSignatureInformations.erase(maCurrentSignatureInformations.begin() + nPosition, maCurrentSignatureInformations.end());
         return;
     }
 
