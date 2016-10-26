@@ -488,8 +488,10 @@ void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) co
                 OControlModel::getFastPropertyValue( rValue, nHandle );
     }
 }
+
 sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
-                                                    sal_Int32 nHandle, const Any& rValue )throw( IllegalArgumentException )
+                                                    sal_Int32 nHandle, const Any& rValue )
+    throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     bool bModified(false);
     switch (nHandle)
