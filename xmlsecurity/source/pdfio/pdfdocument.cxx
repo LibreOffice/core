@@ -306,7 +306,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     // Write signature object.
     sal_Int32 nSignatureId = m_aXRef.size();
     sal_uInt64 nSignatureOffset = m_aEditBuffer.Tell();
-    m_aXRef.push_back(nSignatureOffset);
+    m_aXRef[nSignatureId] = nSignatureOffset;
+    m_aXRefDirty[nSignatureId] = true;
     OStringBuffer aSigBuffer;
     aSigBuffer.append(nSignatureId);
     aSigBuffer.append(" 0 obj\n");
@@ -347,7 +348,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
 
     // Write appearance object.
     sal_Int32 nAppearanceId = m_aXRef.size();
-    m_aXRef.push_back(m_aEditBuffer.Tell());
+    m_aXRef[nAppearanceId] = m_aEditBuffer.Tell();
+    m_aXRefDirty[nAppearanceId] = true;
     m_aEditBuffer.WriteUInt32AsString(nAppearanceId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<</Type/XObject\n/Subtype/Form\n");
@@ -356,7 +358,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
 
     // Write the Annot object, references nSignatureId and nAppearanceId.
     sal_Int32 nAnnotId = m_aXRef.size();
-    m_aXRef.push_back(m_aEditBuffer.Tell());
+    m_aXRef[nAnnotId] = m_aEditBuffer.Tell();
+    m_aXRefDirty[nAnnotId] = true;
     m_aEditBuffer.WriteUInt32AsString(nAnnotId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<</Type/Annot/Subtype/Widget/F 132\n");
@@ -394,6 +397,7 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         return false;
     }
     m_aXRef[nFirstPageId] = m_aEditBuffer.Tell();
+    m_aXRefDirty[nFirstPageId] = true;
     m_aEditBuffer.WriteUInt32AsString(nFirstPageId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<<");
@@ -446,6 +450,7 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         return false;
     }
     m_aXRef[nCatalogId] = m_aEditBuffer.Tell();
+    m_aXRefDirty[nCatalogId] = true;
     m_aEditBuffer.WriteUInt32AsString(nCatalogId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<<");
@@ -491,13 +496,18 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
 
     // Write the xref table.
     sal_uInt64 nXRefOffset = m_aEditBuffer.Tell();
-    m_aEditBuffer.WriteCharPtr("xref\n0 ");
-    m_aEditBuffer.WriteUInt32AsString(m_aXRef.size());
-    m_aEditBuffer.WriteCharPtr("\n");
-    for (size_t nObject = 0; nObject < m_aXRef.size(); ++nObject)
+    m_aEditBuffer.WriteCharPtr("xref\n");
+    for (const auto& rXRef : m_aXRef)
     {
+        size_t nObject = rXRef.first;
+        size_t nOffset = rXRef.second;
+        if (!m_aXRefDirty[nObject])
+            continue;
+
+        m_aEditBuffer.WriteUInt32AsString(nObject);
+        m_aEditBuffer.WriteCharPtr(" 1\n");
         OStringBuffer aBuffer;
-        aBuffer.append(static_cast<sal_Int32>(m_aXRef[nObject]));
+        aBuffer.append(static_cast<sal_Int32>(nOffset));
         while (aBuffer.getLength() < 10)
             aBuffer.insert(0, "0");
         if (nObject == 0)
@@ -612,41 +622,14 @@ bool PDFDocument::Write(SvStream& rStream)
     return rStream.good();
 }
 
-bool PDFDocument::Read(SvStream& rStream)
+bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
 {
-    // Check file magic.
-    std::vector<sal_Int8> aHeader(5);
-    rStream.Seek(0);
-    rStream.ReadBytes(aHeader.data(), aHeader.size());
-    if (aHeader[0] != '%' || aHeader[1] != 'P' || aHeader[2] != 'D' || aHeader[3] != 'F' || aHeader[4] != '-')
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: header mismatch");
-        return false;
-    }
-
-    // Allow later editing of the contents in-memory.
-    rStream.Seek(0);
-    m_aEditBuffer.WriteStream(rStream);
-
-    // Look up the offset of the xref table.
-    size_t nStartXRef = FindStartXRef(rStream);
-    SAL_INFO("xmlsecurity.pdfio", "PDFDocument::Read: nStartXRef is " << nStartXRef);
-    if (nStartXRef == 0)
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: found no xref statrt offset");
-        return false;
-    }
-    rStream.Seek(nStartXRef);
-    char ch;
-    ReadXRef(rStream);
-
-    // Then we can tokenize the stream.
-    rStream.Seek(0);
     bool bInXRef = false;
     // The next number will be an xref offset.
     bool bInStartXRef = false;
     while (true)
     {
+        char ch;
         rStream.ReadChar(ch);
         if (rStream.IsEof())
             break;
@@ -655,10 +638,16 @@ bool PDFDocument::Read(SvStream& rStream)
         {
         case '%':
         {
-            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFCommentElement(*this)));
+            auto pComment = new PDFCommentElement(*this);
+            m_aElements.push_back(std::unique_ptr<PDFElement>(pComment));
             rStream.SeekRel(-1);
             if (!m_aElements.back()->Read(rStream))
                 return false;
+            if (bPartial && !m_aEOFs.empty() && m_aEOFs.back() == rStream.Tell())
+            {
+                // Found EOF and partial parsing requested, we're done.
+                return true;
+            }
             break;
         }
         case '<':
@@ -742,7 +731,7 @@ bool PDFDocument::Read(SvStream& rStream)
                     size_t nElements = m_aElements.size();
                     if (nElements < 2)
                     {
-                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: expected at least two tokens before 'obj' or 'R' keyword");
+                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: expected at least two tokens before 'obj' or 'R' keyword");
                         return false;
                     }
 
@@ -750,7 +739,7 @@ bool PDFDocument::Read(SvStream& rStream)
                     auto pGenerationNumber = dynamic_cast<PDFNumberElement*>(m_aElements[nElements - 1].get());
                     if (!pObjectNumber || !pGenerationNumber)
                     {
-                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: missing object or generation number before 'obj' or 'R' keyword");
+                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: missing object or generation number before 'obj' or 'R' keyword");
                         return false;
                     }
 
@@ -791,7 +780,7 @@ bool PDFDocument::Read(SvStream& rStream)
                             break;
                         }
 
-                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: found no Length key for stream keyword");
+                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: found no Length key for stream keyword");
                         return false;
                     }
 
@@ -833,7 +822,7 @@ bool PDFDocument::Read(SvStream& rStream)
                 }
                 else
                 {
-                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: unexpected '" << aKeyword << "' keyword");
+                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: unexpected '" << aKeyword << "' keyword");
                     return false;
                 }
             }
@@ -841,7 +830,7 @@ bool PDFDocument::Read(SvStream& rStream)
             {
                 if (!isspace(ch))
                 {
-                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: unexpected character: " << ch);
+                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: unexpected character: " << ch);
                     return false;
                 }
             }
@@ -851,6 +840,57 @@ bool PDFDocument::Read(SvStream& rStream)
     }
 
     return true;
+}
+
+bool PDFDocument::Read(SvStream& rStream)
+{
+    // Check file magic.
+    std::vector<sal_Int8> aHeader(5);
+    rStream.Seek(0);
+    rStream.ReadBytes(aHeader.data(), aHeader.size());
+    if (aHeader[0] != '%' || aHeader[1] != 'P' || aHeader[2] != 'D' || aHeader[3] != 'F' || aHeader[4] != '-')
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: header mismatch");
+        return false;
+    }
+
+    // Allow later editing of the contents in-memory.
+    rStream.Seek(0);
+    m_aEditBuffer.WriteStream(rStream);
+
+    // Look up the offset of the xref table.
+    size_t nStartXRef = FindStartXRef(rStream);
+    SAL_INFO("xmlsecurity.pdfio", "PDFDocument::Read: nStartXRef is " << nStartXRef);
+    if (nStartXRef == 0)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: found no xref statrt offset");
+        return false;
+    }
+    while (true)
+    {
+        rStream.Seek(nStartXRef);
+        ReadXRef(rStream);
+        if (!Tokenize(rStream, /*bPartial=*/true))
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: failed to tokenizer trailer after xref");
+            return false;
+        }
+        auto pPrev = dynamic_cast<PDFNumberElement*>(m_pTrailer->Lookup("Prev"));
+        if (pPrev)
+            nStartXRef = pPrev->GetValue();
+
+        // Reset state, except object offsets and the edit buffer.
+        m_aElements.clear();
+        m_aStartXRefs.clear();
+        m_aEOFs.clear();
+        m_pTrailer = nullptr;
+        if (!pPrev)
+            break;
+    }
+
+    // Then we can tokenize the stream.
+    rStream.Seek(0);
+    return Tokenize(rStream, /*bPartial=*/false);
 }
 
 OString PDFDocument::ReadKeyword(SvStream& rStream)
@@ -911,60 +951,68 @@ void PDFDocument::ReadXRef(SvStream& rStream)
     }
 
     PDFDocument::SkipWhitespace(rStream);
-    PDFNumberElement aFirstObject;
-    if (!aFirstObject.Read(rStream))
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read first object number");
-        return;
-    }
 
-    if (aFirstObject.GetValue() != 0)
+    while (true)
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: expected first object number == 0");
-        return;
-    }
-
-    PDFDocument::SkipWhitespace(rStream);
-    PDFNumberElement aNumberOfEntries;
-    if (!aNumberOfEntries.Read(rStream))
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read number of entries");
-        return;
-    }
-
-    if (aNumberOfEntries.GetValue() <= 0)
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: expected one or more entries");
-        return;
-    }
-
-    size_t nSize = aNumberOfEntries.GetValue();
-    for (size_t nEntry = 0; nEntry < nSize; ++nEntry)
-    {
-        PDFDocument::SkipWhitespace(rStream);
-        PDFNumberElement aOffset;
-        if (!aOffset.Read(rStream))
+        PDFNumberElement aFirstObject;
+        if (!aFirstObject.Read(rStream))
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read offset");
+            // Next token is not a number, it'll be the trailer.
+            return;
+        }
+
+        if (aFirstObject.GetValue() < 0)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: expected first object number >= 0");
             return;
         }
 
         PDFDocument::SkipWhitespace(rStream);
-        PDFNumberElement aGenerationNumber;
-        if (!aGenerationNumber.Read(rStream))
+        PDFNumberElement aNumberOfEntries;
+        if (!aNumberOfEntries.Read(rStream))
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read generation number");
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read number of entries");
             return;
         }
 
-        PDFDocument::SkipWhitespace(rStream);
-        OString aKeyword = ReadKeyword(rStream);
-        if (aKeyword != "f" && aKeyword != "n")
+        if (aNumberOfEntries.GetValue() <= 0)
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: unexpected keyword");
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: expected one or more entries");
             return;
         }
-        m_aXRef.push_back(aOffset.GetValue());
+
+        size_t nSize = aNumberOfEntries.GetValue();
+        for (size_t nEntry = 0; nEntry < nSize; ++nEntry)
+        {
+            size_t nIndex = aFirstObject.GetValue() + nEntry;
+            PDFDocument::SkipWhitespace(rStream);
+            PDFNumberElement aOffset;
+            if (!aOffset.Read(rStream))
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read offset");
+                return;
+            }
+
+            PDFDocument::SkipWhitespace(rStream);
+            PDFNumberElement aGenerationNumber;
+            if (!aGenerationNumber.Read(rStream))
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: failed to read generation number");
+                return;
+            }
+
+            PDFDocument::SkipWhitespace(rStream);
+            OString aKeyword = ReadKeyword(rStream);
+            if (aKeyword != "f" && aKeyword != "n")
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: unexpected keyword");
+                return;
+            }
+            m_aXRef[nIndex] = aOffset.GetValue();
+            // Initially only the first entry is dirty.
+            m_aXRefDirty[nIndex] = nIndex == 0;
+            PDFDocument::SkipWhitespace(rStream);
+        }
     }
 }
 
@@ -988,13 +1036,14 @@ void PDFDocument::SkipWhitespace(SvStream& rStream)
 
 size_t PDFDocument::GetObjectOffset(size_t nIndex) const
 {
-    if (nIndex >= m_aXRef.size())
+    auto it = m_aXRef.find(nIndex);
+    if (it == m_aXRef.end())
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetObjectOffset: wanted to look up index #" << nIndex);
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetObjectOffset: wanted to look up index #" << nIndex << ", but failed");
         return 0;
     }
 
-    return m_aXRef[nIndex];
+    return it->second;
 }
 
 const std::vector< std::unique_ptr<PDFElement> >& PDFDocument::GetElements()
@@ -1461,6 +1510,11 @@ bool PDFNumberElement::Read(SvStream& rStream)
     m_nOffset = rStream.Tell();
     char ch;
     rStream.ReadChar(ch);
+    if (!isdigit(ch) && ch != '-')
+    {
+        rStream.SeekRel(-1);
+        return false;
+    }
     while (!rStream.IsEof())
     {
         if (!isdigit(ch) && ch != '-')
