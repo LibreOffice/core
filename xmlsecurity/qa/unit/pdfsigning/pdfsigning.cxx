@@ -29,17 +29,25 @@ class PDFSigningTest : public test::BootstrapFixture
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
 
+    /**
+     * Sign rInURL once and save the result as rOutURL, asserting that rInURL
+     * had nOriginalSignatureCount signatures.
+     */
+    void sign(const OUString& rInURL, const OUString& rOutURL, size_t nOriginalSignatureCount);
 public:
     PDFSigningTest();
     void setUp() override;
 
     /// Test adding a new signature to a previously unsigned file.
     void testPDFAdd();
+    /// Test signing a previously unsigned file twice.
+    void testPDFAdd2();
     /// Test remove a signature from a previously signed file.
     void testPDFRemove();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
+    CPPUNIT_TEST(testPDFAdd2);
     CPPUNIT_TEST(testPDFRemove);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -67,25 +75,20 @@ void PDFSigningTest::setUp()
 #endif
 }
 
-void PDFSigningTest::testPDFAdd()
+void PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_t nOriginalSignatureCount)
 {
-#ifndef _WIN32
-    // Make sure that no.pdf has no signatures.
+    // Make sure that input has nOriginalSignatureCount signatures.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
     xmlsecurity::pdfio::PDFDocument aDocument;
     {
-        OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
-        OUString aInURL = aSourceDir + "no.pdf";
-        SvFileStream aStream(aInURL, StreamMode::READ);
+        SvFileStream aStream(rInURL, StreamMode::READ);
         CPPUNIT_ASSERT(aDocument.Read(aStream));
         std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
-        CPPUNIT_ASSERT(aSignatures.empty());
+        CPPUNIT_ASSERT_EQUAL(nOriginalSignatureCount, aSignatures.size());
     }
 
-    // Sign it and write out the result as add.pdf.
-    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_signing.test.user/");
-    OUString aOutURL = aTargetDir + "add.pdf";
+    // Sign it and write out the result.
     {
         uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
         uno::Sequence<uno::Reference<security::XCertificate>> aCertificates = xSecurityEnvironment->getPersonalCertificates();
@@ -95,21 +98,54 @@ void PDFSigningTest::testPDFAdd()
             return;
         }
         CPPUNIT_ASSERT(aDocument.Sign(aCertificates[0], "test"));
-        SvFileStream aOutStream(aOutURL, StreamMode::WRITE | StreamMode::TRUNC);
+        SvFileStream aOutStream(rOutURL, StreamMode::WRITE | StreamMode::TRUNC);
         CPPUNIT_ASSERT(aDocument.Write(aOutStream));
     }
 
     // Read back the signed pdf and make sure that it has one valid signature.
     {
-        SvFileStream aStream(aOutURL, StreamMode::READ);
+        SvFileStream aStream(rOutURL, StreamMode::READ);
         xmlsecurity::pdfio::PDFDocument aVerifyDocument;
         CPPUNIT_ASSERT(aVerifyDocument.Read(aStream));
         std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aVerifyDocument.GetSignatureWidgets();
-        // This was 0 when PDFDocument::Sign() silently returned success, without doing anything.
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aSignatures.size());
-        SignatureInformation aInfo(0);
-        CPPUNIT_ASSERT(xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[0], aInfo));
+        // This was nOriginalSignatureCount when PDFDocument::Sign() silently returned success, without doing anything.
+        CPPUNIT_ASSERT_EQUAL(nOriginalSignatureCount + 1, aSignatures.size());
+        for (size_t i = 0; i < aSignatures.size(); ++i)
+        {
+            SignatureInformation aInfo(i);
+            bool bLast = i == aSignatures.size() - 1;
+            CPPUNIT_ASSERT(xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], aInfo, bLast));
+        }
     }
+}
+
+void PDFSigningTest::testPDFAdd()
+{
+#ifndef _WIN32
+    OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
+    OUString aInURL = aSourceDir + "no.pdf";
+    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_signing.test.user/");
+    OUString aOutURL = aTargetDir + "add.pdf";
+    sign(aInURL, aOutURL, 0);
+#endif
+}
+
+void PDFSigningTest::testPDFAdd2()
+{
+#ifndef _WIN32
+    // Sign.
+    OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
+    OUString aInURL = aSourceDir + "no.pdf";
+    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_signing.test.user/");
+    OUString aOutURL = aTargetDir + "add.pdf";
+    sign(aInURL, aOutURL, 0);
+
+    // Sign again.
+    aInURL = aTargetDir + "add.pdf";
+    aOutURL = aTargetDir + "add2.pdf";
+    // This failed with "second range end is not the end of the file" for the
+    // first signature.
+    sign(aInURL, aOutURL, 1);
 #endif
 }
 
@@ -128,7 +164,7 @@ void PDFSigningTest::testPDFRemove()
         std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aSignatures.size());
         SignatureInformation aInfo(0);
-        CPPUNIT_ASSERT(xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[0], aInfo));
+        CPPUNIT_ASSERT(xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[0], aInfo, /*bLast=*/true));
     }
 
     // Remove the signature and write out the result as remove.pdf.
