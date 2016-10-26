@@ -95,7 +95,6 @@ public:
  */
 class FormulaLogger
 {
-    bool mbState = false; // Just to avoid loplugin:staticmethods
 public:
 
     static FormulaLogger get()
@@ -105,15 +104,14 @@ public:
 
     class GroupScope
     {
-        bool mbState = false; // Just to avoid loplugin:staticmethods
     public:
-        void addMessage( const OUString& /*rMsg*/ ) { mbState = !mbState; }
-        void setCalcComplete() { mbState = !mbState; }
+        void addMessage( const OUString& /*rMsg*/ ) { (void) this; /* loplugin:staticmethods */ }
+        void setCalcComplete() { (void) this; /* loplugin:staticmethods */ }
     };
 
     GroupScope enterGroup( const ScDocument& /*rDoc*/, const ScFormulaCell& /*rCell*/ )
     {
-        mbState = !mbState;
+        (void) this; /* loplugin:staticmethods */
         return GroupScope();
     }
 };
