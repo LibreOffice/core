@@ -173,7 +173,7 @@ namespace frm
 
     sal_Bool OScrollBarModel::convertFastPropertyValue(
                 Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
-                throw ( IllegalArgumentException )
+                throw ( IllegalArgumentException, RuntimeException, std::exception )
     {
         bool bModified( false );
         switch ( _nHandle )
