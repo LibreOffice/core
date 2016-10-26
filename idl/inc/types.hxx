@@ -34,7 +34,7 @@ public:
     tools::SvRef<SvMetaType> aType;
     SvIdentifier             aSlotId;
                         SvMetaAttribute();
-                        SvMetaAttribute( SvMetaType * );
+    SvMetaAttribute( SvMetaType * );
 
     void                SetSlotId( const SvIdentifier & rId )
                         { aSlotId = rId; }
@@ -59,8 +59,6 @@ class SvMetaType : public SvMetaReference
     void                WriteSfxItem( const OString& rItemName, SvIdlDataBase & rBase,
                                       SvStream & rOutStm );
 protected:
-    bool                ReadNamesSvIdl( SvTokenStream & rInStm );
-
     bool                ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 public:
             SvMetaType();
