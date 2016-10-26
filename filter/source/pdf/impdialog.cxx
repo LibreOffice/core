@@ -28,6 +28,8 @@
 #include "sfx2/passwd.hxx"
 #include "svtools/miscopt.hxx"
 
+#include "comphelper/propertyvalue.hxx"
+#include "comphelper/sequence.hxx"
 #include "comphelper/storagehelper.hxx"
 
 #include "com/sun/star/text/XTextRange.hpp"
@@ -449,72 +451,26 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteBool( "EnableCopyingOfContent", mbCanCopyOrExtract );
     maConfigItem.WriteBool( "EnableTextAccessForAccessibilityTools", mbCanExtractForAccessibility );
 
-    Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
+    std::vector<beans::PropertyValue> aRet;
 
-    // FIXME: OMG, this is horrible coding style...
-    int nElementAdded = 12;
-
-    aRet.realloc( aRet.getLength() + nElementAdded );
-
-    sal_uInt32 const nLength(aRet.getLength());
-    aRet[ nLength - nElementAdded ].Name = "Watermark";
-    aRet[ nLength - nElementAdded ].Value <<= maWatermarkText;
-    nElementAdded--;
-
-    aRet[ nLength - nElementAdded ].Name = "EncryptFile";
-    aRet[ nLength - nElementAdded ].Value <<= mbEncrypt;
-    nElementAdded--;
-
-    aRet[ nLength - nElementAdded ].Name = "PreparedPasswords";
-    aRet[ nLength - nElementAdded ].Value <<= mxPreparedPasswords;
-    nElementAdded--;
-
-    aRet[ nLength - nElementAdded ].Name = "RestrictPermissions";
-    aRet[ nLength - nElementAdded ].Value <<= mbRestrictPermissions;
-    nElementAdded--;
-
-    aRet[ nLength - nElementAdded ].Name = "PreparedPermissionPassword";
-    aRet[ nLength - nElementAdded ].Value <<= maPreparedOwnerPassword;
-    nElementAdded--;
-
+    aRet.push_back(comphelper::makePropertyValue("Watermark", maWatermarkText));
+    aRet.push_back(comphelper::makePropertyValue("EncryptFile", mbEncrypt));
+    aRet.push_back(comphelper::makePropertyValue("PreparedPasswords", mxPreparedPasswords));
+    aRet.push_back(comphelper::makePropertyValue("RestrictPermissions", mbRestrictPermissions));
+    aRet.push_back(comphelper::makePropertyValue("PreparedPermissionPassword", maPreparedOwnerPassword));
     if( mbIsRangeChecked )
-    {
-        aRet[ nLength - nElementAdded ].Name = "PageRange";
-        aRet[ nLength - nElementAdded ].Value <<= msPageRange;
-        nElementAdded--;
-    }
+        aRet.push_back(comphelper::makePropertyValue("PageRange", msPageRange));
     else if( mbSelectionIsChecked )
-    {
-        aRet[ nLength - nElementAdded ].Name = "Selection";
-        aRet[ nLength - nElementAdded ].Value = maSelection;
-        nElementAdded--;
-    }
+        aRet.push_back(comphelper::makePropertyValue("Selection", maSelection));
 
-    aRet[ nLength - nElementAdded ].Name = "SignatureLocation";
-    aRet[ nLength - nElementAdded ].Value <<= msSignLocation;
-    nElementAdded--;
+    aRet.push_back(comphelper::makePropertyValue("SignatureLocation", msSignLocation));
+    aRet.push_back(comphelper::makePropertyValue("SignatureReason", msSignReason));
+    aRet.push_back(comphelper::makePropertyValue("SignatureContactInfo", msSignContact));
+    aRet.push_back(comphelper::makePropertyValue("SignaturePassword", msSignPassword));
+    aRet.push_back(comphelper::makePropertyValue("SignatureCertificate", maSignCertificate));
+    aRet.push_back(comphelper::makePropertyValue("SignatureTSA", msSignTSA));
 
-    aRet[ nLength - nElementAdded ].Name = "SignatureReason";
-    aRet[ nLength - nElementAdded ].Value <<= msSignReason;
-    nElementAdded--;
-
-    aRet[ nLength - nElementAdded ].Name = "SignatureContactInfo";
-    aRet[ nLength - nElementAdded ].Value <<= msSignContact;
-    nElementAdded--;
-
-    aRet[ nLength - nElementAdded ].Name = "SignaturePassword";
-    aRet[ nLength - nElementAdded ].Value <<= msSignPassword;
-    nElementAdded--;
-
-    aRet[ nLength - nElementAdded ].Name = "SignatureCertificate";
-    aRet[ nLength - nElementAdded ].Value <<= maSignCertificate;
-    nElementAdded--;
-
-    aRet[ nLength - nElementAdded ].Name = "SignatureTSA";
-    aRet[ nLength - nElementAdded ].Value <<= msSignTSA;
-    nElementAdded--;
-
-    return aRet;
+    return comphelper::concatSequences(maConfigItem.GetFilterData(), comphelper::containerToSequence(aRet));
 }
 
 
