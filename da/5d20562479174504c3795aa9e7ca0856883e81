@@ -1,0 +1,8 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+1: Giuseppe Castagno <giuseppe.castagno@acca-esse.eu>
+Code-Review+2: Michael Stahl <mstahl@redhat.com>
+Submitted-by: Michael Stahl <mstahl@redhat.com>
+Submitted-at: Wed, 26 Oct 2016 12:14:04 +0000
+Reviewed-on: https://gerrit.libreoffice.org/29781
+Project: core
+Branch: refs/heads/master
