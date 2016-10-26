@@ -33,10 +33,12 @@
 #include <memory>
 #include <list>
 #include <map>
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
+
+#include "DavURIObject.hxx"
 
 namespace webdav_ucp
 {
@@ -90,7 +92,7 @@ namespace webdav_ucp
         /// target time when this capability becomes stale
         sal_uInt32 m_nStaleTime;
         sal_uInt32 m_nRequestedTimeLife;
-        OUString  m_sURL;
+        std::shared_ptr<DavURIObject>  m_rURL;
         OUString  m_sRedirectedURL;
 
         /// The cached HTT response status code. It's 0 if the code was dealt with and there is no need to cache it
@@ -123,8 +125,17 @@ namespace webdav_ucp
         sal_uInt32 getRequestedTimeLife() const { return m_nRequestedTimeLife; };
         void setRequestedTimeLife( const sal_uInt32 nRequestedTimeLife ) { m_nRequestedTimeLife = nRequestedTimeLife; };
 
-        const OUString & getURL() const { return m_sURL; };
-        void setURL( const OUString & sURL ) { m_sURL = sURL; };
+        std::shared_ptr<DavURIObject> getURL() const {
+            return std::shared_ptr<DavURIObject>( m_rURL );
+        };
+
+        void setURL( const std::shared_ptr<DavURIObject> rURL ) {
+            m_rURL = rURL;
+        };
+
+        void clearURL() {
+            m_rURL = std::make_shared<DavURIObject>( DavURIObject() );
+        };
 
         const OUString & getRedirectedURL() const { return m_sRedirectedURL; };
         void setRedirectedURL( const OUString & sRedirectedURL ) { m_sRedirectedURL = sRedirectedURL; };
@@ -151,7 +162,7 @@ namespace webdav_ucp
             m_aAllowedMethods.clear();
             m_nStaleTime = 0;
             m_nRequestedTimeLife = 0;
-            m_sURL.clear();
+            m_rURL = std::make_shared<DavURIObject>( DavURIObject() );
             m_sRedirectedURL.clear();
             m_nHttpResponseStatusCode = 0;
             m_sHttpResponseStatusText.clear();
@@ -182,14 +193,6 @@ namespace webdav_ucp
 
         void setHeadAllowed( const OUString & rURL, bool HeadAllowed = true );
 
-    private:
-
-        /// remove the last '/' in aUrl, if it exists
-        static void normalizeURLLastChar( OUString& aUrl ) {
-            if ( aUrl.getLength() > 1 &&
-                 ( ( aUrl.lastIndexOf( '/' ) + 1 ) == aUrl.getLength() ) )
-                aUrl = aUrl.copy(0, aUrl.getLength() - 1 );
-        };
     };
 
     enum Depth { DAVZERO = 0, DAVONE = 1, DAVINFINITY = -1 };
