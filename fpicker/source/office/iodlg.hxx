@@ -65,7 +65,7 @@ private:
     VclPtr<SvtFileView>         _pFileView;
     VclPtr<Splitter>            _pSplitter;
     ::svt::IFilePickerListener* _pFileNotifier;
-    SvtExpFileDlg_Impl*         _pImp;
+    std::unique_ptr<SvtExpFileDlg_Impl>  pImpl;
     PickerFlags                 _nPickerFlags;
     bool                        _bIsInExecute   :   1;
 
