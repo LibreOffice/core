@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_5989f1c9",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-10-26T13:56:29Z",
+      "side": 1,
+      "message": "isn\u0027t there a better term than old/new? What if \"new\" gets superseeded by \"newer\"?",
+      "revId": "469db432a67f81979550afa18ad3145464a515f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
