@@ -1790,6 +1790,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTCELLS );
     if (bRecord)
         rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
+    std::unique_ptr<ScUndoRemoveMerge> pUndoRemoveMerge;
 
     itr = aMark.begin();
     for (; itr != itrEnd && nTabCount; ++itr)
@@ -1897,12 +1898,19 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
                 if( !qIncreaseRange.empty() )
                 {
+                    if (bRecord && !pUndoRemoveMerge)
+                    {
+                        ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+                        pUndoDoc->InitUndo( &rDoc, *aMark.begin(), *aMark.rbegin());
+                        pUndoRemoveMerge.reset( new ScUndoRemoveMerge( &rDocShell, rRange, pUndoDoc ));
+                    }
+
                     for( ::std::vector<ScRange>::const_iterator iIter( qIncreaseRange.begin()); iIter != qIncreaseRange.end(); ++iIter )
                     {
                         ScRange aRange( *iIter );
                         if( rDoc.HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
                         {
-                            UnmergeCells( aRange, true );
+                            UnmergeCells( aRange, bRecord, pUndoRemoveMerge.get() );
                         }
                     }
                 }
@@ -1916,6 +1924,11 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 return false;
             }
         }
+    }
+
+    if (bRecord && pUndoRemoveMerge)
+    {
+        rDocShell.GetUndoManager()->AddUndoAction( pUndoRemoveMerge.release());
     }
 
     switch (eCmd)
@@ -2218,6 +2231,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DELETECELLS );
     if (bRecord)
         rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
+    std::unique_ptr<ScUndoRemoveMerge> pUndoRemoveMerge;
 
     itr = aMark.begin();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
@@ -2327,12 +2341,19 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
                 if( !qDecreaseRange.empty() )
                 {
+                    if (bRecord && !pUndoRemoveMerge)
+                    {
+                        ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+                        pUndoDoc->InitUndo( &rDoc, *aMark.begin(), *aMark.rbegin());
+                        pUndoRemoveMerge.reset( new ScUndoRemoveMerge( &rDocShell, rRange, pUndoDoc ));
+                    }
+
                     for( ::std::vector<ScRange>::const_iterator iIter( qDecreaseRange.begin()); iIter != qDecreaseRange.end(); ++iIter )
                     {
                         ScRange aRange( *iIter );
                         if( rDoc.HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
                         {
-                            UnmergeCells( aRange, true );
+                            UnmergeCells( aRange, bRecord, pUndoRemoveMerge.get() );
                         }
                     }
                 }
@@ -2345,6 +2366,11 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 return false;
             }
         }
+    }
+
+    if (bRecord && pUndoRemoveMerge)
+    {
+        rDocShell.GetUndoManager()->AddUndoAction( pUndoRemoveMerge.release());
     }
 
     //      ausfuehren
@@ -2794,7 +2820,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
-        UnmergeCells( aPasteDest, false );
+        UnmergeCells( aPasteDest, false, nullptr );
 
     bool bDestHeight = AdjustRowHeight(
                             ScRange( 0,nDestRow,nDestTab, MAXCOL,nDestEndRow,nDestEndTab ),
@@ -4777,17 +4803,17 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
     return true;
 }
 
-bool ScDocFunc::UnmergeCells( const ScRange& rRange, bool bRecord )
+bool ScDocFunc::UnmergeCells( const ScRange& rRange, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge )
 {
     ScCellMergeOption aOption(rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
     SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = rRange.aEnd.Tab();
     for (SCTAB i = nTab1; i <= nTab2; ++i)
         aOption.maTabs.insert(i);
 
-    return UnmergeCells(aOption, bRecord);
+    return UnmergeCells(aOption, bRecord, pUndoRemoveMerge);
 }
 
-bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord )
+bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge )
 {
     using ::std::set;
 
@@ -4801,7 +4827,8 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord )
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScDocument* pUndoDoc = nullptr;
+    ScDocument* pUndoDoc = (pUndoRemoveMerge ? pUndoRemoveMerge->GetUndoDoc() : nullptr);
+    assert( pUndoDoc || !pUndoRemoveMerge );
     for (set<SCTAB>::const_iterator itr = rOption.maTabs.begin(), itrEnd = rOption.maTabs.end();
           itr != itrEnd; ++itr)
     {
@@ -4844,8 +4871,17 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord )
 
     if (bRecord)
     {
-        rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoRemoveMerge( &rDocShell, rOption, pUndoDoc ) );
+        if (pUndoRemoveMerge)
+        {
+            // If pUndoRemoveMerge was passed, the caller is responsible for
+            // adding it to Undo. Just add the current option.
+            pUndoRemoveMerge->AddCellMergeOption( rOption);
+        }
+        else
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                    new ScUndoRemoveMerge( &rDocShell, rOption, pUndoDoc ) );
+        }
     }
     aModificator.SetDocumentModified();
 

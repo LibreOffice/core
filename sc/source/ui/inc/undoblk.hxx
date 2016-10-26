@@ -902,6 +902,9 @@ public:
                     ScUndoRemoveMerge( ScDocShell* pNewDocShell,
                                        const ScCellMergeOption& rOption,
                                        ScDocument* pNewUndoDoc );
+                    ScUndoRemoveMerge( ScDocShell* pNewDocShell,
+                                       const ScRange& rRange,
+                                       ScDocument* pNewUndoDoc );
     virtual         ~ScUndoRemoveMerge();
 
     virtual void    Undo() override;
@@ -911,11 +914,14 @@ public:
 
     virtual OUString GetComment() const override;
 
+    ScDocument*     GetUndoDoc();
+    void            AddCellMergeOption( const ScCellMergeOption& rOption );
+
 private:
     void            SetCurTab();
 
-    ScCellMergeOption maOption;
-    ScDocument*     pUndoDoc;
+    std::vector<ScCellMergeOption> maOptions;
+    ScDocument*                    pUndoDoc;
 };
 
 class ScUndoBorder: public ScBlockUndo
