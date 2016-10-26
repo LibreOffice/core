@@ -1637,8 +1637,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         if ( bError )
                         {
                             DAVOptions aDAVOptionsException;
-
-                            aDAVOptionsException.setURL( aTargetURL );
+                            std::shared_ptr<DavURLObject> xURL = std::make_shared<DavURLObject>( DavURLObject( aTargetURL ) );
+                            aDAVOptionsException.setURL( xURL );
                             // check if the error was SC_NOT_FOUND, meaning that the
                             // GET fall back didn't succeeded and the element is really missing
                             // we will consider the resource SC_GONE (410) for some time
@@ -4045,6 +4045,7 @@ void Content::getResourceOptions(
     // first check if in cache, if not, then send method to server
     if ( !aStaticDAVOptionsCache.getDAVOptions( aTargetURL, aDAVOptions ) )
     {
+        std::shared_ptr<DavURLObject> xTargetURL = std::make_shared<DavURLObject>( DavURLObject( aTargetURL ) );
         try
         {
             rResAccess->OPTIONS( aDAVOptions, xEnv );
@@ -4067,7 +4068,7 @@ void Content::getResourceOptions(
                 aRedirURL.clear();
             }
             // cache this URL's option
-            aDAVOptions.setURL( aTargetURL );
+            aDAVOptions.setURL( xTargetURL );
             aDAVOptions.setRedirectedURL( aRedirURL );
             aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                   nLifeTime );
@@ -4078,7 +4079,7 @@ void Content::getResourceOptions(
             aStaticDAVOptionsCache.removeDAVOptions( aTargetURL );
             rResAccess->resetUri();
 
-            aDAVOptions.setURL( aTargetURL );
+            aDAVOptions.setURL( xTargetURL );
             aDAVOptions.setRedirectedURL( aRedirURL );
             switch( e.getError() )
             {
@@ -4194,7 +4195,7 @@ void Content::getResourceOptions(
                             sal_uInt32 nLifeTime = m_nOptsCacheLifeNotFound;
                             if( isResourceAvailable( xEnv, rResAccess, aDAVOptions ) )
                             {
-                                SAL_WARN( "ucb.ucp.webdav", "OPTIONS - Got an SC_NOT_FOUND, but the URL <" << m_xIdentifier->getContentIdentifier() << "> resource exists" );
+                                SAL_WARN( "ucb.ucp.webdav", "OPTIONS - Got SC_NOT_FOUND, but URL <" << m_xIdentifier->getContentIdentifier() << "> resource exists" );
                                 nLifeTime = m_nOptsCacheLifeNotImpl;
                             }
                             else

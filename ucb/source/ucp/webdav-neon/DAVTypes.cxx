@@ -28,7 +28,7 @@ DAVOptions::DAVOptions() :
     m_aAllowedMethods(),
     m_nStaleTime( 0 ),
     m_nRequestedTimeLife( 0 ),
-    m_sURL(),
+    m_rURL( std::make_shared<DavURLObject>( DavURLObject() ) ),
     m_sRedirectedURL(),
     m_nHttpResponseStatusCode( 0 ),
     m_sHttpResponseStatusText()
@@ -44,7 +44,7 @@ DAVOptions::DAVOptions( const DAVOptions & rOther ) :
     m_aAllowedMethods( rOther.m_aAllowedMethods ),
     m_nStaleTime( rOther.m_nStaleTime ),
     m_nRequestedTimeLife( rOther.m_nRequestedTimeLife ),
-    m_sURL( rOther.m_sURL ),
+    m_rURL( std::make_shared<DavURLObject>( *(rOther.m_rURL) ) ),
     m_sRedirectedURL( rOther.m_sRedirectedURL),
     m_nHttpResponseStatusCode( rOther.m_nHttpResponseStatusCode ),
     m_sHttpResponseStatusText( rOther.m_sHttpResponseStatusText )
@@ -65,7 +65,7 @@ DAVOptions & DAVOptions::operator=( const DAVOptions& rOpts )
     m_aAllowedMethods = rOpts.m_aAllowedMethods;
     m_nStaleTime = rOpts.m_nStaleTime;
     m_nRequestedTimeLife = rOpts.m_nRequestedTimeLife;
-    m_sURL = rOpts.m_sURL;
+    m_rURL = std::make_shared<DavURLObject>( *rOpts.m_rURL );
     m_sRedirectedURL = rOpts.m_sRedirectedURL;
     m_nHttpResponseStatusCode = rOpts.m_nHttpResponseStatusCode;
     m_sHttpResponseStatusText = rOpts.m_sHttpResponseStatusText;
@@ -83,7 +83,7 @@ bool DAVOptions::operator==( const DAVOptions& rOpts ) const
         m_aAllowedMethods == rOpts.m_aAllowedMethods &&
         m_nStaleTime == rOpts.m_nStaleTime &&
         m_nRequestedTimeLife == rOpts.m_nRequestedTimeLife &&
-        m_sURL == rOpts.m_sURL &&
+        *m_rURL == *rOpts.m_rURL &&
         m_sRedirectedURL == rOpts.m_sRedirectedURL &&
         m_nHttpResponseStatusCode == rOpts.m_nHttpResponseStatusCode &&
         m_sHttpResponseStatusText == rOpts.m_sHttpResponseStatusText;
@@ -103,14 +103,17 @@ DAVOptionsCache::~DAVOptionsCache()
 bool DAVOptionsCache::getDAVOptions( const OUString & rURL, DAVOptions & rDAVOptions )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( NeonUri::unescape( rURL ) ) );
-    normalizeURLLastChar( aEncodedUrl );
+    DavURLObject aDavURLObject( rURL );
+    aDavURLObject.removeFinalSlash();
+    OUString aEncodedUrl( aDavURLObject.GetMainURL() );
 
     // search the URL in the static map
     DAVOptionsMap::iterator it;
     it = m_aTheCache.find( aEncodedUrl );
     if ( it == m_aTheCache.end() )
+    {
         return false;
+    }
     else
     {
         // check if the capabilities are stale, before restoring
@@ -131,8 +134,9 @@ bool DAVOptionsCache::getDAVOptions( const OUString & rURL, DAVOptions & rDAVOpt
 void DAVOptionsCache::removeDAVOptions( const OUString & rURL )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( NeonUri::unescape( rURL ) ) );
-    normalizeURLLastChar( aEncodedUrl );
+    DavURLObject aDavURLObject( rURL );
+    aDavURLObject.removeFinalSlash();
+    OUString aEncodedUrl( aDavURLObject.GetMainURL() );
 
     DAVOptionsMap::iterator it;
     it = m_aTheCache.find( aEncodedUrl );
@@ -145,15 +149,8 @@ void DAVOptionsCache::removeDAVOptions( const OUString & rURL )
 void DAVOptionsCache::addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    OUString aURL( rDAVOptions.getURL() );
-
-    OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( NeonUri::unescape( aURL ) ) );
-    normalizeURLLastChar( aEncodedUrl );
-    rDAVOptions.setURL( aEncodedUrl );
-
-// unchanged, it may be used to access a server
-    OUString aRedirURL( rDAVOptions.getRedirectedURL() );
-    rDAVOptions.setRedirectedURL( aRedirURL );
+    rDAVOptions.getURL()->removeFinalSlash();
+    OUString aEncodedUrl( rDAVOptions.getURL()->GetMainURL() );
 
     // check if already cached
     DAVOptionsMap::iterator it;
@@ -174,8 +171,9 @@ void DAVOptionsCache::addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 
 void DAVOptionsCache::setHeadAllowed( const OUString & rURL, const bool HeadAllowed )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( NeonUri::unescape( rURL ) ) );
-    normalizeURLLastChar( aEncodedUrl );
+    DavURLObject aDavURLObject( rURL );
+    aDavURLObject.removeFinalSlash();
+    OUString aEncodedUrl( aDavURLObject.GetMainURL() );
 
     DAVOptionsMap::iterator it;
     it = m_aTheCache.find( aEncodedUrl );
