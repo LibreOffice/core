@@ -53,6 +53,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/extract.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/javainteractionhandler.hxx>
@@ -1103,15 +1104,10 @@ bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandle
     if ( !m_xPopupMenuControllerFactory.is() )
         return false;
 
-    Sequence< Any > aSeq( 2 );
-    PropertyValue aPropValue;
-
-    aPropValue.Name         = "ModuleIdentifier";
-    aPropValue.Value      <<= m_aModuleIdentifier;
-    aSeq[0] <<= aPropValue;
-    aPropValue.Name         = "Frame";
-    aPropValue.Value      <<= m_xFrame;
-    aSeq[1] <<= aPropValue;
+    Sequence< Any > aSeq( 3 );
+    aSeq[0] <<= comphelper::makePropertyValue( "ModuleIdentifier", m_aModuleIdentifier );
+    aSeq[1] <<= comphelper::makePropertyValue( "Frame", m_xFrame );
+    aSeq[2] <<= comphelper::makePropertyValue( "InToolbar", !m_bHasMenuBar );
 
     Reference< XPopupMenuController > xPopupMenuController(
                                             m_xPopupMenuControllerFactory->createInstanceWithArgumentsAndContext(
