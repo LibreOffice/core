@@ -729,12 +729,26 @@
           <value>org.libreoffice.chart2.Chart2ToolboxController</value>
         </prop>
       </node>
-      <node oor:name="c2" oor:op="replace">
+      <node oor:name="TableRefreshControl" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:Refresh</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+          <value>com.sun.star.sdb.TableDataView</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:DBRefreshMenu;1</value>
+        </prop>
+      </node>
+      <node oor:name="DataBrowserRefreshControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Refresh</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.DataSourceBrowser</value>
         </prop>
         <prop oor:name="Controller">
           <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
