@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,ucb_webdav_local_neon, \
 	sal \
 	salhelper \
 	test \
+	tl \
 	ucbhelper \
 ))
 

@@ -20,6 +20,7 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 	cppuhelper \
 	sal \
 	salhelper \
+	tl \
 	ucbhelper \
 	$(gb_UWINAPI) \
 ))
@@ -44,6 +45,7 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav-neon/DAVResourceAccess \
 	ucb/source/ucp/webdav-neon/DAVSessionFactory \
 	ucb/source/ucp/webdav-neon/DAVTypes \
+	ucb/source/ucp/webdav-neon/DavURIObject \
 	ucb/source/ucp/webdav-neon/LinkSequence \
 	ucb/source/ucp/webdav-neon/LockEntrySequence \
 	ucb/source/ucp/webdav-neon/LockSequence \

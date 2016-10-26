@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,ucb_webdav_propfindcache, \
 	sal \
 	salhelper \
 	test \
+	tl \
 	ucbhelper \
 ))
 
