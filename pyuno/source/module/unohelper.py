@@ -1,4 +1,4 @@
-# -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -294,4 +294,4 @@ class _FactoryHelper_( XSingleComponentFactory, XServiceInfo, Base ):
     def createInstanceWithArgumentsAndContext( self, args, context ):
         return self.clazz( context, *args )
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -1,4 +1,4 @@
-# -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -50,4 +50,4 @@ def main():
 
 main()
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

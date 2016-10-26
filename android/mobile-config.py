@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
+#
 # This file is part of the LibreOffice project.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -112,4 +114,4 @@ if __name__ == '__main__':
 
     tree.write(sys.argv[2], 'UTF-8', True)
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

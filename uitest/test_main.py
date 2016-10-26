@@ -1,4 +1,4 @@
-# -*- Mode: python; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -115,4 +115,4 @@ if __name__ == '__main__':
         sys.exit(1)
     sys.exit(0)
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab: */
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

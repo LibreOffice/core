@@ -1,4 +1,4 @@
-# -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -1826,4 +1826,4 @@ def __gotoline__(n):
 
 g_exportedScripts = left, right, goforward, gobackward, run, stop, home, clearscreen, commandline, __translate__
 
-# vim: set noet sw=4 ts=4:
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

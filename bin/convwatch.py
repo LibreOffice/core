@@ -452,4 +452,4 @@ if __name__ == "__main__":
         usage()
         sys.exit(1)
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

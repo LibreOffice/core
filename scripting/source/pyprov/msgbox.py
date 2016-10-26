@@ -1,5 +1,4 @@
-# -*- tab-width: 4; indent-tabs-mode: nil -*-
-#
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -238,3 +237,5 @@ if __name__ == '__main__':
     myBox.numberOflines = 2
 
     print(myBox.show("A small message",0,"Dialog title"))
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

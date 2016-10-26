@@ -1,4 +1,4 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -89,4 +89,4 @@ class CheckSidebarRegistry(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 
-# vim: set noet sw=4 ts=4:
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

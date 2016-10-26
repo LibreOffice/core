@@ -1,4 +1,4 @@
-# -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -119,4 +119,4 @@ cursor.setPropertyValue( "CharShadowed", False )
 
 text.insertString( cursor, " That's all for now!" , 0 )
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

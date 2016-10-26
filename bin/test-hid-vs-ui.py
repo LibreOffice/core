@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -185,4 +185,4 @@ Note: The bot generating this message can be found and improved here:
     else:
         print errors
 
-# vim: set et sw=4 ts=4:
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

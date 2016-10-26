@@ -1,4 +1,4 @@
-# -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -57,4 +57,4 @@ g_ImplementationHelper.addImplementation( \
     ("com.sun.star.task.Job",),)                 # list of implemented services
                                                  # (the only service)
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim: set shiftwidth=4 softtabstop=4 expandtab:
