@@ -137,7 +137,8 @@ void ShadowPropertyPanel::Initialize()
         mpShadowTransSlider->SetRange(Range(0,100));
         mpShadowTransSlider->SetUpdateMode(true);
         mpShadowTransSlider->SetSlideHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransSliderHdl) );
-        InsertDistanceValues();
+        for(sal_uInt16 i = 0; i <= 20 ; i++)
+            mpShadowDistance->InsertValue(i*2,FUNIT_POINT);
         InsertAngleValues();
     }
 }
@@ -254,12 +255,6 @@ void ShadowPropertyPanel::SetTransparencyValue(long nVal)
 
 void ShadowPropertyPanel::DataChanged(const DataChangedEvent& /*rEvent*/)
 {
-}
-
-void ShadowPropertyPanel::InsertDistanceValues()
-{
-    for(sal_uInt16 i = 0; i <= 20 ; i++)
-        mpShadowDistance->InsertValue(i*2,FUNIT_POINT);
 }
 
 void ShadowPropertyPanel::InsertAngleValues()

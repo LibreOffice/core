@@ -61,7 +61,6 @@ private:
     DECL_LINK(SplitHdl, Splitter*, void);
 
 protected:
-    void ThemeSelectionHasChanged();
     virtual ~GalleryControl() override;
     virtual void dispose() override;
 };

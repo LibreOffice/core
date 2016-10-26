@@ -177,8 +177,6 @@ class FmXFormView : public ::cppu::WeakImplHelper<
 
     FmFormShell* GetFormShell() const;
 
-    void removeGridWindowListening();
-
 protected:
     FmXFormView( FmFormView* _pView );
     virtual ~FmXFormView() override;

@@ -169,12 +169,6 @@ SvxDoubleItem::SvxDoubleItem(const SvxDoubleItem& rItem) :
 }
 
 
-OUString SvxDoubleItem::GetValueText() const
-{
-    return rtl::math::doubleToUString( fVal, rtl_math_StringFormat_E, 4, '.' );
-}
-
-
 bool SvxDoubleItem::GetPresentation
             ( SfxItemPresentation /*ePresentation*/, MapUnit /*eCoreMetric*/,
               MapUnit /*ePresentationMetric*/, OUString& rText,
@@ -187,7 +181,7 @@ bool SvxDoubleItem::GetPresentation
             pIntlWrapper->getLocaleData()->getNumDecimalSep()[0], true );
     }
     else
-        rText = GetValueText();
+        rText = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_E, 4, '.' );
     return true;
 }
 

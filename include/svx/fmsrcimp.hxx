@@ -344,8 +344,6 @@ private:
     // moves the iterator with respect to the direction/overflow iterator/overflow cursor
     SVX_DLLPRIVATE void BuildAndInsertFieldInfo(const css::uno::Reference< css::container::XIndexAccess >& xAllFields, sal_Int32 nField);
 
-    SVX_DLLPRIVATE bool HasPreviousLoc() { return m_aPreviousLocBookmark.hasValue(); }
-
     void OnSearchTerminated();
     // is used by SearchThread, after the return from this handler the thread removes itself
     DECL_LINK(OnNewRecordCount, sal_Int32, void);

@@ -157,7 +157,8 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, true);
     // making whole text
     bool bNewTextTransferred = false;
-    OutlinerParaObject *pNewText = impGetMergedUnderflowParaObject(pOutl);
+    // merges underflowing text with the one in the next box
+    OutlinerParaObject *pNewText = mpUnderflChText->CreateMergedUnderflowParaObject(pOutl, mpNextLink->GetOutlinerParaObject());
 
     // Set the other box empty; it will be replaced by the rest of the text if overflow occurs
     if (!mpTargetLink->GetPreventChainable())
@@ -245,11 +246,6 @@ void TextChainFlow::impMoveChainedTextToNextLink(SdrOutliner *pOverflOutl)
 SdrTextObj *TextChainFlow::GetLinkTarget() const
 {
     return mpTargetLink;
-}
-
-OutlinerParaObject *TextChainFlow::impGetMergedUnderflowParaObject(SdrOutliner *pOutliner)
-{
-        return mpUnderflChText->CreateMergedUnderflowParaObject(pOutliner, mpNextLink->GetOutlinerParaObject());
 }
 
 TextChain *TextChainFlow::GetTextChain() const

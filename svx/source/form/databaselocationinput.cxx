@@ -67,7 +67,6 @@ namespace svx
     private:
         void     impl_initFilterProperties_nothrow();
         void     impl_onBrowseButtonClicked();
-        void     impl_onLocationModified();
         OUString impl_getCurrentURL() const;
 
         DECL_LINK( OnControlAction, VclWindowEvent&, void );
@@ -209,7 +208,7 @@ namespace svx
             &&  ( _rEvent.GetId() == VCLEVENT_EDIT_MODIFY )
             )
         {
-            impl_onLocationModified();
+            m_bNeedExistenceCheck = true;
         }
     }
 
@@ -252,11 +251,6 @@ namespace svx
         }
     }
 
-
-    void DatabaseLocationInputController_Impl::impl_onLocationModified()
-    {
-        m_bNeedExistenceCheck = true;
-    }
 
     DatabaseLocationInputController::DatabaseLocationInputController( const Reference<XComponentContext>& _rContext,
             ::svt::OFileURLControl& _rLocationInput, PushButton& _rBrowseButton )

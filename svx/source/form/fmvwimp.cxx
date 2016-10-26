@@ -464,7 +464,14 @@ FmXFormView::~FmXFormView()
 void SAL_CALL FmXFormView::disposing(const EventObject& Source) throw( RuntimeException, std::exception )
 {
     if ( m_xWindow.is() && Source.Source == m_xWindow )
-        removeGridWindowListening();
+    {
+        m_xWindow->removeFocusListener(this);
+        if ( m_pView )
+        {
+            m_pView->SetMoveOutside( false, FmFormView::ImplAccess() );
+        }
+        m_xWindow = nullptr;
+    }
 }
 
 // XFormControllerListener
@@ -1915,20 +1922,6 @@ void SAL_CALL FmXFormView::focusLost( const FocusEvent& /*e*/ ) throw (RuntimeEx
         m_pView->SetMoveOutside( false, FmFormView::ImplAccess() );
     }
 }
-
-void FmXFormView::removeGridWindowListening()
-{
-    if ( m_xWindow.is() )
-    {
-        m_xWindow->removeFocusListener(this);
-        if ( m_pView )
-        {
-            m_pView->SetMoveOutside( false, FmFormView::ImplAccess() );
-        }
-        m_xWindow = nullptr;
-    }
-}
-
 
 DocumentType FmXFormView::impl_getDocumentType() const
 {

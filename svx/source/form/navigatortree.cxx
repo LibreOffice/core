@@ -713,12 +713,6 @@ namespace svxform
     }
 
 
-    sal_Int8 NavigatorTree::implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const ::Point& _rDropPos, bool _bDnD )
-    {
-        return implAcceptDataTransfer( _rFlavors, _nAction, GetEntry( _rDropPos ), _bDnD );
-    }
-
-
     sal_Int8 NavigatorTree::implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, bool _bDnD )
     {
         // no target -> no drop
@@ -907,7 +901,7 @@ namespace svxform
                 m_aDropActionTimer.Stop();
         }
 
-        return implAcceptDataTransfer( GetDataFlavorExVector(), rEvt.mnAction, aDropPos, true );
+        return implAcceptDataTransfer( GetDataFlavorExVector(), rEvt.mnAction, GetEntry( aDropPos ), true );
     }
 
 

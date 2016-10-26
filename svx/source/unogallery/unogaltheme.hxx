@@ -47,9 +47,6 @@ public:
     explicit GalleryTheme( const OUString& rThemeName );
     virtual ~GalleryTheme() override;
 
-    static OUString getImplementationName_Static() throw();
-    static css::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
-
 protected:
 
     // XServiceInfo

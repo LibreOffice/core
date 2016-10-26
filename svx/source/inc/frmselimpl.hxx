@@ -178,8 +178,6 @@ struct FrameSelectorImpl : public Resource
 
     /** Draws selection arrows for the specified frame border. */
     void                DrawArrows( const FrameBorder& rBorder );
-    /** Draws arrows in current selection state for all enabled frame borders. */
-    void                DrawAllArrows();
 
     /** Returns the color that has to be used to draw a frame border. */
     Color               GetDrawLineColor( const Color& rColor ) const;

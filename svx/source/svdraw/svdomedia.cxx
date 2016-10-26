@@ -184,7 +184,9 @@ const uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot() const
 
 void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /* = false */ )
 {
-    Size aSize( Application::GetDefaultDevice()->PixelToLogic( getPreferredSize(), MapUnit::Map100thMM ) );
+    Size aSize( Application::GetDefaultDevice()->PixelToLogic(
+                    static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( GetViewContact() ).getPreferredSize(),
+                    MapUnit::Map100thMM ) );
     Size aMaxSize( rMaxRect.GetSize() );
 
     if( aSize.Height() != 0 && aSize.Width() != 0 )
@@ -249,11 +251,6 @@ void SdrMediaObj::setMediaProperties( const ::avmedia::MediaItem& rState )
 const ::avmedia::MediaItem& SdrMediaObj::getMediaProperties() const
 {
     return m_xImpl->m_MediaProperties;
-}
-
-Size SdrMediaObj::getPreferredSize() const
-{
-    return static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( GetViewContact() ).getPreferredSize();
 }
 
 uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()

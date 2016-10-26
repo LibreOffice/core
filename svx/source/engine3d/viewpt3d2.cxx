@@ -57,15 +57,7 @@ void Viewport3D::SetViewWindow(double fX, double fY, double fW, double fH)
 
 const basegfx::B3DPoint& Viewport3D::GetViewPoint()
 {
-    MakeTransform();
-
-    return aViewPoint;
-}
-
-// Calculate View transformations matrix
-
-void Viewport3D::MakeTransform()
-{
+    // Calculate View transformations matrix
     if ( !bTfValid )
     {
         double fV, fXupVp, fYupVp;
@@ -123,6 +115,7 @@ void Viewport3D::MakeTransform()
 
         bTfValid = true;
     }
+    return aViewPoint;
 }
 
 void Viewport3D::SetDeviceWindow(const Rectangle& rRect)

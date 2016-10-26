@@ -72,7 +72,12 @@ namespace sdr
 
         EventList::~EventList()
         {
-            Clear();
+            while(mpHead)
+            {
+                Event* pNext = mpHead->GetNext();
+                mpHead->SetNext(nullptr);
+                mpHead = pNext;
+            }
         }
 
         void EventList::Insert(Event* pNew)
@@ -124,16 +129,6 @@ namespace sdr
                 }
 
                 pOld->SetNext(nullptr);
-            }
-        }
-
-        void EventList::Clear()
-        {
-            while(mpHead)
-            {
-                Event* pNext = mpHead->GetNext();
-                mpHead->SetNext(nullptr);
-                mpHead = pNext;
             }
         }
 

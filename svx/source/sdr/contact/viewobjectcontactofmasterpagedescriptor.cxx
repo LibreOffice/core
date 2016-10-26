@@ -44,11 +44,6 @@ namespace sdr
         {
         }
 
-        sdr::MasterPageDescriptor& ViewObjectContactOfMasterPageDescriptor::GetMasterPageDescriptor() const
-        {
-            return static_cast< ViewContactOfMasterPageDescriptor& >(GetViewContact()).GetMasterPageDescriptor();
-        }
-
         bool ViewObjectContactOfMasterPageDescriptor::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
         {
             if(rDisplayInfo.GetControlLayerProcessingActive())
@@ -68,7 +63,7 @@ namespace sdr
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             drawinglayer::primitive2d::Primitive2DContainer xMasterPageSequence;
-            const sdr::MasterPageDescriptor& rDescriptor = GetMasterPageDescriptor();
+            const sdr::MasterPageDescriptor& rDescriptor = static_cast< ViewContactOfMasterPageDescriptor& >(GetViewContact()).GetMasterPageDescriptor();
 
             // used range (retval) is fixed here, it's the MasterPage fill range
             const SdrPage& rOwnerPage = rDescriptor.GetOwnerPage();

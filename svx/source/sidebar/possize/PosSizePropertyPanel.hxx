@@ -157,8 +157,6 @@ private:
     DECL_LINK( FlipHdl, ToolBox *, void );
 
     void Initialize();
-    void executePosX();
-    void executePosY();
     void executeSize();
 
     void MetricState( SfxItemState eState, const SfxPoolItem* pState );

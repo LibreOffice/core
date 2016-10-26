@@ -138,18 +138,34 @@ sal_uInt16 NBOTypeMgrBase:: IsSingleLevel(sal_uInt16 nCurLevel)
         return (sal_uInt16)0xFFFF;
 }
 
-void NBOTypeMgrBase::StoreBulCharFmtName_impl() {
-        if ( pSet )
-        {
-            SfxAllItemSet aSet(*pSet);
-            const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
+void NBOTypeMgrBase::SetItems(const SfxItemSet* pArg) {
+    pSet = pArg;
+    if ( pSet )
+    {
+        SfxAllItemSet aSet(*pSet);
+        const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
 
-            if ( pBulletCharFmt )
+        if ( pBulletCharFmt )
+        {
+            aNumCharFmtName =  pBulletCharFmt->GetValue();
+        }
+
+        const SfxPoolItem* pItem;
+        SfxItemState eState = pSet->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
+        if(eState == SfxItemState::SET)
+        {
+            eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
+        } else {
+            //sd use different sid for numbering rule
+            eState = pSet->GetItemState(EE_PARA_NUMBULLET, false, &pItem);
+            if(eState == SfxItemState::SET)
             {
-                aNumCharFmtName =  pBulletCharFmt->GetValue();
+                eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(EE_PARA_NUMBULLET));
             }
         }
+    }
 }
+
 void NBOTypeMgrBase::ImplLoad(const OUString& filename)
 {
     bIsLoading = true;
@@ -220,24 +236,6 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
     eCoreUnit = eOldCoreUnit;
 }
 
-void NBOTypeMgrBase::StoreMapUnit_impl() {
-    if ( pSet )
-    {
-        const SfxPoolItem* pItem;
-        SfxItemState eState = pSet->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
-        if(eState == SfxItemState::SET)
-        {
-            eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
-        } else {
-            //sd use different sid for numbering rule
-            eState = pSet->GetItemState(EE_PARA_NUMBULLET, false, &pItem);
-            if(eState == SfxItemState::SET)
-            {
-                eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(EE_PARA_NUMBULLET));
-            }
-        }
-    }
-}
 // Character Bullet Type lib
 BulletsSettings_Impl* BulletsTypeMgr::pActualBullets[] ={nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
 sal_Unicode BulletsTypeMgr::aDynamicBulletTypes[]={' ',' ',' ',' ',' ',' ',' ',' '};

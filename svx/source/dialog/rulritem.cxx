@@ -589,14 +589,9 @@ const SvxColumnDescription& SvxColumnItem::operator[](sal_uInt16 index) const
     return aColumns[index];
 }
 
-void SvxColumnItem::Insert(const SvxColumnDescription &rDesc, sal_uInt16 nPos)
-{
-    aColumns.insert(aColumns.begin() + nPos, rDesc);
-}
-
 void SvxColumnItem::Append(const SvxColumnDescription &rDesc)
 {
-    Insert(rDesc, Count());
+    aColumns.push_back(rDesc);
 }
 
 void SvxColumnItem::SetLeft(long left)

@@ -85,8 +85,6 @@ class SVX_DLLPUBLIC FmFormShell : public SfxShell
         // (the FormView itself is not a broadcaster, therefore it can't always correctly notify the
         // form explorer who is interested in the event)
 
-    const OutputDevice* GetCurrentViewDevice() const { return m_pFormView ? m_pFormView->GetActualOutDev() : nullptr; }
-
 public:
     SFX_DECL_INTERFACE(SVX_INTERFACE_FORM_SH)
 

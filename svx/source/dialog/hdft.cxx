@@ -1160,7 +1160,7 @@ void SvxHFPage::PageCreated(const SfxAllItemSet &rSet)
     {
         const bool bNew(pSupportDrawingLayerFillStyleItem->GetValue());
 
-        EnableDrawingLayerFillStyles(bNew);
+        mbEnableDrawingLayerFillStyles = bNew;
     }
 }
 

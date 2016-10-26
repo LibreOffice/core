@@ -190,7 +190,6 @@ private:
         throw( css::uno::RuntimeException, css::lang::IndexOutOfBoundsException );
 
     void CommitChange (sal_Int16 aEventId, const css::uno::Any& rNewValue, const css::uno::Any& rOldValue);
-    void FireEvent (const css::accessibility::AccessibleEventObject& aEvent);
 
     css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessible( const SdrObject* pObj );
 

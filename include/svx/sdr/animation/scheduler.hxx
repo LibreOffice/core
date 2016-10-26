@@ -79,9 +79,6 @@ namespace sdr
             SAL_DLLPRIVATE void Insert(Event* pNew);
             SAL_DLLPRIVATE void Remove(Event* pOld);
 
-            // clear list
-            SAL_DLLPRIVATE void Clear();
-
             // get first
             SAL_DLLPRIVATE Event* GetFirst() {  return mpHead; }
         };

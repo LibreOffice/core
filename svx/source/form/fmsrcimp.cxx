@@ -886,7 +886,7 @@ void FmSearchEngine::SearchNextImpl()
 
     sal_Int32 nFieldPos;
 
-    if (HasPreviousLoc())
+    if (m_aPreviousLocBookmark.hasValue())
     {
         DBG_ASSERT(EQUAL_BOOKMARKS(m_aPreviousLocBookmark, m_xSearchCursor.getBookmark()),
             "FmSearchEngine::SearchNextImpl : ungueltige Position !");

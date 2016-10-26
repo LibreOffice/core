@@ -491,8 +491,6 @@ protected:
     virtual void CreateB2dIAObject() override;
 
     BitmapEx GetBitmapForHandle( const BitmapEx& rBitmap, int nSize );
-
-    static BitmapEx GetHandlesBitmap();
 };
 
 

@@ -236,7 +236,8 @@ SvxShowCharSetItem::~SvxShowCharSetItem()
     if ( m_xAcc.is() )
     {
         m_pItem->ParentDestroyed();
-        ClearAccessible();
+        m_pItem = nullptr;
+        m_xAcc  = nullptr;
     }
 }
 
@@ -252,15 +253,6 @@ uno::Reference< css::accessibility::XAccessible > const & SvxShowCharSetItem::Ge
     return m_xAcc;
 }
 
-
-void SvxShowCharSetItem::ClearAccessible()
-{
-    if ( m_xAcc.is() )
-    {
-        m_pItem = nullptr;
-        m_xAcc  = nullptr;
-    }
-}
 
 
 SvxShowCharSetAcc::SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent ) : OAccessibleSelectionHelper(new VCLExternalSolarLock())

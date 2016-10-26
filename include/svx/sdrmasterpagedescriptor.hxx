@@ -49,9 +49,6 @@ namespace sdr
 
         void operator=(const MasterPageDescriptor& rCandidate) = delete;
 
-    protected:
-        sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
     public:
         MasterPageDescriptor(SdrPage& aOwnerPage, SdrPage& aUsedPage);
         virtual ~MasterPageDescriptor();

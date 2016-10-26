@@ -96,19 +96,6 @@ namespace sdr
             }
         }
 
-        // Trigger and consume the events
-        void TimerEventHandler::ExecuteEvents()
-        {
-            for(;;)
-            {
-                BaseEvent* pEvent = GetEvent();
-                if(pEvent == nullptr)
-                    break;
-                pEvent->ExecuteEvent();
-                delete pEvent;
-            }
-        }
-
         // for control
         bool TimerEventHandler::IsEmpty() const
         {
@@ -118,7 +105,15 @@ namespace sdr
         // The timer when it is triggered; from class Timer
         void TimerEventHandler::Invoke()
         {
-            ExecuteEvents();
+            // Trigger and consume the events
+            for(;;)
+            {
+                BaseEvent* pEvent = GetEvent();
+                if(pEvent == nullptr)
+                    break;
+                pEvent->ExecuteEvent();
+                delete pEvent;
+            }
         }
 
         // reset the timer

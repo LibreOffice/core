@@ -629,43 +629,6 @@ void SvxTPFilter::SetRedlinTable(SvxRedlinTable* pTable)
     pRedlinTable=pTable;
 }
 
-void SvxTPFilter::ShowDateFields(SvxRedlinDateMode nKind)
-{
-    switch(nKind)
-    {
-        case SvxRedlinDateMode::BEFORE:
-                EnableDateLine1(true);
-                EnableDateLine2(false);
-                break;
-        case SvxRedlinDateMode::SINCE:
-                EnableDateLine1(true);
-                EnableDateLine2(false);
-                break;
-        case SvxRedlinDateMode::EQUAL:
-                EnableDateLine1(true);
-                m_pTfDate->Disable();
-                m_pTfDate->SetText(OUString());
-                EnableDateLine2(false);
-                break;
-        case SvxRedlinDateMode::NOTEQUAL:
-                EnableDateLine1(true);
-                m_pTfDate->Disable();
-                m_pTfDate->SetText(OUString());
-                EnableDateLine2(false);
-                break;
-        case SvxRedlinDateMode::BETWEEN:
-                EnableDateLine1(true);
-                EnableDateLine2(true);
-                break;
-        case SvxRedlinDateMode::SAVE:
-                EnableDateLine1(false);
-                EnableDateLine2(false);
-                break;
-        case SvxRedlinDateMode::NONE:
-                break;
-    }
-}
-
 void SvxTPFilter::EnableDateLine1(bool bFlag)
 {
     if(bFlag && m_pCbDate->IsChecked())
@@ -898,7 +861,40 @@ void SvxTPFilter::ShowAction(bool bShow)
 
 IMPL_LINK_NOARG( SvxTPFilter, SelDateHdl, ListBox&, void )
 {
-    ShowDateFields(static_cast<SvxRedlinDateMode>(m_pLbDate->GetSelectEntryPos()));
+    SvxRedlinDateMode nKind = static_cast<SvxRedlinDateMode>(m_pLbDate->GetSelectEntryPos());
+    switch(nKind)
+    {
+        case SvxRedlinDateMode::BEFORE:
+                EnableDateLine1(true);
+                EnableDateLine2(false);
+                break;
+        case SvxRedlinDateMode::SINCE:
+                EnableDateLine1(true);
+                EnableDateLine2(false);
+                break;
+        case SvxRedlinDateMode::EQUAL:
+                EnableDateLine1(true);
+                m_pTfDate->Disable();
+                m_pTfDate->SetText(OUString());
+                EnableDateLine2(false);
+                break;
+        case SvxRedlinDateMode::NOTEQUAL:
+                EnableDateLine1(true);
+                m_pTfDate->Disable();
+                m_pTfDate->SetText(OUString());
+                EnableDateLine2(false);
+                break;
+        case SvxRedlinDateMode::BETWEEN:
+                EnableDateLine1(true);
+                EnableDateLine2(true);
+                break;
+        case SvxRedlinDateMode::SAVE:
+                EnableDateLine1(false);
+                EnableDateLine2(false);
+                break;
+        case SvxRedlinDateMode::NONE:
+                break;
+    }
     bModified=true;
 }
 
@@ -1071,7 +1067,7 @@ SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTop
     SetTabPage(m_nViewPageId, pTPView);
     SetTabPage(m_nFilterPageId, pTPFilter);
 
-    pTPFilter->SetRedlinTable(GetViewTable());
+    pTPFilter->SetRedlinTable(pTPView->GetTableControl());
 
     SetCurPageId(m_nViewPageId);
 
@@ -1094,11 +1090,6 @@ void SvxAcceptChgCtr::dispose()
 void SvxAcceptChgCtr::ShowFilterPage()
 {
     SetCurPageId(m_nFilterPageId);
-}
-
-SvxRedlinTable* SvxAcceptChgCtr::GetViewTable()
-{
-    return pTPView ? pTPView->GetTableControl() : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

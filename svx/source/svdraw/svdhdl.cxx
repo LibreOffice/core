@@ -2213,12 +2213,6 @@ SdrCropHdl::SdrCropHdl(
 }
 
 
-BitmapEx SdrCropHdl::GetHandlesBitmap()
-{
-    return BitmapEx(ResId(SIP_SA_CROP_MARKERS, *ImpGetResMgr()));
-}
-
-
 BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
 {
     int nPixelSize = 0, nX = 0, nY = 0, nOffset = 0;
@@ -2273,7 +2267,7 @@ void SdrCropHdl::CreateB2dIAObject()
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         int nHdlSize = pHdlList->GetHdlSize();
 
-        const BitmapEx aHandlesBitmap( GetHandlesBitmap() );
+        const BitmapEx aHandlesBitmap( ResId(SIP_SA_CROP_MARKERS, *ImpGetResMgr()) );
         BitmapEx aBmpEx1( GetBitmapForHandle( aHandlesBitmap, nHdlSize ) );
 
         for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)

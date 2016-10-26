@@ -78,9 +78,6 @@ namespace sdr
             TimerEventHandler();
             ~TimerEventHandler() override;
 
-            // Trigger and consume the events
-            void ExecuteEvents();
-
             bool IsEmpty() const;
 
             // The timer when it is triggered; from class Timer

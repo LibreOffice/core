@@ -303,7 +303,7 @@ void SdrDragMethod::resetSdrDragEntries()
 
 basegfx::B2DRange SdrDragMethod::getCurrentRange() const
 {
-    return getB2DRangeFromOverlayObjectList();
+    return maOverlayObjectList.getBaseRange();
 }
 
 void SdrDragMethod::clearSdrDragEntries()

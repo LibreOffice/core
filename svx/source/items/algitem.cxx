@@ -53,7 +53,16 @@ SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
 SvxOrientationItem::SvxOrientationItem( sal_Int32 nRotation, bool bStacked, const sal_uInt16 nId ) :
     SfxEnumItem( nId )
 {
-    SetFromRotation( nRotation, bStacked );
+    if( bStacked )
+    {
+        SetValue( SVX_ORIENTATION_STACKED );
+    }
+    else switch( nRotation )
+    {
+        case 9000:  SetValue( SVX_ORIENTATION_BOTTOMTOP );  break;
+        case 27000: SetValue( SVX_ORIENTATION_TOPBOTTOM );  break;
+        default:    SetValue( SVX_ORIENTATION_STANDARD );
+    }
 }
 
 
@@ -149,20 +158,6 @@ sal_Int32 SvxOrientationItem::GetRotation( sal_Int32 nStdAngle ) const
         default: ; //prevent warning
     }
     return nAngle;
-}
-
-void SvxOrientationItem::SetFromRotation( sal_Int32 nRotation, bool bStacked )
-{
-    if( bStacked )
-    {
-        SetValue( SVX_ORIENTATION_STACKED );
-    }
-    else switch( nRotation )
-    {
-        case 9000:  SetValue( SVX_ORIENTATION_BOTTOMTOP );  break;
-        case 27000: SetValue( SVX_ORIENTATION_TOPBOTTOM );  break;
-        default:    SetValue( SVX_ORIENTATION_STANDARD );
-    }
 }
 
 SvxMarginItem::SvxMarginItem( const sal_uInt16 nId ) :

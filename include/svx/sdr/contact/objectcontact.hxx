@@ -79,9 +79,6 @@ private:
     // flag for preview renderer
     bool                                            mbIsPreviewRenderer : 1;
 
-    // method to create a EventHandler. Needs to give a result.
-    static sdr::event::TimerEventHandler* CreateEventHandler();
-
 protected:
     // Interface to allow derivates to travel over the registered VOC's
     sal_uInt32 getViewObjectContactCount() const { return maViewObjectContactVector.size(); }
@@ -134,9 +131,6 @@ public:
     // method to get the EventHandler. It will
     // return a existing one or create a new one using CreateEventHandler().
     sdr::event::TimerEventHandler& GetEventHandler() const;
-
-    // delete the EventHandler
-    void DeleteEventHandler();
 
     // test if there is an EventHandler without creating one on demand
     bool HasEventHandler() const;

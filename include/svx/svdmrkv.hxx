@@ -229,7 +229,6 @@ public:
 protected:
     // all available changing methods
     SdrMarkList& GetMarkedObjectListWriteAccess() { return mpSdrViewSelection->GetMarkedObjectListWriteAccess(); }
-    void SetEdgesOfMarkedNodesDirty() { mpSdrViewSelection->SetEdgesOfMarkedNodesDirty(); }
 
 public:
     // all available const methods for read access to selection
@@ -245,8 +244,6 @@ public:
     OUString GetDescriptionOfMarkedObjects() const { return GetMarkedObjectList().GetMarkDescription(); }
     OUString GetDescriptionOfMarkedPoints() const { return GetMarkedObjectList().GetPointMarkDescription(); }
     OUString GetDescriptionOfMarkedGluePoints() const { return GetMarkedObjectList().GetGluePointMarkDescription(); }
-    void GetBoundRectFromMarkedObjects(SdrPageView* pPageView, Rectangle& rRect) const { GetMarkedObjectList().TakeBoundRect(pPageView, rRect); }
-    bool GetSnapRectFromMarkedObjects(SdrPageView* pPageView, Rectangle& rRect) const { return GetMarkedObjectList().TakeSnapRect(pPageView, rRect); }
 
     // Get a list of all those links which are connected to marked nodes,
     // but which are not marked themselves.

@@ -42,10 +42,6 @@ class SVX_DLLPUBLIC SvxHFPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-private:
-    //UUUU
-    void EnableDrawingLayerFillStyles(bool bNew) { mbEnableDrawingLayerFillStyles = bNew; }
-
 public:
 
     virtual bool    FillItemSet( SfxItemSet* rOutSet ) override;

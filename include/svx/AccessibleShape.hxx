@@ -443,8 +443,6 @@ protected:
        GetFullAccessibleName(AccessibleShape *shape)
        throw (css::uno::RuntimeException, std::exception);
     virtual OUString GetStyle();
-    void UpdateDocumentAllSelState(css::uno::Reference<
-        css::accessibility::XAccessibleStateSet > &xStateSet);
     /** Update the <const>OPAQUE</const> and <const>SELECTED</const> state.
     */
     void UpdateStates();

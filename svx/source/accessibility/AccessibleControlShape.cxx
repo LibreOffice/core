@@ -138,11 +138,6 @@ AccessibleControlShape::~AccessibleControlShape()
         // ourself) to this proxy, and thus delete it
 }
 
-SdrObject* AccessibleControlShape::getSdrObject() const
-{
-    return GetSdrObjectFromXShape (mxShape);
-}
-
 namespace {
     Reference< XContainer > lcl_getControlContainer( const vcl::Window* _pWin, const SdrView* _pView )
     {
@@ -188,7 +183,7 @@ void AccessibleControlShape::Init()
 
         // get the control which belongs to our model (relative to our view)
         const vcl::Window* pViewWindow = maShapeTreeInfo.GetWindow();
-        SdrUnoObj* pUnoObjectImpl = dynamic_cast<SdrUnoObj*>( getSdrObject()  );
+        SdrUnoObj* pUnoObjectImpl = dynamic_cast<SdrUnoObj*>( GetSdrObjectFromXShape(mxShape)  );
         SdrView* pView = maShapeTreeInfo.GetSdrView();
         OSL_ENSURE( pView && pViewWindow && pUnoObjectImpl, "AccessibleControlShape::Init: no view, or no view window, no SdrUnoObj!" );
 

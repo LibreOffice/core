@@ -67,7 +67,7 @@ LinePropertyPanel::LinePropertyPanel(
     mpBindings(pBindings),
     maContext()
 {
-    Initialize();
+    setMapUnit(maWidthControl.GetCoreMetric());
 }
 
 LinePropertyPanel::~LinePropertyPanel()
@@ -89,11 +89,6 @@ void LinePropertyPanel::dispose()
     maCapStyle.dispose();
 
     LinePropertyPanelBase::dispose();
-}
-
-void LinePropertyPanel::Initialize()
-{
-    setMapUnit(maWidthControl.GetCoreMetric());
 }
 
 VclPtr<vcl::Window> LinePropertyPanel::Create (

@@ -137,9 +137,11 @@ void SdrEdgeInfoRec::ImpSetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon
 
 long SdrEdgeInfoRec::ImpGetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const
 {
-    const Point& rPt=ImpGetLineVersatzPoint(eLineCode);
-    if (ImpIsHorzLine(eLineCode,rXP)) return rPt.Y();
-    else return rPt.X();
+    const Point& rPt = const_cast<SdrEdgeInfoRec*>(this)->ImpGetLineVersatzPoint(eLineCode);
+    if (ImpIsHorzLine(eLineCode,rXP))
+        return rPt.Y();
+    else
+        return rPt.X();
 }
 
 

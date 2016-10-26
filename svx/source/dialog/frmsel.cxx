@@ -591,12 +591,6 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
     mpVirDev->DrawImage( aPos2, maILArrows.GetImage( nImgId2 + nSelectAdd ) );
 }
 
-void FrameSelectorImpl::DrawAllArrows()
-{
-    for(FrameBorderCIter aIt(maEnabBorders); aIt.Is(); ++aIt)
-        DrawArrows(**aIt);
-}
-
 Color FrameSelectorImpl::GetDrawLineColor( const Color& rColor ) const
 {
     Color aColor( mbHCMode ? maHCLineCol : rColor );
@@ -662,7 +656,8 @@ void FrameSelectorImpl::DrawAllFrameBorders()
 void FrameSelectorImpl::DrawVirtualDevice()
 {
     DrawBackground();
-    DrawAllArrows();
+    for(FrameBorderCIter aIt(maEnabBorders); aIt.Is(); ++aIt)
+        DrawArrows(**aIt);
     DrawAllFrameBorders();
     mbFullRepaint = false;
 }
