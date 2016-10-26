@@ -851,7 +851,7 @@ css::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const O
         return getPropertyDefaultByHandle(nHandle);
 }
 
-sal_Bool SAL_CALL OPropertySetAggregationHelper::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException, std::exception)
+sal_Bool SAL_CALL OPropertySetAggregationHelper::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     bool bModified = false;
 

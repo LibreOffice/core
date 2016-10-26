@@ -937,7 +937,7 @@ void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) con
 
 sal_Bool OControlModel::convertFastPropertyValue(
                         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
-                        throw (css::lang::IllegalArgumentException, std::exception)
+                        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     bool bModified(false);
     switch (_nHandle)

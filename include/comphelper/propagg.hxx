@@ -247,7 +247,7 @@ public:
     /** only implemented for "forwarded" properties, every other property must be handled
         in the derivee, and will assert if passed herein
     */
-    virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) throw(css::lang::IllegalArgumentException, std::exception) override;
+    virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     /** only implemented for "forwarded" properties, every other property must be handled
         in the derivee, and will assert if passed herein
