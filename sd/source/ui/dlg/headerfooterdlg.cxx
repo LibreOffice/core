@@ -627,35 +627,38 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
             if( pOPO )
                 pOutl->SetText( *pOPO );
 
-            EFieldInfo aFieldInfo;
-            aFieldInfo.pFieldItem = nullptr;
+            EPosition aDateFieldPosition;
+            bool bHasDateFieldItem = false;
 
             sal_Int32 nParaCount = pEdit->GetParagraphCount();
-            sal_Int32 nPara;
-            for( nPara = 0; (nPara < nParaCount) && (aFieldInfo.pFieldItem == nullptr); nPara++ )
+            for (sal_Int32 nPara = 0; (nPara < nParaCount) && !bHasDateFieldItem; ++nPara)
             {
-                sal_uInt16 nFieldCount = pEdit->GetFieldCount( nPara );
-                sal_uInt16 nField;
-                for( nField = 0; (nField < nFieldCount) && (aFieldInfo.pFieldItem == nullptr); nField++ )
+                sal_uInt16 nFieldCount = pEdit->GetFieldCount(nPara);
+                for (sal_uInt16 nField = 0; (nField < nFieldCount) && !bHasDateFieldItem; ++nField)
                 {
-                    aFieldInfo = pEdit->GetFieldInfo( nPara, nField );
-                    if( aFieldInfo.pFieldItem )
+                    EFieldInfo aFieldInfo = pEdit->GetFieldInfo(nPara, nField);
+                    if (aFieldInfo.pFieldItem)
                     {
                         const SvxFieldData* pFieldData = aFieldInfo.pFieldItem->GetField();
-                        if( pFieldData && ( dynamic_cast< const SvxDateTimeField *>( pFieldData ) != nullptr || dynamic_cast< const SvxDateField *>( pFieldData ) != nullptr))
+                        if (dynamic_cast<const SvxDateTimeField*>(pFieldData) != nullptr ||
+                            dynamic_cast<const SvxDateField*>(pFieldData) != nullptr)
                         {
+                            bHasDateFieldItem = true;
+                            aDateFieldPosition = aFieldInfo.aPosition;
                             break;
                         }
                     }
-                    aFieldInfo.pFieldItem = nullptr;
                 }
             }
 
-            if( aFieldInfo.pFieldItem != nullptr )
+            if (bHasDateFieldItem)
             {
                 if( bSet )
                 {
-                    SfxItemSet aSet( pEdit->GetAttribs( aFieldInfo.aPosition.nPara, aFieldInfo.aPosition.nIndex, aFieldInfo.aPosition.nIndex+1, GetAttribsFlags::CHARATTRIBS ) );
+                    SfxItemSet aSet(pEdit->GetAttribs(aDateFieldPosition.nPara,
+                                                      aDateFieldPosition.nIndex,
+                                                      aDateFieldPosition.nIndex+1,
+                                                      GetAttribsFlags::CHARATTRIBS));
 
                     SvxLanguageItem aItem( rLanguage, EE_CHAR_LANGUAGE );
                     aSet.Put( aItem );
@@ -666,7 +669,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
                     SvxLanguageItem aItemCTL( rLanguage, EE_CHAR_LANGUAGE_CTL );
                     aSet.Put( aItemCTL );
 
-                    ESelection aSel( aFieldInfo.aPosition.nPara, aFieldInfo.aPosition.nIndex, aFieldInfo.aPosition.nPara, aFieldInfo.aPosition.nIndex+1 );
+                    ESelection aSel(aDateFieldPosition.nPara, aDateFieldPosition.nIndex,
+                                    aDateFieldPosition.nPara, aDateFieldPosition.nIndex+1 );
                     pEdit->QuickSetAttribs( aSet, aSel );
 
                     pObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
@@ -674,7 +678,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
                 }
                 else
                 {
-                    rLanguage =  pOutl->GetLanguage( aFieldInfo.aPosition.nPara, aFieldInfo.aPosition.nIndex );
+                    rLanguage =  pOutl->GetLanguage(aDateFieldPosition.nPara,
+                                                    aDateFieldPosition.nIndex );
                 }
             }
 
