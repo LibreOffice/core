@@ -187,14 +187,11 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
     {
         pItem->QueryValue( rAny, rEntry.nMemberId );
     }
-    else
+    else if(0 == (rEntry.nFlags & PropertyAttribute::MAYBEVOID))
     {
-        SfxItemSet aSet(*rSet.GetPool(), rEntry.nWID, rEntry.nWID);
-        if(0 == (rEntry.nFlags & PropertyAttribute::MAYBEVOID))
-            throw RuntimeException(
-                    "Property not found in ItemSet but not MAYBEVOID?", nullptr);
+        throw RuntimeException(
+            "Property not found in ItemSet but not MAYBEVOID?", nullptr);
     }
-
 
     // convert general SfxEnumItem values to specific values
     if( rEntry.aType.getTypeClass() == TypeClass_ENUM &&
