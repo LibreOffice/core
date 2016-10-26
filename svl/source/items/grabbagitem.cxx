@@ -17,25 +17,16 @@
 
 using namespace com::sun::star;
 
-SfxGrabBagItem::SfxGrabBagItem()
-{
-}
+SfxGrabBagItem::SfxGrabBagItem() = default;
 
 SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich) :
     SfxPoolItem(nWhich)
 {
 }
 
-SfxGrabBagItem::SfxGrabBagItem(const SfxGrabBagItem& rItem) :
-    SfxPoolItem(rItem),
-    m_aMap(rItem.m_aMap)
-{
-}
+SfxGrabBagItem::SfxGrabBagItem(const SfxGrabBagItem& rItem) = default;
 
-SfxGrabBagItem::~SfxGrabBagItem()
-{
-}
-
+SfxGrabBagItem::~SfxGrabBagItem() = default;
 
 bool SfxGrabBagItem::operator==(const SfxPoolItem& rItem) const
 {

@@ -15,9 +15,7 @@ SmWordExportBase::SmWordExportBase(const SmNode* pIn)
 {
 }
 
-SmWordExportBase::~SmWordExportBase()
-{
-}
+SmWordExportBase::~SmWordExportBase() = default;
 
 void SmWordExportBase::HandleNode(const SmNode* pNode, int nLevel)
 {
