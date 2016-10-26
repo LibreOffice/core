@@ -291,9 +291,9 @@ void OEditBaseModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
     }
 }
 
-
 sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
-                                            sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException )
+                                            sal_Int32 nHandle, const Any& rValue )
+    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     bool bModified(false);
     switch (nHandle)
@@ -325,7 +325,6 @@ sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rO
     }
     return bModified;
 }
-
 
 void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw ( css::uno::Exception, std::exception)
 {
