@@ -646,7 +646,7 @@ namespace frm
 
 
     sal_Bool OClickableImageBaseModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
-                                throw( IllegalArgumentException )
+                                throw( IllegalArgumentException, RuntimeException, std::exception )
     {
         switch (nHandle)
         {
