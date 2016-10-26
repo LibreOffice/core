@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -48,4 +49,5 @@ $(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3))): $(gb_Helpe
 endef
 
 endif
+
 # vim: set noet ts=4 sw=4:
