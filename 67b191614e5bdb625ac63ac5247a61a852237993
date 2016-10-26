@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_ab9388a2",
+        "filename": "svl/source/items/nranges.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-26T19:52:34Z",
+      "side": 1,
+      "message": "this looks like an O(n^2) loop, surely it should be doable in a single pass?",
+      "revId": "67b191614e5bdb625ac63ac5247a61a852237993",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
