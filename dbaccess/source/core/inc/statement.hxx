@@ -91,7 +91,9 @@ public:
                             css::uno::Any & rOldValue,
                             sal_Int32 nHandle,
                             const css::uno::Any& rValue )
-                                throw (css::lang::IllegalArgumentException) override;
+                                throw (css::lang::IllegalArgumentException,
+                                       css::uno::RuntimeException,
+                                       std::exception) override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const css::uno::Any& rValue

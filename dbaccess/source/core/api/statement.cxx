@@ -198,7 +198,7 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (Runtim
     return *getArrayHelper();
 }
 
-sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException  )
+sal_Bool OStatementBase::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException, RuntimeException, std::exception)
 {
     bool bModified(false);
     switch (nHandle)
