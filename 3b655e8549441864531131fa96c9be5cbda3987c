@@ -16,6 +16,24 @@
       "revId": "3b655e8549441864531131fa96c9be5cbda3987c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_1983f9cd",
+        "filename": "cui/source/dialogs/dlgname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-10-26T11:58:35Z",
+      "side": 1,
+      "message": "What do you think if we do it like this? https://codepaste.net/4kf13x\n\nSo that the new check will work both when aCheckNameHdl.IsSet() is true and when it is false.",
+      "parentUuid": "7a77a97e_19e779e5",
+      "revId": "3b655e8549441864531131fa96c9be5cbda3987c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
