@@ -2357,7 +2357,8 @@ void SfxMedium::GetLockingStream_Impl()
 
 void SfxMedium::GetMedium_Impl()
 {
-    if ( !pImp->m_pInStream )
+    if ( !pImp->m_pInStream
+        || (pImp->bIsTemp && !pImp->xInputStream.is() && !pImp->m_xInputStreamToLoadFrom.is() && !pImp->xStream.is() && !pImp->m_xLockingStream.is() ) )
     {
         pImp->bDownloadDone = false;
         Reference< css::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
