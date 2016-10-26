@@ -171,7 +171,6 @@ namespace accessibility
 
         // syntactic sugar for FireEvent
         void GotPropertyEvent( const uno::Any& rNewValue, const sal_Int16 nEventId ) const { FireEvent( nEventId, rNewValue ); }
-        void LostPropertyEvent( const uno::Any& rOldValue, const sal_Int16 nEventId ) const { FireEvent( nEventId, uno::Any(), rOldValue ); }
 
         // shutdown usage of current edit source on myself and the children.
         void ShutdownEditSource();
@@ -437,7 +436,7 @@ namespace accessibility
                 {
                     AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
                     if ( !pAccessibleCell )
-                            LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
+                        FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::makeAny(AccessibleStateType::FOCUSED) );
                     else
                     {
                         AccessibleTableShape* pAccTable = pAccessibleCell->GetParentTable();

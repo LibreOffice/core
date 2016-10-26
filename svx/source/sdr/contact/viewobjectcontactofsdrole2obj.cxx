@@ -37,11 +37,6 @@ using namespace com::sun::star;
 
 namespace sdr { namespace contact {
 
-const SdrOle2Obj& ViewObjectContactOfSdrOle2Obj::getSdrOle2Object() const
-{
-    return static_cast< ViewContactOfSdrOle2Obj& >(GetViewContact()).GetOle2Obj();
-}
-
 drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
     const DisplayInfo& /*rDisplayInfo*/) const
 {
@@ -49,7 +44,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::c
     // In the future, some of these may be solved different, but ATM try to stay compatible
     // with the old behaviour
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
-    const SdrOle2Obj& rSdrOle2 = getSdrOle2Object();
+    const SdrOle2Obj& rSdrOle2 = static_cast< ViewContactOfSdrOle2Obj& >(GetViewContact()).GetOle2Obj();
     sal_Int32 nState(-1);
 
     {

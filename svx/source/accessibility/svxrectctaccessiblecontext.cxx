@@ -529,7 +529,9 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getSelectedAccess
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
-    checkChildIndexOnSelection( nIndex );
+    if( nIndex || mnSelectedChild == NOCHILDSELECTED )
+        // in our case only for the first (0) _selected_ child this is a valid request
+        throw lang::IndexOutOfBoundsException();
 
     return getAccessibleChild( mnSelectedChild );
 }
@@ -547,13 +549,6 @@ void SAL_CALL SvxRectCtlAccessibleContext::deselectAccessibleChild( sal_Int32 /*
 void SvxRectCtlAccessibleContext::checkChildIndex( long nIndex ) throw( lang::IndexOutOfBoundsException )
 {
     if( nIndex < 0 || nIndex >= getAccessibleChildCount() )
-        throw lang::IndexOutOfBoundsException();
-}
-
-void SvxRectCtlAccessibleContext::checkChildIndexOnSelection( long nIndex ) throw( lang::IndexOutOfBoundsException )
-{
-    if( nIndex || mnSelectedChild == NOCHILDSELECTED )
-        // in our case only for the first (0) _selected_ child this is a valid request
         throw lang::IndexOutOfBoundsException();
 }
 
@@ -580,7 +575,9 @@ void SvxRectCtlAccessibleContext::FireChildFocus( RectPoint eButton )
             Any                             aOld;
             Any                             aNew;
             aNew <<= AccessibleStateType::FOCUSED;
-            CommitChange( AccessibleEventObject( xSource, AccessibleEventId::STATE_CHANGED, aNew, aOld ) );
+            if (mnClientId)
+                comphelper::AccessibleEventNotifier::addEvent( mnClientId,
+                                                               AccessibleEventObject( xSource, AccessibleEventId::STATE_CHANGED, aNew, aOld ) );
         }
     }
     else
@@ -621,12 +618,6 @@ void SvxRectCtlAccessibleContext::selectChild(RectPoint eButton )
 {
     // no guard -> is done in next selectChild
     selectChild(PointToIndex( eButton, mbAngleMode ));
-}
-
-void SvxRectCtlAccessibleContext::CommitChange( const AccessibleEventObject& rEvent )
-{
-    if (mnClientId)
-        comphelper::AccessibleEventNotifier::addEvent( mnClientId, rEvent );
 }
 
 void SAL_CALL SvxRectCtlAccessibleContext::disposing()
@@ -690,7 +681,7 @@ Rectangle SvxRectCtlAccessibleContext::GetBoundingBox() throw( RuntimeException 
 
 void SvxRectCtlAccessibleContext::ThrowExceptionIfNotAlive() throw( lang::DisposedException )
 {
-    if( IsNotAlive() )
+    if( rBHelper.bDisposed || rBHelper.bInDispose )
         throw lang::DisposedException();
 }
 
@@ -1046,7 +1037,7 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::disposing()
 
 void SvxRectCtlChildAccessibleContext::ThrowExceptionIfNotAlive() throw( lang::DisposedException )
 {
-    if( IsNotAlive() )
+    if( rBHelper.bDisposed || rBHelper.bInDispose )
         throw lang::DisposedException();
 }
 

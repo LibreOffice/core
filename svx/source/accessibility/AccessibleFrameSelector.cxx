@@ -483,16 +483,10 @@ IMPL_LINK( AccFrameSelector, WindowEventListener, VclWindowEvent&, rEvent, void 
 {
     vcl::Window* pWindow = rEvent.GetWindow();
     DBG_ASSERT( pWindow, "AccFrameSelector::WindowEventListener: no window!" );
-    if ( !pWindow->IsAccessibilityEventsSuppressed() || ( rEvent.GetId() == VCLEVENT_OBJECT_DYING ) )
-    {
-        ProcessWindowEvent( rEvent );
-    }
-}
+    if ( pWindow->IsAccessibilityEventsSuppressed() && ( rEvent.GetId() != VCLEVENT_OBJECT_DYING ) )
+        return;
 
-
-void AccFrameSelector::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
-{
-    switch ( rVclWindowEvent.GetId() )
+    switch ( rEvent.GetId() )
     {
         case VCLEVENT_WINDOW_GETFOCUS:
         {

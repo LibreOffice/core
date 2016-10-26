@@ -80,7 +80,6 @@ private:
     SfxBindings* mpBindings;
     long nX,nY,nXY;
 
-    void InsertDistanceValues();
     void InsertAngleValues();
     void SetTransparencyValue(long);
     void UpdateControls();

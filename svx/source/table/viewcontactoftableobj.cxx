@@ -507,7 +507,7 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DContainer ViewContactOfTableObj::createViewIndependentPrimitive2DSequence() const
         {
-            const sdr::table::SdrTableObj& rTableObj = GetTableObj();
+            const sdr::table::SdrTableObj& rTableObj = static_cast<const sdr::table::SdrTableObj&>(GetSdrObject());
             const uno::Reference< css::table::XTable > xTable = rTableObj.getTable();
 
             if(xTable.is())

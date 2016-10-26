@@ -211,7 +211,6 @@ private:
     SVX_DLLPRIVATE ::std::vector<sal_uInt32>::iterator GetRemoved_Impl( size_t nKey );
     SVX_DLLPRIVATE bool                                IsRemoved_Impl( size_t nKey );
     SVX_DLLPRIVATE ::std::vector<sal_uInt32>::iterator GetAdded_Impl( size_t nKey );
-    SVX_DLLPRIVATE bool                                IsAdded_Impl( size_t nKey );
 
     SVX_DLLPRIVATE void  GetPreviewString_Impl( OUString& rString,
                                                 Color*& rpColor );

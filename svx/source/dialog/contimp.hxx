@@ -112,9 +112,6 @@ public:
 
     const void*         GetEditingObject() const { return pCheckObj; }
 
-    bool                IsUndoPossible() const;
-    bool                IsRedoPossible() const;
-
     void                UpdateGraphic( const Graphic& rGraphic, bool bGraphicLinked,
                                 const tools::PolyPolygon* pPolyPoly,
                                 void* pEditingObj );

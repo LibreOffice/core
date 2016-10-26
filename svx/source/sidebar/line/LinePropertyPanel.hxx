@@ -112,8 +112,6 @@ private:
 
     SfxBindings* mpBindings;
     vcl::EnumContext maContext;
-
-    void Initialize();
 };
 
 } } // end of namespace svx::sidebar

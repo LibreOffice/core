@@ -147,9 +147,6 @@ protected:
     /// stops multiplexing the state changes of our aggregate context
     void    stopStateMultiplexing( );
 
-    /// retrieves the SdrObject of the shape we represent
-    SdrObject*  getSdrObject( ) const;
-
     /** adjusts our AccessibleRole, depending on the control type we're working for
 
         <p>Only to be called during initialization</p>

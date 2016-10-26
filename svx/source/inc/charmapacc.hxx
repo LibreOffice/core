@@ -109,7 +109,6 @@ namespace svx
         ~SvxShowCharSetItem();
 
         css::uno::Reference< css::accessibility::XAccessible > const &    GetAccessible();
-         void                                                             ClearAccessible();
     };
 
 

@@ -67,24 +67,10 @@ GalleryTheme::~GalleryTheme()
 }
 
 
-OUString GalleryTheme::getImplementationName_Static()
-    throw()
-{
-    return OUString( "com.sun.star.comp.gallery.GalleryTheme" );
-}
-
-
-uno::Sequence< OUString > GalleryTheme::getSupportedServiceNames_Static()
-    throw()
-{
-    uno::Sequence< OUString > aSeq { "com.sun.star.gallery.GalleryTheme" };
-    return aSeq;
-}
-
 OUString SAL_CALL GalleryTheme::getImplementationName()
     throw( uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
+    return OUString( "com.sun.star.comp.gallery.GalleryTheme" );
 }
 
 sal_Bool SAL_CALL GalleryTheme::supportsService( const OUString& ServiceName )
@@ -96,7 +82,7 @@ sal_Bool SAL_CALL GalleryTheme::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL GalleryTheme::getSupportedServiceNames()
     throw( uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.gallery.GalleryTheme" };
 }
 
 uno::Sequence< uno::Type > SAL_CALL GalleryTheme::getTypes()

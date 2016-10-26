@@ -166,16 +166,11 @@ SdrPageView::~SdrPageView()
     ClearPageWindows();
 }
 
-void SdrPageView::CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow)
-{
-    maPageWindows.push_back(new SdrPageWindow(*this, rPaintWindow));
-}
-
 void SdrPageView::AddPaintWindowToPageView(SdrPaintWindow& rPaintWindow)
 {
     if(!FindPageWindow(rPaintWindow))
     {
-        CreateNewPageWindowEntry(rPaintWindow);
+        maPageWindows.push_back(new SdrPageWindow(*this, rPaintWindow));
     }
 }
 

@@ -203,7 +203,6 @@ private:
 
 protected:
 
-    void            ShowDateFields(SvxRedlinDateMode nKind);
     void            EnableDateLine1(bool bFlag);
     void            EnableDateLine2(bool bFlag);
 
@@ -351,7 +350,6 @@ public:
 
     SvxTPFilter*    GetFilterPage() { return pTPFilter;}
     SvxTPView*      GetViewPage() { return pTPView;}
-    SvxRedlinTable* GetViewTable();
 };
 
 #endif // INCLUDED_SVX_CTREDLIN_HXX

@@ -39,17 +39,16 @@ GalleryControl::GalleryControl (
     : Window(pParentWindow, WB_SIZEABLE|WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE),
       mpGallery (Gallery::GetGalleryInstance()),
       mpSplitter(VclPtr<GallerySplitter>::Create(
-
               this,
               WB_HSCROLL,
               [this] () { return this->InitSettings(); })),
       mpBrowser1(VclPtr<GalleryBrowser1>::Create(
-
               this,
               mpGallery,
               [this] (KeyEvent const& rEvent, vcl::Window *const pWindow)
                   { return this->GalleryKeyInput(rEvent, pWindow); },
-              [this] () { return this->ThemeSelectionHasChanged(); })),
+              [this] ()
+                  { return mpBrowser2->SelectTheme(mpBrowser1->GetSelectedTheme()); })),
       mpBrowser2(VclPtr<GalleryBrowser2>::Create(this, mpGallery)),
       maLastSize(GetOutputSizePixel()),
       mbIsInitialResize(true)
@@ -218,11 +217,6 @@ void GalleryControl::GetFocus()
     Window::GetFocus();
     if (mpBrowser1)
         mpBrowser1->GrabFocus();
-}
-
-void GalleryControl::ThemeSelectionHasChanged()
-{
-    mpBrowser2->SelectTheme(mpBrowser1->GetSelectedTheme());
 }
 
 IMPL_LINK_NOARG( GalleryControl, SplitHdl, Splitter*, void )

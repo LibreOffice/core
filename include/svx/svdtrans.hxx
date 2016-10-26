@@ -287,7 +287,6 @@ class SVX_DLLPUBLIC SdrFormatter {
     MapUnit   eDstMU;
 private:
     SVX_DLLPRIVATE void Undirty();
-    SVX_DLLPRIVATE void ForceUndirty() const { if (bDirty) const_cast<SdrFormatter*>(this)->Undirty(); }
 public:
     SdrFormatter(MapUnit eSrc, MapUnit eDst)
         : nMul_(0)

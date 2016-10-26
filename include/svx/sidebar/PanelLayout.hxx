@@ -27,7 +27,6 @@ class SVX_DLLPUBLIC PanelLayout : public Control, public VclBuilderContainer
 private:
     Idle m_aPanelLayoutIdle;
     bool m_bInClose;
-    bool hasPanelPendingLayout() const;
 
     DECL_DLLPRIVATE_LINK(ImplHandlePanelLayoutTimerHdl, Idle*, void);
 

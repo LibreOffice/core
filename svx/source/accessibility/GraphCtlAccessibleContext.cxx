@@ -276,16 +276,9 @@ void SvxGraphCtrlAccessibleContext::CommitChange (
         rNewValue,
         rOldValue);
 
-    FireEvent (aEvent);
-}
-
-/** sends an AccessibleEventObject to all added XAccessibleEventListeners */
-void SvxGraphCtrlAccessibleContext::FireEvent (const AccessibleEventObject& aEvent)
-{
     if (mnClientId)
         comphelper::AccessibleEventNotifier::addEvent( mnClientId, aEvent );
 }
-
 
 Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChild( sal_Int32 nIndex )
     throw( RuntimeException, lang::IndexOutOfBoundsException, std::exception )

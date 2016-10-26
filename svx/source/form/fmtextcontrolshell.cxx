@@ -1279,8 +1279,11 @@ namespace svx
     }
 
 
-    void FmTextControlShell::impl_parseURL_nothrow( URL& _rURL )
+    FmTextControlFeature* FmTextControlShell::implGetFeatureDispatcher( const Reference< XDispatchProvider >& _rxProvider, SfxApplication* _pApplication, SfxSlotId _nSlot )
     {
+        OSL_PRECOND( _rxProvider.is() && _pApplication, "FmTextControlShell::implGetFeatureDispatcher: invalid arg(s)!" );
+        URL aFeatureURL;
+        aFeatureURL.Complete = lcl_getUnoSlotName( *_pApplication, _nSlot );
         try
         {
             if ( !m_xURLTransformer.is() )
@@ -1288,21 +1291,12 @@ namespace svx
                 m_xURLTransformer = util::URLTransformer::create( ::comphelper::getProcessComponentContext() );
             }
             if ( m_xURLTransformer.is() )
-                m_xURLTransformer->parseStrict( _rURL );
+                m_xURLTransformer->parseStrict( aFeatureURL );
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-    }
-
-
-    FmTextControlFeature* FmTextControlShell::implGetFeatureDispatcher( const Reference< XDispatchProvider >& _rxProvider, SfxApplication* _pApplication, SfxSlotId _nSlot )
-    {
-        OSL_PRECOND( _rxProvider.is() && _pApplication, "FmTextControlShell::implGetFeatureDispatcher: invalid arg(s)!" );
-        URL aFeatureURL;
-        aFeatureURL.Complete = lcl_getUnoSlotName( *_pApplication, _nSlot );
-        impl_parseURL_nothrow( aFeatureURL );
         Reference< XDispatch > xDispatcher = _rxProvider->queryDispatch( aFeatureURL, OUString(), 0xFF );
         if ( xDispatcher.is() )
             return new FmTextControlFeature( xDispatcher, aFeatureURL, _nSlot, this );

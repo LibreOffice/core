@@ -1304,8 +1304,8 @@ void SdrMarkView::SetMarkRects()
 
     if(pPV)
     {
-        pPV->SetHasMarkedObj(GetSnapRectFromMarkedObjects(pPV, pPV->MarkSnap()));
-        GetBoundRectFromMarkedObjects(pPV, pPV->MarkBound());
+        pPV->SetHasMarkedObj(GetMarkedObjectList().TakeSnapRect(pPV, pPV->MarkSnap()));
+        GetMarkedObjectList().TakeBoundRect(pPV, pPV->MarkBound());
     }
 }
 
@@ -2094,7 +2094,7 @@ void SdrMarkView::EnterMarkedGroup()
 void SdrMarkView::MarkListHasChanged()
 {
     GetMarkedObjectListWriteAccess().SetNameDirty();
-    SetEdgesOfMarkedNodesDirty();
+    mpSdrViewSelection->SetEdgesOfMarkedNodesDirty();
 
     mbMarkedObjRectDirty=true;
     mbMarkedPointsRectsDirty=true;

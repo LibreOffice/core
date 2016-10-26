@@ -295,7 +295,7 @@ bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
     if ( bInserted )
     {
         nCurFormatKey = nAddKey;
-        DBG_ASSERT( !IsAdded_Impl( nCurFormatKey ), "duplicate format!" );
+        DBG_ASSERT( GetAdded_Impl( nCurFormatKey ) == aAddList.end(), "duplicate format!" );
         aAddList.push_back( nCurFormatKey );
 
         // get current table
@@ -1147,11 +1147,6 @@ bool SvxNumberFormatShell::IsRemoved_Impl( size_t nKey )
     return ::std::find(aAddList.begin(), aAddList.end(), nKey);
 }
 
-
-bool SvxNumberFormatShell::IsAdded_Impl( size_t nKey )
-{
-    return GetAdded_Impl( nKey ) != aAddList.end();
-}
 
 // Konvertierungs-Routinen:
 void SvxNumberFormatShell::PosToCategory_Impl(sal_uInt16 nPos, short& rCategory)

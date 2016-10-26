@@ -192,10 +192,6 @@ namespace svx
         */
         void    stopControllerListening( );
 
-        /** parses the given URL's Complete member, by calling XURLTransformer::parseString
-        */
-        void    impl_parseURL_nothrow( css::util::URL& _rURL );
-
         DECL_LINK( OnInvalidateClipboard, Timer*, void );
     };
 

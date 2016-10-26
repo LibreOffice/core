@@ -278,11 +278,6 @@ void SvxIMapDlg::SetExecState( bool bEnable )
     pOwnData->bExecState = bEnable;
 }
 
-void SvxIMapDlg::SetImageMap( const ImageMap& rImageMap )
-{
-    pIMapWnd->SetImageMap( rImageMap );
-}
-
 const ImageMap& SvxIMapDlg::GetImageMap() const
 {
     return pIMapWnd->GetImageMap();
@@ -733,7 +728,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl, Idle *, void)
         }
 
         pIMapWnd->SetGraphic( pOwnData->aUpdateGraphic );
-        SetImageMap( pOwnData->aUpdateImageMap );
+        pIMapWnd->SetImageMap( pOwnData->aUpdateImageMap );
         SetTargetList( pOwnData->aUpdateTargetList );
         pCheckObj = pOwnData->pUpdateEditingObject;
 

@@ -28,12 +28,6 @@ using namespace com::sun::star;
 
 namespace sdr
 {
-    // ViewContact part
-    sdr::contact::ViewContact* MasterPageDescriptor::CreateObjectSpecificViewContact()
-    {
-        return new sdr::contact::ViewContactOfMasterPageDescriptor(*this);
-    }
-
     MasterPageDescriptor::MasterPageDescriptor(SdrPage& aOwnerPage, SdrPage& aUsedPage)
     :   maOwnerPage(aOwnerPage),
         maUsedPage(aUsedPage),
@@ -64,7 +58,7 @@ namespace sdr
         if(!mpViewContact)
         {
             const_cast< MasterPageDescriptor* >(this)->mpViewContact =
-                const_cast< MasterPageDescriptor* >(this)->CreateObjectSpecificViewContact();
+                new sdr::contact::ViewContactOfMasterPageDescriptor(*const_cast< MasterPageDescriptor* >(this));
         }
 
         return *mpViewContact;

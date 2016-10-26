@@ -175,7 +175,11 @@ SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
 
 void SAL_CALL SvXMLEmbeddedObjectHelper::disposing()
 {
-    Flush();
+    if( mxTempStorage.is() )
+    {
+        Reference < XComponent > xComp( mxTempStorage, UNO_QUERY );
+        xComp->dispose();
+    }
 }
 
 void SvXMLEmbeddedObjectHelper::splitObjectURL(const OUString& _aURLNoPar,
@@ -592,15 +596,6 @@ void SvXMLEmbeddedObjectHelper::Destroy(
     {
         pSvXMLEmbeddedObjectHelper->dispose();
         pSvXMLEmbeddedObjectHelper->release();
-    }
-}
-
-void SvXMLEmbeddedObjectHelper::Flush()
-{
-    if( mxTempStorage.is() )
-    {
-        Reference < XComponent > xComp( mxTempStorage, UNO_QUERY );
-        xComp->dispose();
     }
 }
 

@@ -222,7 +222,8 @@ uno::Reference<XAccessible > SAL_CALL SvxPixelCtlAccessible::getAccessibleAtPoin
     throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    ensureIsAlive();
+    if( !IsAlive() )
+        throw lang::DisposedException();
     uno::Reference <XAccessible> xAcc;
 
     Point childPoint;
@@ -364,14 +365,6 @@ void SAL_CALL SvxPixelCtlAccessible::deselectAccessibleChild( sal_Int32 ) throw 
 {
 }
 
-// Added by lq
-void SvxPixelCtlAccessible::ensureIsAlive() const
-    throw ( lang::DisposedException )
-{
-    if( !IsAlive() )
-        throw lang::DisposedException();
-}
-
 //XAccessibleEventBroadcaster
 void SAL_CALL SvxPixelCtlAccessible::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )  throw( RuntimeException, std::exception )
 {
@@ -399,17 +392,13 @@ void SAL_CALL SvxPixelCtlAccessible::removeAccessibleEventListener( const uno::R
         }
     }
 }
-void SvxPixelCtlAccessible::CommitChange( const AccessibleEventObject& rEvent )
-{
-    if (mnClientId)
-        comphelper::AccessibleEventNotifier::addEvent( mnClientId, rEvent );
-}
 
 //Solution:Add the event handling method
 void SvxPixelCtlAccessible::FireAccessibleEvent (short nEventId, const css::uno::Any& rOld, const css::uno::Any& rNew)
 {
     const uno::Reference< XInterface >  xSource( *this );
-    CommitChange( AccessibleEventObject( xSource, nEventId, rNew,rOld ) );
+    if (mnClientId)
+        comphelper::AccessibleEventNotifier::addEvent( mnClientId, AccessibleEventObject( xSource, nEventId, rNew,rOld ) );
 }
 
 void SAL_CALL SvxPixelCtlAccessible::disposing()
@@ -543,7 +532,8 @@ void SvxPixelCtlAccessibleChild::FireAccessibleEvent (
     const css::uno::Any& rNew)
 {
     const uno::Reference< XInterface >  xSource( *this );
-    CommitChange( AccessibleEventObject( xSource, nEventId, rNew,rOld ) );
+    if (mnClientId)
+        comphelper::AccessibleEventNotifier::addEvent( mnClientId, AccessibleEventObject( xSource, nEventId, rNew,rOld ) );
 }
 
 SvxPixelCtlAccessibleChild::SvxPixelCtlAccessibleChild(
@@ -788,13 +778,6 @@ Sequence< OUString > SAL_CALL SvxPixelCtlAccessibleChild::getSupportedServiceNam
     return aRet;
 }
 
-// internal
-void SvxPixelCtlAccessibleChild::CommitChange( const AccessibleEventObject& rEvent )
-{
-    if (mnClientId)
-        comphelper::AccessibleEventNotifier::addEvent( mnClientId, rEvent );
-}
-
 void SAL_CALL SvxPixelCtlAccessibleChild::disposing()
 {
     if( !rBHelper.bDisposed )
@@ -816,7 +799,7 @@ void SAL_CALL SvxPixelCtlAccessibleChild::disposing()
 
 void SvxPixelCtlAccessibleChild::ThrowExceptionIfNotAlive() throw( lang::DisposedException )
 {
-    if( IsNotAlive() )
+    if( rBHelper.bDisposed || rBHelper.bInDispose )
         throw lang::DisposedException();
 }
 

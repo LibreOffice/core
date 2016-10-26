@@ -739,7 +739,8 @@ void SdrFormatter::TakeStr(long nVal, OUString& rStr) const
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
 
-    ForceUndirty();
+    if (bDirty)
+        const_cast<SdrFormatter*>(this)->Undirty();
 
     sal_Int16 nC(nKomma_);
 

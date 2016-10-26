@@ -70,8 +70,6 @@ class SVX_DLLPUBLIC Viewport3D
     double fWRatio;                 // device/view aspect ratio
     double fHRatio;
 
-    void MakeTransform();
-
  public:
     Viewport3D();
 

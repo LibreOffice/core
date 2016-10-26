@@ -144,7 +144,6 @@ public:
 
     const void*         GetEditingObject() const { return pCheckObj; }
 
-    void                SetImageMap( const ImageMap& rImageMap );
     const ImageMap&     GetImageMap() const;
 
     void                SetTargetList( const TargetList& rTargetList );

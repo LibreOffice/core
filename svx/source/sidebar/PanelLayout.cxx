@@ -57,16 +57,11 @@ Size PanelLayout::GetOptimalSize() const
     return Control::GetOptimalSize();
 }
 
-bool PanelLayout::hasPanelPendingLayout() const
-{
-    return m_aPanelLayoutIdle.IsActive();
-}
-
 void PanelLayout::queue_resize(StateChangedType /*eReason*/)
 {
     if (m_bInClose)
         return;
-    if (hasPanelPendingLayout())
+    if (m_aPanelLayoutIdle.IsActive())
         return;
     if (!isLayoutEnabled(this))
         return;

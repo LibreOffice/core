@@ -195,7 +195,6 @@ public:
     SvxColumnDescription&       GetActiveColumnDescription();
 
     sal_uInt16  Count() const;
-    void        Insert(const SvxColumnDescription& rDesc, sal_uInt16 nPos);
     void        Append(const SvxColumnDescription& rDesc);
     void        SetLeft(long aLeft);
     void        SetRight(long aRight);

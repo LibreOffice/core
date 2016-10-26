@@ -110,7 +110,6 @@ public:
     {}
 
     Point& ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode);
-    const Point& ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode) const { return const_cast<SdrEdgeInfoRec*>(this)->ImpGetLineVersatzPoint(eLineCode); }
     sal_uInt16 ImpGetPolyIdx(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
     bool ImpIsHorzLine(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
     void ImpSetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP, long nVal);

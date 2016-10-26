@@ -49,9 +49,6 @@ public:
 
     bool    isValid() const;
 
-    static OUString getImplementationName_Static() throw();
-    static css::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
-
 protected:
 
     // XInterface

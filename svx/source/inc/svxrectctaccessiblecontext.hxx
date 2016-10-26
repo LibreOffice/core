@@ -202,8 +202,6 @@ protected:
     // internals
     void checkChildIndex( long nIndexOfChild ) throw( css::lang::IndexOutOfBoundsException );
 
-    void checkChildIndexOnSelection( long nIndexOfChild ) throw( css::lang::IndexOutOfBoundsException );
-
     /** Selects a new child by index.
 
         <p>If the child was not selected before, the state of the child will
@@ -234,16 +232,10 @@ protected:
     /// @Return the object's current bounding box relative to the parent object.
     Rectangle GetBoundingBox() throw( css::uno::RuntimeException );
 
-    /// Calls all Listener to tell they the change.
-    void CommitChange( const css::accessibility::AccessibleEventObject& rEvent );
-
     virtual void SAL_CALL disposing() override;
 
     /// @returns true if it's disposed or in disposing
     inline bool IsAlive() const;
-
-    /// @returns true if it's not disposed and no in disposing
-    inline bool IsNotAlive() const;
 
     /// throws the exception DisposedException if it's not alive
     void ThrowExceptionIfNotAlive() throw( css::lang::DisposedException );
@@ -281,11 +273,6 @@ private:
 inline bool SvxRectCtlAccessibleContext::IsAlive() const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
-}
-
-inline bool SvxRectCtlAccessibleContext::IsNotAlive() const
-{
-    return rBHelper.bDisposed || rBHelper.bInDispose;
 }
 
 typedef ::cppu::WeakAggComponentImplHelper7<
@@ -434,9 +421,6 @@ protected:
     /// @returns true if it's disposed or in disposing
     inline bool IsAlive() const;
 
-    /// @returns true if it's not disposed and no in disposing
-    inline bool IsNotAlive() const;
-
     /// throws the exception DisposedException if it's not alive
     void ThrowExceptionIfNotAlive() throw( css::lang::DisposedException );
 
@@ -479,11 +463,6 @@ private:
 inline bool SvxRectCtlChildAccessibleContext::IsAlive() const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
-}
-
-inline bool SvxRectCtlChildAccessibleContext::IsNotAlive() const
-{
-    return rBHelper.bDisposed || rBHelper.bInDispose;
 }
 
 

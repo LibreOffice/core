@@ -144,8 +144,6 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         MapUnit         eCoreUnit;
         // store the attributes passed from pSet
         OUString        aNumCharFmtName;
-        void            StoreBulCharFmtName_impl();
-        void            StoreMapUnit_impl();
         NBOTypeMgrBase(const NBOTypeMgrBase&) = delete;
 
     public:
@@ -164,7 +162,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         virtual bool IsCustomized(sal_uInt16 nIndex)=0;
         static sal_uInt16 IsSingleLevel(sal_uInt16 nCurLevel);
         // store the attributes passed from pSet
-        void SetItems(const SfxItemSet* pArg) { pSet = pArg;StoreBulCharFmtName_impl();StoreMapUnit_impl();}
+        void SetItems(const SfxItemSet* pArg);
     protected:
         const OUString& GetBulCharFmtName() { return aNumCharFmtName;}
         MapUnit GetMapUnit() { return eCoreUnit;}

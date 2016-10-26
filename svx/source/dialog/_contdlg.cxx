@@ -421,16 +421,6 @@ void SvxSuperContourDlg::UpdateGraphic( const Graphic& rGraphic, bool _bGraphicL
     aUpdateIdle.Start();
 }
 
-bool SvxSuperContourDlg::IsUndoPossible() const
-{
-    return aUndoGraphic.GetType() != GraphicType::NONE;
-}
-
-bool SvxSuperContourDlg::IsRedoPossible() const
-{
-    return aRedoGraphic.GetType() != GraphicType::NONE;
-}
-
 // Click handler for ToolBox
 
 IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
@@ -635,8 +625,8 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
     m_pTbx1->EnableItem(mnAutoContourId, bDontHide && bDrawEnabled);
     m_pTbx1->EnableItem(mnPipetteId, !bWorkplace && bDrawEnabled && bBitmap);
 
-    m_pTbx1->EnableItem(mnUndoId, bDontHide && IsUndoPossible());
-    m_pTbx1->EnableItem(mnRedoId, bDontHide && IsRedoPossible());
+    m_pTbx1->EnableItem(mnUndoId, bDontHide && aUndoGraphic.GetType() != GraphicType::NONE);
+    m_pTbx1->EnableItem(mnRedoId, bDontHide && aRedoGraphic.GetType() != GraphicType::NONE);
 
     if ( bPolyEdit )
     {

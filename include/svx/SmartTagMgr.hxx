@@ -117,8 +117,6 @@ private:
     */
     void AssociateActionsWithRecognizers();
 
-    void CreateBreakIterator() const;
-
 public:
 
     SmartTagMgr( const OUString& rApplicationName );

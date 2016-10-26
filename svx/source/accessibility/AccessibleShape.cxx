@@ -485,7 +485,12 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
             xStateSet.set( new ::utl::AccessibleStateSetHelper (*pStateSet));
         }
     }
-    UpdateDocumentAllSelState(xStateSet);
+    if (mpParent && mpParent->IsDocumentSelAll())
+    {
+        ::utl::AccessibleStateSetHelper* pStateSet =
+            static_cast< ::utl::AccessibleStateSetHelper*>(xStateSet.get());
+        pStateSet->AddState (AccessibleStateType::SELECTED);
+    }
     return xStateSet;
 }
 
@@ -1331,21 +1336,6 @@ sal_Int16 SAL_CALL AccessibleShape::getAccessibleRole()
     return nAccessibleRole;
 }
 
-
-void AccessibleShape::UpdateDocumentAllSelState(Reference<XAccessibleStateSet> &xStateSet)
-{
-    if (mpParent && mpParent->IsDocumentSelAll())
-    {
-        ::utl::AccessibleStateSetHelper* pStateSet =
-            static_cast< ::utl::AccessibleStateSetHelper*>(xStateSet.get());
-        pStateSet->AddState (AccessibleStateType::SELECTED);
-
-        //uno::Any NewValue;
-        //NewValue <<= AccessibleStateType::SELECTED;
-
-        //CommitChange(AccessibleEventId::STATE_CHANGED,NewValue,uno::Any());
-    }
-}
 
 //sort the drawing objects from up to down, from left to right
 struct XShapePosCompareHelper
