@@ -25,6 +25,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	concat-deps \
 	cpp \
 	cppunittester \
+	gbuildtojson \
 	$(if $(filter MSC,$(COM)), \
 		gcc-wrapper \
 		g++-wrapper \
