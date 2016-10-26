@@ -249,7 +249,7 @@ namespace frm
 
 
     bool FontControlModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
-                sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException )
+                sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException, RuntimeException, std::exception )
     {
         bool bModified = false;
         switch( _nHandle )
