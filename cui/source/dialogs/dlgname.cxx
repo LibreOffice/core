@@ -60,8 +60,11 @@ void SvxNameDialog::dispose()
 
 IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl, Edit&, void)
 {
+    // Do not allow empty names
     if(aCheckNameHdl.IsSet())
-        pBtnOK->Enable(aCheckNameHdl.Call(*this));
+        pBtnOK->Enable(!pEdtName->GetText().isEmpty() && aCheckNameHdl.Call(*this));
+    else
+        pBtnOK->Enable(!pEdtName->GetText().isEmpty());
 }
 
 
