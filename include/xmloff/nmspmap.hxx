@@ -50,13 +50,6 @@ public:
     sal_uInt16          nKey;
 };
 
-struct uInt32lt
-{
-    bool operator()( sal_uInt32 r1, sal_uInt32 r2) const
-    {
-        return r1 < r2;
-    }
-};
 typedef ::std::pair < sal_uInt16, OUString > QNamePair;
 
 struct QNamePairHash
@@ -69,7 +62,7 @@ struct QNamePairHash
 
 typedef std::unordered_map < QNamePair, OUString, QNamePairHash > QNameCache;
 typedef std::unordered_map < OUString, ::rtl::Reference <NameSpaceEntry >, OUStringHash > NameSpaceHash;
-typedef std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry >, uInt32lt > NameSpaceMap;
+typedef std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry > > NameSpaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
 {

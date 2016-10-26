@@ -85,7 +85,7 @@ namespace dbaui
             ExternalFeature( const css::util::URL& _rURL ) : aURL( _rURL ), bEnabled( false ) { }
         };
 
-        typedef ::std::map< sal_uInt16, ExternalFeature, ::std::less< sal_uInt16 > >  ExternalFeaturesMap;
+        typedef ::std::map< sal_uInt16, ExternalFeature >  ExternalFeaturesMap;
         ExternalFeaturesMap     m_aExternalFeatures;
 
         svx::ODataAccessDescriptor    m_aDocumentDataSource;

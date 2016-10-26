@@ -400,7 +400,7 @@ FlashFont::~FlashFont()
 sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
 {
     // see if we already created a glyph for this character
-    std::map<sal_uInt16, sal_uInt16, ltuint16>::iterator aIter( maGlyphIndex.find(nChar) );
+    std::map<sal_uInt16, sal_uInt16>::iterator aIter( maGlyphIndex.find(nChar) );
     if( aIter != maGlyphIndex.end() )
     {
         return aIter->second;
