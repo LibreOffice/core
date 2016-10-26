@@ -16,6 +16,24 @@
       "revId": "469db432a67f81979550afa18ad3145464a515f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_999389fa",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-10-26T14:04:58Z",
+      "side": 1,
+      "message": "This should be short-lived, once 5.3 is out we will, hopefully, removed the old layout code in this will be removed along with this string since there will be only one layout engine.",
+      "parentUuid": "7a77a97e_5989f1c9",
+      "revId": "469db432a67f81979550afa18ad3145464a515f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
