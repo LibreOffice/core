@@ -1201,7 +1201,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
                     ScRange aRange(nCol, nRow1, nStartTab);
                     pDoc->ExtendOverlapped(aRange);
                     pDoc->ExtendMerge(aRange, true);
-                    rDocFunc.UnmergeCells(aRange, bRecord);
+                    rDocFunc.UnmergeCells(aRange, bRecord, nullptr /*TODO: should pass combined UndoDoc if bRecord*/);
                 }
             }
         }
@@ -1302,7 +1302,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
-        rDocFunc.UnmergeCells( aUserRange, false );
+        rDocFunc.UnmergeCells( aUserRange, false, nullptr );
 
     pDoc->ExtendMergeSel( nStartCol, nStartRow, nEndCol, nEndRow, aFilteredMark, true );    // refresh
                                                                                     // new range

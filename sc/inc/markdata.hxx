@@ -143,10 +143,12 @@ public:
     // iterators for table access
     typedef std::set<SCTAB>::iterator iterator;
     typedef std::set<SCTAB>::const_iterator const_iterator;
+    typedef std::set<SCTAB>::const_reverse_iterator const_reverse_iterator;
     iterator begin();
     iterator end();
     const_iterator begin() const;
     const_iterator end() const;
+    const_reverse_iterator rbegin() const;
 };
 
 #endif
