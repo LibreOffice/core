@@ -253,10 +253,9 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
     }
 }
 
-
 sal_Bool OComboBoxModel::convertFastPropertyValue(
                         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
-                        throw (IllegalArgumentException)
+                        throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     bool bModified(false);
     switch (_nHandle)
@@ -287,7 +286,6 @@ sal_Bool OComboBoxModel::convertFastPropertyValue(
     }
     return bModified;
 }
-
 
 void OComboBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
