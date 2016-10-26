@@ -390,7 +390,8 @@ void OGridColumn::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
 
 
 sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
-                                            sal_Int32 nHandle, const Any& rValue )throw( IllegalArgumentException )
+                                            sal_Int32 nHandle, const Any& rValue )
+    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     bool bModified(false);
     switch (nHandle)
