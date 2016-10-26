@@ -231,7 +231,7 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) throw(css::lang::IllegalArgumentException) override;
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) throw ( css::uno::Exception, std::exception ) override;
 
     css::uno::Any  SAL_CALL getFastPropertyValue( sal_Int32 nHandle )
