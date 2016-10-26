@@ -814,4 +814,9 @@ ScMarkData::const_iterator ScMarkData::end() const
     return maTabMarked.end();
 }
 
+ScMarkData::const_reverse_iterator ScMarkData::rbegin() const
+{
+    return maTabMarked.rbegin();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
