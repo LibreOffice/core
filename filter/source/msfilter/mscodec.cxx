@@ -248,10 +248,10 @@ void MSCodec_Xor95::Skip( std::size_t nBytes )
 MSCodec97::MSCodec97(size_t nHashLen)
     : m_nHashLen(nHashLen)
     , m_hCipher(rtl_cipher_create(rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream))
+    , m_aDocId(16, 0)
     , m_aDigestValue(nHashLen, 0)
 {
     assert(m_hCipher != nullptr);
-    (void)memset (m_pDocId, 0, sizeof(m_pDocId));
 }
 
 MSCodec_Std97::MSCodec_Std97()
@@ -269,7 +269,7 @@ MSCodec_CryptoAPI::MSCodec_CryptoAPI()
 MSCodec97::~MSCodec97()
 {
     (void)memset(m_aDigestValue.data(), 0, m_aDigestValue.size());
-    (void)memset(m_pDocId, 0, sizeof(m_pDocId));
+    (void)memset(m_aDocId.data(), 0, m_aDocId.size());
     rtl_cipher_destroy(m_hCipher);
 }
 
@@ -309,10 +309,11 @@ bool MSCodec97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
         uno::Sequence< sal_Int8 > aUniqueID = aHashData.getUnpackedValueOrDefault("STD97UniqueID", uno::Sequence< sal_Int8 >() );
         if ( aUniqueID.getLength() == 16 )
         {
-            (void)memcpy( m_pDocId, aUniqueID.getConstArray(), 16 );
+            assert(m_aDocId.size() == static_cast<size_t>(aUniqueID.getLength()));
+            (void)memcpy(m_aDocId.data(), aUniqueID.getConstArray(), m_aDocId.size());
             bResult = true;
             lcl_PrintDigest(m_aDigestValue.data(), "digest value");
-            lcl_PrintDigest(m_pDocId, "DocId value");
+            lcl_PrintDigest(m_aDocId.data(), "DocId value");
         }
         else
             OSL_FAIL( "Unexpected document ID!\n" );
@@ -328,7 +329,7 @@ uno::Sequence< beans::NamedValue > MSCodec97::GetEncryptionData()
     ::comphelper::SequenceAsHashMap aHashData;
     assert(m_aDigestValue.size() == m_nHashLen);
     aHashData[ OUString( "STD97EncryptionKey" ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(m_aDigestValue.data()), m_nHashLen );
-    aHashData[ OUString( "STD97UniqueID" ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(m_pDocId), 16 );
+    aHashData[ OUString( "STD97UniqueID" ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(m_aDocId.data()), m_aDocId.size() );
 
     return aHashData.getAsConstNamedValueList();
 }
@@ -351,9 +352,9 @@ void MSCodec_Std97::InitKey (
 
     lcl_PrintDigest(m_aDigestValue.data(), "digest value");
 
-    (void)memcpy (m_pDocId, pDocId, 16);
+    (void)memcpy (m_aDocId.data(), pDocId, 16);
 
-    lcl_PrintDigest(m_pDocId, "DocId value");
+    lcl_PrintDigest(m_aDocId.data(), "DocId value");
 }
 
 void MSCodec_CryptoAPI::InitKey (
@@ -378,9 +379,9 @@ void MSCodec_CryptoAPI::InitKey (
 
     lcl_PrintDigest(m_aDigestValue.data(), "digest value");
 
-    (void)memcpy (m_pDocId, pDocId, 16);
+    (void)memcpy(m_aDocId.data(), pDocId, 16);
 
-    lcl_PrintDigest(m_pDocId, "DocId value");
+    lcl_PrintDigest(m_aDocId.data(), "DocId value");
 }
 
 bool MSCodec97::VerifyKey(const sal_uInt8* pSaltData, const sal_uInt8* pSaltDigest)
@@ -592,8 +593,8 @@ void MSCodec_Std97::GetEncryptKey (
 
 void MSCodec97::GetDocId( sal_uInt8 pDocId[16] )
 {
-    if ( sizeof( m_pDocId ) == 16 )
-        (void)memcpy( pDocId, m_pDocId, 16 );
+    assert(m_aDocId.size() == 16);
+    (void)memcpy(pDocId, m_aDocId.data(), 16);
 }
 
 EncryptionStandardHeader::EncryptionStandardHeader()

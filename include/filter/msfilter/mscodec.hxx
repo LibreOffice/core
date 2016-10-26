@@ -319,7 +319,7 @@ private:
 protected:
     size_t              m_nHashLen;
     rtlCipher           m_hCipher;
-    sal_uInt8           m_pDocId[16];
+    std::vector<sal_uInt8> m_aDocId;
     std::vector<sal_uInt8> m_aDigestValue;
 };
 
