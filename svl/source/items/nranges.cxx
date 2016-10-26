@@ -18,35 +18,12 @@
  */
 #include <svl/nranges.hxx>
 
+#include <algorithm>
 #include <cassert>
 #include <cstring>
 #include <vector>
 
-#include <osl/diagnose.h>
 #include <tools/debug.hxx>
-
-#ifdef DBG_UTIL
-
-#define DBG_CHECK_RANGES(sal_uInt16, pArr)                                 \
-    for ( const sal_uInt16 *pRange = pArr; *pRange; pRange += 2 )          \
-    {                                                                   \
-        DBG_ASSERT( pRange[0] <= pRange[1], "ranges must be sorted" );  \
-        DBG_ASSERT( !pRange[2] || ( pRange[2] - pRange[1] ) > 1,        \
-                    "ranges must be sorted and discrete" );             \
-    }
-
-#else
-
-#define DBG_CHECK_RANGES(sal_uInt16,pArr)
-
-#endif
-
-inline void Swap_Impl(const sal_uInt16 *& rp1, const sal_uInt16 *& rp2)
-{
-    const sal_uInt16 * pTemp = rp1;
-    rp1 = rp2;
-    rp2 = pTemp;
-}
 
 /**
  * Creates a sal_uInt16-ranges-array in 'rpRanges' using 'nWh1' and 'nWh2' as
@@ -128,31 +105,14 @@ sal_uInt16 Capacity_Impl( const sal_uInt16 *pRanges )
 }
 
 /**
- * Copy ctor
- */
-SfxUShortRanges::SfxUShortRanges( const SfxUShortRanges &rOrig )
-{
-    if ( rOrig._pRanges )
-    {
-        sal_uInt16 nCount = Count_Impl( rOrig._pRanges ) + 1;
-        _pRanges = new sal_uInt16[nCount];
-        memcpy( _pRanges, rOrig._pRanges, sizeof(sal_uInt16) * nCount );
-    }
-    else
-        _pRanges = nullptr;
-}
-
-/**
  * Constructs a SfxUShortRanges instance from one range of sal_uInt16s.
  *
  * Precondition: nWhich1 <= nWhich2
  */
 SfxUShortRanges::SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
-:   _pRanges( new sal_uInt16[3] )
+    :   m_aRanges({std::pair<sal_uInt16, sal_uInt16>(nWhich1, nWhich2)})
 {
-    _pRanges[0] = nWhich1;
-    _pRanges[1] = nWhich2;
-    _pRanges[2] = 0;
+    assert(m_aRanges.front().first <= m_aRanges.front().second);
 }
 
 /**
@@ -164,38 +124,33 @@ SfxUShortRanges::SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
  */
 SfxUShortRanges::SfxUShortRanges( const sal_uInt16* pArr )
 {
-    DBG_CHECK_RANGES(sal_uInt16, pArr);
-    sal_uInt16 nCount = Count_Impl(pArr) + 1;
-    _pRanges = new sal_uInt16[ nCount ];
-    memcpy( _pRanges, pArr, sizeof(sal_uInt16) * nCount );
+#ifdef DBG_UTIL
+    for ( const sal_uInt16 *pRange = pArr; *pRange; pRange += 2 )
+    {
+        assert(pRange[0] <= pRange[1]);
+        DBG_ASSERT( !pRange[2] || ( pRange[2] - pRange[1] ) > 1,
+                    "ranges must be sorted and discrete" );
+    }
+#endif
+    sal_uInt16 nCount = Count_Impl(pArr);
+    for (size_t i = 0; i < nCount; i += 2)
+        m_aRanges.emplace_back(std::pair<sal_uInt16, sal_uInt16>(pArr[i],pArr[i+1]));
 }
 
 
-/**
- * Assigns ranges from 'rRanges' to '*this'.
- */
-SfxUShortRanges& SfxUShortRanges::operator =
-(
-    const SfxUShortRanges &rRanges
-)
+const std::vector<sal_uInt16> SfxUShortRanges::getVector() const
 {
-    // special case: assign itself
-    if ( &rRanges == this )
-        return *this;
-
-    delete[] _pRanges;
-
-    // special case: 'rRanges' is empty
-    if ( rRanges.IsEmpty() )
-        _pRanges = nullptr;
-    else
+    // construct flat range array
+    const size_t nSize = 2 * m_aRanges.size() + 1;
+    std::vector<sal_uInt16> aRanges(nSize);
+    for (size_t i = 0; i < (nSize - 1); i +=2)
     {
-        // copy ranges
-        sal_uInt16 nCount = Count_Impl( rRanges._pRanges ) + 1;
-        _pRanges = new sal_uInt16[ nCount ];
-        memcpy( _pRanges, rRanges._pRanges, sizeof(sal_uInt16) * nCount );
+        aRanges[i]   = m_aRanges[i/2].first;
+        aRanges[i+1] = m_aRanges[i/2].second;
     }
-    return *this;
+    // null terminate to be compatible with sal_uInt16* array pointers
+    aRanges[nSize-1] = 0;
+    return aRanges;
 }
 
 /**
@@ -215,139 +170,28 @@ SfxUShortRanges& SfxUShortRanges::operator +=
     if ( IsEmpty() )
         return *this = rRanges;
 
-    // First, run through _pRanges and rRanges._pRanges and determine the size of
-    // the new, merged ranges:
-    sal_uInt16 nCount = 0;
-    const sal_uInt16 * pRA = _pRanges;
-    const sal_uInt16 * pRB = rRanges._pRanges;
+    // simple comparator for pairs, only care about lower bound of range
+    auto isLess = [](std::pair<sal_uInt16, sal_uInt16> lhs, std::pair<sal_uInt16, sal_uInt16> rhs)
+                        {return lhs.first < rhs.first;};
+    // true if ranges overlap or adjoin, false if ranges are separate (!only works on sorted pairs)
+    auto needMerge = [](std::pair<sal_uInt16, sal_uInt16> lhs, std::pair<sal_uInt16, sal_uInt16> rhs)
+                        {return (lhs.first-1) <= rhs.second && (rhs.first-1) <= lhs.second;};
 
-    for (;;)
+    std::vector<std::pair<sal_uInt16, sal_uInt16>> aMerged(m_aRanges.size()+rRanges.m_aRanges.size());
+    // merge and sort range pairs
+    std::merge(m_aRanges.begin(), m_aRanges.end(),
+               rRanges.m_aRanges.begin(), rRanges.m_aRanges.end(),
+               aMerged.begin(), isLess);
+    std::vector<std::pair<sal_uInt16, sal_uInt16> >::iterator it;
+    // check neighbouring ranges, find first range which overlaps or adjoins the previous range
+    while ((it = std::is_sorted_until(aMerged.begin(), aMerged.end(), needMerge)) != aMerged.end())
     {
-        // The first pair of pRA has a lower lower bound than the first pair
-        // of pRB:
-        if (pRA[0] > pRB[0])
-            Swap_Impl(pRA, pRB);
-
-        // We are done with the merging if at least pRA is exhausted:
-        if (!pRA[0])
-            break;
-
-        for (;;)
-        {
-            // Skip those pairs in pRB that completely lie in the first pair
-            // of pRA:
-            while (pRB[1] <= pRA[1])
-            {
-                pRB += 2;
-
-                // Watch out for exhaustion of pRB:
-                if (!pRB[0])
-                {
-                    Swap_Impl(pRA, pRB);
-                    goto count_rest;
-                }
-            }
-
-            // If the next pair of pRA does not at least touch the current new
-            // pair, we are done with the current new pair:
-            if (pRB[0] > pRA[1] + 1)
-                break;
-
-            // The next pair of pRB extends the current new pair; first,
-            // extend the current new pair (we are done if pRB is then
-            // exhausted); second, switch the roles of pRA and pRB in order to
-            // merge in those following pairs of the original pRA that will
-            // lie in the (now larger) current new pair or will even extend it
-            // further:
-            pRA += 2;
-            if (!pRA[0])
-                goto count_rest;
-            Swap_Impl(pRA, pRB);
-        }
-
-        // Done with the current new pair:
-        pRA += 2;
-        nCount += 2;
+        --it; // merge with previous range
+        // lower bounds are sorted, implies: it->first = min(it[0].first, it[1].first)
+        it->second = std::max(it[0].second, it[1].second);
+        aMerged.erase(it+1);
     }
-
-    // Only pRB has more pairs available, pRA is already exhausted:
-count_rest:
-    for (; pRB[0]; pRB += 2)
-        nCount += 2;
-
-    // Now, create new ranges of the correct size and, on a second run through
-    // _pRanges and rRanges._pRanges, copy the merged pairs into the new
-    // ranges:
-    sal_uInt16 * pNew = new sal_uInt16[nCount + 1];
-    pRA = _pRanges;
-    pRB = rRanges._pRanges;
-    sal_uInt16 * pRN = pNew;
-
-    for (;;)
-    {
-        // The first pair of pRA has a lower lower bound than the first pair
-        // of pRB:
-        if (pRA[0] > pRB[0])
-            Swap_Impl(pRA, pRB);
-
-        // We are done with the merging if at least pRA is exhausted:
-        if (!pRA[0])
-            break;
-
-        // Lower bound of current new pair is already known:
-        *pRN++ = pRA[0];
-
-        for (;;)
-        {
-            // Skip those pairs in pRB that completely lie in the first pair
-            // of pRA:
-            while (pRB[1] <= pRA[1])
-            {
-                pRB += 2;
-
-                // Watch out for exhaustion of pRB:
-                if (!pRB[0])
-                {
-                    Swap_Impl(pRA, pRB);
-                    ++pRB;
-                    goto copy_rest;
-                }
-            }
-
-            // If the next pair of pRA does not at least touch the current new
-            // pair, we are done with the current new pair:
-            if (pRB[0] > pRA[1] + 1)
-                break;
-
-            // The next pair of pRB extends the current new pair; first,
-            // extend the current new pair (we are done if pRB is then
-            // exhausted); second, switch the roles of pRA and pRB in order to
-            // merge in those following pairs of the original pRA that will
-            // lie in the (now larger) current new pair or will even extend it
-            // further:
-            pRA += 2;
-            if (!pRA[0])
-            {
-                ++pRB;
-                goto copy_rest;
-            }
-            Swap_Impl(pRA, pRB);
-        }
-
-        // Done with the current new pair, now upper bound is also known:
-        *pRN++ = pRA[1];
-        pRA += 2;
-    }
-
-    // Only pRB has more pairs available (which are copied to the new ranges
-    // unchanged), pRA is already exhausted:
-copy_rest:
-    for (; *pRB;)
-        *pRN++ = *pRB++;
-    *pRN = 0;
-
-    delete[] _pRanges;
-    _pRanges = pNew;
+    m_aRanges = aMerged;
 
     return *this;
 }

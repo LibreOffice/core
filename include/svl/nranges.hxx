@@ -21,27 +21,26 @@
 
 #include <cstdarg>
 #include <sal/types.h>
+#include <vector>
 
 class SfxUShortRanges
 {
-    sal_uInt16*                 _pRanges; // 0-terminated array of sal_uInt16-pairs
+    std::vector<std::pair<sal_uInt16, sal_uInt16>> m_aRanges;
 
 public:
-                                SfxUShortRanges( const SfxUShortRanges &rOrig );
                                 SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
                                 SfxUShortRanges( const sal_uInt16* nNumTable );
-                                ~SfxUShortRanges()
-                                { delete [] _pRanges; }
-
-    SfxUShortRanges&            operator = ( const SfxUShortRanges & );
 
     SfxUShortRanges&            operator += ( const SfxUShortRanges & );
 
     bool                        IsEmpty() const
-                                { return !_pRanges || 0 == *_pRanges; }
-
-                                operator const sal_uInt16* () const
-                                { return _pRanges; }
+                                { return m_aRanges.size() == 0; }
+    /**
+     * returns null terminated flat vector of ranges.
+     *
+     * use .data() on return value to get a sal_uInt16-ranges-array
+     */
+    const std::vector<sal_uInt16> getVector() const;
 };
 
 /**

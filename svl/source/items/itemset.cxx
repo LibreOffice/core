@@ -596,7 +596,7 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
     // merge new range
     SfxUShortRanges aRanges( m_pWhichRanges );
     aRanges += SfxUShortRanges( nFrom, nTo );
-    SetRanges( aRanges );
+    SetRanges( aRanges.getVector().data() );
 }
 
 /**
