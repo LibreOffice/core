@@ -113,7 +113,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
             for (size_t i = 0; i < aSignatures.size(); ++i)
             {
                 SignatureInformation aInfo(i);
-                if (!xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], aInfo))
+                bool bLast = i == aSignatures.size() - 1;
+                if (!xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], aInfo, bLast))
                 {
                     SAL_WARN("xmlsecurity.pdfio", "failed to determine digest match");
                     return 1;

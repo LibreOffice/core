@@ -1188,7 +1188,7 @@ std::vector<unsigned char> PDFDocument::DecodeHexString(PDFHexStringElement* pEl
     return aRet;
 }
 
-bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation)
+bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation, bool bLast)
 {
     PDFObjectElement* pValue = pSignature->LookupObject("V");
     if (!pValue)
@@ -1285,7 +1285,7 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     }
     rStream.Seek(STREAM_SEEK_TO_END);
     size_t nFileEnd = rStream.Tell();
-    if ((aByteRanges[1].first + aByteRanges[1].second) != nFileEnd)
+    if (bLast && (aByteRanges[1].first + aByteRanges[1].second) != nFileEnd)
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: second range end is not the end of the file");
         return false;
