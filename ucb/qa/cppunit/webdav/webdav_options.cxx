@@ -27,7 +27,7 @@ namespace
 
         void tearDown(  ) override;
 
-        void DAVTypesCheckInit( webdav_ucp::DAVOptions& aDavType );
+        void DAVTypesCheckInit( webdav_ucp::DAVOptions const & aDavType );
         void DAVTypesTest();
 
         void DAVOptsCacheTests();
@@ -51,7 +51,7 @@ namespace
     {
     }
 
-    void webdav_opts_test::DAVTypesCheckInit( webdav_ucp::DAVOptions& aDavType )
+    void webdav_opts_test::DAVTypesCheckInit( webdav_ucp::DAVOptions const & aDavType )
     {
         // check if the class is at reset state
         // using accessors
