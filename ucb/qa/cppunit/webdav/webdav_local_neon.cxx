@@ -12,6 +12,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include "NeonUri.hxx"
 
+using namespace webdav_ucp;
 
 namespace
 {
@@ -35,7 +36,7 @@ namespace
     {
         //try URL decomposition
         OUString aURL( "http://user%40anothername@server.biz:8040/aService/asegment/nextsegment/check.this?test=true&link=http://anotherserver.com/%3Fcheck=theapplication%26os=linuxintel%26lang=en-US%26version=5.2.0" );
-        webdav_ucp::NeonUri aURI( aURL );
+        NeonUri aURI( aURL );
         CPPUNIT_ASSERT_EQUAL( OUString( "http" ), aURI.GetScheme() );
         CPPUNIT_ASSERT_EQUAL( OUString( "server.biz" ), aURI.GetHost() );
         CPPUNIT_ASSERT_EQUAL( OUString( "user%40anothername" ), aURI.GetUserInfo() );
