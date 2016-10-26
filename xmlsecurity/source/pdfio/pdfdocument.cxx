@@ -1334,6 +1334,13 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
         return false;
     }
 
+    // Import certificates from the signed data temporarily, so it'll be
+    // possible to verify the signature, even if we didn't have the certificate
+    // perviously.
+    std::vector<CERTCertificate*> aDocumentCertificates;
+    for (size_t i = 0; pCMSSignedData->rawCerts[i]; ++i)
+        aDocumentCertificates.push_back(CERT_NewTempCertificate(CERT_GetDefaultCertDB(), pCMSSignedData->rawCerts[i], nullptr, 0, 0));
+
     NSSCMSSignerInfo* pCMSSignerInfo = NSS_CMSSignedData_GetSignerInfo(pCMSSignedData, 0);
     if (!pCMSSignerInfo)
     {
@@ -1456,6 +1463,8 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     PORT_Free(pActualResultBuffer);
     HASH_Destroy(pHASHContext);
     NSS_CMSSignerInfo_Destroy(pCMSSignerInfo);
+    for (auto pDocumentCertificate : aDocumentCertificates)
+        CERT_DestroyCertificate(pDocumentCertificate);
 
     return true;
 #else
