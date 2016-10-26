@@ -7,12 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_PythonTest_PythonTest,solenv_python))
+$(eval $(call gb_Executable_Executable,gbuildtojson))
 
-$(eval $(call gb_PythonTest_add_modules,solenv_python,$(SRCDIR)/solenv/qa/python,\
-	gbuildtoide \
+$(eval $(call gb_Executable_add_exception_objects,gbuildtojson,\
+	solenv/gbuildtojson/gbuildtojson \
 ))
 
-$(call gb_PythonTest_get_target,solenv_python): $(call gb_CustomTarget_get_target,solenv/gbuildtesttools)
-
-# vim: set noet sw=4 ts=4:
+# vim:set noet sw=4 ts=4:
