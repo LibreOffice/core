@@ -18,6 +18,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
+#include <filter/msfilter/mscodec.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
@@ -784,7 +785,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
                         return false;
                     }
 
-                    PDFDocument::SkipWhitespace(rStream);
+                    PDFDocument::SkipLineBreaks(rStream);
                     m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFStreamElement(nLength)));
                     if (!m_aElements.back()->Read(rStream))
                         return false;
@@ -822,7 +823,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
                 }
                 else
                 {
-                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: unexpected '" << aKeyword << "' keyword");
+                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: unexpected '" << aKeyword << "' keyword at byte position " << rStream.Tell());
                     return false;
                 }
             }
@@ -830,7 +831,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
             {
                 if (!isspace(ch))
                 {
-                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: unexpected character: " << ch);
+                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: unexpected character: " << ch << " at byte position " << rStream.Tell());
                     return false;
                 }
             }
@@ -1027,6 +1028,24 @@ void PDFDocument::SkipWhitespace(SvStream& rStream)
             break;
 
         if (!isspace(ch))
+        {
+            rStream.SeekRel(-1);
+            return;
+        }
+    }
+}
+
+void PDFDocument::SkipLineBreaks(SvStream& rStream)
+{
+    char ch = 0;
+
+    while (true)
+    {
+        rStream.ReadChar(ch);
+        if (rStream.IsEof())
+            break;
+
+        if (ch != '\n' && ch != '\r')
         {
             rStream.SeekRel(-1);
             return;
@@ -1388,7 +1407,10 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     switch (SECOID_FindOIDTag(&aAlgorithm))
     {
     case SEC_OID_SHA1:
-        nMaxResultLen = 20;
+        nMaxResultLen = msfilter::SHA1_HASH_LENGTH;
+        break;
+    case SEC_OID_SHA256:
+        nMaxResultLen = msfilter::SHA256_HASH_LENGTH;
         break;
     default:
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: unrecognized algorithm");
@@ -1519,14 +1541,14 @@ bool PDFNumberElement::Read(SvStream& rStream)
     m_nOffset = rStream.Tell();
     char ch;
     rStream.ReadChar(ch);
-    if (!isdigit(ch) && ch != '-')
+    if (!isdigit(ch) && ch != '-' && ch != '.')
     {
         rStream.SeekRel(-1);
         return false;
     }
     while (!rStream.IsEof())
     {
-        if (!isdigit(ch) && ch != '-')
+        if (!isdigit(ch) && ch != '-' && ch != '.')
         {
             rStream.SeekRel(-1);
             m_nLength = rStream.Tell() - m_nOffset;
@@ -1599,25 +1621,28 @@ const OString& PDFHexStringElement::GetValue() const
 
 bool PDFLiteralStringElement::Read(SvStream& rStream)
 {
-    char ch;
+    char nPrevCh = 0;
+    char ch = 0;
     rStream.ReadChar(ch);
     if (ch != '(')
     {
         SAL_INFO("xmlsecurity.pdfio", "PDFHexStringElement::Read: expected '(' as first character");
         return false;
     }
+    nPrevCh = ch;
     rStream.ReadChar(ch);
 
     OStringBuffer aBuf;
     while (!rStream.IsEof())
     {
-        if (ch == ')')
+        if (ch == ')' && nPrevCh != '\\')
         {
             m_aValue = aBuf.makeStringAndClear();
             SAL_INFO("xmlsecurity.pdfio", "PDFLiteralStringElement::Read: m_aValue is '" << m_aValue << "'");
             return true;
         }
         aBuf.append(ch);
+        nPrevCh = ch;
         rStream.ReadChar(ch);
     }
 
