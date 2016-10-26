@@ -95,41 +95,41 @@ namespace http_dav_ucp
 
         virtual ~DAVOptions();
 
-        bool isClass1() { return m_isClass1; };
+        bool isClass1() const { return m_isClass1; };
         void setClass1( bool Class1 = true ) { m_isClass1 = Class1; };
 
-        bool isClass2() { return m_isClass2; };
+        bool isClass2() const { return m_isClass2; };
         void setClass2( bool Class2 = true ) { m_isClass2 = Class2; };
 
-        bool isClass3() { return m_isClass3; };
+        bool isClass3() const { return m_isClass3; };
         void setClass3( bool Class3 = true ) { m_isClass3 = Class3; };
 
-        bool isHeadAllowed() { return m_isHeadAllowed; };
+        bool isHeadAllowed() const { return m_isHeadAllowed; };
         void setHeadAllowed( bool HeadAllowed = true ) { m_isHeadAllowed = HeadAllowed; };
 
-        sal_uInt32 getStaleTime() { return m_nStaleTime ; };
+        sal_uInt32 getStaleTime() const { return m_nStaleTime ; };
         void setStaleTime( const sal_uInt32 nStaleTime ) { m_nStaleTime = nStaleTime; };
 
-        sal_uInt32 getRequestedTimeLife() { return m_nRequestedTimeLife; };
+        sal_uInt32 getRequestedTimeLife() const { return m_nRequestedTimeLife; };
         void setRequestedTimeLife( const sal_uInt32 nRequestedTimeLife ) { m_nRequestedTimeLife = nRequestedTimeLife; };
 
-        const OUString & getURL() { return m_sURL; };
+        const OUString & getURL() const { return m_sURL; };
         void setURL( const OUString & sURL ) { m_sURL = sURL; };
 
-        const OUString & getRedirectedURL() { return m_sRedirectedURL; };
+        const OUString & getRedirectedURL() const { return m_sRedirectedURL; };
         void setRedirectedURL( const OUString & sRedirectedURL ) { m_sRedirectedURL = sRedirectedURL; };
 
         void  setAllowedMethods( const OUString & aAllowedMethods ) { m_aAllowedMethods = aAllowedMethods; } ;
-        const OUString & getAllowedMethods() { return m_aAllowedMethods; } ;
-        bool isLockAllowed() { return ( m_aAllowedMethods.indexOf( "LOCK" ) != -1 ); };
+        const OUString & getAllowedMethods() const { return m_aAllowedMethods; } ;
+        bool isLockAllowed() const { return ( m_aAllowedMethods.indexOf( "LOCK" ) != -1 ); };
 
         void setLocked( bool locked = true ) { m_isLocked = locked; } ;
-        bool isLocked() { return m_isLocked; };
+        bool isLocked() const { return m_isLocked; };
 
-        sal_uInt16 getHttpResponseStatusCode() { return m_nHttpResponseStatusCode; };
+        sal_uInt16 getHttpResponseStatusCode() const { return m_nHttpResponseStatusCode; };
         void setHttpResponseStatusCode( const sal_uInt16 nHttpResponseStatusCode ) { m_nHttpResponseStatusCode = nHttpResponseStatusCode; };
 
-        const OUString & getHttpResponseStatusText() { return m_sHttpResponseStatusText; };
+        const OUString & getHttpResponseStatusText() const { return m_sHttpResponseStatusText; };
         void setHttpResponseStatusText( const OUString & rHttpResponseStatusText ) { m_sHttpResponseStatusText = rHttpResponseStatusText; };
 
         void init() {
