@@ -102,17 +102,6 @@ ERRTYPE RscTop::SetVariable( Atom nVarName, RscTop * pClass,
         return ERR_UNKNOWN_METHOD;
 }
 
-ERRTYPE RscTop::SetVariable( Atom nVarName, RscTop * pClass,
-                     RSCINST * pDflt, RSCVAR nVarType, SfxSlotInfo nMask,
-                     Atom nDataBaseName )
-{
-    if( pSuperClass )
-        return pSuperClass->SetVariable( nVarName, pClass, pDflt,
-                                         nVarType, nMask, nDataBaseName );
-    else
-        return ERR_UNKNOWN_METHOD;
-}
-
 void RscTop::EnumVariables( void * pData, VarEnumCallbackProc pProc )
 {
     if( pSuperClass )

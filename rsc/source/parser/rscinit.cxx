@@ -167,10 +167,6 @@ void RscTypCont::Init()
     pClassMenuItem->SetVariable( nId, pClassMenu, nullptr, VAR_SVDYNAMIC,
                                  (sal_uInt32)RscMenuItem::Menu );
 }
-{
-    RscTop* pClassSfxSlotInfo = InitClassSfxSlotInfo( pClassMgr );
-    pRoot->Insert( pClassSfxSlotInfo );
-}
 
     aNmTb.SetSort();
 }

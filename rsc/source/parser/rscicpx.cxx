@@ -364,24 +364,4 @@ RscTop * RscTypCont::InitClassMenu( RscTop * pSuper,
     return pClassMenu;
 }
 
-RscTop * RscTypCont::InitClassSfxSlotInfo( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassSfxSlotInfo;
-
-    // initialize class
-    nId = pHS->getID( "SfxSlotInfo" );
-    pClassSfxSlotInfo = new RscClass( nId, RSC_SFX_SLOT_INFO, pSuper );
-    aNmTb.Put( nId, CLASSNAME, pClassSfxSlotInfo );
-
-    nId = aNmTb.Put( "SlotName", VARNAME );
-    pClassSfxSlotInfo->SetVariable( nId, &aLangString, nullptr, 0,
-                                    SfxSlotInfo::SlotName );
-    nId = aNmTb.Put( "HelpText", VARNAME );
-    pClassSfxSlotInfo->SetVariable( nId, &aLangString, nullptr, 0,
-                                    SfxSlotInfo::HelpText );
-    return pClassSfxSlotInfo;
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
