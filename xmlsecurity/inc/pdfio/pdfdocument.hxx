@@ -75,6 +75,8 @@ public:
     static size_t FindStartXRef(SvStream& rStream);
     void ReadXRef(SvStream& rStream);
     static void SkipWhitespace(SvStream& rStream);
+    /// Instead of all whitespace, just skip CR and NL characters.
+    static void SkipLineBreaks(SvStream& rStream);
     size_t GetObjectOffset(size_t nIndex) const;
     const std::vector< std::unique_ptr<PDFElement> >& GetElements();
     std::vector<PDFObjectElement*> GetPages();
