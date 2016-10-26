@@ -58,7 +58,8 @@ bool PDFSignatureHelper::ReadAndVerifySignature(const uno::Reference<io::XInputS
     {
         SignatureInformation aInfo(i);
 
-        if (!xmlsecurity::pdfio::PDFDocument::ValidateSignature(*pStream, aSignatures[i], aInfo))
+        bool bLast = i == aSignatures.size() - 1;
+        if (!xmlsecurity::pdfio::PDFDocument::ValidateSignature(*pStream, aSignatures[i], aInfo, bLast))
         {
             SAL_WARN("xmlsecurity.helper", "failed to determine digest match");
             continue;

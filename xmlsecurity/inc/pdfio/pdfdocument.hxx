@@ -88,8 +88,12 @@ public:
     /// Serializes the contents of the edit buffer.
     bool Write(SvStream& rStream);
     std::vector<PDFObjectElement*> GetSignatureWidgets();
-    /// Return value is about if we can determine a result, rInformation is about the actual result.
-    static bool ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation);
+    /**
+     * @param rInformation The actual result.
+     * @param bLast If this is the last signature in the file, so it covers the whole file physically.
+     * @return If we can determinate a result.
+     */
+    static bool ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation, bool bLast);
     /// Remove the nth signature from read document in the edit buffer.
     bool RemoveSignature(size_t nPosition);
 };
