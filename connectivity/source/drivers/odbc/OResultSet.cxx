@@ -1434,7 +1434,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
                             Any & rOldValue,
                             sal_Int32 nHandle,
                             const Any& rValue )
-                                throw (css::lang::IllegalArgumentException)
+                                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     switch(nHandle)
     {
