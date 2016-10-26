@@ -1398,7 +1398,7 @@ void ScUndoDragDrop::Redo()
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
-        pDocShell->GetDocFunc().UnmergeCells( aDestRange, false );
+        pDocShell->GetDocFunc().UnmergeCells( aDestRange, false, nullptr );
 
     for (nTab=aDestRange.aStart.Tab(); nTab<=aDestRange.aEnd.Tab(); nTab++)
     {
@@ -2108,7 +2108,14 @@ bool ScUndoRemoveBreaks::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoRemoveMerge::ScUndoRemoveMerge( ScDocShell* pNewDocShell,
                                       const ScCellMergeOption& rOption, ScDocument* pNewUndoDoc ) :
     ScBlockUndo( pNewDocShell, rOption.getFirstSingleRange(), SC_UNDO_SIMPLE ),
-    maOption(rOption),
+    pUndoDoc( pNewUndoDoc )
+{
+    maOptions.push_back( rOption);
+}
+
+ScUndoRemoveMerge::ScUndoRemoveMerge( ScDocShell* pNewDocShell,
+                                      ScDocument* pNewUndoDoc ) :
+    ScBlockUndo( pNewDocShell, ScRange(), SC_UNDO_SIMPLE ),
     pUndoDoc( pNewUndoDoc )
 {
 }
@@ -2123,6 +2130,16 @@ OUString ScUndoRemoveMerge::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_REMERGE );  // "remove merge"
 }
 
+ScDocument* ScUndoRemoveMerge::GetUndoDoc()
+{
+    return pUndoDoc;
+}
+
+void ScUndoRemoveMerge::AddCellMergeOption( const ScCellMergeOption& rOption )
+{
+    maOptions.push_back( rOption);
+}
+
 void ScUndoRemoveMerge::Undo()
 {
     using ::std::set;
@@ -2133,25 +2150,28 @@ void ScUndoRemoveMerge::Undo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    for (set<SCTAB>::const_iterator itr = maOption.maTabs.begin(), itrEnd = maOption.maTabs.end();
-          itr != itrEnd; ++itr)
+    for (const auto & rOption : maOptions)
     {
-        OSL_ENSURE(pUndoDoc, "NULL pUndoDoc!");
-        if (!pUndoDoc)
-            continue;
-        // There is no need to extend merge area because it's already been extended.
-        ScRange aRange = maOption.getSingleRange(*itr);
-        rDoc.DeleteAreaTab(aRange, InsertDeleteFlags::ATTRIB);
-        pUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::ATTRIB, false, rDoc);
-
-        bool bDidPaint = false;
-        if ( pViewShell )
+        for (set<SCTAB>::const_iterator itr = rOption.maTabs.begin(), itrEnd = rOption.maTabs.end();
+                itr != itrEnd; ++itr)
         {
-            pViewShell->SetTabNo(*itr);
-            bDidPaint = pViewShell->AdjustRowHeight(maOption.mnStartRow, maOption.mnEndRow);
+            OSL_ENSURE(pUndoDoc, "NULL pUndoDoc!");
+            if (!pUndoDoc)
+                continue;
+            // There is no need to extend merge area because it's already been extended.
+            ScRange aRange = rOption.getSingleRange(*itr);
+            rDoc.DeleteAreaTab(aRange, InsertDeleteFlags::ATTRIB);
+            pUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::ATTRIB, false, rDoc);
+
+            bool bDidPaint = false;
+            if ( pViewShell )
+            {
+                pViewShell->SetTabNo(*itr);
+                bDidPaint = pViewShell->AdjustRowHeight(rOption.mnStartRow, rOption.mnEndRow);
+            }
+            if (!bDidPaint)
+                ScUndoUtil::PaintMore(pDocShell, aRange);
         }
-        if (!bDidPaint)
-            ScUndoUtil::PaintMore(pDocShell, aRange);
     }
 
     EndUndo();
@@ -2167,36 +2187,39 @@ void ScUndoRemoveMerge::Redo()
     ScDocument& rDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    for (set<SCTAB>::const_iterator itr = maOption.maTabs.begin(), itrEnd = maOption.maTabs.end();
-          itr != itrEnd; ++itr)
+    for (const auto & rOption : maOptions)
     {
-        SCTAB nTab = *itr;
-        // There is no need to extend merge area because it's already been extended.
-        ScRange aRange = maOption.getSingleRange(nTab);
-
-        const SfxPoolItem& rDefAttr = rDoc.GetPool()->GetDefaultItem( ATTR_MERGE );
-        ScPatternAttr aPattern( rDoc.GetPool() );
-        aPattern.GetItemSet().Put( rDefAttr );
-        rDoc.ApplyPatternAreaTab( maOption.mnStartCol, maOption.mnStartRow,
-                                   maOption.mnEndCol, maOption.mnEndRow, nTab,
-                                   aPattern );
-
-        rDoc.RemoveFlagsTab( maOption.mnStartCol, maOption.mnStartRow,
-                              maOption.mnEndCol, maOption.mnEndRow, nTab,
-                              ScMF::Hor | ScMF::Ver );
-
-        rDoc.ExtendMerge(aRange, true);
-
-        //  Paint
-
-        bool bDidPaint = false;
-        if ( pViewShell )
+        for (set<SCTAB>::const_iterator itr = rOption.maTabs.begin(), itrEnd = rOption.maTabs.end();
+                itr != itrEnd; ++itr)
         {
-            pViewShell->SetTabNo(nTab);
-            bDidPaint = pViewShell->AdjustRowHeight(maOption.mnStartRow, maOption.mnEndRow);
+            SCTAB nTab = *itr;
+            // There is no need to extend merge area because it's already been extended.
+            ScRange aRange = rOption.getSingleRange(nTab);
+
+            const SfxPoolItem& rDefAttr = rDoc.GetPool()->GetDefaultItem( ATTR_MERGE );
+            ScPatternAttr aPattern( rDoc.GetPool() );
+            aPattern.GetItemSet().Put( rDefAttr );
+            rDoc.ApplyPatternAreaTab( rOption.mnStartCol, rOption.mnStartRow,
+                    rOption.mnEndCol, rOption.mnEndRow, nTab,
+                    aPattern );
+
+            rDoc.RemoveFlagsTab( rOption.mnStartCol, rOption.mnStartRow,
+                    rOption.mnEndCol, rOption.mnEndRow, nTab,
+                    ScMF::Hor | ScMF::Ver );
+
+            rDoc.ExtendMerge(aRange, true);
+
+            //  Paint
+
+            bool bDidPaint = false;
+            if ( pViewShell )
+            {
+                pViewShell->SetTabNo(nTab);
+                bDidPaint = pViewShell->AdjustRowHeight(rOption.mnStartRow, rOption.mnEndRow);
+            }
+            if (!bDidPaint)
+                ScUndoUtil::PaintMore(pDocShell, aRange);
         }
-        if (!bDidPaint)
-            ScUndoUtil::PaintMore(pDocShell, aRange);
     }
 
     EndRedo();

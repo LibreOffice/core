@@ -45,6 +45,7 @@ class ScTableProtection;
 struct ScCellMergeOption;
 class ScConditionalFormat;
 class ScConditionalFormatList;
+class ScUndoRemoveMerge;
 
 namespace sc {
 
@@ -189,8 +190,8 @@ public:
 
     bool            MergeCells( const ScCellMergeOption& rOption, bool bContents,
                                         bool bRecord, bool bApi, bool bEmptyMergedCells = false );
-    bool            UnmergeCells( const ScRange& rRange, bool bRecord );
-    bool            UnmergeCells( const ScCellMergeOption& rOption, bool bRecord );
+    bool            UnmergeCells( const ScRange& rRange, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge );
+    bool            UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge );
 
     void            SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTAB nTab = -1 );     // takes ownership of pNewRanges //nTab = -1 for local range names
     void            ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab = -1 );

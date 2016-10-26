@@ -1208,7 +1208,7 @@ bool ScViewFunc::RemoveMerge()
         }
         while (bExtended);
 
-        bool bOk = pDocSh->GetDocFunc().UnmergeCells(aOption, true/*bRecord*/ );
+        bool bOk = pDocSh->GetDocFunc().UnmergeCells(aOption, true/*bRecord*/, nullptr);
         aExtended = aOption.getFirstSingleRange();
         MarkRange( aExtended );
 
