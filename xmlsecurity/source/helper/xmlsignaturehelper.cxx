@@ -169,8 +169,6 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
     /*
      * write the xml context for signatures
      */
-    OUString tag_AllSignatures(TAG_DOCUMENTSIGNATURES);
-
     SvXMLAttributeList *pAttributeList = new SvXMLAttributeList();
     OUString sNamespace;
     if (mbODFPre1_2)
@@ -184,7 +182,7 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
 
     xSaxWriter->startDocument();
     xSaxWriter->startElement(
-        tag_AllSignatures,
+        TAG_DOCUMENTSIGNATURES,
         uno::Reference< css::xml::sax::XAttributeList > (pAttributeList));
 
     return xSaxWriter;
@@ -192,8 +190,7 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
 
 void XMLSignatureHelper::CloseDocumentHandler( const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler )
 {
-    OUString tag_AllSignatures(TAG_DOCUMENTSIGNATURES);
-    xDocumentHandler->endElement( tag_AllSignatures );
+    xDocumentHandler->endElement( TAG_DOCUMENTSIGNATURES );
     xDocumentHandler->endDocument();
 }
 

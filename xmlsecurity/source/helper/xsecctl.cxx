@@ -581,31 +581,6 @@ void XSecController::exportSignature(
  *  signatureInfo       - signature to be exported
  ******************************************************************************/
 {
-    /*
-     * defines all element tags in Signature element.
-     */
-    OUString tag_Signature(TAG_SIGNATURE);
-    OUString tag_SignedInfo(TAG_SIGNEDINFO);
-    OUString tag_CanonicalizationMethod(TAG_CANONICALIZATIONMETHOD);
-    OUString tag_SignatureMethod(TAG_SIGNATUREMETHOD);
-    OUString tag_Reference(TAG_REFERENCE);
-    OUString tag_Transforms(TAG_TRANSFORMS);
-    OUString tag_Transform(TAG_TRANSFORM);
-    OUString tag_DigestMethod(TAG_DIGESTMETHOD);
-    OUString tag_DigestValue(TAG_DIGESTVALUE);
-    OUString tag_SignatureValue(TAG_SIGNATUREVALUE);
-    OUString tag_KeyInfo(TAG_KEYINFO);
-    OUString tag_X509Data(TAG_X509DATA);
-    OUString tag_X509IssuerSerial(TAG_X509ISSUERSERIAL);
-    OUString tag_X509IssuerName(TAG_X509ISSUERNAME);
-    OUString tag_X509SerialNumber(TAG_X509SERIALNUMBER);
-    OUString tag_X509Certificate(TAG_X509CERTIFICATE);
-    OUString tag_Object(TAG_OBJECT);
-    OUString tag_SignatureProperties(TAG_SIGNATUREPROPERTIES);
-    OUString tag_SignatureProperty(TAG_SIGNATUREPROPERTY);
-    OUString tag_Date(TAG_DATE);
-    OUString tag_Description(TAG_DESCRIPTION);
-
     const SignatureReferenceInformations& vReferenceInfors = signatureInfo.vSignatureReferenceInfors;
     SvXMLAttributeList *pAttributeList;
 
@@ -624,11 +599,11 @@ void XSecController::exportSignature(
             OUString(signatureInfo.ouSignatureId));
     }
 
-    xDocumentHandler->startElement( tag_Signature, cssu::Reference< cssxs::XAttributeList > (pAttributeList));
+    xDocumentHandler->startElement( TAG_SIGNATURE, cssu::Reference< cssxs::XAttributeList > (pAttributeList));
     {
         /* Write SignedInfo element */
         xDocumentHandler->startElement(
-            tag_SignedInfo,
+            TAG_SIGNEDINFO,
             cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
         {
             /* Write CanonicalizationMethod element */
@@ -636,16 +611,16 @@ void XSecController::exportSignature(
             pAttributeList->AddAttribute(
                 ATTR_ALGORITHM,
                 ALGO_C14N);
-            xDocumentHandler->startElement( tag_CanonicalizationMethod, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
-            xDocumentHandler->endElement( tag_CanonicalizationMethod );
+            xDocumentHandler->startElement( TAG_CANONICALIZATIONMETHOD, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
+            xDocumentHandler->endElement( TAG_CANONICALIZATIONMETHOD );
 
             /* Write SignatureMethod element */
             pAttributeList = new SvXMLAttributeList();
             pAttributeList->AddAttribute(
                 ATTR_ALGORITHM,
                 ALGO_RSASHA1);
-            xDocumentHandler->startElement( tag_SignatureMethod, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
-            xDocumentHandler->endElement( tag_SignatureMethod );
+            xDocumentHandler->startElement( TAG_SIGNATUREMETHOD, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
+            xDocumentHandler->endElement( TAG_SIGNATUREMETHOD );
 
             /* Write Reference element */
             int j;
@@ -675,7 +650,7 @@ void XSecController::exportSignature(
                         "#" + refInfor.ouURI);
                 }
 
-                xDocumentHandler->startElement( tag_Reference, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
+                xDocumentHandler->startElement( TAG_REFERENCE, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
                 {
                     /* Write Transforms element */
                     if (refInfor.nType == SignatureReferenceType::XMLSTREAM)
@@ -684,7 +659,7 @@ void XSecController::exportSignature(
                      */
                     {
                         xDocumentHandler->startElement(
-                            tag_Transforms,
+                            TAG_TRANSFORMS,
                             cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
                         {
                             pAttributeList = new SvXMLAttributeList();
@@ -692,11 +667,11 @@ void XSecController::exportSignature(
                                 ATTR_ALGORITHM,
                                 ALGO_C14N);
                             xDocumentHandler->startElement(
-                                tag_Transform,
+                                TAG_TRANSFORM,
                                 cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
-                            xDocumentHandler->endElement( tag_Transform );
+                            xDocumentHandler->endElement( TAG_TRANSFORM );
                         }
-                        xDocumentHandler->endElement( tag_Transforms );
+                        xDocumentHandler->endElement( TAG_TRANSFORMS );
                     }
 
                     /* Write DigestMethod element */
@@ -705,82 +680,82 @@ void XSecController::exportSignature(
                         ATTR_ALGORITHM,
                         ALGO_XMLDSIGSHA1);
                     xDocumentHandler->startElement(
-                        tag_DigestMethod,
+                        TAG_DIGESTMETHOD,
                         cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
-                    xDocumentHandler->endElement( tag_DigestMethod );
+                    xDocumentHandler->endElement( TAG_DIGESTMETHOD );
 
                     /* Write DigestValue element */
                     xDocumentHandler->startElement(
-                        tag_DigestValue,
+                        TAG_DIGESTVALUE,
                         cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
                     xDocumentHandler->characters( refInfor.ouDigestValue );
-                    xDocumentHandler->endElement( tag_DigestValue );
+                    xDocumentHandler->endElement( TAG_DIGESTVALUE );
                 }
-                xDocumentHandler->endElement( tag_Reference );
+                xDocumentHandler->endElement( TAG_REFERENCE );
             }
         }
-        xDocumentHandler->endElement( tag_SignedInfo );
+        xDocumentHandler->endElement( TAG_SIGNEDINFO );
 
         /* Write SignatureValue element */
         xDocumentHandler->startElement(
-            tag_SignatureValue,
+            TAG_SIGNATUREVALUE,
             cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
         xDocumentHandler->characters( signatureInfo.ouSignatureValue );
-        xDocumentHandler->endElement( tag_SignatureValue );
+        xDocumentHandler->endElement( TAG_SIGNATUREVALUE );
 
         /* Write KeyInfo element */
         xDocumentHandler->startElement(
-            tag_KeyInfo,
+            TAG_KEYINFO,
             cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
         {
             /* Write X509Data element */
             xDocumentHandler->startElement(
-                tag_X509Data,
+                TAG_X509DATA,
                 cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
             {
                 /* Write X509IssuerSerial element */
                 xDocumentHandler->startElement(
-                    tag_X509IssuerSerial,
+                    TAG_X509ISSUERSERIAL,
                     cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
                 {
                     /* Write X509IssuerName element */
                     xDocumentHandler->startElement(
-                        tag_X509IssuerName,
+                        TAG_X509ISSUERNAME,
                         cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
                     xDocumentHandler->characters( signatureInfo.ouX509IssuerName );
-                    xDocumentHandler->endElement( tag_X509IssuerName );
+                    xDocumentHandler->endElement( TAG_X509ISSUERNAME );
 
                     /* Write X509SerialNumber element */
                     xDocumentHandler->startElement(
-                        tag_X509SerialNumber,
+                        TAG_X509SERIALNUMBER,
                         cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
                     xDocumentHandler->characters( signatureInfo.ouX509SerialNumber );
-                    xDocumentHandler->endElement( tag_X509SerialNumber );
+                    xDocumentHandler->endElement( TAG_X509SERIALNUMBER );
                 }
-                xDocumentHandler->endElement( tag_X509IssuerSerial );
+                xDocumentHandler->endElement( TAG_X509ISSUERSERIAL );
 
                 /* Write X509Certificate element */
                 if (!signatureInfo.ouX509Certificate.isEmpty())
                 {
                     xDocumentHandler->startElement(
-                        tag_X509Certificate,
+                        TAG_X509CERTIFICATE,
                         cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
                     xDocumentHandler->characters( signatureInfo.ouX509Certificate );
-                    xDocumentHandler->endElement( tag_X509Certificate );
+                    xDocumentHandler->endElement( TAG_X509CERTIFICATE );
                 }
             }
-            xDocumentHandler->endElement( tag_X509Data );
+            xDocumentHandler->endElement( TAG_X509DATA );
         }
-        xDocumentHandler->endElement( tag_KeyInfo );
+        xDocumentHandler->endElement( TAG_KEYINFO );
 
         /* Write Object element */
         xDocumentHandler->startElement(
-            tag_Object,
+            TAG_OBJECT,
             cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
         {
             /* Write SignatureProperties element */
             xDocumentHandler->startElement(
-                tag_SignatureProperties,
+                TAG_SIGNATUREPROPERTIES,
                 cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
             {
                 /* Write SignatureProperty element */
@@ -792,7 +767,7 @@ void XSecController::exportSignature(
                     ATTR_TARGET,
                     "#" + signatureInfo.ouSignatureId);
                 xDocumentHandler->startElement(
-                    tag_SignatureProperty,
+                    TAG_SIGNATUREPROPERTY,
                     cssu::Reference< cssxs::XAttributeList > (pAttributeList));
                 {
                     /* Write timestamp element */
@@ -803,7 +778,7 @@ void XSecController::exportSignature(
                         NS_DC);
 
                     xDocumentHandler->startElement(
-                        NSTAG_DC ":" + tag_Date,
+                        NSTAG_DC ":" TAG_DATE,
                         cssu::Reference< cssxs::XAttributeList > (pAttributeList));
 
                     OUStringBuffer buffer;
@@ -820,9 +795,9 @@ void XSecController::exportSignature(
                     xDocumentHandler->characters( buffer.makeStringAndClear() );
 
                     xDocumentHandler->endElement(
-                        NSTAG_DC ":" + tag_Date);
+                        NSTAG_DC ":" TAG_DATE);
                 }
-                xDocumentHandler->endElement( tag_SignatureProperty );
+                xDocumentHandler->endElement( TAG_SIGNATUREPROPERTY );
             }
 
             // Write signature description.
@@ -832,26 +807,26 @@ void XSecController::exportSignature(
                 pAttributeList = new SvXMLAttributeList();
                 pAttributeList->AddAttribute(ATTR_ID, signatureInfo.ouDescriptionPropertyId);
                 pAttributeList->AddAttribute(ATTR_TARGET, "#" + signatureInfo.ouSignatureId);
-                xDocumentHandler->startElement(tag_SignatureProperty, uno::Reference<xml::sax::XAttributeList>(pAttributeList));
+                xDocumentHandler->startElement(TAG_SIGNATUREPROPERTY, uno::Reference<xml::sax::XAttributeList>(pAttributeList));
 
                 {
                     // Description element.
                     pAttributeList = new SvXMLAttributeList();
                     pAttributeList->AddAttribute(ATTR_XMLNS ":" NSTAG_DC, NS_DC);
 
-                    xDocumentHandler->startElement(NSTAG_DC ":" + tag_Description, uno::Reference<xml::sax::XAttributeList>(pAttributeList));
+                    xDocumentHandler->startElement(NSTAG_DC ":" TAG_DESCRIPTION, uno::Reference<xml::sax::XAttributeList>(pAttributeList));
                     xDocumentHandler->characters(signatureInfo.ouDescription);
-                    xDocumentHandler->endElement(NSTAG_DC ":" + tag_Description);
+                    xDocumentHandler->endElement(NSTAG_DC ":" TAG_DESCRIPTION);
                 }
 
-                xDocumentHandler->endElement(tag_SignatureProperty);
+                xDocumentHandler->endElement(TAG_SIGNATUREPROPERTY);
             }
 
-            xDocumentHandler->endElement( tag_SignatureProperties );
+            xDocumentHandler->endElement( TAG_SIGNATUREPROPERTIES );
         }
-        xDocumentHandler->endElement( tag_Object );
+        xDocumentHandler->endElement( TAG_OBJECT );
     }
-    xDocumentHandler->endElement( tag_Signature );
+    xDocumentHandler->endElement( TAG_SIGNATURE );
 }
 
 void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>& xRootStorage, const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation)
