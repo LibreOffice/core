@@ -38,7 +38,6 @@ class RscCont;
 class RscCmdLine;
 enum class KeyFuncType : sal_Int32;
 enum class MenuItemBits : sal_Int16;
-enum class SfxStyleFamily;
 enum class MapUnit;
 
 struct WriteRcContext
@@ -84,7 +83,6 @@ class RscTypCont
     void        SETCONST( RscConst *, Atom, sal_uInt32 );
     inline void SETCONST( RscConst *p1, const char * p2, KeyFuncType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, Atom p2, MenuItemBits p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
-    inline void SETCONST( RscConst *p1, const char * p2, SfxStyleFamily p3 ) { SETCONST(p1, p2, static_cast<sal_uInt16>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, MapUnit p3 ) { SETCONST(p1, p2, static_cast<sal_uInt16>(p3)); }
     RscEnum *   InitFieldUnitsType();
     RscEnum *   InitColor();
@@ -111,12 +109,6 @@ class RscTypCont
     RscTop *    InitClassMenuItem( RscTop * pSuper );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );
 
-    RscTop *    InitClassSfxStyleFamilyItem( RscTop * pSuper,
-                                             RscTop * pClassBitmap,
-                                             RscTop * pClassImage,
-                                             RscArray * pStrLst );
-    RscTop *    InitClassSfxTemplateDialog(  RscTop * pSuper,
-                                             RscTop * pStyleFamily );
     RscTop *    InitClassSfxSlotInfo( RscTop * pSuper );
 
 public:

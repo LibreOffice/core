@@ -168,16 +168,6 @@ void RscTypCont::Init()
                                  (sal_uInt32)RscMenuItem::Menu );
 }
 {
-    RscTop* pClassSfxStyleFamilyItem = InitClassSfxStyleFamilyItem( pClassMgr,
-                                                   pClassBitmap,
-                                                   pClassImage,
-                                                   pLangStringLongTupelList );
-    pRoot->Insert( pClassSfxStyleFamilyItem );
-
-    RscTop* pClassSfxTemplateDialog = InitClassSfxTemplateDialog( pClassMgr,
-                                                  pClassSfxStyleFamilyItem );
-    pRoot->Insert( pClassSfxTemplateDialog );
-
     RscTop* pClassSfxSlotInfo = InitClassSfxSlotInfo( pClassMgr );
     pRoot->Insert( pClassSfxSlotInfo );
 }

@@ -40,7 +40,6 @@
 
 ObjectStack                     S;
 RscTop *                        pCurClass;
-SfxStyleItem                    nCurMask;
 char                            szErrBuf[ 100 ];
 
 RSCINST GetVarInst( const RSCINST & rInst, const char * pVarName )
@@ -286,13 +285,10 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 %type  <macrostruct>    id_expression
 %type  <string>                 string_multiline
 
-%type  <pClass>                 type
-%type  <pClass>                 type_base
 %type  <header>                 class_header_body
 %type  <header>                 class_header
 %type  <header>                 var_header_class
 %type  <copyref>                copy_ref
-%type  <ushort>                 type_flags
 
 
 %left '|'
@@ -393,106 +389,6 @@ resource_definition
       pMem = rtl_allocateMemory( 20000 );
       rtl_freeMemory( pMem );
 #endif
-  }
-  | new_class_definition_header '{' new_class_definition_body '}' ';'
-  | new_class_definition_header ';'
-  ;
-
-new_class_definition_header
-  : CLASS SYMBOL id_expression ':' CLASSNAME
-  {
-      sal_Int32       lType;
-
-      $3.Evaluate( &lType );
-
-      // Klasse anlegen
-      Atom nId = pHS->getID( $2 );
-      pCurClass = new RscClass( nId, lType, $5 );
-      nCurMask = SfxStyleItem::List;
-      pTC->aNmTb.Put( nId, CLASSNAME, pCurClass );
-      pTC->GetRoot()->Insert( pCurClass );
-  }
-  | CLASS CLASSNAME id_expression ':' CLASSNAME
-  {
-      pCurClass = $2;
-      nCurMask = SfxStyleItem::List;
-  }
-;
-
-new_class_definition_body
-  :
-  | property_definition ';' new_class_definition_body
-  ;
-
-property_definition
-  : type_flags type SYMBOL
-  {
-      // Variable anlegen
-      Atom nId = pTC->aNmTb.Put( $3, VARNAME );
-      pCurClass->SetVariable( nId, $2, nullptr, $1, nCurMask );
-      nCurMask = SfxStyleItem(((int)nCurMask) << 1);
-  }
-  | type_flags type VARNAME
-  {
-      pCurClass->SetVariable( $3, $2, nullptr, $1, nCurMask );
-      nCurMask = SfxStyleItem(((int)nCurMask) << 1);
-  }
-  ;
-
-type_flags
-  : type_flags EXTENDABLE
-  {
-      $$ = $1 | VAR_EXTENDABLE;
-  }
-  | type_flags WRITEIFSET
-  {
-      $$ = $1 | VAR_SVDYNAMIC;
-  }
-  |
-  {
-      $$ = 0;
-  }
-  ;
-
-type
-  : type_base
-  {
-        $$ = $1;
-  }
-  | type_base '[' ']'
-  {
-      if( $1 )
-      {
-          rtl::OString aTypeName = rtl::OStringBuffer(pHS->getString($1->GetId())).
-              append("[]").makeStringAndClear();
-          $$ = pTC->SearchType( pHS->getID( aTypeName.getStr(), true ) );
-          if( !$$ )
-          {
-              RscCont * pCont;
-              pCont = new RscCont( pHS->getID( aTypeName.getStr() ), RSC_NOTYPE );
-              pCont->SetTypeClass( $1 );
-              pTC->InsertType( pCont );
-              $$ = pCont;
-          }
-      }
-      else
-      {
-          $$ = nullptr;
-      }
-  }
-  ;
-
-type_base
-  : CLASSNAME
-  {
-        $$ = $1;
-  }
-  | SYMBOL
-  {
-      RscTop * pType = pTC->SearchType( pHS->getID( $1, true ) );
-      if( !pType )
-          pTC->pEH->Error( ERR_NOTYPE, pCurClass, RscId() );
-      $$ = pType;
   }
   ;
 

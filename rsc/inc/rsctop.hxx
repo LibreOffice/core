@@ -83,11 +83,6 @@ public:
                     // sets the variable
     virtual ERRTYPE SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt,
-                                 RSCVAR nVarType, SfxStyleItem nMask,
-                                 Atom nDataBaseName = InvalidAtom );
-
-    virtual ERRTYPE SetVariable( Atom nVarName, RscTop * pClass,
-                                 RSCINST * pDflt,
                                  RSCVAR nVarType, SfxSlotInfo nMask,
                                  Atom nDataBaseName = InvalidAtom );
 

@@ -19,13 +19,7 @@
 #ifndef INCLUDED_RSC_RSCSFX_HXX
 #define INCLUDED_RSC_RSCSFX_HXX
 
-// StarView     (RSC_NOTYPE) bis (RSC_NOTYPE + 0x190)
-// Sfx          (RSC_NOTYPE + 0x200) bis (RSC_NOTYPE + 0x20F)
-#define RSC_SFX_STYLE_FAMILIES     (0x100 + 0x201)
-#define RSC_SFX_STYLE_FAMILY_ITEM  (0x100 + 0x202)
 #define RSC_SFX_SLOT_INFO          (0x100 + 0x203)
-// StarMoney    (RSC_NOTYPE + 0x210) bis (RSC_NOTYPE + 0x22F)
-// Public       (RSC_NOTYPE + 0x300) bis (RSC_NOTYPE + 0x3FF)
 
 //========== S F X =======================================
 // This is used as a flags enum in sw/, but only there,
@@ -42,25 +36,11 @@ enum class SfxStyleFamily {
     All     = 0x7fff
 };
 
-
-// SfxTemplate
-enum class SfxStyleItem {
-    None         = 0x00,
-    List         = 0x01,
-    Bitmap       = 0x02,
-    Text         = 0x04,
-    HelpText     = 0x08,
-    StyleFamily  = 0x10,
-    Image        = 0x20
-};
-
-
 // SfxSlotInfo
 enum class SfxSlotInfo {
     SlotName  = 0x1,
     HelpText  = 0x2
 };
-
 
 #endif
 

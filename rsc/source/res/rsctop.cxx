@@ -103,17 +103,6 @@ ERRTYPE RscTop::SetVariable( Atom nVarName, RscTop * pClass,
 }
 
 ERRTYPE RscTop::SetVariable( Atom nVarName, RscTop * pClass,
-                     RSCINST * pDflt, RSCVAR nVarType, SfxStyleItem nMask,
-                     Atom nDataBaseName )
-{
-    if( pSuperClass )
-        return pSuperClass->SetVariable( nVarName, pClass, pDflt,
-                                         nVarType, nMask, nDataBaseName );
-    else
-        return ERR_UNKNOWN_METHOD;
-}
-
-ERRTYPE RscTop::SetVariable( Atom nVarName, RscTop * pClass,
                      RSCINST * pDflt, RSCVAR nVarType, SfxSlotInfo nMask,
                      Atom nDataBaseName )
 {

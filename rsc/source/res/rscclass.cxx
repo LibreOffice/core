@@ -281,16 +281,6 @@ ERRTYPE RscClass::SetVariable( Atom nVarName,
                                RscTop * pClass,
                                RSCINST * pDflt,
                                RSCVAR nVarType,
-                               SfxStyleItem nMask,
-                               Atom nDataBaseName)
-{
-    return SetVariable(nVarName, pClass, pDflt, nVarType, (sal_uInt32)nMask, nDataBaseName);
-}
-
-ERRTYPE RscClass::SetVariable( Atom nVarName,
-                               RscTop * pClass,
-                               RSCINST * pDflt,
-                               RSCVAR nVarType,
                                SfxSlotInfo nMask,
                                Atom nDataBaseName)
 {
