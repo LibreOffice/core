@@ -16,6 +16,24 @@
       "revId": "a95da3376bdcdc749d378635920024f41cfcbf97",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_59a3b19e",
+        "filename": "sd/source/ui/view/drviews4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-10-26T09:16:49Z",
+      "side": 1,
+      "message": "So I\u0027ve been trying to dig this out, but without much success. git log refers to Sun-internal issue so nobody will ever find out what was the original bug.My hunch would be, it had sth to do with dragging an object and not redrawing the background colour where the object used to be.\n\nMentioned in the comment, SdrCreateView::MovCreateObj doesn\u0027t execute IsSolidDragging() (without -Now nowadays) anymore (?) so I\u0027d be tempted to remove this code, but knowing that such moves tend to cause regressions, I\u0027d leave it alone :)",
+      "parentUuid": "7a77a97e_677c4a21",
+      "revId": "a95da3376bdcdc749d378635920024f41cfcbf97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
