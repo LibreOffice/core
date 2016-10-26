@@ -267,7 +267,7 @@ bool ActionTriggerSeparatorPropertySet::impl_tryToChangeProperty(
     const   Any&        aNewValue       ,
     Any&                aOldValue       ,
     Any&                aConvertedValue )
-throw( IllegalArgumentException )
+throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     // Set default return value if method failed.
     bool bReturn = false;
