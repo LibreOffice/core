@@ -132,7 +132,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     SwDoc *pDoc = getDoc();
 
     if( getExportFlags() & (SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::STYLES|
-                            SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::UNDO))
+                            SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT))
     {
         if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
         {
@@ -268,7 +268,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     // set redline mode if we export STYLES or CONTENT, unless redline
     // mode is taken care of outside (through info XPropertySet)
     bool bSaveRedline =
-        bool( getExportFlags() & (SvXMLExportFlags::UNDO|SvXMLExportFlags::STYLES) );
+        bool( getExportFlags() & (SvXMLExportFlags::CONTENT|SvXMLExportFlags::STYLES) );
     if( bSaveRedline )
     {
         // if the info property set has a ShowChanges property,
@@ -483,6 +483,7 @@ void SwXMLExport::ExportContent_()
         }
     }
 
+    GetTextParagraphExport()->exportTrackedChanges( false );
     GetTextParagraphExport()->exportTextDeclarations();
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();

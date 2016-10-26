@@ -204,6 +204,7 @@ void SwXMLExport::ExportAutoStyles_()
     // exported in ExportContent_
     if( getExportFlags() & SvXMLExportFlags::CONTENT )
     {
+        GetTextParagraphExport()->exportTrackedChanges( true );
         Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
         Reference < XText > xText = xTextDoc->getText();
 
