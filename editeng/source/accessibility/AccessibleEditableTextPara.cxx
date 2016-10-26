@@ -867,42 +867,22 @@ namespace accessibility
             return pValues[a].Name < pValues[b].Name;
         }
     };
+}
 
-    OUString AccessibleEditableTextPara::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
+namespace
+{
+    OUString GetFieldTypeNameFromField(EFieldInfo &ree)
     {
         OUString strFldType;
-        SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
-        //For field object info
-        sal_Int32 nParaIndex = GetParagraphIndex();
-        sal_Int32 nAllFieldLen = 0;
-        sal_Int32 nField = rCacheTF.GetFieldCount(nParaIndex), nFoundFieldIndex = -1;
-        EFieldInfo ree;
-        sal_Int32  reeBegin, reeEnd;
         sal_Int32 nFieldType = -1;
-        for(sal_Int32 j = 0; j < nField; j++)
-        {
-            ree = rCacheTF.GetFieldInfo(nParaIndex, j);
-            reeBegin  = ree.aPosition.nIndex + nAllFieldLen;
-            reeEnd = reeBegin + ree.aCurrentText.getLength();
-            nAllFieldLen += (ree.aCurrentText.getLength() - 1);
-            if( reeBegin > nIndex )
-            {
-                break;
-            }
-            if(  nIndex >= reeBegin && nIndex < reeEnd )
-            {
-                nFoundFieldIndex = j;
-                break;
-            }
-        }
-        if (nFoundFieldIndex >= 0 && ree.pFieldItem)
+        if (ree.pFieldItem)
         {
             // So we get a field, check its type now.
             nFieldType = ree.pFieldItem->GetField()->GetClassId() ;
         }
-        switch(nFieldType)
+        switch (nFieldType)
         {
-        case text::textfield::Type::DATE:
+            case text::textfield::Type::DATE:
             {
                 const SvxDateField* pDateField = static_cast< const SvxDateField* >(ree.pFieldItem->GetField());
                 if (pDateField)
@@ -912,23 +892,23 @@ namespace accessibility
                     else if (pDateField->GetType() == SVXDATETYPE_VAR)
                         strFldType = "date (variable)";
                 }
+                break;
             }
-            break;
-        case text::textfield::Type::PAGE:
-            strFldType = "page-number";
-            break;
-        //support the sheet name & pages fields
-        case text::textfield::Type::PAGES:
-            strFldType = "page-count";
-            break;
-        case text::textfield::Type::TABLE:
-            strFldType = "sheet-name";
-            break;
-        //End
-        case text::textfield::Type::TIME:
-            strFldType = "time";
-            break;
-        case text::textfield::Type::EXTENDED_TIME:
+            case text::textfield::Type::PAGE:
+                strFldType = "page-number";
+                break;
+            //support the sheet name & pages fields
+            case text::textfield::Type::PAGES:
+                strFldType = "page-count";
+                break;
+            case text::textfield::Type::TABLE:
+                strFldType = "sheet-name";
+                break;
+            //End
+            case text::textfield::Type::TIME:
+                strFldType = "time";
+                break;
+            case text::textfield::Type::EXTENDED_TIME:
             {
                 const SvxExtTimeField* pTimeField = static_cast< const SvxExtTimeField* >(ree.pFieldItem->GetField());
                 if (pTimeField)
@@ -938,19 +918,47 @@ namespace accessibility
                     else if (pTimeField->GetType() == SVXTIMETYPE_VAR)
                         strFldType = "time (variable)";
                 }
+                break;
             }
-            break;
-        case text::textfield::Type::AUTHOR:
-            strFldType = "author";
-            break;
-        case text::textfield::Type::EXTENDED_FILE:
-        case text::textfield::Type::DOCINFO_TITLE:
-            strFldType = "file name";
-            break;
-        default:
-            break;
+            case text::textfield::Type::AUTHOR:
+                strFldType = "author";
+                break;
+            case text::textfield::Type::EXTENDED_FILE:
+            case text::textfield::Type::DOCINFO_TITLE:
+                strFldType = "file name";
+                break;
+            default:
+                break;
         }
         return strFldType;
+    }
+}
+
+namespace accessibility
+{
+    OUString AccessibleEditableTextPara::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
+    {
+        SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
+        //For field object info
+        sal_Int32 nParaIndex = GetParagraphIndex();
+        sal_Int32 nAllFieldLen = 0;
+        sal_Int32 nField = rCacheTF.GetFieldCount(nParaIndex);
+        for (sal_Int32 j = 0; j < nField; ++j)
+        {
+            EFieldInfo ree = rCacheTF.GetFieldInfo(nParaIndex, j);
+            sal_Int32 reeBegin = ree.aPosition.nIndex + nAllFieldLen;
+            sal_Int32 reeEnd = reeBegin + ree.aCurrentText.getLength();
+            nAllFieldLen += (ree.aCurrentText.getLength() - 1);
+            if (reeBegin > nIndex)
+            {
+                break;
+            }
+            if (nIndex >= reeBegin && nIndex < reeEnd)
+            {
+                return GetFieldTypeNameFromField(ree);
+            }
+        }
+        return OUString();
     }
 
     uno::Reference< XAccessibleStateSet > SAL_CALL AccessibleEditableTextPara::getAccessibleStateSet() throw (uno::RuntimeException, std::exception)
@@ -1621,7 +1629,7 @@ namespace accessibility
         for (sal_Int32 j = 0; j < nField; ++j)
         {
             EFieldInfo ree = rCacheTF.GetFieldInfo(nParaIndex, j);
-            reeBegin  = ree.aPosition.nIndex + nAllFieldLen;
+            reeBegin = ree.aPosition.nIndex + nAllFieldLen;
             reeEnd = reeBegin + ree.aCurrentText.getLength();
             nAllFieldLen += (ree.aCurrentText.getLength() - 1);
             if( reeBegin > nIndex )
