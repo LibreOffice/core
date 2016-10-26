@@ -1617,11 +1617,10 @@ namespace accessibility
         SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
         sal_Int32 nAllFieldLen = 0;
         sal_Int32 nField = rCacheTF.GetFieldCount(nParaIndex), nFoundFieldIndex = -1;
-        EFieldInfo ree;
         sal_Int32  reeBegin=0, reeEnd=0;
-        for (sal_Int32 j = 0; j < nField; j++)
+        for (sal_Int32 j = 0; j < nField; ++j)
         {
-            ree = rCacheTF.GetFieldInfo(nParaIndex, j);
+            EFieldInfo ree = rCacheTF.GetFieldInfo(nParaIndex, j);
             reeBegin  = ree.aPosition.nIndex + nAllFieldLen;
             reeEnd = reeBegin + ree.aCurrentText.getLength();
             nAllFieldLen += (ree.aCurrentText.getLength() - 1);
@@ -1655,11 +1654,10 @@ namespace accessibility
         SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
         sal_Int32 nAllFieldLen = 0;
         sal_Int32 nField = rCacheTF.GetFieldCount(nParaIndex), nFoundFieldIndex = -1;
-        EFieldInfo ree;
         sal_Int32  reeBegin=0, reeEnd=0;
-        for (sal_Int32 j = 0; j < nField; j++)
+        for (sal_Int32 j = 0; j < nField; ++j)
         {
-            ree = rCacheTF.GetFieldInfo(nParaIndex, j);
+            EFieldInfo ree = rCacheTF.GetFieldInfo(nParaIndex, j);
             reeBegin  = ree.aPosition.nIndex + nAllFieldLen;
             reeEnd = reeBegin + ree.aCurrentText.getLength();
             nAllFieldLen += (ree.aCurrentText.getLength() - 1);
