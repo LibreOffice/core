@@ -951,20 +951,6 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
         Size aOldSize = pItem->maImage.GetSizePixel();
 
         pItem->maImageOriginal = aImage;
-
-        if (GetDPIScaleFactor() > 1)
-        {
-            BitmapEx aBitmap(aImage.GetBitmapEx());
-
-            // Some code calls this twice, so add a sanity check
-            // FIXME find out what that code is & fix accordingly
-            if (aBitmap.GetSizePixel().Width() < 32)
-            {
-                aBitmap.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
-                aImage = Image(aBitmap);
-            }
-        }
-
         pItem->maImage = aImage;
 
         // only once all is calculated, do extra work

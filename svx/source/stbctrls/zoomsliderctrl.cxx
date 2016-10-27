@@ -159,25 +159,6 @@ SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nI
     mxImpl->maSliderButton   = Image( SVX_RES( RID_SVXBMP_SLIDERBUTTON   ) );
     mxImpl->maIncreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERINCREASE ) );
     mxImpl->maDecreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERDECREASE ) );
-
-//#ifndef MACOSX
-    sal_Int32 nScaleFactor = rStatusBar.GetDPIScaleFactor();
-    if (nScaleFactor != 1)
-    {
-        Image arr[3] = {mxImpl->maSliderButton, mxImpl->maIncreaseButton, mxImpl->maDecreaseButton};
-
-        for (int i = 0; i < 3; i++)
-        {
-            BitmapEx aBitmap = arr[i].GetBitmapEx();
-            //Use Lanczos scaling for the slider button because it does a better job with circles
-            aBitmap.Scale(nScaleFactor, nScaleFactor, i == 0 ? BmpScaleFlag::Lanczos : BmpScaleFlag::Fast);
-            arr[i] = Image(aBitmap);
-        }
-        mxImpl->maSliderButton = arr[0];
-        mxImpl->maIncreaseButton = arr[1];
-        mxImpl->maDecreaseButton = arr[2];
-    }
-//#endif
 }
 
 SvxZoomSliderControl::~SvxZoomSliderControl()

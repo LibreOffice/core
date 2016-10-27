@@ -1521,18 +1521,6 @@ void SwContentTree::Display( bool bActive )
     if(!m_bIsImageListInitialized)
     {
         m_aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
-
-        if ( GetDPIScaleFactor() > 1 )
-        {
-            for (short i = 0; i < m_aEntryImages.GetImageCount(); i++)
-            {
-                OUString rImageName = m_aEntryImages.GetImageName(i);
-                BitmapEx b = m_aEntryImages.GetImage(rImageName).GetBitmapEx();
-                //Use Lanczos because it looks better with circles / diagonals
-                b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Lanczos);
-                m_aEntryImages.ReplaceImage(rImageName, Image(b));
-            }
-        }
         m_bIsImageListInitialized = true;
     }
     // First read the selected entry to select it later again if necessary
