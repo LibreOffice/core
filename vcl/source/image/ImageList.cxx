@@ -33,10 +33,6 @@
 #include <vcl/implimagetree.hxx>
 #include <image.h>
 
-#if OSL_DEBUG_LEVEL > 0
-#include <rtl/strbuf.hxx>
-#endif
-
 ImageList::ImageList() :
     mpImplData( nullptr )
 {
@@ -126,31 +122,6 @@ void ImageList::ImplInit( sal_uInt16 nItems, const Size &rSize )
     mpImplData = new ImplImageList;
     mpImplData->maImages.reserve( nItems );
     mpImplData->maImageSize = rSize;
-}
-
-void ImageAryData::Load(const OUString &rPrefix)
-{
-    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-
-    OUString aFileName = rPrefix;
-    aFileName += maName;
-#if OSL_DEBUG_LEVEL > 0
-    bool bSuccess =
-#endif
-        ImplImageTree::get().loadImage(aFileName, aIconTheme, maBitmapEx, true);
-#if OSL_DEBUG_LEVEL > 0
-    if ( !bSuccess )
-    {
-        OStringBuffer aMessage;
-        aMessage.append( "ImageAryData::Load: failed to load image '" );
-        aMessage.append( OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
-        aMessage.append( "'" );
-        aMessage.append( " from icon theme '" );
-        aMessage.append( OUStringToOString( aIconTheme, RTL_TEXTENCODING_UTF8 ).getStr() );
-        aMessage.append( "'" );
-        OSL_FAIL( aMessage.makeStringAndClear().getStr() );
-    }
-#endif
 }
 
 // FIXME: Rather a performance hazard
@@ -284,21 +255,17 @@ void ImageList::RemoveImage( sal_uInt16 nId )
 
 Image ImageList::GetImage( sal_uInt16 nId ) const
 {
-
     Image aRet;
 
-    if( mpImplData )
+    if (mpImplData)
     {
-        std::vector<ImageAryData *>::iterator aIter;
-        for( aIter = mpImplData->maImages.begin();
-             aIter != mpImplData->maImages.end(); ++aIter)
+        for (ImageAryData* pImageData : mpImplData->maImages)
         {
-            if ((*aIter)->mnId == nId)
+            if (pImageData->mnId == nId)
             {
-                if( (*aIter)->IsLoadable() )
-                    (*aIter)->Load( mpImplData->maPrefix );
-
-                aRet = Image( (*aIter)->maBitmapEx );
+                if (pImageData->IsLoadable())
+                    pImageData->Load(mpImplData->maPrefix);
+                aRet = Image(pImageData->maBitmapEx);
             }
         }
     }
@@ -306,9 +273,9 @@ Image ImageList::GetImage( sal_uInt16 nId ) const
     if (!aRet)
     {
         BitmapEx rBitmap;
-        bool res = vcl::ImageRepository::loadDefaultImage(rBitmap);
-        if (res)
-            aRet =  Image(rBitmap);
+        bool bResult = vcl::ImageRepository::loadDefaultImage(rBitmap);
+        if (bResult)
+            aRet = Image(rBitmap);
     }
 
     return aRet;
