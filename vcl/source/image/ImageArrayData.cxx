@@ -25,9 +25,17 @@
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/implimagetree.hxx>
 
 #include <image.h>
 #include <memory>
+
+#if OSL_DEBUG_LEVEL > 0
+#include <rtl/strbuf.hxx>
+#endif
+
+#include <vcl/BitmapProcessor.hxx>
 
 ImageAryData::ImageAryData( const ImageAryData& rData ) :
     maName( rData.maName ),
@@ -54,5 +62,32 @@ ImageAryData& ImageAryData::operator=( const ImageAryData& rData )
 
     return *this;
 }
+
+void ImageAryData::Load(const OUString &rPrefix)
+{
+    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+
+    OUString aFileName = rPrefix;
+    aFileName += maName;
+
+    bool bSuccess = ImplImageTree::get().loadImage(aFileName, aIconTheme, maBitmapEx, true);
+
+    if (bSuccess)
+    {}
+#if OSL_DEBUG_LEVEL > 0
+    else
+    {
+        OStringBuffer aMessage;
+        aMessage.append( "ImageAryData::Load: failed to load image '" );
+        aMessage.append( OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        aMessage.append( "'" );
+        aMessage.append( " from icon theme '" );
+        aMessage.append( OUStringToOString( aIconTheme, RTL_TEXTENCODING_UTF8 ).getStr() );
+        aMessage.append( "'" );
+        OSL_FAIL( aMessage.makeStringAndClear().getStr() );
+    }
+#endif
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
