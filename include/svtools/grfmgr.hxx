@@ -311,9 +311,6 @@ private:
 
                             DECL_LINK( ImplAutoSwapOutHdl, Timer*, void );
 
-    // restart SwapOut timer; this is like touching in a cache to reset to the full timeout value
-    void SVT_DLLPRIVATE     restartSwapOutTimer() const;
-
     // Handle evtl. needed AfterDataChanges, needs to be called when new
     // graphic data is swapped in/added to the GraphicManager
     void SVT_DLLPRIVATE     ImplAfterDataChange();
@@ -408,8 +405,6 @@ public:
     bool                    IsTransparent() const { return mbTransparent; }
     bool                    IsAnimated() const { return mbAnimated; }
     bool                    IsEPS() const { return mbEPS; }
-
-    Link<Animation*,void>   GetAnimationNotifyHdl() const { return GetGraphic().GetAnimationNotifyHdl(); }
 
     bool                    SwapOut();
     bool                    SwapOut( SvStream* pOStm );

@@ -104,18 +104,13 @@ namespace svt
 
     IMPL_LINK( DialogController, OnWindowEvent, VclWindowEvent&, _rEvent, void )
     {
-        if ( m_pImpl->pEventFilter->payAttentionTo( _rEvent ) )
-            impl_updateAll( _rEvent );
-    }
-
-
-    void DialogController::impl_updateAll( const VclWindowEvent& _rTriggerEvent )
-    {
+        if ( !m_pImpl->pEventFilter->payAttentionTo( _rEvent ) )
+            return;
         for ( auto loop = m_pImpl->aConcernedWindows.begin();
                 loop != m_pImpl->aConcernedWindows.end();
                 ++loop
             )
-            impl_update( _rTriggerEvent, *(*loop) );
+            impl_update( _rEvent, *(*loop) );
     }
 
 

@@ -221,32 +221,6 @@ void PlaceEditDialog::InitDetails( )
     SelectTypeHdl( *m_pLBServerType );
 }
 
-void PlaceEditDialog::UpdateLabel( )
-{
-    if( !bLabelChanged )
-    {
-        if( !m_pEDUsername->GetText().isEmpty( ) )
-        {
-            OUString sLabel = SvtResId( STR_SVT_DEFAULT_SERVICE_LABEL );
-            OUString sUser = m_pEDUsername->GetText();
-
-            int nLength = sUser.indexOf( '@' );
-            if( nLength < 0 )
-                nLength = sUser.getLength();
-
-            sLabel = sLabel.replaceFirst( "$user$", sUser.copy( 0, nLength ) );
-            sLabel = sLabel.replaceFirst( "$service$", m_pLBServerType->GetSelectEntry() );
-
-            m_pEDServerName->SetText( sLabel );
-            bLabelChanged = false;
-        }
-        else
-        {
-            m_pEDServerName->SetText( m_pLBServerType->GetSelectEntry( ) );
-        }
-    }
-}
-
 IMPL_LINK( PlaceEditDialog, OKHdl, Button*, /*pBtn*/, void)
 {
     if ( m_xCurrentDetails.get() )
@@ -290,7 +264,28 @@ IMPL_LINK( PlaceEditDialog, DelHdl, Button*, /*pButton*/, void)
 
 IMPL_LINK_NOARG( PlaceEditDialog, EditHdl, DetailsContainer*, void )
 {
-    UpdateLabel( );
+    if( !bLabelChanged )
+    {
+        if( !m_pEDUsername->GetText().isEmpty( ) )
+        {
+            OUString sLabel = SvtResId( STR_SVT_DEFAULT_SERVICE_LABEL );
+            OUString sUser = m_pEDUsername->GetText();
+
+            int nLength = sUser.indexOf( '@' );
+            if( nLength < 0 )
+                nLength = sUser.getLength();
+
+            sLabel = sLabel.replaceFirst( "$user$", sUser.copy( 0, nLength ) );
+            sLabel = sLabel.replaceFirst( "$service$", m_pLBServerType->GetSelectEntry() );
+
+            m_pEDServerName->SetText( sLabel );
+            bLabelChanged = false;
+        }
+        else
+        {
+            m_pEDServerName->SetText( m_pLBServerType->GetSelectEntry( ) );
+        }
+    }
 
     OUString sUrl = GetServerUrl( );
     OUString sName = m_pEDServerName->GetText().trim( );

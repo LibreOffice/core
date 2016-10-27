@@ -52,9 +52,6 @@ namespace pcr
 
     protected:
         virtual void    ModelHasMoved(SvTreeListEntry* pSource ) override;
-
-    private:
-        using SvTreeListBox::MoveSelection;
     };
 
 

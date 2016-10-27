@@ -305,7 +305,6 @@ protected:
     void            EditText( const OUString&, const Rectangle&,const Selection&);
     void            CancelTextEditing();
     bool            EditingCanceled() const;
-    bool            IsEmptyTextAllowed() const;
 
     // Return value must be derived from SvViewDataEntry!
     virtual SvViewDataEntry* CreateViewData( SvTreeListEntry* ) override;
@@ -380,7 +379,6 @@ public:
     static SvTreeListEntry* PrevSibling( SvTreeListEntry* pEntry );
 
     bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
-    bool            MoveSelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
     bool            MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, bool bAllowCopyFallback );
     void            RemoveSelection();
 
@@ -535,7 +533,6 @@ protected:
     using SvListView::SelectAll;
 
     SVT_DLLPRIVATE short        GetHeightOffset( const Image& rBmp, Size& rLogicSize);
-    SVT_DLLPRIVATE void         GetHeightOffset( Size& rLogicSize);
 
     SVT_DLLPRIVATE void         SetEntryHeight( SvTreeListEntry* pEntry );
     SVT_DLLPRIVATE void         AdjustEntryHeight( const Image& rBmp );

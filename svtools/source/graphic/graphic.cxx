@@ -88,23 +88,10 @@ void SAL_CALL Graphic::release() throw()
     unographic::GraphicDescriptor::release();
 }
 
-OUString Graphic::getImplementationName_Static() throw()
-{
-    return OUString( "com.sun.star.comp.graphic.Graphic" );
-}
-
-
-uno::Sequence< OUString > Graphic::getSupportedServiceNames_Static()
-    throw()
-{
-    uno::Sequence< OUString > aSeq { "com.sun.star.graphic.Graphic" };
-    return aSeq;
-}
-
 OUString SAL_CALL Graphic::getImplementationName()
     throw( uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
+    return OUString( "com.sun.star.comp.graphic.Graphic" );
 }
 
 sal_Bool SAL_CALL Graphic::supportsService( const OUString& rServiceName )
@@ -117,7 +104,7 @@ uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
     throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString >    aRet( ::unographic::GraphicDescriptor::getSupportedServiceNames() );
-    uno::Sequence< OUString >    aNew( getSupportedServiceNames_Static() );
+    uno::Sequence< OUString >    aNew { "com.sun.star.graphic.Graphic" };
     sal_Int32                           nOldCount = aRet.getLength();
 
     aRet.realloc( nOldCount + aNew.getLength() );

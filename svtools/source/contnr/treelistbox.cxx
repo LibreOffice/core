@@ -602,11 +602,6 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
 }
 
 // return: all entries were moved
-bool SvTreeListBox::MoveSelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget )
-{
-    return MoveSelectionCopyFallbackPossible( pSource, pTarget, false );
-}
-
 bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, bool bAllowCopyFallback )
 {
     nCurEntrySelPos = 0; // selection counter for NotifyMoving/Copying
@@ -917,7 +912,7 @@ IMPL_LINK_NOARG(SvTreeListBox, TextEditEndedHdl_Impl, SvInplaceEdit2&, void)
         aStr = pEdCtrl->GetText();
     else
         aStr = pEdCtrl->GetSavedValue();
-    if ( IsEmptyTextAllowed() || !aStr.isEmpty() )
+    if ( mpImpl->m_bIsEmptyTextAllowed || !aStr.isEmpty() )
         EditedText( aStr );
     // Hide may only be called after the new text was put into the entry, so
     // that we don't call the selection handler in the GetFocus of the listbox
@@ -941,11 +936,6 @@ void SvTreeListBox::EndEditing( bool bCancel )
     nImpFlags &= (~SvTreeListBoxFlags::IN_EDT);
 }
 
-
-bool SvTreeListBox::IsEmptyTextAllowed() const
-{
-    return mpImpl->m_bIsEmptyTextAllowed;
-}
 
 void SvTreeListBox::ForbidEmptyText()
 {
@@ -1141,7 +1131,7 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox
         }
         else if( DND_ACTION_MOVE == rEvt.mnAction )
         {
-            if (MoveSelection(g_pDDSource, pTarget))
+            if (MoveSelectionCopyFallbackPossible( g_pDDSource, pTarget, false ))
                 nRet = rEvt.mnAction;
         }
         else if( DND_ACTION_COPYMOVE == rEvt.mnAction )
@@ -2156,11 +2146,6 @@ short SvTreeListBox::GetHeightOffset(const Image& rBmp, Size& aSizeLogic )
     return nOffset;
 }
 
-void SvTreeListBox::GetHeightOffset(Size& aSizeLogic )
-{
-    aSizeLogic = Size(GetTextWidth(OUString('X')), GetTextHeight());
-}
-
 void SvTreeListBox::SetEntryHeight( SvTreeListEntry* pEntry )
 {
     short nHeightMax=0;
@@ -2215,8 +2200,7 @@ void SvTreeListBox::AdjustEntryHeight( const Image& rBmp )
 
 void SvTreeListBox::AdjustEntryHeight()
 {
-    Size aSize;
-    GetHeightOffset( aSize );
+    Size aSize( GetTextWidth(OUString('X')), GetTextHeight() );
     if( aSize.Height()  >  nEntryHeight )
     {
         nEntryHeight = (short)aSize.Height() + nEntryHeightOffs;

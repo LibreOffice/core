@@ -50,9 +50,6 @@ private:
 
     FileControlMode_Internal    mnInternalFlags;
 
-private:
-    SVT_DLLPRIVATE void     ImplBrowseFile( );
-
 protected:
     SVT_DLLPRIVATE void     Resize() override;
     SVT_DLLPRIVATE void     GetFocus() override;

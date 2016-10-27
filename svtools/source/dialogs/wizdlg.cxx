@@ -105,14 +105,9 @@ void WizardDialog::ImplCalcSize( Size& rSize )
     }
 }
 
-bool WizardDialog::hasWizardPendingLayout() const
-{
-    return maWizardLayoutIdle.IsActive();
-}
-
 void WizardDialog::queue_resize(StateChangedType /*eReason*/)
 {
-    if (hasWizardPendingLayout())
+    if (maWizardLayoutIdle.IsActive())
         return;
     if (IsInClose())
         return;

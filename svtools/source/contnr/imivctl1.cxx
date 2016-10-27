@@ -2016,24 +2016,19 @@ void SvxIconChoiceCtrl_Impl::ShowCursor( bool bShow )
 void SvxIconChoiceCtrl_Impl::HideDDIcon()
 {
     pView->Update();
-    ImpHideDDIcon();
-    pDDBufDev = pDDDev;
-    pDDDev = nullptr;
-}
-
-void SvxIconChoiceCtrl_Impl::ImpHideDDIcon()
-{
     if( pDDDev )
     {
         Size aSize( pDDDev->GetOutputSizePixel() );
         // restore pView
         pView->DrawOutDev( aDDLastRectPos, aSize, Point(), aSize, *pDDDev );
     }
+    pDDBufDev = pDDDev;
+    pDDDev = nullptr;
 }
 
 bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
 {
-    Rectangle aDocRect( GetDocumentRect() );
+    Rectangle aDocRect( Point(), aVirtOutputSize );
     Rectangle aVisRect( GetOutputRect() );
     if( aVisRect.IsInside( aDocRect ))
         return false;

@@ -373,7 +373,7 @@ Rectangle SvtRulerAccessible::GetBoundingBox() throw( RuntimeException )
 
 void SvtRulerAccessible::ThrowExceptionIfNotAlive() throw( lang::DisposedException )
 {
-    if( IsNotAlive() )
+    if( rBHelper.bDisposed || rBHelper.bInDispose )
         throw lang::DisposedException();
 }
 

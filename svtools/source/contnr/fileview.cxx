@@ -219,7 +219,6 @@ protected:
 private:
     std::unordered_map<OUString, OUString, OUStringHash> m_Translation;
     const OUString              maTransFileName;
-    void                        Init();         // reads the translation file and fills the (internal) list
 
 public:
                                 explicit NameTranslationList( const INetURLObject& rBaseURL );
@@ -239,13 +238,17 @@ inline const OUString& NameTranslationList::GetTransTableFileName() const
     return maTransFileName;
 }
 
-void NameTranslationList::Init()
+NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
+    maTransFile( rBaseURL ),
+    m_HashedURL(rBaseURL.GetMainURL(INetURLObject::NO_DECODE)),
+    maTransFileName( OUString(".nametranslation.table") )
 {
-// Tries to read the file ".nametranslation.table" in the base folder. Complete path/name is in maTransFile.
-// Further on, the found entries in the section "TRANSLATIONNAMES" are used to replace names in the
-// base folder by translated ones. The translation must be given in UTF8
-// See examples of such a files in the samples-folder of an Office installation
+    maTransFile.insertName( maTransFileName );
 
+    // Tries to read the file ".nametranslation.table" in the base folder. Complete path/name is in maTransFile.
+    // Further on, the found entries in the section "TRANSLATIONNAMES" are used to replace names in the
+    // base folder by translated ones. The translation must be given in UTF8
+    // See examples of such a files in the samples-folder of an Office installation
     try
     {
         ::ucbhelper::Content aTestContent( maTransFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -270,15 +273,6 @@ void NameTranslationList::Init()
         }
     }
     catch( Exception const & ) {}
-}
-
-NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
-    maTransFile( rBaseURL ),
-    m_HashedURL(rBaseURL.GetMainURL(INetURLObject::NO_DECODE)),
-    maTransFileName( OUString(".nametranslation.table") )
-{
-    maTransFile.insertName( maTransFileName );
-    Init();
 }
 
 const OUString* NameTranslationList::Translate( const OUString& rName ) const

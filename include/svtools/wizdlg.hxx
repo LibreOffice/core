@@ -204,7 +204,6 @@ private:
     bool                    mbEmptyViewMargin;
 
     DECL_DLLPRIVATE_LINK( ImplHandleWizardLayoutTimerHdl, Idle*, void );
-    bool hasWizardPendingLayout() const;
 
 protected:
     long                LogicalCoordinateToPixel(int iCoordinate);

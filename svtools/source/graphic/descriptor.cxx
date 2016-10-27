@@ -153,21 +153,6 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
 }
 
 
-OUString GraphicDescriptor::getImplementationName_Static()
-    throw()
-{
-    return OUString( "com.sun.star.comp.graphic.GraphicDescriptor"  );
-}
-
-
-uno::Sequence< OUString > GraphicDescriptor::getSupportedServiceNames_Static()
-    throw(  )
-{
-    uno::Sequence< OUString > aSeq { "com.sun.star.graphic.GraphicDescriptor" };
-    return aSeq;
-}
-
-
 uno::Any SAL_CALL GraphicDescriptor::queryAggregation( const uno::Type & rType )
     throw( uno::RuntimeException, std::exception )
 {
@@ -214,7 +199,7 @@ void SAL_CALL GraphicDescriptor::release()
 OUString SAL_CALL GraphicDescriptor::getImplementationName()
     throw( uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
+    return OUString( "com.sun.star.comp.graphic.GraphicDescriptor"  );
 }
 
 sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceName )
@@ -227,7 +212,7 @@ sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceNam
 uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
     throw( uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.graphic.GraphicDescriptor" };
 }
 
 

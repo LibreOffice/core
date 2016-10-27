@@ -2194,7 +2194,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             {
                 // only try to expand if sublist is expandable,
                 // otherwise ignore the key press
-                if( IsNowExpandable() )
+                if( IsExpandable() && !pView->IsExpanded( pCursor ) )
                     pView->Expand( pCursor );
             }
             else if ( bIsCellFocusEnabled && pCursor )
@@ -3304,11 +3304,6 @@ void SvImpLBox::NotifyTabsChanged()
 bool SvImpLBox::IsExpandable() const
 {
     return pCursor->HasChildren() || pCursor->HasChildrenOnDemand();
-}
-
-bool SvImpLBox::IsNowExpandable() const
-{
-    return IsExpandable() && !pView->IsExpanded( pCursor );
 }
 
 IMPL_LINK(SvImpLBox, MyUserEvent, void*, pArg, void )

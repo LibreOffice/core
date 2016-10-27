@@ -354,7 +354,6 @@ public:
     virtual void        dispose() override;
 
     virtual bool        ShowDropDown( bool bShow ) override;
-    VclPtr<Calendar>    CreateCalendar( vcl::Window* pParent );
     Calendar*           GetCalendar();
 
     void                EnableToday() { mbToday = true; }
