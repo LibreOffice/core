@@ -43,6 +43,7 @@ RscTypCont::RscTypCont( RscError * pErrHdl,
     , nByteOrder( nOrder )
     , aSearchPath( rSearchPath )
     , nUniqueId(256)
+    , nFilePos( 0 )
     , nPMId(RSC_VERSIONCONTROL +1) // at least one more
     , aBool( pHS->getID( "sal_Bool" ), RSC_NOTYPE )
     , aShort( pHS->getID( "short" ), RSC_NOTYPE )
