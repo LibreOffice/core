@@ -66,11 +66,7 @@ public:
     virtual css::uno::Reference< css::script::browse::XBrowseNode > SAL_CALL
         createView( sal_Int16 viewType )
             throw ( css::uno::RuntimeException, std::exception ) override;
-    private:
-    css::uno::Reference< css::script::browse::XBrowseNode >
-        getSelectorHierarchy()
-            throw ( css::uno::RuntimeException );
-
+private:
     css::uno::Reference< css::script::browse::XBrowseNode >
         getOrganizerHierarchy()
             throw ( css::uno::RuntimeException );

@@ -216,11 +216,6 @@ void ScaPricingAddIn::InitData()
     }
 }
 
-OUString ScaPricingAddIn::GetDisplFuncStr( sal_uInt16 nResId ) throw( uno::RuntimeException, std::exception )
-{
-    return ScaResStringLoader( RID_PRICING_FUNCTION_NAMES, nResId, GetResMgr() ).GetString();
-}
-
 OUString ScaPricingAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( uno::RuntimeException, std::exception )
 {
     OUString aRet;
@@ -302,7 +297,7 @@ OUString SAL_CALL ScaPricingAddIn::getDisplayFunctionName( const OUString& aProg
                                 FindScaFuncData( aProgrammaticName ) );
     if(fDataIt != pFuncDataList->end() )
     {
-        aRet = GetDisplFuncStr( fDataIt->GetUINameID() );
+        aRet = ScaResStringLoader( RID_PRICING_FUNCTION_NAMES, fDataIt->GetUINameID(), GetResMgr() ).GetString();
         if( fDataIt->IsDouble() )
             aRet += STR_FROM_ANSI( "_ADD" );
     }

@@ -195,7 +195,6 @@ private:
     ResMgr&                     GetResMgr() throw( css::uno::RuntimeException, std::exception );
     void                        InitData();
 
-    OUString                    GetDisplFuncStr( sal_uInt16 nResId ) throw( css::uno::RuntimeException, std::exception );
     OUString                    GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( css::uno::RuntimeException, std::exception );
 
 public:
