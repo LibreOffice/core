@@ -79,11 +79,6 @@ ResMgr& AnalysisAddIn::GetResMgr() throw( uno::RuntimeException, std::exception 
     return *pResMgr;
 }
 
-OUString AnalysisAddIn::GetDisplFuncStr( sal_uInt16 nFuncNum ) throw( uno::RuntimeException, std::exception )
-{
-    return AnalysisRscStrLoader( RID_ANALYSIS_FUNCTION_NAMES, nFuncNum, GetResMgr() ).GetString();
-}
-
 class AnalysisResourcePublisher : public Resource
 {
 public:
@@ -285,7 +280,7 @@ OUString SAL_CALL AnalysisAddIn::getDisplayFunctionName( const OUString& aProgra
     auto it = std::find_if(pFD->begin(), pFD->end(), FindFuncData( aProgrammaticName ) );
     if( it != pFD->end() )
     {
-        aRet = GetDisplFuncStr( it->GetUINameID() );
+        aRet = AnalysisRscStrLoader( RID_ANALYSIS_FUNCTION_NAMES, it->GetUINameID(), GetResMgr() ).GetString();
         if( it->IsDouble() )
         {
             const OUString& rSuffix = it->GetSuffix();

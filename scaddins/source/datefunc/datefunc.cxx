@@ -200,11 +200,6 @@ void ScaDateAddIn::InitData()
     }
 }
 
-OUString ScaDateAddIn::GetDisplFuncStr( sal_uInt16 nResId ) throw( uno::RuntimeException, std::exception )
-{
-    return ScaResStringLoader( RID_DATE_FUNCTION_NAMES, nResId, GetResMgr() ).GetString();
-}
-
 OUString ScaDateAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( uno::RuntimeException, std::exception )
 {
     OUString aRet;
@@ -284,7 +279,7 @@ OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgram
                                 FindScaFuncData( aProgrammaticName ) );
     if( fDataIt != pFuncDataList->end() )
     {
-        aRet = GetDisplFuncStr( fDataIt->GetUINameID() );
+        aRet = ScaResStringLoader( RID_DATE_FUNCTION_NAMES, fDataIt->GetUINameID(), GetResMgr() ).GetString();
         if( fDataIt->IsDouble() )
             aRet += STR_FROM_ANSI( "_ADD" );
     }
