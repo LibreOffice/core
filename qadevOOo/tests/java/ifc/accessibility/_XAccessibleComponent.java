@@ -478,6 +478,11 @@ public class _XAccessibleComponent extends MultiMethodTest {
                 log.println( "potential race bounds " + bounds.Width + "x" + bounds.Height +
                              " vs. size " + size.Width + "x" + size.Height);
                 // Possibily we hit a race condition and it re-sized (?) ...
+                // One such race is described in
+                // <https://bugs.documentfoundation.org/show_bug.cgi?id=64587>
+                // "SvpSalInstance::CheckTimeout -> ScTable::SetRowHeightRange
+                // breaks JunitTest_sc_unoapi sc.ScAccessibleCell::com::sun::
+                // star::accessibility::XAccessibleComponent::getSize()".
                 bounds = oObj.getBounds();
                 size = oObj.getSize();
             }
