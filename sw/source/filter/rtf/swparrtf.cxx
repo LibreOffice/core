@@ -160,30 +160,36 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(const OUString& rURL)
 {
-    Reader* pReader = ImportRTF();
-
     SvFileStream aFileStream(rURL, StreamMode::READ);
-    tools::SvRef<SotStorage> xStorage;
-    pReader->pStrm = &aFileStream;
-    pReader->SetFltName("FILTER_RTF");
 
     SwGlobals::ensure();
 
     SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
     xDocSh->DoInitNew();
-    SwDoc* pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
 
-    bool bRet = false;
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
+    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
+
+    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XComponent> xDstDoc(xDocSh->GetModel(), uno::UNO_QUERY_THROW);
+    xImporter->setTargetDocument(xDstDoc);
+
+    uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aDescriptor(1);
+    aDescriptor[0].Name = "InputStream";
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(aFileStream));
+    aDescriptor[0].Value <<= xStream;
+    bool bRet(1);
     try
     {
-        SwPaM aPaM(pD->GetNodes().GetEndOfContent());
-        bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
+        xFilter->filter(aDescriptor);
     }
-    catch (std::exception const&)
+    catch (...)
     {
+        bRet = false;
     }
-    delete pReader;
     return bRet;
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
