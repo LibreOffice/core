@@ -145,12 +145,6 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
 void TabBar::UpdateButtonIcons()
 {
     Image aImage = Theme::GetImage(Theme::Image_TabBarMenu);
-    if ( mpMenuButton->GetDPIScaleFactor() > 1 )
-    {
-        BitmapEx b = aImage.GetBitmapEx();
-        b.Scale(mpMenuButton->GetDPIScaleFactor(), mpMenuButton->GetDPIScaleFactor(), BmpScaleFlag::Fast);
-        aImage = Image(b);
-    }
     mpMenuButton->SetModeImage(aImage);
 
     for(ItemContainer::const_iterator
@@ -163,13 +157,6 @@ void TabBar::UpdateButtonIcons()
         if (xDeckDescriptor)
         {
             aImage = GetItemImage(*xDeckDescriptor);
-            if ( mpMenuButton->GetDPIScaleFactor() > 1 )
-            {
-                BitmapEx b = aImage.GetBitmapEx();
-                b.Scale(mpMenuButton->GetDPIScaleFactor(), mpMenuButton->GetDPIScaleFactor(), BmpScaleFlag::Fast);
-                aImage = Image(b);
-            }
-
             iItem->mpButton->SetModeImage(aImage);
         }
     }

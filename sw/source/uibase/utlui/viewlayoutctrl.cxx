@@ -51,30 +51,6 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
     mpImpl->maImageAutomatic_Active     = Image( SW_RES(IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE) );
     mpImpl->maImageBookMode             = Image( SW_RES(IMG_VIEWLAYOUT_BOOKMODE) );
     mpImpl->maImageBookMode_Active      = Image( SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE) );
-
-    sal_Int32 nScaleFactor = rStatusBar.GetDPIScaleFactor();
-    if (nScaleFactor != 1)
-    {
-        Image arr[6] = {mpImpl->maImageSingleColumn, mpImpl->maImageSingleColumn_Active,
-                        mpImpl->maImageAutomatic, mpImpl->maImageAutomatic_Active,
-                        mpImpl->maImageBookMode, mpImpl->maImageBookMode_Active};
-
-        for (Image & i : arr)
-        {
-            BitmapEx aBitmap = i.GetBitmapEx();
-            aBitmap.Scale(nScaleFactor, nScaleFactor, BmpScaleFlag::Fast);
-            i = Image(aBitmap);
-        }
-
-        mpImpl->maImageSingleColumn = arr[0];
-        mpImpl->maImageSingleColumn_Active = arr[1];
-
-        mpImpl->maImageAutomatic = arr[2];
-        mpImpl->maImageAutomatic_Active = arr[3];
-
-        mpImpl->maImageBookMode = arr[4];
-        mpImpl->maImageBookMode_Active = arr[5];
-    }
 }
 
 SwViewLayoutControl::~SwViewLayoutControl()
