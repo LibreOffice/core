@@ -151,7 +151,7 @@ sal_Bool SAL_CALL ActionTriggerSeparatorPropertySet::convertFastPropertyValue(
     Any&        aOldValue,
     sal_Int32   nHandle,
     const Any&  aValue  )
-throw( IllegalArgumentException )
+    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     //  Check, if value of property will changed in method "setFastPropertyValue_NoBroadcast()".
     //  Return sal_True, if changed - else return sal_False.

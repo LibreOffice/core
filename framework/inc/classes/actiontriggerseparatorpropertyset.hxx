@@ -70,7 +70,7 @@ class ActionTriggerSeparatorPropertySet :   private cppu::BaseMutex,
                                                             css::uno::Any&       aOldValue,
                                                             sal_Int32                       nHandle,
                                                             const css::uno::Any& aValue          )
-            throw( css::lang::IllegalArgumentException ) override;
+            throw( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& aValue )
             throw( css::uno::Exception, std::exception ) override;
