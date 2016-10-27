@@ -502,11 +502,6 @@ void SmElementsControl::DoScroll(long nDelta)
     Invalidate();
 }
 
-void SmElementsControl::addSeparator()
-{
-    maElementList.push_back(o3tl::make_unique<SmElementSeparator>());
-}
-
 void SmElementsControl::addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
 {
     std::unique_ptr<SmNode> pNode(SmParser().ParseExpression(aElementVisual));
@@ -541,7 +536,7 @@ void SmElementsControl::addElements(const sal_uInt16 aElementsArray[][2], sal_uI
         sal_uInt16 aElementId = aElementsArray[i][0];
         sal_uInt16 aElementIdHelp = aElementsArray[i][1];
         if (aElementId == 0xFFFF) {
-            addSeparator();
+            maElementList.push_back(o3tl::make_unique<SmElementSeparator>());
         } else {
             if (aElementId == RID_NEWLINE)
                 addElement(OUString( "\xe2\x86\xb5", 3, RTL_TEXTENCODING_UTF8 ), SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));

@@ -106,8 +106,6 @@ class SmElementsControl : public Control
 
     void addElements(const sal_uInt16 aElementsArray[][2], sal_uInt16 size);
 
-    void addSeparator();
-
     void build();
 
     //if pContext is not NULL, then draw, otherwise

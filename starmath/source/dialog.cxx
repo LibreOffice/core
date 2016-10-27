@@ -1466,7 +1466,7 @@ IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl, Button*, void)
     // remember old SymbolSet
     OUString  aOldSymbolSet (m_pSymbolSets->GetSelectEntry());
 
-    sal_uInt16 nSymPos = GetSelectedSymbol();
+    sal_uInt16 nSymPos = m_pSymbolSetDisplay->GetSelectSymbol();
 
     // adapt dialog to data of the SymbolSet manager, which might have changed
     if (pDialog->Execute() == RET_OK  &&  rSymbolMgr.IsModified())

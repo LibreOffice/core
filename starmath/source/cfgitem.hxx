@@ -130,7 +130,6 @@ protected:
     inline bool IsOtherModified() const     { return bIsOtherModified; }
     void        SetFormatModified( bool bVal );
     inline bool IsFormatModified() const    { return bIsFormatModified; }
-    void        SetFontFormatListModified( bool bVal );
 
     SmFontFormatList &          GetFontFormatList();
     const SmFontFormatList &    GetFontFormatList() const

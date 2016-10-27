@@ -70,7 +70,6 @@ public:
     SvStream* GetStrm()                     { return m_pStrm;     }
     void  SetStrm( SvStream*, bool );
     void  SetStrm( UCBStorageStream* );
-    bool  IsWritable() const                { return ( m_pStrm && m_pStrm->IsWritable() ); }
     bool  Good() const                      { return m_nError == SVSTREAM_OK; }
     ErrCode GetError()                      { return m_nError;    }
     void  MoveError( StorageBase& );
