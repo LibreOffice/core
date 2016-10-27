@@ -194,7 +194,16 @@ void PresenterScrollBar::SetThumbPosition (
 
         UpdateBorders();
         Repaint(GetRectangle(Total), bAsynchronousUpdate);
-        NotifyThumbPositionChange();
+
+        mbIsNotificationActive = true;
+        try
+        {
+            maThumbMotionListener(mnThumbPosition);
+        }
+        catch (Exception&)
+        {
+        }
+        mbIsNotificationActive = false;
     }
 }
 
@@ -520,24 +529,6 @@ void PresenterScrollBar::PaintBitmap(
             xBitmap,
             aViewState,
             aRenderState);
-    }
-}
-
-void PresenterScrollBar::NotifyThumbPositionChange()
-{
-    if ( ! mbIsNotificationActive)
-    {
-        mbIsNotificationActive = true;
-
-        try
-        {
-            maThumbMotionListener(mnThumbPosition);
-        }
-        catch (Exception&)
-        {
-        }
-
-        mbIsNotificationActive = false;
     }
 }
 

@@ -217,8 +217,6 @@ protected:
 
     void UpdateState (const sal_Int16 aState, const bool bValue);
 
-    bool IsDisposed() const;
-
     void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
 };
@@ -1090,7 +1088,7 @@ void SAL_CALL PresenterAccessible::AccessibleObject::addAccessibleEventListener 
     {
         const osl::MutexGuard aGuard(m_aMutex);
 
-        if (IsDisposed())
+        if (rBHelper.bDisposed || rBHelper.bInDispose)
         {
             uno::Reference<uno::XInterface> xThis (static_cast<XWeak*>(this), UNO_QUERY);
             rxListener->disposing (lang::EventObject(xThis));
@@ -1334,11 +1332,6 @@ awt::Point PresenterAccessible::AccessibleObject::GetAbsoluteParentLocation()
         return xParentComponent->getLocationOnScreen();
     else
         return awt::Point();
-}
-
-bool PresenterAccessible::AccessibleObject::IsDisposed() const
-{
-    return (rBHelper.bDisposed || rBHelper.bInDispose);
 }
 
 void PresenterAccessible::AccessibleObject::ThrowIfDisposed() const

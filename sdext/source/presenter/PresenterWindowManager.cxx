@@ -1111,17 +1111,12 @@ Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolyg
     return xPolyPolygon;
 }
 
-
-void PresenterWindowManager::Invalidate()
-{
-    mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow);
-}
 void PresenterWindowManager::Update()
 {
     mxClipPolygon = nullptr;
     mbIsLayoutPending = true;
 
-    Invalidate();
+    mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow);
 }
 
 void PresenterWindowManager::ThrowIfDisposed() const

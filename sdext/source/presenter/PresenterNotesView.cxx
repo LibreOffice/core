@@ -320,7 +320,12 @@ void SAL_CALL PresenterNotesView::windowHidden (const lang::EventObject& rEvent)
 void SAL_CALL PresenterNotesView::windowPaint (const awt::PaintEvent& rEvent)
     throw (RuntimeException, std::exception)
 {
-    ThrowIfDisposed();
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        throw lang::DisposedException (
+            "PresenterNotesView object has already been disposed",
+            static_cast<uno::XWeak*>(this));
+    }
 
     if ( ! mbIsPresenterViewActive)
         return;
@@ -695,17 +700,6 @@ void PresenterNotesView::UpdateScrollBar()
 
         mpScrollBar->SetThumbSize(maTextBoundingBox.Y2 - maTextBoundingBox.Y1);
         mpScrollBar->CheckValues();
-    }
-}
-
-void PresenterNotesView::ThrowIfDisposed()
-    throw (css::lang::DisposedException)
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            "PresenterNotesView object has already been disposed",
-            static_cast<uno::XWeak*>(this));
     }
 }
 
