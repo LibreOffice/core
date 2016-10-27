@@ -909,6 +909,13 @@ bool PDFDocument::Read(SvStream& rStream)
             SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: failed to tokenizer trailer after xref");
             return false;
         }
+
+        if (!m_pTrailer)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: found no trailer");
+            return false;
+        }
+
         auto pPrev = dynamic_cast<PDFNumberElement*>(m_pTrailer->Lookup("Prev"));
         if (pPrev)
             nStartXRef = pPrev->GetValue();
