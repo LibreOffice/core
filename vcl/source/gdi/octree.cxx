@@ -52,11 +52,14 @@ ImpNodeCache::~ImpNodeCache()
     }
 }
 
-Octree::Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors ) :
-            nMax        ( nColors ),
-            nLeafCount  ( 0 ),
-            pTree       ( nullptr ),
-            pAcc        ( &rReadAcc )
+Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
+    : nMax(nColors)
+    , nLeafCount(0)
+    , nLevel(0)
+    , pTree(nullptr)
+    , pColor(nullptr)
+    , pAcc(&rReadAcc)
+    , nPalIndex(0)
 {
     pNodeCache = new ImpNodeCache( nColors );
     memset( pReduce, 0, ( OCTREE_BITS + 1 ) * sizeof( NODE* ) );
