@@ -90,7 +90,7 @@ void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const An
 
 sal_Bool OHiddenModel::convertFastPropertyValue(
             Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
-            throw (IllegalArgumentException)
+            throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     bool bModified(false);
     switch (_nHandle)
