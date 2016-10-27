@@ -519,6 +519,9 @@ void WorkbookFragment::finalizeImport()
         rtl::Reference<oox::core::FragmentHandler> xFragment(new RevisionHeadersFragment(*this, aRevHeadersPath));
         importOoxFragment(xFragment, *xParser);
     }
+
+    // attach macros to registered objects now that all objects have been created.
+    getBaseFilter().getVbaProject().attachMacros();
 }
 
 namespace {

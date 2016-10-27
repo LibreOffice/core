@@ -252,6 +252,8 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
 {
     readVbaModules( rVbaPrjStrg );
     importModulesAndForms(rVbaPrjStrg, rGraphicHelper, bDefaultColorBgr );
+    // attach macros to registered objects
+    attachMacros();
 }
 
 void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
@@ -501,9 +503,6 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
             }
         }
     }
-
-    // attach macros to registered objects
-    attachMacros();
 }
 
 void VbaProject::attachMacros()
