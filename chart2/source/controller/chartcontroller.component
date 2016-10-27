@@ -53,6 +53,6 @@
   </implementation>
   <implementation name="org.libreoffice.chart2.Chart2ToolboxController"
       constructor="org_libreoffice_chart2_Chart2ToolboxController">
-    <service name="com.sun.star.frame.ToolbarContoller"/>
+    <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
 </component>

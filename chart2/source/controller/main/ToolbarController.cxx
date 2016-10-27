@@ -113,7 +113,7 @@ void ChartToolbarController::update()
 OUString ChartToolbarController::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
-    return OUString("org.libreoffice.chart2.ChartToolbarController");
+    return OUString("org.libreoffice.chart2.Chart2ToolboxController");
 }
 
 sal_Bool ChartToolbarController::supportsService(OUString const & ServiceName)
