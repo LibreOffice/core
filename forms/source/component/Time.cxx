@@ -172,7 +172,7 @@ void SAL_CALL OTimeModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle 
 
 
 sal_Bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
-        sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException)
+        sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
         return convertFormatKeyPropertyValue(_rConvertedValue, _rOldValue, _rValue);
