@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_6b7250e7",
+        "filename": "compilerplugins/clang/unnecessaryoverride.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-27T14:01:18Z",
+      "side": 1,
+      "message": "why allow this (instead of warning that it should be replaced with a using declaration)?",
+      "revId": "073a874c2ded1f6b942803f2a70eb3f8a84d817b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_8b77acd3",
+        "filename": "compilerplugins/clang/unnecessaryoverride.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-27T14:01:18Z",
+      "side": 1,
+      "message": "allow both public and protected?",
+      "revId": "073a874c2ded1f6b942803f2a70eb3f8a84d817b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
