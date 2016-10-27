@@ -201,7 +201,6 @@ private:
     void GLInitSlides();
 
     bool impl_prepareTransition();
-    void impl_finishTransition();
 
 private:
     rtl::Reference<OpenGLContext> mpContext;
@@ -410,12 +409,6 @@ bool OGLTransitionerImpl::impl_prepareTransition()
     if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= mnGLVersion )
         return mpTransition->prepare( maLeavingSlideGL, maEnteringSlideGL );
     return false;
-}
-
-void OGLTransitionerImpl::impl_finishTransition()
-{
-    if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= mnGLVersion )
-        mpTransition->finish();
 }
 
 bool OGLTransitionerImpl::setTransition( const std::shared_ptr<OGLTransitionImpl>& pTransition )
@@ -1106,7 +1099,8 @@ void OGLTransitionerImpl::impl_dispose()
     mpContext->makeCurrent();
     CHECK_GL_ERROR();
 
-    impl_finishTransition();
+    if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= mnGLVersion )
+        mpTransition->finish();
     disposeTextures();
     if( mpContext.is() )
         mpContext->dispose();

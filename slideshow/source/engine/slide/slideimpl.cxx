@@ -175,12 +175,6 @@ private:
     /// Prefetch show, but don't call applyInitialShapeAttributes()
     bool implPrefetchShow();
 
-    /// Start GIF and other intrinsic shape animations
-    void endIntrinsicAnimations();
-
-    /// End GIF and other intrinsic shape animations
-    void startIntrinsicAnimations();
-
     /// Add Polygons to the member maPolygons
     void addPolygons(const PolyPolygonVector& rPolygons);
 
@@ -465,7 +459,7 @@ void SlideImpl::show( bool bSlideBackgoundPainted )
     // enable shape-intrinsic animations (drawing layer animations or
     // GIF animations)
     if( mbIntrinsicAnimationsAllowed )
-        startIntrinsicAnimations();
+        mpSubsettableShapeManager->notifyIntrinsicAnimationsEnabled();
 
     // enable paint overlay, if maUserPaintColor is valid
     activatePaintOverlay();
@@ -491,7 +485,7 @@ void SlideImpl::hide()
 
 
     // switch off all shape-intrinsic animations.
-    endIntrinsicAnimations();
+    mpSubsettableShapeManager->notifyIntrinsicAnimationsDisabled();
 
     // force-end all SMIL animations, too
     maAnimations.end();
@@ -853,16 +847,6 @@ void SlideImpl::deactivatePaintOverlay()
 
     mpPaintOverlay.reset();
     mbPaintOverlayActive = false;
-}
-
-void SlideImpl::endIntrinsicAnimations()
-{
-    mpSubsettableShapeManager->notifyIntrinsicAnimationsDisabled();
-}
-
-void SlideImpl::startIntrinsicAnimations()
-{
-    mpSubsettableShapeManager->notifyIntrinsicAnimationsEnabled();
 }
 
 void SlideImpl::applyShapeAttributes(
