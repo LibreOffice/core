@@ -78,13 +78,13 @@ SwTbxAutoTextCtrl::~SwTbxAutoTextCtrl()
 
 VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
 {
-    ScopedVclPtrInstance<PopupMenu> pPopup;
     SwView* pView = ::GetActiveView();
     if(pView && !pView->GetDocShell()->IsReadOnly() &&
        !pView->GetWrtShell().HasReadonlySel() )
     {
         Link<Menu*,bool> aLnk = LINK(this, SwTbxAutoTextCtrl, PopupHdl);
 
+        ScopedVclPtrInstance<PopupMenu> pPopup;
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
         const size_t nGroupCount = pGlossaryList->GetGroupCount();
         for(size_t i = 1; i <= nGroupCount; ++i)
