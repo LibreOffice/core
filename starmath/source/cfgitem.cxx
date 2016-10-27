@@ -361,13 +361,6 @@ void SmMathConfig::SetFormatModified( bool bVal )
 }
 
 
-void SmMathConfig::SetFontFormatListModified( bool bVal )
-{
-    if (pFontFormatList)
-        pFontFormatList->SetModified( bVal );
-}
-
-
 void SmMathConfig::ReadSymbol( SmSym &rSymbol,
                         const OUString &rSymbolName,
                         const OUString &rBaseNode ) const
@@ -974,7 +967,8 @@ void SmMathConfig::SetStandardFormat( const SmFormat &rFormat, bool bSaveFontFor
         if (bSaveFontFormatList)
         {
             // needed for SmFontTypeDialog's DefaultButtonClickHdl
-            SetFontFormatListModified( true );
+            if (pFontFormatList)
+                pFontFormatList->SetModified( true );
             SaveFontFormatList();
         }
     }

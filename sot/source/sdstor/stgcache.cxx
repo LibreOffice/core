@@ -274,7 +274,7 @@ void StgCache::SetStrm( UCBStorageStream* pStgStream )
 
 void StgCache::SetDirty( const rtl::Reference< StgPage > &rPage )
 {
-    assert( IsWritable() );
+    assert( m_pStrm && m_pStrm->IsWritable() );
     maDirtyPages[ rPage->GetPage() ] = rPage;
 }
 

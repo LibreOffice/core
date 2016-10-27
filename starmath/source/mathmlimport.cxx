@@ -484,7 +484,7 @@ void SmXMLImport::endDocument()
     throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     //Set the resulted tree into the SmDocShell where it belongs
-    SmNode *pTree = GetTree();
+    SmNode *pTree = popOrZero(aNodeStack);
     if (pTree && pTree->GetType() == NTABLE)
     {
         uno::Reference <frame::XModel> xModel = GetModel();
