@@ -197,7 +197,6 @@ public:
     SAL_DLLPRIVATE void LockObjectShell_Impl();
 
     SAL_DLLPRIVATE void MakeActive_Impl( bool bActivate );
-    SAL_DLLPRIVATE void SetQuietMode_Impl( bool );
     SAL_DLLPRIVATE const Size& GetMargin_Impl() const;
     SAL_DLLPRIVATE void SetActiveChildFrame_Impl( SfxViewFrame* );
     SAL_DLLPRIVATE SfxViewFrame* GetActiveChildFrame_Impl() const;

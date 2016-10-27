@@ -227,10 +227,6 @@ protected:
     void                        ModifyChanged();
     virtual bool                Close() override;
 
-    /** declares the document to have capabilities to contain basic/dialog libraries
-    */
-    void                        SetHasNoBasic();
-
     /// template method, called by FlushDocInfo; this implementation is empty
     virtual void                DoFlushDocInfo();
 
@@ -294,7 +290,6 @@ public:
     bool                        IsDocShared() const;
     OUString                    GetSharedFileURL() const;
     bool                        SwitchToShared( bool bShared, bool bSave );
-    SAL_DLLPRIVATE void         FreeSharedFile();
     SAL_DLLPRIVATE void         FreeSharedFile( const OUString& aTempFileURL );
     SAL_DLLPRIVATE void         DoNotCleanShareControlFile();
     void                        SetSharedXMLFlag( bool bFlag ) const;

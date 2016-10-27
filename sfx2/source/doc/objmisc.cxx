@@ -587,13 +587,6 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
 }
 
 
-void SfxObjectShell::FreeSharedFile()
-{
-    if ( pMedium )
-        FreeSharedFile( pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
-}
-
-
 void SfxObjectShell::FreeSharedFile( const OUString& aTempFileURL )
 {
     SetSharedXMLFlag( false );

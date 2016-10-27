@@ -79,8 +79,6 @@ namespace sfx2
         {
         };
 
-              SfxObjectShell* getObjectShell()       { return rAntiImpl.getBaseModel().GetObjectShell(); }
-
         // IUndoManagerImplementation
         virtual ::svl::IUndoManager&        getImplUndoManager() override;
         virtual Reference< XUndoManager >   getThis() override;
@@ -134,7 +132,7 @@ namespace sfx2
     {
         SfxModelGuard aGuard( rAntiImpl );
 
-        const SfxObjectShell* pDocShell = getObjectShell();
+        const SfxObjectShell* pDocShell = rAntiImpl.getBaseModel().GetObjectShell();
         ENSURE_OR_THROW( pDocShell != nullptr, "lcl_invalidateUndo: no access to the doc shell!" );
         SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( pDocShell );
         while ( pViewFrame )

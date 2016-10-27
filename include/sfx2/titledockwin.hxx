@@ -72,12 +72,6 @@ namespace sfx2
         */
         void    impl_resetToolBox();
 
-        /** returns the current title.
-
-            If no title has been set via SetTitle, then the window text (Window::GetText) is returned.
-        */
-        OUString  impl_getTitle() const;
-
     private:
         DECL_LINK( OnToolboxItemSelected, ToolBox*, void );
 

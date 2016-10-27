@@ -347,7 +347,6 @@ class SfxOwnFramesLocker
 public:
     explicit SfxOwnFramesLocker( SfxObjectShell* ObjechShell );
     ~SfxOwnFramesLocker();
-    void UnlockFrames();
 };
 
 SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell* pObjectShell )
@@ -395,25 +394,6 @@ SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell* pObjectShell )
 
 SfxOwnFramesLocker::~SfxOwnFramesLocker()
 {
-    UnlockFrames();
-}
-
-vcl::Window* SfxOwnFramesLocker::GetVCLWindow( const Reference< frame::XFrame >& xFrame )
-{
-    vcl::Window* pWindow = nullptr;
-
-    if ( xFrame.is() )
-    {
-        Reference< awt::XWindow > xWindow = xFrame->getContainerWindow();
-        if ( xWindow.is() )
-               pWindow = VCLUnoHelper::GetWindow( xWindow );
-    }
-
-    return pWindow;
-}
-
-void SfxOwnFramesLocker::UnlockFrames()
-{
     for ( sal_Int32 nInd = 0; nInd < m_aLockedFrames.getLength(); nInd++ )
     {
         try
@@ -435,6 +415,20 @@ void SfxOwnFramesLocker::UnlockFrames()
             OSL_FAIL( "Can't unlock the frame window!\n" );
         }
     }
+}
+
+vcl::Window* SfxOwnFramesLocker::GetVCLWindow( const Reference< frame::XFrame >& xFrame )
+{
+    vcl::Window* pWindow = nullptr;
+
+    if ( xFrame.is() )
+    {
+        Reference< awt::XWindow > xWindow = xFrame->getContainerWindow();
+        if ( xWindow.is() )
+               pWindow = VCLUnoHelper::GetWindow( xWindow );
+    }
+
+    return pWindow;
 }
 
 // SfxSaveGuard ====================================================================================
@@ -4124,8 +4118,11 @@ namespace sfx { namespace intern {
 
         ~ViewCreationGuard()
         {
-            if ( !m_bSuccess )
-                impl_closeAll();
+            if ( !m_bSuccess && m_aWeakFrame && !m_aWeakFrame->GetCurrentDocument() )
+            {
+                m_aWeakFrame->SetFrameInterface_Impl( nullptr );
+                m_aWeakFrame->DoClose();
+            }
         }
 
         void takeFrameOwnership( SfxFrame* i_pFrame )
@@ -4138,16 +4135,6 @@ namespace sfx { namespace intern {
         void    releaseAll()
         {
             m_bSuccess = true;
-        }
-
-    private:
-        void impl_closeAll()
-        {
-            if ( m_aWeakFrame && !m_aWeakFrame->GetCurrentDocument() )
-            {
-                m_aWeakFrame->SetFrameInterface_Impl( nullptr );
-                m_aWeakFrame->DoClose();
-            }
         }
 
     private:

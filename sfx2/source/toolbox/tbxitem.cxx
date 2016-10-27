@@ -842,7 +842,7 @@ void SfxPopupWindow::dispose()
 }
 
 
-void SfxPopupWindow::GetOrCreateStatusListener()
+void SfxPopupWindow::AddStatusListener( const OUString& rCommandURL )
 {
     if ( !m_xStatusListener.is() )
     {
@@ -852,12 +852,6 @@ void SfxPopupWindow::GetOrCreateStatusListener()
                                     this );
         m_xStatusListener.set( static_cast< cppu::OWeakObject* >( m_pStatusListener ), UNO_QUERY );
     }
-}
-
-
-void SfxPopupWindow::AddStatusListener( const OUString& rCommandURL )
-{
-    GetOrCreateStatusListener();
     if ( m_xStatusListener.is() )
         m_pStatusListener->addStatusListener( rCommandURL );
 }
@@ -881,21 +875,15 @@ void SfxPopupWindow::PopupModeEnd()
     if ( IsVisible() )
     {
         // was teared-off
-        DeleteFloatingWindow();
+        if ( m_bFloating )
+        {
+            Hide();
+            Delete();
+        }
         m_bFloating = true;
     }
     else
         Close();
-}
-
-
-void SfxPopupWindow::DeleteFloatingWindow()
-{
-    if ( m_bFloating )
-    {
-        Hide();
-        Delete();
-    }
 }
 
 

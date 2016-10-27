@@ -348,17 +348,12 @@ void FileDialogHelper_Impl::LoadLastUsedFilter( const OUString& _rContextIdentif
     }
 }
 
-void FileDialogHelper_Impl::SaveLastUsedFilter( const OUString& _rContextIdentifier )
-{
-    SvtViewOptions( E_DIALOG, IODLG_CONFIGNAME ).SetUserItem( _rContextIdentifier,
-                        makeAny( getFilterWithExtension( getFilter() ) ) );
-}
-
 void FileDialogHelper_Impl::SaveLastUsedFilter()
 {
     const OUString* pConfigId = GetLastFilterConfigId( meContext );
     if( pConfigId )
-        SaveLastUsedFilter( *pConfigId );
+        SvtViewOptions( E_DIALOG, IODLG_CONFIGNAME ).SetUserItem( *pConfigId,
+                            makeAny( getFilterWithExtension( getFilter() ) ) );
 }
 
 std::shared_ptr<const SfxFilter> FileDialogHelper_Impl::getCurentSfxFilter()

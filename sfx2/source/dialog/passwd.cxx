@@ -67,7 +67,7 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl, Button*, void)
 {
     bool bConfirmFailed = bool( mnExtras & SfxShowExtras::CONFIRM ) &&
                           ( GetConfirm() != GetPassword() );
-    if( ( mnExtras & SfxShowExtras::CONFIRM2 ) && ( GetConfirm2() != GetPassword2() ) )
+    if( ( mnExtras & SfxShowExtras::CONFIRM2 ) && ( mpConfirm2ED->GetText() != GetPassword2() ) )
         bConfirmFailed = true;
     if ( bConfirmFailed )
     {

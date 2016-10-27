@@ -289,7 +289,7 @@ SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
 
     const bool bScriptSupport = ( i_nCreationFlags & SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS ) == SfxModelFlags::NONE;
     if ( !bScriptSupport )
-        SetHasNoBasic();
+        pImpl->m_bNoBasicCapabilities = true;
 
     const bool bDocRecovery = ( i_nCreationFlags & SfxModelFlags::DISABLE_DOCUMENT_RECOVERY ) == SfxModelFlags::NONE;
     if ( !bDocRecovery )
@@ -357,8 +357,8 @@ SfxObjectShell::~SfxObjectShell()
         pMedium->CloseAndReleaseStreams_Impl();
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-        if ( IsDocShared() )
-            FreeSharedFile();
+        if ( IsDocShared() && pMedium )
+            FreeSharedFile( pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
 #endif
         DELETEX( SfxMedium, pMedium );
     }
@@ -681,11 +681,6 @@ BasicManager* SfxObjectShell::GetBasicManager() const
     }
 #endif
     return pBasMgr;
-}
-
-void SfxObjectShell::SetHasNoBasic()
-{
-    pImpl->m_bNoBasicCapabilities = true;
 }
 
 bool SfxObjectShell::HasBasic() const

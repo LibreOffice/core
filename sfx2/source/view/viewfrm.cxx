@@ -1286,7 +1286,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 
     m_xObjSh = pObjSh;
     if ( m_xObjSh.Is() && m_xObjSh->IsPreview() )
-        SetQuietMode_Impl( true );
+        GetDispatcher()->SetQuietMode_Impl( true );
 
     if ( pObjSh )
     {
@@ -1629,11 +1629,6 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
             }
         }
     }
-}
-
-void SfxViewFrame::SetQuietMode_Impl( bool bOn )
-{
-    GetDispatcher()->SetQuietMode_Impl( bOn );
 }
 
 SfxObjectShell* SfxViewFrame::GetObjectShell()

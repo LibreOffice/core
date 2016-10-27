@@ -77,8 +77,6 @@ friend class SfxFrameStatusListener;
     css::uno::Reference< css::lang::XComponent >           m_xStatusListener;
 
 private:
-    void                    GetOrCreateStatusListener();
-
     SfxPopupWindow(SfxPopupWindow &) = delete;
     void operator =(SfxPopupWindow &) = delete;
     void Delete();
@@ -86,7 +84,6 @@ private:
 protected:
     virtual void            PopupModeEnd() override;
     virtual bool            Close() override;
-    void                    DeleteFloatingWindow();
 
     sal_uInt16              GetId() const { return m_nId; }
     const css::uno::Reference< css::frame::XFrame >& GetFrame() const { return m_xFrame; }

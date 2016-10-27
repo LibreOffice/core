@@ -103,10 +103,6 @@ public:
     {
         return mpPassword2ED->GetText();
     }
-    OUString GetConfirm2() const
-    {
-        return mpConfirm2ED->GetText();
-    }
     void SetGroup2Text(const OUString& i_rText)
     {
         mpPassword2Box->set_label(i_rText);

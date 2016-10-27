@@ -2018,19 +2018,6 @@ void SfxCommonTemplateDialog_Impl::EnableDelete()
     }
 }
 
-// After selecting a focused item if possible again on the app window
-void SfxCommonTemplateDialog_Impl::ResetFocus()
-{
-    if ( dynamic_cast< const SfxTemplateDialog_Impl* >(this) !=  nullptr )
-    {
-        SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
-        SfxViewShell *pVu = pViewFrame->GetViewShell();
-        vcl::Window *pAppWin = pVu ? pVu->GetWindow(): nullptr;
-        if(pAppWin)
-            pAppWin->GrabFocus();
-    }
-}
-
 IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, TreeListApplyHdl, SvTreeListBox *, bool )
 {
     ApplyHdl(nullptr);
@@ -2050,7 +2037,15 @@ IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, ApplyHdl, LinkParamNone*, void )
                      ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
                      0, nullptr, &nModifier );
     }
-    ResetFocus();
+    // After selecting a focused item if possible again on the app window
+    if ( dynamic_cast< const SfxTemplateDialog_Impl* >(this) !=  nullptr )
+    {
+        SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
+        SfxViewShell *pVu = pViewFrame->GetViewShell();
+        vcl::Window *pAppWin = pVu ? pVu->GetWindow(): nullptr;
+        if(pAppWin)
+            pAppWin->GrabFocus();
+    }
 }
 
 IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, PreviewHdl, Button*, void)
