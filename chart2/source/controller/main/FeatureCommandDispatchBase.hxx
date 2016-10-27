@@ -34,8 +34,7 @@ struct ControllerFeature: public css::frame::DispatchInformation
 };
 
 typedef ::std::map< OUString,
-                    ControllerFeature,
-                    ::std::less< OUString > > SupportedFeatures;
+                    ControllerFeature > SupportedFeatures;
 
 struct FeatureState
 {
