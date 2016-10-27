@@ -322,11 +322,13 @@ void DefinedName::createNameObject( sal_Int32 nIndex )
     mnTokenIndex = nIndex;
 }
 
-std::unique_ptr<ScTokenArray> DefinedName::getScTokens()
+std::unique_ptr<ScTokenArray> DefinedName::getScTokens(
+        const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks )
 {
     ScTokenArray aTokenArray;
     ScCompiler aCompiler(&getScDocument(), ScAddress(0, 0, mnCalcSheet));
     aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
+    aCompiler.SetExternalLinks( rExternalLinks);
     std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(maModel.maFormula));
     // Compile the tokens into RPN once to populate information into tokens
     // where necessary, e.g. for TableRef inner reference. RPN can be discarded
@@ -339,7 +341,7 @@ std::unique_ptr<ScTokenArray> DefinedName::getScTokens()
     return pArray;
 }
 
-void DefinedName::convertFormula()
+void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks )
 {
     // macro function or vba procedure
     if(!mpScRangeData)
@@ -347,7 +349,7 @@ void DefinedName::convertFormula()
 
     // convert and set formula of the defined name
     {
-        std::unique_ptr<ScTokenArray> pTokenArray = getScTokens();
+        std::unique_ptr<ScTokenArray> pTokenArray = getScTokens( rExternalLinks);
         mpScRangeData->SetCode( *pTokenArray );
     }
 
@@ -445,7 +447,7 @@ void DefinedNamesBuffer::finalizeImport()
 
     /*  Now convert all name formulas, so that the formula parser can find all
         names in case of circular dependencies. */
-    maDefNames.forEachMem( &DefinedName::convertFormula );
+    maDefNames.forEachMem( &DefinedName::convertFormula, getExternalLinks().getLinkInfos());
 }
 
 DefinedNameRef DefinedNamesBuffer::getByIndex( sal_Int32 nIndex ) const
