@@ -108,7 +108,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     aDlgSet.Put( SfxInt32Item( ATTR_PRESENT_DISPLAY, pOptions->GetDisplay() ) );
 
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    std::unique_ptr<AbstractSdStartPresDlg> pDlg(pFact ? pFact->CreateSdStartPresentationDlg(mpWindow, aDlgSet, aPageNameList, pCustomShowList) : nullptr);
+    ScopedVclPtr<AbstractSdStartPresDlg> pDlg(pFact ? pFact->CreateSdStartPresentationDlg(mpWindow, aDlgSet, aPageNameList, pCustomShowList) : nullptr);
     if( pDlg && (pDlg->Execute() == RET_OK) )
     {
         OUString aPage;

@@ -356,20 +356,19 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void )
 {
     if (m_ppbApproxSettings == pButton)
     {
-        std::unique_ptr<AbstractSvxSearchSimilarityDialog> pDlg;
-
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if ( pFact )
-            pDlg.reset(pFact->CreateSvxSearchSimilarityDialog( this, m_pSearchEngine->GetLevRelaxed(), m_pSearchEngine->GetLevOther(),
-                        m_pSearchEngine->GetLevShorter(), m_pSearchEngine->GetLevLonger() ));
-        DBG_ASSERT( pDlg, "FmSearchDialog, OnClickedSpecialSettings: could not load the dialog!" );
-
-        if ( pDlg && pDlg->Execute() == RET_OK )
+        if (pFact)
         {
-            m_pSearchEngine->SetLevRelaxed( pDlg->IsRelaxed() );
-            m_pSearchEngine->SetLevOther( pDlg->GetOther() );
-            m_pSearchEngine->SetLevShorter(pDlg->GetShorter() );
-            m_pSearchEngine->SetLevLonger( pDlg->GetLonger() );
+            ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog( this, m_pSearchEngine->GetLevRelaxed(), m_pSearchEngine->GetLevOther(),
+                        m_pSearchEngine->GetLevShorter(), m_pSearchEngine->GetLevLonger() ));
+            DBG_ASSERT( pDlg, "FmSearchDialog, OnClickedSpecialSettings: could not load the dialog!" );
+            if (pDlg && pDlg->Execute() == RET_OK)
+            {
+                m_pSearchEngine->SetLevRelaxed( pDlg->IsRelaxed() );
+                m_pSearchEngine->SetLevOther( pDlg->GetOther() );
+                m_pSearchEngine->SetLevShorter(pDlg->GetShorter() );
+                m_pSearchEngine->SetLevLonger( pDlg->GetLonger() );
+            }
         }
     }
     else if (m_pSoundsLikeCJKSettings == pButton)
@@ -378,7 +377,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            std::unique_ptr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet, m_pSearchEngine->GetTransliterationFlags() ));
+            ScopedVclPtr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet, m_pSearchEngine->GetTransliterationFlags() ));
             DBG_ASSERT(aDlg, "Dialog creation failed!");
             aDlg->Execute();
 

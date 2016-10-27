@@ -1550,9 +1550,9 @@ void FmXFormShell::ExecuteSearch()
     // ausgeraeumt sind, sollte hier ein SM_USETHREAD rein, denn die Suche in einem eigenen Thread ist doch etwas fluessiger
     // sollte allerdings irgendwie von dem unterliegenden Cursor abhaengig gemacht werden, DAO zum Beispiel ist nicht thread-sicher
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    std::unique_ptr<AbstractFmSearchDialog> pDialog;
+    ScopedVclPtr<AbstractFmSearchDialog> pDialog;
     if ( pFact )
-        pDialog.reset(pFact->CreateFmSearchDialog( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, aContextNames, nInitialContext, LINK( this, FmXFormShell, OnSearchContextRequest ) ));
+        pDialog.disposeAndReset(pFact->CreateFmSearchDialog( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, aContextNames, nInitialContext, LINK( this, FmXFormShell, OnSearchContextRequest ) ));
     DBG_ASSERT( pDialog, "FmXFormShell::ExecuteSearch: could not create the search dialog!" );
     if ( pDialog )
     {
@@ -1560,7 +1560,7 @@ void FmXFormShell::ExecuteSearch()
         pDialog->SetFoundHandler( LINK( this, FmXFormShell, OnFoundData ) );
         pDialog->SetCanceledNotFoundHdl( LINK( this, FmXFormShell, OnCanceledNotFound ) );
         pDialog->Execute();
-        pDialog.reset();
+        pDialog.disposeAndClear();
     }
 
     // GridControls wieder restaurieren

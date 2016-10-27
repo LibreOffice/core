@@ -529,7 +529,7 @@ executePasswordDialog(
 
                 VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
                 AbstractPasswordToOpenModifyDialog *pTmp = pFact->CreatePasswordToOpenModifyDialog( pParent, nMaxPasswdLen, bIsPasswordToModify );
-                std::unique_ptr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
+                ScopedVclPtr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
 
                 rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
                 rInfo.SetPassword( pDialog->GetPasswordToOpen() );

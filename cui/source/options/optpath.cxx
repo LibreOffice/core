@@ -566,7 +566,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, Button*, void)
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if ( pFact )
         {
-            std::unique_ptr<AbstractSvxMultiPathDialog> pMultiDlg(
+            ScopedVclPtr<AbstractSvxMultiPathDialog> pMultiDlg(
                 pFact->CreateSvxMultiPathDialog( this ));
             DBG_ASSERT( pMultiDlg, "Dialog creation failed!" );
 

@@ -311,7 +311,7 @@ void VclContainer::Command(const CommandEvent& rCEvt)
                                 AbstractScreenshotAnnotationDlg* pTmp = pFact->CreateScreenshotAnnotationDlg(
                                     Application::GetDefDialogParent(),
                                     *pParentDialog);
-                                std::unique_ptr< AbstractScreenshotAnnotationDlg > pDialog(pTmp);
+                                ScopedVclPtr<AbstractScreenshotAnnotationDlg> pDialog(pTmp);
 
                                 if (pDialog)
                                 {

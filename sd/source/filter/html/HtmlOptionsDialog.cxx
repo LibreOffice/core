@@ -196,7 +196,7 @@ sal_Int16 SdHtmlOptionsDialog::execute()
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     if( pFact )
     {
-        std::unique_ptr<AbstractSdPublishingDlg> pDlg(pFact->CreateSdPublishingDlg( Application::GetDefDialogParent(), meDocType ));
+        ScopedVclPtr<AbstractSdPublishingDlg> pDlg(pFact->CreateSdPublishingDlg( Application::GetDefDialogParent(), meDocType ));
         if( pDlg )
         {
             if( pDlg->Execute() )

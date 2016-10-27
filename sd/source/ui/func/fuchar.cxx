@@ -96,7 +96,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
         }
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdTabCharDialog(mpViewShell->GetActiveWindow(), &aNewAttr, mpDoc->GetDocSh() ) : nullptr);
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdTabCharDialog(mpViewShell->GetActiveWindow(), &aNewAttr, mpDoc->GetDocSh() ) : nullptr);
         sal_uInt16 nResult = RET_CANCEL;
         if( pDlg )
         {

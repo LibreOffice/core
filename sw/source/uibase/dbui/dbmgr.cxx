@@ -2957,7 +2957,7 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     assert( pFact && "Factory creation failed!" );
-    std::unique_ptr<AbstractSwInsertDBColAutoPilot> pDlg(pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
+    ScopedVclPtr<AbstractSwInsertDBColAutoPilot> pDlg(pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
                                                                                 xSource,
                                                                                 xColSupp,
                                                                                 aDBData ));

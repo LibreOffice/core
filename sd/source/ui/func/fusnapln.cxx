@@ -110,7 +110,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         aNewAttr.Put(SfxInt32Item(ATTR_SNAPLINE_Y, aLinePos.Y()));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<AbstractSdSnapLineDlg> pDlg(pFact ? pFact->CreateSdSnapLineDlg(mpViewShell->GetActiveWindow(), aNewAttr, mpView) : nullptr);
+        ScopedVclPtr<AbstractSdSnapLineDlg> pDlg(pFact ? pFact->CreateSdSnapLineDlg(mpViewShell->GetActiveWindow(), aNewAttr, mpView) : nullptr);
         OSL_ASSERT(pDlg);
         if (!pDlg)
             return;
@@ -143,7 +143,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         sal_uInt16 nResult = pDlg->Execute();
 
         pDlg->GetAttr(aNewAttr);
-        pDlg.reset();
+        pDlg.disposeAndClear();
 
         switch( nResult )
         {

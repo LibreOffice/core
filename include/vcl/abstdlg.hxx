@@ -36,8 +36,9 @@ class Bitmap;
 */
 class VCL_DLLPUBLIC VclAbstractDialog : public virtual VclReferenceBase
 {
-public:
+protected:
     virtual             ~VclAbstractDialog() override;
+public:
     virtual short       Execute() = 0;
 
     // Screenshot interface
@@ -49,27 +50,33 @@ public:
 
 class VCL_DLLPUBLIC VclAbstractDialog2 : public virtual VclReferenceBase
 {
-public:
+protected:
     virtual             ~VclAbstractDialog2() override;
-
+public:
     virtual void        StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) = 0;
     virtual long        GetResult() = 0;
 };
 
 class VCL_DLLPUBLIC VclAbstractTerminatedDialog : public VclAbstractDialog
 {
+protected:
+    virtual             ~VclAbstractTerminatedDialog() override = default;
 public:
     virtual void        EndDialog(long nResult) = 0;
 };
 
 class VCL_DLLPUBLIC VclAbstractRefreshableDialog : public VclAbstractDialog
 {
+protected:
+    virtual             ~VclAbstractRefreshableDialog() override = default;
 public:
     virtual void        Update() = 0;
 };
 
 class VCL_DLLPUBLIC AbstractPasswordToOpenModifyDialog : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractPasswordToOpenModifyDialog() override = default;
 public:
     virtual OUString    GetPasswordToOpen() const   = 0;
     virtual OUString    GetPasswordToModify() const = 0;
@@ -78,6 +85,8 @@ public:
 
 class VCL_DLLPUBLIC AbstractScreenshotAnnotationDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScreenshotAnnotationDlg() override = default;
 };
 
 class VCL_DLLPUBLIC VclAbstractDialogFactory

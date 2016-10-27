@@ -107,7 +107,7 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                std::unique_ptr<AbstractScPivotFilterDlg> pDlg(pFact->CreateScPivotFilterDlg(
+                ScopedVclPtr<AbstractScPivotFilterDlg> pDlg(pFact->CreateScPivotFilterDlg(
                     pViewShell->GetDialogParent(), aArgSet, nSrcTab));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
 

@@ -139,7 +139,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         if(rLink.IsVisible())
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            std::unique_ptr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( pMDI, &rSh.GetLinkManager(), false, &rLink ));
+                            ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( pMDI, &rSh.GetLinkManager(), false, &rLink ));
                             if ( pDlg )
                             {
                                 pDlg->Execute();
@@ -152,7 +152,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                         assert(pFact && "SwAbstractDialogFactory fail!");
 
-                        std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSwFieldEditDlg( GetView() ));
+                        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwFieldEditDlg( GetView() ));
                         assert(pDlg && "Dialog creation failed!");
                         pDlg->Execute();
                     }
@@ -497,7 +497,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
                     assert(pFact2 && "Dialog creation failed!");
-                    std::unique_ptr<AbstractSvxPostItDialog> pDlg(pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel ));
+                    ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel ));
                     assert(pDlg && "Dialog creation failed!");
                     pDlg->HideAuthor();
 
@@ -522,7 +522,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         rSh.SetRedlineComment(sMsg);
                     }
 
-                    pDlg.reset();
+                    pDlg.disposeAndClear();
                     SwViewShell::SetCareWin(nullptr);
                     g_bNoInterrupt = false;
                     rSh.ClearMark();
@@ -556,7 +556,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                     assert(pFact && "Dialog creation failed!");
-                    std::unique_ptr<AbstractJavaEditDialog> pDlg(pFact->CreateJavaEditDialog(pMDI, &rSh));
+                    ScopedVclPtr<AbstractJavaEditDialog> pDlg(pFact->CreateJavaEditDialog(pMDI, &rSh));
                     assert(pDlg && "Dialog creation failed!");
                     if ( pDlg->Execute() )
                     {

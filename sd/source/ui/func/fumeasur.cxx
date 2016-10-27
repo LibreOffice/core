@@ -57,7 +57,7 @@ void FuMeasureDlg::DoExecute( SfxRequest& rReq )
     if( !pArgs )
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractDialog> pDlg( pFact ? pFact->CreateSfxDialog( nullptr, aNewAttr, mpView, RID_SVXPAGE_MEASURE) : nullptr );
+        ScopedVclPtr<SfxAbstractDialog> pDlg( pFact ? pFact->CreateSfxDialog( nullptr, aNewAttr, mpView, RID_SVXPAGE_MEASURE) : nullptr );
 
         if( pDlg.get() && (pDlg->Execute() == RET_OK) )
         {

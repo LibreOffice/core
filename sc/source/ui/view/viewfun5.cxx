@@ -306,7 +306,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     // this for html pasting only, but in the future it may
                     // make sense to do it for other data types too.
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    std::unique_ptr<AbstractScTextImportOptionsDlg> pDlg(
+                    ScopedVclPtr<AbstractScTextImportOptionsDlg> pDlg(
                         pFact->CreateScTextImportOptionsDlg());
 
                     if (pDlg->Execute() == RET_OK)
@@ -335,7 +335,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     ScImportStringStream aStrm( aStr);
                     ScAbstractDialogFactory* pFact =
                         ScAbstractDialogFactory::Create();
-                    std::unique_ptr<AbstractScImportAsciiDlg> pDlg(
+                    ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(
                         pFact->CreateScImportAsciiDlg( OUString(), &aStrm, SC_PASTETEXT));
 
                     if (pDlg->Execute() == RET_OK)

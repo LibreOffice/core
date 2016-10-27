@@ -91,7 +91,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         }
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdParagraphTabDlg(mpViewShell->GetActiveWindow(), &aNewAttr) : nullptr);
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdParagraphTabDlg(mpViewShell->GetActiveWindow(), &aNewAttr) : nullptr);
         if (!pDlg)
             return;
 

@@ -102,7 +102,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             if( pFact )
             {
-                std::unique_ptr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(mpViewShell->GetActiveWindow(), aSet, mpDoc->GetColorList(), mpView ));
+                ScopedVclPtr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(mpViewShell->GetActiveWindow(), aSet, mpDoc->GetColorList(), mpView ));
                 if (!pDlg)
                     return;
 
@@ -118,7 +118,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
                     default:
                     {
-                        pDlg.reset();
+                        pDlg.disposeAndClear();
                         mpView->EndUndo();
                     }
                     return; // Cancel

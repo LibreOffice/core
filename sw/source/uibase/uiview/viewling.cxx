@@ -576,13 +576,13 @@ void SwView::StartThesaurus()
         SpellError( eLang );
     else
     {
-        std::unique_ptr<AbstractThesaurusDialog> pDlg;
+        ScopedVclPtr<AbstractThesaurusDialog> pDlg;
         // create dialog
         {   //Scope for SwWait-Object
             SwWait aWait( *GetDocShell(), true );
             // load library with dialog only on demand ...
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            pDlg.reset(pFact->CreateThesaurusDialog( &GetEditWin(), xThes, aTmp, eLang ));
+            pDlg.disposeAndReset(pFact->CreateThesaurusDialog( &GetEditWin(), xThes, aTmp, eLang ));
         }
 
         if ( pDlg->Execute()== RET_OK )
