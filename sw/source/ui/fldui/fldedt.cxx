@@ -328,7 +328,7 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, Button*, void)
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aSet,
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aSet,
         pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
         RC_DLG_ADDR ));
     OSL_ENSURE(pDlg, "Dialog creation failed!");

@@ -62,12 +62,16 @@ class SdCustomShowList;
 
 class AbstractCopyDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractCopyDlg() override = default;
 public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) = 0;
 };
 
 class AbstractSdCustomShowDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSdCustomShowDlg() override = default;
 public:
     virtual bool        IsModified() const = 0;
     virtual bool        IsCustomShow() const = 0;
@@ -75,6 +79,8 @@ public:
 
 class AbstractSdModifyFieldDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSdModifyFieldDlg() override = default;
 public:
     virtual SvxFieldData*       GetField() = 0;
     virtual SfxItemSet          GetItemSet() = 0;
@@ -82,6 +88,8 @@ public:
 
 class AbstractSdSnapLineDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSdSnapLineDlg() override = default;
 public:
     virtual void GetAttr(SfxItemSet& rOutAttrs) = 0;
     virtual void HideRadioGroup() = 0;
@@ -93,6 +101,8 @@ public:
 
 class AbstractSdInsertLayerDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSdInsertLayerDlg() override = default;
 public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) = 0;
     //from class vcl::Window
@@ -101,10 +111,14 @@ public:
 
 class AbstractSdInsertPasteDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSdInsertPasteDlg() override = default;
 };
 
 class AbstractSdInsertPagesObjsDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSdInsertPagesObjsDlg() override = default;
 public:
     virtual std::vector<OUString> GetList ( const sal_uInt16 nType ) = 0;
     virtual bool        IsLink() = 0;
@@ -113,6 +127,8 @@ public:
 
 class AbstractMorphDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractMorphDlg() override = default;
 public:
     virtual void            SaveSettings() const = 0;
     virtual sal_uInt16          GetFadeSteps() const = 0;
@@ -122,30 +138,40 @@ public:
 
 class AbstractSdStartPresDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSdStartPresDlg() override = default;
 public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) = 0;
 };
 
 class AbstractSdPresLayoutDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSdPresLayoutDlg() override = default;
 public:
     virtual void    GetAttr(SfxItemSet& rOutAttrs) = 0;
 };
 
 class AbstractSdVectorizeDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSdVectorizeDlg() override = default;
 public:
     virtual const GDIMetaFile&  GetGDIMetaFile() const = 0;
 };
 
 class AbstractSdPublishingDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSdPublishingDlg() override = default;
 public:
     virtual void GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams ) = 0;
 };
 
 class AbstractHeaderFooterDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractHeaderFooterDialog() override = default;
 };
 
 class SdAbstractDialogFactory

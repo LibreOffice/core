@@ -183,7 +183,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialog creation failed!");
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
                                                         GetView().GetWindow(), &aSet, GetShell()));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
         const SfxStringItem* pPageItem = rReq.GetArg<SfxStringItem>(FN_PARAM_1);

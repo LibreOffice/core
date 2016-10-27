@@ -893,7 +893,7 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "Dialog creation failed!");
-                std::unique_ptr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
+                ScopedVclPtr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
                                                         this, aSet,
                                                         *pActiveShell,
                                                         nullptr,

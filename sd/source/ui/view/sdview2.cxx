@@ -880,12 +880,9 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
                 OUString aDesc(SD_RESSTR(STR_DESC_NAMEGROUP));
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                std::unique_ptr<AbstractSvxNameDialog> pDlg;
+                ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog(mpViewSh->GetActiveWindow(), aNewName, aDesc) : nullptr);
 
-                if (pFact)
-                    pDlg.reset(pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), aNewName, aDesc ));
-
-                if( pDlg )
+                if (pDlg)
                 {
                     pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
 

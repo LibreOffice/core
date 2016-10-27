@@ -708,7 +708,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     SfxItemSet      aSet     ( GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
                     SvxZoomItem     aZoomItem( eOldZoomType, nOldZoom, SID_ATTR_ZOOM );
-                    std::unique_ptr<AbstractSvxZoomDialog> pDlg;
+                    ScopedVclPtr<AbstractSvxZoomDialog> pDlg;
                     ScMarkData&     rMark = GetViewData().GetMarkData();
                     SvxZoomEnableFlags nBtnFlags = SvxZoomEnableFlags::N50
                                                 | SvxZoomEnableFlags::N75
@@ -726,7 +726,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg.reset(pFact->CreateSvxZoomDialog(GetDialogParent(), aSet ));
+                        pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetDialogParent(), aSet));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
                     }
                     if (pDlg)
@@ -851,7 +851,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                std::unique_ptr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
+                ScopedVclPtr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 pDlg->SetDescription(
                     OUString( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
@@ -871,7 +871,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     const sal_Int32 nSelCount = pDlg->GetSelectEntryCount();
                     for( sal_Int32 nSelIx = 0; nSelIx < nSelCount; ++nSelIx )
                         aIndexList.insert( aIndexList.begin()+nSelIx, pDlg->GetSelectEntryPos( nSelIx ) );
-                    pDlg.reset();
+                    pDlg.disposeAndClear();
                     rReq.AppendItem( SfxIntegerListItem( SID_SELECT_TABLES, aIndexList ) );
                 }
                 else

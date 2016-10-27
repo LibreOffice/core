@@ -381,7 +381,7 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl, Button*, void)
     {
         SfxAllItemSet aSet( rSh.GetAttrPool() );
         aSet.Put( SfxInt32Item( SID_ATTR_CHAR, GetDelimChar() ) );
-        std::unique_ptr<SfxAbstractDialog> pMap(pFact->CreateSfxDialog( m_pDelimPB, aSet,
+        ScopedVclPtr<SfxAbstractDialog> pMap(pFact->CreateSfxDialog( m_pDelimPB, aSet,
             rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
         if( RET_OK == pMap->Execute() )
         {

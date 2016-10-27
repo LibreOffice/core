@@ -58,7 +58,7 @@ void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
     if( !pArgs )
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( nullptr, &aNewAttr, mpView ));
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( nullptr, &aNewAttr, mpView ));
 
         sal_uInt16 nResult = pDlg->Execute();
 

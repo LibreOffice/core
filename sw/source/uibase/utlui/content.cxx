@@ -3225,7 +3225,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, EditEntryMode nMode)
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        std::unique_ptr<AbstractSwRenameXNamedDlg> pDlg(pFact->CreateSwRenameXNamedDlg(this, xNamed, xNameAccess));
+        ScopedVclPtr<AbstractSwRenameXNamedDlg> pDlg(pFact->CreateSwRenameXNamedDlg(this, xNamed, xNameAccess));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
         if(xSecond.is())
             pDlg->SetAlternativeAccess( xSecond, xThird);

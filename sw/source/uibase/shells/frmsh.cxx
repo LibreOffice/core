@@ -465,7 +465,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact);
-                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog(
+                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog(
                                                         nSel & nsSelectionType::SEL_GRF ? OUString("PictureDialog") :
                                                         nSel & nsSelectionType::SEL_OLE ? OUString("ObjectDialog"):
                                                                                         OUString("FrameDialog"),
@@ -623,7 +623,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 assert(pFact);
-                std::unique_ptr<AbstractSvxObjectTitleDescDialog> pDlg(
+                ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(
                     pFact->CreateSvxObjectTitleDescDialog( aTitle,
                                                            aDescription ));
                 assert(pDlg);
@@ -1263,7 +1263,7 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 assert(pFact);
-                std::unique_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
+                ScopedVclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
                     nullptr,
                     &aNewAttr,
                     pDoc,

@@ -616,11 +616,11 @@ void SwView::ExecNumberingOutline(SfxItemPool & rPool)
     SfxItemSet aTmp(rPool, FN_PARAM_1, FN_PARAM_1);
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
-    std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                 GetWindow(), &aTmp, GetWrtShell()));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlg->Execute();
-    pDlg.reset();
+    pDlg.disposeAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -95,7 +95,7 @@ namespace svx {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, bEnableBackgroundSelector ));
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, bEnableBackgroundSelector ));
             DBG_ASSERT(pDlg, "Dialog creation failed!");
             if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
             {

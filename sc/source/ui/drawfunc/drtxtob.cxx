@@ -872,14 +872,14 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             case SID_DRAWTEXT_ATTR_DLG:
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aEditAttr, pView ));
+                    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aEditAttr, pView ));
 
                     bDone = ( RET_OK == pDlg->Execute() );
 
                     if ( bDone )
                         aNewAttr.Put( *pDlg->GetOutputItemSet() );
 
-                    pDlg.reset();
+                    pDlg.disposeAndClear();
 
                     SfxBindings& rBindings = pViewData->GetBindings();
                     rBindings.Invalidate( SID_TABLE_VERT_NONE );

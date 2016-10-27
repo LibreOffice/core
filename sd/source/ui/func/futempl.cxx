@@ -295,8 +295,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
             if( pStyleSheet )
             {
-                std::unique_ptr<SfxAbstractTabDialog> pStdDlg;
-                std::unique_ptr<SfxAbstractTabDialog> pPresDlg;
+                ScopedVclPtr<SfxAbstractTabDialog> pStdDlg;
+                ScopedVclPtr<SfxAbstractTabDialog> pPresDlg;
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 bool bOldDocInOtherLanguage = false;
                 SfxItemSet aOriSet( pStyleSheet->GetItemSet() );
@@ -305,7 +305,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 if (eFamily == SD_STYLE_FAMILY_GRAPHICS)
                 {
-                    pStdDlg.reset(pFact ? pFact->CreateSdTabTemplateDlg(mpViewShell->GetActiveWindow(), mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView) : nullptr);
+                    pStdDlg.disposeAndReset(pFact ? pFact->CreateSdTabTemplateDlg(mpViewShell->GetActiveWindow(), mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView) : nullptr);
                 }
                 else if (eFamily == SD_STYLE_FAMILY_PSEUDO)
                 {
@@ -369,7 +369,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     if( !bOldDocInOtherLanguage )
                     {
-                        pPresDlg.reset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh,  mpViewShell->GetActiveWindow(), SdResId(nDlgId), *pStyleSheet, ePO, pSSPool ) : nullptr);
+                        pPresDlg.disposeAndReset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh,  mpViewShell->GetActiveWindow(), SdResId(nDlgId), *pStyleSheet, ePO, pSSPool ) : nullptr);
                     }
                 }
                 else if (eFamily == SD_STYLE_FAMILY_CELL)

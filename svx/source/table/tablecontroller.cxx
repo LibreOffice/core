@@ -917,7 +917,7 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
         aNewAttr.Put( aBoxInfoItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr< SfxAbstractTabDialog > xDlg( pFact ? pFact->CreateSvxFormatCellsDialog( &aNewAttr, pTableObj->GetModel(), pTableObj) : nullptr );
+        ScopedVclPtr<SfxAbstractTabDialog> xDlg( pFact ? pFact->CreateSvxFormatCellsDialog( &aNewAttr, pTableObj->GetModel(), pTableObj) : nullptr );
         // Even Cancel Button is returning positive(101) value,
         if (xDlg.get() && xDlg->Execute() == RET_OK)
         {
@@ -1244,7 +1244,7 @@ void SvxTableController::SplitMarkedCells()
         getSelectedCells( aStart, aEnd );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr< SvxAbstractSplittTableDialog > xDlg( pFact ? pFact->CreateSvxSplittTableDialog( nullptr, false, 99 ) : nullptr );
+        ScopedVclPtr< SvxAbstractSplittTableDialog > xDlg( pFact ? pFact->CreateSvxSplittTableDialog( nullptr, false, 99 ) : nullptr );
         if( xDlg.get() && xDlg->Execute() )
         {
             const sal_Int32 nCount = xDlg->GetCount() - 1;

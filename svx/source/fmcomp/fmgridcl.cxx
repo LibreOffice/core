@@ -868,7 +868,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                std::unique_ptr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog());
+                ScopedVclPtr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog());
                 DBG_ASSERT(pDlg, "Dialog creation failed!");
                 pDlg->SetColumns(xCols);
                 pDlg->Execute();

@@ -348,7 +348,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "no dialog factory!");
-            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("PictureDialog",
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("PictureDialog",
                                                     GetView().GetViewFrame(),
                                                     GetView().GetWindow(),
                                                     aSet, false));

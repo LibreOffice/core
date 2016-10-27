@@ -233,7 +233,7 @@ bool SwWrtShell::StartInputFieldDlg( SwField* pField, bool bNextButton,
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
-    std::unique_ptr<AbstractFieldInputDlg> pDlg(pFact->CreateFieldInputDlg(pParentWin, *this, pField, bNextButton));
+    ScopedVclPtr<AbstractFieldInputDlg> pDlg(pFact->CreateFieldInputDlg(pParentWin, *this, pField, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
@@ -248,7 +248,7 @@ bool SwWrtShell::StartInputFieldDlg( SwField* pField, bool bNextButton,
     if(pWindowState)
         *pWindowState = pDlg->GetWindowState();
 
-    pDlg.reset();
+    pDlg.disposeAndClear();
     GetWin()->Update();
     return bRet;
 }
@@ -258,14 +258,14 @@ bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bNextButton, OStrin
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(*this, pField, bNextButton));
+    ScopedVclPtr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(*this, pField, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
     const short nRet = pDlg->Execute();
     if(pWindowState)
         *pWindowState = pDlg->GetWindowState();
-    pDlg.reset();
+    pDlg.disposeAndClear();
     bool bRet = RET_CANCEL == nRet;
     GetWin()->Update();
     if(RET_YES == nRet)

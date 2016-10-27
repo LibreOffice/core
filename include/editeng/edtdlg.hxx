@@ -40,19 +40,25 @@ class CheckBox;
 
 class AbstractThesaurusDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractThesaurusDialog() override = default;
 public:
     virtual OUString    GetWord() = 0;
 };
 
 class AbstractHyphenWordDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractHyphenWordDialog() override = default;
 public:
     virtual vcl::Window* GetWindow() = 0;
 };
 
 class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog
 {
- public:
+protected:
+    virtual ~AbstractHangulHanjaConversionDialog() override = default;
+public:
     virtual void     EnableRubySupport( bool _bVal ) = 0;
     virtual void     SetByCharacter( bool _bByCharacter ) = 0;
     virtual void     SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) = 0;

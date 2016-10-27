@@ -98,6 +98,8 @@ typedef void        (*GlossarySetActGroup)(const OUString& rNewGroup);
 
 class AbstractGlossaryDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractGlossaryDlg() override = default;
 public:
     virtual OUString        GetCurrGrpName() const = 0;
     virtual OUString        GetCurrShortName() const = 0;
@@ -105,6 +107,8 @@ public:
 
 class AbstractFieldInputDlg : public VclAbstractTerminatedDialog
 {
+protected:
+    virtual ~AbstractFieldInputDlg() override = default;
 public:
     //from class SalFrame
     virtual void         SetWindowState( const OString & rStr ) = 0;
@@ -114,6 +118,8 @@ public:
 
 class AbstractInsFootNoteDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractInsFootNoteDlg() override = default;
 public:
     virtual OUString    GetFontName() = 0;
     virtual bool        IsEndNote() = 0;
@@ -125,6 +131,8 @@ public:
 
 class AbstractInsTableDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractInsTableDlg() override = default;
 public:
     virtual void            GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                                 SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
@@ -133,6 +141,8 @@ public:
 
 class AbstractJavaEditDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractJavaEditDialog() override = default;
 public:
     virtual OUString            GetScriptText() const = 0;
     virtual OUString            GetScriptType() const = 0;
@@ -143,6 +153,8 @@ public:
 
 class AbstractMailMergeDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractMailMergeDlg() override = default;
 public:
     virtual DBManagerOptions GetMergeType() = 0;
     virtual const OUString& GetSaveFilter() const = 0;
@@ -156,18 +168,24 @@ public:
 
 class AbstractMailMergeCreateFromDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractMailMergeCreateFromDlg() override = default;
 public:
     virtual bool    IsThisDocument() const = 0;
 };
 
 class AbstractMailMergeFieldConnectionsDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractMailMergeFieldConnectionsDlg() override = default;
 public:
     virtual bool    IsUseExistingConnections() const = 0;
 };
 
 class AbstractMultiTOXTabDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractMultiTOXTabDialog() override = default;
 public:
     virtual CurTOXType          GetCurrentTOXType() const = 0;
     virtual SwTOXDescription&   GetTOXDescription(CurTOXType eTOXTypes) = 0;
@@ -177,17 +195,24 @@ public:
 
 class AbstractEditRegionDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractEditRegionDlg() override = default;
 public:
     virtual void    SelectSection(const OUString& rSectionName) = 0;
 };
+
 class AbstractInsertSectionTabDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractInsertSectionTabDialog() override = default;
 public:
     virtual void     SetSectionData(SwSectionData const& rSect) = 0;
 };
 
 class AbstractSwWordCountFloatDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSwWordCountFloatDlg() override = default;
 public:
     virtual void        UpdateCounts() = 0;
     virtual void        SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat) = 0;
@@ -196,6 +221,8 @@ public:
 
 class AbstractSwInsertAbstractDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSwInsertAbstractDlg() override = default;
 public:
     virtual sal_uInt8   GetLevel() const = 0;
     virtual sal_uInt8   GetPara() const = 0;
@@ -203,6 +230,8 @@ public:
 
 class AbstractSwAsciiFilterDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSwAsciiFilterDlg() override = default;
 public:
     virtual void FillOptions( SwAsciiOptions& rOptions ) = 0;
 
@@ -210,6 +239,8 @@ public:
 
 class AbstractSwBreakDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSwBreakDlg() override = default;
 public:
     virtual OUString                        GetTemplateName() = 0;
     virtual sal_uInt16                      GetKind() = 0;
@@ -219,12 +250,16 @@ public:
 
 class AbstractSplitTableDialog : public VclAbstractDialog // add for
 {
+protected:
+    virtual ~AbstractSplitTableDialog() override = default;
 public:
     virtual sal_uInt16 GetSplitMode() = 0;
 };
 
 class AbstractSwConvertTableDlg :  public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSwConvertTableDlg() override = default;
 public:
     virtual void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTableFlags,
@@ -233,8 +268,9 @@ public:
 
 class AbstractSwInsertDBColAutoPilot :  public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSwInsertDBColAutoPilot() override = default;
 public:
-
     virtual void DataToDoc( const css::uno::Sequence< css::uno::Any >& rSelection,
         css::uno::Reference< css::sdbc::XDataSource> rxSource,
         css::uno::Reference< css::sdbc::XConnection> xConnection,
@@ -243,13 +279,17 @@ public:
 
 class AbstractDropDownFieldDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractDropDownFieldDialog() override = default;
 public:
-     virtual OString GetWindowState() const = 0; //this method inherit from SystemWindow
-     virtual void    SetWindowState( const OString & rStr ) = 0; //this method inherit from SystemWindow
+    virtual OString GetWindowState() const = 0; //this method inherit from SystemWindow
+    virtual void    SetWindowState( const OString & rStr ) = 0; //this method inherit from SystemWindow
 };
 
 class AbstractSwLabDlg  : public SfxAbstractTabDialog
 {
+protected:
+    virtual ~AbstractSwLabDlg() override = default;
 public:
      virtual const OUString& GetBusinessCardStr() const = 0;
      virtual Printer *GetPrt() =0;
@@ -257,6 +297,8 @@ public:
 
 class AbstractSwSelGlossaryDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSwSelGlossaryDlg() override = default;
 public:
     virtual void InsertGlos(const OUString &rRegion, const OUString &rGlosName) = 0;    // inline
     virtual sal_Int32 GetSelectedIdx() const = 0;  // inline
@@ -265,12 +307,16 @@ public:
 
 class AbstractSwAutoFormatDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSwAutoFormatDlg() override = default;
 public:
     virtual void FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const = 0;
 };
 
 class AbstractSwFieldDlg : public SfxAbstractTabDialog
 {
+protected:
+    virtual ~AbstractSwFieldDlg() override = default;
 public:
     virtual void                Start() = 0;  //this method from sfxtabdialog
     virtual void                Initialize(SfxChildWinInfo *pInfo) = 0;
@@ -282,6 +328,8 @@ public:
 
 class AbstractSwRenameXNamedDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSwRenameXNamedDlg() override = default;
 public:
     virtual void    SetForbiddenChars( const OUString& rSet ) = 0;
     virtual void SetAlternativeAccess(
@@ -291,12 +339,16 @@ public:
 
 class AbstractSwModalRedlineAcceptDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSwModalRedlineAcceptDlg() override = default;
 public:
     virtual void            AcceptAll( bool bAccept ) = 0;
 };
 
 class AbstractMarkFloatDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractMarkFloatDlg() override = default;
 public:
     virtual void    ReInitDlg(SwWrtShell& rWrtShell) = 0;
     virtual vcl::Window *    GetWindow() = 0; //this method is added for return a Window type pointer
@@ -311,6 +363,8 @@ class SwMailMergeConfigItem;
 
 class AbstractMailMergeWizard : public VclAbstractDialog2
 {
+protected:
+    virtual ~AbstractMailMergeWizard() override = default;
 public:
     virtual OUString            GetReloadDocument() const = 0;
     virtual bool            ShowPage( sal_uInt16 nLevel ) = 0;

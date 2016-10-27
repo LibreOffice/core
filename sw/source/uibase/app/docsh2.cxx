@@ -695,7 +695,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            std::unique_ptr<AbstractSwInsertAbstractDlg> pDlg(pFact->CreateSwInsertAbstractDlg());
+            ScopedVclPtr<AbstractSwInsertAbstractDlg> pDlg(pFact->CreateSwInsertAbstractDlg());
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             if(RET_OK == pDlg->Execute())
             {

@@ -447,7 +447,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractDialog> pDlg(pFact ? pFact->CreatSdActionDialog(mpViewShell->GetActiveWindow(), &aSet, mpView) : nullptr);
+        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact ? pFact->CreatSdActionDialog(mpViewShell->GetActiveWindow(), &aSet, mpView) : nullptr);
 
         short nResult = pDlg ? pDlg->Execute() : static_cast<short>(RET_CANCEL);
 

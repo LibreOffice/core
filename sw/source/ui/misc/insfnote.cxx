@@ -111,7 +111,7 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl, Button*, void)
     aAllSet.Put( rFont );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aAllSet,
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aAllSet,
         rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
     if (RET_OK == pDlg->Execute())
     {

@@ -291,11 +291,11 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_INSERT_DATE_TIME:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr<AbstractHeaderFooterDialog> pDlg(pFact ? pFact->CreateHeaderFooterDialog( this, GetActiveWindow(), GetDoc(), mpActualPage ) : nullptr);
+            ScopedVclPtr<AbstractHeaderFooterDialog> pDlg(pFact ? pFact->CreateHeaderFooterDialog( this, GetActiveWindow(), GetDoc(), mpActualPage ) : nullptr);
             if( pDlg )
             {
                 pDlg->Execute();
-                pDlg.reset();
+                pDlg.disposeAndClear();
 
                 GetActiveWindow()->Invalidate();
                 UpdatePreview( mpActualPage );

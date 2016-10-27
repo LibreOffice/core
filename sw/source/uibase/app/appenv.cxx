@@ -207,7 +207,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     }
 
     vcl::Window *pParent = pOldSh ? pOldSh->GetWin() : nullptr;
-    std::unique_ptr<SfxAbstractTabDialog> pDlg;
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg;
     short nMode = ENV_INSERT;
 
     const SwEnvItem* pItem = rReq.GetArg<SwEnvItem>(FN_ENVELOP);
@@ -216,7 +216,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        pDlg.reset(pFact->CreateSwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange ));
+        pDlg.disposeAndReset(pFact->CreateSwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange ));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
         nMode = pDlg->Execute();
     }

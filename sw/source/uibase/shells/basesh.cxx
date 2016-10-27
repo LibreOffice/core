@@ -857,7 +857,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                std::unique_ptr<AbstractSwConvertTableDlg> pDlg(pFact->CreateSwConvertTableDlg(GetView(), bToTable));
+                ScopedVclPtr<AbstractSwConvertTableDlg> pDlg(pFact->CreateSwConvertTableDlg(GetView(), bToTable));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if( RET_OK == pDlg->Execute() )
                 {
@@ -2435,7 +2435,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                                RES_BOX              , RES_SHADOW,
                                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                0 );
-            std::unique_ptr<SfxAbstractDialog> pDlg;
+            ScopedVclPtr<SfxAbstractDialog> pDlg;
             // Table cell(s) selected?
             if ( rSh.IsTableMode() )
             {
@@ -2445,7 +2445,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg.reset(pFact->CreateSwBorderDlg( pMDI, aSet, SwBorderModes::TABLE ));
+                pDlg.disposeAndReset(pFact->CreateSwBorderDlg( pMDI, aSet, SwBorderModes::TABLE ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2462,7 +2462,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg.reset(pFact->CreateSwBorderDlg( pMDI, aSet, SwBorderModes::FRAME ));
+                pDlg.disposeAndReset(pFact->CreateSwBorderDlg( pMDI, aSet, SwBorderModes::FRAME ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2480,7 +2480,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg.reset(pFact->CreateSwBorderDlg( pMDI, aSet, SwBorderModes::PARA ));
+                pDlg.disposeAndReset(pFact->CreateSwBorderDlg( pMDI, aSet, SwBorderModes::PARA ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2500,7 +2500,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             SfxItemSet aSet( rSh.GetAttrPool(),
                              RES_BACKGROUND, RES_BACKGROUND );
 
-            std::unique_ptr<SfxAbstractDialog> pDlg;
+            ScopedVclPtr<SfxAbstractDialog> pDlg;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
@@ -2510,7 +2510,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // Get background attributes of the table and put it in the set
                 SvxBrushItem aBrush(RES_BACKGROUND);
                 rSh.GetBoxBackground( aBrush );
-                pDlg.reset(pFact->CreateSfxDialog( pMDI, aSet,
+                pDlg.disposeAndReset(pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
@@ -2528,7 +2528,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
                 rSh.GetFlyFrameAttr( aSet );
 
-                pDlg.reset(pFact->CreateSfxDialog( pMDI, aSet,
+                pDlg.disposeAndReset(pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
@@ -2543,7 +2543,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // Set border attributes Umrandungsattribute with the shell quite normal.
                 rSh.GetCurAttr( aSet );
 
-                pDlg.reset(pFact->CreateSfxDialog( pMDI, aSet,
+                pDlg.disposeAndReset(pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
@@ -2656,7 +2656,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                std::unique_ptr<AbstractInsTableDlg> pDlg(pFact->CreateInsTableDlg(rTempView));
+                ScopedVclPtr<AbstractInsTableDlg> pDlg(pFact->CreateInsTableDlg(rTempView));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if( RET_OK == pDlg->Execute() )
                 {

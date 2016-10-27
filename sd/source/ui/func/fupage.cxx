@@ -336,7 +336,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     {
         // create the dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg( pFact ? pFact->CreateSdTabPageDialog(mpViewShell->GetActiveWindow(), &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage) : nullptr );
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact ? pFact->CreateSdTabPageDialog(mpViewShell->GetActiveWindow(), &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage) : nullptr );
         if( pDlg.get() && pDlg->Execute() == RET_OK )
             pTempSet.reset( new SfxItemSet(*pDlg->GetOutputItemSet()) );
     }

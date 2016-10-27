@@ -58,6 +58,8 @@ namespace com { namespace sun { namespace star { namespace frame {
 
 class SfxAbstractDialog : virtual public VclAbstractDialog
 {
+protected:
+    virtual ~SfxAbstractDialog() override = default;
 public:
     /** Get a set of items changed in the dialog.
       */
@@ -68,6 +70,8 @@ public:
 
 class SfxAbstractTabDialog : virtual public SfxAbstractDialog
 {
+protected:
+    virtual ~SfxAbstractTabDialog() override = default;
 public:
     virtual void                SetCurPageId( sal_uInt16 nId ) = 0;
     virtual void                SetCurPageId( const OString &rName ) = 0;
@@ -77,12 +81,16 @@ public:
 
 class SfxAbstractApplyTabDialog : virtual public SfxAbstractTabDialog
 {
+protected:
+    virtual ~SfxAbstractApplyTabDialog() override = default;
 public:
     virtual void                SetApplyHdl( const Link<LinkParamNone*,void>& rLink ) = 0;
 };
 
 class SfxAbstractInsertObjectDialog : virtual public VclAbstractDialog
 {
+protected:
+    virtual ~SfxAbstractInsertObjectDialog() override = default;
 public:
     virtual css::uno::Reference < css::embed::XEmbeddedObject > GetObject()=0;
     virtual css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType )=0;
@@ -91,6 +99,8 @@ public:
 
 class SfxAbstractPasteDialog : virtual public VclAbstractDialog
 {
+protected:
+    virtual ~SfxAbstractPasteDialog() override = default;
 public:
     virtual void Insert( SotClipboardFormatId nFormat, const rtl::OUString & rFormatName ) = 0;
     virtual void SetObjName( const SvGlobalName & rClass, const rtl::OUString & rObjName ) = 0;
@@ -99,10 +109,14 @@ public:
 
 class SfxAbstractLinksDialog : virtual public VclAbstractDialog
 {
+protected:
+    virtual ~SfxAbstractLinksDialog() override = default;
 };
 
 class AbstractScriptSelectorDialog : virtual public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractScriptSelectorDialog() override = default;
 public:
     virtual rtl::OUString       GetScriptURL() const = 0;
     virtual void                SetRunLabel() = 0;
