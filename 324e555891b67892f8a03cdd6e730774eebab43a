@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_6eaa5ed6",
+        "filename": "fpicker/source/office/iodlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-27T20:20:00Z",
+      "side": 1,
+      "message": "_pImpl needs to be deleted here because the class contains VclPtr fields.\nso you\u0027ll need to call:\n   pImpl.reset()",
+      "revId": "324e555891b67892f8a03cdd6e730774eebab43a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
