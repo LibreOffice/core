@@ -177,7 +177,7 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
         sNamespace = NS_DOCUMENTSIGNATURES_ODF_1_2;
 
     pAttributeList->AddAttribute(
-        ATTR_XMLNS,
+        "xmlns",
         sNamespace);
 
     xSaxWriter->startDocument();

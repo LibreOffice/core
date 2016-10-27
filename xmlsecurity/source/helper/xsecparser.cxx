@@ -96,7 +96,7 @@ void SAL_CALL XSecParser::startElement(
             m_pXSecController->collectToVerify( ouIdAttr );
         }
 
-        if ( aName == TAG_SIGNATURE )
+        if ( aName == "Signature" )
         {
             m_pXSecController->addSignature();
             if (ouIdAttr != nullptr)
@@ -104,9 +104,9 @@ void SAL_CALL XSecParser::startElement(
                 m_pXSecController->setId( ouIdAttr );
             }
         }
-        else if ( aName == TAG_REFERENCE )
+        else if ( aName == "Reference" )
         {
-            OUString ouUri = xAttribs->getValueByName(ATTR_URI);
+            OUString ouUri = xAttribs->getValueByName("URI");
             SAL_WARN_IF( ouUri == nullptr, "xmlsecurity.helper", "URI == NULL" );
 
             if (ouUri.startsWith("#"))
@@ -125,11 +125,11 @@ void SAL_CALL XSecParser::startElement(
                 m_bReferenceUnresolved = true;
             }
         }
-        else if (aName == TAG_TRANSFORM)
+        else if (aName == "Transform")
         {
             if ( m_bReferenceUnresolved )
             {
-                OUString ouAlgorithm = xAttribs->getValueByName(ATTR_ALGORITHM);
+                OUString ouAlgorithm = xAttribs->getValueByName("Algorithm");
 
                 if (ouAlgorithm != nullptr && ouAlgorithm == ALGO_C14N)
                     /*
@@ -141,44 +141,44 @@ void SAL_CALL XSecParser::startElement(
                 }
             }
         }
-        else if (aName == TAG_X509ISSUERNAME)
+        else if (aName == "X509IssuerName")
         {
             m_ouX509IssuerName.clear();
             m_bInX509IssuerName = true;
         }
-        else if (aName == TAG_X509SERIALNUMBER)
+        else if (aName == "X509SerialNumber")
         {
             m_ouX509SerialNumber.clear();
             m_bInX509SerialNumber = true;
         }
-        else if (aName == TAG_X509CERTIFICATE)
+        else if (aName == "X509Certificate")
         {
             m_ouX509Certificate.clear();
             m_bInX509Certificate = true;
         }
-        else if (aName == TAG_SIGNATUREVALUE)
+        else if (aName == "SignatureValue")
         {
             m_ouSignatureValue.clear();
             m_bInSignatureValue = true;
         }
-        else if (aName == TAG_DIGESTVALUE)
+        else if (aName == "DigestValue")
         {
             m_ouDigestValue.clear();
             m_bInDigestValue = true;
         }
-        else if ( aName == TAG_SIGNATUREPROPERTY )
+        else if ( aName == "SignatureProperty" )
         {
             if (ouIdAttr != nullptr)
             {
                 m_pXSecController->setPropertyId( ouIdAttr );
             }
         }
-        else if (aName == NSTAG_DC ":" TAG_DATE)
+        else if (aName == "dc:date")
         {
             m_ouDate.clear();
             m_bInDate = true;
         }
-        else if (aName == NSTAG_DC ":" TAG_DESCRIPTION)
+        else if (aName == "dc:description")
         {
             m_ouDescription.clear();
             m_bInDescription = true;
@@ -209,11 +209,11 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
 {
     try
     {
-        if (aName == TAG_DIGESTVALUE)
+        if (aName == "DigestValue")
         {
             m_bInDigestValue = false;
         }
-        else if ( aName == TAG_REFERENCE )
+        else if ( aName == "Reference" )
         {
             if ( m_bReferenceUnresolved )
             /*
@@ -226,36 +226,36 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
 
             m_pXSecController->setDigestValue( m_ouDigestValue );
         }
-        else if ( aName == TAG_SIGNEDINFO )
+        else if ( aName == "SignedInfo" )
         {
             m_pXSecController->setReferenceCount();
         }
-        else if ( aName == TAG_SIGNATUREVALUE )
+        else if ( aName == "SignatureValue" )
         {
             m_pXSecController->setSignatureValue( m_ouSignatureValue );
             m_bInSignatureValue = false;
         }
-        else if (aName == TAG_X509ISSUERNAME)
+        else if (aName == "X509IssuerName")
         {
             m_pXSecController->setX509IssuerName( m_ouX509IssuerName );
             m_bInX509IssuerName = false;
         }
-        else if (aName == TAG_X509SERIALNUMBER)
+        else if (aName == "X509SerialNumber")
         {
             m_pXSecController->setX509SerialNumber( m_ouX509SerialNumber );
             m_bInX509SerialNumber = false;
         }
-        else if (aName == TAG_X509CERTIFICATE)
+        else if (aName == "X509Certificate")
         {
             m_pXSecController->setX509Certificate( m_ouX509Certificate );
             m_bInX509Certificate = false;
         }
-        else if (aName == NSTAG_DC ":" TAG_DATE)
+        else if (aName == "dc:date")
         {
             m_pXSecController->setDate( m_ouDate );
             m_bInDate = false;
         }
-        else if (aName == NSTAG_DC ":" TAG_DESCRIPTION)
+        else if (aName == "dc:description")
         {
             m_pXSecController->setDescription( m_ouDescription );
             m_bInDescription = false;
