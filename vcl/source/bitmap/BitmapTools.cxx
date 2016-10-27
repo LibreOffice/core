@@ -21,6 +21,10 @@
 
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 
+#include <tools/resmgr.hxx>
+#include <tools/rc.h>
+#include <vcl/svapp.hxx>
+
 using namespace css;
 
 using drawinglayer::primitive2d::Primitive2DSequence;
@@ -31,6 +35,24 @@ namespace vcl
 
 namespace bitmap
 {
+
+BitmapEx loadFromResource(const ResId& rResId, const ImageLoadFlags eFlags)
+{
+    BitmapEx aBitmapEx;
+
+    ResMgr* pResMgr = nullptr;
+
+    ResMgr::GetResourceSkipHeader(rResId.SetRT( RSC_BITMAP ), &pResMgr);
+    pResMgr->ReadLong();
+    pResMgr->ReadLong();
+
+    const OUString aFileName(pResMgr->ReadString());
+    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+
+    ImplImageTree::get().loadImage(aFileName, aIconTheme, aBitmapEx, true, eFlags);
+
+    return aBitmapEx;
+}
 
 void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, double fScalingFactor)
 {
