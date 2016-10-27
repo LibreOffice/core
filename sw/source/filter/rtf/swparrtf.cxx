@@ -179,7 +179,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(const OUString& rURL
     aDescriptor[0].Name = "InputStream";
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(aFileStream));
     aDescriptor[0].Value <<= xStream;
-    bool bRet(1);
+    bool bRet = true;
     try
     {
         xFilter->filter(aDescriptor);
