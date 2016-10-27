@@ -122,7 +122,6 @@ public:
     virtual ~SmFontPickList() { Clear(); }
 
     virtual void    Insert(const vcl::Font &rFont);
-    void            Remove(const vcl::Font &rFont);
 
     void            Clear();
     vcl::Font       Get(sal_uInt16 nPos = 0) const;

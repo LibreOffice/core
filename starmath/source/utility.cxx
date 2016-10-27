@@ -88,7 +88,13 @@ OUString SmFontPickList::GetStringItem(const vcl::Font &rFont)
 
 void SmFontPickList::Insert(const vcl::Font &rFont)
 {
-    Remove(rFont);
+    for (size_t nPos = 0; nPos < aFontVec.size(); nPos++)
+        if (CompareItem( aFontVec[nPos], rFont))
+        {
+            aFontVec.erase( aFontVec.begin() + nPos );
+            break;
+        }
+
     aFontVec.push_front( rFont );
 
     if (aFontVec.size() > nMaxItems)
@@ -96,17 +102,6 @@ void SmFontPickList::Insert(const vcl::Font &rFont)
         aFontVec.pop_back();
     }
 }
-
-void SmFontPickList::Remove(const vcl::Font &rFont)
-{
-    for (size_t nPos = 0; nPos < aFontVec.size(); nPos++)
-        if (CompareItem( aFontVec[nPos], rFont))
-        {
-            aFontVec.erase( aFontVec.begin() + nPos );
-            break;
-        }
-}
-
 
 void SmFontPickList::ReadFrom(const SmFontDialog& rDialog)
 {

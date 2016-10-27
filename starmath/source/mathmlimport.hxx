@@ -238,10 +238,6 @@ public:
     const SvXMLTokenMap &GetActionAttrTokenMap();
 
     SmNodeStack & GetNodeStack()    { return aNodeStack; }
-    SmNode *GetTree()
-    {
-        return popOrZero(aNodeStack);
-    }
 
     bool GetSuccess()              { return bSuccess; }
     SAL_WARN_UNUSED_RESULT const OUString& GetText() { return aText; }
