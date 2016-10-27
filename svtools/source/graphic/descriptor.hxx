@@ -74,9 +74,6 @@ public:
     void init( const OUString& rURL );
     void init( const css::uno::Reference< css::io::XInputStream >& rxIStm, const OUString& rURL );
 
-    static OUString getImplementationName_Static() throw();
-    static css::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
-
 protected:
 
     static ::comphelper::PropertySetInfo* createPropertySetInfo();

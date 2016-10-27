@@ -650,7 +650,7 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
                     delete mpSimpleCache;
 
                 mpSimpleCache = new GrfSimpleCacheObj( GetTransformedGraphic( &aAttr ), aAttr );
-                mpSimpleCache->maGraphic.SetAnimationNotifyHdl( GetAnimationNotifyHdl() );
+                mpSimpleCache->maGraphic.SetAnimationNotifyHdl( GetGraphic().GetAnimationNotifyHdl() );
             }
 
             mpSimpleCache->maGraphic.StartAnimation( pOut, aPt, aSz, nExtraData, pFirstFrameOutDev );
@@ -681,7 +681,12 @@ const Graphic& GraphicObject::GetGraphic() const
     //fdo#50697 If we've been asked to provide the graphic, then reset
     //the cache timeout to start from now and not remain at the
     //time of creation
-    pThis->restartSwapOutTimer();
+    // restart SwapOut timer; this is like touching in a cache to reset to the full timeout value
+    if( pThis->mpSwapOutTimer && pThis->mpSwapOutTimer->IsActive() )
+    {
+        pThis->mpSwapOutTimer->Stop();
+        pThis->mpSwapOutTimer->Start();
+    }
 
     return maGraphic;
 }
@@ -1183,14 +1188,5 @@ basegfx::B2DVector GraphicObject::calculateCropScaling(
     return basegfx::B2DVector(fFactorX,fFactorY);
 }
 
-// restart SwapOut timer
-void GraphicObject::restartSwapOutTimer() const
-{
-    if( mpSwapOutTimer && mpSwapOutTimer->IsActive() )
-    {
-        mpSwapOutTimer->Stop();
-        mpSwapOutTimer->Start();
-    }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

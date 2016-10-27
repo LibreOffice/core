@@ -344,17 +344,6 @@ void SvSimpleTable::HBarClick()
     }
 }
 
-void SvSimpleTable::HBarStartDrag()
-{
-    if(!aHeaderBar->IsItemMode())
-    {
-        Rectangle aSizeRect(Point(0,0),
-            SvHeaderTabListBox::GetOutputSizePixel());
-        aSizeRect.Left()=-GetXOffset()+aHeaderBar->GetDragPos();
-        aSizeRect.Right()=-GetXOffset()+aHeaderBar->GetDragPos();
-        ShowTracking( aSizeRect, ShowTrackFlags::Split );
-    }
-}
 void SvSimpleTable::HBarDrag()
 {
     HideTracking();
@@ -403,7 +392,14 @@ IMPL_LINK( SvSimpleTable, StartDragHdl, HeaderBar*, pCtr, void)
 {
     if(pCtr==aHeaderBar.get())
     {
-        HBarStartDrag();
+        if(!aHeaderBar->IsItemMode())
+        {
+            Rectangle aSizeRect(Point(0,0),
+                SvHeaderTabListBox::GetOutputSizePixel());
+            aSizeRect.Left()=-GetXOffset()+aHeaderBar->GetDragPos();
+            aSizeRect.Right()=-GetXOffset()+aHeaderBar->GetDragPos();
+            ShowTracking( aSizeRect, ShowTrackFlags::Split );
+        }
     }
 }
 

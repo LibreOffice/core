@@ -513,16 +513,6 @@ SvMacroTableEventDescriptor::SvMacroTableEventDescriptor(
     const SvEventDescription* pSupportedMacroItems) :
         SvDetachedEventDescriptor(pSupportedMacroItems)
 {
-    copyMacrosFromTable(rMacroTable);
-}
-
-SvMacroTableEventDescriptor::~SvMacroTableEventDescriptor()
-{
-}
-
-void SvMacroTableEventDescriptor::copyMacrosFromTable(
-    const SvxMacroTableDtor& rMacroTable)
-{
     for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; i++)
     {
         const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
@@ -530,7 +520,10 @@ void SvMacroTableEventDescriptor::copyMacrosFromTable(
         if (nullptr != pMacro)
             replaceByName(nEvent, *pMacro);
     }
+}
 
+SvMacroTableEventDescriptor::~SvMacroTableEventDescriptor()
+{
 }
 
 void SvMacroTableEventDescriptor::copyMacrosIntoTable(

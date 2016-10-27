@@ -189,9 +189,6 @@ private:
     // if element at cursor can be expanded in general
     bool IsExpandable() const;
 
-    // if element at cursor can be expanded at this moment
-    bool IsNowExpandable() const;
-
     static  void        implInitDefaultNodeImages();
 
     void UpdateStringSorter();

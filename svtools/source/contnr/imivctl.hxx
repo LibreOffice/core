@@ -247,7 +247,6 @@ class SvxIconChoiceCtrl_Impl
     void                Center( SvxIconChoiceCtrlEntry* pEntry ) const;
     void                StopEditTimer() { aEditIdle.Stop(); }
     void                StartEditTimer() { aEditIdle.Start(); }
-    void                ImpHideDDIcon();
     void                CallSelectHandler( SvxIconChoiceCtrlEntry* );
     void                SelectRect(
                             SvxIconChoiceCtrlEntry* pEntry1,
@@ -477,8 +476,6 @@ public:
 
     void                SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCtrlColumnInfo& );
     const SvxIconChoiceCtrlColumnInfo* GetColumn( sal_uInt16 nIndex ) const;
-
-    Rectangle           GetDocumentRect() const { return Rectangle( Point(), aVirtOutputSize ); }
 
     void                SetEntryHighlightFrame(
                             SvxIconChoiceCtrlEntry* pEntry,

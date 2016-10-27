@@ -1796,7 +1796,7 @@ sal_Bool SVTXNumericField::isStrictFormat() throw(css::uno::RuntimeException, st
     return pField && pField->IsStrictFormat();
 }
 
-void SVTXNumericField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
+void SVTXNumericField::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     SVTXFormattedField::ImplGetPropertyIds( rIds );
 }

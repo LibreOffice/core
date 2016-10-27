@@ -80,7 +80,6 @@ protected:
     virtual void            Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
     virtual void            HBarClick();
-    void                    HBarStartDrag();
     void                    HBarDrag();
     void                    HBarEndDrag();
 

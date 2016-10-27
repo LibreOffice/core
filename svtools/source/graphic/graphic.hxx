@@ -47,8 +47,6 @@ public:
     void init( const ::Graphic& rGraphic ) throw();
 
     static const ::Graphic* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace ) throw();
-    static OUString getImplementationName_Static() throw();
-    static css::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
 
 protected:
 

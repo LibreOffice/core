@@ -302,8 +302,6 @@ private:
 
     bool            GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowColMove = false);
     void            SelectColumnPos( sal_uInt16 nCol, bool _bSelect, bool bMakeVisible);
-    void            SelectColumnId( sal_uInt16 nColId, bool _bSelect, bool bMakeVisible)
-                        { SelectColumnPos( GetColumnPos(nColId), _bSelect, bMakeVisible); }
 
     void            ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool _bForeignDevice, bool _bDrawSelections);
 

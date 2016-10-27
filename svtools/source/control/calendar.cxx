@@ -2275,18 +2275,13 @@ bool CalendarField::ShowDropDown( bool bShow )
     return true;
 }
 
-VclPtr<Calendar> CalendarField::CreateCalendar( vcl::Window* pParent )
-{
-    return VclPtr<Calendar>::Create( pParent, mnCalendarStyle | WB_TABSTOP );
-}
-
 Calendar* CalendarField::GetCalendar()
 {
     if ( !mpFloatWin )
     {
         mpFloatWin = VclPtr<ImplCFieldFloatWin>::Create( this );
         mpFloatWin->SetPopupModeEndHdl( LINK( this, CalendarField, ImplPopupModeEndHdl ) );
-        mpCalendar = CreateCalendar( mpFloatWin );
+        mpCalendar = VclPtr<Calendar>::Create( mpFloatWin, mnCalendarStyle | WB_TABSTOP );
         mpCalendar->SetPosPixel( Point() );
         mpCalendar->SetSelectHdl( LINK( this, CalendarField, ImplSelectHdl ) );
     }

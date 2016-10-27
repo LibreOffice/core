@@ -219,12 +219,6 @@ void ToolbarMenu_Impl::fireAccessibleEvent( short nEventId, const css::uno::Any&
 }
 
 
-bool ToolbarMenu_Impl::hasAccessibleListeners()
-{
-    return( mxAccessible.is() && mxAccessible->HasAccessibleListeners() );
-}
-
-
 sal_Int32 ToolbarMenu_Impl::getAccessibleChildCount() throw (RuntimeException)
 {
     sal_Int32 nCount = 0;
@@ -355,7 +349,7 @@ void ToolbarMenu_Impl::clearAccessibleSelection()
 
 void ToolbarMenu_Impl::notifyHighlightedEntry()
 {
-    if( hasAccessibleListeners() )
+    if( mxAccessible.is() && mxAccessible->HasAccessibleListeners() )
     {
         ToolbarMenuEntry* pEntry = implGetEntry( mnHighlightedEntry );
         if( pEntry && pEntry->mbEnabled && (pEntry->mnEntryId != TITLE_ID) )

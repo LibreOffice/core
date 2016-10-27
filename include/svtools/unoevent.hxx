@@ -280,7 +280,6 @@ public:
 
     virtual ~SvMacroTableEventDescriptor() override;
 
-    void copyMacrosFromTable(const SvxMacroTableDtor& aFmt);
     void copyMacrosIntoTable(SvxMacroTableDtor& aFmt);
 };
 

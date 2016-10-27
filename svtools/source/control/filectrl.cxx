@@ -172,11 +172,6 @@ void FileControl::Resize()
 }
 
 
-IMPL_LINK_NOARG(FileControl, ButtonHdl, Button*, void)
-{
-    ImplBrowseFile( );
-}
-
 void FileControl::GetFocus()
 {
     maEdit->GrabFocus();
@@ -199,7 +194,7 @@ void FileControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
         GetEdit().SetStyle( nOldEditStyle );
 }
 
-void FileControl::ImplBrowseFile( )
+IMPL_LINK_NOARG(FileControl, ButtonHdl, Button*, void)
 {
     try
     {

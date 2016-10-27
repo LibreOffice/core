@@ -248,7 +248,6 @@ namespace svt
 
     protected:
         css::uno::Any   getProperty(const OUString& _rLocalName) const;
-        css::uno::Any   getProperty(const sal_Char* _pLocalName) const;
 
         OUString        getStringProperty(const sal_Char* _pLocalName) const;
         OUString        getStringProperty(const OUString& _rLocalName) const;
@@ -322,12 +321,6 @@ void AssignmentPersistentData::ImplCommit()
     }
 
 
-    Any AssignmentPersistentData::getProperty(const sal_Char* _pLocalName) const
-    {
-        return getProperty(OUString::createFromAscii(_pLocalName));
-    }
-
-
     Any AssignmentPersistentData::getProperty(const OUString& _rLocalName) const
     {
         Sequence< OUString > aProperties(&_rLocalName, 1);
@@ -348,7 +341,7 @@ void AssignmentPersistentData::ImplCommit()
     OUString AssignmentPersistentData::getStringProperty(const sal_Char* _pLocalName) const
     {
         OUString sReturn;
-        getProperty( _pLocalName ) >>= sReturn;
+        getProperty(OUString::createFromAscii(_pLocalName)) >>= sReturn;
         return sReturn;
     }
 

@@ -420,7 +420,6 @@ namespace svt
 
         bool        implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot );
 
-        static  OUString getCacheFileName();
         static  sal_Int32   getMagicNumber();
         static  void        normalize( TemplateFolderContent& _rState );
 
@@ -460,12 +459,6 @@ namespace svt
         ( nMagic += (sal_Int8)'S' ) <<= 4;
         ( nMagic += (sal_Int8)'C' ) <<= 0;
         return nMagic;
-    }
-
-
-    OUString TemplateFolderCacheImpl::getCacheFileName()
-    {
-        return OUString(".templdir.cache");
     }
 
 
@@ -723,7 +716,7 @@ namespace svt
         }
 
         // append our name
-        aStorageURL.Append( getCacheFileName() );
+        aStorageURL.Append( ".templdir.cache" );
 
         // open the stream
         m_pCacheStream = UcbStreamHelper::CreateStream( aStorageURL.GetMainURL( INetURLObject::DECODE_TO_IURI ),

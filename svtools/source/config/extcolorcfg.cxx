@@ -125,7 +125,6 @@ public:
 
     static void                     DisableBroadcast();
     static void                     EnableBroadcast();
-    static bool                     IsEnableBroadcast();
 
     static void                     LockBroadcast();
     static void                     UnlockBroadcast();
@@ -222,11 +221,6 @@ void ExtendedColorConfig_Impl::EnableBroadcast()
 {
     if ( ExtendedColorConfig::m_pImpl )
         ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled = true;
-}
-
-bool ExtendedColorConfig_Impl::IsEnableBroadcast()
-{
-    return ExtendedColorConfig::m_pImpl && ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled;
 }
 
 void lcl_addString(uno::Sequence < OUString >& _rSeq,const OUString& _sAdd)
@@ -516,7 +510,7 @@ void ExtendedColorConfig_Impl::UnlockBroadcast()
         m_bBroadcastWhenUnlocked = ExtendedColorConfig::m_pImpl != nullptr;
         if ( m_bBroadcastWhenUnlocked )
         {
-            if ( ExtendedColorConfig_Impl::IsEnableBroadcast() )
+            if ( ExtendedColorConfig::m_pImpl && ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled )
             {
                 m_bBroadcastWhenUnlocked = false;
                 ExtendedColorConfig::m_pImpl->Broadcast(SfxHint(SFX_HINT_COLORS_CHANGED));

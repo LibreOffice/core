@@ -178,9 +178,6 @@ protected:
     /// @returns true if it's disposed or in disposing
     inline bool IsAlive() const;
 
-    /// @returns true if it's not disposed and no in disposing
-    inline bool IsNotAlive() const;
-
     /// throws the exception DisposedException if it's not alive
     void ThrowExceptionIfNotAlive() throw( css::lang::DisposedException );
 
@@ -210,11 +207,6 @@ private:
 inline bool SvtRulerAccessible::IsAlive() const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
-}
-
-inline bool SvtRulerAccessible::IsNotAlive() const
-{
-    return rBHelper.bDisposed || rBHelper.bInDispose;
 }
 
 #endif

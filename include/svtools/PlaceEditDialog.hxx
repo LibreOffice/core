@@ -81,7 +81,6 @@ public :
 private:
 
     void InitDetails( );
-    void UpdateLabel( );
 
     DECL_LINK ( OKHdl, Button *, void );
     DECL_LINK ( DelHdl, Button *, void );

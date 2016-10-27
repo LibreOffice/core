@@ -165,8 +165,6 @@ private:
     /// The current FOCUSED state.
     bool mbIsFocused;
 
-    void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-
     /** Tell all listeners that the object is dying.  This callback is
         usually called from the WeakComponentImplHelper class.
     */
@@ -262,7 +260,6 @@ struct ToolbarMenu_Impl
     void setAccessible( ToolbarMenuAcc* pAccessible );
 
     void fireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
-    bool hasAccessibleListeners();
 
     sal_Int32 getAccessibleChildCount() throw (css::uno::RuntimeException);
     css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int32 index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);

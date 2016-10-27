@@ -1600,7 +1600,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
                         SelectAll();
                 }
                 else
-                    SelectColumnId( rEvt.GetColumnId(), true, false );
+                    SelectColumnPos( GetColumnPos(rEvt.GetColumnId()), true, false);
             }
 
             // turn cursor on again, if necessary
