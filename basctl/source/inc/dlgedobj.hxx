@@ -31,7 +31,7 @@
 namespace basctl
 {
 
-typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexToNameMap;
+typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;
 
 
 class DlgEdForm;

@@ -37,8 +37,7 @@ namespace
             AccessibleEventObject > ClientEvent;
 
     typedef ::std::map< AccessibleEventNotifier::TClientId,
-                ::comphelper::OInterfaceContainerHelper2*,
-                ::std::less< AccessibleEventNotifier::TClientId > > ClientMap;
+                ::comphelper::OInterfaceContainerHelper2* > ClientMap;
 
     /// key is the end of the interval, value is the start of the interval
     typedef ::std::map<AccessibleEventNotifier::TClientId,
