@@ -40,8 +40,8 @@ public:
     /** Prepares document for collaboration and should call SetConference() */
     virtual void StartCollaboration( TeleConference* pConference ) = 0;
 
-    TUBES_DLLPRIVATE sal_uInt64 GetId() const;
-    TUBES_DLLPRIVATE void Invite( TpContact* pContact ) const;
+    SAL_DLLPRIVATE sal_uInt64 GetId() const;
+    SAL_DLLPRIVATE void Invite( TpContact* pContact ) const;
 
     /** Application calls this to display contacts dialog from where can the collaboration start */
     void DisplayContacts();
