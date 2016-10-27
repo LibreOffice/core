@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_cb77e400",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2347,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-10-27T11:34:13Z",
+      "side": 1,
+      "message": "only !xInputStream is critical to the functionality of the patch.  I added as many others as seemed potentially valid to prevent unintentional regressions.\n\nI can only test the fix under Linux, so the fix should be confirmed in Windows and Mac webdav before 5.3.0.3.",
+      "range": {
+        "startLine": 2347,
+        "startChar": 37,
+        "endLine": 2347,
+        "endChar": 61
+      },
+      "revId": "5423bf0954f77f391fcbbc0e9a99b9ea6e02303f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
