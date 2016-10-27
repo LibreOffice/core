@@ -37,6 +37,12 @@ class PDFSigningTest : public test::BootstrapFixture
      * had nOriginalSignatureCount signatures.
      */
     void sign(const OUString& rInURL, const OUString& rOutURL, size_t nOriginalSignatureCount);
+    /**
+     * Read a pdf and make sure that it has the expected number of valid
+     * signatures.
+     */
+    void verify(const OUString& rURL, size_t nCount);
+
 public:
     PDFSigningTest();
     void setUp() override;
@@ -49,12 +55,15 @@ public:
     void testPDFRemove();
     /// Test removing all signatures from a previously multi-signed file.
     void testPDFRemoveAll();
+    /// Test a PDF 1.4 document, signed by Adobe.
+    void testPDF14Adobe();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
     CPPUNIT_TEST(testPDFAdd2);
     CPPUNIT_TEST(testPDFRemove);
     CPPUNIT_TEST(testPDFRemoveAll);
+    CPPUNIT_TEST(testPDF14Adobe);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -79,6 +88,21 @@ void PDFSigningTest::setUp()
     osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
     setenv("MOZILLA_CERTIFICATE_FOLDER", aTargetPath.toUtf8().getStr(), 1);
 #endif
+}
+
+void PDFSigningTest::verify(const OUString& rURL, size_t nCount)
+{
+    SvFileStream aStream(rURL, StreamMode::READ);
+    xmlsecurity::pdfio::PDFDocument aVerifyDocument;
+    CPPUNIT_ASSERT(aVerifyDocument.Read(aStream));
+    std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aVerifyDocument.GetSignatureWidgets();
+    CPPUNIT_ASSERT_EQUAL(nCount, aSignatures.size());
+    for (size_t i = 0; i < aSignatures.size(); ++i)
+    {
+        SignatureInformation aInfo(i);
+        bool bLast = i == aSignatures.size() - 1;
+        CPPUNIT_ASSERT(xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], aInfo, bLast));
+    }
 }
 
 void PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_t nOriginalSignatureCount)
@@ -108,21 +132,8 @@ void PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_
         CPPUNIT_ASSERT(aDocument.Write(aOutStream));
     }
 
-    // Read back the signed pdf and make sure that it has one valid signature.
-    {
-        SvFileStream aStream(rOutURL, StreamMode::READ);
-        xmlsecurity::pdfio::PDFDocument aVerifyDocument;
-        CPPUNIT_ASSERT(aVerifyDocument.Read(aStream));
-        std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aVerifyDocument.GetSignatureWidgets();
-        // This was nOriginalSignatureCount when PDFDocument::Sign() silently returned success, without doing anything.
-        CPPUNIT_ASSERT_EQUAL(nOriginalSignatureCount + 1, aSignatures.size());
-        for (size_t i = 0; i < aSignatures.size(); ++i)
-        {
-            SignatureInformation aInfo(i);
-            bool bLast = i == aSignatures.size() - 1;
-            CPPUNIT_ASSERT(xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], aInfo, bLast));
-        }
-    }
+    // This was nOriginalSignatureCount when PDFDocument::Sign() silently returned success, without doing anything.
+    verify(rOutURL, nOriginalSignatureCount + 1);
 }
 
 void PDFSigningTest::testPDFAdd()
@@ -183,14 +194,9 @@ void PDFSigningTest::testPDFRemove()
     }
 
     // Read back the pdf and make sure that it no longer has signatures.
-    {
-        SvFileStream aStream(aOutURL, StreamMode::READ);
-        xmlsecurity::pdfio::PDFDocument aVerifyDocument;
-        CPPUNIT_ASSERT(aVerifyDocument.Read(aStream));
-        std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aVerifyDocument.GetSignatureWidgets();
-        // This failed when PDFDocument::RemoveSignature() silently returned success, without doing anything.
-        CPPUNIT_ASSERT(aSignatures.empty());
-    }
+    // This failed when PDFDocument::RemoveSignature() silently returned
+    // success, without doing anything.
+    verify(aOutURL, 0);
 #endif
 }
 
@@ -228,6 +234,15 @@ void PDFSigningTest::testPDFRemoveAll()
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), rInformations.size());
 #endif
 }
+
+void PDFSigningTest::testPDF14Adobe()
+{
+    // Two signatures, first is SHA1, the second is SHA256.
+    // This was 0, as we failed to find the Annots key's value when it was a
+    // reference-to-array, not an array.
+    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14adobe.pdf", 2);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

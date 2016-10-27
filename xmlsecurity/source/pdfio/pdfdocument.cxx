@@ -76,6 +76,7 @@ public:
 
 class PDFReferenceElement;
 class PDFDictionaryElement;
+class PDFArrayElement;
 
 /// Indirect object: something with a unique ID.
 class PDFObjectElement : public PDFElement
@@ -89,6 +90,8 @@ class PDFObjectElement : public PDFElement
     /// Length of the dictionary buffer till (before) the '<<' token.
     sal_uInt64 m_nDictionaryLength;
     PDFDictionaryElement* m_pDictionaryElement;
+    /// The contained direct array, if any.
+    PDFArrayElement* m_pArrayElement;
 
 public:
     PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue);
@@ -103,6 +106,8 @@ public:
     sal_uInt64 GetDictionaryLength();
     PDFDictionaryElement* GetDictionary() const;
     void SetDictionary(PDFDictionaryElement* pDictionaryElement);
+    void SetArray(PDFArrayElement* pArrayElement);
+    PDFArrayElement* GetArray() const;
 };
 
 /// Dictionary object: a set key-value pairs.
@@ -628,6 +633,12 @@ bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
     bool bInXRef = false;
     // The next number will be an xref offset.
     bool bInStartXRef = false;
+    // Last seen object token.
+    PDFObjectElement* pObject = nullptr;
+    // Dictionary depth, so we know when we're outside any dictionaries.
+    int nDictionaryDepth = 0;
+    // Last seen array token that's outside any dictionaries.
+    PDFArrayElement* pArray = nullptr;
     while (true)
     {
         char ch;
@@ -657,7 +668,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
             rStream.ReadChar(ch);
             rStream.SeekRel(-2);
             if (ch == '<')
+            {
                 m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFDictionaryElement()));
+                ++nDictionaryDepth;
+            }
             else
                 m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFHexStringElement()));
             if (!m_aElements.back()->Read(rStream))
@@ -667,6 +681,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
         case '>':
         {
             m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFEndDictionaryElement()));
+            --nDictionaryDepth;
             rStream.SeekRel(-1);
             if (!m_aElements.back()->Read(rStream))
                 return false;
@@ -674,7 +689,15 @@ bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
         }
         case '[':
         {
-            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFArrayElement()));
+            auto pArr = new PDFArrayElement();
+            m_aElements.push_back(std::unique_ptr<PDFElement>(pArr));
+            if (nDictionaryDepth == 0)
+            {
+                // The array is attached directly, inform the object.
+                pArray = pArr;
+                if (pObject)
+                    pObject->SetArray(pArray);
+            }
             rStream.SeekRel(-1);
             if (!m_aElements.back()->Read(rStream))
                 return false;
@@ -683,6 +706,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
         case ']':
         {
             m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFEndArrayElement()));
+            pArray = nullptr;
             rStream.SeekRel(-1);
             if (!m_aElements.back()->Read(rStream))
                 return false;
@@ -745,9 +769,17 @@ bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
                     }
 
                     if (bObj)
-                        m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFObjectElement(*this, pObjectNumber->GetValue(), pGenerationNumber->GetValue())));
+                    {
+                        pObject = new PDFObjectElement(*this, pObjectNumber->GetValue(), pGenerationNumber->GetValue());
+                        m_aElements.push_back(std::unique_ptr<PDFElement>(pObject));
+                    }
                     else
+                    {
                         m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFReferenceElement(*this, pObjectNumber->GetValue(), pGenerationNumber->GetValue())));
+                        if (pArray)
+                            // Reference is part of a direct (non-dictionary) array, inform the array.
+                            pArray->PushBack(m_aElements.back().get());
+                    }
                     if (!m_aElements.back()->Read(rStream))
                         return false;
                 }
@@ -922,14 +954,14 @@ size_t PDFDocument::FindStartXRef(SvStream& rStream)
     if (nSize != aBuf.size())
         aBuf.resize(nSize);
     OString aPrefix("startxref");
-    char* pOffset = strstr(aBuf.data(), aPrefix.getStr());
-    if (!pOffset)
+    auto it = std::search(aBuf.begin(), aBuf.end(), aPrefix.getStr(), aPrefix.getStr() + aPrefix.getLength());
+    if (it == aBuf.end())
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::FindStartXRef: found no startxref");
         return 0;
     }
 
-    rStream.SeekRel(pOffset - aBuf.data() + aPrefix.getLength());
+    rStream.SeekRel(it - aBuf.begin() + aPrefix.getLength());
     if (rStream.IsEof())
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::FindStartXRef: unexpected end of stream after startxref");
@@ -1009,9 +1041,14 @@ void PDFDocument::ReadXRef(SvStream& rStream)
                 SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: unexpected keyword");
                 return;
             }
-            m_aXRef[nIndex] = aOffset.GetValue();
-            // Initially only the first entry is dirty.
-            m_aXRefDirty[nIndex] = nIndex == 0;
+            // xrefs are read in reverse order, so never update an existing
+            // offset with an older one.
+            if (m_aXRef.find(nIndex) == m_aXRef.end())
+            {
+                m_aXRef[nIndex] = aOffset.GetValue();
+                // Initially only the first entry is dirty.
+                m_aXRefDirty[nIndex] = nIndex == 0;
+            }
             PDFDocument::SkipWhitespace(rStream);
         }
     }
@@ -1133,7 +1170,22 @@ std::vector<PDFObjectElement*> PDFDocument::GetSignatureWidgets()
 
     for (const auto& pPage : aPages)
     {
-        auto pAnnots = dynamic_cast<PDFArrayElement*>(pPage->Lookup("Annots"));
+        PDFElement* pAnnotsElement = pPage->Lookup("Annots");
+        auto pAnnots = dynamic_cast<PDFArrayElement*>(pAnnotsElement);
+        if (!pAnnots)
+        {
+            // Annots is not an array, see if it's a reference to an object
+            // with a direct array.
+            auto pAnnotsRef = dynamic_cast<PDFReferenceElement*>(pAnnotsElement);
+            if (pAnnotsRef)
+            {
+                if (PDFObjectElement* pAnnotsObject = pAnnotsRef->LookupObject())
+                {
+                    pAnnots = pAnnotsObject->GetArray();
+                }
+            }
+        }
+
         if (!pAnnots)
             continue;
 
@@ -1438,12 +1490,8 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     }
 
     PRTime nSigningTime;
-    if (NSS_CMSSignerInfo_GetSigningTime(pCMSSignerInfo, &nSigningTime) != SECSuccess)
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: NSS_CMSSignerInfo_GetSigningTime() failed");
-        return false;
-    }
-    else
+    // This may fail, in which case the date should be taken from the dictionary's "M" key.
+    if (NSS_CMSSignerInfo_GetSigningTime(pCMSSignerInfo, &nSigningTime) == SECSuccess)
     {
         // First convert the UNIX timestamp to an ISO8601 string.
         OUStringBuffer aBuffer;
@@ -1679,7 +1727,8 @@ PDFObjectElement::PDFObjectElement(PDFDocument& rDoc, double fObjectValue, doubl
       m_fGenerationValue(fGenerationValue),
       m_nDictionaryOffset(0),
       m_nDictionaryLength(0),
-      m_pDictionaryElement(nullptr)
+      m_pDictionaryElement(nullptr),
+      m_pArrayElement(nullptr)
 {
 }
 
@@ -2000,6 +2049,16 @@ void PDFObjectElement::SetDictionary(PDFDictionaryElement* pDictionaryElement)
     m_pDictionaryElement = pDictionaryElement;
 }
 
+void PDFObjectElement::SetArray(PDFArrayElement* pArrayElement)
+{
+    m_pArrayElement = pArrayElement;
+}
+
+PDFArrayElement* PDFObjectElement::GetArray() const
+{
+    return m_pArrayElement;
+}
+
 PDFReferenceElement::PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue)
     : m_rDoc(rDoc),
       m_fObjectValue(fObjectValue),
@@ -2203,7 +2262,7 @@ bool PDFNameElement::Read(SvStream& rStream)
     rStream.ReadChar(ch);
     while (!rStream.IsEof())
     {
-        if (isspace(ch) || ch == '/' || ch == '[' || ch == '<' || ch == '(')
+        if (isspace(ch) || ch == '/' || ch == '[' || ch == '<' || ch == '>' || ch == '(')
         {
             rStream.SeekRel(-1);
             m_aValue = aBuf.makeStringAndClear();
