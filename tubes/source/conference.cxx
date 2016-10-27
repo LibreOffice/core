@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <tubes/conference.hxx>
-
 #include <tubes/collaboration.hxx>
-#include <tubes/constants.h>
-#include <tubes/file-transfer-helper.h>
 #include <tubes/manager.hxx>
+
+#include <conference.hxx>
+#include <constants.h>
+#include <file-transfer-helper.h>
 
 #include <gtk/gtk.h>
 #include <telepathy-glib/telepathy-glib.h>

@@ -10,11 +10,11 @@
 #include <sal/config.h>
 
 #include <vcl/graphicfilter.hxx>
-#include <tubes/conference.hxx>
 #include <tubes/collaboration.hxx>
 
 #include <telepathy-glib/telepathy-glib.h>
 
+#include <conference.hxx>
 #include <contacts.hxx>
 
 void tubes::TubeContacts::Invite()

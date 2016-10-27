@@ -16,7 +16,7 @@
 #include <telepathy-glib/debug.h>
 #include <telepathy-glib/simple-approver.h>
 
-#include <tubes/constants.h>
+#include <constants.h>
 
 GMainLoop *mainloop = NULL;
 

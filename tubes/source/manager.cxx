@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <tubes/collaboration.hxx>
 #include <tubes/manager.hxx>
 
-#include <tubes/collaboration.hxx>
-#include <tubes/conference.hxx>
-#include <tubes/constants.h>
-#include <tubes/file-transfer-helper.h>
+#include <conference.hxx>
+#include <constants.h>
+#include <file-transfer-helper.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/Desktop.hpp>

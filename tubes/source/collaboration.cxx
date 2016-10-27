@@ -8,10 +8,9 @@
  */
 
 #include <tubes/collaboration.hxx>
-
-#include <tubes/conference.hxx>
 #include <tubes/manager.hxx>
 
+#include <conference.hxx>
 #include <contacts.hxx>
 
 Collaboration::Collaboration() :

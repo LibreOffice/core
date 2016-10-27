@@ -29,7 +29,7 @@
 #include <telepathy-glib/dbus.h>
 #include <telepathy-glib/interfaces.h>
 
-#include <tubes/file-transfer-helper.h>
+#include <file-transfer-helper.h>
 
 #define DEBUG(...)
 
