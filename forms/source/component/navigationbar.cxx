@@ -341,7 +341,7 @@ namespace frm
 
 
     sal_Bool SAL_CALL ONavigationBarModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
-        sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException )
+        sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException, RuntimeException, std::exception )
     {
         bool bModified = false;
 
