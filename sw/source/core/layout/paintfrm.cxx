@@ -99,6 +99,8 @@
 #include <view.hxx>
 #include <paintfrm.hxx>
 
+#include <vcl/BitmapTools.hxx>
+
 #define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)
 #define COL_NOTES_SIDEPANE_SCROLLAREA       RGB_COLORDATA(230,230,220)
@@ -6093,8 +6095,11 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *_pViewShell->GetOut() );
 
-    static vcl::DeleteOnDeinit< drawinglayer::primitive2d::DiscreteShadow > shadowMaskObj
-        ( new drawinglayer::primitive2d::DiscreteShadow( SW_RES( BMP_PAGE_SHADOW_MASK ) ));
+    static vcl::DeleteOnDeinit<drawinglayer::primitive2d::DiscreteShadow> shadowMaskObj(
+        new drawinglayer::primitive2d::DiscreteShadow(
+            vcl::bitmap::loadFromResource(SW_RES(BMP_PAGE_SHADOW_MASK),
+                                               ImageLoadFlags::IgnoreDarkTheme | ImageLoadFlags::IgnoreScalingFactor)));
+
     drawinglayer::primitive2d::DiscreteShadow& shadowMask = *shadowMaskObj.get();
     static vcl::DeleteOnDeinit< BitmapEx > aPageTopRightShadowObj( new BitmapEx );
     static vcl::DeleteOnDeinit< BitmapEx > aPageBottomRightShadowObj( new BitmapEx );
