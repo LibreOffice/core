@@ -114,7 +114,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
         }
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog( nullptr, aName, aDesc ) : nullptr);
+        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog( nullptr, aName, aDesc ) : nullptr);
 
         if( pDlg )
         {

@@ -221,7 +221,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg( pTabViewShell->GetDialogParent(), bTheFlag));
+                        ScopedVclPtr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg( pTabViewShell->GetDialogParent(), bTheFlag));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if (pDlg->Execute() == RET_OK)
                             eCmd = pDlg->GetInsCellCmd();
@@ -293,7 +293,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScDeleteCellDlg> pDlg(pFact->CreateScDeleteCellDlg( pTabViewShell->GetDialogParent(), bTheFlag ));
+                        ScopedVclPtr<AbstractScDeleteCellDlg> pDlg(pFact->CreateScDeleteCellDlg( pTabViewShell->GetDialogParent(), bTheFlag ));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if (pDlg->Execute() == RET_OK)
@@ -375,7 +375,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScDeleteContentsDlg> pDlg(pFact->CreateScDeleteContentsDlg(pTabViewShell->GetDialogParent()));
+                        ScopedVclPtr<AbstractScDeleteContentsDlg> pDlg(pFact->CreateScDeleteContentsDlg(pTabViewShell->GetDialogParent()));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         ScDocument* pDoc = GetViewData()->GetDocument();
                         SCTAB nTab = GetViewData()->GetTabNo();
@@ -482,7 +482,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    std::unique_ptr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
+                    ScopedVclPtr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
                                                                                             &ScGlobal::GetRscString(STR_FILL_TAB)));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
                     pDlg->SetFillMode(true);
@@ -715,7 +715,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    std::unique_ptr<AbstractScFillSeriesDlg> pDlg(pFact->CreateScFillSeriesDlg( pTabViewShell->GetDialogParent(),
+                    ScopedVclPtr<AbstractScFillSeriesDlg> pDlg(pFact->CreateScFillSeriesDlg( pTabViewShell->GetDialogParent(),
                                                             *pDoc,
                                                             eFillDir, eFillCmd, eFillDateCmd,
                                                             aStartStr, fIncVal, fMaxVal,
@@ -1173,7 +1173,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetDialogParent()));
+                        ScopedVclPtr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetDialogParent()));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                             bColumns = pDlg->GetColsChecked();
@@ -1232,7 +1232,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetDialogParent(), true));
+                        ScopedVclPtr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetDialogParent(), true));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                             bColumns = pDlg->GetColsChecked();
@@ -1396,7 +1396,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                             OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                            std::unique_ptr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg(pTabViewShell->GetDialogParent()));
+                            ScopedVclPtr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg(pTabViewShell->GetDialogParent()));
                             OSL_ENSURE(pDlg, "Dialog create fail!");
                             pDlg->SetOtherDoc( bOtherDoc );
                             // if ChangeTrack MoveMode disable
@@ -1596,7 +1596,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if ( nFormatCount )
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pTabViewShell->GetDialogParent() ));
+                            ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pTabViewShell->GetDialogParent() ));
                             if ( pDlg )
                             {
                             for (sal_uInt16 i=0; i<nFormatCount; i++)
@@ -1831,7 +1831,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                std::unique_ptr<AbstractScNameCreateDlg> pDlg(pFact->CreateScNameCreateDlg(pTabViewShell->GetDialogParent(), nFlags));
+                ScopedVclPtr<AbstractScNameCreateDlg> pDlg(pFact->CreateScNameCreateDlg(pTabViewShell->GetDialogParent(), nFlags));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
 
                 if( pDlg->Execute() )
@@ -2148,7 +2148,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                std::unique_ptr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg( pTabViewShell->GetDialogParent(), GetViewData()->GetDocShell() ));
+                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg( pTabViewShell->GetDialogParent(), GetViewData()->GetDocShell() ));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 switch( pDlg->Execute() )
                 {
@@ -2360,7 +2360,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
                 aSet.Put( SvxFontItem( aCurFont.GetFamilyType(), aCurFont.GetFamilyName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), GetPool().GetWhich(SID_ATTR_CHAR_FONT) ) );
 
-                std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( pTabViewShell->GetDialogParent(), aSet,
+                ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( pTabViewShell->GetDialogParent(), aSet,
                     pTabViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
 
                 if ( pDlg->Execute() == RET_OK )
@@ -2460,7 +2460,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if (!pList)
                     pList = pDoc->GetCondFormList( aPos.Tab() );
 
-                std::unique_ptr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg(
+                ScopedVclPtr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg(
                     pTabViewShell->GetDialogParent(), pDoc, pList));
 
                 if (pDlgItem)
@@ -2699,7 +2699,7 @@ void ScCellShell::ExecuteDataPilotDialog()
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-        std::unique_ptr<AbstractScDataPilotSourceTypeDlg> pTypeDlg(
+        ScopedVclPtr<AbstractScDataPilotSourceTypeDlg> pTypeDlg(
             pFact->CreateScDataPilotSourceTypeDlg(
                 pTabViewShell->GetDialogParent(), bEnableExt));
 
@@ -2718,7 +2718,7 @@ void ScCellShell::ExecuteDataPilotDialog()
             if ( pTypeDlg->IsExternal() )
             {
                 std::vector<OUString> aSources = ScDPObject::GetRegisteredSources();
-                std::unique_ptr<AbstractScDataPilotServiceDlg> pServDlg(
+                ScopedVclPtr<AbstractScDataPilotServiceDlg> pServDlg(
                     pFact->CreateScDataPilotServiceDlg(
                         pTabViewShell->GetDialogParent(), aSources));
 
@@ -2739,7 +2739,7 @@ void ScCellShell::ExecuteDataPilotDialog()
             {
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                std::unique_ptr<AbstractScDataPilotDatabaseDlg> pDataDlg(
+                ScopedVclPtr<AbstractScDataPilotDatabaseDlg> pDataDlg(
                     pFact->CreateScDataPilotDatabaseDlg(
                         pTabViewShell->GetDialogParent()));
 
@@ -2870,7 +2870,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
         return;
     }
 
-    std::unique_ptr<SfxAbstractTabDialog> pDlg;
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg;
     ScSubTotalParam aSubTotalParam;
     SfxItemSet aArgSet( GetPool(), SCITEM_SUBTDATA, SCITEM_SUBTDATA );
 
@@ -2893,7 +2893,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     assert(pFact); //"ScAbstractFactory create fail
 
-    pDlg.reset(pFact->CreateScSubTotalDlg(pTabViewShell->GetDialogParent(), &aArgSet));
+    pDlg.disposeAndReset(pFact->CreateScSubTotalDlg(pTabViewShell->GetDialogParent(), &aArgSet));
     assert(pDlg); // "Dialog create fail
     pDlg->SetCurPageId(1);
 

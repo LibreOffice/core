@@ -58,7 +58,7 @@ void FuLink::DoExecute( SfxRequest& )
     sfx2::LinkManager* pLinkManager = mpDoc->GetLinkManager();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    std::unique_ptr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( mpViewShell->GetActiveWindow(), pLinkManager ));
+    ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( mpViewShell->GetActiveWindow(), pLinkManager ));
     if ( pDlg )
     {
         pDlg->Execute();

@@ -767,7 +767,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(pButton, rSh.GetAttrPool(), pTableSet, &rSh));
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(pButton, rSh.GetAttrPool(), pTableSet, &rSh));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute() )
         pTableSet->Put( *pDlg->GetOutputItemSet() );
@@ -785,7 +785,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, AutoFormatHdl, Button*, pButton, void )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(), false, pTAutoFormat));
+    ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(), false, pTAutoFormat));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFormatOfIndex( pTAutoFormat );

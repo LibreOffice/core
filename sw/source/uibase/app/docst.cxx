@@ -816,7 +816,7 @@ sal_uInt16 SwDocShell::Edit(
         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         assert( pFact );
-        std::unique_ptr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(&GetView()->GetViewFrame()->GetWindow(),
+        ScopedVclPtr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(&GetView()->GetViewFrame()->GetWindow(),
                                                     *(xTmp.get()), nFamily, sPage,
                                                     pActShell ? pActShell : m_pWrtShell, bNew));
         assert( pDlg );

@@ -140,11 +140,11 @@ void TableObjectBar::Execute( SfxRequest& rReq )
             case SID_TABLE_INSERT_COL_BEFORE:
             case SID_TABLE_INSERT_COL_AFTER:
             {
-                std::unique_ptr<SvxAbstractInsRowColDlg> pDlg;
+                ScopedVclPtr<SvxAbstractInsRowColDlg> pDlg;
                 if (nSlotId == SID_TABLE_INSERT_ROW_DLG || nSlotId == SID_TABLE_INSERT_COL_DLG)
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    pDlg.reset(pFact ? pFact->CreateSvxInsRowColDlg(mpView->GetViewShell()->GetParentWindow(), nSlotId == SID_TABLE_INSERT_COL_DLG, SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) : nullptr);
+                    pDlg.disposeAndReset(pFact ? pFact->CreateSvxInsRowColDlg(mpView->GetViewShell()->GetParentWindow(), nSlotId == SID_TABLE_INSERT_COL_DLG, SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) : nullptr);
 
                     if (!pDlg.get() || (pDlg->Execute() != 1))
                         break;

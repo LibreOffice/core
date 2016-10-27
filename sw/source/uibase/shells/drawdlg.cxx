@@ -55,7 +55,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( nullptr, &aNewAttr, pView ));
+                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( nullptr, &aNewAttr, pView ));
                 sal_uInt16 nResult = pDlg->Execute();
 
                 if (nResult == RET_OK)
@@ -77,7 +77,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             bool bHasMarked = pView->AreObjectsMarked();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            std::unique_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog( nullptr,
+            ScopedVclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog( nullptr,
                                                                             &aNewAttr,
                                                                             pDoc,
                                                                             true));
@@ -119,7 +119,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
-            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( nullptr,
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( nullptr,
                     &aNewAttr,
                 pDoc,
                 pObj,

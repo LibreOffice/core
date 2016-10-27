@@ -260,7 +260,7 @@ IMPL_LINK( SwBaseShell, InsertDBTextHdl, void*, p, void )
             SwDBData aDBData = pDBStruct->aDBData;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-            std::unique_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot(GetView(),
+            ScopedVclPtr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot(GetView(),
                                                                                                 xSource,
                                                                                                 xColSupp,
                                                                                                 aDBData));

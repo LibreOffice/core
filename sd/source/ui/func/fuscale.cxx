@@ -109,14 +109,9 @@ void FuScale::DoExecute( SfxRequest& rReq )
         pZoomItem->SetValueSet( nZoomValues );
         aNewAttr.Put( *pZoomItem );
 
-        std::unique_ptr<AbstractSvxZoomDialog> pDlg;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if(pFact)
-        {
-            pDlg.reset(pFact->CreateSvxZoomDialog(nullptr, aNewAttr));
-        }
-
-        if( pDlg )
+        ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact ? pFact->CreateSvxZoomDialog(nullptr, aNewAttr) : nullptr);
+        if (pDlg)
         {
             pDlg->SetLimits( (sal_uInt16)mpWindow->GetMinZoom(), (sal_uInt16)mpWindow->GetMaxZoom() );
             sal_uInt16 nResult = pDlg->Execute();
@@ -136,7 +131,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
 
             const SfxItemSet aArgs (*(pDlg->GetOutputItemSet ()));
 
-            pDlg.reset();
+            pDlg.disposeAndClear();
 
             if (!mpViewShell)
                 return;

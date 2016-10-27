@@ -1099,7 +1099,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                                     rRedline.GetRedlineData().GetTimeStamp() ),
                                     SID_ATTR_POSTIT_DATE ));
 
-                        std::unique_ptr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog( m_pParentDlg, aSet ));
+                        ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog( m_pParentDlg, aSet ));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                         pDlg->HideAuthor();
@@ -1139,7 +1139,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                             m_pTable->SetEntryText(sMsg.replace('\n', ' '), pEntry, 3);
                         }
 
-                        pDlg.reset();
+                        pDlg.disposeAndClear();
                         SwViewShell::SetCareWin(nullptr);
                     }
 

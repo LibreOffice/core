@@ -877,7 +877,7 @@ void SlotManager::RenameSlide()
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialog creation failed!");
-        std::unique_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
+        ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
                 mrSlideSorter.GetContentWindow(),
                 aPageName, aDescr));
         DBG_ASSERT(aNameDlg, "Dialog creation failed!");
@@ -897,7 +897,7 @@ void SlotManager::RenameSlide()
                 DBG_ASSERT( bResult, "Couldn't rename slide" );
             }
         }
-        aNameDlg.reset();
+        aNameDlg.disposeAndClear();
 
         // Tell the slide sorter about the name change (necessary for
         // accessibility.)

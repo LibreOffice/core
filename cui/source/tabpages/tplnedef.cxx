@@ -554,7 +554,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialog creation failed!");
-    std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
     bool bLoop = true;
 
@@ -601,7 +601,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
             aBox->Execute();
         }
     }
-    pDlg.reset();
+    pDlg.disposeAndClear();
 
     // determine button state
     if ( pDashList->Count() )
@@ -626,7 +626,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, Button*, void)
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialog creation failed!");
-        std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = pDashList->Count();

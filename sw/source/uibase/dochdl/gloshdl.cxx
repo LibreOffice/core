@@ -76,7 +76,7 @@ void SwGlossaryHdl::GlossaryDlg()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     assert(pFact && "Dialog creation failed!");
-    std::unique_ptr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(pViewFrame, this, pWrtShell));
+    ScopedVclPtr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(pViewFrame, this, pWrtShell));
     assert(pDlg && "Dialog creation failed!");
     OUString sName;
     OUString sShortName;
@@ -87,7 +87,7 @@ void SwGlossaryHdl::GlossaryDlg()
         sShortName = pDlg->GetCurrShortName();
     }
 
-    pDlg.reset();
+    pDlg.disposeAndClear();
     DELETEZ(pCurGrp);
     if(HasGlossaryList())
     {
@@ -437,7 +437,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "SwAbstractDialogFactory fail!");
 
-                std::unique_ptr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(aShortName));
+                ScopedVclPtr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(aShortName));
                 assert(pDlg && "Dialog creation failed!");
                 for(TextBlockInfo_Impl & i : aFoundArr)
                 {
@@ -447,7 +447,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                 const sal_Int32 nRet = RET_OK == pDlg->Execute()?
                                         pDlg->GetSelectedIdx():
                                         LISTBOX_ENTRY_NOTFOUND;
-                pDlg.reset();
+                pDlg.disposeAndClear();
                 if(LISTBOX_ENTRY_NOTFOUND != nRet)
                 {
                     TextBlockInfo_Impl* pData = &aFoundArr[nRet];

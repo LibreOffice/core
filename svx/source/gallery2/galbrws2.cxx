@@ -1152,7 +1152,7 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        std::unique_ptr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog( this, aOldTitle ));
+                        ScopedVclPtr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog( this, aOldTitle ));
                         DBG_ASSERT(aDlg, "Dialog creation failed!");
                         if( aDlg->Execute() == RET_OK )
                         {

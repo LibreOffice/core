@@ -640,7 +640,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        std::unique_ptr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(nullptr, aSet));
+                        ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(nullptr, aSet));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
                         pDlg->SetLimits( 20, 400 );
                         pDlg->HideButton( ZoomButtonId::OPTIMAL );

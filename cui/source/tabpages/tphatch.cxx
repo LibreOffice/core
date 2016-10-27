@@ -476,7 +476,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     assert(pFact && "Dialog creation failed!");
-    std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     assert(pDlg && "Dialog creation failed!");
     ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16         nError   = 1;
@@ -502,7 +502,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
         if( pWarnBox->Execute() != RET_OK )
             break;
     }
-    pDlg.reset();
+    pDlg.disposeAndClear();
     pWarnBox.disposeAndClear();
 
     if( !nError )
@@ -597,7 +597,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         assert(pFact && "Dialog creation failed!");
-        std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
         assert(pDlg && "Dialog creation failed!");
 
         bool bLoop = true;

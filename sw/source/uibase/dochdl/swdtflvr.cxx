@@ -2878,7 +2878,7 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
 {
     bool bRet = false;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( &rSh.GetView().GetEditWin() ));
+    ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( &rSh.GetView().GetEditWin() ));
 
     DataFlavorExVector aFormats( rData.GetDataFlavorExVector() );
     TransferableObjectDescriptor aDesc;

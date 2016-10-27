@@ -75,7 +75,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
         mpView->GetAttributes( *pNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxLineTabDialog(nullptr,pNewAttr.get(),mpDoc,pObj,bHasMarked) : nullptr);
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxLineTabDialog(nullptr,pNewAttr.get(),mpDoc,pObj,bHasMarked) : nullptr);
         if( pDlg && (pDlg->Execute() == RET_OK) )
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));

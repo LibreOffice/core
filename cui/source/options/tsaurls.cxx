@@ -98,7 +98,7 @@ IMPL_LINK_NOARG(TSAURLsDialog, AddHdl_Impl, Button*, void)
     OUString aDesc( get<FixedText>("enteraurl")->GetText() );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( m_pAddBtn, aURL, aDesc));
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( m_pAddBtn, aURL, aDesc));
 
     if ( pDlg->Execute() == RET_OK )
     {

@@ -36,9 +36,9 @@ namespace svx
         SfxItemSet aRegistrationItems( SfxGetpApp()->GetPool(), SID_SB_DB_REGISTER, SID_SB_DB_REGISTER, 0 );
 
         SvxAbstractDialogFactory* pDialogFactory = SvxAbstractDialogFactory::Create();
-        std::unique_ptr< SfxAbstractDialog > pDialog;
+        ScopedVclPtr<SfxAbstractDialog> pDialog;
         if ( pDialogFactory )
-            pDialog.reset( pDialogFactory->CreateSfxDialog( _parentWindow, aRegistrationItems, nullptr, RID_SFXPAGE_DBREGISTER ) );
+            pDialog.disposeAndReset( pDialogFactory->CreateSfxDialog( _parentWindow, aRegistrationItems, nullptr, RID_SFXPAGE_DBREGISTER ) );
         if ( pDialog.get() )
             nResult = pDialog->Execute();
 

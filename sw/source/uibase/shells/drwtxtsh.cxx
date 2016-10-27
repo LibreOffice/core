@@ -463,7 +463,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
-                    std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(
+                    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(
                                 &(GetView().GetViewFrame()->GetWindow()),
                                 &aNewAttr, pSdrView ));
                     sal_uInt16 nResult = pDlg->Execute();
@@ -749,7 +749,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
         // If character is selected, it can be shown
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( rView.GetWindow(), aAllSet,
+        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( rView.GetWindow(), aAllSet,
             rView.GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
         sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
