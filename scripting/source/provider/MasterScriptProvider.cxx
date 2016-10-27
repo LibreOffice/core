@@ -419,7 +419,9 @@ Sequence< Reference< browse::XBrowseNode > > SAL_CALL
 MasterScriptProvider::getChildNodes()
         throw ( css::uno::RuntimeException, std::exception )
 {
-    Sequence< Reference< provider::XScriptProvider > > providers = getAllProviders();
+    if ( !providerCache() )
+        throw RuntimeException( "MasterScriptProvider::getAllProviders, cache not initialised" );
+    Sequence< Reference< provider::XScriptProvider > > providers = providerCache()->getAllProviders();
 
     sal_Int32 size = providers.getLength();
     bool hasPkgs = m_xMSPPkg.is();
@@ -749,22 +751,6 @@ sal_Bool SAL_CALL MasterScriptProvider::hasElements(  ) throw ( RuntimeException
         throw RuntimeException( "hasElements not implemented!!!!" );
     }
     return false;
-}
-
-
-Sequence< Reference< provider::XScriptProvider > > SAL_CALL
-MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
-{
-    if ( providerCache() )
-    {
-        return providerCache()->getAllProviders();
-    }
-    else
-    {
-        OUString errorMsg(
-            "MasterScriptProvider::getAllProviders, cache not initialised");
-        throw RuntimeException( errorMsg.concat( errorMsg ) );
-    }
 }
 
 

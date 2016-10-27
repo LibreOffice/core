@@ -655,23 +655,12 @@ BrowseNodeFactoryImpl::createView( sal_Int16 viewType )
     switch( viewType )
     {
         case browse::BrowseNodeFactoryViewTypes::MACROSELECTOR:
-            return getSelectorHierarchy();
+            return new SelectorBrowseNode( m_xComponentContext );
         case browse::BrowseNodeFactoryViewTypes::MACROORGANIZER:
             return getOrganizerHierarchy();
         default:
             throw RuntimeException( "Unknown view type" );
     }
-}
-
-Reference< browse::XBrowseNode >
-BrowseNodeFactoryImpl::getSelectorHierarchy()
-    throw (RuntimeException)
-{
-    /*if ( !m_xSelectorBrowseNode.is() )
-    {
-        m_xSelectorBrowseNode = new SelectorBrowseNode( m_xComponentContext );
-    }*/
-    return new SelectorBrowseNode( m_xComponentContext );
 }
 
 Reference< browse::XBrowseNode >

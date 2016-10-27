@@ -101,11 +101,6 @@ public:
     virtual void SAL_CALL initialize( const css::uno::Sequence < css::uno::Any > & args )
         throw ( css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
-    // Public method to return all Language Providers in this MasterScriptProviders
-    // context.
-    css::uno::Sequence< css::uno::Reference< css::script::provider::XScriptProvider > > SAL_CALL
-        getAllProviders() throw ( css::uno::RuntimeException );
-
     // returns context string for this provider, eg
     const OUString& getContextString() { return m_sCtxString; }
 
