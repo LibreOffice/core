@@ -146,7 +146,7 @@ public:
                 throw (css::uno::Exception, std::exception) override;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
                 css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue )
-                throw (css::lang::IllegalArgumentException, std::exception) override;
+                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
 protected:
     static const ::connectivity::ORowSetValue s_aEmptyValue;
