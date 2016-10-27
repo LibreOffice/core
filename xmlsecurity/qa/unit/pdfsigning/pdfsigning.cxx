@@ -41,7 +41,7 @@ class PDFSigningTest : public test::BootstrapFixture
      * Read a pdf and make sure that it has the expected number of valid
      * signatures.
      */
-    void verify(const OUString& rURL, size_t nCount);
+    std::vector<SignatureInformation> verify(const OUString& rURL, size_t nCount);
 
 public:
     PDFSigningTest();
@@ -90,8 +90,12 @@ void PDFSigningTest::setUp()
 #endif
 }
 
-void PDFSigningTest::verify(const OUString& rURL, size_t nCount)
+std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, size_t nCount)
 {
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    std::vector<SignatureInformation> aRet;
+
     SvFileStream aStream(rURL, StreamMode::READ);
     xmlsecurity::pdfio::PDFDocument aVerifyDocument;
     CPPUNIT_ASSERT(aVerifyDocument.Read(aStream));
@@ -102,7 +106,10 @@ void PDFSigningTest::verify(const OUString& rURL, size_t nCount)
         SignatureInformation aInfo(i);
         bool bLast = i == aSignatures.size() - 1;
         CPPUNIT_ASSERT(xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], aInfo, bLast));
+        aRet.push_back(aInfo);
     }
+
+    return aRet;
 }
 
 void PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_t nOriginalSignatureCount)
@@ -241,7 +248,9 @@ void PDFSigningTest::testPDF14Adobe()
     // Two signatures, first is SHA1, the second is SHA256.
     // This was 0, as we failed to find the Annots key's value when it was a
     // reference-to-array, not an array.
-    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14adobe.pdf", 2);
+    std::vector<SignatureInformation> aInfos = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14adobe.pdf", 2);
+    // This was 0, out-of-PKCS#7 signature date wasn't read.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2016), aInfos[1].stDateTime.Year);
 #endif
 }
 
