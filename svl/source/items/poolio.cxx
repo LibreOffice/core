@@ -323,11 +323,6 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     return rStream;
 }
 
-bool SfxItemPool::HasPersistentRefCounts() const
-{
-    return pImpl->mbPersistentRefCounts;
-}
-
 /**
  * If the SfxItemPool was loaded with 'bRefCounts' == sal_False, we need
  * to finish the loading of the document contents with a call of this method.
@@ -868,7 +863,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
                     return &pTarget->Put( *pItem );
 
                 // References have NOT been loaded together with the pool?
-                if ( !pTarget->HasPersistentRefCounts() )
+                if ( !pTarget->pImpl->mbPersistentRefCounts )
                     AddRef( *pItem );
                 else
                     return pItem;

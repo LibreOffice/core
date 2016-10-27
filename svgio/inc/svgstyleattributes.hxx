@@ -351,7 +351,6 @@ namespace svgio
 
             /// StrokeDashOffset content
             SvgNumber getStrokeDashOffset() const;
-            void setStrokeDashOffset(const SvgNumber& rStrokeDashOffset) { maStrokeDashOffset = rStrokeDashOffset; }
 
             /// StrokeLinecap content
             StrokeLinecap getStrokeLinecap() const;
@@ -363,7 +362,6 @@ namespace svgio
 
             /// StrokeMiterLimit content
             SvgNumber getStrokeMiterLimit() const;
-            void setStrokeMiterLimit(const SvgNumber& rStrokeMiterLimit) { maStrokeMiterLimit = rStrokeMiterLimit; }
 
             /// StrokeOpacity content
             SvgNumber getStrokeOpacity() const;
@@ -446,7 +444,6 @@ namespace svgio
             // BaselineShift
             void setBaselineShift(const BaselineShift aBaselineShift) { maBaselineShift = aBaselineShift; }
             BaselineShift getBaselineShift() const { return maBaselineShift; }
-            void setBaselineShiftNumber(const SvgNumber& rBaselineShift) { maBaselineShiftNumber = rBaselineShift; }
             SvgNumber getBaselineShiftNumber() const;
         };
     } // end of namespace svgreader

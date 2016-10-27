@@ -849,11 +849,6 @@ private:
     // Create builtin formats for language/country if necessary, return CLOffset
     SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL( LanguageType eLnge );
 
-    // Build negative currency format, old compatibility style
-    SVL_DLLPRIVATE void ImpGetNegCurrFormat(OUStringBuffer& sNegStr, const OUString& rCurrSymbol);
-    // Build positive currency format, old compatibility style
-    SVL_DLLPRIVATE void ImpGetPosCurrFormat(OUStringBuffer& sPosStr, const OUString& rCurrSymbol);
-
     // Create theCurrencyTable with all <type>NfCurrencyEntry</type>
     SVL_DLLPRIVATE static void ImpInitCurrencyTable();
 
