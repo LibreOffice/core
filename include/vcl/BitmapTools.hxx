@@ -16,12 +16,12 @@
 namespace vcl
 {
 
-class VCL_DLLPUBLIC BitmapTools
+namespace bitmap
 {
-public:
-    static void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx,
-                            double fScaleFactor = 1.0);
-};
+
+void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, double fScaleFactor = 1.0);
+
+}
 
 }
 
