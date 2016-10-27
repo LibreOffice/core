@@ -132,7 +132,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_PRESENTATION:
         case SID_PRESENTATION_CURRENT_SLIDE:
         case SID_REHEARSE_TIMINGS:
-            ShowSlideShow (rRequest);
+            slideshowhelp::ShowSlideShow(rRequest, *mrSlideSorter.GetModel().GetDocument());
             pShell->Cancel();
             rRequest.Done();
             break;
@@ -854,11 +854,6 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
             aLayoutStr = aLayoutStr.copy(0, nIndex);
         rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
     }
-}
-
-void SlotManager::ShowSlideShow( SfxRequest& rReq)
-{
-    slideshowhelp::ShowSlideShow(rReq, *mrSlideSorter.GetModel().GetDocument());
 }
 
 void SlotManager::RenameSlide()

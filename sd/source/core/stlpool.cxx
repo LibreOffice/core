@@ -595,18 +595,13 @@ void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool, SdStyleShee
 
 void SdStyleSheetPool::RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix)
 {
-    RenameAndCopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS, rCreatedSheets, rRenameSuffix );
+    CopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS, rCreatedSheets, rRenameSuffix );
 }
 
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily )
 {
     SdStyleSheetVector aTmpSheets;
     CopySheets(rSourcePool, eFamily, aTmpSheets);
-}
-
-void SdStyleSheetPool::RenameAndCopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix)
-{
-    CopySheets( rSourcePool, eFamily, rCreatedSheets, rRenameSuffix );
 }
 
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets)

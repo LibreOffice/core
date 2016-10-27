@@ -562,11 +562,6 @@ PropRead::PropRead( SotStorage& rStorage, const OUString& rName ) :
     }
 }
 
-void PropRead::AddSection( Section& rSection )
-{
-    maSections.push_back( o3tl::make_unique<Section>( rSection ) );
-}
-
 const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
 {
     std::vector<std::unique_ptr<Section> >::iterator it;
@@ -605,7 +600,7 @@ void PropRead::Read()
                 mpSvStream->Seek( nSectionOfs );
                 Section aSection( pSectCLSID );
                 aSection.Read( mpSvStream.get() );
-                AddSection( aSection );
+                maSections.push_back( o3tl::make_unique<Section>( aSection ) );
                 mpSvStream->Seek( nCurrent );
             }
             delete[] pSectCLSID;

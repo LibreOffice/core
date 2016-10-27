@@ -71,24 +71,11 @@ ModuleController::ModuleController (const Reference<XComponentContext>& rxContex
       mpResourceToFactoryMap(new ResourceToFactoryMap()),
       mpLoadedFactories(new LoadedFactoryContainer())
 {
-    (void)rxContext;
-    LoadFactories(rxContext);
-}
-
-ModuleController::~ModuleController() throw()
-{
-}
-
-void SAL_CALL ModuleController::disposing()
-{
-    // Break the cyclic reference back to DrawController object
-    mpLoadedFactories.reset();
-    mpResourceToFactoryMap.reset();
-    mxController.clear();
-}
-
-void ModuleController::LoadFactories (const Reference<XComponentContext>& rxContext)
-{
+    /** Load a list of URL to service mappings from the
+        /org.openoffice.Office.Impress/MultiPaneGUI/Framework/ResourceFactories
+        configuration entry.  The mappings are stored in the
+        mpResourceToFactoryMap member.
+    */
     try
     {
         ConfigurationAccess aConfiguration (
@@ -112,6 +99,18 @@ void ModuleController::LoadFactories (const Reference<XComponentContext>& rxCont
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+}
+
+ModuleController::~ModuleController() throw()
+{
+}
+
+void SAL_CALL ModuleController::disposing()
+{
+    // Break the cyclic reference back to DrawController object
+    mpLoadedFactories.reset();
+    mpResourceToFactoryMap.reset();
+    mxController.clear();
 }
 
 void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)

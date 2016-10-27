@@ -149,7 +149,6 @@ public:
     void UpdateOutlineObject( SdPage* pPage, Paragraph* pPara );
 
 private:
-    void ShowSlideShow(SfxRequest& rReq);
     OutlineView* pOlView;
     SdPage*         pLastPage; // For efficient processing of the preview
     rtl::Reference<TransferableClipboardListener> mxClipEvtLstnr;

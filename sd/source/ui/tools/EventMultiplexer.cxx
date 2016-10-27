@@ -142,12 +142,6 @@ private:
         EventMultiplexerEventId eId,
         void* pUserData = nullptr);
 
-    /** This method throws a DisposedException when the object has already been
-        disposed.
-    */
-    void ThrowIfDisposed()
-        throw (css::lang::DisposedException);
-
     DECL_LINK(SlideSorterSelectionChangeListener, LinkParamNone*, void);
 };
 
@@ -484,7 +478,12 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
     const beans::PropertyChangeEvent& rEvent)
     throw (RuntimeException, std::exception)
 {
-    ThrowIfDisposed();
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        throw lang::DisposedException (
+            "SlideSorterController object has already been disposed",
+            static_cast<uno::XWeak*>(this));
+    }
 
     if ( rEvent.PropertyName == aCurrentPagePropertyName )
     {
@@ -616,17 +615,6 @@ void SAL_CALL EventMultiplexer::Implementation::disposing()
 {
     CallListeners (EventMultiplexerEventId::Disposing);
     ReleaseListeners();
-}
-
-void EventMultiplexer::Implementation::ThrowIfDisposed()
-    throw (css::lang::DisposedException)
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            "SlideSorterController object has already been disposed",
-            static_cast<uno::XWeak*>(this));
-    }
 }
 
 void EventMultiplexer::Implementation::Notify (

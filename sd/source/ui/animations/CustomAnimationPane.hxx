@@ -74,11 +74,9 @@ public:
     void onSelectionChanged();
     void onChangeCurrentPage();
     void onAdd();
-    void animationChange();
     void onRemove();
     void onChangeStart();
     void onChangeStart( sal_Int16 nNodeType );
-    void onChangeProperty();
     void onChangeSpeed();
 
     // methods
@@ -108,7 +106,6 @@ private:
     void removeListener();
     void updateControls();
     void updateMotionPathTags();
-    void markShapesFromSelectedEffects();
 
     void showOptions(const OString& sPage = OString());
     void moveSelection( bool bUp );

@@ -59,8 +59,6 @@ public:
      * If pNewPage is 0 then removes all occurrences of pOldPage.
      */
     void ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage );
-    /** Removes all occurrences of pPage. */
-    void RemovePage( const SdPage* pPage );
 
     void   SetName(const OUString& rName);
     const OUString& GetName() const { return aName;}

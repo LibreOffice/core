@@ -89,7 +89,7 @@ void SdCustomShow::ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage )
 {
     if( !pNewPage )
     {
-        RemovePage(pOldPage);
+        maPages.erase(::std::remove(maPages.begin(), maPages.end(), pOldPage), maPages.end());
     }
     else
     {
@@ -97,12 +97,7 @@ void SdCustomShow::ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage )
     }
 }
 
-void SdCustomShow::RemovePage( const SdPage* pPage )
-{
-    maPages.erase(::std::remove(maPages.begin(), maPages.end(), pPage), maPages.end());
-}
-
-void   SdCustomShow::SetName(const OUString& rName)
+void SdCustomShow::SetName(const OUString& rName)
 {
     aName = rName;
 }

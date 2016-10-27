@@ -54,8 +54,6 @@ public:
     virtual void MakeVisible(const Rectangle& rRect, vcl::Window& rWin) override;
     virtual void HideSdrPage() override; // SdrPageView* pPV);
 
-    void    PresPaint(const vcl::Region& rRegion);
-
     virtual void DeleteMarked() override; // from SdrView
 protected:
     virtual void ModelHasChanged() override;

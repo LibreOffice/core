@@ -925,8 +925,8 @@ void SlideTransitionPane::applyToSelectedPages(bool bPreview = true)
         {
             if (aEffect.mnType) // mnType = 0 denotes no transition
                 playCurrentEffect();
-            else
-                stopEffects();
+            else if( mxView.is() )
+                SlideShow::Stop( mrBase );
         }
 
         if (pFocusWindow)
@@ -941,14 +941,6 @@ void SlideTransitionPane::playCurrentEffect()
 
         Reference< css::animations::XAnimationNode > xNode;
         SlideShow::StartPreview( mrBase, mxView->getCurrentPage(), xNode );
-    }
-}
-
-void SlideTransitionPane::stopEffects()
-{
-    if( mxView.is() )
-    {
-        SlideShow::Stop( mrBase );
     }
 }
 

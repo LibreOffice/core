@@ -472,8 +472,8 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
             OutputDevice* pShowWindow = xSlideshow->getShowWindow();
             if( (pShowWindow == pOutDev) || (xSlideshow->getAnimationMode() == ANIMATIONMODE_PREVIEW) )
             {
-                if( pShowWindow == pOutDev )
-                    PresPaint(rReg);
+                if( pShowWindow == pOutDev && mpViewSh )
+                    xSlideshow->paint( rReg.GetBoundRect() );
                 bStandardPaint = false;
             }
         }
@@ -482,20 +482,6 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
     if(bStandardPaint)
     {
         ::sd::View::CompleteRedraw(pOutDev, rReg, pRedirector);
-    }
-}
-
-/**
- * Paint-Event during running slide show
- */
-
-void DrawView::PresPaint(const vcl::Region& rRegion)
-{
-    if(mpViewSh)
-    {
-        rtl::Reference< SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
-        if( xSlideshow.is() && xSlideshow->isRunning() )
-            xSlideshow->paint( rRegion.GetBoundRect() );
     }
 }
 
