@@ -96,7 +96,7 @@ VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
                 sal_uInt16 nIndex = static_cast<sal_uInt16>(100*i);
                 // but insert without extension
                 pPopup->InsertItem( i, sTitle);
-                PopupMenu* pSub = VclPtr<PopupMenu>::Create();
+                VclPtrInstance<PopupMenu> pSub;
                 pSub->SetSelectHdl(aLnk);
                 pPopup->SetPopupMenu(i, pSub);
                 for(sal_uInt16 j = 0; j < nBlockCount; j++)
