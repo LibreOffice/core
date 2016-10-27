@@ -19,6 +19,7 @@
 
 #include <svx/svdobj.hxx>
 #include <comphelper/lok.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <init.hxx>
 #include <fesh.hxx>
 #include <pagefrm.hxx>
@@ -502,8 +503,15 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                 }
                 //put a hard-break after the graphic to keep it separated
                 //from the caption text if the outer frame is resized
-                SwIndex aIdx(pTextNode, bBefore ? nInsertPos : 1);
+                const sal_Int32 nIndex = bBefore ? nInsertPos : 1;
+                SwIndex aIdx(pTextNode, nIndex);
                 pTextNode->InsertText("\n", aIdx);
+                //set the hard-break to be hidden, otherwise it has
+                //non-zero width in word and so hard-break flows on
+                //the next line, pushing the caption text out of
+                //the frame making the caption apparently disappear
+                SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
+                pTextNode->InsertItem(aHidden, nIndex, nIndex + 1);
             }
         }
 
