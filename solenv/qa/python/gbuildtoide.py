@@ -110,9 +110,6 @@ class CheckGbuildToIdeModules(unittest.TestCase):
         shutil.copyfile(os.path.join(self.srcdirnative, 'Repository.mk'), os.path.join(self.tempsrc, 'Repository.mk'))
         shutil.copyfile(os.path.join(self.srcdirnative, 'RepositoryExternal.mk'), os.path.join(self.tempsrc, 'RepositoryExternal.mk'))
         shutil.copyfile(os.path.join(self.srcdirnative, 'RepositoryFixes.mk'), os.path.join(self.tempsrc, 'RepositoryFixes.mk'))
-        shutil.copytree(os.path.join(self.srcdirnative, 'config_host'),  os.path.join(self.tempsrc, 'config_host'))
-        print('copytree from _%s_ to _%s_' % (os.path.join(self.srcdirnative, 'solenv').replace('\\', '#').replace('/', '!'), os.path.join(self.tempsrc, 'solenv').replace('\\', '#').replace('/', '!')))
-        shutil.copytree(os.path.join(self.srcdirnative, 'solenv'),  os.path.join(self.tempsrc, 'solenv'))
 
     def tearDown(self):
         shutil.rmtree(self.tempsrc)
@@ -128,16 +125,21 @@ class CheckGbuildToIdeModules(unittest.TestCase):
             shutil.rmtree(self.tempwork)
             os.makedirs(os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
             shutil.copy(self.gbuildtojson, os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
-            if module != 'solenv':
-                shutil.copytree(os.path.join(os.environ['SRCDIR'], module), os.path.join(self.tempsrc, module))
+            #if module != 'solenv':
+            #    shutil.copytree(os.path.join(os.environ['SRCDIR'], module), os.path.join(self.tempsrc, module))
             (bashscripthandle, bashscriptname) = tempfile.mkstemp()
+            print("bashscriptname: ", bashscriptname)
             bashscript = os.fdopen(bashscripthandle, 'w', newline='\n')
-            bashscript.write("set -e\n")
-            bashscript.write("cd %s/%s\n" % (self.tempsrc.replace('\\','/'), module))
-            bashscript.write("%s gbuildtoide WORKDIR=%s SRCDIR=%s\n" % (self.make, self.tempwork.replace('\\', '/'), self.tempsrc.replace('\\','/')))
+            bashscript.write('set -e\n')
+            for m in set([module, 'solenv', 'config_host']):
+                bashscript.write('cp -a "%s/%s" -t "%s"\n' % (self.srcdir, m, self.tempsrc.replace('\\','/')))
+            bashscript.write('cd %s/%s\n' % (self.tempsrc.replace('\\','/'), module))
+            bashscript.write('%s gbuildtoide WORKDIR=%s SRCDIR=%s\n' % (self.make, self.tempwork.replace('\\', '/'), self.tempsrc.replace('\\','/')))
+            #bashscript.write('rm -rf "%s/%s"\n' % (self.tempsrc.replace('\\','/'), module)) # slightly nervous about rm -rf'ing in a shell script, but rmtree migh be unstable on windows as is copytree
             bashscript.close()
             subprocess.check_call([self.bash, bashscriptname.replace('\\', '/')])
             os.remove(bashscriptname)
+            shutil.rmtree(os.path.join(self.tempsrc.replace('\\','/'), module))
         jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToIde', 'Library'))
         gbuildlibs = []
         for jsonfilename in jsonfiles:
