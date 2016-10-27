@@ -69,10 +69,6 @@ inline int IntTimes256FromFixed(FIXED f)
     return nFixedTimes256;
 }
 
-// these variables can be static because they store system wide settings
-static bool bImplSalCourierScalable = false;
-static bool bImplSalCourierNew = false;
-
 // TODO: also support temporary TTC font files
 typedef std::map< OUString, FontAttributes > FontAttrMap;
 
@@ -423,6 +419,13 @@ LanguageType MapCharToLanguage( sal_UCS4 uChar )
     return LANGUAGE_DONTKNOW;
 }
 
+class WinPreMatchFontSubstititution
+:    public ImplPreMatchFontSubstitution
+{
+public:
+    bool FindFontSubstitute(FontSelectPattern&) const override;
+};
+
 class WinGlyphFallbackSubstititution
 :    public ImplGlyphFallbackFontSubstitution
 {
@@ -504,6 +507,39 @@ namespace
         const OUString aDefault = rDefaults.getUserInterfaceFont(rLanguageTag);
         return rFontCollection.FindFontFamilyByTokenNames(aDefault);
     }
+}
+
+// These are Win 3.1 bitmap fonts using "FON" font format
+// which is not supported with "Direct Write" so let's substitute them
+// with a font that is supported and always available.
+// Based on:
+// https://dxr.mozilla.org/mozilla-esr10/source/gfx/thebes/gfxDWriteFontList.cpp#1057
+static const std::map<OUString, OUString> aBitmapFontSubs =
+{
+    { "MS Sans Serif", "Microsoft Sans Serif" },
+    { "MS Serif",      "Times New Roman" },
+    { "Small Fonts",   "Arial" },
+    { "Courier",       "Courier New" },
+    { "Roman",         "Times New Roman" },
+    { "Script",        "Mistral" }
+};
+
+// TODO: See if Windows have API that we can use here to improve font fallback.
+bool WinPreMatchFontSubstititution::FindFontSubstitute(FontSelectPattern& rFontSelData) const
+{
+    if (rFontSelData.IsSymbolFont() || IsStarSymbol(rFontSelData.maSearchName))
+        return false;
+
+    for (const auto& aSub : aBitmapFontSubs)
+    {
+        if (rFontSelData.maSearchName == GetEnglishSearchFontName(aSub.first))
+        {
+            rFontSelData.maSearchName = aSub.second;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // find a fallback font for missing characters
@@ -592,9 +628,6 @@ struct ImplEnumInfo
     LOGFONTA*           mpLogFontA;
     LOGFONTW*           mpLogFontW;
     UINT                mnPreferredCharSet;
-    bool                mbCourier;
-    bool                mbImplSalCourierScalable;
-    bool                mbImplSalCourierNew;
     bool                mbPrinter;
     int                 mnFontCount;
 };
@@ -1361,26 +1394,6 @@ HFONT WinSalGraphics::ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontS
     LOGFONTW aLogFont;
     ImplGetLogFontFromFontSelect( getHDC(), i_pFont, aLogFont, true );
 
-    // on the display we prefer Courier New when Courier is a
-    // bitmap only font and we need to stretch or rotate it
-    if( mbScreen
-    &&  (i_pFont->mnWidth != 0
-      || i_pFont->mnOrientation != 0
-      || i_pFont->mpFontData == NULL
-      || (i_pFont->mpFontData->GetHeight() != i_pFont->mnHeight))
-    && !bImplSalCourierScalable
-    && bImplSalCourierNew
-    && (ImplSalWICompareAscii( aLogFont.lfFaceName, "Courier" ) == 0) )
-        lstrcpynW( aLogFont.lfFaceName, L"Courier New", 12 );
-
-    // Script and Roman are Win 3.1 bitmap fonts using "FON" font format
-    // which is not supported with "Direct Write" so let's substitute them
-    // with a font that is supported and always available.
-    if (ImplSalWICompareAscii(aLogFont.lfFaceName, "Script") == 0)
-        wcscpy(aLogFont.lfFaceName, L"Times New Roman");
-    if (ImplSalWICompareAscii(aLogFont.lfFaceName, "Roman") == 0)
-        wcscpy(aLogFont.lfFaceName, L"Times New Roman");
-
     // #i47675# limit font requests to MAXFONTHEIGHT
     // TODO: share MAXFONTHEIGHT font instance
     if( (-aLogFont.lfHeight <= MAXFONTHEIGHT)
@@ -1644,12 +1657,6 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
         // Ignore vertical fonts
         if ( pLogFont->elfLogFont.lfFaceName[0] != '@' )
         {
-            if ( !pInfo->mbImplSalCourierNew )
-                pInfo->mbImplSalCourierNew = ImplSalWICompareAscii( pLogFont->elfLogFont.lfFaceName, "Courier New" ) == 0;
-            if ( !pInfo->mbImplSalCourierScalable )
-                pInfo->mbCourier = ImplSalWICompareAscii( pLogFont->elfLogFont.lfFaceName, "Courier" ) == 0;
-            else
-                pInfo->mbCourier = FALSE;
             OUString aName = OUString(reinterpret_cast<const sal_Unicode*>(pLogFont->elfLogFont.lfFaceName));
             pInfo->mpName = &aName;
             memcpy( pInfo->mpLogFontW->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.getLength()+1)*sizeof( wchar_t ) );
@@ -1659,22 +1666,20 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
             pInfo->mpLogFontW->lfFaceName[0] = '\0';
             pInfo->mpLogFontW->lfCharSet = DEFAULT_CHARSET;
             pInfo->mpName = NULL;
-            pInfo->mbCourier = FALSE;
         }
     }
     else
     {
-        // ignore non-scalable non-device font on printer
-        if( pInfo->mbPrinter )
-            if( (nFontType & RASTER_FONTTYPE) && !(nFontType & DEVICE_FONTTYPE) )
-                return 1;
+        // Ignore non-device font on printer.
+        if (pInfo->mbPrinter && !(nFontType & DEVICE_FONTTYPE))
+            return 1;
+
+        // Ignore non-scalable fonts.
+        if (nFontType & RASTER_FONTTYPE)
+            return 1;
 
         WinFontFace* pData = ImplLogMetricToDevFontDataW( pLogFont, &(pMetric->ntmTm), nFontType );
         pData->SetFontId( sal_IntPtr( pInfo->mnFontCount++ ) );
-
-        // knowing Courier to be scalable is nice
-        if( pInfo->mbCourier )
-            pInfo->mbImplSalCourierScalable |= pData->IsScalable();
 
         pInfo->mpList->Add( pData );
     }
@@ -1957,19 +1962,8 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
     aInfo.mpName        = NULL;
     aInfo.mpLogFontA    = NULL;
     aInfo.mpLogFontW    = NULL;
-    aInfo.mbCourier     = false;
     aInfo.mbPrinter     = mbPrinter;
     aInfo.mnFontCount   = 0;
-    if ( !mbPrinter )
-    {
-        aInfo.mbImplSalCourierScalable  = false;
-        aInfo.mbImplSalCourierNew       = false;
-    }
-    else
-    {
-        aInfo.mbImplSalCourierScalable  = true;
-        aInfo.mbImplSalCourierNew       = true;
-    }
 
     aInfo.mnPreferredCharSet = DEFAULT_CHARSET;
     DWORD nCP = GetACP();
@@ -1984,17 +1978,11 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
     EnumFontFamiliesExW( getHDC(), &aLogFont,
         (FONTENUMPROCW)SalEnumFontsProcExW, (LPARAM)(void*)&aInfo, 0 );
 
-    // check what Courier fonts are used on the screen, so to perhaps
-    // map Courier to CourierNew in SetFont()
-    if ( !mbPrinter )
-    {
-        bImplSalCourierScalable = aInfo.mbImplSalCourierScalable;
-        bImplSalCourierNew      = aInfo.mbImplSalCourierNew;
-    }
-
     // set glyph fallback hook
     static WinGlyphFallbackSubstititution aSubstFallback( getHDC() );
+    static WinPreMatchFontSubstititution aPreMatchFont;
     pFontCollection->SetFallbackHook( &aSubstFallback );
+    pFontCollection->SetPreMatchHook(&aPreMatchFont);
 }
 
 void WinSalGraphics::ClearDevFontCache()
