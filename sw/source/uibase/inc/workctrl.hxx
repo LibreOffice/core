@@ -53,9 +53,6 @@ class SwView;
 
 class SwTbxAutoTextCtrl : public SfxToolBoxControl
 {
-    VclPtr<PopupMenu>       pPopup;
-
-    void                    DelPopup();
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 

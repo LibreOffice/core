@@ -67,26 +67,24 @@ SwTbxAutoTextCtrl::SwTbxAutoTextCtrl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
     ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pPopup(nullptr)
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
 }
 
 SwTbxAutoTextCtrl::~SwTbxAutoTextCtrl()
 {
-    DelPopup();
 }
 
 VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
 {
+    ScopedVclPtrInstance<PopupMenu> pPopup;
     SwView* pView = ::GetActiveView();
     if(pView && !pView->GetDocShell()->IsReadOnly() &&
        !pView->GetWrtShell().HasReadonlySel() )
     {
         Link<Menu*,bool> aLnk = LINK(this, SwTbxAutoTextCtrl, PopupHdl);
 
-        pPopup = VclPtr<PopupMenu>::Create();
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
         const size_t nGroupCount = pGlossaryList->GetGroupCount();
         for(size_t i = 1; i <= nGroupCount; ++i)
@@ -123,9 +121,7 @@ VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
         pToolBox->SetItemDown( nId, false );
     }
     GetToolBox().EndSelection();
-    DelPopup();
     return nullptr;
-
 }
 
 void SwTbxAutoTextCtrl::StateChanged( sal_uInt16,
@@ -156,18 +152,6 @@ IMPL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, Menu*, pMenu, bool)
     pGlosHdl->InsertGlossary(sShortName);
 
     return false;
-}
-
-void SwTbxAutoTextCtrl::DelPopup()
-{
-    if(pPopup)
-    {
-        for( sal_uInt16 i = 0; i < pPopup->GetItemCount(); i ++ )
-        {
-            pPopup->DisposePopupMenu(pPopup->GetItemId(i));
-        }
-        pPopup.disposeAndClear();
-    }
 }
 
 // Navigation-Popup

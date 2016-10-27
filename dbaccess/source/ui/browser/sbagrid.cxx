@@ -681,7 +681,7 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
     }
 }
 
-void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu, sal_uInt16 nExecutionResult)
+void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
 {
     switch (nExecutionResult)
     {

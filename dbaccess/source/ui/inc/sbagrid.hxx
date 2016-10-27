@@ -176,7 +176,7 @@ namespace dbaui
 
         // FmGridHeader overridables
         virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu) override;
-        virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu, sal_uInt16 nExecutionResult) override;
+        virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult) override;
 
     private:
         // DragSourceHelper overridables

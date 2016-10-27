@@ -2912,20 +2912,6 @@ void SvImpLBox::PaintDDCursor( SvTreeListEntry* pInsertionPos )
     pView->SetRasterOp( eOldOp );
 }
 
-// Delete all submenus of a PopupMenu, recursively
-static void lcl_DeleteSubPopups(PopupMenu* pPopup)
-{
-    for(sal_uInt16 i = 0; i < pPopup->GetItemCount(); i++)
-    {
-        VclPtr<PopupMenu> pSubPopup = pPopup->GetPopupMenu( pPopup->GetItemId( i ));
-        if(pSubPopup)
-        {
-            lcl_DeleteSubPopups(pSubPopup);
-            pPopup->DisposePopupMenu( pPopup->GetItemId( i ));
-        }
-    }
-}
-
 void SvImpLBox::Command( const CommandEvent& rCEvt )
 {
     CommandEventId   nCommand = rCEvt.GetCommand();
@@ -3024,7 +3010,6 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
                 sal_uInt16 nMenuAction = pPopup->Execute( pView, aPopupPos );
                 if ( nMenuAction )
                     pView->ExecuteContextMenuAction( nMenuAction );
-                lcl_DeleteSubPopups(pPopup.get());
                 pPopup.disposeAndClear();
             }
         }

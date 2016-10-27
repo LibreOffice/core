@@ -1188,10 +1188,6 @@ SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
 
 void SvxNumOptionsTabPage::dispose()
 {
-    if (m_pBitmapMB)
-    {
-        m_pBitmapMB->GetPopupMenu()->DisposePopupMenu(m_nGalleryId);
-    }
     delete pActNum;
     pActNum = nullptr;
     delete pSaveNum;

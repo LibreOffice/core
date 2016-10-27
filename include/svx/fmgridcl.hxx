@@ -67,7 +67,7 @@ protected:
     virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu);
     /** After executing the context menu for a column this method is called.
     */
-    virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu, sal_uInt16 nExecutionResult);
+    virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
 
     // DropTargetHelper
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
