@@ -97,7 +97,6 @@ private:
     void HandleResourceRequest(
         bool bActivation,
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
-    void UpdateForMainViewShell();
 };
 
 } } // end of namespace sd::framework

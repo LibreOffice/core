@@ -139,7 +139,6 @@ protected:
     virtual void NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent);
 
     typedef ::std::pair<int, MasterPageContainer::Token> UserData;
-    static UserData* CreateUserData (int nIndex, MasterPageContainer::Token aToken);
     UserData* GetUserData (int nIndex) const;
     void SetUserData (int nIndex, UserData* pData);
 

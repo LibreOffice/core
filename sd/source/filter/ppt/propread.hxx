@@ -147,14 +147,12 @@ class PropRead
         sal_uInt8               mApplicationCLSID[ 16 ];
         std::vector<std::unique_ptr<Section> > maSections;
 
-        void                    AddSection( Section& rSection );
-
     public:
                                 PropRead( SotStorage& rSvStorage, const OUString& rName );
 
         PropRead&               operator=( const PropRead& rPropRead );
         const Section*          GetSection( const sal_uInt8* pFMTID );
-        bool                IsValid() const { return mbStatus; };
+        bool                    IsValid() const { return mbStatus; };
         void                    Read();
 };
 

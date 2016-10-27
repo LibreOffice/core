@@ -353,7 +353,7 @@ void AnnotationWindow::InitControls()
 
     Invalidate();
 
-    SetLanguage(GetLanguage());
+    SetLanguage(SvxLanguageItem( Doc()->GetLanguage( EE_CHAR_LANGUAGE ), SID_ATTR_LANGUAGE ));
 
     mpMeta->Show();
     mpVScrollbar->Show();
@@ -492,11 +492,6 @@ IMPL_LINK(AnnotationWindow, ScrollHdl, ScrollBar*, pScroll, void)
 {
     long nDiff = getView()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
     getView()->Scroll( 0, nDiff );
-}
-
-SvxLanguageItem AnnotationWindow::GetLanguage()
-{
-    return SvxLanguageItem( Doc()->GetLanguage( EE_CHAR_LANGUAGE ), SID_ATTR_LANGUAGE );
 }
 
 TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )

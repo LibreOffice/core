@@ -241,7 +241,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_REHEARSE_TIMINGS:
         {
             pOlView->PrepareClose();
-            ShowSlideShow(rReq);
+            slideshowhelp::ShowSlideShow(rReq, *GetDoc());
             Cancel();
             rReq.Done();
         }
@@ -346,11 +346,6 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
     Invalidate(SID_COPY);
     Invalidate(SID_PASTE);
     Invalidate(SID_PASTE_UNFORMATTED);
-}
-
-void OutlineViewShell::ShowSlideShow(SfxRequest& rReq)
-{
-    slideshowhelp::ShowSlideShow(rReq, *GetDoc());
 }
 
 void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)

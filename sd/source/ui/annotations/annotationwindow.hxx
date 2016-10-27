@@ -100,8 +100,6 @@ class AnnotationWindow : public FloatingWindow
 
         void StartEdit();
 
-        SvxLanguageItem GetLanguage();
-
         void setAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
 
         void ExecuteSlot( sal_uInt16 nSID );

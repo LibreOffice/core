@@ -83,21 +83,16 @@ void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
 
             msCurrentHelpText = sHelpText;
             // show new tooltip immediately, if last one was recently hidden
-            Show(maHiddenTimer.IsActive());
+            if(maHiddenTimer.IsActive())
+                DoShow();
+            else
+                maShowTimer.Start();
         }
         else
         {
             msCurrentHelpText.clear();
         }
     }
-}
-
-void ToolTip::Show (const bool bNoDelay)
-{
-    if (bNoDelay)
-        DoShow();
-    else
-        maShowTimer.Start();
 }
 
 void ToolTip::DoShow()

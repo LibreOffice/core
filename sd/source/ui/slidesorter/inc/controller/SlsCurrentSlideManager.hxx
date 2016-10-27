@@ -92,7 +92,6 @@ private:
     */
     Timer maSwitchPageDelayTimer;
 
-    bool IsCurrentSlideIsValid();
     void SetCurrentSlideAtViewShellBase (const model::SharedPageDescriptor& rpSlide);
     void SetCurrentSlideAtTabControl (const model::SharedPageDescriptor& rpSlide);
     void SetCurrentSlideAtXController (const model::SharedPageDescriptor& rpSlide);

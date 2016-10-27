@@ -92,7 +92,6 @@ private:
     sal_Int32 mnTop;
     sal_Int32 mnTotalHeight;
 
-    void GetEditEngine();
     EditEngine* CreateEditEngine();
     void CheckTop();
 };
@@ -254,7 +253,7 @@ PresenterTextView::Implementation::Implementation()
 {
     mpOutputDevice->SetMapMode(MapUnit::MapPixel);
 
-    GetEditEngine();
+    mpEditEngine = CreateEditEngine ();
 }
 
 PresenterTextView::Implementation::~Implementation()
@@ -262,12 +261,6 @@ PresenterTextView::Implementation::~Implementation()
     delete mpEditEngine;
     SfxItemPool::Free(mpEditEngineItemPool);
     mpOutputDevice.disposeAndClear();
-}
-
-void PresenterTextView::Implementation::GetEditEngine()
-{
-    if (mpEditEngine == nullptr)
-        mpEditEngine = CreateEditEngine ();
 }
 
 EditEngine* PresenterTextView::Implementation::CreateEditEngine()

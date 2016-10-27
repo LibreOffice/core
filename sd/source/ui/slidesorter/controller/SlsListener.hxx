@@ -170,12 +170,6 @@ private:
     */
     void HandleShapeModification (const SdrPage* pPage);
 
-    /** This method throws a DisposedException when the object has already been
-        disposed.
-    */
-    void ThrowIfDisposed()
-        throw (css::lang::DisposedException);
-
     DECL_LINK(EventMultiplexerCallback, tools::EventMultiplexerEvent&, void);
 };
 

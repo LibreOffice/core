@@ -78,18 +78,12 @@ ConfigurationUpdater::ConfigurationUpdater (
     // updates until the two configurations are the same.
     maUpdateTimer.SetTimeout(snNormalTimeout);
     maUpdateTimer.SetTimeoutHdl(LINK(this,ConfigurationUpdater,TimeoutHandler));
-    SetControllerManager(rxControllerManager);
+    mxControllerManager = rxControllerManager;
 }
 
 ConfigurationUpdater::~ConfigurationUpdater()
 {
     maUpdateTimer.Stop();
-}
-
-void ConfigurationUpdater::SetControllerManager(
-    const Reference<XControllerManager>& rxControllerManager)
-{
-    mxControllerManager = rxControllerManager;
 }
 
 void ConfigurationUpdater::RequestUpdate (

@@ -722,7 +722,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_PRESENTATION_CURRENT_SLIDE:
         case SID_REHEARSE_TIMINGS:
         {
-            ShowSlideShow(rReq);
+            slideshowhelp::ShowSlideShow(rReq, *GetDoc());
             rReq.Ignore ();
         }
         break;
@@ -1612,11 +1612,6 @@ namespace slideshowhelp
             }
         }
     }
-}
-
-void DrawViewShell::ShowSlideShow(SfxRequest& rReq)
-{
-    slideshowhelp::ShowSlideShow(rReq, *GetDoc());
 }
 
 void DrawViewShell::StopSlideShow (bool /*bCloseFrame*/)

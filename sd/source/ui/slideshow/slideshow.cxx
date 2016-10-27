@@ -671,7 +671,8 @@ void SAL_CALL SlideShow::end()
                 WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
                 if( pWorkWindow )
                 {
-                    pWorkWindow->StartPresentationMode( isAlwaysOnTop() ? PresentationFlags::HideAllApps : PresentationFlags::NONE );
+                    pWorkWindow->StartPresentationMode(   (mxController.is() && mxController->maPresSettings.mbAlwaysOnTop)
+                                                        ? PresentationFlags::HideAllApps : PresentationFlags::NONE );
                 }
             }
         }
@@ -992,11 +993,6 @@ void SlideShow::paint( const Rectangle& rRect )
 {
     if( mxController.is() )
         mxController->paint( rRect );
-}
-
-bool SlideShow::isAlwaysOnTop()
-{
-    return mxController.is() && mxController->maPresSettings.mbAlwaysOnTop;
 }
 
 void SlideShow::pause( bool bPause )

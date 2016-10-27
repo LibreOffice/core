@@ -445,7 +445,11 @@ void SAL_CALL Listener::propertyChange (
     const PropertyChangeEvent& rEvent)
     throw (RuntimeException, std::exception)
 {
-    ThrowIfDisposed();
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        throw lang::DisposedException ("SlideSorterController object has already been disposed",
+            static_cast<uno::XWeak*>(this));
+    }
 
     static const char sCurrentPagePropertyName[] = "CurrentPage";
     static const char sEditModePropertyName[] = "IsMasterPageMode";
@@ -621,16 +625,6 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
                 OSL_ASSERT(pCandidate!=nullptr && pCandidate->TRG_HasMasterPage());
             }
         }
-    }
-}
-
-void Listener::ThrowIfDisposed()
-    throw (css::lang::DisposedException)
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException ("SlideSorterController object has already been disposed",
-            static_cast<uno::XWeak*>(this));
     }
 }
 

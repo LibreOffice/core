@@ -305,7 +305,7 @@ void SlideSorter::CreateModelViewController()
     DBG_ASSERT (mpSlideSorterModel.get()!=nullptr,
         "Can not create model for slide browser");
 
-    mpSlideSorterView.reset(CreateView());
+    mpSlideSorterView.reset(new view::SlideSorterView (*this));
     DBG_ASSERT (mpSlideSorterView.get()!=nullptr,
         "Can not create view for slide browser");
 
@@ -331,11 +331,6 @@ model::SlideSorterModel* SlideSorter::CreateModel()
     }
     else
         return nullptr;
-}
-
-view::SlideSorterView* SlideSorter::CreateView()
-{
-    return new view::SlideSorterView (*this);
 }
 
 controller::SlideSorterController* SlideSorter::CreateController()

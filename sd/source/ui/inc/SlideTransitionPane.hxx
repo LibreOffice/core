@@ -85,7 +85,6 @@ private:
 
     void applyToSelectedPages(bool bPreview);
     void playCurrentEffect();
-    void stopEffects();
 
     void addListener();
     void removeListener();
