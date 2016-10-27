@@ -258,6 +258,7 @@ class PDFLiteralStringElement : public PDFElement
     OString m_aValue;
 public:
     bool Read(SvStream& rStream) override;
+    const OString& GetValue() const;
 };
 
 /// The trailer singleton is at the end of the doc.
@@ -1314,6 +1315,24 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
             rInformation.ouDescription = aBuffer.makeStringAndClear();
     }
 
+    // Date: used only when the time of signing is not available in the
+    // signature.
+    auto pM = dynamic_cast<PDFLiteralStringElement*>(pValue->Lookup("M"));
+    if (pM)
+    {
+        // Example: "D:20161027100104".
+        const OString& rM = pM->GetValue();
+        if (rM.startsWith("D:") && rM.getLength() >= 16)
+        {
+            rInformation.stDateTime.Year = rM.copy(2, 4).toInt32();
+            rInformation.stDateTime.Month = rM.copy(6, 2).toInt32();
+            rInformation.stDateTime.Day = rM.copy(8, 2).toInt32();
+            rInformation.stDateTime.Hours = rM.copy(10, 2).toInt32();
+            rInformation.stDateTime.Minutes = rM.copy(12, 2).toInt32();
+            rInformation.stDateTime.Seconds = rM.copy(14, 2).toInt32();
+        }
+    }
+
     // Build a list of offset-length pairs, representing the signed bytes.
     std::vector<std::pair<size_t, size_t>> aByteRanges;
     size_t nByteRangeOffset = 0;
@@ -1695,6 +1714,11 @@ bool PDFLiteralStringElement::Read(SvStream& rStream)
     }
 
     return false;
+}
+
+const OString& PDFLiteralStringElement::GetValue() const
+{
+    return m_aValue;
 }
 
 PDFTrailerElement::PDFTrailerElement(PDFDocument& rDoc)
