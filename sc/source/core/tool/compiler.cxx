@@ -1184,7 +1184,7 @@ struct ConventionXL
         if (rTabName != aLastTabName)
         {
             rBuf.append(':');
-            ScRangeStringConverter::AppendTableName(rBuf, rTabName);
+            ScRangeStringConverter::AppendTableName(rBuf, aLastTabName);
         }
     }
 
