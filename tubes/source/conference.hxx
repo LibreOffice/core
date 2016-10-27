@@ -13,12 +13,10 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 
+#include <telepathy-glib/telepathy-glib.h>
+
 class Collaboration;
 class TeleConferenceImpl;
-typedef struct _TpAccount TpAccount;
-typedef struct _TpContact TpContact;
-typedef struct _TpDBusTubeChannel TpDBusTubeChannel;
-typedef struct _GDBusConnection GDBusConnection;
 
 /** Conference setup by TeleManager */
 class TeleConference
