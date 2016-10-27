@@ -87,8 +87,10 @@ void VBATest::testMiscVBAFunctions()
 
 void VBATest::testMiscOLEStuff()
 {
-// not much point even trying to run except on windows
-#if defined(_WIN32)
+// Not much point even trying to run except on Windows. Does not work
+// on 64-bit Windows with Excel installed. (Without Excel doesn't
+// really do anything anyway, see "so skip test" below.)
+#if defined(_WIN32) && !defined(_WIN64)
     // test if we have the necessary runtime environment
     // to run the OLE tests.
     uno::Reference< lang::XMultiServiceFactory > xOLEFactory;
