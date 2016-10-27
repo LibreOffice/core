@@ -262,6 +262,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,glyphy)/src/.libs -lglyphy \
 )
 endif
+
 endef
 
 endif # SYSTEM_GLYPHY
