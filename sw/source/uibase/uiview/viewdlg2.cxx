@@ -54,7 +54,7 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "SwAbstractDialogFactory fail!");
 
-            std::unique_ptr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog( pMDI, *this ));
+            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog( pMDI, *this ));
             assert(pDialog && "Dialog creation failed!");
             if ( pDialog )
             {
@@ -66,7 +66,7 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "Dialog creation failed!");
-            std::unique_ptr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
+            ScopedVclPtr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
                 pMDI, *m_pWrtShell, true));
             assert(pDlg && "Dialog creation failed!");
 
