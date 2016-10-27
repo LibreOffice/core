@@ -139,6 +139,9 @@ public:
         VbaMacroAttacherBase class. */
     void                registerMacroAttacher( const VbaMacroAttacherRef& rxAttacher );
 
+    /** Attaches VBA macros to objects registered via registerMacroAttacher(). */
+    void                attachMacros();
+
     /** Returns true, if the document contains at least one code module. */
     bool                hasModules() const;
 
@@ -176,9 +179,6 @@ private:
     void                importVba(
                             StorageBase& rVbaPrjStrg,
                             const GraphicHelper& rGraphicHelper );
-
-    /** Attaches VBA macros to objects registered via registerMacroAttacher(). */
-    void                attachMacros();
 
     /** Copies the entire VBA project storage to the passed document model. */
     void                copyStorage( StorageBase& rVbaPrjStrg );
