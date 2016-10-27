@@ -21,12 +21,12 @@ class ScCollaboration : public Collaboration
     ScDocShell* mpScDocShell;
 public:
             ScCollaboration( ScDocShell* pScDocShell );
-    virtual ~ScCollaboration();
+    virtual ~ScCollaboration() override;
 
-    virtual void  EndCollaboration() const;
-    virtual void  PacketReceived( const OString& rPacket ) const;
-    virtual void  SaveAndSendFile( TpContact* pContact ) const;
-    virtual void  StartCollaboration( TeleConference* pConference );
+    virtual void  EndCollaboration() const override;
+    virtual void  PacketReceived( const OString& rPacket ) const override;
+    virtual void  SaveAndSendFile( TpContact* pContact ) const override;
+    virtual void  StartCollaboration( TeleConference* pConference ) override;
 private:
     friend class ScDocShell;
     ScDocFuncSend* GetScDocFuncSend() const;

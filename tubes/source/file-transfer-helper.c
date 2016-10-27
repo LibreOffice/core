@@ -66,7 +66,14 @@
  * to use in an UI.
  */
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
 G_DEFINE_TYPE (EmpathyFTHandler, empathy_ft_handler, G_TYPE_OBJECT)
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #define BUFFER_SIZE 4096
 
@@ -112,7 +119,7 @@ typedef struct {
 } CallbacksData;
 
 /* private data */
-struct _EmpathyFTHandlerPriv {
+struct EmpathyFTHandlerPriv_ {
   gboolean dispose_run;
 
   GFile *gfile;

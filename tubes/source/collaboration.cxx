@@ -12,9 +12,10 @@
 #include <tubes/conference.hxx>
 #include <tubes/manager.hxx>
 
+#include <contacts.hxx>
+
 Collaboration::Collaboration() :
-    mpConference( NULL ),
-    mpContacts( NULL )
+    mpConference( nullptr )
 {
     TeleManager::registerCollaboration( this );
 }
@@ -40,10 +41,17 @@ void Collaboration::Invite( TpContact* pContact ) const
     }
 }
 
+void Collaboration::DisplayContacts()
+{
+    if (!mpContacts)
+        mpContacts = VclPtr<tubes::TubeContacts>::Create( this );
+    mpContacts->Populate();
+}
+
 void Collaboration::SendFile( TpContact* pContact, const OUString& rURL ) const
 {
     if (mpConference)
-        mpConference->sendFile( pContact, rURL, NULL, NULL );
+        mpConference->sendFile( pContact, rURL, nullptr, nullptr );
 }
 
 void Collaboration::SendPacket( const OString& rPacket ) const

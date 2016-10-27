@@ -28,12 +28,12 @@ public:
     // FIXME: really ScDocFunc should be an abstract base, so
     // we don't need the rDocSh hack/pointer
     ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncDirect* pDirect, ScCollaboration* pCollaboration );
-    virtual ~ScDocFuncSend();
+    virtual ~ScDocFuncSend() override;
 
     virtual void        EnterListAction( sal_uInt16 nNameResId );
     virtual void        EndListAction();
 
-    virtual sal_Bool    SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, sal_Bool bApi );
+    virtual bool SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, bool bApi );
     virtual bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
     virtual bool SetValueCells( const ScAddress& rPos, const std::vector<double>& aVals, bool bInteraction );
     virtual bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
@@ -44,14 +44,14 @@ public:
         const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish,
         bool bApi, const formula::FormulaGrammar::Grammar eGrammar );
     virtual bool        ShowNote( const ScAddress& rPos, bool bShow = true );
-    virtual bool        SetNoteText( const ScAddress& rPos, const OUString& rNoteText, sal_Bool bApi );
-    virtual sal_Bool    RenameTable( SCTAB nTab, const OUString& rName, sal_Bool bRecord, sal_Bool bApi );
-    virtual sal_Bool    ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
-                                         sal_Bool bApi );
-    virtual sal_Bool    ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
-                                    sal_Bool bApi );
-    virtual sal_Bool    MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
-                                    sal_Bool bRecord, sal_Bool bApi );
+    virtual bool        SetNoteText( const ScAddress& rPos, const OUString& rNoteText, bool bApi );
+    virtual bool        RenameTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
+    virtual bool        ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
+                                         bool bApi );
+    virtual bool        ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
+                                    bool bApi );
+    virtual bool        MergeCells( const ScCellMergeOption& rOption, bool bContents,
+                                    bool bRecord, bool bApi );
 };
 
 #endif

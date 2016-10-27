@@ -150,6 +150,9 @@ private:
     static ::osl::Mutex&    GetMutex();
 };
 
+// FIXME: should be static and not used in conference.cxx
+void TeleManager_fileReceived( const OUString& rStr, const OString& rUuid );
+
 #endif // INCLUDED_TUBES_MANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

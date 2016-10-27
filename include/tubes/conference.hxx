@@ -27,7 +27,7 @@ public:
 
     TeleConference( TpAccount* pAccount,
                     TpDBusTubeChannel* pChannel,
-                    const OString sUuid = OString(),
+                    const OString & sUuid = OString(),
                     bool bMaster = false );
     ~TeleConference();
 

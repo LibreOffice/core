@@ -35,14 +35,14 @@ EditTextObject stringToEdit( const OUString& /* rStr */ )
 {
     // FIXME: implement me.
     // The code here only serves to make this file compilable.
-    EditEngine aEditEngine(0);
+    EditEngine aEditEngine(nullptr);
     return *aEditEngine.CreateTextObject();
 }
 
 ScFormulaCell* stringToFormulaCell( const OUString &rString )
 {
     (void)rString; // FIXME: implement me
-    return NULL;
+    return nullptr;
 }
 
 struct ProtocolError {
@@ -77,7 +77,7 @@ public:
                     eState = FIND_LAST_QUOTE;
                     break;
                 }
-                // else drop through
+                SAL_FALLTHROUGH;
             case IN_TEXT:
                 if (rString[n] == ';')
                 {
@@ -206,7 +206,7 @@ public:
         appendSeparator();
     }
 
-    void appendBool( sal_Bool b )
+    void appendBool( bool b )
     {
         aMessage.appendAscii( b ? "true" : "false" );
         appendSeparator();
@@ -320,7 +320,7 @@ void ScDocFuncSend::EndListAction()
     SendMessage( aOp );
 }
 
-sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, sal_Bool bApi )
+bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, bool bApi )
 {
     ScChangeOpWriter aOp( "setNormalString" );
     aOp.appendAddress( rPos );
@@ -331,7 +331,7 @@ sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& r
     o_rbNumFmtSet = false;
 
     if ( OUString( rText ) == "saveme" )
-        mpCollaboration->SaveAndSendFile( NULL );
+        mpCollaboration->SaveAndSendFile( nullptr );
 
     if ( OUString( rText ) == "contacts" )
         mpCollaboration->DisplayContacts();
@@ -410,7 +410,7 @@ bool ScDocFuncSend::ShowNote( const ScAddress& rPos, bool bShow )
     return true; // needs some code auditing action
 }
 
-bool ScDocFuncSend::SetNoteText( const ScAddress& rPos, const OUString& rNoteText, sal_Bool bApi )
+bool ScDocFuncSend::SetNoteText( const ScAddress& rPos, const OUString& rNoteText, bool bApi )
 {
     ScChangeOpWriter aOp( "setNoteText" );
     aOp.appendAddress( rPos );
@@ -420,8 +420,8 @@ bool ScDocFuncSend::SetNoteText( const ScAddress& rPos, const OUString& rNoteTex
     return true; // needs some code auditing action
 }
 
-sal_Bool ScDocFuncSend::RenameTable( SCTAB nTab, const OUString& rName,
-                                     sal_Bool bRecord, sal_Bool bApi )
+bool ScDocFuncSend::RenameTable( SCTAB nTab, const OUString& rName,
+                                     bool bRecord, bool bApi )
 {
     ScChangeOpWriter aOp( "renameTable" );
     aOp.appendInt( nTab );
@@ -432,22 +432,22 @@ sal_Bool ScDocFuncSend::RenameTable( SCTAB nTab, const OUString& rName,
     return true; // needs some code auditing action
 }
 
-sal_Bool ScDocFuncSend::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
-                                         sal_Bool bApi )
+bool ScDocFuncSend::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
+                                         bool bApi )
 {
     SAL_INFO( "sc.tubes", "ApplyAttributes not implemented!" );
     return ScDocFunc::ApplyAttributes( rMark, rPattern, bApi );
 }
 
-sal_Bool ScDocFuncSend::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
-                                    sal_Bool bApi )
+bool ScDocFuncSend::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
+                                    bool bApi )
 {
     SAL_INFO( "sc.tubes", "ApplyStyle not implemented!" );
     return ScDocFunc::ApplyStyle( rMark, rStyleName, bApi );
 }
 
-sal_Bool ScDocFuncSend::MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
-                             sal_Bool bRecord, sal_Bool bApi )
+bool ScDocFuncSend::MergeCells( const ScCellMergeOption& rOption, bool bContents,
+                             bool bRecord, bool bApi )
 {
     SAL_INFO( "sc.tubes", "MergeCells not implemented!" );
     return ScDocFunc::MergeCells( rOption, bContents, bRecord, bApi );

@@ -30,8 +30,8 @@ class TestTeleTubes: public CppUnit::TestFixture
 {
 public:
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     void testSession();
 
@@ -44,8 +44,8 @@ public:
 
 class TestCollaboration;
 // static, not members, so they actually survive cppunit test iteration
-static TestCollaboration*   mpCollaboration1 = NULL;
-static TestCollaboration*   mpCollaboration2 = NULL;
+static TestCollaboration*   mpCollaboration1 = nullptr;
+static TestCollaboration*   mpCollaboration2 = nullptr;
 //static bool                 mbFileSentSuccess = false;
 static bool                 mbPacketReceived = false;
 static OUString             maTestConfigIniURL;
@@ -54,14 +54,14 @@ static OString              maAccepterIdentifier;
 
 class TestCollaboration : public Collaboration
 {
-    virtual void EndCollaboration() const {}
-    virtual void PacketReceived( const OString& rPacket ) const
+    virtual void EndCollaboration() const override {}
+    virtual void PacketReceived( const OString& rPacket ) const override
     {
         CPPUNIT_ASSERT( rPacket == "from 1 to 2");
         mbPacketReceived = true;
     }
-    virtual void SaveAndSendFile( TpContact* ) const {}
-    virtual void StartCollaboration( TeleConference* ) {}
+    virtual void SaveAndSendFile( TpContact* ) const override {}
+    virtual void StartCollaboration( TeleConference* ) override {}
 };
 
 gboolean timed_out( void * )
@@ -73,7 +73,7 @@ gboolean timed_out( void * )
 
 void TestTeleTubes::setUp()
 {
-    g_timeout_add_seconds (10, timed_out, NULL);
+    g_timeout_add_seconds (10, timed_out, nullptr);
     maTestConfigIniURL = "file://" +
             OUString::createFromAscii( getenv("SRCDIR") ) + "/tubes/qa/test-config.ini";
     rtl::Bootstrap aTestConfig( maTestConfigIniURL );
@@ -115,10 +115,10 @@ void TestTeleTubes::testSession()
         "and are on each other's contact lists",
         pairs.size() > 0 );
 
-    TpAccount* mpOffererAccount = NULL;
-    TpContact* mpAccepterContact = NULL;
+    TpAccount* mpOffererAccount = nullptr;
+    TpContact* mpAccepterContact = nullptr;
 
-    for (guint i = 0; i < pairs.size(); i++)
+    for (AccountContactPairV::size_type i = 0; i < pairs.size(); i++)
     {
         AccountContactPair pair = pairs[i];
 
@@ -146,32 +146,32 @@ void TestTeleTubes::testSession()
         mpAccepterContact);
 
     // Now we can start session
-    TeleConference* pConference = NULL;
+    TeleConference* pConference = nullptr;
     pConference = TeleManager::startBuddySession( mpOffererAccount, mpAccepterContact);
-    CPPUNIT_ASSERT( pConference != NULL);
+    CPPUNIT_ASSERT( pConference != nullptr);
     mpCollaboration1->SetConference( pConference );
     mpCollaboration1->SendFile( mpAccepterContact, maTestConfigIniURL );
 
     g_object_unref(mpOffererAccount);
-    mpOffererAccount = NULL;
+    mpOffererAccount = nullptr;
     g_object_unref(mpAccepterContact);
-    mpAccepterContact = NULL;
+    mpAccepterContact = nullptr;
 
     //while (!mbFileSentSuccess)
     //    g_main_context_iteration( NULL, TRUE);
 
     // This checks that the file was received and msCurrentUUID set (see manager.cxx)
     while (!TeleManager::hasWaitingConference())
-        g_main_context_iteration( NULL, TRUE);
+        g_main_context_iteration( nullptr, TRUE);
 
     pConference = TeleManager::getConference();
-    CPPUNIT_ASSERT( pConference != NULL);
+    CPPUNIT_ASSERT( pConference != nullptr);
     mpCollaboration2->SetConference( pConference );
 
     mpCollaboration1->SendPacket( "from 1 to 2");
 
     while (!mbPacketReceived)
-        g_main_context_iteration( NULL, TRUE);
+        g_main_context_iteration( nullptr, TRUE);
 }
 
 void TestTeleTubes::tearDown()

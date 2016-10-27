@@ -37,7 +37,7 @@ struct InfoLogger
     }
 };
 }
-#define INFO_LOGGER_F(s)    InfoLogger aLogger(0,(s))
+#define INFO_LOGGER_F(s)    InfoLogger aLogger(nullptr,(s))
 #define INFO_LOGGER(s)      InfoLogger aLogger(this,(s))
 #else
 #define INFO_LOGGER_F(s)
@@ -52,7 +52,7 @@ public:
     bool                    mbTubeOfferedHandlerInvoked : 1;
 
     TeleConferenceImpl() :
-        mpTube( NULL ),
+        mpTube( nullptr ),
         mbTubeOfferedHandlerInvoked( false )
     {}
 
@@ -71,7 +71,7 @@ static void TeleConference_MethodCallHandler(
 {
     INFO_LOGGER_F( "TeleConference_MethodCallHandler");
 
-    TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
+    TeleConference* pConference = static_cast<TeleConference*>(pUserData);
     SAL_WARN_IF( !pConference, "tubes", "TeleConference_MethodCallHandler: no conference");
     if (!pConference)
         return;
@@ -97,7 +97,7 @@ static void TeleConference_MethodCallHandler(
 
     GVariant *ay;
     g_variant_get( pParameters, "(@ay)", &ay);
-    const char* pPacketData = reinterpret_cast<const char*>( g_variant_get_data( ay));
+    const char* pPacketData = static_cast<const char*>( g_variant_get_data( ay));
     gsize nPacketSize = g_variant_get_size( ay);
 
     SAL_WARN_IF( !pPacketData, "tubes", "TeleConference_MethodCallHandler: couldn't get packet data");
@@ -114,7 +114,7 @@ static void TeleConference_MethodCallHandler(
     if (pConference->isMaster())
         pConference->sendPacket( aPacket );
 
-    g_dbus_method_invocation_return_value( pInvocation, 0 );
+    g_dbus_method_invocation_return_value( pInvocation, nullptr );
 
     g_variant_unref( ay);
 }
@@ -129,7 +129,7 @@ static void TeleConference_ChannelCloseHandler(
 {
     INFO_LOGGER_F( "TeleConference_ChannelCloseHandler");
 
-    TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
+    TeleConference* pConference = static_cast<TeleConference*>(pUserData);
     SAL_WARN_IF( !pConference, "tubes", "TeleConference_ChannelCloseHandler: no conference");
     if (!pConference)
         return;
@@ -152,7 +152,7 @@ static void TeleConference_TubeOfferedHandler(
 {
     INFO_LOGGER_F( "TeleConference_TubeOfferedHandler");
 
-    TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
+    TeleConference* pConference = static_cast<TeleConference*>(pUserData);
     SAL_WARN_IF( !pConference, "tubes", "TeleConference_TubeOfferedHandler: no conference");
     if (!pConference)
         return;
@@ -160,7 +160,7 @@ static void TeleConference_TubeOfferedHandler(
     pConference->setTubeOfferedHandlerInvoked( true);
 
     TpDBusTubeChannel* pChannel = TP_DBUS_TUBE_CHANNEL( pSource);
-    GError* pError = NULL;
+    GError* pError = nullptr;
     GDBusConnection* pTube = tp_dbus_tube_channel_offer_finish(
             pChannel, pResult, &pError);
 
@@ -183,7 +183,7 @@ static void TeleConference_TubeAcceptedHandler(
 {
     INFO_LOGGER_F( "TeleConference_TubeAcceptedHandler");
 
-    TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
+    TeleConference* pConference = static_cast<TeleConference*>(pUserData);
     SAL_WARN_IF( !pConference, "tubes", "TeleConference_TubeAcceptedHandler: no conference");
     if (!pConference)
         return;
@@ -191,7 +191,7 @@ static void TeleConference_TubeAcceptedHandler(
     pConference->setTubeOfferedHandlerInvoked( true);
 
     TpDBusTubeChannel* pChannel = TP_DBUS_TUBE_CHANNEL( pSource);
-    GError* pError = NULL;
+    GError* pError = nullptr;
     GDBusConnection* pTube = tp_dbus_tube_channel_accept_finish(
             pChannel, pResult, &pError);
 
@@ -209,11 +209,11 @@ static void TeleConference_TubeAcceptedHandler(
 
 
 TeleConference::TeleConference( TpAccount* pAccount,
-        TpDBusTubeChannel* pChannel, const OString sUuid, bool bMaster )
+        TpDBusTubeChannel* pChannel, const OString & sUuid, bool bMaster )
     :
-        mpCollaboration( NULL ),
-        mpAccount( NULL ),
-        mpChannel( NULL ),
+        mpCollaboration( nullptr ),
+        mpAccount( nullptr ),
+        mpChannel( nullptr ),
         msUuid( sUuid ),
         mbMaster( bMaster ),
         pImpl( new TeleConferenceImpl() )
@@ -230,10 +230,10 @@ TeleConference::~TeleConference()
 
 static void channel_closed_cb( TpChannel *channel, gpointer user_data, GObject * /* weak_object */ )
 {
-    Collaboration* pCollaboration = reinterpret_cast<Collaboration*> (user_data);
+    Collaboration* pCollaboration = static_cast<Collaboration*> (user_data);
     if (TeleManager::existsCollaboration( pCollaboration ))
     {
-        GtkWidget *dialog = gtk_message_dialog_new( NULL, static_cast<GtkDialogFlags> (0),
+        GtkWidget *dialog = gtk_message_dialog_new( nullptr, static_cast<GtkDialogFlags> (0),
                 GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
                 "Contact %s lost, you'll now be working locally.",
                 tp_contact_get_alias (tp_channel_get_target_contact (channel)) );
@@ -268,10 +268,10 @@ bool TeleConference::spinUntilTubeEstablished()
 {
     while (!isTubeOfferedHandlerInvoked())
     {
-        g_main_context_iteration( NULL, TRUE );
+        g_main_context_iteration( nullptr, TRUE );
     }
 
-    bool bOpen = pImpl->mpTube != NULL;
+    bool bOpen = pImpl->mpTube != nullptr;
     SAL_INFO( "tubes", "TeleConference::spinUntilTubeEstablished: tube open: " << bOpen);
     return bOpen;
 }
@@ -303,7 +303,7 @@ bool TeleConference::offerTube()
 
     GHashTable* pParameters = tp_asv_new (
             LIBO_TUBES_UUID, G_TYPE_STRING, msUuid.getStr(),
-            NULL);
+            nullptr);
 
     tp_dbus_tube_channel_offer_async(
             mpChannel,
@@ -327,9 +327,9 @@ bool TeleConference::setTube( GDBusConnection* pTube)
     static const GDBusInterfaceVTable interface_vtable =
     {
         TeleConference_MethodCallHandler,
-        NULL,
-        NULL,
-        { NULL },
+        nullptr,
+        nullptr,
+        { nullptr },
     };
     static const gchar introspection_xml[] =
         "<node>"
@@ -340,12 +340,12 @@ bool TeleConference::setTube( GDBusConnection* pTube)
         "  </interface>"
         "</node>";
 
-    introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
-    g_assert (introspection_data != NULL);
+    introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, nullptr);
+    g_assert (introspection_data != nullptr);
 
     pImpl->maObjectRegistrationId = g_dbus_connection_register_object( pImpl->mpTube,
             LIBO_TUBES_DBUS_PATH, introspection_data->interfaces[0],
-            &interface_vtable, this, NULL, NULL);
+            &interface_vtable, this, nullptr, nullptr);
     g_assert (pImpl->maObjectRegistrationId > 0);
 
     g_dbus_node_info_unref (introspection_data);
@@ -373,7 +373,7 @@ void TeleConference::close()
     INFO_LOGGER( "TeleConference::close");
 
     if (mpChannel)
-        tp_cli_channel_call_close( TP_CHANNEL( mpChannel), 5000, TeleConference_ChannelCloseHandler, this, NULL, NULL);
+        tp_cli_channel_call_close( TP_CHANNEL( mpChannel), 5000, TeleConference_ChannelCloseHandler, this, nullptr, nullptr);
     else
         finalize();
 }
@@ -388,21 +388,21 @@ void TeleConference::finalize()
     if (mpChannel)
     {
         g_object_unref( mpChannel);
-        mpChannel = NULL;
+        mpChannel = nullptr;
     }
 
     if (mpAccount)
     {
         g_object_unref( mpAccount);
-        mpAccount = NULL;
+        mpAccount = nullptr;
     }
 
     if (pImpl->mpTube)
     {
         g_dbus_connection_unregister_object( pImpl->mpTube, pImpl->maObjectRegistrationId);
-        g_dbus_connection_close_sync( pImpl->mpTube, NULL, NULL );
+        g_dbus_connection_close_sync( pImpl->mpTube, nullptr, nullptr );
         g_object_unref( pImpl->mpTube );
-        pImpl->mpTube = NULL;
+        pImpl->mpTube = nullptr;
     }
 
     //! *this gets destructed here!
@@ -433,14 +433,14 @@ bool TeleConference::sendPacket( const OString& rPacket )
             g_free, pData);
 
     g_dbus_connection_call( pImpl->mpTube,
-            NULL, /* bus name; in multi-user case we'd address this to the master. */
+            nullptr, /* bus name; in multi-user case we'd address this to the master. */
             LIBO_TUBES_DBUS_PATH,
             LIBO_TUBES_DBUS_INTERFACE,
             LIBO_TUBES_DBUS_MSG_METHOD,
             pParameters, /* consumes the floating reference */
-            NULL,
+            nullptr,
             G_DBUS_CALL_FLAGS_NONE,
-            -1, NULL, NULL, NULL);
+            -1, nullptr, nullptr, nullptr);
 
     // If we started the session, we can execute commands immediately.
     if (mbMaster && mpCollaboration)
@@ -464,9 +464,9 @@ void TeleConference::setCollaboration( Collaboration* pCollaboration )
     mpCollaboration = pCollaboration;
     if (mpChannel)
     {
-        GError *error = NULL;
+        GError *error = nullptr;
         if (!tp_cli_channel_connect_to_closed( TP_CHANNEL (mpChannel),
-                    channel_closed_cb, mpCollaboration, NULL, NULL, &error ))
+                    channel_closed_cb, mpCollaboration, nullptr, nullptr, &error ))
         {
             SAL_WARN( "tubes", "Error when connecting to signal closed: " << error->message );
             g_error_free (error);
@@ -480,7 +480,7 @@ void TeleConference::invite( TpContact *pContact )
     TpHandle aHandle = tp_contact_get_handle( pContact );
     GArray handles = { reinterpret_cast<gchar *> (&aHandle), 1 };
     tp_cli_channel_interface_group_call_add_members( TP_CHANNEL( mpChannel ),
-            -1, &handles, NULL, NULL, NULL, NULL, NULL );
+            -1, &handles, nullptr, nullptr, nullptr, nullptr, nullptr );
 }
 
 namespace {
@@ -500,7 +500,7 @@ public:
 
 static void TeleConference_TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer user_data)
 {
-    SendFileRequest *request = reinterpret_cast<SendFileRequest *>(user_data);
+    SendFileRequest *request = static_cast<SendFileRequest *>(user_data);
 
     if (request->mpCallback)
         request->mpCallback(true, request->mpUserData);
@@ -510,7 +510,7 @@ static void TeleConference_TransferDone( EmpathyFTHandler *handler, TpFileTransf
 
 static void TeleConference_TransferError( EmpathyFTHandler *handler, const GError *error, gpointer user_data)
 {
-    SendFileRequest *request = reinterpret_cast<SendFileRequest *>(user_data);
+    SendFileRequest *request = static_cast<SendFileRequest *>(user_data);
 
     SAL_INFO( "tubes", "TeleConference_TransferError: " << error->message);
 
@@ -522,12 +522,12 @@ static void TeleConference_TransferError( EmpathyFTHandler *handler, const GErro
 
 static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gpointer user_data)
 {
-    SendFileRequest *request = reinterpret_cast<SendFileRequest *>(user_data);
+    SendFileRequest *request = static_cast<SendFileRequest *>(user_data);
 
-    if ( error != 0 )
+    if ( error != nullptr )
     {
         if (request->mpCallback)
-            request->mpCallback(error == 0, request->mpUserData);
+            request->mpCallback(error == nullptr, request->mpUserData);
         delete request;
         g_object_unref (handler);
     }
@@ -544,7 +544,6 @@ static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gp
 }
 
 // TODO: move sending file to TeleManager
-extern void TeleManager_fileReceived( const OUString&, const OString& );
 void TeleConference::sendFile( TpContact* pContact, const OUString& localUri, FileSentCallback pCallback, void* pUserData)
 {
     INFO_LOGGER( "TeleConference::sendFile");

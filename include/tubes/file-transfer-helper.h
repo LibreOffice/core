@@ -41,7 +41,7 @@ G_BEGIN_DECLS
 #define EMPATHY_IS_FT_HANDLER(obj) \
   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EMPATHY_TYPE_FT_HANDLER))
 
-typedef struct _EmpathyFTHandlerPriv EmpathyFTHandlerPriv;
+typedef struct EmpathyFTHandlerPriv_ EmpathyFTHandlerPriv;
 
 typedef struct {
   GObject parent;
