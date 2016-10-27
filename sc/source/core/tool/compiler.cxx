@@ -1470,12 +1470,23 @@ struct ConventionXL_OOX : public ConventionXL_A1
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 nFileId, const OUString& /*rFileName*/,
         const OUString& rTabName, const ScSingleRefData& rRef ) const override
     {
-        // [N]'Sheet Name'!$A$1
+        // '[N]Sheet Name'!$A$1 or [N]SheetName!$A$1
         // Where N is a 1-based positive integer number of a file name in OOXML
         // xl/externalLinks/externalLinkN.xml
 
-        ConventionXL_OOX::makeExternalDocStr(rBuffer, nFileId);
-        ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
+        OUString aQuotedTab( rTabName);
+        ScCompiler::CheckTabQuotes( aQuotedTab);
+        if (!aQuotedTab.isEmpty() && aQuotedTab[0] == '\'')
+        {
+            rBuffer.append('\'');
+            ConventionXL_OOX::makeExternalDocStr( rBuffer, nFileId);
+            rBuffer.append( aQuotedTab.copy(1));
+        }
+        else
+        {
+            ConventionXL_OOX::makeExternalDocStr( rBuffer, nFileId);
+            rBuffer.append( aQuotedTab);
+        }
         rBuffer.append('!');
 
         makeSingleCellStr(rBuffer, rRef, rRef.toAbs(rPos));
@@ -1486,10 +1497,27 @@ struct ConventionXL_OOX : public ConventionXL_A1
         const std::vector<OUString>& rTabNames, const OUString& rTabName,
         const ScComplexRefData& rRef ) const override
     {
+        // '[N]Sheet One':'Sheet Two'!A1:B2 or [N]SheetOne!A1:B2
+        // Actually Excel writes '[N]Sheet One:Sheet Two'!A1:B2 but reads the
+        // simpler to produce and more logical form with independently quoted
+        // sheet names as well. The [N] having to be within the quoted sheet
+        // name is ugly enough..
+
         ScRange aAbsRef = rRef.toAbs(rPos);
 
-        ConventionXL_OOX::makeExternalDocStr(rBuffer, nFileId);
-        ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, rTabNames, aAbsRef);
+        OUStringBuffer aBuf;
+        ConventionXL::makeExternalTabNameRange( aBuf, rTabName, rTabNames, aAbsRef);
+        if (!aBuf.isEmpty() && aBuf[0] == '\'')
+        {
+            rBuffer.append('\'');
+            ConventionXL_OOX::makeExternalDocStr( rBuffer, nFileId);
+            rBuffer.append( aBuf.copy(1));
+        }
+        else
+        {
+            ConventionXL_OOX::makeExternalDocStr( rBuffer, nFileId);
+            rBuffer.append( aBuf);
+        }
         rBuffer.append('!');
 
         makeSingleCellStr(rBuffer, rRef.Ref1, aAbsRef.aStart);
