@@ -64,7 +64,7 @@ private:
     Link<FuncPage&, void>    aModifyLink;
     VclPtr<ListBox>          m_pLbCategory;
     VclPtr<FormulaListBox>   m_pLbFunction;
-    VclPtr<Edit>        m_plbFunctionSearchString;
+    VclPtr<Edit>             m_plbFunctionSearchString;
     const IFunctionManager*  m_pFunctionManager;
 
     ::std::vector< TFunctionDesc >  aLRUList;

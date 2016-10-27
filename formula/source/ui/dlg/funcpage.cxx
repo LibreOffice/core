@@ -156,30 +156,32 @@ void FuncPage::UpdateFunctionList(OUString& aStr)
                 }
             }
         }
-
-
-        m_pLbFunction->SetUpdateMode( true );
-        // Ensure no function is selected so the Next button doesn't overwrite a
-        // function that is not in the list with an arbitrary selected one.
-        m_pLbFunction->SetNoSelection();
-
-        if(IsVisible()) SelHdl(*m_pLbFunction);
     }
     else{
         const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
 
-        for (sal_uInt32 i = 0; i < nCategoryCount; i++){
+        for (sal_uInt32 i = 0; i < nCategoryCount; i++)
+        {
             const IFunctionCategory* pCategory = m_pFunctionManager->getCategory(i);
             const sal_uInt32 functionCount = pCategory->getCount();
-            for (sal_uInt32 j = 0; j < functionCount; ++j) {
+            for (sal_uInt32 j = 0; j < functionCount; ++j)
+            {
                 TFunctionDesc pDesc(pCategory->getFunction(j));
-                if ((pDesc->getFunctionName()).indexOf(aStr.toAsciiUpperCase()) >= 0) {
+                if ((pDesc->getFunctionName()).indexOf(aStr.toAsciiUpperCase()) >= 0)
+                {
                     m_pLbFunction->SetEntryData(
                         m_pLbFunction->InsertEntry(pDesc->getFunctionName()), const_cast<IFunctionDescription *>(pDesc));
                 }
             }
         }
     }
+
+    m_pLbFunction->SetUpdateMode( true );
+        // Ensure no function is selected so the Next button doesn't overwrite a
+        // function that is not in the list with an arbitrary selected one.
+    m_pLbFunction->SetNoSelection();
+
+    if(IsVisible()) SelHdl(*m_pLbFunction);
 }
 
 IMPL_LINK( FuncPage, SelHdl, ListBox&, rLb, void )
