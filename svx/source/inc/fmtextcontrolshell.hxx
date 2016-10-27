@@ -101,7 +101,7 @@ namespace svx
 
         // translating between "slots" of the framework and "features" of the active control
         typedef rtl::Reference<FmTextControlFeature> ControlFeature;
-        typedef ::std::map< SfxSlotId, ControlFeature, ::std::less< SfxSlotId > >   ControlFeatures;
+        typedef ::std::map< SfxSlotId, ControlFeature >   ControlFeatures;
         ControlFeatures                                             m_aControlFeatures;
 
         SfxViewFrame*                                               m_pViewFrame;
