@@ -701,7 +701,6 @@ class ImplIntrospectionAccess : public IntrospectionAccessHelper
     Reference<XIndexAccess>         getXIndexAccess();
     Reference<XEnumerationAccess>   getXEnumerationAccess();
     Reference<XIdlArray>            getXIdlArray();
-    Reference<XUnoTunnel>           getXUnoTunnel();
 
     void cacheXNameContainer();
     void cacheXIndexContainer();
@@ -1019,11 +1018,6 @@ Reference<XIdlArray> ImplIntrospectionAccess::getXIdlArray()
     return mxObjIdlArray;
 }
 
-Reference<XUnoTunnel> ImplIntrospectionAccess::getXUnoTunnel()
-{
-    return Reference<XUnoTunnel>::query( mxIface );
-}
-
 // Methods from XInterface
 Any SAL_CALL ImplIntrospectionAccess::queryInterface( const Type& rType )
     throw( RuntimeException, std::exception )
@@ -1282,7 +1276,7 @@ void ImplIntrospectionAccess::set(Any& array, sal_Int32 index, const Any& value)
 sal_Int64 ImplIntrospectionAccess::getSomething( const Sequence< sal_Int8 >& aIdentifier )
         throw (RuntimeException, std::exception)
 {
-    return getXUnoTunnel()->getSomething( aIdentifier );
+    return Reference<XUnoTunnel>::query( mxIface )->getSomething( aIdentifier );
 }
 
 

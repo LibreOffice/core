@@ -1397,7 +1397,7 @@ namespace svgio
                     {
                         if(aNum.isPositive())
                         {
-                            setStrokeDashOffset(aNum);
+                            maStrokeDashOffset = aNum;
                         }
                     }
                     break;
@@ -1448,7 +1448,7 @@ namespace svgio
                     {
                         if(basegfx::fTools::moreOrEqual(aNum.getNumber(), 1.0))
                         { //readSingleNumber sets Unit_px as default, if unit is missing. Correct it here.
-                            setStrokeMiterLimit(SvgNumber(aNum.getNumber(), Unit_none));
+                            maStrokeMiterLimit = SvgNumber(aNum.getNumber(), Unit_none);
                         }
                     }
                     break;
@@ -1937,7 +1937,7 @@ namespace svgio
                         }
                         else if(readSingleNumber(aContent, aNum))
                         {
-                            setBaselineShiftNumber(aNum);
+                            maBaselineShiftNumber = aNum;
 
                             if(Unit_percent == aNum.getUnit())
                             {

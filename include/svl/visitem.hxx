@@ -63,8 +63,6 @@ public:
 
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
-    OUString GetValueTextByVal(bool bTheValue) const;
-
     bool GetValue() const { return m_nValue.bVisible; }
 };
 

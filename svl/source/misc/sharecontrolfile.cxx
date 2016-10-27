@@ -54,28 +54,6 @@ namespace svt {
 ShareControlFile::ShareControlFile( const OUString& aOrigURL )
 : LockFileCommon( aOrigURL, OUString( ".~sharing."  ) )
 {
-    OpenStream();
-
-    if ( !IsValid() )
-        throw io::NotConnectedException();
-}
-
-
-ShareControlFile::~ShareControlFile()
-{
-    try
-    {
-        Close();
-    }
-    catch( uno::Exception& )
-    {}
-}
-
-
-void ShareControlFile::OpenStream()
-{
-    // if it is called outside of constructor the mutex must be locked already
-
     if ( !m_xStream.is() && !m_aURL.isEmpty() )
     {
         uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
@@ -125,8 +103,20 @@ void ShareControlFile::OpenStream()
         m_xTruncate.set( m_xOutputStream, uno::UNO_QUERY_THROW );
         m_xStream = xStream;
     }
+
+    if ( !IsValid() )
+        throw io::NotConnectedException();
 }
 
+ShareControlFile::~ShareControlFile()
+{
+    try
+    {
+        Close();
+    }
+    catch( uno::Exception& )
+    {}
+}
 
 void ShareControlFile::Close()
 {

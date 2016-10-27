@@ -167,7 +167,6 @@ public:
 
     SvStream &                      Load(SvStream &);
     virtual SvStream &              Store(SvStream &) const;
-    bool                            HasPersistentRefCounts() const;
     void                            LoadCompleted();
 
     sal_uInt16                      GetFirstWhich() const;

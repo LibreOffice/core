@@ -2744,18 +2744,6 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
 }
 
 
-void SvNumberFormatter::ImpGetPosCurrFormat(OUStringBuffer& sPosStr, const OUString& rCurrSymbol)
-{
-    NfCurrencyEntry::CompletePositiveFormatString( sPosStr,
-        rCurrSymbol, xLocaleData->getCurrPositiveFormat() );
-}
-
-void SvNumberFormatter::ImpGetNegCurrFormat(OUStringBuffer& sNegStr, const OUString& rCurrSymbol)
-{
-    NfCurrencyEntry::CompleteNegativeFormatString( sNegStr,
-        rCurrSymbol, xLocaleData->getCurrNegativeFormat() );
-}
-
 sal_Int32 SvNumberFormatter::ImpPosToken ( const OUStringBuffer & sFormat, sal_Unicode token, sal_Int32 nStartPos /* = 0*/ )
 {
     sal_Int32 nLength = sFormat.getLength();
@@ -2911,8 +2899,10 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
         {   // "automatic" old style
             OUString aSymbol, aAbbrev;
             GetCompatibilityCurrency( aSymbol, aAbbrev );
-            ImpGetPosCurrFormat( sString, aSymbol );
-            ImpGetNegCurrFormat( sNegStr, aSymbol );
+            NfCurrencyEntry::CompletePositiveFormatString( sString,
+                                aSymbol, xLocaleData->getCurrPositiveFormat() );
+            NfCurrencyEntry::CompleteNegativeFormatString( sNegStr,
+                                aSymbol, xLocaleData->getCurrNegativeFormat() );
         }
         if (IsRed)
         {
