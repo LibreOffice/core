@@ -722,7 +722,12 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
     throw (RuntimeException, std::exception)
 {
-    ThrowIfDisposed();
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        throw lang::DisposedException (
+            OUString( "PresenterController object has already been disposed"),
+            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
+    }
 
     sal_Int32 nType (0);
     if ( ! (rEvent.UserData >>= nType))
@@ -1206,17 +1211,6 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
             aContext,
             rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
             0));
-}
-
-void PresenterController::ThrowIfDisposed() const
-    throw (css::lang::DisposedException)
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            OUString( "PresenterController object has already been disposed"),
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
-    }
 }
 
 void PresenterController::SwitchMonitors()

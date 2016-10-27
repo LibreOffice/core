@@ -127,7 +127,6 @@ namespace {
     private:
         bool mbOn;
         rtl::Reference<PresenterController> mpPresenterController;
-        static bool IsActive (const ::rtl::Reference<PresenterWindowManager>& rpWindowManager);
     };
 
     class SetSlideSorterCommand : public Command
@@ -240,8 +239,6 @@ private:
         const OUString& rsURLPath,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~Dispatch() override;
-
-    void ThrowIfDisposed() const throw (css::lang::DisposedException);
 };
 
 //----- Service ---------------------------------------------------------------
@@ -453,11 +450,16 @@ void PresenterProtocolHandler::Dispatch::disposing()
 
 void SAL_CALL PresenterProtocolHandler::Dispatch::dispatch(
     const css::util::URL& rURL,
-    const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
+    const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
     throw(css::uno::RuntimeException, std::exception)
 {
-    (void)rArguments;
-    ThrowIfDisposed();
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        throw lang::DisposedException (
+            OUString(
+                "PresenterProtocolHandler::Dispatch object has already been disposed"),
+            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
+    }
 
     if (rURL.Protocol == "vnd.org.libreoffice.presenterscreen:"
         && rURL.Path == msURLPath)
@@ -509,18 +511,6 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::removeStatusListener (
     }
     else
         throw RuntimeException();
-}
-
-void PresenterProtocolHandler::Dispatch::ThrowIfDisposed() const
-    throw (css::lang::DisposedException)
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            OUString(
-                "PresenterProtocolHandler::Dispatch object has already been disposed"),
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
-    }
 }
 
 //----- document::XEventListener ----------------------------------------------
@@ -675,13 +665,7 @@ Any SetNotesViewCommand::GetState() const
     if ( ! pWindowManager.is())
         return Any(false);
 
-    return Any(IsActive(pWindowManager));
-}
-
-bool SetNotesViewCommand::IsActive (
-    const ::rtl::Reference<PresenterWindowManager>& rpWindowManager)
-{
-    return rpWindowManager->GetViewMode() == PresenterWindowManager::VM_Notes;
+    return Any(pWindowManager->GetViewMode() == PresenterWindowManager::VM_Notes);
 }
 
 //===== SetSlideSorterCommand =================================================

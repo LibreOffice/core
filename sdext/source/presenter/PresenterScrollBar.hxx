@@ -214,7 +214,6 @@ protected:
         const css::awt::Rectangle& rRepaintBox,
         const Area eArea,
         const SharedBitmapDescriptor& rpBitmaps);
-    void NotifyThumbPositionChange();
     void UpdateWidthOrHeight (sal_Int32& rSize,
         const SharedBitmapDescriptor& rpDescriptor);
     css::uno::Reference<css::rendering::XBitmap> GetBitmap (

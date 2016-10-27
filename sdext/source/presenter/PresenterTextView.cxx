@@ -1201,7 +1201,7 @@ PresenterTextParagraph::Line::Line (
 
 void PresenterTextParagraph::Line::ProvideCellBoxes()
 {
-    if ( ! IsEmpty() && maCellBoxes.getLength()==0)
+    if ( mnLineStartCharacterIndex < mnLineEndCharacterIndex && maCellBoxes.getLength()==0 )
     {
         if (mxLayoutedLine.is())
             maCellBoxes = mxLayoutedLine->queryInkMeasures();
@@ -1229,11 +1229,6 @@ void PresenterTextParagraph::Line::ProvideLayoutedLine (
             nTextDirection,
             0);
     }
-}
-
-bool PresenterTextParagraph::Line::IsEmpty() const
-{
-    return mnLineStartCharacterIndex >= mnLineEndCharacterIndex;
 }
 
 } } // end of namespace ::sdext::presenter

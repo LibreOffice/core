@@ -814,8 +814,15 @@ void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
         pIterator->notifyEach(&awt::XPaintListener::windowPaint, aEvent);
     }
 
-    if (mbIsForcedPaintPending)
-        ForceRepaint();
+    /** The slide show relies on the back buffer of the canvas not being
+        modified.  With a shared canvas there are times when that can not be
+        guaranteed.
+    */
+    if (mbIsForcedPaintPending && mxSlideShow.is() && mbIsViewAdded)
+    {
+        mxSlideShow->removeView(this);
+        impl_addAndConfigureView();
+    }
 
     // Finally, in double buffered environments, request the changes to be
     // made visible.
@@ -927,15 +934,6 @@ void PresenterSlideShowView::Resize()
     // we have to enforce a complete repaint.
     if ( ! mbIsPaintPending)
         mbIsForcedPaintPending = true;
-}
-
-void PresenterSlideShowView::ForceRepaint()
-{
-    if (mxSlideShow.is() && mbIsViewAdded)
-    {
-        mxSlideShow->removeView(this);
-        impl_addAndConfigureView();
-    }
 }
 
 void PresenterSlideShowView::CreateBackgroundPolygons()

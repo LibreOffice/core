@@ -166,12 +166,6 @@ private:
     void Scroll (const double nDistance);
     void SetTop (const double nTop);
     void UpdateScrollBar();
-
-    /** This method throws a DisposedException when the object has already been
-        disposed.
-    */
-    void ThrowIfDisposed()
-        throw (css::lang::DisposedException);
 };
 
 } } // end of namespace ::sdext::presenter

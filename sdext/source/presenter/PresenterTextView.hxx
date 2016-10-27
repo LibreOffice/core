@@ -175,7 +175,6 @@ private:
             const PresenterTheme::SharedFontDescriptor& rpFont,
             const sal_Int8 nTextDirection);
         void ProvideCellBoxes();
-        bool IsEmpty() const;
     };
 
     css::uno::Reference<css::i18n::XBreakIterator> mxBreakIterator;
