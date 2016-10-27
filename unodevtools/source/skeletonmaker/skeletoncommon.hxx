@@ -33,8 +33,7 @@
 
 namespace skeletonmaker {
 
-typedef ::std::map< OString, ::std::vector< OString >,
-                    ::std::less< OString > > ProtocolCmdMap;
+typedef ::std::map< OString, ::std::vector< OString > > ProtocolCmdMap;
 
 typedef ::std::vector< unoidl::AccumulationBasedServiceEntity::Property >
 AttributeInfo;
