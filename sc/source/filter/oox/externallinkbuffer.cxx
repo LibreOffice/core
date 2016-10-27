@@ -435,8 +435,6 @@ sal_Int32 ExternalLink::getDocumentLinkIndex() const
 sal_Int32 ExternalLink::getSheetCacheIndex( sal_Int32 nTabId ) const
 {
     OSL_ENSURE( meLinkType == LINKTYPE_EXTERNAL, "ExternalLink::getSheetCacheIndex - invalid link type" );
-    OSL_ENSURE( nTabId == 0,
-        "ExternalLink::getSheetCacheIndex - invalid sheet index" );
     return ContainerHelper::getVectorElement( maSheetCaches, nTabId, -1 );
 }
 
