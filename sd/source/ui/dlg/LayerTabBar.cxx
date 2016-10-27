@@ -96,6 +96,7 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
             bool bVisible = pPV->IsLayerVisible(aName);
             pPV->SetLayerVisible(aName, !bVisible);
             pDrViewSh->ResetActualLayer();
+            pDrViewSh->GetView()->GetDoc().SetChanged();
         }
     }
 
