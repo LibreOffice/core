@@ -100,13 +100,6 @@ private:
     ModuleController (const ModuleController&) = delete;
     virtual ~ModuleController() throw() override;
 
-    /** Load a list of URL to service mappings from the
-        /org.openoffice.Office.Impress/MultiPaneGUI/Framework/ResourceFactories
-        configuration entry.  The mappings are stored in the
-        mpResourceToFactoryMap member.
-    */
-    void LoadFactories (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-
     /** Called for every entry in the ResourceFactories configuration entry.
     */
     void ProcessFactory (const ::std::vector<css::uno::Any>& rValues);

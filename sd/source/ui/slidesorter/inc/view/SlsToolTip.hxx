@@ -60,12 +60,6 @@ private:
     Timer maShowTimer;
     Timer maHiddenTimer;
 
-    /** Request to show the tool tip.
-        @param bForce
-            When <TRUE/> then the tool tip is show right away.  Otherwise it
-            is shown after a short delay.
-    */
-    void Show (const bool bForce);
     void DoShow();
 
     DECL_LINK(DelayTrigger, Timer*, void);

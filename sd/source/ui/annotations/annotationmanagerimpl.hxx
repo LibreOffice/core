@@ -103,8 +103,6 @@ public:
     void DisposeTags();
 
     SdPage* GetNextPage( SdPage* pPage, bool bForeward );
-    SdPage* GetFirstPage();
-    SdPage* GetLastPage();
 
     SdPage* GetCurrentPage();
 

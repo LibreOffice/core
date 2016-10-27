@@ -1092,17 +1092,22 @@ Color AnnotationManagerImpl::GetColorDark(sal_uInt16 aAuthorIndex)
     return Color(COL_WHITE);
 }
 
-SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
+SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForward )
 {
     if( pPage == nullptr )
-        return bForeward ? GetFirstPage() : GetLastPage();
+    {
+        if (bForward)
+            return mpDoc->GetSdPage(0, PageKind::Standard ); // first page
+        else
+            return mpDoc->GetMasterSdPage( mpDoc->GetMasterSdPageCount(PageKind::Standard) - 1, PageKind::Standard ); // last page
+    }
 
     sal_uInt16 nPageNum = (pPage->GetPageNum() - 1) >> 1;
 
     // first all non master pages
     if( !pPage->IsMasterPage() )
     {
-        if( bForeward )
+        if( bForward )
         {
             if( nPageNum >= mpDoc->GetSdPageCount(PageKind::Standard)-1 )
             {
@@ -1122,7 +1127,7 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
     }
     else
     {
-        if( bForeward )
+        if( bForward )
         {
             if( nPageNum >= mpDoc->GetMasterSdPageCount(PageKind::Standard)-1 )
             {
@@ -1142,17 +1147,6 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
         }
         return mpDoc->GetMasterSdPage(nPageNum,PageKind::Standard);
     }
-}
-
-SdPage* AnnotationManagerImpl::GetFirstPage()
-{
-    // return first drawing page
-    return mpDoc->GetSdPage(0, PageKind::Standard );
-}
-
-SdPage* AnnotationManagerImpl::GetLastPage()
-{
-    return mpDoc->GetMasterSdPage( mpDoc->GetMasterSdPageCount(PageKind::Standard) - 1, PageKind::Standard );
 }
 
 SdPage* AnnotationManagerImpl::GetCurrentPage()

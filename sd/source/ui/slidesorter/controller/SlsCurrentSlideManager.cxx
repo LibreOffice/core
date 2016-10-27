@@ -94,16 +94,12 @@ void CurrentSlideManager::ReleaseCurrentSlide()
     mnCurrentSlideIndex = -1;
 }
 
-bool CurrentSlideManager::IsCurrentSlideIsValid()
-{
-    return mnCurrentSlideIndex >= 0 && mnCurrentSlideIndex<mrSlideSorter.GetModel().GetPageCount();
-}
-
 void CurrentSlideManager::AcquireCurrentSlide (const sal_Int32 nSlideIndex)
 {
     mnCurrentSlideIndex = nSlideIndex;
 
-    if (IsCurrentSlideIsValid())
+    // if current slide valid
+    if (mnCurrentSlideIndex >= 0 && mnCurrentSlideIndex<mrSlideSorter.GetModel().GetPageCount())
     {
         // Get a descriptor for the XDrawPage reference.  Note that the
         // given XDrawPage may or may not be member of the slide sorter

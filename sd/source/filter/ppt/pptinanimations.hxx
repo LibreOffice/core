@@ -81,8 +81,6 @@ private:
     bool convertAnimationNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, const css::uno::Reference< css::animations::XAnimationNode >& xParent );
     static bool convertAnimationValue( oox::ppt::MS_AttributeNames eAttribute, css::uno::Any& rValue );
 
-    void processAfterEffectNodes();
-
     css::uno::Any  implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
     static sal_Int16            implGetColorSpace( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
 

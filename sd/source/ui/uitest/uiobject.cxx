@@ -124,7 +124,7 @@ void ImpressWindowUIObject::execute(const OUString& rAction,
             auto itr = rParameters.find("OBJECT");
             OUString aName = itr->second;
             SdrObject* pObj = getObject(mxWindow, aName);
-            SdrPageView* pPageView = getPageView();
+            SdrPageView* pPageView = getViewShell(mxWindow)->GetView()->GetSdrPageView();
             getViewShell(mxWindow)->GetView()->MarkObj(pObj, pPageView);
         }
     }
@@ -169,11 +169,6 @@ std::unique_ptr<UIObject> ImpressWindowUIObject::create(vcl::Window* pWindow)
     sd::Window* pWin = dynamic_cast<sd::Window*>(pWindow);
     assert(pWin);
     return std::unique_ptr<UIObject>(new ImpressWindowUIObject(pWin));
-}
-
-SdrPageView* ImpressWindowUIObject::getPageView()
-{
-    return getViewShell(mxWindow)->GetView()->GetSdrPageView();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

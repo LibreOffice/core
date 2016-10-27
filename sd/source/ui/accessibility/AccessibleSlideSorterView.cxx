@@ -336,7 +336,7 @@ void SAL_CALL AccessibleSlideSorterView::addAccessibleEventListener(
     {
         const osl::MutexGuard aGuard(maMutex);
 
-        if (IsDisposed())
+        if (rBHelper.bDisposed || rBHelper.bInDispose)
         {
             uno::Reference<uno::XInterface> x (static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
             rxListener->disposing (lang::EventObject (x));
@@ -652,11 +652,6 @@ void AccessibleSlideSorterView::ThrowIfDisposed()
         throw lang::DisposedException ("object has been already disposed",
             static_cast<uno::XWeak*>(this));
     }
-}
-
-bool AccessibleSlideSorterView::IsDisposed()
-{
-    return (rBHelper.bDisposed || rBHelper.bInDispose);
 }
 
 //===== AccessibleSlideSorterView::Implementation =============================

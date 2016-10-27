@@ -455,13 +455,6 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
    }
 }
 
-MasterPagesSelector::UserData* MasterPagesSelector::CreateUserData (
-    int nIndex,
-    MasterPageContainer::Token aToken)
-{
-    return new UserData(nIndex,aToken);
-}
-
 MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) const
 {
     const ::osl::MutexGuard aGuard (maMutex);
@@ -519,7 +512,7 @@ void MasterPagesSelector::SetItem (
                         mpContainer->GetPageNameForToken(aToken),
                         nIndex);
                 }
-                SetUserData(nIndex, CreateUserData(nIndex,aToken));
+                SetUserData(nIndex, new UserData(nIndex,aToken));
 
                 AddTokenToIndexEntry(nIndex,aToken);
             }

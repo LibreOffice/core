@@ -159,7 +159,6 @@ public:
 
     // settings
     bool isFullScreen();                                // a.k.a. FuSlideShow::IsFullScreen()
-    bool isAlwaysOnTop();                               // a.k.a. FuSlideShow::IsAlwaysOnTop();
     OutputDevice* getShowWindow();                      // a.k.a. FuSlideShow::GetShowWindow()
     int getAnimationMode();                             // a.k.a. FuSlideShow::GetAnimationMode()
     sal_Int32 getCurrentPageNumber();                   // a.k.a. FuSlideShow::GetCurrentPage()

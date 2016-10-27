@@ -1740,37 +1740,6 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
     return false;
 }
 
-void CustomAnimationPane::animationChange()
-{
-    if( maListSelection.size() == 1 )
-    {
-        CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectEntryData());
-        // tdf#99137, the selected entry may also be a subcategory title, so not an effect
-        // just leave in this case
-        if (!pPreset)
-            return;
-        const double fDuration = (*pPreset)->getDuration();
-        CustomAnimationPresetPtr pDescriptor(*pPreset);
-        MainSequenceRebuildGuard aGuard( mpMainSequence );
-
-        // get selected effect
-        EffectSequence::iterator aIter( maListSelection.begin() );
-        const EffectSequence::iterator aEnd( maListSelection.end() );
-        while( aIter != aEnd )
-        {
-            CustomAnimationEffectPtr pEffect = (*aIter++);
-
-            EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
-            if( !pEffectSequence )
-                pEffectSequence = mpMainSequence.get();
-
-            pEffectSequence->replace( pEffect, pDescriptor, fDuration );
-        }
-        onPreview(false);
-    }
-
-}
-
 void CustomAnimationPane::onAdd()
 {
     bool bHasText = true;
@@ -1976,40 +1945,6 @@ void CustomAnimationPane::onChangeStart( sal_Int16 nNodeType )
     }
 }
 
-void CustomAnimationPane::onChangeProperty()
-{
-    if( mpLBProperty->getSubControl() )
-    {
-        addUndo();
-
-        MainSequenceRebuildGuard aGuard( mpMainSequence );
-
-        const Any aValue( mpLBProperty->getSubControl()->getValue() );
-
-        bool bNeedUpdate = false;
-
-        // change selected effect
-        EffectSequence::iterator aIter( maListSelection.begin() );
-        const EffectSequence::iterator aEnd( maListSelection.end() );
-        while( aIter != aEnd )
-        {
-            CustomAnimationEffectPtr pEffect = (*aIter++);
-
-            if( setProperty1Value( mnPropertyType, pEffect, aValue ) )
-                bNeedUpdate = true;
-        }
-
-        if( bNeedUpdate )
-        {
-            mpMainSequence->rebuild();
-            updateControls();
-            mrBase.GetDocShell()->SetModified();
-        }
-
-        onPreview( false );
-    }
-}
-
 void CustomAnimationPane::onChangeSpeed()
 {
     double fDuration = getDuration();
@@ -2051,12 +1986,66 @@ double CustomAnimationPane::getDuration()
 /// this link is called when the property box is modified by the user
 IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
 {
-    onChangeProperty();
+    if( mpLBProperty->getSubControl() )
+    {
+        addUndo();
+
+        MainSequenceRebuildGuard aGuard( mpMainSequence );
+
+        const Any aValue( mpLBProperty->getSubControl()->getValue() );
+
+        bool bNeedUpdate = false;
+
+        // change selected effect
+        EffectSequence::iterator aIter( maListSelection.begin() );
+        const EffectSequence::iterator aEnd( maListSelection.end() );
+        while( aIter != aEnd )
+        {
+            CustomAnimationEffectPtr pEffect = (*aIter++);
+
+            if( setProperty1Value( mnPropertyType, pEffect, aValue ) )
+                bNeedUpdate = true;
+        }
+
+        if( bNeedUpdate )
+        {
+            mpMainSequence->rebuild();
+            updateControls();
+            mrBase.GetDocShell()->SetModified();
+        }
+
+        onPreview( false );
+    }
 }
 
 IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
 {
-    animationChange();
+    if( maListSelection.size() == 1 )
+    {
+        CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectEntryData());
+        // tdf#99137, the selected entry may also be a subcategory title, so not an effect
+        // just leave in this case
+        if (!pPreset)
+            return;
+        const double fDuration = (*pPreset)->getDuration();
+        CustomAnimationPresetPtr pDescriptor(*pPreset);
+        MainSequenceRebuildGuard aGuard( mpMainSequence );
+
+        // get selected effect
+        EffectSequence::iterator aIter( maListSelection.begin() );
+        const EffectSequence::iterator aEnd( maListSelection.end() );
+        while( aIter != aEnd )
+        {
+            CustomAnimationEffectPtr pEffect = (*aIter++);
+
+            EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
+            if( !pEffectSequence )
+                pEffectSequence = mpMainSequence.get();
+
+            pEffectSequence->replace( pEffect, pDescriptor, fDuration );
+        }
+        onPreview(false);
+    }
 }
 
 IMPL_LINK_NOARG(CustomAnimationPane, UpdateAnimationLB, ListBox&, void)
@@ -2327,14 +2316,6 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
     SlideShow::StartPreview( mrBase, mxCurrentPage, xRoot );
 }
 
-// ICustomAnimationListController
-void CustomAnimationPane::onSelect()
-{
-    maListSelection = mpCustomAnimationList->getSelection();
-    updateControls();
-    markShapesFromSelectedEffects();
-}
-
 const CustomAnimationPresets& CustomAnimationPane::getPresets()
 {
     if (mpCustomAnimationPresets == nullptr)
@@ -2342,8 +2323,13 @@ const CustomAnimationPresets& CustomAnimationPane::getPresets()
     return *mpCustomAnimationPresets;
 }
 
-void CustomAnimationPane::markShapesFromSelectedEffects()
+// ICustomAnimationListController
+void CustomAnimationPane::onSelect()
 {
+    maListSelection = mpCustomAnimationList->getSelection();
+    updateControls();
+
+    // mark shapes from selected effects
     if( !maSelectionLock.isLocked() )
     {
         ScopeLockGuard aGuard( maSelectionLock );

@@ -48,7 +48,8 @@ std::shared_ptr<TimerBasedTaskExecution> TimerBasedTaskExecution::Create (
     // Let the new object have a shared_ptr to itself, so that it can
     // release itself when the AsynchronousTask has been executed
     // completely.
-    pExecution->SetSelf(pExecution);
+    if (pExecution->mpTask.get() != nullptr)
+        pExecution->mpSelf = pExecution;
     return pExecution;
 }
 
@@ -97,13 +98,6 @@ TimerBasedTaskExecution::TimerBasedTaskExecution (
 TimerBasedTaskExecution::~TimerBasedTaskExecution()
 {
     maTimer.Stop();
-}
-
-void TimerBasedTaskExecution::SetSelf (
-    const std::shared_ptr<TimerBasedTaskExecution>& rpSelf)
-{
-    if (mpTask.get() != nullptr)
-        mpSelf = rpSelf;
 }
 
 IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback, Timer *, void)

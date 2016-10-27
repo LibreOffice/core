@@ -202,12 +202,6 @@ protected:
     */
     model::SlideSorterModel* CreateModel();
 
-    /** Create the view for the view shell.  When called from the default
-        implementation of CreateModelViewController() then the model but not
-        the controller does exist.  Test their pointers when in doubt.
-    */
-    view::SlideSorterView* CreateView();
-
     /** Create the controller for the view shell.  When called from the default
         implementation of CreateModelViewController() then both the view and
         the controller do exist.  Test their pointers when in doubt.

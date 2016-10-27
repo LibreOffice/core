@@ -178,7 +178,8 @@ int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRec
                 nNodes = importAnimationContainer( pAtom.get(), xParent );
             }
 
-            processAfterEffectNodes();
+            std::for_each( maAfterEffectNodes.begin(), maAfterEffectNodes.end(),
+                           sd::stl_process_after_effect_node_func );
         }
     }
 
@@ -187,11 +188,6 @@ int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRec
 #endif
 
     return nNodes;
-}
-
-void AnimationImporter::processAfterEffectNodes()
-{
-    std::for_each( maAfterEffectNodes.begin(), maAfterEffectNodes.end(), sd::stl_process_after_effect_node_func );
 }
 
 Reference< XAnimationNode > AnimationImporter::createNode( const Atom* pAtom, const AnimationNode& rNode )
