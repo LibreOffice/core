@@ -72,9 +72,6 @@ namespace connectivity
                 This method needs to be implemented in derived classes.
                 <BR>
                 The method gets called with s_aMutex acquired.
-                <BR>
-                as long as IPropertyArrayHelper has no virtual destructor, the implementation of ~OPropertyArrayUsageHelper
-                assumes that you created an ::cppu::OPropertyArrayHelper when deleting s_pProps.
                 @return                         an pointer to the newly created array helper. Must not be NULL.
             */
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const override;
