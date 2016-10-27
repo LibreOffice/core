@@ -559,7 +559,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
 
         const SfxPoolItem* pItem;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet,
+        ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet,
             pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(), SID_EVENTCONFIG ));
         if ( pMacroDlg && pMacroDlg->Execute() == RET_OK &&
             SfxItemState::SET == pMacroDlg->GetOutputItemSet()->GetItemState( RES_FRMMACRO, false, &pItem ) )
@@ -1040,7 +1040,7 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn, void )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        std::unique_ptr<AbstractSvxMultiPathDialog> pDlg(pFact->CreateSvxPathSelectDialog(pBtn));
+        ScopedVclPtr<AbstractSvxMultiPathDialog> pDlg(pFact->CreateSvxPathSelectDialog(pBtn));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
         SvtPathOptions aPathOpt;
         const OUString sGlosPath( aPathOpt.GetAutoTextPath() );

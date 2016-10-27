@@ -486,8 +486,8 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( GetView().GetWindow(), aSet,
-                    rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), DLG_SWDROPCAPS ));
+                ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( GetView().GetWindow(), aSet,
+                    rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), DLG_SWDROPCAPS));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if (pDlg->Execute() == RET_OK)
                 {

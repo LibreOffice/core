@@ -376,7 +376,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16 nError = 1;
 
@@ -402,7 +402,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
             break;
     }
 
-    pDlg.reset();
+    pDlg.disposeAndClear();
     pWarnBox.disposeAndClear();
 
     if (!nError)

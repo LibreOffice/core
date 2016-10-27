@@ -377,7 +377,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                     OString aCmd(".uno:");
                     aCmd += pSlot->GetUnoName();
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    std::unique_ptr<SfxAbstractInsertObjectDialog> pDlg( pFact->CreateInsertObjectDialog( GetWin(), OUString::fromUtf8( aCmd ), xStor, &aServerList ));
+                    ScopedVclPtr<SfxAbstractInsertObjectDialog> pDlg( pFact->CreateInsertObjectDialog( GetWin(), OUString::fromUtf8( aCmd ), xStor, &aServerList ));
                     if ( pDlg )
                     {
                         pDlg->Execute();

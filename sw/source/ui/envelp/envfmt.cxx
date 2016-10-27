@@ -283,7 +283,7 @@ IMPL_LINK( SwEnvFormatPage, EditHdl, MenuButton *, pButton, void )
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         const OUString sFormatStr = pColl->GetName();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, SwCharDlgMode::Env, &sFormatStr));
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, SwCharDlgMode::Env, &sFormatStr));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
         if (pDlg->Execute() == RET_OK)
         {

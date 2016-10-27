@@ -64,6 +64,8 @@ namespace svx{ class SpellDialogChildWindow;}
 
 class AbstractSvxDistributeDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxDistributeDialog() override = default;
 public:
     virtual SvxDistributeHorizontal GetDistributeHor() const = 0;
     virtual SvxDistributeVertical GetDistributeVer() const = 0;
@@ -71,12 +73,16 @@ public:
 
 class AbstractFmShowColsDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractFmShowColsDialog() override = default;
 public:
      virtual void SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols)= 0;
 };
 
 class AbstractSvxZoomDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxZoomDialog() override = default;
 public:
     virtual void    SetLimits( sal_uInt16 nMin, sal_uInt16 nMax ) = 0;
     virtual void    HideButton( ZoomButtonId nBtnId )= 0;
@@ -85,6 +91,8 @@ public:
 
 class AbstractSpellDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSpellDialog() override = default;
 public:
     virtual void        Invalidate() = 0;
     virtual vcl::Window*     GetWindow()  = 0;
@@ -95,26 +103,36 @@ typedef sal_IntPtr (*PLinkStub)( void*, void* );
 
 class AbstractSearchProgress :public VclAbstractRefreshableDialog
 {
+protected:
+    virtual ~AbstractSearchProgress() override = default;
 };
 
 class AbstractTakeProgress :public VclAbstractRefreshableDialog
 {
+protected:
+    virtual ~AbstractTakeProgress() override = default;
 };
 
 class AbstractTitleDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractTitleDialog() override = default;
 public:
     virtual OUString  GetTitle() const =0;
 };
 
 class AbstractGalleryIdDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractGalleryIdDialog() override = default;
 public:
     virtual sal_uIntPtr GetId() const =0;
 };
 
 class AbstractURLDlg :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractURLDlg() override = default;
 public:
     virtual OUString      GetURL() const = 0;
     virtual OUString      GetAltText() const = 0;
@@ -125,10 +143,14 @@ public:
 
 class AbstractSvxHlinkDlgMarkWnd :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxHlinkDlgMarkWnd() override = default;
 };
 
 class AbstractSvxSearchSimilarityDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxSearchSimilarityDialog() override = default;
 public:
     virtual sal_uInt16  GetOther() =0 ;
     virtual sal_uInt16  GetShorter() =0 ;
@@ -138,12 +160,16 @@ public:
 
 class AbstractSvxJSearchOptionsDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxJSearchOptionsDialog() override = default;
 public:
     virtual sal_Int32           GetTransliterationFlags() const = 0;
 };
 
 class AbstractFmInputRecordNoDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractFmInputRecordNoDialog() override = default;
 public:
     virtual void SetValue(long dNew) = 0;
     virtual long GetValue() const = 0;
@@ -151,12 +177,16 @@ public:
 
 class AbstractSvxNewDictionaryDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxNewDictionaryDialog() override = default;
 public:
     virtual css::uno::Reference< css::linguistic2::XDictionary >  GetNewDictionary() = 0;
 };
 
 class AbstractSvxNameDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxNameDialog() override = default;
 public:
     virtual void    GetName( OUString& rName ) = 0;
     virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately = false ) = 0;
@@ -168,6 +198,8 @@ public:
 
 class AbstractSvxObjectNameDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxObjectNameDialog() override = default;
 public:
     virtual void GetName(OUString& rName) = 0;
     virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) = 0;
@@ -175,6 +207,8 @@ public:
 
 class AbstractSvxObjectTitleDescDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxObjectTitleDescDialog() override = default;
 public:
     virtual void GetTitle(OUString& rTitle) = 0;
     virtual void GetDescription(OUString& rDescription) = 0;
@@ -182,10 +216,14 @@ public:
 
 class AbstractSvxMessDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxMessDialog() override = default;
 };
 
 class AbstractSvxMultiPathDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxMultiPathDialog() override = default;
 public:
     virtual OUString        GetPath() const = 0;
     virtual void            SetPath( const OUString& rPath ) = 0;
@@ -194,6 +232,8 @@ public:
 
 class AbstractSvxHpLinkDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxHpLinkDlg() override = default;
 public:
     virtual vcl::Window*     GetWindow()  = 0;
     virtual bool       QueryClose() = 0;
@@ -202,6 +242,8 @@ public:
 struct FmFoundRecordInformation;
 class AbstractFmSearchDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractFmSearchDialog() override = default;
 public:
     virtual void SetFoundHandler(const Link<FmFoundRecordInformation&,void>& lnk) = 0;
     virtual void SetCanceledNotFoundHdl(const Link<FmFoundRecordInformation&,void>& lnk)=0;
@@ -210,29 +252,39 @@ public:
 
 class AbstractGraphicFilterDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractGraphicFilterDialog() override = default;
 public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };
 
 class AbstractSvxAreaTabDialog :public SfxAbstractTabDialog
 {
+protected:
+    virtual ~AbstractSvxAreaTabDialog() override = default;
 };
 
 struct SvxSwFrameValidation;
 class AbstractSvxTransformTabDialog : public SfxAbstractTabDialog
 {
+protected:
+    virtual ~AbstractSvxTransformTabDialog() override = default;
 public:
     virtual void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink ) = 0;
 };
 
 class AbstractSvxCaptionDialog : public SfxAbstractTabDialog
 {
+protected:
+    virtual ~AbstractSvxCaptionDialog() override = default;
 public:
     virtual void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink ) = 0;
 };
 
 class AbstractSvxPostItDialog :public VclAbstractDialog
 {
+protected:
+    virtual ~AbstractSvxPostItDialog() override = default;
 public:
     virtual void                SetText( const OUString& rStr ) = 0;  //From class Window
     virtual const SfxItemSet*   GetOutputItemSet() const = 0;
@@ -249,6 +301,8 @@ public:
 
 class SvxAbstractSplittTableDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~SvxAbstractSplittTableDialog() override = default;
 public:
     virtual bool IsHorizontal() const = 0;
     virtual bool IsProportional() const = 0;
@@ -257,6 +311,8 @@ public:
 
 class SvxAbstractNewTableDialog : public VclAbstractDialog
 {
+protected:
+    virtual ~SvxAbstractNewTableDialog() override = default;
 public:
     virtual sal_Int32 getRows() const = 0;
     virtual sal_Int32 getColumns() const = 0;
@@ -264,6 +320,8 @@ public:
 
 class SvxAbstractInsRowColDlg : public VclAbstractDialog
 {
+protected:
+    virtual ~SvxAbstractInsRowColDlg() override = default;
 public:
     virtual bool isInsertBefore() const = 0;
     virtual sal_uInt16 getInsertCount() const = 0;

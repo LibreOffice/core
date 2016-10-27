@@ -1552,7 +1552,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            std::unique_ptr<AbstractSvxNewDictionaryDialog> aDlg(pFact->CreateSvxNewDictionaryDialog( this ));
+            ScopedVclPtr<AbstractSvxNewDictionaryDialog> aDlg(pFact->CreateSvxNewDictionaryDialog( this ));
             DBG_ASSERT(aDlg, "Dialog creation failed!");
             uno::Reference< XDictionary >  xNewDic;
             if ( aDlg->Execute() == RET_OK )
@@ -1587,7 +1587,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        std::unique_ptr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog( this, xDic->getName() ));
+                        ScopedVclPtr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog( this, xDic->getName() ));
                         DBG_ASSERT(aDlg, "Dialog creation failed!");
                         aDlg->Execute();
                     }

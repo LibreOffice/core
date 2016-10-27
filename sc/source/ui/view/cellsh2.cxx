@@ -181,7 +181,7 @@ static bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-        std::unique_ptr<AbstractScSortWarningDlg> pWarningDlg(pFact->CreateScSortWarningDlg( pTabViewShell->GetDialogParent(), aExtendStr, aCurrentStr ));
+        ScopedVclPtr<AbstractScSortWarningDlg> pWarningDlg(pFact->CreateScSortWarningDlg( pTabViewShell->GetDialogParent(), aExtendStr, aCurrentStr ));
         OSL_ENSURE(pWarningDlg, "Dialog create fail!");
         short bResult = pWarningDlg->Execute();
         if( bResult == BTN_EXTEND_RANGE || bResult == BTN_CURRENT_SELECTION )
@@ -335,7 +335,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                std::unique_ptr<AbstractScDataFormDlg> pDlg(pFact->CreateScDataFormDlg(
+                ScopedVclPtr<AbstractScDataFormDlg> pDlg(pFact->CreateScDataFormDlg(
                     pTabViewShell->GetDialogParent(), pTabViewShell));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
 
@@ -495,7 +495,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         assert(pFact); //ScAbstractFactory create fail!
 
-                        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScSortDlg(pTabViewShell->GetDialogParent(),  &aArgSet));
+                        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScSortDlg(pTabViewShell->GetDialogParent(),  &aArgSet));
                         assert(pDlg); //Dialog create fail!
                         pDlg->SetCurPageId("criteria");  // 1=sort field tab  2=sort options tab
 
@@ -738,7 +738,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScSelEntryDlg> pDlg(pFact->CreateScSelEntryDlg( pTabViewShell->GetDialogParent(),
+                        ScopedVclPtr<AbstractScSelEntryDlg> pDlg(pFact->CreateScSelEntryDlg( pTabViewShell->GetDialogParent(),
                                                                                                   aList ));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
@@ -982,7 +982,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE( pFact, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pFact is null!" );
-                    std::unique_ptr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(
+                    ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(
                         OUString(), &aStream, SC_TEXTTOCOLUMNS));
                     OSL_ENSURE( pDlg, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDlg is null!" );
 

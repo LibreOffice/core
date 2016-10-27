@@ -55,6 +55,8 @@ namespace com { namespace sun { namespace star { namespace sheet {
 
 class AbstractScImportAsciiDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScImportAsciiDlg() override = default;
 public:
     virtual void                        GetOptions( ScAsciiOptions& rOpt ) = 0;
     virtual void                        SaveParameters() = 0;
@@ -62,6 +64,8 @@ public:
 
 class AbstractScAutoFormatDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScAutoFormatDlg() override = default;
 public:
     virtual sal_uInt16 GetIndex() const = 0 ;
     virtual OUString GetCurrFormatName() = 0;
@@ -69,6 +73,8 @@ public:
 
 class AbstractScColRowLabelDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScColRowLabelDlg() override = default;
 public:
     virtual bool IsCol() = 0;
     virtual bool IsRow() = 0;
@@ -76,6 +82,8 @@ public:
 
 class AbstractScCondFormatManagerDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScCondFormatManagerDlg() override = default;
 public:
     virtual ScConditionalFormatList* GetConditionalFormatList() = 0;
 
@@ -88,12 +96,16 @@ public:
 
 class AbstractScDataPilotDatabaseDlg  :public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScDataPilotDatabaseDlg() override = default;
 public:
     virtual void    GetValues( ScImportSourceDesc& rDesc ) = 0;
 };
 
 class AbstractScDataPilotSourceTypeDlg  : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScDataPilotSourceTypeDlg() override = default;
 public:
     virtual bool IsDatabase() const = 0;
     virtual bool IsExternal() const = 0;
@@ -104,6 +116,8 @@ public:
 
 class AbstractScDataPilotServiceDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScDataPilotServiceDlg() override = default;
 public:
     virtual OUString  GetServiceName() const = 0;
     virtual OUString  GetParSource() const = 0 ;
@@ -114,6 +128,8 @@ public:
 
 class AbstractScDeleteCellDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScDeleteCellDlg() override = default;
 public:
     virtual DelCellCmd GetDelCellCmd() const = 0;
 };
@@ -121,11 +137,14 @@ public:
 //for dataform
 class AbstractScDataFormDlg : public VclAbstractDialog
 {
-
+protected:
+    virtual             ~AbstractScDataFormDlg() override = default;
 };
 
 class AbstractScDeleteContentsDlg: public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScDeleteContentsDlg() override = default;
 public:
     virtual void    DisableObjects() = 0 ;
     virtual InsertDeleteFlags GetDelContentsCmdBits() const = 0;
@@ -133,6 +152,8 @@ public:
 
 class AbstractScFillSeriesDlg: public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScFillSeriesDlg() override = default;
 public:
     virtual FillDir     GetFillDir() const = 0;
     virtual FillCmd     GetFillCmd() const = 0;
@@ -146,18 +167,24 @@ public:
 
 class AbstractScGroupDlg :  public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScGroupDlg() override = default;
 public:
     virtual bool GetColsChecked() const = 0;
 };
 
 class AbstractScInsertCellDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScInsertCellDlg() override = default;
 public:
     virtual InsCellCmd GetInsCellCmd() const = 0;
 };
 
 class AbstractScInsertContentsDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScInsertContentsDlg() override = default;
 public:
     virtual InsertDeleteFlags GetInsContentsCmdBits() const = 0;
     virtual ScPasteFunc   GetFormulaCmdBits() const = 0 ;
@@ -173,6 +200,8 @@ public:
 
 class AbstractScInsertTableDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScInsertTableDlg() override = default;
 public:
     virtual bool            GetTablesFromFile() = 0;
     virtual bool            GetTablesAsLink()   = 0;
@@ -186,12 +215,16 @@ public:
 
 class AbstractScSelEntryDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScSelEntryDlg() override = default;
 public:
     virtual OUString GetSelectEntry() const = 0;
 };
 
 class AbstractScLinkedAreaDlg : public VclAbstractDialog2
 {
+protected:
+    virtual             ~AbstractScLinkedAreaDlg() override = default;
 public:
     virtual void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
                                         const OUString& rOptions, const OUString& rSource,
@@ -205,12 +238,16 @@ public:
 
 class AbstractScMetricInputDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScMetricInputDlg() override = default;
 public:
     virtual long GetInputValue() const = 0;
 };
 
 class AbstractScMoveTableDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScMoveTableDlg() override = default;
 public:
     virtual sal_uInt16  GetSelectedDocument     () const = 0;
     virtual sal_uInt16  GetSelectedTable        () const = 0;
@@ -223,24 +260,32 @@ public:
 
 class AbstractScNameCreateDlg : public VclAbstractDialog  // Manage Name Dialog
 {
+protected:
+    virtual             ~AbstractScNameCreateDlg() override = default;
 public:
     virtual sal_uInt16          GetFlags() const = 0;
 };
 
 class AbstractScNamePasteDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScNamePasteDlg() override = default;
 public:
     virtual std::vector<OUString> GetSelectedNames() const = 0;
 };
 
 class AbstractScPivotFilterDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScPivotFilterDlg() override = default;
 public:
     virtual const ScQueryItem&  GetOutputItem() = 0;
 };
 
 class AbstractScDPFunctionDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScDPFunctionDlg() override = default;
 public:
     virtual PivotFunc  GetFuncMask() const = 0;
     virtual css::sheet::DataPilotFieldReference GetFieldRef() const = 0;
@@ -248,6 +293,8 @@ public:
 
 class AbstractScDPSubtotalDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScDPSubtotalDlg() override = default;
 public:
     virtual PivotFunc  GetFuncMask() const = 0;
     virtual void    FillLabelData( ScDPLabelData& rLabelData ) const = 0;
@@ -255,12 +302,16 @@ public:
 
 class AbstractScDPNumGroupDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScDPNumGroupDlg() override = default;
 public:
     virtual ScDPNumGroupInfo GetGroupInfo() const = 0;
 };
 
 class AbstractScDPDateGroupDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScDPDateGroupDlg() override = default;
 public:
     virtual ScDPNumGroupInfo GetGroupInfo() const = 0;
     virtual sal_Int32 GetDatePart() const = 0;
@@ -268,12 +319,16 @@ public:
 
 class AbstractScDPShowDetailDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScDPShowDetailDlg() override = default;
 public:
     virtual OUString  GetDimensionName() const = 0;
 };
 
 class AbstractScNewScenarioDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScNewScenarioDlg() override = default;
 public:
 
     virtual void SetScenarioData( const OUString& rName, const OUString& rComment,
@@ -285,6 +340,8 @@ public:
 
 class AbstractScShowTabDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScShowTabDlg() override = default;
 public:
     virtual void    Insert( const OUString& rString, bool bSelected ) = 0;
     virtual sal_Int32 GetSelectEntryCount() const = 0;
@@ -295,28 +352,38 @@ public:
 
 class AbstractScSortWarningDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScSortWarningDlg() override = default;
 };
 
 class AbstractScStringInputDlg :  public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScStringInputDlg() override = default;
 public:
     virtual OUString GetInputString() const = 0;
 };
 
 class AbstractScTabBgColorDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScTabBgColorDlg() override = default;
 public:
     virtual void GetSelectedColor( Color& rColor ) const = 0;
 };
 
 class AbstractScImportOptionsDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScImportOptionsDlg() override = default;
 public:
     virtual void GetImportOptions( ScImportOptions& rOptions ) const = 0;
 };
 
 class AbstractScTextImportOptionsDlg : public VclAbstractDialog
 {
+protected:
+    virtual             ~AbstractScTextImportOptionsDlg() override = default;
 public:
     virtual LanguageType GetLanguageType() const = 0;
     virtual bool IsDateConversionSet() const = 0;

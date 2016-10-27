@@ -198,7 +198,7 @@ void ScreenshotTest::processAllKnownDialogs()
 {
     for (mapType::const_iterator i = getKnownDialogs().begin(); i != getKnownDialogs().end(); ++i)
     {
-        std::unique_ptr<VclAbstractDialog> pDlg(createDialogByID((*i).second));
+        ScopedVclPtr<VclAbstractDialog> pDlg(createDialogByID((*i).second));
 
         if (pDlg)
         {
@@ -227,7 +227,7 @@ void ScreenshotTest::processDialogBatchFile(const OUString& rFile)
         if (!aNextUIFile.isEmpty() && !aNextUIFile.startsWith(aComment))
         {
             // first check if it's a known dialog
-            std::unique_ptr<VclAbstractDialog> pDlg(createDialogByName(aNextUIFile));
+            ScopedVclPtr<VclAbstractDialog> pDlg(createDialogByName(aNextUIFile));
 
             if (pDlg)
             {

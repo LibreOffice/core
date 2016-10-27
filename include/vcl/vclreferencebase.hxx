@@ -53,7 +53,7 @@ private:
 
 protected:
                                 VclReferenceBase();
-public:
+protected:
     virtual                     ~VclReferenceBase();
 
 protected:

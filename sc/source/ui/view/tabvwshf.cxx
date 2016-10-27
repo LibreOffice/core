@@ -131,7 +131,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    std::unique_ptr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
+                    ScopedVclPtr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     OUString aTabName;
@@ -207,7 +207,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    std::unique_ptr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetDialogParent(), rViewData,
+                    ScopedVclPtr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetDialogParent(), rViewData,
                         nTabSelCount, nSlot == FID_INS_TABLE_EXT));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
                     if ( RET_OK == pDlg->Execute() )
@@ -385,7 +385,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    std::unique_ptr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
+                    ScopedVclPtr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
                         GetDialogParent(), aDlgTitle, OUString(ScResId(SCSTR_NAME)),
                         aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
                         pHelpId));
@@ -510,7 +510,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    std::unique_ptr<AbstractScMoveTableDlg> pDlg(pFact->CreateScMoveTableDlg(GetDialogParent(),
+                    ScopedVclPtr<AbstractScMoveTableDlg> pDlg(pFact->CreateScMoveTableDlg(GetDialogParent(),
                         aDefaultName));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
@@ -736,7 +736,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-                    std::unique_ptr<AbstractScTabBgColorDlg> pDlg(pFact->CreateScTabBgColorDlg(
+                    ScopedVclPtr<AbstractScTabBgColorDlg> pDlg(pFact->CreateScTabBgColorDlg(
                                                                 GetDialogParent(),
                                                                 OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
                                                                 OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)),
@@ -796,7 +796,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pDlgFactory = SvxAbstractDialogFactory::Create();
                     if (pDlgFactory)
                     {
-                        std::unique_ptr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
+                        ScopedVclPtr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
                             GetDialogParent(), xFrame, false, xEvents, 0 ) );
                         if ( pDialog.get() && pDialog->Execute() == RET_OK )
                         {

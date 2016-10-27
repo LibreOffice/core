@@ -777,7 +777,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             if ( pStyleSheet )
             {
                 SfxStyleFamily  eFam    = pStyleSheet->GetFamily();
-                std::unique_ptr<SfxAbstractTabDialog> pDlg;
+                ScopedVclPtr<SfxAbstractTabDialog> pDlg;
                 sal_uInt16          nRsc    = 0;
 
                 // Store old Items from the style
@@ -860,7 +860,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                pDlg.reset(pFact->CreateScStyleDlg( pParent, *pStyleSheet, nRsc, nRsc ));
+                pDlg.disposeAndReset(pFact->CreateScStyleDlg( pParent, *pStyleSheet, nRsc, nRsc ));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nResult = pDlg->Execute();
                 pTabViewShell->SetInFormatDialog(false);

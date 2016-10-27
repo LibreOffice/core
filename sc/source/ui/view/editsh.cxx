@@ -273,7 +273,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_PASTE_SPECIAL:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pViewData->GetDialogParent() ));
+                ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pViewData->GetDialogParent() ));
                 SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
                 if ( pDlg )
                 {
@@ -285,7 +285,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                     nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
                 }
-                pDlg.reset();
+                pDlg.disposeAndClear();
 
                 // while the dialog was open, edit mode may have been stopped
                 if (!SC_MOD()->IsInputMode())
@@ -453,7 +453,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                std::unique_ptr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pViewData->GetDocShell(), false ));
+                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pViewData->GetDocShell(), false ));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
@@ -478,7 +478,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTopView->InsertText(aBuffer.makeStringAndClear());
                     }
                 }
-                pDlg.reset();
+                pDlg.disposeAndClear();
 
                 if (pTopView)
                     pTopView->GetWindow()->GrabFocus();
@@ -495,7 +495,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
+                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
                     pViewData->GetDialogParent(), &aAttrs, pObjSh));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)

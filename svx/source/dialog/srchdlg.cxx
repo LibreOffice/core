@@ -1390,7 +1390,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            std::unique_ptr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog( this,
+            ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog( this,
                                                                         pSearchItem->IsLEVRelaxed(),
                                                                         pSearchItem->GetLEVOther(),
                                                                         pSearchItem->GetLEVShorter(),
@@ -1413,7 +1413,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            std::unique_ptr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet,
+            ScopedVclPtr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet,
                     pSearchItem->GetTransliterationFlags() ));
             DBG_ASSERT(aDlg, "Dialog creation failed!");
             int nRet = aDlg->Execute();
@@ -2018,7 +2018,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, Button*, void)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabItemDialog(this, aSet));
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTabItemDialog(this, aSet));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
         aTxt = pDlg->GetText() + aTxt;
         pDlg->SetText( aTxt );
@@ -2103,7 +2103,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl, Button*, void)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges ));
+        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges ));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
         pDlg->Execute();
     }

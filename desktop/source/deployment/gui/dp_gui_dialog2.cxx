@@ -505,7 +505,7 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleOptionsBtn, Button*, void)
         if ( pFact )
         {
             OUString sExtensionId = GetEntryData( nActive )->m_xPackage->getIdentifier().Value;
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateOptionsDialog( this, sExtensionId, OUString() ));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateOptionsDialog( this, sExtensionId, OUString() ));
 
             pDlg->Execute();
         }

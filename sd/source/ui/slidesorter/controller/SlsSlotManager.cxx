@@ -259,14 +259,14 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_PHOTOALBUM:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
                 mrSlideSorter.GetContentWindow(),
                 pDocument) : nullptr);
 
             if (pDlg)
             {
                 pDlg->Execute();
-                pDlg.reset();
+                pDlg.disposeAndClear();
             }
             rRequest.Done ();
         }

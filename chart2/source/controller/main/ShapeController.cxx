@@ -260,7 +260,7 @@ void ShapeController::executeDispatch_FormatLine()
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                std::unique_ptr< SfxAbstractTabDialog > pDlg(
+                ScopedVclPtr< SfxAbstractTabDialog > pDlg(
                     pFact->CreateSvxLineTabDialog( pParent, &aAttr, &pDrawModelWrapper->getSdrModel(),
                         pSelectedObj, bHasMarked ) );
                 if ( pDlg->Execute() == RET_OK )
@@ -299,7 +299,7 @@ void ShapeController::executeDispatch_FormatArea()
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                std::unique_ptr< AbstractSvxAreaTabDialog > pDlg(
+                ScopedVclPtr< AbstractSvxAreaTabDialog > pDlg(
                     pFact->CreateSvxAreaTabDialog( pParent, &aAttr, &pDrawModelWrapper->getSdrModel(), true ) );
                 if ( pDlg.get() )
                 {
@@ -341,7 +341,7 @@ void ShapeController::executeDispatch_TextAttributes()
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                std::unique_ptr< SfxAbstractTabDialog > pDlg(
+                ScopedVclPtr< SfxAbstractTabDialog > pDlg(
                     pFact->CreateTextTabDialog( pParent, &aAttr, pDrawViewWrapper ) );
                 if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                 {
@@ -380,7 +380,7 @@ void ShapeController::executeDispatch_TransformDialog()
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
-                    std::unique_ptr< SfxAbstractTabDialog > pDlg(
+                    ScopedVclPtr< SfxAbstractTabDialog > pDlg(
                         pFact->CreateCaptionDialog( pParent, pDrawViewWrapper ) );
                     if ( pDlg.get() )
                     {
@@ -404,7 +404,7 @@ void ShapeController::executeDispatch_TransformDialog()
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
-                    std::unique_ptr< SfxAbstractTabDialog > pDlg(
+                    ScopedVclPtr< SfxAbstractTabDialog > pDlg(
                         pFact->CreateSvxTransformTabDialog( pParent, &aGeoAttr, pDrawViewWrapper ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
@@ -433,7 +433,7 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
-                    std::unique_ptr< AbstractSvxObjectTitleDescDialog > pDlg(
+                    ScopedVclPtr< AbstractSvxObjectTitleDescDialog > pDlg(
                         pFact->CreateSvxObjectTitleDescDialog( aTitle, aDescription ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
@@ -463,7 +463,7 @@ void ShapeController::executeDispatch_RenameObject()
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
-                    std::unique_ptr< AbstractSvxObjectNameDialog > pDlg(
+                    ScopedVclPtr< AbstractSvxObjectNameDialog > pDlg(
                         pFact->CreateSvxObjectNameDialog( aName ) );
                     pDlg->SetCheckNameHdl( LINK( this, ShapeController, CheckNameHdl ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )

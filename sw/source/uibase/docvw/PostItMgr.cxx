@@ -1435,14 +1435,14 @@ void SwPostItMgr::ExecuteFormatAllDialog(SwView& rView)
     SfxItemSet aDlgAttr(*pPool, EE_ITEMS_START, EE_ITEMS_END);
     aDlgAttr.Put(aEditAttr);
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(rView.GetWindow(), rView, aDlgAttr, SwCharDlgMode::Ann));
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(rView.GetWindow(), rView, aDlgAttr, SwCharDlgMode::Ann));
     sal_uInt16 nRet = pDlg->Execute();
     if (RET_OK == nRet)
     {
         aDlgAttr.Put(*pDlg->GetOutputItemSet());
         FormatAll(aDlgAttr);
     }
-    pDlg.reset();
+    pDlg.disposeAndClear();
     SetActiveSidebarWin(pOrigActiveWin);
 }
 

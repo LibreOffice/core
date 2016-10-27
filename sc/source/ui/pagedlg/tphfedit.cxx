@@ -201,7 +201,7 @@ void ScEditWindow::SetCharAttributes()
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
             GetParent(),  &aSet, pDocSh));
         OSL_ENSURE(pDlg, "Dialog create fail!");
         pDlg->SetText( ScGlobal::GetRscString( STR_TEXTATTRS ) );

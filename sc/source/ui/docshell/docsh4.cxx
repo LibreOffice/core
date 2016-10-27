@@ -323,7 +323,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScColRowLabelDlg> pDlg(pFact->CreateScColRowLabelDlg(pParent, bRowHeaders, bColHeaders));
+                        ScopedVclPtr<AbstractScColRowLabelDlg> pDlg(pFact->CreateScColRowLabelDlg(pParent, bRowHeaders, bColHeaders));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -872,7 +872,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                                std::unique_ptr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(GetActiveDialogParent(), aName, true, bSheetProtected));
+                                ScopedVclPtr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(GetActiveDialogParent(), aName, true, bSheetProtected));
                                 OSL_ENSURE(pNewDlg, "Dialog create fail!");
                                 pNewDlg->SetScenarioData( aName, aComment, aColor, nFlags );
                                 if ( pNewDlg->Execute() == RET_OK )
@@ -1565,7 +1565,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScStyleDlg( GetActiveDialogParent(), *pStyleSheet, RID_SCDLG_STYLES_PAGE, RID_SCDLG_STYLES_PAGE ));
+                        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScStyleDlg( GetActiveDialogParent(), *pStyleSheet, RID_SCDLG_STYLES_PAGE, RID_SCDLG_STYLES_PAGE ));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if ( pDlg->Execute() == RET_OK )
@@ -1605,7 +1605,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                             PageStyleModified( aNewName, false );
                             rReq.Done();
                         }
-                        pDlg.reset();
+                        pDlg.disposeAndClear();
 
                         rStyleSet.ClearItem( ATTR_PAGE_PAPERTRAY );
                     }
@@ -1727,7 +1727,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
+                        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
                                                                                 GetActiveDialogParent(),
                                                                                 rStyleSet,
                                                                                 aStr,

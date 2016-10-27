@@ -424,7 +424,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 if ( pFrameItem )
                     xFrame = pFrameItem->GetFrame();
 
-                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateCustomizeTabDialog(
+                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCustomizeTabDialog(
                     &aSet, xFrame ));
 
                 if ( pDlg )
@@ -606,7 +606,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, RID_DEFAULTABOUT ));
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, RID_DEFAULTABOUT ));
                 pDlg->Execute();
                 bDone = true;
             }
@@ -1510,7 +1510,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             do  // artificial loop for flow control
             {
-                std::unique_ptr<AbstractScriptSelectorDialog> pDlg(pFact->CreateScriptSelectorDialog(
+                ScopedVclPtr<AbstractScriptSelectorDialog> pDlg(pFact->CreateScriptSelectorDialog(
                     lcl_getDialogParent( xFrame, GetTopWindow() ), xFrame ));
                 OSL_ENSURE( pDlg, "SfxApplication::OfaExec_Impl( SID_RUNMACRO ): no dialog!" );
                 if ( !pDlg )
@@ -1602,7 +1602,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), false, &pItem ) == SfxItemState::SET )
                     aSet.Put( *pItem );
 
-                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateAutoCorrTabDialog( &aSet ));
+                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateAutoCorrTabDialog( &aSet ));
                 pDlg->Execute();
             }
 

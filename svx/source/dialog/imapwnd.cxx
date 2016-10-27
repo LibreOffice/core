@@ -655,7 +655,7 @@ void IMapWindow::DoMacroAssign()
         aSet.Put( aMacroItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet, mxDocumentFrame, SID_EVENTCONFIG ));
+        ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet, mxDocumentFrame, SID_EVENTCONFIG ));
 
         if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
         {
@@ -677,7 +677,7 @@ void IMapWindow::DoPropertyDialog()
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            std::unique_ptr<AbstractURLDlg> aDlg(pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
+            ScopedVclPtr<AbstractURLDlg> aDlg(pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
                                             pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList ));
             DBG_ASSERT(aDlg, "Dialog creation failed!");
             if ( aDlg->Execute() == RET_OK )

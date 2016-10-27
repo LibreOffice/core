@@ -534,7 +534,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclSwViewDialog(*this));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclSwViewDialog(*this));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             break;
@@ -1681,7 +1681,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             if ( ( GetDocShell()->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ) || !GetDocShell()->IsInPlaceActive() )
             {
                 const SfxItemSet *pSet = nullptr;
-                std::unique_ptr<AbstractSvxZoomDialog> pDlg;
+                ScopedVclPtr<AbstractSvxZoomDialog> pDlg;
                 if ( pArgs )
                     pSet = pArgs;
                 else
@@ -1711,7 +1711,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg.reset(pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet));
+                        pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet));
                         OSL_ENSURE(pDlg, "Zooming fail!");
                         if (pDlg)
                         {
@@ -1914,7 +1914,7 @@ void SwView::EditLinkDlg()
 {
     bool bWeb = dynamic_cast<SwWebView*>( this ) !=  nullptr;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    std::unique_ptr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager(), bWeb ));
+    ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager(), bWeb ));
     if ( pDlg )
     {
         pDlg->Execute();
@@ -2387,7 +2387,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     if ( pFact )
                     {
-                        std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_OPTIONS_DATABASES ));
+                        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_OPTIONS_DATABASES ));
                         pDlg->Execute();
                     }
                 }

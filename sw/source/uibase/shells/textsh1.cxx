@@ -167,13 +167,13 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     ::PrepareBoxInfo( aCoreSet, rWrtSh );
 
     aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(rWrtSh.GetView().GetDocShell())));
-    std::unique_ptr<SfxAbstractTabDialog> pDlg;
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg;
     if ( bUseDialog && GetActiveView() )
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        pDlg.reset(pFact->CreateSwCharDlg(rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), aCoreSet, SwCharDlgMode::Std));
+        pDlg.disposeAndReset(pFact->CreateSwCharDlg(rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), aCoreSet, SwCharDlgMode::Std));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
         if( FN_INSERT_HYPERLINK == nSlot )
             pDlg->SetCurPageId("hyperlink");
@@ -338,7 +338,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                 if (pFact)
                 {
-                    std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( GetView().GetWindow(), SID_LANGUAGE_OPTIONS ));
+                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( GetView().GetWindow(), SID_LANGUAGE_OPTIONS ));
                     pDlg->Execute();
                 }
             }
@@ -626,7 +626,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq ));
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 pDlg->Execute();
             }
@@ -723,10 +723,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rWrtSh, DLG_SORTING ));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rWrtSh, DLG_SORTING ));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
-            pDlg.reset();
+            pDlg.disposeAndClear();
             rReq.Done();
         }
         break;
@@ -993,7 +993,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                         rWrtSh.GetNodeNumStart( pPaM ) );
                 aCoreSet.Put(aStartAt);
             }
-            std::unique_ptr<SfxAbstractTabDialog> pDlg;
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg;
 
             if ( bUseDialog && GetActiveView() )
             {
@@ -1004,7 +1004,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg.reset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, false, sDefPage ));
+                pDlg.disposeAndReset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, false, sDefPage ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
             }
             SfxItemSet* pSet = nullptr;

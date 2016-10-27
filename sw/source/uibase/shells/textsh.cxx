@@ -479,7 +479,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
-            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("FrameDialog",
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("FrameDialog",
                                                   GetView().GetViewFrame(),
                                                   &GetView().GetViewFrame()->GetWindow(),
                                                   aSet));
@@ -532,7 +532,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialog creation failed!");
-        std::unique_ptr<VclAbstractDialog> pColDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN));
+        ScopedVclPtr<VclAbstractDialog> pColDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN));
         OSL_ENSURE(pColDlg, "Dialog creation failed!");
         pColDlg->Execute();
     }

@@ -2365,7 +2365,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                     if( pFact )
                     {
-                        std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, static_cast<sal_uLong>(nAnz) ));
+                        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, static_cast<sal_uLong>(nAnz) ));
                         if( pDlg )
                         {
                             pDlg->Execute();
@@ -2879,14 +2879,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
        case SID_PHOTOALBUM:
        {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
                 GetActiveWindow(),
                 GetDoc()) : nullptr);
 
             if (pDlg)
             {
                 pDlg->Execute();
-                pDlg.reset();
+                pDlg.disposeAndClear();
             }
             Cancel();
             rReq.Ignore ();

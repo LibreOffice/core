@@ -58,7 +58,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( pMDI, GetShell(), DLG_EDIT_AUTHMARK));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( pMDI, GetShell(), DLG_EDIT_AUTHMARK));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
         }
@@ -84,7 +84,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             {   // Several marks, which should it be?
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                std::unique_ptr<VclAbstractDialog> pMultDlg(pFact->CreateMultiTOXMarkDlg(pMDI, aMgr));
+                ScopedVclPtr<VclAbstractDialog> pMultDlg(pFact->CreateMultiTOXMarkDlg(pMDI, aMgr));
                 OSL_ENSURE(pMultDlg, "Dialog creation failed!");
                 nRet = pMultDlg->Execute();
             }
@@ -92,7 +92,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateIndexMarkModalDlg(pMDI, GetShell(), aMgr.GetCurTOXMark()));
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateIndexMarkModalDlg(pMDI, GetShell(), aMgr.GetCurTOXMark()));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 pDlg->Execute();
             }

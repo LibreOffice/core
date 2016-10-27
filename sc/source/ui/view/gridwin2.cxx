@@ -54,7 +54,6 @@ using namespace css;
 using namespace css::sheet;
 using css::sheet::DataPilotFieldOrientation;
 using std::vector;
-using std::unique_ptr;
 
 DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const
 {
@@ -207,7 +206,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-            const std::unique_ptr<AbstractScPivotFilterDlg> pDlg(
+            ScopedVclPtr<AbstractScPivotFilterDlg> pDlg(
                 pFact->CreateScPivotFilterDlg(
                     pViewData->GetViewShell()->GetDialogParent(), aArgSet, nSrcTab));
             OSL_ENSURE(pDlg, "Dialog create fail!");
@@ -435,7 +434,7 @@ private:
 void ScGridWindow::DPLaunchFieldPopupMenu(
     const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj)
 {
-    unique_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
+    std::unique_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
     sal_uInt16 nOrient;
     pDPData->mnDim = pDPObj->GetHeaderDim(rPos, nOrient);
 
