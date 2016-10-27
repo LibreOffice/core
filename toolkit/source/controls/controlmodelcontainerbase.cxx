@@ -705,7 +705,7 @@ void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Refer
 }
 
 
-typedef ::std::multimap< sal_Int32, Reference< XControlModel >, ::std::less< sal_Int32 > > MapIndexToModel;
+typedef ::std::multimap< sal_Int32, Reference< XControlModel > > MapIndexToModel;
 
 
 Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getControlModels(  ) throw (RuntimeException, std::exception)

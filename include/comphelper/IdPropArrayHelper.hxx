@@ -40,7 +40,7 @@ namespace comphelper
     template <typename TYPE> struct OIdPropertyArrayUsageHelperMutex
             : public rtl::Static< ::osl::Mutex, OIdPropertyArrayUsageHelperMutex<TYPE> > {};
 
-    typedef std::map< sal_Int32, ::cppu::IPropertyArrayHelper*, std::less< sal_Int32 > > OIdPropertyArrayMap;
+    typedef std::map< sal_Int32, ::cppu::IPropertyArrayHelper* > OIdPropertyArrayMap;
     template <class TYPE>
     class OIdPropertyArrayUsageHelper
     {

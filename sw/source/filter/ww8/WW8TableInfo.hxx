@@ -156,7 +156,7 @@ public:
 #endif
 };
 
-typedef std::multiset<CellInfo, std::less<CellInfo> > CellInfoMultiSet;
+typedef std::multiset<CellInfo> CellInfoMultiSet;
 typedef std::map<sal_uInt32, WW8TableNodeInfoInner*,
             std::greater<sal_uInt32> > RowEndInners_t;
 
