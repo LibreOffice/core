@@ -31,10 +31,25 @@
 #include <rtl/ustring.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/dllapi.h>
+#include <i18nlangtag/languagetag.hxx>
 
 namespace com { namespace sun { namespace star { namespace container {
     class XNameAccess;
 } } } }
+
+enum class ImageLoadFlags : sal_uInt16
+{
+    NONE                = 0,
+    IgnoreScalingFactor = 1,
+    IgnoreDarkTheme     = 2,
+};
+
+namespace o3tl {
+
+template<> struct typed_flags<ImageLoadFlags>: is_typed_flags<ImageLoadFlags, 0x3> {};
+
+}
+
 
 class ImplImageTree {
 public:
@@ -45,11 +60,13 @@ public:
 
     bool loadImage(
         OUString const & name, OUString const & style,
-        BitmapEx & bitmap, bool localized );
+        BitmapEx & bitmap, bool localized,
+        const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
 
     bool loadDefaultImage(
         OUString const & style,
-        BitmapEx& bitmap);
+        BitmapEx& bitmap,
+        const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
 
     /** a crude form of life cycle control (called from DeInitVCL; otherwise,
      *  if the ImplImageTree singleton were destroyed during exit that would
@@ -69,51 +86,64 @@ private:
     typedef std::unordered_map<OUString, std::pair<bool, BitmapEx>, OUStringHash> IconCache;
     typedef std::unordered_map<OUString, OUString, OUStringHash> IconLinkHash;
 
-    struct IconSet {
+    struct IconSet
+    {
         OUString maURL;
         css::uno::Reference<css::container::XNameAccess> maNameAccess;
         IconCache maIconCache;
         IconLinkHash maLinkHash;
 
-        IconSet() {}
-        IconSet(const OUString &aURL) : maURL(aURL) {}
+        IconSet()
+        {}
+
+        IconSet(const OUString & rURL)
+            : maURL(rURL)
+        {}
     };
 
     /// Map between the theme name(s) and the content.
     typedef std::unordered_map<OUString, IconSet, OUStringHash> StyleIconSet;
 
     /// Remember all the (used) icon styles and individual icons in them.
-    StyleIconSet maIconSet;
+    StyleIconSet maIconSets;
 
     /// Style used for the current operations; switches switch several times during fallback search.
     OUString maCurrentStyle;
 
+    IconSet& getCurrentIconSet()
+    {
+        return maIconSets[maCurrentStyle];
+    }
+
     bool doLoadImage(
         OUString const & name, OUString const & style,
-        BitmapEx & bitmap, bool localized);
+        BitmapEx & bitmap, bool localized, const ImageLoadFlags eFlags);
+
+    std::vector<OUString> getPaths(OUString const & name, LanguageTag& rLanguageTag);
 
     bool checkPathAccess();
 
-    void setStyle(OUString const & style );
+    void setStyle(OUString const & rStyle);
 
     void createStyle();
 
-    bool iconCacheLookup( OUString const & name, bool localized, BitmapEx & bitmap );
+    bool iconCacheLookup(OUString const & rName, bool bLocalized, const ImageLoadFlags eFlags, BitmapEx & rBitmap);
 
-    bool findImage(std::vector< OUString > const & paths, BitmapEx & bitmap );
+    bool findImage(std::vector<OUString> const & rPaths, BitmapEx & rBitmap, const ImageLoadFlags eFlags);
 
     void loadImageLinks();
 
-    void parseLinkFile(std::shared_ptr<SvStream> const & stream);
+    void parseLinkFile(std::shared_ptr<SvStream> const & aStream);
 
     /// Return name of a real .png according to links.txt.
-    OUString const & getRealImageName(OUString const & name);
+    OUString const & getRealImageName(OUString const & rName);
+
 
     /** Return name of the fallback style for the provided one.
 
         Must not be cyclic :-)  The last theme in the chain returns an empty string.
     */
-    static OUString fallbackStyle(const OUString &style);
+    static OUString fallbackStyle(const OUString &rStyle);
 };
 
 #endif
