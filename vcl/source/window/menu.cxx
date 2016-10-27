@@ -1511,10 +1511,6 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             {
                 Size aImgSz = pData->aImage.GetSizePixel();
 
-                sal_Int32 nScaleFactor = pWindow->GetDPIScaleFactor();
-                aImgSz.Height() *= nScaleFactor;
-                aImgSz.Width() *= nScaleFactor;
-
                 aImgSz.Height() += 4; // add a border for native marks
                 aImgSz.Width() += 4; // add a border for native marks
                 if ( aImgSz.Width() > aMaxImgSz.Width() )
@@ -1966,13 +1962,6 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
 
                     Image aImage = pData->aImage;
 
-                    sal_Int32 nScaleFactor = rRenderContext.GetDPIScaleFactor();
-                    if (nScaleFactor != 1)
-                    {
-                        BitmapEx aBitmap = aImage.GetBitmapEx();
-                        aBitmap.Scale(nScaleFactor, nScaleFactor, BmpScaleFlag::Fast);
-                        aImage = Image(aBitmap);
-                    }
                     aTmpPos = aOuterCheckRect.TopLeft();
                     aTmpPos.X() += (aOuterCheckRect.GetWidth() - aImage.GetSizePixel().Width()) / 2;
                     aTmpPos.Y() += (aOuterCheckRect.GetHeight() - aImage.GetSizePixel().Height()) / 2;

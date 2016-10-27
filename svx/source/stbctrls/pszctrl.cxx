@@ -177,17 +177,6 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
     pImpl->aPosImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
     pImpl->aSizeImage = Image( ResId( RID_SVXBMP_SIZE, DIALOG_MGR() ) );
 
-    if ( rStb.GetDPIScaleFactor() > 1)
-    {
-        BitmapEx b = pImpl->aPosImage.GetBitmapEx();
-        b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BmpScaleFlag::Fast);
-        pImpl->aPosImage = Image(b);
-
-        b = pImpl->aSizeImage.GetBitmapEx();
-        b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BmpScaleFlag::Fast);
-        pImpl->aSizeImage = Image(b);
-    }
-
     addStatusListener( STR_POSITION);         // SID_ATTR_POSITION
     addStatusListener( STR_TABLECELL);   // SID_TABLE_CELL
     addStatusListener( STR_FUNC);    // SID_PSZ_FUNCTION

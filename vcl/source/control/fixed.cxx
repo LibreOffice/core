@@ -1026,14 +1026,7 @@ bool FixedImage::SetModeImage( const Image& rImage )
 
 Image FixedImage::loadThemeImage(const OString &rFileName)
 {
-    OUString sIconTheme =
-        Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-    const OUString sFileName(OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
-    BitmapEx aBitmap;
-    bool bSuccess = ImplImageTree::get().loadImage(
-        sFileName, sIconTheme, aBitmap, true);
-    SAL_WARN_IF(!bSuccess, "vcl.layout", "Unable to load " << sFileName
-        << " from theme " << sIconTheme);
+    BitmapEx aBitmap(OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
     return Image(aBitmap);
 }
 
@@ -1041,7 +1034,7 @@ bool FixedImage::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "pixbuf")
     {
-        SetImage(FixedImage::loadThemeImage(rValue));
+        SetImage(loadThemeImage(rValue));
     }
     else
         return Control::set_property(rKey, rValue);
