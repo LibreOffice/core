@@ -29,7 +29,10 @@ using drawinglayer::primitive2d::Primitive2DReference;
 namespace vcl
 {
 
-void BitmapTools::loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, double fScalingFactor)
+namespace bitmap
+{
+
+void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, double fScalingFactor)
 {
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
@@ -67,7 +70,7 @@ void BitmapTools::loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx
         aRealRect.X2 = aRange.getMaxX() - aRange.getMinX();
         aRealRect.Y2 = aRange.getMaxY() - aRange.getMinY();
 
-        double nDPI = 90 * fScalingFactor;
+        double nDPI = 96 * fScalingFactor;
 
         const css::uno::Reference<css::graphic::XPrimitive2DRenderer> xPrimitive2DRenderer = css::graphic::Primitive2DTools::create(xContext);
         const css::uno::Reference<css::rendering::XBitmap> xBitmap(
@@ -85,6 +88,6 @@ void BitmapTools::loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx
     }
 }
 
-}
+}} // end vcl::bitmap
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
