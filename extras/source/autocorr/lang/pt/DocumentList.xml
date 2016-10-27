@@ -3205,4 +3205,24 @@
 <block-list:block block-list:abbreviated-name="saiem" block-list:name="saem"/>
 <block-list:block block-list:abbreviated-name="séniores" block-list:name="seniores"/>
 <block-list:block block-list:abbreviated-name="simultaniedade" block-list:name="simultaneidade"/>
+  <block-list:block block-list:abbreviated-name="apartir" block-list:name="a partir"/>
+  <block-list:block block-list:abbreviated-name="buvino" block-list:name="bovino"/>
+  <block-list:block block-list:abbreviated-name="cadaver" block-list:name="cadáver"/>
+  <block-list:block block-list:abbreviated-name="cadaveres" block-list:name="cadáveres"/>
+  <block-list:block block-list:abbreviated-name="cartomância" block-list:name="cartomancia"/>
+  <block-list:block block-list:abbreviated-name="catequeze" block-list:name="catequese"/>
+  <block-list:block block-list:abbreviated-name="célular" block-list:name="celular"/>
+  <block-list:block block-list:abbreviated-name="célulares" block-list:name="celulares"/>
+  <block-list:block block-list:abbreviated-name="chaile" block-list:name="xaile"/>
+  <block-list:block block-list:abbreviated-name="ciume" block-list:name="ciúme"/>
+  <block-list:block block-list:abbreviated-name="ciumes" block-list:name="ciúmes"/>
+  <block-list:block block-list:abbreviated-name="coizinha" block-list:name="coisinha"/>
+  <block-list:block block-list:abbreviated-name="coizinhas" block-list:name="coisinhas"/>
+  <block-list:block block-list:abbreviated-name="compôr" block-list:name="compor"/>
+  <block-list:block block-list:abbreviated-name="fôro" block-list:name="foro"/>
+  <block-list:block block-list:abbreviated-name="fragil" block-list:name="frágil"/>
+  <block-list:block block-list:abbreviated-name="furmosura" block-list:name="formosura"/>
+  <block-list:block block-list:abbreviated-name="fuzível" block-list:name="fusível"/>
+  <block-list:block block-list:abbreviated-name="premios" block-list:name="prémios"/>
+  <block-list:block block-list:abbreviated-name="tere" block-list:name="ter"/>
 </block-list:block-list>
