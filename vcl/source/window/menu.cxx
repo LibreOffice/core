@@ -819,13 +819,6 @@ PopupMenu* Menu::GetPopupMenu( sal_uInt16 nItemId ) const
         return nullptr;
 }
 
-void Menu::DisposePopupMenu( sal_uInt16 nItemId )
-{
-    MenuItemData* pData = pItemList->GetData( nItemId );
-    if ( pData )
-        pData->pSubMenu.disposeAndClear();
-}
-
 void Menu::SetAccelKey( sal_uInt16 nItemId, const KeyCode& rKeyCode )
 {
     size_t          nPos;

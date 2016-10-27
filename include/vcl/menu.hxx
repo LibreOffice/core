@@ -282,7 +282,6 @@ public:
 
     void SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu );
     PopupMenu* GetPopupMenu( sal_uInt16 nItemId ) const;
-    void DisposePopupMenu( sal_uInt16 nItemId );
 
     void SetAccelKey( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode );
     vcl::KeyCode GetAccelKey( sal_uInt16 nItemId ) const;

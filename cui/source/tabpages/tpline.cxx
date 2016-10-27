@@ -227,18 +227,6 @@ SvxLineTabPage::~SvxLineTabPage()
 
 void SvxLineTabPage::dispose()
 {
-    // Symbols on a line (e.g. StarCharts), dtor new!
-    if (m_pSymbolMB)
-    {
-        m_pSymbolMB->GetPopupMenu()->DisposePopupMenu( MN_GALLERY );
-
-        if(m_pSymbolList)
-        {
-            m_pSymbolMB->GetPopupMenu()->DisposePopupMenu( MN_SYMBOLS );
-        }
-        m_pSymbolMB = nullptr;
-    }
-
     for (SvxBmpItemInfo* pInfo : m_aGrfBrushItems)
     {
         delete pInfo->pBrushItem;
