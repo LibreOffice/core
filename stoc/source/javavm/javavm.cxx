@@ -349,7 +349,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
 void getDefaultLocaleFromConfig(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
-    const css::uno::Reference<css::uno::XComponentContext> &xCtx ) throw(css::uno::Exception)
+    const css::uno::Reference<css::uno::XComponentContext> &xCtx ) throw(css::uno::Exception, std::exception)
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry =
         xSMgr->createInstanceWithContext( "com.sun.star.configuration.ConfigurationRegistry", xCtx );
