@@ -177,14 +177,9 @@ short SvxOpenGraphicDialog::Execute()
 }
 
 
-void SvxOpenGraphicDialog::SetPath( const OUString& rPath )
-{
-    mpImpl->aFileDlg.SetDisplayDirectory(rPath);
-}
-
 void SvxOpenGraphicDialog::SetPath( const OUString& rPath, bool bLinkState )
 {
-    SetPath(rPath);
+    mpImpl->aFileDlg.SetDisplayDirectory(rPath);
     AsLink(bLinkState);
 }
 

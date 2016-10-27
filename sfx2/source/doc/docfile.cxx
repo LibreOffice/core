@@ -649,7 +649,14 @@ const OUString& SfxMedium::GetPhysicalName() const
 
 void SfxMedium::CreateFileStream()
 {
-    ForceSynchronStream_Impl();
+    // force synchron
+    if( pImpl->m_pInStream )
+    {
+        SvLockBytes* pBytes = pImpl->m_pInStream->GetLockBytes();
+        if( pBytes )
+            pBytes->SetSynchronMode();
+    }
+
     GetInStream();
     if( pImpl->m_pInStream )
     {
@@ -3114,17 +3121,6 @@ void SfxMedium::SetExpired_Impl( const DateTime& rDateTime )
 bool SfxMedium::IsExpired() const
 {
     return pImpl->aExpireTime.IsValidAndGregorian() && pImpl->aExpireTime < DateTime( DateTime::SYSTEM );
-}
-
-
-void SfxMedium::ForceSynchronStream_Impl()
-{
-    if( pImpl->m_pInStream )
-    {
-        SvLockBytes* pBytes = pImpl->m_pInStream->GetLockBytes();
-        if( pBytes )
-            pBytes->SetSynchronMode();
-    }
 }
 
 

@@ -279,7 +279,6 @@ protected:
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-    SFX2_DLLPRIVATE void         ImplInitScrollBar();
     SFX2_DLLPRIVATE void         ImplDeleteItems();
     SFX2_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
     SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetItem( size_t nPos );

@@ -933,14 +933,6 @@ struct XmlIdRegistryClipboard::XmlIdRegistry_Impl
     Metadatable* const* LookupEntry(const OUString & i_rStreamName,
         const OUString & i_rIdref) const;
 
-    Metadatable*      * LookupEntry(const OUString & i_rStreamName,
-        const OUString & i_rIdref)
-    {
-        return const_cast<Metadatable**>(
-            const_cast<const XmlIdRegistry_Impl*>(this)
-                ->LookupEntry(i_rStreamName, i_rIdref));
-    }
-
     ClipboardXmlIdMap_t m_XmlIdMap;
     ClipboardXmlIdReverseMap_t m_XmlIdReverseMap;
 };
@@ -1036,7 +1028,7 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::TryInsertMetadatable(
     OSL_ENSURE(isContentFile(i_rStreamName) || isStylesFile(i_rStreamName),
         "invalid stream");
 
-    Metadatable ** ppEntry = LookupEntry(i_rStreamName, i_rIdref);
+    Metadatable ** ppEntry = const_cast<Metadatable**>(LookupEntry(i_rStreamName, i_rIdref));
     if (ppEntry)
     {
         if (*ppEntry)

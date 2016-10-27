@@ -215,24 +215,6 @@ void ThumbnailView::ApplySettings(vcl::RenderContext& rRenderContext)
     mpItemAttrs->nMaxTextLength = 0;
 }
 
-void ThumbnailView::ImplInitScrollBar()
-{
-    if ( GetStyle() & WB_VSCROLL )
-    {
-        if ( !mpScrBar )
-        {
-            mpScrBar = VclPtr<ScrollBar>::Create( this, WB_VSCROLL | WB_DRAG );
-            mpScrBar->SetScrollHdl( LINK( this, ThumbnailView, ImplScrollHdl ) );
-        }
-        else
-        {
-            // adapt the width because of the changed settings
-            long nScrBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-            mpScrBar->setPosSizePixel( 0, 0, nScrBarWidth, 0, PosSizeFlags::Width );
-        }
-    }
-}
-
 void ThumbnailView::DrawItem(ThumbnailViewItem *pItem)
 {
     if (pItem->isVisible())
@@ -265,7 +247,19 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
 
     // consider the scrolling
     if ( nStyle & WB_VSCROLL )
-        ImplInitScrollBar();
+    {
+        if ( !mpScrBar )
+        {
+            mpScrBar = VclPtr<ScrollBar>::Create( this, WB_VSCROLL | WB_DRAG );
+            mpScrBar->SetScrollHdl( LINK( this, ThumbnailView, ImplScrollHdl ) );
+        }
+        else
+        {
+            // adapt the width because of the changed settings
+            long nScrBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+            mpScrBar->setPosSizePixel( 0, 0, nScrBarWidth, 0, PosSizeFlags::Width );
+        }
+    }
     else
     {
         if ( mpScrBar )

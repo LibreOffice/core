@@ -200,17 +200,12 @@ namespace sfx2
         // Paint title bar text.
         rRenderContext.SetLineColor(rStyleSettings.GetActiveTextColor());
         aTitleBarBox.Left() += 3;
-        rRenderContext.DrawText(aTitleBarBox, impl_getTitle(),
-                               DrawTextFlags::Left | DrawTextFlags::VCenter | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
+        rRenderContext.DrawText(aTitleBarBox,
+                                !m_sTitle.isEmpty() ? m_sTitle : GetText(),
+                                DrawTextFlags::Left | DrawTextFlags::VCenter | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
 
         // Restore original values of the output device.
         rRenderContext.Pop();
-    }
-
-
-    OUString TitledDockingWindow::impl_getTitle() const
-    {
-        return !m_sTitle.isEmpty() ? m_sTitle : GetText();
     }
 
 

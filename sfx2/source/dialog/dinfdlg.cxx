@@ -345,11 +345,11 @@ void SfxDocumentInfoItem::resetUserData(const OUString & i_rAuthor)
 {
     setAuthor(i_rAuthor);
     DateTime now( DateTime::SYSTEM );
-    setCreationDate( now.GetUNODateTime() );
+    m_CreationDate = now.GetUNODateTime();
     setModifiedBy(OUString());
     setPrintedBy(OUString());
-    setModificationDate(util::DateTime());
-    setPrintDate(util::DateTime());
+    m_ModificationDate = util::DateTime();
+    m_PrintDate = util::DateTime();
     setEditingDuration(0);
     setEditingCycles(1);
 }

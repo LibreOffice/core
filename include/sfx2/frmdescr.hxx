@@ -79,7 +79,6 @@ public:
     const INetURLObject&    GetURL() const
                             { return aURL; }
     void                    SetURL( const OUString& rURL );
-    void                    SetActualURL( const INetURLObject& rURL );
     void                    SetActualURL( const OUString& rURL );
     void                    SetReadOnly( bool bSet ) { bReadOnly = bSet;}
     void                    SetEditable( bool bSet );

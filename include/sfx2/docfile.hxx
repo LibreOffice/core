@@ -223,7 +223,6 @@ public:
     SAL_DLLPRIVATE SvKeyValueIterator* GetHeaderAttributes_Impl();
 
     SAL_DLLPRIVATE void Init_Impl();
-    SAL_DLLPRIVATE void ForceSynchronStream_Impl();
 
     SAL_DLLPRIVATE void GetLockingStream_Impl();
     SAL_DLLPRIVATE void GetMedium_Impl();

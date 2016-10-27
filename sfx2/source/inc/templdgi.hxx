@@ -249,7 +249,6 @@ protected:
     {
         return nActFamily != 0xffff;
     }
-    void ResetFocus();
     void EnableDelete();
     void Initialize();
     void EnableHierarchical(bool);

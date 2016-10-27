@@ -64,7 +64,7 @@ SfxItemSet* SfxFrameDescriptor::GetArgs()
 void SfxFrameDescriptor::SetURL( const OUString& rURL )
 {
     aURL = INetURLObject(rURL);
-    SetActualURL( aURL );
+    SetActualURL(aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ));
 }
 
 void SfxFrameDescriptor::SetActualURL( const OUString& rURL )
@@ -72,11 +72,6 @@ void SfxFrameDescriptor::SetActualURL( const OUString& rURL )
     aActualURL = INetURLObject(rURL);
     if ( pImpl->pArgs )
         pImpl->pArgs->ClearItem();
-}
-
-void SfxFrameDescriptor::SetActualURL( const INetURLObject& rURL )
-{
-    SetActualURL(rURL.GetMainURL( INetURLObject::DECODE_TO_IURI ));
 }
 
 void SfxFrameDescriptor::SetEditable( bool bSet )

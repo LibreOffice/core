@@ -128,13 +128,12 @@ namespace sfx2
 
         void                    setControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId );
 
-        bool                CheckFilterOptionsCapability( const std::shared_ptr<const SfxFilter>& _pFilter );
+        bool                    CheckFilterOptionsCapability( const std::shared_ptr<const SfxFilter>& _pFilter );
 
-        bool                isInOpenMode() const;
+        bool                    isInOpenMode() const;
         OUString                getCurrentFilterUIName() const;
 
         void                    LoadLastUsedFilter( const OUString& _rContextIdentifier );
-        void                    SaveLastUsedFilter( const OUString& _rContextIdentifier );
         void                    SaveLastUsedFilter();
 
         void                    implInitializeFileName( );

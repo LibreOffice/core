@@ -115,24 +115,15 @@ public:
 
     const css::util::DateTime&
                 getCreationDate() const { return m_CreationDate; }
-    void        setCreationDate(const css::util::DateTime& i_val) {
-                    m_CreationDate = i_val;
-                }
     const OUString& getModifiedBy() const { return m_ModifiedBy; }
     void        setModifiedBy(const OUString& i_val) { m_ModifiedBy = i_val; }
 
     const css::util::DateTime&
                 getModificationDate() const { return m_ModificationDate; }
-    void        setModificationDate(const css::util::DateTime& i_val) {
-                    m_ModificationDate = i_val;
-                }
     const OUString& getPrintedBy() const { return m_PrintedBy; }
     void        setPrintedBy(const OUString& i_val) { m_PrintedBy = i_val; }
     const css::util::DateTime&
                 getPrintDate() const { return m_PrintDate; }
-    void        setPrintDate(const css::util::DateTime& i_val) {
-                    m_PrintDate = i_val;
-                }
     sal_Int16   getEditingCycles() const { return m_EditingCycles; }
     void        setEditingCycles(sal_Int16 i_val) { m_EditingCycles = i_val; }
     sal_Int32   getEditingDuration() const { return m_EditingDuration; }
