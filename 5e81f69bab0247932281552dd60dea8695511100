@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_8bcecc81",
+        "filename": "fpicker/source/office/iodlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-27T06:16:49Z",
+      "side": 1,
+      "message": "now the parent class no longer has a pointer to it\u0027s own impl ????\nthis class(CustomContainer) should probably just carry on using a raw pointer",
+      "revId": "5e81f69bab0247932281552dd60dea8695511100",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
