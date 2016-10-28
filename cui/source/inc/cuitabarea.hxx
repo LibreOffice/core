@@ -31,6 +31,7 @@
 
 class SdrModel;
 class SdrView;
+class SvxColorListBox;
 
 /************************************************************************/
 
@@ -335,7 +336,7 @@ private:
     VclPtr<VclGrid>            m_pGridShadow;
     VclPtr<SvxRectCtl>         m_pCtlPosition;
     VclPtr<MetricField>        m_pMtrDistance;
-    VclPtr<ColorLB>            m_pLbShadowColor;
+    VclPtr<SvxColorListBox>    m_pLbShadowColor;
     VclPtr<MetricField>        m_pMtrTransparent;
     VclPtr<SvxXShadowPreview>  m_pCtlXRectPreview;
 
@@ -356,14 +357,13 @@ private:
 
     DECL_LINK_TYPED( ClickShadowHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ModifyShadowHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( SelectShadowHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( SelectShadowHdl_Impl, SvxColorListBox&, void );
 
 public:
     SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
     virtual ~SvxShadowTabPage();
     virtual void dispose() override;
 
-    void    Construct();
     static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pShadowRanges; }
 
@@ -397,9 +397,9 @@ private:
     VclPtr<FixedText>          m_pFtAngle;
     VclPtr<MetricField>        m_pMtrAngle;
     VclPtr<MetricField>        m_pMtrBorder;
-    VclPtr<ColorLB>            m_pLbColorFrom;
+    VclPtr<SvxColorListBox>    m_pLbColorFrom;
     VclPtr<MetricField>        m_pMtrColorFrom;
-    VclPtr<ColorLB>            m_pLbColorTo;
+    VclPtr<SvxColorListBox>    m_pLbColorTo;
     VclPtr<MetricField>        m_pMtrColorTo;
     VclPtr<GradientLB>         m_pLbGradients;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
@@ -431,6 +431,7 @@ private:
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ChangeGradientHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
+    DECL_LINK_TYPED( ModifiedColorListBoxHdl_Impl, SvxColorListBox&, void );
     DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
@@ -478,7 +479,7 @@ private:
     VclPtr<MetricField>        m_pMtrAngle;
     VclPtr<SvxRectCtl>         m_pCtlAngle;
     VclPtr<ListBox>            m_pLbLineType;
-    VclPtr<ColorLB>            m_pLbLineColor;
+    VclPtr<SvxColorListBox>    m_pLbLineColor;
     VclPtr<HatchingLB>         m_pLbHatchings;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
@@ -509,6 +510,7 @@ private:
     DECL_LINK_TYPED( ChangeHatchHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ModifiedColorListBoxHdl_Impl, SvxColorListBox&, void );
     void ModifiedHdl_Impl(void*);
     DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
@@ -559,8 +561,8 @@ class SvxBitmapTabPage : public SvxTabPage
 private:
     VclPtr<VclBox>             m_pBxPixelEditor;
     VclPtr<SvxPixelCtl>        m_pCtlPixel;
-    VclPtr<ColorLB>            m_pLbColor;
-    VclPtr<ColorLB>            m_pLbBackgroundColor;
+    VclPtr<SvxColorListBox>    m_pLbColor;
+    VclPtr<SvxColorListBox>    m_pLbBackgroundColor;
     VclPtr<FixedText>          m_pLbBitmapsHidden;
     VclPtr<BitmapLB>           m_pLbBitmaps;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
@@ -598,7 +600,7 @@ private:
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ChangeBitmapHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ChangePixelColorHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ChangeBackgrndColorHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ChangeBackgrndColorHdl_Impl, SvxColorListBox&, void );
     DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
 

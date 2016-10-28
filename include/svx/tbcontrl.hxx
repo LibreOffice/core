@@ -136,6 +136,7 @@
 #include <svx/strarray.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <svx/colorwindow.hxx>
 #include <svx/PaletteManager.hxx>
 #include <memory>
 
@@ -226,17 +227,16 @@ public:
     Color GetColor();
 };
 
-typedef std::function<void(const OUString&, const Color&)> ColorSelectFunction;
 class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 {
     using SfxToolBoxControl::StateChanged;
 
     std::unique_ptr<svx::ToolboxButtonColorUpdater> m_xBtnUpdater;
-    PaletteManager mPaletteManager;
+    PaletteManager mrPaletteManager;
     BorderColorStatus maBorderColorStatus;
     bool bSidebarType;
     ColorSelectFunction maColorSelectFunction;
-    DECL_LINK_TYPED(SelectedHdl, const Color&, void);
+    DECL_LINK_TYPED(SelectedHdl, const NamedColor&, void);
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxColorToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);

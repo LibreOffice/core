@@ -19,6 +19,7 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
+#include <svx/colorbox.hxx>
 #include <svx/dialogs.hrc>
 
 #include "svx/xattr.hxx"
@@ -183,23 +184,8 @@ void SvxShadowTabPage::dispose()
     SvxTabPage::dispose();
 }
 
-void SvxShadowTabPage::Construct()
-{
-    m_pLbShadowColor->Fill( m_pColorList );
-
-    if( m_bDisable )
-    {
-        m_pTsbShowShadow->Disable();
-        m_pGridShadow->Disable();
-    }
-}
-
-
 void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    sal_Int32 nPos;
-    sal_Int32 nCount;
-
     const SfxUInt16Item* pPageTypeItem = rSet.GetItem<SfxUInt16Item>(SID_PAGE_TYPE, false);
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
@@ -226,18 +212,6 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
                             m_pColorList = pLine->GetNewColorList();
                     }
                 }
-
-                // aLbShadowColor
-                nPos = m_pLbShadowColor->GetSelectEntryPos();
-                m_pLbShadowColor->Clear();
-                m_pLbShadowColor->Fill( m_pColorList );
-                nCount = m_pLbShadowColor->GetEntryCount();
-                if( nCount == 0 )
-                    ; // this case should not occur
-                else if( nCount <= nPos )
-                    m_pLbShadowColor->SelectEntryPos( 0 );
-                else
-                    m_pLbShadowColor->SelectEntryPos( nPos );
 
                 SfxItemSet rAttribs( rSet );
                 // rSet contains shadow attributes too, but we want
@@ -343,10 +317,11 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
             }
         }
 
-        // ShadowColor
-        sal_Int32 nPos = m_pLbShadowColor->GetSelectEntryPos();
-        if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-            m_pLbShadowColor->IsValueChangedFromSaved() )
+    // ShadowColor
+    {
+        XColorItem aItem(makeSdrShadowColorItem(m_pLbShadowColor->GetSelectEntryColor()));
+        pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWCOLOR );
+        if ( !pOld || !( *static_cast<const XColorItem*>(pOld) == aItem ) )
         {
             XColorItem aItem(makeSdrShadowColorItem(m_pLbShadowColor->GetSelectEntryColor()));
             pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWCOLOR );
@@ -501,11 +476,11 @@ IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ClickShadowHdl_Impl, Button*, void)
     ModifyShadowHdl_Impl( *m_pMtrTransparent );
 }
 
-
-IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, SelectShadowHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, SelectShadowHdl_Impl, SvxColorListBox&, void)
 {
     ModifyShadowHdl_Impl(*m_pMtrTransparent);
 }
+
 IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
 {
     if( m_pTsbShowShadow->GetState() == TRISTATE_TRUE )
@@ -513,11 +488,7 @@ IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
     else
         m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
-    sal_Int32 nPos = m_pLbShadowColor->GetSelectEntryPos();
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
-    {
-        m_rXFSet.Put( XFillColorItem( OUString(), m_pLbShadowColor->GetSelectEntryColor() ) );
-    }
+    m_rXFSet.Put( XFillColorItem( OUString(), m_pLbShadowColor->GetSelectEntryColor() ) );
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
     XFillTransparenceItem aItem( nVal );
     m_rXFSet.Put( XFillTransparenceItem( aItem ) );

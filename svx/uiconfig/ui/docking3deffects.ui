@@ -1089,7 +1089,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-ColorLB" id="ambientcolor">
+                      <object class="svxlo-SvxColorListBox" id="ambientcolor">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1250,7 +1250,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="svxlo-ColorLB" id="lightcolor1">
+                          <object class="svxlo-SvxColorListBox" id="lightcolor1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">start</property>
@@ -1263,7 +1263,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxlo-ColorLB" id="lightcolor2">
+                          <object class="svxlo-SvxColorListBox" id="lightcolor2">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
@@ -1276,7 +1276,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxlo-ColorLB" id="lightcolor3">
+                          <object class="svxlo-SvxColorListBox" id="lightcolor3">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
@@ -1289,7 +1289,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxlo-ColorLB" id="lightcolor4">
+                          <object class="svxlo-SvxColorListBox" id="lightcolor4">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
@@ -1302,7 +1302,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxlo-ColorLB" id="lightcolor5">
+                          <object class="svxlo-SvxColorListBox" id="lightcolor5">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
@@ -1315,7 +1315,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxlo-ColorLB" id="lightcolor6">
+                          <object class="svxlo-SvxColorListBox" id="lightcolor6">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
@@ -1328,7 +1328,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxlo-ColorLB" id="lightcolor7">
+                          <object class="svxlo-SvxColorListBox" id="lightcolor7">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
@@ -1341,7 +1341,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxlo-ColorLB" id="lightcolor8">
+                          <object class="svxlo-SvxColorListBox" id="lightcolor8">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
@@ -1721,7 +1721,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-ColorLB" id="objcolor">
+                      <object class="svxlo-SvxColorListBox" id="objcolor">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1733,7 +1733,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-ColorLB" id="illumcolor">
+                      <object class="svxlo-SvxColorListBox" id="illumcolor">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1856,7 +1856,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-ColorLB" id="speccolor">
+                      <object class="svxlo-SvxColorListBox" id="speccolor">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>

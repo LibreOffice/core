@@ -358,10 +358,9 @@ VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateBreakDlg(
 
 AbstractCopyDlg * SdAbstractDialogFactory_Impl::CreateCopyDlg(vcl::Window* pParent,
                                             const SfxItemSet& rInAttrs,
-                                            const rtl::Reference<XColorList> &pColTab,
                                             ::sd::View* pView )
 {
-    return new AbstractCopyDlg_Impl( VclPtr< ::sd::CopyDlg>::Create( pParent, rInAttrs, pColTab, pView ) );
+    return new AbstractCopyDlg_Impl( VclPtr< ::sd::CopyDlg>::Create( pParent, rInAttrs, pView ) );
 }
 
 AbstractSdCustomShowDlg * SdAbstractDialogFactory_Impl::CreateSdCustomShowDlg(vcl::Window* pParent, SdDrawDocument& rDrawDoc )

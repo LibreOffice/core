@@ -24,6 +24,8 @@
 #include <svx/tabline.hxx>
 #include <svx/tabarea.hxx>
 
+class SvxColorListBox;
+
 class SvxLineTabDialog : public SfxTabDialog
 {
     sal_uInt16            m_nLineTabPage;
@@ -91,7 +93,7 @@ class SvxLineTabPage : public SvxTabPage
 private:
     VclPtr<VclBox>             m_pBoxColor;
     VclPtr<LineLB>             m_pLbLineStyle;
-    VclPtr<ColorLB>            m_pLbColor;
+    VclPtr<SvxColorListBox>    m_pLbColor;
     VclPtr<VclBox>             m_pBoxWidth;
     VclPtr<MetricField>        m_pMtrLineWidth;
     VclPtr<VclBox>             m_pBoxTransparency;
@@ -181,7 +183,7 @@ private:
     DECL_LINK_TYPED( ChangeEndModifyHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ChangeEndClickHdl_Impl, Button*, void );
     void ChangeEndHdl_Impl(void*);
-    DECL_LINK_TYPED( ChangePreviewListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ChangePreviewListBoxHdl_Impl, SvxColorListBox&, void );
     DECL_LINK_TYPED( ChangePreviewModifyHdl_Impl, Edit&, void );
     void ChangePreviewHdl_Impl(void*);
     DECL_LINK_TYPED( ChangeTransparentHdl_Impl, Edit&, void );

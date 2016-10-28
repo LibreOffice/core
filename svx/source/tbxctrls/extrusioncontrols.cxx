@@ -41,7 +41,7 @@
 #include "helpid.hrc"
 #include "extrusioncontrols.hxx"
 #include "extrusioncontrols.hrc"
-#include "colorwindow.hxx"
+#include <svx/colorwindow.hxx>
 #include "extrusiondepthdialog.hxx"
 
 using namespace ::com::sun::star::uno;

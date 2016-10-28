@@ -36,11 +36,10 @@
 
 class ScRedlineOptionsTabPage : public SfxTabPage
 {
-    VclPtr<ColorListBox>       m_pContentColorLB;
-    VclPtr<ColorListBox>       m_pRemoveColorLB;
-    VclPtr<ColorListBox>       m_pInsertColorLB;
-    VclPtr<ColorListBox>       m_pMoveColorLB;
-    OUString                   aAuthorStr;
+    VclPtr<SvxColorListBox>    m_pContentColorLB;
+    VclPtr<SvxColorListBox>    m_pRemoveColorLB;
+    VclPtr<SvxColorListBox>    m_pInsertColorLB;
+    VclPtr<SvxColorListBox>    m_pMoveColorLB;
 
 public:
 

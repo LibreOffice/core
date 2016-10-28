@@ -28,6 +28,8 @@
 #include <sfx2/basedlgs.hxx>
 #include <tools/fract.hxx>
 
+class SvxColorListBox;
+
 namespace sd {
 
 class View;
@@ -40,7 +42,7 @@ class CopyDlg
 {
 public:
     CopyDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
-        const XColorListRef &pColList, ::sd::View* pView );
+        ::sd::View* pView );
     virtual ~CopyDlg();
     virtual void dispose() override;
 
@@ -58,18 +60,17 @@ private:
     VclPtr<MetricField>        m_pMtrFldWidth;
     VclPtr<MetricField>        m_pMtrFldHeight;
 
-    VclPtr<ColorLB>            m_pLbStartColor;
+    VclPtr<SvxColorListBox>    m_pLbStartColor;
     VclPtr<FixedText>          m_pFtEndColor;
-    VclPtr<ColorLB>            m_pLbEndColor;
+    VclPtr<SvxColorListBox>    m_pLbEndColor;
 
     VclPtr<PushButton>         m_pBtnSetDefault;
 
     const SfxItemSet&   mrOutAttrs;
-    XColorListRef       mpColorList;
     Fraction            maUIScale;
     ::sd::View*         mpView;
 
-    DECL_LINK_TYPED( SelectColorHdl, ListBox&, void );
+    DECL_LINK_TYPED( SelectColorHdl, SvxColorListBox&, void );
     DECL_LINK_TYPED( SetViewData, Button*, void );
     DECL_LINK_TYPED( SetDefault, Button*, void );
 };

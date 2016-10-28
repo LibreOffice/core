@@ -26,7 +26,7 @@
 class SfxItemSet;
 class MetricField;
 class ValueSet;
-class ColorListBox;
+class SvxColorListBox;
 
 namespace svx {
 
@@ -47,7 +47,7 @@ sfx::ItemConnectionBase* CreateMarginConnection( const SfxItemSet& rItemSet,
 /** Creates an item connection object that connects an SvxShadowItem with the
     controls of the SvxBorderTabPage. */
 sfx::ItemConnectionBase* CreateShadowConnection( const SfxItemSet& rItemSet,
-        ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor );
+        ValueSet& rVsPos, MetricField& rMfSize, SvxColorListBox& rLbColor );
 
 
 }

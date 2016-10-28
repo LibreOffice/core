@@ -22,10 +22,6 @@
 #include "bmpmask.hrc"
 #include "helpid.hrc"
 
-String RID_SVXDLG_BMPMASK_STR_TRANSP
-{
-    Text [ en-US ] = "Transparent";
-};
 
 String RID_SVXDLG_BMPMASK_STR_SOURCECOLOR
 {

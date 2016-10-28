@@ -443,7 +443,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxlo-ColorLB" id="start">
+                          <object class="svxlo-SvxColorListBox" id="start">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -454,7 +454,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxlo-ColorLB" id="end">
+                          <object class="svxlo-SvxColorListBox" id="end">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>

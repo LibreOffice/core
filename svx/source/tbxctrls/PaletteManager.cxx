@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <svx/PaletteManager.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
@@ -32,6 +33,7 @@
 #include <set>
 #include <cppu/unotype.hxx>
 #include <officecfg/Office/Common.hxx>
+
 
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
@@ -54,6 +56,7 @@ PaletteManager::PaletteManager() :
         pColorList = XColorList::CreateStdColorList();
     LoadPalettes();
     mnNumOfPalettes += m_Palettes.size();
+
 }
 
 PaletteManager::~PaletteManager()
@@ -118,29 +121,30 @@ void PaletteManager::LoadPalettes()
 
 void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 {
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-
     if( mnCurrentPalette == 0)
     {
         rColorSet.Clear();
         css::uno::Sequence< sal_Int32 > CustomColorList( officecfg::Office::Common::UserColors::CustomColor::get() );
         css::uno::Sequence< OUString > CustomColorNameList( officecfg::Office::Common::UserColors::CustomColorName::get() );
         int nIx = 1;
-        for( int i = 0;i < CustomColorList.getLength();i++ )
+        for (int i = 0; i < CustomColorList.getLength(); ++i)
         {
-            Color aColor( CustomColorList[i] );
-            OUString aColorName( CustomColorNameList[i] );
-            rColorSet.InsertItem( nIx, aColor, aColorName );
+            Color aColor(CustomColorList[i]);
+            rColorSet.InsertItem(nIx, aColor, CustomColorNameList[i]);
             ++nIx;
         }
     }
     else if( mnCurrentPalette == mnNumOfPalettes - 1 )
     {
         // Add doc colors to palette
-        std::set<Color> aColors = pDocSh->GetDocColors();
-        mnColorCount = aColors.size();
-        rColorSet.Clear();
-        rColorSet.addEntriesForColorSet(aColors, SVX_RESSTR( RID_SVXSTR_DOC_COLOR_PREFIX ) + " " );
+        SfxObjectShell* pDocSh = SfxObjectShell::Current();
+        if (pDocSh)
+        {
+            std::set<Color> aColors = pDocSh->GetDocColors();
+            mnColorCount = aColors.size();
+            rColorSet.Clear();
+            rColorSet.addEntriesForColorSet(aColors, SVX_RESSTR( RID_SVXSTR_DOC_COLOR_PREFIX ) + " " );
+        }
     }
     else
     {
@@ -152,18 +156,17 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
 {
     maRecentColors.clear();
-    css::uno::Sequence< sal_Int32 > Colorlist(officecfg::Office::Common::UserColors::RecentColor::get());
-    for(int i = 0;i < Colorlist.getLength();i++)
-    {
-        Color aColor( Colorlist[i] );
-        maRecentColors.push_back( aColor );
-    }
     rColorSet.Clear();
+    css::uno::Sequence< sal_Int32 > Colorlist(officecfg::Office::Common::UserColors::RecentColor::get());
+    css::uno::Sequence< OUString > ColorNamelist(officecfg::Office::Common::UserColors::RecentColorName::get());
     int nIx = 1;
-    for(std::deque<Color>::const_iterator it = maRecentColors.begin();
-        it != maRecentColors.end(); ++it)
+    const bool bHasColorNames = Colorlist.getLength() == ColorNamelist.getLength();
+    for (int i = 0; i < Colorlist.getLength(); ++i)
     {
-        rColorSet.InsertItem(nIx, *it, "");
+        Color aColor(Colorlist[i]);
+        OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
+        maRecentColors.emplace_back(aColor, sColorName);
+        rColorSet.InsertItem(nIx, aColor, sColorName);
         ++nIx;
     }
 }
@@ -202,9 +205,13 @@ void PaletteManager::SetPalette( sal_Int32 nPos )
             }
         }
     }
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
-    officecfg::Office::Common::UserColors::PaletteName::set(GetPaletteName(), batch);
-    batch->commit();
+    OUString aPaletteName(officecfg::Office::Common::UserColors::PaletteName::get());
+    if (aPaletteName != GetPaletteName())
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
+        officecfg::Office::Common::UserColors::PaletteName::set(GetPaletteName(), batch);
+        batch->commit();
+    }
 }
 
 sal_Int32 PaletteManager::GetPalette()
@@ -256,55 +263,66 @@ void PaletteManager::SetLastColor(const Color& rLastColor)
     mLastColor = rLastColor;
 }
 
-void PaletteManager::AddRecentColor(const Color& rRecentColor)
+void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& rName, bool bFront)
 {
-    std::deque<Color>::iterator itColor =
-        std::find(maRecentColors.begin(), maRecentColors.end(), rRecentColor);
+    auto itColor = std::find_if(maRecentColors.begin(),
+                                maRecentColors.end(),
+                                [rRecentColor] (const NamedColor &a) { return a.first == rRecentColor; });
     // if recent color to be added is already in list, remove it
     if( itColor != maRecentColors.end() )
         maRecentColors.erase( itColor );
 
-    maRecentColors.push_front( rRecentColor );
-    if( maRecentColors.size() > mnMaxRecentColors )
+    if (maRecentColors.size() == mnMaxRecentColors)
         maRecentColors.pop_back();
+    if (bFront)
+        maRecentColors.push_front(std::make_pair(rRecentColor, rName));
+    else
+        maRecentColors.emplace_back(rRecentColor, rName);
     css::uno::Sequence< sal_Int32 > aColorList(maRecentColors.size());
-    for(std::deque<Color>::size_type i = 0;i < maRecentColors.size();i++)
+    css::uno::Sequence< OUString > aColorNameList(maRecentColors.size());
+    for (size_t i = 0; i < maRecentColors.size(); ++i)
     {
-        aColorList[i] = static_cast<sal_Int32>(maRecentColors[i].GetColor());
+        aColorList[i] = static_cast<sal_Int32>(maRecentColors[i].first.GetColor());
+        aColorNameList[i] = maRecentColors[i].second;
     }
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
     officecfg::Office::Common::UserColors::RecentColor::set(aColorList, batch);
+    officecfg::Office::Common::UserColors::RecentColorName::set(aColorNameList, batch);
     batch->commit();
 }
 
 void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)
 {
     mpBtnUpdater = pBtnUpdater;
+    if (mpBtnUpdater)
+        mLastColor = mpBtnUpdater->GetCurrentColor();
 }
 
-void PaletteManager::SetColorSelectFunction(const std::function<void(const OUString&, const Color&)>& aColorSelectFunction)
+void PaletteManager::SetColorSelectFunction(const std::function<void(const OUString&, const NamedColor&)>& aColorSelectFunction)
 {
     maColorSelectFunction = aColorSelectFunction;
 }
 
-void PaletteManager::PopupColorPicker(const OUString& aCommand)
+void PaletteManager::PopupColorPicker(vcl::Window* pParent, const OUString& aCommand, const Color& rInitialColor)
 {
     // The calling object goes away during aColorDlg.Execute(), so we must copy this
     OUString aCommandCopy = aCommand;
-    SvColorDialog aColorDlg( nullptr );
-    aColorDlg.SetColor ( mLastColor );
-    aColorDlg.SetMode( svtools::ColorPickerMode_MODIFY );
+    SvColorDialog aColorDlg(pParent);
+    aColorDlg.SetColor(rInitialColor);
+    aColorDlg.SetMode(svtools::ColorPickerMode_MODIFY);
     if( aColorDlg.Execute() == RET_OK )
     {
         if (mpBtnUpdater)
             mpBtnUpdater->Update( aColorDlg.GetColor() );
         mLastColor = aColorDlg.GetColor();
-        AddRecentColor( mLastColor );
-        maColorSelectFunction(aCommandCopy, mLastColor);
+        OUString sColorName = ("#" + mLastColor.AsRGBHexString().toAsciiUpperCase());
+        NamedColor aNamedColor = std::make_pair(mLastColor, sColorName);
+        AddRecentColor(mLastColor, sColorName);
+        maColorSelectFunction(aCommandCopy, aNamedColor);
     }
 }
 
-void PaletteManager::DispatchColorCommand(const OUString& aCommand, const Color& rColor)
+void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor)
 {
     using namespace css::uno;
     using namespace css::frame;
@@ -313,14 +331,15 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const Color&
 
     Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
     Reference<XDesktop2> xDesktop = Desktop::create(xContext);
-    Reference<XDispatchProvider> xDispatchProvider(xDesktop->getCurrentFrame(), UNO_QUERY );
+    Reference<XFrame> xFrame(xDesktop->getCurrentFrame());
+    Reference<XDispatchProvider> xDispatchProvider(xFrame, UNO_QUERY);
     if (xDispatchProvider.is())
     {
         INetURLObject aObj( aCommand );
 
         Sequence<PropertyValue> aArgs(1);
         aArgs[0].Name = aObj.GetURLPath();
-        aArgs[0].Value = makeAny(sal_Int32(rColor.GetColor()));
+        aArgs[0].Value <<= sal_Int32(rColor.first.GetColor());
 
         URL aTargetURL;
         aTargetURL.Complete = aCommand;
@@ -329,7 +348,11 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const Color&
 
         Reference<XDispatch> xDispatch = xDispatchProvider->queryDispatch(aTargetURL, OUString(), 0);
         if (xDispatch.is())
+        {
             xDispatch->dispatch(aTargetURL, aArgs);
+            if (xFrame->getContainerWindow().is())
+                xFrame->getContainerWindow()->setFocus();
+        }
     }
 }
 

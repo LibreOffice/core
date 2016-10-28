@@ -28,13 +28,14 @@
 #include <svx/strarray.hxx>
 
 class ScViewOptions;
+class SvxColorListBox;
 
 class ScTpContentOptions : public SfxTabPage
 {
     friend class VclPtr<ScTpContentOptions>;
     VclPtr<ListBox>         pGridLB;
     VclPtr<FixedText>       pColorFT;
-    VclPtr<ColorListBox>    pColorLB;
+    VclPtr<SvxColorListBox> pColorLB;
     VclPtr<CheckBox>        pBreakCB;
     VclPtr<CheckBox>        pGuideLineCB;
 

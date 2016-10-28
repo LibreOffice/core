@@ -91,7 +91,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-ColorListBox" id="insertcolor">
+                  <object class="svxlo-SvxColorListBox" id="insertcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -208,7 +208,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-ColorListBox" id="deletedcolor">
+                  <object class="svxlo-SvxColorListBox" id="deletedcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -325,7 +325,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-ColorListBox" id="changedcolor">
+                  <object class="svxlo-SvxColorListBox" id="changedcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -397,7 +397,7 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
-                  <object class="svtlo-ColorListBox" id="markcolor">
+                  <object class="svxlo-SvxColorListBox" id="markcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>

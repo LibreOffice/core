@@ -12,6 +12,7 @@
 
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <tools/color.hxx>
+#include <svx/Palette.hxx>
 
 class SvxColorToolBoxControl;
 
@@ -26,7 +27,7 @@ public:
             SvxColorToolBoxControl* pControl,
             const OUString& rPropertyName);
 
-    void operator()(const OUString& rCommand, const Color& rColor);
+    void operator()(const OUString& rCommand, const NamedColor& rColor);
 
     void updateModel(const css::uno::Reference<css::frame::XModel>& xModel);
 

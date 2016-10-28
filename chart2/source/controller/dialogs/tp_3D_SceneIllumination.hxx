@@ -29,6 +29,8 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/dlgctl3d.hxx>
 
+class SvxColorListBox;
+
 namespace chart
 {
 
@@ -59,7 +61,7 @@ public:
 
 private:
     DECL_LINK_TYPED( ClickLightSourceButtonHdl, Button*, void );
-    DECL_LINK_TYPED( SelectColorHdl, ListBox&, void );
+    DECL_LINK_TYPED( SelectColorHdl, SvxColorListBox&, void );
     DECL_LINK_TYPED( ColorDialogHdl, Button*, void );
     DECL_LINK_TYPED( PreviewChangeHdl, SvxLightCtl3D*, void );
     DECL_LINK_TYPED( PreviewSelectHdl, SvxLightCtl3D*, void );
@@ -81,10 +83,10 @@ private:
     VclPtr<LightButton> m_pBtn_Light7;
     VclPtr<LightButton> m_pBtn_Light8;
 
-    VclPtr<ColorLB>     m_pLB_LightSource;
+    VclPtr<SvxColorListBox> m_pLB_LightSource;
     VclPtr<PushButton>  m_pBtn_LightSource_Color;
 
-    VclPtr<ColorLB>     m_pLB_AmbientLight;
+    VclPtr<SvxColorListBox> m_pLB_AmbientLight;
     VclPtr<PushButton>  m_pBtn_AmbientLight_Color;
 
     VclPtr<SvxLightCtl3D>   m_pCtl_Preview;

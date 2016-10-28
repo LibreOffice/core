@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SOURCE_TBXCTRLS_COLORWINDOW_HXX
 
 #include <sfx2/tbxctrl.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
 #include <svl/lstner.hxx>
 #include <rtl/ustring.hxx>
@@ -32,11 +33,13 @@
 #include <functional>
 
 class BorderColorStatus;
+class Button;
+typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
 
-class SvxColorWindow : public SfxPopupWindow
+#define COL_NONE_COLOR    ::Color(0x80, 0xFF, 0xFF, 0xFF)
+
+class SVX_DLLPUBLIC SvxColorWindow : public svtools::ToolbarPopup
 {
-    using FloatingWindow::StateChanged;
-
 private:
     const sal_uInt16    theSlotId;
     VclPtr<SvxColorValueSet>   mpColorSet;
@@ -44,42 +47,50 @@ private:
 
     VclPtr<ListBox>     mpPaletteListBox;
     VclPtr<PushButton>  mpButtonAutoColor;
+    VclPtr<PushButton>  mpButtonNoneColor;
     VclPtr<PushButton>  mpButtonPicker;
     VclPtr<FixedLine>   mpAutomaticSeparator;
     OUString            maCommand;
-    Link<const Color&, void> maSelectedLink;
+    Link<const NamedColor&, void> maSelectedLink;
 
-    PaletteManager&     mrPaletteManager;
+    VclPtr<vcl::Window> mxParentWindow;
+    PaletteManager& mrPaletteManager;
     BorderColorStatus&  mrBorderColorStatus;
 
-    std::function<void(const OUString&, const Color&)> maColorSelectFunction;
+    ColorSelectFunction maColorSelectFunction;
 
     DECL_LINK_TYPED( SelectHdl, ValueSet*, void );
     DECL_LINK_TYPED( SelectPaletteHdl, ListBox&, void);
     DECL_LINK_TYPED( AutoColorClickHdl, Button*, void );
     DECL_LINK_TYPED( OpenPickerClickHdl, Button*, void );
 
-protected:
-    virtual void    Resize() override;
-    virtual bool    Close() override;
+    static bool SelectValueSetEntry(SvxColorValueSet* pColorSet, const Color& rColor);
+    static NamedColor GetSelectEntryColor(ValueSet * pColorSet);
+    NamedColor GetAutoColor() const;
+    NamedColor GetNoneColor() const;
 
 public:
-    SvxColorWindow( const OUString& rCommand,
-                         PaletteManager& rPaletteManager,
-                         BorderColorStatus& rBorderColorStatus,
-                         sal_uInt16 nSlotId,
-                         const css::uno::Reference< css::frame::XFrame >& rFrame,
-                         const OUString& rWndTitle,
-                         vcl::Window* pParentWindow,
-                         std::function<void(const OUString&, const Color&)> maColorSelectFunction);
-    virtual ~SvxColorWindow();
+    SvxColorWindow(const OUString& rCommand,
+                   PaletteManager& rPaletteManager,
+                   BorderColorStatus& rBorderColorStatus,
+                   sal_uInt16 nSlotId,
+                   const css::uno::Reference< css::frame::XFrame >& rFrame,
+                   vcl::Window* pParentWindow,
+                   ColorSelectFunction const& rColorSelectFunction);
+    virtual ~SvxColorWindow() override;
     virtual void        dispose() override;
+    void                ShowNoneButton();
     void                StartSelection();
+    void                SetNoSelection();
+    bool                IsNoSelection() const;
+    void                SelectEntry(const NamedColor& rColor);
+    void                SelectEntry(const Color& rColor);
+    NamedColor          GetSelectEntryColor() const;
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    virtual void        statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
-    void SetSelectedHdl( const Link<const Color&, void>& rLink ) { maSelectedLink = rLink; }
+    void SetSelectedHdl( const Link<const NamedColor&, void>& rLink ) { maSelectedLink = rLink; }
 };
 
 #endif

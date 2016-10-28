@@ -25,6 +25,7 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <svx/colorbox.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/xfillit0.hxx>
@@ -126,8 +127,8 @@ protected:
     VclPtr<FixedText>                                          mpColorTextFT;
     VclPtr<SvxFillTypeBox>                                     mpLbFillType;
     VclPtr<SvxFillAttrBox>                                     mpLbFillAttr;
-    VclPtr<ColorLB>                                            mpLbFillGradFrom;
-    VclPtr<ColorLB>                                            mpLbFillGradTo;
+    VclPtr<SvxColorListBox>                                    mpLbFillGradFrom;
+    VclPtr<SvxColorListBox>                                    mpLbFillGradTo;
     VclPtr<sfx2::sidebar::SidebarToolBox>                      mpToolBoxColor; // for new color picker
     VclPtr<FixedText>                                          mpTrspTextFT;
     VclPtr<ListBox>                                            mpLBTransType;
@@ -159,6 +160,7 @@ protected:
 
     DECL_LINK_TYPED(SelectFillTypeHdl, ListBox&, void );
     DECL_LINK_TYPED(SelectFillAttrHdl, ListBox&, void );
+    DECL_LINK_TYPED(SelectFillColorHdl, SvxColorListBox&, void );
     DECL_LINK_TYPED(ChangeTrgrTypeHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(ModifyTransparentHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(ModifyTransSliderHdl, Slider*, void);

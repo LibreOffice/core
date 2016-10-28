@@ -38,7 +38,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="doccolor_lb">
+      <object class="svxlo-SvxColorListBox" id="doccolor_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -72,7 +72,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="docboundaries_lb">
+      <object class="svxlo-SvxColorListBox" id="docboundaries_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -98,7 +98,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="appback_lb">
+      <object class="svxlo-SvxColorListBox" id="appback_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -148,7 +148,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="objboundaries_lb">
+      <object class="svxlo-SvxColorListBox" id="objboundaries_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -185,7 +185,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="tblboundaries_lb">
+      <object class="svxlo-SvxColorListBox" id="tblboundaries_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -220,7 +220,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="font_lb">
+      <object class="svxlo-SvxColorListBox" id="font_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -257,7 +257,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="unvisitedlinks_lb">
+      <object class="svxlo-SvxColorListBox" id="unvisitedlinks_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -294,7 +294,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="visitedlinks_lb">
+      <object class="svxlo-SvxColorListBox" id="visitedlinks_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -354,7 +354,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="autospellcheck_lb">
+      <object class="svxlo-SvxColorListBox" id="autospellcheck_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -364,7 +364,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="shadows_lb">
+      <object class="svxlo-SvxColorListBox" id="shadows_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -374,7 +374,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="smarttags_lb">
+      <object class="svxlo-SvxColorListBox" id="smarttags_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -400,7 +400,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="writergrid_lb">
+      <object class="svxlo-SvxColorListBox" id="writergrid_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -435,7 +435,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="field_lb">
+      <object class="svxlo-SvxColorListBox" id="field_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -457,7 +457,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="index_lb">
+      <object class="svxlo-SvxColorListBox" id="index_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -479,7 +479,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="script_lb">
+      <object class="svxlo-SvxColorListBox" id="script_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -559,7 +559,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="section_lb">
+      <object class="svxlo-SvxColorListBox" id="section_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -581,7 +581,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="hdft_lb">
+      <object class="svxlo-SvxColorListBox" id="hdft_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -616,7 +616,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="pagebreak_lb">
+      <object class="svxlo-SvxColorListBox" id="pagebreak_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -651,7 +651,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="direct_lb">
+      <object class="svxlo-SvxColorListBox" id="direct_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -702,7 +702,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="sgml_lb">
+      <object class="svxlo-SvxColorListBox" id="sgml_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -737,7 +737,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="htmlcomment_lb">
+      <object class="svxlo-SvxColorListBox" id="htmlcomment_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -772,7 +772,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="htmlkeyword_lb">
+      <object class="svxlo-SvxColorListBox" id="htmlkeyword_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -807,7 +807,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="unknown_lb">
+      <object class="svxlo-SvxColorListBox" id="unknown_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -858,7 +858,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="calcgrid_lb">
+      <object class="svxlo-SvxColorListBox" id="calcgrid_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -893,7 +893,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="brk_lb">
+      <object class="svxlo-SvxColorListBox" id="brk_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -928,7 +928,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="brkmanual_lb">
+      <object class="svxlo-SvxColorListBox" id="brkmanual_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -963,7 +963,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="brkauto_lb">
+      <object class="svxlo-SvxColorListBox" id="brkauto_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -998,7 +998,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="det_lb">
+      <object class="svxlo-SvxColorListBox" id="det_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1033,7 +1033,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="deterror_lb">
+      <object class="svxlo-SvxColorListBox" id="deterror_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1068,7 +1068,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="ref_lb">
+      <object class="svxlo-SvxColorListBox" id="ref_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1103,7 +1103,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="notes_lb">
+      <object class="svxlo-SvxColorListBox" id="notes_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1154,7 +1154,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="drawgrid_lb">
+      <object class="svxlo-SvxColorListBox" id="drawgrid_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1205,7 +1205,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="basicid_lb">
+      <object class="svxlo-SvxColorListBox" id="basicid_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1240,7 +1240,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="basiccomment_lb">
+      <object class="svxlo-SvxColorListBox" id="basiccomment_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1275,7 +1275,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="basicnumber_lb">
+      <object class="svxlo-SvxColorListBox" id="basicnumber_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1310,7 +1310,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="basicstring_lb">
+      <object class="svxlo-SvxColorListBox" id="basicstring_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1345,7 +1345,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="basicop_lb">
+      <object class="svxlo-SvxColorListBox" id="basicop_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1380,7 +1380,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="basickeyword_lb">
+      <object class="svxlo-SvxColorListBox" id="basickeyword_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1415,7 +1415,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="error_lb">
+      <object class="svxlo-SvxColorListBox" id="error_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1466,7 +1466,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="sqlid_lb">
+      <object class="svxlo-SvxColorListBox" id="sqlid_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1501,7 +1501,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="sqlnumber_lb">
+      <object class="svxlo-SvxColorListBox" id="sqlnumber_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1536,7 +1536,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="sqlstring_lb">
+      <object class="svxlo-SvxColorListBox" id="sqlstring_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1571,7 +1571,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="sqlop_lb">
+      <object class="svxlo-SvxColorListBox" id="sqlop_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1606,7 +1606,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="sqlkeyword_lb">
+      <object class="svxlo-SvxColorListBox" id="sqlkeyword_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1641,7 +1641,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="sqlparam_lb">
+      <object class="svxlo-SvxColorListBox" id="sqlparam_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1676,7 +1676,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-ColorListBox" id="sqlcomment_lb">
+      <object class="svxlo-SvxColorListBox" id="sqlcomment_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
