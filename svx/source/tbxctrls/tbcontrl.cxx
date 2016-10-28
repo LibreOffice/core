@@ -84,11 +84,11 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/cmapitem.hxx>
+#include <svx/colorwindow.hxx>
 #include "svx/drawitem.hxx"
 #include <svx/tbcontrl.hxx>
 #include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
-#include "colorwindow.hxx"
 #include <memory>
 
 #include <svx/framelink.hxx>

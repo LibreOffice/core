@@ -32,8 +32,9 @@
 #include <functional>
 
 class BorderColorStatus;
+class Button;
 
-class SvxColorWindow : public SfxPopupWindow
+class SVX_DLLPUBLIC SvxColorWindow : public SfxPopupWindow
 {
 private:
     const sal_uInt16    theSlotId;

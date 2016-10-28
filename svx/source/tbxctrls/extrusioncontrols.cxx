@@ -23,6 +23,7 @@
 #include <osl/mutex.hxx>
 
 #include <svtools/toolbarmenu.hxx>
+#include <svx/colorwindow.hxx>
 #include <vcl/toolbox.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
@@ -41,7 +42,6 @@
 #include "helpid.hrc"
 #include "extrusioncontrols.hxx"
 #include "extrusioncontrols.hrc"
-#include "colorwindow.hxx"
 #include "extrusiondepthdialog.hxx"
 
 using namespace ::com::sun::star::uno;
