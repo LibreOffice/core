@@ -42,7 +42,6 @@
 #include <hintids.hxx>
 #include <tools/globname.hxx>
 #include <svx/svxids.hrc>
-#include <rtl/random.h>
 
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
@@ -52,6 +51,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <comphelper/string.hxx>
+#include <comphelper/random.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
 #include <tools/multisel.hxx>
@@ -245,10 +245,8 @@ void SwDoc::setRsid( sal_uInt32 nVal )
     {
         // Increase the rsid with a random number smaller than 2^17. This way we
         // expect to be able to edit a document 2^12 times before rsid overflows.
-        static rtlRandomPool aPool = rtl_random_createPool();
-        rtl_random_getBytes( aPool, &nIncrease, sizeof ( nIncrease ) );
-        nIncrease &= ( 1<<17 ) - 1;
-        nIncrease++; // make sure the new rsid is not the same
+        // start from 1 to ensure the new rsid is not the same
+        nIncrease = comphelper::rng::uniform_uint_distribution(1, (1 << 17) - 1);
     }
     mnRsid = nVal + nIncrease;
 }

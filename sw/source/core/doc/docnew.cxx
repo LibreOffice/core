@@ -28,9 +28,9 @@
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <rtl/random.h>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
@@ -367,10 +367,7 @@ SwDoc::SwDoc()
     {
         // Initialize the session id of the current document to a random number
         // smaller than 2^21.
-        static rtlRandomPool aPool = rtl_random_createPool();
-        rtl_random_getBytes( aPool, &mnRsid, sizeof ( mnRsid ) );
-        mnRsid &= ( 1<<21 ) - 1;
-        mnRsid++;
+        mnRsid = comphelper::rng::uniform_uint_distribution(1, (1 << 21) - 1);
     }
     mnRsidRoot = mnRsid;
 
