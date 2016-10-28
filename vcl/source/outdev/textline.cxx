@@ -1017,20 +1017,20 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
         aStartPt.RotateAround( nEndX, nEndY, -nOrientation );
     }
 
-    long nWaveHeight;
-
-    nWaveHeight = 3;
+    long nWaveHeight = 3;
     nStartY++;
     nEndY++;
 
-    if (mnDPIScaleFactor > 1)
-    {
-        nWaveHeight *= mnDPIScaleFactor;
+    float fScaleFactor = GetDPIScaleFactor();
 
-        nStartY += mnDPIScaleFactor - 1; // Shift down additional pixel(s) to create more visual separation.
+    if (fScaleFactor > 1.0f)
+    {
+        nWaveHeight *= fScaleFactor;
+
+        nStartY += fScaleFactor - 1; // Shift down additional pixel(s) to create more visual separation.
 
         // odd heights look better than even
-        if (mnDPIScaleFactor % 2 == 0)
+        if (nWaveHeight % 2 == 0)
         {
             nWaveHeight--;
         }
@@ -1044,7 +1044,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
     }
     ImplDrawWaveLine(nStartX, nStartY, 0, 0,
                      nEndX-nStartX, nWaveHeight,
-                     mnDPIScaleFactor, nOrientation, GetLineColor());
+                     fScaleFactor, nOrientation, GetLineColor());
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos );

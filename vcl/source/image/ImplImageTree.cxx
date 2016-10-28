@@ -124,9 +124,9 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     if (eFlags & ImageLoadFlags::IgnoreDarkTheme)
         bConvertToDarkTheme = false;
 
-    sal_Int32 aScaleFactor = Application::GetDefaultDevice()->GetDPIScaleFactor();
+    float aScaleFactor = Application::GetDefaultDevice()->GetDPIScaleFactor();
     if (eFlags & ImageLoadFlags::IgnoreScalingFactor)
-        aScaleFactor = 1;
+        aScaleFactor = 1.0f;
 
     if (rPath.endsWith(".png"))
     {
@@ -149,7 +149,7 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     if (bConvertToDarkTheme)
         rBitmap = BitmapProcessor::createLightImage(rBitmap);
 
-    if (aScaleFactor > 1)
+    if (aScaleFactor > 1.0f)
         rBitmap.Scale(double(aScaleFactor), double(aScaleFactor), BmpScaleFlag::Fast);
 }
 
@@ -284,13 +284,15 @@ OUString createVariant(const ImageLoadFlags eFlags)
     if (eFlags & ImageLoadFlags::IgnoreDarkTheme)
         bConvertToDarkTheme = false;
 
-    sal_Int32 aScaleFactor = Application::GetDefaultDevice()->GetDPIScaleFactor();
+    sal_Int32 aScalePercentage = Application::GetDefaultDevice()->GetDPIScalePercentage();
     if (eFlags & ImageLoadFlags::IgnoreScalingFactor)
-        aScaleFactor = 1;
+        aScalePercentage = 100;
 
     OUString aVariant;
-    if (aScaleFactor == 2)
-        aVariant = "2x";
+    if (aScalePercentage == 100 && !bConvertToDarkTheme)
+        return aVariant;
+
+    aVariant = OUString::number(aScalePercentage);
 
     if (bConvertToDarkTheme)
         aVariant += "-dark";

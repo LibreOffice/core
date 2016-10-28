@@ -365,7 +365,7 @@ private:
     long                            mnOutHeight;
     sal_Int32                       mnDPIX;
     sal_Int32                       mnDPIY;
-    sal_Int32                       mnDPIScaleFactor; ///< For Hi-DPI displays, we want to draw everything mnDPIScaleFactor-times larger
+    sal_Int32                       mnDPIScalePercentage; ///< For Hi-DPI displays, we want to draw elements for a percentage larger
     /// font specific text alignment offsets in pixel units
     mutable long                    mnTextOffX;
     mutable long                    mnTextOffY;
@@ -533,7 +533,15 @@ public:
     SAL_DLLPRIVATE void         SetDPIX( sal_Int32 nDPIX ) { mnDPIX = nDPIX; }
     SAL_DLLPRIVATE void         SetDPIY( sal_Int32 nDPIY ) { mnDPIY = nDPIY; }
 
-    sal_Int32                   GetDPIScaleFactor() const { return mnDPIScaleFactor; }
+    float GetDPIScaleFactor() const
+    {
+        return mnDPIScalePercentage / 100.0f;
+    }
+
+    sal_Int32 GetDPIScalePercentage() const
+    {
+        return mnDPIScalePercentage;
+    }
 
     OutDevType                  GetOutDevType() const { return meOutDevType; }
 

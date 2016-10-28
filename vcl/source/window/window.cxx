@@ -869,7 +869,7 @@ void Window::ReleaseGraphics( bool bRelease )
 
 static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
 {
-    sal_Int32 nResult = 1;
+    sal_Int32 nResult = 100;
 
 #ifndef MACOSX
     // Setting of HiDPI is unfortunately all only a heuristic; and to add
@@ -877,8 +877,12 @@ static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
     // the DPI and whatnot
     // eg. fdo#77059 - set the value from which we do consider the
     // screen hi-dpi to greater than 168
-    if (nDPI > 168)
-        nResult = std::max(sal_Int32(1), (nDPI + 48) / 96);
+    if (nDPI > 216)      // 96 * 2   + 96 / 4
+        nResult = 250;
+    else if (nDPI > 168) // 96 * 2   - 96 / 4
+        nResult = 200;
+    else if (nDPI > 120) // 96 * 1.5 - 96 / 4
+        nResult = 150;
 #else
     (void)nDPI;
 #endif
@@ -1130,7 +1134,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     }
 
     // setup the scale factor for Hi-DPI displays
-    mnDPIScaleFactor = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
+    mnDPIScalePercentage = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
     mnDPIX = mpWindowImpl->mpFrameData->mnDPIX;
     mnDPIY = mpWindowImpl->mpFrameData->mnDPIY;
 
@@ -1316,7 +1320,7 @@ void Window::ImplInitResolutionSettings()
         mnDPIY = mpWindowImpl->mpFrameData->mnDPIY;
 
         // setup the scale factor for Hi-DPI displays
-        mnDPIScaleFactor = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
+        mnDPIScalePercentage = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
         const StyleSettings& rStyleSettings = mxSettings->GetStyleSettings();
         SetPointFont(*this, rStyleSettings.GetAppFont());
     }
@@ -1324,7 +1328,7 @@ void Window::ImplInitResolutionSettings()
     {
         mnDPIX  = mpWindowImpl->mpParent->mnDPIX;
         mnDPIY  = mpWindowImpl->mpParent->mnDPIY;
-        mnDPIScaleFactor = mpWindowImpl->mpParent->mnDPIScaleFactor;
+        mnDPIScalePercentage = mpWindowImpl->mpParent->mnDPIScalePercentage;
     }
 
     // update the recalculated values for logical units
