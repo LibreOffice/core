@@ -38,6 +38,16 @@ public:
     virtual ~PDFElement() { }
 };
 
+enum class TokenizeMode
+{
+    /// Full file.
+    END_OF_STREAM,
+    /// Till the first %%EOF token.
+    EOF_TOKEN,
+    /// Till the end of the current object.
+    END_OF_OBJECT
+};
+
 /**
  * In-memory representation of an on-disk PDF document.
  *
@@ -64,8 +74,8 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     static int AsHex(char ch);
     /// Decode a hex dump.
     static std::vector<unsigned char> DecodeHexString(PDFHexStringElement* pElement);
-    /// Tokenize elements from current offset, optionally only till the next EOF.
-    bool Tokenize(SvStream& rStream, bool bPartial);
+    /// Tokenize elements from current offset.
+    bool Tokenize(SvStream& rStream, TokenizeMode eMode);
 
 public:
     PDFDocument();
@@ -74,6 +84,7 @@ public:
     static OString ReadKeyword(SvStream& rStream);
     static size_t FindStartXRef(SvStream& rStream);
     void ReadXRef(SvStream& rStream);
+    void ReadXRefStream(SvStream& rStream);
     static void SkipWhitespace(SvStream& rStream);
     /// Instead of all whitespace, just skip CR and NL characters.
     static void SkipLineBreaks(SvStream& rStream);

@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <sax/tools/converter.hxx>
+#include <tools/zcodec.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/pdfwriter.hxx>
@@ -184,10 +185,12 @@ public:
 class PDFStreamElement : public PDFElement
 {
     size_t m_nLength;
+    sal_uInt64 m_nOffset;
 
 public:
     PDFStreamElement(size_t nLength);
     bool Read(SvStream& rStream) override;
+    sal_uInt64 GetOffset() const;
 };
 
 /// End of a stream: 'endstream' keyword.
@@ -629,7 +632,7 @@ bool PDFDocument::Write(SvStream& rStream)
     return rStream.good();
 }
 
-bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
+bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
 {
     bool bInXRef = false;
     // The next number will be an xref offset.
@@ -656,7 +659,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
             rStream.SeekRel(-1);
             if (!m_aElements.back()->Read(rStream))
                 return false;
-            if (bPartial && !m_aEOFs.empty() && m_aEOFs.back() == rStream.Tell())
+            if (eMode == TokenizeMode::EOF_TOKEN && !m_aEOFs.empty() && m_aEOFs.back() == rStream.Tell())
             {
                 // Found EOF and partial parsing requested, we're done.
                 return true;
@@ -834,6 +837,11 @@ bool PDFDocument::Tokenize(SvStream& rStream, bool bPartial)
                     m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFEndObjectElement()));
                     if (!m_aElements.back()->Read(rStream))
                         return false;
+                    if (eMode == TokenizeMode::END_OF_OBJECT)
+                    {
+                        // Found endobj and only object parsing was requested, we're done.
+                        return true;
+                    }
                 }
                 else if (aKeyword == "true" || aKeyword == "false")
                     m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFBooleanElement(aKeyword.toBoolean())));
@@ -904,7 +912,7 @@ bool PDFDocument::Read(SvStream& rStream)
     {
         rStream.Seek(nStartXRef);
         ReadXRef(rStream);
-        if (!Tokenize(rStream, /*bPartial=*/true))
+        if (!Tokenize(rStream, TokenizeMode::EOF_TOKEN))
         {
             SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: failed to tokenizer trailer after xref");
             return false;
@@ -931,7 +939,7 @@ bool PDFDocument::Read(SvStream& rStream)
 
     // Then we can tokenize the stream.
     rStream.Seek(0);
-    return Tokenize(rStream, /*bPartial=*/false);
+    return Tokenize(rStream, TokenizeMode::END_OF_STREAM);
 }
 
 OString PDFDocument::ReadKeyword(SvStream& rStream)
@@ -983,9 +991,232 @@ size_t PDFDocument::FindStartXRef(SvStream& rStream)
     return aNumber.GetValue();
 }
 
+void PDFDocument::ReadXRefStream(SvStream& rStream)
+{
+    // Look up the stream length in the object dictionary.
+    if (!Tokenize(rStream, TokenizeMode::END_OF_OBJECT))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: failed to read object");
+        return;
+    }
+
+    if (m_aElements.empty())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: no tokens found");
+        return;
+    }
+
+    PDFObjectElement* pObject = nullptr;
+    for (const auto& pElement : m_aElements)
+    {
+        if (auto pObj = dynamic_cast<PDFObjectElement*>(pElement.get()))
+        {
+            pObject = pObj;
+            break;
+        }
+    }
+    if (!pObject)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: no object token found");
+        return;
+    }
+
+    PDFElement* pLookup = pObject->Lookup("Length");
+    auto pNumber = dynamic_cast<PDFNumberElement*>(pLookup);
+    if (!pNumber)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: stream length is not provided");
+        return;
+    }
+    sal_uInt64 nLength = pNumber->GetValue();
+
+    // Look up the stream offset.
+    PDFStreamElement* pStream = nullptr;
+    for (const auto& pElement : m_aElements)
+    {
+        if (auto pS = dynamic_cast<PDFStreamElement*>(pElement.get()))
+        {
+            pStream = pS;
+            break;
+        }
+    }
+    if (!pStream)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: no stream token found");
+        return;
+    }
+
+    // Read and decompress it.
+    rStream.Seek(pStream->GetOffset());
+    std::vector<char> aBuf(nLength);
+    rStream.ReadBytes(aBuf.data(), aBuf.size());
+
+    auto pFilter = dynamic_cast<PDFNameElement*>(pObject->Lookup("Filter"));
+    if (!pFilter)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: no Filter found");
+        return;
+    }
+
+    if (pFilter->GetValue() != "FlateDecode")
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: unexpected filter: " << pFilter->GetValue());
+        return;
+    }
+
+    int nColumns = 1;
+    int nPredictor = 1;
+    if (auto pDecodeParams = dynamic_cast<PDFDictionaryElement*>(pObject->Lookup("DecodeParms")))
+    {
+        const std::map<OString, PDFElement*>& rItems = pDecodeParams->GetItems();
+        auto it = rItems.find("Columns");
+        if (it != rItems.end())
+            if (auto pColumns = dynamic_cast<PDFNumberElement*>(it->second))
+                nColumns = pColumns->GetValue();
+        it = rItems.find("Predictor");
+        if (it != rItems.end())
+            if (auto pPredictor = dynamic_cast<PDFNumberElement*>(it->second))
+                nPredictor = pPredictor->GetValue();
+    }
+
+    SvMemoryStream aSource(aBuf.data(), aBuf.size(), StreamMode::READ);
+    SvMemoryStream aStream;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    aZCodec.Decompress(aSource, aStream);
+    if (!aZCodec.EndCompression())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: decompression failed");
+        return;
+    }
+
+    // Look up the first and the last entry we need to read.
+    auto pIndex = dynamic_cast<PDFArrayElement*>(pObject->Lookup("Index"));
+    if (!pIndex || pIndex->GetElements().size() < 2)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index not found or has < 2 elements");
+        return;
+    }
+
+    const std::vector<PDFElement*>& rIndexElements = pIndex->GetElements();
+    auto pFirstObject = dynamic_cast<PDFNumberElement*>(rIndexElements[0]);
+    if (!pFirstObject)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index has no first object");
+        return;
+    }
+
+    auto pNumberOfObjects = dynamic_cast<PDFNumberElement*>(rIndexElements[1]);
+    if (!pNumberOfObjects)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index has no number of objects");
+        return;
+    }
+
+    // Look up the format of a single entry.
+    const int nWSize = 3;
+    auto pW = dynamic_cast<PDFArrayElement*>(pObject->Lookup("W"));
+    if (!pW || pW->GetElements().size() < nWSize)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: W not found or has < 3 elements");
+        return;
+    }
+    int aW[nWSize];
+    // First character is the (kind of) repeated predictor.
+    int nLineLength = 1;
+    for (size_t i = 0; i < nWSize; ++i)
+    {
+        auto pI = dynamic_cast<PDFNumberElement*>(pW->GetElements()[i]);
+        if (!pI)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: W contains non-number");
+            return;
+        }
+        aW[i] = pI->GetValue();
+        nLineLength += aW[i];
+    }
+
+    if (nLineLength - 1 != nColumns)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: /DecodeParms/Columns is inconsitent with /W");
+        return;
+    }
+
+    size_t nSize = pNumberOfObjects->GetValue();
+    aStream.Seek(0);
+    // This is the line as read from the stream.
+    std::vector<unsigned char> aOrigLine(nLineLength);
+    // This is the line as it appears after tweaking according to nPredictor.
+    std::vector<unsigned char> aFilteredLine(nLineLength);
+    for (size_t nEntry = 0; nEntry < nSize; ++nEntry)
+    {
+        size_t nIndex = pFirstObject->GetValue() + nEntry;
+
+        aStream.ReadBytes(aOrigLine.data(), aOrigLine.size());
+        if (aOrigLine[0] + 10 != nPredictor)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: in-stream predictor is inconsistent with /DecodeParms/Predictor for object #" << nIndex);
+            return;
+        }
+
+        for (int i = 0; i < nLineLength; ++i)
+        {
+            switch (nPredictor)
+            {
+            case 1:
+                // No prediction.
+                break;
+            case 12:
+                // PNG prediction: up (on all rows).
+                aFilteredLine[i] = aFilteredLine[i] + aOrigLine[i];
+                break;
+            default:
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: unexpected predictor: " << nPredictor);
+                return;
+                break;
+            }
+        }
+
+        // First character is already handled above.
+        int nPos = 1;
+        size_t nType = 0;
+        // Start of the current field in the stream data.
+        int nOffset = nPos;
+        for (; nPos < nOffset + aW[0]; ++nPos)
+        {
+            unsigned char nCh = aFilteredLine[nPos];
+            nType = (nType << 8) + nCh;
+        }
+
+        // Start of the object in the file stream.
+        size_t nStreamOffset = 0;
+        nOffset = nPos;
+        for (; nPos < nOffset + aW[1]; ++nPos)
+        {
+            unsigned char nCh = aFilteredLine[nPos];
+            nStreamOffset = (nStreamOffset << 8) + nCh;
+        }
+
+        size_t nGenerationNumber = 0;
+        nOffset = nPos;
+        for (; nPos < nOffset + aW[2]; ++nPos)
+        {
+            unsigned char nCh = aFilteredLine[nPos];
+            nGenerationNumber = (nGenerationNumber << 8) + nCh;
+        }
+    }
+}
+
 void PDFDocument::ReadXRef(SvStream& rStream)
 {
-    if (ReadKeyword(rStream) != "xref")
+    OString aKeyword = ReadKeyword(rStream);
+    if (aKeyword.isEmpty())
+    {
+        ReadXRefStream(rStream);
+        return;
+    }
+
+    if (aKeyword != "xref")
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: xref is not the first keyword");
         return;
@@ -1043,7 +1274,7 @@ void PDFDocument::ReadXRef(SvStream& rStream)
             }
 
             PDFDocument::SkipWhitespace(rStream);
-            OString aKeyword = ReadKeyword(rStream);
+            aKeyword = ReadKeyword(rStream);
             if (aKeyword != "f" && aKeyword != "n")
             {
                 SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: unexpected keyword");
@@ -2323,16 +2554,23 @@ sal_uInt64 PDFNameElement::GetLength() const
 }
 
 PDFStreamElement::PDFStreamElement(size_t nLength)
-    : m_nLength(nLength)
+    : m_nLength(nLength),
+      m_nOffset(0)
 {
 }
 
 bool PDFStreamElement::Read(SvStream& rStream)
 {
     SAL_INFO("xmlsecurity.pdfio", "PDFStreamElement::Read: length is " << m_nLength);
+    m_nOffset = rStream.Tell();
     rStream.SeekRel(m_nLength);
 
     return rStream.good();
+}
+
+sal_uInt64 PDFStreamElement::GetOffset() const
+{
+    return m_nOffset;
 }
 
 bool PDFEndStreamElement::Read(SvStream& /*rStream*/)
