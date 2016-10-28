@@ -527,6 +527,8 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
         m_pFrameSel->HideAllBorders();
     }
 
+    if( !m_pFrameSel->IsAnyBorderVisible() )
+        m_pFrameSel->DeselectAllBorders();
 
     // depict line (color) in controllers if unambiguous:
 
