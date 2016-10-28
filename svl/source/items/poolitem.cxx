@@ -110,8 +110,8 @@ SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
 
 SfxPoolItem::~SfxPoolItem()
 {
-    DBG_ASSERT(m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF,
-            "destroying item in use");
+    assert((m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF)
+            && "destroying item in use");
 #if OSL_DEBUG_LEVEL > 0
     --nItemCount;
 #endif

@@ -192,15 +192,15 @@ inline void SfxPoolItem::SetKind( SfxItemKind n )
 
 inline void SfxPoolItem::AddRef( sal_uLong n ) const
 {
-    DBG_ASSERT(m_nRefCount <= SFX_ITEMS_MAXREF, "AddRef with non-Pool-Item");
-    DBG_ASSERT(ULONG_MAX - m_nRefCount > n, "AddRef: refcount overflow");
+    assert(m_nRefCount <= SFX_ITEMS_MAXREF && "AddRef with non-Pool-Item");
+    assert(n <= SFX_ITEMS_MAXREF - m_nRefCount && "AddRef: refcount overflow");
     m_nRefCount += n;
 }
 
 inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const
 {
-    DBG_ASSERT(m_nRefCount <= SFX_ITEMS_MAXREF, "ReleaseRef with non-Pool-Item");
-    DBG_ASSERT(m_nRefCount >= n, "ReleaseRef: refcount underflow");
+    assert(m_nRefCount <= SFX_ITEMS_MAXREF && "ReleaseRef with non-Pool-Item");
+    assert(n <= m_nRefCount);
     m_nRefCount -= n;
     return m_nRefCount;
 }
