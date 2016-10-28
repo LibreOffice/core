@@ -84,7 +84,7 @@ IMPL_LINK( ConditionField, OnFormula, Button*, _pClickedButton, void )
     }
 }
 
-// class SvxColorWindow_Impl --------------------------------------------------
+// TO-DO, this is yet another color selector, can it be replaced with SvxColorWindor/SvxColorToolBoxControl ?
 #ifndef WB_NO_DIRECTSELECT
 #define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #endif
