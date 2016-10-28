@@ -108,7 +108,7 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     if (mbDelayMenu)
     {
         // If the separated dropdown symbol is not hit, delay the popup execution
-        if( mnDDStyle != PushButtonDropdownStyle::MenuButton || // no separator at all
+        if( mnDDStyle == PushButtonDropdownStyle::Toolbox || // no separator at all
             rMEvt.GetPosPixel().X() <= ImplGetSeparatorX() )
         {
             if ( !mpMenuTimer )
