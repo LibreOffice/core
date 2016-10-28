@@ -175,7 +175,6 @@ namespace dbtools
     {
     }
 
-
     DatabaseMetaData::DatabaseMetaData( const Reference< XConnection >& _connection )
         :m_pImpl( new DatabaseMetaData_Impl )
     {
@@ -188,6 +187,10 @@ namespace dbtools
     {
     }
 
+    DatabaseMetaData::DatabaseMetaData( DatabaseMetaData&& _copyFrom )
+        :m_pImpl(std::move(_copyFrom.m_pImpl))
+    {
+    }
 
     DatabaseMetaData& DatabaseMetaData::operator=( const DatabaseMetaData& _copyFrom )
     {
@@ -198,11 +201,15 @@ namespace dbtools
         return *this;
     }
 
+    DatabaseMetaData& DatabaseMetaData::operator=( DatabaseMetaData&& _copyFrom )
+    {
+        m_pImpl = std::move(_copyFrom.m_pImpl);
+        return *this;
+    }
 
     DatabaseMetaData::~DatabaseMetaData()
     {
     }
-
 
     bool DatabaseMetaData::isConnected() const
     {
