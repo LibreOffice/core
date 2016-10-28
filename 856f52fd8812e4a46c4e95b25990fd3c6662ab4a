@@ -16,6 +16,125 @@
       "revId": "856f52fd8812e4a46c4e95b25990fd3c6662ab4a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_8eca5a4e",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T18:17:39Z",
+      "side": 1,
+      "message": "Yes, creating the ScPatternAttr on the heap is unnecessary here and alloc/dealloc slower than on the stack.",
+      "revId": "856f52fd8812e4a46c4e95b25990fd3c6662ab4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_2e306656",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T18:17:39Z",
+      "side": 1,
+      "message": "All these (nCount || pData) and (!pData \u0026\u0026 !nCount) and (!pData || !nCount) throughout the entire change could be simplified to check only (pData) and (!pData) (or (nCount) and (!nCount) fwiw but I\u0027d use pData).\n\nClearly if pData\u003d\u003dnullptr then nCount must be 0 and if pData holds an entry array then nCount is \u003e0.",
+      "revId": "856f52fd8812e4a46c4e95b25990fd3c6662ab4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_0e12cab4",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T18:17:39Z",
+      "side": 1,
+      "message": "This should actually be\n\n if (!pData \u0026\u0026 nReserve)\n\nas nLimit will be 0 anyway if pData\u003d\u003dnullptr",
+      "revId": "856f52fd8812e4a46c4e95b25990fd3c6662ab4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_2e7ea6e4",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T18:17:39Z",
+      "side": 1,
+      "message": "The init should be done with an nLimit size of nNeeded, otherwise the one element ScAttrEntry[] will just be reallocated to the needed size (\u003d\u003d3) hereafter.",
+      "revId": "856f52fd8812e4a46c4e95b25990fd3c6662ab4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_8e541a55",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1971,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T18:17:39Z",
+      "side": 1,
+      "message": "This should always return false as there is no differing attribution at all in this column and it\u0027s all default.",
+      "revId": "856f52fd8812e4a46c4e95b25990fd3c6662ab4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_ae51d664",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T18:17:39Z",
+      "side": 1,
+      "message": "Nitpick: just\n\n return pDocument-\u003eGetDefPattern()-\u003eIsVisible();",
+      "revId": "856f52fd8812e4a46c4e95b25990fd3c6662ab4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_ee4bceae",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2247,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T18:17:39Z",
+      "side": 1,
+      "message": "Nitpick: just\n\n return !static_cast\u003cconst ScMergeFlagAttr\u0026\u003e(pDocument-\u003eGetDefPattern()-\u003eGetItem(ATTR_MERGE_FLAG)).IsVerOverlapped();",
+      "revId": "856f52fd8812e4a46c4e95b25990fd3c6662ab4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
