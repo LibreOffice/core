@@ -1,0 +1,7 @@
+Code-Review+2: Christian Lohmaier <lohmaier+LibreOffice@googlemail.com>
+Verified+1: Jenkins <ci@libreoffice.org>
+Submitted-by: Michael Stahl <mstahl@redhat.com>
+Submitted-at: Fri, 28 Oct 2016 11:46:04 +0000
+Reviewed-on: https://gerrit.libreoffice.org/30349
+Project: core
+Branch: refs/heads/libreoffice-5-2
