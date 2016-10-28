@@ -161,7 +161,7 @@ namespace pcr
     inline CommonBehaviourControl< TControlInterface, TControlWindow >::CommonBehaviourControl ( sal_Int16 _nControlType, vcl::Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers)
         :ComponentBaseClass( m_aMutex )
         ,CommonBehaviourControlHelper( _nControlType, *this )
-        ,m_pControlWindow( new TControlWindow( _pParentWindow, _nWindowStyle ) )
+        ,m_pControlWindow( VclPtr<TControlWindow>::Create( _pParentWindow, _nWindowStyle ) )
     {
         if ( _bDoSetHandlers )
         {

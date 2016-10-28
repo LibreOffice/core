@@ -42,7 +42,7 @@ namespace dbaui
 
     template < class T > class OSaveValueWrapper : public ISaveValueWrapper
     {
-        T*  m_pSaveValue;
+        VclPtr<T>  m_pSaveValue;
     public:
         explicit OSaveValueWrapper(T* _pSaveValue) : m_pSaveValue(_pSaveValue)
         { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
@@ -53,7 +53,7 @@ namespace dbaui
 
     template < class T > class ODisableWrapper : public ISaveValueWrapper
     {
-        T*  m_pSaveValue;
+        VclPtr<T>  m_pSaveValue;
     public:
         explicit ODisableWrapper(T* _pSaveValue) : m_pSaveValue(_pSaveValue)
         { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
