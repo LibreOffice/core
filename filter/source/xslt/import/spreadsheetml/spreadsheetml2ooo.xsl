@@ -6921,7 +6921,7 @@
 	<xsl:template name="create-data-content">
 		<xsl:param name="style-id" select="@ss:StyleID"/>
 		<xsl:choose>
-			<xsl:when test="ss:Data//text()[string-length(.) != 0]">
+			<xsl:when test="ss:Data//text()[string-length(.) != 0] and ss:Data[count(*)>0]">
 				<xsl:for-each select="ss:Data//text()[string-length(.) != 0]">
 					<xsl:sort select="position(  )" order="ascending" data-type="number"/>
 					<text:span text:style-name="{concat($style-id, 'T', count(preceding::ss:Data[child::html:*]), '_', position())}">
@@ -7168,7 +7168,7 @@
 			<xsl:value-of select="concat($last,$current)"/>
 		</xsl:if>
 	</xsl:template>
-	<xsl:template match="ss:Data">
+	<xsl:template match="ss:Data[count(*)>0]">
 		<xsl:for-each select=".//text()[string-length(.) != 0]">
 			<style:style style:name="{concat(ancestor::ss:Cell/@ss:StyleID,'T',count(preceding::ss:Data[child::html:*]), '_', position())}" style:family="text">
 				<xsl:element name="style:text-properties">
