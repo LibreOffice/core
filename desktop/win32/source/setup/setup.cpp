@@ -81,8 +81,10 @@
 
 #define RUNTIME_X64_NAME    TEXT( "redist\\vcredist_x64.exe" )
 #define RUNTIME_X86_NAME    TEXT( "redist\\vcredist_x86.exe" )
-#define PRODUCTCODE_X86     TEXT( "{E503B4BF-F7BB-3D5F-8BC8-F694B1CFF942}" )
-#define PRODUCTCODE_X64     TEXT( "{350AA351-21FA-3270-8B7A-835434E766AD}" )
+// Microsoft Visual C++ 2008 Redistributable - x86 9.0.30729.6161
+#define PRODUCTCODE_X86     TEXT( "{9BE518E6-ECC6-35A9-88E4-87755C07200F}" )
+// Microsoft Visual C++ 2008 Redistributable - x64 9.0.30729.6161
+#define PRODUCTCODE_X64     TEXT( "{5FCE6D76-F5DC-37AB-B2B8-22AB8CEDB1D4}" )
 
 #define MSIAPI_DllGetVersion     "DllGetVersion"
 #define ADVAPI32API_CheckTokenMembership "CheckTokenMembership"
