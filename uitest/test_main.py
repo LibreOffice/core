@@ -66,8 +66,12 @@ def get_test_case_classes_of_module(module):
     return [ c for c in classes if issubclass(c, UITestCase) ]
 
 def add_tests_for_file(test_file, test_suite):
+    test_name_limit = os.environ.get('UITEST_TEST_NAME', '')
     test_loader = unittest.TestLoader()
     module_name = os.path.splitext(os.path.split(test_file)[1])[0]
+    if len(test_name_limit) > 0 and not test_name_limit.startswith(module_name):
+        return
+
     loader = importlib.machinery.SourceFileLoader(module_name, test_file)
     mod = loader.load_module()
     classes = get_test_case_classes_of_module(mod)
