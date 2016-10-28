@@ -144,7 +144,7 @@ void SdExportTest::testN821567()
     xDocShRef = saveAndReload( xDocShRef.get(), ODP );
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
         xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-    CPPUNIT_ASSERT_MESSAGE( "not exactly one page", xDoc->getDrawPages()->getCount() == 1 );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "not exactly one page", static_cast<sal_Int32>(1), xDoc->getDrawPages()->getCount() );
     uno::Reference< drawing::XDrawPage > xPage( getPage( 0, xDocShRef ) );
 
     uno::Reference< beans::XPropertySet > xPropSet( xPage, uno::UNO_QUERY );
@@ -281,7 +281,7 @@ void SdExportTest::testSwappedOutImageExport()
 
         // Check whether graphic exported well after it was swapped out
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), xDrawPagesSupplier->getDrawPages()->getCount() == 2 );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDrawPagesSupplier->getDrawPages()->getCount());
         uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
 
         uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
@@ -449,7 +449,7 @@ void SdExportTest::testImageWithSpecialID()
 
         // Check whether graphic was exported well
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), xDrawPagesSupplier->getDrawPages()->getCount() == 2 );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDrawPagesSupplier->getDrawPages()->getCount() );
         uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
 
         uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);

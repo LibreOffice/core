@@ -259,16 +259,16 @@ void SdOOXMLExportTest1::testN828390_4()
         {
             const SvxFontHeightItem * pFontHeight = dynamic_cast<const SvxFontHeightItem *>((*it).pAttr);
             if( pFontHeight )
-                CPPUNIT_ASSERT_MESSAGE( "Font height is wrong", pFontHeight->GetHeight() == 1129 );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font height is wrong", static_cast<sal_uInt32>(1129), pFontHeight->GetHeight() );
             const SvxFontItem *pFont = dynamic_cast<const SvxFontItem *>((*it).pAttr);
             if( pFont )
             {
-                CPPUNIT_ASSERT_MESSAGE( "Font is wrong", pFont->GetFamilyName() == "Arial");
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font is wrong", OUString("Arial"), pFont->GetFamilyName() );
                 bPassed = true;
             }
             const SvxWeightItem *pWeight = dynamic_cast<const SvxWeightItem *>((*it).pAttr);
             if( pWeight )
-                CPPUNIT_ASSERT_MESSAGE( "Font Weight is wrong", pWeight->GetWeight() == WEIGHT_BOLD);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font Weight is wrong", WEIGHT_BOLD, pWeight->GetWeight() );
         }
     }
     CPPUNIT_ASSERT(bPassed);
