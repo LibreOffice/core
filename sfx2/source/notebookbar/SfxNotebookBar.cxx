@@ -164,8 +164,8 @@ void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
         RemoveListeners(pSysWindow);
         if(pSysWindow->GetNotebookBar())
             pSysWindow->CloseNotebookBar();
+        SfxNotebookBar::ShowMenubar(true);
     }
-    SfxNotebookBar::ShowMenubar(true);
 }
 
 bool SfxNotebookBar::IsActive()
