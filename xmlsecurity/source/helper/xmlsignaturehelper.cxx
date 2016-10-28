@@ -51,7 +51,6 @@
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/sequence.hxx>
 
-#define TAG_DOCUMENTSIGNATURES  "document-signatures"
 #define NS_DOCUMENTSIGNATURES   "http://openoffice.org/2004/documentsignatures"
 #define NS_DOCUMENTSIGNATURES_ODF_1_2 "urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"
 #define OOXML_SIGNATURE_ORIGIN "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin"
@@ -182,7 +181,7 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
 
     xSaxWriter->startDocument();
     xSaxWriter->startElement(
-        TAG_DOCUMENTSIGNATURES,
+        "document-signatures",
         uno::Reference< css::xml::sax::XAttributeList > (pAttributeList));
 
     return xSaxWriter;
@@ -190,7 +189,7 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
 
 void XMLSignatureHelper::CloseDocumentHandler( const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler )
 {
-    xDocumentHandler->endElement( TAG_DOCUMENTSIGNATURES );
+    xDocumentHandler->endElement( "document-signatures" );
     xDocumentHandler->endDocument();
 }
 
