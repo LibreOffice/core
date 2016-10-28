@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_21795794",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T23:33:51Z",
+      "side": 1,
+      "message": "As the function does not modify aStr to return another value this should be const OUString\u0026",
+      "range": {
+        "startLine": 119,
+        "startChar": 34,
+        "endLine": 119,
+        "endChar": 48
+      },
+      "revId": "5dc0b45d2eebd796aa60d08317194af2d495f213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_81414b3c",
+        "filename": "formula/uiconfig/ui/functionpage.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T23:33:51Z",
+      "side": 1,
+      "message": "IDs must be unique within a .ui file, this duplicates the one of the Function label.",
+      "range": {
+        "startLine": 15,
+        "startChar": 35,
+        "endLine": 15,
+        "endChar": 41
+      },
+      "revId": "5dc0b45d2eebd796aa60d08317194af2d495f213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_c14b4358",
+        "filename": "formula/uiconfig/ui/functionpage.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T23:33:51Z",
+      "side": 1,
+      "message": "The mnemonic_widget is the ID of the corresponding object, it is not case-sensitive but should have the same case to ease case-sensitive searches within an editor.",
+      "range": {
+        "startLine": 21,
+        "startChar": 41,
+        "endLine": 21,
+        "endChar": 47
+      },
+      "revId": "5dc0b45d2eebd796aa60d08317194af2d495f213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_e1483f5e",
+        "filename": "formula/uiconfig/ui/functionpage.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T23:33:51Z",
+      "side": 1,
+      "message": "For both children the packing position information is missing. The consequence in this case is that logically the search element is positioned at the end of the chain and the Alt+S mnemonic is not functional. This is also visible when loading the file in glade.",
+      "revId": "5dc0b45d2eebd796aa60d08317194af2d495f213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
