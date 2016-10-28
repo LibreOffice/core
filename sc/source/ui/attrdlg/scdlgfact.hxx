@@ -532,28 +532,28 @@ public:
                                                                     bool                    bMultiByte = false,
                                                                     bool                    bOnlyDbtoolsEncodings = false,
                                                                     bool                    bImport = true ) override;
-    virtual SfxAbstractTabDialog * CreateScAttrDlg( vcl::Window*          pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScAttrDlg( vcl::Window*          pParent,
                                                     const SfxItemSet* pCellAttrs ) override;
 
-    virtual SfxAbstractTabDialog * CreateScHFEditDlg(vcl::Window*       pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScHFEditDlg(vcl::Window*       pParent,
                                                     const SfxItemSet&   rCoreSet,
                                                     const OUString&     rPageStyle,
                                                     sal_uInt16          nResId ) override;
 
-    virtual SfxAbstractTabDialog * CreateScStyleDlg( vcl::Window*                pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScStyleDlg( vcl::Window*                pParent,
                                                     SfxStyleSheetBase&  rStyleBase,
                                                     sal_uInt16              nRscId,
                                                     int nId) override;
 
-    virtual SfxAbstractTabDialog * CreateScSubTotalDlg( vcl::Window*             pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScSubTotalDlg( vcl::Window*             pParent,
                                                         const SfxItemSet*   pArgSet ) override;
-    virtual SfxAbstractTabDialog * CreateScCharDlg(vcl::Window* pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScCharDlg(vcl::Window* pParent,
         const SfxItemSet* pAttr, const SfxObjectShell* pDocShell) override;
 
-    virtual SfxAbstractTabDialog * CreateScParagraphDlg(vcl::Window* pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScParagraphDlg(vcl::Window* pParent,
         const SfxItemSet* pAttr) override;
 
-    virtual SfxAbstractTabDialog * CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet) override;
+    virtual VclPtr<SfxAbstractTabDialog> CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet) override;
 
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) override;

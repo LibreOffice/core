@@ -518,29 +518,29 @@ public:
                                                                     bool                    bOnlyDbtoolsEncodings = false,
                                                                     bool                    bImport = true ) = 0;
 
-    virtual SfxAbstractTabDialog * CreateScAttrDlg( vcl::Window*          pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScAttrDlg( vcl::Window*          pParent,
                                                     const SfxItemSet* pCellAttrs ) = 0;
 
-    virtual SfxAbstractTabDialog * CreateScHFEditDlg(vcl::Window*       pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScHFEditDlg(vcl::Window*       pParent,
                                                     const SfxItemSet&   rCoreSet,
                                                     const OUString&     rPageStyle,
                                                     sal_uInt16          nResId ) = 0;
 
-    virtual SfxAbstractTabDialog * CreateScStyleDlg( vcl::Window*                pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScStyleDlg( vcl::Window*                pParent,
                                                     SfxStyleSheetBase&  rStyleBase,
                                                     sal_uInt16              nRscId,
                                                     int nId) = 0;
 
-    virtual SfxAbstractTabDialog * CreateScSubTotalDlg( vcl::Window*             pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScSubTotalDlg( vcl::Window*             pParent,
                                                         const SfxItemSet*   pArgSet ) = 0;
 
-    virtual SfxAbstractTabDialog * CreateScCharDlg(vcl::Window* pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScCharDlg(vcl::Window* pParent,
         const SfxItemSet* pAttr, const SfxObjectShell* pDocShell) = 0;
 
-    virtual SfxAbstractTabDialog * CreateScParagraphDlg(vcl::Window* pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScParagraphDlg(vcl::Window* pParent,
         const SfxItemSet* pAttr) = 0;
 
-    virtual SfxAbstractTabDialog * CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet) = 0;
+    virtual VclPtr<SfxAbstractTabDialog> CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet) = 0;
 
     // for tabpage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;

@@ -857,13 +857,13 @@ AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptions
     return VclPtr<AbstractScImportOptionsDlg_Impl>::Create( pDlg );
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs)
+VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs)
 {
     VclPtr<SfxTabDialog> pDlg = VclPtr<ScAttrDlg>::Create(pParent, pCellAttrs);
     return VclPtr<ScAbstractTabDialog_Impl>::Create(pDlg);
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( vcl::Window*         pParent,
+VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScHFEditDlg( vcl::Window*         pParent,
                                                                         const SfxItemSet&   rCoreSet,
                                                                         const OUString&     rPageStyle,
                                                                         sal_uInt16          nResId )
@@ -910,7 +910,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( vcl::Win
     return pDlg ? VclPtr<ScAbstractTabDialog_Impl>::Create( pDlg ) : nullptr;
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScStyleDlg( vcl::Window*              pParent,
+VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScStyleDlg( vcl::Window*              pParent,
                                                                         SfxStyleSheetBase&  rStyleBase,
                                                                         sal_uInt16              nRscId,
                                                                         int nId)
@@ -931,27 +931,27 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScStyleDlg( vcl::Wind
     return nullptr;
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
+VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
 {
     VclPtr<SfxTabDialog> pDlg = VclPtr<ScSubTotalDlg>::Create( pParent, pArgSet );
     return VclPtr<ScAbstractTabDialog_Impl>::Create( pDlg );
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScCharDlg(
+VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScCharDlg(
     vcl::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell)
 {
     VclPtr<SfxTabDialog> pDlg = VclPtr<ScCharDlg>::Create(pParent, pAttr, pDocShell);
     return VclPtr<ScAbstractTabDialog_Impl>::Create(pDlg);
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScParagraphDlg(
+VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScParagraphDlg(
     vcl::Window* pParent, const SfxItemSet* pAttr)
 {
     VclPtr<SfxTabDialog> pDlg = VclPtr<ScParagraphDlg>::Create(pParent, pAttr);
     return VclPtr<ScAbstractTabDialog_Impl>::Create(pDlg);
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
+VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
 {
     VclPtr<SfxTabDialog> pDlg = VclPtr<ScSortDlg>::Create( pParent, pArgSet );
     return VclPtr<ScAbstractTabDialog_Impl>::Create( pDlg );
