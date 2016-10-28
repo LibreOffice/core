@@ -38,8 +38,7 @@ class View3DDialog : public TabDialog
 {
 public:
     View3DDialog( vcl::Window* pWindow,
-                  const css::uno::Reference< css::frame::XModel > & xChartModel,
-                  const XColorListRef &pColorTable );
+                  const css::uno::Reference< css::frame::XModel > & xChartModel );
     virtual ~View3DDialog() override;
     virtual void dispose() override;
 

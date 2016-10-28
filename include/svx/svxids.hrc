@@ -999,9 +999,11 @@
 #define SID_LINE_ARROW_START                            ( SID_SVX_START + 1165 )
 #define SID_LINE_ARROW_END                              ( SID_SVX_START + 1166 )
 #define SID_DRAW_MEASURELINE                            ( SID_SVX_START + 1167 )
+#define SID_AUTHOR_COLOR                                ( SID_SVX_START + 1168 )
+#define SID_BMPMASK_COLOR                               ( SID_SVX_START + 1169 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_DRAW_MEASURELINE + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_BMPMASK_COLOR + 1 )
 
 // Overflow check for slot IDs
 

@@ -266,7 +266,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-ColorLB" id="linecolorlb">
+                  <object class="svxlo-SvxColorListBox" id="linecolorlb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -292,7 +292,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-ColorLB" id="backgroundcolorlb">
+                  <object class="svxlo-SvxColorListBox" id="backgroundcolorlb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
