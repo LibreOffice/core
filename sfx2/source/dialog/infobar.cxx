@@ -154,9 +154,9 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
     if (pMessageColor)
         m_pMessage->SetControlForeground(Color(*pMessageColor));
 
-    sal_Int32 nScaleFactor = GetDPIScaleFactor();
+    float fScaleFactor = GetDPIScaleFactor();
     long nWidth = pParent->GetSizePixel().getWidth();
-    SetPosSizePixel(Point(0, 0), Size(nWidth, INFO_BAR_BASE_HEIGHT * nScaleFactor));
+    SetPosSizePixel(Point(0, 0), Size(nWidth, INFO_BAR_BASE_HEIGHT * fScaleFactor));
 
     m_pMessage->SetText(sMessage);
     m_pMessage->Show();
@@ -233,25 +233,25 @@ void SfxInfoBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle
 
 void SfxInfoBarWindow::Resize()
 {
-    sal_Int32 nScaleFactor = GetDPIScaleFactor();
+    float fScaleFactor = GetDPIScaleFactor();
 
     long nWidth = GetSizePixel().getWidth();
-    m_pCloseBtn->SetPosSizePixel(Point(nWidth - 25 * nScaleFactor, 15 * nScaleFactor), Size(10 * nScaleFactor, 10 * nScaleFactor));
+    m_pCloseBtn->SetPosSizePixel(Point(nWidth - 25 * fScaleFactor, 15 * fScaleFactor), Size(10 * fScaleFactor, 10 * fScaleFactor));
 
     // Reparent the buttons and place them on the right of the bar
-    long nX = m_pCloseBtn->GetPosPixel().getX() - 15 * nScaleFactor;
-    long nButtonGap = 5 * nScaleFactor;
+    long nX = m_pCloseBtn->GetPosPixel().getX() - 15 * fScaleFactor;
+    long nButtonGap = 5 * fScaleFactor;
 
     for (auto it = m_aActionBtns.begin(); it != m_aActionBtns.end(); ++it)
     {
         long nButtonWidth = (*it)->GetSizePixel().getWidth();
         nX -= nButtonWidth;
-        (*it)->SetPosSizePixel(Point(nX, 5 * nScaleFactor), Size(nButtonWidth, 30 * nScaleFactor));
+        (*it)->SetPosSizePixel(Point(nX, 5 * fScaleFactor), Size(nButtonWidth, 30 * fScaleFactor));
         nX -= nButtonGap;
     }
 
-    Point aMessagePosition(10 * nScaleFactor, 10 * nScaleFactor);
-    Size aMessageSize(nX - 20 * nScaleFactor, 20 * nScaleFactor);
+    Point aMessagePosition(10 * fScaleFactor, 10 * fScaleFactor);
+    Size aMessageSize(nX - 20 * fScaleFactor, 20 * fScaleFactor);
 
     m_pMessage->SetPosSizePixel(aMessagePosition, aMessageSize);
 }

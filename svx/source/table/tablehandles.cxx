@@ -290,8 +290,8 @@ void TableBorderHdl::CreateB2dIAObject()
                     const bool bAnimate = getAnimate();
 
                     OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
-                    sal_Int32 nScaleFactor = rOutDev.GetDPIScaleFactor();
-                    double fWidth = nScaleFactor * 6.0;
+                    float fScaleFactor = rOutDev.GetDPIScaleFactor();
+                    double fWidth = fScaleFactor * 6.0;
 
                     sdr::overlay::OverlayObject* pOverlayObject =
                         new sdr::overlay::OverlayRectangle(aRange.getMinimum(), aRange.getMaximum(),

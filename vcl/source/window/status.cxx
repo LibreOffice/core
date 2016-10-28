@@ -906,7 +906,7 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
         nBits |= StatusBarItemBits::Center;
 
     // create item
-    if (mbAdjustHiDPI && GetDPIScaleFactor() != 1)
+    if (mbAdjustHiDPI)
     {
         nWidth *= GetDPIScaleFactor();
     }

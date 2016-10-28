@@ -591,8 +591,8 @@ void SdrHdl::CreateB2dIAObject()
                                 default:
                                     break;
                             }
-                            sal_Int32 nScaleFactor = rOutDev.GetDPIScaleFactor();
-                            basegfx::B2DSize aB2DSize(fSize * nScaleFactor, fSize * nScaleFactor);
+                            float fScalingFactor = rOutDev.GetDPIScaleFactor();
+                            basegfx::B2DSize aB2DSize(fSize * fScalingFactor, fSize * fScalingFactor);
 
                             Color aHandleStrokeColor(COL_BLACK);
                             Color aHandleFillColor(COL_LIGHTGREEN);
@@ -681,7 +681,7 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
 
 sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
     const basegfx::B2DPoint& rPos,
-    BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, OutputDevice& rOutDev, Point aMoveOutsideOffset)
+    BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, OutputDevice& /*rOutDev*/, Point aMoveOutsideOffset)
 {
     sdr::overlay::OverlayObject* pRetval = nullptr;
 
@@ -798,10 +798,6 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
             aBmpEx = BitmapEx(Bitmap(Size(13, 13), 24));
             aBmpEx.Erase(COL_BLACK);
         }
-
-        // Scale the handle with the DPI scale factor
-        sal_Int32 nScaleFactor = rOutDev.GetDPIScaleFactor();
-        aBmpEx.Scale(nScaleFactor, nScaleFactor);
 
         if(eKindOfMarker == BitmapMarkerKind::Anchor || eKindOfMarker == BitmapMarkerKind::AnchorPressed)
         {
