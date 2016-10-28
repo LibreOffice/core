@@ -263,7 +263,9 @@ void BackingWindow::initControls()
     mpLocalView->Hide();
 
     mpTemplateButton->SetDelayMenu(true);
+    mpTemplateButton->SetDropDown(PushButtonDropdownStyle::SplitMenuButton);
     mpRecentButton->SetDelayMenu(true);
+    mpRecentButton->SetDropDown(PushButtonDropdownStyle::SplitMenuButton);
 
     //set handlers
     mpLocalView->setCreateContextMenuHdl(LINK(this, BackingWindow, CreateContextMenuHdl));

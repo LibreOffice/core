@@ -868,7 +868,8 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
     sal_uLong nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
     if( nImageSep < 1 )
         nImageSep = 1;
-    if ( mnDDStyle == PushButtonDropdownStyle::MenuButton )
+    if ( mnDDStyle == PushButtonDropdownStyle::MenuButton ||
+         mnDDStyle == PushButtonDropdownStyle::SplitMenuButton )
     {
         long nSeparatorX = 0;
         Rectangle aSymbolRect = aInRect;
@@ -1034,7 +1035,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         return;
 
     bool bRollOver = (IsMouseOver() && aInRect.IsInside(GetPointerPosPixel()));
-    bool bDrawMenuSep = true;
+    bool bDrawMenuSep = mnDDStyle == PushButtonDropdownStyle::SplitMenuButton;
     if (GetStyle() & WB_FLATBUTTON)
     {
         if (!bRollOver && !HasFocus())
@@ -1642,7 +1643,8 @@ Size PushButton::CalcMinimumSize() const
     }
     else if ( Button::HasImage() && ! (ImplGetButtonState() & DrawButtonFlags::NoImage) )
         aSize = GetModeImage().GetSizePixel();
-    if( mnDDStyle == PushButtonDropdownStyle::MenuButton )
+    if( mnDDStyle == PushButtonDropdownStyle::MenuButton ||
+        mnDDStyle == PushButtonDropdownStyle::SplitMenuButton )
     {
         long nSymbolSize = GetTextHeight() / 2 + 1;
         aSize.Width() += 2*nSymbolSize;
