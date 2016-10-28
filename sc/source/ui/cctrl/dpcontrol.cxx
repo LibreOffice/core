@@ -145,9 +145,9 @@ void ScDPFieldButton::draw()
 
 void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
 {
-    sal_Int32 nScaleFactor = mpOutDev->GetDPIScaleFactor();
+    float fScaleFactor = mpOutDev->GetDPIScaleFactor();
 
-    long nMaxSize = 18L * nScaleFactor; // Button max size in either dimension
+    long nMaxSize = 18L * fScaleFactor; // Button max size in either dimension
 
     long nW = std::min(maSize.getWidth() / 2, nMaxSize);
     long nH = std::min(maSize.getHeight(),    nMaxSize);
@@ -170,7 +170,7 @@ void ScDPFieldButton::drawPopupButton()
     Size aSize;
     getPopupBoundingBox(aPos, aSize);
 
-    sal_Int32 nScaleFactor = mpOutDev->GetDPIScaleFactor();
+    float fScaleFactor = mpOutDev->GetDPIScaleFactor();
 
     // Background & outer black border
     mpOutDev->SetLineColor(COL_BLACK);
@@ -185,7 +185,7 @@ void ScDPFieldButton::drawPopupButton()
 
     Point aCenter(aPos.X() + (aSize.Width() / 2), aPos.Y() + (aSize.Height() / 2));
 
-    Size aArrowSize(4 * nScaleFactor, 2 * nScaleFactor);
+    Size aArrowSize(4 * fScaleFactor, 2 * fScaleFactor);
 
     tools::Polygon aPoly(3);
     aPoly.SetPoint(Point(aCenter.X() - aArrowSize.Width(), aCenter.Y() - aArrowSize.Height()), 0);
@@ -196,8 +196,8 @@ void ScDPFieldButton::drawPopupButton()
     if (mbHasHiddenMember)
     {
         // tiny little box to display in presence of hidden member(s).
-        Point aBoxPos(aPos.X() + aSize.Width() - 5 * nScaleFactor, aPos.Y() + aSize.Height() - 5 * nScaleFactor);
-        Size aBoxSize(3 * nScaleFactor, 3 * nScaleFactor);
+        Point aBoxPos(aPos.X() + aSize.Width() - 5 * fScaleFactor, aPos.Y() + aSize.Height() - 5 * fScaleFactor);
+        Size aBoxSize(3 * fScaleFactor, 3 * fScaleFactor);
         mpOutDev->DrawRect(Rectangle(aBoxPos, aBoxSize));
     }
 }

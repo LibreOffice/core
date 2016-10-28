@@ -112,8 +112,10 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
     , mnTablePosX(2)
     , mnTablePosY(2)
 {
-    mnTableCellWidth  = 15 * GetDPIScaleFactor();
-    mnTableCellHeight = 15 * GetDPIScaleFactor();
+    float fScaleFactor = GetDPIScaleFactor();
+
+    mnTableCellWidth  = 15 * fScaleFactor;
+    mnTableCellHeight = 15 * fScaleFactor;
 
     mnTableWidth  = mnTablePosX + TABLE_CELLS_HORIZ*mnTableCellWidth;
     mnTableHeight = mnTablePosY + TABLE_CELLS_VERT*mnTableCellHeight;

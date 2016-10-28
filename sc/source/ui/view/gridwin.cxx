@@ -5999,9 +5999,9 @@ void ScGridWindow::UpdateCursorOverlay()
             // show the cursor as 4 (thin) rectangles
             Rectangle aRect(aScrPos, Size(nSizeXPix - 1, nSizeYPix - 1));
 
-            sal_Int32 nScale = GetDPIScaleFactor();
+            float fScaleFactor = GetDPIScaleFactor();
 
-            long aCursorWidth = 1 * nScale;
+            long aCursorWidth = 1 * fScaleFactor;
 
             Rectangle aLeft = Rectangle(aRect);
             aLeft.Top()    -= aCursorWidth;
@@ -6190,9 +6190,9 @@ void ScGridWindow::UpdateAutoFillOverlay()
         ScDocument* pDoc = pViewData->GetDocument();
         bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
-        sal_Int32 nScale = GetDPIScaleFactor();
+        float fScaleFactor = GetDPIScaleFactor();
         // Size should be even
-        Size aFillHandleSize(6 * nScale, 6 * nScale);
+        Size aFillHandleSize(6 * fScaleFactor, 6 * fScaleFactor);
 
         Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, true );
         long nSizeXPix;
@@ -6210,10 +6210,10 @@ void ScGridWindow::UpdateAutoFillOverlay()
         Rectangle aFillRect(aFillPos, aFillHandleSize);
 
         // expand rect to increase hit area
-        mpAutoFillRect.reset(new Rectangle(aFillRect.Left()   - nScale,
-                                           aFillRect.Top()    - nScale,
-                                           aFillRect.Right()  + nScale,
-                                           aFillRect.Bottom() + nScale));
+        mpAutoFillRect.reset(new Rectangle(aFillRect.Left()   - fScaleFactor,
+                                           aFillRect.Top()    - fScaleFactor,
+                                           aFillRect.Right()  + fScaleFactor,
+                                           aFillRect.Bottom() + fScaleFactor));
 
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();

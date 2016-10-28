@@ -394,9 +394,9 @@ void applyTheme(SfxStyleSheetBasePool* pPool, const OUString& sFontSetName, cons
 BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
 {
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev(*Application::GetDefaultDevice());
-    sal_Int32 nScaleFactor = pVirtualDev->GetDPIScaleFactor();
-    long BORDER = 2 * nScaleFactor;
-    long SIZE = 12 * nScaleFactor;
+    float fScaleFactor = pVirtualDev->GetDPIScaleFactor();
+    long BORDER = 2 * fScaleFactor;
+    long SIZE = 12 * fScaleFactor;
 
     Size aSize(BORDER * 7 + SIZE * 6, BORDER * 3 + SIZE * 2);
     pVirtualDev->SetOutputSizePixel(aSize);

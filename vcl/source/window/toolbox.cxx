@@ -1671,8 +1671,9 @@ bool ToolBox::ImplCalcItem()
     long            nDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
 
     // set defaults if image or text is needed but empty
-    nDefWidth       = GetDefaultImageSize().Width() * GetDPIScaleFactor();
-    nDefHeight      = GetDefaultImageSize().Height() * GetDPIScaleFactor();
+    float fDPIScaleFactor = GetDPIScaleFactor();
+    nDefWidth  = GetDefaultImageSize().Width()  * fDPIScaleFactor;
+    nDefHeight = GetDefaultImageSize().Height() * fDPIScaleFactor;
 
     mnWinHeight = 0;
     // determine minimum size necessary in NWF
@@ -2711,14 +2712,15 @@ static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const Rect
         else
             rRenderContext.SetFillColor(Color(COL_BLACK));
     }
+    float fScaleFactor = rRenderContext.GetDPIScaleFactor();
 
-    int linewidth = 1 * rRenderContext.GetDPIScaleFactor();
-    int space = 4 * rRenderContext.GetDPIScaleFactor();
+    int linewidth = 1 * fScaleFactor;
+    int space = 4 * fScaleFactor;
 
     if( !bRotate )
     {
-        long width = 8 * rRenderContext.GetDPIScaleFactor();
-        long height = 5 * rRenderContext.GetDPIScaleFactor();
+        long width = 8 * fScaleFactor;
+        long height = 5 * fScaleFactor;
 
         //Keep odd b/c drawing code works better
         if ( height % 2 == 0 )
@@ -2742,8 +2744,8 @@ static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const Rect
     }
     else
     {
-        long width = 5 * rRenderContext.GetDPIScaleFactor();
-        long height = 8 * rRenderContext.GetDPIScaleFactor();
+        long width = 5 * fScaleFactor;
+        long height = 8 * fScaleFactor;
 
         //Keep odd b/c drawing code works better
         if (width % 2 == 0)
@@ -2785,10 +2787,12 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const Rect
             rRenderContext.SetFillColor(Color(COL_BLACK));
     }
 
+    float fScaleFactor = rRenderContext.GetDPIScaleFactor();
+
     if( !bRotate )
     {
-        long width = 5 * rRenderContext.GetDPIScaleFactor();
-        long height = 3 * rRenderContext.GetDPIScaleFactor();
+        long width = 5 * fScaleFactor;
+        long height = 3 * fScaleFactor;
 
         long x = rDropDownRect.Left() + (rDropDownRect.getWidth() - width)/2;
         long y = rDropDownRect.Top() + (rDropDownRect.getHeight() - height)/2;
@@ -2802,8 +2806,8 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const Rect
     }
     else
     {
-        long width = 3 * rRenderContext.GetDPIScaleFactor();
-        long height = 5 * rRenderContext.GetDPIScaleFactor();
+        long width = 3 * fScaleFactor;
+        long height = 5 * fScaleFactor;
 
         long x = rDropDownRect.Left() + (rDropDownRect.getWidth() - width)/2;
         long y = rDropDownRect.Top() + (rDropDownRect.getHeight() - height)/2;
