@@ -69,9 +69,6 @@
 #include "document.hxx"
 #include "sc.hrc"
 
-#define SC_MAX_POOLREF      (SFX_ITEMS_OLD_MAXREF - 39)
-#define SC_SAFE_POOLREF     (SC_MAX_POOLREF + 20)
-
 sal_uInt16* ScDocumentPool::pVersionMap1 = nullptr;
 sal_uInt16* ScDocumentPool::pVersionMap2 = nullptr;
 sal_uInt16* ScDocumentPool::pVersionMap3 = nullptr;
@@ -591,14 +588,6 @@ void ScDocumentPool::DeleteVersionMaps()
     pVersionMap1 = nullptr;
 }
 
-/**
- * The sal_uInt16 RefCount can overflow easily for the pattern attributes (SetItems):
- * E.g. Alternate formatting for 600 whole cells.
- * The RefCount is kept at SC_MAX_POOLREF and not increased/decreased anymore.
- * This RefCount is recalculated not until the next load.
- * The difference between SC_MAX_POOLREF and SC_SAFE_POOLREF is a little larger than it needs
- * to be, to allow for detecting accidental "normal" changes to the RefCount (assertions).
- */
 const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {
     if ( rItem.Which() != ATTR_PATTERN ) // Only Pattern is special
@@ -616,39 +605,7 @@ const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWh
         ++mnCurrentMaxKey;
         const_cast<ScPatternAttr&>(static_cast<const ScPatternAttr&>(rNew)).SetKey(mnCurrentMaxKey);
     }
-    CheckRef( rNew );
     return rNew;
-}
-
-void ScDocumentPool::Remove( const SfxPoolItem& rItem )
-{
-    if ( rItem.Which() == ATTR_PATTERN ) // Only Pattern is special
-    {
-        sal_uInt32 nRef = rItem.GetRefCount();
-        if ( nRef >= (sal_uInt32) SC_MAX_POOLREF && nRef <= (sal_uInt32) SFX_ITEMS_OLD_MAXREF )
-        {
-            if ( nRef != (sal_uInt32) SC_SAFE_POOLREF )
-            {
-                OSL_FAIL("Who fiddles with my ref counts?");
-                SetRefCount( (SfxPoolItem&)rItem, (sal_uInt32) SC_SAFE_POOLREF );
-            }
-            return; // Do not decrement
-        }
-    }
-    SfxItemPool::Remove( rItem );
-}
-
-void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )
-{
-    sal_uInt32 nRef = rItem.GetRefCount();
-    if ( nRef >= (sal_uInt32) SC_MAX_POOLREF && nRef <= (sal_uInt32) SFX_ITEMS_OLD_MAXREF )
-    {
-        // At the Apply of the Cache we might increase by 2 (to MAX+1 or SAFE+2)
-        // We only decrease by 1 (in LoadCompleted)
-        OSL_ENSURE( nRef<=(sal_uInt32)SC_MAX_POOLREF+1 || (nRef>=(sal_uInt32)SC_SAFE_POOLREF-1 && nRef<=(sal_uInt32)SC_SAFE_POOLREF+2),
-                "ScDocumentPool::CheckRef" );
-        SetRefCount( (SfxPoolItem&)rItem, (sal_uInt32) SC_SAFE_POOLREF );
-    }
 }
 
 void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )

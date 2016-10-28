@@ -799,8 +799,6 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
         {
             const ScPatternAttr* pOldPattern = pData[nPos].pPattern;
             const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &pCache->ApplyTo( *pOldPattern ) );
-            ScDocumentPool::CheckRef( *pOldPattern );
-            ScDocumentPool::CheckRef( *pNewPattern );
             if (pNewPattern != pOldPattern)
             {
                 SCROW nY1 = nStart;

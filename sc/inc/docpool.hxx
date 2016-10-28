@@ -55,8 +55,6 @@ public:
     virtual MapUnit             GetMetric( sal_uInt16 nWhich ) const override;
 
     virtual const SfxPoolItem&  Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 ) override;
-    virtual void                Remove( const SfxPoolItem& ) override;
-    static void                 CheckRef( const SfxPoolItem& );
 
     void StyleDeleted( ScStyleSheet* pStyle );      // delete templates(?) in organizer
     void CellStyleCreated( const OUString& rName, ScDocument* pDoc );
