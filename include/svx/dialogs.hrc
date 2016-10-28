@@ -31,8 +31,10 @@
 // some strings also used in CUI
 #define RID_SVXERRCTX                       (RID_SVX_START + 351)
 #define RID_SVXSTR_COLOR                    (RID_SVX_START + 179)
-#define RID_SVXSTR_TRANSPARENT              (RID_SVX_START + 190)
+#define RID_SVXSTR_NOFILL                   (RID_SVX_START + 190)
 #define RID_SVXSTR_AUTOMATIC                (RID_SVX_START + 841)
+#define RID_SVXSTR_BY_AUTHOR                (RID_SVX_START + 842)
+#define RID_SVXSTR_TRANSPARENT              (RID_SVX_START + 843)
 #define RID_SVXSTR_INVISIBLE                (RID_SVX_START + 178)
 #define RID_SVXSTR_NONE                     (RID_SVX_START + 183)
 #define RID_SVXSTR_SOLID                    (RID_SVX_START + 160)
@@ -147,9 +149,6 @@
 #define RID_SVXIMAGE_COLORDLG               (RID_SVX_START + 214)
 
 #define RID_SVXFLOAT3D_FAVORITE             (RID_SVX_START + 73)
-#define RID_SVXFLOAT3D_FIX_X                (RID_SVX_START + 74)
-#define RID_SVXFLOAT3D_FIX_Y                (RID_SVX_START + 75)
-#define RID_SVXFLOAT3D_FIX_Z                (RID_SVX_START + 76)
 #define RID_SVXFLOAT3D_FIX_R                (RID_SVX_START + 77)
 #define RID_SVXFLOAT3D_FIX_G                (RID_SVX_START + 78)
 #define RID_SVXFLOAT3D_FIX_B                (RID_SVX_START + 84)

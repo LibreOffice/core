@@ -233,7 +233,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ColorListBox" id="linecolorlb">
+                      <object class="svxlo-SvxColorListBox" id="linecolorlb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -505,7 +505,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-ColorListBox" id="shadowcolorlb">
+                  <object class="svxlo-SvxColorListBox" id="shadowcolorlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
