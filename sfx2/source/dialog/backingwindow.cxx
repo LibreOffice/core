@@ -262,8 +262,8 @@ void BackingWindow::initControls()
     mpLocalView->SetStyle( mpLocalView->GetStyle() | WB_VSCROLL);
     mpLocalView->Hide();
 
-    mpTemplateButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
-    mpRecentButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
+    mpTemplateButton->SetDelayMenu(true);
+    mpRecentButton->SetDelayMenu(true);
 
     //set handlers
     mpLocalView->setCreateContextMenuHdl(LINK(this, BackingWindow, CreateContextMenuHdl));

@@ -28,8 +28,6 @@ class PopupMenu;
 class VclBuilder;
 class VclSimpleEvent;
 
-#define MENUBUTTON_MENUMODE_TIMED       ((sal_uInt16)0x0001)
-
 class VCL_DLLPUBLIC MenuButton : public PushButton
 {
 private:
@@ -38,7 +36,7 @@ private:
     Timer*          mpMenuTimer;
     VclPtr<PopupMenu> mpMenu;
     sal_uInt16      mnCurItemId;
-    sal_uInt16      mnMenuMode;
+    bool            mbDelayMenu;
     Link<MenuButton*,void> maActivateHdl;
     Link<MenuButton*,void> maSelectHdl;
 
@@ -65,7 +63,13 @@ public:
 
     void            ExecuteMenu();
 
-    void            SetMenuMode(sal_uInt16 nMode) { mnMenuMode = nMode; }
+    //if false then the whole button launches the menu
+    //if true, then the button has a separator
+    //where the right portion launches the menu immediately
+    //where the left portion activates the underlying Button handlers
+    //before launching the menu in an idle, allowing it to be cancelled
+    //before being shown
+    void            SetDelayMenu(bool bDelay) { mbDelayMenu = bDelay; }
 
     void            SetPopupMenu( PopupMenu* pNewMenu );
     PopupMenu*      GetPopupMenu() const { return mpMenu; }

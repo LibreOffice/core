@@ -33,7 +33,7 @@ void MenuButton::ImplInitMenuButtonData()
     mpMenuTimer     = nullptr;
     mpMenu          = nullptr;
     mnCurItemId     = 0;
-    mnMenuMode      = 0;
+    mbDelayMenu     = false;
 }
 
 void MenuButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
@@ -105,7 +105,7 @@ IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl, Timer *, void)
 void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
     bool bExecute = true;
-    if ( mnMenuMode & MENUBUTTON_MENUMODE_TIMED )
+    if (mbDelayMenu)
     {
         // If the separated dropdown symbol is not hit, delay the popup execution
         if( mnDDStyle != PushButtonDropdownStyle::MenuButton || // no separator at all
@@ -141,7 +141,7 @@ void MenuButton::KeyInput( const KeyEvent& rKEvt )
     sal_uInt16 nCode = aKeyCode.GetCode();
     if ( (nCode == KEY_DOWN) && aKeyCode.IsMod2() )
         ExecuteMenu();
-    else if ( !(mnMenuMode & MENUBUTTON_MENUMODE_TIMED) &&
+    else if ( !mbDelayMenu &&
               !aKeyCode.GetModifier() &&
               ((nCode == KEY_RETURN) || (nCode == KEY_SPACE)) )
         ExecuteMenu();

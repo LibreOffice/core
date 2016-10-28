@@ -279,7 +279,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, PickerFlags nBits )
     m_pName_ed->SetGetFocusHdl( LINK( this, RemoteFilesDialog, FileNameGetFocusHdl ) );
     m_pName_ed->SetModifyHdl( LINK( this, RemoteFilesDialog, FileNameModifyHdl ) );
 
-    m_pAddService_btn->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
+    m_pAddService_btn->SetDelayMenu( true );
     m_pAddMenu = m_pAddService_btn->GetPopupMenu();
     m_pAddService_btn->SetClickHdl( LINK( this, RemoteFilesDialog, AddServiceHdl ) );
     m_pAddService_btn->SetSelectHdl( LINK( this, RemoteFilesDialog, EditServiceMenuHdl ) );
