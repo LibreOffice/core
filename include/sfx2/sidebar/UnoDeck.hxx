@@ -41,7 +41,7 @@ public:
 
     virtual sal_Bool SAL_CALL isActive()
                                 throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL activate( const sal_Bool bActivate )
+    virtual void SAL_CALL activate( sal_Bool bActivate )
                                 throw(css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::ui::XPanels> SAL_CALL getPanels()
@@ -49,7 +49,7 @@ public:
 
     virtual sal_Int32 SAL_CALL getOrderIndex()
                                 throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setOrderIndex( const sal_Int32 newOrderIndex )
+    virtual void SAL_CALL setOrderIndex( sal_Int32 newOrderIndex )
                                 throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL moveFirst()
                                 throw(css::uno::RuntimeException, std::exception) override;

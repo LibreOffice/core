@@ -62,7 +62,7 @@ public:
     virtual sal_Int32 SAL_CALL createByRange(const uno::Reference<sheet::XSheetCellRanges>& xRanges)
         throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL removeByID( const sal_Int32 nID )
+    virtual void SAL_CALL removeByID( sal_Int32 nID )
                                 throw(css::uno::RuntimeException,
                                       std::exception) override;
 
@@ -92,10 +92,10 @@ public:
     ScDocShell* getDocShell();
 
     // XConditionalFormat
-    virtual void SAL_CALL createEntry(const sal_Int32 nType, const sal_Int32 nPos)
+    virtual void SAL_CALL createEntry(sal_Int32 nType, sal_Int32 nPos)
         throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL removeByIndex(const sal_Int32 nIndex)
+    virtual void SAL_CALL removeByIndex(sal_Int32 nIndex)
                                 throw(css::uno::RuntimeException,
                                       std::exception) override;
 

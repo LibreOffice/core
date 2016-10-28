@@ -111,12 +111,6 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4355: 'this' : used in base member initializer list
 
-# C4373: '%$S': virtual function overrides '%$pS', previous versions
-#   of the compiler did not override when parameters only differed by
-#   const/volatile qualifiers.
-# [translation: ancient compilers that don't actually support C++ do
-#  stupid things]
-
 # C4481: nonstandard extension used: override specifier 'override'
 # (MSVC 2010 warns about this, even though it's C++11 keyword)
 
@@ -204,7 +198,6 @@ gb_CXXFLAGS := \
 	-wd4290 \
 	-wd4351 \
 	-wd4355 \
-	-wd4373 \
 	-wd4481 \
 	-wd4505 \
 	-wd4512 \

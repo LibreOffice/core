@@ -354,7 +354,7 @@ public:
     }
 
     virtual SvXMLImportContext * CreateChildContext(
-        sal_uInt16 const nPrefix, OUString const& rLocalName,
+        sal_uInt16 nPrefix, OUString const& rLocalName,
         uno::Reference<xml::sax::XAttributeList> const& xAttrList) override
     {
         if (XML_NAMESPACE_TEXT == nPrefix && IsXMLToken(rLocalName, XML_OUTLINE_STYLE))
@@ -396,7 +396,7 @@ public:
     }
 
     virtual SvXMLImportContext * CreateContext(
-        sal_uInt16 const nPrefix, OUString const& rLocalName,
+        sal_uInt16 nPrefix, OUString const& rLocalName,
         uno::Reference<xml::sax::XAttributeList> const& xAttrList) override
     {
         if (XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken(rLocalName, XML_STYLES))

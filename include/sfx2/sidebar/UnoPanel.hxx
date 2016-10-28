@@ -44,14 +44,14 @@ public:
 
     virtual sal_Bool SAL_CALL isExpanded()
                                 throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL expand( const sal_Bool bCollapseOther )
+    virtual void SAL_CALL expand( sal_Bool bCollapseOther )
                                 throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL collapse( )
                                 throw(css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Int32 SAL_CALL getOrderIndex()
                                 throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setOrderIndex( const sal_Int32 newOrderIndex )
+    virtual void SAL_CALL setOrderIndex( sal_Int32 newOrderIndex )
                                 throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL moveFirst()
                                 throw(css::uno::RuntimeException, std::exception) override;
