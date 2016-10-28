@@ -181,8 +181,6 @@ public:
     virtual ~SalAquaFilePicker() override;
 
     void filterControlChanged();
-
-    void implInitialize();
 };
 
 #endif // INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFILEPICKER_HXX

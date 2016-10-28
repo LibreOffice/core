@@ -555,12 +555,6 @@ void SalAquaFilePicker::ensureFilterHelper()
     }
 }
 
-void SalAquaFilePicker::implInitialize()
-{
-    //call super
-    SalAquaPicker::implInitialize();
-}
-
 void SalAquaFilePicker::updateFilterUI()
 {
     m_pControlHelper->updateFilterUI();
