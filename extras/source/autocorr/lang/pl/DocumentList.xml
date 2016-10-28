@@ -489,6 +489,18 @@
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
   <block-list:block block-list:abbreviated-name=":cent:" block-list:name="Â¢"/>
+  <block-list:block block-list:abbreviated-name=":godzina 10.00:" block-list:name="🕙"/>
+  <block-list:block block-list:abbreviated-name=":godzina 1.00:" block-list:name="🕐"/>
+  <block-list:block block-list:abbreviated-name=":godzina 11.00:" block-list:name="🕚"/>
+  <block-list:block block-list:abbreviated-name=":godzina 12.00:" block-list:name="🕛"/>
+  <block-list:block block-list:abbreviated-name=":godzina 2.00:" block-list:name="🕑"/>
+  <block-list:block block-list:abbreviated-name=":godzina 3.00:" block-list:name="🕒"/>
+  <block-list:block block-list:abbreviated-name=":godzina 4.00:" block-list:name="🕓"/>
+  <block-list:block block-list:abbreviated-name=":godzina 5.00:" block-list:name="🕔"/>
+  <block-list:block block-list:abbreviated-name=":godzina 6.00:" block-list:name="🕕"/>
+  <block-list:block block-list:abbreviated-name=":godzina 7.00:" block-list:name="🕖"/>
+  <block-list:block block-list:abbreviated-name=":godzina 8.00:" block-list:name="🕗"/>
+  <block-list:block block-list:abbreviated-name=":godzina 9.00:" block-list:name="🕘"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
@@ -777,29 +789,17 @@
   <block-list:block block-list:abbreviated-name=":gniew:" block-list:name="😠"/>
   <block-list:block block-list:abbreviated-name=":goblin:" block-list:name="👺"/>
   <block-list:block block-list:abbreviated-name=":Godło Iranu:" block-list:name="☫"/>
-  <block-list:block block-list:abbreviated-name=":godzina 10.00:" block-list:name="🕙"/>
-  <block-list:block block-list:abbreviated-name=":godzina 1.00:" block-list:name="🕐"/>
   <block-list:block block-list:abbreviated-name=":godzina 10.30:" block-list:name="🕥"/>
-  <block-list:block block-list:abbreviated-name=":godzina 11.00:" block-list:name="🕚"/>
   <block-list:block block-list:abbreviated-name=":godzina 11.30:" block-list:name="🕦"/>
-  <block-list:block block-list:abbreviated-name=":godzina 12.00:" block-list:name="🕛"/>
   <block-list:block block-list:abbreviated-name=":godzina 12.30:" block-list:name="🕧"/>
   <block-list:block block-list:abbreviated-name=":godzina 1.30:" block-list:name="🕜"/>
-  <block-list:block block-list:abbreviated-name=":godzina 2.00:" block-list:name="🕑"/>
   <block-list:block block-list:abbreviated-name=":godzina 2.30:" block-list:name="🕝"/>
-  <block-list:block block-list:abbreviated-name=":godzina 3.00:" block-list:name="🕒"/>
   <block-list:block block-list:abbreviated-name=":godzina 3.30:" block-list:name="🕞"/>
-  <block-list:block block-list:abbreviated-name=":godzina 4.00:" block-list:name="🕓"/>
   <block-list:block block-list:abbreviated-name=":godzina 4.30:" block-list:name="🕟"/>
-  <block-list:block block-list:abbreviated-name=":godzina 5.00:" block-list:name="🕔"/>
   <block-list:block block-list:abbreviated-name=":godzina 5.30:" block-list:name="🕠"/>
-  <block-list:block block-list:abbreviated-name=":godzina 6.00:" block-list:name="🕕"/>
   <block-list:block block-list:abbreviated-name=":godzina 6.30:" block-list:name="🕡"/>
-  <block-list:block block-list:abbreviated-name=":godzina 7.00:" block-list:name="🕖"/>
   <block-list:block block-list:abbreviated-name=":godzina 7.30:" block-list:name="🕢"/>
-  <block-list:block block-list:abbreviated-name=":godzina 8.00:" block-list:name="🕗"/>
   <block-list:block block-list:abbreviated-name=":godzina 8.30:" block-list:name="🕣"/>
-  <block-list:block block-list:abbreviated-name=":godzina 9.00:" block-list:name="🕘"/>
   <block-list:block block-list:abbreviated-name=":godzina 9.30:" block-list:name="🕤"/>
   <block-list:block block-list:abbreviated-name=":golf:" block-list:name="⛳"/>
   <block-list:block block-list:abbreviated-name=":góra:" block-list:name="⛰"/>
