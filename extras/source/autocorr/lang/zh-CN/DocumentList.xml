@@ -824,6 +824,7 @@
   <block-list:block block-list:abbreviated-name=":1/8:" block-list:name="⅛"/>
   <block-list:block block-list:abbreviated-name=":_1:" block-list:name="₁"/>
   <block-list:block block-list:abbreviated-name=":^1:" block-list:name="¹"/>
+  <block-list:block block-list:abbreviated-name=":1 h:" block-list:name="🕐"/>
   <block-list:block block-list:abbreviated-name=":2.30:" block-list:name="🕝"/>
   <block-list:block block-list:abbreviated-name=":2/3:" block-list:name="⅔"/>
   <block-list:block block-list:abbreviated-name=":_2:" block-list:name="₂"/>
