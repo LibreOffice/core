@@ -19,6 +19,7 @@
 
 #include "copydlg.hxx"
 #include <comphelper/string.hxx>
+#include <svx/colorbox.hxx>
 #include <svx/dlgutil.hxx>
 #include <sfx2/module.hxx>
 #include <svx/xcolit.hxx>
@@ -40,11 +41,9 @@ namespace sd {
 
 #define TOKEN ';'
 
-CopyDlg::CopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs,
-    const XColorListRef &pColList, ::sd::View* pInView)
+CopyDlg::CopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pInView)
     : SfxModalDialog(pWindow, "DuplicateDialog", "modules/sdraw/ui/copydlg.ui")
     , mrOutAttrs(rInAttrs)
-    , mpColorList(pColList)
     , maUIScale(pInView->GetDoc().GetUIScale())
     , mpView(pInView)
 {
@@ -59,11 +58,6 @@ CopyDlg::CopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs,
     get(m_pFtEndColor, "endlabel");
     get(m_pLbEndColor, "end");
     get(m_pBtnSetDefault, "default");
-
-    // color tables
-    DBG_ASSERT( mpColorList.is(), "No colortable available !" );
-    m_pLbStartColor->Fill( mpColorList );
-    m_pLbEndColor->CopyEntries( *m_pLbStartColor );
 
     m_pLbStartColor->SetSelectHdl( LINK( this, CopyDlg, SelectColorHdl ) );
     m_pBtnSetViewData->SetClickHdl( LINK( this, CopyDlg, SetViewData ) );
@@ -201,31 +195,22 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_WIDTH, nWidth ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_HEIGHT, nHeight ) );
 
-    if( m_pLbStartColor->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
-    {
-        XColorItem aXColorItem( ATTR_COPY_START_COLOR, m_pLbStartColor->GetSelectEntry(),
-                                    m_pLbStartColor->GetSelectEntryColor() );
-        rOutAttrs.Put( aXColorItem );
-    }
-    if( m_pLbEndColor->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
-    {
-        XColorItem aXColorItem( ATTR_COPY_END_COLOR, m_pLbEndColor->GetSelectEntry(),
-                                    m_pLbEndColor->GetSelectEntryColor() );
-        rOutAttrs.Put( aXColorItem );
-    }
+    NamedColor aColor = m_pLbStartColor->GetSelectEntry();
+    rOutAttrs.Put(XColorItem(ATTR_COPY_START_COLOR, aColor.second, aColor.first));
+    aColor = m_pLbEndColor->GetSelectEntry();
+    rOutAttrs.Put(XColorItem(ATTR_COPY_END_COLOR, aColor.second, aColor.first));
 }
 
 /**
  * enables and selects end color LB
  */
-IMPL_LINK_NOARG(CopyDlg, SelectColorHdl, ListBox&, void)
+IMPL_LINK_NOARG(CopyDlg, SelectColorHdl, SvxColorListBox&, void)
 {
-    sal_Int32 nPos = m_pLbStartColor->GetSelectEntryPos();
+    const Color aColor = m_pLbStartColor->GetSelectEntryColor();
 
-    if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-        !m_pLbEndColor->IsEnabled() )
+    if (!m_pLbEndColor->IsEnabled())
     {
-        m_pLbEndColor->SelectEntryPos( nPos );
+        m_pLbEndColor->SelectEntry(aColor);
         m_pLbEndColor->Enable();
         m_pFtEndColor->Enable();
     }
