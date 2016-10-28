@@ -21,11 +21,13 @@
 
 #include <bitset>
 
+#include <editeng/editids.hrc>
 #include <svtools/colorcfg.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <vcl/scrbar.hxx>
+#include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
@@ -177,12 +179,12 @@ public:
     virtual void dispose() override;
 
 public:
-    void SetLinks (Link<Button*,void> const&, Link<ListBox&,void> const&, Link<Control&,void> const&);
+    void SetLinks (Link<Button*,void> const&, Link<SvxColorListBox&,void> const&, Link<Control&,void> const&);
     unsigned GetEntryHeight () const { return vEntries[0]->GetHeight(); }
     void Update (EditableColorConfig const*, EditableExtendedColorConfig const*);
     void ScrollHdl(const ScrollBar&);
     void ClickHdl (EditableColorConfig*, CheckBox*);
-    void ColorHdl (EditableColorConfig*, EditableExtendedColorConfig*, ColorListBox*);
+    void ColorHdl (EditableColorConfig*, EditableExtendedColorConfig*, SvxColorListBox*);
     void Init(ScrollBar *pVScroll, HeaderBar *m_pHeaderHB);
     void AdjustScrollBar();
     void AdjustHeaderBar();
@@ -214,10 +216,10 @@ private:
     public:
         void Show ();
         void Hide ();
-        void SetAppearance(Wallpaper const& aTextWall, ColorListBox const& aSampleList);
+        void SetAppearance(Wallpaper const& rTextWall);
         void SetTextColor (Color C) { m_pText->SetTextColor(C); }
     public:
-        void SetLinks (Link<Button*,void> const&, Link<ListBox&,void> const&, Link<Control&,void> const&);
+        void SetLinks (Link<Button*,void> const&, Link<SvxColorListBox&,void> const&, Link<Control&,void> const&);
         void Update (ColorConfigEntry, ColorConfigValue const&);
         void Update (ExtendedColorConfigValue const&);
         void ColorChanged (ColorConfigEntry, ColorConfigValue&);
@@ -227,7 +229,7 @@ private:
         unsigned GetHeight () const { return m_pColorList->GetSizePixel().Height(); }
     public:
         bool Is (CheckBox* pBox) const { return m_pText == pBox; }
-        bool Is (ColorListBox* pBox) const { return m_pColorList == pBox; }
+        bool Is (SvxColorListBox* pBox) const { return m_pColorList == pBox; }
         void dispose()
         {
             m_pText.disposeAndClear();
@@ -239,7 +241,7 @@ private:
         // checkbox (CheckBox) or simple text (FixedText)
         VclPtr<Control> m_pText;
         // color list box
-        VclPtr<ColorListBox> m_pColorList;
+        VclPtr<SvxColorListBox> m_pColorList;
         // color preview box
         VclPtr<vcl::Window> m_pPreview;
         // default color
@@ -350,9 +352,7 @@ ColorConfigWindow_Impl::Entry::Entry( vcl::Window *pGrid, unsigned nYPos,
     m_pText->set_margin_left(6 + nCheckBoxLabelOffset);
     m_pText->SetText(rColorEntry.getDisplayName());
 
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|WB_DROPDOWN;
-    m_pColorList = VclPtr<ColorListBox>::Create(pGrid, nWinBits);
-    m_pColorList->EnableAutoSize(true);
+    m_pColorList = VclPtr<SvxColorListBox>::Create(pGrid);
     m_pColorList->set_grid_left_attach(1);
     m_pColorList->set_grid_top_attach(nYPos);
 
@@ -390,24 +390,22 @@ void ColorConfigWindow_Impl::Entry::Hide()
 
 // SetAppearance()
 // iEntry: which entry is this?
-// aTextWall: background of the text (transparent)
+// rTextWall: background of the text (transparent)
 // aSampleList: sample color listbox (to copy from)
-void ColorConfigWindow_Impl::Entry::SetAppearance(
-    Wallpaper const& aTextWall,
-    ColorListBox const& aSampleList)
+void ColorConfigWindow_Impl::Entry::SetAppearance(Wallpaper const& rTextWall)
 {
     // text (and optionally checkbox)
-    m_pText->SetBackground(aTextWall);
+    m_pText->SetBackground(rTextWall);
     // preview
     m_pPreview->SetBorderStyle(WindowBorderStyle::MONO);
     // color list
-    m_pColorList->CopyEntries(aSampleList);
-    m_pColorList->InsertAutomaticEntryColor(m_aDefaultColor);
+    m_pColorList->SetSlotId(SID_ATTR_CHAR_COLOR);
+    m_pColorList->SetAutoDisplayColor(m_aDefaultColor);
 }
 
 // SetLinks()
 void ColorConfigWindow_Impl::Entry::SetLinks(
-    Link<Button*,void> const& aCheckLink, Link<ListBox&,void> const& aColorLink,
+    Link<Button*,void> const& aCheckLink, Link<SvxColorListBox&,void> const& aColorLink,
     Link<Control&,void> const& aGetFocusLink)
 {
     m_pColorList->SetSelectHdl(aColorLink);
@@ -423,17 +421,10 @@ void ColorConfigWindow_Impl::Entry::SetLinks(
 void ColorConfigWindow_Impl::Entry::Update (
     ColorConfigEntry aColorEntry, ColorConfigValue const& rValue
 ) {
-    Color aColor;
-    if ((unsigned)rValue.nColor == COL_AUTO)
-    {
+    Color aColor(rValue.nColor);
+    m_pColorList->SelectEntry(aColor);
+    if (aColor.GetColor() == COL_AUTO)
         aColor = ColorConfig::GetDefaultColor(aColorEntry);
-        m_pColorList->SelectEntryPos(0);
-    }
-    else
-    {
-        aColor = Color(rValue.nColor);
-        m_pColorList->SelectEntry(aColor);
-    }
     m_pPreview->SetBackground(Wallpaper(aColor));
     if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(m_pText.get()))
         pCheckBox->Check(rValue.bIsVisible);
@@ -445,7 +436,7 @@ void ColorConfigWindow_Impl::Entry::Update (
 ) {
     Color aColor(rValue.getColor());
     if (rValue.getColor() == rValue.getDefaultColor())
-        m_pColorList->SelectEntryPos(0);
+        m_pColorList->SelectEntry(Color(COL_AUTO));
     else
         m_pColorList->SelectEntry(aColor);
     SetColor(aColor);
@@ -456,17 +447,10 @@ void ColorConfigWindow_Impl::Entry::ColorChanged (
     ColorConfigEntry aColorEntry,
     ColorConfigValue& rValue
 ) {
-    Color aColor;
-    if (m_pColorList->IsAutomaticSelected())
-    {
+    Color aColor = m_pColorList->GetSelectEntryColor();
+    rValue.nColor = aColor.GetColor();
+    if (aColor.GetColor() == COL_AUTO)
         aColor = ColorConfig::GetDefaultColor(aColorEntry);
-        rValue.nColor = COL_AUTO;
-    }
-    else
-    {
-        aColor = m_pColorList->GetSelectEntryColor();
-        rValue.nColor = aColor.GetColor();
-    }
     SetColor(aColor);
 }
 
@@ -476,8 +460,7 @@ void ColorConfigWindow_Impl::Entry::ColorChanged (
 ) {
     Color aColor = m_pColorList->GetSelectEntryColor();
     rValue.setColor(aColor.GetColor());
-    // automatic?
-    if (m_pColorList->GetSelectEntryPos() == 0)
+    if (aColor.GetColor() == COL_AUTO)
     {
         rValue.setColor(rValue.getDefaultColor());
         aColor.SetColor(rValue.getColor());
@@ -628,22 +611,11 @@ void ColorConfigWindow_Impl::SetAppearance ()
 
     OSL_ENSURE( vEntries.size() >= SAL_N_ELEMENTS(vEntryInfo), "wrong number of helpIDs for color listboxes" );
 
-    // creating a sample color listbox with the color entries
-    ScopedVclPtrInstance< ColorListBox > aSampleColorList(this);
-    {
-        XColorListRef const xColorTable = XColorList::CreateStdColorList();
-        for (sal_Int32 i = 0; i != xColorTable->Count(); ++i)
-        {
-            XColorEntry& rEntry = *xColorTable->GetColor(i);
-            aSampleColorList->InsertEntry(rEntry.GetColor(), rEntry.GetName());
-        }
-    }
-
     // appearance
     for (size_t i = 0; i != vEntries.size(); ++i)
     {
         // appearance
-        vEntries[i]->SetAppearance(aTransparentWall, *aSampleColorList.get());
+        vEntries[i]->SetAppearance(aTransparentWall);
     }
 }
 
@@ -681,7 +653,7 @@ void ColorConfigWindow_Impl::Init(ScrollBar *pVScroll, HeaderBar *pHeaderHB)
 
 // SetLinks()
 void ColorConfigWindow_Impl::SetLinks (
-    Link<Button*,void> const& aCheckLink, Link<ListBox&,void> const& aColorLink, Link<Control&,void> const& aGetFocusLink
+    Link<Button*,void> const& aCheckLink, Link<SvxColorListBox&,void> const& aColorLink, Link<Control&,void> const& aGetFocusLink
 ) {
     for (unsigned i = 0; i != vEntries.size(); ++i)
         vEntries[i]->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
@@ -742,10 +714,10 @@ void ColorConfigWindow_Impl::ClickHdl (EditableColorConfig* pConfig, CheckBox* p
 }
 
 // ColorHdl()
-void ColorConfigWindow_Impl::ColorHdl (
+void ColorConfigWindow_Impl::ColorHdl(
     EditableColorConfig* pConfig, EditableExtendedColorConfig* pExtConfig,
-    ColorListBox* pBox
-) {
+    SvxColorListBox* pBox)
+{
     unsigned i = 0;
 
     // default entries
@@ -838,7 +810,7 @@ class ColorConfigCtrl_Impl : public VclVBox
 
     DECL_LINK(ScrollHdl, ScrollBar*, void);
     DECL_LINK(ClickHdl, Button*, void);
-    DECL_LINK(ColorHdl, ListBox&, void);
+    DECL_LINK(ColorHdl, SvxColorListBox&, void);
     DECL_LINK(ControlFocusHdl, Control&, void);
 
     virtual bool PreNotify (NotifyEvent& rNEvt) override;
@@ -892,7 +864,7 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(vcl::Window* pParent)
     m_pVScroll->SetEndScrollHdl(aScrollLink);
 
     Link<Button*,void> aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
-    Link<ListBox&,void> aColorLink = LINK(this, ColorConfigCtrl_Impl, ColorHdl);
+    Link<SvxColorListBox&,void> aColorLink = LINK(this, ColorConfigCtrl_Impl, ColorHdl);
     Link<Control&,void> aGetFocusLink = LINK(this, ColorConfigCtrl_Impl, ControlFocusHdl);
     m_pScrollWindow->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
 
@@ -998,11 +970,12 @@ IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, Button*, pBox, void)
 }
 
 // a color list has changed
-IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ListBox&, rBox, void)
+IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, SvxColorListBox&, rBox, void)
 {
     DBG_ASSERT(pColorConfig, "Configuration not set" );
-    m_pScrollWindow->ColorHdl(pColorConfig, pExtColorConfig, static_cast<ColorListBox*>(&rBox));
+    m_pScrollWindow->ColorHdl(pColorConfig, pExtColorConfig, &rBox);
 }
+
 IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control&, rCtrl, void)
 {
     // determine whether a control is completely visible

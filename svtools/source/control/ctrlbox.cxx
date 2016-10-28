@@ -93,18 +93,6 @@ ColorListBox::ColorListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     SetEdgeBlending(true);
 }
 
-VCL_BUILDER_DECL_FACTORY(ColorListBox)
-{
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
-    if (bDropdown)
-        nWinBits |= WB_DROPDOWN;
-    VclPtrInstance<ColorListBox> pListBox(pParent, nWinBits);
-    if (bDropdown)
-        pListBox->EnableAutoSize(true);
-    rRet = pListBox;
-}
-
 ColorListBox::~ColorListBox()
 {
     disposeOnce();

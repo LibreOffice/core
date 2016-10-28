@@ -171,7 +171,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxlo-ColorLB" id="lbcolor">
+          <object class="svxlo-SvxColorListBox" id="lbcolor">
             <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -184,7 +184,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxlo-ColorLB" id="lbgradient">
+          <object class="svxlo-SvxColorListBox" id="lbgradient">
             <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>

@@ -38,6 +38,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "sdresid.hxx"
 #include <svtools/controldims.hrc>
+#include <svx/colorbox.hxx>
 #include <svx/gallery.hxx>
 #include <svx/drawitem.hxx>
 #include <unotools/pathoptions.hxx>
@@ -149,13 +150,6 @@ void SlideBackground::Initialize()
     mpCloseMaster->SetClickHdl(LINK(this, SlideBackground, CloseMasterHdl));
     meUnit = maPaperSizeController.GetCoreMetric();
 
-    mpMasterSlide->SetSelectHdl(LINK(this, SlideBackground, AssignMasterPage));
-
-    mpFillStyle->SetSelectHdl(LINK(this, SlideBackground, FillStyleModifyHdl));
-    mpFillLB->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
-    mpFillGrad->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
-    mpFillAttr->SetSelectHdl(LINK(this, SlideBackground, FillBackgroundHdl));
-
     ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
     if (pMainViewShell)
     {
@@ -179,6 +173,13 @@ void SlideBackground::Initialize()
     mpDspMasterObjects->SetClickHdl(LINK(this,SlideBackground, DspObjects));
 
     Update();
+
+    mpMasterSlide->SetSelectHdl(LINK(this, SlideBackground, AssignMasterPage));
+
+    mpFillStyle->SetSelectHdl(LINK(this, SlideBackground, FillStyleModifyHdl));
+    mpFillLB->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
+    mpFillGrad->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
+    mpFillAttr->SetSelectHdl(LINK(this, SlideBackground, FillBackgroundHdl));
 }
 
 void SlideBackground::HandleContextChange(
@@ -211,48 +212,24 @@ void SlideBackground::Update()
             mpFillAttr->Hide();
             mpFillGrad->Hide();
             mpFillLB->Show();
-            mpFillLB->Clear();
-            const SvxColorListItem aItem( *static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
-            mpFillLB->Fill(aItem.GetColorList());
-
             const Color aColor = GetColorSetOrDefault();
-            mpFillLB->SelectEntry( aColor );
-
-            if(mpFillLB->GetSelectEntryCount() == 0)
-            {
-                mpFillLB->InsertEntry(aColor, OUString());
+            if (aColor != mpFillLB->GetSelectEntryColor())
                 mpFillLB->SelectEntry(aColor);
-            }
         }
         break;
         case GRADIENT:
         {
             mpFillLB->Show();
-            const SvxColorListItem aItem(*static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
             mpFillAttr->Hide();
             mpFillGrad->Show();
-            mpFillLB->Clear();
-            mpFillGrad->Clear();
-            mpFillLB->Fill(aItem.GetColorList());
-            mpFillGrad->Fill(aItem.GetColorList());
 
             const XGradient xGradient = GetGradientSetOrDefault();
             const Color aStartColor = xGradient.GetStartColor();
-            const Color aEndColor = xGradient.GetEndColor();
-            mpFillLB->SelectEntry( aStartColor );
-            mpFillGrad->SelectEntry( aEndColor );
-
-            if(mpFillLB->GetSelectEntryCount() == 0)
-            {
-                mpFillLB->InsertEntry(aStartColor, OUString());
+            if (aStartColor != mpFillLB->GetSelectEntryColor())
                 mpFillLB->SelectEntry(aStartColor);
-            }
-
-            if(mpFillGrad->GetSelectEntryCount() == 0)
-            {
-                mpFillGrad->InsertEntry(aEndColor, OUString());
+            const Color aEndColor = xGradient.GetEndColor();
+            if (aEndColor != mpFillGrad->GetSelectEntryColor())
                 mpFillGrad->SelectEntry(aEndColor);
-            }
         }
         break;
 
@@ -831,7 +808,7 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get() });
 }
 
-IMPL_LINK_NOARG(SlideBackground, FillColorHdl, ListBox&, void)
+IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpFillStyle->GetSelectEntryPos();
     switch(eXFS)
