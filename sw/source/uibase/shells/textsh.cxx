@@ -532,7 +532,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialog creation failed!");
-        std::unique_ptr<VclAbstractDialog> pColDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN));
+        ScopedVclPtr<VclAbstractDialog> pColDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN));
         OSL_ENSURE(pColDlg, "Dialog creation failed!");
         pColDlg->Execute();
     }

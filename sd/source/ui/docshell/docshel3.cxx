@@ -283,7 +283,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                 SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                 if (pFact && mpViewShell)
                 {
-                    std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( mpViewShell->GetActiveWindow(), SID_LANGUAGE_OPTIONS ));
+                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( mpViewShell->GetActiveWindow(), SID_LANGUAGE_OPTIONS ));
                     pDlg->Execute();
                 }
             }

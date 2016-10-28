@@ -606,7 +606,7 @@ void SwView::ExecFormatFootnote()
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetWindow(), GetWrtShell()));
+    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetWindow(), GetWrtShell()));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlg->Execute();
 }

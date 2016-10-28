@@ -338,7 +338,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                 if (pFact)
                 {
-                    std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( GetView().GetWindow(), SID_LANGUAGE_OPTIONS ));
+                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( GetView().GetWindow(), SID_LANGUAGE_OPTIONS ));
                     pDlg->Execute();
                 }
             }
@@ -626,7 +626,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq ));
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 pDlg->Execute();
             }
@@ -721,12 +721,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_SORTING_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rWrtSh, DLG_SORTING ));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rWrtSh, DLG_SORTING ));
             pDlg->Execute();
-            pDlg.reset();
             rReq.Done();
         }
         break;

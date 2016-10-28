@@ -273,7 +273,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
         if ( pFact != nullptr )
         {
-            std::unique_ptr<VclAbstractDialog> pDlg(
+            ScopedVclPtr<VclAbstractDialog> pDlg(
                 pFact->CreateScriptErrorDialog( aException ));
 
             if ( pDlg )

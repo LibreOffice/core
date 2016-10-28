@@ -1477,14 +1477,15 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
 
     if ( bCaughtException && bRaiseError )
     {
-        std::unique_ptr< VclAbstractDialog > pScriptErrDlg;
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
         if ( pFact )
-            pScriptErrDlg.reset( pFact->CreateScriptErrorDialog( aException ) );
-        OSL_ENSURE( pScriptErrDlg.get(), "SfxObjectShell::CallXScript: no script error dialog!" );
+        {
+            ScopedVclPtr<VclAbstractDialog> pScriptErrDlg( pFact->CreateScriptErrorDialog( aException ) );
+            OSL_ENSURE( pScriptErrDlg.get(), "SfxObjectShell::CallXScript: no script error dialog!" );
 
-        if ( pScriptErrDlg.get() )
-            pScriptErrDlg->Execute();
+            if ( pScriptErrDlg.get() )
+                pScriptErrDlg->Execute();
+        }
     }
 
     OSL_TRACE( "leaving CallXScript" );

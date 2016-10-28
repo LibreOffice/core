@@ -315,11 +315,10 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 pPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
 
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), pPage ) : nullptr);
-            if( pDlg )
+            if (pFact)
             {
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), pPage ));
                 pDlg->Execute();
-                pDlg.reset();
                 Invalidate();
             }
             rReq.Done ();

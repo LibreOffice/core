@@ -2396,7 +2396,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         case FN_FORMAT_TITLEPAGE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateTitlePageDlg( pMDI ));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateTitlePageDlg( pMDI ));
             pDlg->Execute();
         }
         break;
@@ -2870,7 +2870,7 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateSwChangeDBDlg(GetView()));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwChangeDBDlg(GetView()));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
         }

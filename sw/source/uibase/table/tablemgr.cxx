@@ -56,7 +56,7 @@ void SwTableFUNC::ColWidthDlg( vcl::Window *pParent )
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateSwTableWidthDlg(pParent, *this));
+    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwTableWidthDlg(pParent, *this));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlg->Execute();
 }

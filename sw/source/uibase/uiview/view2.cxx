@@ -534,7 +534,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclSwViewDialog(*this));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclSwViewDialog(*this));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             break;
@@ -2387,7 +2387,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     if ( pFact )
                     {
-                        std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_OPTIONS_DATABASES ));
+                        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_OPTIONS_DATABASES ));
                         pDlg->Execute();
                     }
                 }

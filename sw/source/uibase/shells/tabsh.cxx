@@ -833,7 +833,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_ROW_HEIGHT ));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_ROW_HEIGHT ));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             break;
@@ -1049,7 +1049,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-                std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateTableMergeDialog(GetView().GetWindow(), bPrev));
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateTableMergeDialog(GetView().GetWindow(), bPrev));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if( RET_OK != pDlg->Execute())
                     bPrev = bNext = false;

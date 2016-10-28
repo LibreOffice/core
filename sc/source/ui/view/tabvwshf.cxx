@@ -796,7 +796,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pDlgFactory = SvxAbstractDialogFactory::Create();
                     if (pDlgFactory)
                     {
-                        std::unique_ptr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
+                        ScopedVclPtr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
                             GetDialogParent(), xFrame, false, xEvents, 0 ) );
                         if ( pDialog.get() && pDialog->Execute() == RET_OK )
                         {

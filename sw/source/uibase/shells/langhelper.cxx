@@ -126,7 +126,7 @@ namespace SwLangHelper
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if (pFact)
             {
-                std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( rView.GetWindow(), SID_LANGUAGE_OPTIONS ));
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( rView.GetWindow(), SID_LANGUAGE_OPTIONS ));
                 pDlg->Execute();
             }
         }

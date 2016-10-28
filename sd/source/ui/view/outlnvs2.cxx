@@ -311,14 +311,13 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_PHOTOALBUM:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
-                GetActiveWindow(),
-                GetDoc()) : nullptr);
-
-            if (pDlg)
+            if (pFact)
             {
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSdPhotoAlbumDialog(
+                    GetActiveWindow(),
+                    GetDoc()));
+
                 pDlg->Execute();
-                pDlg.reset();
             }
             Cancel();
             rReq.Ignore ();
