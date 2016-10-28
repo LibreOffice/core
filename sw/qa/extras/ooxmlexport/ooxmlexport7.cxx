@@ -23,6 +23,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <pagedesc.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
@@ -1138,6 +1139,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103389, "tdf103389.docx")
 }
 
 #endif
+
+DECLARE_OOXMLEXPORT_TEST(testTdf103544, "tdf103544.docx")
+{
+    // We have two shapes: a frame and an image
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPage->getCount());
+
+    // Image was lost because of the frame export
+    uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
+    CPPUNIT_ASSERT(xGraphic.is());
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
