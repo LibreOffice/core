@@ -56,6 +56,7 @@ class CommonSalLayout : public GenericSalLayout
 public:
 #if defined(_WIN32)
     explicit                CommonSalLayout(HDC, WinFontInstance&, const WinFontFace&);
+    const FontSelectPattern& getFontSelData() const { return mrFontSelData; };
 #elif defined(MACOSX) || defined(IOS)
     explicit                CommonSalLayout(const CoreTextStyle&);
     const CoreTextStyle&    getFontData() const { return mrCoreTextStyle; };

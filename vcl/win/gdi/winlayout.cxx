@@ -3339,6 +3339,7 @@ sal_GlyphId GraphiteLayoutWinImpl::getKashidaGlyph(int & rWidth)
 HINSTANCE D2DWriteTextOutRenderer::mmD2d1 = nullptr,
           D2DWriteTextOutRenderer::mmDWrite = nullptr;
 D2DWriteTextOutRenderer::pD2D1CreateFactory_t D2DWriteTextOutRenderer::D2D1CreateFactory = nullptr;
+D2DWriteTextOutRenderer::pD2D1MakeRotateMatrix_t D2DWriteTextOutRenderer::D2D1MakeRotateMatrix = nullptr;
 D2DWriteTextOutRenderer::pDWriteCreateFactory_t D2DWriteTextOutRenderer::DWriteCreateFactory = nullptr;
 
 bool D2DWriteTextOutRenderer::InitModules()
@@ -3348,10 +3349,11 @@ bool D2DWriteTextOutRenderer::InitModules()
     if (mmD2d1 && mmDWrite)
     {
         D2D1CreateFactory = pD2D1CreateFactory_t(GetProcAddress(mmD2d1, "D2D1CreateFactory"));
+        D2D1MakeRotateMatrix = pD2D1MakeRotateMatrix_t(GetProcAddress(mmD2d1, "D2D1MakeRotateMatrix"));
         DWriteCreateFactory = pDWriteCreateFactory_t(GetProcAddress(mmDWrite, "DWriteCreateFactory"));
     }
 
-    if (!D2D1CreateFactory || !DWriteCreateFactory)
+    if (!D2D1CreateFactory || !DWriteCreateFactory || !D2D1MakeRotateMatrix)
     {
         CleanupModules();
         return false;
@@ -3370,6 +3372,7 @@ void D2DWriteTextOutRenderer::CleanupModules()
     mmD2d1 = nullptr;
     mmDWrite = nullptr;
     D2D1CreateFactory = nullptr;
+    D2D1MakeRotateMatrix = nullptr;
     DWriteCreateFactory = nullptr;
 }
 #endif // ENABLE_GRAPHITE_DWRITE
@@ -3479,7 +3482,24 @@ bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
         FLOAT  glyphAdvances[MAX_GLYPHS];
         DWRITE_GLYPH_OFFSET glyphOffsets[MAX_GLYPHS] = { { 0.0f, 0.0f }, };
 
+        bool bVertical = false;
+        double nYDiff = 0.0f;
+        const CommonSalLayout* pCSL = dynamic_cast<const CommonSalLayout*>(&rLayout);
+        if (pCSL)
+            bVertical = pCSL->getFontSelData().mbVertical;
+
+        if (bVertical)
+        {
+            DWRITE_FONT_METRICS aFM;
+            mpFontFace->GetMetrics(&aFM);
+            nYDiff = (aFM.ascent - aFM.descent) * mlfEmHeight / aFM.designUnitsPerEm;
+        }
+
         mpRT->BeginDraw();
+
+        D2D1_MATRIX_3X2_F aOrigTrans, aRotTrans;
+        mpRT->GetTransform(&aOrigTrans);
+
         do
         {
             nGlyphs = rLayout.GetNextGlyphs(1, glyphIntStr, *pPos, *pGetNextGlypInfo, glyphIntAdv);
@@ -3501,7 +3521,17 @@ bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
                 0
             };
 
-            mpRT->DrawGlyphRun(baseline, &glyphs, pBrush);
+            if (bVertical && (glyphIntStr[0] & GF_ROTMASK) != GF_ROTL)
+            {
+                D2D1MakeRotateMatrix(90.0f, baseline, &aRotTrans);
+                mpRT->SetTransform(aOrigTrans * aRotTrans);
+                mpRT->DrawGlyphRun(baseline, &glyphs, pBrush);
+                mpRT->SetTransform(aOrigTrans);
+            }
+            else
+            {
+                mpRT->DrawGlyphRun({ baseline.x, baseline.y + nYDiff }, &glyphs, pBrush);
+            }
         } while (!pRectToErase);
 
         hr = mpRT->EndDraw();
@@ -3641,21 +3671,45 @@ bool D2DWriteTextOutRenderer::GetDWriteInkBox(IDWriteFontFace & rFontFace, SalLa
     Point aPos;
     sal_GlyphId nLGlyph;
     std::vector<uint16_t> indices;
+    std::vector<sal_GlyphId> gids;
     std::vector<Point>  positions;
     int nStart = 0;
     while (rLayout.GetNextGlyphs(1, &nLGlyph, aPos, nStart) == 1)
     {
         positions.push_back(aPos);
         indices.push_back(nLGlyph);
+        gids.push_back(nLGlyph);
     }
 
     auto aBoxes = GetGlyphInkBoxes(indices.data(), indices.data() + indices.size());
     if (aBoxes.empty())
         return false;
 
+    bool bVertical = false;
+    double nYDiff = 0.0f;
+    const CommonSalLayout* pCSL = dynamic_cast<const CommonSalLayout*>(&rLayout);
+    if (pCSL)
+        bVertical = pCSL->getFontSelData().mbVertical;
+
+    if (bVertical)
+    {
+        DWRITE_FONT_METRICS aFM;
+        rFontFace.GetMetrics(&aFM);
+        nYDiff = (aFM.ascent - aFM.descent) * mlfEmHeight / aFM.designUnitsPerEm;
+    }
+
     auto p = positions.begin();
+    auto gid = gids.begin();
     for (auto &b:aBoxes)
     {
+        if (bVertical)
+        {
+            if ((*gid++ & GF_ROTMASK) != GF_ROTL)
+                // FIXME: Hack, should rotate the box here instead.
+                b.expand(std::max(b.getHeight(), b.getWidth()));
+            else
+                b += Point(0, nYDiff);
+        }
         b += *p++;
         rOut.Union(b);
     }
@@ -4006,28 +4060,11 @@ LogicalFontInstance* WinFontFace::CreateFontInstance( FontSelectPattern& rFSD ) 
 
 void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout, HDC hDC)
 {
-    if (getenv("SAL_DWRITE_COMMON_LAYOUT"))
-    {
-        Point aPos(0, 0);
-        int nGlyphCount(0);
-        TextOutRenderer &render = TextOutRenderer::get();
-        bool result = render(rLayout, hDC, nullptr, &aPos, &nGlyphCount);
-        assert(!result);
-    }
-    else
-    {
-        Point aPos;
-        sal_GlyphId aGlyphId;
-        int nFetchedGlyphs = 0;
-        UINT oldTa = GetTextAlign(hDC);
-        SetTextAlign(hDC, (oldTa & ~TA_NOUPDATECP));
-        while (rLayout.GetNextGlyphs(1, &aGlyphId, aPos, nFetchedGlyphs))
-        {
-            ExtTextOutW(hDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, nullptr, reinterpret_cast<LPCWSTR>(&aGlyphId),
-                         1, nullptr);
-        }
-        SetTextAlign(hDC, oldTa);
-    }
+    Point aPos(0, 0);
+    int nGlyphCount(0);
+    TextOutRenderer &render = TextOutRenderer::get();
+    bool result = render(rLayout, hDC, nullptr, &aPos, &nGlyphCount);
+    assert(!result);
 }
 
 void WinSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
