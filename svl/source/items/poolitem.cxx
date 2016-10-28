@@ -40,7 +40,7 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     , m_nWhich(nWhich)
     , m_nKind(SfxItemKind::NONE)
 {
-    DBG_ASSERT(nWhich <= SHRT_MAX, "invalid WhichId");
+    assert(nWhich <= SHRT_MAX);
 #if OSL_DEBUG_LEVEL > 0
     ++nItemCount;
     if ( pw1 && nItemCount>=10000 )
@@ -226,7 +226,8 @@ SfxVoidItem::SfxVoidItem( const SfxVoidItem& rCopy):
 
 bool SfxVoidItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "unequal type" );
+    assert(SfxPoolItem::operator==(rCmp));
+    (void) rCmp;
     return true;
 }
 
