@@ -100,7 +100,6 @@ public:
     PDFElement* Lookup(const OString& rDictionaryKey);
     PDFObjectElement* LookupObject(const OString& rDictionaryKey);
     double GetObjectValue() const;
-    double GetGenerationValue() const;
     void SetDictionaryOffset(sal_uInt64 nDictionaryOffset);
     sal_uInt64 GetDictionaryOffset();
     void SetDictionaryLength(sal_uInt64 nDictionaryLength);
@@ -277,7 +276,8 @@ public:
 };
 
 PDFDocument::PDFDocument()
-    : m_pTrailer(nullptr)
+    : m_pTrailer(nullptr),
+      m_pXRefStream(nullptr)
 {
 }
 
@@ -746,6 +746,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
                 {
                     bInStartXRef = false;
                     m_aStartXRefs.push_back(pNumberElement->GetValue());
+
+                    auto it = m_aOffsetObjects.find(pNumberElement->GetValue());
+                    if (it != m_aOffsetObjects.end())
+                        m_pXRefStream = it->second;
                 }
             }
             else if (isalpha(ch))
@@ -776,6 +780,8 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
                     {
                         pObject = new PDFObjectElement(*this, pObjectNumber->GetValue(), pGenerationNumber->GetValue());
                         m_aElements.push_back(std::unique_ptr<PDFElement>(pObject));
+                        m_aOffsetObjects[pObjectNumber->GetLocation()] = pObject;
+                        m_aIDObjects[pObjectNumber->GetValue()] = pObject;
                     }
                     else
                     {
@@ -918,13 +924,9 @@ bool PDFDocument::Read(SvStream& rStream)
             return false;
         }
 
-        if (!m_pTrailer)
-        {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: found no trailer");
-            return false;
-        }
-
-        auto pPrev = dynamic_cast<PDFNumberElement*>(m_pTrailer->Lookup("Prev"));
+        PDFNumberElement* pPrev = nullptr;
+        if (m_pTrailer)
+            pPrev = dynamic_cast<PDFNumberElement*>(m_pTrailer->Lookup("Prev"));
         if (pPrev)
             nStartXRef = pPrev->GetValue();
 
@@ -933,6 +935,7 @@ bool PDFDocument::Read(SvStream& rStream)
         m_aStartXRefs.clear();
         m_aEOFs.clear();
         m_pTrailer = nullptr;
+        m_pXRefStream = nullptr;
         if (!pPrev)
             break;
     }
@@ -1197,12 +1200,23 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
             nStreamOffset = (nStreamOffset << 8) + nCh;
         }
 
+        // Generation number of the object.
         size_t nGenerationNumber = 0;
         nOffset = nPos;
         for (; nPos < nOffset + aW[2]; ++nPos)
         {
             unsigned char nCh = aFilteredLine[nPos];
             nGenerationNumber = (nGenerationNumber << 8) + nCh;
+        }
+
+        // "n" entry of the xref table
+        if (nType == 1)
+        {
+            if (m_aXRef.find(nIndex) == m_aXRef.end())
+            {
+                m_aXRef[nIndex] = nStreamOffset;
+                m_aXRefDirty[nIndex] = false;
+            }
         }
     }
 }
@@ -1346,17 +1360,21 @@ const std::vector< std::unique_ptr<PDFElement> >& PDFDocument::GetElements()
     return m_aElements;
 }
 
+const std::map<size_t, PDFObjectElement*>& PDFDocument::GetIDObjects() const
+{
+    return m_aIDObjects;
+}
+
 std::vector<PDFObjectElement*> PDFDocument::GetPages()
 {
     std::vector<PDFObjectElement*> aRet;
 
-    if (!m_pTrailer)
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetPages: found no trailer");
-        return aRet;
-    }
+    PDFReferenceElement* pRoot = nullptr;
+    if (m_pTrailer)
+        pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"));
+    else if (m_pXRefStream)
+        pRoot = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Root"));
 
-    auto pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"));
     if (!pRoot)
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetPages: trailer has no Root key");
@@ -1373,7 +1391,7 @@ std::vector<PDFObjectElement*> PDFDocument::GetPages()
     PDFObjectElement* pPages = pCatalog->LookupObject("Pages");
     if (!pPages)
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetPages: catalog has no pages");
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetPages: catalog (obj " << pCatalog->GetObjectValue() << ") has no pages");
         return aRet;
     }
 
@@ -2237,11 +2255,6 @@ double PDFObjectElement::GetObjectValue() const
     return m_fObjectValue;
 }
 
-double PDFObjectElement::GetGenerationValue() const
-{
-    return m_fGenerationValue;
-}
-
 void PDFObjectElement::SetDictionaryOffset(sal_uInt64 nDictionaryOffset)
 {
     m_nDictionaryOffset = nDictionaryOffset;
@@ -2395,25 +2408,12 @@ double PDFReferenceElement::LookupNumber(SvStream& rStream) const
 
 PDFObjectElement* PDFReferenceElement::LookupObject() const
 {
-    const std::vector< std::unique_ptr<PDFElement> >& rElements = m_rDoc.GetElements();
-    // Iterate in reverse order, so in case an incremental update adds a newer
-    // version, we find it.
-    for (int i = rElements.size() - 1; i >= 0; --i)
-    {
-        const std::unique_ptr<PDFElement>& rElement = rElements[i];
-        auto* pObjectElement = dynamic_cast<PDFObjectElement*>(rElement.get());
-        if (!pObjectElement)
-            continue;
+    const std::map<size_t, PDFObjectElement*>& rIDObjects = m_rDoc.GetIDObjects();
+    auto it = rIDObjects.find(m_fObjectValue);
+    if (it != rIDObjects.end())
+        return it->second;
 
-        if (pObjectElement->GetObjectValue() != m_fObjectValue)
-            continue;
-
-        if (pObjectElement->GetGenerationValue() != m_fGenerationValue)
-            continue;
-
-        return pObjectElement;
-    }
-
+    SAL_WARN("xmlsecurity.pdfio", "PDFReferenceElement::LookupObject: can't find obj " << m_fObjectValue);
     return nullptr;
 }
 

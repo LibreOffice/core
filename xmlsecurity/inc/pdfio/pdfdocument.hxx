@@ -63,11 +63,17 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     std::map<size_t, size_t> m_aXRef;
     /// Object ID <-> "are changed as part of an incremental update?" map.
     std::map<size_t, bool> m_aXRefDirty;
+    /// Object offset <-> Object pointer map.
+    std::map<size_t, PDFObjectElement*> m_aOffsetObjects;
+    /// Object ID <-> Object pointer map.
+    std::map<size_t, PDFObjectElement*> m_aIDObjects;
     /// List of xref offsets we know.
     std::vector<size_t> m_aStartXRefs;
     /// List of EOF offsets we know.
     std::vector<size_t> m_aEOFs;
     PDFTrailerElement* m_pTrailer;
+    /// When m_pTrailer is nullptr, this can still have a dictionary.
+    PDFObjectElement* m_pXRefStream;
     /// All editing takes place in this buffer, if it happens.
     SvMemoryStream m_aEditBuffer;
 
@@ -93,6 +99,7 @@ public:
     std::vector<PDFObjectElement*> GetPages();
     /// Remember the end location of an EOF token.
     void PushBackEOF(size_t nOffset);
+    const std::map<size_t, PDFObjectElement*>& GetIDObjects() const;
 
     /// Read elements from the start of the stream till its end.
     bool Read(SvStream& rStream);
