@@ -517,6 +517,10 @@
         <col id="1">2</col>
       </row>
       <row>
+        <col id="0" translatable="yes">Left-to-right (vertical)</col>
+        <col id="1">3</col>
+      </row>
+      <row>
         <col id="0" translatable="yes">Use superordinate object settings</col>
         <col id="1">4</col>
       </row>
