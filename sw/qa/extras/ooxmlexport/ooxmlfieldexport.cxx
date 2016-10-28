@@ -498,8 +498,8 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78590, "FDO78590.docx")
         return;
 
     // This is to ensure that the fld starts and ends inside a hyperlink...
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "w", "9851" );
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "h", "1669" );
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:framePr", "w", "9851" );
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:framePr", "h", "1669" );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testSdtCitationRun, "sdt-citation-run.docx")
