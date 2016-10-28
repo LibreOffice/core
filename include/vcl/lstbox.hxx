@@ -276,10 +276,6 @@ public:
 class VCL_DLLPUBLIC MultiListBox : public ListBox
 {
 public:
-    using ListBox::SaveValue;
-    using ListBox::GetSavedValue;
-    using ListBox::IsValueChangedFromSaved;
-
     explicit        MultiListBox( vcl::Window* pParent, WinBits nStyle );
 
 };
