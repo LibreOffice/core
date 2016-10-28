@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_4e9f6203",
+        "filename": "sc/source/ui/inc/ExternalLink.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-10-28T16:24:33Z",
+      "side": 1,
+      "message": "Why do we need this enum. We will need to check anyway each time if the resource is available or not.",
+      "revId": "b1cf729f880a02bb838463d916f578dba617f4ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_ce9372f9",
+        "filename": "sc/source/ui/inc/ExternalLink.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-10-28T16:24:33Z",
+      "side": 1,
+      "message": "Should be maURL, meAvailablity and meType.",
+      "revId": "b1cf729f880a02bb838463d916f578dba617f4ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_6ea41e57",
+        "filename": "sc/source/ui/inc/ExternalLink.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-10-28T16:24:33Z",
+      "side": 1,
+      "message": "Should be mfRefreshRate or mnRefreshRate.",
+      "revId": "b1cf729f880a02bb838463d916f578dba617f4ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
