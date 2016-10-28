@@ -120,17 +120,17 @@ friend class SfxItemPoolCache;
 friend class SfxItemSet;
 friend class SfxVoidItem;
 
-    mutable sal_uLong   m_nRefCount;
+    mutable sal_uInt32 m_nRefCount;
     sal_uInt16  m_nWhich;
     SfxItemKind  m_nKind;
 
 private:
-    inline void              SetRefCount( sal_uLong n );
+    inline void              SetRefCount(sal_uInt32 n);
     inline void              SetKind( SfxItemKind n );
 public:
-    inline void              AddRef( sal_uLong n = 1 ) const;
+    inline void              AddRef(sal_uInt32 n = 1) const;
 private:
-    inline sal_uLong         ReleaseRef( sal_uLong n = 1 ) const;
+    inline sal_uInt32        ReleaseRef(sal_uInt32 n = 1) const;
 
 protected:
                              explicit SfxPoolItem( sal_uInt16 nWhich = 0 );
@@ -170,7 +170,7 @@ public:
     // clone and call SetWhich
     SfxPoolItem*             CloneSetWhich( sal_uInt16 nNewWhich ) const;
 
-    sal_uLong                GetRefCount() const { return m_nRefCount; }
+    sal_uInt32               GetRefCount() const { return m_nRefCount; }
     inline SfxItemKind       GetKind() const { return m_nKind; }
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
@@ -178,7 +178,7 @@ private:
     SfxPoolItem&             operator=( const SfxPoolItem& ) = delete;
 };
 
-inline void SfxPoolItem::SetRefCount( sal_uLong n )
+inline void SfxPoolItem::SetRefCount(sal_uInt32 n)
 {
     m_nRefCount = n;
     m_nKind = SfxItemKind::NONE;
@@ -190,14 +190,14 @@ inline void SfxPoolItem::SetKind( SfxItemKind n )
     m_nKind = n;
 }
 
-inline void SfxPoolItem::AddRef( sal_uLong n ) const
+inline void SfxPoolItem::AddRef(sal_uInt32 n) const
 {
     assert(m_nRefCount <= SFX_ITEMS_MAXREF && "AddRef with non-Pool-Item");
     assert(n <= SFX_ITEMS_MAXREF - m_nRefCount && "AddRef: refcount overflow");
     m_nRefCount += n;
 }
 
-inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const
+inline sal_uInt32 SfxPoolItem::ReleaseRef(sal_uInt32 n) const
 {
     assert(m_nRefCount <= SFX_ITEMS_MAXREF && "ReleaseRef with non-Pool-Item");
     assert(n <= m_nRefCount);

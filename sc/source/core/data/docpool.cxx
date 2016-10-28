@@ -610,7 +610,7 @@ const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWh
 
     // Else Put must always happen, because it could be another Pool
     const SfxPoolItem& rNew = SfxItemPool::Put( rItem, nWhich );
-    sal_uLong nRef = rNew.GetRefCount();
+    sal_uInt32 nRef = rNew.GetRefCount();
     if (nRef == 1)
     {
         ++mnCurrentMaxKey;
@@ -624,13 +624,13 @@ void ScDocumentPool::Remove( const SfxPoolItem& rItem )
 {
     if ( rItem.Which() == ATTR_PATTERN ) // Only Pattern is special
     {
-        sal_uLong nRef = rItem.GetRefCount();
-        if ( nRef >= (sal_uLong) SC_MAX_POOLREF && nRef <= (sal_uLong) SFX_ITEMS_OLD_MAXREF )
+        sal_uInt32 nRef = rItem.GetRefCount();
+        if ( nRef >= (sal_uInt32) SC_MAX_POOLREF && nRef <= (sal_uInt32) SFX_ITEMS_OLD_MAXREF )
         {
-            if ( nRef != (sal_uLong) SC_SAFE_POOLREF )
+            if ( nRef != (sal_uInt32) SC_SAFE_POOLREF )
             {
                 OSL_FAIL("Who fiddles with my ref counts?");
-                SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
+                SetRefCount( (SfxPoolItem&)rItem, (sal_uInt32) SC_SAFE_POOLREF );
             }
             return; // Do not decrement
         }
@@ -640,14 +640,14 @@ void ScDocumentPool::Remove( const SfxPoolItem& rItem )
 
 void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )
 {
-    sal_uLong nRef = rItem.GetRefCount();
-    if ( nRef >= (sal_uLong) SC_MAX_POOLREF && nRef <= (sal_uLong) SFX_ITEMS_OLD_MAXREF )
+    sal_uInt32 nRef = rItem.GetRefCount();
+    if ( nRef >= (sal_uInt32) SC_MAX_POOLREF && nRef <= (sal_uInt32) SFX_ITEMS_OLD_MAXREF )
     {
         // At the Apply of the Cache we might increase by 2 (to MAX+1 or SAFE+2)
         // We only decrease by 1 (in LoadCompleted)
-        OSL_ENSURE( nRef<=(sal_uLong)SC_MAX_POOLREF+1 || (nRef>=(sal_uLong)SC_SAFE_POOLREF-1 && nRef<=(sal_uLong)SC_SAFE_POOLREF+2),
+        OSL_ENSURE( nRef<=(sal_uInt32)SC_MAX_POOLREF+1 || (nRef>=(sal_uInt32)SC_SAFE_POOLREF-1 && nRef<=(sal_uInt32)SC_SAFE_POOLREF+2),
                 "ScDocumentPool::CheckRef" );
-        SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
+        SetRefCount( (SfxPoolItem&)rItem, (sal_uInt32) SC_SAFE_POOLREF );
     }
 }
 
