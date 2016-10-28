@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_c16263d8",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T23:58:56Z",
+      "side": 1,
+      "message": "toAsciiUpperCase() will not work with translated function names that contain other letters than ASCII. \n\nInstead, to test if a string is part of another, use CharClass::uppercase() on both strings first. A CharClass instance for the current locale can be obtained from SvtSysLocale(), see include/unotools/syslocale.hxx and include/unotools/charclass.hxx",
+      "range": {
+        "startLine": 171,
+        "startChar": 60,
+        "endLine": 171,
+        "endChar": 76
+      },
+      "revId": "933835e0d23ac1622569c9ca07394ac7d077d0d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_a16567e2",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-28T23:58:56Z",
+      "side": 1,
+      "message": "For one, calling a function on aStr on each iteration is performance waste. Such should be done before the loops.",
+      "range": {
+        "startLine": 171,
+        "startChar": 55,
+        "endLine": 171,
+        "endChar": 59
+      },
+      "revId": "933835e0d23ac1622569c9ca07394ac7d077d0d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
