@@ -17,6 +17,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -68,6 +69,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf84678, "tdf84678.docx")
     // This was 0, left margin inside a shape+text wasn't imported from DOCX.
     // 360000 EMU, but layout uses twips.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(567), parseDump("/root/page/body/txt/anchored/fly/infos/prtBounds", "left").toInt32());
+
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf103544, "tdf103544.docx")
+{
+    // We have two shapes: a frame and an image
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    CPPUNIT_ASSERT_EQUAL(2, xDrawPage->getCount());
+
+    // Image was lost because of the frame export
+    uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
+    CPPUNIT_ASSERT(xGraphic.is());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
