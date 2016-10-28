@@ -101,7 +101,7 @@ namespace connectivity
             using MacabCommonStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
 
             // OComponentHelper
-            virtual void SAL_CALL disposing() override;
+            using MacabCommonStatement_BASE::disposing;
 
             // XInterface
             virtual void SAL_CALL release() throw() override;

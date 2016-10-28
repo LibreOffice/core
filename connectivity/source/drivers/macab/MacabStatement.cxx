@@ -79,11 +79,6 @@ MacabCommonStatement::~MacabCommonStatement()
 {
 }
 
-void MacabCommonStatement::disposing()
-{
-    MacabCommonStatement_BASE::disposing();
-}
-
 void MacabCommonStatement::resetParameters() const throw(css::sdbc::SQLException)
 {
 }
