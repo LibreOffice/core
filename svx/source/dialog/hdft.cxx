@@ -664,11 +664,11 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
     if(pFact)
     {
         //UUUU
-        SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg(
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(
             this,
             *pBBSet,
             true/*EnableBackgroundSelector*/,
-            mbEnableDrawingLayerFillStyles);
+            mbEnableDrawingLayerFillStyles));
 
         DBG_ASSERT(pDlg,"Dialog creation failed!");
         if(RET_OK == pDlg->Execute() && pDlg->GetOutputItemSet())
