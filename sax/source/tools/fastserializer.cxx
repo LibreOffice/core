@@ -407,7 +407,7 @@ namespace sax_fastparser {
         // flush, so that we get everything in getData()
         maCachedOutputStream.flush();
 
-        if (maMarkStack.size() == 1 && eMergeType != MergeMarks::IGNORE)
+        if (maMarkStack.size() == 1)
         {
 #ifdef DBG_UTIL
             while (!maMarkStack.top()->m_DebugEndedElements.empty())
@@ -471,8 +471,6 @@ namespace sax_fastparser {
                     topDebugEndedElements,
                     topDebugStartedElements);
                 break;
-            case MergeMarks::IGNORE:
-                break;
         }
 #endif
         if (maMarkStack.empty())
@@ -490,8 +488,6 @@ namespace sax_fastparser {
             case MergeMarks::APPEND:   maMarkStack.top()->append( aMerge );   break;
             case MergeMarks::PREPEND:  maMarkStack.top()->prepend( aMerge );  break;
             case MergeMarks::POSTPONE: maMarkStack.top()->postpone( aMerge ); break;
-            case MergeMarks::IGNORE:   break;
-
         }
     }
 
