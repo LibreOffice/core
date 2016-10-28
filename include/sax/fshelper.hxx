@@ -60,7 +60,7 @@ const sal_Int32 FSEND_internal = -1; // same as XML_TOKEN_INVALID
 
 namespace sax_fastparser {
 
-enum class MergeMarks { APPEND = 0, PREPEND = 1, POSTPONE = 2, IGNORE = 3 };
+enum class MergeMarks { APPEND = 0, PREPEND = 1, POSTPONE = 2};
 
 typedef css::uno::Reference< css::xml::sax::XFastAttributeList > XFastAttributeListRef;
 
