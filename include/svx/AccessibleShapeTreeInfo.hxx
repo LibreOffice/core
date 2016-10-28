@@ -66,6 +66,8 @@ public:
 
     AccessibleShapeTreeInfo& operator= (const AccessibleShapeTreeInfo& rInfo);
 
+    void dispose();
+
     /** Deprecated.  Don't use this method.
     */
     void SetDocumentWindow (const css::uno::Reference<

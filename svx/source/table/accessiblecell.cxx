@@ -528,7 +528,7 @@ void AccessibleCell::disposing()
     // Cleanup.  Remove references to objects to allow them to be
     // destroyed.
     mxCell.clear();
-    maShapeTreeInfo = AccessibleShapeTreeInfo();
+    maShapeTreeInfo.dispose();
 
     // Call base classes.
     AccessibleContextBase::dispose ();

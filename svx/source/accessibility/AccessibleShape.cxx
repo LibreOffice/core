@@ -1264,7 +1264,7 @@ void AccessibleShape::disposing()
     // Cleanup.  Remove references to objects to allow them to be
     // destroyed.
     mxShape = nullptr;
-    maShapeTreeInfo = AccessibleShapeTreeInfo();
+    maShapeTreeInfo.dispose();
 
     // Call base classes.
     AccessibleContextBase::dispose ();

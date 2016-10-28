@@ -48,6 +48,15 @@ AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (const AccessibleShapeTreeInfo&
     // Empty.
 }
 
+void AccessibleShapeTreeInfo::dispose()
+{
+    mxDocumentWindow.clear();
+    mxModelBroadcaster.clear();
+    mpView = nullptr;
+    mxController.clear();
+    mpWindow.reset();
+    mpViewForwarder = nullptr;
+}
 
 AccessibleShapeTreeInfo& AccessibleShapeTreeInfo::operator= (const AccessibleShapeTreeInfo& rInfo)
 {
