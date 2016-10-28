@@ -1474,10 +1474,6 @@ IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
     mrPaletteManager.PopupColorPicker(maCommand);
 }
 
-void SvxColorWindow::Resize()
-{
-}
-
 void SvxColorWindow::StartSelection()
 {
     mpColorSet->StartSelection();

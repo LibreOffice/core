@@ -58,9 +58,6 @@ private:
     DECL_LINK( AutoColorClickHdl, Button*, void );
     DECL_LINK( OpenPickerClickHdl, Button*, void );
 
-protected:
-    virtual void    Resize() override;
-
 public:
     SvxColorWindow( const OUString& rCommand,
                          PaletteManager& rPaletteManager,
