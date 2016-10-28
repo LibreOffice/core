@@ -20,7 +20,9 @@
 #include <doc.hxx>
 #include <list.hxx>
 #include <numrule.hxx>
-#include <rtl/random.h>
+
+#include <comphelper/random.hxx>
+
 #include <vector>
 
 
@@ -230,13 +232,9 @@ const OUString DocumentListsManager::CreateUniqueListId()
     else
     {
         // #i92478#
-        OUString aNewListId( "list" );
-        // #o12311627#
-        static rtlRandomPool s_RandomPool( rtl_random_createPool() );
-        sal_Int64 n;
-        rtl_random_getBytes( s_RandomPool, &n, sizeof(n) );
-        aNewListId += OUString::number( (n < 0 ? -n : n) );
-
+        unsigned int const n(comphelper::rng::uniform_uint_distribution(0,
+                                std::numeric_limits<unsigned int>::max()));
+        OUString const aNewListId = "list" + OUString::number(n);
         return MakeListIdUnique( aNewListId );
     }
 }

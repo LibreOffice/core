@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <rtl/random.h>
 #include <tools/resid.hxx>
 #include <editeng/lrspitem.hxx>
 #include <ftninfo.hxx>
@@ -55,6 +54,7 @@
 #include <list.hxx>
 #include <calbck.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/random.hxx>
 #include <tools/datetimeutils.hxx>
 
 #include <cstdlib>
@@ -2210,10 +2210,9 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
         }
         else
         {
-            static rtlRandomPool s_RandomPool( rtl_random_createPool() );
-            sal_Int64 n;
-            rtl_random_getBytes( s_RandomPool, &n, sizeof(n) );
-            aName = OUString::number( (n < 0 ? -n : n) );
+            unsigned int const n(comphelper::rng::uniform_uint_distribution(0,
+                                    std::numeric_limits<unsigned int>::max()));
+            aName = OUString::number(n);
         }
         if( pChkStr && pChkStr->isEmpty() )
             pChkStr = nullptr;
