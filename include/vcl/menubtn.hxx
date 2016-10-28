@@ -40,7 +40,6 @@ private:
     Link<MenuButton*,void> maActivateHdl;
     Link<MenuButton*,void> maSelectHdl;
 
-    SAL_DLLPRIVATE void    ImplInitMenuButtonData();
     DECL_DLLPRIVATE_LINK( ImplMenuTimeoutHdl, Timer*, void );
 
                            MenuButton( const MenuButton & ) = delete;

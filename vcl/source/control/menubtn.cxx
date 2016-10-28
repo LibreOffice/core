@@ -26,16 +26,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-void MenuButton::ImplInitMenuButtonData()
-{
-    mnDDStyle       = PushButtonDropdownStyle::MenuButton;
-
-    mpMenuTimer     = nullptr;
-    mpMenu          = nullptr;
-    mnCurItemId     = 0;
-    mbDelayMenu     = false;
-}
-
 void MenuButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     if ( !(nStyle & WB_NOTABSTOP) )
@@ -73,10 +63,13 @@ OString MenuButton::GetCurItemIdent() const
 }
 
 MenuButton::MenuButton( vcl::Window* pParent, WinBits nWinBits )
-    : PushButton( WINDOW_MENUBUTTON )
+    : PushButton(WINDOW_MENUBUTTON)
+    , mpMenuTimer(nullptr)
+    , mnCurItemId(0)
+    , mbDelayMenu(false)
 {
-    ImplInitMenuButtonData();
-    ImplInit( pParent, nWinBits );
+    mnDDStyle = PushButtonDropdownStyle::MenuButton;
+    ImplInit(pParent, nWinBits);
 }
 
 MenuButton::~MenuButton()
