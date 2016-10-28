@@ -68,7 +68,7 @@ OutputDevice::OutputDevice() :
     mnOutHeight                     = 0;
     mnDPIX                          = 0;
     mnDPIY                          = 0;
-    mnDPIScaleFactor                = 1;
+    mnDPIScalePercentage            = 100;
     mnTextOffX                      = 0;
     mnTextOffY                      = 0;
     mnOutOffOrigX                   = 0;
