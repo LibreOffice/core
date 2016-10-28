@@ -478,7 +478,6 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 
     const ScPatternAttr*    pOldAttrs       = GetSelectionPattern();
 
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg;
     std::unique_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
     std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
@@ -538,7 +537,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-    pDlg.disposeAndReset(pFact->CreateScAttrDlg(GetDialogParent(), pOldSet.get()));
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScAttrDlg(GetDialogParent(), pOldSet.get()));
 
     if (!rName.isEmpty())
         pDlg->SetCurPageId(rName);
