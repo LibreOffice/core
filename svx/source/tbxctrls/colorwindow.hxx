@@ -33,7 +33,7 @@
 
 class BorderColorStatus;
 
-class SvxColorWindow_Impl : public SfxPopupWindow
+class SvxColorWindow : public SfxPopupWindow
 {
 private:
     const sal_uInt16    theSlotId;
@@ -61,14 +61,14 @@ protected:
     virtual void    Resize() override;
 
 public:
-    SvxColorWindow_Impl( const OUString& rCommand,
+    SvxColorWindow( const OUString& rCommand,
                          PaletteManager& rPaletteManager,
                          BorderColorStatus& rBorderColorStatus,
                          sal_uInt16 nSlotId,
                          const css::uno::Reference< css::frame::XFrame >& rFrame,
                          vcl::Window* pParentWindow,
                          std::function<void(const OUString&, const Color&)> const & maColorSelectFunction);
-    virtual ~SvxColorWindow_Impl() override;
+    virtual ~SvxColorWindow() override;
     virtual void        dispose() override;
     void                StartSelection();
 
