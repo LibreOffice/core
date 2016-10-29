@@ -176,8 +176,12 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
                 TFunctionDesc pDesc(pCategory->getFunction(j));
                 if (pCharClassPtr->uppercase(pDesc->getFunctionName()).indexOf(aSearchStr) >= 0)
                 {
-                    m_pLbFunction->SetEntryData(
-                        m_pLbFunction->InsertEntry(pDesc->getFunctionName()), const_cast<IFunctionDescription *>(pDesc));
+                    if (!pDesc->isHidden())
+                    {
+                        m_pLbFunction->SetEntryData(
+                                m_pLbFunction->InsertEntry(
+                                    pDesc->getFunctionName()), const_cast<IFunctionDescription *>(pDesc));
+                    }
                 }
             }
         }
