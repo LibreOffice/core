@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_81c4eb92",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-29T13:42:24Z",
+      "side": 1,
+      "message": "If you allocate an instance with new you also have to delete it somewhere to not have it leak memory.\n\nHowever, SvtSysLocale doesn\u0027t have to be new\u0027ed, it\u0027s not an expensive object, just a factory to provide a singleton, you can allocate it on the stack like\n\n SvtSysLocale aSysLocale;\n\nBtw, for pointers we use the \u0027p\u0027 prefix.",
+      "revId": "fc056f3d1f0008ccd5545b1432c46d17c0df5558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_a1c1e782",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-29T13:42:24Z",
+      "side": 1,
+      "message": "So this the should be\n\n const CharClass* pCharClassPtr \u003d aSysLocale.GetCharClassPtr();",
+      "revId": "fc056f3d1f0008ccd5545b1432c46d17c0df5558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_c1bee3fe",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-29T13:42:24Z",
+      "side": 1,
+      "message": "You don\u0027t need a temporary object aUppercaseFunctionStr, this can be combined as\n\n if (pCharClassPtr-\u003euppercase(pDesc-\u003egetFunctionName()).indexOf(aSearchStr) \u003e\u003d 0)",
+      "revId": "fc056f3d1f0008ccd5545b1432c46d17c0df5558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_a148072f",
+        "filename": "formula/source/ui/dlg/funcpage.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-29T13:42:24Z",
+      "side": 1,
+      "message": "Why indent the, even unrelated to this change, comment?",
+      "revId": "fc056f3d1f0008ccd5545b1432c46d17c0df5558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_6146ef24",
+        "filename": "formula/uiconfig/ui/functionpage.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-29T13:42:24Z",
+      "side": 1,
+      "message": "Setting this expand to true will make the search edit expand in the vertical direction when resizing the dialog vertically, which looks odd and lets it occupy more space than necessary.",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 47
+      },
+      "revId": "fc056f3d1f0008ccd5545b1432c46d17c0df5558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
