@@ -64,6 +64,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/sheet/xsheetoutline \
     test/source/sheet/xstyleloader \
     test/source/sheet/xviewpane \
+    test/source/sheet/xlabelrange \
     test/source/text/xtext \
     test/source/text/xtextfield \
     test/source/text/xtextcontent \
