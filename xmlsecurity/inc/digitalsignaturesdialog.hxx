@@ -70,6 +70,8 @@ private:
     VclPtr<FixedImage>         m_pSigsOldSignatureImg;
     VclPtr<FixedText>          m_pSigsOldSignatureFI;
 
+    VclPtr<CheckBox>           m_pXAdESCompliantCB;
+
     VclPtr<PushButton>         m_pViewBtn;
     VclPtr<PushButton>         m_pAddBtn;
     VclPtr<PushButton>         m_pRemoveBtn;
@@ -82,6 +84,9 @@ private:
     bool m_bHasDocumentSignature;
     bool m_bWarningShowSignMacro;
 
+    bool m_bXAdESCompliant;
+
+    DECL_LINK(XAdESCompliantCheckBoxHdl, CheckBox&, void);
     DECL_LINK(ViewButtonHdl, Button*, void);
     DECL_LINK(AddButtonHdl, Button*, void);
     DECL_LINK(RemoveButtonHdl, Button*, void);
@@ -90,7 +95,7 @@ private:
     DECL_LINK(StartVerifySignatureHdl, LinkParamNone*, bool );
     DECL_LINK(OKButtonHdl, Button*, void );
 
-    void                ImplGetSignatureInformations(bool bUseTempStream, bool bCacheLastSignature = true);
+    void                ImplGetSignatureInformations(bool bUseTempStream, bool bCacheLastSignature);
     void                ImplFillSignaturesBox();
     void                ImplShowSignaturesDetails();
 

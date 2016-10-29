@@ -172,8 +172,8 @@ public:
     void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const tools::Time& rTime );
     void SetDescription(sal_Int32 nSecurityId, const OUString& rDescription);
 
-    void        AddForSigning( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, bool bBinary );
-    bool        CreateAndWriteSignature( const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler );
+    void        AddForSigning( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, bool bBinary, bool bXAdESCompliantIfODF );
+    bool        CreateAndWriteSignature( const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler, bool bXAdESCompliantIfODF );
     bool        ReadAndVerifySignature( const css::uno::Reference< css::io::XInputStream >& xInputStream );
 
     // MT: ??? I think only for adding/removing, not for new signatures...

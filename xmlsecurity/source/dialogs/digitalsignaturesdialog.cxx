@@ -116,6 +116,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     get(m_pHintDocFT, "dochint");
     get(m_pHintBasicFT, "macrohint");
     get(m_pHintPackageFT, "packagehint");
+    get(m_pXAdESCompliantCB, "xadescompliant");
     get(m_pViewBtn, "view");
     get(m_pAddBtn, "sign");
     get(m_pRemoveBtn, "remove");
@@ -128,6 +129,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     get(m_pSigsNotvalidatedFI, "notvalidatedft");
     get(m_pSigsOldSignatureImg, "oldsignatureimg");
     get(m_pSigsOldSignatureFI, "oldsignatureft");
+
+    m_bXAdESCompliant = !DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
 
     Size aControlSize(275, 109);
     const long nControlWidth = aControlSize.Width();
@@ -150,6 +153,9 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     m_pSignaturesLB->SetSelectHdl( LINK( this, DigitalSignaturesDialog, SignatureHighlightHdl ) );
     m_pSignaturesLB->SetDoubleClickHdl( LINK( this, DigitalSignaturesDialog, SignatureSelectHdl ) );
+
+    m_pXAdESCompliantCB->SetToggleHdl( LINK( this, DigitalSignaturesDialog, XAdESCompliantCheckBoxHdl ) );
+    m_pXAdESCompliantCB->Check(m_bXAdESCompliant);
 
     m_pViewBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, ViewButtonHdl ) );
     m_pViewBtn->Disable();
@@ -196,6 +202,7 @@ void DigitalSignaturesDialog::dispose()
     m_pSigsNotvalidatedFI.clear();
     m_pSigsOldSignatureImg.clear();
     m_pSigsOldSignatureFI.clear();
+    m_pXAdESCompliantCB.clear();
     m_pViewBtn.clear();
     m_pAddBtn.clear();
     m_pRemoveBtn.clear();
@@ -315,8 +322,23 @@ short DigitalSignaturesDialog::Execute()
 {
     // Verify Signatures and add certificates to ListBox...
     mbVerifySignatures = true;
-    ImplGetSignatureInformations(false);
+    ImplGetSignatureInformations(/*bUseTempStream=*/false, /*bCacheLastSignature=*/true);
     ImplFillSignaturesBox();
+
+    // FIXME: Disable the "Use XAdES compliant signatures" checkbox if it is irrelevant. If it is
+    // enabled, set its initial state based on existing signatures, if any.
+
+    // If it is OOXML, the checkbox is irrelevant.
+
+    // How to find out here whether it is OOXML? I don't want to create a SignatureStreamHelper and
+    // check its nStorageFormat as that seems overly complicated and seems to have weird indirect
+    // consequences, as I noticed when I tried to use DocumentSignatureManager::IsXAdESRelevant()
+    // (which now is in #if 0).
+
+    if (maSignatureManager.maCurrentSignatureInformations.size() > 0)
+    {
+        // If the document has only SHA-1 signatures we probably want it to stay that way?
+    }
 
     // Only verify once, content will not change.
     // But for refreshing signature information, StartVerifySignatureHdl will be called after each add/remove
@@ -346,6 +368,11 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureSelectHdl, SvTreeListBox*, boo
     return false;
 }
 
+IMPL_LINK_NOARG(DigitalSignaturesDialog, XAdESCompliantCheckBoxHdl, CheckBox&, void)
+{
+    m_bXAdESCompliant = m_pXAdESCompliantCB->IsChecked();
+}
+
 IMPL_LINK_NOARG(DigitalSignaturesDialog, ViewButtonHdl, Button*, void)
 {
     ImplShowSignaturesDetails();
@@ -363,7 +390,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
         if ( aChooser->Execute() == RET_OK )
         {
             sal_Int32 nSecurityId;
-            if (!maSignatureManager.add(aChooser->GetSelectedCertificate(), aChooser->GetDescription(), nSecurityId))
+            if (!maSignatureManager.add(aChooser->GetSelectedCertificate(), aChooser->GetDescription(), nSecurityId, m_bXAdESCompliant))
                 return;
             mbSignaturesChanged = true;
 
@@ -382,7 +409,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
                 // will not contain
                 // SecurityOperationStatus_OPERATION_SUCCEEDED
                 mbVerifySignatures = true;
-                ImplGetSignatureInformations(true, /*bCacheLastSignature=*/false);
+                ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
                 ImplFillSignaturesBox();
             }
         }
@@ -391,7 +418,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
     {
         OSL_FAIL( "Exception while adding a signature!" );
         // Don't keep invalid entries...
-        ImplGetSignatureInformations(true, /*bCacheLastSignature=*/false);
+        ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
         ImplFillSignaturesBox();
     }
 }
@@ -415,7 +442,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
         {
             OSL_FAIL( "Exception while removing a signature!" );
             // Don't keep invalid entries...
-            ImplGetSignatureInformations(true);
+            ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/true);
             ImplFillSignaturesBox();
         }
     }

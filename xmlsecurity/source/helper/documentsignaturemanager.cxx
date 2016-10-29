@@ -58,6 +58,28 @@ PDFSignatureHelper& DocumentSignatureManager::getPDFSignatureHelper()
     return *mpPDFSignatureHelper;
 }
 
+#if 0 // For some reason does not work
+bool DocumentSignatureManager::IsXAdESRelevant()
+{
+    if (mxStore.is())
+    {
+        // ZIP-based: ODF or OOXML.
+        maSignatureHelper.StartMission();
+
+        SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(embed::ElementModes::READ, /*bUseTempStream=*/true);
+        if (aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML)
+        {
+            maSignatureHelper.EndMission();
+            return false;
+        }
+        // FIXME: How to figure out if it is ODF 1.2?
+        maSignatureHelper.EndMission();
+        return true;
+    }
+    return false;
+}
+#endif
+
 /* Using the zip storage, we cannot get the properties "MediaType" and "IsEncrypted"
     We use the manifest to find out if a file is xml and if it is encrypted.
     The parameter is an encoded uri. However, the manifest contains paths. Therefore
@@ -193,7 +215,7 @@ SignatureStreamHelper DocumentSignatureManager::ImplOpenSignatureStream(sal_Int3
     return aHelper;
 }
 
-bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>& xCert, const OUString& rDescription, sal_Int32& nSecurityId)
+bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>& xCert, const OUString& rDescription, sal_Int32& nSecurityId, bool bXAdESCompliantIfODF)
 {
     if (!xCert.is())
     {
@@ -250,7 +272,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
     for (sal_Int32 n = 0; n < nElements; n++)
     {
         bool bBinaryMode = !isXML(aElements[n]);
-        maSignatureHelper.AddForSigning(nSecurityId, aElements[n], aElements[n], bBinaryMode);
+        maSignatureHelper.AddForSigning(nSecurityId, aElements[n], aElements[n], bBinaryMode, bXAdESCompliantIfODF);
     }
 
     maSignatureHelper.SetDateTime(nSecurityId, Date(Date::SYSTEM), tools::Time(tools::Time::SYSTEM));
@@ -275,7 +297,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
             XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n]);
 
         // Create a new one...
-        maSignatureHelper.CreateAndWriteSignature(xDocumentHandler);
+        maSignatureHelper.CreateAndWriteSignature(xDocumentHandler, bXAdESCompliantIfODF);
 
         // That's it...
         XMLSignatureHelper::CloseDocumentHandler(xDocumentHandler);

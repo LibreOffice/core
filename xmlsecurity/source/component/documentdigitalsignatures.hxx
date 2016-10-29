@@ -45,7 +45,9 @@ class DocumentDigitalSignatures : public cppu::WeakImplHelper
 {
 private:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
-    // will be set by XInitialization. If not we assume true. false means an earlier version.
+    // will be set by XInitialization. If not we assume true. false means an earlier version (whatever that means,
+    // this is a string, not a boolean).
+    // Note that the code talks about "ODF version" even if this class is also used to sign OOXML.
     OUString m_sODFVersion;
     //The number of arguments which were passed in XInitialization::initialize
     int m_nArgumentsCount;
@@ -58,6 +60,7 @@ private:
 
 public:
     explicit DocumentDigitalSignatures( const css::uno::Reference< css::uno::XComponentContext>& rxCtx );
+    virtual ~DocumentDigitalSignatures() override;
 
     // for service registration...
     static OUString GetImplementationName() throw (css::uno::RuntimeException);

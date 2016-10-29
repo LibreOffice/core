@@ -25,6 +25,7 @@
 #include <string.h>
 
 namespace cssu = com::sun::star::uno;
+namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;
 
 XSecParser::XSecParser(XSecController* pXSecController,
@@ -39,6 +40,7 @@ XSecParser::XSecParser(XSecController* pXSecController,
     , m_pXSecController(pXSecController)
     , m_xNextHandler(xNextHandler)
     , m_bReferenceUnresolved(false)
+    , m_nReferenceDigestID(cssxc::DigestID::SHA1)
 {
 }
 
@@ -113,7 +115,7 @@ void SAL_CALL XSecParser::startElement(
                 /*
                 * remove the first character '#' from the attribute value
                 */
-                m_pXSecController->addReference( ouUri.copy(1) );
+                m_pXSecController->addReference( ouUri.copy(1), m_nReferenceDigestID );
             }
             else
             {
@@ -122,6 +124,21 @@ void SAL_CALL XSecParser::startElement(
                 */
                 m_currentReferenceURI = ouUri;
                 m_bReferenceUnresolved = true;
+            }
+        }
+        else if (aName == "DigestMethod")
+        {
+            OUString ouAlgorithm = xAttribs->getValueByName("Algorithm");
+
+            SAL_WARN_IF( ouAlgorithm.isEmpty(), "xmlsecurity.helper", "no Algorithm in Reference" );
+            if (!ouAlgorithm.isEmpty())
+            {
+                SAL_WARN_IF( ouAlgorithm != ALGO_XMLDSIGSHA1 && ouAlgorithm != ALGO_XMLDSIGSHA256,
+                             "xmlsecurity.helper", "Algorithm neither SHA1 or SHA256");
+                if (ouAlgorithm == ALGO_XMLDSIGSHA1)
+                    m_nReferenceDigestID = cssxc::DigestID::SHA1;
+                else if (ouAlgorithm == ALGO_XMLDSIGSHA256)
+                    m_nReferenceDigestID = cssxc::DigestID::SHA256;
             }
         }
         else if (aName == "Transform")
@@ -135,7 +152,7 @@ void SAL_CALL XSecParser::startElement(
                      * a xml stream
                      */
                 {
-                    m_pXSecController->addStreamReference( m_currentReferenceURI, false);
+                    m_pXSecController->addStreamReference( m_currentReferenceURI, false, m_nReferenceDigestID );
                     m_bReferenceUnresolved = false;
                 }
             }
@@ -219,11 +236,11 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             * it must be a octet stream
             */
             {
-                m_pXSecController->addStreamReference( m_currentReferenceURI, true);
+                m_pXSecController->addStreamReference( m_currentReferenceURI, true, m_nReferenceDigestID );
                 m_bReferenceUnresolved = false;
             }
 
-            m_pXSecController->setDigestValue( m_ouDigestValue );
+            m_pXSecController->setDigestValue( m_nReferenceDigestID, m_ouDigestValue );
         }
         else if ( aName == "SignedInfo" )
         {

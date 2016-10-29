@@ -202,7 +202,7 @@ void SigningTest::testDescription()
     CPPUNIT_ASSERT(xCertificate.is());
     OUString aDescription("SigningTest::testDescription");
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, aDescription, nSecurityId);
+    aManager.add(xCertificate, aDescription, nSecurityId, false);
 
     // Read back the signature and make sure that the description survives the roundtrip.
     aManager.read(/*bUseTempStream=*/true);
@@ -235,7 +235,7 @@ void SigningTest::testOOXMLDescription()
     CPPUNIT_ASSERT(xCertificate.is());
     OUString aDescription("SigningTest::testDescription");
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, aDescription, nSecurityId);
+    aManager.add(xCertificate, aDescription, nSecurityId, false);
 
     // Read back the signature and make sure that the description survives the roundtrip.
     aManager.read(/*bUseTempStream=*/true);
@@ -267,7 +267,7 @@ void SigningTest::testOOXMLAppend()
     uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager.maSignatureHelper);
     CPPUNIT_ASSERT(xCertificate.is());
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, OUString(), nSecurityId);
+    aManager.add(xCertificate, OUString(), nSecurityId, false);
 
     // Read back the signatures and make sure that we have the expected amount.
     aManager.read(/*bUseTempStream=*/true);

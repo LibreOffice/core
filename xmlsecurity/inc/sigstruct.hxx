@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
+#include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <vector>
@@ -41,11 +42,23 @@ struct SignatureReferenceInformation
 {
     SignatureReferenceType  nType;
     OUString   ouURI;
+    // For ODF: XAdES digests (SHA256) or the old SHA1, from css::xml::crypto::DigestID
+    sal_Int32  nDigestID;
     OUString   ouDigestValue;
 
-    SignatureReferenceInformation( SignatureReferenceType type, const OUString& uri )
+    SignatureReferenceInformation() :
+        nType(SignatureReferenceType::SAMEDOCUMENT),
+        ouURI(""),
+        nDigestID(css::xml::crypto::DigestID::SHA1),
+        ouDigestValue("")
+    {
+    }
+
+    SignatureReferenceInformation( SignatureReferenceType type, sal_Int32 digestID, const OUString& uri ) :
+        SignatureReferenceInformation()
     {
         nType = type;
+        nDigestID = digestID;
         ouURI = uri;
     }
 };
@@ -57,6 +70,8 @@ struct SignatureInformation
     sal_Int32 nSecurityId;
     sal_Int32 nSecurityEnvironmentIndex;
     css::xml::crypto::SecurityOperationStatus nStatus;
+    // For ODF: XAdES digests (SHA256) or the old SHA1, from css::xml::crypto::DigestID
+    sal_Int32 nDigestID;
     SignatureReferenceInformations  vSignatureReferenceInfors;
     OUString ouX509IssuerName;
     OUString ouX509SerialNumber;

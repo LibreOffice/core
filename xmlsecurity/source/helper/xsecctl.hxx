@@ -78,10 +78,10 @@ public:
         xReferenceResolvedListener = xListener;
     }
 
-    void addReference( SignatureReferenceType type, const OUString& uri, sal_Int32 keeperId )
+    void addReference( SignatureReferenceType type, sal_Int32 digestID, const OUString& uri, sal_Int32 keeperId )
     {
         signatureInfor.vSignatureReferenceInfors.push_back(
-                SignatureReferenceInformation(type, uri));
+                SignatureReferenceInformation(type, digestID, uri));
         vKeeperIds.push_back( keeperId );
     }
 };
@@ -254,6 +254,13 @@ private:
      * representing whether to verify the current signature
      */
     bool m_bVerifyCurrentSignature;
+
+    /*
+     * the type of signature to generate (from the css::xml::crypto::DigestID alternatives) when there is a choice,
+     * in practice currently SHA1 or SHA256 for ODF.
+     */
+    sal_Int32 m_nDigestID;
+
 public:
     /*
      * An xUriBinding is provided to map Uris to XInputStream interfaces.
@@ -281,23 +288,28 @@ private:
      */
     static OUString createId();
     css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToWrite(
-        InternalSignatureInformation& signatureInfo, sal_Int32 nStorageFormat = 0 );
+        InternalSignatureInformation& signatureInfo,
+        sal_Int32 nStorageFormat,
+        bool bXAdESCompliantIfODF );
 
     /*
      * For signature verification
      */
     void addSignature();
-    void addReference( const OUString& ouUri);
+    void addReference(
+        const OUString& ouUri,
+        sal_Int32 nDigestID );
     void addStreamReference(
         const OUString& ouUri,
-        bool isBinary );
+        bool isBinary,
+        sal_Int32 nDigestID );
     void setReferenceCount() const;
 
     void setX509IssuerName( OUString& ouX509IssuerName );
     void setX509SerialNumber( OUString& ouX509SerialNumber );
     void setX509Certificate( OUString& ouX509Certificate );
     void setSignatureValue( OUString& ouSignatureValue );
-    void setDigestValue( OUString& ouDigestValue );
+    void setDigestValue( sal_Int32 nDigestID, OUString& ouDigestValue );
 
     void setDate( OUString& ouDate );
     void setDescription(const OUString& rDescription);
@@ -342,7 +354,7 @@ public:
     /*
      * For signature generation
      */
-    void signAStream( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, bool isBinary);
+    void signAStream( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, bool isBinary, bool bXAdESCompliantIfODF);
 
 
     /** sets data that describes the certificate.
@@ -384,7 +396,8 @@ public:
     void setDescription(sal_Int32 nSecurityId, const OUString& rDescription);
 
     bool WriteSignature(
-        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler );
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
+        bool bXAdESCompliantIfODF);
 
     /*
      * For signature verification

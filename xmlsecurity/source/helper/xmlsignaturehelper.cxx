@@ -145,9 +145,9 @@ void XMLSignatureHelper::SetDescription(sal_Int32 nSecurityId, const OUString& r
     mpXSecController->setDescription(nSecurityId, rDescription);
 }
 
-void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const OUString& uri, const OUString& objectURL, bool bBinary )
+void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const OUString& uri, const OUString& objectURL, bool bBinary, bool bXAdESCompliantIfODF )
 {
-    mpXSecController->signAStream( nSecurityId, uri, objectURL, bBinary );
+    mpXSecController->signAStream( nSecurityId, uri, objectURL, bBinary, bXAdESCompliantIfODF );
 }
 
 
@@ -221,11 +221,11 @@ void XMLSignatureHelper::ExportOOXMLSignature(const uno::Reference<embed::XStora
     }
 }
 
-bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax::XDocumentHandler >& xDocumentHandler )
+bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax::XDocumentHandler >& xDocumentHandler, bool bXAdESCompliantIfODF )
 {
     mbError = false;
 
-    if ( !mpXSecController->WriteSignature( xDocumentHandler ) )
+    if ( !mpXSecController->WriteSignature( xDocumentHandler, bXAdESCompliantIfODF ) )
     {
         mbError = true;
     }

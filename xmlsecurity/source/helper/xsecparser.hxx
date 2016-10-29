@@ -95,6 +95,10 @@ private:
     OUString m_currentReferenceURI;
     bool m_bReferenceUnresolved;
 
+    // Relevant for ODF. The digest algorithm selected by the current DigestMethod element's
+    // Algorithm attribute in the current Reference element. From css::xml::crypto::DigestID.
+    sal_Int32 m_nReferenceDigestID;
+
 private:
     static OUString getIdAttr(const css::uno::Reference<
             css::xml::sax::XAttributeList >& xAttribs );

@@ -59,7 +59,9 @@ OUString XSecController::createId()
 }
 
 cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepareSignatureToWrite(
-    InternalSignatureInformation& internalSignatureInfor, sal_Int32 nStorageFormat )
+    InternalSignatureInformation& internalSignatureInfor,
+    sal_Int32 nStorageFormat,
+    bool bXAdESCompliantIfODF)
 {
     sal_Int32 nSecurityId = internalSignatureInfor.signatureInfor.nSecurityId;
     SignatureReferenceInformations& vReferenceInfors = internalSignatureInfor.signatureInfor.vSignatureReferenceInfors;
@@ -165,28 +167,30 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference<cssxc::sax::XKeyCollector> keyCollector (xReferenceResolvedListener, cssu::UNO_QUERY);
     keyCollector->setKeyId(0);
 
+    const sal_Int32 digestID = bXAdESCompliantIfODF ? cssxc::DigestID::SHA256 : cssxc::DigestID::SHA1;
+
     if (nStorageFormat != embed::StorageFormats::OFOPXML)
     {
         internalSignatureInfor.signatureInfor.ouSignatureId = createId();
         internalSignatureInfor.signatureInfor.ouPropertyId = createId();
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
         size++;
 
         if (!internalSignatureInfor.signatureInfor.ouDescription.isEmpty())
         {
             // Only mention the hash of the description in the signature if it's non-empty.
             internalSignatureInfor.signatureInfor.ouDescriptionPropertyId = createId();
-            internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, internalSignatureInfor.signatureInfor.ouDescriptionPropertyId, -1);
+            internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, internalSignatureInfor.signatureInfor.ouDescriptionPropertyId, -1);
             size++;
         }
     }
     else
     {
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, "idPackageObject", -1);
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idPackageObject", -1);
         size++;
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, "idOfficeObject", -1);
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idOfficeObject", -1);
         size++;
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, "idSignedProperties", -1);
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idSignedProperties", -1);
         size++;
     }
 
@@ -204,21 +208,22 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     return xReferenceResolvedListener;
 }
 
-void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, const OUString& /*objectURL*/, bool isBinary)
+void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, const OUString& /*objectURL*/, bool isBinary, bool bXAdESCompliantIfODF)
 {
-    SignatureReferenceType type = isBinary ? SignatureReferenceType::BINARYSTREAM : SignatureReferenceType::XMLSTREAM;
+    const SignatureReferenceType type = isBinary ? SignatureReferenceType::BINARYSTREAM : SignatureReferenceType::XMLSTREAM;
+    const sal_Int32 digestID = bXAdESCompliantIfODF ? cssxc::DigestID::SHA256 : cssxc::DigestID::SHA1;
 
     int index = findSignatureInfor( securityId );
 
     if (index == -1)
     {
         InternalSignatureInformation isi(securityId, nullptr);
-        isi.addReference(type, uri, -1);
+        isi.addReference(type, digestID, uri, -1);
         m_vInternalSignatureInformations.push_back( isi );
     }
     else
     {
-        m_vInternalSignatureInformations[index].addReference(type, uri, -1);
+        m_vInternalSignatureInformations[index].addReference(type, digestID, uri, -1);
     }
 }
 
@@ -302,8 +307,11 @@ void XSecController::setDescription(sal_Int32 nSecurityId, const OUString& rDesc
 }
 
 bool XSecController::WriteSignature(
-    const cssu::Reference<cssxs::XDocumentHandler>& xDocumentHandler )
+    const cssu::Reference<cssxs::XDocumentHandler>& xDocumentHandler,
+    bool bXAdESCompliantIfODF )
 {
+    (void) bXAdESCompliantIfODF;
+
     bool rc = false;
 
     SAL_WARN_IF( !xDocumentHandler.is(), "xmlsecurity.helper", "I really need a document handler!" );
@@ -336,11 +344,9 @@ bool XSecController::WriteSignature(
             {
                 InternalSignatureInformation &isi = m_vInternalSignatureInformations[i];
 
-                /*
-                 * prepare the signature creator
-                 */
-                isi.xReferenceResolvedListener
-                    = prepareSignatureToWrite( isi );
+                // Prepare the signature creator.
+                // 0 is not a documented value of embed::StorageFormats, ugh
+                isi.xReferenceResolvedListener = prepareSignatureToWrite( isi, 0, bXAdESCompliantIfODF );
 
                 exportSignature( xSEKHandler, isi.signatureInfor );
             }
@@ -383,7 +389,7 @@ bool XSecController::WriteOOXMLSignature(const uno::Reference<embed::XStorage>& 
             for (InternalSignatureInformation & rInformation : m_vInternalSignatureInformations)
             {
                 // Prepare the signature creator.
-                rInformation.xReferenceResolvedListener = prepareSignatureToWrite(rInformation, embed::StorageFormats::OFOPXML);
+                rInformation.xReferenceResolvedListener = prepareSignatureToWrite(rInformation, embed::StorageFormats::OFOPXML, false);
 
                 exportOOXMLSignature(xRootStorage, xSEKHandler, rInformation.signatureInfor);
             }

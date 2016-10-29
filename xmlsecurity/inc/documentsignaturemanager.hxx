@@ -57,7 +57,7 @@ public:
     bool isXML(const OUString& rURI);
     SignatureStreamHelper ImplOpenSignatureStream(sal_Int32 eStreamMode, bool bTempStream);
     /// Add a new signature, using xCert as a signing certificate, and rDescription as description.
-    bool add(const css::uno::Reference<css::security::XCertificate>& xCert, const OUString& rDescription, sal_Int32& nSecurityId);
+    bool add(const css::uno::Reference<css::security::XCertificate>& xCert, const OUString& rDescription, sal_Int32& nSecurityId, bool bXAdESCompliantIfODF);
     /// Remove signature at nPosition.
     void remove(sal_uInt16 nPosition);
     /// Read signatures from either a temp stream or the real storage.
@@ -66,6 +66,10 @@ public:
     void write();
     /// Lazy creation of PDF helper.
     PDFSignatureHelper& getPDFSignatureHelper();
+#if 0
+    // Checks if the document is a kind where it is relevant to distinguish between using XAdES or not
+    bool IsXAdESRelevant();
+#endif
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX

@@ -57,6 +57,10 @@ DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponen
 {
 }
 
+DocumentDigitalSignatures::~DocumentDigitalSignatures()
+{
+}
+
 void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {

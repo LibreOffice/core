@@ -65,6 +65,7 @@ XSecController::XSecController( const cssu::Reference<cssu::XComponentContext>& 
     , m_bIsSAXEventKeeperSticky(false)
     , m_nReservedSignatureId(0)
     , m_bVerifyCurrentSignature(false)
+    , m_nDigestID(cssxc::DigestID::SHA1)
 {
 }
 
@@ -614,9 +615,12 @@ void XSecController::exportSignature(
 
             /* Write SignatureMethod element */
             pAttributeList = new SvXMLAttributeList();
+
+            // Assume that all Reference elements use the same DigestMethod:Algorithm, and that the
+            // SignatureMethod:Algorithm should be the corresponding one.
             pAttributeList->AddAttribute(
                 "Algorithm",
-                ALGO_RSASHA1);
+                (vReferenceInfors[0].nDigestID == cssxc::DigestID::SHA1 ? OUString(ALGO_RSASHA1) : OUString(ALGO_RSASHA256)));
             xDocumentHandler->startElement( "SignatureMethod", cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
             xDocumentHandler->endElement( "SignatureMethod" );
 
@@ -676,7 +680,7 @@ void XSecController::exportSignature(
                     pAttributeList = new SvXMLAttributeList();
                     pAttributeList->AddAttribute(
                         "Algorithm",
-                        ALGO_XMLDSIGSHA1);
+                        (refInfor.nDigestID == cssxc::DigestID::SHA1 ? OUString(ALGO_XMLDSIGSHA1) : OUString(ALGO_XMLDSIGSHA256)));
                     xDocumentHandler->startElement(
                         "DigestMethod",
                         cssu::Reference< cssxs::XAttributeList > (pAttributeList) );

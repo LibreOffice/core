@@ -114,7 +114,7 @@ void XSecController::addSignature()
     m_vInternalSignatureInformations.push_back( isi );
 }
 
-void XSecController::addReference( const OUString& ouUri)
+void XSecController::addReference( const OUString& ouUri, sal_Int32 nDigestID )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -122,12 +122,13 @@ void XSecController::addReference( const OUString& ouUri)
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
-    isi.addReference(SignatureReferenceType::SAMEDOCUMENT,ouUri, -1 );
+    isi.addReference(SignatureReferenceType::SAMEDOCUMENT, nDigestID, ouUri, -1 );
 }
 
 void XSecController::addStreamReference(
     const OUString& ouUri,
-    bool isBinary )
+    bool isBinary,
+    sal_Int32 nDigestID )
 {
         SignatureReferenceType type = (isBinary?SignatureReferenceType::BINARYSTREAM:SignatureReferenceType::XMLSTREAM);
 
@@ -154,7 +155,7 @@ void XSecController::addStreamReference(
         }
     }
 
-    isi.addReference(type, ouUri, -1);
+    isi.addReference(type, nDigestID, ouUri, -1);
 }
 
 void XSecController::setReferenceCount() const
@@ -235,7 +236,7 @@ void XSecController::setSignatureValue( OUString& ouSignatureValue )
     isi.signatureInfor.ouSignatureValue = ouSignatureValue;
 }
 
-void XSecController::setDigestValue( OUString& ouDigestValue )
+void XSecController::setDigestValue( sal_Int32 nDigestID, OUString& ouDigestValue )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -250,6 +251,7 @@ void XSecController::setDigestValue( OUString& ouDigestValue )
     }
     SignatureReferenceInformation &reference =
         isi.signatureInfor.vSignatureReferenceInfors.back();
+    reference.nDigestID = nDigestID;
     reference.ouDigestValue = ouDigestValue;
 }
 
