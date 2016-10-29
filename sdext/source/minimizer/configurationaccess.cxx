@@ -162,7 +162,7 @@ ConfigurationAccess::~ConfigurationAccess()
 
 OUString ConfigurationAccess::getString( const PPPOptimizerTokenEnum eToken ) const
 {
-    std::map< PPPOptimizerTokenEnum, OUString, Compare >::const_iterator aIter( maStrings.find( eToken ) );
+    std::map< PPPOptimizerTokenEnum, OUString >::const_iterator aIter( maStrings.find( eToken ) );
     return aIter != maStrings.end() ? ((*aIter).second) : OUString();
 }
 

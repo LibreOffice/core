@@ -93,17 +93,9 @@ const char * dbg_out(const OUString & aStr)
     return aDbgOutResult.getStr();
 }
 
-struct CompareUShort
+map<sal_uInt16,OUString> & GetItemWhichMap()
 {
-    bool operator()(sal_uInt16 a, sal_uInt16 b) const
-    {
-        return a < b;
-    }
-};
-
-map<sal_uInt16,OUString,CompareUShort> & GetItemWhichMap()
-{
-    static map<sal_uInt16,OUString,CompareUShort> aItemWhichMap;
+    static map<sal_uInt16,OUString> aItemWhichMap;
     static bool bInitialized = false;
 
     if (! bInitialized)

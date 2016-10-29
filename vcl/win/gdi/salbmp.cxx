@@ -62,15 +62,7 @@ inline void ImplSetPixel4( sal_uInt8* pScanline, long nX, const BYTE cIndex )
 // Helper class to manage Gdiplus::Bitmap instances inside of
 // WinSalBitmap
 
-struct Comparator
-{
-    bool operator()(WinSalBitmap* pA, WinSalBitmap* pB) const
-    {
-        return pA < pB;
-    }
-};
-
-typedef ::std::map< WinSalBitmap*, sal_uInt32, Comparator > EntryMap;
+typedef ::std::map< WinSalBitmap*, sal_uInt32 > EntryMap;
 static const sal_uInt32 nDefaultCycles(60);
 
 class GdiPlusBuffer : protected cppu::BaseMutex, public Timer
