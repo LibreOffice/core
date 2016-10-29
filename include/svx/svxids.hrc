@@ -964,7 +964,7 @@
 #define FN_SVX_SET_NUMBER                               ( SID_SVX_START + 1136 )
 #define FN_SVX_SET_BULLET                               ( SID_SVX_START + 1137 )
 #define FN_SVX_SET_OUTLINE                              ( SID_SVX_START + 1138 )
-
+#define SID_ALLOW_SPACING_WITHOUT_BORDERS               ( SID_SVX_START + 1139 )
 #define SID_ATTR_BORDER_STYLES                          ( SID_SVX_START + 1140 )
 #define SID_ATTR_BORDER_DEFAULT_WIDTH                   ( SID_SVX_START + 1141 )
 // 1142 is used by editeng (SID_ATTR_CHAR_GRABBAG)
