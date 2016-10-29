@@ -126,6 +126,7 @@ public:
     void testTdf95932();
     void testTdf99030();
     void testTdf49561();
+    void testTdf103473();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -177,6 +178,7 @@ public:
     CPPUNIT_TEST(testTdf95932);
     CPPUNIT_TEST(testTdf99030);
     CPPUNIT_TEST(testTdf49561);
+    CPPUNIT_TEST(testTdf103473);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1482,6 +1484,22 @@ void SdImportTest::testTdf49561()
     OUString aCharFontName;
     CPPUNIT_ASSERT(xPropSet->getPropertyValue("CharFontName") >>= aCharFontName);
     CPPUNIT_ASSERT_EQUAL(OUString("Stencil"), aCharFontName);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf103473()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf103473.pptx"), PPTX);
+
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    SdrTextObj *const pObj = dynamic_cast<SdrTextObj *const>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pObj);
+    Rectangle aRect = pObj->GetGeoRect();
+    CPPUNIT_ASSERT_EQUAL(3629L, aRect.Left());
+    CPPUNIT_ASSERT_EQUAL(4431L, aRect.Top());
+    CPPUNIT_ASSERT_EQUAL(8353L, aRect.Right());
+    CPPUNIT_ASSERT_EQUAL(9155L, aRect.Bottom());
 
     xDocShRef->DoClose();
 }
