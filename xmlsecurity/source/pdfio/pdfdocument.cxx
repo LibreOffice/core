@@ -1427,6 +1427,9 @@ std::vector<PDFObjectElement*> PDFDocument::GetSignatureWidgets()
 
     for (const auto& pPage : aPages)
     {
+        if (!pPage)
+            continue;
+
         PDFElement* pAnnotsElement = pPage->Lookup("Annots");
         auto pAnnots = dynamic_cast<PDFArrayElement*>(pAnnotsElement);
         if (!pAnnots)
