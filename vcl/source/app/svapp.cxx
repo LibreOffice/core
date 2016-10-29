@@ -57,6 +57,7 @@
 
 #include "salinst.hxx"
 #include "salframe.hxx"
+#include "sallayout.hxx"
 #include "salsys.hxx"
 #include "svdata.hxx"
 #include "salimestatus.hxx"
@@ -1217,6 +1218,13 @@ OUString Application::GetHWOSConfInfo()
     aDetails.append( GetToolkitName() );
     aDetails.append( "; " );
 #endif
+
+    aDetails.append( VclResId(SV_APP_LAYOUT_ENGINE).toString() );
+    if (SalLayout::UseCommonLayout())
+        aDetails.append( VclResId(SV_APP_LAYOUT_NEW).toString() );
+    else
+        aDetails.append( VclResId(SV_APP_LAYOUT_OLD).toString() );
+    aDetails.append( "; " );
 
     return aDetails.makeStringAndClear();
 }
