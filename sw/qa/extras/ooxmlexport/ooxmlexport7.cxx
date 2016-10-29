@@ -23,6 +23,8 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <pagedesc.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
@@ -1135,6 +1137,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103389, "tdf103389.docx")
     // Check both canvases' geometry
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp/wps:spPr/a:prstGeom", "prst", "rect");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp/wps:spPr/a:prstGeom", "prst", "rect");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf103573, "tdf103573.docx")
+{
+    // Relative positions to the left or right margin (MS Word naming) was not handled.
+    uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1), uno::UNO_QUERY );
+    sal_Int16 nValue;
+    xShapeProperties->getPropertyValue("HoriOrient") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally", text::HoriOrientation::CENTER, nValue);
+    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally relatively to left page border", text::RelOrientation::PAGE_LEFT, nValue);
+
+    xShapeProperties.set( getShape(2), uno::UNO_QUERY );
+    xShapeProperties->getPropertyValue("HoriOrient") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally", text::HoriOrientation::CENTER, nValue);
+    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally relatively to right page border", text::RelOrientation::PAGE_RIGHT, nValue);
 }
 
 #endif
