@@ -405,6 +405,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     SID_COLOR_TABLE,        SID_PATTERN_LIST,                        // [10179
 
                     SID_HTML_MODE,          SID_HTML_MODE,                          // [10414
+                    SID_ALLOW_PADDING_WITHOUT_BORDERS, SID_ALLOW_PADDING_WITHOUT_BORDERS,   // [11139
                     FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,                      // [21032
                     FN_SURROUND,            FN_HORI_ORIENT,                         // [21303
                     FN_SET_FRM_NAME,        FN_KEEP_ASPECT_RATIO,                   // [21306
@@ -455,6 +456,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                         rSh.GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ) ) );
                 const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
                 aSet.Put( SfxBoolItem( FN_OLE_IS_MATH, xObj.is() && SotExchange::IsMath( xObj->getClassID() ) ) );
+
+                aSet.Put( SfxBoolItem( SID_ALLOW_PADDING_WITHOUT_BORDERS,
+                        rSh.GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::ALLOW_PADDING_WITHOUT_BORDERS) ) );
 
                 OString sDefPage;
                 if(pArgs && pArgs->GetItemState(FN_FORMAT_FRAME_DLG, false, &pItem) == SfxItemState::SET)

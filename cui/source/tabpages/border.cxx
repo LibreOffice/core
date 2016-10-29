@@ -102,6 +102,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         mbTLBREnabled( false ),
         mbBLTREnabled( false ),
         mbUseMarginItem( false ),
+        mbAllowPaddingWithoutBorders( false ),
         mbSync(true),
         mbRemoveAdjacentCellBorders( false ),
         bIsCalcDoc( false )
@@ -178,6 +179,11 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         // The caller specifies default line width.  Honor it.
         const SfxInt64Item* p = static_cast<const SfxInt64Item*>(pItem);
         m_pLineWidthMF->SetValue(p->GetValue());
+    }
+
+    if (rCoreAttrs.HasItem(SID_ALLOW_PADDING_WITHOUT_BORDERS, &pItem))
+    {
+        mbAllowPaddingWithoutBorders = static_cast<const SfxBoolItem*>(pItem)->GetValue();
     }
 
     // set metric
@@ -698,10 +704,11 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
             if( !m_pLeftMF->GetText().isEmpty() || !m_pRightMF->GetText().isEmpty() ||
                 !m_pTopMF->GetText().isEmpty() || !m_pBottomMF->GetText().isEmpty() )
             {
-                if ( ((mbHorEnabled || mbVerEnabled || (nSWMode & SwBorderModes::TABLE)) &&
-                        (m_pLeftMF->IsModified()||m_pRightMF->IsModified()||
-                            m_pTopMF->IsModified()||m_pBottomMF->IsModified()) )||
-                     m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Top ) != svx::FrameBorderState::Hide
+                if ( mbAllowPaddingWithoutBorders
+                     || ((mbHorEnabled || mbVerEnabled || (nSWMode & SwBorderModes::TABLE)) &&
+                         (m_pLeftMF->IsModified()||m_pRightMF->IsModified()||
+                             m_pTopMF->IsModified()||m_pBottomMF->IsModified()) )
+                     || m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Top ) != svx::FrameBorderState::Hide
                      || m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Bottom ) != svx::FrameBorderState::Hide
                      || m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Left ) != svx::FrameBorderState::Hide
                      || m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Right ) != svx::FrameBorderState::Hide )
@@ -1156,7 +1163,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
             m_pRightMF->SetFirst(0);
             m_pTopMF->SetFirst(0);
             m_pBottomMF->SetFirst(0);
-            if(!bSpaceModified)
+            if(!bSpaceModified && !mbAllowPaddingWithoutBorders)
             {
                 m_pLeftMF->SetValue(0);
                 m_pRightMF->SetValue(0);
@@ -1168,7 +1175,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
         SvxBoxInfoItemValidFlags nValid = SvxBoxInfoItemValidFlags::TOP|SvxBoxInfoItemValidFlags::BOTTOM|SvxBoxInfoItemValidFlags::LEFT|SvxBoxInfoItemValidFlags::RIGHT;
 
         // for other objects (paragraph, page, frame, character) the edit is disabled, if there's no border set
-        if(!(nSWMode & SwBorderModes::TABLE))
+        if(!(nSWMode & SwBorderModes::TABLE) && !mbAllowPaddingWithoutBorders)
         {
             if(bLineSet)
             {
