@@ -52,15 +52,7 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::svt;
 
-struct LessuInt32
-{
-    bool operator() (const sal_uInt32 rValue1, const sal_uInt32 rValue2) const
-    {
-        return rValue1 < rValue2;
-    }
-};
-
-typedef std::set< sal_uInt32, LessuInt32 >  SvXMLuInt32Set;
+typedef std::set< sal_uInt32 >  SvXMLuInt32Set;
 
 struct SvXMLEmbeddedTextEntry
 {

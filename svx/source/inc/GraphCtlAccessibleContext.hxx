@@ -208,14 +208,7 @@ private:
     OUString msName;
 
     /// map of accessible shapes
-    struct SdrObjectCompareLess
-    {
-        bool operator()(const SdrObject* p1, const SdrObject* p2) const
-        {
-            return p1 < p2;
-        }
-    };
-    typedef ::std::map< const SdrObject*, rtl::Reference<accessibility::AccessibleShape>, SdrObjectCompareLess > ShapesMapType;
+    typedef ::std::map< const SdrObject*, rtl::Reference<accessibility::AccessibleShape> > ShapesMapType;
     ShapesMapType mxShapes;
 
     VclPtr<GraphCtrl>  mpControl;

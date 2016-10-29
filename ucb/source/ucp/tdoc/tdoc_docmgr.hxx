@@ -54,16 +54,7 @@ namespace tdoc_ucp {
     };
 
 
-    struct ltref
-    {
-        bool operator()(
-            const OUString & r1, const OUString & r2 ) const
-        {
-            return r1 < r2;
-        }
-    };
-
-    typedef std::map< OUString, StorageInfo, ltref > DocumentList;
+    typedef std::map< OUString, StorageInfo > DocumentList;
 
 
     class OfficeDocumentsManager :

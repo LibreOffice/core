@@ -49,14 +49,6 @@ using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-struct ltint32
-{
-  bool operator()(const sal_Int32 p, sal_Int32 q) const
-  {
-    return p < q;
-  }
-};
-
 struct ConnectionHint
 {
     css::uno::Reference< css::drawing::XShape > mxConnector;
@@ -76,7 +68,7 @@ struct XShapeCompareHelper
 
 /** this map store all glue point id mappings for shapes that had user defined glue points. This
     is needed because on insertion the glue points will get a new and unique id */
-typedef std::map<sal_Int32,sal_Int32,ltint32> GluePointIdMap;
+typedef std::map<sal_Int32,sal_Int32> GluePointIdMap;
 typedef std::map< css::uno::Reference < css::drawing::XShape >, GluePointIdMap, XShapeCompareHelper > ShapeGluePointsMap;
 
 /** this struct is created for each startPage() call and stores information that is needed during

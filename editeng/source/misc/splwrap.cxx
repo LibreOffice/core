@@ -79,15 +79,7 @@ void SvxPrepareAutoCorrect( OUString &rOldText, const OUString &rNewText )
 #define SVX_LANG_MISSING            2
 #define SVX_LANG_MISSING_DO_WARN    3
 
-struct lt_LanguageType
-{
-    bool operator()( LanguageType n1, LanguageType n2 ) const
-    {
-        return n1 < n2;
-    }
-};
-
-typedef std::map< LanguageType, sal_uInt16, lt_LanguageType >   LangCheckState_map_t;
+typedef std::map< LanguageType, sal_uInt16 >   LangCheckState_map_t;
 
 static LangCheckState_map_t & GetLangCheckState()
 {
