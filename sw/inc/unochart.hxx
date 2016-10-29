@@ -120,14 +120,7 @@ class SwChartDataProvider :
     typedef std::set< css::uno::WeakReference < css::chart2::data::XDataSequence >, lt_DataSequenceRef > Set_DataSequenceRef_t;
 
     // map of data-sequence sets for each table
-    struct lt_SwTable_Ptr
-    {
-        bool operator()( const SwTable *p1, const SwTable *p2 ) const
-        {
-            return p1 < p2;
-        }
-    };
-    typedef std::map< const SwTable *, Set_DataSequenceRef_t, lt_SwTable_Ptr > Map_Set_DataSequenceRef_t;
+    typedef std::map< const SwTable *, Set_DataSequenceRef_t > Map_Set_DataSequenceRef_t;
 
     // map of all data-sequences provided directly or indirectly (e.g. via
     // data-source) by this object. Since there is only one object of this type

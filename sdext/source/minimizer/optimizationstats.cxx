@@ -45,7 +45,7 @@ void OptimizationStats::SetStatusValue( const PPPOptimizerTokenEnum eStat, const
 
 const uno::Any* OptimizationStats::GetStatusValue( const PPPOptimizerTokenEnum eStat ) const
 {
-    std::map< PPPOptimizerTokenEnum, uno::Any, Compare >::const_iterator aIter( maStats.find( eStat ) );
+    std::map< PPPOptimizerTokenEnum, uno::Any >::const_iterator aIter( maStats.find( eStat ) );
     return aIter != maStats.end() ? &((*aIter).second) : nullptr;
 }
 
@@ -54,7 +54,7 @@ css::beans::PropertyValues OptimizationStats::GetStatusSequence()
 {
     int i = 0;
     uno::Sequence< PropertyValue > aStatsSequence( maStats.size() );
-    std::map< PPPOptimizerTokenEnum, uno::Any, Compare >::iterator aIter( maStats.begin() );
+    std::map< PPPOptimizerTokenEnum, uno::Any >::iterator aIter( maStats.begin() );
     while( aIter != maStats.end() )
     {
         aStatsSequence[ i ].Name = TKGet( (*aIter).first );

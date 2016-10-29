@@ -39,16 +39,7 @@ namespace {
         }
     };
 
-    struct SidebarWinOrder
-    {
-        bool operator()( const SidebarWinKey& rSidebarWinKeyA,
-                             const SidebarWinKey& rSidebarWinKeyB ) const
-        {
-            return rSidebarWinKeyA < rSidebarWinKeyB;
-        }
-    };
-
-    typedef std::map < SidebarWinKey, VclPtr<sw::sidebarwindows::SwSidebarWin>, SidebarWinOrder > SidebarWinContainer;
+    typedef std::map < SidebarWinKey, VclPtr<sw::sidebarwindows::SwSidebarWin> > SidebarWinContainer;
 
     struct FrameKey
     {
@@ -64,16 +55,7 @@ namespace {
         }
     };
 
-    struct FrameOrder
-    {
-        bool operator()( const FrameKey& rFrameKeyA,
-                             const FrameKey& rFrameKeyB ) const
-        {
-            return rFrameKeyA < rFrameKeyB;
-        }
-    };
-
-    typedef std::map < FrameKey, SidebarWinContainer, FrameOrder > FrameSidebarWinContainer_;
+    typedef std::map < FrameKey, SidebarWinContainer > FrameSidebarWinContainer_;
 }
 
 namespace sw { namespace sidebarwindows {

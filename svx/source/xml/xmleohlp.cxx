@@ -126,14 +126,6 @@ void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
     bStreamClosed = true;
 }
 
-struct OUStringLess
-{
-    bool operator() ( const OUString& r1, const OUString& r2 ) const
-    {
-        return r1 < r2;
-    }
-};
-
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
     maReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME ),
