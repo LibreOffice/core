@@ -673,7 +673,10 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         if (bKashidaJustify && nDiff > 1)
             pKashidas[i] = nDiff;
 
-        // Apply the same delta to all glyphs belonging to the same character.
+        // Adjust the width of the first glyph belonging to current character.
+        m_GlyphItems[i].mnNewWidth += nDiff;
+
+        // Apply the X position of all glyphs belonging to current character.
         size_t j = i;
         while (j < m_GlyphItems.size())
         {
