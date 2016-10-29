@@ -62,11 +62,6 @@ class Image;
 class PopupMenu;
 class Application;
 class OutputDevice;
-namespace vcl
-{
-    class CommandInfoProvider;
-    class Window;
-}
 class SystemWindow;
 class WorkWindow;
 class Dialog;
@@ -86,7 +81,26 @@ class VclEventListeners2;
 class SalData;
 class OpenGLContext;
 
-namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
+#define SV_ICON_ID_OFFICE                               1
+#define SV_ICON_ID_TEXT                                 2
+#define SV_ICON_ID_TEXT_TEMPLATE                        3
+#define SV_ICON_ID_SPREADSHEET                          4
+#define SV_ICON_ID_SPREADSHEET_TEMPLATE                 5
+#define SV_ICON_ID_DRAWING                              6
+#define SV_ICON_ID_PRESENTATION                         8
+#define SV_ICON_ID_MASTER_DOCUMENT                     10
+#define SV_ICON_ID_TEMPLATE                            11
+#define SV_ICON_ID_DATABASE                            12
+#define SV_ICON_ID_FORMULA                             13
+
+namespace vcl
+{
+    class CommandInfoProvider;
+    class DisplayConnectionDispatch;
+    class SettingsConfigItem;
+    class DeleteOnDeinitBase;
+    class Window;
+}
 
 class LocaleConfigurationListener : public utl::ConfigurationListener
 {
@@ -306,6 +320,7 @@ struct BlendFrameCache
 struct ImplSchedulerContext
 {
     ImplSchedulerData*      mpFirstSchedulerData = nullptr; ///< list of all active tasks
+    ImplSchedulerData*      mpLastSchedulerData = nullptr;  ///< last item of the mpFirstSchedulerData list
     SalTimer*               mpSalTimer = nullptr;           ///< interface to sal event loop / system timer
     sal_uInt64              mnTimerPeriod = 0;              ///< current timer period
     sal_uInt64              mnLastProcessTime = 0;          ///< last time a task was processed
