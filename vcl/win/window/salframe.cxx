@@ -3692,93 +3692,96 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
     return nRet;
 }
 
-static bool ImplHandlePaintMsg( HWND hWnd )
+enum class PostPaint
 {
-    bool bMutex = FALSE;
-    if ( ImplSalYieldMutexTryToAcquire() )
-        bMutex = TRUE;
+    IsPosted,
+    IsInitial
+};
 
-    // if we don't get the mutex, we can also change the clip region,
-    // because other threads doesn't use the mutex from the main
-    // thread --> see AcquireGraphics()
+static bool ImplHandlePostPaintMsg( HWND hWnd, RECT* pRect,
+                                    PostPaint eProcessed = PostPaint::IsPosted )
+{
+    bool bGotMutex = false;
 
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( pFrame )
     {
-        // clip-region must be reset, as we do not get a proper
-        // bounding-rectangle otherwise
-        if ( pFrame->mpGraphics && pFrame->mpGraphics->getRegion() )
-            SelectClipRgn( pFrame->mpGraphics->getHDC(), nullptr );
+        if ( ImplSalYieldMutexTryToAcquire() )
+            bGotMutex = true;
 
-        // according to Window-Documentation one shall check first if
-        // there really is a paint-region
-        if ( GetUpdateRect( hWnd, nullptr, FALSE ) )
-        {
-            // Call BeginPaint/EndPaint to query the rect and send
-            // this Notification to rect
-            RECT aUpdateRect;
-            PAINTSTRUCT aPs;
-            BeginPaint( hWnd, &aPs );
-            CopyRect( &aUpdateRect, &aPs.rcPaint );
-
-            // Paint
-            // reset ClipRegion
-            if ( pFrame->mpGraphics && pFrame->mpGraphics->getRegion() )
-            {
-                SelectClipRgn( pFrame->mpGraphics->getHDC(),
-                               pFrame->mpGraphics->getRegion() );
-            }
-
-            if ( bMutex )
-            {
-                SalPaintEvent aPEvt( aUpdateRect.left, aUpdateRect.top, aUpdateRect.right-aUpdateRect.left, aUpdateRect.bottom-aUpdateRect.top, pFrame->mbPresentation );
-                pFrame->CallCallback( SalEvent::Paint, &aPEvt );
-            }
-            else
-            {
-                RECT* pRect = new RECT;
-                CopyRect( pRect, &aUpdateRect );
-                BOOL const ret = PostMessageW(hWnd, SAL_MSG_POSTPAINT, reinterpret_cast<WPARAM>(pRect), 0);
-                SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
-            }
-            EndPaint( hWnd, &aPs );
-        }
-        else
-        {
-            // reset ClipRegion
-            if ( pFrame->mpGraphics && pFrame->mpGraphics->getRegion() )
-            {
-                SelectClipRgn( pFrame->mpGraphics->getHDC(),
-                               pFrame->mpGraphics->getRegion() );
-            }
-        }
-    }
-
-    if ( bMutex )
-        ImplSalYieldMutexRelease();
-
-    return bMutex;
-}
-
-static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
-{
-    // Paint
-    if ( ImplSalYieldMutexTryToAcquire() )
-    {
-        WinSalFrame* pFrame = GetWindowPtr( hWnd );
-        if ( pFrame )
+        if ( bGotMutex )
         {
             SalPaintEvent aPEvt( pRect->left, pRect->top, pRect->right-pRect->left, pRect->bottom-pRect->top );
             pFrame->CallCallback( SalEvent::Paint, &aPEvt );
+            ImplSalYieldMutexRelease();
+            if ( PostPaint::IsPosted == eProcessed )
+                delete pRect;
         }
-        ImplSalYieldMutexRelease();
-        delete pRect;
+        else
+        {
+            RECT* pMsgRect;
+            if ( PostPaint::IsInitial == eProcessed )
+            {
+                pMsgRect = new RECT;
+                CopyRect( pMsgRect, pRect );
+            }
+            else
+                pMsgRect = pRect;
+            BOOL const ret = PostMessageW(hWnd, SAL_MSG_POSTPAINT, reinterpret_cast<WPARAM>(pMsgRect), 0);
+            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+        }
     }
-    else
+
+    return bGotMutex;
+}
+
+static bool ImplHandlePaintMsg( HWND hWnd )
+{
+    bool bPaintSuccessful = false;
+
+    // even without the Yield mutex, we can still change the clip region,
+    // because other threads don't use the Yield mutex
+    // --> see AcquireGraphics()
+
+    WinSalFrame* pFrame = GetWindowPtr( hWnd );
+    if ( pFrame )
     {
-        BOOL const ret = PostMessageW(hWnd, SAL_MSG_POSTPAINT, reinterpret_cast<WPARAM>(pRect), 0);
-        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+        // clip region must be set, as we don't get a proper
+        // bounding rectangle otherwise
+        bool bHasClipRegion = pFrame->mpGraphics && pFrame->mpGraphics->getRegion();
+        if ( bHasClipRegion )
+            SelectClipRgn( pFrame->mpGraphics->getHDC(), nullptr );
+
+        // according to Windows documentation one shall check first if
+        // there really is a paint-region
+        RECT aUpdateRect;
+        PAINTSTRUCT aPs;
+        bool bHasPaintRegion = GetUpdateRect( hWnd, nullptr, FALSE );
+        if ( bHasPaintRegion )
+        {
+            // call BeginPaint/EndPaint to query the paint rect and use
+            // this infomation in the (deferred) paint
+            BeginPaint( hWnd, &aPs );
+            CopyRect( &aUpdateRect, &aPs.rcPaint );
+        }
+
+        // reset clip region
+        if ( bHasClipRegion )
+            SelectClipRgn( pFrame->mpGraphics->getHDC(),
+                           pFrame->mpGraphics->getRegion() );
+
+        // try painting
+        if ( bHasPaintRegion )
+        {
+            bPaintSuccessful = ImplHandlePostPaintMsg( hWnd, &aUpdateRect,
+                                                       PostPaint::IsInitial );
+            EndPaint( hWnd, &aPs );
+        }
+        else // if there is nothing to paint, the paint is successful
+            bPaintSuccessful = true;
     }
+
+    return bPaintSuccessful;
 }
 
 static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect )
@@ -5632,8 +5635,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             rDef = FALSE;
             break;
         case SAL_MSG_POSTPAINT:
-            ImplHandlePaintMsg2( hWnd, reinterpret_cast<RECT*>(wParam) );
-            bCheckTimers = true;
+            bCheckTimers = ImplHandlePostPaintMsg( hWnd, reinterpret_cast<RECT*>(wParam) );
             rDef = FALSE;
             break;
 
