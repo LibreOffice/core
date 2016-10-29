@@ -73,6 +73,7 @@ cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
 cmd/lc_insertrowsbefore.png cmd/lc_insertrows.png
 cmd/lc_insertspreadsheet.png cmd/lc_togglesheetgrid.png
 cmd/lc_inserttimefield.png cmd/lc_timefield.png
+cmd/lc_gotopage.png cmd/lc_nextrecord.png
 
 cmd/sc_insobjctrl.png cmd/sc_newdoc.png
 cmd/sc_insert.png cmd/sc_togglesheetgrid.png
@@ -110,6 +111,7 @@ cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
 cmd/sc_insertrowsbefore.png cmd/sc_insertrows.png
 cmd/sc_insertspreadsheet.png cmd/sc_togglesheetgrid.png
 cmd/sc_inserttimefield.png cmd/sc_timefield.png
+cmd/sc_gotopage.png cmd/sc_nextrecord.png
 
 # Zoom
 cmd/lc_previewzoom.png cmd/lc_zoomprevious.png
@@ -349,10 +351,6 @@ cmd/sc_dbnewformautopilot.png cmd/sc_autoformat.png
 cmd/sc_commontaskbarvisible.png cmd/sc_autoformat.png
 cmd/sc_autopilotmenu.png cmd/sc_autoformat.png
 cmd/sc_newarrangement.png cmd/sc_autoformat.png
-
-# Changes
-cmd/lc_trackchangesbar.png cmd/lc_ok.png
-cmd/sc_trackchangesbar.png cmd/sc_ok.png
 
 # Filter
 cmd/lc_formfilterexecute.png cmd/lc_datafilterstandardfilter.png
