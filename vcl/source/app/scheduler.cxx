@@ -106,7 +106,8 @@ void Scheduler::ImplDeInitScheduler()
     }
 
     rSchedCtx.mpFirstSchedulerData = nullptr;
-    rSchedCtx.mnTimerPeriod = 0;
+    rSchedCtx.mpLastSchedulerData  = nullptr;
+    rSchedCtx.mnTimerPeriod        = 0;
 }
 
 /**
@@ -233,6 +234,8 @@ bool Scheduler::ProcessTaskScheduling( bool bIdle )
                 pPrevSchedulerData->mpNext = pSchedulerData->mpNext;
             else
                 rSchedCtx.mpFirstSchedulerData = pSchedulerData->mpNext;
+            if ( !pSchedulerData->mpNext )
+                rSchedCtx.mpLastSchedulerData = pPrevSchedulerData;
             if ( pSchedulerData->mpTask )
                 pSchedulerData->mpTask->mpImpl->mpSchedulerData = nullptr;
             ImplSchedulerData *pDeleteItem = pSchedulerData;
@@ -355,23 +358,23 @@ void Task::Start()
     if ( !mpImpl->mpSchedulerData )
     {
         // insert Task
-        mpImpl->mpSchedulerData                = new ImplSchedulerData;
-        mpImpl->mpSchedulerData->mpTask        = this;
-        mpImpl->mpSchedulerData->mbInScheduler = false;
+        ImplSchedulerData* pSchedulerData = new ImplSchedulerData;
+        pSchedulerData->mpTask            = this;
+        pSchedulerData->mbInScheduler     = false;
+        pSchedulerData->mpNext            = nullptr;
+        mpImpl->mpSchedulerData = pSchedulerData;
 
         // insert last due to SFX!
-        ImplSchedulerData* pPrev = nullptr;
-        ImplSchedulerData* pData = rSchedCtx.mpFirstSchedulerData;
-        while ( pData )
+        if ( !rSchedCtx.mpLastSchedulerData )
         {
-            pPrev = pData;
-            pData = pData->mpNext;
+            rSchedCtx.mpFirstSchedulerData = pSchedulerData;
+            rSchedCtx.mpLastSchedulerData = pSchedulerData;
         }
-        mpImpl->mpSchedulerData->mpNext = nullptr;
-        if ( pPrev )
-            pPrev->mpNext = mpImpl->mpSchedulerData;
         else
-            rSchedCtx.mpFirstSchedulerData = mpImpl->mpSchedulerData;
+        {
+            rSchedCtx.mpLastSchedulerData->mpNext = pSchedulerData;
+            rSchedCtx.mpLastSchedulerData = pSchedulerData;
+        }
         SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
                   << " " << mpImpl->mpSchedulerData << "  added      " << *this );
     }
