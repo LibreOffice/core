@@ -1710,17 +1710,17 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     double fShearX(0.0);
     rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
-    // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
-    // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
-    if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
+    // flip?
+    bool bFlipX = aScale.getX() < 0.0,
+         bFlipY = aScale.getY() < 0.0;
+    if (bFlipX)
     {
         aScale.setX(fabs(aScale.getX()));
-        aScale.setY(fabs(aScale.getY()));
-        fRotate = fmod(fRotate + F_PI, F_2PI);
     }
-    // flip?
-    bool bFlipX = basegfx::fTools::less(aScale.getX(), 0.0),
-         bFlipY = basegfx::fTools::less(aScale.getY(), 0.0);
+    if (bFlipY)
+    {
+        aScale.setY(fabs(aScale.getY()));
+    }
 
     // reset object shear and rotations
     aGeo.nRotationAngle = 0;

@@ -114,6 +114,7 @@ public:
     void testTdf93097();
     void testTdf93124();
     void testTdf93868();
+    void testTdf103473();
     void testTdf103792();
     void testTdf103876();
     void testTdf104015();
@@ -163,6 +164,7 @@ public:
     CPPUNIT_TEST(testTdf93097);
     CPPUNIT_TEST(testTdf93124);
     CPPUNIT_TEST(testTdf93868);
+    CPPUNIT_TEST(testTdf103473);
     CPPUNIT_TEST(testTdf103792);
     CPPUNIT_TEST(testTdf103876);
     CPPUNIT_TEST(testTdf104015);
@@ -1400,6 +1402,22 @@ void SdImportTest::testTdf104445()
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(635), rProp.Value.get<sal_Int32>());
         }
     }
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf103473()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/tdf103473.pptx"), PPTX);
+
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    SdrTextObj *const pObj = dynamic_cast<SdrTextObj *const>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pObj);
+    Rectangle aRect = pObj->GetGeoRect();
+    CPPUNIT_ASSERT_EQUAL(3629L, aRect.Left());
+    CPPUNIT_ASSERT_EQUAL(4431L, aRect.Top());
+    CPPUNIT_ASSERT_EQUAL(8353L, aRect.Right());
+    CPPUNIT_ASSERT_EQUAL(9155L, aRect.Bottom());
+
     xDocShRef->DoClose();
 }
 
