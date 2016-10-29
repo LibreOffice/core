@@ -113,6 +113,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_check_data_pilot_field \
 	CppunitTest_sc_check_data_pilot_table \
 	CppunitTest_sc_viewpaneobj \
+        CppunitTest_sc_labelrangeobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
