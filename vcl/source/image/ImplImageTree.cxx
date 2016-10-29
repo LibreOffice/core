@@ -252,14 +252,6 @@ bool ImplImageTree::loadImage(OUString const & name, OUString const & style, Bit
     {
         try
         {
-            if (doLoadImage(name, aStyle + "_svg", rBitmap, localized, eFlags))
-                return true;
-        }
-        catch (css::uno::RuntimeException &)
-        {}
-
-        try
-        {
             if (doLoadImage(name, aStyle, rBitmap, localized, eFlags))
                 return true;
         }
