@@ -124,9 +124,10 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
     m_pLbFunction->Clear();
     m_pLbFunction->SetUpdateMode( false );
 
-    if(aStr.isEmpty())
+    const sal_Int32 nSelPos = m_pLbCategory->GetSelectEntryPos();
+
+    if (aStr.isEmpty() || nSelPos == 0)
     {
-        sal_Int32  nSelPos   = m_pLbCategory->GetSelectEntryPos();
         const IFunctionCategory* pCategory = static_cast<const IFunctionCategory*>(m_pLbCategory->GetEntryData(nSelPos));
 
         if ( nSelPos > 0 )
@@ -163,24 +164,40 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
     else
     {
         SvtSysLocale aSysLocale;
-        const CharClass* pCharClassPtr = aSysLocale.GetCharClassPtr();
-        OUString aSearchStr = pCharClassPtr->uppercase(aStr);
+        const CharClass* pCharClass = aSysLocale.GetCharClassPtr();
+        const OUString aSearchStr( pCharClass->uppercase(aStr));
 
         const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
-        for (sal_uInt32 i = 0; i < nCategoryCount; i++)
+        // Category listbox holds additional entries for Last Used and All, so
+        // the offset should be two but hard coded numbers are ugly..
+        const sal_Int32 nCategoryOffset = m_pLbCategory->GetEntryCount() - nCategoryCount;
+        // If a real category (not Last Used or All) is selected, list only
+        // functions of that category. Else list all, LRU is handled above.
+        sal_Int32 nCatBeg = (nSelPos == LISTBOX_ENTRY_NOTFOUND ? -1 : nSelPos - nCategoryOffset);
+        sal_uInt32 nCatEnd;
+        if (nCatBeg < 0)
+        {
+            nCatBeg = 0;
+            nCatEnd = nCategoryCount;
+        }
+        else
+        {
+            nCatEnd = nCatBeg + 1;
+        }
+        for (sal_uInt32 i = nCatBeg; i < nCatEnd; ++i)
         {
             const IFunctionCategory* pCategory = m_pFunctionManager->getCategory(i);
-            const sal_uInt32 functionCount = pCategory->getCount();
-            for (sal_uInt32 j = 0; j < functionCount; ++j)
+            const sal_uInt32 nFunctionCount = pCategory->getCount();
+            for (sal_uInt32 j = 0; j < nFunctionCount; ++j)
             {
                 TFunctionDesc pDesc(pCategory->getFunction(j));
-                if (pCharClassPtr->uppercase(pDesc->getFunctionName()).indexOf(aSearchStr) >= 0)
+                if (pCharClass->uppercase(pDesc->getFunctionName()).indexOf(aSearchStr) >= 0)
                 {
                     if (!pDesc->isHidden())
                     {
                         m_pLbFunction->SetEntryData(
-                                m_pLbFunction->InsertEntry(
-                                    pDesc->getFunctionName()), const_cast<IFunctionDescription *>(pDesc));
+                                m_pLbFunction->InsertEntry( pDesc->getFunctionName()),
+                                const_cast<IFunctionDescription *>(pDesc));
                     }
                 }
             }
@@ -223,15 +240,16 @@ IMPL_LINK_NOARG(FuncPage, DblClkHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(FuncPage, ModifyHdl, Edit&, void)
 {
+    // While typing select All category.
+    m_pLbCategory->SelectEntryPos(1);
     OUString searchStr = m_plbFunctionSearchString->GetText();
     UpdateFunctionList(searchStr);
 }
 
 void FuncPage::SetCategory(sal_Int32 nCat)
 {
-    OUString searchStr = m_plbFunctionSearchString->GetText();
     m_pLbCategory->SelectEntryPos(nCat);
-    UpdateFunctionList(searchStr);
+    UpdateFunctionList(OUString());
 }
 
 sal_Int32 FuncPage::GetFuncPos(const IFunctionDescription* _pDesc)
