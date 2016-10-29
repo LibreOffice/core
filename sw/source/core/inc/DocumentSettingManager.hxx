@@ -109,7 +109,7 @@ class DocumentSettingManager :
     bool mbUseVirtualDevice                 : 1;
     bool mbAddFlyOffsets                    : 1;
     bool mbAddVerticalFlyOffsets            : 1;
-    bool mbAllowSpacingWithoutBorders       : 1;    // tdf#41542
+    bool mbAllowPaddingWithoutBorders       : 1;    // tdf#41542
     bool mbAddExternalLeading               : 1;
     bool mbUseHiResolutionVirtualDevice     : 1;
     bool mbOldLineSpacing                   : 1;    // #i11859#

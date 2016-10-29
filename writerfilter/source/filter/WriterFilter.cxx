@@ -299,7 +299,7 @@ void WriterFilter::setTargetDocument(const uno::Reference< lang::XComponent >& x
     xSettings->setPropertyValue("TabOverMargin", uno::makeAny(true));
     xSettings->setPropertyValue("TreatSingleColumnBreakAsPageBreak", uno::makeAny(true));
     xSettings->setPropertyValue("PropLineSpacingShrinksFirstLine", uno::makeAny(true));
-    xSettings->setPropertyValue("AllowSpacingWithoutBorders", uno::makeAny(true));
+    xSettings->setPropertyValue("AllowPaddingWithoutBorders", uno::makeAny(true));
 }
 
 void WriterFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
