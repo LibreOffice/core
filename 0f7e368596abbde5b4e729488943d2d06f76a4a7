@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_c490b198",
+        "filename": "include/vcl/builderfactory.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-30T18:20:56Z",
+      "side": 1,
+      "message": "what\u0027s the point of this, since you use rMap in the next line?",
+      "revId": "0f7e368596abbde5b4e729488943d2d06f76a4a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_447ca172",
+        "filename": "include/vcl/builderfactory.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-30T18:20:56Z",
+      "side": 1,
+      "message": "indent this so it\u0027s obvious its a consequnec of the if statement",
+      "revId": "0f7e368596abbde5b4e729488943d2d06f76a4a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_04e9c91a",
+        "filename": "sw/source/ui/config/optload.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-30T18:20:56Z",
+      "side": 1,
+      "message": "WinBits on a line all by itself looks lonely, and unnecessary, please just pass it as a value to the macro i.e.\n  VCL_BUILDER_FACTORY_CONSTRUCTOR(SwCaptionPreview, 0)",
+      "revId": "0f7e368596abbde5b4e729488943d2d06f76a4a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_24eec522",
+        "filename": "sw/source/ui/dbui/mmaddressblockpage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-30T18:20:56Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "0f7e368596abbde5b4e729488943d2d06f76a4a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
