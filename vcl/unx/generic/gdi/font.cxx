@@ -53,9 +53,9 @@ X11SalGraphics::GetFontGC()
     return pFontGC_;
 }
 
-void X11SalGraphics::DrawServerFontLayout( const GenericSalLayout& rLayout, const ServerFont& rServerFont )
+void X11SalGraphics::DrawServerFontLayout( const GenericSalLayout& rLayout, const FreetypeFont& rFreetypeFont )
 {
-    mxTextRenderImpl->DrawServerFontLayout(rLayout, rServerFont);
+    mxTextRenderImpl->DrawServerFontLayout(rLayout, rFreetypeFont);
 }
 
 void X11SalGraphics::DrawSalLayout( const CommonSalLayout& rLayout )

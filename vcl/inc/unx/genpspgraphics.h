@@ -33,7 +33,7 @@ class PhysicalFontCollection;
 
 namespace psp { struct JobData; class PrinterGfx; }
 
-class ServerFont;
+class FreetypeFont;
 class ServerFontLayout;
 class FontAttributes;
 class SalInfoPrinter;
@@ -46,7 +46,7 @@ class VCL_DLLPUBLIC GenPspGraphics : public SalGraphics
     psp::JobData*           m_pJobData;
     psp::PrinterGfx*        m_pPrinterGfx;
 
-    ServerFont*             m_pServerFont[ MAX_FALLBACK ];
+    FreetypeFont*           m_pFreetypeFont[ MAX_FALLBACK ];
     bool                    m_bFontVertical;
     SalInfoPrinter*         m_pInfoPrinter;
 public:
@@ -133,7 +133,7 @@ public:
     virtual bool            GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) override;
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
     virtual void            DrawSalLayout( const CommonSalLayout& ) override {};
-    virtual void            DrawServerFontLayout( const GenericSalLayout&, const ServerFont& ) override;
+    virtual void            DrawServerFontLayout( const GenericSalLayout&, const FreetypeFont& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
     virtual void            drawPixel( long nX, long nY ) override;
     virtual void            drawPixel( long nX, long nY, SalColor nSalColor ) override;

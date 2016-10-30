@@ -137,7 +137,7 @@ public:
     void                AnnounceFonts( PhysicalFontCollection* ) const;
     void                ClearFontList();
 
-    ServerFont* CreateFont( const FontSelectPattern& );
+    FreetypeFont* CreateFont( const FontSelectPattern& );
 
 private:
     typedef std::unordered_map<sal_IntPtr,FreetypeFontInfo*> FontList;

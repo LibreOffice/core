@@ -26,13 +26,13 @@
 
 #include <deque>
 
-class ServerFont;
+class FreetypeFont;
 class GlyphCache;
 typedef struct _cairo cairo_t;
 
 class VCL_DLLPUBLIC CairoTextRender : public TextRenderImpl
 {
-    ServerFont*     mpServerFont[ MAX_FALLBACK ];
+    FreetypeFont*   mpFreetypeFont[ MAX_FALLBACK ];
 
     SalColor        mnTextColor;
 
@@ -88,7 +88,7 @@ public:
     virtual bool                GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& ) override;
     virtual bool                GetGlyphOutline( sal_GlyphId nIndex, basegfx::B2DPolyPolygon& ) override;
     virtual SalLayout*          GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
-    virtual void                DrawServerFontLayout( const GenericSalLayout&, const ServerFont& ) override;
+    virtual void                DrawServerFontLayout( const GenericSalLayout&, const FreetypeFont& ) override;
 #if ENABLE_CAIRO_CANVAS
     virtual SystemFontData      GetSysFontData( int nFallbackLevel ) const override;
 #endif

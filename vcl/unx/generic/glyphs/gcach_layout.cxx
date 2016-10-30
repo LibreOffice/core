@@ -39,20 +39,20 @@
 #define HB_VERSION_ATLEAST(a,b,c) 0
 #endif
 
-// layout implementation for ServerFont
-ServerFontLayout::ServerFontLayout( ServerFont& rFont )
-:   mrServerFont( rFont )
+// layout implementation for FreetypeFont
+ServerFontLayout::ServerFontLayout( FreetypeFont& rFont )
+:   mrFreetypeFont( rFont )
 {
 }
 
 void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
 {
-    rSalGraphics.DrawServerFontLayout( *this, mrServerFont );
+    rSalGraphics.DrawServerFontLayout( *this, mrFreetypeFont );
 }
 
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
-    return mrServerFont.GetLayoutEngine()->Layout(*this, rArgs);
+    return mrFreetypeFont.GetLayoutEngine()->Layout(*this, rArgs);
 }
 
 void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
@@ -68,10 +68,10 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     // insert kashidas where requested by the formatting array
     if( (rArgs.mnFlags & SalLayoutFlags::KashidaJustification) && rArgs.mpDXArray )
     {
-        int nKashidaIndex = mrServerFont.GetGlyphIndex( 0x0640 );
+        int nKashidaIndex = mrFreetypeFont.GetGlyphIndex( 0x0640 );
         if( nKashidaIndex != 0 )
         {
-            const GlyphMetric& rGM = mrServerFont.GetGlyphMetric( nKashidaIndex );
+            const GlyphMetric& rGM = mrFreetypeFont.GetGlyphMetric( nKashidaIndex );
             KashidaJustify( nKashidaIndex, rGM.GetCharWidth() );
             // TODO: kashida-GSUB/GPOS
         }
@@ -105,7 +105,7 @@ void ServerFontLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
     rArgs.NeedFallback(nGraphemeStartPos, nGraphemeEndPos, bRightToLeft);
 }
 
-std::ostream &operator <<(std::ostream& s, ServerFont* pFont)
+std::ostream &operator <<(std::ostream& s, FreetypeFont* pFont)
 {
 #ifndef SAL_LOG_INFO
     (void) pFont;
@@ -129,7 +129,7 @@ static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     pTagName[3] = (char)(nTableTag);
     pTagName[4] = 0;
 
-    ServerFont* pFont = static_cast<ServerFont*>(pUserData);
+    FreetypeFont* pFont = static_cast<FreetypeFont*>(pUserData);
 
     SAL_INFO("vcl.harfbuzz", "getFontTable(" << pFont << ", " << pTagName << ")");
 
@@ -148,7 +148,7 @@ static hb_bool_t getFontGlyph(hb_font_t* /*font*/, void* pFontData,
         hb_codepoint_t* nGlyphIndex,
         void* /*pUserData*/)
 {
-    ServerFont* pFont = static_cast<ServerFont*>(pFontData);
+    FreetypeFont* pFont = static_cast<FreetypeFont*>(pFontData);
     *nGlyphIndex = pFont->GetRawGlyphIndex(ch, vs);
 
     // tdf#89231 if the font is missing non-breaking space, then use a normal space
@@ -162,7 +162,7 @@ static hb_position_t getGlyphAdvanceH(hb_font_t* /*font*/, void* pFontData,
         hb_codepoint_t nGlyphIndex,
         void* /*pUserData*/)
 {
-    ServerFont* pFont = static_cast<ServerFont*>(pFontData);
+    FreetypeFont* pFont = static_cast<FreetypeFont*>(pFontData);
     const GlyphMetric& rGM = pFont->GetGlyphMetric(nGlyphIndex);
     return rGM.GetCharWidth() << 6;
 }
@@ -201,7 +201,7 @@ static hb_position_t getGlyphKerningH(hb_font_t* /*font*/, void* pFontData,
 {
     // This callback is for old style 'kern' table, GPOS kerning is handled by HarfBuzz directly
 
-    ServerFont* pFont = static_cast<ServerFont*>(pFontData);
+    FreetypeFont* pFont = static_cast<FreetypeFont*>(pFontData);
     FT_Face aFace = pFont->GetFtFace();
 
     SAL_INFO("vcl.harfbuzz", "getGlyphKerningH(" << pFont << ", " << nGlyphIndex1 << ", " << nGlyphIndex2 << ")");
@@ -234,7 +234,7 @@ static hb_bool_t getGlyphExtents(hb_font_t* /*font*/, void* pFontData,
         hb_glyph_extents_t* pExtents,
         void* /*pUserData*/)
 {
-    ServerFont* pFont = static_cast<ServerFont*>(pFontData);
+    FreetypeFont* pFont = static_cast<FreetypeFont*>(pFontData);
     FT_Face aFace = pFont->GetFtFace();
 
     SAL_INFO("vcl.harfbuzz", "getGlyphExtents(" << pFont << ", " << nGlyphIndex << ")");
@@ -258,7 +258,7 @@ static hb_bool_t getGlyphContourPoint(hb_font_t* /*font*/, void* pFontData,
         void* /*pUserData*/)
 {
     bool ret = false;
-    ServerFont* pFont = static_cast<ServerFont*>(pFontData);
+    FreetypeFont* pFont = static_cast<FreetypeFont*>(pFontData);
     FT_Face aFace = pFont->GetFtFace();
 
     SAL_INFO("vcl.harfbuzz", "getGlyphContourPoint(" << pFont << ", " << nGlyphIndex << ", " << nPointIndex << ")");
@@ -326,21 +326,21 @@ private:
     int                     mnUnitsPerEM;
 
 public:
-    explicit                HbLayoutEngine(ServerFont&);
+    explicit                HbLayoutEngine(FreetypeFont&);
     virtual                 ~HbLayoutEngine() override;
 
     virtual bool            Layout(ServerFontLayout&, ImplLayoutArgs&) override;
 };
 
-HbLayoutEngine::HbLayoutEngine(ServerFont& rServerFont)
+HbLayoutEngine::HbLayoutEngine(FreetypeFont& rFreetypeFont)
 :   maHbScript(HB_SCRIPT_INVALID),
     mpHbFace(nullptr),
     mnUnitsPerEM(0)
 {
-    FT_Face aFtFace = rServerFont.GetFtFace();
-    mnUnitsPerEM = rServerFont.GetEmUnits();
+    FT_Face aFtFace = rFreetypeFont.GetFtFace();
+    mnUnitsPerEM = rFreetypeFont.GetEmUnits();
 
-    mpHbFace = hb_face_create_for_tables(getFontTable, &rServerFont, nullptr);
+    mpHbFace = hb_face_create_for_tables(getFontTable, &rFreetypeFont, nullptr);
     hb_face_set_index(mpHbFace, aFtFace->face_index);
     hb_face_set_upem(mpHbFace, mnUnitsPerEM);
 }
@@ -401,7 +401,7 @@ std::shared_ptr<vcl::TextLayoutCache> ServerFontLayout::CreateTextLayoutCache(
 
 bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 {
-    ServerFont& rFont = rLayout.GetServerFont();
+    FreetypeFont& rFont = rLayout.GetFreetypeFont();
     FT_Face aFtFace = rFont.GetFtFace();
 
     SAL_INFO("vcl.harfbuzz", "layout(" << this << ",rArgs=" << rArgs << ")");
@@ -610,7 +610,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
     return true;
 }
 
-ServerFontLayoutEngine* ServerFont::GetLayoutEngine()
+ServerFontLayoutEngine* FreetypeFont::GetLayoutEngine()
 {
     if (!mpLayoutEngine) {
         mpLayoutEngine = new HbLayoutEngine(*this);
