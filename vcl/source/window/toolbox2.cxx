@@ -105,8 +105,7 @@ ImplToolItem::ImplToolItem()
 
 ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
                             ToolBoxItemBits nItemBits ) :
-    maImage( rImage ),
-    maImageOriginal( rImage )
+    maImage( rImage )
 {
     init(nItemId, nItemBits, false);
 }
@@ -121,7 +120,6 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const OUString& rText,
 ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
                             const OUString& rText, ToolBoxItemBits nItemBits ) :
     maImage( rImage ),
-    maImageOriginal( rImage ),
     maText( rText )
 {
     init(nItemId, nItemBits, false);
@@ -953,13 +951,10 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
 
     if ( nPos != TOOLBOX_ITEM_NOTFOUND )
     {
-        Image aImage(rImage);
-
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
         Size aOldSize = pItem->maImage.GetSizePixel();
 
-        pItem->maImageOriginal = aImage;
-        pItem->maImage = aImage;
+        pItem->maImage = rImage;
 
         // only once all is calculated, do extra work
         if (!mbCalc)
@@ -1014,7 +1009,6 @@ void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 )
         if( nDeltaAngle && !!pItem->maImage )
         {
             pItem->maImage = ImplRotImage( pItem->maImage, nDeltaAngle );
-            pItem->maImageOriginal = ImplRotImage( pItem->maImageOriginal, nDeltaAngle );
         }
 
         if (!mbCalc)
@@ -1052,7 +1046,6 @@ void ToolBox::SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror )
             if (!!pItem->maImage)
             {
                 pItem->maImage = ImplMirrorImage(pItem->maImage);
-                pItem->maImageOriginal = ImplMirrorImage(pItem->maImageOriginal);
             }
 
             if (!mbCalc)
@@ -1065,12 +1058,6 @@ Image ToolBox::GetItemImage(sal_uInt16 nItemId) const
 {
     ImplToolItem* pItem = ImplGetItem(nItemId);
     return pItem ? pItem->maImage : Image();
-}
-
-Image ToolBox::GetItemImageOriginal(sal_uInt16 nItemId) const
-{
-    ImplToolItem* pItem = ImplGetItem(nItemId);
-    return pItem ? pItem->maImageOriginal : Image();
 }
 
 void ToolBox::SetItemText( sal_uInt16 nItemId, const OUString& rText )
@@ -1660,7 +1647,7 @@ void ToolBox::UpdateCustomMenu()
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
                 MenuItemBits nMenuItemBits = ConvertBitsFromToolBoxToMenu(it->mnBits);
-                pMenu->InsertItem( id, it->maText, it->maImageOriginal, nMenuItemBits);
+                pMenu->InsertItem( id, it->maText, it->maImage, nMenuItemBits);
                 pMenu->SetItemCommand( id, it->maCommandStr );
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem ( id, it->meState == TRISTATE_TRUE );
@@ -1678,7 +1665,7 @@ void ToolBox::UpdateCustomMenu()
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
                 MenuItemBits nMenuItemBits = ConvertBitsFromToolBoxToMenu(it->mnBits);
-                pMenu->InsertItem( id, it->maText, it->maImageOriginal, nMenuItemBits );
+                pMenu->InsertItem( id, it->maText, it->maImage, nMenuItemBits );
                 pMenu->SetItemCommand( id, it->maCommandStr );
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem( id, it->meState == TRISTATE_TRUE );
