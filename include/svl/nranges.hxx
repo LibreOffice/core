@@ -22,28 +22,6 @@
 #include <cstdarg>
 #include <sal/types.h>
 
-class SfxUShortRanges
-{
-    sal_uInt16*                 _pRanges; // 0-terminated array of sal_uInt16-pairs
-
-public:
-                                SfxUShortRanges( const SfxUShortRanges &rOrig );
-                                SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
-                                SfxUShortRanges( const sal_uInt16* nNumTable );
-                                ~SfxUShortRanges()
-                                { delete [] _pRanges; }
-
-    SfxUShortRanges&            operator = ( const SfxUShortRanges & );
-
-    SfxUShortRanges&            operator += ( const SfxUShortRanges & );
-
-    bool                        IsEmpty() const
-                                { return !_pRanges || 0 == *_pRanges; }
-
-                                operator const sal_uInt16* () const
-                                { return _pRanges; }
-};
-
 /**
  * Creates a sal_uInt16-ranges-array in 'rpRanges' using 'nWh1' and 'nWh2' as
  * first range, 'nNull' as terminator or start of 2nd range and 'pArgs' as

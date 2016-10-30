@@ -593,10 +593,58 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
     if ( nFrom == nTo && ( eItemState == SfxItemState::DEFAULT || eItemState == SfxItemState::SET ) )
         return;
 
-    // merge new range
-    SfxUShortRanges aRanges( m_pWhichRanges );
-    aRanges += SfxUShortRanges( nFrom, nTo );
-    SetRanges( aRanges );
+#ifdef DBG_UTIL
+    assert(nFrom <= nTo);
+    for (const sal_uInt16 *pRange = m_pWhichRanges; *pRange; pRange += 2)
+    {
+        assert(pRange[0] <= pRange[1]);
+        // ranges must be sorted and discrete
+        assert(!pRange[2] || (pRange[2] - pRange[1]) > 1);
+    }
+#endif
+
+    // create vector of ranges (sal_uInt16 pairs of lower and upper bound)
+    const size_t nOldCount = Count_Impl(m_pWhichRanges);
+    std::vector<std::pair<sal_uInt16, sal_uInt16>> aRangesTable;
+    aRangesTable.reserve(nOldCount/2 + 1);
+    bool bAdded = false;
+    for (size_t i = 0; i < nOldCount; i += 2)
+    {
+        if (!bAdded && m_pWhichRanges[i] >= nFrom)
+        {   // insert new range, keep ranges sorted
+            aRangesTable.emplace_back(std::pair<sal_uInt16, sal_uInt16>(nFrom, nTo));
+            bAdded = true;
+        }
+        // insert current range
+        aRangesTable.emplace_back(std::pair<sal_uInt16, sal_uInt16>(m_pWhichRanges[i], m_pWhichRanges[i+1]));
+    }
+    if (!bAdded)
+        aRangesTable.emplace_back(std::pair<sal_uInt16, sal_uInt16>(nFrom, nTo));
+
+    // true if ranges overlap or adjoin, false if ranges are separate
+    auto needMerge = [](std::pair<sal_uInt16, sal_uInt16> lhs, std::pair<sal_uInt16, sal_uInt16> rhs)
+                     {return (lhs.first-1) <= rhs.second && (rhs.first-1) <= lhs.second;};
+
+    std::vector<std::pair<sal_uInt16, sal_uInt16> >::iterator it = aRangesTable.begin();
+    // check neighbouring ranges, find first range which overlaps or adjoins a previous range
+    while ((it = std::is_sorted_until(it, aRangesTable.end(), needMerge)) != aRangesTable.end())
+    {
+        --it; // merge with previous range
+        // lower bounds are sorted, implies: it->first = min(it[0].first, it[1].first)
+        it->second = std::max(it[0].second, it[1].second);
+        aRangesTable.erase(std::next(it));
+    }
+
+    // construct range array
+    const size_t nNewSize = 2 * aRangesTable.size() + 1;
+    std::vector<sal_uInt16> aRanges(nNewSize);
+    for (size_t i = 0; i < (nNewSize - 1); i +=2)
+        std::tie(aRanges[i], aRanges[i+1]) = aRangesTable[i/2];
+
+    // null terminate to be compatible with sal_uInt16* array pointers
+    aRanges.back() = 0;
+
+    SetRanges( aRanges.data() );
 }
 
 /**
