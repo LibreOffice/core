@@ -597,7 +597,7 @@ bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
 }
 
 // =========================Factories  for createdialog ===================
-AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( const OUString& aDatName,
+VclPtr<AbstractScImportAsciiDlg> ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( const OUString& aDatName,
                                                     SvStream* pInStream, ScImportAsciiCall eCall )
 {
     VclPtr<ScImportAsciiDlg> pDlg = VclPtr<ScImportAsciiDlg>::Create( nullptr, aDatName,pInStream, eCall );
