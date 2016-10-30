@@ -53,6 +53,8 @@ class CommonSalLayout : public GenericSalLayout
     OString                 msLanguage;
     std::vector<hb_feature_t> maFeatures;
 
+    hb_font_t*              getHbFont();
+
 public:
 #if defined(_WIN32)
     explicit                CommonSalLayout(HDC, WinFontInstance&, const WinFontFace&);
