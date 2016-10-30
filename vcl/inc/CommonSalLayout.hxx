@@ -46,7 +46,7 @@ class CommonSalLayout : public GenericSalLayout
 #elif defined(MACOSX) || defined(IOS)
     const CoreTextStyle&    mrCoreTextStyle;
 #else
-    ServerFont&             mrServerFont;
+    FreetypeFont&           mrFreetypeFont;
 #endif
 
     void                    ParseFeatures(const OUString& name);
@@ -61,8 +61,8 @@ public:
     explicit                CommonSalLayout(const CoreTextStyle&);
     const CoreTextStyle&    getFontData() const { return mrCoreTextStyle; };
 #else
-    explicit                CommonSalLayout(ServerFont&);
-    const ServerFont&       getFontData() const { return mrServerFont; };
+    explicit                CommonSalLayout(FreetypeFont&);
+    const FreetypeFont&     getFontData() const { return mrFreetypeFont; };
 #endif
 
     void                    SetNeedFallback(ImplLayoutArgs&, sal_Int32, bool);

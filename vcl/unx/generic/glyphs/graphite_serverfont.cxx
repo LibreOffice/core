@@ -30,70 +30,70 @@
 
 float freetypeServerFontAdvance(const void* appFontHandle, gr_uint16 glyphId)
 {
-    ServerFont * pServerFont =
-        const_cast<ServerFont*>
-        (static_cast<const ServerFont*>(appFontHandle));
-    if (pServerFont)
+    FreetypeFont * pFreetypeFont =
+        const_cast<FreetypeFont*>
+        (static_cast<const FreetypeFont*>(appFontHandle));
+    if (pFreetypeFont)
     {
-        return static_cast<float>(pServerFont->GetGlyphMetric(glyphId).GetCharWidth());
+        return static_cast<float>(pFreetypeFont->GetGlyphMetric(glyphId).GetCharWidth());
     }
     return .0f;
 }
 
 // An implementation of the GraphiteLayout interface to enable Graphite enabled fonts to be used.
 
-GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) throw()
-    : ServerFontLayout(rServerFont),
-        maImpl(rServerFont.GetGraphiteFace()->face(), rServerFont)
+GraphiteServerFontLayout::GraphiteServerFontLayout(FreetypeFont& rFreetypeFont) throw()
+    : ServerFontLayout(rFreetypeFont),
+        maImpl(rFreetypeFont.GetGraphiteFace()->face(), rFreetypeFont)
     , mpFeatures(nullptr)
 {
-    gr_font * pFont = rServerFont.GetGraphiteFace()->font(rServerFont.GetFontSelData().mnHeight, rServerFont.NeedsArtificialBold(), rServerFont.NeedsArtificialItalic());
+    gr_font * pFont = rFreetypeFont.GetGraphiteFace()->font(rFreetypeFont.GetFontSelData().mnHeight, rFreetypeFont.NeedsArtificialBold(), rFreetypeFont.NeedsArtificialItalic());
     if (!pFont)
     {
         pFont = gr_make_font_with_advance_fn(
                // need to use mnHeight here, mfExactHeight can give wrong values
-               static_cast<float>(rServerFont.GetFontSelData().mnHeight),
-               &rServerFont,
+               static_cast<float>(rFreetypeFont.GetFontSelData().mnHeight),
+               &rFreetypeFont,
                freetypeServerFontAdvance,
-               rServerFont.GetGraphiteFace()->face());
-        rServerFont.GetGraphiteFace()->addFont(rServerFont.GetFontSelData().mnHeight, pFont, rServerFont.NeedsArtificialBold(), rServerFont.NeedsArtificialItalic());
+               rFreetypeFont.GetGraphiteFace()->face());
+        rFreetypeFont.GetGraphiteFace()->addFont(rFreetypeFont.GetFontSelData().mnHeight, pFont, rFreetypeFont.NeedsArtificialBold(), rFreetypeFont.NeedsArtificialItalic());
     }
     maImpl.SetFont(pFont);
     OString aLang("");
-    if (rServerFont.GetFontSelData().meLanguage != LANGUAGE_DONTKNOW)
+    if (rFreetypeFont.GetFontSelData().meLanguage != LANGUAGE_DONTKNOW)
     {
-        aLang = OUStringToOString( LanguageTag( rServerFont.GetFontSelData().meLanguage ).getBcp47(),
+        aLang = OUStringToOString( LanguageTag( rFreetypeFont.GetFontSelData().meLanguage ).getBcp47(),
                 RTL_TEXTENCODING_UTF8 );
     }
     OString name = OUStringToOString(
-        rServerFont.GetFontSelData().maTargetName, RTL_TEXTENCODING_UTF8 );
+        rFreetypeFont.GetFontSelData().maTargetName, RTL_TEXTENCODING_UTF8 );
 #ifdef DEBUG
     printf("GraphiteServerFontLayout %lx %s size %d %f\n", (long unsigned int)this, name.getStr(),
-        rServerFont.GetFtFace()->size->metrics.x_ppem,
-        rServerFont.GetFontSelData().mfExactHeight);
+        rFreetypeFont.GetFtFace()->size->metrics.x_ppem,
+        rFreetypeFont.GetFontSelData().mfExactHeight);
 #endif
     sal_Int32 nFeat = name.indexOf(grutils::GrFeatureParser::FEAT_PREFIX) + 1;
     if (nFeat > 0)
     {
         OString aFeat = name.copy(nFeat, name.getLength() - nFeat);
         mpFeatures = new grutils::GrFeatureParser(
-            rServerFont.GetGraphiteFace()->face(), aFeat, aLang);
+            rFreetypeFont.GetGraphiteFace()->face(), aFeat, aLang);
 #ifdef DEBUG
         if (mpFeatures)
             printf("GraphiteServerFontLayout %s/%s/%s %x language\n",
-                OUStringToOString( rServerFont.GetFontSelData().GetFamilyName(),
+                OUStringToOString( rFreetypeFont.GetFontSelData().GetFamilyName(),
                 RTL_TEXTENCODING_UTF8 ).getStr(),
-                OUStringToOString( rServerFont.GetFontSelData().maTargetName,
+                OUStringToOString( rFreetypeFont.GetFontSelData().maTargetName,
                 RTL_TEXTENCODING_UTF8 ).getStr(),
-                OUStringToOString( rServerFont.GetFontSelData().maSearchName,
+                OUStringToOString( rFreetypeFont.GetFontSelData().maSearchName,
                 RTL_TEXTENCODING_UTF8 ).getStr(),
-                rServerFont.GetFontSelData().meLanguage);
+                rFreetypeFont.GetFontSelData().meLanguage);
 #endif
     }
     else
     {
         mpFeatures = new grutils::GrFeatureParser(
-            rServerFont.GetGraphiteFace()->face(), aLang);
+            rFreetypeFont.GetGraphiteFace()->face(), aLang);
     }
     maImpl.SetFeatures(mpFeatures);
 }
@@ -104,9 +104,9 @@ GraphiteServerFontLayout::~GraphiteServerFontLayout() throw()
     mpFeatures = nullptr;
 }
 
-bool GraphiteServerFontLayout::IsGraphiteEnabledFont(ServerFont& rServerFont)
+bool GraphiteServerFontLayout::IsGraphiteEnabledFont(FreetypeFont& rFreetypeFont)
 {
-    if (rServerFont.GetGraphiteFace())
+    if (rFreetypeFont.GetGraphiteFace())
     {
 #ifdef DEBUG
         printf("IsGraphiteEnabledFont\n");
@@ -118,10 +118,10 @@ bool GraphiteServerFontLayout::IsGraphiteEnabledFont(ServerFont& rServerFont)
 
 sal_GlyphId GraphiteLayoutImpl::getKashidaGlyph(int & width)
 {
-    int nKashidaIndex = mrServerFont.GetGlyphIndex( 0x0640 );
+    int nKashidaIndex = mrFreetypeFont.GetGlyphIndex( 0x0640 );
     if( nKashidaIndex != 0 )
     {
-        const GlyphMetric& rGM = mrServerFont.GetGlyphMetric( nKashidaIndex );
+        const GlyphMetric& rGM = mrFreetypeFont.GetGlyphMetric( nKashidaIndex );
         width = rGM.GetCharWidth();
     }
     else
