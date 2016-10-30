@@ -458,6 +458,22 @@ void ImplImageTree::loadImageLinks()
     }
 }
 
+OUString convertLcTo32Path(OUString const & rPath)
+{
+    OUString aResult;
+    if (rPath.lastIndexOf('/') != -1)
+    {
+        sal_Int32 nCopyFrom = rPath.lastIndexOf('/') + 1;
+        OUString sFile = rPath.copy(nCopyFrom);
+        OUString sDir = rPath.copy(0, rPath.lastIndexOf('/'));
+        if (!sFile.isEmpty() && sFile.startsWith("lc_"))
+        {
+            aResult = sDir + "/32/" + sFile.copy(3);
+        }
+    }
+    return aResult;
+}
+
 void ImplImageTree::parseLinkFile(std::shared_ptr<SvStream> const & xStream)
 {
     OString aLine;
@@ -482,6 +498,12 @@ void ImplImageTree::parseLinkFile(std::shared_ptr<SvStream> const & xStream)
         }
 
         getCurrentIconSet().maLinkHash[aLink] = aOriginal;
+
+        OUString aOriginal32 = convertLcTo32Path(aOriginal);
+        OUString aLink32 = convertLcTo32Path(aLink);
+
+        if (!aOriginal32.isEmpty() && !aLink32.isEmpty())
+            getCurrentIconSet().maLinkHash[aLink32] = aOriginal32;
     }
 }
 
