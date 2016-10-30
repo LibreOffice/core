@@ -2493,17 +2493,14 @@ namespace svt { namespace table
         }
         else if ( m_pTableControl->getAnchor() == m_pTableControl->getCurRow() )
         {
-            //selecting region,
-            int diff = m_pTableControl->getCurRow() - newRow;
             //selected region lies above the last selection
-            if( diff >= 0)
+            if( m_pTableControl->getCurRow() >= newRow)
             {
                 //put selected rows in vector
                 while ( m_pTableControl->getAnchor() >= newRow )
                 {
                     m_pTableControl->markRowAsSelected( m_pTableControl->getAnchor() );
                     m_pTableControl->setAnchor( m_pTableControl->getAnchor() - 1 );
-                    diff--;
                 }
                 m_pTableControl->setAnchor( m_pTableControl->getAnchor() + 1 );
             }
@@ -2514,7 +2511,6 @@ namespace svt { namespace table
                 {
                     m_pTableControl->markRowAsSelected( m_pTableControl->getAnchor() );
                     m_pTableControl->setAnchor( m_pTableControl->getAnchor() + 1 );
-                    diff++;
                 }
                 m_pTableControl->setAnchor( m_pTableControl->getAnchor() - 1 );
             }
