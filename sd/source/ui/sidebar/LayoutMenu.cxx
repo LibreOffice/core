@@ -544,7 +544,6 @@ void LayoutMenu::Fill()
     }
 
     Clear();
-    int n = 0;
     for (sal_uInt16 i=1; pInfo!=nullptr&&pInfo->mnBmpResId!=0; i++,pInfo++)
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
@@ -556,7 +555,6 @@ void LayoutMenu::Fill()
 
             InsertItem(i, Image(aBmp), SdResId (pInfo->mnStrResId));
             SetItemData (i, new AutoLayout(pInfo->maAutoLayout));
-            n++;
         }
     }
 
