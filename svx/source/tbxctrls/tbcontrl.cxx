@@ -261,6 +261,7 @@ private:
 
 protected:
     virtual void    GetFocus() override;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 
 public:
     SvxFrameWindow_Impl( svt::ToolboxController& rController, vcl::Window* pParentWindow );
@@ -1660,10 +1661,13 @@ void SvxFrameWindow_Impl::dispose()
 void SvxFrameWindow_Impl::GetFocus()
 {
     if (aFrameSet)
-    {
-        aFrameSet->GrabFocus();
         aFrameSet->StartSelection();
-    }
+}
+
+void SvxFrameWindow_Impl::KeyInput( const KeyEvent& rKEvt )
+{
+    aFrameSet->GrabFocus();
+    aFrameSet->KeyInput( rKEvt );
 }
 
 void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )

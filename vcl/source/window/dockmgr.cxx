@@ -1089,11 +1089,11 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     mpFloatWin->StartPopupMode( pParentToolBox, nFlags );
     GetWindow()->Show();
 
-    if( bIsToolBox && pParentToolBox->IsKeyEvent() )
+    if( pParentToolBox->IsKeyEvent() )
     {
         // send HOME key to subtoolbar in order to select first item
         KeyEvent aEvent( 0, vcl::KeyCode( KEY_HOME ) );
-        mpFloatWin->KeyInput(aEvent);
+        GetWindow()->KeyInput(aEvent);
     }
 }
 
