@@ -1171,7 +1171,7 @@ throw (uno::RuntimeException, std::exception)
             Reference< XDispatchProvider > xDispatchProvider;
 
             VclPtr<MenuBar> pMenuBar = VclPtr<MenuBar>::Create();
-            m_pInplaceMenuBar = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, aModuleIdentifier, pMenuBar, true, true );
+            m_pInplaceMenuBar = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, aModuleIdentifier, pMenuBar, true );
             m_pInplaceMenuBar->SetItemContainer( xMergedMenuBar );
 
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );

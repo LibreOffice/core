@@ -578,8 +578,7 @@ void Menu::RemoveItem( sal_uInt16 nPos )
         ImplCallEventListeners( VCLEVENT_MENU_REMOVEITEM, nPos );
 }
 
-void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 nNewPos,
-                  sal_uInt16 nMode = 0 )
+void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 nNewPos )
 {
     MenuItemType eType = rMenu.GetItemType( nPos );
 
@@ -621,13 +620,8 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 n
         if ( pSubMenu )
         {
             // create auto-copy
-            if ( nMode == 1 )
-            {
-                VclPtr<PopupMenu> pNewMenu = VclPtr<PopupMenu>::Create( *pSubMenu );
-                pThis->SetPopupMenu( nId, pNewMenu );
-            }
-            else
-                pThis->SetPopupMenu( nId, pSubMenu );
+            VclPtr<PopupMenu> pNewMenu = VclPtr<PopupMenu>::Create( *pSubMenu );
+            pThis->SetPopupMenu( nId, pNewMenu );
         }
     }
 }
@@ -789,6 +783,9 @@ void Menu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu )
     // same menu, nothing to do
     if ( static_cast<PopupMenu*>(pData->pSubMenu.get()) == pMenu )
         return;
+
+    // remove old menu
+    pData->pSubMenu.disposeAndClear();
 
     // data exchange
     pData->pSubMenu = pMenu;
@@ -1203,7 +1200,7 @@ Menu& Menu::operator=( const Menu& rMenu )
     // copy items
     sal_uInt16 nCount = rMenu.GetItemCount();
     for ( sal_uInt16 i = 0; i < nCount; i++ )
-        ImplCopyItem( this, rMenu, i, MENU_APPEND, 1 );
+        ImplCopyItem( this, rMenu, i, MENU_APPEND );
 
     nDefaultItem = rMenu.nDefaultItem;
     aActivateHdl = rMenu.aActivateHdl;

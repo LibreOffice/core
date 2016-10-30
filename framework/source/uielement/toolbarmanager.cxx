@@ -1332,13 +1332,7 @@ void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
 
     // remove config entries from menu, so we have a clean menu to start with
     // remove submenu first
-    VclPtr<::PopupMenu>  pItemMenu = pMenu->GetPopupMenu( 1 );
-    if( pItemMenu )
-    {
-        pItemMenu->Clear();
-        pItemMenu.disposeAndClear();
-        pMenu->SetPopupMenu( 1, pItemMenu );
-    }
+    pMenu->SetPopupMenu( 1, nullptr );
 
     // remove all items that were not added by the toolbar itself
     sal_uInt16 i;
@@ -1507,18 +1501,6 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
         sal_uInt16 nId = aQuickCustomizationMenu->GetItemId( i );
         if ( MenuItemAllowed( nId ))
             pMenu->CopyItem( *aQuickCustomizationMenu.get(), i );
-    }
-
-    // set submenu to toolbar menu
-    if( aQuickCustomizationMenu->GetPopupMenu( 1 ) )
-    {
-        // create an own submenu to avoid auto-delete when resource menu is deleted
-        VclPtr<::PopupMenu> pItemMenu = VclPtr<::PopupMenu>::Create();
-
-        for( i=0; i< aQuickCustomizationMenu->GetPopupMenu( 1 )->GetItemCount(); i++)
-            pItemMenu->CopyItem( *aQuickCustomizationMenu->GetPopupMenu( 1 ), i );
-
-        pMenu->SetPopupMenu( 1, pItemMenu );
     }
 
     // Set the title of the menu

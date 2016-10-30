@@ -81,9 +81,7 @@ class MenuBarManager : public css::frame::XStatusListener                ,
             const css::uno::Reference< css::frame::XFrame >& rFrame,
             const css::uno::Reference< css::util::XURLTransformer >& _xURLTransformer,
             Menu*           pAddonMenu,
-            bool            bDelete,
-            bool            bDeleteChildren,
-            bool popup);
+            bool            popup);
 
     public:
         MenuBarManager(
@@ -94,7 +92,6 @@ class MenuBarManager : public css::frame::XStatusListener                ,
             const OUString& aModuleIdentifier,
             Menu* pMenu,
             bool bDelete,
-            bool bDeleteChildren,
             bool bHasMenuBar = true );
 
         virtual ~MenuBarManager() override;
@@ -145,8 +142,7 @@ class MenuBarManager : public css::frame::XStatusListener                ,
                               const css::uno::Reference< css::frame::XFrame >& rFrame,
                               const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
                               const OUString& rModuleIdentifier,
-                              bool bDelete,
-                              bool bDeleteChildren );
+                              bool bDelete );
         void SetItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rItemContainer );
         void GetPopupController( PopupControllerCache& rPopupController );
 
@@ -197,12 +193,11 @@ class MenuBarManager : public css::frame::XStatusListener                ,
         bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler );
         void             AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sItemCommand,sal_uInt16 _nItemId);
         sal_uInt16           FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const;
-        void             Init(const css::uno::Reference< css::frame::XFrame >& rFrame,Menu* pAddonMenu,bool bDelete,bool bDeleteChildren,bool _bHandlePopUp);
+        void             Init(const css::uno::Reference< css::frame::XFrame >& rFrame,Menu* pAddonMenu,bool _bHandlePopUp);
         void             SetHdl();
 
         bool                                                         m_bDisposed;
         bool                                                         m_bDeleteMenu;
-        bool                                                         m_bDeleteChildren;
         bool                                                         m_bActive;
         bool                                                         m_bIsBookmarkMenu;
         bool                                                         m_bShowMenuImages;

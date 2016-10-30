@@ -451,7 +451,6 @@ static const sal_Int16 nZoomValues[] =
 void SwOneExampleFrame::CreatePopup(const Point& rPt)
 {
     ScopedVclPtrInstance<PopupMenu> aPop;
-    ScopedVclPtrInstance<PopupMenu> aSubPop1;
     ResStringArray& rArr = aMenuRes.GetMenuArray();
 
     aPop->InsertItem(ITEM_UP,   rArr.GetString(rArr.FindIndex(ST_MENU_UP )));
@@ -470,6 +469,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         sal_Int16 nZoom = 0;
         aZoom >>= nZoom;
 
+        VclPtrInstance<PopupMenu> aSubPop1;
         for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(nZoomValues); ++i)
         {
             OUString sTemp = unicode::formatPercent(nZoomValues[i],

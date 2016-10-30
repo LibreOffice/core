@@ -113,7 +113,7 @@ private:
     sal_uIntPtr         mnObjectPos;
     bool                mbPreview;
     ScopedVclPtr<PopupMenu> mpPopupMenu;
-    ScopedVclPtr<PopupMenu> mpBackgroundPopup;
+    VclPtr<PopupMenu> mpBackgroundPopup;
     VclPtr<GalleryBrowser2> mpBrowser;
 
     typedef std::map< int, CommandInfo > CommandInfoMap;
@@ -150,6 +150,7 @@ GalleryThemePopup::GalleryThemePopup(
     , mpBackgroundPopup( VclPtr<PopupMenu>::Create() )
     , mpBrowser( pBrowser )
 {
+    mpPopupMenu->SetPopupMenu( MN_BACKGROUND, mpBackgroundPopup );
 
     // SID_GALLERY_ENABLE_ADDCOPY
     m_aCommandInfo.insert(
@@ -308,7 +309,6 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
     else
     {
         mpPopupMenu->EnableItem( MN_BACKGROUND );
-        mpPopupMenu->SetPopupMenu( MN_BACKGROUND, mpBackgroundPopup );
         mpBackgroundPopup->SetSelectHdl( LINK( this, GalleryThemePopup, BackgroundMenuSelectHdl ) );
     }
 

@@ -184,8 +184,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                                                                       xDispatchProvider,
                                                                       aModuleIdentifier,
                                                                       pVCLMenuBar,
-                                                                      false,
-                                                                      true );
+                                                                      false );
 
                 m_xMenuBarManager.set( static_cast< OWeakObject *>( pMenuBarManager ), UNO_QUERY );
             }

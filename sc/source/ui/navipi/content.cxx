@@ -580,14 +580,14 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 //  Drag-Drop Modus
 
                 ScopedVclPtrInstance<PopupMenu> aPop;
-                ScopedVclPtrInstance<ScPopupMenu> aDropMenu( ScResId( RID_POPUP_DROPMODE ) );
+                VclPtrInstance<ScPopupMenu> aDropMenu( ScResId( RID_POPUP_DROPMODE ) );
                 aDropMenu->CheckItem( RID_DROPMODE_URL + pParentWindow->GetDropMode() );
                 aPop->InsertItem( 1, pParentWindow->GetStrDragMode() );
                 aPop->SetPopupMenu( 1, aDropMenu.get() );
 
                 //  angezeigtes Dokument
 
-                ScopedVclPtrInstance<ScPopupMenu> aDocMenu;
+                VclPtrInstance<ScPopupMenu> aDocMenu;
                 aDocMenu->SetMenuFlags( aDocMenu->GetMenuFlags() | MenuFlags::NoAutoMnemonics );
                 sal_uInt16 i=0;
                 sal_uInt16 nPos=0;

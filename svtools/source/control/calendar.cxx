@@ -1155,7 +1155,6 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
 
     Date        aOldFirstDate = GetFirstMonth();
     ScopedVclPtrInstance<PopupMenu> aPopupMenu;
-    VclPtr<PopupMenu> pYearPopupMenus[MENU_YEAR_COUNT];
     sal_uInt16      nMonthOff;
     sal_uInt16      nCurItemId;
     sal_uInt16      nYear = rDate.GetYear()-1;
@@ -1172,27 +1171,19 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
     // construct menu (include years with different months)
     for ( i = 0; i < MENU_YEAR_COUNT; i++ )
     {
-        pYearPopupMenus[i] = VclPtr<PopupMenu>::Create();
+        VclPtrInstance<PopupMenu> pYearPopupMenu;
         for ( j = 1; j <= 12; j++ )
-            pYearPopupMenus[i]->InsertItem( nYearIdCount+j,
+            pYearPopupMenu->InsertItem( nYearIdCount+j,
                     maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, j-1, 1));
         aPopupMenu->InsertItem( 10+i, OUString::number( nYear+i ) );
-        aPopupMenu->SetPopupMenu( 10+i, pYearPopupMenus[i] );
+        aPopupMenu->SetPopupMenu( 10+i, pYearPopupMenu );
         nYearIdCount += 1000;
     }
 
     mbMenuDown = true;
     nCurItemId = aPopupMenu->Execute( this, rPos );
     mbMenuDown = false;
-
-    // destroy menu
-    aPopupMenu->SetPopupMenu( 2, nullptr );
-    for ( i = 0; i < MENU_YEAR_COUNT; i++ )
-    {
-        aPopupMenu->SetPopupMenu( 10+i, nullptr );
-        pYearPopupMenus[i].disposeAndClear();
-    }
 
     if ( nCurItemId )
     {

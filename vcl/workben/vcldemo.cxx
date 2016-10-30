@@ -1813,8 +1813,6 @@ public:
 class DemoWidgets : public WorkWindow
 {
     VclPtr<MenuBar> mpBar;
-    VclPtr<PopupMenu> mpPopup;
-
     VclPtr<VclBox> mpBox;
     VclPtr<ToolBox> mpToolbox;
     VclPtr<PushButton> mpButton;
@@ -1869,9 +1867,9 @@ public:
 
         mpBar = VclPtr<MenuBar>::Create();
         mpBar->InsertItem(0,"File");
-        mpPopup = VclPtr<PopupMenu>::Create();
-        mpPopup->InsertItem(0,"Item");
-        mpBar->SetPopupMenu(0, mpPopup);
+        VclPtrInstance<PopupMenu> pPopup;
+        pPopup->InsertItem(0,"Item");
+        mpBar->SetPopupMenu(0, pPopup);
         SetMenuBar(mpBar);
 
         Show();
@@ -1886,7 +1884,6 @@ public:
         mpToolbox.disposeAndClear();
         mpButton.disposeAndClear();
         mpBox.disposeAndClear();
-        mpPopup.disposeAndClear();
         mpBar.disposeAndClear();
         WorkWindow::dispose();
     }
