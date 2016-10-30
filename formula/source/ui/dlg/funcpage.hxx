@@ -61,7 +61,6 @@ private:
     OModuleClient            m_aModuleClient;
     Link<FuncPage&,void>     aDoubleClickLink;
     Link<FuncPage&,void>     aSelectionLink;
-    Link<FuncPage&, void>    aModifyLink;
     VclPtr<ListBox>          m_pLbCategory;
     VclPtr<FormulaListBox>   m_pLbFunction;
     VclPtr<Edit>             m_plbFunctionSearchString;
