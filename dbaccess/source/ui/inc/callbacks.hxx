@@ -68,6 +68,14 @@ namespace dbaui
     class SAL_NO_VTABLE IContextMenuProvider
     {
     public:
+        /** returns the context menu resource name for the control
+
+            Supposed to be a valid name from uiconfig/<module>/popupmenu folder.
+            Nevertheless, the getContextMenu method will not be evaluated, as long
+            as this method returns non-empty string.
+        */
+        virtual OUString getContextMenuResourceName( Control& _rControl ) const = 0;
+
         /** returns the context menu for the control
 
             Note that the menu does not need to care for the controls selection, or its

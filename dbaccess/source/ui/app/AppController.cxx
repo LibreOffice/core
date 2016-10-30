@@ -2281,9 +2281,14 @@ void OApplicationController::onDeleteEntry()
     executeChecked(nId,Sequence<PropertyValue>());
 }
 
+OUString OApplicationController::getContextMenuResourceName( Control& /*_rControl*/ ) const
+{
+    return OUString("edit");
+}
+
 VclPtr<PopupMenu> OApplicationController::getContextMenu( Control& /*_rControl*/ ) const
 {
-    return VclPtr<PopupMenu>::Create( ModuleRes( RID_MENU_APP_EDIT ) );
+    return nullptr;
 }
 
 IController& OApplicationController::getCommandController()

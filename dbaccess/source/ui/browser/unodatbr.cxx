@@ -3469,6 +3469,11 @@ bool SbaTableQueryBrowser::requestQuickHelp( const SvTreeListEntry* _pEntry, OUS
     return false;
 }
 
+OUString SbaTableQueryBrowser::getContextMenuResourceName( Control& ) const
+{
+    return OUString();
+}
+
 VclPtr<PopupMenu> SbaTableQueryBrowser::getContextMenu( Control& _rControl ) const
 {
     OSL_PRECOND( &m_pTreeView->getListBox() == &_rControl,
