@@ -157,6 +157,8 @@ struct ImplFrameData
     VclPtr<VirtualDevice> mpBuffer; ///< Buffer for the double-buffering
     bool mbInBufferedPaint; ///< PaintHelper is in the process of painting into this buffer.
     Rectangle maBufferedRect; ///< Rectangle in the buffer that has to be painted to the screen.
+
+    ImplFrameData( vcl::Window *pWindow );
 };
 
 struct ImplAccessibleInfos
