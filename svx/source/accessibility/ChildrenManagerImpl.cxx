@@ -848,7 +848,6 @@ void ChildrenManagerImpl::UpdateSelection()
     typedef std::vector< PAIR_SHAPE > VEC_SHAPE;
     VEC_SHAPE vecSelect;
     int nAddSelect=0;
-    int nRemoveSelect=0;
     bool bHasSelectedShape=false;
     ChildDescriptorListType::const_iterator aEnd = maVisibleChildren.end();
     for (ChildDescriptorListType::iterator I=maVisibleChildren.begin(); I != aEnd; ++I)
@@ -912,7 +911,6 @@ void ChildrenManagerImpl::UpdateSelection()
                     if(bDrawShape)
                     {
                         vecSelect.push_back(std::make_pair(pAccessibleShape,false));
-                        ++nRemoveSelect;
                     }
                 }
             }
