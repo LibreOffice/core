@@ -184,8 +184,6 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
 
         hb_face_destroy(pHbFace);
     }
-
-    ParseFeatures(mrFontSelData.maTargetName);
 }
 
 #elif defined(MACOSX) || defined(IOS)
@@ -210,8 +208,6 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
 
         hb_face_destroy(pHbFace);
     }
-
-    ParseFeatures(mrFontSelData.maTargetName);
 }
 
 #else
@@ -229,8 +225,6 @@ CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
 
         hb_face_destroy(pHbFace);
     }
-
-    ParseFeatures(mrFontSelData.maTargetName);
 }
 #endif
 
@@ -403,6 +397,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
     static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
     hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
 #endif
+
+    ParseFeatures(mrFontSelData.maTargetName);
 
     Point aCurrPos(0, 0);
     while (true)
