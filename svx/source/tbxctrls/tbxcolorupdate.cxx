@@ -68,7 +68,7 @@ namespace svx
 
     void ToolboxButtonColorUpdater::Update(const Color& rColor, bool bForceUpdate)
     {
-        Image aImage(mpTbx->GetItemImageOriginal(mnBtnId));
+        Image aImage(mpTbx->GetItemImage(mnBtnId));
         Size aItemSize(mpTbx->GetItemContentSize(mnBtnId));
 
         const bool bSizeChanged = (maBmpSize != aItemSize);
