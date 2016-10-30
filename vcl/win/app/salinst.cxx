@@ -316,10 +316,6 @@ SalData::SalData()
     mpDitherDiff = nullptr;     // Dither mapping table
     mpDitherLow = nullptr;      // Dither mapping table
     mpDitherHigh = nullptr;     // Dither mapping table
-    mnTimerMS = 0;              // Current Time (in MS) of the Timer
-    mnTimerOrgMS = 0;           // Current Original Time (in MS)
-    mnNextTimerTime = 0;
-    mnLastEventTime = 0;
     mnTimerId = nullptr;        // windows timer id
     mhSalObjMsgHook = nullptr;  // hook to get interesting msg for SalObject
     mhWantLeaveMsg = nullptr;   // window handle, that want a MOUSELEAVE message
@@ -664,12 +660,18 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             rDef = FALSE;
             break;
         case SAL_MSG_STARTTIMER:
-            ImplSalStartTimer( (sal_uLong) lParam );
+        {
+            sal_uLong nTime = GetTickCount();
+            if ( nTime < (sal_uLong) lParam )
+                nTime = (sal_uLong) lParam - nTime;
+            else
+                nTime = 0;
+            ImplSalStartTimer( nTime );
             rDef = FALSE;
             break;
+        }
         case SAL_MSG_STOPTIMER:
             ImplSalStopTimer();
-            rDef = FALSE;
             break;
         case SAL_MSG_CREATEFRAME:
             nRet = reinterpret_cast<LRESULT>(ImplSalCreateFrame( GetSalData()->mpFirstInstance, reinterpret_cast<HWND>(lParam), (SalFrameStyleFlags)wParam ));
@@ -715,23 +717,12 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             ReleaseDC( reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam) );
             rDef = FALSE;
             break;
-        case SAL_MSG_POSTTIMER:
-            EmitTimerCallback();
-            break;
         case SAL_MSG_TIMER_CALLBACK:
-            EmitTimerCallback();
             MSG aMsg;
-            while (PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK, SAL_MSG_TIMER_CALLBACK, PM_REMOVE))
-            {
-                // nothing; just remove all the SAL_MSG_TIMER_CALLBACKs that
-                // accumulated in the queue during the EmitTimerCallback(),
-                // otherwise it happens with short timeouts and long callbacks
-                // that no other events will ever be processed, as the queue
-                // is full of SAL_MSG_TIMER_CALLBACKs.
-                // It is impossible to limit the amount of them being emitted
-                // in the first place, as they are emitted asynchronously, but
-                // here we are already fully synchronized.
-            }
+            while ( PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK,
+                                 SAL_MSG_TIMER_CALLBACK, PM_REMOVE) )
+                assert( "Multiple timer messages in queue" );
+            EmitTimerCallback();
             break;
     }
 
@@ -835,24 +826,6 @@ bool WinSalInstance::AnyInput( VclInputFlags nType )
     }
 
     return false;
-}
-
-void SalTimer::Start( sal_uLong nMS )
-{
-    // to switch to Main-Thread
-    SalData* pSalData = GetSalData();
-    if ( pSalData->mpFirstInstance )
-    {
-        if ( pSalData->mnAppThreadId != GetCurrentThreadId() )
-        {
-            BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS);
-            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
-        }
-        else
-            SendMessageW( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
-    }
-    else
-        ImplSalStartTimer( nMS );
 }
 
 SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, SalFrameStyleFlags nSalFrameStyle )
