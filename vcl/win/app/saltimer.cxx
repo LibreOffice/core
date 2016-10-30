@@ -22,9 +22,6 @@
 #include <win/saltimer.h>
 #include <win/salinst.h>
 
-// maximum period
-#define MAX_SYSPERIOD     65533
-
 void CALLBACK SalTimerProc(PVOID pParameter, BOOLEAN bTimerOrWaitFired);
 
 // See http://msdn.microsoft.com/en-us/library/windows/desktop/ms687003%28v=vs.85%29.aspx
@@ -37,64 +34,68 @@ void CALLBACK SalTimerProc(PVOID pParameter, BOOLEAN bTimerOrWaitFired);
 void ImplSalStopTimer()
 {
     SalData *const pSalData = GetSalData();
+    assert( !pSalData->mpFirstInstance || pSalData->mnAppThreadId == GetCurrentThreadId() );
+
     HANDLE hTimer = pSalData->mnTimerId;
     if (hTimer)
     {
-        pSalData->mnTimerId = nullptr; // reset so it doesn't restart
+        pSalData->mnTimerId = nullptr;
         DeleteTimerQueueTimer(nullptr, hTimer, INVALID_HANDLE_VALUE);
-        pSalData->mnNextTimerTime = 0;
     }
+
+    // remove all pending SAL_MSG_TIMER_CALLBACK messages
+    // we always have to do this, since ImplSalStartTimer with 0ms just queues
+    // a new SAL_MSG_TIMER_CALLBACK message
     MSG aMsg;
-    // this needs to run on the main thread
-    while (PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK, SAL_MSG_TIMER_CALLBACK, PM_REMOVE))
-    {
-        // just remove all the SAL_MSG_TIMER_CALLBACKs
-        // when the application end, this SAL_MSG_TIMER_CALLBACK start the timer again
-        // and then crashed in "SalTimerProc" when the object "SalData" was deleted
-    }
+    int nMsgCount = 0;
+    while ( PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK,
+                         SAL_MSG_TIMER_CALLBACK, PM_REMOVE) )
+        nMsgCount++;
+    assert( nMsgCount <= 1 );
 }
 
-void ImplSalStartTimer( sal_uLong nMS, bool bMutex )
+void ImplSalStartTimer( sal_uLong nMS )
 {
     SalData* pSalData = GetSalData();
+    assert( !pSalData->mpFirstInstance || pSalData->mnAppThreadId == GetCurrentThreadId() );
 
-    // Remember the time of the timer
-    pSalData->mnTimerMS = nMS;
-    if (!bMutex)
-        pSalData->mnTimerOrgMS = nMS;
+    // DueTime parameter is a DWORD, which is always an unsigned 32bit
+    if (nMS > SAL_MAX_UINT32)
+        nMS = SAL_MAX_UINT32;
 
-    // duration has to fit into Window's sal_uInt16
-    if (nMS > MAX_SYSPERIOD)
-        nMS = MAX_SYSPERIOD;
+    // cannot change a one-shot timer, so delete it and create a new one
+    ImplSalStopTimer();
 
-    // cannot change a one-shot timer, so delete it and create new one
-    if (pSalData->mnTimerId)
+    // directly post a timer callback message for instant timers / idles
+    if ( 0 == nMS )
     {
-        DeleteTimerQueueTimer(nullptr, pSalData->mnTimerId, INVALID_HANDLE_VALUE);
-        pSalData->mnTimerId = nullptr;
+        BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd,
+                                      SAL_MSG_TIMER_CALLBACK, 0, 0);
+        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
     }
-    CreateTimerQueueTimer(&pSalData->mnTimerId, nullptr, SalTimerProc, nullptr, nMS, 0, WT_EXECUTEINTIMERTHREAD);
-
-    pSalData->mnNextTimerTime = pSalData->mnLastEventTime + nMS;
+    else
+    {
+        // probably WT_EXECUTEONLYONCE is not needed, but it enforces Period
+        // to be 0 and should not hurt; also see
+        // https://www.microsoft.com/msj/0499/pooling/pooling.aspx
+        CreateTimerQueueTimer(&pSalData->mnTimerId, nullptr, SalTimerProc, nullptr,
+                              nMS, 0, WT_EXECUTEINTIMERTHREAD | WT_EXECUTEONLYONCE);
+    }
 }
 
 WinSalTimer::~WinSalTimer()
 {
+    Stop();
 }
 
 void WinSalTimer::Start( sal_uLong nMS )
 {
-    // switch to main thread
     SalData* pSalData = GetSalData();
-    if ( pSalData->mpFirstInstance )
+    if ( pSalData->mpFirstInstance && pSalData->mnAppThreadId != GetCurrentThreadId() )
     {
-        if ( pSalData->mnAppThreadId != GetCurrentThreadId() )
-        {
-            BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS);
-            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
-        }
-        else
-            SendMessageW( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
+        BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd,
+            SAL_MSG_STARTTIMER, 0, (LPARAM)GetTickCount() + nMS);
+        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
     }
     else
         ImplSalStartTimer( nMS );
@@ -103,9 +104,14 @@ void WinSalTimer::Start( sal_uLong nMS )
 void WinSalTimer::Stop()
 {
     SalData* pSalData = GetSalData();
-
-    assert(pSalData->mpFirstInstance);
-    SendMessageW(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STOPTIMER, 0, 0);
+    if ( pSalData->mpFirstInstance && pSalData->mnAppThreadId != GetCurrentThreadId() )
+    {
+        BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd,
+            SAL_MSG_STOPTIMER, 0, 0);
+        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+    }
+    else
+        ImplSalStopTimer();
 }
 
 /** This gets invoked from a Timer Queue thread.
@@ -122,7 +128,8 @@ void CALLBACK SalTimerProc(PVOID, BOOLEAN)
         // always post message when the timer fires, we will remove the ones
         // that happened during execution of the callback later directly from
         // the message queue
-        BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK, 0, 0);
+        BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd,
+                                      SAL_MSG_TIMER_CALLBACK, 0, 0);
 #if OSL_DEBUG_LEVEL > 0
         if (0 == ret) // SEH prevents using SAL_WARN here?
             fputs("ERROR: PostMessage() failed!", stderr);
@@ -140,31 +147,23 @@ call then happens when the main thread gets SAL_MSG_TIMER_CALLBACK.
 */
 void EmitTimerCallback()
 {
-    SalData* pSalData = GetSalData();
-    ImplSVData* pSVData = ImplGetSVData();
-
     // Test for MouseLeave
     SalTestMouseLeave();
 
+    ImplSVData *pSVData = ImplGetSVData();
+    if ( ! pSVData->maSchedCtx.mpSalTimer )
+        return;
+
     // Try to acquire the mutex. If we don't get the mutex then we
     // try this a short time later again.
-    if (pSVData->maSchedCtx.mpSalTimer && ImplSalYieldMutexTryToAcquire())
+    if (ImplSalYieldMutexTryToAcquire())
     {
         pSVData->maSchedCtx.mpSalTimer->CallCallback();
 
         ImplSalYieldMutexRelease();
-
-        // Run the timer again if it was started before, and also
-        // Run the timer in the correct time, if we started this
-        // with a small timeout, because we didn't get the mutex
-        // - but not if mnTimerId is 0, which is set by ImplSalStopTimer()
-        if (pSalData->mnTimerId)
-            ImplSalStartTimer(pSalData->mnTimerOrgMS);
     }
     else
-    {
-        ImplSalStartTimer(10, true);
-    }
+        ImplSalStartTimer( 10 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

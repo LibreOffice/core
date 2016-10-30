@@ -32,6 +32,9 @@ public:
     virtual void Stop() override;
 };
 
+void ImplSalStartTimer( sal_uIntPtr nMS );
+void ImplSalStopTimer();
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
