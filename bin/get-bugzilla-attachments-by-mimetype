@@ -32,6 +32,10 @@ import os, os.path
 import stat
 import sys
 import threading
+import patoolib
+import pickle
+import shutil
+
 try:
     import queue
 except:
@@ -58,6 +62,50 @@ def urlopen_retry(url):
                 raise
             print("retrying...")
 
+def uncompress_file(dirName, download, subFileName):
+    try:
+        os.mkdir(dirName)
+    except:
+        pass
+
+    try:
+        patoolib.extract_archive(download, outdir=dirName)
+    except patoolib.util.PatoolError:
+        os.rmdir(dirName)
+        print('ERROR: ' + download + " can't be extracted.")
+        return
+
+    print('Deleting ' + download)
+    os.remove(download)
+
+    subAttachmentid = 0
+    for dirpath, _, files in os.walk(dirName):
+        for file in files:
+            subAttachmentid += 1
+            path = os.path.join(dirpath, file)
+            extension = file.split('.')[-1].lower()
+
+            if extension in compress_mimetypes.values():
+                uncompress_file(dirpath,file, subFileName)
+            elif extension in tmp_mimetype.values():
+                newPath = os.path.join(extension,
+                                       subFileName + str(subAttachmentid) + '.' + extension)
+                print('Moving ' + path + ' to ' + newPath)
+                try:
+                    os.rename(path, newPath)
+                except FileNotFoundError:
+                    try:
+                        os.mkdir(extension)
+                    except:
+                        pass
+            else:
+                print('Extension is ' + extension + " Skipping - Removing " + path)
+                os.remove(path)
+
+    print('Deleting directory ' + dirName)
+    shutil.rmtree(dirName)
+
+
 def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
     id = url.rsplit('=', 2)[1]
     print("id is " + prefix + id + " " + suffix)
@@ -66,6 +114,7 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
     dom = minidom.parse(sock)
     sock.close()
     attachmentid=0
+
     for attachment in dom.getElementsByTagName('attachment'):
         attachmentid += 1
         print(" mimetype is", end=' ')
@@ -81,10 +130,20 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
                     print('deleted attachment, skipping')
                     continue
 
-                download = suffix + '/' +prefix + id + '-' + str(attachmentid) + '.' + suffix
-                if os.path.isfile(download):
-                    print("assuming " + download + " is up to date")
-                    continue
+                dirName = suffix + '/' + prefix + id + '-' + str(attachmentid)
+                download = dirName + '.' + suffix
+
+                isCompress = False
+                if mimetype in compress_mimetypes.keys():
+                    if download in compressList:
+                        print(download + ' was already downloaded in the past. Skipping')
+                        continue
+                    isCompress = True
+                    compressList.append(download)
+                else:
+                    if os.path.isfile(download):
+                        print("assuming " + download + " is up to date")
+                        continue
 
                 # prevent re-downloading FDO attachments from TDF
                 if prefix == "tdf" and int(id) < 88776:
@@ -99,6 +158,10 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
                 f.write(base64.b64decode(node.firstChild.nodeValue))
                 f.close()
                 os.rename(tmpfile, download)
+
+                if isCompress:
+                    uncompress_file(dirName, download, prefix + id + '-' + str(attachmentid) + '_')
+
                 break
 
 def get_novell_bug_via_xml(url, mimetype, prefix, suffix):
@@ -337,6 +400,7 @@ def get_launchpad_bugs(prefix):
                 f.close()
                 os.rename(tmpfile, download)
 
+
 rss_bugzillas = (
     ( 'abi', 'http://bugzilla.abisource.com/buglist.cgi' ), #added for abiword
     ( 'fdo', 'http://bugs.freedesktop.org/buglist.cgi' ),
@@ -351,7 +415,7 @@ rss_bugzillas = (
     # does not add it back immediately .-)
     # 'novell': 'https://bugzilla.novell.com/buglist.cgi',
     ( 'ooo', 'https://bz.apache.org/ooo/buglist.cgi' ),
-    ( 'tdf', 'http://bugs.documentfoundation.org/buglist.cgi' ),
+    ( 'tdf', 'http://bugs.documentfoundation.org/buglist.cgi')
 )
 
 redhatrpc = 'https://bugzilla.redhat.com/xmlrpc.cgi'
@@ -364,7 +428,7 @@ redhatbug = 'https://bugzilla.redhat.com/show_bug.cgi?id='
 novellattach = 'https://bugzilla.novell.com/attachment.cgi?id='
 
 mimetypes = {
-# ODF
+#ODF
     'application/vnd.oasis.opendocument.base': 'odb',
     'application/vnd.oasis.opendocument.database': 'odb',
     'application/vnd.oasis.opendocument.chart': 'odc',
@@ -495,7 +559,24 @@ mimetypes = {
     'image/x-cmu-raster': 'ras',
     'image/x-sun-raster': 'ras',
     'image/x-xbitmap': 'xbm',
-    'image/x-xpixmap': 'xpm',
+    'image/x-xpixmap': 'xpm'
+}
+
+compress_mimetypes = {
+    'application/x-zip-compressed' : 'zip',
+    'application/zip' : 'zip',
+    'application/x-tar': 'tar',
+    'application/x-compressed' : 'zip',
+    'application/x-tar-gz': 'gz',
+    'application/x-7z-compressed': '7z',
+    'application/x-rar-compressed': 'rar',
+    'application/x-rar': 'rar',
+    'application/rar': 'rar',
+    'application/gzip': 'gz',
+    'application/x-gzip': 'gz',
+    'application/x-bzip': 'bzip',
+    'application/x-compressed-tar': 'gz',
+    'application/bzip2': 'bzip'
 }
 
 # disabled for now, this would download gigs of pngs/jpegs...
@@ -517,40 +598,57 @@ class manage_threads(threading.Thread):
                 # Get job from queue
                 # Use job parameters to call our query
                 # Then let the queue know we are done with this job
-                (uri, mimetype, prefix, extension) = jobs.get(True,6)
+                (uri, mimetype, prefix, suffix) = jobs.get(True,6)
                 try:
-                    get_through_rss_query(uri, mimetype, prefix, extension)
+                    get_through_rss_query(uri, mimetype, prefix, suffix)
                 finally:
                     jobs.task_done()
-            except KeyboardInterrupt:
-                raise # Ctrl+C should work
             except queue.Empty:
                 break
 
 def generate_multi_threading():
-    for (prefix, uri) in rss_bugzillas:
+    try:
+        for (prefix, uri) in rss_bugzillas:
 
-        # Initialize threads
-        for i in range(max_threads):
-            manage_threads().start()
+            # Initialize threads
+            for i in range(max_threads):
+                manage_threads().start()
 
-        # Create a job for every mimetype for a bugzilla
-        for (mimetype,extension) in mimetypes.items():
-            # It seems that bugzilla has problems returing that many results
-            # (10000 results is probably a limit set somewhere) so we always
-            # end processing the complete list.
-            if mimetype == 'text/html' and prefix == 'moz':
-                    continue
+            # Create a job for every mimetype for a bugzilla
+            for (mimetype,extension) in mimetypes.items():
+                # It seems that bugzilla has problems returing that many results
+                # (10000 results is probably a limit set somewhere) so we always
+                # end processing the complete list.
+                if mimetype == 'text/html' and prefix == 'moz':
+                        continue
 
-            jobs.put([uri, mimetype, prefix, extension], block=True)
-            print("successfully placed a job in the queue searching for " + mimetype + " in bugtracker " + prefix)
 
-        # Continue when all mimetypes are done for a bugzilla
-        jobs.join()
-        print("DONE with bugtracker " + prefix)
+                jobs.put([uri, mimetype, prefix, extension], block=True)
+                print("successfully placed a job in the queue searching for " + mimetype + " in bugtracker " + prefix)
+
+            # Continue when all mimetypes are done for a bugzilla
+            jobs.join()
+            print("DONE with bugtracker " + prefix)
+
+    except KeyboardInterrupt:
+        with open('compressList.pickle', 'wb') as handle:
+            pickle.dump(compressList, handle)
+        raise  # Ctrl+C should work
 
 max_threads = 20 # Number of threads to create, (1 = without multi-threading)
 jobs = queue.Queue()
+
+compressList = []
+
+try:
+    with open('compressList.pickle', 'rb') as handle:
+        compressList = pickle.load(handle)
+except EOFError:
+    pass
+except OSError as e:
+    open('compressList.pickle', 'a').close()
+
+mimetypes.update(compress_mimetypes)
 
 generate_multi_threading()
 
@@ -561,5 +659,8 @@ try:
     get_launchpad_bugs("lp")
 except ImportError:
     print("launchpadlib unavailable, skipping Ubuntu tracker")
+
+with open('compressList.pickle', 'wb') as handle:
+    pickle.dump(compressList, handle)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
