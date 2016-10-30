@@ -156,10 +156,11 @@ class ToolBarManager : public ToolbarManager_Base
         typedef std::unordered_map< sal_uInt16, css::uno::Reference< css::container::XIndexAccess > > MenuDescriptionMap;
 
         bool m_bDisposed : 1,
-             m_bSmallSymbols : 1,
              m_bAddedToTaskPaneList : 1,
              m_bFrameActionRegistered : 1,
              m_bUpdateControllers : 1;
+
+        sal_Int16 m_eSymbolSize;
 
         VclPtr<ToolBox>                                              m_pToolBar;
 

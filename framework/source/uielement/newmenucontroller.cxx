@@ -92,7 +92,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
 
                 if ( !aImageId.isEmpty() )
                 {
-                    aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aImageId, false, xFrame );
+                    aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aImageId, xFrame);
                     if ( !!aImage )
                     {
                         bImageSet = true;

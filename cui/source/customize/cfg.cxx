@@ -374,9 +374,13 @@ void InitImageType()
         css::ui::ImageType::COLOR_NORMAL |
         css::ui::ImageType::SIZE_DEFAULT;
 
-    if ( SvtMiscOptions().AreCurrentSymbolsLarge() )
+    if (SvtMiscOptions().GetSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE)
     {
         theImageType |= css::ui::ImageType::SIZE_LARGE;
+    }
+    else if (SvtMiscOptions().GetSymbolsSize() == SFX_SYMBOLS_SIZE_32)
+    {
+        theImageType |= css::ui::ImageType::SIZE_32;
     }
 }
 
@@ -5040,8 +5044,11 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
 
     pTbSymbol->SetPageScroll( true );
 
-    bool bLargeIcons = GetImageType() & css::ui::ImageType::SIZE_LARGE;
-    m_nExpectedSize = bLargeIcons ? 26 : 16;
+    m_nExpectedSize = 16;
+    if (GetImageType() & css::ui::ImageType::SIZE_LARGE)
+        m_nExpectedSize = 26;
+    else if (GetImageType() & css::ui::ImageType::SIZE_32)
+        m_nExpectedSize = 32;
 
     if ( m_nExpectedSize != 16 )
     {

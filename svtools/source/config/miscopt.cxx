@@ -825,7 +825,9 @@ sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const
         // Use system settings, we have to retrieve the toolbar icon size from the
         // Application class
         ToolbarIconSize nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
-        if ( nStyleIconSize == ToolbarIconSize::Large )
+        if (nStyleIconSize == ToolbarIconSize::Size32)
+            eOptSymbolsSize = SFX_SYMBOLS_SIZE_32;
+        else if (nStyleIconSize == ToolbarIconSize::Large)
             eOptSymbolsSize = SFX_SYMBOLS_SIZE_LARGE;
         else
             eOptSymbolsSize = SFX_SYMBOLS_SIZE_SMALL;
@@ -836,7 +838,7 @@ sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const
 
 bool SvtMiscOptions::AreCurrentSymbolsLarge() const
 {
-    return ( GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE );
+    return ( GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE || GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_32);
 }
 
 OUString SvtMiscOptions::GetIconTheme() const

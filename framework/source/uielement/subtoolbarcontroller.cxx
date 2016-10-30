@@ -291,7 +291,13 @@ void SubToolBarController::updateImage()
         sal_uInt16 nId = 0;
         if ( getToolboxId( nId, &pToolBox ) )
         {
-            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( m_aLastCommand, pToolBox->GetToolboxButtonSize() == ToolBoxButtonSize::Large, getFrameInterface() );
+            vcl::ImageType eImageType = vcl::ImageType::Size16;
+            if (pToolBox->GetToolboxButtonSize() == ToolBoxButtonSize::Large)
+                eImageType = vcl::ImageType::Size26;
+            else if (pToolBox->GetToolboxButtonSize() == ToolBoxButtonSize::Size32)
+                eImageType = vcl::ImageType::Size32;
+
+            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(m_aLastCommand, getFrameInterface(), eImageType);
             if ( !!aImage )
                 pToolBox->SetItemImage( nId, aImage );
         }

@@ -761,6 +761,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             case 0: eSet = SFX_SYMBOLS_SIZE_AUTO;  break;
             case 1: eSet = SFX_SYMBOLS_SIZE_SMALL; break;
             case 2: eSet = SFX_SYMBOLS_SIZE_LARGE; break;
+            case 3: eSet = SFX_SYMBOLS_SIZE_32; break;
             default:
                 OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_pIconSizeLB should not be possible!" );
         }
@@ -953,10 +954,18 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     SvtMiscOptions aMiscOptions;
     mpOpenGLConfig->reset();
 
-    if( aMiscOptions.GetSymbolsSize() != SFX_SYMBOLS_SIZE_AUTO )
-        nSizeLB_InitialSelection = ( aMiscOptions.AreCurrentSymbolsLarge() )? 2 : 1;
+    if (aMiscOptions.GetSymbolsSize() != SFX_SYMBOLS_SIZE_AUTO)
+    {
+        nSizeLB_InitialSelection = 1;
+
+        if (aMiscOptions.GetSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE)
+            nSizeLB_InitialSelection = 2;
+        else if (aMiscOptions.GetSymbolsSize() == SFX_SYMBOLS_SIZE_32)
+            nSizeLB_InitialSelection = 3;
+    }
     m_pIconSizeLB->SelectEntryPos( nSizeLB_InitialSelection );
     m_pIconSizeLB->SaveValue();
+
     if( aMiscOptions.GetSidebarIconSize() == ToolBoxButtonSize::DontCare )
         ; // do nothing
     else if( aMiscOptions.GetSidebarIconSize() == ToolBoxButtonSize::Small )

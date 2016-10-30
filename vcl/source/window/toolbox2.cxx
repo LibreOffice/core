@@ -436,8 +436,16 @@ void ToolBox::InsertItem(const OUString& rCommand, const css::uno::Reference<css
 {
     OUString aLabel(vcl::CommandInfoProvider::Instance().GetLabelForCommand(rCommand, rFrame));
     OUString aTooltip(vcl::CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
-    Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(
-        rCommand, (GetToolboxButtonSize() == ToolBoxButtonSize::Large), rFrame));
+
+    vcl::ImageType eImageType = vcl::ImageType::Size16;
+
+    if (GetToolboxButtonSize() == ToolBoxButtonSize::Large)
+        eImageType = vcl::ImageType::Size26;
+    else if (GetToolboxButtonSize() == ToolBoxButtonSize::Size32)
+        eImageType = vcl::ImageType::Size32;
+
+    CommandInfoProvider& rInfoProvider = vcl::CommandInfoProvider::Instance();
+    Image aImage(rInfoProvider.GetImageForCommand(rCommand, rFrame, eImageType));
 
     sal_uInt16 nItemId = GetItemCount() + 1;
     InsertItem(nItemId, aImage, aLabel, nBits, nPos);

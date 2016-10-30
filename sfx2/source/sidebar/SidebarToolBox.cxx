@@ -268,7 +268,14 @@ IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
 
     ToolBoxButtonSize eSize = GetIconSize();
 
-    bool bBigImages(eSize == ToolBoxButtonSize::Large);
+    vcl::ImageType eImageType = vcl::ImageType::Size16;
+    if (eSize == ToolBoxButtonSize::Large)
+        eImageType = vcl::ImageType::Size26;
+    else if (eSize == ToolBoxButtonSize::Size32)
+        eImageType = vcl::ImageType::Size32;
+
+    bool bBig = (eImageType == vcl::ImageType::Size26 || eImageType == vcl::ImageType::Size32);
+
     SetToolboxButtonSize(eSize);
 
     for (auto const& it : maControllers)
@@ -286,11 +293,11 @@ IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
             if(SfxViewFrame::Current())
             {
                 css::uno::Reference<frame::XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-                Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, bBigImages, xFrame);
+                Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, xFrame, eImageType);
                 // Try also to query for add-on images before giving up and use an
                 // empty image.
                 if (!aImage)
-                    aImage = framework::AddonsOptions().GetImageFromURL(aCommandURL, bBigImages);
+                    aImage = framework::AddonsOptions().GetImageFromURL(aCommandURL, bBig);
                 SetItemImage(it.first, aImage);
             }
         }

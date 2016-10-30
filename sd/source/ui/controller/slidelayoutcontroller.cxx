@@ -239,7 +239,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::W
                 sSlotStr = ".uno:DuplicatePage";
             else
                 sSlotStr = ".uno:Undo";
-            aSlotImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( sSlotStr, false, xFrame );
+            aSlotImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(sSlotStr, xFrame);
 
             OUString sSlotTitle;
             if( bInsertPage )

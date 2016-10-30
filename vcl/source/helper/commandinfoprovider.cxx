@@ -211,8 +211,9 @@ OUString CommandInfoProvider::GetRealCommandForCommand(const OUString& rCommandN
     return GetCommandProperty("TargetURL", rCommandName);
 }
 
-Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName, bool bLarge,
-                                              const Reference<frame::XFrame>& rxFrame)
+Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName,
+                                              const Reference<frame::XFrame>& rxFrame,
+                                              vcl::ImageType eImageType)
 {
     SetFrame(rxFrame);
 
@@ -220,8 +221,11 @@ Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName, boo
         return Image();
 
     sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
-    if (bLarge)
+
+    if (eImageType == vcl::ImageType::Size26)
         nImageType |= ui::ImageType::SIZE_LARGE;
+    else if (eImageType == vcl::ImageType::Size32)
+        nImageType |= ui::ImageType::SIZE_32;
 
     try
     {
