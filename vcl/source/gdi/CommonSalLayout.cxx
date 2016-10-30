@@ -172,12 +172,13 @@ void CommonSalLayout::ParseFeatures(const OUString& name)
 #if defined(_WIN32)
 CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, const WinFontFace& rWinFontFace)
 :   mrFontSelData(rWinFontInstance.maFontSelData)
+,   mhDC(hDC)
+,   mhFont(static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT)))
 {
     mpHbFont = rWinFontFace.GetHbFont();
     if (!mpHbFont)
     {
-        HFONT hFont = static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT));
-        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, hFont, nullptr);
+        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, mhFont, nullptr);
 
         mpHbFont = createHbFont(pHbFace);
         rWinFontFace.SetHbFont(mpHbFont);

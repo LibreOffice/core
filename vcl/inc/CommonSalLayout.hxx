@@ -42,9 +42,12 @@ class CommonSalLayout : public GenericSalLayout
     hb_font_t*              mpHbFont;
     const FontSelectPattern& mrFontSelData;
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
-#if defined(MACOSX) || defined(IOS)
+#ifdef _WIN32
+    HDC                     mhDC;
+    HFONT                   mhFont;
+#elif defined(MACOSX) || defined(IOS)
     const CoreTextStyle&    mrCoreTextStyle;
-#elif !defined(_WIN32)
+#else
     FreetypeFont&           mrFreetypeFont;
 #endif
 
@@ -57,6 +60,7 @@ class CommonSalLayout : public GenericSalLayout
 public:
 #if defined(_WIN32)
     explicit                CommonSalLayout(HDC, WinFontInstance&, const WinFontFace&);
+    void                    InitFont() const override { SelectObject(mhDC, mhFont); };
     const FontSelectPattern& getFontSelData() const { return mrFontSelData; };
 #elif defined(MACOSX) || defined(IOS)
     explicit                CommonSalLayout(const CoreTextStyle&);
