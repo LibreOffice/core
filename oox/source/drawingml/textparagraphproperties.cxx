@@ -356,7 +356,9 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
     if ( maStyleName.hasValue() )
         rPropMap.setAnyProperty( PROP_CharStyleName, maStyleName);
     if (pFilterBase ) {
-        if ( maBulletColorPtr->isUsed() )
+        bool bFollowTextColor = false;
+        mbBulletColorFollowText >>= bFollowTextColor;
+        if ( maBulletColorPtr->isUsed() && !bFollowTextColor )
             rPropMap.setProperty( PROP_BulletColor, maBulletColorPtr->getColor( pFilterBase->getGraphicHelper() ));
     }
 }
