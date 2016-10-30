@@ -54,8 +54,6 @@
 std::unique_ptr<GlobalGlyphCache> GlyphCache::gGlobalGlyphCache(new GlobalGlyphCache);
 GLuint WinFontInstance::mnGLyphyProgram = 0;
 
-#if ENABLE_GRAPHITE_DWRITE
-
 inline void WinFontInstance::CacheGlyphWidth( int nCharCode, int nCharWidth )
 {
     maWidthMap[ nCharCode ] = nCharWidth;
@@ -3375,17 +3373,12 @@ void D2DWriteTextOutRenderer::CleanupModules()
     D2D1MakeRotateMatrix = nullptr;
     DWriteCreateFactory = nullptr;
 }
-#endif // ENABLE_GRAPHITE_DWRITE
 
 TextOutRenderer & TextOutRenderer::get()
 {
-#if ENABLE_GRAPHITE_DWRITE
     static std::unique_ptr<TextOutRenderer> _impl(D2DWriteTextOutRenderer::InitModules()
         ? static_cast<TextOutRenderer*>(new D2DWriteTextOutRenderer())
         : static_cast<TextOutRenderer*>(new ExTextOutRenderer()));
-#else // ENABLE_GRAPHITE_DWRITE
-    static std::unique_ptr<TextOutRenderer> _impl(static_cast<TextOutRenderer*>(new ExTextOutRenderer()));
-#endif // ENABLE_GRAPHITE_DWRITE
 
     return *_impl;
 }
@@ -3411,8 +3404,6 @@ bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
 
     return (pRectToErase && nGlyphs >= 1);
 }
-
-#if ENABLE_GRAPHITE_DWRITE
 
 D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
     : mpD2DFactory(nullptr),
@@ -3716,8 +3707,6 @@ bool D2DWriteTextOutRenderer::GetDWriteInkBox(IDWriteFontFace & rFontFace, SalLa
 
     return true;
 }
-
-#endif // ENABLE_GRAPHITE_DWRITE
 
 float gr_fontAdvance(const void* appFontHandle, gr_uint16 glyphId)
 {
