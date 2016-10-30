@@ -58,9 +58,15 @@ namespace o3tl
     template<> struct typed_flags<ToolBoxMenuType> : is_typed_flags<ToolBoxMenuType, 0x0003> {};
 }
 
-// small or large force an exact toolbox size for proper alignemnt
+// small, large, size32 force an exact toolbox size for proper alignemnt
 // dontcare will let the toolbox decide about its size
-enum class ToolBoxButtonSize { DontCare, Small, Large };
+enum class ToolBoxButtonSize
+{
+    DontCare,
+    Small,
+    Large,
+    Size32,
+};
 
 // ToolBoxLayoutMode::Normal   - traditional layout, items are centered in the toolbar
 // ToolBoxLayoutMode::LockVert - special mode (currently used for calc input/formula

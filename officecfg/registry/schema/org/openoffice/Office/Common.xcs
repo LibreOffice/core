@@ -5710,6 +5710,11 @@
               <desc>larger icons</desc>
             </info>
           </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>32x32 pixel icons</desc>
+            </info>
+          </enumeration>
         </constraints>
         <value>2</value>
       </prop>

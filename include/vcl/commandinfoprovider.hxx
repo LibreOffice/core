@@ -22,6 +22,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/keycod.hxx>
 #include <vcl/image.hxx>
+#include <vcl/CommandImageResolver.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -91,8 +92,8 @@ public:
 
     Image GetImageForCommand(
         const OUString& rsCommandName,
-        bool bLarge,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        vcl::ImageType eImageType = vcl::ImageType::Small);
 
     sal_Int32 GetPropertiesForCommand(
         const OUString& rsCommandName,

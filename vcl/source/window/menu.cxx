@@ -513,7 +513,7 @@ void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::f
     {
         OUString aLabel(CommandInfoProvider::Instance().GetPopupLabelForCommand(rCommand, rFrame));
         OUString aTooltip(CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
-        Image aImage(CommandInfoProvider::Instance().GetImageForCommand(rCommand, /*bLarge=*/ false, rFrame));
+        Image aImage(CommandInfoProvider::Instance().GetImageForCommand(rCommand, rFrame));
 
         InsertItem(nItemId, aLabel, aImage);
         SetHelpText(nItemId, aTooltip);

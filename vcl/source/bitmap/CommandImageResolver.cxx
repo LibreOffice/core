@@ -24,7 +24,8 @@ namespace
 static const o3tl::enumarray<ImageType, const char*> ImageType_Prefixes =
 {
     "cmd/sc_",
-    "cmd/lc_"
+    "cmd/lc_",
+    "cmd/32/"
 };
 
 OUString lclConvertToCanonicalName(const OUString& rFileName)
