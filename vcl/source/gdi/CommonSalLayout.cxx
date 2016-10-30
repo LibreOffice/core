@@ -61,7 +61,7 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     }
 #else
     const unsigned char* pBuffer = nullptr;
-    ServerFont* pFont = static_cast<ServerFont*>(pUserData);
+    FreetypeFont* pFont = static_cast<FreetypeFont*>(pUserData);
     pBuffer = pFont->GetTable(pTagName, &nLength);
 #endif
 
@@ -213,17 +213,17 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
 }
 
 #else
-CommonSalLayout::CommonSalLayout(ServerFont& rServerFont)
-:   mrFontSelData(rServerFont.GetFontSelData()),
-    mrServerFont(rServerFont)
+CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
+:   mrFontSelData(rFreetypeFont.GetFontSelData()),
+    mrFreetypeFont(rFreetypeFont)
 {
-    mpHbFont = rServerFont.GetHbFont();
+    mpHbFont = rFreetypeFont.GetHbFont();
     if (!mpHbFont)
     {
-        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, &rServerFont, nullptr);
+        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, &rFreetypeFont, nullptr);
 
         mpHbFont = createHbFont(pHbFace);
-        mrServerFont.SetHbFont(mpHbFont);
+        mrFreetypeFont.SetHbFont(mpHbFont);
 
         hb_face_destroy(pHbFace);
     }

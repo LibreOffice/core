@@ -458,7 +458,7 @@ public:
 
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
     virtual void            DrawSalLayout( const CommonSalLayout& ) override;
-    virtual void            DrawServerFontLayout( const GenericSalLayout&, const ServerFont& ) override {};
+    virtual void            DrawServerFontLayout( const GenericSalLayout&, const FreetypeFont& ) override {};
 
     virtual bool            supportsOperation( OutDevSupportType ) const override;
     // Query the platform layer for control support

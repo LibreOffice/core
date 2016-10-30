@@ -45,7 +45,7 @@ class GlyphData;
 class GraphiteFaceWrapper;
 class FontConfigFontOptions;
 class PhysicalFontCollection;
-class ServerFont;
+class FreetypeFont;
 class ServerFontLayout;
 class ServerFontLayoutEngine;
 class SvpGcpHelper;
@@ -68,17 +68,17 @@ public:
 
     void                    AnnounceFonts( PhysicalFontCollection* ) const;
 
-    ServerFont*             CacheFont( const FontSelectPattern& );
-    void                    UncacheFont( ServerFont& );
+    FreetypeFont*           CacheFont( const FontSelectPattern& );
+    void                    UncacheFont( FreetypeFont& );
     void                    ClearFontCache();
     void                    InvalidateAllGlyphs();
 
 private:
-    friend class ServerFont;
-    // used by ServerFont class only
-    void                    AddedGlyph( ServerFont&, GlyphData& );
+    friend class FreetypeFont;
+    // used by FreetypeFont class only
+    void                    AddedGlyph( FreetypeFont&, GlyphData& );
     void                    RemovingGlyph();
-    void                    UsingGlyph( ServerFont&, GlyphData& );
+    void                    UsingGlyph( FreetypeFont&, GlyphData& );
 
 private:
     void                    GarbageCollect();
@@ -87,14 +87,14 @@ private:
     // the FontList key's mpFontData member is reinterpreted as integer font id
     struct IFSD_Equal{  bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
     struct IFSD_Hash{ size_t operator()( const FontSelectPattern& ) const; };
-    typedef std::unordered_map<FontSelectPattern,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
+    typedef std::unordered_map<FontSelectPattern,FreetypeFont*,IFSD_Hash,IFSD_Equal > FontList;
 
     FontList                maFontList;
     sal_uLong               mnMaxSize;      // max overall cache size in bytes
     mutable sal_uLong       mnBytesUsed;
     mutable long            mnLruIndex;
     mutable int             mnGlyphCount;
-    ServerFont*             mpCurrentGCFont;
+    FreetypeFont*           mpCurrentGCFont;
 
     FreetypeManager*        mpFtManager;
 };
@@ -144,11 +144,11 @@ private:
     mutable long            mnLruValue;
 };
 
-class VCL_DLLPUBLIC ServerFont
+class VCL_DLLPUBLIC FreetypeFont
 {
 public:
-                            ServerFont( const FontSelectPattern&, FreetypeFontInfo* );
-    virtual                 ~ServerFont();
+                            FreetypeFont( const FontSelectPattern&, FreetypeFontInfo* );
+    virtual                 ~FreetypeFont();
 
     const OString&          GetFontFileName() const;
     bool                    TestFont() const { return mbFaceOk;}
@@ -187,7 +187,7 @@ public:
 private:
     friend class GlyphCache;
     friend class ServerFontLayout;
-    friend class ServerFontInstance;
+    friend class FreetypeFontInstance;
     friend class X11SalGraphics;
     friend class CairoTextRender;
 
@@ -214,8 +214,8 @@ private:
     mutable long            mnRefCount;
     mutable sal_uLong       mnBytesUsed;
 
-    ServerFont*             mpPrevGCFont;
-    ServerFont*             mpNextGCFont;
+    FreetypeFont*           mpPrevGCFont;
+    FreetypeFont*           mpNextGCFont;
 
     // 16.16 fixed point values used for a rotated font
     long                    mnCos;
@@ -246,17 +246,17 @@ private:
 };
 
 // a class for cache entries for physical font instances that are based on serverfonts
-class VCL_DLLPUBLIC ServerFontInstance : public LogicalFontInstance
+class VCL_DLLPUBLIC FreetypeFontInstance : public LogicalFontInstance
 {
 public:
-                            ServerFontInstance( FontSelectPattern& );
-    virtual                 ~ServerFontInstance() override;
+                            FreetypeFontInstance( FontSelectPattern& );
+    virtual                 ~FreetypeFontInstance() override;
 
-    void                    SetServerFont(ServerFont* p);
+    void                    SetFreetypeFont(FreetypeFont* p);
     void                    HandleFontOptions();
 
 private:
-    ServerFont*             mpServerFont;
+    FreetypeFont*           mpFreetypeFont;
     std::shared_ptr<FontConfigFontOptions> mxFontOptions;
     bool                    mbGotFontOptions;
 
@@ -265,7 +265,7 @@ private:
 class VCL_DLLPUBLIC ServerFontLayout : public GenericSalLayout
 {
 public:
-                            ServerFontLayout( ServerFont& );
+                            ServerFontLayout( FreetypeFont& );
 
     virtual bool            LayoutText( ImplLayoutArgs& ) override;
     virtual void            AdjustLayout( ImplLayoutArgs& ) override;
@@ -276,13 +276,13 @@ public:
                                 sal_Int32 nIndex,
                                 bool bRightToLeft);
 
-    ServerFont&             GetServerFont() const   { return mrServerFont; }
+    FreetypeFont&           GetFreetypeFont() const   { return mrFreetypeFont; }
 
     virtual std::shared_ptr<vcl::TextLayoutCache>
         CreateTextLayoutCache(OUString const&) const override;
 
 private:
-    ServerFont&             mrServerFont;
+    FreetypeFont&           mrFreetypeFont;
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 
                             ServerFontLayout( const ServerFontLayout& ) = delete;

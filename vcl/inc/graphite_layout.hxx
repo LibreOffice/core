@@ -38,7 +38,7 @@
 
 #include "sallayout.hxx"
 
-class ServerFont;
+class FreetypeFont;
 class PhysicalFontFace;
 
 namespace grutils { class GrFeatureParser; }

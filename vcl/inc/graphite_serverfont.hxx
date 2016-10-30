@@ -36,12 +36,12 @@ class VCL_PLUGIN_PUBLIC GraphiteLayoutImpl : public GraphiteLayout
 {
 public:
     GraphiteLayoutImpl(const gr_face * pFace,
-                       ServerFont & rServerFont) throw()
-    : GraphiteLayout(pFace), mrServerFont(rServerFont) {};
+                       FreetypeFont & rFreetypeFont) throw()
+    : GraphiteLayout(pFace), mrFreetypeFont(rFreetypeFont) {};
     virtual ~GraphiteLayoutImpl() throw() override {};
     virtual sal_GlyphId getKashidaGlyph(int & width) override;
 private:
-    ServerFont & mrServerFont;
+    FreetypeFont & mrFreetypeFont;
 };
 
 // This class implments the server font specific parts.
@@ -54,7 +54,7 @@ private:
         mutable GraphiteLayoutImpl maImpl;
         grutils::GrFeatureParser * mpFeatures;
 public:
-        GraphiteServerFontLayout(ServerFont& pServerFont) throw();
+        GraphiteServerFontLayout(FreetypeFont& pFreetypeFont) throw();
 
         virtual bool  LayoutText( ImplLayoutArgs& rArgs) override
         {
@@ -101,7 +101,7 @@ public:
 
         virtual ~GraphiteServerFontLayout() throw() override;
 
-        static bool IsGraphiteEnabledFont(ServerFont& rServerFont);
+        static bool IsGraphiteEnabledFont(FreetypeFont& rFreetypeFont);
 };
 
 #endif

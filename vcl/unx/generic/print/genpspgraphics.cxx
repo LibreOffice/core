@@ -262,7 +262,7 @@ GenPspGraphics::GenPspGraphics()
       m_bFontVertical( false ),
       m_pInfoPrinter( nullptr )
 {
-    for(ServerFont* & rp : m_pServerFont)
+    for(FreetypeFont* & rp : m_pFreetypeFont)
         rp = nullptr;
 }
 
@@ -562,7 +562,7 @@ ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
 
 LogicalFontInstance* ImplPspFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
-    ServerFontInstance* pEntry = new ServerFontInstance( rFSD );
+    FreetypeFontInstance* pEntry = new FreetypeFontInstance( rFSD );
     return pEntry;
 }
 
@@ -656,7 +656,7 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 class PspServerFontLayout : public ServerFontLayout
 {
 public:
-    PspServerFontLayout( psp::PrinterGfx&, ServerFont& rFont, const ImplLayoutArgs& rArgs );
+    PspServerFontLayout( psp::PrinterGfx&, FreetypeFont& rFont, const ImplLayoutArgs& rArgs );
 
     virtual void        InitFont() const override;
     const sal_Unicode*  getTextPtr() const { return maText.getStr() - mnMinCharPos; }
@@ -674,7 +674,7 @@ private:
     int                 mnMinCharPos;
 };
 
-PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, ServerFont& rFont, const ImplLayoutArgs& rArgs )
+PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, FreetypeFont& rFont, const ImplLayoutArgs& rArgs )
         :   ServerFontLayout( rFont ),
             mrPrinterGfx( rGfx )
 {
@@ -761,7 +761,7 @@ void PspFontLayout::DrawText( SalGraphics& ) const
     DrawPrinterLayout( *this, mrPrinterGfx, false );
 }
 
-void GenPspGraphics::DrawServerFontLayout( const GenericSalLayout& rLayout, const ServerFont& /*unused*/ )
+void GenPspGraphics::DrawServerFontLayout( const GenericSalLayout& rLayout, const FreetypeFont& /*unused*/ )
 {
     // print complex text
     DrawPrinterLayout( rLayout, *m_pPrinterGfx, true );
@@ -769,18 +769,18 @@ void GenPspGraphics::DrawServerFontLayout( const GenericSalLayout& rLayout, cons
 
 const FontCharMapRef GenPspGraphics::GetFontCharMap() const
 {
-    if( !m_pServerFont[0] )
+    if( !m_pFreetypeFont[0] )
         return nullptr;
 
-    const FontCharMapRef xFCMap = m_pServerFont[0]->GetFontCharMap();
+    const FontCharMapRef xFCMap = m_pFreetypeFont[0]->GetFontCharMap();
     return xFCMap;
 }
 
 bool GenPspGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
-    if (!m_pServerFont[0])
+    if (!m_pFreetypeFont[0])
         return false;
-    return m_pServerFont[0]->GetFontCapabilities(rFontCapabilities);
+    return m_pFreetypeFont[0]->GetFontCapabilities(rFontCapabilities);
 }
 
 void GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
@@ -788,11 +788,11 @@ void GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
     // release all fonts that are to be overridden
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
     {
-        if( m_pServerFont[i] != nullptr )
+        if( m_pFreetypeFont[i] != nullptr )
         {
             // old server side font is no longer referenced
-            GlyphCache::GetInstance().UncacheFont( *m_pServerFont[i] );
-            m_pServerFont[i] = nullptr;
+            GlyphCache::GetInstance().UncacheFont( *m_pFreetypeFont[i] );
+            m_pFreetypeFont[i] = nullptr;
         }
     }
 
@@ -823,13 +823,13 @@ void GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
     if( pEntry->mpFontData )
     {
         // requesting a font provided by builtin rasterizer
-        ServerFont* pServerFont = GlyphCache::GetInstance().CacheFont( *pEntry );
-        if( pServerFont != nullptr )
+        FreetypeFont* pFreetypeFont = GlyphCache::GetInstance().CacheFont( *pEntry );
+        if( pFreetypeFont != nullptr )
         {
-            if( pServerFont->TestFont() )
-                m_pServerFont[ nFallbackLevel ] = pServerFont;
+            if( pFreetypeFont->TestFont() )
+                m_pFreetypeFont[ nFallbackLevel ] = pFreetypeFont;
             else
-                GlyphCache::GetInstance().UncacheFont( *pServerFont );
+                GlyphCache::GetInstance().UncacheFont( *pFreetypeFont );
         }
     }
 
@@ -950,7 +950,7 @@ bool GenPspGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
     if( nLevel >= MAX_FALLBACK )
         return false;
 
-    ServerFont* pSF = m_pServerFont[ nLevel ];
+    FreetypeFont* pSF = m_pFreetypeFont[ nLevel ];
     if( !pSF )
         return false;
 
@@ -967,7 +967,7 @@ bool GenPspGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     if( nLevel >= MAX_FALLBACK )
         return false;
 
-    ServerFont* pSF = m_pServerFont[ nLevel ];
+    FreetypeFont* pSF = m_pFreetypeFont[ nLevel ];
     if( !pSF )
         return false;
 
@@ -989,18 +989,18 @@ SalLayout* GenPspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 
     GenericSalLayout* pLayout = nullptr;
 
-    if( m_pServerFont[ nFallbackLevel ]
+    if( m_pFreetypeFont[ nFallbackLevel ]
         && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
     {
 #if ENABLE_GRAPHITE
         // Is this a Graphite font?
-        if (GraphiteServerFontLayout::IsGraphiteEnabledFont(*m_pServerFont[nFallbackLevel]))
+        if (GraphiteServerFontLayout::IsGraphiteEnabledFont(*m_pFreetypeFont[nFallbackLevel]))
         {
-            pLayout = new GraphiteServerFontLayout(*m_pServerFont[nFallbackLevel]);
+            pLayout = new GraphiteServerFontLayout(*m_pFreetypeFont[nFallbackLevel]);
         }
         else
 #endif
-            pLayout = new PspServerFontLayout( *m_pPrinterGfx, *m_pServerFont[nFallbackLevel], rArgs );
+            pLayout = new PspServerFontLayout( *m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel], rArgs );
     }
     else
         pLayout = new PspFontLayout( *m_pPrinterGfx );

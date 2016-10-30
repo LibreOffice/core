@@ -59,10 +59,10 @@ void GlyphCache::InvalidateAllGlyphs()
 {
     for( FontList::iterator it = maFontList.begin(), end = maFontList.end(); it != end; ++it )
     {
-        ServerFont* pServerFont = it->second;
-        // free all pServerFont related data
-        pServerFont->GarbageCollect( mnLruIndex+0x10000000 );
-        delete pServerFont;
+        FreetypeFont* pFreetypeFont = it->second;
+        // free all pFreetypeFont related data
+        pFreetypeFont->GarbageCollect( mnLruIndex+0x10000000 );
+        delete pFreetypeFont;
     }
 
     maFontList.clear();
@@ -166,7 +166,7 @@ void GlyphCache::ClearFontCache()
         mpFtManager->ClearFontList();
 }
 
-ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
+FreetypeFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
 {
     // a serverfont request has pFontData
     if( rFontSelData.mpFontData == nullptr )
@@ -182,14 +182,14 @@ ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
     FontList::iterator it = maFontList.find( aFontSelData );
     if( it != maFontList.end() )
     {
-        ServerFont* pFound = it->second;
+        FreetypeFont* pFound = it->second;
         if( pFound )
             pFound->AddRef();
         return pFound;
     }
 
     // font not cached yet => create new font item
-    ServerFont* pNew = nullptr;
+    FreetypeFont* pNew = nullptr;
     if( mpFtManager )
         pNew = mpFtManager->CreateFont( aFontSelData );
 
@@ -217,11 +217,11 @@ ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
     return pNew;
 }
 
-void GlyphCache::UncacheFont( ServerFont& rServerFont )
+void GlyphCache::UncacheFont( FreetypeFont& rFreetypeFont )
 {
-    if( (rServerFont.Release() <= 0) && (mnMaxSize <= mnBytesUsed) )
+    if( (rFreetypeFont.Release() <= 0) && (mnMaxSize <= mnBytesUsed) )
     {
-        mpCurrentGCFont = &rServerFont;
+        mpCurrentGCFont = &rFreetypeFont;
         GarbageCollect();
     }
 }
@@ -241,50 +241,50 @@ void GlyphCache::GarbageCollect()
         return;
 
     // prepare advance to next font for garbage collection
-    ServerFont* const pServerFont = mpCurrentGCFont;
-    mpCurrentGCFont = pServerFont->mpNextGCFont;
+    FreetypeFont* const pFreetypeFont = mpCurrentGCFont;
+    mpCurrentGCFont = pFreetypeFont->mpNextGCFont;
 
-    if( (pServerFont == mpCurrentGCFont)    // no other fonts
-    ||  (pServerFont->GetRefCount() > 0) )  // font still used
+    if( (pFreetypeFont == mpCurrentGCFont)    // no other fonts
+    ||  (pFreetypeFont->GetRefCount() > 0) )  // font still used
     {
         // try to garbage collect at least a few bytes
-        pServerFont->GarbageCollect( mnLruIndex - mnGlyphCount/2 );
+        pFreetypeFont->GarbageCollect( mnLruIndex - mnGlyphCount/2 );
     }
     else // current GC font is unreferenced
     {
-        SAL_WARN_IF( (pServerFont->GetRefCount() != 0), "vcl",
+        SAL_WARN_IF( (pFreetypeFont->GetRefCount() != 0), "vcl",
             "GlyphCache::GC detected RefCount underflow" );
 
-        // free all pServerFont related data
-        pServerFont->GarbageCollect( mnLruIndex+0x10000000 );
-        if( pServerFont == mpCurrentGCFont )
+        // free all pFreetypeFont related data
+        pFreetypeFont->GarbageCollect( mnLruIndex+0x10000000 );
+        if( pFreetypeFont == mpCurrentGCFont )
             mpCurrentGCFont = nullptr;
-        const FontSelectPattern& rIFSD = pServerFont->GetFontSelData();
+        const FontSelectPattern& rIFSD = pFreetypeFont->GetFontSelData();
         maFontList.erase( rIFSD );
-        mnBytesUsed -= pServerFont->GetByteCount();
+        mnBytesUsed -= pFreetypeFont->GetByteCount();
 
         // remove font from list of garbage collected fonts
-        if( pServerFont->mpPrevGCFont )
-            pServerFont->mpPrevGCFont->mpNextGCFont = pServerFont->mpNextGCFont;
-        if( pServerFont->mpNextGCFont )
-            pServerFont->mpNextGCFont->mpPrevGCFont = pServerFont->mpPrevGCFont;
-        if( pServerFont == mpCurrentGCFont )
+        if( pFreetypeFont->mpPrevGCFont )
+            pFreetypeFont->mpPrevGCFont->mpNextGCFont = pFreetypeFont->mpNextGCFont;
+        if( pFreetypeFont->mpNextGCFont )
+            pFreetypeFont->mpNextGCFont->mpPrevGCFont = pFreetypeFont->mpPrevGCFont;
+        if( pFreetypeFont == mpCurrentGCFont )
             mpCurrentGCFont = nullptr;
 
-        delete pServerFont;
+        delete pFreetypeFont;
     }
 }
 
-inline void GlyphCache::UsingGlyph( ServerFont&, GlyphData& rGlyphData )
+inline void GlyphCache::UsingGlyph( FreetypeFont&, GlyphData& rGlyphData )
 {
     rGlyphData.SetLruValue( mnLruIndex++ );
 }
 
-inline void GlyphCache::AddedGlyph( ServerFont& rServerFont, GlyphData& rGlyphData )
+inline void GlyphCache::AddedGlyph( FreetypeFont& rFreetypeFont, GlyphData& rGlyphData )
 {
     ++mnGlyphCount;
     mnBytesUsed += sizeof( rGlyphData );
-    UsingGlyph( rServerFont, rGlyphData );
+    UsingGlyph( rFreetypeFont, rGlyphData );
     if( mnBytesUsed > mnMaxSize )
         GarbageCollect();
 }
@@ -295,24 +295,24 @@ inline void GlyphCache::RemovingGlyph()
     --mnGlyphCount;
 }
 
-void ServerFont::ReleaseFromGarbageCollect()
+void FreetypeFont::ReleaseFromGarbageCollect()
 {
     // remove from GC list
-    ServerFont* pPrev = mpPrevGCFont;
-    ServerFont* pNext = mpNextGCFont;
+    FreetypeFont* pPrev = mpPrevGCFont;
+    FreetypeFont* pNext = mpNextGCFont;
     if( pPrev ) pPrev->mpNextGCFont = pNext;
     if( pNext ) pNext->mpPrevGCFont = pPrev;
     mpPrevGCFont = nullptr;
     mpNextGCFont = nullptr;
 }
 
-long ServerFont::Release() const
+long FreetypeFont::Release() const
 {
-    SAL_WARN_IF( mnRefCount <= 0, "vcl", "ServerFont: RefCount underflow" );
+    SAL_WARN_IF( mnRefCount <= 0, "vcl", "FreetypeFont: RefCount underflow" );
     return --mnRefCount;
 }
 
-GlyphData& ServerFont::GetGlyphData( sal_GlyphId aGlyphId )
+GlyphData& FreetypeFont::GetGlyphData( sal_GlyphId aGlyphId )
 {
     // usually the GlyphData is cached
     GlyphList::iterator it = maGlyphList.find( aGlyphId );
@@ -330,7 +330,7 @@ GlyphData& ServerFont::GetGlyphData( sal_GlyphId aGlyphId )
     return rGlyphData;
 }
 
-void ServerFont::GarbageCollect( long nMinLruIndex )
+void FreetypeFont::GarbageCollect( long nMinLruIndex )
 {
     GlyphList::iterator it = maGlyphList.begin();
     while( it != maGlyphList.end() )
@@ -348,27 +348,27 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
     }
 }
 
-ServerFontInstance::ServerFontInstance( FontSelectPattern& rFSD )
+FreetypeFontInstance::FreetypeFontInstance( FontSelectPattern& rFSD )
 :   LogicalFontInstance( rFSD )
-,   mpServerFont( nullptr )
+,   mpFreetypeFont( nullptr )
 ,   mbGotFontOptions( false )
 {}
 
-void ServerFontInstance::SetServerFont(ServerFont* p)
+void FreetypeFontInstance::SetFreetypeFont(FreetypeFont* p)
 {
-    if (p == mpServerFont)
+    if (p == mpFreetypeFont)
         return;
-    if (mpServerFont)
-        mpServerFont->Release();
-    mpServerFont = p;
-    if (mpServerFont)
-        mpServerFont->AddRef();
+    if (mpFreetypeFont)
+        mpFreetypeFont->Release();
+    mpFreetypeFont = p;
+    if (mpFreetypeFont)
+        mpFreetypeFont->AddRef();
 }
 
-ServerFontInstance::~ServerFontInstance()
+FreetypeFontInstance::~FreetypeFontInstance()
 {
-    // TODO: remove the ServerFont here instead of in the GlyphCache
-    if (mpServerFont)
-        mpServerFont->Release();
+    // TODO: remove the FreetypeFont here instead of in the GlyphCache
+    if (mpFreetypeFont)
+        mpFreetypeFont->Release();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
