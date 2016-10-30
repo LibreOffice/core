@@ -642,29 +642,41 @@ static bool lr_tb_sort( Element* pLeft, Element* pRight )
     // Note: allow for 10% overlap on text lines since text lines are usually
     // of the same order as font height whereas the real paint area
     // of text is usually smaller
-    double fudge_factor = 1.0;
-    if( dynamic_cast< TextElement* >(pLeft) || dynamic_cast< TextElement* >(pRight) )
-        fudge_factor = 0.9;
+    double fudge_factor_left = 0.0, fudge_factor_right = 0.0;
+    if( dynamic_cast< TextElement* >(pLeft) )
+        fudge_factor_left = 0.1;
+    if (dynamic_cast< TextElement* >(pRight))
+        fudge_factor_right = 0.1;
 
+    // Allow negative height
+    double lower_boundary_left  = pLeft->y  + std::max(pLeft->h, 0.0)  - fabs(pLeft->h)  * fudge_factor_left;
+    double lower_boundary_right = pRight->y + std::max(pRight->h, 0.0) - fabs(pRight->h) * fudge_factor_right;
+    double upper_boundary_left  = pLeft->y  + std::min(pLeft->h, 0.0);
+    double upper_boundary_right = pRight->y + std::min(pRight->h, 0.0);
     // if left's lower boundary is above right's upper boundary
     // then left is smaller
-    if( pLeft->y+pLeft->h*fudge_factor < pRight->y )
+    if( lower_boundary_left < upper_boundary_right )
         return true;
     // if right's lower boundary is above left's upper boundary
     // then left is definitely not smaller
-    if( pRight->y+pRight->h*fudge_factor < pLeft->y )
+    if( lower_boundary_right < upper_boundary_left )
         return false;
 
+    // Allow negative width
+    double left_boundary_left   = pLeft->y  + std::min(pLeft->w, 0.0);
+    double left_boundary_right  = pRight->y + std::min(pRight->w, 0.0);
+    double right_boundary_left  = pLeft->y  + std::max(pLeft->w, 0.0);
+    double right_boundary_right = pRight->y + std::max(pRight->w, 0.0);
     // by now we have established that left and right are inside
     // a "line", that is they have vertical overlap
     // second: left-right sorting
     // if left's right boundary is left to right's left boundary
     // then left is smaller
-    if( pLeft->x+pLeft->w < pRight->x )
+    if( right_boundary_left < left_boundary_right )
         return true;
     // if right's right boundary is left to left's left boundary
     // then left is definitely not smaller
-    if( pRight->x+pRight->w < pLeft->x )
+    if( right_boundary_right < left_boundary_left )
         return false;
 
     // here we have established vertical and horizontal overlap
