@@ -1738,12 +1738,10 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
     // use master's id type as they have same range, mso does that as well
     pFS->startElementNS( XML_p, XML_sldLayoutIdLst, FSEND );
 
-    int nCount = 0;
     for( int i = 0; i < LAYOUT_SIZE; i++) {
         sal_Int32 nLayoutFileId = GetLayoutFileId( i, nPageNum );
         if( nLayoutFileId > 0 ) {
             AddLayoutIdAndRelation( pFS, nLayoutFileId );
-            nCount++;
         } else {
             ImplWritePPTXLayout( i, nPageNum );
             AddLayoutIdAndRelation( pFS, GetLayoutFileId( i, nPageNum ) );
