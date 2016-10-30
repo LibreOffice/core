@@ -53,7 +53,18 @@
 
 using namespace framework;
 
-namespace {
+namespace
+{
+
+vcl::ImageType getImageType(ToolBoxButtonSize eSize)
+{
+    vcl::ImageType eImageType = vcl::ImageType::Size16;
+    if (eSize == ToolBoxButtonSize::Large)
+        eImageType = vcl::ImageType::Size26;
+    else if (eSize == ToolBoxButtonSize::Size32)
+        eImageType = vcl::ImageType::Size32;
+    return eImageType;
+}
 
 typedef cppu::ImplInheritanceHelper< svt::ToolboxController,
                                     css::lang::XServiceInfo >
@@ -380,9 +391,10 @@ void GenericPopupToolbarController::functionExecuted( const OUString& rCommand )
             pToolBox->SetHelpText( nId, OUString() ); // Will retrieve the new one from help.
             pToolBox->SetItemText( nId, vcl::CommandInfoProvider::Instance().GetLabelForCommand( rCommand, m_xFrame ) );
             pToolBox->SetQuickHelpText( nId, vcl::CommandInfoProvider::Instance().GetTooltipForCommand( rCommand, m_xFrame ) );
-            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( rCommand,
-                                                                                    pToolBox->GetToolboxButtonSize() == ToolBoxButtonSize::Large,
-                                                                                    m_xFrame );
+
+            vcl::ImageType eImageType = getImageType(pToolBox->GetToolboxButtonSize());
+
+            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(rCommand, m_xFrame, eImageType);
             if ( !!aImage )
                 pToolBox->SetItemImage( nId, aImage );
         }
@@ -499,21 +511,22 @@ void SaveToolbarController::updateImage()
     if ( !getToolboxId( nId, &pToolBox ) )
         return;
 
-    bool bLargeIcons = pToolBox->GetToolboxButtonSize() == ToolBoxButtonSize::Large;
+    vcl::ImageType eImageType = getImageType(pToolBox->GetToolboxButtonSize());
+
     Image aImage;
 
     if ( m_bReadOnly )
     {
-        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( ".uno:SaveAs", bLargeIcons, m_xFrame );
+        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(".uno:SaveAs", m_xFrame, eImageType);
     }
     else if ( m_bModified )
     {
-        Image aResImage( bLargeIcons ? FwkResId( IMG_SAVEMODIFIED_LARGE ) : FwkResId( IMG_SAVEMODIFIED_SMALL ) );
+        Image aResImage(eImageType == vcl::ImageType::Size16 ? FwkResId(IMG_SAVEMODIFIED_SMALL) : FwkResId(IMG_SAVEMODIFIED_LARGE));
         aImage = aResImage;
     }
 
     if ( !aImage )
-        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( m_aCommandURL, bLargeIcons, m_xFrame );
+        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(m_aCommandURL, m_xFrame, eImageType);
 
     if ( !!aImage )
         pToolBox->SetItemImage( nId, aImage );

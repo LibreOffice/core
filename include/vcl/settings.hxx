@@ -228,6 +228,7 @@ enum class ToolbarIconSize
     Unknown      = 0,
     Small        = 1,
     Large        = 2,
+    Size32       = 3,
 };
 
 #define STYLE_CURSOR_NOBLINKTIME    SAL_MAX_UINT64

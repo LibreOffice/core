@@ -385,6 +385,7 @@
                               <item translatable="yes">Automatic</item>
                               <item translatable="yes">Small</item>
                               <item translatable="yes">Large</item>
+                              <item translatable="yes">Extra Large</item>
                             </items>
                           </object>
                           <packing>

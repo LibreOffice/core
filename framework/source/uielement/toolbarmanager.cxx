@@ -54,6 +54,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/imgdef.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/syswin.hxx>
@@ -94,15 +95,6 @@ static const char HELPID_PREFIX_TESTTOOL[]     = ".HelpId:";
 
 static const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU = 1000;
 
-
-static sal_Int16 getImageTypeFromBools( bool bBig )
-{
-    sal_Int16 n( 0 );
-    if ( bBig )
-        n |= css::ui::ImageType::SIZE_LARGE;
-    return n;
-}
-
 static css::uno::Reference< css::frame::XLayoutManager > getLayoutManagerFromFrame(
     css::uno::Reference< css::frame::XFrame >& rFrame )
 {
@@ -126,6 +118,21 @@ static css::uno::Reference< css::frame::XLayoutManager > getLayoutManagerFromFra
 
     return xLayoutManager;
 }
+namespace
+{
+
+sal_Int16 getCurrentImageType()
+{
+    SvtMiscOptions aMiscOptions;
+    sal_Int16 nImageType = css::ui::ImageType::SIZE_DEFAULT;
+    if (aMiscOptions.GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE)
+        nImageType |= css::ui::ImageType::SIZE_LARGE;
+    else if (aMiscOptions.GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_32)
+        nImageType |= css::ui::ImageType::SIZE_32;
+    return nImageType;
+}
+
+} // end anonymous namespace
 
 //  XInterface, XTypeProvider, XServiceInfo
 
@@ -134,10 +141,10 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
                                 const OUString& rResourceName,
                                 ToolBox* pToolBar ) :
     m_bDisposed( false ),
-    m_bSmallSymbols( !SvtMiscOptions().AreCurrentSymbolsLarge() ),
     m_bAddedToTaskPaneList( true ),
     m_bFrameActionRegistered( false ),
     m_bUpdateControllers( false ),
+    m_eSymbolSize(SvtMiscOptions().GetCurrentSymbolsSize()),
     m_pToolBar( pToolBar ),
     m_aResourceName( rResourceName ),
     m_xFrame( rFrame ),
@@ -163,7 +170,13 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_pToolBar->SetDoubleClickHdl( LINK( this, ToolBarManager, DoubleClick ) );
     m_pToolBar->SetStateChangedHdl( LINK( this, ToolBarManager, StateChanged ) );
     m_pToolBar->SetDataChangedHdl( LINK( this, ToolBarManager, DataChanged ) );
-    m_pToolBar->SetToolboxButtonSize( m_bSmallSymbols ? ToolBoxButtonSize::Small : ToolBoxButtonSize::Large );
+
+    if (m_eSymbolSize == SFX_SYMBOLS_SIZE_LARGE)
+        m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Large);
+    else if (m_eSymbolSize == SFX_SYMBOLS_SIZE_32)
+        m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Size32);
+    else
+        m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Small);
 
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
@@ -252,11 +265,12 @@ void ToolBarManager::CheckAndUpdateImages()
     bool bRefreshImages = false;
 
     SvtMiscOptions aMiscOptions;
-    bool bCurrentSymbolsSmall = !aMiscOptions.AreCurrentSymbolsLarge();
-    if ( m_bSmallSymbols != bCurrentSymbolsSmall )
+    sal_Int16 eNewSymbolSize = aMiscOptions.GetCurrentSymbolsSize();
+
+    if (m_eSymbolSize != eNewSymbolSize )
     {
         bRefreshImages = true;
-        m_bSmallSymbols = bCurrentSymbolsSmall;
+        m_eSymbolSize = eNewSymbolSize;
     }
 
     const OUString& sCurrentIconTheme = aMiscOptions.GetIconTheme();
@@ -275,8 +289,22 @@ void ToolBarManager::RefreshImages()
 {
     SolarMutexGuard g;
 
-    bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    m_pToolBar->SetToolboxButtonSize( bBigImages ? ToolBoxButtonSize::Large : ToolBoxButtonSize::Small );
+    vcl::ImageType eImageType = vcl::ImageType::Size16;
+
+    if (m_eSymbolSize == SFX_SYMBOLS_SIZE_LARGE)
+    {
+        m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Large);
+        eImageType = vcl::ImageType::Size26;
+    }
+    else if (m_eSymbolSize == SFX_SYMBOLS_SIZE_32)
+    {
+        eImageType = vcl::ImageType::Size32;
+        m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Size32);
+    }
+    else
+    {
+        m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Small);
+    }
 
     for ( auto const& it : m_aControllerMap )
     {
@@ -290,11 +318,12 @@ void ToolBarManager::RefreshImages()
         else
         {
             OUString aCommandURL = m_pToolBar->GetItemCommand( it.first );
-            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, bBigImages, m_xFrame);
+            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, m_xFrame, eImageType);
             // Try also to query for add-on images before giving up and use an
             // empty image.
+            bool bBigImages = eImageType != vcl::ImageType::Size16;
             if ( !aImage )
-                aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages );
+                aImage = framework::AddonsOptions().GetImageFromURL(aCommandURL, bBigImages);
             m_pToolBar->SetItemImage( it.first, aImage );
         }
     }
@@ -533,9 +562,7 @@ void ToolBarManager::impl_elementChanged(bool const isRemove,
 
     Reference< XNameAccess > xNameAccess;
     sal_Int16                nImageType = sal_Int16();
-    sal_Int16                nCurrentImageType = getImageTypeFromBools(
-                                                    SvtMiscOptions().AreCurrentSymbolsLarge()
-                                                    );
+    sal_Int16                nCurrentImageType = getCurrentImageType();
 
     if (( Event.aInfo >>= nImageType ) &&
         ( nImageType == nCurrentImageType ) &&
@@ -1197,12 +1224,13 @@ void ToolBarManager::RequestImages()
     Sequence< Reference< XGraphic > > aDocGraphicSeq;
     Sequence< Reference< XGraphic > > aModGraphicSeq;
 
-    bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge() );
+    SvtMiscOptions aMiscOptions;
+
+    sal_Int16 nImageType = getCurrentImageType();
 
     if ( m_xDocImageManager.is() )
-        aDocGraphicSeq = m_xDocImageManager->getImages( p, aCmdURLSeq );
-    aModGraphicSeq = m_xModuleImageManager->getImages( p, aCmdURLSeq );
+        aDocGraphicSeq = m_xDocImageManager->getImages(nImageType, aCmdURLSeq);
+    aModGraphicSeq = m_xModuleImageManager->getImages(nImageType, aCmdURLSeq);
 
     sal_uInt32 i = 0;
     CommandToInfoMap::iterator pIter = m_aCommandMap.begin();
@@ -1218,7 +1246,7 @@ void ToolBarManager::RequestImages()
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
-                aImage = framework::AddonsOptions().GetImageFromURL( aCmdURLSeq[i], bBigImages );
+                aImage = framework::AddonsOptions().GetImageFromURL( aCmdURLSeq[i], aMiscOptions.AreCurrentSymbolsLarge());
 
             pIter->second.nImageInfo = 1; // mark image as module based
         }
@@ -1461,7 +1489,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
                 pVisibleItemsPopupMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MenuItemBits::CHECKABLE );
                 pVisibleItemsPopupMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
                 pVisibleItemsPopupMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
-                Image aImage( vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, false, m_xFrame) );
+                Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, m_xFrame));
                 commandToImage[aCommandURL] = aImage;
                 pVisibleItemsPopupMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos, aImage );
             }

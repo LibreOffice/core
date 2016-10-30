@@ -890,7 +890,7 @@ namespace
         if (!aTooltip.isEmpty())
             pButton->SetQuickHelpText(aTooltip);
 
-        Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommand, /*bLarge=*/ false, rFrame));
+        Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommand, rFrame));
         pButton->SetModeImage(aImage);
 
         pButton->SetCommandHandler(aCommand);
