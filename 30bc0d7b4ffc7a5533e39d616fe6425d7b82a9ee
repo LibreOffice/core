@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_846879bc",
+        "filename": "sc/qa/extras/sclabelrangeobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-10-30T17:37:06Z",
+      "side": 1,
+      "message": "This should be 2.",
+      "revId": "30bc0d7b4ffc7a5533e39d616fe6425d7b82a9ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_64735db2",
+        "filename": "sc/qa/extras/sclabelrangeobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-10-30T17:37:06Z",
+      "side": 1,
+      "message": "This should be obviously ScLabelRangeObj. See the error in the build.",
+      "revId": "30bc0d7b4ffc7a5533e39d616fe6425d7b82a9ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_a46575e2",
+        "filename": "test/source/sheet/xlabelrange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-10-30T17:37:06Z",
+      "side": 1,
+      "message": "Does this really work?",
+      "revId": "30bc0d7b4ffc7a5533e39d616fe6425d7b82a9ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_c46271d8",
+        "filename": "test/source/sheet/xlabelrange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-10-30T17:37:06Z",
+      "side": 1,
+      "message": "Does this really work?",
+      "revId": "30bc0d7b4ffc7a5533e39d616fe6425d7b82a9ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
