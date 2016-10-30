@@ -127,6 +127,7 @@ public:
     void testTdf99030();
     void testTdf49561();
     void testTdf103473();
+    void testTdf103477();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -179,6 +180,7 @@ public:
     CPPUNIT_TEST(testTdf99030);
     CPPUNIT_TEST(testTdf49561);
     CPPUNIT_TEST(testTdf103473);
+    CPPUNIT_TEST(testTdf103477);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1500,6 +1502,23 @@ void SdImportTest::testTdf103473()
     CPPUNIT_ASSERT_EQUAL(4431L, aRect.Top());
     CPPUNIT_ASSERT_EQUAL(8353L, aRect.Right());
     CPPUNIT_ASSERT_EQUAL(9155L, aRect.Bottom());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf103477()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf103477.pptx"), PPTX);
+
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(6) );
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr );
+
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>( aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET) );
+    CPPUNIT_ASSERT(pNumFmt);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", sal_uInt32(0x000000), pNumFmt->GetNumRule()->GetLevel(1).GetBulletColor().GetColor());
 
     xDocShRef->DoClose();
 }
