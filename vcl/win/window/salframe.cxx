@@ -5480,8 +5480,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         return 0;
     }
 
-    bool bCheckTimers = false;
-
     switch( nMsg )
     {
         case WM_MOUSEMOVE:
@@ -5618,11 +5616,11 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             rDef = FALSE;
             break;
         case WM_PAINT:
-            bCheckTimers = ImplHandlePaintMsg( hWnd );
+            ImplHandlePaintMsg( hWnd );
             rDef = FALSE;
             break;
         case SAL_MSG_POSTPAINT:
-            bCheckTimers = ImplHandlePostPaintMsg( hWnd, reinterpret_cast<RECT*>(wParam) );
+            ImplHandlePostPaintMsg( hWnd, reinterpret_cast<RECT*>(wParam) );
             rDef = FALSE;
             break;
 
@@ -5841,24 +5839,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 rDef = FALSE;
             }
             break;
-    }
-
-    if( bCheckTimers )
-    {
-        SalData* pSalData = GetSalData();
-        if( pSalData->mnNextTimerTime )
-        {
-            DWORD nCurTime = GetTickCount();
-            if( pSalData->mnNextTimerTime < nCurTime )
-            {
-                MSG aMsg;
-                if( ! PeekMessageW( &aMsg, nullptr, WM_PAINT, WM_PAINT, PM_NOREMOVE | PM_NOYIELD ) )
-                {
-                    BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_POSTTIMER, 0, nCurTime);
-                    SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
-                }
-            }
-        }
     }
 
     return nRet;
