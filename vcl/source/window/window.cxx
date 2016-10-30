@@ -775,6 +775,54 @@ ImplWinData::~ImplWinData()
     delete mpTrackRect;
 }
 
+ImplFrameData::ImplFrameData( vcl::Window *pWindow )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    assert (pSVData->maWinData.mpFirstFrame.get() != pWindow);
+    mpNextFrame        = pSVData->maWinData.mpFirstFrame;
+    pSVData->maWinData.mpFirstFrame = pWindow;
+    mpFirstOverlap     = nullptr;
+    mpFocusWin         = nullptr;
+    mpMouseMoveWin     = nullptr;
+    mpMouseDownWin     = nullptr;
+    mpFontCollection   = pSVData->maGDIData.mpScreenFontList;
+    mpFontCache        = pSVData->maGDIData.mpScreenFontCache;
+    mnFocusId          = nullptr;
+    mnMouseMoveId      = nullptr;
+    mnLastMouseX       = -1;
+    mnLastMouseY       = -1;
+    mnBeforeLastMouseX = -1;
+    mnBeforeLastMouseY = -1;
+    mnFirstMouseX      = -1;
+    mnFirstMouseY      = -1;
+    mnLastMouseWinX    = -1;
+    mnLastMouseWinY    = -1;
+    mnModalMode        = 0;
+    mnMouseDownTime    = 0;
+    mnClickCount       = 0;
+    mnFirstMouseCode   = 0;
+    mnMouseCode        = 0;
+    mnMouseMode        = MouseEventModifiers::NONE;
+    meMapUnit          = MapUnit::MapPixel;
+    mbHasFocus         = false;
+    mbInMouseMove      = false;
+    mbMouseIn          = false;
+    mbStartDragCalled  = false;
+    mbNeedSysWindow    = false;
+    mbMinimized        = false;
+    mbStartFocusState  = false;
+    mbInSysObjFocusHdl = false;
+    mbInSysObjToTopHdl = false;
+    mbSysObjFocus      = false;
+    maPaintIdle.SetPriority( SchedulerPriority::REPAINT );
+    maPaintIdle.SetIdleHdl( LINK( pWindow, vcl::Window, ImplHandlePaintHdl ) );
+    maPaintIdle.SetDebugName( "vcl::Window maPaintIdle" );
+    maResizeIdle.SetPriority( SchedulerPriority::RESIZE );
+    maResizeIdle.SetIdleHdl( LINK( pWindow, vcl::Window, ImplHandleResizeTimerHdl ) );
+    maResizeIdle.SetDebugName( "vcl::Window maResizeIdle" );
+    mbInternalDragGestureRecognizer = false;
+    mbInBufferedPaint = false;
+}
 
 namespace vcl {
 
@@ -1020,58 +1068,13 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         pFrame->SetCallback( this, ImplWindowFrameProc );
 
         // set window frame data
-        mpWindowImpl->mpFrameData     = new ImplFrameData;
+        mpWindowImpl->mpFrameData     = new ImplFrameData( this );
         mpWindowImpl->mpFrame         = pFrame;
         mpWindowImpl->mpFrameWindow   = this;
         mpWindowImpl->mpOverlapWindow = this;
 
-        // set frame data
-        assert (pSVData->maWinData.mpFirstFrame.get() != this);
-        mpWindowImpl->mpFrameData->mpNextFrame        = pSVData->maWinData.mpFirstFrame;
-        pSVData->maWinData.mpFirstFrame = this;
-        mpWindowImpl->mpFrameData->mpFirstOverlap     = nullptr;
-        mpWindowImpl->mpFrameData->mpFocusWin         = nullptr;
-        mpWindowImpl->mpFrameData->mpMouseMoveWin     = nullptr;
-        mpWindowImpl->mpFrameData->mpMouseDownWin     = nullptr;
-        mpWindowImpl->mpFrameData->mpFontCollection   = pSVData->maGDIData.mpScreenFontList;
-        mpWindowImpl->mpFrameData->mpFontCache        = pSVData->maGDIData.mpScreenFontCache;
-        mpWindowImpl->mpFrameData->mnFocusId          = nullptr;
-        mpWindowImpl->mpFrameData->mnMouseMoveId      = nullptr;
-        mpWindowImpl->mpFrameData->mnLastMouseX       = -1;
-        mpWindowImpl->mpFrameData->mnLastMouseY       = -1;
-        mpWindowImpl->mpFrameData->mnBeforeLastMouseX = -1;
-        mpWindowImpl->mpFrameData->mnBeforeLastMouseY = -1;
-        mpWindowImpl->mpFrameData->mnFirstMouseX      = -1;
-        mpWindowImpl->mpFrameData->mnFirstMouseY      = -1;
-        mpWindowImpl->mpFrameData->mnLastMouseWinX    = -1;
-        mpWindowImpl->mpFrameData->mnLastMouseWinY    = -1;
-        mpWindowImpl->mpFrameData->mnModalMode        = 0;
-        mpWindowImpl->mpFrameData->mnMouseDownTime    = 0;
-        mpWindowImpl->mpFrameData->mnClickCount       = 0;
-        mpWindowImpl->mpFrameData->mnFirstMouseCode   = 0;
-        mpWindowImpl->mpFrameData->mnMouseCode        = 0;
-        mpWindowImpl->mpFrameData->mnMouseMode        = MouseEventModifiers::NONE;
-        mpWindowImpl->mpFrameData->meMapUnit          = MapUnit::MapPixel;
-        mpWindowImpl->mpFrameData->mbHasFocus         = false;
-        mpWindowImpl->mpFrameData->mbInMouseMove      = false;
-        mpWindowImpl->mpFrameData->mbMouseIn          = false;
-        mpWindowImpl->mpFrameData->mbStartDragCalled  = false;
-        mpWindowImpl->mpFrameData->mbNeedSysWindow    = false;
-        mpWindowImpl->mpFrameData->mbMinimized        = false;
-        mpWindowImpl->mpFrameData->mbStartFocusState  = false;
-        mpWindowImpl->mpFrameData->mbInSysObjFocusHdl = false;
-        mpWindowImpl->mpFrameData->mbInSysObjToTopHdl = false;
-        mpWindowImpl->mpFrameData->mbSysObjFocus      = false;
-        mpWindowImpl->mpFrameData->maPaintIdle.SetPriority( SchedulerPriority::REPAINT );
-        mpWindowImpl->mpFrameData->maPaintIdle.SetIdleHdl( LINK( this, Window, ImplHandlePaintHdl ) );
-        mpWindowImpl->mpFrameData->maPaintIdle.SetDebugName( "vcl::Window maPaintIdle" );
-        mpWindowImpl->mpFrameData->maResizeIdle.SetPriority( SchedulerPriority::RESIZE );
-        mpWindowImpl->mpFrameData->maResizeIdle.SetIdleHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
-        mpWindowImpl->mpFrameData->maResizeIdle.SetDebugName( "vcl::Window maResizeIdle" );
-        mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = false;
         if (!(nStyle & WB_DEFAULTWIN) && mpWindowImpl->mbDoubleBufferingRequested)
             RequestDoubleBuffering(true);
-        mpWindowImpl->mpFrameData->mbInBufferedPaint = false;
 
         if ( pRealParent && IsTopWindow() )
         {
