@@ -27,6 +27,8 @@
 #include <win/salgdi.h>
 
 #include <usp10.h>
+#include <d2d1.h>
+#include <dwrite.h>
 
 #include "opengl/PackedTextureAtlas.hxx"
 
@@ -38,10 +40,6 @@ typedef std::unordered_map<int,int> IntMap;
 #include <graphite_layout.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <graphite_features.hxx>
-#if ENABLE_GRAPHITE_DWRITE
-#include <d2d1.h>
-#include <dwrite.h>
-#endif
 #endif
 
 // This needs to come after any includes for d2d1.h, otherwise we get lots of errors
@@ -448,8 +446,6 @@ public:
         Point* pPos, int* pGetNextGlypInfo) override;
 };
 
-#if ENABLE_GRAPHITE_DWRITE
-
 class D2DWriteTextOutRenderer : public TextOutRenderer
 {
     typedef HRESULT(WINAPI *pD2D1CreateFactory_t)(D2D1_FACTORY_TYPE,
@@ -517,7 +513,5 @@ private:
     float             mlfEmHeight;
     HDC               mhDC;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
