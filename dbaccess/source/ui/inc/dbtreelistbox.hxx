@@ -22,6 +22,7 @@
 #include "ScrollHelper.hxx"
 #include "moduledbu.hxx"
 
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <svtools/treelistbox.hxx>
@@ -58,8 +59,8 @@ namespace dbaui
         std::set<SvTreeListEntry*>  m_aSelectedEntries;
         SvTreeListEntry*            m_pDragedEntry;
         IControlActionListener*     m_pActionListener;
-        IContextMenuProvider*
-                                    m_pContextMenuProvider;
+        IContextMenuProvider*       m_pContextMenuProvider;
+        css::uno::Reference<css::frame::XPopupMenuController> m_xMenuController;
 
         Link<SvTreeListEntry*,bool> m_aPreExpandHandler;    // handler to be called before a node is expanded
         Link<LinkParamNone*,void>   m_aSelChangeHdl;        // handler to be called (asynchronously) when the selection changes in any way
@@ -74,6 +75,7 @@ namespace dbaui
         DECL_LINK( OnResetEntry, void*, void );
         DECL_LINK( ScrollUpHdl, LinkParamNone*, void );
         DECL_LINK( ScrollDownHdl, LinkParamNone*, void );
+        DECL_LINK( MenuEventListener, VclMenuEvent&, void );
 
     public:
         DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0);

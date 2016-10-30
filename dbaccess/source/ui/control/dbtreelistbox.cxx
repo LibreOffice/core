@@ -30,10 +30,13 @@
 #include <com/sun/star/util/URL.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/help.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <dbaccess/IController.hxx>
 #include <framework/actiontriggerhelper.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include "svtools/treelistentry.hxx"
@@ -83,6 +86,7 @@ void DBTreeListBox::init()
 
 DBTreeListBox::~DBTreeListBox()
 {
+    assert(!m_xMenuController.is());
     disposeOnce();
 }
 
@@ -555,12 +559,41 @@ VclPtr<PopupMenu> DBTreeListBox::CreateContextMenu()
     if ( !m_pContextMenuProvider )
         return pContextMenu;
 
-    // the basic context menu
-    pContextMenu.reset( m_pContextMenuProvider->getContextMenu( *this ) );
-    // disable what is not available currently
-    lcl_enableEntries( pContextMenu.get(), m_pContextMenuProvider->getCommandController() );
-    // set images
-    lcl_insertMenuItemImages( *pContextMenu, m_pContextMenuProvider->getCommandController() );
+    OUString aResourceName( m_pContextMenuProvider->getContextMenuResourceName( *this ) );
+    OUString aMenuIdentifier;
+
+    if ( aResourceName.isEmpty() )
+    {
+        // the basic context menu
+        pContextMenu.reset( m_pContextMenuProvider->getContextMenu( *this ) );
+        // disable what is not available currently
+        lcl_enableEntries( pContextMenu.get(), m_pContextMenuProvider->getCommandController() );
+        // set images
+        lcl_insertMenuItemImages( *pContextMenu, m_pContextMenuProvider->getCommandController() );
+    }
+    else
+    {
+        css::uno::Sequence< css::uno::Any > aArgs( 3 );
+        aArgs[0] <<= comphelper::makePropertyValue( "Value", aResourceName );
+        aArgs[1] <<= comphelper::makePropertyValue( "Frame", m_pContextMenuProvider->getCommandController().getXController()->getFrame() );
+        aArgs[2] <<= comphelper::makePropertyValue( "IsContextMenu", true );
+
+        css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        m_xMenuController.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext ), css::uno::UNO_QUERY );
+
+        css::uno::Reference< css::awt::XPopupMenu > xPopupMenu( xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.awt.PopupMenu", xContext ), css::uno::UNO_QUERY );
+
+        if ( !m_xMenuController.is() || !xPopupMenu.is() )
+            return pContextMenu;
+
+        m_xMenuController->setPopupMenu( xPopupMenu );
+        pContextMenu.reset( static_cast< PopupMenu* >( VCLXMenu::GetImplementation( xPopupMenu )->GetMenu() ) );
+        pContextMenu->AddEventListener( LINK( this, DBTreeListBox, MenuEventListener ) );
+        aMenuIdentifier = "private:resource/popupmenu/" + aResourceName;
+    }
+
     // allow context menu interception
     ::comphelper::OInterfaceContainerHelper2* pInterceptors = m_pContextMenuProvider->getContextMenuInterceptors();
     if ( !pInterceptors || !pInterceptors->getLength() )
@@ -571,7 +604,7 @@ VclPtr<PopupMenu> DBTreeListBox::CreateContextMenu()
     aEvent.ExecutePosition.X = -1;
     aEvent.ExecutePosition.Y = -1;
     aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
-        pContextMenu.get(), nullptr );
+        pContextMenu.get(), &aMenuIdentifier );
     aEvent.Selection = new SelectionSupplier( m_pContextMenuProvider->getCurrentSelection( *this ) );
 
     ::comphelper::OInterfaceIteratorHelper2 aIter( *pInterceptors );
@@ -617,16 +650,15 @@ VclPtr<PopupMenu> DBTreeListBox::CreateContextMenu()
 
     if ( bModifiedMenu )
     {
-        // the interceptor(s) modified the menu description => create a new PopupMenu
-        VclPtrInstance<PopupMenu> pModifiedMenu;
+        pContextMenu->Clear();
         ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
-            pModifiedMenu, aEvent.ActionTriggerContainer );
+            pContextMenu, aEvent.ActionTriggerContainer );
         aEvent.ActionTriggerContainer.clear();
-        pContextMenu.reset( pModifiedMenu );
 
         // the interceptors only know command URLs, but our menus primarily work
         // with IDs -> we need to translate the commands to IDs
-        lcl_adjustMenuItemIDs( *pModifiedMenu, m_pContextMenuProvider->getCommandController() );
+        if ( aResourceName.isEmpty() )
+            lcl_adjustMenuItemIDs( *pContextMenu, m_pContextMenuProvider->getCommandController() );
     }
 
     return pContextMenu;
@@ -634,8 +666,19 @@ VclPtr<PopupMenu> DBTreeListBox::CreateContextMenu()
 
 void DBTreeListBox::ExecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
 {
-    if ( m_pContextMenuProvider && _nSelectedPopupEntry )
+    if ( !m_xMenuController.is() && m_pContextMenuProvider && _nSelectedPopupEntry )
         m_pContextMenuProvider->getCommandController().executeChecked( _nSelectedPopupEntry, Sequence< PropertyValue >() );
+}
+
+IMPL_LINK( DBTreeListBox, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
+{
+    if ( rMenuEvent.GetId() == VCLEVENT_OBJECT_DYING )
+    {
+        css::uno::Reference< css::lang::XComponent > xComponent( m_xMenuController, css::uno::UNO_QUERY );
+        if ( xComponent.is() )
+            xComponent->dispose();
+        m_xMenuController.clear();
+    }
 }
 
 IMPL_LINK_NOARG(DBTreeListBox, OnTimeOut, Timer*, void)
