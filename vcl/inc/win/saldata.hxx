@@ -84,10 +84,6 @@ public:
     long*                   mpDitherDiff;           // Dither mapping table
     BYTE*                   mpDitherLow;            // Dither mapping table
     BYTE*                   mpDitherHigh;           // Dither mapping table
-    sal_uLong               mnTimerMS;              // Current Time (in MS) of the Timer
-    sal_uLong               mnTimerOrgMS;           // Current Original Time (in MS)
-    DWORD                   mnNextTimerTime;
-    DWORD                   mnLastEventTime;
     HANDLE                  mnTimerId;              ///< Windows timer id
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
@@ -231,9 +227,9 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 // wParam == hWnd; lParam == 0
 #define SAL_MSG_RELEASEDC           (WM_USER+121)
 // wParam == newParentHwnd; lParam == oldHwnd; lResult == newhWnd
-#define SAL_MSG_RECREATEHWND         (WM_USER+122)
+#define SAL_MSG_RECREATEHWND        (WM_USER+122)
 // wParam == newParentHwnd; lParam == oldHwnd; lResult == newhWnd
-#define SAL_MSG_RECREATECHILDHWND    (WM_USER+123)
+#define SAL_MSG_RECREATECHILDHWND   (WM_USER+123)
 // wParam == 0; lParam == HWND;
 #define SAL_MSG_DESTROYHWND         (WM_USER+124)
 
@@ -243,6 +239,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_MSG_MOUSELEAVE          (WM_USER+131)
 // NULL-Message, should not be processed
 #define SAL_MSG_DUMMY               (WM_USER+132)
+// Used for SETFOCUS and KILLFOCUS
 // wParam == 0; lParam == 0
 #define SAL_MSG_POSTFOCUS           (WM_USER+133)
 // wParam == wParam; lParam == lParam
@@ -269,11 +266,10 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_MSG_SETINPUTCONTEXT     (WM_USER+144)
 // wParam == nFlags; lParam == 0
 #define SAL_MSG_ENDEXTTEXTINPUT     (WM_USER+145)
-// POSTTIMER-Message; wparam = 0, lParam == time
-#define SAL_MSG_POSTTIMER        (WM_USER+161)
 
 // SysChild-ToTop; wParam = 0; lParam = 0
 #define SALOBJ_MSG_TOTOP            (WM_USER+160)
+// Used for SETFOCUS and KILLFOCUS
 // POSTFOCUS-Message; wParam == bFocus; lParam == 0
 #define SALOBJ_MSG_POSTFOCUS        (WM_USER+161)
 
