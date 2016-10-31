@@ -2576,15 +2576,13 @@ static OUString OldNameToNewName_Impl( const OUString &rOld )
 {
     static const char aOldNamePart1[] = ".TextField.DocInfo.";
     static const char aOldNamePart2[] = ".TextField.";
-    static const char aNewNamePart1[] = ".textfield.docinfo.";
-    static const char aNewNamePart2[] = ".textfield.";
     OUString sServiceNameCC( rOld );
     sal_Int32 nIdx = sServiceNameCC.indexOf( aOldNamePart1 );
     if (nIdx >= 0)
-        sServiceNameCC = sServiceNameCC.replaceAt( nIdx, strlen(aOldNamePart1), aNewNamePart1 );
+        sServiceNameCC = sServiceNameCC.replaceAt( nIdx, strlen(aOldNamePart1), ".textfield.docinfo." );
     nIdx = sServiceNameCC.indexOf( aOldNamePart2 );
     if (nIdx >= 0)
-        sServiceNameCC = sServiceNameCC.replaceAt( nIdx, strlen(aOldNamePart2), aNewNamePart2 );
+        sServiceNameCC = sServiceNameCC.replaceAt( nIdx, strlen(aOldNamePart2), ".textfield." );
     return sServiceNameCC;
 }
 

@@ -37,8 +37,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-const sal_Char sServiceNameFootnote[] = "com.sun.star.text.AccessibleFootnoteView";
-const sal_Char sServiceNameEndnote[] = "com.sun.star.text.AccessibleEndnoteView";
 const sal_Char sImplementationNameFootnote[] = "com.sun.star.comp.Writer.SwAccessibleFootnoteView";
 const sal_Char sImplementationNameEndnote[] = "com.sun.star.comp.Writer.SwAccessibleEndnoteView";
 
@@ -115,9 +113,9 @@ Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     if( AccessibleRole::END_NOTE == GetRole() )
-        pArray[0] = sServiceNameEndnote;
+        pArray[0] = "com.sun.star.text.AccessibleEndnoteView";
     else
-        pArray[0] = sServiceNameFootnote;
+        pArray[0] = "com.sun.star.text.AccessibleFootnoteView";
     pArray[1] = sAccessibleServiceName;
     return aRet;
 }

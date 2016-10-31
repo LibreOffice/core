@@ -151,7 +151,6 @@
 #include <memory>
 
 const char sStatusDelim[] = " : ";
-const char sStatusComma[] = " , ";
 
 using namespace sfx2;
 using namespace ::com::sun::star;
@@ -1576,7 +1575,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if( nOutlineLevel != 0 )
                 {
                     if (!sStr.isEmpty())
-                        sStr += sStatusComma;
+                        sStr += " , ";
                     if( bOutlineNum )
                     {
                         sStr += SW_RESSTR(STR_OUTLINE_NUMBERING);

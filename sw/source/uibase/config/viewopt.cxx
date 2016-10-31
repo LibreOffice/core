@@ -67,8 +67,6 @@ Color SwViewOption::m_aHeaderFooterMarkColor(COL_BLUE);
 ViewOptFlags SwViewOption::m_nAppearanceFlags = ViewOptFlags::DocBoundaries|ViewOptFlags::ObjectBoundaries;
 sal_uInt16 SwViewOption::m_nPixelTwips = 0;   // one pixel on the screen
 
-static const char aPostItStr[] = "  ";
-
 bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 {
     return  m_nCoreOptions == rOpt.m_nCoreOptions
@@ -131,7 +129,7 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
 sal_uInt16 SwViewOption::GetPostItsWidth( const OutputDevice *pOut )
 {
     assert(pOut && "no Outdev");
-    return sal_uInt16(pOut->GetTextWidth( aPostItStr));
+    return sal_uInt16(pOut->GetTextWidth("  "));
 }
 
 void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool bIsScript )

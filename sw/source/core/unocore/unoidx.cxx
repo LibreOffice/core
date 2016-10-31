@@ -1717,13 +1717,6 @@ throw (uno::RuntimeException, std::exception)
     return ::sw::UnoTunnelImpl<SwXDocumentIndexMark>(rId, this);
 }
 
-static const sal_Char cBaseMark[]      = "com.sun.star.text.BaseIndexMark";
-static const sal_Char cContentMark[]   = "com.sun.star.text.ContentIndexMark";
-static const sal_Char cIdxMark[]       = "com.sun.star.text.DocumentIndexMark";
-static const sal_Char cIdxMarkAsian[]  = "com.sun.star.text.DocumentIndexMarkAsian";
-static const sal_Char cUserMark[]      = "com.sun.star.text.UserIndexMark";
-static const sal_Char cTextContent[]   = "com.sun.star.text.TextContent";
-
 OUString SAL_CALL
 SwXDocumentIndexMark::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
@@ -1744,19 +1737,19 @@ SwXDocumentIndexMark::getSupportedServiceNames() throw (uno::RuntimeException, s
     const sal_Int32 nCnt = (m_pImpl->m_eTOXType == TOX_INDEX) ? 4 : 3;
     uno::Sequence< OUString > aRet(nCnt);
     OUString* pArray = aRet.getArray();
-    pArray[0] = cBaseMark;
-    pArray[1] = cTextContent;
+    pArray[0] = "com.sun.star.text.BaseIndexMark";
+    pArray[1] = "com.sun.star.text.TextContent";
     switch (m_pImpl->m_eTOXType)
     {
         case TOX_USER:
-            pArray[2] = cUserMark;
+            pArray[2] = "com.sun.star.text.UserIndexMark";
         break;
         case TOX_CONTENT:
-            pArray[2] = cContentMark;
+            pArray[2] = "com.sun.star.text.ContentIndexMark";
         break;
         case TOX_INDEX:
-            pArray[2] = cIdxMark;
-            pArray[3] = cIdxMarkAsian;
+            pArray[2] = "com.sun.star.text.DocumentIndexMark";
+            pArray[3] = "com.sun.star.text.DocumentIndexMarkAsian";
         break;
 
         default:

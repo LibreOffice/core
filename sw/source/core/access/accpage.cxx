@@ -35,7 +35,6 @@ using namespace ::com::sun::star::accessibility;
 using uno::RuntimeException;
 using uno::Sequence;
 
-const sal_Char sServiceName[] = "com.sun.star.text.AccessiblePageView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessiblePageView";
 
 bool SwAccessiblePage::IsSelected()
@@ -152,7 +151,7 @@ Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = sServiceName;
+    pArray[0] = "com.sun.star.text.AccessiblePageView";
     pArray[1] = sAccessibleServiceName;
     return aRet;
 }
