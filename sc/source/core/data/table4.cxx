@@ -259,8 +259,11 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
     if (eCellType == CELLTYPE_VALUE)
     {
+        double fVal;
         sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(GetAttr(nCol,nRow,ATTR_VALUE_FORMAT))->GetValue();
-        bool bDate = ( pDocument->GetFormatTable()->GetType(nFormat) == css::util::NumberFormat::DATE );
+        const sal_Int16 nFormatType = pDocument->GetFormatTable()->GetType(nFormat);
+        bool bDate = (nFormatType  == css::util::NumberFormat::DATE );
+        bool bBooleanCell = (!bDate && nFormatType == css::util::NumberFormat::LOGICAL);
         if (bDate)
         {
             if (nCount > 1)
@@ -341,6 +344,10 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 rInc = 1.0;
             }
         }
+        else if (bBooleanCell && ((fVal = aFirstCell.mfValue) == 0.0 || fVal == 1.0))
+        {
+            // Nothing, rInc stays 0.0, no specific fill mode.
+        }
         else
         {
             if (nCount > 1)
@@ -359,6 +366,10 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         nVal2 = aCell.mfValue;
                         double nDiff = approxDiff( nVal2, nVal1);
                         if ( !::rtl::math::approxEqual( nDiff, rInc, 13 ) )
+                            bVal = false;
+                        else if ((nVal2 == 0.0 || nVal2 == 1.0) &&
+                                (pDocument->GetFormatTable()->GetType(GetNumberFormat(nCol,nRow)) ==
+                                 css::util::NumberFormat::LOGICAL))
                             bVal = false;
                         nVal1 = nVal2;
                     }
@@ -939,13 +950,25 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     break;
                     case CELLTYPE_VALUE:
                     {
+                        sal_uLong nNumFmt = GetNumberFormat( nSrcX, nSrcY );
                         //  overflow is possible...
                         double nVal = aCell.mfValue;
                         if ( !(nScFillModeMouseModifier & KEY_MOD1) )
-                            nVal += (double) nDelta;
+                        {
+                            if (nVal == 0.0 || nVal == 1.0)
+                            {
+                                bool bBooleanCell = (pDocument->GetFormatTable()->GetType( nNumFmt) ==
+                                        css::util::NumberFormat::LOGICAL);
+                                if (!bBooleanCell)
+                                    nVal += (double) nDelta;
+                            }
+                            else
+                            {
+                                nVal += (double) nDelta;
+                            }
+                        }
 
                         Color* pColor;
-                        sal_uLong nNumFmt = GetNumberFormat( nSrcX, nSrcY );
                         pDocument->GetFormatTable()->GetOutputString( nVal, nNumFmt, aValue, &pColor );
                     }
                     break;
@@ -1326,6 +1349,7 @@ void ScTable::FillAutoSimple(
         nDelta = -1.0;
     sal_uLong nFormulaCounter = nActFormCnt;
     bool bGetCell = true;
+    bool bBooleanCell = false;
     sal_uInt16 nCellDigits = 0;
     short nHeadNoneTail = 0;
     sal_Int32 nStringValue = 0;
@@ -1357,9 +1381,16 @@ void ScTable::FillAutoSimple(
                         FillFormulaVertical(*aSrcCell.mpFormula, rInner, rCol, nIStart, nIEnd, pProgress, rProgress);
                         return;
                     }
+                    bBooleanCell = (pDocument->GetFormatTable()->GetType(
+                                aCol[rCol].GetNumberFormat( nSource)) == css::util::NumberFormat::LOGICAL);
+
                 }
                 else                // rInner&:=nCol, rOuter&:=nRow
+                {
                     aSrcCell = aCol[nSource].GetCellValue(rRow);
+                    bBooleanCell = (pDocument->GetFormatTable()->GetType(
+                                aCol[nSource].GetNumberFormat( rRow)) == css::util::NumberFormat::LOGICAL);
+                }
 
                 bGetCell = false;
                 if (!aSrcCell.isEmpty())
@@ -1393,7 +1424,13 @@ void ScTable::FillAutoSimple(
             switch (aSrcCell.meType)
             {
                 case CELLTYPE_VALUE:
-                    aCol[rCol].SetValue(rRow, aSrcCell.mfValue + nDelta);
+                    {
+                        double fVal;
+                        if (bBooleanCell && ((fVal = aSrcCell.mfValue) == 0.0 || fVal == 1.0))
+                            aCol[rCol].SetValue(rRow, aSrcCell.mfValue);
+                        else
+                            aCol[rCol].SetValue(rRow, aSrcCell.mfValue + nDelta);
+                    }
                     break;
                 case CELLTYPE_STRING:
                 case CELLTYPE_EDIT:
