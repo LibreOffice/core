@@ -31,6 +31,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <basegfx/numeric/ftools.hxx>
+
 #include "OGLTrans_Operation.hxx"
 
 SRotate::SRotate(const glm::vec3& Axis, const glm::vec3& Origin,
@@ -38,7 +40,7 @@ SRotate::SRotate(const glm::vec3& Axis, const glm::vec3& Origin,
     Operation(bInter, T0, T1),
     axis(Axis),
     origin(Origin),
-    angle(Angle)
+    angle(basegfx::deg2rad(Angle))
 {
 }
 
@@ -55,7 +57,7 @@ RotateAndScaleDepthByWidth::RotateAndScaleDepthByWidth(const glm::vec3& Axis,
     Operation(bInter, T0, T1),
     axis(Axis),
     origin(Origin),
-    angle(Angle),
+    angle(basegfx::deg2rad(Angle)),
     scale(bScale)
 {
 }
@@ -65,7 +67,7 @@ RotateAndScaleDepthByHeight::RotateAndScaleDepthByHeight(const glm::vec3& Axis,
     Operation(bInter, T0, T1),
     axis(Axis),
     origin(Origin),
-    angle(Angle),
+    angle(basegfx::deg2rad(Angle)),
     scale(bScale)
 {
 }
