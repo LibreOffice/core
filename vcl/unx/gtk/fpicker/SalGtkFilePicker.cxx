@@ -786,8 +786,6 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
 
                     if( sExtension.getLength() >= 3 ) // 3 = typical/minimum extension length
                     {
-                        static const char aStarDot[] = "*.";
-
                         OUString aNewFilter;
                         OUString aOldFilter = getCurrentFilter();
                         bool bChangeFilter = true;
@@ -797,7 +795,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
                                   ++aListIter
                                 )
                         {
-                            if( lcl_matchFilter( aListIter->getFilter(), aStarDot+sExtension ) )
+                            if( lcl_matchFilter( aListIter->getFilter(), "*." + sExtension ) )
                             {
                                 if( aNewFilter.isEmpty() )
                                     aNewFilter = aListIter->getTitle();
@@ -1831,7 +1829,6 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
     OString aFilterName = OUStringToOString( aShrunkName, RTL_TEXTENCODING_UTF8 );
     gtk_file_filter_set_name( filter, aFilterName.getStr() );
 
-    static const char aStarDot[] = "*.";
     OUString aTokens;
 
     bool bAllGlob = rType == "*.*" || rType == "*";
@@ -1845,7 +1842,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
         {
             aToken = rType.getToken( 0, ';', nIndex );
             // Assume all have the "*.<extn>" syntax
-            sal_Int32 nStarDot = aToken.lastIndexOf( aStarDot );
+            sal_Int32 nStarDot = aToken.lastIndexOf( "*." );
             if (nStarDot >= 0)
                 aToken = aToken.copy( nStarDot + 2 );
             if (!aToken.isEmpty())

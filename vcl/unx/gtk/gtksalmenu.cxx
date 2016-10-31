@@ -623,7 +623,7 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
     GtkStyleContext *pButtonContext = gtk_widget_get_style_context(GTK_WIDGET(mpCloseButton));
 
     GtkCssProvider *pProvider = gtk_css_provider_new();
-    const gchar data[] = "* { "
+    static const gchar data[] = "* { "
       "padding: 0;"
       "margin-left: 8px;"
       "margin-right: 8px;"
