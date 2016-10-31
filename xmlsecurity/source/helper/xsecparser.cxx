@@ -107,7 +107,7 @@ void SAL_CALL XSecParser::startElement(
         else if ( aName == "Reference" )
         {
             OUString ouUri = xAttribs->getValueByName("URI");
-            SAL_WARN_IF( ouUri.isEmpty(), "xmlsecurity.helper", "URI == NULL" );
+            SAL_WARN_IF( ouUri.isEmpty(), "xmlsecurity.helper", "URI is empty" );
             if (ouUri.startsWith("#"))
             {
                 /*
