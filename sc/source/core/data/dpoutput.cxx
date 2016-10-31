@@ -107,9 +107,6 @@ struct ScDPOutLevelData
 
 namespace {
 
-bool lcl_compareColfuc ( SCCOL i,  SCCOL j) { return (i<j); }
-bool lcl_compareRowfuc ( SCROW i,  SCROW j) { return (i<j); }
-
 class ScDPOutputImpl
 {
     ScDocument*         mpDoc;
@@ -154,8 +151,8 @@ void ScDPOutputImpl::OutputDataArea()
 
     bool bAllRows = ( ( mnTabEndRow - mnDataStartRow + 2 ) == (SCROW) mnRows.size() );
 
-    std::sort( mnCols.begin(), mnCols.end(), lcl_compareColfuc );
-    std::sort( mnRows.begin(), mnRows.end(), lcl_compareRowfuc );
+    std::sort( mnCols.begin(), mnCols.end() );
+    std::sort( mnRows.begin(), mnRows.end() );
 
     for( SCCOL nCol = 0; nCol < (SCCOL)mnCols.size()-1; nCol ++ )
     {

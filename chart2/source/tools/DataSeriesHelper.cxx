@@ -723,14 +723,6 @@ bool hasUnhiddenData( const uno::Reference< chart2::XDataSeries >& xSeries )
     return false;
 }
 
-struct lcl_LessIndex
-{
-    inline bool operator() ( sal_Int32 first, sal_Int32 second ) const
-    {
-        return ( first < second );
-    }
-};
-
 sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Reference< chart2::data::XDataSequence >& xDataSequence, bool bTranslate )
 {
     if( !bTranslate )
@@ -746,7 +738,7 @@ sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Refere
             if( aHiddenIndicesSeq.getLength() )
             {
                 ::std::vector< sal_Int32 > aHiddenIndices( ContainerHelper::SequenceToVector( aHiddenIndicesSeq ) );
-                ::std::sort( aHiddenIndices.begin(), aHiddenIndices.end(), lcl_LessIndex() );
+                ::std::sort( aHiddenIndices.begin(), aHiddenIndices.end() );
 
                 sal_Int32 nHiddenCount = static_cast<sal_Int32>(aHiddenIndices.size());
                 for( sal_Int32 nN = 0; nN < nHiddenCount; ++nN)
