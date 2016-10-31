@@ -68,7 +68,6 @@ namespace dbaccess
         virtual bool SAL_CALL rowDeleted(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
         // css::sdbc::XResultSetUpdate
         virtual void SAL_CALL insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
-        virtual void SAL_CALL updateRow(const ORowSetRow& _rInsertRow,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL deleteRow(const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
     };
 }

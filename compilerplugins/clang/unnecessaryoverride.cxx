@@ -80,8 +80,7 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
 
     // if we are overriding more than one method, then this is a disambiguating override
     if (methodDecl->isVirtual()) {
-        if (methodDecl->size_overridden_methods() != 1
-            || (*methodDecl->begin_overridden_methods())->isPure())
+        if (methodDecl->size_overridden_methods() != 1)
         {
             return true;
         }
