@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_1f791694",
+        "filename": "ucb/qa/cppunit/webdav/webdav_options.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-31T13:43:29Z",
+      "side": 1,
+      "message": "why mix those various using directives, \u0027const X \u0026\u0027 reorderings, etc. into this change?",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_3f6ed2c9",
+        "filename": "ucb/source/ucp/webdav-neon/DAVTypes.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-31T13:43:29Z",
+      "side": 1,
+      "message": "why hold it by shared_ptr instead of by value?  (also, is it supposed to always hold a non-null ptr?)",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_5f738eb1",
+        "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-31T13:43:29Z",
+      "side": 1,
+      "message": "(For one, I\u0027d be more consistent in casing of acronyms \"DAV\" vs. \"URI\"; for another, I\u0027d drop the meaningless \"Object\".)",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_7f684abb",
+        "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-31T13:43:29Z",
+      "side": 1,
+      "message": "what can that ambiguous return value be good for (and it doesn\u0027t appear to be used, apart from the test code)?",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_9f6526e3",
+        "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-31T13:43:29Z",
+      "side": 1,
+      "message": "(instead of \"the next code\", I\u0027d just end the comment in a colon)",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_df5f9e0c",
+        "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-31T13:43:29Z",
+      "side": 1,
+      "message": "INetURLObject is quite some amount of legacy mess (and new code is urged to use better---though still partial---replacements, like rtl/uri.hxx or UNOIDL com.sun.star.uri), and it\u0027s aggressive way of normalizing its input isn\u0027t necessarily helpful; are there any specific normalizations that need to be done here? might be better to do them more explicitly",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
