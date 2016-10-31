@@ -666,6 +666,12 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
     }
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPadding.odt")
+{
+    // the page style's borderless padding should force this to 3 pages, not 1
+    CPPUNIT_ASSERT_EQUAL( 3, getPages() );
+}
+
 DECLARE_ODFEXPORT_TEST(testFdo43807, "fdo43807.odt")
 {
     uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
