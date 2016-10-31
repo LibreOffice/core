@@ -61,6 +61,8 @@ gb_UnpackedTarball_get_final_target = foo
 gb_LinkTarget__get_headers_check =
 gb_LinkTarget_add_cobject = $(call gb_LinkTarget_get_target,$(1)) : COBJECTS += $(2)
 gb_LinkTarget_add_cxxobject = $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS += $(2)
+gb_LinkTarget_add_generated_c_object = $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS += $(2)
+gb_LinkTarget_add_generated_cxx_object = $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 gb_LinkTarget_use_package =
 gb_LinkTarget_add_sdi_headers =
 gb_LinkTarget_use_external_project =
