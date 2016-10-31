@@ -61,7 +61,7 @@ struct XclExpHashEntry
 {
     const XclExpString* mpString;       /// Pointer to the string (no ownership).
     sal_uInt32          mnSstIndex;     /// The SST index of this string.
-    inline explicit     XclExpHashEntry( const XclExpString* pString = nullptr, sal_uInt32 nSstIndex = 0 ) :
+    inline explicit     XclExpHashEntry( const XclExpString* pString, sal_uInt32 nSstIndex ) :
                             mpString( pString ), mnSstIndex( nSstIndex ) {}
 };
 
@@ -568,7 +568,7 @@ void XclExpLabelranges::Save( XclExpStream& rStrm )
 class XclExpCFImpl : protected XclExpRoot
 {
 public:
-    explicit            XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority = 0 );
+    explicit            XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority );
 
     /** Writes the body of the CF record. */
     void                WriteBody( XclExpStream& rStrm );

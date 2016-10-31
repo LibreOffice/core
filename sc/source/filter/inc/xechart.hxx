@@ -190,7 +190,7 @@ class XclExpChFutureRecordBase : public XclExpFutureRecord, protected XclExpChRo
 {
 public:
     explicit            XclExpChFutureRecordBase( const XclExpChRoot& rRoot,
-                            XclFutureRecType eRecType, sal_uInt16 nRecId, std::size_t nRecSize = 0 );
+                            XclFutureRecType eRecType, sal_uInt16 nRecId, std::size_t nRecSize );
 
     /** Writes missing CHFRBLOCKBEGIN records and this record. */
     virtual void        Save( XclExpStream& rStrm ) override;

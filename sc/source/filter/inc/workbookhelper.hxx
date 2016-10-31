@@ -180,7 +180,7 @@ public:
                             OUString& orName,
                             const css::uno::Sequence< css::sheet::FormulaToken>& rTokens,
                             sal_Int32 nIndex,
-                            sal_Int32 nNameFlags, sal_Int32 nTab = -1 ) const;
+                            sal_Int32 nNameFlags, sal_Int32 nTab ) const;
 
     /** Creates and returns a database range on-the-fly in the Calc document.
         The range will not be buffered in the global table buffer.

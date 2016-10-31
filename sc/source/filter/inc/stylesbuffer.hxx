@@ -864,12 +864,12 @@ public:
     /** Creates the style sheet described by the DXF with the passed identifier. */
     OUString     createDxfStyle( sal_Int32 nDxfId ) const;
 
-    void                writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, bool bSkipPoolDefs = false ) const;
-    sal_uLong           writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs = false ) const;
+    void                writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, bool bSkipPoolDefs ) const;
+    sal_uLong           writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const;
     /** Writes the specified number format to the passed property map. */
-    void                writeBorderToItemSet( SfxItemSet& rItemSet, sal_Int32 nBorderId, bool bSkipPoolDefs = false ) const;
+    void                writeBorderToItemSet( SfxItemSet& rItemSet, sal_Int32 nBorderId, bool bSkipPoolDefs ) const;
     /** Writes the fill attributes of the specified fill data to the passed property map. */
-    void                writeFillToItemSet( SfxItemSet& rItemSet, sal_Int32 nFillId, bool bSkipPoolDefs = false ) const;
+    void                writeFillToItemSet( SfxItemSet& rItemSet, sal_Int32 nFillId, bool bSkipPoolDefs ) const;
 
     /** Writes the cell formatting attributes of the specified XF to the passed property set. */
     void                writeCellXfToDoc( ScDocumentImport& rDoc, const css::table::CellRangeAddress& rRange, sal_Int32 nXfId ) const;

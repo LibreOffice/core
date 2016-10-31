@@ -199,7 +199,7 @@ class SdrTextObj;
 class XclTxo : public ExcRecord
 {
 public:
-                                XclTxo( const OUString& rString, sal_uInt16 nFontIx = EXC_FONT_APP );
+                                XclTxo( const OUString& rString, sal_uInt16 nFontIx );
                                 XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rEditObj );
                                 XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObject* pCaption );
 

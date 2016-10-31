@@ -27,8 +27,8 @@ class ScColRowLabelDlg : public ModalDialog
 {
 public:
     ScColRowLabelDlg(vcl::Window* pParent,
-                     bool bCol = false,
-                     bool bRow = false)
+                     bool bCol,
+                     bool bRow)
         : ModalDialog(pParent, "ChangeSourceDialog",
         "modules/scalc/ui/changesourcedialog.ui")
     {

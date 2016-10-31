@@ -175,10 +175,10 @@ private:
         TParentWindow* pParent, const OUString& rID, const OUString& rUIXMLDescription );
 
     template<class TParentWindow, class TResId, class TArg>
-    ScRefHdlrImplBase( TParentWindow* pParent, TResId nResId, const TArg &rArg, SfxBindings *pB = nullptr );
+    ScRefHdlrImplBase( TParentWindow* pParent, TResId nResId, const TArg &rArg, SfxBindings *pB );
 
     template<class TParentWindow, class TArg>
-    ScRefHdlrImplBase( TParentWindow* pParent, const OUString& rID, const OUString& rUIXMLDescription, const TArg &rArg, SfxBindings *pB = nullptr );
+    ScRefHdlrImplBase( TParentWindow* pParent, const OUString& rID, const OUString& rUIXMLDescription, const TArg &rArg, SfxBindings *pB );
 
     virtual ~ScRefHdlrImplBase() override;
 

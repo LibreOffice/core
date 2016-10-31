@@ -61,7 +61,7 @@ public:
     explicit            Shape(
                             const WorksheetHelper& rHelper,
                             const AttributeList& rAttribs,
-                            const sal_Char* pcServiceName = nullptr );
+                            const sal_Char* pcServiceName );
 
 protected:
     virtual void        finalizeXShape(

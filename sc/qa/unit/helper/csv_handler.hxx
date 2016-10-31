@@ -83,7 +83,7 @@ OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, double aExpected,
 class csv_handler
 {
 public:
-    csv_handler(ScDocument* pDoc, SCTAB nTab, StringType eType = StringValue):
+    csv_handler(ScDocument* pDoc, SCTAB nTab, StringType eType):
             mpDoc(pDoc),
             mnCol(0),
             mnRow(0),

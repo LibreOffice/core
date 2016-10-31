@@ -28,13 +28,13 @@ class ScDelimiterTable;
 class ScImportOptionsDlg : public ModalDialog
 {
 public:
-    ScImportOptionsDlg( vcl::Window*                 pParent,
-                        bool                    bAscii = true,
-                        const ScImportOptions*  pOptions = nullptr,
-                        const OUString*         pStrTitle = nullptr,
-                        bool                    bMultiByte = false,
-                        bool                    bOnlyDbtoolsEncodings = false,
-                        bool                    bImport = true );
+    ScImportOptionsDlg( vcl::Window*            pParent,
+                        bool                    bAscii,
+                        const ScImportOptions*  pOptions,
+                        const OUString*         pStrTitle,
+                        bool                    bMultiByte,
+                        bool                    bOnlyDbtoolsEncodings,
+                        bool                    bImport );
 
     virtual ~ScImportOptionsDlg() override;
     virtual void dispose() override;

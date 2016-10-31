@@ -217,7 +217,7 @@ public:
     ScXMLStyleExport(
         SvXMLExport& rExp,
         const OUString& rPoolStyleName,
-        SvXMLAutoStylePoolP *pAutoStyleP=nullptr );
+        SvXMLAutoStylePoolP *pAutoStyleP );
     virtual ~ScXMLStyleExport() override;
 };
 

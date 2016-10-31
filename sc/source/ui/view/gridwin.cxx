@@ -326,7 +326,7 @@ void ScFilterListBox::SelectHdl()
 class ScFilterFloatingWindow : public FloatingWindow
 {
 public:
-    ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
+    ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle );
     virtual ~ScFilterFloatingWindow() override;
     virtual void dispose() override;
 };

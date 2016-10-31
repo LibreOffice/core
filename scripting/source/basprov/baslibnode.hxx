@@ -56,7 +56,7 @@ namespace basprov
         const OUString& sScriptingContext,
             BasicManager* pBasicManager,
             const css::uno::Reference< css::script::XLibraryContainer >& xLibContainer,
-            const OUString& sLibName, bool isAppScript=true );
+            const OUString& sLibName, bool isAppScript );
         virtual ~BasicLibraryNodeImpl() override;
 
         // XBrowseNode
