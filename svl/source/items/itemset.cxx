@@ -625,14 +625,29 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
     auto needMerge = [](std::pair<sal_uInt16, sal_uInt16> lhs, std::pair<sal_uInt16, sal_uInt16> rhs)
                      {return (lhs.first-1) <= rhs.second && (rhs.first-1) <= lhs.second;};
 
-    std::vector<std::pair<sal_uInt16, sal_uInt16> >::iterator it = aRangesTable.begin();
-    // check neighbouring ranges, find first range which overlaps or adjoins a previous range
-    while ((it = std::is_sorted_until(it, aRangesTable.end(), needMerge)) != aRangesTable.end())
+    for (;;)
     {
-        --it; // merge with previous range
+        // check neighbouring ranges, find first range which overlaps or adjoins a previous range
+        std::vector<std::pair<sal_uInt16, sal_uInt16> >::iterator it = aRangesTable.begin();
+        if (it == aRangesTable.end())
+            break;
+        std::vector<std::pair<sal_uInt16, sal_uInt16> >::iterator itNext;
+        for (;;)
+        {
+            itNext = std::next(it);
+            if (itNext == aRangesTable.end())
+                break;
+            if (needMerge(*it, *itNext))
+                break;
+            ++it;
+        }
+        if (itNext == aRangesTable.end())
+            break;
+
+        // merge with next range
         // lower bounds are sorted, implies: it->first = min(it[0].first, it[1].first)
-        it->second = std::max(it[0].second, it[1].second);
-        aRangesTable.erase(std::next(it));
+        it->second = std::max(it->second, itNext->second);
+        aRangesTable.erase(itNext);
     }
 
     // construct range array
