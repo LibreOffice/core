@@ -993,7 +993,7 @@ void
 SvxScriptSelectorDialog::UpdateUI()
 {
     OUString url = GetScriptURL();
-    if ( url != nullptr && !url.isEmpty() )
+    if ( !url.isEmpty() )
     {
         OUString sMessage =
             m_pCommands->GetHelpText(m_pCommands->FirstSelected());
