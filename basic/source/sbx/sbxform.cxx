@@ -23,6 +23,8 @@
 #include <basic/sbxform.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <rtl/character.hxx>
+
 /*
 TODO: are there any Star-Basic characteristics unconsidered?
 
@@ -50,10 +52,6 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
                     // +2 for exponent E and exp. leading sign
                     // +3 for the exponent's value
                     // +1 for closing 0
-
-// Defines for the digits:
-#define ASCII_0                     '0' // 48
-#define ASCII_9                     '9' // 57
 
 #define CREATE_1000SEP_CHAR         '@'
 
@@ -131,7 +129,7 @@ void SbxBasicFormater::AppendDigit( OUStringBuffer& sStrg, short nDigit )
 {
     if( nDigit>=0 && nDigit<=9 )
     {
-        sStrg.append((sal_Unicode)(nDigit+ASCII_0));
+        sStrg.append((sal_Unicode)(nDigit+'0'));
     }
 }
 
@@ -175,7 +173,7 @@ void SbxBasicFormater::StrRoundDigit( OUStringBuffer& sStrg, short nPos, bool& b
     // in one piece, i. e. special characters should ONLY be in
     // front OR behind the number and not right in the middle of
     // the format information for the number
-    while( nPos >= 0 && ( sStrg[nPos] < ASCII_0 || sStrg[nPos] > ASCII_9 ))
+    while( nPos >= 0 && ! rtl::isAsciiDigit(sStrg[nPos]))
     {
         nPos--;
     }
@@ -188,9 +186,9 @@ void SbxBasicFormater::StrRoundDigit( OUStringBuffer& sStrg, short nPos, bool& b
     else
     {
         sal_Unicode c2 = sStrg[nPos];
-        if( c2 >= ASCII_0 && c2 <= ASCII_9 )
+        if( rtl::isAsciiDigit(c2) )
         {
-            if( c2 == ASCII_9 )
+            if( c2 == '9' )
             {
                 sStrg[nPos] = (sal_Unicode)'0';
                 StrRoundDigit( sStrg, nPos - 1, bOverflow );
@@ -272,7 +270,7 @@ short SbxBasicFormater::GetDigitAtPosScan( short nPos, bool& bFoundFirstDigit )
     // query of the number's first valid digit --> set flag
     if( nPos==nNumExp )
         bFoundFirstDigit = true;
-    return (short)(sSciNumStrg[ no ] - ASCII_0);
+    return (short)(sSciNumStrg[ no ] - '0');
 }
 
 short SbxBasicFormater::GetDigitAtPosExpScan( short nPos, bool& bFoundFirstDigit )
@@ -285,7 +283,7 @@ short SbxBasicFormater::GetDigitAtPosExpScan( short nPos, bool& bFoundFirstDigit
 
     if( nPos==nExpExp )
         bFoundFirstDigit = true;
-    return (short)(sNumExpStrg[ no ] - ASCII_0);
+    return (short)(sNumExpStrg[ no ] - '0');
 }
 
 // a value for the exponent can be given because the number maybe shall
