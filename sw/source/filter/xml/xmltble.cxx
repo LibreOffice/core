@@ -64,9 +64,6 @@ using table::XCell;
 using std::vector;
 using std::advance;
 
-// string constants for table cell export
-static const char g_sNumberFormat[] = "NumberFormat";
-static const char g_sIsProtected[] = "IsProtected";
 
 class SwXMLTableColumn_Impl : public SwWriteTableCol
 {
@@ -823,7 +820,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                 if (xCellPropertySet.is())
                 {
                     sal_Int32 nNumberFormat = 0;
-                    Any aAny = xCellPropertySet->getPropertyValue(g_sNumberFormat);
+                    Any aAny = xCellPropertySet->getPropertyValue("NumberFormat");
                     aAny >>= nNumberFormat;
 
                     if (css::util::NumberFormat::TEXT == nNumberFormat)
@@ -843,7 +840,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                     // else: invalid key; ignore
 
                     // cell protection
-                    aAny = xCellPropertySet->getPropertyValue(g_sIsProtected);
+                    aAny = xCellPropertySet->getPropertyValue("IsProtected");
                     if (*o3tl::doAccess<bool>(aAny))
                     {
                         AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED,

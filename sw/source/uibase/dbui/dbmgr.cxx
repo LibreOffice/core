@@ -148,13 +148,6 @@ using namespace ::com::sun::star;
 #define DB_SEP_RETURN   2
 #define DB_SEP_NEWLINE  3
 
-const sal_Char cCursor[] = "Cursor";
-const sal_Char cCommand[] = "Command";
-const sal_Char cCommandType[] = "CommandType";
-const sal_Char cDataSourceName[] = "DataSourceName";
-const sal_Char cSelection[] = "Selection";
-const sal_Char cActiveConnection[] = "ActiveConnection";
-
 namespace {
 
 void rescheduleGui() {
@@ -2924,17 +2917,17 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
     uno::Reference< sdbc::XConnection> xConnection;
     for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
     {
-        if ( pValues[nPos].Name == cDataSourceName )
+        if ( pValues[nPos].Name == "DataSourceName" )
             pValues[nPos].Value >>= sDataSource;
-        else if ( pValues[nPos].Name == cCommand )
+        else if ( pValues[nPos].Name == "Command" )
             pValues[nPos].Value >>= sDataTableOrQuery;
-        else if ( pValues[nPos].Name == cCursor )
+        else if ( pValues[nPos].Name == "Cursor" )
             pValues[nPos].Value >>= xResSet;
-        else if ( pValues[nPos].Name == cSelection )
+        else if ( pValues[nPos].Name == "Selection" )
             pValues[nPos].Value >>= aSelection;
-        else if ( pValues[nPos].Name == cCommandType )
+        else if ( pValues[nPos].Name == "CommandType" )
             pValues[nPos].Value >>= nCmdType;
-        else if ( pValues[nPos].Name == cActiveConnection )
+        else if ( pValues[nPos].Name == "ActiveConnection" )
             pValues[nPos].Value >>= xConnection;
     }
     if(sDataSource.isEmpty() || sDataTableOrQuery.isEmpty() || !xResSet.is())
