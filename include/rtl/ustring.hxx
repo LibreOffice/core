@@ -1588,6 +1588,17 @@ public:
     friend bool     operator != ( const sal_Unicode * pStr1,    const OUString& rStr2 )
                         { return !(operator == ( pStr1, rStr2 )); }
 
+#if defined LIBO_INTERNAL_ONLY
+    // Prevent the above overloads from being selected for nonsensical code like
+    //
+    //   if (ouIdAttr == nullptr)
+    //
+    friend bool operator ==(OUString const &, std::nullptr_t) = delete;
+    friend bool operator ==(std::nullptr_t, OUString const &) = delete;
+    friend bool operator !=(OUString const &, std::nullptr_t) = delete;
+    friend bool operator !=(std::nullptr_t, OUString const &) = delete;
+#endif
+
     friend bool     operator <  ( const OUString& rStr1,    const OUString& rStr2 )
                         { return rStr1.compareTo( rStr2 ) < 0; }
     friend bool     operator >  ( const OUString& rStr1,    const OUString& rStr2 )
