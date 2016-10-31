@@ -62,6 +62,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     get(mpCBResetWholeUserProfile, "check_reset_whole_userprofile");
 
     get(mpBugLink, "linkbutton_bugs");
+    get(mpUserProfileLink, "linkbutton_profile");
 
     mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
     mpBtnQuit->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
@@ -115,6 +116,8 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
         "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=safemode");
     mpBugLink->SetURL(sURL);
+
+    mpUserProfileLink->SetURL(comphelper::BackupFileHelper::getUserProfileURL());
 }
 
 SafeModeDialog::~SafeModeDialog()
@@ -138,6 +141,7 @@ void SafeModeDialog::dispose()
     mpCBResetWholeUserProfile.clear();
 
     mpBugLink.clear();
+    mpUserProfileLink.clear();
 
     Dialog::dispose();
 }
