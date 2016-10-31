@@ -409,40 +409,40 @@ class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 public:
     virtual ~ScAbstractDialogFactory_Impl() {}
 
-    virtual     VclPtr<AbstractScImportAsciiDlg> CreateScImportAsciiDlg( const OUString& aDatName,
+    virtual VclPtr<AbstractScImportAsciiDlg> CreateScImportAsciiDlg( const OUString& aDatName,
                                                                     SvStream* pInStream,
                                                                     ScImportAsciiCall eCall) override;
 
-    virtual AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg() override;
+    virtual VclPtr<AbstractScTextImportOptionsDlg> CreateScTextImportOptionsDlg() override;
 
-    virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg(vcl::Window* pParent,
+    virtual VclPtr<AbstractScAutoFormatDlg> CreateScAutoFormatDlg(vcl::Window* pParent,
                                                                 ScAutoFormat* pAutoFormat,
                                                                 const ScAutoFormatData* pSelFormatData,
                                                                 ScViewData *pViewData) override;
-    virtual AbstractScColRowLabelDlg * CreateScColRowLabelDlg (vcl::Window* pParent,
+    virtual VclPtr<AbstractScColRowLabelDlg> CreateScColRowLabelDlg (vcl::Window* pParent,
                                                                 bool bCol,
                                                                 bool bRow = false) override;
 
-    virtual AbstractScSortWarningDlg * CreateScSortWarningDlg(vcl::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) override;
+    virtual VclPtr<AbstractScSortWarningDlg> CreateScSortWarningDlg(vcl::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) override;
 
-    virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList ) override;
+    virtual VclPtr<AbstractScCondFormatManagerDlg> CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList ) override;
 
-    virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg(vcl::Window* pParent) override;
+    virtual VclPtr<AbstractScDataPilotDatabaseDlg> CreateScDataPilotDatabaseDlg(vcl::Window* pParent) override;
 
-    virtual AbstractScDataPilotSourceTypeDlg* CreateScDataPilotSourceTypeDlg(vcl::Window* pParent,
+    virtual VclPtr<AbstractScDataPilotSourceTypeDlg> CreateScDataPilotSourceTypeDlg(vcl::Window* pParent,
         bool bEnableExternal) override;
 
-    virtual AbstractScDataPilotServiceDlg * CreateScDataPilotServiceDlg( vcl::Window* pParent,
+    virtual VclPtr<AbstractScDataPilotServiceDlg> CreateScDataPilotServiceDlg( vcl::Window* pParent,
                                                                         const std::vector<OUString>& rServices ) override;
-    virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove ) override;
+    virtual VclPtr<AbstractScDeleteCellDlg> CreateScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove ) override;
 
     //for dataform
-    virtual AbstractScDataFormDlg* CreateScDataFormDlg(vcl::Window* pParent,
+    virtual VclPtr<AbstractScDataFormDlg> CreateScDataFormDlg(vcl::Window* pParent,
         ScTabViewShell* pTabViewShell) override;
 
-    virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(vcl::Window* pParent) override;
+    virtual VclPtr<AbstractScDeleteContentsDlg> CreateScDeleteContentsDlg(vcl::Window* pParent) override;
 
-    virtual AbstractScFillSeriesDlg * CreateScFillSeriesDlg( vcl::Window*        pParent,
+    virtual VclPtr<AbstractScFillSeriesDlg> CreateScFillSeriesDlg( vcl::Window*        pParent,
                                                             ScDocument&     rDocument,
                                                             FillDir         eFillDir,
                                                             FillCmd         eFillCmd,
@@ -451,24 +451,24 @@ public:
                                                             double          fStep,
                                                             double          fMax,
                                                             sal_uInt16       nPossDir) override;
-    virtual AbstractScGroupDlg * CreateAbstractScGroupDlg( vcl::Window* pParent,
+    virtual VclPtr<AbstractScGroupDlg> CreateAbstractScGroupDlg( vcl::Window* pParent,
                                                             bool bUnGroup = false) override;
 
-    virtual AbstractScInsertCellDlg * CreateScInsertCellDlg( vcl::Window* pParent,
+    virtual VclPtr<AbstractScInsertCellDlg> CreateScInsertCellDlg( vcl::Window* pParent,
                                                              bool bDisallowCellMove ) override;
 
-    virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( vcl::Window*        pParent,
+    virtual VclPtr<AbstractScInsertContentsDlg> CreateScInsertContentsDlg( vcl::Window*        pParent,
                                                                     const OUString* pStrTitle = nullptr ) override;
 
-    virtual AbstractScInsertTableDlg * CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,
+    virtual VclPtr<AbstractScInsertTableDlg> CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,
         SCTAB nTabCount, bool bFromFile) override;
 
-    virtual AbstractScSelEntryDlg * CreateScSelEntryDlg ( vcl::Window* pParent,
+    virtual VclPtr<AbstractScSelEntryDlg> CreateScSelEntryDlg ( vcl::Window* pParent,
                                                           const std::vector<OUString> &rEntryList ) override;
 
-    virtual AbstractScLinkedAreaDlg * CreateScLinkedAreaDlg(vcl::Window* pParent) override;
+    virtual VclPtr<AbstractScLinkedAreaDlg> CreateScLinkedAreaDlg(vcl::Window* pParent) override;
 
-    virtual AbstractScMetricInputDlg * CreateScMetricInputDlg (  vcl::Window*        pParent,
+    virtual VclPtr<AbstractScMetricInputDlg> CreateScMetricInputDlg (  vcl::Window*        pParent,
                                                                 const OString&  sDialogName,
                                                                 long            nCurrent,
                                                                 long            nDefault,
@@ -477,56 +477,56 @@ public:
                                                                 long            nMaximum  = 1000,
                                                                 long            nMinimum  = 0 ) override;
 
-    virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(vcl::Window * pParent,
+    virtual VclPtr<AbstractScMoveTableDlg> CreateScMoveTableDlg(vcl::Window * pParent,
         const OUString& rDefault) override;
 
-    virtual AbstractScNameCreateDlg * CreateScNameCreateDlg(vcl::Window * pParent,
+    virtual VclPtr<AbstractScNameCreateDlg> CreateScNameCreateDlg(vcl::Window * pParent,
         sal_uInt16 nFlags) override;
 
-    virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell, bool bInsList=true ) override;
+    virtual VclPtr<AbstractScNamePasteDlg> CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell, bool bInsList=true ) override;
 
-    virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg(vcl::Window* pParent,
+    virtual VclPtr<AbstractScPivotFilterDlg> CreateScPivotFilterDlg(vcl::Window* pParent,
         const SfxItemSet& rArgSet, sal_uInt16 nSourceTab) override;
 
-    virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( vcl::Window* pParent,
+    virtual VclPtr<AbstractScDPFunctionDlg> CreateScDPFunctionDlg( vcl::Window* pParent,
                                                                 const ScDPLabelDataVector& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScPivotFuncData& rFuncData ) override;
 
-    virtual AbstractScDPSubtotalDlg * CreateScDPSubtotalDlg( vcl::Window* pParent,
+    virtual VclPtr<AbstractScDPSubtotalDlg> CreateScDPSubtotalDlg( vcl::Window* pParent,
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScPivotFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields ) override;
 
-    virtual AbstractScDPNumGroupDlg * CreateScDPNumGroupDlg( vcl::Window* pParent,
+    virtual VclPtr<AbstractScDPNumGroupDlg> CreateScDPNumGroupDlg( vcl::Window* pParent,
                                                                 const ScDPNumGroupInfo& rInfo ) override;
 
-    virtual AbstractScDPDateGroupDlg * CreateScDPDateGroupDlg( vcl::Window* pParent,
+    virtual VclPtr<AbstractScDPDateGroupDlg> CreateScDPDateGroupDlg( vcl::Window* pParent,
                                                                 const ScDPNumGroupInfo& rInfo,
                                                                 sal_Int32 nDatePart,
                                                                 const Date& rNullDate ) override;
 
-    virtual AbstractScDPShowDetailDlg * CreateScDPShowDetailDlg( vcl::Window* pParent,
+    virtual VclPtr<AbstractScDPShowDetailDlg> CreateScDPShowDetailDlg( vcl::Window* pParent,
                                                                 ScDPObject& rDPObj,
                                                                 sal_uInt16 nOrient ) override;
 
-    virtual AbstractScNewScenarioDlg * CreateScNewScenarioDlg ( vcl::Window* pParent, const OUString& rName,
+    virtual VclPtr<AbstractScNewScenarioDlg> CreateScNewScenarioDlg ( vcl::Window* pParent, const OUString& rName,
                                                                 bool bEdit, bool bSheetProtected = false ) override;
-    virtual AbstractScShowTabDlg * CreateScShowTabDlg(vcl::Window* pParent) override;
+    virtual VclPtr<AbstractScShowTabDlg> CreateScShowTabDlg(vcl::Window* pParent) override;
 
-    virtual AbstractScStringInputDlg * CreateScStringInputDlg (  vcl::Window* pParent,
+    virtual VclPtr<AbstractScStringInputDlg> CreateScStringInputDlg (  vcl::Window* pParent,
                                                                 const OUString& rTitle,
                                                                 const OUString& rEditTitle,
                                                                 const OUString& rDefault,
                                                                 const OString& sHelpId, const OString& sEditHelpId ) override;
 
-    virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  vcl::Window* pParent,
+    virtual VclPtr<AbstractScTabBgColorDlg> CreateScTabBgColorDlg (  vcl::Window* pParent,
                                                                 const OUString& rTitle, //Dialog Title
                                                                 const OUString& rTabBgColorNoColorText, //Label for no tab color
                                                                 const Color& rDefaultColor ) override; //Currently selected Color
 
-    virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( bool                    bAscii,
+    virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg ( bool                    bAscii,
                                                                     const ScImportOptions*  pOptions = nullptr,
                                                                     const OUString*         pStrTitle = nullptr,
                                                                     bool                    bMultiByte = false,
@@ -556,7 +556,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet) override;
 
     // For TabPage
-    virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) override;
+    virtual CreateTabPage                GetTabPageCreatorFunc( sal_uInt16 nId ) override;
 
 };
 
