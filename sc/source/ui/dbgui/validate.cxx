@@ -846,7 +846,7 @@ IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl, Button*, void)
     // choosing a script
     OUString aScriptURL = SfxApplication::ChooseScript();
 
-    if ( aScriptURL != nullptr && !aScriptURL.isEmpty() )
+    if ( !aScriptURL.isEmpty() )
     {
         m_pEdtTitle->SetText( aScriptURL );
     }
