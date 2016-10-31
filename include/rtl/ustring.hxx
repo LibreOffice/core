@@ -3226,6 +3226,18 @@ public:
     }
 };
 
+#if defined LIBO_INTERNAL_ONLY
+// Prevent the operator ==/!= overloads with 'sal_Unicode const *' paramter from
+// being selected for nonsensical code like
+//
+//   if (ouIdAttr == nullptr)
+//
+void operator ==(OUString const &, std::nullptr_t) = delete;
+void operator ==(std::nullptr_t, OUString const &) = delete;
+void operator !=(OUString const &, std::nullptr_t) = delete;
+void operator !=(std::nullptr_t, OUString const &) = delete;
+#endif
+
 #if defined LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 /// @cond INTERNAL
 
