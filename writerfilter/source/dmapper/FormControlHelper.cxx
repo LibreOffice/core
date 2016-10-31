@@ -258,16 +258,13 @@ void FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
     if (! xFormComps.is())
         return;
 
-    static const char sControl[] = "Control";
-
     sal_Int32 nControl = 0;
     bool bDone = false;
     OUString sControlName;
 
     do
     {
-        OUString sTmp(sControl);
-        sTmp += OUString::number(nControl);
+        OUString sTmp = "Control" + OUString::number(nControl);
 
         nControl++;
         if (! xFormCompsByName->hasByName(sTmp))

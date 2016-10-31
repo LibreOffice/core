@@ -273,9 +273,8 @@ OUString OLEHandler::copyOLEOStream(
 
             ::oox::ole::SaveInteropProperties(xTextDocument, aURL, nullptr, m_sProgId, m_sDrawAspect);
 
-            static const char sProtocol[] = "vnd.sun.star.EmbeddedObject:";
             OUString aPersistName( xEmbeddedResolver->resolveEmbeddedObjectURL( aURL ) );
-            sRet = aPersistName.copy( strlen(sProtocol) );
+            sRet = aPersistName.copy( strlen("vnd.sun.star.EmbeddedObject:") );
 
         }
         uno::Reference< lang::XComponent > xComp( xEmbeddedResolver, uno::UNO_QUERY_THROW );
