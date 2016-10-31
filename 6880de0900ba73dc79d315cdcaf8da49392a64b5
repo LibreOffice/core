@@ -45,6 +45,30 @@
       "revId": "6880de0900ba73dc79d315cdcaf8da49392a64b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_1fd83653",
+        "filename": "connectivity/source/drivers/firebird/Util.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2016-10-31T19:25:50Z",
+      "side": 1,
+      "message": "I made this because the function calls in DatabaseMetadata.cxx\nSqlsubtype is only used for blob and decimal/numeric types. In other types, it is ignored (firebird gives 0 after query).",
+      "parentUuid": "7a77a97e_bf6ca29d",
+      "range": {
+        "startLine": 56,
+        "startChar": 55,
+        "endLine": 56,
+        "endChar": 73
+      },
+      "revId": "6880de0900ba73dc79d315cdcaf8da49392a64b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
