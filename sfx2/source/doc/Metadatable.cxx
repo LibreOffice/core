@@ -24,8 +24,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include <rtl/random.h>
-
+#include <comphelper/random.hxx>
 
 #include <algorithm>
 #include <list>
@@ -406,12 +405,11 @@ template< typename T >
     }
     else
     {
-        static rtlRandomPool s_Pool( rtl_random_createPool() );
         do
         {
-            sal_Int32 n;
-            rtl_random_getBytes(s_Pool, & n, sizeof(n));
-            id = prefix + OUString::number(abs(n));
+            unsigned int const n(comphelper::rng::uniform_uint_distribution(0,
+                                    std::numeric_limits<unsigned int>::max()));
+            id = prefix + OUString::number(n);
             iter = i_rXmlIdMap.find(id);
         }
         while (iter != i_rXmlIdMap.end());
