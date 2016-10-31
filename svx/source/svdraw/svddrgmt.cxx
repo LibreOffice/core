@@ -667,15 +667,7 @@ void SdrDragMethod::CancelSdrDrag()
     Hide();
 }
 
-struct compareConstSdrObjectRefs
-{
-    bool operator()(const SdrObject* p1, const SdrObject* p2) const
-    {
-        return (p1 < p2);
-    }
-};
-
-typedef std::map< const SdrObject*, SdrObject*, compareConstSdrObjectRefs> SdrObjectAndCloneMap;
+typedef std::map< const SdrObject*, SdrObject* > SdrObjectAndCloneMap;
 
 void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager)
 {
