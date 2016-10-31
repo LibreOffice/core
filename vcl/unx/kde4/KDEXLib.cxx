@@ -57,6 +57,7 @@ KDEXLib::KDEXLib() :
     // the timer has to use a Qt::QueuedConnection, otherwise the nested event
     // loop will detect the blocking timer and drop it from the polling
     // freezing LO X11 processing.
+    timeoutTimer.setSingleShot( true );
     connect( &timeoutTimer, SIGNAL( timeout()), this, SLOT( timeoutActivated()), Qt::QueuedConnection );
     connect( &userEventTimer, SIGNAL( timeout()), this, SLOT( userEventActivated()), Qt::QueuedConnection );
 
