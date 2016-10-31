@@ -225,15 +225,14 @@ The offered possible changes get more radical from top to bottom, so it is recom
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_left">12</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">If you experience problems that are not resolved by using the Safe Mode, visit the following link to get help or report a bug.
-
-You can also include the relevant parts of your User Profile. Beware that it might contain personal data.</property>
+                    <property name="label" translatable="yes">If you experience problems that are not resolved by using the Safe Mode, visit the following link to get help or report a bug.</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -254,6 +253,34 @@ You can also include the relevant parts of your User Profile. Beware that it mig
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">You can also include the relevant parts of your User Profile. Beware that it might contain personal data.
+Your User Profile is located at:</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLinkButton" id="linkbutton_profile">
+                    <property name="label" translatable="yes">Show User Profile</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>
