@@ -65,7 +65,7 @@ void firebird::evaluateStatusVector(const ISC_STATUS_ARRAY& rStatusVector,
     }
 }
 
-sal_Int32 firebird::getColumnTypeFromFBType(short aType)
+sal_Int32 firebird::getColumnTypeFromFBType(short aType, short aSubType)
 {
     aType &= ~1; // Remove last bit -- it is used to denote whether column
                  // can store Null, not needed for type determination
@@ -76,12 +76,24 @@ sal_Int32 firebird::getColumnTypeFromFBType(short aType)
     case SQL_VARYING:
         return DataType::VARCHAR;
     case SQL_SHORT:
+        if(aSubType == 1)
+            return DataType::NUMERIC;
+        if(aSubType == 2)
+            return DataType::DECIMAL;
         return DataType::SMALLINT;
     case SQL_LONG:
+        if(aSubType == 1)
+            return DataType::NUMERIC;
+        if(aSubType == 2)
+            return DataType::DECIMAL;
         return DataType::INTEGER;
     case SQL_FLOAT:
         return DataType::FLOAT;
     case SQL_DOUBLE:
+        if(aSubType == 1)
+            return DataType::NUMERIC;
+        if(aSubType == 2)
+            return DataType::DECIMAL;
         return DataType::DOUBLE;
     case SQL_D_FLOAT:
         return DataType::DOUBLE;
@@ -96,6 +108,10 @@ sal_Int32 firebird::getColumnTypeFromFBType(short aType)
     case SQL_TYPE_DATE:
         return DataType::DATE;
     case SQL_INT64:
+        if(aSubType == 1)
+            return DataType::NUMERIC;
+        if(aSubType == 2)
+            return DataType::DECIMAL;
         return DataType::BIGINT;
     case SQL_NULL:
         return DataType::SQLNULL;
@@ -107,7 +123,7 @@ sal_Int32 firebird::getColumnTypeFromFBType(short aType)
     }
 }
 
-OUString firebird::getColumnTypeNameFromFBType(short aType)
+OUString firebird::getColumnTypeNameFromFBType(short aType, short aSubType)
 {
     aType &= ~1; // Remove last bit -- it is used to denote whether column
                 // can store Null, not needed for type determination
@@ -118,12 +134,24 @@ OUString firebird::getColumnTypeNameFromFBType(short aType)
     case SQL_VARYING:
         return OUString("SQL_VARYING");
     case SQL_SHORT:
+        if(aSubType == 1)
+            return OUString("SQL_NUMERIC");
+        if(aSubType == 2)
+            return OUString("SQL_DECIMAL");
         return OUString("SQL_SHORT");
     case SQL_LONG:
+        if(aSubType == 1)
+            return OUString("SQL_NUMERIC");
+        if(aSubType == 2)
+            return OUString("SQL_DECIMAL");
         return OUString("SQL_LONG");
     case SQL_FLOAT:
         return OUString("SQL_FLOAT");
     case SQL_DOUBLE:
+        if(aSubType == 1)
+            return OUString("SQL_NUMERIC");
+        if(aSubType == 2)
+            return OUString("SQL_DECIMAL");
         return OUString("SQL_DOUBLE");
     case SQL_D_FLOAT:
         return OUString("SQL_D_FLOAT");
@@ -138,6 +166,10 @@ OUString firebird::getColumnTypeNameFromFBType(short aType)
     case SQL_TYPE_DATE:
         return OUString("SQL_TYPE_DATE");
     case SQL_INT64:
+        if(aSubType == 1)
+            return OUString("SQL_NUMERIC");
+        if(aSubType == 2)
+            return OUString("SQL_DECIMAL");
         return OUString("SQL_INT64");
     case SQL_NULL:
         return OUString("SQL_NULL");
@@ -539,5 +571,15 @@ OUString firebird::escapeWith( const OUString& sText, const char aKey, const cha
     }
 
     return sRet;
+}
+
+sal_Int64 firebird::pow10Integer(int nDecimalCount)
+{
+    sal_Int64 nRet = 1;
+    for(int i=0; i< nDecimalCount; i++)
+    {
+        nRet *= 10;
+    }
+    return nRet;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
