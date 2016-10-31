@@ -179,11 +179,10 @@ XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetSequenceIdBP()
 
 XMLPropertyBackpatcher<OUString>& XMLTextImportHelper::GetSequenceNameBP()
 {
-    static const char s_SourceName[] = "SourceName";
     if (!m_xBackpatcherImpl->m_pSequenceNameBackpatcher.get())
     {
         m_xBackpatcherImpl->m_pSequenceNameBackpatcher.reset(
-            new XMLPropertyBackpatcher<OUString>(s_SourceName));
+            new XMLPropertyBackpatcher<OUString>("SourceName"));
     }
     return *m_xBackpatcherImpl->m_pSequenceNameBackpatcher;
 }

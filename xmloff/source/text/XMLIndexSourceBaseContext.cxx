@@ -40,9 +40,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
-const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
-const sal_Char sAPI_IsRelativeTabstops[] = "IsRelativeTabstops";
-
 static const SvXMLTokenMapEntry aIndexSourceTokenMap[] =
 {
     { XML_NAMESPACE_TEXT,
@@ -151,8 +148,8 @@ XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
     Reference<XPropertySet> & rPropSet,
     bool bLevelFormats)
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sCreateFromChapter(sAPI_CreateFromChapter)
-,   sIsRelativeTabstops(sAPI_IsRelativeTabstops)
+,   sCreateFromChapter("CreateFromChapter")
+,   sIsRelativeTabstops("IsRelativeTabstops")
 ,   bUseLevelFormats(bLevelFormats)
 ,   bChapterIndex(false)
 ,   bRelativeTabs(true)

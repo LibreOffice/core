@@ -103,7 +103,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
-sal_Char const sXML_1_1[] = "1.1";
 sal_Char const sXML_1_2[] = "1.2";
 
 #define XML_MODEL_SERVICE_WRITER    "com.sun.star.text.TextDocument"
@@ -1363,7 +1362,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     case SvtSaveOptions::ODFVER_LATEST: pVersion = sXML_1_2; break;
     case SvtSaveOptions::ODFVER_012_EXT_COMPAT: pVersion = sXML_1_2; break;
     case SvtSaveOptions::ODFVER_012: pVersion = sXML_1_2; break;
-    case SvtSaveOptions::ODFVER_011: pVersion = sXML_1_1; break;
+    case SvtSaveOptions::ODFVER_011: pVersion = "1.1"; break;
     case SvtSaveOptions::ODFVER_010: break;
 
     default:
