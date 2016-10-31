@@ -23,6 +23,7 @@ foo:
 define gb_LinkTarget__command
 mkdir -p $(WORKDIR)/GbuildToIde/$(dir $(2))
 mkdir -p $(WORKDIR)/LinkTarget/$(dir $(2))
+$(if $(GBUILDTOJSON_LD_LIBRARY_PATH),LD_LIBRARY_PATH=$(GBUILDTOJSON_LD_LIBRARY_PATH)) \
 $(call gb_Executable_get_command,gbuildtojson) \
 --linktarget=$(call var2file,$(shell $(gb_MKTEMP)),100,$(2)) \
 --ilibtarget=$(call var2file,$(shell $(gb_MKTEMP)),100,$(ILIBTARGET)) \

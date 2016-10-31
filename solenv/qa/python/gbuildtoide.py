@@ -28,6 +28,7 @@ def getgbuildtesttools(testcase):
 makeenvvars = ['MAKEOVERRIDES', 'MAKEFLAGS', 'MAKE_TERMERR', 'MAKE_TERMOUT', 'MAKELEVEL', 'MFLAGS']
 def clearmakevars():
     if 'LD_LIBRARY_PATH' in os.environ:
+        os.environ['GBUILDTOJSON_LD_LIBRARY_PATH'] = os.environ['LD_LIBRARY_PATH']
         del(os.environ['LD_LIBRARY_PATH']) # built with ASAN; prevent that
     for makeenvvar in makeenvvars:
         if makeenvvar in os.environ:
