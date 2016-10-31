@@ -377,6 +377,58 @@ bool OResultSet::isNull(const sal_Int32 nColumnIndex)
 }
 
 template <typename T>
+OUString OResultSet::makeNumericString(const sal_Int32 nColumnIndex)
+{
+    //  minus because firebird stores scale as a negative number
+    int nDecimalCount = -(m_pSqlda->sqlvar[nColumnIndex-1].sqlscale);
+    if(nDecimalCount < 0)
+    {
+        // scale should be always positive
+        assert(false);
+        return OUString();
+    }
+
+    OUStringBuffer sRetBuffer;
+    T nAllDigits = *reinterpret_cast<T*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
+    sal_Int64 nDecimalCountExp = pow10Integer(nDecimalCount);
+
+    if(nAllDigits < 0)
+    {
+        sRetBuffer.append('-');
+        nAllDigits = -nAllDigits; // abs
+    }
+
+    sRetBuffer.append((sal_Int64) (nAllDigits / nDecimalCountExp) );
+    if( nDecimalCount > 0)
+    {
+        sRetBuffer.append('.');
+
+        sal_Int64 nFractionalPart = nAllDigits % nDecimalCountExp;
+
+        int iCount = 0; // digit count
+        sal_Int64 nFracTemp = nFractionalPart;
+        while(nFracTemp>0)
+        {
+            nFracTemp /= 10;
+            iCount++;
+        }
+
+        int nMissingNulls = nDecimalCount - iCount;
+
+        // append nulls after dot and before nFractionalPart
+        for(int i=0; i<nMissingNulls; i++)
+        {
+            sRetBuffer.append('0');
+        }
+
+        // the rest
+        sRetBuffer.append(nFractionalPart);
+    }
+
+    return sRetBuffer.makeStringAndClear();
+}
+
+template <typename T>
 T OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
 {
     if ((m_bWasNull = isNull(nColumnIndex)))
@@ -398,18 +450,25 @@ ORowSetValue OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_S
     //
     // Basically we just have to map to the correct direct request and
     // ORowSetValue does the rest for us here.
+    int nSqlSubType = m_pSqlda->sqlvar[nColumnIndex-1].sqlsubtype;
     switch (m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1)
     {
         case SQL_TEXT:
         case SQL_VARYING:
             return getString(nColumnIndex);
         case SQL_SHORT:
+            if(nSqlSubType == 0 || nSqlSubType == 1) //numeric or decimal
+                return getString(nColumnIndex);
             return getShort(nColumnIndex);
         case SQL_LONG:
+            if(nSqlSubType == 0 || nSqlSubType == 1) //numeric or decimal
+                return getString(nColumnIndex);
             return getInt(nColumnIndex);
         case SQL_FLOAT:
             return getFloat(nColumnIndex);
         case SQL_DOUBLE:
+            if(nSqlSubType == 0 || nSqlSubType == 1) //numeric or decimal
+                return getString(nColumnIndex);
             return getDouble(nColumnIndex);
         case SQL_D_FLOAT:
             return getFloat(nColumnIndex);
@@ -420,6 +479,8 @@ ORowSetValue OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_S
         case SQL_TYPE_DATE:
             return getDate(nColumnIndex);
         case SQL_INT64:
+            if(nSqlSubType == 0 || nSqlSubType == 1) //numeric or decimal
+                return getString(nColumnIndex);
             return getLong(nColumnIndex);
         case SQL_BLOB:
         case SQL_NULL:
@@ -502,6 +563,7 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
 {
     // &~1 to remove the "can contain NULL" indicator
     int aSqlType = m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1;
+    int aSqlSubType = m_pSqlda->sqlvar[nColumnIndex-1].sqlsubtype;
     if (aSqlType == SQL_TEXT )
     {
         return OUString(m_pSqlda->sqlvar[nColumnIndex-1].sqldata,
@@ -516,6 +578,26 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
         return OUString(m_pSqlda->sqlvar[nColumnIndex-1].sqldata + 2,
                         aLength,
                         RTL_TEXTENCODING_UTF8);
+    }
+    else if ((aSqlType == SQL_SHORT || aSqlType == SQL_LONG
+                || aSqlType == SQL_DOUBLE || aSqlType == SQL_INT64)
+                    && (aSqlSubType == 1 || aSqlSubType == 2))
+    {
+        // decimal and numeric types
+        switch(aSqlType)
+        {
+            case SQL_SHORT:
+                return makeNumericString<sal_Int16>(nColumnIndex);
+            case SQL_LONG:
+                return makeNumericString<sal_Int32>(nColumnIndex);
+            case SQL_DOUBLE:
+                // TODO FIXME 64 bits?
+            case SQL_INT64:
+                return makeNumericString<sal_Int64>(nColumnIndex);
+            default:
+                assert(false);
+                return OUString(); // never reached
+        }
     }
     else
     {

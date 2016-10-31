@@ -53,8 +53,8 @@ namespace connectivity
                                   const css::uno::Reference< css::uno::XInterface >& _rxContext)
                 throw (css::sdbc::SQLException);
 
-        sal_Int32 getColumnTypeFromFBType(short aType);
-        ::rtl::OUString getColumnTypeNameFromFBType(short aType);
+        sal_Int32 getColumnTypeFromFBType(short aType, short aSubType);
+        ::rtl::OUString getColumnTypeNameFromFBType(short aType, short aSubType);
 
         /**
          * Internally (i.e. in RDB$FIELD_TYPE) firebird stores the data type
@@ -73,6 +73,7 @@ namespace connectivity
         OString extractSingleTableFromSelect( const OStringVector &vec );
 
         OUString escapeWith( const OUString& sText, const char aKey, const char aEscapeChar);
+        sal_Int64 pow10Integer( int nDecimalCount );
     }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_UTIL_HXX
