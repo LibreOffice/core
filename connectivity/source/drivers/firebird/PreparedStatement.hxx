@@ -79,6 +79,13 @@ namespace connectivity
              */
             void closeBlobAfterWriting(isc_blob_handle& rBlobHandle);
 
+            /**
+             * Take out the number part of a fix point decimal without
+             * the information of where is the fracional part from a
+             * string representation of a number. (e.g. 54.654 -> 54654)
+             */
+            sal_Int64 toNumericWithoutDecimalPlace(const OUString& sSource);
+
         protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
                                                                    const css::uno::Any& rValue)
