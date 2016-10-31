@@ -33,8 +33,10 @@ module com {  module sun {  module star {  module xml {  module sax {
     allow the user to make a copy of the instance.
 
     </p>
-    <p>This interface is an IDL version of the Java interface
-    <em>org.xml.sax.AttributeList</em>.</p>
+    <p>This interface is a poor IDL version of the Java interface
+    <em>org.xml.sax.AttributeList</em>.  For example in getValueByName, it does
+    not allow to distinguish a missing value (for which the Java interface
+    returns null) from an empty string value.</p>
  */
 published interface XAttributeList: com::sun::star::uno::XInterface
 {

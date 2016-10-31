@@ -46,7 +46,7 @@ OUString XSecParser::getIdAttr(const cssu::Reference< cssxs::XAttributeList >& x
 {
     OUString ouIdAttr = xAttribs->getValueByName("id");
 
-    if (ouIdAttr == nullptr)
+    if (ouIdAttr.isEmpty())
     {
         ouIdAttr = xAttribs->getValueByName("Id");
     }
@@ -91,7 +91,7 @@ void SAL_CALL XSecParser::startElement(
     try
     {
         OUString ouIdAttr = getIdAttr(xAttribs);
-        if (ouIdAttr != nullptr)
+        if (!ouIdAttr.isEmpty())
         {
             m_pXSecController->collectToVerify( ouIdAttr );
         }
@@ -99,7 +99,7 @@ void SAL_CALL XSecParser::startElement(
         if ( aName == "Signature" )
         {
             m_pXSecController->addSignature();
-            if (ouIdAttr != nullptr)
+            if (!ouIdAttr.isEmpty())
             {
                 m_pXSecController->setId( ouIdAttr );
             }
@@ -107,8 +107,7 @@ void SAL_CALL XSecParser::startElement(
         else if ( aName == "Reference" )
         {
             OUString ouUri = xAttribs->getValueByName("URI");
-            SAL_WARN_IF( ouUri == nullptr, "xmlsecurity.helper", "URI == NULL" );
-
+            SAL_WARN_IF( ouUri.isEmpty(), "xmlsecurity.helper", "URI == NULL" );
             if (ouUri.startsWith("#"))
             {
                 /*
@@ -131,7 +130,7 @@ void SAL_CALL XSecParser::startElement(
             {
                 OUString ouAlgorithm = xAttribs->getValueByName("Algorithm");
 
-                if (ouAlgorithm != nullptr && ouAlgorithm == ALGO_C14N)
+                if (ouAlgorithm == ALGO_C14N)
                     /*
                      * a xml stream
                      */
@@ -168,7 +167,7 @@ void SAL_CALL XSecParser::startElement(
         }
         else if ( aName == "SignatureProperty" )
         {
-            if (ouIdAttr != nullptr)
+            if (!ouIdAttr.isEmpty())
             {
                 m_pXSecController->setPropertyId( ouIdAttr );
             }
