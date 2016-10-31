@@ -31,10 +31,10 @@
 #include <swtypes.hxx>
 #include <UndoBookmark.hxx>
 #include <unobookmark.hxx>
-#include <rtl/random.h>
 #include <o3tl/make_unique.hxx>
 #include <xmloff/odffields.hxx>
 #include <libxml/xmlwriter.h>
+#include <comphelper/random.hxx>
 #include <comphelper/anytostring.hxx>
 
 using namespace ::sw::mark;
@@ -206,15 +206,14 @@ namespace sw { namespace mark
         }
         else
         {
-            static rtlRandomPool aPool = rtl_random_createPool();
             static OUString sUniquePostfix;
             static sal_Int32 nCount = SAL_MAX_INT32;
             OUStringBuffer aResult(rPrefix);
             if(nCount == SAL_MAX_INT32)
             {
-                sal_Int32 nRandom;
-                rtl_random_getBytes(aPool, &nRandom, sizeof(nRandom));
-                sUniquePostfix = OUStringBuffer(13).append('_').append(static_cast<sal_Int32>(abs(nRandom))).makeStringAndClear();
+                unsigned int const n(comphelper::rng::uniform_uint_distribution(0,
+                                    std::numeric_limits<unsigned int>::max()));
+                sUniquePostfix = "_" + OUString::number(n);
                 nCount = 0;
             }
             // putting the counter in front of the random parts will speed up string comparisons
