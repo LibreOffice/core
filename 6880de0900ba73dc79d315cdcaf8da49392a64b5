@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_3f5892fa",
+        "filename": "connectivity/source/drivers/firebird/PreparedStatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-10-31T16:11:32Z",
+      "side": 1,
+      "message": "This code block assumes that the type of x and sqlType are consistent. That is, it assumes that if sqlType indicates \"32 bit integer\", then x contains a 32 bit integer.\n\nThe point of this function is rather that the caller does not have to care about this, and the function itself will do the conversion. It can use the utility function ::dbtools::setObjectWithInfo for that, which will usually do the right thing. Among the drivers, many implementations of setObjectWithInfo are of the form:\n\nif(some special case to be handled specifically)\n{\n   do stuff\n}\nelse\n{\n   ::dbtools::setObjectWithInfo(this,parameterIndex,x,sqlType,scale)\n}",
+      "range": {
+        "startLine": 573,
+        "startChar": 4,
+        "endLine": 573,
+        "endChar": 5
+      },
+      "revId": "6880de0900ba73dc79d315cdcaf8da49392a64b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
