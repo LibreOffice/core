@@ -41,9 +41,6 @@
 using namespace css;
 using namespace css::uno;
 
-const char UNO_FLIPHORIZONTAL[] = ".uno:FlipHorizontal";
-const char UNO_FLIPVERTICAL[]   = ".uno:FlipVertical";
-
 const char USERITEM_NAME[]      = "FitItem";
 
 namespace svx { namespace sidebar {
@@ -489,13 +486,13 @@ IMPL_LINK( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox, void )
 {
     const OUString aCommand(pBox->GetItemCommand(pBox->GetCurItemId()));
 
-    if(aCommand == UNO_FLIPHORIZONTAL)
+    if(aCommand == ".uno:FlipHorizontal")
     {
         SfxVoidItem aHoriItem(SID_FLIP_HORIZONTAL);
         GetBindings()->GetDispatcher()->ExecuteList(SID_FLIP_HORIZONTAL,
                 SfxCallMode::RECORD, { &aHoriItem });
     }
-    else if(aCommand == UNO_FLIPVERTICAL)
+    else if(aCommand == ".uno:FlipVertical")
     {
         SfxVoidItem aVertItem(SID_FLIP_VERTICAL);
         GetBindings()->GetDispatcher()->ExecuteList(SID_FLIP_VERTICAL,

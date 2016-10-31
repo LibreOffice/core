@@ -287,8 +287,6 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
             {
                 static const char s_sTitle[] = "Title";
                 static const char s_sIsReadOnly[] = "IsReadOnly";
-                static const char s_sSDG_EXT[] = "sdg";
-                static const char s_sSDV_EXT[] = "sdv";
 
                 while( xResultSet->next() )
                 {
@@ -296,8 +294,8 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
 
                     if(aThmURL.GetExtension().equalsIgnoreAsciiCase("thm"))
                     {
-                        INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( s_sSDG_EXT );
-                        INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( s_sSDV_EXT );
+                        INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( "sdg" );
+                        INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( "sdv" );
                         OUString        aTitle;
 
                         try
