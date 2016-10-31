@@ -1553,13 +1553,11 @@ namespace xmloff
             const Reference< XAttributeList >& _rxAttrList)
     {
         // is it the "option" sub tag of a listbox ?
-        static const char s_sOptionElementName[] = "option";
-        if (s_sOptionElementName == _rLocalName)
+        if (_rLocalName == "option")
             return new OListOptionImport(GetImport(), _nPrefix, _rLocalName, this);
 
         // is it the "item" sub tag of a combobox ?
-        static const char s_sItemElementName[] = "item";
-        if (s_sItemElementName == _rLocalName)
+        if (_rLocalName == "item")
             return new OComboItemImport(GetImport(), _nPrefix, _rLocalName, this);
 
         // everything else

@@ -40,9 +40,6 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-const sal_Char sAPI_FieldMaster_Bibliography[] =
-                                "com.sun.star.text.FieldMaster.Bibliography";
-
 
 XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationContext(
     SvXMLImport& rImport,
@@ -50,8 +47,7 @@ XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationConte
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList) :
         SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_BIBLIOGRAPHYCONFIG),
-        sFieldMaster_Bibliography(
-            sAPI_FieldMaster_Bibliography),
+        sFieldMaster_Bibliography("com.sun.star.text.FieldMaster.Bibliography"),
         sBracketBefore("BracketBefore"),
         sBracketAfter("BracketAfter"),
         sIsNumberEntries("IsNumberEntries"),

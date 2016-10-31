@@ -40,22 +40,16 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
-const sal_Char sAPI_CreateFromOutline[] = "CreateFromOutline";
-const sal_Char sAPI_CreateFromMarks[] = "CreateFromMarks";
-const sal_Char sAPI_Level[] = "Level";
-const sal_Char sAPI_CreateFromLevelParagraphStyles[] = "CreateFromLevelParagraphStyles";
-
-
 XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet)
 :   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, true)
-,   sCreateFromMarks(sAPI_CreateFromMarks)
-,   sLevel(sAPI_Level)
-,   sCreateFromOutline(sAPI_CreateFromOutline)
-,   sCreateFromLevelParagraphStyles(sAPI_CreateFromLevelParagraphStyles)
+,   sCreateFromMarks("CreateFromMarks")
+,   sLevel("Level")
+,   sCreateFromOutline("CreateFromOutline")
+,   sCreateFromLevelParagraphStyles("CreateFromLevelParagraphStyles")
     // use all chapters by default
 ,   nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->getCount())
 ,   bUseOutline(true)

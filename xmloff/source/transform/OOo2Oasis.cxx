@@ -1431,8 +1431,7 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
             OSL_ENSURE( rPropSet.is(), "no info property set" );
             if( rPropSet.is() )
             {
-                const sal_Char sRedlineProtectionKey[] = "RedlineProtectionKey";
-                OUString aPropName(sRedlineProtectionKey);
+                OUString aPropName("RedlineProtectionKey");
                 Reference< XPropertySetInfo > xPropSetInfo(
                             rPropSet->getPropertySetInfo() );
                 if( xPropSetInfo.is() &&

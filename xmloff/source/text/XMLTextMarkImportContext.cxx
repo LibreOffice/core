@@ -128,16 +128,14 @@ static SvXMLEnumMapEntry const lcl_aMarkTypeMap[] =
 
 static const char *lcl_getFormFieldmarkName(OUString &name)
 {
-    static const char sCheckbox[]=ODF_FORMCHECKBOX;
-    static const char sFormDropDown[]=ODF_FORMDROPDOWN;
     if (name == "msoffice.field.FORMCHECKBOX" ||
         name == "ecma.office-open-xml.field.FORMCHECKBOX")
-        return sCheckbox;
+        return ODF_FORMCHECKBOX;
     else if (name == ODF_FORMCHECKBOX)
-        return sCheckbox;
-    if (name == ODF_FORMDROPDOWN ||
-        name == "ecma.office-open-xml.field.FORMDROPDOWN")
-        return sFormDropDown;
+        return ODF_FORMCHECKBOX;
+    else if (name == ODF_FORMDROPDOWN ||
+             name == "ecma.office-open-xml.field.FORMDROPDOWN")
+        return ODF_FORMDROPDOWN;
     else
         return nullptr;
 }
@@ -179,10 +177,7 @@ void XMLTextMarkImportContext::EndElement()
 {
     SvXMLImportContext::EndElement();
 
-    static const char sAPI_reference_mark[] = "com.sun.star.text.ReferenceMark";
     static const char sAPI_bookmark[] = "com.sun.star.text.Bookmark";
-    static const char sAPI_fieldmark[] = "com.sun.star.text.Fieldmark";
-    static const char sAPI_formfieldmark[] = "com.sun.star.text.FormFieldmark";
 
     if (!m_sBookmarkName.isEmpty())
     {
@@ -195,7 +190,7 @@ void XMLTextMarkImportContext::EndElement()
                 case TypeReference:
                     // export point reference mark
                     CreateAndInsertMark(GetImport(),
-                        sAPI_reference_mark,
+                        "com.sun.star.text.ReferenceMark",
                         m_sBookmarkName,
                         m_rHelper.GetCursorAsRange()->getStart());
                     break;
@@ -223,7 +218,7 @@ void XMLTextMarkImportContext::EndElement()
                         // export point bookmark
                         const Reference<XInterface> xContent(
                             CreateAndInsertMark(GetImport(),
-                                        (bImportAsField ? OUString(sAPI_formfieldmark) : OUString(sAPI_bookmark)),
+                                        (bImportAsField ? OUString("com.sun.star.text.FormFieldmark") : OUString(sAPI_bookmark)),
                                 m_sBookmarkName,
                                 m_rHelper.GetCursorAsRange()->getStart(),
                                 m_sXmlId) );
@@ -341,7 +336,7 @@ void XMLTextMarkImportContext::EndElement()
                                 // insert reference
                                 xContent = CreateAndInsertMark(GetImport(),
                                         (bImportAsField
-                                            ? OUString(sAPI_fieldmark)
+                                            ? OUString("com.sun.star.text.Fieldmark")
                                             : OUString(sAPI_bookmark)),
                                         m_sBookmarkName,
                                         xInsertionCursor,

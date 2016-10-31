@@ -152,8 +152,6 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
     , meDirection(ED_none), mnStartScale(100), meSpeed(AnimationSpeed_MEDIUM)
     , mnVerb(0), mbPlayFull(false)
 {
-    static const char sXMLClickName[] = "click";
-
     if( nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_EVENT_LISTENER ) )
     {
         mbValid = true;
@@ -223,7 +221,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
                 sEventName = sValue;
                 sal_uInt16 nScriptPrefix =
                     GetImport().GetNamespaceMap().GetKeyByAttrName( sValue, &sEventName );
-                mbValid = XML_NAMESPACE_DOM == nScriptPrefix && sEventName == sXMLClickName;
+                mbValid = XML_NAMESPACE_DOM == nScriptPrefix && sEventName == "click";
             }
             else if( IsXMLToken( aAttrLocalName, XML_LANGUAGE ) )
             {
