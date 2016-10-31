@@ -3611,10 +3611,10 @@ std::vector<Rectangle> D2DWriteTextOutRenderer::GetGlyphInkBoxes(uint16_t * pGid
                    bottom = INT32(m.advanceHeight) - m.verticalOriginY - m.bottomSideBearing;
 
         // Scale to screen space.
-        pOut->Left()   = std::lround(left * mlfEmHeight / aFontMetrics.designUnitsPerEm);
-        pOut->Top()    = std::lround(top * mlfEmHeight / aFontMetrics.designUnitsPerEm);
-        pOut->Right()  = std::lround(right * mlfEmHeight / aFontMetrics.designUnitsPerEm);
-        pOut->Bottom() = std::lround(bottom * mlfEmHeight / aFontMetrics.designUnitsPerEm);
+        pOut->Left()   = std::floor(left * mlfEmHeight / aFontMetrics.designUnitsPerEm);
+        pOut->Top()    = std::floor(top * mlfEmHeight / aFontMetrics.designUnitsPerEm);
+        pOut->Right()  = std::ceil(right * mlfEmHeight / aFontMetrics.designUnitsPerEm);
+        pOut->Bottom() = std::ceil(bottom * mlfEmHeight / aFontMetrics.designUnitsPerEm);
 
         ++pOut;
     }
