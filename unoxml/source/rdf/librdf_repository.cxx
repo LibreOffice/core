@@ -1491,12 +1491,6 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
 throw (uno::RuntimeException, lang::IllegalArgumentException,
     rdf::RepositoryException, std::exception)
 {
-    static const char s_cell[] = "com.sun.star.table.Cell";
-    static const char s_cellprops[] = "com.sun.star.text.CellProperties"; // for writer
-    static const char s_paragraph[] = "com.sun.star.text.Paragraph";
-    static const char s_bookmark[] = "com.sun.star.text.Bookmark";
-    static const char s_meta[] = "com.sun.star.text.InContentMetadata";
-
     if (!i_xSubject.is()) {
         throw lang::IllegalArgumentException(
             "librdf_Repository::setStatementRDFa: Subject is null", *this, 0);
@@ -1520,14 +1514,14 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const uno::Reference<lang::XServiceInfo> xService(i_xObject,
         uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextRange> xTextRange;
-    if (xService->supportsService(s_cell) ||
-        xService->supportsService(s_cellprops) ||
-        xService->supportsService(s_paragraph))
+    if (xService->supportsService("com.sun.star.table.Cell") ||
+        xService->supportsService("com.sun.star.text.CellProperties") || // for writer
+        xService->supportsService("com.sun.star.text.Paragraph"))
     {
         xTextRange.set(i_xObject, uno::UNO_QUERY_THROW);
     }
-    else if (xService->supportsService(s_bookmark) ||
-             xService->supportsService(s_meta))
+    else if (xService->supportsService("com.sun.star.text.Bookmark") ||
+             xService->supportsService("com.sun.star.text.InContentMetadata"))
     {
         const uno::Reference<text::XTextContent> xTextContent(i_xObject,
             uno::UNO_QUERY_THROW);
