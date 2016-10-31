@@ -2043,6 +2043,14 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
                 // MM If there is no line the distance should be set to 0
                 rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(0));
     }
+    else
+    {
+        rPropOpt.AddOpt( ESCHER_Prop_dyTextTop, 0 );
+        rPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, 0 );
+        rPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, 0 );
+        rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
+    }
+
     if( bFirstLine )                // no valid line found
     {
         rPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
