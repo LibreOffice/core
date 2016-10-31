@@ -22,10 +22,10 @@
 
 enum SfxSymbolsSize
 {
-    SFX_SYMBOLS_SIZE_SMALL,
-    SFX_SYMBOLS_SIZE_LARGE,
-    SFX_SYMBOLS_SIZE_32,
-    SFX_SYMBOLS_SIZE_AUTO
+    SFX_SYMBOLS_SIZE_SMALL   = 0,
+    SFX_SYMBOLS_SIZE_LARGE   = 1,
+    SFX_SYMBOLS_SIZE_32      = 3, // keep the numbers as they are written into the profile
+    SFX_SYMBOLS_SIZE_AUTO    = 2,
 };
 
 #endif // INCLUDED_SVTOOLS_IMGDEF_HXX
