@@ -1829,13 +1829,9 @@ SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
     m_bCachedJoinedWithPrev = false;
     m_bCachedJoinedWithNext = false;
 
-    bool bAllowPaddingWithoutBorders = false;
-    if( (pConstructor->GetType() & SwFrameType::Fly)
-        && pConstructor->IsLayoutFrame()
-        && pConstructor->GetLower() && pConstructor->GetLower()->IsTextFrame() )
-    {
-        bAllowPaddingWithoutBorders = pConstructor->getRootFrame()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::ALLOW_PADDING_WITHOUT_BORDERS);
-    }
+    // ODF spec (and MS formats) always allow padding if defined, so always enable for visual display.
+    // Once the UI is enabled by default (in LO5.4), set back to compatility to disable both UI and visual display for potential incompatible formats.
+    bool bAllowPaddingWithoutBorders = true; //pConstructor->getRootFrame()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::ALLOW_PADDING_WITHOUT_BORDERS);
     m_bBorderDist = bool(pConstructor->GetType() & SwFrameType::Cell) || bAllowPaddingWithoutBorders;
 }
 
