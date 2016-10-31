@@ -90,7 +90,7 @@ public:
         position that rotation axis runs through
 
         @param Angle
-        angle in radians of CCW rotation
+        angle in degrees of CCW rotation
 
         @param bInter
         see Operation
@@ -114,7 +114,7 @@ private:
     */
     glm::vec3 origin;
 
-    /** angle in radians of CCW rotation
+    /** angle in degrees of CCW rotation
     */
     double angle;
 };
