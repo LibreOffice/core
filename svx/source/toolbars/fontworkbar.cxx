@@ -245,15 +245,12 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
 
 static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
 {
-    static const char  sTextPath[] = "TextPath";
-    static const char  sSameLetterHeights[] = "SameLetterHeights";
-
     sal_uInt16 nSID = rReq.GetSlot();
     switch( nSID )
     {
         case SID_FONTWORK_SAME_LETTER_HEIGHTS:
         {
-            css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sSameLetterHeights );
+            css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "SameLetterHeights" );
             if( pAny )
             {
                 bool bOn = false;

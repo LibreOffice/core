@@ -725,10 +725,10 @@ namespace svxform
 
     void SAL_CALL FormScriptListener::firing( const ScriptEvent& _rEvent ) throw (RuntimeException, std::exception)
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-       static const char vbaInterOp[] = "VBAInterop";
-       if ( _rEvent.ScriptType == vbaInterOp )
+       if ( _rEvent.ScriptType == "VBAInterop" )
            return; // not handled here
+
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         if ( impl_isDisposed_nothrow() )
             return;
