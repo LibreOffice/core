@@ -51,12 +51,6 @@ namespace {
     static const ::sal_Int32 s_nOffsetPassword          = 3;
     static const ::sal_Int32 s_nOffsetThumbnail         = 4;
 
-    const char s_sCommonHistory[] = "org.openoffice.Office.Common/History";
-    const char s_sHistories[] = "org.openoffice.Office.Histories/Histories";
-    const char s_sPickListSize[] = "PickListSize";
-    const char s_sHelpBookmarksSize[] = "HelpBookmarkSize";
-    const char s_sPickList[] = "PickList";
-    const char s_sHelpBookmarks[] = "HelpBookmarks";
     const char s_sItemList[] = "ItemList";
     const char s_sOrderList[] = "OrderList";
     const char s_sHistoryItemRef[] = "HistoryItemRef";
@@ -108,14 +102,14 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
         m_xCfg.set(
             ::comphelper::ConfigurationHelper::openConfig(
                 ::comphelper::getProcessComponentContext(),
-                s_sHistories,
+                "org.openoffice.Office.Histories/Histories",
                 ::comphelper::EConfigurationModes::Standard),
             uno::UNO_QUERY);
 
         m_xCommonXCU.set(
             ::comphelper::ConfigurationHelper::openConfig(
                 ::comphelper::getProcessComponentContext(),
-                s_sCommonHistory,
+                "org.openoffice.Office.Common/History",
                 ::comphelper::EConfigurationModes::Standard),
             uno::UNO_QUERY);
     }
@@ -146,11 +140,11 @@ sal_uInt32 SvtHistoryOptions_Impl::GetCapacity(EHistoryType eHistory)
         switch (eHistory)
         {
         case ePICKLIST:
-            xListAccess->getPropertyValue(s_sPickListSize) >>= nSize;
+            xListAccess->getPropertyValue("PickListSize") >>= nSize;
             break;
 
         case eHELPBOOKMARKS:
-            xListAccess->getPropertyValue(s_sHelpBookmarksSize) >>= nSize;
+            xListAccess->getPropertyValue("HelpBookmarkSize") >>= nSize;
             break;
 
         default:
@@ -174,11 +168,11 @@ uno::Reference<container::XNameAccess> SvtHistoryOptions_Impl::GetListAccess(EHi
         switch (eHistory)
         {
         case ePICKLIST:
-            m_xCfg->getByName(s_sPickList) >>= xListAccess;
+            m_xCfg->getByName("PickList") >>= xListAccess;
             break;
 
         case eHELPBOOKMARKS:
-            m_xCfg->getByName(s_sHelpBookmarks) >>= xListAccess;
+            m_xCfg->getByName("HelpBookmarks") >>= xListAccess;
             break;
 
         default:
