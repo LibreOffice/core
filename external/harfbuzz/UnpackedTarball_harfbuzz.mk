@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/ubsan.patch \
     external/harfbuzz/clang-cl.patch \
+    external/harfbuzz/0001-graphite-Fix-shaping-with-varying-font-size.patch \
 ))
 
 ifneq ($(ENABLE_RUNTIME_OPTIMIZATIONS),TRUE)
