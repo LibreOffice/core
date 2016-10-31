@@ -49,7 +49,7 @@ private:
     std::map<OUString, std::unique_ptr<ScRangeName>> m_RangeMap;
 
 public:
-    ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool bInsList=true );
+    ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool bInsList );
 
     virtual ~ScNamePasteDlg() override;
     virtual void dispose() override;

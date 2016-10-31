@@ -546,7 +546,7 @@ class XclExpStyle : public XclExpRecord
 {
 public:
     explicit            XclExpStyle( sal_uInt32 nXFId, const OUString& rStyleName );
-    explicit            XclExpStyle( sal_uInt32 nXFId, sal_uInt8 nStyleId, sal_uInt8 nLevel = EXC_STYLE_NOLEVEL );
+    explicit            XclExpStyle( sal_uInt32 nXFId, sal_uInt8 nStyleId, sal_uInt8 nLevel );
 
     /** Returns true, if this record represents an Excel built-in style. */
     inline bool         IsBuiltIn() const { return mnStyleId != EXC_STYLE_USERDEF; }

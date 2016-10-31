@@ -274,7 +274,7 @@ class XclExpFutureRecord : public XclExpRecord
 {
 public:
     explicit            XclExpFutureRecord( XclFutureRecType eRecType,
-                            sal_uInt16 nRecId, std::size_t nRecSize = 0 );
+                            sal_uInt16 nRecId, std::size_t nRecSize );
 
     /** Writes the extended record header and calls WriteBody(). */
     virtual void        Save( XclExpStream& rStrm ) override;

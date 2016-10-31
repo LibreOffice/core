@@ -1446,9 +1446,9 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
 static ScRefFlags lcl_ScAddress_Parse ( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAddr,
                                         const ScAddress::Details& rDetails,
                                         ScAddress::ExternalInfo* pExtInfo,
-                                        const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
-                                        sal_Int32* pSheetEndPos = nullptr,
-                                        const OUString* pErrRef = nullptr )
+                                        const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
+                                        sal_Int32* pSheetEndPos,
+                                        const OUString* pErrRef )
 {
     if( !*p )
         return ScRefFlags::ZERO;

@@ -94,7 +94,7 @@ public:
 
     ScUndoEnterData(
         ScDocShell* pNewDocShell, const ScAddress& rPos,
-        ValuesType& rOldValues, const OUString& rNewStr, EditTextObject* pObj = nullptr );
+        ValuesType& rOldValues, const OUString& rNewStr, EditTextObject* pObj );
 
     virtual ~ScUndoEnterData() override;
 
@@ -331,7 +331,7 @@ class ScUndoRangeNames: public ScSimpleUndo
 public:
                     //use nTab = -1 for global range names
                     ScUndoRangeNames( ScDocShell* pNewDocShell,
-                                        ScRangeName* pOld, ScRangeName* pNew , SCTAB nTab = -1);
+                                      ScRangeName* pOld, ScRangeName* pNew , SCTAB nTab);
     virtual         ~ScUndoRangeNames() override;
 
     virtual void    Undo() override;

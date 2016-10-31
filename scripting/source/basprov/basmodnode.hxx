@@ -50,7 +50,7 @@ namespace basprov
     public:
         BasicModuleNodeImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const OUString& sScriptingContext,
-            SbModule* pModule, bool isAppScript = true );
+            SbModule* pModule, bool isAppScript );
         virtual ~BasicModuleNodeImpl() override;
 
         // XBrowseNode

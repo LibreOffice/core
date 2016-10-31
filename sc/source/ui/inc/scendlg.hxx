@@ -32,7 +32,7 @@ enum class ScScenarioFlags;
 class ScNewScenarioDlg : public ModalDialog
 {
 public:
-    ScNewScenarioDlg(vcl::Window* pParent, const OUString& rName, bool bEdit = false, bool bSheetProtected = false);
+    ScNewScenarioDlg(vcl::Window* pParent, const OUString& rName, bool bEdit, bool bSheetProtected);
     virtual ~ScNewScenarioDlg() override;
     virtual void dispose() override;
     void SetScenarioData( const OUString& rName, const OUString& rComment,

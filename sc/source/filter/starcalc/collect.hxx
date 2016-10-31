@@ -38,7 +38,7 @@ protected:
     sal_uInt16          nDelta;
     ScDataObject**     pItems;
 public:
-    ScCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4);
+    ScCollection(sal_uInt16 nLim, sal_uInt16 nDel);
     ScCollection(const ScCollection& rCollection);
     virtual                 ~ScCollection() override;
 

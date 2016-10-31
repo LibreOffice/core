@@ -48,7 +48,7 @@ protected:
 public:
 
     ScRedComDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet,
-                    ScDocShell *pShell, ScChangeAction *pAction, bool bPrevNext = false);
+                    ScDocShell *pShell, ScChangeAction *pAction, bool bPrevNext);
     ~ScRedComDialog();
 
     void Execute();
