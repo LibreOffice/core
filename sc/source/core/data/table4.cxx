@@ -294,7 +294,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                     nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
                     bool bVal = true;
-                    for (sal_uInt16 i=1; i<nCount && bVal; i++)
+                    for (SCSIZE i=1; i<nCount && bVal; i++)
                     {
                         ScRefCellValue aCell = GetCellValue(nCol,nRow);
                         if (aCell.meType == CELLTYPE_VALUE)
@@ -351,7 +351,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                 nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
                 bool bVal = true;
-                for (sal_uInt16 i=1; i<nCount && bVal; i++)
+                for (SCSIZE i=1; i<nCount && bVal; i++)
                 {
                     ScRefCellValue aCell = GetCellValue(nCol,nRow);
                     if (aCell.meType == CELLTYPE_VALUE)
@@ -399,7 +399,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             (void)rListData->GetSubIndex(aStr, rListIndex, bMatchCase);
             nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
             nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
-            for (sal_uInt16 i=1; i<nCount && rListData; i++)
+            for (SCSIZE i=1; i<nCount && rListData; i++)
             {
                 (void)GetString(nCol, nRow, aStr);
                 if (!rListData->GetSubIndex(aStr, rListIndex, bMatchCase))
@@ -426,7 +426,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                     nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
                     bool bVal = true;
-                    for (sal_uInt16 i=1; i<nCount && bVal; i++)
+                    for (SCSIZE i=1; i<nCount && bVal; i++)
                     {
                         ScRefCellValue aCell = GetCellValue(nCol, nRow);
                         CellType eType = aCell.meType;
