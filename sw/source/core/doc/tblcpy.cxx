@@ -45,6 +45,7 @@
 #include <redline.hxx>
 #include <fmtfsize.hxx>
 #include <list>
+#include <deque>
 #include <memory>
 #include <o3tl/make_unique.hxx>
 
@@ -68,7 +69,7 @@ namespace
 
     typedef std::vector< BoxSpanInfo > BoxStructure;
     typedef std::vector< BoxStructure > LineStructure;
-    typedef std::list< sal_uLong > ColumnStructure;
+    typedef std::deque< sal_uLong > ColumnStructure;
 
     struct SubBox
     {
@@ -334,7 +335,7 @@ namespace
         }
         if( rpCol == maCols.end() || *rpCol > rnBorder )
         {
-            maCols.insert( rpCol, rnBorder );
+            rpCol = maCols.insert( rpCol, rnBorder );
             --rpCol;
             incColSpan( nLine, rnCol );
         }
