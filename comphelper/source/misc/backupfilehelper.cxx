@@ -2205,6 +2205,11 @@ namespace comphelper
         deleteDirRecursively(maUserConfigWorkURL);
     }
 
+    OUString BackupFileHelper::getUserProfileURL()
+    {
+        return maUserConfigBaseURL;
+    }
+
     /////////////////// helpers ///////////////////////
 
     const rtl::OUString BackupFileHelper::getPackURL()
