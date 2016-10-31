@@ -342,8 +342,8 @@ throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
 
 bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 {
-    if (m_aCurrentFilter == nullptr) {
-        OSL_TRACE("filter name is null");
+    if (m_aCurrentFilter.isEmpty()) {
+        OSL_TRACE("filter name is empty");
         return true;
     }
 
