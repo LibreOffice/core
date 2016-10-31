@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_9f6fe691",
+        "filename": "ucb/source/ucp/webdav-neon/DAVTypes.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-31T16:46:44Z",
+      "side": 1,
+      "message": "indeed, INetURLObject has an OUStringBuffer member, so is somewhat expensive to copy (I\u0027ll try to remember to look into that, independently of this change); but it can\u0027t be that much of a measurable difference in practice, or is it?",
+      "parentUuid": "7a77a97e_bfb90231",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_5f738eb1",
         "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
         "patchSetId": 3
@@ -142,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_ff045ac7",
+        "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-31T16:46:44Z",
+      "side": 1,
+      "message": "but wouldn\u0027t it be better then to not add query and fragment parts?  (but if this potentially ambiguous string is what should be used as human-directed \"title\", then so be it :)",
+      "parentUuid": "7a77a97e_3f7c1272",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_9f6526e3",
         "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
         "patchSetId": 3
@@ -188,6 +224,24 @@
       "side": 1,
       "message": "Ah that\u0027s interesting, didn\u0027t know it.\nI\u0027ll have a look at both rtl/uri.hxx and com.sun.star.uri.\n\nWhat\u0027s needed here is a way to manage URI (percent-encode, percent-decode, compare) as described in the relevant RFC\u0027s.\nI said percent-encode/percent-decode because the URL presented to the provider are sometimes percent-encoded and some other time they are not.",
       "parentUuid": "7a77a97e_df5f9e0c",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_1f0af6d2",
+        "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-10-31T16:46:44Z",
+      "side": 1,
+      "message": "With \"URL presented to the provider\" you mean URL passed from UCB\u0027s client code to this webdav-neon UCP (instead of URL passed between this webdav-neon UCP and the neon library, say)?\n\nAnd with a URL being (not) percent-encoded, you mean redundant encodings (like writing an \u0027A\u0027 as \u0027%41\u0027)?",
+      "parentUuid": "7a77a97e_7f968a95",
       "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
