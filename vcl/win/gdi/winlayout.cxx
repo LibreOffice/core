@@ -3455,7 +3455,7 @@ bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
     }
 
     Rectangle bounds;
-    bool succeeded = GetDWriteInkBox(*mpFontFace, rLayout, mlfEmHeight, bounds);
+    bool succeeded = GetDWriteInkBox(rLayout, bounds);
     succeeded &= BindDC(hDC, bounds);   // Update the bounding rect.
 
     ID2D1SolidColorBrush* pBrush = nullptr;
@@ -3652,12 +3652,12 @@ bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** p
     return succeeded;
 }
 
-bool D2DWriteTextOutRenderer::GetDWriteInkBox(IDWriteFontFace & rFontFace, SalLayout const &rLayout, float const /*lfEmHeight*/, Rectangle & rOut) const
+bool D2DWriteTextOutRenderer::GetDWriteInkBox(SalLayout const &rLayout, Rectangle & rOut) const
 {
     rOut.SetEmpty();
 
     DWRITE_FONT_METRICS aFontMetrics;
-    rFontFace.GetMetrics(&aFontMetrics);
+    mpFontFace->GetMetrics(&aFontMetrics);
 
     Point aPos;
     sal_GlyphId nLGlyph;
@@ -3685,7 +3685,7 @@ bool D2DWriteTextOutRenderer::GetDWriteInkBox(IDWriteFontFace & rFontFace, SalLa
     if (bVertical)
     {
         DWRITE_FONT_METRICS aFM;
-        rFontFace.GetMetrics(&aFM);
+        mpFontFace->GetMetrics(&aFM);
         nYDiff = (aFM.ascent - aFM.descent) * mlfEmHeight / aFM.designUnitsPerEm;
     }
 

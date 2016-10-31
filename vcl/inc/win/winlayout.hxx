@@ -501,7 +501,7 @@ private:
     D2DWriteTextOutRenderer & operator = (const D2DWriteTextOutRenderer &) = delete;
 
     bool GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const;
-    bool GetDWriteInkBox(IDWriteFontFace & rFontFace, SalLayout const &rLayout, float const lfEmHeight, Rectangle &) const;
+    bool GetDWriteInkBox(SalLayout const &rLayout, Rectangle &) const;
 
     ID2D1Factory        * mpD2DFactory;
     IDWriteFactory      * mpDWriteFactory;
