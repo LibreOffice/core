@@ -22,6 +22,29 @@
       "revId": "6880de0900ba73dc79d315cdcaf8da49392a64b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_bf6ca29d",
+        "filename": "connectivity/source/drivers/firebird/Util.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-10-31T16:41:35Z",
+      "side": 1,
+      "message": "You sure that giving a default value here is the right thing to do? It means the compiler will not warn you when you just forget to pass a subtype... Is it ever appropriate not to pass a subtype to this function? Maybe it is, you tell me. In that case, maybe the default value is a good idea. But please explain.",
+      "range": {
+        "startLine": 56,
+        "startChar": 55,
+        "endLine": 56,
+        "endChar": 73
+      },
+      "revId": "6880de0900ba73dc79d315cdcaf8da49392a64b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
