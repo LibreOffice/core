@@ -273,8 +273,11 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
     }
     // Apparently I should be doing some kind of lookup for a partial specialisations of std::iterator_traits<T> to see if an
     // object is an iterator, but that sounds like too much work
-    std::string s = pVarDecl->getType().getDesugaredType(compiler.getASTContext()).getAsString();
-    if (s.find("iterator") != std::string::npos) {
+    auto t = pVarDecl->getType().getDesugaredType(compiler.getASTContext());
+    std::string s = t.getAsString();
+    if (s.find("iterator") != std::string::npos
+        || loplugin::TypeCheck(t).Class("__wrap_iter").StdNamespace())
+    {
         return true;
     }
     // std::pair seems to show up in whacky ways in clang's AST. Sometimes it's a class, sometimes it's a typedef, and sometimes
