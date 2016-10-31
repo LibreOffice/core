@@ -4814,7 +4814,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
         case svExternalDoubleRef:
             {
                 ScMatValType nType = GetDoubleOrStringFromMatrix( fVal, aString);
-                bIsString = ScMatrix::IsNonValueType( nType);
+                bIsString = ScMatrix::IsRealStringType( nType);
             }
             break;
         case svExternalSingleRef:
@@ -5170,7 +5170,7 @@ void ScInterpreter::ScCountIf()
             case svExternalDoubleRef:
             {
                 ScMatValType nType = GetDoubleOrStringFromMatrix(fVal, aString);
-                bIsString = ScMatrix::IsNonValueType( nType);
+                bIsString = ScMatrix::IsRealStringType( nType);
             }
             break;
             case svString:
@@ -5391,7 +5391,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                 case svExternalDoubleRef:
                     {
                         ScMatValType nType = GetDoubleOrStringFromMatrix( fVal, aString);
-                        bIsString = ScMatrix::IsNonValueType( nType);
+                        bIsString = ScMatrix::IsRealStringType( nType);
                     }
                     break;
                 case svExternalSingleRef:
