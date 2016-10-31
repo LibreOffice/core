@@ -2125,7 +2125,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                                XML_anchorCtr, bHorizontalCenter ? "1" : nullptr,
                                XML_vert, sWritingMode,
                                FSEND );
-        if( presetWarp != nullptr  && !presetWarp.isEmpty())
+        if( !presetWarp.isEmpty())
         {
             mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp.toUtf8().getStr(),
                 FSEND );
