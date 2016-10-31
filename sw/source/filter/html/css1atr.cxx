@@ -2216,7 +2216,7 @@ static bool OutCSS1_FrameFormatBrush( SwHTMLWriter& rWrt,
     /// output brush of frame format, if its background color is not "no fill"/"auto fill"
     /// or it has a background graphic.
     if( rBrushItem.GetColor() != COL_TRANSPARENT ||
-        nullptr != rBrushItem.GetGraphicLink() ||
+        !rBrushItem.GetGraphicLink().isEmpty() ||
         0 != rBrushItem.GetGraphicPos() )
     {
         OutCSS1_SvxBrush( rWrt, rBrushItem, CSS1_BACKGROUND_FLY, nullptr );

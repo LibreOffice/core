@@ -698,7 +698,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
                 SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
                 const bool          bIsLink  = m_pBtnLink->IsChecked();
-                const bool          bWasLink = (nullptr != rOldItem.GetGraphicLink() );
+                const bool          bWasLink = !rOldItem.GetGraphicLink().isEmpty();
 
 
                 if ( !bIsLink && !bIsGraphicValid )
