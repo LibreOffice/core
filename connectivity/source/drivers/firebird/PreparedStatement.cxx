@@ -561,13 +561,52 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Refere
 
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException, std::exception)
 {
-    (void) parameterIndex;
-    (void) x;
-    (void) sqlType;
-    (void) scale;
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
+    // set scale
+    XSQLVAR* pVar = m_pInSqlda->sqlvar + (parameterIndex - 1);
+    pVar->sqlscale = scale;
+
+    // set value depending on type
+    switch(sqlType)
+    {
+        case SQL_SHORT:
+            sal_Int16 nShortValue;
+            if(x >>= nShortValue)
+            {
+                setValue< sal_Int16 >(parameterIndex, nShortValue, sqlType);
+                return;
+            }
+        case SQL_LONG:
+            sal_Int32 nIntValue;
+            if(x >>= nIntValue)
+            {
+                setValue< sal_Int32 >(parameterIndex, nIntValue, sqlType);
+                return;
+            }
+        case SQL_DOUBLE:
+            double nDoubleValue;
+            if(x >>= nDoubleValue)
+            {
+                setValue< double >(parameterIndex, nDoubleValue, sqlType);
+                return;
+            }
+        case SQL_INT64:
+            sal_Int64 nLongValue;
+            if(x >>= nLongValue)
+            {
+                setValue< sal_Int64 >(parameterIndex, nLongValue, sqlType);
+                return;
+            }
+    }
+
+    // handle error
+    OUStringBuffer buf;
+    buf.append( "PreparedStatement::setObjectWithInfo: can't convert value of type " );
+    buf.append( x.getValueTypeName() );
+    buf.append( " to type DECIMAL or NUMERIC" );
+    throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any () );
 }
 
 
