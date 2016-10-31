@@ -52,6 +52,22 @@
 namespace
 {
 
+OUString convertLcTo32Path(OUString const & rPath)
+{
+    OUString aResult;
+    if (rPath.lastIndexOf('/') != -1)
+    {
+        sal_Int32 nCopyFrom = rPath.lastIndexOf('/') + 1;
+        OUString sFile = rPath.copy(nCopyFrom);
+        OUString sDir = rPath.copy(0, rPath.lastIndexOf('/'));
+        if (!sFile.isEmpty() && sFile.startsWith("lc_"))
+        {
+            aResult = sDir + "/32/" + sFile.copy(3);
+        }
+    }
+    return aResult;
+}
+
 OUString createPath(OUString const & name, sal_Int32 pos, OUString const & locale)
 {
     return name.copy(0, pos + 1) + locale + name.copy(pos);
@@ -177,15 +193,15 @@ std::vector<OUString> ImplImageTree::getPaths(OUString const & name, LanguageTag
     {
         for (OUString& rFallback : rLanguageTag.getFallbackStrings(true))
         {
-            OUString aFallbackName = getRealImageName(createPath(name, pos, rFallback));
-            sPaths.push_back(getNameNoExtension(aFallbackName) + ".svg");
-            sPaths.push_back(aFallbackName);
+            OUString aFallbackName = getNameNoExtension(getRealImageName(createPath(name, pos, rFallback)));
+            sPaths.push_back(aFallbackName + ".png");
+            sPaths.push_back(aFallbackName + ".svg");
         }
     }
 
-    OUString aRealName = getRealImageName(name);
-    sPaths.push_back(getNameNoExtension(aRealName) + ".svg");
-    sPaths.push_back(aRealName);
+    OUString aRealName = getNameNoExtension(getRealImageName(name));
+    sPaths.push_back(aRealName + ".png");
+    sPaths.push_back(aRealName + ".svg");
 
     return sPaths;
 }
@@ -456,22 +472,6 @@ void ImplImageTree::loadImageLinks()
         parseLinkFile( wrapStream(s) );
         return;
     }
-}
-
-OUString convertLcTo32Path(OUString const & rPath)
-{
-    OUString aResult;
-    if (rPath.lastIndexOf('/') != -1)
-    {
-        sal_Int32 nCopyFrom = rPath.lastIndexOf('/') + 1;
-        OUString sFile = rPath.copy(nCopyFrom);
-        OUString sDir = rPath.copy(0, rPath.lastIndexOf('/'));
-        if (!sFile.isEmpty() && sFile.startsWith("lc_"))
-        {
-            aResult = sDir + "/32/" + sFile.copy(3);
-        }
-    }
-    return aResult;
 }
 
 void ImplImageTree::parseLinkFile(std::shared_ptr<SvStream> const & xStream)

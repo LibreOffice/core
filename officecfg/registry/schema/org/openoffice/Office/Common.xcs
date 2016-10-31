@@ -5707,10 +5707,10 @@
           </enumeration>
           <enumeration oor:value="1">
             <info>
-              <desc>larger icons</desc>
+              <desc>26x26 pixel icons</desc>
             </info>
           </enumeration>
-          <enumeration oor:value="2">
+          <enumeration oor:value="3">
             <info>
               <desc>32x32 pixel icons</desc>
             </info>
