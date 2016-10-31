@@ -81,7 +81,7 @@ enum class SalFrameStyleFlags
     TOOLWINDOW          = 0x40000000,
 };
 namespace o3tl {
-    template<> struct typed_flags<SalFrameStyleFlags> : is_typed_flags<SalFrameStyleFlags, 0x7c8001ff> {};
+    template<> struct typed_flags<SalFrameStyleFlags> : is_typed_flags<SalFrameStyleFlags, 0x788001ff> {};
 };
 
 // - extended frame style                 -
