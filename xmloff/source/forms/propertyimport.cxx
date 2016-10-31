@@ -388,7 +388,7 @@ SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPr
 
     void OPropertyElementsContext::Characters(const OUString& _rChars)
     {
-        OSL_ENSURE(nullptr == _rChars.trim(), "OPropertyElementsContext::Characters: non-whitespace characters detected!");
+        OSL_ENSURE(_rChars.trim().isEmpty(), "OPropertyElementsContext::Characters: non-whitespace characters detected!");
         SvXMLImportContext::Characters(_rChars);
     }
 
