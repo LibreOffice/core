@@ -242,6 +242,12 @@ DECLARE_ODFIMPORT_TEST(testOdtBorders, "borders_ooo33.odt")
     } while(xParaEnum->hasMoreElements());
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPadding.odt")
+{
+    // the page style's borderless padding should force this to 3 pages, not 1
+    CPPUNIT_ASSERT_EQUAL( 3, getPages() );
+}
+
 DECLARE_ODFIMPORT_TEST(testPageStyleLayoutDefault, "hello.odt")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
