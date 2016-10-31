@@ -3474,7 +3474,7 @@ bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
         DWRITE_GLYPH_OFFSET glyphOffsets[MAX_GLYPHS] = { { 0.0f, 0.0f }, };
 
         bool bVertical = false;
-        double nYDiff = 0.0f;
+        float nYDiff = 0.0f;
         const CommonSalLayout* pCSL = dynamic_cast<const CommonSalLayout*>(&rLayout);
         if (pCSL)
             bVertical = pCSL->getFontSelData().mbVertical;
