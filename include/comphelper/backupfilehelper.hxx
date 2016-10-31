@@ -179,6 +179,9 @@ namespace comphelper
         */
         static void tryResetUserProfile();
 
+        /** Return the profile url */
+        static const OUString& getUserProfileURL();
+
     private:
         // internal helper methods
         static const rtl::OUString getPackURL();

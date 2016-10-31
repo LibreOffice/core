@@ -46,6 +46,7 @@ private:
     VclPtr<CheckBox> mpCBResetWholeUserProfile;
 
     VclPtr<FixedHyperlink> mpBugLink;
+    VclPtr<FixedHyperlink> mpUserProfileLink;
 
     // local BackupFileHelper for handling possible restores
     comphelper::BackupFileHelper maBackupFileHelper;
