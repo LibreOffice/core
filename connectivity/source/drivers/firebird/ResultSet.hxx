@@ -101,6 +101,9 @@ namespace connectivity
 
             bool isNull(const sal_Int32 nColumnIndex);
 
+            template <typename T> OUString makeNumericString(
+                    const sal_Int32 nColumnIndex);
+
             template <typename T> T     retrieveValue(const sal_Int32 nColumnIndex,
                                                       const ISC_SHORT nType);
 

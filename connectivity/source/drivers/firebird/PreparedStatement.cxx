@@ -29,6 +29,7 @@
 #include <osl/diagnose.h>
 #include <propertyids.hxx>
 #include <time.h>
+#include <connectivity/dbtools.hxx>
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -561,13 +562,18 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Refere
 
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException, std::exception)
 {
-    (void) parameterIndex;
-    (void) x;
-    (void) sqlType;
-    (void) scale;
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
+    if( sqlType == DataType::DECIMAL ||
+            sqlType == DataType::NUMERIC)
+    {
+    // set scale
+    XSQLVAR* pVar = m_pInSqlda->sqlvar + (parameterIndex - 1);
+    pVar->sqlscale = scale;
+    }
+
+    ::dbtools::setObjectWithInfo(this,parameterIndex,x,sqlType,scale);
 }
 
 
