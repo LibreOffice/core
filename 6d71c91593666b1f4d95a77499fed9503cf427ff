@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_843f9924",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 9
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-10-31T06:31:13Z",
+      "side": 1,
+      "message": "I don\u0027t know if I have abused any ID conventions with SID_ALLOW_PADDING_WITHOUT_BORDERS. That\u0027s a massive mess that could use some basic in-line documentation. Is this in the right file?  OK to fill in a hole (since it is right beside another border item)? Do I need to be worried about potentially re-using an older / abandoned #1139?",
+      "range": {
+        "startLine": 967,
+        "startChar": 1,
+        "endLine": 967,
+        "endChar": 41
+      },
+      "revId": "6d71c91593666b1f4d95a77499fed9503cf427ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
