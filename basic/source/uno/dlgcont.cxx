@@ -367,6 +367,9 @@ Reference< css::resource::XStringResourcePersistence >
         uno::Reference< embed::XStorage > xLibrariesStor;
         uno::Reference< embed::XStorage > xLibraryStor;
         try {
+            xRet = Reference< resource::XStringResourcePersistence >(
+              mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.resource.StringResourceWithStorage", mxContext),
+              UNO_QUERY );
             xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
                 // TODO: Should be READWRITE with new storage concept using store() instead of storeTo()
             if ( !xLibrariesStor.is() )
