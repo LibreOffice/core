@@ -315,7 +315,7 @@ IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn)
     }
     else if (pBtn == mpBtnRestart.get())
     {
-        //Close();
+        Close();
         applyChanges();
     }
 }
