@@ -3326,14 +3326,6 @@ bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
     return true;
 }
 
-#if ENABLE_GRAPHITE
-
-sal_GlyphId GraphiteLayoutWinImpl::getKashidaGlyph(int & rWidth)
-{
-    rWidth = mrFont.GetMinKashidaWidth();
-    return mrFont.GetMinKashidaGlyph();
-}
-
 HINSTANCE D2DWriteTextOutRenderer::mmD2d1 = nullptr,
           D2DWriteTextOutRenderer::mmDWrite = nullptr;
 D2DWriteTextOutRenderer::pD2D1CreateFactory_t D2DWriteTextOutRenderer::D2D1CreateFactory = nullptr;
@@ -3706,6 +3698,14 @@ bool D2DWriteTextOutRenderer::GetDWriteInkBox(SalLayout const &rLayout, Rectangl
     }
 
     return true;
+}
+
+#if ENABLE_GRAPHITE
+
+sal_GlyphId GraphiteLayoutWinImpl::getKashidaGlyph(int & rWidth)
+{
+	rWidth = mrFont.GetMinKashidaWidth();
+	return mrFont.GetMinKashidaGlyph();
 }
 
 float gr_fontAdvance(const void* appFontHandle, gr_uint16 glyphId)
