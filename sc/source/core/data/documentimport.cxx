@@ -500,7 +500,7 @@ class CellStoreInitializer
         sc::CellTextAttrStoreType::iterator miPos;
         SvtScriptType mnScriptNumeric;
 
-        Impl(const SvtScriptType nScriptNumeric)
+        explicit Impl(const SvtScriptType nScriptNumeric)
             : maAttrs(MAXROWCOUNT), miPos(maAttrs.begin()), mnScriptNumeric(nScriptNumeric)
         {}
     };

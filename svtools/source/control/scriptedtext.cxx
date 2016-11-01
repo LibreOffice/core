@@ -64,7 +64,7 @@ private:
 
 public:
                                 /** This constructor sets an output device and fonts for all script types. */
-                                SvtScriptedTextHelper_Impl(
+    explicit                    SvtScriptedTextHelper_Impl(
                                     OutputDevice& _rOutDevice );
                                 /** Copy constructor. */
                                 SvtScriptedTextHelper_Impl(

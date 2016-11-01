@@ -27,7 +27,7 @@ class NotebookbarToolBox : public sfx2::sidebar::SidebarToolBox
 {
 public:
 
-    NotebookbarToolBox(vcl::Window* pParentWindow)
+    explicit NotebookbarToolBox(vcl::Window* pParentWindow)
     : sfx2::sidebar::SidebarToolBox(pParentWindow)
     {
         ToolBoxButtonSize eSize = ToolBoxButtonSize::Small;

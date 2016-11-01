@@ -80,7 +80,7 @@ class ConfigurationAccess
 {
     public:
 
-        ConfigurationAccess( const css::uno::Reference< css::uno::XComponentContext >& rXFactory );
+        explicit ConfigurationAccess( const css::uno::Reference< css::uno::XComponentContext >& rXFactory );
         ~ConfigurationAccess();
         void SaveConfiguration();
 

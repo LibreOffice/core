@@ -16,7 +16,7 @@ struct BulkDataHint::Impl
     ScDocument& mrDoc;
     const ColumnSpanSet* mpSpans;
 
-    Impl( ScDocument& rDoc ) :
+    explicit Impl( ScDocument& rDoc ) :
         mrDoc(rDoc),
         mpSpans(nullptr) {}
 };

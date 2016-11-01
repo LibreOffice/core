@@ -54,7 +54,7 @@ class PDFCommentElement : public PDFElement
     OString m_aComment;
 
 public:
-    PDFCommentElement(PDFDocument& rDoc);
+    explicit PDFCommentElement(PDFDocument& rDoc);
     bool Read(SvStream& rStream) override;
 };
 
@@ -187,7 +187,7 @@ class PDFStreamElement : public PDFElement
     sal_uInt64 m_nOffset;
 
 public:
-    PDFStreamElement(size_t nLength);
+    explicit PDFStreamElement(size_t nLength);
     bool Read(SvStream& rStream) override;
     sal_uInt64 GetOffset() const;
 };
@@ -234,7 +234,7 @@ public:
 class PDFBooleanElement : public PDFElement
 {
 public:
-    PDFBooleanElement(bool bValue);
+    explicit PDFBooleanElement(bool bValue);
     bool Read(SvStream& rStream) override;
 };
 
@@ -270,7 +270,7 @@ class PDFTrailerElement : public PDFElement
     std::map<OString, PDFElement*> m_aDictionary;
 
 public:
-    PDFTrailerElement(PDFDocument& rDoc);
+    explicit PDFTrailerElement(PDFDocument& rDoc);
     bool Read(SvStream& rStream) override;
     PDFElement* Lookup(const OString& rDictionaryKey);
 };

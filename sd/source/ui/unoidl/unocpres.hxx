@@ -50,7 +50,7 @@ private:
 
 public:
     SdXCustomPresentation() throw();
-    SdXCustomPresentation( SdCustomShow* mpSdCustomShow) throw();
+    explicit SdXCustomPresentation( SdCustomShow* mpSdCustomShow ) throw();
     virtual ~SdXCustomPresentation() throw() override;
 
     // internal

@@ -55,7 +55,7 @@ public:
     bool mbIsListenerAddedToWindow;
 
     ShellDescriptor ();
-    ShellDescriptor (ShellId nId);
+    explicit ShellDescriptor (ShellId nId);
     ShellDescriptor (const ShellDescriptor& rDescriptor);
     ShellDescriptor& operator= (const ShellDescriptor& rDescriptor);
     bool IsMainViewShell() const;

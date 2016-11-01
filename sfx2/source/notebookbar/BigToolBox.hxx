@@ -37,7 +37,7 @@ namespace sfx2 { namespace notebookbar {
 class SFX2_DLLPUBLIC BigToolBox : public sfx2::sidebar::SidebarToolBox
 {
 public:
-    BigToolBox(vcl::Window* pParent);
+    explicit BigToolBox(vcl::Window* pParent);
 };
 
 

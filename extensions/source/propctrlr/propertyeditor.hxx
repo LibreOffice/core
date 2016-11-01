@@ -69,7 +69,7 @@ namespace pcr
         void                        GetFocus() override;
 
     public:
-                                    OPropertyEditor (vcl::Window* pParent);
+        explicit                    OPropertyEditor (vcl::Window* pParent);
 
                                     virtual ~OPropertyEditor() override;
         virtual void                dispose() override;

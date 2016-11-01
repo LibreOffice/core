@@ -44,7 +44,7 @@ class CellLineStylePopup : public FloatingWindow
 
 
 public:
-    CellLineStylePopup(SfxDispatcher* pDispatcher);
+    explicit CellLineStylePopup(SfxDispatcher* pDispatcher);
     void SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis);
     virtual ~CellLineStylePopup() override;
     virtual void dispose() override;

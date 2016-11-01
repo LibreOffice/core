@@ -102,7 +102,7 @@ namespace pcr
         void    Resize() override;
 
     public:
-                                    OBrowserListBox( vcl::Window* pParent );
+        explicit                    OBrowserListBox( vcl::Window* pParent );
 
                                     virtual ~OBrowserListBox() override;
         virtual void                dispose() override;

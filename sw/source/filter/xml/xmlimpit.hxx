@@ -38,7 +38,7 @@ protected:
     sal_uInt16 nUnknownWhich;
 
 public:
-    SvXMLImportItemMapper( SvXMLItemMapEntriesRef const & rMapEntries );
+    explicit SvXMLImportItemMapper( SvXMLItemMapEntriesRef const & rMapEntries );
     virtual ~SvXMLImportItemMapper();
 
     /** fills the given itemset with the attributes in the given list */
