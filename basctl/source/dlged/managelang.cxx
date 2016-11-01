@@ -149,19 +149,12 @@ IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, AddHdl, Button*, void)
     ScopedVclPtrInstance< SetDefaultLanguageDialog > aDlg( this, m_xLocalizationMgr );
     if ( RET_OK == aDlg->Execute() )
     {
-        if (!m_xLocalizationMgr->isLibraryLocalized())
-        {
-            SAL_WARN("basctl.basicide", "Adding langs to non-localized library tdf#93077");
-        }
-        else
-        {
-            // add new locales
-            Sequence< Locale > aLocaleSeq = aDlg->GetLocales();
-            m_xLocalizationMgr->handleAddLocales( aLocaleSeq );
-            // update listbox
-            ClearLanguageBox();
-            FillLanguageBox();
-        }
+        // add new locales
+        Sequence< Locale > aLocaleSeq = aDlg->GetLocales();
+        m_xLocalizationMgr->handleAddLocales( aLocaleSeq );
+        // update listbox
+        ClearLanguageBox();
+        FillLanguageBox();
 
         if (SfxBindings* pBindings = GetBindingsPtr())
             pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );

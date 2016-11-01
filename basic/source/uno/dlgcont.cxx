@@ -380,7 +380,11 @@ Reference< css::resource::XStringResourcePersistence >
         }
         catch(const uno::Exception& )
         {
-            // TODO: Error handling?
+            // Something went wrong while trying to get the storage library.
+            // Return an object that supports StringResourceWithStorage, give it a storage location later.
+            xRet = Reference< resource::XStringResourcePersistence >(
+              mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.resource.StringResourceWithStorage", mxContext),
+              UNO_QUERY );
             return xRet;
         }
 
