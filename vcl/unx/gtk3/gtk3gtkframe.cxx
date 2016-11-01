@@ -1438,7 +1438,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
                 SetDefaultSize();
             setMinMaxSize();
 
-            if (isFloatGrabWindow() && !getDisplay()->GetCaptureFrame() && m_nFloats == 0)
+            if (isFloatGrabWindow() && !getDisplay()->GetCaptureFrame())
             {
                 m_pParent->grabPointer(true, true);
                 gtk_grab_add(m_pParent->getMouseEventWidget());
@@ -1449,7 +1449,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
             if( isFloatGrabWindow() )
             {
                 m_nFloats++;
-                if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 1 )
+                if (!getDisplay()->GetCaptureFrame())
                 {
                     grabPointer(true, true);
                     gtk_grab_add(getMouseEventWidget());
@@ -1464,7 +1464,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
             if( isFloatGrabWindow() )
             {
                 m_nFloats--;
-                if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 0)
+                if (!getDisplay()->GetCaptureFrame())
                 {
                     gtk_grab_remove(getMouseEventWidget());
                     grabPointer(false);
