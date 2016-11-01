@@ -55,7 +55,7 @@ class CommonSalLayout : public GenericSalLayout
     OString                 msLanguage;
     std::vector<hb_feature_t> maFeatures;
 
-    hb_font_t*              getHbFont();
+    void                    getScale(double* nXScale, double* nYScale);
 
 public:
 #if defined(_WIN32)

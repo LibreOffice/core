@@ -80,31 +80,28 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 static hb_font_t* createHbFont(hb_face_t* pHbFace)
 {
     hb_font_t* pHbFont = hb_font_create(pHbFace);
+    unsigned int nUPEM = hb_face_get_upem(pHbFace);
+    hb_font_set_scale(pHbFont, nUPEM, nUPEM);
     hb_ot_font_set_funcs(pHbFont);
+
+    hb_face_destroy(pHbFace);
 
     return pHbFont;
 }
 
-// We cache and re-use the HarfBuzz font for different layout instances, so we
-// need sure to set the correct scale (font size) before using the font.
-hb_font_t* CommonSalLayout::getHbFont()
+void CommonSalLayout::getScale(double* nXScale, double* nYScale)
 {
-    unsigned int nXScale = mrFontSelData.mnWidth << 6;
-    unsigned int nYScale = mrFontSelData.mnHeight << 6;
+    hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
+    unsigned int nUPEM = hb_face_get_upem(pHbFace);
 
-#if defined(_WIN32)
-    // HACK to get stretched/shrunken text. TODO: Get rid of HACK
+    double nHeight(mrFontSelData.mnHeight);
+    double nWidth(mrFontSelData.mnWidth ? mrFontSelData.mnWidth : nHeight);
+
+    if (nYScale)
+        *nYScale = nHeight / nUPEM;
+
     if (nXScale)
-        nXScale = double(nXScale) * 1.812;
-#endif
-
-    if (!nXScale)
-      nXScale = nYScale;
-
-    hb_font_set_ppem(mpHbFont, nXScale, nYScale);
-    hb_font_set_scale(mpHbFont, nXScale, nYScale);
-
-    return mpHbFont;
+        *nXScale = nWidth / nUPEM;
 }
 
 #if !HB_VERSION_ATLEAST(1, 1, 0)
@@ -182,8 +179,6 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
 
         mpHbFont = createHbFont(pHbFace);
         rWinFontFace.SetHbFont(mpHbFont);
-
-        hb_face_destroy(pHbFace);
     }
 }
 
@@ -206,8 +201,6 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
 
         mpHbFont = createHbFont(pHbFace);
         rCoreTextStyle.SetHbFont(mpHbFont);
-
-        hb_face_destroy(pHbFace);
     }
 }
 
@@ -223,8 +216,6 @@ CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
 
         mpHbFont = createHbFont(pHbFace);
         mrFreetypeFont.SetHbFont(mpHbFont);
-
-        hb_face_destroy(pHbFace);
     }
 }
 #endif
@@ -370,8 +361,7 @@ static int GetVerticalFlagsForScript(UScriptCode aScript)
 
 bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 {
-    hb_font_t* pHbFont = getHbFont();
-    hb_face_t* pHbFace = hb_font_get_face(pHbFont);
+    hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
     hb_script_t aHbScript = HB_SCRIPT_INVALID;
 
     int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos);
@@ -400,6 +390,10 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 #endif
 
     ParseFeatures(mrFontSelData.maTargetName);
+
+    double nXScale = 0;
+    double nYScale = 0;
+    getScale(&nXScale, &nYScale);
 
     Point aCurrPos(0, 0);
     while (true)
@@ -485,7 +479,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             hb_segment_properties_t aHbProps;
             hb_buffer_get_segment_properties(pHbBuffer, &aHbProps);
             hb_shape_plan_t* pHbPlan = hb_shape_plan_create_cached(pHbFace, &aHbProps, maFeatures.data(), maFeatures.size(), pHbShapers);
-            bool ok = hb_shape_plan_execute(pHbPlan, pHbFont, pHbBuffer, maFeatures.data(), maFeatures.size());
+            bool ok = hb_shape_plan_execute(pHbPlan, mpHbFont, pHbBuffer, maFeatures.data(), maFeatures.size());
             assert(ok);
             (void) ok;
             hb_buffer_set_content_type(pHbBuffer, HB_BUFFER_CONTENT_TYPE_GLYPHS);
@@ -543,7 +537,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 if (bDiacritic)
                     nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
-                int32_t nAdvance, nXOffset, nYOffset;
+                DeviceCoordinate nAdvance, nXOffset, nYOffset;
                 if (bVertical)
                 {
                     int nVertFlag;
@@ -556,15 +550,15 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                         nVertFlag = GF_ROTL;
 #endif
                     nGlyphIndex |= nVertFlag;
-                    nAdvance = -pHbPositions[i].y_advance >> 6;
-                    nXOffset =  pHbPositions[i].y_offset >> 6;
-                    nYOffset = -pHbPositions[i].x_offset >> 6;
+                    nAdvance = -pHbPositions[i].y_advance * nYScale;
+                    nXOffset =  pHbPositions[i].y_offset * nYScale;
+                    nYOffset = -pHbPositions[i].x_offset * nXScale;
                 }
                 else
                 {
-                    nAdvance = pHbPositions[i].x_advance >> 6;
-                    nXOffset = pHbPositions[i].x_offset >> 6;
-                    nYOffset = pHbPositions[i].y_offset >> 6;
+                    nAdvance = pHbPositions[i].x_advance * nXScale;
+                    nXOffset = pHbPositions[i].x_offset * nXScale;
+                    nYOffset = pHbPositions[i].y_offset * nYScale;
                 }
 
                 Point aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
@@ -649,9 +643,12 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
     if (rArgs.mnFlags & SalLayoutFlags::KashidaJustification)
     {
         // Find Kashida glyph width and index.
-        hb_font_t* pHbFont = getHbFont();
-        if (hb_font_get_glyph(pHbFont, 0x0640, 0, &nKashidaIndex))
-            nKashidaWidth = hb_font_get_glyph_h_advance(pHbFont, nKashidaIndex) / 64;
+        if (hb_font_get_glyph(mpHbFont, 0x0640, 0, &nKashidaIndex))
+        {
+            double nXScale = 0;
+            getScale(&nXScale, nullptr);
+            nKashidaWidth = hb_font_get_glyph_h_advance(mpHbFont, nKashidaIndex) * nXScale;
+        }
         bKashidaJustify = nKashidaWidth != 0;
     }
 
