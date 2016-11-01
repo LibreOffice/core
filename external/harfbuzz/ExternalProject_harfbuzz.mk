@@ -40,7 +40,13 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			$(if $(filter MACOSX,$(OS)),--with-coretext=yes) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(filter LINUX,$(OS)),CXXFLAGS="$(CXXFLAGS) -fvisibility=hidden") \
+			CXXFLAGS=' \
+				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
+				$(if $(debug), \
+					$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUG_CFLAGS) \
+						$(gb_DEBUG_CXXFLAGS), \
+					$(gb_COMPILEROPTFLAGS)) \
+				$(CXXFLAGS) $(if $(filter LINUX,$(OS)),-fvisibility=hidden)' \
 		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE) lib) \
 	)
 
