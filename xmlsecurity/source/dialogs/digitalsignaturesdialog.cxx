@@ -76,8 +76,8 @@ namespace
         }
     };
 
-void SaveODFItem::ImplCommit() {}
-void SaveODFItem::Notify( const css::uno::Sequence< OUString >& ) {}
+    void SaveODFItem::ImplCommit() {}
+    void SaveODFItem::Notify( const css::uno::Sequence< OUString >& ) {}
 
     SaveODFItem::SaveODFItem(): utl::ConfigItem(OUString(
         "Office.Common/Save")), m_nODF(0)
