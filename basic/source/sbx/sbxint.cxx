@@ -21,10 +21,7 @@
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
-double ImpRound( double d )
-{
-    return d + ( d < 0 ? -0.5 : 0.5 );
-}
+#include <cmath>
 
 sal_Int16 ImpGetInteger( const SbxValues* p )
 {
@@ -84,7 +81,7 @@ start:
                 SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = SbxMININT;
             }
             else
-                nRes = (sal_Int16) ImpRound( p->nSingle );
+                nRes = (sal_Int16) std::lround( p->nSingle );
             break;
         case SbxCURRENCY:
             {
@@ -145,7 +142,7 @@ start:
                 SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = SbxMININT;
             }
             else
-                nRes = (sal_Int16) ImpRound( dVal );
+                nRes = (sal_Int16) std::lround( dVal );
             break;
             }
         case SbxLPSTR:
@@ -168,7 +165,7 @@ start:
                     SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = SbxMININT;
                 }
                 else
-                    nRes = (sal_Int16) ImpRound( d );
+                    nRes = (sal_Int16) std::lround( d );
             }
             break;
         case SbxOBJECT:
@@ -350,7 +347,7 @@ sal_Int64 ImpDoubleToSalInt64( double d )
         SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = SbxMINSALINT64;
     }
     else
-        nRes = (sal_Int64) ImpRound( d );
+        nRes = (sal_Int64) std::llround( d );
     return nRes;
 }
 
@@ -366,7 +363,7 @@ sal_uInt64 ImpDoubleToSalUInt64( double d )
         SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = 0;
     }
     else
-        nRes = (sal_uInt64) ImpRound( d );
+        nRes = (sal_uInt64) std::llround( d );
     return nRes;
 }
 
@@ -716,7 +713,7 @@ start:
                         SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = 0;
                     }
                     else
-                        nRes = (sal_uInt64) ImpRound( d );
+                        nRes = (sal_uInt64) std::llround( d );
                 }
                 else if( n64 < 0 )
                 {
