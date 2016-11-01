@@ -199,18 +199,18 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         if (bCaption)
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            AbstractSvxCaptionDialog* pCaptionDlg =
+                            VclPtr<AbstractSvxCaptionDialog> pCaptionDlg =
                                     pFact->CreateCaptionDialog( nullptr, pSdrView, nAllowedAnchors );
-                            pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                             pDlg.disposeAndReset(pCaptionDlg);
+                            pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                         }
                         else
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            AbstractSvxTransformTabDialog* pTransform =
+                            VclPtr<AbstractSvxTransformTabDialog> pTransform =
                                         pFact->CreateSvxTransformTabDialog( nullptr, nullptr, pSdrView, nAllowedAnchors );
-                            pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                             pDlg.disposeAndReset(pTransform);
+                            pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                         }
                         SfxItemSet aNewAttr(pSdrView->GetGeoAttrFromMarked());
 
