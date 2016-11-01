@@ -87,15 +87,9 @@ using namespace ::com::sun::star;
 
 const static sal_Char sMyBegComment[]   = "<!-- ";
 const static sal_Char sMyEndComment[]   = " -->";
-const static sal_Char sFontFamily[]     = "font-family:";
-const static sal_Char sFontSize[]       = "font-size:";
 const static sal_Char sDisplay[]        = "display:";
 const static sal_Char sBorder[]         = "border:";
-const static sal_Char sPadding[]        = "padding:";
-const static sal_Char sPosition[]       = "position:";
 const static sal_Char sBackground[]     = "background:";
-const static sal_Char sWidth[]          = "width:";
-const static sal_Char sHeight[]         = "height:";
 
 const sal_uInt16 ScHTMLExport::nDefaultFontSize[SC_HTML_FONTSIZES] =
 {
@@ -359,7 +353,8 @@ void ScHTMLExport::WriteHeader()
     rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_division ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_table ).WriteCharPtr( "," )
        .WriteCharPtr( OOO_STRING_SVTOOLS_HTML_thead ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tbody ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tfoot ).WriteCharPtr( "," )
        .WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tablerow ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tableheader ).WriteCharPtr( "," )
-       .WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tabledata ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_parabreak ).WriteCharPtr( " { " ).WriteCharPtr( sFontFamily );
+       .WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tabledata ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_parabreak )
+       .WriteCharPtr( " { " ).WriteCharPtr( "font-family:" );
     sal_Int32 nFonts = comphelper::string::getTokenCount(aHTMLStyle.aFontFamilyName, ';');
     if ( nFonts == 1 )
     {
@@ -380,7 +375,7 @@ void ScHTMLExport::WriteHeader()
                 rStrm.WriteCharPtr( ", " );
         }
     }
-    rStrm.WriteCharPtr( "; " ).WriteCharPtr( sFontSize )
+    rStrm.WriteCharPtr( "; " ).WriteCharPtr( "font-size:" )
        .WriteCharPtr( GetFontSizeCss( ( sal_uInt16 ) aHTMLStyle.nFontHeight ) ).WriteCharPtr( " }" );
 
     OUT_LF();
@@ -390,10 +385,10 @@ void ScHTMLExport::WriteHeader()
     rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_anchor ).WriteCharPtr(".comment-indicator:hover")
        .WriteCharPtr(" + ").WriteCharPtr( OOO_STRING_SVTOOLS_HTML_comment2 ).WriteCharPtr(" { ")
        .WriteCharPtr(sBackground).WriteCharPtr("#ffd").WriteCharPtr("; ")
-       .WriteCharPtr(sPosition).WriteCharPtr("absolute").WriteCharPtr("; ")
+       .WriteCharPtr("position:").WriteCharPtr("absolute").WriteCharPtr("; ")
        .WriteCharPtr(sDisplay).WriteCharPtr("block").WriteCharPtr("; ")
        .WriteCharPtr(sBorder).WriteCharPtr("1px solid black").WriteCharPtr("; ")
-       .WriteCharPtr(sPadding).WriteCharPtr("0.5em").WriteCharPtr("; ")
+       .WriteCharPtr("padding:").WriteCharPtr("0.5em").WriteCharPtr("; ")
        .WriteCharPtr(" } ");
 
     OUT_LF();
@@ -403,8 +398,8 @@ void ScHTMLExport::WriteHeader()
         .WriteCharPtr(sBackground).WriteCharPtr("red").WriteCharPtr("; ")
         .WriteCharPtr(sDisplay).WriteCharPtr("inline-block").WriteCharPtr("; ")
         .WriteCharPtr(sBorder).WriteCharPtr("1px solid black").WriteCharPtr("; ")
-        .WriteCharPtr(sWidth).WriteCharPtr("0.5em").WriteCharPtr("; ")
-        .WriteCharPtr(sHeight).WriteCharPtr("0.5em").WriteCharPtr("; ")
+        .WriteCharPtr("width:").WriteCharPtr("0.5em").WriteCharPtr("; ")
+        .WriteCharPtr("height:").WriteCharPtr("0.5em").WriteCharPtr("; ")
         .WriteCharPtr(" } ");
 
     OUT_LF();

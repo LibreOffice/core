@@ -68,8 +68,6 @@ static const sal_Int32 nArbitraryLineLengthLimit = 2 * MAXCOLCOUNT * 65536;
 namespace
 {
     const char SYLK_LF[]  = "\x1b :";
-    const char DOUBLE_SEMICOLON[] = ";;";
-    const char DOUBLE_DOUBLEQUOTE[] = "\"\"";
 
     inline bool lcl_IsEndianSwap( const SvStream& rStrm )
     {
@@ -715,9 +713,9 @@ static void lcl_UnescapeSylk( OUString & rString, SylkVersion eVersion )
     // Older versions quoted the string and doubled embedded quotes, but not
     // the semicolons, which was plain wrong.
     if (eVersion >= SYLK_OOO32)
-        rString = rString.replaceAll(DOUBLE_SEMICOLON, ";");
+        rString = rString.replaceAll(";;", ";");
     else
-        rString = rString.replaceAll(DOUBLE_DOUBLEQUOTE, "\"");
+        rString = rString.replaceAll("\"\"", "\"");
 
     rString = rString.replaceAll(SYLK_LF, "\n");
 }
@@ -1099,8 +1097,7 @@ static bool lcl_PutString(
             sal_Int16 nMonth = (sal_Int16) aMStr.toInt32();
             if (!nMonth)
             {
-                static const char aSeptCorrect[] =  "SEPT";
-                static const char aSepShortened[] =  "SEP";
+                static const char aSepShortened[] = "SEP";
                 uno::Sequence< i18n::CalendarItem2 > xMonths;
                 sal_Int32 i, nMonthCount;
                 //  first test all month names from local international
@@ -1111,7 +1108,7 @@ static bool lcl_PutString(
                     if ( rTransliteration.isEqual( aMStr, xMonths[i].FullName ) ||
                          rTransliteration.isEqual( aMStr, xMonths[i].AbbrevName ) )
                         nMonth = sal::static_int_cast<sal_Int16>( i+1 );
-                    else if ( i == 8 && rTransliteration.isEqual( aSeptCorrect,
+                    else if ( i == 8 && rTransliteration.isEqual( "SEPT",
                                 xMonths[i].AbbrevName ) &&
                             rTransliteration.isEqual( aMStr, aSepShortened ) )
                     {   // correct English abbreviation is SEPT,

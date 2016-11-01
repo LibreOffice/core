@@ -66,12 +66,6 @@
 # endif
 #endif
 
-#if defined(_WIN32)
-    const rtl::OUStringLiteral EXECUTABLE_NAME ("osl_process_child.exe");
-#else
-    const rtl::OUStringLiteral EXECUTABLE_NAME ("osl_process_child");
-#endif
-
 using namespace osl;
 
 using ::rtl::OUString;
@@ -184,7 +178,12 @@ public:
     {
         parameters_[0] = env_param_.pData;
         suCWD = getExecutablePath();
-        suExecutableFileURL = suCWD + "/" + EXECUTABLE_NAME;
+
+#if defined(_WIN32)
+        suExecutableFileURL = suCWD + "/" "osl_process_child.exe";
+#else
+        suExecutableFileURL = suCWD + "/" "osl_process_child";
+#endif
     }
 
     virtual void setUp() override
