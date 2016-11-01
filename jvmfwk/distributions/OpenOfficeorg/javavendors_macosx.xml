@@ -23,14 +23,14 @@
  <updated>2013-04-09</updated>
 
  <vendorInfos>
+ <vendor name="Oracle Corporation">
+  <minVersion>1.7.0</minVersion>
+ </vendor>
   <vendor name="Apple Computer, Inc.">
     <minVersion>1.5.0</minVersion>
   </vendor>
  <vendor name="Apple Inc.">
   <minVersion>1.5.0</minVersion>
- </vendor>
- <vendor name="Oracle Corporation">
-  <minVersion>1.7.0</minVersion>
  </vendor>
  <vendor name="Azul Systems, Inc.">
   <minVersion>1.6.0</minVersion>
