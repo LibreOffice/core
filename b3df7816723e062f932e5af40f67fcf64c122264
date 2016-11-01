@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_5f038e73",
+        "filename": "ucb/source/ucp/webdav-neon/DAVTypes.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2016-11-01T09:26:52Z",
+      "side": 1,
+      "message": "It\u0027s rather small, though I didn\u0027t measure it.\nTrying to open in LO the link:\n\u003chttps://es.wikipedia.org/wiki/M%C3%A1quina_de_Turing\u003e\nyou note a slight difference with or without the patch set, in favor of the patch set.",
+      "parentUuid": "7a77a97e_9f6fe691",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_5f738eb1",
         "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
         "patchSetId": 3
@@ -178,6 +196,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_7ff84a7d",
+        "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2016-11-01T09:26:52Z",
+      "side": 1,
+      "message": "As an example tdf#42742 bug document contains links to images in the form:\n\u003chttp://yaytay.files.wordpress.com/2009/11/img_01211.jpg?w\u003d441\u0026h\u003d640\u003e\n\nIf you open directly (LO dialogs) that link you obtain directly that image with title \u0027img_01211.jpg?w\u003d441\u0026h\u003d640\u0027 I guess that in this case it\u0027s all right (I\u0027d tell from it witdh \u003d 441px height \u003d 640px).\n\nIn other occasions the Web server can redirerect LO to open the \u0027real\u0027 file, possibly with a more meaningful name, the provider will then return that title.",
+      "parentUuid": "7a77a97e_ff045ac7",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_9f6526e3",
         "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
         "patchSetId": 3
@@ -242,6 +278,24 @@
       "side": 1,
       "message": "With \"URL presented to the provider\" you mean URL passed from UCB\u0027s client code to this webdav-neon UCP (instead of URL passed between this webdav-neon UCP and the neon library, say)?\n\nAnd with a URL being (not) percent-encoded, you mean redundant encodings (like writing an \u0027A\u0027 as \u0027%41\u0027)?",
       "parentUuid": "7a77a97e_7f968a95",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_9ff52685",
+        "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2016-11-01T09:26:52Z",
+      "side": 1,
+      "message": "\"URL presented to the provider\" I meant the URL in parameter css::ucb::XContentIdentifier of webdav_ucp::Content::Content():\n\u003chttp://opengrok.libreoffice.org/xref/core/ucb/source/ucp/webdav-neon/webdavcontent.cxx#222\u003e\n\n\"URL being (not) percent-encoded\" I meant in \"human readable format\" like:\n\u003chttps://es.wikipedia.org/wiki/Máquina_de_Turing\u003e\n\nI didn\u0027t observe redundant encodings.",
+      "parentUuid": "7a77a97e_1f0af6d2",
       "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
