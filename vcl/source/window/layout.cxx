@@ -2676,17 +2676,6 @@ vcl::Window* getNonLayoutParent(vcl::Window *pWindow)
     return pWindow;
 }
 
-vcl::Window* getNonLayoutRealParent(vcl::Window *pWindow)
-{
-    while (pWindow)
-    {
-        pWindow = pWindow->ImplGetParent();
-        if (!pWindow || !isContainerWindow(*pWindow))
-            break;
-    }
-    return pWindow;
-}
-
 bool isVisibleInLayout(const vcl::Window *pWindow)
 {
     bool bVisible = true;

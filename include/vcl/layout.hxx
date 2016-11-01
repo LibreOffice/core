@@ -733,9 +733,6 @@ Size getLegacyBestSizeForChildren(const vcl::Window &rWindow);
 //Get first parent which is not a layout widget
 VCL_DLLPUBLIC vcl::Window* getNonLayoutParent(vcl::Window *pParent);
 
-//Get first real parent which is not a layout widget
-vcl::Window* getNonLayoutRealParent(vcl::Window *pParent);
-
 //return true if this window and its stack of containers are all shown
 bool isVisibleInLayout(const vcl::Window *pWindow);
 
