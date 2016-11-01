@@ -91,13 +91,15 @@ The offered possible changes get more radical from top to bottom, so it is recom
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkCheckButton" id="check_profilesafe_config">
-                <property name="label" translatable="yes">Restore UserConfiguration to last known working state from backup</property>
+              <object class="GtkRadioButton" id="radio_restore">
+                <property name="label" translatable="yes">Restore</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="xalign">0</property>
+                <property name="active">True</property>
                 <property name="draw_indicator">True</property>
+                <property name="group">radio_configure</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -106,13 +108,43 @@ The offered possible changes get more radical from top to bottom, so it is recom
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="check_profilesafe_extensions">
-                <property name="label" translatable="yes">Restore enable/disable State of installed User Extensions to last known working state</property>
+              <object class="GtkBox" id="group_restore">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">18</property>
+                <property name="margin_top">6</property>
+                <property name="margin_bottom">6</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkCheckButton" id="check_profilesafe_config">
+                    <property name="label" translatable="yes">Restore UserConfiguration to last known working state from backup</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="check_profilesafe_extensions">
+                    <property name="label" translatable="yes">Restore enable/disable State of installed User Extensions to last known working state</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -121,13 +153,15 @@ The offered possible changes get more radical from top to bottom, so it is recom
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="check_disable_all_extensions">
-                <property name="label" translatable="yes">Disable all User Extensions</property>
+              <object class="GtkRadioButton" id="radio_configure">
+                <property name="label" translatable="yes">Configure</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="xalign">0</property>
+                <property name="active">True</property>
                 <property name="draw_indicator">True</property>
+                <property name="group">radio_restore</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -136,13 +170,73 @@ The offered possible changes get more radical from top to bottom, so it is recom
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="check_deinstall_user_extensions">
-                <property name="label" translatable="yes">Deinstall all User Extensions</property>
+              <object class="GtkBox" id="group_configure">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">18</property>
+                <property name="margin_top">6</property>
+                <property name="margin_bottom">6</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkCheckButton" id="check_disable_all_extensions">
+                    <property name="label" translatable="yes">Disable all User Extensions</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="check_deinstall_user_extensions">
+                    <property name="label" translatable="yes">Deinstall all User Extensions</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="check_deinstall_all_extensions">
+                    <property name="label" translatable="yes">Deinstall all Extensions (including shared and bundled)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="check_disable_hw_acceleration">
+                    <property name="label" translatable="yes">Disable hardware acceleration (OpenGL, OpenCL)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -151,13 +245,15 @@ The offered possible changes get more radical from top to bottom, so it is recom
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="check_deinstall_all_extensions">
-                <property name="label" translatable="yes">Deinstall all Extensions (including shared and bundled)</property>
+              <object class="GtkRadioButton" id="radio_reset">
+                <property name="label" translatable="yes">Reset</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="xalign">0</property>
+                <property name="active">True</property>
                 <property name="draw_indicator">True</property>
+                <property name="group">radio_restore</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -166,48 +262,47 @@ The offered possible changes get more radical from top to bottom, so it is recom
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="check_disable_hw_acceleration">
-                <property name="label" translatable="yes">Disable hardware acceleration (OpenGL, OpenCL)</property>
+              <object class="GtkBox" id="group_reset">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">18</property>
+                <property name="margin_top">6</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkCheckButton" id="check_reset_customizations">
+                    <property name="label" translatable="yes">Reset User Customizations (Settings, User Interface modifications, AutoCorrect, AutoText, etc.)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="check_reset_whole_userprofile">
+                    <property name="label" translatable="yes">Reset the whole User Profile to initial state after Installation</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="check_reset_customizations">
-                <property name="label" translatable="yes">Reset User Customizations (Settings, User Interface modifications, AutoCorrect, AutoText, etc.)</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">6</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="check_reset_whole_userprofile">
-                <property name="label" translatable="yes">Reset the whole User Profile to initial state after Installation</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">7</property>
               </packing>
             </child>
           </object>

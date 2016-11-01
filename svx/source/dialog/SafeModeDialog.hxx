@@ -12,6 +12,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/vclmedit.hxx>
@@ -36,6 +37,14 @@ private:
     VclPtr<Button> mpBtnQuit;
     VclPtr<Button> mpBtnRestart;
 
+    VclPtr<VclBox> mpBoxRestore;
+    VclPtr<VclBox> mpBoxConfigure;
+    VclPtr<VclBox> mpBoxReset;
+
+    VclPtr<RadioButton> mpRadioRestore;
+    VclPtr<RadioButton> mpRadioConfigure;
+    VclPtr<RadioButton> mpRadioReset;
+
     VclPtr<CheckBox> mpCBCheckProfilesafeConfig;
     VclPtr<CheckBox> mpCBCheckProfilesafeExtensions;
     VclPtr<CheckBox> mpCBDisableAllExtensions;
@@ -54,6 +63,7 @@ private:
     void applyChanges();
     static void openWebBrowser(const OUString & sURL, const OUString &sTitle);
 
+    DECL_LINK(RadioBtnHdl, Button*, void);
     DECL_LINK(CheckBoxHdl, CheckBox&, void);
     DECL_LINK(BtnHdl, Button*, void);
 };
