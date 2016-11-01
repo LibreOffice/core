@@ -567,8 +567,6 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_WEBHTML:
         {
-            static const char HTML_DOCUMENT_TYPE[] = "generic_HTML";
-            static const char HTML_GRAPHIC_TYPE[]  = "graphic_HTML";
             const sal_Int32   FILTERFLAG_EXPORT    = 0x00000002;
 
             css::uno::Reference< lang::XMultiServiceFactory > xSMGR(::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW);
@@ -603,7 +601,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             if ( xModel.is() && xStorable.is() )
             {
                 OUString aFilterName;
-                OUString aTypeName( HTML_DOCUMENT_TYPE );
+                OUString aTypeName( "generic_HTML" );
                 OUString aFileName;
                 OUString aExtension( "htm" );
 
@@ -624,7 +622,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 {
                     // Draw/Impress uses a different type. 2nd chance try to use alternative type name
                     aFilterName = impl_retrieveFilterNameFromTypeAndModule(
-                        xContainerQuery, HTML_GRAPHIC_TYPE, aModule, nFilterFlags );
+                        xContainerQuery, "graphic_HTML", aModule, nFilterFlags );
                 }
 
                 // No filter found => error

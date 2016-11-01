@@ -116,7 +116,6 @@
 const char aFilterNameString[] = "FilterName";
 const char aFilterOptionsString[] = "FilterOptions";
 const char aFilterDataString[] = "FilterData";
-const char aFilterFlagsString[] = "FilterFlags";
 
 using namespace ::com::sun::star;
 using namespace css::system;
@@ -1465,7 +1464,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
 
     const OUString sFilterOptionsString(aFilterOptionsString);
     const OUString sFilterDataString(aFilterDataString);
-    const OUString sFilterFlagsString(aFilterFlagsString);
+    const OUString sFilterFlagsString("FilterFlags");
 
     if ( ( nStoreMode & EXPORT_REQUESTED ) && ( nStoreMode & PDFEXPORT_REQUESTED ) && !( nStoreMode & PDFDIRECTEXPORT_REQUESTED ) )
     {

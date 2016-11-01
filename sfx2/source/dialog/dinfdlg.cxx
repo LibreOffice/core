@@ -98,9 +98,6 @@ const sal_uInt16 HI_TYPE = 2;
 const sal_uInt16 HI_VALUE = 3;
 const sal_uInt16 HI_ACTION = 4;
 
-static const char DOCUMENT_SIGNATURE_MENU_CMD[] = "Signature";
-
-
 namespace {
 
 OUString CreateSizeText( sal_Int64 nSize )
@@ -796,8 +793,7 @@ SfxDocumentPage::SfxDocumentPage(vcl::Window* pParent, const SfxItemSet& rItemSe
     // [i96288] Check if the document signature command is enabled
     // on the main list enable/disable the pushbutton accordingly
     SvtCommandOptions aCmdOptions;
-    if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
-                             DOCUMENT_SIGNATURE_MENU_CMD ) )
+    if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, "Signature" ) )
         m_pSignatureBtn->Disable();
 }
 

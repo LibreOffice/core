@@ -173,13 +173,9 @@ void SfxObjectFactory::SetModule_Impl( SfxModule *pMod )
 void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OUString& rTemplateName )
 {
     static const int nMaxPathSize = 16000;
-    static const char SERVICE_FILTER_FACTORY[] = "com.sun.star.document.FilterFactory";
-    static const char SERVICE_TYPE_DECTECTION[] = "com.sun.star.document.TypeDetection";
 
-    static const char CONF_ROOT[] = "/org.openoffice.Setup";
     OUString CONF_PATH = "Office/Factories/" + rServiceName;
     static const char PROP_DEF_TEMPL_CHANGED[] = "ooSetupFactorySystemDefaultTemplateChanged";
-    static const char PROP_ACTUAL_FILTER[] = "ooSetupFactoryActualFilter";
 
     static const char DEF_TPL_STR[] = "/soffice.";
 
@@ -197,17 +193,17 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
             uno::Reference< uno::XInterface > xConfig = ::comphelper::ConfigurationHelper::openConfig(
-                ::comphelper::getProcessComponentContext(), CONF_ROOT, ::comphelper::EConfigurationModes::Standard );
+                ::comphelper::getProcessComponentContext(), "/org.openoffice.Setup", ::comphelper::EConfigurationModes::Standard );
 
             OUString aActualFilter;
-            ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, CONF_PATH, PROP_ACTUAL_FILTER ) >>= aActualFilter;
+            ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, CONF_PATH, "ooSetupFactoryActualFilter" ) >>= aActualFilter;
             bool bChanged(false);
             ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, CONF_PATH, PROP_DEF_TEMPL_CHANGED ) >>= bChanged;
 
             uno::Reference< container::XNameAccess > xFilterFactory(
-                xFactory->createInstance( SERVICE_FILTER_FACTORY ), uno::UNO_QUERY_THROW );
+                xFactory->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY_THROW );
             uno::Reference< container::XNameAccess > xTypeDetection(
-                xFactory->createInstance( SERVICE_TYPE_DECTECTION ), uno::UNO_QUERY_THROW );
+                xFactory->createInstance( "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY_THROW );
 
             OUString aActualFilterTypeName;
             uno::Sequence< beans::PropertyValue > aActuralFilterData;

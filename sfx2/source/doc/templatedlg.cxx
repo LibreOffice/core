@@ -63,8 +63,6 @@ const char TM_SETTING_MANAGER[] = "TemplateManager";
 const char TM_SETTING_LASTFOLDER[] = "LastFolder";
 const char TM_SETTING_LASTAPPLICATION[] = "LastApplication";
 
-const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
-
 const char ACTIONBAR_ACTION[] = "action_menu";
 
 #define MNI_ACTION_NEW_FOLDER 1
@@ -1064,7 +1062,7 @@ void SfxTemplateManagerDlg::OnTemplateLink ()
             Any(sNodePath),
             PropertyState_DIRECT_VALUE);
         args.getArray()[0] <<= val;
-        Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
+        Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", args), UNO_QUERY);
         if( xNameAccess.is() )
         {
             OUString sURL;
