@@ -334,10 +334,10 @@ void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
 
     rItem.setDuration( getDuration() );
     rItem.setTime( getMediaTime() );
-    rItem.setLoop( isPlaybackLoop() );
-    rItem.setMute( isMute() );
-    rItem.setVolumeDB( getVolumeDB() );
-    rItem.setZoom( getZoom() );
+    rItem.setLoop( mxPlayer.is() && mxPlayer->isPlaybackLoop() );
+    rItem.setMute( mxPlayer.is() && mxPlayer->isMute() );
+    rItem.setVolumeDB( mxPlayer.is() ? mxPlayer->getVolumeDB() : 0 );
+    rItem.setZoom( mxPlayerWindow.is() ? mxPlayerWindow->getZoomLevel() : media::ZoomLevel_NOT_AVAILABLE );
     rItem.setURL( getURL(), mTempFileURL, maReferer );
 }
 
@@ -356,17 +356,17 @@ void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
     if (nMaskSet & AVMediaSetMask::TIME)
         setMediaTime(std::min(rItem.getTime(), getDuration()));
 
-    if (nMaskSet & AVMediaSetMask::LOOP)
-        setPlaybackLoop(rItem.isLoop());
+    if (nMaskSet & AVMediaSetMask::LOOP && mxPlayer.is() )
+        mxPlayer->setPlaybackLoop( rItem.isLoop() );
 
-    if (nMaskSet & AVMediaSetMask::MUTE)
-        setMute(rItem.isMute());
+    if (nMaskSet & AVMediaSetMask::MUTE && mxPlayer.is() )
+        mxPlayer->setMute( rItem.isMute() );
 
-    if (nMaskSet & AVMediaSetMask::VOLUMEDB)
-        setVolumeDB(rItem.getVolumeDB());
+    if (nMaskSet & AVMediaSetMask::VOLUMEDB && mxPlayer.is() )
+        mxPlayer->setVolumeDB( rItem.getVolumeDB() );
 
-    if (nMaskSet & AVMediaSetMask::ZOOM)
-        setZoom(rItem.getZoom());
+    if (nMaskSet & AVMediaSetMask::ZOOM && mxPlayerWindow.is() )
+        mxPlayerWindow->setZoomLevel( rItem.getZoom() );
 
     // set play state at last
     if (nMaskSet & AVMediaSetMask::STATE)
@@ -401,16 +401,6 @@ void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
     }
 }
 
-bool MediaWindowImpl::setZoom(css::media::ZoomLevel eLevel)
-{
-    return mxPlayerWindow.is() && mxPlayerWindow->setZoomLevel( eLevel );
-}
-
-css::media::ZoomLevel MediaWindowImpl::getZoom() const
-{
-    return( mxPlayerWindow.is() ? mxPlayerWindow->getZoomLevel() : media::ZoomLevel_NOT_AVAILABLE );
-}
-
 void MediaWindowImpl::stop()
 {
     if( mxPlayer.is() )
@@ -436,39 +426,6 @@ void MediaWindowImpl::setMediaTime( double fTime )
 double MediaWindowImpl::getMediaTime() const
 {
     return( mxPlayer.is() ? mxPlayer->getMediaTime() : 0.0 );
-}
-
-void MediaWindowImpl::setPlaybackLoop( bool bSet )
-{
-    if( mxPlayer.is() )
-        mxPlayer->setPlaybackLoop( bSet );
-}
-
-bool MediaWindowImpl::isPlaybackLoop() const
-{
-    return mxPlayer.is() && mxPlayer->isPlaybackLoop();
-}
-
-void MediaWindowImpl::setMute( bool bSet )
-{
-    if( mxPlayer.is() )
-        mxPlayer->setMute( bSet );
-}
-
-bool MediaWindowImpl::isMute() const
-{
-    return mxPlayer.is() && mxPlayer->isMute();
-}
-
-void MediaWindowImpl::setVolumeDB( sal_Int16 nVolumeDB )
-{
-    if( mxPlayer.is() )
-        mxPlayer->setVolumeDB( nVolumeDB );
-}
-
-sal_Int16 MediaWindowImpl::getVolumeDB() const
-{
-    return (mxPlayer.is() ? mxPlayer->getVolumeDB() : 0);
 }
 
 void MediaWindowImpl::stopPlayingInternal(bool bStop)
