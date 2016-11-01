@@ -42,7 +42,7 @@ class ComPtr
 
         /** initialize com ptr with given interface.
          */
-        ComPtr(T_INTERFACE* pInterface)
+        explicit ComPtr(T_INTERFACE* pInterface)
         {
             m_pInterface = pInterface;
             if (m_pInterface)
@@ -62,7 +62,7 @@ class ComPtr
 
         /** initialize object by quering external object for the right interface.
          */
-        ComPtr(IUnknown* pIUnknown)
+        explicit ComPtr(IUnknown* pIUnknown)
         {
             if (pIUnknown)
                 pIUnknown->QueryInterface(P_IID, (void**)&m_pInterface);

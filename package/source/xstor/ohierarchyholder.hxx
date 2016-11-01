@@ -65,7 +65,7 @@ struct OHierarchyElement_Impl : public cppu::WeakImplHelper< css::embed::XTransa
     OWeakStorRefList_Impl m_aOpenStreams;
 
 public:
-    OHierarchyElement_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage )
+    explicit OHierarchyElement_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage )
     : m_rParent( nullptr )
     , m_xOwnStorage( xStorage )
     {}

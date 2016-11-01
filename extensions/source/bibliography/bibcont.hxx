@@ -82,7 +82,7 @@ class BibBookContainer: public BibSplitWindow
 
     public:
 
-        BibBookContainer(vcl::Window* pParent );
+        explicit BibBookContainer(vcl::Window* pParent );
         virtual ~BibBookContainer() override;
         virtual void dispose() override;
 

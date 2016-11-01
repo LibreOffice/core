@@ -469,7 +469,7 @@ class SdOptionsGridItem : public SvxGridItem
 {
 
 public:
-                            SdOptionsGridItem( SdOptions* pOpts );
+    explicit                SdOptionsGridItem( SdOptions* pOpts );
 
     void                    SetOptions( SdOptions* pOpts ) const;
 };
@@ -563,7 +563,7 @@ class SD_DLLPUBLIC SdOptionsPrintItem : public SfxPoolItem
 public:
 
                             explicit SdOptionsPrintItem();
-                            SdOptionsPrintItem( SdOptions* pOpts );
+    explicit                SdOptionsPrintItem( SdOptions* pOpts );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;

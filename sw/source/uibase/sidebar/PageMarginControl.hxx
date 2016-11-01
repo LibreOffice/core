@@ -44,7 +44,7 @@ namespace sw { namespace sidebar {
 class PageMarginControl : public SfxPopupWindow
 {
 public:
-    PageMarginControl( sal_uInt16 nId );
+    explicit PageMarginControl( sal_uInt16 nId );
     virtual ~PageMarginControl() override;
     virtual void dispose() override;
 

@@ -33,7 +33,7 @@ private:
     sal_uInt16      nSelItem;
     OUString        maStrUnit[CELL_LINE_STYLE_ENTRIES];
 public:
-    CellLineStyleValueSet(vcl::Window* pParent);
+    explicit CellLineStyleValueSet(vcl::Window* pParent);
     virtual ~CellLineStyleValueSet() override;
     virtual void dispose() override;
 

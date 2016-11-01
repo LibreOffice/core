@@ -254,7 +254,7 @@ struct ToolbarMenu_Impl
 
     Link<ToolbarMenu*,void>          maSelectHdl;
 
-    ToolbarMenu_Impl( ToolbarMenu& rMenu );
+    explicit ToolbarMenu_Impl( ToolbarMenu& rMenu );
     ~ToolbarMenu_Impl();
 
     void setAccessible( ToolbarMenuAcc* pAccessible );

@@ -406,7 +406,7 @@ friend class SfxDockingWindow;
     bool                bDockingPrevented;
     OString aWinState;
 
-                        SfxDockingWindow_Impl(SfxDockingWindow *pBase);
+    explicit            SfxDockingWindow_Impl(SfxDockingWindow *pBase);
     SfxChildAlignment   GetLastAlignment() const
                         { return eLastAlignment; }
     void                SetLastAlignment(SfxChildAlignment eAlign)

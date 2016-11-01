@@ -305,7 +305,7 @@ namespace /* private */ {
     class recent_item_writer
     {
     public:
-        recent_item_writer( recently_used_file& file ) :
+        explicit recent_item_writer( recently_used_file& file ) :
             file_(file),
             items_written_(0)
         {}
