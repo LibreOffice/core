@@ -228,12 +228,10 @@ OUString OReportEngineJFree::getNewOutputName()
             OUStringBuffer sAuthor(aUserOpts.GetFirstName());
             sAuthor.append(" ");
             sAuthor.append(aUserOpts.GetLastName());
-            static const char s_sAuthor[] = "Author";
-            aConvertedProperties[nPos].Name = s_sAuthor;
+            aConvertedProperties[nPos].Name = "Author";
             aConvertedProperties[nPos++].Value <<= sAuthor.makeStringAndClear();
 
-            static const char s_sTitle[] = "Title";
-            aConvertedProperties[nPos].Name = s_sTitle;
+            aConvertedProperties[nPos].Name = "Title";
             aConvertedProperties[nPos++].Value <<= m_xReport->getCaption();
 
             // create job factory and initialize

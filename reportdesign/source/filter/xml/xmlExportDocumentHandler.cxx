@@ -43,8 +43,7 @@ void lcl_exportPrettyPrinting(const uno::Reference< xml::sax::XDocumentHandler >
     SvtSaveOptions aSaveOpt;
     if ( aSaveOpt.IsPrettyPrinting() )
     {
-        static const char s_sWhitespaces[] = " ";
-        _xDelegatee->ignorableWhitespace(s_sWhitespaces);
+        _xDelegatee->ignorableWhitespace(" ");
     }
 }
 
@@ -358,20 +357,17 @@ void ExportDocumentHandler::exportTableRows()
 
     const OUString sValueType( lcl_createAttribute(XML_NP_OFFICE, XML_VALUE_TYPE) );
 
-    static const char s_sFieldPrefix[] = "field:[";
-    static const char s_sFieldPostfix[] = "]";
     const OUString sCell( lcl_createAttribute(XML_NP_TABLE, XML_TABLE_CELL) );
     const OUString sP( lcl_createAttribute(XML_NP_TEXT, XML_P) );
     const OUString sFtext(lcl_createAttribute(XML_NP_RPT,XML_FORMATTED_TEXT) );
     const OUString sRElement(lcl_createAttribute(XML_NP_RPT,XML_REPORT_ELEMENT) );
     const OUString sRComponent( lcl_createAttribute(XML_NP_RPT,XML_REPORT_COMPONENT) ) ;
     const OUString sFormulaAttrib( lcl_createAttribute(XML_NP_RPT,XML_FORMULA) );
-    static const char s_sString[] = "string";
     static const char s_sFloat[] = "float";
 
     SvXMLAttributeList* pCellAtt = new SvXMLAttributeList();
     uno::Reference< xml::sax::XAttributeList > xCellAtt = pCellAtt;
-    pCellAtt->AddAttribute(sValueType,s_sString);
+    pCellAtt->AddAttribute(sValueType, "string");
 
     bool bRemoveString = true;
     OUString sFormula;
@@ -395,9 +391,9 @@ void ExportDocumentHandler::exportTableRows()
     }
     for(sal_Int32 i = 0; i < nCount ; ++i)
     {
-        sFormula = s_sFieldPrefix;
+        sFormula = "field:[";
         sFormula += m_aColumns[i];
-        sFormula += s_sFieldPostfix;
+        sFormula += "]";
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         uno::Reference< xml::sax::XAttributeList > xAttribs = pList;
         pList->AddAttribute(sFormulaAttrib,sFormula);
