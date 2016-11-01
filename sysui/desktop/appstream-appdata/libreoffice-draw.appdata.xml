@@ -1,44 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-<id>libreoffice-draw.desktop</id>
-<metadata_license>CC0-1.0</metadata_license>
-<project_license>MPL-2.0</project_license>
-<name>LibreOffice Draw</name>
-<summary>Graphics editor part of the LibreOffice productivity suite</summary>
-<description>
-<p>
+  <id>libreoffice-draw.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MPL-2.0</project_license>
+  <name>LibreOffice Draw</name>
+  <summary>Graphics editor part of the LibreOffice productivity suite</summary>
+  <description>
+    <p>
 LibreOffice Draw is an easy-to-use graphics editor, which empowers you to create
 anything from quick sketches to complex diagrams.
 It provides a powerful set of tools and shapes for producing technical drawings,
 charts, and much else.
 </p>
-<p>
+    <p>
 Draw allows you to create, manipulate and arrange different objects - it offers
 a number of tools for editing, resizing, rotating, grouping and styling them!
 It also provides smart connectors that make it easy for you to build charts and
 diagrams, and make beautiful drawings composed of different objects.
 </p>
-<p>
+    <p>
 LibreOffice supports opening and saving into a wide variety of formats, so you
 can easily share drawings with users of other popular office suites without
 worrying about compatibility.
 </p>
-</description>
-<url type="homepage">http://www.libreoffice.org/discover/draw/</url>
-<url type="bugtracker">https://bugs.documentfoundation.org/</url>
-<url type="donation">https://donate.libreoffice.org/</url>
-<url type="faq">https://wiki.documentfoundation.org/Faq</url>
-<url type="help">http://www.libreoffice.org/get-help/documentation/</url>
-<screenshots>
-<screenshot type="default">http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Draw-02-Tiger-fdo82219.png</screenshot>
-<screenshot>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Draw-03-Square-fdo75097.png</screenshot>
-</screenshots>
-<developer_name>The Document Foundation</developer_name>
-<updatecontact>libreoffice_at_lists.freedesktop.org</updatecontact>
-<kudos>
-  <kudo>HiDpiIcon</kudo>
-  <kudo>HighContrast</kudo>
-  <kudo>ModernToolkit</kudo>
-  <kudo>UserDocs</kudo>
-</kudos>
+  </description>
+  <url type="homepage">http://www.libreoffice.org/discover/draw/</url>
+  <url type="bugtracker">https://bugs.documentfoundation.org/</url>
+  <url type="donation">https://donate.libreoffice.org/</url>
+  <url type="faq">https://wiki.documentfoundation.org/Faq</url>
+  <url type="help">http://www.libreoffice.org/get-help/documentation/</url>
+  <url type="translate">https://wiki.documentfoundation.org/Translating_LibreOffice</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Draw-02-Tiger-fdo82219.png</image>
+      <caption><!-- Describe this screenshot in less than ~10 words --></caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Draw-03-Square-fdo75097.png</image>
+      <caption><!-- Describe this screenshot in less than ~10 words --></caption>
+    </screenshot>
+  </screenshots>
+  <developer_name>The Document Foundation</developer_name>
+  <update_contact>libreoffice_at_lists.freedesktop.org</update_contact>
+  <kudos>
+    <kudo>HiDpiIcon</kudo>
+    <kudo>HighContrast</kudo>
+    <kudo>ModernToolkit</kudo>
+    <kudo>UserDocs</kudo>
+  </kudos>
 </component>
