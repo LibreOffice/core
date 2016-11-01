@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_ff30da09",
+        "filename": "svl/source/items/poolio.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-11-01T13:41:49Z",
+      "side": 1,
+      "message": "i think you miss an \"!\" here, it\u0027s always true",
+      "revId": "c5721f0cef294453b8f1b4668b204734c14c49c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
