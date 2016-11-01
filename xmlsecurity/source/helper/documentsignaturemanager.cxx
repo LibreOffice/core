@@ -243,7 +243,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
 
     maSignatureHelper.SetX509Certificate(nSecurityId, xCert->getIssuerName(), aCertSerial, aStrBuffer.makeStringAndClear(), aCertDigest);
 
-    std::vector< OUString > aElements = DocumentSignatureHelper::CreateElementList(mxStore, meSignatureMode, OOo3_2Document);
+    std::vector< OUString > aElements = DocumentSignatureHelper::CreateElementList(mxStore, meSignatureMode, DocumentSignatureAlgorithm::OOo3_2);
     DocumentSignatureHelper::AppendContentTypes(mxStore, aElements);
 
     sal_Int32 nElements = aElements.size();

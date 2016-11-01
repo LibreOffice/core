@@ -190,7 +190,7 @@ void SigningTest::testDescription()
     aMediaDescriptor["FilterName"] <<= OUString("writer8");
     xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
-    DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
@@ -223,7 +223,7 @@ void SigningTest::testOOXMLDescription()
     aMediaDescriptor["FilterName"] <<= OUString("MS Word 2007 XML");
     xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
-    DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
@@ -253,7 +253,7 @@ void SigningTest::testOOXMLAppend()
     CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
                          osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
     // Load the test document as a storage and read its single signature.
-    DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL, embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
@@ -278,7 +278,7 @@ void SigningTest::testOOXMLAppend()
 void SigningTest::testOOXMLRemove()
 {
     // Load the test document as a storage and read its signatures: purpose1 and purpose2.
-    DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "multi.docx";
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL, embed::ElementModes::READWRITE);
@@ -309,7 +309,7 @@ void SigningTest::testOOXMLRemoveAll()
     CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None,
                          osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
     // Load the test document as a storage and read its single signature.
-    DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL, embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());

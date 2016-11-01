@@ -221,7 +221,7 @@ void PDFSigningTest::testPDFRemoveAll()
     OUString aOutURL = aTargetDir + "remove-all.pdf";
     CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None, osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "2good.pdf", aOutURL));
     // Load the test document as a storage and read its two signatures.
-    DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     SvStream* pStream = utl::UcbStreamHelper::CreateStream(aOutURL, StreamMode::READ | StreamMode::WRITE);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
     aManager.mxSignatureStream = xStream;

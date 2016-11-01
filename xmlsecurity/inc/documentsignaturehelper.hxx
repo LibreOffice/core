@@ -47,13 +47,18 @@ namespace embed {
 
  **********************************************************/
 
-enum DocumentSignatureMode { SignatureModeDocumentContent, SignatureModeMacros, SignatureModePackage };
-
-enum DocumentSignatureAlgorithm
+enum class DocumentSignatureMode
 {
-    OOo2Document,
-    OOo3_0Document,
-    OOo3_2Document
+    Content,
+    Macros,
+    Package
+};
+
+enum class DocumentSignatureAlgorithm
+{
+    OOo2,
+    OOo3_0,
+    OOo3_2
 };
 
 struct SignatureStreamHelper

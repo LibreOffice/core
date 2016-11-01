@@ -97,7 +97,7 @@ void ImplFillElementList(
             // OOXML
             continue;
 
-        if (mode != OOo3_2Document
+        if (mode != DocumentSignatureAlgorithm::OOo3_2
             && (pNames[n] == "META-INF" || pNames[n] == "mimetype"))
         {
             continue;
@@ -162,13 +162,13 @@ DocumentSignatureHelper::getDocumentAlgorithm(
     const OUString & sODFVersion, const SignatureInformation & sigInfo)
 {
     OSL_ASSERT(!sODFVersion.isEmpty());
-    DocumentSignatureAlgorithm mode = OOo3_2Document;
+    DocumentSignatureAlgorithm mode = DocumentSignatureAlgorithm::OOo3_2;
     if (!isOOo3_2_Signature(sigInfo))
     {
         if (isODFPre_1_2(sODFVersion))
-            mode = OOo2Document;
+            mode = DocumentSignatureAlgorithm::OOo2;
         else
-            mode = OOo3_0Document;
+            mode = DocumentSignatureAlgorithm::OOo3_0;
     }
     return mode;
 }
@@ -199,9 +199,9 @@ DocumentSignatureHelper::CreateElementList(
 
     switch ( eMode )
     {
-        case SignatureModeDocumentContent:
+        case DocumentSignatureMode::Content:
         {
-            if (mode == OOo2Document) //that is, ODF 1.0, 1.1
+            if (mode == DocumentSignatureAlgorithm::OOo2) //that is, ODF 1.0, 1.1
             {
                 // 1) Main content
                 ImplFillElementList(aElements, rxStore, OUString(), false, mode);
@@ -252,7 +252,7 @@ DocumentSignatureHelper::CreateElementList(
             }
         }
         break;
-        case SignatureModeMacros:
+        case DocumentSignatureMode::Macros:
         {
             // 1) Macros
             OUString aSubStorageName( "Basic" );
@@ -290,7 +290,7 @@ DocumentSignatureHelper::CreateElementList(
             }
         }
         break;
-        case SignatureModePackage:
+        case DocumentSignatureMode::Package:
         {
             // Everything except META-INF
             ImplFillElementList(aElements, rxStore, OUString(), true, mode);
@@ -370,9 +370,9 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
             if ( aHelper.xSignatureStorage.is() )
             {
                 OUString aSIGStreamName;
-                if ( eDocSigMode == SignatureModeDocumentContent )
+                if ( eDocSigMode == DocumentSignatureMode::Content )
                     aSIGStreamName = DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName();
-                else if ( eDocSigMode == SignatureModeMacros )
+                else if ( eDocSigMode == DocumentSignatureMode::Macros )
                     aSIGStreamName = DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName();
                 else
                     aSIGStreamName = DocumentSignatureHelper::GetPackageSignatureDefaultStreamName();
@@ -425,7 +425,7 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
         if ( ( rInf.nType == SignatureReferenceType::BINARYSTREAM ) || ( rInf.nType == SignatureReferenceType::XMLSTREAM ) )
         {
             OUString sReferenceURI = rInf.ouURI;
-            if (alg == OOo2Document)
+            if (alg == DocumentSignatureAlgorithm::OOo2)
             {
                 //Comparing URIs is a difficult. Therefore we kind of normalize
                 //it before comparing. We assume that our URI do not have a leading "./"
@@ -440,7 +440,7 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
             for (CIT aIter = sElementList.begin(); aIter != sElementList.end(); ++aIter)
             {
                 OUString sElementListURI = *aIter;
-                if (alg == OOo2Document)
+                if (alg == DocumentSignatureAlgorithm::OOo2)
                 {
                     sElementListURI =
                         ::rtl::Uri::encode(

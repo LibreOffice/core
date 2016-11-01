@@ -165,9 +165,15 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     switch( maSignatureManager.meSignatureMode )
     {
-        case SignatureModeDocumentContent:  m_pHintDocFT->Show();     break;
-        case SignatureModeMacros:           m_pHintBasicFT->Show();   break;
-        case SignatureModePackage:          m_pHintPackageFT->Show(); break;
+        case DocumentSignatureMode::Content:
+            m_pHintDocFT->Show();
+            break;
+        case DocumentSignatureMode::Macros:
+            m_pHintBasicFT->Show();
+            break;
+        case DocumentSignatureMode::Package:
+            m_pHintPackageFT->Show();
+            break;
     }
 }
 
@@ -270,7 +276,7 @@ bool DigitalSignaturesDialog::canAddRemove()
     //As of OOo 3.2 the document signature includes in macrosignatures.xml. That is
     //adding a macro signature will break an existing document signature.
     //The sfx2 will remove the documentsignature when the user adds a macro signature
-    if (maSignatureManager.meSignatureMode == SignatureModeMacros
+    if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Macros
         && ret)
     {
         if (m_bHasDocumentSignature && !m_bWarningShowSignMacro)
@@ -518,20 +524,20 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             //by an version of OOo previous to 3.2
             // If there is no storage, then it's pointless to check storage
             // stream references.
-            else if (maSignatureManager.meSignatureMode == SignatureModeDocumentContent
+            else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Content
                 && bSigValid && bCertValid && (maSignatureManager.mxStore.is() && !DocumentSignatureHelper::isOOo3_2_Signature(
                 maSignatureManager.maCurrentSignatureInformations[n])))
             {
                 aImage = m_pSigsNotvalidatedImg->GetImage();
                 bAllNewSignatures &= false;
             }
-            else if (maSignatureManager.meSignatureMode == SignatureModeDocumentContent
+            else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Content
                 && bSigValid && bCertValid && DocumentSignatureHelper::isOOo3_2_Signature(
                 maSignatureManager.maCurrentSignatureInformations[n]))
             {
                 aImage = m_pSigsValidImg->GetImage();
             }
-            else if (maSignatureManager.meSignatureMode == SignatureModeMacros
+            else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Macros
                 && bSigValid && bCertValid)
             {
                 aImage = m_pSigsValidImg->GetImage();
