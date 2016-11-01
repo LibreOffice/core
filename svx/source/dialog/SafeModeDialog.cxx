@@ -37,6 +37,14 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpBtnQuit(),
     mpBtnRestart(),
 
+    mpBoxRestore(),
+    mpBoxConfigure(),
+    mpBoxReset(),
+
+    mpRadioRestore(),
+    mpRadioConfigure(),
+    mpRadioReset(),
+
     mpCBCheckProfilesafeConfig(),
     mpCBCheckProfilesafeExtensions(),
     mpCBDisableAllExtensions(),
@@ -52,6 +60,14 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     get(mpBtnQuit, "btn_quit");
     get(mpBtnRestart, "btn_restart");
 
+    get(mpBoxRestore, "group_restore");
+    get(mpBoxConfigure, "group_configure");
+    get(mpBoxReset, "group_reset");
+
+    get(mpRadioRestore, "radio_restore");
+    get(mpRadioConfigure, "radio_configure");
+    get(mpRadioReset, "radio_reset");
+
     get(mpCBCheckProfilesafeConfig, "check_profilesafe_config");
     get(mpCBCheckProfilesafeExtensions, "check_profilesafe_extensions");
     get(mpCBDisableAllExtensions, "check_disable_all_extensions");
@@ -63,6 +79,10 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
 
     get(mpBugLink, "linkbutton_bugs");
     get(mpUserProfileLink, "linkbutton_profile");
+
+    mpRadioRestore->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
+    mpRadioConfigure->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
+    mpRadioReset->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
 
     mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
     mpBtnQuit->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
@@ -109,8 +129,12 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     {
         mpCBResetCustomizations->Disable();
     }
-
     // no disabe of mpCBResetWholeUserProfile, always possible (as last choice)
+
+    // Check the first radio button and disable the other parts
+    mpRadioRestore->Check();
+    mpBoxConfigure->Disable();
+    mpBoxReset->Disable();
 
     // Set URL for help button (module=safemode)
     OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
@@ -127,6 +151,14 @@ SafeModeDialog::~SafeModeDialog()
 
 void SafeModeDialog::dispose()
 {
+    mpRadioRestore.clear();
+    mpRadioConfigure.clear();
+    mpRadioReset.clear();
+
+    mpBoxRestore.clear();
+    mpBoxConfigure.clear();
+    mpBoxReset.clear();
+
     mpBtnContinue.clear();
     mpBtnQuit.clear();
     mpBtnRestart.clear();
@@ -156,58 +188,92 @@ bool SafeModeDialog::Close()
 
 void SafeModeDialog::applyChanges()
 {
-    if (mpCBCheckProfilesafeConfig->IsChecked())
+    /// Restore
+    if (mpRadioRestore->IsChecked())
     {
-        // reset UserConfiguration to last known working state
-        // ProfileSafeMode/BackupFileHelper
-        maBackupFileHelper.tryPop();
+        if (mpCBCheckProfilesafeConfig->IsChecked())
+        {
+            // reset UserConfiguration to last known working state
+            // ProfileSafeMode/BackupFileHelper
+            maBackupFileHelper.tryPop();
+        }
+
+        if (mpCBCheckProfilesafeExtensions->IsChecked())
+        {
+            // reset State of installed Extensions to last known working state
+            // ProfileSafeMode/BackupFileHelper
+            maBackupFileHelper.tryPopExtensionInfo();
+        }
     }
 
-    if (mpCBCheckProfilesafeExtensions->IsChecked())
+    // Configure
+    if (mpRadioConfigure->IsChecked())
     {
-        // reset State of installed Extensions to last known working state
-        // ProfileSafeMode/BackupFileHelper
-        maBackupFileHelper.tryPopExtensionInfo();
+        if (mpCBDisableAllExtensions->IsChecked())
+        {
+            // Disable all extensions
+            comphelper::BackupFileHelper::tryDisableAllExtensions();
+        }
+
+        if (mpCBDeinstallUserExtensions->IsChecked())
+        {
+            // Deinstall all User Extensions (installed for User only)
+            comphelper::BackupFileHelper::tryDeinstallUserExtensions();
+        }
+
+        if (mpCBDeinstallAllExtensions->IsChecked())
+        {
+            // Deinstall all Extensions (user|shared|bundled)
+            comphelper::BackupFileHelper::tryDeinstallAllExtensions();
+        }
+
+        if (mpCBDisableHWAcceleration->IsChecked())
+        {
+            comphelper::BackupFileHelper::tryDisableHWAcceleration();
+        }
     }
 
-    if (mpCBDisableAllExtensions->IsChecked())
+    // Reset
+    if (mpRadioReset->IsChecked())
     {
-        // Disable all extensions
-        comphelper::BackupFileHelper::tryDisableAllExtensions();
-    }
+        if (mpCBResetCustomizations->IsChecked())
+        {
+            // Reset customizations (Settings and UserInterface modifications)
+            comphelper::BackupFileHelper::tryResetCustomizations();
+        }
 
-    if (mpCBDeinstallUserExtensions->IsChecked())
-    {
-        // Deinstall all User Extensions (installed for User only)
-        comphelper::BackupFileHelper::tryDeinstallUserExtensions();
-    }
-
-    if (mpCBDeinstallAllExtensions->IsChecked())
-    {
-        // Deinstall all Extensions (user|shared|bundled)
-        comphelper::BackupFileHelper::tryDeinstallAllExtensions();
-    }
-
-    if (mpCBDisableHWAcceleration->IsChecked())
-    {
-        comphelper::BackupFileHelper::tryDisableHWAcceleration();
-    }
-
-    if (mpCBResetCustomizations->IsChecked())
-    {
-        // Reset customizations (Settings and UserInterface modifications)
-        comphelper::BackupFileHelper::tryResetCustomizations();
-    }
-
-    if (mpCBResetWholeUserProfile->IsChecked())
-    {
-        // Reset the whole UserProfile
-        comphelper::BackupFileHelper::tryResetUserProfile();
+        if (mpCBResetWholeUserProfile->IsChecked())
+        {
+            // Reset the whole UserProfile
+            comphelper::BackupFileHelper::tryResetUserProfile();
+        }
     }
 
     // Then restart
     css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext())->requestRestart(
         css::uno::Reference< css::task::XInteractionHandler >());
+}
+
+IMPL_LINK(SafeModeDialog, RadioBtnHdl, Button*, pBtn, void)
+{
+    if (pBtn == mpRadioConfigure.get())
+    {
+        mpBoxConfigure->Enable();
+        mpBoxRestore->Disable();
+        mpBoxReset->Disable();
+    }
+    else if (pBtn == mpRadioReset.get())
+    {
+        mpBoxReset->Enable();
+        mpBoxConfigure->Disable();
+        mpBoxRestore->Disable();
+    }
+    else if (pBtn == mpRadioRestore.get())
+    {
+        mpBoxRestore->Enable();
+        mpBoxReset->Disable();
+        mpBoxConfigure->Disable();
+    }
 }
 
 IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
