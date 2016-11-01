@@ -153,3 +153,10 @@ DerivedData
 # gdb config
 /.gdbinit
 /.gdb_history
+
+# Codelite IDE specific
+*.project
+/.codelite
+*.workspace
+*.workspace.session
+*.tags
