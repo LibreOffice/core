@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_9fa0c692",
+        "filename": "include/vcl/builderfactory.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-01T06:33:04Z",
+      "side": 1,
+      "message": "add a line here\n  WinBits wb \u003d arg2;",
+      "revId": "574247b1eba6f4a702f8c14bbfe2565399a9edb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_bfad828a",
+        "filename": "include/vcl/builderfactory.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-01T06:33:04Z",
+      "side": 1,
+      "message": "then change this to\n  wb |\u003d WB_BORDER",
+      "revId": "574247b1eba6f4a702f8c14bbfe2565399a9edb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_dfaa3e70",
+        "filename": "include/vcl/builderfactory.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-01T06:33:04Z",
+      "side": 1,
+      "message": "then change arg2 to wb here",
+      "revId": "574247b1eba6f4a702f8c14bbfe2565399a9edb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
