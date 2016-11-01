@@ -222,13 +222,12 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
         return nullptr;
     }
 
+#if CLANG_VERSION < 30800
+        return nullptr;
+#else
     std::vector<const CXXMethodDecl*> maSimilarMethods;
 
-#if CLANG_VERSION >= 30800
     auto BaseMatchesCallback = [&](const CXXBaseSpecifier *cxxBaseSpecifier, CXXBasePath& )
-#else
-    auto BaseMatchesCallback = [&](const CXXBaseSpecifier *cxxBaseSpecifier, CXXBasePath&, void* )
-#endif
     {
         if (cxxBaseSpecifier->getAccessSpecifier() != AS_public && cxxBaseSpecifier->getAccessSpecifier() != AS_protected)
             return false;
@@ -269,16 +268,13 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
     };
 
     CXXBasePaths aPaths;
-#if CLANG_VERSION >= 30800
     methodDecl->getParent()->lookupInBases(BaseMatchesCallback, aPaths);
-#else
-    methodDecl->getParent()->lookupInBases(BaseMatchesCallback, nullptr, aPaths);
-#endif
 
     if (maSimilarMethods.size() == 1) {
         return maSimilarMethods[0];
     }
     return nullptr;
+#endif
 }
 
 
