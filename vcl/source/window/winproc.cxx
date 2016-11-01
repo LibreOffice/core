@@ -813,12 +813,23 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
 
     // find window - is every time the window which has currently the
     // focus or the last time the focus.
-    // the first floating window always has the focus
+
+    // the first floating window always has the focus, try it, or any parent floating windows, first
     vcl::Window* pChild = pSVData->maWinData.mpFirstFloat;
-    if( !pChild || ( pChild->ImplGetWindowImpl()->mbFloatWin && !static_cast<FloatingWindow *>(pChild)->GrabsFocus() ) )
-        pChild = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
-    else
-        pChild = pChild->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
+    while (pChild)
+    {
+        if (pChild->ImplGetWindowImpl()->mbFloatWin)
+        {
+            if (static_cast<FloatingWindow *>(pChild)->GrabsFocus())
+                break;
+        }
+        pChild = pChild->GetParent();
+    }
+
+    if (!pChild)
+        pChild = pWindow;
+
+    pChild = pChild->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
 
     // no child - than no input
     if ( !pChild )
