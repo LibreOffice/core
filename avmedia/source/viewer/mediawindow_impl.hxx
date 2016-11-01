@@ -123,9 +123,6 @@ private:
     // DragSourceHelper
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
-    bool setZoom(css::media::ZoomLevel eLevel);
-    css::media::ZoomLevel getZoom() const;
-
     void stop();
 
     bool isPlaying() const;
@@ -134,15 +131,6 @@ private:
 
     void setMediaTime( double fTime );
     double getMediaTime() const;
-
-    void setPlaybackLoop( bool bSet );
-    bool isPlaybackLoop() const;
-
-    void setMute( bool bSet );
-    bool isMute() const;
-
-    void setVolumeDB( sal_Int16 nVolumeDB );
-    sal_Int16 getVolumeDB() const;
 
     void stopPlayingInternal( bool );
 
