@@ -146,17 +146,21 @@ class WinGlyphFallbackSubstititution
 :    public ImplGlyphFallbackFontSubstitution
 {
 public:
-    explicit    WinGlyphFallbackSubstititution( HDC );
+    explicit WinGlyphFallbackSubstititution()
+    {
+        mhDC = GetDC(nullptr);
+    };
+
+    ~WinGlyphFallbackSubstititution()
+    {
+        ReleaseDC(nullptr, mhDC);
+    };
 
     bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingChars ) const override;
 private:
     HDC mhDC;
     bool HasMissingChars(PhysicalFontFace*, OUString& rMissingChars) const;
 };
-
-inline WinGlyphFallbackSubstititution::WinGlyphFallbackSubstititution( HDC hDC )
-:   mhDC( hDC )
-{}
 
 // does a font face hold the given missing characters?
 bool WinGlyphFallbackSubstititution::HasMissingChars(PhysicalFontFace* pFace, OUString& rMissingChars) const
@@ -1677,7 +1681,7 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
         SalEnumFontsProcExW, reinterpret_cast<LPARAM>(&aInfo), 0 );
 
     // set glyph fallback hook
-    static WinGlyphFallbackSubstititution aSubstFallback( getHDC() );
+    static WinGlyphFallbackSubstititution aSubstFallback;
     static WinPreMatchFontSubstititution aPreMatchFont;
     pFontCollection->SetFallbackHook( &aSubstFallback );
     pFontCollection->SetPreMatchHook(&aPreMatchFont);
