@@ -232,6 +232,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_5f11ceab",
+        "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2016-11-01T11:06:01Z",
+      "side": 1,
+      "message": "Ah, you are right. It will return a wrong value.\n\nSo probably a possible way would be to not decode the %3F if there is a query in the URL and %3F is present somewhere in the path.\n\nSame should be for the \u0027#\u0027 character (%35) marking the beginning of the fragment.",
+      "parentUuid": "7a77a97e_ff2a9ae6",
+      "revId": "b3df7816723e062f932e5af40f67fcf64c122264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_9f6526e3",
         "filename": "ucb/source/ucp/webdav-neon/DavURIObject.hxx",
         "patchSetId": 3
