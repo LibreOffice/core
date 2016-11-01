@@ -3225,4 +3225,26 @@
   <block-list:block block-list:abbreviated-name="fuzível" block-list:name="fusível"/>
   <block-list:block block-list:abbreviated-name="premios" block-list:name="prémios"/>
   <block-list:block block-list:abbreviated-name="tere" block-list:name="ter"/>
+  <block-list:block block-list:abbreviated-name="bacharlato" block-list:name="bacharelato"/>
+  <block-list:block block-list:abbreviated-name="bacharlatos" block-list:name="bacharelatos"/>
+  <block-list:block block-list:abbreviated-name="batidela" block-list:name="batedela"/>
+  <block-list:block block-list:abbreviated-name="batidelas" block-list:name="batedelas"/>
+  <block-list:block block-list:abbreviated-name="exmplo" block-list:name="exemplo"/>
+  <block-list:block block-list:abbreviated-name="parametro" block-list:name="parâmetro"/>
+  <block-list:block block-list:abbreviated-name="parametros" block-list:name="parâmetros"/>
+  <block-list:block block-list:abbreviated-name="soburdinado" block-list:name="subordinado"/>
+  <block-list:block block-list:abbreviated-name="soburdinados" block-list:name="subordinados"/>
+  <block-list:block block-list:abbreviated-name="solestício" block-list:name="solstício"/>
+  <block-list:block block-list:abbreviated-name="sózinho" block-list:name="sozinho"/>
+  <block-list:block block-list:abbreviated-name="sózinhos" block-list:name="sozinhos"/>
+  <block-list:block block-list:abbreviated-name="superficie" block-list:name="superfície"/>
+  <block-list:block block-list:abbreviated-name="superficies" block-list:name="superfícies"/>
+  <block-list:block block-list:abbreviated-name="supérfulo" block-list:name="supérfluo"/>
+  <block-list:block block-list:abbreviated-name="supérfulos" block-list:name="supérfluos"/>
+  <block-list:block block-list:abbreviated-name="suscinto" block-list:name="sucinto"/>
+  <block-list:block block-list:abbreviated-name="suspenção" block-list:name="suspensão"/>
+  <block-list:block block-list:abbreviated-name="suterrado" block-list:name="soterrado"/>
+  <block-list:block block-list:abbreviated-name="suterrados" block-list:name="soterrados"/>
+  <block-list:block block-list:abbreviated-name="tabú" block-list:name="tabu"/>
+  <block-list:block block-list:abbreviated-name="tabús" block-list:name="tabus"/>
 </block-list:block-list>
