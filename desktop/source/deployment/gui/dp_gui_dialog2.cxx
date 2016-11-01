@@ -116,7 +116,6 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 {
     bool            m_bInterfaceLocked;
 
-    VclPtr<PushButton>     m_pOptionsBtn;
     VclPtr<PushButton>     m_pEnableBtn;
     VclPtr<PushButton>     m_pRemoveBtn;
 
@@ -130,7 +129,6 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 
     DECL_LINK( ScrollHdl, ScrollBar*, void );
 
-    DECL_LINK( HandleOptionsBtn, Button*, void );
     DECL_LINK( HandleEnableBtn, Button*, void );
     DECL_LINK( HandleRemoveBtn, Button*, void );
 
@@ -153,7 +151,6 @@ public:
 ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(vcl::Window* pParent)
     : ExtensionBox_Impl(pParent)
     , m_bInterfaceLocked(false)
-    , m_pOptionsBtn(nullptr)
     , m_pEnableBtn(nullptr)
     , m_pRemoveBtn(nullptr)
     , m_pParent(nullptr)
@@ -166,26 +163,21 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
 
     m_pParent = pParentDialog;
 
-    m_pOptionsBtn = VclPtr<PushButton>::Create( this, WB_TABSTOP );
     m_pEnableBtn = VclPtr<PushButton>::Create( this, WB_TABSTOP );
     m_pRemoveBtn = VclPtr<PushButton>::Create( this, WB_TABSTOP );
 
     SetHelpId( HID_EXTENSION_MANAGER_LISTBOX );
-    m_pOptionsBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_OPTIONS );
     m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
     m_pRemoveBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_REMOVE );
 
-    m_pOptionsBtn->SetClickHdl( LINK( this, ExtBoxWithBtns_Impl, HandleOptionsBtn ) );
     m_pEnableBtn->SetClickHdl( LINK( this, ExtBoxWithBtns_Impl, HandleEnableBtn ) );
     m_pRemoveBtn->SetClickHdl( LINK( this, ExtBoxWithBtns_Impl, HandleRemoveBtn ) );
 
-    m_pOptionsBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_OPTIONS ) );
     m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
     m_pRemoveBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
 
     Size aSize = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
                                MapMode( MapUnit::MapAppFont ) );
-    m_pOptionsBtn->SetSizePixel( aSize );
     m_pEnableBtn->SetSizePixel( aSize );
     m_pRemoveBtn->SetSizePixel( aSize );
 
@@ -207,7 +199,6 @@ ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 
 void ExtBoxWithBtns_Impl::dispose()
 {
-    m_pOptionsBtn.disposeAndClear();
     m_pEnableBtn.disposeAndClear();
     m_pRemoveBtn.disposeAndClear();
     m_pParent.clear();
@@ -225,8 +216,7 @@ void ExtBoxWithBtns_Impl::RecalcAll()
     }
     else
     {
-        m_pOptionsBtn->Disable();
-        m_pOptionsBtn->Hide();
+        m_pParent->enableOptionsButton( false );
         m_pEnableBtn->Disable();
         m_pEnableBtn->Hide();
         m_pRemoveBtn->Disable();
@@ -252,14 +242,12 @@ void ExtBoxWithBtns_Impl::selectEntry( const long nPos )
 
 void ExtBoxWithBtns_Impl::SetButtonPos( const Rectangle& rRect )
 {
-    Size  aBtnSize( m_pOptionsBtn->GetSizePixel() );
+    Size  aBtnSize( m_pRemoveBtn->GetSizePixel() );
     Point aBtnPos( rRect.Left() + ICON_OFFSET,
                    rRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
 
-    m_pOptionsBtn->SetPosPixel( aBtnPos );
-    aBtnPos.X() = rRect.Right() - TOP_OFFSET - aBtnSize.Width();
     m_pRemoveBtn->SetPosPixel( aBtnPos );
-    aBtnPos.X() -= ( TOP_OFFSET + aBtnSize.Width() );
+    aBtnPos.X() = rRect.Right() - TOP_OFFSET - aBtnSize.Width();
     m_pEnableBtn->SetPosPixel( aBtnPos );
 }
 
@@ -296,14 +284,12 @@ void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
 
     if ( rEntry->m_bHasOptions && bShowOptionBtn )
     {
-        m_pOptionsBtn->Enable();
-        m_pOptionsBtn->Show();
+        m_pParent->enableOptionsButton( true );
         rEntry->m_bHasButtons = true;
     }
     else
     {
-        m_pOptionsBtn->Disable();
-        m_pOptionsBtn->Hide();
+        m_pParent->enableOptionsButton( false );
     }
 
     if ( rEntry->m_bUser || rEntry->m_bShared )
@@ -329,15 +315,9 @@ bool ExtBoxWithBtns_Impl::HandleTabKey( bool bReverse )
 
     PushButton *pNext = nullptr;
 
-    if ( m_pOptionsBtn->HasFocus() ) {
-        if ( !bReverse && !GetEntryData( nIndex )->m_bLocked )
-            pNext = m_pEnableBtn;
-    }
-    else if ( m_pEnableBtn->HasFocus() ) {
+    if ( m_pEnableBtn->HasFocus() ) {
         if ( !bReverse )
             pNext = m_pRemoveBtn;
-        else if ( GetEntryData( nIndex )->m_bHasOptions )
-            pNext = m_pOptionsBtn;
     }
     else if ( m_pRemoveBtn->HasFocus() ) {
         if ( bReverse )
@@ -345,15 +325,11 @@ bool ExtBoxWithBtns_Impl::HandleTabKey( bool bReverse )
     }
     else {
         if ( !bReverse ) {
-            if ( GetEntryData( nIndex )->m_bHasOptions )
-                pNext = m_pOptionsBtn;
-            else if ( ! GetEntryData( nIndex )->m_bLocked )
+            if ( ! GetEntryData( nIndex )->m_bLocked )
                 pNext = m_pEnableBtn;
         } else {
             if ( ! GetEntryData( nIndex )->m_bLocked )
                 pNext = m_pRemoveBtn;
-            else if ( GetEntryData( nIndex )->m_bHasOptions )
-                pNext = m_pOptionsBtn;
         }
     }
 
@@ -471,9 +447,9 @@ void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
     }
     else
     {
-        m_pOptionsBtn->Enable( false );
         m_pRemoveBtn->Enable( false );
         m_pEnableBtn->Enable( false );
+        m_pParent->enableOptionsButton( false );
     }
 }
 
@@ -482,36 +458,14 @@ IMPL_LINK( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar, void )
 {
     long nDelta = pScrBar->GetDelta();
 
-    Point aNewOptPt( m_pOptionsBtn->GetPosPixel() - Point( 0, nDelta ) );
     Point aNewRemPt( m_pRemoveBtn->GetPosPixel() - Point( 0, nDelta ) );
     Point aNewEnPt( m_pEnableBtn->GetPosPixel() - Point( 0, nDelta ) );
 
     DoScroll( nDelta );
 
-    m_pOptionsBtn->SetPosPixel( aNewOptPt );
     m_pRemoveBtn->SetPosPixel( aNewRemPt );
     m_pEnableBtn->SetPosPixel( aNewEnPt );
 }
-
-
-IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleOptionsBtn, Button*, void)
-{
-    const sal_Int32 nActive = getSelIndex();
-
-    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
-    {
-        SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-
-        if ( pFact )
-        {
-            OUString sExtensionId = GetEntryData( nActive )->m_xPackage->getIdentifier().Value;
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateOptionsDialog( this, sExtensionId, OUString() ));
-
-            pDlg->Execute();
-        }
-    }
-}
-
 
 IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleEnableBtn, Button*, void)
 {
@@ -689,8 +643,9 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     , m_pManager(pManager)
 {
     get(m_pExtensionBox, "extensions");
-    get(m_pAddBtn, "add");
-    get(m_pUpdateBtn, "update");
+    get(m_pOptionsBtn, "optionsbtn");
+    get(m_pAddBtn, "addbtn");
+    get(m_pUpdateBtn, "updatebtn");
     get(m_pCloseBtn, "close");
     get(m_pBundledCbx, "bundled");
     get(m_pSharedCbx, "shared");
@@ -702,6 +657,9 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
 
     m_pExtensionBox->InitFromDialog(this);
 
+    m_pOptionsBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_OPTIONS );
+
+    m_pOptionsBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleOptionsBtn ) );
     m_pAddBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleAddBtn ) );
     m_pCloseBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCloseBtn ) );
 
@@ -738,6 +696,7 @@ void ExtMgrDialog::dispose()
 {
     m_aIdle.Stop();
     m_pExtensionBox.clear();
+    m_pOptionsBtn.clear();
     m_pAddBtn.clear();
     m_pUpdateBtn.clear();
     m_pCloseBtn.clear();
@@ -942,6 +901,10 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
     return files;
 }
 
+void ExtMgrDialog::enableOptionsButton( bool bEnable )
+{
+    m_pOptionsBtn->Enable( bEnable );
+}
 
 IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn, Button*, void)
 {
@@ -1042,6 +1005,23 @@ void ExtMgrDialog::updatePackageInfo( const uno::Reference< deployment::XPackage
     m_pExtensionBox->updateEntry( xPackage );
 }
 
+IMPL_LINK_NOARG(ExtMgrDialog, HandleOptionsBtn, Button*, void)
+{
+    const sal_Int32 nActive = m_pExtensionBox->getSelIndex();
+
+    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
+    {
+        SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+
+        if ( pFact )
+        {
+            OUString sExtensionId = m_pExtensionBox->GetEntryData( nActive )->m_xPackage->getIdentifier().Value;
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateOptionsDialog( this, sExtensionId, OUString() ));
+
+            pDlg->Execute();
+        }
+    }
+}
 
 IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn, Button*, void)
 {

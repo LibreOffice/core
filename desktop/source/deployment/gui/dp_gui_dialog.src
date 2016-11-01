@@ -44,11 +44,6 @@ String RID_CTX_ITEM_CHECK_UPDATE
     Text [ en-US ] = "~Update...";
 };
 
-String RID_CTX_ITEM_OPTIONS
-{
-    Text [ en-US ] = "~Options...";
-};
-
 String RID_STR_ADDING_PACKAGES
 {
     Text [ en-US ] = "Adding %EXTENSION_NAME";

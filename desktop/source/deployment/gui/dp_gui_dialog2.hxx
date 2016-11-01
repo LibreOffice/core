@@ -102,6 +102,7 @@ class ExtMgrDialog : public ModelessDialog,
                      public DialogHelper
 {
     VclPtr<ExtBoxWithBtns_Impl> m_pExtensionBox;
+    VclPtr<PushButton>          m_pOptionsBtn;
     VclPtr<PushButton>          m_pAddBtn;
     VclPtr<PushButton>          m_pUpdateBtn;
     VclPtr<CloseButton>         m_pCloseBtn;
@@ -132,6 +133,7 @@ class ExtMgrDialog : public ModelessDialog,
 
     bool removeExtensionWarn( const OUString &rExtensionTitle ) const;
 
+    DECL_LINK( HandleOptionsBtn, Button*, void );
     DECL_LINK( HandleAddBtn, Button*, void );
     DECL_LINK( HandleUpdateBtn, Button*, void );
     DECL_LINK( HandleCancelBtn, Button*, void );
@@ -171,6 +173,8 @@ public:
     virtual void    checkEntries() override;
 
     css::uno::Sequence< OUString > raiseAddPicker();
+
+    void enableOptionsButton( bool bEnable );
 };
 
 
