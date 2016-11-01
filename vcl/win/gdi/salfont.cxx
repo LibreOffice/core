@@ -151,7 +151,7 @@ public:
     bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingChars ) const override;
 private:
     HDC mhDC;
-    bool HasMissingChars( PhysicalFontFace*, const OUString& rMissingChars ) const;
+    bool HasMissingChars(PhysicalFontFace*, OUString& rMissingChars) const;
 };
 
 inline WinGlyphFallbackSubstititution::WinGlyphFallbackSubstititution( HDC hDC )
@@ -159,7 +159,7 @@ inline WinGlyphFallbackSubstititution::WinGlyphFallbackSubstititution( HDC hDC )
 {}
 
 // does a font face hold the given missing characters?
-bool WinGlyphFallbackSubstititution::HasMissingChars( PhysicalFontFace* pFace, const OUString& rMissingChars ) const
+bool WinGlyphFallbackSubstititution::HasMissingChars(PhysicalFontFace* pFace, OUString& rMissingChars) const
 {
     WinFontFace* pWinFont = static_cast< WinFontFace* >(pFace);
     FontCharMapRef xFontCharMap = pWinFont->GetFontCharMap();
@@ -194,19 +194,24 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( PhysicalFontFace* pFace, c
         return false;
 
     int nMatchCount = 0;
-    // static const int nMaxMatchCount = 1; // TODO: tolerate more missing characters?
+    std::vector<sal_UCS4> rRemainingCodes;
     const sal_Int32 nStrLen = rMissingChars.getLength();
-    for( sal_Int32 nStrIdx = 0; nStrIdx < nStrLen; /* ++nStrIdx unreachable code, see the 'break' below */ )
+    sal_Int32 nStrIdx = 0;
+    while (nStrIdx < nStrLen)
     {
         const sal_UCS4 uChar = rMissingChars.iterateCodePoints( &nStrIdx );
-        nMatchCount += xFontCharMap->HasChar( uChar ) ? 1 : 0;
-        break; // for now
+        if (xFontCharMap->HasChar(uChar))
+            nMatchCount++;
+        else
+            rRemainingCodes.push_back(uChar);
     }
 
     xFontCharMap = nullptr;
 
-    const bool bHasMatches = (nMatchCount > 0);
-    return bHasMatches;
+    if (nMatchCount > 0)
+        rMissingChars = OUString(rRemainingCodes.data(), rRemainingCodes.size());
+
+    return nMatchCount > 0;
 }
 
 namespace
