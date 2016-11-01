@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_7aaf78e3",
+        "filename": "basic/source/uno/dlgcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-01T19:00:22Z",
+      "side": 1,
+      "message": "could use the new style constructor here:\n      StringResourceWithStorage::create(mxContext)",
+      "revId": "cdd1c11886b1de4b4fa0f8763d8fc8e4260fa9ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
