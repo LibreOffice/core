@@ -13,6 +13,8 @@
 #include "DAVException.hxx"
 #include "DAVTypes.hxx"
 
+using namespace webdav_ucp;
+
 namespace
 {
 
@@ -27,7 +29,7 @@ namespace
 
         void tearDown(  ) override;
 
-        void DAVTypesCheckInit( webdav_ucp::DAVOptions const & aDavType );
+        void DAVTypesCheckInit( DAVOptions const & aDavType );
         void DAVTypesTest();
 
         void DAVOptsCacheTests();
@@ -51,7 +53,7 @@ namespace
     {
     }
 
-    void webdav_opts_test::DAVTypesCheckInit( webdav_ucp::DAVOptions const & aDavType )
+    void webdav_opts_test::DAVTypesCheckInit( DAVOptions const & aDavType )
     {
         // check if the class is at reset state
         // using accessors
@@ -73,7 +75,7 @@ namespace
     void webdav_opts_test::DAVTypesTest()
     {
         //our DAVOptions
-        webdav_ucp::DAVOptions aDavOpt;
+        DAVOptions aDavOpt;
         DAVTypesCheckInit( aDavOpt );
 
         aDavOpt.setClass1();
@@ -275,7 +277,7 @@ namespace
         aDavOpt.init();
         DAVTypesCheckInit( aDavOpt );
         // equality check
-        webdav_ucp::DAVOptions aDavOptTarget;
+        DAVOptions aDavOptTarget;
         CPPUNIT_ASSERT_EQUAL( true , aDavOpt == aDavOptTarget );
 
         aDavOpt.setClass1();
@@ -341,11 +343,11 @@ namespace
     void webdav_opts_test::DAVOptsCacheTests()
     {
         // define a local cache to test
-        webdav_ucp::DAVOptionsCache aDAVOptsCache;
+        DAVOptionsCache aDAVOptsCache;
         // the value to cache
-        webdav_ucp::DAVOptions aDavOpt;
+        DAVOptions aDavOpt;
         // the returned value to test
-        webdav_ucp::DAVOptions aDavOptCached;
+        DAVOptions aDavOptCached;
         // init the values
         OUString aAllowedMethods = "OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK";
         OUString aURL = "http://my.server.org/a%20fake%20url/to%20test/another-url";
