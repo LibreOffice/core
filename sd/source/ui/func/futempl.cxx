@@ -35,6 +35,8 @@
 #include <editeng/numitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/sdr/properties/properties.hxx>
@@ -102,6 +104,10 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     SfxStyleSheetBasePool* pSSPool = mpDoc->GetDocSh()->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = nullptr;
 
+    static const sal_uInt16 aRanges[] = {
+        EE_ITEMS_START, EE_ITEMS_END,
+        SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR
+    };
     const SfxPoolItem* pItem;
     SfxStyleFamily nFamily = (SfxStyleFamily)USHRT_MAX;
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY,
@@ -118,7 +124,6 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         else
             nFamily = SD_STYLE_FAMILY_PSEUDO;
     }
-
     OUString aStyleName;
     sal_uInt16 nRetMask = SFXSTYLEBIT_ALL;
 
@@ -299,7 +304,15 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 ScopedVclPtr<SfxAbstractTabDialog> pPresDlg;
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 bool bOldDocInOtherLanguage = false;
-                SfxItemSet aOriSet( pStyleSheet->GetItemSet() );
+                SfxItemSet aNewAttr( mpViewShell->GetPool(), aRanges);
+
+                if( aNewAttr.GetItemState( EE_CHAR_BKGCOLOR, true, &pItem ) == SfxItemState::SET)
+                {
+                    Color aBackColor = static_cast<const SvxBackgroundColorItem*>(pItem)->GetValue();
+                    SvxBrushItem aBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR);
+                    aNewAttr.ClearItem( EE_CHAR_BKGCOLOR);
+                    aNewAttr.Put(aBrushItem);
+                }
 
                 SfxStyleFamily eFamily = pStyleSheet->GetFamily();
 
@@ -394,11 +407,18 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     case RET_OK:
                     {
                         nRetMask = pStyleSheet->GetMask();
-
                         if (eFamily == SD_STYLE_FAMILY_PSEUDO)
                         {
                             SfxItemSet aTempSet(*pOutSet);
                             static_cast<SdStyleSheet*>(pStyleSheet)->AdjustToFontHeight(aTempSet);
+
+                            const SvxBrushItem* pBrushItem = static_cast<const SvxBrushItem*>(aTempSet.GetItem( SID_ATTR_BRUSH_CHAR ));
+                            if( pBrushItem )
+                            {
+                                SvxBackgroundColorItem aBackColorItem( pBrushItem->GetColor(), EE_CHAR_BKGCOLOR );
+                                aTempSet.ClearItem(SID_ATTR_BRUSH_CHAR);
+                                aTempSet.Put(aBackColorItem);
+                            }
 
                             /* Special treatment: reset the INVALIDS to
                                NULL-Pointer (otherwise INVALIDs or pointer point
