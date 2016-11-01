@@ -169,14 +169,9 @@ bool Window::Notify( NotifyEvent& rNEvt )
     // manage the dialogs
     if ( (GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL )
     {
-        // if the parent also has dialog control activated, the parent takes over control
         if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) || (rNEvt.GetType() == MouseNotifyEvent::KEYUP) )
         {
-            if ( ImplIsOverlapWindow() ||
-                 ((getNonLayoutRealParent(this)->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
-            {
-                bRet = ImplDlgCtrl( *rNEvt.GetKeyEvent(), rNEvt.GetType() == MouseNotifyEvent::KEYINPUT );
-            }
+            bRet = ImplDlgCtrl(*rNEvt.GetKeyEvent(), rNEvt.GetType() == MouseNotifyEvent::KEYINPUT);
         }
         else if ( (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS) || (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS) )
         {
