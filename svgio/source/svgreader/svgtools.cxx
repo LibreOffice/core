@@ -1482,15 +1482,13 @@ namespace svgio
 
                     if(!rMimeType.isEmpty() && nPos < nLen)
                     {
-                        static const char aStrImage[] = "image";
-
-                        if(rMimeType.match(aStrImage, 0))
+                        if(rMimeType.startsWith("image"))
                         {
                             // image data
                             OUString aData(rCandidate.copy(nPos));
                             static const char aStrBase64[] = "base64";
 
-                            if(aData.match(aStrBase64, 0))
+                            if(aData.startsWith(aStrBase64))
                             {
                                 // base64 encoded
                                 nPos = strlen(aStrBase64);

@@ -39,8 +39,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-static const char aRootName[] = "Office.Math";
-
 #define SYMBOL_LIST         "SymbolList"
 #define FONT_FORMAT_LIST    "FontFormatList"
 
@@ -332,7 +330,7 @@ const OUString SmFontFormatList::GetNewFontFormatId() const
 
 
 SmMathConfig::SmMathConfig() :
-    ConfigItem(OUString(aRootName))
+    ConfigItem(OUString("Office.Math"))
     , pFormat()
     , pOther()
     , pFontFormatList()

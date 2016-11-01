@@ -84,10 +84,7 @@ bool isValidNCName(OUString const & i_rIdref)
 
 static const char s_content [] = "content.xml";
 static const char s_styles  [] = "styles.xml";
-static const char s_meta    [] = "meta.xml";
-static const char s_settings[] = "settings.xml";
 static const char s_manifest[] = "manifest.rdf";
-static const char s_rdfxml  [] = "application/rdf+xml";
 static const char s_odfmime [] = "application/vnd.oasis.opendocument.";
 
 
@@ -110,7 +107,7 @@ bool isValidXmlId(OUString const & i_rStreamName,
 
 static bool isReservedFile(OUString const & i_rPath)
 {
-    return isContentFile(i_rPath) || isStylesFile(i_rPath) || i_rPath == s_meta || i_rPath == s_settings;
+    return isContentFile(i_rPath) || isStylesFile(i_rPath) || i_rPath == "meta.xml" || i_rPath == "settings.xml";
 }
 
 
@@ -611,7 +608,7 @@ exportStream(struct DocumentMetadataAccess_Impl & i_rImpl,
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         xStreamProps->setPropertyValue(
             "MediaType",
-            uno::makeAny(OUString(s_rdfxml)));
+            uno::makeAny(OUString("application/rdf+xml")));
     }
     const uno::Reference<io::XOutputStream> xOutStream(
         xStream->getOutputStream(), uno::UNO_SET_THROW );
