@@ -35,9 +35,7 @@ namespace lang = ::com::sun::star::lang;
 namespace uri = ::com::sun::star::uri;
 
 static const char SHARE[] = "share";
-static const char SHARE_URI[] = "vnd.sun.star.expand:$BRAND_BASE_DIR";
 
-static const char SHARE_UNO_PACKAGES[] = "share:uno_packages";
 static const char SHARE_UNO_PACKAGES_URI[] =
     "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE";
 
@@ -45,12 +43,7 @@ static const char USER[] = "user";
 static const char USER_URI[] =
     "vnd.sun.star.expand:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
 
-static const char USER_UNO_PACKAGES[] = "user:uno_packages";
-static const char USER_UNO_PACKAGES_DIR[] =
-    "/user/uno_packages/cache";
 
-static const char DOCUMENT[] = "document";
-static const char TDOC_SCHEME[] = "vnd.sun.star.tdoc";
 
 ScriptingFrameworkURIHelper::ScriptingFrameworkURIHelper(
     const uno::Reference< uno::XComponentContext >& xContext)
@@ -118,26 +111,26 @@ ScriptingFrameworkURIHelper::initBaseURI()
         uri = USER_URI;
         bAppendScriptsPart = true;
     }
-    else if ( m_sLocation == USER_UNO_PACKAGES )
+    else if ( m_sLocation == "user:uno_packages" )
     {
         test = "uno_packages";
-        uri = OUStringLiteral(USER_URI) + USER_UNO_PACKAGES_DIR;
+        uri = OUStringLiteral(USER_URI) + "/user/uno_packages/cache";
     }
     else if (m_sLocation == SHARE)
     {
         test = SHARE;
-        uri = SHARE_URI;
+        uri = "vnd.sun.star.expand:$BRAND_BASE_DIR";
         bAppendScriptsPart = true;
     }
-    else if (m_sLocation == SHARE_UNO_PACKAGES)
+    else if (m_sLocation == "share:uno_packages")
     {
         test = "uno_packages";
         uri = SHARE_UNO_PACKAGES_URI;
     }
-    else if (m_sLocation.startsWith(TDOC_SCHEME))
+    else if (m_sLocation.startsWith("vnd.sun.star.tdoc"))
     {
         m_sBaseURI = m_sLocation.concat( SCRIPTS_PART );
-        m_sLocation = DOCUMENT;
+        m_sLocation = "document";
         return true;
     }
     else
