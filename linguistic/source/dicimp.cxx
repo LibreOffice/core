@@ -1018,9 +1018,7 @@ void DicEntry::splitDicFileWord(const OUString &rDicFileWord,
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    static const char aDelim[] = "==";
-
-    sal_Int32 nDelimPos = rDicFileWord.indexOf( aDelim );
+    sal_Int32 nDelimPos = rDicFileWord.indexOf( "==" );
     if (-1 != nDelimPos)
     {
         sal_Int32 nTriplePos = nDelimPos + 2;

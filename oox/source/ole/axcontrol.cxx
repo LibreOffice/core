@@ -2520,9 +2520,6 @@ HtmlSelectModel::HtmlSelectModel()
 bool
 HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
 {
-    static const char sMultiple[] = "<SELECT MULTIPLE";
-    static const char sSelected[] = "OPTION SELECTED";
-
     OUString sStringContents = rInStrm.readUnicodeArray( rInStrm.size() );
 
     OUString data = sStringContents;
@@ -2540,7 +2537,7 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
         OUString sLine( data.getToken( nToken, '\n' ) );
         if ( !nToken ) // first line will tell us if multiselect is enabled
         {
-            if ( sLine == sMultiple )
+            if ( sLine == "<SELECT MULTIPLE" )
                 mnMultiSelect = AX_SELECTION_MULTI;
         }
         // skip first and last lines, no data there
@@ -2558,7 +2555,7 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
                     displayValue = displayValue.replaceAll( "&quot;", "\"" );
                     displayValue = displayValue.replaceAll( "&amp;", "&" );
                     listValues.push_back( displayValue );
-                    if( sLine.indexOf( sSelected ) != -1 )
+                    if( sLine.indexOf( "OPTION SELECTED" ) != -1 )
                         selectedIndices.push_back( static_cast< sal_Int16 >( listValues.size() ) - 1 );
                 }
             }
