@@ -144,7 +144,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleIndex(
 
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
-    return implGetChildIndex( nRow, nColumn );
+    return nRow * m_aTable.GetColumnCount() + nColumn;
 }
 
 sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRow( sal_Int32 nChildIndex )
@@ -205,11 +205,6 @@ Sequence< sal_Int8 > SAL_CALL AccessibleGridControlTableBase::getImplementationI
 
 // internal helper methods ----------------------------------------------------
 
-sal_Int32 AccessibleGridControlTableBase::implGetChildCount() const
-{
-    return m_aTable.GetRowCount()*m_aTable.GetColumnCount();
-}
-
 sal_Int32 AccessibleGridControlTableBase::implGetRow( sal_Int32 nChildIndex ) const
 {
     sal_Int32 nColumns = m_aTable.GetColumnCount();
@@ -220,12 +215,6 @@ sal_Int32 AccessibleGridControlTableBase::implGetColumn( sal_Int32 nChildIndex )
 {
     sal_Int32 nColumns = m_aTable.GetColumnCount();
     return nColumns ? (nChildIndex % nColumns) : 0;
-}
-
-sal_Int32 AccessibleGridControlTableBase::implGetChildIndex(
-        sal_Int32 nRow, sal_Int32 nColumn ) const
-{
-    return nRow * m_aTable.GetColumnCount() + nColumn;
 }
 
 void AccessibleGridControlTableBase::implGetSelectedRows( Sequence< sal_Int32 >& rSeq )
@@ -263,7 +252,7 @@ void AccessibleGridControlTableBase::ensureIsValidAddress(
 void AccessibleGridControlTableBase::ensureIsValidIndex( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException )
 {
-    if( nChildIndex >= implGetChildCount() )
+    if( nChildIndex >= m_aTable.GetRowCount()*m_aTable.GetColumnCount() )
         throw lang::IndexOutOfBoundsException(
             OUString( "child index is invalid" ), *this );
 }

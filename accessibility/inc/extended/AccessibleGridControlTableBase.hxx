@@ -158,18 +158,11 @@ protected:
     // internal helper methods
 
     /** @attention  This method requires locked mutex's and a living object.
-        @return  The number of cells of the table. */
-    sal_Int32 implGetChildCount() const;
-
-    /** @attention  This method requires locked mutex's and a living object.
         @return  The row index of the specified cell index. */
     sal_Int32 implGetRow( sal_Int32 nChildIndex ) const;
     /** @attention  This method requires locked mutex's and a living object.
         @return  The column index of the specified cell index. */
     sal_Int32 implGetColumn( sal_Int32 nChildIndex ) const;
-    /** @attention  This method requires locked mutex's and a living object.
-        @return  The child index of the specified cell address. */
-    sal_Int32 implGetChildIndex( sal_Int32 nRow, sal_Int32 nColumn ) const;
 
     /** Fills a sequence with sorted indexes of completely selected rows.
         @attention  This method requires locked mutex's and a living object.

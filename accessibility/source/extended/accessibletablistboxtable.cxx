@@ -260,13 +260,8 @@ namespace accessibility
 
     void AccessibleTabListBoxTable::ensureValidIndex( sal_Int32 _nIndex ) const
     {
-        if ( ( _nIndex < 0 ) || ( _nIndex >= implGetCellCount() ) )
+        if ( ( _nIndex < 0 ) || ( _nIndex >= (implGetRowCount() * implGetColumnCount()) ) )
             throw IndexOutOfBoundsException();
-    }
-
-    bool AccessibleTabListBoxTable::implIsRowSelected( sal_Int32 _nRow ) const
-    {
-        return m_pTabListBox && m_pTabListBox->IsSelected( m_pTabListBox->GetEntry( _nRow ) );
     }
 
     void AccessibleTabListBoxTable::implSelectRow( sal_Int32 _nRow, bool _bSelect )
@@ -341,7 +336,7 @@ namespace accessibility
         ensureIsAlive();
         ensureValidIndex( nChildIndex );
 
-        return implIsRowSelected( implGetRow( nChildIndex ) );
+        return m_pTabListBox && m_pTabListBox->IsSelected( m_pTabListBox->GetEntry( implGetRow( nChildIndex ) ) );
     }
 
     void SAL_CALL AccessibleTabListBoxTable::clearAccessibleSelection(  ) throw (RuntimeException, std::exception)

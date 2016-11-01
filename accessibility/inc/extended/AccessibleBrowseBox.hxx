@@ -211,9 +211,6 @@ public:
         ::svt::IAccessibleTableProvider& _rBrowseBox
     );
 
-    /// checks whether the accessible context is still alive
-    bool                            isContextAlive() const;
-
     /// returns the AccessibleContext belonging to this Accessible
     inline AccessibleBrowseBox*            getContext()         { return m_pContext; }
 
@@ -233,7 +230,7 @@ protected:
     void dispose() override;
     virtual bool isAlive() const override
     {
-        return isContextAlive();
+        return m_pContext && m_pContext->isAlive();
     }
     virtual css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) override

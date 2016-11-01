@@ -132,7 +132,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleIndex(
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
-    return implGetChildIndex( nRow, nColumn );
+    return nRow * implGetColumnCount() + nColumn;
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleRow( sal_Int32 nChildIndex )
@@ -242,12 +242,6 @@ sal_Int32 AccessibleBrowseBoxTableBase::implGetColumn( sal_Int32 nChildIndex ) c
 {
     sal_Int32 nColumns = implGetColumnCount();
     return nColumns ? (nChildIndex % nColumns) : 0;
-}
-
-sal_Int32 AccessibleBrowseBoxTableBase::implGetChildIndex(
-        sal_Int32 nRow, sal_Int32 nColumn ) const
-{
-    return nRow * implGetColumnCount() + nColumn;
 }
 
 bool AccessibleBrowseBoxTableBase::implIsRowSelected( sal_Int32 nRow ) const

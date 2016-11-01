@@ -198,9 +198,6 @@ protected:
     /** @attention  This method requires locked mutex's and a living object.
         @return  The column index of the specified cell index. */
     sal_Int32 implGetColumn( sal_Int32 nChildIndex ) const;
-    /** @attention  This method requires locked mutex's and a living object.
-        @return  The child index of the specified cell address. */
-    sal_Int32 implGetChildIndex( sal_Int32 nRow, sal_Int32 nColumn ) const;
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  TRUE, if the specified row is selected. */

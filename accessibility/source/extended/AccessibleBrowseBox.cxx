@@ -347,11 +347,6 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
 }
 
 
-bool AccessibleBrowseBoxAccess::isContextAlive() const
-{
-    return  ( nullptr != m_pContext ) && m_pContext->isAlive();
-}
-
 
 } // namespace accessibility
 

@@ -179,9 +179,6 @@ public:
         ::svt::table::IAccessibleTable& _rTable
     );
 
-    /// checks whether the accessible context is still alive
-    bool                            isContextAlive() const;
-
     /// returns the AccessibleContext belonging to this Accessible
     inline AccessibleGridControl*            getContext()         { return m_pContext; }
 
@@ -201,7 +198,7 @@ protected:
     void DisposeAccessImpl() override;
     virtual bool isAlive() const override
     {
-        return isContextAlive();
+        return m_pContext && m_pContext->isAlive();
     }
     virtual void commitCellEvent( sal_Int16 nEventId,
          const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override

@@ -440,12 +440,6 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
 }
 
 
-bool AccessibleGridControlAccess::isContextAlive() const
-{
-    return  ( nullptr != m_pContext ) && m_pContext->isAlive();
-}
-
-
 }   // namespace accessibility
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -257,31 +257,19 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleListBoxEntry::getImplementationName() throw(RuntimeException, std::exception)
     {
-        return getImplementationName_Static();
+        return OUString( "com.sun.star.comp.svtools.AccessibleTreeListBoxEntry" );
     }
 
     Sequence< OUString > SAL_CALL AccessibleListBoxEntry::getSupportedServiceNames() throw(RuntimeException, std::exception)
-    {
-        return getSupportedServiceNames_Static();
-    }
-
-    sal_Bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
-    {
-        return cppu::supportsService(this, _rServiceName);
-    }
-
-    // XServiceInfo - static methods
-
-    Sequence< OUString > AccessibleListBoxEntry::getSupportedServiceNames_Static() throw( RuntimeException )
     {
         return {"com.sun.star.accessibility.AccessibleContext",
                 "com.sun.star.accessibility.AccessibleComponent",
                 "com.sun.star.awt.AccessibleTreeListBoxEntry"};
     }
 
-    OUString AccessibleListBoxEntry::getImplementationName_Static() throw( RuntimeException )
+    sal_Bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
     {
-        return OUString( "com.sun.star.comp.svtools.AccessibleTreeListBoxEntry" );
+        return cppu::supportsService(this, _rServiceName);
     }
 
     // XAccessible

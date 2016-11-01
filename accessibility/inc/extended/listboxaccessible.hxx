@@ -53,10 +53,6 @@ namespace accessibility
     protected:
         virtual ~ListBoxAccessibleBase( );
 
-        // own overridables
-        /// will be called for any VclWindowEvent events broadcasted by our VCL window
-        void ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent );
-
         /** will be called when our window broadcasts the VCLEVENT_OBJECT_DYING event
 
             <p>Usually, you derive your class from both ListBoxAccessibleBase and XComponent,

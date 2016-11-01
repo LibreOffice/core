@@ -48,8 +48,6 @@ private:
     /** Throws an exception, if nIndex is not a valid child index. */
     void ensureValidIndex( sal_Int32 _nIndex ) const;
 
-    /** Returns true, if the specified row is selected. */
-    bool implIsRowSelected( sal_Int32 _nRow ) const;
     /** Selects the specified row. */
     void implSelectRow( sal_Int32 _nRow, bool _bSelect );
 
@@ -59,8 +57,6 @@ private:
     sal_Int32 implGetColumnCount() const override;
     /** Returns the count of selected rows in the table. */
     sal_Int32 implGetSelRowCount() const;
-    /** Returns the total cell count in the table (including header). */
-    inline sal_Int32 implGetCellCount() const { return implGetRowCount() * implGetColumnCount(); }
 
     /** Returns the row index from cell index. */
     inline sal_Int32 implGetRow( sal_Int32 _nIndex ) const { return _nIndex / implGetColumnCount(); }

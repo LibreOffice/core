@@ -129,31 +129,19 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleIconChoiceCtrl::getImplementationName() throw (RuntimeException, std::exception)
     {
-        return getImplementationName_Static();
+        return OUString( "com.sun.star.comp.svtools.AccessibleIconChoiceControl" );
     }
 
     Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrl::getSupportedServiceNames() throw (RuntimeException, std::exception)
-    {
-        return getSupportedServiceNames_Static();
-    }
-
-    sal_Bool SAL_CALL AccessibleIconChoiceCtrl::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
-    {
-        return cppu::supportsService(this, _rServiceName);
-    }
-
-    // XServiceInfo - static methods
-
-    Sequence< OUString > AccessibleIconChoiceCtrl::getSupportedServiceNames_Static() throw (RuntimeException)
     {
         return {"com.sun.star.accessibility.AccessibleContext",
                 "com.sun.star.accessibility.AccessibleComponent",
                 "com.sun.star.awt.AccessibleIconChoiceControl"};
     }
 
-    OUString AccessibleIconChoiceCtrl::getImplementationName_Static() throw (RuntimeException)
+    sal_Bool SAL_CALL AccessibleIconChoiceCtrl::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
     {
-        return OUString( "com.sun.star.comp.svtools.AccessibleIconChoiceControl" );
+        return cppu::supportsService(this, _rServiceName);
     }
 
     // XAccessible
