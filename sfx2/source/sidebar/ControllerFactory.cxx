@@ -53,8 +53,10 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
             rxFrame, rxController,
             nWidth));
 
+    bool bFactoryHasController( xController.is() );
+
     // Create a controller for the new item.
-    if ( ! xController.is())
+    if ( !bFactoryHasController )
     {
         xController.set(
             static_cast<XWeak*>(::framework::CreateToolBoxController(
@@ -78,7 +80,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
 
     // Initialize the controller with eg a service factory.
     Reference<lang::XInitialization> xInitialization (xController, UNO_QUERY);
-    if (xInitialization.is())
+    if (!bFactoryHasController && xInitialization.is())
     {
         beans::PropertyValue aPropValue;
         std::vector<Any> aPropertyVector;
