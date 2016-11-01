@@ -770,7 +770,7 @@ bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph )
 
 bool SalLayout::UseCommonLayout()
 {
-    static bool bUse = getenv("SAL_NO_COMMON_LAYOUT") == nullptr;
+    static bool bUse = getenv("SAL_USE_COMMON_LAYOUT") != nullptr;
     return bUse;
 }
 
