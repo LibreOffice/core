@@ -209,7 +209,7 @@ Dim oSourceTable As Object, oSourceColumns As Object, oSourceCol As Object, oTar
 Dim oSourceKeys As Object, oSourceKey As Object, oTargetKey As Object
 Dim i As Integer, j As Integer, sSql As String, vPrimaryKeys() As Variant
 Dim vNameComponents() As Variant, iNames As Integer, sSurround As String
-Dim vInputFields() As Variant, vFieldBinary() As Variant, vOutputFields() As Variant
+Dim vInputField As Variant, vFieldBinary() As Variant, vOutputField As Variant
 Dim oInput as Object, oOutput As Object, iNbFields As Integer, vValue As Variant
 Dim vBinary As Variant, lInputSize As Long, lOutputSize As Long
 Dim lInputRecs As Long, lInputMax As Long, vField As Variant, bProgressMeter As Boolean, sFile As String
@@ -318,14 +318,10 @@ Const cstProgressMeterLimit = 100
 								bProgressMeter = ( lInputMax &gt; cstProgressMeterLimit )
 
 								iNbFields = .Fields().Count - 1
-								vInputFields = Array()
 								vFieldBinary = Array()
-								vOutputFields = Array()
-								ReDim vInputFields(0 To iNbFields), vFieldBinary(0 To iNbFields), vOutputFields(0 To iNbFields)
+								ReDim vFieldBinary(0 To iNbFields)
 								For i = 0 To iNbFields
-									Set vInputFields(i) = .Fields(i)
-									vFieldBinary(i) = Utils._IsBinaryType(vInputFields(i).Column.Type)
-									Set vOutputFields(i) = oOutput.Fields(i)
+									vFieldBinary(i) = Utils._IsBinaryType(.Fields(i).Column.Type)
 								Next i
 							Else
 								bProgressMeter = False
@@ -335,20 +331,22 @@ Const cstProgressMeterLimit = 100
 								oOutput.RowSet.moveToInsertRow()
 								oOutput._EditMode = dbEditAdd
 								For i = 0 To iNbFields
+									Set vInputField = .Fields(i)
+									Set vOutputField = oOutput.Fields(i)
 									If vFieldBinary(i) Then
-										lInputSize = vInputFields(i).FieldSize
+										lInputSize = vInputField.FieldSize
 										If lInputSize &lt;= cstMaxBinlength Then
 											vField =  Utils._getResultSetColumnValue(.RowSet, i + 1, True)
 											Utils._updateResultSetColumnValue(iRDBMS, oOutput.RowSet, i + 1, vField)
 										ElseIf oDatabase._BinaryStream Then
 											&apos;	Typically for SQLite where binary fields are limited
-											If lInputSize &gt; vOutputFields(i).Column.Precision Then
-												TraceError(TRACEWARNING, ERRPRECISION, Utils._CalledSub(), 0, 1, Array(vOutputFields(i)._Name, lInputRecs + 1))
+											If lInputSize &gt; vOutputField.Column.Precision Then
+												TraceError(TRACEWARNING, ERRPRECISION, Utils._CalledSub(), 0, 1, Array(vOutputField._Name, lInputRecs + 1))
 												Utils._updateResultSetColumnValue(iRDBMS, oOutput.RowSet, i + 1, Null)
 											Else
 												sFile = Utils._GetRandomFileName(&quot;BINARY&quot;)
-												vInputFields(i)._WriteAll(sFile, &quot;WriteAllBytes&quot;)
-												vOutputFields(i)._ReadAll(sFile, &quot;ReadAllBytes&quot;)
+												vInputField._WriteAll(sFile, &quot;WriteAllBytes&quot;)
+												vOutputField._ReadAll(sFile, &quot;ReadAllBytes&quot;)
 												Kill ConvertToUrl(sFile)
 											End If
 										End If
