@@ -48,7 +48,9 @@ $(eval $(call gb_Library_use_libraries,comphelper,\
     cppuhelper \
     sal \
     salhelper \
+    tl \
     ucbhelper \
+    utl \
 	i18nlangtag \
 	$(gb_UWINAPI) \
 ))
@@ -126,6 +128,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/weak \
     comphelper/source/misc/weakeventlistener \
     comphelper/source/officeinstdir/officeinstallationdirectories \
+    comphelper/source/package/ZipPackageHelper \
     comphelper/source/processfactory/processfactory \
     comphelper/source/property/ChainablePropertySet \
     comphelper/source/property/ChainablePropertySetInfo \
