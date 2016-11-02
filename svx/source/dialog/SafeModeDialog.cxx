@@ -17,8 +17,11 @@
 #include <vcl/layout.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
+#include <unotools/ZipPackageHelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/configmgr.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
@@ -79,14 +82,15 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
 
     get(mpBugLink, "linkbutton_bugs");
     get(mpUserProfileLink, "linkbutton_profile");
+    get(mpBtnCreateZip, "btn_create_zip");
 
     mpRadioRestore->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
     mpRadioConfigure->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
     mpRadioReset->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
 
-    mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
-    mpBtnQuit->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
-    mpBtnRestart->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
+    mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
+    mpBtnQuit->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
+    mpBtnRestart->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
 
     mpCBCheckProfilesafeConfig->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBCheckProfilesafeExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
@@ -96,6 +100,8 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpCBDisableHWAcceleration->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetCustomizations->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetWholeUserProfile->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+
+    mpBtnCreateZip->SetClickHdl(LINK(this, SafeModeDialog, CreateZipBtnHdl));
 
     // Disable restart btn until some checkbox is active
     mpBtnRestart->Disable();
@@ -174,6 +180,7 @@ void SafeModeDialog::dispose()
 
     mpBugLink.clear();
     mpUserProfileLink.clear();
+    mpBtnCreateZip.clear();
 
     Dialog::dispose();
 }
@@ -276,7 +283,7 @@ IMPL_LINK(SafeModeDialog, RadioBtnHdl, Button*, pBtn, void)
     }
 }
 
-IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
+IMPL_LINK(SafeModeDialog, DialogBtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnContinue.get())
     {
@@ -292,6 +299,56 @@ IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
         Close();
         applyChanges();
     }
+}
+
+namespace {
+    class ProfileExportedDialog : public ModalDialog
+    {
+    private:
+        DECL_LINK(OpenHdl, Button*, void);
+    public:
+        explicit ProfileExportedDialog();
+    };
+
+    ProfileExportedDialog::ProfileExportedDialog()
+        : ModalDialog(nullptr, "SafeModeQueryDialog", "svx/ui/profileexporteddialog.ui")
+    {
+        get<Button>("openfolder")->SetClickHdl(LINK(this, ProfileExportedDialog, OpenHdl));
+    }
+
+    IMPL_LINK_NOARG(ProfileExportedDialog, OpenHdl, Button*, void)
+    {
+        const OUString uri(comphelper::BackupFileHelper::getUserProfileURL());
+        css::uno::Reference< css::system::XSystemShellExecute > exec(
+        css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
+        try {
+            exec->execute(uri, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
+        } catch (css::uno::Exception) {
+        }
+        EndDialog(RET_OK);
+    }
+}
+
+IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, Button*, /*pBtn*/, void)
+{
+    const OUString zipFileName("libreoffice-profile.zip");
+    const OUString zipFileURL(comphelper::BackupFileHelper::getUserProfileURL() + "/" + zipFileName);
+    osl::File::remove(zipFileURL); // Remove previous exports
+    try
+    {
+        utl::ZipPackageHelper aZipHelper(comphelper::getProcessComponentContext(), zipFileURL);
+        aZipHelper.addFolderWithContent(aZipHelper.getRootFolder(), comphelper::BackupFileHelper::getUserProfileWorkURL());
+        aZipHelper.savePackage();
+    }
+    catch (uno::Exception)
+    {
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, SVX_RESSTR(RID_SVXSTR_SAFEMODE_ZIP_FAILURE));
+        aErrorBox->Execute();
+        return;
+    }
+
+    ScopedVclPtrInstance< ProfileExportedDialog > aDialog;
+    aDialog->Execute();
 }
 
 IMPL_LINK(SafeModeDialog, CheckBoxHdl, CheckBox&, /*pCheckBox*/, void)
