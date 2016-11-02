@@ -423,7 +423,7 @@ public:
     void startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
                    GdkDragAction sourceActions, GtkTargetList* pTargetList);
 
-    static void closePopup();
+    void closePopup();
 
 #endif
     virtual ~GtkSalFrame() override;

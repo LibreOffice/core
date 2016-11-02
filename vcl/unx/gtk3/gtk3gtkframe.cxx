@@ -2557,6 +2557,8 @@ void GtkSalFrame::closePopup()
     ImplSVData* pSVData = ImplGetSVData();
     if (!pSVData->maWinData.mpFirstFloat)
         return;
+    if (pSVData->maWinData.mpFirstFloat->ImplGetFrame() != this)
+        return;
     pSVData->maWinData.mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
 }
 
@@ -2597,7 +2599,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     {
         bool bClosePopups = (pEvent->window != widget_get_window(pThis->getMouseEventWidget()));
         if (bClosePopups)
-            closePopup();
+            pThis->closePopup();
     }
 
     // --- RTL --- (mirror mouse pos)
@@ -3143,7 +3145,7 @@ gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer 
         !(pThis->m_nState & GDK_WINDOW_STATE_WITHDRAWN))
     {
         if (pThis->isFloatGrabWindow())
-            closePopup();
+            pThis->closePopup();
     }
 
     pThis->m_nState = pEvent->window_state.new_window_state;
