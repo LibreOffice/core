@@ -17,6 +17,7 @@ REM ----------------------------------------------------------------------------
 Private	_Type					As String				&apos;	Must be RECORDSET
 Private _Name					As String				&apos;	Unique, generated
 Private _This					As Object
+Private _Fields()				As Variant
 Private _ParentName				As String
 Private _ParentType				As String
 Private _ParentDatabase			As Object
@@ -51,6 +52,7 @@ Private Sub Class_Initialize()
 	_Type = OBJRECORDSET
 	_Name = &quot;&quot;
 	Set _This = Nothing
+	_Fields = Array()
 	_ParentName = &quot;&quot;
 	Set _ParentDatabase = Nothing
 	_ParentType = &quot;&quot;
@@ -371,6 +373,7 @@ Public Function mClose(ByVal Optional pbRemove As Boolean) As Variant
 &apos;	If pbRemove = True, remove recordset from Recordsets collection
 
 Const cstThisSub = &quot;Recordset.Close&quot;
+Dim i As Integer
 
 	If _ErrorHandler() Then On Local Error Goto Exit_Function		&apos;	Do not stop execution
 	Utils._SetCalledSub(cstThisSub)
@@ -393,6 +396,13 @@ Const cstThisSub = &quot;Recordset.Close&quot;
 	_BookmarkBeforeNew = Null
 	_BookmarkLastModified = Null
 	_IsClone = False
+	For i = 0 To UBound(_Fields)
+		If Not IsNull(_Fields(i)) Then
+			_Fields(i).Dispose()
+			Set _Fields(i) = Nothing
+		End If
+	Next i
+	_Fields = Array()
 	Set RowSet = Nothing
 	If IsMissing(pbRemove) Then pbRemove = True
 	If pbRemove Then _ParentDatabase.RecordsetsColl.Remove(_Name)
@@ -486,42 +496,61 @@ Const cstThisSub = &quot;Recordset.Fields&quot;
 	End If
 			
 Dim sObjects() As String, sObjectName As String, oObject As Object
-Dim i As Integer, bFound As Boolean, oFields As Object
+Dim i As Integer, oFields As Object, iIndex As Integer
+
+	&apos;	No argument, return a collection
+	If IsMissing(pvIndex) Then
+		Set oObject = New Collect
+		oObject._CollType = COLLFIELDS
+		oObject._ParentType = OBJRECORDSET
+		oObject._ParentName = _Name
+		Set oObject._ParentDatabase = _ParentDatabase
+		oObject._Count = RowSet.getColumns().Count
+		Goto Exit_Function
+	End If
 
 	Set oFields = RowSet.getColumns()
 	sObjects = oFields.ElementNames()
-	Select Case True
-		Case IsMissing(pvIndex)
-			Set oObject = New Collect
-			oObject._CollType = COLLFIELDS
-			oObject._ParentType = OBJRECORDSET
-			oObject._ParentName = _Name
-			Set oObject._ParentDatabase = _ParentDatabase
-			oObject._Count = UBound(sObjects) + 1
-			Goto Exit_Function
-		Case VarType(pvIndex) = vbString
-			bFound = False
-		&apos;	Check existence of object and find its exact (case-sensitive) name
-			For i = 0 To UBound(sObjects)
-				If UCase(pvIndex) = UCase(sObjects(i)) Then
-					sObjectName = sObjects(i)
-					bFound = True
-					Exit For
-				End If
-			Next i
-			If Not bFound Then Goto Trace_NotFound
-		Case Else		&apos;	pvIndex is numeric
-			If pvIndex &lt; 0 Or pvIndex &gt; UBound(sObjects) Then Goto Trace_IndexError
-			sObjectName = sObjects(pvIndex)
-	End Select
 
-	Set oObject = New Field
-	oObject._Name = sObjectName
-	Set oObject.Column = oFields.getByName(sObjectName)
-	oObject._ParentName = _Name
-	oObject._ParentType = _Type
-	Set oObject._ParentDatabase = _ParentDatabase
-	Set oObject._ParentRecordset = _This
+	&apos;	Argument is the field name
+	If VarType(pvIndex) = vbString Then
+		iIndex = -1
+		&apos;	Check existence of object and find its exact (case-sensitive) name
+		For i = 0 To UBound(sObjects)
+			If UCase(pvIndex) = UCase(sObjects(i)) Then
+				sObjectName = sObjects(i)
+				iIndex = i
+				Exit For
+			End If
+		Next i
+		If iIndex &lt; 0 Then Goto Trace_NotFound
+	&apos;	Argument is numeric
+	Else
+		If pvIndex &lt; 0 Or pvIndex &gt; UBound(sObjects) Then Goto Trace_IndexError
+		sObjectName = sObjects(pvIndex)
+		iIndex = pvIndex
+	End If
+
+	&apos;	Check if field object already buffered in _Fields() array
+	If UBound(_Fields) &lt; 0 Then		&apos;	Initialize _Fields
+		ReDim _Fields(0 To UBound(sObjects))
+		For i = 0 To UBound(sObjects)
+			Set _Fields(i) = Nothing
+		Next i
+	End If
+	If Not IsNull(_Fields(iIndex)) Then
+		Set oObject = _Fields(iIndex)
+	&apos;	Otherwise create new field object
+	Else
+		Set oObject = New Field
+		oObject._Name = sObjectName
+		Set oObject.Column = oFields.getByName(sObjectName)
+		oObject._ParentName = _Name
+		oObject._ParentType = _Type
+		Set oObject._ParentDatabase = _ParentDatabase
+		Set oObject._ParentRecordset = _This
+		Set _Fields(iIndex) = oObject
+	End If
 
 Exit_Function:
 	Set Fields = oObject
