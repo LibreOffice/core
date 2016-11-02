@@ -61,6 +61,7 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 	zlib \
 	lcms2 \
 	libxml2 \
+	icu_headers \
 	icui18n \
 	icuuc \
 ))
