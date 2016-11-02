@@ -58,7 +58,6 @@ class SwLanguageIterator
     const SfxPoolItem*  pCurItem;
     size_t              nAttrPos;
     sal_Int32           nChgPos;
-    sal_uInt16          nWhichId;
 
     void AddToStack( const SwTextAttr& rAttr );
     void SearchNextChg();

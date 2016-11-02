@@ -156,7 +156,6 @@ BiffInputStream::BiffInputStream( BinaryInputStream& rInStream ) :
     maRecBuffer( rInStream ),
     mnRecHandle( -1 ),
     mnRecId( BIFF_ID_UNKNOWN ),
-    mnAltContId( BIFF_ID_UNKNOWN ),
     mnCurrRecSize( 0 ),
     mnComplRecSize( 0 ),
     mbHasComplRec( false )
@@ -319,7 +318,6 @@ void BiffInputStream::setupRecord()
     // initialize class members
     mnRecHandle = maRecBuffer.getRecHeaderPos();
     mnRecId = maRecBuffer.getRecId();
-    mnAltContId = BIFF_ID_UNKNOWN;
     mnCurrRecSize = mnComplRecSize = maRecBuffer.getRecSize();
     mbHasComplRec = false;
     mbEof = !isInRecord();
@@ -347,9 +345,9 @@ void BiffInputStream::rewindToRecord( sal_Int64 nRecHandle )
     }
 }
 
-bool BiffInputStream::isContinueId( sal_uInt16 nRecId ) const
+bool BiffInputStream::isContinueId( sal_uInt16 nRecId )
 {
-    return (nRecId == BIFF_ID_CONT) || (nRecId == mnAltContId);
+    return (nRecId == BIFF_ID_CONT) || (nRecId == BIFF_ID_UNKNOWN);
 }
 
 bool BiffInputStream::jumpToNextContinue()

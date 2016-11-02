@@ -239,7 +239,6 @@ struct ImplSVHelpData
     bool                    mbQuickHelp = false;            // is QuickHelp enabled
     bool                    mbSetKeyboardHelp = false;      // tiphelp was activated by keyboard
     bool                    mbKeyboardHelp = false;         // tiphelp was activated by keyboard
-    bool                    mbAutoHelpId = true;            // generate HelpIds
     bool                    mbRequestingHelp = false;       // In Window::RequestHelp
     VclPtr<HelpTextWindow>  mpHelpWin;                      // HelpWindow
     sal_uInt64              mnLastHelpHideTime = 0;         // ticks of last show

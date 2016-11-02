@@ -768,7 +768,6 @@ bool Outliner::Expand( Paragraph* pPara )
         {
             UndoActionStart( OLUNDO_EXPAND );
             pUndo = new OLUndoExpand( this, OLUNDO_EXPAND );
-            pUndo->pParas = nullptr;
             pUndo->nCount = pParaList->GetAbsPos( pPara );
         }
         pParaList->Expand( pPara );
@@ -796,7 +795,6 @@ bool Outliner::Collapse( Paragraph* pPara )
         {
             UndoActionStart( OLUNDO_COLLAPSE );
             pUndo = new OLUndoExpand( this, OLUNDO_COLLAPSE );
-            pUndo->pParas = nullptr;
             pUndo->nCount = pParaList->GetAbsPos( pPara );
         }
 

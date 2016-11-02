@@ -192,7 +192,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         return pNd;
     }
 
-    SbiToken eTok = (pKeywordSymbolInfo == nullptr) ? pParser->Next() : pKeywordSymbolInfo->m_eTok;
+    SbiToken eTok = (pKeywordSymbolInfo == nullptr) ? pParser->Next() : SYMBOL;
     // memorize the parsing's begin
     pParser->LockColumn();
     OUString aSym( (pKeywordSymbolInfo == nullptr) ? pParser->GetSym() : pKeywordSymbolInfo->m_aKeywordSymbol );

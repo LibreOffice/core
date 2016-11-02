@@ -167,7 +167,6 @@ struct PCSharedItemsModel
     bool                mbIsNumeric;        /// True = has numeric item(s), maybe other types except date.
     bool                mbIsInteger;        /// True = has numeric item(s) with only integers, maybe other types except date.
     bool                mbHasLongText;      /// True = contains strings with >255 characters.
-    bool                mbHasLongIndexes;   /// True = indexes to shared items are 16-bit (BIFF only).
 
     explicit            PCSharedItemsModel();
 };
@@ -334,7 +333,6 @@ struct PCDefinitionModel
     double              mfRefreshedDate;    /// Date/time of last refresh.
     sal_Int32           mnRecords;          /// Number of data records in the cache.
     sal_Int32           mnMissItemsLimit;   /// Limit for discarding unused items.
-    sal_uInt16          mnDatabaseFields;   /// Number of database (source data) fields (BIFF only).
     bool                mbInvalid;          /// True = cache needs refresh.
     bool                mbSaveData;         /// True = cached item values are present.
     bool                mbRefreshOnLoad;    /// True = try to refresh cache on load.

@@ -33,7 +33,6 @@ private:
     Bool    mbUseable; // system supports current locale ?
     XIC     maContext;
 
-    XIMStyle mnSupportedStatusStyle;
     XIMStyle mnSupportedPreeditStyle;
     XIMStyle mnStatusStyle;
     XIMStyle mnPreeditStyle;

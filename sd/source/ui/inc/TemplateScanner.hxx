@@ -148,11 +148,7 @@ private:
     /** The data structure that is to be filled with information about the
         template files.
     */
-     std::vector<TemplateDir*> maFolderList;
-
-    /** Whether the template entries have to be sorted.
-    */
-    bool mbEntrySortingEnabled;
+    std::vector<TemplateDir*> maFolderList;
 
     /** This member points into the maFolderList to the member that was most
         recently added.

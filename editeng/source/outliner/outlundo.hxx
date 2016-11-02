@@ -113,7 +113,6 @@ public:
     virtual void Undo() override;
     virtual void Redo() override;
 
-    sal_uInt16* pParas;  // 0 == nCount contains paragraph number
     Outliner* pOutliner;
     sal_Int32 nCount;
 };

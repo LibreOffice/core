@@ -43,8 +43,6 @@ class SD_DLLPUBLIC SdDocPreviewWin : public Control, public SfxListener
 protected:
     GDIMetaFile*    pMetaFile;
     Link<SdDocPreviewWin&,void> aClickHdl;
-    SfxObjectShell* mpObj;
-    sal_uInt16      mnShowPage;
     Color           maDocumentColor;
     rtl::Reference< sd::SlideShow > mxSlideShow;
 

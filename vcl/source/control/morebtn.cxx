@@ -32,7 +32,6 @@ struct ImplMoreButtonData
 void MoreButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     mpMBData     = new ImplMoreButtonData;
-    meUnit       = MapUnit::MapPixel;
     mbState      = false;
 
     mpMBData->mpItemList = nullptr;
@@ -91,7 +90,7 @@ void MoreButton::Click()
 {
     vcl::Window*     pParent = GetParent();
     Size        aSize( pParent->GetSizePixel() );
-    long        nDeltaPixel = LogicToPixel( Size( 0, 0 ), meUnit ).Height();
+    long        nDeltaPixel = LogicToPixel( Size( 0, 0 ), MapUnit::MapPixel ).Height();
 
     // Change status
     mbState = !mbState;

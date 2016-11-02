@@ -36,8 +36,6 @@ using namespace ::comphelper;
 namespace
 {
 
-#define FORMAT_LONGCURRENCY      4
-
 BigInt ImplPower10( sal_uInt16 n )
 {
     sal_uInt16 i;
@@ -289,7 +287,6 @@ void LongCurrencyFormatter::ImpInit()
     mnMax              *= 0x7FFFFFFF;
     mnCorrectedValue    = 0;
     mnDecimalDigits     = 0;
-    mnType              = FORMAT_LONGCURRENCY;
     mbThousandSep       = true;
     SetDecimalDigits( 0 );
 }
