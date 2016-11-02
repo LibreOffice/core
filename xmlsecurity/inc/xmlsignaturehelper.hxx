@@ -91,6 +91,12 @@ class XMLSECURITY_DLLPUBLIC XMLSignatureHelper
 {
 private:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
+    // FIXME: This field appears to be unused (it is only assigned to in the XMLSignatureHelper
+    // constructor), but it can't be removed as it is that very assignment which causes the object
+    // it to be acquired, and otherwise its reference counting will be borked and we get a
+    // crash. This is stupid of course. Probably we should just kill the separate XSecController
+    // class and move its contents inside this class. Nothing else uses XSecController anyway, as
+    // far as I see.
     css::uno::Reference< css::xml::crypto::sax::XSecurityController > mxSecurityController;
     css::uno::Reference< css::xml::crypto::XUriBinding > mxUriBinding;
 
