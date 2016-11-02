@@ -31,8 +31,8 @@ namespace CPPU_CURRENT_NAMESPACE {
 void callVirtualMethod(
     void * pThis, sal_uInt32 nVtableIndex, void * pRegisterReturn,
     typelib_TypeDescriptionReference * pReturnTypeRef, bool bSimpleReturn,
-    sal_uInt64 *pStack, sal_uInt32 nStack, sal_uInt64 *pGPR, sal_uInt32 nGPR,
-    double * pFPR, sal_uInt32 nFPR);
+    sal_uInt64 *pStack, sal_uInt32 nStack, sal_uInt64 *pGPR, double * pFPR,
+    sal_uInt32 nFPR);
 
 }
 
