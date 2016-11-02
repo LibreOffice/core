@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SFX2_SIGNATURESTATE_HXX
 #define INCLUDED_SFX2_SIGNATURESTATE_HXX
 
-// xmlsec05, check with SFX team
 enum class SignatureState
 {
+    // FIXME: Do these values have to be these, and given at all, or is this just cargo cult?
     UNKNOWN       = 0xffff, // used to be -1 when this was a sal_uInt16
     NOSIGNATURES  = 0,
     OK            = 1,
