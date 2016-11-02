@@ -17,6 +17,7 @@
 #include <vcl/layout.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
+#include <unotools/ZipPackageHelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -79,14 +80,15 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
 
     get(mpBugLink, "linkbutton_bugs");
     get(mpUserProfileLink, "linkbutton_profile");
+    get(mpBtnCreateZip, "btn_create_zip");
 
     mpRadioRestore->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
     mpRadioConfigure->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
     mpRadioReset->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
 
-    mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
-    mpBtnQuit->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
-    mpBtnRestart->SetClickHdl(LINK(this, SafeModeDialog, BtnHdl));
+    mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
+    mpBtnQuit->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
+    mpBtnRestart->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
 
     mpCBCheckProfilesafeConfig->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBCheckProfilesafeExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
@@ -96,6 +98,8 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpCBDisableHWAcceleration->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetCustomizations->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetWholeUserProfile->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+
+    mpBtnCreateZip->SetClickHdl(LINK(this, SafeModeDialog, CreateZipBtnHdl));
 
     // Disable restart btn until some checkbox is active
     mpBtnRestart->Disable();
@@ -276,7 +280,7 @@ IMPL_LINK(SafeModeDialog, RadioBtnHdl, Button*, pBtn, void)
     }
 }
 
-IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
+IMPL_LINK(SafeModeDialog, DialogBtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnContinue.get())
     {
@@ -292,6 +296,13 @@ IMPL_LINK(SafeModeDialog, BtnHdl, Button*, pBtn, void)
         Close();
         applyChanges();
     }
+}
+
+IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, Button*, /*pBtn*/, void)
+{
+    utl::ZipPackageHelper aZipHelper(comphelper::getProcessComponentContext(),
+        "~/tmp/pack.zip");
+    aZipHelper.savePackage();
 }
 
 IMPL_LINK(SafeModeDialog, CheckBoxHdl, CheckBox&, /*pCheckBox*/, void)
