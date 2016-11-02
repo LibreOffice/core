@@ -29,8 +29,8 @@
 #include <osl/diagnose.h>
 #include <oox/core/filterbase.hxx>
 #include <oox/token/properties.hxx>
+#include <oox/helper/binaryinputstream.hxx>
 #include "addressconverter.hxx"
-#include "biffinputstream.hxx"
 #include "defnamesbuffer.hxx"
 #include "externallinkbuffer.hxx"
 #include "tablebuffer.hxx"

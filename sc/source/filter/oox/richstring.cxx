@@ -23,10 +23,10 @@
 #include <com/sun/star/text/XText.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <editeng/editobj.hxx>
+#include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/tokens.hxx>
-#include "biffinputstream.hxx"
 #include "editutil.hxx"
 
 #include <vcl/svapp.hxx>

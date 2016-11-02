@@ -18,8 +18,6 @@
  */
 
 #include "pivottablefragment.hxx"
-
-#include "biffinputstream.hxx"
 #include "pivottablebuffer.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

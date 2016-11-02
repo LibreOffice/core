@@ -20,7 +20,6 @@
 #include "excelhandlers.hxx"
 
 #include <oox/core/filterbase.hxx>
-#include "biffinputstream.hxx"
 
 namespace oox {
 namespace xls {
@@ -38,11 +37,6 @@ WorkbookFragmentBase::WorkbookFragmentBase(
 WorksheetFragmentBase::WorksheetFragmentBase(
         const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
-    WorksheetHelper( rHelper )
-{
-}
-
-BiffWorksheetContextBase::BiffWorksheetContextBase( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
 {
 }

@@ -28,7 +28,6 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
-#include "biffinputstream.hxx"
 #include "formulaparser.hxx"
 #include "richstringcontext.hxx"
 #include "unitconverter.hxx"
