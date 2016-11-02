@@ -11,6 +11,7 @@ $(eval $(call gb_Executable_Executable,xpdfimport))
 
 $(eval $(call gb_Executable_use_externals,xpdfimport,\
     boost_headers \
+    jpeg \
     poppler \
     $(if $(filter-out WNT MACOSX,$(OS)),fontconfig) \
     zlib \
