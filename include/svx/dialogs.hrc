@@ -1098,8 +1098,11 @@
 #define RID_SVXSTR_ZOOM_PAGE_WIDTH       (RID_SVX_START + 1389)
 #define RID_SVXSTR_ZOOM_OPTIMAL_VIEW     (RID_SVX_START + 1390)
 
+// Strings for SafeModeDialog
+#define RID_SVXSTR_SAFEMODE_ZIP_FAILURE  (RID_SVX_START + 1391)
+
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
-#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1391)
+#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1392)
 
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be

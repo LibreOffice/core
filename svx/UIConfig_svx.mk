@@ -47,6 +47,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/optgridpage \
 	svx/uiconfig/ui/paralinespacingcontrol \
 	svx/uiconfig/ui/passwd \
+	svx/uiconfig/ui/profileexporteddialog \
 	svx/uiconfig/ui/querydeletecontourdialog \
 	svx/uiconfig/ui/querydeleteobjectdialog \
 	svx/uiconfig/ui/querydeletethemedialog \

@@ -2211,6 +2211,11 @@ namespace comphelper
         return maUserConfigBaseURL;
     }
 
+    const OUString& BackupFileHelper::getUserProfileWorkURL()
+    {
+        return maUserConfigWorkURL;
+    }
+
     /////////////////// helpers ///////////////////////
 
     const rtl::OUString BackupFileHelper::getPackURL()

@@ -354,8 +354,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">You can also include the relevant parts of your User Profile. Beware that it might contain personal data.
-Your User Profile is located at:</property>
+                    <property name="label" translatable="yes">You can also include the relevant parts of your User Profile. Beware that it might contain personal data.</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -365,17 +364,42 @@ Your User Profile is located at:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLinkButton" id="linkbutton_profile">
-                    <property name="label" translatable="yes">Show User Profile</property>
+                  <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="relief">none</property>
+                    <property name="can_focus">False</property>
+                    <property name="homogeneous">True</property>
+                    <child>
+                      <object class="GtkButton" id="btn_create_zip">
+                        <property name="label" translatable="yes">Create zip archive from User Profile</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLinkButton" id="linkbutton_profile">
+                        <property name="label" translatable="yes">Show User Profile</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="relief">none</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
               </object>
