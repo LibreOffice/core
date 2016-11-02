@@ -305,7 +305,7 @@ bool UnusedFields::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     return true;
 }
 
-loplugin::Plugin::Registration< UnusedFields > X("unusedfields", false);
+loplugin::Plugin::Registration< UnusedFields > X("unusedfields", true);
 
 }
 

@@ -1152,8 +1152,7 @@ void ColorLB::Modify( const XColorEntry& rEntry, sal_Int32 nPos )
 // Fills the listbox (provisional) with strings
 
 HatchingLB::HatchingLB( vcl::Window* pParent, WinBits nWinStyle)
-: ListBox( pParent, nWinStyle ),
-  mpList ( nullptr )
+: ListBox( pParent, nWinStyle )
 {
     SetEdgeBlending(true);
 }
@@ -1193,8 +1192,7 @@ void FillAttrLB::Fill( const XHatchListRef &pList )
 // Fills the listbox (provisional) with strings
 
 GradientLB::GradientLB( vcl::Window* pParent, WinBits aWB)
-: ListBox( pParent, aWB ),
-  mpList(nullptr)
+: ListBox( pParent, aWB )
 {
     SetEdgeBlending(true);
 }
@@ -1234,9 +1232,7 @@ void FillAttrLB::Fill( const XGradientListRef &pList )
 // BitmapLB Constructor
 
 BitmapLB::BitmapLB( vcl::Window* pParent, WinBits aWB)
-:   ListBox( pParent, aWB ),
-    maBitmapEx(),
-    mpList(nullptr)
+:   ListBox( pParent, aWB )
 {
     SetEdgeBlending(true);
 }

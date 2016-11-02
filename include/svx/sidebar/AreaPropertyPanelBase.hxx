@@ -154,8 +154,6 @@ protected:
     std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
     std::unique_ptr< SfxUInt16Item >                mpTransparanceItem;
 
-    css::uno::Reference<css::frame::XFrame>                 mxFrame;
-
     DECL_LINK(SelectFillTypeHdl, ListBox&, void );
     DECL_LINK(SelectFillAttrHdl, ListBox&, void );
     DECL_LINK(ChangeGradientAngle, Edit&, void);
