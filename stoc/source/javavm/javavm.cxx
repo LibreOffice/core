@@ -539,7 +539,7 @@ void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
 void initVMConfiguration(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
-    const css::uno::Reference<css::uno::XComponentContext > &xCtx) throw(css::uno::Exception)
+    const css::uno::Reference<css::uno::XComponentContext > &xCtx) throw(css::uno::Exception, std::exception)
 {
     stoc_javavm::JVM jvm;
     try {
