@@ -166,14 +166,7 @@ TreeListBox::TreeListBox (vcl::Window* pParent, WinBits nStyle)
     nMode = 0xFF;   // everything
 }
 
-VCL_BUILDER_DECL_FACTORY(TreeListBox)
-{
-    WinBits nWinBits = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-    rRet = VclPtr<TreeListBox>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(TreeListBox, WB_TABSTOP)
 
 TreeListBox::~TreeListBox ()
 {

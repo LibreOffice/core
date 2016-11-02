@@ -33,14 +33,7 @@ SeriesListBox::SeriesListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
 {}
 
-VCL_BUILDER_DECL_FACTORY(SeriesListBox)
-{
-    WinBits nWinStyle = 0;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SeriesListBox>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SeriesListBox, 0)
 
 SvTreeListEntry* SeriesListBox::CreateEntry() const
 {
