@@ -1,7 +1,7 @@
 MSVC: using SOLARINC and EXCFLAGS
 
---- curl/lib/Makefile.vc10	2012-05-24 12:07:02.000000000 -0400
-+++ curl/lib/Makefile.vc10	2012-10-29 11:53:44.658809300 -0400
+--- curl/lib/Makefile.vc12	2012-05-24 12:07:02.000000000 -0400
++++ curl/lib/Makefile.vc12	2012-10-29 11:53:44.658809300 -0400
 @@ -117,7 +117,7 @@
  ZLIBLIBSDLL  = zdll.lib
  ZLIBLIBS     = zlib.lib
@@ -11,6 +11,14 @@ MSVC: using SOLARINC and EXCFLAGS
  
  CFGSET       = FALSE
  
+@@ -632,7 +632,6 @@
+ 	$(DIROBJ)\vtls.obj \
+ 	$(DIROBJ)\openssl.obj \
+ 	$(DIROBJ)\strdup.obj \
+-	$(DIROBJ)\strequal.obj \
+ 	$(DIROBJ)\strerror.obj \
+ 	$(DIROBJ)\strtok.obj \
+ 	$(DIROBJ)\strtoofft.obj \
 @@ -620,11 +620,11 @@
  debug-dll-ssl-dll\libcurl.res \
  debug-dll-zlib-dll\libcurl.res \
