@@ -1257,13 +1257,19 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 {
                     nFirstAdjustmentValue = aHandle.nRefX;
                     fPos1 *= 100000.0;
-                    fPos1 /= nCoordWidth;
+                    if ( nCoordWidth )
+                        fPos1 /= nCoordWidth ;
+                    else if ( aLogicRect.GetWidth() )
+                        fPos1 /= aLogicRect.GetWidth() ;
                 }
                 if ( aHandle.nFlags & HandleFlags::REFY )
                 {
                     nSecondAdjustmentValue = aHandle.nRefY;
                     fPos2 *= 100000.0;
-                    fPos2 /= nCoordHeight;
+                    if ( nCoordHeight )
+                        fPos2 /= nCoordHeight ;
+                    else if ( aLogicRect.GetHeight() )
+                        fPos2 /= aLogicRect.GetHeight() ;
                 }
                 if ( nFirstAdjustmentValue >= 0 )
                 {
