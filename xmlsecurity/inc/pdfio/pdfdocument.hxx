@@ -45,7 +45,40 @@ enum class TokenizeMode
     /// Till the first %%EOF token.
     EOF_TOKEN,
     /// Till the end of the current object.
-    END_OF_OBJECT
+    END_OF_OBJECT,
+    /// Same as END_OF_OBJECT, but for object streams (no endobj keyword).
+    STORED_OBJECT
+};
+
+/// The type column of an entry in a cross-reference stream.
+enum class XRefEntryType
+{
+    /// xref "n" or xref stream "1".
+    NOT_COMPRESSED,
+    /// xref stream "2.
+    COMPRESSED
+};
+
+/// An entry in a cross-reference stream.
+struct XRefEntry
+{
+    XRefEntryType m_eType;
+    /**
+     * Non-compressed: The byte offset of the object, starting from the
+     * beginning of the file.
+     * Compressed: The object number of the object stream in which this object is
+     * stored.
+     */
+    sal_uInt64 m_nOffset;
+    /**
+     * Non-compressed: The generation number of the object.
+     * Compressed: The index of this object within the object stream.
+     */
+    sal_uInt64 m_nGenerationNumber;
+    /// Are changed as part of an incremental update?.
+    bool m_bDirty;
+
+    XRefEntry();
 };
 
 /**
@@ -60,9 +93,7 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     /// This vector owns all elements.
     std::vector< std::unique_ptr<PDFElement> > m_aElements;
     /// Object ID <-> object offset map.
-    std::map<size_t, size_t> m_aXRef;
-    /// Object ID <-> "are changed as part of an incremental update?" map.
-    std::map<size_t, bool> m_aXRefDirty;
+    std::map<size_t, XRefEntry> m_aXRef;
     /// Object offset <-> Object pointer map.
     std::map<size_t, PDFObjectElement*> m_aOffsetObjects;
     /// Object ID <-> Object pointer map.
@@ -80,8 +111,6 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     static int AsHex(char ch);
     /// Decode a hex dump.
     static std::vector<unsigned char> DecodeHexString(PDFHexStringElement* pElement);
-    /// Tokenize elements from current offset.
-    bool Tokenize(SvStream& rStream, TokenizeMode eMode);
 
 public:
     PDFDocument();
@@ -99,7 +128,14 @@ public:
     std::vector<PDFObjectElement*> GetPages();
     /// Remember the end location of an EOF token.
     void PushBackEOF(size_t nOffset);
-    const std::map<size_t, PDFObjectElement*>& GetIDObjects() const;
+    /// Look up object based on object number, possibly by parsing object streams.
+    PDFObjectElement* LookupObject(size_t nObjectNumber);
+    /// Access to the input document, even after the inpust ream is gone.
+    SvMemoryStream& GetEditBuffer();
+    /// Tokenize elements from current offset.
+    bool Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< std::unique_ptr<PDFElement> >& rElements, PDFObjectElement* pObject);
+    /// Register an object (owned directly or indirectly by m_aElements) as a provder for a given ID.
+    void SetIDObject(size_t nID, PDFObjectElement* pObject);
 
     /// Read elements from the start of the stream till its end.
     bool Read(SvStream& rStream);

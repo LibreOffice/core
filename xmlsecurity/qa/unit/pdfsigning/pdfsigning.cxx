@@ -57,6 +57,8 @@ public:
     void testPDFRemoveAll();
     /// Test a PDF 1.4 document, signed by Adobe.
     void testPDF14Adobe();
+    /// Test a PDF 1.6 document, signed by Adobe.
+    void testPDF16Adobe();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
@@ -64,6 +66,7 @@ public:
     CPPUNIT_TEST(testPDFRemove);
     CPPUNIT_TEST(testPDFRemoveAll);
     CPPUNIT_TEST(testPDF14Adobe);
+    CPPUNIT_TEST(testPDF16Adobe);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -251,6 +254,17 @@ void PDFSigningTest::testPDF14Adobe()
     std::vector<SignatureInformation> aInfos = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14adobe.pdf", 2);
     // This was 0, out-of-PKCS#7 signature date wasn't read.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2016), aInfos[1].stDateTime.Year);
+#endif
+}
+
+void PDFSigningTest::testPDF16Adobe()
+{
+#ifndef _WIN32
+    // Contains a cross-reference stream, object streams and a compressed
+    // stream with a predictor. And a valid signature.
+    // Found signatures was 0, as parsing failed due to lack of support for
+    // these features.
+    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf16adobe.pdf", 1);
 #endif
 }
 

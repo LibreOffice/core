@@ -78,6 +78,7 @@ public:
 class PDFReferenceElement;
 class PDFDictionaryElement;
 class PDFArrayElement;
+class PDFStreamElement;
 
 /// Indirect object: something with a unique ID.
 class PDFObjectElement : public PDFElement
@@ -93,6 +94,12 @@ class PDFObjectElement : public PDFElement
     PDFDictionaryElement* m_pDictionaryElement;
     /// The contained direct array, if any.
     PDFArrayElement* m_pArrayElement;
+    /// The stream of this object, used when this is an object stream.
+    PDFStreamElement* m_pStreamElement;
+    /// Objects of an object stream.
+    std::vector< std::unique_ptr<PDFObjectElement> > m_aStoredElements;
+    /// Elements of an object in an object stream.
+    std::vector< std::unique_ptr<PDFElement> > m_aElements;
 
 public:
     PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue);
@@ -107,7 +114,11 @@ public:
     PDFDictionaryElement* GetDictionary() const;
     void SetDictionary(PDFDictionaryElement* pDictionaryElement);
     void SetArray(PDFArrayElement* pArrayElement);
+    void SetStream(PDFStreamElement* pStreamElement);
     PDFArrayElement* GetArray() const;
+    /// Parse objects stored in this object stream.
+    void ParseStoredObjects();
+    std::vector< std::unique_ptr<PDFElement> >& GetStoredElements();
 };
 
 /// Dictionary object: a set key-value pairs.
@@ -175,7 +186,7 @@ public:
     /// Assuming the reference points to a number object, return its value.
     double LookupNumber(SvStream& rStream) const;
     /// Lookup referenced object, without assuming anything about its contents.
-    PDFObjectElement* LookupObject() const;
+    PDFObjectElement* LookupObject();
     int GetObjectValue() const;
     int GetGenerationValue() const;
 };
@@ -275,6 +286,14 @@ public:
     PDFElement* Lookup(const OString& rDictionaryKey);
 };
 
+XRefEntry::XRefEntry()
+    : m_eType(XRefEntryType::NOT_COMPRESSED),
+      m_nOffset(0),
+      m_nGenerationNumber(0),
+      m_bDirty(false)
+{
+}
+
 PDFDocument::PDFDocument()
     : m_pTrailer(nullptr),
       m_pXRefStream(nullptr)
@@ -315,14 +334,15 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
 
     // Write signature object.
     sal_Int32 nSignatureId = m_aXRef.size();
-    sal_uInt64 nSignatureOffset = m_aEditBuffer.Tell();
-    m_aXRef[nSignatureId] = nSignatureOffset;
-    m_aXRefDirty[nSignatureId] = true;
+    XRefEntry aSignatureEntry;
+    aSignatureEntry.m_nOffset = m_aEditBuffer.Tell();
+    aSignatureEntry.m_bDirty = true;
+    m_aXRef[nSignatureId] = aSignatureEntry;
     OStringBuffer aSigBuffer;
     aSigBuffer.append(nSignatureId);
     aSigBuffer.append(" 0 obj\n");
     aSigBuffer.append("<</Contents <");
-    sal_Int64 nSignatureContentOffset = nSignatureOffset + aSigBuffer.getLength();
+    sal_Int64 nSignatureContentOffset = aSignatureEntry.m_nOffset + aSigBuffer.getLength();
     // Reserve space for the PKCS#7 object.
     const int MAX_SIGNATURE_CONTENT_LENGTH = 50000;
     OStringBuffer aContentFiller(MAX_SIGNATURE_CONTENT_LENGTH);
@@ -337,7 +357,7 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     aSigBuffer.append(" ");
     aSigBuffer.append(nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
     aSigBuffer.append(" ");
-    sal_uInt64 nSignatureLastByteRangeOffset = nSignatureOffset + aSigBuffer.getLength();
+    sal_uInt64 nSignatureLastByteRangeOffset = aSignatureEntry.m_nOffset + aSigBuffer.getLength();
     // We don't know how many bytes we need for the last ByteRange value, this
     // should be enough.
     OStringBuffer aByteRangeFiller;
@@ -358,8 +378,10 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
 
     // Write appearance object.
     sal_Int32 nAppearanceId = m_aXRef.size();
-    m_aXRef[nAppearanceId] = m_aEditBuffer.Tell();
-    m_aXRefDirty[nAppearanceId] = true;
+    XRefEntry aAppearanceEntry;
+    aAppearanceEntry.m_nOffset = m_aEditBuffer.Tell();
+    aAppearanceEntry.m_bDirty = true;
+    m_aXRef[nAppearanceId] = aAppearanceEntry;
     m_aEditBuffer.WriteUInt32AsString(nAppearanceId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<</Type/XObject\n/Subtype/Form\n");
@@ -368,8 +390,10 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
 
     // Write the Annot object, references nSignatureId and nAppearanceId.
     sal_Int32 nAnnotId = m_aXRef.size();
-    m_aXRef[nAnnotId] = m_aEditBuffer.Tell();
-    m_aXRefDirty[nAnnotId] = true;
+    XRefEntry aAnnotEntry;
+    aAnnotEntry.m_nOffset = m_aEditBuffer.Tell();
+    aAnnotEntry.m_bDirty = true;
+    m_aXRef[nAnnotId] = aAnnotEntry;
     m_aEditBuffer.WriteUInt32AsString(nAnnotId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<</Type/Annot/Subtype/Widget/F 132\n");
@@ -406,8 +430,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: invalid first page obj id");
         return false;
     }
-    m_aXRef[nFirstPageId] = m_aEditBuffer.Tell();
-    m_aXRefDirty[nFirstPageId] = true;
+    m_aXRef[nFirstPageId].m_nOffset = m_aEditBuffer.Tell();
+    m_aXRef[nFirstPageId].m_bDirty = true;
     m_aEditBuffer.WriteUInt32AsString(nFirstPageId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<<");
@@ -459,8 +483,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: invalid catalog obj id");
         return false;
     }
-    m_aXRef[nCatalogId] = m_aEditBuffer.Tell();
-    m_aXRefDirty[nCatalogId] = true;
+    m_aXRef[nCatalogId].m_nOffset = m_aEditBuffer.Tell();
+    m_aXRef[nCatalogId].m_bDirty = true;
     m_aEditBuffer.WriteUInt32AsString(nCatalogId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<<");
@@ -510,8 +534,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     for (const auto& rXRef : m_aXRef)
     {
         size_t nObject = rXRef.first;
-        size_t nOffset = rXRef.second;
-        if (!m_aXRefDirty[nObject])
+        size_t nOffset = rXRef.second.m_nOffset;
+        if (!rXRef.second.m_bDirty)
             continue;
 
         m_aEditBuffer.WriteUInt32AsString(nObject);
@@ -632,13 +656,13 @@ bool PDFDocument::Write(SvStream& rStream)
     return rStream.good();
 }
 
-bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
+bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< std::unique_ptr<PDFElement> >& rElements, PDFObjectElement* pObjectElement)
 {
+    // Last seen object token.
+    PDFObjectElement* pObject = pObjectElement;
     bool bInXRef = false;
     // The next number will be an xref offset.
     bool bInStartXRef = false;
-    // Last seen object token.
-    PDFObjectElement* pObject = nullptr;
     // Dictionary depth, so we know when we're outside any dictionaries.
     int nDictionaryDepth = 0;
     // Last seen array token that's outside any dictionaries.
@@ -655,9 +679,9 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
         case '%':
         {
             auto pComment = new PDFCommentElement(*this);
-            m_aElements.push_back(std::unique_ptr<PDFElement>(pComment));
+            rElements.push_back(std::unique_ptr<PDFElement>(pComment));
             rStream.SeekRel(-1);
-            if (!m_aElements.back()->Read(rStream))
+            if (!rElements.back()->Read(rStream))
                 return false;
             if (eMode == TokenizeMode::EOF_TOKEN && !m_aEOFs.empty() && m_aEOFs.back() == rStream.Tell())
             {
@@ -673,28 +697,28 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
             rStream.SeekRel(-2);
             if (ch == '<')
             {
-                m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFDictionaryElement()));
+                rElements.push_back(std::unique_ptr<PDFElement>(new PDFDictionaryElement()));
                 ++nDictionaryDepth;
             }
             else
-                m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFHexStringElement()));
-            if (!m_aElements.back()->Read(rStream))
+                rElements.push_back(std::unique_ptr<PDFElement>(new PDFHexStringElement()));
+            if (!rElements.back()->Read(rStream))
                 return false;
             break;
         }
         case '>':
         {
-            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFEndDictionaryElement()));
+            rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndDictionaryElement()));
             --nDictionaryDepth;
             rStream.SeekRel(-1);
-            if (!m_aElements.back()->Read(rStream))
+            if (!rElements.back()->Read(rStream))
                 return false;
             break;
         }
         case '[':
         {
             auto pArr = new PDFArrayElement();
-            m_aElements.push_back(std::unique_ptr<PDFElement>(pArr));
+            rElements.push_back(std::unique_ptr<PDFElement>(pArr));
             if (nDictionaryDepth == 0)
             {
                 // The array is attached directly, inform the object.
@@ -703,32 +727,32 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
                     pObject->SetArray(pArray);
             }
             rStream.SeekRel(-1);
-            if (!m_aElements.back()->Read(rStream))
+            if (!rElements.back()->Read(rStream))
                 return false;
             break;
         }
         case ']':
         {
-            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFEndArrayElement()));
+            rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndArrayElement()));
             pArray = nullptr;
             rStream.SeekRel(-1);
-            if (!m_aElements.back()->Read(rStream))
+            if (!rElements.back()->Read(rStream))
                 return false;
             break;
         }
         case '/':
         {
-            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFNameElement()));
+            rElements.push_back(std::unique_ptr<PDFElement>(new PDFNameElement()));
             rStream.SeekRel(-1);
-            if (!m_aElements.back()->Read(rStream))
+            if (!rElements.back()->Read(rStream))
                 return false;
             break;
         }
         case '(':
         {
-            m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFLiteralStringElement()));
+            rElements.push_back(std::unique_ptr<PDFElement>(new PDFLiteralStringElement()));
             rStream.SeekRel(-1);
-            if (!m_aElements.back()->Read(rStream))
+            if (!rElements.back()->Read(rStream))
                 return false;
             break;
         }
@@ -738,7 +762,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
             {
                 // Numbering object: an integer or a real.
                 PDFNumberElement* pNumberElement = new PDFNumberElement();
-                m_aElements.push_back(std::unique_ptr<PDFElement>(pNumberElement));
+                rElements.push_back(std::unique_ptr<PDFElement>(pNumberElement));
                 rStream.SeekRel(-1);
                 if (!pNumberElement->Read(rStream))
                     return false;
@@ -761,15 +785,15 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
                 bool bObj = aKeyword == "obj";
                 if (bObj || aKeyword == "R")
                 {
-                    size_t nElements = m_aElements.size();
+                    size_t nElements = rElements.size();
                     if (nElements < 2)
                     {
                         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: expected at least two tokens before 'obj' or 'R' keyword");
                         return false;
                     }
 
-                    auto pObjectNumber = dynamic_cast<PDFNumberElement*>(m_aElements[nElements - 2].get());
-                    auto pGenerationNumber = dynamic_cast<PDFNumberElement*>(m_aElements[nElements - 1].get());
+                    auto pObjectNumber = dynamic_cast<PDFNumberElement*>(rElements[nElements - 2].get());
+                    auto pGenerationNumber = dynamic_cast<PDFNumberElement*>(rElements[nElements - 1].get());
                     if (!pObjectNumber || !pGenerationNumber)
                     {
                         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: missing object or generation number before 'obj' or 'R' keyword");
@@ -779,34 +803,34 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
                     if (bObj)
                     {
                         pObject = new PDFObjectElement(*this, pObjectNumber->GetValue(), pGenerationNumber->GetValue());
-                        m_aElements.push_back(std::unique_ptr<PDFElement>(pObject));
+                        rElements.push_back(std::unique_ptr<PDFElement>(pObject));
                         m_aOffsetObjects[pObjectNumber->GetLocation()] = pObject;
                         m_aIDObjects[pObjectNumber->GetValue()] = pObject;
                     }
                     else
                     {
-                        m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFReferenceElement(*this, pObjectNumber->GetValue(), pGenerationNumber->GetValue())));
+                        rElements.push_back(std::unique_ptr<PDFElement>(new PDFReferenceElement(*this, pObjectNumber->GetValue(), pGenerationNumber->GetValue())));
                         if (pArray)
                             // Reference is part of a direct (non-dictionary) array, inform the array.
-                            pArray->PushBack(m_aElements.back().get());
+                            pArray->PushBack(rElements.back().get());
                     }
-                    if (!m_aElements.back()->Read(rStream))
+                    if (!rElements.back()->Read(rStream))
                         return false;
                 }
                 else if (aKeyword == "stream")
                 {
                     // Look up the length of the stream from the parent object's dictionary.
                     size_t nLength = 0;
-                    for (size_t nElement = 0; nElement < m_aElements.size(); ++nElement)
+                    for (size_t nElement = 0; nElement < rElements.size(); ++nElement)
                     {
                         // Iterate in reverse order.
-                        size_t nIndex = m_aElements.size() - nElement - 1;
-                        PDFElement* pElement = m_aElements[nIndex].get();
-                        auto pObjectElement = dynamic_cast<PDFObjectElement*>(pElement);
-                        if (!pObjectElement)
+                        size_t nIndex = rElements.size() - nElement - 1;
+                        PDFElement* pElement = rElements[nIndex].get();
+                        auto pObj = dynamic_cast<PDFObjectElement*>(pElement);
+                        if (!pObj)
                             continue;
 
-                        PDFElement* pLookup = pObjectElement->Lookup("Length");
+                        PDFElement* pLookup = pObj->Lookup("Length");
                         auto pReference = dynamic_cast<PDFReferenceElement*>(pLookup);
                         if (pReference)
                         {
@@ -828,20 +852,23 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
                     }
 
                     PDFDocument::SkipLineBreaks(rStream);
-                    m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFStreamElement(nLength)));
-                    if (!m_aElements.back()->Read(rStream))
+                    auto pStreamElement = new PDFStreamElement(nLength);
+                    if (pObject)
+                        pObject->SetStream(pStreamElement);
+                    rElements.push_back(std::unique_ptr<PDFElement>(pStreamElement));
+                    if (!rElements.back()->Read(rStream))
                         return false;
                 }
                 else if (aKeyword == "endstream")
                 {
-                    m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFEndStreamElement()));
-                    if (!m_aElements.back()->Read(rStream))
+                    rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndStreamElement()));
+                    if (!rElements.back()->Read(rStream))
                         return false;
                 }
                 else if (aKeyword == "endobj")
                 {
-                    m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFEndObjectElement()));
-                    if (!m_aElements.back()->Read(rStream))
+                    rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndObjectElement()));
+                    if (!rElements.back()->Read(rStream))
                         return false;
                     if (eMode == TokenizeMode::END_OF_OBJECT)
                     {
@@ -850,9 +877,9 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
                     }
                 }
                 else if (aKeyword == "true" || aKeyword == "false")
-                    m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFBooleanElement(aKeyword.toBoolean())));
+                    rElements.push_back(std::unique_ptr<PDFElement>(new PDFBooleanElement(aKeyword.toBoolean())));
                 else if (aKeyword == "null")
-                    m_aElements.push_back(std::unique_ptr<PDFElement>(new PDFNullElement()));
+                    rElements.push_back(std::unique_ptr<PDFElement>(new PDFNullElement()));
                 else if (aKeyword == "xref")
                     // Allow 'f' and 'n' keywords.
                     bInXRef = true;
@@ -862,7 +889,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
                 else if (aKeyword == "trailer")
                 {
                     m_pTrailer = new PDFTrailerElement(*this);
-                    m_aElements.push_back(std::unique_ptr<PDFElement>(m_pTrailer));
+                    rElements.push_back(std::unique_ptr<PDFElement>(m_pTrailer));
                 }
                 else if (aKeyword == "startxref")
                 {
@@ -888,6 +915,11 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode)
     }
 
     return true;
+}
+
+void PDFDocument::SetIDObject(size_t nID, PDFObjectElement* pObject)
+{
+    m_aIDObjects[nID] = pObject;
 }
 
 bool PDFDocument::Read(SvStream& rStream)
@@ -917,16 +949,30 @@ bool PDFDocument::Read(SvStream& rStream)
     while (true)
     {
         rStream.Seek(nStartXRef);
-        ReadXRef(rStream);
-        if (!Tokenize(rStream, TokenizeMode::EOF_TOKEN))
+        OString aKeyword = ReadKeyword(rStream);
+        if (aKeyword.isEmpty())
+            ReadXRefStream(rStream);
+
+        else
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: failed to tokenizer trailer after xref");
-            return false;
+            if (aKeyword != "xref")
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: xref is not the first keyword");
+                return false;
+            }
+            ReadXRef(rStream);
+            if (!Tokenize(rStream, TokenizeMode::EOF_TOKEN, m_aElements, nullptr))
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: failed to tokenizer trailer after xref");
+                return false;
+            }
         }
 
         PDFNumberElement* pPrev = nullptr;
         if (m_pTrailer)
             pPrev = dynamic_cast<PDFNumberElement*>(m_pTrailer->Lookup("Prev"));
+        else if (m_pXRefStream)
+            pPrev = dynamic_cast<PDFNumberElement*>(m_pXRefStream->Lookup("Prev"));
         if (pPrev)
             nStartXRef = pPrev->GetValue();
 
@@ -942,7 +988,7 @@ bool PDFDocument::Read(SvStream& rStream)
 
     // Then we can tokenize the stream.
     rStream.Seek(0);
-    return Tokenize(rStream, TokenizeMode::END_OF_STREAM);
+    return Tokenize(rStream, TokenizeMode::END_OF_STREAM, m_aElements, nullptr);
 }
 
 OString PDFDocument::ReadKeyword(SvStream& rStream)
@@ -997,7 +1043,7 @@ size_t PDFDocument::FindStartXRef(SvStream& rStream)
 void PDFDocument::ReadXRefStream(SvStream& rStream)
 {
     // Look up the stream length in the object dictionary.
-    if (!Tokenize(rStream, TokenizeMode::END_OF_OBJECT))
+    if (!Tokenize(rStream, TokenizeMode::END_OF_OBJECT, m_aElements, nullptr))
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: failed to read object");
         return;
@@ -1023,6 +1069,9 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: no object token found");
         return;
     }
+
+    // So that the Prev key can be looked up later.
+    m_pXRefStream = pObject;
 
     PDFElement* pLookup = pObject->Lookup("Length");
     auto pNumber = dynamic_cast<PDFNumberElement*>(pLookup);
@@ -1095,25 +1144,37 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
 
     // Look up the first and the last entry we need to read.
     auto pIndex = dynamic_cast<PDFArrayElement*>(pObject->Lookup("Index"));
+    size_t nFirstObject = 0;
+    size_t nNumberOfObjects = 0;
     if (!pIndex || pIndex->GetElements().size() < 2)
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index not found or has < 2 elements");
-        return;
+        auto pSize = dynamic_cast<PDFNumberElement*>(pObject->Lookup("Size"));
+        if (pSize)
+            nNumberOfObjects = pSize->GetValue();
+        else
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index not found or has < 2 elements");
+            return;
+        }
     }
-
-    const std::vector<PDFElement*>& rIndexElements = pIndex->GetElements();
-    auto pFirstObject = dynamic_cast<PDFNumberElement*>(rIndexElements[0]);
-    if (!pFirstObject)
+    else
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index has no first object");
-        return;
-    }
+        const std::vector<PDFElement*>& rIndexElements = pIndex->GetElements();
+        auto pFirstObject = dynamic_cast<PDFNumberElement*>(rIndexElements[0]);
+        if (!pFirstObject)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index has no first object");
+            return;
+        }
+        nFirstObject = pFirstObject->GetValue();
 
-    auto pNumberOfObjects = dynamic_cast<PDFNumberElement*>(rIndexElements[1]);
-    if (!pNumberOfObjects)
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index has no number of objects");
-        return;
+        auto pNumberOfObjects = dynamic_cast<PDFNumberElement*>(rIndexElements[1]);
+        if (!pNumberOfObjects)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index has no number of objects");
+            return;
+        }
+        nNumberOfObjects = pNumberOfObjects->GetValue();
     }
 
     // Look up the format of a single entry.
@@ -1145,15 +1206,14 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
         return;
     }
 
-    size_t nSize = pNumberOfObjects->GetValue();
     aStream.Seek(0);
     // This is the line as read from the stream.
     std::vector<unsigned char> aOrigLine(nLineLength);
     // This is the line as it appears after tweaking according to nPredictor.
     std::vector<unsigned char> aFilteredLine(nLineLength);
-    for (size_t nEntry = 0; nEntry < nSize; ++nEntry)
+    for (size_t nEntry = 0; nEntry < nNumberOfObjects; ++nEntry)
     {
-        size_t nIndex = pFirstObject->GetValue() + nEntry;
+        size_t nIndex = nFirstObject + nEntry;
 
         aStream.ReadBytes(aOrigLine.data(), aOrigLine.size());
         if (aOrigLine[0] + 10 != nPredictor)
@@ -1210,12 +1270,15 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
         }
 
         // "n" entry of the xref table
-        if (nType == 1)
+        if (nType == 1 || nType == 2)
         {
             if (m_aXRef.find(nIndex) == m_aXRef.end())
             {
-                m_aXRef[nIndex] = nStreamOffset;
-                m_aXRefDirty[nIndex] = false;
+                XRefEntry aEntry;
+                aEntry.m_eType = nType == 1 ? XRefEntryType::NOT_COMPRESSED : XRefEntryType::COMPRESSED;
+                aEntry.m_nOffset = nStreamOffset;
+                aEntry.m_nGenerationNumber = nGenerationNumber;
+                m_aXRef[nIndex] = aEntry;
             }
         }
     }
@@ -1223,19 +1286,6 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
 
 void PDFDocument::ReadXRef(SvStream& rStream)
 {
-    OString aKeyword = ReadKeyword(rStream);
-    if (aKeyword.isEmpty())
-    {
-        ReadXRefStream(rStream);
-        return;
-    }
-
-    if (aKeyword != "xref")
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: xref is not the first keyword");
-        return;
-    }
-
     PDFDocument::SkipWhitespace(rStream);
 
     while (true)
@@ -1288,7 +1338,7 @@ void PDFDocument::ReadXRef(SvStream& rStream)
             }
 
             PDFDocument::SkipWhitespace(rStream);
-            aKeyword = ReadKeyword(rStream);
+            OString aKeyword = ReadKeyword(rStream);
             if (aKeyword != "f" && aKeyword != "n")
             {
                 SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: unexpected keyword");
@@ -1298,9 +1348,13 @@ void PDFDocument::ReadXRef(SvStream& rStream)
             // offset with an older one.
             if (m_aXRef.find(nIndex) == m_aXRef.end())
             {
-                m_aXRef[nIndex] = aOffset.GetValue();
+                XRefEntry aEntry;
+                aEntry.m_nOffset = aOffset.GetValue();
+                aEntry.m_nGenerationNumber = aGenerationNumber.GetValue();
                 // Initially only the first entry is dirty.
-                m_aXRefDirty[nIndex] = nIndex == 0;
+                if (nIndex == 0)
+                    aEntry.m_bDirty = true;
+                m_aXRef[nIndex] = aEntry;
             }
             PDFDocument::SkipWhitespace(rStream);
         }
@@ -1346,23 +1400,18 @@ void PDFDocument::SkipLineBreaks(SvStream& rStream)
 size_t PDFDocument::GetObjectOffset(size_t nIndex) const
 {
     auto it = m_aXRef.find(nIndex);
-    if (it == m_aXRef.end())
+    if (it == m_aXRef.end() || it->second.m_eType == XRefEntryType::COMPRESSED)
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::GetObjectOffset: wanted to look up index #" << nIndex << ", but failed");
         return 0;
     }
 
-    return it->second;
+    return it->second.m_nOffset;
 }
 
 const std::vector< std::unique_ptr<PDFElement> >& PDFDocument::GetElements()
 {
     return m_aElements;
-}
-
-const std::map<size_t, PDFObjectElement*>& PDFDocument::GetIDObjects() const
-{
-    return m_aIDObjects;
 }
 
 std::vector<PDFObjectElement*> PDFDocument::GetPages()
@@ -2011,7 +2060,8 @@ PDFObjectElement::PDFObjectElement(PDFDocument& rDoc, double fObjectValue, doubl
       m_nDictionaryOffset(0),
       m_nDictionaryLength(0),
       m_pDictionaryElement(nullptr),
-      m_pArrayElement(nullptr)
+      m_pArrayElement(nullptr),
+      m_pStreamElement(nullptr)
 {
 }
 
@@ -2236,7 +2286,14 @@ PDFElement* PDFDictionaryElement::Lookup(const std::map<OString, PDFElement*>& r
 PDFElement* PDFObjectElement::Lookup(const OString& rDictionaryKey)
 {
     if (m_aDictionary.empty())
-        PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
+    {
+        if (!m_aElements.empty())
+            // This is a stored object in an object stream.
+            PDFDictionaryElement::Parse(m_aElements, this, m_aDictionary);
+        else
+            // Normal object: elements are stored as members of the document itself.
+            PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
+    }
 
     return PDFDictionaryElement::Lookup(m_aDictionary, rDictionaryKey);
 }
@@ -2332,9 +2389,137 @@ void PDFObjectElement::SetArray(PDFArrayElement* pArrayElement)
     m_pArrayElement = pArrayElement;
 }
 
+void PDFObjectElement::SetStream(PDFStreamElement* pStreamElement)
+{
+    m_pStreamElement = pStreamElement;
+}
+
 PDFArrayElement* PDFObjectElement::GetArray() const
 {
     return m_pArrayElement;
+}
+
+void PDFObjectElement::ParseStoredObjects()
+{
+    if (!m_pStreamElement)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFObjectElement::ParseStoredObjects: no stream");
+        return;
+    }
+
+    auto pType = dynamic_cast<PDFNameElement*>(Lookup("Type"));
+    if (!pType || pType->GetValue() != "ObjStm")
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: missing or unexpected type: " << pType->GetValue());
+        return;
+    }
+
+    auto pFilter = dynamic_cast<PDFNameElement*>(Lookup("Filter"));
+    if (!pFilter || pFilter->GetValue() != "FlateDecode")
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: missing or unexpected filter");
+        return;
+    }
+
+    auto pFirst = dynamic_cast<PDFNumberElement*>(Lookup("First"));
+    if (!pFirst)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFObjectElement::ParseStoredObjects: no First");
+        return;
+    }
+
+    auto pN = dynamic_cast<PDFNumberElement*>(Lookup("N"));
+    if (!pN)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFObjectElement::ParseStoredObjects: no N");
+        return;
+    }
+    size_t nN = pN->GetValue();
+
+    auto pLength = dynamic_cast<PDFNumberElement*>(Lookup("Length"));
+    if (!pLength)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFObjectElement::ParseStoredObjects: no length");
+        return;
+    }
+    size_t nLength = pLength->GetValue();
+
+    // Read and decompress it.
+    SvMemoryStream& rEditBuffer = m_rDoc.GetEditBuffer();
+    rEditBuffer.Seek(m_pStreamElement->GetOffset());
+    std::vector<char> aBuf(nLength);
+    rEditBuffer.ReadBytes(aBuf.data(), aBuf.size());
+    SvMemoryStream aSource(aBuf.data(), aBuf.size(), StreamMode::READ);
+    SvMemoryStream aStream;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    aZCodec.Decompress(aSource, aStream);
+    if (!aZCodec.EndCompression())
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFObjectElement::ParseStoredObjects: decompression failed");
+        return;
+    }
+
+    aStream.Seek(STREAM_SEEK_TO_END);
+    nLength = aStream.Tell();
+    aStream.Seek(0);
+    std::vector<size_t> aObjNums;
+    std::vector<size_t> aOffsets;
+    std::vector<size_t> aLengths;
+    // First iterate over and find out the lengths.
+    for (size_t nObject = 0; nObject < nN; ++nObject)
+    {
+        PDFNumberElement aObjNum;
+        if (!aObjNum.Read(aStream))
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFObjectElement::ParseStoredObjects: failed to read object number");
+            return;
+        }
+        aObjNums.push_back(aObjNum.GetValue());
+
+        PDFDocument::SkipWhitespace(aStream);
+
+        PDFNumberElement aByteOffset;
+        if (!aByteOffset.Read(aStream))
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFObjectElement::ParseStoredObjects: failed to read byte offset");
+            return;
+        }
+        aOffsets.push_back(pFirst->GetValue() + aByteOffset.GetValue());
+
+        if (aOffsets.size() > 1)
+            aLengths.push_back(aOffsets.back() - aOffsets[aOffsets.size() - 2]);
+        if (nObject + 1 == nN)
+            aLengths.push_back(nLength - aOffsets.back());
+
+        PDFDocument::SkipWhitespace(aStream);
+    }
+
+    // Now create streams with the proper length and tokenize the data.
+    for (size_t nObject = 0; nObject < nN; ++nObject)
+    {
+        size_t nObjNum = aObjNums[nObject];
+        size_t nOffset = aOffsets[nObject];
+        size_t nLen = aLengths[nObject];
+
+        aStream.Seek(nOffset);
+        m_aStoredElements.push_back(std::unique_ptr<PDFObjectElement>(new PDFObjectElement(m_rDoc, nObjNum, 0)));
+        PDFObjectElement* pStored = m_aStoredElements.back().get();
+
+        aBuf.clear();
+        aBuf.resize(nLen);
+        aStream.ReadBytes(aBuf.data(), aBuf.size());
+        SvMemoryStream aStoredStream(aBuf.data(), aBuf.size(), StreamMode::READ);
+
+        m_rDoc.Tokenize(aStoredStream, TokenizeMode::STORED_OBJECT, pStored->GetStoredElements(), pStored);
+        // This is how references know the object is stored inside this object stream.
+        m_rDoc.SetIDObject(nObjNum, pStored);
+    }
+}
+
+std::vector< std::unique_ptr<PDFElement> >& PDFObjectElement::GetStoredElements()
+{
+    return m_aElements;
 }
 
 PDFReferenceElement::PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue)
@@ -2409,15 +2594,41 @@ double PDFReferenceElement::LookupNumber(SvStream& rStream) const
     return aNumber.GetValue();
 }
 
-PDFObjectElement* PDFReferenceElement::LookupObject() const
+PDFObjectElement* PDFReferenceElement::LookupObject()
 {
-    const std::map<size_t, PDFObjectElement*>& rIDObjects = m_rDoc.GetIDObjects();
-    auto it = rIDObjects.find(m_fObjectValue);
-    if (it != rIDObjects.end())
-        return it->second;
+    return m_rDoc.LookupObject(m_fObjectValue);
+}
 
-    SAL_WARN("xmlsecurity.pdfio", "PDFReferenceElement::LookupObject: can't find obj " << m_fObjectValue);
+PDFObjectElement* PDFDocument::LookupObject(size_t nObjectNumber)
+{
+    auto itIDObjects = m_aIDObjects.find(nObjectNumber);
+    auto itXRef = m_aXRef.find(nObjectNumber);
+    if (itIDObjects == m_aIDObjects.end() && itXRef != m_aXRef.end())
+    {
+        // We don't have an object for this number yet, but there is an xref
+        // entry for it.
+        const XRefEntry& rEntry = itXRef->second;
+        if (rEntry.m_eType == XRefEntryType::COMPRESSED)
+        {
+            // It's a compressed entry, try parsing the stored objects.
+            if (PDFObjectElement* pObjectStream = LookupObject(rEntry.m_nOffset))
+                // This registers new IDs.
+                pObjectStream->ParseStoredObjects();
+        }
+        // Find again, now that the new objects are registered.
+        itIDObjects = m_aIDObjects.find(nObjectNumber);
+    }
+
+    if (itIDObjects != m_aIDObjects.end())
+        return itIDObjects->second;
+
+    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::LookupObject: can't find obj " << nObjectNumber);
     return nullptr;
+}
+
+SvMemoryStream& PDFDocument::GetEditBuffer()
+{
+    return m_aEditBuffer;
 }
 
 int PDFReferenceElement::GetObjectValue() const
