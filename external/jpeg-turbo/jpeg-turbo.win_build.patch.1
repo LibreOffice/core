@@ -1,3 +1,7 @@
+Copy definitions of "boolean", "INT16", "INT32" from win/jconfig.h.in
+
+... into jconfig.h.in, which is the one we use via configure.
+
 diff -ru jpeg-turbo.orig/simd/Makefile.in jpeg-turbo/simd/Makefile.in
 --- jpeg-turbo.orig/simd/Makefile.in	2015-09-21 20:48:45.000000000 +0200
 +++ jpeg-turbo/simd/Makefile.in	2015-11-22 10:52:46.975285184 +0100
@@ -24,3 +28,27 @@ diff -ru jpeg-turbo.orig/configure jpeg-turbo/configure
 
  fi
  done
+--- jpeg-turbo/jconfig.h.in.orig	2016-11-02 22:43:55.012600000 +0100
++++ jpeg-turbo/jconfig.h.in	2016-11-02 22:45:01.905400000 +0100
+@@ -71,3 +71,21 @@
+ 
+ /* The size of `size_t', as computed by sizeof. */
+ #undef SIZEOF_SIZE_T
++
++#ifdef _MSC_VER
++
++/* Define "boolean" as unsigned char, not int, per Windows custom */
++#ifndef __RPCNDR_H__		/* don't conflict if rpcndr.h already read */
++typedef unsigned char boolean;
++#endif
++#define HAVE_BOOLEAN		/* prevent jmorecfg.h from redefining it */
++
++/* Define "INT32" as int, not long, per Windows custom */
++#if !(defined(_BASETSD_H_) || defined(_BASETSD_H))   /* don't conflict if basetsd.h already read */
++typedef short INT16;
++typedef signed int INT32;
++#endif
++#define XMD_H                   /* prevent jmorecfg.h from redefining it */
++
++#endif /* _MSC_VER */
++
