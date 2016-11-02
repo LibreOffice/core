@@ -153,7 +153,6 @@ TemplateScanner::TemplateScanner()
       maFolderContent(),
       mpTemplateDirectory(nullptr),
       maFolderList(),
-      mbEntrySortingEnabled(false),
       mpLastAddedEntry(nullptr),
       mpFolderDescriptors(new FolderDescriptorList()),
       mxTemplateRoot(),
@@ -353,7 +352,7 @@ TemplateScanner::State TemplateScanner::ScanFolder()
             // Scan the folder and insert it into the list of template
             // folders.
             mpTemplateDirectory = new TemplateDir;
-            mpTemplateDirectory->EnableSorting(mbEntrySortingEnabled);
+            mpTemplateDirectory->EnableSorting(false);
             // Continue with scanning all entries in the folder.
             eNextState = INITIALIZE_ENTRY_SCAN;
         }

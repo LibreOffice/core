@@ -84,7 +84,6 @@ private:
     double      m_fClipRight;
     double      m_fClipTop;
     double      m_fClipBottom;
-    bool        m_bHoriFlip;
 };
 
 inline void XFImageStyle::SetBrightness(sal_Int32 brightness)

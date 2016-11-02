@@ -56,7 +56,6 @@ PresenterPaneBase::PresenterPaneBase (
       msTitle(),
       mxComponentContext(rxContext),
       mpViewBackground(),
-      mbHasCallout(false),
       maCalloutAnchor()
 {
     if (mpPresenterController.get() != nullptr)
@@ -363,16 +362,7 @@ void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
 
         PaintBorderBackground(aLocalBorderBox, rUpdateBox);
 
-        if (mbHasCallout)
-            mxBorderPainter->paintBorderWithCallout(
-                mxPaneId->getResourceURL(),
-                mxBorderCanvas,
-                aLocalBorderBox,
-                rUpdateBox,
-                msTitle,
-                maCalloutAnchor);
-        else
-            mxBorderPainter->paintBorder(
+        mxBorderPainter->paintBorder(
                 mxPaneId->getResourceURL(),
                 mxBorderCanvas,
                 aLocalBorderBox,

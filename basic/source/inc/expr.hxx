@@ -24,6 +24,7 @@
 
 #include "opcodes.hxx"
 #include "token.hxx"
+#include <vector>
 
 class SbiExprNode;
 class SbiExpression;
@@ -34,7 +35,6 @@ class SbiSymDef;
 class SbiProcDef;
 
 
-#include <vector>
 typedef ::std::unique_ptr<SbiExprList> SbiExprListPtr;
 typedef ::std::vector<SbiExprListPtr> SbiExprListVector;
 
@@ -49,7 +49,6 @@ struct KeywordSymbolInfo
 {
     OUString m_aKeywordSymbol;
     SbxDataType     m_eSbxDataType;
-    SbiToken        m_eTok;
 };
 
 enum SbiExprType {                  // expression types:

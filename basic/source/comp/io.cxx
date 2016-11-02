@@ -118,7 +118,6 @@ void SbiParser::Line()
         KeywordSymbolInfo aInfo;
         aInfo.m_aKeywordSymbol = "line";
         aInfo.m_eSbxDataType = GetType();
-        aInfo.m_eTok = SYMBOL;
 
         Symbol( &aInfo );
     }
@@ -282,7 +281,6 @@ void SbiParser::Name()
         KeywordSymbolInfo aInfo;
         aInfo.m_aKeywordSymbol = "name";
         aInfo.m_eSbxDataType = GetType();
-        aInfo.m_eTok = SYMBOL;
 
         Symbol( &aInfo );
         return;

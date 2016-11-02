@@ -1101,13 +1101,6 @@ public:
     */
     static Help*                GetHelp();
 
-    /** Turns on "auto-help" (hover mouse above UI element and a tooltip with an
-     explanation pops up.
-
-     @see EnableAutoHelpId
-    */
-    static void                 EnableAutoHelpId();
-
     ///@}
 
     /** @name Dialogs

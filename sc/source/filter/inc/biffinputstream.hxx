@@ -218,7 +218,7 @@ private:
     inline bool         isInRecord() const { return mnRecHandle >= 0; }
 
     /** Returns true, if the passed ID is real or alternative continuation record ID. */
-    bool                isContinueId( sal_uInt16 nRecId ) const;
+    static bool         isContinueId( sal_uInt16 nRecId );
     /** Goes to start of the next CONTINUE record.
         @descr  Stream must be located at the end of a raw record, and handling
         of CONTINUE records must be enabled.
@@ -236,7 +236,6 @@ private:
 
     sal_Int64           mnRecHandle;        /// Handle of current record.
     sal_uInt16          mnRecId;            /// Identifier of current record (not the CONTINUE ID).
-    sal_uInt16          mnAltContId;        /// Alternative identifier for content continuation records.
 
     sal_Int64           mnCurrRecSize;      /// Helper for record size and position.
     sal_Int64           mnComplRecSize;     /// Size of complete record data (with CONTINUEs).

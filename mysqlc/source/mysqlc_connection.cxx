@@ -67,7 +67,6 @@ OConnection::OConnection(MysqlCDriver& _rDriver, sql::Driver * _cppDriver)
     ,m_rDriver(_rDriver)
     ,cppDriver(_cppDriver)
     ,m_bClosed(false)
-    ,m_bUseCatalog(false)
 {
     OSL_TRACE("OConnection::OConnection");
     m_rDriver.acquire();

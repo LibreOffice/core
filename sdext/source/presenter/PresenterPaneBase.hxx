@@ -123,7 +123,6 @@ protected:
     OUString msTitle;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     SharedBitmapDescriptor mpViewBackground;
-    bool mbHasCallout;
     css::awt::Point maCalloutAnchor;
 
     virtual void CreateCanvases (

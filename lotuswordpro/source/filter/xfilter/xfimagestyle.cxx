@@ -68,7 +68,6 @@ XFImageStyle::XFImageStyle()
     , m_fClipRight(0)
     , m_fClipTop(0)
     , m_fClipBottom(0)
-    , m_bHoriFlip(false)
 {}
 
 void XFImageStyle::ToXml(IXFStream *pStrm)
@@ -115,9 +114,6 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
     m_aPad.ToXml(pStrm);
     //margin:
     m_aMargins.ToXml(pStrm);
-    //flip
-    if( m_bHoriFlip  )
-        pAttrList->AddAttribute( "style:mirror", "horizontal-on-right-pages" );
 
     if( m_nBrightness )
         pAttrList->AddAttribute( "draw:luminance", OUString::number(m_nBrightness) + "%" );
