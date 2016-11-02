@@ -173,7 +173,7 @@ void SfxItemSet::InitRanges_Impl(va_list pArgs, sal_uInt16 nWh1, sal_uInt16 nWh2
     memset(static_cast<void*>(m_pItems), 0, sizeof(SfxPoolItem*) * nSize);
 }
 
-SfxItemSet::SfxItemSet(SfxItemPool& rPool, int nWh1, int nWh2, int nNull, ...)
+SfxItemSet::SfxItemSet(SfxItemPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2, sal_uInt16 nNull, ...)
     : m_pPool( &rPool )
     , m_pParent(nullptr)
     , m_pWhichRanges(nullptr)
@@ -181,17 +181,13 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool, int nWh1, int nWh2, int nNull, ...)
 {
     assert(nWh1 <= nWh2);
 
-    if(!nNull)
-        InitRanges_Impl(
-            sal::static_int_cast< sal_uInt16 >(nWh1),
-            sal::static_int_cast< sal_uInt16 >(nWh2));
-    else {
+    if (nNull == 0) // delimiter
+        InitRanges_Impl(nWh1, nWh2);
+    else
+    {
         va_list pArgs;
         va_start( pArgs, nNull );
-        InitRanges_Impl(
-            pArgs, sal::static_int_cast< sal_uInt16 >(nWh1),
-            sal::static_int_cast< sal_uInt16 >(nWh2),
-            sal::static_int_cast< sal_uInt16 >(nNull));
+        InitRanges_Impl(pArgs, nWh1, nWh2, nNull);
         va_end(pArgs);
     }
 }
