@@ -26,7 +26,7 @@ $(call gb_ExternalProject_get_state_target,poppler,build) :
 			--disable-poppler-cpp \
 			--disable-libopenjpeg \
 			--disable-libtiff \
-			--disable-libjpeg \
+			--enable-libjpeg \
 			--disable-libpng \
 			--disable-zlib \
 			--disable-libcurl \
