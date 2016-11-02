@@ -1384,7 +1384,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
     ImplGetSignatureState(); // document signature
     if (GetMedium() && GetMedium()->GetFilter() && GetMedium()->GetFilter()->IsOwnFormat())
         ImplGetSignatureState( true ); // script signature
-    bool bHasSign = ( pImpl->nScriptingSignatureState != SignatureState::NOSIGNATURES || pImpl->nDocumentSignatureState != SignatureState::NOSIGNATURES );
+oh    bool bHasSign = ( pImpl->nScriptingSignatureState != SignatureState::NOSIGNATURES || pImpl->nDocumentSignatureState != SignatureState::NOSIGNATURES );
 
     // the target ODF version on saving
 
@@ -1402,7 +1402,9 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
     OUString aODFVersion;
     try
     {
-        // check the version of the document
+        // check the ODF version of the document
+        // No idea what relevance this has if the document has not been loaded from ODF (or is not
+        // being saved to ODF)
         uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
         xPropSet->getPropertyValue("Version") >>= aODFVersion;
     }
