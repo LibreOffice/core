@@ -76,11 +76,6 @@ KabCommonStatement::~KabCommonStatement()
 {
 }
 
-void KabCommonStatement::disposing()
-{
-    KabCommonStatement_BASE::disposing();
-}
-
 void KabCommonStatement::resetParameters() const throw(css::sdbc::SQLException)
 {
     lcl_throwError(STR_PARA_ONLY_PREPARED);
