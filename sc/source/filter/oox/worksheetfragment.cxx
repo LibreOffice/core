@@ -27,7 +27,6 @@
 #include "addressconverter.hxx"
 #include "autofilterbuffer.hxx"
 #include "autofiltercontext.hxx"
-#include "biffinputstream.hxx"
 #include "commentsfragment.hxx"
 #include "condformatcontext.hxx"
 #include "drawingfragment.hxx"

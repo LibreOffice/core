@@ -23,7 +23,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include "biffinputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
 
 namespace oox {
 namespace xls {

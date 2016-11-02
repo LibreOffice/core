@@ -31,6 +31,7 @@
 #include <osl/diagnose.h>
 #include <unotools/mediadescriptor.hxx>
 #include <oox/core/filterbase.hxx>
+#include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertymap.hxx>
@@ -38,7 +39,6 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
-#include "biffinputstream.hxx"
 #include "unitconverter.hxx"
 #include "workbooksettings.hxx"
 #include "worksheetbuffer.hxx"

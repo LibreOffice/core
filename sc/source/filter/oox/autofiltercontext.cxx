@@ -20,7 +20,6 @@
 #include "autofiltercontext.hxx"
 
 #include "autofilterbuffer.hxx"
-#include "biffinputstream.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

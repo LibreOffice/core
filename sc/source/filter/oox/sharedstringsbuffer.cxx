@@ -19,8 +19,6 @@
 
 #include "sharedstringsbuffer.hxx"
 
-#include "biffinputstream.hxx"
-
 namespace oox {
 namespace xls {
 

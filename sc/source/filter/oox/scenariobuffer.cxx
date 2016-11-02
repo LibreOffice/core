@@ -26,13 +26,13 @@
 #include <com/sun/star/sheet/XScenariosSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
-#include "biffinputstream.hxx"
 
 namespace oox {
 namespace xls {

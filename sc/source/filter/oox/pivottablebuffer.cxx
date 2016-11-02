@@ -38,13 +38,13 @@
 #include <com/sun/star/sheet/XDataPilotField.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XSheetOperation.hpp>
+#include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
-#include "biffinputstream.hxx"
 
 #include "dapiuno.hxx"
 #include "dpobject.hxx"

@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 
 #include <oox/helper/binaryinputstream.hxx>
-#include "biffinputstream.hxx"
 #include "excelchartconverter.hxx"
 #include "excelvbaproject.hxx"
 #include "stylesbuffer.hxx"

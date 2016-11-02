@@ -31,7 +31,6 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/vml/vmlshape.hxx>
 #include "addressconverter.hxx"
-#include "biffinputstream.hxx"
 #include "drawingfragment.hxx"
 #include <svx/sdtaitm.hxx>
 #include "unitconverter.hxx"

@@ -27,13 +27,13 @@
 #include <svl/intitem.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <oox/core/filterbase.hxx>
+#include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
-#include "biffinputstream.hxx"
 #include "stylesbuffer.hxx"
 #include "themebuffer.hxx"
 

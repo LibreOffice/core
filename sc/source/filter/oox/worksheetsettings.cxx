@@ -21,10 +21,11 @@
 
 #include <com/sun/star/util/XProtectable.hpp>
 #include <oox/core/filterbase.hxx>
+#include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "biffinputstream.hxx"
+#include "biffcodec.hxx"
 #include "pagesettings.hxx"
 #include "workbooksettings.hxx"
 #include "tabprotection.hxx"

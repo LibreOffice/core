@@ -28,8 +28,6 @@
 namespace oox {
 namespace xls {
 
-class BiffInputStream;
-
 /** A vector of com.sun.star.table.CellRangeAddress elements and additional
     functionality. */
 class ApiCellRangeList

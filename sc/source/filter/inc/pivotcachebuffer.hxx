@@ -72,19 +72,6 @@ public:
     /** Reads the index of a shared item. */
     void                readIndex( SequenceInputStream& rStrm );
 
-    /** Reads the string value from a pivot cache item. */
-    void                readString( BiffInputStream& rStrm, const WorkbookHelper& rHelper );
-    /** Reads the double value from a pivot cache item. */
-    void                readDouble( BiffInputStream& rStrm );
-    /** Reads the integer value from a pivot cache item. */
-    void                readInteger( BiffInputStream& rStrm );
-    /** Reads the date/time value from a pivot cache item. */
-    void                readDate( BiffInputStream& rStrm );
-    /** Reads the boolean value from a pivot cache item. */
-    void                readBool( BiffInputStream& rStrm );
-    /** Reads the error code value from a pivot cache item. */
-    void                readError( BiffInputStream& rStrm );
-
     /** Returns the type of the item. */
     inline sal_Int32    getType() const { return mnType; }
     /** Returns the value of the item. */
@@ -112,8 +99,6 @@ public:
     void                importItem( sal_Int32 nElement, const AttributeList& rAttribs );
     /** Imports the item from the passed stream and record. */
     void                importItem( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    /** Imports a complete item list from the passed stream. */
-    void                importItemList( BiffInputStream& rStrm, sal_uInt16 nCount );
 
     /** Returns true, if this item list is empty. */
     inline bool         empty() const { return maItems.empty(); }
@@ -241,10 +226,6 @@ public:
     /** Imports one or more group items from the passed record. */
     void                importPCDFGroupItem( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
-    /** Imports numeric grouping settings from the PCDFRANGEPR record. */
-    void                importPCDFRangePr( BiffInputStream& rStrm );
-    /** Imports the mapping between group items and base items from the PCDFDISCRETEPR record. */
-    void                importPCDFDiscretePr( BiffInputStream& rStrm );
     /** Apply user Captions to imported group data */
     void                applyItemCaptions( const IdCaptionPairList& vCaptions );
 
@@ -302,9 +283,6 @@ public:
 
     /** Reads an item from the PCRECORD record and writes it to the passed sheet. */
     void                importPCRecordItem( SequenceInputStream& rStrm,
-                            WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const;
-    /** Reads an item index from the PCITEM_INDEXLIST record and writes the item to the passed sheet. */
-    void                importPCItemIndex( BiffInputStream& rStrm,
                             WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const;
 
 private:
@@ -418,9 +396,6 @@ public:
 
     /** Reads a PCRECORD record and writes all item values to the passed sheet. */
     void                importPCRecord( SequenceInputStream& rStrm,
-                            WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const;
-    /** Reads a PCITEM_INDEXLIST record and writes all item values to the passed sheet. */
-    void                importPCItemIndexList( BiffInputStream& rStrm,
                             WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const;
 
 private:

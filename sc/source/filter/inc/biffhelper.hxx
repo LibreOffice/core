@@ -27,8 +27,6 @@ namespace oox { class SequenceInputStream; }
 namespace oox {
 namespace xls {
 
-class BiffInputStream;
-
 // BIFF12 record identifiers ==================================================
 
 const sal_Int32 BIFF12_ID_ARRAY             = 0x01AA;
@@ -608,11 +606,6 @@ public:
 
     /** Reads a BIFF12 string with leading 16-bit or 32-bit length field. */
     static OUString readString( SequenceInputStream& rStrm, bool b32BitLen = true, bool bAllowNulChars = false );
-
-    // BIFF2-BIFF8 import -----------------------------------------------------
-
-    /** Returns true, if the current record of the stream is a BOF record. */
-    static bool         isBofRecord( BiffInputStream& rStrm );
 
 private:
                         BiffHelper() = delete;

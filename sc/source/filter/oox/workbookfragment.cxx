@@ -30,7 +30,6 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
-#include "biffinputstream.hxx"
 #include "chartsheetfragment.hxx"
 #include "connectionsfragment.hxx"
 #include "externallinkbuffer.hxx"

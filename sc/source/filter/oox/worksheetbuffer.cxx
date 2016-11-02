@@ -34,7 +34,6 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "biffinputstream.hxx"
 #include "excelhandlers.hxx"
 #include "document.hxx"
 

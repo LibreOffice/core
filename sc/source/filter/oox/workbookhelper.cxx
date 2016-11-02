@@ -41,7 +41,6 @@
 #include <oox/token/properties.hxx>
 #include <vcl/msgbox.hxx>
 #include "addressconverter.hxx"
-#include "biffinputstream.hxx"
 #include "biffcodec.hxx"
 #include "connectionsbuffer.hxx"
 #include "defnamesbuffer.hxx"

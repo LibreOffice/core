@@ -27,7 +27,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/containerhelper.hxx>
-#include "biffinputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
 
 namespace oox {
 namespace xls {

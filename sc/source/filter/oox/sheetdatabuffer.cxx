@@ -41,7 +41,6 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
-#include "biffinputstream.hxx"
 #include "formulaparser.hxx"
 #include "sharedstringsbuffer.hxx"
 #include "unitconverter.hxx"
