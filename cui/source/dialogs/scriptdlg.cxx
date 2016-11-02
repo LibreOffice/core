@@ -1205,6 +1205,8 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     m_pScriptsBox->SetCurEntry( pEntry );
 }
 
+namespace {
+
 OUString ReplaceString(
     const OUString& source,
     const OUString& token,
@@ -1368,21 +1370,6 @@ OUString GetErrorMessage(
         unformatted, language, script, OUString(), OUString(), message );
 }
 
-OUString GetErrorMessage( const RuntimeException& re )
-{
-    Type t = cppu::UnoType<decltype(re)>::get();
-    OUString message = t.getTypeName() + re.Message;
-
-    return message;
-}
-
-OUString GetErrorMessage( const Exception& e )
-{
-    Type t = cppu::UnoType<decltype(e)>::get();
-    OUString message = t.getTypeName() + e.Message;
-    return message;
-}
-
 OUString GetErrorMessage( const css::uno::Any& aException )
 {
     if ( aException.getValueType() ==
@@ -1420,15 +1407,14 @@ OUString GetErrorMessage( const css::uno::Any& aException )
 
     }
     // unknown exception
+    auto msg = aException.getValueTypeName();
     Exception e;
-    RuntimeException rte;
-    if ( aException >>= rte )
+    if ( (aException >>= e) && !e.Message.isEmpty() )
     {
-        return GetErrorMessage( rte );
+        msg += ": " + e.Message;
     }
-
-    aException >>= e;
-    return GetErrorMessage( e );
+    return msg;
+}
 
 }
 

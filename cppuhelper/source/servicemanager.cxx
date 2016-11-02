@@ -812,13 +812,19 @@ void cppuhelper::ServiceManager::loadImplementation(
         if (ctor != nullptr) {
             assert(!implementation->info->environment.isEmpty());
             css::uno::Environment curEnv(css::uno::Environment::getCurrent());
+            if (!curEnv.is()) {
+                throw css::uno::DeploymentException(
+                    "cannot get current environment",
+                    css::uno::Reference<css::uno::XInterface>());
+            }
             css::uno::Environment env(
                 cppuhelper::detail::getEnvironment(
                     implementation->info->environment,
                     implementation->info->name));
-            if (!(curEnv.is() && env.is())) {
+            if (!env.is()) {
                 throw css::uno::DeploymentException(
-                    "cannot get environments",
+                    ("cannot get environment "
+                     + implementation->info->environment),
                     css::uno::Reference<css::uno::XInterface>());
             }
             if (curEnv.get() != env.get()) {
