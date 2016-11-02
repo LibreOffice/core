@@ -464,16 +464,7 @@ SfxDispatcher::SfxDispatcher()
 */
 SfxDispatcher::SfxDispatcher(SfxViewFrame *pViewFrame)
 {
-    if ( pViewFrame )
-    {
-        SfxViewFrame *pFrame = pViewFrame->GetParentViewFrame();
-        if ( pFrame )
-            Construct_Impl(  pFrame->GetDispatcher() );
-        else
-            Construct_Impl( nullptr );
-    }
-    else
-        Construct_Impl( nullptr );
+    Construct_Impl( nullptr );
     xImp->pFrame = pViewFrame;
 }
 
@@ -1299,8 +1290,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
         SetMenu_Impl();
 
     SfxWorkWindow *pWorkWin = xImp->pFrame->GetFrame().GetWorkWindow_Impl();
-    SfxWorkWindow *pTaskWin = xImp->pFrame->GetTopFrame().GetWorkWindow_Impl();
-    pTaskWin->ResetStatusBar_Impl();
+    pWorkWin->ResetStatusBar_Impl();
 
     SfxDispatcher *pDispat = this;
     while ( pDispat )
@@ -1326,7 +1316,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
         pActDispat = pActDispat->xImp->pParent;
     }
 
-    Update_Impl_( bUIActive, !bIsIPActive, bIsIPActive, pTaskWin );
+    Update_Impl_( bUIActive, !bIsIPActive, bIsIPActive, pWorkWin );
     if ( (bUIActive || bIsActive) && !comphelper::LibreOfficeKit::isActive() )
         pWorkWin->UpdateObjectBars_Impl();
 

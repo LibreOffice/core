@@ -929,7 +929,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
             if ( !nError )
             {
 
-                m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(true);
+                m_pViewSh->GetViewFrame()->GetFrame().LockResize_Impl(true);
                 try
                 {
                     m_pImp->m_xObject->setClientSite( m_pImp->m_xClient );
@@ -982,8 +982,8 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 }
 
                 SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
-                pFrame->GetTopFrame().LockResize_Impl(false);
-                pFrame->GetTopFrame().Resize();
+                pFrame->GetFrame().LockResize_Impl(false);
+                pFrame->GetFrame().Resize();
             }
         }
     }
@@ -1041,7 +1041,7 @@ void SfxInPlaceClient::DeactivateObject()
                 }
             }
 
-            m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(true);
+            m_pViewSh->GetViewFrame()->GetFrame().LockResize_Impl(true);
 
             if ( (m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
                  svt::EmbeddedObjectRef::IsGLChart(m_pImp->m_xObject) )
@@ -1062,8 +1062,8 @@ void SfxInPlaceClient::DeactivateObject()
 
             SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
             SfxViewFrame::SetViewFrame( pFrame );
-            pFrame->GetTopFrame().LockResize_Impl(false);
-            pFrame->GetTopFrame().Resize();
+            pFrame->GetFrame().LockResize_Impl(false);
+            pFrame->GetFrame().Resize();
         }
         catch (css::uno::Exception& )
         {}

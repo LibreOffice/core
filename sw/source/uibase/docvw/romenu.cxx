@@ -186,10 +186,8 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     else
         EnableItem( MN_READONLY_LOADGRAPHIC, false );
 
-    bool bReloadFrame = nullptr != rSh.GetView().GetViewFrame()->GetFrame().GetParentFrame();
-    EnableItem( MN_READONLY_RELOAD_FRAME,
-            bReloadFrame );
-    EnableItem( MN_READONLY_RELOAD, !bReloadFrame);
+    EnableItem( MN_READONLY_RELOAD_FRAME, false );
+    EnableItem( MN_READONLY_RELOAD);
 
     Check( MN_READONLY_EDITDOC,         SID_EDITDOC,        rDis );
     Check( MN_READONLY_SELECTION_MODE,  FN_READONLY_SELECTION_MODE,    rDis );

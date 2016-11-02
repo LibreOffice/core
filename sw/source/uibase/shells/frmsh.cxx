@@ -464,7 +464,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 if(pArgs && pArgs->GetItemState(FN_FORMAT_FRAME_DLG, false, &pItem) == SfxItemState::SET)
                     sDefPage = OUStringToOString(static_cast<const SfxStringItem *>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
 
-                aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetTopFrame()));
+                aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetFrame()));
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &GetView()) != nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

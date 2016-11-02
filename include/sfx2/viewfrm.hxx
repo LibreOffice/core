@@ -110,8 +110,6 @@ public:
             void            DoActivate(bool bMDI);
             void            DoDeactivate(bool bMDI, SfxViewFrame *pOld=nullptr);
 
-    SfxViewFrame*           GetParentViewFrame() const;
-
     using SfxShell::GetDispatcher;
     SfxDispatcher*          GetDispatcher() { return m_pDispatcher; }
     SfxBindings&            GetBindings() { return *m_pBindings; }
@@ -149,8 +147,6 @@ public:
     bool                    DoClose();
     sal_uIntPtr             GetFrameType() const
                             { return GetFrame().GetFrameType(); }
-    SfxFrame&               GetTopFrame() const
-                            { return GetFrame().GetTopFrame(); }
     void                    GetTargetList( TargetList& rList ) const
                             { GetFrame().GetTargetList( rList ); }
 

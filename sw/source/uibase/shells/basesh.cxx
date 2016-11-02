@@ -170,7 +170,7 @@ static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     void* pEditObj = GraphicType::NONE != nGrfType && GraphicType::Default != nGrfType
                         ? rSh.GetIMapInventor() : nullptr;
     std::unique_ptr<TargetList> pList(new TargetList);
-    rSh.GetView().GetViewFrame()->GetTopFrame().GetTargetList(*pList);
+    rSh.GetView().GetViewFrame()->GetFrame().GetTargetList(*pList);
 
     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
     rSh.GetFlyFrameAttr( aSet );

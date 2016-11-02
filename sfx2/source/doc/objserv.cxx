@@ -422,12 +422,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( !pFrame )
                 return;
 
-            if ( pFrame->GetFrame().GetParentFrame() )
-            {
-                pFrame->GetTopViewFrame()->GetObjectShell()->ExecuteSlot( rReq );
-                return;
-            }
-
             if ( !IsOwnStorageFormat( *GetMedium() ) )
                 return;
 
@@ -757,31 +751,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_CLOSEDOC:
         {
             SfxViewFrame *pFrame = GetFrame();
-            if ( pFrame && pFrame->GetFrame().GetParentFrame() )
-            {
-                // If SID_CLOSEDOC is executed through menu and so on, but
-                // the current document is in a frame, then the
-                // FrameSetDocument should actually be closed.
-                pFrame->GetTopViewFrame()->GetObjectShell()->ExecuteSlot( rReq );
-                rReq.Done();
-                return;
-            }
 
             bool bInFrameSet = false;
             sal_uInt16 nFrames=0;
             pFrame = SfxViewFrame::GetFirst( this );
             while ( pFrame )
             {
-                if ( pFrame->GetFrame().GetParentFrame() )
-                {
-                    // In this document there still exists a view that is
-                    // in a FrameSet , which of course may not be closed
-                    // geclosed werden
-                    bInFrameSet = true;
-                }
-                else
-                    nFrames++;
-
+                nFrames++;
                 pFrame = SfxViewFrame::GetNext( *pFrame, this );
             }
 
@@ -791,8 +767,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 pFrame = SfxViewFrame::GetFirst( this );
                 while ( pFrame )
                 {
-                    if ( !pFrame->GetFrame().GetParentFrame() )
-                        pFrame->GetFrame().DoClose();
+                    pFrame->GetFrame().DoClose();
                     pFrame = SfxViewFrame::GetNext( *pFrame, this );
                 }
             }
@@ -985,14 +960,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     SfxViewFrame* pFrame = GetFrame();
                     if ( !pFrame )
                         pFrame = SfxViewFrame::GetFirst( this );
-                    if ( pFrame  )
-                    {
-                        if ( pFrame->GetFrame().GetParentFrame() )
-                        {
-                            pFrame = pFrame->GetTopViewFrame();
-                            pDoc = pFrame->GetObjectShell();
-                        }
-                    }
 
                     if ( !pFrame || !pDoc->HasName() ||
                         !IsOwnStorageFormat( *pDoc->GetMedium() ) )
@@ -1016,18 +983,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
             case SID_CLOSEDOC:
             {
-                SfxObjectShell *pDoc = this;
-                SfxViewFrame *pFrame = GetFrame();
-                if ( pFrame && pFrame->GetFrame().GetParentFrame() )
-                {
-
-                    // If SID_CLOSEDOC is executed through menu and so on, but
-                    // the current document is in a frame, then the
-                    // FrameSetDocument should actually be closed.
-                    pDoc = pFrame->GetTopViewFrame()->GetObjectShell();
-                }
-
-                if ( pDoc->GetFlags() & SfxObjectShellFlags::DONTCLOSE )
+                if ( GetFlags() & SfxObjectShellFlags::DONTCLOSE )
                     rSet.DisableItem(nWhich);
                 else
                     rSet.Put(SfxStringItem(nWhich, SfxResId(STR_CLOSEDOC).toString()));

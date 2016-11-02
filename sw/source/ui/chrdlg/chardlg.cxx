@@ -169,7 +169,7 @@ SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     ::FillCharStyleListBox(*m_pNotVisitedLB, pView->GetDocShell());
 
     TargetList* pList = new TargetList;
-    const SfxFrame& rFrame = pView->GetViewFrame()->GetTopFrame();
+    const SfxFrame& rFrame = pView->GetViewFrame()->GetFrame();
     rFrame.GetTargetList(*pList);
     if ( !pList->empty() )
     {
