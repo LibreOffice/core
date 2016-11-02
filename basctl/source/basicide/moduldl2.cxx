@@ -155,14 +155,7 @@ CheckBox::CheckBox(vcl::Window* pParent, WinBits nStyle)
     Init();
 }
 
-VCL_BUILDER_DECL_FACTORY(CheckBox)
-{
-    WinBits nWinBits = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-    rRet = VclPtr<CheckBox>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(CheckBox, WB_TABSTOP)
 
 CheckBox::~CheckBox()
 {

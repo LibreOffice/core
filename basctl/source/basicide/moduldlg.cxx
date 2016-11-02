@@ -53,14 +53,7 @@ ExtTreeListBox::ExtTreeListBox(vcl::Window* pParent, WinBits nStyle)
 {
 }
 
-VCL_BUILDER_DECL_FACTORY(ExtTreeListBox)
-{
-    WinBits nWinBits = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-    rRet = VclPtr<ExtTreeListBox>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(ExtTreeListBox, WB_TABSTOP)
 
 bool ExtTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
