@@ -1185,8 +1185,7 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     m_sPageStr(SW_RES(STR_PAGE)),
     m_pHScrollbar(nullptr),
     m_pVScrollbar(nullptr),
-    m_pScrollFill(VclPtr<ScrollBarBox>::Create( &pViewFrame->GetWindow(),
-        pViewFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
+    m_pScrollFill(VclPtr<ScrollBarBox>::Create( &pViewFrame->GetWindow(), WB_SIZEABLE )),
     mnPageCount( 0 ),
     mbResetFormDesignMode( false ),
     mbFormDesignModeToReset( false )

@@ -95,7 +95,6 @@ class SFX2_DLLPUBLIC SfxFrame : public SvCompatWeakBase<SfxFrame>
     friend class SfxFrameWindow_Impl;
 
 private:
-    SfxFrame*           pParentFrame;
     SfxFrameArr_Impl*   pChildArr;
     std::unique_ptr< SfxFrame_Impl >     pImpl;
     VclPtr<vcl::Window> pWindow;
@@ -119,8 +118,6 @@ public:
     bool                DoClose();
     sal_uInt16          GetChildFrameCount() const;
     SfxFrame*           GetChildFrame( sal_uInt16 nPos ) const;
-    SfxFrame*           GetParentFrame() const
-                        { return pParentFrame; }
 
     void                SetPresentationMode( bool bSet );
     SystemWindow*       GetSystemWindow() const;
@@ -130,8 +127,6 @@ public:
 
     SfxObjectShell*     GetCurrentDocument() const;
     SfxViewFrame*       GetCurrentViewFrame() const;
-    SfxFrame&           GetTopFrame() const;
-    bool                IsParent( SfxFrame* ) const;
 
     sal_uInt32          GetFrameType() const;
     static void         GetDefaultTargetList( TargetList& );

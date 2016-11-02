@@ -100,12 +100,6 @@ SfxFrame::~SfxFrame()
     if ( it != pFramesArr_Impl->end() )
         pFramesArr_Impl->erase( it );
 
-    if ( pParentFrame )
-    {
-        pParentFrame->RemoveChildFrame_Impl( this );
-        pParentFrame = nullptr;
-    }
-
     delete pImpl->pDescr;
 
     if ( pChildArr )
@@ -253,14 +247,6 @@ void SfxFrame::RemoveChildFrame_Impl( SfxFrame* pFrame )
         pChildArr->erase( it );
 };
 
-SfxFrame& SfxFrame::GetTopFrame() const
-{
-    const SfxFrame* pParent = this;
-    while ( pParent->pParentFrame )
-        pParent = pParent->pParentFrame;
-    return *const_cast< SfxFrame* >( pParent );
-}
-
 bool SfxFrame::IsClosing_Impl() const
 {
     return pImpl->bClosing;
@@ -315,9 +301,7 @@ SfxViewFrame* SfxFrame::GetCurrentViewFrame() const
 
 SfxDispatcher* SfxFrame::GetDispatcher_Impl() const
 {
-    if ( pImpl->pCurrentViewFrame )
-        return pImpl->pCurrentViewFrame->GetDispatcher();
-    return GetParentFrame()->GetDispatcher_Impl();
+    return pImpl->pCurrentViewFrame->GetDispatcher();
 }
 
 bool SfxFrame::IsAutoLoadLocked_Impl() const
@@ -410,7 +394,6 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
     assert(pDoc && "NULL-Document inserted ?!");
 
-    GetParentFrame();
     const SfxMedium *pMed = pDoc->GetMedium();
     GetDescriptor()->SetActualURL( pMed->GetOrigURL() );
 
@@ -458,7 +441,7 @@ SfxFrameDescriptor* SfxFrame::GetDescriptor() const
 
     if ( !pImpl->pDescr )
     {
-        DBG_ASSERT( !GetParentFrame(), "No TopLevel-Frame, but no Descriptor!" );
+        DBG_ASSERT( true, "No TopLevel-Frame, but no Descriptor!" );
         pImpl->pDescr = new SfxFrameDescriptor;
         if ( GetCurrentDocument() )
             pImpl->pDescr->SetURL( GetCurrentDocument()->GetMedium()->GetOrigURL() );
@@ -478,10 +461,7 @@ void SfxFrame::GetDefaultTargetList(TargetList& rList)
 
 void SfxFrame::GetTargetList( TargetList& rList ) const
 {
-    if ( !GetParentFrame() )
-    {
-        SfxFrame::GetDefaultTargetList(rList);
-    }
+    SfxFrame::GetDefaultTargetList(rList);
 
     SfxViewFrame* pView = GetCurrentViewFrame();
     if( pView && pView->GetViewShell() && pChildArr )
@@ -493,19 +473,6 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
             pFrame->GetTargetList( rList );
         }
     }
-}
-
-bool SfxFrame::IsParent( SfxFrame *pFrame ) const
-{
-    SfxFrame *pParent = pParentFrame;
-    while ( pParent )
-    {
-        if ( pParent == pFrame )
-            return true;
-        pParent = pParent->pParentFrame;
-    }
-
-    return false;
 }
 
 void SfxFrame::InsertTopFrame_Impl( SfxFrame* pFrame )
@@ -676,8 +643,6 @@ void SfxFrame::Appear()
         GetCurrentViewFrame()->Show();
         GetWindow().Show();
         pImpl->xFrame->getContainerWindow()->setVisible( true );
-        if ( pParentFrame )
-            pParentFrame->Appear();
         Reference < css::awt::XTopWindow > xTopWindow( pImpl->xFrame->getContainerWindow(), UNO_QUERY );
         if ( xTopWindow.is() )
             xTopWindow->toFront();
@@ -721,12 +686,6 @@ void SfxFrame::SetToolSpaceBorderPixel_Impl( const SvBorder& rBorder )
         else
             aSize.Height() = 0;
 
-        if ( GetParentFrame() )
-        {
-            bool bHasTools = rBorder.Left() != rBorder.Right() || rBorder.Top() != rBorder.Bottom();
-            pF->GetWindow().SetBorderStyle( bHasTools ? WindowBorderStyle::NORMAL : WindowBorderStyle::NOBORDER );
-        }
-
         pF->GetWindow().SetPosSizePixel( aPos, aSize );
     }
 }
@@ -742,8 +701,6 @@ SfxWorkWindow* SfxFrame::GetWorkWindow_Impl() const
 {
     if ( pImpl->pWorkWin )
         return pImpl->pWorkWin;
-    else if ( pParentFrame )
-        return pParentFrame->GetWorkWindow_Impl();
     else
         return nullptr;
 }

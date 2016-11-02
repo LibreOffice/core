@@ -691,7 +691,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_pFormShell(nullptr),
     m_pHScrollbar(nullptr),
     m_pVScrollbar(nullptr),
-    m_pScrollFill(VclPtr<ScrollBarBox>::Create( &_pFrame->GetWindow(), _pFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
+    m_pScrollFill(VclPtr<ScrollBarBox>::Create( &_pFrame->GetWindow(), WB_SIZEABLE )),
     m_pVRuler(VclPtr<SvxRuler>::Create(&GetViewFrame()->GetWindow(), m_pEditWin,
                             SvxRulerSupportFlags::TABS | SvxRulerSupportFlags::PARAGRAPH_MARGINS_VERTICAL|
                                 SvxRulerSupportFlags::BORDERS | SvxRulerSupportFlags::REDUCED_METRIC,
@@ -874,11 +874,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_pVRuler->SetActive();
 
     SfxViewFrame* pViewFrame = GetViewFrame();
-    if( pViewFrame->GetFrame().GetParentFrame())
-    {
-        aUsrPref.SetViewHRuler(false);
-        aUsrPref.SetViewVRuler(false);
-    }
 
     StartListening(*pViewFrame, true);
     StartListening(rDocSh, true);

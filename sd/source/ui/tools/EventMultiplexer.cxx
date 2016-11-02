@@ -208,7 +208,7 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     // Connect to the frame to listen for controllers being exchanged.
     // Listen to changes of certain properties.
     Reference<frame::XFrame> xFrame (
-        mrBase.GetFrame()->GetTopFrame().GetFrameInterface(),
+        mrBase.GetFrame()->GetFrame().GetFrameInterface(),
         uno::UNO_QUERY);
     mxFrameWeak = xFrame;
     if (xFrame.is())

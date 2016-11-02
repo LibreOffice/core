@@ -204,7 +204,6 @@ static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHa
 
 void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 {
-    SfxFrame *pParent = GetFrame().GetParentFrame();
     if ( rReq.GetSlot() == SID_RELOAD )
     {
         // When CTRL-Reload, reload the active Frame
@@ -220,18 +219,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 pActFrame->ExecReload_Impl( rReq );
                 return;
             }
-        }
-    }
-    else
-    {
-        // When CTRL-Edit, edit the TopFrame.
-        sal_uInt16 nModifier = rReq.GetModifier();
-
-        if ( ( nModifier & KEY_MOD1 ) && pParent )
-        {
-            SfxViewFrame *pTop = GetTopViewFrame();
-            pTop->ExecReload_Impl( rReq );
-            return;
         }
     }
 
@@ -1510,7 +1497,7 @@ void SfxViewFrame::Enable( bool bEnable )
     {
         m_pImpl->bEnabled = bEnable;
 
-        vcl::Window *pWindow = &GetFrame().GetTopFrame().GetWindow();
+        vcl::Window *pWindow = &GetFrame().GetWindow();
         if ( !bEnable )
             m_pImpl->bWindowWasEnabled = pWindow->IsInputEnabled();
         if ( !bEnable || m_pImpl->bWindowWasEnabled )
@@ -1594,12 +1581,6 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
                 if ( GetObjectShell()->IsPreview() )
                 {
                     bPreview = true;
-                }
-                else
-                {
-                    SfxViewFrame* pParent = GetParentViewFrame();
-                    if ( pParent )
-                        pParent->SetActiveChildFrame_Impl( this );
                 }
 
                 css::uno::Reference< css::frame::XFrame > xFrame = GetFrame().GetFrameInterface();
@@ -2218,16 +2199,6 @@ void SfxViewFrame::ToTop()
 
 /*  [Description]
 
-    The ParentViewFrame is the ViewFrame of the ParentFrames.
-*/
-SfxViewFrame* SfxViewFrame::GetParentViewFrame() const
-{
-    SfxFrame *pFrame = GetFrame().GetParentFrame();
-    return pFrame ? pFrame->GetCurrentViewFrame() : nullptr;
-}
-
-/*  [Description]
-
     GetFrame returns the Frame, in which the ViewFrame is located.
 */
 SfxFrame& SfxViewFrame::GetFrame() const
@@ -2237,7 +2208,7 @@ SfxFrame& SfxViewFrame::GetFrame() const
 
 SfxViewFrame* SfxViewFrame::GetTopViewFrame() const
 {
-    return GetFrame().GetTopFrame().GetCurrentViewFrame();
+    return GetFrame().GetCurrentViewFrame();
 }
 
 vcl::Window& SfxViewFrame::GetWindow() const
@@ -2843,7 +2814,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     {
         if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DATABASE))
             return;
-        Reference < XFrame > xFrame = GetFrame().GetTopFrame().GetFrameInterface();
+        Reference < XFrame > xFrame = GetFrame().GetFrameInterface();
         Reference < XFrame > xBeamer( xFrame->findFrame( "_beamer", FrameSearchFlag::CHILDREN ) );
         bool bHasChild = xBeamer.is();
         bool bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
@@ -2950,7 +2921,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         }
         else if ( nSID == SID_BROWSER )
         {
-            Reference < XFrame > xFrame = GetFrame().GetTopFrame().GetFrameInterface()->
+            Reference < XFrame > xFrame = GetFrame().GetFrameInterface()->
                             findFrame( "_beamer", FrameSearchFlag::CHILDREN );
             if ( !xFrame.is() )
                 rState.DisableItem( nSID );

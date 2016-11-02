@@ -462,7 +462,7 @@ void SfxWorkWindow::Sort_Impl()
 // constructor for workwin of a Frame
 
 SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMaster ) :
-    pParent( pFrm->GetParentFrame() ? pFrm->GetParentFrame()->GetWorkWindow_Impl() : nullptr ),
+    pParent( nullptr ),
     pBindings(&pFrm->GetCurrentViewFrame()->GetBindings()),
     pWorkWin (pWin),
     pConfigShell( nullptr ),

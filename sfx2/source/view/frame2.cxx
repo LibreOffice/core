@@ -290,7 +290,6 @@ SfxFrame* SfxFrame::Create( const Reference < XFrame >& i_rFrame )
 
 SfxFrame::SfxFrame( vcl::Window& i_rContainerWindow )
     :SvCompatWeakBase<SfxFrame>( this )
-    ,pParentFrame( nullptr )
     ,pChildArr( nullptr )
     ,pWindow( nullptr )
 {

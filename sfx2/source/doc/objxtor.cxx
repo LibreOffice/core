@@ -583,7 +583,7 @@ bool SfxObjectShell::PrepareClose
     if ( bUI && IsModified() && pFrame )
     {
         // restore minimized
-        SfxFrame& rTop = pFrame->GetTopFrame();
+        SfxFrame& rTop = pFrame->GetFrame();
         SfxViewFrame::SetViewFrame( rTop.GetCurrentViewFrame() );
         pFrame->GetFrame().Appear();
 

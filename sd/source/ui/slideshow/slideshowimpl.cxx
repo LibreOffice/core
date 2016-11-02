@@ -2485,7 +2485,7 @@ void SlideshowImpl::setActiveXToolbarsVisible( bool bVisible )
                 try
                 {
                     Reference< frame::XLayoutManager > xLayoutManager;
-                    Reference< beans::XPropertySet > xFrameProps( pViewFrame->GetFrame().GetTopFrame().GetFrameInterface(), UNO_QUERY_THROW );
+                    Reference< beans::XPropertySet > xFrameProps( pViewFrame->GetFrame().GetFrameInterface(), UNO_QUERY_THROW );
                     if ( ( xFrameProps->getPropertyValue( "LayoutManager" )
                                 >>= xLayoutManager )
                       && xLayoutManager.is() )

@@ -613,7 +613,7 @@ WorkWindow *SlideShow::GetWorkWindow()
     if( !pShell || !pShell->GetViewFrame() )
         return nullptr;
 
-    return dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
+    return dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetFrame().GetWindow().GetParent());
 }
 
 bool SlideShow::IsExitAfterPresenting() const
@@ -668,7 +668,7 @@ void SAL_CALL SlideShow::end()
 
             if( pShell && pShell->GetViewFrame() )
             {
-                WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
+                WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetFrame().GetWindow().GetParent());
                 if( pWorkWindow )
                 {
                     pWorkWindow->StartPresentationMode(   (mxController.is() && mxController->maPresSettings.mbAlwaysOnTop)

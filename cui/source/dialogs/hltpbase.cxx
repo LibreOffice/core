@@ -152,7 +152,7 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
 
         SfxDispatcher* pDispatch = GetDispatcher();
         SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : nullptr;
-        SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetTopFrame() : nullptr;
+        SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
         if ( pFrame )
         {
             std::unique_ptr<TargetList> pList(new TargetList);
