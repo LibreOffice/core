@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_fa2b8831",
+        "filename": "sw/source/ui/dbui/mmaddressblockpage.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-02T07:14:51Z",
+      "side": 1,
+      "message": "remove indentation",
+      "revId": "5121640f187630f3ef35c83ada66e4ac6e4dc705",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
