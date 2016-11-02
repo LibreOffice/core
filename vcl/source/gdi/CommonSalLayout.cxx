@@ -190,6 +190,9 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
     mpHbFont = rCoreTextStyle.GetHbFont();
     if (!mpHbFont)
     {
+        // On macOS we use HarfBuzz for AAT shaping, but HarfBuzz will then
+        // need a CGFont (as it offloads the actual AAT shaping to Core Text),
+        // if we have one we use it to create the hb_face_t.
         hb_face_t* pHbFace;
         CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue(rCoreTextStyle.GetStyleDict(), kCTFontAttributeName));
         CGFontRef pCGFont = CTFontCopyGraphicsFont(pCTFont, nullptr);
