@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_fabb8873",
+        "filename": "sw/source/core/layout/frmtool.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1834,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-11-02T16:40:26Z",
+      "side": 1,
+      "message": "If the compat setting isn\u0027t read anymore, then I would rather remove it before it hits any release. If there will be a format needing this compat flag, let\u0027s add it back when that appears. I\u0027m not convinced that\u0027ll ever happen. ;-)\n\nOr at least (as a minimal change) just delete the commented out code, you can trust git.",
+      "revId": "fc21ebc16478a7d1ed451b712552670ea84e5818",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
