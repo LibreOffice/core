@@ -37,6 +37,13 @@
 #include <sechash.h>
 #endif
 
+#ifdef XMLSEC_CRYPTO_MSCRYPTO
+#include <prewin.h>
+#include <wincrypt.h>
+#include <postwin.h>
+#include <comphelper/windowserrorstring.hxx>
+#endif
+
 using namespace com::sun::star;
 
 namespace xmlsecurity
@@ -1863,6 +1870,120 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     for (auto pDocumentCertificate : aDocumentCertificates)
         CERT_DestroyCertificate(pDocumentCertificate);
 
+    return true;
+#elif defined XMLSEC_CRYPTO_MSCRYPTO
+    //  Open a message for decoding.
+    HCRYPTMSG hMsg = CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+                                          CMSG_DETACHED_FLAG,
+                                          0,
+                                          NULL,
+                                          nullptr,
+                                          nullptr);
+    if (!hMsg)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: CryptMsgOpenToDecode() failed");
+        return false;
+    }
+
+    //  Update the message with the encoded header blob.
+    if (!CryptMsgUpdate(hMsg, aSignature.data(), aSignature.size(), TRUE))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature, CryptMsgUpdate() for the header failed: " << WindowsErrorString(GetLastError()));
+        return false;
+    }
+
+    //  Update the message with the content blob.
+    for (const auto& rByteRange : aByteRanges)
+    {
+        rStream.Seek(rByteRange.first);
+
+        const int nChunkLen = 4096;
+        std::vector<unsigned char> aBuffer(nChunkLen);
+        for (size_t nByte = 0; nByte < rByteRange.second;)
+        {
+            size_t nRemainingSize = rByteRange.second - nByte;
+            if (nRemainingSize < nChunkLen)
+            {
+                rStream.ReadBytes(aBuffer.data(), nRemainingSize);
+                if (!CryptMsgUpdate(hMsg, aBuffer.data(), nRemainingSize, FALSE))
+                {
+                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature, CryptMsgUpdate() for the content failed: " << WindowsErrorString(GetLastError()));
+                    return false;
+                }
+                nByte = rByteRange.second;
+            }
+            else
+            {
+                rStream.ReadBytes(aBuffer.data(), nChunkLen);
+                if (!CryptMsgUpdate(hMsg, aBuffer.data(), nChunkLen, FALSE))
+                {
+                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature, CryptMsgUpdate() for the content failed: " << WindowsErrorString(GetLastError()));
+                    return false;
+                }
+                nByte += nChunkLen;
+            }
+        }
+    }
+    if (!CryptMsgUpdate(hMsg, nullptr, 0, TRUE))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature, CryptMsgUpdate() for the last content failed: " << WindowsErrorString(GetLastError()));
+        return false;
+    }
+
+    // Get the signer CERT_INFO from the message.
+    DWORD nSignerCertInfo = 0;
+    if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_CERT_INFO_PARAM, 0, nullptr, &nSignerCertInfo))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: CryptMsgGetParam() failed");
+        return false;
+    }
+    std::unique_ptr<BYTE[]> pSignerCertInfoBuf(new BYTE[nSignerCertInfo]);
+    if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_CERT_INFO_PARAM, 0, pSignerCertInfoBuf.get(), &nSignerCertInfo))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: CryptMsgGetParam() failed");
+        return false;
+    }
+    PCERT_INFO pSignerCertInfo = reinterpret_cast<PCERT_INFO>(pSignerCertInfoBuf.get());
+
+    // Open a certificate store in memory using CERT_STORE_PROV_MSG, which
+    // initializes it with the certificates from the message.
+    HCERTSTORE hStoreHandle = CertOpenStore(CERT_STORE_PROV_MSG,
+                                            PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+                                            NULL,
+                                            0,
+                                            hMsg);
+    if (!hStoreHandle)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: CertOpenStore() failed");
+        return false;
+    }
+
+    // Find the signer's certificate in the store.
+    PCCERT_CONTEXT pSignerCertContext = CertGetSubjectCertificateFromStore(hStoreHandle,
+                                                                           PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+                                                                           pSignerCertInfo);
+    if (!pSignerCertContext)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: CertGetSubjectCertificateFromStore() failed");
+        return false;
+    }
+    else
+    {
+        // Write rInformation.ouX509Certificate.
+        uno::Sequence<sal_Int8> aDerCert(pSignerCertContext->cbCertEncoded);
+        for (size_t i = 0; i < pSignerCertContext->cbCertEncoded; ++i)
+            aDerCert[i] = pSignerCertContext->pbCertEncoded[i];
+        OUStringBuffer aBuffer;
+        sax::Converter::encodeBase64(aBuffer, aDerCert);
+        rInformation.ouX509Certificate = aBuffer.makeStringAndClear();
+    }
+
+    // Use the CERT_INFO from the signer certificate to verify the signature.
+    if (CryptMsgControl(hMsg, 0, CMSG_CTRL_VERIFY_SIGNATURE, pSignerCertContext->pCertInfo))
+        rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+
+    CertCloseStore(hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG);
+    CryptMsgClose(hMsg);
     return true;
 #else
     // Not implemented.
