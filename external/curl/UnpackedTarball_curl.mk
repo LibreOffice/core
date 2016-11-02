@@ -14,8 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,curl,$(CURL_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,curl,1))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,curl,\
-	Makefile.msvc.names \
-	lib/Makefile.vc9 \
+	lib/Makefile.vc11 \
 ))
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-7.26.0_nspr.patch \

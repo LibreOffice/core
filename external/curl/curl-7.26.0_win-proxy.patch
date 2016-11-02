@@ -83,9 +83,10 @@
 +      if(!check_noproxy(conn->host.name, no_proxy)) {
 +        /* Look for the http proxy setting */
 +        char* tok;
++        char *saveptr;
 +
 +        if(NULL != ieProxy) {
-+          tok = strtok(ieProxy, ";");
++          tok = strtok_s(ieProxy, ";", &saveptr);
 +          if(strchr(tok, '=') == NULL) {
 +            proxy = strdup(ieProxy);
 +          }
@@ -95,7 +96,7 @@
 +                /* We found HTTP proxy value, then use it */
 +                proxy = strdup( tok + 5 );
 +              }
-+              tok = strtok(NULL, ";");
++              tok = strtok_s(NULL, ";", &saveptr);
 +            }
 +            while(NULL != tok);
 +          }
