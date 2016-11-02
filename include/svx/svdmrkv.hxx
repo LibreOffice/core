@@ -182,7 +182,7 @@ public:
 
     virtual void ClearPageView() override;
     virtual void HideSdrPage() override;
-    virtual bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
+    bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
 
     // Returns sal_True if objects, points or glue points are selected by drawing a frame
     // (as long as the frame is drawn).

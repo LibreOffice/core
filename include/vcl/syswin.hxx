@@ -199,8 +199,6 @@ public:
 
     virtual bool    Close();
     virtual void    TitleButtonClick( TitleButton nButton );
-    virtual void    Pin();
-    virtual void    Roll();
     virtual void    Resizing( Size& rSize );
     virtual void    Resize() override;
     virtual Size    GetOptimalSize() const override;

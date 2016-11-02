@@ -298,14 +298,6 @@ void SystemWindow::TitleButtonClick( TitleButton )
 {
 }
 
-void SystemWindow::Pin()
-{
-}
-
-void SystemWindow::Roll()
-{
-}
-
 void SystemWindow::Resizing( Size& )
 {
 }

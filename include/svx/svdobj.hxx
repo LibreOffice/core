@@ -636,7 +636,7 @@ public:
     void ImpSetAnchorPos(const Point& rPnt);
     virtual void NbcSetAnchorPos(const Point& rPnt);
     virtual void SetAnchorPos(const Point& rPnt);
-    virtual const Point& GetAnchorPos() const;
+    const Point& GetAnchorPos() const;
 
     /// Snap is not done on the BoundRect but if possible on logic coordinates
     /// (i.e. without considering stroke width, ...)
