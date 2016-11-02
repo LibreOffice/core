@@ -912,15 +912,6 @@ void SmDocShell::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
     SetText( aEquation.ConvertToStarMath());
 }
 
-bool SmDocShell::SaveCompleted( const css::uno::Reference< css::embed::XStorage >& xStorage )
-{
-    if( SfxObjectShell::SaveCompleted( xStorage ))
-        return true;
-
-    return false;
-}
-
-
 void SmDocShell::Execute(SfxRequest& rReq)
 {
     switch (rReq.GetSlot())
