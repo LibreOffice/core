@@ -31,7 +31,6 @@
 #include "filter.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
-#include "biff.hxx"
 #include <tools/stream.hxx>
 #include <memory>
 
@@ -131,10 +130,26 @@ FltError ScFormatFilterPluginImpl::ScImportQuattroPro( SfxMedium &rMedium, ScDoc
     return eRet;
 }
 
-ScQProReader::ScQProReader( SfxMedium &rMedium ):
-    ScBiffReader( rMedium )
+ScQProReader::ScQProReader( SfxMedium &rMedium )
+    : mnId(0)
+    , mnLength(0)
+    , mnOffset(0)
+    , mbEndOfFile(false)
 {
+    mpStream = rMedium.GetInStream();
+    if( mpStream )
+    {
+        mpStream->SetBufferSize( 65535 );
+        mpStream->SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
+    }
 }
+
+ScQProReader::~ScQProReader()
+{
+    if( mpStream )
+        mpStream->SetBufferSize( 0 );
+}
+
 
 FltError ScQProReader::import( ScDocument *pDoc )
 {
@@ -211,14 +226,49 @@ FltError ScQProReader::import( ScDocument *pDoc )
 
 bool ScQProReader::recordsLeft()
 {
-    bool bValue = ScBiffReader::recordsLeft();
-    return bValue;
+    return mpStream && !mpStream->IsEof();
 }
 
 bool ScQProReader::nextRecord()
 {
-    bool bValue = ScBiffReader::nextRecord();
-    return bValue;
+    if( !recordsLeft() )
+        return false;
+
+    if( mbEndOfFile )
+        return false;
+
+    sal_uInt32 nPos = mpStream->Tell();
+    if( nPos != mnOffset + mnLength )
+        mpStream->Seek( mnOffset + mnLength );
+
+    mnLength = mnId = 0;
+    mpStream->ReadUInt16( mnId ).ReadUInt16( mnLength );
+
+    mnOffset = mpStream->Tell();
+#ifdef DEBUG_SC_QPRO
+    fprintf( stderr, "Read record 0x%x length 0x%x at offset 0x%x\n",
+        (unsigned)mnId, (unsigned)mnLength, (unsigned)mnOffset );
+
+#if 1  // rather verbose
+    int len = mnLength;
+    while (len > 0) {
+        int i, chunk = len < 16 ? len : 16;
+        unsigned char data[16];
+        mpStream->Read( data, chunk );
+
+        for (i = 0; i < chunk; i++)
+            fprintf( stderr, "%.2x ", data[i] );
+        fprintf( stderr, "| " );
+        for (i = 0; i < chunk; i++)
+            fprintf( stderr, "%c", data[i] < 127 && data[i] > 30 ? data[i] : '.' );
+        fprintf( stderr, "\n" );
+
+        len -= chunk;
+    }
+    mpStream->Seek( mnOffset );
+#endif
+#endif
+    return true;
 }
 
 void ScQProReader::readString( OUString &rString, sal_uInt16 nLength )

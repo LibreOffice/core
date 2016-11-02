@@ -145,7 +145,6 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/lotus/op \
 	sc/source/filter/lotus/optab \
 	sc/source/filter/lotus/tool \
-	sc/source/filter/qpro/biff \
 	sc/source/filter/qpro/qpro \
 	sc/source/filter/qpro/qproform \
 	sc/source/filter/qpro/qprostyle \
