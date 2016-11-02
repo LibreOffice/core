@@ -250,6 +250,7 @@ static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen
                                          sal_uInt16 nIcon, sal_uInt16 iconSize,
                                          Pixmap& icon_pixmap, Pixmap& icon_mask, NetWmIconData& netwm_icon)
 {
+    return true;
     if( ! ImplGetResMgr() )
         return false;
 
