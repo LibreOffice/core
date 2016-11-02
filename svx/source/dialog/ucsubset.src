@@ -1079,6 +1079,50 @@ Resource RID_SUBSETMAP
     {
         Text [ en-US ] = "Sutton Signwriting";
     };
+    String RID_SUBSETSTR_ADLAM
+    {
+        Text [ en-US ] = "Adlam";
+    };
+    String RID_SUBSETSTR_BHAIKSUKI
+    {
+        Text [ en-US ] = "Bhaiksuki";
+    };
+    String RID_SUBSETSTR_CYRILLIC_EXTENDED_C
+    {
+        Text [ en-US ] = "Cyrillic Extended-C";
+    };
+    String RID_SUBSETSTR_GLAGOLITIC_SUPPLEMENT
+    {
+        Text [ en-US ] = "Glagolitic Supplement";
+    };
+    String RID_SUBSETSTR_IDEOGRAPHIC_SYMBOLS_AND_PUNCTUATION
+    {
+        Text [ en-US ] = "Ideographic Symbols and Punctuation";
+    };
+    String RID_SUBSETSTR_MARCHEN
+    {
+        Text [ en-US ] = "Marchen";
+    };
+    String RID_SUBSETSTR_MONGOLIAN_SUPPLEMENT
+    {
+        Text [ en-US ] = "Mongolian Supplement";
+    };
+    String RID_SUBSETSTR_NEWA
+    {
+        Text [ en-US ] = "Newa";
+    };
+    String RID_SUBSETSTR_OSAGE
+    {
+        Text [ en-US ] = "Osage";
+    };
+    String RID_SUBSETSTR_TANGUT
+    {
+        Text [ en-US ] = "Tangut";
+    };
+    String RID_SUBSETSTR_TANGUT_COMPONENTS
+    {
+        Text [ en-US ] = "Tangut Components";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
