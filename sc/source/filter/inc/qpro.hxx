@@ -27,22 +27,29 @@
 #include "flttypes.hxx"
 #include "ftools.hxx"
 #include "qprostyle.hxx"
-#include "biff.hxx"
 
 class ScDocument;
 
 // Stream wrapper class
-class ScQProReader : public ScBiffReader
+class ScQProReader
 {
-    public:
+    sal_uInt16 mnId;
+    sal_uInt16 mnLength;
+    sal_uInt32 mnOffset;
+    SvStream *mpStream;
+    bool mbEndOfFile;
+
+public:
+    ScQProReader( SfxMedium &rMedium );
+    ~ScQProReader();
+
     bool recordsLeft();
     void SetEof( bool bValue ){ mbEndOfFile = bValue; }
     bool nextRecord();
     sal_uInt16 getId() { return mnId; }
     sal_uInt16 getLength() { return mnLength; }
     void readString( OUString &rString, sal_uInt16 nLength );
-    ScQProReader( SfxMedium &rMedium );
-    ~ScQProReader(){ };
+
     FltError import( ScDocument *pDoc );
     FltError readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle );
 };
