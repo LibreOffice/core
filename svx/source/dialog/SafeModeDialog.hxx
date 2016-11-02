@@ -56,6 +56,7 @@ private:
 
     VclPtr<FixedHyperlink> mpBugLink;
     VclPtr<FixedHyperlink> mpUserProfileLink;
+    VclPtr<Button> mpBtnCreateZip;
 
     // local BackupFileHelper for handling possible restores
     comphelper::BackupFileHelper maBackupFileHelper;
@@ -65,7 +66,8 @@ private:
 
     DECL_LINK(RadioBtnHdl, Button*, void);
     DECL_LINK(CheckBoxHdl, CheckBox&, void);
-    DECL_LINK(BtnHdl, Button*, void);
+    DECL_LINK(CreateZipBtnHdl, Button*, void);
+    DECL_LINK(DialogBtnHdl, Button*, void);
 };
 
 #endif
