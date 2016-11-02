@@ -868,10 +868,6 @@ SignatureInformations XSecController::getSignatureInformations() const
  */
 
 /*
- * XFastPropertySet
- */
-
-/*
  * XSAXEventKeeperStatusChangeListener
  */
 

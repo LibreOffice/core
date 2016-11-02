@@ -37,7 +37,6 @@
 #include <com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
 #include <com/sun/star/xml/wrapper/XXMLDocumentWrapper.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -98,7 +97,6 @@ public:
 class XSecController : public cppu::WeakImplHelper
 <
     css::xml::crypto::sax::XSecurityController,
-    //css::beans::XFastPropertySet,
     css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener,
     css::xml::crypto::sax::XSignatureCreationResultListener,
     css::xml::crypto::sax::XSignatureVerifyResultListener
@@ -112,10 +110,6 @@ class XSecController : public cppu::WeakImplHelper
  *  Controls the whole xml security framework to create signatures or to
  *  verify signatures.
  *
- *   NOTES
- *  The XFastPropertySet interface is used to transfer common values to
- *  classes in other module, for instance, the signature id for all
- *  sessions is transferred to xmloff module through this interface.
  ******************************************************************************/
 {
     friend class XSecParser;
@@ -420,10 +414,6 @@ public:
      * XSecurityController
      *
      * no method in XSecurityController interface
-     */
-
-    /*
-     * XFastPropertySet
      */
 
     /*
