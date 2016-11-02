@@ -425,24 +425,29 @@ endif # SYSTEM_ZLIB
 ifneq ($(SYSTEM_JPEG),)
 
 define gb_LinkTarget__use_jpeg
-$(call gb_LinkTarget_add_libs,$(1),-ljpeg)
+$(call gb_LinkTarget_add_libs,$(1),$(LIBJPEG_LIBS))
 $(call gb_LinkTarget_set_ldflags,$(1),\
 	$$(filter-out -L/usr/lib/jvm%,$$(T_LDFLAGS)) \
 )
 
 endef
 
+gb_ExternalProject__use_jpeg :=
+
 else ifneq ($(filter JPEG_TURBO,$(BUILD_TYPE)),)
 
 define gb_LinkTarget__use_jpeg
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,jpeg-turbo) \
+	$(LIBJPEG_CFLAGS) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,jpeg-turbo)/.libs/libjpeg$(gb_StaticLibrary_PLAINEXT) \
-)
+$(call gb_LinkTarget_add_libs,$(1),$(LIBJPEG_LIBS))
 $(call gb_LinkTarget_use_external_project,$(1),jpeg-turbo,full)
+
+endef
+
+define gb_ExternalProject__use_jpeg
+$(call gb_ExternalProject_use_external_project,$(1),jpeg-turbo)
 
 endef
 
@@ -450,13 +455,18 @@ else # !SYSTEM_JPEG
 
 define gb_LinkTarget__use_jpeg
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,jpeg) \
+	$(LIBJPEG_CFLAGS) \
 	$$(INCLUDE) \
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	jpeg \
 )
+
+define gb_ExternalProject__use_jpeg
+$(call gb_ExternalProject_use_static_libraries,$(1),jpeg)
+
+endef
 
 endef
 
@@ -2752,6 +2762,7 @@ endef
 else # !SYSTEM_POPPLER
 
 define gb_LinkTarget__use_poppler
+$(call gb_LinkTarget_use_external,$(1),jpeg)
 $(call gb_LinkTarget_use_external_project,$(1),poppler,full)
 
 $(call gb_LinkTarget_set_include,$(1),\
