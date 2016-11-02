@@ -334,13 +334,6 @@ int macxp_resolveAlias(char *path, int buflen);
 #   define SA_FAMILY_DECL short sa_family
 #endif
 
-typedef struct sockaddr_ipx {
-    SA_FAMILY_DECL;
-    char  sa_netnum[4];
-    char  sa_nodenum[6];
-    unsigned short sa_socket;
-} SOCKADDR_IPX;
-
 #define NSPROTO_IPX      1000
 #define NSPROTO_SPX      1256
 #define NSPROTO_SPXII    1257

@@ -79,11 +79,9 @@ class  SVX_DLLPUBLIC BulletsSettings
     public:
         bool            bIsCustomized;
         rtl::OUString   sDescription;
-        NBType          eType;
     public:
-        BulletsSettings(NBType eTy) :
-            bIsCustomized(false),
-            eType(eTy)
+        BulletsSettings() :
+            bIsCustomized(false)
             {}
         virtual ~BulletsSettings(){}
 };
@@ -95,9 +93,8 @@ class  SVX_DLLPUBLIC BulletsSettings_Impl:public BulletsSettings
         vcl::Font   aFont;
 
     public:
-        BulletsSettings_Impl(NBType eTy)
-            : BulletsSettings(eTy)
-            , cBulletChar(0)
+        BulletsSettings_Impl()
+            : cBulletChar(0)
             {}
         virtual ~BulletsSettings_Impl() override {}
 };

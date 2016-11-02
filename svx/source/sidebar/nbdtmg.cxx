@@ -260,7 +260,7 @@ void BulletsTypeMgr::Init()
 
     for (sal_uInt16 i=0;i<DEFAULT_BULLET_TYPES;i++)
     {
-        pActualBullets[i] = new BulletsSettings_Impl(NBType::Bullets);
+        pActualBullets[i] = new BulletsSettings_Impl;
         pActualBullets[i]->cBulletChar = aDefaultBulletTypes[i];
         pActualBullets[i]->aFont =rActBulletFont;
         pActualBullets[i]->sDescription = SVX_RESSTR( RID_SVXSTR_BULLET_DESCRIPTION_0 + i );

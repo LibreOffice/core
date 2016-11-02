@@ -136,9 +136,6 @@ public:
     virtual ~SvxXMLBitmapEntryExporter() override;
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
-
-private:
-    XMLImageStyle maImageStyle;
 };
 
 

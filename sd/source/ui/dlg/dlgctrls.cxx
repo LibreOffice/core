@@ -32,13 +32,6 @@ using namespace ::sd;
 
 struct FadeEffectLBImpl
 {
-    // The set id of each entry
-    std::vector< OUString > maSet;
-
-    // How many variants each transition set has
-    std::map< OUString, int > maNumVariants;
-
-    std::vector< TransitionPresetPtr > maPresets;
 };
 
 FadeEffectLB::FadeEffectLB(vcl::Window* pParent, WinBits nStyle)
