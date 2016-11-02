@@ -41,7 +41,6 @@ struct JPEGCreateBitmapParam
     unsigned long Y_density;
 
     bool bGray;
-    bool bTopDown;      // CreateBitmap method in svtools
 };
 
 class JPEGReader : public GraphicReader

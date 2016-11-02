@@ -92,8 +92,7 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       maImgSquare(SVX_RES(IMG_SQUARE)),
       maImgLinear(SVX_RES(IMG_LINEAR)),
       mpFloatTransparenceItem(),
-      mpTransparanceItem(),
-      mxFrame(rxFrame)
+      mpTransparanceItem()
 {
     get(mpColorTextFT,    "filllabel");
     get(mpLbFillType,     "fillstyle");

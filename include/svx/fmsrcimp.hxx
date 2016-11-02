@@ -158,7 +158,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine
 
     // the formatter
     css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xFormatSupplier;
-    css::uno::Reference< css::util::XNumberFormatter >        m_xFormatter;
 
     CharClass               m_aCharacterClassficator;
     CollatorWrapper         m_aStringCompare;

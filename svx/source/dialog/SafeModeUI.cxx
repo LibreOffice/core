@@ -24,7 +24,7 @@ class SafeModeUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,
                                                   css::frame::XSynchronousDispatch > // => XDispatch!
 {
 public:
-    explicit SafeModeUI(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    SafeModeUI();
     virtual ~SafeModeUI() override;
 
     // css.lang.XServiceInfo
@@ -41,15 +41,10 @@ public:
     virtual css::uno::Any SAL_CALL dispatchWithReturnValue(const css::util::URL& aURL,
                                         const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
         throw(css::uno::RuntimeException, std::exception) override;
-
-private:
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
 };
 
-SafeModeUI::SafeModeUI(const css::uno::Reference<css::uno::XComponentContext>& xContext):
-    mxContext(xContext)
+SafeModeUI::SafeModeUI()
 {
-
 }
 
 SafeModeUI::~SafeModeUI()
@@ -90,10 +85,10 @@ css::uno::Any SAL_CALL SafeModeUI::dispatchWithReturnValue(const css::util::URL&
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_svx_SafeModeUI_get_implementation(
-    css::uno::XComponentContext *context,
+    css::uno::XComponentContext * /*context*/,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new SafeModeUI(context));
+    return cppu::acquire(new SafeModeUI);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

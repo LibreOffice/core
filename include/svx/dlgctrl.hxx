@@ -223,7 +223,6 @@ public:
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC HatchingLB : public ListBox
 {
-    XHatchListRef mpList;
 public:
     explicit HatchingLB(vcl::Window* pParent, WinBits aWB);
 };
@@ -232,7 +231,6 @@ public:
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC GradientLB : public ListBox
 {
-    XGradientListRef mpList;
 public:
     explicit GradientLB(vcl::Window* pParent, WinBits aWB);
 };
@@ -243,11 +241,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC BitmapLB : public ListBox
 {
 public:
     explicit BitmapLB(vcl::Window* pParent, WinBits aWB);
-
-private:
-    BitmapEx        maBitmapEx;
-
-    XBitmapListRef  mpList;
 };
 
 /************************************************************************/

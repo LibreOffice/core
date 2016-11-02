@@ -52,7 +52,7 @@ for k, definitions in sourceLocationToDefinitionMap.iteritems():
     if len(definitions) > 1:
         for d in definitions:
             definitionSet.remove(d)
-    
+
 untouchedSet = set()
 for d in definitionSet:
     if d in callSet:
@@ -87,7 +87,7 @@ for d in definitionSet:
         or srcLoc.startswith("lotuswordpro/source/filter/lwpsdwdrawheader.hxx")
         or srcLoc.startswith("hwpfilter/")
         or srcLoc.startswith("embeddedobj/source/inc/")
-        or srcLoc.startswith("svtools/source/dialogs/insdlg.cxx")):
+        or srcLoc.startswith("svtools/source/dialogs/insdlg.cxx")
         or srcLoc.startswith("bridges/")):
         continue
     if d[0] in set([ "AtkObjectWrapperClass", "AtkObjectWrapper", "GLOMenu", "GLOAction", "_XRegion", "SalMenuButtonItem", "Vertex",
@@ -95,7 +95,7 @@ for d in definitionSet:
             "ImplPPTParaPropSet", "DataNode"]):
         continue
     # unit testing code
-    if (srcLoc.startswith("cppu/source/uno/check.cxx"):
+    if srcLoc.startswith("cppu/source/uno/check.cxx"):
         continue
     fieldType = definitionToTypeMap[d]
     if fieldType in set([ "class rptui::OModuleClient" ]):

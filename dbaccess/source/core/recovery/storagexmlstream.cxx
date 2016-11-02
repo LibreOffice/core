@@ -119,12 +119,6 @@ namespace dbaccess
         m_pData->xHandler->characters( i_rCharacters );
     }
 
-    // StorageXMLInputStream_Data
-    struct StorageXMLInputStream_Data
-    {
-        Reference< XParser >    xParser;
-    };
-
     // StorageXMLInputStream
     StorageXMLInputStream::StorageXMLInputStream( const Reference<XComponentContext>& i_rContext,
                                                   const Reference< XStorage >& i_rParentStorage,
