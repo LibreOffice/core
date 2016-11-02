@@ -27,6 +27,12 @@ public:
     }
 
 };
+DECLARE_WW8EXPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPadding.odt")
+{
+    // the page style's borderless padding should force this to 3 pages, not 1
+    CPPUNIT_ASSERT_EQUAL( 3, getPages() );
+}
+
 
 DECLARE_WW8EXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.doc")
 {
