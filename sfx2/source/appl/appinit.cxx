@@ -205,8 +205,6 @@ void SfxApplication::Initialize_Impl()
     Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
     xDesktop->addTerminateListener( new SfxTerminateListener_Impl() );
 
-    Application::EnableAutoHelpId();
-
     pImpl->pAppDispatch = new SfxStatusDispatcher;
     pImpl->pAppDispatch->acquire();
 

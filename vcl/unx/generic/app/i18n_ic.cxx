@@ -119,16 +119,17 @@ get_font_set( Display *p_display )
     return p_font_set;
 }
 
+static const XIMStyle g_nSupportedStatusStyle(
+                               XIMStatusCallbacks   |
+                               XIMStatusNothing     |
+                               XIMStatusNone
+                               );
+
 // Constructor for a InputContext (IC)
 
 SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         mbUseable( True ),
         maContext( nullptr ),
-        mnSupportedStatusStyle(
-                               XIMStatusCallbacks   |
-                               XIMStatusNothing     |
-                               XIMStatusNone
-                               ),
         mnSupportedPreeditStyle(
                                 XIMPreeditCallbacks |
                                 XIMPreeditNothing   |
@@ -469,7 +470,7 @@ Bool
 SalI18N_InputContext::IsSupportedIMStyle( XIMStyle nStyle ) const
 {
     if (   (nStyle & mnSupportedPreeditStyle)
-           && (nStyle & mnSupportedStatusStyle) )
+           && (nStyle & g_nSupportedStatusStyle) )
     {
         return True;
     }
@@ -500,7 +501,7 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
                 {
                     nBestScore = nActualScore;
                     mnPreeditStyle = nProvidedStyle & mnSupportedPreeditStyle;
-                    mnStatusStyle  = nProvidedStyle & mnSupportedStatusStyle;
+                    mnStatusStyle  = nProvidedStyle & g_nSupportedStatusStyle;
                 }
             }
         }

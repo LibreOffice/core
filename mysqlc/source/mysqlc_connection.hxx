@@ -108,7 +108,6 @@ namespace connectivity
             sql::Driver*    cppDriver;
 
             bool    m_bClosed;
-            bool    m_bUseCatalog;  // should we use the catalog on filebased databases
 
         public:
             sal_Int32 getMysqlVersion()
@@ -209,8 +208,6 @@ namespace connectivity
             inline const ConnectionSettings& getConnectionSettings() const { return m_settings; }
             rtl::OUString transFormPreparedStatement(const rtl::OUString& _sSQL);
 
-            // should we use the catalog on filebased databases
-            inline bool             isCatalogUsed()     const { return m_bUseCatalog; }
             inline const MysqlCDriver&  getDriver()         const { return m_rDriver;}
 
         }; /* OConnection */

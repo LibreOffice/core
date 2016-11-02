@@ -419,8 +419,7 @@ PCSharedItemsModel::PCSharedItemsModel() :
     mbHasMixed( false ),
     mbIsNumeric( false ),
     mbIsInteger( false ),
-    mbHasLongText( false ),
-    mbHasLongIndexes( false )
+    mbHasLongText( false )
 {
 }
 
@@ -918,7 +917,7 @@ void PivotCacheField::importPCRecordItem( SequenceInputStream& rStrm, WorksheetH
 void PivotCacheField::importPCItemIndex( BiffInputStream& rStrm, WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const
 {
     OSL_ENSURE( hasSharedItems(), "PivotCacheField::importPCItemIndex - invalid call, no shared items found" );
-    sal_Int32 nIndex = maSharedItemsModel.mbHasLongIndexes ? rStrm.readuInt16() : rStrm.readuInt8();
+    sal_Int32 nIndex = rStrm.readuInt8();
     writeSharedItemToSourceDataCell( rSheetHelper, nCol, nRow, nIndex );
 }
 
@@ -956,7 +955,6 @@ PCDefinitionModel::PCDefinitionModel() :
     mfRefreshedDate( 0.0 ),
     mnRecords( 0 ),
     mnMissItemsLimit( 0 ),
-    mnDatabaseFields( 0 ),
     mbInvalid( false ),
     mbSaveData( true ),
     mbRefreshOnLoad( false ),
@@ -1093,7 +1091,7 @@ void PivotCache::importPCDSheetSource( SequenceInputStream& rStrm, const Relatio
 
 PivotCacheField& PivotCache::createCacheField( bool bInitDatabaseField )
 {
-    bool bIsDatabaseField = !bInitDatabaseField || (maFields.size() < maDefModel.mnDatabaseFields);
+    bool bIsDatabaseField = !bInitDatabaseField;
     PivotCacheFieldVector::value_type xCacheField( new PivotCacheField( *this, bIsDatabaseField ) );
     maFields.push_back( xCacheField );
     return *xCacheField;

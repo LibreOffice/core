@@ -32,7 +32,6 @@ class VCL_DLLPUBLIC MoreButton : public PushButton
 {
 private:
     ImplMoreButtonData* mpMBData;
-    MapUnit             meUnit;
     bool                mbState;
 
                         MoreButton( const MoreButton & ) = delete;

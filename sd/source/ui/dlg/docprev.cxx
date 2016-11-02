@@ -62,7 +62,7 @@ VCL_BUILDER_DECL_FACTORY(SdDocPreviewWin)
 }
 
 SdDocPreviewWin::SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle )
-: Control(pParent, nStyle), pMetaFile( nullptr ), mpObj(nullptr), mnShowPage(0)
+: Control(pParent, nStyle), pMetaFile( nullptr )
 {
     SetBorderStyle( WindowBorderStyle::MONO );
     svtools::ColorConfig aColorConfig;
@@ -182,9 +182,6 @@ bool SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
 
 void SdDocPreviewWin::updateViewSettings()
 {
-    ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( mpObj );
-    SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():nullptr;
-
     SvtAccessibilityOptions aAccOptions;
     bool bUseWhiteColor = !aAccOptions.GetIsForPagePreviews() && GetSettings().GetStyleSettings().GetHighContrastMode();
     if( bUseWhiteColor )
@@ -197,71 +194,8 @@ void SdDocPreviewWin::updateViewSettings()
         maDocumentColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     }
 
-    GDIMetaFile* pMtf = nullptr;
-
-    if(pDoc)
-    {
-        SdPage * pPage = pDoc->GetSdPage( mnShowPage, PageKind::Standard );
-        if( pPage )
-        {
-            SdrOutliner& rOutl = pDoc->GetDrawOutliner();
-            Color aOldBackgroundColor = rOutl.GetBackgroundColor();
-            rOutl.SetBackgroundColor( maDocumentColor );
-
-            pMtf = new GDIMetaFile;
-
-            ScopedVclPtrInstance< VirtualDevice > pVDev;
-
-            const Fraction      aFrac( pDoc->GetScaleFraction() );
-            const MapMode       aMap( pDoc->GetScaleUnit(), Point(), aFrac, aFrac );
-
-            pVDev->SetMapMode( aMap );
-
-            // Disable output, as we only want to record a metafile
-            pVDev->EnableOutput( false );
-
-            pMtf->Record( pVDev );
-
-            ::sd::DrawView* pView = new ::sd::DrawView(pDocShell, this, nullptr);
-
-            const Size aSize( pPage->GetSize() );
-
-            pView->SetBordVisible( false );
-            pView->SetPageVisible( false );
-            pView->ShowSdrPage( pPage );
-
-            const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
-            const Size aNewSize( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
-                                  aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
-            const Rectangle aClipRect( aNewOrg, aNewSize );
-            MapMode         aVMap( aMap );
-
-            pVDev->Push();
-            aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
-            pVDev->SetRelativeMapMode( aVMap );
-            pVDev->IntersectClipRegion( aClipRect );
-
-        // Use new StandardCheckVisisbilityRedirector
-        StandardCheckVisisbilityRedirector aRedirector;
-        const Rectangle aRedrawRectangle( Point(), aNewSize );
-        vcl::Region aRedrawRegion(aRedrawRectangle);
-        pView->SdrPaintView::CompleteRedraw(pVDev,aRedrawRegion,&aRedirector);
-
-            pVDev->Pop();
-
-            pMtf->Stop();
-            pMtf->WindStart();
-            pMtf->SetPrefMapMode( aMap );
-            pMtf->SetPrefSize( aNewSize );
-
-            rOutl.SetBackgroundColor( aOldBackgroundColor );
-
-            delete pView;
-        }
-    }
-
     delete pMetaFile;
-    pMetaFile = pMtf;
+    pMetaFile = nullptr;
 
     Invalidate();
 }

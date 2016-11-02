@@ -143,13 +143,11 @@ OLUndoExpand::OLUndoExpand(Outliner* pOut, sal_uInt16 _nId )
     DBG_ASSERT(pOut,"Undo:No Outliner");
     pOutliner = pOut;
     nCount = 0;
-    pParas = nullptr;
 }
 
 
 OLUndoExpand::~OLUndoExpand()
 {
-    delete pParas;
 }
 
 
@@ -163,25 +161,12 @@ void OLUndoExpand::Restore( bool bUndo )
     sal_uInt16 _nId = GetId();
     if((_nId == OLUNDO_EXPAND && !bUndo) || (_nId == OLUNDO_COLLAPSE && bUndo))
         bExpand = true;
-    if( !pParas )
-    {
-        pPara = pOutliner->GetParagraph( nCount );
-        if( bExpand )
-            pOutliner->Expand( pPara );
-        else
-            pOutliner->Collapse( pPara );
-    }
+
+    pPara = pOutliner->GetParagraph( nCount );
+    if( bExpand )
+        pOutliner->Expand( pPara );
     else
-    {
-        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-        {
-            pPara = pOutliner->GetParagraph( pParas[nIdx] );
-            if( bExpand )
-                pOutliner->Expand( pPara );
-            else
-                pOutliner->Collapse( pPara );
-        }
-    }
+        pOutliner->Collapse( pPara );
 }
 
 void OLUndoExpand::Undo()

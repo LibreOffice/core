@@ -40,9 +40,8 @@ protected:
     BigInt                  mnMax;
     BigInt                  mnCorrectedValue;
     OUString                maCurrencySymbol;
-    sal_uInt16              mnType;
     sal_uInt16              mnDecimalDigits;
-    bool                mbThousandSep;
+    bool                    mbThousandSep;
 
                             LongCurrencyFormatter();
 public:

@@ -83,12 +83,9 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection& _rCon)
     ,identifier_quote_string_set(false)
 {
     OSL_TRACE("ODatabaseMetaData::ODatabaseMetaData");
-    if (!m_rConnection.isCatalogUsed())
-    {
-        osl_atomic_increment(&m_refCount);
-        m_bUseCatalog = !(usesLocalFiles() || usesLocalFilePerTable());
-        osl_atomic_decrement(&m_refCount);
-    }
+    osl_atomic_increment(&m_refCount);
+    m_bUseCatalog = !(usesLocalFiles() || usesLocalFilePerTable());
+    osl_atomic_decrement(&m_refCount);
 }
 
 ODatabaseMetaData::~ODatabaseMetaData()
