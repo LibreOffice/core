@@ -23,10 +23,12 @@ $(eval $(call gb_Module_add_targets,solenv,\
 endif
 
 ifneq ($(DISABLE_PYTHON),TRUE)
+ifneq ($(OS),WNT) # disable on Windows for now, causes gerrit/jenkins failures
 $(eval $(call gb_Module_add_subsequentcheck_targets,solenv,\
 	CustomTarget_gbuildtesttools \
 	PythonTest_solenv_python \
 ))
+endif
 endif
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
