@@ -137,7 +137,6 @@ public:
 
     FloatingWindow*     GetFloatingWindow() const;
 
-    virtual void        Resizing( Size& rSize );
     static void         RegisterChildWindowContext(SfxModule*, sal_uInt16, SfxChildWinContextFactory*);
 };
 

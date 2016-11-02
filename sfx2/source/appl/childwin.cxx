@@ -537,10 +537,6 @@ FloatingWindow* SfxChildWindowContext::GetFloatingWindow() const
     }
 }
 
-void SfxChildWindowContext::Resizing( Size& )
-{
-}
-
 void SfxChildWindow::SetFactory_Impl( SfxChildWinFactory *pF )
 {
     pImpl->pFact = pF;

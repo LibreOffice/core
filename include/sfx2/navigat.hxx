@@ -46,7 +46,6 @@ public:
                             WinBits nBits );
 
     virtual void        Resize() override;
-    virtual void        Resizing( Size& rSize ) override;
     virtual bool        Close() override;
 };
 

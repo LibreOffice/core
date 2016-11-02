@@ -146,7 +146,7 @@ public:
     const OUString&                 GetName() const;
 
     virtual const SfxPoolItem&      Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 );
-    virtual void                    Remove( const SfxPoolItem& );
+    void                            Remove( const SfxPoolItem& );
     const SfxPoolItem&              GetDefaultItem( sal_uInt16 nWhich ) const;
 
     const SfxPoolItem*              LoadItem( SvStream &rStream,

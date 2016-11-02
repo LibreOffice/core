@@ -181,7 +181,7 @@ public:
     virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = nullptr, const sal_Int16* pOrient = nullptr);
     const SvxBrushItem*         GetBrush() const {return pGraphicBrush;}
     void            SetGraphic( const OUString& rName );
-    virtual sal_Int16   GetVertOrient() const;
+    sal_Int16       GetVertOrient() const;
     void            SetGraphicSize(const Size& rSet) {aGraphicSize = rSet;}
     const Size&     GetGraphicSize() const {return aGraphicSize;}
 

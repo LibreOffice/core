@@ -83,7 +83,7 @@ public:
     // moved from inline to *.cxx
     virtual bool MouseButtonDown(const MouseEvent& rMEvt); // { return FALSE; }
 
-    virtual sal_uInt8 Command(const CommandEvent& rCEvt);
+    sal_uInt8 Command(const CommandEvent& rCEvt);
 
     virtual void Activate();
     virtual void Deactivate();

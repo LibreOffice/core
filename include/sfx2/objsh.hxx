@@ -433,7 +433,7 @@ public:
     bool                        IsSecurityOptOpenReadOnly() const;
     void                        SetSecurityOptOpenReadOnly( bool bOpenReadOnly = true );
 
-    virtual Size                GetFirstPageSize();
+    Size                        GetFirstPageSize();
     bool                        DoClose();
     virtual void                PrepareReload();
     std::shared_ptr<GDIMetaFile> GetPreviewMetaFile( bool bFullContent = false ) const;

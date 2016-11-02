@@ -908,7 +908,6 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
                                     pClientWindow->RollDown();
                                 else
                                     pClientWindow->RollUp();
-                                pClientWindow->Roll();
                             }
                         }
                     }
@@ -981,7 +980,6 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                             pClientWindow->RollDown();
                         else
                             pClientWindow->RollUp();
-                        pClientWindow->Roll();
                     }
                 }
             }
@@ -1059,7 +1057,6 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                     {
                         SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
                         pClientWindow->SetPin( !pClientWindow->IsPinned() );
-                        pClientWindow->Pin();
                     }
                 }
             }
