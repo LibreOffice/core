@@ -7307,8 +7307,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         const SfxPoolItem* pItem = m_rExport.HasItem( RES_BOX );
         if ( pItem )
         {
-            m_pageMargins.nPageMarginRight = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( SvxBoxItemLine::LEFT );
-            m_pageMargins.nPageMarginLeft = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( SvxBoxItemLine::RIGHT );
+            m_pageMargins.nPageMarginRight = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( SvxBoxItemLine::LEFT, /*bEvenIfNoLine*/true );
+            m_pageMargins.nPageMarginLeft = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
         }
         else
             m_pageMargins.nPageMarginLeft = m_pageMargins.nPageMarginRight = 0;

@@ -55,6 +55,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.d
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPadding.odt")
+{
+    // the page style's borderless padding should force this to 3 pages, not 1
+    CPPUNIT_ASSERT_EQUAL( 3, getPages() );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf103389, "tdf103389.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
