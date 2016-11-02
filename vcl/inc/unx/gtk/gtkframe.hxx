@@ -351,6 +351,7 @@ public:
 #if GTK_CHECK_VERSION(3,0,0)
     cairo_surface_t*                m_pSurface;
     DamageHandler                   m_aDamageHandler;
+    int                             m_nGrabLevel;
 #endif
     GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
     GtkSalFrame( SystemParentData* pSysData );
@@ -424,6 +425,9 @@ public:
                    GdkDragAction sourceActions, GtkTargetList* pTargetList);
 
     void closePopup();
+
+    void addGrabLevel();
+    void removeGrabLevel();
 
 #endif
     virtual ~GtkSalFrame() override;

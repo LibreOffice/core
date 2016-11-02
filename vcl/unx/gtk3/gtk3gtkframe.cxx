@@ -980,6 +980,7 @@ static void damaged(void *handle,
 void GtkSalFrame::InitCommon()
 {
     m_pSurface = nullptr;
+    m_nGrabLevel = 0;
 
     m_aDamageHandler.handle = this;
     m_aDamageHandler.damaged = ::damaged;
@@ -1441,7 +1442,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
             if (isFloatGrabWindow() && !getDisplay()->GetCaptureFrame())
             {
                 m_pParent->grabPointer(true, true);
-                gtk_grab_add(m_pParent->getMouseEventWidget());
+                m_pParent->addGrabLevel();
             }
 
             gtk_widget_show(m_pWindow);
@@ -1452,7 +1453,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
                 if (!getDisplay()->GetCaptureFrame())
                 {
                     grabPointer(true, true);
-                    gtk_grab_add(getMouseEventWidget());
+                    addGrabLevel();
                 }
                 // #i44068# reset parent's IM context
                 if( m_pParent )
@@ -1466,9 +1467,9 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
                 m_nFloats--;
                 if (!getDisplay()->GetCaptureFrame())
                 {
-                    gtk_grab_remove(getMouseEventWidget());
+                    removeGrabLevel();
                     grabPointer(false);
-                    gtk_grab_remove(m_pParent->getMouseEventWidget());
+                    m_pParent->removeGrabLevel();
                     m_pParent->grabPointer(false);
                 }
             }
@@ -2548,6 +2549,20 @@ void GtkSalFrame::StartToolKitMoveBy()
                                pEvent->button.x_root,
                                pEvent->button.y_root,
                                pEvent->button.time);
+}
+
+void GtkSalFrame::addGrabLevel()
+{
+    if (m_nGrabLevel == 0)
+        gtk_grab_add(getMouseEventWidget());
+    ++m_nGrabLevel;
+}
+
+void GtkSalFrame::removeGrabLevel()
+{
+    --m_nGrabLevel;
+    if (m_nGrabLevel == 0)
+        gtk_grab_remove(getMouseEventWidget());
 }
 
 void GtkSalFrame::closePopup()
