@@ -102,7 +102,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         mbTLBREnabled( false ),
         mbBLTREnabled( false ),
         mbUseMarginItem( false ),
-        mbAllowPaddingWithoutBorders( false ),
+        mbAllowPaddingWithoutBorders( true ),
         mbSync(true),
         mbRemoveAdjacentCellBorders( false ),
         bIsCalcDoc( false )
