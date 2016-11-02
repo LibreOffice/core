@@ -104,6 +104,7 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/misc/unotoolsservices \
     unotools/source/misc/wincodepage \
     unotools/source/misc/ServiceDocumenter \
+    unotools/source/misc/ZipPackageHelper \
     unotools/source/streaming/streamhelper \
     unotools/source/streaming/streamwrap \
     unotools/source/ucbhelper/localfilehelper \
