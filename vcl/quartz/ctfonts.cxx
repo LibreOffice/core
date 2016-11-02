@@ -157,9 +157,9 @@ bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) 
     const CGRect aCGRect = CTFontGetBoundingRectsForGlyphs( aCTFontRef, aFontOrientation, &nCGGlyph, nullptr, 1 );
 
     rRect.Left()   = lrint( aCGRect.origin.x );
-    rRect.Top()    = lrint( aCGRect.origin.y );
+    rRect.Top()    = lrint(-aCGRect.origin.y );
     rRect.Right()  = lrint( aCGRect.origin.x + aCGRect.size.width );
-    rRect.Bottom() = lrint( aCGRect.origin.y + aCGRect.size.height );
+    rRect.Bottom() = lrint( aCGRect.origin.y - aCGRect.size.height );
     return true;
 }
 
