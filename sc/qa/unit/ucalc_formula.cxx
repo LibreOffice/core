@@ -3924,6 +3924,30 @@ void Test::testFuncCOUNTIF()
     // We should correctly count with empty string key.
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0,4,0)));
 
+    // Another test case adopted from tdf#99291, empty array elements should
+    // not match empty cells, but cells with 0.
+    clearSheet(m_pDoc, 0);
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0,0, 0,1, aMark, "=COUNTIF(B1:B5;C1:C2)");
+    // As we will be testing for 0.0 values, check that formulas are actually present.
+    OUString aFormula;
+    m_pDoc->GetFormula(0,0,0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("{=COUNTIF(B1:B5;C1:C2)}"), aFormula);
+    m_pDoc->GetFormula(0,1,0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("{=COUNTIF(B1:B5;C1:C2)}"), aFormula);
+    // The 0.0 results expected.
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    // 0.0 in B2, 1.0 in B3 and B4
+    m_pDoc->SetValue( ScAddress(1,1,0), 0.0);
+    m_pDoc->SetValue( ScAddress(1,2,0), 1.0);
+    m_pDoc->SetValue( ScAddress(1,3,0), 1.0);
+    // Matched by 0.0 produced by empty cell in array, and 1.0 in C2.
+    m_pDoc->SetValue( ScAddress(2,1,0), 1.0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("One cell with 0.0",  1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two cells with 1.0", 2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
