@@ -2421,7 +2421,7 @@ void SvxBoxItem::SetDistance( sal_uInt16 nNew, SvxBoxItemLine nLine )
 }
 
 
-sal_uInt16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bIgnoreLine ) const
+sal_uInt16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine ) const
 {
     SvxBorderLine* pTmp = nullptr;
     sal_uInt16 nDist = 0;
@@ -2451,7 +2451,7 @@ sal_uInt16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bIgnoreLine ) c
     {
         nDist = nDist + pTmp->GetScaledWidth();
     }
-    else if( !bIgnoreLine )
+    else if( !bEvenIfNoLine )
         nDist = 0;
     return nDist;
 }
