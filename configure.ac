@@ -7716,10 +7716,10 @@ fi
 if test "$with_system_jpeg" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_JPEG=TRUE
-    AC_CHECK_HEADER(jpeglib.h, [],
+    AC_CHECK_HEADER(jpeglib.h, [ LIBJPEG_CFLAGS= ],
         [AC_MSG_ERROR(jpeg.h not found. install libjpeg)], [])
-    AC_CHECK_LIB(jpeg, jpeg_resync_to_restart, [ JPEG3RDLIB=-ljpeg ],
-    [AC_MSG_CHECKING(jpeg library not found or fuctional)], [])
+    AC_CHECK_LIB(jpeg, jpeg_resync_to_restart, [ LIBJPEG_LIBS="-ljpeg" ],
+        [AC_MSG_ERROR(jpeg library not found or fuctional)], [])
     libo_MINGW_CHECK_DLL([libjpeg])
 else
     SYSTEM_JPEG=
@@ -7768,12 +7768,18 @@ Alternatively, you can install the 'new' nasm where ever you want and make sure 
 _EOS
         AC_MSG_ERROR([no nasm (Netwide Assembler) found])
         fi
+        LIBJPEG_CFLAGS="-I${WORKDIR}/UnpackedTarball/jpeg-turbo"
+        LIBJPEG_LIBS="${WORKDIR}/UnpackedTarball/jpeg-turbo/.libs/libjpeg.lib"
     else
         AC_MSG_RESULT([internal, jpeg])
         BUILD_TYPE="$BUILD_TYPE JPEG"
+        LIBJPEG_CFLAGS="-I${WORKDIR}/UnpackedTarball/jpeg"
+        LIBJPEG_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -ljpeg"
     fi
 fi
 AC_SUBST(NASM)
+AC_SUBST(LIBJPEG_CFLAGS)
+AC_SUBST(LIBJPEG_LIBS)
 AC_SUBST(SYSTEM_JPEG)
 
 dnl ===================================================================
