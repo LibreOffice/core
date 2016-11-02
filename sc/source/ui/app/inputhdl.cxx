@@ -645,6 +645,10 @@ ScInputHandler::ScInputHandler()
     pActiveViewSh = nullptr;
 
     //  Bindings (only still used for Invalidate) are retrieved if needed on demand
+
+    pDelayTimer = new Timer( "ScInputHandlerDelay timer" );
+    pDelayTimer->SetTimeout( 500 ); // 500 ms delay
+    pDelayTimer->SetTimeoutHdl( LINK( this, ScInputHandler, DelayTimer ) );
 }
 
 ScInputHandler::~ScInputHandler()
@@ -3716,36 +3720,23 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
             {
                 if ( !pInputWin->IsEnabled())
                 {
+                    pDelayTimer->Stop();
                     pInputWin->Enable();
-                    if(pDelayTimer )
-                    {
-                        DELETEZ( pDelayTimer );
-                    }
                 }
             }
             else if(pScMod->IsRefDialogOpen())
             {   // Because every document has its own InputWin,
                 // we should start Timer again, because the input line may
                 // still be active
-                if ( !pDelayTimer )
-                {
-                    pDelayTimer = new Timer;
-                    pDelayTimer->SetTimeout( 500 ); // 500 ms delay
-                    pDelayTimer->SetTimeoutHdl( LINK( this, ScInputHandler, DelayTimer ) );
+                if ( !pDelayTimer->IsActive() )
                     pDelayTimer->Start();
-                }
             }
         }
     }
     else // !pState || !pActiveViewSh
     {
-        if ( !pDelayTimer )
-        {
-            pDelayTimer = new Timer;
-            pDelayTimer->SetTimeout( 500 ); // 500 ms delay
-            pDelayTimer->SetTimeoutHdl( LINK( this, ScInputHandler, DelayTimer ) );
+        if ( !pDelayTimer->IsActive() )
             pDelayTimer->Start();
-        }
     }
 
     HideTip();
@@ -3761,50 +3752,42 @@ void ScInputHandler::UpdateCellAdjust( SvxCellHorJustify eJust )
 
 void ScInputHandler::ResetDelayTimer()
 {
-    if(pDelayTimer!=nullptr)
+    if( pDelayTimer->IsActive() )
     {
-        DELETEZ( pDelayTimer );
-
-        if ( pInputWin)
-        {
+        pDelayTimer->Stop();
+        if ( pInputWin )
             pInputWin->Enable();
-        }
     }
 }
 
-IMPL_LINK_TYPED( ScInputHandler, DelayTimer, Timer*, pTimer, void )
+IMPL_LINK_NOARG( ScInputHandler, DelayTimer, Timer*, void )
 {
-    if ( pTimer == pDelayTimer )
+    if ( nullptr == pLastState || SC_MOD()->IsFormulaMode() || SC_MOD()->IsRefDialogOpen())
     {
-        DELETEZ( pDelayTimer );
-
-        if ( nullptr == pLastState || SC_MOD()->IsFormulaMode() || SC_MOD()->IsRefDialogOpen())
+        //! New method at ScModule to query if function autopilot is open
+        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+        if ( pViewFrm && pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) )
         {
-            //! New method at ScModule to query if function autopilot is open
-            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-            if ( pViewFrm && pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) )
+            if ( pInputWin)
             {
-                if ( pInputWin)
-                {
-                    pInputWin->EnableButtons( false );
-                    pInputWin->Disable();
-                }
+                pInputWin->EnableButtons( false );
+                pInputWin->Disable();
             }
-            else if ( !bFormulaMode ) // Keep formula e.g. for help
+        }
+        else if ( !bFormulaMode ) // Keep formula e.g. for help
+        {
+            bInOwnChange = true; // disable ModifyHdl (reset below)
+
+            pActiveViewSh = nullptr;
+            mpEditEngine->SetText( EMPTY_OUSTRING );
+            if ( pInputWin )
             {
-                bInOwnChange = true; // disable ModifyHdl (reset below)
-
-                pActiveViewSh = nullptr;
-                pEngine->SetText( EMPTY_OUSTRING );
-                if ( pInputWin )
-                {
-                    pInputWin->SetPosString( EMPTY_OUSTRING );
-                    pInputWin->SetTextString( EMPTY_OUSTRING );
-                    pInputWin->Disable();
-                }
-
-                bInOwnChange = false;
+                pInputWin->SetPosString( EMPTY_OUSTRING );
+                pInputWin->SetTextString( EMPTY_OUSTRING );
+                pInputWin->Disable();
             }
+
+            bInOwnChange = false;
         }
     }
 }
