@@ -72,7 +72,9 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">%PRODUCTNAME is now running in Safe Mode. You can make one or more of the following changes to return to a working state.
+            <property name="label" translatable="yes">%PRODUCTNAME is now running in Safe Mode wich temporarily disables your configuration and extensions.
+
+You can make one or more of the following changes to return to a working state.
 
 The offered possible changes get more radical from top to bottom, so it is recommended to try them thoroughly one after the other.</property>
             <property name="wrap">True</property>
