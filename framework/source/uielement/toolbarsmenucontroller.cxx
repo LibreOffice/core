@@ -67,15 +67,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui;
 
-static const char CONFIGURE_TOOLBARS_CMD[]      = "ConfigureDialog";
-static const char CONFIGURE_TOOLBARS[]          = ".uno:ConfigureDialog";
-static const char CMD_COLORBAR[]                = ".uno:ColorControl";
-static const char CMD_FORMULABAR[]              = ".uno:InsertFormula";
-static const char CMD_INPUTLINEBAR[]            = ".uno:InputLineVisible";
 static const char CMD_RESTOREVISIBILITY[]       = ".cmd:RestoreVisibility";
-static const char ITEM_DESCRIPTOR_RESOURCEURL[] = "ResourceURL";
-static const char ITEM_DESCRIPTOR_UINAME[]      = "UIName";
-static const char STATIC_PRIVATE_TB_RESOURCE[]  = "private:resource/toolbar/";
 
 static const char STATIC_CMD_PART[]             = ".uno:AvailableToolbars?Toolbar:string=";
 static const char STATIC_INTERNAL_CMD_PART[]    = ".cmd:";
@@ -219,9 +211,9 @@ static void fillHashMap( const Sequence< Sequence< css::beans::PropertyValue > >
         const PropertyValue* pProperties = rSeqToolBars[i].getConstArray();
         for ( sal_Int32 j = 0; j < rSeqToolBars[i].getLength(); j++ )
         {
-            if ( pProperties[j].Name == ITEM_DESCRIPTOR_RESOURCEURL )
+            if ( pProperties[j].Name == "ResourceURL" )
                 pProperties[j].Value >>= aResourceURL;
-            else if ( pProperties[j].Name == ITEM_DESCRIPTOR_UINAME )
+            else if ( pProperties[j].Name == "UIName" )
                 pProperties[j].Value >>= aUIName;
         }
 
@@ -427,21 +419,21 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         {
             if ( m_aModuleIdentifier == "com.sun.star.drawing.DrawingDocument" ||
                  m_aModuleIdentifier == "com.sun.star.presentation.PresentationDocument" )
-                addCommand( m_xPopupMenu, CMD_COLORBAR, aEmptyString );
+                addCommand( m_xPopupMenu, ".uno:ColorControl", aEmptyString );
             else if ( m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
-                addCommand( m_xPopupMenu, CMD_INPUTLINEBAR, aEmptyString );
+                addCommand( m_xPopupMenu, ".uno:InputLineVisible", aEmptyString );
             else
-                addCommand( m_xPopupMenu, CMD_FORMULABAR, aEmptyString );
+                addCommand( m_xPopupMenu, ".uno:InsertFormula", aEmptyString );
         }
 
         bool          bAddCommand( true );
         SvtCommandOptions aCmdOptions;
-        OUString     aConfigureToolbar( CONFIGURE_TOOLBARS );
+        OUString     aConfigureToolbar( ".uno:ConfigureDialog" );
 
         if ( aCmdOptions.HasEntries( SvtCommandOptions::CMDOPTION_DISABLED ))
         {
             if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
-                                     CONFIGURE_TOOLBARS_CMD))
+                                     "ConfigureDialog"))
                 bAddCommand = false;
         }
 
@@ -679,7 +671,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                     sal_Int32 nIndex = aCmd.indexOf( '=' );
                     if (( nIndex > 0 ) && (( nIndex+1 ) < aCmd.getLength() ))
                     {
-                        OUStringBuffer aBuf( STATIC_PRIVATE_TB_RESOURCE );
+                        OUStringBuffer aBuf( "private:resource/toolbar/" );
                         aBuf.append( aCmd.copy( nIndex+1 ));
 
                         bool      bShow( !pVCLPopupMenu->IsItemChecked( rEvent.MenuId ));
