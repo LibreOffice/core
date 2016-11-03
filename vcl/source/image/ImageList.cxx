@@ -33,13 +33,11 @@
 #include <vcl/implimagetree.hxx>
 #include <image.h>
 
-ImageList::ImageList() :
-    mpImplData( nullptr )
+ImageList::ImageList()
 {
 }
 
-ImageList::ImageList( const ResId& rResId ) :
-    mpImplData( nullptr )
+ImageList::ImageList(const ResId& rResId)
 {
     SAL_INFO( "vcl.gdi", "vcl: ImageList::ImageList( const ResId& rResId )" );
 
@@ -76,9 +74,8 @@ ImageList::ImageList( const ResId& rResId ) :
     }
 }
 
-ImageList::ImageList( const std::vector< OUString >& rNameVector,
-                      const OUString& rPrefix) :
-    mpImplData( nullptr )
+ImageList::ImageList(const std::vector< OUString >& rNameVector,
+                     const OUString& rPrefix)
 {
     SAL_INFO( "vcl.gdi", "vcl: ImageList::ImageList(const vector< OUString >& ..." );
 
@@ -91,29 +88,24 @@ ImageList::ImageList( const std::vector< OUString >& rNameVector,
     }
 }
 
-ImageList::ImageList( const ImageList& rImageList ) :
-    mpImplData( rImageList.mpImplData )
+ImageList::ImageList( const ImageList& rImageList )
+    : mpImplData(rImageList.mpImplData)
 {
-
-    if( mpImplData )
-        ++mpImplData->mnRefCount;
 }
 
-ImageList::ImageList( ImageList&& rImageList ) :
-    mpImplData( rImageList.mpImplData )
+ImageList::ImageList( ImageList&& rImageList )
+    : mpImplData(rImageList.mpImplData)
 {
-    rImageList.mpImplData = nullptr;
+    rImageList.mpImplData.reset();
 }
 
 ImageList::~ImageList()
 {
-    if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
-        delete mpImplData;
 }
 
 void ImageList::ImplInit( sal_uInt16 nItems, const Size &rSize )
 {
-    mpImplData = new ImplImageList;
+    mpImplData.reset(new ImplImageList);
     mpImplData->maImages.reserve( nItems );
     mpImplData->maImageSize = rSize;
 }
@@ -202,7 +194,6 @@ void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
 
 sal_uInt16 ImageList::ImplGetImageId( const OUString& rImageName ) const
 {
-
     ImageAryData *pImg = mpImplData->maNameHash[ rImageName ];
     if( pImg )
         return pImg->mnId;
@@ -236,7 +227,6 @@ void ImageList::ReplaceImage( const OUString& rImageName, const Image& rImage )
 
 void ImageList::RemoveImage( sal_uInt16 nId )
 {
-
     for( size_t i = 0; i < mpImplData->maImages.size(); ++i )
     {
         if( mpImplData->maImages[ i ]->mnId == nId )
@@ -294,7 +284,6 @@ Image ImageList::GetImage( const OUString& rImageName ) const
 
 sal_uInt16 ImageList::GetImageCount() const
 {
-
     return mpImplData ? static_cast< sal_uInt16 >( mpImplData->maImages.size() ) : 0;
 }
 
@@ -320,7 +309,6 @@ bool ImageList::HasImageAtPos( sal_uInt16 nId ) const
 
 sal_uInt16 ImageList::GetImagePos( const OUString& rImageName ) const
 {
-
     if( mpImplData && !rImageName.isEmpty() )
     {
         for( size_t i = 0; i < mpImplData->maImages.size(); i++ )
@@ -335,7 +323,6 @@ sal_uInt16 ImageList::GetImagePos( const OUString& rImageName ) const
 
 sal_uInt16 ImageList::GetImageId( sal_uInt16 nPos ) const
 {
-
     if( mpImplData && (nPos < GetImageCount()) )
         return mpImplData->maImages[ nPos ]->mnId;
 
@@ -344,7 +331,6 @@ sal_uInt16 ImageList::GetImageId( sal_uInt16 nPos ) const
 
 OUString ImageList::GetImageName( sal_uInt16 nPos ) const
 {
-
     if( mpImplData && (nPos < GetImageCount()) )
         return mpImplData->maImages[ nPos ]->maName;
 
@@ -370,7 +356,6 @@ void ImageList::GetImageNames( std::vector< OUString >& rNames ) const
 
 Size ImageList::GetImageSize() const
 {
-
     Size aRet;
 
     if( mpImplData )
@@ -390,32 +375,19 @@ Size ImageList::GetImageSize() const
 
 ImageList& ImageList::operator=( const ImageList& rImageList )
 {
-
-    if( rImageList.mpImplData )
-        ++rImageList.mpImplData->mnRefCount;
-
-    if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
-        delete mpImplData;
-
     mpImplData = rImageList.mpImplData;
-
     return *this;
 }
 
 ImageList& ImageList::operator=( ImageList&& rImageList )
 {
-    if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
-        delete mpImplData;
-
     mpImplData = rImageList.mpImplData;
     rImageList.mpImplData = nullptr;
-
     return *this;
 }
 
 bool ImageList::operator==( const ImageList& rImageList ) const
 {
-
     bool bRet = false;
 
     if( rImageList.mpImplData == mpImplData )

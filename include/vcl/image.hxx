@@ -29,6 +29,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <memory>
 #include <vector>
 
 struct ImplImage;
@@ -69,7 +70,7 @@ public:
 
 private:
 
-    ImplImage*             mpImplData;
+    std::shared_ptr<ImplImage> mpImplData;
 
     SAL_DLLPRIVATE void    ImplInit( const BitmapEx& rBmpEx );
 };
@@ -122,7 +123,7 @@ public:
 
 private:
 
-    ImplImageList*  mpImplData;
+    std::shared_ptr<ImplImageList> mpImplData;
 
     SAL_DLLPRIVATE void    ImplInit( sal_uInt16 nItems, const Size &rSize );
     SAL_DLLPRIVATE sal_uInt16  ImplGetImageId( const OUString& rImageName ) const;
