@@ -91,6 +91,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
@@ -196,6 +197,7 @@ public:
     void testRedlineViewAuthor();
     void testRedlineTimestamp();
     void testCursorWindows();
+    void testLandscape();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -294,6 +296,7 @@ public:
     CPPUNIT_TEST(testRedlineViewAuthor);
     CPPUNIT_TEST(testRedlineTimestamp);
     CPPUNIT_TEST(testCursorWindows);
+    CPPUNIT_TEST(testLandscape);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3440,6 +3443,25 @@ void SwUiWriterTest::testCursorWindows()
     // This was 3, not 0 -- cursor of the other window moved.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pShellCursor1->Start()->nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(aText.getLength(), pShellCursor2->Start()->nContent.GetIndex());
+}
+
+void SwUiWriterTest::testLandscape()
+{
+    // Set page orientation to landscape.
+    SwDoc* pDoc = createDoc();
+    uno::Sequence<beans::PropertyValue> aPropertyValues =
+    {
+        comphelper::makePropertyValue("AttributePage.Landscape", true),
+    };
+    lcl_dispatchCommand(mxComponent, ".uno:AttributePage", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // Assert that the document model was modified.
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    size_t nPageDesc = pWrtShell->GetCurPageDesc();
+    // This failed, page was still portrait.
+    CPPUNIT_ASSERT(pWrtShell->GetPageDesc(nPageDesc).GetLandscape());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
