@@ -72,8 +72,6 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-static const char   TOOLBOXITEM_SEPARATOR_STR[] = "private:separator";
-
 AddonsToolBarManager::AddonsToolBarManager( const Reference< XComponentContext >& rxContext,
                                 const Reference< XFrame >& rFrame,
                                 const OUString& rResourceName,
@@ -240,7 +238,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
         if ( IsCorrectContext( aModuleIdentifier, aContext ))
         {
-            if ( aURL == TOOLBOXITEM_SEPARATOR_STR )
+            if ( aURL == "private:separator" ) // toolbox item separator
             {
                 sal_uInt16 nCount = m_pToolBar->GetItemCount();
                 if ( nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != ToolBoxItemType::SEPARATOR ) && nElements > 0 )
