@@ -12,6 +12,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <tools/datetime.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -152,7 +153,16 @@ void PDFSigningTest::testPDFAdd()
     OUString aInURL = aSourceDir + "no.pdf";
     OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     OUString aOutURL = aTargetDir + "add.pdf";
-    sign(aInURL, aOutURL, 0);
+    bool bHadCertificates = sign(aInURL, aOutURL, 0);
+
+    if (bHadCertificates)
+    {
+        // Make sure the timestamp is correct.
+        std::vector<SignatureInformation> aInfos = verify(aOutURL, 1);
+        DateTime aDateTime(DateTime::SYSTEM);
+        // This was 0 (on Windows), as neither the /M key nor the PKCS#7 blob contained a timestamp.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(aDateTime.GetYear()), aInfos[0].stDateTime.Year);
+    }
 }
 
 void PDFSigningTest::testPDFAdd2()

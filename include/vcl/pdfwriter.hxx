@@ -1270,6 +1270,9 @@ The following structure describes the permissions used in PDF security
 
     /// Write rString as a PDF hex string into rBuffer.
     static void AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer);
+
+    /// Get current date/time in PDF D:YYYYMMDDHHMMSS form.
+    static OString GetDateTime();
 };
 
 }
