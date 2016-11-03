@@ -299,7 +299,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkCheckButton" id="check_reset_customizations">
-                    <property name="label" translatable="yes">Reset user customizations (settings, user interface modifications, AutoCorrect, AutoText, etc.)</property>
+                    <property name="label" translatable="yes">Reset settings and user interface modifications</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
