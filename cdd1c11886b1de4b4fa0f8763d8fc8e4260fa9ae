@@ -16,6 +16,24 @@
       "revId": "cdd1c11886b1de4b4fa0f8763d8fc8e4260fa9ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_f03647b3",
+        "filename": "basic/source/uno/dlgcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000195
+      },
+      "writtenOn": "2016-11-03T21:21:53Z",
+      "side": 1,
+      "message": "I can\u0027t seem to make that work, I get an error stating that there is no StringResourceWithStorage::create that takes one argument. However I may very well call it incorrectly.\n\nI guess we can\u0027t actually create the StringResourceWithStorage object fully until we have a proper location for it. I\u0027ll try to find some time to debug where this is actually given the location. \n\nAnyway maybe this should be moved down to the catch statement? I believe it\u0027s the only time we need it, otherwise it will be initialized and created further down.",
+      "parentUuid": "7a77a97e_7aaf78e3",
+      "revId": "cdd1c11886b1de4b4fa0f8763d8fc8e4260fa9ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
