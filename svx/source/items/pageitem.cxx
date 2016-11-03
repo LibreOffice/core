@@ -180,7 +180,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    switch( nMemberId )
+    switch( nMemberId & ~CONVERT_TWIPS )
     {
         case MID_PAGE_NUMTYPE:
         {
