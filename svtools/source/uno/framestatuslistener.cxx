@@ -279,42 +279,6 @@ void FrameStatusListener::bindListener()
     }
 }
 
-void FrameStatusListener::unbindListener()
-{
-    SolarMutexGuard aSolarMutexGuard;
-
-    // Collect all registered command URL's and store them temporary
-    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-    if ( m_xContext.is() && xDispatchProvider.is() )
-    {
-        Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
-        URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
-        while ( pIter != m_aListenerMap.end() )
-        {
-            Reference< XURLTransformer > xURLTransformer( css::util::URLTransformer::create( m_xContext ) );
-            css::util::URL aTargetURL;
-            aTargetURL.Complete = pIter->first;
-            xURLTransformer->parseStrict( aTargetURL );
-
-            Reference< XDispatch > xDispatch( pIter->second );
-            if ( xDispatch.is() )
-            {
-                // We already have a dispatch object => we have to requery.
-                // Release old dispatch object and remove it as listener
-                try
-                {
-                    xDispatch->removeStatusListener( xStatusListener, aTargetURL );
-                }
-                catch (const Exception&)
-                {
-                }
-            }
-            pIter->second.clear();
-            ++pIter;
-        }
-    }
-}
-
 } // svt
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

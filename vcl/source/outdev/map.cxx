@@ -1949,60 +1949,6 @@ void OutputDevice::SetPixelOffset( const Size& rOffset )
 }
 
 
-namespace vcl {
-
-long Window::ImplLogicUnitToPixelX( long nX, MapUnit eUnit )
-{
-    if ( eUnit != MapUnit::MapPixel )
-    {
-        ImplFrameData* pFrameData = mpWindowImpl->mpFrameData;
-
-        // shift map unit, then re-calculate
-        if ( pFrameData->meMapUnit != eUnit )
-        {
-            pFrameData->meMapUnit = eUnit;
-            ImplCalcMapResolution( MapMode( eUnit ), mnDPIX, mnDPIY,
-                                   pFrameData->maMapUnitRes );
-        }
-
-        // BigInt is not required, as this function is only used to
-        // convert the window position
-        nX  = nX * mnDPIX * pFrameData->maMapUnitRes.mnMapScNumX;
-        nX += nX >= 0 ?  (pFrameData->maMapUnitRes.mnMapScDenomX/2) :
-                        -((pFrameData->maMapUnitRes.mnMapScDenomX-1)/2);
-        nX /= pFrameData->maMapUnitRes.mnMapScDenomX;
-    }
-
-    return nX;
-}
-
-long Window::ImplLogicUnitToPixelY( long nY, MapUnit eUnit )
-{
-    if ( eUnit != MapUnit::MapPixel )
-    {
-        ImplFrameData* pFrameData = mpWindowImpl->mpFrameData;
-
-        // shift map unit, then re-calculate
-        if ( pFrameData->meMapUnit != eUnit )
-        {
-            pFrameData->meMapUnit = eUnit;
-            ImplCalcMapResolution( MapMode( eUnit ), mnDPIX, mnDPIY,
-                                   pFrameData->maMapUnitRes );
-        }
-
-        // BigInt is not required, as this function is only used to
-        // convert the window position
-        nY  = nY * mnDPIY * pFrameData->maMapUnitRes.mnMapScNumY;
-        nY += nY >= 0 ?  (pFrameData->maMapUnitRes.mnMapScDenomY/2) :
-                        -((pFrameData->maMapUnitRes.mnMapScDenomY-1)/2);
-        nY /= pFrameData->maMapUnitRes.mnMapScDenomY;
-    }
-
-    return nY;
-}
-
-} /* namespace vcl */
-
 DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( long nWidth ) const
 {
     if ( !mbMap )

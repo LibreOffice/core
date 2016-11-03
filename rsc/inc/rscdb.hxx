@@ -149,14 +149,8 @@ public:
                           }
     const OString&    GetSearchPath() const { return aSearchPath; }
     void              SetSysSearchPath( const OString& rStr ) { aSysSearchPath = rStr; }
-    void              InsertType( RscTop * pType )
-                          {
-                              aBaseLst.push_back( pType );
-                          }
-    RscTop  *         SearchType( Atom nTypId );
                       // deletes all resource objects of this file
     void              Delete( RscFileTab::Index lFileKey );
-    RscTop  *         GetRoot()         { return pRoot; }
     sal_uInt32        PutSysName( sal_uInt32 nRscTyp, char * pName );
     void              ClearSysNames();
     ERRTYPE           WriteRc( WriteRcContext& rContext );

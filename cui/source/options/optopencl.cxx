@@ -121,11 +121,5 @@ void SvxOpenCLTabPage::Reset( const SfxItemSet* )
     mpUseOpenCL->SaveValue();
 }
 
-void SvxOpenCLTabPage::EnableOpenCLHdl(VclFrame* pFrame, bool aEnable)
-{
-
-    pFrame->Enable(aEnable);
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

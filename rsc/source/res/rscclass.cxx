@@ -592,30 +592,6 @@ void RscClass::WriteSrc( const RSCINST & rInst,
     return;
 }
 
-sal_Int32 RscClass::GetCorrectValues( const RSCINST & rInst,
-                                      sal_uInt32 nVarPos,
-                                      sal_uInt32 nTupelIdx,
-                                      RscTypCont * pTC)
-{
-    sal_Int32 nLang = 0;
-    sal_Int32 nBaseValue;
-
-    // retrieve base value
-    RSCINST aTmpI = GetInstData( rInst.pData, nVarPos, true );
-    aTmpI.pClass->GetNumber( aTmpI, &nBaseValue );
-
-    // retrieve language delta
-    aTmpI = rInst.pClass->GetVariable( rInst, nRsc_DELTALANG, RSCINST() );
-    if( aTmpI.IsInst() )
-    {
-        RscWriteRc aMem;
-        aTmpI.pClass->WriteRc( aTmpI, aMem, pTC, 0, false );
-        nLang = (sal_Int32)aMem.GetShort( nTupelIdx * sizeof(sal_uInt16) );
-    }
-
-    return nLang + nBaseValue;
-}
-
 ERRTYPE RscClass::WriteInstRc( const RSCINST & rInst,
                                RscWriteRc & rMem,
                                RscTypCont * pTC,

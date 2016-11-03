@@ -51,10 +51,6 @@ protected:
     static sal_uInt32   GetObjSizeRes( RSHEADER_TYPE * pHT )
     { return ResMgr::GetObjSize( pHT ); }
 
-    // get a 32bit value from Resource data
-    static sal_Int32    GetLongRes( void const * pLong )
-    { return ResMgr::GetLong( pLong ); }
-
     // read a 32bit value from resource data and increment pointer
     sal_Int32 ReadLongRes()
     { return m_pResMgr->ReadLong(); }

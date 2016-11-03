@@ -258,14 +258,6 @@ private:
     void PaintInnerWindow (const css::awt::PaintEvent& rEvent);
     void PaintEndSlide (const css::awt::Rectangle& rRepaintBox);
 
-    /** The slide show relies on the back buffer of the canvas not being
-        modified.  With a shared canvas there are times when that can not be
-        guaranteed.
-        Call this method when the back buffer may have changed its content,
-        like when the window has been moved but not resized.
-    */
-    void ForceRepaint();
-
     void CreateBackgroundPolygons();
 
     /** This method throws a DisposedException when the object has already been

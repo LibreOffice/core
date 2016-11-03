@@ -714,9 +714,6 @@ private:
     SAL_DLLPRIVATE void                 ImplDlgCtrlFocusChanged( vcl::Window* pWindow, bool bGetFocus );
     SAL_DLLPRIVATE vcl::Window*         ImplFindDlgCtrlWindow( vcl::Window* pWindow );
 
-    SAL_DLLPRIVATE long                 ImplLogicUnitToPixelX( long nX, MapUnit eUnit );
-    SAL_DLLPRIVATE long                 ImplLogicUnitToPixelY( long nY, MapUnit eUnit );
-
     SAL_DLLPRIVATE static void          ImplNewInputContext();
 
     SAL_DLLPRIVATE void                 ImplCallActivateListeners(vcl::Window*);
