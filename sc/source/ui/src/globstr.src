@@ -533,50 +533,6 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Group" ;
     };
-    String STR_PIVOTFUNC_SUM
-    {
-        Text [ en-US ] = "SUM" ;
-    };
-    String STR_PIVOTFUNC_COUNT
-    {
-        Text [ en-US ] = "COUNT" ;
-    };
-    String STR_PIVOTFUNC_AVG
-    {
-        Text [ en-US ] = "AVERAGE" ;
-    };
-    String STR_PIVOTFUNC_MAX
-    {
-        Text [ en-US ] = "MAX" ;
-    };
-    String STR_PIVOTFUNC_MIN
-    {
-        Text [ en-US ] = "MIN" ;
-    };
-    String STR_PIVOTFUNC_PROD
-    {
-        Text [ en-US ] = "PRODUCT" ;
-    };
-    String STR_PIVOTFUNC_COUNT2
-    {
-        Text [ en-US ] = "COUNTA" ;
-    };
-    String STR_PIVOTFUNC_STDDEV
-    {
-        Text [ en-US ] = "STDEV" ;
-    };
-    String STR_PIVOTFUNC_STDDEV2
-    {
-        Text [ en-US ] = "STDEVP" ;
-    };
-    String STR_PIVOTFUNC_VAR
-    {
-        Text [ en-US ] = "VAR" ;
-    };
-    String STR_PIVOTFUNC_VAR2
-    {
-        Text [ en-US ] = "VARP" ;
-    };
     String STR_TABLE
     {
         Text [ en-US ] = "Sheet" ;
