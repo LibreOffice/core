@@ -74,9 +74,12 @@ namespace utl
         OConfigurationNode() :m_bEscapeNames(false) { }
         /// copy ctor
         OConfigurationNode(const OConfigurationNode& _rSource);
+        /// move ctor
+        OConfigurationNode(OConfigurationNode&& _rSource);
 
         /// assigment
         OConfigurationNode& operator=(const OConfigurationNode& _rSource);
+        OConfigurationNode& operator=(OConfigurationNode&& _rSource);
 
         /// dtor
         virtual ~OConfigurationNode() override {}
