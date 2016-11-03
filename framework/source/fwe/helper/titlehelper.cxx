@@ -20,6 +20,8 @@
 #include <framework/titlehelper.hxx>
 #include <services.h>
 #include <properties.h>
+#include <classes/fwkresid.hxx>
+#include <classes/resource.hrc>
 
 #include <com/sun/star/frame/UntitledNumbersConst.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -34,6 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/svapp.hxx>
 
 namespace framework{
 
@@ -475,6 +478,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     impl_appendModuleName       (sTitle);
     impl_appendDebugVersion     (sTitle);
 #endif
+    impl_appendSafeMode         (sTitle);
     // SYNCHRONIZED ->
     aLock.reset ();
 
@@ -559,6 +563,12 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer&)
 {
 }
 #endif
+
+void TitleHelper::impl_appendSafeMode (OUStringBuffer& sTitle)
+{
+    if (Application::IsSafeModeEnabled())
+        sTitle.append(FwkResId (STR_SAFEMODE_TITLE));
+}
 
 void TitleHelper::impl_startListeningForModel (const css::uno::Reference< css::frame::XModel >& xModel)
 {
