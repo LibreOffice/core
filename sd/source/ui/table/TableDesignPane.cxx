@@ -359,14 +359,7 @@ void TableValueSet::updateSettings()
     }
 }
 
-VCL_BUILDER_DECL_FACTORY(TableValueSet)
-{
-    WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<TableValueSet>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(TableValueSet, WB_TABSTOP)
 
 void TableDesignWidget::updateControls()
 {
