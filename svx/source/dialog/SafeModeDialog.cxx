@@ -42,10 +42,12 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
 
     mpBoxRestore(),
     mpBoxConfigure(),
+    mpBoxDeinstall(),
     mpBoxReset(),
 
     mpRadioRestore(),
     mpRadioConfigure(),
+    mpRadioDeinstall(),
     mpRadioReset(),
 
     mpCBCheckProfilesafeConfig(),
@@ -65,10 +67,12 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
 
     get(mpBoxRestore, "group_restore");
     get(mpBoxConfigure, "group_configure");
+    get(mpBoxDeinstall, "group_deinstall");
     get(mpBoxReset, "group_reset");
 
     get(mpRadioRestore, "radio_restore");
     get(mpRadioConfigure, "radio_configure");
+    get(mpRadioDeinstall, "radio_deinstall");
     get(mpRadioReset, "radio_reset");
 
     get(mpCBCheckProfilesafeConfig, "check_profilesafe_config");
@@ -110,6 +114,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     // Check the first radio button and disable the other parts
     mpRadioRestore->Check();
     mpBoxConfigure->Disable();
+    mpBoxDeinstall->Disable();
     mpBoxReset->Disable();
 
     // Set URL for help button (module=safemode)
@@ -129,10 +134,12 @@ void SafeModeDialog::dispose()
 {
     mpRadioRestore.clear();
     mpRadioConfigure.clear();
+    mpRadioDeinstall.clear();
     mpRadioReset.clear();
 
     mpBoxRestore.clear();
     mpBoxConfigure.clear();
+    mpBoxDeinstall.clear();
     mpBoxReset.clear();
 
     mpBtnContinue.clear();
@@ -226,6 +233,14 @@ void SafeModeDialog::applyChanges()
             comphelper::BackupFileHelper::tryDisableAllExtensions();
         }
 
+        if (mpCBDisableHWAcceleration->IsChecked())
+        {
+            comphelper::BackupFileHelper::tryDisableHWAcceleration();
+        }
+    }
+
+    if (mpRadioDeinstall->IsChecked())
+    {
         if (mpCBDeinstallUserExtensions->IsChecked())
         {
             // Deinstall all User Extensions (installed for User only)
@@ -236,11 +251,6 @@ void SafeModeDialog::applyChanges()
         {
             // Deinstall all Extensions (user|shared|bundled)
             comphelper::BackupFileHelper::tryDeinstallAllExtensions();
-        }
-
-        if (mpCBDisableHWAcceleration->IsChecked())
-        {
-            comphelper::BackupFileHelper::tryDisableHWAcceleration();
         }
     }
 
@@ -267,7 +277,18 @@ void SafeModeDialog::applyChanges()
 
 IMPL_LINK(SafeModeDialog, RadioBtnHdl, Button*, pBtn)
 {
-    if (pBtn == mpRadioConfigure.get())
+    if (pBtn == mpRadioRestore.get())
+    {
+        // Enable the currently selected box
+        mpBoxRestore->Enable();
+        // Make sure only possible choices are active
+        enableDisableWidgets();
+        // Disable the unselected boxes
+        mpBoxReset->Disable();
+        mpBoxConfigure->Disable();
+        mpBoxDeinstall->Disable();
+    }
+    else if (pBtn == mpRadioConfigure.get())
     {
         // Enable the currently selected box
         mpBoxConfigure->Enable();
@@ -276,7 +297,19 @@ IMPL_LINK(SafeModeDialog, RadioBtnHdl, Button*, pBtn)
         // Disable the unselected boxes
         mpBoxRestore->Disable();
         mpBoxReset->Disable();
+        mpBoxDeinstall->Disable();
 
+    }
+    else if (pBtn == mpRadioDeinstall.get())
+    {
+        // Enable the currently selected box
+        mpBoxDeinstall->Enable();
+        // Make sure only possible choices are active
+        enableDisableWidgets();
+        // Disable the unselected boxes
+        mpBoxRestore->Disable();
+        mpBoxConfigure->Disable();
+        mpBoxReset->Disable();
     }
     else if (pBtn == mpRadioReset.get())
     {
@@ -287,16 +320,7 @@ IMPL_LINK(SafeModeDialog, RadioBtnHdl, Button*, pBtn)
         // Disable the unselected boxes
         mpBoxConfigure->Disable();
         mpBoxRestore->Disable();
-    }
-    else if (pBtn == mpRadioRestore.get())
-    {
-        // Enable the currently selected box
-        mpBoxRestore->Enable();
-        // Make sure only possible choices are active
-        enableDisableWidgets();
-        // Disable the unselected boxes
-        mpBoxReset->Disable();
-        mpBoxConfigure->Disable();
+        mpBoxDeinstall->Disable();
     }
 
     return 0;

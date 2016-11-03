@@ -39,10 +39,12 @@ private:
 
     VclPtr<VclBox> mpBoxRestore;
     VclPtr<VclBox> mpBoxConfigure;
+    VclPtr<VclBox> mpBoxDeinstall;
     VclPtr<VclBox> mpBoxReset;
 
     VclPtr<RadioButton> mpRadioRestore;
     VclPtr<RadioButton> mpRadioConfigure;
+    VclPtr<RadioButton> mpRadioDeinstall;
     VclPtr<RadioButton> mpRadioReset;
 
     VclPtr<CheckBox> mpCBCheckProfilesafeConfig;
