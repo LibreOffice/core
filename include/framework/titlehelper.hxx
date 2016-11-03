@@ -160,6 +160,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
         void impl_appendProductName (OUStringBuffer& sTitle);
         void impl_appendModuleName (OUStringBuffer& sTitle);
         void impl_appendDebugVersion (OUStringBuffer& sTitle);
+        void impl_appendSafeMode (OUStringBuffer& sTitle);
 
         void impl_setSubTitle (const css::uno::Reference< css::frame::XTitle >& xSubTitle);
 
