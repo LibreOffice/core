@@ -7,13 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#version 120
-#if __VERSION__ < 130
-int min( int a, int b ) { return a < b ? a : b; }
-float min( float a, float b ) { return a < b ? a : b; }
-#endif
-
-/* TODO Use textureOffset for newest version of GLSL */
+#version 130
 
 uniform sampler2D sampler;
 uniform int swidth;
@@ -34,23 +28,108 @@ varying vec2 mask_coord;
 uniform sampler2D mask;
 #endif
 
+vec4 getTexel(int x, int y)
+{
+    vec2 offset = vec2(x * xsrcconvert, y * ysrcconvert);
+    vec4 texel = texture2D(sampler, offset);
+#ifdef MASKED
+    texel.a = 1.0 - texture2D(mask, offset).r;
+#endif
+    return texel;
+}
+
+#ifdef USE_REDUCED_REGISTER_VARIANT
+
+void main(void)
+{
+    // Convert to pixel coordinates again.
+    int dx = int(tex_coord.s * xdestconvert);
+    int dy = int(tex_coord.t * ydestconvert);
+
+    // Compute the range of source pixels which will make up this destination pixel.
+    float fsx1 = min(dx * xscale,   float(swidth - 1));
+    float fsx2 = min(fsx1 + xscale, float(swidth - 1));
+
+    float fsy1 = min(dy * yscale,   float(sheight - 1));
+    float fsy2 = min(fsy1 + yscale, float(sheight - 1));
+
+    // To whole pixel coordinates.
+    int xstart = int(floor(fsx1));
+    int xend   = int(floor(fsx2));
+
+    int ystart = int(floor(fsy1));
+    int yend   = int(floor(fsy2));
+
+    float xlength = fsx2 - fsx1;
+    float ylength = fsy2 - fsy1;
+
+    float xContribution[3];
+    xContribution[0] = (1.0 - max(0.0, fsx1 - xstart))     / xlength;
+    xContribution[1] =  1.0 / xlength;
+    xContribution[2] = (1.0 - max(0.0, (xend + 1) - fsx2)) / xlength;
+
+    float yContribution[3];
+    yContribution[0] = (1.0 - max(0.0, fsy1 - ystart))     / ylength;
+    yContribution[1] =  1.0 / ylength;
+    yContribution[2] = (1.0 - max(0.0, (yend + 1) - fsy2)) / ylength;
+
+    vec4 sumAll = vec4(0.0, 0.0, 0.0, 0.0);
+    vec4 texel;
+    // First Y pass
+    {
+        vec4 sumX = vec4(0.0, 0.0, 0.0, 0.0);
+
+        sumX += getTexel(xstart, ystart) * xContribution[0];
+        for (int x = xstart + 1; x < xend; ++x)
+        {
+           sumX += getTexel(x, ystart) * xContribution[1];
+        }
+        sumX += getTexel(xend, ystart) * xContribution[2];
+
+        sumAll += sumX * yContribution[0];
+    }
+
+    // Middle Y Passes
+    for (int y = ystart + 1; y < yend; ++y)
+    {
+        vec4 sumX = vec4(0.0, 0.0, 0.0, 0.0);
+
+        sumX += getTexel(xstart, y) * xContribution[0];
+        for (int x = xstart + 1; x < xend; ++x)
+        {
+            sumX += getTexel(x, y) * xContribution[1];
+        }
+        sumX += getTexel(xend, y) * xContribution[2];
+
+        sumAll += sumX * yContribution[1];
+    }
+
+    // Last Y pass
+    {
+        vec4 sumX = vec4(0.0, 0.0, 0.0, 0.0);
+
+        sumX += getTexel(xstart, yend) * xContribution[0];
+        for (int x = xstart + 1; x < xend; ++x)
+        {
+            sumX += getTexel(x, yend) * xContribution[1];
+        }
+        sumX += getTexel(xend, yend) * xContribution[2];
+
+        sumAll += sumX * yContribution[2];
+    }
+
+    gl_FragColor = sumAll;
+}
+#else
 void main(void)
 {
     // Convert to pixel coordinates again.
     int dx = int( tex_coord.s * xdestconvert );
     int dy = int( tex_coord.t * ydestconvert );
 
-    // Note: These values are always the same for the same X (or Y),
-    // so they could be precalculated in C++ and passed to the shader,
-    // but GLSL has limits on the size of uniforms passed to it,
-    // so it'd need something like texture buffer objects from newer
-    // GLSL versions, and it seems the hassle is not really worth it.
-
-    // How much each column/row will contribute to the resulting pixel.
-    // assert( xscale <= 100 ); assert( yscale <= 100 );
     float xratio[ 16 + 2 ];
     float yratio[ 16 + 2 ];
-    // For finding the first and last source pixel.
+
     int xpixel[ 16 + 2 ];
     int ypixel[ 16 + 2 ];
 
@@ -147,5 +226,5 @@ void main(void)
 
     gl_FragColor = sum;
 }
-
+#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
