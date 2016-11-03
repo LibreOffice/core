@@ -17,16 +17,13 @@
 namespace vcl
 {
 
-class VCL_DLLPUBLIC RenderSettings
+class VCL_DLLPUBLIC RenderSettings final
 {
     OutDevState maOutDevState;
     std::unique_ptr<Wallpaper> mpBackground;
 
 public:
     RenderSettings()
-    {}
-
-    virtual ~RenderSettings()
     {}
 };
 

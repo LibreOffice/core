@@ -73,7 +73,7 @@ public:
     GLuint AddStencil();
 };
 
-class VCL_DLLPUBLIC OpenGLTexture
+class VCL_DLLPUBLIC OpenGLTexture final
 {
 private:
     // if the rect size doesn't match the mpImpl one, this instance
@@ -98,7 +98,7 @@ public:
                     OpenGLTexture( int nX, int nY, int nWidth, int nHeight );
                     OpenGLTexture( const OpenGLTexture& rTexture );
                     OpenGLTexture( const OpenGLTexture& rTexture, int nX, int nY, int nWidth, int nHeight );
-    virtual         ~OpenGLTexture();
+                    ~OpenGLTexture();
 
     bool            IsUnique() const;
 

@@ -66,7 +66,7 @@ struct EndPopupModeData
  *  All DockingWindows should be converted the new class.
  */
 
-class ImplDockingWindowWrapper
+class ImplDockingWindowWrapper final
 {
     friend class ::vcl::Window;
     friend class DockingManager;
@@ -115,7 +115,7 @@ private:
 
 public:
     ImplDockingWindowWrapper( const vcl::Window *pWindow );
-    virtual ~ImplDockingWindowWrapper();
+    ~ImplDockingWindowWrapper();
 
     vcl::Window*         GetWindow()     { return mpDockingWindow; }
     bool            ImplStartDocking( const Point& rPos );

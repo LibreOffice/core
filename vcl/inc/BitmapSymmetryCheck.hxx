@@ -14,11 +14,11 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
 
-class VCL_DLLPUBLIC BitmapSymmetryCheck
+class VCL_DLLPUBLIC BitmapSymmetryCheck final
 {
 public:
     BitmapSymmetryCheck();
-    virtual ~BitmapSymmetryCheck();
+    ~BitmapSymmetryCheck();
 
     static bool check(Bitmap& rBitmap);
 
