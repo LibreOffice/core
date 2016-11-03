@@ -413,8 +413,6 @@ public:
 
 #endif // ENABLE_GRAPHITE
 
-#endif
-
 class TextOutRenderer
 {
 protected:
@@ -513,5 +511,7 @@ private:
     float             mlfEmHeight;
     HDC               mhDC;
 };
+
+#endif // INCLUDED_VCL_INC_WIN_WINLAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
