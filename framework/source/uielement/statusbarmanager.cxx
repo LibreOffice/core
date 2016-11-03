@@ -54,14 +54,6 @@
 
 using namespace ::com::sun::star;
 
-// Property names of a menu/menu item ItemDescriptor
-static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
-static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
-static const char ITEM_DESCRIPTOR_OFFSET[]      = "Offset";
-static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
-static const char ITEM_DESCRIPTOR_WIDTH[]       = "Width";
-static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
-
 namespace framework
 {
 
@@ -440,27 +432,27 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
             {
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
-                    if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
+                    if ( aProp[i].Name == "CommandURL" )
                     {
                         aProp[i].Value >>= aCommandURL;
                     }
-                    else if ( aProp[i].Name == ITEM_DESCRIPTOR_HELPURL )
+                    else if ( aProp[i].Name == "HelpURL" )
                     {
                         aProp[i].Value >>= aHelpURL;
                     }
-                    else if ( aProp[i].Name == ITEM_DESCRIPTOR_STYLE )
+                    else if ( aProp[i].Name == "Style" )
                     {
                         aProp[i].Value >>= nStyle;
                     }
-                    else if ( aProp[i].Name == ITEM_DESCRIPTOR_TYPE )
+                    else if ( aProp[i].Name == "Type" )
                     {
                         aProp[i].Value >>= nType;
                     }
-                    else if ( aProp[i].Name == ITEM_DESCRIPTOR_WIDTH )
+                    else if ( aProp[i].Name == "Width" )
                     {
                         aProp[i].Value >>= nWidth;
                     }
-                    else if ( aProp[i].Name == ITEM_DESCRIPTOR_OFFSET )
+                    else if ( aProp[i].Name == "Offset" )
                     {
                         aProp[i].Value >>= nOffset;
                     }

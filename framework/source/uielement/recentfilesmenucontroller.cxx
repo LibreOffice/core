@@ -46,8 +46,6 @@ namespace {
 static const char CMD_CLEAR_LIST[]   = ".uno:ClearRecentFileList";
 static const char CMD_OPEN_AS_TEMPLATE[] = ".uno:OpenTemplate";
 static const char CMD_OPEN_REMOTE[]  = ".uno:OpenRemote";
-static const char CMD_PREFIX[]       = "vnd.sun.star.popup:RecentFileList?entry=";
-static const char MENU_SHORTCUT[]     = "~N. ";
 
 struct LoadRecentFile
 {
@@ -192,7 +190,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                         aMenuShortCut.append( "1~0. " );
                     else
                     {
-                        aMenuShortCut.append( MENU_SHORTCUT );
+                        aMenuShortCut.append( "~N. " );
                         aMenuShortCut[ 1 ] = sal_Unicode( i + '1' );
                     }
                 }
@@ -203,7 +201,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 }
 
                 OUStringBuffer aStrBuffer;
-                aStrBuffer.append( CMD_PREFIX );
+                aStrBuffer.append( "vnd.sun.star.popup:RecentFileList?entry=" );
                 aStrBuffer.append( sal_Int32( i ) );
                 OUString  aURLString( aStrBuffer.makeStringAndClear() );
 
