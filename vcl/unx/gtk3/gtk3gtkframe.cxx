@@ -1809,7 +1809,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, Rectangle *
 
     bool bSpanAllScreens = nNewScreen == (unsigned int)-1;
     m_bSpanMonitorsWhenFullscreen = bSpanAllScreens && getDisplay()->getSystem()->GetDisplayScreenCount() > 1;
-
+    gint nMonitor = -1;
     if (m_bSpanMonitorsWhenFullscreen)   //span all screens
     {
         pScreen = gtk_widget_get_screen( m_pWindow );
@@ -1820,7 +1820,6 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, Rectangle *
     }
     else
     {
-        gint nMonitor;
         bool bSameMonitor = false;
 
         if (!bSpanAllScreens)
@@ -1906,7 +1905,19 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, Rectangle *
         ? GDK_FULLSCREEN_ON_ALL_MONITORS : GDK_FULLSCREEN_ON_CURRENT_MONITOR );
 #endif
     if( eType == SetType::Fullscreen )
-        gtk_window_fullscreen( GTK_WINDOW( m_pWindow ) );
+    {
+        if (m_bSpanMonitorsWhenFullscreen)
+            gtk_window_fullscreen(GTK_WINDOW(m_pWindow));
+        else
+        {
+#if GTK_CHECK_VERSION(3,18,0)
+            gtk_window_fullscreen_on_monitor(GTK_WINDOW(m_pWindow), pScreen, nMonitor);
+#else
+            gtk_window_fullscreen(GTK_WINDOW(m_pWindow));
+#endif
+        }
+
+    }
     else if( eType == SetType::UnFullscreen )
         gtk_window_unfullscreen( GTK_WINDOW( m_pWindow ) );
 
