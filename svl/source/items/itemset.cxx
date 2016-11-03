@@ -141,8 +141,7 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool)
         m_pPool->FillItemIdRanges_Impl( m_pWhichRanges );
 
     const sal_uInt16 nSize = TotalCount();
-    m_pItems = new const SfxPoolItem* [ nSize ];
-    memset(static_cast<void*>(m_pItems), 0, nSize * sizeof(SfxPoolItem*));
+    m_pItems = new const SfxPoolItem*[nSize]{};
 }
 
 SfxItemSet::SfxItemSet(SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich2)
@@ -157,20 +156,15 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich
 
 void SfxItemSet::InitRanges_Impl(sal_uInt16 nWh1, sal_uInt16 nWh2)
 {
-    m_pWhichRanges = new sal_uInt16[ 3 ];
-    *(m_pWhichRanges+0) = nWh1;
-    *(m_pWhichRanges+1) = nWh2;
-    *(m_pWhichRanges+2) = 0;
+    m_pWhichRanges = new sal_uInt16[3]{nWh1, nWh2, 0};
     const sal_uInt16 nRg = nWh2 - nWh1 + 1;
-    m_pItems = new const SfxPoolItem* [ nRg ];
-    memset(static_cast<void*>(m_pItems), 0, nRg * sizeof(SfxPoolItem*));
+    m_pItems = new const SfxPoolItem*[nRg]{};
 }
 
 void SfxItemSet::InitRanges_Impl(va_list pArgs, sal_uInt16 nWh1, sal_uInt16 nWh2, sal_uInt16 nNull)
 {
     sal_uInt16 nSize = InitializeRanges_Impl(m_pWhichRanges, pArgs, nWh1, nWh2, nNull);
-    m_pItems = new const SfxPoolItem* [ nSize ];
-    memset(static_cast<void*>(m_pItems), 0, sizeof(SfxPoolItem*) * nSize);
+    m_pItems = new const SfxPoolItem*[nSize]{};
 }
 
 SfxItemSet::SfxItemSet(SfxItemPool& rPool, int nWh1, int nWh2, int nNull, ...)
@@ -206,8 +200,7 @@ void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
         pPtr += 2;
     }
 
-    m_pItems = new const SfxPoolItem* [ nCnt ];
-    memset(static_cast<void*>(m_pItems), 0, sizeof(SfxPoolItem*) * nCnt);
+    m_pItems = new const SfxPoolItem*[nCnt]{};
 
     std::ptrdiff_t cnt = pPtr - pWhichPairTable +1;
     m_pWhichRanges = new sal_uInt16[ cnt ];
@@ -1659,8 +1652,7 @@ SfxAllItemSet::SfxAllItemSet( SfxItemPool &rPool )
     m_pItems = nullptr;
 
     // Allocate nInitCount pairs at USHORTs for Ranges
-    m_pWhichRanges = new sal_uInt16[ nInitCount + 1 ];
-    memset( m_pWhichRanges, 0, (nInitCount + 1) * sizeof(sal_uInt16) );
+    m_pWhichRanges = new sal_uInt16[nInitCount + 1]{};
 }
 
 SfxAllItemSet::SfxAllItemSet(const SfxItemSet &rCopy)

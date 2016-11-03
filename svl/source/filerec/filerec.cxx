@@ -497,8 +497,7 @@ bool SfxMultiRecordReader::ReadHeader_Impl()
                      _nContentCount << " claimed, truncating");
             _nContentCount = nMaxRecords;
         }
-        _pContentOfs = new sal_uInt32[_nContentCount];
-        memset(_pContentOfs, 0, _nContentCount*sizeof(sal_uInt32));
+        _pContentOfs = new sal_uInt32[_nContentCount]{};
         #if defined(OSL_LITENDIAN)
         _pStream->ReadBytes( _pContentOfs, sizeof(sal_uInt32)*_nContentCount );
         #else
