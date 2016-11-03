@@ -1928,6 +1928,10 @@ bool HTMLParser::ParseMetaOptionsImpl(
             case HTML_O_CONTENT:
                 aContent = aOption.GetString();
                 break;
+            case HTML_O_CHARSET:
+                OString sValue(OUStringToOString(aOption.GetString(), RTL_TEXTENCODING_ASCII_US));
+                o_rEnc = GetExtendedCompatibilityTextEncoding(rtl_getTextEncodingFromMimeCharset(sValue.getStr()));
+                break;
         }
     }
 
@@ -1941,7 +1945,6 @@ bool HTMLParser::ParseMetaOptionsImpl(
         // convert line endings for Description
         aContent = convertLineEnd(aContent, GetSystemLineEnd());
     }
-
 
     if ( bHTTPEquiv && i_pHTTPHeader )
     {

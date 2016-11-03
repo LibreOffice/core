@@ -422,6 +422,7 @@
 #define OOO_STRING_SVTOOLS_HTML_O_alt "alt"
 #define OOO_STRING_SVTOOLS_HTML_O_axis "axis"
 #define OOO_STRING_SVTOOLS_HTML_O_char "char"
+#define OOO_STRING_SVTOOLS_HTML_O_charset "charset"
 #define OOO_STRING_SVTOOLS_HTML_O_class "class"
 #define OOO_STRING_SVTOOLS_HTML_O_code "code"
 #define OOO_STRING_SVTOOLS_HTML_O_codetype "codetype"

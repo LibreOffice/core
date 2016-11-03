@@ -576,6 +576,7 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_alt},       HTML_O_ALT},
     {{OOO_STRING_SVTOOLS_HTML_O_axis},      HTML_O_AXIS},
     {{OOO_STRING_SVTOOLS_HTML_O_char},      HTML_O_CHAR}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_charset},   HTML_O_CHARSET},
     {{OOO_STRING_SVTOOLS_HTML_O_class},     HTML_O_CLASS},
     {{OOO_STRING_SVTOOLS_HTML_O_code},      HTML_O_CODE}, // HotJava
     {{OOO_STRING_SVTOOLS_HTML_O_codetype},  HTML_O_CODETYPE},
