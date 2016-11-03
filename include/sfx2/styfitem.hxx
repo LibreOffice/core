@@ -50,7 +50,6 @@ public:
     SfxStyleFamily  GetFamily() const { return nFamily; }
     const SfxStyleFilter& GetFilterList() const { return aFilterList; }
     const Image&    GetImage() const { return aImage; }
-    void            SetImage( const Image& _rImg ) { aImage = _rImg; }
 };
 
 using SfxStyleFamilies = std::vector<SfxStyleFamilyItem>;

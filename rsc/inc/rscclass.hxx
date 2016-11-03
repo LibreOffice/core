@@ -53,8 +53,6 @@ protected:
     bool                IsValueDflt( CLASS_DATA pData, sal_uInt32 nEle );
     void                SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle,
                                     bool bSet );
-    sal_Int32           GetCorrectValues( const RSCINST & rInst, sal_uInt32 nVarPos,
-                                          sal_uInt32 nTupelIdx, RscTypCont * pTC );
 public:
                     RscClass( Atom nId, sal_uInt32 nTypId, RscTop * pSuperCl );
                     virtual ~RscClass() override;

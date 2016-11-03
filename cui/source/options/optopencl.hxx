@@ -37,8 +37,6 @@ private:
     VclPtr<FixedText> mpOclUsed;
     VclPtr<FixedText> mpOclNotUsed;
 
-    static void EnableOpenCLHdl(VclFrame* pFrame, bool aEnable);
-
 public:
     SvxOpenCLTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxOpenCLTabPage() override;
