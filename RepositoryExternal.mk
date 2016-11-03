@@ -2771,7 +2771,6 @@ endef
 else # !SYSTEM_POPPLER
 
 define gb_LinkTarget__use_poppler
-$(call gb_LinkTarget_use_external,$(1),jpeg)
 $(call gb_LinkTarget_use_external_project,$(1),poppler,full)
 
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2786,6 +2785,8 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,poppler)/goo/.libs/libgoo$(gb_StaticLibrary_PLAINEXT) \
 	$(call gb_UnpackedTarball_get_dir,poppler)/poppler/.libs/libpoppler$(gb_StaticLibrary_PLAINEXT) \
 )
+
+$(call gb_LinkTarget_use_external,$(1),jpeg)
 
 ifeq ($(OS),MACOSX)
 $(call gb_LinkTarget_add_libs,$(1),\
