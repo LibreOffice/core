@@ -297,18 +297,6 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const css::uno::Reference< css:
     {
         xParser->parseStream( aParserInput );
     }
-    catch( xml::sax::SAXParseException& )
-    {
-        mbError = true;
-    }
-    catch( xml::sax::SAXException& )
-    {
-        mbError = true;
-    }
-    catch( css::io::IOException& )
-    {
-        mbError = true;
-    }
     catch( uno::Exception& )
     {
         mbError = true;
