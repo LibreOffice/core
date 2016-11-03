@@ -225,25 +225,10 @@ bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax
 {
     mbError = false;
 
-    /*
-     * create a signature listener
-     */
-
-    /*
-     * configure the signature creation listener
-     */
-
-    /*
-     * write signatures
-     */
     if ( !mpXSecController->WriteSignature( xDocumentHandler ) )
     {
         mbError = true;
     }
-
-    /*
-     * clear up the signature creation listener
-     */
 
     return !mbError;
 }
