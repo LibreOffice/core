@@ -53,9 +53,6 @@ namespace cppcanvas
 
             virtual void setPriority( double fPriority ) override;
 
-            virtual css::uno::Reference<
-                css::rendering::XSprite >  getUNOSprite() const override;
-
         private:
             ImplSprite(const ImplSprite&) = delete;
             ImplSprite& operator=( const ImplSprite& ) = delete;

@@ -500,7 +500,13 @@ void PrinterInfoManager::initialize()
             aMergeInfo.m_aContext.setValue( pMergeKey, pMergeValue );
     }
 
-    getSystemPrintQueues();
+    if( m_pQueueInfo && m_pQueueInfo->hasChanged() )
+    {
+        m_aSystemPrintCommand = m_pQueueInfo->getCommand();
+        m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
+        delete m_pQueueInfo;
+        m_pQueueInfo = nullptr;
+    }
     for( ::std::list< SystemPrintQueue >::iterator it = m_aSystemPrintQueues.begin(); it != m_aSystemPrintQueues.end(); ++it )
     {
         OUString aPrinterName( "<" );
@@ -814,19 +820,6 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
         writePrinterConfig();
     }
     return bSuccess;
-}
-
-const std::list< PrinterInfoManager::SystemPrintQueue >& PrinterInfoManager::getSystemPrintQueues()
-{
-    if( m_pQueueInfo && m_pQueueInfo->hasChanged() )
-    {
-        m_aSystemPrintCommand = m_pQueueInfo->getCommand();
-        m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
-        delete m_pQueueInfo;
-        m_pQueueInfo = nullptr;
-    }
-
-    return m_aSystemPrintQueues;
 }
 
 bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, const char* pToken ) const
