@@ -34,6 +34,8 @@
 
 #include <i18nlangtag/lang.h>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
@@ -770,7 +772,8 @@ bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph )
 
 bool SalLayout::UseCommonLayout()
 {
-    static bool bUse = getenv("SAL_NO_COMMON_LAYOUT") == nullptr;
+    static bool bUse = (getenv("SAL_NO_COMMON_LAYOUT") == nullptr) &&
+                       (officecfg::Office::Common::VCL::TextLayoutEngine::get() == "new");
     return bUse;
 }
 
