@@ -52,6 +52,15 @@ struct VCL_DLLPUBLIC GLWindow
     virtual ~GLWindow();
 };
 
+struct VCL_DLLPUBLIC OpenGLCapabilitySwitch
+{
+    bool mbLimitedShaderRegisters;
+
+    OpenGLCapabilitySwitch()
+        : mbLimitedShaderRegisters(false)
+    {}
+};
+
 class VCL_DLLPUBLIC OpenGLContext
 {
     friend class OpenGLTests;
@@ -92,6 +101,11 @@ public:
     std::unique_ptr<RenderState>& state()
     {
         return mpRenderState;
+    }
+
+    OpenGLCapabilitySwitch& getOpenGLCapabilitySwitch()
+    {
+        return maOpenGLCapabilitySwitch;
     }
 
     /// Is this GL context the current context ?
@@ -164,6 +178,8 @@ protected:
     OpenGLFramebuffer* mpCurrentFramebuffer;
     OpenGLFramebuffer* mpFirstFramebuffer;
     OpenGLFramebuffer* mpLastFramebuffer;
+
+    OpenGLCapabilitySwitch maOpenGLCapabilitySwitch;
 
 private:
     struct ProgramHash
