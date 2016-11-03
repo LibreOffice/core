@@ -7769,12 +7769,20 @@ _EOS
         AC_MSG_ERROR([no nasm (Netwide Assembler) found])
         fi
         LIBJPEG_CFLAGS="-I${WORKDIR}/UnpackedTarball/jpeg-turbo"
-        LIBJPEG_LIBS="${WORKDIR}/UnpackedTarball/jpeg-turbo/.libs/libjpeg.lib"
+        if test "$COM" = "MSC"; then
+            LIBJPEG_LIBS="${WORKDIR}/UnpackedTarball/jpeg-turbo/.libs/libjpeg.lib"
+        else
+            LIBJPEG_LIBS="-L${WORKDIR}/UnpackedTarball/jpeg-turbo/.libs -ljpeg"
+        fi
     else
         AC_MSG_RESULT([internal, jpeg])
         BUILD_TYPE="$BUILD_TYPE JPEG"
         LIBJPEG_CFLAGS="-I${WORKDIR}/UnpackedTarball/jpeg"
-        LIBJPEG_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -ljpeg"
+        if test "$COM" = "MSC"; then
+            LIBJPEG_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/libjpeg.lib"
+        else
+            LIBJPEG_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -ljpeg"
+        fi
     fi
 fi
 AC_SUBST(NASM)
