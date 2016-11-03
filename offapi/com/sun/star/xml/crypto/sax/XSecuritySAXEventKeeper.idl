@@ -53,19 +53,6 @@ interface XSecuritySAXEventKeeper : XSAXEventKeeper
         [in] boolean modifyElement);
 
     /**
-     * Clones an element collector.
-     *
-     * @param referenceId                    the keeper id of the element collector to
-     *                                       be cloned
-     * @param priority                       the priority of new element collector. See
-     *                                       ConstOfPriority
-     * @return                               the keeper id of the new element collector
-     */
-    long cloneElementCollector(
-        [in] long referenceId,
-        [in] ElementMarkPriority priority);
-
-    /**
      * Sets security id for an element mark.
      *
      * @param id           the keeper id of the element collector to be set

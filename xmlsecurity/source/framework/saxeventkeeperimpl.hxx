@@ -247,10 +247,6 @@ public:
         css::xml::crypto::sax::ElementMarkPriority priority,
         sal_Bool modifyElement )
         throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL cloneElementCollector(
-        sal_Int32 referenceId,
-        css::xml::crypto::sax::ElementMarkPriority priority )
-        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setSecurityId( sal_Int32 id, sal_Int32 securityId )
         throw (css::uno::RuntimeException, std::exception) override;
 

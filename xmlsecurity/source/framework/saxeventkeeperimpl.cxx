@@ -983,40 +983,6 @@ sal_Int32 SAL_CALL SAXEventKeeperImpl::addSecurityElementCollector(
         nullptr);
 }
 
-sal_Int32 SAL_CALL SAXEventKeeperImpl::cloneElementCollector(
-    sal_Int32 referenceId,
-    cssxc::sax::ElementMarkPriority priority )
-    throw (cssu::RuntimeException, std::exception)
-{
-    sal_Int32 nId = -1;
-
-    ElementCollector* pElementCollector = static_cast<ElementCollector*>(findElementMarkBuffer(referenceId));
-    if (pElementCollector != nullptr)
-    {
-        nId = m_nNextElementMarkId;
-        m_nNextElementMarkId ++;
-
-        ElementCollector* pClonedOne
-            = pElementCollector->clone(nId, priority);
-
-            /*
-             * add this EC into the security data buffer array.
-             */
-        m_vElementMarkBuffers.push_back(pClonedOne);
-
-            /*
-             * If the reference EC is still in initial EC array, add
-             * this cloned one into the initial EC array too.
-             */
-            if (pElementCollector->getBufferNode() == nullptr)
-        {
-            m_vNewElementCollectors.push_back(pClonedOne);
-        }
-    }
-
-    return nId;
-}
-
 void SAL_CALL SAXEventKeeperImpl::setSecurityId( sal_Int32 id, sal_Int32 securityId )
     throw (cssu::RuntimeException, std::exception)
 {
