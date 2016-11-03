@@ -108,10 +108,21 @@ public:
     ScMarkArray GetMarkArray( SCCOL nCol ) const;
 
     bool        IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple = false ) const;
-    void        FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const;
+
+    /** Create a range list of marks.
+        @param  nForTab
+                If -1, use start-sheet-tab of the multi-area in ranges.
+                If >= 0, use given sheet-tab in ranges.
+     */
+    void        FillRangeListWithMarks( ScRangeList* pList, bool bClear, SCTAB nForTab = -1 ) const;
     void        ExtendRangeListTables( ScRangeList* pList ) const;
 
     ScRangeList GetMarkedRanges() const;
+    /** Get marked ranges with sheet-tab set to nTab.
+        Marks are stored for the currently active sheet respectively the
+        multi-area start-sheet-tab, update ranges with the sheet for which this
+        is called. */
+    ScRangeList GetMarkedRangesForTab( SCTAB nTab ) const;
 
     void        MarkFromRangeList( const ScRangeList& rList, bool bReset );
 

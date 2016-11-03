@@ -289,6 +289,9 @@ void ScTabControl::Select()
     rBind.Invalidate( FID_TABLE_HIDE );
     rBind.Invalidate( FID_TAB_SET_TAB_BG_COLOR );
 
+    // Recalculate status bar functions.
+    rBind.Invalidate( SID_TABLE_CELL );
+
         // SetReference onlw when the consolidate dialog is open
         // (for referenzes over multiple sheets)
         // for others this is only needed fidgeting

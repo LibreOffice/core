@@ -354,7 +354,7 @@ void ScMarkData::MarkFromRangeList( const ScRangeList& rList, bool bReset )
     }
 }
 
-void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const
+void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear, SCTAB nForTab ) const
 {
     if (!pList)
         return;
@@ -366,7 +366,7 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const
 
     if ( bMultiMarked )
     {
-        SCTAB nTab = aMultiRange.aStart.Tab();
+        SCTAB nTab = (nForTab < 0 ? aMultiRange.aStart.Tab() : nForTab);
 
         SCCOL nStartCol = aMultiRange.aStart.Col();
         SCCOL nEndCol = aMultiRange.aEnd.Col();
@@ -401,7 +401,17 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const
     }
 
     if ( bMarked )
-        pList->Append( aMarkRange );
+    {
+        if (nForTab < 0)
+            pList->Append( aMarkRange );
+        else
+        {
+            ScRange aRange( aMarkRange );
+            aRange.aStart.SetTab( nForTab );
+            aRange.aEnd.SetTab( nForTab );
+            pList->Append( aRange );
+        }
+    }
 }
 
 void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
@@ -426,7 +436,14 @@ void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
 ScRangeList ScMarkData::GetMarkedRanges() const
 {
     ScRangeList aRet;
-    FillRangeListWithMarks(&aRet, false);
+    FillRangeListWithMarks(&aRet, false, -1);
+    return aRet;
+}
+
+ScRangeList ScMarkData::GetMarkedRangesForTab( SCTAB nTab ) const
+{
+    ScRangeList aRet;
+    FillRangeListWithMarks(&aRet, false, nTab);
     return aRet;
 }
 

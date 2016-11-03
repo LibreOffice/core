@@ -3342,7 +3342,7 @@ sal_Int32 ScTable::GetMaxNumberStringLen(
 
 void ScTable::UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& rMark )
 {
-    ScRangeList aRanges = rMark.GetMarkedRanges();
+    ScRangeList aRanges = rMark.GetMarkedRangesForTab( nTab );
     for (SCCOL nCol = 0; nCol <= MAXCOL && !rData.bError; ++nCol)
     {
         if (pColFlags && ColHidden(nCol))
