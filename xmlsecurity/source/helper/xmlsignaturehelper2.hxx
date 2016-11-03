@@ -40,6 +40,10 @@ namespace embed {
 
 // MT: Not needed any more, remove later...
 
+// FIXME: I certainly would love to remove as much as possible of this steaming pile of
+// over-engineering, but I wonder what exactly the above comment means. Certainly it is not
+// straightforward to remove this class, it is used.
+
 class ImplXMLSignatureListener : public cppu::WeakImplHelper
 <
     css::xml::crypto::sax::XSignatureCreationResultListener,
