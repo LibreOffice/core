@@ -31,6 +31,10 @@ else
 postgresql_CPPFLAGS := $(ZLIB_CFLAGS)
 postgresql_LDFLAGS  :=
 
+ifeq ($(SYSTEM_ZLIB),)
+postgresql_LDFLAGS += $(ZLIB_LIBS)
+endif
+
 ifeq ($(DISABLE_OPENSSL),)
 ifeq ($(SYSTEM_OPENSSL),)
 postgresql_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,openssl)/include
