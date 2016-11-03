@@ -350,25 +350,12 @@ bool XSecController::WriteSignature(
 
             rc = true;
         }
-        catch( cssxs::SAXException& )
-        {
-            m_pErrorMessage = ERROR_SAXEXCEPTIONDURINGCREATION;
-        }
-        catch( css::io::IOException& )
-        {
-            m_pErrorMessage = ERROR_IOEXCEPTIONDURINGCREATION;
-        }
         catch( cssu::Exception& )
         {
-            m_pErrorMessage = ERROR_EXCEPTIONDURINGCREATION;
         }
 
         m_xSAXEventKeeper->setNextHandler( nullptr );
         m_bIsSAXEventKeeperSticky = false;
-    }
-    else
-    {
-        m_pErrorMessage = ERROR_CANNOTCREATEXMLSECURITYCOMPONENT;
     }
 
     return rc;
@@ -406,24 +393,13 @@ bool XSecController::WriteOOXMLSignature(const uno::Reference<embed::XStorage>& 
 
             bRet = true;
         }
-        catch (const xml::sax::SAXException&)
-        {
-            m_pErrorMessage = ERROR_SAXEXCEPTIONDURINGCREATION;
-        }
-        catch(const io::IOException&)
-        {
-            m_pErrorMessage = ERROR_IOEXCEPTIONDURINGCREATION;
-        }
         catch(const uno::Exception&)
         {
-            m_pErrorMessage = ERROR_EXCEPTIONDURINGCREATION;
         }
 
         m_xSAXEventKeeper->setNextHandler(nullptr);
         m_bIsSAXEventKeeperSticky = false;
     }
-    else
-        m_pErrorMessage = ERROR_CANNOTCREATEXMLSECURITYCOMPONENT;
 
     return bRet;
 }

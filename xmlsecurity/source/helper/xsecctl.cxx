@@ -63,7 +63,6 @@ XSecController::XSecController( const cssu::Reference<cssu::XComponentContext>& 
     , m_bIsBlocking(false)
     , m_eStatusOfSecurityComponents(InitializationState::UNINITIALIZED)
     , m_bIsSAXEventKeeperSticky(false)
-    , m_pErrorMessage(nullptr)
     , m_nReservedSignatureId(0)
     , m_bVerifyCurrentSignature(false)
 {
@@ -457,7 +456,6 @@ void XSecController::startMission(
 
     m_eStatusOfSecurityComponents = InitializationState::UNINITIALIZED;
     m_xSecurityContext = xSecurityContext;
-    m_pErrorMessage = nullptr;
 
     m_vInternalSignatureInformations.clear();
 

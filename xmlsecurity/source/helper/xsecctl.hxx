@@ -47,14 +47,6 @@
 
 #include <vector>
 
-/*
- * all error information
- */
-#define ERROR_CANNOTCREATEXMLSECURITYCOMPONENT    "Can't create XML security components."
-#define ERROR_SAXEXCEPTIONDURINGCREATION          "A SAX exception is throwed during signature creation."
-#define ERROR_IOEXCEPTIONDURINGCREATION           "An IO exception is throwed during signature creation."
-#define ERROR_EXCEPTIONDURINGCREATION             "An exception is throwed during signature creation."
-
 #define NS_XMLDSIG "http://www.w3.org/2000/09/xmldsig#"
 #define NS_DC      "http://purl.org/dc/elements/1.1/"
 #define NS_XD      "http://uri.etsi.org/01903/v1.3.2#"
@@ -246,11 +238,6 @@ private:
      * This flag is used to the situation when creating signature.
      */
     bool m_bIsSAXEventKeeperSticky;
-
-    /*
-      * error message pointer
-      */
-    const char *m_pErrorMessage;
 
     /*
      * the XSecParser which is used to parse the signature stream
