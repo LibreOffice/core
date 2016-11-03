@@ -106,37 +106,6 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     // Disable restart btn until some checkbox is active
     mpBtnRestart->Disable();
 
-    if (!maBackupFileHelper.isPopPossible())
-    {
-        mpCBCheckProfilesafeConfig->Disable();
-    }
-
-    if (!maBackupFileHelper.isPopPossibleExtensionInfo())
-    {
-        mpCBCheckProfilesafeExtensions->Disable();
-    }
-
-    if (!comphelper::BackupFileHelper::isTryDisableAllExtensionsPossible())
-    {
-        mpCBDisableAllExtensions->Disable();
-    }
-
-    if (!comphelper::BackupFileHelper::isTryDeinstallUserExtensionsPossible())
-    {
-        mpCBDeinstallUserExtensions->Disable();
-    }
-
-    if (!comphelper::BackupFileHelper::isTryDeinstallAllExtensionsPossible())
-    {
-        mpCBDeinstallAllExtensions->Disable();
-    }
-
-    if (!comphelper::BackupFileHelper::isTryResetCustomizationsPossible())
-    {
-        mpCBResetCustomizations->Disable();
-    }
-    // no disabe of mpCBResetWholeUserProfile, always possible (as last choice)
-
     // Check the first radio button and disable the other parts
     mpRadioRestore->Check();
     mpBoxConfigure->Disable();
@@ -183,6 +152,40 @@ void SafeModeDialog::dispose()
     mpBtnCreateZip.clear();
 
     Dialog::dispose();
+}
+
+void SafeModeDialog::enableDisableWidgets()
+{
+    if (!maBackupFileHelper.isPopPossible())
+    {
+        mpCBCheckProfilesafeConfig->Disable();
+    }
+
+    if (!maBackupFileHelper.isPopPossibleExtensionInfo())
+    {
+        mpCBCheckProfilesafeExtensions->Disable();
+    }
+
+    if (!comphelper::BackupFileHelper::isTryDisableAllExtensionsPossible())
+    {
+        mpCBDisableAllExtensions->Disable();
+    }
+
+    if (!comphelper::BackupFileHelper::isTryDeinstallUserExtensionsPossible())
+    {
+        mpCBDeinstallUserExtensions->Disable();
+    }
+
+    if (!comphelper::BackupFileHelper::isTryDeinstallAllExtensionsPossible())
+    {
+        mpCBDeinstallAllExtensions->Disable();
+    }
+
+    if (!comphelper::BackupFileHelper::isTryResetCustomizationsPossible())
+    {
+        mpCBResetCustomizations->Disable();
+    }
+    // no disabe of mpCBResetWholeUserProfile, always possible (as last choice)
 }
 
 bool SafeModeDialog::Close()
@@ -265,19 +268,32 @@ IMPL_LINK(SafeModeDialog, RadioBtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpRadioConfigure.get())
     {
+        // Enable the currently selected box
         mpBoxConfigure->Enable();
+        // Make sure only possible choices are active
+        enableDisableWidgets();
+        // Disable the unselected boxes
         mpBoxRestore->Disable();
         mpBoxReset->Disable();
+
     }
     else if (pBtn == mpRadioReset.get())
     {
+        // Enable the currently selected box
         mpBoxReset->Enable();
+        // Make sure only possible choices are active
+        enableDisableWidgets();
+        // Disable the unselected boxes
         mpBoxConfigure->Disable();
         mpBoxRestore->Disable();
     }
     else if (pBtn == mpRadioRestore.get())
     {
+        // Enable the currently selected box
         mpBoxRestore->Enable();
+        // Make sure only possible choices are active
+        enableDisableWidgets();
+        // Disable the unselected boxes
         mpBoxReset->Disable();
         mpBoxConfigure->Disable();
     }
