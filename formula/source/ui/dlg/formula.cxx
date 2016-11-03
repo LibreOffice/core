@@ -121,7 +121,7 @@ public:
     RefEdit*        GetCurrRefEdit();
 
     const FormulaHelper& GetFormulaHelper() const { return m_aFormulaHelper;}
-    uno::Reference< sheet::XFormulaOpCodeMapper > const & GetFormulaOpCodeMapper() const;
+    void InitFormulaOpCodeMapper();
 
     DECL_LINK( ModifyHdl, ParaWin&, void );
     DECL_LINK( FxHdl, ParaWin&, void );
@@ -403,30 +403,29 @@ void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
     pData->SetFocusWindow(pWin);
 }
 
-uno::Reference< sheet::XFormulaOpCodeMapper > const & FormulaDlg_Impl::GetFormulaOpCodeMapper() const
+void FormulaDlg_Impl::InitFormulaOpCodeMapper()
 {
-    if ( !m_xOpCodeMapper.is() )
-    {
-        m_xOpCodeMapper = m_pHelper->getFormulaOpCodeMapper();
-        m_aFunctionOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::FUNCTIONS);
-        m_pFunctionOpCodesEnd = m_aFunctionOpCodes.getConstArray() + m_aFunctionOpCodes.getLength();
+    if ( m_xOpCodeMapper.is() )
+        return;
 
-        m_aUnaryOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::UNARY_OPERATORS);
-        m_pUnaryOpCodesEnd = m_aUnaryOpCodes.getConstArray() + m_aUnaryOpCodes.getLength();
+    m_xOpCodeMapper = m_pHelper->getFormulaOpCodeMapper();
+    m_aFunctionOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::FUNCTIONS);
+    m_pFunctionOpCodesEnd = m_aFunctionOpCodes.getConstArray() + m_aFunctionOpCodes.getLength();
 
-        m_aBinaryOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::BINARY_OPERATORS);
-        m_pBinaryOpCodesEnd = m_aBinaryOpCodes.getConstArray() + m_aBinaryOpCodes.getLength();
+    m_aUnaryOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::UNARY_OPERATORS);
+    m_pUnaryOpCodesEnd = m_aUnaryOpCodes.getConstArray() + m_aUnaryOpCodes.getLength();
 
-        uno::Sequence< OUString > aArgs(3);
-        aArgs[TOKEN_OPEN]   = "(";
-        aArgs[TOKEN_CLOSE]  = ")";
-        aArgs[TOKEN_SEP]    = ";";
-        m_aSeparatorsOpCodes = m_xOpCodeMapper->getMappings(aArgs,sheet::FormulaLanguage::ODFF);
+    m_aBinaryOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::BINARY_OPERATORS);
+    m_pBinaryOpCodesEnd = m_aBinaryOpCodes.getConstArray() + m_aBinaryOpCodes.getLength();
 
-        m_aSpecialOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::SPECIAL);
-        m_pSpecialOpCodesEnd = m_aSpecialOpCodes.getConstArray() + m_aSpecialOpCodes.getLength();
-    } // if ( !m_xOpCodeMapper.is() )
-    return m_xOpCodeMapper;
+    uno::Sequence< OUString > aArgs(3);
+    aArgs[TOKEN_OPEN]   = "(";
+    aArgs[TOKEN_CLOSE]  = ")";
+    aArgs[TOKEN_SEP]    = ";";
+    m_aSeparatorsOpCodes = m_xOpCodeMapper->getMappings(aArgs,sheet::FormulaLanguage::ODFF);
+
+    m_aSpecialOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::SPECIAL);
+    m_pSpecialOpCodesEnd = m_aSpecialOpCodes.getConstArray() + m_aSpecialOpCodes.getLength();
 }
 
 void FormulaDlg_Impl::DeleteArgs()
@@ -744,7 +743,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
 
 void FormulaDlg_Impl::fillTree(StructPage* _pTree)
 {
-    GetFormulaOpCodeMapper();
+    InitFormulaOpCodeMapper();
     FormulaToken* pToken = m_pTokenArray->LastRPN();
 
     if( pToken != nullptr)
@@ -766,7 +765,7 @@ void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    GetFormulaOpCodeMapper(); // just to get it initialized
+    InitFormulaOpCodeMapper();
     m_pTokenArray = m_pHelper->convertToTokenArray(m_aTokenList);
     const sal_Int32 nLen = static_cast<sal_Int32>(m_pTokenArray->GetLen());
     FormulaToken** pTokens = m_pTokenArray->GetArray();
