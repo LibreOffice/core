@@ -216,43 +216,6 @@
  
    SignatureInfo *validateSignature(bool doVerifyCert, bool forceRevalidation);
  
---- poppler/Stream.cc
-+++ poppler/Stream.cc
-@@ -2966,12 +2966,12 @@
-       } else {
- 	amp = 0;
-       }
--      data[0] += (*prevDC += amp) << scanInfo.al;
-+      data[0] += (int) ((unsigned) (*prevDC += amp) << scanInfo.al);
-     } else {
-       if ((bit = readBit()) == 9999) {
- 	return gFalse;
-       }
--      data[0] += bit << scanInfo.al;
-+      data[0] += (unsigned) bit << scanInfo.al;
-     }
-     ++i;
-   }
-@@ -3064,7 +3064,7 @@
- 	  j = dctZigZag[i++];
- 	}
-       }
--      data[j] = amp << scanInfo.al;
-+      data[j] = (unsigned) amp << scanInfo.al;
-     }
-   }
- 
-@@ -3251,8 +3251,8 @@
-     v3 = p[6];
-     v4 = (dctSqrt1d2 * (p[1] - p[7]) + 128) >> 8;
-     v7 = (dctSqrt1d2 * (p[1] + p[7]) + 128) >> 8;
--    v5 = p[3] << 4;
--    v6 = p[5] << 4;
-+    v5 = (unsigned) p[3] << 4;
-+    v6 = (unsigned) p[5] << 4;
- 
-     // stage 3
-     t = (v0 - v1+ 1) >> 1;
 --- poppler/XRef.cc
 +++ poppler/XRef.cc
 @@ -293,6 +293,7 @@
