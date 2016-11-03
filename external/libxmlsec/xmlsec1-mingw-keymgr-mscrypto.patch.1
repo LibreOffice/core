@@ -1,4 +1,4 @@
-From 37e2cf159580f9b4e737dfe650f30981f92ad381 Mon Sep 17 00:00:00 2001
+From f7c31f73a103226c9f8b334f071d70243e27f6ff Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:11:52 +0100
 Subject: [PATCH] xmlsec1-mingw-keymgr-mscrypto.patch
@@ -23,7 +23,7 @@ index 5cea654..3dc6452 100644
  
  if SHAREDLIB_HACK
 diff --git a/src/mscrypto/Makefile.in b/src/mscrypto/Makefile.in
-index d542fe4..f682964 100644
+index f8ad32b..36c4765 100644
 --- a/src/mscrypto/Makefile.in
 +++ b/src/mscrypto/Makefile.in
 @@ -135,7 +135,8 @@ am__DEPENDENCIES_1 =
@@ -46,7 +46,7 @@ index d542fe4..f682964 100644
  	$(am__objects_2)
  libxmlsec1_mscrypto_la_OBJECTS = $(am_libxmlsec1_mscrypto_la_OBJECTS)
  AM_V_lt = $(am__v_lt_@AM_V@)
-@@ -472,6 +474,7 @@ libxmlsec1_mscrypto_la_CPPFLAGS = \
+@@ -471,6 +473,7 @@ libxmlsec1_mscrypto_la_CPPFLAGS = \
  libxmlsec1_mscrypto_la_SOURCES = globals.h private.h app.c certkeys.c \
  	ciphers.c crypto.c digests.c hmac.c keysstore.c kw_aes.c \
  	kw_des.c kt_rsa.c signatures.c symkeys.c x509.c x509vfy.c \
@@ -54,7 +54,7 @@ index d542fe4..f682964 100644
  	csp_calg.h csp_oid.h xmlsec-mingw.h $(NULL) $(am__append_1)
  libxmlsec1_mscrypto_la_LIBADD = \
  	$(MSCRYPTO_LIBS) \
-@@ -592,6 +595,7 @@ distclean-compile:
+@@ -591,6 +594,7 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-symkeys.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-x509.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-x509vfy.Plo@am__quote@
@@ -62,7 +62,7 @@ index d542fe4..f682964 100644
  
  .c.o:
  @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-@@ -624,6 +628,13 @@ libxmlsec1_mscrypto_la-app.lo: app.c
+@@ -623,6 +627,13 @@ libxmlsec1_mscrypto_la-app.lo: app.c
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
  @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_mscrypto_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_mscrypto_la-app.lo `test -f 'app.c' || echo '$(srcdir)/'`app.c
  
