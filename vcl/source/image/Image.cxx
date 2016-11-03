@@ -40,15 +40,12 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-Image::Image() :
-    mpImplData( nullptr )
+Image::Image()
 {
 }
 
-Image::Image( const ResId& rResId ) :
-    mpImplData( nullptr )
+Image::Image( const ResId& rResId )
 {
-
     rResId.SetRT( RSC_IMAGE );
 
     ResMgr* pResMgr = rResId.GetResMgr();
@@ -70,78 +67,60 @@ Image::Image( const ResId& rResId ) :
     }
 }
 
-Image::Image( const Image& rImage ) :
-    mpImplData( rImage.mpImplData )
+Image::Image(const Image& rImage)
+    : mpImplData(rImage.mpImplData)
 {
-
-    if( mpImplData )
-        ++mpImplData->mnRefCount;
 }
 
-Image::Image( const BitmapEx& rBitmapEx ) :
-    mpImplData( nullptr )
+Image::Image(const BitmapEx& rBitmapEx)
 {
-
-    ImplInit( rBitmapEx );
+    ImplInit(rBitmapEx);
 }
 
-Image::Image( const Bitmap& rBitmap ) :
-    mpImplData( nullptr )
+Image::Image(const Bitmap& rBitmap)
 {
-
-    ImplInit( rBitmap );
+    ImplInit(rBitmap);
 }
 
-Image::Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap ) :
-    mpImplData( nullptr )
+Image::Image(const Bitmap& rBitmap, const Bitmap& rMaskBitmap)
 {
-
-    const BitmapEx aBmpEx( rBitmap, rMaskBitmap );
-
-    ImplInit( aBmpEx );
+    const BitmapEx aBitmapEx(rBitmap, rMaskBitmap);
+    ImplInit(aBitmapEx);
 }
 
-Image::Image( const Bitmap& rBitmap, const Color& rColor ) :
-    mpImplData( nullptr )
+Image::Image(const Bitmap& rBitmap, const Color& rColor)
 {
-
-    const BitmapEx aBmpEx( rBitmap, rColor );
-
-    ImplInit( aBmpEx );
+    const BitmapEx aBitmapEx(rBitmap, rColor);
+    ImplInit(aBitmapEx);
 }
 
-Image::Image( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic ) :
-    mpImplData( nullptr )
+Image::Image(const css::uno::Reference< css::graphic::XGraphic >& rxGraphic)
 {
-
-    const Graphic aGraphic( rxGraphic );
-    ImplInit( aGraphic.GetBitmapEx() );
+    const Graphic aGraphic(rxGraphic);
+    ImplInit(aGraphic.GetBitmapEx());
 }
 
-Image::Image( const OUString &rFileUrl ) :
-    mpImplData( nullptr )
+Image::Image(const OUString & rFileUrl)
 {
-    OUString aTmp;
-    osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
+    OUString aPath;
+    osl::FileBase::getSystemPathFromFileURL(rFileUrl, aPath);
     Graphic aGraphic;
-    const OUString aFilterName( IMP_PNG );
-    if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
+    const OUString aFilterName(IMP_PNG);
+    if (GRFILTER_OK == GraphicFilter::LoadGraphic(aPath, aFilterName, aGraphic))
     {
-        ImplInit( aGraphic.GetBitmapEx() );
+        ImplInit(aGraphic.GetBitmapEx());
     }
 }
 
 Image::~Image()
 {
-    if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
-        delete mpImplData;
 }
 
 void Image::ImplInit(const BitmapEx& rBitmapEx)
 {
     if (!rBitmapEx.IsEmpty())
     {
-        mpImplData = new ImplImage;
+        mpImplData.reset(new ImplImage);
         mpImplData->mpBitmapEx.reset(new BitmapEx(rBitmapEx));
     }
 }
@@ -177,21 +156,13 @@ css::uno::Reference< css::graphic::XGraphic > Image::GetXGraphic() const
     return aGraphic.GetXGraphic();
 }
 
-Image& Image::operator=( const Image& rImage )
+Image& Image::operator=(const Image& rImage)
 {
-
-    if( rImage.mpImplData )
-        ++rImage.mpImplData->mnRefCount;
-
-    if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
-        delete mpImplData;
-
     mpImplData = rImage.mpImplData;
-
     return *this;
 }
 
-Image& Image::operator=( Image&& rImage )
+Image& Image::operator=(Image&& rImage)
 {
     std::swap(mpImplData, rImage.mpImplData);
     return *this;
@@ -213,7 +184,7 @@ bool Image::operator==(const Image& rImage) const
 
 void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize)
 {
-    if (mpImplData == nullptr || !mpImplData->mpBitmapEx ||
+    if (!mpImplData || !mpImplData->mpBitmapEx ||
         (!pOutDev->IsDeviceOutputNecessary() && pOutDev->GetConnectMetaFile() == nullptr))
         return;
 
