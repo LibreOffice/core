@@ -87,6 +87,7 @@ public:
     void testTdf91979();
     // void testTdf40110();
     void testTdf98657();
+    void testTdf88821();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf64229);
@@ -96,6 +97,7 @@ public:
     CPPUNIT_TEST(testTdf91979);
     // CPPUNIT_TEST(testTdf40110);
     CPPUNIT_TEST(testTdf98657);
+    CPPUNIT_TEST(testTdf88821);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -243,6 +245,16 @@ void ScFiltersTest::testTdf98657()
     CPPUNIT_ASSERT_EQUAL(double(285.0), rDoc.GetValue(ScAddress(1, 1, 0)));
 }
 
+void ScFiltersTest::testTdf88821()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf88821.", FORMAT_HTML);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // B2 should be 'Périmètre', not 'PÃ©rimÃ¨tre'
+    CPPUNIT_ASSERT_EQUAL(OStringToOUString("P\xC3\xA9rim\xC3\xA8tre", RTL_TEXTENCODING_UTF8), rDoc.GetString(1, 1, 0));
+
+    xDocSh->DoClose();
+}
 
 ScFiltersTest::ScFiltersTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )

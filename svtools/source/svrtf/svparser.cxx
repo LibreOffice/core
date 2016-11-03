@@ -106,7 +106,6 @@ void SvParser::ClearTxtConvContext()
 
 void SvParser::SetSrcEncoding( rtl_TextEncoding eEnc )
 {
-
     if( eEnc != eSrcEnc )
     {
         if( pImplData && pImplData->hConv )
@@ -174,13 +173,13 @@ sal_Unicode SvParser::GetNextChar()
                 {
                     if( 0xfe == c1 && 0xff == c2 )
                     {
-                        eSrcEnc = RTL_TEXTENCODING_UCS2;
+                        SetSrcEncoding(RTL_TEXTENCODING_UCS2);
                         bUCS2BSrcEnc = true;
                         bSeekBack = false;
                     }
                     else if( 0xff == c1 && 0xfe == c2 )
                     {
-                        eSrcEnc = RTL_TEXTENCODING_UCS2;
+                        SetSrcEncoding(RTL_TEXTENCODING_UCS2);
                         bUCS2BSrcEnc = false;
                         bSeekBack = false;
                     }
@@ -200,7 +199,7 @@ sal_Unicode SvParser::GetNextChar()
                         bErr = rInput.IsEof() || rInput.GetError();
                         if( !bErr && ( 0xbf == c3 ) )
                         {
-                            eSrcEnc = RTL_TEXTENCODING_UTF8;
+                            SetSrcEncoding(RTL_TEXTENCODING_UTF8);
                             bSeekBack = false;
                         }
                     }
