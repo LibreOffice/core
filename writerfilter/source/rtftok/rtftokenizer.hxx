@@ -24,11 +24,11 @@ namespace writerfilter
 namespace rtftok
 {
 /// RTF tokenizer that separates control words from text.
-class RTFTokenizer
+class RTFTokenizer final
 {
 public:
     RTFTokenizer(RTFListener& rImport, SvStream* pInStream, css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator);
-    virtual ~RTFTokenizer();
+    ~RTFTokenizer();
 
     RTFError resolveParse();
     static int asHex(char ch);

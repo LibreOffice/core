@@ -129,7 +129,7 @@ public:
     SchXMLExportHelper_Impl( SvXMLExport& rExport,
                         SvXMLAutoStylePoolP& rASPool );
 
-    virtual ~SchXMLExportHelper_Impl();
+    ~SchXMLExportHelper_Impl();
 
     SchXMLExportHelper_Impl(const SchXMLExportHelper_Impl&) = delete;
     SchXMLExportHelper_Impl& operator=(const SchXMLExportHelper_Impl&) = delete;

@@ -28,11 +28,11 @@ namespace writerfilter
 {
 
 #ifdef DEBUG_WRITERFILTER
-class LoggedResourcesHelper
+class LoggedResourcesHelper final
 {
 public:
     explicit LoggedResourcesHelper(const std::string & sPrefix);
-    virtual ~LoggedResourcesHelper();
+    ~LoggedResourcesHelper();
 
     void startElement(const std::string & sElement);
     static void endElement(const std::string & sElement);

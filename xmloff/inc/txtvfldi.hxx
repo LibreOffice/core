@@ -31,7 +31,7 @@
 
 
 /** helper class: parses value-type and associated value attributes */
-class XMLValueImportHelper
+class XMLValueImportHelper final
 {
 
     const OUString sPropertyContent;
@@ -70,7 +70,7 @@ public:
         bool bValue,                        /// process value (Prep.Field)
         bool bFormula);                     /// process formula (Prep.F.)
 
-    virtual ~XMLValueImportHelper();
+    ~XMLValueImportHelper();
 
     /// process attribute values
     void ProcessAttribute( sal_uInt16 nAttrToken,

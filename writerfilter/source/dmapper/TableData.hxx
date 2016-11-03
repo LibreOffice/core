@@ -33,7 +33,7 @@ namespace dmapper
 /**
    Class containing the data to describe a table cell.
  */
-class CellData
+class CellData final
 {
     /**
        Handle to start of cell.
@@ -59,8 +59,6 @@ public:
     : mStart(start), mEnd(start), mpProps(pProps), mbOpen(true)
     {
     }
-
-    virtual ~CellData() {}
 
     /**
        Set the end handle of a cell.
@@ -103,7 +101,7 @@ public:
 /**
    Class to handle data of a table row.
  */
-class RowData
+class RowData final
 {
     typedef ::std::vector<CellData::Pointer_t> Cells;
 
@@ -126,8 +124,6 @@ public:
     : mCells(rRowData.mCells), mpProperties(rRowData.mpProperties)
     {
     }
-
-    virtual ~RowData() {}
 
     /**
        Add a cell to the row.

@@ -31,7 +31,7 @@
 /** This class represents a SAX handler which simply forwards to
     the corresponding libxml API and translates parameter if necessary.
 */
-class SAXHelper
+class SAXHelper final
 {
     private:
         xmlParserCtxtPtr m_pParserCtxt ;
@@ -39,7 +39,7 @@ class SAXHelper
 
     public:
         SAXHelper( ) ;
-        virtual ~SAXHelper() ;
+        ~SAXHelper() ;
 
         xmlNodePtr getCurrentNode() { return m_pParserCtxt->node;}
         void setCurrentNode(const xmlNodePtr pNode);

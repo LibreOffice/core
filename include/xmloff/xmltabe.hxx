@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-class SvxXMLTabStopExport
+class SvxXMLTabStopExport final
 {
     SvXMLExport& rExport;   // for access to document handler
 
@@ -41,7 +41,7 @@ protected:
 public:
 
     SvxXMLTabStopExport(  SvXMLExport& rExport );
-    virtual ~SvxXMLTabStopExport();
+    ~SvxXMLTabStopExport();
 
     // core API
     void Export( const css::uno::Any& rAny );

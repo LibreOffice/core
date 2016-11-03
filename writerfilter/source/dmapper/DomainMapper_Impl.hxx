@@ -335,7 +335,7 @@ struct SymbolData
 };
 
 class DomainMapper;
-class DomainMapper_Impl
+class DomainMapper_Impl final
 {
 public:
     typedef std::map < OUString, BookmarkInsertPosition > BookmarkMap_t;
@@ -475,7 +475,7 @@ public:
             css::uno::Reference< css::lang::XComponent > const& xModel,
             SourceDocumentType eDocumentType,
             utl::MediaDescriptor& rMediaDesc);
-    virtual ~DomainMapper_Impl();
+    ~DomainMapper_Impl();
 
     SectionPropertyMap* GetLastSectionContext( )
     {

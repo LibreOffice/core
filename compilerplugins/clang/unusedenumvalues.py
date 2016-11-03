@@ -108,9 +108,3 @@ with open("loplugin.unusedenumvalues.report-untouched", "wt") as f:
         f.write( t[1] + "\n" )
         f.write( "    " + t[0] + "\n" )
 
-    
-
-# add an empty line at the end to make it easier for the unusedFieldsremove plugin to mmap() the output file 
-print
-        
-

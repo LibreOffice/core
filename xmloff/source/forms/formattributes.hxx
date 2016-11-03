@@ -271,7 +271,7 @@ namespace xmloff
         <p>The construction of this class is rather expensive (or at least it's initialization from outside),
         so it should be shared</p>
     */
-    class OAttribute2Property
+    class OAttribute2Property final
     {
     public:
         // TODO: maybe the following struct should be used for exports, too. In this case we would not need to
@@ -295,7 +295,7 @@ namespace xmloff
 
     public:
         OAttribute2Property();
-        virtual ~OAttribute2Property();
+        ~OAttribute2Property();
 
         /** return the AttributeAssignment which corresponds to the given attribute
 

@@ -75,7 +75,7 @@ public:
         a lot of the methods here have been moved to <sax/tools/converter.hxx>!
 */
 
-class XMLOFF_DLLPUBLIC SvXMLUnitConverter
+class XMLOFF_DLLPUBLIC SvXMLUnitConverter final
 {
 private:
     SvXMLUnitConverter(const SvXMLUnitConverter&) = delete;
@@ -93,7 +93,7 @@ public:
         sal_Int16 eCoreMeasureUnit /*css::util::MeasureUnit*/,
         sal_Int16 eXMLMeasureUnit /*css::util::MeasureUnit*/);
 
-    virtual ~SvXMLUnitConverter();
+    ~SvXMLUnitConverter();
 
     static sal_Int16 GetMeasureUnit(FieldUnit const nFieldUnit);
 
