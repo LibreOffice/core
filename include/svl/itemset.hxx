@@ -66,7 +66,7 @@ public:
 
                                 SfxItemSet( SfxItemPool&);
                                 SfxItemSet( SfxItemPool&, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
-                                SfxItemSet( SfxItemPool&, sal_uInt16 nWh1, sal_uInt16 nWh2, sal_uInt16 nNull, ... );
+                                SfxItemSet( SfxItemPool&, int nWh1, int nWh2, int nNull, ... );
                                 SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
     virtual                     ~SfxItemSet();
 
