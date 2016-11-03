@@ -73,6 +73,45 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
 namespace
 {
 
+class ColorScanlineConverter
+{
+public:
+    ScanlineFormat meSourceFormat;
+    ScanlineFormat meDestinationFormat;
+
+    int mnComponentSize;
+    int mnComponentExchangeIndex;
+
+    long mnScanlineSize;
+
+    ColorScanlineConverter(ScanlineFormat eSourceFormat, ScanlineFormat eDestinationFormat, int nComponentSize, long nScanlineSize)
+        : meSourceFormat(eSourceFormat)
+        , meDestinationFormat(eDestinationFormat)
+        , mnComponentSize(nComponentSize)
+        , mnComponentExchangeIndex(0)
+        , mnScanlineSize(nScanlineSize)
+    {
+        if (meSourceFormat == ScanlineFormat::N32BitTcAbgr ||
+            meSourceFormat == ScanlineFormat::N32BitTcArgb)
+        {
+            mnComponentExchangeIndex = 1;
+        }
+    }
+
+    void convertScanline(sal_uInt8* pSource, sal_uInt8* pDestination)
+    {
+        for (int x = 0; x < mnScanlineSize; x += mnComponentSize)
+        {
+            for (int i = 0; i < mnComponentSize; ++i)
+            {
+                pDestination[x + i] = pSource[x + i];
+            }
+            pDestination[x + mnComponentExchangeIndex + 0] = pSource[x + mnComponentExchangeIndex + 2];
+            pDestination[x + mnComponentExchangeIndex + 2] = pSource[x + mnComponentExchangeIndex + 0];
+        }
+    }
+};
+
 void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 {
          BitmapPalette aBitmapPalette;
@@ -90,11 +129,31 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
         sal_uInt8* pSource(pRead->mpBits);
         sal_uInt8* pDestination(pWrite->mpBits);
 
-        for (long y = 0; y < pRead->mnHeight; y++)
+        std::unique_ptr<ColorScanlineConverter> pConverter;
+
+        if (pRead->mnFormat == ScanlineFormat::N24BitTcRgb)
+            pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N24BitTcRgb, ScanlineFormat::N24BitTcBgr,
+                                                        3, pRead->mnScanlineSize));
+        else if (pRead->mnFormat == ScanlineFormat::N32BitTcRgba)
+            pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N32BitTcRgba, ScanlineFormat::N32BitTcBgra,
+                                                        4, pRead->mnScanlineSize));
+        if (pConverter)
         {
-            memcpy(pDestination, pSource, pRead->mnScanlineSize);
-            pSource += pRead->mnScanlineSize;
-            pDestination += pWrite->mnScanlineSize;
+            for (long y = 0; y < pRead->mnHeight; y++)
+            {
+                pConverter->convertScanline(pSource, pDestination);
+                pSource += pRead->mnScanlineSize;
+                pDestination += pWrite->mnScanlineSize;
+            }
+        }
+        else
+        {
+            for (long y = 0; y < pRead->mnHeight; y++)
+            {
+                memcpy(pDestination, pSource, pRead->mnScanlineSize);
+                pSource += pRead->mnScanlineSize;
+                pDestination += pWrite->mnScanlineSize;
+            }
         }
         rWinSalBitmap.ReleaseBuffer(pWrite, BitmapAccessMode::Write);
 
