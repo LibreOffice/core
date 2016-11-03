@@ -152,7 +152,14 @@ FormulaLogger::FormulaLogger()
         return;
     }
 
+    // Output the header information.
     writeAscii("---\n");
+    writeAscii("OpenCL: ");
+    writeAscii(ScCalcConfig::isOpenCLEnabled() ? "enabled\n" : "disabled\n");
+    writeAscii("Software Interpreter: ");
+    writeAscii(ScCalcConfig::isSwInterpreterEnabled() ? "enabled\n" : "disabled\n");
+    writeAscii("---\n");
+
     sync();
 }
 
