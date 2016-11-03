@@ -43,7 +43,7 @@ class SvXMLNumUsedList_Impl;
 struct SvXMLEmbeddedTextEntry;
 class SvXMLEmbeddedTextEntryArr;
 
-class XMLOFF_DLLPUBLIC SvXMLNumFmtExport
+class XMLOFF_DLLPUBLIC SvXMLNumFmtExport final
 {
 private:
     SvXMLExport&                rExport;
@@ -103,7 +103,7 @@ public:
                        const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp,
                        const OUString& rPrefix );
 
-    virtual ~SvXMLNumFmtExport();
+    ~SvXMLNumFmtExport();
 
     // core API
     void Export( bool bIsAutoStyle);

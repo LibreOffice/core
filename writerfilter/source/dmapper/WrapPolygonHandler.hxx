@@ -29,7 +29,7 @@
 namespace writerfilter {
 namespace dmapper {
 
-class WrapPolygon
+class WrapPolygon final
 {
 public:
     typedef std::vector<css::awt::Point> Points_t;
@@ -40,7 +40,7 @@ private:
 
 public:
     WrapPolygon();
-    virtual ~WrapPolygon();
+    ~WrapPolygon();
 
     void addPoint(const css::awt::Point & rPoint);
 

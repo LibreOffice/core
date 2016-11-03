@@ -17,11 +17,11 @@ namespace writerfilter
 namespace rtftok
 {
 /// Skips a destination after a not parsed control word if it was prefixed with \*
-class RTFSkipDestination
+class RTFSkipDestination final
 {
 public:
     RTFSkipDestination(RTFListener& rImport);
-    virtual ~RTFSkipDestination();
+    ~RTFSkipDestination();
     void setParsed(bool bParsed);
     void setReset(bool bReset);
 private:

@@ -34,7 +34,7 @@ namespace dmapper {
 
 class DomainMapper;
 
-class TablePropertiesHandler
+class TablePropertiesHandler final
 {
 private:
     PropertyMapPtr m_pCurrentProperties;
@@ -43,7 +43,7 @@ private:
 
 public:
     TablePropertiesHandler();
-    virtual ~TablePropertiesHandler( );
+    ~TablePropertiesHandler( );
 
     bool sprm(Sprm & sprm);
 

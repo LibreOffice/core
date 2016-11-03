@@ -149,7 +149,7 @@ enum FieldIdEnum {
 };
 
 
-class XMLTextFieldExport
+class XMLTextFieldExport final
 {
     SvXMLExport& rExport;
 
@@ -164,7 +164,7 @@ public:
     XMLTextFieldExport( SvXMLExport& rExp,
                         /// XMLPropertyState for the combined characters field
                         XMLPropertyState* pCombinedCharState );
-    virtual ~XMLTextFieldExport();
+    ~XMLTextFieldExport();
 
     /// Export this field and the surrounding span element with the formatting.
     /// To be called for every field in the document body.

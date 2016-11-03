@@ -503,7 +503,7 @@ class AnimationsExporterImpl
 {
 public:
     AnimationsExporterImpl( SvXMLExport& rExport, const Reference< XPropertySet >& xPageProps );
-    virtual ~AnimationsExporterImpl();
+    ~AnimationsExporterImpl();
 
     void prepareNode( const Reference< XAnimationNode >& xNode );
     void exportNode( const Reference< XAnimationNode >& xNode );

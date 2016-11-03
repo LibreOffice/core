@@ -39,7 +39,7 @@ struct SavedAlternateState
     bool m_bTookChoice; ///< Did we take the Choice or want Fallback instead?
 };
 
-class OOXMLParserState
+class OOXMLParserState final
 {
     bool mbInSectionGroup;
     bool mbInParagraphGroup;
@@ -64,7 +64,7 @@ public:
     typedef std::shared_ptr<OOXMLParserState> Pointer_t;
 
     OOXMLParserState();
-    virtual ~OOXMLParserState();
+    ~OOXMLParserState();
 
     bool isInSectionGroup() const { return mbInSectionGroup;}
     void setInSectionGroup(bool bInSectionGroup);

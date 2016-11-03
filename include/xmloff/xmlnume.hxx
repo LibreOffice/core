@@ -37,7 +37,7 @@ class SvXMLExportItemMapper;
 class SvXMLExport;
 class XMLTextListAutoStylePool;
 
-class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport
+class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport final
 {
     SvXMLExport& rExport;
     const OUString sNumberingRules;
@@ -64,7 +64,7 @@ protected:
 public:
 
     SvxXMLNumRuleExport( SvXMLExport& rExport );
-    virtual ~SvxXMLNumRuleExport();
+    ~SvxXMLNumRuleExport();
 
     // should be private but sw::StoredChapterNumberingExport needs it
     void exportLevelStyles(

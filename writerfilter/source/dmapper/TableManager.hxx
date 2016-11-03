@@ -49,7 +49,7 @@ class DomainMapperTableHandler;
  */
 class TableManager
 {
-    class TableManagerState
+    class TableManagerState final
     {
         /**
          properties of the current cell
@@ -87,10 +87,6 @@ class TableManager
          */
         TableManagerState()
         : mbRowEnd(false), mbInCell(false), mbCellEnd(false)
-        {
-        }
-
-        virtual ~TableManagerState()
         {
         }
 

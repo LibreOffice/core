@@ -34,8 +34,19 @@ TODO does not find destructors that don't need to be virtual
 
 namespace {
 
+struct MyFuncInfo
+{
+    std::string name;
+    std::string sourceLocation;
+
+};
+bool operator < (const MyFuncInfo &lhs, const MyFuncInfo &rhs)
+{
+    return lhs.name < rhs.name;
+}
+
 // try to limit the voluminous output a little
-static std::set<std::string> definitionSet;
+static std::set<MyFuncInfo> definitionSet;
 static std::set<std::string> overridingSet;
 
 class UnnecessaryVirtual:
@@ -51,8 +62,8 @@ public:
         // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
         // writing to the same logfile
         std::string output;
-        for (const std::string & s : definitionSet)
-            output += "definition:\t" + s + "\n";
+        for (const MyFuncInfo & s : definitionSet)
+            output += "definition:\t" + s.name + "\t" + s.sourceLocation + "\n";
         for (const std::string & s : overridingSet)
             output += "overriding:\t" + s + "\n";
         ofstream myfile;
@@ -61,11 +72,12 @@ public:
         myfile.close();
     }
     bool shouldVisitTemplateInstantiations () const { return true; }
+    bool shouldVisitImplicitCode() const { return true; }
 
     bool VisitCXXMethodDecl( const CXXMethodDecl* decl );
-    bool VisitCallExpr(CallExpr* );
 private:
     std::string fullyQualifiedName(const FunctionDecl* functionDecl);
+    std::string toString(SourceLocation loc);
 };
 
 std::string niceName(const CXXMethodDecl* functionDecl)
@@ -87,6 +99,16 @@ std::string niceName(const CXXMethodDecl* functionDecl)
 
 std::string UnnecessaryVirtual::fullyQualifiedName(const FunctionDecl* functionDecl)
 {
+    if (functionDecl->getInstantiatedFromMemberFunction())
+        functionDecl = functionDecl->getInstantiatedFromMemberFunction();
+    else if (functionDecl->getClassScopeSpecializationPattern())
+        functionDecl = functionDecl->getClassScopeSpecializationPattern();
+// workaround clang-3.5 issue
+#if CLANG_VERSION >= 30600
+    else if (functionDecl->getTemplateInstantiationPattern())
+        functionDecl = functionDecl->getTemplateInstantiationPattern();
+#endif
+
     std::string ret = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
     ret += " ";
     if (isa<CXXMethodDecl>(functionDecl)) {
@@ -113,110 +135,68 @@ std::string UnnecessaryVirtual::fullyQualifiedName(const FunctionDecl* functionD
 
 bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* methodDecl )
 {
+    if (ignoreLocation(methodDecl)) {
+        return true;
+    }
+    if (!methodDecl->isThisDeclarationADefinition() ||
+        !methodDecl->isVirtual() ||
+        methodDecl->isDeleted())
+    {
+        return true;
+    }
     methodDecl = methodDecl->getCanonicalDecl();
+    // ignore stuff that forms part of the stable URE interface
+    if (isInUnoIncludeFile(methodDecl)) {
+        return true;
+    }
 
     std::string aNiceName = niceName(methodDecl);
 
     // for destructors, we need to check if any of the superclass' destructors are virtual
     if (isa<CXXDestructorDecl>(methodDecl)) {
-    /* TODO I need to check if the base class has any virtual functions, since overriding
-            classes will simply get a compiler-provided virtual destructor by default.
-
-        if (!methodDecl->isVirtual() && !methodDecl->isPure()) {
-           return true;
+        const CXXRecordDecl* cxxRecordDecl = methodDecl->getParent();
+        if (cxxRecordDecl->getNumBases() == 0) {
+            definitionSet.insert( { aNiceName, toString( methodDecl->getLocation() ) } );
+            return true;
         }
-        std::set<std::string> overriddenSet;
-        const CXXRecordDecl *pRecordDecl = methodDecl->getParent();
-        for(auto baseSpecifier = pRecordDecl->bases_begin();
-            baseSpecifier != pRecordDecl->bases_end(); ++baseSpecifier)
+        for(auto baseSpecifier = cxxRecordDecl->bases_begin();
+            baseSpecifier != cxxRecordDecl->bases_end(); ++baseSpecifier)
         {
             if (baseSpecifier->getType()->isRecordType())
             {
-                const CXXRecordDecl *pSuperclassCXXRecordDecl = baseSpecifier->getType()->getAsCXXRecordDecl();
-                if (pSuperclassCXXRecordDecl->getDestructor())
-                {
-                   std::string aOverriddenNiceName = niceName(pSuperclassCXXRecordDecl->getDestructor());
-                   overriddenSet.insert(aOverriddenNiceName);
-                }
+                const CXXRecordDecl* superclassCXXRecordDecl = baseSpecifier->getType()->getAsCXXRecordDecl();
+                std::string aOverriddenNiceName = niceName(superclassCXXRecordDecl->getDestructor());
+                overridingSet.insert(aOverriddenNiceName);
             }
         }
-        if (overriddenSet.empty()) {
-            cout << "definition:\t" << aNiceName << endl;
-        } else {
-            for(std::string s : overriddenSet)
-               cout << "overriding:\t" << s << endl;
-        }*/
         return true;
     }
 
-    if (!methodDecl->isVirtual()) {
-        return true;
-    }
     if (methodDecl->size_overridden_methods() == 0) {
-        // ignore stuff that forms part of the stable URE interface
-        if (isInUnoIncludeFile(methodDecl)) {
-            return true;
-        }
-        // ignore templates and template instantiations,
-        // I just cannot get clang to give me decent overriding method data out of them
-        if (methodDecl->getParent()->getDescribedClassTemplate()
-            || methodDecl->getParent()->getTemplateInstantiationPattern())
-            return true;
-        if (aNiceName.find("processOpCode2") != std::string::npos)
-        {
-            methodDecl->dump();
-            cout << "definition " << aNiceName << endl;
-        }
-        definitionSet.insert(aNiceName);
+        definitionSet.insert( { aNiceName, toString( methodDecl->getLocation() ) } );
     } else {
        for (auto iter = methodDecl->begin_overridden_methods();
             iter != methodDecl->end_overridden_methods(); ++iter)
        {
            const CXXMethodDecl *overriddenMethod = *iter;
            // we only care about the first level override to establish that a virtual qualifier was useful.
-           if (overriddenMethod->isPure() || overriddenMethod->size_overridden_methods() == 0) {
+           if (overriddenMethod->isPure() || overriddenMethod->size_overridden_methods() == 0)
+           {
                std::string aOverriddenNiceName = niceName(overriddenMethod);
                overridingSet.insert(aOverriddenNiceName);
-               if (aNiceName.find("processOpCode2") != std::string::npos)
-               {
-                    methodDecl->dump();
-                    cout << "overriding " << aNiceName << endl;
-                }
            }
-      }
+        }
     }
     return true;
 }
 
-// prevent recursive templates from blowing up the stack
-static std::set<std::string> traversedFunctionSet;
-
-bool UnnecessaryVirtual::VisitCallExpr(CallExpr* expr)
+std::string UnnecessaryVirtual::toString(SourceLocation loc)
 {
-    // Note that I don't ignore ANYTHING here, because I want to get calls to my code that result
-    // from template instantiation deep inside the STL and other external code
-
-    FunctionDecl* calleeFunctionDecl = expr->getDirectCallee();
-    if (calleeFunctionDecl == nullptr) {
-        Expr* callee = expr->getCallee()->IgnoreParenImpCasts();
-        DeclRefExpr* dr = dyn_cast<DeclRefExpr>(callee);
-        if (dr) {
-            calleeFunctionDecl = dyn_cast<FunctionDecl>(dr->getDecl());
-            if (calleeFunctionDecl)
-                goto gotfunc;
-        }
-        return true;
-    }
-
-gotfunc:
-    // if we see a call to a function, it may effectively create new code,
-    // if the function is templated. However, if we are inside a template function,
-    // calling another function on the same template, the same problem occurs.
-    // Rather than tracking all of that, just traverse anything we have not already traversed.
-    if (traversedFunctionSet.insert(fullyQualifiedName(calleeFunctionDecl)).second)
-        TraverseFunctionDecl(calleeFunctionDecl);
-
-    return true;
+    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
+    StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
+    std::string sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
+    normalizeDotDotInFilePath(sourceLocation);
+    return sourceLocation;
 }
 
 

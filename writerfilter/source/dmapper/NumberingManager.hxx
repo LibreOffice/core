@@ -105,12 +105,12 @@ private:
 };
 
 /// Represents a numbering picture bullet: an id and a graphic.
-class NumPicBullet
+class NumPicBullet final
 {
 public:
     typedef std::shared_ptr<NumPicBullet> Pointer;
     NumPicBullet();
-    virtual ~NumPicBullet();
+    ~NumPicBullet();
 
     void SetId(sal_Int32 nId);
     sal_Int32 GetId() { return m_nId;}
