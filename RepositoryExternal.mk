@@ -1396,7 +1396,9 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 endef
 
 define gb_ExternalProject__use_graphite
-$(call gb_ExternalProject_use_external_project,$(1),graphite)
+$(call gb_ExternalProject_use_static_libraries,$(1),\
+	graphite \
+)
 
 endef
 endif # SYSTEM_GRAPHITE
