@@ -1259,7 +1259,11 @@ bool scaleTexture(const rtl::Reference< OpenGLContext > &xContext,
     int nNewWidth = nWidth / ixscale;
     int nNewHeight = nHeight / iyscale;
 
-    OpenGLProgram* pProgram = xContext->UseProgram("textureVertexShader", "areaScaleFragmentShader");
+    OString sUseReducedRegisterVariantDefine;
+    if (xContext->getOpenGLCapabilitySwitch().mbLimitedShaderRegisters)
+        sUseReducedRegisterVariantDefine = OString("#define USE_REDUCED_REGISTER_VARIANT\n");
+
+    OpenGLProgram* pProgram = xContext->UseProgram("textureVertexShader", "areaScaleFragmentShader", sUseReducedRegisterVariantDefine);
     if (pProgram == nullptr)
         return false;
 
@@ -1324,6 +1328,11 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     // See OpenGLSalBitmap::ImplScaleArea().
     bool areaScaling = false;
     bool fastAreaScaling = false;
+
+    OString sUseReducedRegisterVariantDefine;
+    if (mpContext->getOpenGLCapabilitySwitch().mbLimitedShaderRegisters)
+        sUseReducedRegisterVariantDefine = OString("#define USE_REDUCED_REGISTER_VARIANT\n");
+
     OUString textureFragmentShader;
     if( ixscale >= 2 && iyscale >= 2 )  // scale ratio less than 50%
     {
@@ -1388,7 +1397,7 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     {
         if( !UseProgram( "transformedTextureVertexShader",
                 textureFragmentShader.isEmpty() ? "maskedTextureFragmentShader" : textureFragmentShader,
-                "#define MASKED" ) )
+                "#define MASKED\n" + sUseReducedRegisterVariantDefine))
             return;
         mpProgram->SetTexture( "mask", aInMask );
         GLfloat aMaskCoord[8];
@@ -1400,7 +1409,8 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     else
     {
         if( !UseProgram( "transformedTextureVertexShader",
-                textureFragmentShader.isEmpty() ? "textureFragmentShader" : textureFragmentShader ) )
+                textureFragmentShader.isEmpty() ? "textureFragmentShader" : textureFragmentShader,
+                sUseReducedRegisterVariantDefine))
             return;
     }
 

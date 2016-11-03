@@ -231,8 +231,14 @@ bool OpenGLSalBitmap::ImplScaleArea( const rtl::Reference< OpenGLContext > &xCon
 
     // TODO Make sure the framebuffer is alright
 
+    OString sUseReducedRegisterVariantDefine;
+    if (xContext->getOpenGLCapabilitySwitch().mbLimitedShaderRegisters)
+        sUseReducedRegisterVariantDefine = OString("#define USE_REDUCED_REGISTER_VARIANT\n");
+
     OpenGLProgram* pProgram = xContext->UseProgram( "textureVertexShader",
-        fast ? OUString( "areaScaleFastFragmentShader" ) : OUString( "areaScaleFragmentShader" ));
+        fast ? OUString( "areaScaleFastFragmentShader" ) : OUString( "areaScaleFragmentShader" ),
+        sUseReducedRegisterVariantDefine);
+
     if( pProgram == nullptr )
         return false;
 
@@ -281,7 +287,7 @@ bool OpenGLSalBitmap::ImplScaleArea( const rtl::Reference< OpenGLContext > &xCon
         ixscale = 1 / rScaleX;
         iyscale = 1 / rScaleY;
 
-        pProgram = xContext->UseProgram("textureVertexShader", "areaScaleFragmentShader");
+        pProgram = xContext->UseProgram("textureVertexShader", "areaScaleFragmentShader", sUseReducedRegisterVariantDefine);
         if (pProgram == nullptr)
             return false;
 
