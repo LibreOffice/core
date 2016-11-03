@@ -69,8 +69,6 @@ const sal_Int16 MAX_IMAGETYPE_VALUE       = css::ui::ImageType::SIZE_32;
 static const char   IMAGE_FOLDER[]        = "images";
 static const char   BITMAPS_FOLDER[]      = "Bitmaps";
 
-static const char   ModuleImageList[]     = "private:resource/images/moduleimages";
-
 static const o3tl::enumarray<vcl::ImageType, const char*> IMAGELIST_XML_FILE =
 {
     "sc_imagelist.xml",
@@ -513,7 +511,7 @@ ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext
     m_xContext( rxContext )
     , m_pOwner(pOwner)
     , m_pDefaultImageList( nullptr )
-    , m_aResourceString( ModuleImageList )
+    , m_aResourceString( "private:resource/images/moduleimages" )
     , m_aListenerContainer( m_mutex )
     , m_bUseGlobal(_bUseGlobal)
     , m_bReadOnly( true )
