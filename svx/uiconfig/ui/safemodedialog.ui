@@ -92,7 +92,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkRadioButton" id="radio_restore">
-                <property name="label" translatable="yes">Restore</property>
+                <property name="label" translatable="yes">Restore from backup</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -117,7 +117,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkCheckButton" id="check_profilesafe_config">
-                    <property name="label" translatable="yes">Restore UserConfiguration to last known working state from backup</property>
+                    <property name="label" translatable="yes">Restore user configuration to last known working state</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -132,7 +132,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="check_profilesafe_extensions">
-                    <property name="label" translatable="yes">Restore enable/disable State of installed User Extensions to last known working state</property>
+                    <property name="label" translatable="yes">Restore enabled/disabled state of installed user extensions to last known working state</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -179,7 +179,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkCheckButton" id="check_disable_all_extensions">
-                    <property name="label" translatable="yes">Disable all User Extensions</property>
+                    <property name="label" translatable="yes">Disable all user extensions</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -194,7 +194,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="check_deinstall_user_extensions">
-                    <property name="label" translatable="yes">Deinstall all User Extensions</property>
+                    <property name="label" translatable="yes">Deinstall all user extensions</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -209,7 +209,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="check_deinstall_all_extensions">
-                    <property name="label" translatable="yes">Deinstall all Extensions (including shared and bundled)</property>
+                    <property name="label" translatable="yes">Deinstall all extensions (including shared and bundled)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -246,7 +246,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
             </child>
             <child>
               <object class="GtkRadioButton" id="radio_reset">
-                <property name="label" translatable="yes">Reset</property>
+                <property name="label" translatable="yes">Reset to factory settings</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -270,7 +270,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkCheckButton" id="check_reset_customizations">
-                    <property name="label" translatable="yes">Reset User Customizations (Settings, User Interface modifications, AutoCorrect, AutoText, etc.)</property>
+                    <property name="label" translatable="yes">Reset user customizations (settings, user interface modifications, AutoCorrect, AutoText, etc.)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -285,7 +285,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="check_reset_whole_userprofile">
-                    <property name="label" translatable="yes">Reset the whole User Profile to initial state after Installation</property>
+                    <property name="label" translatable="yes">Reset the whole user profile</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
