@@ -16,6 +16,7 @@
 #include <svtools/treelistentry.hxx>
 #include "pivot.hxx"
 #include "scabstdlg.hxx"
+#include "globstr.hrc"
 
 using namespace std;
 
@@ -28,23 +29,28 @@ namespace
 
 OUString lclGetFunctionMaskName(const PivotFunc nFunctionMask)
 {
+    sal_uInt16 nStrId = 0;
     switch (nFunctionMask)
     {
-        case PivotFunc::Sum:       return OUString("Sum");
-        case PivotFunc::Count:     return OUString("Count");
-        case PivotFunc::Average:   return OUString("Mean");
-        case PivotFunc::Max:       return OUString("Max");
-        case PivotFunc::Min:       return OUString("Min");
-        case PivotFunc::Product:   return OUString("Product");
-        case PivotFunc::CountNum: return OUString("Count");
-        case PivotFunc::StdDev:   return OUString("StDev");
-        case PivotFunc::StdDevP:  return OUString("StDevP");
-        case PivotFunc::StdVar:   return OUString("Var");
-        case PivotFunc::StdVarP:  return OUString("VarP");
+        case PivotFunc::Sum:        nStrId = STR_FUN_TEXT_SUM;      break;
+        case PivotFunc::Count:      nStrId = STR_FUN_TEXT_COUNT;    break;
+        case PivotFunc::Average:    nStrId = STR_FUN_TEXT_AVG;      break;
+        case PivotFunc::Max:        nStrId = STR_FUN_TEXT_MAX;      break;
+        case PivotFunc::Min:        nStrId = STR_FUN_TEXT_MIN;      break;
+        case PivotFunc::Product:    nStrId = STR_FUN_TEXT_PRODUCT;  break;
+        case PivotFunc::CountNum:   nStrId = STR_FUN_TEXT_COUNT;    break;
+        case PivotFunc::StdDev:     nStrId = STR_FUN_TEXT_STDDEV;   break;
+        case PivotFunc::StdDevP:    nStrId = STR_FUN_TEXT_STDDEV;   break;
+        case PivotFunc::StdVar:     nStrId = STR_FUN_TEXT_VAR;      break;
+        case PivotFunc::StdVarP:    nStrId = STR_FUN_TEXT_VAR;      break;
         default:
+            assert(false);
             break;
     }
-    return OUString();
+    if (nStrId != 0)
+        return ScGlobal::GetRscString(nStrId);
+    else
+        return OUString();
 }
 
 OUString lclCreateDataItemName(const PivotFunc nFunctionMask, const OUString& rName, const sal_uInt8 nDuplicationCount)
