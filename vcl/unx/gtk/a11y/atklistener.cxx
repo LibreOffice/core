@@ -558,6 +558,9 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             break;
 
         case accessibility::AccessibleEventId::SELECTION_CHANGED:
+        case accessibility::AccessibleEventId::SELECTION_CHANGED_ADD:
+        case accessibility::AccessibleEventId::SELECTION_CHANGED_REMOVE:
+        case accessibility::AccessibleEventId::SELECTION_CHANGED_WITHIN:
             g_signal_emit_by_name( G_OBJECT( atk_obj ), "selection_changed");
             break;
 
