@@ -401,7 +401,6 @@ void SigningTest::testOOXMLBroken()
 
 void SigningTest::testPDFGood()
 {
-#ifndef _WIN32
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
@@ -415,31 +414,26 @@ void SigningTest::testPDFGood()
          .getStr()),
         (nActual == SignatureState::NOTVALIDATED
          || nActual == SignatureState::OK));
-#endif
 }
 
 void SigningTest::testPDFBad()
 {
-#ifndef _WIN32
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
-#endif
 }
 
 void SigningTest::testPDFNo()
 {
-#ifndef _WIN32
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "no.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::NOSIGNATURES), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
-#endif
 }
 
 void SigningTest::test96097Calc()
