@@ -356,6 +356,12 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
     aSigBuffer.append(aContentFiller.makeStringAndClear());
     aSigBuffer.append(">\n/Type/Sig/SubFilter/adbe.pkcs7.detached");
+
+    // Time of signing.
+    aSigBuffer.append(" /M (");
+    aSigBuffer.append(vcl::PDFWriter::GetDateTime());
+    aSigBuffer.append(")");
+
     // Byte range: we can write offset1-length1 and offset2 right now, will
     // write length2 later.
     aSigBuffer.append(" /ByteRange [ 0 ");
