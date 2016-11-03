@@ -125,8 +125,6 @@ public:
 
     const Point&    GetPosPixel() const     { return maPos; }
     MouseEventModifiers GetMode() const         { return mnMode; }
-                    /** inits this vcl KeyEvent with all settings from the given awt event **/
-                    MouseEvent( const css::awt::MouseEvent& rEvent );
 
     sal_uInt16      GetClicks() const       { return mnClicks; }
 
@@ -179,62 +177,14 @@ inline MouseEvent::MouseEvent( const Point& rPos, sal_uInt16 nClicks,
 
 class VCL_DLLPUBLIC ZoomEvent
 {
-private:
-    Point           maCenter;
-    float           mfScale;
-
 public:
-    ZoomEvent() :
-        mfScale( 1 )
-    {
-    }
-
-    ZoomEvent( const Point& rCenter,
-               float fScale ) :
-        maCenter( rCenter ),
-        mfScale( fScale )
-    {
-    }
-
-    const Point& GetCenter() const
-    {
-        return maCenter;
-    }
-
-    float GetScale() const
-    {
-        return mfScale;
-    }
+    ZoomEvent() {}
 };
 
 class VCL_DLLPUBLIC ScrollEvent
 {
-private:
-    int mnXOffset;
-    int mnYOffset;
-
 public:
-    ScrollEvent() :
-        mnXOffset( 0 ),
-        mnYOffset( 0 )
-    {
-    }
-
-    ScrollEvent( int xOffset, int yOffset ) :
-        mnXOffset( xOffset ),
-        mnYOffset( yOffset )
-    {
-    }
-
-    int GetXOffset() const
-    {
-        return mnXOffset;
-    }
-
-    int GetYOffset() const
-    {
-        return mnYOffset;
-    }
+    ScrollEvent() {}
 };
 
 

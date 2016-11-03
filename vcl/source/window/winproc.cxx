@@ -2547,14 +2547,13 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             break;
         case SalEvent::ExternalZoom:
             {
-            ZoomEvent const * pZoomEvent = static_cast<ZoomEvent const *>(pEvent);
             SalWheelMouseEvent aSalWheelMouseEvent;
             aSalWheelMouseEvent.mnTime = tools::Time::GetSystemTicks();
-            aSalWheelMouseEvent.mnX = pZoomEvent->GetCenter().getX();
-            aSalWheelMouseEvent.mnY = pZoomEvent->GetCenter().getY();
+            aSalWheelMouseEvent.mnX = 0;
+            aSalWheelMouseEvent.mnY = 0;
             // Pass on the scale as a percentage * 100 of current zoom factor
             // so to assure zoom granularity
-            aSalWheelMouseEvent.mnDelta = long(double(pZoomEvent->GetScale()) * double(MOBILE_ZOOM_SCALE_MULTIPLIER));
+            aSalWheelMouseEvent.mnDelta = long(MOBILE_ZOOM_SCALE_MULTIPLIER);
             // Other SalWheelMouseEvent fields ignored when the
             // scaleDirectly parameter to ImplHandleWheelEvent() is
             // true.
@@ -2563,13 +2562,12 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             break;
         case SalEvent::ExternalScroll:
             {
-            ScrollEvent const * pScrollEvent = static_cast<ScrollEvent const *>(pEvent);
             SalWheelMouseEvent aSalWheelMouseEvent;
             aSalWheelMouseEvent.mnTime = tools::Time::GetSystemTicks();
             aSalWheelMouseEvent.mbDeltaIsPixel = true;
             // event location holds delta values instead
-            aSalWheelMouseEvent.mnX = long(pScrollEvent->GetXOffset());
-            aSalWheelMouseEvent.mnY = long(pScrollEvent->GetYOffset());
+            aSalWheelMouseEvent.mnX = 0;
+            aSalWheelMouseEvent.mnY = 0;
             aSalWheelMouseEvent.mnScrollLines = 0;
             if (aSalWheelMouseEvent.mnX != 0 || aSalWheelMouseEvent.mnY != 0)
             {

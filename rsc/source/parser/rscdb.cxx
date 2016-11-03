@@ -208,44 +208,6 @@ void RscTypCont::ClearSysNames()
     aSysLst.clear();
 }
 
-RscTop * RscTypCont::SearchType( Atom nId )
-{
-    /*  [Description]
-
-        Search for base type nId;
-    */
-    if( nId == InvalidAtom )
-        return nullptr;
-
-#define ELSE_IF( a )                \
-    else if( a.GetId() == nId ) \
-        return &a;                  \
-
-    if( aBool.GetId() == nId )
-        return &aBool;
-    ELSE_IF( aShort )
-    ELSE_IF( aUShort )
-    ELSE_IF( aLong )
-    ELSE_IF( aEnumLong )
-    ELSE_IF( aIdUShort )
-    ELSE_IF( aIdNoZeroUShort )
-    ELSE_IF( aNoZeroShort )
-    ELSE_IF( aIdLong )
-    ELSE_IF( aString )
-    ELSE_IF( aLangType )
-    ELSE_IF( aLangString )
-    ELSE_IF( aLangShort )
-// al least to not pollute
-#undef ELSE_IF
-
-    for (RscTop* pItem : aBaseLst)
-    {
-        if (pItem->GetId() == nId)
-            return pItem;
-    }
-    return nullptr;
-}
-
 sal_uInt32 RscTypCont::PutSysName( sal_uInt32 nRscTyp, char * pFileName )
 {
     RscSysEntry *pFoundEntry = nullptr;
