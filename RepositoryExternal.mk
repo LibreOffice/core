@@ -464,10 +464,10 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 	jpeg \
 )
 
+endef
+
 define gb_ExternalProject__use_jpeg
 $(call gb_ExternalProject_use_static_libraries,$(1),jpeg)
-
-endef
 
 endef
 
