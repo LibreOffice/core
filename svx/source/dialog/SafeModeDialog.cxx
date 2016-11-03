@@ -205,7 +205,7 @@ bool SafeModeDialog::Close()
 
 void SafeModeDialog::applyChanges()
 {
-    /// Restore
+    // Restore
     if (mpRadioRestore->IsChecked())
     {
         if (mpCBCheckProfilesafeConfig->IsChecked())
@@ -238,6 +238,7 @@ void SafeModeDialog::applyChanges()
         }
     }
 
+    // Deinstall
     if (mpRadioDeinstall->IsChecked())
     {
         if (mpCBDeinstallUserExtensions->IsChecked())
@@ -269,7 +270,7 @@ void SafeModeDialog::applyChanges()
         }
     }
 
-    // Then restart
+    // finally, restart
     css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext())->requestRestart(
         css::uno::Reference< css::task::XInteractionHandler >());
 }
