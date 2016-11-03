@@ -20,12 +20,10 @@
 
 using namespace com::sun::star;
 
-#if !defined _WIN32
 namespace
 {
 const char* DATA_DIRECTORY = "/xmlsecurity/qa/unit/pdfsigning/data/";
 }
-#endif
 
 /// Testsuite for the PDF signing feature.
 class PDFSigningTest : public test::BootstrapFixture
@@ -36,7 +34,7 @@ class PDFSigningTest : public test::BootstrapFixture
      * Sign rInURL once and save the result as rOutURL, asserting that rInURL
      * had nOriginalSignatureCount signatures.
      */
-    void sign(const OUString& rInURL, const OUString& rOutURL, size_t nOriginalSignatureCount);
+    bool sign(const OUString& rInURL, const OUString& rOutURL, size_t nOriginalSignatureCount);
     /**
      * Read a pdf and make sure that it has the expected number of valid
      * signatures.
@@ -84,7 +82,7 @@ void PDFSigningTest::setUp()
     // Set up cert8.db and key3.db in workdir/CppunitTest/
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aTargetDir = m_directories.getURLFromWorkdir(
-                              "/CppunitTest/xmlsecurity_signing.test.user/");
+                              "/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "cert8.db");
     osl::File::copy(aSourceDir + "key3.db", aTargetDir + "key3.db");
     OUString aTargetPath;
@@ -115,7 +113,7 @@ std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, s
     return aRet;
 }
 
-void PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_t nOriginalSignatureCount)
+bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_t nOriginalSignatureCount)
 {
     // Make sure that input has nOriginalSignatureCount signatures.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
@@ -134,8 +132,8 @@ void PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_
         uno::Sequence<uno::Reference<security::XCertificate>> aCertificates = xSecurityEnvironment->getPersonalCertificates();
         if (!aCertificates.hasElements())
         {
-            // NSS failed to parse it's own profile.
-            return;
+            // NSS failed to parse it's own profile or Windows has no certificates installed.
+            return false;
         }
         CPPUNIT_ASSERT(aDocument.Sign(aCertificates[0], "test"));
         SvFileStream aOutStream(rOutURL, StreamMode::WRITE | StreamMode::TRUNC);
@@ -144,41 +142,39 @@ void PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_
 
     // This was nOriginalSignatureCount when PDFDocument::Sign() silently returned success, without doing anything.
     verify(rOutURL, nOriginalSignatureCount + 1);
+
+    return true;
 }
 
 void PDFSigningTest::testPDFAdd()
 {
-#ifndef _WIN32
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aInURL = aSourceDir + "no.pdf";
-    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_signing.test.user/");
+    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     OUString aOutURL = aTargetDir + "add.pdf";
     sign(aInURL, aOutURL, 0);
-#endif
 }
 
 void PDFSigningTest::testPDFAdd2()
 {
-#ifndef _WIN32
     // Sign.
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aInURL = aSourceDir + "no.pdf";
-    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_signing.test.user/");
+    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     OUString aOutURL = aTargetDir + "add.pdf";
-    sign(aInURL, aOutURL, 0);
+    bool bHadCertificates = sign(aInURL, aOutURL, 0);
 
     // Sign again.
     aInURL = aTargetDir + "add.pdf";
     aOutURL = aTargetDir + "add2.pdf";
     // This failed with "second range end is not the end of the file" for the
     // first signature.
-    sign(aInURL, aOutURL, 1);
-#endif
+    if (bHadCertificates)
+        sign(aInURL, aOutURL, 1);
 }
 
 void PDFSigningTest::testPDFRemove()
 {
-#ifndef _WIN32
     // Make sure that good.pdf has 1 valid signature.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
@@ -195,7 +191,7 @@ void PDFSigningTest::testPDFRemove()
     }
 
     // Remove the signature and write out the result as remove.pdf.
-    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_signing.test.user/");
+    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     OUString aOutURL = aTargetDir + "remove.pdf";
     {
         CPPUNIT_ASSERT(aDocument.RemoveSignature(0));
@@ -207,12 +203,10 @@ void PDFSigningTest::testPDFRemove()
     // This failed when PDFDocument::RemoveSignature() silently returned
     // success, without doing anything.
     verify(aOutURL, 0);
-#endif
 }
 
 void PDFSigningTest::testPDFRemoveAll()
 {
-#ifndef _WIN32
     // Make sure that good2.pdf has 2 valid signatures.  Unlike in
     // testPDFRemove(), here intentionally test DocumentSignatureManager and
     // PDFSignatureHelper code as well.
@@ -220,7 +214,7 @@ void PDFSigningTest::testPDFRemoveAll()
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
 
     // Copy the test document to a temporary file, as it'll be modified.
-    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_signing.test.user/");
+    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     OUString aOutURL = aTargetDir + "remove-all.pdf";
     CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None, osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "2good.pdf", aOutURL));
     // Load the test document as a storage and read its two signatures.
@@ -242,30 +236,25 @@ void PDFSigningTest::testPDFRemoveAll()
     // (instead of doing that when removal failed).
     // Then this was 1, when the chained signature wasn't removed.
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), rInformations.size());
-#endif
 }
 
 void PDFSigningTest::testPDF14Adobe()
 {
-#ifndef _WIN32
     // Two signatures, first is SHA1, the second is SHA256.
     // This was 0, as we failed to find the Annots key's value when it was a
     // reference-to-array, not an array.
     std::vector<SignatureInformation> aInfos = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14adobe.pdf", 2);
     // This was 0, out-of-PKCS#7 signature date wasn't read.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2016), aInfos[1].stDateTime.Year);
-#endif
 }
 
 void PDFSigningTest::testPDF16Adobe()
 {
-#ifndef _WIN32
     // Contains a cross-reference stream, object streams and a compressed
     // stream with a predictor. And a valid signature.
     // Found signatures was 0, as parsing failed due to lack of support for
     // these features.
     verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf16adobe.pdf", 1);
-#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);
