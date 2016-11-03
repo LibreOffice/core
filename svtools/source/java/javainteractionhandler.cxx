@@ -45,14 +45,15 @@ using namespace com::sun::star::task;
 namespace svt
 {
 
+bool JavaInteractionHandler::m_bJavaDisabled_Handled(false);
+bool JavaInteractionHandler::m_bInvalidSettings_Handled(false);
+bool JavaInteractionHandler::m_bJavaNotFound_Handled(false);
+bool JavaInteractionHandler::m_bVMCreationFailure_Handled(false);
+bool JavaInteractionHandler::m_bRestartRequired_Handled(false);
+
 JavaInteractionHandler::JavaInteractionHandler() :
     m_aRefCount(0),
     m_bShowErrorsOnce(true),
-    m_bJavaDisabled_Handled(false),
-    m_bInvalidSettings_Handled(false),
-    m_bJavaNotFound_Handled(false),
-    m_bVMCreationFailure_Handled(false),
-    m_bRestartRequired_Handled(false),
     m_nResult_JavaDisabled(RET_NO)
 {
 }
