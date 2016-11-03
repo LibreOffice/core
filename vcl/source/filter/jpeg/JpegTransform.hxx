@@ -22,7 +22,7 @@
 
 #include <vcl/graph.hxx>
 
-class JpegTransform
+class JpegTransform final
 {
     sal_uInt16 maRotate;
     SvStream&  mrInputStream;
@@ -31,7 +31,7 @@ class JpegTransform
 public:
 
     JpegTransform(SvStream& rInputStream, SvStream& rOutputStream);
-    virtual ~JpegTransform();
+    ~JpegTransform();
 
     void setRotate(sal_uInt16 aRotate);
     void perform();

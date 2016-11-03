@@ -84,11 +84,11 @@ namespace vcl
     /** a class which allows rendering text of a Control onto a device, by taking into account the metrics of
         a reference device.
     */
-    class ControlTextRenderer
+    class ControlTextRenderer final
     {
     public:
         ControlTextRenderer( const Control& _rControl, OutputDevice& _rTargetDevice, OutputDevice& _rReferenceDevice );
-        virtual ~ControlTextRenderer();
+        ~ControlTextRenderer();
 
         Rectangle   DrawText( const Rectangle& _rRect,
                               const OUString& _rText, DrawTextFlags _nStyle,

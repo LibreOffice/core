@@ -27,11 +27,11 @@
 
 namespace vcl { struct TrueTypeFont; }         ///< SFT's idea of a TTF font
 
-class FontSubsetInfo
+class FontSubsetInfo final
 {
 public:
     explicit    FontSubsetInfo();
-    virtual     ~FontSubsetInfo();
+                ~FontSubsetInfo();
 
     enum FontType {
         NO_FONT     = 0,

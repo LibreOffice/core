@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-class JPEGWriter
+class JPEGWriter final
 {
     SvStream&           mrStream;
     BitmapReadAccess*   mpReadAccess;
@@ -44,8 +44,6 @@ public:
     JPEGWriter( SvStream& rStream,
                 const css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                 bool* pExportWasGrey );
-
-    virtual ~JPEGWriter() {};
 
     void*       GetScanline( long nY );
     bool    Write( const Graphic& rGraphic );

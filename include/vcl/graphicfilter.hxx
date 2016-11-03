@@ -130,7 +130,7 @@ enum class GraphicFileFormat
 };
 
 
-class VCL_DLLPUBLIC GraphicDescriptor
+class VCL_DLLPUBLIC GraphicDescriptor final
 {
     SvStream*           pFileStm;
 
@@ -190,7 +190,7 @@ public:
         derived from the extension */
     GraphicDescriptor( SvStream& rInStream, const OUString* pPath );
 
-    virtual ~GraphicDescriptor();
+    ~GraphicDescriptor();
 
     /** starts the detection
 

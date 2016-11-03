@@ -144,11 +144,11 @@ private:
     mutable long            mnLruValue;
 };
 
-class VCL_DLLPUBLIC FreetypeFont
+class VCL_DLLPUBLIC FreetypeFont final
 {
 public:
                             FreetypeFont( const FontSelectPattern&, FreetypeFontInfo* );
-    virtual                 ~FreetypeFont();
+                           ~FreetypeFont();
 
     const OString&          GetFontFileName() const;
     bool                    TestFont() const { return mbFaceOk;}

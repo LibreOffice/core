@@ -31,7 +31,7 @@ class GfxLink;
 struct ImpSwapFile;
 class GraphicConversionParameters;
 
-class ImpGraphic
+class ImpGraphic final
 {
     friend class Graphic;
 
@@ -62,7 +62,7 @@ private:
                         ImpGraphic( const Animation& rAnimation );
                         ImpGraphic( const GDIMetaFile& rMtf );
 public:
-    virtual             ~ImpGraphic();
+                        ~ImpGraphic();
 private:
 
     ImpGraphic&         operator=( const ImpGraphic& rImpGraphic );

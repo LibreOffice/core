@@ -22,7 +22,7 @@
 
 #include <vcl/graph.hxx>
 
-class VCL_DLLPUBLIC GraphicNativeTransform
+class VCL_DLLPUBLIC GraphicNativeTransform final
 {
     Graphic& mrGraphic;
 
@@ -32,7 +32,7 @@ class VCL_DLLPUBLIC GraphicNativeTransform
 
 public:
     GraphicNativeTransform(Graphic& rGraphic);
-    virtual ~GraphicNativeTransform();
+    ~GraphicNativeTransform();
 
     bool canBeRotated();
     bool rotate(sal_uInt16 aRotation);

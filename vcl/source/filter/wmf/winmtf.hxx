@@ -434,7 +434,7 @@ struct BSaveStruct
 };
 
 
-class WinMtfOutput
+class WinMtfOutput final
 {
     WinMtfPathObj       aPathObj;
     WinMtfClipPath      aClipPath;
@@ -621,7 +621,7 @@ public:
     void                PassEMFPlusHeaderInfo();
 
     explicit            WinMtfOutput( GDIMetaFile& rGDIMetaFile );
-    virtual             ~WinMtfOutput();
+                        ~WinMtfOutput();
 };
 
 class WinMtf

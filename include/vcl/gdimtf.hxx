@@ -54,7 +54,7 @@ enum class MtfConversion
 typedef Color (*ColorExchangeFnc)( const Color& rColor, const void* pColParam );
 typedef BitmapEx (*BmpExchangeFnc)( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-class VCL_DLLPUBLIC GDIMetaFile
+class VCL_DLLPUBLIC GDIMetaFile final
 {
 private:
     ::std::vector< MetaAction* > m_aList;
@@ -105,7 +105,7 @@ protected:
 public:
                     GDIMetaFile();
                     GDIMetaFile( const GDIMetaFile& rMtf );
-    virtual         ~GDIMetaFile();
+                    ~GDIMetaFile();
 
     GDIMetaFile&    operator=( const GDIMetaFile& rMtf );
     bool            operator==( const GDIMetaFile& rMtf ) const;

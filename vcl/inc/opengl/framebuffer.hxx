@@ -15,7 +15,7 @@
 
 #include <opengl/texture.hxx>
 
-class VCL_DLLPUBLIC OpenGLFramebuffer
+class VCL_DLLPUBLIC OpenGLFramebuffer final
 {
 private:
     GLuint      mnId;
@@ -25,7 +25,7 @@ private:
 
 public:
     OpenGLFramebuffer();
-    virtual ~OpenGLFramebuffer();
+    ~OpenGLFramebuffer();
 
     int     GetWidth() const { return mnWidth; };
     int     GetHeight() const { return mnHeight; };
