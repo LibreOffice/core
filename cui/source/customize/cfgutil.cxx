@@ -258,16 +258,7 @@ SfxConfigFunctionListBox::SfxConfigFunctionListBox(vcl::Window* pParent, WinBits
     GetModel()->SetSortMode( SortAscending );
 }
 
-VCL_BUILDER_DECL_FACTORY(SfxConfigFunctionListBox)
-{
-    WinBits nWinBits = WB_TABSTOP;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<SfxConfigFunctionListBox>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SfxConfigFunctionListBox, WB_TABSTOP)
 
 SfxConfigFunctionListBox::~SfxConfigFunctionListBox()
 {
@@ -398,16 +389,7 @@ SfxConfigGroupListBox::SfxConfigGroupListBox(vcl::Window* pParent, WinBits nStyl
     SetNodeBitmaps( pImp->m_collapsedImage, pImp->m_expandedImage );
 }
 
-VCL_BUILDER_DECL_FACTORY(SfxConfigGroupListBox)
-{
-    WinBits nWinBits = WB_TABSTOP;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<SfxConfigGroupListBox>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SfxConfigGroupListBox, WB_TABSTOP)
 
 SfxConfigGroupListBox::~SfxConfigGroupListBox()
 {

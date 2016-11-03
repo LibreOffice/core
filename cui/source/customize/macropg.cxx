@@ -153,16 +153,7 @@ void MacroEventListBox::dispose()
     Control::dispose();
 }
 
-VCL_BUILDER_DECL_FACTORY(MacroEventListBox)
-{
-    WinBits nWinBits = WB_TABSTOP;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<MacroEventListBox>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(MacroEventListBox, WB_TABSTOP)
 
 Size MacroEventListBox::GetOptimalSize() const
 {

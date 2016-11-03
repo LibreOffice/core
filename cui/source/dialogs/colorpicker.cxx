@@ -166,16 +166,7 @@ ColorPreviewControl::ColorPreviewControl(vcl::Window* pParent, WinBits nStyle)
 {
 }
 
-VCL_BUILDER_DECL_FACTORY(ColorPreviewControl)
-{
-    WinBits nBits = 0;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nBits |= WB_BORDER;
-
-    rRet = VclPtr<ColorPreviewControl>::Create(pParent, nBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(ColorPreviewControl, 0)
 
 void ColorPreviewControl::SetColor( const Color& rCol )
 {
@@ -263,16 +254,7 @@ void ColorFieldControl::dispose()
     Control::dispose();
 }
 
-VCL_BUILDER_DECL_FACTORY(ColorFieldControl)
-{
-    WinBits nBits = 0;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nBits |= WB_BORDER;
-
-    rRet = VclPtr<ColorFieldControl>::Create(pParent, nBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(ColorFieldControl, 0)
 
 Size ColorFieldControl::GetOptimalSize() const
 {
@@ -665,16 +647,7 @@ void ColorSliderControl::dispose()
     Control::dispose();
 }
 
-VCL_BUILDER_DECL_FACTORY(ColorSliderControl)
-{
-    WinBits nBits = 0;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nBits |= WB_BORDER;
-
-    rRet = VclPtr<ColorSliderControl>::Create(pParent, nBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(ColorSliderControl, 0)
 
 void ColorSliderControl::UpdateBitmap()
 {

@@ -84,14 +84,7 @@ void SvxHlmarkTreeLBox::dispose()
     SvTreeListBox::dispose();
 }
 
-VCL_BUILDER_DECL_FACTORY(SvxHlmarkTreeLBox)
-{
-    WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SvxHlmarkTreeLBox>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxHlmarkTreeLBox, WB_TABSTOP)
 
 Size SvxHlmarkTreeLBox::GetOptimalSize() const
 {
