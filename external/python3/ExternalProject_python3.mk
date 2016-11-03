@@ -93,6 +93,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			)" \
 		&& MAKEFLAGS= $(MAKE) \
 			$(if $(filter MACOSX,$(OS)),DESTDIR=$(EXTERNAL_WORKDIR)/python-inst install) \
+			$(if $(SYSTEM_ZLIB),,ZLIB_INCDIR=$(WORKDIR)/UnpackedTarball/zlib) \
 		&& ln -s build/lib.* LO_lib \
 	)
 
