@@ -88,6 +88,7 @@ public:
     // void testTdf40110();
     void testTdf98657();
     void testTdf88821();
+    void testTdf88821_2();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf64229);
@@ -98,6 +99,7 @@ public:
     // CPPUNIT_TEST(testTdf40110);
     CPPUNIT_TEST(testTdf98657);
     CPPUNIT_TEST(testTdf88821);
+    CPPUNIT_TEST(testTdf88821_2);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -252,6 +254,17 @@ void ScFiltersTest::testTdf88821()
 
     // B2 should be 'Périmètre', not 'PÃ©rimÃ¨tre'
     CPPUNIT_ASSERT_EQUAL(OStringToOUString("P\xC3\xA9rim\xC3\xA8tre", RTL_TEXTENCODING_UTF8), rDoc.GetString(1, 1, 0));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf88821_2()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf88821-2.", FORMAT_HTML);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // A2 should be 'ABCabcČŠŽčšž', not 'ABCabcÄŒÅ Å½ÄﾍÅ¡Å¾'
+    CPPUNIT_ASSERT_EQUAL(OStringToOUString("ABCabc\xC4\x8C\xC5\xA0\xC5\xBD\xC4\x8D\xC5\xA1\xC5\xBE", RTL_TEXTENCODING_UTF8), rDoc.GetString(0, 1, 0));
 
     xDocSh->DoClose();
 }
