@@ -106,17 +106,6 @@
 #define STR_BOX_YNI                 66
 #define STR_NO_REF_TABLE            67
 
-#define STR_PIVOTFUNC_SUM           68  // pivot.cxx
-#define STR_PIVOTFUNC_COUNT         69
-#define STR_PIVOTFUNC_AVG           70
-#define STR_PIVOTFUNC_MAX           71
-#define STR_PIVOTFUNC_MIN           72
-#define STR_PIVOTFUNC_PROD          73
-#define STR_PIVOTFUNC_COUNT2        74
-#define STR_PIVOTFUNC_STDDEV        75
-#define STR_PIVOTFUNC_STDDEV2       76
-#define STR_PIVOTFUNC_VAR           77
-#define STR_PIVOTFUNC_VAR2          78
 #define STR_PIVOT_TOTAL             79
 #define STR_PIVOT_DATA              80
 
