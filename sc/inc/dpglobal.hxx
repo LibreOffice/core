@@ -22,8 +22,6 @@
 
 #include <o3tl/typed_flags_set.hxx>
 
-#define     PIVOT_MAXFUNC           11
-
 enum class PivotFunc {
     NONE         = 0x0000,
     Sum          = 0x0001,
