@@ -38,18 +38,7 @@ GraphicPreviewWindow::GraphicPreviewWindow(vcl::Window* pParent,
 {
 }
 
-
-VCL_BUILDER_DECL_FACTORY(GraphicPreviewWindow)
-{
-    WinBits nWinBits = WB_TABSTOP;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<GraphicPreviewWindow>::Create(pParent, nWinBits);
-}
-
+VCL_BUILDER_FACTORY_CONSTRUCTOR(GraphicPreviewWindow, WB_TABSTOP)
 
 Size GraphicPreviewWindow::GetOptimalSize() const
 {

@@ -88,16 +88,7 @@ SvxConfigFunctionListBox::SvxConfigFunctionListBox(vcl::Window* pParent, WinBits
         LINK( this, SvxConfigFunctionListBox, TimerHdl ) );
 }
 
-VCL_BUILDER_DECL_FACTORY(SvxConfigFunctionListBox)
-{
-    WinBits nWinBits = WB_TABSTOP;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<SvxConfigFunctionListBox>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxConfigFunctionListBox, WB_TABSTOP)
 
 SvxConfigFunctionListBox::~SvxConfigFunctionListBox()
 {
@@ -225,16 +216,7 @@ SvxConfigGroupListBox::SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyl
     );
 }
 
-VCL_BUILDER_DECL_FACTORY(SvxConfigGroupListBox)
-{
-    WinBits nWinBits = WB_TABSTOP;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<SvxConfigGroupListBox>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxConfigGroupListBox, WB_TABSTOP)
 
 SvxConfigGroupListBox::~SvxConfigGroupListBox()
 {

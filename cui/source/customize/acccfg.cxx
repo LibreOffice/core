@@ -664,16 +664,7 @@ void SfxAccCfgLBoxString_Impl::Paint(const Point& aPos, SvTreeListBox& /*rDevice
 
 }
 
-VCL_BUILDER_DECL_FACTORY(SfxAccCfgTabListBox)
-{
-    WinBits nWinBits = WB_TABSTOP;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<SfxAccCfgTabListBox_Impl>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SfxAccCfgTabListBox_Impl, WB_TABSTOP)
 
 SfxAccCfgTabListBox_Impl::~SfxAccCfgTabListBox_Impl()
 {

@@ -777,14 +777,7 @@ Size SvxCropExample::GetOptimalSize() const
     return LogicToPixel(Size(78, 78), MapUnit::MapAppFont);
 }
 
-VCL_BUILDER_DECL_FACTORY(SvxCropExample)
-{
-    WinBits nWinStyle = 0;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SvxCropExample>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxCropExample, 0)
 
 void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
