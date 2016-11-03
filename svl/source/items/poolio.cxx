@@ -633,8 +633,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
                              " max possible entries, but " << nCount << " claimed, truncating");
                     nCount = nMaxRecords;
                 }
-                sal_uInt16 *pMap = new sal_uInt16[nCount];
-                memset(pMap, 0, nCount * sizeof(sal_uInt16));
+                sal_uInt16 *pMap = new sal_uInt16[nCount]{};
                 for ( sal_uInt16 n = 0; n < nCount; ++n )
                     rStream.ReadUInt16( pMap[n] );
                 SetVersionMap( nVersion, nHStart, nHEnd, pMap );
