@@ -1960,8 +1960,8 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
 
     // Find the signer's certificate in the store.
     PCCERT_CONTEXT pSignerCertContext = CertGetSubjectCertificateFromStore(hStoreHandle,
-                                                                           PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-                                                                           pSignerCertInfo);
+                                        PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+                                        pSignerCertInfo);
     if (!pSignerCertContext)
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: CertGetSubjectCertificateFromStore() failed");
