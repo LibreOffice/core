@@ -50,16 +50,7 @@ using namespace ::com::sun::star::uno;
 
 const int SdDocPreviewWin::FRAME = 4;
 
-VCL_BUILDER_DECL_FACTORY(SdDocPreviewWin)
-{
-    WinBits nWinStyle = 0;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-
-    rRet = VclPtr<SdDocPreviewWin>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SdDocPreviewWin, 0)
 
 SdDocPreviewWin::SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle )
 : Control(pParent, nStyle), pMetaFile( nullptr )

@@ -108,14 +108,7 @@ ClientBox::ClientBox( vcl::Window* pParent, WinBits nStyle ) :
     Show();
 }
 
-VCL_BUILDER_DECL_FACTORY(ClientBox)
-{
-    WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<ClientBox>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(ClientBox, WB_TABSTOP)
 
 Size ClientBox::GetOptimalSize() const
 {

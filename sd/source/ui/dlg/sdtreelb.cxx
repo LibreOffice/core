@@ -96,14 +96,7 @@ SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
     rParent.SetupDragOrigin();
 }
 
-VCL_BUILDER_DECL_FACTORY(SdPageObjsTLB)
-{
-    WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SdPageObjsTLB>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SdPageObjsTLB, WB_TABSTOP)
 
 SdPageObjsTLB::SdPageObjsTransferable::~SdPageObjsTransferable()
 {

@@ -144,16 +144,7 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
     RecalcAll();
 }
 
-VCL_BUILDER_DECL_FACTORY(ScCondFormatList)
-{
-    WinBits nWinBits = 0;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<ScCondFormatList>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(ScCondFormatList, 0)
 
 Size ScCondFormatList::GetOptimalSize() const
 {

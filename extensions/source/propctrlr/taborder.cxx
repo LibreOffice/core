@@ -300,14 +300,7 @@ namespace pcr
         SetSelectionMode( SelectionMode::Multiple );
     }
 
-    VCL_BUILDER_DECL_FACTORY(TabOrderListBox)
-    {
-         WinBits nWinStyle = WB_TABSTOP;
-         OString sBorder = VclBuilder::extractCustomProperty(rMap);
-         if (!sBorder.isEmpty())
-             nWinStyle |= WB_BORDER;
-         rRet = VclPtr<TabOrderListBox>::Create(pParent, nWinStyle);
-    }
+    VCL_BUILDER_FACTORY_CONSTRUCTOR(TabOrderListBox, WB_TABSTOP)
 
     TabOrderListBox::~TabOrderListBox()
     {
