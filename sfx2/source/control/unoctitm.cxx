@@ -26,6 +26,7 @@
 #include <svl/itemset.hxx>
 #include <svl/visitem.hxx>
 #include <svtools/javacontext.hxx>
+#include <svtools/javainteractionhandler.hxx>
 #include <svl/itempool.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -192,6 +193,30 @@ const css::uno::Sequence< sal_Int8 >& SfxOfficeDispatch::impl_getStaticIdentifie
     return seqID ;
 }
 
+#if HAVE_FEATURE_JAVA
+// The JavaContext contains an interaction handler which is used when
+// the creation of a Java Virtual Machine fails. The second parameter
+// indicates, that there shall only be one user notification (message box)
+// even if the same error (interaction) reoccurs. The effect is, that if a
+// user selects a menu entry than they may get only one notification that
+// a JRE is not selected.
+// This function checks if a JavaContext is already available (typically
+// created by Desktop::Main() in app.cxx), and creates new one if not.
+namespace {
+std::shared_ptr< css::uno::ContextLayer > EnsureJavaContext()
+{
+    css::uno::Reference< css::uno::XCurrentContext > xContext(css::uno::getCurrentContext());
+    if (xContext.is())
+    {
+        css::uno::Reference< css::task::XInteractionHandler > xHandler;
+        xContext->getValueByName(JAVA_INTERACTION_HANDLER_NAME) >>= xHandler;
+        if (xHandler.is())
+            return nullptr; // No need to add new layer: JavaContext already present
+    }
+    return std::make_shared< css::uno::ContextLayer >(new svt::JavaContext(xContext));
+}
+}
+#endif
 
 void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) throw ( css::uno::RuntimeException, std::exception )
 {
@@ -199,14 +224,7 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css
     if ( pImpl )
     {
 #if HAVE_FEATURE_JAVA
-        // The JavaContext contains an interaction handler which is used when
-        // the creation of a Java Virtual Machine fails. The second parameter
-        // indicates, that there shall only be one user notification (message box)
-        // even if the same error (interaction) reoccurs. The effect is, that if a
-        // user selects a menu entry than they may get only one notification that
-        // a JRE is not selected.
-        css::uno::ContextLayer layer(
-            new svt::JavaContext( css::uno::getCurrentContext() ) );
+        std::shared_ptr< css::uno::ContextLayer > layer(EnsureJavaContext());
 #endif
         pImpl->dispatch( aURL, aArgs, css::uno::Reference < css::frame::XDispatchResultListener >() );
     }
@@ -220,8 +238,7 @@ void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const css::util::URL&
     if ( pImpl )
     {
 #if HAVE_FEATURE_JAVA
-        // see comment for SfxOfficeDispatch::dispatch
-        css::uno::ContextLayer layer( new svt::JavaContext( css::uno::getCurrentContext() ) );
+        std::shared_ptr< css::uno::ContextLayer > layer(EnsureJavaContext());
 #endif
         pImpl->dispatch( aURL, aArgs, rListener );
     }
