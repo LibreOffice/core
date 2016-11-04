@@ -56,8 +56,7 @@ namespace dbaccess
         try
         {
             Reference<XMultiServiceFactory> xFac(_rxConnection,UNO_QUERY_THROW);
-            static const char s_sViewAccess[] = "ViewAccessServiceName";
-            m_xViewAccess.set(xFac->createInstance(lcl_getServiceNameForSetting(_rxConnection,s_sViewAccess)),UNO_QUERY);
+            m_xViewAccess.set(xFac->createInstance(lcl_getServiceNameForSetting(_rxConnection,"ViewAccessServiceName")),UNO_QUERY);
         }
         catch(const Exception& )
         {

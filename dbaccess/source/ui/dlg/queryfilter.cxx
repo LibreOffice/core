@@ -348,8 +348,7 @@ bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,co
                 _rFilter.Name = ::dbtools::quoteName(aQuote,_rFilter.Name);
                 if ( !sTableName.isEmpty() )
                 {
-                    static const char sSep[] = ".";
-                    sTableName += sSep;
+                    sTableName += ".";
                     sTableName += _rFilter.Name;
                     _rFilter.Name = sTableName;
                 }

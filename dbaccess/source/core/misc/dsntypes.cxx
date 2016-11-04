@@ -292,8 +292,7 @@ bool ODsnTypeCollection::isEmbeddedDatabase( const OUString& _sURL )
 OUString ODsnTypeCollection::getEmbeddedDatabase() const
 {
     OUString sEmbeddedDatabaseURL;
-    static const char s_sNodeName[] = "org.openoffice.Office.DataAccess"; ///Installed
-    const ::utl::OConfigurationTreeRoot aInstalled = ::utl::OConfigurationTreeRoot::createWithComponentContext(m_xContext, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+    const ::utl::OConfigurationTreeRoot aInstalled = ::utl::OConfigurationTreeRoot::createWithComponentContext(m_xContext, "org.openoffice.Office.DataAccess", -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
     if ( aInstalled.isValid() )
     {
         if ( aInstalled.hasByName("EmbeddedDatabases/DefaultEmbeddedDatabase/Value") )
