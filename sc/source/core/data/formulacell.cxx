@@ -4125,7 +4125,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
         ScTokenArray aCode;
         ScGroupTokenConverter aConverter(aCode, *pDocument, *this, xGroup->mpTopCell->aPos);
-        if (!aConverter.convert(*pCode))
+        if (!aConverter.convert(*pCode, aScope))
         {
             SAL_INFO("sc.opencl", "conversion of group " << this << " failed, disabling");
             mxGroup->meCalcState = sc::GroupCalcDisabled;
