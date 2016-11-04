@@ -16,6 +16,24 @@
       "revId": "ad0c4865d1adf8aa07c062cfdaeb02934f3dab68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_ba966d92",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-11-04T15:09:22Z",
+      "side": 1,
+      "message": "No; in this case, no new ContextLayer will be created, and empty *reference* will be returned. No change in Context will result.",
+      "parentUuid": "7a77a97e_7a7cd572",
+      "revId": "ad0c4865d1adf8aa07c062cfdaeb02934f3dab68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
