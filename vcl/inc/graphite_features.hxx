@@ -42,8 +42,6 @@ namespace grutils
     {
     public:
         enum { MAX_FEATURES = 64 };
-        static const char FEAT_PREFIX;
-        static const char FEAT_SEPARATOR;
         static const char FEAT_ID_VALUE_SEPARATOR;
         GrFeatureParser(const gr_face * face, const OString& features, const OString& lang);
         GrFeatureParser(const gr_face * face, const OString& lang);

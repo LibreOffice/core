@@ -29,6 +29,7 @@
 #include <windows.h>
 #endif
 
+#include <fontselect.hxx>
 #include <graphite_features.hxx>
 
 using namespace grutils;
@@ -74,9 +75,6 @@ short getIntValue(const OString & id, size_t offset, size_t length)
 
 }
 
-// These mustn't conflict with font name lists which use ; and ,
-const char GrFeatureParser::FEAT_PREFIX = ':';
-const char GrFeatureParser::FEAT_SEPARATOR = '&';
 const char GrFeatureParser::FEAT_ID_VALUE_SEPARATOR = '=';
 
 GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& lang)
@@ -106,7 +104,7 @@ GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& features,
         if (features.match(aLangPrefix, pos ))
         {
             pos = nEquals + 1;
-            nFeatEnd = features.indexOf(FEAT_SEPARATOR, pos);
+            nFeatEnd = features.indexOf(FontSelectPatternAttributes::FEAT_SEPARATOR, pos);
             if (nFeatEnd == -1)
             {
                 nFeatEnd = features.getLength();
@@ -164,7 +162,7 @@ GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& features,
             }
             const gr_feature_ref * pFref = gr_face_find_fref(pFace, featId);
             pos = nEquals + 1;
-            nFeatEnd = features.indexOf(FEAT_SEPARATOR, pos);
+            nFeatEnd = features.indexOf(FontSelectPatternAttributes::FEAT_SEPARATOR, pos);
             if (nFeatEnd == -1)
             {
                 nFeatEnd = features.getLength();

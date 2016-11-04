@@ -18,9 +18,6 @@
  */
 
 #include <config_graphite.h>
-#if ENABLE_GRAPHITE
-#include "graphite_features.hxx"
-#endif
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
@@ -989,21 +986,17 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
         aSearchName = rFSD.maTargetName;
 
-#if ENABLE_GRAPHITE
         // Until features are properly supported, they are appended to the
         // font name, so we need to strip them off so the font is found.
-        sal_Int32 nFeat = aSearchName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX);
+        sal_Int32 nFeat = aSearchName.indexOf(FontSelectPatternAttributes::FEAT_PREFIX);
         OUString aOrigName = rFSD.maTargetName;
         OUString aBaseFontName = aSearchName.copy( 0, (nFeat != -1) ? nFeat : aSearchName.getLength() );
 
-        if (nFeat != -1 &&
-            -1 != aSearchName.indexOf(grutils::GrFeatureParser::FEAT_ID_VALUE_SEPARATOR, nFeat))
+        if (nFeat != -1)
         {
             aSearchName = aBaseFontName;
             rFSD.maTargetName = aBaseFontName;
         }
-
-#endif
 
         aSearchName = GetEnglishSearchFontName( aSearchName );
         ImplFontSubstitute( aSearchName );
@@ -1035,10 +1028,9 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
             }
         }
 
-#if ENABLE_GRAPHITE
         // restore the features to make the font selection data unique
         rFSD.maTargetName = aOrigName;
-#endif
+
         // check if the current font name token or its substitute is valid
         PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName( aSearchName );
         if( pFoundData )
@@ -1047,10 +1039,9 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         // some systems provide special customization
         // e.g. they suggest "serif" as UI-font, but this name cannot be used directly
         //      because the system wants to map it to another font first, e.g. "Helvetica"
-#if ENABLE_GRAPHITE
+
         // use the target name to search in the prematch hook
         rFSD.maTargetName = aBaseFontName;
-#endif
 
         // Related: fdo#49271 RTF files often contain weird-ass
         // Win 3.1/Win95 style fontnames which attempt to put the
@@ -1071,11 +1062,11 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
             if( mpPreMatchHook->FindFontSubstitute( rFSD ) )
                 aSearchName = GetEnglishSearchFontName( aSearchName );
         }
-#if ENABLE_GRAPHITE
+
         // the prematch hook uses the target name to search, but we now need
         // to restore the features to make the font selection data unique
         rFSD.maTargetName = aOrigName;
-#endif
+
         pFoundData = ImplFindFontFamilyBySearchName( aSearchName );
         if( pFoundData )
             return pFoundData;

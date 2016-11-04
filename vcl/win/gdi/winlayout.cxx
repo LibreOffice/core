@@ -3735,7 +3735,7 @@ GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const WinFontFace& rWFD, WinFontIn
             RTL_TEXTENCODING_ASCII_US);
     OString name = OUStringToOString(
         rWFE.maFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
-    sal_Int32 nFeat = name.indexOf(grutils::GrFeatureParser::FEAT_PREFIX) + 1;
+    sal_Int32 nFeat = name.indexOf(FontSelectPatternAttributes::FEAT_PREFIX) + 1;
     if (nFeat > 0)
     {
         OString aFeat = name.copy(nFeat, name.getLength() - nFeat);

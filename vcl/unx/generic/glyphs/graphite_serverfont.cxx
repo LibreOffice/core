@@ -72,7 +72,7 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(FreetypeFont& rFreetypeFont) 
         rFreetypeFont.GetFtFace()->size->metrics.x_ppem,
         rFreetypeFont.GetFontSelData().mfExactHeight);
 #endif
-    sal_Int32 nFeat = name.indexOf(grutils::GrFeatureParser::FEAT_PREFIX) + 1;
+    sal_Int32 nFeat = name.indexOf(FontSelectPatternAttributes::FEAT_PREFIX) + 1;
     if (nFeat > 0)
     {
         OString aFeat = name.copy(nFeat, name.getLength() - nFeat);

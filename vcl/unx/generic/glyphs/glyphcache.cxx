@@ -26,11 +26,6 @@
 #include <fontinstance.hxx>
 #include <fontattributes.hxx>
 
-#include <config_graphite.h>
-#if ENABLE_GRAPHITE
-#include <graphite_features.hxx>
-#endif
-
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
@@ -74,23 +69,22 @@ size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData 
 {
     // TODO: is it worth to improve this hash function?
     sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>( rFontSelData.mpFontData );
-#if ENABLE_GRAPHITE
-    if (rFontSelData.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
+
+    if (rFontSelData.maTargetName.indexOf(FontSelectPatternAttributes::FEAT_PREFIX)
         != -1)
     {
         OString aFeatName = OUStringToOString( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
         nFontId ^= aFeatName.hashCode();
     }
-#endif
+
     size_t nHash = nFontId << 8;
     nHash   += rFontSelData.mnHeight;
     nHash   += rFontSelData.mnOrientation;
     nHash   += size_t(rFontSelData.mbVertical);
     nHash   += rFontSelData.GetItalic();
     nHash   += rFontSelData.GetWeight();
-#if ENABLE_GRAPHITE
     nHash   += rFontSelData.meLanguage;
-#endif
+
     return nHash;
 }
 
@@ -121,16 +115,14 @@ bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const Font
     if( nAWidth != nBWidth )
         return false;
 
-#if ENABLE_GRAPHITE
    if (rA.meLanguage != rB.meLanguage)
         return false;
    // check for features
-   if ((rA.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
+   if ((rA.maTargetName.indexOf(FontSelectPatternAttributes::FEAT_PREFIX)
         != -1 ||
-        rB.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
+        rB.maTargetName.indexOf(FontSelectPatternAttributes::FEAT_PREFIX)
         != -1) && rA.maTargetName != rB.maTargetName)
         return false;
-#endif
 
     if (rA.mbEmbolden != rB.mbEmbolden)
         return false;

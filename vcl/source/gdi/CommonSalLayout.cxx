@@ -125,15 +125,15 @@ static hb_unicode_funcs_t* getUnicodeFuncs()
 void CommonSalLayout::ParseFeatures(const OUString& name)
 {
     int nFeatures = 0;
-    int nStart = name.indexOf(':');
+    int nStart = name.indexOf(FontSelectPatternAttributes::FEAT_PREFIX);
     if (nStart < 0)
         return;
     OString oName = OUStringToOString(name, RTL_TEXTENCODING_ASCII_US);
-    for (int nNext = nStart; nNext > 0; nNext = name.indexOf('&', nNext + 1))
+    for (int nNext = nStart; nNext > 0; nNext = name.indexOf(FontSelectPatternAttributes::FEAT_SEPARATOR, nNext + 1))
     {
         if (name.match("lang=", nNext + 1))
         {
-            int endamp = name.indexOf('&', nNext+1);
+            int endamp = name.indexOf(FontSelectPatternAttributes::FEAT_SEPARATOR, nNext+1);
             int enddelim = name.indexOf(' ', nNext+1);
             int end = name.getLength();
             if (endamp < 0)
@@ -154,7 +154,9 @@ void CommonSalLayout::ParseFeatures(const OUString& name)
         return;
 
     maFeatures.reserve(nFeatures);
-    for (int nThis = nStart, nNext = name.indexOf('&', nStart + 1); nThis > 0; nThis = nNext, nNext = name.indexOf('&', nNext + 1))
+    for (int nThis = nStart, nNext = name.indexOf(FontSelectPatternAttributes::FEAT_SEPARATOR, nStart + 1);
+         nThis > 0;
+         nThis = nNext, nNext = name.indexOf(FontSelectPatternAttributes::FEAT_SEPARATOR, nNext + 1))
     {
         if (!name.match("lang=", nThis + 1))
         {
