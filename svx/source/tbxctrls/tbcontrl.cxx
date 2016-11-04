@@ -3200,8 +3200,8 @@ void SvxListBoxColorWrapper::operator()(const OUString& /*rCommand*/, const Name
     mxControl->Selected(rColor);
 }
 
-SvxColorListBox::SvxColorListBox(vcl::Window* pParent)
-    : MenuButton(pParent)
+SvxColorListBox::SvxColorListBox(vcl::Window* pParent, WinBits nStyle)
+    : MenuButton(pParent, nStyle)
     , m_aColorWrapper(this)
     , m_aAutoDisplayColor(Application::GetSettings().GetStyleSettings().GetDialogColor())
     , m_nSlotId(0)

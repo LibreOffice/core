@@ -45,7 +45,7 @@ private:
     void LockWidthRequest();
     VclPtr<SvxColorWindow> getColorWindow() const;
 public:
-    SvxColorListBox(vcl::Window* pParent);
+    SvxColorListBox(vcl::Window* pParent, WinBits nStyle = 0);
     virtual ~SvxColorListBox() override;
     virtual void dispose() override;
 
