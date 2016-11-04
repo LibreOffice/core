@@ -437,7 +437,7 @@ void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
 ScRangeList ScMarkData::GetMarkedRanges() const
 {
     ScRangeList aRet;
-    FillRangeListWithMarks(&aRet, false, -1);
+    FillRangeListWithMarks(&aRet, false);
     return aRet;
 }
 
