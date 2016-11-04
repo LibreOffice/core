@@ -574,7 +574,6 @@ namespace dbp
             if (xColumns.is())
             {
                 m_aContext.aFieldNames = xColumns->getElementNames();
-                static const char s_sFieldTypeProperty[] = "Type";
                 const OUString* pBegin = m_aContext.aFieldNames.getConstArray();
                 const OUString* pEnd   = pBegin + m_aContext.aFieldNames.getLength();
                 for(;pBegin != pEnd;++pBegin)
@@ -584,7 +583,7 @@ namespace dbp
                     {
                         Reference< XPropertySet > xColumn;
                         xColumns->getByName(*pBegin) >>= xColumn;
-                        xColumn->getPropertyValue(s_sFieldTypeProperty) >>= nFieldType;
+                        xColumn->getPropertyValue("Type") >>= nFieldType;
                     }
                     catch(const Exception&)
                     {

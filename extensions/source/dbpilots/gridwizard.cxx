@@ -100,9 +100,6 @@ namespace dbp
         if (!xColumnFactory.is() || !xColumnContainer.is())
             return;
 
-        static const char s_sDataFieldProperty [] = "DataField";
-        static const char s_sLabelProperty     [] = "Label";
-        static const char s_sWidthProperty     [] = "Width";
         static const char s_sMouseWheelBehavior[] = "MouseWheelBehavior";
         static const char s_sEmptyString[] = "";
 
@@ -201,11 +198,11 @@ namespace dbp
                     disambiguateName(xExistenceChecker, sColumnName);
 
                     // the data field the column should be bound to
-                    xColumn->setPropertyValue(s_sDataFieldProperty, makeAny(*pFormFieldName));
+                    xColumn->setPropertyValue("DataField", makeAny(*pFormFieldName));
                     // the label
-                    xColumn->setPropertyValue(s_sLabelProperty, makeAny(*pFormFieldName + *pColumnLabelPostfix));
+                    xColumn->setPropertyValue("Label", makeAny(*pFormFieldName + *pColumnLabelPostfix));
                     // the width (<void/> => column will be auto-sized)
-                    xColumn->setPropertyValue(s_sWidthProperty, Any());
+                    xColumn->setPropertyValue("Width", Any());
 
                     if ( xColumnPSI->hasPropertyByName( s_sMouseWheelBehavior ) )
                         xColumn->setPropertyValue( s_sMouseWheelBehavior, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) );
