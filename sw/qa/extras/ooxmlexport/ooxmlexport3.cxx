@@ -771,6 +771,19 @@ DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
 #endif
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf41542_imagePadding, "tdf41542_imagePadding.odt")
+{
+    // borderlessImage - image WITHOUT BORDERS : simulate padding with -crop
+    text::GraphicCrop crop = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
+    CPPUNIT_ASSERT( crop.Left != 0 && crop.Right != 0 );
+    CPPUNIT_ASSERT( crop.Left == crop.Top && crop.Right == crop.Bottom && crop.Left == crop.Right);
+
+    // borderedImage - image WITH BORDERS : simulate padding with -crop
+    crop = getProperty<text::GraphicCrop>(getShape(3), "GraphicCrop");
+    CPPUNIT_ASSERT( crop.Left != 0 && crop.Right != 0 );
+    CPPUNIT_ASSERT( crop.Left == crop.Top && crop.Right == crop.Bottom && crop.Left == crop.Right);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFootnoteParagraphTag, "testFootnote.docx")
 {
     /* In footnotes.xml, the paragraph tag inside <w:footnote w:id="2"> was getting written into document.xml.
