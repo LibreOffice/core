@@ -53,6 +53,13 @@
             <property name="position">1</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkLabel" id="skipped">
+            <property name="visible">False</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">skipped $1 ...</property>
+          </object>
+        </child>
       </object>
     </child>
     <action-widgets>
