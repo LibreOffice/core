@@ -179,7 +179,18 @@ void SheetDataBuffer::setDateTimeCell( const CellModel& rModel, const css::util:
     // set appropriate number format
     using namespace ::com::sun::star::util::NumberFormat;
     sal_Int16 nStdFmt = (fSerial < 1.0) ? TIME : (((rDateTime.Hours > 0) || (rDateTime.Minutes > 0) || (rDateTime.Seconds > 0)) ? DATETIME : DATE);
-    setStandardNumFmt( rModel.maCellAddr, nStdFmt );
+    // set number format
+    try
+    {
+        Reference< XNumberFormatsSupplier > xNumFmtsSupp( getDocument(), UNO_QUERY_THROW );
+        Reference< XNumberFormatTypes > xNumFmtTypes( xNumFmtsSupp->getNumberFormats(), UNO_QUERY_THROW );
+        sal_Int32 nIndex = xNumFmtTypes->getStandardFormat( nStdFmt, Locale() );
+        PropertySet aPropSet( getCell( rModel.maCellAddr ) );
+        aPropSet.setProperty( PROP_NumberFormat, nIndex );
+    }
+    catch( Exception& )
+    {
+    }
 }
 
 void SheetDataBuffer::setBooleanCell( const CellModel& rModel, bool bValue )
@@ -313,21 +324,6 @@ void SheetDataBuffer::setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCusto
 void SheetDataBuffer::setMergedRange( const CellRangeAddress& rRange )
 {
     maMergedRanges.push_back( MergedRange( rRange ) );
-}
-
-void SheetDataBuffer::setStandardNumFmt( const ScAddress& rCellAddr, sal_Int16 nStdNumFmt )
-{
-    try
-    {
-        Reference< XNumberFormatsSupplier > xNumFmtsSupp( getDocument(), UNO_QUERY_THROW );
-        Reference< XNumberFormatTypes > xNumFmtTypes( xNumFmtsSupp->getNumberFormats(), UNO_QUERY_THROW );
-        sal_Int32 nIndex = xNumFmtTypes->getStandardFormat( nStdNumFmt, Locale() );
-        PropertySet aPropSet( getCell( rCellAddr ) );
-        aPropSet.setProperty( PROP_NumberFormat, nIndex );
-    }
-    catch( Exception& )
-    {
-    }
 }
 
 typedef std::pair<sal_Int32, sal_Int32> FormatKeyPair;

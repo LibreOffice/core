@@ -79,8 +79,6 @@ struct SheetViewModel
     /** Returns the grid color as RGB value. */
     sal_Int32           getGridColor( const ::oox::core::FilterBase& rFilter ) const;
 
-    /** Returns the selection data, if available, otherwise 0. */
-    const PaneSelectionModel* getPaneSelection( sal_Int32 nPaneId ) const;
     /** Returns the selection data of the active pane. */
     const PaneSelectionModel* getActiveSelection() const;
     /** Returns read/write access to the selection data of the specified pane. */

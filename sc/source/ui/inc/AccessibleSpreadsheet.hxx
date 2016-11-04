@@ -290,7 +290,6 @@ private:
         MAP_ADDR_XACC;
     MAP_ADDR_XACC m_mapSelectionSend;
     void RemoveSelection(ScMarkData &refScMarkData);
-    bool IsSameMarkCell();
     void CommitFocusCell(const ScAddress &aNewCell);
 public:
     void FireFirstCellFocus();

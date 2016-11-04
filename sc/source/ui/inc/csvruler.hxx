@@ -167,8 +167,6 @@ private:
 
     /** Inverts the cursor bar at the specified position in maRulerDev. */
     SAL_DLLPRIVATE void                        ImplInvertCursor( sal_Int32 nPos );
-    /** Draws directly tracking rectangle to the column with the specified index. */
-    SAL_DLLPRIVATE void                        ImplDrawTrackingRect();
 
     /** Sets arrow or horizontal split pointer. */
     SAL_DLLPRIVATE void                        ImplSetMousePointer( sal_Int32 nPos );

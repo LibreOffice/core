@@ -103,9 +103,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     void SetContentValidation( const ScAddress& rScCellPos );
 
     void LockSolarMutex();
-    void UnlockSolarMutex();
 
-    bool HasSpecialContent() const;
     bool CellsAreRepeated() const;
 
     void SetFormulaCell             ( ScFormulaCell* pFCell ) const;

@@ -132,11 +132,6 @@ bool ScMyOpenCloseColumnRowGroup::IsGroupEnd(const sal_Int32 nField)
     return bGroupEnd;
 }
 
-void ScMyOpenCloseColumnRowGroup::CloseGroup()
-{
-    rExport.EndElement( rName, true );
-}
-
 void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
 {
     ScMyFieldGroupVec::iterator aItr(aTableEnd.begin());
@@ -145,7 +140,7 @@ void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
     {
         if (*aItr == nField)
         {
-            CloseGroup();
+            rExport.EndElement( rName, true );
             aItr = aTableEnd.erase(aItr);
         }
         else

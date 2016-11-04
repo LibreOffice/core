@@ -146,11 +146,6 @@ void ScValueIterator::IncPos()
         IncBlock();
 }
 
-void ScValueIterator::SetPos(size_t nPos)
-{
-    maCurPos = mpCells->position(maCurPos.first, nPos);
-}
-
 bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
 {
     while (true)
@@ -195,7 +190,7 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
              ( ( mnSubTotalFlags & SubtotalFlags::IgnoreHidden ) &&
                pDoc->RowHidden( nCurRow, mnTab, nullptr, &nLastRow ) ) )
         {
-            SetPos(nLastRow+1);
+            maCurPos = mpCells->position(maCurPos.first, nLastRow+1);
             continue;
         }
 

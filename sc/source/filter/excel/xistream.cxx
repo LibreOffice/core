@@ -512,14 +512,9 @@ void XclImpStream::CopyDecrypterFrom( const XclImpStream& rStrm )
     SetDecrypter( xNewDecr );
 }
 
-bool XclImpStream::HasValidDecrypter() const
-{
-    return mxDecrypter && mxDecrypter->IsValid();
-}
-
 void XclImpStream::EnableDecryption( bool bEnable )
 {
-    mbUseDecr = bEnable && HasValidDecrypter();
+    mbUseDecr = bEnable && mxDecrypter && mxDecrypter->IsValid();
 }
 
 void XclImpStream::PushPosition()
@@ -950,7 +945,7 @@ OUString XclImpStream::ReadRawByteString( sal_uInt16 nChars )
 
 OUString XclImpStream::ReadByteString( bool b16BitLen )
 {
-    return ReadRawByteString( ReadByteStrLen( b16BitLen ) );
+    return ReadRawByteString( b16BitLen ? ReaduInt16() : ReaduInt8() );
 }
 
 // private --------------------------------------------------------------------

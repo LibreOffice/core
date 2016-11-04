@@ -140,10 +140,6 @@ public:
     void                setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCustomFormat );
     /** Merges the cells in the passed cell range. */
     void                setMergedRange( const css::table::CellRangeAddress& rRange );
-    /** Sets a standard number format (constant from com.sun.star.util.NumberFormat) to the specified cell. */
-    void                setStandardNumFmt(
-                            const ScAddress& rCellAddr,
-                            sal_Int16 nStdNumFmt );
 
     /** Processes the cell formatting data of the passed cell. */
     void                setCellFormat( const CellModel& rModel );

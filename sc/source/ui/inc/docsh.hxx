@@ -310,7 +310,6 @@ public:
     void            ReloadTabLinks();
 
     void            SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoading = false );
-    void            SetCalcConfig( const ScCalcConfig& rConfig );
     virtual void    CheckConfigOptions() override;
 
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );

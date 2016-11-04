@@ -101,13 +101,9 @@ public:
                             sal_uInt16& rnXclForeIx, sal_uInt16& rnXclBackIx, sal_uInt8& rnXclPattern,
                             sal_uInt32 nForeColorId, sal_uInt32 nBackColorId ) const;
 
-    /** Returns the RGB color data for a (non-zero-based) Excel palette entry.
-        @return  The color from current or default palette or COL_AUTO, if nothing else found. */
-    ColorData           GetColorData( sal_uInt16 nXclIndex ) const;
     /** Returns the color for a (non-zero-based) Excel palette entry.
         @return  The color from current or default palette or COL_AUTO, if nothing else found. */
-    inline Color        GetColor( sal_uInt16 nXclIndex ) const
-                            { return Color( GetColorData( nXclIndex ) ); }
+    Color               GetColor( sal_uInt16 nXclIndex ) const;
 
     /** Saves the PALETTE record, if it differs from the default palette. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -228,11 +224,6 @@ public:
         @return  The resulting Excel font index. */
     sal_uInt16          Insert( const XclFontData& rFontData,
                             XclExpColorType eColorType, bool bAppFont = false );
-    /** Inserts the font into the buffer if not present.
-        @param bAppFont  true = Sets the application font; false = Inserts a new font.
-        @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const vcl::Font& rFont,
-                            XclExpColorType eColorType, bool bAppFont );
     /** Inserts the SvxFont into the buffer if not present, e.g. where escapements are used.
         @return  The resulting Excel font index. */
     sal_uInt16          Insert( const SvxFont& rFont,

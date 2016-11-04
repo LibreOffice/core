@@ -793,7 +793,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             SetAllFormulasDirty(aFormulaDirtyCxt);
 
             if (pDrawLayer)
-                DrawMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
+                pDrawLayer->ScMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
             bValid = true;
         }
@@ -923,7 +923,8 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         SetAllFormulasDirty(aFormulaDirtyCxt);
 
         if (pDrawLayer) //  Skip cloning Note caption object
-            DrawCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
+            // page is already created in ScTable ctor
+            pDrawLayer->ScCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
         if (pDPCollection)
             pDPCollection->CopyToTab(nOldPos, nNewPos);

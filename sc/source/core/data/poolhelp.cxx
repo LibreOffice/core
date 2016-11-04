@@ -74,8 +74,10 @@ SvNumberFormatter*  ScPoolHelper::GetFormTable() const
     return pFormTable;
 }
 
-void ScPoolHelper::UseDocOptions() const
+void ScPoolHelper::SetFormTableOpt(const ScDocOptions& rOpt)
 {
+    aOpt = rOpt;
+    // #i105512# if the number formatter exists, update its settings
     if (pFormTable)
     {
         sal_uInt16 d,m;
@@ -85,12 +87,6 @@ void ScPoolHelper::UseDocOptions() const
         pFormTable->ChangeStandardPrec( (sal_uInt16)aOpt.GetStdPrecision() );
         pFormTable->SetYear2000( aOpt.GetYear2000() );
     }
-}
-
-void ScPoolHelper::SetFormTableOpt(const ScDocOptions& rOpt)
-{
-    aOpt = rOpt;
-    UseDocOptions();        // #i105512# if the number formatter exists, update its settings
 }
 
 SvNumberFormatter* ScPoolHelper::CreateNumberFormatter() const

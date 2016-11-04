@@ -47,7 +47,6 @@ class ScMyOpenCloseColumnRowGroup
     ScMyFieldGroupVec           aTableEnd;
 
     void OpenGroup(const ScMyColumnRowGroup& rGroup);
-    void CloseGroup();
 public:
     ScMyOpenCloseColumnRowGroup(ScXMLExport& rExport, sal_uInt32 nToken);
     ~ScMyOpenCloseColumnRowGroup();

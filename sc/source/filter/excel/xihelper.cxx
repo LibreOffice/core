@@ -497,11 +497,6 @@ sal_uInt16 XclImpHFConverter::GetMaxLineHeight( XclImpHFPortion ePortion ) const
     return (nMaxHt == 0) ? mxFontData->mnHeight : nMaxHt;
 }
 
-sal_uInt16 XclImpHFConverter::GetCurrMaxLineHeight() const
-{
-    return GetMaxLineHeight( meCurrObj );
-}
-
 void XclImpHFConverter::UpdateMaxLineHeight( XclImpHFPortion ePortion )
 {
     sal_uInt16& rnMaxHt = maInfos[ ePortion ].mnMaxLineHt;
@@ -564,7 +559,7 @@ void XclImpHFConverter::InsertLineBreak()
     mrEE.QuickInsertText( OUString('\n'), ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
     ++rSel.nEndPara;
     rSel.nEndPos = 0;
-    GetCurrInfo().mnHeight += GetCurrMaxLineHeight();
+    GetCurrInfo().mnHeight += GetMaxLineHeight( meCurrObj );
     GetCurrInfo().mnMaxLineHt = 0;
 }
 

@@ -255,7 +255,28 @@ void ScAcceptChgDlg::Init()
         pTPFilter->SetRange(aRefStr);
     }
 
-    InitFilter();
+    // init filter
+    if(pTPFilter->IsDate()||pTPFilter->IsRange()||
+        pTPFilter->IsAuthor()||pTPFilter->IsComment())
+    {
+        pTheView->SetFilterDate(pTPFilter->IsDate());
+        pTheView->SetDateTimeMode(pTPFilter->GetDateMode());
+        pTheView->SetFirstDate(pTPFilter->GetFirstDate());
+        pTheView->SetLastDate(pTPFilter->GetLastDate());
+        pTheView->SetFirstTime(pTPFilter->GetFirstTime());
+        pTheView->SetLastTime(pTPFilter->GetLastTime());
+        pTheView->SetFilterAuthor(pTPFilter->IsAuthor());
+        pTheView->SetAuthor(pTPFilter->GetSelectedAuthor());
+
+        pTheView->SetFilterComment(pTPFilter->IsComment());
+
+        utl::SearchParam aSearchParam( pTPFilter->GetComment(),
+                utl::SearchParam::SRCH_REGEXP,false );
+
+        pTheView->SetCommentParams(&aSearchParam);
+
+        pTheView->UpdateFilterTest();
+    }
 }
 
 void ScAcceptChgDlg::ClearView()
@@ -1787,31 +1808,6 @@ void ScAcceptChgDlg::FillInfo(SfxChildWinInfo& rInfo) const
         rInfo.aExtraString += ";";
     }
     rInfo.aExtraString += ")";
-}
-
-void ScAcceptChgDlg::InitFilter()
-{
-    if(pTPFilter->IsDate()||pTPFilter->IsRange()||
-        pTPFilter->IsAuthor()||pTPFilter->IsComment())
-    {
-        pTheView->SetFilterDate(pTPFilter->IsDate());
-        pTheView->SetDateTimeMode(pTPFilter->GetDateMode());
-        pTheView->SetFirstDate(pTPFilter->GetFirstDate());
-        pTheView->SetLastDate(pTPFilter->GetLastDate());
-        pTheView->SetFirstTime(pTPFilter->GetFirstTime());
-        pTheView->SetLastTime(pTPFilter->GetLastTime());
-        pTheView->SetFilterAuthor(pTPFilter->IsAuthor());
-        pTheView->SetAuthor(pTPFilter->GetSelectedAuthor());
-
-        pTheView->SetFilterComment(pTPFilter->IsComment());
-
-        utl::SearchParam aSearchParam( pTPFilter->GetComment(),
-                utl::SearchParam::SRCH_REGEXP,false );
-
-        pTheView->SetCommentParams(&aSearchParam);
-
-        pTheView->UpdateFilterTest();
-    }
 }
 
 #define CALC_DATE       3

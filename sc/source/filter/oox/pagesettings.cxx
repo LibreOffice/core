@@ -393,8 +393,6 @@ private:
 
     /** Returns the current line height of the specified portion. */
     double              getCurrHeight( HFPortionId ePortion ) const;
-    /** Returns the current line height. */
-    double              getCurrHeight() const;
 
     /** Updates the current line height of the specified portion, using the current font size. */
     void                updateCurrHeight( HFPortionId ePortion );
@@ -736,11 +734,6 @@ double HeaderFooterParser::getCurrHeight( HFPortionId ePortion ) const
     return (fMaxHt == 0.0) ? maFontModel.mfHeight : fMaxHt;
 }
 
-double HeaderFooterParser::getCurrHeight() const
-{
-    return getCurrHeight( meCurrPortion );
-}
-
 void HeaderFooterParser::updateCurrHeight( HFPortionId ePortion )
 {
     double& rfMaxHt = maPortions[ ePortion ].mfCurrHeight;
@@ -782,7 +775,7 @@ void HeaderFooterParser::appendLineBreak()
 {
     getEndPos()->gotoEnd( false );
     getEndPos()->setString( OUString( '\n' ) );
-    getPortion().mfTotalHeight += getCurrHeight();
+    getPortion().mfTotalHeight += getCurrHeight( meCurrPortion ); // add the current line height.
     getPortion().mfCurrHeight = 0;
 }
 

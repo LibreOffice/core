@@ -160,14 +160,9 @@ sal_Int32 SheetViewModel::getGridColor( const FilterBase& rFilter ) const
     return mbDefGridColor ? API_RGB_TRANSPARENT : maGridColor.getColor( rFilter.getGraphicHelper() );
 }
 
-const PaneSelectionModel* SheetViewModel::getPaneSelection( sal_Int32 nPaneId ) const
-{
-    return maPaneSelMap.get( nPaneId ).get();
-}
-
 const PaneSelectionModel* SheetViewModel::getActiveSelection() const
 {
-    return getPaneSelection( mnActivePaneId );
+    return maPaneSelMap.get( mnActivePaneId ).get();
 }
 
 PaneSelectionModel& SheetViewModel::createPaneSelection( sal_Int32 nPaneId )

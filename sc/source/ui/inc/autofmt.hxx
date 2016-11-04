@@ -90,7 +90,6 @@ private:
     SAL_DLLPRIVATE const SvxLineItem& GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const;
 
     SAL_DLLPRIVATE void DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow);
-    SAL_DLLPRIVATE void DrawStrings(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void DrawBackground(vcl::RenderContext& rRenderContext);
 
     SAL_DLLPRIVATE void MakeFonts(sal_uInt16 nIndex, vcl::Font& rFont,

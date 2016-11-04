@@ -508,7 +508,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
 
     nTableCount = xIndex->getCount();
     if (!pSharedData)
-        CreateSharedData(nTableCount);
+        pSharedData = new ScMySharedData(nTableCount);
 
     pCellStyles->AddNewTable(nTableCount - 1);
 
@@ -3742,11 +3742,6 @@ void ScXMLExport::SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgres
     }
 }
 
-bool ScXMLExport::IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2)
-{
-    return (aCell1.nType == aCell2.nType);
-}
-
 bool ScXMLExport::IsEditCell(ScMyCell& rCell)
 {
     return rCell.maBaseCell.meType == CELLTYPE_EDIT;
@@ -3774,8 +3769,8 @@ bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
             {
                 if ((((aCell1.nStyleIndex == aCell2.nStyleIndex) && (aCell1.bIsAutoStyle == aCell2.bIsAutoStyle)) ||
                      ((aCell1.nStyleIndex == aCell2.nStyleIndex) && (aCell1.nStyleIndex == -1))) &&
-                    (aCell1.nValidationIndex == aCell2.nValidationIndex) &&
-                    IsCellTypeEqual(aCell1, aCell2))
+                    aCell1.nValidationIndex == aCell2.nValidationIndex &&
+                    aCell1.nType == aCell2.nType)
                 {
                     switch ( aCell1.nType )
                     {
@@ -4939,11 +4934,6 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
 XMLShapeExport* ScXMLExport::CreateShapeExport()
 {
     return new ScXMLShapeExport(*this);
-}
-
-void ScXMLExport::CreateSharedData(const sal_Int32 nTableCount)
-{
-    pSharedData = new ScMySharedData(nTableCount);
 }
 
 XMLNumberFormatAttributesExportHelper* ScXMLExport::GetNumberFormatAttributesExportHelper()

@@ -316,7 +316,6 @@ private:
 
     void FillShapes(std::vector < uno::Reference < drawing::XShape > >& rShapes) const;
     bool FindSelectedShapesChanges(const css::uno::Reference<css::drawing::XShapes>& xShapes, bool bCommitChange) const;
-    void FillSelectionSupplier() const;
 
     ScAddress* GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
     uno::Reference<XAccessibleRelationSet> GetRelationSet(const ScAccessibleShapeData* pData) const;
@@ -338,7 +337,23 @@ ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, Sc
     mpAccessibleDocument(pAccessibleDocument),
     meSplitPos(eSplitPos)
 {
-    FillSelectionSupplier();
+    if (mpViewShell)
+    {
+        SfxViewFrame* pViewFrame = mpViewShell->GetViewFrame();
+        if (pViewFrame)
+        {
+            xSelectionSupplier = uno::Reference<view::XSelectionSupplier>(pViewFrame->GetFrame().GetController(), uno::UNO_QUERY);
+            if (xSelectionSupplier.is())
+            {
+                if (mpAccessibleDocument)
+                    xSelectionSupplier->addSelectionChangeListener(mpAccessibleDocument);
+                uno::Reference<drawing::XShapes> xShapes (xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+                if (xShapes.is())
+                    mnShapesSelected = xShapes->getCount();
+            }
+        }
+    }
+
     maZOrderedShapes.push_back(nullptr); // add an element which represents the table
 
     GetCount(); // fill list with filtered shapes (no internal shapes)
@@ -1145,26 +1160,6 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
     std::for_each(aShapesList.begin(), aShapesList.end(), Destroy());
 
     return bResult;
-}
-
-void ScChildrenShapes::FillSelectionSupplier() const
-{
-    if (!xSelectionSupplier.is() && mpViewShell)
-    {
-        SfxViewFrame* pViewFrame = mpViewShell->GetViewFrame();
-        if (pViewFrame)
-        {
-            xSelectionSupplier = uno::Reference<view::XSelectionSupplier>(pViewFrame->GetFrame().GetController(), uno::UNO_QUERY);
-            if (xSelectionSupplier.is())
-            {
-                if (mpAccessibleDocument)
-                    xSelectionSupplier->addSelectionChangeListener(mpAccessibleDocument);
-                uno::Reference<drawing::XShapes> xShapes (xSelectionSupplier->getSelection(), uno::UNO_QUERY);
-                if (xShapes.is())
-                    mnShapesSelected = xShapes->getCount();
-            }
-        }
-    }
 }
 
 ScAddress* ScChildrenShapes::GetAnchor(const uno::Reference<drawing::XShape>& xShape) const

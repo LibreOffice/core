@@ -70,18 +70,6 @@ void ScDocument::BeginDrawUndo()
         pDrawLayer->BeginCalcUndo(false);
 }
 
-rtl::Reference<XColorList> ScDocument::GetColorList()
-{
-    if (pDrawLayer)
-        return pDrawLayer->GetColorList();
-    else
-    {
-        if (!pColorList.is())
-            pColorList = XColorList::CreateStdColorList();
-        return pColorList;
-    }
-}
-
 void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos)
 {
     if (pDrawLayer && pSrcDoc->pDrawLayer)
@@ -232,7 +220,16 @@ bool ScDocument::IsChart( const SdrObject* pObject )
 
 IMPL_LINK( ScDocument, GetUserDefinedColor, sal_uInt16, nColorIndex, Color* )
 {
-    return const_cast<Color*>(&(GetColorList()->GetColor(nColorIndex)->GetColor()));
+    rtl::Reference<XColorList> xColorList;
+    if (pDrawLayer)
+        xColorList = pDrawLayer->GetColorList();
+    else
+    {
+        if (!pColorList.is())
+            pColorList = XColorList::CreateStdColorList();
+        xColorList = pColorList;
+    }
+    return const_cast<Color*>(&(xColorList->GetColor(nColorIndex)->GetColor()));
 }
 
 void ScDocument::DeleteDrawLayer()
@@ -255,17 +252,6 @@ void ScDocument::DeleteDrawLayer()
 bool ScDocument::DrawGetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) const
 {
     return pDrawLayer->GetPrintArea( rRange, bSetHor, bSetVer );
-}
-
-void ScDocument::DrawMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
-{
-    pDrawLayer->ScMovePage(nOldPos,nNewPos);
-}
-
-void ScDocument::DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
-{
-    // page is already created in ScTable ctor
-    pDrawLayer->ScCopyPage( nOldPos, nNewPos );
 }
 
 void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

@@ -33,20 +33,15 @@ using namespace css::uno;
 #define SCFILTOPT_ROWSCALE      1
 #define SCFILTOPT_WK3           2
 
-Sequence<OUString> ScFilterOptions::GetPropertyNames()
-{
-    return {"MS_Excel/ColScale",            // SCFILTOPT_COLSCALE
-            "MS_Excel/RowScale",            // SCFILTOPT_ROWSCALE
-            "Lotus123/WK3"};                // SCFILTOPT_WK3
-}
-
 ScFilterOptions::ScFilterOptions() :
     ConfigItem( OUString( CFGPATH_FILTER ) ),
     bWK3Flag( false ),
     fExcelColScale( 0 ),
     fExcelRowScale( 0 )
 {
-    Sequence<OUString> aNames = GetPropertyNames();
+    Sequence<OUString> aNames { "MS_Excel/ColScale",  // SCFILTOPT_COLSCALE
+                                "MS_Excel/RowScale",  // SCFILTOPT_ROWSCALE
+                                "Lotus123/WK3" };     // SCFILTOPT_WK3
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");

@@ -46,7 +46,6 @@ private:
     void ResetRenameInput();
     void CheckNewTabName();
     ScDocument* GetSelectedDoc();
-    bool IsCurrentDocSelected() const;
 
 private:
     VclPtr<RadioButton>     pBtnMove;

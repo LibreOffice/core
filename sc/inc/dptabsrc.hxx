@@ -161,7 +161,6 @@ public:
     OUString GetDataDimName(long nIndex);
     const ScDPCache* GetCache();
     const ScDPItemData*         GetItemDataById( long nDim, long nId );
-    SCROW                       GetMemberId(  long  nDim, const ScDPItemData& rData );
     bool                        IsDataLayoutDimension(long nDim);
     sal_uInt16                  GetDataLayoutOrientation();
 
@@ -395,8 +394,6 @@ public:
                                 throw(css::uno::RuntimeException, std::exception) override;
 
     sal_uInt16 getOrientation() const;
-    void setOrientation(sal_uInt16 nNew);
-    long getPosition() const;
     bool getIsDataLayoutDimension() const;
     sal_uInt16 getFunction() const { return nFunction;}
     void setFunction(sal_uInt16 nNew);       // for data dimension
@@ -709,7 +706,6 @@ public:
 
     sal_Int32               GetIndexFromName( const OUString& rName ) const;     // <0 if not found
     const ScDPItemData*     GetSrcItemDataByIndex(  SCROW nIndex);
-    SCROW                   GetSrcItemsCount();
 
 private:
     css::uno::Sequence< OUString > getElementNames( bool bLocaleIndependent ) const

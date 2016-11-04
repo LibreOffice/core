@@ -596,11 +596,6 @@ XclImpPivotCache::~XclImpPivotCache()
 
 // data access ----------------------------------------------------------------
 
-sal_uInt16 XclImpPivotCache::GetFieldCount() const
-{
-    return static_cast< sal_uInt16 >( maFields.size() );
-}
-
 const XclImpPCField* XclImpPivotCache::GetField( sal_uInt16 nFieldIdx ) const
 {
     return (nFieldIdx < maFields.size()) ? maFields[ nFieldIdx ].get() : nullptr;
@@ -744,7 +739,7 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
             case EXC_ID_SXFIELD:
             {
                 xCurrField.reset();
-                sal_uInt16 nNewFieldIdx = GetFieldCount();
+                sal_uInt16 nNewFieldIdx = static_cast< sal_uInt16 >( maFields.size() );
                 if( nNewFieldIdx < EXC_PC_MAXFIELDCOUNT )
                 {
                     xCurrField.reset( new XclImpPCField( GetRoot(), *this, nNewFieldIdx ) );
@@ -841,7 +836,7 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
     OSL_ENSURE( maPCInfo.mnTotalFields == maFields.size(),
         "XclImpPivotCache::ReadPivotCacheStream - field count mismatch" );
 
-    if (HasCacheRecords())
+    if (static_cast<bool>(maPCInfo.mnFlags & EXC_SXDB_SAVEDATA))
     {
         SCROW nNewEnd = maSrcRange.aStart.Row() + maPCInfo.mnSrcRecs;
         maSrcRange.aEnd.SetRow(nNewEnd);
@@ -857,11 +852,6 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
         // nItemScRow points to last used row
         maSrcRange.aEnd.SetRow( nItemScRow );
     }
-}
-
-bool XclImpPivotCache::HasCacheRecords() const
-{
-    return static_cast<bool>(maPCInfo.mnFlags & EXC_SXDB_SAVEDATA);
 }
 
 bool XclImpPivotCache::IsRefreshOnLoad() const
@@ -1141,7 +1131,8 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
 void XclImpPTField::ConvertFieldInfo( ScDPSaveDimension& rSaveDim ) const
 {
     rSaveDim.SetShowEmpty( ::get_flag( maFieldExtInfo.mnFlags, EXC_SXVDEX_SHOWALL ) );
-    ConvertItems( rSaveDim );
+    for( XclImpPTItemVec::const_iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
+        (*aIt)->ConvertItem( rSaveDim );
 }
 
 void XclImpPTField::ConvertDataField( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const
@@ -1182,12 +1173,6 @@ void XclImpPTField::ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const Xcl
     }
 
     rSaveDim.SetReferenceValue(&aFieldRef);
-}
-
-void XclImpPTField::ConvertItems( ScDPSaveDimension& rSaveDim ) const
-{
-    for( XclImpPTItemVec::const_iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
-        (*aIt)->ConvertItem( rSaveDim );
 }
 
 XclImpPivotTable::XclImpPivotTable( const XclImpRoot& rRoot ) :

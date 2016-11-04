@@ -359,13 +359,6 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
 #undef FRAME_OFFSET
 
-void ScAutoFmtPreview::DrawStrings(vcl::RenderContext& rRenderContext)
-{
-    for(size_t nRow = 0; nRow < 5; ++nRow)
-        for(size_t nCol = 0; nCol < 5; ++nCol)
-            DrawString(rRenderContext, nCol, nRow);
-}
-
 void ScAutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
 {
     if (pCurData)
@@ -396,7 +389,9 @@ void ScAutoFmtPreview::PaintCells(vcl::RenderContext& rRenderContext)
             DrawBackground(rRenderContext);
 
         // 2) values
-        DrawStrings(rRenderContext);
+        for(size_t nRow = 0; nRow < 5; ++nRow)
+            for(size_t nCol = 0; nCol < 5; ++nCol)
+                DrawString(rRenderContext, nCol, nRow);
 
         // 3) border
         if (pCurData->GetIncludeFrame())

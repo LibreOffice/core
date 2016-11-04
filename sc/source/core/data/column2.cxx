@@ -1206,11 +1206,6 @@ bool ScColumn::IsEmptyAttr() const
         return true;
 }
 
-bool ScColumn::IsEmpty() const
-{
-    return (IsEmptyData() && IsEmptyAttr());
-}
-
 bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
 {
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nStartRow);

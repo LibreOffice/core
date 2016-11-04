@@ -93,7 +93,6 @@ private:
     bool                    bUseColor:1;
 
     void            Init();
-    void            InitFilter();
 
     DECL_LINK( FilterHandle, SvxTPFilter*, void );
     DECL_LINK( RefHandle, SvxTPFilter*, void );

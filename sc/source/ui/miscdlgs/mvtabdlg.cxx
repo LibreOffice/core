@@ -160,7 +160,7 @@ void ScMoveTableDlg::CheckNewTabName()
         return;
     }
 
-    bool bMoveInCurrentDoc = (pBtnMove->IsChecked() && IsCurrentDocSelected());
+    bool bMoveInCurrentDoc = pBtnMove->IsChecked() && pLbDoc->GetSelectEntryPos() == mnCurrentDocPos;
     bool bFound = false;
     const sal_Int32 nLast = pLbTable->GetEntryCount();
     for ( sal_uInt16 i=0; i<nLast && !bFound; ++i )
@@ -193,11 +193,6 @@ ScDocument* ScMoveTableDlg::GetSelectedDoc()
 {
     sal_Int32 nPos = pLbDoc->GetSelectEntryPos();
     return static_cast<ScDocument*>(pLbDoc->GetEntryData(nPos));
-}
-
-bool ScMoveTableDlg::IsCurrentDocSelected() const
-{
-    return pLbDoc->GetSelectEntryPos() == mnCurrentDocPos;
 }
 
 void ScMoveTableDlg::Init()

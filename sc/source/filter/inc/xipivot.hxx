@@ -153,8 +153,6 @@ public:
 
     const OUString& GetSourceRangeName() const { return maSrcRangeName; }
 
-    /** Returns the number of pivot cache fields. */
-    sal_uInt16          GetFieldCount() const;
     /** Returns read-only access to a pivot cache field. */
     const XclImpPCField* GetField( sal_uInt16 nFieldIdx ) const;
 
@@ -174,7 +172,6 @@ public:
     /** Reads the entire pivot cache stream. Uses decrypter from passed stream. */
     void                ReadPivotCacheStream( XclImpStream& rStrm );
 
-    bool                HasCacheRecords() const;
     bool                IsRefreshOnLoad() const;
     bool                IsValid() const;
 
@@ -277,7 +274,6 @@ private:
 
     void                ConvertDataField( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const;
     void                ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const;
-    void                ConvertItems( ScDPSaveDimension& rSaveDim ) const;
 
 private:
     typedef ::std::list< XclPTDataFieldInfo >   XclPTDataFieldInfoList;

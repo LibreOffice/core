@@ -62,7 +62,6 @@ public:
                         const ScMarkData& rMark );
     void    TestRange( ScDocument* pDoc, const ScRange& rRange );
     void    TestSelection( ScDocument* pDoc, const ScMarkData& rMark );
-    void    TestView( ScViewFunc* pView );
 
     bool IsEditable() const { return mbIsEditable; }
     bool IsFormatEditable() const { return mbIsEditable || mbOnlyMatrix; }

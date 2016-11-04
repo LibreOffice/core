@@ -189,7 +189,6 @@ class ScXMLExport : public SvXMLExport
     void WriteTableShapes();
     void SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgress);
 
-    static bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2);
     static bool IsEditCell(ScMyCell& rCell);
     bool IsCellEqual(ScMyCell& aCell1, ScMyCell& aCell2);
 
@@ -253,7 +252,6 @@ public:
 
     virtual void exportAnnotationMeta( const css::uno::Reference < css::drawing::XShape >& xShape) override;
 
-    void CreateSharedData(const sal_Int32 nTableCount);
     void SetSharedData(ScMySharedData* pTemp) { pSharedData = pTemp; }
     ScMySharedData* GetSharedData() { return pSharedData; }
     XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
