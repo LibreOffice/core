@@ -34,6 +34,23 @@
       "revId": "cdd1c11886b1de4b4fa0f8763d8fc8e4260fa9ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_d046abbe",
+        "filename": "basic/source/uno/dlgcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-04T07:26:54Z",
+      "side": 1,
+      "message": "the new style constructor is already being called here, so I don\u0027t understand why your new code is necessary",
+      "revId": "cdd1c11886b1de4b4fa0f8763d8fc8e4260fa9ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
