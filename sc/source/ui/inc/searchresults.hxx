@@ -23,6 +23,7 @@ namespace sc {
 class SearchResultsDlg : public ModelessDialog
 {
     VclPtr<SvSimpleTable> mpList;
+    VclPtr<FixedText> mpLabel;
     SfxBindings* mpBindings;
     ScDocument* mpDoc;
 

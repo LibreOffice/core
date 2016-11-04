@@ -26,6 +26,8 @@ SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParen
     ModelessDialog(pParent, "SearchResultsDialog", "modules/scalc/ui/searchresults.ui"),
     mpBindings(_pBindings), mpDoc(nullptr)
 {
+    get(mpLabel, "skipped");
+
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("results");
     Size aControlSize(150, 120);
     aControlSize = pContainer->LogicToPixel(aControlSize, MAP_APPFONT);
@@ -47,16 +49,73 @@ SearchResultsDlg::~SearchResultsDlg()
 void SearchResultsDlg::dispose()
 {
     mpList.disposeAndClear();
+    mpLabel.disposeAndClear();
     ModelessDialog::dispose();
+}
+
+namespace
+{
+    class ListWrapper {
+        size_t mnCount;
+        const size_t mnMaximum;
+        OUStringBuffer maName;
+        VclPtr<FixedText> mpLabel;
+        VclPtr<SvSimpleTable> mpList;
+    public:
+        ListWrapper(const VclPtr<SvSimpleTable> &pList,
+                    const VclPtr<FixedText> &pLabel) :
+            mnCount(0),
+            mnMaximum(1000),
+            mpLabel(pLabel),
+            mpList(pList)
+        {
+            mpList->Clear();
+            mpList->SetUpdateMode(false);
+        }
+        void Insert(const OUString &aTabName,
+                    const ScAddress &rPos,
+                    formula::FormulaGrammar::AddressConvention eConvention,
+                    const OUString &aText)
+        {
+            if (mnCount++ < mnMaximum)
+            {
+                maName.append(aTabName);
+                maName.append("\t");
+                maName.append(rPos.Format(SCA_ABS, nullptr, eConvention));
+                maName.append("\t");
+                maName.append(aText);
+                mpList->InsertEntry(maName.makeStringAndClear());
+            }
+        }
+        void Update()
+        {
+            if (mnCount > mnMaximum)
+            {
+                if (mpLabel)
+                {
+                    size_t nSkipped = mnCount - mnMaximum;
+                    OUString aSkipped(mpLabel->GetText());
+                    mpList->InsertEntry(
+                        aSkipped.replaceFirst("$1", OUString::number(nSkipped)));
+                }
+            }
+            mpList->SetUpdateMode(true);
+        }
+    };
 }
 
 void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatchedRanges )
 {
-    mpList->Clear();
-    mpList->SetUpdateMode(false);
+    ListWrapper aList(mpList, mpLabel);
     std::vector<OUString> aTabNames = pDoc->GetAllTableNames();
     SCTAB nTabCount = aTabNames.size();
-    for (size_t i = 0, n = rMatchedRanges.size(); i < n; ++i)
+
+    // tdf#92160 - too many results blow the widget's mind
+    size_t nMatchMax = rMatchedRanges.size();
+    if (nMatchMax > 1000)
+        nMatchMax = 1000;
+
+    for (size_t i = 0, n = nMatchMax; i < n; ++i)
     {
         ScCellIterator aIter(pDoc, *rMatchedRanges[i]);
         for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
@@ -66,12 +125,12 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
                 // Out-of-bound sheet index.
                 continue;
 
-            OUString aPosStr = aPos.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention());
-            mpList->InsertEntry(aTabNames[aPos.Tab()] + "\t" + aPosStr + "\t" + pDoc->GetString(aPos));
+            aList.Insert(aTabNames[aPos.Tab()], aPos,
+                         pDoc->GetAddressConvention(),
+                         pDoc->GetString(aPos));
         }
     }
-    mpList->SetUpdateMode(true);
-
+    aList.Update();
     mpDoc = pDoc;
 }
 
