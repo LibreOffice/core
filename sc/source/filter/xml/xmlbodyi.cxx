@@ -60,7 +60,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
                                                    const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     sPassword(),
     meHash1(PASSHASH_SHA1),
     meHash2(PASSHASH_UNSPECIFIED),

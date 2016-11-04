@@ -24,9 +24,10 @@
 #include <unotools/textsearch.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 
 
-class ScXMLCalculationSettingsContext : public SvXMLImportContext
+class ScXMLCalculationSettingsContext : public ScXMLImportContext
 {
     css::util::Date aNullDate;
     double fIterationEpsilon;
@@ -39,8 +40,6 @@ class ScXMLCalculationSettingsContext : public SvXMLImportContext
     bool bLookUpLabels;
     bool bMatchWholeCell;
 
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLCalculationSettingsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -59,10 +58,8 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLNullDateContext : public SvXMLImportContext
+class ScXMLNullDateContext : public ScXMLImportContext
 {
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLNullDateContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -77,10 +74,8 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLIterationContext : public SvXMLImportContext
+class ScXMLIterationContext : public ScXMLImportContext
 {
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLIterationContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,

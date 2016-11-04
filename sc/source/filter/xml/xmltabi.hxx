@@ -21,6 +21,7 @@
 
 #include "externalrefmgr.hxx"
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 
 #include <xmloff/xmlictxt.hxx>
 #include <memory>
@@ -37,16 +38,13 @@ struct ScXMLExternalTabData
     ScXMLExternalTabData();
 };
 
-class ScXMLTableContext : public SvXMLImportContext
+class ScXMLTableContext : public ScXMLImportContext
 {
     OUString   sPrintRanges;
     ::std::unique_ptr<ScXMLExternalTabData> pExternalRefInfo;
     sal_Int32       nStartOffset;
     bool            bStartFormPage;
     bool            bPrintEntireSheet;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -63,10 +61,8 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLTableProtectionContext : public SvXMLImportContext
+class ScXMLTableProtectionContext : public ScXMLImportContext
 {
-    ScXMLImport& GetScImport();
-
 public:
     ScXMLTableProtectionContext( ScXMLImport& rImport, sal_uInt16 nPrefix,
                         const OUString& rLName,

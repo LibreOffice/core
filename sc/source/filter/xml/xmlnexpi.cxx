@@ -50,7 +50,7 @@ ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext(
     ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
     const uno::Reference<xml::sax::XAttributeList>& /* xAttrList */,
     Inserter* pInserter ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     mpInserter(pInserter)
 {
     rImport.LockSolarMutex();
@@ -98,7 +98,7 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext(
     const OUString& rLName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList,
     ScXMLNamedExpressionsContext::Inserter* pInserter ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     mpInserter(pInserter)
 {
     if (!mpInserter)
@@ -167,7 +167,7 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
     ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList,
     ScXMLNamedExpressionsContext::Inserter* pInserter ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     mpInserter(pInserter)
 {
     if (!mpInserter)

@@ -23,10 +23,11 @@
 #include <xmloff/xmlimp.hxx>
 #include <tools/color.hxx>
 #include "rangelst.hxx"
+#include "importcontext.hxx"
 
 class ScXMLImport;
 
-class ScXMLTableScenarioContext : public SvXMLImportContext
+class ScXMLTableScenarioContext : public ScXMLImportContext
 {
 private:
     OUString   sComment;
@@ -38,9 +39,6 @@ private:
     bool            bCopyFormulas;
     bool            bIsActive;
     bool            bProtected;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 

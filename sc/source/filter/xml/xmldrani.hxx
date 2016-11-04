@@ -32,17 +32,15 @@
 
 #include "dbdata.hxx"
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 
 #include <memory>
 
 class ScDBData;
 struct ScQueryParam;
 
-class ScXMLDatabaseRangesContext : public SvXMLImportContext
+class ScXMLDatabaseRangesContext : public ScXMLImportContext
 {
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
 
     ScXMLDatabaseRangesContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
@@ -64,7 +62,7 @@ struct ScSubTotalRule
     css::uno::Sequence <css::sheet::SubTotalColumn> aSubTotalColumns;
 };
 
-class ScXMLDatabaseRangeContext : public SvXMLImportContext
+class ScXMLDatabaseRangeContext : public ScXMLImportContext
 {
     std::unique_ptr<ScQueryParam> mpQueryParam;
     ScRange         maRange;
@@ -97,9 +95,6 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     bool            bHasHeader;
     bool            bByRow;
     ScDBCollection::RangeType meRangeType;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
     std::unique_ptr<ScDBData> ConvertToDBData(const OUString& rName);
 
@@ -135,13 +130,10 @@ public:
                                                                                                     bFilterConditionSourceRange = true; }
 };
 
-class ScXMLSourceSQLContext : public SvXMLImportContext
+class ScXMLSourceSQLContext : public ScXMLImportContext
 {
     ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
     OUString               sDBName;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -159,13 +151,10 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLSourceTableContext : public SvXMLImportContext
+class ScXMLSourceTableContext : public ScXMLImportContext
 {
     ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
     OUString               sDBName;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -183,13 +172,10 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLSourceQueryContext : public SvXMLImportContext
+class ScXMLSourceQueryContext : public ScXMLImportContext
 {
     ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
     OUString               sDBName;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -207,12 +193,9 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLConResContext : public SvXMLImportContext
+class ScXMLConResContext : public ScXMLImportContext
 {
     ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -230,12 +213,9 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLSubTotalRulesContext : public SvXMLImportContext
+class ScXMLSubTotalRulesContext : public ScXMLImportContext
 {
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -254,12 +234,9 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLSortGroupsContext : public SvXMLImportContext
+class ScXMLSortGroupsContext : public ScXMLImportContext
 {
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -277,13 +254,10 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLSubTotalRuleContext : public SvXMLImportContext
+class ScXMLSubTotalRuleContext : public ScXMLImportContext
 {
     ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
     ScSubTotalRule              aSubTotalRule;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -305,14 +279,11 @@ public:
     aSubTotalRule.aSubTotalColumns[aSubTotalRule.aSubTotalColumns.getLength() - 1] = rSubTotalColumn; }
 };
 
-class ScXMLSubTotalFieldContext : public SvXMLImportContext
+class ScXMLSubTotalFieldContext : public ScXMLImportContext
 {
     ScXMLSubTotalRuleContext* pSubTotalRuleContext;
     OUString sFieldNumber;
     OUString sFunction;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 

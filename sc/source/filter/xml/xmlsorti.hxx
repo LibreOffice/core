@@ -26,10 +26,11 @@
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include "xmldrani.hxx"
+#include "importcontext.hxx"
 
 class ScXMLImport;
 
-class ScXMLSortContext : public SvXMLImportContext
+class ScXMLSortContext : public ScXMLImportContext
 {
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;
 
@@ -42,9 +43,6 @@ class ScXMLSortContext : public SvXMLImportContext
     bool        bBindFormatsToContent;
     bool        bIsCaseSensitive;
     bool        bEnabledUserList;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -64,16 +62,13 @@ public:
     void AddSortField(const OUString& sFieldNumber, const OUString& sDataType, const OUString& sOrder);
 };
 
-class ScXMLSortByContext : public SvXMLImportContext
+class ScXMLSortByContext : public ScXMLImportContext
 {
     ScXMLSortContext* pSortContext;
 
     OUString   sFieldNumber;
     OUString   sDataType;
     OUString   sOrder;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 

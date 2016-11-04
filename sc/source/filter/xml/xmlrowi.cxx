@@ -49,7 +49,7 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     sVisibility(GetXMLToken(XML_VISIBLE)),
     nRepeatedRows(1),
     bHasCell(false)
@@ -217,7 +217,7 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       const bool bTempHeader,
                                       const bool bTempGroup ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     nHeaderStartRow(0),
     nGroupStartRow(0),
     bHeader(bTempHeader),

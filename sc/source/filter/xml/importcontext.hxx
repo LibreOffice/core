@@ -22,7 +22,7 @@ class ScXMLImportContext : public SvXMLImportContext
 {
 public:
     ScXMLImportContext(
-        SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName);
+        ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName);
 
 protected:
     ScXMLImport& GetScImport();

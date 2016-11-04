@@ -26,12 +26,10 @@
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 
-class ScXMLContentValidationsContext : public SvXMLImportContext
+class ScXMLContentValidationsContext : public ScXMLImportContext
 {
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
 
     ScXMLContentValidationsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,

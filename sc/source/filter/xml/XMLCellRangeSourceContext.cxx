@@ -39,7 +39,7 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList,
         ScMyImpCellRangeSource* pCellRangeSource ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     if( !xAttrList.is() ) return;
 

@@ -64,7 +64,7 @@ ScXMLDetectiveContext::ScXMLDetectiveContext(
         sal_uInt16 nPrfx,
         const OUString& rLName,
         ScMyImpDetectiveObjVec* pNewDetectiveObjVec ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDetectiveObjVec( pNewDetectiveObjVec )
 {
 }
@@ -106,7 +106,7 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList,
         ScMyImpDetectiveObjVec* pNewDetectiveObjVec ):
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDetectiveObjVec( pNewDetectiveObjVec ),
     aDetectiveObj(),
     bValid( false )
@@ -183,7 +183,7 @@ ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     aDetectiveOp(),
     bHasType( false )
 {

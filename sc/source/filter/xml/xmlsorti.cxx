@@ -38,7 +38,7 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
                                       const css::uno::Reference<
                                       css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDatabaseRangeContext(pTempDatabaseRangeContext),
     sAlgorithm(),
     nUserListIndex(0),
@@ -201,7 +201,7 @@ ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLSortContext* pTempSortContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pSortContext(pTempSortContext),
     sDataType(GetXMLToken(XML_AUTOMATIC)),
     sOrder(GetXMLToken(XML_ASCENDING))

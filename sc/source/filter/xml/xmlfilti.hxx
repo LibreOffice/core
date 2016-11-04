@@ -30,6 +30,7 @@
 
 #include "xmldrani.hxx"
 #include "xmldpimp.hxx"
+#include "importcontext.hxx"
 #include "queryentry.hxx"
 
 #include <stack>
@@ -38,7 +39,7 @@
 class ScXMLImport;
 struct ScQueryParam;
 
-class ScXMLFilterContext : public SvXMLImportContext
+class ScXMLFilterContext : public ScXMLImportContext
 {
     struct ConnStackItem
     {
@@ -55,9 +56,6 @@ class ScXMLFilterContext : public SvXMLImportContext
     bool        bCopyOutputData;
     bool        bConditionSourceRange;
     std::vector<ConnStackItem> maConnStack;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -80,13 +78,10 @@ public:
     bool GetConnection();
 };
 
-class ScXMLAndContext : public SvXMLImportContext
+class ScXMLAndContext : public ScXMLImportContext
 {
     ScQueryParam& mrQueryParam;
     ScXMLFilterContext* pFilterContext;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -105,13 +100,10 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLOrContext : public SvXMLImportContext
+class ScXMLOrContext : public ScXMLImportContext
 {
     ScQueryParam& mrQueryParam;
     ScXMLFilterContext* pFilterContext;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -130,7 +122,7 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLConditionContext : public SvXMLImportContext
+class ScXMLConditionContext : public ScXMLImportContext
 {
     ScQueryParam& mrQueryParam;
     ScXMLFilterContext* pFilterContext;
@@ -141,9 +133,6 @@ class ScXMLConditionContext : public SvXMLImportContext
     OUString sOperator;
     sal_Int32   nField;
     bool        bIsCaseSensitive;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -165,10 +154,8 @@ public:
     void AddSetItem(const ScQueryEntry::Item& rItem);
 };
 
-class ScXMLSetItemContext : public SvXMLImportContext
+class ScXMLSetItemContext : public ScXMLImportContext
 {
-    const ScXMLImport& GetScImport() const;
-    ScXMLImport& GetScImport();
 public:
     ScXMLSetItemContext(ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -187,7 +174,7 @@ public:
 
 // Datapilot (Core)
 
-class ScXMLDPFilterContext : public SvXMLImportContext
+class ScXMLDPFilterContext : public ScXMLImportContext
 {
     ScXMLDataPilotTableContext* pDataPilotTable;
 
@@ -203,9 +190,6 @@ class ScXMLDPFilterContext : public SvXMLImportContext
     bool        bNextConnectionOr:1;
     bool        bConditionSourceRange:1;
     ::std::stack<bool>  aConnectionOrStack;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -255,13 +239,9 @@ public:
     void AddFilterField (const ScQueryEntry& aFilterField);
 };
 
-class ScXMLDPAndContext : public SvXMLImportContext
+class ScXMLDPAndContext : public ScXMLImportContext
 {
     ScXMLDPFilterContext* pFilterContext;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
 
     ScXMLDPAndContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
@@ -278,13 +258,9 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLDPOrContext : public SvXMLImportContext
+class ScXMLDPOrContext : public ScXMLImportContext
 {
     ScXMLDPFilterContext* pFilterContext;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
 
     ScXMLDPOrContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
@@ -301,7 +277,7 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLDPConditionContext : public SvXMLImportContext
+class ScXMLDPConditionContext : public ScXMLImportContext
 {
     ScXMLDPFilterContext* pFilterContext;
 
@@ -310,9 +286,6 @@ class ScXMLDPConditionContext : public SvXMLImportContext
     OUString sOperator;
     sal_Int32   nField;
     bool        bIsCaseSensitive;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
