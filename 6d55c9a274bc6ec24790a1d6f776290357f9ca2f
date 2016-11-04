@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_509e1b57",
+        "filename": "connectivity/source/drivers/firebird/DatabaseMetaData.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-11-04T05:38:54Z",
+      "side": 1,
+      "message": "small nitpick: rather than multiplying by -1, better to just put:\n\n-(xRow-\u003egetShort(10))\n\nMultiplication is slower... I admit modern compilers probably will do this replacement by default when in optimising mode, but still, let\u0027s write the best code we can :)",
+      "range": {
+        "startLine": 1252,
+        "startChar": 67,
+        "endLine": 1252,
+        "endChar": 83
+      },
+      "revId": "6d55c9a274bc6ec24790a1d6f776290357f9ca2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_70ca3751",
+        "filename": "connectivity/source/drivers/firebird/PreparedStatement.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-11-04T05:38:54Z",
+      "side": 1,
+      "message": "typo in function name:\ntoNumericWi*th*outDecimalPlace",
+      "range": {
+        "startLine": 87,
+        "startChar": 33,
+        "endLine": 87,
+        "endChar": 35
+      },
+      "revId": "6d55c9a274bc6ec24790a1d6f776290357f9ca2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_f0b567d0",
+        "filename": "connectivity/source/drivers/firebird/ResultSet.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-11-04T05:38:54Z",
+      "side": 1,
+      "message": "same as before. Just stick a \"-\" in front.",
+      "range": {
+        "startLine": 383,
+        "startChar": 65,
+        "endLine": 383,
+        "endChar": 72
+      },
+      "revId": "6d55c9a274bc6ec24790a1d6f776290357f9ca2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_10bbc3c5",
+        "filename": "connectivity/source/drivers/firebird/ResultSet.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-11-04T05:38:54Z",
+      "side": 1,
+      "message": "Same as before:\nnAllDigits \u003d -nAllDigits",
+      "range": {
+        "startLine": 398,
+        "startChar": 19,
+        "endLine": 398,
+        "endChar": 26
+      },
+      "revId": "6d55c9a274bc6ec24790a1d6f776290357f9ca2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_30b0bfdd",
+        "filename": "connectivity/source/drivers/firebird/ResultSetMetaData.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-11-04T05:38:54Z",
+      "side": 1,
+      "message": "same as before",
+      "range": {
+        "startLine": 234,
+        "startChar": 46,
+        "endLine": 234,
+        "endChar": 53
+      },
+      "revId": "6d55c9a274bc6ec24790a1d6f776290357f9ca2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
