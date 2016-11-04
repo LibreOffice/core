@@ -676,6 +676,36 @@ void Test::testSelectionFunction()
         }
     }
 
+    // Calculate function across selected sheets.
+    clearSheet(m_pDoc, 0);
+    m_pDoc->InsertTab(1, "Test2");
+    m_pDoc->InsertTab(2, "Test3");
+
+    // Set values at B2 and C3 on each sheet.
+    m_pDoc->SetValue(ScAddress(1,1,0), 1.0);
+    m_pDoc->SetValue(ScAddress(2,2,0), 2.0);
+    m_pDoc->SetValue(ScAddress(1,1,1), 4.0);
+    m_pDoc->SetValue(ScAddress(2,2,1), 8.0);
+    m_pDoc->SetValue(ScAddress(1,1,2), 16.0);
+    m_pDoc->SetValue(ScAddress(2,2,2), 32.0);
+
+    // Mark B2 and C3 on first sheet.
+    aRanges.RemoveAll();
+    aRanges.Append(ScRange(1,1,0)); // B2
+    aRanges.Append(ScRange(2,2,0)); // C3
+    aMark.MarkFromRangeList(aRanges, true);
+    // Additionally select third sheet.
+    aMark.SelectTable(2, true);
+
+    {
+        double fRes = 0.0;
+        bool bRes = m_pDoc->GetSelectionFunction( SUBTOTAL_FUNC_SUM, ScAddress(), aMark, fRes);
+        CPPUNIT_ASSERT_MESSAGE("Failed to fetch selection function result.", bRes);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("1+2+16+32=", 51.0, fRes);
+    }
+
+    m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 
