@@ -1303,7 +1303,7 @@ namespace
 } // end of anonymous namespace
 
 FillAttrLB::FillAttrLB(vcl::Window* pParent, WinBits aWB)
-:   ColorListBox(pParent, aWB)
+    : ListBox(pParent, aWB)
 {
 }
 

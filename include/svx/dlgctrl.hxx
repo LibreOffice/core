@@ -245,7 +245,7 @@ public:
 
 /************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FillAttrLB : public ColorListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FillAttrLB : public ListBox
 {
 private:
     BitmapEx        maBitmapEx;
