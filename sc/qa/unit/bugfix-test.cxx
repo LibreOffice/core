@@ -89,6 +89,7 @@ public:
     void testTdf98657();
     void testTdf88821();
     void testTdf88821_2();
+    // void testRhbz1390776();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf64229);
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testTdf98657);
     CPPUNIT_TEST(testTdf88821);
     CPPUNIT_TEST(testTdf88821_2);
+    // CPPUNIT_TEST(testRhbz1390776);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -268,6 +270,18 @@ void ScFiltersTest::testTdf88821_2()
 
     xDocSh->DoClose();
 }
+
+#if 0
+void ScFiltersTest::testRhbz1390776()
+{
+    ScDocShellRef xDocSh = loadDoc("rhbz1390776.", FORMAT_XLS_XML);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0, 27, 0), "SUM(A18:A23)", "Wrong range");
+
+    xDocSh->DoClose();
+}
+#endif
 
 ScFiltersTest::ScFiltersTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )

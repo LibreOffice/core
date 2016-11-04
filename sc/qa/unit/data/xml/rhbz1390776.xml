@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+    <Styles>
+        <Style ss:ID="Default" ss:Name="Normal">
+            <Alignment ss:Vertical="Bottom"/>
+        </Style>
+        <Style ss:ID="black">
+            <Font ss:Color="#000000" />
+        </Style>
+        <Style ss:ID="red">
+            <Font ss:Color="#FF0000" ss:Bold="1"/>
+        </Style>
+        <Style ss:ID="blue">
+            <Font ss:Color="#0000FF" ss:Bold="1"/>
+        </Style>
+    </Styles>
+    <Worksheet ss:Name="Sheet1">
+        <Table ss:ExpandedColumnCount="18" x:FullColumns="1" x:FullRows="1">
+            <Column ss:Index="1" ss:AutoFitWidth="0" ss:Width="150"/>
+            <Column ss:Index="2" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="3" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="4" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="5" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="6" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="7" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="8" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="9" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="10" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="11" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="12" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="13" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="14" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="15" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="16" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="17" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Column ss:Index="18" ss:AutoFitWidth="0" ss:Width="50"/>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+            <Row><Cell><Data ss:Type="Number">1</Data></Cell></Row>
+
+            <Row><Cell ss:Formula="=sum(R[-10]C:R[-5]C"><Data ss:Type="Number">10</Data></Cell></Row>
+        </Table>
+    </Worksheet>
+</Workbook>
