@@ -750,7 +750,7 @@
 #define SID_READONLY_MODE                               ( SID_SVX_START + 930 )
 #define SID_ATTR_ALIGN_HYPHENATION                      ( SID_SVX_START + 931 )
 #define SID_ATTR_NUMBERFORMAT_SOURCE                    ( SID_SVX_START + 932 )
-#define SID_ATTR_AUTO_COLOR_INVALID                     ( SID_SVX_START + 933 )
+
 #define SID_RULER_BORDER_DISTANCE                       ( SID_SVX_START + 935 )
 #define SID_INSERT_DATEFIELD                            ( SID_SVX_START + 936 )
 #define SID_INSERT_TIMEFIELD                            ( SID_SVX_START + 937 )

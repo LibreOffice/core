@@ -1298,15 +1298,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
         case SID_ATTR_CHAR_COLOR2:
         case SID_EXTRUSION_3D_COLOR:
         {
-            SfxPoolItem* pDummy;
-
-            Reference< XDispatchProvider > aDisp( GetFrame()->getController(), UNO_QUERY );
-            SfxQueryStatus aQueryStatus( aDisp,
-                                         SID_ATTR_AUTO_COLOR_INVALID,
-                                         OUString( ".uno:AutoColorInvalid" ));
-            SfxItemState eState = aQueryStatus.QueryState( pDummy );
-            if( (SfxItemState::DEFAULT > eState) || ( SID_EXTRUSION_3D_COLOR == theSlotId ) )
-                mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
+            mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
             break;
         }
         default:
