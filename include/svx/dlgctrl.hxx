@@ -207,6 +207,75 @@ public:
 
 /************************************************************************/
 
+class SAL_WARN_UNUSED SVX_DLLPUBLIC ColorListBox : public ListBox
+{
+    ImpColorList*   pColorList; // separate liste, in case of user data are required from outside
+    Size            aImageSize;
+
+    using Window::ImplInit;
+    SVT_DLLPRIVATE void         ImplInit();
+    SVT_DLLPRIVATE void         ImplDestroyColorEntries();
+
+public:
+                    ColorListBox( vcl::Window* pParent,
+                                  WinBits nWinStyle = WB_BORDER );
+    virtual         ~ColorListBox() override;
+    virtual void    dispose() override;
+
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
+
+    using ListBox::InsertEntry;
+    sal_Int32       InsertEntry( const OUString& rStr,
+                                 sal_Int32  nPos = LISTBOX_APPEND );
+    sal_Int32       InsertEntry( const Color& rColor, const OUString& rStr,
+                                 sal_Int32  nPos = LISTBOX_APPEND );
+    bool            IsAutomaticSelected() { return !GetSelectEntryPos(); }
+    using ListBox::RemoveEntry;
+    void            RemoveEntry( sal_Int32  nPos );
+    void            Clear();
+    void            CopyEntries( const ColorListBox& rBox );
+
+    using ListBox::GetEntryPos;
+    sal_Int32       GetEntryPos( const Color& rColor ) const;
+    Color           GetEntryColor( sal_Int32  nPos ) const;
+
+    void            SelectEntry( const OUString& rStr )
+                        { ListBox::SelectEntry( rStr ); }
+    void            SelectEntry( const Color& rColor );
+    Color           GetSelectEntryColor() const;
+    using ListBox::IsEntrySelected;
+
+    bool            IsEntrySelected(const Color& rColor) const
+    {
+        sal_Int32  nPos = GetEntryPos( rColor );
+        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+            return IsEntryPosSelected( nPos );
+        else
+            return false;
+    }
+
+private:
+                    ColorListBox( const ColorListBox& ) = delete;
+    ColorListBox&   operator =( const ColorListBox& ) = delete;
+};
+
+inline void ColorListBox::SelectEntry( const Color& rColor )
+{
+    sal_Int32  nPos = GetEntryPos( rColor );
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+        ListBox::SelectEntryPos( nPos );
+}
+
+inline Color ColorListBox::GetSelectEntryColor() const
+{
+    sal_Int32  nPos = GetSelectEntryPos();
+    Color aColor;
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+        aColor = GetEntryColor( nPos );
+    return aColor;
+}
+
+
 class SAL_WARN_UNUSED SVX_DLLPUBLIC ColorLB : public ColorListBox
 {
 
