@@ -334,7 +334,7 @@ void PageMarginControl::FillHelpText( const bool bUserCustomValuesAvailable )
     aHelpText = aInner;
     aHelpText += aWide3ValText;
     aHelpText += aOuter;
-    aHelpText += aWide3ValText;
+    aHelpText += aWide1ValText;
     aHelpText += aTop;
     aHelpText += aWide1ValText;
     aHelpText += aBottom;
