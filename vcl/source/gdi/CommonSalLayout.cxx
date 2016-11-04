@@ -340,6 +340,7 @@ static int GetVerticalFlagsForScript(UScriptCode aScript)
         case USCRIPT_KATAKANA:
         case USCRIPT_MEROITIC_CURSIVE:
         case USCRIPT_MEROITIC_HIEROGLYPHS:
+        case USCRIPT_TANGUT:
         case USCRIPT_YI:
             nFlag = GF_ROTL;
             break;
