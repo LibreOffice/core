@@ -47,6 +47,7 @@
 
 #include "appluno.hxx"
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 #include "document.hxx"
 #include "docsh.hxx"
 #include "docuno.hxx"
@@ -232,7 +233,6 @@ protected:
     ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
-
     ScXMLDocContext_Impl( ScXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
@@ -301,12 +301,9 @@ SvXMLImportContext *ScXMLFlatDocContext_Impl::CreateChildContext(
     }
 }
 
-class ScXMLBodyContext_Impl : public SvXMLImportContext
+class ScXMLBodyContext_Impl : public ScXMLImportContext
 {
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
-
     ScXMLBodyContext_Impl( ScXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList );
@@ -320,7 +317,7 @@ public:
 ScXMLBodyContext_Impl::ScXMLBodyContext_Impl( ScXMLImport& rImport,
                                              sal_uInt16 nPrfx, const OUString& rLName,
                                              const uno::Reference< xml::sax::XAttributeList > & /* xAttrList */ ) :
-SvXMLImportContext( rImport, nPrfx, rLName )
+ScXMLImportContext( rImport, nPrfx, rLName )
 {
 }
 

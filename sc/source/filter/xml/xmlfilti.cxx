@@ -45,7 +45,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
                                         const Reference<XAttributeList>& xAttrList,
                                         ScQueryParam& rParam,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     mrQueryParam(rParam),
     pDatabaseRangeContext(pTempDatabaseRangeContext),
     bSkipDuplicates(false),
@@ -201,7 +201,7 @@ ScXMLAndContext::ScXMLAndContext( ScXMLImport& rImport,
                                   const Reference<XAttributeList>& /* xAttrList */,
                                   ScQueryParam& rParam,
                                   ScXMLFilterContext* pTempFilterContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     mrQueryParam(rParam),
     pFilterContext(pTempFilterContext)
 {
@@ -251,7 +251,7 @@ ScXMLOrContext::ScXMLOrContext( ScXMLImport& rImport,
                                 const Reference<css::xml::sax::XAttributeList>& /* xAttrList */,
                                 ScQueryParam& rParam,
                                 ScXMLFilterContext* pTempFilterContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     mrQueryParam(rParam),
     pFilterContext(pTempFilterContext)
 {
@@ -301,7 +301,7 @@ ScXMLConditionContext::ScXMLConditionContext(
     const Reference<XAttributeList>& xAttrList,
     ScQueryParam& rParam,
     ScXMLFilterContext* pTempFilterContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     mrQueryParam(rParam),
     pFilterContext(pTempFilterContext),
     nField(0),
@@ -467,20 +467,10 @@ void ScXMLConditionContext::EndElement()
         rEntry.GetQueryItems().swap(maQueryItems);
 }
 
-const ScXMLImport& ScXMLSetItemContext::GetScImport() const
-{
-    return static_cast<const ScXMLImport&>(GetImport());
-}
-
-ScXMLImport& ScXMLSetItemContext::GetScImport()
-{
-    return static_cast<ScXMLImport&>(GetImport());
-}
-
 ScXMLSetItemContext::ScXMLSetItemContext(
     ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList, ScXMLConditionContext& rParent) :
-    SvXMLImportContext(rImport, nPrfx, rLName)
+    ScXMLImportContext(rImport, nPrfx, rLName)
 {
     sal_Int32 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterSetItemAttrTokenMap();
@@ -529,7 +519,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDataPilotTableContext* pTempDataPilotTableContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDataPilotTable(pTempDataPilotTableContext),
     aFilterFields(),
     eSearchType(utl::SearchParam::SRCH_NORMAL),
@@ -653,7 +643,7 @@ ScXMLDPAndContext::ScXMLDPAndContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */,
                                       ScXMLDPFilterContext* pTempFilterContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     pFilterContext = pTempFilterContext;
     pFilterContext->OpenConnection(false);
@@ -701,7 +691,7 @@ ScXMLDPOrContext::ScXMLDPOrContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */,
                                       ScXMLDPFilterContext* pTempFilterContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pFilterContext(pTempFilterContext)
 {
     pFilterContext->OpenConnection(true);
@@ -750,7 +740,7 @@ ScXMLDPConditionContext::ScXMLDPConditionContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDPFilterContext* pTempFilterContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pFilterContext(pTempFilterContext),
     sDataType(GetXMLToken(XML_TEXT)),
     nField(0),

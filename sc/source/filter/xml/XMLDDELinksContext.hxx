@@ -22,12 +22,11 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 #include <list>
 
-class ScXMLDDELinksContext : public SvXMLImportContext
+class ScXMLDDELinksContext : public ScXMLImportContext
 {
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDELinksContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -52,7 +51,7 @@ struct ScDDELinkCell
 
 typedef std::list<ScDDELinkCell> ScDDELinkCells;
 
-class ScXMLDDELinkContext : public SvXMLImportContext
+class ScXMLDDELinkContext : public ScXMLImportContext
 {
     ScDDELinkCells  aDDELinkTable;
     ScDDELinkCells  aDDELinkRow;
@@ -64,8 +63,6 @@ class ScXMLDDELinkContext : public SvXMLImportContext
     sal_Int32       nRows;
     sal_uInt8       nMode;
 
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDELinkContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -90,12 +87,10 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLDDESourceContext : public SvXMLImportContext
+class ScXMLDDESourceContext : public ScXMLImportContext
 {
     ScXMLDDELinkContext* pDDELink;
 
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDESourceContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -111,12 +106,10 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLDDETableContext : public SvXMLImportContext
+class ScXMLDDETableContext : public ScXMLImportContext
 {
     ScXMLDDELinkContext* pDDELink;
 
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDETableContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -132,12 +125,10 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLDDEColumnContext : public SvXMLImportContext
+class ScXMLDDEColumnContext : public ScXMLImportContext
 {
     ScXMLDDELinkContext* pDDELink;
 
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDEColumnContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -153,13 +144,11 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLDDERowContext : public SvXMLImportContext
+class ScXMLDDERowContext : public ScXMLImportContext
 {
     ScXMLDDELinkContext*    pDDELink;
     sal_Int32               nRows;
 
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDERowContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -175,7 +164,7 @@ public:
     virtual void EndElement() override;
 };
 
-class ScXMLDDECellContext : public SvXMLImportContext
+class ScXMLDDECellContext : public ScXMLImportContext
 {
     OUString        sValue;
     double          fValue;
@@ -186,8 +175,6 @@ class ScXMLDDECellContext : public SvXMLImportContext
 
     ScXMLDDELinkContext* pDDELink;
 
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDECellContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,

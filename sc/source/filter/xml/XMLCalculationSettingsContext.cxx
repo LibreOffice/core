@@ -36,7 +36,7 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
                                       const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     fIterationEpsilon(0.001),
     nIterationCount(100),
     nYear2000(1930),
@@ -161,7 +161,7 @@ ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLCalculationSettingsContext* pCalcSet) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -207,7 +207,7 @@ ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLCalculationSettingsContext* pCalcSet) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; ++i )

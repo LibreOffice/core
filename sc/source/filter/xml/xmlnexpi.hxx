@@ -23,17 +23,15 @@
 #include <xmloff/xmlimp.hxx>
 #include "address.hxx"
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 
 #include <memory>
 
 struct ScMyNamedExpression;
 class ScRangeName;
 
-class ScXMLNamedExpressionsContext : public SvXMLImportContext
+class ScXMLNamedExpressionsContext : public ScXMLImportContext
 {
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
 
     class Inserter
@@ -88,11 +86,8 @@ private:
     std::shared_ptr<Inserter> mpInserter;
 };
 
-class ScXMLNamedRangeContext : public SvXMLImportContext
+class ScXMLNamedRangeContext : public ScXMLImportContext
 {
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
 
     ScXMLNamedRangeContext(
@@ -112,11 +107,8 @@ private:
     ScXMLNamedExpressionsContext::Inserter* mpInserter;
 };
 
-class ScXMLNamedExpressionContext : public SvXMLImportContext
+class ScXMLNamedExpressionContext : public ScXMLImportContext
 {
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
 
     ScXMLNamedExpressionContext(

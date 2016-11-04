@@ -21,13 +21,10 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 
-class ScXMLLabelRangesContext : public SvXMLImportContext
+class ScXMLLabelRangesContext : public ScXMLImportContext
 {
-private:
-    const ScXMLImport&          GetScImport() const     { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport&                GetScImport()           { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
                                 ScXMLLabelRangesContext(
                                     ScXMLImport& rImport,
@@ -45,15 +42,12 @@ public:
     virtual void                EndElement() override;
 };
 
-class ScXMLLabelRangeContext : public SvXMLImportContext
+class ScXMLLabelRangeContext : public ScXMLImportContext
 {
 private:
-    OUString             sLabelRangeStr;
-    OUString             sDataRangeStr;
+    OUString                    sLabelRangeStr;
+    OUString                    sDataRangeStr;
     bool                        bColumnOrientation;
-
-    const ScXMLImport&          GetScImport() const     { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport&                GetScImport()           { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
                                 ScXMLLabelRangeContext(

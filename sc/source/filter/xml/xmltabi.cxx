@@ -138,7 +138,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     nStartOffset(-1),
     bStartFormPage(false),
     bPrintEntireSheet(true)
@@ -420,15 +420,10 @@ void ScXMLTableContext::EndElement()
     }
 }
 
-ScXMLImport& ScXMLTableProtectionContext::GetScImport()
-{
-    return static_cast<ScXMLImport&>(GetImport());
-}
-
 ScXMLTableProtectionContext::ScXMLTableProtectionContext(
     ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList ) :
-    SvXMLImportContext( rImport, nPrefix, rLName )
+    ScXMLImportContext( rImport, nPrefix, rLName )
 {
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableProtectionAttrTokenMap();
     bool bSelectProtectedCells = false;

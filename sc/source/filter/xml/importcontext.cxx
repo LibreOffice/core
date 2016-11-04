@@ -10,7 +10,7 @@
 #include "importcontext.hxx"
 #include "xmlimprt.hxx"
 
-ScXMLImportContext::ScXMLImportContext(SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName) :
+ScXMLImportContext::ScXMLImportContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName) :
     SvXMLImportContext(rImport, nPrefix, rLocalName)
 {
 }

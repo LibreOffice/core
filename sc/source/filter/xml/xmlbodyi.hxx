@@ -23,12 +23,13 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 
 #include "tabprotection.hxx"
 
 class ScXMLChangeTrackingImportHelper;
 
-class ScXMLBodyContext : public SvXMLImportContext
+class ScXMLBodyContext : public ScXMLImportContext
 {
     OUString   sPassword;
     ScPasswordHash  meHash1;
@@ -37,8 +38,6 @@ class ScXMLBodyContext : public SvXMLImportContext
     bool            bHadCalculationSettings;
 
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLBodyContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,

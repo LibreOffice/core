@@ -62,7 +62,7 @@ ScXMLDatabaseRangesContext::ScXMLDatabaseRangesContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     // has no attributes
     rImport.LockSolarMutex();
@@ -104,7 +104,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     mpQueryParam(new ScQueryParam),
     sDatabaseRangeName(STR_DB_LOCAL_NONAME),
     aSortSequence(),
@@ -487,7 +487,7 @@ ScXMLSourceSQLContext::ScXMLSourceSQLContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -558,7 +558,7 @@ ScXMLSourceTableContext::ScXMLSourceTableContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -624,7 +624,7 @@ ScXMLSourceQueryContext::ScXMLSourceQueryContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -690,7 +690,7 @@ ScXMLConResContext::ScXMLConResContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDatabaseRangeContext( pTempDatabaseRangeContext )
 {
     OUString sConRes;
@@ -733,7 +733,7 @@ ScXMLSubTotalRulesContext::ScXMLSubTotalRulesContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -809,7 +809,7 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
     pDatabaseRangeContext->SetSubTotalsSortGroups(true);
@@ -886,7 +886,7 @@ ScXMLSubTotalRuleContext::ScXMLSubTotalRuleContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -948,7 +948,7 @@ ScXMLSubTotalFieldContext::ScXMLSubTotalFieldContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLSubTotalRuleContext* pTempSubTotalRuleContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pSubTotalRuleContext(pTempSubTotalRuleContext)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;

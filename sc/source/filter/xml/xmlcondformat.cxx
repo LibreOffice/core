@@ -22,7 +22,7 @@
 
 ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName):
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     GetScImport().SetNewCondFormatData();
     GetScImport().GetDocument()->SetCondFormList(new ScConditionalFormatList(), GetScImport().GetTables().GetCurrentSheet());
@@ -58,7 +58,7 @@ void ScXMLConditionalFormatsContext::EndElement()
 
 ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList):
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     OUString sRange;
 
@@ -138,7 +138,7 @@ ScXMLConditionalFormatContext::~ScXMLConditionalFormatContext()
 
 ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName, ScConditionalFormat* pFormat):
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pColorScaleFormat(nullptr)
 {
     pColorScaleFormat = new ScColorScaleFormat(GetScImport().GetDocument());
@@ -167,7 +167,7 @@ SvXMLImportContext* ScXMLColorScaleFormatContext::CreateChildContext( sal_uInt16
 ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat):
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     mpDataBarFormat(nullptr),
     mpFormatData(nullptr)
 {
@@ -322,7 +322,7 @@ ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_u
                         const OUString& rLName,
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat):
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     OUString aIconSetType, sShowValue;
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
@@ -566,7 +566,7 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
                         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat ):
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     OUString sExpression;
     OUString sStyle;
@@ -641,7 +641,7 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
                         const OUString& rLName,
                         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleFormat* pFormat):
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     mpFormatEntry( nullptr )
 {
     double nVal = 0;
@@ -693,7 +693,7 @@ ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport, 
                         const OUString& rLName,
                         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleEntry*& pColorScaleEntry):
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     OUString sVal;
     OUString sType;
@@ -770,7 +770,7 @@ ScXMLDateContext::ScXMLDateContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
                         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat ):
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     OUString sDateType, sStyle;
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);

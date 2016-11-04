@@ -44,7 +44,7 @@ ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     sVisibility(GetXMLToken(XML_VISIBLE))
 {
     nColCount = 1;
@@ -158,7 +158,7 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       const bool bTempHeader, const bool bTempGroup) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     nHeaderStartCol(0),
     nHeaderEndCol(0),
     nGroupStartCol(0),

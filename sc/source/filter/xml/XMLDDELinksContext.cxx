@@ -35,7 +35,7 @@ ScXMLDDELinksContext::ScXMLDDELinksContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     // here are no attributes
     rImport.LockSolarMutex();
@@ -69,7 +69,7 @@ ScXMLDDELinkContext::ScXMLDDELinkContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     aDDELinkTable(),
     aDDELinkRow(),
     sApplication(),
@@ -193,7 +193,7 @@ ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDDELink(pTempDDELink)
 {
     if( !xAttrList.is() ) return;
@@ -251,7 +251,7 @@ ScXMLDDETableContext::ScXMLDDETableContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */,
                                       ScXMLDDELinkContext* pTempDDELink) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDDELink(pTempDDELink)
 {
     // here are no attributes
@@ -290,7 +290,7 @@ ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDDELink(pTempDDELink)
 {
     if( !xAttrList.is() ) return;
@@ -336,7 +336,7 @@ ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     pDDELink(pTempDDELink),
     nRows(1)
 {
@@ -390,7 +390,7 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     sValue(),
     fValue(),
     nCells(1),

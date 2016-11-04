@@ -22,14 +22,12 @@
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 
-class ScXMLContentContext : public SvXMLImportContext
+class ScXMLContentContext : public ScXMLImportContext
 {
     OUStringBuffer sOUText;
     OUStringBuffer& sValue;
-
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
