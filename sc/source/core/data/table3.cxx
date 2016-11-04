@@ -3404,7 +3404,20 @@ sal_Int32 ScTable::GetMaxNumberStringLen(
 void ScTable::UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& rMark )
 {
     ScRangeList aRanges = rMark.GetMarkedRangesForTab( nTab );
-    for (SCCOL nCol = 0; nCol <= MAXCOL && !rData.bError; ++nCol)
+    ScRange aMarkArea( ScAddress::UNINITIALIZED );
+    if (rMark.IsMultiMarked())
+        rMark.GetMultiMarkArea( aMarkArea );
+    else if (rMark.IsMarked())
+        rMark.GetMarkArea( aMarkArea );
+    else
+    {
+        assert(!"ScTable::UpdateSelectionFunction - called without anything marked");
+        aMarkArea.aStart.SetCol(0);
+        aMarkArea.aEnd.SetCol(MAXCOL);
+    }
+    const SCCOL nStartCol = aMarkArea.aStart.Col();
+    const SCCOL nEndCol = aMarkArea.aEnd.Col();
+    for (SCCOL nCol = nStartCol; nCol <= nEndCol && !rData.bError; ++nCol)
     {
         if (pColFlags && ColHidden(nCol))
             continue;
