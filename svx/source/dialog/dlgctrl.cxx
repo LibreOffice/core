@@ -1127,7 +1127,7 @@ public:
                 explicit ImplColorListData( const Color& rColor ) : aColor( rColor ) { bColor = true; }
 };
 
-void ColorListBox::ImplInit()
+void ColorLB::ImplInit()
 {
     pColorList = new ImpColorList();
 
@@ -1137,26 +1137,26 @@ void ColorListBox::ImplInit()
     SetUserItemSize( aImageSize );
 }
 
-void ColorListBox::ImplDestroyColorEntries()
+void ColorLB::ImplDestroyColorEntries()
 {
     for ( size_t n = pColorList->size(); n; )
         delete (*pColorList)[ --n ];
     pColorList->clear();
 }
 
-ColorListBox::ColorListBox( vcl::Window* pParent, WinBits nWinStyle ) :
+ColorLB::ColorLB( vcl::Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle )
 {
     ImplInit();
     SetEdgeBlending(true);
 }
 
-ColorListBox::~ColorListBox()
+ColorLB::~ColorLB()
 {
     disposeOnce();
 }
 
-void ColorListBox::dispose()
+void ColorLB::dispose()
 {
     if ( pColorList )
     {
@@ -1167,7 +1167,7 @@ void ColorListBox::dispose()
     ListBox::dispose();
 }
 
-sal_Int32 ColorListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
+sal_Int32 ColorLB::InsertEntry( const OUString& rStr, sal_Int32 nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
     if ( nPos != LISTBOX_ERROR )
@@ -1188,7 +1188,7 @@ sal_Int32 ColorListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
     return nPos;
 }
 
-sal_Int32 ColorListBox::InsertEntry( const Color& rColor, const OUString& rStr,
+sal_Int32 ColorLB::InsertEntry( const Color& rColor, const OUString& rStr,
                                 sal_Int32 nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
@@ -1210,7 +1210,7 @@ sal_Int32 ColorListBox::InsertEntry( const Color& rColor, const OUString& rStr,
     return nPos;
 }
 
-void ColorListBox::RemoveEntry( sal_Int32 nPos )
+void ColorLB::RemoveEntry( sal_Int32 nPos )
 {
     ListBox::RemoveEntry( nPos );
     if ( 0 <= nPos && static_cast<size_t>(nPos) < pColorList->size() )
@@ -1222,13 +1222,13 @@ void ColorListBox::RemoveEntry( sal_Int32 nPos )
     }
 }
 
-void ColorListBox::Clear()
+void ColorLB::Clear()
 {
     ImplDestroyColorEntries();
     ListBox::Clear();
 }
 
-void ColorListBox::CopyEntries( const ColorListBox& rBox )
+void ColorLB::CopyEntries( const ColorLB& rBox )
 {
     // Liste leeren
     ImplDestroyColorEntries();
@@ -1255,7 +1255,7 @@ void ColorListBox::CopyEntries( const ColorListBox& rBox )
     }
 }
 
-sal_Int32 ColorListBox::GetEntryPos( const Color& rColor ) const
+sal_Int32 ColorLB::GetEntryPos( const Color& rColor ) const
 {
     for( sal_Int32 n = (sal_Int32) pColorList->size(); n; )
     {
@@ -1266,7 +1266,7 @@ sal_Int32 ColorListBox::GetEntryPos( const Color& rColor ) const
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-Color ColorListBox::GetEntryColor( sal_Int32 nPos ) const
+Color ColorLB::GetEntryColor( sal_Int32 nPos ) const
 {
     Color aColor;
     ImplColorListData* pData = ( 0 <= nPos && static_cast<size_t>(nPos) < pColorList->size() ) ?
@@ -1276,7 +1276,7 @@ Color ColorListBox::GetEntryColor( sal_Int32 nPos ) const
     return aColor;
 }
 
-void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
+void ColorLB::UserDraw( const UserDrawEvent& rUDEvt )
 {
     size_t nPos = rUDEvt.GetItemId();
     ImplColorListData* pData = ( nPos < pColorList->size() ) ? (*pColorList)[ nPos ] : nullptr;

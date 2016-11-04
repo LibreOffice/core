@@ -207,7 +207,7 @@ public:
 
 /************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC ColorListBox : public ListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC ColorLB : public ListBox
 {
     ImpColorList*   pColorList; // separate liste, in case of user data are required from outside
     Size            aImageSize;
@@ -217,9 +217,9 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC ColorListBox : public ListBox
     SVT_DLLPRIVATE void         ImplDestroyColorEntries();
 
 public:
-                    ColorListBox( vcl::Window* pParent,
+                    ColorLB( vcl::Window* pParent,
                                   WinBits nWinStyle = WB_BORDER );
-    virtual         ~ColorListBox() override;
+    virtual         ~ColorLB() override;
     virtual void    dispose() override;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
@@ -233,7 +233,7 @@ public:
     using ListBox::RemoveEntry;
     void            RemoveEntry( sal_Int32  nPos );
     void            Clear();
-    void            CopyEntries( const ColorListBox& rBox );
+    void            CopyEntries( const ColorLB& rBox );
 
     using ListBox::GetEntryPos;
     sal_Int32       GetEntryPos( const Color& rColor ) const;
@@ -241,8 +241,23 @@ public:
 
     void            SelectEntry( const OUString& rStr )
                         { ListBox::SelectEntry( rStr ); }
-    void            SelectEntry( const Color& rColor );
-    Color           GetSelectEntryColor() const;
+
+    void SelectEntry( const Color& rColor )
+    {
+        sal_Int32  nPos = GetEntryPos( rColor );
+        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+            ListBox::SelectEntryPos( nPos );
+    }
+
+    Color GetSelectEntryColor() const
+    {
+        sal_Int32  nPos = GetSelectEntryPos();
+        Color aColor;
+        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+            aColor = GetEntryColor( nPos );
+        return aColor;
+    }
+
     using ListBox::IsEntrySelected;
 
     bool            IsEntrySelected(const Color& rColor) const
@@ -254,38 +269,14 @@ public:
             return false;
     }
 
-private:
-                    ColorListBox( const ColorListBox& ) = delete;
-    ColorListBox&   operator =( const ColorListBox& ) = delete;
-};
-
-inline void ColorListBox::SelectEntry( const Color& rColor )
-{
-    sal_Int32  nPos = GetEntryPos( rColor );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        ListBox::SelectEntryPos( nPos );
-}
-
-inline Color ColorListBox::GetSelectEntryColor() const
-{
-    sal_Int32  nPos = GetSelectEntryPos();
-    Color aColor;
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        aColor = GetEntryColor( nPos );
-    return aColor;
-}
-
-
-class SAL_WARN_UNUSED SVX_DLLPUBLIC ColorLB : public ColorListBox
-{
-
-public:
-         ColorLB( vcl::Window* pParent, WinBits aWB ) : ColorListBox( pParent, aWB ) {}
-
     void Fill( const XColorListRef &pTab );
 
     void Append( const XColorEntry& rEntry );
     void Modify( const XColorEntry& rEntry, sal_Int32 nPos );
+
+private:
+                    ColorLB( const ColorLB& ) = delete;
+    ColorLB&   operator =( const ColorLB& ) = delete;
 };
 
 /************************************************************************/
