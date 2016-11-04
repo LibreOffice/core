@@ -76,7 +76,6 @@ public:
 
     bool VisitCXXMethodDecl( const CXXMethodDecl* decl );
 private:
-    std::string fullyQualifiedName(const FunctionDecl* functionDecl);
     std::string toString(SourceLocation loc);
 };
 
@@ -95,42 +94,6 @@ std::string niceName(const CXXMethodDecl* functionDecl)
         s += "const";
     }
     return s;
-}
-
-std::string UnnecessaryVirtual::fullyQualifiedName(const FunctionDecl* functionDecl)
-{
-    if (functionDecl->getInstantiatedFromMemberFunction())
-        functionDecl = functionDecl->getInstantiatedFromMemberFunction();
-    else if (functionDecl->getClassScopeSpecializationPattern())
-        functionDecl = functionDecl->getClassScopeSpecializationPattern();
-// workaround clang-3.5 issue
-#if CLANG_VERSION >= 30600
-    else if (functionDecl->getTemplateInstantiationPattern())
-        functionDecl = functionDecl->getTemplateInstantiationPattern();
-#endif
-
-    std::string ret = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
-    ret += " ";
-    if (isa<CXXMethodDecl>(functionDecl)) {
-        const CXXRecordDecl* recordDecl = dyn_cast<CXXMethodDecl>(functionDecl)->getParent();
-        ret += recordDecl->getQualifiedNameAsString();
-        ret += "::";
-    }
-    ret += functionDecl->getNameAsString() + "(";
-    bool bFirst = true;
-    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
-        if (bFirst)
-            bFirst = false;
-        else
-            ret += ",";
-        ret += pParmVarDecl->getType().getCanonicalType().getAsString();
-    }
-    ret += ")";
-    if (isa<CXXMethodDecl>(functionDecl) && dyn_cast<CXXMethodDecl>(functionDecl)->isConst()) {
-        ret += " const";
-    }
-
-    return ret;
 }
 
 bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* methodDecl )
