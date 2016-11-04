@@ -1063,7 +1063,7 @@ String RID_XWIDESLASHY_HELP
 {
     Text [ en-US ] = "Division (wideslash)" ;
 };
-String RID_XWIDEBSLASHY     { Text = "<?> widebslash <?> " ; };
+String RID_XWIDEBSLASHY     { Text = "{<?>} widebslash {<?>} " ; };
 String RID_XWIDEBSLASHY_HELP
 {
     Text [ en-US ] = "Division (counter wideslash)" ;
