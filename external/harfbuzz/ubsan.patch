@@ -1,3 +1,14 @@
+--- src/hb-ot-font.cc
++++ src/hb-ot-font.cc
+@@ -125,7 +125,7 @@
+     if (glyph >= this->num_advances)
+       glyph = this->num_advances - 1;
+ 
+-    return this->table->longMetric[glyph].advance;
++    return static_cast<OT::LongMetric const *>(this->table->longMetric)[glyph].advance;
+   }
+ };
+ 
 --- src/hb-ot-map-private.hh
 +++ src/hb-ot-map-private.hh
 @@ -52,8 +52,11 @@
