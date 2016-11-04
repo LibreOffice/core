@@ -88,21 +88,6 @@ ImageList::ImageList(const std::vector< OUString >& rNameVector,
     }
 }
 
-ImageList::ImageList( const ImageList& rImageList )
-    : mpImplData(rImageList.mpImplData)
-{
-}
-
-ImageList::ImageList( ImageList&& rImageList )
-    : mpImplData(rImageList.mpImplData)
-{
-    rImageList.mpImplData.reset();
-}
-
-ImageList::~ImageList()
-{
-}
-
 void ImageList::ImplInit( sal_uInt16 nItems, const Size &rSize )
 {
     mpImplData.reset(new ImplImageList);
@@ -371,19 +356,6 @@ Size ImageList::GetImageSize() const
         }
     }
     return aRet;
-}
-
-ImageList& ImageList::operator=( const ImageList& rImageList )
-{
-    mpImplData = rImageList.mpImplData;
-    return *this;
-}
-
-ImageList& ImageList::operator=( ImageList&& rImageList )
-{
-    mpImplData = rImageList.mpImplData;
-    rImageList.mpImplData = nullptr;
-    return *this;
 }
 
 bool ImageList::operator==( const ImageList& rImageList ) const

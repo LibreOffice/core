@@ -46,14 +46,12 @@ class VCL_DLLPUBLIC Image
 public:
                     Image();
                     explicit Image( const ResId& rResId );
-                    Image( const Image& rImage );
                     explicit Image( const BitmapEx& rBitmapEx );
                     explicit Image( const Bitmap& rBitmap );
                     Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap );
                     Image( const Bitmap& rBitmap, const Color& rColor );
                     explicit Image( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
                     explicit Image( const OUString &rPNGFileUrl );
-                    ~Image();
 
     Size            GetSizePixel() const;
 
@@ -61,8 +59,6 @@ public:
     css::uno::Reference< css::graphic::XGraphic > GetXGraphic() const;
 
     bool            operator!() const { return !mpImplData; }
-    Image&          operator=( const Image& rImage );
-    Image&          operator=( Image&& rImage );
     bool            operator==( const Image& rImage ) const;
     bool            operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }
 
@@ -82,9 +78,6 @@ public:
                     explicit ImageList( const ResId& rResId );
                     ImageList( const std::vector<OUString>& rNameVector,
                                const OUString& rPrefix);
-                    ImageList( const ImageList& rImageList );
-                    ImageList( ImageList&& rImageList );
-                    ~ImageList();
 
     void                    InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
                                    const std::vector< OUString > &rNameVector );
@@ -116,8 +109,6 @@ public:
     OUString        GetImageName( sal_uInt16 nPos ) const;
     void            GetImageNames( ::std::vector< OUString >& rNames ) const;
 
-    ImageList&      operator=( const ImageList& rImageList );
-    ImageList&      operator=( ImageList&& rImageList );
     bool            operator==( const ImageList& rImageList ) const;
     bool            operator!=( const ImageList& rImageList ) const { return !(ImageList::operator==( rImageList )); }
 
