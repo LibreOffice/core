@@ -36,7 +36,7 @@
 #include "cairo_spritehelper.hxx"
 
 using namespace ::cairo;
-using namespace ::com::sun::star;
+    using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
