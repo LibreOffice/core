@@ -1855,14 +1855,67 @@ PDFWriterImpl::~PDFWriterImpl()
 void PDFWriterImpl::setupDocInfo()
 {
     std::vector< sal_uInt8 > aId;
+    m_aCreationDateString = PDFWriter::GetDateTime();
     computeDocumentIdentifier( aId, m_aContext.DocumentInfo, m_aCreationDateString, m_aCreationMetaDateString );
     if( m_aContext.Encryption.DocumentIdentifier.empty() )
         m_aContext.Encryption.DocumentIdentifier = aId;
 }
 
+OString PDFWriter::GetDateTime()
+{
+    OStringBuffer aRet;
+
+    TimeValue aTVal, aGMT;
+    oslDateTime aDT;
+    osl_getSystemTime(&aGMT);
+    osl_getLocalTimeFromSystemTime(&aGMT, &aTVal);
+    osl_getDateTimeFromTimeValue(&aTVal, &aDT);
+    aRet.append("D:");
+    aRet.append((sal_Char)('0' + ((aDT.Year / 1000) % 10)));
+    aRet.append((sal_Char)('0' + ((aDT.Year / 100) % 10)));
+    aRet.append((sal_Char)('0' + ((aDT.Year / 10) % 10)));
+    aRet.append((sal_Char)('0' + (aDT.Year % 10)));
+    aRet.append((sal_Char)('0' + ((aDT.Month / 10) % 10)));
+    aRet.append((sal_Char)('0' + (aDT.Month % 10)));
+    aRet.append((sal_Char)('0' + ((aDT.Day / 10) % 10)));
+    aRet.append((sal_Char)('0' + (aDT.Day % 10)));
+    aRet.append((sal_Char)('0' + ((aDT.Hours / 10) % 10)));
+    aRet.append((sal_Char)('0' + (aDT.Hours % 10)));
+    aRet.append((sal_Char)('0' + ((aDT.Minutes / 10) % 10)));
+    aRet.append((sal_Char)('0' + (aDT.Minutes % 10)));
+    aRet.append((sal_Char)('0' + ((aDT.Seconds / 10) % 10)));
+    aRet.append((sal_Char)('0' + (aDT.Seconds % 10)));
+
+    sal_uInt32 nDelta = 0;
+    if (aGMT.Seconds > aTVal.Seconds)
+    {
+        aRet.append("-");
+        nDelta = aGMT.Seconds-aTVal.Seconds;
+    }
+    else if (aGMT.Seconds < aTVal.Seconds)
+    {
+        aRet.append("+");
+        nDelta = aTVal.Seconds-aGMT.Seconds;
+    }
+    else
+        aRet.append("Z");
+
+    if (nDelta)
+    {
+        aRet.append((sal_Char)('0' + ((nDelta / 36000) % 10)));
+        aRet.append((sal_Char)('0' + ((nDelta / 3600) % 10)));
+        aRet.append("'");
+        aRet.append((sal_Char)('0' + ((nDelta / 600) % 6)));
+        aRet.append((sal_Char)('0' + ((nDelta / 60) % 10)));
+    }
+    aRet.append( "'" );
+
+    return aRet.makeStringAndClear();
+}
+
 void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIdentifier,
                                                const vcl::PDFWriter::PDFDocInfo& i_rDocInfo,
-                                               OString& o_rCString1,
+                                               const OString& i_rCString1,
                                                OString& o_rCString2
                                                )
 {
@@ -1889,22 +1942,7 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     osl_getSystemTime( &aGMT );
     osl_getLocalTimeFromSystemTime( &aGMT, &aTVal );
     osl_getDateTimeFromTimeValue( &aTVal, &aDT );
-    OStringBuffer aCreationDateString(64), aCreationMetaDateString(64);
-    aCreationDateString.append( "D:" );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Year/1000)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Year/100)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Year/10)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Year)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Month/10)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Month)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Day/10)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Day)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Hours/10)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Hours)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Minutes/10)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Minutes)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Seconds/10)%10)) );
-    aCreationDateString.append( (sal_Char)('0' + ((aDT.Seconds)%10)) );
+    OStringBuffer aCreationMetaDateString(64);
 
     //--> i59651, we fill the Metadata date string as well, if PDF/A is requested
     // according to ISO 19005-1:2005 6.7.3 the date is corrected for
@@ -1935,41 +1973,30 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     sal_uInt32 nDelta = 0;
     if( aGMT.Seconds > aTVal.Seconds )
     {
-        aCreationDateString.append( "-" );
         nDelta = aGMT.Seconds-aTVal.Seconds;
         aCreationMetaDateString.append( "-" );
     }
     else if( aGMT.Seconds < aTVal.Seconds )
     {
-        aCreationDateString.append( "+" );
         nDelta = aTVal.Seconds-aGMT.Seconds;
         aCreationMetaDateString.append( "+" );
     }
     else
     {
-        aCreationDateString.append( "Z" );
         aCreationMetaDateString.append( "Z" );
 
     }
     if( nDelta )
     {
-        aCreationDateString.append( (sal_Char)('0' + ((nDelta/36000)%10)) );
-        aCreationDateString.append( (sal_Char)('0' + ((nDelta/3600)%10)) );
-        aCreationDateString.append( "'" );
-        aCreationDateString.append( (sal_Char)('0' + ((nDelta/600)%6)) );
-        aCreationDateString.append( (sal_Char)('0' + ((nDelta/60)%10)) );
-
         aCreationMetaDateString.append( (sal_Char)('0' + ((nDelta/36000)%10)) );
         aCreationMetaDateString.append( (sal_Char)('0' + ((nDelta/3600)%10)) );
         aCreationMetaDateString.append( ":" );
         aCreationMetaDateString.append( (sal_Char)('0' + ((nDelta/600)%6)) );
         aCreationMetaDateString.append( (sal_Char)('0' + ((nDelta/60)%10)) );
     }
-    aCreationDateString.append( "'" );
-    aID.append( aCreationDateString.getStr(), aCreationDateString.getLength() );
+    aID.append( i_rCString1.getStr(), i_rCString1.getLength() );
 
     aInfoValuesOut = aID.makeStringAndClear();
-    o_rCString1 = aCreationDateString.makeStringAndClear();
     o_rCString2 = aCreationMetaDateString.makeStringAndClear();
 
     rtlDigest aDigest = rtl_digest_createMD5();
