@@ -59,7 +59,6 @@
 #include <unotest/assertion_traits.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <com/sun/star/text/GraphicCrop.hpp>
 #include <swtypes.hxx>
 #include <drawdoc.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
