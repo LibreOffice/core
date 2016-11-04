@@ -526,7 +526,6 @@ void SvxShadowTabPage::PageCreated(const SfxAllItemSet& aSet)
         SetPageType((PageType) pPageTypeItem->GetValue());
     if (pDlgTypeItem)
         SetDlgType(pDlgTypeItem->GetValue());
-    Construct();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
