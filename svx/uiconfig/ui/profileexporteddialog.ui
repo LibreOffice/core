@@ -2,10 +2,10 @@
 <!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkDialog" id="SafeModeQueryDialog">
+  <object class="GtkDialog" id="ProfileExportedDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Enter Safe Mode</property>
+    <property name="title" translatable="yes">Profile exported</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
