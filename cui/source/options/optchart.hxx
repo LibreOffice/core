@@ -29,11 +29,11 @@
 
 #include "cfgchart.hxx"
 
+typedef std::vector<Color> ImpColorList;
 class ColorLB;
 
 class SvxDefaultColorOptPage : public SfxTabPage
 {
-
 private:
     VclPtr<ColorLB>                m_pLbChartColors;
     VclPtr<ValueSet>               m_pValSetColorBox;

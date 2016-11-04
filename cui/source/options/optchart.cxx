@@ -28,12 +28,7 @@
 
 class ColorLB : public ListBox
 {
-    ImpColorList*   pColorList; // separate liste, in case of user data are required from outside
-    Size            aImageSize;
-
-    using Window::ImplInit;
-    SVT_DLLPRIVATE void         ImplInit();
-    SVT_DLLPRIVATE void         ImplDestroyColorEntries();
+    ImpColorList  aColorList; // separate liste, in case of user data are required from outside
 
 public:
     ColorLB(vcl::Window* pParent, WinBits nWinStyle = WB_BORDER);
@@ -76,35 +71,9 @@ VCL_BUILDER_DECL_FACTORY(ColorLB)
     rRet = pListBox;
 }
 
-class ImplColorListData
-{
-public:
-    Color       aColor;
-    bool        bColor;
-
-                ImplColorListData() : aColor( COL_BLACK ) { bColor = false; }
-                explicit ImplColorListData( const Color& rColor ) : aColor( rColor ) { bColor = true; }
-};
-
-void ColorLB::ImplInit()
-{
-    pColorList = new ImpColorList();
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    aImageSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
-}
-
-void ColorLB::ImplDestroyColorEntries()
-{
-    for ( size_t n = pColorList->size(); n; )
-        delete (*pColorList)[ --n ];
-    pColorList->clear();
-}
-
 ColorLB::ColorLB( vcl::Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle )
 {
-    ImplInit();
     SetEdgeBlending(true);
 }
 
@@ -115,12 +84,6 @@ ColorLB::~ColorLB()
 
 void ColorLB::dispose()
 {
-    if ( pColorList )
-    {
-        ImplDestroyColorEntries();
-        delete pColorList;
-        pColorList = nullptr;
-    }
     ListBox::dispose();
 }
 
@@ -128,6 +91,7 @@ sal_Int32 ColorLB::InsertEntry( const Color& rColor, const OUString& rStr,
                                 sal_Int32 nPos )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Size aImageSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
 
     VclPtr<VirtualDevice> xDevice = VclPtr<VirtualDevice>::Create();
     xDevice->SetOutputSize(aImageSize);
@@ -140,17 +104,16 @@ sal_Int32 ColorLB::InsertEntry( const Color& rColor, const OUString& rStr,
     nPos = ListBox::InsertEntry(rStr, Image(aBitmap), nPos);
     if ( nPos != LISTBOX_ERROR )
     {
-        ImplColorListData* pData = new ImplColorListData( rColor );
-        if ( static_cast<size_t>(nPos) < pColorList->size() )
+        if ( static_cast<size_t>(nPos) < aColorList.size() )
         {
-            ImpColorList::iterator it = pColorList->begin();
+            ImpColorList::iterator it = aColorList.begin();
             ::std::advance( it, nPos );
-            pColorList->insert( it, pData );
+            aColorList.insert( it, rColor );
         }
         else
         {
-            pColorList->push_back( pData );
-            nPos = pColorList->size() - 1;
+            aColorList.push_back( rColor );
+            nPos = aColorList.size() - 1;
         }
     }
     return nPos;
@@ -159,28 +122,25 @@ sal_Int32 ColorLB::InsertEntry( const Color& rColor, const OUString& rStr,
 void ColorLB::RemoveEntry( sal_Int32 nPos )
 {
     ListBox::RemoveEntry( nPos );
-    if ( 0 <= nPos && static_cast<size_t>(nPos) < pColorList->size() )
+    if ( 0 <= nPos && static_cast<size_t>(nPos) < aColorList.size() )
     {
-            ImpColorList::iterator it = pColorList->begin();
-            ::std::advance( it, nPos );
-            delete *it;
-            pColorList->erase( it );
+        ImpColorList::iterator it = aColorList.begin();
+        std::advance(it, nPos);
+        aColorList.erase(it);
     }
 }
 
 void ColorLB::Clear()
 {
-    ImplDestroyColorEntries();
+    aColorList.clear();
     ListBox::Clear();
 }
 
 Color ColorLB::GetEntryColor( sal_Int32 nPos ) const
 {
     Color aColor;
-    ImplColorListData* pData = ( 0 <= nPos && static_cast<size_t>(nPos) < pColorList->size() ) ?
-        (*pColorList)[ nPos ] : nullptr;
-    if ( pData && pData->bColor )
-        aColor = pData->aColor;
+    if (0 <= nPos && static_cast<size_t>(nPos) < aColorList.size())
+        aColor = aColorList[nPos];
     return aColor;
 }
 
