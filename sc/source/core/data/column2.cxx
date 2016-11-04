@@ -3212,6 +3212,9 @@ void ScColumn::UpdateSelectionFunction(
     sc::SingleColumnSpanSet aSpanSet;
     aSpanSet.scan(rRanges, nTab, nCol); // mark all selected rows.
 
+    if (aSpanSet.empty())
+        return;     // nothing to do, bail out
+
     // Exclude all hidden rows.
     ScFlatBoolRowSegments::RangeData aRange;
     SCROW nRow = 0;
