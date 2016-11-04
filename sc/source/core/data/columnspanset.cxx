@@ -329,7 +329,7 @@ void SingleColumnSpanSet::scan(const ScMarkData& rMark, SCTAB nTab, SCCOL nCol)
         // This table is not selected. Nothing to scan.
         return;
 
-    ScRangeList aRanges = rMark.GetMarkedRanges();
+    ScRangeList aRanges = rMark.GetMarkedRangesForTab(nTab);
     scan(aRanges, nTab, nCol);
 }
 
