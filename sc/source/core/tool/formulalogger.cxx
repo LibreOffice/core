@@ -157,6 +157,29 @@ void FormulaLogger::GroupScope::addRefMessage(
     mpImpl->maMessages.push_back(aBuf.makeStringAndClear());
 }
 
+void FormulaLogger::GroupScope::addRefMessage(
+    const ScAddress& rPos, const formula::FormulaToken& rToken )
+{
+    OUStringBuffer aBuf;
+    OUString aPosStr = rPos.Format(ScRefFlags::VALID, &mpImpl->mrDoc);
+    aBuf.append(aPosStr);
+    aBuf.appendAscii(": ");
+
+    switch (rToken.GetType())
+    {
+        case formula::svDouble:
+            aBuf.appendAscii("numeric value");
+            break;
+        case formula::svString:
+            aBuf.appendAscii("string value");
+            break;
+        default:
+            aBuf.appendAscii("unknown value");
+    }
+
+    mpImpl->maMessages.push_back(aBuf.makeStringAndClear());
+}
+
 void FormulaLogger::GroupScope::setCalcComplete()
 {
     mpImpl->mbCalcComplete = true;

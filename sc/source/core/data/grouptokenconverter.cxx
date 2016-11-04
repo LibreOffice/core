@@ -160,6 +160,7 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
                         return false;
 
                     mrGroupTokens.AddToken(*pNewToken);
+                    rScope.addRefMessage(aRefPos, *pNewToken);
                 }
             }
             break;
