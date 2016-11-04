@@ -545,16 +545,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 DeviceCoordinate nAdvance, nXOffset, nYOffset;
                 if (bVertical)
                 {
-                    int nVertFlag;
-#if 0               /* XXX: does not work as expected for Common script */
-                    UErrorCode error = U_ZERO_ERROR;
-                    nVertFlag = GetVerticalFlagsForScript(uscript_getScript(aChar, &error));
-#else
-                    nVertFlag = GetVerticalFlags(aChar);
-                    if (nVertFlag == GF_ROTR)
-                        nVertFlag = GF_ROTL;
-#endif
-                    nGlyphIndex |= nVertFlag;
+                    nGlyphIndex |= GF_ROTL;
                     nAdvance = -pHbPositions[i].y_advance * nYScale;
                     nXOffset =  pHbPositions[i].y_offset * nYScale;
                     nYOffset = -pHbPositions[i].x_offset * nXScale;
