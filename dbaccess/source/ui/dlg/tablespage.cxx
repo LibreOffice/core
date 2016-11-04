@@ -440,7 +440,6 @@ namespace dbaui
     Sequence< OUString > OTableSubscriptionPage::collectDetailedSelection() const
     {
         Sequence< OUString > aTableFilter;
-        static const char sDot[] = ".";
         static const char sWildcard[] = "%";
 
         OUString sComposedName;
@@ -494,7 +493,7 @@ namespace dbaui
                             }
                         }
                         bSchemaWildcard = OTableTreeListBox::isWildcardChecked(pSchema);
-                        sComposedName += m_pTablesList->GetEntryText( pSchema ) + sDot;
+                        sComposedName += m_pTablesList->GetEntryText( pSchema ) + ".";
                     }
 
                     if (bSchemaWildcard)

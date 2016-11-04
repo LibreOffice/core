@@ -279,9 +279,8 @@ namespace
      */
     void grabFocusFromLimitBox( OQueryController& _rController )
     {
-        static const char sResourceURL[] = "private:resource/toolbar/designobjectbar";
         Reference< XLayoutManager > xLayoutManager = OGenericUnoController::getLayoutManager( _rController.getFrame() );
-        Reference< XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
+        Reference< XUIElement > xUIElement = xLayoutManager->getElement("private:resource/toolbar/designobjectbar");
         if (xUIElement.is())
         {
             Reference< XWindow > xWindow(xUIElement->getRealInterface(), css::uno::UNO_QUERY);
