@@ -29,6 +29,8 @@
 
 #include "cfgchart.hxx"
 
+class ColorLB;
+
 class SvxDefaultColorOptPage : public SfxTabPage
 {
 
