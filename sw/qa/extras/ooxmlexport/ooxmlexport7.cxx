@@ -22,7 +22,6 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/text/GraphicCrop.hpp>
 #include <pagedesc.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
