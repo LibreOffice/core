@@ -26,7 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/svxids.hrc>
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC ColorLB : public ListBox
+class ColorLB : public ListBox
 {
     ImpColorList*   pColorList; // separate liste, in case of user data are required from outside
     Size            aImageSize;
@@ -36,37 +36,20 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC ColorLB : public ListBox
     SVT_DLLPRIVATE void         ImplDestroyColorEntries();
 
 public:
-                    ColorLB( vcl::Window* pParent,
-                                  WinBits nWinStyle = WB_BORDER );
+    ColorLB(vcl::Window* pParent, WinBits nWinStyle = WB_BORDER);
     virtual         ~ColorLB() override;
     virtual void    dispose() override;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
 
     using ListBox::InsertEntry;
-    sal_Int32       InsertEntry( const OUString& rStr,
-                                 sal_Int32  nPos = LISTBOX_APPEND );
     sal_Int32       InsertEntry( const Color& rColor, const OUString& rStr,
                                  sal_Int32  nPos = LISTBOX_APPEND );
-    bool            IsAutomaticSelected() { return !GetSelectEntryPos(); }
     using ListBox::RemoveEntry;
     void            RemoveEntry( sal_Int32  nPos );
     void            Clear();
-    void            CopyEntries( const ColorLB& rBox );
 
-    using ListBox::GetEntryPos;
-    sal_Int32       GetEntryPos( const Color& rColor ) const;
     Color           GetEntryColor( sal_Int32  nPos ) const;
-
-    void            SelectEntry( const OUString& rStr )
-                        { ListBox::SelectEntry( rStr ); }
-
-    void SelectEntry( const Color& rColor )
-    {
-        sal_Int32  nPos = GetEntryPos( rColor );
-        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-            ListBox::SelectEntryPos( nPos );
-    }
 
     Color GetSelectEntryColor() const
     {
@@ -77,25 +60,8 @@ public:
         return aColor;
     }
 
-    using ListBox::IsEntrySelected;
-
-    bool            IsEntrySelected(const Color& rColor) const
-    {
-        sal_Int32  nPos = GetEntryPos( rColor );
-        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-            return IsEntryPosSelected( nPos );
-        else
-            return false;
-    }
-
-    void Fill( const XColorListRef &pTab );
-
     void Append( const XColorEntry& rEntry );
     void Modify( const XColorEntry& rEntry, sal_Int32 nPos );
-
-private:
-                    ColorLB( const ColorLB& ) = delete;
-    ColorLB&   operator =( const ColorLB& ) = delete;
 };
 
 VCL_BUILDER_DECL_FACTORY(ColorLB)
@@ -162,27 +128,6 @@ void ColorLB::dispose()
     ListBox::dispose();
 }
 
-sal_Int32 ColorLB::InsertEntry( const OUString& rStr, sal_Int32 nPos )
-{
-    nPos = ListBox::InsertEntry( rStr, nPos );
-    if ( nPos != LISTBOX_ERROR )
-    {
-        ImplColorListData* pData = new ImplColorListData;
-        if ( static_cast<size_t>(nPos) < pColorList->size() )
-        {
-            ImpColorList::iterator it = pColorList->begin();
-            ::std::advance( it, nPos );
-            pColorList->insert( it, pData );
-        }
-        else
-        {
-            pColorList->push_back( pData );
-            nPos = pColorList->size() - 1;
-        }
-    }
-    return nPos;
-}
-
 sal_Int32 ColorLB::InsertEntry( const Color& rColor, const OUString& rStr,
                                 sal_Int32 nPos )
 {
@@ -221,44 +166,6 @@ void ColorLB::Clear()
 {
     ImplDestroyColorEntries();
     ListBox::Clear();
-}
-
-void ColorLB::CopyEntries( const ColorLB& rBox )
-{
-    // Liste leeren
-    ImplDestroyColorEntries();
-
-    // Daten kopieren
-    size_t nCount = rBox.pColorList->size();
-    for ( size_t n = 0; n < nCount; n++ )
-    {
-        ImplColorListData* pData = (*rBox.pColorList)[ n ];
-        sal_Int32 nPos = InsertEntry( rBox.GetEntry( n ) );
-        if ( nPos != LISTBOX_ERROR )
-        {
-            if ( static_cast<size_t>(nPos) < pColorList->size() )
-            {
-                ImpColorList::iterator it = pColorList->begin();
-                ::std::advance( it, nPos );
-                pColorList->insert( it, new ImplColorListData( *pData ) );
-            }
-            else
-            {
-                pColorList->push_back( new ImplColorListData( *pData ) );
-            }
-        }
-    }
-}
-
-sal_Int32 ColorLB::GetEntryPos( const Color& rColor ) const
-{
-    for( sal_Int32 n = (sal_Int32) pColorList->size(); n; )
-    {
-        ImplColorListData* pData = (*pColorList)[ --n ];
-        if ( pData->bColor && ( pData->aColor == rColor ) )
-            return n;
-    }
-    return LISTBOX_ENTRY_NOTFOUND;
 }
 
 Color ColorLB::GetEntryColor( sal_Int32 nPos ) const
@@ -318,31 +225,9 @@ void ColorLB::UserDraw( const UserDrawEvent& rUDEvt )
         ListBox::DrawEntry( rUDEvt, true, false );
 }
 
-
-// Fills the Listbox with color and strings
-
-void ColorLB::Fill( const XColorListRef &pColorTab )
-{
-    if( !pColorTab.is() )
-        return;
-
-    long nCount = pColorTab->Count();
-    SetUpdateMode( false );
-
-    for( long i = 0; i < nCount; i++ )
-    {
-        const XColorEntry* pEntry = pColorTab->GetColor(i);
-        InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-    }
-
-    AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( true );
-}
-
 void ColorLB::Append( const XColorEntry& rEntry )
 {
     InsertEntry( rEntry.GetColor(), rEntry.GetName() );
-    AdaptDropDownLineCountToMaximum();
 }
 
 void ColorLB::Modify( const XColorEntry& rEntry, sal_Int32 nPos )
@@ -350,7 +235,6 @@ void ColorLB::Modify( const XColorEntry& rEntry, sal_Int32 nPos )
     RemoveEntry( nPos );
     InsertEntry( rEntry.GetColor(), rEntry.GetName(), nPos );
 }
-
 
 namespace
 {
