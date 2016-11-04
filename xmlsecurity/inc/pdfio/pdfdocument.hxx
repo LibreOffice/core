@@ -116,6 +116,8 @@ public:
     PDFDocument();
     PDFDocument& operator=(const PDFDocument&) = delete;
     PDFDocument(const PDFDocument&) = delete;
+    /// @name Low-level functions, to be used by PDFElement subclasses.
+    //@{
     static OString ReadKeyword(SvStream& rStream);
     static size_t FindStartXRef(SvStream& rStream);
     void ReadXRef(SvStream& rStream);
@@ -136,13 +138,17 @@ public:
     bool Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< std::unique_ptr<PDFElement> >& rElements, PDFObjectElement* pObject);
     /// Register an object (owned directly or indirectly by m_aElements) as a provder for a given ID.
     void SetIDObject(size_t nID, PDFObjectElement* pObject);
+    //@}
 
+    /// @name High-level functions, to be used by others.
+    //@{
     /// Read elements from the start of the stream till its end.
     bool Read(SvStream& rStream);
     /// Sign the read document with xCertificate in the edit buffer.
     bool Sign(const css::uno::Reference<css::security::XCertificate>& xCertificate, const OUString& rDescription);
     /// Serializes the contents of the edit buffer.
     bool Write(SvStream& rStream);
+    /// Get a list of signatures embedded into this document.
     std::vector<PDFObjectElement*> GetSignatureWidgets();
     /**
      * @param rInformation The actual result.
@@ -152,6 +158,7 @@ public:
     static bool ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation, bool bLast);
     /// Remove the nth signature from read document in the edit buffer.
     bool RemoveSignature(size_t nPosition);
+    //@}
 };
 
 } // namespace pdfio

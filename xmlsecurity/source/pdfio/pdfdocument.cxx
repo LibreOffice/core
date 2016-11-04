@@ -1760,7 +1760,20 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     }
 
     SECItem aAlgorithm = NSS_CMSSignedData_GetDigestAlgs(pCMSSignedData)[0]->algorithm;
-    HASH_HashType eHashType = HASH_GetHashTypeByOidTag(SECOID_FindOIDTag(&aAlgorithm));
+    SECOidTag eOidTag = SECOID_FindOIDTag(&aAlgorithm);
+
+    // Map a sign algorithm to a digest algorithm.
+    // See NSS_CMSUtil_MapSignAlgs(), which is private to us.
+    switch (eOidTag)
+    {
+    case SEC_OID_PKCS1_SHA1_WITH_RSA_ENCRYPTION:
+        eOidTag = SEC_OID_SHA1;
+        break;
+    default:
+        break;
+    }
+
+    HASH_HashType eHashType = HASH_GetHashTypeByOidTag(eOidTag);
     HASHContext* pHASHContext = HASH_Create(eHashType);
     if (!pHASHContext)
     {
@@ -1796,7 +1809,7 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
 
     // Find out what is the expected length of the hash.
     unsigned int nMaxResultLen = 0;
-    switch (SECOID_FindOIDTag(&aAlgorithm))
+    switch (eOidTag)
     {
     case SEC_OID_SHA1:
         nMaxResultLen = msfilter::SHA1_HASH_LENGTH;

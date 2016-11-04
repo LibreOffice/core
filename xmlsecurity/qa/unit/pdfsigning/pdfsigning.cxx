@@ -58,6 +58,8 @@ public:
     void testPDF14Adobe();
     /// Test a PDF 1.6 document, signed by Adobe.
     void testPDF16Adobe();
+    /// Test a PDF 1.4 document, signed by LO on Windows.
+    void testPDF14LOWin();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
@@ -66,6 +68,7 @@ public:
     CPPUNIT_TEST(testPDFRemoveAll);
     CPPUNIT_TEST(testPDF14Adobe);
     CPPUNIT_TEST(testPDF16Adobe);
+    CPPUNIT_TEST(testPDF14LOWin);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -265,6 +268,15 @@ void PDFSigningTest::testPDF16Adobe()
     // Found signatures was 0, as parsing failed due to lack of support for
     // these features.
     verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf16adobe.pdf", 1);
+}
+
+void PDFSigningTest::testPDF14LOWin()
+{
+    // mscrypto used SEC_OID_PKCS1_SHA1_WITH_RSA_ENCRYPTION as a digest
+    // algorithm when it meant SEC_OID_SHA1, make sure we tolerate that on all
+    // platforms.
+    // This failed, as NSS HASH_Create() didn't handle the sign algorithm.
+    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14lowin.pdf", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);
