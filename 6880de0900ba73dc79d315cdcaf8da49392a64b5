@@ -69,6 +69,30 @@
       "revId": "6880de0900ba73dc79d315cdcaf8da49392a64b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_50b53bcb",
+        "filename": "connectivity/source/drivers/firebird/Util.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-11-04T05:39:11Z",
+      "side": 1,
+      "message": "I understand. My opinion is that it is better to force the caller of getColumnTypeFromFBType to explicitly put the 0 so that he says that in this call, it is impossible to have a BLOB, DECIMAL or NUMERIC, rather than assuming that by default. It leads to less programming errors. However, this is a matter of opinion and I don\u0027t formally oppose your choice.\n\nDon\u0027t we need to handle subtypes also in getColumnTypeFromFBType ?",
+      "parentUuid": "7a77a97e_1fd83653",
+      "range": {
+        "startLine": 56,
+        "startChar": 55,
+        "endLine": 56,
+        "endChar": 73
+      },
+      "revId": "6880de0900ba73dc79d315cdcaf8da49392a64b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
