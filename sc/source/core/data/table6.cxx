@@ -571,10 +571,14 @@ bool ScTable::ReplaceAll(
     else
         GetLastDataPos(nLastCol, nLastRow);
 
+    // tdf#92160 - columnular replace is faster, and more memory efficient.
+    SvxSearchItem aCopyItem(rSearchItem);
+    aCopyItem.SetRowDirection(false);
+
     bool bEverFound = false;
     while (true)
     {
-        bool bFound = Search(rSearchItem, nCol, nRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc);
+        bool bFound = Search(aCopyItem, nCol, nRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc);
 
         if (bFound)
         {
