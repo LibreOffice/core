@@ -1732,7 +1732,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uI
 
     aPropOpt.AddOpt( ESCHER_Prop_pibFlags, nFlags );
     nBorderThick = WriteFlyFrameAttr(rFormat,mso_sptPictureFrame,aPropOpt);
-    WriteGrfAttr(*pGrfNd, aPropOpt);
+    WriteGrfAttr(*pGrfNd, rFormat, aPropOpt);
 
     aPropOpt.Commit( GetStream() );
 
@@ -1743,7 +1743,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uI
     return nBorderThick;
 }
 
-void SwBasicEscherEx::WriteGrfAttr(const SwNoTextNode& rNd,
+void SwBasicEscherEx::WriteGrfAttr(const SwNoTextNode& rNd, const SwFrameFormat& rFormat,
     EscherPropertyContainer& rPropOpt)
 {
     const SfxPoolItem* pItem;
@@ -1814,20 +1814,39 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTextNode& rNd,
     if (nBrightness != 0)
         rPropOpt.AddOpt( ESCHER_Prop_pictureBrightness, nBrightness * 327 );
 
+    sal_Int32 nCropL = 0;
+    sal_Int32 nCropR = 0;
+    sal_Int32 nCropT = 0;
+    sal_Int32 nCropB = 0;
     if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CROPGRF,
         true, &pItem))
     {
-        const Size aSz( rNd.GetTwipSize() );
-        sal_Int32 nVal;
-        if( 0 != ( nVal = static_cast<const SwCropGrf*>(pItem )->GetLeft() ) )
-            rPropOpt.AddOpt( ESCHER_Prop_cropFromLeft, ToFract16( nVal, aSz.Width()) );
-        if( 0 != ( nVal = static_cast<const SwCropGrf*>(pItem )->GetRight() ) )
-            rPropOpt.AddOpt( ESCHER_Prop_cropFromRight, ToFract16( nVal, aSz.Width()));
-        if( 0 != ( nVal = static_cast<const SwCropGrf*>(pItem )->GetTop() ) )
-            rPropOpt.AddOpt( ESCHER_Prop_cropFromTop, ToFract16( nVal, aSz.Height()));
-        if( 0 != ( nVal = static_cast<const SwCropGrf*>(pItem )->GetBottom() ) )
-            rPropOpt.AddOpt( ESCHER_Prop_cropFromBottom, ToFract16( nVal, aSz.Height()));
+        const SwCropGrf& rCrop = *static_cast<const SwCropGrf*>(pItem);
+        nCropL += rCrop.GetLeft();
+        nCropR += rCrop.GetRight();
+        nCropT += rCrop.GetTop();
+        nCropB += rCrop.GetBottom();
     }
+
+    // simulate border padding as a negative crop.
+    if (SfxItemState::SET == rFormat.GetItemState(RES_BOX, false, &pItem))
+    {
+        const SvxBoxItem& rBox = *static_cast<const SvxBoxItem*>(pItem);
+        nCropL -= rBox.GetDistance( SvxBoxItemLine::LEFT );
+        nCropR -= rBox.GetDistance( SvxBoxItemLine::RIGHT );
+        nCropT -= rBox.GetDistance( SvxBoxItemLine::TOP );
+        nCropB -= rBox.GetDistance( SvxBoxItemLine::BOTTOM );
+    }
+
+    const Size aSz( rNd.GetTwipSize() );
+    if( 0 != nCropL )
+        rPropOpt.AddOpt( ESCHER_Prop_cropFromLeft, ToFract16( nCropL, aSz.Width()) );
+    if( 0 != nCropR )
+        rPropOpt.AddOpt( ESCHER_Prop_cropFromRight, ToFract16( nCropR, aSz.Width()));
+    if( 0 != nCropT )
+        rPropOpt.AddOpt( ESCHER_Prop_cropFromTop, ToFract16( nCropT, aSz.Height()));
+    if( 0 != nCropB )
+        rPropOpt.AddOpt( ESCHER_Prop_cropFromBottom, ToFract16( nCropB, aSz.Height()));
 }
 
 void SwBasicEscherEx::SetPicId(const SdrObject &, sal_uInt32,
@@ -1891,7 +1910,7 @@ sal_Int32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrameFormat& rFormat, sal_uI
             rMirror), pGraphic ? *pGraphic : Graphic(), *pSdrObj, nShapeId, bRectIsSet ? &aRect : nullptr );
 
         nBorderThick = WriteFlyFrameAttr(rFormat, mso_sptPictureFrame, aPropOpt);
-        WriteGrfAttr(rOLENd, aPropOpt);
+        WriteGrfAttr(rOLENd, rFormat, aPropOpt);
         aPropOpt.Commit(GetStream());
 
         // store anchor attribute
