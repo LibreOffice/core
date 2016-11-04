@@ -277,7 +277,7 @@ String RID_ABSX_HELP
 {
     Text [ en-US ] = "Absolute Value" ;
 };
-String RID_FACTX            { Text = "fact {<?>} " ; };
+String RID_FACTX            { Text = "fact{<?>} " ; };
 String RID_FACTX_HELP
 {
     Text [ en-US ] = "Factorial" ;
