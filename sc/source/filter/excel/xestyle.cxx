@@ -791,9 +791,9 @@ void XclExpPalette::GetMixedColors(
     return mxImpl->GetMixedColors( rnXclForeIx, rnXclBackIx, rnXclPattern, nForeColorId, nBackColorId );
 }
 
-ColorData XclExpPalette::GetColorData( sal_uInt16 nXclIndex ) const
+Color XclExpPalette::GetColor( sal_uInt16 nXclIndex ) const
 {
-    return mxImpl->GetColorData( nXclIndex );
+    return Color(mxImpl->GetColorData( nXclIndex ));
 }
 
 void XclExpPalette::Save( XclExpStream& rStrm )
@@ -1234,12 +1234,6 @@ sal_uInt16 XclExpFontBuffer::Insert(
 }
 
 sal_uInt16 XclExpFontBuffer::Insert(
-        const vcl::Font& rFont, XclExpColorType eColorType, bool bAppFont )
-{
-    return Insert( XclFontData( rFont ), eColorType, bAppFont );
-}
-
-sal_uInt16 XclExpFontBuffer::Insert(
         const SvxFont& rFont, XclExpColorType eColorType )
 {
     return Insert( XclFontData( rFont ), eColorType );
@@ -1250,7 +1244,7 @@ sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet,
 {
     // #i17050# script type now provided by caller
     vcl::Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rItemSet, nScript );
-    return Insert( aFont, eColorType, bAppFont );
+    return Insert( XclFontData( aFont ), eColorType, bAppFont );
 }
 
 void XclExpFontBuffer::Save( XclExpStream& rStrm )

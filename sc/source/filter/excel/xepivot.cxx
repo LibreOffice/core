@@ -723,11 +723,6 @@ void XclExpPivotCache::SaveXml( XclExpXmlStream& /*rStrm*/ )
 {
 }
 
-XclExpPCField* XclExpPivotCache::GetFieldAcc( sal_uInt16 nFieldIdx )
-{
-    return maFieldList.GetRecord( nFieldIdx ).get();
-}
-
 void XclExpPivotCache::AddFields( const ScDPObject& rDPObj )
 {
     AddStdFields( rDPObj );
@@ -760,7 +755,7 @@ void XclExpPivotCache::AddGroupFields( const ScDPObject& rDPObj )
             // loop over all existing standard fields to find their group fields
             for( sal_uInt16 nFieldIdx = 0; nFieldIdx < maPCInfo.mnStdFields; ++nFieldIdx )
             {
-                if( XclExpPCField* pCurrStdField = GetFieldAcc( nFieldIdx ) )
+                if( XclExpPCField* pCurrStdField = maFieldList.GetRecord( nFieldIdx ).get() )
                 {
                     const ScDPSaveGroupDimension* pGroupDim = pSaveDimData->GetGroupDimForBase( pCurrStdField->GetFieldName() );
                     XclExpPCField* pLastGroupField = pCurrStdField;

@@ -331,15 +331,6 @@ void ScXMLTableRowCellContext::LockSolarMutex()
     }
 }
 
-void ScXMLTableRowCellContext::UnlockSolarMutex()
-{
-    if (bSolarMutexLocked)
-    {
-        GetScImport().UnlockSolarMutex();
-        bSolarMutexLocked = false;
-    }
-}
-
 namespace {
 
 bool cellExists( const ScAddress& rCellPos )
@@ -1278,11 +1269,6 @@ void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
     }
 }
 
-bool ScXMLTableRowCellContext::HasSpecialContent() const
-{
-    return (mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource);
-}
-
 bool ScXMLTableRowCellContext::CellsAreRepeated() const
 {
     return ( (nColsRepeated > 1) || (nRepeatedRows > 1) );
@@ -1340,7 +1326,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
     }
 
     ScAddress aCurrentPos( rCellPos );
-    if( HasSpecialContent() )
+    if( mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource ) // has special content
         bIsEmpty = false;
 
     AddTextAndValueCell( rCellPos, pOUText, aCurrentPos );
@@ -1526,7 +1512,12 @@ void ScXMLTableRowCellContext::EndElement()
     else
         AddNonFormulaCell(aCellPos);
 
-    UnlockSolarMutex(); //if LockSolarMutex got used, we presumably need to ensure an UnlockSolarMutex
+    //if LockSolarMutex got used, we presumably need to ensure an UnlockSolarMutex
+    if (bSolarMutexLocked)
+    {
+        GetScImport().UnlockSolarMutex();
+        bSolarMutexLocked = false;
+    }
 
     bIsMerged = false;
     nMergedCols = 1;

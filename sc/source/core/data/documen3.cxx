@@ -152,7 +152,7 @@ void ScDocument::SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRan
     }
 }
 
-void ScDocument::GetTabRangeNameMap(std::map<OUString, ScRangeName*>& aRangeNameMap)
+void ScDocument::GetRangeNameMap(std::map<OUString, ScRangeName*>& aRangeNameMap)
 {
     for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); ++i)
     {
@@ -168,11 +168,6 @@ void ScDocument::GetTabRangeNameMap(std::map<OUString, ScRangeName*>& aRangeName
         maTabs[i]->GetName(aTableName);
         aRangeNameMap.insert(std::pair<OUString, ScRangeName*>(aTableName,p));
     }
-}
-
-void ScDocument::GetRangeNameMap(std::map<OUString, ScRangeName*>& aRangeNameMap)
-{
-    GetTabRangeNameMap(aRangeNameMap);
     if (!pRangeName)
     {
         pRangeName = new ScRangeName();

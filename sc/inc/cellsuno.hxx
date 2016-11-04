@@ -1484,9 +1484,6 @@ private:
     ScRange                         aTotalRange;
     ScMyRangeLists                  aRangeLists;
 
-private:
-    void                            GetObjects_Impl();
-
 public:
                             ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rR);
     virtual                 ~ScUniqueCellFormatsObj() override;

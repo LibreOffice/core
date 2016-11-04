@@ -284,16 +284,15 @@ bool ScChangeAction::IsMasterDelete() const
 
 void ScChangeAction::RemoveAllLinks()
 {
-    RemoveAllAnyLinks();
-    RemoveAllDeletedIn();
-    RemoveAllDeleted();
-    RemoveAllDependent();
-}
-
-void ScChangeAction::RemoveAllAnyLinks()
-{
     while ( pLinkAny )
         delete pLinkAny; // Moves up by itself
+
+    RemoveAllDeletedIn();
+
+    while ( pLinkDeleted )
+        delete pLinkDeleted; // Moves up by itself
+
+    RemoveAllDependent();
 }
 
 bool ScChangeAction::RemoveDeletedIn( const ScChangeAction* p )
@@ -382,19 +381,13 @@ bool ScChangeAction::HasDeleted() const
 
 void ScChangeAction::SetDeletedIn( ScChangeAction* p )
 {
-    ScChangeActionLinkEntry* pLink1 = AddDeletedIn( p );
+    ScChangeActionLinkEntry* pLink1 = new ScChangeActionLinkEntry( GetDeletedInAddress(), p );
     ScChangeActionLinkEntry* pLink2;
     if ( GetType() == SC_CAT_CONTENT )
         pLink2 = p->AddDeleted( static_cast<ScChangeActionContent*>(this)->GetTopContent() );
     else
         pLink2 = p->AddDeleted( this );
     pLink1->SetLink( pLink2 );
-}
-
-void ScChangeAction::RemoveAllDeleted()
-{
-    while ( pLinkDeleted )
-        delete pLinkDeleted; // Moves up by itself
 }
 
 void ScChangeAction::RemoveAllDependent()

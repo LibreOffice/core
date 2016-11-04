@@ -263,18 +263,10 @@ protected:
         pLnk->SetLink( pL );
     }
 
-    void RemoveAllAnyLinks();
-
     virtual ScChangeActionLinkEntry*    GetDeletedIn() const
                                             { return pLinkDeletedIn; }
     virtual ScChangeActionLinkEntry**   GetDeletedInAddress()
                                             { return &pLinkDeletedIn; }
-    ScChangeActionLinkEntry* AddDeletedIn( ScChangeAction* p )
-    {
-        return new ScChangeActionLinkEntry(
-            GetDeletedInAddress(), p );
-    }
-
     bool RemoveDeletedIn( const ScChangeAction* );
     void SetDeletedIn( ScChangeAction* );
 
@@ -282,8 +274,6 @@ protected:
     {
         return new ScChangeActionLinkEntry(&pLinkDeleted, p);
     }
-
-    void RemoveAllDeleted();
 
     ScChangeActionLinkEntry* AddDependent( ScChangeAction* p )
     {

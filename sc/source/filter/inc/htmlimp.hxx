@@ -31,7 +31,6 @@ private:
 public:
     ScHTMLImport( ScDocument* pDoc, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight );
     virtual ~ScHTMLImport() override;
-    const ScHTMLParser* GetParser() const { return static_cast<ScHTMLParser*>(mpParser); }
 
     virtual void        WriteToDocument( bool bSizeColsRows = false, double nOutputFactor = 1.0,
                                          SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) override;

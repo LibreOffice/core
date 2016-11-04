@@ -120,7 +120,7 @@ void ScHTMLImport::WriteToDocument(
 {
     ScEEImport::WriteToDocument( bSizeColsRows, nOutputFactor, pFormatter, bConvertDate );
 
-    const ScHTMLParser* pParser = GetParser();
+    const ScHTMLParser* pParser = static_cast<ScHTMLParser*>(mpParser);
     const ScHTMLTable* pGlobTable = pParser->GetGlobalTable();
     if( !pGlobTable )
         return;

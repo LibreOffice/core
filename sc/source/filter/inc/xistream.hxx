@@ -323,8 +323,6 @@ public:
     void                SetDecrypter( XclImpDecrypterRef const & xDecrypter );
     /** Sets decrypter from another stream. */
     void                CopyDecrypterFrom( const XclImpStream& rStrm );
-    /** Returns true, if a valid decrypter is set at the stream. */
-    bool                HasValidDecrypter() const;
     /** Switches usage of current decryption algorithm on/off.
         @descr  Encryption is re-enabled automatically, if a new record is
         started using the function StartNextRecord(). */
@@ -509,10 +507,6 @@ private:
     /** Reads and decrypts nBytes bytes to the existing(!) buffer pData.
         @return  Count of bytes really read. */
     sal_uInt16          ReadRawData( void* pData, sal_uInt16 nBytes );
-
-    /** Reads 8 bit/16 bit string length. */
-    inline sal_uInt16   ReadByteStrLen( bool b16BitLen )
-                            { return b16BitLen ? ReaduInt16() : ReaduInt8(); }
 
 private:
     typedef ::std::vector< XclImpStreamPos > XclImpStreamPosStack;

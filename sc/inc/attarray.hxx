@@ -169,7 +169,6 @@ public:
     void    FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset );
     bool    IsStyleSheetUsed( const ScStyleSheet& rStyle ) const;
 
-    void    DeleteAreaSafe(SCROW nStartRow, SCROW nEndRow);
     void    SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
                                     const ScPatternAttr* pWantedPattern, bool bDefault );
     void    CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray );

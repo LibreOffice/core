@@ -72,8 +72,6 @@ private:
     void                        DoDeleteRange( const ScRange& rRange );
 
     inline sal_uInt8            LookAtuInt8();
-    inline double               ReadRK();
-    inline bool                 ReadBool();
     inline void                 Read2DAddress( ScAddress& rAddress );
     inline void                 Read2DRange( ScRange& rRange );
     SCTAB                       ReadTabNum();
@@ -116,16 +114,6 @@ inline sal_uInt8 XclImpChangeTrack::LookAtuInt8()
     nValue = pStrm->ReaduInt8();
     pStrm->PopPosition();
     return nValue;
-}
-
-inline double XclImpChangeTrack::ReadRK()
-{
-    return XclTools::GetDoubleFromRK( pStrm->ReadInt32() );
-}
-
-inline bool XclImpChangeTrack::ReadBool()
-{
-    return (pStrm->ReaduInt16() != 0);
 }
 
 inline void XclImpChangeTrack::Read2DAddress( ScAddress& rAddress )

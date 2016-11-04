@@ -9427,18 +9427,6 @@ uno::Any SAL_CALL ScCellFormatsEnumeration::nextElement() throw(container::NoSuc
     return uno::makeAny(uno::Reference<table::XCellRange> (NextObject_Impl()));
 }
 
-ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rRange) :
-    pDocShell( pDocSh ),
-    aTotalRange( rRange ),
-    aRangeLists()
-{
-    pDocShell->GetDocument().AddUnoObject(*this);
-
-    OSL_ENSURE( aTotalRange.aStart.Tab() == aTotalRange.aEnd.Tab(), "unterschiedliche Tabellen" );
-
-    GetObjects_Impl();
-}
-
 ScUniqueCellFormatsObj::~ScUniqueCellFormatsObj()
 {
     SolarMutexGuard g;
@@ -9600,49 +9588,54 @@ struct ScUniqueFormatsOrder
     }
 };
 
-void ScUniqueCellFormatsObj::GetObjects_Impl()
+ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rRange) :
+    pDocShell( pDocSh ),
+    aTotalRange( rRange ),
+    aRangeLists()
 {
-    if (pDocShell)
+    pDocShell->GetDocument().AddUnoObject(*this);
+
+    OSL_ENSURE( aTotalRange.aStart.Tab() == aTotalRange.aEnd.Tab(), "unterschiedliche Tabellen" );
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    SCTAB nTab = aTotalRange.aStart.Tab();
+    ScAttrRectIterator aIter( &rDoc, nTab,
+                                aTotalRange.aStart.Col(), aTotalRange.aStart.Row(),
+                                aTotalRange.aEnd.Col(), aTotalRange.aEnd.Row() );
+    SCCOL nCol1, nCol2;
+    SCROW nRow1, nRow2;
+
+    // Collect the ranges for each format in a hash map, to avoid nested loops
+
+    ScUniqueFormatsHashMap aHashMap;
+    while (aIter.GetNext( nCol1, nCol2, nRow1, nRow2 ) )
     {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        SCTAB nTab = aTotalRange.aStart.Tab();
-        ScAttrRectIterator aIter( &rDoc, nTab,
-                                    aTotalRange.aStart.Col(), aTotalRange.aStart.Row(),
-                                    aTotalRange.aEnd.Col(), aTotalRange.aEnd.Row() );
-        SCCOL nCol1, nCol2;
-        SCROW nRow1, nRow2;
-
-        // Collect the ranges for each format in a hash map, to avoid nested loops
-
-        ScUniqueFormatsHashMap aHashMap;
-        while (aIter.GetNext( nCol1, nCol2, nRow1, nRow2 ) )
-        {
-            ScRange aRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
-            const ScPatternAttr* pPattern = rDoc.GetPattern(nCol1, nRow1, nTab);
-            aHashMap[pPattern].Join( aRange );
-        }
-
-        // Fill the vector aRangeLists with the range lists from the hash map
-
-        aRangeLists.reserve( aHashMap.size() );
-        ScUniqueFormatsHashMap::iterator aMapIter( aHashMap.begin() );
-        ScUniqueFormatsHashMap::iterator aMapEnd( aHashMap.end() );
-        while ( aMapIter != aMapEnd )
-        {
-            ScUniqueFormatsEntry& rEntry = aMapIter->second;
-            const ScRangeList& rRanges = rEntry.GetRanges();
-            aRangeLists.push_back( rRanges );       // copy ScRangeList
-            rEntry.Clear();                         // free memory, don't hold both copies of all ranges
-            ++aMapIter;
-        }
-
-        // Sort the vector by first range's start position, to avoid random shuffling
-        // due to using the ScPatterAttr pointers
-
-        ScUniqueFormatsOrder aComp;
-        ::std::sort( aRangeLists.begin(), aRangeLists.end(), aComp );
+        ScRange aRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
+        const ScPatternAttr* pPattern = rDoc.GetPattern(nCol1, nRow1, nTab);
+        aHashMap[pPattern].Join( aRange );
     }
+
+    // Fill the vector aRangeLists with the range lists from the hash map
+
+    aRangeLists.reserve( aHashMap.size() );
+    ScUniqueFormatsHashMap::iterator aMapIter( aHashMap.begin() );
+    ScUniqueFormatsHashMap::iterator aMapEnd( aHashMap.end() );
+    while ( aMapIter != aMapEnd )
+    {
+        ScUniqueFormatsEntry& rEntry = aMapIter->second;
+        const ScRangeList& rRanges = rEntry.GetRanges();
+        aRangeLists.push_back( rRanges );       // copy ScRangeList
+        rEntry.Clear();                         // free memory, don't hold both copies of all ranges
+        ++aMapIter;
+    }
+
+    // Sort the vector by first range's start position, to avoid random shuffling
+    // due to using the ScPatterAttr pointers
+
+    ScUniqueFormatsOrder aComp;
+    ::std::sort( aRangeLists.begin(), aRangeLists.end(), aComp );
 }
+
 
 // XIndexAccess
 

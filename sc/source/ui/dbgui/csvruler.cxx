@@ -530,7 +530,10 @@ void ScCsvRuler::ImplRedraw()
             ImplDrawRulerDev();
         }
         DrawOutDev( Point(), maWinSize, Point(), maWinSize, *maRulerDev.get() );
-        ImplDrawTrackingRect();
+        /* Draws directly tracking rectangle to the column with the specified index. */
+        if( HasFocus() )
+            InvertTracking( Rectangle( 0, 0, GetWidth() - 1, GetHeight() - 2 ),
+                ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
     }
 }
 
@@ -634,13 +637,6 @@ void ScCsvRuler::ImplInvertCursor( sal_Int32 nPos )
         if( HasSplit( nPos ) )
             ImplDrawSplit( nPos );
     }
-}
-
-void ScCsvRuler::ImplDrawTrackingRect()
-{
-    if( HasFocus() )
-        InvertTracking( Rectangle( 0, 0, GetWidth() - 1, GetHeight() - 2 ),
-            ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
 }
 
 void ScCsvRuler::ImplSetMousePointer( sal_Int32 nPos )

@@ -46,8 +46,6 @@ public:
     inline void         SetFormats( const XclFormatRunVec& rFormats ) { maFormats = rFormats; }
     /** Reads and appends the formatting information (run count and runs) from stream. */
     inline void         ReadFormats( XclImpStream& rStrm ) { ReadFormats( rStrm, maFormats ); }
-    /** Reads and appends nRunCount formatting runs from stream. */
-    inline void         ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount ) { ReadFormats( rStrm, maFormats, nRunCount ); }
     /** Reads and appends formatting runs from an OBJ or TXO record. */
     inline void         ReadObjFormats( XclImpStream& rStrm, sal_uInt16 nFormatSize ) { ReadObjFormats( rStrm, maFormats, nFormatSize ); }
 

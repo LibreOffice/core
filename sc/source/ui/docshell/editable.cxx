@@ -64,7 +64,13 @@ ScEditableTester::ScEditableTester( ScViewFunc* pView ) :
     mbIsEditable(true),
     mbOnlyMatrix(true)
 {
-    TestView( pView );
+    bool bThisMatrix;
+    if ( !pView->SelectionEditable( &bThisMatrix ) )
+    {
+        mbIsEditable = false;
+        if ( !bThisMatrix )
+            mbOnlyMatrix = false;
+    }
 }
 
 void ScEditableTester::TestBlock( ScDocument* pDoc, SCTAB nTab,
@@ -110,20 +116,6 @@ void ScEditableTester::TestSelection( ScDocument* pDoc, const ScMarkData& rMark 
     {
         bool bThisMatrix;
         if ( !pDoc->IsSelectionEditable( rMark, &bThisMatrix ) )
-        {
-            mbIsEditable = false;
-            if ( !bThisMatrix )
-                mbOnlyMatrix = false;
-        }
-    }
-}
-
-void ScEditableTester::TestView( ScViewFunc* pView )
-{
-    if (mbIsEditable || mbOnlyMatrix)
-    {
-        bool bThisMatrix;
-        if ( !pView->SelectionEditable( &bThisMatrix ) )
         {
             mbIsEditable = false;
             if ( !bThisMatrix )

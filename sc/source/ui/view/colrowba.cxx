@@ -64,11 +64,6 @@ ScColBar::~ScColBar()
 {
 }
 
-inline bool ScColBar::UseNumericHeader() const
-{
-    return pTabView->GetViewData().GetDocument()->GetAddressConvention() == formula::FormulaGrammar::CONV_XL_R1C1;
-}
-
 SCCOLROW ScColBar::GetPos() const
 {
     return pTabView->GetViewData().GetPosX(meWhich);
@@ -87,7 +82,7 @@ sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo ) const
 
 OUString ScColBar::GetEntryText( SCCOLROW nEntryNo ) const
 {
-    return UseNumericHeader()
+    return pTabView->GetViewData().GetDocument()->GetAddressConvention() == formula::FormulaGrammar::CONV_XL_R1C1
         ? OUString::number(nEntryNo + 1)
         : ScColToAlpha( static_cast<SCCOL>(nEntryNo) );
 }

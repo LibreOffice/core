@@ -227,7 +227,7 @@ void XclImpChangeTrack::ReadCell(
         break;
         case EXC_CHTR_TYPE_RK:
         {
-            double fValue = ReadRK();
+            double fValue = XclTools::GetDoubleFromRK( pStrm->ReadInt32() );
             if( pStrm->IsValid() )
             {
                 rCell.meType = CELLTYPE_VALUE;
@@ -257,7 +257,7 @@ void XclImpChangeTrack::ReadCell(
         break;
         case EXC_CHTR_TYPE_BOOL:
         {
-            double fValue = (double) ReadBool();
+            double fValue = (double) (pStrm->ReaduInt16() != 0);
             if( pStrm->IsValid() )
             {
                 rCell.meType = CELLTYPE_VALUE;

@@ -638,8 +638,6 @@ public:
     /** Inserts a range of hyperlink cells. */
     void                SetHyperlink( const XclRange& rXclRange, const OUString& rUrl );
 
-    /** Inserts the first cell of a merged cell range. */
-    void                SetMerge( SCCOL nScCol, SCROW nScRow );
     /** Inserts a complete merged cell range. */
     void                SetMerge( SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2, SCROW nScRow2 );
 

@@ -1910,7 +1910,7 @@ void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, X
             if (pRange && (pRange->aEnd.Row() == nScRow) && (pRange->aEnd.Col() + 1 == nScCol) && (eMode == xlXFModeBlank))
                 pRange->aEnd.IncCol();
             else if( eMode != xlXFModeBlank )   // do not merge empty cells
-                SetMerge( nScCol, nScRow );
+                maMergeList.Append( ScRange( nScCol, nScRow, 0 ) );
         }
     }
 }
@@ -1966,11 +1966,6 @@ void XclImpXFRangeBuffer::SetBorderLine( const ScRange& rRange, SCTAB nScTab, Sv
 void XclImpXFRangeBuffer::SetHyperlink( const XclRange& rXclRange, const OUString& rUrl )
 {
     maHyperlinks.push_back( XclImpHyperlinkRange( rXclRange, rUrl ) );
-}
-
-void XclImpXFRangeBuffer::SetMerge( SCCOL nScCol, SCROW nScRow )
-{
-    maMergeList.Append( ScRange( nScCol, nScRow, 0 ) );
 }
 
 void XclImpXFRangeBuffer::SetMerge( SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2, SCROW nScRow2 )

@@ -55,8 +55,6 @@ public:
     virtual void        DrawInvert( long nDragPos ) override;
 
     virtual OUString    GetDragHelp( long nVal ) override;
-
-            bool        UseNumericHeader() const;
 };
 
 class ScRowBar : public ScHeaderControl

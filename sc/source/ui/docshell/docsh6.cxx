@@ -465,12 +465,7 @@ void ScDocShell::SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoadi
     }
 
     // Per document interpreter settings.
-    SetCalcConfig( rOpt.GetCalcConfig());
-}
-
-void ScDocShell::SetCalcConfig( const ScCalcConfig& rConfig )
-{
-    aDocument.SetCalcConfig( rConfig);
+    aDocument.SetCalcConfig( rOpt.GetCalcConfig() );
 }
 
 void ScDocShell::CheckConfigOptions()

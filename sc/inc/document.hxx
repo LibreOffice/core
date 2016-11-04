@@ -504,7 +504,6 @@ public:
     void            GetDocStat( ScDocStat& rDocStat );
 
     SC_DLLPUBLIC void  InitDrawLayer( SfxObjectShell* pDocShell = nullptr );
-    rtl::Reference<XColorList>          GetColorList();
 
     SC_DLLPUBLIC sfx2::LinkManager* GetLinkManager();
     SC_DLLPUBLIC const sfx2::LinkManager* GetLinkManager() const;
@@ -541,7 +540,6 @@ public:
      */
     SC_DLLPUBLIC void GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rRangeNames) const;
     SC_DLLPUBLIC void SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap);
-    SC_DLLPUBLIC void GetTabRangeNameMap(std::map<OUString, ScRangeName*>& rRangeName);
     SC_DLLPUBLIC void GetRangeNameMap(std::map<OUString, ScRangeName*>& rRangeName);
     SC_DLLPUBLIC ScRangeName* GetRangeName(SCTAB nTab) const;
     SC_DLLPUBLIC ScRangeName* GetRangeName() const;
@@ -2327,8 +2325,6 @@ private:
 
     void    DeleteDrawLayer();
     SC_DLLPUBLIC bool   DrawGetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) const;
-    void    DrawMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
-    void    DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
 
     void    UpdateDrawPrinter();
     void    UpdateDrawLanguages();

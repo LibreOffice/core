@@ -1458,14 +1458,6 @@ void ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
     }
 }
 
-/**
- * Remove field, but leave MergeFlags
- */
-void ScAttrArray::DeleteAreaSafe(SCROW nStartRow, SCROW nEndRow)
-{
-    SetPatternAreaSafe( nStartRow, nEndRow, pDocument->GetDefPattern(), true );
-}
-
 void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
                         const ScPatternAttr* pWantedPattern, bool bDefault )
 {
@@ -2120,7 +2112,7 @@ void ScAttrArray::DeleteArea(SCROW nStartRow, SCROW nEndRow)
     if ( !HasAttrib( nStartRow, nEndRow, HasAttrFlags::Overlapped | HasAttrFlags::AutoFilter) )
         SetPatternArea( nStartRow, nEndRow, pDocument->GetDefPattern() );
     else
-        DeleteAreaSafe( nStartRow, nEndRow );  // leave merge flags
+        SetPatternAreaSafe( nStartRow, nEndRow, pDocument->GetDefPattern(), true ); // leave merge flags
 }
 
 void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)

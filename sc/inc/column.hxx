@@ -221,7 +221,6 @@ public:
 
     bool        IsEmptyData() const;
     bool        IsEmptyAttr() const;
-    bool        IsEmpty() const;
 
                 // data only:
     bool        IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;

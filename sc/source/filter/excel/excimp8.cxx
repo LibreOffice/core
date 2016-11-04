@@ -446,15 +446,6 @@ void ImportExcel8::PostDocLoad()
     }
 
     // read doc info (no docshell while pasting from clipboard)
-    LoadDocumentProperties();
-
-    // #i45843# Pivot tables are now handled outside of PostDocLoad, so they are available
-    // when formula cells are calculated, for the GETPIVOTDATA function.
-}
-
-void ImportExcel8::LoadDocumentProperties()
-{
-    // no docshell while pasting from clipboard
     if( SfxObjectShell* pShell = GetDocShell() )
     {
         // BIFF5+ without storage is possible
@@ -469,6 +460,9 @@ void ImportExcel8::LoadDocumentProperties()
         {
         }
     }
+
+    // #i45843# Pivot tables are now handled outside of PostDocLoad, so they are available
+    // when formula cells are calculated, for the GETPIVOTDATA function.
 }
 
 // autofilter
@@ -788,17 +782,6 @@ void XclImpAutoFilterData::SetExtractPos( const ScAddress& rAddr )
 
 void XclImpAutoFilterData::Apply()
 {
-    CreateScDBData();
-
-    if( bActive )
-    {
-        InsertQueryParam();
-    }
-}
-
-void XclImpAutoFilterData::CreateScDBData()
-{
-
     // Create the ScDBData() object if the AutoFilter is activated
     // or if we need to create the Advanced Filter.
     if( bActive || bCriteria)
@@ -819,6 +802,10 @@ void XclImpAutoFilterData::CreateScDBData()
         rDoc.SetAnonymousDBData(Tab(), pCurrDBData);
     }
 
+    if( bActive )
+    {
+        InsertQueryParam();
+    }
 }
 
 void XclImpAutoFilterData::EnableRemoveFilter()

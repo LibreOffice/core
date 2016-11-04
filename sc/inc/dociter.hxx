@@ -71,7 +71,6 @@ class ScValueIterator            // walk through all values in an area
     SCROW GetRow() const;
     void IncBlock();
     void IncPos();
-    void SetPos(size_t nPos);
 
     /**
      * See if the cell at the current position is a non-empty cell. If not,

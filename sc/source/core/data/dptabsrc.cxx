@@ -867,7 +867,7 @@ void ScDPSource::CreateRes_Impl()
     {
         ScDPDimension* pDim = GetDimensionsObject()->getByIndex(*it);
         if ( pDim->HasSelectedPage() )
-            aInitState.AddMember(*it, GetMemberId(*it, pDim->GetSelectedData()));
+            aInitState.AddMember(*it, GetCache()->GetIdByItemData(*it, pDim->GetSelectedData()));
     }
 
     // Show grand total columns only when the option is set *and* there is at
@@ -1384,16 +1384,6 @@ sal_uInt16 ScDPDimension::getOrientation() const
     return pSource->GetOrientation( nDim );
 }
 
-void ScDPDimension::setOrientation(sal_uInt16 nNew)
-{
-    pSource->SetOrientation( nDim, nNew );
-}
-
-long ScDPDimension::getPosition() const
-{
-    return pSource->GetPosition( nDim );
-}
-
 bool ScDPDimension::getIsDataLayoutDimension() const
 {
     return pSource->GetData()->getIsDataLayoutDimension( nDim );
@@ -1503,7 +1493,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
     {
         sheet::DataPilotFieldOrientation eEnum;
         if (aValue >>= eEnum)
-            setOrientation( sal::static_int_cast<sal_uInt16>(eEnum) );
+            pSource->SetOrientation( nDim, sal::static_int_cast<sal_uInt16>(eEnum) );
     }
     else if ( aPropertyName == SC_UNO_DP_FUNCTION )
     {
@@ -1575,7 +1565,7 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
 {
     uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_POSITION )
-        aRet <<= (sal_Int32) getPosition();
+        aRet <<= (sal_Int32) pSource->GetPosition( nDim );
     else if ( aPropertyName == SC_UNO_DP_USEDHIERARCHY )
         aRet <<= (sal_Int32) getUsedHierarchy();
     else if ( aPropertyName == SC_UNO_DP_ORIENTATION )
@@ -2253,7 +2243,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
                 case SC_DAPI_LEVEL_YEAR:
                     {
                         const ScDPItemData* pLastNumData = nullptr;
-                        for ( SCROW n = 0 ;n <GetSrcItemsCount() ; n-- )
+                        for ( SCROW n = 0; n < (SCROW) pSource->GetData()->GetColumnEntries(nDim).size(); n-- )
                         {
                             const ScDPItemData* pData  = GetSrcItemDataByIndex( n );
                             if ( pData && pData->HasStringData() )
@@ -2693,11 +2683,6 @@ const ScDPItemData* ScDPSource::GetItemDataById(long nDim, long nId)
     return GetData()->GetMemberById(nDim, nId);
 }
 
-SCROW ScDPSource::GetMemberId(long nDim, const ScDPItemData& rData)
-{
-    return GetCache()->GetIdByItemData(nDim, rData);
-}
-
 const ScDPItemData* ScDPMembers::GetSrcItemDataByIndex(SCROW nIndex)
 {
     const std::vector< SCROW >& memberIds = pSource->GetData()->GetColumnEntries( nDim );
@@ -2705,11 +2690,6 @@ const ScDPItemData* ScDPMembers::GetSrcItemDataByIndex(SCROW nIndex)
         return nullptr;
     SCROW nId =  memberIds[ nIndex ];
     return pSource->GetItemDataById( nDim, nId );
-}
-
-SCROW ScDPMembers::GetSrcItemsCount()
-{
-    return pSource->GetData()->GetColumnEntries(nDim).size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

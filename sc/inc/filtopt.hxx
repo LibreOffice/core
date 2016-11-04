@@ -32,8 +32,6 @@ private:
     double      fExcelColScale;
     double      fExcelRowScale;
 
-    static css::uno::Sequence<OUString> GetPropertyNames();
-
     virtual void    ImplCommit() override;
 
 public:

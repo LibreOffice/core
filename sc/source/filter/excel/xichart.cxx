@@ -2683,7 +2683,7 @@ void XclImpChTypeGroup::Finalize()
     bool bStockChart =
         (maType.GetRecId() == EXC_ID_CHLINE) &&         // must be a line chart
         !mxChart3d &&                                   // must be a 2d chart
-        HasHiLoLine() &&                                // must contain hi-lo lines
+        m_ChartLines.find(EXC_CHCHARTLINE_HILO) != m_ChartLines.end() && // must contain hi-lo lines
         (maSeries.size() == static_cast<XclImpChSeriesVec::size_type>(HasDropBars() ? 4 : 3));   // correct series count
     maType.Finalize( bStockChart );
 
@@ -3293,7 +3293,7 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
     {
         ScfPropertySet aAxisProp( xAxis );
         // #i58688# axis enabled
-        aAxisProp.SetBoolProperty( EXC_CHPROP_SHOW, IsActivated() );
+        aAxisProp.SetBoolProperty( EXC_CHPROP_SHOW, !mxAxisLine || mxAxisLine->IsShowAxis() );
 
         // axis line properties
         if( mxAxisLine )
@@ -3305,8 +3305,8 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
         // axis caption text --------------------------------------------------
 
         // radar charts disable their category labels via chart type, not via axis
-        bool bHasLabels = HasLabels() &&
-            ((GetAxisType() != EXC_CHAXIS_X) || rTypeGroup.HasCategoryLabels());
+        bool bHasLabels = (!mxTick || mxTick->HasLabels()) &&
+                          ((GetAxisType() != EXC_CHAXIS_X) || rTypeGroup.HasCategoryLabels());
         aAxisProp.SetBoolProperty( EXC_CHPROP_DISPLAYLABELS, bHasLabels );
         if( bHasLabels )
         {
@@ -3377,7 +3377,7 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
 
         // main grid
         ScfPropertySet aGridProp( xAxis->getGridProperties() );
-        aGridProp.SetBoolProperty( EXC_CHPROP_SHOW, HasMajorGrid() );
+        aGridProp.SetBoolProperty( EXC_CHPROP_SHOW, (bool)mxMajorGrid );
         if( mxMajorGrid )
             mxMajorGrid->Convert( GetChRoot(), aGridProp, EXC_CHOBJTYPE_GRIDLINE );
         // sub grid
@@ -3385,7 +3385,7 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
         if( aSubGridPropSeq.hasElements() )
         {
             ScfPropertySet aSubGridProp( aSubGridPropSeq[ 0 ] );
-            aSubGridProp.SetBoolProperty( EXC_CHPROP_SHOW, HasMinorGrid() );
+            aSubGridProp.SetBoolProperty( EXC_CHPROP_SHOW, (bool)mxMinorGrid );
             if( mxMinorGrid )
                 mxMinorGrid->Convert( GetChRoot(), aSubGridProp, EXC_CHOBJTYPE_GRIDLINE );
         }

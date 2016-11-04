@@ -616,7 +616,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     if ( (!bIsDel || aMarkRange != aDelRange) &&
                         bNewMarked &&
                         nNewMarkCount > 0 &&
-                        !IsSameMarkCell() )
+                        m_LastMarkedRanges != *mpMarkedRanges )
                     {
                         RemoveSelection(refScMarkData);
                         if(bNewPosCellFocus)
@@ -762,11 +762,6 @@ void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
         m_strCurCellValue = pScDoc->GetString(maActiveCell.Col(),maActiveCell.Row(),maActiveCell.Tab());
     }
     CommitChange(aEvent);
-}
-
-bool ScAccessibleSpreadsheet::IsSameMarkCell()
-{
-    return m_LastMarkedRanges == *mpMarkedRanges;
 }
 
 //=====  XAccessibleTable  ================================================

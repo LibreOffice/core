@@ -783,7 +783,7 @@ const sc::CellTextAttr* ScColumn::GetCellTextAttr( sc::ColumnBlockConstPosition&
 
 bool ScColumn::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
 {
-    if (IsEmpty())
+    if (IsEmptyData() && IsEmptyAttr())
         return true;
 
     // Return false if we have any non-empty cells between nStartRow and nEndRow inclusive.
@@ -870,11 +870,6 @@ class CopyToClipHandler
         std::vector<sc::CellTextAttr> aAttrs(nSize); // default values
         maDestPos.miCellTextAttrPos = mrDestCol.GetCellAttrStore().set(
             maDestPos.miCellTextAttrPos, nRow, aAttrs.begin(), aAttrs.end());
-    }
-
-    void duplicateNotes(SCROW nStartRow, size_t nDataSize )
-    {
-        mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestPos, false);
     }
 
 public:
@@ -984,7 +979,7 @@ public:
             setDefaultAttrsToDest(nTopRow, nDataSize);
 
         if (mbCopyNotes)
-            duplicateNotes(nTopRow, nDataSize);
+            mrSrcCol.DuplicateNotes(nTopRow, nDataSize, mrDestCol, maDestPos, false);
     }
 };
 
@@ -1283,11 +1278,6 @@ class CopyAsLinkHandler
         setDefaultAttrsToDest(nTopRow, nDataSize);
     }
 
-    void duplicateNotes(SCROW nStartRow, size_t nDataSize, bool bCloneCaption )
-    {
-        mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestPos, bCloneCaption);
-    }
-
 public:
     CopyAsLinkHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos, InsertDeleteFlags nCopyFlags) :
         mrSrcCol(rSrcCol),
@@ -1327,7 +1317,7 @@ public:
         if (mnCopyFlags & (InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES))
         {
             bool bCloneCaption = (mnCopyFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-            duplicateNotes(nRow, nDataSize, bCloneCaption );
+            mrSrcCol.DuplicateNotes(nRow, nDataSize, mrDestCol, maDestPos, bCloneCaption);
         }
 
         switch (aNode.type)
@@ -1493,11 +1483,6 @@ class CopyByCloneHandler
         }
     }
 
-    void duplicateNotes(SCROW nStartRow, size_t nDataSize, bool bCloneCaption )
-    {
-        mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestPos, bCloneCaption);
-    }
-
 public:
     CopyByCloneHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos,
             InsertDeleteFlags nCopyFlags, svl::SharedStringPool* pSharedStringPool, bool bGlobalNamesToLocal) :
@@ -1551,7 +1536,7 @@ public:
         if (mnCopyFlags & (InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES))
         {
             bool bCloneCaption = (mnCopyFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-            duplicateNotes(nRow, nDataSize, bCloneCaption );
+            mrSrcCol.DuplicateNotes(nRow, nDataSize, mrDestCol, maDestPos, bCloneCaption);
         }
 
         switch (aNode.type)

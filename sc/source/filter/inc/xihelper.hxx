@@ -209,8 +209,6 @@ private:
 
     /** Returns the maximum line height of the specified portion. */
     sal_uInt16          GetMaxLineHeight( XclImpHFPortion ePortion ) const;
-    /** Returns the current maximum line height. */
-    sal_uInt16          GetCurrMaxLineHeight() const;
 
     /** Updates the maximum line height of the specified portion, using the current font size. */
     void                UpdateMaxLineHeight( XclImpHFPortion ePortion );

@@ -186,9 +186,6 @@ public:
     static void SaveXml( XclExpXmlStream& rStrm );
 
 private:
-    /** Returns read/write access to a pivot cache field. */
-    XclExpPCField*      GetFieldAcc( sal_uInt16 nFieldIdx );
-
     /** Adds all pivot cache fields. */
     void                AddFields( const ScDPObject& rDPObj );
 

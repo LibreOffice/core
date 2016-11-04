@@ -1021,8 +1021,6 @@ private:
     /** Reads a CHDATAFORMAT record group (default series format). */
     void                ReadChDataFormat( XclImpStream& rStrm );
 
-    /** Returns true, if the chart type group contains a hi-lo line format. */
-    inline bool         HasHiLoLine() const { return m_ChartLines.find(EXC_CHCHARTLINE_HILO) != m_ChartLines.end(); }
     /** Returns true, if the chart type group contains drop bar formats. */
     inline bool         HasDropBars() const { return !m_DropBars.empty(); }
 
@@ -1149,14 +1147,6 @@ public:
     inline sal_uInt16   GetAxisType() const { return maData.mnType; }
     /** Returns the axis dimension index used by the chart API. */
     inline sal_Int32    GetApiAxisDimension() const { return maData.GetApiAxisDimension(); }
-    /** Returns true, if the axis is active. */
-    inline bool         IsActivated() const { return !mxAxisLine || mxAxisLine->IsShowAxis(); }
-    /** Returns true, if the axis contains caption labels. */
-    inline bool         HasLabels() const { return !mxTick || mxTick->HasLabels(); }
-    /** Returns true, if the axis shows its major grid lines. */
-    inline bool         HasMajorGrid() const { return static_cast< bool >(mxMajorGrid); }
-    /** Returns true, if the axis shows its minor grid lines. */
-    inline bool         HasMinorGrid() const { return static_cast< bool >(mxMinorGrid); }
 
     /** Creates an API axis object. */
     css::uno::Reference< css::chart2::XAxis >
