@@ -10,11 +10,14 @@
 #include <tokenarray.hxx>
 #include <document.hxx>
 #include <tokenstringcontext.hxx>
+#include <address.hxx>
 
 #include <o3tl/make_unique.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
+#include <formula/vectortoken.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <cstdlib>
 
@@ -48,6 +51,7 @@ FormulaLogger& FormulaLogger::get()
 struct FormulaLogger::GroupScope::Impl
 {
     FormulaLogger& mrLogger;
+    const ScDocument& mrDoc;
 
     OUString maPrefix;
     std::vector<OUString> maMessages;
@@ -55,7 +59,7 @@ struct FormulaLogger::GroupScope::Impl
     bool mbCalcComplete = false;
 
     Impl( FormulaLogger& rLogger, const OUString& rPrefix, const ScDocument& rDoc, const ScFormulaCell& rCell ) :
-        mrLogger(rLogger), maPrefix(rPrefix)
+        mrLogger(rLogger), mrDoc(rDoc), maPrefix(rPrefix)
     {
         ++mrLogger.mnNestLevel;
 
@@ -110,6 +114,47 @@ FormulaLogger::GroupScope::~GroupScope() {}
 void FormulaLogger::GroupScope::addMessage( const OUString& rMsg )
 {
     mpImpl->maMessages.push_back(rMsg);
+}
+
+void FormulaLogger::GroupScope::addRefMessage(
+    const ScAddress& rPos, size_t nLen, const formula::VectorRefArray& rArray )
+{
+    OUStringBuffer aBuf;
+
+    ScRange aRefRange(rPos);
+    aRefRange.aEnd.IncRow(nLen-1);
+    OUString aRangeStr = aRefRange.Format(ScRefFlags::VALID, &mpImpl->mrDoc);
+    aBuf.append(aRangeStr);
+    aBuf.appendAscii(": ");
+
+    if (rArray.mpNumericArray)
+    {
+        if (rArray.mpStringArray)
+        {
+            // mixture of numeric and string cells.
+            aBuf.appendAscii("numeric and string");
+        }
+        else
+        {
+            // numeric cells only.
+            aBuf.appendAscii("numeric only");
+        }
+    }
+    else
+    {
+        if (rArray.mpStringArray)
+        {
+            // string cells only.
+            aBuf.appendAscii("string only");
+        }
+        else
+        {
+            // empty cells.
+            aBuf.appendAscii("empty");
+        }
+    }
+
+    mpImpl->maMessages.push_back(aBuf.makeStringAndClear());
 }
 
 void FormulaLogger::GroupScope::setCalcComplete()
