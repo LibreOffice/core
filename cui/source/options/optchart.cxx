@@ -40,8 +40,6 @@ public:
     virtual         ~ColorLB() override;
     virtual void    dispose() override;
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
-
     using ListBox::InsertEntry;
     sal_Int32       InsertEntry( const Color& rColor, const OUString& rStr,
                                  sal_Int32  nPos = LISTBOX_APPEND );
@@ -94,8 +92,6 @@ void ColorLB::ImplInit()
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     aImageSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
-    EnableUserDraw( true );
-    SetUserItemSize( aImageSize );
 }
 
 void ColorLB::ImplDestroyColorEntries()
@@ -131,7 +127,17 @@ void ColorLB::dispose()
 sal_Int32 ColorLB::InsertEntry( const Color& rColor, const OUString& rStr,
                                 sal_Int32 nPos )
 {
-    nPos = ListBox::InsertEntry( rStr, nPos );
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+    VclPtr<VirtualDevice> xDevice = VclPtr<VirtualDevice>::Create();
+    xDevice->SetOutputSize(aImageSize);
+    const Rectangle aRect(Point(0, 0), aImageSize);
+    xDevice->SetFillColor(rColor);
+    xDevice->SetLineColor(rStyleSettings.GetDisableColor());
+    xDevice->DrawRect(aRect);
+    Bitmap aBitmap(xDevice->GetBitmap(Point(0, 0), xDevice->GetOutputSize()));
+
+    nPos = ListBox::InsertEntry(rStr, Image(aBitmap), nPos);
     if ( nPos != LISTBOX_ERROR )
     {
         ImplColorListData* pData = new ImplColorListData( rColor );
@@ -176,53 +182,6 @@ Color ColorLB::GetEntryColor( sal_Int32 nPos ) const
     if ( pData && pData->bColor )
         aColor = pData->aColor;
     return aColor;
-}
-
-void ColorLB::UserDraw( const UserDrawEvent& rUDEvt )
-{
-    size_t nPos = rUDEvt.GetItemId();
-    ImplColorListData* pData = ( nPos < pColorList->size() ) ? (*pColorList)[ nPos ] : nullptr;
-    if ( pData )
-    {
-        if ( pData->bColor )
-        {
-            Point aPos( rUDEvt.GetRect().TopLeft() );
-
-            aPos.X() += 2;
-            aPos.Y() += ( rUDEvt.GetRect().GetHeight() - aImageSize.Height() ) / 2;
-
-            const Rectangle aRect(aPos, aImageSize);
-
-            vcl::RenderContext* pRenderContext = rUDEvt.GetRenderContext();
-            pRenderContext->Push();
-            pRenderContext->SetFillColor(pData->aColor);
-            pRenderContext->SetLineColor(pRenderContext->GetTextColor());
-            pRenderContext->DrawRect(aRect);
-            pRenderContext->Pop();
-
-            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-            const sal_uInt16 nEdgeBlendingPercent(GetEdgeBlending() ? rStyleSettings.GetEdgeBlending() : 0);
-
-            if(nEdgeBlendingPercent)
-            {
-                const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
-                const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
-                const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
-                const BitmapEx aBlendFrame(createBlendFrame(aRect.GetSize(), nAlpha, rTopLeft, rBottomRight));
-
-                if(!aBlendFrame.IsEmpty())
-                {
-                    pRenderContext->DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
-                }
-            }
-
-            ListBox::DrawEntry( rUDEvt, false, false );
-        }
-        else
-            ListBox::DrawEntry( rUDEvt, false, true );
-    }
-    else
-        ListBox::DrawEntry( rUDEvt, true, false );
 }
 
 void ColorLB::Append( const XColorEntry& rEntry )
