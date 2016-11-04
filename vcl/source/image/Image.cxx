@@ -67,11 +67,6 @@ Image::Image( const ResId& rResId )
     }
 }
 
-Image::Image(const Image& rImage)
-    : mpImplData(rImage.mpImplData)
-{
-}
-
 Image::Image(const BitmapEx& rBitmapEx)
 {
     ImplInit(rBitmapEx);
@@ -112,10 +107,6 @@ Image::Image(const OUString & rFileUrl)
     }
 }
 
-Image::~Image()
-{
-}
-
 void Image::ImplInit(const BitmapEx& rBitmapEx)
 {
     if (!rBitmapEx.IsEmpty())
@@ -154,18 +145,6 @@ css::uno::Reference< css::graphic::XGraphic > Image::GetXGraphic() const
     const Graphic aGraphic( GetBitmapEx() );
 
     return aGraphic.GetXGraphic();
-}
-
-Image& Image::operator=(const Image& rImage)
-{
-    mpImplData = rImage.mpImplData;
-    return *this;
-}
-
-Image& Image::operator=(Image&& rImage)
-{
-    std::swap(mpImplData, rImage.mpImplData);
-    return *this;
 }
 
 bool Image::operator==(const Image& rImage) const
