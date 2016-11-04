@@ -52,6 +52,24 @@
       "revId": "ad0c4865d1adf8aa07c062cfdaeb02934f3dab68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_dac16982",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-11-04T15:32:24Z",
+      "side": 1,
+      "message": "ah, sorry, I read that code too sloppily\n\nthis doesn\u0027t work; css::uno::ContextLayer doesn\u0027t inherit from XInterface and doesn\u0027t implement acquire/release (and if it did implement acquire/release, you should use rtl::Reference instead of css::uno::Reference, cf. loplugin:refcounting)",
+      "parentUuid": "7a77a97e_ba966d92",
+      "revId": "ad0c4865d1adf8aa07c062cfdaeb02934f3dab68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
