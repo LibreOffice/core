@@ -108,10 +108,6 @@
 #define STR_SHOW_RULER                      ( RID_STRING_START +  63 )
 #define STR_SHOW_GRID                       ( RID_STRING_START +  64 )
 
-#define STR_COLOR_WHITE                     ( RID_STRING_START +  65 )
-#define STR_CHARCOLOR                       ( RID_STRING_START +  66 )
-#define STR_CHARBACKGROUND                  ( RID_STRING_START +  67 )
-#define STR_TRANSPARENT                     ( RID_STRING_START +  68 )
 #define RID_STR_FIELDSELECTION              ( RID_STRING_START +  69 )
 
 #define RID_STR_UNDO_ADD_GROUP_HEADER       ( RID_STRING_START +  70 )

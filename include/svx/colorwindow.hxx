@@ -31,7 +31,7 @@
 
 #include <functional>
 
-class BorderColorStatus
+class SVX_DLLPUBLIC BorderColorStatus
 {
     Color maColor;
     Color maTLBRColor;

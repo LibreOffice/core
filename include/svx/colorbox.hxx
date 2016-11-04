@@ -21,6 +21,7 @@ class SvxListBoxColorWrapper
 public:
     SvxListBoxColorWrapper(SvxColorListBox* pControl);
     void operator()(const OUString& rCommand, const NamedColor& rColor);
+    void dispose();
 private:
     VclPtr<SvxColorListBox> mxControl;
 };

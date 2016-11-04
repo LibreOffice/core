@@ -3192,6 +3192,11 @@ void SvxListBoxColorWrapper::operator()(const OUString& /*rCommand*/, const Name
     mxControl->Selected(rColor);
 }
 
+void SvxListBoxColorWrapper::dispose()
+{
+    mxControl.clear();
+}
+
 SvxColorListBox::SvxColorListBox(vcl::Window* pParent, WinBits nStyle)
     : MenuButton(pParent, nStyle)
     , m_aColorWrapper(this)
@@ -3306,6 +3311,7 @@ SvxColorListBox::~SvxColorListBox()
 void SvxColorListBox::dispose()
 {
     m_xColorWindow.disposeAndClear();
+    m_aColorWrapper.dispose();
     MenuButton::dispose();
 }
 
