@@ -23,30 +23,23 @@
 #include <sal/types.h>
 #include <vcl/timer.hxx>
 #include <svx/svxdllapi.h>
+#include <o3tl/sorted_vector.hxx>
 
-
-// event class
 
 namespace sdr
 {
     namespace animation
     {
+
         class SVX_DLLPUBLIC Event
         {
             // time of event in ms
             sal_uInt32                                      mnTime;
 
-            // pointer for linked list sorted by mnTime
-            Event*                                          mpNext;
-
         public:
             // constructor/destructor
             SAL_DLLPRIVATE explicit Event();
             virtual ~Event();
-
-            // access to mpNext
-            SAL_DLLPRIVATE Event* GetNext() const {  return mpNext; }
-            SAL_DLLPRIVATE void SetNext(Event* pNew);
 
             // get/set time
             SAL_DLLPRIVATE sal_uInt32 GetTime() const {  return mnTime; }
@@ -55,43 +48,12 @@ namespace sdr
             // execute event
             virtual void Trigger(sal_uInt32 nTime) = 0;
         };
-    } // end of namespace animation
-} // end of namespace sdr
 
-
-// eventlist class
-
-namespace sdr
-{
-    namespace animation
-    {
-        class SVX_DLLPUBLIC EventList
+        struct CompareEvent
         {
-            // pointer to first entry
-            Event*                                          mpHead;
-
-        public:
-            // constructor/destructor
-            SAL_DLLPRIVATE EventList();
-            virtual ~EventList();
-
-            // insert/remove time dependent
-            SAL_DLLPRIVATE void Insert(Event* pNew);
-            SAL_DLLPRIVATE void Remove(Event* pOld);
-
-            // get first
-            SAL_DLLPRIVATE Event* GetFirst() {  return mpHead; }
+            bool operator()(Event* const& lhs, Event* const& rhs) const;
         };
-    } // end of namespace animation
-} // end of namespace sdr
 
-
-// scheduler class
-
-namespace sdr
-{
-    namespace animation
-    {
         class SVX_DLLPUBLIC Scheduler : public Timer
         {
             // time in ms
@@ -101,7 +63,7 @@ namespace sdr
             sal_uInt32                                      mnDeltaTime;
 
             // list of events
-            EventList                                       maList;
+            o3tl::sorted_vector<Event*, CompareEvent>       maList;
 
             // Flag which remembers if this timer is paused. Default
             // is false.
@@ -135,6 +97,7 @@ namespace sdr
             SAL_DLLPRIVATE bool IsPaused() const { return mbIsPaused; }
             SAL_DLLPRIVATE void SetPaused(bool bNew);
         };
+
     } // end of namespace animation
 } // end of namespace sdr
 
