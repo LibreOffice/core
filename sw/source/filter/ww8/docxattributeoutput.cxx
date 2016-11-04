@@ -4123,7 +4123,7 @@ void DocxAttributeOutput::DefaultStyle()
 /* Writes <a:srcRect> tag back to document.xml if a file conatins a cropped image.
 *  NOTE : Tested on images of type JPEG,EMF/WMF,BMP, PNG and GIF.
 */
-void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
+void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj, const SwFrameFormat* pFrameFormat )
 {
     uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
@@ -4134,9 +4134,6 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
 
     Size aOriginalSize(aGrafObj.GetPrefSize());
 
-    css::text::GraphicCrop aGraphicCropStruct;
-    xPropSet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
-
     const MapMode aMap100mm( MapUnit::Map100thMM );
     const MapMode& rMapMode = aGrafObj.GetPrefMapMode();
     if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
@@ -4144,15 +4141,33 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
         aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, aMap100mm);
     }
 
-    if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
+    css::text::GraphicCrop aGraphicCropStruct;
+    xPropSet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
+    sal_Int16 nCropL = aGraphicCropStruct.Left;
+    sal_Int16 nCropR = aGraphicCropStruct.Right;
+    sal_Int16 nCropT = aGraphicCropStruct.Top;
+    sal_Int16 nCropB = aGraphicCropStruct.Bottom;
+
+    // simulate border padding as a negative crop.
+    const SfxPoolItem* pItem;
+    if (pFrameFormat && SfxItemState::SET == pFrameFormat->GetItemState(RES_BOX, false, &pItem))
+    {
+        const SvxBoxItem& rBox = *static_cast<const SvxBoxItem*>(pItem);
+        nCropL -= rBox.GetDistance( SvxBoxItemLine::LEFT );
+        nCropR -= rBox.GetDistance( SvxBoxItemLine::RIGHT );
+        nCropT -= rBox.GetDistance( SvxBoxItemLine::TOP );
+        nCropB -= rBox.GetDistance( SvxBoxItemLine::BOTTOM );
+    }
+
+    if ( (0 != nCropL) || (0 != nCropT) || (0 != nCropR) || (0 != nCropB) )
     {
         double  widthMultiplier  = 100000.0/aOriginalSize.Width();
         double  heightMultiplier = 100000.0/aOriginalSize.Height();
 
-        double left   = aGraphicCropStruct.Left * widthMultiplier;
-        double right  = aGraphicCropStruct.Right * widthMultiplier;
-        double top    = aGraphicCropStruct.Top * heightMultiplier;
-        double bottom = aGraphicCropStruct.Bottom * heightMultiplier;
+        double left   = nCropL * widthMultiplier;
+        double right  = nCropR * widthMultiplier;
+        double top    = nCropT * heightMultiplier;
+        double bottom = nCropB * heightMultiplier;
 
         m_pSerializer->singleElementNS( XML_a, XML_srcRect,
              XML_l, I32S(left),
@@ -4347,7 +4362,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->endElementNS( XML_a, XML_blip );
 
     if (pSdrObj){
-        WriteSrcRect(pSdrObj);
+        WriteSrcRect(pSdrObj, pFrameFormat);
     }
 
     m_pSerializer->startElementNS( XML_a, XML_stretch,

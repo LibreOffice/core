@@ -831,26 +831,39 @@ DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
     }
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf41542_imagePadding, "tdf41542_imagePadding.odt")
+{
+    // borderlessImage - image WITHOUT BORDERS : simulate padding with -crop
+    text::GraphicCrop crop = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
+    CPPUNIT_ASSERT( crop.Left != 0 && crop.Right != 0 );
+    CPPUNIT_ASSERT( crop.Left == crop.Top && crop.Right == crop.Bottom && crop.Left == crop.Right );
+
+    // borderedImage - image WITH BORDERS : simulate padding with -crop
+    crop = getProperty<text::GraphicCrop>(getShape(3), "GraphicCrop");
+    CPPUNIT_ASSERT( crop.Left != 0 && crop.Right != 0 );
+    CPPUNIT_ASSERT( crop.Left == crop.Top && crop.Right == crop.Bottom && crop.Left == crop.Right );
+}
+
 DECLARE_WW8EXPORT_TEST(testFdo77454, "fdo77454.doc")
 {
     {
-        // check negative crops round-trip
+        // check negative crops round-trip  (with border/padding of 1)
         text::GraphicCrop const crop =
             getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
-        CPPUNIT_ASSERT_EQUAL(sal_Int32( -439), crop.Left);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-7040), crop.Right);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32( -220), crop.Top);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-7040), crop.Bottom);
+        CPPUNIT_ASSERT(abs(sal_Int32( -439) - crop.Left)   <= 2);
+        CPPUNIT_ASSERT(abs(sal_Int32(-7040) - crop.Right)  <= 2);
+        CPPUNIT_ASSERT(abs(sal_Int32( -220) - crop.Top)    <= 2);
+        CPPUNIT_ASSERT(abs(sal_Int32(-7040) - crop.Bottom) <= 2);
     }
 
     {
-        // check positive crops round-trip
+        // check positive crops round-trip (with padding of 1)
         text::GraphicCrop const crop =
             getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(  326), crop.Left);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32( 1208), crop.Right);
-        CPPUNIT_ASSERT(abs(sal_Int32(1635) -  crop.Top) <= 2);
-        CPPUNIT_ASSERT(abs(sal_Int32(  95) - crop.Bottom) <= 2);
+        CPPUNIT_ASSERT(abs(sal_Int32( 326) - crop.Left)   <= 3);
+        CPPUNIT_ASSERT(abs(sal_Int32(1208) - crop.Right)  <= 3);
+        CPPUNIT_ASSERT(abs(sal_Int32(1635) - crop.Top)    <= 3);
+        CPPUNIT_ASSERT(abs(sal_Int32(  95) - crop.Bottom) <= 3);
     }
 }
 
