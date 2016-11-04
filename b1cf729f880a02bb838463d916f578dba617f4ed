@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_da1de910",
+        "filename": "sc/source/ui/inc/ExternalLink.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001210
+      },
+      "writtenOn": "2016-11-04T18:45:24Z",
+      "side": 1,
+      "message": "The Reason I did this was because Data maybe fetched from an Online source like a website or from an offline source such as a file. The Input Url would be parsed and the source (online or offline) would be determined and a variable would be set accordingly.",
+      "parentUuid": "7a77a97e_4e9f6203",
+      "revId": "b1cf729f880a02bb838463d916f578dba617f4ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_ce9372f9",
         "filename": "sc/source/ui/inc/ExternalLink.hxx",
         "patchSetId": 1
