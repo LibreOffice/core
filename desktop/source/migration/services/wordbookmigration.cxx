@@ -29,12 +29,6 @@ using namespace ::com::sun::star::uno;
 
 namespace migration
 {
-
-
-    static const char sSourceSubDir[] = "/user/wordbook";
-    static const char sTargetSubDir[] = "/user/wordbook";
-
-
     // component operations
 
 
@@ -156,7 +150,7 @@ bool IsUserWordbook( const OUString& rFile )
         ::utl::Bootstrap::PathStatus aStatus = ::utl::Bootstrap::locateUserInstallation( sTargetDir );
         if ( aStatus == ::utl::Bootstrap::PATH_EXISTS )
         {
-            sTargetDir += sTargetSubDir;
+            sTargetDir += "/user/wordbook";
             TStringVectorPtr aFileList = getFiles( m_sSourceDir );
             TStringVector::const_iterator aI = aFileList->begin();
             while ( aI != aFileList->end() )
@@ -229,7 +223,7 @@ bool IsUserWordbook( const OUString& rFile )
                 {
                     OSL_FAIL( "WordbookMigration::initialize: argument UserData has wrong type!" );
                 }
-                m_sSourceDir += sSourceSubDir;
+                m_sSourceDir += "/user/wordbook";
                 break;
             }
         }
