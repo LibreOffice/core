@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_7a7cd572",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-11-04T15:06:59Z",
+      "side": 1,
+      "message": "I misremembered how css::uno::ContextLayer works; it does not chain a new, temporal context atop an existing one, but merely temporarily replaces the exiting one with the new one.  So if EnsureJavaContext returns nullptr, the following code would temporarily use a null context.\nSo, arguably, the original code was poor, and should have installed a wrapping context instead of a replacing one.",
+      "revId": "ad0c4865d1adf8aa07c062cfdaeb02934f3dab68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
