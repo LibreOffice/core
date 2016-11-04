@@ -62,6 +62,7 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
+#include <com/sun/star/awt/CharSet.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -2665,6 +2666,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             rContext->Insert(PROP_CHAR_FONT_NAME, aVal);
             rContext->Insert(PROP_CHAR_FONT_NAME_ASIAN, aVal);
             rContext->Insert(PROP_CHAR_FONT_NAME_COMPLEX, aVal);
+            rContext->Insert(PROP_CHAR_FONT_CHAR_SET, uno::makeAny(awt::CharSet::SYMBOL));
             utext( reinterpret_cast < const sal_uInt8 * >( &(aSymbolData.cSymbol) ), 1 );
         }
     }
