@@ -18,7 +18,12 @@ class ScFormulaCell;
 class ScDocument;
 class ScAddress;
 
-namespace formula { struct VectorRefArray; }
+namespace formula {
+
+class FormulaToken;
+struct VectorRefArray;
+
+}
 
 namespace sc {
 
@@ -83,6 +88,11 @@ public:
         void addRefMessage( const ScAddress& rPos, size_t nLen, const formula::VectorRefArray& rArray );
 
         /**
+         * Add to the log a single cell reference information.
+         */
+        void addRefMessage( const ScAddress& rPos, const formula::FormulaToken& rToken );
+
+        /**
          * Call this when the group calculation has finished successfullly.
          */
         void setCalcComplete();
@@ -116,6 +126,8 @@ public:
     public:
         void addMessage( const OUString& /*rMsg*/ ) { (void) this; /* loplugin:staticmethods */ }
         void addRefMessage( const ScAddress& /*rPos*/, size_t /*nLen*/, const formula::VectorRefArray& /*rArray*/ )
+        { (void) this; /* loplugin:staticmethods */ }
+        void addRefMessage( const ScAddress& /*rPos*/, const formula::FormulaToken& /*rToken*/ )
         { (void) this; /* loplugin:staticmethods */ }
         void setCalcComplete() { (void) this; /* loplugin:staticmethods */ }
     };
