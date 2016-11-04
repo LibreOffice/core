@@ -5598,8 +5598,16 @@ void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& a
         SCCOLROW nFieldStart = aParam.bByRow ?
             static_cast<SCCOLROW>(aRange.aStart.Col()) :
             static_cast<SCCOLROW>(aRange.aStart.Row());
+        SCCOLROW nFieldEnd = aParam.bByRow ?
+            static_cast<SCCOLROW>(aRange.aEnd.Col()) :
+            static_cast<SCCOLROW>(aRange.aEnd.Row());
         for (i=0; i<aParam.GetSortKeyCount(); i++)
+        {
             aParam.maKeyState[i].nField += nFieldStart;
+            // tdf#103632 - sanity check poorly behaved macros.
+            if (aParam.maKeyState[i].nField > nFieldEnd)
+                aParam.maKeyState[i].nField = nFieldEnd;
+        }
 
         SCTAB nTab = aRange.aStart.Tab();
         aParam.nCol1 = aRange.aStart.Col();
