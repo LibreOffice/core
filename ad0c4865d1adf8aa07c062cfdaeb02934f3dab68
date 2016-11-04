@@ -34,6 +34,24 @@
       "revId": "ad0c4865d1adf8aa07c062cfdaeb02934f3dab68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_3ae97d1b",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-11-04T15:19:40Z",
+      "side": 1,
+      "message": "And AFAICT, wrapping happens at the Context level (when JavaContext is created with previous CurrentContext argument); Layer only sets new CurrentContext, and other contexts are chained from it.",
+      "parentUuid": "7a77a97e_7a7cd572",
+      "revId": "ad0c4865d1adf8aa07c062cfdaeb02934f3dab68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
