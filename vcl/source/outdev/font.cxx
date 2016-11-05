@@ -36,11 +36,6 @@
 
 #include "svids.hrc"
 
-#include <config_graphite.h>
-#if ENABLE_GRAPHITE
-#include "graphite_features.hxx"
-#endif
-
 FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
 {
     FontMetric aFontMetric;
