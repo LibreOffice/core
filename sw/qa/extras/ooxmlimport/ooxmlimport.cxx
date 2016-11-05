@@ -1250,7 +1250,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf100830, "tdf100830.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testTdf103664, "tdf103664.docx")
 {
-    // Wingdings symbols was displayed as rectangles
+    // Wingdings symbols were displayed as rectangles
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf020), xPara->getString()[0] );
     CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0fc), xPara->getString()[1] );
@@ -1262,7 +1262,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103664, "tdf103664.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameAsian"));
     CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameComplex"));
 
-    // Make sure these special characters imported as symbols
+    // Make sure these special characters are imported as symbols
     CPPUNIT_ASSERT_EQUAL(awt::CharSet::SYMBOL, getProperty<sal_Int16>(xRun, "CharFontCharSet"));
 }
 
