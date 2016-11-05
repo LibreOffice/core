@@ -798,6 +798,11 @@ String SCSTR_ROW_LABEL
     Text [ en-US ] = "Range contains ~row labels" ;
 };
 
+String SCSTR_AUTHOR
+{
+    Text [ en-US ] = "By author" ;
+};
+
 StringArray SCSTR_UNIT
 {
     ItemList [ en-US ] =

@@ -25,7 +25,6 @@
 #include <sfx2/request.hxx>
 #include <svx/dlgctrl.hxx>
 
-class SvxColorListBox;
 
 namespace svx { namespace sidebar {
 
@@ -61,10 +60,10 @@ public:
         SfxBindings* pBindings);
 
 private:
-    VclPtr<CheckBox>      mpShowShadow;
-    VclPtr<MetricBox>     mpShadowDistance;
-    VclPtr<SvxColorListBox> mpLBShadowColor;
-    VclPtr<MetricBox>     mpShadowAngle;
+    VclPtr<CheckBox>   mpShowShadow;
+    VclPtr<MetricBox>       mpShadowDistance;
+    VclPtr<ColorLB>       mpLBShadowColor;
+    VclPtr<MetricBox>       mpShadowAngle;
     VclPtr<FixedText>     mpFTAngle;
     VclPtr<FixedText>     mpFTDistance;
     VclPtr<FixedText>     mpFTTransparency;
@@ -85,7 +84,7 @@ private:
     void SetTransparencyValue(long);
     void UpdateControls();
     DECL_LINK(ClickShadowHdl, Button*, void);
-    DECL_LINK(ModifyShadowColorHdl, SvxColorListBox&, void);
+    DECL_LINK(ModifyShadowColorHdl, ListBox&, void);
     DECL_LINK(ModifyShadowTransMetricHdl, Edit&, void);
     DECL_LINK(ModifyShadowDistanceHdl, Edit&, void);
     DECL_LINK(ModifyShadowTransSliderHdl, Slider*, void);

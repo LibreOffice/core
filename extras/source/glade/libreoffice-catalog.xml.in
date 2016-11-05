@@ -94,11 +94,29 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Color ListBox" name="svxlo-ColorListBox"
-                        generic-name="Color ListBox" parent="GtkComboBox"
+    <glade-widget-class title="Svt Color ListBox" name="svtlo-ColorListBox"
+                        generic-name="Svt Color ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
+      <properties>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
+      </properties>
     </glade-widget-class>
 
+    <glade-widget-class title="Svx Color ListBox" name="svxlo-ColorLB"
+                        generic-name="Svx Color ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
+      </properties>
+    </glade-widget-class>
     <glade-widget-class title="Gradient ListBox" name="svxlo-GradientLB"
                         generic-name="GradientListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">

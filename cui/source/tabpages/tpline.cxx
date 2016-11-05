@@ -24,7 +24,6 @@
 #include <sfx2/module.hxx>
 
 #include <cuires.hrc>
-#include <svx/colorbox.hxx>
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
@@ -269,6 +268,8 @@ void SvxLineTabPage::dispose()
 
 void SvxLineTabPage::Construct()
 {
+    // Color chart
+    m_pLbColor->Fill( m_pColorList );
     FillListboxes();
 }
 
@@ -640,6 +641,17 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             {
                 if( *m_pnColorListState & ChangeType::CHANGED )
                     m_pColorList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewColorList();
+                // aLbColor
+                sal_Int32 nColorPos = m_pLbColor->GetSelectEntryPos();
+                m_pLbColor->Clear();
+                m_pLbColor->Fill( m_pColorList );
+                nCount = m_pLbColor->GetEntryCount();
+                if( nCount == 0 )
+                    ; // This case should never occur
+                else if( nCount <= nColorPos )
+                    m_pLbColor->SelectEntryPos( 0 );
+                else
+                    m_pLbColor->SelectEntryPos( nColorPos );
 
                 ChangePreviewHdl_Impl( nullptr );
             }
@@ -755,9 +767,9 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     }
 
     // Line color
+    if( m_pLbColor->IsValueChangedFromSaved() )
     {
-        NamedColor aColor = m_pLbColor->GetSelectEntry();
-        XLineColorItem aItem(aColor.second, aColor.first);
+        XLineColorItem aItem( m_pLbColor->GetSelectEntry(), m_pLbColor->GetSelectEntryColor() );
         pOld = GetOldItem( *rAttrs, XATTR_LINECOLOR );
         if ( !pOld || !( *static_cast<const XLineColorItem*>(pOld) == aItem ) )
         {
@@ -1058,8 +1070,7 @@ void SvxLineTabPage::FillXLSet_Impl()
     m_rXLSet.Put( XLineEndWidthItem( GetCoreValue( *m_pMtrEndWidth, m_ePoolUnit ) ) );
 
     m_rXLSet.Put( XLineWidthItem( GetCoreValue( *m_pMtrLineWidth, m_ePoolUnit ) ) );
-    NamedColor aColor = m_pLbColor->GetSelectEntry();
-    m_rXLSet.Put(XLineColorItem(aColor.second, aColor.first));
+    m_rXLSet.Put( XLineColorItem( m_pLbColor->GetSelectEntry(), m_pLbColor->GetSelectEntryColor() ) );
 
     // Centered line end
     if( m_pTsbCenterStart->GetState() == TRISTATE_TRUE )
@@ -1249,6 +1260,11 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     {
         Color aCol = static_cast<const XLineColorItem&>( rAttrs->Get( XATTR_LINECOLOR ) ).GetColorValue();
         m_pLbColor->SelectEntry( aCol );
+        if( m_pLbColor->GetSelectEntryCount() == 0 )
+        {
+            m_pLbColor->InsertEntry( aCol, OUString() );
+            m_pLbColor->SelectEntry( aCol );
+        }
     }
 
     // Line start
@@ -1482,11 +1498,11 @@ VclPtr<SfxTabPage> SvxLineTabPage::Create( vcl::Window* pWindow,
     return VclPtr<SvxLineTabPage>::Create( pWindow, *rAttrs );
 }
 
-IMPL_LINK( SvxLineTabPage, ChangePreviewListBoxHdl_Impl, SvxColorListBox&, rListBox, void )
+
+IMPL_LINK( SvxLineTabPage, ChangePreviewListBoxHdl_Impl, ListBox&, rListBox, void )
 {
     ChangePreviewHdl_Impl(&rListBox);
 }
-
 IMPL_LINK( SvxLineTabPage, ChangePreviewModifyHdl_Impl, Edit&, rEdit, void )
 {
     ChangePreviewHdl_Impl(&rEdit);

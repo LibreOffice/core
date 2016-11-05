@@ -102,7 +102,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             if( pFact )
             {
-                ScopedVclPtr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(mpViewShell->GetActiveWindow(), aSet, mpView ));
+                ScopedVclPtr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(mpViewShell->GetActiveWindow(), aSet, mpDoc->GetColorList(), mpView ));
                 if (!pDlg)
                     return;
 

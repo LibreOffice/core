@@ -59,6 +59,230 @@
 #define FONTNAMEBOXMRUENTRIESFILE "/user/config/fontnameboxmruentries"
 
 
+class ImplColorListData
+{
+public:
+    Color       aColor;
+    bool        bColor;
+
+                ImplColorListData() : aColor( COL_BLACK ) { bColor = false; }
+                explicit ImplColorListData( const Color& rColor ) : aColor( rColor ) { bColor = true; }
+};
+
+void ColorListBox::ImplInit()
+{
+    pColorList = new ImpColorList();
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    aImageSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
+    EnableUserDraw( true );
+    SetUserItemSize( aImageSize );
+}
+
+void ColorListBox::ImplDestroyColorEntries()
+{
+    for ( size_t n = pColorList->size(); n; )
+        delete (*pColorList)[ --n ];
+    pColorList->clear();
+}
+
+ColorListBox::ColorListBox( vcl::Window* pParent, WinBits nWinStyle ) :
+    ListBox( pParent, nWinStyle )
+{
+    ImplInit();
+    SetEdgeBlending(true);
+}
+
+VCL_BUILDER_DECL_FACTORY(ColorListBox)
+{
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    VclPtrInstance<ColorListBox> pListBox(pParent, nWinBits);
+    if (bDropdown)
+        pListBox->EnableAutoSize(true);
+    rRet = pListBox;
+}
+
+ColorListBox::~ColorListBox()
+{
+    disposeOnce();
+}
+
+void ColorListBox::dispose()
+{
+    if ( pColorList )
+    {
+        ImplDestroyColorEntries();
+        delete pColorList;
+        pColorList = nullptr;
+    }
+    ListBox::dispose();
+}
+
+sal_Int32 ColorListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
+{
+    nPos = ListBox::InsertEntry( rStr, nPos );
+    if ( nPos != LISTBOX_ERROR )
+    {
+        ImplColorListData* pData = new ImplColorListData;
+        if ( static_cast<size_t>(nPos) < pColorList->size() )
+        {
+            ImpColorList::iterator it = pColorList->begin();
+            ::std::advance( it, nPos );
+            pColorList->insert( it, pData );
+        }
+        else
+        {
+            pColorList->push_back( pData );
+            nPos = pColorList->size() - 1;
+        }
+    }
+    return nPos;
+}
+
+sal_Int32 ColorListBox::InsertEntry( const Color& rColor, const OUString& rStr,
+                                sal_Int32 nPos )
+{
+    nPos = ListBox::InsertEntry( rStr, nPos );
+    if ( nPos != LISTBOX_ERROR )
+    {
+        ImplColorListData* pData = new ImplColorListData( rColor );
+        if ( static_cast<size_t>(nPos) < pColorList->size() )
+        {
+            ImpColorList::iterator it = pColorList->begin();
+            ::std::advance( it, nPos );
+            pColorList->insert( it, pData );
+        }
+        else
+        {
+            pColorList->push_back( pData );
+            nPos = pColorList->size() - 1;
+        }
+    }
+    return nPos;
+}
+
+void ColorListBox::InsertAutomaticEntryColor(const Color &rColor)
+{
+    // insert the "Automatic"-entry always on the first position
+    InsertEntry( rColor, SVT_RESSTR(STR_SVT_AUTOMATIC_COLOR), 0 );
+}
+
+void ColorListBox::RemoveEntry( sal_Int32 nPos )
+{
+    ListBox::RemoveEntry( nPos );
+    if ( 0 <= nPos && static_cast<size_t>(nPos) < pColorList->size() )
+    {
+            ImpColorList::iterator it = pColorList->begin();
+            ::std::advance( it, nPos );
+            delete *it;
+            pColorList->erase( it );
+    }
+}
+
+void ColorListBox::Clear()
+{
+    ImplDestroyColorEntries();
+    ListBox::Clear();
+}
+
+void ColorListBox::CopyEntries( const ColorListBox& rBox )
+{
+    // Liste leeren
+    ImplDestroyColorEntries();
+
+    // Daten kopieren
+    size_t nCount = rBox.pColorList->size();
+    for ( size_t n = 0; n < nCount; n++ )
+    {
+        ImplColorListData* pData = (*rBox.pColorList)[ n ];
+        sal_Int32 nPos = InsertEntry( rBox.GetEntry( n ) );
+        if ( nPos != LISTBOX_ERROR )
+        {
+            if ( static_cast<size_t>(nPos) < pColorList->size() )
+            {
+                ImpColorList::iterator it = pColorList->begin();
+                ::std::advance( it, nPos );
+                pColorList->insert( it, new ImplColorListData( *pData ) );
+            }
+            else
+            {
+                pColorList->push_back( new ImplColorListData( *pData ) );
+            }
+        }
+    }
+}
+
+sal_Int32 ColorListBox::GetEntryPos( const Color& rColor ) const
+{
+    for( sal_Int32 n = (sal_Int32) pColorList->size(); n; )
+    {
+        ImplColorListData* pData = (*pColorList)[ --n ];
+        if ( pData->bColor && ( pData->aColor == rColor ) )
+            return n;
+    }
+    return LISTBOX_ENTRY_NOTFOUND;
+}
+
+Color ColorListBox::GetEntryColor( sal_Int32 nPos ) const
+{
+    Color aColor;
+    ImplColorListData* pData = ( 0 <= nPos && static_cast<size_t>(nPos) < pColorList->size() ) ?
+        (*pColorList)[ nPos ] : nullptr;
+    if ( pData && pData->bColor )
+        aColor = pData->aColor;
+    return aColor;
+}
+
+void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
+{
+    size_t nPos = rUDEvt.GetItemId();
+    ImplColorListData* pData = ( nPos < pColorList->size() ) ? (*pColorList)[ nPos ] : nullptr;
+    if ( pData )
+    {
+        if ( pData->bColor )
+        {
+            Point aPos( rUDEvt.GetRect().TopLeft() );
+
+            aPos.X() += 2;
+            aPos.Y() += ( rUDEvt.GetRect().GetHeight() - aImageSize.Height() ) / 2;
+
+            const Rectangle aRect(aPos, aImageSize);
+
+            vcl::RenderContext* pRenderContext = rUDEvt.GetRenderContext();
+            pRenderContext->Push();
+            pRenderContext->SetFillColor(pData->aColor);
+            pRenderContext->SetLineColor(pRenderContext->GetTextColor());
+            pRenderContext->DrawRect(aRect);
+            pRenderContext->Pop();
+
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+            const sal_uInt16 nEdgeBlendingPercent(GetEdgeBlending() ? rStyleSettings.GetEdgeBlending() : 0);
+
+            if(nEdgeBlendingPercent)
+            {
+                const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
+                const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
+                const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
+                const BitmapEx aBlendFrame(createBlendFrame(aRect.GetSize(), nAlpha, rTopLeft, rBottomRight));
+
+                if(!aBlendFrame.IsEmpty())
+                {
+                    pRenderContext->DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
+                }
+            }
+
+            ListBox::DrawEntry( rUDEvt, false, false );
+        }
+        else
+            ListBox::DrawEntry( rUDEvt, false, true );
+    }
+    else
+        ListBox::DrawEntry( rUDEvt, true, false );
+}
+
 BorderWidthImpl::BorderWidthImpl( BorderWidthImplFlags nFlags, double nRate1, double nRate2, double nRateGap ):
     m_nFlags( nFlags ),
     m_nRate1( nRate1 ),

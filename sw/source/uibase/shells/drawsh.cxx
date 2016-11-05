@@ -579,6 +579,16 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
     SdrView* pDrView = rSh.GetDrawView();
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
     const SdrObject* pObj = nullptr;
+    SvxFontWorkDialog* pDlg = nullptr;
+
+    const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
+
+    SfxViewFrame* pVFrame = GetView().GetViewFrame();
+    if ( pVFrame->HasChildWindow(nId) )
+    {
+        SfxChildWindow *pChildWindow = pVFrame->GetChildWindow(nId);
+        pDlg = pChildWindow ? static_cast<SvxFontWorkDialog*>(pChildWindow->GetWindow()) : nullptr;
+    }
 
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -606,6 +616,9 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
     }
     else
     {
+        if ( pDlg )
+            pDlg->SetColorList(XColorList::GetStdColorList());
+
         pDrView->GetAttributes( rSet );
     }
 }

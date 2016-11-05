@@ -284,13 +284,45 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     m_pLbLineStyle->SetSelectHdl( LINK( this, SvxBorderTabPage, SelStyleHdl_Impl ) );
     m_pLbLineColor->SetSelectHdl( LINK( this, SvxBorderTabPage, SelColHdl_Impl ) );
     m_pLineWidthMF->SetModifyHdl( LINK( this, SvxBorderTabPage, ModifyWidthHdl_Impl ) );
+    m_pLbShadowColor->SetSelectHdl( LINK( this, SvxBorderTabPage, SelColHdl_Impl ) );
     m_pWndPresets->SetSelectHdl( LINK( this, SvxBorderTabPage, SelPreHdl_Impl ) );
     m_pWndShadows->SetSelectHdl( LINK( this, SvxBorderTabPage, SelSdwHdl_Impl ) );
 
     FillValueSets();
     FillLineListBox_Impl();
 
+    // fill ColorBox out of the XColorList
+    SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
+    XColorListRef       pColorTable;
+
+    DBG_ASSERT( pDocSh, "DocShell not found!" );
+
+    if ( pDocSh )
+    {
+        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        if ( pItem != nullptr )
+            pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+    }
+
+    DBG_ASSERT( pColorTable.is(), "ColorTable not found!" );
+
+    if ( pColorTable.is() )
+    {
+        // filling the line color box
+        m_pLbLineColor->SetUpdateMode( false );
+
+        for ( long i = 0; i < pColorTable->Count(); ++i )
+        {
+            const XColorEntry* pEntry = pColorTable->GetColor(i);
+            m_pLbLineColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+        }
+        m_pLbLineColor->SetUpdateMode( true );
+
+        m_pLbShadowColor->CopyEntries(*m_pLbLineColor);
+    }
+
     // connections
+
     bool bSupportsShadow = !SfxItemPool::IsSlot( GetWhich( SID_ATTR_BORDER_SHADOW ) );
     if( bSupportsShadow )
         AddItemConnection( svx::CreateShadowConnection( rCoreAttrs, *m_pWndShadows, *m_pEdShadowSize, *m_pLbShadowColor ) );
@@ -312,8 +344,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     AddItemConnection( new sfx::CheckBoxConnection( SID_SW_COLLAPSING_BORDERS, *m_pMergeAdjacentBordersCB, ItemConnFlags::NONE ) );
     m_pMergeAdjacentBordersCB->Hide();
 
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    if (pDocSh)
+    if( pDocSh )
     {
         Reference< XServiceInfo > xSI( pDocSh->GetModel(), UNO_QUERY );
         if ( xSI.is() )
@@ -533,8 +564,12 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
         if( !bColorEq )
             aColor.SetColor( COL_BLACK );
 
-        m_pLbLineColor->SelectEntry(aColor);
-        m_pLbLineStyle->SetColor(aColor);
+        sal_Int32 nSelPos = m_pLbLineColor->GetEntryPos( aColor );
+        if( nSelPos == LISTBOX_ENTRY_NOTFOUND )
+            nSelPos = m_pLbLineColor->InsertEntry( aColor, SVX_RESSTR( RID_SVXSTR_COLOR_USER ) );
+
+        m_pLbLineColor->SelectEntryPos( nSelPos );
+        m_pLbLineStyle->SetColor( aColor );
 
         // Select all visible lines, if they are all equal.
         if( bWidthEq && bColorEq )
@@ -542,6 +577,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
         // set the current style and color (caches style in control even if nothing is selected)
         SelStyleHdl_Impl(*m_pLbLineStyle);
+        SelColHdl_Impl(*m_pLbLineColor);
     }
 
     bool bEnable = m_pWndShadows->GetSelectItemId() > 1 ;
@@ -832,6 +868,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
 
         // set current style to all previously selected lines
         SelStyleHdl_Impl(*m_pLbLineStyle);
+        SelColHdl_Impl(*m_pLbLineColor);
     }
 
     // Presets ValueSet does not show a selection (used as push buttons).
@@ -851,11 +888,16 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
     m_pLbShadowColor->Enable(bEnable);
 }
 
-IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, SvxColorListBox&, rColorBox, void)
+
+IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox&, rLb, void )
 {
-    Color aColor = rColorBox.GetSelectEntryColor();
-    m_pFrameSel->SetColorToSelection(aColor);
-    m_pLbLineStyle->SetColor(aColor);
+    ColorListBox* pColLb = static_cast<ColorListBox*>(&rLb);
+
+    if (&rLb == m_pLbLineColor)
+    {
+        m_pFrameSel->SetColorToSelection( pColLb->GetSelectEntryColor() );
+        m_pLbLineStyle->SetColor( pColLb->GetSelectEntryColor() );
+    }
 }
 
 IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)

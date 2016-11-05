@@ -1103,6 +1103,52 @@ void SvxPixelCtl::Reset()
     Invalidate();
 }
 
+VCL_BUILDER_DECL_FACTORY(ColorLB)
+{
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinBits |= WB_BORDER;
+    VclPtrInstance<ColorLB> pListBox(pParent, nWinBits);
+    pListBox->EnableAutoSize(true);
+    rRet = pListBox;
+}
+
+// Fills the Listbox with color and strings
+
+void ColorLB::Fill( const XColorListRef &pColorTab )
+{
+    if( !pColorTab.is() )
+        return;
+
+    long nCount = pColorTab->Count();
+    SetUpdateMode( false );
+
+    for( long i = 0; i < nCount; i++ )
+    {
+        const XColorEntry* pEntry = pColorTab->GetColor(i);
+        InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+    }
+
+    AdaptDropDownLineCountToMaximum();
+    SetUpdateMode( true );
+}
+
+void ColorLB::Append( const XColorEntry& rEntry )
+{
+    InsertEntry( rEntry.GetColor(), rEntry.GetName() );
+    AdaptDropDownLineCountToMaximum();
+}
+
+void ColorLB::Modify( const XColorEntry& rEntry, sal_Int32 nPos )
+{
+    RemoveEntry( nPos );
+    InsertEntry( rEntry.GetColor(), rEntry.GetName(), nPos );
+}
+
 // Fills the listbox (provisional) with strings
 
 HatchingLB::HatchingLB( vcl::Window* pParent, WinBits nWinStyle)
@@ -1257,7 +1303,7 @@ namespace
 } // end of anonymous namespace
 
 FillAttrLB::FillAttrLB(vcl::Window* pParent, WinBits aWB)
-    : ListBox(pParent, aWB)
+:   ColorListBox(pParent, aWB)
 {
 }
 

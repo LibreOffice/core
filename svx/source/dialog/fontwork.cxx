@@ -20,7 +20,6 @@
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <svx/colorbox.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdview.hxx>
@@ -792,11 +791,21 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl, Idle *, void)
             { &aDistItem, &aStartItem, &aShadowXItem, &aShadowYItem });
 }
 
-IMPL_LINK_NOARG(SvxFontWorkDialog, ColorSelectHdl_Impl, SvxColorListBox&, void)
+IMPL_LINK_NOARG(SvxFontWorkDialog, ColorSelectHdl_Impl, ListBox&, void)
 {
     XFormTextShadowColorItem aItem( "", m_pShadowColorLB->GetSelectEntryColor() );
     GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_SHDWCOLOR,
             SfxCallMode::RECORD, { &aItem });
+}
+
+void SvxFontWorkDialog::SetColorList(const XColorListRef &pList)
+{
+    if ( pList.is() && pList != pColorList )
+    {
+        pColorList = pList;
+        m_pShadowColorLB->Clear();
+        m_pShadowColorLB->Fill(pColorList);
+    }
 }
 
 void SvxFontWorkDialog::ApplyImageList()

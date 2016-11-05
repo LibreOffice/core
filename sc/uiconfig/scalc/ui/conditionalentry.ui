@@ -131,7 +131,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxlo-SvxColorListBox" id="lbcolmin">
+          <object class="svtlo-ColorListBox" id="lbcolmin">
             <property name="can_focus">False</property>
           </object>
           <packing>
@@ -140,7 +140,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxlo-SvxColorListBox" id="lbcolmiddle">
+          <object class="svtlo-ColorListBox" id="lbcolmiddle">
             <property name="can_focus">False</property>
           </object>
           <packing>
@@ -149,7 +149,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxlo-SvxColorListBox" id="lbcolmax">
+          <object class="svtlo-ColorListBox" id="lbcolmax">
             <property name="can_focus">False</property>
           </object>
           <packing>

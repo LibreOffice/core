@@ -13,7 +13,6 @@
 #include "document.hxx"
 #include "sc.hrc"
 
-#include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <vcl/msgbox.hxx>
@@ -67,6 +66,16 @@ void SetValue( ScDocument* pDoc, ScColorScaleEntry* pEntry, Edit& aEdit)
         aEdit.Disable();
 }
 
+void SelectColor(const Color& aColor, const OUString & aCustomName, ColorListBox& rLstBox)
+{
+    rLstBox.SelectEntry( aColor );
+    if ( rLstBox.GetSelectEntryColor() != aColor )
+    {
+        rLstBox.InsertEntry( aColor, aCustomName );
+        rLstBox.SelectEntry( aColor );
+    }
+}
+
 }
 
 ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos):
@@ -91,13 +100,14 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     get( mpCbOnlyBar, "only_bar");
 
     maStrWarnSameValue = get<FixedText>("str_same_value")->GetText();
+    maCustomColor = get<FixedText>("custom_color")->GetText();
 
     Init();
 
-    mpLbPos->SelectEntry(rData.maPositiveColor);
+    ::SelectColor( rData.maPositiveColor, maCustomColor, *mpLbPos);
     mpLbFillType->SelectEntryPos( rData.mbGradient ? 1 : 0 );
-    if (rData.mpNegativeColor)
-        mpLbNeg->SelectEntry(*rData.mpNegativeColor);
+    if(rData.mpNegativeColor)
+        ::SelectColor( *rData.mpNegativeColor, maCustomColor, *mpLbNeg );
 
     switch (rData.meAxisPosition)
     {
@@ -150,9 +160,42 @@ void ScDataBarSettingsDlg::dispose()
 
 void ScDataBarSettingsDlg::Init()
 {
-    mpLbNeg->SelectEntry(Color(COL_LIGHTRED));
-    mpLbAxisCol->SelectEntry(Color(COL_BLACK));
-    mpLbPos->SelectEntry(Color(COL_LIGHTBLUE));
+    SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
+    XColorListRef       pColorTable;
+
+    DBG_ASSERT( pDocSh, "DocShell not found!" );
+
+    if ( pDocSh )
+    {
+        const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        if ( pItem != nullptr )
+            pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+    }
+    if ( pColorTable.is() )
+    {
+        // filling the line color box
+        mpLbPos->SetUpdateMode( false );
+        mpLbNeg->SetUpdateMode( false );
+        mpLbAxisCol->SetUpdateMode( false );
+
+        for ( long i = 0; i < pColorTable->Count(); ++i )
+        {
+            const XColorEntry* pEntry = pColorTable->GetColor(i);
+            mpLbPos->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            mpLbNeg->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            mpLbAxisCol->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+
+            if(pEntry->GetColor() == Color(COL_LIGHTRED))
+                mpLbNeg->SelectEntryPos(i);
+            if(pEntry->GetColor() == Color(COL_BLACK))
+                mpLbAxisCol->SelectEntryPos(i);
+            if(pEntry->GetColor() == Color(COL_LIGHTBLUE))
+                mpLbPos->SelectEntryPos(i);
+        }
+        mpLbPos->SetUpdateMode( true );
+        mpLbNeg->SetUpdateMode( true );
+        mpLbAxisCol->SetUpdateMode( true );
+    }
     mpBtnOk->SetClickHdl( LINK( this, ScDataBarSettingsDlg, OkBtnHdl ) );
 
     mpLbTypeMin->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );

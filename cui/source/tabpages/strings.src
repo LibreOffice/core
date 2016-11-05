@@ -87,6 +87,10 @@ String RID_SVXSTR_DESC_LINEEND
 {
     Text [ en-US ] = "Please enter a name for the new arrowhead:" ;
 };
+String RID_SVXSTR_CHARNAME_TRANSPARENT
+{
+    Text [ en-US ] = "Transparent";
+};
 String RID_SVXSTR_CHARNAME_NOSTYLE
 {
     Text [ en-US ] = "No %1";

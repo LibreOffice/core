@@ -19,7 +19,6 @@
 
 struct ScDataBarFormatData;
 class ScDocument;
-class SvxColorListBox;
 
 class ScDataBarSettingsDlg : public ModalDialog
 {
@@ -27,9 +26,9 @@ private:
     VclPtr<OKButton> mpBtnOk;
     VclPtr<CancelButton> mpBtnCancel;
 
-    VclPtr<SvxColorListBox> mpLbPos;
-    VclPtr<SvxColorListBox> mpLbNeg;
-    VclPtr<SvxColorListBox> mpLbAxisCol;
+    VclPtr<ColorListBox> mpLbPos;
+    VclPtr<ColorListBox> mpLbNeg;
+    VclPtr<ColorListBox> mpLbAxisCol;
 
     VclPtr<ListBox> mpLbFillType;
     VclPtr<ListBox> mpLbTypeMin;
@@ -44,6 +43,7 @@ private:
     VclPtr<CheckBox> mpCbOnlyBar;
 
     OUString maStrWarnSameValue;
+    OUString maCustomColor;
     SvNumberFormatter* mpNumberFormatter;
 
     ScDocument* mpDoc;

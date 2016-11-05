@@ -28,7 +28,6 @@
 
 #include <cuires.hrc>
 #include "helpid.hrc"
-#include <svx/colorbox.hxx>
 #include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
@@ -125,10 +124,9 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pMtrBorder->SetModifyHdl( aLink );
     m_pSliderBorder->SetSlideHdl( LINK( this, SvxGradientTabPage, ModifiedSliderHdl_Impl ) );
     m_pMtrColorFrom->SetModifyHdl( aLink );
-    Link<SvxColorListBox&,void> aLink3 = LINK( this, SvxGradientTabPage, ModifiedColorListBoxHdl_Impl );
-    m_pLbColorFrom->SetSelectHdl( aLink3 );
+    m_pLbColorFrom->SetSelectHdl( aLink2 );
     m_pMtrColorTo->SetModifyHdl( aLink );
-    m_pLbColorTo->SetSelectHdl( aLink3 );
+    m_pLbColorTo->SetSelectHdl( aLink2 );
 
     // #i76307# always paint the preview in LTR, because this is what the document does
     m_pCtlPreview->EnableRTL( false );
@@ -165,13 +163,21 @@ void SvxGradientTabPage::dispose()
     SfxTabPage::dispose();
 }
 
+
 void SvxGradientTabPage::Construct()
 {
+    m_pLbColorFrom->Fill( m_pColorList );
+    m_pLbColorTo->CopyEntries( *m_pLbColorFrom );
+
     m_pGradientLB->FillPresetListBox( *m_pGradientList );
 }
 
+
 void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
 {
+    sal_Int32 nPos;
+    sal_Int32 nCount;
+
     if( m_pColorList.is() )
     {
         // ColorList
@@ -182,6 +188,30 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
                 dynamic_cast<SvxAreaTabDialog*>(GetParentDialog()) : nullptr;
             if (pArea)
                 m_pColorList = pArea->GetNewColorList();
+
+            // LbColorFrom
+            nPos = m_pLbColorFrom->GetSelectEntryPos();
+            m_pLbColorFrom->Clear();
+            m_pLbColorFrom->Fill( m_pColorList );
+            nCount = m_pLbColorFrom->GetEntryCount();
+            if( nCount == 0 )
+                ; // this case should not occur
+            else if( nCount <= nPos )
+                m_pLbColorFrom->SelectEntryPos( 0 );
+            else
+                m_pLbColorFrom->SelectEntryPos( nPos );
+
+            // LbColorTo
+            nPos = m_pLbColorTo->GetSelectEntryPos();
+            m_pLbColorTo->Clear();
+            m_pLbColorTo->CopyEntries( *m_pLbColorFrom );
+            nCount = m_pLbColorTo->GetEntryCount();
+            if( nCount == 0 )
+                ; // this case should not occur
+            else if( nCount <= nPos )
+                m_pLbColorTo->SelectEntryPos( 0 );
+            else
+                m_pLbColorTo->SelectEntryPos( nPos );
 
             ModifiedHdl_Impl( this );
         }
@@ -280,12 +310,8 @@ VclPtr<SfxTabPage> SvxGradientTabPage::Create( vcl::Window* pWindow,
     return VclPtr<SvxGradientTabPage>::Create( pWindow, *rOutAttrs );
 }
 
-IMPL_LINK( SvxGradientTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
-{
-    ModifiedHdl_Impl(&rListBox);
-}
 
-IMPL_LINK( SvxGradientTabPage, ModifiedColorListBoxHdl_Impl, SvxColorListBox&, rListBox, void )
+IMPL_LINK( SvxGradientTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
 {
     ModifiedHdl_Impl(&rListBox);
 }
@@ -591,8 +617,20 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
         m_pLbColorFrom->SetNoSelection();
         m_pLbColorFrom->SelectEntry( pGradient->GetStartColor() );
 
+        if ( m_pLbColorFrom->GetSelectEntryCount() == 0 )
+        {
+            m_pLbColorFrom->InsertEntry( pGradient->GetStartColor(),
+                                      OUString() );
+            m_pLbColorFrom->SelectEntry( pGradient->GetStartColor() );
+        }
         m_pLbColorTo->SetNoSelection();
         m_pLbColorTo->SelectEntry( pGradient->GetEndColor() );
+
+        if ( m_pLbColorTo->GetSelectEntryCount() == 0 )
+        {
+            m_pLbColorTo->InsertEntry( pGradient->GetEndColor(), OUString() );
+            m_pLbColorTo->SelectEntry( pGradient->GetEndColor() );
+        }
 
         m_pMtrAngle->SetValue( pGradient->GetAngle() / 10 ); // should be changed in resource
         m_pMtrBorder->SetValue( pGradient->GetBorder() );

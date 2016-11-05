@@ -45,8 +45,6 @@
 #include "EventMultiplexer.hxx"
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 
-class SvxColorListBox;
-
 namespace sd { namespace sidebar {
 
 class SlideBackground :
@@ -81,9 +79,9 @@ private:
     VclPtr<ListBox> mpPaperOrientation;
     VclPtr<ListBox> mpMasterSlide;
     VclPtr<SvxFillTypeBox> mpFillStyle;
-    VclPtr<SvxColorListBox> mpFillLB;
+    VclPtr<ColorLB> mpFillLB;
     VclPtr<SvxFillAttrBox> mpFillAttr;
-    VclPtr<SvxColorListBox> mpFillGrad;
+    VclPtr<ColorLB> mpFillGrad;
     VclPtr<CheckBox> mpDspMasterBackground;
     VclPtr<CheckBox> mpDspMasterObjects;
     VclPtr<Button> mpCloseMaster;
@@ -122,7 +120,7 @@ private:
     DECL_LINK(FillBackgroundHdl, ListBox&, void);
     DECL_LINK(FillStyleModifyHdl, ListBox&, void);
     DECL_LINK(PaperSizeModifyHdl, ListBox&, void);
-    DECL_LINK(FillColorHdl, SvxColorListBox&, void);
+    DECL_LINK(FillColorHdl, ListBox&, void);
     DECL_LINK(AssignMasterPage, ListBox&, void);
     DECL_LINK(DspBackground, Button*, void);
     DECL_LINK(DspObjects, Button*, void);

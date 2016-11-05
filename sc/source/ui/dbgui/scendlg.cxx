@@ -21,7 +21,6 @@
 
 #include "scitems.hxx"
 #include <comphelper/string.hxx>
-#include <svx/colorbox.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 #include <sfx2/objsh.hxx>
@@ -58,6 +57,27 @@ ScNewScenarioDlg::ScNewScenarioDlg( vcl::Window* pParent, const OUString& rName,
 
     if (bIsEdit)
         SetText(get<FixedText>("alttitle")->GetText());
+
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    if ( pDocSh )
+    {
+        const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        if ( pItem )
+        {
+            XColorListRef pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+            if (pColorList.is())
+            {
+                m_pLbColor->SetUpdateMode( false );
+                long nCount = pColorList->Count();
+                for ( long n=0; n<nCount; n++ )
+                {
+                    const XColorEntry* pEntry = pColorList->GetColor(n);
+                    m_pLbColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+                }
+                m_pLbColor->SetUpdateMode( true );
+            }
+        }
+    }
 
     SvtUserOptions aUserOpt;
 

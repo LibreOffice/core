@@ -253,7 +253,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="svxlo-SvxColorListBox" id="bordercolor">
+                              <object class="svtlo-ColorListBox" id="bordercolor">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <accessibility>

@@ -32,7 +32,6 @@
 class NotifyEvent;
 class Control;
 class ListBox;
-class SvxColorListBox;
 class Edit;
 
 namespace pcr
@@ -91,7 +90,6 @@ namespace pcr
 
         /// may be used by derived classes, they forward the event to the PropCtrListener
         DECL_LINK( ModifiedHdl, ListBox&, void );
-        DECL_LINK( ColorModifiedHdl, SvxColorListBox&, void );
         DECL_LINK( EditModifiedHdl, Edit&, void );
         DECL_LINK( GetFocusHdl, Control&, void );
         DECL_LINK( LoseFocusHdl, Control&, void );
@@ -152,9 +150,8 @@ namespace pcr
         inline void impl_checkDisposed_throw();
     private:
         VclPtr<TControlWindow>         m_pControlWindow;
-        void implSetModifyHandler(const Edit&);
-        void implSetModifyHandler(const ListBox&);
-        void implSetModifyHandler(const SvxColorListBox&);
+        void implSetModifyHandler(std::true_type);
+        void implSetModifyHandler(std::false_type);
     };
 
 
@@ -168,7 +165,7 @@ namespace pcr
     {
         if ( _bDoSetHandlers )
         {
-            implSetModifyHandler(*m_pControlWindow);
+            implSetModifyHandler(std::is_base_of<::Edit,TControlWindow>());
             m_pControlWindow->SetGetFocusHdl( LINK( this, CommonBehaviourControlHelper, GetFocusHdl ) );
             m_pControlWindow->SetLoseFocusHdl( LINK( this, CommonBehaviourControlHelper, LoseFocusHdl ) );
         }
@@ -176,21 +173,15 @@ namespace pcr
     }
 
     template< class TControlInterface, class TControlWindow >
-    inline void CommonBehaviourControl< TControlInterface, TControlWindow >::implSetModifyHandler(const Edit&)
+    inline void CommonBehaviourControl< TControlInterface, TControlWindow >::implSetModifyHandler(std::true_type)
     {
         m_pControlWindow->SetModifyHdl( LINK( this, CommonBehaviourControlHelper, EditModifiedHdl ) );
     }
 
     template< class TControlInterface, class TControlWindow >
-    inline void CommonBehaviourControl< TControlInterface, TControlWindow >::implSetModifyHandler(const ListBox&)
+    inline void CommonBehaviourControl< TControlInterface, TControlWindow >::implSetModifyHandler(std::false_type)
     {
         m_pControlWindow->SetModifyHdl( LINK( this, CommonBehaviourControlHelper, ModifiedHdl ) );
-    }
-
-    template< class TControlInterface, class TControlWindow >
-    inline void CommonBehaviourControl< TControlInterface, TControlWindow >::implSetModifyHandler(const SvxColorListBox&)
-    {
-        m_pControlWindow->SetModifyHdl( LINK( this, CommonBehaviourControlHelper, ColorModifiedHdl ) );
     }
 
     template< class TControlInterface, class TControlWindow >

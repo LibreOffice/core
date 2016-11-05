@@ -27,7 +27,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include <svx/colorbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/settings.hxx>
@@ -159,11 +158,17 @@ void SvxPatternTabPage::dispose()
 
 void SvxPatternTabPage::Construct()
 {
+    m_pLbColor->Fill( m_pColorList );
+    m_pLbBackgroundColor->CopyEntries( *m_pLbColor );
     m_pPatternLB->FillPresetListBox( *m_pPatternList );
 }
 
+
 void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
 {
+    sal_Int32 nPos;
+    sal_Int32 nCount;
+
     if( m_pColorList.is() )
     {
         // ColorList
@@ -174,6 +179,30 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
                 dynamic_cast<SvxAreaTabDialog*>(GetParentDialog()) : nullptr;
             if (pArea)
                 m_pColorList = pArea->GetNewColorList();
+
+            // LbColor
+            nPos = m_pLbColor->GetSelectEntryPos();
+            m_pLbColor->Clear();
+            m_pLbColor->Fill( m_pColorList );
+            nCount = m_pLbColor->GetEntryCount();
+            if( nCount == 0 )
+                ; // this case should not occur
+            else if( nCount <= nPos )
+                m_pLbColor->SelectEntryPos( 0 );
+            else
+                m_pLbColor->SelectEntryPos( nPos );
+
+            // LbColorBackground
+            nPos = m_pLbBackgroundColor->GetSelectEntryPos();
+            m_pLbBackgroundColor->Clear();
+            m_pLbBackgroundColor->CopyEntries( *m_pLbColor );
+            nCount = m_pLbBackgroundColor->GetEntryCount();
+            if( nCount == 0 )
+                ; // this case should not occur
+            else if( nCount <= nPos )
+                m_pLbBackgroundColor->SelectEntryPos( 0 );
+            else
+                m_pLbBackgroundColor->SelectEntryPos( nPos );
         }
 
         // determining (possibly cutting) the name and
@@ -324,8 +353,33 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
             Color aPixelColor = aFront;
             Color aBackColor = aBack;
 
+            // #i123564# This causes the wrong color to be selected
+            // as foreground color when the 1st bitmap in the bitmap
+            // list is selected. I see no reason why this is done,
+            // thus I will take it out
+
+            //if( 0 == m_pLbBitmaps->GetSelectEntryPos() )
+            //{
+            //  m_pLbColor->SelectEntry( Color( COL_BLACK ) );
+            //  ChangePixelColorHdl_Impl( this );
+            //}
+            //else
+
             m_pLbColor->SelectEntry( aPixelColor );
+
+            if( m_pLbColor->GetSelectEntryCount() == 0 )
+            {
+                m_pLbColor->InsertEntry( aPixelColor, OUString() );
+                m_pLbColor->SelectEntry( aPixelColor );
+            }
+
             m_pLbBackgroundColor->SelectEntry( aBackColor );
+
+            if( m_pLbBackgroundColor->GetSelectEntryCount() == 0 )
+            {
+                m_pLbBackgroundColor->InsertEntry( aBackColor, OUString() );
+                m_pLbBackgroundColor->SelectEntry( aBackColor );
+            }
 
             // update m_pBitmapCtl, rXFSet and m_pCtlPreview
             m_pBitmapCtl->SetPixelColor( aPixelColor );
@@ -554,7 +608,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxPatternTabPage, ChangeColorHdl_Impl, SvxColorListBox&, void)
+IMPL_LINK_NOARG(SvxPatternTabPage, ChangeColorHdl_Impl, ListBox&, void)
 {
     ChangeColor_Impl();
 }

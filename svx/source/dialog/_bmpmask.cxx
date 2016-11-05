@@ -25,7 +25,6 @@
 #include <sfx2/dispatch.hxx>
 #include <svtools/colrdlg.hxx>
 
-#include <svx/colorbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/bmpmask.hxx>
 #include <svx/dialogs.hrc>
@@ -35,6 +34,7 @@
 #include "helpid.hrc"
 
 #define BMP_RESID(nId)  ResId(nId, DIALOG_MGR())
+#define TRANSP_COL      (Color( 252, 252, 252 ))
 #define OWN_CALLMODE    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD
 
 
@@ -293,7 +293,7 @@ IMPL_LINK( MaskData, CbxTransHdl, Button*, pButton, void )
 
 IMPL_LINK( MaskData, FocusLbHdl, Control&, rControl, void )
 {
-    SvxColorListBox* pLb = static_cast<SvxColorListBox*>(&rControl);
+    ColorLB* pLb = static_cast<ColorLB*>(&rControl);
     // MT: bFireFox as API parameter is ugly, find better solution????
     pMask->m_pQSet1->SelectItem( pLb == pMask->m_pLbColor1 ? 1 : 0 /* , false */ );
     pMask->m_pQSet2->SelectItem( pLb == pMask->m_pLbColor2 ? 1 : 0 /* , false */ );
@@ -373,7 +373,6 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pQSet1->Show();
     get(m_pSp1, "tol1");
     get(m_pLbColor1, "color1");
-    m_pLbColor1->SetSlotId(SID_BMPMASK_COLOR);
     get(m_pCbx2, "cbx2");
     m_pQSet2 = VclPtr<MaskSet>::Create(this, pGrid);
     m_pQSet2->set_grid_left_attach(1);
@@ -381,7 +380,6 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pQSet2->Show();
     get(m_pSp2, "tol2");
     get(m_pLbColor2, "color2");
-    m_pLbColor2->SetSlotId(SID_BMPMASK_COLOR);
     get(m_pCbx3, "cbx3");
     m_pQSet3 = VclPtr<MaskSet>::Create(this, pGrid);
     m_pQSet3->set_grid_left_attach(1);
@@ -389,7 +387,6 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pQSet3->Show();
     get(m_pSp3, "tol3");
     get(m_pLbColor3, "color3");
-    m_pLbColor3->SetSlotId(SID_BMPMASK_COLOR);
     get(m_pCbx4, "cbx4");
     m_pQSet4   = VclPtr<MaskSet>::Create(this, pGrid);
     m_pQSet4->set_grid_left_attach(1);
@@ -397,15 +394,14 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pQSet4->Show();
     get(m_pSp4, "tol4");
     get(m_pLbColor4, "color4");
-    m_pLbColor4->SetSlotId(SID_BMPMASK_COLOR);
     get(m_pCbxTrans, "cbx5");
     get(m_pLbColorTrans, "color5");
 
-    m_pLbColorTrans->SelectEntry(Color(COL_BLACK));
-    m_pLbColor1->SelectEntry(Color(COL_TRANSPARENT));
-    m_pLbColor2->SelectEntry(Color(COL_TRANSPARENT));
-    m_pLbColor3->SelectEntry(Color(COL_TRANSPARENT));
-    m_pLbColor4->SelectEntry(Color(COL_TRANSPARENT));
+    //temp fill it to get optimal size
+    m_pLbColor1->Fill(XColorList::GetStdColorList());
+    m_pLbColor1->set_width_request(m_pLbColor1->get_preferred_size().Width());
+    m_pLbColor1->Clear();
+    //clear again
 
     m_pTbxPipette->SetSelectHdl( LINK( pData, MaskData, PipetteHdl ) );
     m_pBtnExec->SetClickHdl( LINK( pData, MaskData, ExecHdl ) );
@@ -519,6 +515,40 @@ bool SvxBmpMask::Close()
             OWN_CALLMODE, { &aItem2 });
 
     return SfxDockingWindow::Close();
+}
+
+bool SvxBmpMask::NeedsColorList() const
+{
+    return ( m_pLbColor1->GetEntryCount() == 0 );
+}
+
+void SvxBmpMask::SetColorList( const XColorListRef &pList )
+{
+    if ( pList.is() && ( pList != pColLst ) )
+    {
+        const OUString aTransp(BMP_RESID(RID_SVXDLG_BMPMASK_STR_TRANSP).toString());
+
+        pColLst = pList;
+
+        m_pLbColorTrans->Fill( pColLst );
+        m_pLbColorTrans->SelectEntryPos( 0 );
+
+        m_pLbColor1->Fill( pColLst );
+        m_pLbColor1->InsertEntry( TRANSP_COL, aTransp, 0 );
+        m_pLbColor1->SelectEntryPos( 0 );
+
+        m_pLbColor2->Fill( pColLst );
+        m_pLbColor2->InsertEntry( TRANSP_COL, aTransp, 0 );
+        m_pLbColor2->SelectEntryPos( 0 );
+
+        m_pLbColor3->Fill( pColLst );
+        m_pLbColor3->InsertEntry( TRANSP_COL, aTransp, 0 );
+        m_pLbColor3->SelectEntryPos( 0 );
+
+        m_pLbColor4->Fill( pColLst );
+        m_pLbColor4->InsertEntry( TRANSP_COL, aTransp, 0 );
+        m_pLbColor4->SelectEntryPos( 0 );
+    }
 }
 
 void SvxBmpMask::SetColor( const Color& rColor )
@@ -708,7 +738,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
             pMinB[i] = std::max( nVal - nTol, 0L );
             pMaxB[i] = std::min( nVal + nTol, 255L );
 
-            pTrans[ i ] = (pDstCols[ i ] == COL_TRANSPARENT);
+            pTrans[ i ] = ( pDstCols[ i ] == TRANSP_COL );
         }
 
         // Investigate actions and if necessary replace colors
@@ -1024,7 +1054,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
                         for( sal_uInt16 i = 0; i < nCount; i++ )
                         {
                             // Do we have a transparent color?
-                            if (pDstCols[i] == COL_TRANSPARENT)
+                            if( pDstCols[i] == TRANSP_COL )
                             {
                                 BitmapEx    aBmpEx( ImpMaskTransparent( aGraphic.GetBitmapEx(),
                                                                         pSrcCols[ i ], pTols[ i ] ) );

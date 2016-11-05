@@ -167,11 +167,10 @@ void AreaPropertyPanelBase::Initialize()
     mpLbFillType->SetSelectHdl( LINK( this, AreaPropertyPanelBase, SelectFillTypeHdl ) );
 
     Link<ListBox&,void> aLink = LINK( this, AreaPropertyPanelBase, SelectFillAttrHdl );
-    Link<SvxColorListBox&,void> aLink3 = LINK( this, AreaPropertyPanelBase, SelectFillColorHdl );
     mpLbFillAttr->SetSelectHdl( aLink );
     mpGradientStyle->SetSelectHdl( aLink );
-    mpLbFillGradFrom->SetSelectHdl( aLink3 );
-    mpLbFillGradTo->SetSelectHdl( aLink3 );
+    mpLbFillGradFrom->SetSelectHdl( aLink );
+    mpLbFillGradTo->SetSelectHdl( aLink );
     mpMTRAngle->SetModifyHdl(LINK(this,AreaPropertyPanelBase, ChangeGradientAngle));
 
     mpLBTransType->SetSelectHdl(LINK(this, AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl));
@@ -297,32 +296,60 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
             mpToolBoxColor->Hide();
             mpBmpImport->Hide();
 
-            mpLbFillAttr->Enable();
-            mpLbFillGradTo->Enable();
-            mpLbFillGradFrom->Enable();
-            mpGradientStyle->Enable();
-            mpMTRAngle->Enable();
-            mpLbFillAttr->Clear();
-
-            if (LISTBOX_ENTRY_NOTFOUND != mnLastPosGradient)
+            const SvxColorListItem* pColorListItem = static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE));
+            if(pColorListItem)
             {
-                const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
+                mpLbFillAttr->Enable();
+                mpLbFillGradTo->Enable();
+                mpLbFillGradFrom->Enable();
+                mpGradientStyle->Enable();
+                mpMTRAngle->Enable();
+                mpLbFillAttr->Clear();
+                mpLbFillGradTo->Clear();
+                mpLbFillGradFrom->Clear();
+                mpLbFillGradTo->Fill(pColorListItem->GetColorList());
+                mpLbFillGradFrom->Fill(pColorListItem->GetColorList());
 
-                if(mnLastPosGradient < aItem.GetGradientList()->Count())
+                mpLbFillGradFrom->AdaptDropDownLineCountToMaximum();
+                mpLbFillGradTo->AdaptDropDownLineCountToMaximum();
+
+                if(LISTBOX_ENTRY_NOTFOUND != mnLastPosGradient)
                 {
-                    const XGradient aGradient = aItem.GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
-                    const XFillGradientItem aXFillGradientItem(aGradient);
+                    const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
 
-                    // #i122676# change FillStyle and Gradient in one call
-                    XFillStyleItem aXFillStyleItem(drawing::FillStyle_GRADIENT);
-                    setFillStyleAndGradient(&aXFillStyleItem, aXFillGradientItem);
-                    mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
-                    mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                    if(mnLastPosGradient < aItem.GetGradientList()->Count())
+                    {
+                        const XGradient aGradient = aItem.GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
+                        const XFillGradientItem aXFillGradientItem(aGradient);
 
-                    mpMTRAngle->SetValue(aGradient.GetAngle() / 10);
-                    css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
-                    mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( eXGS ));
+                        // #i122676# change FillStyle and Gradient in one call
+                        XFillStyleItem aXFillStyleItem(drawing::FillStyle_GRADIENT);
+                        setFillStyleAndGradient(&aXFillStyleItem, aXFillGradientItem);
+                        mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
+                        if(mpLbFillGradFrom->GetSelectEntryCount() == 0)
+                        {
+                            mpLbFillGradFrom->InsertEntry(aGradient.GetStartColor(), OUString());
+                            mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
+                        }
+                        mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                        if(mpLbFillGradTo->GetSelectEntryCount() == 0)
+                        {
+                            mpLbFillGradTo->InsertEntry(aGradient.GetEndColor(), OUString());
+                            mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                        }
+
+                        mpMTRAngle->SetValue(aGradient.GetAngle() / 10);
+                        css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
+                        mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( eXGS ));
+                    }
                 }
+            }
+            else
+            {
+                mpLbFillGradFrom->Disable();
+                mpLbFillGradTo->Disable();
+                mpMTRAngle->Disable();
+                mpGradientStyle->Disable();
             }
             break;
         }
@@ -446,11 +473,6 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
     {
         mpLbFillType->Selected();
     }
-}
-
-IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillColorHdl, SvxColorListBox&, void)
-{
-    SelectFillAttrHdl_Impl();
 }
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillAttrHdl, ListBox&, void)
@@ -1154,15 +1176,28 @@ void AreaPropertyPanelBase::Update()
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
                     mpLbFillAttr->Fill(aItem.GetGradientList());
+                    const SvxColorListItem aColorItem(*static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
+                    mpLbFillGradFrom->Fill(aColorItem.GetColorList());
+                    mpLbFillGradTo->Fill(aColorItem.GetColorList());
                     mpLbFillGradTo->SetNoSelection();
                     mpLbFillGradFrom->SetNoSelection();
-                    if (mpFillGradientItem)
+                    if(mpFillGradientItem)
                     {
                         const OUString aString(mpFillGradientItem->GetName());
                         mpLbFillAttr->SelectEntry(aString);
                         const XGradient aGradient = mpFillGradientItem->GetGradientValue();
                         mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
+                        if(mpLbFillGradFrom->GetSelectEntryCount() == 0)
+                        {
+                            mpLbFillGradFrom->InsertEntry(aGradient.GetStartColor(), OUString());
+                            mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
+                        }
                         mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                        if(mpLbFillGradTo->GetSelectEntryCount() == 0)
+                        {
+                            mpLbFillGradTo->InsertEntry(aGradient.GetEndColor(), OUString());
+                            mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                        }
                         mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( aGradient.GetGradientStyle() ));
                         if(mpGradientStyle->GetSelectEntryPos() == (sal_Int32)GradientStyle::Radial)
                             mpMTRAngle->Disable();

@@ -129,6 +129,34 @@ void CheckBoxWrapper::SetControlValue( bool bValue )
 }
 
 
+ColorListBoxWrapper::ColorListBoxWrapper(ColorListBox & rListBox):
+    SingleControlWrapper< ColorListBox, Color >(rListBox)
+{}
+
+ColorListBoxWrapper::~ColorListBoxWrapper()
+{}
+
+bool ColorListBoxWrapper::IsControlDontKnow() const
+{
+    return GetControl().GetSelectEntryCount() == 0;
+}
+
+void ColorListBoxWrapper::SetControlDontKnow( bool bSet )
+{
+    if( bSet ) GetControl().SetNoSelection();
+}
+
+Color ColorListBoxWrapper::GetControlValue() const
+{
+    return GetControl().GetSelectEntryColor();
+}
+
+void ColorListBoxWrapper::SetControlValue( Color aColor )
+{
+    GetControl().SelectEntry( aColor );
+}
+
+
 // Multi control wrappers
 
 

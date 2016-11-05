@@ -476,7 +476,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxColorListBox" id="listLB_COLOR">
+                  <object class="svtlo-ColorListBox" id="listLB_COLOR">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>

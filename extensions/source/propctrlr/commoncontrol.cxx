@@ -104,11 +104,6 @@ namespace pcr
         setModified();
     }
 
-    IMPL_LINK_NOARG( CommonBehaviourControlHelper, ColorModifiedHdl, SvxColorListBox&, void )
-    {
-        setModified();
-    }
-
     IMPL_LINK_NOARG( CommonBehaviourControlHelper, GetFocusHdl, Control&, void )
     {
         try

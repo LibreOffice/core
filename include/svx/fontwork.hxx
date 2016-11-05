@@ -35,7 +35,6 @@
 class SdrView;
 class SdrPageView;
 class SdrObject;
-class SvxColorListBox;
 
 class XFormTextAdjustItem;
 class XFormTextDistanceItem;
@@ -108,7 +107,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     VclPtr<FixedImage>      m_pFbShadowY;
     VclPtr<MetricField>     m_pMtrFldShadowY;
 
-    VclPtr<SvxColorListBox> m_pShadowColorLB;
+    VclPtr<ColorLB>         m_pShadowColorLB;
 
     SfxBindings&    rBindings;
     Idle            aInputIdle;
@@ -139,6 +138,8 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     long            nSaveShadowAngle;
     long            nSaveShadowSize;
 
+    XColorListRef   pColorList;
+
  friend class SvxFontWorkChildWindow;
  friend class SvxFontWorkControllerItem;
 
@@ -149,7 +150,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     DECL_LINK( ModifyInputHdl_Impl, Edit&, void );
     DECL_LINK( InputTimoutHdl_Impl, Idle *, void );
 
-    DECL_LINK( ColorSelectHdl_Impl, SvxColorListBox&, void );
+    DECL_LINK( ColorSelectHdl_Impl, ListBox&, void );
 
     void SetStyle_Impl(const XFormTextStyleItem*);
     void SetAdjust_Impl(const XFormTextAdjustItem*);
@@ -174,6 +175,8 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
                       vcl::Window* pParent);
     virtual ~SvxFontWorkDialog() override;
     virtual void dispose() override;
+
+    void SetColorList(const XColorListRef &pTable);
 };
 
 #endif // INCLUDED_SVX_FONTWORK_HXX

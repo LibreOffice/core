@@ -254,21 +254,18 @@ void PaletteManager::SetLastColor(const Color& rLastColor)
     mLastColor = rLastColor;
 }
 
-void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& rName, bool bFront)
+void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& rName)
 {
     auto itColor = std::find_if(maRecentColors.begin(),
                                 maRecentColors.end(),
-                                [rRecentColor] (const NamedColor &a) { return a.first == rRecentColor; });
+                                [rRecentColor] (const color_and_name &a) { return a.first == rRecentColor; });
     // if recent color to be added is already in list, remove it
     if( itColor != maRecentColors.end() )
         maRecentColors.erase( itColor );
 
-    if (maRecentColors.size() == mnMaxRecentColors)
+    maRecentColors.push_front(std::make_pair(rRecentColor, rName));
+    if( maRecentColors.size() > mnMaxRecentColors )
         maRecentColors.pop_back();
-    if (bFront)
-        maRecentColors.push_front(std::make_pair(rRecentColor, rName));
-    else
-        maRecentColors.push_back(std::make_pair(rRecentColor, rName));
     css::uno::Sequence< sal_Int32 > aColorList(maRecentColors.size());
     css::uno::Sequence< OUString > aColorNameList(maRecentColors.size());
     for (size_t i = 0; i < maRecentColors.size(); ++i)
@@ -288,7 +285,7 @@ void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)
     mLastColor = mpBtnUpdater->GetCurrentColor();
 }
 
-void PaletteManager::SetColorSelectFunction(const std::function<void(const OUString&, const NamedColor&)>& aColorSelectFunction)
+void PaletteManager::SetColorSelectFunction(const std::function<void(const OUString&, const Color&)>& aColorSelectFunction)
 {
     maColorSelectFunction = aColorSelectFunction;
 }
@@ -305,14 +302,12 @@ void PaletteManager::PopupColorPicker(const OUString& aCommand)
         if (mpBtnUpdater)
             mpBtnUpdater->Update( aColorDlg.GetColor() );
         mLastColor = aColorDlg.GetColor();
-        OUString sColorName = ("#" + mLastColor.AsRGBHexString().toAsciiUpperCase());
-        NamedColor aNamedColor = std::make_pair(mLastColor, sColorName);
-        AddRecentColor(mLastColor, sColorName);
-        maColorSelectFunction(aCommandCopy, aNamedColor);
+        AddRecentColor(mLastColor, ("#" + mLastColor.AsRGBHexString().toAsciiUpperCase()));
+        maColorSelectFunction(aCommandCopy, mLastColor);
     }
 }
 
-void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor)
+void PaletteManager::DispatchColorCommand(const OUString& aCommand, const Color& rColor)
 {
     using namespace css::uno;
     using namespace css::frame;
@@ -328,7 +323,7 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
 
         Sequence<PropertyValue> aArgs(1);
         aArgs[0].Name = aObj.GetURLPath();
-        aArgs[0].Value = makeAny(sal_Int32(rColor.first.GetColor()));
+        aArgs[0].Value = makeAny(sal_Int32(rColor.GetColor()));
 
         URL aTargetURL;
         aTargetURL.Complete = aCommand;

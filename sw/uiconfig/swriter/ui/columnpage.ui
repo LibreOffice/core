@@ -538,7 +538,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxColorListBox" id="colorlb">
+                  <object class="svtlo-ColorListBox" id="colorlb">
                     <property name="visible">True</property>
                     <property name="dropdown">True</property>
                     <property name="can_focus">False</property>

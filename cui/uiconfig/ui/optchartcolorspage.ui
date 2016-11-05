@@ -26,7 +26,8 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkTreeView" id="colors:border">
+              <object class="svxlo-ColorLB" id="colors:border">
+                <property name="dropdown">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>

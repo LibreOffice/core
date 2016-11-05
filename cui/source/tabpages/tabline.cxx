@@ -235,6 +235,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<SvxShadowTabPage&>(rPage).SetDlgType( 0 );
         static_cast<SvxShadowTabPage&>(rPage).SetAreaTP( &mbAreaTP );
         static_cast<SvxShadowTabPage&>(rPage).SetColorChgd( &mnColorListState );
+        static_cast<SvxShadowTabPage&>(rPage).Construct();
     }
 }
 

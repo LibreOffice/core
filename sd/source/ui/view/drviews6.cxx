@@ -87,6 +87,15 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
 {
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     const SdrObject* pObj = nullptr;
+    SvxFontWorkDialog* pDlg = nullptr;
+
+    sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
+
+    if (GetViewFrame()->HasChildWindow(nId))
+    {
+        SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(nId);
+        pDlg = pWnd ? static_cast<SvxFontWorkDialog*>(pWnd->GetWindow()) : nullptr;
+    }
 
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -116,6 +125,9 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
     }
     else
     {
+        if ( pDlg )
+            pDlg->SetColorList(GetDoc()->GetColorList());
+
         SfxItemSet aSet( GetDoc()->GetPool() );
         mpDrawView->GetAttributes( aSet );
         rSet.Set( aSet );
@@ -329,7 +341,16 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 {
     const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
     const SdrObject*    pObj = nullptr;
+    sal_uInt16              nId = SvxBmpMaskChildWindow::GetChildWindowId();
     bool                bEnable = false;
+
+    if ( GetViewFrame()->HasChildWindow( nId ) )
+    {
+        SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(nId);
+        SvxBmpMask* pDlg = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : nullptr;
+        if (pDlg && pDlg->NeedsColorList())
+            pDlg->SetColorList(GetDoc()->GetColorList());
+    }
 
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();

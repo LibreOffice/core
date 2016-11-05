@@ -62,7 +62,6 @@
 #include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
 
-#include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>
 #include <svx/gallery.hxx>
 
@@ -192,24 +191,43 @@ public:
     virtual Control* getControl() override;
 
 private:
-    VclPtr<SvxColorListBox> mpControl;
-    DECL_LINK(OnSelect, SvxColorListBox&, void);
+    VclPtr<ColorListBox> mpControl;
+    DECL_LINK(OnSelect, ListBox&, void);
     Link<LinkParamNone*,void> maModifyLink;
 };
 
 ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
 : PropertySubControl( nControlType ), maModifyLink(rModifyHdl)
 {
-    mpControl = VclPtr<SvxColorListBox>::Create(pParent);
+    mpControl = VclPtr<ColorListBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
+    mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( LINK(this, ColorPropertyBox, OnSelect) );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_COLORPROPERTYBOX );
 
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    DBG_ASSERT( pDocSh, "DocShell not found!" );
+    XColorListRef pColorList;
+    const SfxPoolItem* pItem = nullptr;
+
+    if ( pDocSh && ( ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != nullptr) )
+        pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+
+    if ( !pColorList.is() )
+        pColorList = XColorList::CreateStdColorList();
+
     sal_Int32 nColor = 0;
     rValue >>= nColor;
-    mpControl->SelectEntry(static_cast<Color>(nColor));
+
+    for ( long i = 0; i < pColorList->Count(); i++ )
+    {
+        const XColorEntry* pEntry = pColorList->GetColor(i);
+        sal_Int32 nPos = mpControl->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+        if( pEntry->GetColor().GetRGBColor() == (sal_uInt32)nColor )
+            mpControl->SelectEntryPos( nPos );
+    }
 }
 
-IMPL_LINK_NOARG(ColorPropertyBox, OnSelect, SvxColorListBox&, void)
+IMPL_LINK_NOARG(ColorPropertyBox, OnSelect, ListBox&, void)
 {
     maModifyLink.Call(nullptr);
 }
@@ -227,7 +245,7 @@ void ColorPropertyBox::setValue( const Any& rValue, const OUString& )
         rValue >>= nColor;
 
         mpControl->SetNoSelection();
-        mpControl->SelectEntry(static_cast<Color>(nColor));
+        mpControl->SelectEntryPos( mpControl->GetEntryPos( static_cast<Color>(nColor) ) );
     }
 }
 
@@ -1022,7 +1040,7 @@ private:
     VclPtr<FixedText>      mpFTAfterEffect;
     VclPtr<ListBox>        mpLBAfterEffect;
     VclPtr<FixedText>      mpFTDimColor;
-    VclPtr<SvxColorListBox> mpCLBDimColor;
+    VclPtr<ColorListBox>   mpCLBDimColor;
     VclPtr<FixedText>      mpFTTextAnim;
     VclPtr<ListBox>        mpLBTextAnim;
     VclPtr<MetricField>    mpMFTextDelay;
@@ -1047,7 +1065,6 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
     get(mpLBAfterEffect, "aeffect_list" );
     get(mpFTDimColor, "dim_color_label" );
     get(mpCLBDimColor, "dim_color_list" );
-    mpCLBDimColor->SelectEntry(Color(COL_BLACK));
     get(mpFTTextAnim, "text_animation_label" );
     get(mpLBTextAnim, "text_animation_list" );
     get(mpMFTextDelay,"text_delay" );
@@ -1059,6 +1076,28 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
     mpLBSound->SetSelectHdl( LINK( this, CustomAnimationEffectTabPage, implSelectHdl ) );
 
     mpPBSoundPreview->SetClickHdl( LINK( this, CustomAnimationEffectTabPage, implClickHdl ) );
+
+    // fill the color box
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    DBG_ASSERT( pDocSh, "DocShell not found!" );
+    XColorListRef pColorList;
+    const SfxPoolItem* pItem = nullptr;
+
+    if ( pDocSh && ( (pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != nullptr ) )
+        pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+
+    if ( !pColorList.is() )
+        pColorList = XColorList::CreateStdColorList();
+
+    mpCLBDimColor->SetUpdateMode( false );
+
+    for ( long i = 0; i < pColorList->Count(); i++ )
+    {
+        const XColorEntry* pEntry = pColorList->GetColor(i);
+        mpCLBDimColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+    }
+
+    mpCLBDimColor->SetUpdateMode( true );
 
     // only show settings if all selected effects have the same preset-id
     if( pSet->getPropertyState( nHandlePresetId ) != STLPropertyState::Ambiguous )
@@ -1135,8 +1174,13 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
             {
                 sal_Int32 nColor = 0;
                 aDimColor >>= nColor;
-                Color aColor(nColor);
-                mpCLBDimColor->SelectEntry(aColor);
+                Color aColor( nColor );
+                sal_Int32 nColorPos = mpCLBDimColor->GetEntryPos( aColor );
+                if ( LISTBOX_ENTRY_NOTFOUND != nColorPos )
+                    mpCLBDimColor->SelectEntryPos( nColorPos );
+                else
+                    mpCLBDimColor->SelectEntryPos(
+                        mpCLBDimColor->InsertEntry( aColor, SVX_RESSTR(RID_SVXSTR_COLOR_USER) ) );
             }
             else
             {
@@ -1288,7 +1332,16 @@ IMPL_LINK( CustomAnimationEffectTabPage, implSelectHdl, ListBox&, rListBox, void
 
 void CustomAnimationEffectTabPage::implHdl(Control* pControl )
 {
-    if( pControl == mpLBTextAnim )
+    if( pControl == mpLBAfterEffect )
+    {
+        sal_Int32 nPos = static_cast<ListBox*>( mpLBAfterEffect )->GetSelectEntryPos();
+        if( nPos == 1 )
+        {
+            if( mpCLBDimColor->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+                mpCLBDimColor->SelectEntryPos(0);
+        }
+    }
+    else if( pControl == mpLBTextAnim )
     {
         if( mpMFTextDelay->GetValue() == 0 )
             mpMFTextDelay->SetValue( 100 );
@@ -1367,7 +1420,10 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
         Any aDimColor;
         if( nPos == 1 )
         {
-            Color aSelectedColor = mpCLBDimColor->GetSelectEntryColor();
+            Color aSelectedColor;
+            if ( mpCLBDimColor->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+                aSelectedColor = mpCLBDimColor->GetSelectEntryColor();
+
             aDimColor = makeAny( (sal_Int32)aSelectedColor.GetRGBColor() );
         }
 

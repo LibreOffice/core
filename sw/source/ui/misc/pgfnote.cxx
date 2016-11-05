@@ -93,9 +93,9 @@ IMPL_LINK_NOARG(SwFootNotePage, LineWidthChanged_Impl, Edit&, void)
     m_pLineTypeBox->SetWidth( nVal );
 }
 
-IMPL_LINK(SwFootNotePage, LineColorSelected_Impl, SvxColorListBox&, rColorBox, void)
+IMPL_LINK_NOARG(SwFootNotePage, LineColorSelected_Impl, ListBox&, void)
 {
-    m_pLineTypeBox->SetColor(rColorBox.GetSelectEntryColor());
+    m_pLineTypeBox->SetColor( m_pLineColorBox->GetSelectEntryColor() );
 }
 
 SwFootNotePage::SwFootNotePage(vcl::Window *pParent, const SfxItemSet &rSet)
@@ -211,9 +211,41 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     m_pLineTypeBox->SelectEntry( pFootnoteInfo->GetLineStyle() );
 
     // Separator Color
-    m_pLineColorBox->SelectEntry(pFootnoteInfo->GetLineColor());
-    m_pLineColorBox->SetSelectHdl(LINK(this, SwFootNotePage, LineColorSelected_Impl));
-    m_pLineTypeBox->SetColor(pFootnoteInfo->GetLineColor());
+    SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
+    XColorListRef pColorList;
+
+    OSL_ENSURE( pDocSh, "DocShell not found!" );
+
+    if ( pDocSh )
+    {
+        const SfxPoolItem* pColorItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        if ( pColorItem != nullptr )
+            pColorList = static_cast<const SvxColorListItem*>(pColorItem)->GetColorList();
+    }
+
+    OSL_ENSURE( pColorList.is(), "ColorTable not found!" );
+
+    if ( pColorList.is() )
+    {
+        m_pLineColorBox->SetUpdateMode( false );
+
+        for ( long i = 0; i < pColorList->Count(); ++i )
+        {
+            const XColorEntry* pEntry = pColorList->GetColor(i);
+            m_pLineColorBox->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+        }
+        m_pLineColorBox->SetUpdateMode( true );
+    }
+
+    // select color in the list or add it as a user color
+    sal_Int32 nSelPos = m_pLineColorBox->GetEntryPos( pFootnoteInfo->GetLineColor() );
+    if( nSelPos == LISTBOX_ENTRY_NOTFOUND )
+        nSelPos = m_pLineColorBox->InsertEntry( pFootnoteInfo->GetLineColor(),
+                SVX_RESSTR(RID_SVXSTR_COLOR_USER) );
+
+    m_pLineColorBox->SetSelectHdl( LINK( this, SwFootNotePage, LineColorSelected_Impl ) );
+    m_pLineColorBox->SelectEntryPos( nSelPos );
+    m_pLineTypeBox->SetColor( pFootnoteInfo->GetLineColor() );
 
     // position
     m_pLinePosBox->SelectEntryPos( static_cast< sal_Int32 >(pFootnoteInfo->GetAdj()) );

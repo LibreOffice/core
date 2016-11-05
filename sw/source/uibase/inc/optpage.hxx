@@ -30,7 +30,6 @@
 
 #include <vcl/fixed.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <svx/colorbox.hxx>
 #include <svx/fntctrl.hxx>
 #include <fontcfg.hxx>
 class SfxPrinter;
@@ -313,26 +312,27 @@ public:
 class SwRedlineOptionsTabPage : public SfxTabPage
 {
     VclPtr<ListBox>             pInsertLB;
-    VclPtr<SvxColorListBox>     pInsertColorLB;
+    VclPtr<ColorListBox>        pInsertColorLB;
     VclPtr<SvxFontPrevWindow>   pInsertedPreviewWN;
 
     VclPtr<ListBox>             pDeletedLB;
-    VclPtr<SvxColorListBox>     pDeletedColorLB;
+    VclPtr<ColorListBox>        pDeletedColorLB;
     VclPtr<SvxFontPrevWindow>   pDeletedPreviewWN;
 
     VclPtr<ListBox>             pChangedLB;
-    VclPtr<SvxColorListBox>     pChangedColorLB;
+    VclPtr<ColorListBox>        pChangedColorLB;
     VclPtr<SvxFontPrevWindow>   pChangedPreviewWN;
 
     VclPtr<ListBox>             pMarkPosLB;
-    VclPtr<SvxColorListBox>     pMarkColorLB;
+    VclPtr<ColorListBox>        pMarkColorLB;
     VclPtr<SwMarkPreview>       pMarkPreviewWN;
 
+    OUString             sAuthor;
+    OUString             sNone;
+
     DECL_LINK(AttribHdl, ListBox&, void);
-    void ChangedMaskPrev();
     DECL_LINK(ChangedMaskPrevHdl, ListBox&, void);
-    DECL_LINK(ChangedMaskColorPrevHdl, SvxColorListBox&, void);
-    DECL_LINK(ColorHdl, SvxColorListBox&, void);
+    DECL_LINK(ColorHdl, ListBox&, void);
 
     static void InitFontStyle(SvxFontPrevWindow& rExampleWin);
 

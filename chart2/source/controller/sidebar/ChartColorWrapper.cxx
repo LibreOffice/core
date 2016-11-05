@@ -67,12 +67,12 @@ ChartColorWrapper::ChartColorWrapper(
 {
 }
 
-void ChartColorWrapper::operator()(const OUString& , const NamedColor& rColor)
+void ChartColorWrapper::operator()(const OUString& , const Color& rColor)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     assert(xPropSet.is());
 
-    xPropSet->setPropertyValue(maPropertyName, css::uno::makeAny(rColor.first.GetColor()));
+    xPropSet->setPropertyValue(maPropertyName, css::uno::makeAny(rColor.GetColor()));
 }
 
 void ChartColorWrapper::updateModel(const css::uno::Reference<css::frame::XModel>& xModel)

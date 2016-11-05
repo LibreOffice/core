@@ -23,7 +23,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/fntctrl.hxx>
 #include <svx/checklbx.hxx>
-#include <svx/colorbox.hxx>
 #include <svx/langbox.hxx>
 #include <vcl/layout.hxx>
 #include <memory>
@@ -176,7 +175,7 @@ class SvxCharEffectsPage : public SvxCharBasePage
 private:
     static const sal_uInt16 pEffectsRanges[];
     VclPtr<FixedText>          m_pFontColorFT;
-    VclPtr<SvxColorListBox>    m_pFontColorLB;
+    VclPtr<ColorListBox>       m_pFontColorLB;
 
     VclPtr<FixedText>          m_pEffectsFT;
     VclPtr<ListBox>            m_pEffectsLB;
@@ -191,13 +190,13 @@ private:
 
     VclPtr<ListBox>            m_pOverlineLB;
     VclPtr<FixedText>          m_pOverlineColorFT;
-    VclPtr<SvxColorListBox>    m_pOverlineColorLB;
+    VclPtr<ColorListBox>       m_pOverlineColorLB;
 
     VclPtr<ListBox>            m_pStrikeoutLB;
 
     VclPtr<ListBox>            m_pUnderlineLB;
     VclPtr<FixedText>          m_pUnderlineColorFT;
-    VclPtr<SvxColorListBox>    m_pUnderlineColorLB;
+    VclPtr<ColorListBox>       m_pUnderlineColorLB;
 
     VclPtr<CheckBox>           m_pIndividualWordsBtn;
 
@@ -210,6 +209,8 @@ private:
     VclPtr<FixedText>          m_pA11yWarningFT;
 
     sal_uInt16          m_nHtmlMode;
+
+    OUString            m_aTransparentColorName;
 
                         SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
@@ -224,7 +225,7 @@ private:
     DECL_LINK(CbClickHdl_Impl, Button*, void);
     DECL_LINK(TristClickHdl_Impl, Button*, void);
     DECL_LINK(UpdatePreview_Impl, ListBox&, void);
-    DECL_LINK(ColorBoxSelectHdl_Impl, SvxColorListBox&, void);
+    DECL_LINK(ColorBoxSelectHdl_Impl, ListBox&, void);
 
 public:
     virtual ~SvxCharEffectsPage() override;

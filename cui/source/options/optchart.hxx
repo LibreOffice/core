@@ -29,12 +29,11 @@
 
 #include "cfgchart.hxx"
 
-typedef std::vector<Color> ImpColorList;
-
 class SvxDefaultColorOptPage : public SfxTabPage
 {
+
 private:
-    VclPtr<ListBox>                m_pLbChartColors;
+    VclPtr<ColorLB>                m_pLbChartColors;
     VclPtr<ValueSet>               m_pValSetColorBox;
     VclPtr<PushButton>             m_pPBDefault;
     VclPtr<PushButton>             m_pPBAdd;
@@ -43,7 +42,6 @@ private:
     SvxChartOptions*        pChartOptions;
     SvxChartColorTableItem* pColorConfig;
     XColorListRef           pColorList;
-    ImpColorList            aColorList;
 
     DECL_LINK( ResetToDefaults, Button *, void );
     DECL_LINK( AddChartColor, Button *, void );
@@ -53,15 +51,6 @@ private:
 
     void FillColorBox();
     long GetColorIndex( const Color& rCol );
-
-private:
-    void InsertColorEntry(const XColorEntry& rEntry, sal_Int32 nPos = LISTBOX_APPEND);
-    void RemoveColorEntry(sal_Int32 nPos);
-    void ModifyColorEntry(const XColorEntry& rEntry, sal_Int32 nPos);
-    void ClearColorEntries();
-    void FillBoxChartColorLB();
-    Color GetEntryColor(sal_Int32 nPos) const;
-    Color GetSelectEntryColor() const;
 
 public:
     SvxDefaultColorOptPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );

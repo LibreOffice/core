@@ -25,7 +25,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <editeng/borderline.hxx>
@@ -498,11 +497,12 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pAutoWidthBox->SetClickHdl(LINK(this, SwColumnPage, AutoWidthHdl));
 
     aLk = LINK( this, SwColumnPage, UpdateColMgr );
-    m_pLineTypeDLB->SetSelectHdl(LINK(this, SwColumnPage, UpdateColMgrListBox));
+    Link<ListBox&,void> aLk2 = LINK( this, SwColumnPage, UpdateColMgrListBox );
+    m_pLineTypeDLB->SetSelectHdl( aLk2 );
     m_pLineWidthEdit->SetModifyHdl( aLk );
-    m_pLineColorDLB->SetSelectHdl(LINK( this, SwColumnPage, UpdateColMgrColorBox));
+    m_pLineColorDLB->SetSelectHdl( aLk2 );
     m_pLineHeightEdit->SetModifyHdl( aLk );
-    m_pLinePosDLB->SetSelectHdl(LINK(this, SwColumnPage, UpdateColMgrListBox));
+    m_pLinePosDLB->SetSelectHdl( aLk2 );
 
     // Separator line
     m_pLineTypeDLB->SetUnit( FUNIT_POINT );
@@ -525,7 +525,29 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
             m_pLineWidthEdit->GetDecimalDigits( ),
             m_pLineWidthEdit->GetUnit(), MapUnit::MapTwip ));
     m_pLineTypeDLB->SetWidth( nLineWidth );
-    m_pLineColorDLB->SelectEntry(COL_BLACK);
+
+    // Fill the color listbox
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    XColorListRef pColorList;
+    if ( pDocSh )
+    {
+        const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        if ( pItem != nullptr )
+            pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+    }
+
+    if ( pColorList.is() )
+    {
+        m_pLineColorDLB->SetUpdateMode( false );
+
+        for (long i = 0; i < pColorList->Count(); ++i )
+        {
+            const XColorEntry* pEntry = pColorList->GetColor(i);
+            m_pLineColorDLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+        }
+        m_pLineColorDLB->SetUpdateMode( true );
+    }
+    m_pLineColorDLB->SelectEntryPos( 0 );
 }
 
 SwColumnPage::~SwColumnPage()
@@ -679,18 +701,10 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgrListBox, ListBox&, void )
 {
     UpdateColMgr(*m_pLineWidthEdit);
 }
-
-IMPL_LINK_NOARG( SwColumnPage, UpdateColMgrColorBox, SvxColorListBox&, void )
-{
-    UpdateColMgr(*m_pLineWidthEdit);
-}
-
 IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, Edit&, void )
 {
-    if (!m_pColMgr)
-        return;
     long nGutterWidth = m_pColMgr->GetGutterWidth();
-    if (m_nCols > 1)
+    if(m_nCols > 1)
     {
             // Determine whether the most narrow column is too narrow
             // for the adjusted column gap

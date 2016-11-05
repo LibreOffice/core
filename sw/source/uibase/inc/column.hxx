@@ -31,7 +31,6 @@
 #include <svtools/valueset.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/colorbox.hxx>
 #include <fmtclbl.hxx>
 #include <colex.hxx>
 #include <prcntfld.hxx>
@@ -106,7 +105,7 @@ class SwColumnPage : public SfxTabPage
     VclPtr<FixedText>      m_pLineWidthLbl;
     VclPtr<MetricField>    m_pLineWidthEdit;
     VclPtr<FixedText>      m_pLineColorLbl;
-    VclPtr<SvxColorListBox> m_pLineColorDLB;
+    VclPtr<ColorListBox>   m_pLineColorDLB;
     VclPtr<FixedText>      m_pLineHeightLbl;
     VclPtr<MetricField>    m_pLineHeightEdit;
     VclPtr<FixedText>      m_pLinePosLbl;
@@ -147,7 +146,6 @@ class SwColumnPage : public SfxTabPage
     DECL_LINK( Down, Button *, void );
     DECL_LINK( UpdateColMgr, Edit&, void );
     DECL_LINK( UpdateColMgrListBox, ListBox&, void );
-    DECL_LINK( UpdateColMgrColorBox, SvxColorListBox&, void );
     void Timeout();
 
     void            Update(MetricField *pInteractiveField);

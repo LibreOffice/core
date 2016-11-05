@@ -34,8 +34,17 @@
 void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
 {
     const SdrObject*    pObj        = nullptr;
+    SvxFontWorkDialog*  pDlg        = nullptr;
     ScDrawView*         pDrView     = pViewData->GetScDrawView();
     const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
+    sal_uInt16              nId = SvxFontWorkChildWindow::GetChildWindowId();
+
+    SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
+    if (pViewFrm->HasChildWindow(nId))
+    {
+        SfxChildWindow* pWnd = pViewFrm->GetChildWindow(nId);
+        pDlg = pWnd ? static_cast<SvxFontWorkDialog*>(pWnd->GetWindow()) : nullptr;
+    }
 
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -63,6 +72,22 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
     }
     else
     {
+        if ( pDlg )
+        {
+            SfxObjectShell* pDocSh = SfxObjectShell::Current();
+
+            if ( pDocSh )
+            {
+                const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+                XColorListRef pColorList;
+
+                if ( pItem )
+                    pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+
+                if ( pColorList.is() )
+                    pDlg->SetColorList( pColorList );
+            }
+        }
         SfxItemSet aViewAttr(pDrView->GetModel()->GetItemPool());
         pDrView->GetAttributes(aViewAttr);
         rSet.Set(aViewAttr);

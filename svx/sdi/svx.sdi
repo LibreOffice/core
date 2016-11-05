@@ -3596,6 +3596,25 @@ SfxBoolItem Freeline_Unfilled SID_DRAW_FREELINE_NOFILL
 ]
 
 
+SfxBoolItem AutoColorInvalid SID_ATTR_AUTO_COLOR_INVALID
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_INSERT;
+]
+
+
 SfxVoidItem Gallery SID_GALLERY
 
 [

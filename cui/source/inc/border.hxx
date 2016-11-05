@@ -25,7 +25,6 @@
 #include <vcl/fixed.hxx>
 #include <svtools/valueset.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/colorbox.hxx>
 #include <svx/frmsel.hxx>
 #include <svx/flagsdef.hxx>
 
@@ -73,7 +72,7 @@ private:
     VclPtr<svx::FrameSelector> m_pFrameSel;
 
     VclPtr<LineListBox>        m_pLbLineStyle;
-    VclPtr<SvxColorListBox>    m_pLbLineColor;
+    VclPtr<ColorListBox>       m_pLbLineColor;
     VclPtr<MetricField>        m_pLineWidthMF;
 
     VclPtr<VclContainer>       m_pSpacingFrame;
@@ -92,7 +91,7 @@ private:
     VclPtr<FixedText>          m_pFtShadowSize;
     VclPtr<MetricField>        m_pEdShadowSize;
     VclPtr<FixedText>          m_pFtShadowColor;
-    VclPtr<SvxColorListBox>    m_pLbShadowColor;
+    VclPtr<ColorListBox>       m_pLbShadowColor;
 
 
     VclPtr<VclContainer>       m_pPropertiesFrame;///< properties - "Merge with next paragraph" in Writer
@@ -121,7 +120,7 @@ private:
 
     // Handler
     DECL_LINK( SelStyleHdl_Impl, ListBox&, void );
-    DECL_LINK( SelColHdl_Impl, SvxColorListBox&, void );
+    DECL_LINK( SelColHdl_Impl, ListBox&, void );
     DECL_LINK( SelPreHdl_Impl, ValueSet*, void );
     DECL_LINK( SelSdwHdl_Impl, ValueSet*, void );
     DECL_LINK( LinesChanged_Impl, LinkParamNone*, void );

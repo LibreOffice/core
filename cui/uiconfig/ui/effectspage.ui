@@ -324,7 +324,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxlo-SvxColorListBox" id="fontcolorlb">
+          <object class="svtlo-ColorListBox" id="fontcolorlb">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -389,7 +389,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxlo-SvxColorListBox" id="underlinecolorlb">
+          <object class="svtlo-ColorListBox" id="underlinecolorlb">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -399,7 +399,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxlo-SvxColorListBox" id="overlinecolorlb">
+          <object class="svtlo-ColorListBox" id="overlinecolorlb">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>

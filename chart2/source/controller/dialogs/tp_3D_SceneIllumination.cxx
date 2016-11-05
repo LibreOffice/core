@@ -22,7 +22,6 @@
 #include "Bitmaps.hrc"
 #include "CommonConverters.hxx"
 
-#include <svx/colorbox.hxx>
 #include "svx/dialogs.hrc"
 #include <svx/dialmgr.hxx>
 #include <rtl/math.hxx>
@@ -104,7 +103,7 @@ void LightSourceInfo::initButtonFromSource()
 
 namespace
 {
-    OUString lcl_makeColorName(const Color& rColor)
+    OUString lcl_makeColorName( Color rColor )
     {
         OUString aStr = SVX_RESSTR(RID_SVXFLOAT3D_FIX_R) +
                         OUString::number(rColor.GetRed()) +
@@ -116,11 +115,15 @@ namespace
                         OUString::number(rColor.GetBlue());
         return aStr;
     }
-
-    void lcl_selectColor(SvxColorListBox& rListBox, const Color& rColor)
+    void lcl_selectColor( ColorListBox& rListBox, const Color& rColor )
     {
         rListBox.SetNoSelection();
-        rListBox.SelectEntry(std::make_pair(rColor, lcl_makeColorName(rColor)));
+        rListBox.SelectEntry( rColor );
+        if( rListBox.GetSelectEntryCount() == 0 )
+        {
+            const sal_Int32 nPos = rListBox.InsertEntry( rColor, lcl_makeColorName( rColor ) );
+            rListBox.SelectEntryPos( nPos );
+        }
     }
 
     ::chart::LightSource lcl_getLightSourceFromProperties(
@@ -212,7 +215,8 @@ namespace
 
 ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( vcl::Window* pWindow
                 , const uno::Reference< beans::XPropertySet > & xSceneProperties
-                , const uno::Reference< frame::XModel >& xChartModel )
+                , const uno::Reference< frame::XModel >& xChartModel
+                , const XColorListRef & pColorTable )
                 : TabPage ( pWindow
                           ,"tp_3D_SceneIllumination"
                           ,"modules/schart/ui/tp_3D_SceneIllumination.ui")
@@ -237,6 +241,14 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( vcl::Window*
     get(m_pBtn_AmbientLight_Color, "BTN_AMBIENT_COLOR");
 
     get(m_pCtl_Preview, "CTL_LIGHT_PREVIEW");
+
+    if( pColorTable.is() )
+    {
+        m_pLB_AmbientLight->Fill( pColorTable );
+        m_pLB_LightSource->Fill( pColorTable );
+    }
+    m_pLB_AmbientLight->SetDropDownLineCount(10);
+    m_pLB_LightSource->SetDropDownLineCount(10);
 
     m_pLightSourceInfoList = new LightSourceInfo[8];
     m_pLightSourceInfoList[0].pButton = m_pBtn_Light1;
@@ -396,7 +408,7 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, SvxLightCtl3
 IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton, void )
 {
     bool bIsAmbientLight = (pButton==m_pBtn_AmbientLight_Color);
-    SvxColorListBox* pListBox = ( bIsAmbientLight ? m_pLB_AmbientLight : m_pLB_LightSource);
+    ColorLB* pListBox = ( bIsAmbientLight ? m_pLB_AmbientLight : m_pLB_LightSource);
 
     SvColorDialog aColorDlg( this );
     aColorDlg.SetColor( pListBox->GetSelectEntryColor() );
@@ -429,9 +441,9 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton, v
     }
 }
 
-IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, SvxColorListBox&, rBox, void )
+IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ListBox&, rBox, void )
 {
-    SvxColorListBox* pListBox = &rBox;
+    ColorLB* pListBox = static_cast<ColorLB*>(&rBox);
     if(pListBox==m_pLB_AmbientLight)
     {
         m_bInCommitToModel = true;

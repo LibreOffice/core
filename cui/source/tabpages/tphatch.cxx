@@ -29,7 +29,6 @@
 
 #include <cuires.hrc>
 #include "helpid.hrc"
-#include <svx/colorbox.hxx>
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
@@ -119,8 +118,7 @@ SvxHatchTabPage::SvxHatchTabPage
     m_pMtrAngle->SetModifyHdl( aLink );
     m_pSliderAngle->SetSlideHdl( LINK( this, SvxHatchTabPage, ModifiedSliderHdl_Impl ) );
     m_pLbLineType->SetSelectHdl( aLink2 );
-    Link<SvxColorListBox&,void> aLink3 = LINK( this, SvxHatchTabPage, ModifiedColorListBoxHdl_Impl );
-    m_pLbLineColor->SetSelectHdl( aLink3 );
+    m_pLbLineColor->SetSelectHdl( aLink2 );
     m_pCbBackgroundColor->SetToggleHdl( LINK( this, SvxHatchTabPage, ToggleHatchBackgroundColor_Impl ) );
     m_pLbBackgroundColor->SetSelectHdl( LINK( this, SvxHatchTabPage, ModifiedBackgroundHdl_Impl ) );
 
@@ -152,13 +150,20 @@ void SvxHatchTabPage::dispose()
     SvxTabPage::dispose();
 }
 
+
 void SvxHatchTabPage::Construct()
 {
+    m_pLbLineColor->Fill( m_pColorList );
+    m_pLbBackgroundColor->Fill( m_pColorList );
     m_pHatchLB->FillPresetListBox(*m_pHatchingList);
 }
 
+
 void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 {
+    sal_Int32 nPos;
+    sal_Int32 nCount;
+
     if( m_pColorList.is() )
     {
         // ColorList
@@ -169,6 +174,18 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
                 dynamic_cast<SvxAreaTabDialog*>(GetParentDialog()) : nullptr;
             if (pArea)
                 m_pColorList = pArea->GetNewColorList();
+
+            // LbLineColor
+            nPos = m_pLbLineColor->GetSelectEntryPos();
+            m_pLbLineColor->Clear();
+            m_pLbLineColor->Fill( m_pColorList );
+            nCount = m_pLbLineColor->GetEntryCount();
+            if( nCount == 0 )
+                ; // this case should not occur
+            else if( nCount <= nPos )
+                m_pLbLineColor->SelectEntryPos( 0 );
+            else
+                m_pLbLineColor->SelectEntryPos( nPos );
 
             ModifiedHdl_Impl( this );
         }
@@ -211,6 +228,12 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
         Color aColor(aColorItem.GetColorValue());
         m_pLbBackgroundColor->Enable();
         m_pLbBackgroundColor->SelectEntry(aColor);
+
+        if( m_pLbBackgroundColor->GetSelectEntryCount() == 0 )
+        {
+            m_pLbBackgroundColor->InsertEntry( aColor , OUString() );
+            m_pLbBackgroundColor->SelectEntry( aColor );
+        }
         m_rXFSet.Put( aColorItem );
     }
     else
@@ -272,10 +295,15 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
     rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
     rSet->Put( XFillHatchItem( aString, *pXHatch ) );
     rSet->Put( XFillBackgroundItem( m_pCbBackgroundColor->IsChecked() ) );
-    if (m_pCbBackgroundColor->IsChecked())
+    if(m_pCbBackgroundColor->IsChecked())
     {
-        NamedColor aColor = m_pLbBackgroundColor->GetSelectEntry();
-        rSet->Put(XFillColorItem(aColor.second, aColor.first));
+        sal_uInt32 nPosBckColor = m_pLbBackgroundColor->GetSelectEntryPos();
+        OUString aBckColorString;
+        if( nPosBckColor != LISTBOX_ENTRY_NOTFOUND )
+            aBckColorString = m_pLbBackgroundColor->GetSelectEntry();
+        else
+            aBckColorString = OUString();
+        rSet->Put( XFillColorItem( aBckColorString, m_pLbBackgroundColor->GetSelectEntryColor() ) );
     }
     return true;
 }
@@ -307,12 +335,8 @@ VclPtr<SfxTabPage> SvxHatchTabPage::Create( vcl::Window* pWindow,
     return VclPtr<SvxHatchTabPage>::Create( pWindow, *rSet );
 }
 
-IMPL_LINK( SvxHatchTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
-{
-    ModifiedHdl_Impl(&rListBox);
-}
 
-IMPL_LINK( SvxHatchTabPage, ModifiedColorListBoxHdl_Impl, SvxColorListBox&, rListBox, void )
+IMPL_LINK( SvxHatchTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
 {
     ModifiedHdl_Impl(&rListBox);
 }
@@ -327,7 +351,7 @@ IMPL_LINK_NOARG( SvxHatchTabPage, ToggleHatchBackgroundColor_Impl, CheckBox&, vo
     ModifiedBackgroundHdl_Impl(*m_pLbBackgroundColor);
 }
 
-IMPL_LINK_NOARG( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, SvxColorListBox&, void )
+IMPL_LINK_NOARG( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, ListBox&, void )
 {
     Color aColor(COL_TRANSPARENT);
     if(m_pCbBackgroundColor->IsChecked())
@@ -405,8 +429,15 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
     {
         m_pLbLineType->SelectEntryPos(
             sal::static_int_cast< sal_Int32 >( pHatch->GetHatchStyle() ) );
+        // if the entry is not in the listbox
+        // the color is added temporarily
         m_pLbLineColor->SetNoSelection();
         m_pLbLineColor->SelectEntry( pHatch->GetColor() );
+        if( m_pLbLineColor->GetSelectEntryCount() == 0 )
+        {
+            m_pLbLineColor->InsertEntry( pHatch->GetColor(), OUString() );
+            m_pLbLineColor->SelectEntry( pHatch->GetColor() );
+        }
         SetMetricValue( *m_pMtrDistance, pHatch->GetDistance(), m_ePoolUnit );
         long mHatchAngle = pHatch->GetAngle() / 10;
         m_pMtrAngle->SetValue( mHatchAngle );

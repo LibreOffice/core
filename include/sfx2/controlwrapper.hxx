@@ -115,7 +115,7 @@ private:
      |   +- DummyWindowWrapper   [1]
      |   +- CheckBoxWrapper   [1]
      |   +- EditWrapper   [1]
-     |   +- SvxColorListBoxWrapper   [1]
+     |   +- ColorListBoxWrapper   [1]
      |   |
      |   +- MetricFieldWrapper< ValueT >   [1]
      |   |   |
@@ -238,6 +238,26 @@ public:
 
     virtual bool        GetControlValue() const override;
     virtual void        SetControlValue( bool bValue ) override;
+};
+
+
+/** A wrapper for the SVTOOLS ColorListBox. */
+class SFX2_DLLPUBLIC ColorListBoxWrapper:
+    public SingleControlWrapper< ColorListBox, Color >
+{
+    /*  Note: cannot use 'const Color&' as template argument, because the
+        SVTOOLS ColorListBox returns the color by value and not by reference,
+        therefore GetControlValue() must return a temporary object too. */
+public:
+    explicit ColorListBoxWrapper(ColorListBox & rListBox);
+
+    virtual ~ColorListBoxWrapper() override;
+
+    virtual bool        IsControlDontKnow() const override;
+    virtual void        SetControlDontKnow( bool bSet ) override;
+
+    virtual Color       GetControlValue() const override;
+    virtual void        SetControlValue( Color aColor ) override;
 };
 
 

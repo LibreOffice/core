@@ -87,7 +87,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxColorListBox" id="changes">
+                  <object class="svxlo-ColorLB" id="changes">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -97,7 +97,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxColorListBox" id="deletions">
+                  <object class="svxlo-ColorLB" id="deletions">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -107,7 +107,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxColorListBox" id="entries">
+                  <object class="svxlo-ColorLB" id="entries">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -117,7 +117,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxColorListBox" id="insertions">
+                  <object class="svxlo-ColorLB" id="insertions">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
