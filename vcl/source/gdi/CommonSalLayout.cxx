@@ -751,6 +751,11 @@ bool CommonSalLayout::IsKashidaPosValid(int nCharPos) const
     {
         if (pIter->mnCharPos == nCharPos)
         {
+            // If the character was not supported by this layout, return false
+            // so that fallback layouts would be checked for it.
+            if (pIter->maGlyphId == 0)
+                break;
+
             // Search backwards for previous glyph belonging to a different
             // character. We are looking backwards because we are dealing with
             // RTL glyphs, which will be in visual order.

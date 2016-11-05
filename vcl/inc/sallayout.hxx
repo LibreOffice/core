@@ -243,6 +243,7 @@ public:
                                    int&, DeviceCoordinate* pGlyphAdvAry = nullptr, int* pCharPosAry = nullptr,
                                    const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const override;
+    virtual bool    IsKashidaPosValid(int nCharPos) const override;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( SalLayout& rBaseLayout );

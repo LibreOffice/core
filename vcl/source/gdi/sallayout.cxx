@@ -2027,6 +2027,29 @@ bool MultiSalLayout::GetOutline( SalGraphics& rGraphics,
     return bRet;
 }
 
+bool MultiSalLayout::IsKashidaPosValid(int nCharPos) const
+{
+    // Check the base layout
+    bool bValid = mpLayouts[0]->IsKashidaPosValid(nCharPos);
+
+    // If base layout returned false, it might be because the character was not
+    // supported there, so we check fallback layouts.
+    if (!bValid)
+    {
+        for (int i = 1; i < mnLevel; ++i)
+        {
+            // - 1 because there is no fallback run for the base layout, IIUC.
+            if (maFallbackRuns[i - 1].PosIsInAnyRun(nCharPos))
+            {
+                bValid = mpLayouts[i]->IsKashidaPosValid(nCharPos);
+                break;
+            }
+        }
+    }
+
+    return bValid;
+}
+
 std::shared_ptr<vcl::TextLayoutCache> SalLayout::CreateTextLayoutCache(
         OUString const&) const
 {
