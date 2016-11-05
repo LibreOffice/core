@@ -266,7 +266,6 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
             static_cast<SvxShadowTabPage&>(rPage).SetColorList( mpColorList );
             static_cast<SvxShadowTabPage&>(rPage).SetColorChgd( &mnColorListState );
-            static_cast<SvxShadowTabPage&>(rPage).Construct();
     }
     else if (nId == m_nTransparenceTabPage)
     {

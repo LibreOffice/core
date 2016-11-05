@@ -41,21 +41,6 @@ String RID_SVXFLOAT3D_FAVORITE
     Text [ en-US ] = "Favorite";
 };
 
-String RID_SVXFLOAT3D_FIX_X
-{
-    Text [ en-US ] = "X";
-};
-
-String RID_SVXFLOAT3D_FIX_Y
-{
-    Text [ en-US ] = "Y";
-};
-
-String RID_SVXFLOAT3D_FIX_Z
-{
-    Text [ en-US ] = "Z";
-};
-
 String RID_SVXFLOAT3D_FIX_R
 {
     Text [ en-US ] = "R:";

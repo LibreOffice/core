@@ -41,14 +41,13 @@ enum class ViewType3D
     Material
 };
 
-class SdrModel;
 class FmFormModel;
 class VirtualDevice;
 class E3dView;
 class SdrPageView;
 class Svx3DCtrlItem;
 class SvxConvertTo3DItem;
-
+class SvxColorListBox;
 
 struct Svx3DWinImpl;
 
@@ -113,16 +112,16 @@ private:
     VclPtr<PushButton>         m_pBtnLight6;
     VclPtr<PushButton>         m_pBtnLight7;
     VclPtr<PushButton>         m_pBtnLight8;
-    VclPtr<ColorLB>            m_pLbLight1;
-    VclPtr<ColorLB>            m_pLbLight2;
-    VclPtr<ColorLB>            m_pLbLight3;
-    VclPtr<ColorLB>            m_pLbLight4;
-    VclPtr<ColorLB>            m_pLbLight5;
-    VclPtr<ColorLB>            m_pLbLight6;
-    VclPtr<ColorLB>            m_pLbLight7;
-    VclPtr<ColorLB>            m_pLbLight8;
+    VclPtr<SvxColorListBox>    m_pLbLight1;
+    VclPtr<SvxColorListBox>    m_pLbLight2;
+    VclPtr<SvxColorListBox>    m_pLbLight3;
+    VclPtr<SvxColorListBox>    m_pLbLight4;
+    VclPtr<SvxColorListBox>    m_pLbLight5;
+    VclPtr<SvxColorListBox>    m_pLbLight6;
+    VclPtr<SvxColorListBox>    m_pLbLight7;
+    VclPtr<SvxColorListBox>    m_pLbLight8;
     VclPtr<PushButton>         m_pBtnLightColor;
-    VclPtr<ColorLB>            m_pLbAmbientlight;    // ListBox
+    VclPtr<SvxColorListBox>    m_pLbAmbientlight;    // ListBox
     VclPtr<PushButton>         m_pBtnAmbientColor;   // color button
 
 // Textures
@@ -144,13 +143,13 @@ private:
 // material editor
     VclPtr<VclContainer>       m_pFLMaterial;
     VclPtr<ListBox>            m_pLbMatFavorites;
-    VclPtr<ColorLB>            m_pLbMatColor;
+    VclPtr<SvxColorListBox>    m_pLbMatColor;
     VclPtr<PushButton>         m_pBtnMatColor;
-    VclPtr<ColorLB>            m_pLbMatEmission;
+    VclPtr<SvxColorListBox>    m_pLbMatEmission;
     VclPtr<PushButton>         m_pBtnEmissionColor;
 
     VclPtr<VclContainer>       m_pFLMatSpecular;
-    VclPtr<ColorLB>            m_pLbMatSpecular;
+    VclPtr<SvxColorListBox>    m_pLbMatSpecular;
     VclPtr<PushButton>         m_pBtnSpecularColor;
     VclPtr<MetricField>        m_pMtrMatSpecularIntensity;
 
@@ -191,6 +190,7 @@ private:
     DECL_LINK( ClickHdl, Button*, void );
     DECL_LINK( ClickColorHdl, Button*, void );
     DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_LINK( SelectColorHdl, SvxColorListBox&, void );
     DECL_LINK( ModifyHdl, Edit&, void );
     void ClickLight(PushButton &rBtn);
 
@@ -199,9 +199,9 @@ private:
     SVX_DLLPRIVATE void         Construct();
     SVX_DLLPRIVATE void         Reset();
 
-    SVX_DLLPRIVATE static bool  LBSelectColor( ColorLB* pLb, const Color& rColor );
+    SVX_DLLPRIVATE static void  LBSelectColor( SvxColorListBox* pLb, const Color& rColor );
     SVX_DLLPRIVATE sal_uInt16   GetLightSource( const PushButton* pBtn );
-    SVX_DLLPRIVATE ColorLB*     GetLbByButton( const PushButton* pBtn = nullptr );
+    SVX_DLLPRIVATE SvxColorListBox* GetLbByButton( const PushButton* pBtn = nullptr );
 
     SVX_DLLPRIVATE bool         GetUILightState( const PushButton& rBtn ) const;
     SVX_DLLPRIVATE void         SetUILightState( PushButton& aBtn, bool bState );
@@ -215,7 +215,7 @@ public:
             virtual ~Svx3DWin() override;
     virtual void dispose() override;
 
-    void    InitColorLB( const SdrModel* pDoc );
+    void    InitColorLB();
     bool    IsUpdateMode() const { return bUpdate; }
 
     void    Update( SfxItemSet& rSet );

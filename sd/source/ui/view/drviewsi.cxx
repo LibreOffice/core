@@ -72,7 +72,7 @@ void DrawViewShell::ExecEffectWin( SfxRequest& rReq )
             {
                 Svx3DWin* p3DWin = static_cast<Svx3DWin*>( pWindow->GetWindow() );
                 if( p3DWin )
-                    p3DWin->InitColorLB( GetDoc() );
+                    p3DWin->InitColorLB();
             }
         }
         break;

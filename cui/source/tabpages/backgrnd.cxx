@@ -381,7 +381,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
 
     m_pBackgroundColorSet->SetSelectHdl( HDL(BackgroundColorHdl_Impl) );
     m_pBackgroundColorSet->SetStyle(m_pBackgroundColorSet->GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD);
-    m_pBackgroundColorSet->SetText(SVX_RESSTR(RID_SVXSTR_TRANSPARENT));
+    m_pBackgroundColorSet->SetText(SVX_RESSTR(RID_SVXSTR_NOFILL));
 }
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
