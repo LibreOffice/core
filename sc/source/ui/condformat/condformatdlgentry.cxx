@@ -18,6 +18,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <vcl/msgbox.hxx>
@@ -663,7 +664,7 @@ OUString convertNumberToString(double nVal, ScDocument* pDoc)
     return aText;
 }
 
-void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ColorListBox& rLbCol, ScDocument* pDoc )
+void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, SvxColorListBox& rLbCol, ScDocument* pDoc )
 {
     // entry Automatic is not available for color scales
     sal_Int32 nIndex = static_cast<sal_Int32>(rEntry.GetType());
@@ -726,7 +727,7 @@ void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const 
     }
 }
 
-ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListBox& rColor, const Edit& rValue, ScDocument* pDoc, const ScAddress& rPos )
+ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const SvxColorListBox& rColor, const Edit& rValue, ScDocument* pDoc, const ScAddress& rPos )
 {
     ScColorScaleEntry* pEntry = new ScColorScaleEntry();
 
@@ -796,38 +797,8 @@ void ScColorScale2FrmtEntry::Init()
 {
     maLbEntryTypeMin->SetSelectHdl( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
     maLbEntryTypeMax->SetSelectHdl( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
-
-    SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
-    XColorListRef       pColorTable;
-
-    DBG_ASSERT( pDocSh, "DocShell not found!" );
-
-    if ( pDocSh )
-    {
-        const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-        if ( pItem != nullptr )
-            pColorTable = static_cast<const SvxColorListItem*>(pItem) ->GetColorList();
-    }
-    if ( pColorTable.is() )
-    {
-        // filling the line color box
-        maLbColMin->SetUpdateMode( false );
-        maLbColMax->SetUpdateMode( false );
-
-        for ( long i = 0; i < pColorTable->Count(); ++i )
-        {
-            const XColorEntry* pEntry = pColorTable->GetColor(i);
-            maLbColMin->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-            maLbColMax->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-
-            if(pEntry->GetColor() == Color(COL_LIGHTRED))
-                maLbColMin->SelectEntryPos(i);
-            if(pEntry->GetColor() == Color(COL_LIGHTBLUE))
-                maLbColMax->SelectEntryPos(i);
-        }
-        maLbColMin->SetUpdateMode( true );
-        maLbColMax->SetUpdateMode( true );
-    }
+    maLbColMin->SelectEntry(Color(COL_LIGHTRED));
+    maLbColMax->SelectEntry(Color(COL_LIGHTBLUE));
 }
 
 ScFormatEntry* ScColorScale2FrmtEntry::createColorscaleEntry() const
@@ -976,43 +947,9 @@ void ScColorScale3FrmtEntry::Init()
     maLbEntryTypeMin->SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
     maLbEntryTypeMax->SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
     maLbEntryTypeMiddle->SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
-
-    SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
-    XColorListRef       pColorTable;
-
-    DBG_ASSERT( pDocSh, "DocShell not found!" );
-
-    if ( pDocSh )
-    {
-        const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-        if ( pItem != nullptr )
-            pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
-    }
-    if ( pColorTable.is() )
-    {
-        // filling the line color box
-        maLbColMin->SetUpdateMode( false );
-        maLbColMiddle->SetUpdateMode( false );
-        maLbColMax->SetUpdateMode( false );
-
-        for ( long i = 0; i < pColorTable->Count(); ++i )
-        {
-            const XColorEntry* pEntry = pColorTable->GetColor(i);
-            maLbColMin->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-            maLbColMiddle->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-            maLbColMax->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-
-            if(pEntry->GetColor() == Color(COL_LIGHTRED))
-                maLbColMin->SelectEntryPos(i);
-            if(pEntry->GetColor() == Color(COL_YELLOW))
-                maLbColMiddle->SelectEntryPos(i);
-            if(pEntry->GetColor() == Color(0x00CC00)) // Green 3
-                maLbColMax->SelectEntryPos(i);
-        }
-        maLbColMin->SetUpdateMode( true );
-        maLbColMiddle->SetUpdateMode( true );
-        maLbColMax->SetUpdateMode( true );
-    }
+    maLbColMin->SelectEntry(Color(COL_LIGHTRED));
+    maLbColMiddle->SelectEntry(Color(COL_YELLOW));
+    maLbColMax->SelectEntry(Color(0x00CC00));
 }
 
 ScFormatEntry* ScColorScale3FrmtEntry::createColorscaleEntry() const

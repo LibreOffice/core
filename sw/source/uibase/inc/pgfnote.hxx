@@ -27,6 +27,7 @@
 
 #include <vcl/group.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <svx/colorbox.hxx>
 
 // footnote settings TabPage
 class SwFootNotePage: public SfxTabPage
@@ -53,7 +54,7 @@ private:
     VclPtr<ListBox>        m_pLinePosBox;
     VclPtr<LineListBox>    m_pLineTypeBox;
     VclPtr<MetricField>    m_pLineWidthEdit;
-    VclPtr<ColorListBox>   m_pLineColorBox;
+    VclPtr<SvxColorListBox> m_pLineColorBox;
     VclPtr<MetricField>    m_pLineLengthEdit;
     VclPtr<MetricField>    m_pLineDistEdit;
 
@@ -61,7 +62,7 @@ private:
     DECL_LINK( HeightMetric, Button*, void );
     DECL_LINK( HeightModify, Control&, void );
     DECL_LINK( LineWidthChanged_Impl, Edit&, void );
-    DECL_LINK( LineColorSelected_Impl, ListBox&, void );
+    DECL_LINK( LineColorSelected_Impl, SvxColorListBox&, void );
 
     long            lMaxHeight;
 

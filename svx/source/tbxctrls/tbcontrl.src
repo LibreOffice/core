@@ -41,9 +41,14 @@ ImageList RID_SVXIL_FRAME
     IdCount = { 12 ; };
 };
 
-String RID_SVXSTR_TRANSPARENT
+String RID_SVXSTR_NOFILL
 {
     Text [ en-US ] = "No Fill" ;
+};
+
+String RID_SVXSTR_TRANSPARENT
+{
+    Text [ en-US ] = "Transparent";
 };
 
 String RID_SVXSTR_FILLPATTERN
@@ -133,6 +138,11 @@ String RID_SVXSTR_BACKGROUND
 String RID_SVXSTR_AUTOMATIC
 {
     Text [ en-US ] = "Automatic";
+};
+
+String RID_SVXSTR_BY_AUTHOR
+{
+    Text [ en-US ] = "By author";
 };
 
 String RID_SVXSTR_PAGES
