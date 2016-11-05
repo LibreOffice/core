@@ -363,13 +363,14 @@ SbMethod* MacroChooser::CreateMacro()
         else if ( !pBasic->GetModules().empty() )
             pModule = pBasic->GetModules().front().get();
 
+        OUString aSubName = m_pMacroNameEdit->GetText();
+
         if ( !pModule )
         {
             pModule = createModImpl( static_cast<vcl::Window*>( this ),
                 aDocument, *m_pBasicBox, aLibName, aModName, false );
         }
 
-        OUString aSubName = m_pMacroNameEdit->GetText();
         DBG_ASSERT( !pModule || !pModule->FindMethod( aSubName, SbxClassType::Method ), "Macro existiert schon!" );
         pMethod = pModule ? basctl::CreateMacro( pModule, aSubName ) : nullptr;
     }
