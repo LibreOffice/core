@@ -1697,8 +1697,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
             {
                 SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                                    RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                                    RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+                                    RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
                                     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                                     0 );
                 aCharSet.Put( *GetpSwAttrSet() );
@@ -1742,8 +1741,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         {
             SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+                RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                 0 );
             aCharSet.Put( *GetpSwAttrSet() );
@@ -2109,8 +2107,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         {
             SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+                                RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
                                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                                 0 );
             aCharSet.Put( *GetpSwAttrSet() );

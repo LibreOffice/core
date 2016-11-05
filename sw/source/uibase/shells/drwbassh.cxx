@@ -132,9 +132,9 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     if( rMarkList.GetMark(0) != nullptr )
                     {
-                        SfxItemSet aSet(GetPool(),  RES_SURROUND, RES_SURROUND,
+                        SfxItemSet aSet(GetPool(),  RES_LR_SPACE, RES_UL_SPACE,
+                                                    RES_SURROUND, RES_SURROUND,
                                                     RES_ANCHOR, RES_ANCHOR,
-                                                    RES_LR_SPACE, RES_UL_SPACE,
                                                     SID_HTML_MODE, SID_HTML_MODE,
                                                     FN_DRAW_WRAP_DLG, FN_DRAW_WRAP_DLG,
                                                     0);

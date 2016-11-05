@@ -995,10 +995,10 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
 
     // keep hard tabs, alignment, language, hyphenation, DropCaps and nearly all frame attributes
     SfxItemSet aSet( m_pDoc->GetAttrPool(),
-                        RES_PARATR_ADJUST, RES_PARATR_ADJUST,
-                        RES_PARATR_TABSTOP, RES_PARATR_DROP,
-                        RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
-                        RES_BACKGROUND, RES_SHADOW,
+                        RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,   // 10
+                        RES_PARATR_ADJUST,   RES_PARATR_ADJUST,     // 64
+                        RES_PARATR_TABSTOP,  RES_PARATR_DROP,       // 68
+                        RES_BACKGROUND,      RES_SHADOW,            // 104-106
                         0 );
 
     if( m_pCurTextNd->HasSwAttrSet() )

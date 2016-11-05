@@ -762,8 +762,8 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             SfxItemSet aSetItemItemSet( *pDoc->GetPool(),
                                   ATTR_BACKGROUND, ATTR_BACKGROUND,
                                   ATTR_BORDER, ATTR_SHADOW,
-                                  ATTR_PAGE_SIZE, ATTR_PAGE_SIZE,
                                   ATTR_LRSPACE, ATTR_ULSPACE,
+                                  ATTR_PAGE_SIZE, ATTR_PAGE_SIZE,
                                   ATTR_PAGE_ON, ATTR_PAGE_SHARED,
                                   0 );
             nColor = pHeadFootLine->BackColor;

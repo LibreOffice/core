@@ -405,10 +405,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
                 SfxItemSet aDlgAttr(GetPool(),
                                     EE_ITEMS_START, EE_ITEMS_END,
-                                    SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_HYPHENZONE,
-                                    SID_ATTR_PARA_SPLIT, SID_ATTR_PARA_SPLIT,
-                                    SID_ATTR_PARA_WIDOWS, SID_ATTR_PARA_WIDOWS,
-                                    SID_ATTR_PARA_ORPHANS, SID_ATTR_PARA_ORPHANS,
+                                    SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_WIDOWS,
                                     0);
 
                 aDlgAttr.Put(aEditAttr);

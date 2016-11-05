@@ -643,8 +643,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
                 SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
                 SfxItemSet aCoreSet( GetPool(),
-                                 SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,
-                                 SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
+                                 SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,
                                  0 );
 
                 SfxItemSet aBoxSet( *aCoreSet.GetPool(),

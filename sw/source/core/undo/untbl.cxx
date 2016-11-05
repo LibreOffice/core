@@ -2557,8 +2557,8 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         aInsIdx = rBox.GetSttIdx() + 1;
         rDoc.GetNodes().Delete( aInsIdx );
 
-        SfxItemSet aTmpSet( rDoc.GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
-                                                RES_VERT_ORIENT, RES_VERT_ORIENT, 0 );
+        SfxItemSet aTmpSet( rDoc.GetAttrPool(), RES_VERT_ORIENT,   RES_VERT_ORIENT,
+                                                RES_BOXATR_FORMAT, RES_BOXATR_VALUE, 0 );
         aTmpSet.Put( rBox.GetFrameFormat()->GetAttrSet() );
         if( aTmpSet.Count() )
         {
@@ -2577,8 +2577,8 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         if( aTmpSet.Count() )
         {
             pEntry->pBoxNumAttr = new SfxItemSet( rDoc.GetAttrPool(),
-                                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
-                                    RES_VERT_ORIENT, RES_VERT_ORIENT, 0 );
+                                    RES_VERT_ORIENT,   RES_VERT_ORIENT,
+                                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE, 0 );
             pEntry->pBoxNumAttr->Put( aTmpSet );
         }
 
@@ -2650,8 +2650,8 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         aInsIdx = rBox.GetSttIdx() + 1;
         rDoc.GetNodes().Delete( aInsIdx );
 
-        SfxItemSet aTmpSet( rDoc.GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
-                                                RES_VERT_ORIENT, RES_VERT_ORIENT, 0 );
+        SfxItemSet aTmpSet( rDoc.GetAttrPool(), RES_VERT_ORIENT,   RES_VERT_ORIENT,
+                                                RES_BOXATR_FORMAT, RES_BOXATR_VALUE, 0 );
         aTmpSet.Put( rBox.GetFrameFormat()->GetAttrSet() );
         if( aTmpSet.Count() )
         {
@@ -2669,8 +2669,8 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         if( aTmpSet.Count() )
         {
             pEntry->pBoxNumAttr = new SfxItemSet( rDoc.GetAttrPool(),
-                                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
-                                    RES_VERT_ORIENT, RES_VERT_ORIENT, 0 );
+                                    RES_VERT_ORIENT,   RES_VERT_ORIENT,
+                                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE, 0 );
             pEntry->pBoxNumAttr->Put( aTmpSet );
         }
 
@@ -2700,8 +2700,8 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
     }
 
     pEntry->pBoxNumAttr = new SfxItemSet( pDoc->GetAttrPool(),
-                                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
-                                    RES_VERT_ORIENT, RES_VERT_ORIENT, 0 );
+                                    RES_VERT_ORIENT,   RES_VERT_ORIENT,
+                                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE, 0 );
     pEntry->pBoxNumAttr->Put( rBox.GetFrameFormat()->GetAttrSet() );
     if( !pEntry->pBoxNumAttr->Count() )
     {

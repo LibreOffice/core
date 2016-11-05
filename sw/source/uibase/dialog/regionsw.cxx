@@ -62,13 +62,12 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     const SfxItemSet *pSet = rReq.GetArgs();
 
     SfxItemSet aSet(GetPool(),
-            RES_COL, RES_COL,
-            RES_LR_SPACE, RES_LR_SPACE,
-            RES_COLUMNBALANCE, RES_FRAMEDIR,
-            RES_BACKGROUND, RES_BACKGROUND,
-            RES_FRM_SIZE, RES_FRM_SIZE,
-            RES_FTN_AT_TXTEND, RES_END_AT_TXTEND,
-            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
+            RES_FRM_SIZE,       RES_FRM_SIZE,           // 88
+            RES_LR_SPACE,       RES_LR_SPACE,           // 90
+            RES_BACKGROUND,     RES_BACKGROUND,         // 104
+            RES_COL,            RES_COL,                // 108
+            RES_FTN_AT_TXTEND,  RES_FRAMEDIR,           // 116-119
+            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,     // 10051
             0);
 
     if (!pSet || pSet->Count()==0)
@@ -181,9 +180,9 @@ IMPL_LINK( SwWrtShell, InsertRegionDialog, void*, p, void )
     if (xSectionData.get())
     {
         SfxItemSet aSet(GetView().GetPool(),
-                RES_COL, RES_COL,
-                RES_BACKGROUND, RES_BACKGROUND,
                 RES_FRM_SIZE, RES_FRM_SIZE,
+                RES_BACKGROUND, RES_BACKGROUND,
+                RES_COL, RES_COL,
                 SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
                 0);
         SwRect aRect;

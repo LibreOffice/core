@@ -512,9 +512,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             if(SfxItemState::SET == pOutSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
                                 rSh.SetFlyName(static_cast<const SfxStringItem*>(pItem)->GetValue());
                             SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,   RES_FRM_SIZE,
-                                                            RES_SURROUND,   RES_SURROUND,
-                                                            RES_ANCHOR,     RES_ANCHOR,
-                                                            RES_VERT_ORIENT,RES_HORI_ORIENT,
+                                                            RES_SURROUND,   RES_ANCHOR,
                                                             0);
                             aShellSet.Put(*pOutSet);
                             aMgr.SetAttrSet(aShellSet);
@@ -669,10 +667,8 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
     if (rSh.IsFrameSelected())
     {
         SfxItemSet aSet( rSh.GetAttrPool(),
-                            RES_LR_SPACE, RES_UL_SPACE,
-                            RES_PROTECT, RES_HORI_ORIENT,
-                            RES_OPAQUE, RES_OPAQUE,
-                            RES_PRINT, RES_OPAQUE,
+                            RES_LR_SPACE, RES_UL_SPACE, // 90-91
+                            RES_PRINT, RES_HORI_ORIENT, // 97-102
                             0 );
         rSh.GetFlyFrameAttr( aSet );
 

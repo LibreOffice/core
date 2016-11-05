@@ -1752,7 +1752,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     {
         SfxItemSet aSet(rPaM.GetDoc()->GetAttrPool(),
             RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
-            RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
             RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
             0L);
         SwUnoCursorHelper::GetCursorAttr(rPaM, aSet);
@@ -1948,8 +1947,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
                                 rPaM.GetDoc()->GetAttrPool(),
                                 RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
                                 RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
-                                RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-                                0L ));
+                                0 ));
                     }
                     // #i63870#
                     SwUnoCursorHelper::GetCursorAttr( rPaM, *pSet );

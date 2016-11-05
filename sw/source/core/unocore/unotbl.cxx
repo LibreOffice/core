@@ -1852,14 +1852,12 @@ void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet, std::function<Tpooli
 void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
 {
     SfxItemSet aSet(rDoc.GetAttrPool(),
-        RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
-        RES_BACKGROUND,     RES_BACKGROUND,
-        RES_FRM_SIZE,       RES_UL_SPACE,
-        RES_HORI_ORIENT,    RES_HORI_ORIENT,
-        RES_BREAK,          RES_BREAK,
-        RES_KEEP,           RES_KEEP,
-        RES_SHADOW,         RES_SHADOW,
-        RES_PAGEDESC,       RES_PAGEDESC,
+        RES_FRM_SIZE,       RES_BREAK   ,       // 88-93
+        RES_HORI_ORIENT,    RES_HORI_ORIENT,    // 102
+        RES_BACKGROUND,     RES_BACKGROUND,     // 104
+        RES_SHADOW,         RES_SHADOW,         // 106
+        RES_KEEP,           RES_KEEP,           // 109
+        RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,   // 112
         0
         );
     const uno::Any* pRepHead;
@@ -3646,7 +3644,6 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                 {
                     SfxItemSet aSet(m_pImpl->m_pTableCursor->GetDoc()->GetAttrPool(),
                         RES_CHRATR_BEGIN,       RES_FRMATR_END -1,
-                        RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                         0L);
                     // first look at the attributes of the cursor

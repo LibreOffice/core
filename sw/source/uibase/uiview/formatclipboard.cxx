@@ -382,18 +382,17 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     if( nSelectionType & nsSelectionType::SEL_TBL_CELLS )//only copy table attributes if really cells are selected (not only text in tables)
     {
         m_pTableItemSet = new SfxItemSet(rPool,
-                        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_SHADOW, //SID_ATTR_BORDER_OUTER is inbetween
-                        RES_BACKGROUND,         RES_SHADOW, //RES_BOX is inbetween
-                        SID_ATTR_BRUSH_ROW,     SID_ATTR_BRUSH_TABLE,
-                        RES_BREAK,              RES_BREAK,
-                        RES_PAGEDESC,           RES_PAGEDESC,
-                        RES_LAYOUT_SPLIT,       RES_LAYOUT_SPLIT,
-                        RES_ROW_SPLIT,          RES_ROW_SPLIT,
-                        RES_KEEP,               RES_KEEP,
-                        RES_FRAMEDIR,           RES_FRAMEDIR,
-                        FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE,
-                        FN_TABLE_BOX_TEXTORIENTATION, FN_TABLE_BOX_TEXTORIENTATION,
-                        FN_TABLE_SET_VERT_ALIGN, FN_TABLE_SET_VERT_ALIGN,
+                        RES_PAGEDESC,               RES_BREAK,              //    92 -    93
+                        RES_BACKGROUND,             RES_SHADOW,             //   104 -   106
+                        RES_KEEP,                   RES_KEEP,               //           109
+                        RES_LAYOUT_SPLIT,           RES_LAYOUT_SPLIT,       //           112
+                        RES_FRAMEDIR,               RES_FRAMEDIR,           //           119
+                        RES_ROW_SPLIT,              RES_ROW_SPLIT,          //           121
+                        SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_SHADOW, // 10023 - 10025
+                        SID_ATTR_BRUSH_ROW,         SID_ATTR_BRUSH_TABLE,   // 10368 - 10453
+                        FN_TABLE_BOX_TEXTORIENTATION, FN_TABLE_BOX_TEXTORIENTATION, // 20592
+                        FN_TABLE_SET_VERT_ALIGN,    FN_TABLE_SET_VERT_ALIGN,        // 20588
+                        FN_PARAM_TABLE_HEADLINE,    FN_PARAM_TABLE_HEADLINE,        // 21150
                         0);
         lcl_getTableAttributes( *m_pTableItemSet, rWrtShell );
     }

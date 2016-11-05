@@ -883,12 +883,12 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
             if(pContCopy)
             {
                 SfxItemSet aSet(pActiveShell->GetView().GetPool(),
-                            RES_COL, RES_COL,
-                            RES_BACKGROUND, RES_BACKGROUND,
-                            RES_FRM_SIZE, RES_FRM_SIZE,
-                            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-                            RES_LR_SPACE, RES_LR_SPACE,
-                            FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE,
+                           {RES_FRM_SIZE,       RES_FRM_SIZE,       //    88
+                            RES_LR_SPACE,       RES_LR_SPACE,       //    90
+                            RES_BACKGROUND,     RES_BACKGROUND,     //   104
+                            RES_COL,            RES_COL,            //   108
+                            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE, // 10051
+                            FN_PARAM_TOX_TYPE,  FN_PARAM_TOX_TYPE,  // 22414
                             0);
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

@@ -283,9 +283,8 @@ void SwPageBreakWin::Select( )
                     pNd->GetDoc()->GetIDocumentUndoRedo( ).StartUndo( UNDO_UI_DELETE_PAGE_BREAK, nullptr );
 
                     SfxItemSet aSet( GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
-                            RES_PAGEDESC, RES_PAGEDESC,
-                            RES_BREAK, RES_BREAK,
-                            nullptr );
+                            RES_PAGEDESC, RES_BREAK,
+                            0 );
                     aSet.Put( SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK ) );
                     aSet.Put( SwFormatPageDesc( nullptr ) );
 

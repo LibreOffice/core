@@ -426,10 +426,8 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
 
                 SfxItemPool* pPool = pHFFormat->GetAttrSet().GetPool();
                 SfxItemSet aSet( *pPool,
-                       RES_BACKGROUND, RES_BACKGROUND,
-                       RES_BOX, RES_BOX,
-                       SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-                       RES_SHADOW, RES_SHADOW, 0 );
+                       RES_BACKGROUND,        RES_SHADOW,               // 104-106
+                       SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0);// 10023
 
             aSet.Put( pHFFormat->GetAttrSet() );
 

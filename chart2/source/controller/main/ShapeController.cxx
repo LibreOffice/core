@@ -566,13 +566,9 @@ void ShapeController::executeDispatch_ParagraphDialog()
             pDrawViewWrapper->GetAttributes( aAttr );
 
             SfxItemSet aNewAttr( rPool,
-                                    EE_ITEMS_START, EE_ITEMS_END,
-                                    SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_HYPHENZONE,
-                                    SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_PAGEBREAK,
-                                    SID_ATTR_PARA_SPLIT, SID_ATTR_PARA_SPLIT,
-                                    SID_ATTR_PARA_WIDOWS, SID_ATTR_PARA_WIDOWS,
-                                    SID_ATTR_PARA_ORPHANS, SID_ATTR_PARA_ORPHANS,
-                                    0 );
+                                 EE_ITEMS_START,          EE_ITEMS_END,
+                                 SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_WIDOWS,
+                                 0 );
             aNewAttr.Put( aAttr );
             aNewAttr.Put( SvxHyphenZoneItem( false, SID_ATTR_PARA_HYPHENZONE ) );
             aNewAttr.Put( SvxFormatBreakItem( SvxBreak::NONE, SID_ATTR_PARA_PAGEBREAK ) );

@@ -1283,8 +1283,7 @@ bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
                 RES_CHRATR_POSTURE,     RES_CHRATR_POSTURE,
                 RES_CHRATR_WEIGHT,      RES_CHRATR_WEIGHT,
                 RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_FONT,
-                RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT,
-                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_FONT,
+                RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_FONT,
                 RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
                 0 );
             aTstItemSet.Set( pDCCharFormat->GetAttrSet() );

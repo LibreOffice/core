@@ -462,11 +462,10 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
     pBoxFormat(nullptr),
     rDoc(rDocument),
     aCoreSet(GetPool().GetPool(),   //UUUU sorted by indices, one double removed
-            RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,             // [1
-            RES_PARATR_BEGIN,       RES_PARATR_END - 1,             // [60
-            RES_PARATR_LIST_BEGIN,  RES_PARATR_LIST_END - 1,        // [77
-            RES_FRMATR_BEGIN,       RES_FRMATR_END - 1,             // [82
-            RES_UNKNOWNATR_BEGIN,   RES_UNKNOWNATR_END-1,           // [143
+            RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,             // [1-45
+            // RES_PARATR, RES_PARATR_LIST, RES_FRMATR
+            RES_PARATR_BEGIN,       RES_FRMATR_END - 1,             // [63-129
+            RES_UNKNOWNATR_BEGIN,   RES_UNKNOWNATR_END-1,           // [150
 
             //UUUU FillAttribute support
             XATTR_FILL_FIRST, XATTR_FILL_LAST,                      // [1014

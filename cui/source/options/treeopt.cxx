@@ -1130,11 +1130,11 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
         {
             pRet = new SfxItemSet(
                 SfxGetpApp()->GetPool(),
+                SID_HTML_MODE, SID_HTML_MODE,
                 SID_ATTR_METRIC, SID_ATTR_SPELL,
                 SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
                 SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
                 SID_ATTR_YEAR2000, SID_ATTR_YEAR2000,
-                SID_HTML_MODE, SID_HTML_MODE,
                 0 );
 
             SfxItemSet aOptSet( SfxGetpApp()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );

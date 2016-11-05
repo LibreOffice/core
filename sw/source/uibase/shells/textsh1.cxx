@@ -130,13 +130,11 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(),
                         RES_CHRATR_BEGIN,      RES_CHRATR_END-1,
                         RES_TXTATR_INETFMT,    RES_TXTATR_INETFMT,
-                        RES_BACKGROUND,        RES_BACKGROUND,
-                        RES_BOX,               RES_BOX,
-                        RES_SHADOW,            RES_SHADOW,
+                        RES_BACKGROUND,        RES_SHADOW,
                         SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-                        FN_PARAM_SELECTION,    FN_PARAM_SELECTION,
                         SID_HTML_MODE,         SID_HTML_MODE,
                         SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,   SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
+                        FN_PARAM_SELECTION,    FN_PARAM_SELECTION,
                         0 );
     rWrtSh.GetCurAttr( aCoreSet );
     bool bSel = rWrtSh.HasSelection();
@@ -913,10 +911,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             bool bApplyCharUnit = ::HasCharUnit( dynamic_cast<SwWebView*>( &GetView()) != nullptr  );
             SW_MOD()->PutItem(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bApplyCharUnit));
 
-            SfxItemSet aCoreSet( GetPool(), //UUUU sorted by indices, one group of three concatenated
-                            RES_PARATR_BEGIN,           RES_PARATR_END - 1,         // [60
-                            RES_PARATR_LIST_BEGIN,      RES_PARATR_LIST_END - 1,    // [77
-                            RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,         // [82
+            SfxItemSet aCoreSet( GetPool(), // ranges sorted by indices
+                            // RES_PARATR, RES_PARATR_LIST & RES_FRMATR
+                            RES_PARATR_BEGIN,           RES_FRMATR_END - 1,         // [63 .. 129
 
                             //UUUU FillAttribute support
                             XATTR_FILL_FIRST, XATTR_FILL_LAST,                      // [1014

@@ -773,13 +773,11 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     {
         SfxItemSet aSearch(pDocShell->GetDoc()->GetAttrPool(),
                             RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                            RES_PARATR_BEGIN, RES_PARATR_END-1,
-                            RES_FRMATR_BEGIN, RES_FRMATR_END-1,
+                            RES_PARATR_BEGIN, RES_FRMATR_END-1,
                             0);
         SfxItemSet aReplace(pDocShell->GetDoc()->GetAttrPool(),
                             RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                            RES_PARATR_BEGIN, RES_PARATR_END-1,
-                            RES_FRMATR_BEGIN, RES_FRMATR_END-1,
+                            RES_PARATR_BEGIN, RES_FRMATR_END-1,
                             0);
         pSearch->FillSearchItemSet(aSearch);
         pSearch->FillReplaceItemSet(aReplace);
@@ -908,9 +906,8 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
         {
             SfxItemSet aSearch(pDocShell->GetDoc()->GetAttrPool(),
                                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                                RES_PARATR_BEGIN, RES_PARATR_END-1,
-                                RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                                 RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
+                                RES_PARATR_BEGIN, RES_FRMATR_END-1,
                                 0);
             pSearch->FillSearchItemSet(aSearch);
             bool bCancel;

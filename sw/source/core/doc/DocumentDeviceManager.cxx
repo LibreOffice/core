@@ -206,10 +206,10 @@ void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
     {
         //The ItemSet is deleted by Sfx!
         SfxItemSet *pSet = new SfxItemSet( m_rDoc.GetAttrPool(),
-                        FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                        SID_HTML_MODE,  SID_HTML_MODE,
                         SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                        SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                        SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
+                        SID_HTML_MODE,             SID_HTML_MODE,
+                        FN_PARAM_ADDPRINTER,       FN_PARAM_ADDPRINTER,
                         0 );
         VclPtr<SfxPrinter> p = VclPtr<SfxPrinter>::Create( pSet, rJobSetup );
         if ( bCheckPageDescs )
@@ -290,10 +290,10 @@ SfxPrinter& DocumentDeviceManager::CreatePrinter_() const
     // We create a default SfxPrinter.
     // The ItemSet is deleted by Sfx!
     SfxItemSet *pSet = new SfxItemSet( m_rDoc.GetAttrPool(),
-                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                    SID_HTML_MODE,  SID_HTML_MODE,
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                    SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
+                    SID_HTML_MODE,             SID_HTML_MODE,
+                    FN_PARAM_ADDPRINTER,       FN_PARAM_ADDPRINTER,
                     0 );
 
     VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( pSet );

@@ -73,11 +73,7 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     SfxItemPool* pArgPool = rArgs.GetPool();
     SfxItemSet aNewAttr( *pArgPool,
                             EE_ITEMS_START, EE_ITEMS_END,
-                            SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_HYPHENZONE,
-                            SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_PAGEBREAK,
-                            SID_ATTR_PARA_SPLIT, SID_ATTR_PARA_SPLIT,
-                            SID_ATTR_PARA_WIDOWS, SID_ATTR_PARA_WIDOWS,
-                            SID_ATTR_PARA_ORPHANS, SID_ATTR_PARA_ORPHANS,
+                            SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_WIDOWS,
                             0 );
     aNewAttr.Put( rArgs );
 

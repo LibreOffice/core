@@ -1183,8 +1183,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         {
             rSh.StartAllAction();
             SfxItemSet   aSet( rSh.GetAttrPool(),
-                                RES_SHADOW, RES_SHADOW,
-                                RES_BACKGROUND, RES_BACKGROUND, 0 );
+                                RES_BACKGROUND, RES_BACKGROUND,
+                                RES_SHADOW,     RES_SHADOW, 0 );
 
             aSet.Put(*pItem);
             // Tabele cell(s) selected?

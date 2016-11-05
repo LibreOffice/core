@@ -1171,8 +1171,7 @@ namespace //local functions originally from docfmt.cxx
                 // CharFormat and URL attributes are treated separately!
                 // TEST_TEMP ToDo: AutoFormat!
                 SfxItemSet aTextSet( pDoc->GetAttrPool(),
-                                    RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK,
-                                    RES_TXTATR_META, RES_TXTATR_METAFIELD,
+                                    RES_TXTATR_REFMARK, RES_TXTATR_METAFIELD,
                                     RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
                                     RES_TXTATR_INPUTFIELD, RES_TXTATR_INPUTFIELD,
                                     0 );

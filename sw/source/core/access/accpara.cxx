@@ -2083,13 +2083,11 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
     const SwTextNode* pTextNode( GetTextNode() );
     std::unique_ptr<SfxItemSet> pSet;
     pSet.reset( new SfxItemSet( const_cast<SwAttrPool&>(pTextNode->GetDoc()->GetAttrPool()),
-        RES_PARATR_ADJUST, RES_PARATR_ADJUST,
-        RES_PARATR_TABSTOP, RES_PARATR_TABSTOP,
-        RES_PARATR_LINESPACING, RES_PARATR_LINESPACING,
-        RES_UL_SPACE, RES_UL_SPACE,
-        RES_LR_SPACE, RES_LR_SPACE,
-        RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
-        RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
+        RES_PARATR_LINESPACING, RES_PARATR_ADJUST,      //63-64
+        RES_PARATR_TABSTOP,     RES_PARATR_TABSTOP,     //68
+        RES_PARATR_NUMRULE,     RES_PARATR_NUMRULE,     //72
+        RES_PARATR_LIST_BEGIN,  RES_PARATR_LIST_END-1,  //82-86
+        RES_LR_SPACE,           RES_UL_SPACE,           //90-91
         0 ) );
 
     if ( pTextNode->HasBullet() || pTextNode->HasNumber() )

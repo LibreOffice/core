@@ -1911,8 +1911,8 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                 if( nullptr != (pCNd = aPos.nNode.GetNode().GetContentNode() ))
                 {
                     SfxItemSet aSet( GetDoc()->GetAttrPool(),
-                                    RES_LR_SPACE, RES_LR_SPACE,
                                     RES_PARATR_ADJUST, RES_PARATR_ADJUST,
+                                    RES_LR_SPACE,      RES_LR_SPACE,
                                     0 );
                     SvxLRSpaceItem aLR( static_cast<const SvxLRSpaceItem&>(
                                         pCNd->GetAttr( RES_LR_SPACE ) ) );

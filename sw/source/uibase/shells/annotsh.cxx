@@ -527,10 +527,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 */
                 SfxItemSet aDlgAttr(GetPool(),
                                     EE_ITEMS_START, EE_ITEMS_END,
-                                    SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_HYPHENZONE,
-                                    SID_ATTR_PARA_SPLIT, SID_ATTR_PARA_SPLIT,
-                                    SID_ATTR_PARA_WIDOWS, SID_ATTR_PARA_WIDOWS,
-                                    SID_ATTR_PARA_ORPHANS, SID_ATTR_PARA_ORPHANS,
+                                    SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_WIDOWS,
                                     0);
 
                 aDlgAttr.Put(aEditAttr);
@@ -1763,8 +1760,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         SfxItemSet aOldSet( pOLV->GetAttribs() );
         SfxItemSet aFontSet( *aOldSet.GetPool(),
                             EE_CHAR_FONTINFO, EE_CHAR_FONTINFO,
-                            EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CJK,
-                            EE_CHAR_FONTINFO_CTL, EE_CHAR_FONTINFO_CTL,
+                            EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL,
                             0 );
         aFontSet.Set( aOldSet );
 
