@@ -22,6 +22,7 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <svx/svxids.hrc>
+#include <svx/colorbox.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
 #include "svx/drawitem.hxx"
@@ -142,22 +143,20 @@ void PageStylesPanel::dispose()
 void PageStylesPanel::Initialize()
 {
     aCustomEntry = mpCustomEntry->GetText();
-    mpColumnCount->SetSelectHdl( LINK(this, PageStylesPanel, ModifyColumnCountHdl) );
-
-    SvxNumOptionsTabPageHelper::GetI18nNumbering( *mpNumberSelectLB, ::std::numeric_limits<sal_uInt16>::max());
-    mpNumberSelectLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyNumberingHdl) );
-
-    mpLayoutSelectLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyLayoutHdl) );
-    mpBgFillType->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillStyleHdl));
-    mpBgColorLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorHdl));
-    mpBgGradientLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorHdl));
-    mpBgHatchingLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorHdl));
-    mpBgBitmapLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorHdl));
-
     mpBindings->Invalidate(SID_ATTR_PAGE_COLUMN);
     mpBindings->Invalidate(SID_ATTR_PAGE);
     mpBindings->Invalidate(SID_ATTR_PAGE_FILLSTYLE);
     Update();
+
+    mpColumnCount->SetSelectHdl( LINK(this, PageStylesPanel, ModifyColumnCountHdl) );
+    SvxNumOptionsTabPageHelper::GetI18nNumbering( *mpNumberSelectLB, ::std::numeric_limits<sal_uInt16>::max());
+    mpNumberSelectLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyNumberingHdl) );
+    mpLayoutSelectLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyLayoutHdl) );
+    mpBgFillType->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillStyleHdl));
+    mpBgColorLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorListHdl));
+    mpBgGradientLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorListHdl));
+    mpBgHatchingLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorHdl));
+    mpBgBitmapLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorHdl));
 }
 
 void PageStylesPanel::Update()
@@ -180,49 +179,22 @@ void PageStylesPanel::Update()
             mpBgGradientLB->Hide();
             mpBgHatchingLB->Hide();
             mpBgColorLB->Show();
-            mpBgColorLB->Clear();
-            const SvxColorListItem aItem( *static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
-            mpBgColorLB->Fill(aItem.GetColorList());
-
             const Color aColor = GetColorSetOrDefault();
-            mpBgColorLB->SelectEntry( aColor );
-
-            if(mpBgColorLB->GetSelectEntryCount() == 0)
-            {
-                mpBgColorLB->InsertEntry(aColor, OUString());
-                mpBgColorLB->SelectEntry(aColor);
-            }
+            mpBgColorLB->SelectEntry(aColor);
         }
         break;
         case drawing::FillStyle_GRADIENT:
         {
-            const SvxColorListItem aItem(*static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
             mpBgBitmapLB->Hide();
             mpBgHatchingLB->Hide();
             mpBgColorLB->Show();
             mpBgGradientLB->Show();
-            mpBgColorLB->Clear();
-            mpBgGradientLB->Clear();
-            mpBgColorLB->Fill(aItem.GetColorList());
-            mpBgGradientLB->Fill(aItem.GetColorList());
 
             const XGradient xGradient = GetGradientSetOrDefault();
             const Color aStartColor = xGradient.GetStartColor();
+            mpBgColorLB->SelectEntry(aStartColor);
             const Color aEndColor = xGradient.GetEndColor();
-            mpBgColorLB->SelectEntry( aStartColor );
-            mpBgGradientLB->SelectEntry( aEndColor );
-
-            if(mpBgColorLB->GetSelectEntryCount() == 0)
-            {
-                mpBgColorLB->InsertEntry(aStartColor, OUString());
-                mpBgColorLB->SelectEntry(aStartColor);
-            }
-
-            if(mpBgGradientLB->GetSelectEntryCount() == 0)
-            {
-                mpBgGradientLB->InsertEntry(aEndColor, OUString());
-                mpBgGradientLB->SelectEntry(aEndColor);
-            }
+            mpBgGradientLB->SelectEntry(aEndColor);
         }
         break;
 
@@ -514,7 +486,7 @@ IMPL_LINK_NOARG(PageStylesPanel, ModifyFillStyleHdl, ListBox&, void)
     mpBgFillType->Selected();
 }
 
-IMPL_LINK_NOARG(PageStylesPanel, ModifyFillColorHdl, ListBox&, void)
+void PageStylesPanel::ModifyFillColor()
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpBgFillType->GetSelectEntryPos();
     SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -562,6 +534,16 @@ IMPL_LINK_NOARG(PageStylesPanel, ModifyFillColorHdl, ListBox&, void)
         default:
             break;
     }
+}
+
+IMPL_LINK_NOARG(PageStylesPanel, ModifyFillColorHdl, ListBox&, void)
+{
+    ModifyFillColor();
+}
+
+IMPL_LINK_NOARG(PageStylesPanel, ModifyFillColorListHdl, SvxColorListBox&, void)
+{
+    ModifyFillColor();
 }
 
 } }

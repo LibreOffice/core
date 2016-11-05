@@ -450,7 +450,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-ColorLB" id="colorfromlb">
+                      <object class="svxlo-SvxColorListBox" id="colorfromlb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="entry_text_column">0</property>
@@ -496,7 +496,7 @@
                     <property name="row_spacing">3</property>
                     <property name="column_spacing">6</property>
                     <child>
-                      <object class="svxlo-ColorLB" id="colortolb">
+                      <object class="svxlo-SvxColorListBox" id="colortolb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="entry_text_column">0</property>
