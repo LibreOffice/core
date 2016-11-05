@@ -94,7 +94,9 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_margin,
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_page,
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_column,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_character
+                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_character,
+                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_leftMargin,
+                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_rightMargin
                 };
 
                 static const sal_Int16 pHoriRelations[] =
@@ -103,9 +105,11 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                     text::RelOrientation::PAGE_FRAME,
                     text::RelOrientation::FRAME,
                     text::RelOrientation::CHAR,
+                    text::RelOrientation::PAGE_LEFT,
+                    text::RelOrientation::PAGE_RIGHT,
                 };
 
-                for ( int i = 0; i < 4; i++ )
+                for ( int i = 0; i < 6; i++ )
                 {
                     if ( pHoriRelValues[i] == sal_uInt32( nIntValue ) )
                         m_nRelation = pHoriRelations[i];
