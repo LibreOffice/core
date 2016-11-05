@@ -1055,6 +1055,10 @@ SbiExprListPtr SbiExprList::ParseParameters( SbiParser* pParser, bool bStandalon
         {
             if( ( pExprList->bBracket && eTok == RPAREN ) || SbiTokenizer::IsEoln( eTok ) )
             {
+                if ( SbiTokenizer::IsEoln( eTok ) && pExprList->bBracket)
+                {
+                    pParser->Error( ERRCODE_BASIC_EXPECTED, RPAREN );
+                }
                 break;
             }
             pParser->Error( pExprList->bBracket ? ERRCODE_BASIC_BAD_BRACKETS : ERRCODE_BASIC_EXPECTED, COMMA );
