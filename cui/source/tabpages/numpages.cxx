@@ -31,6 +31,7 @@
 #include <svl/eitem.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/colorbox.hxx>
 #include <svx/gallery.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/brushitem.hxx>
@@ -1109,6 +1110,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
 
     get(m_pBulColorFT, "colorft");
     get(m_pBulColLB, "color");
+    m_pBulColLB->SetSlotId(SID_ATTR_CHAR_COLOR);
 
     get(m_pBulRelSizeFT, "relsizeft");
     get(m_pBulRelSizeMF, "relsize");
@@ -1373,31 +1375,6 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
         *pActNum = *pSaveNum;
     m_pPreviewWIN->SetNumRule(pActNum);
     m_pSameLevelCB->Check(pActNum->IsContinuousNumbering());
-
-    // fill ColorListBox as needed
-    if ( pActNum->IsFeatureSupported( SvxNumRuleFlags::BULLET_COLOR ) )
-    {
-        SfxObjectShell* pDocSh = SfxObjectShell::Current();
-        DBG_ASSERT( pDocSh, "DocShell not found!" );
-        XColorListRef pColorTable;
-        if ( pDocSh )
-        {
-            pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-            if ( pItem )
-                pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
-        }
-
-        if ( !pColorTable.is() )
-            pColorTable = XColorList::CreateStdColorList();
-
-        m_pBulColLB->InsertEntry( Color( COL_AUTO ), SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
-
-        for ( long i = 0; i < pColorTable->Count(); i++ )
-        {
-            const XColorEntry* pEntry = pColorTable->GetColor(i);
-            m_pBulColLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-        }
-    }
 
     SfxObjectShell* pShell;
     if ( SfxItemState::SET == rSet->GetItemState( SID_HTML_MODE, false, &pItem )
@@ -1928,10 +1905,9 @@ IMPL_LINK( SvxNumOptionsTabPage, SameLevelHdl_Impl, Button*, pBox, void )
     InitControls();
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, BulColorHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK(SvxNumOptionsTabPage, BulColorHdl_Impl, SvxColorListBox&, rColorBox, void)
 {
-    ColorListBox* pBox = static_cast<ColorListBox*>(&rListBox);
-    Color nSetColor = pBox->GetSelectEntryColor();
+    Color nSetColor = rColorBox.GetSelectEntryColor();
 
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)

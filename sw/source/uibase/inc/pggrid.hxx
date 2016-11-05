@@ -24,6 +24,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <svx/colorbox.hxx>
 
 // TabPage Format/(Styles/)Page/Text grid
 class SwTextGridPage: public SfxTabPage
@@ -57,7 +58,7 @@ class SwTextGridPage: public SfxTabPage
 
     VclPtr<CheckBox>        m_pDisplayCB;
     VclPtr<CheckBox>        m_pPrintCB;
-    VclPtr<ColorListBox>    m_pColorLB;
+    VclPtr<SvxColorListBox> m_pColorLB;
 
     sal_Int32       m_nRubyUserValue;
     bool        m_bRubyUserValue;
@@ -71,12 +72,14 @@ class SwTextGridPage: public SfxTabPage
     void PutGridItem(SfxItemSet& rSet);
     static void SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 nValue );
 
+    void GridModifyHdl();
+
     DECL_LINK(GridTypeHdl, Button*, void);
     DECL_LINK(CharorLineChangedHdl, SpinField&, void);
     DECL_LINK(CharorLineLoseFocusdHdl, Control&, void);
     DECL_LINK(TextSizeChangedHdl, SpinField&, void);
     DECL_LINK(TextSizeLoseFocusHdl, Control&, void);
-    DECL_LINK(GridModifyHdl, ListBox&, void);
+    DECL_LINK(ColorModifyHdl, SvxColorListBox&, void);
     DECL_LINK(GridModifyClickHdl, Button*, void);
     DECL_LINK(DisplayGridHdl, Button*, void);
 

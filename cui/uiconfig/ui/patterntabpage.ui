@@ -185,7 +185,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-ColorLB" id="LB_COLOR">
+                      <object class="svxcorelo-SvxColorListBox" id="LB_COLOR">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
@@ -223,7 +223,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-ColorLB" id="LB_BACKGROUND_COLOR">
+                      <object class="svxcorelo-SvxColorListBox" id="LB_BACKGROUND_COLOR">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
