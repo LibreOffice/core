@@ -60,8 +60,6 @@
 
 #include <vector>
 
-#include <config_graphite.h>
-
 #if OSL_DEBUG_LEVEL > 1
 #include <ndtxt.hxx>
 #endif
@@ -2711,34 +2709,17 @@ namespace {
             // step back two positions for smoother repaint
             nReformat -= 2;
 
-    #ifndef MACOSX
-    #if ! ENABLE_GRAPHITE
             // i#28795, i#34607, i#38388
-            // step back six(!) more characters for complex scripts
-            // this is required e.g., for Khmer (thank you, Javier!)
-            const SwScriptInfo& rSI = txtFormatInfo.GetParaPortion()->GetScriptInfo();
-            sal_Int32 nMaxContext = 0;
-            if( ::i18n::ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
-                nMaxContext = 6;
-    #else
-            // Some Graphite fonts need context for scripts not marked as complex
+            // step back more characters, this is required by complex scripts
+            // e.g., for Khmer (thank you, Javier!)
             static const sal_Int32 nMaxContext = 10;
-    #endif
-    #else
-            // some fonts like Quartz's Zapfino need more context
-            // TODO: query FontInfo for maximum unicode context
-            static const sal_Int32 nMaxContext = 8;
-    #endif
-            if( nMaxContext > 0 )
+            if (nReformat > txtFormatInfo.GetLineStart() + nMaxContext)
+                nReformat = nReformat - nMaxContext;
+            else
             {
-                if ( nReformat > txtFormatInfo.GetLineStart() + nMaxContext )
-                    nReformat = nReformat - nMaxContext;
-                else
-                {
-                    nReformat = txtFormatInfo.GetLineStart();
-                    //reset the margin flag - prevent loops
-                    SwTextCursor::SetRightMargin(false);
-                }
+                nReformat = txtFormatInfo.GetLineStart();
+                //reset the margin flag - prevent loops
+                SwTextCursor::SetRightMargin(false);
             }
 
             // Weird situation: Our line used to end with a hole portion
