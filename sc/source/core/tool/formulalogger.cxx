@@ -40,6 +40,14 @@ std::unique_ptr<osl::File> initFile()
     return o3tl::make_unique<osl::File>(aPath);
 }
 
+ScRefFlags getRefFlags( const ScAddress& rCellPos, const ScAddress& rRefPos )
+{
+    ScRefFlags eFlags = ScRefFlags::VALID;
+    if (rCellPos.Tab() != rRefPos.Tab())
+        eFlags |= ScRefFlags::TAB_3D;
+    return eFlags;
+}
+
 }
 
 FormulaLogger& FormulaLogger::get()
@@ -117,13 +125,14 @@ void FormulaLogger::GroupScope::addMessage( const OUString& rMsg )
 }
 
 void FormulaLogger::GroupScope::addRefMessage(
-    const ScAddress& rPos, size_t nLen, const formula::VectorRefArray& rArray )
+    const ScAddress& rCellPos, const ScAddress& rRefPos, size_t nLen,
+    const formula::VectorRefArray& rArray )
 {
     OUStringBuffer aBuf;
 
-    ScRange aRefRange(rPos);
+    ScRange aRefRange(rRefPos);
     aRefRange.aEnd.IncRow(nLen-1);
-    OUString aRangeStr = aRefRange.Format(ScRefFlags::VALID, &mpImpl->mrDoc);
+    OUString aRangeStr = aRefRange.Format(getRefFlags(rCellPos, rRefPos), &mpImpl->mrDoc);
     aBuf.append(aRangeStr);
     aBuf.appendAscii(": ");
 
@@ -158,21 +167,23 @@ void FormulaLogger::GroupScope::addRefMessage(
 }
 
 void FormulaLogger::GroupScope::addRefMessage(
-    const ScAddress& rPos, size_t nLen, const std::vector<formula::VectorRefArray>& rArrays )
+    const ScAddress& rCellPos, const ScAddress& rRefPos, size_t nLen,
+    const std::vector<formula::VectorRefArray>& rArrays )
 {
-    ScAddress aPos(rPos); // copy
+    ScAddress aPos(rRefPos); // copy
     for (const formula::VectorRefArray& rArray : rArrays)
     {
-        addRefMessage(aPos, nLen, rArray);
+        addRefMessage(rCellPos, aPos, nLen, rArray);
         aPos.IncCol();
     }
 }
 
 void FormulaLogger::GroupScope::addRefMessage(
-    const ScAddress& rPos, const formula::FormulaToken& rToken )
+    const ScAddress& rCellPos, const ScAddress& rRefPos,
+    const formula::FormulaToken& rToken )
 {
     OUStringBuffer aBuf;
-    OUString aPosStr = rPos.Format(ScRefFlags::VALID, &mpImpl->mrDoc);
+    OUString aPosStr = rRefPos.Format(getRefFlags(rCellPos, rRefPos), &mpImpl->mrDoc);
     aBuf.append(aPosStr);
     aBuf.appendAscii(": ");
 
