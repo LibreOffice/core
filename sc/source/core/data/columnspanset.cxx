@@ -385,7 +385,7 @@ bool SingleColumnSpanSet::empty() const
 {
     // Empty if there's only the 0..MAXROW span with false.
     ColumnSpansType::const_iterator it = maSpans.begin();
-    return (it->first == 0) && (it->second == false) && (++it != maSpans.end()) && (it->first == MAXROWCOUNT);
+    return (it->first == 0) && !(it->second) && (++it != maSpans.end()) && (it->first == MAXROWCOUNT);
 }
 
 }
