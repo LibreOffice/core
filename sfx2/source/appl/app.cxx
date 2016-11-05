@@ -35,7 +35,6 @@
 #include <svl/svdde.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
-#include <osl/file.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -217,7 +216,7 @@ SfxApplication::SfxApplication()
 
 SfxApplication::~SfxApplication()
 {
-    OSL_ENSURE( GetObjectShells_Impl().size() == 0, "Memory leak: some object shells were not removed!" );
+    SAL_WARN_IF(GetObjectShells_Impl().size() != 0, "sfx.appl", "Memory leak: some object shells were not removed!");
 
     Broadcast( SfxHint(SFX_HINT_DYING) );
 
