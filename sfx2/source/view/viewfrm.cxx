@@ -159,7 +159,8 @@ static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHa
     // TODO/LATER: In future the info should replace the direct hash completely
     bool bResult = ( !nPasswordHash && !aInfo.getLength() );
 
-    OSL_ENSURE( pFilter && ( pFilter->GetFilterFlags() & SfxFilterFlags::PASSWORDTOMODIFY ), "PasswordToModify feature is active for a filter that does not support it!" );
+    SAL_WARN_IF( !(pFilter && ( pFilter->GetFilterFlags() & SfxFilterFlags::PASSWORDTOMODIFY )), "sfx.view",
+                       "PasswordToModify feature is active for a filter that does not support it!");
 
     if ( pFilter && xHandler.is() )
     {
@@ -526,7 +527,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 while ( pView )
                 {
                     Reference< XFrame > xFrame( pView->GetFrame().GetFrameInterface() );
-                    OSL_ENSURE( xFrame.is(), "SfxViewFrame::ExecReload_Impl: no XFrame?!" );
+                    SAL_WARN_IF( !xFrame.is(), "sfx.view", "SfxViewFrame::ExecReload_Impl: no XFrame?!");
                     aViewFrames.push_back( ViewDescriptor( xFrame, pView->GetCurViewId() ) );
 
                     pView = GetNext( *pView, xOldObj );
@@ -1826,7 +1827,7 @@ void SfxViewFrame::SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId )
         OSL_FAIL( "SfxViewFrame::SaveCurrentViewData_Impl: views without API names? Shouldn't happen anymore?" );
         return;
     }
-    OSL_ENSURE( sNewViewName != sCurrentViewName, "SfxViewFrame::SaveCurrentViewData_Impl: suspicious: new and old view name are identical!" );
+    SAL_WARN_IF(sNewViewName == sCurrentViewName, "sfx.view", "SfxViewFrame::SaveCurrentViewData_Impl: suspicious: new and old view name are identical!");
 
     // save the view data only when we're moving from a non-print-preview to the print-preview view
     if ( sNewViewName != "PrintPreview" )
@@ -2282,7 +2283,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
         nLine++;
     }
 
-    SAL_WARN_IF( nStartPos == -1, "sfx", "CutLines: Start row not found!" );
+    SAL_WARN_IF(nStartPos == -1, "sfx.view", "CutLines: Start row not found!");
 
     if ( nStartPos != -1 )
     {
@@ -2408,7 +2409,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
 
         if(!xLibCont.is())
         {
-            SAL_WARN( "sfx.view", "couldn't get access to the basic lib container. Adding of macro isn't possible." );
+            SAL_WARN("sfx.view", "couldn't get access to the basic lib container. Adding of macro isn't possible.");
             return;
         }
 
@@ -2932,7 +2933,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         {
             if  ( !KnowsChildWindow( nSID ) )
             {
-                OSL_ENSURE( false, "SID_SIDEBAR state requested, but no task pane child window exists for this ID!" );
+                SAL_WARN("sfx.view", "SID_SIDEBAR state requested, but no task pane child window exists for this ID!");
                 rState.DisableItem( nSID );
             }
             else
