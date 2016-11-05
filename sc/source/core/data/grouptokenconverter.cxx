@@ -138,7 +138,7 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
 
                     formula::SingleVectorRefToken aTok(aArray, nLen, nTrimLen);
                     mrGroupTokens.AddToken(aTok);
-                    rScope.addRefMessage(aRefPos, nLen, aArray);
+                    rScope.addRefMessage(mrPos, aRefPos, nLen, aArray);
 
                     if (nTrimLen && !mxFormulaGroupContext)
                     {
@@ -160,7 +160,7 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
                         return false;
 
                     mrGroupTokens.AddToken(*pNewToken);
-                    rScope.addRefMessage(aRefPos, *pNewToken);
+                    rScope.addRefMessage(mrPos, aRefPos, *pNewToken);
                 }
             }
             break;
@@ -224,7 +224,7 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
 
                 formula::DoubleVectorRefToken aTok(aArrays, nRequestedLength, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
                 mrGroupTokens.AddToken(aTok);
-                rScope.addRefMessage(aRefPos, nRequestedLength, aArrays);
+                rScope.addRefMessage(mrPos, aRefPos, nRequestedLength, aArrays);
 
                 if (nArrayLength && !aArrays.empty() && !mxFormulaGroupContext)
                 {
