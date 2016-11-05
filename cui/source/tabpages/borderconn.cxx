@@ -22,6 +22,7 @@
 #include "editeng/lineitem.hxx"
 #include <editeng/boxitem.hxx>
 #include <svx/algitem.hxx>
+#include <svx/colorbox.hxx>
 #include <editeng/shaditem.hxx>
 
 namespace svx {
@@ -203,7 +204,7 @@ static const ShadowPosWrapper::MapEntryType s_pShadowPosMap[] =
 class ShadowControlsWrapper : public sfx::MultiControlWrapper< SvxShadowItem >
 {
 public:
-    explicit            ShadowControlsWrapper( ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor );
+    explicit            ShadowControlsWrapper( ValueSet& rVsPos, MetricField& rMfSize, SvxColorListBox& rLbColor );
 
     virtual SvxShadowItem GetControlValue() const override;
     virtual void        SetControlValue( SvxShadowItem aItem ) override;
@@ -211,11 +212,11 @@ public:
 private:
     ShadowPosWrapper                    maPosWrp;
     sfx::MetricFieldWrapper<sal_uInt16> maSizeWrp;
-    sfx::ColorListBoxWrapper            maColorWrp;
+    SvxColorListBoxWrapper              maColorWrp;
 };
 
 ShadowControlsWrapper::ShadowControlsWrapper(
-        ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor ) :
+        ValueSet& rVsPos, MetricField& rMfSize, SvxColorListBox& rLbColor ) :
     maPosWrp( rVsPos, s_pShadowPosMap ),
     maSizeWrp( rMfSize, FUNIT_TWIP ),
     maColorWrp( rLbColor )
@@ -250,11 +251,11 @@ class ShadowConnection : public sfx::ItemControlConnection< ShadowItemWrapper, S
 {
 public:
     explicit            ShadowConnection( const SfxItemSet& rItemSet,
-                                ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor );
+                                ValueSet& rVsPos, MetricField& rMfSize, SvxColorListBox& rLbColor );
 };
 
 ShadowConnection::ShadowConnection( const SfxItemSet& rItemSet,
-        ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor ) :
+        ValueSet& rVsPos, MetricField& rMfSize, SvxColorListBox& rLbColor ) :
     ItemControlConnectionType( SID_ATTR_BORDER_SHADOW, new ShadowControlsWrapper( rVsPos, rMfSize, rLbColor ), ItemConnFlags::NONE )
 {
     mxCtrlWrp->SetDefaultValue( maItemWrp.GetDefaultItem( rItemSet ) );
@@ -275,7 +276,7 @@ sfx::ItemConnectionBase* CreateMarginConnection( const SfxItemSet& rItemSet,
 }
 
 sfx::ItemConnectionBase* CreateShadowConnection( const SfxItemSet& rItemSet,
-        ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor )
+        ValueSet& rVsPos, MetricField& rMfSize, SvxColorListBox& rLbColor )
 {
     return new ShadowConnection( rItemSet, rVsPos, rMfSize, rLbColor );
 }

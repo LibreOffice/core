@@ -24,21 +24,5 @@ String STR_NUMBERED_CONDITION
 {
     Text [ en-US ] = "Condition $number$";
 };
-String STR_COLOR_WHITE
-{
-    Text [ en-US ] = "White" ;
-};
-String STR_CHARCOLOR
-{
-    Text [ en-US ] = "Font color" ;
-};
-String STR_CHARBACKGROUND
-{
-    Text [ en-US ] = "Background";
-};
-String STR_TRANSPARENT
-{
-    Text [ en-US ] = "No Fill" ;
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

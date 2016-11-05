@@ -31,6 +31,7 @@
 #include "globstr.hrc"
 #include <appoptio.hxx>
 #include <scmod.hxx>
+#include <svx/colorbox.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
@@ -151,8 +152,8 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         pBreakCB       ->IsValueChangedFromSaved() ||
         pGuideLineCB   ->IsValueChangedFromSaved())
     {
-        pLocalOptions->SetGridColor( pColorLB->GetSelectEntryColor(),
-                                     pColorLB->GetSelectEntry() );
+        NamedColor aNamedColor = pColorLB->GetSelectEntry();
+        pLocalOptions->SetGridColor(aNamedColor.first, aNamedColor.second);
         rCoreSet->Put(ScTpViewItem(SID_SCVIEWOPTIONS, *pLocalOptions));
         bRet = true;
     }
@@ -302,58 +303,14 @@ void ScTpContentOptions::InitGridOpt()
 
     pGridLB->SelectEntryPos (nSelPos);
 
-    if ( pColorLB->GetEntryCount() == 0 )
-    {
-        SfxObjectShell* pDocSh = SfxObjectShell::Current();
-        // there might be another DocShell here
-        pDocSh = dynamic_cast<ScDocShell*>( pDocSh );
-
-        XColorListRef pColorList;
-        if ( pDocSh  )
-        {
-            const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-            if ( pItem )
-                pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
-        }
-        else
-            pColorList = XColorList::GetStdColorList();
-
-        if ( !pColorList.is() )
-            return;
-
-        pColorLB->SetUpdateMode( false );
-
-        // items from ColorTable
-
-        long nCount = pColorList->Count();
-        for ( long n=0; n<nCount; n++ )
-        {
-            const XColorEntry* pEntry = pColorList->GetColor(n);
-            pColorLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-        }
-
-        // default GridColor
-
-        Color aStdCol( SC_STD_GRIDCOLOR );          // same default as in ScViewOptions
-        if ( LISTBOX_ENTRY_NOTFOUND ==
-                pColorLB->GetEntryPos( aStdCol ) )
-            pColorLB->InsertEntry( aStdCol, ScGlobal::GetRscString( STR_GRIDCOLOR ) );
-
-        pColorLB->SetUpdateMode( true );
-
-        Invalidate();
-    }
-
-    //  also select grid color entry on subsequent calls
-
+    //  select grid color entry
     OUString  aName;
     Color     aCol    = pLocalOptions->GetGridColor( &aName );
-    nSelPos = pColorLB->GetEntryPos( aCol );
 
-    if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
-        pColorLB->SelectEntryPos( nSelPos );
-    else
-        pColorLB->SelectEntryPos( pColorLB->InsertEntry( aCol, aName ) );
+    if (aName.trim().isEmpty() && aCol == Color(SC_STD_GRIDCOLOR))
+        aName = ScGlobal::GetRscString(STR_GRIDCOLOR);
+
+    pColorLB->SelectEntry(std::make_pair(aCol, aName));
 }
 
 IMPL_LINK( ScTpContentOptions, GridHdl, ListBox&, rLb, void )
