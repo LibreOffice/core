@@ -109,8 +109,9 @@ public:
     void SetRemoveAdjacentCellBorder( bool bSet ) { bRemoveAdjCellBorder = bSet; }
 
     // Line width plus Space plus inward distance
-    // bIgnoreLine = TRUE -> Also return distance, when no Line is set
-    sal_uInt16  CalcLineSpace( SvxBoxItemLine nLine, bool bIgnoreLine = false ) const;
+    // bEvenIfNoLine = TRUE -> Also return distance, when no Line is set
+    sal_uInt16  CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine = false ) const;
+    bool HasBorder( bool bTreatPaddingAsBorder = false ) const;
     static css::table::BorderLine2 SvxLineToLine( const editeng::SvxBorderLine* pLine, bool bConvert );
     static bool LineToSvxLine(const css::table::BorderLine& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
     static bool LineToSvxLine(const css::table::BorderLine2& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
