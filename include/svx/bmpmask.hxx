@@ -75,6 +75,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMaskChildWindow : public SfxChildWindo
 class MaskData;
 class MaskSet;
 class ColorWindow;
+class SvxColorListBox;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
 {
@@ -88,28 +89,27 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     VclPtr<CheckBox>           m_pCbx1;
     VclPtr<MaskSet>            m_pQSet1;
     VclPtr<MetricField>        m_pSp1;
-    VclPtr<ColorLB>            m_pLbColor1;
+    VclPtr<SvxColorListBox>    m_pLbColor1;
 
     VclPtr<CheckBox>           m_pCbx2;
     VclPtr<MaskSet>            m_pQSet2;
     VclPtr<MetricField>        m_pSp2;
-    VclPtr<ColorLB>            m_pLbColor2;
+    VclPtr<SvxColorListBox>    m_pLbColor2;
 
     VclPtr<CheckBox>           m_pCbx3;
     VclPtr<MaskSet>            m_pQSet3;
     VclPtr<MetricField>        m_pSp3;
-    VclPtr<ColorLB>            m_pLbColor3;
+    VclPtr<SvxColorListBox>    m_pLbColor3;
 
     VclPtr<CheckBox>           m_pCbx4;
     VclPtr<MaskSet>            m_pQSet4;
     VclPtr<MetricField>        m_pSp4;
-    VclPtr<ColorLB>            m_pLbColor4;
+    VclPtr<SvxColorListBox>    m_pLbColor4;
 
     MaskData*           pData;
     VclPtr<CheckBox>           m_pCbxTrans;
-    VclPtr<ColorLB>            m_pLbColorTrans;
+    VclPtr<SvxColorListBox>    m_pLbColorTrans;
 
-    XColorListRef       pColLst;
     Color               aPipetteColor;
     SvxBmpMaskSelectItem aSelItem;
 
@@ -139,9 +139,6 @@ public:
 
     void                SetColor( const Color& rColor );
     void                PipetteClicked();
-
-    bool                NeedsColorList() const;
-    void                SetColorList( const XColorListRef &pColorList );
 
     void                SetExecState( bool bEnable );
 

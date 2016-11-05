@@ -207,20 +207,6 @@ public:
 
 /************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC ColorLB : public ColorListBox
-{
-
-public:
-         ColorLB( vcl::Window* pParent, WinBits aWB ) : ColorListBox( pParent, aWB ) {}
-
-    void Fill( const XColorListRef &pTab );
-
-    void Append( const XColorEntry& rEntry );
-    void Modify( const XColorEntry& rEntry, sal_Int32 nPos );
-};
-
-/************************************************************************/
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC HatchingLB : public ListBox
 {
 public:
@@ -245,7 +231,7 @@ public:
 
 /************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FillAttrLB : public ColorListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FillAttrLB : public ListBox
 {
 private:
     BitmapEx        maBitmapEx;

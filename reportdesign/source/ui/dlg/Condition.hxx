@@ -26,6 +26,7 @@
 
 #include <dbaccess/ToolBoxHelper.hxx>
 
+#include <svx/colorwindow.hxx>
 #include <svx/fntctrl.hxx>
 
 #include <vcl/fixed.hxx>
@@ -62,6 +63,18 @@ namespace rptui
         OUString GetText() const { return m_pSubEdit->GetText(); }
     };
 
+    class ConditionColorWrapper
+    {
+    public:
+        ConditionColorWrapper(Condition* pControl);
+        void SetSlotId(sal_uInt16 nSlotId) { mnSlotId = nSlotId; }
+        void operator()(const OUString& rCommand, const NamedColor& rColor);
+        void dispose();
+    private:
+        VclPtr<Condition> mxControl;
+        sal_uInt16 mnSlotId;
+    };
+
     //= Condition
 
     class Condition :public VclHBox
@@ -74,6 +87,9 @@ namespace rptui
         sal_uInt16                  m_nBackgroundColorId;
         sal_uInt16                  m_nFontColorId;
         sal_uInt16                  m_nFontDialogId;
+        PaletteManager              m_aPaletteManager;
+        BorderColorStatus           m_aBorderColorStatus;
+        ConditionColorWrapper       m_aColorWrapper;
 
         ::rptui::OReportController& m_rController;
         IConditionalFormatAction&   m_rAction;
@@ -89,7 +105,7 @@ namespace rptui
         VclPtr<PushButton>                 m_pMoveDown;
         VclPtr<PushButton>                 m_pAddCondition;
         VclPtr<PushButton>                 m_pRemoveCondition;
-        VclPtr<OColorPopup>                m_pColorFloat;
+        VclPtr<SvxColorWindow>             m_pColorFloat;
 
         svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterFontColor; // updates the color below the toolbar icon
         svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterBackgroundColor;
