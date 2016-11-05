@@ -74,8 +74,12 @@ namespace basctl
     // new methods for macros
 
     OUString        ChooseMacro(
-        const css::uno::Reference< css::frame::XModel >& rxLimitToDocument,
+        const css::uno::Reference< css::frame::XModel >& rxLimitToDocument, const css::uno::Reference< css::frame::XFrame >& xDocFrame,
         bool bChooseOnly, const OUString& rMacroDesc );
+    inline OUString ChooseMacro(
+        const css::uno::Reference< css::frame::XModel >& rxLimitToDocument,
+        bool bChooseOnly, const OUString& rMacroDesc )
+    { return ChooseMacro(rxLimitToDocument, css::uno::Reference< css::frame::XFrame >(), bChooseOnly, rMacroDesc); }
 
     css::uno::Sequence< OUString > GetMethodNames(
         const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )

@@ -68,7 +68,7 @@ unusedMethodsExclusionSet = set([
     # loaded by dlopen()
     "void * getStandardAccessibleFactory()",
     "void * getSvtAccessibilityComponentFactory()",
-    "struct _rtl_uString * basicide_choose_macro(void *,unsigned char,struct _rtl_uString *)",
+    "struct _rtl_uString * basicide_choose_macro(void *,void *,unsigned char,struct _rtl_uString *)",
     "void basicide_macro_organizer(short)",
     "long basicide_handle_basic_error(void *)",
     "class com::sun::star::uno::XInterface * org_libreoffice_chart2_Chart2ToolboxController(class com::sun::star::uno::XComponentContext *,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &)",

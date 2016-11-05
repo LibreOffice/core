@@ -1190,17 +1190,17 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
 #ifndef DISABLE_DYNLOADING
 
-typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(void*, sal_Bool, rtl_uString*);
+typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(void*, void*, sal_Bool, rtl_uString*);
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
 #else
 
-extern "C" rtl_uString* basicide_choose_macro(void*, sal_Bool, rtl_uString*);
+extern "C" rtl_uString* basicide_choose_macro(void*, void*, sal_Bool, rtl_uString*);
 
 #endif
 
-OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChooseOnly )
+OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, const Reference< XFrame >& xDocFrame, bool bChooseOnly )
 {
 #ifndef DISABLE_DYNLOADING
     osl::Module aMod;
@@ -1220,7 +1220,7 @@ OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChoose
 
     // call basicide_choose_macro in basctl
     OUString rMacroDesc;
-    rtl_uString* pScriptURL = pSymbol( rxLimitToDocument.get(), bChooseOnly, rMacroDesc.pData );
+    rtl_uString* pScriptURL = pSymbol( rxLimitToDocument.get(), xDocFrame.get(), bChooseOnly, rMacroDesc.pData );
     OUString aScriptURL( pScriptURL );
     rtl_uString_release( pScriptURL );
     return aScriptURL;
@@ -1469,7 +1469,13 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 }
             }
 
-            rReq.SetReturnValue( SfxStringItem( rReq.GetSlot(), ChooseMacro( xLimitToModel, bChooseOnly ) ) );
+            Reference< XFrame > xFrame;
+            const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
+            const SfxUnoFrameItem* pFrameItem = SfxItemSet::GetItem<SfxUnoFrameItem>(pIntSet, SID_FILLFRAME, false);
+            if (pFrameItem)
+                xFrame = pFrameItem->GetFrame();
+
+            rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), ChooseMacro(xLimitToModel, xFrame, bChooseOnly)));
             rReq.Done();
         }
         break;
