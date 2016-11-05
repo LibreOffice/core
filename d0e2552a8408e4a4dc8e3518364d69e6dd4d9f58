@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_da232904",
+        "filename": "sw/source/core/doc/notxtfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-11-05T10:21:13Z",
+      "side": 1,
+      "message": "totally disabling this section with false \u0026\u0026 didn\u0027t trigger any failure in \"make check\", so unable to confirm that whatever I did isn\u0027t causing a regression.  This however prevents an OLE problem which a tester mentioned in the bug report (and seems reasonable to require a picture for a CLIPPED_PICTURES setting.)",
+      "range": {
+        "startLine": 273,
+        "startChar": 9,
+        "endLine": 273,
+        "endChar": 15
+      },
+      "revId": "d0e2552a8408e4a4dc8e3518364d69e6dd4d9f58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
