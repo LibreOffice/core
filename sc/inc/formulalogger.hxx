@@ -85,19 +85,24 @@ public:
          * Add to the log a vector reference information for a single
          * reference.
          */
-        void addRefMessage( const ScAddress& rPos, size_t nLen, const formula::VectorRefArray& rArray );
+        void addRefMessage(
+            const ScAddress& rCellPos, const ScAddress& rRefPos, size_t nLen,
+            const formula::VectorRefArray& rArray );
 
         /**
          * Add to the log a vector reference information for a range
          * reference.
          */
         void addRefMessage(
-            const ScAddress& rPos, size_t nLen, const std::vector<formula::VectorRefArray>& rArrays );
+            const ScAddress& rCellPos, const ScAddress& rRefPos, size_t nLen,
+            const std::vector<formula::VectorRefArray>& rArrays );
 
         /**
          * Add to the log a single cell reference information.
          */
-        void addRefMessage( const ScAddress& rPos, const formula::FormulaToken& rToken );
+        void addRefMessage(
+            const ScAddress& rCellPos, const ScAddress& rRefPos,
+            const formula::FormulaToken& rToken );
 
         /**
          * Call this when the group calculation has finished successfullly.
@@ -134,20 +139,22 @@ public:
         void addMessage( const OUString& /*rMsg*/ ) { (void) this; /* loplugin:staticmethods */ }
 
         void addRefMessage(
-            const ScAddress& /*rPos*/, size_t /*nLen*/,
+            const ScAddress& /*rCellPos*/, const ScAddress& /*rRefPos*/, size_t /*nLen*/,
             const formula::VectorRefArray& /*rArray*/ )
         {
             (void) this; /* loplugin:staticmethods */
         }
 
         void addRefMessage(
-            const ScAddress& /*rPos*/, size_t /*nLen*/,
+            const ScAddress& /*rCellPos*/, const ScAddress& /*rRefPos*/, size_t /*nLen*/,
             const std::vector<formula::VectorRefArray>& /*rArrays*/ )
         {
             (void) this; /* loplugin:staticmethods */
         }
 
-        void addRefMessage( const ScAddress& /*rPos*/, const formula::FormulaToken& /*rToken*/ )
+        void addRefMessage(
+            const ScAddress& /*rCellPos*/, const ScAddress& /*rRefPos*/,
+            const formula::FormulaToken& /*rToken*/ )
         {
             (void) this; /* loplugin:staticmethods */
         }
