@@ -241,7 +241,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svtlo-ColorListBox" id="positive_colour">
+                          <object class="svxcorelo-SvxColorListBox" id="positive_colour">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -252,7 +252,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svtlo-ColorListBox" id="negative_colour">
+                          <object class="svxcorelo-SvxColorListBox" id="negative_colour">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -374,7 +374,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svtlo-ColorListBox" id="axis_colour">
+                          <object class="svxcorelo-SvxColorListBox" id="axis_colour">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -521,17 +521,6 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="custom_color">
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Custom</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">6</property>
               </packing>
             </child>
           </object>

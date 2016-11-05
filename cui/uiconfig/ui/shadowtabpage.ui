@@ -99,7 +99,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-ColorLB" id="LB_SHADOW_COLOR">
+                      <object class="svxcorelo-SvxColorListBox" id="LB_SHADOW_COLOR">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
