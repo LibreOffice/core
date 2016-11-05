@@ -3232,18 +3232,18 @@ void WW8TabDesc::AdjustNewBand()
         // sides and using that one on one side of the line (right)
         SvxBoxItem aCurrentBox(sw::util::ItemGet<SvxBoxItem>(*(pBox->GetFrameFormat()), RES_BOX));
         const ::editeng::SvxBorderLine *pLeftLine = aCurrentBox.GetLine(SvxBoxItemLine::LEFT);
-        int nCurrentRightLineWidth = 0;
+        int nCurrentRightLineWidth = aCurrentBox.CalcLineWidth( SvxBoxItemLine::LEFT );
         if(pLeftLine)
-            nCurrentRightLineWidth = pLeftLine->GetScaledWidth();
+            assert(aCurrentBox.CalcLineWidth( SvxBoxItemLine::LEFT ) == pLeftLine->GetScaledWidth());
 
         if (i != 0)
         {
             SwTableBox* pBox2 = (*pTabBoxes)[i-1];
             SvxBoxItem aOldBox(sw::util::ItemGet<SvxBoxItem>(*(pBox2->GetFrameFormat()), RES_BOX));
             const ::editeng::SvxBorderLine *pRightLine = aOldBox.GetLine(SvxBoxItemLine::RIGHT);
-            int nOldBoxRightLineWidth = 0;
+            int nOldBoxRightLineWidth = aOldBox.CalcLineWidth( SvxBoxItemLine::RIGHT );
             if(pRightLine)
-                nOldBoxRightLineWidth = pRightLine->GetScaledWidth();
+                assert(aOldBox.CalcLineWidth( SvxBoxItemLine::RIGHT ) == pRightLine->GetScaledWidth());
 
             if(nOldBoxRightLineWidth>nCurrentRightLineWidth)
                 aCurrentBox.SetLine(aOldBox.GetLine(SvxBoxItemLine::RIGHT), SvxBoxItemLine::LEFT);

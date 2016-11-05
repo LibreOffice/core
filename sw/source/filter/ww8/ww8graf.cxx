@@ -1679,24 +1679,28 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     rInnerDist.Bottom()+=nLineThick;
 
     const SvxBorderLine *pLine;
+    rInnerDist.Left()   -= aBox.CalcLineWidth( SvxBoxItemLine::LEFT );
+    rInnerDist.Top()    -= aBox.CalcLineWidth( SvxBoxItemLine::TOP );
+    rInnerDist.Right()  -= aBox.CalcLineWidth( SvxBoxItemLine::RIGHT );
+    rInnerDist.Bottom() -= aBox.CalcLineWidth( SvxBoxItemLine::BOTTOM );
     if (nullptr != (pLine = aBox.GetLine(SvxBoxItemLine::LEFT)))
     {
-        rInnerDist.Left() -= (pLine->GetScaledWidth());
+        assert(aBox.CalcLineWidth( SvxBoxItemLine::LEFT ) == pLine->GetScaledWidth());
     }
 
     if (nullptr != (pLine = aBox.GetLine(SvxBoxItemLine::TOP)))
     {
-        rInnerDist.Top() -= (pLine->GetScaledWidth());
+        assert(aBox.CalcLineWidth( SvxBoxItemLine::TOP ) == pLine->GetScaledWidth());
     }
 
     if (nullptr != (pLine = aBox.GetLine(SvxBoxItemLine::RIGHT)))
     {
-        rInnerDist.Right() -= (pLine->GetScaledWidth());
+        assert(aBox.CalcLineWidth( SvxBoxItemLine::RIGHT ) == pLine->GetScaledWidth());
     }
 
     if (nullptr != (pLine = aBox.GetLine(SvxBoxItemLine::BOTTOM)))
     {
-        rInnerDist.Bottom() -= (pLine->GetScaledWidth());
+        assert(aBox.CalcLineWidth( SvxBoxItemLine::BOTTOM ) == pLine->GetScaledWidth());
     }
 
     // set distances from box's border to text contained within the box

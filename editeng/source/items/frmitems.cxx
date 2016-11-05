@@ -2420,6 +2420,33 @@ void SvxBoxItem::SetDistance( sal_uInt16 nNew, SvxBoxItemLine nLine )
     }
 }
 
+sal_uInt16 SvxBoxItem::CalcLineWidth( SvxBoxItemLine nLine ) const
+{
+    SvxBorderLine* pTmp = nullptr;
+    sal_uInt16 nWidth = 0;
+    switch ( nLine )
+    {
+    case SvxBoxItemLine::TOP:
+        pTmp = pTop;
+        break;
+    case SvxBoxItemLine::BOTTOM:
+        pTmp = pBottom;
+        break;
+    case SvxBoxItemLine::LEFT:
+        pTmp = pLeft;
+        break;
+    case SvxBoxItemLine::RIGHT:
+        pTmp = pRight;
+        break;
+    default:
+        OSL_FAIL( "wrong line" );
+    }
+
+    if( pTmp )
+        nWidth = pTmp->GetScaledWidth();
+
+    return nWidth;
+}
 
 sal_uInt16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine ) const
 {
