@@ -236,7 +236,7 @@
                         <property name="can_focus">False</property>
                         <property name="spacing">12</property>
                         <child>
-                          <object class="svxlo-ColorLB" id="LB_LIGHTSOURCE">
+                          <object class="svxcorelo-SvxColorListBox" id="LB_LIGHTSOURCE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                           </object>
@@ -310,7 +310,7 @@
                     <property name="can_focus">False</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="svxlo-ColorLB" id="LB_AMBIENTLIGHT">
+                      <object class="svxcorelo-SvxColorListBox" id="LB_AMBIENTLIGHT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>

@@ -34,6 +34,7 @@
 #include <vcl/combobox.hxx>
 #include <svtools/calendar.hxx>
 #include <svtools/fmtfield.hxx>
+#include <svx/colorbox.hxx>
 
 #include <set>
 
@@ -60,18 +61,18 @@ namespace pcr
             TListboxWindow::SetSelectHdl( LINK(this, ListLikeControlWithModifyHandler, OnSelect) );
         }
 
-        void SetModifyHdl( const Link<ListBox&,void>& _rLink ) { aModifyHdl = _rLink;; }
+        void SetModifyHdl( const Link<TListboxWindow&,void>& _rLink ) { aModifyHdl = _rLink;; }
     private:
-        DECL_LINK(OnSelect, ListBox&, void);
-        Link<ListBox&,void> aModifyHdl;
+        DECL_LINK(OnSelect, TListboxWindow&, void);
+        Link<TListboxWindow&,void> aModifyHdl;
     };
 
     template< class LISTBOX_WINDOW >
-    void ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::LinkStubOnSelect(void * instance, ListBox& data) {
+    void ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::LinkStubOnSelect(void * instance, LISTBOX_WINDOW& data) {
         return static_cast<ListLikeControlWithModifyHandler< LISTBOX_WINDOW > *>(instance)->OnSelect(data);
     }
     template< class LISTBOX_WINDOW >
-    void ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::OnSelect(ListBox& rListBox)
+    void ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::OnSelect(LISTBOX_WINDOW& rListBox)
     {
         aModifyHdl.Call(rListBox);
     }
@@ -260,14 +261,11 @@ namespace pcr
 
     //= OColorControl
 
-    typedef CommonBehaviourControl  <   css::inspection::XStringListControl
-                                    ,   ListLikeControlWithModifyHandler< ColorListBox >
+    typedef CommonBehaviourControl  <   css::inspection::XPropertyControl
+                                    ,   ListLikeControlWithModifyHandler<SvxColorListBox>
                                     >   OColorControl_Base;
     class OColorControl : public OColorControl_Base
     {
-    private:
-        ::std::set< OUString >   m_aNonColorEntries;
-
     public:
         OColorControl( vcl::Window* pParent, WinBits nWinStyle );
 
@@ -275,12 +273,6 @@ namespace pcr
         virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::beans::IllegalTypeException, css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) override;
-
-        // XStringListControl
-        virtual void SAL_CALL clearList(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL prependListEntry( const OUString& NewEntry ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
         // CommonBehaviourControlHelper::setModified

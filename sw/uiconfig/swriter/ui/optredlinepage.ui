@@ -85,7 +85,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-ColorListBox" id="insertcolor">
+                  <object class="svxcorelo-SvxColorListBox" id="insertcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -196,7 +196,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-ColorListBox" id="deletedcolor">
+                  <object class="svxcorelo-SvxColorListBox" id="deletedcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -307,7 +307,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-ColorListBox" id="changedcolor">
+                  <object class="svxcorelo-SvxColorListBox" id="changedcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -379,7 +379,7 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
-                  <object class="svtlo-ColorListBox" id="markcolor">
+                  <object class="svxcorelo-SvxColorListBox" id="markcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -470,18 +470,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="byauthor">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="label" translatable="yes">By author</property>
-        <property name="use_underline">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">4</property>
       </packing>
     </child>
   </object>
