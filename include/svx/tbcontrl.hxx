@@ -136,6 +136,7 @@
 #include <svx/strarray.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <svx/colorwindow.hxx>
 #include <svx/PaletteManager.hxx>
 #include <memory>
 
@@ -203,19 +204,8 @@ friend class SfxStyleControllerItem_Impl;
     SVX_DLLPRIVATE SfxStyleFamily GetActFamily();
 };
 
-class BorderColorStatus
-{
-    Color maColor;
-    Color maTLBRColor;
-    Color maBLTRColor;
-public:
-    BorderColorStatus();
-    ~BorderColorStatus();
-    bool statusChanged( const css::frame::FeatureStateEvent& rEvent );
-    Color GetColor();
-};
+typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
 
-typedef std::function<void(const OUString&, const Color&)> ColorSelectFunction;
 class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 {
     std::unique_ptr<svx::ToolboxButtonColorUpdater> m_xBtnUpdater;
@@ -223,7 +213,7 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
     BorderColorStatus m_aBorderColorStatus;
     bool m_bSplitButton;
     ColorSelectFunction m_aColorSelectFunction;
-    DECL_LINK(SelectedHdl, const Color&, void);
+    DECL_LINK(SelectedHdl, const NamedColor&, void);
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxColorToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);

@@ -254,7 +254,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-ColorListBox" id="dim_color_list">
+                  <object class="svxcorelo-SvxColorListBox" id="dim_color_list">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>

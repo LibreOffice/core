@@ -49,6 +49,7 @@
 #include <svx/pagenumberlistbox.hxx>
 
 class List;
+class SvxColorListBox;
 namespace sw { namespace sidebar {
 
 class PageStylesPanel:
@@ -94,9 +95,9 @@ private:
     ::sfx2::sidebar::ControllerItem maBgBitmapControl;
     ::sfx2::sidebar::ControllerItem maBgFillStyleControl;
 
-    VclPtr<ColorLB>         mpBgColorLB;
+    VclPtr<SvxColorListBox> mpBgColorLB;
     VclPtr<SvxFillAttrBox>  mpBgHatchingLB;
-    VclPtr<ColorLB>         mpBgGradientLB;
+    VclPtr<SvxColorListBox> mpBgGradientLB;
     VclPtr<SvxFillAttrBox>  mpBgBitmapLB;
     VclPtr<ListBox>         mpLayoutSelectLB;
     VclPtr<ListBox>         mpColumnCount;
@@ -112,11 +113,14 @@ private:
     const OUString GetHatchingSetOrDefault();
     const OUString GetBitmapSetOrDefault();
 
+    void ModifyFillColor();
+
     DECL_LINK( ModifyColumnCountHdl, ListBox&, void );
     DECL_LINK( ModifyNumberingHdl, ListBox&, void );
     DECL_LINK( ModifyLayoutHdl, ListBox&, void );
     DECL_LINK( ModifyFillStyleHdl, ListBox&, void );
     DECL_LINK( ModifyFillColorHdl, ListBox&, void );
+    DECL_LINK( ModifyFillColorListHdl, SvxColorListBox&, void );
 };
 
 } } //end of namespace sw::sidebar
