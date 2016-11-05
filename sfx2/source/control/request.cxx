@@ -267,6 +267,18 @@ SfxRequest::SfxRequest
 }
 
 
+SfxRequest::SfxRequest
+(
+    sal_uInt16                  nSlotId,
+    SfxCallMode                 nMode,
+    const SfxAllItemSet&        rSfxArgs,
+    const SfxAllItemSet&        rSfxInternalArgs
+)
+: SfxRequest(nSlotId, nMode, rSfxArgs)
+{
+    SetInternalArgs_Impl(rSfxInternalArgs);
+}
+
 SfxCallMode SfxRequest::GetCallMode() const
 {
     return pImpl->nCallMode;

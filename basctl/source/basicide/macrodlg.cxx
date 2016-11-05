@@ -46,8 +46,9 @@ using ::std::map;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-MacroChooser::MacroChooser( vcl::Window* pParnt, bool bCreateEntries )
+MacroChooser::MacroChooser( vcl::Window* pParnt, const Reference< frame::XFrame >& xDocFrame, bool bCreateEntries )
     : SfxModalDialog(pParnt, "BasicMacroDialog", "modules/BasicIDE/ui/basicmacrodialog.ui")
+    , m_xDocumentFrame(xDocFrame)
     , bNewDelIsDel(true)
     // the Sfx doesn't ask the BasicManager whether modified or not
     // => start saving in case of a change without a into the BasicIDE.
@@ -735,7 +736,12 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton, void )
         OUString aComment( GetInfo( pMethod ) );
         SfxMacroInfoItem aItem( SID_MACROINFO, pBasMgr, aLib, aMod, aSub, aComment );
         SfxAllItemSet Args( SfxGetpApp()->GetPool() );
-        SfxRequest aRequest( SID_CONFIG, SfxCallMode::SYNCHRON, Args );
+
+        SfxAllItemSet aInternalSet(SfxGetpApp()->GetPool());
+        if (m_xDocumentFrame.is())
+            aInternalSet.Put(SfxUnoFrameItem(SID_FILLFRAME, m_xDocumentFrame));
+
+        SfxRequest aRequest(SID_CONFIG, SfxCallMode::SYNCHRON, Args, aInternalSet);
         aRequest.AppendItem( aItem );
         SfxGetpApp()->ExecuteSlot( aRequest );
     }
