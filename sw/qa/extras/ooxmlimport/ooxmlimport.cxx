@@ -81,6 +81,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <svx/svdpage.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/awt/CharSet.hpp>
 
 #include <bordertest.hxx>
 
@@ -3245,6 +3246,25 @@ DECLARE_OOXMLIMPORT_TEST(testTdf99074, "tdf99074.docx")
     // This was false, Web Layout was ignored on import.
     CPPUNIT_ASSERT(getProperty<bool>(xSettings, "InBrowseMode"));
 }
+
+DECLARE_OOXMLIMPORT_TEST(testTdf103664, "tdf103664.docx")
+{
+    // Wingdings symbols was displayed as rectangles
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf020), xPara->getString()[0] );
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0fc), xPara->getString()[1] );
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0dc), xPara->getString()[2] );
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf081), xPara->getString()[3] );
+
+    uno::Reference<beans::XPropertySet> xRun(getRun(xPara,1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameAsian"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameComplex"));
+
+    // Make sure these special characters imported as symbols
+    CPPUNIT_ASSERT_EQUAL(awt::CharSet::SYMBOL, getProperty<sal_Int16>(xRun, "CharFontCharSet"));
+}
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
