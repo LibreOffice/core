@@ -39,6 +39,7 @@
 
 class SdrModel;
 class SvxBitmapCtl;
+class SvxColorListBox;
 
 /************************************************************************/
 class ButtonBox
@@ -321,7 +322,7 @@ private:
     VclPtr<VclGrid>            m_pGridShadow;
     VclPtr<SvxRectCtl>         m_pCtlPosition;
     VclPtr<MetricField>        m_pMtrDistance;
-    VclPtr<ColorLB>            m_pLbShadowColor;
+    VclPtr<SvxColorListBox>    m_pLbShadowColor;
     VclPtr<MetricField>        m_pMtrTransparent;
     VclPtr<SvxXShadowPreview>  m_pCtlXRectPreview;
 
@@ -340,14 +341,13 @@ private:
 
     DECL_LINK( ClickShadowHdl_Impl, Button*, void );
     DECL_LINK( ModifyShadowHdl_Impl, Edit&, void );
-    DECL_LINK( SelectShadowHdl_Impl, ListBox&, void );
+    DECL_LINK( SelectShadowHdl_Impl, SvxColorListBox&, void );
 
 public:
     SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
     virtual ~SvxShadowTabPage() override;
     virtual void dispose() override;
 
-    void    Construct();
     static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pShadowRanges; }
 
@@ -381,9 +381,9 @@ private:
     VclPtr<MetricField>        m_pMtrAngle;
     VclPtr<MetricField>        m_pMtrBorder;
     VclPtr<Slider>             m_pSliderBorder;
-    VclPtr<ColorLB>            m_pLbColorFrom;
+    VclPtr<SvxColorListBox>    m_pLbColorFrom;
     VclPtr<MetricField>        m_pMtrColorFrom;
-    VclPtr<ColorLB>            m_pLbColorTo;
+    VclPtr<SvxColorListBox>    m_pLbColorTo;
     VclPtr<MetricField>        m_pMtrColorTo;
     VclPtr<SvxPresetListBox>   m_pGradientLB;
     VclPtr<NumericField>       m_pMtrIncrement;
@@ -413,6 +413,7 @@ private:
     DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );
     DECL_LINK( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
     DECL_LINK( ModifiedEditHdl_Impl, Edit&, void );
+    DECL_LINK( ModifiedColorListBoxHdl_Impl, SvxColorListBox&, void );
     DECL_LINK( ModifiedListBoxHdl_Impl, ListBox&, void );
     DECL_LINK( ChangeAutoStepHdl_Impl, CheckBox&, void );
     DECL_LINK( ModifiedSliderHdl_Impl, Slider*, void );
@@ -455,9 +456,9 @@ private:
     VclPtr<MetricField>        m_pMtrAngle;
     VclPtr<Slider>             m_pSliderAngle;
     VclPtr<ListBox>            m_pLbLineType;
-    VclPtr<ColorLB>            m_pLbLineColor;
+    VclPtr<SvxColorListBox>    m_pLbLineColor;
     VclPtr<CheckBox>           m_pCbBackgroundColor;
-    VclPtr<ColorLB>            m_pLbBackgroundColor;
+    VclPtr<SvxColorListBox>    m_pLbBackgroundColor;
     VclPtr<SvxPresetListBox>   m_pHatchLB;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
@@ -483,8 +484,9 @@ private:
     void ChangeHatchHdl_Impl();
     DECL_LINK( ModifiedEditHdl_Impl, Edit&, void );
     DECL_LINK( ModifiedListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK( ModifiedColorListBoxHdl_Impl, SvxColorListBox&, void );
     DECL_LINK( ToggleHatchBackgroundColor_Impl, CheckBox&, void );
-    DECL_LINK( ModifiedBackgroundHdl_Impl, ListBox&, void );
+    DECL_LINK( ModifiedBackgroundHdl_Impl, SvxColorListBox&, void );
     DECL_LINK( ModifiedSliderHdl_Impl, Slider*, void );
     void ModifiedHdl_Impl(void*);
     DECL_LINK( ClickAddHdl_Impl, Button*, void );
@@ -613,8 +615,8 @@ class SvxPatternTabPage : public SvxTabPage
 private:
     VclPtr<VclBox>             m_pBxPixelEditor;
     VclPtr<SvxPixelCtl>        m_pCtlPixel;
-    VclPtr<ColorLB>            m_pLbColor;
-    VclPtr<ColorLB>            m_pLbBackgroundColor;
+    VclPtr<SvxColorListBox>    m_pLbColor;
+    VclPtr<SvxColorListBox>    m_pLbBackgroundColor;
     VclPtr<SvxPresetListBox>   m_pPatternLB;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
@@ -642,7 +644,7 @@ private:
     DECL_LINK( ClickAddHdl_Impl, Button*, void );
     DECL_LINK( ClickModifyHdl_Impl, Button*, void );
     DECL_LINK( ChangePatternHdl_Impl, ValueSet*, void );
-    DECL_LINK( ChangeColorHdl_Impl, ListBox&, void );
+    DECL_LINK( ChangeColorHdl_Impl, SvxColorListBox&, void );
     DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );
     DECL_LINK( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
 

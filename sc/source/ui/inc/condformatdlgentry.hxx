@@ -18,6 +18,7 @@
 
 class ScIconSetFrmtDataEntry;
 class ScCondFormatDlg;
+class SvxColorListBox;
 
 namespace condformat {
 
@@ -172,8 +173,8 @@ class ScColorScale2FrmtEntry : public ScCondFrmtEntry
     VclPtr<Edit> maEdMin;
     VclPtr<Edit> maEdMax;
 
-    VclPtr<ColorListBox> maLbColMin;
-    VclPtr<ColorListBox> maLbColMax;
+    VclPtr<SvxColorListBox> maLbColMin;
+    VclPtr<SvxColorListBox> maLbColMax;
 
     ScFormatEntry* createColorscaleEntry() const;
 
@@ -206,9 +207,9 @@ class ScColorScale3FrmtEntry : public ScCondFrmtEntry
     VclPtr<Edit> maEdMiddle;
     VclPtr<Edit> maEdMax;
 
-    VclPtr<ColorListBox> maLbColMin;
-    VclPtr<ColorListBox> maLbColMiddle;
-    VclPtr<ColorListBox> maLbColMax;
+    VclPtr<SvxColorListBox> maLbColMin;
+    VclPtr<SvxColorListBox> maLbColMiddle;
+    VclPtr<SvxColorListBox> maLbColMax;
 
     ScFormatEntry* createColorscaleEntry() const;
 

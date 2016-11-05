@@ -292,16 +292,10 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 2:
         {
-            // CreateCopyDlg(const SfxItemSet& rInAttrs, const rtl::Reference<XColorList> &pColTab, ::sd::View* pView) override;
-            // works without XColorList (DropDowns will be empty), but
-            // it's easy to access, so use it
-            XColorListRef pColorList(XColorList::CreateStdColorList());
-
             // needs an SfxItemSet, use the one from the 1st object
             pRetval = getSdAbstractDialogFactory()->CreateCopyDlg(
                 getViewShell()->GetActiveWindow(),
                 getSfxItemSetFromSdrObject(),
-                pColorList,
                 getDrawView());
             break;
         }
