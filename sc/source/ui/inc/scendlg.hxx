@@ -29,6 +29,8 @@
 
 enum class ScScenarioFlags;
 
+class SvxColorListBox;
+
 class ScNewScenarioDlg : public ModalDialog
 {
 public:
@@ -45,7 +47,7 @@ private:
     VclPtr<Edit>               m_pEdName;
     VclPtr<VclMultiLineEdit>   m_pEdComment;
     VclPtr<CheckBox>           m_pCbShowFrame;
-    VclPtr<ColorListBox>       m_pLbColor;
+    VclPtr<SvxColorListBox>    m_pLbColor;
     VclPtr<CheckBox>           m_pCbTwoWay;
     VclPtr<CheckBox>           m_pCbCopyAll;
     VclPtr<CheckBox>           m_pCbProtect;

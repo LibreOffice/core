@@ -23,6 +23,7 @@
 #include <memory>
 
 #include <sfx2/tabdlg.hxx>
+#include <svx/Palette.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/menubtn.hxx>
@@ -33,6 +34,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <vcl/dialog.hxx>
 
+class SvxColorListBox;
 class SvxNumRule;
 class SvxBmpNumValueSet;
 class SvxNumValueSet;
@@ -254,7 +256,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     VclPtr<FixedText>      m_pCharFmtFT;
     VclPtr<ListBox>        m_pCharFmtLB;
     VclPtr<FixedText>      m_pBulColorFT;
-    VclPtr<ColorListBox>   m_pBulColLB;
+    VclPtr<SvxColorListBox> m_pBulColLB;
     VclPtr<FixedText>      m_pBulRelSizeFT;
     VclPtr<MetricField>    m_pBulRelSizeMF;
     VclPtr<FixedText>      m_pAllLevelFT;
@@ -327,7 +329,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
         DECL_LINK( AllLevelHdl_Impl, Edit&, void );
         DECL_LINK( OrientHdl_Impl, ListBox&, void );
         DECL_LINK( SameLevelHdl_Impl, Button*, void );
-        DECL_LINK( BulColorHdl_Impl, ListBox&, void );
+        DECL_LINK( BulColorHdl_Impl, SvxColorListBox&, void );
         DECL_LINK( BulRelSizeHdl_Impl, Edit&, void);
         DECL_LINK( PreviewInvalidateHdl_Impl, Timer *, void);
         void EditModifyHdl_Impl(Edit*);

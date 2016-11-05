@@ -48,11 +48,10 @@ class SVX_DLLPUBLIC PaletteManager
 
     XColorListRef           pColorList;
     Color                   mLastColor;
-    typedef std::pair<Color, OUString>  color_and_name;
-    std::deque<color_and_name> maRecentColors;
+    std::deque<NamedColor>  maRecentColors;
     std::vector<std::unique_ptr<Palette>> m_Palettes;
 
-    std::function<void(const OUString&, const Color&)> maColorSelectFunction;
+    std::function<void(const OUString&, const NamedColor&)> maColorSelectFunction;
     css::uno::Reference < css::uno::XComponentContext > m_context;
 public:
     PaletteManager();
@@ -74,14 +73,14 @@ public:
 
     const Color& GetLastColor();
     void        SetLastColor(const Color& rLastColor);
-    void        AddRecentColor(const Color& rRecentColor, const OUString& rColorName);
+    void        AddRecentColor(const Color& rRecentColor, const OUString& rColorName, bool bFront = true);
 
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater);
     void        PopupColorPicker(const OUString& aCommand);
 
-    void        SetColorSelectFunction(const std::function<void(const OUString&, const Color&)>& aColorSelectFunction);
+    void        SetColorSelectFunction(const std::function<void(const OUString&, const NamedColor&)>& aColorSelectFunction);
 
-    static void DispatchColorCommand(const OUString& aCommand, const Color& rColor);
+    static void DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor);
 };
 
 #endif // INCLUDED_SVX_PALETTEMANAGER_HXX
