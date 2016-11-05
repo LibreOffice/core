@@ -158,6 +158,17 @@ void FormulaLogger::GroupScope::addRefMessage(
 }
 
 void FormulaLogger::GroupScope::addRefMessage(
+    const ScAddress& rPos, size_t nLen, const std::vector<formula::VectorRefArray>& rArrays )
+{
+    ScAddress aPos(rPos); // copy
+    for (const formula::VectorRefArray& rArray : rArrays)
+    {
+        addRefMessage(aPos, nLen, rArray);
+        aPos.IncCol();
+    }
+}
+
+void FormulaLogger::GroupScope::addRefMessage(
     const ScAddress& rPos, const formula::FormulaToken& rToken )
 {
     OUStringBuffer aBuf;
