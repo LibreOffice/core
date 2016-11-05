@@ -28,7 +28,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -165,7 +164,7 @@ utl::ConfigManager::acquireTree(utl::ConfigItem & item) {
 utl::ConfigManager::ConfigManager() {}
 
 utl::ConfigManager::~ConfigManager() {
-    OSL_ASSERT(items_.empty());
+    SAL_WARN_IF(!items_.empty(), "unotools.config", "ConfigManager not empty");
 }
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >
@@ -189,7 +188,7 @@ void utl::ConfigManager::removeConfigItem(utl::ConfigItem & item) {
 }
 
 void utl::ConfigManager::registerConfigItem(utl::ConfigItem * item) {
-    OSL_ASSERT(item != nullptr);
+    assert(item != nullptr);
     items_.push_back(item);
 }
 
