@@ -33,20 +33,13 @@ namespace sdr
         SfxItemSet* CaptionProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             return new SfxItemSet(rPool,
-
-                // range from SdrAttrObj
-                SDRATTR_START, SDRATTR_SHADOW_LAST,
-                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
+                // range from SdrAttrObj & SdrCaptionObj
+                SDRATTR_START, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
-                // range from SdrCaptionObj
-                SDRATTR_CAPTION_FIRST, SDRATTR_CAPTION_LAST,
-
                 // range from SdrTextObj
                 EE_ITEMS_START, EE_ITEMS_END,
-
                 // end
-                0, 0);
+                0);
         }
 
         CaptionProperties::CaptionProperties(SdrObject& rObj)

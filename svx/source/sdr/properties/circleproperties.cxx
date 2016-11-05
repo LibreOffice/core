@@ -35,20 +35,16 @@ namespace sdr
         SfxItemSet* CircleProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             return new SfxItemSet(rPool,
-
                 // range from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
                 // range from SdrCircObj
                 SDRATTR_CIRC_FIRST, SDRATTR_CIRC_LAST,
-
+                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
                 // range from SdrTextObj
                 EE_ITEMS_START, EE_ITEMS_END,
-
                 // end
-                0, 0);
+                0);
         }
 
         CircleProperties::CircleProperties(SdrObject& rObj)
