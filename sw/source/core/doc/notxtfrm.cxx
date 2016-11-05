@@ -277,11 +277,23 @@ void SwNoTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
 
     // In case the picture fly frm was clipped, render it with the origin
     // size instead of scaling it
-    if ( rNoTNd.getIDocumentSettingAccess()->get( DocumentSettingId::CLIPPED_PICTURES ) )
+    if ( pGrfNd && rNoTNd.getIDocumentSettingAccess()->get( DocumentSettingId::CLIPPED_PICTURES ) )
     {
         const SwFlyFreeFrame *pFly = dynamic_cast< const SwFlyFreeFrame* >( FindFlyFrame() );
         if( pFly )
-            aGrfArea = SwRect( Frame().Pos( ), pFly->GetUnclippedFrame( ).SSize( ) );
+        {
+            bool bGetUnclippedFrame=true;
+            const SfxPoolItem* pItem;
+            if( pFly->GetFormat() && SfxItemState::SET == pFly->GetFormat()->GetItemState(RES_BOX, false, &pItem) )
+            {
+                const SvxBoxItem& rBox = *static_cast<const SvxBoxItem*>(pItem);
+                if( rBox.HasBorder( /*bTreatPaddingAsBorder*/true) )
+                    bGetUnclippedFrame = false;
+            }
+
+            if( bGetUnclippedFrame )
+                aGrfArea = SwRect( Frame().Pos( ), pFly->GetUnclippedFrame( ).SSize( ) );
+        }
     }
 
     aPaintArea._Intersection( aOrigPaint );

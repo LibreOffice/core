@@ -2433,7 +2433,7 @@ void SvxBoxItem::SetDistance( sal_uInt16 nNew, SvxBoxItemLine nLine )
 }
 
 
-sal_uInt16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bIgnoreLine ) const
+sal_uInt16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine ) const
 {
     SvxBorderLine* pTmp = nullptr;
     sal_uInt16 nDist = 0;
@@ -2463,9 +2463,17 @@ sal_uInt16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bIgnoreLine ) c
     {
         nDist = nDist + pTmp->GetScaledWidth();
     }
-    else if( !bIgnoreLine )
+    else if( !bEvenIfNoLine )
         nDist = 0;
     return nDist;
+}
+
+bool SvxBoxItem::HasBorder( bool bTreatPaddingAsBorder ) const
+{
+    return  CalcLineSpace( SvxBoxItemLine::BOTTOM,   bTreatPaddingAsBorder )
+            || CalcLineSpace( SvxBoxItemLine::RIGHT, bTreatPaddingAsBorder )
+            || CalcLineSpace( SvxBoxItemLine::TOP,   bTreatPaddingAsBorder )
+            || CalcLineSpace( SvxBoxItemLine::LEFT,  bTreatPaddingAsBorder );
 }
 
 // class SvxBoxInfoItem --------------------------------------------------
