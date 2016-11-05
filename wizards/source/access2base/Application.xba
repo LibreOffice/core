@@ -160,23 +160,6 @@ Global Const CTLPARENTISGRID	= &quot;GRID&quot;
 Global Const CTLPARENTISGROUP	= &quot;OPTIONGROUP&quot;
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Type Root
-	ErrorHandler		As Boolean
-	MinimalTraceLevel	As Integer
-	TraceLogs()			As Variant
-	TraceLogCount		As Integer
-	TraceLogLast		As Integer
-	TraceLogMaxEntries	As Integer
-	CalledSub			As String
-	Introspection		As Object				&apos;	com.sun.star.beans.Introspection	
-	VersionNumber		As String				&apos;	Actual Access2Base version number
-	FindRecord			As Object
-	StatusBar			As Object
-	Dialogs				As Object				&apos;	Collection
-	TempVars			As Object				&apos;	Collection
-	CurrentDoc()		As Variant				&apos;	Array of document containers - [0] = Base document, [1 ... N] = other documents
-End Type
-
 Type DocContainer
 	Document			As Object				&apos;	com.sun.star.comp.dba.ODatabaseDocument	or SwXTextDocument or ScModelObj
 	Active				As Boolean
@@ -1483,7 +1466,6 @@ REM ----------------------------------------------------------------------------
 Public Sub _RootInit(Optional ByVal pbForce As Boolean)
 &apos;	Initialize _A2B_ global variable. Reinit forced if pbForce = True
 
-Dim vRoot As Root, vCurrentDoc() As Variant
 	If IsMissing(pbForce) Then pbForce = False
 	If IsEmpty(_A2B_) Or pbForce Then _A2B_ = New Root_
 	
