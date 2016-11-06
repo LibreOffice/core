@@ -15,6 +15,10 @@ $(eval $(call gb_Library_add_defs,OGLTrans,\
 ))
 endif
 
+$(eval $(call gb_Library_add_defs,OGLTrans,\
+    -DGLM_FORCE_RADIANS \
+))
+
 $(eval $(call gb_Library_use_sdk_api,OGLTrans))
 
 $(eval $(call gb_Library_use_libraries,OGLTrans,\
