@@ -70,6 +70,11 @@ STD_FONT_FILELIST(gid_File_Fnt_EmojiOne_Color, "fonts_emojione_color.filelist")
 //Karla fonts
 STD_FONT_FILELIST(gid_File_Fnt_Karla, "fonts_karla.filelist")
 
+#ifdef WITH_NOTO_FONT
+// Noto fonts
+STD_FONT_FILELIST(gid_File_Fnt_Noto, "fonts_noto.filelist")
+#endif
+
 #endif
 
 // fontconfig updates to allow proper use of local fonts

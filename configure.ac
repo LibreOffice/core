@@ -1589,6 +1589,11 @@ AC_ARG_WITH(fonts,
          known to be available on the system then you should use this option.]),
 ,)
 
+AC_ARG_ENABLE(noto-font,
+    AS_HELP_STRING([--enable-noto-font],
+        [Add Google Noto font.]),
+,)
+
 AC_ARG_WITH(epm,
     AS_HELP_STRING([--with-epm],
         [Decides which epm to use. Default is to use the one from the system if
@@ -11538,6 +11543,21 @@ fi
 AC_SUBST(WITH_FONTS)
 AC_DEFINE_UNQUOTED([TEST_FONTS_MISSING], $TEST_FONTS_MISSING)
 
+dnl Test whether to include Google Noto fonts
+dnl ===================================================================
+AC_MSG_CHECKING([whether to include Google Noto fonts])
+if test "$enable_noto_font" = "" -o "$enable_noto_font" = "no" -o "$with_fonts" = "no"; then
+    AC_MSG_RESULT([no])
+    WITH_NOTO_FONT=
+else
+    AC_MSG_RESULT([yes])
+    WITH_NOTO_FONT=TRUE
+    BUILD_TYPE="$BUILD_TYPE NOTO_FONT"
+    SCPDEFS="$SCPDEFS -DWITH_NOTO_FONT"
+fi
+AC_SUBST(WITH_NOTO_FONT)
+
+dnl ===================================================================
 
 dnl ===================================================================
 dnl Test whether to enable online update service

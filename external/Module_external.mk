@@ -77,6 +77,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,MYSQLCPPCONN,mysqlcppconn) \
 	$(call gb_Helper_optional,MYTHES,mythes) \
 	$(call gb_Helper_optional,NEON,neon) \
+	$(call gb_Helper_optional,NOTO_FONT,noto_font) \
 	$(call gb_Helper_optional,NSS,nss) \
 	$(call gb_Helper_optional,ODFGEN,libodfgen) \
 	$(call gb_Helper_optional,OPENCOLLADA,opencollada) \

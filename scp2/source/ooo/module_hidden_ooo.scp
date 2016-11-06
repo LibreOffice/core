@@ -113,6 +113,19 @@ Module gid_Module_Root_Fonts_OOo_Hidden
     gid_File_Fnt_EmojiOne_Color,
 	gid_File_FcLocal_Conf);
 End
+#ifdef WITH_NOTO_FONT
+Module gid_Module_Root_Fonts_Noto_Hidden
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Root;
+    InstallOrder = "100";
+    Name = "gid_Module_Root_Fonts_Noto_Hidden";
+    Description = "gid_Module_Root_Fonts_Noto_Hidden";
+    Sortkey = "2150";
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Fnt_Noto);
+End
+#endif
 #endif
 
 Module gid_Module_Oo_Linguistic

@@ -222,6 +222,9 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 	,$(call fetch_Download_item,http://dev-www.libreoffice.org/extern,$(item)))
 	$(if $(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL) \
 	, $(call fetch_Download_item,http://dev-www.libreoffice.org/src/libgltf,$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL)))
+	$(foreach item, \
+		$(call fetch_Optional,NOTO_FONT,FONT_NOTO_TARBALL) \
+	,$(call fetch_Download_item,https://noto-website-2.storage.googleapis.com/pkgs,$(item)))
 	@mkdir -p $(dir $@) && touch $@
 
 # vim: set noet sw=4 ts=4:
