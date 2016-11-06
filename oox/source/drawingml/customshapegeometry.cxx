@@ -706,6 +706,7 @@ PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler2Helper& rPare
     const OUString aEmptyDefault;
     if ( rAttribs.hasAttribute( XML_gdRefR ) )
     {
+        mrAdjustHandle.polar = true ;
         mrAdjustHandle.gdRef1 = GetGeomGuideName( rAttribs.getString( XML_gdRefR, aEmptyDefault ) );
     }
     if ( rAttribs.hasAttribute( XML_minR ) )
@@ -718,6 +719,7 @@ PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler2Helper& rPare
     }
     if ( rAttribs.hasAttribute( XML_gdRefAng ) )
     {
+        mrAdjustHandle.polar = true ;
         mrAdjustHandle.gdRef2 = GetGeomGuideName( rAttribs.getString( XML_gdRefAng, aEmptyDefault ) );
     }
     if ( rAttribs.hasAttribute( XML_minAng ) )
@@ -732,6 +734,7 @@ PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler2Helper& rPare
 
 ContextHandlerRef PolarAdjustHandleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
+    // mrAdjustHandle.pos uses planar coordinates.
     if ( aElementToken == A_TOKEN( pos ) )
         return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
     return nullptr;

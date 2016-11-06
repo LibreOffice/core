@@ -328,7 +328,25 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
             // adjustment value is decisive
             if ( maAdjustHandleList[ i ].polar )
             {
+                // Polar handles in DrawingML
+                // 1. don't have reference center, so PROP_Polar isn't needed.
+                // 2. position always use planar coordinates.
+                // 3. use RefAngle and RefR to specify adjustment value to be updated.
+                // 4. The unit of angular adjustment values are 6000th degree.
+
                 aHandle.setProperty( PROP_Position, maAdjustHandleList[ i ].pos);
+                if ( maAdjustHandleList[ i ].gdRef1.has() )
+                {
+                    sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef1.get() );
+                    if ( nIndex >= 0 )
+                        aHandle.setProperty( PROP_RefR, nIndex);
+                }
+                if ( maAdjustHandleList[ i ].gdRef2.has() )
+                {
+                    sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef2.get() );
+                    if ( nIndex >= 0 )
+                        aHandle.setProperty( PROP_RefAngle, nIndex);
+                }
                 if ( maAdjustHandleList[ i ].min1.has() )
                     aHandle.setProperty( PROP_RadiusRangeMinimum, maAdjustHandleList[ i ].min1.get());
                 if ( maAdjustHandleList[ i ].max1.has() )
