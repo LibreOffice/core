@@ -46,13 +46,6 @@
 
 namespace framework
 {
-    struct NewDocument
-    {
-        css::util::URL                                    aTargetURL;
-        css::uno::Sequence< css::beans::PropertyValue >   aArgSeq;
-        css::uno::Reference< css::frame::XDispatch >      xDispatch;
-    };
-
     class NewMenuController :  public svt::PopupMenuControllerBase
     {
         using svt::PopupMenuControllerBase::disposing;
