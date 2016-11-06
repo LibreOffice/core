@@ -95,7 +95,7 @@ namespace svt
             // XEventListener
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
-            void dispatchCommand( const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
+            void dispatchCommand( const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString& sTarget = OUString() );
 
     protected:
             void throwIfDisposed() throw ( css::uno::RuntimeException );

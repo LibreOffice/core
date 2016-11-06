@@ -124,7 +124,9 @@ void SAL_CALL PopupMenuControllerBase::itemSelected( const awt::MenuEvent& rEven
     }
 }
 
-void PopupMenuControllerBase::dispatchCommand( const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs )
+void PopupMenuControllerBase::dispatchCommand( const OUString& sCommandURL,
+                                               const css::uno::Sequence< css::beans::PropertyValue >& rArgs,
+                                               const OUString& sTarget )
 {
     osl::MutexGuard aLock( m_aMutex );
 
@@ -137,7 +139,7 @@ void PopupMenuControllerBase::dispatchCommand( const OUString& sCommandURL, cons
         aURL.Complete = sCommandURL;
         m_xURLTransformer->parseStrict( aURL );
 
-        Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, OUString(), 0 ), UNO_QUERY_THROW );
+        Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, sTarget, 0 ), UNO_QUERY_THROW );
 
         Application::PostUserEvent( LINK(nullptr, PopupMenuControllerBase, ExecuteHdl_Impl), new PopupMenuControllerBaseDispatchInfo( xDispatch, aURL, rArgs ) );
 

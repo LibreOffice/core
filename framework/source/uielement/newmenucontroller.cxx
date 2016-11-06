@@ -407,57 +407,37 @@ void SAL_CALL NewMenuController::statusChanged( const FeatureStateEvent& ) throw
 void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent ) throw (RuntimeException, std::exception)
 {
     Reference< css::awt::XPopupMenu > xPopupMenu;
-    Reference< XDispatch >            xDispatch;
-    Reference< XDispatchProvider >    xDispatchProvider;
     Reference< XComponentContext >    xContext;
-    Reference< XURLTransformer >      xURLTransformer;
 
     osl::ClearableMutexGuard aLock( m_aMutex );
-    xPopupMenu          = m_xPopupMenu;
-    xDispatchProvider.set( m_xFrame, UNO_QUERY );
-    xContext     = m_xContext;
-    xURLTransformer     = m_xURLTransformer;
+    xPopupMenu = m_xPopupMenu;
+    xContext   = m_xContext;
     aLock.clear();
 
-    css::util::URL aTargetURL;
-    Sequence< PropertyValue > aArgsList( 1 );
-
-    if ( xPopupMenu.is() && xDispatchProvider.is() )
+    if ( xPopupMenu.is() )
     {
         VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::GetImplementation( xPopupMenu ));
         if ( pPopupMenu )
         {
+            OUString aURL;
             OUString aTargetFrame( m_aTargetFrame );
 
             {
                 SolarMutexGuard aSolarMutexGuard;
                 PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-                aTargetURL.Complete = pVCLPopupMenu->GetItemCommand(rEvent.MenuId);
+                aURL = pVCLPopupMenu->GetItemCommand(rEvent.MenuId);
                 sal_uLong nAttributePtr = pVCLPopupMenu->GetUserValue(rEvent.MenuId);
                 MenuAttributes* pAttributes = reinterpret_cast<MenuAttributes *>(nAttributePtr);
                 if (pAttributes)
                     aTargetFrame = pAttributes->aTargetFrame;
             }
 
-            xURLTransformer->parseStrict( aTargetURL );
-
+            Sequence< PropertyValue > aArgsList( 1 );
             aArgsList[0].Name = "Referer";
             aArgsList[0].Value = makeAny( OUString( "private:user" ));
 
-            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, aTargetFrame, 0 );
+            dispatchCommand( aURL, aArgsList, aTargetFrame );
         }
-    }
-
-    if ( xDispatch.is() )
-    {
-        // Call dispatch asynchronously as we can be destroyed while dispatch is
-        // executed. VCL is not able to survive this as it wants to call listeners
-        // after select!!!
-        NewDocument* pNewDocument = new NewDocument;
-        pNewDocument->xDispatch  = xDispatch;
-        pNewDocument->aTargetURL = aTargetURL;
-        pNewDocument->aArgSeq    = aArgsList;
-        Application::PostUserEvent( LINK(nullptr, NewMenuController, ExecuteHdl_Impl), pNewDocument );
     }
 }
 
@@ -546,21 +526,6 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
             m_bNewMenu      = m_aCommandURL == aSlotNewDocDirect;
         }
     }
-}
-
-IMPL_STATIC_LINK( NewMenuController, ExecuteHdl_Impl, void*, p, void )
-{
-    NewDocument* pNewDocument = static_cast<NewDocument*>(p);
-/*  i62706: Don't catch all exceptions. We hide all problems here and are not able
-            to handle them on higher levels.
-    try
-    {
-*/
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
-        pNewDocument->xDispatch->dispatch( pNewDocument->aTargetURL, pNewDocument->aArgSeq );
-    delete pNewDocument;
 }
 
 }
