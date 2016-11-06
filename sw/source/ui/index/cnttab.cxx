@@ -1756,14 +1756,7 @@ void SwIdxTreeListBox::dispose()
     SvTreeListBox::dispose();
 }
 
-VCL_BUILDER_DECL_FACTORY(SwIdxTreeListBox)
-{
-    WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SwIdxTreeListBox>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SwIdxTreeListBox, WB_TABSTOP)
 
 void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {

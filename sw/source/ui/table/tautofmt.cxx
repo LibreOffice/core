@@ -523,14 +523,7 @@ AutoFormatPreview::AutoFormatPreview(vcl::Window* pParent, WinBits nStyle) :
     Init();
 }
 
-VCL_BUILDER_DECL_FACTORY(AutoFormatPreview)
-{
-    WinBits nWinStyle = 0;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<AutoFormatPreview>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(AutoFormatPreview, 0)
 
 void AutoFormatPreview::Resize()
 {

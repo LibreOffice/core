@@ -29,16 +29,7 @@ SvxColorValueSet::SvxColorValueSet(vcl::Window* _pParent, WinBits nWinStyle)
     SetEdgeBlending(true);
 }
 
-VCL_BUILDER_DECL_FACTORY(SvxColorValueSet)
-{
-    WinBits nWinBits = WB_TABSTOP;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<SvxColorValueSet>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxColorValueSet, WB_TABSTOP)
 
 sal_uInt32 SvxColorValueSet::getMaxRowCount()
 {

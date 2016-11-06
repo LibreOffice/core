@@ -28,14 +28,7 @@ SwFieldRefTreeListBox::SwFieldRefTreeListBox(vcl::Window* pParent, WinBits nStyl
 {
 }
 
-VCL_BUILDER_DECL_FACTORY(SwFieldRefTreeListBox)
-{
-    WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SwFieldRefTreeListBox>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SwFieldRefTreeListBox, WB_TABSTOP)
 
 void SwFieldRefTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {

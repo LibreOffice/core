@@ -31,14 +31,7 @@ SvxCheckListBox::SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     Init_Impl();
 }
 
-VCL_BUILDER_DECL_FACTORY(SvxCheckListBox)
-{
-    WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SvxCheckListBox>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxCheckListBox, WB_TABSTOP)
 
 void SvxCheckListBox::SetNormalStaticImage(const Image& rNormalStaticImage)
 {

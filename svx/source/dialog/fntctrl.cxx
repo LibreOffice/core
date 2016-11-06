@@ -511,14 +511,7 @@ SvxFontPrevWindow::SvxFontPrevWindow(vcl::Window* pParent, WinBits nStyle)
     Init();
 }
 
-VCL_BUILDER_DECL_FACTORY(SvxFontPrevWindow)
-{
-    WinBits nWinStyle = 0;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SvxFontPrevWindow>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxFontPrevWindow, 0)
 
 SvxFontPrevWindow::~SvxFontPrevWindow()
 {

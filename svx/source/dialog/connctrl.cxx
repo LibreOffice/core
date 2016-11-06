@@ -46,14 +46,7 @@ SvxXConnectionPreview::SvxXConnectionPreview( vcl::Window* pParent, WinBits nSty
     SetStyles();
 }
 
-VCL_BUILDER_DECL_FACTORY(SvxXConnectionPreview)
-{
-    WinBits nWinStyle = 0;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SvxXConnectionPreview>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxXConnectionPreview, 0)
 
 SvxXConnectionPreview::~SvxXConnectionPreview()
 {

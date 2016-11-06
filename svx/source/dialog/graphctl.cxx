@@ -76,14 +76,7 @@ GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
     EnableRTL( false );
 }
 
-VCL_BUILDER_DECL_FACTORY(GraphCtrl)
-{
-    WinBits nWinStyle = 0;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<GraphCtrl>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(GraphCtrl, 0)
 
 GraphCtrl::~GraphCtrl()
 {

@@ -153,14 +153,7 @@ SwDBTreeList::SwDBTreeList(vcl::Window *pParent, WinBits nStyle)
         InitTreeList();
 }
 
-VCL_BUILDER_DECL_FACTORY(SwDBTreeList)
-{
-    WinBits nStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nStyle |= WB_BORDER;
-    rRet = VclPtr<SwDBTreeList>::Create(pParent, nStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SwDBTreeList, WB_TABSTOP)
 
 Size SwDBTreeList::GetOptimalSize() const
 {
