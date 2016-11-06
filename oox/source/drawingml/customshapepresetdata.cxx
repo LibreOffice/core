@@ -317,11 +317,13 @@ void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OStr
 // Parses a string like: Name = "RefY", Handle = (long) 0, Value = (any) { (long) 0 }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE
 void lcl_parseHandleRef(std::vector<beans::PropertyValue>& rHandle, const OString& rValue, const OUString& rName)
 {
-    static const char aExpectedXPrefix[] = "Name = \"RefX\", Handle = (long) 0, Value = (any) { (long) ";
-    static const char aExpectedYPrefix[] = "Name = \"RefY\", Handle = (long) 0, Value = (any) { (long) ";
-    if (rValue.startsWith(aExpectedXPrefix) || rValue.startsWith(aExpectedYPrefix))
+    static const char aPrefix[] = "\", Handle = (long) 0, Value = (any) { (long) ";
+    const sal_Int32 nCheck= SAL_N_ELEMENTS( aPrefix ) - 1;
+    const sal_Int32 nStart= SAL_N_ELEMENTS( "Name = \"" ) - 1 + rName.getLength();
+
+    if ( rValue.copy( nStart , nCheck ).equalsL( aPrefix, nCheck ) )
     {
-        sal_Int32 nIndex = strlen(aExpectedXPrefix);
+        sal_Int32 nIndex = nStart + nCheck;
         beans::PropertyValue aPropertyValue;
         aPropertyValue.Name = rName;
         // We only expect a Value here
@@ -369,6 +371,10 @@ uno::Sequence<beans::PropertyValue> lcl_parseHandle(const OString& rValue)
                     lcl_parseHandleRef(aRet, aToken, "RefX");
                 else if (aToken.startsWith("Name = \"RefY\""))
                     lcl_parseHandleRef(aRet, aToken, "RefY");
+                else if (aToken.startsWith("Name = \"RefR\""))
+                    lcl_parseHandleRef(aRet, aToken, "RefR");
+                else if (aToken.startsWith("Name = \"RefAngle\""))
+                    lcl_parseHandleRef(aRet, aToken, "RefAngle");
                 else
                     SAL_WARN("oox", "lcl_parseHandle: unexpected token: " << aToken);
             }
