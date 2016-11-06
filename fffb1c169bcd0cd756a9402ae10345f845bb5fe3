@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_9d2b6b30",
+        "filename": "sc/source/ui/inc/cellsh.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-06T06:26:42Z",
+      "side": 1,
+      "message": "At least I\u0027m not a big fan of inline methods. They make debugging and recompilation such a nasty task.",
+      "revId": "fffb1c169bcd0cd756a9402ae10345f845bb5fe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_1d011baf",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-06T06:26:42Z",
+      "side": 1,
+      "message": "the assignment should go on the next line.",
+      "revId": "fffb1c169bcd0cd756a9402ae10345f845bb5fe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_3d2c174a",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-06T06:26:42Z",
+      "side": 1,
+      "message": "Braces belong in an own line. Please check the surrounding code for an idea about the calc coding style.",
+      "revId": "fffb1c169bcd0cd756a9402ae10345f845bb5fe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_5d31d3a1",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-06T06:26:42Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "fffb1c169bcd0cd756a9402ae10345f845bb5fe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_7d268f69",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-06T06:26:42Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "fffb1c169bcd0cd756a9402ae10345f845bb5fe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
