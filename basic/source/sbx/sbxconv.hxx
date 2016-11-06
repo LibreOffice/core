@@ -21,6 +21,15 @@
 #define INCLUDED_BASIC_SOURCE_SBX_SBXCONV_HXX
 
 #include "sbxdec.hxx"
+#if defined(ANDROID)
+namespace std
+{
+double lround(double d)
+{
+    return d + ( d < 0 ? -0.5 : 0.5 );
+}
+}
+#endif
 
 class SbxArray;
 
