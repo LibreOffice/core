@@ -1056,10 +1056,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                     {
                         // remaining right joiners
                         // Reh, Zain, Thal,
-                        if ( isRehChar ( cCh ) ||   // Reh Zain (right joining)
-                                                    // final form may appear in the middle of word
-                             ( 0x60C <= cCh && 0x6FE >= cCh // all others
-                              && nIdx == nWordLen - 1))   // only at end of word
+                        if ( isRehChar ( cCh ) )   // Reh Zain (right joining)
                         {
                             SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
                             // check if character is connectable to previous character,
