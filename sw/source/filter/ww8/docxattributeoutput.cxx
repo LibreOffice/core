@@ -579,10 +579,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     //sdtcontent is written so Set m_bParagraphHasDrawing to false
     m_rExport.SdrExporter().setParagraphHasDrawing( false );
     m_bRunTextIsOn = false;
-    if(aFramePrTextbox.empty())
-        m_pSerializer->mergeTopMarks(Tag_StartParagraph_1);
-    else
-        m_pSerializer->mergeTopMarks(Tag_StartParagraph_1, sax_fastparser::MergeMarks::IGNORE);
+    m_pSerializer->mergeTopMarks(Tag_StartParagraph_1);
 
     // Write framePr
     if(!aFramePrTextbox.empty())
