@@ -72,7 +72,6 @@ DEFINE_INIT_SERVICE                     (   NewMenuController, {} )
 void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
 {
     sal_uInt16 nItemCount = pPopupMenu->GetItemCount();
-    Image               aImage;
     Reference< XFrame > xFrame( m_xFrame );
 
     for ( sal_uInt16 i = 0; i < nItemCount; i++ )
@@ -82,39 +81,23 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
         {
             if ( bSetImages )
             {
-                bool        bImageSet( false );
                 OUString aImageId;
-
+                OUString aCmd( pPopupMenu->GetItemCommand( nItemId ) );
                 sal_uLong nAttributePtr = pPopupMenu->GetUserValue(sal::static_int_cast<sal_uInt16>(i));
                 MenuAttributes* pAttributes = reinterpret_cast<MenuAttributes *>(nAttributePtr);
                 if (pAttributes)
                     aImageId = pAttributes->aImageId;
 
-                if ( !aImageId.isEmpty() )
-                {
-                    aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aImageId, xFrame);
-                    if ( !!aImage )
-                    {
-                        bImageSet = true;
-                        pPopupMenu->SetItemImage( nItemId, aImage );
-                    }
-                }
+                INetURLObject aURLObj( aImageId.isEmpty() ? aCmd : aImageId );
+                Image aImage = SvFileInformationManager::GetImageNoDefault( aURLObj );
+                if ( !aImage )
+                    aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aCmd, xFrame);
 
-                if ( !bImageSet )
-                {
-                    OUString aCmd( pPopupMenu->GetItemCommand( nItemId ) );
-                    if ( !aCmd.isEmpty() )
-                    {
-                        INetURLObject aURLObj( aCmd );
-                        aImage = SvFileInformationManager::GetImageNoDefault( aURLObj );
-                    }
-
-                    if ( !!aImage )
-                        pPopupMenu->SetItemImage( nItemId, aImage );
-                }
+                if ( !!aImage )
+                    pPopupMenu->SetItemImage( nItemId, aImage );
             }
             else
-                pPopupMenu->SetItemImage( nItemId, aImage );
+                pPopupMenu->SetItemImage( nItemId, Image() );
         }
     }
 }
