@@ -277,16 +277,7 @@ void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
                                   (rRenderContext.GetOutputSize().Height() - aTextSize.Height()) / 2), sText);
 }
 
-VCL_BUILDER_DECL_FACTORY(SmShowFont)
-{
-    WinBits nWinStyle = 0;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-
-    rRet = VclPtr<SmShowFont>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SmShowFont, 0)
 
 Size SmShowFont::GetOptimalSize() const
 {
@@ -1351,16 +1342,7 @@ IMPL_LINK( SmShowSymbolSetWindow, ScrollHdl, ScrollBar*, /*pScrollBar*/, void)
     Invalidate();
 }
 
-VCL_BUILDER_DECL_FACTORY(SmShowSymbol)
-{
-    WinBits nWinStyle = 0;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-
-    rRet = VclPtr<SmShowSymbol>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SmShowSymbol, 0)
 
 void SmShowSymbol::Resize()
 {
@@ -1637,16 +1619,7 @@ const SmSym* SmSymbolDialog::GetSymbol() const
     return bValid ? aSymbolSet[ nSymbolNo ] : nullptr;
 }
 
-VCL_BUILDER_DECL_FACTORY(SmShowChar)
-{
-    WinBits nWinStyle = 0;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-
-    rRet = VclPtr<SmShowChar>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SmShowChar, 0)
 
 void SmShowChar::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
 {

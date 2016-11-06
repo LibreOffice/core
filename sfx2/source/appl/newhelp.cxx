@@ -286,14 +286,7 @@ ContentListBox_Impl::ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle)
     InitRoot();
 }
 
-VCL_BUILDER_DECL_FACTORY(ContentListBox)
-{
-    WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<ContentListBox_Impl>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(ContentListBox_Impl, WB_TABSTOP)
 
 ContentListBox_Impl::~ContentListBox_Impl()
 {

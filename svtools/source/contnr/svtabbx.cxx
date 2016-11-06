@@ -95,14 +95,7 @@ SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
     SetHighlightRange();    // select full width
 }
 
-VCL_BUILDER_DECL_FACTORY(SvTabListBox)
-{
-    WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SvTabListBox>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SvTabListBox, WB_TABSTOP)
 
 SvTabListBox::~SvTabListBox()
 {

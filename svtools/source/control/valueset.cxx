@@ -98,17 +98,7 @@ ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle ) :
     ImplInitSettings( true, true, true );
 }
 
-
-VCL_BUILDER_DECL_FACTORY(ValueSet)
-{
-    WinBits nWinBits = WB_TABSTOP;
-
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<ValueSet>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(ValueSet, WB_TABSTOP)
 
 ValueSet::~ValueSet()
 {
