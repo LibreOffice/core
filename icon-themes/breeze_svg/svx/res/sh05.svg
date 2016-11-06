@@ -13,8 +13,8 @@
    height="16"
    id="svg3049"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="sh03.svg"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="sh05.svg"
    inkscape:export-filename="/home/uri/.kde/share/icons/NITRUX-KDE/16x16/actions/view-right-new.png"
    inkscape:export-xdpi="30"
    inkscape:export-ydpi="30">
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="24.411306"
-     inkscape:cx="13.168058"
-     inkscape:cy="5.8372206"
+     inkscape:zoom="34.5228"
+     inkscape:cx="1.0716321"
+     inkscape:cy="7.0071209"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -37,11 +37,11 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1454"
-     inkscape:window-height="1053"
-     inkscape:window-x="464"
+     inkscape:window-width="1920"
+     inkscape:window-height="1141"
+     inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:showpageshadow="false"
      borderlayer="true"
      inkscape:snap-bbox="true">
@@ -73,7 +73,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -82,19 +82,15 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-421.71429,-531.79074)">
-    <rect
+    <path
+       style="color:#000000;fill:#1d99f3;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="M 1 1 L 1 11 L 3 11 L 3 3 L 11 3 L 11 1 L 1 1 z "
+       transform="translate(421.71429,531.79074)"
+       id="rect4063-3" />
+    <path
        style="color:#000000;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="rect4063-3"
-       width="9.9999952"
-       height="9.9999952"
-       x="422.71429"
-       y="532.79077" />
-    <rect
-       style="color:#000000;fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="rect4063"
-       width="9.9999952"
-       height="9.9999952"
-       x="424.71429"
-       y="534.79077" />
+       d="M 3 3 L 3 13 L 13 13 L 13 3 L 3 3 z M 4 4 L 12 4 L 12 12 L 4 12 L 4 4 z "
+       transform="translate(421.71429,531.79074)"
+       id="rect4063" />
   </g>
 </svg>

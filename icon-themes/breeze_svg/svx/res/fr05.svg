@@ -13,9 +13,9 @@
    height="24"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    viewBox="0 0 24 24"
-   sodipodi:docname="fr06.svg">
+   sodipodi:docname="fr05.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -26,17 +26,17 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="25.15656"
-     inkscape:cx="16.030269"
+     inkscape:cx="10.226614"
      inkscape:cy="8.7940237"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:showpageshadow="false"
      units="px"
-     inkscape:window-width="1868"
-     inkscape:window-height="1060"
-     inkscape:window-x="50"
-     inkscape:window-y="-3"
+     inkscape:window-width="1920"
+     inkscape:window-height="1141"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      showguides="true"
      fit-margin-top="0"
@@ -94,7 +94,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -103,49 +103,12 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(1,-1029.3622)">
-    <g
-       id="g3988"
-       transform="matrix(0,1,-1,0,1052.3622,1029.3622)">
-      <rect
-         transform="scale(-1,-1)"
-         y="-1049.3622"
-         x="-20.000017"
-         height="1"
-         width="17"
-         id="rect2994"
-         style="color:#000000;fill:#eff0f1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
-      <rect
-         transform="scale(-1,-1)"
-         y="-1033.3622"
-         x="-20.000017"
-         height="1"
-         width="17"
-         id="rect2994-0"
-         style="color:#000000;fill:#eff0f1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
-      <rect
-         transform="matrix(0,-1,1,0,0,0)"
-         y="3.0000174"
-         x="-1049.3622"
-         height="1"
-         width="16.999983"
-         id="rect2994-2"
-         style="color:#000000;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
-      <rect
-         transform="matrix(0,-1,1,0,0,0)"
-         y="19.000017"
-         x="-1049.3622"
-         height="1"
-         width="16.999983"
-         id="rect2994-03"
-         style="color:#000000;fill:#eff0f1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
-      <rect
-         transform="scale(-1,-1)"
-         y="-1048.3622"
-         x="-19.000017"
-         height="15"
-         width="15.000034"
-         id="rect3832"
-         style="color:#000000;fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
-    </g>
+    <rect
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#1d99f3;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;enable-background:accumulate"
+       id="rect2994-2"
+       width="16.999983"
+       height="1"
+       x="3.0000174"
+       y="1032.3622" />
   </g>
 </svg>
