@@ -81,7 +81,7 @@ SwFieldDlgWrapper::SwFieldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     assert(pFact && "SwAbstractDialogFactory fail!");
-    AbstractSwFieldDlg* pDlg = pFact->CreateSwFieldDlg(pB, this, _pParent);
+    VclPtr<AbstractSwFieldDlg> pDlg = pFact->CreateSwFieldDlg(pB, this, _pParent);
     assert(pDlg && "Dialog creation failed!");
     pDlgInterface = pDlg;
     SetWindow( pDlg->GetWindow() );
