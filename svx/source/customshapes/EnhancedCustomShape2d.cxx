@@ -1301,13 +1301,13 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 {
                     nFirstAdjustmentValue = aHandle.nRefX;
                     fPos1 *= 100000.0;
-                    fPos1 /= nCoordWidth;
+                    fPos1 /= fWidth;
                 }
                 if ( aHandle.nFlags & HandleFlags::REFY )
                 {
                     nSecondAdjustmentValue = aHandle.nRefY;
                     fPos2 *= 100000.0;
-                    fPos2 /= nCoordHeight;
+                    fPos2 /= fHeight;
                 }
                 if ( nFirstAdjustmentValue >= 0 )
                 {
