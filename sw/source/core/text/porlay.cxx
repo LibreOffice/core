@@ -71,6 +71,7 @@ using namespace i18n::ScriptType;
 #define isLamChar(c)        IS_JOINING_GROUP((c), LAM)
 #define isQafChar(c)        IS_JOINING_GROUP((c), QAF)
 #define isRehChar(c)        IS_JOINING_GROUP((c), REH)
+#define isTahChar(c)        IS_JOINING_GROUP((c), TAH)
 #define isTehMarbutaChar(c) IS_JOINING_GROUP((c), TEH_MARBUTA)
 #define isWawChar(c)        IS_JOINING_GROUP((c), WAW)
 #if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 4)
@@ -990,12 +991,13 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                     }
 
                     // 4. Priority:
-                    // before final form of Alef, Lam or Kaf
+                    // before final form of Alef, Tah, Lam, Kaf or Gaf
                     if ( nPriorityLevel >= 3 && nIdx > 0 )
                     {
                         if ( isAlefChar ( cCh ) ||   // Alef (right joining) final form may appear in the middle of word
-                             (( isLamChar ( cCh ) || // Lam
-                              isKafChar ( cCh )   || // Kaf (both dual joining)
+                             (( isLamChar ( cCh ) || // Lam,
+                              isTahChar ( cCh )   || // Tah,
+                              isKafChar ( cCh )   || // Kaf (all dual joining)
                               isGafChar ( cCh ) )
                               && nIdx == nWordLen - 1))  // only at end of word
                         {
