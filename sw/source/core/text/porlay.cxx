@@ -66,7 +66,7 @@ using namespace i18n::ScriptType;
 #define isDalChar(c)        IS_JOINING_GROUP((c), DAL)
 #define isFehChar(c)        IS_JOINING_GROUP((c), FEH)
 #define isGafChar(c)        IS_JOINING_GROUP((c), GAF)
-#define isHahChar(c)        IS_JOINING_GROUP((c), HAH)
+#define isHehChar(c)        IS_JOINING_GROUP((c), HEH)
 #define isKafChar(c)        IS_JOINING_GROUP((c), KAF)
 #define isLamChar(c)        IS_JOINING_GROUP((c), LAM)
 #define isQafChar(c)        IS_JOINING_GROUP((c), QAF)
@@ -971,12 +971,12 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                     }
 
                     // 3. Priority:
-                    // before final form of Teh Marbuta, Hah, Dal
+                    // before final form of Teh Marbuta, Heh, Dal
                     if ( nPriorityLevel >= 2 && nIdx > 0 )
                     {
                         if ( isTehMarbutaChar ( cCh ) || // Teh Marbuta (right joining)
                              isDalChar ( cCh ) ||        // Dal (right joining) final form may appear in the middle of word
-                             ( isHahChar ( cCh ) && nIdx == nWordLen - 1))  // Hah (dual joining) only at end of word
+                             ( isHehChar ( cCh ) && nIdx == nWordLen - 1))  // Heh (dual joining) only at end of word
                         {
 
                             SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
