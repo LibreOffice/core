@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_3d05f7c1",
+        "filename": "basic/source/comp/exprtree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-06T05:53:55Z",
+      "side": 1,
+      "message": "any reason you\u0027re not setting the pExprList-\u003ebError flag here?\n\nJust checking, I don\u0027t know this module at all :-)",
+      "revId": "998c90cb9302d1bee835ed34e5ccaf656fc8b3bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
