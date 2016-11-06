@@ -1204,14 +1204,32 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
             fPos1 /= fXScale;
             fPos2 /= fYScale;
 
+            // Used for scaling the adjustment values based on handle positions
+            double fWidth;
+            double fHeight;
+
+            if ( nCoordWidth || nCoordHeight )
+            {
+                fWidth = nCoordWidth;
+                fHeight = nCoordHeight;
+            }
+            else
+            {
+                fWidth = aLogicRect.GetWidth();
+                fHeight = aLogicRect.GetHeight();
+            }
+
             if ( aHandle.nFlags & HandleFlags::SWITCHED )
             {
                 if ( aLogicRect.GetHeight() > aLogicRect.GetWidth() )
                 {
                     double fX = fPos1;
                     double fY = fPos2;
+                    double fTmp = fWidth;
                     fPos1 = fY;
                     fPos2 = fX;
+                    fHeight = fWidth;
+                    fWidth = fTmp;
                 }
             }
 
@@ -1222,11 +1240,22 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
             if ( aHandle.aPosition.Second.Type == EnhancedCustomShapeParameterType::ADJUSTMENT )
                 aHandle.aPosition.Second.Value>>= nSecondAdjustmentValue;
 
-            if ( aHandle.nFlags & HandleFlags::POLAR )
+
+            // DrawingML polar handles set REFR or REFANGLE instead of POLAR
+            if ( aHandle.nFlags & ( HandleFlags::POLAR | HandleFlags::REFR | HandleFlags::REFANGLE ) )
             {
                 double fXRef, fYRef, fAngle;
-                GetParameter( fXRef, aHandle.aPolar.First, false, false );
-                GetParameter( fYRef, aHandle.aPolar.Second, false, false );
+                if ( aHandle.nFlags & HandleFlags::POLAR )
+                {
+                    GetParameter( fXRef, aHandle.aPolar.First, false, false );
+                    GetParameter( fYRef, aHandle.aPolar.Second, false, false );
+                }
+                else
+                {
+                    // DrawingML polar handles don't have reference center.
+                    fXRef = fWidth / 2;
+                    fYRef = fHeight / 2;
+                }
                 const double fDX = fPos1 - fXRef;
                 fAngle = -( atan2( -fPos2 + fYRef, ( ( fDX == 0.0L ) ? 0.000000001 : fDX ) ) / F_PI180 );
                 double fX = ( fPos1 - fXRef );
@@ -1245,6 +1274,21 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                     GetParameter( fMax, aHandle.aRadiusRangeMaximum, false, false );
                     if ( fRadius > fMax )
                         fRadius = fMax;
+                }
+                if (aHandle.nFlags & HandleFlags::REFR)
+                {
+                    fRadius *= 100000.0;
+                    fRadius /= sqrt( fWidth * fWidth + fHeight * fHeight );
+                    nFirstAdjustmentValue = aHandle.nRefR;
+                }
+                if (aHandle.nFlags & HandleFlags::REFANGLE)
+                {
+                    if ( fAngle < 0 )
+                        fAngle += 360.0;
+                    // Adjustment value referred by nRefAngle needs to be in 60000th a degree
+                    // from 0 to 21600000.
+                    fAngle *= 60000.0;
+                    nSecondAdjustmentValue = aHandle.nRefAngle;
                 }
                 if ( nFirstAdjustmentValue >= 0 )
                     SetAdjustValueAsDouble( fRadius, nFirstAdjustmentValue );
