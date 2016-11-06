@@ -25,10 +25,6 @@
 #include <sal/types.h>
 #include <osl/endian.h>
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
 #include <fontselect.hxx>
 #include <graphite_features.hxx>
 
