@@ -200,14 +200,7 @@ void SwAddressPreview::dispose()
     vcl::Window::dispose();
 }
 
-VCL_BUILDER_DECL_FACTORY(SwAddressPreview)
-{
-    WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SwAddressPreview>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SwAddressPreview, WB_TABSTOP)
 
 void SwAddressPreview::positionScrollBar()
 {
