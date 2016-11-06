@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_1d4cbbc6",
+        "filename": "cui/source/customize/acccfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-11-06T20:40:07Z",
+      "side": 1,
+      "message": "This breaks the customization dialog (Tools \u003e Customize...), because the glade widget name is SfxAccCfgTabListBox not SfxAccCfgTabListBox_Impl. So you should either rename the class, or rename the widget (for the latter search for cuilo-SfxAccCfgTabListBox).",
+      "revId": "f1e3f556dfbbc169a82429c73f55d4e523f92c60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_3dc7b713",
+        "filename": "sfx2/source/appl/newhelp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-11-06T20:40:07Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "f1e3f556dfbbc169a82429c73f55d4e523f92c60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
