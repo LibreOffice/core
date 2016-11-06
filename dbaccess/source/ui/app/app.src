@@ -115,7 +115,7 @@ String RID_STR_QUERIES_HELP_TEXT
 
 String RID_STR_QUERIES_HELP_TEXT_SQL
 {
-    Text [ en-US ] = "Create a query entering an SQL statement directly." ;
+    Text [ en-US ] = "Create a query by entering an SQL statement directly." ;
 };
 
 String RID_STR_QUERIES_HELP_TEXT_WIZARD
