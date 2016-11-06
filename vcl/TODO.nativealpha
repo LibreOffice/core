@@ -1,0 +1,15 @@
+KNOWN GLITCHES
+- Writer - Anchor alpha is not correctly loaded
+- Sidebar - left bar leaves traces
+
+TODO:
+- Check printing, PDF output
+- Metafile
+
+- Windows backend
+- OSX backend
+- X11 backend
+- OpenGL backend
+
+TODO TESTS:
+Erase - check the VirtualDevice is erased to transparent color, input color after
