@@ -91,6 +91,7 @@ namespace sdr
 
             // local changes
             rObj.SetTextDirty();
+            rObj.UndirtyText();
 
             // call parent
             TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
