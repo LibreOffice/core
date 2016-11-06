@@ -339,6 +339,21 @@ packageversion = "%PACKAGEVERSION"
 End
 
 Start
+module = "gid_Module_Root_Fonts_Noto_Hidden"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-noto-fonts"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core"
+packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-noto-fonts"
+freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2016 The Document Foundation"
+solariscopyright = "solariscopyrightfile"
+vendor = "The Document Foundation"
+description = "Google Noto fonts for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
 module = "gid_Module_Oo_Linguistic"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-ooolinguistic"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core"
