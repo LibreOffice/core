@@ -62,24 +62,58 @@ using namespace i18n::ScriptType;
 #define IS_JOINING_GROUP(c, g) ( u_getIntPropertyValue( (c), UCHAR_JOINING_GROUP ) == U_JG_##g )
 #define isAinChar(c)        IS_JOINING_GROUP((c), AIN)
 #define isAlefChar(c)       IS_JOINING_GROUP((c), ALEF)
-#define isBehChar(c)        IS_JOINING_GROUP((c), BEH)
 #define isDalChar(c)        IS_JOINING_GROUP((c), DAL)
-#define isFehChar(c)        IS_JOINING_GROUP((c), FEH)
+#define isFehChar(c)       (IS_JOINING_GROUP((c), FEH) || IS_JOINING_GROUP((c), AFRICAN_FEH))
 #define isGafChar(c)        IS_JOINING_GROUP((c), GAF)
 #define isHehChar(c)        IS_JOINING_GROUP((c), HEH)
 #define isKafChar(c)        IS_JOINING_GROUP((c), KAF)
 #define isLamChar(c)        IS_JOINING_GROUP((c), LAM)
-#define isQafChar(c)        IS_JOINING_GROUP((c), QAF)
+#define isQafChar(c)       (IS_JOINING_GROUP((c), QAF) || IS_JOINING_GROUP((c), AFRICAN_QAF))
 #define isRehChar(c)        IS_JOINING_GROUP((c), REH)
 #define isTahChar(c)        IS_JOINING_GROUP((c), TAH)
 #define isTehMarbutaChar(c) IS_JOINING_GROUP((c), TEH_MARBUTA)
 #define isWawChar(c)        IS_JOINING_GROUP((c), WAW)
-#if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 4)
-#define isYehChar(c)        (IS_JOINING_GROUP((c), YEH) || IS_JOINING_GROUP((c), FARSI_YEH))
-#else
-#define isYehChar(c)        IS_JOINING_GROUP((c), YEH)
-#endif
 #define isSeenOrSadChar(c)  (IS_JOINING_GROUP((c), SAD) || IS_JOINING_GROUP((c), SEEN))
+
+// Beh and charters that behave like Beh in medial form.
+bool isBehChar(sal_Unicode cCh)
+{
+    bool bRet = false;
+    switch (u_getIntPropertyValue(cCh, UCHAR_JOINING_GROUP))
+    {
+    case U_JG_BEH:
+    case U_JG_NOON:
+    case U_JG_AFRICAN_NOON:
+    case U_JG_NYA:
+    case U_JG_YEH:
+    case U_JG_FARSI_YEH:
+    case U_JG_BURUSHASKI_YEH_BARREE:
+        bRet = true;
+    default:
+        bRet = false;
+    }
+
+    return bRet;
+}
+
+// Yeh and charters that behave like Yeh in final form.
+bool isYehChar(sal_Unicode cCh)
+{
+    bool bRet = false;
+    switch (u_getIntPropertyValue(cCh, UCHAR_JOINING_GROUP))
+    {
+    case U_JG_YEH:
+    case U_JG_FARSI_YEH:
+    case U_JG_YEH_BARREE:
+    case U_JG_BURUSHASKI_YEH_BARREE:
+    case U_JG_YEH_WITH_TAIL:
+        bRet = true;
+    default:
+        bRet = false;
+    }
+
+    return bRet;
+}
 
 bool isTransparentChar ( sal_Unicode cCh )
 {
@@ -1012,12 +1046,12 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                     }
 
                     // 5. Priority:
-                    // before medial Beh
+                    // before medial Beh-like
                     if ( nPriorityLevel >= 4 && nIdx > 0 && nIdx < nWordLen - 1 )
                     {
-                        if ( isBehChar ( cCh )) // Beh
+                        if ( isBehChar ( cCh ) )
                         {
-                            // check if next character is Reh, Yeh or Alef Maksura
+                            // check if next character is Reh or Yeh-like
                             sal_Unicode cNextCh = rWord[ nIdx + 1 ];
                             if ( isRehChar ( cNextCh ) || isYehChar ( cNextCh ))
                            {
