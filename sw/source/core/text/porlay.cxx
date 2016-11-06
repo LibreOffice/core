@@ -62,7 +62,7 @@ using namespace i18n::ScriptType;
 #define IS_JOINING_GROUP(c, g) ( u_getIntPropertyValue( (c), UCHAR_JOINING_GROUP ) == U_JG_##g )
 #define isAinChar(c)        IS_JOINING_GROUP((c), AIN)
 #define isAlefChar(c)       IS_JOINING_GROUP((c), ALEF)
-#define isBaaChar(c)        IS_JOINING_GROUP((c), BEH)
+#define isBehChar(c)        IS_JOINING_GROUP((c), BEH)
 #define isDalChar(c)        IS_JOINING_GROUP((c), DAL)
 #define isFehChar(c)        IS_JOINING_GROUP((c), FEH)
 #define isGafChar(c)        IS_JOINING_GROUP((c), GAF)
@@ -1010,10 +1010,10 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                     }
 
                     // 5. Priority:
-                    // before media Bah
+                    // before medial Beh
                     if ( nPriorityLevel >= 4 && nIdx > 0 && nIdx < nWordLen - 1 )
                     {
-                        if ( isBaaChar ( cCh )) // Bah
+                        if ( isBehChar ( cCh )) // Beh
                         {
                             // check if next character is Reh, Yeh or Alef Maksura
                             sal_Unicode cNextCh = rWord[ nIdx + 1 ];
@@ -1031,7 +1031,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                     }
 
                     // 6. Priority:
-                    // before the final form of Waw, Ain, Qaf and Fa
+                    // before the final form of Waw, Ain, Qaf and Feh
                     if ( nPriorityLevel >= 5 && nIdx > 0 )
                     {
                         if ( isWawChar ( cCh )   || // Wav (right joining)
