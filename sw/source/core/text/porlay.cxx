@@ -1054,9 +1054,8 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                     // other connecting possibilities
                     if ( nPriorityLevel >= 6 && nIdx > 0 )
                     {
-                        // remaining right joiners
-                        // Reh, Zain, Thal,
-                        if ( isRehChar ( cCh ) )   // Reh Zain (right joining)
+                        // Reh, Zain
+                        if ( isRehChar ( cCh ) )
                         {
                             SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
                             // check if character is connectable to previous character,
@@ -1068,9 +1067,8 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                         }
                     }
 
-                    // Do not consider Fathatan, Dammatan, Kasratan, Fatha,
-                    // Damma, Kasra, Shadda and Sukun when checking if
-                    // a character can be connected to previous character.
+                    // Do not consider vowel marks when checking if a character
+                    // can be connected to previous character.
                     if ( !isTransparentChar ( cCh) )
                         cPrevCh = cCh;
 
