@@ -1138,7 +1138,7 @@ void SwView::Execute(SfxRequest &rReq)
                 SfxViewFrame* pTmpFrame = GetViewFrame();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                AbstractMailMergeCreateFromDlg* pDlg = pFact->CreateMailMergeCreateFromDlg(&pTmpFrame->GetWindow());
+                ScopedVclPtr<AbstractMailMergeCreateFromDlg> pDlg( pFact->CreateMailMergeCreateFromDlg(&pTmpFrame->GetWindow()) );
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if(RET_OK == pDlg->Execute())
                     bUseCurrentDocument = pDlg->IsThisDocument();
@@ -2340,7 +2340,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
                 //take an existing data source or create a new one?
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                AbstractMailMergeFieldConnectionsDlg* pConnectionsDlg = pFact->CreateMailMergeFieldConnectionsDlg(&GetViewFrame()->GetWindow());
+                ScopedVclPtr<AbstractMailMergeFieldConnectionsDlg> pConnectionsDlg( pFact->CreateMailMergeFieldConnectionsDlg(&GetViewFrame()->GetWindow()) );
                 OSL_ENSURE(pConnectionsDlg, "Dialog creation failed!");
                 if(RET_OK == pConnectionsDlg->Execute())
                     bCallAddressPilot = !pConnectionsDlg->IsUseExistingConnections();
