@@ -151,6 +151,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <memory>
+#include <officecfg/Office/Writer.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -3277,6 +3278,12 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // causing 'Save' being disabled; so let's always save to the original
     // format
     SvtSaveOptions().SetWarnAlienFormat(false);
+
+    // Disable word completion
+    std::shared_ptr< comphelper::ConfigurationChanges > batch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::AutoFunction::Completion::Enable::set(false, batch);
+    batch->commit();
 }
 
 void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
