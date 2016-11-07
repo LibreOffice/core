@@ -72,6 +72,12 @@ $(eval $(call gb_Library_use_externals,jpipe, \
     boost_headers \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_use_system_darwin_frameworks,jpipe, \
+    CoreFoundation \
+))
+endif
+
 $(eval $(call gb_Library_add_libs,jpipe, \
     $(if $(filter-out $(OS),ANDROID),-lpthread) \
 ))
