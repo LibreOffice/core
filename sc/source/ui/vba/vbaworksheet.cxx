@@ -900,8 +900,8 @@ ScVbaWorksheet::ShowDataForm( ) throw (uno::RuntimeException, std::exception)
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-    AbstractScDataFormDlg* pDlg = pFact->CreateScDataFormDlg(pTabViewShell->GetDialogParent(),
-        pTabViewShell);
+    ScopedVclPtr<AbstractScDataFormDlg> pDlg(pFact->CreateScDataFormDlg(pTabViewShell->GetDialogParent(),
+                                                                        pTabViewShell));
     OSL_ENSURE(pDlg, "Dialog create fail!");
 
     pDlg->Execute();
