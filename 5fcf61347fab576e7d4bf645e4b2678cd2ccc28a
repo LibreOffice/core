@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_60bb42c5",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-11-07T12:27:27Z",
+      "side": 1,
+      "message": "\"The second parameter\" no longer makes sense for a while now.  Best clean that up when moving the comment.",
+      "revId": "5fcf61347fab576e7d4bf645e4b2678cd2ccc28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_80b05edf",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-11-07T12:27:27Z",
+      "side": 1,
+      "message": "can even use just a std::unique_ptr",
+      "revId": "5fcf61347fab576e7d4bf645e4b2678cd2ccc28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
