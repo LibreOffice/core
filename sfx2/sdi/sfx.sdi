@@ -2826,6 +2826,24 @@ SfxObjectItem OpenRemote SID_OPENREMOTE
     GroupId = GID_APPLICATION;
 ]
 
+SfxObjectItem SignPDF SID_SIGNPDF
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER,SfxStringItem SuggestedSaveAsDir SID_DEFAULTFILEPATH,SfxStringItem SuggestedSaveAsName SID_DEFAULTFILENAME)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
+
 SfxObjectItem WebHtml SID_WEBHTML
 ()
 [

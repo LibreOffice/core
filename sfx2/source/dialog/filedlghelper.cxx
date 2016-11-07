@@ -2593,16 +2593,24 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              const css::uno::Sequence< OUString >& rBlackList )
 {
     ErrCode nRet;
-    FileDialogHelper aDialog( nDialogType, nFlags,
-            rFact, nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rStandardDir, rBlackList );
+    std::unique_ptr<FileDialogHelper> pDialog;
+    // Sign existing PDF: only works with PDF files and they are opened
+    // read-only to discourage editing (which would invalidate existing
+    // signatures).
+    if (nFlags & FileDialogFlags::SignPDF)
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF).toString(), "pdf", rStandardDir, rBlackList));
+    else
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, rFact, nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rStandardDir, rBlackList));
 
     OUString aPath;
     if ( pPath )
         aPath = *pPath;
 
-    nRet = aDialog.Execute( rpURLList, rpSet, rFilter, aPath );
+    nRet = pDialog->Execute(rpURLList, rpSet, rFilter, aPath);
     DBG_ASSERT( rFilter.indexOf(": ") == -1, "Old filter name used!");
 
+    if (rpSet && nFlags & FileDialogFlags::SignPDF)
+        rpSet->Put(SfxBoolItem(SID_DOC_READONLY, true));
     return nRet;
 }
 

@@ -30,6 +30,10 @@ interface Documents
     [
         ExecMethod = OpenRemoteExec_Impl ;
     ]
+    SID_SIGNPDF
+    [
+        ExecMethod = SignPDFExec_Impl ;
+    ]
     SID_OPENHYPERLINK // ole(no) api(final/play/rec)
     [
         ExecMethod = OpenDocExec_Impl ;

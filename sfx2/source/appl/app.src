@@ -333,6 +333,10 @@ String STR_SFX_FILTERNAME_ALL
 {
     Text [ en-US ] = "All files" ;
 };
+String STR_SFX_FILTERNAME_PDF
+{
+    Text [ en-US ] = "PDF files" ;
+};
 String RID_SVXSTR_EDITGRFLINK
 {
     Text [ en-US ] = "Link Image" ;
