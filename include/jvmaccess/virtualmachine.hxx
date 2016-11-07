@@ -48,14 +48,14 @@ public:
     public:
         /** An exception indicating failure to create an AttachGuard.
          */
-        class JVMACCESS_DLLPUBLIC CreationException
+        class JVMACCESS_DLLPUBLIC CreationException final
         {
         public:
             CreationException();
 
             CreationException(CreationException const &);
 
-            virtual ~CreationException();
+            ~CreationException();
 
             CreationException & operator =(CreationException const &);
         };

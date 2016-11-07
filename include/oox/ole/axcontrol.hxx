@@ -192,14 +192,14 @@ enum ApiDefaultStateMode
 /** A base class with useful helper functions for something that is able to
     convert ActiveX and ComCtl form controls.
  */
-class OOX_DLLPUBLIC ControlConverter
+class OOX_DLLPUBLIC ControlConverter final
 {
 public:
     explicit            ControlConverter(
                             const css::uno::Reference< css::frame::XModel >& rxDocModel,
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr = true );
-    virtual             ~ControlConverter();
+                        ~ControlConverter();
 
     // Generic conversion -----------------------------------------------------
 

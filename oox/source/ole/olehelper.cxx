@@ -330,7 +330,7 @@ Reference< css::frame::XFrame > lcl_getFrame( const  Reference< css::frame::XMod
     return xFrame;
 }
 
-class OleFormCtrlExportHelper
+class OleFormCtrlExportHelper final
 {
     ::oox::ole::EmbeddedControl maControl;
     ::oox::ole::ControlModelBase* mpModel;
@@ -344,7 +344,6 @@ class OleFormCtrlExportHelper
     OUString maGUID;
 public:
     OleFormCtrlExportHelper( const Reference< XComponentContext >& rxCtx, const Reference< XModel >& xDocModel, const Reference< XControlModel >& xModel );
-    virtual ~OleFormCtrlExportHelper() { }
     OUString getGUID()
     {
         OUString sResult;

@@ -53,14 +53,14 @@ namespace core {
 /** Wrapper for a fast SAX parser that works on automatically generated OOXML
     token and namespace identifiers.
  */
-class FastParser
+class FastParser final
 {
 public:
     explicit            FastParser(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext )
                             throw( css::uno::RuntimeException );
 
-    virtual             ~FastParser();
+                         ~FastParser();
 
     /** Registers an OOXML namespace at the parser. */
     void                registerNamespace( sal_Int32 nNamespaceId )

@@ -36,14 +36,14 @@ class JVMACCESS_DLLPUBLIC UnoVirtualMachine: public salhelper::SimpleReferenceOb
 public:
     /** An exception indicating failure to create a UnoVirtualMachine.
      */
-    class JVMACCESS_DLLPUBLIC CreationException
+    class JVMACCESS_DLLPUBLIC CreationException final
     {
     public:
         CreationException();
 
         CreationException(CreationException const &);
 
-        virtual ~CreationException();
+        ~CreationException();
 
         CreationException & operator =(CreationException const &);
     };

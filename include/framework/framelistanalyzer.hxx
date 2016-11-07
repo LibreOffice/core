@@ -34,7 +34,7 @@ namespace framework{
     to switch into the backing mode, close the current active frame only or
     exit the whole application explicitly or implicitly.
  */
-class FWE_DLLPUBLIC FrameListAnalyzer
+class FWE_DLLPUBLIC FrameListAnalyzer final
 {
 
     // types
@@ -177,7 +177,7 @@ class FWE_DLLPUBLIC FrameListAnalyzer
                  FrameListAnalyzer( const css::uno::Reference< css::frame::XFramesSupplier >& xSupplier       ,
                                     const css::uno::Reference< css::frame::XFrame >&          xReferenceFrame ,
                                           sal_uInt32                                          eDetectMode     );
-        virtual ~FrameListAnalyzer();
+                 ~FrameListAnalyzer();
 
 
     // helper

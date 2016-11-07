@@ -50,11 +50,11 @@ namespace ole {
 
 /** Common properties for all controls that are part of a VBA user form or of
     another container control in a VBA user form. */
-class VbaSiteModel
+class VbaSiteModel final
 {
 public:
     explicit            VbaSiteModel();
-    virtual             ~VbaSiteModel();
+                        ~VbaSiteModel();
 
     /** Allows to set single properties specified by XML token identifier. */
     void                importProperty( sal_Int32 nPropId, const OUString& rValue );
