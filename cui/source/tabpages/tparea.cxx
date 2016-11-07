@@ -200,30 +200,15 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
     switch( eFillType )
     {
         case SOLID:
-        {
             return DeactivatePage_Impl<SvxColorTabPage>(_pSet);
-            break;
-        }
         case GRADIENT:
-        {
             return DeactivatePage_Impl<SvxGradientTabPage>(_pSet);
-            break;
-        }
         case HATCH:
-        {
             return DeactivatePage_Impl<SvxHatchTabPage>(_pSet);
-            break;
-        }
         case BITMAP:
-        {
             return DeactivatePage_Impl<SvxBitmapTabPage&>(_pSet);
-            break;
-        }
         case PATTERN:
-        {
             return DeactivatePage_Impl<SvxPatternTabPage>(_pSet);
-            break;
-        }
         default:
             break;
     }
