@@ -41,7 +41,7 @@ namespace framework{
             (or proxy) for all config data of a registered job.
             But it doesn't implement any execute functionality!
  */
-class JobData
+class JobData final
 {
     public:
 
@@ -180,7 +180,7 @@ class JobData
 
                  JobData( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                  JobData( const JobData&                                                rCopy );
-        virtual ~JobData(                                                                     );
+                 ~JobData(                                                                     );
 
         JobData& operator=( const JobData& rCopy );
 

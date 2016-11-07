@@ -46,7 +46,7 @@ namespace framework{
             scenarios. On the other side VCL does not hold us alive (because it doesn't know our UNO reference).
             So we register at the VCL level as an event listener and
  */
-class WindowCommandDispatch
+class WindowCommandDispatch final
 {
     private:
         osl::Mutex m_mutex;
@@ -81,7 +81,7 @@ class WindowCommandDispatch
 
         /** @short  used to free internal resources.
          */
-        virtual ~WindowCommandDispatch();
+        ~WindowCommandDispatch();
 
     // implementation
 

@@ -52,7 +52,7 @@ typedef ::std::vector< css::uno::Reference< css::frame::XFrame > >  TFrameContai
     @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class FrameContainer
+class FrameContainer final
 {
 
     // member
@@ -70,7 +70,7 @@ class FrameContainer
 
         /// constructor / destructor
                  FrameContainer();
-        virtual ~FrameContainer();
+                 ~FrameContainer();
 
         /// add/remove/mark container items
         void                                      append     ( const css::uno::Reference< css::frame::XFrame >& xFrame );

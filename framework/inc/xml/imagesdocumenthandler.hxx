@@ -130,14 +130,14 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< css::xml::sax:
         css::uno::Reference< css::xml::sax::XLocator >      m_xLocator;
 };
 
-class OWriteImagesDocumentHandler
+class OWriteImagesDocumentHandler final
 {
     public:
         OWriteImagesDocumentHandler(
             const ImageListsDescriptor& aItems,
             css::uno::Reference< css::xml::sax::XDocumentHandler > const &
                 rWriteDocumentHandler);
-        virtual ~OWriteImagesDocumentHandler();
+        ~OWriteImagesDocumentHandler();
 
         void WriteImagesDocument() throw
             ( css::xml::sax::SAXException,

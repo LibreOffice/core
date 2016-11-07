@@ -31,7 +31,7 @@ namespace framework{
     @descr  This guard should be used to be sure, that any lock will be
             released. Otherwise the locked document can hinder the office on shutdown!
 */
-class ActionLockGuard
+class ActionLockGuard final
 {
 
     // member
@@ -64,7 +64,7 @@ class ActionLockGuard
         /** @short  release this guard instance and make sure, that no lock
                     will exist afterwards on the internal wrapped resource.
          */
-        virtual ~ActionLockGuard()
+        ~ActionLockGuard()
         {
             unlock();
         }

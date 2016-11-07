@@ -136,13 +136,13 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
         OUString                                                  m_aCommandURL;
 };
 
-class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler
+class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler final
 {
     public:
             OWriteToolBoxDocumentHandler(
-            const css::uno::Reference< css::container::XIndexAccess >& rItemAccess,
-            css::uno::Reference< css::xml::sax::XDocumentHandler >& rDocumentHandler );
-        virtual ~OWriteToolBoxDocumentHandler();
+                const css::uno::Reference< css::container::XIndexAccess >& rItemAccess,
+                css::uno::Reference< css::xml::sax::XDocumentHandler >& rDocumentHandler );
+            ~OWriteToolBoxDocumentHandler();
 
         void WriteToolBoxDocument() throw
             ( css::xml::sax::SAXException,

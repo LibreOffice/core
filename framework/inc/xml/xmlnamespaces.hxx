@@ -28,12 +28,12 @@
 namespace framework
 {
 
-class FWE_DLLPUBLIC XMLNamespaces
+class FWE_DLLPUBLIC XMLNamespaces final
 {
     public:
         XMLNamespaces();
         XMLNamespaces( const XMLNamespaces& );
-        virtual ~XMLNamespaces();
+        ~XMLNamespaces();
 
         void addNamespace( const OUString& aName, const OUString& aValue )
             throw(  css::xml::sax::SAXException );

@@ -36,7 +36,7 @@ namespace framework{
             instead of using soecialize config items of the svtools
             project. This class can wrapp such configuration access.
  */
-class FWI_DLLPUBLIC ConfigAccess
+class FWI_DLLPUBLIC ConfigAccess final
 {
 
     public:
@@ -78,7 +78,7 @@ class FWI_DLLPUBLIC ConfigAccess
 
                  ConfigAccess( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                const OUString&                                    sRoot );
-        virtual ~ConfigAccess();
+                 ~ConfigAccess();
 
         void      open   ( EOpenMode eMode );
         void      close  (                 );

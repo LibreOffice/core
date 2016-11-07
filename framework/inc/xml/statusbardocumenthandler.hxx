@@ -117,13 +117,13 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
         css::uno::Reference< css::xml::sax::XLocator >            m_xLocator;
 };
 
-class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler
+class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler final
 {
     public:
         OWriteStatusBarDocumentHandler(
             const css::uno::Reference< css::container::XIndexAccess >& rStatusBarItems,
             const css::uno::Reference< css::xml::sax::XDocumentHandler >& rWriteDocHandler );
-        virtual ~OWriteStatusBarDocumentHandler();
+        ~OWriteStatusBarDocumentHandler();
 
         void WriteStatusBarDocument() throw
             ( css::xml::sax::SAXException,
