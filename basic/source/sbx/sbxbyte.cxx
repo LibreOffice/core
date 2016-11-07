@@ -21,7 +21,7 @@
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
-#include <cmath>
+#include <rtl/math.hxx>
 
 sal_uInt8 ImpGetByte( const SbxValues* p )
 {
@@ -123,7 +123,7 @@ start:
                 SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (sal_uInt8) std::lround( p->nSingle );
+                nRes = (sal_uInt8) rtl::math::round( p->nSingle );
             break;
         case SbxDATE:
         case SbxDOUBLE:
@@ -149,7 +149,7 @@ start:
                 SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (sal_uInt8) std::lround( dVal );
+                nRes = (sal_uInt8) rtl::math::round( dVal );
             break;
             }
         case SbxBYREF | SbxSTRING:
