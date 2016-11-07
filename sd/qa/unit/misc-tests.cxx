@@ -38,6 +38,8 @@
 #include <controller/SlsPageSelector.hxx>
 #include <undo/undomanager.hxx>
 #include <chrono>
+#include <navigatr.hxx>
+#include <DrawViewShell.hxx>
 
 using namespace ::com::sun::star;
 
@@ -49,12 +51,14 @@ public:
     void testTdf96708();
     void testTdf99396();
     void testTdf99396TextEdit();
+    void testTdf103756UndoThroughNavigator();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
     CPPUNIT_TEST(testTdf96708);
     CPPUNIT_TEST(testTdf99396);
     CPPUNIT_TEST(testTdf99396TextEdit);
+    CPPUNIT_TEST(testTdf103756UndoThroughNavigator);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -237,6 +241,43 @@ void SdMiscTest::testTdf99396TextEdit()
         auto pAdjust = static_cast<const SvxAdjustItem*>(rParaAttribs.GetItem(EE_PARA_JUST));
         CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_CENTER, pAdjust->GetAdjust());
     }
+}
+
+
+// test tdf#103756 - CTRL+Z not working to undo changes performed through Navigator
+
+void SdMiscTest::testTdf103756UndoThroughNavigator()
+{
+    // Load the document and select the table.
+    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf99396.odp"), ODP);
+    sd::ViewShell* pViewShell = xDocSh->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pPage->GetObj(0);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    CPPUNIT_ASSERT(pTableObject);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+
+    // Make sure that the undo stack is empty.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+
+    // Set the vertical alignment of the cells to bottom.
+    sdr::table::SvxTableController* pTableController = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
+    CPPUNIT_ASSERT(pTableController);
+    SfxRequest aRequest(pViewShell->GetViewFrame(), SID_TABLE_VERT_BOTTOM);
+    pTableController->Execute(aRequest);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+
+    sd::DrawViewShell* pDrawViewShell = static_cast<sd::DrawViewShell*>(pViewShell);
+    SdNavigatorWin* pNavigatorWin = pDrawViewShell->GetNavigatorWin();
+    KeyEvent aEvent( 0, KeyFuncType::UNDO);
+    pNavigatorWin->KeyInput(aEvent);
+
+    // the undo event runs asynchronously
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
 
     xDocSh->DoClose();
 }

@@ -244,26 +244,27 @@ void DrawViewShell::StartRulerDrag (
 //else the corresponding entry is set false .
 void DrawViewShell::FreshNavigatrEntry()
 {
-    sal_uInt16 nId = SID_NAVIGATOR;
-    SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
-    if( pWindow )
-    {
-        SdNavigatorWin* pNavWin = static_cast<SdNavigatorWin*>( pWindow->GetContextWindow( SD_MOD() ) );
-        if( pNavWin )
-            pNavWin->FreshEntry();
-    }
+    SdNavigatorWin* pNavWin = GetNavigatorWin();
+    if( pNavWin )
+        pNavWin->FreshEntry();
 }
 
 void DrawViewShell::FreshNavigatrTree()
+{
+    SdNavigatorWin* pNavWin = GetNavigatorWin();
+    if( pNavWin )
+        pNavWin->FreshTree( GetDoc() );
+}
+
+SdNavigatorWin* DrawViewShell::GetNavigatorWin()
 {
     sal_uInt16 nId = SID_NAVIGATOR;
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
     if( pWindow )
     {
-        SdNavigatorWin* pNavWin = static_cast<SdNavigatorWin*>( pWindow->GetContextWindow( SD_MOD() ) );
-        if( pNavWin )
-            pNavWin->FreshTree( GetDoc() );
+        return static_cast<SdNavigatorWin*>( pWindow->GetContextWindow( SD_MOD() ) );
     }
+    return nullptr;
 }
 
 void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
