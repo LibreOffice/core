@@ -114,9 +114,7 @@ static const char ITEM_MENUBAR_URL[] = "private:resource/menubar/menubar";
 static const char ITEM_TOOLBAR_URL[] = "private:resource/toolbar/";
 
 static const char CUSTOM_TOOLBAR_STR[] = "custom_toolbar_";
-static const char CUSTOM_MENU_STR[] = "vnd.openoffice.org:CustomMenu";
 
-static const char aSeparatorStr[] = "----------------------------------";
 static const char aMenuSeparatorStr[] = " | ";
 
 namespace uno = com::sun::star::uno;
@@ -337,7 +335,7 @@ generateCustomMenuURL(
     SvxEntries* entries,
     sal_Int32 suffix = 1 )
 {
-    OUString url = CUSTOM_MENU_STR + OUString::number( suffix );
+    OUString url = "vnd.openoffice.org:CustomMenu" + OUString::number( suffix );
     if (!entries)
         return url;
 
@@ -2321,7 +2319,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
     if (pNewEntryData->IsSeparator())
     {
         pNewEntry = m_pContentsListBox->InsertEntry(
-            OUString(aSeparatorStr),
+            OUString("----------------------------------"),
             nullptr, false, nPos, pNewEntryData);
     }
     else
