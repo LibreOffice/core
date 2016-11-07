@@ -353,7 +353,7 @@ sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole() throw (RuntimeExceptio
     // VCL list boxes in DropDown-Mode else <const>PANEL</const>.
     // This way the Java bridge has not to handle both independently.
     //return m_bIsDropDownBox ? AccessibleRole::COMBO_BOX : AccessibleRole::PANEL;
-    if (m_bIsDropDownBox || (!m_bIsDropDownBox && m_aBoxType == COMBOBOX ))
+    if (m_bIsDropDownBox || (m_aBoxType == COMBOBOX))
         return AccessibleRole::COMBO_BOX;
     else
         return AccessibleRole::PANEL;

@@ -282,7 +282,7 @@ Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeExcepti
             aRet = TXChild::queryInterface( rType);
         return aRet;
     }
-    else if(!m_pTable || (m_pTable && !m_pTable->isNew()))
+    else if(!m_pTable || !m_pTable->isNew())
     {
         if(!m_bAddColumn    && rType == cppu::UnoType<XAppend>::get())
             return Any();

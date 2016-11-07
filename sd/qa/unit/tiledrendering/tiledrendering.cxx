@@ -1235,7 +1235,7 @@ void SdTiledRenderingTest::testCreateViewTextCursor()
     {
         auto itVisibility = aView1.m_aViewCursorVisibilities.find(rInvalidation.first);
         // For each cursor invalidation: if there is no visibility or the visibility is true, that's a problem.
-        if (itVisibility == aView1.m_aViewCursorVisibilities.end() || (itVisibility != aView1.m_aViewCursorVisibilities.end() && itVisibility->second))
+        if (itVisibility == aView1.m_aViewCursorVisibilities.end() || itVisibility->second)
         {
             bFoundCursor = true;
             break;

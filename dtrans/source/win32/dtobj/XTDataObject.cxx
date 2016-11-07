@@ -148,7 +148,7 @@ void SAL_CALL renderDataAndSetupStgMedium(
     const sal_Int8* lpStorage, const FORMATETC& fetc, sal_uInt32 nInitStgSize,
     sal_uInt32 nBytesToTransfer, STGMEDIUM& stgmedium )
 {
-    OSL_PRECOND( !nInitStgSize || nInitStgSize && (nInitStgSize >= nBytesToTransfer),
+    OSL_PRECOND( !nInitStgSize || (nInitStgSize >= nBytesToTransfer),
                  "Memory size less than number of bytes to transfer" );
 
     CStgTransferHelper stgTransfHelper( AUTO_INIT );
