@@ -103,9 +103,6 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& 
 CoreTextFontFace::CoreTextFontFace( const CoreTextFontFace& rSrc )
   : PhysicalFontFace( rSrc )
   , mnFontId( rSrc.mnFontId )
-  , mbOs2Read( rSrc.mbOs2Read )
-  , mbHasOs2Table( rSrc.mbHasOs2Table )
-  , mbCmapEncodingRead( rSrc.mbCmapEncodingRead )
 {
     if( rSrc.mxCharMap.Is() )
         mxCharMap = rSrc.mxCharMap;
@@ -114,9 +111,6 @@ CoreTextFontFace::CoreTextFontFace( const CoreTextFontFace& rSrc )
 CoreTextFontFace::CoreTextFontFace( const FontAttributes& rDFA, sal_IntPtr nFontId )
   : PhysicalFontFace( rDFA )
   , mnFontId( nFontId )
-  , mbOs2Read( false )
-  , mbHasOs2Table( false )
-  , mbCmapEncodingRead( false )
   , mbFontCapabilitiesRead( false )
 {
 }
@@ -216,59 +210,6 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
     }
     rFontCapabilities = maFontCapabilities;
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
-}
-
-void CoreTextFontFace::ReadOs2Table() const
-{
-    // read this only once per font
-    if( mbOs2Read )
-        return;
-
-    mbOs2Read = true;
-    mbHasOs2Table = false;
-
-    // prepare to get the OS/2 table raw data
-    const int nBufSize = GetFontTable( "OS/2", nullptr );
-    SAL_WARN_IF( (nBufSize <= 0), "vcl", "CoreTextFontFace::ReadOs2Table : GetFontTable1 failed!\n");
-    if( nBufSize <= 0 )
-        return;
-
-    // get the OS/2 raw data
-    std::vector<unsigned char> aBuffer( nBufSize );
-    const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
-    SAL_WARN_IF( (nRawLength <= 0), "vcl", "CoreTextFontFace::ReadOs2Table : GetFontTable2 failed!\n");
-    if( nRawLength <= 0 )
-        return;
-
-    SAL_WARN_IF( (nBufSize!=nRawLength), "vcl", "CoreTextFontFace::ReadOs2Table : ByteCount mismatch!\n");
-    mbHasOs2Table = true;
-
-    // parse the OS/2 raw data
-    // TODO: also analyze panose info, etc.
-}
-
-void CoreTextFontFace::ReadMacCmapEncoding() const
-{
-    // read this only once per font
-    if( mbCmapEncodingRead )
-        return;
-
-    mbCmapEncodingRead = true;
-
-    const int nBufSize = GetFontTable( "cmap", nullptr );
-    if( nBufSize <= 0 )
-        return;
-
-    // get the CMAP raw data
-    std::vector<unsigned char> aBuffer( nBufSize );
-    const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
-    if( nRawLength < 24 )
-        return;
-    SAL_WARN_IF( (nBufSize!=nRawLength), "vcl", "CoreTextFontFace::ReadMacCmapEncoding : ByteCount mismatch!\n");
-
-    const unsigned char* pCmap = &aBuffer[0];
-    if( GetUShort( pCmap ) != 0x0000 )
-        return;
 }
 
 AquaSalGraphics::AquaSalGraphics()

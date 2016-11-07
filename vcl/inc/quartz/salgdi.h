@@ -72,9 +72,6 @@ public:
     bool                            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     bool                            HasChar( sal_uInt32 cChar ) const;
 
-    void                            ReadOs2Table() const;
-    void                            ReadMacCmapEncoding() const;
-
 protected:
                                     CoreTextFontFace( const CoreTextFontFace& );
 
@@ -82,9 +79,6 @@ private:
     const sal_IntPtr                mnFontId;
     mutable FontCharMapRef          mxCharMap;
     mutable vcl::FontCapabilities   maFontCapabilities;
-    mutable bool                    mbOs2Read;       // true if OS2-table related info is valid
-    mutable bool                    mbHasOs2Table;
-    mutable bool                    mbCmapEncodingRead; // true if cmap encoding of Mac font is read
     mutable bool                    mbFontCapabilitiesRead;
 };
 
