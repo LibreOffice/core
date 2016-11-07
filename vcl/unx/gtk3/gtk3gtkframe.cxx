@@ -2784,39 +2784,39 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
     if (pThis->isFloatGrabWindow() && pEvent->window != widget_get_window(pThis->getMouseEventWidget()))
         return true;
 
-    SalMouseEvent aEvent;
-    aEvent.mnTime   = pEvent->time;
-    aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
-    aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
-    aEvent.mnCode   = GetMouseModCode( pEvent->state );
-    aEvent.mnButton = 0;
-
-    // --- RTL --- (mirror mouse pos)
-    if( AllSettings::GetLayoutRTL() )
-        aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
-
     vcl::DeletionListener aDel( pThis );
 
-    pThis->CallCallbackExc( SalEvent::MouseMove, &aEvent );
+    int frame_x = (int)(pEvent->x_root - pEvent->x);
+    int frame_y = (int)(pEvent->y_root - pEvent->y);
+    if (frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY)
+    {
+        pThis->maGeometry.nX = frame_x;
+        pThis->maGeometry.nY = frame_y;
+        pThis->CallCallbackExc(SalEvent::Move, nullptr);
+    }
 
     if( ! aDel.isDeleted() )
     {
-        int frame_x = (int)(pEvent->x_root - pEvent->x);
-        int frame_y = (int)(pEvent->y_root - pEvent->y);
-        if( frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY )
-        {
-            pThis->maGeometry.nX = frame_x;
-            pThis->maGeometry.nY = frame_y;
-            pThis->CallCallbackExc( SalEvent::Move, nullptr );
-        }
+        SalMouseEvent aEvent;
+        aEvent.mnTime   = pEvent->time;
+        aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
+        aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
+        aEvent.mnCode   = GetMouseModCode( pEvent->state );
+        aEvent.mnButton = 0;
 
-        if( ! aDel.isDeleted() )
-        {
-            // ask for the next hint
-            gint x, y;
-            GdkModifierType mask;
-            gdk_window_get_pointer( widget_get_window(GTK_WIDGET(pThis->m_pWindow)), &x, &y, &mask );
-        }
+        // --- RTL --- (mirror mouse pos)
+        if( AllSettings::GetLayoutRTL() )
+            aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
+
+        pThis->CallCallbackExc( SalEvent::MouseMove, &aEvent );
+    }
+
+    if( ! aDel.isDeleted() )
+    {
+        // ask for the next hint
+        gint x, y;
+        GdkModifierType mask;
+        gdk_window_get_pointer( widget_get_window(GTK_WIDGET(pThis->m_pWindow)), &x, &y, &mask );
     }
 
     return true;
