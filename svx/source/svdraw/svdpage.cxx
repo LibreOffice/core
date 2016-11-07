@@ -1483,7 +1483,14 @@ void SdrPage::SetModel(SdrModel* pNewModel)
 
         if(!IsMasterPage())
         {
-            pNew->PutItemSet(getSdrPageProperties().GetItemSet());
+            const SfxItemSet& rOldSet = getSdrPageProperties().GetItemSet();
+            SfxItemSet* pNewSet = rOldSet.Clone(false, &pNewModel->GetItemPool());
+            //ensure checkForUniqueItem is called so new pages which have e.g.
+            //XFillBitmapItem set, do not conflict with an existing XFillBitmapItem
+            //with the same name but different properties
+            SdrModel::MigrateItemSet(&rOldSet, pNewSet, pNewModel);
+            pNew->PutItemSet(*pNewSet);
+            delete pNewSet;
         }
 
         pNew->SetStyleSheet(getSdrPageProperties().GetStyleSheet());
