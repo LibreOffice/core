@@ -24,14 +24,14 @@
 
 namespace unoidl {
 
-class LO_DLLPUBLIC_UNOIDL NoSuchFileException {
+class LO_DLLPUBLIC_UNOIDL NoSuchFileException final {
 public:
     SAL_DLLPRIVATE NoSuchFileException(rtl::OUString const & uri): uri_(uri) {}
 
     SAL_DLLPRIVATE NoSuchFileException(NoSuchFileException const & other):
         uri_(other.uri_) {}
 
-    virtual SAL_DLLPRIVATE ~NoSuchFileException() throw ();
+    SAL_DLLPRIVATE ~NoSuchFileException() throw ();
 
     const rtl::OUString& getUri() const { return uri_; }
 
@@ -41,7 +41,7 @@ private:
     rtl::OUString uri_;
 };
 
-class LO_DLLPUBLIC_UNOIDL FileFormatException {
+class LO_DLLPUBLIC_UNOIDL FileFormatException final {
 public:
     SAL_DLLPRIVATE FileFormatException(
         rtl::OUString const & uri, rtl::OUString const & detail):
@@ -52,7 +52,7 @@ public:
         uri_(other.uri_), detail_(other.detail_)
     {}
 
-    virtual SAL_DLLPRIVATE ~FileFormatException() throw ();
+    SAL_DLLPRIVATE ~FileFormatException() throw ();
 
     const rtl::OUString& getUri() const { return uri_; }
 

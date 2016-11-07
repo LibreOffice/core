@@ -85,14 +85,14 @@ sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0  
                     between added/changed/removed elements without any complex mask or bool flag information.
                     Caches from configuration and our own one are synchronized every time - if we do so.
 *//*-*************************************************************************************************************/
-class SvtViewOptionsBase_Impl
+class SvtViewOptionsBase_Impl final
 {
 
     public:
         enum State { STATE_NONE, STATE_FALSE, STATE_TRUE };
 
         explicit SvtViewOptionsBase_Impl(const OUString& rList);
-        virtual                                        ~SvtViewOptionsBase_Impl (                                                                );
+                 ~SvtViewOptionsBase_Impl (                                                                );
         bool                                            Exists                  ( const OUString&                                sName    );
         void                                            Delete                  ( const OUString&                                sName    );
         OUString                                        GetWindowState          ( const OUString&                                sName    );

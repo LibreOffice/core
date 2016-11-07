@@ -273,7 +273,7 @@ protected:
         return createCollectionObject( m_xIndexAccess->getByIndex( nIndex - 1 ) );
     }
 
-    virtual void UpdateCollectionIndex( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess )
+    void UpdateCollectionIndex( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess )
     {
         css::uno::Reference< css::container::XNameAccess > xNameAccess( xIndexAccess, css::uno::UNO_QUERY_THROW );
         m_xIndexAccess = xIndexAccess;

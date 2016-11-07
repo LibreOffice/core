@@ -63,7 +63,7 @@ namespace toolkit
 
         void setScrollVisibility( ScrollBarVisibility rState );
         DECL_LINK( ScrollBarHdl, ScrollBar*, void );
-        virtual void ResetScrollBars();
+        void ResetScrollBars();
         // Window
         virtual void Resize() override;
     };
