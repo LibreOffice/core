@@ -24,6 +24,7 @@
 #include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
+#include <com/sun/star/util/XAccounting.hpp>
 #include <vcl/canvastools.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
@@ -88,6 +89,19 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
     return aRetval;
 }
 
+size_t estimateSize(
+    std::vector<uno::Reference<graphic::XPrimitive2D>> const& rSequence)
+{
+    size_t nRet(0);
+    for (auto& it : rSequence)
+    {
+        uno::Reference<util::XAccounting> const xAcc(it, uno::UNO_QUERY);
+        assert(xAcc.is()); // we expect only BasePrimitive2D from SVG parser
+        nRet += xAcc->estimateUsage();
+    }
+    return nRet;
+}
+
 void SvgData::ensureReplacement()
 {
     ensureSequenceAndRange();
@@ -149,6 +163,19 @@ void SvgData::ensureSequenceAndRange()
                 }
             }
         }
+        mNestedBitmapSize = estimateSize(maSequence);
+    }
+}
+
+auto SvgData::getSizeBytes() -> std::pair<State, size_t>
+{
+    if (maSequence.empty() && maSvgDataArray.hasElements())
+    {
+        return std::make_pair(State::UNPARSED, maSvgDataArray.getLength());
+    }
+    else
+    {
+        return std::make_pair(State::PARSED, maSvgDataArray.getLength() + mNestedBitmapSize);
     }
 }
 
@@ -158,6 +185,7 @@ SvgData::SvgData(const SvgDataArray& rSvgDataArray, const OUString& rPath)
     maRange(),
     maSequence(),
     maReplacement()
+,   mNestedBitmapSize(0)
 {
 }
 
@@ -167,6 +195,7 @@ SvgData::SvgData(const OUString& rPath):
     maRange(),
     maSequence(),
     maReplacement()
+,   mNestedBitmapSize(0)
 {
     SvFileStream rIStm(rPath, StreamMode::STD_READ);
     if(rIStm.GetError())

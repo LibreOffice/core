@@ -56,6 +56,21 @@ namespace drawinglayer
             return getChildren();
         }
 
+        sal_Int64 SAL_CALL GroupPrimitive2D::estimateUsage()
+            throw (css::uno::RuntimeException)
+        {
+            size_t nRet(0);
+            for (auto& it : getChildren())
+            {
+                uno::Reference<util::XAccounting> const xAcc(it, uno::UNO_QUERY);
+                if (xAcc.is())
+                {
+                    nRet += xAcc->estimateUsage();
+                }
+            }
+            return nRet;
+        }
+
         // provide unique ID
         ImplPrimitive2DIDBlock(GroupPrimitive2D, PRIMITIVE2D_ID_GROUPPRIMITIVE2D)
 
