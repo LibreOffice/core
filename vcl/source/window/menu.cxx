@@ -785,7 +785,7 @@ void Menu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu )
         return;
 
     // remove old menu
-    pData->pSubMenu.disposeAndClear();
+    auto oldSubMenu = pData->pSubMenu;
 
     // data exchange
     pData->pSubMenu = pMenu;
@@ -802,6 +802,8 @@ void Menu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu )
         else
             ImplGetSalMenu()->SetSubMenu( pData->pSalMenuItem, nullptr, nPos );
     }
+
+    oldSubMenu.disposeAndClear();
 
     ImplCallEventListeners( VCLEVENT_MENU_SUBMENUCHANGED, nPos );
 }
