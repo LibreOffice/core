@@ -79,7 +79,6 @@ using ::osl::MutexGuard;
 
 namespace
 {
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.Diagram";
 
 enum
 {
@@ -2091,7 +2090,7 @@ OUString SAL_CALL DiagramWrapper::getImplementationName()
 
 OUString DiagramWrapper::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart.Diagram");
 }
 
 sal_Bool SAL_CALL DiagramWrapper::supportsService( const OUString& rServiceName )

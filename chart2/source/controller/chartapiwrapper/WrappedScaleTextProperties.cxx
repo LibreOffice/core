@@ -94,12 +94,10 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
 Any WrappedScaleTextProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    static const char aRefSizeName[] = "ReferencePageSize";
-
     Any aRet( getPropertyDefault( Reference< beans::XPropertyState >( xInnerPropertySet, uno::UNO_QUERY ) ) );
     if( xInnerPropertySet.is() )
     {
-        if( xInnerPropertySet->getPropertyValue( aRefSizeName ).hasValue() )
+        if( xInnerPropertySet->getPropertyValue( "ReferencePageSize" ).hasValue() )
             aRet <<= true;
         else
             aRet <<= false;

@@ -31,12 +31,6 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-static const char lcl_aServiceNameCartesian2d[] = "com.sun.star.chart2.CartesianCoordinateSystem2d";
-static const char lcl_aServiceNameCartesian3d[] = "com.sun.star.chart2.CartesianCoordinateSystem3d";
-
-static const char lcl_aImplementationNameCartesian2d[] = "com.sun.star.comp.chart2.CartesianCoordinateSystem2d";
-static const char lcl_aImplementationNameCartesian3d[] = "com.sun.star.comp.chart2.CartesianCoordinateSystem3d";
-
 static const char CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME[] = "com.sun.star.chart2.CoordinateSystems.Cartesian";
 
 }
@@ -124,7 +118,7 @@ Sequence< OUString > CartesianCoordinateSystem2d::getSupportedServiceNames_Stati
 {
     Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
-    aServices[ 1 ] = lcl_aServiceNameCartesian2d;
+    aServices[ 1 ] = "com.sun.star.chart2.CartesianCoordinateSystem2d";
     return aServices;
 }
 
@@ -137,7 +131,7 @@ OUString SAL_CALL CartesianCoordinateSystem2d::getImplementationName()
 
 OUString CartesianCoordinateSystem2d::getImplementationName_Static()
 {
-    return OUString(lcl_aImplementationNameCartesian2d);
+    return OUString("com.sun.star.comp.chart2.CartesianCoordinateSystem2d");
 }
 
 sal_Bool SAL_CALL CartesianCoordinateSystem2d::supportsService( const OUString& rServiceName )
@@ -167,7 +161,7 @@ Sequence< OUString > CartesianCoordinateSystem3d::getSupportedServiceNames_Stati
 {
     Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
-    aServices[ 1 ] = lcl_aServiceNameCartesian3d;
+    aServices[ 1 ] = "com.sun.star.chart2.CartesianCoordinateSystem3d";
     return aServices;
 }
 
@@ -180,7 +174,7 @@ OUString SAL_CALL CartesianCoordinateSystem3d::getImplementationName()
 
 OUString CartesianCoordinateSystem3d::getImplementationName_Static()
 {
-    return OUString(lcl_aImplementationNameCartesian3d);
+    return OUString("com.sun.star.comp.chart2.CartesianCoordinateSystem3d");
 }
 
 sal_Bool SAL_CALL CartesianCoordinateSystem3d::supportsService( const OUString& rServiceName )

@@ -43,7 +43,6 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.WallOrFloor";
 
 struct StaticWallFloorWrapperPropertyArray_Initializer
 {
@@ -173,7 +172,7 @@ OUString SAL_CALL WallFloorWrapper::getImplementationName()
 
 OUString WallFloorWrapper::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart.WallOrFloor");
 }
 
 sal_Bool SAL_CALL WallFloorWrapper::supportsService( const OUString& rServiceName )

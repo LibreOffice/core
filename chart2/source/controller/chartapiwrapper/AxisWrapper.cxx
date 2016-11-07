@@ -60,7 +60,6 @@ using ::com::sun::star::uno::Any;
 
 namespace
 {
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.Axis";
 
 enum
 {
@@ -710,7 +709,7 @@ OUString SAL_CALL AxisWrapper::getImplementationName()
 
 OUString AxisWrapper::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart.Axis");
 }
 
 sal_Bool SAL_CALL AxisWrapper::supportsService( const OUString& rServiceName )

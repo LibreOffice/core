@@ -31,12 +31,6 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-static const char lcl_aServiceNamePolar2d[] = "com.sun.star.chart2.PolarCoordinateSystem2d";
-static const char lcl_aServiceNamePolar3d[] = "com.sun.star.chart2.PolarCoordinateSystem3d";
-
-static const char lcl_aImplementationNamePolar2d[] = "com.sun.star.comp.chart2.PolarCoordinateSystem2d";
-static const char lcl_aImplementationNamePolar3d[] = "com.sun.star.comp.chart2.PolarCoordinateSystem3d";
-
 static const char CHART2_COOSYSTEM_POLAR_SERVICE_NAME[] = "com.sun.star.chart2.CoordinateSystems.Polar";
 
 }
@@ -124,7 +118,7 @@ Sequence< OUString > PolarCoordinateSystem2d::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = CHART2_COOSYSTEM_POLAR_SERVICE_NAME;
-    aServices[ 1 ] = lcl_aServiceNamePolar2d;
+    aServices[ 1 ] = "com.sun.star.chart2.PolarCoordinateSystem2d";
     return aServices;
 }
 
@@ -137,7 +131,7 @@ OUString SAL_CALL PolarCoordinateSystem2d::getImplementationName()
 
 OUString PolarCoordinateSystem2d::getImplementationName_Static()
 {
-    return OUString(lcl_aImplementationNamePolar2d) ;
+    return OUString("com.sun.star.comp.chart2.PolarCoordinateSystem2d") ;
 }
 
 sal_Bool SAL_CALL PolarCoordinateSystem2d::supportsService( const OUString& rServiceName )
@@ -167,7 +161,7 @@ Sequence< OUString > PolarCoordinateSystem3d::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = CHART2_COOSYSTEM_POLAR_SERVICE_NAME;
-    aServices[ 1 ] = lcl_aServiceNamePolar3d;
+    aServices[ 1 ] = "com.sun.star.chart2.PolarCoordinateSystem3d";
     return aServices;
 }
 
@@ -180,7 +174,7 @@ OUString SAL_CALL PolarCoordinateSystem3d::getImplementationName()
 
 OUString PolarCoordinateSystem3d::getImplementationName_Static()
 {
-    return OUString(lcl_aImplementationNamePolar3d);
+    return OUString("com.sun.star.comp.chart2.PolarCoordinateSystem3d");
 }
 
 sal_Bool SAL_CALL PolarCoordinateSystem3d::supportsService( const OUString& rServiceName )

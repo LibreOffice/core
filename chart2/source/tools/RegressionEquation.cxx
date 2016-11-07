@@ -46,9 +46,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const char lcl_aImplementationName[] =  "com.sun.star.comp.chart2.RegressionEquation";
-static const char lcl_aServiceName[] =  "com.sun.star.chart2.RegressionEquation";
-
 enum
 {
     PROP_EQUATION_SHOW,
@@ -322,7 +319,7 @@ uno::Sequence< OUString > RegressionEquation::getSupportedServiceNames_Static()
     const sal_Int32 nNumServices( 5 );
     sal_Int32 nI = 0;
     uno::Sequence< OUString > aServices( nNumServices );
-    aServices[ nI++ ] = lcl_aServiceName;
+    aServices[ nI++ ] = "com.sun.star.chart2.RegressionEquation";
     aServices[ nI++ ] = "com.sun.star.beans.PropertySet";
     aServices[ nI++ ] = "com.sun.star.drawing.FillProperties";
     aServices[ nI++ ] = "com.sun.star.drawing.LineProperties";
@@ -340,7 +337,7 @@ OUString SAL_CALL RegressionEquation::getImplementationName()
 
 OUString RegressionEquation::getImplementationName_Static()
 {
-    return OUString(lcl_aImplementationName);
+    return OUString("com.sun.star.comp.chart2.RegressionEquation");
 }
 
 sal_Bool SAL_CALL RegressionEquation::supportsService( const OUString& rServiceName )
