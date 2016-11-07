@@ -92,7 +92,7 @@ public:
     void writeValue(double aValue);
 };
 
-class DataCellIterator
+class DataCellIterator final
 {
 private:
     ScRange mInputRange;
@@ -102,7 +102,7 @@ private:
 
 public:
     DataCellIterator(ScRange aInputRange, bool aByColumn);
-    virtual ~DataCellIterator();
+    ~DataCellIterator();
 
     bool hasNext();
     ScAddress get();

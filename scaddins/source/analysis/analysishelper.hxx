@@ -168,7 +168,7 @@ struct FuncDataBase
 };
 
 
-class FuncData
+class FuncData final
 {
 private:
     OUString         aIntName;
@@ -185,7 +185,7 @@ private:
 
 public:
                             FuncData( const FuncDataBase& rBaseData, ResMgr& );
-    virtual                 ~FuncData();
+                            ~FuncData();
 
     inline sal_uInt16       GetUINameID() const;
     inline sal_uInt16       GetDescrID() const;
@@ -238,7 +238,7 @@ public:
 
 
 /// sorted list with unique sal_Int32 values
-class SortedIndividualInt32List
+class SortedIndividualInt32List final
 {
 private:
     std::vector<sal_Int32>      maVector;
@@ -258,7 +258,7 @@ protected:
 
 public:
                                 SortedIndividualInt32List();
-    virtual                     ~SortedIndividualInt32List();
+                                ~SortedIndividualInt32List();
 
     inline sal_uInt32           Count() const
                                     { return maVector.size(); }
@@ -409,12 +409,12 @@ enum ComplListAppendHandl
 };
 
 
-class ComplexList
+class ComplexList final
 {
 private:
     std::vector<Complex*>  maVector;
 public:
-    virtual                 ~ComplexList();
+                           ~ComplexList();
 
     inline const Complex*   Get( sal_uInt32 nIndex ) const;
 
@@ -504,7 +504,7 @@ private:
     std::vector<ConvertData*> maVector;
 public:
                             ConvertDataList();
-    virtual                 ~ConvertDataList();
+                            ~ConvertDataList();
 
     double                  Convert( double fVal, const OUString& rFrom, const OUString& rTo ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };

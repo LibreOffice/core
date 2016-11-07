@@ -236,7 +236,7 @@ struct ScDPParentDimData
 
 typedef std::unordered_map < SCROW, ScDPParentDimData *, MemberHashIndexFunc>  DimMemberHash;
 
-class ResultMembers
+class ResultMembers final
 {
     DimMemberHash      maMemberHash;
     bool mbHasHideDetailsMember;
@@ -246,7 +246,7 @@ public:
     bool IsHasHideDetailsMembers() const { return mbHasHideDetailsMember; }
     void SetHasHideDetailsMembers( bool b ) { mbHasHideDetailsMember = b; }
     ResultMembers();
-    virtual ~ResultMembers();
+    ~ResultMembers();
 };
 
 class LateInitParams

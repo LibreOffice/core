@@ -99,7 +99,7 @@ enum ScChartGlue {
 
 class ScDocument;
 
-class ScChartPositioner             // only parameter struct
+class ScChartPositioner final             // only parameter struct
 {
     ScRangeListRef  aRangeListRef;
     ScDocument* pDocument;
@@ -111,7 +111,6 @@ class ScChartPositioner             // only parameter struct
     bool        bRowHeaders;
     bool        bDummyUpperLeft;
 
-private:
     void        CheckColRowHeaders();
 
     void        GlueState();        // summarised areas
@@ -124,7 +123,7 @@ public:
     ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rRangeList );
     ScChartPositioner( const ScChartPositioner& rPositioner );
 
-    virtual ~ScChartPositioner();
+    ~ScChartPositioner();
 
     const ScRangeListRef&   GetRangeList() const { return aRangeListRef; }
     void    SetRangeList( const ScRange& rNew );

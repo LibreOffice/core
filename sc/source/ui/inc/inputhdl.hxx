@@ -50,7 +50,7 @@ struct ESelection;
 
 //  ScInputHandler
 
-class ScInputHandler
+class ScInputHandler final
 {
 private:
     VclPtr<ScInputWindow>          pInputWin;
@@ -165,7 +165,7 @@ public:
     const ScInputHandler& operator=(const ScInputHandler&) = delete;
 
                     ScInputHandler();
-    virtual         ~ScInputHandler();
+                    ~ScInputHandler();
 
     void SetMode( ScInputMode eNewMode, const OUString* pInitText = nullptr );
     bool            IsInputMode() const { return (eMode != SC_INPUT_NONE); }

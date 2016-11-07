@@ -24,7 +24,7 @@
 #include "PivotLayoutTreeListData.hxx"
 #include "PivotLayoutTreeListLabel.hxx"
 
-class ScItemValue
+class ScItemValue final
 {
 public:
     OUString maName;
@@ -34,7 +34,7 @@ public:
     ScItemValue(OUString const & aName, SCCOL nColumn, PivotFunc nFunctionMask);
     ScItemValue(ScItemValue* pInputItemValue);
 
-    virtual ~ScItemValue();
+    ~ScItemValue();
 };
 
 class ScPivotLayoutDialog : public ScAnyRefDlg

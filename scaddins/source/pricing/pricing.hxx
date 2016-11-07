@@ -134,7 +134,7 @@ struct ScaFuncDataBase
     bool                    bWithOpt;           // first parameter is internal
 };
 
-class ScaFuncData
+class ScaFuncData final
 {
 private:
     OUString             aIntName;           // internal name (get***)
@@ -149,7 +149,7 @@ private:
 
 public:
                                 ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rRscMgr );
-    virtual                     ~ScaFuncData();
+                                ~ScaFuncData();
 
     inline sal_uInt16           GetUINameID() const     { return nUINameID; }
     inline sal_uInt16           GetDescrID() const      { return nDescrID; }
