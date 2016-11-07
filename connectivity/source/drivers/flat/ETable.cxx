@@ -460,12 +460,11 @@ OUString OFlatTable::getEntry()
 
         INetURLObject aURL;
         xDir->beforeFirst();
-        static const char s_sSeparator[] = "/";
         while(xDir->next())
         {
             sName = xRow->getString(1);
             aURL.SetSmartProtocol(INetProtocol::File);
-            OUString sUrl = m_pConnection->getURL() +  s_sSeparator + sName;
+            OUString sUrl = m_pConnection->getURL() + "/" + sName;
             aURL.SetSmartURL( sUrl );
 
             // cut the extension

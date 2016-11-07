@@ -53,14 +53,11 @@ void OMySQLCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TS
 void OMySQLCatalog::refreshTables()
 {
     TStringVector aVector;
-    static const char s_sTableTypeView[] = "VIEW";
-    static const char s_sTableTypeTable[] = "TABLE";
-    static const char s_sAll[] = "%";
 
     Sequence< OUString > sTableTypes(3);
-    sTableTypes[0] = s_sTableTypeView;
-    sTableTypes[1] = s_sTableTypeTable;
-    sTableTypes[2] = s_sAll;    // just to be sure to include anything else ....
+    sTableTypes[0] = "VIEW";
+    sTableTypes[1] = "TABLE";
+    sTableTypes[2] = "%";    // just to be sure to include anything else ....
 
     refreshObjects(sTableTypes,aVector);
 

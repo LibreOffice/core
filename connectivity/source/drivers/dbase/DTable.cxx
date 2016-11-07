@@ -628,13 +628,12 @@ OUString ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName 
         OUString sName;
         OUString sExt;
         INetURLObject aURL;
-        static const char s_sSeparator[] = "/";
         xDir->beforeFirst();
         while(xDir->next())
         {
             sName = xRow->getString(1);
             aURL.SetSmartProtocol(INetProtocol::File);
-            OUString sUrl = _pConnection->getURL() +  s_sSeparator + sName;
+            OUString sUrl = _pConnection->getURL() + "/" + sName;
             aURL.SetSmartURL( sUrl );
 
             // cut the extension

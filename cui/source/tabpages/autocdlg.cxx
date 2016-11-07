@@ -2391,16 +2391,9 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
     if (m_pAutoCompleteList && nSelCnt)
     {
         TransferDataContainer* pCntnr = new TransferDataContainer;
-        css::uno::Reference<
-            css::datatransfer::XTransferable > xRef( pCntnr );
+        css::uno::Reference< css::datatransfer::XTransferable > xRef( pCntnr );
 
         OStringBuffer sData;
-        const sal_Char aLineEnd[] =
-#if defined(_WIN32)
-                "\015\012";
-#else
-                "\012";
-#endif
 
         rtl_TextEncoding nEncode = osl_getThreadTextEncoding();
 
@@ -2408,7 +2401,11 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
         {
             sData.append(OUStringToOString(m_pLBEntries->GetSelectEntry(n),
                 nEncode));
-            sData.append(aLineEnd);
+#if defined(_WIN32)
+            sData.append("\015\012");
+#else
+            sData.append("\012");
+#endif
         }
         pCntnr->CopyByteString( SotClipboardFormatId::STRING, sData.makeStringAndClear() );
         pCntnr->CopyToClipboard( static_cast<vcl::Window*>(const_cast<OfaAutoCompleteTabPage *>(this)) );
