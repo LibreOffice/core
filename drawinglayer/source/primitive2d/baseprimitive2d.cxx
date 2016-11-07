@@ -71,6 +71,12 @@ namespace drawinglayer
             const geometry::ViewInformation2D aViewInformation(rViewParameters);
             return basegfx::unotools::rectangle2DFromB2DRectangle(getB2DRange(aViewInformation));
         }
+
+        sal_Int64 SAL_CALL BasePrimitive2D::estimateUsage()
+            throw (css::uno::RuntimeException)
+        {
+            return 0; // for now ignore the objects themselves
+        }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

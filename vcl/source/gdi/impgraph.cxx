@@ -766,7 +766,12 @@ sal_uLong ImpGraphic::ImplGetSizeBytes() const
         {
             if(maSvgData.get())
             {
-                mnSizeBytes = maSvgData->getSvgDataArrayLength();
+                std::pair<SvgData::State, size_t> tmp(maSvgData->getSizeBytes());
+                if (SvgData::State::UNPARSED == tmp.first)
+                {
+                    return tmp.second; // don't cache it until SVG is parsed
+                }
+                mnSizeBytes = tmp.second;
             }
             else
             {
