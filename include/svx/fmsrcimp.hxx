@@ -144,7 +144,7 @@ namespace svxform {
 
 typedef std::vector< css::uno::Reference< css::uno::XInterface> > InterfaceArray;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine final
 {
     friend class FmSearchThread;
 
@@ -275,7 +275,7 @@ public:
         const OUString& strVisibleFields,
         const InterfaceArray& arrFields);
 
-    virtual ~FmSearchEngine();
+    ~FmSearchEngine();
 
     /** the link will be called on every record and after the completion of the search, the parameter is a pointer to
         a FmSearchProgress structure

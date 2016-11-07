@@ -392,7 +392,7 @@ typedef boost::multi_index_container<
     >
     SwPageDescsBase;
 
-class SwPageDescs
+class SwPageDescs final
 {
     // function updating ByName index via modify
     friend bool SwPageDesc::SetName( const OUString& rNewName );
@@ -415,7 +415,7 @@ public:
     SwPageDescs();
 
     // frees all SwPageDesc!
-    virtual ~SwPageDescs();
+    ~SwPageDescs();
 
     void clear()        { return m_Array.clear(); }
     bool empty()  const { return m_Array.empty(); }

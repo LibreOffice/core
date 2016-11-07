@@ -36,13 +36,13 @@ namespace textconversiondlgs
 {
 
 
-struct DictionaryEntry
+struct DictionaryEntry final
 {
     DictionaryEntry( const OUString& rTerm, const OUString& rMapping
                     , sal_Int16 nConversionPropertyType //linguistic2::ConversionPropertyType
                     , bool bNewEntry = false );
 
-    virtual ~DictionaryEntry();
+    ~DictionaryEntry();
 
     OUString m_aTerm;
     OUString m_aMapping;

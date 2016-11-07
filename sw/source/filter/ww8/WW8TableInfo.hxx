@@ -162,7 +162,7 @@ typedef std::map<sal_uInt32, WW8TableNodeInfoInner*,
 
 
 class WW8TableInfo;
-class WW8TableNodeInfo
+class WW8TableNodeInfo final
 {
 public:
     typedef std::map<sal_uInt32, WW8TableNodeInfoInner::Pointer_t,
@@ -180,7 +180,7 @@ public:
     typedef std::shared_ptr<WW8TableNodeInfo> Pointer_t;
 
     WW8TableNodeInfo(WW8TableInfo * pParent, const SwNode * pTextNode);
-    virtual ~WW8TableNodeInfo();
+    ~WW8TableNodeInfo();
 
     void setDepth(sal_uInt32 nDepth);
     void setEndOfLine(bool bEndOfLine);
@@ -289,7 +289,7 @@ public:
     RowSpansPtr getRowSpansOfRow(WW8TableNodeInfoInner * pNodeInfo);
 };
 
-class WW8TableInfo
+class WW8TableInfo final
 {
     friend class WW8TableNodeInfoInner;
     typedef std::unordered_map<const SwNode *, WW8TableNodeInfo::Pointer_t, hashNode > Map_t;
@@ -339,7 +339,7 @@ public:
     typedef std::shared_ptr<WW8TableInfo> Pointer_t;
 
     WW8TableInfo();
-    virtual ~WW8TableInfo();
+    ~WW8TableInfo();
 
     void processSwTable(const SwTable * pTable);
     WW8TableNodeInfo * processSwTableByLayout(const SwTable * pTable, RowEndInners_t &rLastRowEnds);

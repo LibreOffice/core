@@ -32,7 +32,7 @@ class SfxItemPool;
 class SvStream;
 
 
-class SVX_DLLPUBLIC XFillExchangeData
+class SVX_DLLPUBLIC XFillExchangeData final
 {
 private:
     XFillAttrSetItem*   pXFillAttrSetItem;
@@ -40,7 +40,7 @@ private:
 
 public:
                         XFillExchangeData(const XFillAttrSetItem& rXFillAttrSetItem);
-                        virtual ~XFillExchangeData();
+                        ~XFillExchangeData();
 
                         XFillExchangeData& operator=( const XFillExchangeData& rXFillExchangeData );
 
