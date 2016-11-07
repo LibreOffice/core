@@ -74,7 +74,7 @@ namespace webdav_ucp
 
 */
 
-    class DAVOptions
+    class DAVOptions final
     {
     private:
         bool    m_isClass1;
@@ -103,7 +103,7 @@ namespace webdav_ucp
 
         DAVOptions( const DAVOptions & rOther );
 
-        virtual ~DAVOptions();
+        ~DAVOptions();
 
         bool isClass1() const { return m_isClass1; };
         void setClass1( bool Class1 = true ) { m_isClass1 = Class1; };

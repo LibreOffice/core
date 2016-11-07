@@ -19,7 +19,7 @@
 
 #include <vector>
 
-class OOO_DLLPUBLIC_TEST Primitive2dXmlDump
+class OOO_DLLPUBLIC_TEST Primitive2dXmlDump final
 {
 private:
     std::vector<bool> maFilter;
@@ -27,7 +27,7 @@ private:
 
 public:
     Primitive2dXmlDump();
-    virtual ~Primitive2dXmlDump();
+    ~Primitive2dXmlDump();
 
     /** The actual result that will be used for testing.
 

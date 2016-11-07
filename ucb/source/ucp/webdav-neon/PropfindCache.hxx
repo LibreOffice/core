@@ -31,7 +31,7 @@ namespace webdav_ucp
     // net link is slow.
 
     // Define the properties cache element
-    class PropertyNames
+    class PropertyNames final
     {
         /// target time when this element becomes stale
         sal_uInt32 m_nStaleTime;
@@ -43,7 +43,7 @@ namespace webdav_ucp
         PropertyNames();
         explicit PropertyNames( const OUString& rURL );
         PropertyNames( const PropertyNames& theOther );
-        virtual ~PropertyNames();
+        ~PropertyNames();
 
         sal_uInt32 getStaleTime() const { return m_nStaleTime; };
         void setStaleTime( const sal_uInt32 nStaleTime ) { m_nStaleTime = nStaleTime; };
@@ -62,14 +62,14 @@ namespace webdav_ucp
     typedef std::map< OUString, PropertyNames,
                       std::less< OUString > >PropNameCache;
 
-    class PropertyNamesCache
+    class PropertyNamesCache final
     {
         PropNameCache       m_aTheCache;
         osl::Mutex          m_aMutex;
 
     public:
         PropertyNamesCache();
-        virtual ~PropertyNamesCache();
+        ~PropertyNamesCache();
 
         bool getCachedPropertyNames( const OUString& URL, PropertyNames& rCacheElement );
         void removeCachedPropertyNames( const OUString& URL );

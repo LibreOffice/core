@@ -69,7 +69,7 @@ public:
     VbaTimer()
     {}
 
-    virtual ~VbaTimer()
+    ~VbaTimer()
     {
         m_aTimer.Stop();
     }
@@ -151,14 +151,14 @@ struct VbaTimerInfoHash
 typedef std::unordered_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash > VbaTimerHashMap;
 
 // ====VbaApplicationBase_Impl==================================
-struct VbaApplicationBase_Impl
+struct VbaApplicationBase_Impl final
 {
     VbaTimerHashMap m_aTimerHash;
     bool mbVisible;
 
     inline VbaApplicationBase_Impl() : mbVisible( true ) {}
 
-    virtual ~VbaApplicationBase_Impl()
+    ~VbaApplicationBase_Impl()
     {
         // remove the remaining timers
         for ( VbaTimerHashMap::iterator aIter = m_aTimerHash.begin();
