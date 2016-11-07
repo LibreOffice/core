@@ -65,10 +65,12 @@ enum class FileDialogFlags {
     Export            = 0x02,    // turn Save into Export dialog
     SaveACopy         = 0x04,    // turn Save into Save a Copy dialog
     MultiSelection    = 0x08,
-    Graphic           = 0x10     // register graphic formats
+    Graphic           = 0x10,    // register graphic formats
+    /// Sign existing PDF.
+    SignPDF           = 0x20
 };
 namespace o3tl {
-    template<> struct typed_flags<FileDialogFlags> : is_typed_flags<FileDialogFlags, 0x1f> {};
+    template<> struct typed_flags<FileDialogFlags> : is_typed_flags<FileDialogFlags, 0x3f> {};
 }
 
 #define FILEDIALOG_FILTER_ALL   "*.*"

@@ -3502,7 +3502,10 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                 comphelper::getProcessComponentContext(), aODFVersion, bHasValidDocumentSignature ) );
 
         uno::Reference< embed::XStorage > xWriteableZipStor;
-        if ( !IsReadOnly() )
+        // Signing is not modification of the document, as seen by the user
+        // ("only a saved document can be signed"). So allow signing in the
+        // "opened read-only, but not physically-read-only" case.
+        if (!IsOriginallyReadOnly())
         {
             // we can reuse the temporary file if there is one already
             CreateTempFile( false );

@@ -125,6 +125,7 @@
 #define STR_READONLY                        (RID_SFX_START+105)
 
 #define STR_SFX_FILTERNAME_ALL              (RID_SFX_START+106)
+#define STR_SFX_FILTERNAME_PDF              (RID_SFX_START+107)
 #define STR_EDIT                            (RID_SFX_START+108)
 
 #define STR_BYTES                           (RID_SFX_START+111)

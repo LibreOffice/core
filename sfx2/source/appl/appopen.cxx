@@ -624,6 +624,15 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pRemoteDialogItem && pRemoteDialogItem->GetValue())
             nDialog = SFX2_IMPL_DIALOG_REMOTE;
 
+        sal_Int16 nDialogType = ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION;
+        FileDialogFlags eDialogFlags = FileDialogFlags::MultiSelection;
+        const SfxBoolItem* pSignPDFItem = rReq.GetArg<SfxBoolItem>(SID_SIGNPDF);
+        if (pSignPDFItem && pSignPDFItem->GetValue())
+        {
+            eDialogFlags |= FileDialogFlags::SignPDF;
+            nDialogType = ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
+        }
+
         OUString sStandardDir;
 
         const SfxStringItem* pStandardDirItem = rReq.GetArg<SfxStringItem>(SID_STANDARD_DIR);
@@ -638,8 +647,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
 
         sal_uIntPtr nErr = sfx2::FileOpenDialog_Impl(
-                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                FileDialogFlags::MultiSelection, OUString(), aURLList,
+                nDialogType,
+                eDialogFlags, OUString(), aURLList,
                 aFilter, pSet, &aPath, nDialog, sStandardDir, aBlackList );
 
         if ( nErr == ERRCODE_ABORT )
@@ -1125,6 +1134,12 @@ void SfxApplication::OpenRemoteExec_Impl( SfxRequest& rReq )
 {
     rReq.AppendItem( SfxBoolItem( SID_REMOTE_DIALOG, true ) );
     GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, *rReq.GetArgs() );
+}
+
+void SfxApplication::SignPDFExec_Impl(SfxRequest& rReq)
+{
+    rReq.AppendItem(SfxBoolItem(SID_SIGNPDF, true));
+    GetDispatcher_Impl()->Execute(SID_OPENDOC, SfxCallMode::SYNCHRON, *rReq.GetArgs());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
