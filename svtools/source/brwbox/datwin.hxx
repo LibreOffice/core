@@ -56,7 +56,7 @@ public:
 };
 
 
-class BrowserColumn
+class BrowserColumn final
 {
     sal_uInt16          _nId;
     sal_uLong           _nOriginalWidth;
@@ -67,7 +67,7 @@ class BrowserColumn
 public:
                         BrowserColumn( sal_uInt16 nItemId,
                                         const OUString& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom );
-    virtual            ~BrowserColumn();
+                        ~BrowserColumn();
 
     sal_uInt16          GetId() const { return _nId; }
 

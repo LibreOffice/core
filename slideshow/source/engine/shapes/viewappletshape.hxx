@@ -49,7 +49,7 @@ namespace slideshow
             The class is able to render the associated applet on View
             implementations.
          */
-        class ViewAppletShape
+        class ViewAppletShape final
         {
         public:
             /** Create a ViewAppletShape for the given View
@@ -80,7 +80,7 @@ namespace slideshow
 
             /** destroy the object
              */
-            virtual ~ViewAppletShape();
+            ~ViewAppletShape();
 
             /// Forbid copy construction
             ViewAppletShape(const ViewAppletShape&) = delete;

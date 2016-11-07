@@ -32,11 +32,11 @@ namespace svtools
     enum ColorPickerMode { ColorPickerMode_SELECT = 0, ColorPickerMode_ADD = 1, ColorPickerMode_MODIFY = 2 };
 }
 
-class SVT_DLLPUBLIC SvColorDialog
+class SVT_DLLPUBLIC SvColorDialog final
 {
 public:
     SvColorDialog( vcl::Window* pParent );
-    virtual ~SvColorDialog();
+    ~SvColorDialog();
 
     void            SetColor( const Color& rColor );
     const Color&    GetColor() const { return maColor;}

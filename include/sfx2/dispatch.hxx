@@ -76,7 +76,7 @@ enum class SfxSlotFilterState
 };
 
 
-class SFX2_DLLPUBLIC SfxDispatcher
+class SFX2_DLLPUBLIC SfxDispatcher final
 {
     std::unique_ptr<SfxDispatcher_Impl> xImp;
 
@@ -115,7 +115,7 @@ public:
 
     SAL_DLLPRIVATE void Construct_Impl( SfxDispatcher* pParent );
 
-    virtual             ~SfxDispatcher();
+                        ~SfxDispatcher();
 
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,
                                  SfxCallMode nCall = SfxCallMode::SLOT,

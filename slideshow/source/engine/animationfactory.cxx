@@ -436,7 +436,7 @@ namespace slideshow
 
                 ~GenericAnimation()
                 {
-                    end_();
+                    end();
                 }
 
                 // Animation interface
@@ -472,8 +472,7 @@ namespace slideshow
                     }
                 }
 
-                virtual void end() { end_(); }
-                void end_()
+                void end()
                 {
                     // TODO(Q2): Factor out common code (most
                     // prominently start() and end()) into base class

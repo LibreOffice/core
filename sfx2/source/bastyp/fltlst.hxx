@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-class SfxFilterListener
+class SfxFilterListener final
 {
     private:
         css::uno::Reference< css::util::XRefreshable >  m_xFilterCache;
@@ -37,7 +37,7 @@ class SfxFilterListener
 
     public:
         SfxFilterListener();
-        virtual ~SfxFilterListener();
+        ~SfxFilterListener();
 
     public:
         // XRefreshListener

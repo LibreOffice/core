@@ -34,7 +34,7 @@ enum class FILTER_CATEGORY
 };
 
 // Display unicode emojis depending on the category
-class ViewFilter_Category
+class ViewFilter_Category final
 {
 public:
 
@@ -42,7 +42,7 @@ public:
         : mCategory(rCategory)
     {}
 
-    virtual ~ViewFilter_Category () {}
+    ~ViewFilter_Category () {}
 
     bool operator () (const ThumbnailViewItem *pItem);
 

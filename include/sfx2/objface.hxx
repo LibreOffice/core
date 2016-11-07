@@ -31,7 +31,7 @@ class  SfxConfigItem;
 class  SfxModule;
 class  SvStream;
 
-class SFX2_DLLPUBLIC SfxInterface
+class SFX2_DLLPUBLIC SfxInterface final
 {
 friend class SfxSlotPool;
 
@@ -49,7 +49,7 @@ public:
                                           SfxInterfaceId nClassId,
                                           const SfxInterface* pGeno,
                                           SfxSlot &rMessages, sal_uInt16 nMsgCount );
-    virtual                 ~SfxInterface();
+                            ~SfxInterface();
 
     void                    SetSlotMap( SfxSlot& rMessages, sal_uInt16 nMsgCount );
     inline sal_uInt16           Count() const;
