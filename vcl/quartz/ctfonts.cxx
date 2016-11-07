@@ -148,8 +148,12 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef& rxFontMetric ) const
     CGGlyph nKashidaGid = 0;
     if (CTFontGetGlyphsForCharacters(aCTFontRef, &nKashidaCh, &nKashidaGid, 1))
     {
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+            // 'kCTFontHorizontalOrientation' is deprecated: first deprecated in
+            // macOS 10.11
         double nKashidaAdv = CTFontGetAdvancesForGlyphs(aCTFontRef,
                 kCTFontHorizontalOrientation, &nKashidaGid, nullptr, 1);
+SAL_WNODEPRECATED_DECLARATIONS_POP
         rxFontMetric->SetMinKashida(lrint(nKashidaAdv));
     }
 }
