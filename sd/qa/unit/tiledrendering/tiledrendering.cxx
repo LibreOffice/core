@@ -34,8 +34,10 @@
 #include <svx/svdoutl.hxx>
 
 #include <DrawDocShell.hxx>
+#include <DrawViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShell.hxx>
+#include <navigatr.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
 #include <drawdoc.hxx>
@@ -1403,6 +1405,30 @@ void SdTiledRenderingTest::testTdf103083()
 
     const SfxItemSet& rParagraphItemSet2 = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(2);
     CPPUNIT_ASSERT_EQUAL((sal_uInt16)3, rParagraphItemSet2.Count());
+
+
+    // test tdf#103756 - CTRL+Z not working to undo changes performed through Navigator
+
+    sd::UndoManager* pUndoManager = pXImpressDocument->GetDoc()->GetUndoManager();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(19), pUndoManager->GetUndoActionCount());
+
+    sd::DrawViewShell* pDrawViewShell = static_cast<sd::DrawViewShell*>(pViewShell);
+    SdNavigatorWin* pNavigatorWin = pDrawViewShell->GetNavigatorWin();
+    Point aPoint = pNavigatorWin->GetPosPixel();
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      convertMm100ToTwip(aPoint.getX() + 2), convertMm100ToTwip(aPoint.getY() + 2),
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      convertMm100ToTwip(aPoint.getX() + 2), convertMm100ToTwip(aPoint.getY() + 2),
+                                      1, MOUSE_LEFT, 0);
+
+    const int nCtrlZ = KEY_MOD1 + 512 + 'z' - 'a';
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'z', nCtrlZ);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'z', nCtrlZ);
+
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(18), pUndoManager->GetUndoActionCount());
 
     comphelper::LibreOfficeKit::setActive(false);
 }

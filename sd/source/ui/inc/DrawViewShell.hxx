@@ -47,6 +47,7 @@ class SdrLayer;
 class SvxClipboardFormatItem;
 struct ESelection;
 class AbstractSvxObjectNameDialog;
+class SdNavigatorWin;
 
 namespace sd {
 
@@ -250,6 +251,7 @@ public:
     //false.
     void            FreshNavigatrEntry();
     void            FreshNavigatrTree();
+    SD_DLLPUBLIC SdNavigatorWin* GetNavigatorWin();
     void            MakeVisible(const Rectangle& rRect, vcl::Window& rWin);
 
     virtual void    ReadFrameViewData(FrameView* pView) override;
