@@ -52,6 +52,7 @@ private:
     std::vector< css::uno::Reference< css::graphic::XPrimitive2D > >
                             maSequence;
     BitmapEx                maReplacement;
+    size_t mNestedBitmapSize;
 
     // on demand creators
     void ensureReplacement();
@@ -67,6 +68,8 @@ public:
     /// data read
     const SvgDataArray& getSvgDataArray() const { return maSvgDataArray; }
     sal_uInt32 getSvgDataArrayLength() const { return maSvgDataArray.getLength(); }
+    enum class State { UNPARSED, PARSED };
+    std::pair<State, size_t> getSizeBytes();
     const OUString& getPath() const { return maPath; }
 
     /// data read and evtl. on demand creation

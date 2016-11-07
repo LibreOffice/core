@@ -314,6 +314,21 @@ namespace drawinglayer
             return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
+        sal_Int64 SAL_CALL PatternFillPrimitive2D::estimateUsage()
+            throw (css::uno::RuntimeException)
+        {
+            size_t nRet(0);
+            for (auto& it : getChildren())
+            {
+                uno::Reference<util::XAccounting> const xAcc(it, uno::UNO_QUERY);
+                if (xAcc.is())
+                {
+                    nRet += xAcc->estimateUsage();
+                }
+            }
+            return nRet;
+        }
+
         // provide unique ID
         ImplPrimitive2DIDBlock(PatternFillPrimitive2D, PRIMITIVE2D_ID_PATTERNFILLPRIMITIVE2D)
 

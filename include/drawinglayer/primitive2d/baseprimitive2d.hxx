@@ -22,8 +22,9 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <com/sun/star/util/XAccounting.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <basegfx/range/b2drange.hxx>
 
@@ -49,7 +50,10 @@ namespace drawinglayer { namespace geometry {
 
 namespace drawinglayer { namespace primitive2d {
     /// typedefs for basePrimitive2DImplBase, Primitive2DSequence and Primitive2DReference
-    typedef cppu::WeakComponentImplHelper1< css::graphic::XPrimitive2D > BasePrimitive2DImplBase;
+    typedef cppu::WeakComponentImplHelper<
+                css::graphic::XPrimitive2D,
+                css::util::XAccounting
+            > BasePrimitive2DImplBase;
     typedef css::uno::Reference< css::graphic::XPrimitive2D > Primitive2DReference;
     typedef css::uno::Sequence< Primitive2DReference > Primitive2DSequence;
 
@@ -200,6 +204,10 @@ namespace drawinglayer
                 will construct a ViewInformation2D from the ViewParameters for that purpose
              */
             virtual css::geometry::RealRectangle2D SAL_CALL getRange( const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) throw ( css::uno::RuntimeException, std::exception ) override;
+
+            // XAccounting
+            virtual sal_Int64 SAL_CALL estimateUsage() throw (css::uno::RuntimeException) override;
+
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
