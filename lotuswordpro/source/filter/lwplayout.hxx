@@ -302,11 +302,11 @@ protected:
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_HEAD_LAYOUT;}
 };
 
-class LwpLayoutStyle
+class LwpLayoutStyle final
 {
 public:
     LwpLayoutStyle();
-    virtual ~LwpLayoutStyle();
+    ~LwpLayoutStyle();
     void Read(LwpObjectStream* pStrm);
 private:
     sal_uInt32      m_nStyleDefinition;
@@ -314,11 +314,11 @@ private:
     sal_uInt16      m_nKey;
 };
 
-class LwpLayoutMisc
+class LwpLayoutMisc final
 {
 public:
     LwpLayoutMisc();
-    virtual ~LwpLayoutMisc();
+    ~LwpLayoutMisc();
     void Read(LwpObjectStream* pStrm);
 private:
     sal_Int32   m_nGridDistance;

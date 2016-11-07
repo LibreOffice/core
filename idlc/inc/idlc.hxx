@@ -37,11 +37,11 @@ class AstType;
 class Options;
 class ErrorHandler;
 
-class Idlc
+class Idlc final
 {
 public:
     Idlc(Options* pOptions);
-    virtual ~Idlc();
+    ~Idlc();
 
     void init();
 

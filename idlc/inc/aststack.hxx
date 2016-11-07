@@ -23,11 +23,11 @@
 
 class AstScope;
 
-class AstStack
+class AstStack final
 {
 public:
     AstStack();
-    virtual ~AstStack();
+    ~AstStack();
 
     sal_uInt32 depth() { return m_top;}
     AstScope* top();

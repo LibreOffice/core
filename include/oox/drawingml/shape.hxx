@@ -191,7 +191,7 @@ public:
     const css::uno::Reference< css::drawing::XShape > &
                         getXShape() const { return mxShape; }
 
-    virtual void        applyShapeReference( const Shape& rReferencedShape, bool bUseText = true );
+    void                applyShapeReference( const Shape& rReferencedShape, bool bUseText = true );
     const ::std::vector<OUString>&
                         getExtDrawings() { return maExtDrawings; }
     void                addExtDrawingRelId( const OUString &rRelId ) { maExtDrawings.push_back( rRelId ); }

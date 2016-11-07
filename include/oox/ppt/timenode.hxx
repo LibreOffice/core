@@ -46,13 +46,13 @@ namespace oox { namespace ppt {
     typedef std::shared_ptr< TimeNode > TimeNodePtr;
     typedef std::list< TimeNodePtr > TimeNodePtrList;
 
-    class TimeNode
+    class TimeNode final
     {
     public:
         typedef ::std::map< OUString, css::uno::Any > UserDataMap;
 
         TimeNode( sal_Int16 nNodeType );
-        virtual ~TimeNode();
+        ~TimeNode();
 
         NodePropertyMap & getNodeProperties() { return maNodeProperties; }
         UserDataMap & getUserData() { return maUserData; }

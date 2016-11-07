@@ -111,7 +111,7 @@ enum RscVerbosity
     RscVerbosityVerbose = 2
 };
 
-class RscError
+class RscError final
 {
     FILE *  fListing;
     RscVerbosity m_verbosity;
@@ -122,7 +122,6 @@ class RscError
     void ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
                       const RscId & aId );
 public:
-    virtual ~RscError() {}
 
     sal_uInt32  nErrors;    // Number of errors
                     RscError( RscVerbosity _verbosity )

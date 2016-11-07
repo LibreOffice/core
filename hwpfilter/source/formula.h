@@ -31,7 +31,7 @@ class Node;
 
 using namespace ::com::sun::star::xml::sax;
 
-class Formula
+class Formula final
 {
 public:
     explicit Formula(char *_eq)
@@ -40,7 +40,7 @@ public:
         eq = _eq;
         trim();
     }
-    virtual ~Formula(){ }
+    ~Formula(){ }
 
     void setDocumentHandler(Reference < XDocumentHandler > const & xHandler )
     {

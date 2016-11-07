@@ -24,11 +24,11 @@
 
 #include <vector>
 
-class FeDeclarator
+class FeDeclarator final
 {
 public:
     FeDeclarator(const OString& name);
-    virtual ~FeDeclarator();
+    ~FeDeclarator();
     const OString& getName()
         { return m_name; }
     bool checkType(AstDeclaration const * pType);
@@ -39,18 +39,18 @@ private:
 
 typedef ::std::list< FeDeclarator* > FeDeclList;
 
-class FeInheritanceHeader
+class FeInheritanceHeader final
 {
 public:
     FeInheritanceHeader(
         NodeType nodeType, OString* pName, OString* pInherits,
         std::vector< OString > * typeParameters);
 
-    virtual ~FeInheritanceHeader()
+    ~FeInheritanceHeader()
     {
         if ( m_pName )
             delete m_pName;
-     }
+    }
 
     NodeType getNodeType()
         { return m_nodeType; }
