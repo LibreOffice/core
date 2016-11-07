@@ -1354,26 +1354,6 @@ AC_ARG_ENABLE(64-bit,
         [Build a 64-bit LibreOffice on platforms where the normal build is 32-bit.
          At the moment meaningful only for iOS and Windows.]), ,)
 
-AC_ARG_ENABLE(extra-gallery,
-    AS_HELP_STRING([--enable-extra-gallery],
-        [Add extra gallery content.]),
-,)
-
-AC_ARG_ENABLE(extra-template,
-    AS_HELP_STRING([--enable-extra-template],
-        [Add extra template content.]),
-,)
-
-AC_ARG_ENABLE(extra-sample,
-    AS_HELP_STRING([--enable-extra-sample],
-        [Add extra sample content.]),
-,)
-
-AC_ARG_ENABLE(extra-font,
-    AS_HELP_STRING([--enable-extra-font],
-        [Add extra font content.]),
-,)
-
 AC_ARG_ENABLE(online-update,
     AS_HELP_STRING([--enable-online-update],
         [Enable the online update service that will check for new versions of
@@ -2225,11 +2205,6 @@ AC_ARG_WITH(alloc,
     AS_HELP_STRING([--with-alloc],
         [Define which allocator to build with (choices are oo, system, tcmalloc, jemalloc).
          Note that on FreeBSD/NetBSD system==jemalloc]),
-,)
-
-AC_ARG_WITH(sun-templates,
-    AS_HELP_STRING([--with-sun-templates],
-        [Integrate Sun template packages.]),
 ,)
 
 AC_ARG_WITH(parallelism,
