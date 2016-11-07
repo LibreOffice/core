@@ -10175,13 +10175,14 @@ dnl ===================================================================
 dnl Set vcl option: coordinate device in double or sal_Int32
 dnl ===================================================================
 
-AC_MSG_CHECKING([Type to use for Device Pixel coordinates])
-if test "$_os" = "Darwin" -o  $_os = iOS ; then
-    AC_DEFINE(VCL_FLOAT_DEVICE_PIXEL)
-    AC_MSG_RESULT([double])
-else
-    AC_MSG_RESULT([sal_Int32])
-fi
+dnl disabled for now, we don't want subtle differences between OSs
+dnl AC_MSG_CHECKING([Type to use for Device Pixel coordinates])
+dnl if test "$_os" = "Darwin" -o  $_os = iOS ; then
+dnl     AC_DEFINE(VCL_FLOAT_DEVICE_PIXEL)
+dnl     AC_MSG_RESULT([double])
+dnl else
+dnl     AC_MSG_RESULT([sal_Int32])
+dnl fi
 
 dnl ===================================================================
 dnl Test which vclplugs have to be built.
