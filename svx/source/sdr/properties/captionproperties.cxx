@@ -99,7 +99,7 @@ namespace sdr
             GetObjectItemSet();
 
             // this was set by TextProperties::ForceDefaultAttributes(),
-            // retet to default
+            // reset to default
             mpItemSet->ClearItem(XATTR_LINESTYLE);
         }
     } // end of namespace properties

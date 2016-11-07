@@ -192,7 +192,7 @@ void SafeModeDialog::enableDisableWidgets()
     {
         mpCBResetCustomizations->Disable();
     }
-    // no disabe of mpCBResetWholeUserProfile, always possible (as last choice)
+    // no disable of mpCBResetWholeUserProfile, always possible (as last choice)
 }
 
 bool SafeModeDialog::Close()

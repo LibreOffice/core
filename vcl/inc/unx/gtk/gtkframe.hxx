@@ -541,7 +541,7 @@ public:
     sal_uIntPtr                 GetNativeWindowHandle(GtkWidget *pWidget);
     virtual sal_uIntPtr         GetNativeWindowHandle() override;
 
-    //Call the usual SalFrame Callback, but catch uno exceptionss and delegate
+    //Call the usual SalFrame Callback, but catch uno exceptions and delegate
     //to GtkData to rethrow them after the gsignal is processed when its safe
     //to do so again in our own code after the g_main_context_iteration call
     //which triggers the gsignals.
