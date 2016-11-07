@@ -83,8 +83,6 @@ using namespace i18n::ScriptType;
 #define isWawChar(c)        IS_JOINING_GROUP((c), WAW)
 #define isSeenOrSadChar(c)  (IS_JOINING_GROUP((c), SAD) || IS_JOINING_GROUP((c), SEEN))
 
-#if U_ICU_VERSION_MAJOR_NUM >= 58
-
 // Beh and charters that behave like Beh in medial form.
 bool isBehChar(sal_Unicode cCh)
 {
@@ -93,7 +91,9 @@ bool isBehChar(sal_Unicode cCh)
     {
     case U_JG_BEH:
     case U_JG_NOON:
+#if U_ICU_VERSION_MAJOR_NUM >= 58
     case U_JG_AFRICAN_NOON:
+#endif
     case U_JG_NYA:
     case U_JG_YEH:
     case U_JG_FARSI_YEH:
@@ -128,20 +128,6 @@ bool isYehChar(sal_Unicode cCh)
 
     return bRet;
 }
-
-#else
-
-bool isBehChar(sal_Unicode)
-{
-    return false;
-}
-
-bool isYehChar(sal_Unicode)
-{
-    return false;
-}
-
-#endif
 
 bool isTransparentChar ( sal_Unicode cCh )
 {
