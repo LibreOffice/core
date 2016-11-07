@@ -762,10 +762,10 @@ private:
     DECL_LINK( SelectPaletteLBHdl, ListBox&, void );
     DECL_LINK( SelectValSetHdl_Impl, ValueSet*, void );
     DECL_LINK( SelectColorModeHdl_Impl, RadioButton&, void );
-    void ChangeColor(const Color &rNewColor);
+    void ChangeColor(const Color &rNewColor, bool bUpdatePreset = true);
     void SetColorModel(ColorModel eModel);
     void ChangeColorModel();
-    void UpdateColorValues();
+    void UpdateColorValues( bool bUpdatePreset = true );
     static sal_Int32 SearchColorList(OUString const & aColorName);
     DECL_LINK( ModifiedHdl_Impl, Edit&, void );
 

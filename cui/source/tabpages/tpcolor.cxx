@@ -441,7 +441,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
     {
         Color aPreviewColor = pColorDlg->GetColor();
         aCurrentColor = aPreviewColor;
-        UpdateColorValues();
+        UpdateColorValues( false );
         // fill ItemSet and pass it on to XOut
         rXFSet.Put( XFillColorItem( OUString(), aPreviewColor ) );
         //m_pCtlPreviewOld->SetAttributes( aXFillAttr );
@@ -527,7 +527,7 @@ IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
         rXFSet.Put( XFillColorItem( OUString(), aColor ) );
         m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
         m_pCtlPreviewNew->Invalidate();
-        ChangeColor(aColor);
+        ChangeColor(aColor, false);
 
         if(pValSet == m_pValSetColorList)
         {
@@ -575,11 +575,11 @@ IMPL_LINK(SvxColorTabPage, SelectColorModeHdl_Impl, RadioButton&, rRadioButton, 
     UpdateColorValues();
 }
 
-void SvxColorTabPage::ChangeColor(const Color &rNewColor)
+void SvxColorTabPage::ChangeColor(const Color &rNewColor, bool bUpdatePreset )
 {
     aPreviousColor = rNewColor;
     aCurrentColor = rNewColor;
-    UpdateColorValues();
+    UpdateColorValues( bUpdatePreset );
     // fill ItemSet and pass it on to XOut
     rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
     m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
@@ -620,7 +620,7 @@ void SvxColorTabPage::ChangeColorModel()
     }
 }
 
-void SvxColorTabPage::UpdateColorValues()
+void SvxColorTabPage::UpdateColorValues( bool bUpdatePreset )
 {
     if (eCM != ColorModel::RGB)
     {
@@ -628,13 +628,17 @@ void SvxColorTabPage::UpdateColorValues()
         ConvertColorValues (aCurrentColor, eCM);
 
         m_pCcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
-        m_pCpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetRed() ) );
-        m_pYcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
-        m_pYpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetGreen() ) );
         m_pMcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-        m_pMpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetBlue() ) );
+        m_pYcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
         m_pKcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetTransparency() ) );
-        m_pKpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetTransparency() ) );
+
+        if( bUpdatePreset )
+        {
+            m_pCpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetRed() ) );
+            m_pMpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetBlue() ) );
+            m_pYpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetGreen() ) );
+            m_pKpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetTransparency() ) );
+        }
 
         ConvertColorValues (aPreviousColor, ColorModel::RGB);
         ConvertColorValues (aCurrentColor, ColorModel::RGB);
@@ -642,13 +646,17 @@ void SvxColorTabPage::UpdateColorValues()
     else
     {
         m_pRcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
-        m_pRpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetRed() ) );
         m_pGcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
-        m_pGpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetGreen() ) );
         m_pBcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-        m_pBpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetBlue() ) );
         m_pHexcustom->SetColor( aCurrentColor.GetColor() );
-        m_pHexpreset->SetColor( aPreviousColor.GetColor() );
+
+        if( bUpdatePreset )
+        {
+            m_pRpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetRed() ) );
+            m_pGpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetGreen() ) );
+            m_pBpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetBlue() ) );
+            m_pHexpreset->SetColor( aPreviousColor.GetColor() );
+        }
     }
 }
 
