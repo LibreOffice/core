@@ -51,7 +51,7 @@ struct OrientationHelper_Impl;
     direct modifications of the "Stacked text" check box. Otherwise the update
     mechanism of registered controls will not work.
  */
-class SVX_DLLPUBLIC OrientationHelper
+class SVX_DLLPUBLIC OrientationHelper final
 {
 public:
     /** @param rNfRotation  A numeric field that will be connected to the DialControl. */
@@ -60,7 +60,7 @@ public:
                             NumericField& rNfRotation,
                             CheckBox& rCbStacked );
 
-    virtual             ~OrientationHelper();
+                         ~OrientationHelper();
 
     /** Registers the passed window to be enabled/disabled on call of Enable().
         @param eDisableIfStacked

@@ -52,11 +52,11 @@ typedef std::vector< BorderLineVector > BorderLineMap;
 // TableModel
 
 
-class TableLayouter
+class TableLayouter final
 {
 public:
     explicit TableLayouter( const TableModelRef& xTableModel );
-    virtual ~TableLayouter();
+    ~TableLayouter();
 
     /** try to fit the table into the given rectangle.
         If the rectangle is to small, it will be grown to fit the table.

@@ -29,13 +29,13 @@ public:
     virtual SwEditWin*   GetEditWin() = 0;
 };
 
-class SwFrameControl
+class SwFrameControl final
 {
     VclPtr<vcl::Window> mxWindow;
     ISwFrameControl    *mpIFace;
 public:
     SwFrameControl( const VclPtr<vcl::Window> &pWindow );
-    virtual ~SwFrameControl();
+    ~SwFrameControl();
 
     vcl::Window* GetWindow()  { return mxWindow.get(); }
 

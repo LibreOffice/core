@@ -106,7 +106,7 @@ namespace accessibility
         @see SvxViewForwarder
         @see SvxEditViewForwarder
     */
-    class SVX_DLLPUBLIC AccessibleTextHelper
+    class SVX_DLLPUBLIC AccessibleTextHelper final
     {
 
     public:
@@ -124,7 +124,7 @@ namespace accessibility
         */
         explicit AccessibleTextHelper( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
-        virtual ~AccessibleTextHelper();
+        ~AccessibleTextHelper();
 
     protected:
 

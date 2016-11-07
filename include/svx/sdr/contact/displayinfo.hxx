@@ -28,7 +28,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC DisplayInfo
+        class SVX_DLLPUBLIC DisplayInfo final
         {
         protected:
             // The Layers which shall be processed (visible)
@@ -69,7 +69,7 @@ namespace sdr
             DisplayInfo();
 
             // destructor
-            virtual ~DisplayInfo();
+            ~DisplayInfo();
 
             // access to ProcessLayers
             void SetProcessLayers(const SetOfByte& rSet);

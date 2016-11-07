@@ -59,7 +59,7 @@ class SwRedlineDataParentSortArr : public o3tl::sorted_vector<SwRedlineDataParen
 
 typedef std::vector<std::unique_ptr<SwRedlineDataChild>> SwRedlineDataChildArr;
 
-class SW_DLLPUBLIC SwRedlineAcceptDlg
+class SW_DLLPUBLIC SwRedlineAcceptDlg final
 {
     VclPtr<vcl::Window>     m_pParentDlg;
     std::vector<std::unique_ptr<SwRedlineDataParent>> m_RedlineParents;
@@ -119,7 +119,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
 
 public:
     SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder, vcl::Window *pContentArea, bool bAutoFormat = false);
-    virtual ~SwRedlineAcceptDlg();
+    ~SwRedlineAcceptDlg();
 
     DECL_LINK( FilterChangedHdl, SvxTPFilter*, void );
 

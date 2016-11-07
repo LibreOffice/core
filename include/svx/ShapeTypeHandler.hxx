@@ -75,7 +75,7 @@ struct ShapeTypeDescriptor
         service names of shapes and associated enum values and to create new
         accessible objects for given shapes.
 */
-class SVX_DLLPUBLIC ShapeTypeHandler
+class SVX_DLLPUBLIC ShapeTypeHandler final
 {
 public:
     enum { UNKNOWN_SHAPE_TYPE = 0 };
@@ -151,7 +151,7 @@ protected:
     /** This destructor is never called at the moment.  But because this
         class is a singleton this is not a problem.
     */
-    virtual ~ShapeTypeHandler();
+    ~ShapeTypeHandler();
 
 private:
     /// Pointer to the only instance of this class.

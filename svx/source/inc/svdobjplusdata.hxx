@@ -18,7 +18,7 @@ class SdrObjUserDataList;
 class SdrGluePointList;
 
 // Bitsack for DrawObjects
-class SdrObjPlusData
+class SdrObjPlusData final
 {
     friend class                SdrObject;
 
@@ -34,7 +34,7 @@ class SdrObjPlusData
 
 public:
     SdrObjPlusData();
-    virtual ~SdrObjPlusData();
+    ~SdrObjPlusData();
     SdrObjPlusData* Clone(SdrObject* pObj1) const;
 
     void SetGluePoints(const SdrGluePointList& rPts);
