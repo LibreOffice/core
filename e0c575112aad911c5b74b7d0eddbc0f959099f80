@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_c05ed644",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-07T17:26:54Z",
+      "side": 1,
+      "message": "As both if{}else{} branches unconditionally break at the end, the break can be extracted to the case level. Also, as Markus mentioned elsewhere already in a previous review, we use 4 spaces indentation per level instead of 2. So altogether this (and similar for the following cases) should be\n\n case SID_CURSORDOWN:\n     if (bScrollLock)\n         pTabViewShell-\u003eScrollY( 1, SC_SPLIT_BOTTOM );\n     else\n         pTabViewShell-\u003eMoveCursorRel( 0, nRepeat, SC_FOLLOW_LINE, bSel, bKeep );\n     break;",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 148,
+        "endChar": 13
+      },
+      "revId": "e0c575112aad911c5b74b7d0eddbc0f959099f80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_a040fa57",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-07T17:26:54Z",
+      "side": 1,
+      "message": "I\u0027m still missing the handling of SID_CURSORPAGEDOWN and SID_CURSORPAGEUP as already mentioned in my previous review.",
+      "revId": "e0c575112aad911c5b74b7d0eddbc0f959099f80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_803bfeea",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-07T17:26:54Z",
+      "side": 1,
+      "message": "Same for SID_CURSORPAGERIGHT_ and SID_CURSORPAGELEFT_",
+      "revId": "e0c575112aad911c5b74b7d0eddbc0f959099f80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
