@@ -331,7 +331,7 @@ requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERS
 copyright = "2016 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
-description = "Mailcap module for %PRODUCTNAME %PRODUCTVERSION"
+description = "3rd party free fonts for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
 End
