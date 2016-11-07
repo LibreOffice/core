@@ -87,7 +87,7 @@ typedef std::unordered_map<OUString, ProtocolHandler, OUStringHash> HandlerHash;
 */
 
 class HandlerCFGAccess;
-class FWI_DLLPUBLIC HandlerCache
+class FWI_DLLPUBLIC HandlerCache final
 {
     /* member */
     private:
@@ -105,7 +105,7 @@ class FWI_DLLPUBLIC HandlerCache
     public:
 
                  HandlerCache();
-        virtual ~HandlerCache();
+                 ~HandlerCache();
 
         bool search( const OUString& sURL, ProtocolHandler* pReturn ) const;
         bool search( const css::util::URL&  aURL, ProtocolHandler* pReturn ) const;

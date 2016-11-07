@@ -82,7 +82,7 @@ private:
 
 // class ArgInput
 
-class ArgInput
+class ArgInput final
 {
 private:
     Link<ArgInput&,void>          aFxClickLink;
@@ -104,7 +104,7 @@ public:
 
     ArgInput();
 
-    virtual ~ArgInput() {}
+    ~ArgInput() {}
 
     void        InitArgInput (  FixedText*      pftArg,
                                 PushButton*    pbtnFx,

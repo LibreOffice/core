@@ -39,7 +39,7 @@ namespace framework{
     @devstatus      ready to use
     @threadsafe     yes
 */
-class TaskCreator
+class TaskCreator final
 {
 
     // member
@@ -51,12 +51,9 @@ class TaskCreator
     public:
 
                  TaskCreator( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-        virtual ~TaskCreator(                                                                     );
+                 ~TaskCreator(                                                                     );
 
         css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName );
-
-    // helper
-    private:
 
 }; // class TaskCreator
 

@@ -250,14 +250,14 @@ class FWE_DLLPUBLIC OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
         NextElementClose                                           m_nNextElementExpected;
 }; // OReadMenuPopupHandler
 
-class FWE_DLLPUBLIC OWriteMenuDocumentHandler
+class FWE_DLLPUBLIC OWriteMenuDocumentHandler final
 {
     public:
         OWriteMenuDocumentHandler(
             const css::uno::Reference< css::container::XIndexAccess >& rMenuBarContainer,
             const css::uno::Reference< css::xml::sax::XDocumentHandler >& rDocumentHandler,
             bool bIsMenuBar );
-        virtual ~OWriteMenuDocumentHandler();
+        ~OWriteMenuDocumentHandler();
 
         void WriteMenuDocument() throw
             ( css::xml::sax::SAXException, css::uno::RuntimeException );
