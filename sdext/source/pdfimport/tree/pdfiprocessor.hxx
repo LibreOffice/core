@@ -199,7 +199,7 @@ namespace pdfi
 
         bool                               m_bHaveTextOnDocLevel;
     };
-    class CharGlyph
+    class CharGlyph final
     {
         public:
             CharGlyph(Element* pCurElement, const GraphicsContext& rCurrentContext,
@@ -207,7 +207,6 @@ namespace pdfi
                : m_pCurElement(pCurElement), m_rCurrentContext(rCurrentContext),
                  m_Width(width), m_PrevSpaceWidth(prevSpaceWidth), m_rGlyphs(rGlyphs) {};
 
-            virtual ~CharGlyph(){};
             OUString& getGlyph(){ return m_rGlyphs; }
             double getWidth(){ return m_Width; }
             double getPrevSpaceWidth(){ return m_PrevSpaceWidth; }

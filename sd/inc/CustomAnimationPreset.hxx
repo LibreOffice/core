@@ -86,11 +86,11 @@ struct PresetCategory
 typedef std::shared_ptr< PresetCategory > PresetCategoryPtr;
 typedef std::vector< PresetCategoryPtr > PresetCategoryList;
 
-class SD_DLLPUBLIC CustomAnimationPresets
+class SD_DLLPUBLIC CustomAnimationPresets final
 {
 public:
     SAL_DLLPRIVATE CustomAnimationPresets();
-    SAL_DLLPRIVATE virtual ~CustomAnimationPresets();
+    SAL_DLLPRIVATE ~CustomAnimationPresets();
 
     static const CustomAnimationPresets& getCustomAnimationPresets();
 

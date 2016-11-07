@@ -49,12 +49,12 @@ inline sal_Int32 FromCoreIndex (const sal_uInt16 nCoreIndex) { return (nCoreInde
     this set of slides can be modified (but do not call it directly, use
     SlideSorterController::SetDocumentSlides() instead.)
 */
-class SlideSorterModel
+class SlideSorterModel final
 {
 public:
     SlideSorterModel (SlideSorter& rSlideSorter);
 
-    virtual ~SlideSorterModel();
+    ~SlideSorterModel();
     void Dispose();
 
     /** This method is present to let the view create a ShowView for

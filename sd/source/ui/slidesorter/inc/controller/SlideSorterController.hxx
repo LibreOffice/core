@@ -61,7 +61,7 @@ class SelectionManager;
 class SlotManager;
 class VisibleAreaManager;
 
-class SlideSorterController
+class SlideSorterController final
 {
 public:
     /** Create a new controller for the slide sorter.
@@ -76,7 +76,7 @@ public:
     */
     void Init();
 
-    virtual ~SlideSorterController();
+    ~SlideSorterController();
 
     void Dispose();
 

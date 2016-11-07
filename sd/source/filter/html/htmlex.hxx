@@ -76,7 +76,7 @@ public:
 };
 
 /// this class exports an Impress Document as a HTML Presentation.
-class HtmlExport
+class HtmlExport final
 {
     std::vector< SdPage* > maPages;
     std::vector< SdPage* > maNotesPages;
@@ -229,7 +229,7 @@ class HtmlExport
                SdDrawDocument* pExpDoc,
                sd::DrawDocShell* pDocShell);
 
-    virtual ~HtmlExport();
+    ~HtmlExport();
 
     static OUString ColorToHTMLString( Color aColor );
     static OUString StringToHTMLString( const OUString& rString );

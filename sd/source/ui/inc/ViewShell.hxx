@@ -185,7 +185,7 @@ public:
 
     bool HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
 
-    virtual void SetUIUnit(FieldUnit eUnit);
+    void SetUIUnit(FieldUnit eUnit);
     void SetDefTabHRuler( sal_uInt16 nDefTab );
 
     const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId);
