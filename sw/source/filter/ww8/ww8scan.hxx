@@ -1011,39 +1011,39 @@ friend WW8PLCFMan::WW8PLCFMan(WW8ScannerBase*, ManTypes, long, bool);
 friend class SwWW8FltControlStack;
 
 private:
-    WW8Fib* pWw8Fib;
-    WW8PLCFx_Cp_FKP*  pChpPLCF;         // Character-Attrs
-    WW8PLCFx_Cp_FKP*  pPapPLCF;         // Paragraph-Attrs
-    WW8PLCFx_SEPX*    pSepPLCF;         // Section-Attrs
-    WW8PLCFx_SubDoc*  pFootnotePLCF;         // Footnotes
-    WW8PLCFx_SubDoc*  pEdnPLCF;         // EndNotes
-    WW8PLCFx_SubDoc*  pAndPLCF;         // Comments
-    WW8PLCFx_FLD*     pFieldPLCF;         // Fields in Main Text
-    WW8PLCFx_FLD*     pFieldHdFtPLCF;     // Fields in Header / Footer
-    WW8PLCFx_FLD*     pFieldTxbxPLCF;     // Fields in Textboxes in Main Text
-    WW8PLCFx_FLD*     pFieldTxbxHdFtPLCF; // Fields in Textboxes in Header / Footer
-    WW8PLCFx_FLD*     pFieldFootnotePLCF;      // Fields in Footnotes
-    WW8PLCFx_FLD*     pFieldEdnPLCF;      // Fields in Endnotes
-    WW8PLCFx_FLD*     pFieldAndPLCF;      // Fields in Comments
-    WW8PLCFspecial*   pMainFdoa;        // Graphic Primitives in Main Text
-    WW8PLCFspecial*   pHdFtFdoa;        // Graphic Primitives in Header / Footer
-    WW8PLCFspecial*   pMainTxbx;        // Textboxes in Main Text
-    WW8PLCFspecial*   pMainTxbxBkd;     // Break-Descriptors for them
-    WW8PLCFspecial*   pHdFtTxbx;        // TextBoxes in Header / Footer
-    WW8PLCFspecial*   pHdFtTxbxBkd;     // Break-Descriptors for previous
-    WW8PLCFspecial*   pMagicTables;     // Break-Descriptors for them
-    WW8PLCFspecial*   pSubdocs;         // subdoc references in master document
-    sal_uInt8*        pExtendedAtrds;   // Extended ATRDs
-    WW8PLCFx_Book*    pBook;            // Bookmarks
-    WW8PLCFx_AtnBook* pAtnBook;         // Annotationmarks
+    WW8Fib* m_pWw8Fib;
+    WW8PLCFx_Cp_FKP*  m_pChpPLCF;         // Character-Attrs
+    WW8PLCFx_Cp_FKP*  m_pPapPLCF;         // Paragraph-Attrs
+    WW8PLCFx_SEPX*    m_pSepPLCF;         // Section-Attrs
+    WW8PLCFx_SubDoc*  m_pFootnotePLCF;         // Footnotes
+    WW8PLCFx_SubDoc*  m_pEdnPLCF;         // EndNotes
+    WW8PLCFx_SubDoc*  m_pAndPLCF;         // Comments
+    WW8PLCFx_FLD*     m_pFieldPLCF;         // Fields in Main Text
+    WW8PLCFx_FLD*     m_pFieldHdFtPLCF;     // Fields in Header / Footer
+    WW8PLCFx_FLD*     m_pFieldTxbxPLCF;     // Fields in Textboxes in Main Text
+    WW8PLCFx_FLD*     m_pFieldTxbxHdFtPLCF; // Fields in Textboxes in Header / Footer
+    WW8PLCFx_FLD*     m_pFieldFootnotePLCF;      // Fields in Footnotes
+    WW8PLCFx_FLD*     m_pFieldEdnPLCF;      // Fields in Endnotes
+    WW8PLCFx_FLD*     m_pFieldAndPLCF;      // Fields in Comments
+    WW8PLCFspecial*   m_pMainFdoa;        // Graphic Primitives in Main Text
+    WW8PLCFspecial*   m_pHdFtFdoa;        // Graphic Primitives in Header / Footer
+    WW8PLCFspecial*   m_pMainTxbx;        // Textboxes in Main Text
+    WW8PLCFspecial*   m_pMainTxbxBkd;     // Break-Descriptors for them
+    WW8PLCFspecial*   m_pHdFtTxbx;        // TextBoxes in Header / Footer
+    WW8PLCFspecial*   m_pHdFtTxbxBkd;     // Break-Descriptors for previous
+    WW8PLCFspecial*   m_pMagicTables;     // Break-Descriptors for them
+    WW8PLCFspecial*   m_pSubdocs;         // subdoc references in master document
+    sal_uInt8*        m_pExtendedAtrds;   // Extended ATRDs
+    WW8PLCFx_Book*    m_pBook;            // Bookmarks
+    WW8PLCFx_AtnBook* m_pAtnBook;         // Annotationmarks
     /// Smart tag bookmarks.
-    WW8PLCFx_FactoidBook* pFactoidBook;
+    WW8PLCFx_FactoidBook* m_pFactoidBook;
 
-    WW8PLCFpcd*         pPiecePLCF; // for FastSave ( Basis-PLCF without iterator )
-    WW8PLCFpcd_Iter*    pPieceIter; // for FastSave ( iterator for previous )
-    WW8PLCFx_PCD*       pPLCFx_PCD;     // ditto
-    WW8PLCFx_PCDAttrs*  pPLCFx_PCDAttrs;
-    std::vector<sal_uInt8*> aPieceGrpprls;  // attributes of Piece-Table
+    WW8PLCFpcd*         m_pPiecePLCF; // for FastSave ( Basis-PLCF without iterator )
+    WW8PLCFpcd_Iter*    m_pPieceIter; // for FastSave ( iterator for previous )
+    WW8PLCFx_PCD*       m_pPLCFx_PCD;     // ditto
+    WW8PLCFx_PCDAttrs*  m_pPLCFx_PCDAttrs;
+    std::vector<sal_uInt8*> m_aPieceGrpprls;  // attributes of Piece-Table
 
     WW8PLCFpcd* OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF );
 
@@ -1054,8 +1054,8 @@ public:
     WW8ScannerBase( SvStream* pSt, SvStream* pTableSt, SvStream* pDataSt,
         WW8Fib* pWwF );
     ~WW8ScannerBase();
-    bool AreThereFootnotes() const { return pFootnotePLCF->Count() > 0; };
-    bool AreThereEndnotes()  const { return pEdnPLCF->Count() > 0; };
+    bool AreThereFootnotes() const { return m_pFootnotePLCF->Count() > 0; };
+    bool AreThereEndnotes()  const { return m_pEdnPLCF->Count() > 0; };
 
     //If you use WW8Fc2Cp you are almost certainly doing the wrong thing
     //when it comes to fastsaved files, avoid like the plague. For export
