@@ -76,7 +76,7 @@ public:
     virtual ~FormulaCompiler();
 
     /** Mappings from strings to OpCodes and vice versa. */
-    class FORMULA_DLLPUBLIC OpCodeMap
+    class FORMULA_DLLPUBLIC OpCodeMap final
     {
         OpCodeHashMap         * mpHashMap;                 /// Hash map of symbols, OUString -> OpCode
         OUString              * mpTable;                   /// Array of symbols, OpCode -> OUString, offset==OpCode
@@ -103,7 +103,7 @@ public:
         {
             mbEnglish = FormulaGrammar::isEnglish( meGrammar);
         }
-        virtual ~OpCodeMap();
+        ~OpCodeMap();
 
         /** Copy mappings from r into this map, effectively replacing this map.
 

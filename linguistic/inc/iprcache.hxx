@@ -73,7 +73,7 @@ public:
 };
 
 
-class SpellCache
+class SpellCache final
 {
     css::uno::Reference< css::linguistic2::XDictionaryListEventListener >
                         xFlushLstnr;
@@ -88,7 +88,7 @@ class SpellCache
 
 public:
     SpellCache();
-    virtual ~SpellCache();
+    ~SpellCache();
 
     // called from FlushListener
     void    Flush();

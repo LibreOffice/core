@@ -113,7 +113,7 @@ public:
                     sal_uInt32 inputLength = 0) override;
 };
 
-class Digest
+class Digest final
 {
 public:
     enum DigestType
@@ -136,7 +136,7 @@ private:
 
 public:
     Digest(DigestType eType);
-    virtual ~Digest();
+    ~Digest();
 
     void update(std::vector<sal_uInt8>& input);
     void finalize(std::vector<sal_uInt8>& digest);

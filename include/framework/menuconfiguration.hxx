@@ -94,14 +94,14 @@ public:
     }
 };
 
-class FWE_DLLPUBLIC MenuConfiguration
+class FWE_DLLPUBLIC MenuConfiguration final
 {
 public:
         MenuConfiguration(
             // use const when giving a uno reference by reference
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-        virtual ~MenuConfiguration();
+        ~MenuConfiguration();
 
         css::uno::Reference< css::container::XIndexAccess > CreateMenuBarConfigurationFromXML(
             css::uno::Reference< css::io::XInputStream >& rInputStream )

@@ -75,11 +75,11 @@ class LwpPara;
 class LwpIndentOverride;
 class LwpBulletOverride;
 
-class LwpBulletStyleMgr
+class LwpBulletStyleMgr final
 {
 public:
     LwpBulletStyleMgr();
-    virtual ~LwpBulletStyleMgr();
+    ~LwpBulletStyleMgr();
     OUString RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
         LwpIndentOverride* pIndent);
     inline void SetFoundry(LwpFoundry* pFoundry);

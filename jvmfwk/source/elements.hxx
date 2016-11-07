@@ -260,7 +260,7 @@ public:
 
     The class also determines useful default values for settings which have not been made.
 */
-class MergedSettings
+class MergedSettings final
 {
 private:
     const MergedSettings& operator = (MergedSettings&) = delete;
@@ -280,7 +280,7 @@ private:
 
 public:
     MergedSettings();
-    virtual ~MergedSettings();
+    ~MergedSettings();
 
     /** the default is true.
      */

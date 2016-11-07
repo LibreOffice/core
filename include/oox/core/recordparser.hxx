@@ -49,11 +49,11 @@ struct RecordInputSource
 };
 
 
-class RecordParser
+class RecordParser final
 {
 public:
                         RecordParser();
-    virtual             ~RecordParser();
+                        ~RecordParser();
 
     void                setFragmentHandler( const ::rtl::Reference< FragmentHandler >& rxHandler );
 

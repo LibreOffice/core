@@ -87,7 +87,7 @@ struct AstExprValue
 
 const sal_Char* SAL_CALL exprTypeToString(ExprType t);
 
-class AstExpression
+class AstExpression final
 {
 public:
     // Constructor(s)
@@ -100,7 +100,7 @@ public:
     AstExpression(double            d);
     AstExpression(OString* scopedName);
 
-    virtual ~AstExpression();
+    ~AstExpression();
 
     // Data Accessors
     AstExprValue* getExprValue()
