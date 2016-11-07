@@ -256,7 +256,7 @@ requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERS
 copyright = "2016 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
-description = "Online update modul for %PRODUCTNAME %PRODUCTVERSION"
+description = "Online update module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
 End
