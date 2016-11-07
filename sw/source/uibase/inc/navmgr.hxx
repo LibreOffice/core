@@ -21,7 +21,7 @@ class   SwWrtShell;
 struct  SwPosition;
 class SwUnoCursor;
 
-class SwNavigationMgr
+class SwNavigationMgr final
 {
 private:
     /*
@@ -43,7 +43,7 @@ private:
 public:
     /* Constructor that initializes the shell to the current shell */
     SwNavigationMgr( SwWrtShell & rShell );
-    virtual ~SwNavigationMgr()
+    ~SwNavigationMgr()
     {
         SolarMutexGuard g;
         m_entries.clear();

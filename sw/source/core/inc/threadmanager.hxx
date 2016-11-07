@@ -43,12 +43,12 @@
     It assures that not more than <mnStartedSize> threads
     are started.
 */
-class ThreadManager
+class ThreadManager final
 {
     public:
 
         explicit ThreadManager( css::uno::Reference< css::util::XJobManager >& rThreadJoiner );
-        virtual ~ThreadManager();
+        ~ThreadManager();
 
         std::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef();
         void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID );

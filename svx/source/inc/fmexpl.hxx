@@ -190,14 +190,14 @@ public:
 
 typedef ::std::vector< FmEntryData* > FmEntryDataBaseList;
 
-class FmEntryDataList
+class FmEntryDataList final
 {
 private:
     FmEntryDataBaseList maEntryDataList;
 
 public:
     FmEntryDataList();
-    virtual ~FmEntryDataList();
+    ~FmEntryDataList();
 
     FmEntryData*    at( size_t Index )
         { return ( Index < maEntryDataList.size() ) ? maEntryDataList[ Index ] : nullptr; }

@@ -239,7 +239,7 @@ public:
 };
 
 // internal, used by SwCursor::SaveState() etc.
-struct SwCursor_SavePos
+struct SwCursor_SavePos final
 {
     sal_uLong nNode;
     sal_Int32 nContent;
@@ -250,7 +250,7 @@ struct SwCursor_SavePos
         nContent( rCursor.GetPoint()->nContent.GetIndex() ),
         pNext( nullptr )
     {}
-    virtual ~SwCursor_SavePos() {}
+    ~SwCursor_SavePos() {}
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwCursor_SavePos )
 };

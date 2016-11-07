@@ -38,7 +38,7 @@ namespace com { namespace sun { namespace star {
 
 typedef std::map< OUString, RedlineInfo* > RedlineMapType;
 
-class XMLRedlineImportHelper
+class XMLRedlineImportHelper final
 {
     const OUString sInsertion;
     const OUString sDeletion;
@@ -65,7 +65,7 @@ public:
         // redline mode
         const css::uno::Reference<css::beans::XPropertySet> & rModel,
         const css::uno::Reference<css::beans::XPropertySet> & rImportInfoSet );
-    virtual ~XMLRedlineImportHelper();
+    ~XMLRedlineImportHelper();
 
     // create a redline object
     // (The redline will be inserted into the document after both start
