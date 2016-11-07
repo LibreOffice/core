@@ -1090,12 +1090,10 @@ void handleCrashReport()
 
 void handleSafeMode()
 {
-    static const char SERVICENAME_SAFEMODE[] = "com.sun.star.comp.svx.SafeModeUI";
-
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
     Reference< css::frame::XSynchronousDispatch > xSafeModeUI(
-        xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_SAFEMODE, xContext),
+        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.svx.SafeModeUI", xContext),
         css::uno::UNO_QUERY_THROW);
 
     css::util::URL aURL;
