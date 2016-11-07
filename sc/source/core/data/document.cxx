@@ -2904,7 +2904,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     StartListeningFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
 
     {
-        ScBulkBroadcast aBulkBroadcast( GetBASM());
+        ScBulkBroadcast aBulkBroadcast( GetBASM(), SC_HINT_DATACHANGED);
 
         // Set all formula cells dirty, and collect non-empty non-formula cell
         // positions so that we can broadcast on them below.
@@ -2992,7 +2992,7 @@ void ScDocument::CopyMultiRangeFromClip(
                            aDestRange.aEnd.Col(), aDestRange.aEnd.Row(), rMark, nInsFlag );
 
     {
-        ScBulkBroadcast aBulkBroadcast( GetBASM());
+        ScBulkBroadcast aBulkBroadcast( GetBASM(), SC_HINT_DATACHANGED);
 
         // Set formula cells dirty and collect non-formula cells.
         SetDirtyFromClip(
@@ -3722,7 +3722,7 @@ void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
     bool bOldAutoCalc = GetAutoCalc();
     bAutoCalc = false;      // no mulitple calculations
     {   // scope for bulk broadcast
-        ScBulkBroadcast aBulkBroadcast( GetBASM());
+        ScBulkBroadcast aBulkBroadcast( GetBASM(), SC_HINT_DATACHANGED);
         TableContainer::iterator it = maTabs.begin();
         for (;it != maTabs.end(); ++it)
             if (*it)
@@ -3743,7 +3743,7 @@ void ScDocument::SetDirty( const ScRange& rRange, bool bIncludeEmptyCells )
     bool bOldAutoCalc = GetAutoCalc();
     bAutoCalc = false;      // no mulitple calculations
     {   // scope for bulk broadcast
-        ScBulkBroadcast aBulkBroadcast( GetBASM());
+        ScBulkBroadcast aBulkBroadcast( GetBASM(), SC_HINT_DATACHANGED);
         SCTAB nTab2 = rRange.aEnd.Tab();
         for (SCTAB i=rRange.aStart.Tab(); i<=nTab2 && i < static_cast<SCTAB>(maTabs.size()); i++)
             if (maTabs[i]) maTabs[i]->SetDirty( rRange,

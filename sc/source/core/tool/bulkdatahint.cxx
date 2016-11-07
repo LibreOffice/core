@@ -21,8 +21,8 @@ struct BulkDataHint::Impl
         mpSpans(pSpans) {}
 };
 
-BulkDataHint::BulkDataHint( ScDocument& rDoc, const ColumnSpanSet* pSpans ) :
-    SfxSimpleHint(SC_HINT_BULK_DATACHANGED), mpImpl(new Impl(rDoc, pSpans)) {}
+BulkDataHint::BulkDataHint( ScDocument& rDoc, const ColumnSpanSet* pSpans, sal_uInt32 nHintId ) :
+    SfxSimpleHint( SC_HINT_BULK_DATACHANGED | nHintId ), mpImpl(new Impl(rDoc, pSpans)) {}
 
 BulkDataHint::~BulkDataHint()
 {
