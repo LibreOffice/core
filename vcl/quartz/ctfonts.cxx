@@ -143,6 +143,15 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef& rxFontMetric ) const
     rxFontMetric->SetScalableFlag( true );
     rxFontMetric->SetTrueTypeFlag( true ); // Not sure, but this field is used only for Windows so far
     rxFontMetric->SetKernableFlag( true );
+
+    UniChar nKashidaCh = 0x0640;
+    CGGlyph nKashidaGid = 0;
+    if (CTFontGetGlyphsForCharacters(aCTFontRef, &nKashidaCh, &nKashidaGid, 1))
+    {
+        double nKashidaAdv = CTFontGetAdvancesForGlyphs(aCTFontRef,
+                kCTFontHorizontalOrientation, &nKashidaGid, nullptr, 1);
+        rxFontMetric->SetMinKashida(lrint(nKashidaAdv));
+    }
 }
 
 bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) const
