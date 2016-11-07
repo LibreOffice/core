@@ -187,7 +187,7 @@ class LayoutManagerListener : public ::cppu::WeakImplHelper<
         OUString                                         m_aLayoutManagerPropName;
 };
 
-class SfxWorkWindow
+class SfxWorkWindow final
 {
     friend class LayoutManagerListener;
 
@@ -238,7 +238,7 @@ protected:
 
 public:
                             SfxWorkWindow( vcl::Window* pWin, SfxFrame* pFrm, SfxFrame* pMaster );
-    virtual                 ~SfxWorkWindow();
+                            ~SfxWorkWindow();
     SfxBindings&            GetBindings()
                             { return *pBindings; }
     vcl::Window*                 GetWindow() const

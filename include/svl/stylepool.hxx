@@ -26,7 +26,7 @@
 class StylePoolImpl;
 class IStylePoolIteratorAccess;
 
-class SVL_DLLPUBLIC StylePool
+class SVL_DLLPUBLIC StylePool final
 {
 private:
     std::unique_ptr<StylePoolImpl> pImpl;
@@ -65,7 +65,7 @@ public:
     IStylePoolIteratorAccess* createIterator( const bool bSkipUnusedItemSets = false,
                                                       const bool bSkipIgnorableItems = false );
 
-    virtual ~StylePool();
+    ~StylePool();
 
     static OUString nameOf( const std::shared_ptr<SfxItemSet>& pSet );
 };

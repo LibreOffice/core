@@ -62,7 +62,7 @@ struct SvSortData
     const SvTreeListEntry* pRight;
 };
 
-class SVT_DLLPUBLIC SvTreeList
+class SVT_DLLPUBLIC SvTreeList final
 {
     typedef std::vector<SvListView*> ListViewsType;
 
@@ -136,7 +136,7 @@ protected:
 public:
 
                         SvTreeList();
-    virtual             ~SvTreeList();
+                        ~SvTreeList();
 
     void                InsertView( SvListView* );
     void                RemoveView( SvListView* );

@@ -104,14 +104,14 @@ enum NfKeywordIndex
     NF_KEYWORD_ENTRIES_COUNT
 };
 
-class NfKeywordTable
+class NfKeywordTable final
 {
     typedef ::std::vector<OUString> Keywords_t;
     Keywords_t m_keywords;
 
 public:
     NfKeywordTable() : m_keywords(NF_KEYWORD_ENTRIES_COUNT) {};
-    virtual ~NfKeywordTable() {}
+    ~NfKeywordTable() {}
 
     OUString & operator[] (Keywords_t::size_type n) { return m_keywords[n]; }
     const OUString & operator[] (Keywords_t::size_type n) const { return m_keywords[n]; }

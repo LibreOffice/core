@@ -31,7 +31,7 @@ class Size;
 class Fraction;
 class IMapObject;
 
-class SVT_DLLPUBLIC ImageMap
+class SVT_DLLPUBLIC ImageMap final
 {
 private:
 
@@ -68,7 +68,7 @@ public:
                         ImageMap( const ImageMap& rImageMap );
 
                         // all IMapObjects are destroyed in the destructor
-    virtual             ~ImageMap();
+                        ~ImageMap();
 
     ImageMap&           operator=( const ImageMap& rImageMap );
 

@@ -106,7 +106,7 @@ public:
 
 };
 
-class SVL_DLLPUBLIC SfxItemPropertySet
+class SVL_DLLPUBLIC SfxItemPropertySet final
 {
     SfxItemPropertyMap                                        m_aMap;
     mutable css::uno::Reference<css::beans::XPropertySetInfo> m_xInfo;
@@ -114,7 +114,7 @@ class SVL_DLLPUBLIC SfxItemPropertySet
 public:
                             SfxItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :
                                 m_aMap(pMap) {}
-                            virtual ~SfxItemPropertySet();
+                            ~SfxItemPropertySet();
 
     void getPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
                                           const SfxItemSet& rSet,

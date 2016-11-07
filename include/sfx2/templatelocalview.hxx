@@ -51,7 +51,7 @@ enum class FILTER_APPLICATION
 };
 
 // Display template items depending on the generator application
-class ViewFilter_Application
+class ViewFilter_Application final
 {
 public:
 
@@ -59,7 +59,7 @@ public:
         : mApp(App)
     {}
 
-    virtual ~ViewFilter_Application () {}
+    ~ViewFilter_Application () {}
 
     bool operator () (const ThumbnailViewItem *pItem);
 
