@@ -107,19 +107,16 @@ ScRange FormulaGroupAreaListener::getListeningRange() const
 
 void FormulaGroupAreaListener::Notify( const SfxHint& rHint )
 {
-    switch (rHint.GetId())
+    // SC_HINT_BULK_DATACHANGED may include (SC_HINT_DATACHANGED |
+    // SC_HINT_TABLEOPDIRTY) so has to be checked first.
+    if (rHint.GetId() & SC_HINT_BULK_DATACHANGED)
     {
-        case SC_HINT_DATACHANGED:
-            notifyCellChange(rHint, static_cast<const ScHint*>(&rHint)->GetAddress());
-        break;
-        case SC_HINT_BULK_DATACHANGED:
-        {
-            const BulkDataHint& rBulkHint = static_cast<const BulkDataHint&>(rHint);
-            notifyBulkChange(rBulkHint);
-        }
-        break;
-        default:
-            ;
+        const BulkDataHint& rBulkHint = static_cast<const BulkDataHint&>(rHint);
+        notifyBulkChange(rBulkHint);
+    }
+    else if (rHint.GetId() & (SC_HINT_DATACHANGED | SC_HINT_TABLEOPDIRTY))
+    {
+        notifyCellChange(rHint, static_cast<const ScHint*>(&rHint)->GetAddress());
     }
 }
 

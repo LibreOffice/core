@@ -1003,7 +1003,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             sc::CopyToDocContext aCxt(*this);
             nDestPos = std::min(nDestPos, (SCTAB)(GetTableCount() - 1));
             {   // scope for bulk broadcast
-                ScBulkBroadcast aBulkBroadcast( pBASM);
+                ScBulkBroadcast aBulkBroadcast( pBASM, SC_HINT_DATACHANGED);
                 if (!bResultsOnly)
                 {
                     const bool bGlobalNamesToLocal = false;

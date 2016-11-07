@@ -62,7 +62,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
         return ;    // Clipboard or Undo
     if ( eHardRecalcState == HARDRECALCSTATE_OFF )
     {
-        ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pBASM, rHint.GetId());     // scoped bulk broadcast
         bool bIsBroadcasted = false;
         SvtBroadcaster* pBC = GetBroadcaster(rHint.GetAddress());
         if ( pBC )
@@ -98,7 +98,7 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uInt32 nHint, bool b
 
     if (eHardRecalcState == HARDRECALCSTATE_OFF)
     {
-        ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pBASM, nHint);     // scoped bulk broadcast
         bool bIsBroadcasted = false;
 
         if (bBroadcastSingleBroadcasters)
@@ -226,7 +226,7 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
         return ;    // Clipboard or Undo
     if (eHardRecalcState == HARDRECALCSTATE_OFF)
     {
-        ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pBASM, rHint.GetId());     // scoped bulk broadcast
         if ( pBASM->AreaBroadcast( rHint ) )
             TrackFormulas( rHint.GetId() );
     }
@@ -535,18 +535,18 @@ bool ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
     return pCell->GetPreviousTrack() || pFormulaTrack == pCell;
 }
 
-void ScDocument::FinalTrackFormulas()
+void ScDocument::FinalTrackFormulas( sal_uInt32 nHintId )
 {
     mbTrackFormulasPending = false;
     mbFinalTrackFormulas = true;
     {
-        ScBulkBroadcast aBulk( GetBASM());
+        ScBulkBroadcast aBulk( GetBASM(), nHintId);
         // Collect all pending formula cells in bulk.
-        TrackFormulas();
+        TrackFormulas( nHintId );
     }
     // A final round not in bulk to track all remaining formula cells and their
     // dependents that were collected during ScBulkBroadcast dtor.
-    TrackFormulas();
+    TrackFormulas( nHintId );
     mbFinalTrackFormulas = false;
 }
 

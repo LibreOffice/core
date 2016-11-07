@@ -2087,7 +2087,7 @@ public:
     void                TrackFormulas( sal_uInt32 nHintId = SC_HINT_DATACHANGED );
     void                SetTrackFormulasPending() { mbTrackFormulasPending = true; }
     bool                IsTrackFormulasPending() const { return mbTrackFormulasPending; }
-    void                FinalTrackFormulas();
+    void                FinalTrackFormulas( sal_uInt32 nHintId );
     bool                IsFinalTrackFormulas() const { return mbFinalTrackFormulas; }
     bool                IsInFormulaTree( ScFormulaCell* pCell ) const;
     bool                IsInFormulaTrack( ScFormulaCell* pCell ) const;

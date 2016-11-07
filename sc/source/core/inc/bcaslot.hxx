@@ -318,12 +318,12 @@ public:
                                             const ScRange& rRange,
                                             SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void                EnterBulkBroadcast();
-    void                LeaveBulkBroadcast();
+    void                LeaveBulkBroadcast( sal_uInt32 nHintId );
     bool                InsertBulkArea( const ScBroadcastArea* p );
 
     void InsertBulkGroupArea( ScBroadcastArea* pArea, const ScRange& rRange );
     void RemoveBulkGroupArea( ScBroadcastArea* pArea );
-    bool BulkBroadcastGroupAreas();
+    bool BulkBroadcastGroupAreas( sal_uInt32 nHintId );
 
     /// @return: how many removed
     size_t              RemoveBulkArea( const ScBroadcastArea* p );
@@ -350,8 +350,11 @@ public:
 class ScBulkBroadcast
 {
     ScBroadcastAreaSlotMachine* pBASM;
+    sal_uInt32                  mnHintId;
 public:
-    explicit ScBulkBroadcast( ScBroadcastAreaSlotMachine* p ) : pBASM(p)
+    explicit ScBulkBroadcast( ScBroadcastAreaSlotMachine* p, sal_uInt32 nHintId ) :
+        pBASM(p),
+        mnHintId(nHintId)
     {
         if (pBASM)
             pBASM->EnterBulkBroadcast();
@@ -359,7 +362,7 @@ public:
     ~ScBulkBroadcast()
     {
         if (pBASM)
-            pBASM->LeaveBulkBroadcast();
+            pBASM->LeaveBulkBroadcast( mnHintId );
     }
 };
 
