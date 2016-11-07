@@ -63,11 +63,11 @@ public:
     void setModal(bool bModal) { m_bModal = bModal; }
 };
 
-class TableDesignWidget
+class TableDesignWidget final
 {
 public:
     TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase, bool bModal );
-    virtual ~TableDesignWidget();
+    ~TableDesignWidget();
 
     // callbacks
     void onSelectionChanged();

@@ -73,14 +73,13 @@ using ::com::sun::star::uno::Sequence;
 
 namespace {
 
-class OutlineToImpressFinalizer
+class OutlineToImpressFinalizer final
 {
 public:
     OutlineToImpressFinalizer (
         ::sd::ViewShellBase& rBase,
         SdDrawDocument& rDocument,
         SvLockBytes& rBytes);
-    virtual ~OutlineToImpressFinalizer() {};
     void operator() (bool bEventSeen);
 private:
     ::sd::ViewShellBase& mrBase;

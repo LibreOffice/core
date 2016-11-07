@@ -27,7 +27,7 @@
 class SdDrawDocument;
 class SdPage;
 
-class SD_DLLPUBLIC SdCustomShow
+class SD_DLLPUBLIC SdCustomShow final
 {
 public:
     typedef ::std::vector<const SdPage*> PageVec;
@@ -47,7 +47,7 @@ public:
     explicit SdCustomShow(SdDrawDocument* pDrawDoc);
     SdCustomShow(SdDrawDocument* pDrawDoc, css::uno::Reference< css::uno::XInterface > const & xShow );
 
-    virtual ~SdCustomShow();
+    ~SdCustomShow();
 
     // @@@ copy ctor, but no copy assignment? @@@
     SdCustomShow( const SdCustomShow& rShow );

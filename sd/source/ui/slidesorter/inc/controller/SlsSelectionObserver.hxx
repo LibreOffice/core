@@ -37,11 +37,11 @@ namespace sd { namespace slidesorter { namespace controller {
     StartObservation() and EndObservation().  When the later is called
     the selection is set to just the newly inserted pages.
 */
-class SelectionObserver
+class SelectionObserver final
 {
 public:
     SelectionObserver (SlideSorter& rSlideSorter);
-    virtual ~SelectionObserver();
+    ~SelectionObserver();
 
     void NotifyPageEvent (const SdrPage* pPage);
     void StartObservation();

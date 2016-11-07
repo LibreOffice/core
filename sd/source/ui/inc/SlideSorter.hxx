@@ -64,11 +64,11 @@ namespace sd { namespace slidesorter {
 
     Note that this class is not in its final state.
 */
-class SlideSorter
+class SlideSorter final
 {
     friend class controller::SlotManager;
 public:
-    virtual ~SlideSorter();
+    ~SlideSorter();
 
     /// Forbid copy construction and copy assignment
     SlideSorter(const SlideSorter&) = delete;

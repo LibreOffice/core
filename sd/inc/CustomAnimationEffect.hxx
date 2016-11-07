@@ -51,14 +51,14 @@ typedef std::list< CustomAnimationEffectPtr > EffectSequence;
 
 class EffectSequenceHelper;
 
-class SD_DLLPUBLIC CustomAnimationEffect
+class SD_DLLPUBLIC CustomAnimationEffect final
 {
     friend class MainSequence;
     friend class EffectSequenceHelper;
 
 public:
     CustomAnimationEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    virtual ~CustomAnimationEffect();
+    ~CustomAnimationEffect();
 
     SAL_DLLPRIVATE const css::uno::Reference< css::animations::XAnimationNode >& getNode() const { return mxNode; }
     SAL_DLLPRIVATE void setNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode );

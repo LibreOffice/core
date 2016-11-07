@@ -49,7 +49,7 @@ class RequestQueue;
     timer is started that eventually calls ProcessRequest().  This is
     repeated until the queue is empty or Stop() is called.
 */
-class QueueProcessor
+class QueueProcessor final
 {
 public:
     typedef ::std::function<bool ()> IdleDetectionCallback;
@@ -59,7 +59,7 @@ public:
         const Size& rPreviewSize,
         const bool bDoSuperSampling,
         const SharedCacheContext& rpCacheContext);
-    virtual ~QueueProcessor();
+    ~QueueProcessor();
 
     /** Start the processor.  This implementation is timer based and waits
         an defined amount of time that depends on the given argument before
