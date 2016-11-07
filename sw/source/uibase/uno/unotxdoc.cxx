@@ -30,6 +30,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <editeng/svxacorr.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>
 #include <wdocsh.hxx>
@@ -3277,6 +3279,9 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // causing 'Save' being disabled; so let's always save to the original
     // format
     SvtSaveOptions().SetWarnAlienFormat(false);
+
+    // show word auto completion suggestions in selection instead of tooltip
+    SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags().bAutoCmpltShowAsTip = false;
 }
 
 void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
