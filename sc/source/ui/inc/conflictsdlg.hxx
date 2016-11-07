@@ -74,7 +74,7 @@ public:
 
 // class ScConflictsFinder
 
-class ScConflictsFinder
+class ScConflictsFinder final
 {
 private:
     ScChangeTrack*          mpTrack;
@@ -91,14 +91,14 @@ private:
 public:
                             ScConflictsFinder( ScChangeTrack* pTrack, sal_uLong nStartShared, sal_uLong nEndShared,
                                 sal_uLong nStartOwn, sal_uLong nEndOwn, ScConflictsList& rConflictsList );
-    virtual                 ~ScConflictsFinder();
+                            ~ScConflictsFinder();
 
     bool                    Find();
 };
 
 // class ScConflictsResolver
 
-class ScConflictsResolver
+class ScConflictsResolver final
 {
 private:
     ScChangeTrack*      mpTrack;
@@ -106,7 +106,7 @@ private:
 
 public:
                         ScConflictsResolver( ScChangeTrack* pTrack, ScConflictsList& rConflictsList );
-    virtual             ~ScConflictsResolver();
+                        ~ScConflictsResolver();
 
     void                HandleAction( ScChangeAction* pAction, bool bIsSharedAction,
                             bool bHandleContentAction, bool bHandleNonContentAction );

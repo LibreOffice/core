@@ -127,7 +127,7 @@ public:
     const ScTokenArray* Find( const ScAddress& rRefPos ) const;
 };
 
-class RangeNameBufferWK3
+class RangeNameBufferWK3 final
 {
 private:
     struct Entry
@@ -157,7 +157,7 @@ private:
 
 public:
     RangeNameBufferWK3(LOTUS_ROOT* pLotRoot);
-    virtual                 ~RangeNameBufferWK3();
+    ~RangeNameBufferWK3();
     void                    Add( const OUString& rName, const ScComplexRefData& rCRD );
     inline void             Add( const OUString& rName, const ScRange& aScRange );
     bool                    FindRel( const OUString& rRef, sal_uInt16& rIndex );

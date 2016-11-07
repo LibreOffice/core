@@ -48,11 +48,11 @@ enum XclTracerId
 };
 
 /** This class wraps an MSFilterTracer to create trace logs for import/export filters. */
-class XclTracer
+class XclTracer final
 {
 public:
     explicit                    XclTracer( const OUString& rDocUrl );
-    virtual                     ~XclTracer();
+                                ~XclTracer();
 
     /** Returns true, if tracing is enabled. */
     inline bool                 IsEnabled() const { return mbEnabled; }

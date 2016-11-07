@@ -31,11 +31,11 @@ class ScDocument;
 
 /** All current charts in the calc will be locked in constructor and unlocked in destructor.
 */
-class ScChartLockGuard
+class ScChartLockGuard final
 {
 public:
                     ScChartLockGuard( ScDocument* pDoc );
-    virtual         ~ScChartLockGuard();
+                    ~ScChartLockGuard();
 
     void            AlsoLockThisChart( const css::uno::Reference< css::frame::XModel >& xModel );
 
@@ -48,11 +48,11 @@ private:
 /** Use this to lock all charts in the calc for a little time.
     They will unlock automatically unless you call StartOrContinueLocking() again.
 */
-class ScTemporaryChartLock
+class ScTemporaryChartLock final
 {
 public:
                     ScTemporaryChartLock( ScDocument* pDoc );
-    virtual         ~ScTemporaryChartLock();
+                    ~ScTemporaryChartLock();
 
     void            StartOrContinueLocking();
     void            StopLocking();

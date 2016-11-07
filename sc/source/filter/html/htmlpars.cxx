@@ -1768,7 +1768,7 @@ void ScHTMLEntry::Strip( const EditEngine& rEditEngine )
     instance of this class ownes the contained table objects and deletes them
     on destruction.
  */
-class ScHTMLTableMap
+class ScHTMLTableMap final
 {
 private:
     typedef std::shared_ptr< ScHTMLTable >          ScHTMLTablePtr;
@@ -1785,7 +1785,7 @@ private:
 
 public:
     explicit            ScHTMLTableMap( ScHTMLTable& rParentTable );
-    virtual             ~ScHTMLTableMap();
+                        ~ScHTMLTableMap();
 
     inline const_iterator begin() const { return maTables.begin(); }
     inline const_iterator end() const { return maTables.end(); }
