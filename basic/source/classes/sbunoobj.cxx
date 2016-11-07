@@ -106,7 +106,6 @@ static char const ID_DBG_PROPERTIES[] = "Dbg_Properties";
 static char const ID_DBG_METHODS[] = "Dbg_Methods";
 
 static char const aSeqLevelStr[] = "[]";
-static char const defaultNameSpace[] = "ooo.vba";
 
 // Gets the default property for an uno object. Note: There is some
 // redirection built in. The property name specifies the name
@@ -3258,7 +3257,7 @@ void VBAConstantHelper::init()
     {
         Sequence< TypeClass > types(1);
         types[ 0 ] = TypeClass_CONSTANTS;
-        Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( defaultNameSpace, types, TypeDescriptionSearchDepth_INFINITE  );
+        Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( "ooo.vba", types, TypeDescriptionSearchDepth_INFINITE  );
 
         if ( !xEnum.is())
         {
@@ -4162,8 +4161,6 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     (void)pBasic;
     (void)bWrite;
 
-    static const char aTypeTypeString[] = "type";
-
     // 2 parameters needed
     if ( rPar.Count() != 3 )
     {
@@ -4175,7 +4172,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     OUString aTypeName = rPar.Get(1)->GetOUString();
     SbxVariable* pVal = rPar.Get(2);
 
-    if( aTypeName == aTypeTypeString )
+    if( aTypeName == "type" )
     {
         SbxDataType eBaseType = pVal->SbxValue::GetType();
         OUString aValTypeName;
