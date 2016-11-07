@@ -89,8 +89,10 @@ bool isBehChar(sal_Unicode cCh)
     case U_JG_FARSI_YEH:
     case U_JG_BURUSHASKI_YEH_BARREE:
         bRet = true;
+        break;
     default:
         bRet = false;
+        break;
     }
 
     return bRet;
@@ -108,8 +110,10 @@ bool isYehChar(sal_Unicode cCh)
     case U_JG_BURUSHASKI_YEH_BARREE:
     case U_JG_YEH_WITH_TAIL:
         bRet = true;
+        break;
     default:
         bRet = false;
+        break;
     }
 
     return bRet;
