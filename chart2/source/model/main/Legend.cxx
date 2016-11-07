@@ -47,8 +47,6 @@ using ::com::sun::star::beans::Property;
 namespace
 {
 
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.Legend";
-
 enum
 {
     PROP_LEGEND_ANCHOR_POSITION,
@@ -306,7 +304,7 @@ OUString SAL_CALL Legend::getImplementationName()
 
 OUString Legend::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart2.Legend");
 }
 
 sal_Bool SAL_CALL Legend::supportsService( const OUString& rServiceName )

@@ -66,7 +66,6 @@ using ::com::sun::star::uno::Any;
 
 namespace
 {
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.DataSeries";
 
 enum
 {
@@ -932,7 +931,7 @@ OUString SAL_CALL DataSeriesPointWrapper::getImplementationName()
 
 OUString DataSeriesPointWrapper::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart.DataSeries");
 }
 
 sal_Bool SAL_CALL DataSeriesPointWrapper::supportsService( const OUString& rServiceName )
