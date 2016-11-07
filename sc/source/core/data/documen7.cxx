@@ -62,7 +62,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
         return ;    // Clipboard or Undo
     if ( eHardRecalcState == HARDRECALCSTATE_OFF )
     {
-        ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pBASM, rHint.GetId());     // scoped bulk broadcast
         bool bIsBroadcasted = false;
         SvtBroadcaster* pBC = GetBroadcaster(rHint.GetAddress());
         if ( pBC )
@@ -98,7 +98,7 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uInt32 nHint, bool b
 
     if (eHardRecalcState == HARDRECALCSTATE_OFF)
     {
-        ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pBASM, nHint);     // scoped bulk broadcast
         bool bIsBroadcasted = false;
 
         if (bBroadcastSingleBroadcasters)
@@ -226,7 +226,7 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
         return ;    // Clipboard or Undo
     if (eHardRecalcState == HARDRECALCSTATE_OFF)
     {
-        ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pBASM, rHint.GetId());     // scoped bulk broadcast
         if ( pBASM->AreaBroadcast( rHint ) )
             TrackFormulas( rHint.GetId() );
     }
