@@ -1215,7 +1215,7 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
 
     if (nLineLength - 1 != nColumns)
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: /DecodeParms/Columns is inconsitent with /W");
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: /DecodeParms/Columns is inconsistent with /W");
         return;
     }
 
@@ -1747,7 +1747,7 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
 
     // Import certificates from the signed data temporarily, so it'll be
     // possible to verify the signature, even if we didn't have the certificate
-    // perviously.
+    // previously.
     std::vector<CERTCertificate*> aDocumentCertificates;
     for (size_t i = 0; pCMSSignedData->rawCerts[i]; ++i)
         aDocumentCertificates.push_back(CERT_NewTempCertificate(CERT_GetDefaultCertDB(), pCMSSignedData->rawCerts[i], nullptr, 0, 0));

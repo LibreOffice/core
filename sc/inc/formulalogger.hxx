@@ -105,7 +105,7 @@ public:
             const formula::FormulaToken& rToken );
 
         /**
-         * Call this when the group calculation has finished successfullly.
+         * Call this when the group calculation has finished successfully.
          */
         void setCalcComplete();
     };

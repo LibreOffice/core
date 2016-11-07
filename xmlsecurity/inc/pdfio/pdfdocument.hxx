@@ -132,11 +132,11 @@ public:
     void PushBackEOF(size_t nOffset);
     /// Look up object based on object number, possibly by parsing object streams.
     PDFObjectElement* LookupObject(size_t nObjectNumber);
-    /// Access to the input document, even after the inpust ream is gone.
+    /// Access to the input document, even after the input stream is gone.
     SvMemoryStream& GetEditBuffer();
     /// Tokenize elements from current offset.
     bool Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< std::unique_ptr<PDFElement> >& rElements, PDFObjectElement* pObject);
-    /// Register an object (owned directly or indirectly by m_aElements) as a provder for a given ID.
+    /// Register an object (owned directly or indirectly by m_aElements) as a provider for a given ID.
     void SetIDObject(size_t nID, PDFObjectElement* pObject);
     //@}
 
