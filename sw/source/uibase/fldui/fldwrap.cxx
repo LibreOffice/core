@@ -125,7 +125,7 @@ SwFieldDataOnlyDlgWrapper::SwFieldDataOnlyDlgWrapper( vcl::Window* _pParent, sal
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwFieldDlg* pDlg = pFact->CreateSwFieldDlg(pB, this, _pParent);
+    VclPtr<AbstractSwFieldDlg> pDlg = pFact->CreateSwFieldDlg(pB, this, _pParent);
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlgInterface = pDlg;
 

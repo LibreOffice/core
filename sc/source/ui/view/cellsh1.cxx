@@ -1079,8 +1079,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        AbstractScDPShowDetailDlg* pDlg = pFact->CreateScDPShowDetailDlg(
-                            pTabViewShell->GetDialogParent(), *pDPObj, nOrientation );
+                        ScopedVclPtr<AbstractScDPShowDetailDlg> pDlg( pFact->CreateScDPShowDetailDlg(
+                            pTabViewShell->GetDialogParent(), *pDPObj, nOrientation ) );
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -1120,9 +1120,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE( pFact, "ScAbstractFactory create fail!" );
                         Date aNullDate( *GetViewData()->GetDocument()->GetFormatTable()->GetNullDate() );
-                        AbstractScDPDateGroupDlg* pDlg = pFact->CreateScDPDateGroupDlg(
+                        ScopedVclPtr<AbstractScDPDateGroupDlg> pDlg( pFact->CreateScDPDateGroupDlg(
                             pTabViewShell->GetDialogParent(),
-                            aNumInfo, nParts, aNullDate );
+                            aNumInfo, nParts, aNullDate ) );
                         OSL_ENSURE( pDlg, "Dialog create fail!" );
                         if( pDlg->Execute() == RET_OK )
                         {
@@ -1134,8 +1134,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE( pFact, "ScAbstractFactory create fail!" );
-                        AbstractScDPNumGroupDlg* pDlg = pFact->CreateScDPNumGroupDlg(
-                            pTabViewShell->GetDialogParent(), aNumInfo );
+                        ScopedVclPtr<AbstractScDPNumGroupDlg> pDlg( pFact->CreateScDPNumGroupDlg(
+                            pTabViewShell->GetDialogParent(), aNumInfo ) );
                         OSL_ENSURE( pDlg, "Dialog create fail!" );
                         if( pDlg->Execute() == RET_OK )
                             pTabViewShell->NumGroupDataPilot( pDlg->GetGroupInfo() );

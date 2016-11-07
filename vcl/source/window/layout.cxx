@@ -308,7 +308,7 @@ void VclContainer::Command(const CommandEvent& rCEvt)
                             {
                                 // open screenshot annotation dialog
                                 VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                                AbstractScreenshotAnnotationDlg* pTmp = pFact->CreateScreenshotAnnotationDlg(
+                                VclPtr<AbstractScreenshotAnnotationDlg> pTmp = pFact->CreateScreenshotAnnotationDlg(
                                     Application::GetDefDialogParent(),
                                     *pParentDialog);
                                 ScopedVclPtr<AbstractScreenshotAnnotationDlg> pDialog(pTmp);
