@@ -184,26 +184,26 @@ bool ODesignView::PreNotify( NotifyEvent& rNEvt )
     switch(rNEvt.GetType())
     {
         case MouseNotifyEvent::KEYINPUT:
-            if ( (m_pPropWin && m_pPropWin->HasChildPathFocus()) )
+        {
+            if ( m_pPropWin && m_pPropWin->HasChildPathFocus() )
                 return false;
-            if ( (m_pAddField && m_pAddField->HasChildPathFocus()) )
+            if ( m_pAddField && m_pAddField->HasChildPathFocus() )
                 return false;
-            if ( (m_pReportExplorer && m_pReportExplorer->HasChildPathFocus()) )
+            if ( m_pReportExplorer && m_pReportExplorer->HasChildPathFocus() )
                 return false;
+            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            if ( handleKeyEvent(*pKeyEvent) )
+                bRet = true;
+            else if ( bRet && m_pAccel.get() )
             {
-                const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-                if ( handleKeyEvent(*pKeyEvent) )
-                    bRet = true;
-                else if ( bRet && m_pAccel.get() )
-                {
-                    const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
-                    util::URL aUrl;
-                    aUrl.Complete = m_pAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rCode));
-                    if ( aUrl.Complete.isEmpty() || !m_xController->isCommandEnabled( aUrl.Complete ) )
-                        bRet = false;
-                }
+                const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
+                util::URL aUrl;
+                aUrl.Complete = m_pAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rCode));
+                if ( aUrl.Complete.isEmpty() || !m_xController->isCommandEnabled( aUrl.Complete ) )
+                    bRet = false;
             }
             break;
+        }
         default:
             break;
     }
