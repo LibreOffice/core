@@ -5927,6 +5927,11 @@
           <value xml:lang="en-US">Digital Signatu~res...</value>
         </prop>
       </node>
+      <node oor:name=".uno:SignPDF" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Sign Existing PDF...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:MacroSignature" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Digital Signature...</value>
@@ -6129,6 +6134,11 @@
       <node oor:name=".uno:SendToMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sen~d</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SignaturesMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Digital Signatures</value>
         </prop>
       </node>
       <node oor:name=".uno:MacrosMenu" oor:op="replace">

@@ -26,6 +26,8 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SignPDF"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Quit"/>
         </menu:menupopup>
     </menu:menu>
