@@ -16,6 +16,24 @@
       "revId": "92050cb2bb147faa3ba91ef28036b4e5060c1116",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_e0d832f2",
+        "filename": "offapi/com/sun/star/util/XAccounting.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-11-07T15:40:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a77a97e_204ceac6",
+      "revId": "92050cb2bb147faa3ba91ef28036b4e5060c1116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
