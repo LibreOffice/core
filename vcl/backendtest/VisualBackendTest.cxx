@@ -343,7 +343,7 @@ public:
         Rectangle aRectangle;
         size_t index = 0;
 
-        std::vector<Rectangle> aRegions = setupRegions(2, 2, nWidth, nHeight);
+        std::vector<Rectangle> aRegions = setupRegions(2, 3, nWidth, nHeight);
 
         aRectangle = aRegions[index++];
         {
@@ -363,7 +363,7 @@ public:
         {
             vcl::test::OutputDeviceTestBitmap aOutDevTest;
             Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha();
-            assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap), aRectangle, rRenderContext);
+            assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkAlphaBitmap(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
         aRectangle = aRegions[index++];
@@ -371,6 +371,13 @@ public:
             vcl::test::OutputDeviceTestBitmap aOutDevTest;
             Bitmap aBitmap = aOutDevTest.setupDrawMask();
             assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestBitmap aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupDrawNativeBitmapWithAlpha();
+            assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkAlphaBitmap(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
     }

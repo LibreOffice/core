@@ -77,11 +77,13 @@ public:
     Bitmap setupDrawBitmap();
     Bitmap setupDrawBitmapExWithAlpha();
     Bitmap setupDrawMask();
+    Bitmap setupDrawNativeBitmapWithAlpha();
 
     static TestResult checkBitmap(Bitmap& rBitmap);
     static TestResult checkTransformedBitmap(Bitmap& rBitmap);
     static TestResult checkBitmapExWithAlpha(Bitmap& rBitmap);
     static TestResult checkMask(Bitmap& rBitmap);
+    static TestResult checkAlphaBitmap(Bitmap& rBitmap);
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestAnotherOutDev : public OutputDeviceTestCommon

@@ -111,6 +111,27 @@ Bitmap OutputDeviceTestBitmap::setupDrawMask()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
+Bitmap OutputDeviceTestBitmap::setupDrawNativeBitmapWithAlpha()
+{
+    Size aBitmapSize(9, 9);
+    Bitmap aBitmap(aBitmapSize, 32);
+    {
+        Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
+        aWriteAccess->Erase(COL_TRANSPARENT);
+        aWriteAccess->SetLineColor(Color(0x44, 0xFF, 0xFF, 0x00));
+        aWriteAccess->DrawRect(Rectangle(0, 0, 8, 8));
+        aWriteAccess->DrawRect(Rectangle(3, 3, 5, 5));
+    }
+
+    initialSetup(13, 13, constBackgroundColor);
+
+    Point aPoint(alignToCenter(maVDRectangle, Rectangle(Point(), aBitmapSize)).TopLeft());
+
+    mpVirtualDevice->DrawBitmap(aPoint, aBitmap);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 TestResult OutputDeviceTestBitmap::checkBitmap(Bitmap& rBitmap)
 {
     std::vector<Color> aExpected
@@ -131,7 +152,7 @@ TestResult OutputDeviceTestBitmap::checkTransformedBitmap(Bitmap& rBitmap)
     return checkRectangles(rBitmap, aExpected);
 }
 
-TestResult OutputDeviceTestBitmap::checkBitmapExWithAlpha(Bitmap& rBitmap)
+TestResult OutputDeviceTestBitmap::checkAlphaBitmap(Bitmap& rBitmap)
 {
     const Color aBlendedColor(0xEE, 0xEE, 0x33);
 
