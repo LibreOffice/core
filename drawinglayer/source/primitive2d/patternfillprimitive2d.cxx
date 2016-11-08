@@ -277,7 +277,7 @@ namespace drawinglayer
                     else if(double(nW * nH) / double(mnDiscreteWidth * mnDiscreteHeight) <= 0.5)
                     {
                         // Size has shrunk for 50% or more - it's worth to refresh the buffering
-                        // to spare some ressources
+                        // to spare some resources
                         bResetBuffering = true;
                     }
                 }

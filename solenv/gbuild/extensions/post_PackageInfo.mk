@@ -54,7 +54,7 @@ define gb_PackageInfo_emit_l10n_for_one_alllangpackage
 
 endef
 
-define gb_PackageInfo_emit_l10n_for_one_ressource
+define gb_PackageInfo_emit_l10n_for_one_resource
 @echo "$(patsubst $(INSTDIR)/%,%,$(call gb_ResTarget_get_install_target,$(1)$(2)))" >> $(gb_PackageInfo_get_target)/l10n-$(2).files
 
 endef
@@ -67,12 +67,12 @@ endef
 define gb_PackageInfo_emit_l10n_for_one_configfile
 echo "$(LIBO_SHARE_FOLDER)/registry/$(2)$(1).xcd" >> $(gb_PackageInfo_get_target)/l10n-$(1).files
 
-endef 
+endef
 
 define gb_PackageInfo_emit_l10n_for_one_lang
 @touch $(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/l10n-$(1).$(suf))
 $(if $(filter-out qtz en-US,$(1)),$(foreach packagedir,$(patsubst %/,%,$(gb_AllLangPackage_ALLDIRS)),$(call gb_PackageInfo_emit_l10n_for_one_alllangpackage,$(packagedir),$(1))))
-$(if $(filter $(gb_AllLangResTarget_LANGS),$(1)),$(foreach target,$(gb_AllLangResTarget_ALLTARGETS),$(call gb_PackageInfo_emit_l10n_for_one_ressource,$(target),$(1))))
+$(if $(filter $(gb_AllLangResTarget_LANGS),$(1)),$(foreach target,$(gb_AllLangResTarget_ALLTARGETS),$(call gb_PackageInfo_emit_l10n_for_one_resource,$(target),$(1))))
 $(foreach uizip,\
     $(sort $(foreach uifile,$(gb_UIConfig_ALLFILES),$(firstword $(subst :,$(WHITESPACE),$(uifile))))),\
     $(call gb_PackageInfo_emit_l10n_for_one_uizip,$(1),$(uizip)))
