@@ -25,7 +25,7 @@
 //  * include/svx/gallery.hxx
 //  * share/gallery (theme files are identified by id)
 //
-// These defines are used to map gallery names to translated string ressources. Since
+// These defines are used to map gallery names to translated string resources. Since
 // galleries may be copied from older offices to newer, do *never* change this
 // IDs except adding new ones (and adapting RID_GALLERYSTR_THEME_LAST). The ID
 // *is* written into the binary file *.thm (which is a gallery theme combined of

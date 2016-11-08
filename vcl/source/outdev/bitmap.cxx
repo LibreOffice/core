@@ -1252,7 +1252,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         // limit maximum area to something looking good for non-pixel-based targets (metafile, printer)
         // by using a fixed minimum (allow at least, but no need to utilize) for good smoothing and an area
         // dependent of original size for good quality when e.g. rotated/sheared. Still, limit to a maximum
-        // to avoid crashes/ressource problems (ca. 1500x3000 here)
+        // to avoid crashes/resource problems (ca. 1500x3000 here)
         const Size& rOriginalSizePixel(rBitmapEx.GetSizePixel());
         const double fOrigArea(rOriginalSizePixel.Width() * rOriginalSizePixel.Height() * 0.5);
         const double fOrigAreaScaled(bSheared || bRotated ? fOrigArea * 1.44 : fOrigArea);
