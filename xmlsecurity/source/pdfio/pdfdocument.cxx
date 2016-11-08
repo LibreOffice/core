@@ -478,6 +478,11 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.WriteCharPtr("\nendobj\n\n");
 
     // Write the updated Catalog object, references nAnnotId.
+    if (!m_pTrailer)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: found no trailer");
+        return false;
+    }
     auto pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"));
     if (!pRoot)
     {
