@@ -440,11 +440,6 @@ ODatabaseForm::~ODatabaseForm()
 
 // html tools
 
-OUString ODatabaseForm::GetDataURLEncoded(const Reference<XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt)
-{
-    return GetDataEncoded(true,SubmitButton,MouseEvt);
-}
-
 OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt)
 {
     // Fill List of successful Controls
@@ -497,12 +492,6 @@ OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XContro
 
 
 // html tools
-
-OUString ODatabaseForm::GetDataTextEncoded(const Reference<XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt)
-{
-    return GetDataEncoded(false,SubmitButton,MouseEvt);
-}
-
 
 Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt, OUString& rContentType)
 {
@@ -2193,7 +2182,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
         OUString aData;
         {
             SolarMutexGuard aGuard;
-            aData = GetDataURLEncoded( Control, MouseEvt );
+            aData = GetDataEncoded(true, Control, MouseEvt);
         }
 
         URL aURL;
@@ -2265,7 +2254,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
         OUString aData;
         {
             SolarMutexGuard aGuard;
-            aData = GetDataTextEncoded( Reference<XControl> (), MouseEvt );
+            aData = GetDataEncoded(false, Reference<XControl> (), MouseEvt);
         }
 
         lcl_dispatch(xFrame,xTransformer,aURLStr,aReferer,aTargetName,aData,osl_getThreadTextEncoding());
@@ -3730,23 +3719,9 @@ void SAL_CALL ODatabaseForm::propertyChange( const PropertyChangeEvent& evt ) th
 
 // css::lang::XServiceInfo
 
-OUString SAL_CALL ODatabaseForm::getImplementationName_Static()
-{
-    return OUString( "com.sun.star.comp.forms.ODatabaseForm" );
-}
-
-Sequence< OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames_Static()
-{
-    return css::uno::Sequence<OUString>{
-        FRM_SUN_FORMCOMPONENT, "com.sun.star.form.FormComponents",
-        FRM_SUN_COMPONENT_FORM, FRM_SUN_COMPONENT_HTMLFORM,
-        FRM_SUN_COMPONENT_DATAFORM, FRM_COMPONENT_FORM};
-}
-
-
 OUString SAL_CALL ODatabaseForm::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
+    return OUString( "com.sun.star.comp.forms.ODatabaseForm" );
 }
 
 
@@ -3760,7 +3735,10 @@ Sequence< OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames() throw( R
 
     // concat with out own services
     return ::comphelper::concatSequences(
-        getSupportedServiceNames_Static(),
+        css::uno::Sequence<OUString> {
+            FRM_SUN_FORMCOMPONENT, "com.sun.star.form.FormComponents",
+            FRM_SUN_COMPONENT_FORM, FRM_SUN_COMPONENT_HTMLFORM,
+            FRM_SUN_COMPONENT_DATAFORM, FRM_COMPONENT_FORM },
         aServices
     );
 }

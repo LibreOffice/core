@@ -106,7 +106,6 @@ protected:
         void            InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, PushButton& rBtnFx,
                                         ArgEdit& rEdArg, RefButton& rRefBtn);
 
-        void            DelParaArray();
         void            SetArgumentDesc(const OUString& aText);
         void            SetArgumentText(const OUString& aText);
 

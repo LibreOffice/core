@@ -245,11 +245,10 @@ void SAL_CALL OFileControlModel::reset() throw ( css::uno::RuntimeException, std
 
     if (bContinue)
     {
-        {
-            // If Models are threadSafe
-            ::osl::MutexGuard aGuard(m_aMutex);
-            _reset();
-        }
+        // don't lock our mutex as setting aggregate properties
+        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
+        // our own mutex locked
+        m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, makeAny(m_sDefaultValue));
         m_aResetListeners.notifyEach( &XResetListener::resetted, aEvt );
     }
 }
@@ -266,16 +265,6 @@ void OFileControlModel::removeResetListener(const Reference<XResetListener>& _rx
     m_aResetListeners.removeInterface(_rxListener);
 }
 
-
-void OFileControlModel::_reset()
-{
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, makeAny(m_sDefaultValue));
-    }
-}
 
 }   // namespace frm
 

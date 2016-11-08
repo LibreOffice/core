@@ -76,7 +76,7 @@ namespace frm
             if ( _rxControl.is() )
             {
                 m_aStatusListeners.addInterface( _rxControl );
-                newStatusListener( _rxControl );
+                doNotify( _rxControl, buildStatusEvent() );
             }
     }
 
@@ -110,12 +110,6 @@ namespace frm
         ::comphelper::OInterfaceIteratorHelper2 aIter( getStatusListeners() );
         while ( aIter.hasMoreElements() )
             doNotify( static_cast< XStatusListener* >( aIter.next() ), aEvent );
-    }
-
-
-    void ORichTextFeatureDispatcher::newStatusListener( const Reference< XStatusListener >& _rxListener )
-    {
-        doNotify( _rxListener, buildStatusEvent() );
     }
 
 

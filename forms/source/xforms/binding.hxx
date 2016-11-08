@@ -266,10 +266,6 @@ private:
     /// (to be used be API methods before acting on the object)
     void checkLive() throw( css::uno::RuntimeException );
 
-    /// check whether binding has a model, and throw exception if not
-    /// (to be used be API methods before acting on the object)
-    void checkModel() throw( css::uno::RuntimeException );
-
     /// determine whether object is live
     /// live: has model, and model has been initialized
     bool isLive() const;

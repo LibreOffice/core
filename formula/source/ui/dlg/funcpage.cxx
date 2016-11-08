@@ -73,7 +73,7 @@ FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManage
     m_pLbFunction->set_width_request(aSize.Width());
     m_aHelpId = m_pLbFunction->GetHelpId();
 
-    InitLRUList();
+    m_pFunctionManager->fillLastRecentlyUsedFunctions(aLRUList);
 
     const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
     for(sal_uInt32 j= 0; j < nCategoryCount; ++j)
@@ -295,12 +295,6 @@ const IFunctionDescription* FuncPage::GetFuncDesc( sal_Int32 nPos ) const
     // not pretty, but hopefully rare
     return static_cast<const IFunctionDescription*>(m_pLbFunction->GetEntryData(nPos));
 }
-
-void FuncPage::InitLRUList()
-{
-    m_pFunctionManager->fillLastRecentlyUsedFunctions(aLRUList);
-}
-
 
 } // formula
 

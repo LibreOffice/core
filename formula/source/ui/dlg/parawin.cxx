@@ -324,11 +324,6 @@ void ParaWin::SetArgument(sal_uInt16 no, const OUString& aString)
         aParaArray[no] = comphelper::string::stripStart(aString, ' ');
 }
 
-void ParaWin::DelParaArray()
-{
-    ::std::vector<OUString>().swap(aParaArray);
-}
-
 void ParaWin::SetArgumentFonts(const vcl::Font&aBoldFont,const vcl::Font&aLightFont)
 {
     aFntBold=aBoldFont;
@@ -432,7 +427,7 @@ void ParaWin::ClearAll()
 
 void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
 {
-    DelParaArray();
+    aParaArray.clear();
     m_pSlider->SetThumbPos(0);
 
     aParaArray.resize(nArgs);

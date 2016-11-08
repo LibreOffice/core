@@ -118,7 +118,6 @@ namespace frm
 
     private:
         EditEngine&  getEngine() const;
-        vcl::Window&      getViewport() const;
     };
 
 

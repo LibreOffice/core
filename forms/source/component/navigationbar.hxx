@@ -67,10 +67,6 @@ namespace frm
     public:
         DECLARE_DEFAULT_LEAF_XTOR( ONavigationBarModel );
 
-        // XServiceInfo - static version
-        static  OUString SAL_CALL getImplementationName_Static();
-        static  css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
-
     protected:
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ONavigationBarModel, OControlModel )

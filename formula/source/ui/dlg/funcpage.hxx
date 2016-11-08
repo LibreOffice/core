@@ -78,7 +78,6 @@ private:
 protected:
 
     void            UpdateFunctionList(const OUString&);
-    void            InitLRUList();
 
 
 public:

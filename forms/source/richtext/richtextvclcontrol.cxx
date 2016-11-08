@@ -160,7 +160,7 @@ namespace frm
 
     void RichTextControl::GetFocus()
     {
-        getViewport().GrabFocus();
+        m_pImpl->getViewport( RichTextControlImpl::GrantAccess() )->GrabFocus();
     }
 
 
@@ -317,12 +317,6 @@ namespace frm
     EditEngine& RichTextControl::getEngine() const
     {
         return *m_pImpl->getEngine( RichTextControlImpl::GrantAccess() );
-    }
-
-
-    vcl::Window& RichTextControl::getViewport() const
-    {
-        return *m_pImpl->getViewport( RichTextControlImpl::GrantAccess() );
     }
 
 

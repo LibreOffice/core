@@ -217,16 +217,8 @@ Sequence< OUString > OControl::getAggregateServiceNames()
 
 Sequence<OUString> SAL_CALL OControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
-    return ::comphelper::concatSequences(
-        getAggregateServiceNames(),
-        getSupportedServiceNames_Static()
-   );
-}
-
-Sequence< OUString > SAL_CALL OControl::getSupportedServiceNames_Static() throw( RuntimeException )
-{
     // no own supported service names
-    return Sequence< OUString >();
+    return getAggregateServiceNames();
 }
 
 // XEventListener
