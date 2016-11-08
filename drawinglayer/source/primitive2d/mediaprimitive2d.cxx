@@ -52,8 +52,7 @@ namespace drawinglayer
                 const GraphicObject aGraphicObject(maSnapshot);
                 const GraphicAttr aGraphicAttr;
                 xRetval.resize(2);
-                xRetval[0] = xRefBackground;
-                xRetval[1] = Primitive2DReference(new GraphicPrimitive2D(getTransform(), aGraphicObject, aGraphicAttr));
+                xRetval[1] = new GraphicPrimitive2D(getTransform(), aGraphicObject, aGraphicAttr);
             }
 
             if(getDiscreteBorder())

@@ -166,50 +166,49 @@ namespace drawinglayer
 
         void TextSimplePortionPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
+            if(!getTextLength())
+                return;
+
             Primitive2DContainer aRetval;
+            basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
+            basegfx::B2DHomMatrix aPolygonTransform;
 
-            if(getTextLength())
+            // get text outlines and their object transformation
+            getTextOutlinesAndTransformation(aB2DPolyPolyVector, aPolygonTransform);
+
+            // create primitives for the outlines
+            const sal_uInt32 nCount(aB2DPolyPolyVector.size());
+
+            if(!nCount)
+                return;
+
+            // alloc space for the primitives
+            aRetval.resize(nCount);
+
+            // color-filled polypolygons
+            for(sal_uInt32 a(0L); a < nCount; a++)
             {
-                basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
-                basegfx::B2DHomMatrix aPolygonTransform;
+                // prepare polypolygon
+                basegfx::B2DPolyPolygon& rPolyPolygon = aB2DPolyPolyVector[a];
+                rPolyPolygon.transform(aPolygonTransform);
+                aRetval[a] = new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor());
+            }
 
-                // get text outlines and their object transformation
-                getTextOutlinesAndTransformation(aB2DPolyPolyVector, aPolygonTransform);
+            if(getFontAttribute().getOutline())
+            {
+                // decompose polygon transformation to single values
+                basegfx::B2DVector aScale, aTranslate;
+                double fRotate, fShearX;
+                aPolygonTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
-                // create primitives for the outlines
-                const sal_uInt32 nCount(aB2DPolyPolyVector.size());
+                // create outline text effect with current content and replace
+                Primitive2DReference aNewTextEffect(new TextEffectPrimitive2D(
+                    aRetval,
+                    aTranslate,
+                    fRotate,
+                    TextEffectStyle2D::Outline));
 
-                if(nCount)
-                {
-                    // alloc space for the primitives
-                    aRetval.resize(nCount);
-
-                    // color-filled polypolygons
-                    for(sal_uInt32 a(0L); a < nCount; a++)
-                    {
-                        // prepare polypolygon
-                        basegfx::B2DPolyPolygon& rPolyPolygon = aB2DPolyPolyVector[a];
-                        rPolyPolygon.transform(aPolygonTransform);
-                        aRetval[a] = new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor());
-                    }
-
-                    if(getFontAttribute().getOutline())
-                    {
-                        // decompose polygon transformation to single values
-                        basegfx::B2DVector aScale, aTranslate;
-                        double fRotate, fShearX;
-                        aPolygonTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-                        // create outline text effect with current content and replace
-                        Primitive2DReference aNewTextEffect(new TextEffectPrimitive2D(
-                            aRetval,
-                            aTranslate,
-                            fRotate,
-                            TextEffectStyle2D::Outline));
-
-                        aRetval = Primitive2DContainer { aNewTextEffect };
-                    }
-                }
+                aRetval = Primitive2DContainer { aNewTextEffect };
             }
 
             rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());

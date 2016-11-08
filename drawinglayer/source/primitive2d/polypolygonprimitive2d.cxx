@@ -529,44 +529,44 @@ namespace drawinglayer
     {
         void PolyPolygonSelectionPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
+            if(getTransparence() >= 1.0 || !getB2DPolyPolygon().count())
+                return;
+
             Primitive2DContainer aRetval;
 
-            if(getTransparence() < 1.0 && getB2DPolyPolygon().count())
+            if(getFill() && getB2DPolyPolygon().isClosed())
             {
-                if(getFill() && getB2DPolyPolygon().isClosed())
-                {
-                    // create fill primitive
-                    const Primitive2DReference aFill(
-                        new PolyPolygonColorPrimitive2D(
-                            getB2DPolyPolygon(),
-                            getColor()));
+                // create fill primitive
+                const Primitive2DReference aFill(
+                    new PolyPolygonColorPrimitive2D(
+                        getB2DPolyPolygon(),
+                        getColor()));
 
-                    aRetval = Primitive2DContainer { aFill };
-                }
+                aRetval = Primitive2DContainer { aFill };
+            }
 
-                if(getDiscreteGrow() > 0.0)
-                {
-                    const attribute::LineAttribute aLineAttribute(
-                        getColor(),
-                        getDiscreteGrow() * getDiscreteUnit() * 2.0);
-                    const Primitive2DReference aFatLine(
-                        new PolyPolygonStrokePrimitive2D(
-                            getB2DPolyPolygon(),
-                            aLineAttribute));
+            if(getDiscreteGrow() > 0.0)
+            {
+                const attribute::LineAttribute aLineAttribute(
+                    getColor(),
+                    getDiscreteGrow() * getDiscreteUnit() * 2.0);
+                const Primitive2DReference aFatLine(
+                    new PolyPolygonStrokePrimitive2D(
+                        getB2DPolyPolygon(),
+                        aLineAttribute));
 
-                    aRetval.push_back(aFatLine);
-                }
+                aRetval.push_back(aFatLine);
+            }
 
-                // embed filled to transparency (if used)
-                if(!aRetval.empty() && getTransparence() > 0.0)
-                {
-                    const Primitive2DReference aTrans(
-                        new UnifiedTransparencePrimitive2D(
-                            aRetval,
-                            getTransparence()));
+            // embed filled to transparency (if used)
+            if(!aRetval.empty() && getTransparence() > 0.0)
+            {
+                const Primitive2DReference aTrans(
+                    new UnifiedTransparencePrimitive2D(
+                        aRetval,
+                        getTransparence()));
 
-                    aRetval = Primitive2DContainer { aTrans };
-                }
+                aRetval = Primitive2DContainer { aTrans };
             }
 
             rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());

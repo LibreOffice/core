@@ -223,8 +223,6 @@ namespace drawinglayer
 
         void ScenePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DContainer aRetval;
-
             // create 2D shadows from contained 3D primitives. This creates the shadow primitives on demand and tells if
             // there are some or not. Do this at start, the shadow might still be visible even when the scene is not
             if(impGetShadow3D(rViewInformation))
@@ -237,7 +235,7 @@ namespace drawinglayer
                 if(aViewRange.isEmpty() || aShadow2DRange.overlaps(aViewRange))
                 {
                     // add extracted 2d shadows (before 3d scene creations itself)
-                    aRetval = maShadowPrimitives;
+                    rContainer.insert(rContainer.end(), maShadowPrimitives.begin(), maShadowPrimitives.end());
                 }
             }
 
@@ -477,8 +475,7 @@ namespace drawinglayer
                         aNew2DTransform *= aInverseOToV;
 
                         // create bitmap primitive and add
-                        const Primitive2DReference xRef(new BitmapPrimitive2D(maOldRenderedBitmap, aNew2DTransform));
-                        aRetval.push_back(xRef);
+                        rContainer.push_back(new BitmapPrimitive2D(maOldRenderedBitmap, aNew2DTransform));
 
                         // test: Allow to add an outline in the debugger when tests are needed
                         static bool bAddOutlineToCreated3DSceneRepresentation(false);
@@ -487,14 +484,11 @@ namespace drawinglayer
                         {
                             basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
                             aOutline.transform(aNew2DTransform);
-                            const Primitive2DReference xRef2(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
-                            aRetval.push_back(xRef2);
+                            rContainer.push_back(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
                         }
                     }
                 }
             }
-
-            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
         }
 
         Primitive2DContainer ScenePrimitive2D::getGeometry2D() const
