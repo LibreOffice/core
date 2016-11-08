@@ -55,9 +55,8 @@ private:
     bool IsPresObj() const
         throw (std::exception);
 
-    bool IsEmptyPresObj() const throw();
-    void SetEmptyPresObj(bool bEmpty)
-        throw (css::uno::RuntimeException, std::exception);
+    bool IsEmptyPresObj() const;
+    void SetEmptyPresObj(bool bEmpty);
 
     bool IsMasterDepend() const throw();
     void SetMasterDepend( bool bDepend ) throw();

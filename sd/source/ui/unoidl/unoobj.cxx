@@ -894,7 +894,7 @@ bool SdXShape::IsPresObj() const
 
 /** checks if this presentation object is empty
  */
-bool SdXShape::IsEmptyPresObj() const throw()
+bool SdXShape::IsEmptyPresObj() const
 {
     SdrObject* pObj = mpShape->GetSdrObject();
     if( (pObj != nullptr) && pObj->IsEmptyPresObj() )
@@ -934,12 +934,11 @@ OUString SdXShape::GetPlaceholderText() const
         return OUString();
 
     return pPage->GetPresObjText( pPage->GetPresObjKind(pObj) );
- }
+}
 
 /** sets/reset the empty status of a presentation object
 */
 void SdXShape::SetEmptyPresObj(bool bEmpty)
-    throw (css::uno::RuntimeException, std::exception)
 {
     // only possible if this actually *is* a presentation object
     if( !IsPresObj() )
