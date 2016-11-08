@@ -47,18 +47,7 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
-
-
-    static inline OUString
-        getImplementationName_Static() throw();
-    static css::uno::Sequence< OUString >
-        getSupportedServiceNames_Static() throw();
 };
-
-inline OUString HHConvDic::getImplementationName_Static() throw()
-{
-    return OUString( "com.sun.star.lingu2.HHConvDic" );
-}
 
 
 #endif

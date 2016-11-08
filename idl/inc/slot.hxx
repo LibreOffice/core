@@ -88,9 +88,6 @@ public:
             }
 
 public:
-            SvMetaObject *  MakeClone() const;
-            SvMetaSlot *Clone() const { return static_cast<SvMetaSlot *>(MakeClone()); }
-
             SvMetaSlot();
             SvMetaSlot( SvMetaType * pType );
 

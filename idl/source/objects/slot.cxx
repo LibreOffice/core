@@ -27,11 +27,6 @@
 #include <database.hxx>
 
 
-SvMetaObject *SvMetaSlot::MakeClone() const
-{
-        return new SvMetaSlot( *this );
-}
-
 SvMetaSlot::SvMetaSlot()
     : aRecordPerSet( true )
     , aRecordAbsolute( false )
@@ -480,7 +475,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
                 if (aSId.equals(pAttr->GetSlotId().getString()))
                 {
                     SvMetaSlot& rSlot = dynamic_cast<SvMetaSlot&>(*pAttr);
-                    xEnumSlot = rSlot.Clone();
+                    xEnumSlot = new SvMetaSlot( rSlot );
                     break;
                 }
             }
@@ -488,7 +483,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
             if ( m == rBase.GetSlotList().size() )
             {
                 OSL_FAIL("Invalid EnumSlot!");
-                xEnumSlot = Clone();
+                xEnumSlot = new SvMetaSlot( *this );
                 sal_uLong nValue;
                 if ( rBase.FindId(aSId , &nValue) )
                 {

@@ -122,22 +122,10 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-
-    static inline OUString
-        getImplementationName_Static() throw();
-    static css::uno::Sequence< OUString >
-        getSupportedServiceNames_Static() throw();
-
     bool    HasEntry( const OUString &rLeftText, const OUString &rRightText );
     void    AddEntry( const OUString &rLeftText, const OUString &rRightText );
     void    RemoveEntry( const OUString &rLeftText, const OUString &rRightText );
 };
-
-inline OUString ConvDic::getImplementationName_Static() throw()
-{
-    return OUString( "com.sun.star.lingu2.ConvDic" );
-}
-
 
 #endif
 

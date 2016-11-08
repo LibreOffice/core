@@ -39,7 +39,6 @@ class DefaultNumberingProvider : public cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 {
-    void impl_loadTranslit();
 public:
     DefaultNumberingProvider(
         const css::uno::Reference < css::uno::XComponentContext >& rxContext );
