@@ -26,14 +26,11 @@
 namespace chart
 {
 
-/**
-*/
-
-class VTitle
+class VTitle final
 {
 public:
     explicit VTitle( const css::uno::Reference< css::chart2::XTitle > & xTitle );
-    virtual ~VTitle();
+    ~VTitle();
 
     void    init( const css::uno::Reference< css::drawing::XShapes >& xTargetPage
              , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory

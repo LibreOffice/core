@@ -31,11 +31,11 @@
 namespace chart
 {
 
-class TrendlineResources
+class TrendlineResources final
 {
 public:
     TrendlineResources( vcl::Window* pParent, const SfxItemSet& rInAttrs );
-    virtual ~TrendlineResources();
+    ~TrendlineResources();
 
     void Reset(const SfxItemSet& rInAttrs);
     bool FillItemSet(SfxItemSet* rOutAttrs) const;

@@ -47,13 +47,13 @@ public:
     virtual css::uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
 };
 
-class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider
+class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider final
 {
 public:
     ExplicitCategoriesProvider( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSysModel
                        , ChartModel& rChartModel
                        );
-    virtual ~ExplicitCategoriesProvider();
+    ~ExplicitCategoriesProvider();
 
     void init();
 

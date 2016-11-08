@@ -35,13 +35,13 @@ namespace chart
 
 class DialogModel;
 
-class DataBrowserModel
+class DataBrowserModel final
 {
 public:
     explicit DataBrowserModel(
         const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~DataBrowserModel();
+    ~DataBrowserModel();
 
     /** Inserts a new data series after the data series to which the data column
         with index nAfterColumnIndex belongs.

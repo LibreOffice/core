@@ -92,7 +92,7 @@ public:
 };
 
 // LibUserData
-class LibUserData
+class LibUserData final
 {
 private:
     ScriptDocument m_aDocument;
@@ -102,7 +102,7 @@ public:
         : m_aDocument(rDocument)
     {
     }
-    virtual ~LibUserData() {};
+    ~LibUserData() {};
 
     const ScriptDocument& GetDocument() const { return m_aDocument; }
 };

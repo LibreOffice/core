@@ -26,15 +26,13 @@
 namespace chart
 {
 
-/**
-*/
 class FixedNumberFormatter;
 
-class OOO_DLLPUBLIC_CHARTTOOLS NumberFormatterWrapper
+class OOO_DLLPUBLIC_CHARTTOOLS NumberFormatterWrapper final
 {
 public:
     NumberFormatterWrapper( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier );
-    virtual ~NumberFormatterWrapper();
+    ~NumberFormatterWrapper();
 
     SvNumberFormatter* getSvNumberFormatter() const { return m_pNumberFormatter;}
     const css::uno::Reference< css::util::XNumberFormatsSupplier >&
@@ -51,12 +49,12 @@ private: //private member
     css::uno::Any m_aNullDate;
 };
 
-class OOO_DLLPUBLIC_CHARTTOOLS FixedNumberFormatter
+class OOO_DLLPUBLIC_CHARTTOOLS FixedNumberFormatter final
 {
 public:
     FixedNumberFormatter( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier
         , sal_Int32 nNumberFormatKey );
-    virtual ~FixedNumberFormatter();
+    ~FixedNumberFormatter();
 
     OUString getFormattedString( double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;
 

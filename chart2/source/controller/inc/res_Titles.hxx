@@ -26,11 +26,11 @@
 namespace chart
 {
 
-class TitleResources
+class TitleResources final
 {
 public:
     TitleResources(VclBuilderContainer& rParent, bool bShowSecondaryAxesTitle);
-    virtual ~TitleResources();
+    ~TitleResources();
 
     void writeToResources( const TitleDialogData& rInput );
     void readFromResources( TitleDialogData& rOutput );
