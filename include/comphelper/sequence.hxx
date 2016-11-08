@@ -291,6 +291,15 @@ namespace comphelper
         return result;
     }
 
+    // this one does better type deduction, but does not allow us to copy into a different element type
+    template < typename SrcType >
+    inline css::uno::Sequence< typename SrcType::value_type > containerToSequence( const SrcType& i_Container )
+    {
+        css::uno::Sequence< typename SrcType::value_type > result( i_Container.size() );
+        ::std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
+        return result;
+    }
+
     template <typename T>
     inline css::uno::Sequence<T> containerToSequence(
         ::std::vector<T> const& v )
