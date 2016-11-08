@@ -127,10 +127,6 @@ namespace frm
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-        // css::lang::XServiceInfo - static version
-        static  OUString SAL_CALL getImplementationName_Static();
-        static  css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
-
     protected:
         virtual void PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc ) override;
         virtual void ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal ) override;

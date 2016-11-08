@@ -456,13 +456,6 @@ void Binding::checkLive()
         throw RuntimeException( EXCEPT("Binding not initialized") );
 }
 
-void Binding::checkModel()
-    throw( RuntimeException )
-{
-    if( ! mxModel.is() )
-        throw RuntimeException( EXCEPT("Binding has no Model") );
-}
-
 bool Binding::isLive() const
 {
     const Model* pModel = getModelImpl();
@@ -548,7 +541,8 @@ static void lcl_removeListenerFromNode( const Reference<XNode>& xNode,
 
 void Binding::bind( bool bForceRebind )
 {
-    checkModel();
+    if( ! mxModel.is() )
+        throw RuntimeException( EXCEPT("Binding has no Model") );
 
     // bind() will evaluate this binding as follows:
     // 1) evaluate the binding expression

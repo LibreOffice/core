@@ -78,10 +78,6 @@ namespace frm
     public:
         explicit FormOperations( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
-        // XServiceInfo - static versions
-        static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
-
         struct MethodAccess { friend class MethodGuard; private: MethodAccess() { } };
 
         inline void enterMethod( MethodAccess ) const

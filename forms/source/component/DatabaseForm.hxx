@@ -374,10 +374,6 @@ public:
     virtual OUString SAL_CALL getImplementationName()  throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(css::uno::RuntimeException, std::exception) override;
 
-    // css::lang::XServiceInfo - static version
-    static  OUString SAL_CALL getImplementationName_Static();
-    static  css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
-
     // css::io::XPersistObject
     virtual OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) override;
@@ -509,8 +505,6 @@ private:
 
     // html tools
     OUString         GetDataEncoded(bool _bURLEncoded,const css::uno::Reference< css::awt::XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt);
-    OUString         GetDataURLEncoded(const css::uno::Reference< css::awt::XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt);
-    OUString         GetDataTextEncoded(const css::uno::Reference< css::awt::XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt);
     css::uno::Sequence<sal_Int8>   GetDataMultiPartEncoded(const css::uno::Reference< css::awt::XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt,
                                              OUString& rContentType);
 

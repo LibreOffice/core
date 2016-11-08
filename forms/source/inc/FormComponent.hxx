@@ -131,14 +131,12 @@ namespace frm
     private:
         void    impl_notifyAll_nothrow();
 
-    private:
         OControlModel&                              m_rModel;
         bool                                        m_bLocked;
         std::vector< sal_Int32 >                    m_aHandles;
         std::vector< css::uno::Any >                m_aOldValues;
         std::vector< css::uno::Any >                m_aNewValues;
 
-    private:
         ControlModelLock( const ControlModelLock& ) = delete;
         ControlModelLock& operator=( const ControlModelLock& ) = delete;
     };
@@ -234,9 +232,6 @@ protected:
     virtual sal_Bool SAL_CALL           supportsService(const OUString& ServiceName) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL    getImplementationName() throw(css::uno::RuntimeException, std::exception) override = 0;
-
-// XServiceInfo - static version
-    static  css::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames_Static() throw(css::uno::RuntimeException);
 
 // XControl
     virtual void                                        SAL_CALL setContext(const css::uno::Reference<css::uno::XInterface>& Context) throw (css::uno::RuntimeException, std::exception) override;

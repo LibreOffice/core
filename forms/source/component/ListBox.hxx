@@ -234,8 +234,6 @@ private:
     sal_Int32   getValueType() const;
 
     void        convertBoundValues(sal_Int32 nType) const;
-
-    bool        impl_hasBoundComponent() const { return m_nBoundColumnType != css::sdbc::DataType::SQLNULL; }
 };
 
 

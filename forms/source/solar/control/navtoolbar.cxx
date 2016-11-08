@@ -171,12 +171,7 @@ namespace frm
         if ( pPositionWindow )
             pPositionWindow->setDispatcher( _pDispatcher );
 
-        updateFeatureStates( );
-    }
-
-
-    void NavigationToolBar::updateFeatureStates( )
-    {
+        // update feature states
         for ( sal_uInt16 nPos = 0; nPos < m_pToolbar->GetItemCount(); ++nPos )
         {
             sal_uInt16 nItemId = m_pToolbar->GetItemId( nPos );

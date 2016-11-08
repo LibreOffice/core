@@ -65,7 +65,6 @@ namespace frm
         void    invalidate();
 
     protected:
-        void            newStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxListener );
         // overridables
         virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify );
         virtual void    invalidateFeatureState_Broadcast();
@@ -79,7 +78,6 @@ namespace frm
                     const css::frame::FeatureStateEvent& _rEvent
                 );
 
-    protected:
         // XDispatch
         virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) throw (css::uno::RuntimeException, std::exception) override;

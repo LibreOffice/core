@@ -131,17 +131,6 @@ namespace frm
     {
     }
 
-    OUString FormOperations::getImplementationName_Static(  ) throw(RuntimeException)
-    {
-        return OUString( "com.sun.star.comp.forms.FormOperations" );
-    }
-
-    Sequence< OUString > FormOperations::getSupportedServiceNames_Static(  ) throw(RuntimeException)
-    {
-        Sequence< OUString > aNames { "com.sun.star.form.runtime.FormOperations" };
-        return aNames;
-    }
-
     void SAL_CALL FormOperations::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException, std::exception)
     {
         if ( m_bConstructed )
@@ -165,7 +154,7 @@ namespace frm
 
     OUString SAL_CALL FormOperations::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
-        return getImplementationName_Static();
+        return OUString( "com.sun.star.comp.forms.FormOperations" );
     }
 
     sal_Bool SAL_CALL FormOperations::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
@@ -175,7 +164,7 @@ namespace frm
 
     Sequence< OUString > SAL_CALL FormOperations::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_Static();
+        return { "com.sun.star.form.runtime.FormOperations" };
     }
 
     Reference< XRowSet > SAL_CALL FormOperations::getCursor() throw (RuntimeException, std::exception)

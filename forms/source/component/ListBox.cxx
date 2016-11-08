@@ -1062,7 +1062,7 @@ namespace frm
 
     sal_Int32 OListBoxModel::getValueType() const
     {
-        return impl_hasBoundComponent() ? m_nBoundColumnType : getFieldType();
+        return (m_nBoundColumnType != css::sdbc::DataType::SQLNULL) ? m_nBoundColumnType : getFieldType();
     }
 
     ValueList OListBoxModel::impl_getValues() const

@@ -132,10 +132,6 @@ namespace frm
         /// enables or disables an item, plus possible dependent items
         void implEnableItem( sal_uInt16 _nItemId, bool _bEnabled );
 
-        /** update the states of all features, using the callback
-        */
-        void updateFeatureStates( );
-
         // iterating through item windows
         typedef void (NavigationToolBar::*ItemWindowHandler) (sal_uInt16, vcl::Window*) const;
         void    forEachItemWindow( ItemWindowHandler _handler );

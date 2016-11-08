@@ -873,7 +873,7 @@ namespace frm
 
     OUString SAL_CALL OFilterControl::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
-        return getImplementationName_Static();
+        return OUString( "com.sun.star.comp.forms.OFilterControl" );
     }
 
     sal_Bool SAL_CALL OFilterControl::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
@@ -883,20 +883,8 @@ namespace frm
 
     Sequence< OUString > SAL_CALL OFilterControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_Static();
-    }
-
-    OUString SAL_CALL OFilterControl::getImplementationName_Static()
-    {
-        return OUString( "com.sun.star.comp.forms.OFilterControl" );
-    }
-
-    Sequence< OUString > SAL_CALL OFilterControl::getSupportedServiceNames_Static()
-    {
-        Sequence< OUString > aNames( 2 );
-        aNames[ 0 ] = "com.sun.star.form.control.FilterControl";
-        aNames[ 1 ] = "com.sun.star.awt.UnoControl";
-        return aNames;
+        return { "com.sun.star.form.control.FilterControl",
+                 "com.sun.star.awt.UnoControl" };
     }
 }   // namespace frm
 

@@ -145,21 +145,11 @@ namespace frm
 
     OUString SAL_CALL ONavigationBarModel::getImplementationName()  throw(RuntimeException, std::exception)
     {
-        return getImplementationName_Static();
+        return OUString( "com.sun.star.comp.form.ONavigationBarModel" );
     }
 
 
     Sequence< OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames()  throw(RuntimeException, std::exception)
-    {
-        return getSupportedServiceNames_Static();
-    }
-
-    OUString SAL_CALL ONavigationBarModel::getImplementationName_Static()
-    {
-        return OUString( "com.sun.star.comp.form.ONavigationBarModel" );
-    }
-
-    Sequence< OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames_Static()
     {
         Sequence< OUString > aSupported = OControlModel::getSupportedServiceNames_Static();
         aSupported.realloc( aSupported.getLength() + 2 );

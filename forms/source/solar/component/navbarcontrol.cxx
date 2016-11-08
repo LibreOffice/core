@@ -165,28 +165,14 @@ namespace frm
 
     OUString SAL_CALL ONavigationBarControl::getImplementationName()  throw( RuntimeException, std::exception )
     {
-        return getImplementationName_Static();
+        return OUString( "com.sun.star.comp.form.ONavigationBarControl" );
     }
 
 
     Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames()  throw( RuntimeException, std::exception )
     {
-        return getSupportedServiceNames_Static();
-    }
-
-
-    OUString SAL_CALL ONavigationBarControl::getImplementationName_Static()
-    {
-        return OUString( "com.sun.star.comp.form.ONavigationBarControl" );
-    }
-
-
-    Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames_Static()
-    {
-        Sequence< OUString > aServices( 2 );
-        aServices[ 0 ] = "com.sun.star.awt.UnoControl";
-        aServices[ 1 ] = "com.sun.star.form.control.NavigationToolBar";
-        return aServices;
+        return { "com.sun.star.awt.UnoControl",
+        "com.sun.star.form.control.NavigationToolBar" };
     }
 
 
