@@ -277,10 +277,8 @@ static oslThread osl_thread_create_Impl (
 
 #if defined OPENBSD
     stacksize = 262144;
-#elif defined LINUX
-    stacksize = 12 * 1024 * 1024; // 8MB is not enough for ASAN on x86-64
 #else
-    stacksize = 100 * PTHREAD_STACK_MIN;
+    stacksize = 12 * 1024 * 1024; // 8MB is not enough for ASAN on x86-64
 #endif
     if (pthread_attr_setstacksize(&attr, stacksize) != 0) {
         pthread_attr_destroy(&attr);
