@@ -2855,7 +2855,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    // How many clicks do we need to select a fly frame?
     FrameControlType eControl;
     bool bOverFly = false;
     bool bPageAnchored = false;
@@ -2865,16 +2864,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     if (bOverHeaderFooterFly && (!bIsDocReadOnly && rSh.GetCurField()))
         // We have a field here, that should have priority over header/footer fly.
         bOverHeaderFooterFly = false;
-
-    int nNbFlyClicks = 1;
-    // !bOverHeaderFooterFly doesn't mean we have a frame to select
-    if ( !bPageAnchored && ( ( rSh.IsHeaderFooterEdit( ) && !bOverHeaderFooterFly && bOverFly ) ||
-         ( !rSh.IsHeaderFooterEdit( ) && bOverHeaderFooterFly ) ) )
-    {
-        nNbFlyClicks = 2;
-        if ( _rMEvt.GetClicks( ) < nNbFlyClicks )
-            return;
-    }
 
     // Are we clicking on a blank header/footer area?
     if ( IsInHeaderFooter( aDocPos, eControl ) || bOverHeaderFooterFly )
@@ -3211,10 +3200,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     }
                 }
 
-                bool bHandledFlyClick = false;
-                if (!bExecDrawTextLink && nNumberOfClicks == nNbFlyClicks)
+                if (1 == nNumberOfClicks && !bExecDrawTextLink)
                 {
-                    bHandledFlyClick = true;
                     // only try to select frame, if pointer already was
                     // switched accordingly
                     if ( m_aActHitType != SdrHitKind::NONE && !rSh.IsSelFrameMode() &&
@@ -3339,7 +3326,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     case 2:
                     {
                         g_bFrameDrag = false;
-                        if ( !bHandledFlyClick && !bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos) &&
+                        if ( !bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos) &&
                              FlyProtectFlags::NONE == rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) )
                         {
                         /* This is no good: on the one hand GetSelectionType is used as flag field
