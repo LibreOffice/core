@@ -1107,7 +1107,8 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusGot, Control&, rControl, void )
                 NumericField* pNumericField = dynamic_cast< NumericField* >( &rControl );
                 if ( pNumericField )
                     pNumericField->SaveValue();
-                showHelpText(static_cast<sal_uInt16>(i+STR_RPT_HELP_FIELD));
+                //shows the text given by the id in the multiline edit
+                m_pHelpWindow->SetText(OUString(ModuleRes(static_cast<sal_uInt16>(i+STR_RPT_HELP_FIELD))));
                 break;
             }
         }
@@ -1195,11 +1196,6 @@ IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox&, rListBox, void )
             m_pFieldExpression->InvalidateHandleColumn();
         }
     }
-}
-
-void OGroupsSortingDialog::showHelpText(sal_uInt16 _nResId)
-{
-    m_pHelpWindow->SetText(OUString(ModuleRes(_nResId)));
 }
 
 void OGroupsSortingDialog::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw(uno::RuntimeException, std::exception)

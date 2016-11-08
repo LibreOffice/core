@@ -543,13 +543,13 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
 ,m_aProps(new OReportComponentProperties(_xContext))
 ,m_pImpl(new OReportDefinitionImpl(m_aMutex))
 {
-    m_aProps->m_sName  = RPT_RESSTRING(RID_STR_REPORT,m_aProps->m_xContext->getServiceManager());
+    m_aProps->m_sName  = RPT_RESSTRING(RID_STR_REPORT);
     osl_atomic_increment(&m_refCount);
     {
         init();
         m_pImpl->m_xGroups = new OGroups(this,m_aProps->m_xContext);
         m_pImpl->m_xDetail = OSection::createOSection(this,m_aProps->m_xContext);
-        m_pImpl->m_xDetail->setName(RPT_RESSTRING(RID_STR_DETAIL,m_aProps->m_xContext->getServiceManager()));
+        m_pImpl->m_xDetail->setName(RPT_RESSTRING(RID_STR_DETAIL));
     }
     osl_atomic_decrement( &m_refCount );
 }
@@ -562,7 +562,7 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
 ,m_aProps(new OReportComponentProperties(_xContext))
 ,m_pImpl(new OReportDefinitionImpl(m_aMutex))
 {
-    m_aProps->m_sName  = RPT_RESSTRING(RID_STR_REPORT,m_aProps->m_xContext->getServiceManager());
+    m_aProps->m_sName  = RPT_RESSTRING(RID_STR_REPORT);
     m_aProps->m_xFactory = _xFactory;
     osl_atomic_increment(&m_refCount);
     {
@@ -570,7 +570,7 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
         init();
         m_pImpl->m_xGroups = new OGroups(this,m_aProps->m_xContext);
         m_pImpl->m_xDetail = OSection::createOSection(this,m_aProps->m_xContext);
-        m_pImpl->m_xDetail->setName(RPT_RESSTRING(RID_STR_DETAIL,m_aProps->m_xContext->getServiceManager()));
+        m_pImpl->m_xDetail->setName(RPT_RESSTRING(RID_STR_DETAIL));
     }
     osl_atomic_decrement( &m_refCount );
 }
@@ -769,8 +769,7 @@ void SAL_CALL OReportDefinition::setGroupKeepTogether( ::sal_Int16 _groupkeeptog
     if ( _groupkeeptogether < report::GroupKeepTogether::PER_PAGE || _groupkeeptogether > report::GroupKeepTogether::PER_COLUMN )
         throwIllegallArgumentException("css::report::GroupKeepTogether"
                         ,*this
-                        ,1
-                        ,m_aProps->m_xContext);
+                        ,1);
     set(PROPERTY_GROUPKEEPTOGETHER,_groupkeeptogether,m_pImpl->m_nGroupKeepTogether);
 }
 
@@ -785,8 +784,7 @@ void SAL_CALL OReportDefinition::setPageHeaderOption( ::sal_Int16 _pageheaderopt
     if ( _pageheaderoption < report::ReportPrintOption::ALL_PAGES || _pageheaderoption > report::ReportPrintOption::NOT_WITH_REPORT_HEADER_FOOTER )
         throwIllegallArgumentException("css::report::ReportPrintOption"
                         ,*this
-                        ,1
-                        ,m_aProps->m_xContext);
+                        ,1);
     set(PROPERTY_PAGEHEADEROPTION,_pageheaderoption,m_pImpl->m_nPageHeaderOption);
 }
 
@@ -801,8 +799,7 @@ void SAL_CALL OReportDefinition::setPageFooterOption( ::sal_Int16 _pagefooteropt
     if ( _pagefooteroption < report::ReportPrintOption::ALL_PAGES || _pagefooteroption > report::ReportPrintOption::NOT_WITH_REPORT_HEADER_FOOTER )
         throwIllegallArgumentException("css::report::ReportPrintOption"
                         ,*this
-                        ,1
-                        ,m_aProps->m_xContext);
+                        ,1);
     set(PROPERTY_PAGEFOOTEROPTION,_pagefooteroption,m_pImpl->m_nPageFooterOption);
 }
 
@@ -828,8 +825,7 @@ void SAL_CALL OReportDefinition::setCommandType( ::sal_Int32 _commandtype ) thro
     if ( _commandtype < sdb::CommandType::TABLE || _commandtype > sdb::CommandType::COMMAND )
         throwIllegallArgumentException("css::sdb::CommandType"
                         ,*this
-                        ,1
-                        ,m_aProps->m_xContext);
+                        ,1);
     set(PROPERTY_COMMANDTYPE,_commandtype,m_pImpl->m_nCommandType);
 }
 
@@ -865,7 +861,7 @@ void SAL_CALL OReportDefinition::setReportHeaderOn( sal_Bool _reportheaderon ) t
 {
     if ( bool(_reportheaderon) != m_pImpl->m_xReportHeader.is() )
     {
-        setSection(PROPERTY_REPORTHEADERON,_reportheaderon,RPT_RESSTRING(RID_STR_REPORT_HEADER,m_aProps->m_xContext->getServiceManager()),m_pImpl->m_xReportHeader);
+        setSection(PROPERTY_REPORTHEADERON,_reportheaderon,RPT_RESSTRING(RID_STR_REPORT_HEADER),m_pImpl->m_xReportHeader);
     }
 }
 
@@ -879,7 +875,7 @@ void SAL_CALL OReportDefinition::setReportFooterOn( sal_Bool _reportfooteron ) t
 {
     if ( bool(_reportfooteron) != m_pImpl->m_xReportFooter.is() )
     {
-        setSection(PROPERTY_REPORTFOOTERON,_reportfooteron,RPT_RESSTRING(RID_STR_REPORT_FOOTER,m_aProps->m_xContext->getServiceManager()),m_pImpl->m_xReportFooter);
+        setSection(PROPERTY_REPORTFOOTERON,_reportfooteron,RPT_RESSTRING(RID_STR_REPORT_FOOTER),m_pImpl->m_xReportFooter);
     }
 }
 
@@ -893,7 +889,7 @@ void SAL_CALL OReportDefinition::setPageHeaderOn( sal_Bool _pageheaderon ) throw
 {
     if ( bool(_pageheaderon) != m_pImpl->m_xPageHeader.is() )
     {
-        setSection(PROPERTY_PAGEHEADERON,_pageheaderon,RPT_RESSTRING(RID_STR_PAGE_HEADER,m_aProps->m_xContext->getServiceManager()),m_pImpl->m_xPageHeader);
+        setSection(PROPERTY_PAGEHEADERON,_pageheaderon,RPT_RESSTRING(RID_STR_PAGE_HEADER),m_pImpl->m_xPageHeader);
     }
 }
 
@@ -907,7 +903,7 @@ void SAL_CALL OReportDefinition::setPageFooterOn( sal_Bool _pagefooteron ) throw
 {
     if ( bool(_pagefooteron) != m_pImpl->m_xPageFooter.is() )
     {
-        setSection(PROPERTY_PAGEFOOTERON,_pagefooteron,RPT_RESSTRING(RID_STR_PAGE_FOOTER,m_aProps->m_xContext->getServiceManager()),m_pImpl->m_xPageFooter);
+        setSection(PROPERTY_PAGEFOOTERON,_pagefooteron,RPT_RESSTRING(RID_STR_PAGE_FOOTER),m_pImpl->m_xPageFooter);
     }
 }
 
@@ -1286,7 +1282,7 @@ void SAL_CALL OReportDefinition::loadFromStorage( const uno::Reference< embed::X
 void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XStorage >& _xStorageToSaveTo, const uno::Sequence< beans::PropertyValue >& _aMediaDescriptor ) throw (lang::IllegalArgumentException, io::IOException, uno::Exception, uno::RuntimeException, std::exception)
 {
     if ( !_xStorageToSaveTo.is() )
-        throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL,m_aProps->m_xContext->getServiceManager()),*this,1);
+        throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL),*this,1);
 
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -1446,7 +1442,7 @@ void SAL_CALL OReportDefinition::switchToStorage(
 throw (lang::IllegalArgumentException, io::IOException, uno::Exception, uno::RuntimeException, std::exception)
 {
     if (!xStorage.is())
-        throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL,m_aProps->m_xContext->getServiceManager()),*this,1);
+        throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL),*this,1);
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1971,8 +1967,7 @@ void SAL_CALL OReportDefinition::setMimeType( const OUString& _mimetype ) throw 
     if ( ::std::find(aList.getConstArray(),pEnd,_mimetype) == pEnd )
         throwIllegallArgumentException("getAvailableMimeTypes()"
                         ,*this
-                        ,1
-                        ,m_aProps->m_xContext);
+                        ,1);
     set(PROPERTY_MIMETYPE,_mimetype,m_pImpl->m_sMimeType);
 }
 

@@ -137,7 +137,7 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
 ,m_LineTransparence(0)
 ,m_LineWidth(0)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDLINE,m_aProps.aComponent.m_xContext->getServiceManager());
+    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDLINE);
     m_aProps.aComponent.m_nWidth = MIN_WIDTH;
 }
 
@@ -154,7 +154,7 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
 ,m_LineTransparence(0)
 ,m_LineWidth(0)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDLINE,m_aProps.aComponent.m_xContext->getServiceManager());
+    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDLINE);
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );
     try

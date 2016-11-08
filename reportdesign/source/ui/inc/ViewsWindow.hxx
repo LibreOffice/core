@@ -245,7 +245,6 @@ namespace rptui
         void EndDragObj_removeInvisibleObjects();
         Point m_aDragDelta;
         ::std::vector<SdrObject*> m_aBegDragTempList;
-        bool isObjectInMyTempList(SdrObject *);
     public:
         void BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionView* _pSection);
         void EndDragObj(bool _bDragIntoNewSection,const OSectionView* _pSection,const Point& _aPnt);

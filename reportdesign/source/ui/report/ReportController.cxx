@@ -1017,7 +1017,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             SfxUndoManager& rUndoManager( getUndoManager() );
             (rUndoManager.*doXDo)();
             InvalidateAll();
-            updateFloater();
+            if ( m_pGroupsFloater && m_pGroupsFloater->IsVisible() )
+                m_pGroupsFloater->UpdateData();
         }
         break;
         case SID_CUT:
@@ -1725,11 +1726,6 @@ void OReportController::impl_initialize( )
     }
 }
 
-IMPL_LINK_NOARG( OReportController, OnOpenHelpAgent, void*, void )
-{
-    doOpenHelpAgent();
-}
-
 IMPL_LINK( OReportController, OnCreateHdl, OAddFieldWindow& ,_rAddFieldDlg, void)
 {
     WaitObject aObj( getDesignView() );
@@ -1742,8 +1738,9 @@ IMPL_LINK( OReportController, OnCreateHdl, OAddFieldWindow& ,_rAddFieldDlg, void
 }
 
 
-void OReportController::doOpenHelpAgent()
+IMPL_LINK_NOARG( OReportController, OnOpenHelpAgent, void*, void )
 {
+    // open the help agent of report designer at start time
     if (getFrame().is())
     {
         OUString suURL("vnd.sun.star.help://shared/text/shared/explorer/database/rep_main.xhp?UseDB=no&DbPAR=swriter");
@@ -2836,13 +2833,6 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( 
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-
-void OReportController::updateFloater()
-{
-       if ( m_pGroupsFloater && m_pGroupsFloater->IsVisible() )
-        m_pGroupsFloater->UpdateData();
-}
-
 
 Reference<XFrame> OReportController::getXFrame()
 {

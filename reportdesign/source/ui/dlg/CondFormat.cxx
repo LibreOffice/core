@@ -336,7 +336,7 @@ namespace rptui
         impl_layoutConditions();
 
         // scrollbar visibility
-        if ( !impl_needScrollBar() )
+        if ( m_aConditions.size() <= MAX_CONDITIONS )
             // normalize the position, so it can, in all situations, be used as top index
             m_pCondScroll->SetThumbPos( 0 );
     }

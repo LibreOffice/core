@@ -55,12 +55,10 @@ namespace reportdesign
      * \param _sTypeName The reference where to look for the correct values.
      * \param ExceptionContext_ The exception context.
      * \param ArgumentPosition_ The argument position.
-     * \param Context_ The context to get the factory service.
      */
     void throwIllegallArgumentException(const OUString& _sTypeName
                                         ,const css::uno::Reference< css::uno::XInterface >& ExceptionContext_
-                                        ,sal_Int16 ArgumentPosition_
-                                        ,const css::uno::Reference< css::uno::XComponentContext >& Context_);
+                                        ,sal_Int16 ArgumentPosition_);
 
     /** clones the given object
     *
