@@ -230,7 +230,7 @@ throw (css::uno::RuntimeException, std::exception)
         {
             // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
             // (Use method "getInfoHelper()".)
-            static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+            static Reference< XPropertySetInfo > xInfo = new ::comphelper::PropertySetInfo(getInfoHelper().getProperties());
             pInfo = &xInfo;
         }
     }
@@ -335,13 +335,6 @@ const css::uno::Sequence< css::beans::Property > ConstItemContainer::impl_getSta
     const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, PROPCOUNT );
     // Return "PropertyDescriptor"
     return lPropertyDescriptor;
-}
-
-Reference < XPropertySetInfo > ConstItemContainer::createPropertySetInfo(
-    IPropertyArrayHelper & rProperties )
-{
-    return static_cast<XPropertySetInfo *>(
-            new ::comphelper::PropertySetInfo(rProperties.getProperties()));
 }
 
 } // namespace framework

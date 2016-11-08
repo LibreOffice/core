@@ -34,7 +34,7 @@
 
 namespace framework{
 
-/*
+/**
     @short          implement XFrames, XIndexAccess and XElementAccess interfaces as helper for services
     @descr          Use this class as helper for these interfaces. We share mutex and framecontainer with our owner.
                     The framecontainer is a member of it from type "FrameContainer". That means;
@@ -42,22 +42,15 @@ namespace framework{
                     to prevent against compete access. In future we plan support of semaphore!
 
     @devstatus      deprecated
-    @implements     XInterface
-                    XFrames
-                    XIndexAccess
-                    XElementAccess
-    @base           OWeakObject
 
-    @ATTENTION      Don't use this class as direct member - use it dynamicly. Do not derive from this class.
+    @ATTENTION      Don't use this class as direct member - use it dynamically. Do not derive from this class.
                     We hold a weakreference to our owner not to our superclass.
-
-    @devstatus      deprecated
 */
 class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
 {
     public:
 
-        /*
+        /**
             @short      standard ctor
             @descr      These initialize a new instance of this class with all needed information for work.
                         We share framecontainer with owner implementation! It's a threadsafe container.
@@ -69,7 +62,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
 
         //  XFrames
 
-        /*
+        /**
             @short      append frame to container
             @descr      We share the container with our owner. We can do this only, if no lock is set on container.
                         Valid references are accepted only!
@@ -81,7 +74,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
         */
         virtual void SAL_CALL append( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception ) override;
 
-        /*
+        /**
             @short      remove frame from container
             @descr      This is the companion to append(). We only accept valid references and don't work, if
                         a lock is set.
@@ -93,7 +86,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
         */
         virtual void SAL_CALL remove( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception ) override;
 
-        /*
+        /**
             @short      return list of all applicable frames for given flags
             @descr      Call these to get a list of all frames, which are match with given search flags.
             @param      "nSearchFlag", flags to search right frames.
@@ -105,7 +98,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
 
         //  XIndexAccess
 
-        /*
+        /**
             @short      get count of all current frames in container
             @descr      This is the beginning of full index-access. With a count you can step over all items in container.
                         Next call should be getByIndex(). But these mechanism works only, if no lock in container is set!
@@ -118,7 +111,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
         */
         virtual sal_Int32 SAL_CALL getCount() throw( css::uno::RuntimeException, std::exception ) override;
 
-        /*
+        /**
             @short      get specified container item by index
             @descr      If you called getCount() successful - this method return the specified element as an Any.
                         You must observe the range from 0 to count-1! Otherwise an IndexOutOfBoundsException is thrown.
@@ -138,7 +131,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
 
         //  XElementAccess
 
-        /*
+        /**
             @short      get uno-type of all container items
             @descr      In current implementation type is fixed to XFrame!
                         (container-lock is ignored)
@@ -146,7 +139,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
         */
         virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception ) override;
 
-        /*
+        /**
             @short      get fill state of current container
             @descr      Call these to get information about, if items exist in container or not.
                         (container-lock is ignored)
@@ -159,7 +152,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
 
     protected:
 
-        /*
+        /**
             @short      standard destructor
             @descr      This method destruct an instance of this class and clear some member.
                         This method is protected, because it's not allowed to use this class as a member!
@@ -167,7 +160,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
         */
         virtual ~OFrames() override;
 
-        /*
+        /**
             @short      reset instance to default values
             @descr      There are two ways to delete an instance of this class.<BR>
                         1) delete with destructor<BR>
@@ -181,7 +174,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
 
     private:
 
-        /*
+        /**
             @short      append one sequence to another
             @descr      There is no operation to add to sequences! Use this helper-method to do this.
 
@@ -194,30 +187,9 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
         void impl_appendSequence(           css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqDestination  ,
                                      const  css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqSource       );
 
-    //  debug methods
-    //  (should be private everyway!)
-
-        /*
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-
-            @seealso    ASSERTs in implementation!
-
-            @param      references to checking variables
-            @return     sal_False ,on invalid parameter
-            @return     sal_True  ,otherwise
-        */
-
     private:
-        static bool impldbg_checkParameter_OFramesCtor  (   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
-                                                                        FrameContainer*                                         pFrameContainer );
         static bool impldbg_checkParameter_queryFrames  (           sal_Int32                                               nSearchFlags    );
 
-    //  variables
-    //  (should be private everyway!)
-
-    private:
         css::uno::WeakReference< css::frame::XFrame >               m_xOwner;   /// reference to owner of this instance (Hold no hard reference!)
         FrameContainer*                                             m_pFrameContainer;   /// with owner shared list to hold all direct children of an XFramesSupplier
         bool                                                        m_bRecursiveSearchProtection;   /// flag to protect against recursive searches of frames at parents

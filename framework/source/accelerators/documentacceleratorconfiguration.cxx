@@ -99,12 +99,6 @@ public:
 
     /** read all data into the cache. */
     void fillCache();
-
-private:
-
-    /** forget all currently cached data AND(!)
-        forget all currently used storages. */
-    void clearCache();
 };
 
 DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
@@ -147,7 +141,8 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
     }
 
     if (bForgetOldStorages)
-        clearCache();
+        /* forget all currently cached data AND(!) forget all currently used storages. */
+        m_aPresetHandler.forgetCachedStorages();
 
     if (xStorage.is())
         fillCache();
@@ -198,11 +193,6 @@ void DocumentAcceleratorConfiguration::fillCache()
     }
     catch(const css::uno::Exception&)
     {}
-}
-
-void DocumentAcceleratorConfiguration::clearCache()
-{
-    m_aPresetHandler.forgetCachedStorages();
 }
 
 } // namespace framework

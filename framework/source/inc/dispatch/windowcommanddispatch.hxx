@@ -104,14 +104,7 @@ class WindowCommandDispatch final
          */
         DECL_LINK( impl_notifyCommand, VclWindowEvent&, void );
 
-        /** @short  dispatch right command URLs into our frame context.
-
-            @param  sCommand
-                    the command for dispatch
-         */
-        void impl_dispatchCommand(const OUString& sCommand);
-
-}; // class MACDispatch
+}; // class WindowCommandDispatch
 
 } // namespace framework
 

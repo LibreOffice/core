@@ -287,11 +287,6 @@ namespace framework
         void notify(    OUString const& i_title,
                         void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& )
                     );
-        void notify( void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& ) )
-        {
-            notify( OUString(), i_notificationMethod );
-        }
-
         void notify( void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const EventObject& ) );
 
     private:
@@ -825,7 +820,7 @@ namespace framework
         if ( m_bAPIActionRunning )
             return;
 
-        notify( &XUndoManagerListener::cancelledContext );
+        notify( OUString(), &XUndoManagerListener::cancelledContext );
     }
 
     void UndoManagerHelper_Impl::undoManagerDying()

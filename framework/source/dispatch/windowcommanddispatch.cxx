@@ -127,11 +127,6 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, VclWindowEvent&, rEvent, vo
                 return;
     }
 
-    impl_dispatchCommand(sCommand);
-}
-
-void WindowCommandDispatch::impl_dispatchCommand(const OUString& sCommand)
-{
     // ignore all errors here. It's clicking a menu entry only ...
     // The user will try it again, in case nothing happens .-)
     try

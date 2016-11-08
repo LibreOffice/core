@@ -171,7 +171,8 @@ throw( css::uno::RuntimeException, std::exception )
         // --- SAFE ---
         SolarMutexClearableGuard aGuard;
         impl_RetrievePopupControllerQuery();
-        impl_CreateUriRefFactory();
+        if ( !m_xUriRefFactory.is() )
+            m_xUriRefFactory = css::uri::UriReferenceFactory::create( m_xContext );
 
         css::uno::Reference< css::container::XNameAccess > xPopupCtrlQuery( m_xPopupCtrlQuery );
         css::uno::Reference< css::uri::XUriReferenceFactory > xUriRefFactory( m_xUriRefFactory );
@@ -334,14 +335,6 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
                 }
             }
         }
-    }
-}
-
-void PopupMenuDispatcher::impl_CreateUriRefFactory()
-{
-    if ( !m_xUriRefFactory.is() )
-    {
-        m_xUriRefFactory = css::uri::UriReferenceFactory::create( m_xContext );
     }
 }
 

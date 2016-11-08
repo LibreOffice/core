@@ -96,7 +96,6 @@ class FWI_DLLPUBLIC ConstItemContainer : public ::cppu::WeakImplHelper<
     private:
         ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
-        static css::uno::Reference < css::beans::XPropertySetInfo > SAL_CALL createPropertySetInfo( ::cppu::IPropertyArrayHelper & rProperties );
 
         void copyItemContainer( const std::vector< css::uno::Sequence< css::beans::PropertyValue > >& rSourceVector );
         css::uno::Reference< css::container::XIndexAccess > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer );
