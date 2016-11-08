@@ -50,6 +50,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
 
+#include <cassert>
 #include <functional>
 
 using namespace ::com::sun::star;
@@ -161,21 +162,17 @@ throw ( uno::RuntimeException, std::exception )
 
 void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception )
 {
-    {
-        SolarMutexGuard g;
-        if ( m_bDisposed )
-            return;
-    }
+    SolarMutexGuard g;
+
+    if ( m_bDisposed )
+        return;
 
     RemoveControllers();
 
-    {
-        SolarMutexGuard g;
-        if ( Source.Source == uno::Reference< uno::XInterface >( m_xFrame, uno::UNO_QUERY ))
-            m_xFrame.clear();
+    if ( Source.Source == uno::Reference< uno::XInterface >( m_xFrame, uno::UNO_QUERY ))
+        m_xFrame.clear();
 
-        m_xContext.clear();
-    }
+    m_xContext.clear();
 }
 
 // XComponent
@@ -279,10 +276,8 @@ void StatusBarManager::UpdateControllers()
 
 void StatusBarManager::RemoveControllers()
 {
-    SolarMutexGuard g;
-
-    if ( m_bDisposed )
-        return;
+    DBG_TESTSOLARMUTEX();
+    assert(!m_bDisposed);
 
     std::for_each( m_aControllerMap.begin(),
                    m_aControllerMap.end(),
