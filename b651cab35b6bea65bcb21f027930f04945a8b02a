@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_c3f8a07f",
+        "filename": "svx/source/sdr/properties/measureproperties.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-11-08T12:25:01Z",
+      "side": 1,
+      "message": "I think this need an explanation....first setting the text dirty, then undoing that.\n\nSound like SetTextDirty() should be removed instead of adding a second statement.\n\nIf the construction with the 2 statements has a meaning, then please document it in a comment.",
+      "revId": "b651cab35b6bea65bcb21f027930f04945a8b02a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
