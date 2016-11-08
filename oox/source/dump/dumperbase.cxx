@@ -519,16 +519,11 @@ void StringHelper::appendToken( OUStringBuffer& rStr, const OUString& rToken, sa
     rStr.append( rToken );
 }
 
-void StringHelper::appendIndex( OUStringBuffer& rStr, const OUString& rIdx )
-{
-    rStr.append( '[' ).append( rIdx ).append( ']' );
-}
-
 void StringHelper::appendIndex( OUStringBuffer& rStr, sal_Int64 nIdx )
 {
     OUStringBuffer aToken;
     appendDec( aToken, nIdx );
-    appendIndex( rStr, aToken.makeStringAndClear() );
+    rStr.append( '[' ).append( aToken.makeStringAndClear() ).append( ']' );
 }
 
 OUString StringHelper::getToken( const OUString& rData, sal_Int32& rnPos, sal_Unicode cSep )
@@ -1449,7 +1444,7 @@ void Config::eraseNameList( const String& rListName )
 
 NameListRef Config::getNameList( const String& rListName ) const
 {
-    return implGetNameList( rListName );
+    return mxCfgData->getNameList( rListName );
 }
 
 bool Config::implIsValid() const
@@ -1460,11 +1455,6 @@ bool Config::implIsValid() const
 const OUString* Config::implGetOption( const OUString& rKey ) const
 {
     return mxCfgData->getOption( rKey );
-}
-
-NameListRef Config::implGetNameList( const OUString& rListName ) const
-{
-    return mxCfgData->getNameList( rListName );
 }
 
 Output::Output( const Reference< XComponentContext >& rxContext, const OUString& rFileName ) :
@@ -2458,7 +2448,7 @@ bool RecordObjectBase::implIsValid() const
 
 void RecordObjectBase::implDump()
 {
-    NameListRef xRecNames = getRecNames();
+    NameListRef xRecNames = maRecNames.getNameList( cfg() );
     ItemFormatMap aSimpleRecs( maSimpleRecs.getNameList( cfg() ) );
 
     while( implStartRecord( *mxBaseStrm, mnRecPos, mnRecId, mnRecSize ) )

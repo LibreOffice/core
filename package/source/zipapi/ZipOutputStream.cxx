@@ -148,16 +148,6 @@ void ZipOutputStream::consumeFinishedScheduledThreadEntries()
     m_aEntries = aNonFinishedEntries;
 }
 
-void ZipOutputStream::consumeAllScheduledThreadEntries()
-{
-    while(!m_aEntries.empty())
-    {
-        ZipOutputEntry* pCandidate = m_aEntries.back();
-        m_aEntries.pop_back();
-        consumeScheduledThreadEntry(pCandidate);
-    }
-}
-
 void ZipOutputStream::reduceScheduledThreadsToGivenNumberOrLess(sal_Int32 nThreads)
 {
     while(static_cast< sal_Int32 >(m_aEntries.size()) > nThreads)
@@ -181,7 +171,12 @@ void ZipOutputStream::finish()
     comphelper::ThreadPool::getSharedOptimalPool().waitUntilDone(mpThreadTaskTag);
 
     // consume all processed entries
-    consumeAllScheduledThreadEntries();
+    while(!m_aEntries.empty())
+    {
+        ZipOutputEntry* pCandidate = m_aEntries.back();
+        m_aEntries.pop_back();
+        consumeScheduledThreadEntry(pCandidate);
+    }
 
     sal_Int32 nOffset= static_cast < sal_Int32 > (m_aChucker.GetPosition());
     for (ZipEntry* p : m_aZipList)

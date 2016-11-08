@@ -182,9 +182,8 @@ protected:
     bool IsSizeRightToContent();
     bool IsJustifiable();
     LwpFrame* m_pFrame;
-
-private:
 };
+
 /**
  * @brief
  * VO_COLUMNLAYOUT object

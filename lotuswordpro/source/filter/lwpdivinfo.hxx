@@ -83,7 +83,6 @@ public:
     inline bool IsOleDivision();
     inline bool IsScrollable();
     inline bool IsGotoable();
-    inline LwpDocument* GetDivision();
     void GetNumberOfPages(sal_uInt16& nPageno);
     sal_uInt16 GetMaxNumberOfPages();
 protected:
@@ -153,10 +152,6 @@ inline bool LwpDivInfo::IsGotoable()
     return HasContents() && (IsScrollable() || IsOleDivision());
 }
 
-inline LwpDocument* LwpDivInfo::GetDivision()
-{
-    return dynamic_cast<LwpDocument*>(m_ParentID.obj().get());
-}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

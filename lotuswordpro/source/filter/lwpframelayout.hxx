@@ -191,7 +191,6 @@ public:
     sal_uInt16 GetLines(){return m_nLines;}
     void SetChars(sal_uInt32 nChars){ m_nChars += nChars;}
     sal_uInt32 GetChars() const {return m_nChars;}
-    LwpStory* GetContentStory();
     void RegisterStyle(LwpFoundry* pFoundry);
     void RegisterStyle() override;
 protected:

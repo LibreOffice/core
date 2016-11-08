@@ -117,8 +117,6 @@ public:
     { m_xBaseEncryptionData->m_nIterationCount = nNewCount;}
     void setSize (const sal_Int64 nNewSize);
 
-    void CloseOwnStreamIfAny();
-
     ZipPackageStream( ZipPackage & rNewPackage,
                       const css::uno::Reference < css::uno::XComponentContext >& xContext,
                       sal_Int32 nFormat,

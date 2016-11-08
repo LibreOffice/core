@@ -88,7 +88,6 @@ public:
     }
 
     inline LwpObjectID& GetTabRackID();
-    inline bool IsTabRackOverridden();
     inline void Override(LwpTabOverride* pOther);
 
 protected:
@@ -114,15 +113,9 @@ inline void LwpTabOverride::Override(LwpTabOverride* pOther)
 {
     if (m_nApply & TO_TABRACK)
     {
-        if (IsTabRackOverridden())
-            //m_aTabRackID = *(pOther->GetTabRackID());
+        if ((m_nOverride & TO_TABRACK) != 0)
             pOther->m_aTabRackID = GetTabRackID();
     }
-}
-
-inline bool LwpTabOverride::IsTabRackOverridden()
-{
-    return (m_nOverride & TO_TABRACK) != 0;
 }
 
 #endif

@@ -74,7 +74,6 @@ private:
     // ScheduledThread handling helpers
     void consumeScheduledThreadEntry(ZipOutputEntry* pCandidate);
     void consumeFinishedScheduledThreadEntries();
-    void consumeAllScheduledThreadEntries();
 
 public:
     void reduceScheduledThreadsToGivenNumberOrLess(

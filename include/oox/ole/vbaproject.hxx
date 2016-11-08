@@ -142,12 +142,6 @@ public:
     /** Attaches VBA macros to objects registered via registerMacroAttacher(). */
     void                attachMacros();
 
-    /** Returns true, if the document contains at least one code module. */
-    bool                hasModules() const;
-
-    /** Returns true, if the document contains at least one dialog. */
-    bool                hasDialogs() const;
-
     void                setOleOverridesSink( css::uno::Reference< css::container::XNameContainer >&  rxOleOverridesSink ){ mxOleOverridesSink = rxOleOverridesSink; }
 
 protected:

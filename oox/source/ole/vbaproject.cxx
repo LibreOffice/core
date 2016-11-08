@@ -165,7 +165,8 @@ bool VbaProject::importVbaProject( StorageBase& rVbaPrjStrg )
    GraphicHelper grfHlp( mxContext, xFrame, noStorage );
    importVbaProject( rVbaPrjStrg, grfHlp );
    // return true if something has been imported
-   return hasModules() || hasDialogs();
+   return (mxBasicLib.is() && mxBasicLib->hasElements()) ||
+          (mxDialogLib.is() && mxDialogLib->hasElements());
 }
 
 void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper )
@@ -185,16 +186,6 @@ void VbaProject::registerMacroAttacher( const VbaMacroAttacherRef& rxAttacher )
 {
     OSL_ENSURE( rxAttacher.get(), "VbaProject::registerMacroAttacher - unexpected empty reference" );
     maMacroAttachers.push_back( rxAttacher );
-}
-
-bool VbaProject::hasModules() const
-{
-    return mxBasicLib.is() && mxBasicLib->hasElements();
-}
-
-bool VbaProject::hasDialogs() const
-{
-    return mxDialogLib.is() && mxDialogLib->hasElements();
 }
 
 // protected ------------------------------------------------------------------
