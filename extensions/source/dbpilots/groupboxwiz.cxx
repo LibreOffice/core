@@ -153,8 +153,12 @@ namespace dbp
     }
 
 
-    void OGroupBoxWizard::createRadios()
+    bool OGroupBoxWizard::onFinish()
     {
+        // commit the basic control settings
+        commitControlSettings(&m_aSettings);
+
+        // create the radio buttons
         try
         {
             OOptionGroupLayouter aLayouter( getComponentContext() );
@@ -164,16 +168,6 @@ namespace dbp
         {
             OSL_FAIL("OGroupBoxWizard::createRadios: caught an exception while creating the radio shapes!");
         }
-    }
-
-
-    bool OGroupBoxWizard::onFinish()
-    {
-        // commit the basic control settings
-        commitControlSettings(&m_aSettings);
-
-        // create the radio buttons
-        createRadios();
 
         return OControlWizard::onFinish();
     }
@@ -480,7 +474,7 @@ namespace dbp
 
     OUString& OOptionDBFieldPage::getDBFieldSetting()
     {
-        return getSettings().sDBField;
+        return static_cast<OGroupBoxWizard*>(getDialog())->getSettings().sDBField;
     }
 
     OFinalizeGBWPage::OFinalizeGBWPage( OControlWizard* _pParent )

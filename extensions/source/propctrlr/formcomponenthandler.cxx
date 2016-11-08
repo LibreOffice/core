@@ -825,21 +825,6 @@ namespace pcr
     }
 
 
-    void FormComponentPropertyHandler::onNewComponent()
-    {
-        FormComponentPropertyHandler_Base::onNewComponent();
-        if ( !m_xComponentPropertyInfo.is() && m_xComponent.is() )
-            throw NullPointerException();
-
-        m_xPropertyState.set( m_xComponent, UNO_QUERY );
-        m_eComponentClass = eUnknown;
-        m_bComponentIsSubForm = m_bHaveListSource = m_bHaveCommand = false;
-        m_nClassId = 0;
-
-        impl_initComponentMetaData_throw();
-    }
-
-
     Sequence< Property > SAL_CALL FormComponentPropertyHandler::doDescribeSupportedProperties() const
     {
         if ( !m_xComponentPropertyInfo.is() )
@@ -1535,7 +1520,7 @@ namespace pcr
         // ----- DataSourceName -----
         case PROPERTY_ID_DATASOURCE:
             // reset the connection, now that we have a new data source
-            impl_clearRowsetConnection_nothrow();
+            m_xRowSetConnection.clear();
 
             // available list source values (tables or queries) might have changed
             if ( !_bFirstTimeInit && m_bHaveListSource )
@@ -2016,11 +2001,19 @@ namespace pcr
     }
 
 
-    void FormComponentPropertyHandler::impl_initComponentMetaData_throw()
+    void FormComponentPropertyHandler::onNewComponent()
     {
+        FormComponentPropertyHandler_Base::onNewComponent();
+        if ( !m_xComponentPropertyInfo.is() && m_xComponent.is() )
+            throw NullPointerException();
+
+        m_xPropertyState.set( m_xComponent, UNO_QUERY );
+        m_eComponentClass = eUnknown;
+        m_bComponentIsSubForm = m_bHaveListSource = m_bHaveCommand = false;
+        m_nClassId = 0;
+
         try
         {
-
             // component class
             m_eComponentClass = eUnknown;
 
@@ -2064,7 +2057,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FormComponentPropertyHandler::impl_initComponentMetaData_throw: caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::onNewComponent: caught an exception!" );
             DBG_UNHANDLED_EXCEPTION();
         }
     }
@@ -2361,12 +2354,6 @@ namespace pcr
             OSL_FAIL( "FormComponentPropertyHandler::impl_initFieldList_nothrow: caught an exception!" );
             DBG_UNHANDLED_EXCEPTION();
         }
-    }
-
-
-    void FormComponentPropertyHandler::impl_clearRowsetConnection_nothrow()
-    {
-        m_xRowSetConnection.clear();
     }
 
 

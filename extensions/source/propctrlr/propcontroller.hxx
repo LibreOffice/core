@@ -374,11 +374,6 @@ namespace pcr
         */
         bool    impl_isReadOnlyModel_throw() const;
 
-        /** updates our view so that it is read-only, as indicated by the model property
-            @see impl_isReadOnlyModel_throw
-        */
-        void    impl_updateReadOnlyView_nothrow();
-
         /** starts or stops listening at the model
         */
         void    impl_startOrStopModelListening_nothrow( bool _bDoListen ) const;

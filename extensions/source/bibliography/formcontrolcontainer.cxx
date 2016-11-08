@@ -69,7 +69,7 @@ namespace bib
             m_pFormAdapter->acquire();
             m_pFormAdapter->Init( this );
 
-            ensureDesignMode();
+            implSetDesignMode( !m_xForm.is() || !m_xForm->isLoaded() );
         }
 
         m_xForm = _rxForm;
@@ -107,11 +107,6 @@ namespace bib
             (void) e;   // make compiler happy
             OSL_FAIL( "FormControlContainer::implSetDesignMode: caught an exception!" );
         }
-    }
-
-    void FormControlContainer::ensureDesignMode()
-    {
-        implSetDesignMode( !m_xForm.is() || !m_xForm->isLoaded() );
     }
 
     void FormControlContainer::_loaded( const css::lang::EventObject& /*_rEvent*/ )

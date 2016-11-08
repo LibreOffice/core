@@ -46,8 +46,6 @@ namespace bib
         void        connectForm( const css::uno::Reference< css::form::XLoadable >& _rxForm );
         void        disconnectForm();
 
-        void        ensureDesignMode();
-
         virtual css::uno::Reference< css::awt::XControlContainer >
                     getControlContainer() = 0;
 

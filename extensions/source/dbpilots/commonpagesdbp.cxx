@@ -62,7 +62,16 @@ namespace dbp
         get(m_pDatasourceLabel, "datasourcelabel");
         get(m_pSearchDatabase, "search");
 
-        implCollectDatasource();
+        try
+        {
+            m_xDSContext = getContext().xDatasourceContext;
+            if (m_xDSContext.is())
+                fillListBox(*m_pDatasource, m_xDSContext->getElementNames());
+        }
+        catch (const Exception&)
+        {
+            OSL_FAIL("OTableSelectionPage::OTableSelectionPage: could not collect the data source names!");
+        }
 
         m_pDatasource->SetSelectHdl(LINK(this, OTableSelectionPage, OnListboxSelection));
         m_pTable->SetSelectHdl(LINK(this, OTableSelectionPage, OnListboxSelection));
@@ -360,20 +369,6 @@ namespace dbp
         lcl_fillEntries( *m_pTable, aQueryNames, aQueryImage, CommandType::QUERY );
     }
 
-
-    void OTableSelectionPage::implCollectDatasource()
-    {
-        try
-        {
-            m_xDSContext = getContext().xDatasourceContext;
-            if (m_xDSContext.is())
-                fillListBox(*m_pDatasource, m_xDSContext->getElementNames());
-        }
-        catch (const Exception&)
-        {
-            OSL_FAIL("OTableSelectionPage::implCollectDatasource: could not collect the data source names!");
-        }
-    }
 
     OMaybeListSelectionPage::OMaybeListSelectionPage( OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription )
         :OControlWizardPage(_pParent, _rID, _rUIXMLDescription)

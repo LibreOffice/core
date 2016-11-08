@@ -386,8 +386,12 @@ namespace pcr
     }
 
 
-    void OBrowserLine::impl_getImagesFromURL_nothrow( const OUString& _rImageURL, Image& _out_rImage )
+    void OBrowserLine::ShowBrowseButton( const OUString& _rImageURL, bool _bPrimary )
     {
+        PushButton& rButton( impl_ensureButton( _bPrimary ) );
+
+        OSL_PRECOND( !_rImageURL.isEmpty(), "OBrowserLine::ShowBrowseButton: use the other version if you don't have an image!" );
+        Image aImage;
         try
         {
             Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -398,22 +402,12 @@ namespace pcr
             aMediaProperties[0].Value <<= _rImageURL;
 
             Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties ), UNO_QUERY_THROW );
-            _out_rImage = Image( xGraphic );
+            aImage = Image( xGraphic );
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-    }
-
-
-    void OBrowserLine::ShowBrowseButton( const OUString& _rImageURL, bool _bPrimary )
-    {
-        PushButton& rButton( impl_ensureButton( _bPrimary ) );
-
-        OSL_PRECOND( !_rImageURL.isEmpty(), "OBrowserLine::ShowBrowseButton: use the other version if you don't have an image!" );
-        Image aImage;
-        impl_getImagesFromURL_nothrow( _rImageURL, aImage );
 
         rButton.SetModeImage( aImage );
    }

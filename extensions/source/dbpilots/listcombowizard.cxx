@@ -511,7 +511,7 @@ namespace dbp
 
     OUString& OComboDBFieldPage::getDBFieldSetting()
     {
-        return getSettings().sLinkedFormField;
+        return static_cast<OListComboWizard*>(getDialog())->getSettings().sLinkedFormField;
     }
 
 
