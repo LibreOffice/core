@@ -205,7 +205,7 @@ throw (uno::RuntimeException, std::exception)
         }
     }
 
-    return comphelper::containerToSequence< sal_Int16 >( aGroupList );
+    return comphelper::containerToSequence( aGroupList );
 }
 
 Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
@@ -249,10 +249,7 @@ throw (uno::RuntimeException, std::exception)
         }
     }
 
-    uno::Sequence< frame::DispatchInformation > aSeq =
-        comphelper::containerToSequence< frame::DispatchInformation, std::list< frame::DispatchInformation > >( aCmdList );
-
-    return aSeq;
+    return comphelper::containerToSequence( aCmdList );
 }
 
 }
