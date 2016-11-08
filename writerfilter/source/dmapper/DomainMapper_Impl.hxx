@@ -820,6 +820,10 @@ public:
      * inTbl SPRM or not).
      */
     sal_Int32 m_nTableDepth;
+    /// Raw table cell depth.
+    sal_Int32 m_nTableCellDepth;
+    /// Table cell depth of the last finished paragraph.
+    sal_Int32 m_nLastTableCellParagraphDepth;
 
     /// If the document has a footnote separator.
     bool m_bHasFtnSep;

@@ -275,6 +275,8 @@ private:
     std::stack<TableData::Pointer_t> mTableDataStack;
     RowData::Pointer_t mpUnfinishedRow;
     bool mbKeepUnfinishedRow;
+    /// If this is a nested table, does it start at cell start?
+    bool m_bTableStartsAtCellStart;
 
     /**
        handler for resolveCurrentTable
@@ -476,6 +478,7 @@ public:
     bool isIgnore() const;
 
 
+    void setTableStartsAtCellStart(bool bTableStartsAtCellStart);
 };
 
 }

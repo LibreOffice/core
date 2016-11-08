@@ -233,6 +233,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
         m_bInTableStyleRunProps(false),
         m_nTableDepth(0),
+        m_nTableCellDepth(0),
+        m_nLastTableCellParagraphDepth(0),
         m_bHasFtnSep(false),
         m_bIgnoreNextPara(false),
         m_bIgnoreNextTab(false),
@@ -1034,6 +1036,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
     TagLogger::getInstance().startElement("finishParagraph");
 #endif
 
+    m_nLastTableCellParagraphDepth = m_nTableCellDepth;
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
     if (m_aTextAppendStack.empty())
         return;

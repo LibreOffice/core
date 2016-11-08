@@ -982,7 +982,7 @@ static void lcl_ApplyCellParaProps(uno::Reference<table::XCell> const& xCell,
     }
 }
 
-void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
+void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTableStartsAtCellStart)
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("tablehandler.endTable");
@@ -1127,7 +1127,10 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             {
                 // m_xText points to the body text, get the current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
                 uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert(m_rDMapper_Impl.GetTopTextAppend(), uno::UNO_QUERY);
-                if (xTextAppendAndConvert.is())
+                // Only execute the conversion if the table is not anchored at
+                // the start of an outer table cell, that's not yet
+                // implemented.
+                if (xTextAppendAndConvert.is() && !bTableStartsAtCellStart)
                     xTextAppendAndConvert->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
             }
         }
