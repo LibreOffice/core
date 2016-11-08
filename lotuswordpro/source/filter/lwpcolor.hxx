@@ -99,7 +99,6 @@ private:
           AGLRGB_INVALID = 99,
           AGLRGB_TRANSPARENT = 100
     };
-    void ResolveRGB();
 };
 inline sal_uInt16 LwpColor::GetRed()
 {

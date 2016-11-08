@@ -155,7 +155,7 @@ void LwpDivInfo::GetNumberOfPages(sal_uInt16 & nPageno)
 
 sal_uInt16 LwpDivInfo::GetMaxNumberOfPages()
 {
-    LwpDocument* pDiv = GetDivision();
+    LwpDocument* pDiv = dynamic_cast<LwpDocument*>(m_ParentID.obj().get());
     if(!pDiv)
         return 0;
     LwpDLVListHeadTailHolder* pHeadTail = dynamic_cast<LwpDLVListHeadTailHolder*>(pDiv->GetPageHintsID().obj().get());

@@ -139,16 +139,6 @@ void ZipPackageStream::setZipEntryOnLoading( const ZipEntry &rInEntry )
         m_bToBeCompressed = false;
 }
 
-void ZipPackageStream::CloseOwnStreamIfAny()
-{
-    if ( m_xStream.is() )
-    {
-        m_xStream->closeInput();
-        m_xStream.clear();
-        m_bHasSeekable = false;
-    }
-}
-
 uno::Reference< io::XInputStream > const & ZipPackageStream::GetOwnSeekStream()
 {
     if ( !m_bHasSeekable && m_xStream.is() )
@@ -905,7 +895,12 @@ void ZipPackageStream::successfullyWritten( ZipEntry *pEntry )
 {
     if ( !IsPackageMember() )
     {
-        CloseOwnStreamIfAny();
+        if ( m_xStream.is() )
+        {
+            m_xStream->closeInput();
+            m_xStream.clear();
+            m_bHasSeekable = false;
+        }
         SetPackageMember ( true );
     }
 

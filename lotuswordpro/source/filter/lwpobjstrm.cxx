@@ -69,13 +69,7 @@ LwpObjectStream::LwpObjectStream(LwpSvStream *pStrm, bool isCompressed, sal_uInt
     m_pStrm(pStrm), m_bCompressed(isCompressed)
 {
     assert(size<IO_BUFFERSIZE);
-    ReadStream();
-}
-/**
- * @descr  read object data from stream
- */
-void LwpObjectStream::ReadStream()
-{
+    // read object data from stream
     if(m_nBufSize == 0)
     {
         m_pContentBuf = nullptr;

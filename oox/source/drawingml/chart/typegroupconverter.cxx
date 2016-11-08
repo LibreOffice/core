@@ -222,11 +222,6 @@ ObjectType TypeGroupConverter::getSeriesObjectType() const
         (maTypeInfo.mbSeriesIsFrame2d ? OBJECTTYPE_FILLEDSERIES2D : OBJECTTYPE_LINEARSERIES2D);
 }
 
-bool TypeGroupConverter::isReverseSeries() const
-{
-    return maTypeInfo.mbReverseSeries && !mb3dChart && !isStacked() && !isPercent();
-}
-
 OUString TypeGroupConverter::getSingleSeriesTitle() const
 {
     OUString aSeriesTitle;
@@ -349,7 +344,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
             aSeries.push_back( std::make_shared<SeriesConverter>( *this, **aIt ) );
 
         // reverse series order for some unstacked 2D chart types
-        if( isReverseSeries() )
+        if( maTypeInfo.mbReverseSeries && !mb3dChart && !isStacked() && !isPercent() )
             ::std::reverse( aSeries.begin(), aSeries.end() );
 
         // decide whether to use varying colors for each data point

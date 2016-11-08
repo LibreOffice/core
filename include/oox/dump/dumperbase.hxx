@@ -320,7 +320,6 @@ public:
 
     static void         appendToken( OUStringBuffer& rStr, const OUString& rToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
 
-    static void         appendIndex( OUStringBuffer& rStr, const OUString& rIdx );
     static void         appendIndex( OUStringBuffer& rStr, sal_Int64 nIdx );
 
     static OUString getToken( const OUString& rData, sal_Int32& rnPos, sal_Unicode cSep = OOX_DUMP_LISTSEP );
@@ -879,7 +878,6 @@ protected:
 
     virtual bool        implIsValid() const override;
     const OUString*     implGetOption( const OUString& rKey ) const;
-    NameListRef         implGetNameList( const OUString& rListName ) const;
 
 private:
     typedef std::shared_ptr< SharedConfigData > SharedConfigDataRef;
@@ -1638,7 +1636,6 @@ protected:
 
     sal_Int64           getRecId() const { return mnRecId; }
     sal_Int64           getRecSize() const { return mnRecSize; }
-    NameListRef         getRecNames() const { return maRecNames.getNameList( cfg() ); }
 
     virtual bool        implIsValid() const override;
     virtual void        implDump() override;

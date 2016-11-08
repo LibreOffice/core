@@ -133,10 +133,8 @@ public:
     /** Returns the object type for a series depending on the chart type. */
     ObjectType          getSeriesObjectType() const;
 
-    /** Returns true, if this chart type has to reverse its series order. */
-    bool                isReverseSeries() const;
     /** Returns series title, if the chart type group contains only one single series. */
-    OUString     getSingleSeriesTitle() const;
+    OUString            getSingleSeriesTitle() const;
 
     /** Creates a coordinate system according to the contained chart type. */
     css::uno::Reference< css::chart2::XCoordinateSystem >

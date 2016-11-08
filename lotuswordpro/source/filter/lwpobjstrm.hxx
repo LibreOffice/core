@@ -105,7 +105,6 @@ public:
     void ReadComplete();
     LwpSvStream *GetStream();
 private:
-    void ReadStream();
     void Read2Buffer();
     sal_uInt8* AllocBuffer(sal_uInt16 size);
     static sal_uInt16 DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, sal_uInt16 Size);

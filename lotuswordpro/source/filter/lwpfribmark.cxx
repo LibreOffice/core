@@ -86,17 +86,12 @@ void LwpFribCHBlock::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
     m_nType = pObjStrm->QuickReaduInt8();
 }
 
-LwpCHBlkMarker* LwpFribCHBlock::GetMarker()
-{
-    return dynamic_cast<LwpCHBlkMarker*>(m_objMarker.obj().get());
-}
-
 void LwpFribCHBlock::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
 {
     sal_uInt8 type = GetType();
     if (!pStory)
         return;
-    LwpCHBlkMarker* pMarker = GetMarker();
+    LwpCHBlkMarker* pMarker = dynamic_cast<LwpCHBlkMarker*>(m_objMarker.obj().get());
 
     if (!pMarker)
         return;
@@ -1401,11 +1396,6 @@ LwpFribRubyMarker::LwpFribRubyMarker( LwpPara* pPara )
 {
 }
 
-LwpRubyMarker* LwpFribRubyMarker::GetMarker()
-{
-    return dynamic_cast<LwpRubyMarker*>(m_objMarker.obj(VO_RUBYMARKER).get());
-}
-
 void LwpFribRubyMarker::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_objMarker.ReadIndexed(pObjStrm);
@@ -1415,7 +1405,7 @@ void LwpFribRubyMarker::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 void LwpFribRubyMarker::XFConvert(XFContentContainer* pXFPara)
 {
     sal_uInt8 type = GetType();
-    LwpRubyMarker* pMarker = GetMarker();
+    LwpRubyMarker* pMarker = dynamic_cast<LwpRubyMarker*>(m_objMarker.obj(VO_RUBYMARKER).get());
 
     if (type == MARKER_START)
     {
