@@ -2628,10 +2628,11 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             if (!appendToBlock(pDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
-            if (pColArray->mpStrArray)
-                return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1], &(*pColArray->mpStrArray)[nRow1]);
-            else
-                return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1]);
+            rtl_uString** pStr = nullptr;
+            if (pColArray->mpStrArray && hasNonEmpty(*pColArray->mpStrArray, nRow1, nRow2))
+                pStr = &(*pColArray->mpStrArray)[nRow1];
+
+            return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1], pStr);
         }
         break;
         case sc::element_type_string:
@@ -2660,10 +2661,16 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             if (!appendToBlock(pDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
+            assert(pColArray->mpStrArray);
+
+            rtl_uString** pStr = nullptr;
+            if (hasNonEmpty(*pColArray->mpStrArray, nRow1, nRow2))
+                pStr = &(*pColArray->mpStrArray)[nRow1];
+
             if (pColArray->mpNumArray)
-                return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1], &(*pColArray->mpStrArray)[nRow1]);
+                return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1], pStr);
             else
-                return formula::VectorRefArray(&(*pColArray->mpStrArray)[nRow1]);
+                return formula::VectorRefArray(pStr);
         }
         break;
         case sc::element_type_formula:
@@ -2701,7 +2708,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             rtl_uString** pStr = nullptr;
             if (pColArray->mpNumArray)
                 pNum = &(*pColArray->mpNumArray)[nRow1];
-            if (pColArray->mpStrArray)
+            if (pColArray->mpStrArray && hasNonEmpty(*pColArray->mpStrArray, nRow1, nRow2))
                 pStr = &(*pColArray->mpStrArray)[nRow1];
 
             return formula::VectorRefArray(pNum, pStr);
