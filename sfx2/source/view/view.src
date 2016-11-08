@@ -131,4 +131,9 @@ String STR_READONLY_EDIT
     Text[ en-US ] = "Edit Document";
 };
 
+String STR_READONLY_SIGN
+{
+    Text[ en-US ] = "Sign Document";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1152,6 +1152,22 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     SfxInfoBarWindow* pInfoBar = AppendInfoBar("readonly", SfxResId(STR_READONLY_DOCUMENT));
                     if (pInfoBar)
                     {
+                        SfxMedium* pMedium = m_xObjSh->GetMedium();
+                        if (pMedium && !pMedium->IsOriginallyReadOnly())
+                        {
+                            std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
+                            if (pFilter && pFilter->GetName() == "draw_pdf_import")
+                            {
+                                // SID_SIGNPDF opened a read-write PDF
+                                // read-only for signing purposes.
+                                VclPtrInstance<PushButton> xSignButton(&GetWindow());
+                                xSignButton->SetText(SfxResId(STR_READONLY_SIGN));
+                                xSignButton->SetSizePixel(xSignButton->GetOptimalSize());
+                                xSignButton->SetClickHdl(LINK(this, SfxViewFrame, SignDocumentHandler));
+                                pInfoBar->addButton(xSignButton);
+                            }
+                        }
+
                         VclPtrInstance<PushButton> xBtn(&GetWindow());
                         xBtn->SetText(SfxResId(STR_READONLY_EDIT));
                         xBtn->SetSizePixel(xBtn->GetOptimalSize());
@@ -1251,6 +1267,10 @@ IMPL_LINK_NOARG(SfxViewFrame, SwitchReadOnlyHandler, Button*, void)
     GetDispatcher()->Execute(SID_EDITDOC);
 }
 
+IMPL_LINK_NOARG(SfxViewFrame, SignDocumentHandler, Button*, void)
+{
+    GetDispatcher()->Execute(SID_SIGNATURE);
+}
 
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 {
