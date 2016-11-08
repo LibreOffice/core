@@ -400,7 +400,7 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
     {
     }
 
-    return comphelper::containerToSequence<DataFlavor>(*mpFormats);
+    return comphelper::containerToSequence(*mpFormats);
 }
 
 

@@ -998,7 +998,7 @@ Sequence< Type > OFormattedModel::getSupportedBindingTypes()
         aTypes.push_front(cppu::UnoType< sal_Bool >::get() );
         break;
     }
-    return comphelper::containerToSequence<Type>(aTypes);
+    return comphelper::containerToSequence(aTypes);
 }
 
 Any OFormattedModel::getDefaultForReset() const

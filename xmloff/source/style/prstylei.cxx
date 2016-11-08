@@ -427,7 +427,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                     if (xPropState.is())
                     {
                         nCount = aNameSet.size();
-                        Sequence<OUString> aNames( comphelper::containerToSequence<OUString>(aNameSet) );
+                        Sequence<OUString> aNames( comphelper::containerToSequence(aNameSet) );
                         Sequence < PropertyState > aStates( xPropState->getPropertyStates(aNames) );
                         const PropertyState *pStates = aStates.getConstArray();
                         OUString* pNames = aNames.getArray();

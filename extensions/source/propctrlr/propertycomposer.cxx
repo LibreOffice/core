@@ -255,8 +255,7 @@ namespace pcr
             m_bSupportedPropertiesAreKnown = true;
         }
 
-        Sequence< Property > aSurvived = comphelper::containerToSequence<Property>( m_aSupportedProperties );
-        return aSurvived;
+        return comphelper::containerToSequence( m_aSupportedProperties );
     }
 
 

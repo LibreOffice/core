@@ -2130,7 +2130,7 @@ uno::Sequence<OUString> SwXTextTable::getCellNames() throw( uno::RuntimeExceptio
     SwTableLines& rTableLines = pTable->GetTabLines();
     std::vector<OUString> aAllNames;
     lcl_InspectLines(rTableLines, aAllNames);
-    return comphelper::containerToSequence<OUString>(aAllNames);
+    return comphelper::containerToSequence(aAllNames);
 }
 
 uno::Reference<text::XTextTableCursor> SwXTextTable::createCursorByCellName(const OUString& sCellName)
