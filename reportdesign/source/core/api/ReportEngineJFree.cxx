@@ -196,7 +196,7 @@ OUString OReportEngineJFree::getNewOutputName()
                 ::utl::TempFile aTestFile(sName, false, &sExt);
                 if ( !aTestFile.IsValid() )
                 {
-                    sName = RPT_RESSTRING(RID_STR_REPORT,m_xContext->getServiceManager());
+                    sName = RPT_RESSTRING(RID_STR_REPORT);
                     ::utl::TempFile aFile(sName, false, &sExt);
                     sFileURL = aFile.GetURL();
                 }

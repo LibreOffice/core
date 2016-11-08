@@ -28,7 +28,7 @@ class SimpleResMgr;
 namespace reportdesign
 {
 
-#define RPT_RESSTRING(id,_rM) ResourceManager::loadString(id,_rM)
+#define RPT_RESSTRING(id) ResourceManager::loadString(id)
 
 
     //= ResourceManager
@@ -51,13 +51,10 @@ namespace reportdesign
         };
         friend class EnsureDelete;
 
-    protected:
-        static void ensureImplExists(const css::uno::Reference< css::lang::XMultiComponentFactory >& _rM);
-
     public:
         /** loads the string with the specified resource id from the FormLayer resource file
         */
-        static OUString loadString(sal_uInt16 _nResId,const css::uno::Reference< css::lang::XMultiComponentFactory >& _rM);
+        static OUString loadString(sal_uInt16 _nResId);
     };
 
 

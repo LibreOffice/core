@@ -1038,12 +1038,6 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _
     }
 }
 
-bool OViewsWindow::isObjectInMyTempList(SdrObject *_pObj)
-{
-    return ::std::find(m_aBegDragTempList.begin(),m_aBegDragTempList.end(),_pObj) != m_aBegDragTempList.end();
-}
-
-
 void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionView* _pSection)
 {
     SAL_INFO(
@@ -1091,7 +1085,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
             {
                 const SdrMark* pM = rView.GetSdrMarkByIndex(i);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
-                if (!isObjectInMyTempList(pObj))
+                if (::std::find(m_aBegDragTempList.begin(),m_aBegDragTempList.end(),pObj) == m_aBegDragTempList.end())
                 {
                     Rectangle aRect( pObj->GetCurrentBoundRect() );
                     aRect.Move(0, aNewObjPos.Y());

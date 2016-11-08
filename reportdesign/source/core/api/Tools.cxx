@@ -43,10 +43,9 @@ uno::Reference< report::XSection> lcl_getSection(const uno::Reference< uno::XInt
 void throwIllegallArgumentException( const OUString& _sTypeName
                                     ,const uno::Reference< uno::XInterface >& ExceptionContext_
                                     ,sal_Int16 ArgumentPosition_
-                                    ,const css::uno::Reference< css::uno::XComponentContext >& Context_
                                     )
 {
-    OUString sErrorMessage(RPT_RESSTRING(RID_STR_ERROR_WRONG_ARGUMENT,Context_->getServiceManager()));
+    OUString sErrorMessage(RPT_RESSTRING(RID_STR_ERROR_WRONG_ARGUMENT));
     sErrorMessage = sErrorMessage.replaceAt(sErrorMessage.indexOf('#'),2,_sTypeName);
     throw lang::IllegalArgumentException(sErrorMessage,ExceptionContext_,ArgumentPosition_);
 }

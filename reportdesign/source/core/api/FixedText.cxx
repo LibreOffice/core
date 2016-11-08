@@ -48,7 +48,7 @@ OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContex
 ,FixedTextPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFixedTextOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT,m_aProps.aComponent.m_xContext->getServiceManager());
+    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT);
     m_aProps.aComponent.m_nBorder = 0; // no border
 }
 
@@ -59,7 +59,7 @@ OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContex
 ,FixedTextPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFixedTextOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT,m_aProps.aComponent.m_xContext->getServiceManager());
+    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT);
     m_aProps.aComponent.m_nBorder = 0; // no border
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );

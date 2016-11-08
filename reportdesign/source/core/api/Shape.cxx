@@ -59,7 +59,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext)
 ,m_nZOrder(0)
 ,m_bOpaque(false)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE,m_aProps.aComponent.m_xContext->getServiceManager());
+    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE);
 }
 
 OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
@@ -73,7 +73,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
 ,m_bOpaque(false)
 ,m_sServiceName(_sServiceName)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE,m_aProps.aComponent.m_xContext->getServiceManager());
+    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE);
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );
     {

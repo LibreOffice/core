@@ -316,8 +316,7 @@ void SAL_CALL OSection::setForceNewPage( ::sal_Int16 _forcenewpage ) throw (lang
     if ( _forcenewpage < report::ForceNewPage::NONE || _forcenewpage > report::ForceNewPage::BEFORE_AFTER_SECTION )
         throwIllegallArgumentException("css::report::ForceNewPage"
                         ,*this
-                        ,1
-                        ,m_xContext);
+                        ,1);
     checkNotPageHeaderFooter();
     set(PROPERTY_FORCENEWPAGE,_forcenewpage,m_nForceNewPage);
 }
@@ -334,8 +333,7 @@ void SAL_CALL OSection::setNewRowOrCol( ::sal_Int16 _newroworcol ) throw (lang::
     if ( _newroworcol < report::ForceNewPage::NONE || _newroworcol > report::ForceNewPage::BEFORE_AFTER_SECTION )
         throwIllegallArgumentException("css::report::ForceNewPage"
                         ,*this
-                        ,1
-                        ,m_xContext);
+                        ,1);
     checkNotPageHeaderFooter();
 
     set(PROPERTY_NEWROWORCOL,_newroworcol,m_nNewRowOrCol);

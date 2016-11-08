@@ -206,9 +206,6 @@ namespace rptui
         void executeMethodWithUndo(sal_uInt16 _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun);
         void alignControlsWithUndo(sal_uInt16 _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection = false);
 
-        // open the help agent of report designer at start time
-        void doOpenHelpAgent();
-
         css::uno::Reference< css::frame::XFrame > getXFrame();
 
         /** shrink a section
@@ -225,10 +222,6 @@ namespace rptui
         * bound to a newly created image button.
         */
         void insertGraphic();
-
-        /** resets the floater
-        */
-        void updateFloater();
 
         /** creates a new function in the given value context
         *

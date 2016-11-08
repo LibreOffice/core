@@ -155,9 +155,6 @@ namespace rptui
         /// updates the scrollbar range. (does not update the scrollbar visibility)
         void    impl_updateScrollBarRange();
 
-        /// determines whether we need a scrollbar for the conditions
-        bool    impl_needScrollBar() const { return m_aConditions.size() > MAX_CONDITIONS; }
-
         /// scrolls the condition with the given index to the top position
         void    impl_scrollTo( size_t _nTopCondIndex );
 

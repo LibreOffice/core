@@ -120,7 +120,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 ,m_nScaleMode(awt::ImageScaleMode::NONE)
 ,m_bPreserveIRI(true)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL,m_aProps.aComponent.m_xContext->getServiceManager());
+    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL);
 }
 
 OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _xContext
@@ -132,7 +132,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 ,m_nScaleMode(awt::ImageScaleMode::NONE)
 ,m_bPreserveIRI(true)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL,m_aProps.aComponent.m_xContext->getServiceManager());
+    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL);
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );
     {

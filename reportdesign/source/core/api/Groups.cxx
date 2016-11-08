@@ -80,7 +80,7 @@ void SAL_CALL OGroups::insertByIndex( ::sal_Int32 Index, const uno::Any& aElemen
             checkIndex(Index);
         uno::Reference< report::XGroup > xGroup(aElement,uno::UNO_QUERY);
         if ( !xGroup.is() )
-            throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL,m_xContext->getServiceManager()),*this,2);
+            throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL),*this,2);
 
         if ( bAdd )
             m_aGroups.push_back(xGroup);
@@ -121,7 +121,7 @@ void SAL_CALL OGroups::replaceByIndex( ::sal_Int32 Index, const uno::Any& Elemen
         checkIndex(Index);
         uno::Reference< report::XGroup > xGroup(Element,uno::UNO_QUERY);
         if ( !xGroup.is() )
-            throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL,m_xContext->getServiceManager()),*this,2);
+            throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL),*this,2);
         TGroups::iterator aPos = m_aGroups.begin();
         ::std::advance(aPos,Index);
         aOldElement <<= *aPos;

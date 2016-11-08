@@ -118,7 +118,7 @@ void SAL_CALL OGroup::setHeaderOn( sal_Bool _headeron ) throw (uno::RuntimeExcep
 {
     if ( bool(_headeron) != m_xHeader.is() )
     {
-        OUString sName(RPT_RESSTRING(RID_STR_GROUP_HEADER,m_xContext->getServiceManager()));
+        OUString sName(RPT_RESSTRING(RID_STR_GROUP_HEADER));
         setSection(PROPERTY_HEADERON,_headeron,sName,m_xHeader);
     }
 }
@@ -133,7 +133,7 @@ void SAL_CALL OGroup::setFooterOn( sal_Bool _footeron ) throw (uno::RuntimeExcep
 {
     if ( bool(_footeron) != m_xFooter.is() )
     {
-        OUString sName(RPT_RESSTRING(RID_STR_GROUP_FOOTER,m_xContext->getServiceManager()));
+        OUString sName(RPT_RESSTRING(RID_STR_GROUP_FOOTER));
         setSection(PROPERTY_FOOTERON,_footeron,sName,m_xFooter);
     }
 }
@@ -175,8 +175,7 @@ void SAL_CALL OGroup::setGroupOn( ::sal_Int16 _groupon ) throw (lang::IllegalArg
     if ( _groupon < report::GroupOn::DEFAULT || _groupon > report::GroupOn::INTERVAL )
         throwIllegallArgumentException("css::report::GroupOn"
                         ,*this
-                        ,1
-                        ,m_xContext);
+                        ,1);
     set(PROPERTY_GROUPON,_groupon,m_aProps.m_nGroupOn);
 }
 
@@ -202,8 +201,7 @@ void SAL_CALL OGroup::setKeepTogether( ::sal_Int16 _keeptogether ) throw (lang::
     if ( _keeptogether < report::KeepTogether::NO || _keeptogether > report::KeepTogether::WITH_FIRST_DETAIL )
         throwIllegallArgumentException("css::report::KeepTogether"
                         ,*this
-                        ,1
-                        ,m_xContext);
+                        ,1);
     set(PROPERTY_KEEPTOGETHER,_keeptogether,m_aProps.m_nKeepTogether);
 }
 
