@@ -42,12 +42,13 @@ OFrames::OFrames( const   css::uno::Reference< XFrame >&              xOwner    
         ,   m_pFrameContainer           ( pFrameContainer               )
         ,   m_bRecursiveSearchProtection( false                     )
 {
-    // Safe impossible cases
-    // Method is not defined for ALL incoming parameters!
-    SAL_WARN_IF( !impldbg_checkParameter_OFramesCtor( xOwner, pFrameContainer ), "fwk", "OFrames::OFrames(): Invalid parameter detected!" );
+    // An instance of this class can only work with valid initialization.
+    // We share the mutex with our owner class, need a valid factory to instanciate new services and
+    // use the access to our owner for some operations.
+    SAL_WARN_IF( !xOwner.is() || !pFrameContainer, "fwk", "OFrames::OFrames(): Invalid parameter detected!" );
 }
 
-//  (proteced!) destructor
+//  (protected!) destructor
 
 OFrames::~OFrames()
 {
@@ -344,16 +345,6 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
         If you miss a test for one of this parameters, contact the author or add it himself !(?)
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
-
-// An instance of this class can only work with valid initialization.
-// We share the mutex with our owner class, need a valid factory to instanciate new services and
-// use the access to our owner for some operations.
-bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Reference< XFrame >&              xOwner          ,
-                                                            FrameContainer*                             pFrameContainer )
-{
-    return xOwner.is() && pFrameContainer != nullptr;
-}
-
 
 // A search for frames must initiate with right flags.
 // Some one are superflous and not supported yet. But here we control only the range of incoming parameter!

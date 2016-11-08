@@ -388,11 +388,7 @@ void StatusBarManager::CreateControllers()
         }
     }
 
-    AddFrameActionListener();
-}
-
-void StatusBarManager::AddFrameActionListener()
-{
+    // add frame action listeners
     if ( !m_bFrameActionRegistered && m_xFrame.is() )
     {
         m_bFrameActionRegistered = true;

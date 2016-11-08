@@ -90,7 +90,6 @@ class StatusBarManager : public ::cppu::WeakImplHelper<
         void RemoveControllers();
         void CreateControllers();
         void UpdateControllers();
-        void AddFrameActionListener();
         void MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL css::frame::XStatusbarController::*_pMethod )(const css::awt::MouseEvent&));
 
     protected:
