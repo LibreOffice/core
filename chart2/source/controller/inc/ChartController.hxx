@@ -408,14 +408,14 @@ private:
             //each controller might consider himself as owner of the model first
             bool m_bOwnership;
     };
-    class TheModelRef
+    class TheModelRef final
     {
         public:
             TheModelRef( TheModel* pTheModel, ::osl::Mutex& rMutex );
             TheModelRef( const TheModelRef& rTheModel, ::osl::Mutex& rMutex );
             TheModelRef& operator=(ChartController::TheModel* pTheModel);
             TheModelRef& operator=(const TheModelRef& rTheModel);
-            virtual ~TheModelRef();
+            ~TheModelRef();
             bool is() const;
                 TheModel* operator->() const { return m_pTheModel; }
         private:

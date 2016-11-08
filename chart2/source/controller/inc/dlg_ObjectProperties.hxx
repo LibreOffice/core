@@ -27,11 +27,11 @@
 namespace chart
 {
 
-class ObjectPropertiesDialogParameter
+class ObjectPropertiesDialogParameter final
 {
 public:
     ObjectPropertiesDialogParameter( const OUString& rObjectCID );
-    virtual ~ObjectPropertiesDialogParameter();
+    ~ObjectPropertiesDialogParameter();
 
     void            init( const css::uno::Reference< css::frame::XModel >& xModel );
     ObjectType      getObjectType() const { return m_eObjectType;}

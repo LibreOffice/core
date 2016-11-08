@@ -31,11 +31,11 @@ class SvNumberFormatter;
 namespace chart
 {
 
-class DataLabelResources
+class DataLabelResources final
 {
 public:
     DataLabelResources( VclBuilderContainer* pWindow, vcl::Window* pParent, const SfxItemSet& rInAttrs );
-    virtual ~DataLabelResources();
+    ~DataLabelResources();
 
     bool FillItemSet(SfxItemSet* rOutAttrs) const;
     void Reset(const SfxItemSet& rInAttrs);

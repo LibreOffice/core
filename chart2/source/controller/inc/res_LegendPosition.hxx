@@ -29,7 +29,7 @@
 namespace chart
 {
 
-class LegendPositionResources
+class LegendPositionResources final
 {
 
 public:
@@ -38,7 +38,7 @@ public:
     //constructor inclusive Display checkbox
     LegendPositionResources(VclBuilderContainer& rParent, const css::uno::Reference<
                        css::uno::XComponentContext>& xCC );
-    virtual ~LegendPositionResources();
+    ~LegendPositionResources();
 
     void writeToResources( const css::uno::Reference< css::frame::XModel >& xChartModel );
     void writeToModel( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;

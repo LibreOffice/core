@@ -43,11 +43,11 @@ class ChartModel;
 namespace wrapper
 {
 
-class Chart2ModelContact
+class Chart2ModelContact final
 {
 public:
     explicit Chart2ModelContact( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~Chart2ModelContact();
+    ~Chart2ModelContact();
 
 public:
     void setModel( const css::uno::Reference< css::frame::XModel >& xChartModel );

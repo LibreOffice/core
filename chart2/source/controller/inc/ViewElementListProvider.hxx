@@ -29,11 +29,11 @@ namespace chart
 
 class DrawModelWrapper;
 
-class ViewElementListProvider
+class ViewElementListProvider final
 {
 public:
     ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper );
-    virtual ~ViewElementListProvider();
+    ~ViewElementListProvider();
 
     XColorListRef     GetColorTable() const;
     XDashListRef      GetDashList() const;

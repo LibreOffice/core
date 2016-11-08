@@ -70,7 +70,7 @@ public:
     static void SetAutoCorrectOn( bool b );
 };
 
-class BASIC_DLLPUBLIC CodeCompleteDataCache
+class BASIC_DLLPUBLIC CodeCompleteDataCache final
 {
 /*
  * cache to store data for
@@ -82,7 +82,7 @@ private:
 
 public:
     CodeCompleteDataCache(){}
-    virtual ~CodeCompleteDataCache(){}
+    ~CodeCompleteDataCache(){}
 
     friend BASIC_DLLPUBLIC std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache);
 
