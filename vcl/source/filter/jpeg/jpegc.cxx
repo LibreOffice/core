@@ -177,16 +177,6 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                 pCYMKBuffer.resize(nWidth * 4);
             }
 
-            const ScanlineFormat nFormat = pAccess->GetScanlineFormat();
-
-            bool bTopDown = true;
-
-            if (( bGray && nFormat == ScanlineFormat::N8BitPal) ||
-                (!bGray && nFormat == ScanlineFormat::N24BitTcRgb))
-            {
-                bTopDown = pAccess->IsTopDown();
-            }
-
             std::unique_ptr<BitmapColor[]> pCols;
 
             if (bGray)
@@ -227,9 +217,6 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                     sal_uInt8* p = pScanLineBuffer.data();
                     jpeg_read_scanlines(&cinfo, reinterpret_cast<JSAMPARRAY>(&p), 1);
                 }
-
-                if (!bTopDown)
-                    yIndex = nHeight - 1 - yIndex;
 
                 if (bGray)
                 {
