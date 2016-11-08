@@ -3164,7 +3164,7 @@ namespace drawinglayer
     {
         void MetafilePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
-            // prepare target and porperties; each will have one default entry
+            // prepare target and properties; each will have one default entry
             TargetHolders aTargetHolders;
             PropertyHolders aPropertyHolders;
 
