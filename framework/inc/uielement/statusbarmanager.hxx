@@ -43,7 +43,7 @@ namespace framework
 {
 
 class FrameworkStatusBar;
-class StatusBarManager : public ::cppu::WeakImplHelper<
+class StatusBarManager final: public ::cppu::WeakImplHelper<
                                    css::frame::XFrameActionListener,
                                    css::lang::XComponent,
                                    css::ui::XUIConfigurationListener >
@@ -77,7 +77,7 @@ class StatusBarManager : public ::cppu::WeakImplHelper<
 
         void FillStatusBar( const css::uno::Reference< css::container::XIndexAccess >& rStatusBarData );
 
-    protected:
+    private:
         void DataChanged( const DataChangedEvent& rDCEvt );
         void UserDraw( const UserDrawEvent& rUDEvt );
         void Command( const CommandEvent& rEvt );
@@ -92,7 +92,6 @@ class StatusBarManager : public ::cppu::WeakImplHelper<
         void UpdateControllers();
         void MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL css::frame::XStatusbarController::*_pMethod )(const css::awt::MouseEvent&));
 
-    protected:
         typedef std::map< sal_uInt16, css::uno::Reference< css::frame::XStatusbarController > > StatusBarControllerMap;
 
         bool                                                                  m_bDisposed : 1,
