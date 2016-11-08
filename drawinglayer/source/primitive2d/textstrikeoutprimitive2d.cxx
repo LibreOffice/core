@@ -201,7 +201,7 @@ namespace drawinglayer
             // add primitive
             const attribute::LineAttribute aLineAttribute(getFontColor(), fStrikeoutHeight, basegfx::B2DLineJoin::NONE);
             Primitive2DContainer xRetval(1);
-            xRetval[0] = Primitive2DReference(new PolygonStrokePrimitive2D(aStrikeoutLine, aLineAttribute));
+            xRetval[0] = new PolygonStrokePrimitive2D(aStrikeoutLine, aLineAttribute);
 
             if(bDoubleLine)
             {
@@ -223,10 +223,9 @@ namespace drawinglayer
 
                 // add transform primitive
                 xRetval.push_back(
-                    Primitive2DReference(
                         new TransformPrimitive2D(
                             aTransform,
-                            xRetval)));
+                            xRetval));
             }
 
             rContainer.insert(rContainer.end(), xRetval.begin(), xRetval.end());

@@ -237,10 +237,10 @@ namespace drawinglayer
                             fTextShadowOffset, fTextShadowOffset));
 
                         // create shadow primitive
-                        aShadow = Primitive2DReference(new ShadowPrimitive2D(
+                        aShadow = new ShadowPrimitive2D(
                             aShadowTransform,
                             aShadowColor,
-                            aRetval));
+                            aRetval);
                     }
 
                     if(bHasTextRelief)
@@ -297,9 +297,7 @@ namespace drawinglayer
                     {
                         // put shadow in front if there is one to paint timely before
                         // but placed behind content
-                        const Primitive2DContainer aContent(aRetval);
-                        aRetval = Primitive2DContainer { aShadow };
-                        aRetval.append(aContent);
+                        aRetval.insert(aRetval.begin(), aShadow);
                     }
                 }
             }
