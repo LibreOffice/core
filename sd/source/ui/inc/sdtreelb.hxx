@@ -50,6 +50,9 @@ class DrawDocShell;
 typedef ::tools::SvRef<DrawDocShell> DrawDocShellRef;
 #endif
 }
+namespace svt {
+    class AcceleratorExecute;
+}
 
 /**
  * Effect-Tab-Dialog
@@ -62,6 +65,8 @@ private:
 
     // set contenttree in SdNavigatorWin
     bool                           bisInSdNavigatorWin;
+
+    ::std::unique_ptr< ::svt::AcceleratorExecute> m_pAccel;
 public:
 
     // nested class to implement the TransferableHelper
@@ -182,7 +187,7 @@ protected:
 public:
 
     SdPageObjsTLB(vcl::Window* pParent, WinBits nStyle);
-                            virtual ~SdPageObjsTLB() override;
+    virtual ~SdPageObjsTLB() override;
     virtual void            dispose() override;
 
    // helper function for   GetEntryAltText and GetEntryLongDescription
@@ -192,7 +197,7 @@ public:
     virtual void            SelectHdl() override;
     virtual void            KeyInput( const KeyEvent& rKEvt ) override;
 
-    void                    SetViewFrame( SfxViewFrame* pViewFrame ) { mpFrame = pViewFrame; }
+    void                    SetViewFrame( SfxViewFrame* pViewFrame );
 
     void                    Fill( const SdDrawDocument*, bool bAllPages, const OUString& rDocName );
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName );
