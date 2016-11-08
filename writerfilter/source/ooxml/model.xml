@@ -40,6 +40,8 @@
   <token tokenid="ooxml:object"/>
   <token tokenid="ooxml:tblStart"/>
   <token tokenid="ooxml:tblEnd"/>
+  <token tokenid="ooxml:tcStart"/>
+  <token tokenid="ooxml:tcEnd"/>
 
   <!-- These are not directly generated from OOXML XML elements / attributes, need to clean them up in the future. -->
   <token tokenid="ooxml:tblDepth"/>

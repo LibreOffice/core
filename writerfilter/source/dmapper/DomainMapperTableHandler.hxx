@@ -94,7 +94,7 @@ public:
      */
     void startTable(unsigned int nDepth, const TablePropertyMapPtr& pProps);
     /// Handle end of table.
-    void endTable(unsigned int nestedTableLevel);
+    void endTable(unsigned int nestedTableLevel, bool bTableStartsAtCellStart);
     /**
        Handle start of row.
 
