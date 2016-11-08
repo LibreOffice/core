@@ -42,12 +42,7 @@ struct DataFlavorEx : public css::datatransfer::DataFlavor
     SotClipboardFormatId mnSotId;
 };
 
-// JP 23.03.2001 - this struct is only for "hide" the STD of the vetor,
-// because our makefile filter all this symbols and so nobody can use
-// these struct in any interfacses.
-struct DataFlavorExVector : public ::std::vector< DataFlavorEx >
-{
-};
+typedef ::std::vector<DataFlavorEx> DataFlavorExVector;
 
 
 SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector,
