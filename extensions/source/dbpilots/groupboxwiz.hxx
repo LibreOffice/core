@@ -60,9 +60,6 @@ namespace dbp
         virtual bool                onFinish() override;
 
         virtual bool                approveControl(sal_Int16 _nClassId) override;
-
-    protected:
-        void createRadios();
     };
 
     class OGBWPage : public OControlWizardPage
@@ -160,8 +157,6 @@ namespace dbp
         explicit OOptionDBFieldPage( OControlWizard* _pParent );
 
     protected:
-        OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
-
         // ODBFieldPage overridables
         virtual OUString& getDBFieldSetting() override;
     };

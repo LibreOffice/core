@@ -180,13 +180,6 @@ namespace pcr
         */
         void impl_processEvent_throw( const ::comphelper::AnyEvent& _rEvent );
 
-        /** checks whether we're alive
-
-            @throws DisposedException
-                if the instance is already disposed
-        */
-        void impl_checkAlive_throw() const;
-
         /** checks whether the instance is already disposed
         */
         bool impl_isDisposed_nothrow() const { return m_pContext.get() == nullptr; }
@@ -214,13 +207,6 @@ namespace pcr
     }
 
 
-    void PropertyControlContext_Impl::impl_checkAlive_throw() const
-    {
-        if ( impl_isDisposed_nothrow() )
-            throw DisposedException( OUString(), *const_cast< PropertyControlContext_Impl* >( this ) );
-    }
-
-
     void SAL_CALL PropertyControlContext_Impl::dispose()
     {
         SolarMutexGuard aGuard;
@@ -245,7 +231,8 @@ namespace pcr
 
         {
             SolarMutexGuard aGuard;
-            impl_checkAlive_throw();
+            if ( impl_isDisposed_nothrow() )
+                 throw DisposedException( OUString(), *this );
             pEvent = new ControlEvent( _rxControl, _eType );
 
             if ( m_eMode == eSynchronously )

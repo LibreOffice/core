@@ -149,11 +149,6 @@ namespace pcr
         css::uno::Reference< css::frame::XFrame >
             impl_createEmptyParentlessTask_nothrow() const;
 
-        /** called whenever the component denoted by m_xDesigner has been closed
-            <em>by an external instance</em>
-        */
-        void impl_designerClosed_nothrow();
-
         /** closes the component denoted by m_xDesigner
             @precond
                 our designer component is actually active (->isActive)

@@ -58,7 +58,6 @@ namespace dbp
         DECL_LINK( OnListboxDoubleClicked, ListBox&, void );
         DECL_LINK( OnSearchClicked, Button*, void );
 
-        void implCollectDatasource();
         void implFillTables(const css::uno::Reference< css::sdbc::XConnection >&
                         _rxConn = css::uno::Reference< css::sdbc::XConnection >());
 

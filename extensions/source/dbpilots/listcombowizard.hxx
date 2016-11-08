@@ -174,8 +174,6 @@ namespace dbp
         explicit OComboDBFieldPage( OControlWizard* _pParent );
 
     protected:
-        OListComboSettings& getSettings() { return static_cast<OListComboWizard*>(getDialog())->getSettings(); }
-
         // TabPage overridables
         virtual void ActivatePage() override;
 

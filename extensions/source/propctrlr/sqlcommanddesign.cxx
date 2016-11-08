@@ -145,7 +145,7 @@ namespace pcr
     {
         if ( m_xDesigner.is() && ( Source.Source == m_xDesigner ) )
         {
-            impl_designerClosed_nothrow();
+            m_aCloseLink.Call( *this );
             m_xDesigner.clear();
         }
     }
@@ -295,12 +295,6 @@ namespace pcr
             DBG_UNHANDLED_EXCEPTION();
         }
         return xFrame;
-    }
-
-
-    void SQLCommandDesigner::impl_designerClosed_nothrow()
-    {
-        m_aCloseLink.Call( *this );
     }
 
 

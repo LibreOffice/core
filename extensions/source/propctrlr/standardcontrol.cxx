@@ -669,7 +669,7 @@ namespace pcr
             css::util::Color nColor = COL_TRANSPARENT;
             _rValue >>= nColor;
             ::Color aRgbCol((ColorData)nColor);
-            getTypedControlWindow()->SelectEntry(std::make_pair(aRgbCol, MakeHexStr(nColor, 8)));
+           getTypedControlWindow()->SelectEntry(std::make_pair(aRgbCol, MakeHexStr(nColor, 8)));
         }
         else
             getTypedControlWindow()->SetNoSelection();
