@@ -113,26 +113,24 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         the entries in officecfg/registry/data/org/openoffice/Office/Impress.xcu
         for the TaskPanelFactory.
     */
-#define EndsWith(s,t) s.endsWithAsciiL(t,strlen(t))
-    if (EndsWith(rsUIElementResourceURL, "/CustomAnimations"))
+    if (rsUIElementResourceURL.endsWith("/CustomAnimations"))
         pControl = VclPtr<CustomAnimationPanel>::Create(pParentWindow, *pBase, xFrame);
-    else if (EndsWith(rsUIElementResourceURL, "/Layouts"))
+    else if (rsUIElementResourceURL.endsWith("/Layouts"))
         pControl = VclPtr<LayoutMenu>::Create(pParentWindow, *pBase, xSidebar);
-    else if (EndsWith(rsUIElementResourceURL, "/AllMasterPages"))
+    else if (rsUIElementResourceURL.endsWith("/AllMasterPages"))
         pControl = AllMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
-    else if (EndsWith(rsUIElementResourceURL, "/RecentMasterPages"))
+    else if (rsUIElementResourceURL.endsWith("/RecentMasterPages"))
         pControl = RecentMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
-    else if (EndsWith(rsUIElementResourceURL, "/UsedMasterPages"))
+    else if (rsUIElementResourceURL.endsWith("/UsedMasterPages"))
         pControl = CurrentMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
-    else if (EndsWith(rsUIElementResourceURL, "/SlideTransitions"))
+    else if (rsUIElementResourceURL.endsWith("/SlideTransitions"))
         pControl = VclPtr<SlideTransitionPanel>::Create(pParentWindow, *pBase, xFrame);
-    else if (EndsWith(rsUIElementResourceURL, "/TableDesign"))
+    else if (rsUIElementResourceURL.endsWith("/TableDesign"))
         pControl = VclPtr<TableDesignPanel>::Create(pParentWindow, *pBase);
-    else if (EndsWith(rsUIElementResourceURL, "/NavigatorPanel"))
+    else if (rsUIElementResourceURL.endsWith("/NavigatorPanel"))
         pControl = VclPtr<NavigatorWrapper>::Create(pParentWindow, *pBase, pBindings);
-    else if (EndsWith(rsUIElementResourceURL, "/SlideBackgroundPanel"))
+    else if (rsUIElementResourceURL.endsWith("/SlideBackgroundPanel"))
         pControl = VclPtr<SlideBackground>::Create(pParentWindow, *pBase, xFrame, pBindings);
-#undef EndsWith
 
     if (!pControl)
         throw lang::IllegalArgumentException();
