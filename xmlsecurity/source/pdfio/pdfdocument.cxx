@@ -337,6 +337,7 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     std::vector<PDFObjectElement*> aSignatures = GetSignatureWidgets();
     sal_uInt32 nNextSignature = aSignatures.size() + 1;
 
+    m_aEditBuffer.Seek(STREAM_SEEK_TO_END);
     m_aEditBuffer.WriteCharPtr("\n");
 
     // Write signature object.
@@ -478,12 +479,18 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.WriteCharPtr("\nendobj\n\n");
 
     // Write the updated Catalog object, references nAnnotId.
-    if (!m_pTrailer)
+    PDFReferenceElement* pRoot = nullptr;
+    if (m_pXRefStream)
+        pRoot = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Root"));
+    else
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: found no trailer");
-        return false;
+        if (!m_pTrailer)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: found no trailer");
+            return false;
+        }
+        pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"));
     }
-    auto pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"));
     if (!pRoot)
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: trailer has no root reference");
@@ -577,7 +584,12 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.WriteCharPtr(" ");
     m_aEditBuffer.WriteUInt32AsString(pRoot->GetGenerationValue());
     m_aEditBuffer.WriteCharPtr(" R\n");
-    if (auto pInfo = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Info")))
+    PDFReferenceElement* pInfo = nullptr;
+    if (m_pXRefStream)
+        pInfo = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Info"));
+    else
+        pInfo = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Info"));
+    if (pInfo)
     {
         m_aEditBuffer.WriteCharPtr("/Info ");
         m_aEditBuffer.WriteUInt32AsString(pInfo->GetObjectValue());
@@ -585,7 +597,12 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         m_aEditBuffer.WriteUInt32AsString(pInfo->GetGenerationValue());
         m_aEditBuffer.WriteCharPtr(" R\n");
     }
-    if (auto pID = dynamic_cast<PDFArrayElement*>(m_pTrailer->Lookup("ID")))
+    PDFArrayElement* pID = nullptr;
+    if (m_pXRefStream)
+        pID = dynamic_cast<PDFArrayElement*>(m_pXRefStream->Lookup("ID"));
+    else
+        pID = dynamic_cast<PDFArrayElement*>(m_pTrailer->Lookup("ID"));
+    if (pID)
     {
         const std::vector<PDFElement*>& rElements = pID->GetElements();
         m_aEditBuffer.WriteCharPtr("/ID [ <");
