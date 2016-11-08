@@ -16,6 +16,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <uielement/toolbarmanager.hxx>
 
 #include <uielement/generictoolbarcontroller.hxx>
@@ -454,6 +458,11 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
     {
         SolarMutexGuard g;
 
+        if (m_bDisposed)
+        {
+            return;
+        }
+
         RemoveControllers();
 
         if ( m_xDocImageManager.is() )
@@ -616,9 +625,7 @@ void SAL_CALL ToolBarManager::elementReplaced( const css::ui::ConfigurationEvent
 void ToolBarManager::RemoveControllers()
 {
     DBG_TESTSOLARMUTEX();
-
-    if ( m_bDisposed )
-        return;
+    assert(!m_bDisposed);
 
     m_aSubToolBarControllerMap.clear();
 
