@@ -395,7 +395,7 @@ public:
 
     virtual std::string getType() const override { return "TextTableCell"; }
 
-    static void startCell();
+    void startCell();
     void endCell();
 };
 

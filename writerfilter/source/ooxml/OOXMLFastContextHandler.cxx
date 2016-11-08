@@ -1297,6 +1297,17 @@ OOXMLFastContextHandlerTextTableCell::~OOXMLFastContextHandlerTextTableCell()
 
 void OOXMLFastContextHandlerTextTableCell::startCell()
 {
+    if (isForwardEvents())
+    {
+        OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+        {
+            OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
+            OOXMLProperty::Pointer_t pProp(new OOXMLPropertyImpl(NS_ooxml::LN_tcStart, pVal, OOXMLPropertyImpl::SPRM));
+            pProps->add(pProp);
+        }
+
+        mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+    }
 }
 
 void OOXMLFastContextHandlerTextTableCell::endCell()
@@ -1320,6 +1331,11 @@ void OOXMLFastContextHandlerTextTableCell::endCell()
             OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
             OOXMLProperty::Pointer_t pProp
                 (new OOXMLPropertyImpl(NS_ooxml::LN_tblCell, pVal, OOXMLPropertyImpl::SPRM));
+            pProps->add(pProp);
+        }
+        {
+            OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
+            OOXMLProperty::Pointer_t pProp(new OOXMLPropertyImpl(NS_ooxml::LN_tcEnd, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
 
