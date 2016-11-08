@@ -49,6 +49,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <svtools/acceleratorexecute.hxx>
 #include <svtools/embedtransfer.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
@@ -56,6 +57,8 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <o3tl/make_unique.hxx>
+
+
 using namespace com::sun::star;
 
 class SdPageObjsTLB::IconProvider
@@ -214,7 +217,18 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
     SetDragDropMode(
          DragDropMode::CTRL_MOVE | DragDropMode::CTRL_COPY |
             DragDropMode::APP_MOVE  | DragDropMode::APP_COPY  | DragDropMode::APP_DROP );
+
+    m_pAccel = ::svt::AcceleratorExecute::createAcceleratorHelper();
 }
+
+void SdPageObjsTLB::SetViewFrame( SfxViewFrame* pViewFrame )
+{
+    mpFrame = pViewFrame;
+    sd::ViewShellBase* pBase = sd::ViewShellBase::GetViewShellBase(pViewFrame);
+    const css::uno::Reference< css::frame::XFrame > xFrame = pBase->GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
+    m_pAccel->init(::comphelper::getProcessComponentContext(), xFrame);
+}
+
 
 SdPageObjsTLB::~SdPageObjsTLB()
 {
@@ -230,6 +244,7 @@ void SdPageObjsTLB::dispose()
         delete mpMedium;
     mpParent.clear();
     mpDropNavWin.clear();
+    m_pAccel.reset();
     SvTreeListBox::dispose();
 }
 
@@ -1037,6 +1052,10 @@ void SdPageObjsTLB::SelectHdl()
  */
 void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
 {
+    const vcl::KeyCode& aKeyCode = rKEvt.GetKeyCode();
+    if ( m_pAccel->execute( aKeyCode ) )
+        // the accelerator consumed the event
+        return;
     if( rKEvt.GetKeyCode().GetCode() == KEY_RETURN )
     {
         // commented code from svtools/source/contnr/svimpbox.cxx
