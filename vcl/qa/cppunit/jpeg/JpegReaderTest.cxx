@@ -49,11 +49,12 @@ int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
     return std::max(std::max(deltaR, deltaG), deltaB);
 }
 
-bool checkRect(Bitmap& rBitmap, int aLayerNumber, Color aExpectedColor, int nMaxDelta)
+bool checkRect(Bitmap& rBitmap, int aLayerNumber, long nAreaHeight, long nAreaWidth, Color aExpectedColor, int nMaxDelta)
 {
     Bitmap::ScopedWriteAccess pAccess(rBitmap);
-    long nHeight = pAccess->Height();
-    long nWidth = pAccess->Width();
+
+    long nWidth  = std::min(nAreaWidth,  pAccess->Width());
+    long nHeight = std::min(nAreaHeight, pAccess->Height());
 
     long firstX = 0 + aLayerNumber;
     long firstY = 0 + aLayerNumber;
@@ -65,24 +66,24 @@ bool checkRect(Bitmap& rBitmap, int aLayerNumber, Color aExpectedColor, int nMax
 
     for (long y = firstY; y <= lastY; y++)
     {
-        Color aColorFirst = pAccess->GetPixel(firstX, y);
+        Color aColorFirst = pAccess->GetPixel(y, firstX);
         delta = deltaColor(aColorFirst, aExpectedColor);
         if (delta > nMaxDelta)
             return false;
 
-        Color aColorLast  = pAccess->GetPixel(lastX,  y);
+        Color aColorLast  = pAccess->GetPixel(y, lastX);
         delta = deltaColor(aColorLast, aExpectedColor);
         if (delta > nMaxDelta)
             return false;
     }
     for (long x = firstX; x <= lastX; x++)
     {
-        Color aColorFirst = pAccess->GetPixel(x, firstY);
+        Color aColorFirst = pAccess->GetPixel(firstY, x);
         delta = deltaColor(aColorFirst, aExpectedColor);
         if (delta > nMaxDelta)
             return false;
 
-        Color aColorLast  = pAccess->GetPixel(x, lastY);
+        Color aColorLast  = pAccess->GetPixel(lastY, x);
         delta = deltaColor(aColorLast, aExpectedColor);
         if (delta > nMaxDelta)
             return false;
@@ -104,44 +105,44 @@ void JpegReaderTest::testReadRGB()
 {
     Bitmap aBitmap = loadJPG(getFullUrl("JPEGTestRGB.jpeg"));
     Size aSize = aBitmap.GetSizePixel();
-    CPPUNIT_ASSERT_EQUAL(8L, aSize.Width());
-    CPPUNIT_ASSERT_EQUAL(8L, aSize.Height());
+    CPPUNIT_ASSERT_EQUAL(12L, aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(12L, aSize.Height());
 
     int nMaxDelta = 1; // still acceptable color error
-    CPPUNIT_ASSERT(checkRect(aBitmap, 0, Color(0xff, 0xff, 0xff), nMaxDelta));
-    CPPUNIT_ASSERT(checkRect(aBitmap, 1, Color(0xff, 0x00, 0x00), nMaxDelta));
-    CPPUNIT_ASSERT(checkRect(aBitmap, 2, Color(0x00, 0xff, 0x00), nMaxDelta));
-    CPPUNIT_ASSERT(checkRect(aBitmap, 3, Color(0x00, 0x00, 0xff), nMaxDelta));
+    CPPUNIT_ASSERT(checkRect(aBitmap, 0, 8, 8, Color(0xff, 0xff, 0xff), nMaxDelta));
+    CPPUNIT_ASSERT(checkRect(aBitmap, 1, 8, 8, Color(0xff, 0x00, 0x00), nMaxDelta));
+    CPPUNIT_ASSERT(checkRect(aBitmap, 2, 8, 8, Color(0x00, 0xff, 0x00), nMaxDelta));
+    CPPUNIT_ASSERT(checkRect(aBitmap, 3, 8, 8, Color(0x00, 0x00, 0xff), nMaxDelta));
 }
 
 void JpegReaderTest::testReadGray()
 {
     Bitmap aBitmap = loadJPG(getFullUrl("JPEGTestGray.jpeg"));
     Size aSize = aBitmap.GetSizePixel();
-    CPPUNIT_ASSERT_EQUAL(8L, aSize.Width());
-    CPPUNIT_ASSERT_EQUAL(8L, aSize.Height());
+    CPPUNIT_ASSERT_EQUAL(12L, aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(12L, aSize.Height());
 
     aBitmap.Convert(BmpConversion::BMP_CONVERSION_24BIT); // convert to 24bit so we don't need to deal with palette
 
-    int nMaxDelta = 3;
-    CPPUNIT_ASSERT(checkRect(aBitmap, 0, Color(0xff, 0xff, 0xff), nMaxDelta));
-    CPPUNIT_ASSERT(checkRect(aBitmap, 1, Color(0x36, 0x36, 0x36), nMaxDelta));
-    CPPUNIT_ASSERT(checkRect(aBitmap, 2, Color(0xb6, 0xb6, 0xb6), nMaxDelta));
-    CPPUNIT_ASSERT(checkRect(aBitmap, 3, Color(0x12, 0x12, 0x12), nMaxDelta));
+    int nMaxDelta = 1;
+    CPPUNIT_ASSERT(checkRect(aBitmap, 0, 8, 8, Color(0xff, 0xff, 0xff), nMaxDelta));
+    CPPUNIT_ASSERT(checkRect(aBitmap, 1, 8, 8, Color(0x36, 0x36, 0x36), nMaxDelta));
+    CPPUNIT_ASSERT(checkRect(aBitmap, 2, 8, 8, Color(0xb6, 0xb6, 0xb6), nMaxDelta));
+    CPPUNIT_ASSERT(checkRect(aBitmap, 3, 8, 8, Color(0x12, 0x12, 0x12), nMaxDelta));
 }
 
 void JpegReaderTest::testReadCMYK()
 {
     Bitmap aBitmap = loadJPG(getFullUrl("JPEGTestCMYK.jpeg"));
     Size aSize = aBitmap.GetSizePixel();
-    CPPUNIT_ASSERT_EQUAL(8L, aSize.Width());
-    CPPUNIT_ASSERT_EQUAL(8L, aSize.Height());
+    CPPUNIT_ASSERT_EQUAL(12L, aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(12L, aSize.Height());
 
-    int maxDelta = 7;
-    CPPUNIT_ASSERT(checkRect(aBitmap, 0, Color(0xff, 0xff, 0xff), maxDelta));
-    CPPUNIT_ASSERT(checkRect(aBitmap, 1, Color(0xff, 0x00, 0x00), maxDelta));
-    CPPUNIT_ASSERT(checkRect(aBitmap, 2, Color(0x00, 0xff, 0x00), maxDelta));
-    CPPUNIT_ASSERT(checkRect(aBitmap, 3, Color(0x00, 0x00, 0xff), maxDelta));
+    int maxDelta = 1;
+    CPPUNIT_ASSERT(checkRect(aBitmap, 0, 8, 8, Color(0xff, 0xff, 0xff), maxDelta));
+    CPPUNIT_ASSERT(checkRect(aBitmap, 1, 8, 8, Color(0xff, 0x00, 0x00), maxDelta));
+    CPPUNIT_ASSERT(checkRect(aBitmap, 2, 8, 8, Color(0x00, 0xff, 0x00), maxDelta));
+    CPPUNIT_ASSERT(checkRect(aBitmap, 3, 8, 8, Color(0x00, 0x00, 0xff), maxDelta));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(JpegReaderTest);
