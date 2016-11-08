@@ -736,6 +736,43 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[1]));
     CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[2]));
 
+    // The column begins with a string header at row 1 (Column C).
+    m_pDoc->SetString(ScAddress(2,0,0), "MyHeader");
+    for (SCROW i = 1; i <= 9; ++i) // rows 2-10 are numeric.
+        m_pDoc->SetValue(ScAddress(2,i,0), i);
+
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(2,1,0), 9); // C2:C10
+    CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
+    for (size_t i = 0; i < 9; ++i)
+        CPPUNIT_ASSERT_EQUAL(double(i+1), aArray.mpNumericArray[i]);
+
+    // The column begins with a number, followed by a string then followed by
+    // a block of numbers (Column D).
+    m_pDoc->SetValue(ScAddress(3,0,0), 0.0);
+    m_pDoc->SetString(ScAddress(3,1,0), "Some string");
+    for (SCROW i = 2; i <= 9; ++i) // rows 3-10 are numeric.
+        m_pDoc->SetValue(ScAddress(3,i,0), i);
+
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(3,2,0), 8); // D3:D10
+    CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
+    for (size_t i = 0; i < 8; ++i)
+        CPPUNIT_ASSERT_EQUAL(double(i+2), aArray.mpNumericArray[i]);
+
+    // The column begins with a formula, followed by a string then followed by
+    // a block of numbers (Column E).
+    m_pDoc->SetString(ScAddress(4,0,0), "=1*2");
+    m_pDoc->SetString(ScAddress(4,1,0), "Some string");
+    for (SCROW i = 2; i <= 9; ++i) // rows 3-10 are numeric.
+        m_pDoc->SetValue(ScAddress(4,i,0), i*2);
+
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(4,2,0), 8); // E3:E10
+    CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
+    for (size_t i = 0; i < 8; ++i)
+        CPPUNIT_ASSERT_EQUAL(double((i+2)*2), aArray.mpNumericArray[i]);
+
     m_pDoc->DeleteTab(0);
 }
 
