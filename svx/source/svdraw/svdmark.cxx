@@ -46,8 +46,6 @@ void SdrMark::setTime()
 SdrMark::SdrMark(SdrObject* pNewObj, SdrPageView* pNewPageView)
 :   mpSelectedSdrObject(pNewObj),
     mpPageView(pNewPageView),
-    mpPoints(nullptr),
-    mpGluePoints(nullptr),
     mbCon1(false),
     mbCon2(false),
     mnUser(0)
@@ -64,8 +62,6 @@ SdrMark::SdrMark(const SdrMark& rMark)
     mnTimeStamp(0),
     mpSelectedSdrObject(nullptr),
     mpPageView(nullptr),
-    mpPoints(nullptr),
-    mpGluePoints(nullptr),
     mbCon1(false),
     mbCon2(false),
     mnUser(0)
@@ -75,13 +71,10 @@ SdrMark::SdrMark(const SdrMark& rMark)
 
 SdrMark::~SdrMark()
 {
-    if(mpSelectedSdrObject)
+    if (mpSelectedSdrObject)
     {
         mpSelectedSdrObject->RemoveObjectUser( *this );
     }
-
-    delete mpPoints;
-    delete mpGluePoints;
 }
 
 void SdrMark::ObjectInDestruction(const SdrObject& rObject)
@@ -110,55 +103,17 @@ void SdrMark::SetMarkedSdrObj(SdrObject* pNewObj)
 SdrMark& SdrMark::operator=(const SdrMark& rMark)
 {
     SetMarkedSdrObj(rMark.mpSelectedSdrObject);
+
     mnTimeStamp = rMark.mnTimeStamp;
     mpPageView = rMark.mpPageView;
     mbCon1 = rMark.mbCon1;
     mbCon2 = rMark.mbCon2;
     mnUser = rMark.mnUser;
-
-    if(!rMark.mpPoints)
-    {
-        if(mpPoints)
-        {
-            delete mpPoints;
-            mpPoints = nullptr;
-        }
-    }
-    else
-    {
-        if(!mpPoints)
-        {
-            mpPoints = new SdrUShortCont(*rMark.mpPoints);
-        }
-        else
-        {
-            *mpPoints = *rMark.mpPoints;
-        }
-    }
-
-    if(!rMark.mpGluePoints)
-    {
-        if(mpGluePoints)
-        {
-            delete mpGluePoints;
-            mpGluePoints = nullptr;
-        }
-    }
-    else
-    {
-        if(!mpGluePoints)
-        {
-            mpGluePoints = new SdrUShortCont(*rMark.mpGluePoints);
-        }
-        else
-        {
-            *mpGluePoints = *rMark.mpGluePoints;
-        }
-    }
+    maPoints = rMark.maPoints;
+    maGluePoints = rMark.maGluePoints;
 
     return *this;
 }
-
 
 static bool ImpSdrMarkListSorter(SdrMark* const& lhs, SdrMark* const& rhs)
 {
@@ -549,17 +504,16 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
     for(size_t nMarkNum = 0; nMarkNum < nMarkCount; ++nMarkNum)
     {
         const SdrMark* pMark = GetMark(nMarkNum);
-        const SdrUShortCont* pPts = bGlue ? pMark->GetMarkedGluePoints() : pMark->GetMarkedPoints();
-        const size_t nCount(pPts ? pPts->size() : 0);
+        const SdrUShortCont& rPts = bGlue ? pMark->GetMarkedGluePoints() : pMark->GetMarkedPoints();
 
-        if(nCount)
+        if (!rPts.empty())
         {
             if(n1stMarkNum == SAL_MAX_SIZE)
             {
                 n1stMarkNum = nMarkNum;
             }
 
-            nMarkPtAnz += nCount;
+            nMarkPtAnz += rPts.size();
             nMarkPtObjAnz++;
         }
 
@@ -611,9 +565,9 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
             for(size_t i = n1stMarkNum + 1; i < GetMarkCount() && bEq; ++i)
             {
                 const SdrMark* pMark2 = GetMark(i);
-                const SdrUShortCont* pPts = bGlue ? pMark2->GetMarkedGluePoints() : pMark2->GetMarkedPoints();
+                const SdrUShortCont& rPts = bGlue ? pMark2->GetMarkedGluePoints() : pMark2->GetMarkedPoints();
 
-                if(pPts && !pPts->empty() && pMark2->GetMarkedSdrObj())
+                if (!rPts.empty() && pMark2->GetMarkedSdrObj())
                 {
                     OUString aStr1(pMark2->GetMarkedSdrObj()->TakeObjNamePlural());
                     bEq = aNam == aStr1;

@@ -79,94 +79,92 @@ void SdrPolyEditView::ImpCheckPolyPossibilities()
 void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmooth, bool& b1stSegm, bool& bCurve, bool& bSmoothFuz, bool& bSegmFuz, basegfx::B2VectorContinuity& eSmooth )
 {
     SdrObject* pObj = pM->GetMarkedSdrObj();
-    SdrUShortCont* pPts = pM->GetMarkedPoints();
     SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pObj );
 
-    if(pPath && pPts)
+    if (!pPath)
+        return;
+
+    SdrUShortCont& rPts = pM->GetMarkedPoints();
+    if (rPts.empty())
+        return;
+
+    const bool bClosed(pPath->IsClosed());
+    bSetMarkedPointsSmoothPossible = true;
+
+    if (bClosed)
     {
-        const sal_uInt32 nMarkedPointCount(pPts->size());
+        bSetMarkedSegmentsKindPossible = true;
+    }
 
-        if(nMarkedPointCount)
+    for (SdrUShortCont::const_iterator it = rPts.begin(); it != rPts.end(); ++it)
+    {
+        sal_uInt32 nNum(*it);
+        sal_uInt32 nPolyNum, nPntNum;
+
+        if(PolyPolygonEditor::GetRelativePolyPoint(pPath->GetPathPoly(), nNum, nPolyNum, nPntNum))
         {
-            bool bClosed(pPath->IsClosed());
-            bSetMarkedPointsSmoothPossible = true;
+            const basegfx::B2DPolygon aLocalPolygon(pPath->GetPathPoly().getB2DPolygon(nPolyNum));
+            bool bCanSegment(bClosed || nPntNum < aLocalPolygon.count() - 1L);
 
-            if(bClosed)
+            if(!bSetMarkedSegmentsKindPossible && bCanSegment)
             {
                 bSetMarkedSegmentsKindPossible = true;
             }
 
-            for(SdrUShortCont::const_iterator it = pPts->begin(); it != pPts->end(); ++it)
+            if(!bSmoothFuz)
             {
-                sal_uInt32 nNum(*it);
-                sal_uInt32 nPolyNum, nPntNum;
-
-                if(PolyPolygonEditor::GetRelativePolyPoint(pPath->GetPathPoly(), nNum, nPolyNum, nPntNum))
+                if (b1stSmooth)
                 {
-                    const basegfx::B2DPolygon aLocalPolygon(pPath->GetPathPoly().getB2DPolygon(nPolyNum));
-                    bool bCanSegment(bClosed || nPntNum < aLocalPolygon.count() - 1L);
-
-                    if(!bSetMarkedSegmentsKindPossible && bCanSegment)
-                    {
-                        bSetMarkedSegmentsKindPossible = true;
-                    }
-
-                    if(!bSmoothFuz)
-                    {
-                        if (b1stSmooth)
-                        {
-                            b1stSmooth = false;
-                            eSmooth = basegfx::tools::getContinuityInPoint(aLocalPolygon, nPntNum);
-                        }
-                        else
-                        {
-                            bSmoothFuz = (eSmooth != basegfx::tools::getContinuityInPoint(aLocalPolygon, nPntNum));
-                        }
-                    }
-
-                    if(!bSegmFuz)
-                    {
-                        if(bCanSegment)
-                        {
-                            bool bCrv(aLocalPolygon.isNextControlPointUsed(nPntNum));
-
-                            if(b1stSegm)
-                            {
-                                b1stSegm = false;
-                                bCurve = bCrv;
-                            }
-                            else
-                            {
-                                bSegmFuz = (bCrv != bCurve);
-                            }
-                        }
-                    }
+                    b1stSmooth = false;
+                    eSmooth = basegfx::tools::getContinuityInPoint(aLocalPolygon, nPntNum);
+                }
+                else
+                {
+                    bSmoothFuz = (eSmooth != basegfx::tools::getContinuityInPoint(aLocalPolygon, nPntNum));
                 }
             }
 
-            if(!b1stSmooth && !bSmoothFuz)
+            if(!bSegmFuz)
             {
-                if(basegfx::B2VectorContinuity::NONE == eSmooth)
+                if(bCanSegment)
                 {
-                    eMarkedPointsSmooth = SdrPathSmoothKind::Angular;
-                }
+                    bool bCrv(aLocalPolygon.isNextControlPointUsed(nPntNum));
 
-                if(basegfx::B2VectorContinuity::C1 == eSmooth)
-                {
-                    eMarkedPointsSmooth = SdrPathSmoothKind::Asymmetric;
+                    if(b1stSegm)
+                    {
+                        b1stSegm = false;
+                        bCurve = bCrv;
+                    }
+                    else
+                    {
+                        bSegmFuz = (bCrv != bCurve);
+                    }
                 }
-
-                if(basegfx::B2VectorContinuity::C2 == eSmooth)
-                {
-                    eMarkedPointsSmooth = SdrPathSmoothKind::Symmetric;
-                }
-            }
-
-            if(!b1stSegm && !bSegmFuz)
-            {
-                eMarkedSegmentsKind = (bCurve) ? SdrPathSegmentKind::Curve : SdrPathSegmentKind::Line;
             }
         }
+    }
+
+    if(!b1stSmooth && !bSmoothFuz)
+    {
+        if(basegfx::B2VectorContinuity::NONE == eSmooth)
+        {
+            eMarkedPointsSmooth = SdrPathSmoothKind::Angular;
+        }
+
+        if(basegfx::B2VectorContinuity::C1 == eSmooth)
+        {
+            eMarkedPointsSmooth = SdrPathSmoothKind::Asymmetric;
+        }
+
+        if(basegfx::B2VectorContinuity::C2 == eSmooth)
+        {
+            eMarkedPointsSmooth = SdrPathSmoothKind::Symmetric;
+        }
+    }
+
+    if(!b1stSegm && !bSegmFuz)
+    {
+        eMarkedSegmentsKind = (bCurve) ? SdrPathSegmentKind::Curve : SdrPathSegmentKind::Line;
     }
 }
 
@@ -204,18 +202,17 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
         {
             --nMarkNum;
             SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
-            SdrUShortCont* pPts = pM->GetMarkedPoints();
             SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pM->GetMarkedSdrObj() );
+            if (!pPath)
+                continue;
 
-            if(pPts && pPath)
+            SdrUShortCont& rPts = pM->GetMarkedPoints();
+            PolyPolygonEditor aEditor(pPath->GetPathPoly(), pPath->IsClosed());
+            if (aEditor.SetPointsSmooth(eFlags, rPts))
             {
-                PolyPolygonEditor aEditor( pPath->GetPathPoly(), pPath->IsClosed() );
-                if(aEditor.SetPointsSmooth( eFlags, *pPts ) )
-                {
-                    if( bUndo )
-                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
-                    pPath->SetPathPoly(aEditor.GetPolyPolygon());
-                }
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
+                pPath->SetPathPoly(aEditor.GetPolyPolygon());
             }
         }
 
@@ -239,18 +236,16 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
         {
             --nMarkNum;
             SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
-            SdrUShortCont* pPts = pM->GetMarkedPoints();
             SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pM->GetMarkedSdrObj() );
-
-            if(pPts && pPath)
+            if (!pPath)
+                continue;
+            SdrUShortCont& rPts = pM->GetMarkedPoints();
+            PolyPolygonEditor aEditor( pPath->GetPathPoly(), pPath->IsClosed() );
+            if (aEditor.SetSegmentsKind(eKind, rPts))
             {
-                PolyPolygonEditor aEditor( pPath->GetPathPoly(), pPath->IsClosed() );
-                if(aEditor.SetSegmentsKind( eKind, *pPts ) )
-                {
-                    if( bUndo )
-                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
-                    pPath->SetPathPoly(aEditor.GetPolyPolygon());
-                }
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
+                pPath->SetPathPoly(aEditor.GetPolyPolygon());
             }
         }
 
@@ -307,30 +302,29 @@ void SdrPolyEditView::DeleteMarkedPoints()
         {
             --nMarkNum;
             SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-            SdrUShortCont* pPts=pM->GetMarkedPoints();
             SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pM->GetMarkedSdrObj() );
+            if (!pPath)
+                continue;
 
-            if( pPath && pPts )
+            SdrUShortCont& rPts = pM->GetMarkedPoints();
+            PolyPolygonEditor aEditor( pPath->GetPathPoly(), pPath->IsClosed() );
+            if (aEditor.DeletePoints(rPts))
             {
-                PolyPolygonEditor aEditor( pPath->GetPathPoly(), pPath->IsClosed() );
-                if( aEditor.DeletePoints( *pPts ) )
+                if( aEditor.GetPolyPolygon().count() )
                 {
-                    if( aEditor.GetPolyPolygon().count() )
+                    if( bUndo )
+                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath ));
+                    pPath->SetPathPoly( aEditor.GetPolyPolygon() );
+                }
+                else
+                {
+                    if( bUndo )
+                        AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pPath ) );
+                    pM->GetPageView()->GetObjList()->RemoveObject(pPath->GetOrdNum());
+                    if( !bUndo )
                     {
-                        if( bUndo )
-                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath ));
-                        pPath->SetPathPoly( aEditor.GetPolyPolygon() );
-                    }
-                    else
-                    {
-                        if( bUndo )
-                            AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pPath ) );
-                        pM->GetPageView()->GetObjList()->RemoveObject(pPath->GetOrdNum());
-                        if( !bUndo )
-                        {
-                            SdrObject* pObj = pPath;
-                            SdrObject::Free(pObj);
-                        }
+                        SdrObject* pObj = pPath;
+                        SdrObject::Free(pObj);
                     }
                 }
             }
@@ -358,55 +352,55 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
         {
             --nMarkNum;
             SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
-            SdrUShortCont* pPts = pM->GetMarkedPoints();
             SdrPathObj* pObj = dynamic_cast<SdrPathObj*>( pM->GetMarkedSdrObj() );
+            if (!pObj)
+                continue;
 
-            if(pPts && pObj)
+            SdrUShortCont& rPts = pM->GetMarkedPoints();
+
+            if( bUndo )
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+            bool bKorregFlag(false);
+            sal_uInt32 nMax(pObj->GetHdlCount());
+
+            for(SdrUShortCont::const_reverse_iterator it = rPts.rbegin(); it != rPts.rend(); ++it)
             {
-                if( bUndo )
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
-                bool bKorregFlag(false);
-                sal_uInt32 nMax(pObj->GetHdlCount());
+                sal_uInt32 nNewPt0Idx(0L);
+                SdrObject* pNeuObj = pObj->RipPoint(*it, nNewPt0Idx);
 
-                for(SdrUShortCont::const_reverse_iterator it = pPts->rbegin(); it != pPts->rend(); ++it)
+                if(pNeuObj)
                 {
-                    sal_uInt32 nNewPt0Idx(0L);
-                    SdrObject* pNeuObj = pObj->RipPoint(*it, nNewPt0Idx);
+                    SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
+                    pM->GetPageView()->GetObjList()->InsertObject(pNeuObj, pObj->GetOrdNum() + 1, &aReason);
+                    if( bUndo )
+                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
+                    MarkObj(pNeuObj, pM->GetPageView(), false, true);
+                }
 
-                    if(pNeuObj)
+                if(nNewPt0Idx)
+                {
+                    // correction necessary?
+                    DBG_ASSERT(!bKorregFlag,"Multiple index corrections at SdrPolyEditView::RipUp().");
+                    if(!bKorregFlag)
                     {
-                        SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
-                        pM->GetPageView()->GetObjList()->InsertObject(pNeuObj, pObj->GetOrdNum() + 1, &aReason);
-                        if( bUndo )
-                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
-                        MarkObj(pNeuObj, pM->GetPageView(), false, true);
-                    }
+                        bKorregFlag = true;
 
-                    if(nNewPt0Idx)
-                    {
-                        // correction necessary?
-                        DBG_ASSERT(!bKorregFlag,"Multiple index corrections at SdrPolyEditView::RipUp().");
-                        if(!bKorregFlag)
+                        SdrUShortCont aReplaceSet;
+                        for(SdrUShortCont::const_iterator it2 = rPts.begin(); it2 != rPts.end(); ++it2)
                         {
-                            bKorregFlag = true;
+                            sal_uInt32 nPntNum(*it2);
+                            nPntNum += nNewPt0Idx;
 
-                            SdrUShortCont aReplaceSet;
-                            for(SdrUShortCont::const_iterator it2 = pPts->begin(); it2 != pPts->end(); ++it2)
+                            if(nPntNum >= nMax)
                             {
-                                sal_uInt32 nPntNum(*it2);
-                                nPntNum += nNewPt0Idx;
-
-                                if(nPntNum >= nMax)
-                                {
-                                    nPntNum -= nMax;
-                                }
-
-                                aReplaceSet.insert( (sal_uInt16)nPntNum );
+                                nPntNum -= nMax;
                             }
-                            pPts->swap(aReplaceSet);
 
-                            it = pPts->rbegin();
+                            aReplaceSet.insert( (sal_uInt16)nPntNum );
                         }
+                        rPts.swap(aReplaceSet);
+
+                        it = rPts.rbegin();
                     }
                 }
             }
@@ -429,33 +423,32 @@ bool SdrPolyEditView::IsRipUpAtMarkedPointsPossible() const
         const SdrMark* pMark = GetSdrMarkByIndex(a);
         const SdrPathObj* pMarkedPathObject = dynamic_cast< const SdrPathObj* >(pMark->GetMarkedSdrObj());
 
-        if(pMarkedPathObject)
+        if (!pMarkedPathObject)
+            continue;
+
+        const SdrUShortCont& rSelectedPoints = pMark->GetMarkedPoints();
+        if (rSelectedPoints.empty())
+            continue;
+
+        const basegfx::B2DPolyPolygon& rPathPolyPolygon = pMarkedPathObject->GetPathPoly();
+
+        if(1 == rPathPolyPolygon.count())
         {
-            const SdrUShortCont* pSelectedPoints = pMark->GetMarkedPoints();
+            // #i76617# Do not yet use basegfx::B2DPolygon since curve definitions
+            // are different and methods need to be changed thoroughly with interaction rework
+            const tools::Polygon aPathPolygon(rPathPolyPolygon.getB2DPolygon(0));
+            const sal_uInt16 nPointCount(aPathPolygon.GetSize());
 
-            if(pSelectedPoints && !pSelectedPoints->empty())
+            if(nPointCount >= 3)
             {
-                const basegfx::B2DPolyPolygon& rPathPolyPolygon = pMarkedPathObject->GetPathPoly();
+                bRetval = pMarkedPathObject->IsClosedObj(); // #i76617#
 
-                if(1 == rPathPolyPolygon.count())
+                for(SdrUShortCont::const_iterator it = rSelectedPoints.begin();
+                    !bRetval && it != rSelectedPoints.end(); ++it)
                 {
-                    // #i76617# Do not yet use basegfx::B2DPolygon since curve definitions
-                    // are different and methods need to be changed thoroughly with interaction rework
-                    const tools::Polygon aPathPolygon(rPathPolyPolygon.getB2DPolygon(0));
-                    const sal_uInt16 nPointCount(aPathPolygon.GetSize());
+                    const sal_uInt16 nMarkedPointNum(*it);
 
-                    if(nPointCount >= 3)
-                    {
-                        bRetval = pMarkedPathObject->IsClosedObj(); // #i76617#
-
-                        for(SdrUShortCont::const_iterator it = pSelectedPoints->begin();
-                            !bRetval && it != pSelectedPoints->end(); ++it)
-                        {
-                            const sal_uInt16 nMarkedPointNum(*it);
-
-                            bRetval = (nMarkedPointNum > 0 && nMarkedPointNum < nPointCount - 1);
-                        }
-                    }
+                    bRetval = (nMarkedPointNum > 0 && nMarkedPointNum < nPointCount - 1);
                 }
             }
         }
@@ -541,67 +534,69 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
-        const SdrUShortCont* pPts=pM->GetMarkedPoints();
-        sal_uIntPtr nPointCount=pPts==nullptr ? 0 : pPts->size();
         SdrPathObj* pPath=dynamic_cast<SdrPathObj*>( pObj );
-        if (nPointCount!=0 && pPath!=nullptr)
+        if (!pPath)
+            continue;
+
+        const SdrUShortCont& rPts = pM->GetMarkedPoints();
+        if (rPts.empty())
+            continue;
+
+        if( bUndo )
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+
+        basegfx::B2DPolyPolygon aXPP(pPath->GetPathPoly());
+
+        for (SdrUShortCont::const_iterator it = rPts.begin(); it != rPts.end(); ++it)
         {
-            if( bUndo )
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+            sal_uInt32 nPt = *it;
+            sal_uInt32 nPolyNum, nPointNum;
 
-            basegfx::B2DPolyPolygon aXPP(pPath->GetPathPoly());
-
-            for(SdrUShortCont::const_iterator it = pPts->begin(); it != pPts->end(); ++it)
+            if(PolyPolygonEditor::GetRelativePolyPoint(aXPP, nPt, nPolyNum, nPointNum))
             {
-                sal_uInt32 nPt = *it;
-                sal_uInt32 nPolyNum, nPointNum;
+                //#i83671# used nLocalPointNum (which was the polygon point count)
+                // instead of the point index (nPointNum). This of course leaded
+                // to a wrong point access to the B2DPolygon.
+                basegfx::B2DPolygon aNewXP(aXPP.getB2DPolygon(nPolyNum));
+                Point aPos, aC1, aC2;
+                bool bC1(false);
+                bool bC2(false);
 
-                if(PolyPolygonEditor::GetRelativePolyPoint(aXPP, nPt, nPolyNum, nPointNum))
+                const basegfx::B2DPoint aB2DPos(aNewXP.getB2DPoint(nPointNum));
+                aPos = Point(FRound(aB2DPos.getX()), FRound(aB2DPos.getY()));
+
+                if(aNewXP.isPrevControlPointUsed(nPointNum))
                 {
-                    //#i83671# used nLocalPointNum (which was the polygon point count)
-                    // instead of the point index (nPointNum). This of course leaded
-                    // to a wrong point access to the B2DPolygon.
-                    basegfx::B2DPolygon aNewXP(aXPP.getB2DPolygon(nPolyNum));
-                    Point aPos, aC1, aC2;
-                    bool bC1(false);
-                    bool bC2(false);
-
-                    const basegfx::B2DPoint aB2DPos(aNewXP.getB2DPoint(nPointNum));
-                    aPos = Point(FRound(aB2DPos.getX()), FRound(aB2DPos.getY()));
-
-                    if(aNewXP.isPrevControlPointUsed(nPointNum))
-                    {
-                        const basegfx::B2DPoint aB2DC1(aNewXP.getPrevControlPoint(nPointNum));
-                        aC1 = Point(FRound(aB2DC1.getX()), FRound(aB2DC1.getY()));
-                        bC1 = true;
-                    }
-
-                    if(aNewXP.isNextControlPointUsed(nPointNum))
-                    {
-                        const basegfx::B2DPoint aB2DC2(aNewXP.getNextControlPoint(nPointNum));
-                        aC2 = Point(FRound(aB2DC2.getX()), FRound(aB2DC2.getY()));
-                        bC2 = true;
-                    }
-
-                    (*pTrFunc)(aPos,&aC1,&aC2,p1,p2,p3,p4);
-                    aNewXP.setB2DPoint(nPointNum, basegfx::B2DPoint(aPos.X(), aPos.Y()));
-
-                    if (bC1)
-                    {
-                        aNewXP.setPrevControlPoint(nPointNum, basegfx::B2DPoint(aC1.X(), aC1.Y()));
-                    }
-
-                    if (bC2)
-                    {
-                        aNewXP.setNextControlPoint(nPointNum, basegfx::B2DPoint(aC2.X(), aC2.Y()));
-                    }
-
-                    aXPP.setB2DPolygon(nPolyNum, aNewXP);
+                    const basegfx::B2DPoint aB2DC1(aNewXP.getPrevControlPoint(nPointNum));
+                    aC1 = Point(FRound(aB2DC1.getX()), FRound(aB2DC1.getY()));
+                    bC1 = true;
                 }
-            }
 
-            pPath->SetPathPoly(aXPP);
+                if(aNewXP.isNextControlPointUsed(nPointNum))
+                {
+                    const basegfx::B2DPoint aB2DC2(aNewXP.getNextControlPoint(nPointNum));
+                    aC2 = Point(FRound(aB2DC2.getX()), FRound(aB2DC2.getY()));
+                    bC2 = true;
+                }
+
+                (*pTrFunc)(aPos,&aC1,&aC2,p1,p2,p3,p4);
+                aNewXP.setB2DPoint(nPointNum, basegfx::B2DPoint(aPos.X(), aPos.Y()));
+
+                if (bC1)
+                {
+                    aNewXP.setPrevControlPoint(nPointNum, basegfx::B2DPoint(aC1.X(), aC1.Y()));
+                }
+
+                if (bC2)
+                {
+                    aNewXP.setNextControlPoint(nPointNum, basegfx::B2DPoint(aC2.X(), aC2.Y()));
+                }
+
+                aXPP.setB2DPolygon(nPolyNum, aNewXP);
+            }
         }
+
+        pPath->SetPathPoly(aXPP);
     }
 }
 

@@ -775,8 +775,8 @@ sal_uLong MotionPathTag::GetMarkedPointCount() const
 {
     if( mpMark )
     {
-        const SdrUShortCont* pPts=mpMark->GetMarkedPoints();
-        return pPts ? pPts->size() : 0;
+        const SdrUShortCont& rPts = mpMark->GetMarkedPoints();
+        return rPts.size();
     }
     else
     {
@@ -792,7 +792,6 @@ bool MotionPathTag::MarkPoint(SdrHdl& rHdl, bool bUnmark )
         SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( &rHdl );
         if( pSmartHdl && pSmartHdl->getTag().get() == this )
         {
-            mpMark->ForceMarkedPoints();
             if (mrView.MarkPointHelper(&rHdl,mpMark,bUnmark))
             {
                 mrView.MarkListHasChanged();
@@ -907,7 +906,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
             {
                 SdrHdlList aTemp( rHandlerList.GetView() );
                 mpPathObj->AddToHdlList( aTemp );
-                const SdrUShortCont* pMrkPnts=mpMark->GetMarkedPoints();
+                const SdrUShortCont& rMrkPnts = mpMark->GetMarkedPoints();
 
                 for( size_t nHandle = 0; nHandle < aTemp.GetHdlCount(); ++nHandle )
                 {
@@ -923,7 +922,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
 
                     rHandlerList.AddHdl( pSmartHdl );
 
-                    const bool bSelected= pMrkPnts && pMrkPnts->find( sal_uInt16(nHandle) ) != pMrkPnts->end();
+                    const bool bSelected = rMrkPnts.find( sal_uInt16(nHandle) ) != rMrkPnts.end();
                     pSmartHdl->SetSelected(bSelected);
 
                     if( mrView.IsPlusHandlesAlwaysVisible() || bSelected )
@@ -1016,10 +1015,8 @@ void MotionPathTag::deselect()
 
     if( mpMark )
     {
-        SdrUShortCont* pPts = mpMark->GetMarkedPoints();
-
-        if( pPts )
-            pPts->clear();
+        SdrUShortCont& rPts = mpMark->GetMarkedPoints();
+        rPts.clear();
     }
 
     selectionChanged();
@@ -1042,22 +1039,18 @@ void MotionPathTag::DeleteMarkedPoints()
     {
         mrView.BrkAction();
 
-        SdrUShortCont* pPts = mpMark->GetMarkedPoints();
-
-        if( pPts )
+        SdrUShortCont& rPts = mpMark->GetMarkedPoints();
+        PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
+        if (aEditor.DeletePoints(rPts))
         {
-            PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
-            if( aEditor.DeletePoints( *pPts ) )
+            if( aEditor.GetPolyPolygon().count() )
             {
-                if( aEditor.GetPolyPolygon().count() )
-                {
-                    mpPathObj->SetPathPoly( aEditor.GetPolyPolygon() );
-                }
-
-                mrView.UnmarkAllPoints();
-                mrView.MarkListHasChanged();
-                mrView.updateHandles();
+                mpPathObj->SetPathPoly( aEditor.GetPolyPolygon() );
             }
+
+            mrView.UnmarkAllPoints();
+            mrView.MarkListHasChanged();
+            mrView.updateHandles();
         }
     }
 }
@@ -1098,16 +1091,13 @@ void MotionPathTag::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
 {
     if(mpPathObj && isSelected() && (GetMarkedPointCount() != 0))
     {
-        SdrUShortCont* pPts = mpMark->GetMarkedPoints();
-        if(pPts)
+        SdrUShortCont& rPts = mpMark->GetMarkedPoints();
+        PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
+        if (aEditor.SetSegmentsKind(eKind, rPts))
         {
-            PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
-            if(aEditor.SetSegmentsKind( eKind, *pPts ) )
-            {
-                mpPathObj->SetPathPoly(aEditor.GetPolyPolygon());
-                mrView.MarkListHasChanged();
-                mrView.updateHandles();
-            }
+            mpPathObj->SetPathPoly(aEditor.GetPolyPolygon());
+            mrView.MarkListHasChanged();
+            mrView.updateHandles();
         }
     }
 }
@@ -1151,16 +1141,13 @@ void MotionPathTag::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
 
     if(mpPathObj && mpMark && isSelected() && (GetMarkedPointCount() != 0))
     {
-        SdrUShortCont* pPts = mpMark->GetMarkedPoints();
-        if(pPts)
+        SdrUShortCont& rPts = mpMark->GetMarkedPoints();
+        PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
+        if (aEditor.SetPointsSmooth(eFlags, rPts))
         {
-            PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
-            if(aEditor.SetPointsSmooth( eFlags, *pPts ) )
-            {
-                mpPathObj->SetPathPoly(aEditor.GetPolyPolygon());
-                mrView.MarkListHasChanged();
-                mrView.updateHandles();
-            }
+            mpPathObj->SetPathPoly(aEditor.GetPolyPolygon());
+            mrView.MarkListHasChanged();
+            mrView.updateHandles();
         }
     }
 }

@@ -475,9 +475,9 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
 
         if(pM->GetPageView() == getSdrDragView().GetSdrPageView())
         {
-            const SdrUShortCont* pPts = pM->GetMarkedPoints();
+            const SdrUShortCont& rPts = pM->GetMarkedPoints();
 
-            if(pPts && !pPts->empty())
+            if (!rPts.empty())
             {
                 const SdrObject* pObj = pM->GetMarkedSdrObj();
                 const SdrPathObj* pPath = dynamic_cast< const SdrPathObj* >(pObj);
@@ -488,7 +488,7 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
 
                     if(aPathXPP.count())
                     {
-                        for(SdrUShortCont::const_iterator it = pPts->begin(); it != pPts->end(); ++it)
+                        for(SdrUShortCont::const_iterator it = rPts.begin(); it != rPts.end(); ++it)
                         {
                             sal_uInt32 nPolyNum, nPointNum;
                             const sal_uInt16 nObjPt = *it;
@@ -521,16 +521,16 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
 
         if(pM->GetPageView() == getSdrDragView().GetSdrPageView())
         {
-            const SdrUShortCont* pPts = pM->GetMarkedGluePoints();
+            const SdrUShortCont& rPts = pM->GetMarkedGluePoints();
 
-            if(pPts && !pPts->empty())
+            if (!rPts.empty())
             {
                 const SdrObject* pObj = pM->GetMarkedSdrObj();
                 const SdrGluePointList* pGPL = pObj->GetGluePointList();
 
-                if(pGPL)
+                if (pGPL)
                 {
-                    for(SdrUShortCont::const_iterator it = pPts->begin(); it != pPts->end(); ++it)
+                    for(SdrUShortCont::const_iterator it = rPts.begin(); it != rPts.end(); ++it)
                     {
                         const sal_uInt16 nObjPt = *it;
                         const sal_uInt16 nGlueNum(pGPL->FindGluePoint(nObjPt));
@@ -1652,16 +1652,15 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
             for (size_t nMarkNum=0; nMarkNum<nMarkCount; ++nMarkNum)
             {
                 const SdrMark* pM=rML.GetMark(nMarkNum);
-                const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-                const size_t nPointCount=pPts==nullptr ? 0 : pPts->size();
+                const SdrUShortCont& rPts = pM->GetMarkedGluePoints();
 
-                if (nPointCount!=0)
+                if (!rPts.empty())
                 {
                     const SdrObject* pObj=pM->GetMarkedSdrObj();
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
                     Rectangle aBound(pObj->GetCurrentBoundRect());
 
-                    for (SdrUShortCont::const_iterator it = pPts->begin(); it != pPts->end(); ++it)
+                    for (SdrUShortCont::const_iterator it = rPts.begin(); it != rPts.end(); ++it)
                     {
                         sal_uInt16 nId = *it;
                         sal_uInt16 nGlueNum=pGPL->FindGluePoint(nId);

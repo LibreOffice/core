@@ -48,8 +48,8 @@ protected:
     sal_Int64                                           mnTimeStamp;
     SdrObject*                                          mpSelectedSdrObject; // the selected object
     SdrPageView*                                        mpPageView;
-    SdrUShortCont*                                      mpPoints;     // Selected Points
-    SdrUShortCont*                                      mpGluePoints; // Selected Gluepoints (their Id's)
+    SdrUShortCont                                       maPoints;     // Selected Points
+    SdrUShortCont                                       maGluePoints; // Selected Gluepoints (their Id's)
     bool                                                mbCon1;       // for Connectors
     bool                                                mbCon2;       // for Connectors
     sal_uInt16                                          mnUser;       // E.g. for CopyObjects, also copy Edges
@@ -107,40 +107,24 @@ public:
         return mnUser;
     }
 
-    const SdrUShortCont* GetMarkedPoints() const
+    const SdrUShortCont& GetMarkedPoints() const
     {
-        return mpPoints;
+        return maPoints;
     }
 
-    const SdrUShortCont* GetMarkedGluePoints() const
+    const SdrUShortCont& GetMarkedGluePoints() const
     {
-        return mpGluePoints;
+        return maGluePoints;
     }
 
-    SdrUShortCont* GetMarkedPoints()
+    SdrUShortCont& GetMarkedPoints()
     {
-        return mpPoints;
+        return maPoints;
     }
 
-    SdrUShortCont* GetMarkedGluePoints()
+    SdrUShortCont& GetMarkedGluePoints()
     {
-        return mpGluePoints;
-    }
-
-    SdrUShortCont* ForceMarkedPoints()
-    {
-        if(!mpPoints)
-            mpPoints = new SdrUShortCont;
-
-        return mpPoints;
-    }
-
-    SdrUShortCont* ForceMarkedGluePoints()
-    {
-        if(!mpGluePoints)
-            mpGluePoints = new SdrUShortCont;
-
-        return mpGluePoints;
+        return maGluePoints;
     }
 
     sal_Int64 getTimeStamp() const
