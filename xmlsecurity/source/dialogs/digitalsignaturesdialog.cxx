@@ -212,7 +212,7 @@ void DigitalSignaturesDialog::dispose()
 
 bool DigitalSignaturesDialog::Init()
 {
-    bool bInit = maSignatureManager.maSignatureHelper.Init();
+    bool bInit = maSignatureManager.init();
 
     SAL_WARN_IF( !bInit, "xmlsecurity.dialogs", "Error initializing security context!" );
 
@@ -384,7 +384,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
         return;
     try
     {
-        uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.maSignatureHelper.GetSecurityEnvironment();
+        uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.getSecurityEnvironment();
 
         ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecEnv );
         if ( aChooser->Execute() == RET_OK )
@@ -457,7 +457,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 {
     m_pSignaturesLB->Clear();
 
-    uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = maSignatureManager.maSignatureHelper.GetSecurityEnvironment();
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.getSecurityEnvironment();
     uno::Reference<css::security::XSerialNumberAdapter> xSerialNumberAdapter =
         css::security::SerialNumberAdapter::create(mxCtx);
 
@@ -618,8 +618,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
     {
         sal_uInt16 nSelected = (sal_uInt16) reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() );
         const SignatureInformation& rInfo = maSignatureManager.maCurrentSignatureInformations[ nSelected ];
-        css::uno::Reference<css::xml::crypto::XSecurityEnvironment > xSecEnv =
-            maSignatureManager.maSignatureHelper.GetSecurityEnvironment();
+        uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.getSecurityEnvironment();
         css::uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
             css::security::SerialNumberAdapter::create(mxCtx);
         // Use Certificate from doc, not from key store
@@ -633,7 +632,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Error getting Certificate!" );
         if ( xCert.is() )
         {
-            ScopedVclPtrInstance< CertificateViewer > aViewer( this, maSignatureManager.maSignatureHelper.GetSecurityEnvironment(), xCert, false );
+            ScopedVclPtrInstance<CertificateViewer> aViewer(this, maSignatureManager.getSecurityEnvironment(), xCert, false);
             aViewer->Execute();
         }
     }
