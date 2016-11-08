@@ -238,7 +238,7 @@ namespace sdr
             {
                 OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
 
-                bool bOwnParaObj = pParaObj != nullptr;
+                const bool bOwnParaObj = pParaObj != nullptr;
 
                 if( pParaObj == nullptr )
                     pParaObj = mxCell->GetOutlinerParaObject();
@@ -319,13 +319,19 @@ namespace sdr
 
                 // Set a cell vertical property
                 OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
+
+                const bool bOwnParaObj = pParaObj != nullptr;
+
                 if( pParaObj == nullptr )
                     pParaObj = mxCell->GetOutlinerParaObject();
+
                 if(pParaObj)
                 {
                     pParaObj->SetVertical(bVertical);
-                }
 
+                    if( bOwnParaObj )
+                        delete pParaObj;
+                }
             }
 
             // call parent
