@@ -69,7 +69,7 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
 {
     get(m_pSelectPalette, "paletteselector");
     get(m_pValSetColorList, "colorset");
-    Size aSize = LogicToPixel(Size(100 , 120), MapUnit::MapAppFont);
+    Size aSize = LogicToPixel(Size(100 , 60), MapUnit::MapAppFont);
     m_pValSetColorList->set_width_request(aSize.Width());
     m_pValSetColorList->set_height_request(aSize.Height());
     get(m_pValSetRecentList, "recentcolorset");
