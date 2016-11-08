@@ -39,7 +39,6 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
-#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
@@ -71,19 +70,6 @@ XMLSignatureHelper::~XMLSignatureHelper()
 {
 }
 
-bool XMLSignatureHelper::Init()
-{
-    SAL_WARN_IF( mxSEInitializer.is(), "xmlsecurity.helper", "XMLSignatureHelper::Init - mxSEInitializer already set!" );
-    SAL_WARN_IF( mxSecurityContext.is(), "xmlsecurity.helper", "XMLSignatureHelper::Init - mxSecurityContext already set!" );
-
-    mxSEInitializer = css::xml::crypto::SEInitializer::create( mxCtx );
-
-    if ( mxSEInitializer.is() )
-        mxSecurityContext = mxSEInitializer->createSecurityContext( OUString() );
-
-    return mxSecurityContext.is();
-}
-
 void XMLSignatureHelper::SetStorage(
     const Reference < css::embed::XStorage >& rxStorage,
     const OUString& sODFVersion)
@@ -101,12 +87,12 @@ void XMLSignatureHelper::SetStartVerifySignatureHdl( const Link<LinkParamNone*,b
 }
 
 
-void XMLSignatureHelper::StartMission()
+void XMLSignatureHelper::StartMission(const uno::Reference<xml::crypto::XXMLSecurityContext>& xSecurityContext)
 {
     if ( !mxUriBinding.is() )
         mxUriBinding = new UriBindingHelper();
 
-    mpXSecController->startMission( mxUriBinding, mxSecurityContext );
+    mpXSecController->startMission(mxUriBinding, xSecurityContext);
 }
 
 void XMLSignatureHelper::EndMission()
@@ -312,11 +298,6 @@ SignatureInformation XMLSignatureHelper::GetSignatureInformation( sal_Int32 nSec
 SignatureInformations XMLSignatureHelper::GetSignatureInformations() const
 {
     return mpXSecController->getSignatureInformations();
-}
-
-uno::Reference< css::xml::crypto::XSecurityEnvironment > XMLSignatureHelper::GetSecurityEnvironment()
-{
-    return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironment()): uno::Reference< css::xml::crypto::XSecurityEnvironment >());
 }
 
 IMPL_LINK( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCreationResult&, rResult, void )

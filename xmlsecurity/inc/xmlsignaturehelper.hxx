@@ -100,9 +100,6 @@ private:
     css::uno::Reference< css::xml::crypto::sax::XSecurityController > mxSecurityController;
     css::uno::Reference< css::xml::crypto::XUriBinding > mxUriBinding;
 
-    css::uno::Reference< css::xml::crypto::XSEInitializer > mxSEInitializer;
-    css::uno::Reference< css::xml::crypto::XXMLSecurityContext > mxSecurityContext;
-
     std::vector<XMLSignatureCreationResult>
                                 maCreationResults;
     std::vector<XMLSignatureVerifyResult>
@@ -123,10 +120,6 @@ public:
     XMLSignatureHelper(const css::uno::Reference< css::uno::XComponentContext >& mrCtx );
     ~XMLSignatureHelper();
 
-    // Initialize the security context with default crypto token.
-    // Returns true for success.
-    bool        Init();
-
     // Set the storage which should be used by the default UriBinding
     // Must be set before StatrtMission().
     //sODFVersion indicates  the ODF version
@@ -137,15 +130,12 @@ public:
                 // Default handler will verify all.
     void        SetStartVerifySignatureHdl( const Link<LinkParamNone*,bool>& rLink );
 
-                // Get the security environment
-    css::uno::Reference< css::xml::crypto::XSecurityEnvironment > GetSecurityEnvironment();
-
                 // After signing/verifying, get information about signatures
     SignatureInformation  GetSignatureInformation( sal_Int32 nSecurityId ) const;
     SignatureInformations GetSignatureInformations() const;
 
                 // See XSecController for documentation
-    void        StartMission();
+    void        StartMission(const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext);
     void        EndMission();
     sal_Int32   GetNewSecurityId();
     /** sets data that describes the certificate.

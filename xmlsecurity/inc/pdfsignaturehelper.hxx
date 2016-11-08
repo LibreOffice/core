@@ -25,8 +25,6 @@
 class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
 {
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
-    css::uno::Reference<css::xml::crypto::XSEInitializer> m_xSEInitializer;
-    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> m_xSecurityContext;
     SignatureInformations m_aSignatureInfos;
 
     css::uno::Reference<css::security::XCertificate> m_xCertificate;
@@ -35,7 +33,7 @@ class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
 public:
     PDFSignatureHelper(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext);
     bool ReadAndVerifySignature(const css::uno::Reference<css::io::XInputStream>& xInputStream);
-    css::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformations() const;
+    css::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformations(const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& xSecEnv) const;
     SignatureInformations GetSignatureInformations() const;
 
     /// Return the ID of the next created signature.

@@ -47,6 +47,8 @@ public:
     css::uno::Reference<css::io::XStream> mxTempSignatureStream;
     /// Storage containing all OOXML signatures, unused for ODF.
     css::uno::Reference<css::embed::XStorage> mxTempSignatureStorage;
+    css::uno::Reference<css::xml::crypto::XSEInitializer> mxSEInitializer;
+    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> mxSecurityContext;
 
     DocumentSignatureManager(const css::uno::Reference<css::uno::XComponentContext>& xContext, DocumentSignatureMode eMode);
     ~DocumentSignatureManager();
@@ -66,6 +68,10 @@ public:
     void write();
     /// Lazy creation of PDF helper.
     PDFSignatureHelper& getPDFSignatureHelper();
+    /// Attempts to initialize the platform-specific crypto.
+    bool init();
+    /// Get the security environment.
+    css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironment();
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX

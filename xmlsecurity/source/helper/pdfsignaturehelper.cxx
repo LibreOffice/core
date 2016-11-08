@@ -26,10 +26,6 @@ using namespace ::com::sun::star;
 PDFSignatureHelper::PDFSignatureHelper(const uno::Reference<uno::XComponentContext>& xComponentContext)
     : m_xComponentContext(xComponentContext)
 {
-    m_xSEInitializer = xml::crypto::SEInitializer::create(m_xComponentContext);
-    if (m_xSEInitializer.is())
-        // This initializes nss / mscrypto.
-        m_xSecurityContext = m_xSEInitializer->createSecurityContext(OUString());
 }
 
 bool PDFSignatureHelper::ReadAndVerifySignature(const uno::Reference<io::XInputStream>& xInputStream)
@@ -76,24 +72,23 @@ SignatureInformations PDFSignatureHelper::GetSignatureInformations() const
     return m_aSignatureInfos;
 }
 
-uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDocumentSignatureInformations() const
+uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDocumentSignatureInformations(const uno::Reference<xml::crypto::XSecurityEnvironment>& xSecEnv) const
 {
     uno::Sequence<security::DocumentSignatureInformation> aRet(m_aSignatureInfos.size());
 
-    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = m_xSecurityContext->getSecurityEnvironment();
     for (size_t i = 0; i < m_aSignatureInfos.size(); ++i)
     {
         const SignatureInformation& rInternal = m_aSignatureInfos[i];
         security::DocumentSignatureInformation& rExternal = aRet[i];
         rExternal.SignatureIsValid = rInternal.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
-        rExternal.Signer = xSecurityEnvironment->createCertificateFromAscii(rInternal.ouX509Certificate);
+        rExternal.Signer = xSecEnv->createCertificateFromAscii(rInternal.ouX509Certificate);
 
         // Verify certificate.
         if (rExternal.Signer.is())
         {
             try
             {
-                rExternal.CertificateStatus = xSecurityEnvironment->verifyCertificate(rExternal.Signer, {});
+                rExternal.CertificateStatus = xSecEnv->verifyCertificate(rExternal.Signer, {});
             }
             catch (const uno::SecurityException& rException)
             {
