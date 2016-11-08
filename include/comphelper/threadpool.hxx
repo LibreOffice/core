@@ -36,7 +36,7 @@ public:
 };
 
 /// A very basic thread pool implementation
-class COMPHELPER_DLLPUBLIC ThreadPool
+class COMPHELPER_DLLPUBLIC ThreadPool final
 {
 public:
     /// returns a pointer to a shared pool with optimal thread
@@ -54,7 +54,7 @@ public:
     static      sal_Int32 getPreferredConcurrency();
 
     ThreadPool( sal_Int32 nWorkers );
-    virtual    ~ThreadPool();
+    ~ThreadPool();
 
     /// push a new task onto the work queue
     void        pushTask( ThreadTask *pTask /* takes ownership */ );

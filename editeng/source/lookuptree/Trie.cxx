@@ -16,7 +16,7 @@ using namespace std;
 
 /* TrieNode */
 
-struct TrieNode
+struct TrieNode final
 {
     static const int LATIN_ARRAY_SIZE = 26;
 
@@ -27,7 +27,7 @@ struct TrieNode
 
 
     explicit TrieNode(sal_Unicode aCharacter = '\0');
-    virtual ~TrieNode();
+    ~TrieNode();
 
     void      markWord();
     TrieNode* findChild(sal_Unicode aCharacter);

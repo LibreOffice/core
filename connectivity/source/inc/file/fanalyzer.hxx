@@ -28,7 +28,7 @@ namespace connectivity
     namespace file
     {
         class OConnection;
-        class OOO_DLLPUBLIC_FILE OSQLAnalyzer
+        class OOO_DLLPUBLIC_FILE OSQLAnalyzer final
         {
             typedef ::std::list<OEvaluateSet*>      OEvaluateSetList;
             typedef ::std::pair< ::rtl::Reference<OPredicateCompiler>,::rtl::Reference<OPredicateInterpreter> > TPredicates;
@@ -45,7 +45,7 @@ namespace connectivity
 
         public:
             OSQLAnalyzer(OConnection* _pConnection);
-            virtual ~OSQLAnalyzer();
+            ~OSQLAnalyzer();
             inline static void * SAL_CALL operator new( size_t nSize )
                 { return ::rtl_allocateMemory( nSize ); }
             inline static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint )

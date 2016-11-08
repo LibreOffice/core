@@ -31,7 +31,7 @@ namespace connectivity
 
         // IndexIterator
 
-        class OIndexIterator
+        class OIndexIterator final
         {
         protected:
             file::OBoolOperator*    m_pOperator;
@@ -60,7 +60,7 @@ namespace connectivity
             {
             }
 
-            virtual ~OIndexIterator();
+            ~OIndexIterator();
             sal_uInt32 First();
             sal_uInt32 Next();
 

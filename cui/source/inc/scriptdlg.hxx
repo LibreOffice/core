@@ -109,7 +109,7 @@ public:
     }
 };
 
-class SFEntry
+class SFEntry final
 {
 private:
     sal_uInt8       nType;
@@ -121,7 +121,7 @@ public:
                             const css::uno::Reference< css::script::browse::XBrowseNode >& entryNodes ,
                             const css::uno::Reference< css::frame::XModel >& entryModel) { nType = nT; nodes = entryNodes; loaded=false; model = entryModel; }
                     SFEntry( const SFEntry& r ) { nType = r.nType; nodes = r.nodes; loaded = r.loaded; }
-    virtual         ~SFEntry() {}
+                    ~SFEntry() {}
     const css::uno::Reference< css::script::browse::XBrowseNode >& GetNode() { return nodes ;}
     const css::uno::Reference< css::frame::XModel >& GetModel() { return model ;};
     bool            isLoaded() const                    { return loaded; }

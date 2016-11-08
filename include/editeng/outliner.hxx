@@ -188,7 +188,7 @@ inline void ParaRange::Adjust()
     }
 }
 
-class EDITENG_DLLPUBLIC OutlinerView
+class EDITENG_DLLPUBLIC OutlinerView final
 {
     friend class Outliner;
 
@@ -218,7 +218,7 @@ private:
 
 public:
                 OutlinerView( Outliner* pOut, vcl::Window* pWindow );
-    virtual     ~OutlinerView();
+                ~OutlinerView();
 
     EditView&   GetEditView() const { return *pEditView; }
 

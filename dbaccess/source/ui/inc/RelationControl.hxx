@@ -30,23 +30,21 @@ namespace dbaui
     class IRelationControlInterface;
     class ORelationControl;
 
-    class OTableListBoxControl
+    class OTableListBoxControl final
     {
         VclPtr<ListBox>                                m_pLeftTable;
         VclPtr<ListBox>                                m_pRightTable;
-
         VclPtr<ORelationControl>                       m_pRC_Tables;
         const OJoinTableView::OTableWindowMap*  m_pTableMap;
         IRelationControlInterface*              m_pParentDialog;
         OUString                                m_strCurrentLeft;
         OUString                                m_strCurrentRight;
-    private:
         DECL_LINK( OnTableChanged, ListBox&, void );
     public:
         OTableListBoxControl(VclBuilderContainer* _pParent,
                              const OJoinTableView::OTableWindowMap* _pTableMap,
                              IRelationControlInterface* _pParentDialog);
-        virtual ~OTableListBoxControl();
+        ~OTableListBoxControl();
 
         /** fillListBoxes fills the list boxes with the table windows
         */

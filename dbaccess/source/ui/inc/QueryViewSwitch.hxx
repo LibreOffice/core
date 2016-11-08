@@ -34,14 +34,14 @@ namespace dbaui
     class OQueryContainerWindow;
     class OQueryController;
 
-    class OQueryViewSwitch
+    class OQueryViewSwitch final
     {
         VclPtr<OQueryDesignView>   m_pDesignView;
         VclPtr<OQueryTextView>     m_pTextView;
         bool            m_bAddTableDialogWasVisible; // true if so
     public:
         OQueryViewSwitch(OQueryContainerWindow* pParent, OQueryController& _rController,const css::uno::Reference< css::uno::XComponentContext >& );
-        virtual ~OQueryViewSwitch();
+        ~OQueryViewSwitch();
 
         bool isCutAllowed();
         bool isPasteAllowed();

@@ -38,7 +38,7 @@ namespace dbtools
     /** a class which helps retrieving and setting the value of a database column
         as formatted string.
     */
-    class OOO_DLLPUBLIC_DBTOOLS FormattedColumnValue
+    class OOO_DLLPUBLIC_DBTOOLS FormattedColumnValue final
     {
     public:
         /** constructs an instance
@@ -74,7 +74,7 @@ namespace dbtools
         // note that all methods of this class need to be virtual, since it's
         // used in a load-on-demand context in module SVX
 
-        virtual ~FormattedColumnValue();
+        ~FormattedColumnValue();
 
         void        clear();
 

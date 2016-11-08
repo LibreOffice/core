@@ -113,12 +113,12 @@ namespace dbaui
         bool                    m_bCannotSelectUnfiltered : 1;  // received an DATA_CANNOT_SELECT_UNFILTERED error
 
     protected:
-        class FormErrorHelper
+        class FormErrorHelper final
         {
             SbaXDataBrowserController*  m_pOwner;
         public:
             FormErrorHelper(SbaXDataBrowserController* pOwner) : m_pOwner(pOwner) { m_pOwner->enterFormAction(); }
-            virtual ~FormErrorHelper() { m_pOwner->leaveFormAction(); }
+            ~FormErrorHelper() { m_pOwner->leaveFormAction(); }
         };
         friend class FormErrorHelper;
 

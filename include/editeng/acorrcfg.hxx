@@ -60,7 +60,7 @@ public:
 /*--------------------------------------------------------------------
     Description:   Configuration for Auto Correction
  --------------------------------------------------------------------*/
-class EDITENG_DLLPUBLIC SvxAutoCorrCfg
+class EDITENG_DLLPUBLIC SvxAutoCorrCfg final
 {
     friend class SvxBaseAutoCorrCfg;
     friend class SvxSwAutoCorrCfg;
@@ -111,7 +111,7 @@ public:
     bool IsSearchInAllCategories() const        { return bSearchInAllCategories;}
 
     SvxAutoCorrCfg();
-    virtual ~SvxAutoCorrCfg();
+    ~SvxAutoCorrCfg();
     static SvxAutoCorrCfg& Get();
 };
 

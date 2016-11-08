@@ -235,7 +235,7 @@ enum class SvxNumRuleType
     END
 };
 
-class EDITENG_DLLPUBLIC SvxNumRule
+class EDITENG_DLLPUBLIC SvxNumRule final
 {
     sal_uInt16          nLevelCount;            // Number of supported levels
     SvxNumRuleFlags     nFeatureFlags;          // What is supported?
@@ -257,7 +257,7 @@ public:
                                 = SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     SvxNumRule(const SvxNumRule& rCopy);
     SvxNumRule(SvStream &rStream);
-    virtual ~SvxNumRule();
+    ~SvxNumRule();
 
     bool                    operator==( const SvxNumRule& ) const;
     bool                    operator!=( const SvxNumRule& rRule ) const {return !(*this == rRule);}

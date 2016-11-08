@@ -29,12 +29,8 @@
 namespace dp_manager {
 
 
-/**
-
- */
-class ExtensionProperties
+class ExtensionProperties final
 {
-protected:
     OUString m_propFileUrl;
     const css::uno::Reference<css::ucb::XCommandEnvironment> m_xCmdEnv;
     const css::uno::Reference<css::uno::XComponentContext> m_xContext;
@@ -44,7 +40,7 @@ protected:
     static OUString getPropertyValue(css::beans::NamedValue const & v);
 public:
 
-    virtual ~ExtensionProperties() {};
+    ~ExtensionProperties() {};
     ExtensionProperties(OUString const & urlExtension,
                         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
                         css::uno::Reference<css::uno::XComponentContext> const & xContext);

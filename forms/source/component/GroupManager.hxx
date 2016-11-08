@@ -130,7 +130,7 @@ public:
     const OGroupComp&   GetGroupComponent() const { return m_aGroupComp; }
 };
 
-class OGroup
+class OGroup final
 {
     OGroupCompArr              m_aCompArray;
     std::vector<OGroupCompAcc> m_aCompAccArray;
@@ -142,7 +142,7 @@ class OGroup
 
 public:
     explicit OGroup(const OUString& rGroupName);
-    virtual ~OGroup();
+    ~OGroup();
 
     const OUString& GetGroupName() const { return m_aGroupName; }
     css::uno::Sequence< css::uno::Reference< css::awt::XControlModel>  > GetControlModels() const;
