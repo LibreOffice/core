@@ -2727,25 +2727,6 @@ zlib
    Only third party extensions are listed here whose source code is not in
    the LibreOffice tree.
 
-Barcode
-
-   The following software may be included in this product: Barcode. Use of
-   any of this software is governed by the terms of the license below:
-
-   Copyright (C) Dániel Darabos and Kálmán Szalai
-
-   This program is free software: you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation, either version 3 of the License, or (at your
-   option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-   General Public License for more details.
-
-   See GPL Version 3 below
-
 Convert Text to Number
 
    The following software may be included in this product: Convert Text to
@@ -2764,16 +2745,6 @@ OpenOffice.org2GoogleDocs - export & import to Google Docs, Zoho, WebDAV
    license below:
 
    Copyright © Przemyslaw Rumik
-
-   See LGPL Version 3 below
-
-Hungarian cross-reference toolbar
-
-   The following software may be included in this product: Hungarian
-   cross-reference toolbar. Use of any of this software is governed by the
-   terms of the license below:
-
-   2009-2010 (c) László Németh, license: GNU LGPL
 
    See LGPL Version 3 below
 
@@ -2810,17 +2781,6 @@ Numbertext
 
    See LGPL Version 3 below
 
-SmART Gallery (Diagram)
-
-   The following software may be included in this product: SmART Gallery
-   (Diagram). Use of any of this software is governed by the terms of the
-   license below:
-
-   Copyright © Tibor Hornyák and OxygenOffice Professional Team -
-   http://ooop.sf.net/
-
-   See LGPL Version 3 below
-
 Solver for Nonlinear Programming
 
    The following software may be included in this product: Solver for
@@ -2828,37 +2788,6 @@ Solver for Nonlinear Programming
    terms of the license below:
 
    Copyright 2009 by Sun Microsystems, Inc.
-
-   See LGPL Version 3 below
-
-Typography Toolbar
-
-   The following software may be included in this product: Typography
-   Toolbar. Use of any of this software is governed by the terms of the
-   license below:
-
-   2009-2010 (c) László Németh, license: GNU LGPL
-
-   See LGPL Version 3 below
-
-Validator
-
-   The following software may be included in this product: Validator. Use
-   of any of this software is governed by the terms of the license below:
-
-   Copyright © Tibor Hornyák and OxygenOffice Professional Team -
-   http://ooop.sf.net/
-
-   See LGPL Version 3 below
-
-WatchWindow
-
-   The following software may be included in this product: WatchWindow.
-   Use of any of this software is governed by the terms of the license
-   below:
-
-   Copyright © Tibor Hornyák and OxygenOffice Professional Team -
-   http://ooop.sf.net/
 
    See LGPL Version 3 below
 
