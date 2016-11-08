@@ -271,12 +271,6 @@ DefaultNumberingProvider::~DefaultNumberingProvider()
     delete translit;
 }
 
-void DefaultNumberingProvider::impl_loadTranslit()
-{
-    if ( !translit )
-        translit = new TransliterationImpl(m_xContext);
-}
-
 Sequence< Reference<container::XIndexAccess> >
 DefaultNumberingProvider::getDefaultOutlineNumberings(const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
@@ -647,7 +641,8 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                     const OUString &tmp = OUString::number( number );
                     OUString transliteration;
                     getPropertyByName(aProperties, "Transliteration", true) >>= transliteration;
-                    impl_loadTranslit();
+                    if ( !translit )
+                        translit = new TransliterationImpl(m_xContext);
                     translit->loadModuleByImplName(transliteration, aLocale);
                     result += translit->transliterateString2String(tmp, 0, tmp.getLength());
                } catch (Exception& ) {

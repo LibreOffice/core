@@ -236,7 +236,8 @@ Export::Export(
         std::exit(EXIT_FAILURE);
     }
 
-    if ( bUTF8BOM ) WriteUTF8ByteOrderMarkToOutput();
+    if ( bUTF8BOM )
+        *aOutput.mSimple << '\xEF' << '\xBB' << '\xBF';
 }
 
 void Export::Init()

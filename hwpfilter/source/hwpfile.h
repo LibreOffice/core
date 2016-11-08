@@ -125,7 +125,6 @@ class DLLEXPORT HWPFile
  * Reads one byte from HIODev
  */
         bool Read1b(char &out);
-        bool Read1b(unsigned char &out);
 /**
  * Reads two byte from HIODev
  */

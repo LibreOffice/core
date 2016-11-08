@@ -138,15 +138,10 @@ int HWPFile::SetState(int errcode)
     return error_code;
 }
 
-bool HWPFile::Read1b(unsigned char &out)
-{
-    return hiodev && hiodev->read1b(out);
-}
-
 bool HWPFile::Read1b(char &out)
 {
     unsigned char tmp8;
-    if (!Read1b(tmp8))
+    if (!hiodev || !hiodev->read1b(tmp8))
         return false;
     out = tmp8;
     return true;
