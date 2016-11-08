@@ -59,6 +59,14 @@ DECLARE_OOXMLEXPORT_TEST( testChildNodesOfCubicBezierTo, "FDO74774.docx")
         "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[3]/wps:spPr[1]/a:custGeom[1]/a:pathLst[1]/a:path[1]/a:cubicBezTo[2]/a:pt[3]");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf79329, "tdf79329.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    // This was 1: only the inner, not the outer table was created.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xTables->getCount());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testMSwordHang,"test_msword_hang.docx")
 {
     // fdo#74771:

@@ -314,7 +314,7 @@ void TableManager::resolveCurrentTable()
                 mpTableDataHandler->endRow();
             }
 
-            mpTableDataHandler->endTable(mTableDataStack.size() - 1);
+            mpTableDataHandler->endTable(mTableDataStack.size() - 1, m_bTableStartsAtCellStart);
         }
         catch (css::uno::Exception const& e)
         {
@@ -454,8 +454,14 @@ void TableManager::cellDepth(sal_uInt32 nDepth)
     mnTableDepthNew = nDepth;
 }
 
+void TableManager::setTableStartsAtCellStart(bool bTableStartsAtCellStart)
+{
+    m_bTableStartsAtCellStart = bTableStartsAtCellStart;
+}
+
 TableManager::TableManager()
-    : mnTableDepthNew(0), mnTableDepth(0), mbKeepUnfinishedRow(false)
+    : mnTableDepthNew(0), mnTableDepth(0), mbKeepUnfinishedRow(false),
+      m_bTableStartsAtCellStart(false)
 {
     setRowEnd(false);
     setInCell(false);
