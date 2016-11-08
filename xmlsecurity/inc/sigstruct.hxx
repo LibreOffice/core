@@ -68,7 +68,6 @@ typedef ::std::vector< SignatureReferenceInformation > SignatureReferenceInforma
 struct SignatureInformation
 {
     sal_Int32 nSecurityId;
-    sal_Int32 nSecurityEnvironmentIndex;
     css::xml::crypto::SecurityOperationStatus nStatus;
     // For ODF: XAdES digests (SHA256) or the old SHA1, from css::xml::crypto::DigestID
     sal_Int32 nDigestID;
@@ -106,7 +105,6 @@ struct SignatureInformation
     {
         nSecurityId = nId;
         nStatus = css::xml::crypto::SecurityOperationStatus_UNKNOWN;
-        nSecurityEnvironmentIndex = -1;
     }
 };
 

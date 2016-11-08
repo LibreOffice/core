@@ -90,15 +90,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     args[2] = cssu::makeAny(OUString::number(nIdOfSignatureElementCollector));
 
     //for nss, the internal module is used for signing, which needs to be improved later
-    sal_Int32 nEnvIndex = internalSignatureInfor.signatureInfor.nSecurityEnvironmentIndex;
-    if( nEnvIndex < 0 || nEnvIndex >= m_xSecurityContext->getSecurityEnvironmentNumber())
-    {// set defaultEnv
-        args[3] = cssu::makeAny(m_xSecurityContext->getSecurityEnvironment());
-    }
-    else
-    {
-        args[3] = cssu::makeAny(m_xSecurityContext->getSecurityEnvironmentByIndex(nEnvIndex));
-    }
+    args[3] = cssu::makeAny(m_xSecurityContext->getSecurityEnvironment());
 
     args[4] = cssu::makeAny(m_xXMLSignature);
     xInitialization->initialize(args);
@@ -239,7 +231,6 @@ void XSecController::setX509Certificate(
     if ( index == -1 )
     {
         InternalSignatureInformation isi(nSecurityId, nullptr);
-        isi.signatureInfor.nSecurityEnvironmentIndex = -1;
         isi.signatureInfor.ouX509IssuerName = ouX509IssuerName;
         isi.signatureInfor.ouX509SerialNumber = ouX509SerialNumber;
         isi.signatureInfor.ouX509Certificate = ouX509Cert;
@@ -254,7 +245,6 @@ void XSecController::setX509Certificate(
         si.ouX509SerialNumber = ouX509SerialNumber;
         si.ouX509Certificate = ouX509Cert;
         si.ouCertDigest = ouX509CertDigest;
-        si.nSecurityEnvironmentIndex = -1;
     }
 }
 
