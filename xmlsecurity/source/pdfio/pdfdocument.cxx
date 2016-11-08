@@ -1304,13 +1304,24 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
             nGenerationNumber = (nGenerationNumber << 8) + nCh;
         }
 
-        // "n" entry of the xref table
-        if (nType == 1 || nType == 2)
+        // Ignore invalid nType.
+        if (nType <= 2)
         {
             if (m_aXRef.find(nIndex) == m_aXRef.end())
             {
                 XRefEntry aEntry;
-                aEntry.m_eType = nType == 1 ? XRefEntryType::NOT_COMPRESSED : XRefEntryType::COMPRESSED;
+                switch (nType)
+                {
+                case 0:
+                    aEntry.m_eType = XRefEntryType::FREE;
+                    break;
+                case 1:
+                    aEntry.m_eType = XRefEntryType::NOT_COMPRESSED;
+                    break;
+                case 2:
+                    aEntry.m_eType = XRefEntryType::COMPRESSED;
+                    break;
+                }
                 aEntry.m_nOffset = nStreamOffset;
                 aEntry.m_nGenerationNumber = nGenerationNumber;
                 m_aXRef[nIndex] = aEntry;

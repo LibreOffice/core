@@ -53,6 +53,8 @@ enum class TokenizeMode
 /// The type column of an entry in a cross-reference stream.
 enum class XRefEntryType
 {
+    /// xref "f" or xref stream "0".
+    FREE,
     /// xref "n" or xref stream "1".
     NOT_COMPRESSED,
     /// xref stream "2.
