@@ -159,7 +159,7 @@ namespace connectivity
             void            setValue( const OString &key, const OUString & rValue);
         };
 
-        class MQueryHelper
+        class MQueryHelper final
         {
         private:
             typedef std::vector< MQueryHelperResultEntry* > resultsArray;
@@ -174,7 +174,7 @@ namespace connectivity
 
         public:
             explicit                   MQueryHelper(const OColumnAlias& _ca);
-            virtual                    ~MQueryHelper();
+                                       ~MQueryHelper();
 
             void                       reset();
             MQueryHelperResultEntry*   getByIndex( sal_uInt32 nRow );

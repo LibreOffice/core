@@ -36,7 +36,7 @@ namespace dbaui
         the class OConnectionLine represents the graphical line between the to two windows
     **/
     class OTableConnection;
-    class OConnectionLine
+    class OConnectionLine final
     {
         VclPtr<OTableConnection>       m_pTabConn;
         OConnectionLineDataRef  m_pData;
@@ -48,7 +48,7 @@ namespace dbaui
     public:
         OConnectionLine( OTableConnection* pConn, OConnectionLineDataRef const & pLineData );
         OConnectionLine( const OConnectionLine& rLine );
-        virtual ~OConnectionLine();
+        ~OConnectionLine();
 
         OConnectionLine& operator=( const OConnectionLine& rLine );
 

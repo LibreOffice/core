@@ -146,7 +146,7 @@ class SVGExport;
 class SVGFontExport;
 
 
-class SVGAttributeWriter
+class SVGAttributeWriter final
 {
 private:
 
@@ -161,7 +161,7 @@ private:
 public:
 
                             SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFontExport, SVGState& rCurState );
-    virtual                 ~SVGAttributeWriter();
+                            ~SVGAttributeWriter();
 
     void                    AddColorAttr( const char* pColorAttrName, const char* pColorOpacityAttrName, const Color& rColor );
     void                    AddGradientDef( const Rectangle& rObjRect,const Gradient& rGradient, OUString& rGradientId );
@@ -214,7 +214,7 @@ struct BulletListItemInfo
 };
 
 
-class SVGTextWriter
+class SVGTextWriter final
 {
   public:
     typedef std::unordered_map< OUString, BulletListItemInfo, OUStringHash >         BulletListItemInfoMap;
@@ -255,7 +255,7 @@ class SVGTextWriter
 
   public:
     explicit SVGTextWriter( SVGExport& rExport, SVGAttributeWriter& rAttributeWriter );
-    virtual ~SVGTextWriter();
+    ~SVGTextWriter();
 
     sal_Int32 setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nCurAction );
     void setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAction );
@@ -312,7 +312,7 @@ class SVGTextWriter
 };
 
 
-class SVGActionWriter
+class SVGActionWriter final
 {
 private:
 
@@ -377,7 +377,7 @@ public:
 
 public:
                             SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport );
-    virtual                 ~SVGActionWriter();
+                            ~SVGActionWriter();
 
     void                    WriteMetaFile( const Point& rPos100thmm,
                                            const Size& rSize100thmm,

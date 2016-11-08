@@ -79,7 +79,7 @@ enum class ScrollRangeCheck
 };
 
 
-class EDITENG_DLLPUBLIC EditView
+class EDITENG_DLLPUBLIC EditView final
 {
     friend class EditEngine;
     friend class ImpEditEngine;
@@ -101,7 +101,7 @@ private:
 
 public:
                     EditView( EditEngine* pEng, vcl::Window* pWindow );
-    virtual         ~EditView();
+                    ~EditView();
 
     void            SetEditEngine( EditEngine* pEditEngine );
     EditEngine*     GetEditEngine() const;

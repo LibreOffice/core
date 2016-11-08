@@ -65,11 +65,10 @@ namespace connectivity
         };
 
         //Used to query profiles information
-        class ProfileAccess
+        class ProfileAccess final
         {
         public:
-
-            virtual ~ProfileAccess();
+            ~ProfileAccess();
             ProfileAccess();
             OUString getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException);
             ::sal_Int32 getProfileCount( css::mozilla::MozillaProductType product ) throw (css::uno::RuntimeException);

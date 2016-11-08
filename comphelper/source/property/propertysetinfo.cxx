@@ -31,11 +31,11 @@ using namespace ::com::sun::star::lang;
 
 namespace comphelper
 {
-class PropertyMapImpl
+class PropertyMapImpl final
 {
 public:
     PropertyMapImpl() throw();
-    virtual ~PropertyMapImpl() throw();
+    ~PropertyMapImpl() throw();
 
     void add(PropertyMapEntry const * pMap) throw();
     void remove( const OUString& aName ) throw();

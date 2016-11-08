@@ -85,16 +85,6 @@ protected:
         the additional parameters of the OPropertyArrayAggregationHelper.
     */
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-
-    /** the return value is used for the construction of the OPropertyArrayAggregationHelper.
-        Beware of the lifetime of the returned object, as it has to exist 'til the last instance
-        of this class dies.
-    */
-    virtual IPropertyInfoService* getInfoService() const { return nullptr; }
-
-    /** the return value is used for the construction of the OPropertyArrayAggregationHelper.
-    */
-    virtual sal_Int32 getFirstAggregateId() const { return DEFAULT_AGGREGATE_PROPERTY_ID; }
 };
 
 template<class TYPE>
@@ -145,7 +135,7 @@ template <class TYPE> inline
     css::uno::Sequence< css::beans::Property > aAggregateProps;
     fillProperties(aProps, aAggregateProps);
     OSL_ENSURE(aProps.getLength(), "OAggregationArrayUsageHelper::createArrayHelper : fillProperties returned nonsense !");
-    return new OPropertyArrayAggregationHelper(aProps, aAggregateProps, getInfoService(), getFirstAggregateId());
+    return new OPropertyArrayAggregationHelper(aProps, aAggregateProps, nullptr, DEFAULT_AGGREGATE_PROPERTY_ID);
 }
 
 }

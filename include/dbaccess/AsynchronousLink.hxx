@@ -36,11 +36,9 @@ namespace dbaui
         event while another thread tries to delete this event in the _destructor_ of the
         class).
     */
-    class OAsynchronousLink
+    class OAsynchronousLink final
     {
         Link<void*,void>    m_aHandler;
-
-    protected:
         ::osl::Mutex        m_aEventSafety;
         ::osl::Mutex        m_aDestructionSafety;
         ImplSVEvent *       m_nEventId;
@@ -50,7 +48,7 @@ namespace dbaui
             @param      _rHandler           The link to be called asynchronously
         */
         OAsynchronousLink( const Link<void*,void>& _rHandler );
-        virtual ~OAsynchronousLink();
+        ~OAsynchronousLink();
 
         bool    IsRunning() const { return m_nEventId != nullptr; }
 

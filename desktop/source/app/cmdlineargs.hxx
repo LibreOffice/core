@@ -36,11 +36,12 @@ class CommandLineArgs
         struct Supplier
         {
             // Thrown from constructors and next:
-            class Exception {
+            class Exception final
+            {
             public:
                 Exception();
                 Exception(Exception const &);
-                virtual ~Exception();
+                ~Exception();
                 Exception & operator =(Exception const &);
             };
 

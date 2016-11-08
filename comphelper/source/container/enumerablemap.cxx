@@ -208,7 +208,7 @@ namespace comphelper
     };
 
 
-    class MapEnumerator
+    class MapEnumerator final
     {
     public:
         MapEnumerator( ::cppu::OWeakObject& _rParent, MapData& _mapData, const EnumerationType _type )
@@ -221,7 +221,7 @@ namespace comphelper
             lcl_registerMapModificationListener( m_rMapData, *this );
         }
 
-        virtual ~MapEnumerator()
+        ~MapEnumerator()
         {
             dispose();
         }
