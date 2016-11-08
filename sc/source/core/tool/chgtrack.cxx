@@ -284,13 +284,19 @@ bool ScChangeAction::IsMasterDelete() const
 
 void ScChangeAction::RemoveAllLinks()
 {
-    while ( pLinkAny )
-        delete pLinkAny; // Moves up by itself
+    while (pLinkAny)
+    {
+        // coverity[use_after_free] - Moves up by itself
+        delete pLinkAny;
+    }
 
     RemoveAllDeletedIn();
 
-    while ( pLinkDeleted )
-        delete pLinkDeleted; // Moves up by itself
+    while (pLinkDeleted)
+    {
+        // coverity[use_after_free] - Moves up by itself
+        delete pLinkDeleted;
+    }
 
     RemoveAllDependent();
 }
