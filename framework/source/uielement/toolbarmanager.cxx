@@ -401,50 +401,46 @@ throw ( RuntimeException, std::exception )
 
 void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( RuntimeException, std::exception )
 {
-    {
-        SolarMutexGuard g;
-        if ( m_bDisposed )
-            return;
-    }
+    SolarMutexGuard g;
+
+    if ( m_bDisposed )
+        return;
 
     RemoveControllers();
 
+    if ( m_xDocImageManager.is() )
     {
-        SolarMutexGuard g;
-        if ( m_xDocImageManager.is() )
+        try
         {
-            try
-            {
-                m_xDocImageManager->removeConfigurationListener(
-                    Reference< XUIConfigurationListener >(
-                        static_cast< OWeakObject* >( this ), UNO_QUERY ));
-            }
-            catch (const Exception&)
-            {
-            }
+            m_xDocImageManager->removeConfigurationListener(
+                Reference< XUIConfigurationListener >(
+                    static_cast< OWeakObject* >( this ), UNO_QUERY ));
         }
-
-        if ( m_xModuleImageManager.is() )
+        catch (const Exception&)
         {
-            try
-            {
-                m_xModuleImageManager->removeConfigurationListener(
-                    Reference< XUIConfigurationListener >(
-                        static_cast< OWeakObject* >( this ), UNO_QUERY ));
-            }
-            catch (const Exception&)
-            {
-            }
         }
-
-        m_xDocImageManager.clear();
-        m_xModuleImageManager.clear();
-
-        if ( Source.Source == Reference< XInterface >( m_xFrame, UNO_QUERY ))
-            m_xFrame.clear();
-
-        m_xContext.clear();
     }
+
+    if ( m_xModuleImageManager.is() )
+    {
+        try
+        {
+            m_xModuleImageManager->removeConfigurationListener(
+                Reference< XUIConfigurationListener >(
+                    static_cast< OWeakObject* >( this ), UNO_QUERY ));
+        }
+        catch (const Exception&)
+        {
+        }
+    }
+
+    m_xDocImageManager.clear();
+    m_xModuleImageManager.clear();
+
+    if ( Source.Source == Reference< XInterface >( m_xFrame, UNO_QUERY ))
+        m_xFrame.clear();
+
+    m_xContext.clear();
 }
 
 // XComponent
@@ -619,7 +615,7 @@ void SAL_CALL ToolBarManager::elementReplaced( const css::ui::ConfigurationEvent
 
 void ToolBarManager::RemoveControllers()
 {
-    SolarMutexGuard g;
+    DBG_TESTSOLARMUTEX();
 
     if ( m_bDisposed )
         return;
