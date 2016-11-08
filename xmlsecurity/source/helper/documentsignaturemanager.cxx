@@ -25,6 +25,7 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <comphelper/storagehelper.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -47,11 +48,24 @@ DocumentSignatureManager::~DocumentSignatureManager()
 {
 }
 
+bool DocumentSignatureManager::init()
+{
+    SAL_WARN_IF(mxSEInitializer.is(), "xmlsecurity.helper", "DocumentSignatureManager::Init - mxSEInitializer already set!");
+    SAL_WARN_IF(mxSecurityContext.is(), "xmlsecurity.helper", "DocumentSignatureManager::Init - mxSecurityContext already set!");
+
+    mxSEInitializer = css::xml::crypto::SEInitializer::create(mxContext);
+
+    if (mxSEInitializer.is())
+        mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
+
+    return mxSecurityContext.is();
+}
+
 PDFSignatureHelper& DocumentSignatureManager::getPDFSignatureHelper()
 {
-    // It is important to create this only when dealing with PDF, in case both
-    // this and XMLSignatureHelper is created, xmlsec gets confused, and
-    // doesn't get correct result.
+    if (!mxSecurityContext.is())
+        init();
+
     if (!mpPDFSignatureHelper)
         mpPDFSignatureHelper.reset(new PDFSignatureHelper(mxContext));
 
@@ -246,7 +260,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         return true;
     }
 
-    maSignatureHelper.StartMission();
+    maSignatureHelper.StartMission(mxSecurityContext);
 
     nSecurityId = maSignatureHelper.GetNewSecurityId();
 
@@ -398,7 +412,7 @@ void DocumentSignatureManager::read(bool bUseTempStream, bool bCacheLastSignatur
     if (mxStore.is())
     {
         // ZIP-based: ODF or OOXML.
-        maSignatureHelper.StartMission();
+        maSignatureHelper.StartMission(mxSecurityContext);
 
         SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(embed::ElementModes::READ, bUseTempStream);
         if (aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML && aStreamHelper.xSignatureStream.is())
@@ -472,6 +486,11 @@ void DocumentSignatureManager::write()
         uno::Reference<embed::XTransactedObject> xTrans(aStreamHelper.xSignatureStorage, uno::UNO_QUERY);
         xTrans->commit();
     }
+}
+
+uno::Reference<xml::crypto::XSecurityEnvironment> DocumentSignatureManager::getSecurityEnvironment()
+{
+    return mxSecurityContext.is() ? mxSecurityContext->getSecurityEnvironment() : uno::Reference<xml::crypto::XSecurityEnvironment>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

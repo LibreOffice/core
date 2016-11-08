@@ -106,7 +106,7 @@ public:
 private:
     void createDoc(const OUString& rURL);
     void createCalc(const OUString& rURL);
-    uno::Reference<security::XCertificate> getCertificate(XMLSignatureHelper& rSignatureHelper);
+    uno::Reference<security::XCertificate> getCertificate(DocumentSignatureManager& rSignatureManager);
 };
 
 SigningTest::SigningTest()
@@ -160,9 +160,9 @@ void SigningTest::createCalc(const OUString& rURL)
         mxComponent = loadFromDesktop(rURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 
-uno::Reference<security::XCertificate> SigningTest::getCertificate(XMLSignatureHelper& rSignatureHelper)
+uno::Reference<security::XCertificate> SigningTest::getCertificate(DocumentSignatureManager& rSignatureManager)
 {
-    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = rSignatureHelper.GetSecurityEnvironment();
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = rSignatureManager.getSecurityEnvironment();
     OUString aCertificate;
     {
         SvFileStream aStream(m_directories.getURLFromSrc(DATA_DIRECTORY) + "certificate.crt", StreamMode::READ);
@@ -191,14 +191,14 @@ void SigningTest::testDescription()
     xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
-    CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
+    CPPUNIT_ASSERT(aManager.init());
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.mxStore = xStorage;
     aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
 
     // Then add a signature document.
-    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager.maSignatureHelper);
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager);
     CPPUNIT_ASSERT(xCertificate.is());
     OUString aDescription("SigningTest::testDescription");
     sal_Int32 nSecurityId;
@@ -224,14 +224,14 @@ void SigningTest::testOOXMLDescription()
     xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
-    CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
+    CPPUNIT_ASSERT(aManager.init());
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.mxStore = xStorage;
     aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
 
     // Then add a document signature.
-    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager.maSignatureHelper);
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager);
     CPPUNIT_ASSERT(xCertificate.is());
     OUString aDescription("SigningTest::testDescription");
     sal_Int32 nSecurityId;
@@ -254,7 +254,7 @@ void SigningTest::testOOXMLAppend()
                          osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
     // Load the test document as a storage and read its single signature.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
-    CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
+    CPPUNIT_ASSERT(aManager.init());
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL, embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.mxStore = xStorage;
@@ -264,7 +264,7 @@ void SigningTest::testOOXMLAppend()
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
 
     // Then add a second document signature.
-    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager.maSignatureHelper);
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager);
     CPPUNIT_ASSERT(xCertificate.is());
     sal_Int32 nSecurityId;
     aManager.add(xCertificate, OUString(), nSecurityId, false);
@@ -279,7 +279,7 @@ void SigningTest::testOOXMLRemove()
 {
     // Load the test document as a storage and read its signatures: purpose1 and purpose2.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
-    CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
+    CPPUNIT_ASSERT(aManager.init());
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "multi.docx";
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL, embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
@@ -290,7 +290,7 @@ void SigningTest::testOOXMLRemove()
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
 
     // Then remove the last added signature.
-    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager.maSignatureHelper);
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager);
     CPPUNIT_ASSERT(xCertificate.is());
     aManager.remove(0);
 
@@ -310,7 +310,7 @@ void SigningTest::testOOXMLRemoveAll()
                          osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.docx", aURL));
     // Load the test document as a storage and read its single signature.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
-    CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
+    CPPUNIT_ASSERT(aManager.init());
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL, embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.mxStore = xStorage;
@@ -320,7 +320,7 @@ void SigningTest::testOOXMLRemoveAll()
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
 
     // Then remove the only signature in the document.
-    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager.maSignatureHelper);
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager);
     CPPUNIT_ASSERT(xCertificate.is());
     aManager.remove(0);
     aManager.read(/*bUseTempStream=*/true);
