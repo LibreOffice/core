@@ -259,7 +259,6 @@ private:
 protected:
     virtual void    Resize() override;
     virtual bool    Close() override;
-    virtual void    GetFocus() override;
 
 public:
     SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
@@ -271,6 +270,7 @@ public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 };
 
 class SvxLineWindow_Impl : public SfxPopupWindow
@@ -1664,10 +1664,10 @@ void SvxFrameWindow_Impl::dispose()
     SfxPopupWindow::dispose();
 }
 
-void SvxFrameWindow_Impl::GetFocus()
+void SvxFrameWindow_Impl::KeyInput( const KeyEvent& rKEvt )
 {
-    if (aFrameSet)
-        aFrameSet->GrabFocus();
+    aFrameSet->GrabFocus();
+    aFrameSet->KeyInput( rKEvt );
 }
 
 void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
@@ -2930,6 +2930,13 @@ VclPtr<SfxPopupWindow> SvxFrameToolBoxControl::CreatePopupWindow()
                                FloatWinPopupFlags::AllowTearOff |
                                FloatWinPopupFlags::NoAppFocusClose );
     pFrameWin->StartSelection();
+
+    if ( GetToolBox().IsKeyEvent() )
+    {
+        KeyEvent aEvent( 0, vcl::KeyCode( KEY_HOME ) );
+        pFrameWin->KeyInput( aEvent );
+    }
+
     SetPopupWindow( pFrameWin );
 
     return pFrameWin;
