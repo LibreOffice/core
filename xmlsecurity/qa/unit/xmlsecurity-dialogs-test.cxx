@@ -30,9 +30,7 @@ private:
 
 public:
     XmlsecurityDialogsTest();
-    virtual ~XmlsecurityDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~XmlsecurityDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ XmlsecurityDialogsTest::XmlsecurityDialogsTest()
 
 XmlsecurityDialogsTest::~XmlsecurityDialogsTest()
 {
-}
-
-void XmlsecurityDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void XmlsecurityDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
