@@ -107,6 +107,8 @@ class PDFObjectElement : public PDFElement
     std::vector< std::unique_ptr<PDFObjectElement> > m_aStoredElements;
     /// Elements of an object in an object stream.
     std::vector< std::unique_ptr<PDFElement> > m_aElements;
+    /// Uncompressed buffer of an object in an object stream.
+    std::unique_ptr<SvMemoryStream> m_pStreamBuffer;
 
 public:
     PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue);
@@ -126,6 +128,8 @@ public:
     /// Parse objects stored in this object stream.
     void ParseStoredObjects();
     std::vector< std::unique_ptr<PDFElement> >& GetStoredElements();
+    SvMemoryStream* GetStreamBuffer() const;
+    void SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamBuffer);
 };
 
 /// Dictionary object: a set key-value pairs.
@@ -557,50 +561,111 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: invalid catalog obj id");
         return false;
     }
-    m_aXRef[nCatalogId].m_nOffset = m_aEditBuffer.Tell();
-    m_aXRef[nCatalogId].m_bDirty = true;
-    m_aEditBuffer.WriteUInt32AsString(nCatalogId);
-    m_aEditBuffer.WriteCharPtr(" 0 obj\n");
-    m_aEditBuffer.WriteCharPtr("<<");
-    auto pAcroForm = dynamic_cast<PDFDictionaryElement*>(pCatalog->Lookup("AcroForm"));
-    if (!pAcroForm)
+    PDFElement* pAcroForm = pCatalog->Lookup("AcroForm");
+    auto pAcroFormReference = dynamic_cast<PDFReferenceElement*>(pAcroForm);
+    if (pAcroFormReference)
     {
-        // No AcroForm key, assume no signatures.
-        m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pCatalog->GetDictionaryOffset(), pCatalog->GetDictionaryLength());
-        m_aEditBuffer.WriteCharPtr("/AcroForm<</Fields[\n");
-        m_aEditBuffer.WriteUInt32AsString(nAnnotId);
-        m_aEditBuffer.WriteCharPtr(" 0 R\n]/SigFlags 3>>\n");
-    }
-    else
-    {
-        // AcroForm key is already there, insert our reference at the Fields end.
-        auto it = pAcroForm->GetItems().find("Fields");
-        if (it == pAcroForm->GetItems().end())
+        // Write the updated AcroForm key of the Catalog object.
+        PDFObjectElement* pAcroFormObject = pAcroFormReference->LookupObject();
+        if (!pAcroFormObject)
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: AcroForm without required Fields key");
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: invalid AcroForm reference");
             return false;
         }
 
-        auto pFields = dynamic_cast<PDFArrayElement*>(it->second);
-        if (!pFields)
+        sal_uInt32 nAcroFormId = pAcroFormObject->GetObjectValue();
+        m_aXRef[nAcroFormId].m_eType = XRefEntryType::NOT_COMPRESSED;
+        m_aXRef[nAcroFormId].m_nOffset = m_aEditBuffer.Tell();
+        m_aXRef[nAcroFormId].m_nGenerationNumber = 0;
+        m_aXRef[nAcroFormId].m_bDirty = true;
+        m_aEditBuffer.WriteUInt32AsString(nAcroFormId);
+        m_aEditBuffer.WriteCharPtr(" 0 obj\n");
+
+        SvMemoryStream* pStreamBuffer = pAcroFormObject->GetStreamBuffer();
+        if (!pStreamBuffer)
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: AcroForm Fields is not an array");
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: AcroForm object is in an object stream");
+            return false;
+        }
+
+        if (!pAcroFormObject->Lookup("Fields"))
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: AcroForm object without required Fields key");
+            return false;
+        }
+
+        PDFDictionaryElement* pAcroFormDictionary = pAcroFormObject->GetDictionary();
+        if (!pAcroFormDictionary)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: AcroForm object has no dictionary");
             return false;
         }
 
         // Offset right before the end of the Fields array.
-        sal_uInt64 nFieldsEndOffset = pAcroForm->GetKeyOffset("Fields") + pAcroForm->GetKeyValueLength("Fields") - 1;
-        // Length of beginning of the Catalog dictionary -> Fields end.
-        sal_uInt64 nFieldsBeforeEndLength = nFieldsEndOffset - pCatalog->GetDictionaryOffset();
-        m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pCatalog->GetDictionaryOffset(), nFieldsBeforeEndLength);
+        sal_uInt64 nFieldsEndOffset = pAcroFormDictionary->GetKeyOffset("Fields") + pAcroFormDictionary->GetKeyValueLength("Fields") - strlen("]");
+        // Length of beginning of the object dictionary -> Fields end.
+        sal_uInt64 nFieldsBeforeEndLength = nFieldsEndOffset;
+        m_aEditBuffer.WriteBytes(pStreamBuffer->GetData(), nFieldsBeforeEndLength);
+
+        // Append our reference at the end of the Fields array.
         m_aEditBuffer.WriteCharPtr(" ");
         m_aEditBuffer.WriteUInt32AsString(nAnnotId);
         m_aEditBuffer.WriteCharPtr(" 0 R");
-        // Length of Fields end -> end of the Catalog dictionary.
-        sal_uInt64 nFieldsAfterEndLength = pCatalog->GetDictionaryOffset() + pCatalog->GetDictionaryLength() - nFieldsEndOffset;
-        m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + nFieldsEndOffset, nFieldsAfterEndLength);
+
+        // Length of Fields end -> end of the object dictionary.
+        sal_uInt64 nFieldsAfterEndLength = pStreamBuffer->GetSize() - nFieldsEndOffset;
+        m_aEditBuffer.WriteBytes(static_cast<const char*>(pStreamBuffer->GetData()) + nFieldsEndOffset, nFieldsAfterEndLength);
+
+        m_aEditBuffer.WriteCharPtr("\nendobj\n\n");
     }
-    m_aEditBuffer.WriteCharPtr(">>\nendobj\n\n");
+    else
+    {
+        // Write the updated Catalog object, references nAnnotId.
+        auto pAcroFormDictionary = dynamic_cast<PDFDictionaryElement*>(pAcroForm);
+        m_aXRef[nCatalogId].m_nOffset = m_aEditBuffer.Tell();
+        m_aXRef[nCatalogId].m_bDirty = true;
+        m_aEditBuffer.WriteUInt32AsString(nCatalogId);
+        m_aEditBuffer.WriteCharPtr(" 0 obj\n");
+        m_aEditBuffer.WriteCharPtr("<<");
+        if (!pAcroFormDictionary)
+        {
+            // No AcroForm key, assume no signatures.
+            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pCatalog->GetDictionaryOffset(), pCatalog->GetDictionaryLength());
+            m_aEditBuffer.WriteCharPtr("/AcroForm<</Fields[\n");
+            m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+            m_aEditBuffer.WriteCharPtr(" 0 R\n]/SigFlags 3>>\n");
+        }
+        else
+        {
+            // AcroForm key is already there, insert our reference at the Fields end.
+            auto it = pAcroFormDictionary->GetItems().find("Fields");
+            if (it == pAcroFormDictionary->GetItems().end())
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: AcroForm without required Fields key");
+                return false;
+            }
+
+            auto pFields = dynamic_cast<PDFArrayElement*>(it->second);
+            if (!pFields)
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: AcroForm Fields is not an array");
+                return false;
+            }
+
+            // Offset right before the end of the Fields array.
+            sal_uInt64 nFieldsEndOffset = pAcroFormDictionary->GetKeyOffset("Fields") + pAcroFormDictionary->GetKeyValueLength("Fields") - 1;
+            // Length of beginning of the Catalog dictionary -> Fields end.
+            sal_uInt64 nFieldsBeforeEndLength = nFieldsEndOffset - pCatalog->GetDictionaryOffset();
+            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pCatalog->GetDictionaryOffset(), nFieldsBeforeEndLength);
+            m_aEditBuffer.WriteCharPtr(" ");
+            m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+            m_aEditBuffer.WriteCharPtr(" 0 R");
+            // Length of Fields end -> end of the Catalog dictionary.
+            sal_uInt64 nFieldsAfterEndLength = pCatalog->GetDictionaryOffset() + pCatalog->GetDictionaryLength() - nFieldsEndOffset;
+            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + nFieldsEndOffset, nFieldsAfterEndLength);
+        }
+        m_aEditBuffer.WriteCharPtr(">>\nendobj\n\n");
+    }
 
     // Write the xref table.
     sal_uInt64 nXRefOffset = m_aEditBuffer.Tell();
@@ -2736,12 +2801,28 @@ void PDFObjectElement::ParseStoredObjects()
         m_rDoc.Tokenize(aStoredStream, TokenizeMode::STORED_OBJECT, pStored->GetStoredElements(), pStored);
         // This is how references know the object is stored inside this object stream.
         m_rDoc.SetIDObject(nObjNum, pStored);
+
+        // Store the stream of the object in the object stream for later use.
+        std::unique_ptr<SvMemoryStream> pStreamBuffer(new SvMemoryStream());
+        aStoredStream.Seek(0);
+        pStreamBuffer->WriteStream(aStoredStream);
+        pStored->SetStreamBuffer(pStreamBuffer);
     }
 }
 
 std::vector< std::unique_ptr<PDFElement> >& PDFObjectElement::GetStoredElements()
 {
     return m_aElements;
+}
+
+SvMemoryStream* PDFObjectElement::GetStreamBuffer() const
+{
+    return m_pStreamBuffer.get();
+}
+
+void PDFObjectElement::SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamBuffer)
+{
+    m_pStreamBuffer = std::move(pStreamBuffer);
 }
 
 PDFReferenceElement::PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue)
