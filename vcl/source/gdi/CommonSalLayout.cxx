@@ -751,13 +751,17 @@ bool CommonSalLayout::IsKashidaPosValid(int nCharPos) const
     {
         if (pIter->mnCharPos == nCharPos)
         {
+            // The position is the first glyphs, this would happen if we
+            // changed the text styling in the middle of a word. Since we don’t
+            // do ligatures accross layout engine instances, thid can’t be a
+            // ligature so it should be fine.
+            if (pIter == m_GlyphItems.begin())
+                return true;
+
             // If the character was not supported by this layout, return false
             // so that fallback layouts would be checked for it.
             if (pIter->maGlyphId == 0)
                 break;
-
-            if (pIter == m_GlyphItems.begin())
-                continue;
 
             // Search backwards for previous glyph belonging to a different
             // character. We are looking backwards because we are dealing with
