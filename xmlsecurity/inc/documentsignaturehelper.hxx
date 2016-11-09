@@ -36,17 +36,6 @@ namespace embed {
     class XStorage; }
 }}}
 
-
-/**********************************************************
- DocumentSignatureHelper
-
- Helper class for signing and verifieng document signatures
-
- Functions:
- 1. help to create a list of content to be signed/verified
-
- **********************************************************/
-
 enum class DocumentSignatureMode
 {
     Content,
@@ -74,32 +63,35 @@ struct SignatureStreamHelper
     }
 };
 
-
-class XMLSECURITY_DLLPUBLIC DocumentSignatureHelper
+namespace DocumentSignatureHelper
 {
-public:
-
-    static SignatureStreamHelper OpenSignatureStream(
+    SignatureStreamHelper XMLSECURITY_DLLPUBLIC OpenSignatureStream(
         const css::uno::Reference < css::embed::XStorage >& rxStore, sal_Int32 nOpenMode,
         DocumentSignatureMode eDocSigMode );
-    static std::vector< OUString > CreateElementList(
+
+    std::vector< OUString > XMLSECURITY_DLLPUBLIC CreateElementList(
         const css::uno::Reference < css::embed::XStorage >& rxStore,
         DocumentSignatureMode eMode,
         const DocumentSignatureAlgorithm mode);
-    static bool isODFPre_1_2(const OUString & sODFVersion);
-    static bool isOOo3_2_Signature(const SignatureInformation & sigInfo);
-    static DocumentSignatureAlgorithm getDocumentAlgorithm(
-        const OUString & sODFVersion, const SignatureInformation & sigInfo);
-    static bool checkIfAllFilesAreSigned( const ::std::vector< OUString > & sElementList,
-        const SignatureInformation & sigInfo, const DocumentSignatureAlgorithm alg);
-    static bool equalsReferenceUriManifestPath(
-        const OUString & rUri, const OUString & rPath);
-    static OUString GetDocumentContentSignatureDefaultStreamName();
-    static OUString GetScriptingContentSignatureDefaultStreamName();
-    static OUString GetPackageSignatureDefaultStreamName();
-    /// In case the storage is OOXML, prepend a leading '/' and append content type to the element URIs.
-    static void AppendContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, std::vector<OUString>& rElements);
 
+    bool XMLSECURITY_DLLPUBLIC isODFPre_1_2(const OUString & sODFVersion);
+    bool XMLSECURITY_DLLPUBLIC isOOo3_2_Signature(const SignatureInformation & sigInfo);
+
+    DocumentSignatureAlgorithm XMLSECURITY_DLLPUBLIC getDocumentAlgorithm(
+        const OUString & sODFVersion, const SignatureInformation & sigInfo);
+
+    bool XMLSECURITY_DLLPUBLIC checkIfAllFilesAreSigned( const ::std::vector< OUString > & sElementList,
+        const SignatureInformation & sigInfo, const DocumentSignatureAlgorithm alg);
+
+    bool XMLSECURITY_DLLPUBLIC equalsReferenceUriManifestPath(
+        const OUString & rUri, const OUString & rPath);
+
+    OUString XMLSECURITY_DLLPUBLIC GetDocumentContentSignatureDefaultStreamName();
+    OUString XMLSECURITY_DLLPUBLIC GetScriptingContentSignatureDefaultStreamName();
+    OUString XMLSECURITY_DLLPUBLIC GetPackageSignatureDefaultStreamName();
+
+    /// In case the storage is OOXML, prepend a leading '/' and append content type to the element URIs.
+    void XMLSECURITY_DLLPUBLIC AppendContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, std::vector<OUString>& rElements);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREHELPER_HXX
