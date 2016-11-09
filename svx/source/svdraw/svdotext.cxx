@@ -1936,7 +1936,7 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         {
             AdjustTextFrameWidthAndHeight();
         }
-        else if (IsAutoFit() && !mbInDownScale)
+        else if ( (IsAutoFit() || IsFitToSize()) && !mbInDownScale)
         {
             assert(pEdtOutl);
             mbInDownScale = true;
