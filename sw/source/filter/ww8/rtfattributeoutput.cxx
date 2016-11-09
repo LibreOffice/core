@@ -219,7 +219,7 @@ void RtfAttributeOutput::RTLAndCJKState(bool bIsRTL, sal_uInt16 nScript)
 void RtfAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo)
 {
     // Output table/table row/table cell starts if needed
-    if (pTextNodeInfo.get())
+    if (pTextNodeInfo)
     {
         sal_uInt32 nRow = pTextNodeInfo->getRow();
         sal_uInt32 nCell = pTextNodeInfo->getCell();
@@ -1090,7 +1090,7 @@ void RtfAttributeOutput::EndTable()
 
 void RtfAttributeOutput::FinishTableRowCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pInner, bool /*bForceEmptyParagraph*/)
 {
-    if (pInner.get())
+    if (pInner)
     {
         // Where are we in the table
         sal_uInt32 nRow = pInner->getRow();
@@ -1752,7 +1752,7 @@ void lcl_TextFrameRelativeSize(std::vector< std::pair<OString, OString> >& rFlyP
             aRelation = "0"; // margin
             break;
         }
-        rFlyProperties.push_back(std::make_pair("sizerelh", aRelation));
+        rFlyProperties.emplace_back(std::make_pair("sizerelh", aRelation));
     }
     const sal_uInt8 nHeightPercent = rSize.GetHeightPercent();
     if (nHeightPercent && nHeightPercent != SwFormatFrameSize::SYNCED)
@@ -1769,7 +1769,7 @@ void lcl_TextFrameRelativeSize(std::vector< std::pair<OString, OString> >& rFlyP
             aRelation = "0"; // margin
             break;
         }
-        rFlyProperties.push_back(std::make_pair("sizerelv", aRelation));
+        rFlyProperties.emplace_back(std::make_pair("sizerelv", aRelation));
     }
 }
 
@@ -3501,7 +3501,6 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
       m_bLastTable(true),
       m_bWroteCellInfo(false),
       m_bTableRowEnded(false),
-      m_aCells(),
       m_bSingleEmptyRun(false),
       m_bInRun(false),
       m_pFlyFrameSize(nullptr),
@@ -3509,9 +3508,7 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
 {
 }
 
-RtfAttributeOutput::~RtfAttributeOutput()
-{
-}
+RtfAttributeOutput::~RtfAttributeOutput() = default;
 
 MSWordExportBase& RtfAttributeOutput::GetExport()
 {
