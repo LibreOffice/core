@@ -397,7 +397,7 @@ void ToolBarManager::frameAction( const FrameActionEvent& Action )
 throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard g;
-    if ( Action.Action == FrameAction_CONTEXT_CHANGED )
+    if ( Action.Action == FrameAction_CONTEXT_CHANGED && !m_bDisposed )
     {
         m_aAsyncUpdateControllersTimer.Start();
     }
