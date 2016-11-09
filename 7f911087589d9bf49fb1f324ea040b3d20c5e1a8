@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_8e0c0f96",
+        "filename": "svx/source/svdraw/svdotext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1939,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-11-09T19:12:10Z",
+      "side": 1,
+      "message": "1.) Treat painting ::Proportional and ::AllLines as if they were Autofit while editing. This helps to keep the text somewhat inside the frame (otherwise the ENLARGED text would immediately spill when adding characters).\n2.) There is no line wrapping, so once the smaller text is too long, it still spills out of the frame while editing.  That\u0027s OK with me, since it won\u0027t be wrapped anyway when it shrinks, so that gives the editor a clue that it won\u0027t look good when they are finished.\n3.) It isn\u0027t WYSIWYG, but often the stretched text is hard to read anyway, so in certain cases this is better for editing.\n4.) I was unable to test how this affects ::AllLines because I never found any way to see a shape or a textbox to that setting.",
+      "range": {
+        "startLine": 1939,
+        "startChar": 34,
+        "endLine": 1939,
+        "endChar": 47
+      },
+      "revId": "7f911087589d9bf49fb1f324ea040b3d20c5e1a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
