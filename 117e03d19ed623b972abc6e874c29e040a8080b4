@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_0e563fd2",
+        "filename": "desktop/source/deployment/gui/dp_gui_dialog2.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-11-09T11:41:53Z",
+      "side": 1,
+      "message": "In fact, the show method was written for later use, I\u0027ll remove it for now. Options button will always be visible. It will be enabled/disabled when necessary.",
+      "parentUuid": "7a77a97e_0e91df99",
+      "revId": "117e03d19ed623b972abc6e874c29e040a8080b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_2e8e9b78",
         "filename": "desktop/uiconfig/ui/extensionmanager.ui",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2016-11-09T10:09:53Z",
       "side": 1,
       "message": "Please add the accelerator as it was before (_Options).\nAlso for the other strings please.\nPeople get used to those and if we can, we should avoid changing (auto assigning) them.",
+      "revId": "117e03d19ed623b972abc6e874c29e040a8080b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_2e53fbe2",
+        "filename": "desktop/uiconfig/ui/extensionmanager.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-11-09T11:41:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a77a97e_2e8e9b78",
       "revId": "117e03d19ed623b972abc6e874c29e040a8080b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
