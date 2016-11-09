@@ -384,10 +384,6 @@ public:
     static OUString
                     getObjectContainerStorageName( const ObjectType _eType );
 
-    /** revokes the data source registration at the database context
-    */
-    void            revokeDataSource() const;
-
     /** determines whether a given object storage contains macros
     */
     static bool     objectHasMacros(

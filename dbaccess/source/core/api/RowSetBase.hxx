@@ -221,12 +221,11 @@ namespace dbaccess
             count.
 
             @precond
-                Our mutext is locked.
+                Our mutex is locked.
         */
         sal_Int32   impl_getRowCount() const;
 
         // the checkCache has to be called before calling this methods
-        bool    impl_wasNull();
         sal_Int32   impl_getRow();
         bool    impl_rowDeleted();
 

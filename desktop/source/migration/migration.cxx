@@ -292,7 +292,9 @@ bool MigrationImpl::doMigration()
         // execute custom migration services from Setup.xcu
         // and refresh the cache
         runServices();
-        refresh();
+        uno::Reference< XRefreshable >(
+            configuration::theDefaultProvider::get(comphelper::getProcessComponentContext()),
+            uno::UNO_QUERY_THROW)->refresh();
 
         result = true;
     } catch (css::uno::Exception & e) {
@@ -306,13 +308,6 @@ bool MigrationImpl::doMigration()
     // prevent running the migration multiple times
     setMigrationCompleted();
     return result;
-}
-
-void MigrationImpl::refresh()
-{
-    uno::Reference< XRefreshable >(
-        configuration::theDefaultProvider::get(comphelper::getProcessComponentContext()),
-        uno::UNO_QUERY_THROW)->refresh();
 }
 
 void MigrationImpl::setMigrationCompleted()

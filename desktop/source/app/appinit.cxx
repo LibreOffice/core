@@ -185,7 +185,8 @@ class enable
     }
 };
 
-void Desktop::enableAcceptors()
+// enable acceptors
+IMPL_STATIC_LINK_NOARG(Desktop, EnableAcceptors_Impl, void*, void)
 {
     if (!bAccept)
     {

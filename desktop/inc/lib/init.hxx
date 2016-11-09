@@ -53,7 +53,6 @@ namespace desktop {
         typedef std::vector<std::pair<int, std::string>> queue_type;
 
     private:
-        void flush();
         void removeAll(const std::function<bool (const queue_type::value_type&)>& rTestFunc);
 
         queue_type m_queue;

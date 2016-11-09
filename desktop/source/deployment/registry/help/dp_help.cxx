@@ -100,10 +100,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     void implCollectXhpFiles( const OUString& aDir,
         std::vector< OUString >& o_rXhpFileVector );
 
-    void addDataToDb(OUString const & url, HelpBackendDb::Data const & data);
     ::boost::optional<HelpBackendDb::Data> readDataFromDb(OUString const & url);
     bool hasActiveEntry(OUString const & url);
-    void revokeEntryFromDb(OUString const & url);
     bool activateEntry(OUString const & url);
 
     Reference< ucb::XSimpleFileAccess3 > const & getFileAccess();
@@ -211,13 +209,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<sal_Int16>(-1) );
 }
 
-void BackendImpl::addDataToDb(
-    OUString const & url, HelpBackendDb::Data const & data)
-{
-    if (m_backendDb.get())
-        m_backendDb->addEntry(url, data);
-}
-
 ::boost::optional<HelpBackendDb::Data> BackendImpl::readDataFromDb(
     OUString const & url)
 {
@@ -232,12 +223,6 @@ bool BackendImpl::hasActiveEntry(OUString const & url)
     if (m_backendDb.get())
         return m_backendDb->hasActiveEntry(url);
     return false;
-}
-
-void BackendImpl::revokeEntryFromDb(OUString const & url)
-{
-    if (m_backendDb.get())
-        m_backendDb->revokeEntry(url);
 }
 
 bool BackendImpl::activateEntry(OUString const & url)
@@ -561,14 +546,16 @@ void BackendImpl::implProcessHelp(
                 (void) xCmdEnv;
 #endif
             }
-                //Writing the data entry replaces writing the flag file. If we got to this
-                //point the registration was successful.
-            addDataToDb(xPackage->getURL(), data);
+            // Writing the data entry replaces writing the flag file. If we got to this
+            // point the registration was successful.
+            if (m_backendDb.get())
+                m_backendDb->addEntry(xPackage->getURL(), data);
         }
     } //if (doRegisterPackage)
     else
     {
-        revokeEntryFromDb(xPackage->getURL());
+        if (m_backendDb.get())
+            m_backendDb->revokeEntry(xPackage->getURL());
     }
 }
 

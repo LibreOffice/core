@@ -186,12 +186,8 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException,
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
-    return impl_wasNull();
-}
-
-bool ORowSetBase::impl_wasNull()
-{
-    return !((m_nLastColumnIndex != -1) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is()) || ((*m_aCurrentRow)->get())[m_nLastColumnIndex].isNull();
+    return !((m_nLastColumnIndex != -1) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is())
+           || ((*m_aCurrentRow)->get())[m_nLastColumnIndex].isNull();
 }
 
 const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)

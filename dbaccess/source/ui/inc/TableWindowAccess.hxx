@@ -66,10 +66,6 @@ namespace dbaui
         virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
-        // XServiceInfo - static methods
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
-        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
-
         // XAccessible
         virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) override;
 

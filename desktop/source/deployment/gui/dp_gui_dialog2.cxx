@@ -1259,13 +1259,6 @@ void UpdateRequiredDialog::checkEntries()
 }
 
 
-void UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
-                                          bool bEnable )
-{
-    m_pManager->getCmdQueue()->enableExtension( xPackage, bEnable );
-}
-
-
 IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCancelBtn, Button*, void)
 {
     if ( m_xAbortChannel.is() )
@@ -1553,7 +1546,7 @@ void UpdateRequiredDialog::disableAllEntries()
     for ( long nIndex = 0; nIndex < nCount; nIndex++ )
     {
         TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nIndex );
-        enablePackage( pEntry->m_xPackage, false );
+        m_pManager->getCmdQueue()->enableExtension( pEntry->m_xPackage, false );
     }
 
     setBusy( false );

@@ -226,7 +226,6 @@ public:
 
     virtual void    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &,
                                       bool bLicenseMissing = false ) override;
-    void            enablePackage( const css::uno::Reference< css::deployment::XPackage > &xPackage, bool bEnable );
 
     virtual void    prepareChecking() override;
     virtual void    checkEntries() override;

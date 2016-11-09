@@ -99,7 +99,6 @@ private:
 
 private:
     void    impl_positionControls();
-    void    impl_initImage( MessageType _eImage );
     void    impl_createStandardButtons( WinBits _nStyle );
     void    impl_addDetailsButton();
 };

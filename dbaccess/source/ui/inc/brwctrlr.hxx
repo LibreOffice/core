@@ -245,8 +245,6 @@ namespace dbaui
             // you most probably don't want to override this behavior
 
         // the default implementation of disposing distributes the events to the following disposingXXX functions
-        void disposingGridControl(const css::lang::EventObject& Source);   // calls removeControlListeners
-        void disposingGridModel(const css::lang::EventObject& Source);     // calls removeModelListeners
         void disposingFormModel(const css::lang::EventObject& Source);
         void disposingColumnModel(const css::lang::EventObject& Source);
 

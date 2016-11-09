@@ -52,9 +52,6 @@ namespace dbaui
     typedef ::cppu::WeakImplHelper< css::lang::XEventListener> ODatabaseImportExport_BASE;
     class ODatabaseImportExport : public ODatabaseImportExport_BASE
     {
-    private:
-        void impl_initializeRowMember_throw();
-
     protected:
         css::lang::Locale                                     m_aLocale;
         css::uno::Sequence< css::uno::Any>                    m_aSelection;

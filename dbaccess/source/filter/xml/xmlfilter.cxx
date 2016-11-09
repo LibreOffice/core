@@ -407,7 +407,7 @@ SvXMLImportContext* ODBFilter::CreateContext( sal_uInt16 nPrefix,
             pContext = CreateStylesContext(nPrefix, rLocalName, xAttrList, true);
             break;
         case XML_TOK_DOC_SCRIPT:
-            pContext = CreateScriptContext( rLocalName );
+            pContext = new XMLScriptContext( *this, rLocalName, GetModel() );
             break;
     }
 
@@ -725,12 +725,6 @@ SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const OUS
         SetStyles(static_cast<SvXMLStylesContext*>(pContext));
 
     return pContext;
-}
-
-
-SvXMLImportContext* ODBFilter::CreateScriptContext( const OUString& _rLocalName )
-{
-    return new XMLScriptContext( *this, _rLocalName, GetModel() );
 }
 
 

@@ -184,11 +184,6 @@ void OTableWindow::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
     SetSizePixel( rNewSize );
 }
 
-VclPtr<OTableWindowListBox> OTableWindow::CreateListBox()
-{
-    return VclPtr<OTableWindowListBox>::Create(this);
-}
-
 bool OTableWindow::FillListBox()
 {
     m_xListBox->Clear();
@@ -301,7 +296,7 @@ bool OTableWindow::Init()
     // create list box if necessary
     if ( !m_xListBox )
     {
-        m_xListBox = CreateListBox();
+        m_xListBox = VclPtr<OTableWindowListBox>::Create(this);
         OSL_ENSURE( m_xListBox != nullptr, "OTableWindow::Init() : CreateListBox returned NULL !" );
         m_xListBox->SetSelectionMode( SelectionMode::Multiple );
     }

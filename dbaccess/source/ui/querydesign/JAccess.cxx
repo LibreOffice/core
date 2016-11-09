@@ -39,10 +39,6 @@ namespace dbaui
     }
     OUString SAL_CALL OJoinDesignViewAccess::getImplementationName() throw(RuntimeException, std::exception)
     {
-        return getImplementationName_Static();
-    }
-    OUString OJoinDesignViewAccess::getImplementationName_Static() throw( RuntimeException )
-    {
         return OUString("org.openoffice.comp.dbu.JoinViewAccessibility");
     }
     void OJoinDesignViewAccess::clearTableView()

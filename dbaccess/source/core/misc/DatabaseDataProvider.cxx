@@ -215,7 +215,8 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             try
             {
                 impl_fillRowSet_throw();
-                impl_executeRowSet_throw(aClearForNotifies);
+                if ( impl_fillParameters_nothrow(aClearForNotifies) )
+                    m_xRowSet->execute();
                 impl_fillInternalDataProvider_throw(bHasCategories,aColumnNames);
                 bRet = true;
             }
@@ -612,12 +613,6 @@ OUString SAL_CALL DatabaseDataProvider::getDataSourceName() throw (uno::RuntimeE
 void SAL_CALL DatabaseDataProvider::setDataSourceName(const OUString& the_value) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_DATASOURCENAME,the_value,m_DataSourceName);
-}
-
-void DatabaseDataProvider::impl_executeRowSet_throw(::osl::ResettableMutexGuard& _rClearForNotifies)
-{
-    if ( impl_fillParameters_nothrow(_rClearForNotifies) )
-        m_xRowSet->execute();
 }
 
 namespace

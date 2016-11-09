@@ -521,28 +521,6 @@ void OSQLMessageBox::impl_positionControls()
     SetPageSizePixel( aDialogSize );
 }
 
-void OSQLMessageBox::impl_initImage( MessageType _eImage )
-{
-    switch (_eImage)
-    {
-        default:
-            OSL_FAIL( "OSQLMessageBox::impl_initImage: unsupported image type!" );
-            SAL_FALLTHROUGH;
-        case Info:
-            m_aInfoImage->SetImage(InfoBox::GetStandardImage());
-            break;
-        case Warning:
-            m_aInfoImage->SetImage(WarningBox::GetStandardImage());
-            break;
-        case Error:
-            m_aInfoImage->SetImage(ErrorBox::GetStandardImage());
-            break;
-        case Query:
-            m_aInfoImage->SetImage(QueryBox::GetStandardImage());
-            break;
-    }
-}
-
 void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
 {
     if ( _nStyle & WB_YES_NO_CANCEL )
@@ -637,7 +615,24 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
         default: OSL_FAIL( "OSQLMessageBox::Construct: invalid type!" );
         }
     }
-    impl_initImage( eType );
+    switch (eType)
+    {
+        default:
+            OSL_FAIL( "OSQLMessageBox::impl_initImage: unsupported image type!" );
+            SAL_FALLTHROUGH;
+        case Info:
+            m_aInfoImage->SetImage(InfoBox::GetStandardImage());
+            break;
+        case Warning:
+            m_aInfoImage->SetImage(WarningBox::GetStandardImage());
+            break;
+        case Error:
+            m_aInfoImage->SetImage(ErrorBox::GetStandardImage());
+            break;
+        case Query:
+            m_aInfoImage->SetImage(QueryBox::GetStandardImage());
+            break;
+    }
 
     // create buttons
     impl_createStandardButtons( _nStyle );
