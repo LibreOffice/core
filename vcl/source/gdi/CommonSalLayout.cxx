@@ -412,10 +412,10 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             // orientation.
             if (rArgs.mnFlags & SalLayoutFlags::Vertical)
             {
-                int32_t nIdx = nMinRunPos;
+                sal_Int32 nIdx = nMinRunPos;
                 while (nIdx < nEndRunPos)
                 {
-                    int32_t nPrevIdx = nIdx;
+                    sal_Int32 nPrevIdx = nIdx;
                     sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&nIdx);
                     switch (vcl::GetVerticalOrientation(aChar))
                     {
