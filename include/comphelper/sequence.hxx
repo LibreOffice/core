@@ -340,6 +340,15 @@ namespace comphelper
         return result;
     }
 
+    // this one does better type deduction, but does not allow us to copy into a different element type
+    template < typename DstType >
+    inline DstType sequenceToContainer( const css::uno::Sequence< typename DstType::value_type >& i_Sequence )
+    {
+        DstType result( i_Sequence.getLength() );
+        ::std::copy( i_Sequence.begin(), i_Sequence.end(), result.begin() );
+        return result;
+    }
+
     /** Copy from a Sequence into an existing container
 
         This potentially saves a needless extra copy operation over
