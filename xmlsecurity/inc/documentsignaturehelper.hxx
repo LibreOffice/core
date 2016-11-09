@@ -65,33 +65,33 @@ struct SignatureStreamHelper
 
 namespace DocumentSignatureHelper
 {
-    SignatureStreamHelper XMLSECURITY_DLLPUBLIC OpenSignatureStream(
+    SignatureStreamHelper OpenSignatureStream(
         const css::uno::Reference < css::embed::XStorage >& rxStore, sal_Int32 nOpenMode,
         DocumentSignatureMode eDocSigMode );
 
-    std::vector< OUString > XMLSECURITY_DLLPUBLIC CreateElementList(
+    std::vector< OUString > CreateElementList(
         const css::uno::Reference < css::embed::XStorage >& rxStore,
         DocumentSignatureMode eMode,
         const DocumentSignatureAlgorithm mode);
 
-    bool XMLSECURITY_DLLPUBLIC isODFPre_1_2(const OUString & sODFVersion);
-    bool XMLSECURITY_DLLPUBLIC isOOo3_2_Signature(const SignatureInformation & sigInfo);
+    bool isODFPre_1_2(const OUString & sODFVersion);
+    bool isOOo3_2_Signature(const SignatureInformation & sigInfo);
 
-    DocumentSignatureAlgorithm XMLSECURITY_DLLPUBLIC getDocumentAlgorithm(
+    DocumentSignatureAlgorithm getDocumentAlgorithm(
         const OUString & sODFVersion, const SignatureInformation & sigInfo);
 
-    bool XMLSECURITY_DLLPUBLIC checkIfAllFilesAreSigned( const ::std::vector< OUString > & sElementList,
+    bool checkIfAllFilesAreSigned( const ::std::vector< OUString > & sElementList,
         const SignatureInformation & sigInfo, const DocumentSignatureAlgorithm alg);
 
-    bool XMLSECURITY_DLLPUBLIC equalsReferenceUriManifestPath(
+    bool equalsReferenceUriManifestPath(
         const OUString & rUri, const OUString & rPath);
 
-    OUString XMLSECURITY_DLLPUBLIC GetDocumentContentSignatureDefaultStreamName();
-    OUString XMLSECURITY_DLLPUBLIC GetScriptingContentSignatureDefaultStreamName();
-    OUString XMLSECURITY_DLLPUBLIC GetPackageSignatureDefaultStreamName();
+    OUString GetDocumentContentSignatureDefaultStreamName();
+    OUString GetScriptingContentSignatureDefaultStreamName();
+    OUString GetPackageSignatureDefaultStreamName();
 
     /// In case the storage is OOXML, prepend a leading '/' and append content type to the element URIs.
-    void XMLSECURITY_DLLPUBLIC AppendContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, std::vector<OUString>& rElements);
+    void AppendContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, std::vector<OUString>& rElements);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREHELPER_HXX
