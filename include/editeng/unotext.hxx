@@ -400,8 +400,6 @@ protected:
 public:
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextBase )
 
-    static css::uno::Sequence< css::uno::Type > SAL_CALL getStaticTypes() throw();
-
     css::uno::Reference< css::text::XTextCursor > createTextCursorBySelection( const ESelection& rSel );
 
     // css::uno::XInterface

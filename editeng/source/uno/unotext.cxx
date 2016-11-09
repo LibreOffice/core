@@ -1749,15 +1749,11 @@ namespace
         }
     };
 }
-uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getStaticTypes() throw()
-{
-    return theSvxUnoTextBaseTypes::get();
-}
 
 uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getTypes()
     throw (uno::RuntimeException, std::exception)
 {
-    return getStaticTypes();
+    return theSvxUnoTextBaseTypes::get();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextBase::getImplementationId()

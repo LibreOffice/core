@@ -83,7 +83,6 @@ namespace drawinglayer
             const basegfx::B2DVector& getOffsetPosition() const;
             const basegfx::B2DVector& getRectPoint() const;
             bool getTiling() const;
-            bool getStretch() const;
 
             // FillGraphicAttribute generator
             FillGraphicAttribute createFillGraphicAttribute(const basegfx::B2DRange& rRange) const;

@@ -240,7 +240,7 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
                     const basegfx::B2DPoint aTmpEnd(getEnd() + (fExt * aVector));
 
                     // Get which is the line to show
-                    bool bIsSolidline = isSolidLine();
+                    bool bIsSolidline = mnStyle == css::table::BorderLineStyle::SOLID;
                     double nWidth = getLeftWidth();
                     basegfx::BColor aColor = getRGBColorLeft();
                     if ( basegfx::fTools::equal( 0.0, mfLeftWidth ) )

@@ -585,16 +585,6 @@ namespace accessibility
                                                              aEvent );
     }
 
-    void AccessibleEditableTextPara::GotPropertyEvent( const uno::Any& rNewValue, const sal_Int16 nEventId ) const
-    {
-        FireEvent( nEventId, rNewValue );
-    }
-
-    void AccessibleEditableTextPara::LostPropertyEvent( const uno::Any& rOldValue, const sal_Int16 nEventId ) const
-    {
-        FireEvent( nEventId, uno::Any(), rOldValue );
-    }
-
     void AccessibleEditableTextPara::SetState( const sal_Int16 nStateId )
     {
         ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
@@ -602,7 +592,7 @@ namespace accessibility
             !pStateSet->contains(nStateId) )
         {
             pStateSet->AddState( nStateId );
-            GotPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::STATE_CHANGED );
+            FireEvent( AccessibleEventId::STATE_CHANGED, uno::makeAny( nStateId ) );
         }
     }
 
@@ -613,7 +603,7 @@ namespace accessibility
             pStateSet->contains(nStateId) )
         {
             pStateSet->RemoveState( nStateId );
-            LostPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::STATE_CHANGED );
+            FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::makeAny( nStateId ) );
         }
     }
 
@@ -2798,17 +2788,8 @@ namespace accessibility
 
     uno::Sequence< OUString> SAL_CALL AccessibleEditableTextPara::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
     {
-
-        const OUString sServiceName( getServiceName() );
-        return uno::Sequence< OUString > (&sServiceName, 1);
-    }
-
-    // XServiceName
-    OUString SAL_CALL AccessibleEditableTextPara::getServiceName() throw (uno::RuntimeException)
-    {
-
         // #105185# Using correct service now
-        return OUString("com.sun.star.text.AccessibleParagraphView");
+        return { OUString("com.sun.star.text.AccessibleParagraphView") };
     }
 
 }  // end of namespace accessibility

@@ -118,10 +118,6 @@ namespace drawinglayer
             bool getEmphasisMarkBelow() const { return mbEmphasisMarkBelow; }
             bool getShadow() const { return mbShadow; }
 
-            /// check if this needs to be a TextDecoratedPortionPrimitive2D or
-            /// if a TextSimplePortionPrimitive2D would be suficcient
-            bool decoratedIsNeeded() const;
-
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 

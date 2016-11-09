@@ -74,11 +74,6 @@ namespace drawinglayer
             double getWidth(
                     const geometry::ViewInformation2D& rViewInformation) const;
 
-            bool isSolidLine() const
-            {
-                return mnStyle == css::table::BorderLineStyle::SOLID;
-            }
-
             bool isInsideUsed() const
             {
                 return !basegfx::fTools::equalZero(mfLeftWidth);
