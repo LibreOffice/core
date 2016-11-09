@@ -65,7 +65,7 @@ public:
     /// Read signatures from either a temp stream or the real storage.
     void read(bool bUseTempStream, bool bCacheLastSignature = true);
     /// Write signatures back to the persistent storage.
-    void write();
+    void write(bool bXAdESCompliantIfODF);
     /// Lazy creation of PDF helper.
     PDFSignatureHelper& getPDFSignatureHelper();
 #if 0

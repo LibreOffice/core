@@ -348,7 +348,8 @@ public:
 
     static void exportSignature(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
-        const SignatureInformation& signatureInfo );
+        const SignatureInformation& signatureInfo,
+        bool bXAdESCompliantIfODF );
 
 
     /*

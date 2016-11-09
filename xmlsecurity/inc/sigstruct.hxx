@@ -96,7 +96,7 @@ struct SignatureInformation
     OUString ouDescription;
     /// The Id attribute of the <SignatureProperty> element that contains the <dc:description>.
     OUString ouDescriptionPropertyId;
-    /// OOXML certificate SHA-256 digest, empty for ODF.
+    /// OOXML certificate SHA-256 digest, empty for ODF except when doing XAdES signature.
     OUString ouCertDigest;
     /// A full OOXML signguature for unchanged roundtrip, empty for ODF.
     css::uno::Sequence<sal_Int8> aSignatureBytes;

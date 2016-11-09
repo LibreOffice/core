@@ -57,6 +57,7 @@ private:
     OUString m_ouX509IssuerName;
     OUString m_ouX509SerialNumber;
     OUString m_ouX509Certificate;
+    OUString m_ouCertDigest;
     OUString m_ouDigestValue;
     OUString m_ouSignatureValue;
     OUString m_ouDate;
@@ -69,6 +70,7 @@ private:
     bool m_bInX509IssuerName;
     bool m_bInX509SerialNumber;
     bool m_bInX509Certificate;
+    bool m_bInCertDigest;
     bool m_bInDigestValue;
     bool m_bInSignatureValue;
     bool m_bInDate;

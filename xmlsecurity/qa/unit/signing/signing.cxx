@@ -324,7 +324,7 @@ void SigningTest::testOOXMLRemoveAll()
     CPPUNIT_ASSERT(xCertificate.is());
     aManager.remove(0);
     aManager.read(/*bUseTempStream=*/true);
-    aManager.write();
+    aManager.write(/*bXAdESCompliantIfODF=*/false);
 
     // Make sure that the signature count is zero and the whole signature storage is removed completely.
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), rInformations.size());

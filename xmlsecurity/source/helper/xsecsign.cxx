@@ -289,8 +289,6 @@ bool XSecController::WriteSignature(
     const cssu::Reference<cssxs::XDocumentHandler>& xDocumentHandler,
     bool bXAdESCompliantIfODF )
 {
-    (void) bXAdESCompliantIfODF;
-
     bool rc = false;
 
     SAL_WARN_IF( !xDocumentHandler.is(), "xmlsecurity.helper", "I really need a document handler!" );
@@ -327,7 +325,7 @@ bool XSecController::WriteSignature(
                 // 0 is not a documented value of embed::StorageFormats, ugh
                 isi.xReferenceResolvedListener = prepareSignatureToWrite( isi, 0, bXAdESCompliantIfODF );
 
-                exportSignature( xSEKHandler, isi.signatureInfor );
+                exportSignature( xSEKHandler, isi.signatureInfor, bXAdESCompliantIfODF );
             }
 
             m_bIsSAXEventKeeperSticky = false;

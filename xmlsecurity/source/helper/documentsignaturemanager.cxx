@@ -308,7 +308,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY_THROW);
         std::size_t nInfos = maCurrentSignatureInformations.size();
         for (std::size_t n = 0; n < nInfos; n++)
-            XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n]);
+            XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n], bXAdESCompliantIfODF);
 
         // Create a new one...
         maSignatureHelper.CreateAndWriteSignature(xDocumentHandler, bXAdESCompliantIfODF);
@@ -378,7 +378,7 @@ void DocumentSignatureManager::remove(sal_uInt16 nPosition)
         uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY_THROW);
         std::size_t nInfos = maCurrentSignatureInformations.size();
         for (std::size_t n = 0 ; n < nInfos ; ++n)
-            XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n]);
+            XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n], false /* ??? */);
 
         XMLSignatureHelper::CloseDocumentHandler(xDocumentHandler);
     }
@@ -435,7 +435,7 @@ void DocumentSignatureManager::read(bool bUseTempStream, bool bCacheLastSignatur
     }
 }
 
-void DocumentSignatureManager::write()
+void DocumentSignatureManager::write(bool bXAdESCompliantIfODF)
 {
     if (!mxStore.is())
     {
@@ -455,7 +455,7 @@ void DocumentSignatureManager::write()
         uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY_THROW);
         std::size_t nInfos = maCurrentSignatureInformations.size();
         for (std::size_t n = 0 ; n < nInfos ; ++n)
-            XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n]);
+            XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n], bXAdESCompliantIfODF);
 
         XMLSignatureHelper::CloseDocumentHandler(xDocumentHandler);
 

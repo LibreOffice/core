@@ -33,6 +33,7 @@ XSecParser::XSecParser(XSecController* pXSecController,
     : m_bInX509IssuerName(false)
     , m_bInX509SerialNumber(false)
     , m_bInX509Certificate(false)
+    , m_bInCertDigest(false)
     , m_bInDigestValue(false)
     , m_bInSignatureValue(false)
     , m_bInDate(false)
@@ -177,10 +178,15 @@ void SAL_CALL XSecParser::startElement(
             m_ouSignatureValue.clear();
             m_bInSignatureValue = true;
         }
-        else if (aName == "DigestValue")
+        else if (aName == "DigestValue" && !m_bInCertDigest)
         {
             m_ouDigestValue.clear();
             m_bInDigestValue = true;
+        }
+        else if (aName == "xd:CertDigest")
+        {
+            m_ouCertDigest.clear();
+            m_bInCertDigest = true;
         }
         else if ( aName == "SignatureProperty" )
         {
@@ -225,7 +231,7 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
 {
     try
     {
-        if (aName == "DigestValue")
+        if (aName == "DigestValue" && !m_bInCertDigest)
         {
             m_bInDigestValue = false;
         }
@@ -264,6 +270,11 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
         else if (aName == "X509Certificate")
         {
             m_pXSecController->setX509Certificate( m_ouX509Certificate );
+            m_bInX509Certificate = false;
+        }
+        else if (aName == "xd:CertDigest")
+        {
+            m_pXSecController->setCertDigest( m_ouCertDigest );
             m_bInX509Certificate = false;
         }
         else if (aName == "dc:date")
@@ -316,7 +327,7 @@ void SAL_CALL XSecParser::characters( const OUString& aChars )
     {
         m_ouSignatureValue += aChars;
     }
-    else if (m_bInDigestValue)
+    else if (m_bInDigestValue && !m_bInCertDigest)
     {
         m_ouDigestValue += aChars;
     }
@@ -327,6 +338,10 @@ void SAL_CALL XSecParser::characters( const OUString& aChars )
     else if (m_bInDescription)
     {
         m_ouDescription += aChars;
+    }
+    else if (m_bInCertDigest)
+    {
+        m_ouCertDigest += aChars;
     }
 
     if (m_xNextHandler.is())

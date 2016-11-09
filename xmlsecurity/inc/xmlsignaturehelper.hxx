@@ -171,7 +171,10 @@ public:
     //     will be very useful, see Mission 3 in the new "multisigdemo" program   :-)
     css::uno::Reference< css::xml::sax::XWriter> CreateDocumentHandlerWithHeader( const css::uno::Reference< css::io::XOutputStream >& xOutputStream );
     static void CloseDocumentHandler( const css::uno::Reference< css::xml::sax::XDocumentHandler>& xDocumentHandler );
-    static void ExportSignature( const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler, const SignatureInformation& signatureInfo );
+    static void ExportSignature(
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
+        const SignatureInformation& signatureInfo,
+        bool bXAdESCompliantIfODF );
 
     /// Read and verify OOXML signatures.
     bool ReadAndVerifySignatureStorage(const css::uno::Reference<css::embed::XStorage>& xStorage, bool bCacheLastSignature = true);

@@ -357,7 +357,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureHighlightHdl, SvTreeListBox*, 
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
 {
-    maSignatureManager.write();
+    maSignatureManager.write(m_bXAdESCompliant);
 
     EndDialog(RET_OK);
 }

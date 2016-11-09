@@ -19,6 +19,7 @@
 
 
 #include "xsecctl.hxx"
+#include "documentsignaturehelper.hxx"
 #include <algorithm>
 #include <initializer_list>
 #include <tools/debug.hxx>
@@ -564,9 +565,45 @@ void XSecController::endMission()
     }
 }
 
+namespace
+{
+void writeUnsignedProperties(
+    const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler,
+    const SignatureInformation& signatureInfo)
+{
+    {
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute("Id", "idUnsignedProperties");
+        xDocumentHandler->startElement("xd:UnsignedProperties", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    }
+
+    {
+        xDocumentHandler->startElement("xd:UnsignedSignatureProperties", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+
+        {
+            xDocumentHandler->startElement("xd:CertificateValues", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+
+            {
+                xDocumentHandler->startElement("xd:EncapsulatedX509Certificate", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+                xDocumentHandler->characters(signatureInfo.ouX509Certificate);
+                xDocumentHandler->endElement("xd:EncapsulatedX509Certificate");
+            }
+
+            xDocumentHandler->endElement("xd:CertificateValues");
+        }
+
+        xDocumentHandler->endElement("xd:UnsignedSignatureProperties");
+    }
+
+    xDocumentHandler->endElement("xd:UnsignedProperties");
+}
+
+}
+
 void XSecController::exportSignature(
     const cssu::Reference<cssxs::XDocumentHandler>& xDocumentHandler,
-    const SignatureInformation& signatureInfo )
+    const SignatureInformation& signatureInfo,
+    bool bXAdESCompliantIfODF )
 /****** XSecController/exportSignature ****************************************
  *
  *   NAME
@@ -750,6 +787,8 @@ void XSecController::exportSignature(
         }
         xDocumentHandler->endElement( "KeyInfo" );
 
+        OUString sDate;
+
         /* Write Object element */
         xDocumentHandler->startElement(
             "Object",
@@ -794,7 +833,8 @@ void XSecController::exportSignature(
                     {
                         buffer = utl::toISO8601(signatureInfo.stDateTime);
                     }
-                    xDocumentHandler->characters( buffer.makeStringAndClear() );
+                    sDate = buffer.makeStringAndClear();
+                    xDocumentHandler->characters( sDate );
 
                     xDocumentHandler->endElement(
                         "dc:date");
@@ -827,6 +867,25 @@ void XSecController::exportSignature(
             xDocumentHandler->endElement( "SignatureProperties" );
         }
         xDocumentHandler->endElement( "Object" );
+
+        //  In XAdES, write another Object element for the QualifyingProperties
+        if (bXAdESCompliantIfODF)
+        {
+            pAttributeList =  new SvXMLAttributeList();
+            pAttributeList->AddAttribute("xmlns:xd", NS_XD);
+            xDocumentHandler->startElement(
+                "Object",
+                cssu::Reference< cssxs::XAttributeList > (pAttributeList));
+            {
+                xDocumentHandler->startElement(
+                    "xd:QualifyingProperties",
+                    cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                DocumentSignatureHelper::writeSignedProperties(xDocumentHandler, signatureInfo, sDate);
+                writeUnsignedProperties(xDocumentHandler, signatureInfo);
+                xDocumentHandler->endElement( "xd:QualifyingProperties" );
+            }
+            xDocumentHandler->endElement( "Object" );
+        }
     }
     xDocumentHandler->endElement( "Signature" );
 }

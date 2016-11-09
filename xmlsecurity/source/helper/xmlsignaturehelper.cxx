@@ -181,9 +181,10 @@ void XMLSignatureHelper::CloseDocumentHandler( const uno::Reference<xml::sax::XD
 
 void XMLSignatureHelper::ExportSignature(
     const uno::Reference< xml::sax::XDocumentHandler >& xDocumentHandler,
-    const SignatureInformation& signatureInfo )
+    const SignatureInformation& signatureInfo,
+    bool bXAdESCompliantIfODF )
 {
-    XSecController::exportSignature(xDocumentHandler, signatureInfo);
+    XSecController::exportSignature(xDocumentHandler, signatureInfo, bXAdESCompliantIfODF);
 }
 
 void XMLSignatureHelper::ExportOOXMLSignature(const uno::Reference<embed::XStorage>& xRootStorage, const uno::Reference<embed::XStorage>& xSignatureStorage, const SignatureInformation& rInformation, int nSignatureIndex)

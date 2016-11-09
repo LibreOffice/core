@@ -21,6 +21,7 @@
 #define INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREHELPER_HXX
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <rtl/ustring.hxx>
 #include "sigstruct.hxx"
 #include "xmlsecuritydllapi.h"
@@ -92,6 +93,13 @@ namespace DocumentSignatureHelper
 
     /// In case the storage is OOXML, prepend a leading '/' and append content type to the element URIs.
     void AppendContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, std::vector<OUString>& rElements);
+
+    void writeDigestMethod(
+        const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler);
+    void writeSignedProperties(
+        const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler,
+        const SignatureInformation& signatureInfo,
+        const OUString& sDate);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREHELPER_HXX
