@@ -1245,13 +1245,20 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     if( ::GetTextFaceW( getHDC(), sizeof(aFaceName)/sizeof(wchar_t), aFaceName ) )
         rxFontMetric->SetFamilyName(OUString(reinterpret_cast<const sal_Unicode*>(aFaceName)));
 
+    const DWORD nHheaTag = CalcTag("hhea");
+    const DWORD nOS2Tag = CalcTag("OS/2");
+    const RawFontData aHheaRawData(getHDC(), nHheaTag);
+    const RawFontData aOS2RawData(getHDC(), nOS2Tag);
+
     // get the font metric
-    TEXTMETRICA aWinMetric;
-    const bool bOK = GetTextMetricsA( getHDC(), &aWinMetric );
+    OUTLINETEXTMETRICW aOutlineMetric;
+    const bool bOK = GetOutlineTextMetricsW(getHDC(), sizeof(OUTLINETEXTMETRICW), &aOutlineMetric);
     // restore the HDC to the font in the base level
     SelectFont( getHDC(), hOldFont );
     if( !bOK )
         return;
+
+    TEXTMETRICW aWinMetric = aOutlineMetric.otmTextMetrics;
 
     // device independent font attributes
     rxFontMetric->SetFamilyType(ImplFamilyToSal( aWinMetric.tmPitchAndFamily ));
@@ -1282,33 +1289,10 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
 
     // transformation dependent font metrics
     rxFontMetric->SetWidth( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmAveCharWidth ) );
-    rxFontMetric->SetInternalLeading( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmInternalLeading ) );
-    rxFontMetric->SetExternalLeading( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmExternalLeading ) );
-    rxFontMetric->SetAscent( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmAscent ) );
-    rxFontMetric->SetDescent( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmDescent ) );
 
-    // #107888# improved metric compatibility for Asian fonts...
-    // TODO: assess workaround below for CWS >= extleading
-    // TODO: evaluate use of aWinMetric.sTypo* members for CJK
-    if( mpWinFontData[nFallbackLevel] && mpWinFontData[nFallbackLevel]->SupportsCJK() )
-    {
-        rxFontMetric->SetInternalLeading( rxFontMetric->GetInternalLeading() + rxFontMetric->GetExternalLeading() );
-
-        // #109280# The line height for Asian fonts is too small.
-        // Therefore we add half of the external leading to the
-        // ascent, the other half is added to the descent.
-        const long nHalfTmpExtLeading = rxFontMetric->GetExternalLeading() / 2;
-        const long nOtherHalfTmpExtLeading = rxFontMetric->GetExternalLeading() - nHalfTmpExtLeading;
-
-        // #110641# external leading for Asian fonts.
-        // The factor 0.3 has been confirmed with experiments.
-        long nCJKExtLeading = static_cast<long>(0.30 * (rxFontMetric->GetAscent() + rxFontMetric->GetDescent()));
-        nCJKExtLeading -= rxFontMetric->GetExternalLeading();
-        rxFontMetric->SetExternalLeading( (nCJKExtLeading > 0) ? nCJKExtLeading : 0 );
-
-        rxFontMetric->SetAscent( rxFontMetric->GetAscent() + nHalfTmpExtLeading );
-        rxFontMetric->SetDescent(  rxFontMetric->GetDescent() + nOtherHalfTmpExtLeading );
-    }
+    const std::vector<uint8_t> rHhea(aHheaRawData.get(), aHheaRawData.get() + aHheaRawData.size());
+    const std::vector<uint8_t> rOS2(aOS2RawData.get(), aOS2RawData.get() + aOS2RawData.size());
+    rxFontMetric->ImplCalcLineSpacing(rHhea, rOS2, aOutlineMetric.otmEMSquare);
 
     rxFontMetric->SetMinKashida( GetMinKashidaWidth() );
 }
