@@ -181,9 +181,6 @@ private:
 
     SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
-    //UUUU
-    void EnableDrawingLayerFillStyles(bool bNew) { mbEnableDrawingLayerFillStyles = bNew; }
-
 protected:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;

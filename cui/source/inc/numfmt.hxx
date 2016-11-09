@@ -78,8 +78,6 @@ public:
     virtual void            Reset( const SfxItemSet* rSet ) override;
     virtual DeactivateRC    DeactivatePage  ( SfxItemSet* pSet ) override;
 
-    void                    SetInfoItem( const SvxNumberInfoItem& rItem );
-
     void                    HideLanguage(bool bFlag=true);
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;

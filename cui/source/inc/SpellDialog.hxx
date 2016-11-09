@@ -204,7 +204,6 @@ private:
     void            LockFocusChanges( bool bLock ) {bFocusLocked = bLock;}
     void            Impl_Restore(bool bUseSavedSentence);
 
-    void            SetSelectedLang_Impl( LanguageType nLang );
     LanguageType    GetSelectedLang_Impl() const;
 
     /** Retrieves the next sentence.

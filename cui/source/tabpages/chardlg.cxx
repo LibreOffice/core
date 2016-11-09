@@ -1319,12 +1319,6 @@ void SvxCharNamePage::DisableControls( sal_uInt16 nDisable )
 }
 
 
-void SvxCharNamePage::SetPreviewBackgroundToCharacter()
-{
-    m_bPreviewBackgroundToCharacter = true;
-}
-
-
 void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SvxFontListItem* pFontListItem = aSet.GetItem<SvxFontListItem>(SID_ATTR_CHAR_FONTLIST, false);
@@ -1339,7 +1333,8 @@ void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
         if ( ( nFlags & SVX_RELATIVE_MODE ) == SVX_RELATIVE_MODE )
             EnableRelativeMode();
         if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
-            SetPreviewBackgroundToCharacter();
+            // the writer uses SID_ATTR_BRUSH as font background
+            m_bPreviewBackgroundToCharacter = true;
     }
     if (pDisalbeItem)
         DisableControls(pDisalbeItem->GetValue());
@@ -2466,12 +2461,6 @@ void SvxCharEffectsPage::DisableControls( sal_uInt16 nDisable )
     }
 }
 
-void SvxCharEffectsPage::SetPreviewBackgroundToCharacter()
-{
-    m_bPreviewBackgroundToCharacter = true;
-}
-
-
 void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SfxUInt16Item* pDisableCtlItem = aSet.GetItem<SfxUInt16Item>(SID_DISABLE_CTL, false);
@@ -2485,7 +2474,8 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
         if ( ( nFlags & SVX_ENABLE_FLASH ) == SVX_ENABLE_FLASH )
             m_pBlinkingBtn->Show();
         if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
-            SetPreviewBackgroundToCharacter();
+            // the writer uses SID_ATTR_BRUSH as font background
+            m_bPreviewBackgroundToCharacter = true;
     }
 }
 
@@ -3133,11 +3123,6 @@ void SvxCharPositionPage::FillUserData()
 }
 
 
-void SvxCharPositionPage::SetPreviewBackgroundToCharacter()
-{
-    m_bPreviewBackgroundToCharacter = true;
-}
-
 void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_FLAG_TYPE, false);
@@ -3145,7 +3130,8 @@ void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
-            SetPreviewBackgroundToCharacter();
+            // the writer uses SID_ATTR_BRUSH as font background
+            m_bPreviewBackgroundToCharacter = true;
     }
 }
 // class SvxCharTwoLinesPage ------------------------------------------------
@@ -3363,12 +3349,6 @@ void    SvxCharTwoLinesPage::UpdatePreview_Impl()
     m_pPreviewWin->Invalidate();
 }
 
-void SvxCharTwoLinesPage::SetPreviewBackgroundToCharacter()
-{
-    m_bPreviewBackgroundToCharacter = true;
-}
-
-
 void SvxCharTwoLinesPage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_FLAG_TYPE, false);
@@ -3376,7 +3356,8 @@ void SvxCharTwoLinesPage::PageCreated(const SfxAllItemSet& aSet)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
-            SetPreviewBackgroundToCharacter();
+            // the writer uses SID_ATTR_BRUSH as font background
+            m_bPreviewBackgroundToCharacter = true;
     }
 }
 

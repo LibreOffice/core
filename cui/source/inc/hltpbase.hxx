@@ -146,8 +146,6 @@ protected:
 
     HyperDialogEvent   GetMacroEvents();
     SvxMacroTableDtor* GetMacroTable();
-
-    bool IsHTMLDoc() const;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_HLTPBASE_HXX

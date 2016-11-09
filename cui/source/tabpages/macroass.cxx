@@ -373,7 +373,11 @@ IMPL_LINK( SfxMacroTabPage, TimeOut_Impl, Idle*,, void )
         pTabDlg->EnterWait();
         pTabDlg->EnableInput( false );
     }
-    FillMacroList();
+    // fill macro list
+    mpImpl->pGroupLB->Init(
+        css::uno::Reference<css::uno::XComponentContext >(),
+        GetFrame(),
+        OUString(), false);
     if ( pTabDlg )
     {
         pTabDlg->EnableInput();
@@ -412,15 +416,6 @@ void SfxMacroTabPage::InitAndSetHandler()
 
     mpImpl->pGroupLB->SetFunctionListBox( mpImpl->pMacroLB );
 
-}
-
-void SfxMacroTabPage::FillMacroList()
-{
-    mpImpl->pGroupLB->Init(
-        css::uno::Reference<
-            css::uno::XComponentContext >(),
-        GetFrame(),
-        OUString(), false);
 }
 
 void SfxMacroTabPage::FillEvents()
