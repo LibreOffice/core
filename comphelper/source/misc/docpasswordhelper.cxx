@@ -74,9 +74,9 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
     uno::Sequence< beans::PropertyValue > aResult;
 
     uno::Sequence< sal_Int8 > aSalt = GenerateRandomByteSequence( 16 );
-    sal_Int32 nCount = 1024;
+    sal_Int32 const nPBKDF2IterationCount = 100000;
 
-    uno::Sequence< sal_Int8 > aNewHash = GeneratePBKDF2Hash( aPassword, aSalt, nCount, 16 );
+    uno::Sequence< sal_Int8 > aNewHash = GeneratePBKDF2Hash(aPassword, aSalt, nPBKDF2IterationCount, 16);
     if ( aNewHash.getLength() )
     {
         aResult.realloc( 4 );
@@ -85,7 +85,7 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
         aResult[1].Name = "salt";
         aResult[1].Value <<= aSalt;
         aResult[2].Name = "iteration-count";
-        aResult[2].Value <<= nCount;
+        aResult[2].Value <<= nPBKDF2IterationCount;
         aResult[3].Name = "hash";
         aResult[3].Value <<= aNewHash;
     }
