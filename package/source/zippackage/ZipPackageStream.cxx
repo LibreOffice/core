@@ -655,7 +655,7 @@ bool ZipPackageStream::saveChild(
                 uno::Sequence < sal_Int8 > aSalt( 16 ), aVector( GetBlockSize() );
                 rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
                 rtl_random_getBytes ( rRandomPool, aVector.getArray(), aVector.getLength() );
-                sal_Int32 nIterationCount = 1024;
+                sal_Int32 const nPBKDF2IterationCount = 100000;
 
                 if ( !m_bHaveOwnKey )
                 {
@@ -665,7 +665,7 @@ bool ZipPackageStream::saveChild(
 
                 setInitialisationVector ( aVector );
                 setSalt ( aSalt );
-                setIterationCount ( nIterationCount );
+                setIterationCount(nPBKDF2IterationCount);
             }
 
             // last property is digest, which is inserted later if we didn't have
