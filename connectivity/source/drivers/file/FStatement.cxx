@@ -308,11 +308,6 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aRet.hasValue() ? aRet : OStatement_BASE2::queryInterface( rType);
 }
 
-OSQLAnalyzer* OStatement_Base::createAnalyzer()
-{
-    return new OSQLAnalyzer(m_pConnection.get());
-}
-
 void OStatement_Base::anylizeSQL()
 {
     OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::anylizeSQL: Analyzer isn't set!");
@@ -436,7 +431,7 @@ void OStatement_Base::construct(const OUString& sql)  throw(SQLException, Runtim
         // create the column mapping
         createColumnMapping();
 
-        m_pSQLAnalyzer  = createAnalyzer();
+        m_pSQLAnalyzer = new OSQLAnalyzer(m_pConnection.get());
 
         Reference<XIndexesSupplier> xIndexSup(xTunnel,UNO_QUERY);
         if(xIndexSup.is())

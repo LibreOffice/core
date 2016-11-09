@@ -76,8 +76,6 @@ namespace connectivity
 
             SQLRETURN       OpenConnection(const OUString& aConnectStr,sal_Int32 nTimeOut, bool bSilent);
 
-            OConnection*    cloneConnection(); // creates a new connection
-
         public:
             oslGenericFunction  getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const;
             SQLRETURN       Construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info) throw(css::sdbc::SQLException, std::exception);

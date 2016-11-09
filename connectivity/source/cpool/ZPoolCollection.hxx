@@ -85,7 +85,6 @@ namespace connectivity
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
         // some configuration helper methods
-        css::uno::Reference< css::uno::XInterface > createWithServiceFactory(const OUString& _rPath) const;
         css::uno::Reference< css::uno::XInterface > const & getConfigPoolRoot();
         static css::uno::Reference< css::uno::XInterface > createWithProvider(   const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
                                                                                                     const OUString& _rPath);

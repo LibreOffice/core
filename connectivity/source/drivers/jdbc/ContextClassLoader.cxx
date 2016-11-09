@@ -92,7 +92,7 @@ namespace connectivity { namespace jdbc
     }
 
 
-    void ContextClassLoaderScope::pop()
+    ContextClassLoaderScope::~ContextClassLoaderScope()
     {
         if ( isActive() )
         {

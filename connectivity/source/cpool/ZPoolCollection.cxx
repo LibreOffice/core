@@ -252,7 +252,9 @@ bool OPoolCollection::isPoolingEnabled()
 Reference<XInterface> const & OPoolCollection::getConfigPoolRoot()
 {
     if(!m_xConfigNode.is())
-        m_xConfigNode = createWithServiceFactory(getConnectionPoolNodeName());
+        m_xConfigNode = createWithProvider(
+            css::configuration::theDefaultProvider::get(m_xContext),
+            getConnectionPoolNodeName());
     return m_xConfigNode;
 }
 
@@ -310,13 +312,6 @@ OConnectionPool* OPoolCollection::getConnectionPool(const OUString& _sImplName,
     OSL_ENSURE(pRet, "Could not query DriverManager from ConnectionPool!");
 
     return pRet;
-}
-
-Reference< XInterface > OPoolCollection::createWithServiceFactory(const OUString& _rPath) const
-{
-    return createWithProvider(
-        css::configuration::theDefaultProvider::get(m_xContext),
-        _rPath);
 }
 
 Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider,

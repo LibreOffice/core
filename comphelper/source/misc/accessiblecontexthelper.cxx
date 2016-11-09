@@ -81,15 +81,17 @@ namespace comphelper
     }
 
 
-    void OAccessibleContextHelper::forgetExternalLock()
-    {
-        m_pImpl->setExternalLock( nullptr );
-    }
-
-
     OAccessibleContextHelper::~OAccessibleContextHelper( )
     {
-        forgetExternalLock();
+        /* forgets the reference to the external lock, if present.
+
+           <p>This means any further locking will not be guard the external lock anymore, never.</p>
+
+           <p>To be used in derived classes which do not supply the external lock themself, but instead get
+           them passed from own derivees (or clients).</p>
+        */
+        m_pImpl->setExternalLock( nullptr );
+
             // this ensures that the lock, which may be already destroyed as part of the derivee,
             // is not used anymore
 

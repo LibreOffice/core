@@ -140,16 +140,6 @@ namespace comphelper
         css::uno::Reference< css::accessibility::XAccessible >
                 getAccessibleCreator( ) const;
 
-    private:
-        /** forgets the reference to the external lock, if present.
-
-            <p>This means any further locking will not be guard the external lock anymore, never.</p>
-
-            <p>To be used in derived classes which do not supply the external lock themself, but instead get
-            them passed from own derivees (or clients).</p>
-        */
-        void    forgetExternalLock();
-
     public:
         // XAccessibleEventBroadcaster
         virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;

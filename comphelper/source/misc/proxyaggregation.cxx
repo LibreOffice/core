@@ -190,7 +190,11 @@ namespace comphelper
 
     OComponentProxyAggregation::~OComponentProxyAggregation()
     {
-        implEnsureDisposeInDtor( );
+        if ( !rBHelper.bDisposed )
+        {
+            acquire();  // to prevent duplicate dtor calls
+            dispose();
+        }
     }
 
 
@@ -210,16 +214,6 @@ namespace comphelper
         aTypes[ nLen ] = cppu::UnoType<XComponent>::get();
 
         return aTypes;
-    }
-
-
-    void OComponentProxyAggregation::implEnsureDisposeInDtor( )
-    {
-        if ( !rBHelper.bDisposed )
-        {
-            acquire();  // to prevent duplicate dtor calls
-            dispose();
-        }
     }
 
 
