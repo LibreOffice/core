@@ -736,6 +736,11 @@ void ScBroadcastAreaSlotMachine::StartListeningArea(
     }
     else
     {
+        // A new area needs to be inserted to the corresponding slots, for 3D
+        // ranges for all sheets, do not slice into per sheet areas or the
+        // !bDone will break too early (i.e. after the first sheet) if
+        // subsequent listeners are to be added.
+        ScBroadcastArea* pArea = nullptr;
         bool bDone = false;
         for (SCTAB nTab = rRange.aStart.Tab();
                 !bDone && nTab <= rRange.aEnd.Tab(); ++nTab)
@@ -750,7 +755,6 @@ void ScBroadcastAreaSlotMachine::StartListeningArea(
             SCSIZE nOff = nStart;
             SCSIZE nBreak = nOff + nRowBreak;
             ScBroadcastAreaSlot** pp = ppSlots + nOff;
-            ScBroadcastArea* pArea = nullptr;
             while ( !bDone && nOff <= nEnd )
             {
                 if ( !*pp )
