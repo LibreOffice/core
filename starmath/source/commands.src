@@ -903,6 +903,11 @@ String RID_SLMRANGLEXY_HELP
 {
     Text [ en-US ] = "Operator Brackets (Scalable)" ;
 };
+String RID_XEVALUATEDATY     { Text = "left none {<?>} right rline_{<?>} " ; };
+String RID_XEVALUATEDATY_HELP
+{
+    Text [ en-US ] = "Evaluated At" ;
+};
 String RID_XOVERBRACEY      { Text = "{<?>} overbrace {<?>} " ; };
 String RID_XOVERBRACEY_HELP
 {
@@ -2313,6 +2318,12 @@ Menu RID_COMMANDMENU
                         Identifier = RID_SLRDLINEX;
                         HelpId = HID_SMA_SLRDLINEX;
                         Text = "left ldline x right rdline";
+                    };
+                    MenuItem
+                    {
+                        Identifier = RID_XEVALUATEDATY;
+                        HelpId = HID_SMA_XEVALUATEDATY;
+                        Text = "left none x right rline_y";
                     };
                     MenuItem
                     {

@@ -416,6 +416,7 @@
 #define RID_SLRDBRACKETX            (RID_APP_START + 1824)
 #define RID_XOVERBRACEY             (RID_APP_START + 1825)
 #define RID_XUNDERBRACEY            (RID_APP_START + 1826)
+#define RID_XEVALUATEDATY           (RID_APP_START + 1827)
 
 #define RID_NEWLINE                 (RID_APP_START + 1901)
 #define RID_SBLANK                  (RID_APP_START + 1902)
@@ -667,6 +668,8 @@
 #define RID_COLORX_PURPLE_HELP      (RID_APP_START + 4198)
 #define RID_COLORX_SILVER_HELP      (RID_APP_START + 4199)
 #define RID_COLORX_TEAL_HELP        (RID_APP_START + 4200)
+
+#define RID_XEVALUATEDATY_HELP      (RID_APP_START + 4201)
 
 #define RID_ALIGNLX_HELP                  (RID_APP_START + 4275)
 #define RID_ALIGNCX_HELP                  (RID_APP_START + 4276)
