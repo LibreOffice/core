@@ -230,12 +230,7 @@ struct SubRun
     int32_t mnMin;
     int32_t mnEnd;
     UScriptCode maScript;
-
-    SubRun(int32_t nMin, int32_t nEnd, UScriptCode aScript)
-      : mnMin(nMin)
-      , mnEnd(nEnd)
-      , maScript(aScript)
-    {}
+    hb_direction_t maDirection;
 };
 
 namespace vcl {
@@ -349,47 +344,6 @@ void CommonSalLayout::DrawText(SalGraphics& rSalGraphics) const
     rSalGraphics.DrawSalLayout( *this );
 }
 
-/* https://drafts.csswg.org/css-writing-modes-3/#script-orientations */
-static int GetVerticalFlagsForScript(UScriptCode aScript)
-{
-    int nFlag = GF_NONE;
-
-    switch (aScript)
-    {
-        /* ttb 0° */
-        case USCRIPT_BOPOMOFO:
-        case USCRIPT_EGYPTIAN_HIEROGLYPHS:
-        case USCRIPT_HAN:
-        case USCRIPT_HANGUL:
-        case USCRIPT_HIRAGANA:
-        case USCRIPT_KATAKANA:
-        case USCRIPT_MEROITIC_CURSIVE:
-        case USCRIPT_MEROITIC_HIEROGLYPHS:
-        case USCRIPT_TANGUT:
-        case USCRIPT_YI:
-            nFlag = GF_ROTL;
-            break;
-#if 0
-        /* ttb -90° */
-        case USCRIPT_ORKHON:
-            nFlag = ??;
-            break;
-        /* btt -90° */
-        case USCRIPT_OGHAM:
-            nFlag = ??;
-            break;
-#endif
-        /* ttb 90°, no extra rotation needed */
-        case USCRIPT_MONGOLIAN:
-        case USCRIPT_PHAGS_PA:
-        /* horizontal scripts */
-        default:
-            break;
-    }
-
-    return nFlag;
-}
-
 bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 {
     hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
@@ -451,8 +405,40 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
         {
             int32_t nMinRunPos = nCurrentPos;
             int32_t nEndRunPos = std::min(pTextLayout->runs[k].nEnd, nBidiEndRunPos);
-            SubRun aSubRun(nMinRunPos, nEndRunPos, pTextLayout->runs[k].nCode);
-            aSubRuns.push_back(aSubRun);
+            hb_direction_t aDirection = bRightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
+            UScriptCode aScript = pTextLayout->runs[k].nCode;
+
+            // For vertical text, further divide the runs based on character
+            // orientation.
+            if (rArgs.mnFlags & SalLayoutFlags::Vertical)
+            {
+                int32_t nIdx = nMinRunPos;
+                while (nIdx < nEndRunPos)
+                {
+                    int32_t nPrevIndx = nIdx;
+                    sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&nIdx);
+                    switch (vcl::GetVerticalOrientation(aChar))
+                    {
+                    case VerticalOrientation::Upright:
+                    case VerticalOrientation::TransformedUpright:
+                    case VerticalOrientation::TransformedRotated:
+                        aDirection = HB_DIRECTION_TTB;
+                        break;
+                    default:
+                        aDirection = bRightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
+                        break;
+                    }
+
+                    if (aSubRuns.empty() || aSubRuns.back().maDirection != aDirection)
+                        aSubRuns.push_back({ nPrevIdx, nIdx, aScript, aDirection });
+                    else
+                        aSubRuns.back().mnEnd = nIdx;
+                }
+            }
+            else
+            {
+                aSubRuns.push_back({ nMinRunPos, nEndRunPos, aScript, aDirection });
+            }
 
             nCurrentPos = nEndRunPos;
             ++k;
@@ -476,23 +462,13 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             if (sLanguage.isEmpty())
                 sLanguage = OUStringToOString(rArgs.maLanguageTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
 
-            bool bVertical = false;
-            if ((rArgs.mnFlags & SalLayoutFlags::Vertical) &&
-                GetVerticalFlagsForScript(aSubRun.maScript) == GF_ROTL)
-            {
-                bVertical = true;
-            }
-
             int nHbFlags = HB_BUFFER_FLAGS_DEFAULT;
             if (nMinRunPos == 0)
                 nHbFlags |= HB_BUFFER_FLAG_BOT; /* Beginning-of-text */
             if (nEndRunPos == nLength)
                 nHbFlags |= HB_BUFFER_FLAG_EOT; /* End-of-text */
 
-            if (bVertical)
-                hb_buffer_set_direction(pHbBuffer, HB_DIRECTION_TTB);
-            else
-                hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
+            hb_buffer_set_direction(pHbBuffer, aSubRun.maDirection);
             hb_buffer_set_script(pHbBuffer, aHbScript);
             hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
             hb_buffer_set_flags(pHbBuffer, (hb_buffer_flags_t) nHbFlags);
@@ -569,7 +545,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                     nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
                 DeviceCoordinate nAdvance, nXOffset, nYOffset;
-                if (bVertical)
+                if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
                     nGlyphIndex |= GF_ROTL;
                     nAdvance = -pHbPositions[i].y_advance * nYScale;
