@@ -638,7 +638,7 @@ void SAL_CALL PasswordContainer::addPersistent( const OUString& Url, const OUStr
 void PasswordContainer::PrivateAdd( const OUString& Url, const OUString& UserName, const Sequence< OUString >& Passwords, char Mode, const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException, std::exception)
 {
     NamePassRecord aRecord( UserName );
-    ::std::vector< OUString > aStorePass = comphelper::sequenceToContainer< std::vector<OUString>, OUString>( Passwords );
+    ::std::vector< OUString > aStorePass = comphelper::sequenceToContainer< std::vector<OUString> >( Passwords );
 
     if( Mode == PERSISTENT_RECORD )
         aRecord.SetPersPasswords( EncodePasswords( aStorePass, GetMasterPassword( aHandler ) ) );
