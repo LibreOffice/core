@@ -127,12 +127,25 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef& rxFontMetric ) const
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
-    const CGFloat fAscent = CTFontGetAscent( aCTFontRef );
-    const CGFloat fCapHeight = CTFontGetCapHeight( aCTFontRef );
-    rxFontMetric->SetAscent( lrint( fAscent ) );
-    rxFontMetric->SetDescent( lrint( CTFontGetDescent( aCTFontRef )) );
-    rxFontMetric->SetExternalLeading( lrint( CTFontGetLeading( aCTFontRef )) );
-    rxFontMetric->SetInternalLeading( lrint( fAscent - fCapHeight ) );
+    int nBufSize = 0;
+    std::vector<uint8_t> rHhea;
+    std::vector<uint8_t> rOS2;
+
+    nBufSize = mpFontData->GetFontTable("hhea", nullptr);
+    if (nBufSize > 0)
+    {
+        rHhea.resize(nBufSize);
+        mpFontData->GetFontTable("OS/2", &rHhea[0]);
+    }
+
+    nBufSize = mpFontData->GetFontTable("OS/2", nullptr);
+    if (nBufSize > 0)
+    {
+        rOS2.resize(nBufSize);
+        mpFontData->GetFontTable("OS/2", &rOS2[0]);
+    }
+
+    rxFontMetric->ImplCalcLineSpacing(rHhea, rOS2, CTFontGetUnitsPerEm(aCTFontRef));
 
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough

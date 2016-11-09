@@ -98,9 +98,13 @@ public:
 
     void            ImplInitTextLineSize( const OutputDevice* pDev );
     void            ImplInitAboveTextLineSize();
+    void            ImplCalcLineSpacing(const std::vector<uint8_t>& rHhea,
+                                        const std::vector<uint8_t>& rOS_2,
+                                        int nUPEM);
 
 private:
     // font instance attributes from the font request
+    long            mnHeight;                   // Font size
     long            mnWidth;                    // Reference Width
     short           mnOrientation;              // Rotation in 1/10 degrees
 
