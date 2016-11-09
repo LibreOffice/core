@@ -131,8 +131,7 @@ void SvgData::ensureSequenceAndRange()
             {
                 const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
 
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>,
-                                                             css::uno::Reference< css::graphic::XPrimitive2D >>(xSvgParser->getDecomposition(myInputStream, maPath));
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));
             }
             catch(const uno::Exception&)
             {

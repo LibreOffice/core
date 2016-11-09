@@ -332,8 +332,8 @@ namespace comphelper
         truncated. There's currently no measure to prevent or detect
         precision loss, overflow or truncation.
      */
-    template < typename DstType, typename SrcType >
-    inline DstType sequenceToContainer( const css::uno::Sequence< SrcType >& i_Sequence )
+    template < typename DstType >
+    inline DstType sequenceToContainer( const css::uno::Sequence< typename DstType::value_type >& i_Sequence )
     {
         DstType result( i_Sequence.getLength() );
         ::std::copy( i_Sequence.begin(), i_Sequence.end(), result.begin() );
