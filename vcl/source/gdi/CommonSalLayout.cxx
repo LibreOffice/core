@@ -267,7 +267,34 @@ namespace vcl {
             }
         }
     };
-}
+
+    #include "VerticalOrientationData.cxx"
+
+    VerticalOrientation GetVerticalOrientation(sal_UCS4 cCh)
+    {
+        uint8_t nRet = 1;
+
+        if (cCh < 0x10000)
+        {
+            nRet = sVerticalOrientationValues[sVerticalOrientationPages[0][cCh >> kVerticalOrientationCharBits]]
+                                  [cCh & ((1 << kVerticalOrientationCharBits) - 1)];
+        }
+        else if (cCh < (kVerticalOrientationMaxPlane + 1) * 0x10000)
+        {
+            nRet = sVerticalOrientationValues[sVerticalOrientationPages[sVerticalOrientationPlanes[(cCh >> 16) - 1]]
+                                                   [(cCh & 0xffff) >> kVerticalOrientationCharBits]]
+                                   [cCh & ((1 << kVerticalOrientationCharBits) - 1)];
+        }
+        else
+        {
+            // Default value for unassigned
+            SAL_WARN("vcl.gdi", "Getting VerticalOrientation for codepoint outside Unicode range");
+        }
+
+        return VerticalOrientation(nRet);
+    }
+
+} // namespace vcl
 
 std::shared_ptr<vcl::TextLayoutCache> CommonSalLayout::CreateTextLayoutCache(OUString const& rString) const
 {
