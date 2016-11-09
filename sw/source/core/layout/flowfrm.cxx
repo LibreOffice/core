@@ -587,6 +587,7 @@ void SwFlowFrame::MoveSubTree( SwLayoutFrame* pParent, SwFrame* pSibling )
         //SwSectionFrame::MergeNext removing the pParent we're trying to reparent
         //into
         FlowFrameJoinLockGuard aJoinGuard(pParent);
+        SwFrameDeleteGuard aDeleteGuard(pParent);
         pOldParent = CutTree( &m_rThis );
         bInvaLay = PasteTree( &m_rThis, pParent, pSibling, pOldParent );
     }

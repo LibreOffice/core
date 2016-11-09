@@ -963,8 +963,11 @@ void SwContentFrame::Cut()
                         if( pTmp )
                             pTmp->InvalidatePrt_();
                     }
-                    pUp->Cut();
-                    SwFrame::DestroyFrame(pUp);
+                    if (!pUp->IsDeleteForbidden())
+                    {
+                        pUp->Cut();
+                        SwFrame::DestroyFrame(pUp);
+                    }
                 }
                 else
                 {
