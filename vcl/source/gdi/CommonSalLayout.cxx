@@ -225,20 +225,18 @@ CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
 }
 #endif
 
-struct HbScriptRun
+struct SubRun
 {
     int32_t mnMin;
     int32_t mnEnd;
     UScriptCode maScript;
 
-    HbScriptRun(int32_t nMin, int32_t nEnd, UScriptCode aScript)
+    SubRun(int32_t nMin, int32_t nEnd, UScriptCode aScript)
       : mnMin(nMin)
       , mnEnd(nEnd)
       , maScript(aScript)
     {}
 };
-
-typedef std::vector<HbScriptRun> HbScriptRuns;
 
 namespace vcl {
     struct Run
@@ -411,7 +409,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
         // Find script subruns.
         int nCurrentPos = nBidiMinRunPos;
-        HbScriptRuns aScriptSubRuns;
+        std::vector<SubRun> aSubRuns;
         size_t k = 0;
         for (; k < pTextLayout->runs.size(); ++k)
         {
@@ -426,8 +424,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
         {
             int32_t nMinRunPos = nCurrentPos;
             int32_t nEndRunPos = std::min(pTextLayout->runs[k].nEnd, nBidiEndRunPos);
-            HbScriptRun aRun(nMinRunPos, nEndRunPos, pTextLayout->runs[k].nCode);
-            aScriptSubRuns.push_back(aRun);
+            SubRun aSubRun(nMinRunPos, nEndRunPos, pTextLayout->runs[k].nCode);
+            aSubRuns.push_back(aSubRun);
 
             nCurrentPos = nEndRunPos;
             ++k;
@@ -436,16 +434,16 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
         // RTL subruns should be reversed to ensure that final glyph order is
         // correct.
         if (bRightToLeft)
-            std::reverse(aScriptSubRuns.begin(), aScriptSubRuns.end());
+            std::reverse(aSubRuns.begin(), aSubRuns.end());
 
-        for (const auto& aScriptRun : aScriptSubRuns)
+        for (const auto& aSubRun : aSubRuns)
         {
             hb_buffer_clear_contents(pHbBuffer);
 
-            int nMinRunPos = aScriptRun.mnMin;
-            int nEndRunPos = aScriptRun.mnEnd;
+            int nMinRunPos = aSubRun.mnMin;
+            int nEndRunPos = aSubRun.mnEnd;
             int nRunLen = nEndRunPos - nMinRunPos;
-            aHbScript = hb_icu_script_to_script(aScriptRun.maScript);
+            aHbScript = hb_icu_script_to_script(aSubRun.maScript);
 
             OString sLanguage = msLanguage;
             if (sLanguage.isEmpty())
@@ -453,7 +451,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
             bool bVertical = false;
             if ((rArgs.mnFlags & SalLayoutFlags::Vertical) &&
-                GetVerticalFlagsForScript(aScriptRun.maScript) == GF_ROTL)
+                GetVerticalFlagsForScript(aSubRun.maScript) == GF_ROTL)
             {
                 bVertical = true;
             }
