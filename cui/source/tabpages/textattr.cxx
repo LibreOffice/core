@@ -411,7 +411,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
                 OSL_FAIL( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
                 SAL_FALLTHROUGH;
             case TRISTATE_FALSE: eFTS = SdrFitToSizeType::NONE; break;
-            case TRISTATE_TRUE: eFTS = SdrFitToSizeType::Autofit; break;
+            case TRISTATE_TRUE: eFTS = SdrFitToSizeType::Proportional; break;
         }
         rAttrs->Put( SdrTextFitToSizeTypeItem( eFTS ) );
     }
