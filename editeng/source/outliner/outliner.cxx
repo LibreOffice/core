@@ -168,7 +168,7 @@ void Outliner::ParagraphDeleted( sal_Int32 nPara )
 
     if( !pEditEngine->IsInUndo() )
     {
-        ParagraphRemovingHdl(pPara);
+        aParaRemovingHdl.Call( { this, pPara } );
     }
 
     pParaList->Remove( nPara );
@@ -820,7 +820,7 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     if ( !pEditEngine->IsFlatMode() )
     {
         ESelection aSel( nPara, 0, nPara, 0 );
-        aStdFont = EditEngine::CreateFontFromItemSet( pEditEngine->GetAttribs( aSel ), GetScriptType( aSel ) );
+        aStdFont = EditEngine::CreateFontFromItemSet( pEditEngine->GetAttribs( aSel ), pEditEngine->GetScriptType( aSel ) );
     }
     else
     {
@@ -1341,13 +1341,6 @@ void Outliner::ParagraphInsertedHdl(Paragraph* pPara)
 {
     if( !IsInUndo() )
         aParaInsertedHdl.Call( { this, pPara } );
-}
-
-
-void Outliner::ParagraphRemovingHdl(Paragraph* pPara)
-{
-    if( !IsInUndo() )
-        aParaRemovingHdl.Call( { this, pPara } );
 }
 
 

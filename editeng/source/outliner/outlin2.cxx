@@ -551,11 +551,6 @@ EEHorizontalTextDirection Outliner::GetDefaultHorizontalTextDirection() const
     return pEditEngine->GetDefaultHorizontalTextDirection();
 }
 
-SvtScriptType Outliner::GetScriptType( const ESelection& rSelection ) const
-{
-    return pEditEngine->GetScriptType( rSelection );
-}
-
 LanguageType Outliner::GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const
 {
     return pEditEngine->GetLanguage( nPara, nPos );

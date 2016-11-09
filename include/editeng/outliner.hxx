@@ -694,7 +694,6 @@ public:
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir );
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const;
 
-    SvtScriptType   GetScriptType( const ESelection& rSelection ) const;
     LanguageType    GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const;
 
     void            SetAsianCompressionMode( sal_uInt16 nCompressionMode );
@@ -763,7 +762,6 @@ public:
     void            SetParaInsertedHdl(const Link<ParagraphHdlParam,void>& rLink){aParaInsertedHdl=rLink;}
     const Link<ParagraphHdlParam,void>& GetParaInsertedHdl() const { return aParaInsertedHdl; }
 
-    void            ParagraphRemovingHdl(Paragraph*);
     void            SetParaRemovingHdl(const Link<ParagraphHdlParam,void>& rLink){aParaRemovingHdl=rLink;}
     const Link<ParagraphHdlParam,void>& GetParaRemovingHdl() const { return aParaRemovingHdl; }
 

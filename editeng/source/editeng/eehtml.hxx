@@ -35,10 +35,10 @@ class EditHTMLParser : public HTMLParser
 {
     using HTMLParser::CallParser;
 private:
-    OUStringBuffer maStyleSource;
+    OUStringBuffer          maStyleSource;
     EditSelection           aCurSel;
     OUString                aBaseURL;
-    EditEngine* mpEditEngine;
+    EditEngine*             mpEditEngine;
     AnchorInfo*             pCurAnchor;
 
     bool                    bInPara:1;
@@ -46,9 +46,9 @@ private:
     bool                    bFieldsInserted:1;
     bool                    bInTitle:1;
 
-    sal_uInt8                   nInTable;
-    sal_uInt8                   nInCell;
-    sal_uInt8                   nDefListLevel;
+    sal_uInt8               nInTable;
+    sal_uInt8               nInCell;
+    sal_uInt8               nDefListLevel;
 
     void                    StartPara( bool bReal );
     void                    EndPara( bool bReal );

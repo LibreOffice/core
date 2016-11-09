@@ -148,10 +148,6 @@ namespace accessibility
         AccessibleImageBullet( const AccessibleImageBullet& ) = delete;
         AccessibleImageBullet& operator= ( const AccessibleImageBullet& ) = delete;
 
-        // syntactic sugar for FireEvent
-        void GotPropertyEvent( const css::uno::Any& rNewValue, const sal_Int16 nEventId ) const;
-        void LostPropertyEvent( const css::uno::Any& rOldValue, const sal_Int16 nEventId ) const;
-
         // maintain state set and send STATE_CHANGE events
         void SetState( const sal_Int16 nStateId );
         void UnSetState( const sal_Int16 nStateId );

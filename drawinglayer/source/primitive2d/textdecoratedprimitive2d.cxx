@@ -346,16 +346,6 @@ namespace drawinglayer
         {
         }
 
-        bool TextDecoratedPortionPrimitive2D::decoratedIsNeeded() const
-        {
-            return (TEXT_LINE_NONE != getFontOverline()
-                 || TEXT_LINE_NONE != getFontUnderline()
-                 || TEXT_STRIKEOUT_NONE != getTextStrikeout()
-                 || TEXT_FONT_EMPHASIS_MARK_NONE != getTextEmphasisMark()
-                 || TEXT_RELIEF_NONE != getTextRelief()
-                 || getShadow());
-        }
-
         bool TextDecoratedPortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(TextSimplePortionPrimitive2D::operator==(rPrimitive))
@@ -384,7 +374,14 @@ namespace drawinglayer
         // inking area, so add them if needed
         basegfx::B2DRange TextDecoratedPortionPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(decoratedIsNeeded())
+            // check if this needs to be a TextDecoratedPortionPrimitive2D or
+            // if a TextSimplePortionPrimitive2D would be suficcient
+            if (TEXT_LINE_NONE != getFontOverline()
+                 || TEXT_LINE_NONE != getFontUnderline()
+                 || TEXT_STRIKEOUT_NONE != getTextStrikeout()
+                 || TEXT_FONT_EMPHASIS_MARK_NONE != getTextEmphasisMark()
+                 || TEXT_RELIEF_NONE != getTextRelief()
+                 || getShadow())
             {
                 // decoration is used, fallback to BufferedDecompositionPrimitive2D::getB2DRange which uses
                 // the own local decomposition for computation and thus creates all necessary

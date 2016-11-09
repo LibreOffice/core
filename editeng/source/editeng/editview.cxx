@@ -193,7 +193,7 @@ void EditView::InvalidateOtherViewWindows( const Rectangle& rInvRect )
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
-        for (auto& pWin: GetOtherViewWindows())
+        for (auto& pWin : pImpEditView->aOutWindowSet)
         {
             if (pWin)
                 pWin->Invalidate( rInvRect );
@@ -311,11 +311,6 @@ void EditView::SetWindow( vcl::Window* pWin )
 vcl::Window* EditView::GetWindow() const
 {
     return pImpEditView->pOutWin;
-}
-
-EditView::OutWindowSet&  EditView::GetOtherViewWindows()
-{
-    return pImpEditView->aOutWindowSet;
 }
 
 bool EditView::HasOtherViewWindow( vcl::Window* pWin )

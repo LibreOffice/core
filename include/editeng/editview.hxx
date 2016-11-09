@@ -109,7 +109,6 @@ public:
     void            SetWindow( vcl::Window* pWin );
     vcl::Window*    GetWindow() const;
 
-    OutWindowSet&   GetOtherViewWindows();
     bool            HasOtherViewWindow( vcl::Window* pWin );
     bool            AddOtherViewWindow( vcl::Window* pWin );
     bool            RemoveOtherViewWindow( vcl::Window* pWin );

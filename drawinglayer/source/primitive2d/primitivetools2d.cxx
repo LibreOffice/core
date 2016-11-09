@@ -43,7 +43,7 @@ namespace drawinglayer
             if(getBuffered2DDecomposition().empty())
             {
                 // remember new valid DiscreteUnit
-                const_cast< DiscreteMetricDependentPrimitive2D* >(this)->updateDiscreteUnit(fDiscreteUnit);
+                const_cast< DiscreteMetricDependentPrimitive2D* >(this)->mfDiscreteUnit = fDiscreteUnit;
             }
 
             // call base implementation

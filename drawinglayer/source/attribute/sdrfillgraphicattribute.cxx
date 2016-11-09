@@ -211,11 +211,6 @@ namespace drawinglayer
             return mpSdrFillGraphicAttribute->getTiling();
         }
 
-        bool SdrFillGraphicAttribute::getStretch() const
-        {
-            return mpSdrFillGraphicAttribute->getStretch();
-        }
-
         FillGraphicAttribute SdrFillGraphicAttribute::createFillGraphicAttribute(const basegfx::B2DRange& rRange) const
         {
             // get logical size of bitmap (before possibly expanding it)
@@ -226,7 +221,7 @@ namespace drawinglayer
             basegfx::B2DVector aBitmapTopLeft(0.0, 0.0);
 
             //UUUU are changes needed? When stretched we are already done, all other values will have no influence
-            if(getTiling() || !getStretch())
+            if(getTiling() || !mpSdrFillGraphicAttribute->getStretch())
             {
                 // init values with range sizes
                 const double fRangeWidth(0.0 != rRange.getWidth() ? rRange.getWidth() : 1.0);
