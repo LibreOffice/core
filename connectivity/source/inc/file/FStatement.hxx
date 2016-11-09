@@ -106,8 +106,6 @@ namespace connectivity
                                      connectivity::OSQLParseNode* pAscendingDescending);
 
             virtual void initializeResultSet(OResultSet* _pResult);
-            // create the analyzer
-            OSQLAnalyzer* createAnalyzer();
 
             void closeResultSet() throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
 

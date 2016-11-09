@@ -1872,10 +1872,6 @@ cppuhelper::TypeManager::TypeManager():
     manager_(new unoidl::Manager)
 {}
 
-void cppuhelper::TypeManager::init(rtl::OUString const & rdbUris) {
-    readRdbs(rdbUris);
-}
-
 css::uno::Any cppuhelper::TypeManager::find(rtl::OUString const & name) {
     //TODO: caching? (here or in unoidl::Manager?)
     struct Simple {
@@ -2096,9 +2092,9 @@ cppuhelper::TypeManager::createTypeDescriptionEnumeration(
         depth == css::reflection::TypeDescriptionSearchDepth_INFINITE);
 }
 
-void cppuhelper::TypeManager::readRdbs(rtl::OUString const & uris) {
+void cppuhelper::TypeManager::init(rtl::OUString const & rdbUris) {
     for (sal_Int32 i = 0; i != -1;) {
-        rtl::OUString uri(uris.getToken(0, ' ', i));
+        rtl::OUString uri(rdbUris.getToken(0, ' ', i));
         if (uri.isEmpty()) {
             continue;
         }

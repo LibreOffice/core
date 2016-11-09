@@ -70,25 +70,9 @@ void MozillaBootstrap::disposing()
     OMozillaBootstrap_BASE::disposing();
 }
 
-// static ServiceInfo
-
-OUString MozillaBootstrap::getImplementationName_Static(  ) throw(RuntimeException)
-{
-    return OUString(MOZAB_MozillaBootstrap_IMPL_NAME);
-}
-
-Sequence< OUString > MozillaBootstrap::getSupportedServiceNames_Static(  ) throw (RuntimeException)
-{
-    // which service is supported
-    // for more information @see com.sun.star.mozilla.MozillaBootstrap
-    Sequence<OUString> aSNS { "com.sun.star.mozilla.MozillaBootstrap" };
-    return aSNS;
-}
-
-
 OUString SAL_CALL MozillaBootstrap::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
-    return getImplementationName_Static();
+    return OUString(MOZAB_MozillaBootstrap_IMPL_NAME);
 }
 
 sal_Bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
@@ -96,10 +80,11 @@ sal_Bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceNa
     return cppu::supportsService(this, _rServiceName);
 }
 
-
 Sequence< OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
-    return getSupportedServiceNames_Static();
+    // which service is supported
+    // for more information @see com.sun.star.mozilla.MozillaBootstrap
+    return { "com.sun.star.mozilla.MozillaBootstrap" };
 }
 
 

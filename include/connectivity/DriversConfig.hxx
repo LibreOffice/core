@@ -46,11 +46,10 @@ namespace connectivity
     {
         mutable ::utl::OConfigurationTreeRoot   m_aInstalled;
         mutable TInstalledDrivers               m_aDrivers;
-        void Load(const css::uno::Reference< css::uno::XComponentContext >& _rxORB) const;
     public:
         DriversConfigImpl();
 
-        const TInstalledDrivers& getInstalledDrivers(const css::uno::Reference< css::uno::XComponentContext >& _rxORB) const { Load(_rxORB); return m_aDrivers; }
+        const TInstalledDrivers& getInstalledDrivers(const css::uno::Reference< css::uno::XComponentContext >& _rxORB) const;
     };
 
     // Allows to access all driver which are located in the configuration

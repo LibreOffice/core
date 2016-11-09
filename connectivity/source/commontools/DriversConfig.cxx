@@ -91,7 +91,7 @@ DriversConfigImpl::DriversConfigImpl()
 {
 }
 
-void DriversConfigImpl::Load(const uno::Reference< uno::XComponentContext >& _rxORB) const
+const TInstalledDrivers& DriversConfigImpl::getInstalledDrivers(const uno::Reference< uno::XComponentContext >& _rxORB) const
 {
     if ( m_aDrivers.empty() )
     {
@@ -119,6 +119,7 @@ void DriversConfigImpl::Load(const uno::Reference< uno::XComponentContext >& _rx
             }
         } // if ( m_aInstalled.isValid() )
     }
+    return m_aDrivers;
 }
 
 DriversConfig::DriversConfig(const uno::Reference< uno::XComponentContext >& _rxORB)
