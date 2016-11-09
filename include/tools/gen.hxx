@@ -48,9 +48,6 @@ public:
     long&               A() { return nA; }
     long&               B() { return nB; }
 
-    bool                operator == ( const Pair& rPair ) const;
-    bool                operator != ( const Pair& rPair ) const;
-
     TOOLS_DLLPUBLIC friend SvStream&    ReadPair( SvStream& rIStream, Pair& rPair );
     TOOLS_DLLPUBLIC friend SvStream&    WritePair( SvStream& rOStream, const Pair& rPair );
 
@@ -59,15 +56,15 @@ protected:
     long                nB;
 };
 
-inline bool Pair::operator == ( const Pair& rPair ) const
+namespace tools { namespace detail {
+
+// Used to implement operator == for subclasses of Pair:
+inline bool equal(Pair const & p1, Pair const & p2)
 {
-    return ((nA == rPair.nA) && (nB == rPair.nB));
+    return p1.A() == p2.A() && p1.B() == p2.B();
 }
 
-inline bool Pair::operator != ( const Pair& rPair ) const
-{
-    return ((nA != rPair.nA) || (nB != rPair.nB));
-}
+} }
 
 // Point
 
@@ -158,6 +155,16 @@ inline Point operator/( const Point &rVal1, const long nVal2 )
     return Point( rVal1.nA/nVal2, rVal1.nB/nVal2 );
 }
 
+inline bool operator ==(Point const & p1, Point const & p2)
+{
+    return tools::detail::equal(p1, p2);
+}
+
+inline bool operator !=(Point const & p1, Point const & p2)
+{
+    return !(p1 == p2);
+}
+
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const Point& point )
@@ -184,6 +191,16 @@ public:
     void            setWidth(long nWidth)  { Width() = nWidth; }
     void            setHeight(long nHeight)  { Height() = nHeight; }
 };
+
+inline bool operator ==(Size const & s1, Size const & s2)
+{
+    return tools::detail::equal(s1, s2);
+}
+
+inline bool operator !=(Size const & s1, Size const & s2)
+{
+    return !(s1 == s2);
+}
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
@@ -227,6 +244,16 @@ inline void Range::Justify()
         nA = nB;
         nB = nHelp;
     }
+}
+
+inline bool operator ==(Range const & r1, Range const & r2)
+{
+    return tools::detail::equal(r1, r2);
+}
+
+inline bool operator !=(Range const & r1, Range const & r2)
+{
+    return !(r1 == r2);
 }
 
 template< typename charT, typename traits >
@@ -279,6 +306,16 @@ inline void Selection::Justify()
         nA = nB;
         nB = nHelp;
     }
+}
+
+inline bool operator ==(Selection const & s1, Selection const & s2)
+{
+    return tools::detail::equal(s1, s2);
+}
+
+inline bool operator !=(Selection const & s1, Selection const & s2)
+{
+    return !(s1 == s2);
 }
 
 template< typename charT, typename traits >
