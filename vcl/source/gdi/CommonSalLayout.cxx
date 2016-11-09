@@ -756,6 +756,9 @@ bool CommonSalLayout::IsKashidaPosValid(int nCharPos) const
             if (pIter->maGlyphId == 0)
                 break;
 
+            if (pIter == m_GlyphItems.begin())
+                continue;
+
             // Search backwards for previous glyph belonging to a different
             // character. We are looking backwards because we are dealing with
             // RTL glyphs, which will be in visual order.
