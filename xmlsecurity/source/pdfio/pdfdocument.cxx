@@ -667,80 +667,197 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         m_aEditBuffer.WriteCharPtr(">>\nendobj\n\n");
     }
 
-    // Write the xref table.
     sal_uInt64 nXRefOffset = m_aEditBuffer.Tell();
-    m_aEditBuffer.WriteCharPtr("xref\n");
-    for (const auto& rXRef : m_aXRef)
-    {
-        size_t nObject = rXRef.first;
-        size_t nOffset = rXRef.second.m_nOffset;
-        if (!rXRef.second.m_bDirty)
-            continue;
-
-        m_aEditBuffer.WriteUInt32AsString(nObject);
-        m_aEditBuffer.WriteCharPtr(" 1\n");
-        OStringBuffer aBuffer;
-        aBuffer.append(static_cast<sal_Int32>(nOffset));
-        while (aBuffer.getLength() < 10)
-            aBuffer.insert(0, "0");
-        if (nObject == 0)
-            aBuffer.append(" 65535 f \n");
-        else
-            aBuffer.append(" 00000 n \n");
-        m_aEditBuffer.WriteOString(aBuffer.toString());
-    }
-
-    // Write the trailer.
-    m_aEditBuffer.WriteCharPtr("trailer\n<</Size ");
-    m_aEditBuffer.WriteUInt32AsString(m_aXRef.size());
-    m_aEditBuffer.WriteCharPtr("/Root ");
-    m_aEditBuffer.WriteUInt32AsString(pRoot->GetObjectValue());
-    m_aEditBuffer.WriteCharPtr(" ");
-    m_aEditBuffer.WriteUInt32AsString(pRoot->GetGenerationValue());
-    m_aEditBuffer.WriteCharPtr(" R\n");
-    PDFReferenceElement* pInfo = nullptr;
     if (m_pXRefStream)
-        pInfo = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Info"));
-    else
-        pInfo = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Info"));
-    if (pInfo)
     {
-        m_aEditBuffer.WriteCharPtr("/Info ");
-        m_aEditBuffer.WriteUInt32AsString(pInfo->GetObjectValue());
-        m_aEditBuffer.WriteCharPtr(" ");
-        m_aEditBuffer.WriteUInt32AsString(pInfo->GetGenerationValue());
-        m_aEditBuffer.WriteCharPtr(" R\n");
-    }
-    PDFArrayElement* pID = nullptr;
-    if (m_pXRefStream)
-        pID = dynamic_cast<PDFArrayElement*>(m_pXRefStream->Lookup("ID"));
-    else
-        pID = dynamic_cast<PDFArrayElement*>(m_pTrailer->Lookup("ID"));
-    if (pID)
-    {
-        const std::vector<PDFElement*>& rElements = pID->GetElements();
-        m_aEditBuffer.WriteCharPtr("/ID [ <");
-        for (size_t i = 0; i < rElements.size(); ++i)
+        // Write the xref stream.
+        // This is a bit meta: the xref stream stores its own offset.
+        sal_Int32 nXRefStreamId = m_aXRef.size();
+        XRefEntry aXRefStreamEntry;
+        aXRefStreamEntry.m_nOffset = nXRefOffset;
+        aXRefStreamEntry.m_bDirty = true;
+        m_aXRef[nXRefStreamId] = aXRefStreamEntry;
+
+        // Write stream data.
+        SvMemoryStream aXRefStream;
+        for (const auto& rXRef : m_aXRef)
         {
-            auto pIDString = dynamic_cast<PDFHexStringElement*>(rElements[i]);
-            if (!pIDString)
+            const XRefEntry& rEntry = rXRef.second;
+
+            if (!rEntry.m_bDirty)
                 continue;
 
-            m_aEditBuffer.WriteOString(pIDString->GetValue());
-            if ((i + 1) < rElements.size())
-                m_aEditBuffer.WriteCharPtr(">\n<");
+            // First field.
+            unsigned char nType = 0;
+            switch (rEntry.m_eType)
+            {
+            case XRefEntryType::FREE:
+                nType = 0;
+                break;
+            case XRefEntryType::NOT_COMPRESSED:
+                nType = 1;
+                break;
+            case XRefEntryType::COMPRESSED:
+                nType = 2;
+                break;
+            }
+            aXRefStream.WriteUChar(nType);
+
+            // Second field.
+            const size_t nOffsetLen = 3;
+            for (size_t i = 0; i < nOffsetLen; ++i)
+            {
+                size_t nByte = nOffsetLen - i - 1;
+                // Fields requiring more than one byte are stored with the
+                // high-order byte first.
+                unsigned char nCh = (rEntry.m_nOffset & (0xff << (nByte * 8))) >> (nByte * 8);
+                aXRefStream.WriteUChar(nCh);
+            }
+
+            // Third field.
+            aXRefStream.WriteUChar(0);
         }
-        m_aEditBuffer.WriteCharPtr("> ]\n");
-    }
 
-    if (!m_aStartXRefs.empty())
+        m_aEditBuffer.WriteUInt32AsString(nXRefStreamId);
+        m_aEditBuffer.WriteCharPtr(" 0 obj\n<<");
+
+        // ID.
+        auto pID = dynamic_cast<PDFArrayElement*>(m_pXRefStream->Lookup("ID"));
+        if (pID)
+        {
+            const std::vector<PDFElement*>& rElements = pID->GetElements();
+            m_aEditBuffer.WriteCharPtr("/ID [ <");
+            for (size_t i = 0; i < rElements.size(); ++i)
+            {
+                auto pIDString = dynamic_cast<PDFHexStringElement*>(rElements[i]);
+                if (!pIDString)
+                    continue;
+
+                m_aEditBuffer.WriteOString(pIDString->GetValue());
+                if ((i + 1) < rElements.size())
+                    m_aEditBuffer.WriteCharPtr("> <");
+            }
+            m_aEditBuffer.WriteCharPtr("> ] ");
+        }
+
+        // Index.
+        m_aEditBuffer.WriteCharPtr("/Index [ ");
+        for (const auto& rXRef : m_aXRef)
+        {
+            if (!rXRef.second.m_bDirty)
+                continue;
+
+            m_aEditBuffer.WriteUInt32AsString(rXRef.first);
+            m_aEditBuffer.WriteCharPtr(" 1 ");
+        }
+        m_aEditBuffer.WriteCharPtr("] ");
+
+        // Info.
+        auto pInfo = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Info"));
+        if (pInfo)
+        {
+            m_aEditBuffer.WriteCharPtr("/Info ");
+            m_aEditBuffer.WriteUInt32AsString(pInfo->GetObjectValue());
+            m_aEditBuffer.WriteCharPtr(" ");
+            m_aEditBuffer.WriteUInt32AsString(pInfo->GetGenerationValue());
+            m_aEditBuffer.WriteCharPtr(" R ");
+        }
+
+        // Length.
+        m_aEditBuffer.WriteCharPtr("/Length ");
+        m_aEditBuffer.WriteUInt32AsString(aXRefStream.GetSize());
+
+        if (!m_aStartXRefs.empty())
+        {
+            // Write location of the previous cross-reference section.
+            m_aEditBuffer.WriteCharPtr("/Prev ");
+            m_aEditBuffer.WriteUInt32AsString(m_aStartXRefs.back());
+        }
+
+        // Root.
+        m_aEditBuffer.WriteCharPtr("/Root ");
+        m_aEditBuffer.WriteUInt32AsString(pRoot->GetObjectValue());
+        m_aEditBuffer.WriteCharPtr(" ");
+        m_aEditBuffer.WriteUInt32AsString(pRoot->GetGenerationValue());
+        m_aEditBuffer.WriteCharPtr(" R ");
+
+        // Size.
+        m_aEditBuffer.WriteCharPtr("/Size ");
+        m_aEditBuffer.WriteUInt32AsString(m_aXRef.size());
+
+        m_aEditBuffer.WriteCharPtr("/Type/XRef/W[1 3 1]>>\nstream\n");
+        aXRefStream.Seek(0);
+        m_aEditBuffer.WriteStream(aXRefStream);
+        m_aEditBuffer.WriteCharPtr("\nendstream\nendobj\n\n");
+    }
+    else
     {
-        // Write location of the previous cross-reference section.
-        m_aEditBuffer.WriteCharPtr("/Prev ");
-        m_aEditBuffer.WriteUInt32AsString(m_aStartXRefs.back());
-    }
+        // Write the xref table.
+        m_aEditBuffer.WriteCharPtr("xref\n");
+        for (const auto& rXRef : m_aXRef)
+        {
+            size_t nObject = rXRef.first;
+            size_t nOffset = rXRef.second.m_nOffset;
+            if (!rXRef.second.m_bDirty)
+                continue;
 
-    m_aEditBuffer.WriteCharPtr(">>\n");
+            m_aEditBuffer.WriteUInt32AsString(nObject);
+            m_aEditBuffer.WriteCharPtr(" 1\n");
+            OStringBuffer aBuffer;
+            aBuffer.append(static_cast<sal_Int32>(nOffset));
+            while (aBuffer.getLength() < 10)
+                aBuffer.insert(0, "0");
+            if (nObject == 0)
+                aBuffer.append(" 65535 f \n");
+            else
+                aBuffer.append(" 00000 n \n");
+            m_aEditBuffer.WriteOString(aBuffer.toString());
+        }
+
+        // Write the trailer.
+        m_aEditBuffer.WriteCharPtr("trailer\n<</Size ");
+        m_aEditBuffer.WriteUInt32AsString(m_aXRef.size());
+        m_aEditBuffer.WriteCharPtr("/Root ");
+        m_aEditBuffer.WriteUInt32AsString(pRoot->GetObjectValue());
+        m_aEditBuffer.WriteCharPtr(" ");
+        m_aEditBuffer.WriteUInt32AsString(pRoot->GetGenerationValue());
+        m_aEditBuffer.WriteCharPtr(" R\n");
+        auto pInfo = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Info"));
+        if (pInfo)
+        {
+            m_aEditBuffer.WriteCharPtr("/Info ");
+            m_aEditBuffer.WriteUInt32AsString(pInfo->GetObjectValue());
+            m_aEditBuffer.WriteCharPtr(" ");
+            m_aEditBuffer.WriteUInt32AsString(pInfo->GetGenerationValue());
+            m_aEditBuffer.WriteCharPtr(" R\n");
+        }
+        auto pID = dynamic_cast<PDFArrayElement*>(m_pTrailer->Lookup("ID"));
+        if (pID)
+        {
+            const std::vector<PDFElement*>& rElements = pID->GetElements();
+            m_aEditBuffer.WriteCharPtr("/ID [ <");
+            for (size_t i = 0; i < rElements.size(); ++i)
+            {
+                auto pIDString = dynamic_cast<PDFHexStringElement*>(rElements[i]);
+                if (!pIDString)
+                    continue;
+
+                m_aEditBuffer.WriteOString(pIDString->GetValue());
+                if ((i + 1) < rElements.size())
+                    m_aEditBuffer.WriteCharPtr(">\n<");
+            }
+            m_aEditBuffer.WriteCharPtr("> ]\n");
+        }
+
+        if (!m_aStartXRefs.empty())
+        {
+            // Write location of the previous cross-reference section.
+            m_aEditBuffer.WriteCharPtr("/Prev ");
+            m_aEditBuffer.WriteUInt32AsString(m_aStartXRefs.back());
+        }
+
+        m_aEditBuffer.WriteCharPtr(">>\n");
+    }
 
     // Write startxref.
     m_aEditBuffer.WriteCharPtr("startxref\n");
