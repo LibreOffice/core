@@ -335,11 +335,30 @@ bool PDFDocument::RemoveSignature(size_t nPosition)
     return m_aEditBuffer.good();
 }
 
+sal_uInt32 PDFDocument::GetNextSignature()
+{
+    sal_uInt32 nRet = 0;
+    for (const auto& pSignature : GetSignatureWidgets())
+    {
+        auto pT = dynamic_cast<PDFLiteralStringElement*>(pSignature->Lookup("T"));
+        if (!pT)
+            continue;
+
+        const OString& rValue = pT->GetValue();
+        const OString aPrefix = "Signature";
+        if (!rValue.startsWith(aPrefix))
+            continue;
+
+        nRet = std::max(nRet, rValue.copy(aPrefix.getLength()).toUInt32());
+    }
+
+    return nRet + 1;
+}
+
 bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificate, const OUString& rDescription)
 {
     // Decide what identifier to use for the new signature.
-    std::vector<PDFObjectElement*> aSignatures = GetSignatureWidgets();
-    sal_uInt32 nNextSignature = aSignatures.size() + 1;
+    sal_uInt32 nNextSignature = GetNextSignature();
 
     m_aEditBuffer.Seek(STREAM_SEEK_TO_END);
     m_aEditBuffer.WriteCharPtr("\n");
