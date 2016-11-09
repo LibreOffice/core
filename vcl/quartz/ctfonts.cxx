@@ -127,12 +127,33 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef& rxFontMetric ) const
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
-    const CGFloat fAscent = CTFontGetAscent( aCTFontRef );
-    const CGFloat fCapHeight = CTFontGetCapHeight( aCTFontRef );
-    rxFontMetric->SetAscent( lrint( fAscent ) );
-    rxFontMetric->SetDescent( lrint( CTFontGetDescent( aCTFontRef )) );
-    rxFontMetric->SetExternalLeading( lrint( CTFontGetLeading( aCTFontRef )) );
-    rxFontMetric->SetInternalLeading( lrint( fAscent - fCapHeight ) );
+    int nBufSize = 0;
+    std::vector<uint8_t> rHhea;
+    nBufSize = mpFontData->GetFontTable("hhea", nullptr);
+    if (nBufSize > 0)
+    {
+        rHhea.resize(nBufSize);
+        mpFontData->GetFontTable("OS/2", &rHhea[0]);
+    }
+
+    std::vector<uint8_t> rOS2;
+    nBufSize = mpFontData->GetFontTable("OS/2", nullptr);
+    if (nBufSize > 0)
+    {
+        rOS2.resize(nBufSize);
+        mpFontData->GetFontTable("OS/2", &rOS2[0]);
+    }
+
+    rxFontMetric->ImplCalcLineSpacing(rHhea, rOS2, CTFontGetUnitsPerEm(aCTFontRef));
+    if (rxFontMetric->GetAscent() == 0 && rxFontMetric->GetDescent() == 0)
+    {
+        SAL_WARN("vcl.gdi.fontmetric", "Reading line spacing from font failed, falling back to platform API");
+        rxFontMetric->SetAscent(lrint(CTFontGetAscent(aCTFontRef)));
+        rxFontMetric->SetDescent(lrint(CTFontGetDescent(aCTFontRef)));
+        rxFontMetric->SetExternalLeading(lrint(CTFontGetLeading(aCTFontRef)));
+        rxFontMetric->SetInternalLeading(rxFontMetric->GetAscent() - CTFontGetCapHeight(aCTFontRef));
+    }
+
 
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
