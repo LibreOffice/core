@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_0e91df99",
+        "filename": "desktop/source/deployment/gui/dp_gui_dialog2.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-11-09T10:09:53Z",
+      "side": 1,
+      "message": "Instead using this enum, please just add the methods enableOptionsButton(bool bEnable)\nand\nshowOptionsButton(bool bShow)\n\nI haven\u0027t checked, but if maybe you can merge the two methods (if it\u0027s always visible when it\u0027s enabled)",
+      "revId": "117e03d19ed623b972abc6e874c29e040a8080b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_2e8e9b78",
+        "filename": "desktop/uiconfig/ui/extensionmanager.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-11-09T10:09:53Z",
+      "side": 1,
+      "message": "Please add the accelerator as it was before (_Options).\nAlso for the other strings please.\nPeople get used to those and if we can, we should avoid changing (auto assigning) them.",
+      "revId": "117e03d19ed623b972abc6e874c29e040a8080b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
