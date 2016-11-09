@@ -340,7 +340,7 @@ void SpellDialog::UpdateBoxes_Impl()
     }
     else
         SetTitle_Impl( nAltLanguage );
-    SetSelectedLang_Impl( nAltLanguage );
+    m_pLanguageLB->SelectLanguage( nAltLanguage );
     int nDicts = InitUserDicts();
 
     // enter alternatives
@@ -756,12 +756,6 @@ bool SpellDialog::Close()
     SfxViewFrame::Current()->ToggleChildWindow(rParent.GetType());
 
     return true;
-}
-
-
-void SpellDialog::SetSelectedLang_Impl( LanguageType nLang )
-{
-    m_pLanguageLB->SelectLanguage( nLang );
 }
 
 

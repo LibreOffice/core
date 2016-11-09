@@ -1722,7 +1722,7 @@ void SvxPageDescPage::PageCreated(const SfxAllItemSet& aSet)
     {
         const bool bNew(pSupportDrawingLayerFillStyleItem->GetValue());
 
-        EnableDrawingLayerFillStyles(bNew);
+        mbEnableDrawingLayerFillStyles = bNew;
     }
 }
 

@@ -299,12 +299,6 @@ void SvxHyperlinkTabPageBase::SetInitFocus()
     GrabFocus();
 }
 
-// Ask dialog whether the current doc is a HTML-doc
-bool SvxHyperlinkTabPageBase::IsHTMLDoc() const
-{
-    return static_cast<SvxHpLinkDlg*>(mpDialog.get())->IsHTMLDoc();
-}
-
 // retrieve dispatcher
 SfxDispatcher* SvxHyperlinkTabPageBase::GetDispatcher() const
 {
@@ -432,7 +426,8 @@ void SvxHyperlinkTabPageBase::GetDataFromCommonFields( OUString& aStrName,
     aStrName    = mpEdIndication->GetText();
     aStrFrame   = mpCbbFrame->GetText();
     eMode       = (SvxLinkInsertMode) (mpLbForm->GetSelectEntryPos()+1);
-    if( IsHTMLDoc() )
+    // Ask dialog whether the current doc is a HTML-doc
+    if (static_cast<SvxHpLinkDlg*>(mpDialog.get())->IsHTMLDoc())
         eMode = (SvxLinkInsertMode) ( sal_uInt16(eMode) | HLINK_HTMLMODE );
 }
 

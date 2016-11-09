@@ -104,7 +104,6 @@ public:
     virtual void dispose() override;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
-    double          GetRadius() const { return mpMtrRadius->GetValue() / 10.0; }
 };
 
 class GraphicFilterMosaic : public GraphicFilterDialog
@@ -123,8 +122,6 @@ public:
     virtual void dispose() override;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
-    long            GetTileWidth() const { return static_cast<long>(mpMtrWidth->GetValue()); }
-    long            GetTileHeight() const { return static_cast<long>(mpMtrHeight->GetValue()); }
     bool            IsEnhanceEdges() const { return mpCbxEdges->IsChecked(); }
 };
 
@@ -144,7 +141,6 @@ public:
     virtual void dispose() override;
 
     virtual Graphic     GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
-    sal_uInt8           GetGreyThreshold() const { return( (sal_uInt8) FRound( mpMtrThreshold->GetValue() * 2.55 ) ); }
     bool            IsInvert() const { return mpCbxInvert->IsChecked(); }
 };
 
@@ -159,10 +155,6 @@ public:
     virtual ~GraphicFilterSepia() override;
     virtual void dispose() override;
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
-    sal_uInt16 GetSepiaPercent() const
-    {
-        return sal::static_int_cast< sal_uInt16 >(mpMtrSepia->GetValue());
-    }
 };
 
 class GraphicFilterPoster : public GraphicFilterDialog
@@ -177,7 +169,6 @@ public:
     virtual void dispose() override;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
-    sal_uInt16      GetPosterColorCount() const { return( (sal_uInt16) mpNumPoster->GetValue() ); }
 };
 
 class EmbossControl : public SvxRectCtl

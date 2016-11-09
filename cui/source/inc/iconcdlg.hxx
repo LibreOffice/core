@@ -140,7 +140,6 @@ protected:
     static SfxItemSet*      CreateInputItemSet( sal_uInt16 nId );
     inline IconChoicePage*  GetTabPage( sal_uInt16 nPageId )
                                 { return ( GetPageData (nPageId)->pPage ? GetPageData (nPageId)->pPage.get() : nullptr); }
-    static void             RefreshInputSet();
 
     void                    ActivatePageImpl ();
     void                    DeActivatePageImpl ();

@@ -160,8 +160,6 @@ public:
     void                SetFontList( const SvxFontListItem& rItem );
     void                EnableRelativeMode();
     void                EnableSearchMode();
-    ///                  the writer uses SID_ATTR_BRUSH as font background
-    void                SetPreviewBackgroundToCharacter();
 
     void                DisableControls( sal_uInt16 nDisable );
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
@@ -242,8 +240,6 @@ public:
     virtual void        ChangesApplied() override;
 
     void                DisableControls( sal_uInt16 nDisable );
-    ///                  the writer uses SID_ATTR_BRUSH as font background
-    void                SetPreviewBackgroundToCharacter();
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
@@ -320,8 +316,6 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        ChangesApplied() override;
     virtual void        FillUserData() override;
-    ///                  the writer uses SID_ATTR_BRUSH as font background
-    void                SetPreviewBackgroundToCharacter();
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
@@ -365,8 +359,6 @@ public:
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
-    ///                  the writer uses SID_ATTR_BRUSH as font background
-    void                SetPreviewBackgroundToCharacter();
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 

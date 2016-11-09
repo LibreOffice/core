@@ -89,7 +89,6 @@ private:
     rtl::Reference< SearchThread > maSearchThread;
 
                         DECL_LINK( ClickCancelBtn, Button*, void );
-    void                Terminate();
 
 public:
                         SearchProgress( vcl::Window* pParent, const INetURLObject& rStartURL );
@@ -134,7 +133,6 @@ private:
     TokenList_impl      maTakenList;
 
     DECL_LINK( ClickCancelBtn, Button*, void );
-    void                Terminate();
 
 public:
 
