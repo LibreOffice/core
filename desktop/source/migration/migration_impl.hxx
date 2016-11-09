@@ -210,7 +210,6 @@ private:
     void copyFiles();
     void copyConfig();
     void runServices();
-    static void refresh();
 
     static void setMigrationCompleted();
     static bool checkMigrationCompleted();

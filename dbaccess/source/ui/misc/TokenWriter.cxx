@@ -303,7 +303,14 @@ void ODatabaseImportExport::initialize()
                 Reference< XRowSet > xRowSet( xProp, UNO_QUERY );
                 xRowSet->execute();
             }
-            impl_initializeRowMember_throw();
+            if ( !m_xRow.is() && m_xResultSet.is() )
+            {
+                m_xRow.set( m_xResultSet, UNO_QUERY );
+                m_xRowLocate.set( m_xResultSet, UNO_QUERY );
+                m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
+                Reference<XColumnsSupplier> xSup(m_xResultSet,UNO_QUERY_THROW);
+                m_xRowSetColumns.set(xSup->getColumns(),UNO_QUERY_THROW);
+            }
         }
         catch(Exception& )
         {
@@ -344,18 +351,6 @@ bool ODatabaseImportExport::Read()
             initialize();
     }
     return true;
-}
-
-void ODatabaseImportExport::impl_initializeRowMember_throw()
-{
-    if ( !m_xRow.is() && m_xResultSet.is() )
-    {
-        m_xRow.set( m_xResultSet, UNO_QUERY );
-        m_xRowLocate.set( m_xResultSet, UNO_QUERY );
-        m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
-        Reference<XColumnsSupplier> xSup(m_xResultSet,UNO_QUERY_THROW);
-        m_xRowSetColumns.set(xSup->getColumns(),UNO_QUERY_THROW);
-    }
 }
 
 bool ORTFImportExport::Write()

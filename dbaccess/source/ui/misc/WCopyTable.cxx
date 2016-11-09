@@ -548,7 +548,7 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window * pParent, const OUString& _rDef
 
     ::dbaui::fillTypeInfo( _xSourceConnection, m_sTypeNames, m_aTypeInfo, m_aTypeInfoIndex );
     ::dbaui::fillTypeInfo( m_xDestConnection, m_sTypeNames, m_aDestTypeInfo, m_aDestTypeInfoIndex );
-    impl_loadSourceData();
+    loadData( m_rSourceObject, m_vSourceColumns, m_vSourceVec );
 
     bool bAllowViews = true;
     // if the source is a, don't allow creating views
@@ -1023,11 +1023,6 @@ void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,
         m_aDestVec[_nPos] =
             m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first;
     }
-}
-
-void OCopyTableWizard::impl_loadSourceData()
-{
-    loadData( m_rSourceObject, m_vSourceColumns, m_vSourceVec );
 }
 
 void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColVector )

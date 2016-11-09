@@ -109,9 +109,6 @@ namespace dbaui
 
         SqlParseError   InsertField( const OTableFieldDescRef& rInfo, bool bActivate = true);
         bool            HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo) const;
-        // save the position of the table window and the pos of the splitters
-        // called when fields are deleted
-        void DeleteFields( const OUString& rAliasName );
         // called when a table from tabview was deleted
         void TableDeleted(const OUString& rAliasName);
 

@@ -405,17 +405,6 @@ void OAddTableDlg::Update()
         m_xCurrentList->updateTableObjectList( m_rContext.allowViews() );
 }
 
-void OAddTableDlg::impl_addTable()
-{
-    if ( m_xCurrentList->isLeafSelected() )
-    {
-        OUString sSelectedName, sAliasName;
-        sSelectedName = m_xCurrentList->getSelectedName( sAliasName );
-
-        m_rContext.addTableWindow( sSelectedName, sAliasName );
-    }
-}
-
 IMPL_LINK_NOARG( OAddTableDlg, AddClickHdl, Button*, void )
 {
     TableListDoubleClickHdl(nullptr);
@@ -425,7 +414,13 @@ IMPL_LINK_NOARG( OAddTableDlg, TableListDoubleClickHdl, SvTreeListBox*, bool )
 {
     if ( impl_isAddAllowed() )
     {
-        impl_addTable();
+        if ( m_xCurrentList->isLeafSelected() )
+        {
+            OUString sSelectedName, sAliasName;
+            sSelectedName = m_xCurrentList->getSelectedName( sAliasName );
+
+            m_rContext.addTableWindow( sSelectedName, sAliasName );
+        }
         if ( !impl_isAddAllowed() )
             Close();
         return true;  // handled

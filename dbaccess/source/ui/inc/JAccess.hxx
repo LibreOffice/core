@@ -44,9 +44,6 @@ namespace dbaui
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
 
-        // XServiceInfo - static methods
-        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
-
         virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
 
         // XAccessible

@@ -985,7 +985,8 @@ void SAL_CALL ODatabaseModelImpl::release()
         m_pDBContext->removeFromTerminateListener(*this);
         dispose();
         m_pDBContext->storeTransientProperties(*this);
-        revokeDataSource();
+        if ( m_pDBContext && !m_sDocumentURL.isEmpty() )
+            m_pDBContext->revokeDatabaseDocument( *this );
         delete this;
     }
 }
@@ -1086,12 +1087,6 @@ TContentPtr& ODatabaseModelImpl::getObjectContainer( ObjectType _eType )
         rContentPtr->m_aProps.aTitle = lcl_getContainerStorageName_throw( _eType );
     }
     return rContentPtr;
-}
-
-void ODatabaseModelImpl::revokeDataSource() const
-{
-    if ( m_pDBContext && !m_sDocumentURL.isEmpty() )
-        m_pDBContext->revokeDatabaseDocument( *this );
 }
 
 bool ODatabaseModelImpl::adjustMacroMode_AutoReject()

@@ -274,10 +274,6 @@ namespace dbaui
         virtual void onRowChange() override;
         virtual void onColumnChange() override;
 
-        // my own overridables
-        void BeforeDrop();
-        void AfterDrop();
-
         // get a fields property set from a model pos
         css::uno::Reference< css::beans::XPropertySet >  getField(sal_uInt16 nModelPos);
 
@@ -286,7 +282,6 @@ namespace dbaui
 
         // drag events
         void DoColumnDrag(sal_uInt16 nColumnPos);
-        void DoRowDrag(sal_Int16 nRowPos);
         void DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos);
 
         void SetBrowserAttrs();

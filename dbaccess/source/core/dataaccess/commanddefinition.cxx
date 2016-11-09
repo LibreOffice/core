@@ -37,7 +37,7 @@ namespace dbaccess
 
 void OCommandDefinition::registerProperties()
 {
-    OCommandDefinition_Impl& rCommandDefinition( getCommandDefinition() );
+    OCommandDefinition_Impl& rCommandDefinition = dynamic_cast< OCommandDefinition_Impl& >( *m_pImpl.get() );
     registerProperty(PROPERTY_COMMAND, PROPERTY_ID_COMMAND, PropertyAttribute::BOUND,
                     &rCommandDefinition.m_sCommand, cppu::UnoType<decltype(rCommandDefinition.m_sCommand)>::get());
 

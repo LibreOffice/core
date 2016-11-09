@@ -1038,12 +1038,6 @@ void Desktop::HandleBootstrapErrors(
 }
 
 
-bool Desktop::isUIOnSessionShutdownAllowed()
-{
-    return officecfg::Office::Recovery::SessionShutdown::DocumentStoreUIEnabled
-        ::get();
-}
-
 namespace {
 
 bool crashReportInfoExists()
@@ -1170,20 +1164,6 @@ bool impl_callRecoveryUI(bool bEmergencySave     ,
 
 }
 
-/*
- * Save all open documents so they will be reopened
- * the next time the application is started
- *
- * returns sal_True if at least one document could be saved...
- *
- */
-bool Desktop::SaveTasks()
-{
-    return impl_callRecoveryUI(
-        true , // sal_True => force emergency save
-        false);
-}
-
 namespace {
 
 void restartOnMac(bool passArguments) {
@@ -1292,7 +1272,14 @@ void Desktop::Exception(ExceptionCategory nCategory)
                                                     ( Application::IsInExecute()               )    // crashes during startup and shutdown should be ignored (they indicates a corrupt installation ...)
                                                   );
     if ( bAllowRecoveryAndSessionManagement )
-        bRestart = SaveTasks();
+    {
+        // Save all open documents so they will be reopened
+        // the next time the application is started
+        // returns true if at least one document could be saved...
+        bRestart = impl_callRecoveryUI(
+                        true , // force emergency save
+                        false);
+    }
 
     FlushConfiguration();
 
@@ -1974,12 +1961,6 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
 }
 
 
-IMPL_STATIC_LINK(Desktop, AsyncInitFirstRun, Timer *, /*unused*/, void)
-{
-    DoFirstRunInitializations();
-}
-
-
 class ExitTimer : public Timer
 {
   public:
@@ -2028,12 +2009,6 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
         OUString a( "UNO exception during client open:\n"  );
         Application::Abort( a + e.Message );
     }
-}
-
-// enable acceptors
-IMPL_STATIC_LINK_NOARG(Desktop, EnableAcceptors_Impl, void*, void)
-{
-    enableAcceptors();
 }
 
 void Desktop::OpenClients()
@@ -2159,8 +2134,9 @@ void Desktop::OpenClients()
         try
         {
             // specifies whether the UI-interaction on Session shutdown is allowed
+            bool bUIOnSessionShutdownAllowed = officecfg::Office::Recovery::SessionShutdown::DocumentStoreUIEnabled::get();
             xSessionListener = SessionListener::createWithOnQuitFlag(
-                    ::comphelper::getProcessComponentContext(), isUIOnSessionShutdownAllowed());
+                    ::comphelper::getProcessComponentContext(), bUIOnSessionShutdownAllowed);
         }
         catch(const css::uno::Exception& e)
         {
@@ -2594,8 +2570,9 @@ void Desktop::CloseSplashScreen()
 }
 
 
-void Desktop::DoFirstRunInitializations()
+IMPL_STATIC_LINK(Desktop, AsyncInitFirstRun, Timer *, /*unused*/, void)
 {
+    // does initializations which are necessary for the first run of the office
     try
     {
         Reference< XJobExecutor > xExecutor = theJobExecutor::get( ::comphelper::getProcessComponentContext() );

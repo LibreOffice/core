@@ -951,18 +951,6 @@ void SbaGridControl::onColumnChange()
         m_pMasterListener->ColumnChanged();
 }
 
-void SbaGridControl::BeforeDrop()
-{
-    if (m_pMasterListener)
-        m_pMasterListener->BeforeDrop();
-}
-
-void SbaGridControl::AfterDrop()
-{
-    if (m_pMasterListener)
-        m_pMasterListener->AfterDrop();
-}
-
 Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
 {
     Reference< XPropertySet >  xEmptyReturn;
@@ -1094,7 +1082,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
                 SelectAll();
 
             getMouseEvent().Clear();
-            DoRowDrag((sal_Int16)nRow);
+            implTransferSelectedRows((sal_Int16)nRow, false);
 
             bHandled = true;
         }
@@ -1170,11 +1158,6 @@ void SbaGridControl::CopySelectedRowsToClipboard()
 {
     OSL_ENSURE( GetSelectRowCount() > 0, "SbaGridControl::CopySelectedRowsToClipboard: invalid call!" );
     implTransferSelectedRows( (sal_Int16)FirstSelectedRow(), true );
-}
-
-void SbaGridControl::DoRowDrag( sal_Int16 nRowPos )
-{
-    implTransferSelectedRows( nRowPos, false );
 }
 
 void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag )
@@ -1451,24 +1434,28 @@ IMPL_LINK_NOARG(SbaGridControl, AsynchDropEvent, void*, void)
         try
         {
             pImExport->initialize(m_aDataDescriptor);
-            BeforeDrop();
+            if (m_pMasterListener)
+                m_pMasterListener->BeforeDrop();
             if(!pImExport->Read())
             {
                 OUString sError = OUString(ModuleRes(STR_NO_COLUMNNAME_MATCHING));
                 throwGenericSQLException(sError,nullptr);
             }
-            AfterDrop();
+            if (m_pMasterListener)
+                m_pMasterListener->AfterDrop();
             Show();
         }
         catch(const SQLException& e)
         {
-            AfterDrop();
+            if (m_pMasterListener)
+                m_pMasterListener->AfterDrop();
             Show();
             ::dbaui::showError( ::dbtools::SQLExceptionInfo(e), this, getContext() );
         }
         catch(const Exception& )
         {
-            AfterDrop();
+            if (m_pMasterListener)
+                m_pMasterListener->AfterDrop();
             Show();
             DBG_UNHANDLED_EXCEPTION();
         }

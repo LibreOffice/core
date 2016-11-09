@@ -576,11 +576,6 @@ CallbackFlushHandler::~CallbackFlushHandler()
     Stop();
 }
 
-void CallbackFlushHandler::Invoke()
-{
-    flush();
-}
-
 void CallbackFlushHandler::callback(const int type, const char* payload, void* data)
 {
     CallbackFlushHandler* self = static_cast<CallbackFlushHandler*>(data);
@@ -828,7 +823,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     }
 }
 
-void CallbackFlushHandler::flush()
+void CallbackFlushHandler::Invoke()
 {
     if (m_pCallback && !m_bEventLatch)
     {

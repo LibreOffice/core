@@ -109,7 +109,6 @@ namespace dbaui
         bool                    m_bAutoIncrementEnabled;
         bool                    m_bDuplicateName;
 
-        void                    fillColumnList(sal_uInt32 nRows);
         virtual SvParser*       createReader(sal_Int32 _nRows) = 0;
 
         void                    EnableAuto(bool bEnable);

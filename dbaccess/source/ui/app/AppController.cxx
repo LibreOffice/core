@@ -1318,14 +1318,16 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 }
                 break;
             case SID_DB_APP_TABLEFILTER:
-                openTableFilterDialog();
+                // opens the table filter dialog for the selected data source
+                openDialog( "com.sun.star.sdb.TableFilterDialog" );
                 askToReconnect();
                 break;
             case SID_DB_APP_REFRESH_TABLES:
                 refreshTables();
                 break;
             case SID_DB_APP_DSPROPS:
-                openDataSourceAdminDialog();
+                // opens the administration dialog for the selected data source
+                openDialog( "com.sun.star.sdb.DatasourceAdministrationDialog" );
                 askToReconnect();
                 break;
             case SID_DB_APP_DSADVANCED_SETTINGS:
@@ -1340,7 +1342,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 {
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
-                        openDirectSQLDialog();
+                        // opens the DirectSQLDialog to execute hand made sql statements.
+                        openDialog( SERVICE_SDB_DIRECTSQLDIALOG );
                 }
                 break;
             case ID_MIGRATE_SCRIPTS:
@@ -1725,11 +1728,13 @@ bool OApplicationController::onEntryDoubleClick( SvTreeListBox& _rTree )
     {
         try
         {
-            openElement(
+            // opens a new frame with either the table or the query or report or form or view
+            openElementWithArguments(
                 getContainer()->getQualifiedName( _rTree.GetHdlEntry() ),
                 getContainer()->getElementType(),
-                E_OPEN_NORMAL
-            );
+                E_OPEN_NORMAL,
+                0,
+                ::comphelper::NamedValueCollection() );
             return true;    // handled
         }
         catch(const Exception&)
@@ -1763,12 +1768,6 @@ bool OApplicationController::impl_isAlterableView_nothrow( const OUString& _rTab
         DBG_UNHANDLED_EXCEPTION();
     }
     return bIsAlterableView;
-}
-
-Reference< XComponent > OApplicationController::openElement(const OUString& _sName, ElementType _eType,
-    ElementOpenMode _eOpenMode )
-{
-    return openElementWithArguments( _sName, _eType, _eOpenMode, 0, ::comphelper::NamedValueCollection() );
 }
 
 Reference< XComponent > OApplicationController::openElementWithArguments( const OUString& _sName, ElementType _eType,

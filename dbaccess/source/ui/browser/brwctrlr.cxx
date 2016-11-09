@@ -971,16 +971,6 @@ void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e) throw( R
         SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::focusLost : why is my control not commitable ?");
 }
 
-void SbaXDataBrowserController::disposingGridControl(const css::lang::EventObject& /*Source*/)
-{
-    removeControlListeners(getBrowserView()->getGridControl());
-}
-
-void SbaXDataBrowserController::disposingGridModel(const css::lang::EventObject& /*Source*/)
-{
-    removeModelListeners(getControlModel());
-}
-
 void SbaXDataBrowserController::disposingFormModel(const css::lang::EventObject& Source)
 {
     Reference< XPropertySet >  xSourceSet(Source.Source, UNO_QUERY);
@@ -1029,12 +1019,12 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
     {
         Reference< css::awt::XControl >  xSourceControl(Source.Source, UNO_QUERY);
         if (xSourceControl == getBrowserView()->getGridControl())
-            disposingGridControl(Source);
+            removeControlListeners(getBrowserView()->getGridControl());
     }
 
     // its model (the container of the columns) ?
     if (getControlModel() == Source.Source)
-        disposingGridModel(Source);
+        removeModelListeners(getControlModel());
 
     // the form's model ?
     if ((getRowSet() == Source.Source))

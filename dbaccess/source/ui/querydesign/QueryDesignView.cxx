@@ -2675,13 +2675,8 @@ void OQueryDesignView::paste()
 void OQueryDesignView::TableDeleted(const OUString& rAliasName)
 {
     // message that the table was removed from the window
-    DeleteFields(rAliasName);
-    static_cast<OQueryController&>(getController()).InvalidateFeature(ID_BROWSER_ADDTABLE); // inform the view again
-}
-
-void OQueryDesignView::DeleteFields( const OUString& rAliasName )
-{
     m_pSelectionBox->DeleteFields( rAliasName );
+    static_cast<OQueryController&>(getController()).InvalidateFeature(ID_BROWSER_ADDTABLE); // inform the view again
 }
 
 bool OQueryDesignView::HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo)  const

@@ -95,7 +95,6 @@ private:
 
     SvXMLImportContext* CreateStylesContext(sal_uInt16 nPrefix,const OUString& rLocalName,
                                      const Reference< XAttributeList>& xAttrList, bool bIsAutoStyle );
-    SvXMLImportContext* CreateScriptContext( const OUString& rLocalName );
 
 protected:
     // SvXMLImport

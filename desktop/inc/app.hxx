@@ -158,20 +158,12 @@ class Desktop : public Application
         /** for ui-testing provide a mechanism to pseudo-restart by closing the
             open frames and reopen the frame that appeared post initial startup
         */
-        static void DoExecute();
-
-        /// does initializations which are necessary for the first run of the office
-        static void             DoFirstRunInitializations();
+        static void             DoExecute();
 
         static void             ShowBackingComponent(Desktop * progress);
 
-        static bool             SaveTasks();
-
-        static bool             isUIOnSessionShutdownAllowed();
-
         // on-demand acceptors
         static void             createAcceptor(const OUString& aDescription);
-        static void             enableAcceptors();
         static void             destroyAcceptor(const OUString& aDescription);
 
         bool                    m_bCleanedExtensionCache;

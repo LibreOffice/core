@@ -59,8 +59,6 @@ namespace dbaui
         // XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-        // XServiceInfo - static methods
-        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
 

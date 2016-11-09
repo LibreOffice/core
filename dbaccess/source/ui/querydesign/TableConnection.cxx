@@ -62,10 +62,6 @@ namespace dbaui
             m_vConnLine.push_back( new OConnectionLine(this, *aIter) );
     }
 
-    OConnectionLine* OTableConnection::CreateConnLine( const OConnectionLine& rConnLine )
-    {
-        return new OConnectionLine( rConnLine );
-    }
     void OTableConnection::clearLineData()
     {
         ::std::vector<OConnectionLine*>::const_iterator aLineEnd = m_vConnLine.end();
@@ -97,7 +93,7 @@ namespace dbaui
             ::std::vector<OConnectionLine*>::const_iterator aEnd = rLine.end();
             m_vConnLine.reserve(rLine.size());
             for(;aIter != aEnd;++aIter)
-                m_vConnLine.push_back( CreateConnLine( **aIter ));
+                m_vConnLine.push_back( new OConnectionLine( **aIter ));
         }
 
         // as the data are not mine, I also do not delete the old

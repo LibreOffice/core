@@ -145,21 +145,6 @@ namespace dbaui
         */
         static ElementType getElementType(const css::uno::Reference< css::container::XContainer >& _xContainer);
 
-        /** opens a new frame with either the table or the query or report or form or view
-            @param  _sName
-                The name of the object to open
-            @param  _eType
-                Defines the type to open
-            @param  _eOpenMode
-                denotes the mode in which to open the object
-            @return the form or report model will only be returned, otherwise <NULL/>
-        */
-        css::uno::Reference< css::lang::XComponent > openElement(
-            const OUString& _sName,
-            ElementType _eType,
-            ElementOpenMode _eOpenMode
-        );
-
         /** opens a new sub frame with a table/query/form/report/view, passing additional arguments
         */
         css::uno::Reference< css::lang::XComponent > openElementWithArguments(
@@ -292,18 +277,6 @@ namespace dbaui
                 The service name of the dialog to be executed.
         */
         void openDialog(const OUString& _sServiceName);
-
-        /** opens the administration dialog for the selected data source
-        */
-        void openDataSourceAdminDialog();
-
-        /** opens the table filter dialog for the selected data source
-        */
-        void openTableFilterDialog();
-
-        /** opens the DirectSQLDialog to execute hand made sql statements.
-        */
-        void openDirectSQLDialog();
 
         /** when the settings of the data source changed,
             it opens a dialog which ask to close all depending documents, then recreate the connection.

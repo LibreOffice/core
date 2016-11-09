@@ -88,7 +88,6 @@ namespace dbaui
         virtual void    MouseButtonDown( const MouseEvent& rEvt ) override;
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-        VclPtr<OTableWindowListBox> CreateListBox();
             // called at FIRST Init
         bool FillListBox();
             // called at EACH Init

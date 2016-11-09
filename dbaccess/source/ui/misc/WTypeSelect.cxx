@@ -352,7 +352,22 @@ IMPL_LINK_NOARG( OWizTypeSelect, ButtonClickHdl, Button *, void )
 {
     sal_Int32 nBreakPos;
     m_pParent->CheckColumns(nBreakPos);
-    fillColumnList(m_pAutoEt->GetText().toInt32());
+
+    // fill column list
+    sal_uInt32 nRows = m_pAutoEt->GetText().toInt32();
+    if(m_pParserStream)
+    {
+        sal_uInt64 const nTell = m_pParserStream->Tell(); // might change seek position of stream
+
+        SvParser *pReader = createReader(nRows);
+        if(pReader)
+        {
+            pReader->AddFirstRef();
+            pReader->CallParser();
+            pReader->ReleaseRef();
+        }
+        m_pParserStream->Seek(nTell);
+    }
 
     ActivatePage();
 }
@@ -476,23 +491,6 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
         break;
     }
     return bDone || MultiListBox::PreNotify(rEvt);
-}
-
-void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)
-{
-    if(m_pParserStream)
-    {
-        sal_uInt64 const nTell = m_pParserStream->Tell(); // might change seek position of stream
-
-        SvParser *pReader = createReader(nRows);
-        if(pReader)
-        {
-            pReader->AddFirstRef();
-            pReader->CallParser();
-            pReader->ReleaseRef();
-        }
-        m_pParserStream->Seek(nTell);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

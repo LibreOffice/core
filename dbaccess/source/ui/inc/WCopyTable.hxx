@@ -294,8 +294,6 @@ namespace dbaui
         // checks if the type is supported in the destination database
         bool supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType);
 
-        void    impl_loadSourceData();
-
     public:
         // used for copy tables or queries
         OCopyTableWizard(

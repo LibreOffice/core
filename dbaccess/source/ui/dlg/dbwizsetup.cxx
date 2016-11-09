@@ -359,7 +359,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
 void ODbTypeWizDialogSetup::updateTypeDependentStates()
 {
     bool bDoEnable = false;
-    bool bIsConnectionRequired = IsConnectionUrlRequired();
+    bool bIsConnectionRequired = m_pCollection->isConnectionUrlRequired(m_sURL);
     if (!bIsConnectionRequired)
     {
         bDoEnable = true;
@@ -371,11 +371,6 @@ void ODbTypeWizDialogSetup::updateTypeDependentStates()
     enableState(PAGE_DBSETUPWIZARD_AUTHENTIFICATION, bDoEnable);
     enableState(PAGE_DBSETUPWIZARD_FINAL, bDoEnable );
     enableButtons( WizardButtonFlags::FINISH, bDoEnable);
-}
-
-bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
-{
-    return m_pCollection->isConnectionUrlRequired(m_sURL);
 }
 
 void ODbTypeWizDialogSetup::resetPages(const Reference< XPropertySet >& _rxDatasource)

@@ -92,7 +92,6 @@ namespace dbaui
         virtual bool Close() override;
 
         bool impl_isAddAllowed();
-        void impl_addTable();
 
         enum ObjectList
         {

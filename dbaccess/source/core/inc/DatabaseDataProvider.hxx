@@ -218,7 +218,6 @@ private:
     virtual void SAL_CALL disposing() override;
 
     void impl_fillRowSet_throw();
-    void impl_executeRowSet_throw(::osl::ResettableMutexGuard& _rClearForNotifies);
     bool impl_fillParameters_nothrow( ::osl::ResettableMutexGuard& _rClearForNotifies);
     void impl_fillInternalDataProvider_throw(bool _bHasCategories,const css::uno::Sequence< OUString >& i_aColumnNames);
     void impl_invalidateParameter_nothrow();

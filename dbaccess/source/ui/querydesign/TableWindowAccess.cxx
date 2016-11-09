@@ -70,23 +70,12 @@ namespace dbaui
     }
     OUString SAL_CALL OTableWindowAccess::getImplementationName() throw(RuntimeException, std::exception)
     {
-        return getImplementationName_Static();
+        return OUString("org.openoffice.comp.dbu.TableWindowAccessibility");
     }
     Sequence< OUString > SAL_CALL OTableWindowAccess::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_Static();
-    }
-    // XServiceInfo - static methods
-    Sequence< OUString > OTableWindowAccess::getSupportedServiceNames_Static() throw( RuntimeException )
-    {
-        Sequence< OUString > aSupported(2);
-        aSupported[0] = "com.sun.star.accessibility.Accessible";
-        aSupported[1] = "com.sun.star.accessibility.AccessibleContext";
-        return aSupported;
-    }
-    OUString OTableWindowAccess::getImplementationName_Static() throw( RuntimeException )
-    {
-        return OUString("org.openoffice.comp.dbu.TableWindowAccessibility");
+        return { "com.sun.star.accessibility.Accessible",
+                 "com.sun.star.accessibility.AccessibleContext" };
     }
     // XAccessibleContext
     sal_Int32 SAL_CALL OTableWindowAccess::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
