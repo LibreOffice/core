@@ -350,12 +350,6 @@ namespace connectivity
         */
         void impl_appendError( const css::sdbc::SQLException& _rError );
 
-        /** resets our errors
-        */
-        inline void impl_resetErrors()
-        {
-            m_aErrors = css::sdbc::SQLException();
-        }
         void impl_fillJoinConditions(const OSQLParseNode* i_pJoinCondition);
     };
 }

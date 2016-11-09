@@ -220,15 +220,9 @@ namespace dbtools
     }
 
 
-    void FormattedColumnValue::clear()
-    {
-        lcl_clear_nothrow( *m_pData );
-    }
-
-
     FormattedColumnValue::~FormattedColumnValue()
     {
-        clear();
+        lcl_clear_nothrow( *m_pData );
     }
 
     sal_Int16 FormattedColumnValue::getKeyType() const

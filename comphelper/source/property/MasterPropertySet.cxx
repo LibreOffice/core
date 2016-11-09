@@ -456,12 +456,6 @@ void MasterPropertySet::_postGetPropertyState ()
     OSL_FAIL( "you have to implement this yourself!");
 }
 
-void MasterPropertySet::_setPropertyToDefault( const comphelper::PropertyInfo& )
-    throw(UnknownPropertyException )
-{
-    OSL_FAIL( "you have to implement this yourself!");
-}
-
 Any MasterPropertySet::_getPropertyDefault( const comphelper::PropertyInfo& )
     throw(UnknownPropertyException, WrappedTargetException )
 {

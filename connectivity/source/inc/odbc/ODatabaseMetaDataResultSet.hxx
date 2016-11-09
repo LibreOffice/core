@@ -83,8 +83,6 @@ namespace connectivity
 
             // set the columncount of the driver
             void checkColumnCount();
-            static sal_Int32 getResultSetConcurrency() { return css::sdbc::ResultSetConcurrency::READ_ONLY; }
-            static sal_Int32 getResultSetType()        { return css::sdbc::ResultSetType::FORWARD_ONLY; }
             static sal_Int32 getFetchDirection()       { return css::sdbc::FetchDirection::FORWARD; }
             static sal_Int32 getFetchSize()     throw(css::sdbc::SQLException, css::uno::RuntimeException);
             static OUString getCursorName()     throw(css::sdbc::SQLException, css::uno::RuntimeException);

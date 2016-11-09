@@ -505,11 +505,6 @@ void OConnection::disposing()
     dispose_ChildImpl();
 }
 
-OConnection* OConnection::cloneConnection()
-{
-    return new OConnection(m_pDriverHandleCopy,m_pDriver);
-}
-
 SQLHANDLE OConnection::createStatementHandle()
 {
     OConnection* pConnectionTemp = this;
@@ -519,7 +514,7 @@ SQLHANDLE OConnection::createStatementHandle()
         sal_Int32 nMaxStatements = getMetaData()->getMaxStatements();
         if(nMaxStatements && nMaxStatements <= m_nStatementCount)
         {
-            OConnection* pConnection = cloneConnection();
+            OConnection* pConnection = new OConnection(m_pDriverHandleCopy,m_pDriver);
             pConnection->acquire();
             pConnection->Construct(m_sURL,getConnectionInfo());
             pConnectionTemp = pConnection;

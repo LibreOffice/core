@@ -778,10 +778,10 @@ void ODatabaseMetaDataResultSet::getFastPropertyValue( Any& rValue, sal_Int32 nH
             rValue <<= getCursorName();
             break;
         case PROPERTY_ID_RESULTSETCONCURRENCY:
-            rValue <<= getResultSetConcurrency();
+            rValue <<= sal_Int32(css::sdbc::ResultSetConcurrency::READ_ONLY);
             break;
         case PROPERTY_ID_RESULTSETTYPE:
-            rValue <<= getResultSetType();
+            rValue <<= sal_Int32(css::sdbc::ResultSetType::FORWARD_ONLY);
             break;
         case PROPERTY_ID_FETCHDIRECTION:
             rValue <<= getFetchDirection();

@@ -1410,9 +1410,9 @@ void cppuhelper::ServiceManager::removeEventListenerFromComponent(
     }
 }
 
-void cppuhelper::ServiceManager::readRdbs(rtl::OUString const & uris) {
+void cppuhelper::ServiceManager::init(rtl::OUString const & rdbUris) {
     for (sal_Int32 i = 0; i != -1;) {
-        rtl::OUString uri(uris.getToken(0, ' ', i));
+        rtl::OUString uri(rdbUris.getToken(0, ' ', i));
         if (uri.isEmpty()) {
             continue;
         }

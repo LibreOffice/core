@@ -71,12 +71,7 @@ namespace dbtools
             const css::uno::Reference< css::beans::XPropertySet >& i_rColumn
         );
 
-        // note that all methods of this class need to be virtual, since it's
-        // used in a load-on-demand context in module SVX
-
         ~FormattedColumnValue();
-
-        void        clear();
 
         // access to the details of the formatting we determined
         sal_Int16   getKeyType() const;
