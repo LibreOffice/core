@@ -637,68 +637,20 @@ void FreetypeFont::GetFontMetric( ImplFontMetricDataRef& rxTo, long& rFactor ) c
 
     rFactor = 0x100;
 
-    const TT_OS2* pOS2 = static_cast<const TT_OS2*>(FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 ));
-    const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
+    sal_uLong nHhea = 0;
+    const uint8_t* pHheaBuf = mpFontInfo->GetTable("hhea", &nHhea);
+    const std::vector<uint8_t> rHhea(pHheaBuf, pHheaBuf + nHhea);
 
-    rxTo->SetAscent( 0 );
-    rxTo->SetDescent( 0 );
-    rxTo->SetExternalLeading( 0 );
+    sal_uLong nOS2 = 0;
+    const uint8_t* pOS2Buf = mpFontInfo->GetTable("OS/2", &nOS2);
+    const std::vector<uint8_t> rOS2(pOS2Buf, pOS2Buf + nOS2);
+
+    rxTo->ImplCalcLineSpacing(rHhea, rOS2, maFaceFT->units_per_EM);
+
     rxTo->SetSlant( 0 );
     rxTo->SetWidth( mnWidth );
 
-    // Calculating ascender and descender:
-    // FreeType >= 2.4.6 does the right thing, so we just use what it gives us,
-    // for earlier versions we emulate its behaviour;
-    // take them from 'hhea' table,
-    // if zero take them from 'OS/2' table,
-    // if zero take them from FreeType's font metrics
-    if (nFTVERSION >= 2406)
-    {
-        const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
-        rxTo->SetAscent( (rMetrics.ascender + 32) >> 6 );
-        rxTo->SetDescent( (-rMetrics.descender + 32) >> 6 );
-        rxTo->SetExternalLeading( ((rMetrics.height + 32) >> 6) - (rxTo->GetAscent() + rxTo->GetDescent()) );
-    }
-    else
-    {
-        const TT_HoriHeader* pHHea = static_cast<const TT_HoriHeader*>(FT_Get_Sfnt_Table(maFaceFT, ft_sfnt_hhea));
-        if (pHHea)
-        {
-            rxTo->SetAscent( pHHea->Ascender * fScale + 0.5 );
-            rxTo->SetDescent( -pHHea->Descender * fScale + 0.5 );
-            rxTo->SetExternalLeading( pHHea->Line_Gap * fScale + 0.5 );
-        }
-
-        if (!(rxTo->GetAscent() || rxTo->GetDescent()))
-        {
-            if (pOS2 && (pOS2->version != 0xFFFF))
-            {
-                if (pOS2->sTypoAscender || pOS2->sTypoDescender)
-                {
-                    rxTo->SetAscent( pOS2->sTypoAscender * fScale + 0.5 );
-                    rxTo->SetDescent( -pOS2->sTypoDescender * fScale + 0.5 );
-                    rxTo->SetExternalLeading( pOS2->sTypoLineGap * fScale + 0.5 );
-                }
-                else
-                {
-                    rxTo->SetAscent( pOS2->usWinAscent * fScale + 0.5 );
-                    rxTo->SetDescent( pOS2->usWinDescent * fScale + 0.5 );
-                    rxTo->SetExternalLeading( 0 );
-                }
-            }
-        }
-
-        if (!(rxTo->GetAscent() || rxTo->GetDescent()))
-        {
-            const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
-            rxTo->SetAscent( (rMetrics.ascender + 32) >> 6 );
-            rxTo->SetDescent( (-rMetrics.descender + 32) >> 6 );
-            rxTo->SetExternalLeading( ((rMetrics.height + 32) >> 6) - (rxTo->GetAscent() + rxTo->GetDescent() ) );
-        }
-    }
-
-    rxTo->SetInternalLeading( rxTo->GetAscent() + rxTo->GetDescent() - (maFaceFT->units_per_EM * fScale + 0.5) );
-
+    const TT_OS2* pOS2 = static_cast<const TT_OS2*>(FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 ));
     if( pOS2 && (pOS2->version != 0xFFFF) )
     {
         // map the panose info from the OS2 table to their VCL counterparts
