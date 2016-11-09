@@ -72,7 +72,6 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     DECL_LINK(DoubleClickHdl, ListBox&, void);
     DECL_LINK(BrowseHdl, Button*, void);
     DECL_LINK(RadioHdl, Button*, void);
-    void SelectDefault();
     bool IsCreateNew() const override
         { return m_pRbNewObject->IsChecked(); }
 

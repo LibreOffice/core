@@ -232,8 +232,10 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double fScaleX, double fScaleY )
 {
     Graphic         aRet;
-    const Size      aSize( std::max( FRound( GetTileWidth() * fScaleX ), 1L ),
-                           std::max( FRound( GetTileHeight() * fScaleY ), 1L ) );
+    long            nTileWidth = static_cast<long>(mpMtrWidth->GetValue());
+    long            nTileHeight = static_cast<long>(mpMtrHeight->GetValue());
+    const Size      aSize( std::max( FRound( nTileWidth * fScaleX ), 1L ),
+                           std::max( FRound( nTileHeight * fScaleY ), 1L ) );
     BmpFilterParam  aParam( aSize );
 
     if( rGraphic.IsAnimated() )
@@ -299,7 +301,8 @@ void GraphicFilterSmooth::dispose()
 Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
-    BmpFilterParam  aParam( GetRadius() );
+    double          nRadius = mpMtrRadius->GetValue() / 10.0;
+    BmpFilterParam  aParam( nRadius );
 
     if( rGraphic.IsAnimated() )
     {
@@ -369,7 +372,8 @@ void GraphicFilterSolarize::dispose()
 Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
-    BmpFilterParam  aParam( GetGreyThreshold() );
+    sal_uInt8       nGreyThreshold = (sal_uInt8) FRound( mpMtrThreshold->GetValue() * 2.55 );
+    BmpFilterParam  aParam( nGreyThreshold );
 
     if( rGraphic.IsAnimated() )
     {
@@ -430,7 +434,8 @@ void GraphicFilterSepia::dispose()
 Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
-    BmpFilterParam  aParam( GetSepiaPercent() );
+    sal_uInt16      nSepiaPct = sal::static_int_cast< sal_uInt16 >(mpMtrSepia->GetValue());
+    BmpFilterParam  aParam( nSepiaPct );
 
     if( rGraphic.IsAnimated() )
     {
@@ -486,8 +491,8 @@ void GraphicFilterPoster::dispose()
 
 Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
-    Graphic         aRet;
-    const sal_uInt16    nPosterCount = GetPosterColorCount();
+    Graphic          aRet;
+    const sal_uInt16 nPosterCount = (sal_uInt16) mpNumPoster->GetValue();
 
     if( rGraphic.IsAnimated() )
     {

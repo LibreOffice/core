@@ -218,16 +218,10 @@ void SearchProgress::dispose()
 }
 
 
-void SearchProgress::Terminate()
+IMPL_LINK_NOARG(SearchProgress, ClickCancelBtn, Button*, void)
 {
     if (maSearchThread.is())
         maSearchThread->terminate();
-}
-
-
-IMPL_LINK_NOARG(SearchProgress, ClickCancelBtn, Button*, void)
-{
-    Terminate();
 }
 
 
@@ -347,16 +341,10 @@ void TakeProgress::dispose()
 }
 
 
-void TakeProgress::Terminate()
+IMPL_LINK_NOARG(TakeProgress, ClickCancelBtn, Button*, void)
 {
     if (maTakeThread.is())
         maTakeThread->terminate();
-}
-
-
-IMPL_LINK_NOARG(TakeProgress, ClickCancelBtn, Button*, void)
-{
-    Terminate();
 }
 
 

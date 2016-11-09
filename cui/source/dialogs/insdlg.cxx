@@ -147,12 +147,6 @@ IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl, Button*, void)
 }
 
 
-void SvInsertOleDlg::SelectDefault()
-{
-    m_pLbObjecttype->SelectEntryPos(0);
-}
-
-
 SvInsertOleDlg::SvInsertOleDlg
 (
     vcl::Window* pParent,
@@ -213,7 +207,7 @@ short SvInsertOleDlg::Execute()
     for ( sal_uLong i = 0; i < m_pServers->Count(); i++ )
         m_pLbObjecttype->InsertEntry( (*m_pServers)[i].GetHumanName() );
     m_pLbObjecttype->SetUpdateMode( true );
-    SelectDefault();
+    m_pLbObjecttype->SelectEntryPos(0);
     OUString aName;
 
     DBG_ASSERT( m_xStorage.is(), "No storage!");

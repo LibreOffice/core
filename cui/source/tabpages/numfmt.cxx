@@ -832,14 +832,6 @@ DeactivateRC SvxNumberFormatTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-void SvxNumberFormatTabPage::SetInfoItem( const SvxNumberInfoItem& rItem )
-{
-    if(pNumItem==nullptr)
-    {
-        pNumItem = static_cast<SvxNumberInfoItem*>(rItem.Clone());
-    }
-}
-
 void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEntries )
 {
     OUString    aEntry;
@@ -1844,8 +1836,8 @@ void SvxNumberFormatTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SvxNumberInfoItem* pNumberInfoItem = aSet.GetItem<SvxNumberInfoItem>(SID_ATTR_NUMBERFORMAT_INFO, false);
     const SfxLinkItem* pLinkItem = aSet.GetItem<SfxLinkItem>(SID_LINK_TYPE, false);
-    if (pNumberInfoItem)
-        SetInfoItem(*pNumberInfoItem);
+    if (pNumberInfoItem && !pNumItem)
+        pNumItem = static_cast<SvxNumberInfoItem*>(pNumberInfoItem->Clone());
     if (pLinkItem)
         fnOkHdl = pLinkItem->GetValue();
 }

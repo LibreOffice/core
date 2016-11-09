@@ -785,7 +785,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    void             SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
+    void    SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
     void    SetPos( sal_Int32* pInPos ) { pPos = pInPos; }
     void    SetColorList( const XColorListRef& pColList );
 
@@ -793,18 +793,6 @@ public:
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
 
     virtual void FillUserData() override;
-
-    void SetModified(bool bIsModified)
-    {
-        if (bIsModified)
-            *pnColorListState |= ChangeType::MODIFIED;
-        else
-            *pnColorListState &= ~ChangeType::MODIFIED;
-    }
-    void AddState(ChangeType nState)
-    {
-        *pnColorListState |= nState;
-    }
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUITABAREA_HXX

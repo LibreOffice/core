@@ -50,7 +50,6 @@ protected:
 
     void                        InitAndSetHandler();
     void                        FillEvents();
-    void                        FillMacroList();
     void                        EnableButtons();
 
 public:

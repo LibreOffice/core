@@ -485,7 +485,7 @@ void IconChoiceDialog::DeActivatePageImpl ()
 
         if ( nRet & DeactivateRC::RefreshSet )
         {
-            RefreshInputSet();
+            // TODO refresh input set
             // flag all pages to be newly initialized
             for (IconChoicePageData* pObj : maPageList)
             {
@@ -618,11 +618,6 @@ void IconChoiceDialog::Start_Impl()
 {
     FocusOnIcon( mnCurrentPageId );
     ActivatePageImpl();
-}
-
-void IconChoiceDialog::RefreshInputSet()
-{
-    SAL_WARN( "cui.dialogs", "RefreshInputSet not implemented" );
 }
 
 /**********************************************************************

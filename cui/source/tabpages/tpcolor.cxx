@@ -507,8 +507,8 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, ListBox&, void)
                 pLine->SetNewColorList(pList);
             else
                 SetColorList(pList);
-            AddState( ChangeType::CHANGED );
-            SetModified( false );
+            *pnColorListState |= ChangeType::CHANGED;
+            *pnColorListState &= ~ChangeType::MODIFIED;
         }
     }
     if(nPos != 0)
