@@ -113,6 +113,8 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     static int AsHex(char ch);
     /// Decode a hex dump.
     static std::vector<unsigned char> DecodeHexString(PDFHexStringElement* pElement);
+    /// Suggest a minimal, yet free signature ID to use for the next signature.
+    sal_uInt32 GetNextSignature();
 
 public:
     PDFDocument();
