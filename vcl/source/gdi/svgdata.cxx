@@ -34,7 +34,7 @@
 using namespace ::com::sun::star;
 
 BitmapEx convertPrimitive2DSequenceToBitmapEx(
-    const std::vector< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
+    const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels)
 {
@@ -90,7 +90,7 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
 }
 
 size_t estimateSize(
-    std::vector<uno::Reference<graphic::XPrimitive2D>> const& rSequence)
+    std::deque<uno::Reference<graphic::XPrimitive2D>> const& rSequence)
 {
     size_t nRet(0);
     for (auto& it : rSequence)
@@ -131,7 +131,8 @@ void SvgData::ensureSequenceAndRange()
             {
                 const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
 
-                maSequence = comphelper::sequenceToContainer< std::vector< css::uno::Reference< css::graphic::XPrimitive2D > > >(xSvgParser->getDecomposition(myInputStream, maPath));
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>,
+                                                             css::uno::Reference< css::graphic::XPrimitive2D >>(xSvgParser->getDecomposition(myInputStream, maPath));
             }
             catch(const uno::Exception&)
             {
@@ -220,7 +221,7 @@ const basegfx::B2DRange& SvgData::getRange() const
     return maRange;
 }
 
-const std::vector< css::uno::Reference< css::graphic::XPrimitive2D > >& SvgData::getPrimitive2DSequence() const
+const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& SvgData::getPrimitive2DSequence() const
 {
     const_cast< SvgData* >(this)->ensureSequenceAndRange();
 

@@ -105,7 +105,7 @@ namespace svgio
             const uno::Reference< ::io::XInputStream >& xSVGStream,
             const OUString& aAbsolutePath ) throw (uno::RuntimeException, std::exception)
         {
-            drawinglayer::primitive2d::Primitive2DSequence aRetval;
+            drawinglayer::primitive2d::Primitive2DContainer aRetval;
 
             if(xSVGStream.is())
             {
@@ -156,9 +156,7 @@ namespace svgio
 
                     if(Display_none != pCandidate->getDisplay())
                     {
-                        drawinglayer::primitive2d::Primitive2DContainer aTmp = comphelper::sequenceToContainer<drawinglayer::primitive2d::Primitive2DContainer>(aRetval);
-                        pCandidate->decomposeSvgNode(aTmp, false);
-                        aRetval = comphelper::containerToSequence(aTmp);
+                        pCandidate->decomposeSvgNode(aRetval, false);
                     }
                 }
             }
@@ -167,7 +165,7 @@ namespace svgio
                 OSL_ENSURE(false, "Invalid stream (!)");
             }
 
-            return aRetval;
+            return comphelper::containerToSequence(aRetval);
         }
 
         OUString SAL_CALL XSvgParser::getImplementationName() throw(uno::RuntimeException, std::exception)
