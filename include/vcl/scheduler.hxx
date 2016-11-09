@@ -63,9 +63,6 @@ protected:
      */
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const = 0;
 
-    Scheduler(Scheduler &) = delete;
-    void operator =(Scheduler &) = delete;
-
 public:
     Scheduler( const sal_Char *pDebugName );
     Scheduler( const Scheduler& rScheduler );
