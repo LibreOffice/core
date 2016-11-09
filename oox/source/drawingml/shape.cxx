@@ -1140,7 +1140,7 @@ Reference< XShape > Shape::createAndInsert(
                         }
                     }
                 }
-
+                xText->setString("");
                 Reference < XTextCursor > xAt = xText->createTextCursor();
                 getTextBody()->insertAt( rFilterBase, xText, xAt, aCharStyleProperties, mpMasterTextListStyle );
             }
