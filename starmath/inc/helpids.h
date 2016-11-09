@@ -248,6 +248,7 @@
 #define HID_SMA_XUNDERBRACEY                              "STARMATH_HID_SMA_XUNDERBRACEY"
 #define HID_SMA_LRDBRACKETX                               "STARMATH_HID_SMA_LRDBRACKETX"
 #define HID_SMA_SLRDBRACKETX                              "STARMATH_HID_SMA_SLRDBRACKETX"
+#define HID_SMA_XEVALUATEDATY                             "STARMATH_HID_SMA_XEVALUATEDATY"
 
 
 #define HID_SMA_NOSPACE                                   "STARMATH_HID_SMA_NOSPACE"
