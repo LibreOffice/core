@@ -109,7 +109,7 @@ void FastParser::setDocumentHandler( const Reference< XFastDocumentHandler >& rx
     mxParser->setFastDocumentHandler( rxDocHandler );
 }
 
-void FastParser::parseStream( const InputSource& rInputSource, bool bCloseStream ) throw( SAXException, IOException, RuntimeException )
+void FastParser::parseStream( const InputSource& rInputSource, bool bCloseStream ) throw( SAXException, IOException, RuntimeException, std::exception )
 {
     // guard closing the input stream also when exceptions are thrown
     InputStreamCloseGuard aGuard( rInputSource.aInputStream, bCloseStream );
@@ -118,7 +118,7 @@ void FastParser::parseStream( const InputSource& rInputSource, bool bCloseStream
     mxParser->parseStream( rInputSource );
 }
 
-void FastParser::parseStream( const Reference< XInputStream >& rxInStream, const OUString& rStreamName ) throw( SAXException, IOException, RuntimeException )
+void FastParser::parseStream( const Reference< XInputStream >& rxInStream, const OUString& rStreamName ) throw( SAXException, IOException, RuntimeException, std::exception )
 {
     InputSource aInputSource;
     aInputSource.sSystemId = rStreamName;
@@ -126,7 +126,7 @@ void FastParser::parseStream( const Reference< XInputStream >& rxInStream, const
     parseStream( aInputSource );
 }
 
-void FastParser::parseStream( StorageBase& rStorage, const OUString& rStreamName ) throw( SAXException, IOException, RuntimeException )
+void FastParser::parseStream( StorageBase& rStorage, const OUString& rStreamName ) throw( SAXException, IOException, RuntimeException, std::exception )
 {
     parseStream( rStorage.openInputStream( rStreamName ), rStreamName );
 }

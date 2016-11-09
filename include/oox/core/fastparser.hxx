@@ -74,19 +74,19 @@ public:
     /** Parses the passed SAX input source.
         @param bCloseStream  True = closes the stream in the input source after parsing. */
     void                parseStream( const css::xml::sax::InputSource& rInputSource, bool bCloseStream = false )
-                            throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException );
+                            throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception );
 
     /** Parses the passed input stream.
         @param bCloseStream  True = closes the passed stream after parsing. */
     void                parseStream(
                             const css::uno::Reference< css::io::XInputStream >& rxInStream,
                             const OUString& rStreamName )
-                            throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException );
+                            throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception );
 
     /** Parses a stream from the passed storage with the specified name.
         @param bCloseStream  True = closes the stream after parsing. */
     void                parseStream( StorageBase& rStorage, const OUString& rStreamName )
-                            throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException );
+                            throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception );
 
     const css::uno::Reference< css::xml::sax::XFastTokenHandler >&
                getTokenHandler() const { return mxTokenHandler; }
