@@ -204,6 +204,7 @@ namespace vcl
         sal_uInt32 ur4;           /**< bits 96 - 127 of Unicode Range flags                    */
         sal_uInt8  panose[10];    /**< PANOSE classification number                            */
         sal_uInt32 typeFlags;     /**< type flags (copyright bits + PS-OpenType flag)       */
+        sal_uInt16 fsSelection;   /**< OS/2 fsSelection */
     } TTGlobalFontInfo;
 
 #define TYPEFLAG_INVALID        0x8000000
@@ -506,6 +507,20 @@ namespace vcl
  *
  */
     void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info);
+
+/**
+ * Returns fonts metrics.
+ * @see TTGlobalFontInfo
+ *
+ * @param hhea        hhea table data
+ * @param os2         OS/2 table data
+ * @param info        pointer to a TTGlobalFontInfo structure
+ * @ingroup sft
+ *
+ */
+ void GetTTFontMterics(const std::vector<uint8_t>& hhea,
+                       const std::vector<uint8_t>& os2,
+                       TTGlobalFontInfo *info);
 
 /**
  * returns the number of glyphs in a font
