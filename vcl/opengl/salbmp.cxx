@@ -64,7 +64,7 @@ inline bool determineTextureFormat(sal_uInt16 nBits, GLenum& nFormat, GLenum& nT
         return true;
     case 32:
         nFormat = GL_RGBA;
-        nType = GL_UNSIGNED_INT_8_8_8_8;
+        nType = GL_UNSIGNED_BYTE;
         return true;
     default:
         break;
