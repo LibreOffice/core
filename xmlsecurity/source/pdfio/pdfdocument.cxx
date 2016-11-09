@@ -437,46 +437,95 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.WriteCharPtr(" 0 R\n>>\n");
     m_aEditBuffer.WriteCharPtr(">>\nendobj\n\n");
 
-    // Write the updated first page object, references nAnnotId.
-    sal_uInt32 nFirstPageId = pFirstPage->GetObjectValue();
-    if (nFirstPageId >= m_aXRef.size())
+    PDFElement* pAnnots = pFirstPage->Lookup("Annots");
+    auto pAnnotsReference = dynamic_cast<PDFReferenceElement*>(pAnnots);
+    if (pAnnotsReference)
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: invalid first page obj id");
-        return false;
-    }
-    m_aXRef[nFirstPageId].m_nOffset = m_aEditBuffer.Tell();
-    m_aXRef[nFirstPageId].m_bDirty = true;
-    m_aEditBuffer.WriteUInt32AsString(nFirstPageId);
-    m_aEditBuffer.WriteCharPtr(" 0 obj\n");
-    m_aEditBuffer.WriteCharPtr("<<");
-    auto pAnnots = dynamic_cast<PDFArrayElement*>(pFirstPage->Lookup("Annots"));
-    if (!pAnnots)
-    {
-        // No Annots key, just write the key with a single reference.
-        m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pFirstPage->GetDictionaryOffset(), pFirstPage->GetDictionaryLength());
-        m_aEditBuffer.WriteCharPtr("/Annots[");
-        m_aEditBuffer.WriteUInt32AsString(nAnnotId);
-        m_aEditBuffer.WriteCharPtr(" 0 R]");
-    }
-    else
-    {
-        // Annots key is already there, insert our reference at the end.
-        PDFDictionaryElement* pDictionary = pFirstPage->GetDictionary();
+        // Write the updated Annots key of the Page object.
+        PDFObjectElement* pAnnotsObject = pAnnotsReference->LookupObject();
+        if (!pAnnotsObject)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: invalid Annots reference");
+            return false;
+        }
 
-        // Offset right before the end of the Annots array.
-        sal_uInt64 nAnnotsEndOffset = pDictionary->GetKeyOffset("Annots") + pDictionary->GetKeyValueLength("Annots") - 1;
-        // Length of beginning of the dictionary -> Annots end.
-        sal_uInt64 nAnnotsBeforeEndLength = nAnnotsEndOffset - pFirstPage->GetDictionaryOffset();
-        m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pFirstPage->GetDictionaryOffset(), nAnnotsBeforeEndLength);
+        sal_uInt32 nAnnotsId = pAnnotsObject->GetObjectValue();
+        m_aXRef[nAnnotsId].m_eType = XRefEntryType::NOT_COMPRESSED;
+        m_aXRef[nAnnotsId].m_nOffset = m_aEditBuffer.Tell();
+        m_aXRef[nAnnotsId].m_nGenerationNumber = 0;
+        m_aXRef[nAnnotsId].m_bDirty = true;
+        m_aEditBuffer.WriteUInt32AsString(nAnnotsId);
+        m_aEditBuffer.WriteCharPtr(" 0 obj\n[");
+
+        // Write existing references.
+        PDFArrayElement* pArray = pAnnotsObject->GetArray();
+        if (!pArray)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: Page Annots is a reference to a non-array");
+            return false;
+        }
+
+        for (size_t i = 0; i < pArray->GetElements().size(); ++i)
+        {
+            auto pReference = dynamic_cast<PDFReferenceElement*>(pArray->GetElements()[i]);
+            if (!pReference)
+                continue;
+
+            if (i)
+                m_aEditBuffer.WriteCharPtr(" ");
+            m_aEditBuffer.WriteUInt32AsString(pReference->GetObjectValue());
+            m_aEditBuffer.WriteCharPtr(" 0 R");
+        }
+        // Write our reference.
         m_aEditBuffer.WriteCharPtr(" ");
         m_aEditBuffer.WriteUInt32AsString(nAnnotId);
         m_aEditBuffer.WriteCharPtr(" 0 R");
-        // Length of Annots end -> end of the dictionary.
-        sal_uInt64 nAnnotsAfterEndLength = pFirstPage->GetDictionaryOffset() + pFirstPage->GetDictionaryLength() - nAnnotsEndOffset;
-        m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + nAnnotsEndOffset, nAnnotsAfterEndLength);
+
+        m_aEditBuffer.WriteCharPtr("]\nendobj\n\n");
     }
-    m_aEditBuffer.WriteCharPtr(">>");
-    m_aEditBuffer.WriteCharPtr("\nendobj\n\n");
+    else
+    {
+        // Write the updated first page object, references nAnnotId.
+        sal_uInt32 nFirstPageId = pFirstPage->GetObjectValue();
+        if (nFirstPageId >= m_aXRef.size())
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: invalid first page obj id");
+            return false;
+        }
+        m_aXRef[nFirstPageId].m_nOffset = m_aEditBuffer.Tell();
+        m_aXRef[nFirstPageId].m_bDirty = true;
+        m_aEditBuffer.WriteUInt32AsString(nFirstPageId);
+        m_aEditBuffer.WriteCharPtr(" 0 obj\n");
+        m_aEditBuffer.WriteCharPtr("<<");
+        auto pAnnotsArray = dynamic_cast<PDFArrayElement*>(pAnnots);
+        if (!pAnnotsArray)
+        {
+            // No Annots key, just write the key with a single reference.
+            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pFirstPage->GetDictionaryOffset(), pFirstPage->GetDictionaryLength());
+            m_aEditBuffer.WriteCharPtr("/Annots[");
+            m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+            m_aEditBuffer.WriteCharPtr(" 0 R]");
+        }
+        else
+        {
+            // Annots key is already there, insert our reference at the end.
+            PDFDictionaryElement* pDictionary = pFirstPage->GetDictionary();
+
+            // Offset right before the end of the Annots array.
+            sal_uInt64 nAnnotsEndOffset = pDictionary->GetKeyOffset("Annots") + pDictionary->GetKeyValueLength("Annots") - 1;
+            // Length of beginning of the dictionary -> Annots end.
+            sal_uInt64 nAnnotsBeforeEndLength = nAnnotsEndOffset - pFirstPage->GetDictionaryOffset();
+            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pFirstPage->GetDictionaryOffset(), nAnnotsBeforeEndLength);
+            m_aEditBuffer.WriteCharPtr(" ");
+            m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+            m_aEditBuffer.WriteCharPtr(" 0 R");
+            // Length of Annots end -> end of the dictionary.
+            sal_uInt64 nAnnotsAfterEndLength = pFirstPage->GetDictionaryOffset() + pFirstPage->GetDictionaryLength() - nAnnotsEndOffset;
+            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + nAnnotsEndOffset, nAnnotsAfterEndLength);
+        }
+        m_aEditBuffer.WriteCharPtr(">>");
+        m_aEditBuffer.WriteCharPtr("\nendobj\n\n");
+    }
 
     // Write the updated Catalog object, references nAnnotId.
     PDFReferenceElement* pRoot = nullptr;
