@@ -27,6 +27,7 @@
 #include <com/sun/star/util/XAccounting.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <deque>
 
 
 /** defines for DeclPrimitive2DIDBlock and ImplPrimitive2DIDBlock
@@ -58,21 +59,21 @@ namespace drawinglayer { namespace primitive2d {
     typedef css::uno::Sequence< Primitive2DReference > Primitive2DSequence;
 
 
-    class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer : public std::vector< Primitive2DReference >
+    class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer : public std::deque< Primitive2DReference >
     {
     public:
         explicit Primitive2DContainer() {}
-        explicit Primitive2DContainer( size_type count ) : vector(count) {}
-        Primitive2DContainer( const Primitive2DContainer& other ) : vector(other) {}
-        Primitive2DContainer( const Primitive2DContainer&& other ) : vector(other) {}
-        Primitive2DContainer( const vector< Primitive2DReference >& other ) : vector(other) {}
-        Primitive2DContainer( std::initializer_list<Primitive2DReference> init ) : vector(init) {}
+        explicit Primitive2DContainer( size_type count ) : deque(count) {}
+        Primitive2DContainer( const Primitive2DContainer& other ) : deque(other) {}
+        Primitive2DContainer( const Primitive2DContainer&& other ) : deque(other) {}
+        Primitive2DContainer( const std::deque< Primitive2DReference >& other ) : deque(other) {}
+        Primitive2DContainer( std::initializer_list<Primitive2DReference> init ) : deque(init) {}
 
         void append(const Primitive2DContainer& rSource);
         void append(const Primitive2DSequence& rSource);
         void append(Primitive2DContainer&& rSource);
-        Primitive2DContainer& operator=(const Primitive2DContainer& r) { vector::operator=(r); return *this; }
-        Primitive2DContainer& operator=(const Primitive2DContainer&& r) { vector::operator=(r); return *this; }
+        Primitive2DContainer& operator=(const Primitive2DContainer& r) { deque::operator=(r); return *this; }
+        Primitive2DContainer& operator=(const Primitive2DContainer&& r) { deque::operator=(r); return *this; }
         bool operator==(const Primitive2DContainer& rB) const;
         bool operator!=(const Primitive2DContainer& rB) const { return !operator==(rB); }
         basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& aViewInformation) const;

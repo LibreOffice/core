@@ -26,6 +26,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/graphic/XPrimitive3D.hpp>
 #include <basegfx/range/b3drange.hxx>
+#include <deque>
 
 
 /** defines for DeclPrimitive3DIDBlock and ImplPrimitive3DIDBlock
@@ -53,18 +54,18 @@ namespace drawinglayer { namespace primitive3d {
     typedef css::uno::Reference< css::graphic::XPrimitive3D > Primitive3DReference;
     typedef css::uno::Sequence< Primitive3DReference > Primitive3DSequence;
 
-    class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive3DContainer : public std::vector< Primitive3DReference >
+    class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive3DContainer : public std::deque< Primitive3DReference >
     {
     public:
         explicit Primitive3DContainer() {}
-        explicit Primitive3DContainer( size_type count ) : vector(count) {}
-        Primitive3DContainer( const Primitive3DContainer& other ) : vector(other) {}
-        Primitive3DContainer( const Primitive3DContainer&& other ) : vector(other) {}
-        Primitive3DContainer( std::initializer_list<Primitive3DReference> init ) : vector(init) {}
+        explicit Primitive3DContainer( size_type count ) : deque(count) {}
+        Primitive3DContainer( const Primitive3DContainer& other ) : deque(other) {}
+        Primitive3DContainer( const Primitive3DContainer&& other ) : deque(other) {}
+        Primitive3DContainer( std::initializer_list<Primitive3DReference> init ) : deque(init) {}
 
         void append(const Primitive3DContainer& rSource);
-        Primitive3DContainer& operator=(const Primitive3DContainer& r) { vector::operator=(r); return *this; }
-        Primitive3DContainer& operator=(const Primitive3DContainer&& r) { vector::operator=(r); return *this; }
+        Primitive3DContainer& operator=(const Primitive3DContainer& r) { deque::operator=(r); return *this; }
+        Primitive3DContainer& operator=(const Primitive3DContainer&& r) { deque::operator=(r); return *this; }
         bool operator==(const Primitive3DContainer& rB) const;
         bool operator!=(const Primitive3DContainer& rB) const { return !operator==(rB); }
         basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& aViewInformation) const;
