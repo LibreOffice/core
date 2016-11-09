@@ -77,6 +77,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_bugfix_test,\
     embeddedobj/util/embobj \
     eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
+    filter/source/xmlfilteradaptor/xmlfa \
+    filter/source/xsltfilter/xsltfilter \
     forms/util/frm \
     framework/util/fwk \
     i18npool/source/search/i18nsearch \
