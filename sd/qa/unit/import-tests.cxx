@@ -127,6 +127,7 @@ public:
     void testTdf99030();
     void testTdf49561();
     void testTdf103473();
+    void testTdf103792();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -179,6 +180,7 @@ public:
     CPPUNIT_TEST(testTdf99030);
     CPPUNIT_TEST(testTdf49561);
     CPPUNIT_TEST(testTdf103473);
+    CPPUNIT_TEST(testTdf103792);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1500,6 +1502,24 @@ void SdImportTest::testTdf103473()
     CPPUNIT_ASSERT_EQUAL(4431L, aRect.Top());
     CPPUNIT_ASSERT_EQUAL(8353L, aRect.Right());
     CPPUNIT_ASSERT_EQUAL(9155L, aRect.Bottom());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf103792()
+{
+    // Title text shape on the actual slide contained no text neither a placeholder text.
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf103792.pptx"), PPTX);
+
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    CPPUNIT_ASSERT_MESSAGE("No page found", pPage != nullptr);
+    SdrObject *pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Wrong object", pObj != nullptr);
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>(pObj);
+    CPPUNIT_ASSERT_MESSAGE("Not a text object", pTxtObj != nullptr);
+
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    CPPUNIT_ASSERT_EQUAL(OUString("Click to add Title"), aEdit.GetText(0));
 
     xDocShRef->DoClose();
 }
