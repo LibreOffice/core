@@ -543,7 +543,7 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
     std::shared_ptr<const SfxFilter> pFilter(new SfxFilter(
         rFilter,
         OUString(), nFilterFlags, nClipboardID, rTypeName, 0, OUString(),
-        rUserData, OUString("private:factory/scalc*")));
+        rUserData, OUString("private:factory/scalc")));
     const_cast<SfxFilter*>(pFilter.get())->SetVersion(nFilterVersion);
 
     ScDocShellRef xDocShRef = new ScDocShell;
