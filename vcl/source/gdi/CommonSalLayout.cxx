@@ -415,7 +415,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 int32_t nIdx = nMinRunPos;
                 while (nIdx < nEndRunPos)
                 {
-                    int32_t nPrevIndx = nIdx;
+                    int32_t nPrevIdx = nIdx;
                     sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&nIdx);
                     switch (vcl::GetVerticalOrientation(aChar))
                     {
