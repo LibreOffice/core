@@ -24,6 +24,7 @@
 #include "impfontmetric.hxx"
 #include "impfontmetricdata.hxx"
 #include "PhysicalFontFace.hxx"
+#include "sft.hxx"
 
 #include <vector>
 #include <set>
@@ -214,6 +215,7 @@ bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
 
 ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     : FontAttributes( rFontSelData )
+    , mnHeight ( rFontSelData.mnHeight )
     , mnWidth ( rFontSelData.mnWidth )
     , mnOrientation( (short)(rFontSelData.mnOrientation) )
     , mnAscent( 0 )
@@ -422,6 +424,76 @@ void ImplFontMetricData::ImplInitAboveTextLineSize()
         mnAboveWUnderlineSize = ((nWCalcSize*50)+50) / 100;
 
     mnAboveWUnderlineOffset = nCeiling + (nIntLeading + 1) / 2;
+}
+
+/*
+ * Calculate line spacing:
+ *
+ * - hhea metrics should be used, since hhea is a mandatory font table and
+ *   should always be present.
+ * - But if OS/2 is present, it should be used since it is mandatory in
+ *   Windows.
+ *   OS/2 has Typo and Win metrics, but the later was meant to control
+ *   text clipping not line spacing and can be ridiculously large.
+ *   Unfortunately many Windows application incorrectly use the Win metrics
+ *   (thanks to GDI’s TEXTMETRIC) and old fonts might be designed with this
+ *   in mind, so OpenType introduced a flag for fonts to indicate that they
+ *   really want to use Typo metrics. So for best backward compatibility:
+ *   - Use Win metrics if available.
+ *   - Unless USE_TYPO_METRICS flag is set, in which case use Typo metrics.
+*/
+void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaData,
+        const std::vector<uint8_t>& rOS2Data, int nUPEM)
+{
+    mnAscent = mnDescent = mnExtLeading = mnIntLeading = 0;
+
+    double fScale = static_cast<double>(mnHeight) / nUPEM;
+
+    vcl::TTGlobalFontInfo rInfo;
+    memset(&rInfo, 0, sizeof(vcl::TTGlobalFontInfo));
+    GetTTFontMterics(rHheaData, rOS2Data, &rInfo);
+
+    // Try hhea table first.
+    if (rInfo.ascender || rInfo.descender)
+    {
+        mnAscent     =  rInfo.ascender  * fScale;
+        mnDescent    = -rInfo.descender * fScale;
+        mnExtLeading =  rInfo.linegap   * fScale;
+    }
+
+    // But if OS/2 is present, prefer it.
+    if (rInfo.winAscent || rInfo.winDescent || rInfo.typoAscender || rInfo.typoDescender)
+    {
+        if (mnAscent == 0 && mnDescent == 0)
+        {
+            mnAscent     = rInfo.winAscent  * fScale;
+            mnDescent    = rInfo.winDescent * fScale;
+            mnExtLeading = 0;
+        }
+
+        const uint16_t kUseTypoMetricsMask = 1 << 7;
+        if (rInfo.fsSelection & kUseTypoMetricsMask)
+        {
+            mnAscent     =  rInfo.typoAscender  * fScale;
+            mnDescent    = -rInfo.typoDescender * fScale;
+            mnExtLeading =  rInfo.typoLineGap   * fScale;
+        }
+    }
+
+    if (mnAscent || mnDescent)
+        mnIntLeading = mnAscent + mnDescent - mnHeight;
+
+    SAL_INFO("vcl.gdi.fontmetric",
+                  "fsSelection: "   << rInfo.fsSelection
+             << ", typoAscender: "  << rInfo.typoAscender
+             << ", typoDescender: " << rInfo.typoDescender
+             << ", typoLineGap: "   << rInfo.typoLineGap
+             << ", winAscent: "     << rInfo.winAscent
+             << ", winDescent: "    << rInfo.winDescent
+             << ", ascender: "      << rInfo.ascender
+             << ", descender: "     << rInfo.descender
+             << ", linegap: "       << rInfo.linegap
+             );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

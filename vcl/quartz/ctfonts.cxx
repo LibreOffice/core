@@ -127,12 +127,22 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef& rxFontMetric ) const
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
-    const CGFloat fAscent = CTFontGetAscent( aCTFontRef );
-    const CGFloat fCapHeight = CTFontGetCapHeight( aCTFontRef );
-    rxFontMetric->SetAscent( lrint( fAscent ) );
-    rxFontMetric->SetDescent( lrint( CTFontGetDescent( aCTFontRef )) );
-    rxFontMetric->SetExternalLeading( lrint( CTFontGetLeading( aCTFontRef )) );
-    rxFontMetric->SetInternalLeading( lrint( fAscent - fCapHeight ) );
+    int nBufSize = 0;
+
+    nBufSize = mpFontData->GetFontTable("hhea", nullptr);
+    uint8_t* pHheaBuf = new uint8_t[nBufSize];
+    nBufSize = mpFontData->GetFontTable("hhea", pHheaBuf);
+    std::vector<uint8_t> rHhea(pHheaBuf, pHheaBuf + nBufSize);
+
+    nBufSize = mpFontData->GetFontTable("OS/2", nullptr);
+    uint8_t* pOS2Buf = new uint8_t[nBufSize];
+    nBufSize = mpFontData->GetFontTable("OS/2", pOS2Buf);
+    std::vector<uint8_t> rOS2(pOS2Buf, pOS2Buf + nBufSize);
+
+    rxFontMetric->ImplCalcLineSpacing(rHhea, rOS2, CTFontGetUnitsPerEm(aCTFontRef));
+
+    delete[] pHheaBuf;
+    delete[] pOS2Buf;
 
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
