@@ -738,7 +738,7 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         }
 
         m_aEditBuffer.WriteUInt32AsString(nXRefStreamId);
-        m_aEditBuffer.WriteCharPtr(" 0 obj\n<<");
+        m_aEditBuffer.WriteCharPtr(" 0 obj\n<</Filter/FlateDecode");
 
         // ID.
         auto pID = dynamic_cast<PDFArrayElement*>(m_pXRefStream->Lookup("ID"));
@@ -784,6 +784,18 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
 
         // Length.
         m_aEditBuffer.WriteCharPtr("/Length ");
+        {
+            ZCodec aZCodec;
+            aZCodec.BeginCompression();
+            aXRefStream.Seek(0);
+            SvMemoryStream aStream;
+            aZCodec.Compress(aXRefStream, aStream);
+            aZCodec.EndCompression();
+            aXRefStream.Seek(0);
+            aXRefStream.SetStreamSize(0);
+            aStream.Seek(0);
+            aXRefStream.WriteStream(aStream);
+        }
         m_aEditBuffer.WriteUInt32AsString(aXRefStream.GetSize());
 
         if (!m_aStartXRefs.empty())
