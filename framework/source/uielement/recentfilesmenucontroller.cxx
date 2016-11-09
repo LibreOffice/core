@@ -47,13 +47,6 @@ static const char CMD_CLEAR_LIST[]   = ".uno:ClearRecentFileList";
 static const char CMD_OPEN_AS_TEMPLATE[] = ".uno:OpenTemplate";
 static const char CMD_OPEN_REMOTE[]  = ".uno:OpenRemote";
 
-struct LoadRecentFile
-{
-    util::URL                               aTargetURL;
-    uno::Sequence< beans::PropertyValue >   aArgSeq;
-    uno::Reference< frame::XDispatch >      xDispatch;
-};
-
 class RecentFilesMenuController :  public svt::PopupMenuControllerBase
 {
     using svt::PopupMenuControllerBase::disposing;
@@ -97,8 +90,6 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception ) override;
-
-    DECL_STATIC_LINK( RecentFilesMenuController, ExecuteHdl_Impl, void*, void );
 
 private:
     virtual void impl_setPopupMenu() override;
@@ -263,25 +254,13 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
 void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 {
-    Reference< XDispatch >            xDispatch;
-    Reference< XDispatchProvider >    xDispatchProvider;
-    css::util::URL                    aTargetURL;
-    Sequence< PropertyValue >         aArgsList;
-
-    osl::ClearableMutexGuard aLock( m_aMutex );
-    xDispatchProvider.set( m_xFrame, UNO_QUERY );
-    aLock.clear();
-
     if (( nIndex >= 0 ) &&
         ( nIndex < sal::static_int_cast<sal_Int32>( m_aRecentFilesItems.size() )))
     {
         const RecentFile& rRecentFile = m_aRecentFilesItems[ nIndex ];
 
-        aTargetURL.Complete = rRecentFile.aURL;
-        m_xURLTransformer->parseStrict( aTargetURL );
-
         sal_Int32 nSize = 2;
-        aArgsList.realloc( nSize );
+        Sequence< PropertyValue > aArgsList(nSize);
         aArgsList[0].Name = "Referer";
         aArgsList[0].Value = makeAny( OUString( "private:user" ) );
 
@@ -297,20 +276,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
             aArgsList[nSize-1].Value <<= m_aModuleName;
         }
 
-        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, "_default", 0 );
-    }
-
-    if ( xDispatch.is() )
-    {
-        // Call dispatch asynchronously as we can be destroyed while dispatch is
-        // executed. VCL is not able to survive this as it wants to call listeners
-        // after select!!!
-        LoadRecentFile* pLoadRecentFile = new LoadRecentFile;
-        pLoadRecentFile->xDispatch  = xDispatch;
-        pLoadRecentFile->aTargetURL = aTargetURL;
-        pLoadRecentFile->aArgSeq    = aArgsList;
-
-        Application::PostUserEvent( LINK(nullptr, RecentFilesMenuController, ExecuteHdl_Impl), pLoadRecentFile );
+        dispatchCommand( rRecentFile.aURL, aArgsList, "_default" );
     }
 }
 
@@ -435,23 +401,6 @@ throw( RuntimeException, std::exception )
             }
         }
     }
-}
-
-IMPL_STATIC_LINK( RecentFilesMenuController, ExecuteHdl_Impl, void*, p, void )
-{
-    LoadRecentFile* pLoadRecentFile = static_cast<LoadRecentFile*>(p);
-    try
-    {
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
-        pLoadRecentFile->xDispatch->dispatch( pLoadRecentFile->aTargetURL, pLoadRecentFile->aArgSeq );
-    }
-    catch ( const Exception& )
-    {
-    }
-
-    delete pLoadRecentFile;
 }
 
 }
