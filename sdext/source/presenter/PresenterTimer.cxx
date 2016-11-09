@@ -236,7 +236,7 @@ void SAL_CALL TimerScheduler::run()
             break;
         }
 
-        // Restrict access to the maScheduledTasks member to one, mutext
+        // Restrict access to the maScheduledTasks member to one, mutex
         // guarded, block.
         SharedTimerTask pTask;
         sal_Int64 nDifference = 0;

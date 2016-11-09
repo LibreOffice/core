@@ -35,7 +35,7 @@ class SwAccessibleDocumentBase : public SwAccessibleContext
 {
     css::uno::Reference< css::accessibility::XAccessible> mxParent;
 
-    VclPtr<vcl::Window> mpChildWin; // protected by solar mutext
+    VclPtr<vcl::Window> mpChildWin; // protected by solar mutex
 
     using SwAccessibleFrame::SetVisArea;
 
