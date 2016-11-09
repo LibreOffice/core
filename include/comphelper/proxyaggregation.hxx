@@ -202,10 +202,6 @@ namespace comphelper
         // XComponent/OComponentProxyAggregationHelper
         virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
 
-    protected:
-        // be called from within the dtor of derived classes
-        void implEnsureDisposeInDtor( );
-
     private:
         OComponentProxyAggregation( const OComponentProxyAggregation& ) = delete;
         OComponentProxyAggregation& operator=( const OComponentProxyAggregation& ) = delete;

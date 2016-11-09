@@ -194,7 +194,7 @@ public:
     using ServiceManagerBase::acquire;
     using ServiceManagerBase::release;
 
-    void init(rtl::OUString const & rdbUris) { readRdbs(rdbUris); }
+    void init(rtl::OUString const & rdbUris);
 
     void setContext(
         css::uno::Reference< css::uno::XComponentContext > const & context)
@@ -356,8 +356,6 @@ private:
 
     void removeEventListenerFromComponent(
         css::uno::Reference< css::lang::XComponent > const & component);
-
-    void readRdbs(rtl::OUString const & uris);
 
     void readRdbDirectory(rtl::OUString const & uri, bool optional);
 

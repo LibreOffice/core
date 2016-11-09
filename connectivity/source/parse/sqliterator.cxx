@@ -1546,7 +1546,9 @@ void OSQLParseTreeIterator::traverseAll()
 
 void OSQLParseTreeIterator::impl_traverse( TraversalParts _nIncludeMask )
 {
-    impl_resetErrors();
+    // resets our errors
+    m_aErrors = css::sdbc::SQLException();
+
     m_pImpl->m_nIncludeMask = _nIncludeMask;
 
     if ( !traverseTableNames( *m_pImpl->m_pTables ) )

@@ -73,9 +73,9 @@ namespace comphelper
         /// retrieves the component's mutex
         inline  ::osl::Mutex&   getMutex( GuardAccess )                 { return getMutex(); }
         /// checks whether the component is already disposed, throws a DisposedException if so.
-        inline  void            checkDisposed( GuardAccess ) const      { impl_checkDisposed_throw(); }
+        void                    checkDisposed( GuardAccess ) const;
         /// checks whether the component is already initialized, throws a NotInitializedException if not.
-        inline  void            checkInitialized( GuardAccess ) const   { impl_checkInitialized_throw(); }
+        void                    checkInitialized( GuardAccess ) const;
 
     protected:
         /// retrieves the component's broadcast helper
@@ -84,12 +84,6 @@ namespace comphelper
         inline  ::osl::Mutex&               getMutex()              { return m_rBHelper.rMutex; }
         /// determines whether the instance is already disposed
         inline  bool                        impl_isDisposed() const { return m_rBHelper.bDisposed; }
-
-        /// checks whether the component is already disposed. Throws a DisposedException if so.
-        void    impl_checkDisposed_throw() const;
-
-        /// checks whether the component is already initialized. Throws a NotInitializedException if not.
-        void    impl_checkInitialized_throw() const;
 
         /// determines whether the component is already initialized
         inline  bool

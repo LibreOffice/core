@@ -55,7 +55,7 @@ namespace connectivity { namespace jdbc
             const css::uno::Reference< css::uno::XInterface >& _rxErrorContext
         );
 
-        ~ContextClassLoaderScope() { pop(); }
+        ~ContextClassLoaderScope();
 
         bool isActive() const
         {
@@ -66,8 +66,6 @@ namespace connectivity { namespace jdbc
     private:
         ContextClassLoaderScope(ContextClassLoaderScope &) = delete;
         void operator =(ContextClassLoaderScope &) = delete;
-
-        void pop();
 
         JNIEnv&                             m_environment;
         LocalRef< jobject >                 m_currentThread;

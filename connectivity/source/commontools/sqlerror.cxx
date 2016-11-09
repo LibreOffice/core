@@ -57,7 +57,6 @@ namespace connectivity
         // versions of the public SQLError methods which are just delegated to this impl-class
         static const OUString& getMessagePrefix();
         OUString     getErrorMessage( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 );
-        OUString     getSQLState( const ErrorCondition _eCondition );
         static ErrorCode    getErrorCode( const ErrorCondition _eCondition );
         void                raiseException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 );
         void                raiseException( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 );
@@ -148,12 +147,6 @@ namespace connectivity
     }
 
 
-    OUString SQLError_Impl::getSQLState( const ErrorCondition _eCondition )
-    {
-        return impl_getSQLState( _eCondition );
-    }
-
-
     ErrorCode SQLError_Impl::getErrorCode( const ErrorCondition _eCondition )
     {
         return 0 - ::sal::static_int_cast< ErrorCode, ErrorCondition >( _eCondition );
@@ -217,7 +210,7 @@ namespace connectivity
         return SQLException(
             getErrorMessage( _eCondition, _rParamValue1, _rParamValue2, _rParamValue3 ),
             _rxContext,
-            getSQLState( _eCondition ),
+            impl_getSQLState( _eCondition ),
             getErrorCode( _eCondition ),
             Any()
         );
