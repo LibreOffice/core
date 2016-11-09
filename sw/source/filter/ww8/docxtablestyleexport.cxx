@@ -691,8 +691,6 @@ DocxTableStyleExport::DocxTableStyleExport(SwDoc* pDoc, sax_fastparser::FSHelper
     m_pImpl->m_pSerializer = pSerializer;
 }
 
-DocxTableStyleExport::~DocxTableStyleExport()
-{
-}
+DocxTableStyleExport::~DocxTableStyleExport() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

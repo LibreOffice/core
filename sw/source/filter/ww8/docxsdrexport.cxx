@@ -169,9 +169,7 @@ struct DocxSdrExport::Impl
     {
     }
 
-    ~Impl()
-    {
-    }
+    ~Impl() = default;
 
     /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
 
@@ -186,9 +184,7 @@ DocxSdrExport::DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pS
 {
 }
 
-DocxSdrExport::~DocxSdrExport()
-{
-}
+DocxSdrExport::~DocxSdrExport() = default;
 
 void DocxSdrExport::setSerializer(const sax_fastparser::FSHelperPtr& pSerializer)
 {
