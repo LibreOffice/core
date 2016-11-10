@@ -229,7 +229,7 @@ struct SubRun
 {
     int32_t mnMin;
     int32_t mnEnd;
-    UScriptCode maScript;
+    hb_script_t maScript;
     hb_direction_t maDirection;
 };
 
@@ -406,7 +406,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             int32_t nMinRunPos = nCurrentPos;
             int32_t nEndRunPos = std::min(pTextLayout->runs[k].nEnd, nBidiEndRunPos);
             hb_direction_t aDirection = bRightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
-            UScriptCode aScript = pTextLayout->runs[k].nCode;
+            hb_script_t aScript = hb_icu_script_to_script(pTextLayout->runs[k].nCode);
 
             // For vertical text, further divide the runs based on character
             // orientation.
@@ -456,7 +456,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             int nMinRunPos = aSubRun.mnMin;
             int nEndRunPos = aSubRun.mnEnd;
             int nRunLen = nEndRunPos - nMinRunPos;
-            aHbScript = hb_icu_script_to_script(aSubRun.maScript);
+            aHbScript = aSubRun.maScript;
 
             OString sLanguage = msLanguage;
             if (sLanguage.isEmpty())
@@ -469,7 +469,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 nHbFlags |= HB_BUFFER_FLAG_EOT; /* End-of-text */
 
             hb_buffer_set_direction(pHbBuffer, aSubRun.maDirection);
-            hb_buffer_set_script(pHbBuffer, aHbScript);
+            hb_buffer_set_script(pHbBuffer, aSubRun.maScript);
             hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
             hb_buffer_set_flags(pHbBuffer, (hb_buffer_flags_t) nHbFlags);
             hb_buffer_add_utf16(
@@ -576,6 +576,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
     SortGlyphItems();
 
     // determine need for kashida justification
+    // XXX: This assumes all the text is in the same script, which is not
+    // guaranteed. The flag should be per glyph.
     if ((rArgs.mpDXArray || rArgs.mnLayoutWidth)
     && ((aHbScript == HB_SCRIPT_ARABIC) || (aHbScript == HB_SCRIPT_SYRIAC)))
         rArgs.mnFlags |= SalLayoutFlags::KashidaJustification;
