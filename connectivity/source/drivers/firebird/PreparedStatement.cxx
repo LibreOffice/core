@@ -323,7 +323,7 @@ sal_Int64 OPreparedStatement::toNumericWithoutDecimalPlace(const OUString& sSour
     OUString sNumber(sSource);
 
     // cut off leading 0 eventually ( eg. 0.567 -> .567)
-    sSource.startsWith(OUString("0"), &sNumber);
+    sSource.startsWith("0", &sNumber);
 
     sal_Int32 nDotIndex = sNumber.indexOf((sal_Unicode)'.');
 
