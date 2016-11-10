@@ -21,7 +21,7 @@ $(eval $(call gb_Module_add_l10n_targets,formula,\
 ))
 
 # screenshots
-$(eval $(call gb_Module_add_screeshot_targets,formula,\
+$(eval $(call gb_Module_add_screenshot_targets,formula,\
     CppunitTest_formula_dialogs_test \
 ))
 
