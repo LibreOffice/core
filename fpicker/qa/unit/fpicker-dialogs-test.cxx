@@ -30,9 +30,7 @@ private:
 
 public:
     FpickerDialogsTest();
-    virtual ~FpickerDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~FpickerDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ FpickerDialogsTest::FpickerDialogsTest()
 
 FpickerDialogsTest::~FpickerDialogsTest()
 {
-}
-
-void FpickerDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void FpickerDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)

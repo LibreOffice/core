@@ -30,9 +30,7 @@ private:
 
 public:
     FormulaDialogsTest();
-    virtual ~FormulaDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~FormulaDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ FormulaDialogsTest::FormulaDialogsTest()
 
 FormulaDialogsTest::~FormulaDialogsTest()
 {
-}
-
-void FormulaDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void FormulaDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
