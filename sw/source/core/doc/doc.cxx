@@ -1596,7 +1596,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     sal_Int32 i = 0;
     for ( i = 1; pStPage && i < nDocPageCount; ++i )
         pStPage = (SwPageFrm*)pStPage->GetNext();
-    if ( !pStPage )          // dann wars das
+    if ( !pStPage )          // thats it then
         return;
 
     // currently for prospect printing all pages are valid to be printed
