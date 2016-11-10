@@ -600,12 +600,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         m_aEditBuffer.WriteUInt32AsString(nAcroFormId);
         m_aEditBuffer.WriteCharPtr(" 0 obj\n");
 
+        // If this is nullptr, then the AcroForm object is not in an object stream.
         SvMemoryStream* pStreamBuffer = pAcroFormObject->GetStreamBuffer();
-        if (!pStreamBuffer)
-        {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: AcroForm object is not in an object stream");
-            return false;
-        }
 
         if (!pAcroFormObject->Lookup("Fields"))
         {
@@ -624,7 +620,14 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         sal_uInt64 nFieldsEndOffset = pAcroFormDictionary->GetKeyOffset("Fields") + pAcroFormDictionary->GetKeyValueLength("Fields") - strlen("]");
         // Length of beginning of the object dictionary -> Fields end.
         sal_uInt64 nFieldsBeforeEndLength = nFieldsEndOffset;
-        m_aEditBuffer.WriteBytes(pStreamBuffer->GetData(), nFieldsBeforeEndLength);
+        if (pStreamBuffer)
+            m_aEditBuffer.WriteBytes(pStreamBuffer->GetData(), nFieldsBeforeEndLength);
+        else
+        {
+            nFieldsBeforeEndLength -= pAcroFormObject->GetDictionaryOffset();
+            m_aEditBuffer.WriteCharPtr("<<");
+            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pAcroFormObject->GetDictionaryOffset(), nFieldsBeforeEndLength);
+        }
 
         // Append our reference at the end of the Fields array.
         m_aEditBuffer.WriteCharPtr(" ");
@@ -632,8 +635,17 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         m_aEditBuffer.WriteCharPtr(" 0 R");
 
         // Length of Fields end -> end of the object dictionary.
-        sal_uInt64 nFieldsAfterEndLength = pStreamBuffer->GetSize() - nFieldsEndOffset;
-        m_aEditBuffer.WriteBytes(static_cast<const char*>(pStreamBuffer->GetData()) + nFieldsEndOffset, nFieldsAfterEndLength);
+        if (pStreamBuffer)
+        {
+            sal_uInt64 nFieldsAfterEndLength = pStreamBuffer->GetSize() - nFieldsEndOffset;
+            m_aEditBuffer.WriteBytes(static_cast<const char*>(pStreamBuffer->GetData()) + nFieldsEndOffset, nFieldsAfterEndLength);
+        }
+        else
+        {
+            sal_uInt64 nFieldsAfterEndLength = pAcroFormObject->GetDictionaryOffset() + pAcroFormObject->GetDictionaryLength() - nFieldsEndOffset;
+            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + nFieldsEndOffset, nFieldsAfterEndLength);
+            m_aEditBuffer.WriteCharPtr(">>");
+        }
 
         m_aEditBuffer.WriteCharPtr("\nendobj\n\n");
     }

@@ -283,7 +283,14 @@ void PDFSigningTest::testPDF16Add()
     OUString aOutURL = aTargetDir + "add.pdf";
     // This failed: verification broke as incorrect xref stream was written as
     // part of the new signature.
-    sign(aInURL, aOutURL, 1);
+    bool bHadCertificates = sign(aInURL, aOutURL, 1);
+
+    // Sign again.
+    aInURL = aTargetDir + "add.pdf";
+    aOutURL = aTargetDir + "add2.pdf";
+    // This failed as non-compressed AcroForm wasn't handled.
+    if (bHadCertificates)
+        sign(aInURL, aOutURL, 2);
 }
 
 void PDFSigningTest::testPDF14LOWin()
