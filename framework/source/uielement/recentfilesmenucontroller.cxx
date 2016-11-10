@@ -93,16 +93,10 @@ public:
 
 private:
     virtual void impl_setPopupMenu() override;
-    struct RecentFile
-    {
-        OUString aURL;
-        OUString aTitle;
-    };
-
     void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
     void executeEntry( sal_Int32 nIndex );
 
-    std::vector< RecentFile > m_aRecentFilesItems;
+    std::vector< OUString >   m_aRecentFilesItems;
     bool                      m_bDisabled : 1;
     bool                      m_bShowToolbarEntries;
 };
@@ -152,19 +146,18 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             for ( int i = 0; i < nPickListMenuItems; i++ )
             {
                 Sequence< PropertyValue >& rPickListEntry = aHistoryList[i];
-                RecentFile aRecentFile;
+                OUString aURL;
 
                 for ( int j = 0; j < rPickListEntry.getLength(); j++ )
                 {
-                    Any a = rPickListEntry[j].Value;
-
                     if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_URL )
-                        a >>= aRecentFile.aURL;
-                    else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_TITLE )
-                        a >>= aRecentFile.aTitle;
+                    {
+                        rPickListEntry[j].Value >>= aURL;
+                        break;
+                    }
                 }
 
-                m_aRecentFilesItems.push_back( aRecentFile );
+                m_aRecentFilesItems.push_back( aURL );
             }
         }
 
@@ -195,7 +188,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
                 // Abbreviate URL
                 OUString   aMenuTitle;
-                INetURLObject   aURL( m_aRecentFilesItems[i].aURL );
+                INetURLObject   aURL( m_aRecentFilesItems[i] );
                 OUString aTipHelpText( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
                 if ( aURL.GetProtocol() == INetProtocol::File )
@@ -257,8 +250,6 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
     if (( nIndex >= 0 ) &&
         ( nIndex < sal::static_int_cast<sal_Int32>( m_aRecentFilesItems.size() )))
     {
-        const RecentFile& rRecentFile = m_aRecentFilesItems[ nIndex ];
-
         sal_Int32 nSize = 2;
         Sequence< PropertyValue > aArgsList(nSize);
         aArgsList[0].Name = "Referer";
@@ -276,7 +267,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
             aArgsList[nSize-1].Value <<= m_aModuleName;
         }
 
-        dispatchCommand( rRecentFile.aURL, aArgsList, "_default" );
+        dispatchCommand( m_aRecentFilesItems[ nIndex ], aArgsList, "_default" );
     }
 }
 
