@@ -85,14 +85,20 @@ enum ScChangeActionClipMode
     SC_CACM_PASTE
 };
 
-//  ScChangeActionLinkEntry
-// Inserts itself as the head of a chain (better: linked list?), or before a LinkEntry
-// on delete: automatically remove of what is linked (German original was strange...)
-// ppPrev == &previous->pNext oder address of pointer to head of linked list,
-// *ppPrev == this
-
 class ScChangeAction;
 
+/** A link/connection/dependency between change actions.
+
+    Upon construction inserts itself as the head of a chain / linked list,
+    respectively between existing link entries.
+
+    Upon destruction removes itself from the list and connects the previous and
+    next entry, if it was the first entry automatically maintaining the head
+    pointer to the list.
+
+    ppPrev == &previous->pNext or address of pointer to head of linked list,
+    *ppPrev == this
+ */
 class ScChangeActionLinkEntry
 {
     ScChangeActionLinkEntry( const ScChangeActionLinkEntry& ) = delete;
