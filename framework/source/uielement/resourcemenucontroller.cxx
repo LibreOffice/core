@@ -181,6 +181,9 @@ void ResourceMenuController::updatePopupMenu()
         }
     }
 
+    if ( !m_xMenuContainer.is() )
+        return;
+
     // Clear previous content.
     if ( m_xMenuBarManager.is() )
     {
@@ -246,9 +249,6 @@ void ResourceMenuController::addVerbs( const css::uno::Sequence< css::embed::Ver
 
 void ResourceMenuController::fillToolbarData()
 {
-    if ( !m_xMenuContainer.is() )
-        return;
-
     VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation( m_xPopupMenu );
     Menu* pVCLMenu = pAwtMenu->GetMenu();
 
