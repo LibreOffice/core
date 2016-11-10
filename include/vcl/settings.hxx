@@ -515,6 +515,8 @@ public:
     void                            SetAutoMnemonic( bool bAutoMnemonic );
     bool                            GetAutoMnemonic() const;
 
+    bool                            GetDockingFloatsSupported() const;
+
     void                            SetFontColor( const Color& rColor );
     const Color&                    GetFontColor() const;
 
