@@ -58,6 +58,8 @@ public:
     void testPDF14Adobe();
     /// Test a PDF 1.6 document, signed by Adobe.
     void testPDF16Adobe();
+    /// Test adding a signature to a PDF 1.6 document.
+    void testPDF16Add();
     /// Test a PDF 1.4 document, signed by LO on Windows.
     void testPDF14LOWin();
 
@@ -68,6 +70,7 @@ public:
     CPPUNIT_TEST(testPDFRemoveAll);
     CPPUNIT_TEST(testPDF14Adobe);
     CPPUNIT_TEST(testPDF16Adobe);
+    CPPUNIT_TEST(testPDF16Add);
     CPPUNIT_TEST(testPDF14LOWin);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -268,6 +271,19 @@ void PDFSigningTest::testPDF16Adobe()
     // Found signatures was 0, as parsing failed due to lack of support for
     // these features.
     verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf16adobe.pdf", 1);
+}
+
+void PDFSigningTest::testPDF16Add()
+{
+    // Contains PDF 1.6 features, make sure we can add a signature using that
+    // markup correctly.
+    OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
+    OUString aInURL = aSourceDir + "pdf16adobe.pdf";
+    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
+    OUString aOutURL = aTargetDir + "add.pdf";
+    // This failed: verification broke as incorrect xref stream was written as
+    // part of the new signature.
+    sign(aInURL, aOutURL, 1);
 }
 
 void PDFSigningTest::testPDF14LOWin()
