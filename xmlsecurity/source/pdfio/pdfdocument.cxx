@@ -603,7 +603,7 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         SvMemoryStream* pStreamBuffer = pAcroFormObject->GetStreamBuffer();
         if (!pStreamBuffer)
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: AcroForm object is in an object stream");
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: AcroForm object is not in an object stream");
             return false;
         }
 
@@ -982,6 +982,8 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
 {
     // Last seen object token.
     PDFObjectElement* pObject = pObjectElement;
+    PDFNameElement* pObjectKey = nullptr;
+    PDFObjectElement* pObjectStream = nullptr;
     bool bInXRef = false;
     // The next number will be an xref offset.
     bool bInStartXRef = false;
@@ -1064,10 +1066,15 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
         }
         case '/':
         {
-            rElements.push_back(std::unique_ptr<PDFElement>(new PDFNameElement()));
+            auto pNameElement = new PDFNameElement();
+            rElements.push_back(std::unique_ptr<PDFElement>(pNameElement));
             rStream.SeekRel(-1);
-            if (!rElements.back()->Read(rStream))
+            if (!pNameElement->Read(rStream))
                 return false;
+            if (pObject && pObjectKey && pObjectKey->GetValue() == "Type" && pNameElement->GetValue() == "ObjStm")
+                pObjectStream = pObject;
+            else
+                pObjectKey = pNameElement;
             break;
         }
         case '(':
@@ -1196,6 +1203,14 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                     {
                         // Found endobj and only object parsing was requested, we're done.
                         return true;
+                    }
+
+                    if (pObjectStream)
+                    {
+                        // We're at the end of an object stream, parse the stored objects.
+                        pObjectStream->ParseStoredObjects();
+                        pObjectStream = nullptr;
+                        pObjectKey = nullptr;
                     }
                 }
                 else if (aKeyword == "true" || aKeyword == "false")
@@ -3096,22 +3111,6 @@ PDFObjectElement* PDFReferenceElement::LookupObject()
 PDFObjectElement* PDFDocument::LookupObject(size_t nObjectNumber)
 {
     auto itIDObjects = m_aIDObjects.find(nObjectNumber);
-    auto itXRef = m_aXRef.find(nObjectNumber);
-    if (itIDObjects == m_aIDObjects.end() && itXRef != m_aXRef.end())
-    {
-        // We don't have an object for this number yet, but there is an xref
-        // entry for it.
-        const XRefEntry& rEntry = itXRef->second;
-        if (rEntry.m_eType == XRefEntryType::COMPRESSED)
-        {
-            // It's a compressed entry, try parsing the stored objects.
-            if (PDFObjectElement* pObjectStream = LookupObject(rEntry.m_nOffset))
-                // This registers new IDs.
-                pObjectStream->ParseStoredObjects();
-        }
-        // Find again, now that the new objects are registered.
-        itIDObjects = m_aIDObjects.find(nObjectNumber);
-    }
 
     if (itIDObjects != m_aIDObjects.end())
         return itIDObjects->second;
