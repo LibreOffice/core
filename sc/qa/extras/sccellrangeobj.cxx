@@ -17,13 +17,15 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/util/XSortable.hpp>
+#include <com/sun/star/util/SortField.hpp>
 
 using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 14
+#define NUMBER_OF_TESTS 15
 
 class ScCellRangeObj : public CalcUnoApiTest, public apitest::XCellRangesQuery, public apitest::CellProperties,
                         public apitest::XSearchable, public apitest::XReplaceable, public apitest::XCellRangeData
@@ -35,6 +37,8 @@ public:
     virtual void tearDown() override;
     virtual uno::Reference< uno::XInterface > init() override;
     virtual uno::Reference< uno::XInterface > getXCellRangeData() override;
+    void testSortOOB();
+
 
     CPPUNIT_TEST_SUITE(ScCellRangeObj);
     CPPUNIT_TEST(testQueryColumnDifference);
@@ -52,6 +56,7 @@ public:
     CPPUNIT_TEST(testCreateReplaceDescriptor);
     CPPUNIT_TEST(testGetDataArray);
     CPPUNIT_TEST(testSetDataArray);
+    CPPUNIT_TEST(testSortOOB);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -107,6 +112,32 @@ uno::Reference< uno::XInterface > ScCellRangeObj::getXCellRangeData()
 
     CPPUNIT_ASSERT_MESSAGE("Could not create object of type XCellRangesQuery", xReturn.is());
     return xReturn;
+}
+
+void ScCellRangeObj::testSortOOB()
+{
+    uno::Reference<util::XSortable> xSortable(init(),UNO_QUERY_THROW);
+    try {
+        uno::Sequence<beans::PropertyValue> aEmptyDescriptor;
+        xSortable->sort(aEmptyDescriptor);
+    } catch (const uno::Exception &) {
+        CPPUNIT_FAIL("exception thrown during empty sort");
+    }
+
+    try {
+        uno::Sequence<beans::PropertyValue> aProps(1);
+        uno::Sequence<util::SortField> aSort(1);
+
+        aSort[0].Field = 0xffffff;
+        aSort[0].SortAscending = true;
+
+        aProps[0].Name = "SortFields";
+        aProps[0].Value = uno::makeAny(aSort);
+
+        xSortable->sort(aProps);
+    } catch (const uno::Exception &) {
+        CPPUNIT_FAIL("exception thrown during OOB sort");
+    }
 }
 
 void ScCellRangeObj::setUp()
