@@ -535,6 +535,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                     if (u_getIntPropertyValue(aChar, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
                         bDiacritic = true;
 #else
+                    (void) aChar;
                     // the font lacks GDEF table
                     if (pHbPositions[i].x_advance == 0)
                         bDiacritic = true;
