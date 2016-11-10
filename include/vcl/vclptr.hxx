@@ -101,6 +101,13 @@ public:
         : m_rInnerRef (handle.m_rInnerRef)
     {}
 
+    /** Move constructor...
+     */
+    inline VclPtr (VclPtr<reference_type> && handle)
+        : m_rInnerRef ( std::move(handle.m_rInnerRef) )
+    {
+    }
+
     /** Up-casting conversion constructor: Copies interface reference.
 
         Does not work for up-casts to ambiguous bases.  For the special case of
@@ -170,6 +177,14 @@ public:
     operator =(VclPtr<derived_type> const & rRef)
     {
         m_rInnerRef.set(rRef.get());
+        return *this;
+    }
+
+    /** assignment move operator.
+    */
+    VclPtr & operator =(VclPtr<reference_type> && rRef)
+    {
+        m_rInnerRef = std::move(rRef);
         return *this;
     }
 
@@ -323,7 +338,7 @@ public:
     /**
        Assignment that releases the last reference.
      */
-    inline ScopedVclPtr<reference_type>& operator= (reference_type * pBody)
+    inline ScopedVclPtr<reference_type>& operator = (reference_type * pBody)
     {
         disposeAndReset(pBody);
         return *this;
@@ -361,7 +376,8 @@ private:
     // Most likely we don't want this default copy-construtor.
     ScopedVclPtr (const ScopedVclPtr<reference_type> &) = delete;
     // And certainly we don't want a default assignment operator.
-    ScopedVclPtr<reference_type>& operator= (const ScopedVclPtr<reference_type> &) = delete;
+    ScopedVclPtr<reference_type>& operator = (const ScopedVclPtr<reference_type> &) = delete;
+    ScopedVclPtr<reference_type>& operator= (ScopedVclPtr<reference_type> &&) = delete;
     // And disallow reset as that doesn't call disposeAndClear on the original reference
     void reset() = delete;
     void reset(reference_type *pBody) = delete;
