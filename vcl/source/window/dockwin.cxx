@@ -530,12 +530,14 @@ bool DockingWindow::Notify( NotifyEvent& rNEvt )
 
     if ( mbDockable )
     {
+        const bool bDockingSupportCrippled = !StyleSettings::GetDockingFloatsSupported();
+
         if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
         {
             const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
             if ( pMEvt->IsLeft() )
             {
-                if ( pMEvt->IsMod1() && (pMEvt->GetClicks() == 2) )
+                if (!bDockingSupportCrippled && pMEvt->IsMod1() && (pMEvt->GetClicks() == 2) )
                 {
                     SetFloatingMode( !IsFloatingMode() );
                     return true;
@@ -564,7 +566,7 @@ bool DockingWindow::Notify( NotifyEvent& rNEvt )
         {
             const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
             if( rKey.GetCode() == KEY_F10 && rKey.GetModifier() &&
-                rKey.IsShift() && rKey.IsMod1() )
+                rKey.IsShift() && rKey.IsMod1() && !bDockingSupportCrippled )
             {
                 SetFloatingMode( !IsFloatingMode() );
                 return true;
@@ -587,6 +589,9 @@ bool DockingWindow::Docking( const Point&, Rectangle& )
 
 void DockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
 {
+    if (bFloatMode && !StyleSettings::GetDockingFloatsSupported())
+        mbDockCanceled = true;
+
     if ( !IsDockingCanceled() )
     {
         bool bShow = false;

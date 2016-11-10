@@ -1885,6 +1885,13 @@ StyleSettings::GetAutoMnemonic() const
     return mxData->mbAutoMnemonic;
 }
 
+bool
+StyleSettings::GetDockingFloatsSupported()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    return pSVData->maNWFData.mbDockingFloatsSupported;
+}
+
 void
 StyleSettings::SetFontColor( const Color& rColor )
 {

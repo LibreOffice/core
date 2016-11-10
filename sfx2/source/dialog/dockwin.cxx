@@ -908,7 +908,9 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
 
             // check for valid alignment
             SfxChildAlignment eLocalAlignment = (SfxChildAlignment) (sal_uInt16) aStr.toInt32();
-            if ( pImpl->bDockingPrevented )
+            bool bIgnoreFloatConfig = (eLocalAlignment == SfxChildAlignment::NOALIGNMENT &&
+                                       !StyleSettings::GetDockingFloatsSupported());
+            if (pImpl->bDockingPrevented || bIgnoreFloatConfig)
                 // docking prevented, ignore old configuration and take alignment from default
                 aStr.clear();
             else

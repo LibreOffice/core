@@ -613,6 +613,10 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
                 }
             }
 
+            const bool bDockingSupportCrippled = !StyleSettings::GetDockingFloatsSupported();
+            if (bDockingSupportCrippled)
+                rElementData.m_bFloating = false;
+
             return true;
         }
         catch (const NoSuchElementException&)
