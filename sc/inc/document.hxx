@@ -1452,7 +1452,7 @@ public:
     void            CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
                                     InsertDeleteFlags nInsFlag,
                                     ScDocument* pRefUndoDoc,
-                                    ScDocument* pClipDoc = nullptr,
+                                    ScDocument* pClipDoc,
                                     bool bResetCut = true,
                                     bool bAsLink = false,
                                     bool bIncludeFiltered = true,

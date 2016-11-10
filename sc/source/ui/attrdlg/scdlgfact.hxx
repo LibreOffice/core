@@ -421,7 +421,7 @@ public:
                                                                 ScViewData *pViewData) override;
     virtual VclPtr<AbstractScColRowLabelDlg> CreateScColRowLabelDlg (vcl::Window* pParent,
                                                                 bool bCol,
-                                                                bool bRow = false) override;
+                                                                bool bRow) override;
 
     virtual VclPtr<AbstractScSortWarningDlg> CreateScSortWarningDlg(vcl::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) override;
 
@@ -473,7 +473,7 @@ public:
                                                                 long            nCurrent,
                                                                 long            nDefault,
                                                                 FieldUnit       eFUnit,
-                                                                sal_uInt16      nDecimals = 2,
+                                                                sal_uInt16      nDecimals,
                                                                 long            nMaximum  = 1000,
                                                                 long            nMinimum  = 0 ) override;
 
@@ -512,7 +512,7 @@ public:
                                                                 sal_uInt16 nOrient ) override;
 
     virtual VclPtr<AbstractScNewScenarioDlg> CreateScNewScenarioDlg ( vcl::Window* pParent, const OUString& rName,
-                                                                bool bEdit, bool bSheetProtected = false ) override;
+                                                                bool bEdit, bool bSheetProtected ) override;
     virtual VclPtr<AbstractScShowTabDlg> CreateScShowTabDlg(vcl::Window* pParent) override;
 
     virtual VclPtr<AbstractScStringInputDlg> CreateScStringInputDlg (  vcl::Window* pParent,
@@ -527,7 +527,7 @@ public:
                                                                 const Color& rDefaultColor ) override; //Currently selected Color
 
     virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg ( bool                    bAscii,
-                                                                    const ScImportOptions*  pOptions = nullptr,
+                                                                    const ScImportOptions*  pOptions,
                                                                     const OUString*         pStrTitle = nullptr,
                                                                     bool                    bMultiByte = false,
                                                                     bool                    bOnlyDbtoolsEncodings = false,

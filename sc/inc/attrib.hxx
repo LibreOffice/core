@@ -58,7 +58,7 @@ class SC_DLLPUBLIC ScMergeAttr: public SfxPoolItem
 public:
                 static SfxPoolItem* CreateDefault();
                 ScMergeAttr();
-                ScMergeAttr( SCsCOL nCol, SCsROW nRow = 0);
+                ScMergeAttr( SCsCOL nCol, SCsROW nRow );
                 ScMergeAttr( const ScMergeAttr& );
                 virtual ~ScMergeAttr() override;
 
@@ -284,7 +284,7 @@ class ScDoubleItem : public SfxPoolItem
 {
 public:
                 static SfxPoolItem* CreateDefault();
-                ScDoubleItem( sal_uInt16 nWhich, double nVal=0 );
+                ScDoubleItem( sal_uInt16 nWhich, double nVal );
                 ScDoubleItem( const ScDoubleItem& rItem );
                 virtual ~ScDoubleItem() override;
 

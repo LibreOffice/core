@@ -40,7 +40,7 @@ class ScTabDeletedHint : public SfxHint
 private:
     SCTAB   nTab;
 public:
-            ScTabDeletedHint( SCTAB nTabNo = SCTAB_MAX );
+            ScTabDeletedHint( SCTAB nTabNo );
     virtual ~ScTabDeletedHint() override;
 
     SCTAB   GetTab() const { return nTab; }
@@ -51,7 +51,7 @@ class ScTabSizeChangedHint : public SfxHint
 private:
     SCTAB   nTab;
 public:
-            ScTabSizeChangedHint( SCTAB nTabNo = SCTAB_MAX );
+            ScTabSizeChangedHint( SCTAB nTabNo );
     virtual ~ScTabSizeChangedHint() override;
 
     SCTAB   GetTab() const  { return nTab; }
