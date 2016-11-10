@@ -14,7 +14,7 @@ REM ----------------------------------------------------------------------------
 Public Function _GetLabel(ByVal psShortlabel As String, Optional ByVal psLocale As String) As String
 &apos;	Return the localized label corresponding with ShortLabel
 
-	If IsMissing(psLocale) Then psLocale = UCase(Left(_GetLocale(), 2)) Else psLocale = UCase(psLocale)
+	If IsMissing(psLocale) Then psLocale = UCase(Left(_A2B_.Locale, 2)) Else psLocale = UCase(psLocale)
 	On Local Error Goto Error_Function
 	If Not Utils._InList(psLocale, Array( _
 				&quot;EN&quot;, &quot;FR&quot;, &quot;ES&quot; _
