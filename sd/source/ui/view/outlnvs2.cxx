@@ -294,9 +294,12 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         {
 #ifdef ENABLE_SDREMOTE
              SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-             VclAbstractDialog* pDlg = pFact ? pFact->CreateRemoteDialog(GetActiveWindow()) : nullptr;
-             if (pDlg)
-                 pDlg->Execute();
+             if (pFact)
+             {
+                 ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateRemoteDialog(GetActiveWindow()));
+                 if (pDlg)
+                     pDlg->Execute();
+             }
 #endif
         }
         break;

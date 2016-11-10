@@ -404,7 +404,7 @@ void SAL_CALL IFrameObject::removeVetoableChangeListener(const OUString&, const 
 ::sal_Int16 SAL_CALL IFrameObject::execute() throw (css::uno::RuntimeException, std::exception)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    VclAbstractDialog* pDlg = pFact->CreateEditObjectDialog( ".uno:InsertObjectFloatingFrame", mxObj );
+    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateEditObjectDialog( ".uno:InsertObjectFloatingFrame", mxObj ));
     if ( pDlg )
         pDlg->Execute();
     return 0;

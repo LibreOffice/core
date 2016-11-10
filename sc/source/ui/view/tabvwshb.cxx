@@ -355,7 +355,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_LINKS:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( pWin, rDoc.GetLinkManager() );
+                ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( pWin, rDoc.GetLinkManager() ));
                 if ( pDlg )
                 {
                     pDlg->Execute();
