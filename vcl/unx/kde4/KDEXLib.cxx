@@ -50,8 +50,12 @@
 KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false),
     m_pFreeCmdLineArgs(nullptr), m_pAppCmdLineArgs(nullptr), m_nFakeCmdLineArgs( 0 ),
-    m_isGlibEventLoopType(false), m_allowKdeDialogs(false)
+    m_isGlibEventLoopType(false), m_allowKdeDialogs(false),
+    m_timerEventId( -1 ), m_postUserEventId( -1 )
 {
+    m_timerEventId = QEvent::registerEventType();
+    m_postUserEventId = QEvent::registerEventType();
+
     // the timers created here means they belong to the main thread.
     // As the timeoutTimer runs the LO event queue, which may block on a dialog,
     // the timer has to use a Qt::QueuedConnection, otherwise the nested event
@@ -59,12 +63,10 @@ KDEXLib::KDEXLib() :
     // freezing LO X11 processing.
     timeoutTimer.setSingleShot( true );
     connect( &timeoutTimer, SIGNAL( timeout()), this, SLOT( timeoutActivated()), Qt::QueuedConnection );
-    connect( &userEventTimer, SIGNAL( timeout()), this, SLOT( userEventActivated()), Qt::QueuedConnection );
 
     // QTimer::start() can be called only in its (here main) thread, so this will
     // forward between threads if needed
     connect( this, SIGNAL( startTimeoutTimerSignal()), this, SLOT( startTimeoutTimer()), Qt::QueuedConnection );
-    connect( this, SIGNAL( startUserEventTimerSignal()), this, SLOT( startUserEventTimer()), Qt::QueuedConnection );
 
     // this one needs to be blocking, so that the handling in main thread is processed before
     // the thread emitting the signal continues
@@ -339,17 +341,16 @@ void KDEXLib::StopTimer()
 
 void KDEXLib::timeoutActivated()
 {
-    // HACK? Always process posted events before timer timeouts.
-    // There are places that may watch both (for example, there's a posted
-    // event about change of the current active window and there's a timeout
-    // event informing that a document has finished loading). This is of course
-    // racy, but both generic and gtk event loops manage to deliver posted events
-    // first, so it's at least consistent, and it probably kind of makes at least
-    // some sense (timeouts should be more ok to wait and be triggered somewhen).
-    while( SalKDEDisplay::self()->HasUserEvents() )
+    // don't potentially wait in timeout, as QTimer is non-recursive
+    QApplication::postEvent(this, new QEvent(QEvent::Type( m_timerEventId )));
+}
+
+void KDEXLib::customEvent(QEvent* e)
+{
+    if( e->type() == m_timerEventId )
+        X11SalData::Timeout();
+    else if( e->type() == m_postUserEventId )
         SalKDEDisplay::self()->DispatchInternalEvent();
-    X11SalData::Timeout();
-    // QTimer is not single shot, so will be restarted immediately
 }
 
 void KDEXLib::Wakeup()
@@ -363,23 +364,7 @@ void KDEXLib::PostUserEvent()
 {
     if( !m_isGlibEventLoopType )
         return SalXLib::PostUserEvent();
-    if( qApp->thread() == QThread::currentThread())
-        startUserEventTimer();
-    else
-        Q_EMIT startUserEventTimerSignal();
-}
-
-void KDEXLib::startUserEventTimer()
-{
-    userEventTimer.start( 0 );
-}
-
-void KDEXLib::userEventActivated()
-{
-    if( ! SalKDEDisplay::self()->HasUserEvents() )
-        userEventTimer.stop();
-    SalKDEDisplay::self()->DispatchInternalEvent();
-    // QTimer is not single shot, so will be restarted immediately
+    QApplication::postEvent(this, new QEvent(QEvent::Type( m_postUserEventId )));
 }
 
 void KDEXLib::doStartup()
