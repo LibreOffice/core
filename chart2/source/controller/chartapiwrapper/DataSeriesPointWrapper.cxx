@@ -908,28 +908,8 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rProperty
     return WrappedPropertySet::getPropertyValue( rPropertyName );
 }
 
-uno::Sequence< OUString > DataSeriesPointWrapper::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 7 );
-    aServices[ 0 ] = "com.sun.star.chart.ChartDataRowProperties";
-    aServices[ 1 ] = "com.sun.star.chart.ChartDataPointProperties";
-    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
-    aServices[ 3 ] =  "com.sun.star.beans.PropertySet";
-    aServices[ 4 ] = "com.sun.star.drawing.FillProperties";
-    aServices[ 5 ] = "com.sun.star.drawing.LineProperties";
-    aServices[ 6 ] = "com.sun.star.style.CharacterProperties";
-
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL DataSeriesPointWrapper::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString DataSeriesPointWrapper::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.DataSeries");
 }
@@ -943,7 +923,15 @@ sal_Bool SAL_CALL DataSeriesPointWrapper::supportsService( const OUString& rServ
 css::uno::Sequence< OUString > SAL_CALL DataSeriesPointWrapper::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart.ChartDataRowProperties",
+        "com.sun.star.chart.ChartDataPointProperties",
+        "com.sun.star.xml.UserDefinedAttributesSupplier",
+        "com.sun.star.beans.PropertySet",
+        "com.sun.star.drawing.FillProperties",
+        "com.sun.star.drawing.LineProperties",
+        "com.sun.star.style.CharacterProperties"
+    };
 }
 
 } //  namespace wrapper

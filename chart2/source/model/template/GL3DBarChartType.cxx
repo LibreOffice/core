@@ -104,11 +104,6 @@ GL3DBarChartType::~GL3DBarChartType() {}
 OUString SAL_CALL GL3DBarChartType::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
-}
-
-OUString GL3DBarChartType::getImplementationName_Static()
-{
     return OUString("com.sun.star.comp.chart.GL3DBarChartType");
 }
 
@@ -121,16 +116,10 @@ sal_Bool SAL_CALL GL3DBarChartType::supportsService( const OUString& rServiceNam
 css::uno::Sequence< OUString > SAL_CALL GL3DBarChartType::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence<OUString> GL3DBarChartType::getSupportedServiceNames_Static()
-{
-    uno::Sequence<OUString> aServices(3);
-    aServices[0] = CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR;
-    aServices[1] = "com.sun.star.chart2.ChartType";
-    aServices[2] = "com.sun.star.beans.PropertySet";
-    return aServices;
+    return {
+        CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR,
+        "com.sun.star.chart2.ChartType",
+        "com.sun.star.beans.PropertySet" };
 }
 
 OUString SAL_CALL GL3DBarChartType::getChartType()

@@ -205,11 +205,6 @@ void SAL_CALL Wall::disposing( const lang::EventObject& /* Source */ )
 // ____ OPropertySet ____
 void Wall::firePropertyChangeEvent()
 {
-    fireModifyEvent();
-}
-
-void Wall::fireModifyEvent()
-{
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 

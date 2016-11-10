@@ -158,14 +158,12 @@ OUString SampleAddIn::getImplementationName_Static()
 
 uno::Sequence< OUString > SampleAddIn::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSeq( 4 );
-
-    aSeq[ 0 ] = "com.sun.star.chart.ChartAxisXSupplier";
-    aSeq[ 1 ] = "com.sun.star.chart.ChartAxisYSupplier";
-    aSeq[ 2 ] = "com.sun.star.chart.Diagram";
-    aSeq[ 3 ] = "com.sun.star.chart.SampleAddIn";
-
-    return aSeq;
+    return {
+        "com.sun.star.chart.ChartAxisXSupplier",
+        "com.sun.star.chart.ChartAxisYSupplier",
+        "com.sun.star.chart.Diagram",
+        "com.sun.star.chart.SampleAddIn"
+    };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SampleAddIn_CreateInstance(

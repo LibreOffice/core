@@ -361,11 +361,6 @@ bool ChartController::impl_isDisposedOrSuspended() const
 OUString SAL_CALL ChartController::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
-}
-
-OUString ChartController::getImplementationName_Static()
-{
     return OUString(CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME);
 }
 
@@ -378,16 +373,11 @@ sal_Bool SAL_CALL ChartController::supportsService( const OUString& rServiceName
 css::uno::Sequence< OUString > SAL_CALL ChartController::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > ChartController::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[ 0 ] = CHART_CONTROLLER_SERVICE_NAME;
-    aSNS.getArray()[ 1 ] = "com.sun.star.frame.Controller";
-    //// @todo : add additional services if you support any further
-    return aSNS;
+    return {
+        CHART_CONTROLLER_SERVICE_NAME,
+        "com.sun.star.frame.Controller"
+        //// @todo : add additional services if you support any further
+    };
 }
 
 namespace {

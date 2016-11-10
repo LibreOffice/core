@@ -646,16 +646,6 @@ void Diagram::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-Sequence< OUString > Diagram::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 3 );
-
-    aServices[ 0 ] = "com.sun.star.chart2.Diagram";
-    aServices[ 1 ] = "com.sun.star.layout.LayoutElement";
-    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
 // ____ OPropertySet ____
 uno::Any Diagram::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
@@ -747,11 +737,6 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( Diagram, Diagram_Base, ::property::OPropertySe
 OUString SAL_CALL Diagram::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
-}
-
-OUString Diagram::getImplementationName_Static()
-{
     return OUString("com.sun.star.comp.chart2.Diagram");
 }
 
@@ -764,7 +749,10 @@ sal_Bool SAL_CALL Diagram::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL Diagram::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart2.Diagram",
+        "com.sun.star.layout.LayoutElement",
+        "com.sun.star.beans.PropertySet" };
 }
 
 } //  namespace chart

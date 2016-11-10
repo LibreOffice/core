@@ -646,11 +646,6 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenc
     return xSeq;
 }
 
-void InternalDataProvider::createDefaultData()
-{
-    m_aInternalData.createDefaultData();
-}
-
 // ____ XDataProvider ____
 sal_Bool SAL_CALL InternalDataProvider::createDataSourcePossible( const Sequence< beans::PropertyValue >& /* aArguments */ )
     throw (uno::RuntimeException, std::exception)
@@ -1526,8 +1521,9 @@ void SAL_CALL InternalDataProvider::initialize(const uno::Sequence< uno::Any > &
 {
     comphelper::SequenceAsHashMap aArgs(_aArguments);
     if ( aArgs.getUnpackedValueOrDefault( "CreateDefaultData", false ) )
-        createDefaultData();
+            m_aInternalData.createDefaultData();
 }
+
 // ____ XCloneable ____
 Reference< util::XCloneable > SAL_CALL InternalDataProvider::createClone()
     throw (uno::RuntimeException, std::exception)
@@ -1535,18 +1531,8 @@ Reference< util::XCloneable > SAL_CALL InternalDataProvider::createClone()
     return Reference< util::XCloneable >( new InternalDataProvider( *this ));
 }
 
-Sequence< OUString > InternalDataProvider::getSupportedServiceNames_Static()
-{
-    return { "com.sun.star.chart2.data.DataProvider" };
-}
-
 OUString SAL_CALL InternalDataProvider::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString InternalDataProvider::getImplementationName_Static()
 {
     // note: in xmloff this name is used to indicate usage of own data
     return OUString("com.sun.star.comp.chart.InternalDataProvider");
@@ -1561,7 +1547,7 @@ sal_Bool SAL_CALL InternalDataProvider::supportsService( const OUString& rServic
 css::uno::Sequence< OUString > SAL_CALL InternalDataProvider::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.chart2.data.DataProvider" };
 }
 
 } //  namespace chart

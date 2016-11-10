@@ -1540,24 +1540,8 @@ const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedPropert
     return aWrappedProperties;
 }
 
-uno::Sequence< OUString > ChartDocumentWrapper::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = "com.sun.star.chart.ChartDocument";
-    aServices[ 1 ] = CHART_CHARTAPIWRAPPER_SERVICE_NAME;
-    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
-    aServices[ 3 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL ChartDocumentWrapper::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString ChartDocumentWrapper::getImplementationName_Static()
 {
     return OUString(CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME);
 }
@@ -1571,7 +1555,12 @@ sal_Bool SAL_CALL ChartDocumentWrapper::supportsService( const OUString& rServic
 css::uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart.ChartDocument",
+        CHART_CHARTAPIWRAPPER_SERVICE_NAME,
+        "com.sun.star.xml.UserDefinedAttributesSupplier",
+        "com.sun.star.beans.PropertySet"
+    };
 }
 
 } //  namespace wrapper

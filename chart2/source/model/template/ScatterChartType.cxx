@@ -246,23 +246,8 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartType::getProperty
     return *StaticScatterChartTypeInfo::get();
 }
 
-uno::Sequence< OUString > ScatterChartType::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_SCATTER;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
-    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL ScatterChartType::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString ScatterChartType::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.ScatterChartType");
 }
@@ -276,7 +261,10 @@ sal_Bool SAL_CALL ScatterChartType::supportsService( const OUString& rServiceNam
 css::uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        CHART2_SERVICE_NAME_CHARTTYPE_SCATTER,
+        "com.sun.star.chart2.ChartType",
+        "com.sun.star.beans.PropertySet" };
 }
 
 } //  namespace chart

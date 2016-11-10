@@ -212,11 +212,6 @@ void SAL_CALL StockBar::disposing( const lang::EventObject& /* Source */ )
 // ____ OPropertySet ____
 void StockBar::firePropertyChangeEvent()
 {
-    fireModifyEvent();
-}
-
-void StockBar::fireModifyEvent()
-{
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 

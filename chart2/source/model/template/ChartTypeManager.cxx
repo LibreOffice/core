@@ -603,22 +603,8 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
 }
 
 // ____ XServiceInfo ____
-Sequence< OUString > ChartTypeManager::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = "com.sun.star.chart2.ChartTypeManager";
-    aServices[ 1 ] = "com.sun.star.lang.MultiServiceFactory";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL ChartTypeManager::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString ChartTypeManager::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.ChartTypeManager");
 }
@@ -632,7 +618,9 @@ sal_Bool SAL_CALL ChartTypeManager::supportsService( const OUString& rServiceNam
 css::uno::Sequence< OUString > SAL_CALL ChartTypeManager::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart2.ChartTypeManager",
+        "com.sun.star.lang.MultiServiceFactory" };
 }
 
 } //  namespace chart

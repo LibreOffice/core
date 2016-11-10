@@ -69,9 +69,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
 protected:
     // ____ XFilter ____
     virtual sal_Bool SAL_CALL filter(
@@ -152,16 +149,12 @@ public:
     explicit XMLReportFilterHelper( css::uno::Reference< css::uno::XComponentContext > const & _xContext )
                             :XMLFilter(_xContext)
     {}
-    static OUString getImplementationName_Static()
-    {
-        return OUString( "com.sun.star.comp.chart2.report.XMLFilter" );
-    }
 protected:
     virtual OUString SAL_CALL
         getImplementationName()
             throw( css::uno::RuntimeException, std::exception ) override
     {
-        return getImplementationName_Static();
+        return OUString( "com.sun.star.comp.chart2.report.XMLFilter" );
     }
     // ____ XImporter ____
     virtual void SAL_CALL setTargetDocument(

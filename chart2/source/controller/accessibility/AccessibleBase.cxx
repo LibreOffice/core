@@ -879,12 +879,10 @@ sal_Bool SAL_CALL AccessibleBase::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL AccessibleBase::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aSeq( 2 );
-    OUString* pStr = aSeq.getArray();
-    pStr[ 0 ] = "com.sun.star.accessibility.Accessible";
-    pStr[ 1 ] = "com.sun.star.accessibility.AccessibleContext";
-
-    return aSeq;
+    return {
+        "com.sun.star.accessibility.Accessible",
+        "com.sun.star.accessibility.AccessibleContext"
+    };
 }
 
 // ________ AccessibleBase::XEventListener ________

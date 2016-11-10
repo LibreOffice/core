@@ -223,23 +223,8 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartType::getPropertySetI
     return *StaticPieChartTypeInfo::get();
 }
 
-uno::Sequence< OUString > PieChartType::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_PIE;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
-    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL PieChartType::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString PieChartType::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.PieChartType");
 }
@@ -253,7 +238,10 @@ sal_Bool SAL_CALL PieChartType::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL PieChartType::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        CHART2_SERVICE_NAME_CHARTTYPE_PIE,
+        "com.sun.star.chart2.ChartType",
+        "com.sun.star.beans.PropertySet" };
 }
 
 } //  namespace chart

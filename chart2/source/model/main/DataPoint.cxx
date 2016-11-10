@@ -272,22 +272,7 @@ void SAL_CALL DataPoint::disposing( const lang::EventObject& )
 // ____ OPropertySet ____
 void DataPoint::firePropertyChangeEvent()
 {
-    fireModifyEvent();
-}
-
-void DataPoint::fireModifyEvent()
-{
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
-}
-
-Sequence< OUString > DataPoint::getSupportedServiceNames_Static()
-{
-    return Sequence< OUString >{
-        "com.sun.star.drawing.FillProperties",
-        "com.sun.star.chart2.DataPoint",
-        "com.sun.star.chart2.DataPointProperties",
-        "com.sun.star.beans.PropertySet"
-    };
 }
 
 // needed by MSC compiler
@@ -298,11 +283,6 @@ IMPLEMENT_FORWARD_XINTERFACE2( DataPoint, DataPoint_Base, ::property::OPropertyS
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL DataPoint::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString DataPoint::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.DataPoint") ;
 }
@@ -316,7 +296,12 @@ sal_Bool SAL_CALL DataPoint::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL DataPoint::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return Sequence< OUString >{
+        "com.sun.star.drawing.FillProperties",
+        "com.sun.star.chart2.DataPoint",
+        "com.sun.star.chart2.DataPointProperties",
+        "com.sun.star.beans.PropertySet"
+    };
 }
 
 } //  namespace chart

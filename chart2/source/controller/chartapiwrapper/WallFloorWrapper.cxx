@@ -152,25 +152,8 @@ const std::vector< WrappedProperty* > WallFloorWrapper::createWrappedProperties(
     return aWrappedProperties;
 }
 
-Sequence< OUString > WallFloorWrapper::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
-    aServices[ 1 ] = "com.sun.star.drawing.FillProperties";
-    aServices[ 2 ] = "com.sun.star.drawing.LineProperties";
-    aServices[ 3 ] = "com.sun.star.beans.PropertySet";
-
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL WallFloorWrapper::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString WallFloorWrapper::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.WallOrFloor");
 }
@@ -184,7 +167,12 @@ sal_Bool SAL_CALL WallFloorWrapper::supportsService( const OUString& rServiceNam
 css::uno::Sequence< OUString > SAL_CALL WallFloorWrapper::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.xml.UserDefinedAttributesSupplier",
+        "com.sun.star.drawing.FillProperties",
+        "com.sun.star.drawing.LineProperties",
+        "com.sun.star.beans.PropertySet"
+    };
 }
 
 } //  namespace wrapper

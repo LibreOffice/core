@@ -149,19 +149,8 @@ void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::
     }
 }
 
-Sequence< OUString > LabeledDataSequence::getSupportedServiceNames_Static()
-{
-    return { "com.sun.star.chart2.data.LabeledDataSequence" };
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL LabeledDataSequence::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString LabeledDataSequence::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart2.LabeledDataSequence");
 }
@@ -175,7 +164,7 @@ sal_Bool SAL_CALL LabeledDataSequence::supportsService( const OUString& rService
 css::uno::Sequence< OUString > SAL_CALL LabeledDataSequence::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.chart2.data.LabeledDataSequence" };
 }
 
 } //  namespace chart

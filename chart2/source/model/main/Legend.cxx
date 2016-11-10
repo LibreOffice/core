@@ -252,24 +252,7 @@ void SAL_CALL Legend::disposing( const lang::EventObject& /* Source */ )
 // ____ OPropertySet ____
 void Legend::firePropertyChangeEvent()
 {
-    fireModifyEvent();
-}
-
-void Legend::fireModifyEvent()
-{
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
-}
-
-Sequence< OUString > Legend::getSupportedServiceNames_Static()
-{
-    return Sequence< OUString >{
-        "com.sun.star.chart2.Legend",
-        "com.sun.star.beans.PropertySet",
-        "com.sun.star.drawing.FillProperties",
-        "com.sun.star.drawing.LineProperties",
-        "com.sun.star.style.CharacterProperties",
-        "com.sun.star.layout.LayoutElement"
-    };
 }
 
 // ____ OPropertySet ____
@@ -299,11 +282,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
 OUString SAL_CALL Legend::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
-}
-
-OUString Legend::getImplementationName_Static()
-{
     return OUString("com.sun.star.comp.chart2.Legend");
 }
 
@@ -316,7 +294,14 @@ sal_Bool SAL_CALL Legend::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL Legend::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart2.Legend",
+        "com.sun.star.beans.PropertySet",
+        "com.sun.star.drawing.FillProperties",
+        "com.sun.star.drawing.LineProperties",
+        "com.sun.star.style.CharacterProperties",
+        "com.sun.star.layout.LayoutElement"
+    };
 }
 
 // needed by MSC compiler

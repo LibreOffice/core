@@ -164,25 +164,8 @@ const std::vector< WrappedProperty* > AreaWrapper::createWrappedProperties()
     return aWrappedProperties;
 }
 
-Sequence< OUString > AreaWrapper::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
-    aServices[ 1 ] = "com.sun.star.beans.PropertySet";
-    aServices[ 2 ] = "com.sun.star.drawing.FillProperties";
-    aServices[ 3 ] = "com.sun.star.drawing.LineProperties";
-
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL AreaWrapper::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString AreaWrapper::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.Area");
 }
@@ -196,7 +179,11 @@ sal_Bool SAL_CALL AreaWrapper::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL AreaWrapper::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.xml.UserDefinedAttributesSupplier",
+        "com.sun.star.beans.PropertySet",
+        "com.sun.star.drawing.FillProperties",
+        "com.sun.star.drawing.LineProperties" };
 }
 
 } //  namespace wrapper

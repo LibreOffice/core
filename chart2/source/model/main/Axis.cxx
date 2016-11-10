@@ -633,14 +633,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL Axis::getPropertySetInfo()
     return *StaticAxisInfo::get();
 }
 
-Sequence< OUString > Axis::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = "com.sun.star.chart2.Axis";
-    aServices[ 1 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
 using impl::Axis_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( Axis, Axis_Base, ::property::OPropertySet )
@@ -649,11 +641,6 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( Axis, Axis_Base, ::property::OPropertySet )
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL Axis::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString Axis::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart2.Axis");
 }
@@ -667,7 +654,9 @@ sal_Bool SAL_CALL Axis::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL Axis::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart2.Axis",
+        "com.sun.star.beans.PropertySet" };
 }
 
 } //  namespace chart

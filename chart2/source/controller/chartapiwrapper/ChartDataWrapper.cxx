@@ -701,23 +701,8 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     // \-- locked controllers
 }
 
-uno::Sequence< OUString > ChartDataWrapper::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = "com.sun.star.chart.ChartDataArray";
-    aServices[ 1 ] = "com.sun.star.chart.ChartData";
-
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL ChartDataWrapper::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString ChartDataWrapper::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.ChartData");
 }
@@ -731,7 +716,10 @@ sal_Bool SAL_CALL ChartDataWrapper::supportsService( const OUString& rServiceNam
 css::uno::Sequence< OUString > SAL_CALL ChartDataWrapper::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart.ChartDataArray",
+        "com.sun.star.chart.ChartData"
+    };
 }
 
 } //  namespace wrapper

@@ -59,9 +59,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
 
@@ -105,8 +102,6 @@ protected:
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
-
-    void fireModifyEvent();
 
 private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;

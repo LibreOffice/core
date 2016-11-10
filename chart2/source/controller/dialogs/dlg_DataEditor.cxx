@@ -71,7 +71,7 @@ DataEditor::DataEditor(vcl::Window* pParent,
 
     m_xBrwData->SetCursorMovedHdl( LINK( this, DataEditor, BrowserCursorMovedHdl ));
 
-    UpdateData();
+    m_xBrwData->SetDataFromModel( m_xChartDoc, m_xContext );
     GrabFocus();
     m_xBrwData->GrabFocus();
 
@@ -173,11 +173,6 @@ IMPL_LINK_NOARG(DataEditor, MiscHdl, LinkParamNone*, void)
     sal_Int16 nStyle( aMiscOptions.GetToolboxStyle() );
 
     m_pTbxData->SetOutStyle( nStyle );
-}
-
-void DataEditor::UpdateData()
-{
-    m_xBrwData->SetDataFromModel( m_xChartDoc, m_xContext );
 }
 
 bool DataEditor::Close()

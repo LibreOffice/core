@@ -69,9 +69,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
     void setAddIn( const css::uno::Reference< css::util::XRefreshable >& xAddIn );
     const css::uno::Reference< css::util::XRefreshable >& getAddIn() const { return m_xAddIn;}
 

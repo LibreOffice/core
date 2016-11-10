@@ -732,17 +732,6 @@ sal_Int32 XMLFilter::impl_ExportStream(
     return nWarning;
 }
 
-Sequence< OUString > XMLFilter::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = "com.sun.star.document.ImportFilter";
-    aServices[ 1 ] = "com.sun.star.document.ExportFilter";
-
-    // todo: services are incomplete.  Missing:
-    // XInitialization, XNamed
-    return aServices;
-}
-
 void XMLFilter::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDescriptor, bool & rOutOASIS )
 {
     apphelper::MediaDescriptorHelper aMDHelper( _rMediaDescriptor );
@@ -757,11 +746,6 @@ OUString XMLFilter::getMediaType(bool _bOasis)
 OUString SAL_CALL XMLFilter::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
-}
-
-OUString XMLFilter::getImplementationName_Static()
-{
     return OUString("com.sun.star.comp.chart2.XMLFilter");
 }
 
@@ -774,7 +758,12 @@ sal_Bool SAL_CALL XMLFilter::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL XMLFilter::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.document.ImportFilter",
+        "com.sun.star.document.ExportFilter"
+    };
+    // todo: services are incomplete.  Missing:
+    // XInitialization, XNamed
 }
 
 void XMLReportFilterHelper::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDescriptor, bool & rOutOASIS )

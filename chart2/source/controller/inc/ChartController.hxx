@@ -119,9 +119,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
     // css::frame::XController (required interface)
     virtual void SAL_CALL
         attachFrame( const css::uno::Reference< css::frame::XFrame > & xFrame )

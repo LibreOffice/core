@@ -64,22 +64,8 @@ uno::Sequence< OUString > BarChartType::getSupportedPropertyRoles()
     return aPropRoles;
 }
 
-uno::Sequence< OUString > BarChartType::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_BAR;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL BarChartType::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString BarChartType::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.BarChartType");
 }
@@ -93,7 +79,9 @@ sal_Bool SAL_CALL BarChartType::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL BarChartType::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        CHART2_SERVICE_NAME_CHARTTYPE_BAR,
+        "com.sun.star.chart2.ChartType" };
 }
 
 } //  namespace chart

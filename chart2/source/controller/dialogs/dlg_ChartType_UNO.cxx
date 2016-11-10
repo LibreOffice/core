@@ -43,23 +43,12 @@ ChartTypeUnoDlg::~ChartTypeUnoDlg()
 // lang::XServiceInfo
 OUString SAL_CALL ChartTypeUnoDlg::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
-    return getImplementationName_Static();
-}
-
-OUString ChartTypeUnoDlg::getImplementationName_Static() throw(uno::RuntimeException)
-{
     return OUString(CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME);
 }
 
 css::uno::Sequence<OUString> SAL_CALL ChartTypeUnoDlg::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
 {
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > ChartTypeUnoDlg::getSupportedServiceNames_Static()
-{
-    uno::Sequence<OUString> aSNS { CHART_TYPE_DIALOG_SERVICE_NAME };
-    return aSNS;
+    return { CHART_TYPE_DIALOG_SERVICE_NAME };
 }
 uno::Sequence< sal_Int8 > SAL_CALL ChartTypeUnoDlg::getImplementationId() throw( uno::RuntimeException, std::exception )
 {

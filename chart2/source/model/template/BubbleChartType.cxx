@@ -204,23 +204,8 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL BubbleChartType::getPropertyS
     return *StaticBubbleChartTypeInfo::get();
 }
 
-uno::Sequence< OUString > BubbleChartType::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
-    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL BubbleChartType::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString BubbleChartType::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.BubbleChartType");
 }
@@ -234,7 +219,10 @@ sal_Bool SAL_CALL BubbleChartType::supportsService( const OUString& rServiceName
 css::uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE,
+        "com.sun.star.chart2.ChartType",
+        "com.sun.star.beans.PropertySet" };
 }
 
 } //  namespace chart

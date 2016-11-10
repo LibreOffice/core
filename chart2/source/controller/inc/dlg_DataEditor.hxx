@@ -75,10 +75,6 @@ private:
     /// this is called if MiscOptions change, esp. High-Contrast mode
     DECL_LINK( MiscHdl, LinkParamNone*, void );
 
-    void UpdateData();
-    /// moved and resizes the series name control etc. to fit the dimensions of the edit browsebox
-//     void ImplAdjustHeaderControls( bool bRefreshFromModel );
-
     /** notifySystemWindow adds or remove the given window pToRegister at the Systemwindow found when search pWindow.
         @param  pWindow
             The window which is used to search for the SystemWindow.

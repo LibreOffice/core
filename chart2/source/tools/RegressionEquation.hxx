@@ -68,9 +68,6 @@ public:
         getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception )
         override;
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString >
-        getSupportedServiceNames_Static();
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

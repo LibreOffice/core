@@ -509,25 +509,8 @@ const std::vector< WrappedProperty* > TitleWrapper::createWrappedProperties()
     return aWrappedProperties;
 }
 
-Sequence< OUString > TitleWrapper::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = "com.sun.star.chart.ChartTitle";
-    aServices[ 1 ] = "com.sun.star.drawing.Shape";
-    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
-    aServices[ 3 ] = "com.sun.star.style.CharacterProperties";
-
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL TitleWrapper::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString TitleWrapper::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.Title");
 }
@@ -541,7 +524,12 @@ sal_Bool SAL_CALL TitleWrapper::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL TitleWrapper::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart.ChartTitle",
+        "com.sun.star.drawing.Shape",
+        "com.sun.star.xml.UserDefinedAttributesSupplier",
+         "com.sun.star.style.CharacterProperties"
+    };
 }
 
 } //  namespace wrapper

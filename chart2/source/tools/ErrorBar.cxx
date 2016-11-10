@@ -475,22 +475,8 @@ uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL E
     return comphelper::containerToSequence( m_aDataSequences );
 }
 
-uno::Sequence< OUString > ErrorBar::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.ErrorBar";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL ErrorBar::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString ErrorBar::getImplementationName_Static()
 {
     return OUString(lcl_aServiceName);
 }
@@ -504,7 +490,10 @@ sal_Bool SAL_CALL ErrorBar::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL ErrorBar::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        lcl_aServiceName,
+        "com.sun.star.chart2.ErrorBar"
+    };
 }
 
 // needed by MSC compiler

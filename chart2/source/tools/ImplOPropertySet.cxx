@@ -99,7 +99,11 @@ ImplOPropertySet::ImplOPropertySet( const ImplOPropertySet & rOther )
 {
     ::std::copy( rOther.m_aProperties.begin(), rOther.m_aProperties.end(),
                  ::std::inserter( m_aProperties, m_aProperties.begin() ));
-    cloneInterfaceProperties();
+
+    // clone interface properties
+    ::std::for_each( m_aProperties.begin(), m_aProperties.end(),
+                     lcl_replaceInterfacePropertiesByClones());
+
     m_xStyle.set( ::chart::CloneHelper::CreateRefClone< style::XStyle >()( rOther.m_xStyle ));
 }
 
@@ -172,12 +176,6 @@ bool ImplOPropertySet::SetStyle( const Reference< style::XStyle > & xStyle )
 
     m_xStyle = xStyle;
     return true;
-}
-
-void ImplOPropertySet::cloneInterfaceProperties()
-{
-    ::std::for_each( m_aProperties.begin(), m_aProperties.end(),
-                     lcl_replaceInterfacePropertiesByClones());
 }
 
 } //  namespace impl

@@ -243,14 +243,8 @@ Reference< css::accessibility::XAccessible > SelectorListBox::CreateAccessible()
     return ListBox::CreateAccessible();
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL ElementSelectorToolbarController::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString ElementSelectorToolbarController::getImplementationName_Static()
 {
     return OUString(lcl_aServiceName);
 }
@@ -263,11 +257,6 @@ sal_Bool SAL_CALL ElementSelectorToolbarController::supportsService( const OUStr
 
 css::uno::Sequence< OUString > SAL_CALL ElementSelectorToolbarController::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getSupportedServiceNames_Static();
-}
-
-Sequence< OUString > ElementSelectorToolbarController::getSupportedServiceNames_Static()
 {
     return { "com.sun.star.frame.ToolbarController" };
 }

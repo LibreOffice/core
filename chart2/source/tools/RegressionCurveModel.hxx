@@ -158,9 +158,6 @@ public:
             throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
-
-    static const OUString& getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 class LinearRegressionCurve : public RegressionCurveModel
@@ -184,9 +181,6 @@ public:
             throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
-
-    static const OUString& getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 class LogarithmicRegressionCurve : public RegressionCurveModel
@@ -210,9 +204,6 @@ public:
             throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
-
-    static const OUString& getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 class ExponentialRegressionCurve : public RegressionCurveModel
@@ -235,9 +226,6 @@ public:
             throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
-
-    static const OUString& getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 class PotentialRegressionCurve : public RegressionCurveModel
@@ -261,9 +249,6 @@ public:
             throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
-
-    static const OUString& getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 class PolynomialRegressionCurve : public RegressionCurveModel
@@ -286,9 +271,6 @@ public:
             throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
-
-    static const OUString& getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 class MovingAverageRegressionCurve : public RegressionCurveModel
@@ -311,9 +293,6 @@ public:
             throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
-
-    static const OUString& getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 } //  namespace chart

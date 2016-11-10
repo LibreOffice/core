@@ -128,9 +128,6 @@ public:
     /// confirms all pending changes to be ready to be closed
     bool EndEditing();
 
-    // calls the protected inline-function BrowseBox::GetFirstVisibleColNumber()
-    sal_Int16 GetFirstVisibleColumNumber() const;
-
     bool CellContainsNumbers( sal_Int32 nRow, sal_uInt16 nCol ) const;
 
     sal_uInt32 GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) const;
@@ -173,7 +170,6 @@ private:
     void ImplAdjustHeaderControls();
 
     OUString GetColString( sal_Int32 nColumnId ) const;
-    static OUString GetRowString( sal_Int32 nRow );
 
     DECL_LINK( SeriesHeaderGotFocus, Control&, void );
     DECL_LINK( SeriesHeaderChanged,  impl::SeriesHeaderEdit*, void );

@@ -112,8 +112,6 @@ private: // methods
      */
     css::awt::Rectangle GetWindowPosSize() const;
 
-    ExplicitValueProvider* getExplicitValueProvider();
-
 private: // members
     css::uno::WeakReference< css::view::XSelectionSupplier >        m_xSelectionSupplier;
     css::uno::WeakReference< css::frame::XModel >                   m_xChartModel;

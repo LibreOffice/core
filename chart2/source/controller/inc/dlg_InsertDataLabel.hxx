@@ -40,8 +40,6 @@ private:
 
     const SfxItemSet&   m_rInAttrs;
 
-    void Reset();
-
 public:
     DataLabelsDialog(vcl::Window* pParent, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter);
     virtual ~DataLabelsDialog() override;

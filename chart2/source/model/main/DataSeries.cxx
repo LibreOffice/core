@@ -232,15 +232,6 @@ uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
     return xResult;
 }
 
-Sequence< OUString > DataSeries::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = "com.sun.star.chart2.DataSeries";
-    aServices[ 1 ] = "com.sun.star.chart2.DataPointProperties";
-    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
 // ____ OPropertySet ____
 uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
     throw (beans::UnknownPropertyException,
@@ -569,11 +560,6 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( DataSeries, DataSeries_Base, OPropertySet )
 OUString SAL_CALL DataSeries::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
-}
-
-OUString DataSeries::getImplementationName_Static()
-{
     return OUString("com.sun.star.comp.chart.DataSeries");
 }
 
@@ -586,7 +572,10 @@ sal_Bool SAL_CALL DataSeries::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL DataSeries::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart2.DataSeries",
+        "com.sun.star.chart2.DataPointProperties",
+        "com.sun.star.beans.PropertySet" };
 }
 
 }  // namespace chart
