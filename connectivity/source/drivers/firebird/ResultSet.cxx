@@ -398,7 +398,7 @@ OUString OResultSet::makeNumericString(const sal_Int32 nColumnIndex)
         nAllDigits = -nAllDigits; // abs
     }
 
-    sRetBuffer.append((sal_Int64) (nAllDigits / nDecimalCountExp) );
+    sRetBuffer.append(static_cast<sal_Int64>(nAllDigits / nDecimalCountExp) );
     if( nDecimalCount > 0)
     {
         sRetBuffer.append('.');
