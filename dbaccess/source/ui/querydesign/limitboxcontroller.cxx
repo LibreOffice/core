@@ -195,7 +195,7 @@ uno::Reference< awt::XWindow > SAL_CALL LimitBoxController::createItemWindow(
 {
     uno::Reference< awt::XWindow > xItemWindow;
 
-    vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xParent );
     if ( pParent )
     {
         SolarMutexGuard aSolarMutexGuard;

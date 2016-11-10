@@ -458,7 +458,7 @@ bool Shell::NextPage( bool bPrev )
 
     if ( nPos < pTabBar->GetPageCount() )
     {
-        BaseWindow* pWin = aWindowTable[ pTabBar->GetPageId( nPos ) ];
+        VclPtr<BaseWindow> pWin = aWindowTable[ pTabBar->GetPageId( nPos ) ];
         SetCurWindow( pWin, true );
         bRet = true;
     }
@@ -682,7 +682,7 @@ void Shell::UpdateWindows()
                             for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
                             {
                                 OUString aModName = pModNames[ j ];
-                                ModulWindow* pWin = FindBasWin( *doc, aLibName, aModName );
+                                VclPtr<ModulWindow> pWin = FindBasWin( *doc, aLibName, aModName );
                                 if ( !pWin )
                                     pWin = CreateBasWin( *doc, aLibName, aModName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aModName &&

@@ -996,7 +996,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
                     xList->getByIndex(i) >>= xFrame;
                     if ( xFrame.is() && nTaskId == nCurItemId )
                     {
-                        vcl::Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                        VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                         pWin->GrabFocus();
                         pWin->ToTop( ToTopFlags::RestoreWhenMin );
                         break;
@@ -2012,7 +2012,7 @@ void MenuBarManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComp
             if ( xFrame == xCurrentFrame )
                 nActiveItemId = nItemId;
 
-            vcl::Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+            VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
             OUString sWindowTitle;
             if ( pWin && pWin->IsVisible() )
                 sWindowTitle = pWin->GetText();

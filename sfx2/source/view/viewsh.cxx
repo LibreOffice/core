@@ -450,8 +450,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                         if(xElement.is())
                         {
                             uno::Reference< awt::XWindow > xWin( xElement->getRealInterface(), uno::UNO_QUERY_THROW );
-                            vcl::Window* pWin = VCLUnoHelper::GetWindow( xWin );
-                            ToolBox* pTextToolbox = dynamic_cast< ToolBox* >( pWin );
+                            VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( xWin );
+                            ToolBox* pTextToolbox = dynamic_cast< ToolBox* >( pWin.get() );
                             if( pTextToolbox )
                             {
                                 sal_uInt16 nItemCount = pTextToolbox->GetItemCount();

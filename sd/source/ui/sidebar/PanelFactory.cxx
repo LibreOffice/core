@@ -80,8 +80,8 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     Reference<ui::XSidebar> xSidebar (aArguments.getOrDefault("Sidebar", Reference<ui::XSidebar>()));
 
     // Throw exceptions when the arguments are not as expected.
-    vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-    if ( ! xParentWindow.is() || pParentWindow==nullptr)
+    VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
+    if ( ! xParentWindow.is() || !pParentWindow)
         throw RuntimeException(
             "PanelFactory::createUIElement called without ParentWindow");
     if ( ! xFrame.is())

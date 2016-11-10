@@ -220,7 +220,7 @@ void OJoinTableView::Resize()
     m_aScrollOffset.X() = GetHScrollBar().GetThumbPos();
     m_aScrollOffset.Y() = GetVScrollBar().GetThumbPos();
 
-    OTableWindow* pCheck = m_aTableMap.begin()->second;
+    VclPtr<OTableWindow> pCheck = m_aTableMap.begin()->second;
     Point aRealPos = pCheck->GetPosPixel();
     Point aAssumedPos = pCheck->GetData()->GetPosition() - GetScrollOffset();
 
@@ -1438,7 +1438,7 @@ void OJoinTableView::GrabTabWinFocus()
     }
     else if (!m_aTableMap.empty() && m_aTableMap.begin()->second && m_aTableMap.begin()->second->IsVisible())
     {
-        OTableWindow* pFirstWin = m_aTableMap.begin()->second;
+        VclPtr<OTableWindow> pFirstWin = m_aTableMap.begin()->second;
         if (pFirstWin->GetListBox())
             pFirstWin->GetListBox()->GrabFocus();
         else

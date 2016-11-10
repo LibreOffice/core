@@ -645,7 +645,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_CHAR_CTL_POSTURE, true },
         { SID_ATTR_CHAR_CTL_WEIGHT, true }
     };
-    vcl::Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
     ::std::unique_ptr<FontList> pFontList(new FontList( pParent ));
     XColorListRef pColorList( XColorList::CreateStdColorList() );
     SfxPoolItem* pDefaults[] =
@@ -745,7 +745,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
 
     std::shared_ptr<rptui::OReportModel> pModel  = ::reportdesign::OReportDefinition::getSdrModel(_xShape->getSection()->getReportDefinition());
 
-    vcl::Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
 
     bool bSuccess = false;
     try
@@ -1015,7 +1015,7 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
     {
         xFactory = _xContext->getServiceManager();
         xServiceFactory.set(xFactory,uno::UNO_QUERY);
-        vcl::Window* pParent = VCLUnoHelper::GetWindow( _xInspectorWindow );
+        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( _xInspectorWindow );
 
         uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext("org.libreoffice.report.pentaho.SOFunctionManager",_xContext),uno::UNO_QUERY);
         if ( xMgr.is() )

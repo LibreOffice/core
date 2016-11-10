@@ -88,7 +88,7 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
     // SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
 
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( ! pWindow)
         return;
 

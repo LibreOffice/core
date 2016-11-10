@@ -1614,7 +1614,7 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
                         xSupp->setActiveFrame( uno::Reference < frame::XFrame >() );
 
                     css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
-                    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
+                    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
                     if (pWindow && pWindow->HasChildPathFocus() && bGrabFocus)
                     {
                         SfxInPlaceClient *pCli = GetViewShell()->GetUIActiveClient();

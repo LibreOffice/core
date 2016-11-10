@@ -613,8 +613,7 @@ OUString SwAuthenticator::getPassword(  ) throw (RuntimeException, std::exceptio
 {
     if(!m_aUserName.isEmpty() && m_aPassword.isEmpty() && m_pParentWindow)
     {
-       SfxPasswordDialog* pPasswdDlg =
-                VclPtr<SfxPasswordDialog>::Create( m_pParentWindow );
+       ScopedVclPtrInstance<SfxPasswordDialog> pPasswdDlg( m_pParentWindow );
        pPasswdDlg->SetMinLen( 0 );
        if(RET_OK == pPasswdDlg->Execute())
             m_aPassword = pPasswdDlg->GetPassword();

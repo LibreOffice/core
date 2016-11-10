@@ -170,13 +170,13 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     // VCL SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
 
-    vcl::Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
+    VclPtr<vcl::Window> pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
         ( pWindow                                 ) &&
         ( pWindow->GetType() == WINDOW_WORKWINDOW )
        )
     {
-        WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow);
+        WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
         pWorkWindow->SetApplicationID( sApplicationID );
     }
     // <- VCL SYNCHRONIZED
@@ -287,13 +287,13 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     // VCL SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
 
-    vcl::Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
+    VclPtr<vcl::Window> pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
         ( pWindow                                 ) &&
         ( pWindow->GetType() == WINDOW_WORKWINDOW )
        )
     {
-        WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow);
+        WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
         pWorkWindow->SetIcon( (sal_uInt16)nIcon );
 
         css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
@@ -321,13 +321,13 @@ void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFr
     // VCL SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
 
-    vcl::Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
+    VclPtr<vcl::Window> pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
         ( pWindow                                 ) &&
         ( pWindow->GetType() == WINDOW_WORKWINDOW )
        )
     {
-        WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow);
+        WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
         pWorkWindow->SetText( sTitle );
     }
     // <- VCL SYNCHRONIZED

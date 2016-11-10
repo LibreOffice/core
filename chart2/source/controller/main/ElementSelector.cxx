@@ -313,7 +313,7 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
     uno::Reference< awt::XWindow > xItemWindow;
     if( !m_apSelectorListBox.get() )
     {
-        vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
+        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xParent );
         if( pParent )
         {
             m_apSelectorListBox.reset( VclPtr<SelectorListBox>::Create( pParent, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER ) );

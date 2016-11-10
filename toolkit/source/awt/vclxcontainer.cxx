@@ -85,7 +85,7 @@ css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > VCLXContainer::ge
 
     // Request container interface from all children
     css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > aSeq;
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         sal_uInt16 nChildren = pWindow->GetChildCount();
@@ -111,7 +111,7 @@ void VCLXContainer::enableDialogControl( sal_Bool bEnable ) throw(css::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         WinBits nStyle = pWindow->GetStyle();
@@ -136,7 +136,7 @@ void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< 
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
         // css::style::TabStop
-        vcl::Window* pWin = VCLUnoHelper::GetWindow( pComps[n] );
+        VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( pComps[n] );
         // May be NULL if a css::uno::Sequence is originated from TabController and is missing a peer!
         if ( pWin )
         {
@@ -179,7 +179,7 @@ void VCLXContainer::setGroup( const css::uno::Sequence< css::uno::Reference< css
     vcl::Window* pPrevRadio = nullptr;
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
-        vcl::Window* pWin = VCLUnoHelper::GetWindow( pComps[n] );
+        VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( pComps[n] );
         if ( pWin )
         {
             vcl::Window* pSortBehind = pPrevWin;
@@ -243,9 +243,9 @@ throw(css::uno::RuntimeException, std::exception)
             sal_Int32 nVal =0;
             Value >>= nVal;
             Size aSize( nVal, nVal );
-            vcl::Window* pWindow = GetWindow();
+            VclPtr<vcl::Window> pWindow = GetWindow();
             MapMode aMode( MapUnit::MapAppFont );
-            toolkit::ScrollableInterface* pScrollable = dynamic_cast< toolkit::ScrollableInterface* >( pWindow );
+            toolkit::ScrollableInterface* pScrollable = dynamic_cast< toolkit::ScrollableInterface* >( pWindow.get() );
             if ( pWindow && pScrollable )
             {
                 OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );

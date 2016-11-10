@@ -118,7 +118,7 @@ namespace accessibility
                 break;
             case VCLEVENT_LISTBOX_TREEFOCUS:
                 {
-                    SvTreeListBox* pBox = getListBox();
+                    VclPtr<SvTreeListBox> pBox = getListBox();
                     bool bNeedFocus = false;
                     if (pBox)
                     {
@@ -276,7 +276,7 @@ namespace accessibility
             m_mapEntry.erase(mi);
         }
 
-        SvTreeListBox* pBox = getListBox();
+        VclPtr<SvTreeListBox> pBox = getListBox();
         SvTreeListEntry* pEntryChild = pBox->FirstChild(pEntry);
         while (pEntryChild)
         {
@@ -351,7 +351,7 @@ namespace accessibility
         ensureAlive();
 
         sal_Int32 nCount = 0;
-        SvTreeListBox* pSvTreeListBox = getListBox();
+        VclPtr<SvTreeListBox> pSvTreeListBox = getListBox();
         if ( pSvTreeListBox )
             nCount = pSvTreeListBox->GetLevelChildCount( nullptr );
 

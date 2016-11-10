@@ -286,11 +286,11 @@ throw ( RuntimeException, std::exception )
     if ( m_bDisposed )
         return;
 
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
     if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR && m_nID != 0 )
     {
         OUString   aStrValue;
-        StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow);
+        StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow.get());
 
         if ( Event.State >>= aStrValue )
             pStatusBar->SetItemText( m_nID, aStrValue );

@@ -46,7 +46,7 @@ void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
 {
     SolarMutexGuard aSolarGuard;
 
-    vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(m_xParentWindow);
+    VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(m_xParentWindow);
     if (!m_pStatusBar)
         m_pStatusBar = VclPtr<StatusBar>::Create(pParentWindow, WB_3DLOOK|WB_BORDER);
 

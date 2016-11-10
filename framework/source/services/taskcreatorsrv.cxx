@@ -216,7 +216,7 @@ void TaskCreatorService::implts_applyDocStyleToWindow(const css::uno::Reference<
 {
     // SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
-    vcl::Window* pVCLWindow = VCLUnoHelper::GetWindow(xWindow);
+    VclPtr<vcl::Window> pVCLWindow = VCLUnoHelper::GetWindow(xWindow);
     if (pVCLWindow)
         pVCLWindow->SetExtendedStyle(WB_EXT_DOCUMENT);
     // <- SYNCHRONIZED

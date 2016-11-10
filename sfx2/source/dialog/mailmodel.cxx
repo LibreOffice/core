@@ -821,7 +821,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
 
                     SolarMutexGuard aGuard;
-                    vcl::Window* pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
+                    VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
 
                     ScopedVclPtrInstance< MessageDialog > aBox(pParentWindow, "ErrorFindEmailDialog", "sfx/ui/errorfindemaildialog.ui");
                     aBox->Execute();

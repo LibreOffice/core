@@ -353,7 +353,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     Reference< XWindow > xWindow = xTbxController->createItemWindow( xToolbarWindow );
                     if ( xWindow.is() )
                     {
-                        vcl::Window* pItemWin = VCLUnoHelper::GetWindow( xWindow );
+                        VclPtr<vcl::Window> pItemWin = VCLUnoHelper::GetWindow( xWindow );
                         if ( pItemWin )
                         {
                             WindowType nType = pItemWin->GetType();

@@ -876,7 +876,7 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
 {
     Size aSz = rOutSz;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         sal_Int32 nLeft, nTop, nRight, nBottom;
@@ -1001,7 +1001,7 @@ void VCLXWindow::setVisible( sal_Bool bVisible ) throw(css::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         mpImpl->setDirectVisible( bVisible );
@@ -1013,7 +1013,7 @@ void VCLXWindow::setEnable( sal_Bool bEnable ) throw(css::uno::RuntimeException,
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         pWindow->Enable( bEnable, false ); // #95824# without children!
@@ -1179,10 +1179,10 @@ sal_Bool VCLXWindow::isChild( const css::uno::Reference< css::awt::XWindowPeer >
     SolarMutexGuard aGuard;
 
     bool bIsChild = false;
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
-        vcl::Window* pPeerWindow = VCLUnoHelper::GetWindow( rxPeer );
+        VclPtr<vcl::Window> pPeerWindow = VCLUnoHelper::GetWindow( rxPeer );
         bIsChild = pPeerWindow && pWindow->IsChild( pPeerWindow );
     }
 
@@ -1389,7 +1389,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( !pWindow )
         return;
 
@@ -1401,7 +1401,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
     {
         case BASEPROPERTY_REFERENCE_DEVICE:
         {
-            Control* pControl = dynamic_cast< Control* >( pWindow );
+            Control* pControl = dynamic_cast< Control* >( pWindow.get() );
             OSL_ENSURE( pControl, "VCLXWindow::setProperty( RefDevice ): need a Control for this!" );
             if ( !pControl )
                 break;
@@ -2238,7 +2238,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( !pWindow )
         return;
 
@@ -2247,7 +2247,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeExcep
         OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mpImpl->mxViewGraphics );
         if (!pDev)
             pDev = pWindow->GetParent();
-        TabPage* pTabPage = dynamic_cast< TabPage* >( pWindow );
+        TabPage* pTabPage = dynamic_cast< TabPage* >( pWindow.get() );
         if ( pTabPage )
         {
             Point aPos( nX, nY );
@@ -2406,7 +2406,7 @@ void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable ) throw (css::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
         pWindow->EnableDocking( bEnable );
 }
@@ -2415,7 +2415,7 @@ sal_Bool SAL_CALL VCLXWindow::isFloating(  ) throw (css::uno::RuntimeException, 
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if( pWindow )
         return vcl::Window::GetDockingManager()->IsFloating( pWindow );
     else
@@ -2426,7 +2426,7 @@ void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating ) throw (css::uno:
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if( pWindow )
         vcl::Window::GetDockingManager()->SetFloatingMode( pWindow, bFloating );
 }
@@ -2435,7 +2435,7 @@ sal_Bool SAL_CALL VCLXWindow::isLocked(  ) throw (css::uno::RuntimeException, st
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if( pWindow )
         return vcl::Window::GetDockingManager()->IsLocked( pWindow );
     else
@@ -2446,7 +2446,7 @@ void SAL_CALL VCLXWindow::lock(  ) throw (css::uno::RuntimeException, std::excep
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if( pWindow && !vcl::Window::GetDockingManager()->IsFloating( pWindow ) )
         vcl::Window::GetDockingManager()->Lock( pWindow );
 }
@@ -2455,10 +2455,11 @@ void SAL_CALL VCLXWindow::unlock(  ) throw (css::uno::RuntimeException, std::exc
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if( pWindow && !vcl::Window::GetDockingManager()->IsFloating( pWindow ) )
         vcl::Window::GetDockingManager()->Unlock( pWindow );
 }
+
 void SAL_CALL VCLXWindow::startPopupMode( const css::awt::Rectangle& ) throw (css::uno::RuntimeException, std::exception)
 {
     // TODO: remove interface in the next incompatible build

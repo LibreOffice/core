@@ -502,7 +502,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     xCtrWin->setVisible( true );
                     xControl->setDesignMode( true );
 
-                    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
+                    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
                     pWindow->set_grid_top_attach(rLabel.get_grid_top_attach());
                     pWindow->set_grid_left_attach(rLabel.get_grid_left_attach()+1);
                     pWindow->set_valign(VclAlign::Center);
@@ -658,7 +658,7 @@ bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
                 uno::Reference< awt::XControl >  xControl( aControls[ nCtrlIndex ], UNO_QUERY );
                 DBG_ASSERT( xControl.is(), "-BibGeneralPage::HandleShortCutKey(): a control which is not a control!" );
 
-                vcl::Window*         pWindow = VCLUnoHelper::GetWindow( xControl->getPeer() );
+                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xControl->getPeer() );
 
                 if( pWindow )
                 {

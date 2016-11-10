@@ -700,7 +700,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
     }
 
     // create the component window
-    vcl::Window* pParent   = VCLUnoHelper::GetWindow(xParentWindow);
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(xParentWindow);
     VclPtr<vcl::Window> pWindow = VclPtr<BackingWindow>::Create(pParent);
     m_xWindow = VCLUnoHelper::GetInterface(pWindow);
 
@@ -772,8 +772,8 @@ void SAL_CALL BackingComp::dispatch( const css::util::URL& aURL, const css::uno:
     // vnd.org.libreoffice.recentdocs:ClearRecentFileList  - clear recent files
     if ( aURL.Path == "ClearRecentFileList" )
     {
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow(m_xWindow);
-        BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow );
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(m_xWindow);
+        BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow.get());
         if( pBack )
         {
             pBack->clearRecentFileList();

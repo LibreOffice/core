@@ -631,9 +631,9 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
     mbOffsetUpdatePending = false;
     if (mxWindow.is() && rxBaseWindow.is())
     {
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);
-        vcl::Window* pSharedWindow = VCLUnoHelper::GetWindow(rxBaseWindow);
-        if (pWindow!=nullptr && pSharedWindow!=nullptr)
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(mxWindow);
+        VclPtr<vcl::Window> pSharedWindow = VCLUnoHelper::GetWindow(rxBaseWindow);
+        if (pWindow && pSharedWindow)
         {
             Rectangle aBox = pWindow->GetWindowExtentsRelative(pSharedWindow);
 
@@ -652,12 +652,12 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
 {
     ::basegfx::B2DRectangle aClipRectangle;
 
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);
-    if (pWindow == nullptr)
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(mxWindow);
+    if (!pWindow)
         return ::basegfx::B2DRectangle();
 
-    vcl::Window* pSharedWindow = VCLUnoHelper::GetWindow(mxSharedWindow);
-    if (pSharedWindow == nullptr)
+    VclPtr<vcl::Window> pSharedWindow = VCLUnoHelper::GetWindow(mxSharedWindow);
+    if (!pSharedWindow)
         return ::basegfx::B2DRectangle();
 
     // Get the bounding box of the window and create a range in the

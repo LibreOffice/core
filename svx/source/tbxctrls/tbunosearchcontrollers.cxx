@@ -430,8 +430,8 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< c
 {
     svt::ToolboxController::initialize(aArguments);
 
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
-    ToolBox* pToolBox = static_cast<ToolBox*>(pWindow);
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( getParent() );
+    ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
     if ( pToolBox )
     {
         sal_uInt16 nItemCount = pToolBox->GetItemCount();
@@ -452,10 +452,10 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::cre
 {
     css::uno::Reference< css::awt::XWindow > xItemWindow;
 
-    vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xParent );
     if ( pParent )
     {
-        ToolBox* pToolbar = static_cast<ToolBox*>(pParent);
+        ToolBox* pToolbar = static_cast<ToolBox*>(pParent.get());
         m_pFindTextFieldControl = VclPtr<FindTextFieldControl>::Create( pToolbar, WinBits( WB_DROPDOWN | WB_VSCROLL), m_xFrame, m_xContext  );
 
         Size aSize(250, m_pFindTextFieldControl->GetTextHeight() + 200);
@@ -491,8 +491,8 @@ IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl, Edit&, void)
 
 void FindTextToolbarController::textfieldChanged() {
     // enable or disable item DownSearch/UpSearch of findbar
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
-    ToolBox* pToolBox = static_cast<ToolBox*>(pWindow);
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( getParent() );
+    ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
     if ( pToolBox && m_pFindTextFieldControl )
     {
         bool enableButtons = !m_pFindTextFieldControl->GetText().isEmpty();
@@ -575,8 +575,8 @@ void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ 
     if ( m_bDisposed )
         throw css::lang::DisposedException();
 
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
-    ToolBox* pToolBox = static_cast<ToolBox*>(pWindow);
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( getParent() );
+    ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
 
     impl_executeSearch(m_xContext, m_xFrame, pToolBox, meType == UP );
 
@@ -665,10 +665,10 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::cr
 {
     css::uno::Reference< css::awt::XWindow > xItemWindow;
 
-    vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xParent );
     if ( pParent )
     {
-        ToolBox* pToolbar = static_cast<ToolBox*>(pParent);
+        ToolBox* pToolbar = static_cast<ToolBox*>(pParent.get());
         m_pMatchCaseControl = VclPtr<CheckBox>::Create( pToolbar, 0 );
         m_pMatchCaseControl->SetText( SVX_RESSTR( RID_SVXSTR_FINDBAR_MATCHCASE ) );
         Size aSize( m_pMatchCaseControl->GetOptimalSize() );
@@ -757,10 +757,10 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL SearchFormattedToolboxControll
 {
     css::uno::Reference< css::awt::XWindow > xItemWindow;
 
-    vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xParent );
     if ( pParent )
     {
-        ToolBox* pToolbar = static_cast<ToolBox*>(pParent);
+        ToolBox* pToolbar = static_cast<ToolBox*>(pParent.get());
         m_pSearchFormattedControl = VclPtr<CheckBox>::Create( pToolbar, 0 );
         m_pSearchFormattedControl->SetText( SVX_RESSTR( RID_SVXSTR_FINDBAR_SEARCHFORMATTED ) );
         Size aSize( m_pSearchFormattedControl->GetOptimalSize() );
@@ -848,8 +848,8 @@ void SAL_CALL FindAllToolboxController::execute( sal_Int16 /*KeyModifier*/ ) thr
     if ( m_bDisposed )
         throw css::lang::DisposedException();
 
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
-    ToolBox* pToolBox = static_cast<ToolBox*>(pWindow);
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( getParent() );
+    ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
 
     impl_executeSearch(m_xContext, m_xFrame, pToolBox, false, true);
 }
@@ -1142,8 +1142,8 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
         }
 
         css::uno::Reference< css::awt::XWindow > xWindow(xUIElement->getRealInterface(), css::uno::UNO_QUERY);
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        ToolBox* pToolBox = static_cast<ToolBox*>(pWindow);
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
+        ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
         if ( pToolBox )
         {
             sal_uInt16 nItemCount = pToolBox->GetItemCount();

@@ -991,7 +991,7 @@ void DbGridControl::InsertHandleColumn()
 
 void DbGridControl::Init()
 {
-    BrowserHeader* pNewHeader = CreateHeaderBar(this);
+    VclPtr<BrowserHeader> pNewHeader = CreateHeaderBar(this);
     pHeader->SetMouseTransparent(false);
 
     SetHeaderBar(pNewHeader);

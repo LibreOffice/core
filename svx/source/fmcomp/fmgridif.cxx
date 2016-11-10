@@ -1060,7 +1060,7 @@ VclPtr<FmGridControl> FmXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBi
 
 void FmXGridPeer::Create(vcl::Window* pParent, WinBits nStyle)
 {
-    FmGridControl* pWin = imp_CreateControl(pParent, nStyle);
+    VclPtr<FmGridControl> pWin = imp_CreateControl(pParent, nStyle);
     DBG_ASSERT(pWin != nullptr, "FmXGridPeer::Create : imp_CreateControl didn't return a control !");
 
     pWin->SetStateProvider(LINK(this, FmXGridPeer, OnQueryGridSlotState));
@@ -1693,9 +1693,9 @@ void FmXGridPeer::setDesignMode(sal_Bool bOn) throw( RuntimeException, std::exce
 {
     if (bOn != isDesignMode())
     {
-        vcl::Window* pWin = GetWindow();
+        VclPtr<vcl::Window> pWin = GetWindow();
         if (pWin)
-            static_cast<FmGridControl*>(pWin)->SetDesignMode(bOn);
+            static_cast<FmGridControl*>(pWin.get())->SetDesignMode(bOn);
     }
 
     if (bOn)
@@ -1707,9 +1707,9 @@ void FmXGridPeer::setDesignMode(sal_Bool bOn) throw( RuntimeException, std::exce
 
 sal_Bool FmXGridPeer::isDesignMode() throw( RuntimeException, std::exception )
 {
-    vcl::Window* pWin = GetWindow();
+    VclPtr<vcl::Window> pWin = GetWindow();
     if (pWin)
-        return static_cast<FmGridControl*>(pWin)->IsDesignMode();
+        return static_cast<FmGridControl*>(pWin.get())->IsDesignMode();
     else
         return false;
 }
@@ -2007,7 +2007,7 @@ Reference< XAccessibleContext > FmXGridPeer::CreateAccessibleContext()
     Reference< XAccessibleContext > xContext;
 
     // use the AccessibleContext provided by the VCL window
-    vcl::Window* pGrid = GetWindow();
+    VclPtr<vcl::Window> pGrid = GetWindow();
     if ( pGrid )
     {
         Reference< XAccessible > xAcc( pGrid->GetAccessible() );

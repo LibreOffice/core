@@ -104,10 +104,10 @@ void ProgressBarWrapper::start( const OUString& Text, ::sal_Int32 Range )
     if ( xWindow.is() )
     {
         SolarMutexGuard aSolarMutexGuard;
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
-            StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow);
+            StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow.get());
             if ( !pStatusBar->IsProgressMode() )
                 pStatusBar->StartProgressMode( Text );
             else
@@ -142,10 +142,10 @@ void ProgressBarWrapper::end()
     if ( xWindow.is() )
     {
         SolarMutexGuard aSolarMutexGuard;
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
-            StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow);
+            StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow.get());
             if ( pStatusBar->IsProgressMode() )
                 pStatusBar->EndProgressMode();
         }
@@ -172,10 +172,10 @@ void ProgressBarWrapper::setText( const OUString& Text )
     if ( xWindow.is() )
     {
         SolarMutexGuard aSolarMutexGuard;
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
-            StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow);
+            StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow.get());
             if( pStatusBar->IsProgressMode() )
             {
                 pStatusBar->SetUpdateMode( false );
@@ -225,10 +225,10 @@ void ProgressBarWrapper::setValue( ::sal_Int32 nValue )
     if ( xWindow.is() && bSetValue )
     {
         SolarMutexGuard aSolarMutexGuard;
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
-            StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow);
+            StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow.get());
             if ( !pStatusBar->IsProgressMode() )
                 pStatusBar->StartProgressMode( aText );
             pStatusBar->SetProgressValue( sal_uInt16( nValue ));

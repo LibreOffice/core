@@ -423,7 +423,7 @@ void VCLXButton::setLabel( const OUString& rLabel ) throw(css::uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetText( rLabel );
 }
@@ -847,7 +847,7 @@ void VCLXCheckBox::setLabel( const OUString& rLabel ) throw(css::uno::RuntimeExc
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetText( rLabel );
 }
@@ -1213,7 +1213,7 @@ void VCLXRadioButton::setLabel( const OUString& rLabel ) throw(css::uno::Runtime
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetText( rLabel );
 }
@@ -1410,7 +1410,7 @@ void VCLXSpinField::enableRepeat( sal_Bool bRepeat ) throw(css::uno::RuntimeExce
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         WinBits nStyle = pWindow->GetStyle();
@@ -2185,7 +2185,7 @@ void VCLXMessageBox::setCaptionText( const OUString& rText ) throw(css::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetText( rText );
 }
@@ -2195,7 +2195,7 @@ OUString VCLXMessageBox::getCaptionText() throw(css::uno::RuntimeException, std:
     SolarMutexGuard aGuard;
 
     OUString aText;
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
         aText = pWindow->GetText();
     return aText;

@@ -47,7 +47,7 @@ OUString SAL_CALL  SfxUnoDeck::getTitle()
     SolarMutexGuard aGuard;
 
     SidebarController* pSidebarController = getSidebarController();
-    Deck* pDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mpDeck;
+    VclPtr<Deck> pDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mpDeck;
 
     if (!pDeck)
     {

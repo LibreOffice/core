@@ -404,7 +404,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
     if ( !bDisposing )
     {
         ::SolarMutexGuard aGuard;
-        vcl::Window* pParent = VCLUnoHelper::GetWindow( xWindow );
+        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xWindow );
         WaitObject aWaitObject( pParent );
 
         OUString aCommand( _rURL.Path);

@@ -641,7 +641,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         VCLXWindow* pPeer;
         {
             SolarMutexGuard g;
-            vcl::Window* pVclPeer = VCLUnoHelper::GetWindow( getPeer() );
+            VclPtr<vcl::Window> pVclPeer = VCLUnoHelper::GetWindow( getPeer() );
             pPeer = pVclPeer ? pVclPeer->GetWindowPeer() : nullptr;
         }
         VclListenerLock aNoVclEventMultiplexing( pPeer );

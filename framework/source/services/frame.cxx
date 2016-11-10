@@ -873,7 +873,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     m_xContainerWindow = xWindow;
 
     // if window is initially visible, we will never get a windowShowing event
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
     if (pWindow && pWindow->IsVisible())
         m_bIsHidden = false;
 
@@ -1540,7 +1540,7 @@ sal_Bool SAL_CALL Frame::setComponent(const css::uno::Reference< css::awt::XWind
     css::uno::Reference< css::awt::XWindow > xContainerWindow = m_xContainerWindow;
     css::uno::Reference< css::awt::XWindow > xOldComponentWindow = m_xComponentWindow;
     css::uno::Reference< css::frame::XController > xOldController = m_xController;
-    vcl::Window* pOwnWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+    VclPtr<vcl::Window> pOwnWindow = VCLUnoHelper::GetWindow( xContainerWindow );
     bool bHadFocus = pOwnWindow->HasChildPathFocus();
     bool bWasConnected = m_bConnected;
     aReadLock.clear();
@@ -2660,7 +2660,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& )
             )
         {
             css::uno::Reference< css::awt::XWindow >  xParentWindow   = xParent->getContainerWindow();
-            vcl::Window*                                   pParentWindow   = VCLUnoHelper::GetWindow( xParentWindow    );
+            VclPtr<vcl::Window>                       pParentWindow   = VCLUnoHelper::GetWindow( xParentWindow    );
             //#i70261#: dialogs opened from an OLE object will cause a deactivate on the frame of the OLE object
             // on Solaris/Linux at that time pFocusWindow is still NULL because the focus handling is different; right after
             // the deactivation the focus will be set into the dialog!
@@ -3218,13 +3218,13 @@ void Frame::implts_setIconOnWindow()
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         {
             SolarMutexGuard aSolarGuard;
-            vcl::Window* pWindow = (VCLUnoHelper::GetWindow( xContainerWindow ));
+            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             if(
                 ( pWindow            != nullptr              ) &&
                 ( pWindow->GetType() == WINDOW_WORKWINDOW )
                 )
             {
-                WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow);
+                WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
                 pWorkWindow->SetIcon( (sal_uInt16)nIcon );
             }
         }

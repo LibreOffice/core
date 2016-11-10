@@ -160,7 +160,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             {
                 pList->ProcessWindowEvent (rVclWindowEvent);
             }
-            vcl::Window* pWindow = GetWindow();
+            VclPtr<vcl::Window> pWindow = GetWindow();
             if( pWindow && (pWindow->HasFocus() || pWindow->HasChildPathFocus()) )
             {
                 Any aOldValue, aNewValue;

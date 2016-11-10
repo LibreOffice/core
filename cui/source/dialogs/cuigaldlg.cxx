@@ -976,7 +976,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl, ComboBox&, void)
 
 void TPGalleryThemeProperties::SearchFiles()
 {
-    SearchProgress* pProgress = VclPtr<SearchProgress>::Create( this, aURL );
+    VclPtrInstance<SearchProgress> pProgress( this, aURL );
 
     aFoundList.clear();
     m_pLbxFound->Clear();

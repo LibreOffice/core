@@ -106,7 +106,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
         if (rxParentWindow.is())
         {
             Reference<awt::XWindow> xItemWindow (xController->createItemWindow(rxParentWindow));
-            vcl::Window* pItemWindow = VCLUnoHelper::GetWindow(xItemWindow);
+            VclPtr<vcl::Window> pItemWindow = VCLUnoHelper::GetWindow(xItemWindow);
             if (pItemWindow != nullptr)
             {
                 WindowType nType = pItemWindow->GetType();

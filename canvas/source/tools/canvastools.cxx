@@ -1141,7 +1141,7 @@ namespace canvas
         {
             awt::Rectangle aRetVal( rRect );
 
-            vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWin);
+            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWin);
             if( pWindow )
             {
                 ::Point aPoint( aRetVal.X,

@@ -1146,7 +1146,7 @@ VclPtr<AbstractSvxMultiPathDialog> AbstractDialogFactory_Impl::CreateSvxPathSele
 VclPtr<AbstractSvxHpLinkDlg> AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (vcl::Window* pParent,
                                             SfxBindings* pBindings)
 {
-    SvxHpLinkDlg* pDlg = VclPtr<SvxHpLinkDlg>::Create( pParent, pBindings );
+    VclPtrInstance<SvxHpLinkDlg> pDlg( pParent, pBindings );
     return VclPtr<AbstractSvxHpLinkDlg_Impl>::Create(pDlg);
 }
 

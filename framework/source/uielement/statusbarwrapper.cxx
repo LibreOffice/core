@@ -104,7 +104,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
             StatusBarManager* pStatusBarManager( nullptr );
             {
                 SolarMutexGuard aSolarMutexGuard;
-                vcl::Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {
                     sal_uLong nStyles = WinBits( WB_LEFT | WB_3DLOOK );

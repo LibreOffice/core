@@ -213,7 +213,7 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
         // SOLAR SAFE -> ------------------------
         SolarMutexGuard aSolarGuard;
 
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
         // check for system window is necessary to guarantee correct pointer cast!
         if (
             (pWindow                  ) &&
@@ -222,7 +222,7 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
         {
             WindowStateMask nMask = WindowStateMask::All & ~(WindowStateMask::Minimized);
             sWindowState = OStringToOUString(
-                            static_cast<SystemWindow*>(pWindow)->GetWindowState(nMask),
+                            static_cast<SystemWindow*>(pWindow.get())->GetWindowState(nMask),
                             RTL_TEXTENCODING_UTF8);
         }
         // <- SOLAR SAFE ------------------------
@@ -243,7 +243,7 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     // SOLAR SAFE -> ------------------------
     SolarMutexGuard aSolarGuard;
 
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
     if (!pWindow)
         return;
 
@@ -254,8 +254,8 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     if (!bSystemWindow && !bWorkWindow)
         return;
 
-    SystemWindow* pSystemWindow = static_cast<SystemWindow*>(pWindow);
-    WorkWindow*   pWorkWindow   = static_cast<WorkWindow*  >(pWindow);
+    SystemWindow* pSystemWindow = static_cast<SystemWindow*>(pWindow.get());
+    WorkWindow*   pWorkWindow   = static_cast<WorkWindow*  >(pWindow.get());
 
     // don't save this special state!
     if (pWorkWindow->IsMinimized())

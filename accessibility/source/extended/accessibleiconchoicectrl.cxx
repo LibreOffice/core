@@ -90,7 +90,7 @@ namespace accessibility
                 }
                 case VCLEVENT_WINDOW_GETFOCUS :
                 {
-                    SvtIconChoiceCtrl* pCtrl = getCtrl();
+                    VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
                     if ( pCtrl && pCtrl->HasFocus() )
                     {
                         SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
@@ -167,7 +167,7 @@ namespace accessibility
         ::comphelper::OExternalLockGuard aGuard( this );
 
         ensureAlive();
-        SvtIconChoiceCtrl* pCtrl = getCtrl();
+        VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry(i);
         if ( !pEntry )
             throw RuntimeException();
@@ -217,7 +217,7 @@ namespace accessibility
 
         ensureAlive();
 
-        SvtIconChoiceCtrl* pCtrl = getCtrl();
+        VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( nChildIndex );
         if ( !pEntry )
             throw IndexOutOfBoundsException();
@@ -231,7 +231,7 @@ namespace accessibility
 
         ensureAlive();
 
-        SvtIconChoiceCtrl* pCtrl = getCtrl();
+        VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( nChildIndex );
         if ( !pEntry )
             throw IndexOutOfBoundsException();
@@ -253,7 +253,7 @@ namespace accessibility
 
         ensureAlive();
 
-        SvtIconChoiceCtrl* pCtrl = getCtrl();
+        VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         sal_Int32 nCount = pCtrl->GetEntryCount();
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -270,7 +270,7 @@ namespace accessibility
         ensureAlive();
 
         sal_Int32 nSelCount = 0;
-        SvtIconChoiceCtrl* pCtrl = getCtrl();
+        VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         sal_Int32 nCount = pCtrl->GetEntryCount();
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -293,7 +293,7 @@ namespace accessibility
 
         Reference< XAccessible > xChild;
         sal_Int32 nSelCount = 0;
-        SvtIconChoiceCtrl* pCtrl = getCtrl();
+        VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         sal_Int32 nCount = pCtrl->GetEntryCount();
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -322,7 +322,7 @@ namespace accessibility
 
         Reference< XAccessible > xChild;
         sal_Int32 nSelCount = 0;
-        SvtIconChoiceCtrl* pCtrl = getCtrl();
+        VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         sal_Int32 nCount = pCtrl->GetEntryCount();
         bool bFound = false;
         for ( sal_Int32 i = 0; i < nCount; ++i )

@@ -681,7 +681,7 @@ awt::Rectangle SAL_CALL AccessibleBase::getBounds()
         ExplicitValueProvider::getExplicitValueProvider( m_aAccInfo.m_xView ));
     if( pExplicitValueProvider )
     {
-        vcl::Window* pWindow( VCLUnoHelper::GetWindow( m_aAccInfo.m_xWindow ));
+        VclPtr<vcl::Window> pWindow( VCLUnoHelper::GetWindow( m_aAccInfo.m_xWindow ));
         awt::Rectangle aLogicRect( pExplicitValueProvider->getRectangleOfObject( m_aAccInfo.m_aOID.getObjectCID() ));
         if( pWindow )
         {

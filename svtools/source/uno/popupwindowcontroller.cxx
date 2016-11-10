@@ -187,7 +187,7 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
     if( pToolBox )
     {
         vcl::Window* pItemWindow = pToolBox->GetItemWindow( pToolBox->GetDownItemId() );
-        vcl::Window* pWin = createPopupWindow( pItemWindow ? pItemWindow : pToolBox );
+        VclPtr<vcl::Window> pWin = createPopupWindow( pItemWindow ? pItemWindow : pToolBox );
         if( pWin )
         {
             FloatWinPopupFlags eFloatFlags = FloatWinPopupFlags::GrabFocus |
@@ -196,7 +196,7 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
 
             WinBits nWinBits;
             if ( pWin->GetType() == WINDOW_DOCKINGWINDOW )
-                nWinBits = static_cast< DockingWindow* >( pWin )->GetFloatStyle();
+                nWinBits = static_cast< DockingWindow* >( pWin.get() )->GetFloatStyle();
             else
                 nWinBits = pWin->GetStyle();
 

@@ -158,7 +158,7 @@ bool RenameDialog (
     }
 
     Shell* pShell = GetShell();
-    DialogWindow* pWin = pShell ? pShell->FindDlgWin(rDocument, rLibName, rOldName) : nullptr;
+    VclPtr<DialogWindow> pWin = pShell ? pShell->FindDlgWin(rDocument, rLibName, rOldName) : nullptr;
     Reference< XNameContainer > xExistingDialog;
     if ( pWin )
         xExistingDialog = pWin->GetEditor().GetDialog();
@@ -195,7 +195,7 @@ bool RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, co
 {
     if (Shell* pShell = GetShell())
     {
-        if (DialogWindow* pDlgWin = pShell->FindDlgWin(rDocument, rLibName, rDlgName))
+        if (VclPtr<DialogWindow> pDlgWin = pShell->FindDlgWin(rDocument, rLibName, rDlgName))
         {
             Reference< container::XNameContainer > xDialogModel = pDlgWin->GetDialog();
             LocalizationMgr::removeResourceForDialog( rDocument, rLibName, rDlgName, xDialogModel );

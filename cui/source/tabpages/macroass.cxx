@@ -466,7 +466,7 @@ SfxMacroAssignDlg::SfxMacroAssignDlg(vcl::Window* pParent,
     : SfxSingleTabDialog(pParent, rSet, "EventAssignDialog",
         "cui/ui/eventassigndialog.ui")
 {
-    SfxMacroTabPage* pPage = CreateSfxMacroTabPage(get_content_area(), rSet);
+    VclPtr<SfxMacroTabPage> pPage = CreateSfxMacroTabPage(get_content_area(), rSet);
     pPage->SetFrame( rxDocumentFrame );
     SetTabPage( pPage );
     pPage->LaunchFillGroup();

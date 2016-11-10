@@ -2164,7 +2164,7 @@ void ExtensionsTabPage::CreateDialogWithHandler()
                 Reference< awt::XWindowPeer > xWinPeer( xPageControl->getPeer() );
                 if ( xWinPeer.is() )
                 {
-                    vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWinPeer );
+                    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWinPeer );
                     if ( pWindow )
                         pWindow->SetStyle( pWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
                 }

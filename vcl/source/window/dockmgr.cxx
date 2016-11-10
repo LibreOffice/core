@@ -1156,9 +1156,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 if( mpOldBorderWin == mpDockingWindow )
                     mpOldBorderWin = nullptr;  // no border window found
 
-                ImplDockFloatWin2* pWin =
-                    VclPtr<ImplDockFloatWin2>::Create(
-
+                VclPtrInstance<ImplDockFloatWin2> pWin(
                                          mpParent,
                                          mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?
                                           mnFloatBits | WB_SYSTEMWINDOW

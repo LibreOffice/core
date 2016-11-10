@@ -93,7 +93,7 @@ sal_Int32 SAL_CALL Renderable::getRendererCount (
     sal_Int32 nCount = 0;
     if( mpWindow )
     {
-        if (Printer* pPrinter = getPrinter())
+        if (VclPtr<Printer> pPrinter = getPrinter())
         {
             nCount = mpWindow->countPages( pPrinter );
             sal_Int64 nContent = getIntValue( "PrintContent", -1 );
@@ -124,7 +124,7 @@ Sequence<beans::PropertyValue> SAL_CALL Renderable::getRenderer (
 
     Sequence< beans::PropertyValue > aVals;
     // insert page size here
-    Printer* pPrinter = getPrinter();
+    VclPtr<Printer> pPrinter = getPrinter();
     // no renderdevice is legal; the first call is to get our print ui options
     if( pPrinter )
     {
@@ -152,7 +152,7 @@ void SAL_CALL Renderable::render (
 
     if( mpWindow )
     {
-        if (Printer* pPrinter = getPrinter())
+        if (VclPtr<Printer> pPrinter = getPrinter())
         {
             sal_Int64 nContent = getIntValue( "PrintContent", -1 );
             if( nContent == 1 )

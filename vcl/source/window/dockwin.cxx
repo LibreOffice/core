@@ -714,9 +714,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 vcl::Window* pRealParent = mpWindowImpl->mpRealParent;
                 mpOldBorderWin = mpWindowImpl->mpBorderWindow;
 
-                ImplDockFloatWin* pWin =
-                    VclPtr<ImplDockFloatWin>::Create(
-
+                VclPtrInstance<ImplDockFloatWin> pWin(
                                          mpImplData->mpParent,
                                          mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?  mnFloatBits | WB_SYSTEMWINDOW : mnFloatBits,
                                          this );

@@ -2391,7 +2391,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                     xStartModule->attachFrame(xBackingFrame);
                     xContainerWindow->setVisible(true);
 
-                    vcl::Window* pCompWindow = VCLUnoHelper::GetWindow(xBackingFrame->getComponentWindow());
+                    VclPtr<vcl::Window> pCompWindow = VCLUnoHelper::GetWindow(xBackingFrame->getComponentWindow());
                     if (pCompWindow)
                         pCompWindow->Update();
                 }
@@ -2606,7 +2606,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
         // set the WB_EXT_DOCUMENT style. Normally, this is done by the TaskCreator service when a "_blank"
         // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
         // otherwise documents loaded into this frame will later on miss functionality depending on the style.
-        vcl::Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+        VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         SAL_WARN_IF( !pContainerWindow, "desktop.app", "Desktop::Main: no implementation access to the frame's container window!" );
         pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
         if (progress != nullptr)

@@ -848,7 +848,7 @@ void ToolBarManager::CreateControllers()
                 Reference< XWindow > xWindow = xTbxController->createItemWindow( xToolbarWindow );
                 if ( xWindow.is() )
                 {
-                    vcl::Window* pItemWin = VCLUnoHelper::GetWindow( xWindow );
+                    VclPtr<vcl::Window> pItemWin = VCLUnoHelper::GetWindow( xWindow );
                     if ( pItemWin )
                     {
                         WindowType nType = pItemWin->GetType();
@@ -1869,8 +1869,8 @@ IMPL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, void*, p, void )
             // Use docking window close to close the toolbar. The toolbar layout manager is
             // listener and will react correctly according to the context sensitive
             // flag of our toolbar.
-            vcl::Window* pWin = VCLUnoHelper::GetWindow( pExecuteInfo->xWindow );
-            DockingWindow* pDockWin = dynamic_cast< DockingWindow* >( pWin );
+            VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( pExecuteInfo->xWindow );
+            DockingWindow* pDockWin = dynamic_cast< DockingWindow* >( pWin.get() );
             if ( pDockWin )
                 pDockWin->Close();
         }

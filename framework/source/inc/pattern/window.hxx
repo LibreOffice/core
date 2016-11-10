@@ -54,7 +54,7 @@ static bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
         // Because sometimes VCL create "implicit border windows" as parents even we created
         // a simple XWindow using the toolkit only .-(
         SolarMutexGuard aSolarGuard;
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
         if (
             (pWindow                  ) &&
             (pWindow->IsSystemWindow())

@@ -42,9 +42,11 @@ public:
     bool VisitCXXDestructorDecl(const CXXDestructorDecl *);
     bool VisitCXXDeleteExpr(const CXXDeleteExpr *);
     bool VisitCallExpr(const CallExpr *);
-    bool VisitDeclRefExpr(const DeclRefExpr* pDeclRefExpr);
-    bool VisitCXXConstructExpr( const CXXConstructExpr* expr );
+    bool VisitDeclRefExpr(const DeclRefExpr *);
+    bool VisitCXXConstructExpr(const CXXConstructExpr *);
+    bool VisitBinaryOperator(const BinaryOperator *);
 private:
+    void checkAssignmentForVclPtrToRawConversion(const Type* lhsType, const Expr* rhs);
     bool isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodDecl);
     bool mbCheckingMemcpy = false;
 };
@@ -241,6 +243,57 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     return true;
 }
 
+bool VCLWidgets::VisitBinaryOperator(const BinaryOperator * binaryOperator)
+{
+    if (ignoreLocation(binaryOperator)) {
+        return true;
+    }
+    if ( !binaryOperator->isAssignmentOp() ) {
+        return true;
+    }
+    checkAssignmentForVclPtrToRawConversion(binaryOperator->getLHS()->getType().getTypePtr(), binaryOperator->getRHS());
+    return true;
+}
+
+// Look for places where we are accidentally assigning a returned-by-value VclPtr<T> to a T*, which generally
+// ends up in a use-after-free.
+void VCLWidgets::checkAssignmentForVclPtrToRawConversion(const Type* lhsType, const Expr* rhs)
+{
+    if (!lhsType || !isa<PointerType>(lhsType)) {
+        return;
+    }
+    if (!rhs) {
+        return;
+    }
+    // lots of null checking for something weird going in SW that tends to crash clang with:
+    // const clang::ExtQualsTypeCommonBase *clang::QualType::getCommonPtr() const: Assertion `!isNull() && "Cannot retrieve a NULL type pointer"'
+    if (rhs->getType().getTypePtrOrNull()) {
+        if (const PointerType* pt = dyn_cast<PointerType>(rhs->getType())) {
+             const Type* pointeeType = pt->getPointeeType().getTypePtrOrNull();
+             if (pointeeType && !isa<SubstTemplateTypeParmType>(pointeeType)) {
+                return;
+             }
+        }
+    }
+    const CXXRecordDecl* pointeeClass = lhsType->getPointeeType()->getAsCXXRecordDecl();
+    if (!isDerivedFromVclReferenceBase(pointeeClass)) {
+        return;
+    }
+    const ExprWithCleanups* exprWithCleanups = dyn_cast<ExprWithCleanups>(rhs);
+    if (!exprWithCleanups) {
+        return;
+    }
+    const ImplicitCastExpr* implicitCast = dyn_cast<ImplicitCastExpr>(exprWithCleanups->getSubExpr());
+    if (!implicitCast) {
+        return;
+    }
+    //rhs->getType().dump();
+    report(
+        DiagnosticsEngine::Warning,
+        "assigning a returned-by-value VclPtr<T> to a T* variable is dodgy, should be assigned to a VclPtr",
+         rhs->getSourceRange().getBegin())
+        << rhs->getSourceRange();
+}
 
 bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
     if (ignoreLocation(pVarDecl)) {
@@ -248,6 +301,9 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
     }
     if (isa<ParmVarDecl>(pVarDecl)) {
         return true;
+    }
+    if (pVarDecl->getInit()) {
+        checkAssignmentForVclPtrToRawConversion(pVarDecl->getType().getTypePtr(), pVarDecl->getInit());
     }
     StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(pVarDecl->getLocStart()));
     if (aFileName == SRCDIR "/include/vcl/vclptr.hxx")

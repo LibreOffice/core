@@ -240,10 +240,10 @@ css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow
                 disposeUIElement();
                 m_xUIElement = xUIElement;
 
-                vcl::Window* pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
+                VclPtr<vcl::Window> pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
                 if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
                 {
-                    ToolBox* pToolBar = static_cast< ToolBox* >( pTbxWindow );
+                    ToolBox* pToolBar = static_cast< ToolBox* >( pTbxWindow.get() );
                     pToolBar->SetParent( pToolBox );
                     // calc and set size for popup mode
                     Size aSize = pToolBar->CalcPopupWindowSizePixel();
@@ -381,7 +381,7 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
                 OUString aPersistentString( "Persistent" );
                 try
                 {
-                    vcl::Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
+                    VclPtr<vcl::Window> pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
                     if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
                     {
                         css::uno::Any a = xProp->getPropertyValue( aPersistentString );
