@@ -361,14 +361,17 @@ if test -n "$with_android_ndk"; then
     else
         ANDROID_NDK_VERSION=`cut -f1 -d' ' <$ANDROID_NDK_HOME/RELEASE.TXT`
     fi
-
+    if test -z "$ANDROID_NDK_VERSION";  then
+        AC_MSG_ERROR([Failed to determine android NDK version. Please check your installation.])
+    fi
     case $ANDROID_NDK_VERSION in
     r9*|r10*)
         ;;
-    11.1.*|12.1.*)
+    11.1.*|12.1.*|13.1.*)
         ;;
     *)
-        AC_MSG_ERROR([Unsupported NDK version $ANDROID_NDK_VERSION, only r9*, r10*, 11.1.* and 12.1.* are supported])
+        AC_MSG_WARN([Untested android NDK version $ANDROID_NDK_VERSION, only versions r9* til 13.1.* have been used successfully. Proceed at your own risk.])
+        add_warning "Untested android NDK version $ANDROID_NDK_VERSION, only versions r9* til 13.1.* have been used successfully. Proceed at your own risk."
         ;;
     esac
 
