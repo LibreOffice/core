@@ -52,9 +52,10 @@ class KDEXLib : public QObject, public SalXLib
             };
         QHash< int, SocketData > socketData; // key is fd
         QTimer timeoutTimer;
-        QTimer userEventTimer;
         bool m_isGlibEventLoopType;
         bool m_allowKdeDialogs;
+        int m_timerEventId;
+        int m_postUserEventId;
 
     private:
         void setupEventLoop();
@@ -62,13 +63,11 @@ class KDEXLib : public QObject, public SalXLib
     private Q_SLOTS:
         void socketNotifierActivated( int fd );
         void timeoutActivated();
-        void userEventActivated();
         void startTimeoutTimer();
-        void startUserEventTimer();
         static bool processYield( bool bWait, bool bHandleAllCurrentEvents );
+
     Q_SIGNALS:
         void startTimeoutTimerSignal();
-        void startUserEventTimerSignal();
         void processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
         css::uno::Reference< css::ui::dialogs::XFilePicker2 >
             createFilePickerSignal( const css::uno::Reference< css::uno::XComponentContext >& );
@@ -88,6 +87,8 @@ class KDEXLib : public QObject, public SalXLib
 
         void doStartup();
         bool allowKdeDialogs() { return m_allowKdeDialogs; }
+
+        virtual void customEvent(QEvent* e) override;
 
     public Q_SLOTS:
         css::uno::Reference< css::ui::dialogs::XFilePicker2 >
