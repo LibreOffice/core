@@ -120,16 +120,6 @@ void UncachedDataSequence::registerProperties()
                       cppu::UnoType<decltype(m_aXMLRange)>::get() );
 }
 
-Sequence< OUString > UncachedDataSequence::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.data.DataSequence";
-    aServices[ 2 ] = "com.sun.star.chart2.data.NumericalDataSequence";
-    aServices[ 3 ] = "com.sun.star.chart2.data.TextualDataSequence";
-    return aServices;
-}
-
 IMPLEMENT_FORWARD_XINTERFACE2( UncachedDataSequence, UncachedDataSequence_Base, OPropertyContainer )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( UncachedDataSequence, UncachedDataSequence_Base, OPropertyContainer )
 
@@ -156,14 +146,8 @@ Reference< beans::XPropertySetInfo > SAL_CALL UncachedDataSequence::getPropertyS
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL UncachedDataSequence::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString UncachedDataSequence::getImplementationName_Static()
 {
     return OUString(lcl_aServiceName);
 }
@@ -177,7 +161,12 @@ sal_Bool SAL_CALL UncachedDataSequence::supportsService( const OUString& rServic
 css::uno::Sequence< OUString > SAL_CALL UncachedDataSequence::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        lcl_aServiceName,
+        "com.sun.star.chart2.data.DataSequence",
+        "com.sun.star.chart2.data.NumericalDataSequence",
+        "com.sun.star.chart2.data.TextualDataSequence"
+    };
 }
 
 // ________ XNumericalDataSequence ________

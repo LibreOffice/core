@@ -73,8 +73,6 @@ public:
         tPropertyMap;
 
 private:
-    void cloneInterfaceProperties();
-
     tPropertyMap    m_aProperties;
     css::uno::Reference< css::style::XStyle >
         m_xStyle;

@@ -66,9 +66,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
     // ____ XComponent ____
     virtual void SAL_CALL dispose()
         throw (css::uno::RuntimeException, std::exception) override;
@@ -107,9 +104,6 @@ public:
     virtual void SAL_CALL setAllPropertiesToDefault(  ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setPropertiesToDefault( const css::uno::Sequence< OUString >& aPropertyNames ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-
-private: //methods
-    static ::cppu::IPropertyArrayHelper&   getInfoHelper();
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;

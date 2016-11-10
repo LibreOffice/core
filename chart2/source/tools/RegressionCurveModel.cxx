@@ -122,13 +122,8 @@ struct StaticXXXDefaults_Initializer
     ::chart::tPropertyValueMap* operator()()
     {
         static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
+        ::chart::LinePropertiesHelper::AddDefaultsToMap( aStaticDefaults );
         return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
     }
 };
 
@@ -360,21 +355,9 @@ MeanValueRegressionCurve::MeanValueRegressionCurve(
 {}
 MeanValueRegressionCurve::~MeanValueRegressionCurve()
 {}
-uno::Sequence< OUString > MeanValueRegressionCurve::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.MeanValueRegressionCurve";
-    return aServices;
-}
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 OUString SAL_CALL MeanValueRegressionCurve::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-const OUString& MeanValueRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_MeanValue;
 }
@@ -388,7 +371,7 @@ sal_Bool SAL_CALL MeanValueRegressionCurve::supportsService( const OUString& rSe
 css::uno::Sequence< OUString > SAL_CALL MeanValueRegressionCurve::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { lcl_aServiceName, "com.sun.star.chart2.MeanValueRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL MeanValueRegressionCurve::createClone()
@@ -407,21 +390,9 @@ LinearRegressionCurve::LinearRegressionCurve(
 {}
 LinearRegressionCurve::~LinearRegressionCurve()
 {}
-uno::Sequence< OUString > LinearRegressionCurve::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.LinearRegressionCurve";
-    return aServices;
-}
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 OUString SAL_CALL LinearRegressionCurve::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-const OUString& LinearRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_Linear;
 }
@@ -435,7 +406,7 @@ sal_Bool SAL_CALL LinearRegressionCurve::supportsService( const OUString& rServi
 css::uno::Sequence< OUString > SAL_CALL LinearRegressionCurve::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { lcl_aServiceName, "com.sun.star.chart2.LinearRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL LinearRegressionCurve::createClone()
@@ -454,21 +425,9 @@ LogarithmicRegressionCurve::LogarithmicRegressionCurve(
 {}
 LogarithmicRegressionCurve::~LogarithmicRegressionCurve()
 {}
-uno::Sequence< OUString > LogarithmicRegressionCurve::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.LogarithmicRegressionCurve";
-    return aServices;
-}
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 OUString SAL_CALL LogarithmicRegressionCurve::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-const OUString& LogarithmicRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_Logarithmic;
 }
@@ -482,7 +441,7 @@ sal_Bool SAL_CALL LogarithmicRegressionCurve::supportsService( const OUString& r
 css::uno::Sequence< OUString > SAL_CALL LogarithmicRegressionCurve::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { lcl_aServiceName, "com.sun.star.chart2.LogarithmicRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL LogarithmicRegressionCurve::createClone()
@@ -501,21 +460,9 @@ ExponentialRegressionCurve::ExponentialRegressionCurve(
 {}
 ExponentialRegressionCurve::~ExponentialRegressionCurve()
 {}
-uno::Sequence< OUString > ExponentialRegressionCurve::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.ExponentialRegressionCurve";
-    return aServices;
-}
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 OUString SAL_CALL ExponentialRegressionCurve::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-const OUString& ExponentialRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_Exponential;
 }
@@ -529,7 +476,7 @@ sal_Bool SAL_CALL ExponentialRegressionCurve::supportsService( const OUString& r
 css::uno::Sequence< OUString > SAL_CALL ExponentialRegressionCurve::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { lcl_aServiceName, "com.sun.star.chart2.ExponentialRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL ExponentialRegressionCurve::createClone()
@@ -548,21 +495,9 @@ PotentialRegressionCurve::PotentialRegressionCurve(
 {}
 PotentialRegressionCurve::~PotentialRegressionCurve()
 {}
-uno::Sequence< OUString > PotentialRegressionCurve::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.PotentialRegressionCurve";
-    return aServices;
-}
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 OUString SAL_CALL PotentialRegressionCurve::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-const OUString& PotentialRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_Potential;
 }
@@ -576,7 +511,7 @@ sal_Bool SAL_CALL PotentialRegressionCurve::supportsService( const OUString& rSe
 css::uno::Sequence< OUString > SAL_CALL PotentialRegressionCurve::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { lcl_aServiceName, "com.sun.star.chart2.PotentialRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL PotentialRegressionCurve::createClone()
@@ -595,21 +530,9 @@ PolynomialRegressionCurve::PolynomialRegressionCurve(
 {}
 PolynomialRegressionCurve::~PolynomialRegressionCurve()
 {}
-uno::Sequence< OUString > PolynomialRegressionCurve::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.PolynomialRegressionCurve";
-    return aServices;
-}
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 OUString SAL_CALL PolynomialRegressionCurve::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-const OUString& PolynomialRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_Polynomial;
 }
@@ -623,7 +546,7 @@ sal_Bool SAL_CALL PolynomialRegressionCurve::supportsService( const OUString& rS
 css::uno::Sequence< OUString > SAL_CALL PolynomialRegressionCurve::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { lcl_aServiceName, "com.sun.star.chart2.PolynomialRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL PolynomialRegressionCurve::createClone()
@@ -642,21 +565,9 @@ MovingAverageRegressionCurve::MovingAverageRegressionCurve(
 {}
 MovingAverageRegressionCurve::~MovingAverageRegressionCurve()
 {}
-uno::Sequence< OUString > MovingAverageRegressionCurve::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.MovingAverageRegressionCurve";
-    return aServices;
-}
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 OUString SAL_CALL MovingAverageRegressionCurve::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-const OUString& MovingAverageRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_MovingAverage;
 }
@@ -670,7 +581,7 @@ sal_Bool SAL_CALL MovingAverageRegressionCurve::supportsService( const OUString&
 css::uno::Sequence< OUString > SAL_CALL MovingAverageRegressionCurve::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { lcl_aServiceName, "com.sun.star.chart2.MovingAverageRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::createClone()

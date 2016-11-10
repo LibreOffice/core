@@ -169,25 +169,8 @@ const std::vector< WrappedProperty* > GridWrapper::createWrappedProperties()
     return aWrappedProperties;
 }
 
-Sequence< OUString > GridWrapper::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = "com.sun.star.chart.ChartGrid";
-    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
-    aServices[ 2 ] = "com.sun.star.drawing.LineProperties";
-    aServices[ 3 ] = "com.sun.star.beans.PropertySet";
-
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL GridWrapper::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString GridWrapper::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.Grid");
 }
@@ -201,7 +184,12 @@ sal_Bool SAL_CALL GridWrapper::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL GridWrapper::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart.ChartGrid",
+        "com.sun.star.xml.UserDefinedAttributesSupplier",
+        "com.sun.star.drawing.LineProperties",
+        "com.sun.star.beans.PropertySet"\
+    };
 }
 
 } //  namespace wrapper

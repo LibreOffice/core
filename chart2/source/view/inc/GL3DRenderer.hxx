@@ -267,7 +267,6 @@ private:
     void InitBatch3DUniformBlock();
     void UpdateBatch3DUniformBlock();
     void RenderBatchBars(bool bNewScene);
-    void CheckGLSLVersion();
     void RenderTextShapeBatch();
     void ReleaseTextShapesBatch();
     void CreateTextTextureSingle(const boost::shared_array<sal_uInt8> &bitmapBuf,

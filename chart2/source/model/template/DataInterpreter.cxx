@@ -379,19 +379,8 @@ bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > &
     return bUseCategoriesAsX;
 }
 
-Sequence< OUString > DataInterpreter::getSupportedServiceNames_Static()
-{
-    return { "com.sun.star.chart2.DataInterpreter" };
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL DataInterpreter::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString DataInterpreter::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart2.DataInterpreter");
 }
@@ -405,7 +394,7 @@ sal_Bool SAL_CALL DataInterpreter::supportsService( const OUString& rServiceName
 css::uno::Sequence< OUString > SAL_CALL DataInterpreter::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.chart2.DataInterpreter" };
 }
 
 } // namespace chart

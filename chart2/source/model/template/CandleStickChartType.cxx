@@ -324,23 +324,8 @@ void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(
     ::property::OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 
-uno::Sequence< OUString > CandleStickChartType::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
-    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL CandleStickChartType::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString CandleStickChartType::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.CandleStickChartType") ;
 }
@@ -354,7 +339,10 @@ sal_Bool SAL_CALL CandleStickChartType::supportsService( const OUString& rServic
 css::uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK,
+        "com.sun.star.chart2.ChartType",
+        "com.sun.star.beans.PropertySet" };
 }
 
 } //  namespace chart

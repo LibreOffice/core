@@ -158,11 +158,6 @@ void SAL_CALL UpDownBarWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-::cppu::IPropertyArrayHelper& UpDownBarWrapper::getInfoHelper()
-{
-    return *StaticUpDownBarWrapperInfoHelper::get();
-}
-
 //XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL UpDownBarWrapper::getPropertySetInfo()
                     throw (uno::RuntimeException, std::exception)
@@ -326,7 +321,7 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const OUString& rPropert
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticUpDownBarWrapperDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( getInfoHelper().getHandleByName( rPropertyName ) ) );
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( StaticUpDownBarWrapperInfoHelper::get()->getHandleByName( rPropertyName ) ) );
     if( aFound == rStaticDefaults.end() )
         return uno::Any();
     return (*aFound).second;
@@ -369,25 +364,8 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const 
     return aRetSeq;
 }
 
-Sequence< OUString > UpDownBarWrapper::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = "com.sun.star.chart.ChartArea";
-    aServices[ 1 ] = "com.sun.star.drawing.LineProperties";
-    aServices[ 2 ] = "com.sun.star.drawing.FillProperties";
-    aServices[ 3 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
-
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL UpDownBarWrapper::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString UpDownBarWrapper::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.ChartArea");
 }
@@ -401,7 +379,12 @@ sal_Bool SAL_CALL UpDownBarWrapper::supportsService( const OUString& rServiceNam
 css::uno::Sequence< OUString > SAL_CALL UpDownBarWrapper::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart.ChartArea",
+        "com.sun.star.drawing.LineProperties",
+        "com.sun.star.drawing.FillProperties",
+        "com.sun.star.xml.UserDefinedAttributesSupplier"
+    };
 }
 
 } //  namespace wrapper

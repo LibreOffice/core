@@ -306,7 +306,8 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
             MutexGuard aGuard( GetMutex());
             Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
             if( xChartDoc.is())
-                m_spObjectHierarchy.reset( new ObjectHierarchy( xChartDoc, getExplicitValueProvider() ));
+                m_spObjectHierarchy.reset(
+                    new ObjectHierarchy( xChartDoc, ExplicitValueProvider::getExplicitValueProvider(m_xChartView) ));
             else
                 m_spObjectHierarchy.reset();
         }
@@ -333,11 +334,6 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
             SetInfo( aAccInfo );
         }
     }
-}
-
-ExplicitValueProvider* AccessibleChartView::getExplicitValueProvider()
-{
-    return ExplicitValueProvider::getExplicitValueProvider(m_xChartView);
 }
 
 // view::XSelectionChangeListener

@@ -57,18 +57,8 @@ void SAL_CALL DataSource::setData( const Sequence< Reference< chart2::data::XLab
     m_aDataSeq = aData;
 }
 
-Sequence< OUString > DataSource::getSupportedServiceNames_Static()
-{
-    return { "com.sun.star.chart2.data.DataSource" };
-}
-
 OUString SAL_CALL DataSource::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString DataSource::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.DataSource");
 }
@@ -82,7 +72,7 @@ sal_Bool SAL_CALL DataSource::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL DataSource::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.chart2.data.DataSource" };
 }
 
 } // namespace chart

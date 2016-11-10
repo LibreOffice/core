@@ -418,25 +418,8 @@ const std::vector< WrappedProperty* > LegendWrapper::createWrappedProperties()
     return aWrappedProperties;
 }
 
-Sequence< OUString > LegendWrapper::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = "com.sun.star.chart.ChartLegend";
-    aServices[ 1 ] = "com.sun.star.drawing.Shape";
-    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
-    aServices[ 3 ] = "com.sun.star.style.CharacterProperties";
-
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL LegendWrapper::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString LegendWrapper::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.Legend");
 }
@@ -450,7 +433,12 @@ sal_Bool SAL_CALL LegendWrapper::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL LegendWrapper::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart.ChartLegend",
+        "com.sun.star.drawing.Shape",
+        "com.sun.star.xml.UserDefinedAttributesSupplier",
+        "com.sun.star.style.CharacterProperties"
+    };
 }
 
 } //  namespace wrapper

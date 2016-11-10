@@ -2066,29 +2066,8 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
     return aWrappedProperties;
 }
 
-uno::Sequence< OUString > DiagramWrapper::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 8 );
-    aServices[ 0 ] = "com.sun.star.chart.Diagram";
-    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
-    aServices[ 2 ] = "com.sun.star.chart.StackableDiagram";
-    aServices[ 3 ] = "com.sun.star.chart.ChartAxisXSupplier";
-    aServices[ 4 ] = "com.sun.star.chart.ChartAxisYSupplier";
-    aServices[ 5 ] = "com.sun.star.chart.ChartAxisZSupplier";
-    aServices[ 6 ] = "com.sun.star.chart.ChartTwoAxisXSupplier";
-    aServices[ 7 ] = "com.sun.star.chart.ChartTwoAxisYSupplier";
-
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL DiagramWrapper::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString DiagramWrapper::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.Diagram");
 }
@@ -2102,7 +2081,16 @@ sal_Bool SAL_CALL DiagramWrapper::supportsService( const OUString& rServiceName 
 css::uno::Sequence< OUString > SAL_CALL DiagramWrapper::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart.Diagram",
+        "com.sun.star.xml.UserDefinedAttributesSupplier",
+        "com.sun.star.chart.StackableDiagram",
+        "com.sun.star.chart.ChartAxisXSupplier",
+        "com.sun.star.chart.ChartAxisYSupplier",
+        "com.sun.star.chart.ChartAxisZSupplier",
+        "com.sun.star.chart.ChartTwoAxisXSupplier",
+        "com.sun.star.chart.ChartTwoAxisYSupplier"
+    };
 }
 
 } //  namespace wrapper

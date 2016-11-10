@@ -59,8 +59,6 @@ class ModifyEventForwarder :
 public:
     ModifyEventForwarder();
 
-    void FireEvent( const css::lang::EventObject & rEvent );
-
     void AddListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener );
     void RemoveListener(

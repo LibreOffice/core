@@ -166,23 +166,8 @@ OUString SAL_CALL NetChartType::getChartType()
     return OUString(CHART2_SERVICE_NAME_CHARTTYPE_NET);
 }
 
-uno::Sequence< OUString > NetChartType::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_NET;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
-    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL NetChartType::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString NetChartType::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.NetChartType");
 }
@@ -196,7 +181,10 @@ sal_Bool SAL_CALL NetChartType::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL NetChartType::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        CHART2_SERVICE_NAME_CHARTTYPE_NET,
+        "com.sun.star.chart2.ChartType",
+        "com.sun.star.beans.PropertySet" };
 }
 
 } //  namespace chart

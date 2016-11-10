@@ -1381,11 +1381,6 @@ sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlav
 OUString SAL_CALL ChartView::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
-}
-
-OUString ChartView::getImplementationName_Static()
-{
     return OUString(CHART_VIEW_SERVICE_IMPLEMENTATION_NAME);
 }
 
@@ -1397,11 +1392,6 @@ sal_Bool SAL_CALL ChartView::supportsService( const OUString& rServiceName )
 
 css::uno::Sequence< OUString > SAL_CALL ChartView::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > ChartView::getSupportedServiceNames_Static()
 {
     return { CHART_VIEW_SERVICE_NAME };
 }

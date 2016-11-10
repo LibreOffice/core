@@ -61,9 +61,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
 protected:
     // ____ XDateCategories ____
     virtual css::uno::Sequence< double > SAL_CALL getDateCategories() throw (css::uno::RuntimeException, std::exception) override;

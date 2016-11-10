@@ -101,11 +101,6 @@ ModifyEventForwarder::ModifyEventForwarder() :
 {
 }
 
-void ModifyEventForwarder::FireEvent( const lang::EventObject & rEvent )
-{
-    lcl_fireModifyEvent( m_aModifyListeners, Reference< uno::XWeak >(), & rEvent );
-}
-
 void ModifyEventForwarder::AddListener( const Reference< util::XModifyListener >& aListener )
 {
     try
@@ -177,7 +172,7 @@ void SAL_CALL ModifyEventForwarder::removeModifyListener( const Reference< util:
 void SAL_CALL ModifyEventForwarder::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException, std::exception)
 {
-    FireEvent( aEvent );
+   lcl_fireModifyEvent( m_aModifyListeners, Reference< uno::XWeak >(), &aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____

@@ -211,11 +211,6 @@ OpenGL3DRenderer::ShaderResources::~ShaderResources()
     glDeleteProgram(m_BatchTextProID);
 }
 
-void OpenGL3DRenderer::CheckGLSLVersion()
-{
-    maResources.m_b330Support = GLEW_VERSION_3_3;
-}
-
 void OpenGL3DRenderer::ShaderResources::LoadShaders()
 {
     CHECK_GL_ERROR();
@@ -406,7 +401,7 @@ void OpenGL3DRenderer::init()
     m_fViewAngle = 30.0f;
     m_3DProjection = glm::perspective(m_fViewAngle, (float)m_iWidth / (float)m_iHeight, 0.01f, 6000.0f);
 
-    CheckGLSLVersion();
+    maResources.m_b330Support = GLEW_VERSION_3_3;
     CHECK_GL_ERROR();
     maResources.LoadShaders();
     maPickingResources.LoadShaders();

@@ -47,13 +47,8 @@ struct StaticMinMaxLineWrapperDefaults_Initializer
     ::chart::tPropertyValueMap* operator()()
     {
         static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
+        ::chart::LinePropertiesHelper::AddDefaultsToMap( aStaticDefaults );
         return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
     }
 };
 
@@ -153,11 +148,6 @@ void SAL_CALL MinMaxLineWrapper::removeEventListener(
     throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.removeInterface( aListener );
-}
-
-::cppu::IPropertyArrayHelper& MinMaxLineWrapper::getInfoHelper()
-{
-    return *StaticMinMaxLineWrapperInfoHelper::get();
 }
 
 //XPropertySet
@@ -363,7 +353,7 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const OUString& rProper
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticMinMaxLineWrapperDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( getInfoHelper().getHandleByName( rPropertyName ) ) );
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( StaticMinMaxLineWrapperInfoHelper::get()->getHandleByName( rPropertyName ) ) );
     if( aFound == rStaticDefaults.end() )
         return uno::Any();
     return (*aFound).second;
@@ -406,24 +396,8 @@ uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const
     return aRetSeq;
 }
 
-Sequence< OUString > MinMaxLineWrapper::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = "com.sun.star.chart.ChartLine";
-    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
-    aServices[ 2 ] = "com.sun.star.drawing.LineProperties";
-
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL MinMaxLineWrapper::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString MinMaxLineWrapper::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.ChartLine");
 }
@@ -437,7 +411,11 @@ sal_Bool SAL_CALL MinMaxLineWrapper::supportsService( const OUString& rServiceNa
 css::uno::Sequence< OUString > SAL_CALL MinMaxLineWrapper::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart.ChartLine",
+        "com.sun.star.xml.UserDefinedAttributesSupplier",
+        "com.sun.star.drawing.LineProperties"
+    };
 }
 
 } //  namespace wrapper

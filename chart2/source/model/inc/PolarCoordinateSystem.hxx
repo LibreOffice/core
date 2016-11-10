@@ -50,9 +50,6 @@ public:
             throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
-
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 class PolarCoordinateSystem2d : public PolarCoordinateSystem
@@ -69,9 +66,6 @@ public:
             throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
-
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 class PolarCoordinateSystem3d : public PolarCoordinateSystem
@@ -88,9 +82,6 @@ public:
             throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
-
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 }  // namespace chart

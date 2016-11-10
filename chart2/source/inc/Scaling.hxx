@@ -52,9 +52,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
     // ____ XScaling ____
     virtual double SAL_CALL doScaling( double value )
         throw (css::uno::RuntimeException, std::exception) override;
@@ -93,9 +90,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
     // ____ XScaling ____
     virtual double SAL_CALL
     doScaling( double value )
@@ -133,9 +127,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
     // ____ XScaling ____
     virtual double SAL_CALL doScaling( double value )
         throw (css::uno::RuntimeException, std::exception) override;
@@ -171,9 +162,6 @@ public:
             throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
-
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // ____ XScaling ____
         virtual double SAL_CALL

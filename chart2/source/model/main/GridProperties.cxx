@@ -223,30 +223,12 @@ void SAL_CALL GridProperties::disposing( const lang::EventObject& /* Source */ )
 // ____ OPropertySet ____
 void GridProperties::firePropertyChangeEvent()
 {
-    fireModifyEvent();
-}
-
-void GridProperties::fireModifyEvent()
-{
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
-}
-
-Sequence< OUString > GridProperties::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = "com.sun.star.chart2.GridProperties";
-    aServices[ 1 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL GridProperties::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString GridProperties::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart2.GridProperties");
 }
@@ -260,7 +242,9 @@ sal_Bool SAL_CALL GridProperties::supportsService( const OUString& rServiceName 
 css::uno::Sequence< OUString > SAL_CALL GridProperties::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart2.GridProperties",
+        "com.sun.star.beans.PropertySet" };
 }
 
 // needed by MSC compiler

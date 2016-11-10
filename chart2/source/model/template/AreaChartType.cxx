@@ -53,22 +53,8 @@ OUString SAL_CALL AreaChartType::getChartType()
     return OUString(CHART2_SERVICE_NAME_CHARTTYPE_AREA);
 }
 
-uno::Sequence< OUString > AreaChartType::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_AREA;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL AreaChartType::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString AreaChartType::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.AreaChartType");
 }
@@ -82,7 +68,9 @@ sal_Bool SAL_CALL AreaChartType::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL AreaChartType::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        CHART2_SERVICE_NAME_CHARTTYPE_AREA,
+        "com.sun.star.chart2.ChartType" };
 }
 
 } //  namespace chart

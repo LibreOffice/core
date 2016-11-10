@@ -31,15 +31,10 @@ DataLabelsDialog::DataLabelsDialog(vcl::Window* pWindow, const SfxItemSet& rInAt
     m_rInAttrs(rInAttrs)
 {
     m_apDataLabelResources->SetNumberFormatter( pFormatter );
-    Reset();
+    m_apDataLabelResources->Reset(m_rInAttrs);
 }
 
 DataLabelsDialog::~DataLabelsDialog() = default;
-
-void DataLabelsDialog::Reset()
-{
-    m_apDataLabelResources->Reset(m_rInAttrs);
-}
 
 void DataLabelsDialog::FillItemSet(SfxItemSet& rOutAttrs)
 {

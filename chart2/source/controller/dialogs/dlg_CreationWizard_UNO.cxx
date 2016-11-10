@@ -60,11 +60,6 @@ CreationWizardUnoDlg::~CreationWizardUnoDlg()
 OUString SAL_CALL CreationWizardUnoDlg::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
-}
-
-OUString CreationWizardUnoDlg::getImplementationName_Static()
-{
     return OUString(CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME);
 }
 
@@ -77,13 +72,7 @@ sal_Bool SAL_CALL CreationWizardUnoDlg::supportsService( const OUString& rServic
 css::uno::Sequence< OUString > SAL_CALL CreationWizardUnoDlg::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > CreationWizardUnoDlg::getSupportedServiceNames_Static()
-{
-    uno::Sequence<OUString> aSNS { CHART_WIZARD_DIALOG_SERVICE_NAME };
-    return aSNS;
+    return { CHART_WIZARD_DIALOG_SERVICE_NAME };
 }
 
 // XInterface

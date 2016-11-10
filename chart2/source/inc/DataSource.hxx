@@ -50,9 +50,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException, std::exception ) override;
 
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
 protected:
     // ____ XDataSource ____
     virtual css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL

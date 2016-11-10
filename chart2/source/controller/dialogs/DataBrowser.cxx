@@ -617,18 +617,13 @@ OUString DataBrowser::GetColString( sal_Int32 nColumnId ) const
     return OUString();
 }
 
-OUString DataBrowser::GetRowString( sal_Int32 nRow )
-{
-    return OUString::number(nRow + 1);
-}
-
 OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
 {
     OUString aResult;
 
     if( nColumnId == 0 )
     {
-        aResult = GetRowString( static_cast< sal_Int32 >( nRow ));
+        aResult = OUString::number(static_cast< sal_Int32 >( nRow ) + 1);
     }
     else if( nRow >= 0 && m_apDataBrowserModel.get())
     {
@@ -1171,11 +1166,6 @@ bool DataBrowser::EndEditing()
         return ShowQueryBox();
 }
 
-sal_Int16 DataBrowser::GetFirstVisibleColumNumber() const
-{
-    return GetFirstVisibleColNumber();
-}
-
 void DataBrowser::ColumnResized( sal_uInt16 nColId )
 {
     bool bLastUpdateMode = GetUpdateMode();
@@ -1250,7 +1240,7 @@ void DataBrowser::ImplAdjustHeaderControls()
     pColorWin->set_margin_left(nCurrentPos);
 
     tSeriesHeaderContainer::iterator aIt( m_aSeriesHeaders.begin());
-    sal_uInt16 i = this->GetFirstVisibleColumNumber();
+    sal_uInt16 i = GetFirstVisibleColNumber();
     while( (aIt != m_aSeriesHeaders.end()) && ((*aIt)->GetStartColumn() < i) )
     {
         (*aIt)->Hide();

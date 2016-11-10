@@ -104,19 +104,8 @@ OUString SAL_CALL DateScaling::getServiceName()
     return OUString(lcl_aServiceName_DateScaling);
 }
 
-uno::Sequence< OUString > DateScaling::getSupportedServiceNames_Static()
-{
-    return { lcl_aServiceName_DateScaling };
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL DateScaling::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString DateScaling::getImplementationName_Static()
 {
     return OUString(lcl_aServiceName_DateScaling);
 }
@@ -130,7 +119,7 @@ sal_Bool SAL_CALL DateScaling::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL DateScaling::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { lcl_aServiceName_DateScaling };
 }
 
 InverseDateScaling::InverseDateScaling( const Date& rNullDate, sal_Int32 nTimeUnit, bool bShifted )
@@ -204,19 +193,8 @@ OUString SAL_CALL InverseDateScaling::getServiceName()
     return OUString(lcl_aServiceName_InverseDateScaling);
 }
 
-uno::Sequence< OUString > InverseDateScaling::getSupportedServiceNames_Static()
-{
-    return { lcl_aServiceName_InverseDateScaling };
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL InverseDateScaling::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString InverseDateScaling::getImplementationName_Static()
 {
     return OUString(lcl_aServiceName_InverseDateScaling);
 }
@@ -230,7 +208,7 @@ sal_Bool SAL_CALL InverseDateScaling::supportsService( const OUString& rServiceN
 css::uno::Sequence< OUString > SAL_CALL InverseDateScaling::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return { lcl_aServiceName_InverseDateScaling };
 }
 
 } //namespace chart

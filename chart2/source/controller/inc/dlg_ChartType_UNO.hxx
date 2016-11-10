@@ -36,9 +36,6 @@ class ChartTypeUnoDlg : public ChartTypeUnoDlg_BASE
 public:
     ChartTypeUnoDlg( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    // XServiceInfo - static methods
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
 private:
     virtual ~ChartTypeUnoDlg() override;
 

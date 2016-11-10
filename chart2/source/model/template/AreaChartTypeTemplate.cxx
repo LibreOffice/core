@@ -58,13 +58,8 @@ struct StaticAreaChartTypeTemplateDefaults_Initializer
     ::chart::tPropertyValueMap* operator()()
     {
         static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
+        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aStaticDefaults, PROP_AREA_TEMPLATE_DIMENSION, 2 );
         return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AREA_TEMPLATE_DIMENSION, 2 );
     }
 };
 

@@ -60,13 +60,8 @@ struct StaticCooSysDefaults_Initializer
     ::chart::tPropertyValueMap* operator()()
     {
         static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
+        ::chart::PropertyHelper::setPropertyValueDefault( aStaticDefaults, PROP_COORDINATESYSTEM_SWAPXANDYAXIS, false );
         return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_COORDINATESYSTEM_SWAPXANDYAXIS, false );
     }
 };
 

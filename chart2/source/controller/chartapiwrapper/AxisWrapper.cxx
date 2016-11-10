@@ -690,24 +690,8 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
     return aWrappedProperties;
 }
 
-Sequence< OUString > AxisWrapper::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = "com.sun.star.chart.ChartAxis";
-    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
-    aServices[ 2 ] = "com.sun.star.style.CharacterProperties";
-
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL AxisWrapper::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString AxisWrapper::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart.Axis");
 }
@@ -721,7 +705,11 @@ sal_Bool SAL_CALL AxisWrapper::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL AxisWrapper::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart.ChartAxis",
+        "com.sun.star.xml.UserDefinedAttributesSupplier",
+        "com.sun.star.style.CharacterProperties"
+    };
 }
 
 } //  namespace wrapper

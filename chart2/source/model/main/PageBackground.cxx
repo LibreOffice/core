@@ -203,30 +203,11 @@ void SAL_CALL PageBackground::disposing( const lang::EventObject& /* Source */ )
 // ____ OPropertySet ____
 void PageBackground::firePropertyChangeEvent()
 {
-    fireModifyEvent();
-}
-
-void PageBackground::fireModifyEvent()
-{
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-uno::Sequence< OUString > PageBackground::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = "com.sun.star.chart2.PageBackground";
-    aServices[ 1 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL PageBackground::getImplementationName()
     throw( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-OUString PageBackground::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.chart2.PageBackground");
 }
@@ -240,7 +221,9 @@ sal_Bool SAL_CALL PageBackground::supportsService( const OUString& rServiceName 
 css::uno::Sequence< OUString > SAL_CALL PageBackground::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
+    return {
+        "com.sun.star.chart2.PageBackground",
+        "com.sun.star.beans.PropertySet" };
 }
 
 using impl::PageBackground_Base;
