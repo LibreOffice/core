@@ -855,7 +855,7 @@ Public Function GoToRecord(Optional ByVal pvObjectType As Variant _
 							, Optional ByVal pvOffset As Variant _
 			) As Boolean
 
-&apos;Move to record indicated by pvRecord in the object designated by pvObjectType (MUST BE acDataForm)
+&apos;Move to record indicated by pvRecord/pvOffset in the window designated by pvObjectType and pvObjectName
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	GoToRecord = False
@@ -864,9 +864,6 @@ Const cstThisSub = &quot;GoTorecord&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(pvObjectName) Then pvObjectName = &quot;&quot;
 	If IsMissing(pvObjectType) Then pvObjectType = acActiveDataObject
-&apos;	If IsMissing(pvObjectType) Then
-&apos;		If pvObjectName &lt;&gt; &quot;&quot; Then pvObjectType = acDataForm Else pvObjectType = acActiveDataObject
-&apos;	End If
 	If IsMissing(pvRecord) Then pvRecord = acNext
 	If IsMissing(pvOffset) Then pvOffset = 1
 	If Not (Utils._CheckArgument(pvObjectType, 1, Utils._AddNumeric() _
