@@ -64,56 +64,66 @@ struct FormulaLogger::GroupScope::Impl
     OUString maPrefix;
     std::vector<OUString> maMessages;
 
-    bool mbCalcComplete = false;
+    bool mbCalcComplete;
+    bool mbOutputEnabled;
 
-    Impl( FormulaLogger& rLogger, const OUString& rPrefix, const ScDocument& rDoc, const ScFormulaCell& rCell ) :
-        mrLogger(rLogger), mrDoc(rDoc), maPrefix(rPrefix)
+    Impl( FormulaLogger& rLogger, const OUString& rPrefix, const ScDocument& rDoc,
+        const ScFormulaCell& rCell, bool bOutputEnabled ) :
+        mrLogger(rLogger), mrDoc(rDoc), maPrefix(rPrefix),
+        mbCalcComplete(false), mbOutputEnabled(bOutputEnabled)
     {
         ++mrLogger.mnNestLevel;
 
-        sc::TokenStringContext aCxt(&rDoc, rDoc.GetGrammar());
-        OUString aFormula = rCell.GetCode()->CreateString(aCxt, rCell.aPos);
+        if (mbOutputEnabled)
+        {
+            sc::TokenStringContext aCxt(&rDoc, rDoc.GetGrammar());
+            OUString aFormula = rCell.GetCode()->CreateString(aCxt, rCell.aPos);
 
-        mrLogger.write(maPrefix);
-        mrLogger.writeNestLevel();
+            mrLogger.write(maPrefix);
+            mrLogger.writeNestLevel();
 
-        mrLogger.writeAscii("-- enter (formula='");
-        mrLogger.write(aFormula);
-        mrLogger.writeAscii("', size=");
-        mrLogger.write(rCell.GetSharedLength());
-        mrLogger.writeAscii(")\n");
+            mrLogger.writeAscii("-- enter (formula='");
+            mrLogger.write(aFormula);
+            mrLogger.writeAscii("', size=");
+            mrLogger.write(rCell.GetSharedLength());
+            mrLogger.writeAscii(")\n");
+        }
     }
 
     ~Impl()
     {
-        for (const OUString& rMsg : maMessages)
+        if (mbOutputEnabled)
         {
+            for (const OUString& rMsg : maMessages)
+            {
+                mrLogger.write(maPrefix);
+                mrLogger.writeNestLevel();
+                mrLogger.writeAscii("   * ");
+                mrLogger.write(rMsg);
+                mrLogger.writeAscii("\n");
+            }
+
             mrLogger.write(maPrefix);
             mrLogger.writeNestLevel();
-            mrLogger.writeAscii("   * ");
-            mrLogger.write(rMsg);
-            mrLogger.writeAscii("\n");
+            mrLogger.writeAscii("-- exit (");
+            if (mbCalcComplete)
+                mrLogger.writeAscii("calculation complete");
+            else
+                mrLogger.writeAscii("without calculation");
+
+            mrLogger.writeAscii(")\n");
+
+            mrLogger.sync();
         }
-
-        mrLogger.write(maPrefix);
-        mrLogger.writeNestLevel();
-        mrLogger.writeAscii("-- exit (");
-        if (mbCalcComplete)
-            mrLogger.writeAscii("calculation complete");
-        else
-            mrLogger.writeAscii("without calculation");
-
-        mrLogger.writeAscii(")\n");
-
-        mrLogger.sync();
 
         --mrLogger.mnNestLevel;
     }
 };
 
 FormulaLogger::GroupScope::GroupScope(
-    FormulaLogger& rLogger, const OUString& rPrefix, const ScDocument& rDoc, const ScFormulaCell& rCell ) :
-    mpImpl(o3tl::make_unique<Impl>(rLogger, rPrefix, rDoc, rCell)) {}
+    FormulaLogger& rLogger, const OUString& rPrefix, const ScDocument& rDoc,
+    const ScFormulaCell& rCell, bool bOutputEnabled ) :
+    mpImpl(o3tl::make_unique<Impl>(rLogger, rPrefix, rDoc, rCell, bOutputEnabled)) {}
 
 FormulaLogger::GroupScope::GroupScope( GroupScope&& r ) : mpImpl(std::move(r.mpImpl)) {}
 
@@ -327,7 +337,10 @@ FormulaLogger::GroupScope FormulaLogger::enterGroup(
     aGroupPrefix += rCell.aPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc, rDoc.GetAddressConvention());
     aGroupPrefix += ": ";
 
-    return GroupScope(*this, aGroupPrefix, rDoc, rCell);
+    bool bOutputEnabled = mpLastGroup != rCell.GetCellGroup().get();
+    mpLastGroup = rCell.GetCellGroup().get();
+
+    return GroupScope(*this, aGroupPrefix, rDoc, rCell, bOutputEnabled);
 }
 
 }
