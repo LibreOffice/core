@@ -935,6 +935,9 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMo
 {
     Rectangle aRect( rRect );
 
+    if (bFloatMode && !StyleSettings::GetDockingFloatsSupported())
+        mbDockCanceled = true;
+
     if ( !IsDockingCanceled() )
     {
         bool bShow = false;

@@ -18,7 +18,9 @@
 #include <vcl/settings.hxx>
 #include "unx/fontmanager.hxx"
 #include "cairo_gtk3_cairo.hxx"
-
+#if defined(GDK_WINDOWING_WAYLAND)
+#   include <gdk/gdkwayland.h>
+#endif
 #include <boost/optional.hpp>
 
 GtkStyleContext* GtkSalGraphics::mpWindowStyle = nullptr;
@@ -2898,6 +2900,14 @@ void GtkData::initNWF()
     pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
     pSVData->maNWFData.mbAutoAccel = true;
     pSVData->maNWFData.mbEnableAccel = true;
+
+#if defined(GDK_WINDOWING_WAYLAND)
+    //gnome#768128 for the car crash that is wayland
+    //and floating dockable toolbars
+    GdkDisplay *pDisplay = gdk_display_get_default();
+    if (GDK_IS_WAYLAND_DISPLAY(pDisplay))
+        pSVData->maNWFData.mbDockingFloatsSupported = false;
+#endif
 }
 
 void GtkData::deInitNWF()

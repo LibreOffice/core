@@ -283,6 +283,10 @@ struct ImplSVNWFData
     bool                    mbEnableAccel = true;           // whether or not accelerators are shown
     bool                    mbAutoAccel = false;            // whether accelerators are only shown when Alt is held down
     bool                    mbRolloverMenubar = false;      // theming engine supports rollover in menubar
+    // gnome#768128 I cannot see a route under wayland at present to support
+    // floating toolbars that can be redocked because there's no way to track
+    // that the toolbar is over a dockable area.
+    bool                    mbDockingFloatsSupported = true;
 };
 
 struct BlendFrameCache

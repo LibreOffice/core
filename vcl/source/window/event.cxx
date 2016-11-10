@@ -101,15 +101,17 @@ bool Window::Notify( NotifyEvent& rNEvt )
     // check for docking window
     // but do nothing if window is docked and locked
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
-    if( pWrapper && !( !pWrapper->IsFloatingMode() && pWrapper->IsLocked() ) )
+    if (pWrapper && !( !pWrapper->IsFloatingMode() && pWrapper->IsLocked() ))
     {
+        const bool bDockingSupportCrippled = !StyleSettings::GetDockingFloatsSupported();
+
         if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
         {
             const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
             bool bHit = pWrapper->GetDragArea().IsInside( pMEvt->GetPosPixel() );
             if ( pMEvt->IsLeft() )
             {
-                if ( pMEvt->IsMod1() && (pMEvt->GetClicks() == 2) )
+                if (!bDockingSupportCrippled && pMEvt->IsMod1() && (pMEvt->GetClicks() == 2))
                 {
                     // ctrl double click toggles floating mode
                     pWrapper->SetFloatingMode( !pWrapper->IsFloatingMode() );
@@ -149,8 +151,8 @@ bool Window::Notify( NotifyEvent& rNEvt )
         else if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
-            if( rKey.GetCode() == KEY_F10 && rKey.GetModifier() &&
-                rKey.IsShift() && rKey.IsMod1() )
+            if (rKey.GetCode() == KEY_F10 && rKey.GetModifier() &&
+                rKey.IsShift() && rKey.IsMod1() && !bDockingSupportCrippled)
             {
                 pWrapper->SetFloatingMode( !pWrapper->IsFloatingMode() );
                 /* At this point the floating toolbar frame does not have the
