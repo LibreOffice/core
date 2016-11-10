@@ -264,7 +264,10 @@ namespace canvas
 
         if( aPoint != maPosition )
         {
-            const ::basegfx::B2DRectangle&  rBounds( getFullSpriteRect() );
+            const ::basegfx::B2DRectangle&  rBounds
+                = getUpdateArea( ::basegfx::B2DRectangle( 0.0, 0.0,
+                                                          maSize.getX(),
+                                                          maSize.getY() ) );
 
             if( mbActive )
             {
@@ -452,14 +455,6 @@ namespace canvas
             return ::basegfx::B2DRectangle(
                 maPosition + maCurrClipBounds.getMinimum(),
                 maPosition + maCurrClipBounds.getMaximum() );
-    }
-
-    ::basegfx::B2DRange CanvasCustomSpriteHelper::getFullSpriteRect() const
-    {
-        // Internal! Only call with locked object mutex!
-        return getUpdateArea( ::basegfx::B2DRectangle( 0.0, 0.0,
-                                                       maSize.getX(),
-                                                       maSize.getY() ) );
     }
 }
 

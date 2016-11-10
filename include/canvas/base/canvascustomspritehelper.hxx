@@ -106,9 +106,6 @@ namespace canvas
         /// Calc sprite update area from given raw sprite bounds
         ::basegfx::B2DRange getUpdateArea( const ::basegfx::B2DRange& rUntransformedSpriteBounds ) const;
 
-        /// Calc update area for unclipped sprite content
-        ::basegfx::B2DRange getFullSpriteRect() const;
-
         /** Returns true, if sprite content bitmap is fully opaque.
 
             This does not take clipping or transformation into

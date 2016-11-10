@@ -671,7 +671,7 @@ void Shell::UpdateWindows()
                     {
                         StarBASIC* pLib = doc->getBasicManager()->GetLib( aLibName );
                         if ( pLib )
-                            ImplStartListening( pLib );
+                            StartListening( pLib->GetBroadcaster(), true /* log on only once */ );
 
                         try
                         {
@@ -911,11 +911,6 @@ void Shell::SetCurLibForLocalization( const ScriptDocument& rDocument, const OUS
 
     m_pCurLocalizationMgr = std::make_shared<LocalizationMgr>(this, rDocument, aLibName, xStringResourceManager);
     m_pCurLocalizationMgr->handleTranslationbar();
-}
-
-void Shell::ImplStartListening( StarBASIC* pBasic )
-{
-    StartListening( pBasic->GetBroadcaster(), true /* log on only once */ );
 }
 
 } // namespace basctl

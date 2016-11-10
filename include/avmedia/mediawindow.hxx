@@ -108,9 +108,6 @@ namespace avmedia
         static css::uno::Reference< css::graphic::XGraphic > grabFrame( const OUString& rURL, const OUString& rReferer,
             const OUString& sMimeType );
 
-        static BitmapEx getAudioLogo();
-        static BitmapEx getEmptyLogo();
-
     private:
         MediaWindow(const MediaWindow&) = delete;
         MediaWindow& operator =( const MediaWindow& ) = delete;

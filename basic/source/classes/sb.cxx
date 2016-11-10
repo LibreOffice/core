@@ -1362,7 +1362,7 @@ bool StarBASIC::Call( const OUString& rName, SbxArray* pParam )
         SbxBase::ResetError();
         if( eErr != ERRCODE_SBX_OK )
         {
-            RTError( (SbError)eErr, 0, 0, 0 );
+            RTError( (SbError)eErr, OUString(), 0, 0, 0 );
         }
     }
     return bRes;
@@ -1678,11 +1678,6 @@ bool StarBASIC::CError( SbError code, const OUString& rMsg,
     }
     GetSbData()->bCompilerError = false;     // only true for error handler
     return bRet;
-}
-
-void StarBASIC::RTError( SbError code, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
-{
-    RTError( code, OUString(), l, c1, c2 );
 }
 
 bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
