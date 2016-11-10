@@ -1243,7 +1243,7 @@ namespace
         try
         {
             Reference< awt::XWindow > xContainerWindow( _rxFrame->getContainerWindow(), UNO_SET_THROW );
-            vcl::Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             OSL_ENSURE( pWindow, "lcl_getDialogParent: cool, somebody implemented a VCL-less toolkit!" );
 
             if ( pWindow )

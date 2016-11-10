@@ -152,18 +152,15 @@ namespace drawinglayer
 
                                         if(pVCLXWindow)
                                         {
-                                            vcl::Window* pWindow = pVCLXWindow->GetWindow();
+                                            VclPtr<vcl::Window> pWindow = pVCLXWindow->GetWindow();
 
                                             if(pWindow)
                                             {
                                                 pWindow = pWindow->GetParent();
 
-                                                if(pWindow)
+                                                if(pWindow && MapUnit::Map100thMM == pWindow->GetMapMode().GetMapUnit())
                                                 {
-                                                    if(MapUnit::Map100thMM == pWindow->GetMapMode().GetMapUnit())
-                                                    {
-                                                        bUserIs100thmm = true;
-                                                    }
+                                                    bUserIs100thmm = true;
                                                 }
                                             }
                                         }

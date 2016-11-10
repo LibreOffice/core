@@ -853,7 +853,7 @@ void SVTXGridControl::setEnable( sal_Bool bEnable ) throw(css::uno::RuntimeExcep
     SolarMutexGuard aGuard;
 
     m_xTableModel->setEnabled( bEnable );
-    vcl::Window * pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         pWindow->Enable( bEnable );

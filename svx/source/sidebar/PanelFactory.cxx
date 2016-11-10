@@ -120,7 +120,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         aArguments.getOrDefault("ApplicationName", OUString()),
         aArguments.getOrDefault("ContextName", OUString()));
 
-    vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
+    VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( ! xParentWindow.is() || pParentWindow==nullptr)
         throw RuntimeException(
             "PanelFactory::createUIElement called without ParentWindow",

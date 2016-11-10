@@ -37,7 +37,7 @@ FloatingWindowAccessible::~FloatingWindowAccessible()
 
 void FloatingWindowAccessible::FillAccessibleRelationSet(utl::AccessibleRelationSetHelper& rRelationSet)
 {
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         vcl::Window* pParentWindow = pWindow->GetParent();

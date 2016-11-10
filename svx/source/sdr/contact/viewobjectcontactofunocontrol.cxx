@@ -253,7 +253,7 @@ namespace sdr { namespace contact {
         Reference< XWindowPeer > xPeer( m_xControl->getPeer() );
         if ( xPeer.is() )
         {
-            vcl::Window* pWindow = VCLUnoHelper::GetWindow( xPeer );
+            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xPeer );
             OSL_ENSURE( pWindow, "ControlHolder::invalidate: no implementation access!" );
             if ( pWindow )
                 pWindow->Invalidate();
@@ -266,7 +266,7 @@ namespace sdr { namespace contact {
         // no check whether we're valid, this is the responsibility of the caller
 
         // Argh. Why does XView have a setZoom only, but not a getZoom?
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow( m_xControl->getPeer() );
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( m_xControl->getPeer() );
         OSL_ENSURE( pWindow, "ControlHolder::getZoom: no implementation access!" );
 
         ::basegfx::B2DVector aZoom( 1, 1 );

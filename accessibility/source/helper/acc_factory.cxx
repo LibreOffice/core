@@ -288,7 +288,7 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
 {
     Reference< XAccessibleContext > xContext;
 
-    vcl::Window* pWindow = _pXWindow->GetWindow();
+    VclPtr<vcl::Window> pWindow = _pXWindow->GetWindow();
     if ( pWindow )
     {
         WindowType nType = pWindow->GetType();

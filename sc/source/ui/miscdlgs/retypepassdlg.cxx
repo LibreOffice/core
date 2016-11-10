@@ -113,7 +113,7 @@ void ScRetypePassDlg::SetDataFromDocument(const ScDocument& rDoc)
         VclPtr<FixedText> pFtSheetName = VclPtr<FixedText>::Create(pSheet);
         pFtSheetName->Show();
         pFtSheetName->SetStyle(WB_VCENTER);
-        FixedText* pFtSheetStatus = VclPtr<FixedText>::Create(pSheet);
+        VclPtr<FixedText> pFtSheetStatus = VclPtr<FixedText>::Create(pSheet);
         pFtSheetStatus->Show();
         pFtSheetStatus->SetStyle(WB_VCENTER);
 

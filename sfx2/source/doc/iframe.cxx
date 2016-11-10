@@ -168,7 +168,7 @@ throw( uno::RuntimeException, std::exception )
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {
         DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
-        vcl::Window* pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
         VclPtr<IFrameWindow_Impl> pWin = VclPtr<IFrameWindow_Impl>::Create( pParent, maFrmDescr.IsFrameBorderOn() );
         pWin->SetSizePixel( pParent->GetOutputSizePixel() );
         pWin->SetBackground();

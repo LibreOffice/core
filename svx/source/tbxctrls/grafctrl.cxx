@@ -710,7 +710,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     assert(pFact && "Dialog creation failed!");
                     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
                     assert(fnCreatePage && "Dialog creation failed!");
-                    SfxTabPage* pTabPage = (*fnCreatePage)( aCropDialog->get_content_area(), &aCropDlgAttr );
+                    VclPtr<SfxTabPage> pTabPage = (*fnCreatePage)( aCropDialog->get_content_area(), &aCropDlgAttr );
 
                     pTabPage->SetText( aCropStr );
                     aCropDialog->SetTabPage( pTabPage );

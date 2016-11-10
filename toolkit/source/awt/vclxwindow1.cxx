@@ -37,7 +37,7 @@
 void VCLXWindow::SetSystemParent_Impl( const css::uno::Any& rHandle )
 {
     // does only work for WorkWindows
-    vcl::Window *pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow->GetType() != WINDOW_WORKWINDOW )
     {
         css::uno::RuntimeException aException;
@@ -91,7 +91,7 @@ void VCLXWindow::SetSystemParent_Impl( const css::uno::Any& rHandle )
 #endif
 
     // set system parent
-    static_cast<WorkWindow*>(pWindow)->SetPluginParent( &aSysParentData );
+    static_cast<WorkWindow*>(pWindow.get())->SetPluginParent( &aSysParentData );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

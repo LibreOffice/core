@@ -242,7 +242,7 @@ namespace svt
     {
         if ( nullptr == GetPage( i_nState ) )
         {
-            TabPage* pNewPage = createPage( i_nState );
+            VclPtr<TabPage> pNewPage = createPage( i_nState );
             DBG_ASSERT( pNewPage, "OWizardMachine::GetOrCreatePage: invalid new page (NULL)!" );
 
             // fill up the page sequence of our base class (with dummies)

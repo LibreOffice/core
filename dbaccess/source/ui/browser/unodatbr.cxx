@@ -1327,8 +1327,8 @@ void SbaTableQueryBrowser::implCheckExternalSlot( sal_uInt16 _nId )
     if ( !m_xMainToolbar.is() )
         return;
 
-    vcl::Window* pToolboxWindow = VCLUnoHelper::GetWindow( m_xMainToolbar );
-    ToolBox* pToolbox = dynamic_cast< ToolBox* >( pToolboxWindow );
+    VclPtr<vcl::Window> pToolboxWindow = VCLUnoHelper::GetWindow( m_xMainToolbar );
+    ToolBox* pToolbox = dynamic_cast< ToolBox* >( pToolboxWindow.get() );
     OSL_ENSURE( pToolbox, "SbaTableQueryBrowser::implCheckExternalSlot: cannot obtain the toolbox window!" );
 
     // check if we have to hide this item from the toolbox

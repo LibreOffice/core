@@ -113,8 +113,8 @@ VclPtr<DialogWindow> Shell::FindDlgWin (
     bool bCreateIfNotExist, bool bFindSuspended
 )
 {
-    if (BaseWindow* pWin = FindWindow(rDocument, rLibName, rName, TYPE_DIALOG, bFindSuspended))
-        return static_cast<DialogWindow*>(pWin);
+    if (VclPtr<BaseWindow> pWin = FindWindow(rDocument, rLibName, rName, TYPE_DIALOG, bFindSuspended))
+        return static_cast<DialogWindow*>(pWin.get());
     return bCreateIfNotExist ? CreateDlgWin(rDocument, rLibName, rName) : nullptr;
 }
 

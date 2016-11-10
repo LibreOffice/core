@@ -328,7 +328,7 @@ void OSelectionBrowseBox::Init()
     EditBrowseBox::Init();
 
     // set the header bar
-    BrowserHeader* pNewHeaderBar = CreateHeaderBar(this);
+    VclPtr<BrowserHeader> pNewHeaderBar = CreateHeaderBar(this);
     pNewHeaderBar->SetMouseTransparent(false);
 
     SetHeaderBar(pNewHeaderBar);

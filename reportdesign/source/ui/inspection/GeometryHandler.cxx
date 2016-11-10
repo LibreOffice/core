@@ -2070,7 +2070,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< OUString >& _rF
     try
     {
         uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName("DialogParentWindow") ,uno::UNO_QUERY);
-        vcl::Window* pInspectorWindow = VCLUnoHelper::GetWindow( xInspectorWindow );
+        VclPtr<vcl::Window> pInspectorWindow = VCLUnoHelper::GetWindow( xInspectorWindow );
         WaitObject aWaitCursor( pInspectorWindow );
 
         uno::Reference< sdbc::XPreparedStatement >  xStatement;

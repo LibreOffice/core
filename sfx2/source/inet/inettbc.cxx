@@ -175,7 +175,7 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl, SvtURLBox*, void)
     Reference< XFrame > xFrame( xDesktop->getActiveFrame(), UNO_QUERY );
     if ( xFrame.is() )
     {
-        vcl::Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+        VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
         if ( pWin )
         {
             pWin->GrabFocus();

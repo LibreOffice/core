@@ -136,7 +136,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
     for( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
     {
         OUString aDlgName = pDlgNames[ i ];
-        if (DialogWindow* pWin = m_pShell->FindDlgWin(m_aDocument, m_aLibName, aDlgName))
+        if (VclPtr<DialogWindow> pWin = m_pShell->FindDlgWin(m_aDocument, m_aLibName, aDlgName))
         {
             Reference< container::XNameContainer > xDialog = pWin->GetDialog();
             if( xDialog.is() )

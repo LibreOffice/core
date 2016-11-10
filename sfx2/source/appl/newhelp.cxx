@@ -2657,7 +2657,7 @@ void SfxHelpWindow_Impl::MakeLayout()
 {
     if ( nHeight > 0 && xWindow.is() )
     {
-        vcl::Window* pScreenWin = VCLUnoHelper::GetWindow(xWindow);
+        VclPtr<vcl::Window> pScreenWin = VCLUnoHelper::GetWindow(xWindow);
 
         /* #i55528#
             Hide() / Show() will produce strange effects.
@@ -2781,7 +2781,7 @@ void SfxHelpWindow_Impl::SaveConfig()
     aUserData += ";";
     aUserData += OUString::number( nH );
 
-    vcl::Window* pScreenWin = VCLUnoHelper::GetWindow( xWindow );
+    VclPtr<vcl::Window> pScreenWin = VCLUnoHelper::GetWindow( xWindow );
     aWinPos = pScreenWin->GetWindowExtentsRelative( nullptr ).TopLeft();
     aUserData += ";";
     aUserData += OUString::number( aWinPos.X() );

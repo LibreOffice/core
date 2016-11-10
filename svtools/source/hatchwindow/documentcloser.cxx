@@ -118,7 +118,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, p, void )
                 // reparent the window
                 xWinPeer->setProperty( "PluginParent", uno::makeAny( (sal_Int64) 0 ) );
 
-                vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
                     Dialog::EndAllDialogs( pWindow );
             }

@@ -267,7 +267,7 @@ css::awt::Size SAL_CALL Paragraph::getSize()
 void SAL_CALL Paragraph::grabFocus() throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
-    vcl::Window* pWindow = m_xDocument->GetWindow();
+    VclPtr<vcl::Window> pWindow = m_xDocument->GetWindow();
     if ( pWindow )
     {
         pWindow->GrabFocus();

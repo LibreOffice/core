@@ -1036,7 +1036,7 @@ void SfxInPlaceClient::DeactivateObject()
                 uno::Reference< frame::XController > xController = xModel->getCurrentController();
                 if ( xController.is() )
                 {
-                    vcl::Window* pWindow = VCLUnoHelper::GetWindow( xController->getFrame()->getContainerWindow() );
+                    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xController->getFrame()->getContainerWindow() );
                     bHasFocus = pWindow->HasChildPathFocus( true );
                 }
             }

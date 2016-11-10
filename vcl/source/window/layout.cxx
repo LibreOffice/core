@@ -2106,8 +2106,7 @@ void VclSizeGroup::trigger_queue_resize()
     //sufficient to trigger one widget to trigger all of them
     if (!m_aWindows.empty())
     {
-        vcl::Window *pWindow = *m_aWindows.begin();
-        pWindow->queue_resize();
+        (*m_aWindows.begin())->queue_resize();
     }
 }
 

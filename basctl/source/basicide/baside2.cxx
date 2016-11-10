@@ -617,7 +617,7 @@ bool ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     ErrorHandler::HandleError( StarBASIC::GetErrorCode() );
 
     // #i47002#
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if ( !pWindow )
         return false;
 

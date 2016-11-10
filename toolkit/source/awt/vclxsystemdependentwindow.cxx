@@ -69,10 +69,10 @@ css::uno::Any VCLXSystemDependentWindow::getWindowHandle( const css::uno::Sequen
 
     // TODO, check the process id
     css::uno::Any aRet;
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
-        const SystemEnvData* pSysData = static_cast<SystemChildWindow *>(pWindow)->GetSystemData();
+        const SystemEnvData* pSysData = static_cast<SystemChildWindow *>(pWindow.get())->GetSystemData();
         if( pSysData )
         {
 #if defined(_WIN32)

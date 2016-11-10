@@ -253,8 +253,8 @@ void FocusManager::FocusPanel (
 
 void FocusManager::FocusPanelContent (const sal_Int32 nPanelIndex)
 {
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow(maPanels[nPanelIndex]->GetElementWindow());
-    if (pWindow != nullptr)
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(maPanels[nPanelIndex]->GetElementWindow());
+    if (pWindow)
     {
         mbObservingContentControlFocus = true;
         pWindow->GrabFocus();

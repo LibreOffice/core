@@ -617,7 +617,7 @@ void VCLXFileControl::setText( const OUString& aText ) throw(css::uno::RuntimeEx
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         pWindow->SetText( aText );
@@ -645,7 +645,7 @@ OUString VCLXFileControl::getText() throw(css::uno::RuntimeException, std::excep
     SolarMutexGuard aGuard;
 
     OUString aText;
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
         aText = pWindow->GetText();
     return aText;
@@ -832,7 +832,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -959,7 +959,7 @@ css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName ) th
 
     css::uno::Any aReturn;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1024,7 +1024,7 @@ css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rVa
 {
     css::uno::Any aReturn;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
         return aReturn;
 
@@ -1082,7 +1082,7 @@ css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rVa
 
 void SVTXFormattedField::SetMinValue(const css::uno::Any& rValue)
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
         return;
 
@@ -1111,7 +1111,7 @@ void SVTXFormattedField::SetMinValue(const css::uno::Any& rValue)
 
 css::uno::Any SVTXFormattedField::GetMinValue()
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField || !pField->HasMinValue())
         return css::uno::Any();
 
@@ -1123,7 +1123,7 @@ css::uno::Any SVTXFormattedField::GetMinValue()
 
 void SVTXFormattedField::SetMaxValue(const css::uno::Any& rValue)
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
         return;
 
@@ -1151,7 +1151,7 @@ void SVTXFormattedField::SetMaxValue(const css::uno::Any& rValue)
 
 css::uno::Any SVTXFormattedField::GetMaxValue()
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField || !pField->HasMaxValue())
         return css::uno::Any();
 
@@ -1163,7 +1163,7 @@ css::uno::Any SVTXFormattedField::GetMaxValue()
 
 void SVTXFormattedField::SetDefaultValue(const css::uno::Any& rValue)
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
         return;
 
@@ -1196,7 +1196,7 @@ void SVTXFormattedField::SetDefaultValue(const css::uno::Any& rValue)
 
 css::uno::Any SVTXFormattedField::GetDefaultValue()
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField || pField->IsEmptyFieldEnabled())
         return css::uno::Any();
 
@@ -1211,7 +1211,7 @@ css::uno::Any SVTXFormattedField::GetDefaultValue()
 
 bool SVTXFormattedField::GetTreatAsNumber()
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (pField)
         return pField->TreatingAsNumber();
 
@@ -1221,7 +1221,7 @@ bool SVTXFormattedField::GetTreatAsNumber()
 
 void SVTXFormattedField::SetTreatAsNumber(bool bSet)
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (pField)
         pField->TreatAsNumber(bSet);
 }
@@ -1229,7 +1229,7 @@ void SVTXFormattedField::SetTreatAsNumber(bool bSet)
 
 css::uno::Any SVTXFormattedField::GetValue()
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
         return css::uno::Any();
 
@@ -1251,7 +1251,7 @@ css::uno::Any SVTXFormattedField::GetValue()
 
 void SVTXFormattedField::SetValue(const css::uno::Any& rValue)
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
         return;
 
@@ -1285,7 +1285,7 @@ void SVTXFormattedField::SetValue(const css::uno::Any& rValue)
 
 void SVTXFormattedField::setFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier > & xSupplier)
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
 
     SvNumberFormatsSupplierObj* pNew = nullptr;
     if (!xSupplier.is())
@@ -1324,14 +1324,14 @@ void SVTXFormattedField::setFormatsSupplier(const css::uno::Reference< css::util
 
 sal_Int32 SVTXFormattedField::getFormatKey() const
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetFormatKey() : 0;
 }
 
 
 void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
 {
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (pField)
     {
         if (pField->GetFormatter())
@@ -1402,7 +1402,7 @@ void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_ROADMAP_ITEMSELECTED:
         {
             SolarMutexGuard aGuard;
-            ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
+            VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
             if ( pField )
             {
                 sal_Int16 CurItemID = pField->GetCurrentRoadmapItemID();
@@ -1424,7 +1424,7 @@ void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
+    VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
     if ( pField )
     {
         css::uno::Reference< css::uno::XInterface > xRoadmapItem;
@@ -1496,7 +1496,7 @@ RMItemData SVTXRoadmap::GetRMItemData( const css::container::ContainerEvent& _rE
 void SVTXRoadmap::elementInserted( const css::container::ContainerEvent& _rEvent )throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
+    VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
     if ( pField )
     {
         RMItemData CurItemData = GetRMItemData(  _rEvent );
@@ -1509,7 +1509,7 @@ void SVTXRoadmap::elementInserted( const css::container::ContainerEvent& _rEvent
 void SVTXRoadmap::elementRemoved( const css::container::ContainerEvent& _rEvent )throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
+    VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
     if ( pField )
     {
         sal_Int32 DelIndex = 0;
@@ -1521,7 +1521,7 @@ void SVTXRoadmap::elementRemoved( const css::container::ContainerEvent& _rEvent 
 void SVTXRoadmap::elementReplaced( const css::container::ContainerEvent& _rEvent )throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
+    VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
     if ( pField )
     {
         RMItemData CurItemData = GetRMItemData(  _rEvent );
@@ -1536,7 +1536,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any
 {
     SolarMutexGuard aGuard;
 
-    ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
+    VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1592,7 +1592,7 @@ css::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName ) throw(css
 
     css::uno::Any aReturn;
 
-    ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
+    VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1664,7 +1664,7 @@ void SVTXNumericField::setValue( double Value ) throw(css::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetValue( Value );
 }
@@ -1673,7 +1673,7 @@ double SVTXNumericField::getValue() throw(css::uno::RuntimeException, std::excep
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetValue() : 0;
 }
 
@@ -1681,7 +1681,7 @@ void SVTXNumericField::setMin( double Value ) throw(css::uno::RuntimeException, 
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetMinValue( Value );
 }
@@ -1690,7 +1690,7 @@ double SVTXNumericField::getMin() throw(css::uno::RuntimeException, std::excepti
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetMinValue() : 0;
 }
 
@@ -1698,7 +1698,7 @@ void SVTXNumericField::setMax( double Value ) throw(css::uno::RuntimeException, 
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetMaxValue( Value );
 }
@@ -1707,7 +1707,7 @@ double SVTXNumericField::getMax() throw(css::uno::RuntimeException, std::excepti
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetMaxValue() : 0;
 }
 
@@ -1715,7 +1715,7 @@ void SVTXNumericField::setFirst( double Value ) throw(css::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetSpinFirst( Value );
 }
@@ -1724,7 +1724,7 @@ double SVTXNumericField::getFirst() throw(css::uno::RuntimeException, std::excep
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetSpinFirst() : 0;
 }
 
@@ -1732,7 +1732,7 @@ void SVTXNumericField::setLast( double Value ) throw(css::uno::RuntimeException,
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetSpinLast( Value );
 }
@@ -1741,7 +1741,7 @@ double SVTXNumericField::getLast() throw(css::uno::RuntimeException, std::except
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetSpinLast() : 0;
 }
 
@@ -1749,7 +1749,7 @@ void SVTXNumericField::setSpinSize( double Value ) throw(css::uno::RuntimeExcept
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetSpinSize( Value );
 }
@@ -1758,7 +1758,7 @@ double SVTXNumericField::getSpinSize() throw(css::uno::RuntimeException, std::ex
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetSpinSize() : 0;
 }
 
@@ -1766,7 +1766,7 @@ void SVTXNumericField::setDecimalDigits( sal_Int16 Value ) throw(css::uno::Runti
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetDecimalDigits( Value );
 }
@@ -1775,7 +1775,7 @@ sal_Int16 SVTXNumericField::getDecimalDigits() throw(css::uno::RuntimeException,
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetDecimalDigits() : 0;
 }
 
@@ -1783,7 +1783,7 @@ void SVTXNumericField::setStrictFormat( sal_Bool bStrict ) throw(css::uno::Runti
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetStrictFormat( bStrict );
 }
@@ -1792,7 +1792,7 @@ sal_Bool SVTXNumericField::isStrictFormat() throw(css::uno::RuntimeException, st
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField && pField->IsStrictFormat();
 }
 
@@ -1830,7 +1830,7 @@ void SVTXCurrencyField::setValue( double Value ) throw(css::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetValue( Value );
 }
@@ -1839,7 +1839,7 @@ double SVTXCurrencyField::getValue() throw(css::uno::RuntimeException, std::exce
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetValue() : 0;
 }
 
@@ -1847,7 +1847,7 @@ void SVTXCurrencyField::setMin( double Value ) throw(css::uno::RuntimeException,
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetMinValue( Value );
 }
@@ -1856,7 +1856,7 @@ double SVTXCurrencyField::getMin() throw(css::uno::RuntimeException, std::except
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetMinValue() : 0;
 }
 
@@ -1864,7 +1864,7 @@ void SVTXCurrencyField::setMax( double Value ) throw(css::uno::RuntimeException,
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetMaxValue( Value );
 }
@@ -1873,7 +1873,7 @@ double SVTXCurrencyField::getMax() throw(css::uno::RuntimeException, std::except
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetMaxValue() : 0;
 }
 
@@ -1881,7 +1881,7 @@ void SVTXCurrencyField::setFirst( double Value ) throw(css::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetSpinFirst( Value );
 }
@@ -1890,7 +1890,7 @@ double SVTXCurrencyField::getFirst() throw(css::uno::RuntimeException, std::exce
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetSpinFirst() : 0;
 }
 
@@ -1898,7 +1898,7 @@ void SVTXCurrencyField::setLast( double Value ) throw(css::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetSpinLast( Value );
 }
@@ -1907,7 +1907,7 @@ double SVTXCurrencyField::getLast() throw(css::uno::RuntimeException, std::excep
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetSpinLast() : 0;
 }
 
@@ -1915,7 +1915,7 @@ void SVTXCurrencyField::setSpinSize( double Value ) throw(css::uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetSpinSize( Value );
 }
@@ -1924,7 +1924,7 @@ double SVTXCurrencyField::getSpinSize() throw(css::uno::RuntimeException, std::e
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetSpinSize() : 0;
 }
 
@@ -1932,7 +1932,7 @@ void SVTXCurrencyField::setDecimalDigits( sal_Int16 Value ) throw(css::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetDecimalDigits( Value );
 }
@@ -1941,7 +1941,7 @@ sal_Int16 SVTXCurrencyField::getDecimalDigits() throw(css::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField ? pField->GetDecimalDigits() : 0;
 }
 
@@ -1949,7 +1949,7 @@ void SVTXCurrencyField::setStrictFormat( sal_Bool bStrict ) throw(css::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetStrictFormat( bStrict );
 }
@@ -1958,7 +1958,7 @@ sal_Bool SVTXCurrencyField::isStrictFormat() throw(css::uno::RuntimeException, s
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetAs< FormattedField >();
+    VclPtr<FormattedField> pField = GetAs< FormattedField >();
     return pField && pField->IsStrictFormat();
 }
 
@@ -2119,7 +2119,7 @@ void VCLXProgressBar::setForegroundColor( sal_Int32 nColor ) throw(css::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         Color aColor( nColor );
@@ -2131,7 +2131,7 @@ void VCLXProgressBar::setBackgroundColor( sal_Int32 nColor ) throw(css::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         Color aColor( nColor );
@@ -2207,7 +2207,7 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const css::uno:
             break;
             case BASEPROPERTY_FILLCOLOR:
             {
-                vcl::Window* pWindow = GetWindow();
+                VclPtr<vcl::Window> pWindow = GetWindow();
                 if ( pWindow )
                 {
                     bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;

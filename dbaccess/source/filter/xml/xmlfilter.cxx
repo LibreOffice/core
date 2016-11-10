@@ -264,7 +264,7 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
     if ( xWindow.is() )
     {
         SolarMutexGuard aGuard;
-        vcl::Window* pFocusWindow = VCLUnoHelper::GetWindow( xWindow );
+        VclPtr<vcl::Window> pFocusWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pFocusWindow )
             pFocusWindow->LeaveWait();
     }

@@ -2822,9 +2822,7 @@ void SvxColorToolBoxControl::setColorSelectFunction(const ColorSelectFunction& a
 
 VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
 {
-    SvxColorWindow* pColorWin =
-        VclPtr<SvxColorWindow>::Create(
-
+    VclPtrInstance<SvxColorWindow> pColorWin(
                             m_aCommandURL,
                             m_aPaletteManager,
                             m_aBorderColorStatus,

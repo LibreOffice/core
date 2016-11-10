@@ -176,8 +176,8 @@ void MMCurrentEntryController::dispose() throw (uno::RuntimeException, std::exce
 
 uno::Reference<awt::XWindow> MMCurrentEntryController::createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception)
 {
-    vcl::Window* pParent = VCLUnoHelper::GetWindow(rParent);
-    ToolBox* pToolbar = dynamic_cast<ToolBox*>(pParent);
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(rParent);
+    ToolBox* pToolbar = dynamic_cast<ToolBox*>(pParent.get());
     if (pToolbar)
     {
         // make it visible
@@ -247,8 +247,8 @@ void MMExcludeEntryController::dispose() throw (uno::RuntimeException, std::exce
 
 uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception)
 {
-    vcl::Window* pParent = VCLUnoHelper::GetWindow(rParent);
-    ToolBox* pToolbar = dynamic_cast<ToolBox*>(pParent);
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(rParent);
+    ToolBox* pToolbar = dynamic_cast<ToolBox*>(pParent.get());
     if (pToolbar)
     {
         // make it visible

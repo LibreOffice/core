@@ -696,7 +696,7 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds() throw (uno::RuntimeExcep
 {
     awt::Rectangle aBounds ( 0, 0, 0, 0 );
 
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         Rectangle aRect = pWindow->GetWindowExtentsRelative( nullptr );
@@ -773,7 +773,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::Runtim
     OExternalLockGuard aGuard( this );
 
     sal_Int32 nColor = 0;
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         if ( pWindow->IsControlForeground() )
@@ -800,7 +800,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  ) throw (uno::Runtim
     OExternalLockGuard aGuard( this );
 
     sal_Int32 nColor = 0;
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         if ( pWindow->IsControlBackground() )
@@ -819,7 +819,7 @@ uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw
     OExternalLockGuard aGuard( this );
 
     uno::Reference< awt::XFont > xFont;
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         uno::Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), uno::UNO_QUERY );

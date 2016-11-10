@@ -118,12 +118,12 @@ vcl::Window* getWindowFromXUIElement( const uno::Reference< ui::XUIElement >& xU
 
 SystemWindow* getTopSystemWindow( const uno::Reference< awt::XWindow >& xWindow )
 {
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     while ( pWindow && !pWindow->IsSystemWindow() )
         pWindow = pWindow->GetParent();
 
     if ( pWindow )
-        return static_cast<SystemWindow *>(pWindow);
+        return static_cast<SystemWindow *>(pWindow.get());
     else
         return nullptr;
 }
@@ -150,10 +150,10 @@ bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt:
         _xWindow.set( xUIElement->getRealInterface(), uno::UNO_QUERY );
         _rPosSize = _xWindow->getPosSize();
 
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow( _xWindow );
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( _xWindow );
         if ( pWindow->GetType() == WINDOW_TOOLBOX )
         {
-            ::Size aSize = static_cast<ToolBox*>(pWindow)->CalcWindowSizePixel( 1 );
+            ::Size aSize = static_cast<ToolBox*>(pWindow.get())->CalcWindowSizePixel( 1 );
             _rPosSize.Width = aSize.Width();
             _rPosSize.Height = aSize.Height();
         }
@@ -291,8 +291,8 @@ bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFrame )
         // #i76867# top and system window is required.
         SolarMutexGuard aGuard;
         uno::Reference< awt::XWindow > xWindow( xWindowCheck, uno::UNO_QUERY );
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        return ( pWindow && pWindow->IsSystemWindow() );
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
+        return pWindow && pWindow->IsSystemWindow();
     }
 
     return false;

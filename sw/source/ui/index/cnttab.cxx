@@ -2873,7 +2873,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
 
     if(!aControlList.empty())
     {
-        Control* pLast = *(aControlList.rbegin());
+        Control* pLast = aControlList.rbegin()->get();
 
         aControlSize = pLast->GetSizePixel();
         aControlPos = pLast->GetPosPixel();
@@ -3230,8 +3230,8 @@ void SwTokenWindow::AdjustScrolling()
     if(aControlList.size() > 1)
     {
         //validate scroll buttons
-        Control* pFirstCtrl = *(aControlList.begin());
-        Control* pLastCtrl = *(aControlList.rbegin());
+        Control* pFirstCtrl = aControlList.begin()->get();
+        Control* pLastCtrl = aControlList.rbegin()->get();
 
         long nSpace = m_pCtrlParentWin->GetSizePixel().Width();
         long nWidth = pLastCtrl->GetPosPixel().X() - pFirstCtrl->GetPosPixel().X()
@@ -3551,7 +3551,7 @@ void SwTokenWindow::GetFocus()
     {
         if (!aControlList.empty())
         {
-            Control *pFirst = *aControlList.begin();
+            Control *pFirst = aControlList.begin()->get();
 
             if (pFirst)
             {

@@ -169,7 +169,7 @@ bool RenameModule (
 
     if (Shell* pShell = GetShell())
     {
-        if (ModulWindow* pWin = pShell->FindBasWin(rDocument, rLibName, rNewName, false, true))
+        if (VclPtr<ModulWindow> pWin = pShell->FindBasWin(rDocument, rLibName, rNewName, false, true))
         {
             // set new name in window
             pWin->SetName( rNewName );

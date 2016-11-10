@@ -197,7 +197,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     {
     }
 
-    vcl::Window* pContentWindow = VCLUnoHelper::GetWindow(xWindow);
+    VclPtr<vcl::Window> pContentWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( pContentWindow )
         pContentWindow->SetStyle( pContentWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
     pTitleDockWindow->SetWrappedWindow(pContentWindow);

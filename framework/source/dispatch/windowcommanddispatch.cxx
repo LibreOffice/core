@@ -62,7 +62,7 @@ void WindowCommandDispatch::impl_startListening()
     {
         SolarMutexGuard aSolarLock;
 
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
         if ( ! pWindow)
             return;
 
@@ -82,7 +82,7 @@ void WindowCommandDispatch::impl_stopListening()
     {
         SolarMutexGuard aSolarLock;
 
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
         if (!pWindow)
             return;
 

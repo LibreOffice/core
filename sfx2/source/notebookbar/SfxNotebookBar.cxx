@@ -258,7 +258,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         OUString sFile = lcl_getNotebookbarFileName( eApp );
         OUString sNewFile = rUIFile + sFile;
         OUString sCurrentFile;
-        NotebookBar* pNotebookBar = pSysWindow->GetNotebookBar();
+        VclPtr<NotebookBar> pNotebookBar = pSysWindow->GetNotebookBar();
         if ( pNotebookBar )
             sCurrentFile = OStringToOUString( pNotebookBar->getUIFile(), RTL_TEXTENCODING_ASCII_US );
 

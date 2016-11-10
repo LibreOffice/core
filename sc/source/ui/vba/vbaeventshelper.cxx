@@ -221,7 +221,7 @@ void ScVbaEventListener::startControllerListening( const uno::Reference< frame::
     if( xControllerBorder.is() )
         try { xControllerBorder->addBorderResizeListener( this ); } catch( uno::Exception& ) {}
 
-    if( vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow ) )
+    if( VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow ) )
     {
         maControllers[ pWindow ] = rxController;
     }
@@ -243,7 +243,7 @@ void ScVbaEventListener::stopControllerListening( const uno::Reference< frame::X
     if( xControllerBorder.is() )
         try { xControllerBorder->removeBorderResizeListener( this ); } catch( uno::Exception& ) {}
 
-    if( vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow ) )
+    if( VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow ) )
     {
         maControllers.erase( pWindow );
         if( pWindow == mpActiveWindow )
@@ -278,8 +278,8 @@ void SAL_CALL ScVbaEventListener::windowActivated( const lang::EventObject& rEve
     if( !mbDisposed )
     {
         uno::Reference< awt::XWindow > xWindow( rEvent.Source, uno::UNO_QUERY );
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        OSL_TRACE( "ScVbaEventListener::windowActivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow, mpActiveWindow.get() );
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
+        OSL_TRACE( "ScVbaEventListener::windowActivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow.get(), mpActiveWindow.get() );
         // do not fire activation event multiple time for the same window
         if( pWindow && (pWindow != mpActiveWindow) )
         {
@@ -300,8 +300,8 @@ void SAL_CALL ScVbaEventListener::windowDeactivated( const lang::EventObject& rE
     if( !mbDisposed )
     {
         uno::Reference< awt::XWindow > xWindow( rEvent.Source, uno::UNO_QUERY );
-        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        OSL_TRACE( "ScVbaEventListener::windowDeactivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow, mpActiveWindow.get() );
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
+        OSL_TRACE( "ScVbaEventListener::windowDeactivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow.get(), mpActiveWindow.get() );
         // do not fire the deactivation event, if the window is not active (prevent multiple deactivation)
         if( pWindow && (pWindow == mpActiveWindow) )
             processWindowActivateEvent( pWindow, false );

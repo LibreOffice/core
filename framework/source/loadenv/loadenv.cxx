@@ -1445,7 +1445,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     if (xModified->isModified())
         return css::uno::Reference< css::frame::XFrame >();
 
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xTask->getContainerWindow());
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xTask->getContainerWindow());
     if (pWindow && pWindow->IsInModalMode())
         return css::uno::Reference< css::frame::XFrame >();
 
@@ -1519,10 +1519,10 @@ void LoadEnv::impl_reactForLoadingState()
         if (bMinimized)
         {
             SolarMutexGuard aSolarGuard;
-            vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
             // check for system window is necessary to guarantee correct pointer cast!
             if (pWindow && pWindow->IsSystemWindow())
-                static_cast<WorkWindow*>(pWindow)->Minimize();
+                static_cast<WorkWindow*>(pWindow.get())->Minimize();
         }
         else if (!bHidden)
         {
@@ -1627,7 +1627,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
     // <- SAFE ----------------------------------
 
     SolarMutexGuard aSolarGuard;
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( pWindow )
     {
         bool const preview( m_lMediaDescriptor.getUnpackedValueOrDefault(
@@ -1671,7 +1671,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     // SOLAR SAFE ->
     SolarMutexClearableGuard aSolarGuard1;
 
-    vcl::Window*  pWindow       = VCLUnoHelper::GetWindow(xWindow);
+    VclPtr<vcl::Window>  pWindow = VCLUnoHelper::GetWindow(xWindow);
     if (!pWindow)
         return;
 
@@ -1682,7 +1682,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         return;
 
     // don't overwrite this special state!
-    WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow);
+    WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
     if (pWorkWindow->IsMinimized())
         return;
 
@@ -1739,11 +1739,11 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
             // But if we get a valid pointer we can be sure, that it's the system window pointer
             // we already checked and used before. Because nobody recycle the same uno reference for
             // a new internal c++ implementation ... hopefully .-))
-            vcl::Window* pWindowCheck  = VCLUnoHelper::GetWindow(xWindow);
+            VclPtr<vcl::Window> pWindowCheck = VCLUnoHelper::GetWindow(xWindow);
             if (! pWindowCheck)
                 return;
 
-            SystemWindow* pSystemWindow = static_cast<SystemWindow*>(pWindowCheck);
+            SystemWindow* pSystemWindow = static_cast<SystemWindow*>(pWindowCheck.get());
             pSystemWindow->SetWindowState(OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
             // <- SOLAR SAFE
         }

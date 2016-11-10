@@ -270,7 +270,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
     VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(aWindow);
     assert(pParentComponent);
 
-    vcl::Window* pParent = VCLUnoHelper::GetWindow( aWindow );
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( aWindow );
 
     VclPtrInstance<BibBookContainer> pMyWindow( pParent );
     pMyWindow->Show();

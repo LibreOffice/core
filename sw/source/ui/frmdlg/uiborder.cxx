@@ -41,7 +41,7 @@ SwBorderDlg::SwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes n
 
     if ( fnCreatePage )
     {
-        SfxTabPage* pNewPage = (*fnCreatePage)( get_content_area(), &rSet );
+        VclPtr<SfxTabPage> pNewPage = (*fnCreatePage)( get_content_area(), &rSet );
         SfxAllItemSet aSet(*(rSet.GetPool()));
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE, static_cast<sal_uInt16>(nType)));
         if(SwBorderModes::TABLE == nType)
