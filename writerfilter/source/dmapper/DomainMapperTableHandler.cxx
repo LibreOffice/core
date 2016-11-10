@@ -1028,8 +1028,6 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
 
                 if (xTable.is())
                 {
-                    m_xTableRange = xTable->getAnchor( );
-
                     if (!aMerges.empty())
                     {
                         // Perform horizontal merges in reverse order, so the fact that merging changes the position of cells won't cause a problem for us.

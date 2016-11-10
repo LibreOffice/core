@@ -65,8 +65,6 @@ class DomainMapperTableHandler final
     std::vector<CellSequence_t> m_aRowRanges;
     std::vector<RowSequence_t> m_aTableRanges;
 
-    css::uno::Reference< css::text::XTextRange >           m_xTableRange;
-
     // properties
     PropertyMapVector2      m_aCellProperties;
     PropertyMapVector1      m_aRowProperties;
