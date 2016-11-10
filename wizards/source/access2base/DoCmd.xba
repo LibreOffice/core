@@ -2302,15 +2302,9 @@ REM ----------------------------------------------------------------------------
 Private Function _PromptFormat(ByVal pvList As Variant) As String
 &apos;	Return user selection in Format dialog
 
-Dim oDialog As Object, oDialogLib As Object, iOKCancel As Integer, oControl As Object
-	Set oDialogLib = DialogLibraries
-	If oDialogLib.hasByName(&quot;Access2BaseDev&quot;) Then
-		If Not oDialogLib.IsLibraryLoaded(&quot;Access2BaseDev&quot;) Then oDialogLib.loadLibrary(&quot;Access2BaseDev&quot;)
-		Set oDialog = CreateUnoDialog(DialogLibraries.Access2BaseDev.dlgFormat)
-	Else
-		If Not oDialogLib.IsLibraryLoaded(&quot;Access2Base&quot;) Then oDialogLib.loadLibrary(&quot;Access2Base&quot;)
-		Set oDialog = CreateUnoDialog(DialogLibraries.Access2Base.dlgFormat)
-	End If
+Dim oDialog As Object, iOKCancel As Integer, oControl As Object
+
+	Set oDialog = CreateUnoDialog(Utils._GetDialogLib().dlgFormat)
 	oDialog.Title = _GetLabel(&quot;DLGFORMAT_TITLE&quot;)
 
 	Set oControl = oDialog.Model.getByName(&quot;lblFormat&quot;)

@@ -197,6 +197,25 @@ Dim oPip As Object, sLocation As String
 End Function	&apos;	ExtensionLocation
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _GetDialogLib() As Object
+&apos;	Return actual Access2Base dialogs library
+
+Dim oDialogLib As Object
+	 
+	Set oDialogLib = DialogLibraries
+	If oDialogLib.hasByName(&quot;Access2BaseDev&quot;) Then
+		If Not oDialogLib.IsLibraryLoaded(&quot;Access2BaseDev&quot;) Then oDialogLib.loadLibrary(&quot;Access2BaseDev&quot;)
+		Set _GetDialogLib = DialogLibraries.Access2BaseDev
+	ElseIf oDialogLib.hasByName(&quot;Access2Base&quot;) Then
+		If Not oDialogLib.IsLibraryLoaded(&quot;Access2Base&quot;) Then oDialogLib.loadLibrary(&quot;Access2Base&quot;)
+		Set _GetDialogLib = DialogLibraries.Access2Base
+	Else
+		Set _GetDialogLib = Nothing
+	EndIf
+
+End Function
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _GetResultSetColumnValue(poResultSet As Object _
 											, ByVal piColIndex As Integer _
 											, Optional ByVal pbReturnBinary As Boolean _

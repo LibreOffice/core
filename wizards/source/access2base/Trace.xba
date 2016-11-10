@@ -31,17 +31,10 @@ Public Sub TraceConsole()
 &apos;	Display the Trace dialog with current trace log values and parameter choices
 	If _ErrorHandler() Then On Local Error Goto Error_Sub
 
-Dim sLineBreak As String, oDialogLib As Object, oTraceDialog As Object
+Dim sLineBreak As String, oTraceDialog As Object
 	sLineBreak = vbNewLine
-	 
-	Set oDialogLib = DialogLibraries
-	If oDialogLib.hasByName(&quot;Access2BaseDev&quot;) Then
-		If Not oDialogLib.IsLibraryLoaded(&quot;Access2BaseDev&quot;) Then oDialogLib.loadLibrary(&quot;Access2BaseDev&quot;)
-		Set oTraceDialog = CreateUnoDialog(DialogLibraries.Access2BaseDev.dlgTrace)
-	Else
-		If Not oDialogLib.IsLibraryLoaded(&quot;Access2Base&quot;) Then oDialogLib.loadLibrary(&quot;Access2Base&quot;)
-		Set oTraceDialog = CreateUnoDialog(DialogLibraries.Access2Base.dlgTrace)
-	EndIf
+
+	Set oTraceDialog = CreateUnoDialog(Utils._GetDialogLib().dlgTrace)
 	oTraceDialog.Title = _GetLabel(&quot;DLGTRACE_TITLE&quot;)	&apos;	HelpText ???
 	
 Dim oEntries As Object, oTraceLog As Object, oClear As Object, oMinLevel As Object, oNbEntries As Object, oDump As Object
