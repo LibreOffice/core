@@ -139,7 +139,6 @@ void PPTShape::addShape(
                     {
                         sServiceName = "com.sun.star.presentation.TitleTextShape";
                         aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
-                        bClearText = true;
                     }
                     break;
                     case XML_subTitle :

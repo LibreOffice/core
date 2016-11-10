@@ -1089,7 +1089,7 @@ Reference< XShape > Shape::createAndInsert(
                         aCharStyleProperties.maCharColor.assignIfUsed( pFontRef->maPhClr );
                     }
                 }
-
+                xText->setString("");
                 Reference < XTextCursor > xAt = xText->createTextCursor();
                 getTextBody()->insertAt( rFilterBase, xText, xAt, aCharStyleProperties, mpMasterTextListStyle );
             }
