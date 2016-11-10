@@ -508,9 +508,6 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                         continue;
                 }
 
-                sal_Int32 indexUtf16 = nCharPos;
-                sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
-
                 bool bInCluster = false;
                 if (i > 0 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i - 1].cluster)
                     bInCluster = true;
@@ -532,10 +529,11 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 else
                 {
 #if HB_VERSION_ATLEAST(0, 9, 42)
+                    sal_Int32 indexUtf16 = nCharPos;
+                    sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
                     if (u_getIntPropertyValue(aChar, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
                         bDiacritic = true;
 #else
-                    (void) aChar;
                     // the font lacks GDEF table
                     if (pHbPositions[i].x_advance == 0)
                         bDiacritic = true;
