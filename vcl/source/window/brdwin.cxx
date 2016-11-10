@@ -919,10 +919,7 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
                 maFrameData.mbDragFull = false;
                 if ( nDragFullTest != DragFullOptions::NONE )
                     maFrameData.mbDragFull = true;   // always fulldrag for proper docking, ignore system settings
-                StartTrackingFlags eFlags = maFrameData.mbDragFull ?
-                    StartTrackingFlags::UseToolKitDrag :
-                    StartTrackingFlags::NONE;
-                pBorderWindow->StartTracking(eFlags);
+                pBorderWindow->StartTracking();
             }
             else if ( bHitTest )
                 maFrameData.mnHitTest = BorderWindowHitTest::NONE;

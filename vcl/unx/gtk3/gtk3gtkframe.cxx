@@ -2542,26 +2542,6 @@ bool GtkSalFrame::HidePopover(sal_uIntPtr nId)
 #endif
 }
 
-void GtkSalFrame::StartToolKitMoveBy()
-{
-    GdkEvent *pEvent = gtk_get_current_event();
-    if (!pEvent)
-    {
-        SAL_WARN("vcl.gtk", "no current event for starting window move by wm");
-        return;
-    }
-    if (pEvent->type != GDK_BUTTON_PRESS)
-    {
-        SAL_WARN("vcl.gtk", "current event for starting window move by wm is not a button");
-        return;
-    }
-    gtk_window_begin_move_drag(GTK_WINDOW(m_pWindow),
-                               pEvent->button.button,
-                               pEvent->button.x_root,
-                               pEvent->button.y_root,
-                               pEvent->button.time);
-}
-
 void GtkSalFrame::addGrabLevel()
 {
     if (m_nGrabLevel == 0)
