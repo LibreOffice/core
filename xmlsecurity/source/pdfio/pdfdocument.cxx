@@ -1265,7 +1265,7 @@ bool PDFDocument::Read(SvStream& rStream)
     SAL_INFO("xmlsecurity.pdfio", "PDFDocument::Read: nStartXRef is " << nStartXRef);
     if (nStartXRef == 0)
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: found no xref statrt offset");
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Read: found no xref start offset");
         return false;
     }
     while (true)
@@ -1466,37 +1466,49 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
 
     // Look up the first and the last entry we need to read.
     auto pIndex = dynamic_cast<PDFArrayElement*>(pObject->Lookup("Index"));
-    size_t nFirstObject = 0;
-    size_t nNumberOfObjects = 0;
-    if (!pIndex || pIndex->GetElements().size() < 2)
+    std::vector<size_t> aFirstObjects;
+    std::vector<size_t> aNumberOfObjects;
+    if (!pIndex)
     {
         auto pSize = dynamic_cast<PDFNumberElement*>(pObject->Lookup("Size"));
         if (pSize)
-            nNumberOfObjects = pSize->GetValue();
+        {
+            aFirstObjects.push_back(0);
+            aNumberOfObjects.push_back(pSize->GetValue());
+        }
         else
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index not found or has < 2 elements");
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index and Size not found");
             return;
         }
     }
     else
     {
         const std::vector<PDFElement*>& rIndexElements = pIndex->GetElements();
-        auto pFirstObject = dynamic_cast<PDFNumberElement*>(rIndexElements[0]);
-        if (!pFirstObject)
+        size_t nFirstObject = 0;
+        for (size_t i = 0; i < rIndexElements.size(); ++i)
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index has no first object");
-            return;
-        }
-        nFirstObject = pFirstObject->GetValue();
+            if (i % 2 == 0)
+            {
+                auto pFirstObject = dynamic_cast<PDFNumberElement*>(rIndexElements[i]);
+                if (!pFirstObject)
+                {
+                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index has no first object");
+                    return;
+                }
+                nFirstObject = pFirstObject->GetValue();
+                continue;
+            }
 
-        auto pNumberOfObjects = dynamic_cast<PDFNumberElement*>(rIndexElements[1]);
-        if (!pNumberOfObjects)
-        {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index has no number of objects");
-            return;
+            auto pNumberOfObjects = dynamic_cast<PDFNumberElement*>(rIndexElements[i]);
+            if (!pNumberOfObjects)
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: Index has no number of objects");
+                return;
+            }
+            aFirstObjects.push_back(nFirstObject);
+            aNumberOfObjects.push_back(pNumberOfObjects->GetValue());
         }
-        nNumberOfObjects = pNumberOfObjects->GetValue();
     }
 
     // Look up the format of a single entry.
@@ -1529,89 +1541,95 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
     }
 
     aStream.Seek(0);
-    // This is the line as read from the stream.
-    std::vector<unsigned char> aOrigLine(nLineLength);
-    // This is the line as it appears after tweaking according to nPredictor.
-    std::vector<unsigned char> aFilteredLine(nLineLength);
-    for (size_t nEntry = 0; nEntry < nNumberOfObjects; ++nEntry)
+    for (size_t nSubSection = 0; nSubSection < aFirstObjects.size(); ++nSubSection)
     {
-        size_t nIndex = nFirstObject + nEntry;
+        size_t nFirstObject = aFirstObjects[nSubSection];
+        size_t nNumberOfObjects = aNumberOfObjects[nSubSection];
 
-        aStream.ReadBytes(aOrigLine.data(), aOrigLine.size());
-        if (aOrigLine[0] + 10 != nPredictor)
+        // This is the line as read from the stream.
+        std::vector<unsigned char> aOrigLine(nLineLength);
+        // This is the line as it appears after tweaking according to nPredictor.
+        std::vector<unsigned char> aFilteredLine(nLineLength);
+        for (size_t nEntry = 0; nEntry < nNumberOfObjects; ++nEntry)
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: in-stream predictor is inconsistent with /DecodeParms/Predictor for object #" << nIndex);
-            return;
-        }
+            size_t nIndex = nFirstObject + nEntry;
 
-        for (int i = 0; i < nLineLength; ++i)
-        {
-            switch (nPredictor)
+            aStream.ReadBytes(aOrigLine.data(), aOrigLine.size());
+            if (aOrigLine[0] + 10 != nPredictor)
             {
-            case 1:
-                // No prediction.
-                break;
-            case 12:
-                // PNG prediction: up (on all rows).
-                aFilteredLine[i] = aFilteredLine[i] + aOrigLine[i];
-                break;
-            default:
-                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: unexpected predictor: " << nPredictor);
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: in-stream predictor is inconsistent with /DecodeParms/Predictor for object #" << nIndex);
                 return;
-                break;
             }
-        }
 
-        // First character is already handled above.
-        int nPos = 1;
-        size_t nType = 0;
-        // Start of the current field in the stream data.
-        int nOffset = nPos;
-        for (; nPos < nOffset + aW[0]; ++nPos)
-        {
-            unsigned char nCh = aFilteredLine[nPos];
-            nType = (nType << 8) + nCh;
-        }
-
-        // Start of the object in the file stream.
-        size_t nStreamOffset = 0;
-        nOffset = nPos;
-        for (; nPos < nOffset + aW[1]; ++nPos)
-        {
-            unsigned char nCh = aFilteredLine[nPos];
-            nStreamOffset = (nStreamOffset << 8) + nCh;
-        }
-
-        // Generation number of the object.
-        size_t nGenerationNumber = 0;
-        nOffset = nPos;
-        for (; nPos < nOffset + aW[2]; ++nPos)
-        {
-            unsigned char nCh = aFilteredLine[nPos];
-            nGenerationNumber = (nGenerationNumber << 8) + nCh;
-        }
-
-        // Ignore invalid nType.
-        if (nType <= 2)
-        {
-            if (m_aXRef.find(nIndex) == m_aXRef.end())
+            for (int i = 0; i < nLineLength; ++i)
             {
-                XRefEntry aEntry;
-                switch (nType)
+                switch (nPredictor)
                 {
-                case 0:
-                    aEntry.m_eType = XRefEntryType::FREE;
-                    break;
                 case 1:
-                    aEntry.m_eType = XRefEntryType::NOT_COMPRESSED;
+                    // No prediction.
                     break;
-                case 2:
-                    aEntry.m_eType = XRefEntryType::COMPRESSED;
+                case 12:
+                    // PNG prediction: up (on all rows).
+                    aFilteredLine[i] = aFilteredLine[i] + aOrigLine[i];
+                    break;
+                default:
+                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: unexpected predictor: " << nPredictor);
+                    return;
                     break;
                 }
-                aEntry.m_nOffset = nStreamOffset;
-                aEntry.m_nGenerationNumber = nGenerationNumber;
-                m_aXRef[nIndex] = aEntry;
+            }
+
+            // First character is already handled above.
+            int nPos = 1;
+            size_t nType = 0;
+            // Start of the current field in the stream data.
+            int nOffset = nPos;
+            for (; nPos < nOffset + aW[0]; ++nPos)
+            {
+                unsigned char nCh = aFilteredLine[nPos];
+                nType = (nType << 8) + nCh;
+            }
+
+            // Start of the object in the file stream.
+            size_t nStreamOffset = 0;
+            nOffset = nPos;
+            for (; nPos < nOffset + aW[1]; ++nPos)
+            {
+                unsigned char nCh = aFilteredLine[nPos];
+                nStreamOffset = (nStreamOffset << 8) + nCh;
+            }
+
+            // Generation number of the object.
+            size_t nGenerationNumber = 0;
+            nOffset = nPos;
+            for (; nPos < nOffset + aW[2]; ++nPos)
+            {
+                unsigned char nCh = aFilteredLine[nPos];
+                nGenerationNumber = (nGenerationNumber << 8) + nCh;
+            }
+
+            // Ignore invalid nType.
+            if (nType <= 2)
+            {
+                if (m_aXRef.find(nIndex) == m_aXRef.end())
+                {
+                    XRefEntry aEntry;
+                    switch (nType)
+                    {
+                    case 0:
+                        aEntry.m_eType = XRefEntryType::FREE;
+                        break;
+                    case 1:
+                        aEntry.m_eType = XRefEntryType::NOT_COMPRESSED;
+                        break;
+                    case 2:
+                        aEntry.m_eType = XRefEntryType::COMPRESSED;
+                        break;
+                    }
+                    aEntry.m_nOffset = nStreamOffset;
+                    aEntry.m_nGenerationNumber = nGenerationNumber;
+                    m_aXRef[nIndex] = aEntry;
+                }
             }
         }
     }
