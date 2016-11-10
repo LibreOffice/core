@@ -250,8 +250,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
     if (( nIndex >= 0 ) &&
         ( nIndex < sal::static_int_cast<sal_Int32>( m_aRecentFilesItems.size() )))
     {
-        sal_Int32 nSize = 2;
-        Sequence< PropertyValue > aArgsList(nSize);
+        Sequence< PropertyValue > aArgsList(3);
         aArgsList[0].Name = "Referer";
         aArgsList[0].Value = makeAny( OUString( "private:user" ) );
 
@@ -259,13 +258,9 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         aArgsList[1].Name = "AsTemplate";
         aArgsList[1].Value = makeAny( false );
 
-        if (!m_aModuleName.isEmpty())
-        {
-            // Type detection needs to know which app we are opening it from.
-            aArgsList.realloc(++nSize);
-            aArgsList[nSize-1].Name = "DocumentService";
-            aArgsList[nSize-1].Value <<= m_aModuleName;
-        }
+        // Type detection needs to know which app we are opening it from.
+        aArgsList[2].Name = "DocumentService";
+        aArgsList[2].Value <<= m_aModuleName;
 
         dispatchCommand( m_aRecentFilesItems[ nIndex ], aArgsList, "_default" );
     }
