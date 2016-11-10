@@ -699,12 +699,26 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
 
         // Write stream data.
         SvMemoryStream aXRefStream;
+        const size_t nOffsetLen = 3;
+        // 3 additional bytes: predictor, the first and the third field.
+        const size_t nLineLength = nOffsetLen + 3;
+        // This is the line as it appears before tweaking according to the predictor.
+        std::vector<unsigned char> aOrigLine(nLineLength);
+        // This is the previous line.
+        std::vector<unsigned char> aPrevLine(nLineLength);
+        // This is the line as written to the stream.
+        std::vector<unsigned char> aFilteredLine(nLineLength);
         for (const auto& rXRef : m_aXRef)
         {
             const XRefEntry& rEntry = rXRef.second;
 
             if (!rEntry.m_bDirty)
                 continue;
+
+            // Predictor.
+            size_t nPos = 0;
+            // PNG prediction: up (on all rows).
+            aOrigLine[nPos++] = 2;
 
             // First field.
             unsigned char nType = 0;
@@ -720,25 +734,36 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
                 nType = 2;
                 break;
             }
-            aXRefStream.WriteUChar(nType);
+            aOrigLine[nPos++] = nType;
 
             // Second field.
-            const size_t nOffsetLen = 3;
             for (size_t i = 0; i < nOffsetLen; ++i)
             {
                 size_t nByte = nOffsetLen - i - 1;
                 // Fields requiring more than one byte are stored with the
                 // high-order byte first.
                 unsigned char nCh = (rEntry.m_nOffset & (0xff << (nByte * 8))) >> (nByte * 8);
-                aXRefStream.WriteUChar(nCh);
+                aOrigLine[nPos++] = nCh;
             }
 
             // Third field.
-            aXRefStream.WriteUChar(0);
+            aOrigLine[nPos++] = 0;
+
+            // Now apply the predictor.
+            aFilteredLine[0] = aOrigLine[0];
+            for (size_t i = 1; i < nLineLength; ++i)
+            {
+                // Count the delta vs the previous line.
+                aFilteredLine[i] = aOrigLine[i] - aPrevLine[i];
+                // Remember the new reference.
+                aPrevLine[i] = aOrigLine[i];
+            }
+
+            aXRefStream.WriteBytes(aFilteredLine.data(), aFilteredLine.size());
         }
 
         m_aEditBuffer.WriteUInt32AsString(nXRefStreamId);
-        m_aEditBuffer.WriteCharPtr(" 0 obj\n<</Filter/FlateDecode");
+        m_aEditBuffer.WriteCharPtr(" 0 obj\n<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode");
 
         // ID.
         auto pID = dynamic_cast<PDFArrayElement*>(m_pXRefStream->Lookup("ID"));
