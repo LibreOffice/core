@@ -483,7 +483,6 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
             // CreateSdPresLayoutDlg(::sd::DrawDocShell* pDocShell, vcl::Window* pWindow, const SfxItemSet& rInAttrs) override;
             pRetval = getSdAbstractDialogFactory()->CreateSdPresLayoutDlg(
                 getDocShell(),
-                Application::GetDefDialogParent(),
                 getEmptySfxItemSet());
             break;
         }
