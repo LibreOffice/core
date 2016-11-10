@@ -17,6 +17,7 @@
 class ScFormulaCell;
 class ScDocument;
 class ScAddress;
+struct ScFormulaCellGroup;
 
 namespace formula {
 
@@ -38,6 +39,7 @@ class FormulaLogger
     std::vector<OUString> maMessages;
 
     sal_Int32 mnNestLevel = 0;
+    const ScFormulaCellGroup* mpLastGroup = nullptr;
 
     void writeAscii( const char* s );
     void writeAscii( const char* s, size_t n );
@@ -70,7 +72,8 @@ public:
     private:
         GroupScope(
             FormulaLogger& rLogger, const OUString& rPrefix,
-            const ScDocument& rDoc, const ScFormulaCell& rCell );
+            const ScDocument& rDoc, const ScFormulaCell& rCell,
+            bool bOutputEnabled );
 
     public:
         GroupScope( GroupScope&& r );
