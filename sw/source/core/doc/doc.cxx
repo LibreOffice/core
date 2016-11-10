@@ -73,32 +73,32 @@
 #include <swtable.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>       // for the UndoIds
 #include <UndoCore.hxx>
 #include <UndoInsert.hxx>
 #include <UndoSplitMove.hxx>
 #include <UndoTable.hxx>
-#include <pagedesc.hxx> //DTor
+#include <pagedesc.hxx>     //DTor
 #include <breakit.hxx>
 #include <ndole.hxx>
 #include <ndgrf.hxx>
-#include <rolbck.hxx>           // Undo-Attr
-#include <doctxm.hxx>           // fuer die Verzeichnisse
+#include <rolbck.hxx>       // Undo-Attr
+#include <doctxm.hxx>       // for the directories
 #include <grfatr.hxx>
-#include <poolfmt.hxx>          // PoolVorlagen-Id's
-#include <mvsave.hxx>           // fuer Server-Funktionalitaet
+#include <poolfmt.hxx>      // PoolTemplate ID's
+#include <mvsave.hxx>       // for server functionality
 #include <SwGrammarMarkUp.hxx>
 #include <scriptinfo.hxx>
-#include <acorrect.hxx>         // Autokorrektur
-#include <mdiexp.hxx>           // Statusanzeige
+#include <acorrect.hxx>     // AutoCorrect
+#include <mdiexp.hxx>       // status display
 #include <docstat.hxx>
 #include <docary.hxx>
 #include <redline.hxx>
 #include <fldupde.hxx>
 #include <swbaslnk.hxx>
 #include <printdata.hxx>
-#include <cmdid.h>              // fuer den dflt - Printer in SetJob
-#include <statstr.hrc>          // StatLine-String
+#include <cmdid.h>              // for the dflt - Printer in SetJob
+#include <statstr.hrc>          // StatLine string
 #include <comcore.hrc>
 #include <SwUndoTOXChange.hxx>
 #include <SwUndoFmt.hxx>
@@ -126,11 +126,11 @@ using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 
-// Seiten-Deskriptoren
+// Page descriptors
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
-// Verzeichnisse
+// Directories
 SV_IMPL_PTRARR( SwTOXTypes, SwTOXTypePtr )
-// FeldTypen
+// Field types
 SV_IMPL_PTRARR( SwFldTypes, SwFldTypePtr)
 
 /** IInterface
@@ -609,7 +609,7 @@ void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
 
     if( !pPrt )
     {
-        //Das ItemSet wird vom Sfx geloescht!
+        // the ItemSet will be deleted by Sfx!
         SfxItemSet *pSet = new SfxItemSet( GetAttrPool(),
                         FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
                         SID_HTML_MODE,  SID_HTML_MODE,
@@ -659,8 +659,8 @@ void SwDoc::setPrintData(/*[in]*/ const SwPrintData& rPrtData )
 */
 
 /*
- * Dokumenteditieren (Doc-SS) zum Fuellen des Dokuments
- * durch den RTF Parser und fuer die EditShell.
+ * Document editing (Doc-SS) to fill the documents
+ * by the RTF parser and for the EditShell.
  */
 void SwDoc::ChgDBData(const SwDBData& rNewData)
 {
@@ -679,9 +679,9 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
         return false;
 
     {
-        // Bug 26675:   DataChanged vorm loeschen verschicken, dann bekommt
-        //          man noch mit, welche Objecte sich im Bereich befinden.
-        //          Danach koennen sie vor/hinter der Position befinden.
+        // Bug 26675:   Sent DataChanged before deletion, then you can
+        //      still notice which objects are in the range.
+        //      After that the objects can be before/after the position.
         SwDataChanged aTmp( this, rPos, 0 );
     }
 
@@ -689,7 +689,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().ClearRedo();
-        // einfuegen vom Undo-Object, z.Z. nur beim TextNode
+        // insert the Undo object, currentlx only in TextNode
         if( pNode->IsTxtNode() )
         {
             pUndo = new SwUndoSplitNode( this, rPos, bChkTableStart );
@@ -697,10 +697,9 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
         }
     }
 
-    //JP 28.01.97: Sonderfall fuer SplitNode am Tabellenanfang:
-    //              steht die am Doc/Fly/Footer/..-Anfang oder direkt
-    //              hinter einer Tabelle, dann fuege davor
-    //              einen Absatz ein
+    //JP 28.01.97:  Special case for SplitNode at table start:
+    //      Are they at Doc/Fly/Footer/..-Start or directly
+    //      behind a table, then insert a paragraph before it
     if( bChkTableStart && !rPos.nContent.GetIndex() && pNode->IsTxtNode() )
     {
         sal_uLong nPrevPos = rPos.nNode.GetIndex() - 1;
@@ -717,14 +716,13 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
             if( pNd->IsCntntNode() )
             {
                 //JP 30.04.99 Bug 65660:
-                // ausserhalb des normalen BodyBereiches gibt es keine
-                // Seitenumbrueche, also ist das hier kein gueltige
-                // Bedingung fuers einfuegen eines Absatzes
+                // Outside of the normal BodyArea there are no page breaks,
+                // therefore this is no valid condition for inserting a paragraph
                 if( nPrevPos < GetNodes().GetEndOfExtras().GetIndex() )
                     pNd = 0;
                 else
                 {
-                    // Dann nur, wenn die Tabelle Umbrueche traegt!
+                    // only when the table has breaks!
                     const SwFrmFmt* pFrmFmt = pTblNd->GetTable().GetFrmFmt();
                     if( SFX_ITEM_SET != pFrmFmt->GetItemState(RES_PAGEDESC, sal_False) &&
                         SFX_ITEM_SET != pFrmFmt->GetItemState( RES_BREAK, sal_False ) )
@@ -742,7 +740,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
                     ((SwPosition&)rPos).nNode = pTblNd->GetIndex()-1;
                     ((SwPosition&)rPos).nContent.Assign( pTxtNd, 0 );
 
-                    // nur im BodyBereich den SeitenUmbruch/-Vorlage umhaengem
+                    // only move the page break/page style inside the BodyArea
                     if( nPrevPos > GetNodes().GetEndOfExtras().GetIndex() )
                     {
                         SwFrmFmt* pFrmFmt = pTblNd->GetTable().GetFrmFmt();
@@ -778,7 +776,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     pNode = pNode->SplitCntntNode( rPos );
     if (pNode)
     {
-        // verschiebe noch alle Bookmarks/TOXMarks/FlyAtCnt
+        // now move all Bookmarks/TOXMarks/FlyAtCnt
         if( aBkmkArr.Count() )
             _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, sal_True );
 
@@ -804,7 +802,7 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
     SwTxtNode * pCurNode = rPos.nNode.GetNode().GetTxtNode();
     if( !pCurNode )
     {
-        // dann kann ja einer angelegt werden!
+        // now a node can be created!
         SwNodeIndex aIdx( rPos.nNode, 1 );
         pCurNode = GetNodes().MakeTxtNode( aIdx,
                         GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
@@ -845,7 +843,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
 
     const SwPosition& rPos = *rRg.GetPoint();
 
-    if( pACEWord )                  // Aufnahme in die Autokorrektur
+    if( pACEWord )                  // take it to AutoCorrect
     {
         if( 1 == rStr.Len() && pACEWord->IsDeleted() )
         {
@@ -875,7 +873,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
         }
     }
     else
-    {           // ist Undo und Gruppierung eingeschaltet, ist alles anders !
+    {           // if Undo and Grouping is enabled, then all is different!
         SwUndoInsert * pUndo = NULL; // #111827#
 
         // don't group the start if hints at the start should be expanded
@@ -907,7 +905,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
         for( xub_StrLen i = 0; i < rStr.Len(); ++i )
         {
             nInsPos++;
-            // wenn CanGrouping() sal_True returnt, ist schon alles erledigt
+            // if CanGrouping() is returning sal_True, then all is already done
             if( !pUndo->CanGrouping( rStr.GetChar( i ) ))
             {
                 pUndo = new SwUndoInsert( rPos.nNode, nInsPos, 1, nInsertMode,
@@ -1035,7 +1033,7 @@ SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const String& rObjName,
 
 /*************************************************************************
 |*                SwDoc::GetFldType()
-|*    Beschreibung: liefert den am Doc eingerichteten Feldtypen zurueck
+|*    Description: delievers the field type back which is arranged at the Doc
 *************************************************************************/
 
 SwFieldType *SwDoc::GetSysFldType( const sal_uInt16 eWhich ) const
@@ -1083,12 +1081,11 @@ sal_uInt16 _PostItFld::GetPageNo(
     const std::set< sal_Int32 > &rPossiblePages,
     /* out */ sal_uInt16& rVirtPgNo, /* out */ sal_uInt16& rLineNo )
 {
-    //Problem: Wenn ein PostItFld in einem Node steht, der von mehr als
-    //einer Layout-Instanz repraesentiert wird, steht die Frage im Raum,
-    //ob das PostIt nur ein- oder n-mal gedruck werden soll.
-    //Wahrscheinlich nur einmal, als Seitennummer soll hier keine Zufaellige
-    //sondern die des ersten Auftretens des PostIts innerhalb des selektierten
-    //Bereichs ermittelt werden.
+    // Problem:
+    // When a PostItFld is in a Node that is represented by more than one layout
+    // instance, then there is the question, whether the PostIt should be printed
+    // 1 or n-times. Likely only 1 time. Don't seek a random one as page number
+    // but the first occurrence of the PostIt within the selected area.
     rVirtPgNo = 0;
     sal_uInt16 nPos = GetCntnt();
     SwIterator<SwTxtFrm,SwTxtNode> aIter( GetTxtFld()->GetTxtNode() );
@@ -1121,7 +1118,7 @@ bool lcl_GetPostIts(
 
     if( pFldType->GetDepends() )
     {
-        // Modify-Object gefunden, trage alle Felder ins Array ein
+        // Modify object found, insert all fields into the array
         SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
         const SwTxtFld* pTxtFld;
         for( SwFmtFld* pFld = aIter.First(); pFld;  pFld = aIter.Next() )
@@ -1275,11 +1272,12 @@ void SwDoc::CalculatePagesForPrinting(
     DBG_ASSERT( nFirstPageNo, "first page not found!  Should not happen!" );
     if (nFirstPageNo)
     {
-// HACK: Hier muss von der MultiSelection noch eine akzeptable Moeglichkeit
-// geschaffen werden, alle Seiten von Seite x an zu deselektieren.
-// Z.B. durch SetTotalRange ....
+// Start of HACK:
+// Here an acceptable possibility has to be created by the MultiSelection,
+// to deselect all pages starting from page x.
+// E.g., with SetTotalRange ....
 
-//              aMulti.Select( Range( nLastPageNo+1, SELECTION_MAX ), sal_False );
+// aMulti.Select( Range( nLastPageNo+1, SELECTION_MAX ), sal_False );
         MultiSelection aTmpMulti( Range( 1, nLastPageNo ) );
         long nTmpIdx = aMulti.FirstSelected();
         static long nEndOfSelection = SFX_ENDOFSELECTION;
@@ -1289,7 +1287,7 @@ void SwDoc::CalculatePagesForPrinting(
             nTmpIdx = aMulti.NextSelected();
         }
         aMulti = aTmpMulti;
-// Ende des HACKs
+// End of HACK
 
         nPageNo = nFirstPageNo;
 
@@ -1327,13 +1325,10 @@ void SwDoc::CalculatePagesForPrinting(
         }
     }
 
-
-    //
     // now that we have identified the valid pages for printing according
     // to the print settings we need to get the PageRange to use and
     // use both results to get the actual pages to be printed
     // (post-it settings need to be taken into account later on!)
-    //
 
     // get PageRange value to use
     OUString aPageRange;
@@ -1655,12 +1650,11 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
             aVec.push_back( 0 );
     }
 
-    // dann sorge mal dafuer, das alle Seiten in der richtigen
-    // Reihenfolge stehen:
+    // now make sure that all pages are in the correct order
     sal_uInt16 nSPg = 0;
     sal_uInt32 nEPg = aVec.size();
     sal_uInt16 nStep = 1;
-    if ( 0 == (nEPg & 1 ))      // ungerade gibt es nicht!
+    if ( 0 == (nEPg & 1 ))      // there is no odd!
         --nEPg;
 
     if ( !bPrintLeftPages )
@@ -1721,7 +1715,7 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
     if( rStat.bModified )
     {
         rStat.Reset();
-        rStat.nPara = 0;        // Default ist auf 1 !!
+        rStat.nPara = 0;        // default is 1 !!
         SwNode* pNd;
 
         for( sal_uLong i = GetNodes().Count(); i; )
@@ -1795,14 +1789,14 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
             }
         }
 
-        // event. Stat. Felder Updaten
+        // if necessary update statistical fields
         SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
         pType->UpdateFlds();
     }
 }
 
 
-// Dokument - Info
+// Document - Info
 
 void SwDoc::DocInfoChgd( )
 {
@@ -1811,7 +1805,7 @@ void SwDoc::DocInfoChgd( )
     SetModified();
 }
 
-    // returne zum Namen die im Doc gesetzte Referenz
+    // return the reference that is set in the Doc, together with the name
 const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
 {
     const SfxPoolItem* pItem;
@@ -1830,7 +1824,7 @@ const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
     return 0;
 }
 
-    // returne die RefMark per Index - fuer Uno
+    // return the RefMark by Index - for Uno
 const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 {
     const SfxPoolItem* pItem;
@@ -1854,10 +1848,9 @@ const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
    return pRet;
 }
 
-    // returne die Namen aller im Doc gesetzten Referenzen
-    //JP 24.06.96: Ist der ArrayPointer 0 dann returne nur, ob im Doc. eine
-    //              RefMark gesetzt ist
-    // OS 25.06.96: ab jetzt wird immer die Anzahl der Referenzen returnt
+    // return the names of all references that are set in the Doc
+    // JP 24.06.96: If the ArrayPointer is 0 then return only when a RefMark is set in the Doc
+    // OS 25.06.96: from now on always return the number of the references
 sal_uInt16 SwDoc::GetRefMarks( SvStringsDtor* pNames ) const
 {
     const SfxPoolItem* pItem;
@@ -1936,9 +1929,9 @@ void SwDoc::SetModified()
     // --> OD 2006-05-10 #i65250#
     SwLayouter::ClearMoveBwdLayoutInfo( *this );
     // <--
-    // dem Link wird der Status returnt, wie die Flags waren und werden
-    //  Bit 0:  -> alter Zustand
-    //  Bit 1:  -> neuer Zustand
+    // return the status to the link, how the flags were and will be
+    //  Bit 0:  -> old status
+    //  Bit 1:  -> new status
     long nCall = mbModified ? 3 : 2;
     mbModified = sal_True;
     pDocStat->bModified = sal_True;
@@ -1955,9 +1948,9 @@ void SwDoc::SetModified()
 
 void SwDoc::ResetModified()
 {
-    // dem Link wird der Status returnt, wie die Flags waren und werden
-    //  Bit 0:  -> alter Zustand
-    //  Bit 1:  -> neuer Zustand
+    // return the status to the link, how the flags were and will be
+    //  Bit 0:  -> old status
+    //  Bit 1:  -> new status
     long nCall = mbModified ? 1 : 0;
     mbModified = sal_False;
     // If there is already a document statistic, we assume that
@@ -1988,8 +1981,8 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
             GetIDocumentUndoRedo().AppendUndo(new SwUndoReRead(rPam, *pGrfNd));
         }
 
-        // Weil nicht bekannt ist, ob sich die Grafik spiegeln laesst,
-        // immer das SpiegelungsAttribut zuruecksetzen
+        // Because it's not known if the graphic can be mirrored,
+        // always set back the MirrorAttribute
         if( RES_MIRROR_GRAPH_DONT != pGrfNd->GetSwAttrSet().
                                                 GetMirrorGrf().GetValue() )
             pGrfNd->SetAttr( SwMirrorGrf() );
@@ -2049,12 +2042,12 @@ sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
 /*************************************************************************
  *      SwDoc::SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong )
  *
- * stoesst das Spelling im Idle-Handler wieder an.
- * Wird bInvalid als sal_True uebergeben, so werden zusaetzlich die WrongListen
- * an allen Nodes invalidiert und auf allen Seiten das SpellInvalid-Flag
- * gesetzt.
- * Mit bOnlyWrong kann man dann steuern, ob nur die Bereiche mit falschen
- * Woertern oder die kompletten Bereiche neu ueberprueft werden muessen.
+ * Is activating again the spelling in the Idle handler.
+ * When bInvalid will be hand over as sal_True, then additionally the WrongLists
+ * on all Nodes will be invalidated and on all pages the SpellInvalid flag
+ * will be set.
+ * With bOnlyWrong you can controll, whether only the areas with wrong words
+ * or the complete areas have to be checked again.
  ************************************************************************/
 
 void SwDoc::SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong, sal_Bool bSmartTags )
@@ -2184,8 +2177,8 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
     }
 }
 
-    // loesche den nicht sichtbaren Content aus dem Document, wie z.B.:
-    // versteckte Bereiche, versteckte Absaetze
+    // don't delete the visible content from the document, like e.g.,
+    // hidden sections, hidden paragraphs
 bool SwDoc::RemoveInvisibleContent()
 {
     sal_Bool bRet = sal_False;
@@ -2274,7 +2267,7 @@ bool SwDoc::RemoveInvisibleContent()
     }
 
     {
-        // dann noch alle versteckten Bereiche loeschen/leeren
+        // now delete/empty all hidden sections
         SwSectionFmts aSectFmts;
         SwSectionFmts& rSectFmts = GetSections();
         sal_uInt16 n;
@@ -2324,7 +2317,7 @@ bool SwDoc::RemoveInvisibleContent()
                         pSectNd->StartOfSectionNode()->EndOfSectionIndex() ==
                         pSectNd->EndOfSectionIndex() + 1 )
                     {
-                        // nur den Inhalt loeschen
+                        // delete only the content
                         SwCntntNode* pCNd = GetNodes().GoNext(
                                                 &aPam.GetPoint()->nNode );
                         aPam.GetPoint()->nContent.Assign( pCNd, 0 );
@@ -2338,7 +2331,7 @@ bool SwDoc::RemoveInvisibleContent()
                     }
                     else
                     {
-                        // die gesamte Section loeschen
+                        // delete the complete section
                         aPam.SetMark();
                         aPam.GetPoint()->nNode = *pSectNd->EndOfSectionNode();
                         DelFullPara( aPam );
@@ -2528,7 +2521,7 @@ bool SwDoc::LinksUpdated() const
     return mbLinksUpdated;
 }
 
-    // embedded alle lokalen Links (Bereiche/Grafiken)
+    // embed all local links (sections/graphics)
 ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
 {
     for( sal_uInt16 n = 0; n < rLinks.Count(); ++n )
@@ -2565,10 +2558,10 @@ bool SwDoc::EmbedAllLinks()
         while( 0 != (pLnk = lcl_FindNextRemovableLink( rLinks, rLnkMgr ) ) )
         {
             ::sfx2::SvBaseLinkRef xLink = pLnk;
-            // dem Link sagen, das er aufgeloest wird!
+            // tell the link that it will be cleared!
             xLink->Closed();
 
-            // falls einer vergessen hat sich auszutragen
+            // in the case a link was not deregistered
             if( xLink.Is() )
                 rLnkMgr.Remove( xLink );
 
@@ -2582,7 +2575,7 @@ bool SwDoc::EmbedAllLinks()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:
+    Description:
  --------------------------------------------------------------------*/
 
 sal_Bool SwDoc::IsInsTblFormatNum() const
@@ -2596,7 +2589,7 @@ sal_Bool SwDoc::IsInsTblChangeNumFormat() const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:
+    Description:
  --------------------------------------------------------------------*/
 
 sal_Bool SwDoc::IsInsTblAlignNum() const
@@ -2604,7 +2597,7 @@ sal_Bool SwDoc::IsInsTblAlignNum() const
     return SW_MOD()->IsInsTblAlignNum(get(IDocumentSettingAccess::HTML_MODE));
 }
 
-        // setze das InsertDB als Tabelle Undo auf:
+        // set the InsertDB as table Undo to:
 void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, sal_Bool bIsTable )
 {
     if( bIsTable )
