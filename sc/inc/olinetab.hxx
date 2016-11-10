@@ -37,7 +37,7 @@ class ScOutlineEntry
     bool        bVisible;
 
 public:
-    ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNewHidden = false );
+    ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNewHidden );
     ScOutlineEntry( const ScOutlineEntry& rEntry );
 
     SC_DLLPUBLIC SCCOLROW GetStart() const { return nStart;}

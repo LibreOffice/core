@@ -406,7 +406,7 @@ public:
                                                                 ScViewData *pViewData) = 0;
     virtual VclPtr<AbstractScColRowLabelDlg> CreateScColRowLabelDlg (vcl::Window* pParent,
                                                                 bool bCol,
-                                                                bool bRow = false) = 0;
+                                                                bool bRow) = 0;
 
     virtual VclPtr<AbstractScSortWarningDlg> CreateScSortWarningDlg(vcl::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) = 0;
 
@@ -458,7 +458,7 @@ public:
                                                                 long            nCurrent,
                                                                 long            nDefault,
                                                                 FieldUnit       eFUnit,
-                                                                sal_uInt16      nDecimals = 2,
+                                                                sal_uInt16      nDecimals,
                                                                 long            nMaximum  = 1000,
                                                                 long            nMinimum  = 0 ) = 0;
 
@@ -497,7 +497,7 @@ public:
                                                                 sal_uInt16 nOrient ) = 0;
 
     virtual VclPtr<AbstractScNewScenarioDlg> CreateScNewScenarioDlg ( vcl::Window* pParent, const OUString& rName,
-                                                                bool bEdit, bool bSheetProtected = false ) = 0;
+                                                                bool bEdit, bool bSheetProtected ) = 0;
     virtual VclPtr<AbstractScShowTabDlg> CreateScShowTabDlg(vcl::Window* pParent) = 0;
 
     virtual VclPtr<AbstractScStringInputDlg> CreateScStringInputDlg (  vcl::Window* pParent,
@@ -512,7 +512,7 @@ public:
                                                                 const Color& rDefaultColor ) = 0; //Currently selected Color
 
     virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg ( bool                    bAscii,
-                                                                    const ScImportOptions*  pOptions = nullptr,
+                                                                    const ScImportOptions*  pOptions,
                                                                     const OUString*         pStrTitle = nullptr,
                                                                     bool                    bMultiByte = false,
                                                                     bool                    bOnlyDbtoolsEncodings = false,

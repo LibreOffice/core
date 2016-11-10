@@ -32,7 +32,7 @@ class ScPaintHint : public SfxHint
 
 public:
                     ScPaintHint() = delete;
-                    ScPaintHint( const ScRange& rRng, PaintPartFlags nPaint = PaintPartFlags::All );
+                    ScPaintHint( const ScRange& rRng, PaintPartFlags nPaint );
                     virtual ~ScPaintHint() override;
 
     void            SetPrintFlag(bool bSet) { bPrint = bSet; }

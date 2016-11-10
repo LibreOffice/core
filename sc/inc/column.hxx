@@ -530,7 +530,7 @@ public:
 
     void EndListeningFormulaCells(
         sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,
-        SCROW* pStartRow, SCROW* pEndRow = nullptr );
+        SCROW* pStartRow, SCROW* pEndRow );
 
     void        StartListening( SvtListener& rLst, SCROW nRow );
     void        EndListening( SvtListener& rLst, SCROW nRow );

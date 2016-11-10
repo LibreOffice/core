@@ -70,7 +70,7 @@ public:
                             ScProgress( SfxObjectShell* pObjSh,
                                          const OUString& rText,
                                          sal_uLong nRange,
-                                         bool bWait = true );
+                                         bool bWait );
                             ~ScProgress();
 
 #ifdef SC_PROGRESS_CXX

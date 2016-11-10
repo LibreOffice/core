@@ -110,8 +110,7 @@ protected:
     bool            bDeleteEnginePool;
     bool            bDeleteDefaults;
 
-                    ScEnginePoolHelper( SfxItemPool* pEnginePool,
-                        bool bDeleteEnginePool = false );
+                    ScEnginePoolHelper( SfxItemPool* pEnginePool, bool bDeleteEnginePool );
                     ScEnginePoolHelper( const ScEnginePoolHelper& rOrg );
     virtual         ~ScEnginePoolHelper();
 };
@@ -236,8 +235,7 @@ class ScNoteEditEngine : public ScEditEngineDefaulter
 {
 
 public:
-    ScNoteEditEngine( SfxItemPool* pEnginePool,
-                SfxItemPool* pTextObjectPool = nullptr );
+    ScNoteEditEngine( SfxItemPool* pEnginePool, SfxItemPool* pTextObjectPool );
 
 };
 

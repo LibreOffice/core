@@ -410,7 +410,7 @@ public:
     void        InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize );
     void DeleteRow(
         const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize,
-        bool* pUndoOutline, std::vector<ScAddress>* pGroupPos = nullptr );
+        bool* pUndoOutline, std::vector<ScAddress>* pGroupPos );
 
     bool        TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) const;
     void InsertCol(

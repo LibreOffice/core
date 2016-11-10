@@ -220,7 +220,7 @@ public:
     short GetFormatType() const { return nFormatType; }
     void            Compile(const OUString& rFormula,
                             bool bNoListening,
-                            const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
+                            const formula::FormulaGrammar::Grammar );
     void Compile(
         sc::CompileFormulaContext& rCxt, const OUString& rFormula, bool bNoListening = false );
 
