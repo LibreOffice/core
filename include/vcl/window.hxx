@@ -301,11 +301,11 @@ enum class StartTrackingFlags
     ButtonRepeat         = 0x0010,
     MouseButtonDown      = 0x0020,
     FocusCancel          = 0x0040,
-    UseToolKitDrag       = 0x0080,
 };
+
 namespace o3tl
 {
-    template<> struct typed_flags<StartTrackingFlags> : is_typed_flags<StartTrackingFlags, 0x00ff> {};
+    template<> struct typed_flags<StartTrackingFlags> : is_typed_flags<StartTrackingFlags, 0x007f> {};
 }
 
 // Flags for StartAutoScroll()
