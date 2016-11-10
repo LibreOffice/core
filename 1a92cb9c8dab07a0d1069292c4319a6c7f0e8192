@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_89f3290a",
+        "filename": "include/vcl/vclptr.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-11-10T12:56:32Z",
+      "side": 1,
+      "message": "there won\u0027t be an implicitly declared move assignment op, so this isn\u0027t strictly necessary",
+      "revId": "1a92cb9c8dab07a0d1069292c4319a6c7f0e8192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
