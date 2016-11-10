@@ -31,6 +31,9 @@
         <entry os="7" vendor="intel">
             <device id="all"/>
         </entry>
+        <entry os="8" vendor="intel" compare="equal" version="10.18.10.3308"><!-- Intel(R) HD Graphics 4000 -->
+            <device id="0x0166"/>
+        </entry>
         <entry os="all" vendor="ati" compare="less" version="15.200.1062.1004"> <!-- 150.200 -->
             <device id="all"/>
         </entry>
