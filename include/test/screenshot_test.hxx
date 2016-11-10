@@ -42,7 +42,7 @@ private:
 
     /// dialog creation for known dialogs by ID. Has to be implemented for
     /// each registered known dialog
-    virtual VclAbstractDialog* createDialogByID(sal_uInt32 nID) = 0;
+    virtual VclPtr<VclAbstractDialog> createDialogByID(sal_uInt32 nID) = 0;
 
 public:
     ScreenshotTest();
@@ -53,7 +53,7 @@ public:
     /// Dialog creation for known dialogs by Name (path and UIXMLDescription, *.ui file).
     /// This uses maKnownDialogs to check if known, and if so, calls createDialogByID
     /// with the ID from the map
-    VclAbstractDialog* createDialogByName(const OString& rName);
+    VclPtr<VclAbstractDialog> createDialogByName(const OString& rName);
 
     /// version for AbstractDialogs, the ones created in AbstractDialogFactories
     void dumpDialogToPath(VclAbstractDialog& rDialog);

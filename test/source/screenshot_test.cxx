@@ -107,9 +107,8 @@ void ScreenshotTest::saveScreenshot(Dialog& rDialog)
     }
 }
 
-VclAbstractDialog* ScreenshotTest::createDialogByName(const OString& rName)
+VclPtr<VclAbstractDialog> ScreenshotTest::createDialogByName(const OString& rName)
 {
-    VclAbstractDialog* pRetval = nullptr;
     const mapType::const_iterator aHit = maKnownDialogs.find(rName);
 
     if (aHit != maKnownDialogs.end())
@@ -117,7 +116,7 @@ VclAbstractDialog* ScreenshotTest::createDialogByName(const OString& rName)
         return createDialogByID((*aHit).second);
     }
 
-    return pRetval;
+    return VclPtr<VclAbstractDialog>();
 }
 
 void ScreenshotTest::dumpDialogToPath(VclAbstractDialog& rDialog)

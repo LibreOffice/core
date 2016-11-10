@@ -64,7 +64,7 @@ private:
 
     /// dialog creation for known dialogs by ID. Has to be implemented for
     /// each registered known dialog
-    virtual VclAbstractDialog* createDialogByID(sal_uInt32 nID) override;
+    virtual VclPtr<VclAbstractDialog> createDialogByID(sal_uInt32 nID) override;
 
 public:
     ScScreenshotTest();
@@ -142,9 +142,9 @@ void ScScreenshotTest::registerKnownDialogsByID(mapType& rKnownDialogs)
     rKnownDialogs["modules/scalc/ui/formatcellsdialog.ui"] = 14;
 }
 
-VclAbstractDialog* ScScreenshotTest::createDialogByID(sal_uInt32 nID)
+VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 {
-    VclAbstractDialog *pReturnDialog = nullptr;
+    VclPtr<VclAbstractDialog> pReturnDialog;
     ////FIXME: translatable string here
     const OUString aDefaultSheetName("Sheet1");
 

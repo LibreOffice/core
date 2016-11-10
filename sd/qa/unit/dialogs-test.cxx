@@ -93,7 +93,7 @@ private:
 
     /// dialog creation for known dialogs by ID. Has to be implemented for
     /// each registered known dialog
-    virtual VclAbstractDialog* createDialogByID(sal_uInt32 nID) override;
+    virtual VclPtr<VclAbstractDialog> createDialogByID(sal_uInt32 nID) override;
 
 public:
     SdDialogsTest();
@@ -255,9 +255,9 @@ void SdDialogsTest::registerKnownDialogsByID(mapType& rKnownDialogs)
     rKnownDialogs["modules/simpress/ui/headerfooterdialog.ui"] = 22;
 }
 
-VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
+VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
 {
-    VclAbstractDialog* pRetval = nullptr;
+    VclPtr<VclAbstractDialog> pRetval;
 
     if (getSdAbstractDialogFactory())
     {

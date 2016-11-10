@@ -26,7 +26,7 @@ private:
 
     /// dialog creation for known dialogs by ID. Has to be implemented for
     /// each registered known dialog
-    virtual VclAbstractDialog* createDialogByID(sal_uInt32 nID) override;
+    virtual VclPtr<VclAbstractDialog> createDialogByID(sal_uInt32 nID) override;
 
 public:
     XmlsecurityDialogsTest();
@@ -53,7 +53,7 @@ void XmlsecurityDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/
     // fill map of known dilogs
 }
 
-VclAbstractDialog* XmlsecurityDialogsTest::createDialogByID(sal_uInt32 /*nID*/)
+VclPtr<VclAbstractDialog> XmlsecurityDialogsTest::createDialogByID(sal_uInt32 /*nID*/)
 {
     return nullptr;
 }
