@@ -614,6 +614,29 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             rReq.SetReturnValue(SfxBoolItem(nSlot, bMirror));
         }
         break;
+        case FN_NAME_SHAPE:
+        {
+            bUpdateMgr = false;
+            SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
+            if ( pSdrView &&
+                 pSdrView->GetMarkedObjectCount() == 1 )
+            {
+                OUString aName(rSh.GetFlyName());
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                assert(pFact);
+                ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(
+                    pFact->CreateSvxObjectNameDialog( aName ));
+
+                assert(pDlg);
+
+                if ( pDlg->Execute() == RET_OK )
+                {
+                    pDlg->GetName(aName);
+                    rSh.SetFlyName(aName);
+                }
+            }
+        }
+        break;
         // #i73249#
         case FN_TITLE_DESCRIPTION_SHAPE:
         {
@@ -917,6 +940,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 break;
                 // #i73249#
                 case FN_TITLE_DESCRIPTION_SHAPE:
+                case FN_NAME_SHAPE:
                 {
                     SwWrtShell &rWrtSh = GetShell();
                     SdrView* pSdrView = rWrtSh.GetDrawViewWithValidMarkList();
@@ -925,7 +949,6 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                     {
                         rSet.DisableItem( nWhich );
                     }
-
                 }
                 break;
 
