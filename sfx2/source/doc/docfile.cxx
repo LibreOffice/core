@@ -3605,8 +3605,8 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                     }
                     else
                     {
-                        // Something not based: e.g. PDF.
-                        SvStream* pStream = utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ | StreamMode::WRITE);
+                        // Something not ZIP based: e.g. PDF.
+                        std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ | StreamMode::WRITE));
                         uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
                         if (xSigner->signDocumentContent(uno::Reference<embed::XStorage>(), xStream))
                             bChanges = true;
@@ -3627,7 +3627,17 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                 if ( bScriptingContent )
                     xSigner->showScriptingContentSignatures( GetZipStorageToSign_Impl(), uno::Reference< io::XInputStream >() );
                 else
-                    xSigner->showDocumentContentSignatures( GetZipStorageToSign_Impl(), uno::Reference< io::XInputStream >() );
+                {
+                    uno::Reference<embed::XStorage> xStorage = GetZipStorageToSign_Impl();
+                    if (xStorage.is())
+                        xSigner->showDocumentContentSignatures(xStorage, uno::Reference<io::XInputStream>());
+                    else
+                    {
+                        std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ));
+                        uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(*pStream));
+                        xSigner->showDocumentContentSignatures(uno::Reference<embed::XStorage>(), xStream);
+                    }
+                }
             }
             catch( const uno::Exception& )
             {
