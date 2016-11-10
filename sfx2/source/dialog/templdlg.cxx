@@ -518,24 +518,16 @@ private:
     StyleTreeArr_Impl pChildren;
 
 public:
-
     bool HasParent() const { return !aParent.isEmpty(); }
 
     StyleTree_Impl(const OUString &rName, const OUString &rParent):
         aName(rName), aParent(rParent), pChildren(0) {}
     ~StyleTree_Impl();
-    void Put(StyleTree_Impl* pIns, sal_uIntPtr lPos);
-    size_t Count();
 
     const OUString& getName() { return aName; }
     const OUString& getParent() { return aParent; }
-    StyleTree_Impl *operator[](size_t idx) const { return pChildren[idx]; }
+    StyleTreeArr_Impl& getChildren() { return pChildren; }
 };
-
-size_t StyleTree_Impl::Count()
-{
-    return pChildren.size();
-}
 
 StyleTree_Impl::~StyleTree_Impl()
 {
@@ -543,54 +535,35 @@ StyleTree_Impl::~StyleTree_Impl()
         delete *it;
 }
 
-void StyleTree_Impl::Put(StyleTree_Impl* pIns, sal_uIntPtr lPos)
-{
-    if ( ULONG_MAX == lPos )
-        pChildren.push_back( pIns );
-    else
-        pChildren.insert( pChildren.begin() + (sal_uInt16)lPos, pIns );
-}
-
-
 StyleTreeArr_Impl& MakeTree_Impl(StyleTreeArr_Impl& rArr)
 {
-    const sal_uInt16 nCount = rArr.size();
-
-    comphelper::string::NaturalStringSorter aSorter(
+    const comphelper::string::NaturalStringSorter aSorter(
         ::comphelper::getProcessComponentContext(),
         Application::GetSettings().GetLanguageTag().getLocale());
 
-    // Arrange all under their Parents
-    sal_uInt16 i;
-    for(i = 0; i < nCount; ++i)
+    std::unordered_map<OUString, StyleTree_Impl*, OUStringHash> styleFinder;
+    styleFinder.reserve(rArr.size());
+    for(auto pEntry : rArr)
     {
-        StyleTree_Impl* pEntry = rArr[i];
-        if(pEntry->HasParent())
+        styleFinder.emplace(pEntry->getName(), pEntry);
+    }
+
+    // Arrange all under their Parents
+    for(auto pEntry : rArr)
+    {
+        if(pEntry->HasParent() && styleFinder.find(pEntry->getParent()) != styleFinder.end())
         {
-            for(sal_uInt16 j = 0; j < nCount; ++j)
-            {
-                StyleTree_Impl* pCmp = rArr[j];
-                if(pCmp->getName() == pEntry->getParent())
-                {
-                    // Paste initial filter
-                    sal_uInt16 nPos;
-                    for( nPos = 0 ; nPos < pCmp->Count() &&
-                             aSorter.compare((*pCmp)[nPos]->getName(), pEntry->getName()) < 0 ; nPos++)
-                    {};
-                    pCmp->Put(pEntry,nPos);
-                    break;
-                }
-            }
+            StyleTree_Impl* pCmp = styleFinder[pEntry->getParent()];
+            // Insert child entries sorted
+            auto iPos = std::lower_bound(pCmp->getChildren().begin(), pCmp->getChildren().end(), pEntry,
+                [&aSorter](StyleTree_Impl* pEntry1, StyleTree_Impl* pEntry2) { return aSorter.compare(pEntry1->getName(), pEntry2->getName()) < 0; });
+            pCmp->getChildren().insert(iPos, pEntry);
         }
     }
 
-    for(i = 0; i < rArr.size(); )
-    {
-        if(rArr[i]->HasParent())
-            rArr.erase(rArr.begin() + i);
-        else
-            ++i;
-    }
+    // Only keep tree roots in rArr, child elements can be accessed through the hierarchy
+    rArr.erase(std::remove_if(rArr.begin(), rArr.end(), [](StyleTree_Impl* pEntry) { return pEntry->HasParent(); }), rArr.end());
+
     return rArr;
 }
 
@@ -620,9 +593,9 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
 
     pBox->GetModel()->InvalidateEntry(pTreeListEntry);
 
-    for(size_t i = 0; i < pEntry->Count(); ++i)
+    for(size_t i = 0; i < pEntry->getChildren().size(); ++i)
     {
-        FillBox_Impl(pBox, (*pEntry)[i], rEntries, eStyleFamily, pTreeListEntry);
+        FillBox_Impl(pBox, pEntry->getChildren()[i], rEntries, eStyleFamily, pTreeListEntry);
     }
     return pTreeListEntry;
 }
