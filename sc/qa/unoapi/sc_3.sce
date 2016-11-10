@@ -26,3 +26,4 @@
 -o sc.ScConsolidationDescriptor
 -o sc.ScDDELinkObj
 -o sc.ScDDELinksObj
+-o sc.ScIndexEnumeration_DDELinksEnumeration

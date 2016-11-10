@@ -33,4 +33,3 @@
 -o sc.ScHeaderFooterTextObj
 -o sc.ScIndexEnumeration_CellAnnotationsEnumeration
 -o sc.ScIndexEnumeration_CellAreaLinksEnumeration
--o sc.ScIndexEnumeration_DDELinksEnumeration
