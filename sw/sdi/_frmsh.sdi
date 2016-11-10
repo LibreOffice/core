@@ -369,6 +369,13 @@ interface BaseTextFrame
                 StateMethod = GetState ;
                 DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
         ]
+        // tdf#103268
+        FN_NAME_SHAPE
+        [
+                ExecMethod = Execute ;
+                StateMethod = GetState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
 
 // Abfragefunktionen fuer ImageMaps
 // Slots ohne Export
