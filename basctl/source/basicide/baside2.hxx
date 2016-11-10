@@ -310,8 +310,6 @@ private:
     void                CheckCompileBasic();
     void                BasicExecute();
 
-    static void         GoOnTop();
-
     sal_Int32           FormatAndPrint( Printer* pPrinter, sal_Int32 nPage );
     SbModuleRef const & XModule();
 protected:

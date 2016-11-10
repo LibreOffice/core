@@ -592,7 +592,7 @@ void ModulWindow::ManageBreakPoints()
 
 bool ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
 {
-    GoOnTop();
+    GetShell()->GetViewFrame()->ToTop();
 
     // ReturnWert: BOOL
     //  FALSE:  cancel
@@ -1150,11 +1150,6 @@ void ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
 bool ModulWindow::IsModified()
 {
     return GetEditEngine() && GetEditEngine()->IsModified();
-}
-
-void ModulWindow::GoOnTop()
-{
-    GetShell()->GetViewFrame()->ToTop();
 }
 
 OUString ModulWindow::GetSbModuleName()

@@ -355,7 +355,6 @@ protected:
                             const css::uno::Reference< css::embed::XStorage >& xStorage,
                             bool bComplete );
 
-    void SAL_CALL initializeFromDocumentURL( const OUString& _rInitialDocumentURL );
     void SAL_CALL initializeFromDocument( const css::uno::Reference< css::document::XStorageBasedDocument >& _rxDocument );
 
     // OEventListenerAdapter
@@ -382,8 +381,6 @@ public:
 
     void    enterMethod();
     static void leaveMethod();
-    bool    isDisposed() const { return rBHelper.bInDispose || rBHelper.bDisposed; }
-    void    checkDisposed() const;
 
     // Methods XElementAccess
     virtual css::uno::Type SAL_CALL getElementType()

@@ -404,19 +404,13 @@ SfxLibraryContainer::~SfxLibraryContainer()
     }
 }
 
-void SfxLibraryContainer::checkDisposed() const
-{
-    if ( isDisposed() )
-    {
-        throw DisposedException( OUString(),
-                                 *const_cast< SfxLibraryContainer* >( this ) );
-    }
-}
-
 void SfxLibraryContainer::enterMethod()
 {
     Application::GetSolarMutex().acquire();
-    checkDisposed();
+    if ( rBHelper.bInDispose || rBHelper.bDisposed )
+    {
+        throw DisposedException( OUString(), *this );
+    }
 }
 
 void SfxLibraryContainer::leaveMethod()
@@ -2710,7 +2704,7 @@ void SAL_CALL SfxLibraryContainer::initialize( const Sequence< Any >& _rArgument
         Reference< XStorageBasedDocument > xDocument;
         if ( _rArguments[0] >>= sInitialDocumentURL )
         {
-            initializeFromDocumentURL( sInitialDocumentURL );
+            init( sInitialDocumentURL, nullptr );
             return;
         }
 
@@ -2722,11 +2716,6 @@ void SAL_CALL SfxLibraryContainer::initialize( const Sequence< Any >& _rArgument
     }
 
     throw IllegalArgumentException();
-}
-
-void SAL_CALL SfxLibraryContainer::initializeFromDocumentURL( const OUString& _rInitialDocumentURL )
-{
-    init( _rInitialDocumentURL, nullptr );
 }
 
 void SAL_CALL SfxLibraryContainer::initializeFromDocument( const Reference< XStorageBasedDocument >& _rxDocument )

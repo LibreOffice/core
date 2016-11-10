@@ -99,8 +99,6 @@ private:
     void                SetCurLib( const ScriptDocument& rDocument, const OUString& aLibName, bool bUpdateWindows = true , bool bCheck = true );
     void                SetCurLibForLocalization( const ScriptDocument& rDocument, const OUString& aLibName );
 
-    void                ImplStartListening( StarBASIC* pBasic );
-
     DECL_LINK( TabBarHdl, ::TabBar*, void );
 
     static unsigned nShellCount;
