@@ -30,9 +30,7 @@ private:
 
 public:
     FilterDialogsTest();
-    virtual ~FilterDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~FilterDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ FilterDialogsTest::FilterDialogsTest()
 
 FilterDialogsTest::~FilterDialogsTest()
 {
-}
-
-void FilterDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void FilterDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)

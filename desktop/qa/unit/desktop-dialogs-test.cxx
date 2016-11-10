@@ -30,9 +30,7 @@ private:
 
 public:
     DesktopDialogsTest();
-    virtual ~DesktopDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~DesktopDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ DesktopDialogsTest::DesktopDialogsTest()
 
 DesktopDialogsTest::~DesktopDialogsTest()
 {
-}
-
-void DesktopDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void DesktopDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)

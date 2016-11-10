@@ -30,9 +30,7 @@ private:
 
 public:
     SvtoolsDialogsTest();
-    virtual ~SvtoolsDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~SvtoolsDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ SvtoolsDialogsTest::SvtoolsDialogsTest()
 
 SvtoolsDialogsTest::~SvtoolsDialogsTest()
 {
-}
-
-void SvtoolsDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void SvtoolsDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)

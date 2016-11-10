@@ -30,9 +30,7 @@ private:
 
 public:
     UuiDialogsTest();
-    virtual ~UuiDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~UuiDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ UuiDialogsTest::UuiDialogsTest()
 
 UuiDialogsTest::~UuiDialogsTest()
 {
-}
-
-void UuiDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void UuiDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)

@@ -30,9 +30,7 @@ private:
 
 public:
     Sfx2DialogsTest();
-    virtual ~Sfx2DialogsTest();
-
-    virtual void setUp() override;
+    virtual ~Sfx2DialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ Sfx2DialogsTest::Sfx2DialogsTest()
 
 Sfx2DialogsTest::~Sfx2DialogsTest()
 {
-}
-
-void Sfx2DialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void Sfx2DialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)

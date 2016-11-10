@@ -30,9 +30,7 @@ private:
 
 public:
     CuiDialogsTest();
-    virtual ~CuiDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~CuiDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ CuiDialogsTest::CuiDialogsTest()
 
 CuiDialogsTest::~CuiDialogsTest()
 {
-}
-
-void CuiDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void CuiDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)

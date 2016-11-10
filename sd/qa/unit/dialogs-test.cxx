@@ -97,7 +97,7 @@ private:
 
 public:
     SdDialogsTest();
-    virtual ~SdDialogsTest();
+    virtual ~SdDialogsTest() override;
 
     virtual void setUp() override;
 
@@ -257,7 +257,7 @@ void SdDialogsTest::registerKnownDialogsByID(mapType& rKnownDialogs)
 
 VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
 {
-    VclAbstractDialog* pRetval = 0;
+    VclAbstractDialog* pRetval = nullptr;
 
     if (getSdAbstractDialogFactory())
     {

@@ -68,7 +68,7 @@ private:
 
 public:
     ScScreenshotTest();
-    virtual ~ScScreenshotTest();
+    virtual ~ScScreenshotTest() override;
 
     void testOpeningModalDialogs();
 
@@ -258,7 +258,7 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID(sal_uInt32 nID)
             mpItemSet->Put(SfxUInt32Item(ATTR_VALUE_FORMAT,
                            pAttr->GetNumberFormat( pDoc->GetFormatTable() ) ) );
 
-            pNumberInfoItem.reset(mpViewShell->MakeNumberInfoItem(pDoc, &rViewData));
+            pNumberInfoItem.reset(ScTabViewShell::MakeNumberInfoItem(pDoc, &rViewData));
 
             mpItemSet->MergeRange(SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO);
             mpItemSet->Put(*pNumberInfoItem);

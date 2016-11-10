@@ -30,9 +30,7 @@ private:
 
 public:
     DbaccessDialogsTest();
-    virtual ~DbaccessDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~DbaccessDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ DbaccessDialogsTest::DbaccessDialogsTest()
 
 DbaccessDialogsTest::~DbaccessDialogsTest()
 {
-}
-
-void DbaccessDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void DbaccessDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)

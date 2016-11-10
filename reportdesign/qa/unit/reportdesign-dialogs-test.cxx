@@ -30,9 +30,7 @@ private:
 
 public:
     ReportdesignDialogsTest();
-    virtual ~ReportdesignDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~ReportdesignDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ ReportdesignDialogsTest::ReportdesignDialogsTest()
 
 ReportdesignDialogsTest::~ReportdesignDialogsTest()
 {
-}
-
-void ReportdesignDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void ReportdesignDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)

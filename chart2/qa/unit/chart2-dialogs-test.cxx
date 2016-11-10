@@ -30,9 +30,7 @@ private:
 
 public:
     Chart2DialogsTest();
-    virtual ~Chart2DialogsTest();
-
-    virtual void setUp() override;
+    virtual ~Chart2DialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ Chart2DialogsTest::Chart2DialogsTest()
 
 Chart2DialogsTest::~Chart2DialogsTest()
 {
-}
-
-void Chart2DialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void Chart2DialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)

@@ -30,9 +30,7 @@ private:
 
 public:
     VclDialogsTest();
-    virtual ~VclDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~VclDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ VclDialogsTest::VclDialogsTest()
 
 VclDialogsTest::~VclDialogsTest()
 {
-}
-
-void VclDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void VclDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)

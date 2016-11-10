@@ -30,9 +30,7 @@ private:
 
 public:
     StarmathDialogsTest();
-    virtual ~StarmathDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~StarmathDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ StarmathDialogsTest::StarmathDialogsTest()
 
 StarmathDialogsTest::~StarmathDialogsTest()
 {
-}
-
-void StarmathDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void StarmathDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)

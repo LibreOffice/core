@@ -30,9 +30,7 @@ private:
 
 public:
     BasctlDialogsTest();
-    virtual ~BasctlDialogsTest();
-
-    virtual void setUp() override;
+    virtual ~BasctlDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -48,11 +46,6 @@ BasctlDialogsTest::BasctlDialogsTest()
 
 BasctlDialogsTest::~BasctlDialogsTest()
 {
-}
-
-void BasctlDialogsTest::setUp()
-{
-    ScreenshotTest::setUp();
 }
 
 void BasctlDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
