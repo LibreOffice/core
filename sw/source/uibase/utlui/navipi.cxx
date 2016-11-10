@@ -233,7 +233,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
         bool* pbNext = new bool(false);
         Application::PostUserEvent(LINK(pView, SwView, MoveNavigationHdl), pbNext, true);
     }
-    if (sCommand == "forward")
+    else if (sCommand == "forward")
     {
         // #i75416# move the execution of the search to an asynchronously called static link
         bool* pbNext = new bool(true);
