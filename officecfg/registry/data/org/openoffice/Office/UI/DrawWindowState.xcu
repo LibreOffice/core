@@ -125,6 +125,16 @@
           <value xml:lang="en-US">Page Pane (no selection)</value>
         </prop>
       </node>
+      <node oor:name="private:resource/popupmenu/pagepanemaster" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Page Master Pane</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/pagepanenoselmaster" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Page Master Pane (no selection)</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/popupmenu/table" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Table</value>
