@@ -26,6 +26,7 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <set>
 #include <vector>
 
 /*
@@ -77,6 +78,9 @@ struct SignatureInformation
     OUString ouX509Certificate;
     OUString ouSignatureValue;
     css::util::DateTime stDateTime;
+
+    // XAdES EncapsulatedX509Certificate values
+    std::set<OUString> maEncapsulatedX509Certificates;
 
     //We also keep the date and time as string. This is done when this
     //structure is created as a result of a XML signature being read.

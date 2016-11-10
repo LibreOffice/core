@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -34,6 +34,7 @@ XSecParser::XSecParser(XSecController* pXSecController,
     , m_bInX509SerialNumber(false)
     , m_bInX509Certificate(false)
     , m_bInCertDigest(false)
+    , m_bInEncapsulatedX509Certificate(false)
     , m_bInDigestValue(false)
     , m_bInSignatureValue(false)
     , m_bInDate(false)
@@ -188,6 +189,16 @@ void SAL_CALL XSecParser::startElement(
             m_ouCertDigest.clear();
             m_bInCertDigest = true;
         }
+        // FIXME: Existing code here in xmlsecurity uses "xd" as the namespace prefix for XAdES,
+        // while the sample document attached to tdf#76142 uses "xades". So accept either here. Of
+        // course this is idiotic and wrong, the right thing would be to use a proper way to parse
+        // XML that would handle namespaces correctly. I have no idea how substantial re-plumbing of
+        // this code that would require.
+        else if (aName == "xd:EncapsulatedX509Certificate" || aName == "xades:EncapsulatedX509Certificate")
+        {
+            m_ouEncapsulatedX509Certificate.clear();
+            m_bInEncapsulatedX509Certificate = true;
+        }
         else if ( aName == "SignatureProperty" )
         {
             if (!ouIdAttr.isEmpty())
@@ -277,6 +288,11 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             m_pXSecController->setCertDigest( m_ouCertDigest );
             m_bInX509Certificate = false;
         }
+        else if (aName == "xd:EncapsulatedX509Certificate" || aName == "xades:EncapsulatedX509Certificate")
+        {
+            m_pXSecController->addEncapsulatedX509Certificate( m_ouEncapsulatedX509Certificate );
+            m_bInEncapsulatedX509Certificate = false;
+        }
         else if (aName == "dc:date")
         {
             m_pXSecController->setDate( m_ouDate );
@@ -342,6 +358,10 @@ void SAL_CALL XSecParser::characters( const OUString& aChars )
     else if (m_bInCertDigest)
     {
         m_ouCertDigest += aChars;
+    }
+    else if (m_bInEncapsulatedX509Certificate)
+    {
+        m_ouEncapsulatedX509Certificate += aChars;
     }
 
     if (m_xNextHandler.is())

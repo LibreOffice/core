@@ -294,6 +294,15 @@ void XSecController::setCertDigest(const OUString& rCertDigest)
     rInformation.signatureInfor.ouCertDigest = rCertDigest;
 }
 
+void XSecController::addEncapsulatedX509Certificate(const OUString& rEncapsulatedX509Certificate)
+{
+    if (m_vInternalSignatureInformations.empty())
+        return;
+
+    InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
+    rInformation.signatureInfor.maEncapsulatedX509Certificates.insert(rEncapsulatedX509Certificate);
+}
+
 void XSecController::setId( OUString& ouId )
 {
     if (m_vInternalSignatureInformations.empty())
