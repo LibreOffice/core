@@ -480,7 +480,6 @@ public:
 
     std::vector<Rectangle>  GetGlyphInkBoxes(uint16_t * pGid, uint16_t * pGidEnd) const /*override*/;
     ID2D1RenderTarget * GetRenderTarget() const { return mpRT; }
-    IDWriteFontFace   * GetDWriteFontFace(HDC) const;
     IDWriteFontFace   * GetFontFace() const { return mpFontFace; }
     float               GetEmHeight() const { return mlfEmHeight; }
 

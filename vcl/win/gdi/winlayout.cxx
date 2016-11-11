@@ -3531,24 +3531,6 @@ bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
     return (succeeded && nGlyphs >= 1 && pRectToErase);
 }
 
-IDWriteFontFace* D2DWriteTextOutRenderer::GetDWriteFontFace(HDC hDC) const
-{
-    IDWriteFontFace* pFontFace;
-    bool succeeded = false;
-    try
-    {
-        succeeded = SUCCEEDED(mpGdiInterop->CreateFontFaceFromHdc(hDC, &pFontFace));
-    }
-    catch (const std::exception& e)
-    {
-        SAL_WARN("vcl.gdi", "Error in dwrite while creating font face: " << e.what());
-        return nullptr;
-    }
-    if(succeeded)
-    return pFontFace;
-    else return nullptr;
-}
-
 bool D2DWriteTextOutRenderer::BindFont(HDC hDC)
 {
     // A TextOutRender can only be bound to one font at a time, so the
