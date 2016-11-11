@@ -224,7 +224,7 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
 
                 formula::DoubleVectorRefToken aTok(aArrays, nRequestedLength, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
                 mrGroupTokens.AddToken(aTok);
-                rScope.addRefMessage(mrPos, aRefPos, nRequestedLength, aArrays);
+                rScope.addRefMessage(mrPos, aAbs.aStart, nRequestedLength, aArrays);
 
                 if (nArrayLength && !aArrays.empty() && !mxFormulaGroupContext)
                 {
