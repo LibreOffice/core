@@ -3428,7 +3428,6 @@ SvxBrushItem::SvxBrushItem(SvStream& rStream, sal_uInt16 nVersion, sal_uInt16 _n
 
 SvxBrushItem::SvxBrushItem(const SvxBrushItem& rItem)
     : SfxPoolItem(rItem.Which())
-    , bLoadAgain(true)
 {
     *this = rItem;
 }
@@ -3675,6 +3674,7 @@ SvxBrushItem& SvxBrushItem::operator=(const SvxBrushItem& rItem)
     maStrLink = rItem.maStrLink;
     maStrFilter = rItem.maStrFilter;
     eGraphicPos = rItem.eGraphicPos;
+    bLoadAgain = rItem.bLoadAgain;
     return *this;
 }
 
