@@ -3428,9 +3428,6 @@ SvxBrushItem::SvxBrushItem(SvStream& rStream, sal_uInt16 nVersion, sal_uInt16 _n
 
 SvxBrushItem::SvxBrushItem(const SvxBrushItem& rItem)
     : SfxPoolItem(rItem.Which())
-    , nShadingValue(ShadingPattern::CLEAR)
-    , nGraphicTransparency(0)
-    , eGraphicPos(GPOS_NONE)
     , bLoadAgain(true)
 {
     *this = rItem;
