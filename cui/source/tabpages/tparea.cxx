@@ -270,7 +270,7 @@ void SvxAreaTabPage::Reset_Impl( const SfxItemSet* rAttrs )
 
 void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 {
-    FillType eFillType = static_cast<FillType>(maBox.GetCurrentButtonPos());
+    auto eFillType = maBox.GetCurrentButtonPos();
     switch(eFillType)
     {
         case SOLID:
