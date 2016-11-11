@@ -3248,130 +3248,81 @@ SfxPoolItem* SvxLineItem::Create( SvStream& rStrm, sal_uInt16 ) const
     return _pLine;
 }
 
-
 void SvxLineItem::SetLine( const SvxBorderLine* pNew )
 {
     delete pLine;
     pLine = pNew ? new SvxBorderLine( *pNew ) : nullptr;
 }
 
-
 #define LOAD_GRAPHIC    ((sal_uInt16)0x0001)
 #define LOAD_LINK       ((sal_uInt16)0x0002)
 #define LOAD_FILTER     ((sal_uInt16)0x0004)
 
-
-class SvxBrushItem_Impl
-{
-public:
-    std::unique_ptr<GraphicObject> xGraphicObject;
-    sal_Int8        nGraphicTransparency; //contains a percentage value which is
-                                          //copied to the GraphicObject when necessary
-    explicit SvxBrushItem_Impl(GraphicObject* p)
-        : xGraphicObject(p)
-        , nGraphicTransparency(0)
-    {
-    }
-};
-
-
-SvxBrushItem::SvxBrushItem( sal_uInt16 _nWhich ) :
-
-    SfxPoolItem( _nWhich ),
-
-    aColor           ( COL_TRANSPARENT ),
-    nShadingValue    ( ShadingPattern::CLEAR ),
-    pImpl            ( new SvxBrushItem_Impl( nullptr ) ),
-    maStrLink        (),
-    maStrFilter      (),
-    eGraphicPos      ( GPOS_NONE ),
-    bLoadAgain       ( true )
-
+SvxBrushItem::SvxBrushItem(sal_uInt16 _nWhich)
+    : SfxPoolItem(_nWhich)
+    , aColor(COL_TRANSPARENT)
+    , nShadingValue(ShadingPattern::CLEAR)
+    , nGraphicTransparency(0)
+    , eGraphicPos(GPOS_NONE)
+    , bLoadAgain(true)
 {
 }
 
-
-SvxBrushItem::SvxBrushItem( const Color& rColor, sal_uInt16 _nWhich) :
-
-    SfxPoolItem( _nWhich ),
-
-    aColor            ( rColor ),
-    nShadingValue     ( ShadingPattern::CLEAR ),
-    pImpl             ( new SvxBrushItem_Impl( nullptr ) ),
-    maStrLink         (),
-    maStrFilter       (),
-    eGraphicPos       ( GPOS_NONE ),
-    bLoadAgain        ( true )
-
+SvxBrushItem::SvxBrushItem(const Color& rColor, sal_uInt16 _nWhich)
+    : SfxPoolItem(_nWhich)
+    , aColor(rColor)
+    , nShadingValue(ShadingPattern::CLEAR)
+    , nGraphicTransparency(0)
+    , eGraphicPos(GPOS_NONE)
+    , bLoadAgain(true)
 {
 }
 
-
-SvxBrushItem::SvxBrushItem( const Graphic& rGraphic, SvxGraphicPosition ePos,
-                            sal_uInt16 _nWhich ) :
-
-    SfxPoolItem( _nWhich ),
-
-    aColor            ( COL_TRANSPARENT ),
-    nShadingValue     ( ShadingPattern::CLEAR ),
-    pImpl             ( new SvxBrushItem_Impl( new GraphicObject( rGraphic ) ) ),
-    maStrLink         (),
-    maStrFilter       (),
-    eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
-    bLoadAgain        ( true )
-
+SvxBrushItem::SvxBrushItem(const Graphic& rGraphic, SvxGraphicPosition ePos, sal_uInt16 _nWhich)
+    : SfxPoolItem(_nWhich)
+    , aColor(COL_TRANSPARENT)
+    , nShadingValue(ShadingPattern::CLEAR)
+    , xGraphicObject(new GraphicObject(rGraphic))
+    , nGraphicTransparency(0)
+    , eGraphicPos((GPOS_NONE != ePos) ? ePos : GPOS_MM)
+    , bLoadAgain(true)
 {
     DBG_ASSERT( GPOS_NONE != ePos, "SvxBrushItem-Ctor with GPOS_NONE == ePos" );
 }
 
-
-SvxBrushItem::SvxBrushItem( const GraphicObject& rGraphicObj,
-                            SvxGraphicPosition ePos, sal_uInt16 _nWhich ) :
-
-    SfxPoolItem( _nWhich ),
-
-    aColor            ( COL_TRANSPARENT ),
-    nShadingValue     ( ShadingPattern::CLEAR ),
-    pImpl             ( new SvxBrushItem_Impl( new GraphicObject( rGraphicObj ) ) ),
-    maStrLink         (),
-    maStrFilter       (),
-    eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
-    bLoadAgain        ( true )
-
+SvxBrushItem::SvxBrushItem(const GraphicObject& rGraphicObj, SvxGraphicPosition ePos, sal_uInt16 _nWhich)
+    : SfxPoolItem(_nWhich)
+    , aColor(COL_TRANSPARENT)
+    , nShadingValue(ShadingPattern::CLEAR)
+    , xGraphicObject(new GraphicObject(rGraphicObj))
+    , nGraphicTransparency(0)
+    , eGraphicPos((GPOS_NONE != ePos) ? ePos : GPOS_MM)
+    , bLoadAgain(true)
 {
     DBG_ASSERT( GPOS_NONE != ePos, "SvxBrushItem-Ctor with GPOS_NONE == ePos" );
 }
 
-
-SvxBrushItem::SvxBrushItem(
-    const OUString& rLink, const OUString& rFilter,
-    SvxGraphicPosition ePos, sal_uInt16 _nWhich ) :
-
-    SfxPoolItem( _nWhich ),
-
-    aColor            ( COL_TRANSPARENT ),
-    nShadingValue     ( ShadingPattern::CLEAR ),
-    pImpl             ( new SvxBrushItem_Impl( nullptr ) ),
-    maStrLink         ( rLink ),
-    maStrFilter       ( rFilter ),
-    eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
-    bLoadAgain        ( true )
-
+SvxBrushItem::SvxBrushItem(const OUString& rLink, const OUString& rFilter,
+                           SvxGraphicPosition ePos, sal_uInt16 _nWhich)
+    : SfxPoolItem(_nWhich)
+    , aColor(COL_TRANSPARENT)
+    , nShadingValue(ShadingPattern::CLEAR)
+    , nGraphicTransparency(0)
+    , maStrLink(rLink)
+    , maStrFilter(rFilter)
+    , eGraphicPos((GPOS_NONE != ePos) ? ePos : GPOS_MM)
+    , bLoadAgain(true)
 {
     DBG_ASSERT( GPOS_NONE != ePos, "SvxBrushItem-Ctor with GPOS_NONE == ePos" );
 }
 
-
-SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
-                            sal_uInt16 _nWhich )
-    : SfxPoolItem( _nWhich )
-    , aColor            ( COL_TRANSPARENT )
-    , nShadingValue     ( ShadingPattern::CLEAR )
-    , pImpl             ( new SvxBrushItem_Impl( nullptr ) )
-    , maStrLink         ()
-    , maStrFilter       ()
-    , eGraphicPos       ( GPOS_NONE )
-    , bLoadAgain (false)
+SvxBrushItem::SvxBrushItem(SvStream& rStream, sal_uInt16 nVersion, sal_uInt16 _nWhich)
+    : SfxPoolItem(_nWhich)
+    , aColor(COL_TRANSPARENT)
+    , nShadingValue(ShadingPattern::CLEAR)
+    , nGraphicTransparency(0)
+    , eGraphicPos(GPOS_NONE)
+    , bLoadAgain(false)
 {
     bool bTrans;
     Color aTempColor;
@@ -3441,7 +3392,7 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
             Graphic aGraphic;
 
             ReadGraphic( rStream, aGraphic );
-            pImpl->xGraphicObject.reset(new GraphicObject(aGraphic));
+            xGraphicObject.reset(new GraphicObject(aGraphic));
 
             if( SVSTREAM_FILEFORMAT_ERROR == rStream.GetError() )
             {
@@ -3475,17 +3426,12 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
     }
 }
 
-
-SvxBrushItem::SvxBrushItem( const SvxBrushItem& rItem ) :
-
-    SfxPoolItem( rItem.Which() ),
-    nShadingValue     ( ShadingPattern::CLEAR ),
-    pImpl             ( new SvxBrushItem_Impl( nullptr ) ),
-    maStrLink         (),
-    maStrFilter       (),
-    eGraphicPos       ( GPOS_NONE ),
-    bLoadAgain        ( true )
-
+SvxBrushItem::SvxBrushItem(const SvxBrushItem& rItem)
+    : SfxPoolItem(rItem.Which())
+    , nShadingValue(ShadingPattern::CLEAR)
+    , nGraphicTransparency(0)
+    , eGraphicPos(GPOS_NONE)
+    , bLoadAgain(true)
 {
     *this = rItem;
 }
@@ -3544,12 +3490,12 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             OUString sLink;
             if ( !maStrLink.isEmpty() )
                 sLink = maStrLink;
-            else if (pImpl->xGraphicObject)
+            else if (xGraphicObject)
             {
                 OUString sPrefix(
                     UNO_NAME_GRAPHOBJ_URLPREFIX);
                 OUString sId(OStringToOUString(
-                    pImpl->xGraphicObject->GetUniqueID(),
+                    xGraphicObject->GetUniqueID(),
                     RTL_TEXTENCODING_ASCII_US));
                 sLink = sPrefix + sId;
             }
@@ -3564,7 +3510,7 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
 
         case MID_GRAPHIC_TRANSPARENCY:
-            rVal <<= pImpl->nGraphicTransparency;
+            rVal <<= nGraphicTransparency;
         break;
 
         case MID_SHADING_VALUE:
@@ -3643,8 +3589,8 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     maStrLink.clear();
                     OString sId(OUStringToOString(sLink.copy( sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1 ),
                                                   RTL_TEXTENCODING_ASCII_US));
-                    std::unique_ptr<GraphicObject> xOldGrfObj(std::move(pImpl->xGraphicObject));
-                    pImpl->xGraphicObject.reset(new GraphicObject(sId));
+                    std::unique_ptr<GraphicObject> xOldGrfObj(std::move(xGraphicObject));
+                    xGraphicObject.reset(new GraphicObject(sId));
                     ApplyGraphicTransparency_Impl();
                     xOldGrfObj.reset();
                 }
@@ -3676,8 +3622,8 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             rVal >>= nTmp;
             if(nTmp >= 0 && nTmp <= 100)
             {
-                pImpl->nGraphicTransparency = sal_Int8(nTmp);
-                if (pImpl->xGraphicObject)
+                nGraphicTransparency = sal_Int8(nTmp);
+                if (xGraphicObject)
                     ApplyGraphicTransparency_Impl();
             }
         }
@@ -3728,7 +3674,7 @@ SvxBrushItem& SvxBrushItem::operator=(const SvxBrushItem& rItem)
     aColor = rItem.aColor;
     eGraphicPos = rItem.eGraphicPos;
 
-    pImpl->xGraphicObject.reset();
+    xGraphicObject.reset();
     maStrLink.clear();
     maStrFilter.clear();
 
@@ -3736,15 +3682,15 @@ SvxBrushItem& SvxBrushItem::operator=(const SvxBrushItem& rItem)
     {
         maStrLink = rItem.maStrLink;
         maStrFilter = rItem.maStrFilter;
-        if (rItem.pImpl->xGraphicObject)
+        if (rItem.xGraphicObject)
         {
-            pImpl->xGraphicObject.reset(new GraphicObject(*rItem.pImpl->xGraphicObject));
+            xGraphicObject.reset(new GraphicObject(*rItem.xGraphicObject));
         }
     }
 
     nShadingValue = rItem.nShadingValue;
 
-    pImpl->nGraphicTransparency = rItem.pImpl->nGraphicTransparency;
+    nGraphicTransparency = rItem.nGraphicTransparency;
     return *this;
 }
 
@@ -3755,7 +3701,7 @@ bool SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxBrushItem& rCmp = static_cast<const SvxBrushItem&>(rAttr);
     bool bEqual = ( aColor == rCmp.aColor && eGraphicPos == rCmp.eGraphicPos &&
-        pImpl->nGraphicTransparency == rCmp.pImpl->nGraphicTransparency);
+        nGraphicTransparency == rCmp.nGraphicTransparency);
 
     if ( bEqual )
     {
@@ -3770,11 +3716,11 @@ bool SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
 
             if ( bEqual )
             {
-                if (!rCmp.pImpl->xGraphicObject)
-                    bEqual = !pImpl->xGraphicObject;
+                if (!rCmp.xGraphicObject)
+                    bEqual = !xGraphicObject;
                 else
-                    bEqual = pImpl->xGraphicObject &&
-                             (*pImpl->xGraphicObject == *rCmp.pImpl->xGraphicObject);
+                    bEqual = xGraphicObject &&
+                             (*xGraphicObject == *rCmp.xGraphicObject);
             }
         }
 
@@ -3809,7 +3755,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
 
     sal_uInt16 nDoLoad = 0;
 
-    if (pImpl->xGraphicObject && maStrLink.isEmpty())
+    if (xGraphicObject && maStrLink.isEmpty())
         nDoLoad |= LOAD_GRAPHIC;
     if ( !maStrLink.isEmpty() )
         nDoLoad |= LOAD_LINK;
@@ -3817,8 +3763,8 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
         nDoLoad |= LOAD_FILTER;
     rStream.WriteUInt16( nDoLoad );
 
-    if (pImpl->xGraphicObject && maStrLink.isEmpty())
-        WriteGraphic(rStream, pImpl->xGraphicObject->GetGraphic());
+    if (xGraphicObject && maStrLink.isEmpty())
+        WriteGraphic(rStream, xGraphicObject->GetGraphic());
     if ( !maStrLink.isEmpty() )
     {
         OSL_FAIL("No BaseURL!");
@@ -3838,7 +3784,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
 
 const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) const
 {
-    if (bLoadAgain && !maStrLink.isEmpty() && !pImpl->xGraphicObject)
+    if (bLoadAgain && !maStrLink.isEmpty() && !xGraphicObject)
     // when graphics already loaded, use as a cache
     {
         if (SvtSecurityOptions().isUntrustedReferer(referer)) {
@@ -3887,8 +3833,8 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
         // tdf#94088 when we got a graphic, set it
         if(bGraphicLoaded && GraphicType::NONE != aGraphic.GetType())
         {
-            pImpl->xGraphicObject.reset(new GraphicObject);
-            pImpl->xGraphicObject->SetGraphic(aGraphic);
+            xGraphicObject.reset(new GraphicObject);
+            xGraphicObject->SetGraphic(aGraphic);
             const_cast < SvxBrushItem*> (this)->ApplyGraphicTransparency_Impl();
         }
         else
@@ -3897,24 +3843,17 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
         }
     }
 
-    return pImpl->xGraphicObject.get();
+    return xGraphicObject.get();
 }
-
-sal_Int8 SvxBrushItem::getGraphicTransparency() const
-{
-    return pImpl->nGraphicTransparency;
-}
-
 
 void SvxBrushItem::setGraphicTransparency(sal_Int8 nNew)
 {
-    if(nNew != pImpl->nGraphicTransparency)
+    if (nNew != nGraphicTransparency)
     {
-        pImpl->nGraphicTransparency = nNew;
+        nGraphicTransparency = nNew;
         ApplyGraphicTransparency_Impl();
     }
 }
-
 
 const Graphic* SvxBrushItem::GetGraphic(OUString const & referer) const
 {
@@ -3922,35 +3861,33 @@ const Graphic* SvxBrushItem::GetGraphic(OUString const & referer) const
     return( pGrafObj ? &( pGrafObj->GetGraphic() ) : nullptr );
 }
 
-
 void SvxBrushItem::SetGraphicPos( SvxGraphicPosition eNew )
 {
     eGraphicPos = eNew;
 
     if ( GPOS_NONE == eGraphicPos )
     {
-        pImpl->xGraphicObject.reset();
+        xGraphicObject.reset();
         maStrLink.clear();
         maStrFilter.clear();
     }
     else
     {
-        if (!pImpl->xGraphicObject && maStrLink.isEmpty())
+        if (!xGraphicObject && maStrLink.isEmpty())
         {
-            pImpl->xGraphicObject.reset(new GraphicObject); // Creating a dummy
+            xGraphicObject.reset(new GraphicObject); // Creating a dummy
         }
     }
 }
-
 
 void SvxBrushItem::SetGraphic( const Graphic& rNew )
 {
     if ( maStrLink.isEmpty() )
     {
-        if (pImpl->xGraphicObject)
-            pImpl->xGraphicObject->SetGraphic(rNew);
+        if (xGraphicObject)
+            xGraphicObject->SetGraphic(rNew);
         else
-            pImpl->xGraphicObject.reset(new GraphicObject(rNew));
+            xGraphicObject.reset(new GraphicObject(rNew));
 
         ApplyGraphicTransparency_Impl();
 
@@ -3962,16 +3899,15 @@ void SvxBrushItem::SetGraphic( const Graphic& rNew )
         OSL_FAIL( "SetGraphic() on linked graphic! :-/" );
     }
 }
-
 
 void SvxBrushItem::SetGraphicObject( const GraphicObject& rNewObj )
 {
     if ( maStrLink.isEmpty() )
     {
-        if (pImpl->xGraphicObject)
-            *pImpl->xGraphicObject = rNewObj;
+        if (xGraphicObject)
+            *xGraphicObject = rNewObj;
         else
-            pImpl->xGraphicObject.reset(new GraphicObject(rNewObj));
+            xGraphicObject.reset(new GraphicObject(rNewObj));
 
         ApplyGraphicTransparency_Impl();
 
@@ -3983,7 +3919,6 @@ void SvxBrushItem::SetGraphicObject( const GraphicObject& rNewObj )
         OSL_FAIL( "SetGraphic() on linked graphic! :-/" );
     }
 }
-
 
 void SvxBrushItem::SetGraphicLink( const OUString& rNew )
 {
@@ -3992,7 +3927,7 @@ void SvxBrushItem::SetGraphicLink( const OUString& rNew )
     else
     {
         maStrLink = rNew;
-        pImpl->xGraphicObject.reset();
+        xGraphicObject.reset();
     }
 }
 
@@ -4046,14 +3981,11 @@ WallpaperStyle SvxBrushItem::GraphicPos2WallpaperStyle( SvxGraphicPosition ePos 
     return eResult;
 }
 
-
-SvxBrushItem::SvxBrushItem( const CntWallpaperItem& rItem, sal_uInt16 _nWhich ) :
-    SfxPoolItem    ( _nWhich ),
-    nShadingValue  ( ShadingPattern::CLEAR ),
-    pImpl          ( new SvxBrushItem_Impl( nullptr ) ),
-    maStrLink      (),
-    maStrFilter    (),
-    bLoadAgain     ( true )
+SvxBrushItem::SvxBrushItem(const CntWallpaperItem& rItem, sal_uInt16 _nWhich)
+    : SfxPoolItem(_nWhich)
+    , nShadingValue(ShadingPattern::CLEAR)
+    , nGraphicTransparency(0)
+    , bLoadAgain(true)
 {
     aColor = rItem.GetColor();
 
@@ -4070,13 +4002,13 @@ SvxBrushItem::SvxBrushItem( const CntWallpaperItem& rItem, sal_uInt16 _nWhich ) 
 
 void SvxBrushItem::ApplyGraphicTransparency_Impl()
 {
-    DBG_ASSERT(pImpl->xGraphicObject, "no GraphicObject available" );
-    if (pImpl->xGraphicObject)
+    DBG_ASSERT(xGraphicObject, "no GraphicObject available" );
+    if (xGraphicObject)
     {
-        GraphicAttr aAttr(pImpl->xGraphicObject->GetAttr());
+        GraphicAttr aAttr(xGraphicObject->GetAttr());
         aAttr.SetTransparency(lcl_PercentToTransparency(
-                            pImpl->nGraphicTransparency));
-        pImpl->xGraphicObject->SetAttr(aAttr);
+                            nGraphicTransparency));
+        xGraphicObject->SetAttr(aAttr);
     }
 }
 

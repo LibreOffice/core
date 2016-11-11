@@ -42,12 +42,13 @@ enum SvxGraphicPosition
     GPOS_AREA, GPOS_TILED
 };
 
-class SvxBrushItem_Impl;
 class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
 {
     Color               aColor;
     sal_Int32           nShadingValue;
-    std::unique_ptr<SvxBrushItem_Impl>  pImpl;
+    mutable std::unique_ptr<GraphicObject> xGraphicObject;
+    sal_Int8            nGraphicTransparency; //contains a percentage value which is
+                                              //copied to the GraphicObject when necessary
     OUString            maStrLink;
     OUString            maStrFilter;
     SvxGraphicPosition  eGraphicPos;
@@ -104,7 +105,7 @@ public:
     const OUString&         GetGraphicFilter() const    { return maStrFilter; }
 
     //UUUU get graphic transparency in percent
-    sal_Int8 getGraphicTransparency() const;
+    sal_Int8 getGraphicTransparency() const { return nGraphicTransparency; }
     void setGraphicTransparency(sal_Int8 nNew);
 
     void                SetGraphicPos( SvxGraphicPosition eNew );
