@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_89440975",
+        "filename": "sc/source/filter/excel/xeview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T13:00:58Z",
+      "side": 1,
+      "message": "This comment rather belongs into the commit message instead of the source code. I\u0027ll upload an amended commit.",
+      "revId": "b39f7eef51b73d5b9639586609caa2c9bfb5312d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
