@@ -254,7 +254,7 @@ protected:
 
             if ( bCreate )
             {
-                std::ofstream aStream( aFileName.getStr(), std::ofstream::out );
+                std::ofstream aStream( aFileName.getStr(), std::ofstream::out | std::ofstream::binary );
                 aStream << aString;
                 aStream.close();
             }
