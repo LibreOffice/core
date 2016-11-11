@@ -957,8 +957,15 @@ static bool lcl_PutString(
 {
     ScDocument* pDoc = &rDocImport.getDoc();
     bool bMultiLine = false;
-    if ( nColFormat == SC_COL_SKIP || rStr.isEmpty() || !ValidCol(nCol) || !ValidRow(nRow) )
+    if ( nColFormat == SC_COL_SKIP || !ValidCol(nCol) || !ValidRow(nRow) )
         return bMultiLine;
+    if ( rStr.isEmpty() ) {
+        if ( bUseDocImport )
+            rDocImport.setAutoInput(ScAddress(nCol, nRow, nTab), rStr );
+        else
+            pDoc->SetString( nCol, nRow, nTab, rStr );
+        return false;
+    }
 
     if ( nColFormat == SC_COL_TEXT )
     {
