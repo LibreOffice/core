@@ -1,0 +1,193 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_94ab4089",
+        "filename": "sc/source/ui/inc/cellsh.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T19:34:46Z",
+      "side": 1,
+      "message": "Actually naming parameters can ease reading code. What is that Window for? Ah, pFrameWin, so it probably is a frame window ...",
+      "revId": "cb5ce58592f3be7f64da3d4e5ea5b06a7b84d506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_d4ce9882",
+        "filename": "sc/source/ui/inc/cellsh.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T19:34:46Z",
+      "side": 1,
+      "message": "Rather place all non-static member functions before static member functions.",
+      "revId": "cb5ce58592f3be7f64da3d4e5ea5b06a7b84d506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_94b420f3",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T19:34:46Z",
+      "side": 1,
+      "message": "The comment is quite meaningless. That this was implemented for bug 46200 can be deduced from git annotate, rather comment what is done or why.",
+      "revId": "cb5ce58592f3be7f64da3d4e5ea5b06a7b84d506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_b4b91cec",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T19:34:46Z",
+      "side": 1,
+      "message": "GetFrameWin() is a non-static member function so should not be called with ScCellShell:: prefixed.",
+      "range": {
+        "startLine": 130,
+        "startChar": 32,
+        "endLine": 130,
+        "endChar": 45
+      },
+      "revId": "cb5ce58592f3be7f64da3d4e5ea5b06a7b84d506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_74a6a4c2",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T19:34:46Z",
+      "side": 1,
+      "message": "We prefer a blank between if and parenthesis, so\n\n if (...\n\ninstead of\n\n if(...",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 7
+      },
+      "revId": "cb5ce58592f3be7f64da3d4e5ea5b06a7b84d506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_14c9f078",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T19:34:46Z",
+      "side": 1,
+      "message": "Use nRepeat instead of 1",
+      "range": {
+        "startLine": 140,
+        "startChar": 40,
+        "endLine": 140,
+        "endChar": 41
+      },
+      "revId": "cb5ce58592f3be7f64da3d4e5ea5b06a7b84d506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_f4cb9470",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T19:34:46Z",
+      "side": 1,
+      "message": "Use -nRepeat instead of -1",
+      "range": {
+        "startLine": 151,
+        "startChar": 40,
+        "endLine": 151,
+        "endChar": 42
+      },
+      "revId": "cb5ce58592f3be7f64da3d4e5ea5b06a7b84d506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_34c6ec67",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T19:34:46Z",
+      "side": 1,
+      "message": "Use static_cast\u003cSCsCOL\u003e(-nRepeat * nRTLSign) instead of -1, so if the sheet has RTL layout the scroll direction is correct.",
+      "range": {
+        "startLine": 162,
+        "startChar": 40,
+        "endLine": 162,
+        "endChar": 42
+      },
+      "revId": "cb5ce58592f3be7f64da3d4e5ea5b06a7b84d506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_54a1a8a8",
+        "filename": "sc/source/ui/view/cellsh4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T19:34:46Z",
+      "side": 1,
+      "message": "Use static_cast\u003cSCsCOL\u003e(nRepeat * nRTLSign) instead of 1, so if the sheet has RTL layout the scroll direction is correct.",
+      "range": {
+        "startLine": 173,
+        "startChar": 40,
+        "endLine": 173,
+        "endChar": 41
+      },
+      "revId": "cb5ce58592f3be7f64da3d4e5ea5b06a7b84d506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
