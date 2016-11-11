@@ -159,8 +159,8 @@ private:
     OUString                                                                  maLastFormat;
     mutable css::uno::Reference< css::datatransfer::clipboard::XClipboard >   mxClipboard;
     css::uno::Reference< css::frame::XTerminateListener >                     mxTerminateListener;
-    DataFlavorExVector*                                                       mpFormats;
-    TransferableObjectDescriptor*                                             mpObjDesc;
+    std::unique_ptr<DataFlavorExVector>                                       mxFormats;
+    std::unique_ptr<TransferableObjectDescriptor>                             mxObjDesc;
 
 protected:
     inline const css::uno::Reference< css::datatransfer::clipboard::XClipboard >&
@@ -211,8 +211,6 @@ private:
     SVT_DLLPRIVATE void             ImplFlush();
 
 protected:
-
-    virtual             ~TransferableHelper() override;
 
     void                AddFormat( SotClipboardFormatId nFormat );
     void                AddFormat( const css::datatransfer::DataFlavor& rFlavor );
@@ -271,9 +269,9 @@ private:
 
     css::uno::Reference< css::datatransfer::XTransferable >           mxTransfer;
     css::uno::Reference< css::datatransfer::clipboard::XClipboard >   mxClipboard;
-    DataFlavorExVector*                                               mpFormats;
-    TransferableObjectDescriptor*                                     mpObjDesc;
-    std::unique_ptr<TransferableDataHelper_Impl>                      mpImpl;
+    std::unique_ptr<DataFlavorExVector>                               mxFormats;
+    std::unique_ptr<TransferableObjectDescriptor>                     mxObjDesc;
+    std::unique_ptr<TransferableDataHelper_Impl>                      mxImpl;
 
 protected:
     void                        InitFormats();
@@ -301,7 +299,7 @@ public:
     SotClipboardFormatId           GetFormat( sal_uInt32 nFormat ) const;
     css::datatransfer::DataFlavor  GetFormatDataFlavor( sal_uInt32 nFormat ) const;
 
-    DataFlavorExVector&         GetDataFlavorExVector() const {return *mpFormats; }
+    DataFlavorExVector&         GetDataFlavorExVector() const {return *mxFormats; }
 
     bool                        StartClipboardListening( );
     void                        StopClipboardListening( );
