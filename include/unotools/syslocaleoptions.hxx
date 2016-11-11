@@ -43,8 +43,7 @@ namespace osl { class Mutex; }
 
 class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSysLocaleOptions : public utl::detail::Options
 {
-    static  SvtSysLocaleOptions_Impl*   pOptions;
-    static  sal_Int32                   nRefCount;
+    std::shared_ptr<SvtSysLocaleOptions_Impl>  pImpl;
 
     UNOTOOLS_DLLPRIVATE static  ::osl::Mutex&       GetMutex();
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 nHint ) override;

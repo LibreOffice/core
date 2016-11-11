@@ -38,10 +38,9 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-SvtSysLocaleOptions_Impl*   SvtSysLocaleOptions::pOptions = nullptr;
-sal_Int32                   SvtSysLocaleOptions::nRefCount = 0;
 namespace
 {
+    std::weak_ptr<SvtSysLocaleOptions_Impl> g_pSysLocaleOptions;
     struct CurrencyChangeLink
         : public rtl::Static<Link<LinkParamNone*,void>, CurrencyChangeLink> {};
 }
@@ -513,25 +512,22 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNa
 SvtSysLocaleOptions::SvtSysLocaleOptions()
 {
     MutexGuard aGuard( GetMutex() );
-    if ( !pOptions )
+    pImpl = g_pSysLocaleOptions.lock();
+    if ( !pImpl )
     {
-        pOptions = new SvtSysLocaleOptions_Impl;
+        pImpl = std::make_shared<SvtSysLocaleOptions_Impl>();
+        g_pSysLocaleOptions = pImpl;
         if (!utl::ConfigManager::IsAvoidConfig())
             ItemHolder1::holdConfigItem(E_SYSLOCALEOPTIONS);
     }
-    ++nRefCount;
-    pOptions->AddListener(this);
+    pImpl->AddListener(this);
 }
 
 SvtSysLocaleOptions::~SvtSysLocaleOptions()
 {
     MutexGuard aGuard( GetMutex() );
-    pOptions->RemoveListener(this);
-    if ( !--nRefCount )
-    {
-        delete pOptions;
-        pOptions = nullptr;
-    }
+    pImpl->RemoveListener(this);
+    pImpl.reset();
 }
 
 // static
@@ -555,91 +551,91 @@ Mutex& SvtSysLocaleOptions::GetMutex()
 bool SvtSysLocaleOptions::IsModified()
 {
     MutexGuard aGuard( GetMutex() );
-    return pOptions->IsModified();
+    return pImpl->IsModified();
 }
 
 void SvtSysLocaleOptions::Commit()
 {
     MutexGuard aGuard( GetMutex() );
-    pOptions->Commit();
+    pImpl->Commit();
 }
 
 void SvtSysLocaleOptions::BlockBroadcasts( bool bBlock )
 {
     MutexGuard aGuard( GetMutex() );
-    pOptions->BlockBroadcasts( bBlock );
+    pImpl->BlockBroadcasts( bBlock );
 }
 
 const OUString& SvtSysLocaleOptions::GetLocaleConfigString() const
 {
     MutexGuard aGuard( GetMutex() );
-    return pOptions->GetLocaleString();
+    return pImpl->GetLocaleString();
 }
 
 void SvtSysLocaleOptions::SetLocaleConfigString( const OUString& rStr )
 {
     MutexGuard aGuard( GetMutex() );
-    pOptions->SetLocaleString( rStr );
+    pImpl->SetLocaleString( rStr );
 }
 
 void SvtSysLocaleOptions::SetUILocaleConfigString( const OUString& rStr )
 {
     MutexGuard aGuard( GetMutex() );
-    pOptions->SetUILocaleString( rStr );
+    pImpl->SetUILocaleString( rStr );
 }
 
 const OUString& SvtSysLocaleOptions::GetCurrencyConfigString() const
 {
     MutexGuard aGuard( GetMutex() );
-    return pOptions->GetCurrencyString();
+    return pImpl->GetCurrencyString();
 }
 
 void SvtSysLocaleOptions::SetCurrencyConfigString( const OUString& rStr )
 {
     MutexGuard aGuard( GetMutex() );
-    pOptions->SetCurrencyString( rStr );
+    pImpl->SetCurrencyString( rStr );
 }
 
 const OUString& SvtSysLocaleOptions::GetDatePatternsConfigString() const
 {
     MutexGuard aGuard( GetMutex() );
-    return pOptions->GetDatePatternsString();
+    return pImpl->GetDatePatternsString();
 }
 
 void SvtSysLocaleOptions::SetDatePatternsConfigString( const OUString& rStr )
 {
     MutexGuard aGuard( GetMutex() );
-    pOptions->SetDatePatternsString( rStr );
+    pImpl->SetDatePatternsString( rStr );
 }
 
 bool SvtSysLocaleOptions::IsDecimalSeparatorAsLocale() const
 {
     MutexGuard aGuard( GetMutex() );
-    return pOptions->IsDecimalSeparatorAsLocale();
+    return pImpl->IsDecimalSeparatorAsLocale();
 }
 
 void SvtSysLocaleOptions::SetDecimalSeparatorAsLocale( bool bSet)
 {
     MutexGuard aGuard( GetMutex() );
-    pOptions->SetDecimalSeparatorAsLocale(bSet);
+    pImpl->SetDecimalSeparatorAsLocale(bSet);
 }
 
 bool SvtSysLocaleOptions::IsIgnoreLanguageChange() const
 {
     MutexGuard aGuard( GetMutex() );
-    return pOptions->IsIgnoreLanguageChange();
+    return pImpl->IsIgnoreLanguageChange();
 }
 
 void SvtSysLocaleOptions::SetIgnoreLanguageChange( bool bSet)
 {
     MutexGuard aGuard( GetMutex() );
-    pOptions->SetIgnoreLanguageChange(bSet);
+    pImpl->SetIgnoreLanguageChange(bSet);
 }
 
 bool SvtSysLocaleOptions::IsReadOnly( EOption eOption ) const
 {
     MutexGuard aGuard( GetMutex() );
-    return pOptions->IsReadOnly( eOption );
+    return pImpl->IsReadOnly( eOption );
 }
 
 // static
@@ -711,12 +707,12 @@ LanguageTag SvtSysLocaleOptions::GetLanguageTag() const
 
 const LanguageTag & SvtSysLocaleOptions::GetRealLanguageTag() const
 {
-    return pOptions->GetRealLocale();
+    return pImpl->GetRealLocale();
 }
 
 const LanguageTag & SvtSysLocaleOptions::GetRealUILanguageTag() const
 {
-    return pOptions->GetRealUILocale();
+    return pImpl->GetRealUILocale();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
