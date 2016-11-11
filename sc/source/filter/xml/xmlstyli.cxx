@@ -699,17 +699,17 @@ XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx ,
         const OUString& rLName ,
         const uno::Reference< XAttributeList > & xAttrList,
-        const bool bTempAutoStyles ) :
-    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
-    sCellStyleServiceName( OUString( "com.sun.star.style.CellStyle" )),
-    sColumnStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),
-    sRowStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME )),
-    sTableStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )),
-    nNumberFormatIndex(-1),
-    nConditionalFormatIndex(-1),
-    nCellStyleIndex(-1),
-    nMasterPageNameIndex(-1),
-    bAutoStyles(bTempAutoStyles)
+        const bool bTempAutoStyles )
+    : SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
+    , sCellStyleServiceName("com.sun.star.style.CellStyle")
+    , sColumnStyleServiceName(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME)
+    , sRowStyleServiceName(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)
+    , sTableStyleServiceName(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME)
+    , nNumberFormatIndex(-1)
+    , nConditionalFormatIndex(-1)
+    , nCellStyleIndex(-1)
+    , nMasterPageNameIndex(-1)
+    , bAutoStyles(bTempAutoStyles)
 {
 }
 
@@ -791,8 +791,7 @@ uno::Reference < XNameContainer >
                 if( xTableStyles.is() )
                     xStyles.set(xTableStyles);
                 else
-                    sName =
-                        OUString( OUString( "TableStyles" ));
+                    sName = "TableStyles";
             }
             break;
             case XML_STYLE_FAMILY_TABLE_CELL:
@@ -800,8 +799,7 @@ uno::Reference < XNameContainer >
                 if( xCellStyles.is() )
                     xStyles.set(xCellStyles);
                 else
-                    sName =
-                        OUString( OUString( "CellStyles" ));
+                    sName = "CellStyles";
             }
             break;
             case XML_STYLE_FAMILY_TABLE_COLUMN:
@@ -809,8 +807,7 @@ uno::Reference < XNameContainer >
                 if( xColumnStyles.is() )
                     xStyles.set(xColumnStyles);
                 else
-                    sName =
-                        OUString( OUString( "ColumnStyles" ));
+                    sName = "ColumnStyles";
             }
             break;
             case XML_STYLE_FAMILY_TABLE_ROW:
@@ -818,8 +815,7 @@ uno::Reference < XNameContainer >
                 if( xRowStyles.is() )
                     xStyles.set(xRowStyles);
                 else
-                    sName =
-                        OUString( OUString( "RowStyles" ));
+                    sName = "RowStyles";
             }
             break;
         }
