@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_548fe822",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-11-11T20:16:15Z",
+      "side": 1,
+      "message": "Trailing space",
+      "range": {
+        "startLine": 962,
+        "startChar": 25,
+        "endLine": 962,
+        "endChar": 27
+      },
+      "revId": "ea35709a7cd926f97a15d38a7f05a5510d1d342e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_7494e436",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-11-11T20:16:15Z",
+      "side": 1,
+      "message": "And return false (non-multiline) after this?",
+      "range": {
+        "startLine": 963,
+        "startChar": 54,
+        "endLine": 963,
+        "endChar": 56
+      },
+      "revId": "ea35709a7cd926f97a15d38a7f05a5510d1d342e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
