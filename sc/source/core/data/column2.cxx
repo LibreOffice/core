@@ -46,6 +46,7 @@
 #include "progress.hxx"
 #include "scmatrix.hxx"
 #include <rowheightcontext.hxx>
+#include <tokenstringcontext.hxx>
 
 #include <editeng/eeitem.hxx>
 
@@ -1568,6 +1569,10 @@ namespace {
 
 struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, void>
 {
+    const ScDocument* mpDoc;
+
+    FormulaGroupDumper( const ScDocument* pDoc ) : mpDoc(pDoc) {}
+
     void operator() (const sc::CellStoreType::value_type& rNode) const
     {
         if (rNode.type != sc::element_type_formula)
@@ -1597,6 +1602,7 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
 
             SCROW nLen = pCell->GetSharedLength();
             cout << "    * group: start=" << pCell->aPos.Row() << ", length=" << nLen << endl;
+            printFormula(pCell);
             printResult(pCell);
 
             if (nLen > 1)
@@ -1608,6 +1614,13 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
                 }
             }
         }
+    }
+
+    void printFormula(const ScFormulaCell* pCell) const
+    {
+        sc::TokenStringContext aCxt(mpDoc, mpDoc->GetGrammar());
+        OUString aFormula = pCell->GetCode()->CreateString(aCxt, pCell->aPos);
+        cout << "    * formula: " << aFormula << endl;
     }
 
     void printResult(const ScFormulaCell* pCell) const
@@ -1639,7 +1652,7 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
 void ScColumn::DumpFormulaGroups() const
 {
     cout << "-- table: " << nTab << "; column: " << nCol << endl;
-    std::for_each(maCells.begin(), maCells.end(), FormulaGroupDumper());
+    std::for_each(maCells.begin(), maCells.end(), FormulaGroupDumper(pDocument));
     cout << "--" << endl;
 }
 #endif
