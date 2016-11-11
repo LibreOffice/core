@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_94e7c0e3",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T21:41:14Z",
+      "side": 1,
+      "message": "Also the bUseDocImport case needs to be handled. Which here means, execute pDoc-\u003eSetString() only if (!bUseDocImport), else return without doing anything. The latter (doing nothing) is possible because bUseDocImport is used when importing to a fresh document or sheet so the corresponding cell is empty anyway.\n\nThe SetString() ScSetStringParam* is defaulted to nullptr so doesn\u0027t need to be given, but using NULL instead of nullptr is wrong and some clang plugin checks that and reported the error in the linux_clang_dbgutil_64 Jenkins build. Best omit the defaulted argument here.",
+      "revId": "ff7d1303dcc952beb5906c97ab94b2a4fe983fb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
