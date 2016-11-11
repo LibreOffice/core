@@ -70,7 +70,7 @@ namespace bib
         virtual void    Resize() override;
 
     public:
-                            BibView( vcl::Window* _pParent, BibDataManager* _pDatMan, WinBits nStyle = WB_3DLOOK );
+                            BibView( vcl::Window* _pParent, BibDataManager* _pDatMan, WinBits nStyle );
                             virtual ~BibView() override;
         virtual void        dispose() override;
 

@@ -55,14 +55,14 @@ inline vcl::Window* BibShortCutHandler::GetWindow()
 class BibWindow : public vcl::Window, public BibShortCutHandler
 {
 public:
-                            BibWindow( vcl::Window* pParent,WinBits nStyle = WB_3DLOOK);
+                            BibWindow( vcl::Window* pParent, WinBits nStyle);
     virtual                 ~BibWindow() override;
 };
 
 class BibSplitWindow : public SplitWindow, public BibShortCutHandler
 {
 public:
-                            BibSplitWindow( vcl::Window* pParent,WinBits nStyle = WB_3DLOOK);
+                            BibSplitWindow( vcl::Window* pParent, WinBits nStyle);
 };
 
 #endif

@@ -122,8 +122,8 @@ public:
         const css::uno::Reference< css::drawing::XShapes >& rxSelectedShapes,
         const css::uno::Reference< css::drawing::XDrawPage >& rxSelectedDrawPage,
 
-        sal_Int32 nJPEGCompressMode = -1,
-        bool bExportOLEAsJPEG = false);
+        sal_Int32 nJPEGCompressMode,
+        bool bExportOLEAsJPEG);
     ~FlashExporter();
 
     void Flush();

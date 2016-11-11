@@ -62,7 +62,7 @@ protected:
 // [properties]
 
 public:
-    OGridColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext, const OUString& _sModelName = OUString());
+    OGridColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext, const OUString& _sModelName);
     explicit OGridColumn(const OGridColumn* _pOriginal );
     virtual ~OGridColumn() override;
 

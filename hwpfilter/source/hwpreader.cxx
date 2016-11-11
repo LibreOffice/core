@@ -4171,7 +4171,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                 //parsePara(pPara);
                         while(pPara)
                         {
-                            make_text_p1( pPara );
+                            make_text_p1( pPara, false );
                             pPara = pPara->Next();
                         }
                     }
@@ -4219,7 +4219,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                 //parsePara(pPara);
                         while(pPara)
                         {
-                            make_text_p1( pPara );
+                            make_text_p1( pPara, false );
                             pPara = pPara->Next();
                         }
                     }
@@ -4329,7 +4329,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                 //parsePara(pPara);
                         while(pPara)
                         {
-                            make_text_p1( pPara );
+                            make_text_p1( pPara, false );
                             pPara = pPara->Next();
                         }
                     }
@@ -4445,7 +4445,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                         HWPPara *pPara = drawobj->property.pPara;
                         while(pPara)
                         {
-                            make_text_p1( pPara );
+                            make_text_p1( pPara, false );
                             pPara = pPara->Next();
                         }
                     }
@@ -4510,7 +4510,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                             //  parsePara(pPara);
                             while(pPara)
                             {
-                                make_text_p1( pPara );
+                                make_text_p1( pPara, false );
                                 pPara = pPara->Next();
                             }
                         }
@@ -4528,7 +4528,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                 //parsePara(pPara);
                             while(pPara)
                             {
-                                make_text_p1( pPara );
+                                make_text_p1( pPara, false );
                                 pPara = pPara->Next();
                             }
                         }
@@ -4570,7 +4570,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                 //parsePara(pPara);
                     while(pPara)
                     {
-                        make_text_p1( pPara );
+                        make_text_p1( pPara, false );
                         pPara = pPara->Next();
                     }
 

@@ -66,7 +66,7 @@
 class LwpFribText : public LwpFrib
 {
 public:
-    LwpFribText( LwpPara* pPara, bool bNoUnicode=false);
+    LwpFribText( LwpPara* pPara, bool bNoUnicode);
     virtual ~LwpFribText() override {}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     void XFConvert(XFContentContainer* pXFPara,LwpStory* pStory);

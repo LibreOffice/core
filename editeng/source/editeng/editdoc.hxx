@@ -196,7 +196,7 @@ public:
                     CharAttribList();
                     ~CharAttribList();
 
-    void            dumpAsXml(struct _xmlTextWriter* pWriter = nullptr) const;
+    void            dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
     void            DeleteEmptyAttribs(  SfxItemPool& rItemPool );
 

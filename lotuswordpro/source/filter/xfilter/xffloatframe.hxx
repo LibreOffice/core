@@ -75,7 +75,7 @@ public:
     /**
      * @descr   output range: [start,end], not [start,end).
      */
-    XFFloatFrame(sal_Int32 start, sal_Int32 end, bool all=false);
+    XFFloatFrame(sal_Int32 start, sal_Int32 end, bool all);
 
 public:
     void    ToXml(IXFStream *pStrm) override;

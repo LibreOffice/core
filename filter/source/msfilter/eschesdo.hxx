@@ -52,7 +52,7 @@ class ImplEESdrObject
 public:
     css::uno::Reference< css::beans::XPropertySet >   mXPropSet;
 
-    ImplEESdrObject( ImplEESdrWriter& rEx, const SdrObject& rObj, bool bOOXML = false );
+    ImplEESdrObject( ImplEESdrWriter& rEx, const SdrObject& rObj, bool bOOXML );
     ImplEESdrObject( ImplEESdrWriter& rEx, const css::uno::Reference< css::drawing::XShape >& rShape );
     ~ImplEESdrObject();
 

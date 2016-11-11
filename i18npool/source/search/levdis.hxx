@@ -168,7 +168,7 @@ public:
         @param  bRelaxed    the mathematically incorrect method is default (TRUE)
      */
     WLevDistance( const sal_Unicode* cPattern, int nOtherX, int nShorterY,
-                    int nLongerZ, bool bRelaxed = true );
+                    int nLongerZ, bool bRelaxed );
 
     WLevDistance( const WLevDistance& rWLD );
     ~WLevDistance();

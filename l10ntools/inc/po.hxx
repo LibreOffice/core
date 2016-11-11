@@ -46,7 +46,7 @@ public:
                     PoEntry();
                     PoEntry( const OString& rSourceFile, const OString& rResType, const OString& rGroupId,
                              const OString& rLocalId, const OString& rHelpText, const OString& rText,
-                             const TYPE eType = TTEXT );
+                             const TYPE eType );
                     ~PoEntry();
 
                     PoEntry( const PoEntry& rPo );
@@ -105,7 +105,7 @@ public:
     enum OpenMode { TRUNC, APP };
 
             PoOfstream();
-            PoOfstream(const OString& rFileName, OpenMode aMode = TRUNC );
+            PoOfstream(const OString& rFileName, OpenMode aMode );
             ~PoOfstream();
             PoOfstream(const PoOfstream&) = delete;
     PoOfstream& operator=(const PoOfstream&) = delete;

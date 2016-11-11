@@ -85,7 +85,7 @@ public:
 
     void    SetPageHeight(double height);
 
-    void    SetMargins(double left, double right, double top=-1, double bottom=-1);
+    void    SetMargins(double left, double right, double top, double bottom);
 
     void    SetPageUsage(enumXFPageUsage usage);
 
@@ -108,9 +108,9 @@ public:
     void    SetFootNoteSeparator(enumXFAlignType align,
                                 double width,
                                 sal_Int32 lengthPercent,
-                                double spaceAbove = 0.1,
-                                double spaceBelow = 0.1,
-                                XFColor color=XFColor(0,0,0)
+                                double spaceAbove,
+                                double spaceBelow,
+                                XFColor color
                                 );
 
     virtual enumXFStyle GetStyleFamily() override;

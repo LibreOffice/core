@@ -102,7 +102,7 @@ namespace pcr
         sal_Int32   m_nLastDecimalDigits;
 
     public:
-        OFormattedNumericControl( vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP);
+        OFormattedNumericControl( vcl::Window* pParent, WinBits nWinStyle);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;

@@ -53,7 +53,7 @@ public:
                         const Image& rEntryImg,
                         SvTreeListEntry* pParent,
                         sal_uLong nPos,
-                        IFormulaToken* pToken = nullptr );
+                        IFormulaToken* pToken );
 
     void            SetActiveFlag(bool bFlag);
     bool            GetActiveFlag() { return bActiveFlag;}

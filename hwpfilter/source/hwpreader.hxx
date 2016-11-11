@@ -107,9 +107,9 @@ private:
 
     /* -------- Paragraph Parsing --------- */
     void parsePara(HWPPara *para);
-    void make_text_p0(HWPPara *para, bool bParaStart = false);
-    void make_text_p1(HWPPara *para, bool bParaStart = false);
-    void make_text_p3(HWPPara *para, bool bParaStart = false);
+    void make_text_p0(HWPPara *para, bool bParaStart);
+    void make_text_p1(HWPPara *para, bool bParaStart);
+    void make_text_p3(HWPPara *para, bool bParaStart);
 
     /* -------- rDocument->characters(x) --------- */
     void makeChars(hchar_string & rStr);
