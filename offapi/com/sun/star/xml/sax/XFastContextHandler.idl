@@ -53,7 +53,7 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
             <b>or</b> operation.
 
         @param Attribs
-            Contains a XFastAttrbitueList to access the attributes
+            Contains a XFastAttributeList to access the attributes
             from the element.
 
     */
@@ -68,7 +68,7 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
         @param Name
             contains the elements local name.
         @param Attribs
-            Contains a XFastAttrbitueList to access the attributes
+            Contains a XFastAttributeList to access the attributes
             from the element.
      */
     void startUnknownElement( [in] string Namespace, [in] string Name, [in] XFastAttributeList Attribs )
@@ -102,7 +102,7 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
             namespace combined with an arithmetic <b>or</b> operation.
 
         @param Attribs
-            Contains a XFastAttrbitueList to access the attributes
+            Contains a XFastAttributeList to access the attributes
             from the element.
      */
     XFastContextHandler createFastChildContext( [in] long Element, [in] XFastAttributeList Attribs )
@@ -116,7 +116,7 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
         @param Name
             contains the elements local name.
         @param Attribs
-            Contains a XFastAttrbitueList to access the attributes
+            Contains a XFastAttributeList to access the attributes
             the element.
      */
     XFastContextHandler createUnknownChildContext( [in] string Namespace, [in] string Name, [in] XFastAttributeList Attribs )
