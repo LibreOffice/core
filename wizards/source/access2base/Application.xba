@@ -1046,7 +1046,7 @@ Const cstThisSub = &quot;OpenConnection&quot;
 				.URL = vDocContainer.URL
 				ReDim vDbContainers(0 To 0)
 				Set vDbContainers(0) = vDbContainer
-				TraceLog(TRACEANY, .MetaData.getDatabaseProductName() &amp; &quot; &quot; &amp; .MetaData.getDatabaseProductVersion, False)
+				TraceLog(TRACEANY, .Version, False)
 				TraceLog(TRACEANY, UCase(cstThisSub) &amp; &quot; &quot; &amp; .URL, False)
 			End With
 		Case Else

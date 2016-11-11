@@ -88,9 +88,24 @@ REM ----------------------------------------------------------------------------
 REM --- CLASS GET/LET/SET PROPERTIES					        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
+Property Get Connect() As String
+	Connect = _PropertyGet(&quot;Connect&quot;)
+End Property		&apos;	Connect (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get Name() As String
+	Name = _PropertyGet(&quot;Name&quot;)
+End Property		&apos;	Name (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Property Get ObjectType() As String
 	ObjectType = _PropertyGet(&quot;ObjectType&quot;)
 End Property		&apos;	ObjectType (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get Version() As String
+	Version = _PropertyGet(&quot;Version&quot;)
+End Property		&apos;	Version (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CLASS METHODS	 								        														---
@@ -1580,7 +1595,7 @@ End Function	&apos;	_OutputToHTML	V1.4.0
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _PropertiesList() As Variant
 
-	_PropertiesList = Array(&quot;ObjectType&quot;)
+	_PropertiesList = Array(&quot;Connect&quot;, &quot;Name&quot;, &quot;ObjectType&quot;, &quot;Version&quot;)
 
 End Function	&apos;	_PropertiesList
 
@@ -1594,8 +1609,15 @@ Dim vEMPTY As Variant
 	_PropertyGet = vEMPTY
 	
 	Select Case UCase(psProperty)
+		Case UCase(&quot;Connect&quot;)
+			_PropertyGet = Document.Datasource.URL
+		&apos;	Location = ConvertFromUrl(URL)
+		Case UCase(&quot;Name&quot;)
+			_PropertyGet = Title
 		Case UCase(&quot;ObjectType&quot;)
 			_PropertyGet = _Type
+		Case UCase(&quot;Version&quot;)
+			_PropertyGet = MetaData.getDatabaseProductName() &amp; &quot; &quot; &amp; MetaData.getDatabaseProductVersion
 		Case Else
 			Goto Trace_Error
 	End Select
