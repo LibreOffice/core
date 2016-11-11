@@ -484,6 +484,7 @@ static int doc_getViewsCount(LibreOfficeKitDocument* pThis);
 static bool doc_getViewIds(LibreOfficeKitDocument* pThis, int* pArray, size_t nSize);
 static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           const char *pFontName,
+                          const char *pChar,
                           int* pFontWidth,
                           int* pFontHeight);
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
@@ -2468,12 +2469,14 @@ static bool doc_getViewIds(LibreOfficeKitDocument* /*pThis*/, int* pArray, size_
 
 unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
                     const char* pFontName,
+                    const char* pChar,
                     int* pFontWidth,
                     int* pFontHeight)
 {
     SolarMutexGuard aGuard;
 
     OString aSearchedFontName(pFontName);
+    OUString aText(OStringToOUString(pChar, RTL_TEXTENCODING_UTF8));
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
         pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
@@ -2489,6 +2492,9 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
             if (!aSearchedFontName.equals(aFontName.toUtf8().getStr()))
                 continue;
 
+            if (aText.isEmpty())
+                aText = rFontMetric.GetFamilyName();
+
             auto aDevice(
                 VclPtr<VirtualDevice>::Create(
                     nullptr, Size(1, 1), DeviceFormat::DEFAULT));
@@ -2496,7 +2502,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
             vcl::Font aFont(rFontMetric);
             aFont.SetFontSize(Size(0, 25));
             aDevice->SetFont(aFont);
-            aDevice->GetTextBoundRect(aRect, aFontName);
+            aDevice->GetTextBoundRect(aRect, aText);
             int nFontWidth = aRect.BottomRight().X() + 1;
             *pFontWidth = nFontWidth;
             int nFontHeight = aRect.BottomRight().Y() + 1;
@@ -2509,7 +2515,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
             aDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                         Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
                         pBuffer);
-            aDevice->DrawText(Point(0,0), aFontName);
+            aDevice->DrawText(Point(0,0), aText);
 
             return pBuffer;
         }

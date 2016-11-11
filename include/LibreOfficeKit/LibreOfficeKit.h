@@ -225,6 +225,7 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::renderFont().
     unsigned char* (*renderFont) (LibreOfficeKitDocument* pThis,
                        const char* pFontName,
+                       const char* pChar,
                        int* pFontWidth,
                        int* pFontHeight);
 

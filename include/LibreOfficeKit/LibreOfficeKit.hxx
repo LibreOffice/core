@@ -404,14 +404,15 @@ public:
     }
 
     /**
-     * Paints a font name to be displayed in the font list
+     * Paints a font name or character if provided to be displayed in the font list
      * @param pFontName the font to be painted
      */
     inline unsigned char* renderFont(const char *pFontName,
+                          const char *pChar,
                           int *pFontWidth,
                           int *pFontHeight)
     {
-        return mpDoc->pClass->renderFont(mpDoc, pFontName, pFontWidth, pFontHeight);
+        return mpDoc->pClass->renderFont(mpDoc, pFontName, pChar, pFontWidth, pFontHeight);
     }
 
     /**
