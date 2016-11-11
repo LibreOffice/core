@@ -106,11 +106,6 @@ public:
     // always default to a number. otherwise it will become a SbxEMPTY
     SwSbxValue( long n = 0 ) : bVoid(false)  { PutLong( n ); }
     SwSbxValue( const double& rD ) : bVoid(false) { PutDouble( rD ); }
-    SwSbxValue( const SwSbxValue& rVal ) :
-        SvRefBase( rVal ),
-        SbxValue( rVal ),
-        bVoid(rVal.bVoid)
-        {}
     virtual ~SwSbxValue() override;
 
     bool GetBool() const;
