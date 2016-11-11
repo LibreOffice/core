@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_b45d9ceb",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T16:13:23Z",
+      "side": 1,
+      "message": "I already mentioned in an earlier comment, please name this mrCol instead.",
+      "range": {
+        "startLine": 545,
+        "startChar": 14,
+        "endLine": 545,
+        "endChar": 18
+      },
+      "revId": "be899df5a4d53eccc1acf97abdb19a87e8630cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_f46f1490",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T16:13:23Z",
+      "side": 1,
+      "message": "It is wrong to assign *new ScColumn to the reference, for which the new\u0027ed instance would never be deleted and thus leak.\n\nBut overall, it\u0027s completely unnecessary to have this ctor, it\u0027s not even used.",
+      "revId": "be899df5a4d53eccc1acf97abdb19a87e8630cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_146d7098",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T16:13:23Z",
+      "side": 1,
+      "message": "Please use an indentation of 4 spaces instead of 2.",
+      "revId": "be899df5a4d53eccc1acf97abdb19a87e8630cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_540528c0",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T16:13:23Z",
+      "side": 1,
+      "message": "Nitpick: we prefer\n\n if (...\n\ninstead of\n\n if( ...",
+      "range": {
+        "startLine": 575,
+        "startChar": 20,
+        "endLine": 575,
+        "endChar": 24
+      },
+      "revId": "be899df5a4d53eccc1acf97abdb19a87e8630cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_740a24d4",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T16:13:23Z",
+      "side": 1,
+      "message": "As the outer if (!(mbNumeric \u0026\u0026 mbDateTime)) combined with the inner if (mbNumeric) already determined that mbDateTime is false, the\n\n \u0026\u0026 !mbDateTime\n\nis superfluous.",
+      "range": {
+        "startLine": 575,
+        "startChar": 159,
+        "endLine": 575,
+        "endChar": 174
+      },
+      "revId": "be899df5a4d53eccc1acf97abdb19a87e8630cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_940fc0e0",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T16:13:23Z",
+      "side": 1,
+      "message": "Here we know that mbDateTime is true, so\n\n  \u0026\u0026 mbDateTime\n\nis superfluous.",
+      "range": {
+        "startLine": 582,
+        "startChar": 161,
+        "endLine": 582,
+        "endChar": 175
+      },
+      "revId": "be899df5a4d53eccc1acf97abdb19a87e8630cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
