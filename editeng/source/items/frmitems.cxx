@@ -3267,8 +3267,6 @@ public:
     std::unique_ptr<GraphicObject> xGraphicObject;
     sal_Int8        nGraphicTransparency; //contains a percentage value which is
                                           //copied to the GraphicObject when necessary
-    std::unique_ptr<SvStream> xStream;
-
     explicit SvxBrushItem_Impl(GraphicObject* p)
         : xGraphicObject(p)
         , nGraphicTransparency(0)
@@ -3838,11 +3836,6 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
     return rStream;
 }
 
-void SvxBrushItem::PurgeMedium() const
-{
-    pImpl->xStream.reset();
-}
-
 const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) const
 {
     if (bLoadAgain && !maStrLink.isEmpty() && !pImpl->xGraphicObject)
@@ -3857,12 +3850,11 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
         bool bGraphicLoaded = false;
 
         // try to create stream directly from given URL
-        pImpl->xStream.reset(utl::UcbStreamHelper::CreateStream(maStrLink, StreamMode::STD_READ));
-
+        std::unique_ptr<SvStream> xStream(utl::UcbStreamHelper::CreateStream(maStrLink, StreamMode::STD_READ));
         // tdf#94088 if we have a stream, try to load it directly as graphic
-        if (pImpl->xStream && !pImpl->xStream->GetError())
+        if (xStream && !xStream->GetError())
         {
-            if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, maStrLink, *pImpl->xStream,
+            if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, maStrLink, *xStream,
                 GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::DontSetLogsizeForJpeg))
             {
                 bGraphicLoaded = true;
@@ -3877,10 +3869,10 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
 
             if( INetProtocol::Data == aGraphicURL.GetProtocol() )
             {
-                std::unique_ptr<SvMemoryStream> const xStream(aGraphicURL.getData());
-                if (xStream)
+                std::unique_ptr<SvMemoryStream> const xMemStream(aGraphicURL.getData());
+                if (xMemStream)
                 {
-                    if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, "", *xStream))
+                    if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, "", *xMemStream))
                     {
                         bGraphicLoaded = true;
 

@@ -97,8 +97,6 @@ public:
 
     SvxGraphicPosition  GetGraphicPos() const       { return eGraphicPos; }
 
-    void                PurgeMedium() const;
-
     sal_Int32               GetShadingValue() const     { return nShadingValue; }
     const Graphic*          GetGraphic(OUString const & referer = OUString()/*TODO*/) const;
     const GraphicObject*    GetGraphicObject(OUString const & referer = OUString()/*TODO*/) const;

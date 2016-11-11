@@ -1980,13 +1980,6 @@ void DrawGraphic(
     {
         if( rSh.GetViewOptions()->IsGraphic() )
         {
-            // load graphic directly in PDF import
-            // #i68953# - also during print load graphic directly.
-            if ( (rSh).GetViewOptions()->IsPDFExport() ||
-                 rSh.GetOut()->GetOutDevType() == OUTDEV_PRINTER )
-            {
-                pBrush->PurgeMedium();
-            }
             OUString referer;
             SfxObjectShell * sh = rSh.GetDoc()->GetPersist();
             if (sh != nullptr && sh->HasName()) {
