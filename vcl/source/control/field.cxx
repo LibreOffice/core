@@ -504,7 +504,9 @@ void NumericFormatter::ImplInit()
     mnFieldValue        = 0;
     mnLastValue         = 0;
     mnMin               = 0;
-    mnMax               = SAL_MAX_INT64;
+    mnMax               = SAL_MAX_INT32;
+        // a "large" value substantially smaller than SAL_MAX_INT64, to avoid
+        // overflow in computations using this "dummy" value
     mnDecimalDigits     = 2;
     mnType              = FORMAT_NUMERIC;
     mbThousandSep       = true;
