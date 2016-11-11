@@ -169,7 +169,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/mnemonic \
     vcl/source/window/mnemonicengine \
     vcl/source/window/mouse \
-    vcl/source/window/mouseevent \
     vcl/source/window/msgbox \
     vcl/source/window/popupmenuwindow \
     vcl/source/window/printdlg \
