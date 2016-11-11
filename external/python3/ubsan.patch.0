@@ -35,6 +35,26 @@
  
    /* Set the carry bit iff the function uses any sse registers.
       This is clc or stc, together with the first byte of the jmp.  */
+--- Modules/_ctypes/libffi_osx/x86/x86-ffi64.c
++++ Modules/_ctypes/libffi_osx/x86/x86-ffi64.c
+@@ -599,9 +599,15 @@
+ 	tramp = (volatile unsigned short*)&closure->tramp[0];
+ 
+ 	tramp[0] = 0xbb49;		/* mov <code>, %r11	*/
+-	*(void* volatile*)&tramp[1] = ffi_closure_unix64;
++	tramp[1] = (unsigned short) ffi_closure_unix64;
++	tramp[2] = (unsigned short) (ffi_closure_unix64 >> 16);
++	tramp[3] = (unsigned short) (ffi_closure_unix64 >> 32);
++	tramp[4] = (unsigned short) (ffi_closure_unix64 >> 48);
+ 	tramp[5] = 0xba49;		/* mov <data>, %r10	*/
+-	*(void* volatile*)&tramp[6] = closure;
++	tramp[6] = (unsigned short) closure;
++	tramp[7] = (unsigned short) (closure >> 16);
++	tramp[8] = (unsigned short) (closure >> 32);
++	tramp[9] = (unsigned short) (closure >> 48);
+ 
+ 	/*	Set the carry bit if the function uses any sse registers.
+ 		This is clc or stc, together with the first byte of the jmp.  */
 --- Objects/listobject.c
 +++ Objects/listobject.c
 @@ -641,7 +641,7 @@
