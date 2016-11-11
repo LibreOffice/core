@@ -3674,14 +3674,17 @@ bool SvxBrushItem::GetPresentation
 
 SvxBrushItem& SvxBrushItem::operator=(const SvxBrushItem& rItem)
 {
-    aColor = rItem.aColor;
-    nShadingValue = rItem.nShadingValue;
-    xGraphicObject.reset(rItem.xGraphicObject ? new GraphicObject(*rItem.xGraphicObject) : nullptr);
-    nGraphicTransparency = rItem.nGraphicTransparency;
-    maStrLink = rItem.maStrLink;
-    maStrFilter = rItem.maStrFilter;
-    eGraphicPos = rItem.eGraphicPos;
-    bLoadAgain = rItem.bLoadAgain;
+    if (&rItem != this)
+    {
+        aColor = rItem.aColor;
+        nShadingValue = rItem.nShadingValue;
+        xGraphicObject.reset(rItem.xGraphicObject ? new GraphicObject(*rItem.xGraphicObject) : nullptr);
+        nGraphicTransparency = rItem.nGraphicTransparency;
+        maStrLink = rItem.maStrLink;
+        maStrFilter = rItem.maStrFilter;
+        eGraphicPos = rItem.eGraphicPos;
+        bLoadAgain = rItem.bLoadAgain;
+    }
     return *this;
 }
 
