@@ -368,7 +368,10 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
 
         Reference < XNameContainer > xFamilies = pSvXMLStylesContext->GetStylesContainer( GetFamily() );
         if( !xFamilies.is() )
+        {
+            SAL_WARN("xmloff", "no styles container for family " << GetFamily());
             return;
+        }
 
         bool bNew = false;
         if( xFamilies->hasByName( rName ) )
