@@ -553,19 +553,22 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
                     nGlyphIndex |= GF_ROTL;
-                    nAdvance = -pHbPositions[i].y_advance * nYScale;
-                    nXOffset =  pHbPositions[i].y_offset * nYScale;
-                    nYOffset = -pHbPositions[i].x_offset * nXScale;
+                    nAdvance = -pHbPositions[i].y_advance;
+                    nXOffset =  pHbPositions[i].y_offset;
+                    nYOffset =  pHbPositions[i].x_offset;
                 }
                 else
                 {
-                    nAdvance = pHbPositions[i].x_advance * nXScale;
-                    nXOffset = pHbPositions[i].x_offset * nXScale;
-                    nYOffset = pHbPositions[i].y_offset * nYScale;
+                    nAdvance =  pHbPositions[i].x_advance;
+                    nXOffset =  pHbPositions[i].x_offset;
+                    nYOffset = -pHbPositions[i].y_offset;
                 }
 
-                Point aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
-                const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nAdvance, nXOffset);
+                Point aNewPos(lround((aCurrPos.X() + nXOffset) * nXScale),
+                              lround((aCurrPos.Y() + nYOffset) * nYScale));
+                const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags,
+                                    lround(nAdvance * nXScale),
+                                    lround(nXOffset * nXScale));
                 AppendGlyph(aGI);
 
                 aCurrPos.X() += nAdvance;
