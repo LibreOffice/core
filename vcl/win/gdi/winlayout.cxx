@@ -3599,9 +3599,19 @@ std::vector<Rectangle> D2DWriteTextOutRenderer::GetGlyphInkBoxes(uint16_t * pGid
 bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const
 {
     bool succeeded = false;
+    IDWriteFont* pFont;
+
+    LOGFONTW aLogFont;
+    HFONT hFont = static_cast<HFONT>(::GetCurrentObject(hDC, OBJ_FONT));
+    GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
     try
     {
-        succeeded = SUCCEEDED(mpGdiInterop->CreateFontFaceFromHdc(hDC, ppFontFace));
+        succeeded = SUCCEEDED(mpGdiInterop->CreateFontFromLOGFONT(&aLogFont, &pFont));
+        if (succeeded)
+        {
+            succeeded = SUCCEEDED(pFont->CreateFontFace(ppFontFace));
+            pFont->Release();
+        }
     }
     catch (const std::exception& e)
     {
@@ -3611,10 +3621,6 @@ bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** p
 
     if (succeeded)
     {
-        LOGFONTW aLogFont;
-        HFONT hFont = static_cast<HFONT>(::GetCurrentObject(hDC, OBJ_FONT));
-
-        GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
         float dpix, dpiy;
         mpRT->GetDpi(&dpix, &dpiy);
         *lfSize = aLogFont.lfHeight * 96.0f / dpiy;

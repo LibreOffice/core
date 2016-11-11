@@ -1106,24 +1106,27 @@ HFONT WinSalGraphics::ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontS
     LOGFONTW aLogFont;
     ImplGetLogFontFromFontSelect( getHDC(), i_pFont, aLogFont, true );
 
-    // #i47675# limit font requests to MAXFONTHEIGHT
-    // TODO: share MAXFONTHEIGHT font instance
-    if( (-aLogFont.lfHeight <= MAXFONTHEIGHT)
-    &&  (+aLogFont.lfWidth <= MAXFONTHEIGHT) )
+    if (!SalLayout::UseCommonLayout())
     {
-        o_rFontScale = 1.0;
-    }
-    else if( -aLogFont.lfHeight >= +aLogFont.lfWidth )
-    {
-        o_rFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
-        aLogFont.lfHeight = -MAXFONTHEIGHT;
-        aLogFont.lfWidth = FRound( aLogFont.lfWidth / o_rFontScale );
-    }
-    else // #i95867# also limit font widths
-    {
-        o_rFontScale = +aLogFont.lfWidth / (float)MAXFONTHEIGHT;
-        aLogFont.lfWidth = +MAXFONTHEIGHT;
-        aLogFont.lfHeight = FRound( aLogFont.lfHeight / o_rFontScale );
+        // #i47675# limit font requests to MAXFONTHEIGHT
+        // TODO: share MAXFONTHEIGHT font instance
+        if( (-aLogFont.lfHeight <= MAXFONTHEIGHT)
+        &&  (+aLogFont.lfWidth <= MAXFONTHEIGHT) )
+        {
+            o_rFontScale = 1.0;
+        }
+        else if( -aLogFont.lfHeight >= +aLogFont.lfWidth )
+        {
+            o_rFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
+            aLogFont.lfHeight = -MAXFONTHEIGHT;
+            aLogFont.lfWidth = FRound( aLogFont.lfWidth / o_rFontScale );
+        }
+        else // #i95867# also limit font widths
+        {
+            o_rFontScale = +aLogFont.lfWidth / (float)MAXFONTHEIGHT;
+            aLogFont.lfWidth = +MAXFONTHEIGHT;
+            aLogFont.lfHeight = FRound( aLogFont.lfHeight / o_rFontScale );
+        }
     }
 
     hNewFont = ::CreateFontIndirectW( &aLogFont );

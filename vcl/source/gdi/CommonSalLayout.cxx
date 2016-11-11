@@ -95,7 +95,13 @@ void CommonSalLayout::getScale(double* nXScale, double* nYScale)
     unsigned int nUPEM = hb_face_get_upem(pHbFace);
 
     double nHeight(mrFontSelData.mnHeight);
+#if _WIN32
+    // FIXME: we get very weird font width on Windows, the number below is
+    // “reverse engineered” so that I get the width I’m expecting.
+    double nWidth(mrFontSelData.mnWidth ? mrFontSelData.mnWidth * 1.8285 : nHeight);
+#else
     double nWidth(mrFontSelData.mnWidth ? mrFontSelData.mnWidth : nHeight);
+#endif
 
     if (nYScale)
         *nYScale = nHeight / nUPEM;
