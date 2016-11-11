@@ -185,8 +185,8 @@ private:
     OUString                maLink;
     Link<const GraphicObject*, SvStream*> maSwapStreamHdl;
     OUString                maUserData;
-    Timer*                  mpSwapOutTimer;
-    GrfSimpleCacheObj*      mpSimpleCache;
+    std::unique_ptr<Timer>  mxSwapOutTimer;
+    std::unique_ptr<GrfSimpleCacheObj> mxSimpleCache;
     sal_uLong               mnAnimationLoopCount;
 
     // a unique increasing ID to be able to say which data change is older

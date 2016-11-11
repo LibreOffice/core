@@ -131,17 +131,12 @@ GraphicObject::~GraphicObject()
             mpGlobalMgr = nullptr;
         }
     }
-
-    delete mpSwapOutTimer;
-    delete mpSimpleCache;
 }
 
 void GraphicObject::ImplConstruct()
 {
     mpMgr = nullptr;
     maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
-    mpSwapOutTimer = nullptr;
-    mpSimpleCache = nullptr;
     mnAnimationLoopCount = 0;
     mbAutoSwapped = false;
     mbIsInSwapIn = false;
@@ -356,8 +351,7 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         mpMgr->ImplUnregisterObj( *this );
 
         maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
-        delete mpSimpleCache;
-        mpSimpleCache = nullptr;
+        mxSimpleCache.reset();
 
         maGraphic = rGraphicObj.GetGraphic();
         maAttr = rGraphicObj.maAttr;
@@ -406,11 +400,8 @@ void GraphicObject::SetAttr( const GraphicAttr& rAttr )
 {
     maAttr = rAttr;
 
-    if( mpSimpleCache && ( mpSimpleCache->maAttr != rAttr ) )
-    {
-        delete mpSimpleCache;
-        mpSimpleCache = nullptr;
-    }
+    if (mxSimpleCache && (mxSimpleCache->maAttr != rAttr))
+        mxSimpleCache.reset();
 }
 
 void GraphicObject::SetLink()
@@ -452,21 +443,20 @@ void GraphicObject::SetSwapStreamHdl(const Link<const GraphicObject*, SvStream*>
     maSwapStreamHdl = rHdl;
 
     sal_uInt32 const nSwapOutTimeout(GetCacheTimeInMs());
-    if( nSwapOutTimeout )
+    if (nSwapOutTimeout)
     {
-        if( !mpSwapOutTimer )
+        if (!mxSwapOutTimer)
         {
-            mpSwapOutTimer = new Timer("SwapOutTimer");
-            mpSwapOutTimer->SetTimeoutHdl( LINK( this, GraphicObject, ImplAutoSwapOutHdl ) );
+            mxSwapOutTimer.reset(new Timer("SwapOutTimer"));
+            mxSwapOutTimer->SetTimeoutHdl( LINK( this, GraphicObject, ImplAutoSwapOutHdl ) );
         }
 
-        mpSwapOutTimer->SetTimeout( nSwapOutTimeout );
-        mpSwapOutTimer->Start();
+        mxSwapOutTimer->SetTimeout( nSwapOutTimeout );
+        mxSwapOutTimer->Start();
     }
     else
     {
-        delete mpSwapOutTimer;
-        mpSwapOutTimer = nullptr;
+        mxSwapOutTimer.reset();
     }
 }
 
@@ -578,8 +568,8 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     // (code above needs to call GetGraphic twice)
     if( bCached )
     {
-        if( mpSwapOutTimer )
-            mpSwapOutTimer->Start();
+        if (mxSwapOutTimer)
+            mxSwapOutTimer->Start();
         else
             FireSwapOutRequest();
     }
@@ -644,16 +634,13 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
                 }
             }
 
-            if( !mpSimpleCache || ( mpSimpleCache->maAttr != aAttr ) || pFirstFrameOutDev )
+            if (!mxSimpleCache || (mxSimpleCache->maAttr != aAttr) || pFirstFrameOutDev)
             {
-                if( mpSimpleCache )
-                    delete mpSimpleCache;
-
-                mpSimpleCache = new GrfSimpleCacheObj( GetTransformedGraphic( &aAttr ), aAttr );
-                mpSimpleCache->maGraphic.SetAnimationNotifyHdl( GetGraphic().GetAnimationNotifyHdl() );
+                mxSimpleCache.reset(new GrfSimpleCacheObj(GetTransformedGraphic(&aAttr), aAttr));
+                mxSimpleCache->maGraphic.SetAnimationNotifyHdl(GetGraphic().GetAnimationNotifyHdl());
             }
 
-            mpSimpleCache->maGraphic.StartAnimation( pOut, aPt, aSz, nExtraData, pFirstFrameOutDev );
+            mxSimpleCache->maGraphic.StartAnimation(pOut, aPt, aSz, nExtraData, pFirstFrameOutDev);
 
             if( bCropped )
                 pOut->Pop();
@@ -669,8 +656,8 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
 
 void GraphicObject::StopAnimation( OutputDevice* pOut, long nExtraData )
 {
-    if( mpSimpleCache )
-        mpSimpleCache->maGraphic.StopAnimation( pOut, nExtraData );
+    if (mxSimpleCache)
+        mxSimpleCache->maGraphic.StopAnimation(pOut, nExtraData);
 }
 
 const Graphic& GraphicObject::GetGraphic() const
@@ -682,10 +669,10 @@ const Graphic& GraphicObject::GetGraphic() const
     //the cache timeout to start from now and not remain at the
     //time of creation
     // restart SwapOut timer; this is like touching in a cache to reset to the full timeout value
-    if( pThis->mpSwapOutTimer && pThis->mpSwapOutTimer->IsActive() )
+    if (pThis->mxSwapOutTimer && pThis->mxSwapOutTimer->IsActive())
     {
-        pThis->mpSwapOutTimer->Stop();
-        pThis->mpSwapOutTimer->Start();
+        pThis->mxSwapOutTimer->Stop();
+        pThis->mxSwapOutTimer->Start();
     }
 
     return maGraphic;
@@ -695,20 +682,19 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
 {
     mpMgr->ImplUnregisterObj( *this );
 
-    if( mpSwapOutTimer )
-        mpSwapOutTimer->Stop();
+    if (mxSwapOutTimer)
+        mxSwapOutTimer->Stop();
 
     maGraphic = rGraphic;
     mbAutoSwapped = false;
     ImplAssignGraphicData();
     maLink.clear();
-    delete mpSimpleCache;
-    mpSimpleCache = nullptr;
+    mxSimpleCache.reset();
 
     mpMgr->ImplRegisterObj( *this, maGraphic, nullptr, pCopyObj);
 
-    if( mpSwapOutTimer )
-        mpSwapOutTimer->Start();
+    if (mxSwapOutTimer)
+        mxSwapOutTimer->Start();
 
 
 }
@@ -1089,8 +1075,8 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl, Timer *, void)
         mbIsInSwapOut = false;
     }
 
-    if( mpSwapOutTimer )
-        mpSwapOutTimer->Start();
+    if (mxSwapOutTimer)
+        mxSwapOutTimer->Start();
 }
 
 #define UNO_NAME_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
