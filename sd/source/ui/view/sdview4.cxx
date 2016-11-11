@@ -329,12 +329,6 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
             pPV = nullptr;
     }
 
-    if( !pPickObj && pPV )
-    {
-        SdrPageView* pPageView = pPV;
-        PickObj(rPos, getHitTolLog(), pPickObj, pPageView);
-    }
-
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV && dynamic_cast< SdrMediaObj *>( pPickObj ) !=  nullptr )
     {
         pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
