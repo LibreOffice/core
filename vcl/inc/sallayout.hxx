@@ -313,7 +313,11 @@ public:
                 maGlyphId(aGlyphId), maLinearPos(rLinearPos)
             {}
 
-    enum{ FALLBACK_MASK=0xFF, IS_IN_CLUSTER=0x100, IS_RTL_GLYPH=0x200, IS_DIACRITIC=0x400 };
+    enum {
+        IS_IN_CLUSTER = 0x001,
+        IS_RTL_GLYPH  = 0x002,
+        IS_DIACRITIC  = 0x004
+    };
 
     bool    IsClusterStart() const  { return ((mnFlags & IS_IN_CLUSTER) == 0); }
     bool    IsRTLGlyph() const      { return ((mnFlags & IS_RTL_GLYPH) != 0); }
