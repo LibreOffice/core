@@ -3439,6 +3439,19 @@ SvxBrushItem::SvxBrushItem(const SvxBrushItem& rItem)
 {
 }
 
+SvxBrushItem::SvxBrushItem(SvxBrushItem&& rItem)
+    : SfxPoolItem(std::move(rItem))
+    , aColor(std::move(rItem.aColor))
+    , nShadingValue(std::move(rItem.nShadingValue))
+    , xGraphicObject(std::move(rItem.xGraphicObject))
+    , nGraphicTransparency(std::move(rItem.nGraphicTransparency))
+    , maStrLink(std::move(rItem.maStrLink))
+    , maStrFilter(std::move(rItem.maStrFilter))
+    , eGraphicPos(std::move(rItem.eGraphicPos))
+    , bLoadAgain(std::move(rItem.bLoadAgain))
+{
+}
+
 SvxBrushItem::~SvxBrushItem()
 {
 }
@@ -3685,6 +3698,19 @@ SvxBrushItem& SvxBrushItem::operator=(const SvxBrushItem& rItem)
         eGraphicPos = rItem.eGraphicPos;
         bLoadAgain = rItem.bLoadAgain;
     }
+    return *this;
+}
+
+SvxBrushItem& SvxBrushItem::operator=(SvxBrushItem&& rItem)
+{
+    aColor = std::move(rItem.aColor);
+    nShadingValue = std::move(rItem.nShadingValue);
+    xGraphicObject = std::move(rItem.xGraphicObject);
+    nGraphicTransparency = std::move(rItem.nGraphicTransparency);
+    maStrLink = std::move(rItem.maStrLink);
+    maStrFilter = std::move(rItem.maStrFilter);
+    eGraphicPos = std::move(rItem.eGraphicPos);
+    bLoadAgain = std::move(rItem.bLoadAgain);
     return *this;
 }
 

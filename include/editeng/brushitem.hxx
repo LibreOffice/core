@@ -72,6 +72,7 @@ public:
     SvxBrushItem( const OUString& rLink, const OUString& rFilter,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const SvxBrushItem& );
+    SvxBrushItem( SvxBrushItem&& );
     SvxBrushItem( const CntWallpaperItem&, sal_uInt16 nWhich );
 
     virtual ~SvxBrushItem() override;
@@ -114,7 +115,8 @@ public:
     void                SetGraphicLink( const OUString& rNew );
     void                SetGraphicFilter( const OUString& rNew );
 
-    SvxBrushItem&       operator=( const SvxBrushItem& rItem);
+    SvxBrushItem&       operator=(const SvxBrushItem& rItem);
+    SvxBrushItem&       operator=(SvxBrushItem&& rItem);
 
     static SvxGraphicPosition   WallpaperStyle2GraphicPos( WallpaperStyle eStyle );
     static WallpaperStyle       GraphicPos2WallpaperStyle( SvxGraphicPosition ePos );
