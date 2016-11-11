@@ -1,6 +1,20 @@
-diff -ru python3.orig/Modules/_ctypes/libffi/src/x86/ffi64.c python3/Modules/_ctypes/libffi/src/x86/ffi64.c
---- Modules/_ctypes/libffi/src/x86/ffi64.c	2015-07-05 18:50:07.000000000 +0200
-+++ Modules/_ctypes/libffi/src/x86/ffi64.c	2015-07-26 20:18:56.457153323 +0200
+--- Modules/_ctypes/_ctypes.c
++++ Modules/_ctypes/_ctypes.c
+@@ -1358,8 +1358,10 @@
+         goto error;
+     }
+     stgdict->shape[0] = length;
+-    memmove(&stgdict->shape[1], itemdict->shape,
+-        sizeof(Py_ssize_t) * (stgdict->ndim - 1));
++    if (itemdict->shape) {
++        memmove(&stgdict->shape[1], itemdict->shape,
++            sizeof(Py_ssize_t) * (stgdict->ndim - 1));
++    }
+ 
+     itemsize = itemdict->size;
+     if (length * itemsize < 0) {
+--- Modules/_ctypes/libffi/src/x86/ffi64.c
++++ Modules/_ctypes/libffi/src/x86/ffi64.c
 @@ -548,11 +548,15 @@
    tramp = (volatile unsigned short *) &closure->tramp[0];
  
@@ -21,9 +35,8 @@ diff -ru python3.orig/Modules/_ctypes/libffi/src/x86/ffi64.c python3/Modules/_ct
  
    /* Set the carry bit iff the function uses any sse registers.
       This is clc or stc, together with the first byte of the jmp.  */
-diff -ru python3.orig/Objects/listobject.c python3/Objects/listobject.c
---- Objects/listobject.c	2015-07-05 18:50:08.000000000 +0200
-+++ Objects/listobject.c	2015-07-26 20:22:30.539167695 +0200
+--- Objects/listobject.c
++++ Objects/listobject.c
 @@ -641,7 +641,7 @@
              goto Error;
          }
@@ -33,18 +46,3 @@ diff -ru python3.orig/Objects/listobject.c python3/Objects/listobject.c
  
      if (d < 0) { /* Delete -d items */
          Py_ssize_t tail;
---- Modules/_ctypes/_ctypes.c
-+++ Modules/_ctypes/_ctypes.c
-@@ -1358,8 +1358,10 @@
-         goto error;
-     }
-     stgdict->shape[0] = length;
--    memmove(&stgdict->shape[1], itemdict->shape,
--        sizeof(Py_ssize_t) * (stgdict->ndim - 1));
-+    if (itemdict->shape) {
-+        memmove(&stgdict->shape[1], itemdict->shape,
-+            sizeof(Py_ssize_t) * (stgdict->ndim - 1));
-+    }
- 
-     itemsize = itemdict->size;
-     if (length * itemsize < 0) {
