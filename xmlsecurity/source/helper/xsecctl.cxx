@@ -584,9 +584,12 @@ void writeUnsignedProperties(
             xDocumentHandler->startElement("xd:CertificateValues", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
 
             {
-                xDocumentHandler->startElement("xd:EncapsulatedX509Certificate", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-                xDocumentHandler->characters(signatureInfo.ouX509Certificate);
-                xDocumentHandler->endElement("xd:EncapsulatedX509Certificate");
+                for (const auto& i: signatureInfo.maEncapsulatedX509Certificates)
+                {
+                    xDocumentHandler->startElement("xd:EncapsulatedX509Certificate", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+                    xDocumentHandler->characters(i);
+                    xDocumentHandler->endElement("xd:EncapsulatedX509Certificate");
+                }
             }
 
             xDocumentHandler->endElement("xd:CertificateValues");

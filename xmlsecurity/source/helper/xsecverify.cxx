@@ -299,6 +299,9 @@ void XSecController::addEncapsulatedX509Certificate(const OUString& rEncapsulate
     if (m_vInternalSignatureInformations.empty())
         return;
 
+    if (rEncapsulatedX509Certificate.isEmpty())
+        return;
+
     InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
     rInformation.signatureInfor.maEncapsulatedX509Certificates.insert(rEncapsulatedX509Certificate);
 }

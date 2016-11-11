@@ -120,6 +120,11 @@ void XMLSignatureHelper::SetX509Certificate(
         ouX509CertDigest);
 }
 
+void XMLSignatureHelper::AddEncapsulatedX509Certificate(const OUString& ouEncapsulatedX509Certificate)
+{
+    mpXSecController->addEncapsulatedX509Certificate(ouEncapsulatedX509Certificate);
+}
+
 void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const ::Date& rDate, const tools::Time& rTime )
 {
     css::util::DateTime stDateTime = ::DateTime(rDate, rTime).GetUNODateTime();

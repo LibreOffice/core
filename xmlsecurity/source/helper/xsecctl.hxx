@@ -314,7 +314,6 @@ private:
     void setDate( OUString& ouDate );
     void setDescription(const OUString& rDescription);
     void setCertDigest(const OUString& rCertDigest);
-    void addEncapsulatedX509Certificate(const OUString& rEncapsulatedX509Certificate);
 
 public:
     void setSignatureBytes(const css::uno::Sequence<sal_Int8>& rBytes);
@@ -384,6 +383,8 @@ public:
         const OUString& ouX509SerialNumber,
         const OUString& ouX509Cert,
         const OUString& ouX509CertDigest);
+
+    void addEncapsulatedX509Certificate(const OUString& rEncapsulatedX509Certificate);
 
     void setDate(
         sal_Int32 nSecurityId,

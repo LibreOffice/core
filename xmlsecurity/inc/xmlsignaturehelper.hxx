@@ -159,6 +159,8 @@ public:
     void SetX509Certificate(sal_Int32 nSecurityId, const OUString& ouX509IssuerName,
         const OUString& ouX509SerialNumber, const OUString& ouX509Cert, const OUString& ouX509CertDigest);
 
+    void AddEncapsulatedX509Certificate(const OUString& ouEncapsulatedX509Certificate);
+
     void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const tools::Time& rTime );
     void SetDescription(sal_Int32 nSecurityId, const OUString& rDescription);
 

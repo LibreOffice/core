@@ -286,7 +286,7 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
         else if (aName == "xd:CertDigest")
         {
             m_pXSecController->setCertDigest( m_ouCertDigest );
-            m_bInX509Certificate = false;
+            m_bInCertDigest = false;
         }
         else if (aName == "xd:EncapsulatedX509Certificate" || aName == "xades:EncapsulatedX509Certificate")
         {
