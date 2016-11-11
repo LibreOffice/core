@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <tools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/headbar.hxx>
 #include <unotools/streamwrap.hxx>
@@ -31,6 +32,7 @@
 #include <osl/file.hxx>
 #include <o3tl/enumrange.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include "svtools/treelistentry.hxx"
@@ -38,6 +40,7 @@
 #include <rtl/uri.hxx>
 
 #include <algorithm>
+#include <memory>
 
 #include "xmlfilterdialogstrings.hrc"
 #include "xmlfiltersettingsdialog.hxx"
@@ -55,6 +58,19 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 
 using ::rtl::Uri;
+
+namespace {
+
+std::unique_ptr<ResMgr> getXSLTDialogResMgr() {
+    return std::unique_ptr<ResMgr>(
+        ResMgr::CreateResMgr(
+            "xsltdlg", Application::GetSettings().GetUILanguageTag()));
+}
+
+}
+
+#define RESID(x) ResId(x, *getXSLTDialogResMgr().get())
+#define RESIDSTR(x) RESID(x).toString()
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -230,7 +246,7 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
 
     // execute XML Filter Dialog
-    ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr(), mxContext, &aTempInfo );
+    ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr().get(), mxContext, &aTempInfo );
     if ( aDlg->Execute() == RET_OK )
     {
         // insert the new filter
@@ -249,7 +265,7 @@ void XMLFilterSettingsDialog::onEdit()
         filter_info_impl* pOldInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
         // execute XML Filter Dialog
-        ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr(), mxContext, pOldInfo );
+        ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr().get(), mxContext, pOldInfo );
         if ( aDlg->Execute() == RET_OK )
         {
             filter_info_impl* pNewInfo = aDlg->getNewFilterInfo();
@@ -1206,28 +1222,29 @@ std::vector< application_info_impl* >& getApplicationInfos()
 
     if( aInfos.empty() )
     {
-        ResId aResId1( STR_APPL_NAME_WRITER, *getXSLTDialogResMgr() );
+        auto resmgr = getXSLTDialogResMgr();
+        ResId aResId1( STR_APPL_NAME_WRITER, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.text.TextDocument",
             aResId1,
             "com.sun.star.comp.Writer.XMLImporter",
             "com.sun.star.comp.Writer.XMLExporter" ) );
 
-        ResId aResId2( STR_APPL_NAME_CALC, *getXSLTDialogResMgr() );
+        ResId aResId2( STR_APPL_NAME_CALC, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.sheet.SpreadsheetDocument",
             aResId2,
             "com.sun.star.comp.Calc.XMLImporter",
             "com.sun.star.comp.Calc.XMLExporter" ) );
 
-        ResId aResId3( STR_APPL_NAME_IMPRESS, *getXSLTDialogResMgr() );
+        ResId aResId3( STR_APPL_NAME_IMPRESS, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.presentation.PresentationDocument",
             aResId3,
             "com.sun.star.comp.Impress.XMLImporter",
             "com.sun.star.comp.Impress.XMLExporter" ) );
 
-        ResId aResId4( STR_APPL_NAME_DRAW, *getXSLTDialogResMgr() );
+        ResId aResId4( STR_APPL_NAME_DRAW, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.drawing.DrawingDocument",
             aResId4,
@@ -1235,28 +1252,28 @@ std::vector< application_info_impl* >& getApplicationInfos()
             "com.sun.star.comp.Draw.XMLExporter" ) );
 
         // --- oasis file formats...
-        ResId aResId5( STR_APPL_NAME_OASIS_WRITER, *getXSLTDialogResMgr() );
+        ResId aResId5( STR_APPL_NAME_OASIS_WRITER, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.text.TextDocument",
             aResId5,
             "com.sun.star.comp.Writer.XMLOasisImporter",
             "com.sun.star.comp.Writer.XMLOasisExporter" ) );
 
-        ResId aResId6( STR_APPL_NAME_OASIS_CALC, *getXSLTDialogResMgr() );
+        ResId aResId6( STR_APPL_NAME_OASIS_CALC, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.sheet.SpreadsheetDocument",
             aResId6,
             "com.sun.star.comp.Calc.XMLOasisImporter",
             "com.sun.star.comp.Calc.XMLOasisExporter" ) );
 
-        ResId aResId7( STR_APPL_NAME_OASIS_IMPRESS, *getXSLTDialogResMgr() );
+        ResId aResId7( STR_APPL_NAME_OASIS_IMPRESS, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.presentation.PresentationDocument",
             aResId7,
             "com.sun.star.comp.Impress.XMLOasisImporter",
             "com.sun.star.comp.Impress.XMLOasisExporter" ) );
 
-        ResId aResId8( STR_APPL_NAME_OASIS_DRAW, *getXSLTDialogResMgr() );
+        ResId aResId8( STR_APPL_NAME_OASIS_DRAW, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.drawing.DrawingDocument",
             aResId8,

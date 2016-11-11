@@ -84,11 +84,6 @@ extern std::vector< application_info_impl* >& getApplicationInfos();
 extern OUString getApplicationUIName( const OUString& rServiceName );
 extern const application_info_impl* getApplicationInfo( const OUString& rServiceName );
 
-extern ResMgr* getXSLTDialogResMgr();
-
-#define RESID(x) ResId(x, *getXSLTDialogResMgr())
-#define RESIDSTR(x) RESID(x).toString()
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

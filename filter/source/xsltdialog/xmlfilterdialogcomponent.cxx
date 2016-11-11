@@ -34,7 +34,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/instance.hxx>
@@ -109,17 +108,6 @@ private:
 
     VclPtr<XMLFilterSettingsDialog>          mpDialog;
 };
-
-
-namespace
-{
-    static ResMgr* pXSLTResMgr = nullptr;
-}
-
-ResMgr* getXSLTDialogResMgr()
-{
-    return pXSLTResMgr;
-}
 
 XMLFilterDialogComponent::XMLFilterDialogComponent( const css::uno::Reference< XComponentContext >& rxContext ) :
     OComponentHelper( maMutex ),
@@ -258,12 +246,6 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
     ::SolarMutexGuard aGuard;
 
     mpDialog.disposeAndClear();
-
-    if (pXSLTResMgr)
-    {
-        delete pXSLTResMgr;
-        pXSLTResMgr = nullptr;
-    }
 }
 
 
@@ -307,11 +289,6 @@ void SAL_CALL XMLFilterDialogComponent::setTitle( const OUString& /* _rTitle */ 
 sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
-
-    if( nullptr == pXSLTResMgr )
-    {
-        pXSLTResMgr = ResMgr::CreateResMgr( "xsltdlg", Application::GetSettings().GetUILanguageTag() );
-    }
 
     if( nullptr == mpDialog )
     {
