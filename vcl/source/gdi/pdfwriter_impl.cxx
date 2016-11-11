@@ -7158,8 +7158,8 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         return false;
     }
 
-    if (!CryptMsgUpdate(hMsg, reinterpret_cast<const BYTE *>(rContext.m_pByteRange1), rContext.m_nByteRange1, FALSE) ||
-        !CryptMsgUpdate(hMsg, reinterpret_cast<const BYTE *>(rContext.m_pByteRange2), rContext.m_nByteRange2, TRUE))
+    if (!CryptMsgUpdate(hMsg, static_cast<const BYTE *>(rContext.m_pByteRange1), rContext.m_nByteRange1, FALSE) ||
+        !CryptMsgUpdate(hMsg, static_cast<const BYTE *>(rContext.m_pByteRange2), rContext.m_nByteRange2, TRUE))
     {
         SAL_WARN("vcl.pdfwriter", "CryptMsgUpdate failed: " << WindowsErrorString(GetLastError()));
         CryptMsgClose(hMsg);
@@ -7315,8 +7315,8 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
                                           &aSignedInfo,
                                           nullptr,
                                           nullptr)) ||
-            !CryptMsgUpdate(hMsg, reinterpret_cast<const BYTE *>(rContext.m_pByteRange1), rContext.m_nByteRange1, FALSE) ||
-            !CryptMsgUpdate(hMsg, reinterpret_cast<const BYTE *>(rContext.m_pByteRange1), rContext.m_nByteRange2, TRUE))
+            !CryptMsgUpdate(hMsg, static_cast<const BYTE *>(rContext.m_pByteRange1), rContext.m_nByteRange1, FALSE) ||
+            !CryptMsgUpdate(hMsg, static_cast<const BYTE *>(rContext.m_pByteRange1), rContext.m_nByteRange2, TRUE))
         {
             SAL_WARN("vcl.pdfwriter", "Re-creating the message failed: " << WindowsErrorString(GetLastError()));
             CryptMemFree(pTsContext);
