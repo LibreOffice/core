@@ -283,10 +283,12 @@ public:
 
                                 TransferableDataHelper();
                                 TransferableDataHelper( const TransferableDataHelper& rDataHelper );
+                                TransferableDataHelper( TransferableDataHelper&& rDataHelper );
                                 TransferableDataHelper( const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
                                 ~TransferableDataHelper();
 
     TransferableDataHelper&     operator=( const TransferableDataHelper& rDataHelper );
+    TransferableDataHelper&     operator=( TransferableDataHelper&& rDataHelper );
 
     const css::uno::Reference< css::datatransfer::XTransferable >&    GetTransferable() const { return mxTransfer; }
     css::uno::Reference< css::datatransfer::XTransferable >           GetXTransferable() const;

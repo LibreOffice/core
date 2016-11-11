@@ -1137,15 +1137,24 @@ TransferableDataHelper::TransferableDataHelper(const TransferableDataHelper& rDa
 {
 }
 
+TransferableDataHelper::TransferableDataHelper(TransferableDataHelper&& rDataHelper)
+    : mxTransfer(std::move(rDataHelper.mxTransfer))
+    , mxClipboard(std::move(rDataHelper.mxClipboard))
+    , mxFormats(std::move(rDataHelper.mxFormats))
+    , mxObjDesc(std::move(rDataHelper.mxObjDesc))
+    , mxImpl(new TransferableDataHelper_Impl)
+{
+}
+
 TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDataHelper& rDataHelper )
 {
     if ( this != &rDataHelper )
     {
         ::osl::MutexGuard aGuard(mxImpl->maMutex);
 
-        bool bWasClipboardListening = (nullptr != mxImpl->mpClipboardListener);
+        const bool bWasClipboardListening = (nullptr != mxImpl->mpClipboardListener);
 
-        if ( bWasClipboardListening )
+        if (bWasClipboardListening)
             StopClipboardListening();
 
         mxTransfer = rDataHelper.mxTransfer;
@@ -1153,9 +1162,29 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
         mxObjDesc.reset(new TransferableObjectDescriptor(*rDataHelper.mxObjDesc));
         mxClipboard = rDataHelper.mxClipboard;
 
-        if ( bWasClipboardListening )
+        if (bWasClipboardListening)
             StartClipboardListening();
     }
+
+    return *this;
+}
+
+TransferableDataHelper& TransferableDataHelper::operator=(TransferableDataHelper&& rDataHelper)
+{
+    ::osl::MutexGuard aGuard(mxImpl->maMutex);
+
+    const bool bWasClipboardListening = (nullptr != mxImpl->mpClipboardListener);
+
+    if (bWasClipboardListening)
+        StopClipboardListening();
+
+    mxTransfer = std::move(rDataHelper.mxTransfer);
+    mxFormats = std::move(rDataHelper.mxFormats);
+    mxObjDesc = std::move(rDataHelper.mxObjDesc);
+    mxClipboard = std::move(rDataHelper.mxClipboard);
+
+    if (bWasClipboardListening)
+        StartClipboardListening();
 
     return *this;
 }
