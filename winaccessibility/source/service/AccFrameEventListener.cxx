@@ -88,8 +88,8 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
 
             VCLXWindow* pvclwindow =
                 dynamic_cast<VCLXWindow*>(m_xAccessible.get());
-            vcl::Window* window = pvclwindow->GetWindow();
-            const SystemEnvData* systemdata=window->GetSystemData();
+            const SystemEnvData* systemdata
+                = pvclwindow->GetWindow()->GetSystemData();
 
             //add this child
             pAgent->InsertAccObj(pAcc, m_xAccessible.get(),

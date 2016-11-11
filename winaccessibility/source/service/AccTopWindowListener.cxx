@@ -52,7 +52,7 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
 {
     //get SystemData from window
     VCLXWindow* pvclwindow = static_cast<VCLXWindow*>(pAccessible);
-    vcl::Window* window = pvclwindow->GetWindow();
+    auto window = pvclwindow->GetWindow();
     // The SalFrame of window may be destructed at this time
     const SystemEnvData* systemdata = nullptr;
     try
