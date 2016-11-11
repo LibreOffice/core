@@ -353,7 +353,6 @@ void CommonSalLayout::DrawText(SalGraphics& rSalGraphics) const
 bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 {
     hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
-    hb_script_t aHbScript = HB_SCRIPT_INVALID;
 
     int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos);
     Reserve(nGlyphCapacity);
@@ -462,7 +461,6 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             int nMinRunPos = aSubRun.mnMin;
             int nEndRunPos = aSubRun.mnEnd;
             int nRunLen = nEndRunPos - nMinRunPos;
-            aHbScript = aSubRun.maScript;
 
             OString sLanguage = msLanguage;
             if (sLanguage.isEmpty())
@@ -549,6 +547,12 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 if (bDiacritic)
                     nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
+                if ((aSubRun.maScript == HB_SCRIPT_ARABIC) || (aSubRun.maScript == HB_SCRIPT_SYRIAC))
+                {
+                    nGlyphFlags |= GlyphItem::ALLOW_KASHIDA;
+                    rArgs.mnFlags |= SalLayoutFlags::KashidaJustification;
+                }
+
                 DeviceCoordinate nAdvance, nXOffset, nYOffset;
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
@@ -582,13 +586,6 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
     // and then in logical order (e.g. diacritics after cluster start)
     // XXX: why?
     SortGlyphItems();
-
-    // determine need for kashida justification
-    // XXX: This assumes all the text is in the same script, which is not
-    // guaranteed. The flag should be per glyph.
-    if ((rArgs.mpDXArray || rArgs.mnLayoutWidth)
-    && ((aHbScript == HB_SCRIPT_ARABIC) || (aHbScript == HB_SCRIPT_SYRIAC)))
-        rArgs.mnFlags |= SalLayoutFlags::KashidaJustification;
 
     return true;
 }
@@ -675,7 +672,7 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         DeviceCoordinate nDiff = pNewCharWidths[nCharPos] - pOldCharWidths[nCharPos];
 
         // nDiff > 1 to ignore rounding errors.
-        if (bKashidaJustify && nDiff > 1)
+        if (bKashidaJustify && m_GlyphItems[i].AllowKashida() && nDiff > 1)
             pKashidas[i] = nDiff;
 
         // Adjust the width of the first glyph belonging to current character.
