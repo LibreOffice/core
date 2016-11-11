@@ -3427,9 +3427,16 @@ SvxBrushItem::SvxBrushItem(SvStream& rStream, sal_uInt16 nVersion, sal_uInt16 _n
 }
 
 SvxBrushItem::SvxBrushItem(const SvxBrushItem& rItem)
-    : SfxPoolItem(rItem.Which())
+    : SfxPoolItem(rItem)
+    , aColor(rItem.aColor)
+    , nShadingValue(rItem.nShadingValue)
+    , xGraphicObject(rItem.xGraphicObject ? new GraphicObject(*rItem.xGraphicObject) : nullptr)
+    , nGraphicTransparency(rItem.nGraphicTransparency)
+    , maStrLink(rItem.maStrLink)
+    , maStrFilter(rItem.maStrFilter)
+    , eGraphicPos(rItem.eGraphicPos)
+    , bLoadAgain(rItem.bLoadAgain)
 {
-    *this = rItem;
 }
 
 SvxBrushItem::~SvxBrushItem()
