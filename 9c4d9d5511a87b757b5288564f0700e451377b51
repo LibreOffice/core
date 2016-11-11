@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_3460acce",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T15:06:17Z",
+      "side": 1,
+      "message": "Instead of obtaining a (maybe arbitrary) ViewShell from ViewData, obtain it via ScTabViewShell::GetActiveViewShell() like other places in ScDocFunc do.",
+      "revId": "9c4d9d5511a87b757b5288564f0700e451377b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_1463b0dd",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T15:06:17Z",
+      "side": 1,
+      "message": "Please no trailing blanks. Did the commit hooks not refuse this commit? Or have you removed / not installed the hooks? Please do\n\n ./g -z\n\nin your work tree to (re-)establish all hooks.",
+      "revId": "9c4d9d5511a87b757b5288564f0700e451377b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
