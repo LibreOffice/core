@@ -151,7 +151,7 @@ public:
         mhDC = GetDC(nullptr);
     };
 
-    ~WinGlyphFallbackSubstititution()
+    ~WinGlyphFallbackSubstititution() override
     {
         ReleaseDC(nullptr, mhDC);
     };
