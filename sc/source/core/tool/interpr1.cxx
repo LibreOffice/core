@@ -7365,6 +7365,17 @@ void ScInterpreter::ScAddressFunc()
     FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;      // default
     if( nParamCount >= 4 && 0.0 == ::rtl::math::approxFloor( GetDoubleWithDefault( 1.0)))
         eConv = FormulaGrammar::CONV_XL_R1C1;
+    else
+    {
+        // If A1 syntax is requested then the actual sheet separator and format
+        // convention depends on the syntax configured for INDIRECT to match
+        // that, and if it is unspecified then the document's address syntax.
+        FormulaGrammar::AddressConvention eForceConv = maCalcConfig.meStringRefAddressSyntax;
+        if (eForceConv == FormulaGrammar::CONV_UNSPECIFIED)
+            eForceConv = pDok->GetAddressConvention();
+        if (eForceConv == FormulaGrammar::CONV_XL_A1 || eForceConv == FormulaGrammar::CONV_XL_R1C1)
+            eConv = FormulaGrammar::CONV_XL_A1;     // for anything Excel use Excel A1
+    }
 
     ScRefFlags  nFlags = ScRefFlags::COL_ABS | ScRefFlags::ROW_ABS;   // default
     if( nParamCount >= 3 )
@@ -7433,7 +7444,8 @@ void ScInterpreter::ScAddressFunc()
             ScCompiler::CheckTabQuotes( sTabStr, eConv);
         if (!aDoc.isEmpty())
             sTabStr = aDoc + sTabStr;
-        sTabStr += eConv == FormulaGrammar::CONV_XL_R1C1 ? OUString("!") : OUString(".");
+        sTabStr += (eConv == FormulaGrammar::CONV_XL_R1C1 || eConv == FormulaGrammar::CONV_XL_A1) ?
+            OUString("!") : OUString(".");
         sTabStr += aRefStr;
         PushString( sTabStr );
     }
