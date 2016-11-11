@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_b473dcb0",
+        "filename": "sc/source/ui/drawfunc/futext3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-11T14:55:45Z",
+      "side": 1,
+      "message": "Having immediately subsequent twice the same if condition is superfluous.",
+      "revId": "5eb584aa92d3df35e69bc74cf7709a1fe5c57d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
