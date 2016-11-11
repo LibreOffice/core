@@ -1411,10 +1411,6 @@ SwCalcExp::SwCalcExp(const OUString& rStr, const SwSbxValue& rVal,
 {
 }
 
-SwSbxValue::~SwSbxValue()
-{
-}
-
 bool SwSbxValue::GetBool() const
 {
     return SbxSTRING == GetType() ? !GetOUString().isEmpty()
