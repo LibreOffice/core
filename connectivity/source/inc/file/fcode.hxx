@@ -44,7 +44,16 @@ namespace connectivity
         class OOO_DLLPUBLIC_FILE OCode
         {
         public:
+            //virtual dtor to allow this to be the root of the class hierarchy
             virtual ~OCode() = default;
+            //but that disables the default move ctor
+            OCode(OCode&&) = default;
+            //but that disables the rest of default ctors
+            OCode(const OCode&) = default;
+            OCode() = default;
+            //and same issue for the assignment operators
+            OCode& operator=(const OCode&) = default;
+            OCode& operator=(OCode&&) = default;
 
             inline static void * SAL_CALL operator new( size_t nSize )
                 { return ::rtl_allocateMemory( nSize ); }
