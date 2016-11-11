@@ -100,24 +100,24 @@ void MetadatableTest::test()
     beans::StringPair id3e(empty,  sid3);
     beans::StringPair id4e(empty,  sid4);
     m1.SetMetadataReference(id1);
-    CPPUNIT_ASSERT_MESSAGE("set failed", m1.GetMetadataReference() == id1);
+    CPPUNIT_ASSERT_MESSAGE("set failed", bool(m1.GetMetadataReference() == id1));
     try {
         m2.SetMetadataReference(id1);
         CPPUNIT_ASSERT_MESSAGE("set duplicate succeeded", false);
     } catch (const lang::IllegalArgumentException &) { }
     m1.SetMetadataReference(id1);
     CPPUNIT_ASSERT_MESSAGE("set failed (existing)",
-            m1.GetMetadataReference() == id1);
+            bool(m1.GetMetadataReference() == id1));
     m1.EnsureMetadataReference();
     CPPUNIT_ASSERT_MESSAGE("ensure failed (existing)",
-            m1.GetMetadataReference() == id1);
+            bool(m1.GetMetadataReference() == id1));
 
     m2.EnsureMetadataReference();
     beans::StringPair m2id(m2.GetMetadataReference());
     CPPUNIT_ASSERT_MESSAGE("ensure failed", !m2id.Second.isEmpty());
     m2.EnsureMetadataReference();
     CPPUNIT_ASSERT_MESSAGE("ensure failed (idempotent)",
-            m2.GetMetadataReference() == m2id);
+            bool(m2.GetMetadataReference() == m2id));
 
     m1.m_bInUndo = true;
     CPPUNIT_ASSERT_MESSAGE("move to undo failed",
@@ -125,7 +125,7 @@ void MetadatableTest::test()
 
     m1.m_bInUndo = false;
     CPPUNIT_ASSERT_MESSAGE("move from undo failed",
-            m1.GetMetadataReference() == id1);
+            bool(m1.GetMetadataReference() == id1));
 
     m1.m_bInUndo = true;
     try {
@@ -138,23 +138,23 @@ void MetadatableTest::test()
             m1.GetMetadataReference().Second.isEmpty());
 
     m3.RegisterAsCopyOf(m2);
-    CPPUNIT_ASSERT_MESSAGE("copy: source", m2.GetMetadataReference() == id1);
+    CPPUNIT_ASSERT_MESSAGE("copy: source", bool(m2.GetMetadataReference() == id1));
     CPPUNIT_ASSERT_MESSAGE("copy: duplicate",
             m3.GetMetadataReference().Second.isEmpty());
     m4.RegisterAsCopyOf(m3);
-    CPPUNIT_ASSERT_MESSAGE("copy: source", m2.GetMetadataReference() == id1);
+    CPPUNIT_ASSERT_MESSAGE("copy: source", bool(m2.GetMetadataReference() == id1));
     CPPUNIT_ASSERT_MESSAGE("copy: duplicate",
             m3.GetMetadataReference().Second.isEmpty());
     CPPUNIT_ASSERT_MESSAGE("copy: duplicate",
             m4.GetMetadataReference().Second.isEmpty());
     m2.m_bInUndo = true;
     CPPUNIT_ASSERT_MESSAGE("duplicate to undo",
-            m3.GetMetadataReference() == id1);
+            bool(m3.GetMetadataReference() == id1));
     CPPUNIT_ASSERT_MESSAGE("duplicate to undo",
             m2.GetMetadataReference().Second.isEmpty());
     m2.m_bInUndo = false;
     CPPUNIT_ASSERT_MESSAGE("duplicate from undo",
-            m2.GetMetadataReference() == id1);
+            bool(m2.GetMetadataReference() == id1));
     CPPUNIT_ASSERT_MESSAGE("duplicate from undo",
             m3.GetMetadataReference().Second.isEmpty());
 
@@ -171,23 +171,23 @@ void MetadatableTest::test()
     MockMetadatable m3p(*pReg);
 
     mc1.SetMetadataReference(id2);
-    CPPUNIT_ASSERT_MESSAGE("set failed", mc1.GetMetadataReference() == id2);
+    CPPUNIT_ASSERT_MESSAGE("set failed", bool(mc1.GetMetadataReference() == id2));
     try {
         mc2.SetMetadataReference(id2);
         CPPUNIT_FAIL("set duplicate succeeded");
     } catch (const lang::IllegalArgumentException &) { }
     mc1.SetMetadataReference(id2);
     CPPUNIT_ASSERT_MESSAGE("set failed (existing)",
-            mc1.GetMetadataReference() == id2);
+            bool(mc1.GetMetadataReference() == id2));
     mc1.EnsureMetadataReference();
     CPPUNIT_ASSERT_MESSAGE("ensure failed (existing)",
-            mc1.GetMetadataReference() == id2);
+            bool(mc1.GetMetadataReference() == id2));
     mc2.EnsureMetadataReference();
     beans::StringPair mc2id(mc2.GetMetadataReference());
     CPPUNIT_ASSERT_MESSAGE("ensure failed", !mc2id.Second.isEmpty());
     mc2.EnsureMetadataReference();
     CPPUNIT_ASSERT_MESSAGE("ensure failed (idempotent)",
-            mc2.GetMetadataReference() == mc2id);
+            bool(mc2.GetMetadataReference() == mc2id));
     mc2.RemoveMetadataReference();
     CPPUNIT_ASSERT_MESSAGE("remove failed",
             mc2.GetMetadataReference().Second.isEmpty());
@@ -198,7 +198,7 @@ void MetadatableTest::test()
             mc3.GetMetadataReference().Second.isEmpty() );
     mc2.RegisterAsCopyOf(m2);
     CPPUNIT_ASSERT_MESSAGE("copy to clipboard (non-latent)",
-            mc2.GetMetadataReference() == id1);
+            bool(mc2.GetMetadataReference() == id1));
     // paste mc2 to m2p and mc3 to m3p
     m2p.RegisterAsCopyOf(mc2);
     CPPUNIT_ASSERT_MESSAGE("paste from clipboard (non-latent)",
@@ -211,17 +211,17 @@ void MetadatableTest::test()
     CPPUNIT_ASSERT_MESSAGE("remove failed",
             m2.GetMetadataReference().Second.isEmpty());
     CPPUNIT_ASSERT_MESSAGE("paste-remove (non-latent)",
-            m2p.GetMetadataReference() == id1);
+            bool(m2p.GetMetadataReference() == id1));
     m2p.RemoveMetadataReference();
     CPPUNIT_ASSERT_MESSAGE("remove failed",
             m2p.GetMetadataReference().Second.isEmpty());
     CPPUNIT_ASSERT_MESSAGE("paste-remove2 (non-latent)",
-            m3.GetMetadataReference() == id1);
+            bool(m3.GetMetadataReference() == id1));
     m3.RemoveMetadataReference();
     CPPUNIT_ASSERT_MESSAGE("remove failed",
             m3.GetMetadataReference().Second.isEmpty());
     CPPUNIT_ASSERT_MESSAGE("paste-remove (latent)",
-            m3p.GetMetadataReference() == id1);
+            bool(m3p.GetMetadataReference() == id1));
     // delete mc2
     mc2.SetMetadataReference(beans::StringPair());
     CPPUNIT_ASSERT_MESSAGE("in clipboard becomes non-latent",
@@ -231,16 +231,16 @@ void MetadatableTest::test()
     CPPUNIT_ASSERT_MESSAGE("remove-paste",
             m2p.GetMetadataReference().Second.isEmpty());
     CPPUNIT_ASSERT_MESSAGE("remove-paste (stolen)",
-            m3p.GetMetadataReference() == id1);
+            bool(m3p.GetMetadataReference() == id1));
 
     // auto-detect stream
     m5.SetMetadataReference(id3e);
     CPPUNIT_ASSERT_MESSAGE("auto-detect (content)",
-            m5.GetMetadataReference() == id3);
+            bool(m5.GetMetadataReference() == id3));
     m5.m_bInContent = false;
     m5.SetMetadataReference(id4e);
     CPPUNIT_ASSERT_MESSAGE("auto-detect (styles)",
-            m5.GetMetadataReference() == id4);
+            bool(m5.GetMetadataReference() == id4));
 }
 
 

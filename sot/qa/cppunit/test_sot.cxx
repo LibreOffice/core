@@ -58,8 +58,8 @@ namespace
             xStream->Seek(0);
             sal_uLong nRemaining = xStream->GetSize() - xStream->Tell();
 
-            CPPUNIT_ASSERT_MESSAGE( "check size", nRemaining == nSize );
-            CPPUNIT_ASSERT_MESSAGE( "check size #2", xStream->remainingSize() == nSize );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "check size", nSize, nRemaining );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "check size #2", static_cast<sal_uInt64>(nSize), xStream->remainingSize());
 
             // Read as much as we can, a corrupted FAT chain can cause real grief here
             nReadableSize = xStream->ReadBytes(static_cast<void *>(pData), nSize);
@@ -72,10 +72,10 @@ namespace
                 CPPUNIT_ASSERT_MESSAGE( "sot reading error", !xStream->GetError() );
                 unsigned char c;
                 xStream->Seek( i - 1 );
-                CPPUNIT_ASSERT_MESSAGE( "sot storage reading byte",
-                                        xStream->ReadBytes(&c, 1) == 1);
-                CPPUNIT_ASSERT_MESSAGE( "mismatching data storage reading byte",
-                                        pData[i - 1] == c );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( "sot storage reading byte",
+                                              static_cast<size_t>(1), xStream->ReadBytes(&c, 1));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( "mismatching data storage reading byte",
+                                              c, pData[i - 1] );
             }
         }
         free(pData);
@@ -133,16 +133,16 @@ namespace
                                xStream.Is() && !xObjStor->GetError());
         CPPUNIT_ASSERT_MESSAGE("error in opened stream", !xStream->GetError());
         sal_uLong nPos = xStream->GetSize();
-        CPPUNIT_ASSERT_MESSAGE("odd stream length", nPos == 13312);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("odd stream length", static_cast<sal_uLong>(13312), nPos);
 
         xStream->Seek(STREAM_SEEK_TO_END);
         CPPUNIT_ASSERT_MESSAGE("error seeking to end", !xStream->GetError());
         // cf. comment in Pos2Page, not extremely intuitive ...
-        CPPUNIT_ASSERT_MESSAGE("stream not at beginning", xStream->Tell() == xStream->GetSize());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("stream not at beginning", static_cast<sal_uInt64>(xStream->GetSize()), xStream->Tell());
         xStream->Seek(STREAM_SEEK_TO_BEGIN);
 
         CPPUNIT_ASSERT_MESSAGE("error seeking to beginning", !xStream->GetError());
-        CPPUNIT_ASSERT_MESSAGE("stream not at beginning", xStream->Tell() == 0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("stream not at beginning", static_cast<sal_uInt64>(0), xStream->Tell());
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(SotTest);
