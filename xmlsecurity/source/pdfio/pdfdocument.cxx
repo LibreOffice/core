@@ -51,6 +51,8 @@ namespace xmlsecurity
 namespace pdfio
 {
 
+const int MAX_SIGNATURE_CONTENT_LENGTH = 50000;
+
 class PDFTrailerElement;
 class PDFObjectElement;
 
@@ -355,14 +357,8 @@ sal_uInt32 PDFDocument::GetNextSignature()
     return nRet + 1;
 }
 
-bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificate, const OUString& rDescription)
+sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, sal_uInt64& rLastByteRangeOffset, sal_Int64& rContentOffset)
 {
-    // Decide what identifier to use for the new signature.
-    sal_uInt32 nNextSignature = GetNextSignature();
-
-    m_aEditBuffer.Seek(STREAM_SEEK_TO_END);
-    m_aEditBuffer.WriteCharPtr("\n");
-
     // Write signature object.
     sal_Int32 nSignatureId = m_aXRef.size();
     XRefEntry aSignatureEntry;
@@ -373,9 +369,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     aSigBuffer.append(nSignatureId);
     aSigBuffer.append(" 0 obj\n");
     aSigBuffer.append("<</Contents <");
-    sal_Int64 nSignatureContentOffset = aSignatureEntry.m_nOffset + aSigBuffer.getLength();
+    rContentOffset = aSignatureEntry.m_nOffset + aSigBuffer.getLength();
     // Reserve space for the PKCS#7 object.
-    const int MAX_SIGNATURE_CONTENT_LENGTH = 50000;
     OStringBuffer aContentFiller(MAX_SIGNATURE_CONTENT_LENGTH);
     comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
     aSigBuffer.append(aContentFiller.makeStringAndClear());
@@ -390,11 +385,11 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     // write length2 later.
     aSigBuffer.append(" /ByteRange [ 0 ");
     // -1 and +1 is the leading "<" and the trailing ">" around the hex string.
-    aSigBuffer.append(nSignatureContentOffset - 1);
+    aSigBuffer.append(rContentOffset - 1);
     aSigBuffer.append(" ");
-    aSigBuffer.append(nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
+    aSigBuffer.append(rContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
     aSigBuffer.append(" ");
-    sal_uInt64 nSignatureLastByteRangeOffset = aSignatureEntry.m_nOffset + aSigBuffer.getLength();
+    rLastByteRangeOffset = aSignatureEntry.m_nOffset + aSigBuffer.getLength();
     // We don't know how many bytes we need for the last ByteRange value, this
     // should be enough.
     OStringBuffer aByteRangeFiller;
@@ -413,6 +408,11 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     aSigBuffer.append(" >>\nendobj\n\n");
     m_aEditBuffer.WriteOString(aSigBuffer.toString());
 
+    return nSignatureId;
+}
+
+sal_Int32 PDFDocument::WriteAppearanceObject()
+{
     // Write appearance object.
     sal_Int32 nAppearanceId = m_aXRef.size();
     XRefEntry aAppearanceEntry;
@@ -425,6 +425,14 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.WriteCharPtr("/BBox[0 0 0 0]\n/Length 0\n>>\n");
     m_aEditBuffer.WriteCharPtr("stream\n\nendstream\nendobj\n\n");
 
+    return nAppearanceId;
+}
+
+sal_Int32 PDFDocument::WriteAnnotObject(PDFObjectElement& rFirstPage, sal_Int32 nSignatureId, sal_Int32 nAppearanceId)
+{
+    // Decide what identifier to use for the new signature.
+    sal_uInt32 nNextSignature = GetNextSignature();
+
     // Write the Annot object, references nSignatureId and nAppearanceId.
     sal_Int32 nAnnotId = m_aXRef.size();
     XRefEntry aAnnotEntry;
@@ -436,15 +444,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.WriteCharPtr("<</Type/Annot/Subtype/Widget/F 132\n");
     m_aEditBuffer.WriteCharPtr("/Rect[0 0 0 0]\n");
     m_aEditBuffer.WriteCharPtr("/FT/Sig\n");
-    std::vector<PDFObjectElement*> aPages = GetPages();
-    if (aPages.empty())
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: found no pages");
-        return false;
-    }
-    PDFObjectElement* pFirstPage = aPages[0];
     m_aEditBuffer.WriteCharPtr("/P ");
-    m_aEditBuffer.WriteUInt32AsString(pFirstPage->GetObjectValue());
+    m_aEditBuffer.WriteUInt32AsString(rFirstPage.GetObjectValue());
     m_aEditBuffer.WriteCharPtr(" 0 R\n");
     m_aEditBuffer.WriteCharPtr("/T(Signature");
     m_aEditBuffer.WriteUInt32AsString(nNextSignature);
@@ -460,7 +461,12 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.WriteCharPtr(" 0 R\n>>\n");
     m_aEditBuffer.WriteCharPtr(">>\nendobj\n\n");
 
-    PDFElement* pAnnots = pFirstPage->Lookup("Annots");
+    return nAnnotId;
+}
+
+bool PDFDocument::WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnotId)
+{
+    PDFElement* pAnnots = rFirstPage.Lookup("Annots");
     auto pAnnotsReference = dynamic_cast<PDFReferenceElement*>(pAnnots);
     if (pAnnotsReference)
     {
@@ -509,7 +515,7 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     else
     {
         // Write the updated first page object, references nAnnotId.
-        sal_uInt32 nFirstPageId = pFirstPage->GetObjectValue();
+        sal_uInt32 nFirstPageId = rFirstPage.GetObjectValue();
         if (nFirstPageId >= m_aXRef.size())
         {
             SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: invalid first page obj id");
@@ -524,7 +530,7 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         if (!pAnnotsArray)
         {
             // No Annots key, just write the key with a single reference.
-            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pFirstPage->GetDictionaryOffset(), pFirstPage->GetDictionaryLength());
+            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + rFirstPage.GetDictionaryOffset(), rFirstPage.GetDictionaryLength());
             m_aEditBuffer.WriteCharPtr("/Annots[");
             m_aEditBuffer.WriteUInt32AsString(nAnnotId);
             m_aEditBuffer.WriteCharPtr(" 0 R]");
@@ -532,26 +538,29 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         else
         {
             // Annots key is already there, insert our reference at the end.
-            PDFDictionaryElement* pDictionary = pFirstPage->GetDictionary();
+            PDFDictionaryElement* pDictionary = rFirstPage.GetDictionary();
 
             // Offset right before the end of the Annots array.
             sal_uInt64 nAnnotsEndOffset = pDictionary->GetKeyOffset("Annots") + pDictionary->GetKeyValueLength("Annots") - 1;
             // Length of beginning of the dictionary -> Annots end.
-            sal_uInt64 nAnnotsBeforeEndLength = nAnnotsEndOffset - pFirstPage->GetDictionaryOffset();
-            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + pFirstPage->GetDictionaryOffset(), nAnnotsBeforeEndLength);
+            sal_uInt64 nAnnotsBeforeEndLength = nAnnotsEndOffset - rFirstPage.GetDictionaryOffset();
+            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + rFirstPage.GetDictionaryOffset(), nAnnotsBeforeEndLength);
             m_aEditBuffer.WriteCharPtr(" ");
             m_aEditBuffer.WriteUInt32AsString(nAnnotId);
             m_aEditBuffer.WriteCharPtr(" 0 R");
             // Length of Annots end -> end of the dictionary.
-            sal_uInt64 nAnnotsAfterEndLength = pFirstPage->GetDictionaryOffset() + pFirstPage->GetDictionaryLength() - nAnnotsEndOffset;
+            sal_uInt64 nAnnotsAfterEndLength = rFirstPage.GetDictionaryOffset() + rFirstPage.GetDictionaryLength() - nAnnotsEndOffset;
             m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData()) + nAnnotsEndOffset, nAnnotsAfterEndLength);
         }
         m_aEditBuffer.WriteCharPtr(">>");
         m_aEditBuffer.WriteCharPtr("\nendobj\n\n");
     }
 
-    // Write the updated Catalog object, references nAnnotId.
-    PDFReferenceElement* pRoot = nullptr;
+    return true;
+}
+
+bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& pRoot)
+{
     if (m_pXRefStream)
         pRoot = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Root"));
     else
@@ -698,7 +707,11 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         m_aEditBuffer.WriteCharPtr(">>\nendobj\n\n");
     }
 
-    sal_uInt64 nXRefOffset = m_aEditBuffer.Tell();
+    return true;
+}
+
+void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement* pRoot)
+{
     if (m_pXRefStream)
     {
         // Write the xref stream.
@@ -926,6 +939,44 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
 
         m_aEditBuffer.WriteCharPtr(">>\n");
     }
+}
+
+bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificate, const OUString& rDescription)
+{
+    m_aEditBuffer.Seek(STREAM_SEEK_TO_END);
+    m_aEditBuffer.WriteCharPtr("\n");
+
+    sal_uInt64 nSignatureLastByteRangeOffset = 0;
+    sal_Int64 nSignatureContentOffset = 0;
+    sal_Int32 nSignatureId = WriteSignatureObject(rDescription, nSignatureLastByteRangeOffset, nSignatureContentOffset);
+
+    sal_Int32 nAppearanceId = WriteAppearanceObject();
+
+    std::vector<PDFObjectElement*> aPages = GetPages();
+    if (aPages.empty() || !aPages[0])
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: found no pages");
+        return false;
+    }
+
+    PDFObjectElement& rFirstPage = *aPages[0];
+    sal_Int32 nAnnotId = WriteAnnotObject(rFirstPage, nSignatureId, nAppearanceId);
+
+    if (!WritePageObject(rFirstPage, nAnnotId))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: failed to write the updated Page object");
+        return false;
+    }
+
+    PDFReferenceElement* pRoot = nullptr;
+    if (!WriteCatalogObject(nAnnotId, pRoot))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Sign: failed to write the updated Catalog object");
+        return false;
+    }
+
+    sal_uInt64 nXRefOffset = m_aEditBuffer.Tell();
+    WriteXRef(nXRefOffset, pRoot);
 
     // Write startxref.
     m_aEditBuffer.WriteCharPtr("startxref\n");
@@ -2256,7 +2307,7 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
 
     return true;
 #elif defined XMLSEC_CRYPTO_MSCRYPTO
-    //  Open a message for decoding.
+    // Open a message for decoding.
     HCRYPTMSG hMsg = CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
                                           CMSG_DETACHED_FLAG,
                                           0,
@@ -2269,14 +2320,14 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
         return false;
     }
 
-    //  Update the message with the encoded header blob.
+    // Update the message with the encoded header blob.
     if (!CryptMsgUpdate(hMsg, aSignature.data(), aSignature.size(), TRUE))
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature, CryptMsgUpdate() for the header failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
 
-    //  Update the message with the content blob.
+    // Update the message with the content blob.
     for (const auto& rByteRange : aByteRanges)
     {
         rStream.Seek(rByteRange.first);

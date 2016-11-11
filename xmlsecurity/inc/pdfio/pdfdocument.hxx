@@ -29,6 +29,7 @@ namespace pdfio
 class PDFTrailerElement;
 class PDFObjectElement;
 class PDFHexStringElement;
+class PDFReferenceElement;
 
 /// A byte range in a PDF file.
 class PDFElement
@@ -115,6 +116,18 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     static std::vector<unsigned char> DecodeHexString(PDFHexStringElement* pElement);
     /// Suggest a minimal, yet free signature ID to use for the next signature.
     sal_uInt32 GetNextSignature();
+    /// Write the signature object as part of signing.
+    sal_Int32 WriteSignatureObject(const OUString& rDescription, sal_uInt64& rLastByteRangeOffset, sal_Int64& rSignatureContentOffset);
+    /// Write the appearance object as part of signing.
+    sal_Int32 WriteAppearanceObject();
+    /// Write the annot object as part of signing.
+    sal_Int32 WriteAnnotObject(PDFObjectElement& rFirstPage, sal_Int32 nSignatureId, sal_Int32 nAppearanceId);
+    /// Write the updated Page object as part of signing.
+    bool WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnotId);
+    /// Write the updated Catalog object as part of signing.
+    bool WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& pRoot);
+    /// Write the updated cross-references as part of signing.
+    void WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement* pRoot);
 
 public:
     PDFDocument();
