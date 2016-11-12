@@ -213,8 +213,8 @@ void SdrMarkList::Clear()
         SdrMark* pMark = GetMark(i);
         delete pMark;
     }
-
     maList.clear();
+    mbSorted = true; //we're empty, so can be considered sorted
     SetNameDirty();
 }
 
