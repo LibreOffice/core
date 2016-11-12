@@ -100,7 +100,10 @@ sal_Int32 firebird::getColumnTypeFromFBType(short aType, short aSubType)
     case SQL_TIMESTAMP:
         return DataType::TIMESTAMP;
     case SQL_BLOB:
-        return DataType::BLOB;
+        if (aSubType == 0)
+            return DataType::BLOB;
+        else
+            return DataType::CLOB;
     case SQL_ARRAY:
         return DataType::ARRAY;
     case SQL_TYPE_TIME:
