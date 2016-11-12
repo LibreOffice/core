@@ -70,8 +70,6 @@ struct SignatureInformation
 {
     sal_Int32 nSecurityId;
     css::xml::crypto::SecurityOperationStatus nStatus;
-    // For ODF: XAdES digests (SHA256) or the old SHA1, from css::xml::crypto::DigestID
-    sal_Int32 nDigestID;
     SignatureReferenceInformations  vSignatureReferenceInfors;
     OUString ouX509IssuerName;
     OUString ouX509SerialNumber;
