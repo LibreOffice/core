@@ -2735,8 +2735,8 @@ void SmBlankNode::IncreaseBy(const SmToken &rToken)
 {
     switch(rToken.eType)
     {
-        case TBLANK:    nNum += 4;  break;
-        case TSBLANK:   nNum += 1;  break;
+        case TBLANK:  mnNum += 4; break;
+        case TSBLANK: mnNum += 1; break;
         default:
             break;
     }
@@ -2763,7 +2763,7 @@ void SmBlankNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     // make distance depend on the font height
     // (so that it increases when scaling (e.g. size *2 {a ~ b})
     long  nDist  = GetFont().GetFontSize().Height() / 10L,
-          nSpace = nNum * nDist;
+          nSpace = mnNum * nDist;
 
     // get a SmRect with Baseline and all the bells and whistles
     SmRect::operator = (SmRect(aTmpDev, &rFormat, OUString(' '),

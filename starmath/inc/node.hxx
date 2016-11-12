@@ -1115,23 +1115,23 @@ public:
 
 /** Node for whitespace
  *
- * Used to implement the "~" command. This node is just a blank space.
+ * Used to implement the commands "~" and "`". This node is just a blank space.
  */
 class SmBlankNode : public SmGraphicNode
 {
-    sal_uInt16  nNum;
+    sal_uInt16 mnNum;
 
 public:
     explicit SmBlankNode(const SmToken &rNodeToken)
-    :   SmGraphicNode(NBLANK, rNodeToken)
+        : SmGraphicNode(NBLANK, rNodeToken)
+        , mnNum(0)
     {
-        nNum = 0;
     }
 
     void         IncreaseBy(const SmToken &rToken);
-    void         Clear() { nNum = 0; }
-    sal_uInt16       GetBlankNum() const { return nNum; }
-    void         SetBlankNum(sal_uInt16 nNumber) { nNum = nNumber; }
+    void         Clear() { mnNum = 0; }
+    sal_uInt16   GetBlankNum() const { return mnNum; }
+    void         SetBlankNum(sal_uInt16 nNumber) { mnNum = nNumber; }
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;

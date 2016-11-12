@@ -877,7 +877,7 @@ void SmXMLExport::ExportBlank(const SmNode *pNode, int /*nLevel*/)
     {
         // Attach a width attribute. We choose the (somewhat arbitrary) values
         // ".5em" for a small gap '`' and "2em" for a large gap '~'.
-        // (see SmBlankNode::IncreaseBy for how pTemp->nNum is set).
+        // (see SmBlankNode::IncreaseBy for how pTemp->mnNum is set).
         OUStringBuffer sStrBuf;
         ::sax::Converter::convertDouble(sStrBuf, pTemp->GetBlankNum() * .5);
         sStrBuf.append("em");
