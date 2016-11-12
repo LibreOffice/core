@@ -2266,12 +2266,12 @@ void ScTable::SetFormulaResults(
 }
 
 #if DUMP_COLUMN_STORAGE
-void ScTable::DumpFormulaGroups( SCCOL nCol ) const
+void ScTable::DumpColumnStorage( SCCOL nCol ) const
 {
     if (!ValidCol(nCol))
         return;
 
-    aCol[nCol].DumpFormulaGroups();
+    aCol[nCol].DumpColumnStorage();
 }
 #endif
 

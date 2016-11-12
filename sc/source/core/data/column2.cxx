@@ -1569,11 +1569,11 @@ namespace {
 
 #define DUMP_FORMULA_RESULTS 0
 
-struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, void>
+struct ColumnStorageDumper : std::unary_function<sc::CellStoreType::value_type, void>
 {
     const ScDocument* mpDoc;
 
-    FormulaGroupDumper( const ScDocument* pDoc ) : mpDoc(pDoc) {}
+    ColumnStorageDumper( const ScDocument* pDoc ) : mpDoc(pDoc) {}
 
     void operator() (const sc::CellStoreType::value_type& rNode) const
     {
@@ -1679,10 +1679,10 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
 
 }
 
-void ScColumn::DumpFormulaGroups() const
+void ScColumn::DumpColumnStorage() const
 {
     cout << "-- table: " << nTab << "; column: " << nCol << endl;
-    std::for_each(maCells.begin(), maCells.end(), FormulaGroupDumper(pDocument));
+    std::for_each(maCells.begin(), maCells.end(), ColumnStorageDumper(pDocument));
     cout << "--" << endl;
 }
 #endif

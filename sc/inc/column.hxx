@@ -663,7 +663,7 @@ public:
         sc::TableValues& rValues, sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt );
 
 #if DUMP_COLUMN_STORAGE
-    void DumpFormulaGroups() const;
+    void DumpColumnStorage() const;
 #endif
 
     SCSIZE      GetPatternCount() const;

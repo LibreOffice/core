@@ -2448,13 +2448,13 @@ void ScDocument::DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const S
 }
 
 #if DUMP_COLUMN_STORAGE
-void ScDocument::DumpFormulaGroups( SCTAB nTab, SCCOL nCol ) const
+void ScDocument::DumpColumnStorage( SCTAB nTab, SCCOL nCol ) const
 {
     const ScTable* pTab = FetchTable(nTab);
     if (!pTab)
         return;
 
-    pTab->DumpFormulaGroups(nCol);
+    pTab->DumpColumnStorage(nCol);
 }
 #endif
 

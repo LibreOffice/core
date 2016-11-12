@@ -966,7 +966,7 @@ public:
     void finalizeOutlineImport();
 
 #if DUMP_COLUMN_STORAGE
-    void DumpFormulaGroups( SCCOL nCol ) const;
+    void DumpColumnStorage( SCCOL nCol ) const;
 #endif
 
     /** Replace behaves differently to the Search; adjust the rCol and rRow accordingly.

@@ -2281,7 +2281,7 @@ public:
     void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rTopPos, SCROW nLength );
 
 #if DUMP_COLUMN_STORAGE
-    SC_DLLPUBLIC void DumpFormulaGroups( SCTAB nTab, SCCOL nCol ) const;
+    SC_DLLPUBLIC void DumpColumnStorage( SCTAB nTab, SCCOL nCol ) const;
 #endif
 
 #if DEBUG_AREA_BROADCASTER
