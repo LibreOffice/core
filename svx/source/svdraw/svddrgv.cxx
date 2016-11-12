@@ -732,9 +732,9 @@ bool SdrDragView::IsInsGluePointPossible() const
 bool SdrDragView::BegInsGluePoint(const Point& rPnt)
 {
     bool bRet=false;
-    SdrObject* pObj;
     SdrPageView* pPV;
-    if (PickMarkedObj(rPnt,pObj,pPV,SdrSearchOptions::PASS2BOUND))
+    SdrObject* pObj = PickMarkedObj(rPnt, pPV, SdrSearchOptions::PASS2BOUND);
+    if (pObj)
     {
         BrkAction();
         UnmarkAllGluePoints();

@@ -464,9 +464,9 @@ void DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
                 rView.UnmarkAll();
             else
             {
-                SdrObject* pObj;
                 SdrPageView* pPV;
-                if( rView.PickObj( aMDPos, nHitLog, pObj, pPV ) )
+                SdrObject* pObj = rView.PickObj(aMDPos, nHitLog, pPV);
+                if (pObj)
                 {
                     //if (dynamic_cast<DlgEdForm*>(pObj))
                     //  rView.UnmarkAll();
