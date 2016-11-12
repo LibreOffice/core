@@ -163,11 +163,11 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
         if ( !mpView->AreObjectsMarked() )
         {
-            SdrObject* pObj;
             SdrPageView* pPV;
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
-            if (!mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV))
+            SdrObject* pObj = mpView->PickObj(aPnt, mpView->getHitTolLog(), pPV);
+            if (!pObj)
             {
                 mpView->MarkObj(aPnt, nHitLog);
             }

@@ -268,8 +268,8 @@ public:
     // SdrSearchOptions::DEEP SdrSearchOptions::ALSOONMASTER SdrSearchOptions::TESTMARKABLE SdrSearchOptions::TESTTEXTEDIT
     // SdrSearchOptions::WITHTEXT SdrSearchOptions::TESTTEXTAREA SdrSearchOptions::BACKWARD SdrSearchOptions::MARKED
     // SdrSearchOptions::WHOLEPAGE
-    bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, bool* pbHitPassDirect=nullptr) const;
-    bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions=SdrSearchOptions::NONE) const;
+    SdrObject* PickObj(const Point& rPnt, short nTol, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, bool* pbHitPassDirect=nullptr) const;
+    SdrObject* PickObj(const Point& rPnt, short nTol, SdrPageView*& rpPV, SdrSearchOptions nOptions=SdrSearchOptions::NONE) const;
     bool MarkObj(const Point& rPnt, short nTol=-2, bool bToggle=false, bool bDeep=false);
 
     // Pick: Supported options for nOptions are SdrSearchOptions::PASS2BOUND und SdrSearchOptions::PASS3NEAREST

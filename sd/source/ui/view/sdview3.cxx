@@ -286,7 +286,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     if( bDrag )
     {
         SdrPageView* pPV = nullptr;
-        PickObj( rPos, getHitTolLog(), pPickObj, pPV );
+        pPickObj = PickObj(rPos, getHitTolLog(), pPV);
     }
 
     if( nPage != SDRPAGE_NOTFOUND )
@@ -706,9 +706,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     {
                         // only one object
                         SdrObject*      pObj = pModel->GetSdPage( 0, PageKind::Standard )->GetObj( 0 );
-                        SdrObject*      pPickObj2 = nullptr;
                         SdrPageView*    pPV = nullptr;
-                        PickObj( rPos, getHitTolLog(), pPickObj2, pPV );
+                        SdrObject* pPickObj2 = PickObj(rPos, getHitTolLog(), pPV);
 
                         if( ( mnAction & DND_ACTION_MOVE ) && pPickObj2 && pObj )
                         {

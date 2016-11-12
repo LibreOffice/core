@@ -95,7 +95,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     if( !pPickObj && pPV )
     {
         SdrPageView* pPageView = pPV;
-        PickObj(rPos, getHitTolLog(), pPickObj, pPageView);
+        pPickObj = PickObj(rPos, getHitTolLog(), pPageView);
     }
 
     const bool bIsGraphic(dynamic_cast< const SdrGrafObj* >(pPickObj) !=  nullptr);

@@ -697,16 +697,16 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         bool bAlt       = pMEvt && pMEvt->IsMod2();
         Point aPnt      = pWindow->PixelToLogic( aPosPixel );
         SdrHdl* pHdl    = pView->PickHandle(aPnt);
-        SdrObject* pObj;
         SdrPageView* pPV;
 
         ScMacroInfo* pInfo = nullptr;
-        if ( pView->PickObj(aPnt, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER) )
+        SdrObject* pObj = pView->PickObj(aPnt, pView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER);
+        if (pObj)
         {
             if ( pObj->IsGroupObject() )
             {
-                SdrObject* pHit = nullptr;
-                if ( pView->PickObj(aMDPos, pView->getHitTolLog(), pHit, pPV, SdrSearchOptions::DEEP ) )
+                SdrObject* pHit = pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::DEEP);
+                if (pHit)
                     pObj = pHit;
             }
             pInfo = ScDrawLayer::GetMacroInfo( pObj );
@@ -731,7 +731,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             //  could be suppressed with ALT
             pWindow->SetPointer( Pointer( PointerStyle::RefHand ) );          // Text-URL / ImageMap
         }
-        else if ( !bAlt && pView->PickObj(aPnt, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMACRO) )
+        else if ( !bAlt && (pObj = pView->PickObj(aPnt, pView->getHitTolLog(), pPV, SdrSearchOptions::PICKMACRO)) )
         {
             //  could be suppressed with ALT
             SdrObjMacroHitRec aHitRec;  //! something missing ????

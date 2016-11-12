@@ -1372,17 +1372,16 @@ SdrHdl* SdrMarkView::PickHandle(const Point& rPnt) const
 
 bool SdrMarkView::MarkObj(const Point& rPnt, short nTol, bool bToggle, bool bDeep)
 {
-    SdrObject* pObj;
     SdrPageView* pPV;
     nTol=ImpGetHitTolLogic(nTol,nullptr);
     SdrSearchOptions nOptions=SdrSearchOptions::PICKMARKABLE;
     if (bDeep) nOptions=nOptions|SdrSearchOptions::DEEP;
-    bool bRet=PickObj(rPnt,(sal_uInt16)nTol,pObj,pPV,nOptions);
-    if (bRet) {
+    SdrObject* pObj = PickObj(rPnt, (sal_uInt16)nTol, pPV, nOptions);
+    if (pObj) {
         bool bUnmark=bToggle && IsObjMarked(pObj);
         MarkObj(pObj,pPV,bUnmark);
     }
-    return bRet;
+    return pObj != nullptr;
 }
 
 bool SdrMarkView::MarkNextObj(bool bPrev)
@@ -1741,17 +1740,17 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     return pRet;
 }
 
-bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions) const
+SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpPV, SdrSearchOptions nOptions) const
 {
-    return PickObj(rPnt,nTol,rpObj,rpPV,nOptions,nullptr);
+    return PickObj(rPnt, nTol, rpPV, nOptions, nullptr);
 }
 
-bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, bool* pbHitPassDirect) const
+SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, bool* pbHitPassDirect) const
 { // TODO: lacks a Pass2,Pass3
     SortMarkedObjects();
     if (ppRootObj!=nullptr) *ppRootObj=nullptr;
     if (pbHitPassDirect!=nullptr) *pbHitPassDirect=true;
-    rpObj=nullptr;
+    SdrObject* pRet = nullptr;
     rpPV=nullptr;
     bool bWholePage(nOptions & SdrSearchOptions::WHOLEPAGE);
     bool bMarked(nOptions & SdrSearchOptions::MARKED);
@@ -1856,11 +1855,11 @@ bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
             }
         }
         if (pObj!=nullptr) {
-            rpObj=pObj;
+            pRet=pObj;
             rpPV=pPV;
         }
     }
-    return rpObj!=nullptr;
+    return pRet;
 }
 
 bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions) const

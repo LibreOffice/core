@@ -160,9 +160,9 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
     aPos = pWindow->ScreenToOutputPixel( aPos );
     aPos = pWindow->PixelToLogic( aPos );
 
-    SdrObject* pObj = nullptr;
     SdrPageView* pPV = nullptr;
-    if ( !pView->PickObj( aPos, 0, pObj, pPV, SdrSearchOptions::DEEP ) )
+    SdrObject* pObj = pView->PickObj(aPos, 0, pPV, SdrSearchOptions::DEEP);
+    if (!pObj)
         return false;
 
     FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );

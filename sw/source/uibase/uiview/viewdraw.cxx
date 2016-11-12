@@ -457,7 +457,6 @@ static bool lcl_isTextBox(SdrObject* pObject)
 
 bool SwView::EnterDrawTextMode(const Point& aDocPos)
 {
-    SdrObject* pObj;
     SdrPageView* pPV;
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
@@ -468,16 +467,18 @@ bool SwView::EnterDrawTextMode(const Point& aDocPos)
     sal_uInt16 nOld = pSdrView->GetHitTolerancePixel();
     pSdrView->SetHitTolerancePixel( 2 );
 
-    if( pSdrView->IsMarkedHit( aDocPos ) &&
-        !pSdrView->PickHandle( aDocPos ) && IsTextTool() &&
-        pSdrView->PickObj( aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKTEXTEDIT ) &&
+    SdrObject* pObj = (pSdrView->IsMarkedHit(aDocPos) &&
+                       !pSdrView->PickHandle(aDocPos) && IsTextTool()) ?
+        pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pPV, SdrSearchOptions::PICKTEXTEDIT) :
+        nullptr;
 
+    if (pObj &&
         // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
         ( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr ||
           ( dynamic_cast< const SwDrawVirtObj *>( pObj ) !=  nullptr &&
             dynamic_cast< const SdrTextObj *>(&static_cast<SwDrawVirtObj*>(pObj)->GetReferencedObj() ) != nullptr ) ) &&
 
-        m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE )
+        m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE)
     {
         // Refuse to edit editeng text of the shape if it has textbox attached.
         if (!lcl_isTextBox(pObj))
