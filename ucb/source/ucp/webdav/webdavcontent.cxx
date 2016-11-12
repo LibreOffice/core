@@ -2439,7 +2439,7 @@ void Content::insert(
                             | ContinuationFlags::Disapprove );
                 xIH->handle( xRequest.get() );
 
-                const sal_Int32 nResp = xRequest->getResponse();
+                const ContinuationFlags nResp = xRequest->getResponse();
 
                 switch ( nResp )
                 {
