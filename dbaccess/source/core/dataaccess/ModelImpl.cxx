@@ -400,7 +400,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
             ,m_aContainer(4)
             ,m_aMacroMode( *this )
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
-            ,m_pDBContext( &_rDBContext )
+            ,m_rDBContext( _rDBContext )
             ,m_refCount(0)
             ,m_aEmbeddedMacros()
             ,m_bModificationLock( false )
@@ -434,7 +434,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_aContainer(4)
             ,m_aMacroMode( *this )
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
-            ,m_pDBContext( &_rDBContext )
+            ,m_rDBContext( _rDBContext )
             ,m_refCount(0)
             ,m_aEmbeddedMacros()
             ,m_bModificationLock( false )
@@ -504,7 +504,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    m_pDBContext->appendAtTerminateListener(*this);
+    m_rDBContext.appendAtTerminateListener(*this);
 }
 
 namespace
@@ -982,11 +982,11 @@ void SAL_CALL ODatabaseModelImpl::release()
     if ( osl_atomic_decrement(&m_refCount) == 0 )
     {
         acquire();  // prevent multiple releases
-        m_pDBContext->removeFromTerminateListener(*this);
+        m_rDBContext.removeFromTerminateListener(*this);
         dispose();
-        m_pDBContext->storeTransientProperties(*this);
-        if ( m_pDBContext && !m_sDocumentURL.isEmpty() )
-            m_pDBContext->revokeDatabaseDocument( *this );
+        m_rDBContext.storeTransientProperties(*this);
+        if (!m_sDocumentURL.isEmpty())
+            m_rDBContext.revokeDatabaseDocument(*this);
         delete this;
     }
 }
@@ -1249,13 +1249,10 @@ void ODatabaseModelImpl::impl_switchToLogicalURL( const OUString& i_rDocumentURL
         m_sDocFileLocation = m_sDocumentURL;
 
     // register at the database context, or change registration
-    if ( m_pDBContext )
-    {
-        if ( !sOldURL.isEmpty() )
-            m_pDBContext->databaseDocumentURLChange( sOldURL, m_sDocumentURL );
-        else
-            m_pDBContext->registerDatabaseDocument( *this );
-    }
+    if (!sOldURL.isEmpty())
+        m_rDBContext.databaseDocumentURLChange( sOldURL, m_sDocumentURL );
+    else
+        m_rDBContext.registerDatabaseDocument( *this );
 }
 
 OUString ODatabaseModelImpl::getObjectContainerStorageName( const ObjectType _eType )

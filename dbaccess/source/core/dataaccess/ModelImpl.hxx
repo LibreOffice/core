@@ -183,7 +183,7 @@ private:
 
     SharedStorage                                                     m_xDocumentStorage;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >         m_pStorageModifyListener;
-    ODatabaseContext*                                                 m_pDBContext;
+    ODatabaseContext&                                                 m_rDBContext;
     DocumentEventsData                                                m_aDocumentEvents;
 
     ::comphelper::NamedValueCollection                                m_aMediaDescriptor;
