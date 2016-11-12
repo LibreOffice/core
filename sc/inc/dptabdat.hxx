@@ -142,7 +142,7 @@ public:
     virtual long                GetSourceDim( long nDim );
     virtual long                Compare( long nDim, long nDataId1, long nDataId2);
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
     virtual void Dump() const;
 #endif
 

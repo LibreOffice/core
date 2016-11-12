@@ -142,7 +142,7 @@ public:
     void clear();
     bool empty() const;
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
     void dumpRowFlag(const RowFlagType& rFlag) const;
     void dump() const;
 #endif

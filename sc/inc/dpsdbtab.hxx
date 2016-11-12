@@ -77,6 +77,10 @@ public:
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) override;
     virtual const ScDPFilteredCache&   GetCacheTable() const override;
     virtual void ReloadCacheTable() override;
+
+#if DUMP_PIVOT_TABLE
+    virtual void Dump() const override;
+#endif
 };
 
 #endif

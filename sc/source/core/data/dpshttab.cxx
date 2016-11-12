@@ -209,6 +209,15 @@ void ScSheetDPData::ReloadCacheTable()
     CreateCacheTable();
 }
 
+#if DUMP_PIVOT_TABLE
+
+void ScSheetDPData::Dump() const
+{
+    // TODO : Implement this.
+}
+
+#endif
+
 ScSheetSourceDesc::ScSheetSourceDesc(ScDocument* pDoc) :
     mpDoc(pDoc) {}
 

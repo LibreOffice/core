@@ -293,7 +293,7 @@ long ScDPTableData::Compare( long nDim, long nDataId1, long nDataId2)
         return -1;
 }
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
 void ScDPTableData::Dump() const
 {
 }
