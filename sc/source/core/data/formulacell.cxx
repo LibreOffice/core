@@ -2200,6 +2200,9 @@ void ScFormulaCell::SetInChangeTrack( bool bVal )
 
 void ScFormulaCell::Notify( const SfxHint& rHint )
 {
+    if (pDocument->IsInDtorClear())
+        return;
+
     const sal_uInt32 nHint = rHint.GetId();
     if (nHint == SC_HINT_REFERENCE)
     {
@@ -2266,7 +2269,7 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
         return;
     }
 
-    if ( !pDocument->IsInDtorClear() && pDocument->GetHardRecalcState() == ScDocument::HARDRECALCSTATE_OFF )
+    if ( pDocument->GetHardRecalcState() == ScDocument::HARDRECALCSTATE_OFF )
     {
         if (nHint & (SC_HINT_DATACHANGED | SC_HINT_TABLEOPDIRTY))
         {
