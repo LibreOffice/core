@@ -183,11 +183,11 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
         aPos = pWindow->PixelToLogic( aPos );
 
         SdrPageView* pPV;
-        SdrObject* pObj;
-        if( pView->PickObj( aPos, 0, pObj, pPV, SdrSearchOptions::PICKMACRO ) &&
-             dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
+        SdrObject* pObj = pView->PickObj(aPos, 0, pPV, SdrSearchOptions::PICKMACRO);
+        SwVirtFlyDrawObj* pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
+        if (pDrawObj)
         {
-            SwFlyFrame *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame();
+            SwFlyFrame *pFly = pDrawObj->GetFlyFrame();
             const SwFormatURL &rURL = pFly->GetFormat()->GetURL();
             OUString sText;
             if( rURL.GetMap() )

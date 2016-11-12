@@ -554,9 +554,9 @@ void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
 
     if ( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
     {
-        SdrObject*          pSdrObj = nullptr;
-        SdrPageView*        pPageView = nullptr;
-        if ( pView->PickObj( aPos, pView->getHitTolLog(), pSdrObj, pPageView ) )
+        SdrPageView* pPageView = nullptr;
+        SdrObject* pSdrObj = pView->PickObj(aPos, pView->getHitTolLog(), pPageView);
+        if (pSdrObj)
         {
             const IMapObject*   pIMapObj = GetIMapObj( pSdrObj );
             OUString            aStr;

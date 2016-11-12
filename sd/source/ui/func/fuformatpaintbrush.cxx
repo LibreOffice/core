@@ -99,11 +99,9 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
 
         if( (eHit == SdrHitKind::TextEdit) || (eHit == SdrHitKind::TextEditObj && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != nullptr ) ))
         {
-            SdrObject* pPickObj=nullptr;
             SdrPageView* pPV=nullptr;
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-            mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pPickObj, pPV, SdrSearchOptions::PICKMARKABLE);
-
+            SdrObject* pPickObj = mpView->PickObj(mpWindow->PixelToLogic(rMEvt.GetPosPixel()),nHitLog, pPV, SdrSearchOptions::PICKMARKABLE);
             if( (pPickObj != nullptr) && !pPickObj->IsEmptyPresObj() )
             {
                 // if we text hit another shape than the one currently selected, unselect the old one now
@@ -159,11 +157,9 @@ bool FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
         else
         {
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-            SdrObject* pObj=nullptr;
             SdrPageView* pPV=nullptr;
-            bool bOverMarkableObject = mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pObj, pPV, SdrSearchOptions::PICKMARKABLE);
-
-            if(bOverMarkableObject && HasContentForThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
+            SdrObject* pObj = mpView->PickObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pPV, SdrSearchOptions::PICKMARKABLE);
+            if (pObj && HasContentForThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
                 mpWindow->SetPointer(Pointer(PointerStyle::Fill));
             else
                 mpWindow->SetPointer(Pointer(PointerStyle::Arrow));
