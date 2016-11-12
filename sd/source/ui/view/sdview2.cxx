@@ -536,14 +536,13 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                 // check object insert
                 if( !nRet && ( bXFillExchange || ( ( bDrawing || bGraphic || bMtf || bBitmap || bBookmark ) && ( nDropAction & DND_ACTION_LINK ) ) ) )
                 {
-                    SdrObject*      pPickObj = nullptr;
                     SdrPageView*    pPageView = nullptr;
                     ::sd::Window* pWindow = mpViewSh->GetActiveWindow();
                     Point           aPos( pWindow->PixelToLogic( rEvt.maPosPixel ) );
-                    const bool      bHasPickObj = PickObj( aPos, getHitTolLog(), pPickObj, pPageView );
+                    SdrObject* pPickObj = PickObj(aPos, getHitTolLog(), pPageView);
                     bool            bIsPresTarget = false;
 
-                    if( bHasPickObj && pPickObj && ( pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall() ) )
+                    if (pPickObj && (pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall()))
                     {
                         SdPage* pPage = static_cast<SdPage*>( pPickObj->GetPage() );
 
@@ -551,8 +550,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                             bIsPresTarget = pPage->IsPresObj( pPickObj );
                     }
 
-                    if( bHasPickObj && !bIsPresTarget &&
-                        ( bGraphic || bMtf || bBitmap || bXFillExchange ) )
+                    if (pPickObj && !bIsPresTarget && (bGraphic || bMtf || bBitmap || bXFillExchange))
                     {
                         if( mpDropMarkerObj != pPickObj )
                         {
@@ -719,10 +717,10 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                     }
                     else
                     {
-                        SdrObject*      pPickObj = nullptr;
                         SdrPageView*    pPageView = nullptr;
 
-                        if( PickObj( aPos, getHitTolLog(), pPickObj, pPageView ) )
+                        SdrObject* pPickObj = PickObj(aPos, getHitTolLog(), pPageView);
+                        if (pPickObj)
                         {
                             // insert as clip action => jump
                             OUString       aBookmark( aINetBookmark.GetURL() );

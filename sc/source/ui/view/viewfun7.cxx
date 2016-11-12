@@ -390,8 +390,8 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     SdrPageView* pPageView = pScDrawView->GetSdrPageView();
     if (pPageView)
     {
-        SdrObject* pPickObj = nullptr;
-        if (pScDrawView->PickObj(rPos, pScDrawView->getHitTolLog(), pPickObj, pPageView))
+        SdrObject* pPickObj = pScDrawView->PickObj(rPos, pScDrawView->getHitTolLog(), pPageView);
+        if (pPickObj)
         {
             const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
             SdrObject* pResult = pScDrawView->ApplyGraphicToObject(

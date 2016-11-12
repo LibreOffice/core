@@ -69,6 +69,40 @@ namespace connectivity
             eFilterOther
         };
 
+        struct EBookQueryWrapper
+        {
+        private:
+            EBookQuery*     pQuery;
+        public:
+            EBookQueryWrapper()
+                : pQuery(nullptr)
+            {
+            }
+            EBookQueryWrapper(EBookQueryWrapper& rhs)
+                : pQuery(rhs.pQuery)
+            {
+                if (pQuery)
+                    e_book_query_ref(pQuery);
+                return *this;
+            }
+            EBookQueryWrapper& operator=(const EBookQueryWrapper& rhs)
+            {
+                if (this == &rhs)
+                    return *this;
+                if (pQuery)
+                    e_book_query_unref(pQuery);
+                pQuery = rhs.pQuery;
+                if (pQuery)
+                    e_book_query_ref( pQuery );
+                return *this;
+            }
+            ~EBookQueryWrapper()
+            {
+                if (pQuery)
+                    e_book_query_unref(pQuery);
+            }
+        };
+
         struct QueryData
         {
         private:

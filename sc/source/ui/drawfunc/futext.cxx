@@ -196,14 +196,14 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
             }
         }
 
-        SdrObject* pObj;
-        SdrPageView* pPV;
+        SdrPageView* pPV = nullptr;
 
         if ( pHdl != nullptr || pView->IsMarkedHit(aMDPos) )
         {
-            if (pHdl == nullptr &&
-//              pView->TakeTextEditObject(aMDPos, pObj, pPV) )
-                pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKTEXTEDIT) )
+            SdrObject* pObj = (pHdl == nullptr) ?
+                pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::PICKTEXTEDIT) :
+                nullptr;
+            if (pObj)
             {
                 SdrOutliner* pO = MakeOutliner();
                 lcl_UpdateHyphenator( *pO, pObj );
@@ -329,7 +329,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     if ( bRet )
                     pView->GetCreateObj()->SetGridOffset( aGridOff );
                 }
-                else if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK))
+                else if (SdrObject* pObj = pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK))
                 {
                     pView->UnmarkAllObj();
                     ScViewData& rViewData = pViewShell->GetViewData();

@@ -466,10 +466,12 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
         }
         else
         {
-            SdrObject* pObj; SdrPageView* pPV;
+            SdrPageView* pPV = nullptr;
             pSdrView->SetHitTolerancePixel( HIT_PIX );
-            if ( bNotInSelObj && bExecHyperlinks &&
-                 pSdrView->PickObj( rLPt, pSdrView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMACRO ))
+            SdrObject* pObj  = (bNotInSelObj && bExecHyperlinks) ?
+                 pSdrView->PickObj(rLPt, pSdrView->getHitTolLog(), pPV, SdrSearchOptions::PICKMACRO) :
+                 nullptr;
+            if (pObj)
             {
                 SdrObjMacroHitRec aTmp;
                 aTmp.aPos = rLPt;
@@ -4379,9 +4381,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
         if ((PixelToLogic(m_aStartPos).Y() == (aDocPos.Y())) && (PixelToLogic(m_aStartPos).X() == (aDocPos.X())))//To make sure it was not moved
         {
-            SdrObject* pObj;
-            SdrPageView* pPV;
-            if (pSdrView && pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER ))
+            SdrPageView* pPV = nullptr;
+            SdrObject* pObj = pSdrView ? pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER) : nullptr;
+            if (pObj)
             {
                 SwFrameFormat* pFormat = GetUserCall(pObj)->GetFormat();
                 SwFrameFormat* pShapeFormat = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_FLYFRMFMT);
