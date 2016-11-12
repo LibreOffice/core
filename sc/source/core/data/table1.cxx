@@ -2265,7 +2265,7 @@ void ScTable::SetFormulaResults(
     aCol[nCol].SetFormulaResults(nRow, pResults, nLen);
 }
 
-#if DEBUG_COLUMN_STORAGE
+#if DUMP_COLUMN_STORAGE
 void ScTable::DumpFormulaGroups( SCCOL nCol ) const
 {
     if (!ValidCol(nCol))

@@ -3273,6 +3273,10 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         {
             dumpCellProperties();
         }
+        else if (rKeyCode.GetCode() == KEY_F8)
+        {
+            dumpColumnCellStorage();
+        }
     }
 
 #endif

@@ -2280,7 +2280,7 @@ public:
     const SvtBroadcaster* GetBroadcaster( const ScAddress& rPos ) const;
     void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rTopPos, SCROW nLength );
 
-#if DEBUG_COLUMN_STORAGE
+#if DUMP_COLUMN_STORAGE
     SC_DLLPUBLIC void DumpFormulaGroups( SCTAB nTab, SCCOL nCol ) const;
 #endif
 

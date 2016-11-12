@@ -2447,7 +2447,7 @@ void ScDocument::DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const S
     pTab->DeleteBroadcasters(rBlockPos, rTopPos.Col(), rTopPos.Row(), rTopPos.Row()+nLength-1);
 }
 
-#if DEBUG_COLUMN_STORAGE
+#if DUMP_COLUMN_STORAGE
 void ScDocument::DumpFormulaGroups( SCTAB nTab, SCCOL nCol ) const
 {
     const ScTable* pTab = FetchTable(nTab);

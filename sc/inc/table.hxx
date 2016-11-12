@@ -965,7 +965,7 @@ public:
 
     void finalizeOutlineImport();
 
-#if DEBUG_COLUMN_STORAGE
+#if DUMP_COLUMN_STORAGE
     void DumpFormulaGroups( SCCOL nCol ) const;
 #endif
 

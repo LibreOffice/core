@@ -82,7 +82,7 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
 
     // Apply the lower group object to the lower cells.
 #if DEBUG_COLUMN_STORAGE
-    if (xGroup2->mpTopCell->aPos.Row() + xGroup2->mnLength > aPos.first->position + aPos.first->size)
+    if (xGroup2->mpTopCell->aPos.Row() + size_t(xGroup2->mnLength) > aPos.first->position + aPos.first->size)
     {
         cerr << "ScColumn::SplitFormulaCellGroup: Shared formula region goes beyond the formula block. Not good." << endl;
         cerr.flush();
@@ -294,7 +294,7 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
             xGroup2->mbInvariant = xGroup->mbInvariant;
             xGroup2->mpCode = xGroup->mpCode->Clone();
 #if DEBUG_COLUMN_STORAGE
-            if (xGroup2->mpTopCell->aPos.Row() + xGroup2->mnLength > it->position + it->size)
+            if (xGroup2->mpTopCell->aPos.Row() + size_t(xGroup2->mnLength) > it->position + it->size)
             {
                 cerr << "ScColumn::UnshareFormulaCell: Shared formula region goes beyond the formula block. Not good." << endl;
                 cerr.flush();

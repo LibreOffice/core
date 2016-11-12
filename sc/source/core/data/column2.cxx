@@ -1563,7 +1563,7 @@ void ScColumn::CellStorageModified()
 #endif
 }
 
-#if DEBUG_COLUMN_STORAGE
+#if DUMP_COLUMN_STORAGE
 
 namespace {
 

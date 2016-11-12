@@ -662,7 +662,7 @@ public:
     void SwapNonEmpty(
         sc::TableValues& rValues, sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt );
 
-#if DEBUG_COLUMN_STORAGE
+#if DUMP_COLUMN_STORAGE
     void DumpFormulaGroups() const;
 #endif
 

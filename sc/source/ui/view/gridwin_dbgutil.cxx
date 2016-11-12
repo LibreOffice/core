@@ -112,4 +112,15 @@ void ScGridWindow::dumpGraphicInformation()
     }
 }
 
+void ScGridWindow::dumpColumnCellStorage()
+{
+    // Get the current cursor position.
+    ScAddress aCurPos = pViewData->GetCurPos();
+    ScDocument* pDoc = pViewData->GetDocument();
+
+    // TODO : Perhaps we should dump the whole structure, not just the formula
+    // groups.
+    pDoc->DumpFormulaGroups(aCurPos.Tab(), aCurPos.Col());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

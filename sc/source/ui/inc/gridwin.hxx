@@ -447,6 +447,7 @@ private:
     void dumpColumnInformationPixel();
     void dumpColumnInformationHmm();
     void dumpGraphicInformation();
+    void dumpColumnCellStorage();
 #endif
 
 };
