@@ -21,6 +21,13 @@ namespace connectivity
 {
     namespace firebird
     {
+        // Type Blob has 2 subtypes values
+        // 0 for BLOB, 1 for CLOB
+        // see http://www.firebirdfaq.org/faq48/
+        enum class BlobSubtype {
+            Blob = 0,
+            Clob = 1
+        };
 
         /**
          * Make sure an identifier is safe to use within the databse. Currently
