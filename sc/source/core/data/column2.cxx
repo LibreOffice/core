@@ -1567,6 +1567,8 @@ void ScColumn::CellStorageModified()
 
 namespace {
 
+#define DUMP_FORMULA_RESULTS 0
+
 struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, void>
 {
     const ScDocument* mpDoc;
@@ -1620,9 +1622,10 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
     {
         sc::TokenStringContext aCxt(mpDoc, mpDoc->GetGrammar());
         OUString aFormula = pCell->GetCode()->CreateString(aCxt, pCell->aPos);
-        cout << "    * formula: " << aFormula << endl;
+        cout << "      * formula: " << aFormula << endl;
     }
 
+#if DUMP_FORMULA_RESULTS
     void printResult(const ScFormulaCell* pCell) const
     {
         sc::FormulaResultValue aRes = pCell->GetResult();
@@ -1645,6 +1648,9 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
 
         cout << endl;
     }
+#else
+    void printResult(const ScFormulaCell*) const {}
+#endif
 };
 
 }
