@@ -1670,7 +1670,10 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
         cout << endl;
     }
 #else
-    void printResult(const ScFormulaCell*) const {}
+    void printResult(const ScFormulaCell*) const
+    {
+        (void) this; /* loplugin:staticmethods */
+    }
 #endif
 };
 
