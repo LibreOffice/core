@@ -7840,7 +7840,7 @@ fi
 AC_SUBST([ENABLE_EOT])
 
 dnl ===================================================================
-dnl Check for system librevenge
+dnl Check for DLP libs
 dnl ===================================================================
 AS_IF([test "$COM" = "MSC"],
       [librevenge_libdir="${WORKDIR}/LinkTarget/Library"],
@@ -7848,64 +7848,44 @@ AS_IF([test "$COM" = "MSC"],
 )
 libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0 >= 0.0.1],["-I${WORKDIR}/UnpackedTarball/librevenge/inc"],["-L${librevenge_libdir} -lrevenge-0.0"])
 
-dnl ===================================================================
-dnl Check for system libe-book
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libebook],[EBOOK],[libe-book-0.1])
-libo_PKG_VERSION([EBOOK], [libe-book-0.1], [0.1.2])
-
-dnl ===================================================================
-dnl Check for system libetonyek
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libetonyek],[ETONYEK],[libetonyek-0.1])
-libo_PKG_VERSION([ETONYEK], [libetonyek-0.1], [0.1.5])
-
-dnl ===================================================================
-dnl Check for system libfreehand
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libfreehand],[FREEHAND],[libfreehand-0.1])
-
-dnl ===================================================================
-dnl Check for system libodfgen
-dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libodfgen],[ODFGEN],[libodfgen-0.1])
 
-dnl ===================================================================
-dnl Check for system libcdr
-dnl ===================================================================
+AS_IF([test "$COM" = "MSC"],
+      [libwpd_libdir="${WORKDIR}/LinkTarget/Library"],
+      [libwpd_libdir="${WORKDIR}/UnpackedTarball/libwpd/src/lib/.libs"]
+)
+libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.10],["-I${WORKDIR}/UnpackedTarball/libwpd/inc"],["-L${libwpd_libdir} -lwpd-0.10"])
+
+libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.3])
+
+libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.4])
+libo_PKG_VERSION([WPS], [libwps-0.4], [0.4.4])
+
+libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.1])
+
 libo_CHECK_SYSTEM_MODULE([libcdr],[CDR],[libcdr-0.1])
 
-dnl ===================================================================
-dnl Check for system libmspub
-dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libmspub],[MSPUB],[libmspub-0.1])
 
-dnl ===================================================================
-dnl Check for system libmwaw
-dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libmwaw],[MWAW],[libmwaw-0.3 >= 0.3.1])
 libo_PKG_VERSION([MWAW], [libmwaw-0.3], [0.3.8])
 
-dnl ===================================================================
-dnl Check for system libpagemaker
-dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([libetonyek],[ETONYEK],[libetonyek-0.1])
+libo_PKG_VERSION([ETONYEK], [libetonyek-0.1], [0.1.5])
+
+libo_CHECK_SYSTEM_MODULE([libfreehand],[FREEHAND],[libfreehand-0.1])
+
+libo_CHECK_SYSTEM_MODULE([libebook],[EBOOK],[libe-book-0.1])
+libo_PKG_VERSION([EBOOK], [libe-book-0.1], [0.1.2])
+
+libo_CHECK_SYSTEM_MODULE([libabw],[ABW],[libabw-0.1])
+
 libo_CHECK_SYSTEM_MODULE([libpagemaker],[PAGEMAKER],[libpagemaker-0.0])
 
-dnl ===================================================================
-dnl Check for system libzmf
-dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libzmf],[ZMF],[libzmf-0.0])
 
-dnl ===================================================================
-dnl Check for system libstaroffice
-dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libstaroffice],[STAROFFICE],[libstaroffice-0.0])
 libo_PKG_VERSION([STAROFFICE], [libstaroffice-0.0], [0.0.2])
-
-dnl ===================================================================
-dnl Check for system libvisio
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.1])
 
 dnl ===================================================================
 dnl Check for system libcmis
@@ -7918,15 +7898,6 @@ else
     ENABLE_CMIS=
 fi
 AC_SUBST(ENABLE_CMIS)
-
-dnl ===================================================================
-dnl Check for system libwpd
-dnl ===================================================================
-AS_IF([test "$COM" = "MSC"],
-      [libwpd_libdir="${WORKDIR}/LinkTarget/Library"],
-      [libwpd_libdir="${WORKDIR}/UnpackedTarball/libwpd/src/lib/.libs"]
-)
-libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.10],["-I${WORKDIR}/UnpackedTarball/libwpd/inc"],["-L${libwpd_libdir} -lwpd-0.10"])
 
 dnl ===================================================================
 dnl Check for system lcms2
@@ -7979,22 +7950,6 @@ fi
 AC_SUBST(FREETYPE_CFLAGS)
 AC_SUBST(FREETYPE_LIBS)
 AC_SUBST([SYSTEM_FREETYPE])
-
-dnl ===================================================================
-dnl Check for system libabw
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libabw],[ABW],[libabw-0.1])
-
-dnl ===================================================================
-dnl Check for system libwps
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.4])
-libo_PKG_VERSION([WPS], [libwps-0.4], [0.4.4])
-
-dnl ===================================================================
-dnl Check for system libwpg
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.3])
 
 # ===================================================================
 # Check for system libxslt
