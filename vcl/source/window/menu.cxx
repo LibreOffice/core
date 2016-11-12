@@ -319,9 +319,9 @@ void Menu::Select()
 #if defined(MACOSX)
 void Menu::ImplSelectWithStart( Menu* pSMenu )
 {
-    Menu* pOldStartedFrom = pStartedFrom;
+    auto pOldStartedFrom = pStartedFrom;
     pStartedFrom = pSMenu;
-    Menu* pOldStartedStarted = pOldStartedFrom ? pOldStartedFrom->pStartedFrom : nullptr;
+    auto pOldStartedStarted = pOldStartedFrom ? pOldStartedFrom->pStartedFrom : VclPtr<Menu>();
     Select();
     if( pOldStartedFrom )
         pOldStartedFrom->pStartedFrom = pOldStartedStarted;
