@@ -1453,7 +1453,6 @@ const SwFrameFormat* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
     if( !Imp()->HasDrawView() )
         return nullptr;
 
-    SdrObject* pObj;
     SdrPageView* pPV;
     const SwFrameFormat* pRet = nullptr;
     SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
@@ -1461,11 +1460,8 @@ const SwFrameFormat* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
     const auto nOld = pDView->GetHitTolerancePixel();
     pDView->SetHitTolerancePixel( 2 );
 
-    SwVirtFlyDrawObj* pFlyObj(nullptr);
-    if (pDView->PickObj(rPt, pDView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMACRO))
-    {
-        pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
-    }
+    SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPV, SdrSearchOptions::PICKMACRO);
+    SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
     if (pFlyObj)
     {
         SwFlyFrame *pFly = pFlyObj->GetFlyFrame();
@@ -1529,15 +1525,11 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
     if( !Imp()->HasDrawView() )
         return nullptr;
 
-    SdrObject* pObj;
     SdrPageView* pPV;
     SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
 
-    SwVirtFlyDrawObj* pFlyObj(nullptr);
-    if (pDView->PickObj(rPt, pDView->getHitTolLog(), pObj, pPV))
-    {
-        pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
-    }
+    SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPV);
+    SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
     if (pFlyObj)
     {
         SwFlyFrame *pFly = pFlyObj->GetFlyFrame();
@@ -1571,7 +1563,6 @@ const SwFrameFormat* SwFEShell::GetFormatFromObj( const Point& rPt, SwRect** pRe
 
     if( Imp()->HasDrawView() )
     {
-        SdrObject* pObj;
         SdrPageView* pPView;
 
         SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
@@ -1580,7 +1571,8 @@ const SwFrameFormat* SwFEShell::GetFormatFromObj( const Point& rPt, SwRect** pRe
         // tolerance for Drawing-SS
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SdrSearchOptions::PICKMARKABLE ) )
+        SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPView, SdrSearchOptions::PICKMARKABLE);
+        if (pObj)
         {
            // first check it:
             if (SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
@@ -1693,7 +1685,6 @@ ObjCntType SwFEShell::GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const
 
     if( Imp()->HasDrawView() )
     {
-        SdrObject* pObj;
         SdrPageView* pPView;
 
         SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
@@ -1702,7 +1693,8 @@ ObjCntType SwFEShell::GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const
         // tolerance for Drawing-SS
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SdrSearchOptions::PICKMARKABLE ) )
+        SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPView, SdrSearchOptions::PICKMARKABLE);
+        if (pObj)
             eType = GetObjCntType( *(rpObj = pObj) );
 
         pDView->SetHitTolerancePixel( nOld );

@@ -228,8 +228,8 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 if ( pObj->IsGroupObject() )
                 {
                     SdrPageView* pPV = nullptr;
-                    SdrObject* pHit = nullptr;
-                    if ( pView->PickObj( pWin->PixelToLogic( pViewData->GetMousePosPixel() ), pView->getHitTolLog(), pHit, pPV, SdrSearchOptions::DEEP ) )
+                    SdrObject* pHit = pView->PickObj(pWin->PixelToLogic(pViewData->GetMousePosPixel()), pView->getHitTolLog(), pPV, SdrSearchOptions::DEEP);
+                    if (pHit)
                         pObj = pHit;
                 }
 

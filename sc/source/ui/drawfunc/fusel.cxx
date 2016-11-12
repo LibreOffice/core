@@ -143,10 +143,10 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
-            SdrObject* pObj;
-            SdrPageView* pPV;
+            SdrPageView* pPV = nullptr;
             bool bAlt = rMEvt.IsMod2();
-            if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMACRO) )
+            SdrObject* pObj = !bAlt ? pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::PICKMACRO) : nullptr;
+            if (pObj)
             {
                 pView->BegMacroObj(aMDPos, pObj, pPV, pWindow);
                 bReturn = true;
@@ -154,7 +154,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             else
             {
                 OUString sURL, sTarget;
-                if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER))
+                pObj = !bAlt ? pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER) : nullptr;
+                if (pObj)
                 {
                    // Support for imported Excel docs
                    // Excel is of course not consistent and allows
@@ -176,8 +177,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                        ScMacroInfo* pTmpInfo = ScDrawLayer::GetMacroInfo( pObj );
                        if ( !pTmpInfo || pTmpInfo->GetMacro().isEmpty() )
                        {
-                           SdrObject* pHit = nullptr;
-                           if ( pView->PickObj(aMDPos, pView->getHitTolLog(), pHit, pPV, SdrSearchOptions::DEEP ) )
+                           SdrObject* pHit = pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::DEEP);
+                           if (pHit)
                                pObj = pHit;
                        }
                    }
@@ -420,7 +421,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 * one, he releases the mouse button immediately
                 **************************************************************/
                 SdrPageView* pPV = nullptr;
-                if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK))
+                pObj = pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK);
+                if (pObj)
                 {
                     pView->UnmarkAllObj();
                     pView->MarkObj(pObj,pPV);
