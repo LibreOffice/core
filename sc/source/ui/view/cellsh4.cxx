@@ -127,7 +127,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
 
     // If ScrollLock key is active, cell cursor stays on the current cell while
     // scrolling the grid.
-    bool bScrollLock = true;
+    bool bScrollLock = false;
     KeyIndicatorState eState = GetFrameWin()->GetIndicatorState();
     if (eState & KeyIndicatorState::SCROLLLOCK)
         bScrollLock = true;
