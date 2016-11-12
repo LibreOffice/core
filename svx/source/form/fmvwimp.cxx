@@ -1762,7 +1762,6 @@ void FmXFormView::startMarkListWatching()
     }
 }
 
-
 void FmXFormView::saveMarkList()
 {
     if ( m_pView )
@@ -1802,10 +1801,9 @@ void FmXFormView::saveMarkList()
     else
     {
         OSL_FAIL( "FmXFormView::saveMarkList: invalid view!" );
-        m_aMark = SdrMarkList();
+        m_aMark.Clear();
     }
 }
-
 
 static bool lcl_hasObject( SdrObjListIter& rIter, SdrObject* pObj )
 {
