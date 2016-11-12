@@ -483,17 +483,17 @@ Dim sObjects() As String, bFound As Boolean, oTables As Object, oQueries As Obje
 	If IsMissing(pvType) Then
 		pvType = cstNull
 	Else
-		If Not Utils._CheckArgument(pvType, 1, Utils._AddNumeric(), dbOpenForwardOnly) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvType, 2, Utils._AddNumeric(), dbOpenForwardOnly) Then Goto Exit_Function
 	End If
 	If IsMissing(pvOptions) Then
 		pvOptions = cstNull
 	Else
-		If Not Utils._CheckArgument(pvOptions, 2, Utils._AddNumeric(), dbSQLPassThrough) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvOptions, 3, Utils._AddNumeric(), dbSQLPassThrough) Then Goto Exit_Function
 	End If
 	If IsMissing(pvLockEdit) Then
 		pvLockEdit = cstNull
 	Else
-		If Not Utils._CheckArgument(pvLockEdit, 3, Utils._AddNumeric(), dbReadOnly) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvLockEdit, 4, Utils._AddNumeric(), dbReadOnly) Then Goto Exit_Function
 	End If
 
 	sSource = Split(UCase(Trim(pvSource)), &quot; &quot;)(0)
