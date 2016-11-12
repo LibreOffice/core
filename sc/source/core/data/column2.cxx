@@ -1577,10 +1577,31 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
 
     void operator() (const sc::CellStoreType::value_type& rNode) const
     {
-        if (rNode.type != sc::element_type_formula)
-            return;
+        switch (rNode.type)
+        {
+            case sc::element_type_numeric:
+                cout << "  * numeric block (pos=" << rNode.position << ", length=" << rNode.size << ")" << endl;
+                break;
+            case sc::element_type_string:
+                cout << "  * string block (pos=" << rNode.position << ", length=" << rNode.size << ")" << endl;
+                break;
+            case sc::element_type_edittext:
+                cout << "  * edit-text block (pos=" << rNode.position << ", length=" << rNode.size << ")" << endl;
+                break;
+            case sc::element_type_formula:
+                dumpFormulaBlock(rNode);
+                break;
+            case sc::element_type_empty:
+                cout << "  * empty block (pos=" << rNode.position << ", length=" << rNode.size << ")" << endl;
+                break;
+            default:
+                cout << "  * unknown block" << endl;
+        }
+    }
 
-        cout << "  * formula block" << endl;
+    void dumpFormulaBlock(const sc::CellStoreType::value_type& rNode) const
+    {
+        cout << "  * formula block (pos=" << rNode.position << ", length=" << rNode.size << ")" << endl;
         sc::formula_block::const_iterator it = sc::formula_block::begin(*rNode.data);
         sc::formula_block::const_iterator itEnd = sc::formula_block::end(*rNode.data);
 
