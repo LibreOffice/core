@@ -233,8 +233,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
-            SdrObject* pObj;
-            if (!rMEvt.IsMod2() && mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMACRO))
+            SdrObject* pObj = !rMEvt.IsMod2() ? mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::PICKMACRO) : nullptr;
+            if (pObj)
             {
                 mpView->BegMacroObj(aMDPos, nHitLog, pObj, pPV, mpWindow);
                 bReturn = true;
@@ -301,7 +301,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr
                 )
             {
-                if(mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER))
+                pObj = mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER);
+                if (pObj)
                 {
                     // Animate object when not just selecting.
                     if ( ! bSelectionOnly)
@@ -312,7 +313,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         if(rMEvt.GetClicks() == 1)
                         {
                             // Look into the group
-                            if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::DEEP))
+                            pObj = mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::DEEP);
+                            if (pObj)
                                 bReturn = AnimateObj(pObj, aMDPos);
                         }
                         else if( !bReadOnly && rMEvt.GetClicks() == 2)
@@ -670,8 +672,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 * one, he releases the mouse button immediately
                 **************************************************************/
                 SdrPageView* pPV;
-                SdrObject* pObj;
-                if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK))
+                SdrObject* pObj = mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK);
+                if (pObj)
                 {
                     if (pPV->IsObjMarkable(pObj))
                     {
@@ -1483,11 +1485,9 @@ bool FuSelection::cancel()
 
 SdrObject* FuSelection::pickObject (const Point& rTestPoint)
 {
-    SdrObject* pObject = nullptr;
     SdrPageView* pPageView;
     sal_uInt16 nHitLog = sal_uInt16 (mpWindow->PixelToLogic(Size(HITPIX,0)).Width());
-    mpView->PickObj (rTestPoint, nHitLog, pObject, pPageView, SdrSearchOptions::PICKMARKABLE);
-    return pObject;
+    return mpView->PickObj(rTestPoint, nHitLog, pPageView, SdrSearchOptions::PICKMARKABLE);
 }
 
 void FuSelection::ForcePointer(const MouseEvent* pMEvt)
