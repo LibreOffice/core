@@ -100,7 +100,17 @@ sal_Int32 firebird::getColumnTypeFromFBType(short aType, short aSubType)
     case SQL_TIMESTAMP:
         return DataType::TIMESTAMP;
     case SQL_BLOB:
-        return DataType::BLOB;
+        switch (static_cast<BlobSubtype>(aSubType))
+        {
+            case BlobSubtype::Blob:
+                return DataType::BLOB;
+            case BlobSubtype::Clob:
+                return DataType::CLOB;
+            default:
+                SAL_WARN("connectivity.firebird", "Unknown subtype for Blob type: " << aSubType);
+                assert(!"Unknown subtype for Blob type"); // Should never happen
+                return 0;
+        }
     case SQL_ARRAY:
         return DataType::ARRAY;
     case SQL_TYPE_TIME:
