@@ -1257,12 +1257,11 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
     bool bRet = false;
     if( pDView )
     {
-        SdrObject* pObj;
         SdrPageView* pPV;
         const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        bRet = pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMARKABLE );
+        bRet = pDView->PickObj(rPt, pDView->getHitTolLog(), pPV, SdrSearchOptions::PICKMARKABLE) != nullptr;
         pDView->SetHitTolerancePixel( nOld );
     }
     return bRet;
@@ -1279,7 +1278,7 @@ SdrObject* SwFEShell::GetObjAt( const Point& rPt )
         const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        pDView->PickObj( rPt, pDView->getHitTolLog(), pRet, pPV, SdrSearchOptions::PICKMARKABLE );
+        pRet = pDView->PickObj(rPt, pDView->getHitTolLog(), pPV, SdrSearchOptions::PICKMARKABLE);
         pDView->SetHitTolerancePixel( nOld );
     }
     return pRet;
@@ -1294,16 +1293,16 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 
     if(pDrawView)
     {
-        SdrObject* pObj;
         SdrPageView* pPV;
         const auto nOld(pDrawView->GetHitTolerancePixel());
 
         pDrawView->SetHitTolerancePixel(pDrawView->GetMarkHdlSizePixel()/2);
-        bRet = pDrawView->PickObj(rPt, pDrawView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMARKABLE);
+        SdrObject* pObj = pDrawView->PickObj(rPt, pDrawView->getHitTolLog(), pPV, SdrSearchOptions::PICKMARKABLE);
         pDrawView->SetHitTolerancePixel(nOld);
 
-        if ( bRet && pObj )
+        if (pObj)
         {
+            bRet = true;
             const IDocumentDrawModelAccess& rIDDMA = getIDocumentDrawModelAccess();
             // #i89920#
             // Do not select object in background which is overlapping this text
@@ -1382,8 +1381,8 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                 {
                     SdrObject *pCandidate = pPage->GetObj(a);
 
-                    if (dynamic_cast<const SwVirtFlyDrawObj*>( pCandidate) !=  nullptr &&
-                       static_cast<SwVirtFlyDrawObj*>(pCandidate)->GetCurrentBoundRect().IsInside(rPt) )
+                    SwVirtFlyDrawObj* pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pCandidate);
+                    if (pDrawObj && pDrawObj->GetCurrentBoundRect().IsInside(rPt))
                     {
                         bRet = false;
                     }
@@ -2749,15 +2748,15 @@ SwChainRet SwFEShell::Chainable( SwRect &rRect, const SwFrameFormat &rSource,
     SwChainRet nRet = SwChainRet::NOT_FOUND;
     if( Imp()->HasDrawView() )
     {
-        SdrObject* pObj;
         SdrPageView* pPView;
         SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
         const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
-        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SdrSearchOptions::PICKMARKABLE ) &&
-            dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
+        SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPView, SdrSearchOptions::PICKMARKABLE);
+        SwVirtFlyDrawObj* pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
+        if (pDrawObj)
         {
-            SwFlyFrame *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame();
+            SwFlyFrame *pFly = pDrawObj->GetFlyFrame();
             rRect = pFly->Frame();
 
             // Target and source should not be equal and the list
@@ -2782,12 +2781,11 @@ SwChainRet SwFEShell::Chain( SwFrameFormat &rSource, const Point &rPt )
     if ( nErr == SwChainRet::OK )
     {
         StartAllAction();
-        SdrObject* pObj;
         SdrPageView* pPView;
         SwDrawView *pDView = Imp()->GetDrawView();
         const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
-        pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SdrSearchOptions::PICKMARKABLE );
+        SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPView, SdrSearchOptions::PICKMARKABLE);
         pDView->SetHitTolerancePixel( nOld );
         SwFlyFrame *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame();
 
