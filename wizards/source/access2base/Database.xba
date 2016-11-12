@@ -629,8 +629,11 @@ Public Function OutputTo(ByVal pvObjectType As Variant _
 							, ByVal Optional pvTemplateFile As Variant _
 							, ByVal Optional pvEncoding As Variant _
 							, ByVal Optional pvQuality As Variant _
+							, ByRef Optional pvHeaders As Variant _
+							, ByRef Optional pvData As Variant _
 							) As Boolean
 &apos;Supported:	acFormatHTML, acFormatODS, acFormatXLS, acFormatXLSX, acFormatTXT		for tables and queries
+&apos;pvHeaders and pvData (unpublished) when pvObjectType = acOutputArray
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 Const cstThisSub = &quot;Database.OutputTo&quot;
@@ -638,7 +641,7 @@ Const cstThisSub = &quot;Database.OutputTo&quot;
 
 	OutputTo = False
 	
-	If Not Utils._CheckArgument(pvObjectType, 1, Utils._AddNumeric(), Array(acOutputTable, acOutputQuery)) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvObjectType, 1, Utils._AddNumeric(), Array(acOutputTable, acOutputQuery, acOutputArray)) Then Goto Exit_Function
 	If IsMissing(pvObjectName) Then Call _TraceArguments()
 	If Not Utils._CheckArgument(pvObjectName, 2, vbString) Then Goto Exit_Function
 	If IsMissing(pvOutputFormat) Then pvOutputFormat = &quot;&quot;
@@ -663,13 +666,21 @@ Const cstThisSub = &quot;Database.OutputTo&quot;
 	If Not Utils._CheckArgument(pvEncoding, 7, _AddNumeric()) Then Goto Exit_Function
 	If IsMissing(pvQuality) Then pvQuality = acExportQualityPrint
 	If Not Utils._CheckArgument(pvQuality, 7, _AddNumeric(), Array(acExportQualityPrint, acExportQualityScreen)) Then Goto Exit_Function
+	If pvObjectType = acOutputArray Then
+		If IsMissing(pvHeaders) Or IsMissing(pvData) Then Call _TraceArguments()
+		pvOutputFormat = &quot;HTML&quot;
+	End If
 
 Dim sOutputFile As String, oTable As Object
 Dim sOutputFormat As String, iTemplate As Integer, iOutputFile As Integer, bOutput As Boolean, sSuffix As String
 
-	&apos;Find applicable table or query
-	If pvObjectType = acOutputTable Then Set oTable = TableDefs(pvObjectName, True) Else Set oTable = Querydefs(pvObjectName, True)
-	If IsNull(oTable) Then Goto Error_NotFound
+	If pvObjectType = acOutputArray Then
+		Set oTable = Nothing
+	Else
+		&apos;Find applicable table or query
+		If pvObjectType = acOutputTable Then Set oTable = TableDefs(pvObjectName, True) Else Set oTable = Querydefs(pvObjectName, True)
+		If IsNull(oTable) Then Goto Error_NotFound
+	End If
 	
 	&apos;Determine format and parameters
 	If pvOutputFormat = &quot;&quot; Then
@@ -698,7 +709,11 @@ Dim sOutputFormat As String, iTemplate As Integer, iOutputFile As Integer, bOutp
 	&apos;Create file
 	Select Case sOutputFormat
 		Case UCase(acFormatHTML), &quot;HTML&quot;
-			bOutput = _OutputToHTML(oTable, sOutputFile, pvTemplateFile)
+			If pvObjectType = acOutputArray Then
+				bOutput = _OutputToHTML(Nothing, pvObjectName, sOutputFile, pvTemplateFile, pvHeaders, pvData)
+			Else
+				bOutput = _OutputToHTML(oTable, pvObjectName, sOutputFile, pvTemplateFile)
+			End If
 		Case UCase(acFormatODS), &quot;ODS&quot;
 			bOutput = _OutputToCalc(oTable, sOutputFile, acFormatODS)
 		Case UCase(acFormatXLS), &quot;XLS&quot;
@@ -708,7 +723,6 @@ Dim sOutputFormat As String, iTemplate As Integer, iOutputFile As Integer, bOutp
 		Case UCase(acFormatTXT), &quot;TXT&quot;, &quot;CSV&quot;
 			bOutput = _OutputToCalc(oTable, sOutputFile, acFormatTXT, pvEncoding)
 	End Select
-	oTable.Dispose()
 	
 	&apos;Launch application, if requested
 	If bOutput Then
@@ -720,6 +734,10 @@ Dim sOutputFormat As String, iTemplate As Integer, iOutputFile As Integer, bOutp
 	OutputTo = True
 	
 Exit_Function:
+	If Not IsNull(oTable) Then
+		oTable.Dispose()
+		Set oTable = Nothing
+	End If
 	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_NotFound:
@@ -1225,36 +1243,50 @@ Private Function _OutputClassToHTML(ByVal pvArray As variant) As String
 End Function	&apos;	_OutputClassToHTML	V1.4.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Private Function _OutputDataToHTML(poTable As Object, piFile As Integer) As Boolean
-&apos;	Write html tags around data found in poTable
+Private Function _OutputDataToHTML(ByRef pvTable As Variant, ByVal pvName As String, ByVal piFile As Integer _
+									, ByRef Optional pvHeaders As Variant _
+									, ByRef Optional pvData As Variant _
+									) As Boolean
+&apos;	Write html tags around data found in pvTable
 &apos;	Exit when error without execution stop (to avoid file remaining open ...)
 
 Dim oTableRS As Object, vData() As Variant, i As Integer, j As Integer
 Dim vFieldsBin() As Variant, iDataType As Integer, iNumRows As Integer, iNumFields As Integer, vDataCell As Variant
+Dim bDataArray As Boolean, sHeader As String
 Dim vTrClass() As Variant, vTdClass As Variant, iCountRows As Integer, iLastRow As Integer
 Const cstMaxRows = 200
 	On Local Error GoTo Error_Function
 
+	bDataArray = IsNull(pvTable)
 	Print #piFile, &quot;  &lt;table class=&quot;&quot;dbdatatable&quot;&quot;&gt;&quot;
-	Print #piFile, &quot;   &lt;caption&gt;&quot; &amp; poTable._Name &amp; &quot;&lt;/caption&gt;&quot;
+	Print #piFile, &quot;   &lt;caption&gt;&quot; &amp; pvName &amp; &quot;&lt;/caption&gt;&quot;
 
-	Set oTableRS = poTable.OpenRecordset( , , dbReadOnly)
 	vFieldsBin() = Array()
-	iNumFields = oTableRS.Fields.Count
-	ReDim vFieldsBin(0 To iNumFields - 1)
-	With com.sun.star.sdbc.DataType
+	If bDataArray Then
+		Set oTableRS = Nothing
+		iNumFields = UBound(pvHeaders) + 1
+		ReDim vFieldsBin(0 To iNumFields - 1)
 		For i = 0 To iNumFields - 1
-			iDataType = oTableRS.Fields(i).DataType
-			vFieldsBin(i) = False
-			If iDataType = .BINARY Or iDataType = .VARBINARY Or iDataType = .LONGVARBINARY Or iDataType = .BLOB Or iDataType = .CLOB Then vFieldsBin(i) = True
+			vFieldsBin(i) =  False
 		Next i
-	End With
+	Else
+		Set oTableRS = pvTable.OpenRecordset( , , dbReadOnly)
+		iNumFields = oTableRS.Fields.Count
+		ReDim vFieldsBin(0 To iNumFields - 1)
+		With com.sun.star.sdbc.DataType
+			For i = 0 To iNumFields - 1
+				iDataType = oTableRS.Fields(i).DataType
+				vFieldsBin(i) =  Utils._IsBinaryType(iDataType)
+			Next i
+		End With
+	End If
 
 	With oTableRS
 		Print #piFile, &quot;   &lt;thead&gt;&quot;
 		Print #piFile, &quot;    &lt;tr&gt;&quot;
 		For i = 0 To iNumFields - 1
-			Print #piFile, &quot;     &lt;th scope=&quot;&quot;col&quot;&quot;&gt;&quot; &amp; .Fields(i)._Name &amp; &quot;&lt;/th&gt;&quot;
+			If bDataArray Then sHeader = pvHeaders(i) Else sHeader = .Fields(i)._Name
+			Print #piFile, &quot;     &lt;th scope=&quot;&quot;col&quot;&quot;&gt;&quot; &amp; sHeader &amp; &quot;&lt;/th&gt;&quot;
 		Next i
 		Print #piFile, &quot;    &lt;/tr&gt;&quot;
 		Print #piFile, &quot;   &lt;/thead&gt;&quot;
@@ -1262,13 +1294,21 @@ Const cstMaxRows = 200
 		Print #piFile, &quot;   &lt;/tfoot&gt;&quot;
 
 		Print #piFile, &quot;   &lt;tbody&gt;&quot;
-		.MoveLast
-		iLastRow = .RecordCount
-		.MoveFirst
+		If bDataArray Then
+			iLastRow = UBound(pvData, 2) + 1
+		Else
+			.MoveLast
+			iLastRow = .RecordCount
+			.MoveFirst
+		End If
 		iCountRows = 0
-		Do While Not .EOF()
-			vData() = .GetRows(cstMaxRows)
-			iNumRows = UBound(vData, 2) + 1
+		Do While iCountRows &lt; iLastRow
+			If bDataArray Then
+				iNumRows = iLastRow
+			Else
+				vData() = .GetRows(cstMaxRows)
+				iNumRows = UBound(vData, 2) + 1
+			End If
 			For j = 0 To iNumRows - 1
 				iCountRows = iCountRows + 1
 				vTrClass() = Array()
@@ -1281,7 +1321,7 @@ Const cstMaxRows = 200
 					If i = 0 Then vTdClass() = _AddArray(vTdClass, &quot;firstcol&quot;)
 					If i = iNumFields - 1 Then vTdClass() = _AddArray(vTdClass, &quot;lastcol&quot;)
 					If Not vFieldsBin(i) Then
-						vDataCell = vData(i, j)
+						If bDataArray Then vDataCell = pvData(i, j) Else vDataCell = vData(i, j)
 						Select Case VarType(vDataCell)
 							Case vbEmpty, vbNull
 								vTdClass() = _AddArray(vTdClass, &quot;null&quot;)
@@ -1310,7 +1350,7 @@ Const cstMaxRows = 200
 			Next j
 		Loop
 
-		.mClose()
+		If Not bDataArray Then .mClose()
 	End With
 	Set oTableRS = Nothing
 
@@ -1537,9 +1577,13 @@ Error_Function:
 End Function	&apos;	OutputToCalc	V1.4.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _OutputToHTML(poTable As Object, ByVal psOutputFile As String, ByVal psTemplateFile As String) As Boolean
+Public Function _OutputToHTML(ByRef pvTable As Variant, ByVal pvName As String, ByVal psOutputFile As String, ByVal psTemplateFile As String _
+								, ByRef Optional pvHeaders As Variant _
+								, ByRef Optional pvData As Variant _
+								) As Boolean
 &apos;	http://www.ehow.com/how_5652706_create-html-template-ms-access.html
 
+Dim bDataArray As Boolean
 Dim vMinimalTemplate As Variant, vTemplate As Variant
 Dim iFile As Integer, i As Integer, sLine As String, lBody As Long
 Const cstTitle = &quot;&lt;!--Template_Title--&gt;&quot;, cstBody = &quot;&lt;!--Template_Body--&gt;&quot;
@@ -1560,6 +1604,8 @@ Const cstTitleAlt = &quot;&lt;!--AccessTemplate_Title--&gt;&quot;, cstBodyAlt = 
 
 	vTemplate = _ReadFileIntoArray(psTemplateFile)
 	If LBound(vTemplate) &gt; UBound(vTemplate) Then vTemplate() = vMinimalTemplate()
+	
+	bDataArray = IsNull(pvTable)
 
 &apos;	Write output file
 	iFile = FreeFile()
@@ -1570,12 +1616,16 @@ Const cstTitleAlt = &quot;&lt;!--AccessTemplate_Title--&gt;&quot;, cstBodyAlt = 
 			sLine = Join(Split(sLine, cstBodyAlt), cstBody)
 			Select Case True
 				Case InStr(sLine, cstTitle) &gt; 0
-					sLine = Join(Split(sLine, cstTitle), poTable._Name)
+					sLine = Join(Split(sLine, cstTitle), pvName)
 					Print #iFile, sLine
 				Case InStr(sLine, cstBody) &gt; 0
 					lBody = InStr(sLine, cstBody)
 					If lBody &gt; 1 Then Print #iFile, Left(sLine, lBody - 1)
-					_OutputDataToHTML(poTable, iFile)
+					If bDataArray Then
+						_OutputDataToHTML(pvTable, pvName, iFile, pvHeaders, pvData)
+					Else
+						_OutputDataToHTML(pvTable, pvName, iFile)
+					End If
 					If Len(sLine) &gt; lBody + Len(cstBody) - 1 Then Print #iFile, Right(sLine, Len(sLine) - lBody + Len(cstBody) + 1)
 				Case Else
 					Print #iFile, sLine

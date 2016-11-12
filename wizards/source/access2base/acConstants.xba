@@ -277,6 +277,7 @@ REM -----------------------------------------------------------------
 Global Const acOutputTable = 0
 Global Const acOutputQuery = 1
 Global Const acOutputForm = 2
+Global Const acOutputArray = -1
 
 REM AcEncoding
 REM -----------------------------------------------------------------
