@@ -1537,24 +1537,16 @@ void ScFormulaCell::Interpret()
     }
     else
     {
-        // Do not attempt to interpret a group when calculations are already
-        // running, otherwise we may run into a circular reference hell. See
-        // tdf#95748
-        if (rRecursionHelper.GetRecursionCount())
-            InterpretTail( SCITP_NORMAL);
-        else
-        {
 #if DEBUG_CALCULATION
-            aDC.enterGroup();
-            bool bGroupInterpreted = InterpretFormulaGroup();
-            aDC.leaveGroup();
-            if (!bGroupInterpreted)
-                InterpretTail( SCITP_NORMAL);
+        aDC.enterGroup();
+        bool bGroupInterpreted = InterpretFormulaGroup();
+        aDC.leaveGroup();
+        if (!bGroupInterpreted)
+            InterpretTail( SCITP_NORMAL);
 #else
-            if (!InterpretFormulaGroup())
-                InterpretTail( SCITP_NORMAL);
+        if (!InterpretFormulaGroup())
+            InterpretTail( SCITP_NORMAL);
 #endif
-        }
     }
 
     // While leaving a recursion or iteration stack, insert its cells to the
@@ -4032,6 +4024,15 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
 
     auto aScope = sc::FormulaLogger::get().enterGroup(*pDocument, *this);
+
+    if (pDocument->GetRecursionHelper().GetRecursionCount())
+    {
+        // Do not attempt to interpret a group when calculations are already
+        // running, otherwise we may run into a circular reference hell. See
+        // tdf#95748
+        aScope.addMessage("group calc disabled during recursive calculation.");
+        return false;
+    }
 
     if (mxGroup->meCalcState == sc::GroupCalcDisabled)
     {
