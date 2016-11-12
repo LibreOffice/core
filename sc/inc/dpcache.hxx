@@ -198,7 +198,7 @@ public:
     ScDPCache(ScDocument* pDoc);
     ~ScDPCache();
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
     void Dump() const;
 #endif
 

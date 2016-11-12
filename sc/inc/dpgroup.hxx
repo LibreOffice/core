@@ -179,8 +179,8 @@ public:
     virtual bool                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                                       const ScDPItemData& rSecondData, long nSecondIndex ) const override;
 
-#if DEBUG_PIVOT_TABLE
-    virtual void Dump() const;
+#if DUMP_PIVOT_TABLE
+    virtual void Dump() const override;
 #endif
 };
 

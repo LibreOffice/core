@@ -2880,7 +2880,16 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
     return xRet;
 }
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
+
+void ScDPObject::Dump() const
+{
+    if (!mpTableData)
+        return;
+
+    mpTableData->Dump();
+}
+
 void ScDPObject::DumpCache() const
 {
     if (!mpTableData)

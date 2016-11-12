@@ -37,7 +37,7 @@
 #include <svl/zforlist.hxx>
 #include <o3tl/make_unique.hxx>
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #endif
 
@@ -1211,7 +1211,7 @@ SCROW ScDPCache::GetOrder(long /*nDim*/, SCROW nIndex)
 }
 
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
 
 namespace {
 

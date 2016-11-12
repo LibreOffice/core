@@ -17,6 +17,7 @@
 #include "patattr.hxx"
 #include <svl/poolitem.hxx>
 #include "userdat.hxx"
+#include <dpobject.hxx>
 
 namespace {
 
@@ -118,6 +119,16 @@ void ScGridWindow::dumpColumnCellStorage()
     ScAddress aCurPos = pViewData->GetCurPos();
 
     ScDocument* pDoc = pViewData->GetDocument();
+    const ScDPObject* pDP = pDoc->GetDPAtCursor(aCurPos.Col(), aCurPos.Row(), aCurPos.Tab());
+    if (pDP)
+    {
+        // Dump the pivot table info if the cursor is over a pivot table.
+        pDP->Dump();
+        pDP->DumpCache();
+        return;
+    }
+
+    // Dump the column cell storage info.
     pDoc->DumpColumnStorage(aCurPos.Tab(), aCurPos.Col());
 }
 

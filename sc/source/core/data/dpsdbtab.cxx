@@ -159,4 +159,13 @@ void ScDatabaseDPData::ReloadCacheTable()
     CreateCacheTable();
 }
 
+#if DUMP_PIVOT_TABLE
+
+void ScDatabaseDPData::Dump() const
+{
+    // TODO : Implement this.
+}
+
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

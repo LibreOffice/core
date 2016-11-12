@@ -1038,9 +1038,7 @@ long ScDPGroupTableData::Compare(long nDim, long nDataId1, long nDataId2)
     return ScDPItemData::Compare( *GetMemberById(nDim,  nDataId1),*GetMemberById(nDim,  nDataId2) );
 }
 
-#if DEBUG_PIVOT_TABLE
-using std::cout;
-using std::endl;
+#if DUMP_PIVOT_TABLE
 
 void ScDPGroupTableData::Dump() const
 {

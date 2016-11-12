@@ -251,7 +251,8 @@ public:
 
     static bool         IsOrientationAllowed( sal_uInt16 nOrient, sal_Int32 nDimFlags );
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
+    void Dump() const;
     void DumpCache() const;
 #endif
 };
