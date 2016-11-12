@@ -2379,22 +2379,25 @@ void ScInterpreter::ScIntersect()
         // Convert a reference to list.
         const formula::FormulaToken* xt[2] = { x1, x2 };
         StackVar sv[2] = { sv1, sv2 };
+        // There may only be one reference; the other is necessarily a list
+        // Ensure converted list proper destruction
+        std::unique_ptr<formula::FormulaToken> p;
         for (size_t i=0; i<2; ++i)
         {
             if (sv[i] == svSingleRef)
             {
                 ScComplexRefData aRef;
                 aRef.Ref1 = aRef.Ref2 = *xt[i]->GetSingleRef();
-                formula::FormulaToken* p = new ScRefListToken;
+                p.reset(new ScRefListToken);
                 p->GetRefList()->push_back( aRef);
-                xt[i] = p;
+                xt[i] = p.get();
             }
             else if (sv[i] == svDoubleRef)
             {
                 ScComplexRefData aRef = *xt[i]->GetDoubleRef();
-                formula::FormulaToken* p = new ScRefListToken;
+                p.reset(new ScRefListToken);
                 p->GetRefList()->push_back( aRef);
-                xt[i] = p;
+                xt[i] = p.get();
             }
         }
         x1 = xt[0];
