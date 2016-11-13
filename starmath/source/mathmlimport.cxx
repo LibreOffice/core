@@ -63,6 +63,7 @@ one go*/
 
 #include <memory>
 
+#include "mathmlattr.hxx"
 #include "mathmlimport.hxx"
 #include "register.hxx"
 #include <starmath.hrc>
@@ -1333,17 +1334,80 @@ public:
     void StartElement(const uno::Reference< xml::sax::XAttributeList >& xAttrList ) override;
 };
 
-void SmXMLSpaceContext_Impl::StartElement(
-    const uno::Reference<xml::sax::XAttributeList > & /*xAttrList*/ )
+namespace {
+
+bool lcl_CountBlanks(const MathMLAttributeLengthValue &rLV,
+                     sal_Int32 *pWide, sal_Int32 *pNarrow)
 {
-    // There is not any syntax in Math to specify blank nodes of arbitrary
-    // size. Hence we always interpret an <mspace> as a large gap "~".
+    assert(pWide);
+    assert(pNarrow);
+    if (rLV.aNumber.GetNumerator() == 0)
+    {
+        *pWide = *pNarrow = 0;
+        return true;
+    }
+    // TODO: honor other units than em
+    if (rLV.eUnit != MathMLLengthUnit::Em)
+        return false;
+    if (rLV.aNumber.GetNumerator() < 0)
+        return false;
+    const Fraction aTwo(2, 1);
+    auto aWide = rLV.aNumber / aTwo;
+    auto nWide = static_cast<sal_Int32>(static_cast<long>(aWide));
+    if (nWide < 0)
+        return false;
+    const Fraction aPointFive(1, 2);
+    auto aNarrow = (rLV.aNumber - Fraction(nWide, 1) * aTwo) / aPointFive;
+    auto nNarrow = static_cast<sal_Int32>(static_cast<long>(aNarrow));
+    if (nNarrow < 0)
+        return false;
+    *pWide = nWide;
+    *pNarrow = nNarrow;
+    return true;
+}
+
+}
+
+void SmXMLSpaceContext_Impl::StartElement(
+    const uno::Reference<xml::sax::XAttributeList > & xAttrList )
+{
+    // There is no syntax in Math to specify blank nodes of arbitrary size yet.
+    MathMLAttributeLengthValue aLV;
+    sal_Int32 nWide = 0, nNarrow = 0;
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for (sal_Int16 i=0;i<nAttrCount;i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex(i);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
+        OUString sValue = xAttrList->getValueByIndex(i);
+        const SvXMLTokenMap &rAttrTokenMap = GetSmImport().GetMspaceAttrTokenMap();
+        switch (rAttrTokenMap.Get(nPrefix, aLocalName))
+        {
+            case XML_TOK_WIDTH:
+                if ( ParseMathMLAttributeLengthValue(sValue.trim(), &aLV) <= 0 ||
+                     !lcl_CountBlanks(aLV, &nWide, &nNarrow) )
+                    SAL_WARN("starmath", "ignore mspace's width: " << sValue);
+                break;
+            default:
+                break;
+        }
+    }
     SmToken aToken;
-    aToken.cMathChar = '\0';
     aToken.eType = TBLANK;
+    aToken.cMathChar = '\0';
+    aToken.nGroup = TG::Blank;
     aToken.nLevel = 5;
     std::unique_ptr<SmBlankNode> pBlank(new SmBlankNode(aToken));
-    pBlank->IncreaseBy(aToken);
+    for (sal_Int32 i = 0; i < nWide; i++)
+        pBlank->IncreaseBy(aToken);
+    if (nNarrow > 0)
+    {
+        aToken.eType = TSBLANK;
+        for (sal_Int32 i = 0; i < nNarrow; i++)
+            pBlank->IncreaseBy(aToken);
+    }
     GetSmImport().GetNodeStack().push_front(std::move(pBlank));
 }
 
@@ -1898,6 +1962,12 @@ static const SvXMLTokenMapEntry aActionAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+static const SvXMLTokenMapEntry aMspaceAttrTokenMap[] =
+{
+    { XML_NAMESPACE_MATH,   XML_WIDTH,      XML_TOK_WIDTH },
+    XML_TOKEN_MAP_END
+};
+
 
 const SvXMLTokenMap& SmXMLImport::GetPresLayoutElemTokenMap()
 {
@@ -1969,6 +2039,13 @@ const SvXMLTokenMap& SmXMLImport::GetActionAttrTokenMap()
     if (!pActionAttrTokenMap)
         pActionAttrTokenMap.reset(new SvXMLTokenMap(aActionAttrTokenMap));
     return *pActionAttrTokenMap;
+}
+
+const SvXMLTokenMap& SmXMLImport::GetMspaceAttrTokenMap()
+{
+    if (!pMspaceAttrTokenMap)
+        pMspaceAttrTokenMap.reset(new SvXMLTokenMap(aMspaceAttrTokenMap));
+    return *pMspaceAttrTokenMap;
 }
 
 
