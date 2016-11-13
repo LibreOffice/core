@@ -898,8 +898,6 @@ short Dialog::Execute()
 
     VclPtr<vcl::Window> xWindow = this;
 
-
-
     css::uno::Reference< css::uno::XComponentContext > xContext(
             comphelper::getProcessComponentContext() );
     css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
