@@ -90,7 +90,6 @@ IndexedStyleSheets::GetNumberOfStyleSheets() const
 void
 IndexedStyleSheets::AddStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style)
 {
-    assert(!style->GetName().isEmpty());
     if (!HasStyleSheet(style)) {
         mStyleSheets.push_back(style);
         // since we just added an element to the vector, we can safely do -1 as it will always be >= 1
@@ -101,7 +100,6 @@ IndexedStyleSheets::AddStyleSheet(const rtl::Reference< SfxStyleSheetBase >& sty
 bool
 IndexedStyleSheets::RemoveStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style)
 {
-    assert(!style->GetName().isEmpty());
     rtl::OUString styleName = style->GetName();
     std::vector<unsigned> positions = FindPositionsByName(styleName);
     bool found = false;
@@ -201,7 +199,6 @@ void
 IndexedStyleSheets::Clear(StyleSheetDisposer& disposer)
 {
     for (VectorType::iterator it = mStyleSheets.begin(); it != mStyleSheets.end(); ++it) {
-        assert(!(*it)->GetName().isEmpty());
         disposer.Dispose(*it);
     }
     mStyleSheets.clear();
@@ -210,8 +207,6 @@ IndexedStyleSheets::Clear(StyleSheetDisposer& disposer)
 
 IndexedStyleSheets::~IndexedStyleSheets()
 {
-    for (const auto& rStyleSheet : mStyleSheets)
-        assert(!rStyleSheet->GetName().isEmpty());
 }
 
 bool
