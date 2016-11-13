@@ -84,7 +84,7 @@ public:
     void WriteToSource( const css::uno::Reference<css::uno::XInterface>& xMember,
                             sal_Int32 nPosition );
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
     void Dump(int nIndent = 0) const;
 #endif
 };
@@ -226,7 +226,7 @@ public:
 
     void RemoveObsoleteMembers(const MemberSetType& rMembers);
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
     void Dump(int nIndent = 0) const;
 #endif
 };
@@ -363,7 +363,7 @@ public:
      */
     SC_DLLPUBLIC bool HasInvisibleMember(const OUString& rDimName) const;
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
     void Dump() const;
 #endif
 

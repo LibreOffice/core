@@ -166,7 +166,7 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
     }
 }
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
 
 void ScDPSaveMember::Dump(int nIndent) const
 {
@@ -746,7 +746,7 @@ void ScDPSaveDimension::RemoveObsoleteMembers(const MemberSetType& rMembers)
     maMemberList.swap(aNew);
 }
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
 
 void ScDPSaveDimension::Dump(int nIndent) const
 {
@@ -1424,7 +1424,7 @@ bool ScDPSaveData::HasInvisibleMember(const OUString& rDimName) const
     return pDim->HasInvisibleMember();
 }
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
 
 void ScDPSaveData::Dump() const
 {

@@ -2884,10 +2884,11 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
 
 void ScDPObject::Dump() const
 {
-    if (!mpTableData)
-        return;
+    if (pSaveData)
+        pSaveData->Dump();
 
-    mpTableData->Dump();
+    if (mpTableData)
+        mpTableData->Dump();
 }
 
 void ScDPObject::DumpCache() const
