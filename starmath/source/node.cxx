@@ -2774,6 +2774,20 @@ void SmBlankNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SetWidth(nSpace);
 }
 
+void SmBlankNode::CreateTextFromNode(OUString &rText)
+{
+    if (mnNum <= 0)
+        return;
+    auto nWide = mnNum / 4;
+    auto nNarrow = mnNum % 4;
+    for (sal_uInt16 i = 0; i < nWide; i++)
+        rText += "~";
+    for (sal_uInt16 i = 0; i < nNarrow; i++)
+        rText += "`";
+    rText += " ";
+}
+
+
 /**************************************************************************/
 //Implementation of all accept methods for SmVisitor
 

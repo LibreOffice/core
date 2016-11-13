@@ -1136,6 +1136,7 @@ public:
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
+    virtual void CreateTextFromNode(OUString &rText) override;
 };
 
 
