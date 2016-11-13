@@ -55,7 +55,7 @@ ScDPCache::Field::Field() : mnNumFormat(0) {}
 ScDPCache::ScDPCache(ScDocument* pDoc) :
     mpDoc( pDoc ),
     mnColumnCount ( 0 ),
-    maEmptyRows(0, MAXROW, true),
+    maEmptyRows(0, MAXROWCOUNT, true),
     mnDataSize(-1),
     mnRowCount(0),
     mbDisposing(false)
