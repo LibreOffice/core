@@ -95,7 +95,28 @@ void CommonSalLayout::getScale(double* nXScale, double* nYScale)
     unsigned int nUPEM = hb_face_get_upem(pHbFace);
 
     double nHeight(mrFontSelData.mnHeight);
-    double nWidth(mrFontSelData.mnWidth ? mrFontSelData.mnWidth : nHeight);
+    double nWidth(mrFontSelData.mnWidth);
+    if (mrFontSelData.mnWidth == 0)
+    {
+        nWidth = nHeight;
+    }
+#if defined(_WIN32)
+    else
+    {
+        LOGFONTW aLogFont;
+        GetObjectW(mhFont, sizeof(LOGFONTW), &aLogFont);
+        aLogFont.lfWidth = 0;
+        HFONT hNewFont = CreateFontIndirectW(&aLogFont);
+        HDC hDC = GetDC(nullptr);
+        SelectObject(hDC, hNewFont);
+        TEXTMETRICW aFontMetric;
+        GetTextMetricsW(hDC, &aFontMetric);
+        double nAverageWidthFactor = static_cast<float>(std::abs(aLogFont.lfHeight)) / aFontMetric.tmAveCharWidth;
+        nWidth = nWidth * nAverageWidthFactor;
+        ReleaseDC(nullptr, hDC);
+        DeleteObject(hNewFont);
+    }
+#endif
 
     if (nYScale)
         *nYScale = nHeight / nUPEM;
