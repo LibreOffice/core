@@ -69,67 +69,81 @@ namespace connectivity
             eFilterOther
         };
 
-        struct QueryData
+        class EBookQueryWrapper
         {
         private:
-            EBookQuery*     pQuery;
-
+            EBookQuery* mpQuery;
         public:
-            OUString                             sTable;
-            QueryFilterType                             eFilterType;
-            ::rtl::Reference< ::connectivity::OSQLColumns >  xSelectColumns;
-            SortDescriptor                              aSortOrder;
-
-            QueryData()
-                :pQuery( nullptr )
-                ,sTable()
-                ,eFilterType( eFilterOther )
-                ,xSelectColumns()
-                ,aSortOrder()
+            EBookQueryWrapper()
+                : mpQuery(nullptr)
             {
             }
-
-            QueryData( const QueryData& _rhs )
-                :pQuery( nullptr )
-                ,sTable()
-                ,eFilterType( eFilterOther )
-                ,xSelectColumns()
-                ,aSortOrder()
+            EBookQueryWrapper(const EBookQueryWrapper& rhs)
+                : mpQuery(rhs.mpQuery)
             {
-                *this = _rhs;
+                if (mpQuery)
+                    e_book_query_ref(mpQuery);
             }
-
-            QueryData& operator=( const QueryData& _rhs )
+            EBookQueryWrapper(EBookQueryWrapper&& rhs)
+                : mpQuery(rhs.mpQuery)
             {
-                if ( this == &_rhs )
-                    return *this;
-
-                setQuery( _rhs.pQuery );
-                sTable = _rhs.sTable;
-                eFilterType = _rhs.eFilterType;
-                xSelectColumns = _rhs.xSelectColumns;
-                aSortOrder = _rhs.aSortOrder;
-
+                rhs.mpQuery = nullptr;
+            }
+            void reset(EBookQuery* pQuery)
+            {
+                if (mpQuery)
+                    e_book_query_unref(mpQuery);
+                mpQuery = pQuery;
+                if (mpQuery)
+                    e_book_query_ref(mpQuery);
+            }
+            EBookQueryWrapper& operator=(const EBookQueryWrapper& rhs)
+            {
+                if (this != &rhs)
+                    reset(rhs.mpQuery);
                 return *this;
             }
-
-            ~QueryData()
+            EBookQueryWrapper& operator=(EBookQueryWrapper&& rhs)
             {
-                setQuery( nullptr );
+                if (mpQuery)
+                    e_book_query_unref(mpQuery);
+                mpQuery = rhs.mpQuery;
+                rhs.mpQuery = nullptr;
+                return *this;
             }
-
-            EBookQuery* getQuery() const { return pQuery; }
-
-            void setQuery( EBookQuery* _pQuery )
+            ~EBookQueryWrapper()
             {
-                if ( pQuery )
-                    e_book_query_unref( pQuery );
-                pQuery = _pQuery;
-                if ( pQuery )
-                    e_book_query_ref( pQuery );
+                if (mpQuery)
+                    e_book_query_unref(mpQuery);
+            }
+            EBookQuery* getQuery() const
+            {
+                return mpQuery;
             }
         };
 
+        struct QueryData
+        {
+        private:
+            EBookQueryWrapper aQuery;
+
+        public:
+            OUString sTable;
+            QueryFilterType eFilterType;
+            rtl::Reference<connectivity::OSQLColumns>  xSelectColumns;
+            SortDescriptor aSortOrder;
+
+            QueryData()
+                : sTable()
+                , eFilterType( eFilterOther )
+                , xSelectColumns()
+                , aSortOrder()
+            {
+            }
+
+            EBookQuery* getQuery() const { return aQuery.getQuery(); }
+            void setQuery(EBookQuery* pQuery) { aQuery.reset(pQuery); }
+        };
 
         //************ Class: OCommonStatement
         // is a base class for the normal statement and for the prepared statement
