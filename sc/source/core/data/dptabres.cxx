@@ -267,7 +267,7 @@ void ScDPInitState::RemoveMember()
 namespace {
 
 #if DUMP_PIVOT_TABLE
-void lcl_DumpRow(
+void dumpRow(
     const OUString& rType, const OUString& rName, const ScDPAggData* pAggData,
     ScDocument* pDoc, ScAddress& rPos )
 {
@@ -284,7 +284,7 @@ void lcl_DumpRow(
     rPos.SetRow( nRow + 1 );
 }
 
-void lcl_Indent( ScDocument* pDoc, SCROW nStartRow, const ScAddress& rPos )
+void indent( ScDocument* pDoc, SCROW nStartRow, const ScAddress& rPos )
 {
     SCCOL nCol = rPos.Col();
     SCTAB nTab = rPos.Tab();
@@ -1766,7 +1766,7 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
 #if DUMP_PIVOT_TABLE
 void ScDPResultMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    lcl_DumpRow( OUString("ScDPResultMember"), GetName(), NULL, pDoc, rPos );
+    dumpRow("ScDPResultMember", GetName(), nullptr, pDoc, rPos);
     SCROW nStartRow = rPos.Row();
 
     if (pDataRoot)
@@ -1775,7 +1775,7 @@ void ScDPResultMember::DumpState( const ScDPResultMember* pRefMember, ScDocument
     if (pChildDimension)
         pChildDimension->DumpState( pRefMember, pDoc, rPos );
 
-    lcl_Indent( pDoc, nStartRow, rPos );
+    indent(pDoc, nStartRow, rPos);
 }
 
 void ScDPResultMember::Dump(int nIndent) const
@@ -2628,7 +2628,7 @@ void ScDPDataMember::UpdateRunningTotals(
 #if DUMP_PIVOT_TABLE
 void ScDPDataMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    lcl_DumpRow( OUString("ScDPDataMember"), GetName(), &aAggregate, pDoc, rPos );
+    dumpRow("ScDPDataMember", GetName(), &aAggregate, pDoc, rPos);
     SCROW nStartRow = rPos.Row();
 
     const ScDPDataDimension* pDataChild = GetChildDimension();
@@ -2636,7 +2636,7 @@ void ScDPDataMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* 
     if ( pDataChild && pRefChild )
         pDataChild->DumpState( pRefChild, pDoc, rPos );
 
-    lcl_Indent( pDoc, nStartRow, rPos );
+    indent(pDoc, nStartRow, rPos);
 }
 
 void ScDPDataMember::Dump(int nIndent) const
@@ -3444,7 +3444,7 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
 void ScDPResultDimension::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
     OUString aDimName = bIsDataLayout ? OUString("(data layout)") : OUString(GetName());
-    lcl_DumpRow( OUString("ScDPResultDimension"), aDimName, NULL, pDoc, rPos );
+    dumpRow("ScDPResultDimension", aDimName, nullptr, pDoc, rPos);
 
     SCROW nStartRow = rPos.Row();
 
@@ -3455,7 +3455,7 @@ void ScDPResultDimension::DumpState( const ScDPResultMember* pRefMember, ScDocum
         pMember->DumpState( pRefMember, pDoc, rPos );
     }
 
-    lcl_Indent( pDoc, nStartRow, rPos );
+    indent(pDoc, nStartRow, rPos);
 }
 
 void ScDPResultDimension::Dump(int nIndent) const
@@ -3824,7 +3824,7 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
 void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const
 {
     OUString aDimName = bIsDataLayout ? OUString("(data layout)") : OUString("(unknown)");
-    lcl_DumpRow( OUString("ScDPDataDimension"), aDimName, NULL, pDoc, rPos );
+    dumpRow("ScDPDataDimension", aDimName, nullptr, pDoc, rPos);
 
     SCROW nStartRow = rPos.Row();
 
@@ -3836,7 +3836,7 @@ void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocumen
         pDataMember->DumpState( pRefMember, pDoc, rPos );
     }
 
-    lcl_Indent( pDoc, nStartRow, rPos );
+    indent(pDoc, nStartRow, rPos);
 }
 
 void ScDPDataDimension::Dump(int nIndent) const
