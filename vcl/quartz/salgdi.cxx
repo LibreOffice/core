@@ -430,31 +430,39 @@ void AquaSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
         return;
 
     CTFontRef pFont = static_cast<CTFontRef>(CFDictionaryGetValue(rStyle.GetStyleDict(), kCTFontAttributeName));
+    CGAffineTransform aRotMatrix = CGAffineTransformMakeRotation(-rStyle.mfFontRotation);
 
     Point aPos;
     sal_GlyphId aGlyphId;
     std::vector<CGGlyph> aGlyphIds;
     std::vector<CGPoint> aGlyphPos;
-    std::vector<bool> aGlyphRotation;
+    std::vector<bool> aGlyphOrientation;
     int nStart = 0;
     while (rLayout.GetNextGlyphs(1, &aGlyphId, aPos, nStart))
     {
-        // Transform the position of non-vertical glyphs.
-        CGAffineTransform aMatrix = CGAffineTransformMakeRotation(-rStyle.mfFontRotation);
+        CGPoint aGCPos = CGPointMake(aPos.X(), -aPos.Y());
 
-        // Transform the position of vertical glyphs.
-        // We don’t handle GF_ROTR as it is not used in CommonSalLayout.
-        bool nGlyphRotation = false;
-        if ((aGlyphId & GF_ROTMASK) == GF_ROTL)
+        // Whether the glyph should be upright in vertical mode or not
+        bool bUprightGlyph = false;
+
+        if (rStyle.mfFontRotation)
         {
-            nGlyphRotation = true;
-            double nYdiff = CTFontGetAscent(pFont) - CTFontGetDescent(pFont);
-            aMatrix = CGAffineTransformTranslate(aMatrix, 0, -nYdiff);
+            if ((aGlyphId & GF_ROTMASK) == GF_ROTL)
+            {
+                bUprightGlyph = true;
+                // Adjust the position of upright (vertical) glyphs.
+                aGCPos.y -= CTFontGetAscent(pFont) - CTFontGetDescent(pFont);
+            }
+            else
+            {
+                // Transform the position of rotated glyphs.
+                aGCPos = CGPointApplyAffineTransform(aGCPos, aRotMatrix);
+            }
         }
 
         aGlyphIds.push_back(aGlyphId & GF_IDXMASK);
-        aGlyphPos.push_back(CGPointApplyAffineTransform(CGPointMake(aPos.X(), -aPos.Y()), aMatrix));
-        aGlyphRotation.push_back(nGlyphRotation);
+        aGlyphPos.push_back(aGCPos);
+        aGlyphOrientation.push_back(bUprightGlyph);
     }
 
     if (aGlyphIds.empty())
@@ -462,43 +470,30 @@ void AquaSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
 
     CGContextSaveGState(mrContext);
 
-    // Create a transformed font for drawing vertical glyphs.
-    CTFontRef pRotatedFont = nullptr;
-    if (rStyle.mfFontRotation)
-    {
-        CTFontDescriptorRef pDesc = CTFontCopyFontDescriptor(pFont);
-        CGFloat nSize = CTFontGetSize(pFont);
-        CGAffineTransform aMatrix = CTFontGetMatrix(pFont);
-        aMatrix = CGAffineTransformRotate(aMatrix, -rStyle.mfFontRotation);
-        pRotatedFont = CTFontCreateWithFontDescriptor(pDesc, nSize, &aMatrix);
-        CFRelease(pDesc);
-    }
-
+    // The view is vertically flipped (no idea why), flip it back.
     CGContextScaleCTM(mrContext, 1.0, -1.0);
-    CGContextRotateCTM(mrContext, rStyle.mfFontRotation);
     CGContextSetShouldAntialias(mrContext, !mbNonAntialiasedText);
     CGContextSetFillColor(mrContext, maTextColor.AsArray());
 
-    auto aIt = aGlyphRotation.cbegin();
-    while (aIt != aGlyphRotation.cend())
+    auto aIt = aGlyphOrientation.cbegin();
+    while (aIt != aGlyphOrientation.cend())
     {
-        bool nGlyphRotation = *aIt;
+        bool bUprightGlyph = *aIt;
         // Find the boundary of the run of glyphs with the same rotation, to be
         // drawn together.
-        auto aNext = std::find(aIt, aGlyphRotation.cend(), !nGlyphRotation);
-        size_t nStartIndex = std::distance(aGlyphRotation.cbegin(), aIt);
+        auto aNext = std::find(aIt, aGlyphOrientation.cend(), !bUprightGlyph);
+        size_t nStartIndex = std::distance(aGlyphOrientation.cbegin(), aIt);
         size_t nLen = std::distance(aIt, aNext);
 
-        if (nGlyphRotation && pRotatedFont)
-            CTFontDrawGlyphs(pRotatedFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, mrContext);
-        else
-            CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, mrContext);
+        CGContextSaveGState(mrContext);
+        if (rStyle.mfFontRotation && !bUprightGlyph)
+            CGContextRotateCTM(mrContext, rStyle.mfFontRotation);
+        CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, mrContext);
+        CGContextRestoreGState(mrContext);
 
         aIt = aNext;
     }
 
-    if (pRotatedFont)
-        CFRelease(pRotatedFont);
     CGContextRestoreGState(mrContext);
 }
 
