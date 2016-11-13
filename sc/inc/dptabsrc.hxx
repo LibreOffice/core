@@ -250,7 +250,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(css::uno::RuntimeException, std::exception) override;
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
     void DumpResults() const;
 #endif
 };

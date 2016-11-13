@@ -185,7 +185,7 @@ public:
     const ScDPAggData*  GetExistingChild() const    { return pChild; }
     ScDPAggData*        GetChild();
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
     void Dump(int nIndent) const;
 #endif
 };
@@ -408,7 +408,7 @@ public:
 
     void ResetResults();
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
     void DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
 
     void Dump(int nIndent) const;
@@ -479,7 +479,7 @@ public:
 
     void                ResetResults();
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
     void DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
     void Dump(int nIndent) const;
 #endif
@@ -577,7 +577,7 @@ public:
         const ScDPRelativePos* pMemberPos, const OUString* pName,
         long nRefDimPos, const ScDPRunningTotalState& rRunning );
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
     void DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
     void Dump(int nIndent) const;
 #endif
@@ -641,7 +641,7 @@ public:
 
     void                ResetResults();
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
     void DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const;
     void Dump(int nIndent) const;
 #endif

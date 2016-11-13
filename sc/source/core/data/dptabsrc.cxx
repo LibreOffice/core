@@ -976,6 +976,10 @@ void ScDPSource::CreateRes_Impl()
     ScDPRunningTotalState aRunning( pColResRoot, pRowResRoot );
     ScDPRowTotals aTotals;
     pRowResRoot->UpdateRunningTotals( pColResRoot, pResData->GetRowStartMeasure(), aRunning, aTotals );
+
+#if DUMP_PIVOT_TABLE
+    DumpResults();
+#endif
 }
 
 void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*> &rList )
@@ -1180,7 +1184,7 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const OUString& aPropertyName )
     return aRet;
 }
 
-#if DEBUG_PIVOT_TABLE
+#if DUMP_PIVOT_TABLE
 void ScDPSource::DumpResults() const
 {
     std::cout << "+++++ column root" << std::endl;
