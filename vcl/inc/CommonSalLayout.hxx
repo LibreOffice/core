@@ -45,6 +45,7 @@ class CommonSalLayout : public GenericSalLayout
 #ifdef _WIN32
     HDC                     mhDC;
     HFONT                   mhFont;
+    double                  mnAveWidthFactor;
 #elif defined(MACOSX) || defined(IOS)
     const CoreTextStyle&    mrCoreTextStyle;
 #else
