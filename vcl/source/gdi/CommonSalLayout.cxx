@@ -95,7 +95,15 @@ void CommonSalLayout::getScale(double* nXScale, double* nYScale)
     unsigned int nUPEM = hb_face_get_upem(pHbFace);
 
     double nHeight(mrFontSelData.mnHeight);
+#if defined(_WIN32)
+    // On Windows, mnWidth is relative to average char width not font height,
+    // and wee need to keep it that way for GDI to correctly scale the glyphs.
+    // Here we compensate for this so that HarfBuzz gives us the correct glyph
+    // positions.
+    double nWidth(mrFontSelData.mnWidth ? mrFontSelData.mnWidth * mnAveWidthFactor : nHeight);
+#else
     double nWidth(mrFontSelData.mnWidth ? mrFontSelData.mnWidth : nHeight);
+#endif
 
     if (nYScale)
         *nYScale = nHeight / nUPEM;
@@ -173,6 +181,7 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
 :   mrFontSelData(rWinFontInstance.maFontSelData)
 ,   mhDC(hDC)
 ,   mhFont(static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT)))
+,   mnAveWidthFactor(1.0f)
 {
     mpHbFont = rWinFontFace.GetHbFont();
     if (!mpHbFont)
@@ -181,6 +190,30 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
 
         mpHbFont = createHbFont(pHbFace);
         rWinFontFace.SetHbFont(mpHbFont);
+    }
+
+    // Calculate the mnAveWidthFactor, see the comment where it is used.
+    if (mrFontSelData.mnWidth)
+    {
+        double nUPEM = hb_face_get_upem(hb_font_get_face(mpHbFont));
+
+        LOGFONTW aLogFont;
+        GetObjectW(mhFont, sizeof(LOGFONTW), &aLogFont);
+
+        // Set the height (font size) to EM to minimize rounding errors.
+        aLogFont.lfHeight = -nUPEM;
+        // Set width to the default to get the original value in the metrics.
+        aLogFont.lfWidth = 0;
+
+        // Get the font metrics.
+        HFONT hNewFont = CreateFontIndirectW(&aLogFont);
+        HFONT hOldFont = static_cast<HFONT>(SelectObject(hDC, hNewFont));
+        TEXTMETRICW aFontMetric;
+        GetTextMetricsW(hDC, &aFontMetric);
+        SelectObject(hDC, hOldFont);
+        DeleteObject(hNewFont);
+
+        mnAveWidthFactor = nUPEM / aFontMetric.tmAveCharWidth;
     }
 }
 
