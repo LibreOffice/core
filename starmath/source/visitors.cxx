@@ -2293,7 +2293,16 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmBlankNode* pNode )
 {
-    Append( pNode->GetToken( ).aText );
+    sal_uInt16 nNum = pNode->GetBlankNum();
+    if (nNum <= 0)
+        return;
+    sal_uInt16 nWide = nNum / 4;
+    sal_uInt16 nNarrow = nNum % 4;
+    for (sal_uInt16 i = 0; i < nWide; i++)
+        Append( "~" );
+    for (sal_uInt16 i = 0; i < nNarrow; i++)
+        Append( "`" );
+    Append( " " );
 }
 
 void SmNodeToTextVisitor::Visit( SmErrorNode* )

@@ -35,10 +35,12 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+    void testBlank();
     void testTdf97049();
     void testTdf101022();
 
     CPPUNIT_TEST_SUITE(MathMLExportTest);
+    CPPUNIT_TEST(testBlank);
     CPPUNIT_TEST(testTdf97049);
     CPPUNIT_TEST(testTdf101022);
     CPPUNIT_TEST_SUITE_END();
@@ -85,6 +87,14 @@ xmlDocPtr MathMLExportTest::exportAndParse()
     xmlDocPtr pDoc = parseXml(aTempFile);
     CPPUNIT_ASSERT(pDoc);
     return pDoc;
+}
+
+void MathMLExportTest::testBlank()
+{
+    mxDocShell->SetText("x`y~~z");
+    xmlDocPtr pDoc = exportAndParse();
+    assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mspace[1]", "width", "0.5em");
+    assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mspace[2]", "width", "4em");
 }
 
 void MathMLExportTest::testTdf97049()

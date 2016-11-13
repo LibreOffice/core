@@ -32,12 +32,14 @@ public:
     void testSimple();
     void testNsPrefixMath();
     void testMaction();
+    void testMspace();
     void testtdf99556();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSimple);
     CPPUNIT_TEST(testNsPrefixMath);
     CPPUNIT_TEST(testMaction);
+    CPPUNIT_TEST(testMspace);
     CPPUNIT_TEST(testtdf99556);
     CPPUNIT_TEST_SUITE_END();
 
@@ -103,6 +105,12 @@ void Test::testMaction()
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/maction.mml"));
     OUString sExpected("matrix {1 ## 2 ## 3}");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
+}
+
+void Test::testMspace()
+{
+    loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/mspace.mml"));
+    CPPUNIT_ASSERT_EQUAL(OUString("{a b ~ c ~~``` d}"), mxDocShell->GetText());
 }
 
 void Test::testtdf99556()
