@@ -86,7 +86,7 @@ protected:
 
 public:
                         UnoControlEditModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlEditModel( const UnoControlEditModel& rModel ) : UnoControlModel( rModel ) {;}
+                        UnoControlEditModel( const UnoControlEditModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlEditModel( *this ); }
 
@@ -194,7 +194,7 @@ protected:
 
 public:
                         UnoControlFileControlModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlFileControlModel( const UnoControlFileControlModel& rModel ) : UnoControlModel( rModel ) {;}
+                        UnoControlFileControlModel( const UnoControlFileControlModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlFileControlModel( *this ); }
 
@@ -268,7 +268,7 @@ protected:
 
 public:
                         UnoControlButtonModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlButtonModel( const UnoControlButtonModel& rModel ) : GraphicControlModel( rModel ) {;}
+                        UnoControlButtonModel( const UnoControlButtonModel& rModel ) : GraphicControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlButtonModel( *this ); }
 
@@ -421,7 +421,7 @@ protected:
 
 public:
                         UnoControlRadioButtonModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlRadioButtonModel( const UnoControlRadioButtonModel& rModel ) : GraphicControlModel( rModel ) {;}
+                        UnoControlRadioButtonModel( const UnoControlRadioButtonModel& rModel ) : GraphicControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlRadioButtonModel( *this ); }
 
@@ -506,7 +506,7 @@ protected:
 
 public:
                         UnoControlCheckBoxModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlCheckBoxModel( const UnoControlCheckBoxModel& rModel ) : GraphicControlModel( rModel ) {;}
+                        UnoControlCheckBoxModel( const UnoControlCheckBoxModel& rModel ) : GraphicControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlCheckBoxModel( *this ); }
 
@@ -543,7 +543,7 @@ private:
 public:
 
                             UnoCheckBoxControl();
-                            virtual ~UnoCheckBoxControl() override {;}
+                            virtual ~UnoCheckBoxControl() override {}
     OUString         GetComponentServiceName() override;
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) throw(css::uno::RuntimeException, std::exception) override;
@@ -594,7 +594,7 @@ protected:
 
 public:
     UnoControlFixedHyperlinkModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    UnoControlFixedHyperlinkModel( const UnoControlFixedHyperlinkModel& rModel ) : UnoControlModel( rModel ) {;}
+    UnoControlFixedHyperlinkModel( const UnoControlFixedHyperlinkModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlFixedHyperlinkModel( *this ); }
 
@@ -668,7 +668,7 @@ protected:
 
 public:
                         UnoControlFixedTextModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlFixedTextModel( const UnoControlFixedTextModel& rModel ) : UnoControlModel( rModel ) {;}
+                        UnoControlFixedTextModel( const UnoControlFixedTextModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlFixedTextModel( *this ); }
 
@@ -739,7 +739,7 @@ protected:
 
 public:
                         UnoControlGroupBoxModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlGroupBoxModel( const UnoControlGroupBoxModel& rModel ) : UnoControlModel( rModel ) {;}
+                        UnoControlGroupBoxModel( const UnoControlGroupBoxModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlGroupBoxModel( *this ); }
 
@@ -971,7 +971,7 @@ protected:
 
 public:
                         UnoControlComboBoxModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlComboBoxModel( const UnoControlComboBoxModel& rModel ) : UnoControlListBoxModel( rModel ) {;}
+                        UnoControlComboBoxModel( const UnoControlComboBoxModel& rModel ) : UnoControlListBoxModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlComboBoxModel( *this ); }
 
@@ -1105,7 +1105,7 @@ protected:
 
 public:
                 UnoControlDateFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                UnoControlDateFieldModel( const UnoControlDateFieldModel& rModel ) : UnoControlModel( rModel ) {;}
+                UnoControlDateFieldModel( const UnoControlDateFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlDateFieldModel( *this ); }
 
@@ -1188,7 +1188,7 @@ protected:
 
 public:
                         UnoControlTimeFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlTimeFieldModel( const UnoControlTimeFieldModel& rModel ) : UnoControlModel( rModel ) {;}
+                        UnoControlTimeFieldModel( const UnoControlTimeFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlTimeFieldModel( *this ); }
 
@@ -1269,7 +1269,7 @@ protected:
 
 public:
                 UnoControlNumericFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                UnoControlNumericFieldModel( const UnoControlNumericFieldModel& rModel ) : UnoControlModel( rModel ) {;}
+                UnoControlNumericFieldModel( const UnoControlNumericFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlNumericFieldModel( *this ); }
 
@@ -1352,7 +1352,7 @@ protected:
 
 public:
                         UnoControlCurrencyFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlCurrencyFieldModel( const UnoControlCurrencyFieldModel& rModel ) : UnoControlModel( rModel ) {;}
+                        UnoControlCurrencyFieldModel( const UnoControlCurrencyFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlCurrencyFieldModel( *this ); }
 
@@ -1435,7 +1435,7 @@ protected:
 
 public:
                         UnoControlPatternFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlPatternFieldModel( const UnoControlPatternFieldModel& rModel ) : UnoControlModel( rModel ) {;}
+                        UnoControlPatternFieldModel( const UnoControlPatternFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlPatternFieldModel( *this ); }
 
@@ -1502,7 +1502,7 @@ protected:
 
 public:
                         UnoControlProgressBarModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlProgressBarModel( const UnoControlProgressBarModel& rModel ) : UnoControlModel( rModel ) {;}
+                        UnoControlProgressBarModel( const UnoControlProgressBarModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlProgressBarModel( *this ); }
 
@@ -1565,7 +1565,7 @@ protected:
 
 public:
                         UnoControlFixedLineModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                        UnoControlFixedLineModel( const UnoControlFixedLineModel& rModel ) : UnoControlModel( rModel ) {;}
+                        UnoControlFixedLineModel( const UnoControlFixedLineModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlFixedLineModel( *this ); }
 

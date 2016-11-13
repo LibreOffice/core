@@ -25,7 +25,7 @@ class MockedStyleSheet : public SfxStyleSheetBase
     public:
     MockedStyleSheet(const rtl::OUString& name, SfxStyleFamily fam = SfxStyleFamily::Char)
     : SfxStyleSheetBase(name, nullptr, fam, 0)
-    {;}
+    {}
 
 };
 

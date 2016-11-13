@@ -125,7 +125,7 @@ namespace accessibility
         {
             return  OUString();
         }
-        void            FieldClicked( const SvxFieldItem&, sal_Int32, sal_Int32 ) override {;}
+        void            FieldClicked( const SvxFieldItem&, sal_Int32, sal_Int32 ) override {}
 
         bool            IsValid() const override { return true; }
 

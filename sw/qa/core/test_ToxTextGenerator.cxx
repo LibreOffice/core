@@ -48,7 +48,7 @@ public:
 
 struct MockedSortTab : public SwTOXSortTabBase {
     MockedSortTab()
-    : SwTOXSortTabBase(TOX_SORT_INDEX,nullptr,nullptr,nullptr) {;}
+    : SwTOXSortTabBase(TOX_SORT_INDEX,nullptr,nullptr,nullptr) {}
 
     virtual TextAndReading GetText_Impl() const override {
         return TextAndReading();
@@ -118,7 +118,7 @@ class ToxTextGeneratorWithMockedChapterField : public ToxTextGenerator {
 public:
     explicit ToxTextGeneratorWithMockedChapterField(SwForm &form)
     : ToxTextGenerator(form, std::make_shared<MockedToxTabStopTokenHandler>()),
-      mChapterFieldType(), mChapterField(&mChapterFieldType) {;}
+      mChapterFieldType(), mChapterField(&mChapterFieldType) {}
 
     SwChapterField&
     GetChapterField() {

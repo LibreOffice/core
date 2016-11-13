@@ -52,7 +52,7 @@ protected:
 
 public:
     UnoControlTabPageContainerModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
-    UnoControlTabPageContainerModel( const UnoControlTabPageContainerModel& rModel ) : UnoControlTabPageContainerModel_Base( rModel ),maContainerListeners( *this ) {;}
+    UnoControlTabPageContainerModel( const UnoControlTabPageContainerModel& rModel ) : UnoControlTabPageContainerModel_Base( rModel ),maContainerListeners( *this ) {}
 
     UnoControlModel*    Clone() const override { return new UnoControlTabPageContainerModel( *this ); }
 

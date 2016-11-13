@@ -326,7 +326,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
                     pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_IMAGE1));
                   }
                   else
-                  {;}
+                  {}
                 }
                 while(pSh->Right(sal_uInt16(1), sal_uInt16(1), true));
             }

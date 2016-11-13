@@ -381,7 +381,7 @@ namespace {
 struct DoesStyleMatchStyleSheetPredicate final : public svl::StyleSheetPredicate
 {
     explicit DoesStyleMatchStyleSheetPredicate(SfxStyleSheetIterator *it)
-            : mIterator(it) {;}
+            : mIterator(it) {}
 
     bool
     Check(const SfxStyleSheetBase& styleSheet) override
@@ -701,7 +701,7 @@ namespace {
 struct AddStyleSheetCallback : svl::StyleSheetCallback
 {
     explicit AddStyleSheetCallback(SfxStyleSheetBasePool *pool)
-    : mPool(pool) {;}
+    : mPool(pool) {}
 
     void DoIt(const SfxStyleSheetBase& ssheet) override
     {
@@ -804,7 +804,7 @@ namespace
 struct StyleSheetDisposerFunctor final : public svl::StyleSheetDisposer
 {
     explicit StyleSheetDisposerFunctor(SfxStyleSheetBasePool* pool)
-            : mPool(pool) {;}
+            : mPool(pool) {}
 
     void
     Dispose(rtl::Reference<SfxStyleSheetBase> styleSheet) override

@@ -616,7 +616,7 @@ namespace
 struct HasFamilyPredicate : svl::StyleSheetPredicate
 {
     explicit HasFamilyPredicate(SfxStyleFamily eFamily)
-    : meFamily(eFamily) {;}
+    : meFamily(eFamily) {}
 
     bool Check(const SfxStyleSheetBase& sheet) override
     {
@@ -926,7 +926,7 @@ namespace
 struct StyleSheetIsUserDefinedPredicate : svl::StyleSheetPredicate
 {
     StyleSheetIsUserDefinedPredicate()
-    {;}
+    {}
 
     bool Check(const SfxStyleSheetBase& sheet) override
     {

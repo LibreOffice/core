@@ -180,14 +180,14 @@ protected:
 class LwpFormulaOp : public LwpFormulaFunc
 {
 public:
-    explicit LwpFormulaOp(sal_uInt16 nTokenType):LwpFormulaFunc(nTokenType){;}
+    explicit LwpFormulaOp(sal_uInt16 nTokenType):LwpFormulaFunc(nTokenType){}
     virtual OUString ToString(LwpTableLayout* pCellsMap) override;
 };
 
 class LwpFormulaUnaryOp : public LwpFormulaFunc
 {
 public:
-    explicit LwpFormulaUnaryOp(sal_uInt16 nTokenType):LwpFormulaFunc(nTokenType){;}
+    explicit LwpFormulaUnaryOp(sal_uInt16 nTokenType):LwpFormulaFunc(nTokenType){}
     virtual OUString ToString(LwpTableLayout* pCellsMap) override;
 };
 

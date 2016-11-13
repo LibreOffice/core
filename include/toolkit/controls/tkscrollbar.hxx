@@ -42,7 +42,7 @@ namespace toolkit
 
     public:
                             UnoControlScrollBarModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
-                            UnoControlScrollBarModel( const UnoControlScrollBarModel& rModel ) : UnoControlModel( rModel ) {;}
+                            UnoControlScrollBarModel( const UnoControlScrollBarModel& rModel ) : UnoControlModel( rModel ) {}
 
         UnoControlModel*    Clone() const override { return new UnoControlScrollBarModel( *this ); }
 

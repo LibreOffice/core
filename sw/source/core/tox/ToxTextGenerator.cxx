@@ -100,10 +100,10 @@ ToxTextGenerator::ToxTextGenerator(const SwForm& toxForm,
 : mToxForm(toxForm),
   mLinkProcessor(new ToxLinkProcessor()),
   mTabStopTokenHandler(tabStopHandler)
-{;}
+{}
 
 ToxTextGenerator::~ToxTextGenerator()
-{;}
+{}
 
 OUString
 ToxTextGenerator::HandleChapterToken(const SwTOXSortTabBase& rBase, const SwFormToken& aToken,
