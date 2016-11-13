@@ -128,8 +128,6 @@ sal_IntPtr CoreTextFontFace::GetFontId() const
     return (sal_IntPtr)mnFontId;
 }
 
-static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
-
 const FontCharMapRef CoreTextFontFace::GetFontCharMap() const
 {
     // return the cached charmap
