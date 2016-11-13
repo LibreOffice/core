@@ -81,15 +81,13 @@ inline void widget_set_can_default(GtkWidget *widget, gboolean can_default)
 
 class GtkSalTimer : public SalTimer
 {
-    struct SalGtkTimeoutSource *m_pTimeout;
+    GSource *m_pTimeout;
 public:
     GtkSalTimer();
     virtual ~GtkSalTimer() override;
     virtual void Start( sal_uLong nMS ) override;
     virtual void Stop() override;
     bool         Expired();
-
-    sal_uLong    m_nTimeoutMS;
 };
 
 class GtkData : public SalGenericData
