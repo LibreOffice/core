@@ -1310,15 +1310,14 @@ void ScDPCache::Dump() const
         {
             aRange.start = it->first;
             aRange.empty = it->second;
-            ++it;
-        }
 
-        for (; it != itEnd; ++it)
-        {
-            aRange.end = it->first-1;
-            cout << "    rows " << aRange.start << "-" << aRange.end << ": " << (aRange.empty ? "empty" : "not-empty") << endl;
-            aRange.start = it->first;
-            aRange.empty = it->second;
+            for (++it; it != itEnd; ++it)
+            {
+                aRange.end = it->first-1;
+                cout << "    rows " << aRange.start << "-" << aRange.end << ": " << (aRange.empty ? "empty" : "not-empty") << endl;
+                aRange.start = it->first;
+                aRange.empty = it->second;
+            }
         }
     }
 
