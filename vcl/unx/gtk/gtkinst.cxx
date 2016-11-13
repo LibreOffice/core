@@ -156,6 +156,7 @@ GtkInstance::GtkInstance( SalYieldMutex* pMutex )
 #else
     : X11SalInstance( pMutex )
 #endif
+    , m_pTimer(nullptr)
     , bNeedsInit(true)
     , m_pLastCairoFontOptions(nullptr)
 {
@@ -194,8 +195,7 @@ void GtkInstance::EnsureInit()
 
 GtkInstance::~GtkInstance()
 {
-    while( !m_aTimers.empty() )
-        delete *m_aTimers.begin();
+    assert( nullptr == m_pTimer );
     DeInitAtkBridge();
     ResetLastSeenCairoFontOptions();
 }
@@ -397,18 +397,16 @@ void         GtkInstance::DestroyMenuItem( SalMenuItem* )        {}
 SalTimer* GtkInstance::CreateSalTimer()
 {
     EnsureInit();
-    GtkSalTimer *pTimer = new GtkSalTimer();
-    m_aTimers.push_back( pTimer );
-    return pTimer;
+    assert( nullptr == m_pTimer );
+    if ( nullptr == m_pTimer )
+        m_pTimer = new GtkSalTimer();
+    return m_pTimer;
 }
 
-void GtkInstance::RemoveTimer (SalTimer *pTimer)
+void GtkInstance::RemoveTimer()
 {
     EnsureInit();
-    std::vector<GtkSalTimer *>::iterator it;
-    it = std::find( m_aTimers.begin(), m_aTimers.end(), pTimer );
-    if( it != m_aTimers.end() )
-        m_aTimers.erase( it );
+    m_pTimer = nullptr;
 }
 
 bool GtkInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
@@ -422,12 +420,7 @@ bool GtkInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong co
 bool GtkInstance::IsTimerExpired()
 {
     EnsureInit();
-    for( std::vector<GtkSalTimer *>::iterator it = m_aTimers.begin();
-         it != m_aTimers.end(); ++it )
-        if( (*it)->Expired() )
-            return true;
-
-    return false;
+    return (m_pTimer && m_pTimer->Expired());
 }
 
 bool GtkInstance::AnyInput( VclInputFlags nType )
