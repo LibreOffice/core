@@ -143,7 +143,7 @@ public:
     bool empty() const;
 
 #if DUMP_PIVOT_TABLE
-    void dumpRowFlag(const RowFlagType& rFlag) const;
+    static void dumpRowFlag( const RowFlagType& rFlag );
     void dump() const;
 #endif
 
