@@ -212,15 +212,6 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/**
- * Process keyboard input
- * @returns true if a KeyEvent is being processed, false otherwise
- */
-bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
-{
-    return FuDraw::KeyInput(rKEvt);
-}
-
 void FuConstruct::Activate()
 {
     mpView->SetEditMode(SdrViewEditMode::Create);
