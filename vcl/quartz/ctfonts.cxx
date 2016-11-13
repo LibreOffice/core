@@ -167,7 +167,11 @@ bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.11 kCTFontDefaultOrientation
     const CTFontOrientation aFontOrientation = kCTFontDefaultOrientation; // TODO: horz/vert
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    const CGRect aCGRect = CTFontGetBoundingRectsForGlyphs( aCTFontRef, aFontOrientation, &nCGGlyph, nullptr, 1 );
+    CGRect aCGRect = CTFontGetBoundingRectsForGlyphs(aCTFontRef, aFontOrientation, &nCGGlyph, nullptr, 1);
+
+    // Apply font rotation to non-upright glyphs.
+    if (mfFontRotation && !(aGlyphId & GF_ROTMASK))
+        aCGRect = CGRectApplyAffineTransform(aCGRect, CGAffineTransformMakeRotation(mfFontRotation));
 
     rRect.Left()   = lrint( aCGRect.origin.x );
     rRect.Top()    = lrint(-aCGRect.origin.y );
