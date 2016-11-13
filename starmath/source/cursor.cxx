@@ -996,9 +996,12 @@ void SmCursor::InsertElement(SmFormulaElement element){
         case BlankElement:
         {
             SmToken token;
+            token.eType = TBLANK;
             token.nGroup = TG::Blank;
             token.aText = "~";
-            pNewNode = new SmBlankNode(token);
+            SmBlankNode* pBlankNode = new SmBlankNode(token);
+            pBlankNode->IncreaseBy(token);
+            pNewNode = pBlankNode;
         }break;
         case FactorialElement:
         {
