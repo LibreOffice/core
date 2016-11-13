@@ -239,7 +239,7 @@ SwMMResultSaveDialog::SwMMResultSaveDialog()
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
-    sal_Int32 nCount = xConfigItem->GetMergedDocumentCount();;
+    sal_Int32 nCount = xConfigItem->GetMergedDocumentCount();
     m_pToNF->SetMax(nCount);
     m_pToNF->SetValue(nCount);
 
@@ -407,7 +407,7 @@ void SwMMResultPrintDialog::FillInPrinterSettings()
         m_pPrinterLB->SelectEntry(xConfigItem->GetSelectedPrinter());
     }
 
-    sal_Int32 count = xConfigItem->GetMergedDocumentCount();;
+    sal_Int32 count = xConfigItem->GetMergedDocumentCount();
     m_pToNF->SetValue(count);
     m_pToNF->SetMax(count);
 

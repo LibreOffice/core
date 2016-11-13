@@ -585,7 +585,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                             pAttr->Put(aStyleItem);
                             XFillGradientItem aGradientItem(pName->GetValue (), aGradient);
                             aGradientItem.SetWhich(XATTR_FILLGRADIENT);
-                            pAttr->Put(aGradientItem);;
+                            pAttr->Put(aGradientItem);
                         }
 
                         rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);

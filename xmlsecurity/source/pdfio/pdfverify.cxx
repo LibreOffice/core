@@ -42,7 +42,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
         return 1;
     }
     uno::Reference<lang::XMultiComponentFactory> xMultiComponentFactory = xComponentContext->getServiceManager();
-    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xMultiComponentFactory, uno::UNO_QUERY);;
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xMultiComponentFactory, uno::UNO_QUERY);
     comphelper::setProcessServiceFactory(xMultiServiceFactory);
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer;
     try

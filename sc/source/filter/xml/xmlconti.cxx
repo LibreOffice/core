@@ -69,7 +69,7 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
             sOUText.append(' ');
     }
 
-    return new SvXMLImportContext( GetImport(), nPrefix, rLName );;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLContentContext::Characters( const OUString& rChars )

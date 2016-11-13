@@ -218,7 +218,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
  */
 bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
 {
-    return FuDraw::KeyInput(rKEvt);;
+    return FuDraw::KeyInput(rKEvt);
 }
 
 void FuConstruct::Activate()

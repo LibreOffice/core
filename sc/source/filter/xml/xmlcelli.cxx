@@ -1145,7 +1145,7 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
         ScRefCellValue aCell(*rXMLImport.GetDocument(), rCurrentPos);
         if (aCell.meType == CELLTYPE_FORMULA)
         {
-            ScFormulaCell* pFCell = aCell.mpFormula;;
+            ScFormulaCell* pFCell = aCell.mpFormula;
             SetFormulaCell(pFCell);
             if (pFCell)
                 pFCell->SetNeedNumberFormat( true );

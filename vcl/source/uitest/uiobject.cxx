@@ -543,7 +543,7 @@ EditUIObject::~EditUIObject()
 void EditUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
-    bool bHandled = true;;
+    bool bHandled = true;
     if (rAction == "SET")
     {
         if (rParameters.find("TEXT") != rParameters.end())

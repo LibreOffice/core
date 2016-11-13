@@ -177,7 +177,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
     // create temporary stream
     uno::Reference < io::XTempFile > xTempFile = io::TempFile::create(m_xContext);
     uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
-    uno::Reference < io::XInputStream > xTempIn = xTempFile->getInputStream();;
+    uno::Reference < io::XInputStream > xTempIn = xTempFile->getInputStream();
     uno::Reference < io::XSeekable > xTempSeek( xTempOut, UNO_QUERY_THROW );
 
     // copy the raw stream to the temporary file starting from the current position
