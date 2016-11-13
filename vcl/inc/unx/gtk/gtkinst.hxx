@@ -233,12 +233,12 @@ public:
             const cairo_font_options_t* GetLastSeenCairoFontOptions();
                                    void ResetLastSeenCairoFontOptions();
 
-    void                        RemoveTimer (SalTimer *pTimer);
+    void                        RemoveTimer();
 
     std::shared_ptr<vcl::unx::GtkPrintWrapper> const & getPrintWrapper() const;
 
 private:
-    std::vector<GtkSalTimer *>  m_aTimers;
+    GtkSalTimer*                m_pTimer;
 #if GTK_CHECK_VERSION(3,0,0)
     std::unordered_map< GdkAtom, css::uno::Reference<css::uno::XInterface> > m_aClipboards;
 #endif
