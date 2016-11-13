@@ -753,9 +753,8 @@ static inline void SplitGlyphFlags( const FreetypeFont& rFont, sal_GlyphId& rGly
 
 void FreetypeFont::ApplyGlyphTransform( int nGlyphFlags, FT_Glyph pGlyphFT ) const
 {
-    int nAngle = GetFontSelData().mnOrientation;
     // shortcut most common case
-    if( !nAngle && !nGlyphFlags )
+    if (!GetFontSelData().mnOrientation && !nGlyphFlags)
         return;
 
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
@@ -775,7 +774,6 @@ void FreetypeFont::ApplyGlyphTransform( int nGlyphFlags, FT_Glyph pGlyphFT ) con
         aMatrix.yx = +mnSin;
         break;
     case GF_ROTL:    // left
-        nAngle += 900;
         bStretched = (mfStretch != 1.0);
         aVector.x  = (FT_Pos)(+rMetrics.descender * mfStretch);
         aVector.y  = -rMetrics.ascender;
@@ -785,7 +783,6 @@ void FreetypeFont::ApplyGlyphTransform( int nGlyphFlags, FT_Glyph pGlyphFT ) con
         aMatrix.yx = (FT_Pos)(+mnCos / mfStretch);
         break;
     case GF_ROTR:    // right
-        nAngle -= 900;
         bStretched = (mfStretch != 1.0);
         aVector.x = -maFaceFT->glyph->metrics.horiAdvance;
         aVector.x += (FT_Pos)(rMetrics.descender * mnSin/65536.0);
@@ -796,9 +793,6 @@ void FreetypeFont::ApplyGlyphTransform( int nGlyphFlags, FT_Glyph pGlyphFT ) con
         aMatrix.yx = (FT_Pos)(-mnCos / mfStretch);
         break;
     }
-
-    while( nAngle < 0 )
-        nAngle += 3600;
 
     if( pGlyphFT->format != FT_GLYPH_FORMAT_BITMAP )
     {
