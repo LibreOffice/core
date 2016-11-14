@@ -58,13 +58,9 @@ public:
     {
         return mxRef == static_cast<OfaRefItem<reference_type> const &>(rItem).mxRef;
     }
-    virtual SfxPoolItem*Clone( SfxItemPool* /*pPool = 0*/ ) const override
+    virtual SfxPoolItem* Clone( SfxItemPool* /*pPool = 0*/ ) const override
     {
         return new OfaRefItem( *this );
-    }
-    inline rtl::Reference<reference_type> GetValue() const
-    {
-        return mxRef;
     }
 };
 

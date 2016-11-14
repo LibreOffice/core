@@ -52,9 +52,6 @@ public:
                             sal_uInt16 nBytes );
 
 private:
-    /** Derived classes return a clone of the decoder for usage in new streams. */
-    virtual BiffDecoderBase* implClone() = 0;
-
     /** Derived classes implement password verification and initialization of
         the decoder. */
     virtual css::uno::Sequence< css::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) = 0;
@@ -80,9 +77,6 @@ private:
     /** Copy constructor for cloning. */
                         BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder );
 
-    /** Returns a clone of the decoder for usage in new streams. */
-    virtual BiffDecoder_XOR* implClone() override;
-
     /** Implements password verification and initialization of the decoder. */
     virtual css::uno::Sequence< css::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) override;
     virtual bool implVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
@@ -107,9 +101,6 @@ class BiffDecoder_RCF : public BiffDecoderBase
 private:
     /** Copy constructor for cloning. */
                         BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder );
-
-    /** Returns a clone of the decoder for usage in new streams. */
-    virtual BiffDecoder_RCF* implClone() override;
 
     /** Implements password verification and initialization of the decoder. */
     virtual css::uno::Sequence< css::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) override;

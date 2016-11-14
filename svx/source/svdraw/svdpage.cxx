@@ -1775,41 +1775,4 @@ const SdrPageProperties* SdrPage::getCorrectSdrPageProperties() const
 }
 
 
-// use new redirector instead of pPaintProc
-
-StandardCheckVisisbilityRedirector::StandardCheckVisisbilityRedirector()
-:   ViewObjectContactRedirector()
-{
-}
-
-StandardCheckVisisbilityRedirector::~StandardCheckVisisbilityRedirector()
-{
-}
-
-drawinglayer::primitive2d::Primitive2DContainer StandardCheckVisisbilityRedirector::createRedirectedPrimitive2DSequence(
-    const sdr::contact::ViewObjectContact& rOriginal,
-    const sdr::contact::DisplayInfo& rDisplayInfo)
-{
-    SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
-
-    if(pObject)
-    {
-        if(pObject->GetPage())
-        {
-            if(pObject->GetPage()->checkVisibility(rOriginal, rDisplayInfo, false))
-            {
-                return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
-            }
-        }
-
-        return drawinglayer::primitive2d::Primitive2DContainer();
-    }
-    else
-    {
-        // not an object, maybe a page
-        return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
-    }
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,8 +45,6 @@ public:
         bAuto = rAttr.bAuto;
         return *this;
     }
-
-    bool GetAutoFlag() const                    { return bAuto; }
 };
 
 class SwTableBoxFormula : public SfxPoolItem, public SwTableFormula

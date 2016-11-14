@@ -239,14 +239,6 @@ SfxFrame* SfxFrame::GetChildFrame( sal_uInt16 nPos ) const
     return nullptr;
 }
 
-void SfxFrame::RemoveChildFrame_Impl( SfxFrame* pFrame )
-{
-    DBG_ASSERT( pChildArr, "Unknown Frame!");
-    SfxFrameArr_Impl::iterator it = std::find( pChildArr->begin(), pChildArr->end(), pFrame );
-    if ( it != pChildArr->end() )
-        pChildArr->erase( it );
-};
-
 bool SfxFrame::IsClosing_Impl() const
 {
     return pImpl->bClosing;
@@ -297,11 +289,6 @@ void SfxFrame::CancelTransfers()
 SfxViewFrame* SfxFrame::GetCurrentViewFrame() const
 {
     return pImpl->pCurrentViewFrame;
-}
-
-SfxDispatcher* SfxFrame::GetDispatcher_Impl() const
-{
-    return pImpl->pCurrentViewFrame->GetDispatcher();
 }
 
 bool SfxFrame::IsAutoLoadLocked_Impl() const

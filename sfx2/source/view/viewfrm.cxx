@@ -1643,22 +1643,6 @@ const Size& SfxViewFrame::GetMargin_Impl() const
     return m_pImpl->aMargin;
 }
 
-void SfxViewFrame::SetActiveChildFrame_Impl( SfxViewFrame *pViewFrame )
-{
-    if ( pViewFrame != m_pImpl->pActiveChild )
-    {
-        m_pImpl->pActiveChild = pViewFrame;
-
-        Reference< XFramesSupplier > xFrame( GetFrame().GetFrameInterface(), UNO_QUERY );
-        Reference< XFrame >  xActive;
-        if ( pViewFrame )
-            xActive = pViewFrame->GetFrame().GetFrameInterface();
-
-        if ( xFrame.is() )      // xFrame can be NULL
-            xFrame->setActiveFrame( xActive );
-    }
-}
-
 SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
 {
     SfxViewFrame *pViewFrame = m_pImpl->pActiveChild;

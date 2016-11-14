@@ -382,12 +382,6 @@ SalXLib::~SalXLib()
     delete m_pInputMethod;
 }
 
-void SalXLib::SetInputMethod( SalI18N_InputMethod *pInputMethod )
-{
-    delete m_pInputMethod;
-    m_pInputMethod = pInputMethod;
-}
-
 static Display *OpenX11Display(OString& rDisplay)
 {
     /*

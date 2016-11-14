@@ -74,11 +74,6 @@ BiffDecoder_XOR::BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder ) :
         maCodec.initCodec( maEncryptionData );
 }
 
-BiffDecoder_XOR* BiffDecoder_XOR::implClone()
-{
-    return new BiffDecoder_XOR( *this );
-}
-
 Sequence< NamedValue > BiffDecoder_XOR::implVerifyPassword( const OUString& rPassword )
 {
     maEncryptionData.realloc( 0 );
@@ -147,11 +142,6 @@ BiffDecoder_RCF::BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder ) :
 {
     if( isValid() )
         maCodec.initCodec( maEncryptionData );
-}
-
-BiffDecoder_RCF* BiffDecoder_RCF::implClone()
-{
-    return new BiffDecoder_RCF( *this );
 }
 
 Sequence< NamedValue > BiffDecoder_RCF::implVerifyPassword( const OUString& rPassword )
