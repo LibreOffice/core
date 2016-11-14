@@ -66,7 +66,7 @@ namespace drawinglayer
             return false;
         }
 
-        void SdrOle2Primitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
+        void SdrOle2Primitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             // to take care of getSdrLFSTAttribute() later, the same as in SdrGrafPrimitive2D::create2DDecomposition
             // should happen. For the moment we only need the OLE itself
@@ -170,7 +170,7 @@ namespace drawinglayer
                     getSdrLFSTAttribute().getShadow());
             }
 
-            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
+            rVisitor.append(aRetval);
         }
 
         // provide unique ID

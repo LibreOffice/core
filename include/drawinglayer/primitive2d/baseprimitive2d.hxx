@@ -58,20 +58,32 @@ namespace drawinglayer { namespace primitive2d {
     typedef css::uno::Reference< css::graphic::XPrimitive2D > Primitive2DReference;
     typedef css::uno::Sequence< Primitive2DReference > Primitive2DSequence;
 
+    class Primitive2DContainer;
+    // Visitor class for walking a tree of Primitive2DReference in BasePrimitive2D::get2DDecomposition
+    class DRAWINGLAYER_DLLPUBLIC Primitive2DDecompositionVisitor {
+    public:
+        virtual void append(const Primitive2DReference&) = 0;
+        virtual void append(const Primitive2DContainer&) = 0;
+        virtual void append(Primitive2DContainer&&) = 0;
+        virtual ~Primitive2DDecompositionVisitor();
+    };
 
-    class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer : public std::deque< Primitive2DReference >
+    class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer : public std::deque< Primitive2DReference >,
+                                                                        public Primitive2DDecompositionVisitor
     {
     public:
         explicit Primitive2DContainer() {}
         explicit Primitive2DContainer( size_type count ) : deque(count) {}
+        virtual ~Primitive2DContainer() override;
         Primitive2DContainer( const Primitive2DContainer& other ) : deque(other) {}
         Primitive2DContainer( const Primitive2DContainer&& other ) : deque(other) {}
         Primitive2DContainer( const std::deque< Primitive2DReference >& other ) : deque(other) {}
         Primitive2DContainer( std::initializer_list<Primitive2DReference> init ) : deque(init) {}
 
-        void append(const Primitive2DContainer& rSource);
+        virtual void append(const Primitive2DReference&) override;
+        virtual void append(const Primitive2DContainer& rSource) override;
+        virtual void append(Primitive2DContainer&& rSource) override;
         void append(const Primitive2DSequence& rSource);
-        void append(Primitive2DContainer&& rSource);
         Primitive2DContainer& operator=(const Primitive2DContainer& r) { deque::operator=(r); return *this; }
         Primitive2DContainer& operator=(const Primitive2DContainer&& r) { deque::operator=(r); return *this; }
         bool operator==(const Primitive2DContainer& rB) const;
@@ -190,7 +202,7 @@ namespace drawinglayer
             virtual sal_uInt32 getPrimitive2DID() const = 0;
 
             /// The default implementation will return an empty sequence
-            virtual void get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const;
+            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const;
 
 
             // Methods from XPrimitive2D
@@ -279,7 +291,7 @@ namespace drawinglayer
                 overridden and the ViewInformation2D for the last decomposition need to be remembered, too, and
                 be used in the next call to decide if the buffered decomposition may be reused or not.
              */
-            virtual void get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
