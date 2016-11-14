@@ -1471,7 +1471,7 @@ bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< bean
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
 
-        // is empty pes shape?
+        // is empty pres. shape?
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("IsEmptyPresentationObject"))
         {
             xPropSet->getPropertyValue("IsEmptyPresentationObject") >>= bIsEmpty;
