@@ -176,7 +176,7 @@ namespace drawinglayer
             return getOutputRange();
         }
 
-        void FillHatchPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void FillHatchPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             bool bAdaptDistance(0 != getFillHatch().getMinimalDiscreteDistance());
@@ -184,12 +184,12 @@ namespace drawinglayer
             if(bAdaptDistance)
             {
                 // behave view-dependent
-                DiscreteMetricDependentPrimitive2D::get2DDecomposition(rContainer, rViewInformation);
+                DiscreteMetricDependentPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
             }
             else
             {
                 // behave view-independent
-                BufferedDecompositionPrimitive2D::get2DDecomposition(rContainer, rViewInformation);
+                BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
             }
         }
 

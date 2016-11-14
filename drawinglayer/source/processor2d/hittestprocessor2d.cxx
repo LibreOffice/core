@@ -429,7 +429,7 @@ namespace drawinglayer
                     if(!getHitTextOnly())
                     {
                         // The recently added BitmapEx::GetTransparency() makes it easy to extend
-                        // the BitmapPrimitive2D HitTest to take the contained BotmapEx and it's
+                        // the BitmapPrimitive2D HitTest to take the contained BitmapEx and it's
                         // transparency into account
                         const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
 
