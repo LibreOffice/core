@@ -405,11 +405,11 @@ void MenuFloatingWindow::End()
     if (GetParent() && !GetParent()->IsDisposed())
         GetParent()->ImplDecModalCount();
 
-    // restore focus
+    // restore focus to previous window if we still have the focus
     VclPtr<vcl::Window> xFocusId(xSaveFocusId);
-    if (xFocusId != nullptr)
+    xSaveFocusId = nullptr;
+    if (HasChildPathFocus() && xFocusId != nullptr)
     {
-        xSaveFocusId = nullptr;
         ImplGetSVData()->maWinData.mbNoDeactivate = false;
         Window::EndSaveFocus(xFocusId);
     }

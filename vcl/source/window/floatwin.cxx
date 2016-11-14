@@ -771,12 +771,17 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPt
     {
         Show( false, ShowFlags::NoFocusChange );
 
-        // maybe pass focus on to a suitable FloatingWindow
-        if ( xFocusId != nullptr )
-            Window::EndSaveFocus( xFocusId );
+        if (HasChildPathFocus() && xFocusId != nullptr)
+        {
+            // restore focus to previous focus window if we still have the focus
+            Window::EndSaveFocus(xFocusId);
+        }
         else if ( pSVData->maWinData.mpFocusWin && pSVData->maWinData.mpFirstFloat &&
                   ImplIsWindowOrChild( pSVData->maWinData.mpFocusWin ) )
+        {
+            // maybe pass focus on to a suitable FloatingWindow
             pSVData->maWinData.mpFirstFloat->GrabFocus();
+        }
         mbPopupModeTearOff = false;
     }
     else
