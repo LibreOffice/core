@@ -85,9 +85,6 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
             return true;
         }
     }
-    if (dyn_cast<CXXDestructorDecl>(methodDecl)) {
-        return true;
-    }
     // sometimes the disambiguation happens in a base class
     StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(methodDecl->getLocStart()));
     if (aFileName == SRCDIR "/comphelper/source/property/propertycontainer.cxx")
