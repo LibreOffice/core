@@ -108,7 +108,7 @@ IconThemeSelectorTest::ThemeIsOverriddenByPreferredTheme()
 {
     vcl::IconThemeSelector s;
     OUString preferred("oxygen");
-    s.SetPreferredIconTheme(preferred);
+    s.SetPreferredIconTheme(preferred, false);
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
     OUString selected = s.SelectIconThemeForDesktopEnvironment(themes, "gtk");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'tango' theme is overridden by oxygen", preferred, selected);
@@ -133,7 +133,7 @@ void
 IconThemeSelectorTest::NotInstalledThemeDoesNotOverride()
 {
     vcl::IconThemeSelector s;
-    s.SetPreferredIconTheme("oxygen_katze");
+    s.SetPreferredIconTheme("oxygen_katze", false);
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
     OUString selected = s.SelectIconTheme(themes, "oxygen");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'oxygen' theme is not overridden by 'oxygen_katze'", OUString("oxygen"), selected);
@@ -182,7 +182,7 @@ IconThemeSelectorTest::DifferentPreferredThemesAreInequal()
 {
     vcl::IconThemeSelector s1;
     vcl::IconThemeSelector s2;
-    s1.SetPreferredIconTheme("oxygen");
+    s1.SetPreferredIconTheme("oxygen", false);
     s2.SetUseHighContrastTheme(true);
     bool equal = (s1 == s2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Different preferred themes are detected as inequal", false, equal);
