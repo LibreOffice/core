@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <utility>
 
 #include <com/sun/star/style/XStyle.hpp>
@@ -904,15 +905,8 @@ bool SdXShape::IsEmptyPresObj() const
         if( pTextObj == nullptr )
             return true;
 
-        OutlinerParaObject* pParaObj = pTextObj->GetEditOutlinerParaObject();
-        if( pParaObj )
-        {
-            delete pParaObj;
-        }
-        else
-        {
-            return true;
-        }
+        const std::unique_ptr<OutlinerParaObject> pParaObj(pTextObj->GetEditOutlinerParaObject());
+        return !pParaObj;
     }
 
     return false;
