@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -835,6 +835,9 @@ void XSecController::exportSignature(
                     else
                     {
                         buffer = utl::toISO8601(signatureInfo.stDateTime);
+                        // xsd:dateTime must use period as separator for fractional seconds, while
+                        // utl::toISO8601 uses comma (as allowed, and even recommended, by ISO8601).
+                        buffer.replace(',', '.');
                     }
                     sDate = buffer.makeStringAndClear();
                     xDocumentHandler->characters( sDate );
