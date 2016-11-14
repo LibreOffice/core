@@ -198,9 +198,9 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 {
     if (rCEvt.IsMouseEvent() && CommandEventId::ContextMenu == rCEvt.GetCommand())
     {
-        const bool bIsExperimentalMode(officecfg::Office::Common::Misc::ExperimentalMode::get());
+        const bool bScreenshotMode(officecfg::Office::Common::Misc::ScreenshotMode::get());
 
-        if (bIsExperimentalMode)
+        if (bScreenshotMode)
         {
             bool bVisibleChildren(false);
             vcl::Window* pChild(nullptr);
@@ -326,7 +326,7 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
                     // consume event when:
                     // - CommandEventId::ContextMenu
-                    // - bIsExperimentalMode
+                    // - bScreenshotMode
                     // - bVisibleChildren
                     return;
                 }
