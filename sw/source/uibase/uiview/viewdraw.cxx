@@ -457,7 +457,6 @@ static bool lcl_isTextBox(SdrObject* pObject)
 
 bool SwView::EnterDrawTextMode(const Point& aDocPos)
 {
-    SdrPageView* pPV;
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
     OSL_ENSURE( pSdrView, "EnterDrawTextMode without DrawView?" );
@@ -467,10 +466,10 @@ bool SwView::EnterDrawTextMode(const Point& aDocPos)
     sal_uInt16 nOld = pSdrView->GetHitTolerancePixel();
     pSdrView->SetHitTolerancePixel( 2 );
 
-    SdrObject* pObj = (pSdrView->IsMarkedHit(aDocPos) &&
-                       !pSdrView->PickHandle(aDocPos) && IsTextTool()) ?
-        pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pPV, SdrSearchOptions::PICKTEXTEDIT) :
-        nullptr;
+    SdrObject* pObj = nullptr;
+    SdrPageView* pPV = nullptr;
+    if (pSdrView->IsMarkedHit(aDocPos) && !pSdrView->PickHandle(aDocPos) && IsTextTool())
+        pObj = pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pPV, SdrSearchOptions::PICKTEXTEDIT);
 
     if (pObj &&
         // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
