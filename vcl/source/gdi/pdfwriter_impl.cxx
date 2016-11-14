@@ -6605,7 +6605,7 @@ NSSCMSMessage *CreateCMSMessage(PRTime time,
         return nullptr;
     }
 
-    *cms_signer = NSS_CMSSignerInfo_Create(result, cert, SEC_OID_SHA1);
+    *cms_signer = NSS_CMSSignerInfo_Create(result, cert, SEC_OID_SHA256);
     if (!*cms_signer)
     {
         SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_Create failed");
@@ -6646,7 +6646,7 @@ NSSCMSMessage *CreateCMSMessage(PRTime time,
         return nullptr;
     }
 
-    if (NSS_CMSSignedData_SetDigestValue(*cms_sd, SEC_OID_SHA1, digest) != SECSuccess)
+    if (NSS_CMSSignedData_SetDigestValue(*cms_sd, SEC_OID_SHA256, digest) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_SetDigestValue failed");
         NSS_CMSSignedData_Destroy(*cms_sd);
@@ -6691,7 +6691,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         return false;
     }
 
-    HashContextScope hc(HASH_Create(HASH_AlgSHA1));
+    HashContextScope hc(HASH_Create(HASH_AlgSHA256));
     if (!hc.get())
     {
         SAL_WARN("vcl.pdfwriter", "HASH_Create failed");
@@ -6705,15 +6705,15 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     HASH_Update(hc.get(), static_cast<const unsigned char*>(rContext.m_pByteRange2), rContext.m_nByteRange2);
 
     SECItem digest;
-    unsigned char hash[SHA1_LENGTH];
+    unsigned char hash[SHA256_LENGTH];
     digest.data = hash;
-    HASH_End(hc.get(), digest.data, &digest.len, SHA1_LENGTH);
+    HASH_End(hc.get(), digest.data, &digest.len, SHA256_LENGTH);
     hc.clear();
 
 #ifdef DBG_UTIL
     {
         FILE *out = fopen("PDFWRITER.hash.data", "wb");
-        fwrite(hash, SHA1_LENGTH, 1, out);
+        fwrite(hash, SHA256_LENGTH, 1, out);
         fclose(out);
     }
 #endif
@@ -6779,7 +6779,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         }
 #endif
 
-        HashContextScope ts_hc(HASH_Create(HASH_AlgSHA1));
+        HashContextScope ts_hc(HASH_Create(HASH_AlgSHA256));
         if (!ts_hc.get())
         {
             SAL_WARN("vcl.pdfwriter", "HASH_Create failed");
@@ -6790,16 +6790,16 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         HASH_Begin(ts_hc.get());
         HASH_Update(ts_hc.get(), ts_cms_signer->encDigest.data, ts_cms_signer->encDigest.len);
         SECItem ts_digest;
-        unsigned char ts_hash[SHA1_LENGTH];
+        unsigned char ts_hash[SHA256_LENGTH];
         ts_digest.type = siBuffer;
         ts_digest.data = ts_hash;
-        HASH_End(ts_hc.get(), ts_digest.data, &ts_digest.len, SHA1_LENGTH);
+        HASH_End(ts_hc.get(), ts_digest.data, &ts_digest.len, SHA256_LENGTH);
         ts_hc.clear();
 
 #ifdef DBG_UTIL
         {
             FILE *out = fopen("PDFWRITER.ts_hash.data", "wb");
-            fwrite(ts_hash, SHA1_LENGTH, 1, out);
+            fwrite(ts_hash, SHA256_LENGTH, 1, out);
             fclose(out);
         }
 #endif
@@ -6811,7 +6811,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
 
         src.messageImprint.hashAlgorithm.algorithm.data = nullptr;
         src.messageImprint.hashAlgorithm.parameters.data = nullptr;
-        SECOID_SetAlgorithmID(nullptr, &src.messageImprint.hashAlgorithm, SEC_OID_SHA1, nullptr);
+        SECOID_SetAlgorithmID(nullptr, &src.messageImprint.hashAlgorithm, SEC_OID_SHA256, nullptr);
         src.messageImprint.hashedMessage = ts_digest;
 
         src.reqPolicy.type = siBuffer;
@@ -7427,7 +7427,7 @@ bool PDFWriterImpl::finalizeSignature()
     std::unique_ptr<char[]> buffer1(new char[m_nSignatureContentOffset + 1]);
     sal_uInt64 bytesRead1;
 
-    //FIXME: Check if SHA1 is calculated from the correct byterange
+    //FIXME: Check if hash is calculated from the correct byterange
     CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer1.get(), m_nSignatureContentOffset - 1 , bytesRead1)) );
     if (bytesRead1 != (sal_uInt64)m_nSignatureContentOffset - 1)
         SAL_WARN("vcl.pdfwriter", "First buffer read failed");
