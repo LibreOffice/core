@@ -50,7 +50,7 @@ Chart2DialogsTest::~Chart2DialogsTest()
 
 void Chart2DialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
-    // fill map of known dilogs
+    // fill map of known dialogs
 }
 
 VclPtr<VclAbstractDialog> Chart2DialogsTest::createDialogByID(sal_uInt32 /*nID*/)

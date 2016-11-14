@@ -50,7 +50,7 @@ StarmathDialogsTest::~StarmathDialogsTest()
 
 void StarmathDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
-    // fill map of known dilogs
+    // fill map of known dialogs
 }
 
 VclPtr<VclAbstractDialog> StarmathDialogsTest::createDialogByID(sal_uInt32 /*nID*/)

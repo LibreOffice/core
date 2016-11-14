@@ -229,7 +229,7 @@ const SfxItemSet& SdDialogsTest::getEmptyFillStyleSfxItemSet()
 
 void SdDialogsTest::registerKnownDialogsByID(mapType& rKnownDialogs)
 {
-    // fill map of known dilogs
+    // fill map of known dialogs
     rKnownDialogs["modules/simpress/ui/publishingdialog.ui"] = 0;
     rKnownDialogs["modules/sdraw/ui/breakdialog.ui"] = 1;
     rKnownDialogs["modules/sdraw/ui/copydlg.ui"] = 2;

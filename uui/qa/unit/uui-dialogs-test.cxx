@@ -50,7 +50,7 @@ UuiDialogsTest::~UuiDialogsTest()
 
 void UuiDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
-    // fill map of known dilogs
+    // fill map of known dialogs
 }
 
 VclPtr<VclAbstractDialog> UuiDialogsTest::createDialogByID(sal_uInt32 /*nID*/)

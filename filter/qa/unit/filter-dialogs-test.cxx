@@ -50,7 +50,7 @@ FilterDialogsTest::~FilterDialogsTest()
 
 void FilterDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
-    // fill map of known dilogs
+    // fill map of known dialogs
 }
 
 VclPtr<VclAbstractDialog> FilterDialogsTest::createDialogByID(sal_uInt32 /*nID*/)
