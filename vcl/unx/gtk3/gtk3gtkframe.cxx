@@ -952,12 +952,11 @@ GtkWidget *GtkSalFrame::getMouseEventWidget() const
 }
 
 static void damaged(void *handle,
-                    sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
-                    sal_Int32 nExtentsRight, sal_Int32 nExtentsBottom)
+                    sal_Int32 nExtentsX, sal_Int32 nExtentsY,
+                    sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(handle);
-    pThis->damaged(nExtentsLeft, nExtentsTop,
-                   nExtentsRight, nExtentsBottom);
+    pThis->damaged(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight);
 }
 
 void GtkSalFrame::InitCommon()
@@ -2859,8 +2858,8 @@ cairo_t* GtkSalFrame::getCairoContext() const
     return cr;
 }
 
-void GtkSalFrame::damaged(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
-                          sal_Int32 nExtentsRight, sal_Int32 nExtentsBottom) const
+void GtkSalFrame::damaged(sal_Int32 nExtentsX, sal_Int32 nExtentsY,
+                          sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight) const
 {
     if (dumpframes)
     {
@@ -2872,9 +2871,8 @@ void GtkSalFrame::damaged(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
     }
 
     gtk_widget_queue_draw_area(GTK_WIDGET(m_pFixedContainer),
-                               nExtentsLeft, nExtentsTop,
-                               nExtentsRight - nExtentsLeft,
-                               nExtentsBottom - nExtentsTop);
+                               nExtentsX, nExtentsY,
+                               nExtentsWidth, nExtentsHeight);
 }
 
 // blit our backing cairo surface to the target cairo context
