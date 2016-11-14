@@ -275,12 +275,12 @@ public:
                                        sal_uInt16 nFormat,
                                        const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
-                                    SvStream& rOStm, sal_uInt16 nFormat,
-                                        const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
+                                       SvStream& rOStm, sal_uInt16 nFormat,
+                                       const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
 
     sal_uInt16          CanImportGraphic( const INetURLObject& rPath,
                                       sal_uInt16 nFormat,
-                                      sal_uInt16 * pDeterminedFormat = nullptr);
+                                      sal_uInt16 * pDeterminedFormat);
 
     sal_uInt16          ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
@@ -288,7 +288,7 @@ public:
 
     sal_uInt16          CanImportGraphic( const OUString& rPath, SvStream& rStream,
                                       sal_uInt16 nFormat,
-                                      sal_uInt16 * pDeterminedFormat = nullptr);
+                                      sal_uInt16 * pDeterminedFormat);
 
     sal_uInt16          ImportGraphic( Graphic& rGraphic, const OUString& rPath,
                                    SvStream& rStream,

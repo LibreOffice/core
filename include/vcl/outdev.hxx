@@ -1311,7 +1311,7 @@ public:
 
     SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
                                                       sal_Int32 nIndex, sal_Int32 nLen,
-                                                      const long* pDXAry = nullptr ) const;
+                                                      const long* pDXAry ) const;
 
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;

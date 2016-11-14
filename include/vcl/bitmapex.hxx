@@ -327,9 +327,9 @@ public:
     bool                Adjust(
                             short nLuminancePercent,
                             short nContrastPercent,
-                            short nChannelRPercent = 0,
-                            short nChannelGPercent = 0,
-                            short nChannelBPercent = 0,
+                            short nChannelRPercent,
+                            short nChannelGPercent,
+                            short nChannelBPercent,
                             double fGamma = 1.0,
                             bool bInvert = false,
                             bool msoBrightness = false );
