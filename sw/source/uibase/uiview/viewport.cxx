@@ -217,16 +217,13 @@ void SwView::SetVisArea( const Rectangle &rRect, bool bUpdateScrollbar )
         // If m_pWrtShell's visible area is the whole document, do the same here.
         aOldSz = m_pWrtShell->VisArea().SSize();
 
-    const Point aTopLeft(     AlignToPixel( rRect.TopLeft() ));
-    const Point aBottomRight( AlignToPixel( rRect.BottomRight() ));
-    Rectangle aLR( aTopLeft, aBottomRight );
-
-    if( aLR == m_aVisArea )
+    if( rRect == m_aVisArea )
         return;
 
     const SwTwips lMin = IsDocumentBorder() ? DOCUMENTBORDER : 0;
 
     // No negative position, no negative size
+    Rectangle aLR = rRect;
     if( aLR.Top() < lMin )
     {
         aLR.Bottom() += lMin - aLR.Top();
