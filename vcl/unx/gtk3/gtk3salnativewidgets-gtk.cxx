@@ -2726,14 +2726,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
                             "gtk-application-prefer-dark-theme", &bDarkIconTheme,
                             nullptr );
     OUString sIconThemeName(OUString::createFromAscii(pIconThemeName));
-    if (sIconThemeName.endsWithIgnoreAsciiCase("-dark", &sIconThemeName) ||
-        sIconThemeName.endsWithIgnoreAsciiCase("_dark", &sIconThemeName))
-    {
-        bDarkIconTheme = true;
-    }
-    if (bDarkIconTheme)
-        sIconThemeName += "_dark";
-    aStyleSet.SetPreferredIconTheme(sIconThemeName);
+    aStyleSet.SetPreferredIconTheme(sIconThemeName, bDarkIconTheme);
     g_free( pIconThemeName );
 
     aStyleSet.SetToolbarIconSize( ToolbarIconSize::Large );

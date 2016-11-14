@@ -3026,9 +3026,9 @@ StyleSettings::GetHighContrastMode() const
 }
 
 void
-StyleSettings::SetPreferredIconTheme(const OUString& theme)
+StyleSettings::SetPreferredIconTheme(const OUString& theme, bool bDarkIconTheme)
 {
-    mxData->mIconThemeSelector->SetPreferredIconTheme(theme);
+    mxData->mIconThemeSelector->SetPreferredIconTheme(theme, bDarkIconTheme);
 }
 
 void

@@ -43,7 +43,8 @@ bool icon_theme_is_in_installed_themes(const OUString& theme,
 } // end anonymous namespace
 
 IconThemeSelector::IconThemeSelector()
-: mUseHighContrastTheme(false)
+    : mUseHighContrastTheme(false)
+    , mPreferDarkIconTheme(false)
 {
 }
 
@@ -83,7 +84,7 @@ IconThemeSelector::SelectIconThemeForDesktopEnvironment(
             return mPreferredIconTheme;
         }
         //if a dark variant is preferred, and we didn't have an exact match, then try our one and only dark theme
-        if (mPreferredIconTheme.endsWith("_dark") && icon_theme_is_in_installed_themes("breeze_dark", installedThemes)) {
+        if (mPreferDarkIconTheme && icon_theme_is_in_installed_themes("breeze_dark", installedThemes)) {
             return OUString("breeze_dark");
         }
     }
@@ -121,9 +122,10 @@ IconThemeSelector::SetUseHighContrastTheme(bool v)
 }
 
 void
-IconThemeSelector::SetPreferredIconTheme(const OUString& theme)
+IconThemeSelector::SetPreferredIconTheme(const OUString& theme, bool bDarkIconTheme)
 {
     mPreferredIconTheme = theme;
+    mPreferDarkIconTheme = bDarkIconTheme;
 }
 
 bool
@@ -133,6 +135,9 @@ IconThemeSelector::operator==(const vcl::IconThemeSelector& other) const
         return true;
     }
     if (mPreferredIconTheme != other.mPreferredIconTheme) {
+        return false;
+    }
+    if (mPreferDarkIconTheme != other.mPreferDarkIconTheme) {
         return false;
     }
     if (mUseHighContrastTheme != other.mUseHighContrastTheme) {

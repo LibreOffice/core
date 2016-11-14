@@ -548,7 +548,7 @@ public:
     /** Set a preferred icon theme.
      * This theme will be preferred in GetAutomaticallyChosenIconTheme()
      */
-    void                            SetPreferredIconTheme(const OUString&);
+    void                            SetPreferredIconTheme(const OUString&, bool bDarkIconTheme = false);
 
     const DialogStyle&              GetDialogStyle() const;
     void                            SetDialogStyle( const DialogStyle& rStyle );

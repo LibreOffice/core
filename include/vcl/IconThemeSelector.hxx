@@ -63,7 +63,7 @@ public:
     SetUseHighContrastTheme(bool);
 
     void
-    SetPreferredIconTheme(const OUString&);
+    SetPreferredIconTheme(const OUString&, bool bDarkIconTheme);
 
     bool
     operator==(const vcl::IconThemeSelector&) const;
@@ -85,6 +85,7 @@ private:
 
     OUString mPreferredIconTheme;
     bool mUseHighContrastTheme;
+    bool mPreferDarkIconTheme;
 
     friend class ::IconThemeSelectorTest;
 };
