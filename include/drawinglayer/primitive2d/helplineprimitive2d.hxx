@@ -102,7 +102,7 @@ namespace drawinglayer
             DeclPrimitive2DIDBlock()
 
             /// Override standard getDecomposition to be view-dependent here
-            virtual void get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

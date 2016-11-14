@@ -64,7 +64,7 @@ namespace drawinglayer
             return aRetval;
         }
 
-        void ShadowPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void ShadowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(!getChildren().empty())
             {
@@ -79,7 +79,7 @@ namespace drawinglayer
                 const Primitive2DContainer aSequenceB { xRefA };
 
                 // build transformed primitiveVector with shadow offset and add to target
-                rContainer.push_back(new TransformPrimitive2D(getShadowTransform(), aSequenceB));
+                rVisitor.append(new TransformPrimitive2D(getShadowTransform(), aSequenceB));
             }
         }
 

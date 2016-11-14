@@ -92,7 +92,7 @@ namespace drawinglayer
 
             // own get2DDecomposition to take aspect of decomposition with or without spell checker
             // into account
-            virtual void get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
 
             // transformed clone operator
             virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const = 0;

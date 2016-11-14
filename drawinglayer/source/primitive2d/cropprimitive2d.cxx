@@ -66,7 +66,7 @@ namespace drawinglayer
             return false;
         }
 
-        void CropPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void CropPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(!getChildren().empty())
             {
@@ -126,7 +126,7 @@ namespace drawinglayer
                         {
                             // the new range is completely inside the old range (unit range),
                             // so no masking is needed
-                            rContainer.push_back(xTransformPrimitive);
+                            rVisitor.append(xTransformPrimitive);
                         }
                         else
                         {
@@ -140,7 +140,7 @@ namespace drawinglayer
                                     aMaskPolyPolygon,
                                     Primitive2DContainer { xTransformPrimitive }));
 
-                            rContainer.push_back(xMask);
+                            rVisitor.append(xMask);
                         }
                     }
                 }

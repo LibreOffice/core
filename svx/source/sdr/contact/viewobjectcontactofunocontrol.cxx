@@ -781,7 +781,7 @@ namespace sdr { namespace contact {
     protected:
         virtual void
             get2DDecomposition(
-                ::drawinglayer::primitive2d::Primitive2DContainer& rContainer,
+                ::drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor,
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
             ) const override;
 
@@ -1529,7 +1529,7 @@ namespace sdr { namespace contact {
     }
 
 
-    void LazyControlCreationPrimitive2D::get2DDecomposition( ::drawinglayer::primitive2d::Primitive2DContainer& rContainer, const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+    void LazyControlCreationPrimitive2D::get2DDecomposition( ::drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor, const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
     #if OSL_DEBUG_LEVEL > 0
         ::basegfx::B2DVector aScale, aTranslate;
@@ -1538,7 +1538,7 @@ namespace sdr { namespace contact {
     #endif
         if ( m_pVOCImpl->hasControl() )
             impl_positionAndZoomControl( _rViewInformation );
-        BufferedDecompositionPrimitive2D::get2DDecomposition( rContainer, _rViewInformation );
+        BufferedDecompositionPrimitive2D::get2DDecomposition( rVisitor, _rViewInformation );
     }
 
 
