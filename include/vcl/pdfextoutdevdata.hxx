@@ -309,7 +309,7 @@ public:
         @returns
         the outline item id of the new item
     */
-    sal_Int32 CreateOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID = -1 );
+    sal_Int32 CreateOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID );
 
     /** Create a new note on a page
 

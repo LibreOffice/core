@@ -145,10 +145,10 @@ public:
 
     void                InsertItem( sal_uInt16 nId, vcl::Window* pWindow, long nSize,
                                     sal_uInt16 nPos, sal_uInt16 nIntoSetId,
-                                    SplitWindowItemFlags nBits = SplitWindowItemFlags::NONE );
+                                    SplitWindowItemFlags nBits );
     void                InsertItem( sal_uInt16 nId, long nSize,
                                     sal_uInt16 nPos, sal_uInt16 nIntoSetId,
-                                    SplitWindowItemFlags nBits = SplitWindowItemFlags::NONE );
+                                    SplitWindowItemFlags nBits );
     void                RemoveItem( sal_uInt16 nId );
     void                Clear();
 
