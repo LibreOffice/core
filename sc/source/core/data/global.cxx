@@ -141,29 +141,29 @@ bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                                const sal_uInt16       nWhich )
 {
     bool                bInvalidate = false;
-    const SfxItemState  eNewState   = rNewAttrs.GetItemState( nWhich );
-    const SfxItemState  eOldState   = rOldAttrs.GetItemState( nWhich );
+    const SfxPoolItem*  pNewItem    = nullptr;
+    const SfxItemState  eNewState   = rNewAttrs.GetItemState( nWhich, true, &pNewItem );
+    const SfxPoolItem*  pOldItem    = nullptr;
+    const SfxItemState  eOldState   = rOldAttrs.GetItemState( nWhich, true, &pOldItem );
 
     if ( eNewState == eOldState )
     {
         // Both Items set
         // PoolItems, meaning comparing pointers is valid
         if ( SfxItemState::SET == eOldState )
-            bInvalidate = (&rNewAttrs.Get( nWhich ) != &rOldAttrs.Get( nWhich ));
+            bInvalidate = (pNewItem != pOldItem);
     }
     else
     {
         // Contains a Default Item
         // PoolItems, meaning Item comparison necessary
-        const SfxPoolItem& rOldItem = ( SfxItemState::SET == eOldState )
-                    ? rOldAttrs.Get( nWhich )
-                    : rOldAttrs.GetPool()->GetDefaultItem( nWhich );
+        if (!pOldItem)
+            pOldItem = &rOldAttrs.GetPool()->GetDefaultItem( nWhich );
 
-        const SfxPoolItem& rNewItem = ( SfxItemState::SET == eNewState )
-                    ? rNewAttrs.Get( nWhich )
-                    : rNewAttrs.GetPool()->GetDefaultItem( nWhich );
+        if (!pNewItem)
+            pNewItem = &rNewAttrs.GetPool()->GetDefaultItem( nWhich );
 
-        bInvalidate = rNewItem != rOldItem;
+        bInvalidate = (*pNewItem != *pOldItem);
     }
 
     return bInvalidate;
