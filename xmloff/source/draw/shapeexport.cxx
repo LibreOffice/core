@@ -155,7 +155,6 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     msZIndex( "ZOrder" ),
     msPrintable( "Printable" ),
     msVisible( "Visible" ),
-    msEmptyPres( "IsEmptyPresentationObject" ),
     msModel( "Model" ),
     msStartShape( "StartShape" ),
     msEndShape( "EndShape" ),
@@ -308,9 +307,9 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         {
             uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-            if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(msEmptyPres) )
+            if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("IsEmptyPresentationObject") )
             {
-                uno::Any aAny = xPropSet->getPropertyValue(msEmptyPres);
+                uno::Any aAny = xPropSet->getPropertyValue("IsEmptyPresentationObject");
                 aAny >>= bIsEmptyPresObj;
             }
 

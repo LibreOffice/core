@@ -186,7 +186,6 @@ private:
     const OUString                         msPrintable;
     const OUString                         msVisible;
 
-    const OUString                         msEmptyPres;
     const OUString                         msModel;
     const OUString                         msStartShape;
     const OUString                         msEndShape;
