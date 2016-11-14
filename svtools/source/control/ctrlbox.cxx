@@ -170,7 +170,7 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
 
     bool bGapChange = bool( m_nFlags & BorderWidthImplFlags::CHANGE_DIST );
     double nWidthGap = lcl_getGuessedWidth( nGap, m_nRateGap, bGapChange );
-    if ( bGapChange && nGap > MINGAPWIDTH )
+    if ( bGapChange && nGap >= MINGAPWIDTH )
         aToCompare.push_back( nWidthGap );
     else if ( !bGapChange && nWidthGap < 0 )
         bInvalid = true;

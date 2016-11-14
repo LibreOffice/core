@@ -1949,8 +1949,8 @@ void ScExportTest::testBordersExchangeXLSX()
 /* 0,05 */   {{Solid   , Solid   ,  1,  1}, {Dotted  , Dotted  , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {None    , None    ,  0,  0}},
 /* 0,25 */   {{Solid   , Solid   ,  1,  1}, {Dotted  , Dotted  , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {None    , None    ,  0,  0}},
 /* 0,50 */   {{Solid   , Solid   ,  1,  1}, {Dotted  , Dotted  , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {None    , None    ,  0,  0}},
-/* 0,75 */   {{Solid   , Solid   , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {DashDot , DashDot , 15, 15}, {DashDoDo, DashDoDo, 15, 15}, {None    , None    ,  0,  0}},
-/* 1,00 */   {{Solid   , Solid   , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {DashDot , DashDot , 15, 15}, {DashDoDo, DashDoDo, 15, 15}, {None    , None    ,  0,  0}},
+/* 0,75 */   {{Solid   , Solid   , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {DashDot , DashDot , 15, 15}, {DashDoDo, DashDoDo, 15, 15}, {DoubThin, DoubThin, 35, 35}},
+/* 1,00 */   {{Solid   , Solid   , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {DashDot , DashDot , 15, 15}, {DashDoDo, DashDoDo, 15, 15}, {DoubThin, DoubThin, 35, 35}},
 /* 1,25 */   {{Solid   , Solid   , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {DashDot , DashDot , 15, 15}, {DashDoDo, DashDoDo, 15, 15}, {DoubThin, DoubThin, 35, 35}},
 /* 1,50 */   {{Solid   , Solid   , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {DashDot , DashDot , 15, 15}, {DashDoDo, DashDoDo, 15, 15}, {DoubThin, DoubThin, 35, 35}},
 
@@ -1982,8 +1982,8 @@ void ScExportTest::testBordersExchangeXLSX()
             const editeng::SvxBorderLine* pLineTop    = nullptr;
             const editeng::SvxBorderLine* pLineBottom = nullptr;
             rDoc.GetBorderLines(nCol + 2, (nRow * 2) + 8, 0, nullptr, &pLineTop, nullptr, &pLineBottom);
-            if((nCol < 5) && (nRow == 6))
-            {   // in this range no lines
+            if((nCol < 3) && (nRow == 6))
+            {   // in this range no lines since minimum size to create a double is 0.5
                 CPPUNIT_ASSERT(!pLineTop);
                 CPPUNIT_ASSERT(!pLineBottom);
                 continue;

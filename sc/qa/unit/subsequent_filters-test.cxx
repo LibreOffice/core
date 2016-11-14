@@ -136,6 +136,7 @@ public:
     // void testFormatsXLSX();
     void testMatrixODS();
     void testMatrixXLS();
+    void testDoubleThinBorder();
     void testBorderODS();
     void testBordersOoo33();
     void testBugFixesODS();
@@ -262,6 +263,7 @@ public:
 //  CPPUNIT_TEST(testFormatsXLSX); TODO: Fix this
     CPPUNIT_TEST(testMatrixODS);
     CPPUNIT_TEST(testMatrixXLS);
+    CPPUNIT_TEST(testDoubleThinBorder);
     CPPUNIT_TEST(testBorderODS);
     CPPUNIT_TEST(testBordersOoo33);
     CPPUNIT_TEST(testBugFixesODS);
@@ -913,6 +915,25 @@ void ScFiltersTest::testMatrixXLS()
     testFile(aCSVFileName, rDoc, 0);
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testDoubleThinBorder()
+{
+// double-thin borders created with size less than 1.15 where invisible (and subsequently lost) on round-trips.
+    ScDocShellRef xDocSh = loadDoc("tdf88827_borderDoubleThin.", FORMAT_ODS);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf88827_borderDoubleThin.*", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    const editeng::SvxBorderLine* pLeft = nullptr;
+    const editeng::SvxBorderLine* pTop = nullptr;
+    const editeng::SvxBorderLine* pRight = nullptr;
+    const editeng::SvxBorderLine* pBottom = nullptr;
+
+    rDoc.GetBorderLines( 2, 2, 0, &pLeft, &pTop, &pRight, &pBottom );
+    CPPUNIT_ASSERT(pTop);
+    CPPUNIT_ASSERT(pRight);
+    CPPUNIT_ASSERT_EQUAL( table::BorderLineStyle::DOUBLE_THIN, pRight->GetBorderLineStyle() );
 }
 
 void ScFiltersTest::testBorderODS()
