@@ -58,7 +58,7 @@ public:
 
     virtual OUString filter(const OUString &rText);
 
-    TextFilter(const OUString &rForbiddenChars = OUString(" "));
+    TextFilter(const OUString &rForbiddenChars);
     virtual ~TextFilter();
 };
 
