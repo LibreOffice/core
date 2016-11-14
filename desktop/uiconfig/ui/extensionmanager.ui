@@ -125,7 +125,8 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="removebtn">
-                    <property name="label" translatable="yes">Remove</property>
+                    <property name="label" translatable="yes">_Remove</property>
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
