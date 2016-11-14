@@ -117,20 +117,17 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     bool            m_bInterfaceLocked;
 
     VclPtr<PushButton>     m_pEnableBtn;
-    VclPtr<PushButton>     m_pRemoveBtn;
 
     VclPtr<ExtMgrDialog>   m_pParent;
 
     void            SetButtonPos( const Rectangle& rRect );
     void            SetButtonStatus( const TEntry_Impl& rEntry );
-    bool            HandleTabKey( bool bReverse );
     MENU_COMMAND    ShowPopupMenu( const Point &rPos, const long nPos );
 
 
     DECL_LINK( ScrollHdl, ScrollBar*, void );
 
     DECL_LINK( HandleEnableBtn, Button*, void );
-    DECL_LINK( HandleRemoveBtn, Button*, void );
 
 public:
     explicit ExtBoxWithBtns_Impl(vcl::Window* pParent);
@@ -140,7 +137,6 @@ public:
     void InitFromDialog(ExtMgrDialog *pParentDialog);
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
 
     virtual void    RecalcAll() override;
     virtual void    selectEntry( const long nPos ) override;
@@ -152,7 +148,6 @@ ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(vcl::Window* pParent)
     : ExtensionBox_Impl(pParent)
     , m_bInterfaceLocked(false)
     , m_pEnableBtn(nullptr)
-    , m_pRemoveBtn(nullptr)
     , m_pParent(nullptr)
 {
 }
@@ -164,22 +159,17 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
     m_pParent = pParentDialog;
 
     m_pEnableBtn = VclPtr<PushButton>::Create( this, WB_TABSTOP );
-    m_pRemoveBtn = VclPtr<PushButton>::Create( this, WB_TABSTOP );
 
     SetHelpId( HID_EXTENSION_MANAGER_LISTBOX );
     m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
-    m_pRemoveBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_REMOVE );
 
     m_pEnableBtn->SetClickHdl( LINK( this, ExtBoxWithBtns_Impl, HandleEnableBtn ) );
-    m_pRemoveBtn->SetClickHdl( LINK( this, ExtBoxWithBtns_Impl, HandleRemoveBtn ) );
 
     m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
-    m_pRemoveBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
 
     Size aSize = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
                                MapMode( MapUnit::MapAppFont ) );
     m_pEnableBtn->SetSizePixel( aSize );
-    m_pRemoveBtn->SetSizePixel( aSize );
 
     SetExtraSize( aSize.Height() + 2 * TOP_OFFSET );
 
@@ -200,7 +190,6 @@ ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 void ExtBoxWithBtns_Impl::dispose()
 {
     m_pEnableBtn.disposeAndClear();
-    m_pRemoveBtn.disposeAndClear();
     m_pParent.clear();
     ExtensionBox_Impl::dispose();
 }
@@ -217,10 +206,9 @@ void ExtBoxWithBtns_Impl::RecalcAll()
     else
     {
         m_pParent->enableOptionsButton( false );
+        m_pParent->enableRemoveButton( false );
         m_pEnableBtn->Disable();
         m_pEnableBtn->Hide();
-        m_pRemoveBtn->Disable();
-        m_pRemoveBtn->Hide();
     }
 
     ExtensionBox_Impl::RecalcAll();
@@ -242,12 +230,10 @@ void ExtBoxWithBtns_Impl::selectEntry( const long nPos )
 
 void ExtBoxWithBtns_Impl::SetButtonPos( const Rectangle& rRect )
 {
-    Size  aBtnSize( m_pRemoveBtn->GetSizePixel() );
+    Size  aBtnSize( m_pEnableBtn->GetSizePixel() );
     Point aBtnPos( rRect.Left() + ICON_OFFSET,
                    rRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
 
-    m_pRemoveBtn->SetPosPixel( aBtnPos );
-    aBtnPos.X() = rRect.Right() - TOP_OFFSET - aBtnSize.Width();
     m_pEnableBtn->SetPosPixel( aBtnPos );
 }
 
@@ -294,54 +280,14 @@ void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
 
     if ( rEntry->m_bUser || rEntry->m_bShared )
     {
-        m_pRemoveBtn->Enable( !rEntry->m_bLocked );
-        m_pRemoveBtn->Show();
+        m_pParent->enableRemoveButton( !rEntry->m_bLocked );
         rEntry->m_bHasButtons = true;
     }
     else
     {
-        m_pRemoveBtn->Disable();
-        m_pRemoveBtn->Hide();
+        m_pParent->enableRemoveButton( false );
     }
 }
-
-
-bool ExtBoxWithBtns_Impl::HandleTabKey( bool bReverse )
-{
-    sal_Int32 nIndex = getSelIndex();
-
-    if ( nIndex == svt::IExtensionListBox::ENTRY_NOTFOUND )
-        return false;
-
-    PushButton *pNext = nullptr;
-
-    if ( m_pEnableBtn->HasFocus() ) {
-        if ( !bReverse )
-            pNext = m_pRemoveBtn;
-    }
-    else if ( m_pRemoveBtn->HasFocus() ) {
-        if ( bReverse )
-            pNext = m_pEnableBtn;
-    }
-    else {
-        if ( !bReverse ) {
-            if ( ! GetEntryData( nIndex )->m_bLocked )
-                pNext = m_pEnableBtn;
-        } else {
-            if ( ! GetEntryData( nIndex )->m_bLocked )
-                pNext = m_pRemoveBtn;
-        }
-    }
-
-    if ( pNext )
-    {
-        pNext->GrabFocus();
-        return true;
-    }
-    else
-        return false;
-}
-
 
 MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long nPos )
 {
@@ -413,28 +359,6 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-
-bool ExtBoxWithBtns_Impl::Notify( NotifyEvent& rNEvt )
-{
-    bool bHandled = false;
-
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
-        sal_uInt16 nKeyCode = aKeyCode.GetCode();
-
-        if ( nKeyCode == KEY_TAB )
-            bHandled = HandleTabKey( aKeyCode.IsShift() );
-    }
-
-    if ( !bHandled )
-        return ExtensionBox_Impl::Notify( rNEvt );
-    else
-        return true;
-}
-
-
 void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
 {
     m_bInterfaceLocked = ! bEnable;
@@ -447,9 +371,9 @@ void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
     }
     else
     {
-        m_pRemoveBtn->Enable( false );
         m_pEnableBtn->Enable( false );
         m_pParent->enableOptionsButton( false );
+        m_pParent->enableRemoveButton( false );
     }
 }
 
@@ -458,12 +382,10 @@ IMPL_LINK( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar, void )
 {
     long nDelta = pScrBar->GetDelta();
 
-    Point aNewRemPt( m_pRemoveBtn->GetPosPixel() - Point( 0, nDelta ) );
     Point aNewEnPt( m_pEnableBtn->GetPosPixel() - Point( 0, nDelta ) );
 
     DoScroll( nDelta );
 
-    m_pRemoveBtn->SetPosPixel( aNewRemPt );
     m_pEnableBtn->SetPosPixel( aNewEnPt );
 }
 
@@ -484,19 +406,6 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleEnableBtn, Button*, void)
         }
     }
 }
-
-
-IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleRemoveBtn, Button*, void)
-{
-    const sal_Int32 nActive = getSelIndex();
-
-    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
-    {
-        TEntry_Impl pEntry = GetEntryData( nActive );
-        m_pParent->removePackage( pEntry->m_xPackage );
-    }
-}
-
 
 //                             DialogHelper
 
@@ -645,6 +554,7 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     get(m_pExtensionBox, "extensions");
     get(m_pOptionsBtn, "optionsbtn");
     get(m_pAddBtn, "addbtn");
+    get(m_pRemoveBtn, "removebtn");
     get(m_pUpdateBtn, "updatebtn");
     get(m_pCloseBtn, "close");
     get(m_pBundledCbx, "bundled");
@@ -658,9 +568,11 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     m_pExtensionBox->InitFromDialog(this);
 
     m_pOptionsBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_OPTIONS );
+    m_pRemoveBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_REMOVE );
 
     m_pOptionsBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleOptionsBtn ) );
     m_pAddBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleAddBtn ) );
+    m_pRemoveBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleRemoveBtn ) );
     m_pCloseBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCloseBtn ) );
 
     m_pCancelBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCancelBtn ) );
@@ -698,6 +610,7 @@ void ExtMgrDialog::dispose()
     m_pExtensionBox.clear();
     m_pOptionsBtn.clear();
     m_pAddBtn.clear();
+    m_pRemoveBtn.clear();
     m_pUpdateBtn.clear();
     m_pCloseBtn.clear();
     m_pBundledCbx.clear();
@@ -906,6 +819,11 @@ void ExtMgrDialog::enableOptionsButton( bool bEnable )
     m_pOptionsBtn->Enable( bEnable );
 }
 
+void ExtMgrDialog::enableRemoveButton ( bool bEnable )
+{
+    m_pRemoveBtn->Enable( bEnable );
+}
+
 IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn, Button*, void)
 {
     if ( m_xAbortChannel.is() )
@@ -1037,6 +955,17 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn, Button*, void)
     setBusy( false );
 }
 
+IMPL_LINK_NOARG(ExtMgrDialog, HandleRemoveBtn, Button*, void)
+{
+    const sal_Int32 nActive = m_pExtensionBox->getSelIndex();
+
+    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
+    {
+        TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nActive );
+        removePackage( pEntry->m_xPackage );
+    }
+}
+
 IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx, Button*, void)
 {
     // re-creates the list of packages with addEntry selecting the packages
@@ -1098,22 +1027,7 @@ bool ExtMgrDialog::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
-        sal_uInt16 nKeyCode = aKeyCode.GetCode();
 
-        if ( nKeyCode == KEY_TAB )
-        {
-            if ( aKeyCode.IsShift() ) {
-                if ( m_pAddBtn->HasFocus() ) {
-                    m_pExtensionBox->GrabFocus();
-                    bHandled = true;
-                }
-            } else {
-                if ( m_pGetExtensions->HasFocus() ) {
-                    m_pExtensionBox->GrabFocus();
-                    bHandled = true;
-                }
-            }
-        }
         if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
             bHandled = m_pExtensionBox->Notify( rNEvt );
     }
