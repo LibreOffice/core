@@ -357,9 +357,6 @@ public:
     /// Returns size of the bitmap / text that is inside this toolbox item.
     Size                GetItemContentSize( sal_uInt16 nItemId ) const;
 
-    /// Retrieves the optimal position to place a popup window for this item (subtoolbar or dropdown)
-    Point               GetItemPopupPosition( sal_uInt16 nItemId, const Size& rSize ) const;
-
     sal_uInt16          GetCurItemId() const { return mnCurItemId; }
     sal_uInt16          GetDownItemId() const { return mnDownItemId; }
     sal_uInt16          GetModifier() const { return mnMouseModifier; }

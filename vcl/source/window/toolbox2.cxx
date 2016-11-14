@@ -845,11 +845,6 @@ Point ToolBox::ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize )
     return aPos;
 }
 
-Point ToolBox::GetItemPopupPosition( sal_uInt16 nItemId, const Size& rSize ) const
-{
-    return ImplGetPopupPosition( GetItemRect( nItemId ), rSize );
-}
-
 Rectangle ToolBox::GetItemRect( sal_uInt16 nItemId ) const
 {
     if ( mbCalc || mbFormat )

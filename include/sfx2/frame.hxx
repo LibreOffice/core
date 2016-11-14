@@ -103,8 +103,6 @@ protected:
     bool                Close();
     virtual             ~SfxFrame();
 
-    SAL_DLLPRIVATE void RemoveChildFrame_Impl( SfxFrame* );
-
     SAL_DLLPRIVATE      SfxFrame( vcl::Window& i_rContainerWindow );
 
 public:
@@ -156,7 +154,6 @@ public:
     // Methods for accessing the current set
     SAL_DLLPRIVATE SfxFrameDescriptor* GetDescriptor() const;
 
-    SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl() const;
     SAL_DLLPRIVATE bool IsAutoLoadLocked_Impl() const;
 
     SAL_DLLPRIVATE static void InsertTopFrame_Impl( SfxFrame* pFrame );

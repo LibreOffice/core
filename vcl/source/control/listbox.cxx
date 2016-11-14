@@ -1347,13 +1347,6 @@ void ListBox::DrawEntry(const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawTe
         mpImplWin->DrawEntry(*rEvt.GetRenderContext(), bDrawImage, bDrawTextAtImagePos);
 }
 
-void ListBox::SetUserItemSize( const Size& rSz )
-{
-    mpImplLB->GetMainWindow()->SetUserItemSize( rSz );
-    if ( mpImplWin )
-        mpImplWin->SetUserItemSize( rSz );
-}
-
 void ListBox::EnableUserDraw( bool bUserDraw )
 {
     mpImplLB->GetMainWindow()->EnableUserDraw( bUserDraw );

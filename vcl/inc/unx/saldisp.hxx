@@ -182,7 +182,6 @@ public:
     bool            CheckTimeout( bool bExecuteTimers = true );
 
     SalI18N_InputMethod* GetInputMethod() const { return m_pInputMethod; }
-    void                 SetInputMethod( SalI18N_InputMethod *pInputMethod );
     Display*             GetDisplay() const { return m_pDisplay; }
 };
 

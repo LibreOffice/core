@@ -253,17 +253,6 @@ struct WW8_BRCVer6  // BoRder Code (WW6 version)
         { return ((aBits1[0] & 0xc0) >> 6) | ((aBits1[1] & 0x07) << 2); }
     sal_uInt8 dxpSpace() const
         { return aBits1[1] >> 3; }
-
-    WW8_BRCVer6(sal_uInt8 _dxpLineWidth, sal_uInt8 _brcType, sal_uInt8 _ico,
-        sal_uInt8 _dxpSpace, bool _fShadow)
-    {
-        assert(_dxpSpace < 0x20);
-        assert(_brcType <= 3);
-        assert(_ico < 32);
-        aBits1[0] = _dxpLineWidth | (_brcType << 3) | ((sal_uInt8)_fShadow << 5)
-            | ((_ico << 6) & 0xc0);
-        aBits1[1] = (_ico >> 2) | (_dxpSpace << 3);
-    }
 };
 
 struct WW8_BRC  // BoRder Code (WW8 version)

@@ -216,8 +216,6 @@ public:
 
     Rectangle           GetBoundingRectangle( sal_Int32  nItem ) const;
 
-    void                SetUserItemSize( const Size& rSz );
-
     void                EnableUserDraw( bool bUserDraw );
 
     void                DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawTextAtImagePos );

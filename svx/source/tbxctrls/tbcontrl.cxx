@@ -44,7 +44,6 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/templdlg.hxx>
 #include <svl/isethint.hxx>
-#include <sfx2/querystatus.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>

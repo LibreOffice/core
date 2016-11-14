@@ -90,15 +90,6 @@ public:
                 {
                     return GetPointer( 0 );
                 }
-    sal_uInt16  GetShort( sal_uInt32 nPos )
-                {
-                    sal_uInt16 nVal = 0;
-                    char* pFrom = GetPointer(nPos);
-                    char* pTo = reinterpret_cast<char*>(&nVal);
-                    *pTo++ = *pFrom++;
-                    *pTo++ = *pFrom++;
-                    return bSwap ? OSL_SWAPWORD( nVal ) : nVal;
-                }
     sal_uInt32  GetLong( sal_uInt32 nPos )
                 {
                     sal_uInt32 nVal = 0;
