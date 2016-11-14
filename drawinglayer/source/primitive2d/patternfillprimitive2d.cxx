@@ -251,7 +251,7 @@ namespace drawinglayer
             return getMask().getB2DRange();
         }
 
-        void PatternFillPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void PatternFillPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
             // The existing bufferd decomposition uses a buffer in the remembered
             // size or none if sizes are zero. Get new needed sizes which depend on
@@ -307,7 +307,7 @@ namespace drawinglayer
             }
 
             // call parent
-            BufferedDecompositionPrimitive2D::get2DDecomposition(rContainer, rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
         sal_Int64 SAL_CALL PatternFillPrimitive2D::estimateUsage()

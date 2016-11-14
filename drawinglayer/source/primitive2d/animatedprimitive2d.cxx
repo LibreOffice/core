@@ -64,7 +64,7 @@ namespace drawinglayer
             return false;
         }
 
-        void AnimatedSwitchPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void AnimatedSwitchPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
             if(!getChildren().empty())
             {
@@ -78,7 +78,7 @@ namespace drawinglayer
                 }
 
                 const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_QUERY_THROW);
-                rContainer.push_back(xRef);
+                rVisitor.append(xRef);
             }
         }
 
@@ -100,7 +100,7 @@ namespace drawinglayer
         {
         }
 
-        void AnimatedBlinkPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void AnimatedBlinkPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
             if(!getChildren().empty())
             {
@@ -108,7 +108,7 @@ namespace drawinglayer
 
                 if(fState < 0.5)
                 {
-                    getChildren(rContainer);
+                    getChildren(rVisitor);
                 }
             }
         }
@@ -141,7 +141,7 @@ namespace drawinglayer
             }
         }
 
-        void AnimatedInterpolatePrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void AnimatedInterpolatePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
             const sal_uInt32 nSize(maMatrixStack.size());
 
@@ -188,11 +188,11 @@ namespace drawinglayer
 
                 // create new transform primitive reference, return new sequence
                 const Primitive2DReference xRef(new TransformPrimitive2D(aTargetTransform, getChildren()));
-                rContainer.push_back(xRef);
+                rVisitor.append(xRef);
             }
             else
             {
-                getChildren(rContainer);
+                getChildren(rVisitor);
             }
         }
 

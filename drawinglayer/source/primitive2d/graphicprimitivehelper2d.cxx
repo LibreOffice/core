@@ -323,7 +323,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             /// override to deliver the correct expected frame dependent of timing
-            virtual void get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
         };
 
         AnimatedGraphicPrimitive2D::AnimatedGraphicPrimitive2D(
@@ -392,7 +392,7 @@ namespace drawinglayer
                 && getGraphic() == pCompare->getGraphic());
         }
 
-        void AnimatedGraphicPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void AnimatedGraphicPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
             if (isValidData())
             {
@@ -413,7 +413,7 @@ namespace drawinglayer
 
                 if (aRetval.is())
                 {
-                    rContainer.push_back(aRetval);
+                    rVisitor.append(aRetval);
                     return;
                 }
 
@@ -432,14 +432,14 @@ namespace drawinglayer
 
                 if (aRetval.is())
                 {
-                    rContainer.push_back(aRetval);
+                    rVisitor.append(aRetval);
                     return;
                 }
 
                 // did not work (not buffered and not 1st frame), create from buffer
                 aRetval = createFromBuffer();
 
-                rContainer.push_back(aRetval);
+                rVisitor.append(aRetval);
             }
         }
 
