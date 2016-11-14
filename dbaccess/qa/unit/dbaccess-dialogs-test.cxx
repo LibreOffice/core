@@ -50,7 +50,7 @@ DbaccessDialogsTest::~DbaccessDialogsTest()
 
 void DbaccessDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
-    // fill map of known dilogs
+    // fill map of known dialogs
 }
 
 VclPtr<VclAbstractDialog> DbaccessDialogsTest::createDialogByID(sal_uInt32 /*nID*/)

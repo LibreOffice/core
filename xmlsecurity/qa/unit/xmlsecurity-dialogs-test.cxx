@@ -50,7 +50,7 @@ XmlsecurityDialogsTest::~XmlsecurityDialogsTest()
 
 void XmlsecurityDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
-    // fill map of known dilogs
+    // fill map of known dialogs
 }
 
 VclPtr<VclAbstractDialog> XmlsecurityDialogsTest::createDialogByID(sal_uInt32 /*nID*/)

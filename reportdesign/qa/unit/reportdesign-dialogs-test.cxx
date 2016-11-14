@@ -50,7 +50,7 @@ ReportdesignDialogsTest::~ReportdesignDialogsTest()
 
 void ReportdesignDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
-    // fill map of known dilogs
+    // fill map of known dialogs
 }
 
 VclPtr<VclAbstractDialog> ReportdesignDialogsTest::createDialogByID(sal_uInt32 /*nID*/)

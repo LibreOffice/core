@@ -96,7 +96,7 @@ void ScScreenshotTest::initialize()
 {
     if (mxComponent.is())
         mxComponent->dispose();
-    // use new, epty doc to avoid file locking
+    // use new, empty doc to avoid file locking
     mxComponent = loadFromDesktop("private:factory/scalc", "com.sun.star.sheet.SpreadsheetDocument");
 
     mpFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
@@ -124,7 +124,7 @@ void ScScreenshotTest::initialize()
 
 void ScScreenshotTest::registerKnownDialogsByID(mapType& rKnownDialogs)
 {
-    // fill map of unknown dilogs
+    // fill map of unknown dialogs
     rKnownDialogs["modules/scalc/ui/insertsheet.ui"] = 0;
     rKnownDialogs["modules/scalc/ui/deletecells.ui"] = 1;
     rKnownDialogs["modules/scalc/ui/pastespecial.ui"] = 2;

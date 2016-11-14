@@ -50,7 +50,7 @@ BasctlDialogsTest::~BasctlDialogsTest()
 
 void BasctlDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
-    // fill map of known dilogs
+    // fill map of known dialogs
 }
 
 VclPtr<VclAbstractDialog> BasctlDialogsTest::createDialogByID(sal_uInt32 /*nID*/)
