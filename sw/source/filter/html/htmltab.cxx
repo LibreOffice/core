@@ -3023,32 +3023,32 @@ void SectionSaveStruct::Restore( SwHTMLParser& rParser )
 
 class CellSaveStruct : public SectionSaveStruct
 {
-    OUString aStyle, aId, aClass, aLang, aDir;
-    OUString aBGImage;
-    Color aBGColor;
+    OUString m_aStyle, m_aId, m_aClass, m_aLang, m_aDir;
+    OUString m_aBGImage;
+    Color m_aBGColor;
     std::shared_ptr<SvxBoxItem> m_pBoxItem;
 
-    HTMLTableCnts* pCnts;           // Liste aller Inhalte
-    HTMLTableCnts* pCurrCnts;   // der aktuelle Inhalt oder 0
-    SwNodeIndex *pNoBreakEndParaIdx;// Absatz-Index eines </NOBR>
+    HTMLTableCnts* m_pCnts;           // Liste aller Inhalte
+    HTMLTableCnts* m_pCurrCnts;   // der aktuelle Inhalt oder 0
+    SwNodeIndex *m_pNoBreakEndNodeIndex;// Absatz-Index eines </NOBR>
 
-    double nValue;
+    double m_nValue;
 
-    sal_uInt32 nNumFormat;
+    sal_uInt32 m_nNumFormat;
 
-    sal_uInt16 nRowSpan, nColSpan, nWidth, nHeight;
-    sal_Int32 nNoBreakEndContentPos;     // Zeichen-Index eines </NOBR>
+    sal_uInt16 m_nRowSpan, m_nColSpan, m_nWidth, m_nHeight;
+    sal_Int32 m_nNoBreakEndContentPos;     // Zeichen-Index eines </NOBR>
 
-    SvxAdjust eAdjust;
-    sal_Int16 eVertOri;
+    SvxAdjust m_eAdjust;
+    sal_Int16 m_eVertOri;
 
-    bool bHead : 1;
-    bool bPrcWidth : 1;
-    bool bHasNumFormat : 1;
-    bool bHasValue : 1;
-    bool bBGColor : 1;
-    bool bNoWrap : 1;       // NOWRAP-Option
-    bool bNoBreak : 1;      // NOBREAK-Tag
+    bool m_bHead : 1;
+    bool m_bPrcWidth : 1;
+    bool m_bHasNumFormat : 1;
+    bool m_bHasValue : 1;
+    bool m_bBGColor : 1;
+    bool m_bNoWrap : 1;       // NOWRAP-Option
+    bool m_bNoBreak : 1;      // NOBREAK-Tag
 
 public:
 
@@ -3058,14 +3058,14 @@ public:
     virtual ~CellSaveStruct() override;
 
     void AddContents( HTMLTableCnts *pNewCnts );
-    HTMLTableCnts *GetFirstContents() { return pCnts; }
+    HTMLTableCnts *GetFirstContents() { return m_pCnts; }
 
-    void ClearIsInSection() { pCurrCnts = nullptr; }
-    bool IsInSection() const { return pCurrCnts!=nullptr; }
+    void ClearIsInSection() { m_pCurrCnts = nullptr; }
+    bool IsInSection() const { return m_pCurrCnts!=nullptr; }
 
     void InsertCell( SwHTMLParser& rParser, HTMLTable *pCurTable );
 
-    bool IsHeaderCell() const { return bHead; }
+    bool IsHeaderCell() const { return m_bHead; }
 
     void StartNoBreak( const SwPosition& rPos );
     void EndNoBreak( const SwPosition& rPos );
@@ -3075,25 +3075,25 @@ public:
 CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
                                   bool bHd, bool bReadOpt ) :
     SectionSaveStruct( rParser ),
-    pCnts( nullptr ),
-    pCurrCnts( nullptr ),
-    pNoBreakEndParaIdx( nullptr ),
-    nValue( 0.0 ),
-    nNumFormat( 0 ),
-    nRowSpan( 1 ),
-    nColSpan( 1 ),
-    nWidth( 0 ),
-    nHeight( 0 ),
-    nNoBreakEndContentPos( 0 ),
-    eAdjust( pCurTable->GetInheritedAdjust() ),
-    eVertOri( pCurTable->GetInheritedVertOri() ),
-    bHead( bHd ),
-    bPrcWidth( false ),
-    bHasNumFormat( false ),
-    bHasValue( false ),
-    bBGColor( false ),
-    bNoWrap( false ),
-    bNoBreak( false )
+    m_pCnts( nullptr ),
+    m_pCurrCnts( nullptr ),
+    m_pNoBreakEndNodeIndex( nullptr ),
+    m_nValue( 0.0 ),
+    m_nNumFormat( 0 ),
+    m_nRowSpan( 1 ),
+    m_nColSpan( 1 ),
+    m_nWidth( 0 ),
+    m_nHeight( 0 ),
+    m_nNoBreakEndContentPos( 0 ),
+    m_eAdjust( pCurTable->GetInheritedAdjust() ),
+    m_eVertOri( pCurTable->GetInheritedVertOri() ),
+    m_bHead( bHd ),
+    m_bPrcWidth( false ),
+    m_bHasNumFormat( false ),
+    m_bHasValue( false ),
+    m_bBGColor( false ),
+    m_bNoWrap( false ),
+    m_bNoBreak( false )
 {
     OUString aNumFormat, aValue;
 
@@ -3106,80 +3106,80 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
             switch( rOption.GetToken() )
             {
             case HTML_O_ID:
-                aId = rOption.GetString();
+                m_aId = rOption.GetString();
                 break;
             case HTML_O_COLSPAN:
-                nColSpan = (sal_uInt16)rOption.GetNumber();
+                m_nColSpan = (sal_uInt16)rOption.GetNumber();
                 break;
             case HTML_O_ROWSPAN:
-                nRowSpan = (sal_uInt16)rOption.GetNumber();
+                m_nRowSpan = (sal_uInt16)rOption.GetNumber();
                 break;
             case HTML_O_ALIGN:
-                eAdjust = (SvxAdjust)rOption.GetEnum(
-                                        aHTMLPAlignTable, static_cast< sal_uInt16 >(eAdjust) );
+                m_eAdjust = (SvxAdjust)rOption.GetEnum(
+                                        aHTMLPAlignTable, static_cast< sal_uInt16 >(m_eAdjust) );
                 break;
             case HTML_O_VALIGN:
-                eVertOri = rOption.GetEnum(
-                                        aHTMLTableVAlignTable, eVertOri );
+                m_eVertOri = rOption.GetEnum(
+                                        aHTMLTableVAlignTable, m_eVertOri );
                 break;
             case HTML_O_WIDTH:
-                nWidth = (sal_uInt16)rOption.GetNumber();   // nur fuer Netscape
-                bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-                if( bPrcWidth && nWidth>100 )
-                    nWidth = 100;
+                m_nWidth = (sal_uInt16)rOption.GetNumber();   // nur fuer Netscape
+                m_bPrcWidth = (rOption.GetString().indexOf('%') != -1);
+                if( m_bPrcWidth && m_nWidth>100 )
+                    m_nWidth = 100;
                 break;
             case HTML_O_HEIGHT:
-                nHeight = (sal_uInt16)rOption.GetNumber();  // nur fuer Netscape
+                m_nHeight = (sal_uInt16)rOption.GetNumber();  // nur fuer Netscape
                 if( rOption.GetString().indexOf('%') != -1)
-                    nHeight = 0;    // keine %-Angaben beruecksichtigen
+                    m_nHeight = 0;    // keine %-Angaben beruecksichtigen
                 break;
             case HTML_O_BGCOLOR:
                 // Leere BGCOLOR bei <TABLE>, <TR> und <TD>/<TH> wie Netscape
                 // ignorieren, bei allen anderen Tags *wirklich* nicht.
                 if( !rOption.GetString().isEmpty() )
                 {
-                    rOption.GetColor( aBGColor );
-                    bBGColor = true;
+                    rOption.GetColor( m_aBGColor );
+                    m_bBGColor = true;
                 }
                 break;
             case HTML_O_BACKGROUND:
-                aBGImage = rOption.GetString();
+                m_aBGImage = rOption.GetString();
                 break;
             case HTML_O_STYLE:
-                aStyle = rOption.GetString();
+                m_aStyle = rOption.GetString();
                 break;
             case HTML_O_CLASS:
-                aClass = rOption.GetString();
+                m_aClass = rOption.GetString();
                 break;
             case HTML_O_LANG:
-                aLang = rOption.GetString();
+                m_aLang = rOption.GetString();
                 break;
             case HTML_O_DIR:
-                aDir = rOption.GetString();
+                m_aDir = rOption.GetString();
                 break;
             case HTML_O_SDNUM:
                 aNumFormat = rOption.GetString();
-                bHasNumFormat = true;
+                m_bHasNumFormat = true;
                 break;
             case HTML_O_SDVAL:
-                bHasValue = true;
+                m_bHasValue = true;
                 aValue = rOption.GetString();
                 break;
             case HTML_O_NOWRAP:
-                bNoWrap = true;
+                m_bNoWrap = true;
                 break;
             }
         }
 
-        if( !aId.isEmpty() )
-            rParser.InsertBookmark( aId );
+        if( !m_aId.isEmpty() )
+            rParser.InsertBookmark( m_aId );
     }
 
-    if( bHasNumFormat )
+    if( m_bHasNumFormat )
     {
         LanguageType eLang;
-        nValue = SfxHTMLParser::GetTableDataOptionsValNum(
-                            nNumFormat, eLang, aValue, aNumFormat,
+        m_nValue = SfxHTMLParser::GetTableDataOptionsValNum(
+                            m_nNumFormat, eLang, aValue, aNumFormat,
                             *rParser.m_pDoc->GetNumberFormatter() );
     }
 
@@ -3187,7 +3187,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
     // nicht dort verankern, weil es noch ger keine Section gibt, in der
     // es gibt.
     sal_uInt16 nToken, nColl;
-    if( bHead )
+    if( m_bHead )
     {
         nToken = HTML_TABLEHEADER_ON;
         nColl = RES_POOLCOLL_TABLE_HDLN;
@@ -3198,18 +3198,18 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
         nColl = RES_POOLCOLL_TABLE;
     }
     HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken, nColl, aEmptyOUStr, true );
-    if( SVX_ADJUST_END != eAdjust )
-        rParser.InsertAttr( &rParser.m_aAttrTab.pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST),
+    if( SVX_ADJUST_END != m_eAdjust )
+        rParser.InsertAttr( &rParser.m_aAttrTab.pAdjust, SvxAdjustItem(m_eAdjust, RES_PARATR_ADJUST),
                             pCntxt );
 
-    if( SwHTMLParser::HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
+    if( SwHTMLParser::HasStyleOptions( m_aStyle, m_aId, m_aClass, &m_aLang, &m_aDir ) )
     {
         SfxItemSet aItemSet( rParser.m_pDoc->GetAttrPool(),
                              rParser.m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( rParser.ParseStyleOptions( aStyle, aId, aClass, aItemSet,
-                                       aPropInfo, &aLang, &aDir ) )
+        if( rParser.ParseStyleOptions( m_aStyle, m_aId, m_aClass, aItemSet,
+                                       aPropInfo, &m_aLang, &m_aDir ) )
         {
             SfxPoolItem const* pItem;
             if (SfxItemState::SET == aItemSet.GetItemState(RES_BOX, false, &pItem))
@@ -3228,17 +3228,17 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
 
 CellSaveStruct::~CellSaveStruct()
 {
-    delete pNoBreakEndParaIdx;
+    delete m_pNoBreakEndNodeIndex;
 }
 
 void CellSaveStruct::AddContents( HTMLTableCnts *pNewCnts )
 {
-    if( pCnts )
-        pCnts->Add( pNewCnts );
+    if( m_pCnts )
+        m_pCnts->Add( pNewCnts );
     else
-        pCnts = pNewCnts;
+        m_pCnts = pNewCnts;
 
-    pCurrCnts = pNewCnts;
+    m_pCurrCnts = pNewCnts;
 }
 
 void CellSaveStruct::InsertCell( SwHTMLParser& rParser,
@@ -3274,67 +3274,67 @@ void CellSaveStruct::InsertCell( SwHTMLParser& rParser,
 
     // jetzt muessen wir noch die Zelle an der aktuellen Position einfuegen
     SvxBrushItem *pBrushItem =
-        rParser.CreateBrushItem( bBGColor ? &aBGColor : nullptr, aBGImage,
-                                 aStyle, aId, aClass );
-    pCurTable->InsertCell( pCnts, nRowSpan, nColSpan, nWidth,
-                           bPrcWidth, nHeight, eVertOri, pBrushItem, m_pBoxItem,
-                           bHasNumFormat, nNumFormat, bHasValue, nValue,
-                           bNoWrap );
+        rParser.CreateBrushItem( m_bBGColor ? &m_aBGColor : nullptr, m_aBGImage,
+                                 m_aStyle, m_aId, m_aClass );
+    pCurTable->InsertCell( m_pCnts, m_nRowSpan, m_nColSpan, m_nWidth,
+                           m_bPrcWidth, m_nHeight, m_eVertOri, pBrushItem, m_pBoxItem,
+                           m_bHasNumFormat, m_nNumFormat, m_bHasValue, m_nValue,
+                           m_bNoWrap );
     Restore( rParser );
 }
 
 void CellSaveStruct::StartNoBreak( const SwPosition& rPos )
 {
-    if( !pCnts ||
-        (!rPos.nContent.GetIndex() && pCurrCnts==pCnts &&
-         pCnts->GetStartNode() &&
-         pCnts->GetStartNode()->GetIndex() + 1 ==
+    if( !m_pCnts ||
+        (!rPos.nContent.GetIndex() && m_pCurrCnts==m_pCnts &&
+         m_pCnts->GetStartNode() &&
+         m_pCnts->GetStartNode()->GetIndex() + 1 ==
             rPos.nNode.GetIndex()) )
     {
-        bNoBreak = true;
+        m_bNoBreak = true;
     }
 }
 
 void CellSaveStruct::EndNoBreak( const SwPosition& rPos )
 {
-    if( bNoBreak )
+    if( m_bNoBreak )
     {
-        delete pNoBreakEndParaIdx;
-        pNoBreakEndParaIdx = new SwNodeIndex( rPos.nNode );
-        nNoBreakEndContentPos = rPos.nContent.GetIndex();
-        bNoBreak = false;
+        delete m_pNoBreakEndNodeIndex;
+        m_pNoBreakEndNodeIndex = new SwNodeIndex( rPos.nNode );
+        m_nNoBreakEndContentPos = rPos.nContent.GetIndex();
+        m_bNoBreak = false;
     }
 }
 
 void CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc * /*pDoc*/ )
 {
-    if( pCnts && pCurrCnts==pCnts )
+    if( m_pCnts && m_pCurrCnts==m_pCnts )
     {
-        if( bNoBreak )
+        if( m_bNoBreak )
         {
             // <NOBR> wurde nicht beendet
-            pCnts->SetNoBreak();
+            m_pCnts->SetNoBreak();
         }
-        else if( pNoBreakEndParaIdx &&
-                 pNoBreakEndParaIdx->GetIndex() == rPos.nNode.GetIndex() )
+        else if( m_pNoBreakEndNodeIndex &&
+                 m_pNoBreakEndNodeIndex->GetIndex() == rPos.nNode.GetIndex() )
         {
-            if( nNoBreakEndContentPos == rPos.nContent.GetIndex() )
+            if( m_nNoBreakEndContentPos == rPos.nContent.GetIndex() )
             {
                 // <NOBR> wurde unmittelbar vor dem Zellen-Ende beendet
-                pCnts->SetNoBreak();
+                m_pCnts->SetNoBreak();
             }
-            else if( nNoBreakEndContentPos + 1 == rPos.nContent.GetIndex() )
+            else if( m_nNoBreakEndContentPos + 1 == rPos.nContent.GetIndex() )
             {
                 SwTextNode const*const pTextNd(rPos.nNode.GetNode().GetTextNode());
                 if( pTextNd )
                 {
                     sal_Unicode const cLast =
-                            pTextNd->GetText()[nNoBreakEndContentPos];
+                            pTextNd->GetText()[m_nNoBreakEndContentPos];
                     if( ' '==cLast || '\x0a'==cLast )
                     {
                         // Zwischem dem </NOBR> und dem Zellen-Ende gibt es nur
                         // ein Blank oder einen Zeilenumbruch.
-                        pCnts->SetNoBreak();
+                        m_pCnts->SetNoBreak();
                     }
                 }
             }
