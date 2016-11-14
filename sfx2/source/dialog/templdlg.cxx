@@ -543,17 +543,20 @@ StyleTreeArr_Impl& MakeTree_Impl(StyleTreeArr_Impl& rArr)
 
     std::unordered_map<OUString, StyleTree_Impl*, OUStringHash> styleFinder;
     styleFinder.reserve(rArr.size());
-    for(auto pEntry : rArr)
+    for (const auto& pEntry : rArr)
     {
         styleFinder.emplace(pEntry->getName(), pEntry);
     }
 
     // Arrange all under their Parents
-    for(auto pEntry : rArr)
+    for (const auto& pEntry : rArr)
     {
-        if(pEntry->HasParent() && styleFinder.find(pEntry->getParent()) != styleFinder.end())
+        if (!pEntry->HasParent())
+            continue;
+        auto it = styleFinder.find(pEntry->getParent());
+        if (it != styleFinder.end())
         {
-            StyleTree_Impl* pCmp = styleFinder[pEntry->getParent()];
+            StyleTree_Impl* pCmp = it->second;
             // Insert child entries sorted
             auto iPos = std::lower_bound(pCmp->getChildren().begin(), pCmp->getChildren().end(), pEntry,
                 [&aSorter](StyleTree_Impl* pEntry1, StyleTree_Impl* pEntry2) { return aSorter.compare(pEntry1->getName(), pEntry2->getName()) < 0; });
