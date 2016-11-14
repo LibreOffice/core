@@ -18,6 +18,7 @@
  */
 
 #include <cmdid.h>
+#include <fmtfsize.hxx>
 #include <hintids.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -280,8 +281,8 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
 
 void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
 {
-    const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get( RES_FRM_SIZE ));
-    lMaxHeight = rSize.GetSize().Height();
+    auto const & rSize = static_cast<SwFormatFrameSize const &>(rSet.Get( RES_FRM_SIZE ));
+    lMaxHeight = rSize.GetHeight();
 
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == rSet.GetItemState( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_HEADERSET), false, &pItem ) )
