@@ -313,6 +313,7 @@ include $(foreach class, \
 	AutoInstall \
 	PackageSet \
 	GeneratedPackage \
+	CompilerTest \
 ,$(GBUILDDIR)/$(class).mk)
 
 $(eval $(call gb_Helper_process_executable_registrations))

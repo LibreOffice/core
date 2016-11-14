@@ -44,6 +44,7 @@ gb_CliAssemblyTarget_get_target = $(WORKDIR)/CliAssemblyTarget/$(1).done
 gb_CliAssemblyTarget_get_assembly_target = $(WORKDIR)/CliAssemblyTarget/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
 gb_CliConfigTarget_get_target = $(WORKDIR)/CliConfigTarget/$(1).config
 gb_CliNativeLibrary_get_preparation_target = $(WORKDIR)/CliNativeLibraryTarget/$(1).prepare
+gb_CompilerTest_get_target = $(WORKDIR)/CompilerTest/$(1)
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_ComponentTarget_get_target_for_build = $(WORKDIR_FOR_BUILD)/ComponentTarget/$(1).component
 gb_Configuration_get_preparation_target = $(WORKDIR)/Configuration/$(1).prepared
@@ -233,6 +234,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CliLibrary \
 	CliNativeLibrary \
 	CliUnoApi \
+	CompilerTest \
 	ComponentTarget \
 	CustomPackage \
 	DescriptionTranslateTarget \
@@ -409,6 +411,17 @@ endef
 # this returns a tuple of both the linktargetname, and the target file
 define gb_CppunitTest_get_linktarget
 $(call gb_CppunitTest__get_workdir_linktargetname,$(1))<>$(call gb_CppunitTest__get_linktarget_target,$(1))
+endef
+
+define gb_CompilerTest__get_workdir_linktargetname
+CompilerTest/$(1)
+endef
+define gb_CompilerTest__get_linktarget_target
+$(WORKDIR)/LinkTarget/$(call gb_CompilerTest__get_workdir_linktargetname,$(1))
+endef
+# this returns a tuple of both the linktargetname, and the target file
+define gb_CompilerTest_get_linktarget
+$(call gb_CompilerTest__get_workdir_linktargetname,$(1))<>$(call gb_CompilerTest__get_linktarget_target,$(1))
 endef
 
 # static members declared here because they are used globally
