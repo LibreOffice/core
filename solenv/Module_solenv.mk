@@ -33,4 +33,10 @@ endif
 endif
 endif
 
+ifneq ($(COMPILER_PLUGINS),)
+$(eval $(call gb_Module_add_check_targets,solenv, \
+    CompilerTest_compilerplugins_clang \
+))
+endif
+
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
