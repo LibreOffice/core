@@ -137,7 +137,7 @@ namespace drawinglayer
             return false;
         }
 
-        void SdrTextPrimitive2D::get2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void SdrTextPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
             uno::Reference< drawing::XDrawPage > xCurrentlyVisualizingPage;
             bool bCurrentlyVisualizingPageIsSet(false);
@@ -234,7 +234,7 @@ namespace drawinglayer
             }
 
             // call parent
-            BufferedDecompositionPrimitive2D::get2DDecomposition(rContainer, rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
