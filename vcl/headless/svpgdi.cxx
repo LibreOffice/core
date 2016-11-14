@@ -1359,7 +1359,9 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
 
     if (pDamage)
     {
-        pDamage->damaged(pDamage->handle, nExtentsLeft, nExtentsTop, nExtentsRight, nExtentsBottom);
+        pDamage->damaged(pDamage->handle, nExtentsLeft, nExtentsTop,
+                                          nExtentsRight - nExtentsLeft,
+                                          nExtentsBottom - nExtentsTop);
     }
 }
 
