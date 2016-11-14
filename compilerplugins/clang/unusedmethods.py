@@ -333,6 +333,9 @@ for d in publicDefinitionSet:
     method = d[0] + " " + d[1]
     if d in calledFromOutsideSet:
         continue
+    # TODO ignore constructors for now, my called-from-outside analysis doesn't work here
+    if d[0] == "":
+        continue
     if isOtherConstness(d, calledFromOutsideSet):
         continue
     # ignore external code
