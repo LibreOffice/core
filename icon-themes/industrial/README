@@ -131,7 +131,6 @@ cmd/lc_definename.png
 cmd/lc_deleterecord.png
 cmd/lc_diagramdata.png
 cmd/lc_doubleclicktextedit.png
-cmd/lc_drawcaption.png
 cmd/lc_dsbdocumentdatasource.png
 cmd/lc_dsbeditdoc.png
 cmd/lc_dsbformletter.png
@@ -295,7 +294,6 @@ cmd/lc_macrorecorder.png
 cmd/lc_managebreakpoints.png
 cmd/lc_matchgroup.png
 cmd/lc_measureline.png
-cmd/lc_mergedialog.png
 cmd/lc_modifypage.png
 cmd/lc_moduledialog.png
 cmd/lc_morecontrols.png
@@ -324,10 +322,8 @@ cmd/lc_progressbar.png
 cmd/lc_pushbutton.png
 cmd/lc_quickedit.png
 cmd/lc_radiobutton.png
-cmd/lc_recsave.png
 cmd/lc_rect_rounded_unfilled.png
 cmd/lc_rect_unfilled.png
-cmd/lc_rehearsetimings.png
 cmd/lc_removefilter.png
 cmd/lc_removefiltersort.png
 cmd/lc_repeat.png
@@ -495,7 +491,6 @@ cmd/sc_diagramdata.png
 cmd/sc_diaspeed.png
 cmd/sc_diatime.png
 cmd/sc_doubleclicktextedit.png
-cmd/sc_drawcaption.png
 cmd/sc_dsbdocumentdatasource.png
 cmd/sc_dsbeditdoc.png
 cmd/sc_dsbformletter.png
@@ -657,7 +652,6 @@ cmd/sc_loadbasic.png
 cmd/sc_managebreakpoints.png
 cmd/sc_matchgroup.png
 cmd/sc_measureline.png
-cmd/sc_mergedialog.png
 cmd/sc_morecontrols.png
 cmd/sc_navigationbar.png
 cmd/sc_newarrangement.png
@@ -694,10 +688,8 @@ cmd/sc_progressbar.png
 cmd/sc_pushbutton.png
 cmd/sc_quickedit.png
 cmd/sc_radiobutton.png
-cmd/sc_recsave.png
 cmd/sc_rect_rounded_unfilled.png
 cmd/sc_rect_unfilled.png
-cmd/sc_rehearsetimings.png
 cmd/sc_removefilter.png
 cmd/sc_removefiltersort.png
 cmd/sc_repeat.png
