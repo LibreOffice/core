@@ -43,7 +43,7 @@ public:
             ScMarkArray();
             ScMarkArray( ScMarkArray&& rArray );
             ~ScMarkArray();
-    void    Reset( bool bMarked = false );
+    void    Reset( bool bMarked = false, SCSIZE nNeeded = 1 );
     bool    GetMark( SCROW nRow ) const;
     void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked );
     bool    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;

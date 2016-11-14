@@ -47,15 +47,17 @@ ScMarkArray::~ScMarkArray()
     delete[] pData;
 }
 
-void ScMarkArray::Reset( bool bMarked )
+void ScMarkArray::Reset( bool bMarked, SCSIZE nNeeded )
 {
     // always create pData here
     // (or have separate method to ensure pData)
 
     delete[] pData;
 
-    nCount = nLimit = 1;
-    pData = new ScMarkEntry[1];
+    assert(nNeeded);
+    nLimit = nNeeded;
+    nCount = 1;
+    pData = new ScMarkEntry[nNeeded];
     pData[0].nRow = MAXROW;
     pData[0].bMarked = bMarked;
 }
@@ -117,18 +119,20 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
         else
         {
             if (!pData)
-                Reset();   // create pData for further processing - could use special case handling!
-
-            SCSIZE nNeeded = nCount + 2;
-            if ( nLimit < nNeeded )
+                Reset( false, 3);   // create pData for further processing, allocating 1+2 entries
+            else
             {
-                nLimit += SC_MARKARRAY_DELTA;
+                SCSIZE nNeeded = nCount + 2;
                 if ( nLimit < nNeeded )
-                    nLimit = nNeeded;
-                ScMarkEntry* pNewData = new ScMarkEntry[nLimit];
-                memcpy( pNewData, pData, nCount*sizeof(ScMarkEntry) );
-                delete[] pData;
-                pData = pNewData;
+                {
+                    nLimit += SC_MARKARRAY_DELTA;
+                    if ( nLimit < nNeeded )
+                        nLimit = nNeeded;
+                    ScMarkEntry* pNewData = new ScMarkEntry[nLimit];
+                    memcpy( pNewData, pData, nCount*sizeof(ScMarkEntry) );
+                    delete[] pData;
+                    pData = pNewData;
+                }
             }
 
             SCSIZE ni;          // number of entries in beginning
