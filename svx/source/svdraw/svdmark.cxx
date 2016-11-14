@@ -336,6 +336,8 @@ void SdrMarkList::DeleteMark(size_t nNum)
     {
         maList.erase(maList.begin() + nNum);
         delete pMark;
+        if (maList.empty())
+            mbSorted = true; //we're empty, so can be considered sorted
         SetNameDirty();
     }
 }
