@@ -172,7 +172,6 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         ******************************************************************/
         mpWindow->CaptureMouse();
         pHdl = mpView->PickHandle(aMDPos);
-        SdrPageView* pPV;
 
         long nAngle0  = GetAngle(aMDPos - mpView->GetRef1());
         nAngle0 -= 27000;
@@ -233,6 +232,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
+            SdrPageView* pPV = nullptr;
             SdrObject* pObj = !rMEvt.IsMod2() ? mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::PICKMACRO) : nullptr;
             if (pObj)
             {
