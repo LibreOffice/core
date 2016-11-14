@@ -2010,8 +2010,6 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     clipRegion(cr);
     cairo_translate(cr, rControlRegion.Left(), rControlRegion.Top());
 
-    Rectangle aDamageRect(rControlRegion);
-
     long nX = 0;
     long nY = 0;
     long nWidth = rControlRegion.GetWidth();
@@ -2173,8 +2171,8 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 
     cairo_destroy(cr); // unref
 
-    if (!aDamageRect.IsEmpty())
-        mpFrame->damaged(aDamageRect.Left(), aDamageRect.Top(), aDamageRect.Right(), aDamageRect.Bottom());
+    if (!rControlRegion.IsEmpty())
+        mpFrame->damaged(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
 
     return true;
 }

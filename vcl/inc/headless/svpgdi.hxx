@@ -67,8 +67,8 @@ typedef struct _cairo_user_data_key cairo_user_data_key_t;
 enum PaintMode { OVERPAINT, XOR, INVERT };
 
 typedef void (*damageHandler)(void* handle,
-                              sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
-                              sal_Int32 nExtentsRight, sal_Int32 nExtentsBottom);
+                              sal_Int32 nExtentsX, sal_Int32 nExtentsY,
+                              sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight);
 
 struct VCL_DLLPUBLIC DamageHandler
 {
