@@ -45,7 +45,7 @@ namespace connectivity
         {
         public:
             //virtual dtor to allow this to be the root of the class hierarchy
-            virtual ~OCode() = default;
+            virtual ~OCode();
 #if !defined _MSC_VER || _MSC_VER >= 1900
             //but that disables the default move ctor
             OCode(OCode&&) = default;
