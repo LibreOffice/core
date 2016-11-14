@@ -126,7 +126,7 @@ gb_CXXFLAGS_COMMON += -fpch-preprocess -Winvalid-pch
 endif
 endif
 
-gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-Werror)
+gb_CFLAGS_WERROR = $(if $(ENABLE_WERROR),-Werror)
 
 # This is the default in non-C++11 mode
 ifeq ($(COM_IS_CLANG),TRUE)
