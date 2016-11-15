@@ -23,7 +23,6 @@
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <tools/debug.hxx>
 #include <rtl/instance.hxx>
 
 struct MapMode::ImplMapMode
