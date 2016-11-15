@@ -363,13 +363,13 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             CPPUNIT_ASSERT(pDrawDoc);
             SfxItemSet aNewAttr(pDrawDoc->GetItemPool(), ATTR_LAYER_START, ATTR_LAYER_END);
             const OUString aLayerName = SD_RESSTR(STR_LAYER); // + OUString::number(2);
-            aNewAttr.Put(SdAttrLayerName(aLayerName));
-            aNewAttr.Put(SdAttrLayerTitle());
-            aNewAttr.Put(SdAttrLayerDesc());
-            aNewAttr.Put(SdAttrLayerVisible());
-            aNewAttr.Put(SdAttrLayerPrintable());
-            aNewAttr.Put(SdAttrLayerLocked());
-            aNewAttr.Put(SdAttrLayerThisPage());
+            aNewAttr.Put(makeSdAttrLayerName(aLayerName));
+            aNewAttr.Put(makeSdAttrLayerTitle());
+            aNewAttr.Put(makeSdAttrLayerDesc());
+            aNewAttr.Put(makeSdAttrLayerVisible());
+            aNewAttr.Put(makeSdAttrLayerPrintable());
+            aNewAttr.Put(makeSdAttrLayerLocked());
+            aNewAttr.Put(makeSdAttrLayerThisPage());
             pRetval = getSdAbstractDialogFactory()->CreateSdInsertLayerDlg(
                 getViewShell()->GetActiveWindow(),
                 aNewAttr,

@@ -32,54 +32,40 @@
 #include "diadef.h"
 
 // layer attributes
-class SdAttrLayerName : public SfxStringItem
+inline SfxStringItem makeSdAttrLayerName( const OUString& aStr )
 {
-public:
-    SdAttrLayerName( const OUString& aStr ) :
-        SfxStringItem( ATTR_LAYER_NAME, aStr ) {}
-};
+    return SfxStringItem( ATTR_LAYER_NAME, aStr );
+}
 
-class SdAttrLayerTitle : public SfxStringItem
+inline SfxStringItem makeSdAttrLayerTitle( const OUString& aStr = OUString() )
 {
-public:
-    SdAttrLayerTitle() : SfxStringItem( ATTR_LAYER_TITLE, OUString()) {}
-    SdAttrLayerTitle( const OUString& aStr ) : SfxStringItem( ATTR_LAYER_TITLE, aStr ) {}
-};
+    return SfxStringItem( ATTR_LAYER_TITLE, aStr );
+}
 
-class SdAttrLayerDesc : public SfxStringItem
+inline SfxStringItem makeSdAttrLayerDesc( const OUString& aStr = OUString() )
 {
-public:
-    SdAttrLayerDesc() : SfxStringItem( ATTR_LAYER_DESC, OUString()) {}
-    SdAttrLayerDesc( const OUString& aStr ) : SfxStringItem( ATTR_LAYER_DESC, aStr ) {}
-};
+    return SfxStringItem( ATTR_LAYER_DESC, aStr );
+}
 
-class SdAttrLayerVisible : public SfxBoolItem
+inline SfxBoolItem makeSdAttrLayerVisible( bool bValue = true )
 {
-public:
-    SdAttrLayerVisible( bool bValue = true ) :
-        SfxBoolItem( ATTR_LAYER_VISIBLE, bValue ) {}
-};
+    return SfxBoolItem( ATTR_LAYER_VISIBLE, bValue );
+}
 
-class SdAttrLayerPrintable : public SfxBoolItem
+inline SfxBoolItem makeSdAttrLayerPrintable( bool bValue = true )
 {
-public:
-    SdAttrLayerPrintable( bool bValue = true ) :
-        SfxBoolItem( ATTR_LAYER_PRINTABLE, bValue ) {}
-};
+    return SfxBoolItem( ATTR_LAYER_PRINTABLE, bValue );
+}
 
-class SdAttrLayerLocked : public SfxBoolItem
+inline SfxBoolItem makeSdAttrLayerLocked( bool bValue = false )
 {
-public:
-    SdAttrLayerLocked( bool bValue = false ) :
-        SfxBoolItem( ATTR_LAYER_LOCKED, bValue ) {}
-};
+    return SfxBoolItem( ATTR_LAYER_LOCKED, bValue );
+}
 
-class SdAttrLayerThisPage : public SfxBoolItem
+inline SfxBoolItem makeSdAttrLayerThisPage()
 {
-public:
-    SdAttrLayerThisPage( bool bValue = false ) :
-        SfxBoolItem( ATTR_LAYER_THISPAGE, bValue ) {}
-};
+    return SfxBoolItem( ATTR_LAYER_THISPAGE, false );
+}
 
 class DiaEffectItem : public SfxEnumItem
 {

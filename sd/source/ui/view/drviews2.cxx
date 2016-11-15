@@ -1388,13 +1388,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 SfxItemSet aNewAttr( GetDoc()->GetPool(), ATTR_LAYER_START, ATTR_LAYER_END );
 
-                aNewAttr.Put( SdAttrLayerName( aLayerName ) );
-                aNewAttr.Put( SdAttrLayerTitle() );
-                aNewAttr.Put( SdAttrLayerDesc() );
-                aNewAttr.Put( SdAttrLayerVisible() );
-                aNewAttr.Put( SdAttrLayerPrintable() );
-                aNewAttr.Put( SdAttrLayerLocked() );
-                aNewAttr.Put( SdAttrLayerThisPage() );
+                aNewAttr.Put( makeSdAttrLayerName( aLayerName ) );
+                aNewAttr.Put( makeSdAttrLayerTitle() );
+                aNewAttr.Put( makeSdAttrLayerDesc() );
+                aNewAttr.Put( makeSdAttrLayerVisible() );
+                aNewAttr.Put( makeSdAttrLayerPrintable() );
+                aNewAttr.Put( makeSdAttrLayerLocked() );
+                aNewAttr.Put( makeSdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(GetActiveWindow(), aNewAttr, true, SD_RESSTR(STR_INSERTLAYER)) : nullptr);
@@ -1407,7 +1407,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     while( bLoop && pDlg->Execute() == RET_OK )
                     {
                         pDlg->GetAttr( aNewAttr );
-                        aLayerName   = static_cast<const SdAttrLayerName &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                        aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
                         if( rLayerAdmin.GetLayer( aLayerName, false )
                             || aLayerName.isEmpty() )
@@ -1431,11 +1431,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
                     else
                     {
-                        aLayerTitle  = static_cast<const SdAttrLayerTitle &>( aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
-                        aLayerDesc   = static_cast<const SdAttrLayerDesc &>( aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
-                        bIsVisible   = static_cast<const SdAttrLayerVisible &>( aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
-                        bIsLocked    = static_cast<const SdAttrLayerLocked &>( aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
-                        bIsPrintable = static_cast<const SdAttrLayerPrintable &>( aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue () ;
+                        aLayerTitle  = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
+                        aLayerDesc   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
+                        bIsVisible   = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
+                        bIsLocked    = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
+                        bIsPrintable = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue () ;
                     }
                 }
             }
@@ -1556,13 +1556,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 SfxItemSet aNewAttr( GetDoc()->GetPool(), ATTR_LAYER_START, ATTR_LAYER_END );
 
-                aNewAttr.Put( SdAttrLayerName( aLayerName ) );
-                aNewAttr.Put( SdAttrLayerTitle( aLayerTitle ) );
-                aNewAttr.Put( SdAttrLayerDesc( aLayerDesc ) );
-                aNewAttr.Put( SdAttrLayerVisible( bIsVisible ) );
-                aNewAttr.Put( SdAttrLayerLocked( bIsLocked ) );
-                aNewAttr.Put( SdAttrLayerPrintable( bIsPrintable ) );
-                aNewAttr.Put( SdAttrLayerThisPage() );
+                aNewAttr.Put( makeSdAttrLayerName( aLayerName ) );
+                aNewAttr.Put( makeSdAttrLayerTitle( aLayerTitle ) );
+                aNewAttr.Put( makeSdAttrLayerDesc( aLayerDesc ) );
+                aNewAttr.Put( makeSdAttrLayerVisible( bIsVisible ) );
+                aNewAttr.Put( makeSdAttrLayerLocked( bIsLocked ) );
+                aNewAttr.Put( makeSdAttrLayerPrintable( bIsPrintable ) );
+                aNewAttr.Put( makeSdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(GetActiveWindow(), aNewAttr, bDelete, SD_RESSTR(STR_MODIFYLAYER)) : nullptr);
@@ -1576,7 +1576,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     while( bLoop && ( (nRet = pDlg->Execute()) == RET_OK ) )
                     {
                         pDlg->GetAttr( aNewAttr );
-                        aLayerName   = static_cast<const SdAttrLayerName &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                        aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
                         if( (rLayerAdmin.GetLayer( aLayerName, false ) &&
                              aLayerName != aOldLayerName) || aLayerName.isEmpty() )
@@ -1594,11 +1594,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     switch (nRet)
                     {
                         case RET_OK :
-                            aLayerTitle  = static_cast<const SdAttrLayerTitle &>( aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
-                            aLayerDesc   = static_cast<const SdAttrLayerDesc &>( aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
-                            bIsVisible   = static_cast<const SdAttrLayerVisible &>( aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
-                            bIsLocked    = static_cast<const SdAttrLayerLocked &>( aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
-                            bIsPrintable = static_cast<const SdAttrLayerLocked &>( aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue ();
+                            aLayerTitle  = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
+                            aLayerDesc   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
+                            bIsVisible   = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
+                            bIsLocked    = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
+                            bIsPrintable = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue ();
                             break;
 
                         default :
