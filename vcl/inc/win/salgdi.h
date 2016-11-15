@@ -357,7 +357,7 @@ private:
     // get kernign pairs of the current font
     sal_uLong               GetKernPairs();
 
-    static void             DrawTextLayout(const CommonSalLayout&, HDC);
+    static void             DrawTextLayout(const CommonSalLayout&, HDC, bool bUseDWrite);
 
 public:
     // public SalGraphics methods, the interface to the independent vcl part

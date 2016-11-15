@@ -93,7 +93,7 @@ bool WinFontInstance::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex,
     }
 
     // For now we assume DWrite is present and we won't bother with fallback paths.
-    D2DWriteTextOutRenderer * pTxt = dynamic_cast<D2DWriteTextOutRenderer *>(&TextOutRenderer::get());
+    D2DWriteTextOutRenderer * pTxt = dynamic_cast<D2DWriteTextOutRenderer *>(&TextOutRenderer::get(true));
     if (!pTxt)
         return false;
 
@@ -3366,13 +3366,22 @@ void D2DWriteTextOutRenderer::CleanupModules()
     DWriteCreateFactory = nullptr;
 }
 
-TextOutRenderer & TextOutRenderer::get()
+TextOutRenderer & TextOutRenderer::get(bool bUseDWrite)
 {
-    static std::unique_ptr<TextOutRenderer> _impl(D2DWriteTextOutRenderer::InitModules()
-        ? static_cast<TextOutRenderer*>(new D2DWriteTextOutRenderer())
-        : static_cast<TextOutRenderer*>(new ExTextOutRenderer()));
+    if (bUseDWrite)
+    {
+        static std::unique_ptr<TextOutRenderer> _impl(D2DWriteTextOutRenderer::InitModules()
+            ? static_cast<TextOutRenderer*>(new D2DWriteTextOutRenderer())
+            : static_cast<TextOutRenderer*>(new ExTextOutRenderer()));
 
-    return *_impl;
+        return *_impl;
+    }
+    else
+    {
+        static std::unique_ptr<TextOutRenderer> _impl(new ExTextOutRenderer());
+
+        return *_impl;
+    }
 }
 
 
@@ -3389,6 +3398,15 @@ bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
         nGlyphs = rLayout.GetNextGlyphs(1, glyphIntStr, *pPos, *pGetNextGlypInfo);
         if (nGlyphs < 1)
             break;
+
+        if (SalLayout::UseCommonLayout())
+        {
+            for (int i = 0; i < nGlyphs; i++)
+            {
+                if ((glyphIntStr[i] & GF_ROTMASK) == GF_ROTL)
+                    glyphIntStr[i] |= GF_VERT;
+            }
+        }
 
         std::copy_n(glyphIntStr, nGlyphs, glyphWStr);
         ExtTextOutW(hDC, pPos->X(), pPos->Y(), ETO_GLYPH_INDEX, nullptr, LPCWSTR(&glyphWStr), nGlyphs, nullptr);
@@ -3788,7 +3806,7 @@ bool GraphiteWinLayout::DrawTextImpl(HDC hDC,
     maImpl.DrawBase() = WinLayout::maDrawBase;
     maImpl.DrawOffset() = WinLayout::maDrawOffset;
 
-    TextOutRenderer & render = TextOutRenderer::get();
+    TextOutRenderer & render = TextOutRenderer::get(true);
     bool const ok = render(*this, hDC, pRectToErase, pPos, pGetNextGlypInfo);
     if( hOrigFont )
         DeleteFont(SelectFont(hDC, hOrigFont));
@@ -4035,11 +4053,11 @@ LogicalFontInstance* WinFontFace::CreateFontInstance( FontSelectPattern& rFSD ) 
     return pFontInstance;
 }
 
-void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout, HDC hDC)
+void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout, HDC hDC, bool bUseDWrite)
 {
     Point aPos(0, 0);
     int nGlyphCount(0);
-    TextOutRenderer &render = TextOutRenderer::get();
+    TextOutRenderer &render = TextOutRenderer::get(bUseDWrite);
     bool result = render(rLayout, hDC, nullptr, &aPos, &nGlyphCount);
     assert(!result);
 }
@@ -4051,7 +4069,7 @@ void WinSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
     if (!bUseOpenGL)
     {
         // no OpenGL, just classic rendering
-        DrawTextLayout(rLayout, hDC);
+        DrawTextLayout(rLayout, hDC, false);
     }
     else
     {
@@ -4115,7 +4133,7 @@ void WinSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
             SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
 
             // the actual drawing
-            DrawTextLayout(rLayout, aDC.getCompatibleHDC());
+            DrawTextLayout(rLayout, aDC.getCompatibleHDC(), true);
 
             std::unique_ptr<OpenGLTexture> xTexture(aDC.getTexture());
             if (xTexture)

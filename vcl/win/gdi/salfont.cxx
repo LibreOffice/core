@@ -1072,7 +1072,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
         rLogFont.lfQuality = NONANTIALIASED_QUALITY;
 
     // select vertical mode if requested and available
-    if (!SalLayout::UseCommonLayout() && pFont->mbVertical && nNameLen )
+    if ( pFont->mbVertical && nNameLen )
     {
         // vertical fonts start with an '@'
         memmove( &rLogFont.lfFaceName[1], &rLogFont.lfFaceName[0],
