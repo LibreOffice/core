@@ -842,7 +842,7 @@ void Storage::SetClass( const SvGlobalName & rClass,
             SetError( aCompObj.GetError() );
         else
         {
-            StgOleStream aOle(*this, true);
+            StgOleStream aOle(*this);
             if( !aOle.Store() )
                 SetError( aOle.GetError() );
         }

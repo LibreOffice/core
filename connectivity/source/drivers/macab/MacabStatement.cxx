@@ -67,7 +67,7 @@ MacabCommonStatement::MacabCommonStatement(MacabConnection* _pConnection )
     : MacabCommonStatement_BASE(m_aMutex),
     OPropertySetHelper(MacabCommonStatement_BASE::rBHelper),
     m_aParser(_pConnection->getDriver()->getComponentContext()),
-    m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser, nullptr ),
+    m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser ),
     m_pParseTree(nullptr),
     m_pConnection(_pConnection),
     rBHelper(MacabCommonStatement_BASE::rBHelper)

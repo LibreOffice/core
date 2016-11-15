@@ -1085,7 +1085,7 @@ void OQueryController::setQueryComposer()
             OSL_ENSURE(m_xComposer.is(),"No querycomposer available!");
             Reference<XTablesSupplier> xTablesSup(getConnection(), UNO_QUERY);
             deleteIterator();
-            m_pSqlIterator = new ::connectivity::OSQLParseTreeIterator( getConnection(), xTablesSup->getTables(), m_aSqlParser, nullptr );
+            m_pSqlIterator = new ::connectivity::OSQLParseTreeIterator( getConnection(), xTablesSup->getTables(), m_aSqlParser );
         }
     }
 }

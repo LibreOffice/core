@@ -132,7 +132,7 @@ class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
 
     // voids lower during creation of a column
     friend SwFrame *SaveContent( SwLayoutFrame *, SwFrame* pStart );
-    friend void   RestoreContent( SwFrame *, SwLayoutFrame *, SwFrame *pSibling, bool bGrow );
+    friend void   RestoreContent( SwFrame *, SwLayoutFrame *, SwFrame *pSibling );
 
     // for validating a mistakenly invalidated one in SwContentFrame::MakeAll
     friend void ValidateSz( SwFrame *pFrame );

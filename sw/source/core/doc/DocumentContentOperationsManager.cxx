@@ -2646,27 +2646,23 @@ SwFlyFrameFormat* DocumentContentOperationsManager::Insert( const SwPaM &rRg, co
 }
 
 SwFlyFrameFormat* DocumentContentOperationsManager::Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
-                        const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet,
-                        SwFrameFormat* pFrameFormat )
+                        const SfxItemSet* pFlyAttrSet)
 {
-    if( !pFrameFormat )
+    sal_uInt16 nId = RES_POOLFRM_OLE;
+    if (xObj.is())
     {
-        sal_uInt16 nId = RES_POOLFRM_OLE;
-        if (xObj.is())
-        {
-            SvGlobalName aClassName( xObj->getClassID() );
-            if (SotExchange::IsMath(aClassName))
-                nId = RES_POOLFRM_FORMEL;
-        }
-
-        pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( nId );
+        SvGlobalName aClassName( xObj->getClassID() );
+        if (SotExchange::IsMath(aClassName))
+            nId = RES_POOLFRM_FORMEL;
     }
+
+    SwFrameFormat* pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( nId );
+
     return InsNoTextNode( *rRg.GetPoint(), m_rDoc.GetNodes().MakeOLENode(
                             SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ),
                             xObj,
                             m_rDoc.GetDfltGrfFormatColl() ),
-                            pFlyAttrSet, pGrfAttrSet,
+                            pFlyAttrSet, nullptr,
                             pFrameFormat );
 }
 

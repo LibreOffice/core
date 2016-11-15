@@ -417,8 +417,7 @@ namespace connectivity
                             bool _bIntl,
                             bool _bQuote,
                             sal_Char _cDecSep,
-                            bool _bPredicate,
-                            bool _bSubstitute) const;
+                            bool _bPredicate) const;
 
     private:
         void impl_parseNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam, bool bSimple=true ) const;

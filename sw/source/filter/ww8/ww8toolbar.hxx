@@ -100,7 +100,6 @@ class Tcg255SubStruct : public TBBase
 {
     friend class Tcg255;
 
-    bool mbReadId;
     Tcg255SubStruct(const Tcg255SubStruct&) = delete;
     Tcg255SubStruct& operator = ( const Tcg255SubStruct&) = delete;
 
@@ -108,7 +107,7 @@ protected:
     sal_uInt8 ch;
 
 public:
-    explicit Tcg255SubStruct( bool bReadId );
+    explicit Tcg255SubStruct();
     virtual ~Tcg255SubStruct() override {}
     sal_uInt8 id() const { return ch; }
     bool Read(SvStream &rS) override;
@@ -162,7 +161,7 @@ class SwCTBWrapper : public Tcg255SubStruct
     SwCTBWrapper& operator = ( const SwCTBWrapper&) = delete;
 
 public:
-    explicit SwCTBWrapper( bool bReadId );
+    explicit SwCTBWrapper();
     virtual ~SwCTBWrapper() override;
     void InsertDropIndex( sal_Int32 aIndex ) { dropDownMenuIndices.push_back( aIndex ); }
     SwTBC* GetTBCAtOffset( sal_uInt32 nStreamOffset );
@@ -206,7 +205,7 @@ class PlfMcd : public Tcg255SubStruct
     PlfMcd& operator = ( const PlfMcd&) = delete;
 
 public:
-    explicit PlfMcd( bool bReadId );
+    explicit PlfMcd();
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) override;
@@ -237,7 +236,7 @@ class PlfAcd: public Tcg255SubStruct
     PlfAcd& operator = ( const PlfAcd&) = delete;
 
 public:
-    explicit PlfAcd( bool bReadId );
+    explicit PlfAcd();
     virtual ~PlfAcd() override;
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
@@ -274,7 +273,7 @@ class PlfKme : public Tcg255SubStruct
     PlfKme& operator = ( const PlfKme&) = delete;
 
 public:
-    explicit PlfKme( bool bReadId );
+    explicit PlfKme();
     virtual ~PlfKme() override;
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
@@ -315,7 +314,7 @@ class TcgSttbf : public Tcg255SubStruct
     TcgSttbf& operator = ( const TcgSttbf&) = delete;
 
 public:
-    explicit TcgSttbf( bool bReadId );
+    explicit TcgSttbf();
     virtual ~TcgSttbf() override {}
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
@@ -365,7 +364,7 @@ class MacroNames : public Tcg255SubStruct
     MacroNames& operator = ( const MacroNames&) = delete;
 
 public:
-    explicit MacroNames( bool bReadId );
+    explicit MacroNames();
     virtual ~MacroNames() override;
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1

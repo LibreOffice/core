@@ -338,7 +338,7 @@ void SwSectionFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
                         pTmp = pTmp->GetNext();
                     SwFrame* pSave = ::SaveContent( pCol );
                     if (pSave)
-                        ::RestoreContent( pSave, pSibling->GetUpper(), pTmp, true );
+                        ::RestoreContent( pSave, pSibling->GetUpper(), pTmp );
                 }
             }
         }
@@ -449,7 +449,7 @@ void SwSectionFrame::MergeNext( SwSectionFrame* pNxt )
                             pLast = pLast->GetNext();
                 }
             }
-            ::RestoreContent( pTmp, pLay, pLast, true );
+            ::RestoreContent( pTmp, pLay, pLast );
         }
         SetFollow( pNxt->GetFollow() );
         pNxt->SetFollow( nullptr );
@@ -493,7 +493,7 @@ bool SwSectionFrame::SplitSect( SwFrame* pFrame, bool bApres )
             // Search for last layout frame, e.g. for columned sections.
             while( pLay->Lower() && pLay->Lower()->IsLayoutFrame() )
                 pLay = static_cast<SwLayoutFrame*>(pLay->Lower());
-            ::RestoreContent( pSav, pLay, nullptr, true );
+            ::RestoreContent( pSav, pLay, nullptr );
         }
         InvalidateSize_();
         if( HasFollow() )
@@ -681,7 +681,7 @@ void SwSectionFrame::MoveContentAndDelete( SwSectionFrame* pDel, bool bSave )
     if( pSave )
     {
         lcl_InvalidateInfFlags( pSave, bSize );
-        ::RestoreContent( pSave, pUp, pPrv, true );
+        ::RestoreContent( pSave, pUp, pPrv );
         pUp->FindPageFrame()->InvalidateContent();
         if( !bOldFootnote )
             static_cast<SwFootnoteFrame*>(pUp)->ColUnlock();

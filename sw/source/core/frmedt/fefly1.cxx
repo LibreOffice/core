@@ -856,7 +856,7 @@ SwFlyFrameFormat* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             pFormat = GetDoc()->getIDocumentContentOperations().Insert(rPaM, xObj,
-                                    pFlyAttrSet, nullptr, nullptr );
+                                    pFlyAttrSet );
             OSL_ENSURE( pFormat, "Doc->getIDocumentContentOperations().Insert(notxt) failed." );
 
         }
