@@ -41,6 +41,7 @@ struct PosVecf3
 typedef std::vector <glm::vec3> Vertices3D;
 typedef std::vector <glm::vec3> Normals3D;
 
+// fields must match definition in GLSL shader file
 struct MaterialParameters
 {
     glm::vec4 ambient;
@@ -48,15 +49,21 @@ struct MaterialParameters
     glm::vec4 specular;
     glm::vec4 materialColor;
 
-    bool twoSidesLighting;
+    bool  twoSidesLighting;
     float shininess;
+    float pad;
+    float pad1;
 };
 
+// fields must match definition in GLSL shader file
 struct LightSource
 {
     glm::vec4   lightColor;
     glm::vec4   positionWorldspace;
     float  lightPower;
+    float  pad1;
+    float  pad2;
+    float  pad3;
 };
 
 struct GlobalLights
