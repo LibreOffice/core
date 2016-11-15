@@ -4766,7 +4766,21 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
 
     // Update the shape properties if it is embedded object.
     if(m_xEmbedded.is()){
-        UpdateEmbeddedShapeProps(m_pGraphicImport->GetXShapeObject());
+        uno::Reference<drawing::XShape> xShape = m_pGraphicImport->GetXShapeObject();
+        UpdateEmbeddedShapeProps(xShape);
+        if (eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
+        {
+            uno::Reference<beans::XPropertySet> xEmbeddedProps(m_xEmbedded, uno::UNO_QUERY);
+            text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
+            xEmbeddedProps->setPropertyValue("AnchorType", uno::makeAny(eAnchorType));
+            uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+            xEmbeddedProps->setPropertyValue("HoriOrient", xShapeProps->getPropertyValue("HoriOrient"));
+            xEmbeddedProps->setPropertyValue("HoriOrientPosition", xShapeProps->getPropertyValue("HoriOrientPosition"));
+            xEmbeddedProps->setPropertyValue("HoriOrientRelation", xShapeProps->getPropertyValue("HoriOrientRelation"));
+            xEmbeddedProps->setPropertyValue("VertOrient", xShapeProps->getPropertyValue("VertOrient"));
+            xEmbeddedProps->setPropertyValue("VertOrientPosition", xShapeProps->getPropertyValue("VertOrientPosition"));
+            xEmbeddedProps->setPropertyValue("VertOrientRelation", xShapeProps->getPropertyValue("VertOrientRelation"));
+        }
     }
     //insert it into the document at the current cursor position
     OSL_ENSURE( xTextContent.is(), "DomainMapper_Impl::ImportGraphic");
