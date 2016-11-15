@@ -334,8 +334,8 @@ void CairoTextRender::DrawServerFontLayout( const GenericSalLayout& rLayout, con
                 else
                 {
                     ydiff = font_extents.ascent/nHeight;
-                    xdiff = -font_extents.descent/nHeight;
                 }
+                xdiff = -font_extents.descent/nHeight;
             }
             else if (nGlyphRotation == -1)
             {
