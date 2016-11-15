@@ -310,7 +310,11 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     {
         SdrFitToSizeType eFTS = (SdrFitToSizeType)
                     static_cast<const SdrTextFitToSizeTypeItem&>( rAttrs->Get( SDRATTR_TEXT_FITTOSIZE ) ).GetValue();
-        m_pTsbFitToSize->SetState( eFTS == SDRTEXTFIT_NONE ? TRISTATE_FALSE : TRISTATE_TRUE );
+        if( eFTS == SDRTEXTFIT_AUTOFIT || eFTS == SDRTEXTFIT_NONE )
+            m_pTsbFitToSize->SetState( TRISTATE_FALSE );
+        else
+            m_pTsbFitToSize->SetState( TRISTATE_TRUE );
+
         m_pTsbFitToSize->EnableTriState( false );
     }
     else
@@ -408,8 +412,8 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
             default: ; //prevent warning
                 OSL_FAIL( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
                 SAL_FALLTHROUGH;
-            case TRISTATE_FALSE: eFTS = SDRTEXTFIT_NONE; break;
-            case TRISTATE_TRUE: eFTS = SDRTEXTFIT_AUTOFIT; break;
+            case TRISTATE_FALSE: eFTS = SDRTEXTFIT_AUTOFIT; break;
+            case TRISTATE_TRUE: eFTS = SDRTEXTFIT_PROPORTIONAL; break;
         }
         rAttrs->Put( SdrTextFitToSizeTypeItem( eFTS ) );
     }
