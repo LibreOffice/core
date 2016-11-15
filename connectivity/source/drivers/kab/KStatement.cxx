@@ -64,7 +64,7 @@ KabCommonStatement::KabCommonStatement(KabConnection* _pConnection )
     : KabCommonStatement_BASE(m_aMutex),
     OPropertySetHelper(KabCommonStatement_BASE::rBHelper),
     m_aParser(_pConnection->getComponentContext()),
-    m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser, nullptr ),
+    m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser),
     m_pParseTree(nullptr),
     m_pConnection(_pConnection),
     rBHelper(KabCommonStatement_BASE::rBHelper)
