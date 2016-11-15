@@ -168,6 +168,12 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
         internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
         size++;
 
+        if (bXAdESCompliantIfODF)
+        {
+            internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idSignedProperties", -1);
+            size++;
+        }
+
         if (!internalSignatureInfor.signatureInfor.ouDescription.isEmpty())
         {
             // Only mention the hash of the description in the signature if it's non-empty.
