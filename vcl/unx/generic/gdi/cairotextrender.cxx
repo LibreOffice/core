@@ -321,12 +321,19 @@ void CairoTextRender::DrawServerFontLayout( const GenericSalLayout& rLayout, con
             double ydiff = 0.0;
             if (nGlyphRotation == 1)
             {
-                ydiff = font_extents.ascent/nHeight;
-                xdiff = -font_extents.descent/nHeight;
                 if (SalLayout::UseCommonLayout())
                 {
-                     ydiff -= font_extents.descent/nHeight;
-                     xdiff = 0;
+                    // The y is the origin point position, but Cairo will draw
+                    // the glyph *above* that point, we need to move it down to
+                    // the glyph’s baseline.
+                    cairo_text_extents_t aExt;
+                    cairo_glyph_extents(cr, &cairo_glyphs[nStartIndex], nLen, &aExt);
+                    cairo_glyphs[nStartIndex].y += aExt.x_advance - aExt.height - aExt.y_bearing;
+                }
+                else
+                {
+                    ydiff = font_extents.ascent/nHeight;
+                    xdiff = -font_extents.descent/nHeight;
                 }
             }
             else if (nGlyphRotation == -1)
