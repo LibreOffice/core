@@ -1266,6 +1266,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103664, "tdf103664.docx")
     CPPUNIT_ASSERT_EQUAL(awt::CharSet::SYMBOL, getProperty<sal_Int16>(xRun, "CharFontCharSet"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf82824, "tdf82824.docx")
+{
+    // This was text::TextContentAnchorType_AS_CHARACTER, <wp:anchor> wasn't handled on import for the chart.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
+}
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
