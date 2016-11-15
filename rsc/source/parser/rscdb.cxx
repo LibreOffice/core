@@ -58,7 +58,6 @@ RscTypCont::RscTypCont( RscError * pErrHdl,
     , aStringLiteral( pHS->getID( "Chars" ), RSC_NOTYPE )
     , aLangType()
     , aLangString( pHS->getID( "Lang_Chars" ), RSC_NOTYPE, &aString, &aLangType )
-    , aLangShort( pHS->getID( "Lang_short" ), RSC_NOTYPE, &aShort, &aLangType )
     , pEH(pErrHdl)
     , nFlags( nFlagsP )
 {

@@ -42,9 +42,9 @@
 namespace binaryurp {
 
 css::uno::Reference< css::uno::XInterface > BridgeFactory::static_create(
-    css::uno::Reference< css::uno::XComponentContext > const & xContext)
+    css::uno::Reference< css::uno::XComponentContext > const & /*xContext*/)
 {
-    return static_cast< cppu::OWeakObject * >(new BridgeFactory(xContext));
+    return static_cast< cppu::OWeakObject * >(new BridgeFactory);
 }
 
 OUString BridgeFactory::static_getImplementationName() {
@@ -76,11 +76,9 @@ void BridgeFactory::removeBridge(
     }
 }
 
-BridgeFactory::BridgeFactory(
-    css::uno::Reference< css::uno::XComponentContext > const & context):
-    BridgeFactoryBase(m_aMutex), context_(context)
+BridgeFactory::BridgeFactory():
+    BridgeFactoryBase(m_aMutex)
 {
-    assert(context.is());
 }
 
 BridgeFactory::~BridgeFactory() {}

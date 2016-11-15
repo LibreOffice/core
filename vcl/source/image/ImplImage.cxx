@@ -30,8 +30,7 @@
 #include <memory>
 
 ImplImage::ImplImage()
-    : mnRefCount(1)
-    , maBitmapChecksum(0)
+    : maBitmapChecksum(0)
     , mpBitmapEx()
     , maDisabledBitmapEx()
 {

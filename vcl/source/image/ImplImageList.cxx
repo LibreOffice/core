@@ -30,14 +30,12 @@
 #include <memory>
 
 ImplImageList::ImplImageList()
-    : mnRefCount(1)
 {
 }
 
 ImplImageList::ImplImageList( const ImplImageList &aSrc )
     : maPrefix(aSrc.maPrefix)
     , maImageSize(aSrc.maImageSize)
-    , mnRefCount(1)
 {
     maImages.reserve( aSrc.maImages.size() );
     for ( std::vector<ImageAryData *>::const_iterator aIt = aSrc.maImages.begin(), aEnd = aSrc.maImages.end(); aIt != aEnd; ++aIt )

@@ -78,9 +78,7 @@ private:
     BridgeFactory(const BridgeFactory&) = delete;
     BridgeFactory& operator=(const BridgeFactory&) = delete;
 
-    explicit BridgeFactory(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context);
+    BridgeFactory();
 
     virtual ~BridgeFactory() override;
 
@@ -129,8 +127,6 @@ private:
             com::sun::star::uno::Reference< com::sun::star::bridge::XBridge > >
         BridgeMap;
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-        context_;
     BridgeList unnamed_;
     BridgeMap named_;
 };
