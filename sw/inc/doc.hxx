@@ -1400,7 +1400,7 @@ public:
 
     // Call into intransparent Basic / JavaScript.
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
-                        bool bChkPtr = false, SbxArray* pArgs = nullptr );
+                        bool bChkPtr = false );
 
     /** Adjust left margin via object bar (similar to adjustment of numerations).
      One can either change the margin "by" adding or subtracting a given

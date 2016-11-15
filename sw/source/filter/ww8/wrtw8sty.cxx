@@ -1589,7 +1589,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
             // Switch off test on default item values, if page description
             // set (value of <bOutPgDscSet>) isn't written.
-            AttrOutput().OutputStyleItemSet( aSet, true, bOutPgDscSet );
+            AttrOutput().OutputStyleItemSet( aSet, bOutPgDscSet );
             bOutputStyleItemSet = true;
 
             //Cannot export as normal page framedir, as continuous sections
@@ -1679,7 +1679,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
         m_pISet = &pPdFormat->GetAttrSet();
         if (!bOutputStyleItemSet)
-            AttrOutput().OutputStyleItemSet( pPdFormat->GetAttrSet(), true, false );
+            AttrOutput().OutputStyleItemSet( pPdFormat->GetAttrSet(), false );
         AttrOutput().SectionPageBorders( pPdFormat, pPdFirstPgFormat );
         m_pISet = pOldI;
 

@@ -436,7 +436,7 @@ public:
                                                 // reference is destroyed
     bool                        m_bIsOLEStorage;// an OLEStorage on a UCBStorageStream makes this an Autocommit-stream
 
-                                UCBStorageStream_Impl( const OUString&, StreamMode, UCBStorageStream*, bool, const OString* pKey,
+                                UCBStorageStream_Impl( const OUString&, StreamMode, UCBStorageStream*, bool,
                                                        bool bRepair, Reference< XProgressHandler > const & xProgress );
 
     void                        Free();
@@ -634,7 +634,7 @@ bool UCBStorageElement_Impl::IsModified()
     return bModified;
 }
 
-UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode nMode, UCBStorageStream* pStream, bool bDirect, const OString* pKey, bool bRepair, Reference< XProgressHandler > const & xProgress  )
+UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode nMode, UCBStorageStream* pStream, bool bDirect, bool bRepair, Reference< XProgressHandler > const & xProgress  )
     : m_pAntiImpl( pStream )
     , m_aURL( rName )
     , m_pContent( nullptr )
@@ -665,21 +665,6 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
         }
 
         m_pContent = new ::ucbhelper::Content( aTemp, xComEnv, comphelper::getProcessComponentContext() );
-
-        if ( pKey )
-        {
-            m_aKey = *pKey;
-
-            // stream is encrypted and should be decrypted (without setting the key we'll get the raw data)
-            sal_uInt8 aBuffer[RTL_DIGEST_LENGTH_SHA1];
-            rtlDigestError nErr = rtl_digest_SHA1( pKey->getStr(), pKey->getLength(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
-            if ( nErr == rtl_Digest_E_None )
-            {
-                sal_uInt8* pBuffer = aBuffer;
-                css::uno::Sequence < sal_Int8 > aSequ( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
-                m_pContent->setPropertyValue("EncryptionKey", Any(aSequ) );
-            }
-        }
     }
     catch (const ContentCreationException&)
     {
@@ -1245,7 +1230,7 @@ UCBStorageStream::UCBStorageStream( const OUString& rName, StreamMode nMode, boo
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorageStream !
-    pImp = new UCBStorageStream_Impl( rName, nMode, this, bDirect, nullptr, bRepair, xProgress );
+    pImp = new UCBStorageStream_Impl( rName, nMode, this, bDirect, bRepair, xProgress );
     pImp->AddFirstRef();             // use direct refcounting because in header file only a pointer should be used
     StorageBase::m_nMode = pImp->m_nMode;
 }
@@ -2687,7 +2672,7 @@ void UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode n
     OUString aName( m_aURL );
     aName += "/";
     aName += pElement->m_aOriginalName;
-    pElement->m_xStream = new UCBStorageStream_Impl( aName, nMode, nullptr, bDirect, nullptr, m_bRepairPackage, m_xProgressHandler );
+    pElement->m_xStream = new UCBStorageStream_Impl( aName, nMode, nullptr, bDirect, m_bRepairPackage, m_xProgressHandler );
 }
 
 BaseStorage* UCBStorage::OpenUCBStorage( const OUString& rEleName, StreamMode nMode, bool bDirect )

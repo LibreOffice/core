@@ -74,8 +74,8 @@ OUString MSOWordCommandConvertor::MSOTCIDToOOCommand( sal_Int16 key )
     return OUString();
 }
 
-SwCTBWrapper::SwCTBWrapper( bool bReadId ) : Tcg255SubStruct( bReadId )
-,reserved2(0)
+SwCTBWrapper::SwCTBWrapper() :
+reserved2(0)
 ,reserved3(0)
 ,reserved4(0)
 ,reserved5(0)
@@ -833,33 +833,33 @@ bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream &rS )
      {
          case 0x1:
          {
-             pSubStruct = new PlfMcd( false ); // don't read the id
+             pSubStruct = new PlfMcd;
              break;
          }
          case 0x2:
          {
-             pSubStruct = new PlfAcd( false );
+             pSubStruct = new PlfAcd;
              break;
          }
          case 0x3:
          case 0x4:
          {
-             pSubStruct = new PlfKme( false );
+             pSubStruct = new PlfKme;
              break;
          }
          case 0x10:
          {
-             pSubStruct = new TcgSttbf( false );
+             pSubStruct = new TcgSttbf;
              break;
          }
          case 0x11:
          {
-             pSubStruct = new MacroNames( false );
+             pSubStruct = new MacroNames;
              break;
          }
          case 0x12:
          {
-             pSubStruct = new SwCTBWrapper( false );
+             pSubStruct = new SwCTBWrapper;
              break;
          }
          default:
@@ -927,7 +927,7 @@ void Tcg255::Print( FILE* fp)
 }
 #endif
 
-Tcg255SubStruct::Tcg255SubStruct( bool bReadId ) : mbReadId( bReadId ), ch(0)
+Tcg255SubStruct::Tcg255SubStruct( ) : ch(0)
 {
 }
 
@@ -935,14 +935,11 @@ bool Tcg255SubStruct::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","Tcg255SubStruct::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    if ( mbReadId )
-        rS.ReadUChar( ch );
     return rS.good();
 }
 
-PlfMcd::PlfMcd(bool bReadId)
-    : Tcg255SubStruct(bReadId)
-    , iMac(0)
+PlfMcd::PlfMcd()
+    : iMac(0)
 {
 }
 
@@ -979,8 +976,8 @@ void PlfMcd::Print( FILE* fp )
 }
 #endif
 
-PlfAcd::PlfAcd( bool bReadId ) : Tcg255SubStruct( bReadId )
-,iMac(0)
+PlfAcd::PlfAcd() :
+ iMac(0)
 ,rgacd(nullptr)
 {
 }
@@ -1031,8 +1028,8 @@ void PlfAcd::Print( FILE* fp )
 }
 #endif
 
-PlfKme::PlfKme( bool bReadId ) : Tcg255SubStruct( bReadId )
-,iMac( 0 )
+PlfKme::PlfKme() :
+ iMac( 0 )
 ,rgkme( nullptr )
 {
 }
@@ -1075,7 +1072,7 @@ void PlfKme::Print( FILE* fp )
 }
 #endif
 
-TcgSttbf::TcgSttbf( bool bReadId ) : Tcg255SubStruct( bReadId )
+TcgSttbf::TcgSttbf()
 {
 }
 
@@ -1145,8 +1142,8 @@ void TcgSttbfCore::Print( FILE* fp )
 }
 #endif
 
-MacroNames::MacroNames( bool bReadId ) : Tcg255SubStruct( bReadId )
-,iMac( 0 )
+MacroNames::MacroNames() :
+ iMac( 0 )
 ,rgNames( nullptr )
 {
 }

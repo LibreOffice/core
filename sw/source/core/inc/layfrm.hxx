@@ -39,7 +39,7 @@ class SwLayoutFrame: public SwFrame
 
     // Releases the Lower while restructuring columns
     friend SwFrame* SaveContent( SwLayoutFrame *, SwFrame * );
-    friend void   RestoreContent( SwFrame *, SwLayoutFrame *, SwFrame *pSibling, bool bGrow );
+    friend void   RestoreContent( SwFrame *, SwLayoutFrame *, SwFrame *pSibling );
 
 protected:
 
