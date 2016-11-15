@@ -101,7 +101,7 @@ void PaintCharacterBorder(
 SwFlyFrame *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh );
 
 SwFrame *SaveContent( SwLayoutFrame *pLay, SwFrame *pStart = nullptr );
-void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling, bool bGrow );
+void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling );
 
 // Get ContentNodes, create ContentFrames, and add them to LayFrame.
 void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc, sal_uLong nIndex,
@@ -162,9 +162,7 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout,
 bool IsExtraData( const SwDoc *pDoc );
 
 // #i11760# - method declaration <CalcContent(..)>
-void CalcContent( SwLayoutFrame *pLay,
-                bool bNoColl = false,
-                bool bNoCalcFollow = false );
+void CalcContent( SwLayoutFrame *pLay, bool bNoColl = false );
 
 // Notify classes memorize the current sizes in their constructor and do
 // the necessary notifications in their destructor if needed

@@ -459,7 +459,7 @@ void SwHTMLParser::InsertEmbed()
 
     // und in das Dok einfuegen
     SwFrameFormat* pFlyFormat =
-        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrameSet, nullptr, nullptr );
+        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrameSet );
 
     // Namen am FrameFormat setzen
     if( !aName.isEmpty() )
@@ -632,9 +632,7 @@ void SwHTMLParser::EndObject()
         SwFrameFormat* pFlyFormat =
             m_pDoc->getIDocumentContentOperations().Insert( *m_pPam,
                     ::svt::EmbeddedObjectRef( m_pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
-                    &m_pAppletImpl->GetItemSet(),
-                    nullptr,
-                    nullptr );
+                    &m_pAppletImpl->GetItemSet() );
 
         // den alternativen Namen setzen
         SwNoTextNode *pNoTextNd =
@@ -766,9 +764,7 @@ void SwHTMLParser::EndApplet()
     SwFrameFormat* pFlyFormat =
         m_pDoc->getIDocumentContentOperations().Insert( *m_pPam,
                     ::svt::EmbeddedObjectRef( m_pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
-                    &m_pAppletImpl->GetItemSet(),
-                    nullptr,
-                    nullptr );
+                    &m_pAppletImpl->GetItemSet());
 
     // den alternativen Namen setzen
     SwNoTextNode *pNoTextNd =
@@ -937,7 +933,7 @@ void SwHTMLParser::InsertFloatingFrame()
 
     // und in das Dok einfuegen
     SwFrameFormat* pFlyFormat =
-        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrameSet, nullptr, nullptr );
+        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrameSet );
 
     // den alternativen Namen setzen
     SwNoTextNode *pNoTextNd =

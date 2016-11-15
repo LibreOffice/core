@@ -545,7 +545,7 @@ void RtfExport::WritePageDescTable()
         OutULong(n).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCUSE);
         OutULong((sal_uLong)rPageDesc.ReadUseOn());
 
-        OutPageDescription(rPageDesc, false, false);
+        OutPageDescription(rPageDesc, false);
 
         // search for the next page description
         std::size_t i = nSize;
@@ -719,7 +719,7 @@ void RtfExport::ExportDocument_Impl()
         // All sections are unlocked by default
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SECTUNLOCKED);
         OutLong(1);
-        OutPageDescription(rPageDesc, false, true);     // Changed bCheckForFirstPage to true so headers
+        OutPageDescription(rPageDesc, true);     // Changed bCheckForFirstPage to true so headers
         // following title page are correctly added - i13107
         if (pSttPgDsc)
         {
@@ -1223,7 +1223,7 @@ const OUString* RtfExport::GetRedline(sal_uInt16 nId)
     return nullptr;
 }
 
-void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bWriteReset, bool bCheckForFirstPage)
+void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bCheckForFirstPage)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
     const SwPageDesc* pSave = m_pAktPageDesc;
@@ -1232,14 +1232,6 @@ void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bWriteReset, b
     if (bCheckForFirstPage && m_pAktPageDesc->GetFollow() &&
             m_pAktPageDesc->GetFollow() != m_pAktPageDesc)
         m_pAktPageDesc = m_pAktPageDesc->GetFollow();
-
-    if (bWriteReset)
-    {
-        if (m_pCurPam->GetPoint()->nNode == m_pOrigPam->Start()->nNode)
-            Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SECTD).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SBKNONE);
-        else
-            Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SECT).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SECTD);
-    }
 
     if (m_pAktPageDesc->GetLandscape())
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LNDSCPSXN);

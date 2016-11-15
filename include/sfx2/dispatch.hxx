@@ -113,7 +113,7 @@ public:
                         SfxDispatcher();
                         SfxDispatcher( SfxViewFrame *pFrame );
 
-    SAL_DLLPRIVATE void Construct_Impl( SfxDispatcher* pParent );
+    SAL_DLLPRIVATE void Construct_Impl();
 
                         ~SfxDispatcher();
 

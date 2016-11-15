@@ -59,7 +59,7 @@ public:
 class StgOleStream : public StgInternalStream
 {
 public:
-    StgOleStream( BaseStorage&, bool );
+    explicit StgOleStream( BaseStorage& );
     bool Store();
 };
 

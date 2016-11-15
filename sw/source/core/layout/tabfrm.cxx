@@ -462,7 +462,7 @@ static void lcl_MoveRowContent( SwRowFrame& rSourceLine, SwRowFrame& rDestLine )
 
                 // Find last content
                 SwFrame* pFrame = pDestCell->GetLastLower();
-                ::RestoreContent( pTmp, pDestCell, pFrame, true );
+                ::RestoreContent( pTmp, pDestCell, pFrame );
             }
         }
         pCurrDestCell = static_cast<SwCellFrame*>(pCurrDestCell->GetNext());

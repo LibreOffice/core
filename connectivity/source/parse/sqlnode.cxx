@@ -262,7 +262,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
     parseNodeToStr(
         rString, _rxConnection, nullptr, nullptr, OUString(),
         pContext ? pContext->getPreferredLocale() : OParseContext::getDefaultLocale(),
-        pContext, _bIntl, _bQuote, '.', false, false );
+        pContext, _bIntl, _bQuote, '.', false );
 }
 
 
@@ -276,7 +276,7 @@ void OSQLParseNode::parseNodeToPredicateStr(OUString& rString,
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
-        parseNodeToStr(rString, _rxConnection, xFormatter, nullptr, OUString(), rIntl, pContext, true, true, _cDec, true, false);
+        parseNodeToStr(rString, _rxConnection, xFormatter, nullptr, OUString(), rIntl, pContext, true, true, _cDec, true);
 }
 
 
@@ -292,7 +292,7 @@ void OSQLParseNode::parseNodeToPredicateStr(OUString& rString,
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
-        parseNodeToStr( rString, _rxConnection, xFormatter, _xField, _sPredicateTableAlias, rIntl, pContext, true, true, _cDec, true, false );
+        parseNodeToStr( rString, _rxConnection, xFormatter, _xField, _sPredicateTableAlias, rIntl, pContext, true, true, _cDec, true );
 }
 
 
@@ -306,8 +306,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
                       bool _bIntl,
                       bool _bQuote,
                       sal_Char _cDecSep,
-                      bool _bPredicate,
-                      bool _bSubstitute) const
+                      bool _bPredicate) const
 {
     OSL_ENSURE( _rxConnection.is(), "OSQLParseNode::parseNodeToStr: invalid connection!" );
 
@@ -319,7 +318,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
             OSQLParseNode::impl_parseNodeToString_throw( sBuffer,
                 SQLParseNodeParameter(
                      _rxConnection, xFormatter, _xField, _sPredicateTableAlias, rIntl, pContext,
-                    _bIntl, _bQuote, _cDecSep, _bPredicate, _bSubstitute
+                    _bIntl, _bQuote, _cDecSep, _bPredicate, false
                 ) );
         }
         catch( const SQLException& )

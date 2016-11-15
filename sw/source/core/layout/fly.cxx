@@ -540,7 +540,7 @@ void SwFlyFrame::UnchainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
         {
             SwFrame *pTmp = ::SaveContent( pFoll );
             if ( pTmp )
-                ::RestoreContent( pTmp, pUpper, pMaster->FindLastLower(), true );
+                ::RestoreContent( pTmp, pUpper, pMaster->FindLastLower() );
             pFoll->SetCompletePaint();
             pFoll->InvalidateSize();
             pFoll = pFoll->GetNextLink();
@@ -1366,9 +1366,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 //                          problems in method <SwContentFrame::WouldFit_(..)>,
 //                          which assumes that the follows are formatted.
 //                          Thus, <bNoCalcFollow> no longer used by <FormatWidthCols(..)>.
-void CalcContent( SwLayoutFrame *pLay,
-                bool bNoColl,
-                bool bNoCalcFollow )
+void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
 {
     vcl::RenderContext* pRenderContext = pLay->getRootFrame()->GetCurrShell()->GetOut();
     SwSectionFrame* pSect;
@@ -1449,10 +1447,6 @@ void CalcContent( SwLayoutFrame *pLay,
                     static_cast<SwTabFrame*>(pFrame)->m_bLockBackMove = true;
                 }
             }
-
-            // OD 14.03.2003 #i11760# - forbid format of follow, if requested.
-            if ( bNoCalcFollow && pFrame->IsTextFrame() )
-                static_cast<SwTextFrame*>(pFrame)->ForbidFollowFormat();
 
             {
                 SwFrameDeleteGuard aDeleteGuard(pSect);

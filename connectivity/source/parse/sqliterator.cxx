@@ -135,12 +135,11 @@ namespace connectivity
 
 OSQLParseTreeIterator::OSQLParseTreeIterator(const Reference< XConnection >& _rxConnection,
                                              const Reference< XNameAccess >& _rxTables,
-                                             const OSQLParser& _rParser,
-                                             const OSQLParseNode* pRoot )
+                                             const OSQLParser& _rParser )
     :m_rParser( _rParser )
     ,m_pImpl( new OSQLParseTreeIteratorImpl( _rxConnection, _rxTables ) )
 {
-    setParseTree(pRoot);
+    setParseTree(nullptr);
 }
 
 
