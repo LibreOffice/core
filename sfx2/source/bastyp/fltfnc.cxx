@@ -1117,7 +1117,7 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
 
         if( xFilterCFG.is() && xTypeCFG.is() )
         {
-            // select right query to get right set of filters for search modul
+            // select right query to get right set of filters for search module
             uno::Sequence< OUString > lFilterNames = xFilterCFG->getElementNames();
             if ( lFilterNames.getLength() )
             {

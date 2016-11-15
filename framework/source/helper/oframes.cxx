@@ -282,7 +282,7 @@ sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException, std::exception
     return bHasElements;
 }
 
-//  proteced method
+//  protected method
 
 void OFrames::impl_resetObject()
 {

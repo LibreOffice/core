@@ -298,7 +298,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
     SbiSymDef* pDef;
     SbiExprListPtr pDim;
 
-    // #40689, Statics -> Modul-Initialising, skip in Sub
+    // #40689, Statics -> Module-Initialising, skip in Sub
     sal_uInt32 nEndOfStaticLbl = 0;
     if( !bVBASupportOn && bStatic )
     {

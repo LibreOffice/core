@@ -313,7 +313,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                     else
                         pModule = pBasic->GetModules().front().get();
                 }
-                DBG_ASSERT( pModule, "Kein Modul!" );
+                DBG_ASSERT( pModule, "No Module!" );
                 if ( pModule && !pModule->GetMethods()->Find( rInfo.GetMethod(), SbxClassType::Method ) )
                     CreateMacro( pModule, rInfo.GetMethod() );
             }
@@ -394,7 +394,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SfxMacroInfoItem& rInfo = static_cast<const SfxMacroInfoItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_MACROINFO ));
             BasicManager* pBasMgr = const_cast<BasicManager*>(rInfo.GetBasicManager());
-            DBG_ASSERT( pBasMgr, "Store source: Kein BasMgr?" );
+            DBG_ASSERT( pBasMgr, "Store source: No BasMgr?" );
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
             VclPtr<ModulWindow> pWin = FindBasWin( aDocument, rInfo.GetLib(), rInfo.GetModule(), false, true );
             if ( pWin )
@@ -1147,7 +1147,7 @@ VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC* pBasic )
     if (SbClassModuleObject* pCMO = dynamic_cast<SbClassModuleObject*>(pActiveModule))
         pActiveModule = pCMO->getClassModule();
 
-    DBG_ASSERT( pActiveModule, "Kein aktives Modul im ErrorHdl?!" );
+    DBG_ASSERT( pActiveModule, "No active module in ErrorHdl!?" );
     if ( pActiveModule )
     {
         VclPtr<ModulWindow> pWin;
@@ -1159,7 +1159,7 @@ VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC* pBasic )
                 ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
                 OUString aLibName = pLib->GetName();
                 pWin = FindBasWin( aDocument, aLibName, pActiveModule->GetName(), true );
-                DBG_ASSERT( pWin, "Error/Step-Hdl: Fenster wurde nicht erzeugt/gefunden!" );
+                DBG_ASSERT( pWin, "Error/Step-Hdl: Window was not created/found!" );
                 SetCurLib( aDocument, aLibName );
                 SetCurWindow( pWin, true );
             }

@@ -250,7 +250,7 @@ bool X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
     char    pBits[64];
     char   *pBitsPtr = pBits;
 
-    // Set the pallette-entries for the dithering tile
+    // Set the palette-entries for the dithering tile
     sal_uInt8 nSalColorRed   = SALCOLOR_RED   ( nSalColor );
     sal_uInt8 nSalColorGreen = SALCOLOR_GREEN ( nSalColor );
     sal_uInt8 nSalColorBlue  = SALCOLOR_BLUE  ( nSalColor );

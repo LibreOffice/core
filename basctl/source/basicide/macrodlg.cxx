@@ -300,7 +300,7 @@ void MacroChooser::DeleteMacro()
         }
 
         SbModule* pModule = pMethod->GetModule();
-        assert(pModule && "DeleteMacro: Kein Modul?!");
+        assert(pModule && "DeleteMacro: No Module?!");
         OUString aSource( pModule->GetSource32() );
         sal_uInt16 nStart, nEnd;
         pMethod->GetLineRange( nStart, nEnd );

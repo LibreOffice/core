@@ -95,7 +95,7 @@ Any SAL_CALL OComponentEnumeration::nextElement() throw(    NoSuchElementExcepti
     return aComponent;
 }
 
-//  proteced method
+//  protected method
 
 void OComponentEnumeration::impl_resetObject()
 {
