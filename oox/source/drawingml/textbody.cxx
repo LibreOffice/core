@@ -22,9 +22,11 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "drawingml/textparagraph.hxx"
+#include "oox/helper/propertyset.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
 namespace oox { namespace drawingml {
@@ -69,7 +71,7 @@ void TextBody::insertAt(
         (*aIt)->insertAt( rFilterBase, xText, xAt, rTextStyleProperties, aCombinedTextStyle, aIt == aBeg, nCharHeight );
 }
 
-bool TextBody::isEmpty()
+bool TextBody::isEmpty() const
 {
     if ( maParagraphs.size() <= 0 )
         return true;
@@ -83,6 +85,36 @@ bool TextBody::isEmpty()
         return false;
 
     return aRuns[0]->getText().getLength() <= 0;
+}
+
+void TextBody::ApplyStyleEmpty(
+    const ::oox::core::XmlFilterBase& rFilterBase,
+    const Reference < XText > & xText,
+    const TextCharacterProperties& rTextStyleProperties,
+    const TextListStylePtr& pMasterTextListStylePtr) const
+{
+    assert(isEmpty());
+
+    // Apply character properties
+    TextListStyle aCombinedTextStyle;
+    aCombinedTextStyle.apply( *pMasterTextListStylePtr );
+    aCombinedTextStyle.apply( maTextListStyle );
+
+    PropertySet aPropSet(xText);
+    TextCharacterProperties aTextCharacterProps(maParagraphs[0]->getCharacterStyle(rTextStyleProperties, aCombinedTextStyle));
+    aTextCharacterProps.pushToPropSet(aPropSet, rFilterBase);
+
+    // Apply paragraph properties
+    TextParagraphPropertiesPtr pTextParagraphStyle = maParagraphs[0]->getParagraphStyle(aCombinedTextStyle);
+    if (pTextParagraphStyle.get())
+    {
+        Reference< XPropertySet > xProps(xText, UNO_QUERY);
+        PropertyMap aioBulletList;
+        float nCharHeight = xProps->getPropertyValue("CharHeight").get<float>();
+        TextParagraphProperties aParaProp;
+        aParaProp.apply(*pTextParagraphStyle);
+        aParaProp.pushToPropSet(&rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), false, nCharHeight, true);
+    }
 }
 
 } }
