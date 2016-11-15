@@ -425,7 +425,7 @@ private:
 
 private:
     typedef ::std::vector< HFPortionInfo >  HFPortionInfoVec;
- 
+
     const OUString      maPageNumberService;
     const OUString      maPageCountService;
     const OUString      maSheetNameService;
