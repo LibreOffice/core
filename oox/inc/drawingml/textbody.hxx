@@ -59,7 +59,13 @@ public:
                             const css::uno::Reference < css::text::XTextCursor > & xAt,
                             const TextCharacterProperties& rTextStyleProperties,
                             const TextListStylePtr& pMasterTextListStyle ) const;
-    bool isEmpty();
+    bool isEmpty() const;
+
+    void                ApplyStyleEmpty(
+                            const ::oox::core::XmlFilterBase& rFilterBase,
+                            const css::uno::Reference < css::text::XText > & xText,
+                            const TextCharacterProperties& rTextStyleProperties,
+                            const TextListStylePtr& pMasterTextListStylePtr) const;
 protected:
     TextParagraphVector maParagraphs;
     TextBodyProperties  maTextProperties;
