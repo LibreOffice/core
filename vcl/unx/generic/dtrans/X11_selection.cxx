@@ -769,6 +769,7 @@ void SelectionManager::convertTypeToNative( const OUString& rType, Atom selectio
     int nTabEntries = selection == m_nXdndSelection ? SAL_N_ELEMENTS(aXdndConversionTab) : SAL_N_ELEMENTS(aNativeConversionTab);
 
     OString aType( OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ) );
+    SAL_INFO( "vcl.unx.dtrans", "convertTypeToNative " << aType );
     rFormat = 0;
     for( int i = 0; i < nTabEntries; i++ )
     {
@@ -1457,7 +1458,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                     // conversion succeeded, so aData contains image/bmp now
                     if( pPixmap->needsConversion( reinterpret_cast<const sal_uInt8*>(aData.getConstArray()) ) )
                     {
-                        SAL_INFO( "vcl", "trying bitmap conversion" );
+                        SAL_INFO( "vcl.unx.dtrans", "trying bitmap conversion" );
                         int depth = pPixmap->getDepth();
                         aGuard.clear();
                         aData = convertBitmapDepth(aData, depth);
