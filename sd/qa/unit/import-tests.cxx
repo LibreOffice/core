@@ -124,6 +124,7 @@ public:
     void testTdf49561();
     void testTdf103473();
     void testTdf103792();
+    void testTdf103876();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -176,6 +177,7 @@ public:
     CPPUNIT_TEST(testTdf49561);
     CPPUNIT_TEST(testTdf103473);
     CPPUNIT_TEST(testTdf103792);
+    CPPUNIT_TEST(testTdf103876);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1440,6 +1442,25 @@ void SdImportTest::testTdf103792()
 
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     CPPUNIT_ASSERT_EQUAL(OUString("Click to add Title"), aEdit.GetText(0));
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf103876()
+{
+    // Title text shape's placeholder text did not inherit the corresponding text properties
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf103876.pptx"), PPTX);
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+
+    // Check paragraph alignment
+    sal_Int16 nParaAdjust = 0;
+    xShape->getPropertyValue( "ParaAdjust" ) >>= nParaAdjust;
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(nParaAdjust));
+
+    // Check character color
+    sal_Int32 nCharColor;
+    xShape->getPropertyValue( "CharColor" ) >>= nCharColor;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF0000), nCharColor );
 
     xDocShRef->DoClose();
 }
