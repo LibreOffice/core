@@ -418,7 +418,7 @@ void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
     }
 }
 
-void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
+void SfxDispatcher::Construct_Impl()
 {
     xImp.reset(new SfxDispatcher_Impl);
     xImp->bFlushed = true;
@@ -438,7 +438,7 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
     xImp->pFilterSIDs = nullptr;
     xImp->nDisableFlags = 0;
 
-    xImp->pParent = pParent;
+    xImp->pParent = nullptr;
 
     xImp->bInvalidateOnUnlock = false;
 
@@ -455,7 +455,7 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
 
 SfxDispatcher::SfxDispatcher()
 {
-    Construct_Impl( nullptr );
+    Construct_Impl();
     xImp->pFrame = nullptr;
 }
 
@@ -464,7 +464,7 @@ SfxDispatcher::SfxDispatcher()
 */
 SfxDispatcher::SfxDispatcher(SfxViewFrame *pViewFrame)
 {
-    Construct_Impl( nullptr );
+    Construct_Impl();
     xImp->pFrame = pViewFrame;
 }
 

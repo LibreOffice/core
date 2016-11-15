@@ -441,7 +441,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
                 rDoc.getIDocumentContentOperations().Insert( rContext.GetRepeatPaM(),
                     svt::EmbeddedObjectRef( aNew,
                         static_cast<SwOLENode*>(pCNd)->GetAspect() ),
-                    nullptr, nullptr, nullptr );
+                    nullptr );
             }
 
             break;

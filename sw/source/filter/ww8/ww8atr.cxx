@@ -5043,7 +5043,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
     }
 }
 
-void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bDeep, bool bTestForDefault )
+void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bTestForDefault )
 {
     // based on OutputItemSet() from wrt_fn.cxx
 
@@ -5051,9 +5051,6 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bDeep
     const SfxItemSet* pSet = &rSet;
     if ( !pSet->Count() )
     {
-        if ( !bDeep )
-            return;
-
         while ( nullptr != ( pSet = pSet->GetParent() ) && !pSet->Count() )
             ;
 
@@ -5062,7 +5059,7 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bDeep
     }
 
     const SfxPoolItem* pItem;
-    if ( !bDeep || !pSet->GetParent() )
+    if ( !pSet->GetParent() )
     {
         OSL_ENSURE( rSet.Count(), "Wurde doch schon behandelt oder?" );
         SfxItemIter aIter( *pSet );
@@ -5077,7 +5074,7 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bDeep
         sal_uInt16 nWhich = aIter.FirstWhich();
         while ( nWhich )
         {
-            if ( SfxItemState::SET == pSet->GetItemState( nWhich, bDeep, &pItem ) &&
+            if ( SfxItemState::SET == pSet->GetItemState( nWhich, true/*bDeep*/, &pItem ) &&
                  ( !bTestForDefault ||
                    *pItem != rPool.GetDefaultItem( nWhich ) ||
                    ( pSet->GetParent() && *pItem != pSet->GetParent()->Get( nWhich ) ) ) )

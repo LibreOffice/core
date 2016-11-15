@@ -2522,7 +2522,7 @@ static void lcl_AddObjsToPage( SwFrame* _pFrame, SwPageFrame* _pPage )
     }
 }
 
-void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling, bool bGrow )
+void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling )
 {
     OSL_ENSURE( pSav && pParent, "no Save or Parent provided for RestoreContent." );
     SwRectFnSet aRectFnSet(pParent);
@@ -2607,8 +2607,7 @@ void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling, b
         pNxt->mpPrev = pLast;
     }
 
-    if ( bGrow )
-        pParent->Grow( nGrowVal );
+    pParent->Grow( nGrowVal );
 }
 
 SwPageFrame * InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,

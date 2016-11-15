@@ -163,8 +163,8 @@ bool StgCompObjStream::Store()
 
 /////////////////////////// class StgOleStream
 
-StgOleStream::StgOleStream( BaseStorage& rStg, bool bWr )
-    : StgInternalStream( rStg, OUString("\1Ole"), bWr )
+StgOleStream::StgOleStream( BaseStorage& rStg )
+    : StgInternalStream( rStg, OUString("\1Ole"), true )
 {
 }
 

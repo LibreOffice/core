@@ -182,7 +182,7 @@ public:
     SvStream& OutLong(long nVal);
     void OutUnicode(const sal_Char* pToken, const OUString& rContent, bool bUpr = false);
     void OutDateTime(const sal_Char* pStr, const css::util::DateTime& rDT);
-    void OutPageDescription(const SwPageDesc& rPgDsc, bool bWriteReset, bool bCheckForFirstPage);
+    void OutPageDescription(const SwPageDesc& rPgDsc, bool bCheckForFirstPage);
 
     sal_uInt16 GetColor(const Color& rColor) const;
     void InsColor(const Color& rCol);

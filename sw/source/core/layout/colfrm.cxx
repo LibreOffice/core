@@ -233,7 +233,7 @@ void SwLayoutFrame::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew
             else
                 GetFormat()->SetFormatAttr( SwFormatFillOrder() );
             if ( pSave )
-                ::RestoreContent( pSave, this, nullptr, true );
+                ::RestoreContent( pSave, this, nullptr );
             return;
         }
         if ( nOldNum == 1 )
@@ -286,7 +286,7 @@ void SwLayoutFrame::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew
                 static_cast<SwLayoutFrame*>(Lower())->Lower() &&
                 static_cast<SwLayoutFrame*>(Lower())->Lower()->IsLayoutFrame(),
                 "no column body." );   // ColumnFrames contain BodyFrames
-        ::RestoreContent( pSave, static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(Lower())->Lower()), nullptr, true );
+        ::RestoreContent( pSave, static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(Lower())->Lower()), nullptr );
     }
 }
 
