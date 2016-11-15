@@ -123,7 +123,6 @@ public:
     RscString           aStringLiteral;
     RscLangEnum         aLangType;
     RscLangArray        aLangString;
-    RscLangArray        aLangShort;
 
     RscError*           pEH;        // error handler
     RscNameTable        aNmTb;      // name table

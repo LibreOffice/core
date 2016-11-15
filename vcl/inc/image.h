@@ -52,7 +52,6 @@ struct ImplImageList
     ImageAryDataNameHash   maNameHash;
     OUString               maPrefix;
     Size                   maImageSize;
-    sal_uIntPtr            mnRefCount;
 
     ImplImageList();
     ImplImageList( const ImplImageList &aSrc );
@@ -65,8 +64,6 @@ struct ImplImageList
 
 struct ImplImage
 {
-    sal_uIntPtr mnRefCount;
-
     BitmapChecksum maBitmapChecksum;
 
     std::unique_ptr<BitmapEx> mpBitmapEx;

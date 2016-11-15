@@ -50,8 +50,6 @@ struct MaterialParameters
 
     bool twoSidesLighting;
     float shininess;
-    float pad;
-    float pad1;
 };
 
 struct LightSource
