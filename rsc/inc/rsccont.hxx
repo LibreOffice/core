@@ -55,7 +55,6 @@ protected:
                                  RscTypCont * pTC, sal_uInt32, bool bExtra );
 public:
                     RscBaseCont( Atom nId, sal_uInt32 nTypId,
-                                 RscTop * pSuper,
                                  bool bNoId );
                     virtual ~RscBaseCont() override;
     virtual RSCCLASS_TYPE   GetClassType() const override;

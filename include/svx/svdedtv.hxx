@@ -144,8 +144,8 @@ protected:
     // for CombineMarkedObjects
     static bool ImpCanConvertForCombine1(const SdrObject* pObj);
     static bool ImpCanConvertForCombine(const SdrObject* pObj);
-    static basegfx::B2DPolyPolygon ImpGetPolyPolygon1(const SdrObject* pObj, bool bCombine);
-    static basegfx::B2DPolyPolygon ImpGetPolyPolygon(const SdrObject* pObj, bool bCombine);
+    static basegfx::B2DPolyPolygon ImpGetPolyPolygon1(const SdrObject* pObj);
+    static basegfx::B2DPolyPolygon ImpGetPolyPolygon(const SdrObject* pObj);
     static basegfx::B2DPolygon ImpCombineToSinglePolygon(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     // for DismantleMarkedObjects

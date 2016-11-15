@@ -35,9 +35,9 @@ void ENTRY_STRUCT::Destroy()
     }
 }
 
-RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
+RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId,
                           bool bNoIdent )
-    : RscTop(nId, nTypeId, pSuper)
+    : RscTop(nId, nTypeId, nullptr)
     , pTypeClass(nullptr), pTypeClass1(nullptr)
     , bNoId(bNoIdent), nOffInstData(RscTop::Size())
     , nSize(nOffInstData + ALIGNED_SIZE(sizeof(RscBaseContInst)))
@@ -720,7 +720,7 @@ ERRTYPE RscBaseCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 }
 
 RscContWriteSrc::RscContWriteSrc( Atom nId, sal_uInt32 nTypeId )
-    : RscBaseCont( nId, nTypeId, nullptr, true )
+    : RscBaseCont( nId, nTypeId, true )
 {
 }
 

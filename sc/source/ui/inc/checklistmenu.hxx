@@ -231,7 +231,7 @@ class ScCheckListBox : public SvTreeListBox
 
     public:
 
-    ScCheckListBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
+    ScCheckListBox( vcl::Window* pParent );
     virtual ~ScCheckListBox() override { disposeOnce(); }
     virtual void dispose() override { delete mpCheckButton; SvTreeListBox::dispose(); }
     void Init();
