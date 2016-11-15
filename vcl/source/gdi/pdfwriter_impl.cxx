@@ -6036,6 +6036,10 @@ typedef struct {
     Extension *extensions;
 } TimeStampReq;
 
+struct SigningCertificateV2
+{
+};
+
 // (Partial) ASN.1 for the time stamp response. Very complicated. Pulled
 // together from various RFCs.
 
@@ -6249,6 +6253,16 @@ const SEC_ASN1Template TimeStampReq_Template[] =
     { SEC_ASN1_BOOLEAN | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, certReq), nullptr, 0 },
     { SEC_ASN1_OPTIONAL | SEC_ASN1_CONTEXT_SPECIFIC | 0, offsetof(TimeStampReq, extensions), Extensions_Template, 0 },
     { 0, 0, nullptr, 0 }
+};
+
+/**
+ * SigningCertificateV2 ::= SEQUENCE {
+ * }
+ */
+const SEC_ASN1Template SigningCertificateV2Template[] =
+{
+    {SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(SigningCertificateV2)},
+    {0, 0, nullptr, 0}
 };
 
 typedef struct {
@@ -6562,6 +6576,12 @@ SECStatus
 my_NSS_CMSSignerInfo_AddUnauthAttr(NSSCMSSignerInfo *signerinfo, NSSCMSAttribute *attr)
 {
     return my_NSS_CMSAttributeArray_AddAttr(signerinfo->cmsg->poolp, &(signerinfo->unAuthAttr), attr);
+}
+
+SECStatus
+my_NSS_CMSSignerInfo_AddAuthAttr(NSSCMSSignerInfo *signerinfo, NSSCMSAttribute *attr)
+{
+    return my_NSS_CMSAttributeArray_AddAttr(signerinfo->cmsg->poolp, &(signerinfo->authAttr), attr);
 }
 
 NSSCMSMessage *CreateCMSMessage(PRTime time,
@@ -7034,6 +7054,53 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         }
     }
 
+    // Add the signing certificate as a signed attribute.
+    SigningCertificateV2 aCertificate;
+    SECItem* pEncodedCertificate = SEC_ASN1EncodeItem(nullptr, nullptr, &aCertificate, SigningCertificateV2Template);
+    if (!pEncodedCertificate)
+    {
+        SAL_WARN("vcl.pdfwriter", "SEC_ASN1EncodeItem() failed");
+        return false;
+    }
+
+    NSSCMSAttribute aAttribute;
+    SECItem aAttributeValues[2];
+    SECItem* pAttributeValues[2];
+    pAttributeValues[0] = aAttributeValues;
+    pAttributeValues[1] = nullptr;
+    aAttributeValues[0] = *pEncodedCertificate;
+    aAttributeValues[1].type = siBuffer;
+    aAttributeValues[1].data = nullptr;
+    aAttributeValues[1].len = 0;
+    aAttribute.values = pAttributeValues;
+
+    SECOidData aOidData;
+    aOidData.oid.data = nullptr;
+    /*
+     * id-aa-signingCertificateV2 OBJECT IDENTIFIER ::=
+     * { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
+     *   smime(16) id-aa(2) 47 }
+     */
+    if (my_SEC_StringToOID(&aOidData.oid, "1.2.840.113549.1.9.16.2.47", 0) != SECSuccess)
+    {
+        SAL_WARN("vcl.pdfwriter", "my_SEC_StringToOID() failed");
+        return false;
+    }
+    aOidData.offset = SEC_OID_UNKNOWN;
+    aOidData.desc = "id-aa-signingCertificateV2";
+    aOidData.mechanism = CKM_SHA_1;
+    aOidData.supportedExtension = UNSUPPORTED_CERT_EXTENSION;
+    aAttribute.typeTag = &aOidData;
+    aAttribute.type = aOidData.oid;
+    aAttribute.encoded = PR_TRUE;
+
+    // Don't enable this by default till it works completely.
+    if (g_bDebugDisableCompression && my_NSS_CMSSignerInfo_AddAuthAttr(cms_signer, &aAttribute) != SECSuccess)
+    {
+        SAL_WARN("vcl.pdfwriter", "my_NSS_CMSSignerInfo_AddAuthAttr() failed");
+        return false;
+    }
+
     SECItem cms_output;
     cms_output.data = nullptr;
     cms_output.len = 0;
@@ -7081,6 +7148,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     for (unsigned int i = 0; i < cms_output.len ; i++)
         appendHex(cms_output.data[i], rContext.m_rCMSHexBuffer);
 
+    SECITEM_FreeItem(pEncodedCertificate, PR_TRUE);
     NSS_CMSMessage_Destroy(cms_msg);
 
     return true;
