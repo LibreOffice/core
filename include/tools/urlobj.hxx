@@ -176,9 +176,7 @@ public:
         const;
 
     OUString
-    getAbbreviated(css::uno::Reference<
-                           css::util::XStringWidth > const &
-                       rStringWidth,
+    getAbbreviated(css::uno::Reference< css::util::XStringWidth > const & rStringWidth,
                    sal_Int32 nWidth,
                    DecodeMechanism eMechanism = DECODE_TO_IURI,
                    rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)

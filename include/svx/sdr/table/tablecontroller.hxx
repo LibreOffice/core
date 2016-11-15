@@ -144,7 +144,7 @@ private:
 
     SVX_DLLPRIVATE void MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow );
 
-    SVX_DLLPRIVATE void EditCell(const CellPos& rPos, vcl::Window* pWindow, TblAction nAction = TblAction::NONE);
+    SVX_DLLPRIVATE void EditCell(const CellPos& rPos, vcl::Window* pWindow, TblAction nAction);
     SVX_DLLPRIVATE void StopTextEdit();
 
     SVX_DLLPRIVATE TblAction getKeyboardAction(const KeyEvent& rKEvt, vcl::Window* pWindow);

@@ -64,7 +64,7 @@ public:
     SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem );
     SvxHyperlinkItem( sal_uInt16 nWhich, const OUString& rName, const OUString& rURL,
                                     const OUString& rTarget, const OUString& rIntName,
-                                    SvxLinkInsertMode eTyp = HLINK_FIELD,
+                                    SvxLinkInsertMode eTyp,
                                     HyperDialogEvent nEvents = HyperDialogEvent::NONE,
                                     SvxMacroTableDtor *pMacroTbl =nullptr );
     virtual ~SvxHyperlinkItem () override { delete pMacroTable; }

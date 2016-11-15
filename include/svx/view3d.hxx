@@ -75,7 +75,7 @@ protected:
     void BreakSingle3DObj(E3dObject* pObj);
 
 public:
-    E3dView(SdrModel* pModel, OutputDevice* pOut = nullptr);
+    E3dView(SdrModel* pModel, OutputDevice* pOut);
     virtual ~E3dView() override;
 
     // Output all marked Objects on the given OutputDevice.
@@ -83,7 +83,7 @@ public:
 
     // Access to the default attributes.
     E3dDefaultAttributes& Get3DDefaultAttributes() { return a3DDefaultAttr; }
-    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl = nullptr, short nMinMov = -3, SdrDragMethod* pForcedMeth = nullptr) override;
+    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl, short nMinMov = -3, SdrDragMethod* pForcedMeth = nullptr) override;
     virtual void CheckPossibilities() override;
 
     // Get/Set Event

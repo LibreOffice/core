@@ -248,7 +248,7 @@ protected:
     sal_uInt32                      nOrdNum;
 
 protected:
-    SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect = false);
+    SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect);
     virtual ~SdrUndoObjList() override;
 
     bool IsOwner() { return bOwner; }
@@ -345,7 +345,7 @@ protected:
     SdrObject*                  pNewObj;
 
 public:
-    SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1, bool bOrdNumDirect = false);
+    SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1, bool bOrdNumDirect);
     virtual ~SdrUndoReplaceObj() override;
 
     virtual void Undo() override;
@@ -366,7 +366,7 @@ public:
 class SdrUndoCopyObj : public SdrUndoNewObj
 {
 public:
-    SdrUndoCopyObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
+    SdrUndoCopyObj(SdrObject& rNewObj, bool bOrdNumDirect)
     :   SdrUndoNewObj(rNewObj,bOrdNumDirect) {}
 
     virtual OUString GetComment() const override;

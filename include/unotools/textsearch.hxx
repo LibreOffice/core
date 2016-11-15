@@ -114,7 +114,7 @@ private:
 
 public:
     SearchParam( const OUString &rText,
-                    SearchType eSrchType = SearchParam::SRCH_NORMAL,
+                    SearchType eSrchType,
                     bool bCaseSensitive = true,
                     sal_uInt32 cWildEscChar = '\\',
                     bool bWildMatchSel = false );

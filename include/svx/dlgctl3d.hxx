@@ -98,7 +98,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewContr
     void TrySelection(Point aPosPixel);
 
 public:
-    Svx3DLightControl(vcl::Window* pParent, WinBits nStyle = 0);
+    Svx3DLightControl(vcl::Window* pParent, WinBits nStyle);
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;

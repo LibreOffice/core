@@ -67,7 +67,7 @@ public:
                                               sal_uInt32         nFormatKey,
                                               SvxNumberValueType eNumValType,
                                               double             nNumVal,
-                                              const OUString*    pNumStr = nullptr );
+                                              const OUString*    pNumStr );
 
                         ~SvxNumberFormatShell();
 

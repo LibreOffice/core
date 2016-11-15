@@ -40,7 +40,7 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
+    SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut);
 
 public:
     // Output all marked objects on the specified OutputDevice
@@ -109,8 +109,8 @@ public:
     virtual bool Paste(
         const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
 
-    bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
-    bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
+    bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
+    bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
 };
 
 #endif // INCLUDED_SVX_SVDXCGV_HXX

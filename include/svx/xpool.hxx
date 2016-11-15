@@ -37,9 +37,7 @@ protected:
     SfxItemInfo*    mpLocalItemInfos;
 
 public:
-    XOutdevItemPool(
-        SfxItemPool* pMaster = nullptr,
-        bool bLoadRefCounts = true);
+    XOutdevItemPool( SfxItemPool* pMaster, bool bLoadRefCounts = true);
     XOutdevItemPool(const XOutdevItemPool& rPool);
 
     virtual SfxItemPool* Clone() const override;

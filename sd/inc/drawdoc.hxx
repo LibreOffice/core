@@ -449,8 +449,8 @@ public:
     SAL_DLLPRIVATE void                CheckMasterPages();
 
     SAL_DLLPRIVATE void                Merge(SdrModel& rSourceModel,
-                                sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum=0xFFFF,
-                                sal_uInt16 nDestPos=0xFFFF,
+                                sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
+                                sal_uInt16 nDestPos,
                                 bool bMergeMasterPages = false, bool bAllMasterPages = false,
                                 bool bUndo = true, bool bTreadSourceAsConst = false) override;
 

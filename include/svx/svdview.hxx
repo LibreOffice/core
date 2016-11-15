@@ -237,7 +237,7 @@ public:
     //   bAddMark=TRUE: add to existing selection (->Shift)
     //   bUnmark=TRUE: remove objects from selection which are inside of
     //                 the enveloped frame.
-    bool BegMark(const Point& rPnt, bool bAddMark, bool bUnmark=false);
+    bool BegMark(const Point& rPnt, bool bAddMark, bool bUnmark);
 
     // The following actions are possible:
     //   - ObjectCreating

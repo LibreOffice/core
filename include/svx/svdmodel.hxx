@@ -438,15 +438,15 @@ public:
     // bTreadSourceAsConst.......: sal_True=the SourceModel will not be changed,
     //                             so pages will be copied.
     virtual void Merge(SdrModel& rSourceModel,
-               sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum=0xFFFF,
-               sal_uInt16 nDestPos=0xFFFF,
+               sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
+               sal_uInt16 nDestPos,
                bool bMergeMasterPages = false, bool bAllMasterPages = false,
                bool bUndo = true, bool bTreadSourceAsConst = false);
 
     // Behaves like Merge(SourceModel=DestModel,nFirst,nLast,nDest,sal_False,sal_False,bUndo,!bMoveNoCopy);
     void CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                    sal_uInt16 nDestPos,
-                   bool bUndo, bool bMoveNoCopy = false);
+                   bool bUndo, bool bMoveNoCopy);
 
     // BegUndo() / EndUndo() enables you to group arbitrarily many UndoActions
     // arbitrarily deeply. As comment for the UndoAction the first BegUndo(String) of all

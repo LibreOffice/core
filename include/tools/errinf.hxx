@@ -88,7 +88,7 @@ private:
 public:
 
     TwoStringErrorInfo(sal_uIntPtr nUserID, const OUString & rTheArg1,
-                       const OUString & rTheArg2, sal_uInt16 nMask = 0):
+                       const OUString & rTheArg2, sal_uInt16 nMask):
         DynamicErrorInfo(nUserID, nMask), aArg1(rTheArg1), aArg2(rTheArg2) {}
 
     virtual ~TwoStringErrorInfo() override {}
@@ -106,7 +106,7 @@ private:
     std::unique_ptr<ErrorContextImpl> pImpl;
 
 public:
-                            ErrorContext(vcl::Window *pWin=nullptr);
+                            ErrorContext(vcl::Window *pWin);
     virtual                 ~ErrorContext();
 
     virtual bool            GetString( sal_uIntPtr nErrId, OUString& rCtxStr ) = 0;

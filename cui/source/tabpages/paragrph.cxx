@@ -610,11 +610,11 @@ void SvxStdParagraphTabPage::EnableRelativeMode()
 {
     DBG_ASSERT( GetItemSet().GetParent(), "RelativeMode, but no parent-set!" );
 
-    m_pLeftIndent->EnableRelativeMode( 0, 999 );
-    m_pFLineIndent->EnableRelativeMode( 0, 999 );
-    m_pRightIndent->EnableRelativeMode( 0, 999 );
-    m_pTopDist->EnableRelativeMode( 0, 999 );
-    m_pBottomDist->EnableRelativeMode( 0, 999 );
+    m_pLeftIndent->EnableRelativeMode( 0, 999, 5 );
+    m_pFLineIndent->EnableRelativeMode( 0, 999, 5 );
+    m_pRightIndent->EnableRelativeMode( 0, 999, 5 );
+    m_pTopDist->EnableRelativeMode( 0, 999, 5 );
+    m_pBottomDist->EnableRelativeMode( 0, 999, 5 );
     bRelativeMode = true;
 }
 

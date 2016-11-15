@@ -47,7 +47,7 @@ public:
             XFillBitmapItem(const OUString& rName, const GraphicObject& rGraphicObject);
             XFillBitmapItem(SfxItemPool* pPool, const GraphicObject& rGraphicObject);
             XFillBitmapItem( const XFillBitmapItem& rItem );
-            XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer = 0 );
+            XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer );
 
     virtual bool            operator==( const SfxPoolItem& rItem ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;

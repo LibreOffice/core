@@ -98,7 +98,7 @@ public:
                                  bool bWholeCircle = false );
                         Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
                                  const Point& rBezPt2, const Point& rCtrlPt2,
-                                 sal_uInt16 nPoints = 0 );
+                                 sal_uInt16 nPoints );
 
                         Polygon( const tools::Polygon& rPoly );
                         ~Polygon();

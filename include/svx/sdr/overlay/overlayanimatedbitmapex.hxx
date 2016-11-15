@@ -59,7 +59,7 @@ namespace sdr
                 const basegfx::B2DPoint& rBasePos,
                 const BitmapEx& rBitmapEx1,
                 const BitmapEx& rBitmapEx2,
-                sal_uInt64 nBlinkTime = 500,
+                sal_uInt64 nBlinkTime,
                 sal_uInt16 nCenX1 = 0,
                 sal_uInt16 nCenY1 = 0,
                 sal_uInt16 nCenX2 = 0,

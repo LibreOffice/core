@@ -29,7 +29,7 @@ private:
     css::geometry::AffineMatrix2D        maMatrix;
 
 public:
-    AffineMatrixItem(const css::geometry::AffineMatrix2D* pMatrix = nullptr);
+    AffineMatrixItem(const css::geometry::AffineMatrix2D* pMatrix);
     AffineMatrixItem(SvStream& rIn);
     AffineMatrixItem(const AffineMatrixItem&);
     virtual ~AffineMatrixItem() override;

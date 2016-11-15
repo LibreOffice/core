@@ -176,7 +176,7 @@ protected:
 
 public:
     SdrHdl();
-    explicit SdrHdl(const Point& rPnt, SdrHdlKind eNewKind=SdrHdlKind::Move);
+    explicit SdrHdl(const Point& rPnt, SdrHdlKind eNewKind);
     virtual ~SdrHdl();
 
     const sdr::overlay::OverlayObjectList& getOverlayObjectList() const { return maOverlayGroup; }
@@ -262,7 +262,7 @@ class SVX_DLLPUBLIC SdrHdlColor : public SdrHdl
     SVX_DLLPRIVATE static Color GetLuminance(const Color& rCol);
 
 public:
-    explicit SdrHdlColor(const Point& rRef, Color aCol = Color(COL_BLACK), const Size& rSize = Size(11, 11), bool bLum = false);
+    explicit SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize = Size(11, 11), bool bLum = false);
     virtual ~SdrHdlColor() override;
 
     bool IsUseLuminance() const { return bUseLuminance; }
@@ -297,7 +297,7 @@ private:
     virtual void CreateB2dIAObject() override;
 
 public:
-    SdrHdlGradient(const Point& rRef1, const Point& rRef2, bool bGrad = true);
+    SdrHdlGradient(const Point& rRef1, const Point& rRef2, bool bGrad);
     virtual ~SdrHdlGradient() override;
 
     bool IsGradient() const { return bGradient; }
@@ -335,7 +335,7 @@ protected:
     SdrHdl*                     pHdl2;
 
 public:
-    SdrHdlLine(SdrHdl& rHdl1, SdrHdl& rHdl2, SdrHdlKind eNewKind=SdrHdlKind::MirrorAxis) { eKind=eNewKind; pHdl1=&rHdl1; pHdl2=&rHdl2; }
+    SdrHdlLine(SdrHdl& rHdl1, SdrHdl& rHdl2, SdrHdlKind eNewKind) { eKind=eNewKind; pHdl1=&rHdl1; pHdl2=&rHdl2; }
     virtual ~SdrHdlLine() override;
 
     virtual Pointer GetPointer() const override;

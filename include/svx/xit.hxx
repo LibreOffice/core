@@ -45,8 +45,7 @@ protected:
 public:
             NameOrIndex() { nPalIndex = -1; }
             NameOrIndex(sal_uInt16 nWhich, sal_Int32 nIndex);
-            NameOrIndex(sal_uInt16 nWhich,
-                        const OUString& rName = OUString());
+            NameOrIndex(sal_uInt16 nWhich, const OUString& rName);
             NameOrIndex(sal_uInt16 nWhich, SvStream& rIn);
             NameOrIndex(const NameOrIndex& rNameOrIndex);
            virtual ~NameOrIndex() override {};

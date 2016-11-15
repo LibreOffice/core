@@ -41,7 +41,7 @@ private:
     void FillPresetListBoxImpl(ListType& pList, sal_uInt32 nStartIndex);
 
 public:
-    SvxPresetListBox(vcl::Window* pParent, WinBits nWinStyle = WB_ITEMBORDER);
+    SvxPresetListBox(vcl::Window* pParent, WinBits nWinStyle);
 
     virtual void Resize() override;
     virtual void Command( const CommandEvent& rEvt ) override;

@@ -40,7 +40,7 @@ public:
             XFillGradientItem(const OUString& rName, const XGradient& rTheGradient, sal_uInt16 nWhich = XATTR_FILLGRADIENT);
             XFillGradientItem(const XGradient& rTheGradient);
             XFillGradientItem(const XFillGradientItem& rItem);
-            XFillGradientItem(SvStream& rIn, sal_uInt16 nVer = 0);
+            XFillGradientItem(SvStream& rIn, sal_uInt16 nVer);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;

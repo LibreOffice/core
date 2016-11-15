@@ -249,7 +249,7 @@ namespace utl
                 const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
                 const OUString& _rPath,
                 sal_Int32 _nDepth,
-                CREATION_MODE _eMode = CM_UPDATABLE,
+                CREATION_MODE _eMode,
                 bool _bLazyWrite = true
             );
 
