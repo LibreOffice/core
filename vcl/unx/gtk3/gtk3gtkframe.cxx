@@ -894,25 +894,9 @@ void GtkSalFrame::moveWindow( long nX, long nY )
 
 void GtkSalFrame::widget_set_size_request(long nWidth, long nHeight)
 {
-    gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), nWidth, nHeight );
-}
-
-void GtkSalFrame::window_resize(long nWidth, long nHeight)
-{
     m_nWidthRequest = nWidth;
     m_nHeightRequest = nHeight;
-    widget_set_size_request(nWidth, nHeight);
-    gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
-}
-
-void GtkSalFrame::resizeWindow( long nWidth, long nHeight )
-{
-    if( isChild( false ) )
-    {
-        widget_set_size_request(nWidth, nHeight);
-    }
-    else if( ! isChild( true, false ) )
-        window_resize(nWidth, nHeight);
+    gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), nWidth, nHeight );
 }
 
 static void
@@ -1604,10 +1588,8 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     {
         m_bDefaultSize = false;
 
-        if( isChild( false ) )
+        if (!(m_nState & GDK_WINDOW_STATE_MAXIMIZED))
             widget_set_size_request(nWidth, nHeight);
-        else if( ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) )
-            window_resize(nWidth, nHeight);
 
         setMinMaxSize();
     }
@@ -1685,7 +1667,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         (pState->mnState & WindowStateState::Maximized) &&
         (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask )
     {
-        resizeWindow( pState->mnWidth, pState->mnHeight );
+        widget_set_size_request( pState->mnWidth, pState->mnHeight );
         moveWindow( pState->mnX, pState->mnY );
         m_bDefaultPos = m_bDefaultSize = false;
 
@@ -1895,7 +1877,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, Rectangle *
         // temporarily re-sizeable
         if( !(m_nStyle & SalFrameStyleFlags::SIZEABLE) )
             gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
-        window_resize(nWidth, nHeight);
+        widget_set_size_request(nWidth, nHeight);
     }
 
     gtk_window_move(GTK_WINDOW(m_pWindow), nX, nY);
