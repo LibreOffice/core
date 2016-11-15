@@ -1483,12 +1483,35 @@ short ScTable::CompareCell(
     {
         if (!rCell2.isEmpty())
         {
+            bool bErr1 = false;
             bool bStr1 = ( eType1 != CELLTYPE_VALUE );
-            if (eType1 == CELLTYPE_FORMULA && rCell1.mpFormula->IsValue())
-                bStr1 = false;
+            if (eType1 == CELLTYPE_FORMULA)
+            {
+                if (rCell1.mpFormula->GetErrCode() != FormulaError::NONE)
+                {
+                    bErr1 = true;
+                    bStr1 = false;
+                }
+                else if (rCell1.mpFormula->IsValue())
+                {
+                    bStr1 = false;
+                }
+            }
+
+            bool bErr2 = false;
             bool bStr2 = ( eType2 != CELLTYPE_VALUE );
-            if (eType2 == CELLTYPE_FORMULA && rCell2.mpFormula->IsValue())
-                bStr2 = false;
+            if (eType2 == CELLTYPE_FORMULA)
+            {
+                if (rCell2.mpFormula->GetErrCode() != FormulaError::NONE)
+                {
+                    bErr2 = true;
+                    bStr2 = false;
+                }
+                else if (rCell2.mpFormula->IsValue())
+                {
+                    bStr2 = false;
+                }
+            }
 
             if ( bStr1 && bStr2 )           // only compare strings as strings!
             {
@@ -1531,10 +1554,32 @@ short ScTable::CompareCell(
                         nRes = static_cast<short>( pSortCollator->compareString( aStr1, aStr2 ) );
                 }
             }
-            else if ( bStr1 )               // String <-> Number
-                nRes = 1;                   // Number in front
-            else if ( bStr2 )               // Number <-> String
-                nRes = -1;                  // Number in front
+            else if ( bStr1 )               // String <-> Number or Error
+            {
+                if (bErr2)
+                    nRes = -1;              // String in front of Error
+                else
+                    nRes = 1;               // Number in front of String
+            }
+            else if ( bStr2 )               // Number or Error <-> String
+            {
+                if (bErr1)
+                    nRes = 1;               // String in front of Error
+                else
+                    nRes = -1;              // Number in front of String
+            }
+            else if (bErr1 && bErr2)
+            {
+                // nothing, two Errors are equal
+            }
+            else if (bErr1)                 // Error <-> Number
+            {
+                nRes = 1;                   // Number in front of Error
+            }
+            else if (bErr2)                 // Number <-> Error
+            {
+                nRes = -1;                  // Number in front of Error
+            }
             else                            // Mixed numbers
             {
                 double nVal1 = rCell1.getValue();
