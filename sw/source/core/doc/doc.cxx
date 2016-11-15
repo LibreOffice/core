@@ -842,6 +842,12 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
 
         // format post-it doc to get correct number of pages
         rData.m_pPostItShell->CalcLayout();
+
+        SwRootFrame* pPostItRoot = rData.m_pPostItShell->GetLayout();
+        //tdf#103313 print dialog maxes out cpu as Idles never get to
+        //complete this postitshell's desire to complete formatting
+        pPostItRoot->ResetIdleFormat();
+
         const sal_Int32 nPostItDocPageCount = rData.m_pPostItShell->GetPageCount();
 
         if (nPostItMode == SwPostItMode::Only || nPostItMode == SwPostItMode::EndDoc)
@@ -858,7 +864,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             // now we just need to add the post-it pages to be printed to the
             // end of the vector of pages to print
             sal_Int32 nPageNum = 0;
-            const SwPageFrame * pPageFrame = static_cast<SwPageFrame*>(rData.m_pPostItShell->GetLayout()->Lower());
+            const SwPageFrame * pPageFrame = static_cast<SwPageFrame*>(pPostItRoot->Lower());
             while( pPageFrame && nPageNum < nPostItDocPageCount )
             {
                 OSL_ENSURE( pPageFrame, "Empty page frame. How are we going to print this?" );
