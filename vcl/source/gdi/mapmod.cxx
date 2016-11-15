@@ -49,8 +49,8 @@ MapMode::ImplMapMode::ImplMapMode() :
     maScaleX( 1, 1 ),
     maScaleY( 1, 1 )
 {
-    meUnit      = MapUnit::MapPixel;
-    mbSimple    = true;
+    meUnit   = MapUnit::MapPixel;
+    mbSimple = true;
 }
 
 MapMode::ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
@@ -64,7 +64,7 @@ MapMode::ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
 
 bool MapMode::ImplMapMode::operator==( const ImplMapMode& rImpMapMode ) const
 {
-    if (meUnit   == rImpMapMode.meUnit
+    if (meUnit == rImpMapMode.meUnit
         && maOrigin == rImpMapMode.maOrigin
         && maScaleX == rImpMapMode.maScaleX
         && maScaleY == rImpMapMode.maScaleY)
@@ -88,7 +88,7 @@ MapMode::MapMode( const MapMode& rMapMode ) : mpImplMapMode( rMapMode.mpImplMapM
 
 MapMode::MapMode( MapUnit eUnit ) : mpImplMapMode()
 {
-    mpImplMapMode->meUnit   = eUnit;
+    mpImplMapMode->meUnit = eUnit;
 }
 
 MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
@@ -100,7 +100,7 @@ MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
     mpImplMapMode->maScaleY = rScaleY;
     mpImplMapMode->maScaleX.ReduceInaccurate(32);
     mpImplMapMode->maScaleY.ReduceInaccurate(32);
-    mpImplMapMode->mbSimple    = false;
+    mpImplMapMode->mbSimple = false;
 }
 
 MapMode::~MapMode()
@@ -131,7 +131,7 @@ void MapMode::SetScaleY( const Fraction& rScaleY )
 
 double MapMode::GetUnitMultiplier() const
 {
-    double  nMul;
+    double nMul;
     switch ( GetMapUnit() )
     {
         case MapUnit::MapPixel :
@@ -199,8 +199,8 @@ bool MapMode::IsDefault() const
 
 SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode )
 {
-    VersionCompat   aCompat( rIStm, StreamMode::READ );
-    sal_uInt16          nTmp16;
+    VersionCompat aCompat( rIStm, StreamMode::READ );
+    sal_uInt16    nTmp16;
 
     rIStm.ReadUInt16( nTmp16 ); rMapMode.mpImplMapMode->meUnit = (MapUnit) nTmp16;
     ReadPair( rIStm, rMapMode.mpImplMapMode->maOrigin );
