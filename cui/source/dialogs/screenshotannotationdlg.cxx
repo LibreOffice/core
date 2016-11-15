@@ -90,7 +90,7 @@ namespace
     OUString lcl_Bookmark( const OUString& rWidgetId )
     {
         OUString aTempl = "<!-- Bookmark for widget %1 -->" SAL_NEWLINE_STRING
-                          "<bookmark xml-lang=en-US branch=hid/%2 %3 localize=false </bookmark>" SAL_NEWLINE_STRING;
+                          "<bookmark xml-lang=en-US branch=hid/%2 id=%3 localize=\"false\"/>" SAL_NEWLINE_STRING;
         aTempl = aTempl.replaceFirst( "%1", rWidgetId );
         aTempl = aTempl.replaceFirst( "%2", rWidgetId );
         aTempl = aTempl.replaceFirst( "%3", lcl_genRandom("bm_id") );
@@ -222,7 +222,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     // set screenshot image at FixedImage, resize, set event listener
     if (mpPicture)
     {
-        // colelct all children. Choose start pos to be negative
+        // collect all children. Choose start pos to be negative
         // of target dialog's position to get all positions relative to (0,0)
         const Point aParentPos(mrParentDialog.GetPosPixel());
         const basegfx::B2IPoint aTopLeft(-aParentPos.X(), -aParentPos.Y());
