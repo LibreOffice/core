@@ -53,6 +53,13 @@ public:
     TextCharacterProperties&         getEndProperties() { return maEndProperties; }
     const TextCharacterProperties&   getEndProperties() const { return maEndProperties; }
 
+    TextCharacterProperties          getCharacterStyle(
+        const TextCharacterProperties& rTextStyleProperties,
+        const TextListStyle& rTextListStyle) const;
+
+    TextParagraphPropertiesPtr      getParagraphStyle(
+        const TextListStyle& rTextListStyle) const;
+
     void                        insertAt(
                                     const ::oox::core::XmlFilterBase& rFilterBase,
                                     const css::uno::Reference < css::text::XText > & xText,

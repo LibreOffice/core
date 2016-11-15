@@ -44,6 +44,37 @@ TextParagraph::~TextParagraph()
 {
 }
 
+TextCharacterProperties TextParagraph::getCharacterStyle (
+    const TextCharacterProperties& rTextStyleProperties,
+    const TextListStyle& rTextListStyle) const
+{
+    TextParagraphPropertiesPtr pTextParagraphStyle = getParagraphStyle(rTextListStyle);
+
+    TextCharacterProperties aTextCharacterStyle;
+    if (pTextParagraphStyle.get())
+        aTextCharacterStyle.assignUsed(pTextParagraphStyle->getTextCharacterProperties());
+    aTextCharacterStyle.assignUsed(rTextStyleProperties);
+    aTextCharacterStyle.assignUsed(maProperties.getTextCharacterProperties());
+    return aTextCharacterStyle;
+}
+
+TextParagraphPropertiesPtr TextParagraph::getParagraphStyle(
+    const TextListStyle& rTextListStyle) const
+{
+    sal_Int16 nLevel = maProperties.getLevel();
+
+    SAL_INFO("oox", "TextParagraph::getParagraphStyle - level " << nLevel);
+
+    const TextParagraphPropertiesVector& rListStyle = rTextListStyle.getListStyle();
+    if (nLevel >= static_cast< sal_Int16 >(rListStyle.size()))
+        nLevel = 0;
+    TextParagraphPropertiesPtr pTextParagraphStyle = nullptr;
+    if (rListStyle.size())
+        pTextParagraphStyle = rListStyle[nLevel];
+
+    return pTextParagraphStyle;
+}
+
 void TextParagraph::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > &xText,
@@ -53,23 +84,7 @@ void TextParagraph::insertAt(
 {
     try {
         sal_Int32 nParagraphSize = 0;
-
-        sal_Int16 nLevel = maProperties.getLevel();
-
-        SAL_INFO("oox", "TextParagraph::insertAt() - level " << nLevel);
-
-        const TextParagraphPropertiesVector& rListStyle = rTextListStyle.getListStyle();
-        if ( nLevel >= static_cast< sal_Int16 >( rListStyle.size() ) )
-            nLevel = 0;
-        TextParagraphPropertiesPtr pTextParagraphStyle;
-        if ( rListStyle.size() )
-            pTextParagraphStyle = rListStyle[ nLevel ];
-
-        TextCharacterProperties aTextCharacterStyle;
-        if ( pTextParagraphStyle.get() )
-            aTextCharacterStyle.assignUsed( pTextParagraphStyle->getTextCharacterProperties() );
-        aTextCharacterStyle.assignUsed( rTextStyleProperties );
-        aTextCharacterStyle.assignUsed( maProperties.getTextCharacterProperties() );
+        TextCharacterProperties aTextCharacterStyle = getCharacterStyle(rTextStyleProperties, rTextListStyle);
 
         if( !bFirst )
         {
@@ -105,6 +120,8 @@ void TextParagraph::insertAt(
 
         PropertyMap aioBulletList;
         Reference< XPropertySet > xProps( xAt, UNO_QUERY);
+
+        TextParagraphPropertiesPtr pTextParagraphStyle = getParagraphStyle(rTextListStyle);
         if ( pTextParagraphStyle.get() )
         {
             TextParagraphProperties aParaProp;

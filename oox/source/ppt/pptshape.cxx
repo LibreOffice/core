@@ -349,6 +349,17 @@ void PPTShape::addShape(
 
                 }
             }
+
+            // Apply text properties on placeholder text inside this placeholder shape
+            if (mpPlaceholder.get() != nullptr && getTextBody() && getTextBody()->isEmpty())
+            {
+                Reference < XText > xText(mxShape, UNO_QUERY);
+                if (xText.is())
+                {
+                    TextCharacterProperties aCharStyleProperties;
+                    getTextBody()->ApplyStyleEmpty(rFilterBase, xText, aCharStyleProperties, mpMasterTextListStyle);
+                }
+            }
             if (pShapeMap)
             {
                 // bnc#705982 - if optional model id reference is
