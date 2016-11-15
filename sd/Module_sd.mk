@@ -47,8 +47,9 @@ $(eval $(call gb_Module_add_check_targets,sd,\
 endif
 
 # screenshots
+
 $(eval $(call gb_Module_add_screenshot_targets,sd, \
-    CppunitTest_sd_dialogs_test \
+    $(foreach lang,$(gb_WITH_LANG), $(call CppunitTest_sd_dialogs_test)) \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
