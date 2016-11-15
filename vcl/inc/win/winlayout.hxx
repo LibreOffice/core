@@ -421,7 +421,7 @@ protected:
     TextOutRenderer & operator = (const TextOutRenderer &) = delete;
 
 public:
-    static TextOutRenderer & get();
+    static TextOutRenderer & get(bool bUseDWrite);
 
     virtual ~TextOutRenderer() = default;
 
