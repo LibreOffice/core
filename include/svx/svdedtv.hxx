@@ -168,7 +168,7 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrEditView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
+    SdrEditView(SdrModel* pModel1, OutputDevice* pOut);
     virtual ~SdrEditView() override;
 
 public:
@@ -217,7 +217,7 @@ public:
     void MirrorMarkedObjVertical();
     long GetMarkedObjShear() const;
     void ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear=false, bool bCopy=false);
-    void CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical, bool bNoContortion=false, bool bCopy=false);
+    void CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical, bool bNoContortion, bool bCopy=false);
     void DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion, bool bCopy=false);
 
     // copy marked objects and mark them instead of the old ones

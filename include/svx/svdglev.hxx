@@ -40,7 +40,7 @@ class SVX_DLLPUBLIC SdrGlueEditView: public SdrPolyEditView
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrGlueEditView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
+    SdrGlueEditView(SdrModel* pModel1, OutputDevice* pOut);
     virtual ~SdrGlueEditView() override;
 
 public:
@@ -72,7 +72,7 @@ public:
     // delete all marked GluePoints
     void DeleteMarkedGluePoints();
 
-    void MoveMarkedGluePoints  (const Size& rSiz, bool bCopy=false);
+    void MoveMarkedGluePoints  (const Size& rSiz, bool bCopy);
     void ResizeMarkedGluePoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy);
     void RotateMarkedGluePoints(const Point& rRef, long nAngle, bool bCopy);
 };

@@ -587,7 +587,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog>           CreateSvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj,
-                                                                 bool bHasObj = true ) override;
+                                                                 bool bHasObj ) override;
     virtual VclPtr<AbstractSvxPostItDialog>        CreateSvxPostItDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rCoreSet,
                                                                         bool bPrevNext = false ) override;

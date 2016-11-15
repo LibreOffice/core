@@ -73,7 +73,7 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
             css::container::XIndexAccess> > aOutlineSettings;
 
 public:
-    SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);
+    SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits);
     void init(NumberingPageType eType);
     virtual ~SvxNumValueSet() override;
     virtual void dispose() override;
@@ -104,7 +104,7 @@ protected:
         DECL_LINK(FormatHdl_Impl, Idle *, void);
 
 public:
-    SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);
+    SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits);
     virtual ~SvxBmpNumValueSet() override;
     virtual void dispose() override;
 

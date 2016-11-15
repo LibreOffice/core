@@ -247,7 +247,7 @@ protected:
     virtual void ModelHasChanged();
 
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrPaintView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
+    SdrPaintView(SdrModel* pModel1, OutputDevice* pOut);
     virtual ~SdrPaintView() override;
 
 public:

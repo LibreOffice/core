@@ -625,7 +625,7 @@ SVX_DLLPUBLIC void DrawDiagFrameBorders(
     const Style&        rTRFromL,       /// Horizontal frame border from left to top-right end of rBLTR.
 
     const Color*        pForceColor,    /// If specified, overrides frame border color.
-    bool                bDiagDblClip = false    /// true = Use clipping for crossing double frame borders.
+    bool                bDiagDblClip    /// true = Use clipping for crossing double frame borders.
 );
 
 

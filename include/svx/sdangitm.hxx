@@ -27,7 +27,7 @@
 
 class SVX_DLLPUBLIC SdrAngleItem: public SfxInt32Item {
 public:
-    SdrAngleItem(sal_uInt16 nId, sal_Int32 nAngle=0): SfxInt32Item(nId,nAngle) {}
+    SdrAngleItem(sal_uInt16 nId, sal_Int32 nAngle): SfxInt32Item(nId,nAngle) {}
     SdrAngleItem(sal_uInt16 nId, SvStream& rIn):  SfxInt32Item(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;

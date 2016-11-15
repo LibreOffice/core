@@ -69,7 +69,7 @@ public:
     const void*         GetEditingObject() const;
 
     void                Update( const Graphic& rGraphic, bool bGraphicLinked,
-                                const tools::PolyPolygon* pPolyPoly, void* pEditingObj = nullptr );
+                                const tools::PolyPolygon* pPolyPoly, void* pEditingObj );
 
     static tools::PolyPolygon  CreateAutoContour(  const Graphic& rGraphic,
                                             const Rectangle* pRect = nullptr,

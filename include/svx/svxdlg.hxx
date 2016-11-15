@@ -436,7 +436,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog>           CreateSvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr, //add forSvxLineTabDialog
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj,
-                                                                 bool bHasObj = true )=0;
+                                                                 bool bHasObj )=0;
     virtual VclPtr<SfxAbstractDialog>       CreateSfxDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rAttr,
                                                                         const SdrView* pView,

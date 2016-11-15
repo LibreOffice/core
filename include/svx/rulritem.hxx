@@ -133,10 +133,10 @@ struct SVX_DLLPUBLIC SvxColumnDescription
 
     SvxColumnDescription(const SvxColumnDescription &rCopy);
 
-    SvxColumnDescription(long start, long end, bool bVis = true);
+    SvxColumnDescription(long start, long end, bool bVis);
 
     SvxColumnDescription(long start, long end,
-                         long endMin, long endMax, bool bVis = true);
+                         long endMin, long endMax, bool bVis);
 
     bool operator==(const SvxColumnDescription &rCmp) const;
     bool operator!=(const SvxColumnDescription &rCmp) const;
@@ -183,7 +183,7 @@ public:
     // right edge of the surrounding frame
     // nLeft, nRight each the distance to the surrounding frame
     SvxColumnItem(sal_uInt16 nAct = 0);
-    SvxColumnItem(sal_uInt16 nActCol, sal_uInt16 nLeft, sal_uInt16 nRight = 0); // Table with borders
+    SvxColumnItem(sal_uInt16 nActCol, sal_uInt16 nLeft, sal_uInt16 nRight); // Table with borders
     SvxColumnItem(const SvxColumnItem& aItem);
     virtual ~SvxColumnItem() override;
 

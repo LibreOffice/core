@@ -48,8 +48,7 @@ namespace ucbhelper
         /** Defines the storage kind found
          *  on which the inputstream acts.
          */
-
-        FdInputStream(oslFileHandle tmpfl = nullptr);
+        FdInputStream(oslFileHandle tmpfl);
 
         virtual ~FdInputStream() override;
 

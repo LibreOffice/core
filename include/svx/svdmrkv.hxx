@@ -169,7 +169,7 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrMarkView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
+    SdrMarkView(SdrModel* pModel1, OutputDevice* pOut);
     virtual ~SdrMarkView() override;
 
 public:
@@ -287,7 +287,7 @@ public:
     // object (O2). In case of success the marking of O1 is deleted, a marking
     // is created at O2 and sal_True is returned. With the parameter
     // bPrev=sal_True the scan direction is turned to the other direction.
-    bool MarkNextObj(const Point& rPnt, short nTol, bool bPrev=false);
+    bool MarkNextObj(const Point& rPnt, short nTol, bool bPrev);
 
     // Mark all objects within a rectangular area
     // Just objects are marked which are inclosed completely

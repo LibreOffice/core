@@ -394,7 +394,7 @@ public:
     // Simultaneously sets the text into the Outliner (possibly
     // the one of the EditOutliner) and sets the PaperSize.
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
-        Rectangle* pAnchorRect=nullptr, bool bLineWidth = true ) const;
+        Rectangle* pAnchorRect, bool bLineWidth = true ) const;
     virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const;
     const GeoStat& GetGeoStat() const { return aGeo; }
 

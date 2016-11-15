@@ -155,7 +155,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) = 0;
         virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) = 0;
         virtual void ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault=false,bool isResetSize=false) = 0;
-        virtual OUString GetDescription(sal_uInt16 nIndex,bool isDefault=false)=0;
+        virtual OUString GetDescription(sal_uInt16 nIndex, bool isDefault)=0;
         virtual bool IsCustomized(sal_uInt16 nIndex)=0;
         static sal_uInt16 IsSingleLevel(sal_uInt16 nCurLevel);
         // store the attributes passed from pSet
@@ -188,7 +188,7 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
         virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
         virtual void ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault=false,bool isResetSize=false) override;
-        virtual OUString GetDescription(sal_uInt16 nIndex,bool isDefault=false) override;
+        virtual OUString GetDescription(sal_uInt16 nIndex, bool isDefault) override;
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
         static BulletsTypeMgr& GetInstance();
 };
@@ -208,7 +208,7 @@ class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
         virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
         virtual void ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault=false,bool isResetSize=false) override;
-        virtual OUString GetDescription(sal_uInt16 nIndex,bool isDefault=false) override;
+        virtual OUString GetDescription(sal_uInt16 nIndex, bool isDefault) override;
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
         static NumberingTypeMgr& GetInstance();
 };
@@ -227,7 +227,7 @@ class SVX_DLLPUBLIC OutlineTypeMgr: public NBOTypeMgrBase
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
         virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
         virtual void ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault=false,bool isResetSize=false) override;
-        virtual OUString GetDescription(sal_uInt16 nIndex,bool isDefault=false) override;
+        virtual OUString GetDescription(sal_uInt16 nIndex, bool isDefault) override;
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
         static OutlineTypeMgr& GetInstance();
 };

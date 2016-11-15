@@ -81,7 +81,7 @@ namespace utl
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
             ::osl::Mutex& _rAccessSafety,
             const sal_Char* _pConfigLocation,
-            const sal_Int32 _nLevels = -1
+            const sal_Int32 _nLevels
         );
 
         /// dtor

@@ -42,8 +42,8 @@ protected:
 public:
     SvxRelativeField(vcl::Window* pParent, WinBits nBits, FieldUnit eUnit);
 
-    void            EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax = 150,
-                                        sal_uInt16 nStep = 5 );
+    void            EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax,
+                                        sal_uInt16 nStep );
     void            SetRelative( bool bRelative );
     bool            IsRelative() const { return bRelative; }
     void            EnableNegativeMode() {bNegativeEnabled = true;}

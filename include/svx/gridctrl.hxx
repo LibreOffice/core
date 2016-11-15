@@ -178,7 +178,7 @@ public:
         class AbsolutePos : public NumericField
         {
         public:
-            AbsolutePos(vcl::Window* pParent, WinBits nStyle = 0);
+            AbsolutePos(vcl::Window* pParent, WinBits nStyle);
 
             virtual void KeyInput(const KeyEvent& rEvt) override;
             virtual void LoseFocus() override;
@@ -207,7 +207,7 @@ public:
         virtual void dispose() override;
 
         // Status methods for Controls
-        void InvalidateAll(sal_Int32 nCurrentPos = -1, bool bAll = false);
+        void InvalidateAll(sal_Int32 nCurrentPos, bool bAll = false);
         void InvalidateState(DbGridControlNavigationBarState nWhich) {SetState(nWhich);}
         void SetState(DbGridControlNavigationBarState nWhich);
         bool GetState(DbGridControlNavigationBarState nWhich) const;
@@ -373,7 +373,7 @@ public:
     DbGridControl(
         css::uno::Reference< css::uno::XComponentContext > const & _rxContext,
         vcl::Window* pParent,
-        WinBits nBits = WB_BORDER);
+        WinBits nBits);
 
     virtual ~DbGridControl() override;
     virtual void dispose() override;

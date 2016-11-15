@@ -35,7 +35,7 @@ protected:
 
 public:
     static SfxPoolItem* CreateDefault();
-    SvxClipboardFormatItem( sal_uInt16 nId = 0 );
+    SvxClipboardFormatItem( sal_uInt16 nId );
     SvxClipboardFormatItem( const SvxClipboardFormatItem& );
     virtual ~SvxClipboardFormatItem() override;
 

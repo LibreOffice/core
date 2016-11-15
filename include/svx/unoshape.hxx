@@ -587,7 +587,7 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
 
 public:
-    SvxShapePolyPolygon( SdrObject* pObj , css::drawing::PolygonKind eNew = css::drawing::PolygonKind_LINE ) throw(css::lang::IllegalArgumentException, css::beans::PropertyVetoException);
+    SvxShapePolyPolygon( SdrObject* pObj , css::drawing::PolygonKind eNew ) throw(css::lang::IllegalArgumentException, css::beans::PropertyVetoException);
     virtual ~SvxShapePolyPolygon() throw() override;
 
     // Local support functions
@@ -613,7 +613,7 @@ public:
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
 
-    SvxShapePolyPolygonBezier( SdrObject* pObj , css::drawing::PolygonKind eNew = css::drawing::PolygonKind_PATHLINE) throw();
+    SvxShapePolyPolygonBezier( SdrObject* pObj, css::drawing::PolygonKind eNew ) throw();
     virtual ~SvxShapePolyPolygonBezier() throw() override;
 
     // Local support functions
