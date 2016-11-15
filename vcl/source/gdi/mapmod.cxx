@@ -192,6 +192,7 @@ void MapMode::SetOrigin( const Point& rLogicOrg )
 
     ImplMakeUnique();
     mpImplMapMode->maOrigin = rLogicOrg;
+    mpImplMapMode->mbSimple = false;
 }
 
 void MapMode::SetScaleX( const Fraction& rScaleX )
@@ -200,6 +201,7 @@ void MapMode::SetScaleX( const Fraction& rScaleX )
     ImplMakeUnique();
     mpImplMapMode->maScaleX = rScaleX;
     mpImplMapMode->maScaleX.ReduceInaccurate(32);
+    mpImplMapMode->mbSimple = false;
 }
 
 void MapMode::SetScaleY( const Fraction& rScaleY )
@@ -208,6 +210,7 @@ void MapMode::SetScaleY( const Fraction& rScaleY )
     ImplMakeUnique();
     mpImplMapMode->maScaleY = rScaleY;
     mpImplMapMode->maScaleY.ReduceInaccurate(32);
+    mpImplMapMode->mbSimple = false;
 }
 
 double MapMode::GetUnitMultiplier() const
