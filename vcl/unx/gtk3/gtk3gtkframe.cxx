@@ -901,7 +901,9 @@ void GtkSalFrame::window_resize(long nWidth, long nHeight)
 {
     m_nWidthRequest = nWidth;
     m_nHeightRequest = nHeight;
-    gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
+    gtk_window_set_default_size(GTK_WINDOW(m_pWindow), nWidth, nHeight);
+    if (gtk_widget_get_visible(m_pWindow))
+        gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
 }
 
 void GtkSalFrame::resizeWindow( long nWidth, long nHeight )
