@@ -1308,10 +1308,11 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
             OUStringBuffer aShouldBeBuf;
             aBackComp.CreateStringFromTokenArray( aShouldBeBuf );
 
-            assert( aFormula[0] == '=' );
+            // The initial '=' is optional in ODFF.
+            const sal_Int32 nLeadingEqual = (aFormula.getLength() > 0 && aFormula[0] == '=') ? 1 : 0;
             OUString aShouldBe = aShouldBeBuf.makeStringAndClear();
-            if( aFormula.getLength() == aShouldBe.getLength() + 1 &&
-                aFormula.match( aShouldBe, 1 ) ) // initial '='
+            if (aFormula.getLength() == aShouldBe.getLength() + nLeadingEqual &&
+                    aFormula.match( aShouldBe, nLeadingEqual))
             {
                 // Put them in the same formula group.
                 ScFormulaCellGroupRef xGroup = pPreviousCell->GetCellGroup();

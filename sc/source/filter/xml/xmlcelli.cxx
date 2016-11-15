@@ -1360,42 +1360,21 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
 
     if ( !aText.isEmpty() )
     {
-        if ( aText[0] == '=' && aText.getLength() > 1 )
-        {
-            // temporary formula string as string tokens
-            ScTokenArray *pCode = new ScTokenArray();
+        // temporary formula string as string tokens
+        ScTokenArray *pCode = new ScTokenArray();
 
-            OUString aFormulaNmsp = maFormula->second;
-            if( eGrammar != formula::FormulaGrammar::GRAM_EXTERNAL )
-                aFormulaNmsp.clear();
-            pCode->AssignXMLString( aText, aFormulaNmsp );
+        OUString aFormulaNmsp = maFormula->second;
+        if( eGrammar != formula::FormulaGrammar::GRAM_EXTERNAL )
+            aFormulaNmsp.clear();
+        pCode->AssignXMLString( aText, aFormulaNmsp );
 
-            rDoc.getDoc().IncXMLImportedFormulaCount( aText.getLength() );
-            ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode, eGrammar, MM_NONE);
-            SetFormulaCell(pNewCell);
-            rDoc.setFormulaCell(rCellPos, pNewCell);
+        rDoc.getDoc().IncXMLImportedFormulaCount( aText.getLength() );
+        ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode, eGrammar, MM_NONE);
+        SetFormulaCell(pNewCell);
+        rDoc.setFormulaCell(rCellPos, pNewCell);
 
-            // Re-calculate to get number format only when style is not set.
-            pNewCell->SetNeedNumberFormat(!mbHasStyle);
-        }
-        else if ( aText[0] == '\'' && aText.getLength() > 1 )
-        {
-            //  for bEnglish, "'" at the beginning is always interpreted as text
-            //  marker and stripped
-            rDoc.setStringCell(rCellPos, aText.copy(1));
-        }
-        else
-        {
-            SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-            sal_uInt32 nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
-            double fVal;
-            if ( pFormatter->IsNumberFormat( aText, nEnglish, fVal ) )
-                rDoc.setNumericCell(rCellPos, fVal);
-            //the (english) number format will not be set
-            //search matching local format and apply it
-            else
-                rDoc.setStringCell(rCellPos, aText);
-        }
+        // Re-calculate to get number format only when style is not set.
+        pNewCell->SetNeedNumberFormat(!mbHasStyle);
     }
 }
 
