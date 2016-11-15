@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_0147edbb",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-15T10:24:55Z",
+      "side": 1,
+      "message": "Sigh.. now you indented with tabs instead of spaces.. I\u0027ll correct that in an amended commit, also break the overly long lines.",
+      "revId": "18267d13905bdacc13d4a7ee5a489e548c9acc17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
