@@ -62,24 +62,27 @@ namespace
         return aTempl;
     }
 
-    OUString lcl_Image( const OUString& rScreenshotId )
+    OUString lcl_Image( const OUString& rScreenshotId, const Size& rSize )
     {
-        OUString aTempl = OUString("<image id=%1 src=media/screenshots/%2.png>" //FIXME width + height
-                                    "%3"
+        OUString aTempl = OUString("<image id=%1 src=media/screenshots/%2.png"
+                                    " width=%3cm  height=%4cm>"
+                                    "%5"
                                    "</image>");
         aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("img_id") );
         aTempl = aTempl.replaceFirst( "%2", rScreenshotId );
-        aTempl = aTempl.replaceFirst( "%3", lcl_AltDescr() );
+        aTempl = aTempl.replaceFirst( "%3", OUString::number( rSize.Width() ) );
+        aTempl = aTempl.replaceFirst( "%4", OUString::number( rSize.Height() ) );
+        aTempl = aTempl.replaceFirst( "%5", lcl_AltDescr() );
 
         return aTempl;
     }
 
-    OUString lcl_ParagraphWithImage( const OUString& rScreenshotId )
+    OUString lcl_ParagraphWithImage( const OUString& rScreenshotId, const Size& rSize )
     {
         OUString aTempl = OUString( "<paragraph id=%1 role=\"paragraph\" xml-lang=en-US>%2"
                                     "</paragraph>"  SAL_NEWLINE_STRING );
         aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("par_id") );
-        aTempl = aTempl.replaceFirst( "%2", lcl_Image(rScreenshotId) );
+        aTempl = aTempl.replaceFirst( "%2", lcl_Image(rScreenshotId, rSize) );
 
         return aTempl;
     }
@@ -260,7 +263,9 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     if (mpText)
     {
         OUString aHelpId = OStringToOUString( mrParentDialog.GetHelpId(), RTL_TEXTENCODING_UTF8 );
-        maMainMarkupText = lcl_ParagraphWithImage( aHelpId);
+
+        Size aSizeCm = mrParentDialog.PixelToLogic( maParentDialogSize, MapUnit::MapCM );
+        maMainMarkupText = lcl_ParagraphWithImage( aHelpId, aSizeCm );
         mpText->SetText( maMainMarkupText );
         mpText->SetReadOnly();
     }
