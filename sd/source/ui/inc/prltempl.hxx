@@ -61,6 +61,7 @@ private:
     sal_uInt16            mnTab;
     sal_uInt16            mnAsian;
     sal_uInt16            mnAlign;
+    sal_uInt16            mnBackground;
 
     PresentationObjects ePO;
 
