@@ -129,12 +129,12 @@ VCL_BUILDER_DECL_FACTORY(SvxLanguageComboBox)
     rRet = pLanguageBox;
 }
 
-SvxLanguageBoxBase::SvxLanguageBoxBase( bool bCheck )
+SvxLanguageBoxBase::SvxLanguageBoxBase()
     : m_pSpellUsedLang(nullptr)
     , m_nLangList(SvxLanguageListFlags::EMPTY)
     , m_bHasLangNone(false)
     , m_bLangNoneIsLangAll(false)
-    , m_bWithCheckmark(bCheck)
+    , m_bWithCheckmark(false)
 {
 }
 
@@ -487,7 +487,7 @@ sal_Int32 SvxLanguageBoxBase::GetSavedValueLBB() const
 
 SvxLanguageBox::SvxLanguageBox( vcl::Window* pParent, WinBits nBits )
     : ListBox( pParent, nBits )
-    , SvxLanguageBoxBase( false )
+    , SvxLanguageBoxBase()
 {
     // display entries sorted
     SetStyle( GetStyle() | WB_SORT );
@@ -497,7 +497,7 @@ SvxLanguageBox::SvxLanguageBox( vcl::Window* pParent, WinBits nBits )
 
 SvxLanguageComboBox::SvxLanguageComboBox( vcl::Window* pParent, WinBits nBits )
     : ComboBox( pParent, nBits )
-    , SvxLanguageBoxBase( false )
+    , SvxLanguageBoxBase()
     , mnSavedValuePos( COMBOBOX_ENTRY_NOTFOUND )
     , meEditedAndValid( EditedAndValid::No )
 {

@@ -612,18 +612,18 @@ bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj)
     return true;
 }
 
-basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, bool bCombine)
+basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj)
 {
     basegfx::B2DPolyPolygon aRetval;
     const SdrPathObj* pPath = dynamic_cast<const SdrPathObj*>( pObj );
 
-    if(bCombine && pPath && !pObj->GetOutlinerParaObject())
+    if(pPath && !pObj->GetOutlinerParaObject())
     {
         aRetval = pPath->GetPathPoly();
     }
     else
     {
-        SdrObject* pConvObj = pObj->ConvertToPolyObj(bCombine, false);
+        SdrObject* pConvObj = pObj->ConvertToPolyObj(true/*bCombine*/, false);
 
         if(pConvObj)
         {
@@ -661,7 +661,7 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, b
     return aRetval;
 }
 
-basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon(const SdrObject* pObj, bool bCombine)
+basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon(const SdrObject* pObj)
 {
     SdrObjList* pOL = pObj->GetSubList();
 
@@ -673,14 +673,14 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon(const SdrObject* pObj, bo
         while(aIter.IsMore())
         {
             SdrObject* pObj1 = aIter.Next();
-            aRetval.append(ImpGetPolyPolygon1(pObj1, bCombine));
+            aRetval.append(ImpGetPolyPolygon1(pObj1));
         }
 
         return aRetval;
     }
     else
     {
-        return ImpGetPolyPolygon1(pObj, bCombine);
+        return ImpGetPolyPolygon1(pObj);
     }
 }
 
@@ -1296,7 +1296,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
             // unfortunately ConvertMarkedToPathObj has converted all
             // involved polygon data to curve segments, even if not necessary.
             // It is better to try to reduce to more simple polygons.
-            basegfx::B2DPolyPolygon aTmpPoly(basegfx::tools::simplifyCurveSegments(ImpGetPolyPolygon(pObj, true)));
+            basegfx::B2DPolyPolygon aTmpPoly(basegfx::tools::simplifyCurveSegments(ImpGetPolyPolygon(pObj)));
             aPolyPolygon.insert(0L, aTmpPoly);
 
             if(!pInsOL)

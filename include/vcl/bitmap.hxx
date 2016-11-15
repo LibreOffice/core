@@ -715,8 +715,7 @@ public:
                                 long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
                                 long nColors, long nPixels, long& rIndex );
 
-    SAL_DLLPRIVATE bool     ImplConvolute3(
-                                const long* pMatrix, long nDivisor );
+    SAL_DLLPRIVATE bool     ImplConvolute3( const long* pMatrix );
 
     SAL_DLLPRIVATE bool     ImplMedianFilter();
     SAL_DLLPRIVATE bool     ImplSobelGrey();

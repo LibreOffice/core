@@ -66,7 +66,7 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
         case BMP_FILTER_SHARPEN:
         {
             const long pSharpenMatrix[] = { -1, -1,  -1, -1, 16, -1, -1, -1,  -1 };
-            bRet = ImplConvolute3( &pSharpenMatrix[ 0 ], 8 );
+            bRet = ImplConvolute3( &pSharpenMatrix[ 0 ] );
         }
         break;
 
@@ -110,8 +110,9 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
     return bRet;
 }
 
-bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor )
+bool Bitmap::ImplConvolute3( const long* pMatrix )
 {
+    const long          nDivisor = 8;
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
     bool                bRet = false;
 

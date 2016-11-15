@@ -39,7 +39,7 @@ RscTop * RscTypCont::InitClassMgr()
     RscBaseCont *   pClass;
     Atom            nId;
 
-    aBaseLst.push_back( pClass = new RscBaseCont( InvalidAtom, RSC_NOTYPE, nullptr, false ) );
+    aBaseLst.push_back( pClass = new RscBaseCont( InvalidAtom, RSC_NOTYPE, false ) );
 
     nId = pHS->getID( "Resource" );
     pClassMgr = new RscMgr( nId, RSC_RESOURCE, pClass );

@@ -1610,8 +1610,8 @@ void ScTabStops::clear()
     maControls.clear();
 }
 
-ScCheckListBox::ScCheckListBox( vcl::Window* pParent, WinBits nWinStyle )
-    :  SvTreeListBox( pParent, nWinStyle ), mpCheckButton( nullptr ), mbSeenMouseButtonDown( false )
+ScCheckListBox::ScCheckListBox( vcl::Window* pParent )
+    :  SvTreeListBox( pParent, 0 ), mpCheckButton( nullptr ), mbSeenMouseButtonDown( false )
 {
     Init();
 }
