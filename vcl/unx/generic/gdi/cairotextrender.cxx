@@ -328,7 +328,8 @@ void CairoTextRender::DrawServerFontLayout( const GenericSalLayout& rLayout, con
                     // the glyph’s baseline.
                     cairo_text_extents_t aExt;
                     cairo_glyph_extents(cr, &cairo_glyphs[nStartIndex], nLen, &aExt);
-                    cairo_glyphs[nStartIndex].y += aExt.x_advance - aExt.height - aExt.y_bearing;
+                    double nDescender = std::fmax(aExt.height + aExt.y_bearing, 0);
+                    ydiff = (aExt.x_advance - nDescender) / nHeight;
                 }
                 else
                 {
