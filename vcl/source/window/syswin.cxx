@@ -1162,6 +1162,10 @@ void SystemWindow::DoInitialLayout()
         setOptimalLayoutSize();
         mbIsCalculatingInitialLayoutSize = false;
     }
+    else if (IsDialog() && !(GetStyle() & WB_SIZEABLE))
+    {
+        SetMinOutputSizePixel(GetSizePixel());
+    }
 }
 
 void SystemWindow::doDeferredInit(WinBits /*nBits*/)

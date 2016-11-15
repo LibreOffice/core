@@ -272,9 +272,6 @@ class GtkSalFrame : public SalFrame
     static gboolean     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
     void askForXEmbedFocus( sal_Int32 nTimecode );
     void grabKeyboard(bool bGrab);
-    void resizeWindow( long nWidth, long nHeight );
-    //call gtk_window_resize
-    void window_resize(long nWidth, long nHeight);
 #endif
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
     static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
@@ -324,9 +321,12 @@ class GtkSalFrame : public SalFrame
         return bool(m_nStyle & nMask);
     }
 
+    //call gtk_window_resize
+    void window_resize(long nWidth, long nHeight);
     //call gtk_widget_set_size_request
     void widget_set_size_request(long nWidth, long nHeight);
 
+    void resizeWindow( long nWidth, long nHeight );
     void moveWindow( long nX, long nY );
 
     Size calcDefaultSize();
