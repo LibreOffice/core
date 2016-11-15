@@ -883,9 +883,11 @@ void XSecController::exportSignature(
                 "Object",
                 cssu::Reference< cssxs::XAttributeList > (pAttributeList));
             {
+                pAttributeList = new SvXMLAttributeList();
+                pAttributeList->AddAttribute("Target", "#" + signatureInfo.ouSignatureId);
                 xDocumentHandler->startElement(
                     "xd:QualifyingProperties",
-                    cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                    cssu::Reference< cssxs::XAttributeList > (pAttributeList));
                 DocumentSignatureHelper::writeSignedProperties(xDocumentHandler, signatureInfo, sDate);
                 writeUnsignedProperties(xDocumentHandler, signatureInfo);
                 xDocumentHandler->endElement( "xd:QualifyingProperties" );
