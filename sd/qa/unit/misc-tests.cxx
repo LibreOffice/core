@@ -17,6 +17,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/dispatchcommand.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 
@@ -39,6 +40,7 @@
 #include <controller/SlsClipboard.hxx>
 #include <controller/SlsPageSelector.hxx>
 #include <undo/undomanager.hxx>
+#include <DrawViewShell.hxx>
 
 using namespace ::com::sun::star;
 
@@ -179,17 +181,16 @@ void SdMiscTest::testTdf99396TextEdit()
     sd::DrawDocShellRef xDocSh = Load(getURLFromSrc("/sd/qa/unit/data/tdf99396.odp"), ODP);
     sd::ViewShell* pViewShell = xDocSh->GetViewShell();
     SdPage* pPage = pViewShell->GetActualPage();
-    SdrObject* pObject = pPage->GetObj(0);
-    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pTableObject);
     SdrView* pView = pViewShell->GetView();
-    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pView->MarkObj(pTableObject, pView->GetSdrPageView());
 
     // Make sure that the undo stack is empty.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
 
     // Set horizontal and vertical adjustment during text edit.
-    pView->SdrBeginTextEdit(pObject);
+    pView->SdrBeginTextEdit(pTableObject);
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     {
         SfxRequest aRequest(pViewShell->GetViewFrame(), SID_ATTR_PARA_ADJUST_RIGHT);
@@ -240,6 +241,19 @@ void SdMiscTest::testTdf99396TextEdit()
         auto pAdjust = static_cast<const SvxAdjustItem*>(rParaAttribs.GetItem(EE_PARA_JUST));
         CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_CENTER, pAdjust->GetAdjust());
     }
+
+
+    /*
+     * now test tdf#103950 - Undo does not revert bundled font size changes for table cells
+     */
+    pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    pView->MarkObj(pTableObject, pView->GetSdrPageView()); // select table
+    {
+        SfxRequest aRequest(pViewShell->GetViewFrame(), SID_GROW_FONT_SIZE);
+        static_cast<sd::DrawViewShell*>(pViewShell)->ExecChar(aRequest);
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+
 
     xDocSh->DoClose();
 }

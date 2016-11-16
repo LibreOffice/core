@@ -136,6 +136,10 @@
 
 #define RID_SLIDESORTER_ICONS                   RID_GLOB_START+227
 #define STR_DEAUTHORISE_CLIENT                  RID_GLOB_START+229
-#endif // _SDGLOB_HRC
+
+#define STR_SHRINK_FONT_SIZE                    RID_GLOB_START+232
+#define STR_GROW_FONT_SIZE                      RID_GLOB_START+233
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
