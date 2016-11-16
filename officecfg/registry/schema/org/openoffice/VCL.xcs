@@ -67,6 +67,21 @@
         <desc>Specifies an extensible set of options that are ordered into key/value pairs for the VCL. For example, a valid key for describing when ATTools is activated is: "EnableATToolSupport" (valid values = "true", "false").</desc>
       </info>
     </group>
+    <group oor:name="ExtraLanguage">
+      <info>
+        <desc>Specifies an extenisble list of languages that should be added to the various language selection lists</desc>
+      </info>
+      <prop oor:name="Name" oor:type="xs:string" oor:nillable="false" oor:localized="true">
+        <info>
+          <desc>Gives the UI name to present to the user</desc>
+        </info>
+      </prop>
+      <prop oor:name="ScriptType" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Which of the various language lists to include this in: 1 - Western, 2 - Asian, 3 - CTL, 4 - Right to Left (implies CTL). This value corresponds to the concrete enum values in LanguageTag::ScriptType found in i18nlangtag/languagetag.hxx.</desc>
+        </info>
+      </prop>
+    </group>
     <group oor:name="LocalizedDefaultFonts" oor:extensible="true">
       <info>
         <desc>Contains a localized table of default font lists organized as a set of sets of key/value pairs. The outer set denotes the language (e.g. "en-US") so that default fonts can be declared for different language contexts. Each value is a font list separated by ';'. Default fonts are: CJK_DISPLAY, CJK_HEADING, CJK_PRESENTATION, CJK_SPREADSHEET, CJK_TEXT, CTL_DISPLAY, CTL_HEADING, CTL_PRESENTATION, CTL_SPREADSHEET, CTL_TEXT, FIXED, LATIN_DISPLAY, LATIN_FIXED, LATIN_HEADING, LATIN_PRESENTATION, LATIN_SPREADSHEET, LATIN_TEXT, SANS, SANS_UNICODE, SERIF, SYMBOL, UI_FIXED, UI_SANS. Corresponding font lists: *_DISPLAY, *_HEADING, *_PRESENTATION, *_SPREADSHEET, *_TEXT, SANS, SANS_UNICODE, SERIF,SYMBOL, UI_FIXED, UI_SANS.</desc>
@@ -82,6 +97,11 @@
     <set oor:name="Settings" oor:node-type="ConfigurableSettings">
       <info>
         <desc>Contains the settings for VCL (see template description).</desc>
+      </info>
+    </set>
+    <set oor:name="ExtraLanguages" oor:node-type="ExtraLanguage">
+      <info>
+        <desc>Specifies extra language tags to support</desc>
       </info>
     </set>
     <set oor:name="DefaultFonts" oor:node-type="LocalizedDefaultFonts">

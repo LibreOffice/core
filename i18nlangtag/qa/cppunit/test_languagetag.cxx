@@ -23,6 +23,7 @@
 #include <osl/file.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 using namespace com::sun::star;
 
@@ -516,6 +517,17 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country.isEmpty() );
         CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
         CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( qty.getLanguageType()) );
+    }
+
+    // 'qtx' is an unknown new mslangid
+    {
+        OUString s_qtx( "qtx" );
+        LanguageTag qtx( s_qtx );
+        qtx.setScriptType( LanguageTag::ScriptType::RTL );
+        LanguageType n_qtx = qtx.getLanguageType();
+        CPPUNIT_ASSERT_EQUAL( MsLangId::getScriptType(n_qtx), css::i18n::ScriptType::COMPLEX );
+        CPPUNIT_ASSERT( MsLangId::isRightToLeft(n_qtx) );
+        CPPUNIT_ASSERT( !MsLangId::isCJK(n_qtx) );
     }
 
     // 'x-comment' is a privateuse known "locale"
