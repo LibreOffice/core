@@ -352,7 +352,7 @@ namespace {
     };
 
     ProfileExportedDialog::ProfileExportedDialog()
-        : ModalDialog(nullptr, "SafeModeQueryDialog", "svx/ui/profileexporteddialog.ui")
+        : ModalDialog(nullptr, "ProfileExportedDialog", "svx/ui/profileexporteddialog.ui")
     {
         get<Button>("openfolder")->SetClickHdl(LINK(this, ProfileExportedDialog, OpenHdl));
     }
