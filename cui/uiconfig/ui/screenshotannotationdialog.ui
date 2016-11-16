@@ -100,11 +100,20 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="text">
-            <property name="name">text</property>
-            <property name="height_request">80</property>
+          <object class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTextView" id="text:border">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
