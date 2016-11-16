@@ -201,6 +201,29 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_e4491fd2",
+        "filename": "officecfg/registry/schema/org/openoffice/VCL.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-16T14:07:16Z",
+      "side": 1,
+      "message": "Nitpick: \u0027Latin\u0027 is a notorious bad naming.. even if the API uses it, let\u0027s not populate it further. Rather use \u0027Western\u0027 as that is what is used in the UI dialogs (actually I\u0027d name it \u0027Northern\u0027, but.. ;-)",
+      "range": {
+        "startLine": 81,
+        "startChar": 76,
+        "endLine": 81,
+        "endChar": 81
+      },
+      "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_e4767f3d",
         "filename": "officecfg/registry/schema/org/openoffice/VCL.xcs",
         "patchSetId": 2
@@ -275,6 +298,23 @@
         "endLine": 168,
         "endChar": 35
       },
+      "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_0447fbbb",
+        "filename": "svtools/source/misc/langtab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-16T14:07:16Z",
+      "side": 1,
+      "message": "The script type from the configuration should actually be checked for valid values, specifically as an extension may write there anything it wants.",
       "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
