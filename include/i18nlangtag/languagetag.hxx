@@ -237,6 +237,7 @@ public:
       */
     bool                            isSystemLocale() const { return mbSystemLocale;}
 
+    void                            setScriptType(sal_Int8 st);
 
     /** Reset with existing BCP 47 language tag string. See ctor. */
     LanguageTag &                   reset( const OUString & rBcp47LanguageTag );
@@ -494,13 +495,14 @@ public:
     static bool         isValidBcp47( const OUString& rString, OUString* o_pCanonicalized = nullptr,
                                       bool bDisallowPrivate = false );
 
+    typedef std::shared_ptr< LanguageTagImpl > ImplPtr;
+
     /** If nLang is a generated on-the-fly LangID */
     static bool         isOnTheFlyID( LanguageType nLang );
+    static sal_Int16    getOnTheFlyScriptType( LanguageType nLang );
 
     /** @ATTENTION: _ONLY_ to be called by the application's configuration! */
     static void setConfiguredSystemLanguage( LanguageType nLang );
-
-    typedef std::shared_ptr< LanguageTagImpl > ImplPtr;
 
 private:
 

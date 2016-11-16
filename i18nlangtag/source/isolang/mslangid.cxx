@@ -340,6 +340,10 @@ bool MsLangId::needsSequenceChecking( LanguageType nLang )
 sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 {
     sal_Int16 nScript;
+    if (LanguageTag::isOnTheFlyID(nLang))
+    {
+        return LanguageTag::getOnTheFlyScriptType(nLang);
+    }
     switch( nLang )
     {
         // CTL

@@ -19,6 +19,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <map>
 #include <unordered_set>
 
@@ -259,6 +260,15 @@ private:
         DECISION_YES
     };
 
+    enum ScriptType
+    {
+        UNKNOWN = 0,
+        LATIN = 1,      // Copies css::i18n::ScriptType for strong types
+        CJK = 2,
+        CTL = 3,
+        RIGHT = 4       // implies CTL
+    };
+
     mutable css::lang::Locale               maLocale;
     mutable OUString                        maBcp47;
     mutable OUString                        maCachedLanguage;   ///< cache getLanguage()
@@ -267,6 +277,7 @@ private:
     mutable OUString                        maCachedVariants;   ///< cache getVariants()
     mutable lt_tag_t*                       mpImplLangtag;      ///< liblangtag pointer
     mutable LanguageType                    mnLangID;
+    mutable ScriptType                      meScriptType;
     mutable Decision                        meIsValid;
     mutable Decision                        meIsIsoLocale;
     mutable Decision                        meIsIsoODF;
@@ -287,6 +298,9 @@ private:
     OUString            getRegion() const;
     OUString const &    getVariants() const;
     bool                hasScript() const;
+
+    void                setScriptType(ScriptType st);
+    sal_Int16           getScriptType() const;
 
     bool                isIsoLocale() const;
     bool                isIsoODF() const;
@@ -364,6 +378,7 @@ private:
     /** Convert Locale to BCP 47 string without resolving system and creating
         temporary LanguageTag instances. */
     static OUString     convertToBcp47( const css::lang::Locale& rLocale );
+
 };
 
 
@@ -373,6 +388,7 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTag & rLanguageTag )
         maBcp47( rLanguageTag.maBcp47),
         mpImplLangtag( nullptr),
         mnLangID( rLanguageTag.mnLangID),
+        meScriptType( UNKNOWN),
         meIsValid( DECISION_DONTKNOW),
         meIsIsoLocale( DECISION_DONTKNOW),
         meIsIsoODF( DECISION_DONTKNOW),
@@ -400,6 +416,7 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTagImpl & rLanguageTagImpl )
         mpImplLangtag( rLanguageTagImpl.mpImplLangtag ?
                 lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : nullptr),
         mnLangID( rLanguageTagImpl.mnLangID),
+        meScriptType( rLanguageTagImpl.meScriptType),
         meIsValid( rLanguageTagImpl.meIsValid),
         meIsIsoLocale( rLanguageTagImpl.meIsIsoLocale),
         meIsIsoODF( rLanguageTagImpl.meIsIsoODF),
@@ -434,6 +451,7 @@ LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTa
                             lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : nullptr;
     lt_tag_unref(oldTag);
     mnLangID            = rLanguageTagImpl.mnLangID;
+    meScriptType        = rLanguageTagImpl.meScriptType;
     meIsValid           = rLanguageTagImpl.meIsValid;
     meIsIsoLocale       = rLanguageTagImpl.meIsIsoLocale;
     meIsIsoODF          = rLanguageTagImpl.meIsIsoODF;
@@ -700,6 +718,18 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
 
     return pImpl;
 }
+
+
+sal_Int16 LanguageTag::getOnTheFlyScriptType( LanguageType nRegisterID )
+{
+    const MapLangID& rMapLangID = theMapLangID::get();
+    MapLangID::const_iterator itID( rMapLangID.find( nRegisterID));
+    if (itID != rMapLangID.end())
+        return (*itID).second->getScriptType();
+    else
+        return css::i18n::ScriptType::LATIN;
+}
+
 
 // static
 void LanguageTag::setConfiguredSystemLanguage( LanguageType nLang )
@@ -1946,6 +1976,36 @@ bool LanguageTag::hasScript() const
     bool bRet = getImpl()->hasScript();
     const_cast<LanguageTag*>(this)->syncFromImpl();
     return bRet;
+}
+
+
+sal_Int16 LanguageTagImpl::getScriptType() const
+{
+    switch (meScriptType)
+    {
+        case CJK :
+            return css::i18n::ScriptType::ASIAN;
+        case CTL :
+        case RIGHT :
+            return css::i18n::ScriptType::COMPLEX;
+        case UNKNOWN :
+        case LATIN :
+        default:
+            return css::i18n::ScriptType::LATIN;
+    }
+}
+
+
+void LanguageTagImpl::setScriptType(ScriptType st)
+{
+    if (meScriptType == UNKNOWN)
+        meScriptType = st;
+}
+
+
+void LanguageTag::setScriptType(sal_Int8 st)
+{
+    getImpl()->setScriptType(LanguageTagImpl::ScriptType(st));
 }
 
 

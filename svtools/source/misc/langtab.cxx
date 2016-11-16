@@ -17,7 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Any.h>
 
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/mslangid.hxx>
@@ -28,6 +36,8 @@
 #include <svtools/langtab.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/resary.hxx>
+
+#include <comphelper/processfactory.hxx>
 
 
 using namespace ::com::sun::star;
@@ -129,6 +139,43 @@ const OUString ApplyLreOrRleEmbedding( const OUString &rText )
 SvtLanguageTableImpl::SvtLanguageTableImpl() :
     ResStringArray( SvtResId( STR_ARR_SVT_LANGUAGE_TABLE ) )
 {
+    uno::Reference <uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext());
+    uno::Reference <lang::XMultiServiceFactory> xConfigProvider = configuration::theDefaultProvider::get(xContext);
+    uno::Sequence < uno::Any > aArgs(1);
+    beans::PropertyValue aPath;
+    aPath.Name = "nodePath";
+    aPath.Value <<= OUString("org.openoffice.VCL");
+    aArgs[0] <<= aPath;
+    uno::Reference <uno::XInterface> xInterface = xConfigProvider->createInstanceWithArguments(
+        "com.sun.star.configuration.ConfigurationAccess", aArgs);
+    try
+    {
+        uno::Reference <container::XNameAccess> xNA(xInterface, uno::UNO_QUERY_THROW);
+        xNA.set(xNA->getByName("Languages"), uno::UNO_QUERY_THROW);
+        uno::Sequence <OUString> rElementNames = xNA->getElementNames();
+        sal_Int32 nLen = rElementNames.getLength();
+        for (sal_Int32 i = 0; i < nLen; ++i)
+        {
+            OUString aName;
+            sal_Int32 aType = 0;
+            uno::Reference <container::XNameAccess> xNB;
+            xNA->getByName(rElementNames[i]) >>= xNB;
+            bool bSuccess = (xNB->getByName("Name") >>= aName) &&
+                            (xNB->getByName("ScriptType") >>= aType);
+            if (bSuccess)
+            {
+                LanguageTag aLang(rElementNames[i]);
+                LanguageType anMSId = aLang.getLanguageType();
+                aLang.setScriptType(aType);
+                sal_uInt32 nPos = FindIndex(anMSId);
+                if (nPos == RESARRAY_INDEX_NOTFOUND)
+                    AddItem(aName, anMSId);
+            }
+        }
+    }
+    catch (uno::Exception &)
+    {
+    }
 }
 
 SvtLanguageTableImpl::~SvtLanguageTableImpl()
