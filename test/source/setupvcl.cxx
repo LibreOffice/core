@@ -58,13 +58,20 @@ IMPL_STATIC_LINK_NOARG(Hook, deinitHook, LinkParamNone *, void) {
 }
 
 void test::setUpVcl() {
-    // Force locale (and resource files loaded) to en-US:
-    ResMgr::SetDefaultLocale(LanguageTag("en-US"));
+    // Force locale (and resource files loaded):
+    OUString locale;
+    if (getenv("LO_TEST_LOCALE") != nullptr)
+        locale = OUString::fromUtf8(getenv("LO_TEST_LOCALE"));
+    else
+        locale = "en-US";
+
+    ResMgr::SetDefaultLocale(LanguageTag(locale));
     SvtSysLocaleOptions localOptions;
-    localOptions.SetLocaleConfigString("en-US");
-    localOptions.SetUILocaleConfigString("en-US");
-    MsLangId::setConfiguredSystemUILanguage(LANGUAGE_ENGLISH_US);
-    LanguageTag::setConfiguredSystemLanguage(LANGUAGE_ENGLISH_US);
+    localOptions.SetLocaleConfigString(locale);
+    localOptions.SetUILocaleConfigString(locale);
+    LanguageTag tag(locale);
+    MsLangId::setConfiguredSystemUILanguage(tag.getLanguageType(false));
+    LanguageTag::setConfiguredSystemLanguage(tag.getLanguageType(false));
     InitVCL();
     if (isHeadless()) {
         Application::EnableHeadlessMode(true);
