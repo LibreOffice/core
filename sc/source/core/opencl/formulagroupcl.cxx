@@ -116,7 +116,6 @@ std::string StackVarEnumToString(StackVar const e)
         case svEmptyCell:         return "EmptyCell";
         case svMatrixCell:        return "MatrixCell";
         case svHybridCell:        return "HybridCell";
-        case svHybridValueCell:   return "HybridValueCell";
         case svExternalSingleRef: return "ExternalSingleRef";
         case svExternalDoubleRef: return "ExternalDoubleRef";
         case svExternalName:      return "ExternalName";

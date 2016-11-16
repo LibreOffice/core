@@ -289,7 +289,6 @@ public:
     bool            IsValue();      // also true if formula::svEmptyCell
     bool            IsValueNoError();
     bool            IsValueNoError() const;
-    bool            IsHybridValueCell(); // for cells after import to deal with inherited number formats
     double          GetValue();
     svl::SharedString GetString();
     const ScMatrix* GetMatrix();

@@ -69,9 +69,6 @@ enum StackVarEnum
                                         // and/or string result and a formula
                                         // string to be compiled.
 
-    svHybridValueCell,                  // A temporary formula cell with an value
-                                        // and possibily a string representation
-
     svExternalSingleRef,
     svExternalDoubleRef,
     svExternalName,

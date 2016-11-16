@@ -273,7 +273,7 @@ namespace {
 inline bool isValue( formula::StackVar sv )
 {
     return sv == formula::svDouble || sv == formula::svError
-        || sv == formula::svEmptyCell || sv == formula::svHybridValueCell;
+        || sv == formula::svEmptyCell;
 }
 
 inline bool isString( formula::StackVar sv )
@@ -282,7 +282,6 @@ inline bool isString( formula::StackVar sv )
     {
         case formula::svString:
         case formula::svHybridCell:
-        case formula::svHybridValueCell:
             return true;
         default:
             break;
@@ -304,7 +303,6 @@ bool ScFormulaResult::IsValueNoError() const
     {
         case formula::svDouble:
         case formula::svEmptyCell:
-        case formula::svHybridValueCell:
             return true;
         default:
             return false;
@@ -442,7 +440,6 @@ double ScFormulaResult::GetDouble() const
             switch (mpToken->GetType())
             {
                 case formula::svHybridCell:
-                case formula::svHybridValueCell:
                     return mpToken->GetDouble();
                 case formula::svMatrixCell:
                     {
@@ -471,7 +468,6 @@ svl::SharedString ScFormulaResult::GetString() const
         {
             case formula::svString:
             case formula::svHybridCell:
-            case formula::svHybridValueCell:
                 return mpToken->GetString();
             case formula::svMatrixCell:
                 {

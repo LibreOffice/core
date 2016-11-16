@@ -90,8 +90,6 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
                         double fValue = pFCell->GetValue();
                         if ( !bNullVals && fValue == 0.0 )
                             rString.clear();
-                        else if ( pFCell->IsHybridValueCell() )
-                            rString = pFCell->GetString().getString();
                         else
                             rFormatter.GetOutputString( fValue, nFormat, rString, ppColor, bUseStarFormat );
                     }

@@ -1560,7 +1560,6 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case svExternalSingleRef:
             case svFAP:
             case svHybridCell:
-            case svHybridValueCell:
             case svIndex:
             case svJump:
             case svJumpMatrix:
