@@ -15,6 +15,8 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>
+#include <unotools/syslocaleoptions.hxx>
+
 
 namespace {
     void splitHelpId( const OString& rHelpId, OUString& rDirname, OUString &rBasename )
@@ -36,6 +38,8 @@ ScreenshotTest::ScreenshotTest()
 :   m_aScreenshotDirectory("/workdir/screenshots/"),
     maKnownDialogs()
 {
+    SvtSysLocaleOptions localeOptions;
+    maCurrentLanguage = localeOptions.GetLocaleConfigString();
 }
 
 ScreenshotTest::~ScreenshotTest()
@@ -63,7 +67,7 @@ void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString
 {
     OUString aDirname, aBasename;
     splitHelpId(rScreenshotId, aDirname, aBasename);
-    aDirname = m_aScreenshotDirectory + aDirname;
+    aDirname = m_aScreenshotDirectory + maCurrentLanguage + "/" + aDirname;
 
     osl::FileBase::RC err = osl::Directory::createPath(m_directories.getURLFromSrc(aDirname));
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to create " + aDirname, RTL_TEXTENCODING_UTF8).getStr(),

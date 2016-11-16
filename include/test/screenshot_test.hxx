@@ -27,6 +27,9 @@ private:
     /// the target directory for screenshots
     OUString    m_aScreenshotDirectory;
 
+    /// The current UI language
+    OUString    maCurrentLanguage;
+
     /// the set of known dialogs and their ID for usage in createDialogByID
     mapType     maKnownDialogs;
 
