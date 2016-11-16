@@ -116,7 +116,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     get(m_pHintDocFT, "dochint");
     get(m_pHintBasicFT, "macrohint");
     get(m_pHintPackageFT, "packagehint");
-    get(m_pXAdESCompliantCB, "xadescompliant");
+    get(m_pAdESCompliantCB, "adescompliant");
     get(m_pViewBtn, "view");
     get(m_pAddBtn, "sign");
     get(m_pRemoveBtn, "remove");
@@ -130,7 +130,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     get(m_pSigsOldSignatureImg, "oldsignatureimg");
     get(m_pSigsOldSignatureFI, "oldsignatureft");
 
-    m_bXAdESCompliant = !DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
+    m_bAdESCompliant = !DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
 
     Size aControlSize(275, 109);
     const long nControlWidth = aControlSize.Width();
@@ -154,8 +154,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     m_pSignaturesLB->SetSelectHdl( LINK( this, DigitalSignaturesDialog, SignatureHighlightHdl ) );
     m_pSignaturesLB->SetDoubleClickHdl( LINK( this, DigitalSignaturesDialog, SignatureSelectHdl ) );
 
-    m_pXAdESCompliantCB->SetToggleHdl( LINK( this, DigitalSignaturesDialog, XAdESCompliantCheckBoxHdl ) );
-    m_pXAdESCompliantCB->Check(m_bXAdESCompliant);
+    m_pAdESCompliantCB->SetToggleHdl( LINK( this, DigitalSignaturesDialog, AdESCompliantCheckBoxHdl ) );
+    m_pAdESCompliantCB->Check(m_bAdESCompliant);
 
     m_pViewBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, ViewButtonHdl ) );
     m_pViewBtn->Disable();
@@ -202,7 +202,7 @@ void DigitalSignaturesDialog::dispose()
     m_pSigsNotvalidatedFI.clear();
     m_pSigsOldSignatureImg.clear();
     m_pSigsOldSignatureFI.clear();
-    m_pXAdESCompliantCB.clear();
+    m_pAdESCompliantCB.clear();
     m_pViewBtn.clear();
     m_pAddBtn.clear();
     m_pRemoveBtn.clear();
@@ -357,7 +357,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureHighlightHdl, SvTreeListBox*, 
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
 {
-    maSignatureManager.write(m_bXAdESCompliant);
+    maSignatureManager.write(m_bAdESCompliant);
 
     EndDialog(RET_OK);
 }
@@ -368,9 +368,9 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureSelectHdl, SvTreeListBox*, boo
     return false;
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, XAdESCompliantCheckBoxHdl, CheckBox&, void)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, AdESCompliantCheckBoxHdl, CheckBox&, void)
 {
-    m_bXAdESCompliant = m_pXAdESCompliantCB->IsChecked();
+    m_bAdESCompliant = m_pAdESCompliantCB->IsChecked();
 }
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, ViewButtonHdl, Button*, void)
@@ -390,7 +390,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
         if ( aChooser->Execute() == RET_OK )
         {
             sal_Int32 nSecurityId;
-            if (!maSignatureManager.add(aChooser->GetSelectedCertificate(), aChooser->GetDescription(), nSecurityId, m_bXAdESCompliant))
+            if (!maSignatureManager.add(aChooser->GetSelectedCertificate(), aChooser->GetDescription(), nSecurityId, m_bAdESCompliant))
                 return;
             mbSignaturesChanged = true;
 

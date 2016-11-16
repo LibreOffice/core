@@ -367,11 +367,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="xadescompliant">
-                <property name="label" translatable="yes">Use XAdES-compliant signature when there is a choice</property>
+              <object class="GtkCheckButton" id="adescompliant">
+                <property name="label" translatable="yes">Use AdES-compliant signature when there is a choice</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="halign">start</property>
               </object>
               <packing>
                 <property name="expand">False</property>

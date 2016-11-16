@@ -70,7 +70,7 @@ private:
     VclPtr<FixedImage>         m_pSigsOldSignatureImg;
     VclPtr<FixedText>          m_pSigsOldSignatureFI;
 
-    VclPtr<CheckBox>           m_pXAdESCompliantCB;
+    VclPtr<CheckBox>           m_pAdESCompliantCB;
 
     VclPtr<PushButton>         m_pViewBtn;
     VclPtr<PushButton>         m_pAddBtn;
@@ -84,9 +84,9 @@ private:
     bool m_bHasDocumentSignature;
     bool m_bWarningShowSignMacro;
 
-    bool m_bXAdESCompliant;
+    bool m_bAdESCompliant;
 
-    DECL_LINK(XAdESCompliantCheckBoxHdl, CheckBox&, void);
+    DECL_LINK(AdESCompliantCheckBoxHdl, CheckBox&, void);
     DECL_LINK(ViewButtonHdl, Button*, void);
     DECL_LINK(AddButtonHdl, Button*, void);
     DECL_LINK(RemoveButtonHdl, Button*, void);
