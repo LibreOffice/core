@@ -8949,14 +8949,6 @@ AS_IF([test "$with_system_glew" = "yes"],
     [AC_DEFINE([HAVE_GLEW_1_12])])
 
 dnl ===================================================================
-dnl Check for system glyphy
-dnl ===================================================================
-dnl We currently use GLyphy only on Windows
-if test $_os = WINNT; then
-    libo_CHECK_SYSTEM_MODULE([glyphy], [GLYPHY], [glyphy >= 0.12.0], ["-I${WORKDIR}/UnpackedTarball/glyphy/src"])
-fi
-
-dnl ===================================================================
 dnl Check for system odbc
 dnl ===================================================================
 AC_MSG_CHECKING([which odbc headers to use])

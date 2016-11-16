@@ -42,9 +42,6 @@ typedef std::unordered_map<int,int> IntMap;
 #include <graphite_features.hxx>
 #endif
 
-// This needs to come after any includes for d2d1.h, otherwise we get lots of errors
-#include "glyphy/demo.hxx"
-
 class WinFontInstance;
 struct VisualItem;
 
@@ -166,7 +163,6 @@ class WinFontInstance : public LogicalFontInstance
 public:
     explicit                WinFontInstance( FontSelectPattern& );
     virtual                 ~WinFontInstance() override;
-    void                    setupGLyphy(HDC hDC);
 
 private:
     // TODO: also add HFONT??? Watch out for issues with too many active fonts...
@@ -194,10 +190,6 @@ public:
     int                     GetMinKashidaWidth() const { return mnMinKashidaWidth; }
     int                     GetMinKashidaGlyph() const { return mnMinKashidaGlyph; }
 
-    static GLuint             mnGLyphyProgram;
-    demo_atlas_t*             mpGLyphyAtlas;
-    demo_font_t*              mpGLyphyFont;
-
 private:
     GlyphCache maGlyphCache;
 public:
@@ -212,7 +204,6 @@ private:
     std::unordered_map<int, int>    maWidthMap;
     mutable int                     mnMinKashidaWidth;
     mutable int                     mnMinKashidaGlyph;
-    bool                            mbGLyphySetupCalled;
 };
 
 class WinLayout : public SalLayout
@@ -357,9 +348,6 @@ private:
     int            mnMinKashidaWidth;
     int            mnMinKashidaGlyph;
     bool           mbDisableGlyphInjection;
-    bool           mbUseGLyphy;
-    bool           DrawCachedGlyphsUsingGLyphy(SalGraphics& rGraphics) const;
-    bool           DrawCachedGlyphsUsingTextures(SalGraphics& rGraphics) const;
 };
 
 #if ENABLE_GRAPHITE

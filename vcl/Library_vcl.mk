@@ -41,7 +41,6 @@ $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
 	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(MINGW_SYSROOT)/include/gdiplus) \
-	$(if $(filter WNT,$(OS)),-I$(SRCDIR)/vcl/inc/glyphy/demo) \
 ))
 
 $(eval $(call gb_Library_add_defs,vcl,\
@@ -699,7 +698,6 @@ endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-	vcl/glyphy/demo \
 	vcl/opengl/win/gdiimpl \
 	vcl/opengl/win/WinDeviceInfo \
 	vcl/opengl/win/blocklist_parser \
@@ -746,12 +744,6 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 ))
 
 $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
-endif
-
-ifeq ($(OS), WNT)
-$(eval $(call gb_Library_use_externals,vcl,\
-	glyphy \
-))
 endif
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))

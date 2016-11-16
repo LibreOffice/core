@@ -52,7 +52,6 @@
 
 // static initialization
 std::unique_ptr<GlobalGlyphCache> GlyphCache::gGlobalGlyphCache(new GlobalGlyphCache);
-GLuint WinFontInstance::mnGLyphyProgram = 0;
 
 inline void WinFontInstance::CacheGlyphWidth( int nCharCode, int nCharWidth )
 {
@@ -964,61 +963,6 @@ void SimpleWinLayout::Simplify( bool /*bIsBase*/ )
         mnWidth = mnBaseAdv = 0;
 }
 
-void WinFontInstance::setupGLyphy(HDC hDC)
-{
-    if (mbGLyphySetupCalled)
-        return;
-
-    mbGLyphySetupCalled = true;
-
-    // First get the OUTLINETEXTMETRIC to find the font's em unit. Then, to get an unmodified (not
-    // grid-fitted) glyph outline, create the font anew at that size. That is as the doc for
-    // GetGlyphOutline() suggests.
-    OUTLINETEXTMETRICW aOutlineTextMetric;
-    if (!GetOutlineTextMetricsW (hDC, sizeof (OUTLINETEXTMETRICW), &aOutlineTextMetric))
-    {
-        SAL_WARN("vcl.gdi", "GetOutlineTextMetricsW failed: " << WindowsErrorString(GetLastError()));
-        return;
-    }
-
-    HFONT hFont = static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT));
-    LOGFONTW aLogFont;
-    GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
-
-    HDC hNewDC = GetDC(nullptr);
-    if (hNewDC == nullptr)
-    {
-        SAL_WARN("vcl.gdi", "GetDC failed: " << WindowsErrorString(GetLastError()));
-        return;
-    }
-
-    hNewDC = CreateCompatibleDC(hNewDC);
-    if (hNewDC == nullptr)
-    {
-        SAL_WARN("vcl.gdi", "CreateCompatibleDC failed: " << WindowsErrorString(GetLastError()));
-        return;
-    }
-
-    aLogFont.lfHeight = aOutlineTextMetric.otmEMSquare;
-    hFont = CreateFontIndirectW(&aLogFont);
-    if (hFont == nullptr)
-    {
-        SAL_WARN("vcl.gdi", "CreateFontIndirectW failed: " << WindowsErrorString(GetLastError()));
-        return;
-    }
-    if (SelectObject(hNewDC, hFont) == nullptr)
-    {
-        SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
-        return;
-    }
-
-    if (mnGLyphyProgram == 0)
-        mnGLyphyProgram = demo_shader_create_program();
-
-    mpGLyphyAtlas = demo_atlas_create(2048, 1024, 64, 8);
-    mpGLyphyFont = demo_font_create(hNewDC, mpGLyphyAtlas);
-}
-
 WinLayout::WinLayout(HDC hDC, const WinFontFace& rWFD, WinFontInstance& rWFE, bool bUseOpenGL)
 :   mhDC( hDC ),
     mhFont( static_cast<HFONT>(GetCurrentObject(hDC,OBJ_FONT)) ),
@@ -1348,11 +1292,8 @@ UniscribeLayout::UniscribeLayout(HDC hDC, const WinFontFace& rWinFontData,
     mpGlyphs2Chars( nullptr ),
     mnMinKashidaWidth( 0 ),
     mnMinKashidaGlyph( 0 ),
-    mbDisableGlyphInjection( false ),
-    mbUseGLyphy( false )
+    mbDisableGlyphInjection( false )
 {
-    static bool bUseGLyphy = std::getenv("SAL_USE_GLYPHY") != nullptr;
-    mbUseGLyphy = bUseGLyphy;
 }
 
 UniscribeLayout::~UniscribeLayout()
@@ -2446,246 +2387,20 @@ bool UniscribeLayout::CacheGlyphs(SalGraphics& rGraphics) const
     if (!bDoGlyphCaching)
         return false;
 
-    if (mbUseGLyphy)
+    for (int i = 0; i < mnGlyphCount; i++)
     {
-        if (!mrWinFontEntry.mxFontMetric->IsTrueTypeFont())
-            return false;
-
-        mrWinFontEntry.setupGLyphy(mhDC);
-
-        for (int i = 0; i < mnGlyphCount; i++)
+        int nCodePoint = mpOutGlyphs[i];
+        if (!mrWinFontEntry.GetGlyphCache().IsGlyphCached(nCodePoint))
         {
-            if (mpOutGlyphs[i] == DROPPED_OUTGLYPH)
-                continue;
-
-            glyph_info_t aGI;
-            VCL_GL_INFO("Calling demo_font_lookup_glyph");
-            demo_font_lookup_glyph( mrWinFontEntry.mpGLyphyFont, mpOutGlyphs[i], &aGI );
-        }
-    }
-    else
-    {
-        for (int i = 0; i < mnGlyphCount; i++)
-        {
-            int nCodePoint = mpOutGlyphs[i];
-            if (!mrWinFontEntry.GetGlyphCache().IsGlyphCached(nCodePoint))
-            {
-                if (!mrWinFontEntry.CacheGlyphToAtlas(true, nCodePoint, *this, rGraphics))
-                    return false;
-            }
+            if (!mrWinFontEntry.CacheGlyphToAtlas(true, nCodePoint, *this, rGraphics))
+                return false;
         }
     }
 
     return true;
 }
 
-bool UniscribeLayout::DrawCachedGlyphsUsingGLyphy(SalGraphics& rGraphics) const
-{
-    WinSalGraphics& rWinGraphics = static_cast<WinSalGraphics&>(rGraphics);
-
-    Rectangle aRect;
-    GetBoundRect(rGraphics, aRect);
-
-    WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(rWinGraphics.mpImpl.get());
-    if (!pImpl)
-        return false;
-
-    pImpl->PreDraw();
-
-    rGraphics.GetOpenGLContext()->UseNoProgram();
-
-    glUseProgram( WinFontInstance::mnGLyphyProgram );
-    CHECK_GL_ERROR();
-    demo_atlas_set_uniforms( mrWinFontEntry.mpGLyphyAtlas );
-
-    GLint nLoc;
-
-    nLoc = glGetUniformLocation( WinFontInstance::mnGLyphyProgram, "u_debug" );
-    CHECK_GL_ERROR();
-    glUniform1f( nLoc, 0 );
-    CHECK_GL_ERROR();
-
-    nLoc = glGetUniformLocation( WinFontInstance::mnGLyphyProgram, "u_contrast" );
-    CHECK_GL_ERROR();
-    glUniform1f( nLoc, 1 );
-    CHECK_GL_ERROR();
-
-    nLoc = glGetUniformLocation( WinFontInstance::mnGLyphyProgram, "u_gamma_adjust" );
-    CHECK_GL_ERROR();
-    glUniform1f( nLoc, 1 );
-    CHECK_GL_ERROR();
-
-    nLoc = glGetUniformLocation( WinFontInstance::mnGLyphyProgram, "u_outline" );
-    CHECK_GL_ERROR();
-    glUniform1f( nLoc, GLfloat(false) );
-    CHECK_GL_ERROR();
-
-    nLoc = glGetUniformLocation( WinFontInstance::mnGLyphyProgram, "u_outline_thickness" );
-    CHECK_GL_ERROR();
-    glUniform1f( nLoc, 1 );
-    CHECK_GL_ERROR();
-
-    nLoc = glGetUniformLocation( WinFontInstance::mnGLyphyProgram, "u_boldness" );
-    CHECK_GL_ERROR();
-    glUniform1f( nLoc, 0 );
-    CHECK_GL_ERROR();
-
-    glEnable(GL_BLEND);
-    CHECK_GL_ERROR();
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    CHECK_GL_ERROR();
-
-#if 0
-    // glyphy-demo sets sRGB on initially, and there it has a perhaps beneficial effect,
-    // but doesn't help very much here, if at all
-    GLboolean available = false;
-    if ((glewIsSupported("GL_ARB_framebuffer_sRGB") || glewIsSupported("GL_EXT_framebuffer_sRGB")) &&
-        (glGetBooleanv(GL_FRAMEBUFFER_SRGB_CAPABLE_EXT, &available), available))
-    {
-        glEnable(GL_FRAMEBUFFER_SRGB);
-        CHECK_GL_ERROR();
-    }
-#endif
-
-    // FIXME: This code snippet is mostly copied from the one in
-    // UniscribeLayout::DrawTextImpl. Should be factored out.
-    int nBaseClusterOffset = 0;
-    int nBaseGlyphPos = -1;
-    for( int nItem = 0; nItem < mnItemCount; ++nItem )
-    {
-        const VisualItem& rVisualItem = mpVisualItems[ nItem ];
-
-        // skip if there is nothing to display
-        int nMinGlyphPos, nEndGlyphPos;
-        if( !GetItemSubrange( rVisualItem, nMinGlyphPos, nEndGlyphPos ) )
-            continue;
-
-        if( nBaseGlyphPos < 0 )
-        {
-            // adjust draw position relative to cluster start
-            if( rVisualItem.IsRTL() )
-                nBaseGlyphPos = nEndGlyphPos - 1;
-            else
-                nBaseGlyphPos = nMinGlyphPos;
-
-            int i = mnMinCharPos;
-            while( (--i >= rVisualItem.mnMinCharPos)
-                && (nBaseGlyphPos == mpLogClusters[i]) )
-                 nBaseClusterOffset += mpCharWidths[i];
-
-            if( !rVisualItem.IsRTL() )
-                nBaseClusterOffset = -nBaseClusterOffset;
-        }
-
-        // now draw the matching glyphs in this item
-        Point aRelPos( rVisualItem.mnXOffset + nBaseClusterOffset, 0 );
-        Point aPos = GetDrawPosition( aRelPos );
-
-        int nAdvance = 0;
-
-        // This has to be in sync with UniscribeLayout::FillDXArray(), so that
-        // actual and reported glyph positions (used for e.g. cursor caret
-        // positioning) match.
-        const int* pGlyphWidths = mpJustifications ? mpJustifications : mpGlyphAdvances;
-
-        double font_size = mrWinFontEntry.maFontSelData.mfExactHeight; // ???
-
-        // font_size = 1; // ???
-
-        std::vector<glyph_vertex_t> vertices;
-        for (int i = nMinGlyphPos; i < nEndGlyphPos; i++)
-        {
-            // Ignore dropped glyphs.
-            if (mpOutGlyphs[i] == DROPPED_OUTGLYPH)
-                continue;
-
-            // Total crack
-            glyphy_point_t pt;
-            pt.x = nAdvance + aPos.X() + mpGlyphOffsets[i].du;
-            pt.y = aPos.Y() + mpGlyphOffsets[i].dv;
-            glyph_info_t gi;
-            demo_font_lookup_glyph( mrWinFontEntry.mpGLyphyFont, mpOutGlyphs[i], &gi );
-            demo_shader_add_glyph_vertices( pt, font_size, &gi, &vertices, nullptr );
-
-            nAdvance += pGlyphWidths[i];
-        }
-
-        GLfloat mat[16];
-        m4LoadIdentity( mat );
-
-        GLint viewport[4];
-        glGetIntegerv( GL_VIEWPORT, viewport );
-        CHECK_GL_ERROR();
-
-        double width = viewport[2];
-        double height = viewport[3];
-
-#if 0
-        // Based on demo_view_apply_transform(). I don't really understand it.
-
-        // No scaling, no translation needed here
-
-        // Perspective (but why would we want that in LO; it's needed in glyphy-demo because there
-        // you can rotate the "sheet" the text is drawn on)
-        {
-            double d = std::max( width, height );
-            double near = d / 4;
-            double far = near + d;
-            double factor = near / (2 * near + d);
-            m4Frustum( mat, -width * factor, width * factor, -height * factor, height * factor, near, far );
-            m4Translate( mat, 0, 0, -(near + d * 0.5) );
-        }
-
-        // No rotation here
-
-        // Fix 'up'
-        m4Scale( mat, 1, -1, 1 );
-
-        // Foo
-        // m4Scale( mat, 0.5, 0.5, 1 );
-
-        // The "Center buffer" part in demo_view_display()
-        m4Translate( mat, width/2, height/2, 0 );
-
-#else
-        // Crack that just happens to show something (even if not completely in correct location) in
-        // some cases, but not all. I don't understand why.
-        double scale = std::max( 2/width, 2/height );
-        m4Scale( mat, scale, -scale, 1);
-        m4Translate( mat, -width/2, -height/2, 0 );
-#endif
-
-        GLuint u_matViewProjection_loc = glGetUniformLocation( WinFontInstance::mnGLyphyProgram, "u_matViewProjection" );
-        CHECK_GL_ERROR();
-        glUniformMatrix4fv( u_matViewProjection_loc, 1, GL_FALSE, mat );
-        CHECK_GL_ERROR();
-
-        GLuint a_glyph_vertex_loc = glGetAttribLocation( WinFontInstance::mnGLyphyProgram, "a_glyph_vertex" );
-        GLuint buf_name;
-        glGenBuffers( 1, &buf_name );
-        CHECK_GL_ERROR();
-        glBindBuffer( GL_ARRAY_BUFFER, buf_name );
-        CHECK_GL_ERROR();
-
-        glBufferData( GL_ARRAY_BUFFER,  sizeof(glyph_vertex_t) * vertices.size(), &vertices[0], GL_STATIC_DRAW );
-        CHECK_GL_ERROR();
-        glEnableVertexAttribArray( a_glyph_vertex_loc );
-        CHECK_GL_ERROR();
-        glVertexAttribPointer( a_glyph_vertex_loc, 4, GL_FLOAT, GL_FALSE, sizeof(glyph_vertex_t), nullptr );
-        CHECK_GL_ERROR();
-        glDrawArrays( GL_TRIANGLES, 0, vertices.size() );
-        CHECK_GL_ERROR();
-        glDisableVertexAttribArray( a_glyph_vertex_loc );
-        CHECK_GL_ERROR();
-        glDeleteBuffers( 1, &buf_name );
-        CHECK_GL_ERROR();
-    }
-    pImpl->PostDraw();
-
-    return true;
-}
-
-bool UniscribeLayout::DrawCachedGlyphsUsingTextures(SalGraphics& rGraphics) const
+bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
 {
     WinSalGraphics& rWinGraphics = static_cast<WinSalGraphics&>(rGraphics);
     HDC hDC = rWinGraphics.getHDC();
@@ -2779,14 +2494,6 @@ bool UniscribeLayout::DrawCachedGlyphsUsingTextures(SalGraphics& rGraphics) cons
     }
 
     return true;
-}
-
-bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
-{
-    if (mbUseGLyphy)
-        return DrawCachedGlyphsUsingGLyphy(rGraphics);
-    else
-        return DrawCachedGlyphsUsingTextures( rGraphics );
 }
 
 DeviceCoordinate UniscribeLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
@@ -3962,15 +3669,11 @@ WinFontInstance::WinFontInstance( FontSelectPattern& rFSD )
 :   LogicalFontInstance( rFSD )
 ,    mpKerningPairs( nullptr )
 ,    mnKerningPairs( -1 )
-,    mpGLyphyAtlas( nullptr )
-,    mpGLyphyFont( nullptr )
 ,    maWidthMap( 512 )
 ,    mnMinKashidaWidth( -1 )
 ,    mnMinKashidaGlyph( -1 )
 {
     maScriptCache = nullptr;
-    mpGLyphyFont = nullptr;
-    mbGLyphySetupCalled = false;
 }
 
 WinFontInstance::~WinFontInstance()

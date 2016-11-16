@@ -229,44 +229,6 @@ endef
 
 endif # SYSTEM_GLEW
 
-ifneq ($(SYSTEM_GLYPHY),)
-
-define gb_LinkTarget__use_glyphy
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-    $(GLYPHY_CFLAGS) \
-)
-$(call gb_LinkTarget_add_libs,$(1),$(GLYPHY_LIBS))
-
-endef
-else # !SYSTEM_GLYPHY
-
-$(eval $(call gb_Helper_optional,GLYPHY,$(call gb_Helper_register_packages_for_install,ooo,\
-	glyphy \
-)))
-
-define gb_LinkTarget__use_glyphy
-$(call gb_LinkTarget_use_package,$(1),glyphy)
-
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,glyphy/src) \
-	$$(INCLUDE) \
-)
-
-ifeq ($(COM),MSC)
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,glyphy)/src/.libs/libglyphy.lib \
-)
-else
-$(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,glyphy)/src/.libs -lglyphy \
-)
-endif
-
-endef
-
-endif # SYSTEM_GLYPHY
-
 define gb_LinkTarget__use_iconv
 $(call gb_LinkTarget_add_libs,$(1),-liconv)
 

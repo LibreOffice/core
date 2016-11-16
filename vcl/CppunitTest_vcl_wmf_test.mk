@@ -186,12 +186,6 @@ $(eval $(call gb_CppunitTest_use_system_win32_libs,vcl_wmf_test,\
 #$(eval $(call gb_CppunitTest_add_nativeres,vcl_wmf_test,vcl/salsrc))
 endif
 
-ifeq ($(OS), WNT)
-$(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
-    glyphy \
-))
-endif
-
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_CppunitTest_add_libs,vcl_wmf_test,\
     -lm $(DLOPEN_LIBS) \
