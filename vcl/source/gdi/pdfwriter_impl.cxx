@@ -6036,8 +6036,25 @@ typedef struct {
     Extension *extensions;
 } TimeStampReq;
 
+/**
+ * Supplies different fields that are used to identify certificates, defined by
+ * RFC 5035.
+ */
+struct ESSCertIDv2
+{
+};
+
+/**
+ * This attribute uses the ESSCertIDv2 structure, defined by RFC 5035.
+ */
 struct SigningCertificateV2
 {
+    ESSCertIDv2** certs;
+
+    SigningCertificateV2()
+        : certs(nullptr)
+    {
+    }
 };
 
 // (Partial) ASN.1 for the time stamp response. Very complicated. Pulled
@@ -6256,12 +6273,23 @@ const SEC_ASN1Template TimeStampReq_Template[] =
 };
 
 /**
+ * ESSCertIDv2 ::= SEQUENCE {
+ * }
+ */
+const SEC_ASN1Template ESSCertIDv2Template[] =
+{
+    {SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(ESSCertIDv2)},
+    {0, 0, nullptr, 0}
+};
+
+/**
  * SigningCertificateV2 ::= SEQUENCE {
  * }
  */
 const SEC_ASN1Template SigningCertificateV2Template[] =
 {
     {SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(SigningCertificateV2)},
+    {SEC_ASN1_SEQUENCE_OF, offsetof(SigningCertificateV2, certs), ESSCertIDv2Template, 0},
     {0, 0, nullptr, 0}
 };
 
@@ -7055,7 +7083,12 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     }
 
     // Add the signing certificate as a signed attribute.
+    ESSCertIDv2* aCertIDs[2];
+    ESSCertIDv2 aCertID;
+    aCertIDs[0] = &aCertID;
+    aCertIDs[1] = nullptr;
     SigningCertificateV2 aCertificate;
+    aCertificate.certs = &aCertIDs[0];
     SECItem* pEncodedCertificate = SEC_ASN1EncodeItem(nullptr, nullptr, &aCertificate, SigningCertificateV2Template);
     if (!pEncodedCertificate)
     {
