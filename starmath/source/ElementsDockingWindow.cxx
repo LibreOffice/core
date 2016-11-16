@@ -441,7 +441,14 @@ void SmElementsControl::RequestHelp(const HelpEvent& rHEvt)
 
 void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
 {
+    SmElement* pPrevElement = mpCurrentElement;
     mpCurrentElement = nullptr;
+    if (rMouseEvent.IsLeaveWindow())
+    {
+        LayoutOrPaintContents();
+        Invalidate();
+        return;
+    }
     if (Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()))
     {
         for (std::unique_ptr<SmElement> & i : maElementList)
@@ -450,11 +457,12 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
             Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
-                if (mpCurrentElement != element)
+                if (pPrevElement != element)
                 {
                     mpCurrentElement = element;
                     LayoutOrPaintContents();
                     Invalidate();
+                    return;
                 }
             }
         }
