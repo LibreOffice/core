@@ -6042,6 +6042,8 @@ typedef struct {
  */
 struct ESSCertIDv2
 {
+    SECAlgorithmID hashAlgorithm;
+    SECItem certHash;
 };
 
 /**
@@ -6273,12 +6275,19 @@ const SEC_ASN1Template TimeStampReq_Template[] =
 };
 
 /**
+ * Hash ::= OCTET STRING
+ *
  * ESSCertIDv2 ::= SEQUENCE {
+ *     hashAlgorithm AlgorithmIdentifier DEFAULT {algorithm id-sha256},
+ *     certHash Hash,
+ *     issuerSerial IssuerSerial OPTIONAL
  * }
  */
 const SEC_ASN1Template ESSCertIDv2Template[] =
 {
     {SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(ESSCertIDv2)},
+    {SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(ESSCertIDv2, hashAlgorithm), SEC_ASN1_SUB(SECOID_AlgorithmIDTemplate), 0},
+    {SEC_ASN1_OCTET_STRING, offsetof(ESSCertIDv2, certHash), nullptr, 0},
     {0, 0, nullptr, 0}
 };
 
@@ -7085,6 +7094,26 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     // Add the signing certificate as a signed attribute.
     ESSCertIDv2* aCertIDs[2];
     ESSCertIDv2 aCertID;
+    // Write ESSCertIDv2.hashAlgorithm.
+    aCertID.hashAlgorithm.algorithm.data = nullptr;
+    aCertID.hashAlgorithm.parameters.data = nullptr;
+    SECOID_SetAlgorithmID(nullptr, &aCertID.hashAlgorithm, SEC_OID_SHA256, nullptr);
+    // Write ESSCertIDv2.certHash.
+    SECItem aCertHashItem;
+    unsigned char aCertHash[SHA256_LENGTH];
+    HashContextScope aCertHashContext(HASH_Create(HASH_AlgSHA256));
+    if (!aCertHashContext.get())
+    {
+        SAL_WARN("vcl.pdfwriter", "HASH_Create() failed");
+        return false;
+    }
+    HASH_Begin(aCertHashContext.get());
+    HASH_Update(aCertHashContext.get(), reinterpret_cast<const unsigned char *>(rContext.m_pDerEncoded), rContext.m_nDerEncoded);
+    aCertHashItem.type = siBuffer;
+    aCertHashItem.data = aCertHash;
+    HASH_End(aCertHashContext.get(), aCertHashItem.data, &aCertHashItem.len, SHA256_LENGTH);
+    aCertID.certHash = aCertHashItem;
+    // Write SigningCertificateV2.certs.
     aCertIDs[0] = &aCertID;
     aCertIDs[1] = nullptr;
     SigningCertificateV2 aCertificate;
@@ -7127,8 +7156,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     aAttribute.type = aOidData.oid;
     aAttribute.encoded = PR_TRUE;
 
-    // Don't enable this by default till it works completely.
-    if (g_bDebugDisableCompression && my_NSS_CMSSignerInfo_AddAuthAttr(cms_signer, &aAttribute) != SECSuccess)
+    if (my_NSS_CMSSignerInfo_AddAuthAttr(cms_signer, &aAttribute) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "my_NSS_CMSSignerInfo_AddAuthAttr() failed");
         return false;
