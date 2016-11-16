@@ -15,6 +15,7 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
 
@@ -187,7 +188,7 @@ void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
                 pRealDialog = pDialog;
             }
 
-            pRealDialog->SetText("LibreOffice DialogScreenshot");
+            pRealDialog->SetText(utl::ConfigManager::getProductName());
             pRealDialog->SetStyle(pDialog->GetStyle() | WB_CLOSEABLE);
 
             dumpDialogToPath(*pRealDialog);
