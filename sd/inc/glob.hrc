@@ -139,6 +139,9 @@
 #define STR_MASTERSLIDE_NAME                    RID_GLOB_START+230
 #define STR_MASTERPAGE_NAME                     RID_GLOB_START+231
 
+#define STR_SHRINK_FONT_SIZE                    RID_GLOB_START+232
+#define STR_GROW_FONT_SIZE                      RID_GLOB_START+233
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
