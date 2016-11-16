@@ -80,12 +80,15 @@ class SFX2_DLLPUBLIC SfxDispatcher final
 {
     std::unique_ptr<SfxDispatcher_Impl> xImp;
 
-private:
     // Search for temporary evaluated Todos
     SAL_DLLPRIVATE bool CheckVirtualStack( const SfxShell& rShell );
 
 friend class SfxApplication;
 friend class SfxViewFrame;
+friend class SfxBindings;
+friend class SfxStateCache;
+friend class SfxPopupMenuManager;
+friend class SfxHelp;
 
     DECL_DLLPRIVATE_LINK( EventHdl_Impl, Idle *, void );
     DECL_DLLPRIVATE_LINK( PostMsgHandler, SfxRequest *, void );
@@ -93,11 +96,6 @@ friend class SfxViewFrame;
     SAL_DLLPRIVATE void Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, bool bRecord );
     SAL_DLLPRIVATE void Update_Impl_( bool,bool,bool,SfxWorkWindow*);
 
-protected:
-friend class SfxBindings;
-friend class SfxStateCache;
-friend class SfxPopupMenuManager;
-friend class SfxHelp;
 
     bool                FindServer_( sal_uInt16 nId, SfxSlotServer &rServer, bool bModal );
     bool                FillState_( const SfxSlotServer &rServer,
@@ -106,7 +104,6 @@ friend class SfxHelp;
                                   SfxRequest &rReq,
                                   SfxCallMode eCall = SfxCallMode::RECORD);
 
-protected:
     void FlushImpl();
 
 public:

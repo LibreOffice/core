@@ -310,7 +310,7 @@ public:
     void SwitchToContext(const css::uno::Reference< css::sdbc::XResultSet >& xCursor, const OUString& strVisibleFields, const InterfaceArray& arrFields,
         sal_Int32 nFieldIndex);
 
-protected:
+private:
     void Init(const OUString& strVisibleFields);
 
     void SearchNextImpl();
@@ -319,7 +319,6 @@ protected:
     // start a thread-search (or call SearchNextImpl directly, depending on the search mode)
     void ImplStartNextSearch();
 
-private:
     SVX_DLLPRIVATE void clearControlTexts();
     SVX_DLLPRIVATE void fillControlTexts(const InterfaceArray& arrFields);
 

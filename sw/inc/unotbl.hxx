@@ -75,7 +75,6 @@ class SwXCell final : public SwXCellBaseClass,
     size_t nFndPos;
     static size_t const NOTFOUND = SAL_MAX_SIZE;
 
-protected:
     virtual const SwStartNode *GetStartNode() const override;
 
     virtual css::uno::Reference< css::text::XTextCursor >
@@ -164,7 +163,6 @@ class SwXTextTableRow final : public cppu::WeakImplHelper
 
     SwFrameFormat* GetFrameFormat() { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
     const SwFrameFormat* GetFrameFormat() const { return const_cast<SwXTextTableRow*>(this)->GetFrameFormat(); }
-protected:
     virtual ~SwXTextTableRow() override;
     //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
@@ -505,16 +503,14 @@ class SwXTableRows final : public cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 {
-private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
     SwFrameFormat* GetFrameFormat();
     const SwFrameFormat* GetFrameFormat() const { return const_cast<SwXTableRows*>(this)->GetFrameFormat(); }
-protected:
     virtual ~SwXTableRows() override;
+
 public:
     SwXTableRows(SwFrameFormat& rFrameFormat);
-
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw( css::uno::RuntimeException, std::exception ) override;

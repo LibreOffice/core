@@ -88,7 +88,7 @@ public:
                             sal_Int32 nCtrlIndex ) const;
     const OUString& getControlSource() { return  maControlSource; }
     const OUString& getRowSource() { return  maRowSource; }
-protected:
+private:
     OUString     maName;             ///< Name of the control.
     OUString     maTag;              ///< User defined tag.
     OUString     maToolTip;          ///< Tool tip for the control.

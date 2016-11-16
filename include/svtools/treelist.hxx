@@ -130,7 +130,6 @@ class SVT_DLLPUBLIC SvTreeList final
     SvTreeList(const SvTreeList&) = delete;
     SvTreeList& operator= (const SvTreeList&) = delete;
 
-protected:
     SvTreeListEntry*        pRootItem;
 
 public:

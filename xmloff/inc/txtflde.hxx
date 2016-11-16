@@ -210,7 +210,7 @@ public:
     enum ::xmloff::token::XMLTokenEnum MapAuthorFieldName(const css::uno::Reference< css::beans::XPropertySet > & xPropSet);
     enum ::xmloff::token::XMLTokenEnum MapSenderFieldName(const css::uno::Reference< css::beans::XPropertySet > & xPropSet);
 
-protected:
+private:
 
     SvXMLExport& GetExport() { return rExport; }
 
@@ -407,7 +407,6 @@ protected:
     static OUString MakeSequenceRefName(sal_Int16 nSeqNo,
                                               const OUString& rSeqName);
 
-private:
     // constants
 
     // service names

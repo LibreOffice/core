@@ -79,7 +79,6 @@ private:
     const sal_uInt8*        mpReqEncodedIds;
     int                     mnReqGlyphCount;
 
-protected:
     bool    CreateFontSubsetFromCff( sal_Int32* pOutGlyphWidths );
     bool    CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths );
     static bool CreateFontSubsetFromType1( sal_Int32* pOutGlyphWidths );

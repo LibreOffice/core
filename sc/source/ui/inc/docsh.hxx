@@ -157,8 +157,6 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
 
     SAL_DLLPRIVATE ScDocFunc    *CreateDocFunc();
 
-protected:
-
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
 public:

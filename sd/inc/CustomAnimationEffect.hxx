@@ -169,10 +169,9 @@ public:
     SAL_DLLPRIVATE void updateSdrPathObjFromPath( SdrPathObj& rPathObj );
     SAL_DLLPRIVATE void updatePathFromSdrPathObj( const SdrPathObj& rPathObj );
 
-protected:
+private:
     SAL_DLLPRIVATE void setEffectSequence( EffectSequenceHelper* pSequence ) { mpEffectSequence = pSequence; }
 
-private:
     sal_Int16       mnNodeType;
     OUString        maPresetId;
     OUString        maPresetSubType;

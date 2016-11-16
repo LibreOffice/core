@@ -39,7 +39,6 @@ private:
     Sequence< PropertyValue >   maFilterData;
     Reference< XComponent >     mxSrcDoc;
 
-protected:
     // OGenericUnoDialog
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) override;

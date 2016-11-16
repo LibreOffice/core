@@ -187,7 +187,7 @@ public:
     */
     std::shared_ptr<view::Theme> const & GetTheme() const;
 
-protected:
+private:
     /** This virtual method makes it possible to create a specialization of
         the slide sorter view shell that works with its own implementation
         of model, view, and controller.  The default implementation simply
@@ -208,7 +208,6 @@ protected:
     */
     controller::SlideSorterController* CreateController();
 
-private:
     bool mbIsValid;
 
     std::unique_ptr<controller::SlideSorterController> mpSlideSorterController;

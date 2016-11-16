@@ -94,7 +94,7 @@ namespace oox { namespace ppt {
             { return maPrevCondList; }
         AnimationCondition & getEndSyncValue()
             { mbHasEndSyncValue = true; return maEndSyncValue; }
-    protected:
+    private:
 
         static OUString getServiceName( sal_Int16 nNodeType );
 
@@ -104,7 +104,6 @@ namespace oox { namespace ppt {
             const OUString& rServiceName,
             const css::uno::Reference< css::animations::XAnimationNode >& rxNode );
 
-    private:
         const sal_Int16 mnNodeType;
 
         TimeNodePtrList maChildren;

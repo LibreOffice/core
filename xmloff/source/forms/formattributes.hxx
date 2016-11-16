@@ -289,7 +289,7 @@ namespace xmloff
             AttributeAssignment() : pEnumMap(nullptr), bInverseSemantics(false) { }
         };
 
-    protected:
+    private:
         typedef std::map<OUString, AttributeAssignment> AttributeAssignments;
         AttributeAssignments        m_aKnownProperties;
 
@@ -381,7 +381,7 @@ namespace xmloff
             const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
             const css::uno::Type* _pType = nullptr);
 
-    protected:
+    private:
         /// some common code for the various add*Property methods
         AttributeAssignment& implAdd(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,

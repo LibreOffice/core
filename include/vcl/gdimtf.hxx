@@ -98,8 +98,6 @@ private:
 
     SAL_DLLPRIVATE bool                 ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rLogicDestSize );
 
-protected:
-
     void                                Linker( OutputDevice* pOut, bool bLink );
 
 public:

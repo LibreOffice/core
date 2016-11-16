@@ -22,7 +22,7 @@ public:
 
     static bool check(Bitmap& rBitmap);
 
-protected:
+private:
     static bool checkImpl(BitmapReadAccess* pReadAccess);
 };
 

@@ -129,7 +129,7 @@ class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler final
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
-    protected:
+    private:
         void WriteStatusBarItem(
             const OUString& rCommandURL,
             const OUString& rHelpURL,

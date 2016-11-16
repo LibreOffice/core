@@ -122,7 +122,7 @@ class HStreamIODev final: public HIODev
  * Move current pointer of stream as amount of size
  */
         virtual int skipBlock( int size ) override;
-    protected:
+    private:
 /**
  * Initialize this object
  */
@@ -157,7 +157,7 @@ class HMemIODev final: public HIODev
         virtual bool read4b(int &out) override;
         virtual int readBlock( void *ptr, int size ) override;
         virtual int skipBlock( int size ) override;
-    protected:
+    private:
         virtual void init() override;
 };
 #endif // INCLUDED_HWPFILTER_SOURCE_HIODEV_H

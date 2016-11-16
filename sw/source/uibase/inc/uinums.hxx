@@ -82,7 +82,7 @@ class SW_DLLPUBLIC SwChapterNumRules final
 {
 public:
     enum { nMaxRules = MAX_NUM_RULES };         // currently 9 defined forms
-protected:
+private:
     SwNumRulesWithName   *pNumRules[ MAX_NUM_RULES ];
 
     void Init();
@@ -96,7 +96,6 @@ public:
     void CreateEmptyNumRule(sal_uInt16 nIdx); // for import
     void ApplyNumRules( const SwNumRulesWithName &rCopy,
                         sal_uInt16 nIdx);
-
 };
 
 inline const SwNumRulesWithName *SwChapterNumRules::GetRules(sal_uInt16 nIdx) const

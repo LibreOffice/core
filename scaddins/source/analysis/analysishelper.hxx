@@ -242,7 +242,7 @@ class SortedIndividualInt32List final
 {
 private:
     std::vector<sal_Int32>      maVector;
-protected:
+
     void                        Insert( sal_Int32 nDay );
     void                        Insert( sal_Int32 nDay, sal_Int32 nNullDate, bool bInsertOnWeekend );
     void                        Insert( double fDay, sal_Int32 nNullDate, bool bInsertOnWeekend )
