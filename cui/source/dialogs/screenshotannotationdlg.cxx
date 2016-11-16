@@ -262,8 +262,9 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     // copying content to clipboard is allowed
     if (mpText)
     {
+        mpText->set_width_request(400);
+        mpText->set_height_request( mpText->GetTextHeight() * 10 );
         OUString aHelpId = OStringToOUString( mrParentDialog.GetHelpId(), RTL_TEXTENCODING_UTF8 );
-
         Size aSizeCm = mrParentDialog.PixelToLogic( maParentDialogSize, MapUnit::MapCM );
         maMainMarkupText = lcl_ParagraphWithImage( aHelpId, aSizeCm );
         mpText->SetText( maMainMarkupText );
