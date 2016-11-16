@@ -185,6 +185,15 @@ void AtkListener::handleChildRemoved(
         }
     }
 
+    uno::Reference<accessibility::XAccessibleEventBroadcaster> xBroadcaster(
+        rxChild->getAccessibleContext(), uno::UNO_QUERY);
+
+    if (xBroadcaster.is())
+    {
+        uno::Reference<accessibility::XAccessibleEventListener> xListener(this);
+        xBroadcaster->removeAccessibleEventListener(xListener);
+    }
+
     // FIXME: two problems here:
     // a) we get child-removed events for objects that are no real children
     //    in the accessibility hierarchy or have been removed before due to
