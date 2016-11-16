@@ -199,6 +199,9 @@ css::lang::Locale MsLangId::getFallbackLocale(
 // static
 bool MsLangId::isRightToLeft( LanguageType nLang )
 {
+    if (LanguageTag::isOnTheFlyID(nLang))
+        return LanguageTag::getOnTheFlyScriptType(nLang) == LanguageTag::ScriptType::RIGHT;
+
     switch( nLang & LANGUAGE_MASK_PRIMARY )
     {
         case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY :
@@ -293,6 +296,9 @@ bool MsLangId::isKorean( LanguageType nLang )
 // static
 bool MsLangId::isCJK( LanguageType nLang )
 {
+    if (LanguageTag::isOnTheFlyID(nLang))
+        return LanguageTag::getOnTheFlyScriptType(nLang) == LanguageTag::ScriptType::CJK;
+
     switch (nLang & LANGUAGE_MASK_PRIMARY)
     {
         case LANGUAGE_CHINESE              & LANGUAGE_MASK_PRIMARY:
@@ -340,6 +346,22 @@ bool MsLangId::needsSequenceChecking( LanguageType nLang )
 sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 {
     sal_Int16 nScript;
+    if (LanguageTag::isOnTheFlyID(nLang))
+    {
+        switch (LanguageTag::getOnTheFlyScriptType(nLang))
+        {
+            case LanguageTag::ScriptType::CJK :
+                return css::i18n::ScriptType::ASIAN;
+            case LanguageTag::ScriptType::CTL :
+            case LanguageTag::ScriptType::RIGHT :
+                return css::i18n::ScriptType::COMPLEX;
+            case LanguageTag::ScriptType::LATIN :
+            case LanguageTag::ScriptType::UNKNOWN :
+            default:
+                return css::i18n::ScriptType::LATIN;
+        }
+    }
+
     switch( nLang )
     {
         // CTL
