@@ -1204,10 +1204,10 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         }
         case GtkControlPart::Notebook:
         {
-            GtkWidgetPath *path = gtk_widget_path_new();
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpWindowStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
             set_object_name(path, -1, "notebook");
-            return makeContext(path, nullptr);
+            return makeContext(path, mpWindowStyle);
         }
         case GtkControlPart::NotebookStack:
         {
