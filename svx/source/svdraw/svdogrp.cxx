@@ -754,7 +754,7 @@ SdrObject* SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 
 void SdrObjGroup::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrObjGroup"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrObjGroup"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     SdrObject::dumpAsXml(pWriter);

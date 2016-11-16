@@ -180,7 +180,7 @@ SwDoc * SwPosition::GetDoc() const
 
 void SwPosition::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swPosition"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwPosition"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nNode"), BAD_CAST(OString::number(nNode.GetIndex()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nContent"), BAD_CAST(OString::number(nContent.GetIndex()).getStr()));
     xmlTextWriterEndElement(pWriter);
@@ -1045,7 +1045,7 @@ void SwPaM::InvalidatePaM()
 
 void SwPaM::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swPaM"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwPaM"));
 
     xmlTextWriterStartElement(pWriter, BAD_CAST("point"));
     GetPoint()->dumpAsXml(pWriter);

@@ -3357,7 +3357,7 @@ OUString SwCursorShell::GetCursorDescr() const
 
 void SwCursorShell::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swCursorShell"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwCursorShell"));
 
     SwViewShell::dumpAsXml(pWriter);
 

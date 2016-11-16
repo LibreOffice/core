@@ -548,7 +548,7 @@ bool SwFormatEditInReadonly::GetPresentation
 
 void SwFormatEditInReadonly::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatEditInReadonly"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatEditInReadonly"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
     xmlTextWriterEndElement(pWriter);
@@ -842,7 +842,7 @@ bool SwFormatFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
 
 void SwFormatFollowTextFlow::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatFollowTextFlow"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatFollowTextFlow"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
     xmlTextWriterEndElement(pWriter);

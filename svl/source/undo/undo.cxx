@@ -133,7 +133,7 @@ bool SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
 
 void SfxUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxUndoAction"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUndoAction"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("comment"), BAD_CAST(GetComment().toUtf8().getStr()));
@@ -1275,7 +1275,7 @@ void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         bOwns = true;
     }
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxUndoManager"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUndoManager"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUndoActionCount"), BAD_CAST(OString::number(GetUndoActionCount()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRedoActionCount"), BAD_CAST(OString::number(GetRedoActionCount()).getStr()));
 
@@ -1460,7 +1460,7 @@ bool SfxListUndoAction::Merge( SfxUndoAction *pNextAction )
 
 void SfxListUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxListUndoAction"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxListUndoAction"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::number(aUndoActions.size()).getStr()));
     SfxUndoAction::dumpAsXml(pWriter);
 

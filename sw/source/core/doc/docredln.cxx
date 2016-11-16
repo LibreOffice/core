@@ -87,13 +87,13 @@ SwExtraRedlineTable::~SwExtraRedlineTable()
 
 void SwExtraRedlineTable::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swExtraRedlineTable"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwExtraRedlineTable"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     for (sal_uInt16 nCurExtraRedlinePos = 0; nCurExtraRedlinePos < GetSize(); ++nCurExtraRedlinePos)
     {
         const SwExtraRedline* pExtraRedline = GetRedline(nCurExtraRedlinePos);
-        xmlTextWriterStartElement(pWriter, BAD_CAST("swExtraRedline"));
+        xmlTextWriterStartElement(pWriter, BAD_CAST("SwExtraRedline"));
         xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
         xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*pExtraRedline).name()));
         xmlTextWriterEndElement(pWriter);
@@ -625,7 +625,7 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
 
 void SwRedlineTable::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swRedlineTable"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwRedlineTable"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     for (SwRedlineTable::size_type nCurRedlinePos = 0; nCurRedlinePos < size(); ++nCurRedlinePos)
@@ -1699,7 +1699,7 @@ OUString SwRangeRedline::GetDescr()
 
 void SwRangeRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swRangeRedline"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwRangeRedline"));
 
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(GetSeqNo()).getStr()));

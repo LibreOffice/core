@@ -225,7 +225,7 @@ void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const OUString& rNewN
 
 void OutlinerParaObject::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("outlinerParaObject"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("OutlinerParaObject"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     mpImpl->mpEditTextObject->dumpAsXml(pWriter);
     for (Paragraph const & p : mpImpl->maParagraphDataVector)

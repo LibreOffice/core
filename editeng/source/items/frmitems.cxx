@@ -823,7 +823,7 @@ bool SvxLRSpaceItem::HasMetrics() const
 
 void SvxLRSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("svxLRSpaceItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxLRSpaceItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nFirstLineOfst"), BAD_CAST(OString::number(nFirstLineOfst).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nTxtLeft"), BAD_CAST(OString::number(nTxtLeft).getStr()));
@@ -1088,7 +1088,7 @@ bool SvxULSpaceItem::HasMetrics() const
 
 void SvxULSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("svxULSpaceItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxULSpaceItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUpper"), BAD_CAST(OString::number(nUpper).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLower"), BAD_CAST(OString::number(nLower).getStr()));
@@ -1280,7 +1280,7 @@ SfxPoolItem* SvxProtectItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 void SvxProtectItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("svxProtectItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxProtectItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("content"), BAD_CAST(OString::boolean(bCntnt).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::boolean(bSize).getStr()));
@@ -1570,7 +1570,7 @@ void SvxShadowItem::SetEnumValue( sal_uInt16 nVal )
 
 void SvxShadowItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("svxShadowItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxShadowItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aShadowColor"), BAD_CAST(aShadowColor.AsRGBHexString().toUtf8().getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWidth"), BAD_CAST(OString::number(nWidth).getStr()));
@@ -4033,7 +4033,7 @@ void SvxBrushItem::ApplyGraphicTransparency_Impl()
 
 void SvxBrushItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("svxBrushItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxBrushItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("color"), BAD_CAST(aColor.AsRGBHexString().toUtf8().getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("shadingValue"), BAD_CAST(OString::number(nShadingValue).getStr()));

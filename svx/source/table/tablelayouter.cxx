@@ -1124,7 +1124,7 @@ void TableLayouter::DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal
 
 void TableLayouter::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("tableLayouter"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("TableLayouter"));
 
     xmlTextWriterStartElement(pWriter, BAD_CAST("columns"));
     for (const auto& rColumn : maColumns)
@@ -1141,7 +1141,7 @@ void TableLayouter::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 void TableLayouter::Layout::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("layout"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("TableLayouter_Layout"));
 
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pos"), BAD_CAST(OString::number(mnPos).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::number(mnSize).getStr()));

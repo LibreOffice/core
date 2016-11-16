@@ -1079,7 +1079,7 @@ SwSectionFormat::MakeUnoObject()
 
 void SwSectionFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swSectionFormat"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwSectionFormat"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
     GetAttrSet().dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
@@ -1087,7 +1087,7 @@ void SwSectionFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 void SwSectionFormats::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swSectionFormats"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwSectionFormats"));
     for (size_t i = 0; i < size(); ++i)
         GetFormat(i)->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);

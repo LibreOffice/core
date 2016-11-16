@@ -140,7 +140,7 @@ sal_Int16 SwFormatWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
 
 void SwFormatWrapInfluenceOnObjPos::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatWrapInfluenceOnObjPos"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatWrapInfluenceOnObjPos"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWrapInfluenceOnPosition"), BAD_CAST(OString::number(mnWrapInfluenceOnPosition).getStr()));
     xmlTextWriterEndElement(pWriter);

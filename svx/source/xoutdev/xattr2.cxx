@@ -442,7 +442,7 @@ bool XFillTransparenceItem::GetPresentation
 
 void XFillTransparenceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("xFillTransparenceItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("XFillTransparenceItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
     xmlTextWriterEndElement(pWriter);
@@ -546,7 +546,7 @@ bool XFillBmpTileItem::GetPresentation
 
 void XFillBmpTileItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("xFillBmpTileItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBmpTileItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
     xmlTextWriterEndElement(pWriter);
@@ -596,7 +596,7 @@ sal_uInt16 XFillBmpPosItem::GetValueCount() const
 
 void XFillBmpPosItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("xFillBmpPosItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBmpPosItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number((int)GetValue()).getStr()));
     xmlTextWriterEndElement(pWriter);
@@ -830,7 +830,7 @@ bool XFillBmpStretchItem::GetPresentation
 
 void XFillBmpStretchItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("xFillBmpStretchItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBmpStretchItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
     xmlTextWriterEndElement(pWriter);

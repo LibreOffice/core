@@ -980,7 +980,7 @@ void SdrObjList::RemoveObjectFromContainer (
 
 void SdrObjList::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrObjList"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrObjList"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
 

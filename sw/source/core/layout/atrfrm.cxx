@@ -405,7 +405,7 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 void SwFormatFrameSize::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatFrameSize"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatFrameSize"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
 
     std::stringstream aSize;
@@ -568,7 +568,7 @@ SfxPoolItem*  SwFormatContent::Clone( SfxItemPool* ) const
 
 void SwFormatContent::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatContent"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatContent"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startNode"), BAD_CAST(OString::number(pStartNode->GetNode().GetIndex()).getStr()));
     xmlTextWriterEndElement(pWriter);
@@ -761,7 +761,7 @@ bool SwFormatPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 void SwFormatPageDesc::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatPageDesc"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatPageDesc"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     if (oNumOffset)
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("oNumOffset"), BAD_CAST(OString::number(*oNumOffset).getStr()));
@@ -792,7 +792,7 @@ bool SwColumn::operator==( const SwColumn &rCmp ) const
 
 void SwColumn::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swColumn"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwColumn"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWish"), BAD_CAST(OString::number(m_nWish).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUpper"), BAD_CAST(OString::number(0).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLower"), BAD_CAST(OString::number(0).getStr()));
@@ -1126,7 +1126,7 @@ bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 void SwFormatCol::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatCol"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatCol"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eLineStyle"), BAD_CAST(OString::number(m_eLineStyle).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLineWidth"), BAD_CAST(OString::number(m_nLineWidth).getStr()));
@@ -1272,7 +1272,7 @@ bool SwFormatSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 void SwFormatSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatSurround"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatSurround"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
 
@@ -1401,7 +1401,7 @@ bool SwFormatVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 void SwFormatVertOrient::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatVertOrient"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatVertOrient"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nYPos"), BAD_CAST(OString::number(m_nYPos).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eOrient"), BAD_CAST(OString::number(m_eOrient).getStr()));
@@ -1502,7 +1502,7 @@ bool SwFormatHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 void SwFormatHoriOrient::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatHoriOrient"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatHoriOrient"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nXPos"), BAD_CAST(OString::number(m_nXPos).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eOrient"), BAD_CAST(OString::number(m_eOrient).getStr()));
@@ -1714,7 +1714,7 @@ bool SwFormatAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 void SwFormatAnchor::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatAnchor"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatAnchor"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
 
     if (m_pContentAnchor)
@@ -1911,7 +1911,7 @@ SfxPoolItem* SwFormatNoBalancedColumns::Clone( SfxItemPool* ) const
 
 void SwFormatNoBalancedColumns::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatNoBalancedColumns"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatNoBalancedColumns"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
     xmlTextWriterEndElement(pWriter);
@@ -2846,7 +2846,7 @@ OUString SwFrameFormat::GetDescription() const
 
 void SwFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFrameFormat"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFrameFormat"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());

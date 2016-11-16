@@ -99,7 +99,7 @@ void Paragraph::SetParaIsNumberingRestart( bool bParaIsNumberingRestart )
 
 void Paragraph::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("paragraph"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("Paragraph"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nDepth"), "%" SAL_PRIdINT32, (sal_Int32)nDepth);
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mnNumberingStartValue"), "%" SAL_PRIdINT32, (sal_Int32)mnNumberingStartValue);
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mbParaIsNumberingRestart"), "%" SAL_PRIdINT32, (sal_Int32)mbParaIsNumberingRestart);
@@ -266,7 +266,7 @@ sal_Int32 ParagraphList::GetAbsPos( Paragraph* pParent ) const
 
 void ParagraphList::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("paragraphList"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("ParagraphList"));
     for (const Paragraph* pParagraph : maEntries)
         pParagraph->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);

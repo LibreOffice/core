@@ -1837,7 +1837,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 void SwPostItField::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swPostItField"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwPostItField"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
 
     SwField::dumpAsXml(pWriter);

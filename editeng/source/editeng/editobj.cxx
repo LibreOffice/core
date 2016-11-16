@@ -166,7 +166,7 @@ void ContentInfo::SetText( const OUString& rStr )
 
 void ContentInfo::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("contentInfo"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("ContentInfo"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("style"), BAD_CAST(aStyle.toUtf8().getStr()));
     xmlTextWriterStartElement(pWriter, BAD_CAST("text"));
     xmlTextWriterWriteString(pWriter, BAD_CAST(GetText().toUtf8().getStr()));
@@ -458,7 +458,7 @@ void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
         bOwns = true;
     }
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("editTextObject"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("EditTextObject"));
     sal_Int32 nCount = GetParagraphCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {

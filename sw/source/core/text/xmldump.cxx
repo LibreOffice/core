@@ -441,7 +441,7 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
 
 void SwFont::dumpAsXml(xmlTextWriterPtr writer) const
 {
-    xmlTextWriterStartElement(writer, BAD_CAST("pFont"));
+    xmlTextWriterStartElement(writer, BAD_CAST("SwFont"));
     xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("color"), "%s", GetColor().AsRGBHexString().toUtf8().getStr());
     xmlTextWriterEndElement(writer);
