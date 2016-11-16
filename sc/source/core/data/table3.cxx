@@ -780,7 +780,12 @@ void fillSortedColumnArray(
                 }
                 break;
                 default:
-                    assert(!rCell.mpAttr);
+                    //assert(!rCell.mpAttr);
+                    // This assert doesn't hold, for example
+                    // CopyCellsFromClipHandler may omit copying cells during
+                    // PasteSpecial for which CopyTextAttrsFromClipHandler
+                    // still copies a CellTextAttr. So if that really is not
+                    // expected then fix it there.
                     rCellStore.push_back_empty();
             }
 

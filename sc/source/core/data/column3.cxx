@@ -953,6 +953,11 @@ public:
                                 }
                             }
                         }
+                        else if (rSrcCell.IsEmptyDisplayedAsString())
+                        {
+                            // Empty stays empty and doesn't become 0.
+                            continue;
+                        }
                         else if (rSrcCell.IsValue())
                         {
                             bool bCopy = mrCxt.isDateCell(mrSrcCol, nSrcRow) ? bDateTime : bNumeric;
