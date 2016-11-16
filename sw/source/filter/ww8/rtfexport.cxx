@@ -901,9 +901,7 @@ RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc* pDocument, SwPaM* pCurrent
     : MSWordExportBase(pDocument, pCurrentPam, pOriginalPam),
       m_pFilter(pFilter),
       m_pWriter(pWriter),
-      m_pAttrOutput(),
       m_pSections(nullptr),
-      m_pSdrExport(),
       m_bOutOutlineOnly(bOutOutlineOnly),
       m_eDefaultEncoding(rtl_getTextEncodingFromWindowsCharset(sw::ms::rtl_TextEncodingToWinCharset(DEF_ENCODING))),
       m_eCurrentEncoding(m_eDefaultEncoding),
@@ -924,9 +922,7 @@ RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc* pDocument, SwPaM* pCurrent
         m_pWriter = &m_pFilter->m_aWriter;
 }
 
-RtfExport::~RtfExport()
-{
-}
+RtfExport::~RtfExport() = default;
 
 SvStream& RtfExport::Strm()
 {
@@ -1318,8 +1314,8 @@ private:
 
 public:
     SwRTFWriter(const OUString& rFilterName, const OUString& rBaseURL);
-    virtual ~SwRTFWriter() override;
-    virtual sal_uLong WriteStream() override;
+    ~SwRTFWriter() override;
+    sal_uLong WriteStream() override;
 };
 
 SwRTFWriter::SwRTFWriter(const OUString& rFltName, const OUString& rBaseURL)
@@ -1329,8 +1325,7 @@ SwRTFWriter::SwRTFWriter(const OUString& rFltName, const OUString& rBaseURL)
     m_bOutOutlineOnly = rFltName.startsWith("O");
 }
 
-SwRTFWriter::~SwRTFWriter()
-{}
+SwRTFWriter::~SwRTFWriter() = default;
 
 sal_uLong SwRTFWriter::WriteStream()
 {
