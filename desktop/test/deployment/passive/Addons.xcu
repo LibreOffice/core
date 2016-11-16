@@ -17,42 +17,43 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<o:component-data xmlns:o="http://openoffice.org/2001/registry"
-    o:package="org.openoffice.Office" o:name="Addons">
-  <node o:name="AddonUI">
-    <node o:name="OfficeMenuBar">
-      <node o:name="org.openoffice.test.desktop.deployment.passive"
-          o:op="replace">
-        <prop o:name="Title" xml:lang="en-US">
-          <value>passive</value>
-        </prop>
-        <node o:name="Submenu">
-          <node o:name="1" o:op="replace">
-            <prop o:name="URL">
-              <value>vnd.org.openoffice.test.desktop.deployment.passive_native:</value>
-            </prop>
-            <prop o:name="Title" xml:lang="en-US">
-              <value>native</value>
-            </prop>
-          </node>
-          <node o:name="2" o:op="replace">
-            <prop o:name="URL">
-              <value>vnd.org.openoffice.test.desktop.deployment.passive_java:</value>
-            </prop>
-            <prop o:name="Title" xml:lang="en-US">
-              <value>java</value>
-            </prop>
-          </node>
-          <node o:name="3" o:op="replace">
-            <prop o:name="URL">
-              <value>vnd.org.openoffice.test.desktop.deployment.passive_python:</value>
-            </prop>
-            <prop o:name="Title" xml:lang="en-US">
-              <value>python</value>
-            </prop>
+<o:items xmlns:o="http://openoffice.org/2001/registry">
+  <item o:path="/org.openoffice.Office.Addons">
+    <node o:name="AddonUI">
+      <node o:name="OfficeMenuBar">
+        <node o:name="org.openoffice.test.desktop.deployment.passive"
+            o:op="replace">
+          <prop o:name="Title" xml:lang="en-US">
+            <value>passive</value>
+          </prop>
+          <node o:name="Submenu">
+            <node o:name="1" o:op="replace">
+              <prop o:name="URL">
+                <value>vnd.org.openoffice.test.desktop.deployment.passive_native:</value>
+              </prop>
+              <prop o:name="Title" xml:lang="en-US">
+                <value>native</value>
+              </prop>
+            </node>
+            <node o:name="2" o:op="replace">
+              <prop o:name="URL">
+                <value>vnd.org.openoffice.test.desktop.deployment.passive_java:</value>
+              </prop>
+              <prop o:name="Title" xml:lang="en-US">
+                <value>java</value>
+              </prop>
+            </node>
+            <node o:name="3" o:op="replace">
+              <prop o:name="URL">
+                <value>vnd.org.openoffice.test.desktop.deployment.passive_python:</value>
+              </prop>
+              <prop o:name="Title" xml:lang="en-US">
+                <value>python</value>
+              </prop>
+            </node>
           </node>
         </node>
       </node>
     </node>
-  </node>
-</o:component-data>
+  </item>
+</o:items>
