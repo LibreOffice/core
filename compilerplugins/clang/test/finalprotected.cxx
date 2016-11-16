@@ -10,25 +10,25 @@
 
 class S final {
 protected:
-    void f(int f) { f1 = f; }  // expected-error {{final class should not have protected members - convert them to private [loplugin:finalprotected]}} expected-error {{Unreferenced externally visible function definition [loplugin:unreffun]}}
+    void f(int f) { f1 = f; }  // expected-error {{final class should not have protected members - convert them to private [loplugin:finalprotected]}} expected-error {{[loplugin:unreffun]}}
     int f1;      // expected-error {{final class should not have protected members - convert them to private [loplugin:finalprotected]}}
 public:
-    void g();    // expected-error {{extern prototype in main file without definition [loplugin:externandnotdefined]}} expected-error {{Unreferenced function declaration [loplugin:unreffun]}}
+    void g();    // expected-error {{[loplugin:externandnotdefined]}} expected-error {{[loplugin:unreffun]}}
     int g1;
 private:
-    void h();    // expected-error {{extern prototype in main file without definition [loplugin:externandnotdefined]}} expected-error {{Unreferenced function declaration [loplugin:unreffun]}}
+    void h();    // expected-error {{[loplugin:externandnotdefined]}} expected-error {{[loplugin:unreffun]}}
     int h1;
 };
 
 class S2 {
 protected:
-    void f(int f) { f1 = f; } // expected-error {{Unreferenced externally visible function definition [loplugin:unreffun]}}
+    void f(int f) { f1 = f; } // expected-error {{[loplugin:unreffun]}}
     int f1;
 public:
-    void g();    // expected-error {{extern prototype in main file without definition [loplugin:externandnotdefined]}} expected-error {{Unreferenced function declaration [loplugin:unreffun]}}
+    void g();    // expected-error {{[loplugin:externandnotdefined]}} expected-error {{[loplugin:unreffun]}}
     int g1;
 private:
-    void h();    // expected-error {{extern prototype in main file without definition [loplugin:externandnotdefined]}} expected-error {{Unreferenced function declaration [loplugin:unreffun]}}
+    void h();    // expected-error {{[loplugin:externandnotdefined]}} expected-error {{[loplugin:unreffun]}}
     int h1;
 };
 
