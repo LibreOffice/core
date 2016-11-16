@@ -3204,7 +3204,7 @@ namespace
 
 namespace
 {
-    static GdkDragAction getPreferredDragAction(sal_Int8 dragOperation)
+    GdkDragAction getPreferredDragAction(sal_Int8 dragOperation)
     {
         GdkDragAction eAct(static_cast<GdkDragAction>(0));
 
