@@ -268,7 +268,6 @@
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
-#include <tools/debug.hxx>
 #include <tools/errinf.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>

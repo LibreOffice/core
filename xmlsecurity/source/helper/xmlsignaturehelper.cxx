@@ -25,7 +25,6 @@
 #include "xmlsignaturehelper2.hxx"
 
 #include <tools/stream.hxx>
-#include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 
 #include <xmloff/attrlist.hxx>

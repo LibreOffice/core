@@ -22,7 +22,6 @@
 #include "documentsignaturehelper.hxx"
 #include <algorithm>
 #include <initializer_list>
-#include <tools/debug.hxx>
 
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>

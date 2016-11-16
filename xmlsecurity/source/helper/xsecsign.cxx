@@ -19,7 +19,6 @@
 
 
 #include "xsecctl.hxx"
-#include <tools/debug.hxx>
 
 #include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>

@@ -34,7 +34,6 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
