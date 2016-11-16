@@ -140,7 +140,7 @@ public:
         const css::uno::Reference< css::drawing::XShape >& rxShape)
             throw (css::uno::RuntimeException, std::exception);
 
-protected:
+private:
     // Declare default constructor, copy constructor, destructor, and
     // assignment operation protected so that no one accidentally creates a
     // second instance of this singleton class or deletes it.
@@ -153,7 +153,6 @@ protected:
     */
     ~ShapeTypeHandler();
 
-private:
     /// Pointer to the only instance of this class.
     static ShapeTypeHandler* instance;
 

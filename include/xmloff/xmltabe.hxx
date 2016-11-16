@@ -34,8 +34,6 @@ class SvxXMLTabStopExport final
 {
     SvXMLExport& rExport;   // for access to document handler
 
-protected:
-
     void exportTabStop( const css::style::TabStop* pTabStop );
 
 public:

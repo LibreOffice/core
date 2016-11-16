@@ -48,7 +48,7 @@ public:
 
     static bool isFilteredCategory(FILTER_CATEGORY filter, const OUString &rCategory);
 
-protected:
+private:
 
     FILTER_CATEGORY mCategory;
 };

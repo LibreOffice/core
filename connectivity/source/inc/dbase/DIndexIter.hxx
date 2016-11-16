@@ -33,7 +33,6 @@ namespace connectivity
 
         class OIndexIterator final
         {
-        protected:
             file::OBoolOperator*    m_pOperator;
             const file::OOperand*   m_pOperand;
             rtl::Reference<ODbaseIndex> m_xIndex;

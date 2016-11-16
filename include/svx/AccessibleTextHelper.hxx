@@ -126,14 +126,9 @@ namespace accessibility
 
         ~AccessibleTextHelper();
 
-    protected:
+        AccessibleTextHelper( const AccessibleTextHelper& ) = delete;
+        AccessibleTextHelper& operator= ( const AccessibleTextHelper& ) = delete;
 
-        // declared, but not defined
-        AccessibleTextHelper( const AccessibleTextHelper& );
-        // declared, but not defined
-        AccessibleTextHelper& operator= ( const AccessibleTextHelper& );
-
-    public:
         /** Query the current edit source
 
             @attention This method returns by reference, so you are

@@ -191,7 +191,6 @@ class SfxWorkWindow final
 {
     friend class LayoutManagerListener;
 
-protected:
     std::vector<sal_uInt16> aSortedList;
     SfxStatBar_Impl         aStatBar;
     std::vector< SfxObjectBar_Impl > aObjBarList;
@@ -225,7 +224,6 @@ protected:
     SfxFrame*               pMasterFrame;
     SfxFrame*               pFrame;
 
-protected:
     void                    CreateChildWin_Impl(SfxChildWin_Impl*,bool);
     void                    RemoveChildWin_Impl(SfxChildWin_Impl*);
     void                    Sort_Impl();

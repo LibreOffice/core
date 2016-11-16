@@ -143,7 +143,7 @@ class OWriteImagesDocumentHandler final
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
-    protected:
+    private:
         void WriteImageList( const ImageListItemDescriptor* ) throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );

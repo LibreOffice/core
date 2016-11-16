@@ -30,7 +30,6 @@ namespace sdr
     {
         class SVX_DLLPUBLIC DisplayInfo final
         {
-        protected:
             // The Layers which shall be processed (visible)
             SetOfByte                                       maProcessLayers;
 

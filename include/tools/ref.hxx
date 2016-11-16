@@ -99,7 +99,7 @@ public:
     bool operator ==(const SvRef<T> &rhs) const { return pObj == rhs.pObj; }
     bool operator !=(const SvRef<T> &rhs) const { return !(*this == rhs); }
 
-protected:
+private:
     T * pObj;
 };
 

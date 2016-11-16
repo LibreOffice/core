@@ -217,7 +217,7 @@ public:
     /** get Client information */
     virtual bool GetInfo( SfxPoolItem& rInfo) const override
         { return m_pToTell == nullptr || m_pToTell->GetInfo( rInfo ); }
-protected:
+private:
     virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue ) override
     {
         if( pNewValue && pNewValue->Which() == RES_OBJECTDYING )

@@ -66,7 +66,7 @@ public:
     static bool isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt);
     bool isValid (const OUString& rPath) const;
 
-protected:
+private:
 
     FILTER_APPLICATION mApp;
 };

@@ -1423,6 +1423,7 @@ class VCL_DLLPUBLIC SolarMutexClearableGuard final
     SolarMutexClearableGuard( const SolarMutexClearableGuard& ) = delete;
     const SolarMutexClearableGuard& operator = ( const SolarMutexClearableGuard& ) = delete;
     bool m_bCleared;
+    comphelper::SolarMutex& m_solarMutex;
 public:
     /** Acquires mutex
      */
@@ -1451,9 +1452,6 @@ public:
             m_bCleared = true;
         }
     }
-
-protected:
-    comphelper::SolarMutex& m_solarMutex;
 };
 
 class VCL_DLLPUBLIC SolarMutexResettableGuard final
@@ -1461,6 +1459,7 @@ class VCL_DLLPUBLIC SolarMutexResettableGuard final
     SolarMutexResettableGuard( const SolarMutexResettableGuard& ) = delete;
     const SolarMutexResettableGuard& operator = ( const SolarMutexResettableGuard& ) = delete;
     bool m_bCleared;
+    comphelper::SolarMutex& m_solarMutex;
 public:
     /** Acquires mutex
      */
@@ -1499,9 +1498,6 @@ public:
             m_bCleared = false;
         }
     }
-
-protected:
-    comphelper::SolarMutex& m_solarMutex;
 };
 
 namespace vcl

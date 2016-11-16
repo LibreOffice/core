@@ -42,6 +42,7 @@ namespace dbaui
         ::osl::Mutex        m_aEventSafety;
         ::osl::Mutex        m_aDestructionSafety;
         ImplSVEvent *       m_nEventId;
+        DECL_LINK(OnAsyncCall, void*, void);
 
     public:
         /** constructs the object
@@ -54,9 +55,6 @@ namespace dbaui
 
         void Call( void* _pArgument = nullptr );
         void CancelCall();
-
-    protected:
-        DECL_LINK(OnAsyncCall, void*, void);
     };
 }
 #endif // INCLUDED_DBACCESS_ASYNCRONOUSLINK_HXX

@@ -76,7 +76,7 @@ namespace connectivity
             OUString getDefaultProfile( css::mozilla::MozillaProductType product ) throw (css::uno::RuntimeException);
             bool SAL_CALL isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException);
             bool SAL_CALL getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException);
-        protected:
+        private:
             ProductStruct m_ProductProfileList[4];
             void      LoadProductsInfo();
             void      LoadXPToolkitProfiles(MozillaProductType product);

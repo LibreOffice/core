@@ -54,8 +54,6 @@ class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport final
             const css::uno::Sequence< css::beans::PropertyValue>& rProps,
             bool bOutline );
 
-protected:
-
     SAL_DLLPRIVATE void exportStyle( const css::uno::Reference< css::style::XStyle >& rStyle );
     SAL_DLLPRIVATE void exportOutline();
 

@@ -148,7 +148,7 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler final
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
-    protected:
+    private:
         void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL,
                                sal_Int16 nStyle, bool bVisible ) throw
             ( css::xml::sax::SAXException,

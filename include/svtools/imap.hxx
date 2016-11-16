@@ -38,8 +38,6 @@ private:
     ::std::vector< IMapObject* > maList;
     OUString                     aName;
 
-protected:
-
     // binary saving/loading
     void                ImpWriteImageMap( SvStream& rOStm, const OUString& ) const ;
     void                ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& );

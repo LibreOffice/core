@@ -32,7 +32,6 @@ class InternalResMgr;
 
 class TOOLS_DLLPUBLIC SimpleResMgr final
 {
-protected:
     osl::Mutex              m_aAccessSafety;
     InternalResMgr*         m_pResImpl;
 
