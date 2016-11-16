@@ -57,6 +57,8 @@
       </prop>
     </node>
   </node>
+  <node oor:name="ExtraLanguages">
+  </node>
   <node oor:name="DefaultFonts">
     <node oor:name="en" oor:op="replace">
       <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">

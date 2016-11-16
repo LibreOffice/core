@@ -230,6 +230,8 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
         default:
             break;
     }
+    if (LanguageTag::isOnTheFlyID(nLang))
+        return LanguageTag::getOnTheFlyScriptType(nLang) == LanguageTag::ScriptType::RTL;
     return false;
 }
 
@@ -303,6 +305,8 @@ bool MsLangId::isCJK( LanguageType nLang )
         default:
             break;
     }
+    if (LanguageTag::isOnTheFlyID(nLang))
+        return LanguageTag::getOnTheFlyScriptType(nLang) == LanguageTag::ScriptType::CJK;
     return false;
 }
 
@@ -340,6 +344,7 @@ bool MsLangId::needsSequenceChecking( LanguageType nLang )
 sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 {
     sal_Int16 nScript;
+
     switch( nLang )
     {
         // CTL
@@ -429,7 +434,26 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
                 // Western (actually not necessarily Latin but also Cyrillic,
                 // for example)
                 default:
-                    nScript = css::i18n::ScriptType::LATIN;
+                    if (LanguageTag::isOnTheFlyID(nLang))
+                    {
+                        switch (LanguageTag::getOnTheFlyScriptType(nLang))
+                        {
+                            case LanguageTag::ScriptType::CJK :
+                                nScript = css::i18n::ScriptType::ASIAN;
+                                break;
+                            case LanguageTag::ScriptType::CTL :
+                            case LanguageTag::ScriptType::RTL :
+                                nScript = css::i18n::ScriptType::COMPLEX;
+                                break;
+                            case LanguageTag::ScriptType::WESTERN :
+                            case LanguageTag::ScriptType::UNKNOWN :
+                            default:
+                                nScript = css::i18n::ScriptType::LATIN;
+                                break;
+                        }
+                    }
+                    else
+                        nScript = css::i18n::ScriptType::LATIN;
             }
             break;
     }

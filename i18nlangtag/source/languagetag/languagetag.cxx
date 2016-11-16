@@ -267,6 +267,7 @@ private:
     mutable OUString                        maCachedVariants;   ///< cache getVariants()
     mutable lt_tag_t*                       mpImplLangtag;      ///< liblangtag pointer
     mutable LanguageType                    mnLangID;
+    mutable LanguageTag::ScriptType         meScriptType;
     mutable Decision                        meIsValid;
     mutable Decision                        meIsIsoLocale;
     mutable Decision                        meIsIsoODF;
@@ -287,6 +288,9 @@ private:
     OUString            getRegion() const;
     OUString const &    getVariants() const;
     bool                hasScript() const;
+
+    void                setScriptType(LanguageTag::ScriptType st);
+    LanguageTag::ScriptType getScriptType() const;
 
     bool                isIsoLocale() const;
     bool                isIsoODF() const;
@@ -364,6 +368,7 @@ private:
     /** Convert Locale to BCP 47 string without resolving system and creating
         temporary LanguageTag instances. */
     static OUString     convertToBcp47( const css::lang::Locale& rLocale );
+
 };
 
 
@@ -373,6 +378,7 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTag & rLanguageTag )
         maBcp47( rLanguageTag.maBcp47),
         mpImplLangtag( nullptr),
         mnLangID( rLanguageTag.mnLangID),
+        meScriptType( LanguageTag::ScriptType::UNKNOWN),
         meIsValid( DECISION_DONTKNOW),
         meIsIsoLocale( DECISION_DONTKNOW),
         meIsIsoODF( DECISION_DONTKNOW),
@@ -400,6 +406,7 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTagImpl & rLanguageTagImpl )
         mpImplLangtag( rLanguageTagImpl.mpImplLangtag ?
                 lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : nullptr),
         mnLangID( rLanguageTagImpl.mnLangID),
+        meScriptType( rLanguageTagImpl.meScriptType),
         meIsValid( rLanguageTagImpl.meIsValid),
         meIsIsoLocale( rLanguageTagImpl.meIsIsoLocale),
         meIsIsoODF( rLanguageTagImpl.meIsIsoODF),
@@ -434,6 +441,7 @@ LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTa
                             lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : nullptr;
     lt_tag_unref(oldTag);
     mnLangID            = rLanguageTagImpl.mnLangID;
+    meScriptType        = rLanguageTagImpl.meScriptType;
     meIsValid           = rLanguageTagImpl.meIsValid;
     meIsIsoLocale       = rLanguageTagImpl.meIsIsoLocale;
     meIsIsoODF          = rLanguageTagImpl.meIsIsoODF;
@@ -700,6 +708,18 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
 
     return pImpl;
 }
+
+
+LanguageTag::ScriptType LanguageTag::getOnTheFlyScriptType( LanguageType nRegisterID )
+{
+    const MapLangID& rMapLangID = theMapLangID::get();
+    MapLangID::const_iterator itID( rMapLangID.find( nRegisterID));
+    if (itID != rMapLangID.end())
+        return (*itID).second->getScriptType();
+    else
+        return UNKNOWN;
+}
+
 
 // static
 void LanguageTag::setConfiguredSystemLanguage( LanguageType nLang )
@@ -1946,6 +1966,31 @@ bool LanguageTag::hasScript() const
     bool bRet = getImpl()->hasScript();
     const_cast<LanguageTag*>(this)->syncFromImpl();
     return bRet;
+}
+
+
+LanguageTag::ScriptType LanguageTagImpl::getScriptType() const
+{
+    return meScriptType;
+}
+
+
+LanguageTag::ScriptType LanguageTag::getScriptType() const
+{
+    return getImpl()->getScriptType();
+}
+
+
+void LanguageTagImpl::setScriptType(LanguageTag::ScriptType st)
+{
+    if (meScriptType == LanguageTag::ScriptType::UNKNOWN)  // poor man's clash resolution
+        meScriptType = st;
+}
+
+
+void LanguageTag::setScriptType(LanguageTag::ScriptType st)
+{
+    getImpl()->setScriptType(st);
 }
 
 
