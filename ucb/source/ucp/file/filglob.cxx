@@ -506,8 +506,7 @@ namespace fileaccess {
                 OUString("ContentType");
 
             aAny <<= MissingPropertiesException(
-                OUString( "a property is missing necessary"
-                               "to create a content"),
+                OUString( "a property is missing, necessary to create a content"),
                 xComProc,
                 aSeq);
             cancelCommandExecution(aAny,xEnv);
@@ -538,8 +537,7 @@ namespace fileaccess {
         {
             aAny <<=
                 MissingInputStreamException(
-                    OUString( "the inputstream is missing necessary"
-                                   "to create a content"),
+                    OUString( "the inputstream is missing, necessary to create a content"),
                     xComProc);
             cancelCommandExecution(aAny,xEnv);
         }
