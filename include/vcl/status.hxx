@@ -27,8 +27,6 @@
 #include <vector>
 
 struct ImplStatusItem;
-typedef ::std::vector< ImplStatusItem* > ImplStatusItemList;
-
 
 void VCL_DLLPUBLIC DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,
                                 long nOffset, long nPrgsWidth, long nPrgsHeight,
@@ -61,7 +59,7 @@ class VCL_DLLPUBLIC StatusBar : public vcl::Window
 {
     class   ImplData;
 private:
-    ImplStatusItemList* mpItemList;
+    std::vector<ImplStatusItem *> mpItemList;
     ImplData*           mpImplData;
     OUString            maPrgsTxt;
     Point               maPrgsTxtPos;
