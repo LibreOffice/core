@@ -2344,7 +2344,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     GtkWidget* pToolbar = gtk_toolbar_new();
     mpToolbarStyle = gtk_widget_get_style_context(pToolbar);
-    gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
     gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_TOOLBAR);
 
     GtkToolItem *item = gtk_separator_tool_item_new();
