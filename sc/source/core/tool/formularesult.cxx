@@ -243,14 +243,27 @@ bool ScFormulaResult::IsEmptyDisplayedAsString() const
 {
     if (mbEmpty)
         return mbEmptyDisplayedAsString;
-    if (GetType() == formula::svMatrixCell)
+    switch (GetType())
     {
-        // don't need to test for mpToken here, GetType() already did it
-        const ScEmptyCellToken* p = dynamic_cast<const ScEmptyCellToken*>(
-                static_cast<const ScMatrixCellResultToken*>(
-                    mpToken)->GetUpperLeftToken().get());
-        if (p)
-            return p->IsDisplayedAsString();
+        case formula::svMatrixCell:
+            {
+                // don't need to test for mpToken here, GetType() already did it
+                const ScEmptyCellToken* p = dynamic_cast<const ScEmptyCellToken*>(
+                        static_cast<const ScMatrixCellResultToken*>(
+                            mpToken)->GetUpperLeftToken().get());
+                if (p)
+                    return p->IsDisplayedAsString();
+            }
+        break;
+        case formula::svHybridCell:
+            {
+                const ScHybridCellToken* p = dynamic_cast<const ScHybridCellToken*>(mpToken);
+                if (p)
+                    return p->IsEmptyDisplayedAsString();
+            }
+        break;
+        default:
+        break;
     }
     return false;
 }
@@ -505,7 +518,7 @@ void ScFormulaResult::SetHybridDouble( double f )
             svl::SharedString aString = GetString();
             OUString aFormula( GetHybridFormula());
             mpToken->DecRef();
-            mpToken = new ScHybridCellToken( f, aString, aFormula);
+            mpToken = new ScHybridCellToken( f, aString, aFormula, false);
             mpToken->IncRef();
         }
     }
@@ -525,7 +538,24 @@ void ScFormulaResult::SetHybridString( const svl::SharedString& rStr )
     ResetToDefaults();
     if (mbToken && mpToken)
         mpToken->DecRef();
-    mpToken = new ScHybridCellToken( f, rStr, aFormula);
+    mpToken = new ScHybridCellToken( f, rStr, aFormula, false);
+    mpToken->IncRef();
+    mbToken = true;
+}
+
+void ScFormulaResult::SetHybridEmptyDisplayedAsString()
+{
+    // Obtain values before changing anything.
+    double f = GetDouble();
+    OUString aFormula( GetHybridFormula());
+    svl::SharedString aStr = GetString();
+    ResetToDefaults();
+    if (mbToken && mpToken)
+        mpToken->DecRef();
+    // XXX NOTE: we can't use mbEmpty and mbEmptyDisplayedAsString here because
+    // GetType() intentionally returns svEmptyCell if mbEmpty==true. So stick
+    // it into the ScHybridCellToken.
+    mpToken = new ScHybridCellToken( f, aStr, aFormula, true);
     mpToken->IncRef();
     mbToken = true;
 }
@@ -538,7 +568,7 @@ void ScFormulaResult::SetHybridFormula( const OUString & rFormula )
     ResetToDefaults();
     if (mbToken && mpToken)
         mpToken->DecRef();
-    mpToken = new ScHybridCellToken( f, aStr, rFormula);
+    mpToken = new ScHybridCellToken( f, aStr, rFormula, false);
     mpToken->IncRef();
     mbToken = true;
 }

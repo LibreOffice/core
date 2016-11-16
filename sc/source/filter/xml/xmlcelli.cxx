@@ -165,7 +165,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     mbCheckWithCompilerForError(false),
     mbEditEngineHasText(false),
     mbHasFormatRuns(false),
-    mbHasStyle(false)
+    mbHasStyle(false),
+    mbPossibleEmptyDisplay(false)
 {
     rtl::math::setNan(&fValue); // NaN by default
 
@@ -1028,6 +1029,8 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
         else if (rtl::math::isFinite(fValue))
         {
             pFCell->SetHybridDouble(fValue);
+            if (mbPossibleEmptyDisplay && fValue == 0.0)
+                pFCell->SetHybridEmptyDisplayedAsString();
             pFCell->ResetDirty();
         }
     }
@@ -1452,12 +1455,24 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
 // Libreoffice 4.1+ with ODF1.2 extended write however calcext:value-type="error" in that case
 void ScXMLTableRowCellContext::HasSpecialCaseFormulaText()
 {
-    if (!mbEditEngineHasText || mbNewValueType)
+    if (!mbEditEngineHasText)
         return;
 
-    OUString aStr = GetFirstParagraph();
+    const OUString aStr = GetFirstParagraph();
 
-    if (aStr.isEmpty() || aStr.startsWith("Err:"))
+    if (mbNewValueType)
+    {
+        if (aStr.isEmpty())
+            mbPossibleEmptyDisplay = true;
+        return;
+    }
+
+    if (aStr.isEmpty())
+    {
+        mbPossibleErrorCell = true;
+        mbPossibleEmptyDisplay = true;
+    }
+    else if (aStr.startsWith("Err:"))
         mbPossibleErrorCell = true;
     else if (aStr.startsWith("#"))
         mbCheckWithCompilerForError = true;

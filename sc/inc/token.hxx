@@ -388,11 +388,13 @@ private:
     double mfDouble;
     svl::SharedString maString;
     OUString maFormula;
+    bool mbEmptyDisplayedAsString;
 public:
     ScHybridCellToken(
-        double f, const svl::SharedString & rStr, const OUString & rFormula );
+        double f, const svl::SharedString & rStr, const OUString & rFormula, bool bEmptyDisplayedAsString );
 
     const OUString& GetFormula() const  { return maFormula; }
+    bool IsEmptyDisplayedAsString() const   { return mbEmptyDisplayedAsString; }
     virtual double GetDouble() const override;
 
     virtual svl::SharedString GetString() const override;

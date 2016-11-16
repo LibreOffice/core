@@ -188,7 +188,7 @@ public:
     const OUString& GetHybridFormula() const;
 
     /** Should only be used by import filters, best in the order
-        SetHybridDouble(), SetHybridString(), or only SetHybridString() for
+        SetHybridDouble(), SetHybridString(), or only SetHybridFormula() for
         formula string to be compiled later. */
     SC_DLLPUBLIC void SetHybridDouble( double f );
 
@@ -196,6 +196,11 @@ public:
         SetHybridDouble(), SetHybridString()/SetHybridFormula(), or only
         SetHybridFormula() for formula string to be compiled later. */
     SC_DLLPUBLIC void SetHybridString( const svl::SharedString & rStr );
+
+    /** Should only be used by import filters, best in the order
+        SetHybridDouble(), SetHybridFormula(),
+        SetHybridEmptyDisplayedAsString() must be last. */
+    SC_DLLPUBLIC void SetHybridEmptyDisplayedAsString();
 
     /** Should only be used by import filters, best in the order
         SetHybridDouble(), SetHybridString()/SetHybridFormula(), or only

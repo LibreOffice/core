@@ -96,6 +96,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     bool mbEditEngineHasText;
     bool mbHasFormatRuns;
     bool mbHasStyle;
+    bool mbPossibleEmptyDisplay;
 
     void DoMerge(const ScAddress& rScCellPos, const SCCOL nCols, const SCROW nRows);
 

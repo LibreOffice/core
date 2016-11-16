@@ -1154,11 +1154,14 @@ void ScMatrixFormulaCellToken::ResetResult()
 }
 
 ScHybridCellToken::ScHybridCellToken(
-    double f, const svl::SharedString & rStr, const OUString & rFormula ) :
+    double f, const svl::SharedString & rStr, const OUString & rFormula, bool bEmptyDisplayedAsString ) :
         FormulaToken( formula::svHybridCell ),
         mfDouble( f ), maString( rStr ),
-        maFormula( rFormula )
+        maFormula( rFormula ),
+        mbEmptyDisplayedAsString( bEmptyDisplayedAsString)
 {
+    // caller, make up your mind..
+    assert( !bEmptyDisplayedAsString || (f == 0.0 && rStr.getString().isEmpty()));
 }
 
 double ScHybridCellToken::GetDouble() const { return mfDouble; }

@@ -341,6 +341,13 @@ public:
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
         for performance reasons.*/
     void SetHybridString( const svl::SharedString& r );
+    /** For import only: set an empty cell result to be displayed as empty string.
+        If for whatever reason you have to use both, SetHybridDouble() and
+        SetHybridEmptyDisplayedAsString() or SetHybridFormula(), use
+        SetHybridDouble() first for performance reasons and use
+        SetHybridEmptyDisplayedAsString() last because SetHybridDouble() and
+        SetHybridString() will override it.*/
+    void SetHybridEmptyDisplayedAsString();
     /** For import only: set a temporary formula string to be compiled later.
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first

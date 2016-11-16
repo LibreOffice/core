@@ -2464,6 +2464,11 @@ void ScFormulaCell::SetHybridString( const svl::SharedString& r )
     aResult.SetHybridString( r);
 }
 
+void ScFormulaCell::SetHybridEmptyDisplayedAsString()
+{
+    aResult.SetHybridEmptyDisplayedAsString();
+}
+
 void ScFormulaCell::SetHybridFormula( const OUString& r,
                                     const formula::FormulaGrammar::Grammar eGrammar )
 {
