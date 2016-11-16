@@ -296,7 +296,9 @@ bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
     if (functionDecl->isDeleted() || functionDecl->isDefaulted()) {
         return true;
     }
-    if (isa<CXXConstructorDecl>(functionDecl) && dyn_cast<CXXConstructorDecl>(functionDecl)->isCopyConstructor()) {
+    if (isa<CXXConstructorDecl>(functionDecl)
+        && dyn_cast<CXXConstructorDecl>(functionDecl)->isCopyOrMoveConstructor())
+    {
         return true;
     }
     if (!canonicalFunctionDecl->getLocation().isValid() || ignoreLocation(canonicalFunctionDecl)) {

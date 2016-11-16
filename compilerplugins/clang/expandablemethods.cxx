@@ -306,7 +306,9 @@ bool ExpandableMethods::isCalleeFunctionInteresting(const FunctionDecl* function
     if (functionDecl->isDeleted() || functionDecl->isDefaulted()) {
         return false;
     }
-    if (isa<CXXConstructorDecl>(functionDecl) && dyn_cast<CXXConstructorDecl>(functionDecl)->isCopyConstructor()) {
+    if (isa<CXXConstructorDecl>(functionDecl)
+        && dyn_cast<CXXConstructorDecl>(functionDecl)->isCopyOrMoveConstructor())
+    {
         return false;
     }
     if (!functionDecl->getLocation().isValid() || ignoreLocation(functionDecl)) {
