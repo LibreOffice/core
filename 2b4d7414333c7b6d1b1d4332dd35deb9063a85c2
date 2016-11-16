@@ -2,6 +2,137 @@
   "comments": [
     {
       "key": {
+        "uuid": "7a77a97e_242b17ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-16T13:52:42Z",
+      "side": 1,
+      "message": "The bug notation should be tdf#103855 which is used by several tools.",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 15
+      },
+      "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_24ddd714",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-16T13:52:42Z",
+      "side": 1,
+      "message": "Rather move this to the end of the function. In 99% of all cases we don\u0027t have an on-the-fly-id so the known IDs can be checked first.",
+      "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_44e2d3d6",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-16T13:52:42Z",
+      "side": 1,
+      "message": "Ditto, move to the end of the function.",
+      "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_64e7cfe4",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-16T13:52:42Z",
+      "side": 1,
+      "message": "Ditto, move to the end of the function.",
+      "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_44301357",
+        "filename": "i18nlangtag/source/languagetag/languagetag.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1987,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-16T13:52:42Z",
+      "side": 1,
+      "message": "Why only if so far UNKNOWN?",
+      "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_84ecebc8",
+        "filename": "include/i18nlangtag/languagetag.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-16T13:52:42Z",
+      "side": 1,
+      "message": "Name this RTL then.",
+      "range": {
+        "startLine": 70,
+        "startChar": 8,
+        "endLine": 70,
+        "endChar": 13
+      },
+      "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_2404f77c",
+        "filename": "include/i18nlangtag/languagetag.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-16T13:52:42Z",
+      "side": 1,
+      "message": "Why move this around and not keep it where it is?",
+      "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_64826f02",
         "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
         "patchSetId": 2
@@ -98,6 +229,52 @@
       "writtenOn": "2016-11-16T12:36:52Z",
       "side": 1,
       "message": "you can get access to that more easily via\n\n  #include \u003cofficecfg/registry/officecfg/VCL.hxx\u003e\n\n  auto xNA \u003d officecfg::VCL::Languages::get();",
+      "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_84030b73",
+        "filename": "svtools/source/misc/langtab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-16T13:52:42Z",
+      "side": 1,
+      "message": "Please stick with the naming conventions, so nType instead of aType.",
+      "range": {
+        "startLine": 160,
+        "startChar": 22,
+        "endLine": 160,
+        "endChar": 27
+      },
+      "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_c4f50384",
+        "filename": "svtools/source/misc/langtab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-16T13:52:42Z",
+      "side": 1,
+      "message": "Nitpick: name that nLangID or some such, anMSId is confusing (to me at least..)",
+      "range": {
+        "startLine": 168,
+        "startChar": 29,
+        "endLine": 168,
+        "endChar": 35
+      },
       "revId": "2b4d7414333c7b6d1b1d4332dd35deb9063a85c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
