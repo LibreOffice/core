@@ -51,7 +51,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     mpOldSet = o3tl::make_unique<SfxItemSet>(static_cast<SfxItemPool&>(SdrObject::GetGlobalDrawObjectItemPool()), mpStyleSheet->GetItemSet().GetRanges());
     SdrModel::MigrateItemSet( &mpStyleSheet->GetItemSet(), mpOldSet.get(), pTheDoc );
 
-    maComment = SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT);
+    OUString aComment(SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT));
     OUString aName(mpStyleSheet->GetName());
 
     // delete layout name and separator
@@ -91,7 +91,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     }
 
     // replace placeholder with template name
-    maComment = maComment.replaceFirst("$", aName);
+    SetComment(aComment.replaceFirst("$", aName));
 }
 
 void StyleSheetUndoAction::Undo()
@@ -116,11 +116,6 @@ void StyleSheetUndoAction::Redo()
         static_cast<SdStyleSheet*>(mpStyleSheet)->GetRealStyleSheet()->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
     else
         mpStyleSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
-}
-
-OUString StyleSheetUndoAction::GetComment() const
-{
-    return maComment;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
