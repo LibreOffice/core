@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_845dcbeb",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-11-16T06:27:38Z",
+      "side": 1,
+      "message": "you did not change \"relationshop\" ?",
+      "revId": "9ffb894bbe1ca109417e3629453d4ee2df39997a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_6458affb",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-11-16T06:27:38Z",
+      "side": 1,
+      "message": "you did not change \"fpr\" ?",
+      "revId": "9ffb894bbe1ca109417e3629453d4ee2df39997a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_a472c77a",
+        "filename": "sc/source/filter/inc/xlview.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-11-16T06:27:38Z",
+      "side": 1,
+      "message": "while changing you should also correct the alignment",
+      "revId": "9ffb894bbe1ca109417e3629453d4ee2df39997a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_c46fc390",
+        "filename": "sw/source/filter/html/htmlbas.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-11-16T06:27:38Z",
+      "side": 1,
+      "message": "please correct the alignment when changing.",
+      "revId": "9ffb894bbe1ca109417e3629453d4ee2df39997a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
