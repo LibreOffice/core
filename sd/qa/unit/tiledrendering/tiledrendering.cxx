@@ -837,9 +837,9 @@ void SdTiledRenderingTest::testResizeTableColumn()
 
     // Remember the original cell widths.
     xmlDocPtr pXmlDoc = parseXmlDump();
-    OString aPrefix = "/sdDrawDocument/sdrModel/sdPage/sdrObjList/sdrTableObj/sdrTableObjImpl/tableLayouter/columns/";
-    sal_Int32 nExpectedColumn1 = getXPath(pXmlDoc, aPrefix + "layout[1]", "size").toInt32();
-    sal_Int32 nExpectedColumn2 = getXPath(pXmlDoc, aPrefix + "layout[2]", "size").toInt32();
+    OString aPrefix = "/SdDrawDocument/SdrModel/SdPage/SdrObjList/SdrTableObj/SdrTableObjImpl/TableLayouter/columns/";
+    sal_Int32 nExpectedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size").toInt32();
+    sal_Int32 nExpectedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
     xmlFreeDoc(pXmlDoc);
     pXmlDoc = nullptr;
 
@@ -850,9 +850,9 @@ void SdTiledRenderingTest::testResizeTableColumn()
 
     // Remember the resized column widths.
     pXmlDoc = parseXmlDump();
-    sal_Int32 nResizedColumn1 = getXPath(pXmlDoc, aPrefix + "layout[1]", "size").toInt32();
+    sal_Int32 nResizedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size").toInt32();
     CPPUNIT_ASSERT(nResizedColumn1 < nExpectedColumn1);
-    sal_Int32 nResizedColumn2 = getXPath(pXmlDoc, aPrefix + "layout[2]", "size").toInt32();
+    sal_Int32 nResizedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
     CPPUNIT_ASSERT(nResizedColumn2 > nExpectedColumn2);
     xmlFreeDoc(pXmlDoc);
     pXmlDoc = nullptr;
@@ -862,10 +862,10 @@ void SdTiledRenderingTest::testResizeTableColumn()
 
     // Check the undo result.
     pXmlDoc = parseXmlDump();
-    sal_Int32 nActualColumn1 = getXPath(pXmlDoc, aPrefix + "layout[1]", "size").toInt32();
+    sal_Int32 nActualColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size").toInt32();
     // Expected was 7049, actual was 6048, i.e. the first column width after undo was 1cm smaller than expected.
     CPPUNIT_ASSERT_EQUAL(nExpectedColumn1, nActualColumn1);
-    sal_Int32 nActualColumn2 = getXPath(pXmlDoc, aPrefix + "layout[2]", "size").toInt32();
+    sal_Int32 nActualColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
     CPPUNIT_ASSERT_EQUAL(nExpectedColumn2, nActualColumn2);
     xmlFreeDoc(pXmlDoc);
     pXmlDoc = nullptr;

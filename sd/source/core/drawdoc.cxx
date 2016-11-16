@@ -1101,7 +1101,7 @@ void SdDrawDocument::dumpAsXml(xmlTextWriterPtr pWriter) const
         xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sdDrawDocument"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SdDrawDocument"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     if (mpOutliner)

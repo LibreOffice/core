@@ -992,7 +992,7 @@ const SfxItemPool* SfxItemPool::pStoringPool_ = nullptr;
 
 void SfxItemPool::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxItemPool"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxItemPool"));
     for (auto const & rArrayPtr : pImpl->maPoolItems)
         if (rArrayPtr)
             for (auto const & rItem : *rArrayPtr)

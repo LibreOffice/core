@@ -1165,7 +1165,7 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         {"annotationmarks", &m_vAnnotationMarks}
     };
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("markManager"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("MarkManager"));
     for (const auto & rContainer : aContainers)
     {
         if (!rContainer.pContainer->empty())

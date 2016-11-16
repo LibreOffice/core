@@ -544,7 +544,7 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
 
 void XFillBitmapItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("xFillBitmapItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBitmapItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
 
     NameOrIndex::dumpAsXml(pWriter);

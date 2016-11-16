@@ -1925,7 +1925,7 @@ void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
         xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swDoc"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwDoc"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     m_pNodes->dumpAsXml(pWriter);
@@ -1958,7 +1958,7 @@ void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 void SwDBData::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swDBData"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwDBData"));
 
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("sDataSource"), BAD_CAST(sDataSource.toUtf8().getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("sCommand"), BAD_CAST(sCommand.toUtf8().getStr()));

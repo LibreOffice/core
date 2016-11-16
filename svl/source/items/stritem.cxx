@@ -53,7 +53,7 @@ SfxPoolItem * SfxStringItem::Clone(SfxItemPool *) const
 
 void SfxStringItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxStringItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxStringItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetValue().toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);

@@ -4846,7 +4846,7 @@ sal_uInt16 SwTextNode::ResetAllAttr()
 
 void SwTextNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swTextNode"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextNode"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
 
@@ -4859,21 +4859,21 @@ void SwTextNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     if (GetFormatColl())
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("swTextFormatColl"));
+        xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextFormatColl"));
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetFormatColl()->GetName().toUtf8().getStr()));
         xmlTextWriterEndElement(pWriter);
     }
 
     if (HasSwAttrSet())
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("swAttrSet"));
+        xmlTextWriterStartElement(pWriter, BAD_CAST("SwAttrSet"));
         GetSwAttrSet().dumpAsXml(pWriter);
         xmlTextWriterEndElement(pWriter);
     }
 
     if (HasHints())
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("swpHints"));
+        xmlTextWriterStartElement(pWriter, BAD_CAST("SwpHints"));
         const SwpHints& rHints = GetSwpHints();
         for (size_t i = 0; i < rHints.Count(); ++i)
             rHints.Get(i)->dumpAsXml(pWriter);

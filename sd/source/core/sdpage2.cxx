@@ -631,7 +631,7 @@ void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
 
 void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sdPage"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SdPage"));
 
     const char* pPageKind = nullptr;
     switch (mePageKind)

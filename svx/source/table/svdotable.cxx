@@ -632,7 +632,7 @@ bool SdrTableObjImpl::isInUse()
 
 void SdrTableObjImpl::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrTableObjImpl"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrTableObjImpl"));
     if (mpLayouter)
         mpLayouter->dumpAsXml(pWriter);
     mxTable->dumpAsXml(pWriter);
@@ -2457,7 +2457,7 @@ void SdrTableObj::uno_unlock()
 
 void SdrTableObj::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrTableObj"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrTableObj"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     SdrObject::dumpAsXml(pWriter);

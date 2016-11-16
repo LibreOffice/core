@@ -123,7 +123,7 @@ SfxPoolItem* SfxUInt16Item::CreateDefault()
 
 void SfxUInt16Item::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxUInt16Item"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUInt16Item"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
     xmlTextWriterEndElement(pWriter);

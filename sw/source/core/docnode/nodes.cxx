@@ -2356,7 +2356,7 @@ bool SwNodes::IsDocNodes() const
 
 void SwNodes::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swNodes"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwNodes"));
     for (sal_uLong i = 0; i < Count(); ++i)
         (*this)[i]->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);

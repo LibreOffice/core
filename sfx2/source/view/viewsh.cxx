@@ -1526,7 +1526,7 @@ void SfxViewShell::NotifyOtherView(OutlinerViewShell* pOther, int nType, const O
 
 void SfxViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxViewShell"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxViewShell"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(GetViewShellId()).getStr()));
     xmlTextWriterEndElement(pWriter);

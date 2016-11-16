@@ -1093,7 +1093,7 @@ void ScCondFormatItem::SetCondFormatData( const std::vector<sal_uInt32>& rIndex 
 
 void ScCondFormatItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("condFormatItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("ScCondFormatItem"));
     for (const auto& nItem : maIndex)
     {
         std::string aStrVal = std::to_string(nItem);

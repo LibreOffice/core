@@ -333,7 +333,7 @@ bool SwFormatField::IsProtect() const
 
 void SwFormatField::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatField"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatField"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mpTextField"), "%p", mpTextField);
 

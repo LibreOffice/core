@@ -178,7 +178,7 @@ namespace sw { namespace mark
 
     void MarkBase::dumpAsXml(xmlTextWriterPtr pWriter) const
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("markBase"));
+        xmlTextWriterStartElement(pWriter, BAD_CAST("MarkBase"));
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(m_aName.toUtf8().getStr()));
         xmlTextWriterStartElement(pWriter, BAD_CAST("markPos"));
         GetMarkPos().dumpAsXml(pWriter);
@@ -379,7 +379,7 @@ namespace sw { namespace mark
 
     void Fieldmark::dumpAsXml(xmlTextWriterPtr pWriter) const
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("fieldmark"));
+        xmlTextWriterStartElement(pWriter, BAD_CAST("Fieldmark"));
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("fieldname"), BAD_CAST(m_aFieldname.toUtf8().getStr()));
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("fieldHelptext"), BAD_CAST(m_aFieldHelptext.toUtf8().getStr()));
         MarkBase::dumpAsXml(pWriter);

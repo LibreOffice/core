@@ -3742,13 +3742,13 @@ void SwUiWriterTest::testTdf98987()
     createDoc("tdf98987.docx");
     calcLayout();
     xmlDocPtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/sdrObject", "name", "Rectangle 1");
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/SdrObject", "name", "Rectangle 1");
     sal_Int32 nRectangle1 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds", "top").toInt32();
-    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/sdrObject", "name", "Rectangle 2");
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/SdrObject", "name", "Rectangle 2");
     sal_Int32 nRectangle2 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds", "top").toInt32();
     CPPUNIT_ASSERT(nRectangle1 < nRectangle2);
 
-    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/sdrObject", "name", "Rectangle 3");
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/SdrObject", "name", "Rectangle 3");
     sal_Int32 nRectangle3 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/bounds", "top").toInt32();
     // This failed: the 3rd rectangle had a smaller "top" value than the 2nd one, it even overlapped with the 1st one.
     CPPUNIT_ASSERT(nRectangle2 < nRectangle3);
@@ -3763,7 +3763,7 @@ void SwUiWriterTest::testTdf99004()
     sal_Int32 nTextBox1Height = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "height").toInt32();
     sal_Int32 nTextBox1Bottom = nTextbox1Top + nTextBox1Height;
 
-    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/sdrObject", "name", "Rectangle 2");
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/SdrObject", "name", "Rectangle 2");
     sal_Int32 nRectangle2Top = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds", "top").toInt32();
     // This was 3291 and 2531, should be now around 2472 and 2531, i.e. the two rectangles should not overlap anymore.
     CPPUNIT_ASSERT(nTextBox1Bottom < nRectangle2Top);

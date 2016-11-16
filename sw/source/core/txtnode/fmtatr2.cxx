@@ -151,7 +151,7 @@ bool SwFormatAutoFormat::PutValue( const uno::Any& , sal_uInt8 )
 
 void SwFormatAutoFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatAutoFormat"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatAutoFormat"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     mpHandle->dumpAsXml(pWriter);

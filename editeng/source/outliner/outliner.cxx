@@ -2184,7 +2184,7 @@ void Outliner::dumpAsXml(struct _xmlTextWriter* pWriter) const
         bOwns = true;
     }
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("outliner"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("Outliner"));
     pParaList->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 

@@ -260,7 +260,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
 
 void NameOrIndex::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("nameOrIndex"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("NameOrIndex"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("isIndex"), BAD_CAST(OString::boolean(IsIndex()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
@@ -2203,7 +2203,7 @@ bool XFillStyleItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
 
 void XFillStyleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("xFillStyleItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("XFillStyleItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
 
@@ -2273,7 +2273,7 @@ bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
 
 void XFillColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("xFillColorItem"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("XFillColorItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetColorValue().AsRGBHexString().toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
