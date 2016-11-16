@@ -2897,7 +2897,7 @@ void GtkData::initNWF()
     //and floating dockable toolbars
     GdkDisplay *pDisplay = gdk_display_get_default();
     if (GDK_IS_WAYLAND_DISPLAY(pDisplay))
-        pSVData->maNWFData.mbDockingFloatsSupported = false;
+        pSVData->maNWFData.mbCanDetermineWindowPosition = false;
 #endif
 }
 

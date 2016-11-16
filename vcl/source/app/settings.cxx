@@ -1889,7 +1889,7 @@ bool
 StyleSettings::GetDockingFloatsSupported()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->maNWFData.mbDockingFloatsSupported;
+    return pSVData->maNWFData.mbCanDetermineWindowPosition;
 }
 
 void

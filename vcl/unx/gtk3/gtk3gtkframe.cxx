@@ -2773,7 +2773,9 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
     {
         pThis->maGeometry.nX = frame_x;
         pThis->maGeometry.nY = frame_y;
-        pThis->CallCallbackExc(SalEvent::Move, nullptr);
+        ImplSVData* pSVData = ImplGetSVData();
+        if (pSVData->maNWFData.mbCanDetermineWindowPosition)
+            pThis->CallCallbackExc(SalEvent::Move, nullptr);
     }
 
     if( ! aDel.isDeleted() )
@@ -2894,7 +2896,11 @@ gboolean GtkSalFrame::signalConfigure(GtkWidget*, GdkEventConfigure* pEvent, gpo
     pThis->updateScreenNumber();
 
     if (bMoved)
-        pThis->CallCallbackExc(SalEvent::Move, nullptr);
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        if (pSVData->maNWFData.mbCanDetermineWindowPosition)
+            pThis->CallCallbackExc(SalEvent::Move, nullptr);
+    }
 
     return false;
 }
