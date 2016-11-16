@@ -55,6 +55,24 @@ class I18NLANGTAG_DLLPUBLIC LanguageTag
 
 public:
 
+    /** ScriptType for a language.
+
+        Used only in onTheFly languages as a way of marking key script behaviours
+        for the script of the language without having to store and analyse the
+        script each time. Used primarily from msLangId.
+
+        These need to correspond to the ExtraLanguages.ScriptType template
+        property in officecfg/registry/schema/org/openoffice/VCL.xcs
+     */
+    enum ScriptType
+    {
+        UNKNOWN = 0,
+        WESTERN = 1,      // Copies css::i18n::ScriptType for strong types
+        CJK = 2,
+        CTL = 3,
+        RTL = 4       // implies CTL
+    };
+
     /** Init LanguageTag with existing BCP 47 language tag string.
 
         @param bCanonicalize
@@ -237,6 +255,11 @@ public:
       */
     bool                            isSystemLocale() const { return mbSystemLocale;}
 
+    /** Returns the script type for this language, UNKNOWN if not set */
+    ScriptType                      getScriptType() const;
+
+    /** Sets the script type for this language */
+    void                            setScriptType(ScriptType st);
 
     /** Reset with existing BCP 47 language tag string. See ctor. */
     LanguageTag &                   reset( const OUString & rBcp47LanguageTag );
@@ -496,6 +519,7 @@ public:
 
     /** If nLang is a generated on-the-fly LangID */
     static bool         isOnTheFlyID( LanguageType nLang );
+    static ScriptType   getOnTheFlyScriptType( LanguageType nLang );
 
     /** @ATTENTION: _ONLY_ to be called by the application's configuration! */
     static void setConfiguredSystemLanguage( LanguageType nLang );
