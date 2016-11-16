@@ -391,4 +391,13 @@ String STR_DEAUTHORISE_CLIENT
     Text [ en-US ] = "Remove client authorisation";
 };
 
+String STR_SHRINK_FONT_SIZE
+{
+    Text [ en-US ] = "Shrink font size";
+};
+String STR_GROW_FONT_SIZE
+{
+    Text [ en-US ] = "Grow font size";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
