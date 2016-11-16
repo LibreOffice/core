@@ -196,6 +196,15 @@ void AtkListener::handleChildRemoved(
     // for now.
     if( nIndex >= 0 )
     {
+        uno::Reference<accessibility::XAccessibleEventBroadcaster> xBroadcaster(
+            rxChild->getAccessibleContext(), uno::UNO_QUERY);
+
+        if (xBroadcaster.is())
+        {
+            uno::Reference<accessibility::XAccessibleEventListener> xListener(this);
+            xBroadcaster->removeAccessibleEventListener(xListener);
+        }
+
         updateChildList(rxParent);
 
         AtkObject * pChild = atk_object_wrapper_ref( rxChild, false );
