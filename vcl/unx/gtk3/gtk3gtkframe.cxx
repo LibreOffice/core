@@ -3202,6 +3202,23 @@ namespace
     }
 }
 
+namespace
+{
+    static GdkDragAction getPreferredDragAction(sal_Int8 dragOperation)
+    {
+        GdkDragAction eAct(static_cast<GdkDragAction>(0));
+
+        if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
+            eAct = GDK_ACTION_MOVE;
+        else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_COPY)
+            eAct = GDK_ACTION_COPY;
+        else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_LINK)
+            eAct = GDK_ACTION_LINK;
+
+        return eAct;
+    }
+}
+
 class GtkDropTargetDropContext : public cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDropContext>
 {
     GdkDragContext *m_pContext;
@@ -3216,16 +3233,7 @@ public:
     // XDropTargetDropContext
     virtual void SAL_CALL acceptDrop(sal_Int8 dragOperation) throw(std::exception) override
     {
-        GdkDragAction eAct(static_cast<GdkDragAction>(0));
-
-        if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
-            eAct = GDK_ACTION_MOVE;
-        else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_COPY)
-            eAct = GDK_ACTION_COPY;
-        else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_LINK)
-            eAct = GDK_ACTION_LINK;
-
-        gdk_drag_status(m_pContext, eAct, m_nTime);
+        gdk_drag_status(m_pContext, getPreferredDragAction(dragOperation), m_nTime);
     }
 
     virtual void SAL_CALL rejectDrop() throw(std::exception) override
@@ -3378,16 +3386,7 @@ public:
 
     virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) throw(std::exception) override
     {
-        GdkDragAction eAct(static_cast<GdkDragAction>(0));
-
-        if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
-            eAct = GDK_ACTION_MOVE;
-        else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_COPY)
-            eAct = GDK_ACTION_COPY;
-        else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_LINK)
-            eAct = GDK_ACTION_LINK;
-
-        gdk_drag_status(m_pContext, eAct, m_nTime);
+        gdk_drag_status(m_pContext, getPreferredDragAction(dragOperation), m_nTime);
     }
 
     virtual void SAL_CALL rejectDrag() throw(std::exception) override
@@ -3429,12 +3428,18 @@ gboolean GtkSalFrame::signalDragMotion(GtkWidget *pWidget, GdkDragContext *conte
     //preliminary accept the Drag and select the preferred action, the fire_* will
     //inform the original caller of our choice and the callsite can decide
     //to overrule this choice. i.e. typically here we default to ACTION_MOVE
-    pContext->acceptDrag(GdkToVcl(gdk_drag_context_get_actions(context)));
+    sal_Int8 nSourceActions = GdkToVcl(gdk_drag_context_get_actions(context));
+    GdkDragAction eAction = getPreferredDragAction(nSourceActions);
+    gdk_drag_status(context, eAction, time);
     aEvent.Context = pContext;
     aEvent.LocationX = x;
     aEvent.LocationY = y;
-    aEvent.DropAction = GdkToVcl(gdk_drag_context_get_selected_action(context));
-    aEvent.SourceActions = GdkToVcl(gdk_drag_context_get_actions(context));
+    //under wayland at least, the action selected by gdk_drag_status on the
+    //context is not immediately available via gdk_drag_context_get_selected_action
+    //so here we set the DropAction from what we selected on the context, not
+    //what the context says is selected
+    aEvent.DropAction = GdkToVcl(eAction);
+    aEvent.SourceActions = nSourceActions;
 
     if (!pThis->m_bInDrag)
     {
