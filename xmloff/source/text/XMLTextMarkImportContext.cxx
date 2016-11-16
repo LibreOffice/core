@@ -128,10 +128,9 @@ static SvXMLEnumMapEntry const lcl_aMarkTypeMap[] =
 
 static const char *lcl_getFormFieldmarkName(OUString &name)
 {
-    if (name == "msoffice.field.FORMCHECKBOX" ||
+    if (name == ODF_FORMCHECKBOX ||
+        name == "msoffice.field.FORMCHECKBOX" ||
         name == "ecma.office-open-xml.field.FORMCHECKBOX")
-        return ODF_FORMCHECKBOX;
-    else if (name == ODF_FORMCHECKBOX)
         return ODF_FORMCHECKBOX;
     else if (name == ODF_FORMDROPDOWN ||
              name == "ecma.office-open-xml.field.FORMDROPDOWN")
