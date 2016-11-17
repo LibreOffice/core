@@ -87,6 +87,24 @@
       "revId": "807dba9463375d9b89752cde94ef1f515cbfa95d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_77e22305",
+        "filename": "officecfg/registry/schema/org/openoffice/VCL.xcs",
+        "patchSetId": 6
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000125
+      },
+      "writtenOn": "2016-11-17T14:18:18Z",
+      "side": 1,
+      "message": "\u003cnode oor:name\u003d\"ExtraLanguages\"\u003e\n  \u003cnode oor:name\u003d\"shn\"\u003e\n    \u003cprop oor:name\u003d\"Name\"\u003e\n      ...\n    \u003c/prop\u003e\n  \u003c/node\u003e\n  \u003cnode oor:name\u003d\"can\"\u003e\n    ...\n  \u003c/node\u003e\n  ...\n\u003c/node\u003e\n\nThe ExtraLanguages node itself contains property groups for each language, but there are multiple languages.",
+      "parentUuid": "7a77a97e_f71713eb",
+      "revId": "807dba9463375d9b89752cde94ef1f515cbfa95d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
