@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_f7c5535b",
+        "filename": "officecfg/registry/schema/org/openoffice/VCL.xcs",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-11-17T14:55:18Z",
+      "side": 1,
+      "message": "remove oor:extensible\u003d\"true\"",
+      "revId": "2ace9b344cfe32fb260c4e1c5af3b1b79d8c90ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_77b063f5",
+        "filename": "officecfg/registry/schema/org/openoffice/VCL.xcs",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-11-17T14:55:18Z",
+      "side": 1,
+      "message": "add oor:nillable\u003d\"false\" and oor:localized\u003d\"true\"",
+      "revId": "2ace9b344cfe32fb260c4e1c5af3b1b79d8c90ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
