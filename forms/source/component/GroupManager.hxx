@@ -88,7 +88,6 @@ namespace frm
 
 class OGroupComp
 {
-    OUString m_aName;
     css::uno::Reference< css::beans::XPropertySet>    m_xComponent;
     css::uno::Reference< css::awt::XControlModel>     m_xControlModel;
     sal_Int32   m_nPos;

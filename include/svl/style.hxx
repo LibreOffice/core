@@ -193,7 +193,6 @@ friend class SfxStyleSheetBase;
 protected:
     SfxStyleSheetIterator&      GetIterator_Impl();
 
-    OUString                    aAppName;
     SfxItemPool&                rPool;
     SfxStyleFamily              nSearchFamily;
     sal_uInt16                  nMask;

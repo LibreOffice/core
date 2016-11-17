@@ -138,14 +138,11 @@ public:
 
 class SvxIconChoiceCtrlColumnInfo
 {
-    OUString                aColText;
-    Image                   aColImage;
     long                    nWidth;
-    sal_uInt16              nSubItem;
 
 public:
                             SvxIconChoiceCtrlColumnInfo() :
-                                nWidth( 100 ), nSubItem( 0 ) {}
+                                nWidth( 100 ) {}
                             SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& );
 
     void                    SetWidth( long nWd ) { nWidth = nWd; }

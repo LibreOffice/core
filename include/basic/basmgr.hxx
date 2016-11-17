@@ -48,11 +48,10 @@ class BASIC_DLLPUBLIC BasicError
 private:
     sal_uInt64 nErrorId;
     BasicErrorReason  nReason;
-    OUString  aErrStr;
 
 public:
             BasicError( const BasicError& rErr );
-            BasicError( sal_uInt64 nId, BasicErrorReason nR, const OUString& rErrStr );
+            BasicError( sal_uInt64 nId, BasicErrorReason nR );
 
     sal_uInt64 GetErrorId() const                  { return nErrorId; }
 };

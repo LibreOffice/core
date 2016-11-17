@@ -100,7 +100,6 @@ struct CpyTabFrame
 struct CR_SetBoxWidth
 {
     SwSelBoxes m_Boxes;
-    std::map<SwTableLine*, sal_uInt16> m_LineWidthMap;
     SwShareBoxFormats aShareFormats;
     SwTableNode* pTableNd;
     SwUndoTableNdsChg* pUndo;
@@ -122,9 +121,7 @@ struct CR_SetBoxWidth
         nMode = pTableNd->GetTable().GetTableChgMode();
     }
     CR_SetBoxWidth( const CR_SetBoxWidth& rCpy )
-        : m_LineWidthMap(rCpy.m_LineWidthMap)
-        ,
-        pTableNd( rCpy.pTableNd ),
+        : pTableNd( rCpy.pTableNd ),
         pUndo( rCpy.pUndo ),
         nDiff( rCpy.nDiff ), nSide( rCpy.nSide ),
         nMaxSize( rCpy.nMaxSize ), nLowerDiff( 0 ),

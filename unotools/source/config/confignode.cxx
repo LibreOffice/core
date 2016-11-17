@@ -84,7 +84,6 @@ namespace utl
         , m_xReplaceAccess(_rSource.m_xReplaceAccess)
         , m_xContainerAccess(_rSource.m_xContainerAccess)
         , m_bEscapeNames(_rSource.m_bEscapeNames)
-        , m_sCompletePath(_rSource.m_sCompletePath)
     {
         Reference< XComponent > xConfigNodeComp(m_xDirectAccess, UNO_QUERY);
         if (xConfigNodeComp.is())
@@ -98,7 +97,6 @@ namespace utl
         , m_xReplaceAccess(std::move(_rSource.m_xReplaceAccess))
         , m_xContainerAccess(std::move(_rSource.m_xContainerAccess))
         , m_bEscapeNames(std::move(_rSource.m_bEscapeNames))
-        , m_sCompletePath(std::move(_rSource.m_sCompletePath))
     {
         Reference< XComponent > xConfigNodeComp(m_xDirectAccess, UNO_QUERY);
         if (xConfigNodeComp.is())
@@ -114,7 +112,6 @@ namespace utl
         m_xContainerAccess = _rSource.m_xContainerAccess;
         m_xReplaceAccess = _rSource.m_xReplaceAccess;
         m_bEscapeNames = _rSource.m_bEscapeNames;
-        m_sCompletePath = _rSource.m_sCompletePath;
 
         Reference< XComponent > xConfigNodeComp(m_xDirectAccess, UNO_QUERY);
         if (xConfigNodeComp.is())
@@ -132,7 +129,6 @@ namespace utl
         m_xContainerAccess = std::move(_rSource.m_xContainerAccess);
         m_xReplaceAccess = std::move(_rSource.m_xReplaceAccess);
         m_bEscapeNames = std::move(_rSource.m_bEscapeNames);
-        m_sCompletePath = std::move(_rSource.m_sCompletePath);
 
         Reference< XComponent > xConfigNodeComp(m_xDirectAccess, UNO_QUERY);
         if (xConfigNodeComp.is())

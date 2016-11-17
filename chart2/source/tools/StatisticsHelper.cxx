@@ -297,7 +297,6 @@ void StatisticsHelper::setErrorDataSequence(
 
 Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
     const Reference< chart2::XDataSeries > & xDataSeries,
-    const Reference< uno::XComponentContext > & xContext,
     sal_Int32 nStyle,
     bool bYError /* = true */ )
 {
@@ -311,7 +310,7 @@ Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
     if( !( xSeriesProp->getPropertyValue( aPropName ) >>= xErrorBar ) ||
         !xErrorBar.is())
     {
-        xErrorBar.set( createErrorBar( xContext ));
+        xErrorBar.set( new ErrorBar );
     }
 
     OSL_ASSERT( xErrorBar.is());

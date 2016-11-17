@@ -1305,7 +1305,7 @@ bool ImplSdPPTImport::Import()
                                 SdCustomShowList* pList = mpDoc->GetCustomShowList( true );
                                 if ( pList )
                                 {
-                                    SdCustomShow* pSdCustomShow = new SdCustomShow( mpDoc );
+                                    SdCustomShow* pSdCustomShow = new SdCustomShow;
                                     pSdCustomShow->SetName( aCuShow );
                                     sal_uInt32 nFound = 0;
                                     for ( sal_uInt32 nS = 0; nS < nSCount; nS++ )

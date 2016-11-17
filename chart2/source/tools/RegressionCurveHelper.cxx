@@ -84,15 +84,12 @@ OUString lcl_getServiceNameForType(SvxChartRegress eType)
 namespace chart
 {
 
-Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine(
-    const Reference< XComponentContext > & xContext )
+Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine()
 {
-    return Reference< XRegressionCurve >(
-        new MeanValueRegressionCurve( xContext ));
+    return Reference< XRegressionCurve >( new MeanValueRegressionCurve );
 }
 
 Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServiceName(
-    const Reference< XComponentContext > & xContext,
     const OUString& aServiceName )
 {
     Reference< XRegressionCurve > xResult;
@@ -100,27 +97,27 @@ Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServ
     // todo: use factory methods with service name
     if( aServiceName == "com.sun.star.chart2.LinearRegressionCurve" )
     {
-        xResult.set( new LinearRegressionCurve( xContext ) );
+        xResult.set( new LinearRegressionCurve );
     }
     else if( aServiceName == "com.sun.star.chart2.LogarithmicRegressionCurve" )
     {
-        xResult.set( new LogarithmicRegressionCurve( xContext ) );
+        xResult.set( new LogarithmicRegressionCurve );
     }
     else if( aServiceName == "com.sun.star.chart2.ExponentialRegressionCurve" )
     {
-        xResult.set( new ExponentialRegressionCurve( xContext ) );
+        xResult.set( new ExponentialRegressionCurve );
     }
     else if( aServiceName == "com.sun.star.chart2.PotentialRegressionCurve" )
     {
-        xResult.set( new PotentialRegressionCurve( xContext ) );
+        xResult.set( new PotentialRegressionCurve );
     }
     else if( aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve" )
     {
-        xResult.set( new PolynomialRegressionCurve( xContext ) );
+        xResult.set( new PolynomialRegressionCurve );
     }
     else if( aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve" )
     {
-        xResult.set( new MovingAverageRegressionCurve( xContext ) );
+        xResult.set( new MovingAverageRegressionCurve );
     }
 
     return xResult;
@@ -299,7 +296,6 @@ uno::Reference< chart2::XRegressionCurve >
 
 void RegressionCurveHelper::addMeanValueLine(
     uno::Reference< XRegressionCurveContainer > & xRegCnt,
-    const uno::Reference< XComponentContext > & xContext,
     const uno::Reference< XPropertySet > & xSeriesProp )
 {
     if( !xRegCnt.is() ||
@@ -307,7 +303,7 @@ void RegressionCurveHelper::addMeanValueLine(
         return;
 
     // todo: use a valid context
-    uno::Reference< XRegressionCurve > xCurve( createMeanValueLine( xContext ));
+    uno::Reference< XRegressionCurve > xCurve( createMeanValueLine() );
     xRegCnt->addRegressionCurve( xCurve );
 
     if( xSeriesProp.is())
@@ -372,8 +368,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::addRegressionC
     if( !aServiceName.isEmpty())
     {
         // todo: use a valid context
-        xCurve.set( createRegressionCurveByServiceName(
-                         uno::Reference< uno::XComponentContext >(), aServiceName ));
+        xCurve.set( createRegressionCurveByServiceName( aServiceName ) );
 
         if( xEquationProperties.is())
             xCurve->setEquationProperties( xEquationProperties );

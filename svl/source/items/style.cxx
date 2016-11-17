@@ -576,7 +576,6 @@ SfxStyleSheetIterator& SfxStyleSheetBasePool::GetIterator_Impl()
 
 SfxStyleSheetBasePool::SfxStyleSheetBasePool( SfxItemPool& r ) :
     pImpl(new SfxStyleSheetBasePool_Impl),
-    aAppName(r.GetName()),
     rPool(r),
     nSearchFamily(SfxStyleFamily::Para),
     nMask(SFXSTYLEBIT_ALL)
@@ -590,7 +589,6 @@ SfxStyleSheetBasePool::SfxStyleSheetBasePool( const SfxStyleSheetBasePool& r ) :
     SfxBroadcaster( r ),
     comphelper::OWeakTypeObject(),
     pImpl(new SfxStyleSheetBasePool_Impl),
-    aAppName(r.aAppName),
     rPool(r.rPool),
     nSearchFamily(r.nSearchFamily),
     nMask( r.nMask )
