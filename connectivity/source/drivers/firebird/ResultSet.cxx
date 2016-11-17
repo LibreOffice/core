@@ -57,8 +57,7 @@ OResultSet::OResultSet(Connection* pConnection,
                        ::osl::Mutex& rMutex,
                        const uno::Reference< XInterface >& xStatement,
                        isc_stmt_handle& aStatementHandle,
-                       XSQLDA* pSqlda,
-                       const OUString& rTableName)
+                       XSQLDA* pSqlda )
     : OResultSet_BASE(rMutex)
     , OPropertyContainer(OResultSet_BASE::rBHelper)
     , m_bIsBookmarkable(false)
@@ -76,7 +75,6 @@ OResultSet::OResultSet(Connection* pConnection,
     , m_currentRow(0)
     , m_bIsAfterLastRow(false)
     , m_fieldCount(pSqlda? pSqlda->sqld : 0)
-    , m_sTableName(rTableName)
 {
     SAL_INFO("connectivity.firebird", "OResultSet().");
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
@@ -725,8 +723,7 @@ uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(
 
     if(!m_xMetaData.is())
         m_xMetaData = new OResultSetMetaData(m_pConnection
-                                           , m_pSqlda
-                                           , m_sTableName);
+                                           , m_pSqlda);
     return m_xMetaData;
 }
 

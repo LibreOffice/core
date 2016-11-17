@@ -53,7 +53,6 @@ namespace connectivity
 
             XSQLDA*         m_pOutSqlda;
             XSQLDA*         m_pInSqlda;
-            ::rtl::OUString                                       m_sTableName;
             void checkParameterIndex(sal_Int32 nParameterIndex)
                 throw(css::sdbc::SQLException,
                       css::uno::RuntimeException);

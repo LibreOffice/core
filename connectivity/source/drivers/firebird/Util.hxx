@@ -76,10 +76,6 @@ namespace connectivity
 
         void freeSQLVAR(XSQLDA* pSqlda);
 
-        void tokenizeSQL( const OString & sql, OStringVector &vec  );
-
-        OString extractSingleTableFromSelect( const OStringVector &vec );
-
         OUString escapeWith( const OUString& sText, const char aKey, const char aEscapeChar);
         sal_Int64 pow10Integer( int nDecimalCount );
     }
