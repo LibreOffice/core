@@ -95,7 +95,7 @@ bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     }
 
     rStrExpValue = aOut.makeStringAndClear();
-    return true;
+    return !rStrExpValue.isEmpty();
 }
 
 
