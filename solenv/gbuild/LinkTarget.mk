@@ -488,7 +488,8 @@ define gb_LinkTarget__command_impl
 			$(call gb_LinkTarget__command,$(1),$(2)),\
 			mkdir -p $(dir $(1)) && echo invalid - merged lib > $(1) \
 			$(if $(SOVERSIONSCRIPT),&& echo invalid - merged lib > $(WORKDIR)/LinkTarget/$(2))),\
-		$(call gb_LinkTarget__command,$(1),$(2)))
+		$(if $(filter-out CompilerTest,$(TARGETTYPE)), \
+			$(call gb_LinkTarget__command,$(1),$(2))))
 	$(call gb_LinkTarget__command_objectlist,$(WORKDIR)/LinkTarget/$(2).objectlist)
 endef
 

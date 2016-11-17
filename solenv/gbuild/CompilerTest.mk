@@ -15,6 +15,7 @@ endef
 # call gb_CompilerTest__CompilerTest_impl,compilertest,linktarget
 define gb_CompilerTest__CompilerTest_impl
 $(call gb_LinkTarget_LinkTarget,$(2),CompilerTest_$(1),NONE)
+$(call gb_LinkTarget_set_targettype,$(2),CompilerTest)
 $(call gb_LinkTarget_get_target,$(2)): COMPILER_TEST := $(true)
 $(call gb_LinkTarget_get_target,$(2)): ENABLE_WERROR := $(true)
 $(call gb_CompilerTest_get_target,$(1)): $(call gb_LinkTarget_get_target,$(2))
