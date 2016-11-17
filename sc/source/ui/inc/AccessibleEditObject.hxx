@@ -26,6 +26,8 @@
 #include "global.hxx"
 #include <vcl/window.hxx>
 
+#include <memory>
+
 namespace accessibility
 {
     class AccessibleTextHelper;
@@ -184,7 +186,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    accessibility::AccessibleTextHelper* mpTextHelper;
+    std::unique_ptr<accessibility::AccessibleTextHelper> mpTextHelper;
     EditView*      mpEditView;
     VclPtr<vcl::Window> mpWindow;
     EditObjectType meObjectType;
