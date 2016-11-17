@@ -63,8 +63,11 @@ bool DocumentSignatureManager::init()
 
 PDFSignatureHelper& DocumentSignatureManager::getPDFSignatureHelper()
 {
+    bool bInit = true;
     if (!mxSecurityContext.is())
-        init();
+        bInit = init();
+
+    SAL_WARN_IF(!bInit, "xmlsecurity.comp", "Error initializing security context!");
 
     if (!mpPDFSignatureHelper)
         mpPDFSignatureHelper.reset(new PDFSignatureHelper(mxContext));
