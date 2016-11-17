@@ -234,10 +234,7 @@ protected:
 /*** import text input fields (<text:text-input>) */
 class XMLTextInputFieldImportContext : public XMLVarFieldImportContext
 {
-    const OUString sPropertyContent;
-
 public:
-
 
     XMLTextInputFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import

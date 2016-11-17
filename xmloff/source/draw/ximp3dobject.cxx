@@ -193,7 +193,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
     maCenter(0.0, 0.0, 0.0),
-    maSize(5000.0, 5000.0, 5000.0),
+    maSphereSize(5000.0, 5000.0, 5000.0),
     mbCenterUsed(false),
     mbSizeUsed(false)
 {
@@ -225,9 +225,9 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                 ::basegfx::B3DVector aNewVec;
                 SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
 
-                if(aNewVec != maSize)
+                if(aNewVec != maSphereSize)
                 {
-                    maSize = aNewVec;
+                    maSphereSize = aNewVec;
                     mbSizeUsed = true;
                 }
                 break;
@@ -262,9 +262,9 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
             aPosition3D.PositionY = maCenter.getY();
             aPosition3D.PositionZ = maCenter.getZ();
 
-            aDirection3D.DirectionX = maSize.getX();
-            aDirection3D.DirectionY = maSize.getY();
-            aDirection3D.DirectionZ = maSize.getZ();
+            aDirection3D.DirectionX = maSphereSize.getX();
+            aDirection3D.DirectionY = maSphereSize.getY();
+            aDirection3D.DirectionZ = maSphereSize.getZ();
 
             xPropSet->setPropertyValue("D3DPosition", uno::Any(aPosition3D));
             xPropSet->setPropertyValue("D3DSize", uno::Any(aDirection3D));
