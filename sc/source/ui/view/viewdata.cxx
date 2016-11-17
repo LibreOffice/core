@@ -1763,11 +1763,6 @@ SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, sal_
 
     if (nScrSizeY == SC_SIZE_NONE) nScrSizeY = (sal_uInt16) aScrSize.Height();
 
-    if (comphelper::LibreOfficeKit::isActive() && m_nLOKPageUpDownOffset > 0)
-    {
-        nScrSizeY = ToPixel( m_nLOKPageUpDownOffset, nPPTY );
-    }
-
     SCROW nY;
 
     if (nDir==1)
