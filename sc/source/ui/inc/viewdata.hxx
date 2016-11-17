@@ -434,6 +434,7 @@ public:
 
     /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
     void ForcePageUpDownOffset(long nTwips) { m_nLOKPageUpDownOffset = nTwips; }
+    long GetPageUpDownOffset() { return m_nLOKPageUpDownOffset; }
 
     void            KillEditView();
     void            ResetEditView();

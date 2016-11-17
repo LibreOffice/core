@@ -45,6 +45,7 @@
 #include "tabprotection.hxx"
 #include "markdata.hxx"
 #include "inputopt.hxx"
+#include <comphelper/lok.hxx>
 
 namespace {
 
@@ -628,6 +629,11 @@ void ScTabView::GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPage
     ScHSplitPos eWhichX = WhichH( eWhich );
     ScVSplitPos eWhichY = WhichV( eWhich );
 
+    sal_uInt16 nScrSizeY = SC_SIZE_NONE;
+    if (comphelper::LibreOfficeKit::isActive() && aViewData.GetPageUpDownOffset() > 0) {
+        nScrSizeY = ScViewData::ToPixel( aViewData.GetPageUpDownOffset(), aViewData.GetPPTX() );
+    }
+
     SCsCOL nPageX;
     SCsROW nPageY;
     if (nMovX >= 0)
@@ -636,9 +642,9 @@ void ScTabView::GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPage
         nPageX = ((SCsCOL) aViewData.CellsAtX( nCurX, -1, eWhichX )) * nMovX;
 
     if (nMovY >= 0)
-        nPageY = ((SCsROW) aViewData.CellsAtY( nCurY, 1, eWhichY )) * nMovY;
+        nPageY = ((SCsROW) aViewData.CellsAtY( nCurY, 1, eWhichY, nScrSizeY )) * nMovY;
     else
-        nPageY = ((SCsROW) aViewData.CellsAtY( nCurY, -1, eWhichY )) * nMovY;
+        nPageY = ((SCsROW) aViewData.CellsAtY( nCurY, -1, eWhichY, nScrSizeY )) * nMovY;
 
     if (nMovX != 0 && nPageX == 0) nPageX = (nMovX>0) ? 1 : -1;
     if (nMovY != 0 && nPageY == 0) nPageY = (nMovY>0) ? 1 : -1;
