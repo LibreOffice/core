@@ -1078,7 +1078,7 @@ static XMLPropertyMapEntry *lcl_txtprmap_getMap( TextPropMap nType )
         // [XATTR_FILL_FIRST .. XATTR_FILL_LAST] and would be double since Shapes
         // already contain these (usually in aXMLSDProperties)
         pMap = &(aXMLParaPropMap[21]);
-        OSL_ENSURE( pMap->meXMLName == XML_MARGIN, "shape para map changed" );
+        assert( pMap->meXMLName == XML_MARGIN && " shape para map changed" );
         break;
     case TextPropMap::PARA:
         pMap = aXMLParaPropMap;
@@ -1088,7 +1088,7 @@ static XMLPropertyMapEntry *lcl_txtprmap_getMap( TextPropMap nType )
         break;
     case TextPropMap::AUTO_FRAME:
         pMap = &(aXMLFramePropMap[13]);
-        OSL_ENSURE( pMap->meXMLName == XML_MARGIN, "frame map changed" );
+        assert( pMap->meXMLName == XML_MARGIN && " frame map changed" );
         break;
     case TextPropMap::SHAPE:
         pMap = aXMLShapePropMap;
