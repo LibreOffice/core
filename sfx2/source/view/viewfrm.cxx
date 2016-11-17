@@ -1149,23 +1149,26 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 }
                 else
                 {
-                    SfxInfoBarWindow* pInfoBar = AppendInfoBar("readonly", SfxResId(STR_READONLY_DOCUMENT));
+                    bool bSignPDF = false;
+                    SfxMedium* pMedium = m_xObjSh->GetMedium();
+                    if (pMedium && !pMedium->IsOriginallyReadOnly())
+                    {
+                        std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
+                        bSignPDF = pFilter && pFilter->GetName() == "draw_pdf_import";
+                    }
+
+                    SfxInfoBarWindow* pInfoBar = AppendInfoBar("readonly", SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT));
                     if (pInfoBar)
                     {
-                        SfxMedium* pMedium = m_xObjSh->GetMedium();
-                        if (pMedium && !pMedium->IsOriginallyReadOnly())
+                        if (bSignPDF)
                         {
-                            std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
-                            if (pFilter && pFilter->GetName() == "draw_pdf_import")
-                            {
-                                // SID_SIGNPDF opened a read-write PDF
-                                // read-only for signing purposes.
-                                VclPtrInstance<PushButton> xSignButton(&GetWindow());
-                                xSignButton->SetText(SfxResId(STR_READONLY_SIGN));
-                                xSignButton->SetSizePixel(xSignButton->GetOptimalSize());
-                                xSignButton->SetClickHdl(LINK(this, SfxViewFrame, SignDocumentHandler));
-                                pInfoBar->addButton(xSignButton);
-                            }
+                            // SID_SIGNPDF opened a read-write PDF
+                            // read-only for signing purposes.
+                            VclPtrInstance<PushButton> xSignButton(&GetWindow());
+                            xSignButton->SetText(SfxResId(STR_READONLY_SIGN));
+                            xSignButton->SetSizePixel(xSignButton->GetOptimalSize());
+                            xSignButton->SetClickHdl(LINK(this, SfxViewFrame, SignDocumentHandler));
+                            pInfoBar->addButton(xSignButton);
                         }
 
                         VclPtrInstance<PushButton> xBtn(&GetWindow());
