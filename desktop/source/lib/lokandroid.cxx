@@ -321,7 +321,7 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getT
     const char* pMimeType = pEnv->GetStringUTFChars(mimeType, NULL);
 
     char* pUsedMimeType = 0;
-    LibreOfficeKitClass* pcls = pDocument->pClass;
+    LibreOfficeKitDocumentClass* pcls = pDocument->pClass;
     char* pSelection = pcls->getTextSelection(pDocument, pMimeType, &pUsedMimeType);
     free(pUsedMimeType);
 
