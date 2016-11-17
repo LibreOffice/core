@@ -69,6 +69,24 @@
       "revId": "807dba9463375d9b89752cde94ef1f515cbfa95d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_f71713eb",
+        "filename": "officecfg/registry/schema/org/openoffice/VCL.xcs",
+        "patchSetId": 6
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-11-17T14:06:19Z",
+      "side": 1,
+      "message": "but this template group is always about a single language",
+      "parentUuid": "7a77a97e_b71d9b11",
+      "revId": "807dba9463375d9b89752cde94ef1f515cbfa95d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
