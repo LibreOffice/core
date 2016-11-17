@@ -206,9 +206,9 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper8<
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     void Characters(const OUString& aChars);
 
-protected:
-
     css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
+
+protected:
     bool                        mbIsFormsSupported;
     bool                        mbIsTableShapeSupported;
     bool                        mbIsGraphicLoadOnDemandSupported;

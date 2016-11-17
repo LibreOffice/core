@@ -586,8 +586,7 @@ XMLTextInputFieldImportContext::XMLTextInputFieldImportContext(
                                  true, true, true,
                                  false, false,
                                  false, false, false,
-                                 false),
-        sPropertyContent(sAPI_content)
+                                 false)
 {
     bValid = true;  // always valid
 }
