@@ -12,7 +12,6 @@ xmlsec_patches += xmlsec1-configure.patch.1
 xmlsec_patches += xmlsec1-nssdisablecallbacks.patch.1
 xmlsec_patches += xmlsec1-nssmangleciphers.patch.1
 xmlsec_patches += xmlsec1-noverify.patch.1
-xmlsec_patches += xmlsec1-mingw-keymgr-mscrypto.patch.1
 xmlsec_patches += xmlsec1-vc.patch.1
 xmlsec_patches += xmlsec1-1.2.14_fix_extern_c.patch.1
 xmlsec_patches += xmlsec1-customkeymanage.patch.1
@@ -24,11 +23,5 @@ $(eval $(call gb_UnpackedTarball_set_tarball,xmlsec,$(LIBXMLSEC_TARBALL),,libxml
 $(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
 	$(foreach patch,$(xmlsec_patches),external/libxmlsec/$(patch)) \
 ))
-
-ifeq ($(OS)$(COM),WNTGCC)
-$(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
-	external/libxmlsec/xmlsec1-mingw32.patch \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
