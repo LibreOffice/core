@@ -206,11 +206,13 @@ interface _Annotation
     [
         ExecMethod = Exec;
         StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_PARASPACE_DECREASE
     [
         ExecMethod = Exec;
         StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     FN_INSERT_STRING
