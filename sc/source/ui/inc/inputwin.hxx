@@ -117,6 +117,7 @@ protected:
 
     virtual OUString  GetText() const override;
 
+private:
     void            ImplInitSettings();
     void            UpdateAutoCorrFlag();
 
@@ -139,7 +140,6 @@ protected:
     // it prevents the call of InputChanged in the ModifyHandler of the EditEngine
     bool        bInputMode;
 
-private:
     ScTabViewShell* mpViewShell;
     ScInputBarGroup& mrGroupBar;
     long mnLines;
