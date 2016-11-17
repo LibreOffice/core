@@ -161,8 +161,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPo
          SolarMutexGuard aGuard;
         IsObjectValid();
 
-        if(!mpTextHelper)
-            CreateTextHelper();
+        CreateTextHelper();
 
         xRet = mpTextHelper->GetAt(rPoint);
     }
@@ -239,8 +238,7 @@ sal_Int32 SAL_CALL
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    if (!mpTextHelper)
-        CreateTextHelper();
+    CreateTextHelper();
     return mpTextHelper->GetChildCount();
 }
 
@@ -251,8 +249,7 @@ uno::Reference< XAccessible > SAL_CALL
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    if (!mpTextHelper)
-        CreateTextHelper();
+    CreateTextHelper();
     return mpTextHelper->GetChild(nIndex);
 }
 
@@ -306,8 +303,7 @@ void SAL_CALL
     ScAccessibleEditObject::addAccessibleEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
         throw (uno::RuntimeException, std::exception)
 {
-    if (!mpTextHelper)
-        CreateTextHelper();
+    CreateTextHelper();
 
     mpTextHelper->AddEventListener(xListener);
 
@@ -318,8 +314,7 @@ void SAL_CALL
     ScAccessibleEditObject::removeAccessibleEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
         throw (uno::RuntimeException, std::exception)
 {
-    if (!mpTextHelper)
-        CreateTextHelper();
+    CreateTextHelper();
 
     mpTextHelper->RemoveEventListener(xListener);
 
