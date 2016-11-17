@@ -2220,24 +2220,38 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
         nCol2 = nEndCol;
         nRow2 = nEndRow;
 
-        SCCOL nScrX = aViewData.GetPosX( eHWhich );
-        SCROW nScrY = aViewData.GetPosY( eVWhich );
-        if (nCol1 < nScrX)
-            nCol1 = nScrX;
-        if (nCol2 < nScrX)
-        {
-            if ( eMode == SC_UPDATE_ALL )   // for UPDATE_ALL, paint anyway
-                nCol2 = nScrX;              // (because of extending strings to the right)
-            else
-                bOut = true;                // completely outside the window
-        }
-        if (nRow1 < nScrY)
-            nRow1 = nScrY;
-        if (nRow2 < nScrY)
-            bOut = true;
+        SCCOL nLastX = 0;
+        SCROW nLastY = 0;
 
-        SCCOL nLastX = nScrX + aViewData.VisibleCellsX( eHWhich ) + 1;
-        SCROW nLastY = nScrY + aViewData.VisibleCellsY( eVWhich ) + 1;
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            nLastX = aViewData.GetMaxTiledCol();
+            nLastY = aViewData.GetMaxTiledRow();
+        }
+        else
+        {
+
+            SCCOL nScrX = aViewData.GetPosX( eHWhich );
+            SCROW nScrY = aViewData.GetPosY( eVWhich );
+
+            if (nCol1 < nScrX)
+                nCol1 = nScrX;
+            if (nCol2 < nScrX)
+            {
+                if ( eMode == SC_UPDATE_ALL )   // for UPDATE_ALL, paint anyway
+                    nCol2 = nScrX;              // (because of extending strings to the right)
+                else
+                    bOut = true;                // completely outside the window
+            }
+            if (nRow1 < nScrY)
+                nRow1 = nScrY;
+            if (nRow2 < nScrY)
+                bOut = true;
+
+            nLastX = nScrX + aViewData.VisibleCellsX( eHWhich ) + 1;
+            nLastY = nScrY + aViewData.VisibleCellsY( eVWhich ) + 1;
+        }
+
         if (nCol1 > nLastX)
             bOut = true;
         if (nCol2 > nLastX)
