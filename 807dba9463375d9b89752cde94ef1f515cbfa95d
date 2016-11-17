@@ -105,6 +105,24 @@
       "revId": "807dba9463375d9b89752cde94ef1f515cbfa95d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_d7f137cf",
+        "filename": "officecfg/registry/schema/org/openoffice/VCL.xcs",
+        "patchSetId": 6
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000125
+      },
+      "writtenOn": "2016-11-17T14:22:32Z",
+      "side": 1,
+      "message": "Duh I get it now. You want the template to be ExtraLanguage but the component to be ExtraLanguages?",
+      "parentUuid": "7a77a97e_77e22305",
+      "revId": "807dba9463375d9b89752cde94ef1f515cbfa95d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
