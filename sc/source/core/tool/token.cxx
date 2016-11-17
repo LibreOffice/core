@@ -3117,6 +3117,20 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                             rRef.Ref1.SetFlag3D(true);
                     }
                     break;
+                case svExternalSingleRef:
+                    {
+                        ScSingleRefData& rRef = *p->GetSingleRef();
+                        ScAddress aAbs = rRef.toAbs(rOldPos);
+                        rRef.SetAddress(aAbs, rNewPos);
+                    }
+                    break;
+                case svExternalDoubleRef:
+                    {
+                        ScComplexRefData& rRef = *p->GetDoubleRef();
+                        ScRange aAbs = rRef.toAbs(rOldPos);
+                        rRef.SetRange(aAbs, rNewPos);
+                    }
+                    break;
                 default:
                     ;
             }
