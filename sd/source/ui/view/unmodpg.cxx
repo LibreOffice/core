@@ -70,7 +70,7 @@ ModifyPageUndoAction::ModifyPageUndoAction(
         mbOldBckgrndObjsVisible = false;
     }
 
-    maComment = SD_RESSTR(STR_UNDO_MODIFY_PAGE);
+    SetComment( SD_RESSTR(STR_UNDO_MODIFY_PAGE) );
 }
 
 void ModifyPageUndoAction::Undo()
@@ -161,11 +161,6 @@ void ModifyPageUndoAction::Redo()
 
 ModifyPageUndoAction::~ModifyPageUndoAction()
 {
-}
-
-OUString ModifyPageUndoAction::GetComment() const
-{
-    return maComment;
 }
 
 RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction(

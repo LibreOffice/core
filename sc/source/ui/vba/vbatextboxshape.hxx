@@ -30,7 +30,6 @@ typedef cppu::ImplInheritanceHelper< ScVbaShape, ov::msforms::XTextBoxShape > Te
 class ScVbaTextBoxShape : public TextBoxShapeImpl_BASE
 {
     css::uno::Reference< css::text::XTextRange > m_xTextRange;
-    css::uno::Reference< css::frame::XModel > m_xModel;
 public:
     ScVbaTextBoxShape( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
 

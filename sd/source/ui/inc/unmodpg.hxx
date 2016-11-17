@@ -38,8 +38,6 @@ class ModifyPageUndoAction : public SdUndoAction
     bool        mbOldBckgrndObjsVisible;
     bool        mbNewBckgrndObjsVisible;
 
-    OUString        maComment;
-
 public:
     ModifyPageUndoAction(
         SdDrawDocument*         pTheDoc,
@@ -52,8 +50,6 @@ public:
     virtual ~ModifyPageUndoAction() override;
     virtual void Undo() override;
     virtual void Redo() override;
-
-    virtual OUString GetComment() const override;
 };
 
 class RenameLayoutTemplateUndoAction : public SdUndoAction
