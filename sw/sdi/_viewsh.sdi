@@ -432,12 +432,14 @@ interface BaseTextEditView
     [
         ExecMethod = ExecTabWin;
         StateMethod = StateTabWin;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_PARASPACE_DECREASE
     [
         ExecMethod = ExecTabWin;
         StateMethod = StateTabWin;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ATTR_PAGE_COLUMN
