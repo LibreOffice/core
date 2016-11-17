@@ -357,7 +357,7 @@ sal_uInt32 PDFDocument::GetNextSignature()
     return nRet + 1;
 }
 
-sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, sal_uInt64& rLastByteRangeOffset, sal_Int64& rContentOffset)
+sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool bAdES, sal_uInt64& rLastByteRangeOffset, sal_Int64& rContentOffset)
 {
     // Write signature object.
     sal_Int32 nSignatureId = m_aXRef.size();
@@ -374,7 +374,11 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, sal_uI
     OStringBuffer aContentFiller(MAX_SIGNATURE_CONTENT_LENGTH);
     comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
     aSigBuffer.append(aContentFiller.makeStringAndClear());
-    aSigBuffer.append(">\n/Type/Sig/SubFilter/adbe.pkcs7.detached");
+    aSigBuffer.append(">\n/Type/Sig/SubFilter");
+    if (bAdES)
+        aSigBuffer.append("/ETSI.CAdES.detached");
+    else
+        aSigBuffer.append("/adbe.pkcs7.detached");
 
     // Time of signing.
     aSigBuffer.append(" /M (");
@@ -941,14 +945,14 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement* pRoot)
     }
 }
 
-bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificate, const OUString& rDescription)
+bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificate, const OUString& rDescription, bool bAdES)
 {
     m_aEditBuffer.Seek(STREAM_SEEK_TO_END);
     m_aEditBuffer.WriteCharPtr("\n");
 
     sal_uInt64 nSignatureLastByteRangeOffset = 0;
     sal_Int64 nSignatureContentOffset = 0;
-    sal_Int32 nSignatureId = WriteSignatureObject(rDescription, nSignatureLastByteRangeOffset, nSignatureContentOffset);
+    sal_Int32 nSignatureId = WriteSignatureObject(rDescription, bAdES, nSignatureLastByteRangeOffset, nSignatureContentOffset);
 
     sal_Int32 nAppearanceId = WriteAppearanceObject();
 
@@ -2021,7 +2025,7 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     }
 
     auto pSubFilter = dynamic_cast<PDFNameElement*>(pValue->Lookup("SubFilter"));
-    if (!pSubFilter || pSubFilter->GetValue() != "adbe.pkcs7.detached")
+    if (!pSubFilter || (pSubFilter->GetValue() != "adbe.pkcs7.detached" && pSubFilter->GetValue() != "ETSI.CAdES.detached"))
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: no or unsupported sub-filter");
         return false;

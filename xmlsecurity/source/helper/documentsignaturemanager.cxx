@@ -232,7 +232,7 @@ SignatureStreamHelper DocumentSignatureManager::ImplOpenSignatureStream(sal_Int3
     return aHelper;
 }
 
-bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>& xCert, const OUString& rDescription, sal_Int32& nSecurityId, bool bXAdESCompliantIfODF)
+bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>& xCert, const OUString& rDescription, sal_Int32& nSecurityId, bool bAdESCompliant)
 {
     if (!xCert.is())
     {
@@ -255,7 +255,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         getPDFSignatureHelper().SetX509Certificate(xCert);
         getPDFSignatureHelper().SetDescription(rDescription);
         uno::Reference<io::XInputStream> xInputStream(mxSignatureStream, uno::UNO_QUERY);
-        if (!getPDFSignatureHelper().Sign(xInputStream))
+        if (!getPDFSignatureHelper().Sign(xInputStream, bAdESCompliant))
         {
             SAL_WARN("xmlsecurity.helper", "PDFSignatureHelper::Sign() failed");
             return false;
@@ -299,7 +299,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
     for (sal_Int32 n = 0; n < nElements; n++)
     {
         bool bBinaryMode = !isXML(aElements[n]);
-        maSignatureHelper.AddForSigning(nSecurityId, aElements[n], aElements[n], bBinaryMode, bXAdESCompliantIfODF);
+        maSignatureHelper.AddForSigning(nSecurityId, aElements[n], aElements[n], bBinaryMode, bAdESCompliant);
     }
 
     maSignatureHelper.SetDateTime(nSecurityId, Date(Date::SYSTEM), tools::Time(tools::Time::SYSTEM));
@@ -321,10 +321,10 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY_THROW);
         std::size_t nInfos = maCurrentSignatureInformations.size();
         for (std::size_t n = 0; n < nInfos; n++)
-            XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n], bXAdESCompliantIfODF);
+            XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n], bAdESCompliant);
 
         // Create a new one...
-        maSignatureHelper.CreateAndWriteSignature(xDocumentHandler, bXAdESCompliantIfODF);
+        maSignatureHelper.CreateAndWriteSignature(xDocumentHandler, bAdESCompliant);
 
         // That's it...
         XMLSignatureHelper::CloseDocumentHandler(xDocumentHandler);

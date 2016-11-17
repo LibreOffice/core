@@ -142,7 +142,7 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_
             // NSS failed to parse it's own profile or Windows has no certificates installed.
             return false;
         }
-        CPPUNIT_ASSERT(aDocument.Sign(aCertificates[0], "test"));
+        CPPUNIT_ASSERT(aDocument.Sign(aCertificates[0], "test", /*bAdES=*/true));
         SvFileStream aOutStream(rOutURL, StreamMode::WRITE | StreamMode::TRUNC);
         CPPUNIT_ASSERT(aDocument.Write(aOutStream));
     }

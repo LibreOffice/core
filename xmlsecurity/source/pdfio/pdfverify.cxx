@@ -136,7 +136,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
         SAL_WARN("xmlsecurity.pdfio", "no signing certificates found");
         return 1;
     }
-    if (!aDocument.Sign(aCertificates[0], "pdfverify"))
+    if (!aDocument.Sign(aCertificates[0], "pdfverify", /*bAdES=*/true))
     {
         SAL_WARN("xmlsecurity.pdfio", "failed to sign");
         return 1;

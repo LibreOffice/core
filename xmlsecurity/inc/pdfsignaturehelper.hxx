@@ -43,7 +43,7 @@ public:
     /// Comment / reason to be used next time signing is performed.
     void SetDescription(const OUString& rDescription);
     /// Append a new signature at the end of xInputStream.
-    bool Sign(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+    bool Sign(const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bAdES);
     /// Remove the signature at nPosition (and all dependent signatures) from xInputStream.
     static bool RemoveSignature(const css::uno::Reference<css::io::XInputStream>& xInputStream, sal_uInt16 nPosition);
 };
