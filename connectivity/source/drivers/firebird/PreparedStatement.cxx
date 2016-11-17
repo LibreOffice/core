@@ -599,6 +599,10 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 {
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
+    ensurePrepared();
+
+    checkParameterIndex(parameterIndex);
+    setParameterNull(parameterIndex, false);
 
     XSQLVAR* pVar = m_pInSqlda->sqlvar + (parameterIndex - 1);
     int dType = (pVar->sqltype & ~1); // drop null flag
