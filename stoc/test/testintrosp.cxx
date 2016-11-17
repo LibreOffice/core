@@ -332,7 +332,7 @@ public:
     virtual OUString SAL_CALL getFirstName()
         throw(RuntimeException);
     virtual OUString SAL_CALL getLastName() throw(RuntimeException)
-        { return OUString( OUString("Meyer") ); }
+        { return OUString("Meyer"); }
     virtual sal_Int16 SAL_CALL getAge() throw(RuntimeException)
         { return m_nMarkusAge; }
     virtual sal_Int16 SAL_CALL getChildrenCount() throw(RuntimeException)
@@ -521,7 +521,7 @@ Any ImplIntroTest::getPropertyValue( const OUString& PropertyName )
 OUString ImplIntroTest::getFirstName()
     throw(RuntimeException)
 {
-    return OUString( OUString("Markus") );
+    return OUString("Markus");
 }
 
 void ImplIntroTest::writeln( const OUString& Text )
