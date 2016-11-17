@@ -150,13 +150,14 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
-    if( !m_sTableName.isEmpty() )
+    OUString sTable = getTableName(column);
+    if( !sTable.isEmpty() )
     {
         OUString sColumnName = getColumnName( column );
 
         OUString sSql = "SELECT RDB$IDENTITY_TYPE FROM RDB$RELATION_FIELDS "
                    "WHERE RDB$RELATION_NAME = '"
-                   + escapeWith(m_sTableName, '\'', '\'') + "' AND "
+                   + escapeWith(sTable, '\'', '\'') + "' AND "
                    "RDB$FIELD_NAME = '"+ escapeWith(sColumnName, '\'', '\'') +"'";
 
         Reference<XStatement> xStmt =m_pConnection ->createStatement();
@@ -195,8 +196,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
     sal_Int32 nType = getColumnType(column);
-    if( (nType == DataType::NUMERIC || nType == DataType::DECIMAL)
-           && !m_sTableName.isEmpty() )
+    if( nType == DataType::NUMERIC || nType == DataType::DECIMAL )
     {
         OUString sColumnName = getColumnName( column );
 
