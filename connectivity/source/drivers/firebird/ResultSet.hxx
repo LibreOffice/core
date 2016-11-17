@@ -97,8 +97,6 @@ namespace connectivity
             const sal_Int32                             m_fieldCount;
             ISC_STATUS_ARRAY                            m_statusVector;
 
-            OUString                                    m_sTableName;
-
             bool isNull(const sal_Int32 nColumnIndex);
 
             template <typename T> OUString makeNumericString(
@@ -131,8 +129,8 @@ namespace connectivity
                        ::osl::Mutex& rMutex,
                        const css::uno::Reference< css::uno::XInterface >& xStatement,
                        isc_stmt_handle& aStatementHandle,
-                       XSQLDA* aSqlda,
-                       const OUString & rTableName);
+                       XSQLDA* aSqlda
+                      );
 
             // XInterface
             virtual css::uno::Any SAL_CALL queryInterface(
