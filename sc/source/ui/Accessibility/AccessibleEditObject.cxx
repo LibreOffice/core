@@ -103,8 +103,7 @@ ScAccessibleEditObject::~ScAccessibleEditObject()
 void SAL_CALL ScAccessibleEditObject::disposing()
 {
     SolarMutexGuard aGuard;
-    if (mpTextHelper)
-        DELETEZ(mpTextHelper);
+    mpTextHelper.reset();
 
     ScAccessibleContextBase::disposing();
 }
@@ -368,7 +367,11 @@ void ScAccessibleEditObject::CreateTextHelper()
             pAccessibleTextData.reset
                 (new ScAccessibleEditLineTextData(nullptr, mpWindow));
         }
-        mpTextHelper = new ::accessibility::AccessibleTextHelper(o3tl::make_unique<ScAccessibilityEditSource>(std::move(pAccessibleTextData)));
+
+        std::unique_ptr<ScAccessibilityEditSource> pEditSrc =
+            o3tl::make_unique<ScAccessibilityEditSource>(std::move(pAccessibleTextData));
+
+        mpTextHelper = o3tl::make_unique<::accessibility::AccessibleTextHelper>(std::move(pEditSrc));
         mpTextHelper->SetEventSource(this);
 
         const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
