@@ -100,7 +100,6 @@ private:
     virtual void SAL_CALL disposing() override;
 
     SdPage* mpPage;
-    mutable ::osl::Mutex m_aMutex;
     RealPoint2D m_Position;
     RealSize2D m_Size;
     OUString m_Author;

@@ -39,8 +39,9 @@ public:
 
 protected:
     SdDrawDocument* mpDoc;
-    OUString maComment;
     sal_Int32 mnViewShellId;
+private:
+    OUString maComment;
 };
 
 #endif // INCLUDED_SD_INC_SDUNDO_HXX
