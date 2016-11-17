@@ -363,14 +363,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     SetSublistOpenWithLeftRight();
 }
 
-VCL_BUILDER_DECL_FACTORY(SvTreeListBox)
-{
-    WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SvTreeListBox>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SvTreeListBox, WB_TABSTOP)
 
 void SvTreeListBox::Clear()
 {
