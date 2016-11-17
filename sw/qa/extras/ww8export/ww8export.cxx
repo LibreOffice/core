@@ -347,12 +347,6 @@ DECLARE_WW8EXPORT_TEST(testCp1000044, "cp1000044.doc")
     CPPUNIT_ASSERT_EQUAL(false, bool(xStorable->isReadonly()));
 }
 
-DECLARE_WW8EXPORT_TEST(testCp1000039, "cp1000039.doc")
-{
-    // This was RTL_TEXTENCODING_SYMBOL, causing "1" rendered as a placeholder rectangle.
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(RTL_TEXTENCODING_DONTKNOW), getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharFontCharSet"));
-}
-
 DECLARE_WW8EXPORT_TEST(testBorderColours, "bordercolours.doc")
 {
     // The following 6 colours can only be represented with WW9 (Word 2000)
