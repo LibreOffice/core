@@ -413,7 +413,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 
         int nGlyphWidth = 0;
         // Unicode variance selectors selects glyph of previous base character, do not have width itself.
-        if ( nCharCode >= 0xFE00 && nCharCode <= 0xFE0F || nCharCode >= 0xE0100 && nCharCode <= 0xE01EF )
+        if ( (nCharCode >= 0xFE00 && nCharCode <= 0xFE0F) || (nCharCode >= 0xE0100 && nCharCode <= 0xE01EF) )
         {
             mpOutGlyphs[ i ] = DROPPED_OUTGLYPH;
             mpGlyphAdvances[ i ] = 0;
