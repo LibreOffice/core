@@ -43,9 +43,9 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
                 const Reference< XAttributeList > & _xAttrList
                 ,const uno::Reference< report::XReportDefinition >& _xComponent) :
     OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),nullptr)
-    ,m_xComponent(_xComponent)
+    ,m_xReportDefinition(_xComponent)
 {
-    OSL_ENSURE(m_xComponent.is(),"No Report definition!");
+    OSL_ENSURE(m_xReportDefinition.is(),"No Report definition!");
 
     impl_initRuntimeDefaults();
 
@@ -71,26 +71,26 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
                         const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetCommandTypeOptions();
                         bool bConvertOk = SvXMLUnitConverter::convertEnum( nRet, sValue, aXML_EnumMap );
                         SAL_WARN_IF(!bConvertOk, "reportdesign", "convertEnum failed");
-                        m_xComponent->setCommandType(nRet);
+                        m_xReportDefinition->setCommandType(nRet);
                     }
                     break;
                 case XML_TOK_COMMAND:
-                    m_xComponent->setCommand(sValue);
+                    m_xReportDefinition->setCommand(sValue);
                     break;
                 case XML_TOK_FILTER:
-                    m_xComponent->setFilter(sValue);
+                    m_xReportDefinition->setFilter(sValue);
                     break;
                 case XML_TOK_CAPTION:
-                    m_xComponent->setCaption(sValue);
+                    m_xReportDefinition->setCaption(sValue);
                     break;
                 case XML_TOK_ESCAPE_PROCESSING:
-                    m_xComponent->setEscapeProcessing(sValue == s_sTRUE);
+                    m_xReportDefinition->setEscapeProcessing(sValue == s_sTRUE);
                     break;
                 case XML_TOK_REPORT_MIMETYPE:
-                    m_xComponent->setMimeType(sValue);
+                    m_xReportDefinition->setMimeType(sValue);
                     break;
                 case XML_TOK_REPORT_NAME:
-                    m_xComponent->setName(sValue);
+                    m_xReportDefinition->setName(sValue);
                     break;
                 default:
                     break;
@@ -111,13 +111,13 @@ OXMLReport::~OXMLReport()
 
 void OXMLReport::impl_initRuntimeDefaults() const
 {
-    OSL_PRECOND( m_xComponent.is(), "OXMLReport::impl_initRuntimeDefaults: no component!" );
-    if ( !m_xComponent.is() )
+    OSL_PRECOND( m_xReportDefinition.is(), "OXMLReport::impl_initRuntimeDefaults: no component!" );
+    if ( !m_xReportDefinition.is() )
         return;
 
     try
     {
-        m_xComponent->setCommandType( sdb::CommandType::COMMAND );
+        m_xReportDefinition->setCommandType( sdb::CommandType::COMMAND );
     }
     catch( const Exception& )
     {
@@ -141,7 +141,7 @@ SvXMLImportContext* OXMLReport::CreateChildContext(
         case XML_TOK_REPORT_FUNCTION:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLFunction( m_rImport, nPrefix, rLocalName,xAttrList,m_xComponent.get(),true);
+                pContext = new OXMLFunction( m_rImport, nPrefix, rLocalName,xAttrList,m_xReportDefinition.get(),true);
             }
             break;
         case XML_TOK_MASTER_DETAIL_FIELDS:
@@ -151,15 +151,15 @@ SvXMLImportContext* OXMLReport::CreateChildContext(
         case XML_TOK_REPORT_HEADER:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                m_xComponent->setReportHeaderOn(true);
-                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList ,m_xComponent->getReportHeader());
+                m_xReportDefinition->setReportHeaderOn(true);
+                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getReportHeader());
             }
             break;
         case XML_TOK_PAGE_HEADER:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                m_xComponent->setPageHeaderOn(true);
-                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList ,m_xComponent->getPageHeader());
+                m_xReportDefinition->setPageHeaderOn(true);
+                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getPageHeader());
             }
             break;
         case XML_TOK_GROUP:
@@ -169,21 +169,21 @@ SvXMLImportContext* OXMLReport::CreateChildContext(
         case XML_TOK_DETAIL:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList ,m_xComponent->getDetail());
+                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getDetail());
             }
             break;
         case XML_TOK_PAGE_FOOTER:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                m_xComponent->setPageFooterOn(true);
-                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList ,m_xComponent->getPageFooter(),false);
+                m_xReportDefinition->setPageFooterOn(true);
+                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getPageFooter(),false);
             }
             break;
         case XML_TOK_REPORT_FOOTER:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                m_xComponent->setReportFooterOn(true);
-                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList ,m_xComponent->getReportFooter());
+                m_xReportDefinition->setReportFooterOn(true);
+                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getReportFooter());
             }
             break;
         default:
@@ -199,7 +199,7 @@ SvXMLImportContext* OXMLReport::CreateChildContext(
 
 void OXMLReport::EndElement()
 {
-    Reference< XFunctions > xFunctions = m_xComponent->getFunctions();
+    Reference< XFunctions > xFunctions = m_xReportDefinition->getFunctions();
     const ORptFilter::TGroupFunctionMap& aFunctions = m_rImport.getFunctions();
     ORptFilter::TGroupFunctionMap::const_iterator aIter = aFunctions.begin();
     const ORptFilter::TGroupFunctionMap::const_iterator aEnd = aFunctions.end();
@@ -207,9 +207,9 @@ void OXMLReport::EndElement()
         xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(aIter->second));
 
     if ( !m_aMasterFields.empty() )
-        m_xComponent->setMasterFields(Sequence< OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
+        m_xReportDefinition->setMasterFields(Sequence< OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
     if ( !m_aDetailFields.empty() )
-        m_xComponent->setDetailFields(Sequence< OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
+        m_xReportDefinition->setDetailFields(Sequence< OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
 }
 
 void OXMLReport::addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair)

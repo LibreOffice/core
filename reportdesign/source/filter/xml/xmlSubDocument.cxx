@@ -104,18 +104,18 @@ void OXMLSubDocument::EndElement()
 {
     if ( m_bContainsShape )
     {
-        m_xComponent.set(m_pContainer->getSection()->getByIndex(m_nCurrentCount),uno::UNO_QUERY);
-        if ( m_xComponent.is() )
+        m_xReportComponent.set(m_pContainer->getSection()->getByIndex(m_nCurrentCount),uno::UNO_QUERY);
+        if ( m_xReportComponent.is() )
         {
             if ( !m_aMasterFields.empty() )
-                m_xComponent->setMasterFields(Sequence< OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
+                m_xReportComponent->setMasterFields(Sequence< OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
             if ( !m_aDetailFields.empty() )
-                m_xComponent->setDetailFields(Sequence< OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
+                m_xReportComponent->setDetailFields(Sequence< OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
 
-            m_xComponent->setName(m_xFake->getName());
-            m_xComponent->setPrintRepeatedValues(m_xFake->getPrintRepeatedValues());
+            m_xReportComponent->setName(m_xFake->getName());
+            m_xReportComponent->setPrintRepeatedValues(m_xFake->getPrintRepeatedValues());
             uno::Reference< report::XReportControlModel >   xFakeModel(m_xFake,uno::UNO_QUERY);
-            uno::Reference< report::XReportControlModel >   xComponentModel(m_xComponent,uno::UNO_QUERY);
+            uno::Reference< report::XReportControlModel >   xComponentModel(m_xReportComponent,uno::UNO_QUERY);
             if ( xComponentModel.is() && xFakeModel.is() )
             {
                 xComponentModel->setPrintWhenGroupChange(xFakeModel->getPrintWhenGroupChange());

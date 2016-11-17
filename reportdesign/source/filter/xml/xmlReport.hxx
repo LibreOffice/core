@@ -27,7 +27,7 @@ namespace rptxml
     class ORptFilter;
     class OXMLReport : public OXMLReportElementBase, public IMasterDetailFieds
     {
-        css::uno::Reference< css::report::XReportDefinition > m_xComponent;
+        css::uno::Reference< css::report::XReportDefinition > m_xReportDefinition;
         ::std::vector< OUString> m_aMasterFields;
         ::std::vector< OUString> m_aDetailFields;
         OXMLReport(const OXMLReport&) = delete;
