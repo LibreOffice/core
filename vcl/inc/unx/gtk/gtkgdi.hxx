@@ -53,6 +53,7 @@ enum class GtkControlPart
     ListboxBoxButtonBox,
     ListboxBoxButtonBoxArrow,
     SpinButton,
+    SpinButtonEntry,
     SpinButtonUpButton,
     SpinButtonDownButton,
     ScrollbarVertical,
@@ -151,6 +152,7 @@ private:
     static GtkStyleContext *mpRadioButtonStyle;
     static GtkStyleContext *mpRadioButtonRadioStyle;
     static GtkStyleContext *mpSpinStyle;
+    static GtkStyleContext *mpSpinEntryStyle;
     static GtkStyleContext *mpSpinUpStyle;
     static GtkStyleContext *mpSpinDownStyle;
     static GtkStyleContext *mpComboboxStyle;
@@ -210,7 +212,7 @@ private:
                              ControlPart nPart,
                              Rectangle aAreaRect,
                              ControlState nState );
-           void PaintSpinButton(GtkStyleContext *context,
+           void PaintSpinButton(GtkStateFlags flags,
                          cairo_t *cr,
                          const Rectangle& rControlRectangle,
                          ControlType nType,

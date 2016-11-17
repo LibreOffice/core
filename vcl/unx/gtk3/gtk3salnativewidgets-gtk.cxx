@@ -46,6 +46,7 @@ GtkStyleContext* GtkSalGraphics::mpCheckButtonCheckStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpRadioButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpRadioButtonRadioStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSpinStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpSpinEntryStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSpinUpStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSpinDownStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpComboboxStyle = nullptr;
@@ -711,7 +712,7 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     g_object_unref(pixbuf);
 }
 
-void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
+void GtkSalGraphics::PaintSpinButton(GtkStateFlags flags,
                                      cairo_t *cr,
                                      const Rectangle& rControlRectangle,
                                      ControlType nType,
@@ -735,18 +736,24 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
 
     if (nPart == ControlPart::Entire)
     {
-        gtk_render_background(context, cr,
+        gtk_style_context_set_state(mpSpinStyle, flags);
+
+        gtk_render_background(mpSpinStyle, cr,
                               0, 0,
                               rControlRectangle.GetWidth(), rControlRectangle.GetHeight() );
-        gtk_render_frame(context, cr,
-                         0, 0,
-                         rControlRectangle.GetWidth(), rControlRectangle.GetHeight() );
     }
 
     cairo_translate(cr, -rControlRectangle.Left(), -rControlRectangle.Top());
     PaintOneSpinButton(mpSpinUpStyle, cr, nType, upBtnPart, rControlRectangle, upBtnState );
     PaintOneSpinButton(mpSpinDownStyle, cr, nType, downBtnPart, rControlRectangle, downBtnState );
     cairo_translate(cr, rControlRectangle.Left(), rControlRectangle.Top());
+
+    if (nPart == ControlPart::Entire)
+    {
+        gtk_render_frame(mpSpinStyle, cr,
+                         0, 0,
+                         rControlRectangle.GetWidth(), rControlRectangle.GetHeight() );
+    }
 }
 
 #define FALLBACK_ARROW_SIZE 11 * 0.85
@@ -1122,6 +1129,13 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
             return makeContext(path, nullptr);
         }
+        case GtkControlPart::SpinButtonEntry:
+        {
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpSpinStyle));
+            gtk_widget_path_append_type(path, G_TYPE_NONE);
+            set_object_name(path, -1, "entry");
+            return makeContext(path, mpSpinStyle);
+        }
         case GtkControlPart::SpinButtonUpButton:
         case GtkControlPart::SpinButtonDownButton:
         {
@@ -1419,6 +1433,7 @@ GtkStyleContext* GtkSalGraphics::createOldContext(GtkControlPart ePart)
         }
         case GtkControlPart::Entry:
         case GtkControlPart::ComboboxBoxEntry:
+        case GtkControlPart::SpinButtonEntry:
         {
             GtkWidgetPath *path = gtk_widget_path_new();
             gtk_widget_path_append_type(path, GTK_TYPE_ENTRY);
@@ -1787,7 +1802,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     {
     case ControlType::Spinbox:
     case ControlType::SpinButtons:
-        context = mpEntryStyle;
+        context = mpSpinStyle;
         renderType = RenderType::Spinbutton;
         break;
     case ControlType::Editbox:
@@ -2097,7 +2112,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         PaintScrollbar(context, cr, rControlRegion, nType, nPart, rValue);
         break;
     case RenderType::Spinbutton:
-        PaintSpinButton(context, cr, rControlRegion, nType, nPart, rValue);
+        PaintSpinButton(flags, cr, rControlRegion, nType, nPart, rValue);
         break;
     case RenderType::Combobox:
         PaintCombobox(flags, cr, rControlRegion, nType, nPart, rValue);
@@ -2983,6 +2998,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gSpinBox = gtk_spin_button_new(nullptr, 0, 0);
     gtk_container_add(GTK_CONTAINER(gDumbContainer), gSpinBox);
     mpSpinStyle = createStyleContext(set_object_name, GtkControlPart::SpinButton);
+    mpSpinEntryStyle = createStyleContext(set_object_name, GtkControlPart::SpinButtonEntry);
     mpSpinUpStyle = createStyleContext(set_object_name, GtkControlPart::SpinButtonUpButton);
     mpSpinDownStyle = createStyleContext(set_object_name, GtkControlPart::SpinButtonDownButton);
 
