@@ -59,7 +59,6 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection, sql::Statement *_c
     ,OStatement_CBase( static_cast<cppu::OWeakObject*>(_pConnection), this )
     ,m_pConnection(_pConnection)
     ,cppStatement(_cppStatement)
-    ,rBHelper(OCommonStatement_IBase::rBHelper)
 {
     OSL_TRACE("OCommonStatement::OCommonStatement");
     m_pConnection->acquire();

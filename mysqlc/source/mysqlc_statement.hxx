@@ -99,7 +99,7 @@ namespace connectivity
             OCommonStatement(OConnection* _pConnection, sql::Statement *_cppStatement);
 
         public:
-            ::cppu::OBroadcastHelper& rBHelper;
+            using OCommonStatement_IBase::rBHelper;
             using OCommonStatement_IBase::operator css::uno::Reference< css::uno::XInterface >;
 
             // OComponentHelper

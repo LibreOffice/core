@@ -144,8 +144,6 @@ namespace chelp {
         // Non-interface methods.
 
     private:
-
-        osl::Mutex     m_aMutex;
         bool           isInitialized;
         OUString  m_aScheme;
         Databases*     m_pDatabases;

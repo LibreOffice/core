@@ -89,14 +89,12 @@ namespace dbmm
         virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) override;
 
     private:
-        Reference<XComponentContext>          m_aContext;
         Reference< XOfficeDatabaseDocument >    m_xDocument;
     };
 
     // MacroMigrationDialogService
     MacroMigrationDialogService::MacroMigrationDialogService( const Reference< XComponentContext >& _rxContext )
         :MacroMigrationDialogService_Base( _rxContext )
-        ,m_aContext( _rxContext )
     {
         m_bNeedInitialization = true;
     }

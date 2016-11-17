@@ -72,8 +72,6 @@ class SvxPixelCtlAccessibleChild :
     Rectangle*  mpBoundingBox;
     /// index of child in parent
     long                                mnIndexInParent;
-    /// Mutex guarding this object.
-    ::osl::Mutex                        m_aMutex;
 public:
     SvxPixelCtlAccessibleChild(
                 SvxPixelCtl& rWindow,
