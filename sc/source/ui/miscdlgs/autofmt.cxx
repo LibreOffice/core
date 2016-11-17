@@ -404,6 +404,10 @@ void ScAutoFmtPreview::Init()
     SetBorderStyle( WindowBorderStyle::MONO );
     maArray.Initialize( 5, 5 );
     maArray.SetUseDiagDoubleClipping( false );
+    mnLabelColWidth = 0;
+    mnDataColWidth1 = 0;
+    mnDataColWidth2 = 0;
+    mnRowHeight = 0;
     CalcCellArray( false );
     CalcLineMap();
 }

@@ -825,6 +825,10 @@ void AutoFormatPreview::Init()
     SetBorderStyle( GetBorderStyle() | WindowBorderStyle::MONO );
     maArray.Initialize( 5, 5 );
     maArray.SetUseDiagDoubleClipping( false );
+    nLabelColWidth = 0;
+    nDataColWidth1 = 0;
+    nDataColWidth2 = 0;
+    nRowHeight = 0;
     CalcCellArray( false );
     CalcLineMap();
 }
