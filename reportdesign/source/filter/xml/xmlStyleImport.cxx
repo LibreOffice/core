@@ -292,7 +292,7 @@ Reference < XNameContainer >
     Reference < XNameContainer > xStyles(SvXMLStylesContext::GetStylesContainer(nFamily));
     if (!xStyles.is())
     {
-     OUString sName;
+        OUString sName;
         switch( nFamily )
         {
             case XML_STYLE_FAMILY_TABLE_TABLE:
@@ -300,8 +300,7 @@ Reference < XNameContainer >
                 if( m_xTableStyles.is() )
                     xStyles.set(m_xTableStyles);
                 else
-                    sName =
-                     OUString( OUString( "TableStyles" ));
+                    sName = "TableStyles";
             }
             break;
             case XML_STYLE_FAMILY_TABLE_CELL:
@@ -309,8 +308,7 @@ Reference < XNameContainer >
                 if( m_xCellStyles.is() )
                     xStyles.set(m_xCellStyles);
                 else
-                    sName =
-                     OUString( OUString( "CellStyles" ));
+                    sName = "CellStyles";
             }
             break;
             case XML_STYLE_FAMILY_TABLE_COLUMN:
@@ -318,8 +316,7 @@ Reference < XNameContainer >
                 if( m_xColumnStyles.is() )
                     xStyles.set(m_xColumnStyles);
                 else
-                    sName =
-                     OUString( OUString( "ColumnStyles" ));
+                    sName = "ColumnStyles";
             }
             break;
             case XML_STYLE_FAMILY_TABLE_ROW:
@@ -327,8 +324,7 @@ Reference < XNameContainer >
                 if( m_xRowStyles.is() )
                     xStyles.set(m_xRowStyles);
                 else
-                    sName =
-                     OUString( OUString( "RowStyles" ));
+                    sName = "RowStyles";
             }
             break;
             case XML_STYLE_FAMILY_SD_GRAPHICS_ID:

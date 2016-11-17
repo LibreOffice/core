@@ -271,7 +271,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     }
 
     Any gulp;
-    gulp <<= OUString(OUString("Test"));
+    gulp <<= OUString("Test");
     Any blup;
     blup <<= aStructC;
     xRefl->forName("ModuleA.StructC")->getField(OUString("aString"))->set(blup, gulp);
