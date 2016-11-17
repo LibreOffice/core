@@ -380,6 +380,9 @@ public:
     void                            SetTabHighlightTextColor( const Color& rColor );
     const Color&                    GetTabHighlightTextColor() const;
 
+    void                            SetToolTextColor( const Color& rColor );
+    const Color&                    GetToolTextColor() const;
+
     void                            SetLinkColor( const Color& rColor );
     const Color&                    GetLinkColor() const;
 

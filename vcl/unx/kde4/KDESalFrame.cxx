@@ -233,6 +233,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetFieldTextColor( aText );
     style.SetFieldRolloverTextColor( aText );
     style.SetWindowTextColor( aText );
+    style.SetToolTextColor( aText );
 
     // Base
     style.SetFieldColor( aBase );

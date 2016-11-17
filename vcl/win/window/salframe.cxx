@@ -2658,6 +2658,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetWindowColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOW ) ) );
     aStyleSettings.SetActiveTabColor( aStyleSettings.GetWindowColor() );
     aStyleSettings.SetWindowTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
+    aStyleSettings.SetToolTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
     aStyleSettings.SetFieldColor( aStyleSettings.GetWindowColor() );
     aStyleSettings.SetFieldTextColor( aStyleSettings.GetWindowTextColor() );
     aStyleSettings.SetFieldRolloverTextColor( aStyleSettings.GetFieldTextColor() );

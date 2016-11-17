@@ -132,6 +132,7 @@ struct ImplStyleData
     Color                           maRadioCheckTextColor;
     Color                           maShadowColor;
     Color                           maVisitedLinkColor;
+    Color                           maToolTextColor;
     Color                           maWindowColor;
     Color                           maWindowTextColor;
     Color                           maWorkspaceColor;
@@ -602,6 +603,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maRadioCheckTextColor( rData.maRadioCheckTextColor ),
     maShadowColor( rData.maShadowColor ),
     maVisitedLinkColor( rData.maVisitedLinkColor ),
+    maToolTextColor( rData.maToolTextColor ),
     maWindowColor( rData.maWindowColor ),
     maWindowTextColor( rData.maWindowTextColor ),
     maWorkspaceColor( rData.maWorkspaceColor ),
@@ -745,6 +747,7 @@ void ImplStyleData::SetStandardStyles()
     maHelpTextColor             = Color( COL_BLACK );
     maLinkColor                 = Color( COL_BLUE );
     maVisitedLinkColor          = Color( 0x00, 0x00, 0xCC );
+    maToolTextColor             = Color( COL_BLACK );
     maHighlightLinkColor        = Color( COL_LIGHTBLUE );
     maFontColor                 = Color( COL_BLACK );
     maAlternatingRowColor       = Color( 0xEE, 0xEE, 0xEE );
@@ -1356,6 +1359,19 @@ const Color&
 StyleSettings::GetVisitedLinkColor() const
 {
     return mxData->maVisitedLinkColor;
+}
+
+void
+StyleSettings::SetToolTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maToolTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetToolTextColor() const
+{
+    return mxData->maToolTextColor;
 }
 
 const Color&
@@ -2322,6 +2338,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maHelpTextColor           == rSet.mxData->maHelpTextColor)            &&
          (mxData->maLinkColor               == rSet.mxData->maLinkColor)                &&
          (mxData->maVisitedLinkColor        == rSet.mxData->maVisitedLinkColor)         &&
+         (mxData->maToolTextColor           == rSet.mxData->maToolTextColor)            &&
          (mxData->maHighlightLinkColor      == rSet.mxData->maHighlightLinkColor)       &&
          (mxData->maAppFont                 == rSet.mxData->maAppFont)                  &&
          (mxData->maHelpFont                == rSet.mxData->maHelpFont)                 &&

@@ -1914,6 +1914,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetFieldTextColor( aText );
     aStyleSettings.SetFieldRolloverTextColor( aText );
     aStyleSettings.SetWindowTextColor( aText );
+    aStyleSettings.SetToolTextColor( aText );
     aStyleSettings.SetHelpTextColor( aText );
 
     // Base
