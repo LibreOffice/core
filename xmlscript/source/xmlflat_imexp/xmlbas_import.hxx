@@ -45,10 +45,12 @@ namespace xmlscript
     {
     protected:
         rtl::Reference<BasicImport> m_xImport;
+    private:
         rtl::Reference<BasicElementBase> m_xParent;
         OUString m_aLocalName;
         css::uno::Reference< css::xml::input::XAttributes > m_xAttributes;
 
+    protected:
         static bool getBoolAttr( bool* pRet, const OUString& rAttrName,
             const css::uno::Reference< css::xml::input::XAttributes >& xAttributes,
             sal_Int32 nUid );

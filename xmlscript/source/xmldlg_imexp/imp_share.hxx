@@ -114,20 +114,20 @@ struct DialogImport
     : public ::cppu::WeakImplHelper< css::xml::input::XRoot >
 {
     friend class ImportContext;
-
+private:
     css::uno::Reference< css::uno::XComponentContext > _xContext;
     css::uno::Reference< css::util::XNumberFormatsSupplier > _xSupplier;
 
     std::shared_ptr< std::vector< OUString > > _pStyleNames;
     std::shared_ptr< std::vector< css::uno::Reference< css::xml::input::XElement > > > _pStyles;
 
+    css::uno::Reference< css::frame::XModel > _xDoc;
+public:
     css::uno::Reference< css::container::XNameContainer > _xDialogModel;
     css::uno::Reference< css::lang::XMultiServiceFactory > _xDialogModelFactory;
-    css::uno::Reference< css::frame::XModel > _xDoc;
 
     sal_Int32 XMLNS_DIALOGS_UID, XMLNS_SCRIPT_UID;
 
-public:
     inline bool isEventElement(
         sal_Int32 nUid, OUString const & rLocalName )
     {
@@ -156,8 +156,9 @@ public:
         : _xContext( xContext )
         , _pStyleNames( pStyleNames )
         , _pStyles( pStyles )
+        , _xDoc( xDoc )
         , _xDialogModel( xDialogModel )
-        , _xDialogModelFactory( xDialogModel, css::uno::UNO_QUERY_THROW ), _xDoc( xDoc )
+        , _xDialogModelFactory( xDialogModel, css::uno::UNO_QUERY_THROW )
         , XMLNS_DIALOGS_UID( 0 )
         , XMLNS_SCRIPT_UID( 0 )
         { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() &&
@@ -168,9 +169,9 @@ public:
         , _xSupplier( rOther._xSupplier )
         , _pStyleNames( rOther._pStyleNames )
         , _pStyles( rOther._pStyles )
+        , _xDoc( rOther._xDoc )
         , _xDialogModel( rOther._xDialogModel )
         , _xDialogModelFactory( rOther._xDialogModelFactory )
-        , _xDoc( rOther._xDoc )
         , XMLNS_DIALOGS_UID( rOther.XMLNS_DIALOGS_UID )
         , XMLNS_SCRIPT_UID( rOther.XMLNS_SCRIPT_UID ) {}
 
@@ -204,9 +205,10 @@ class ElementBase
 protected:
     DialogImport * const _pImport;
     ElementBase * const _pParent;
-
+private:
     const sal_Int32 _nUid;
     const OUString _aLocalName;
+protected:
     const css::uno::Reference< css::xml::input::XAttributes > _xAttributes;
 
 public:

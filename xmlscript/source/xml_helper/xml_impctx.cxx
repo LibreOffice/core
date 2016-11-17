@@ -79,9 +79,10 @@ struct ElementEntry
 
 class ExtendedAttributes;
 
-struct MGuard
+class MGuard
 {
     Mutex * m_pMutex;
+public:
     explicit MGuard( Mutex * pMutex )
         : m_pMutex( pMutex )
         { if (m_pMutex) m_pMutex->acquire(); }

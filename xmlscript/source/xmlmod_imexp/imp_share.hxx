@@ -50,6 +50,7 @@ struct ModuleImport
     ModuleDescriptor& mrModuleDesc;
 
     sal_Int32 XMLNS_SCRIPT_UID;
+private:
     sal_Int32 XMLNS_LIBRARY_UID;
     sal_Int32 XMLNS_XLINK_UID;
 
@@ -85,7 +86,6 @@ public:
 class ModuleElement
     : public ::cppu::WeakImplHelper< css::xml::input::XElement >
 {
-protected:
     rtl::Reference<ModuleImport> mxImport;
 
     OUString _aLocalName;

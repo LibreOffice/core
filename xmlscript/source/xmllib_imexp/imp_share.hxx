@@ -158,7 +158,7 @@ class LibElementBase
 protected:
     rtl::Reference<LibraryImport>  mxImport;
     rtl::Reference<LibElementBase> mxParent;
-
+private:
     OUString _aLocalName;
     css::uno::Reference< css::xml::input::XAttributes > _xAttributes;
 
