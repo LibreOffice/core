@@ -217,12 +217,14 @@ interface TextDrawText
     [
         ExecMethod = Execute;
         StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_PARASPACE_DECREASE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ATTR_PARA_LINESPACE // api:
