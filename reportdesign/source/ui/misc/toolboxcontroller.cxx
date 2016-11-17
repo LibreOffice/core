@@ -83,7 +83,6 @@ Reference< XInterface > OToolboxController::create(Reference< XComponentContext 
 
 OToolboxController::OToolboxController(const Reference< XComponentContext >& _rxORB)
     : m_pToolbarController(nullptr)
-    ,m_nToolBoxId(1)
 {
     osl_atomic_increment(&m_refCount);
     m_xContext = _rxORB;
@@ -119,6 +118,7 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
     ToolboxController::initialize(_rArguments);
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
+    sal_uInt16      nToolBoxId = 1;
 
     VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()).get());
     if ( pToolBox )
@@ -129,7 +129,7 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
             const sal_uInt16 nItemId = pToolBox->GetItemId(nPos);
             if ( pToolBox->GetItemCommand(nItemId) == m_aCommandURL )
             {
-                m_nToolBoxId = nItemId;
+                nToolBoxId = nItemId;
                 break;
             }
         }
@@ -137,12 +137,12 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:FontColor"),true));
             m_aStates.insert(TCommandState::value_type(OUString(".uno:Color"),true));
-            m_pToolbarController = new SvxColorToolBoxControl(SID_ATTR_CHAR_COLOR2,m_nToolBoxId,*pToolBox);
+            m_pToolbarController = new SvxColorToolBoxControl(SID_ATTR_CHAR_COLOR2,nToolBoxId,*pToolBox);
         }
         else
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:BackgroundColor"),true));
-            m_pToolbarController = new SvxColorToolBoxControl(SID_BACKGROUND_COLOR,m_nToolBoxId,*pToolBox);
+            m_pToolbarController = new SvxColorToolBoxControl(SID_BACKGROUND_COLOR,nToolBoxId,*pToolBox);
         }
 
         TCommandState::const_iterator aIter = m_aStates.begin();
@@ -152,7 +152,7 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
         if ( m_pToolbarController.is() )
             m_pToolbarController->initialize(_rArguments);
         // check if paste special is allowed, when not don't add DROPDOWN
-        pToolBox->SetItemBits(m_nToolBoxId,pToolBox->GetItemBits(m_nToolBoxId) | ToolBoxItemBits::DROPDOWN);
+        pToolBox->SetItemBits(nToolBoxId,pToolBox->GetItemBits(nToolBoxId) | ToolBoxItemBits::DROPDOWN);
     }
 }
 

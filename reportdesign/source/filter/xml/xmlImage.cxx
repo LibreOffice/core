@@ -47,7 +47,7 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
     OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),_pContainer)
 {
 
-    OSL_ENSURE(m_xComponent.is(),"Component is NULL!");
+    OSL_ENSURE(m_xReportComponent.is(),"Component is NULL!");
     const SvXMLNamespaceMap& rMap = m_rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = m_rImport.GetControlElemTokenMap();
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);

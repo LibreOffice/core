@@ -38,7 +38,7 @@ OXMLReportElementBase::OXMLReportElementBase( ORptFilter& rImport
     SvXMLImportContext( rImport, nPrfx, rLName )
 ,m_rImport(rImport)
 ,m_pContainer(_pContainer)
-,m_xComponent(_xComponent)
+,m_xReportComponent(_xComponent)
 {
 }
 
@@ -70,7 +70,7 @@ SvXMLImportContext* OXMLReportElementBase::CreateChildContext_(
     {
         case XML_TOK_REPORT_ELEMENT:
             {
-                uno::Reference<report::XReportControlModel> xReportModel(m_xComponent,uno::UNO_QUERY);
+                uno::Reference<report::XReportControlModel> xReportModel(m_xReportComponent,uno::UNO_QUERY);
                 if ( xReportModel.is() )
                 {
                     m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
@@ -80,7 +80,7 @@ SvXMLImportContext* OXMLReportElementBase::CreateChildContext_(
             break;
         case XML_TOK_PROPERTIES:
             m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLControlProperty( m_rImport, nPrefix, rLocalName,xAttrList,m_xComponent.get());
+            pContext = new OXMLControlProperty( m_rImport, nPrefix, rLocalName,xAttrList,m_xReportComponent.get());
             break;
         default:
             break;
@@ -93,8 +93,8 @@ void OXMLReportElementBase::EndElement()
 {
     try
     {
-        if ( m_pContainer && m_pContainer->getSection().is() && m_xComponent.is() )
-            m_pContainer->getSection()->add(m_xComponent.get());
+        if ( m_pContainer && m_pContainer->getSection().is() && m_xReportComponent.is() )
+            m_pContainer->getSection()->add(m_xReportComponent.get());
     }
     catch(Exception&)
     {

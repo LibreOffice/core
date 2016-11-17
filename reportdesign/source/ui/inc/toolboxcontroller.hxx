@@ -43,7 +43,6 @@ namespace rptui
         typedef std::map<OUString, sal_Bool> TCommandState;
         TCommandState   m_aStates;
         TToolbarHelper  m_pToolbarController;
-        sal_uInt16      m_nToolBoxId;
         OToolboxController(const OToolboxController&) = delete;
         void operator =(const OToolboxController&) = delete;
     public:
