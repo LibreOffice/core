@@ -81,12 +81,7 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
 namespace chart
 {
 
-uno::Reference< beans::XPropertySet > createErrorBar( const uno::Reference< uno::XComponentContext > & xContext )
-{
-    return new ErrorBar( xContext );
-}
-
-ErrorBar::ErrorBar( uno::Reference< uno::XComponentContext > const & xContext ) :
+ErrorBar::ErrorBar() :
     mnLineWidth(0),
     meLineStyle(drawing::LineStyle_SOLID),
     maLineColor(0),
@@ -98,7 +93,6 @@ ErrorBar::ErrorBar( uno::Reference< uno::XComponentContext > const & xContext ) 
     mfNegativeError(0),
     mfWeight(1),
     meStyle(css::chart::ErrorBarStyle::NONE),
-    m_xContext( xContext ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
@@ -118,7 +112,6 @@ ErrorBar::ErrorBar( const ErrorBar & rOther ) :
     mfNegativeError(rOther.mfNegativeError),
     mfWeight(rOther.mfWeight),
     meStyle(rOther.meStyle),
-    m_xContext( rOther.m_xContext ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     if( ! rOther.m_aDataSequences.empty())
@@ -502,10 +495,10 @@ using impl::ErrorBar_Base;
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_ErrorBar_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_ErrorBar_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::ErrorBar(context));
+    return cppu::acquire(new ::chart::ErrorBar);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

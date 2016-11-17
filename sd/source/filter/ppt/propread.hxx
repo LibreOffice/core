@@ -87,10 +87,9 @@ struct PropEntry
 {
     sal_uInt32  mnId;
     sal_uInt32  mnSize;
-    sal_uInt16  mnTextEnc;
     sal_uInt8*  mpBuf;
 
-    PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize, sal_uInt16 nTextEnc );
+    PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize );
     PropEntry( const PropEntry& rProp );
     ~PropEntry() { delete[] mpBuf; } ;
 

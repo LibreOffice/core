@@ -70,9 +70,7 @@ uno::Reference< beans::XPropertySet > lcl_GetErrorBar(
 
 uno::Reference< beans::XPropertySet > lcl_GetDefaultErrorBar()
 {
-    // todo: use a valid context
-    return uno::Reference< beans::XPropertySet >(
-        ::chart::createErrorBar( uno::Reference< uno::XComponentContext >()));
+    return uno::Reference< beans::XPropertySet >( new ::chart::ErrorBar );
 }
 
 void lcl_getErrorValues( const uno::Reference< beans::XPropertySet > & xErrorBarProp,
@@ -273,8 +271,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 if( ! bNewHasMeanValueLine )
                     RegressionCurveHelper::removeMeanValueLine( xRegCnt );
                 else
-                    RegressionCurveHelper::addMeanValueLine(
-                        xRegCnt, uno::Reference< uno::XComponentContext >(), GetPropertySet() );
+                    RegressionCurveHelper::addMeanValueLine( xRegCnt, GetPropertySet() );
                 bChanged = true;
             }
         }

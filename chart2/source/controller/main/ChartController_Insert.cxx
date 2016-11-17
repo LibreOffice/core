@@ -68,15 +68,14 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-void lcl_InsertMeanValueLine( const uno::Reference< uno::XComponentContext > & xContext,
-                              const uno::Reference< chart2::XDataSeries > & xSeries )
+void lcl_InsertMeanValueLine( const uno::Reference< chart2::XDataSeries > & xSeries )
 {
     uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
         xSeries, uno::UNO_QUERY );
     if( xRegCurveCnt.is())
     {
         ::chart::RegressionCurveHelper::addMeanValueLine(
-            xRegCurveCnt, xContext, uno::Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ));
+            xRegCurveCnt, uno::Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ));
     }
 }
 
@@ -308,8 +307,7 @@ void ChartController::executeDispatch_InsertMeanValue()
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::ActionType::Insert, SCH_RESSTR( STR_OBJECT_AVERAGE_LINE )),
         m_xUndoManager );
-    lcl_InsertMeanValueLine( m_xCC,
-                             ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(),
+    lcl_InsertMeanValueLine( ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(),
                                                                     getModel() ) );
     aUndoGuard.commit();
 }
@@ -326,7 +324,7 @@ void ChartController::executeDispatch_InsertMenu_MeanValues()
     if( xSeries.is() )
     {
         //if a series is selected insert mean value only for that series:
-        lcl_InsertMeanValueLine( m_xCC, xSeries );
+        lcl_InsertMeanValueLine( xSeries );
     }
     else
     {
@@ -334,7 +332,7 @@ void ChartController::executeDispatch_InsertMenu_MeanValues()
             DiagramHelper::getDataSeriesFromDiagram( ChartModelHelper::findDiagram( getModel() )));
 
         for( const auto& xSrs : aSeries )
-            lcl_InsertMeanValueLine( m_xCC, xSrs );
+            lcl_InsertMeanValueLine( xSrs );
     }
     aUndoGuard.commit();
 }
@@ -429,7 +427,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
         // add error bars with standard deviation
         uno::Reference< beans::XPropertySet > xErrorBarProp(
-            StatisticsHelper::addErrorBars( xSeries, m_xCC,
+            StatisticsHelper::addErrorBars( xSeries,
                                             css::chart::ErrorBarStyle::STANDARD_DEVIATION,
                                             bYError));
 

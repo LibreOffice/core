@@ -187,8 +187,7 @@ protected:
         xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties;
         if( !xErrorBarProperties.is() )
         {
-            // todo: use a valid context
-            xErrorBarProperties = ::chart::createErrorBar( uno::Reference< uno::XComponentContext >() );
+            xErrorBarProperties = new ::chart::ErrorBar;
             //default in new and old api are different
             xErrorBarProperties->setPropertyValue( "ShowPositiveError" , uno::makeAny(false) );
             xErrorBarProperties->setPropertyValue( "ShowNegativeError" , uno::makeAny(false) );
@@ -345,7 +344,7 @@ void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XProper
     if( xRegCnt.is() )
     {
         if(aNewValue)
-            RegressionCurveHelper::addMeanValueLine( xRegCnt, nullptr, nullptr );
+            RegressionCurveHelper::addMeanValueLine( xRegCnt, nullptr );
         else
             RegressionCurveHelper::removeMeanValueLine( xRegCnt );
     }

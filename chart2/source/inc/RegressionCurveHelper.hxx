@@ -38,14 +38,11 @@ namespace chart
 namespace RegressionCurveHelper
 {
     /// returns a model mean-value line
-    css::uno::Reference<css::chart2::XRegressionCurve>
-        createMeanValueLine(const css::uno::Reference<css::uno::XComponentContext> & xContext );
+    css::uno::Reference<css::chart2::XRegressionCurve> createMeanValueLine();
 
     /// returns a model regression curve
     css::uno::Reference<css::chart2::XRegressionCurve>
-        createRegressionCurveByServiceName(
-            const css::uno::Reference<css::uno::XComponentContext> & xContext,
-            const OUString& aServiceName );
+        createRegressionCurveByServiceName( const OUString& aServiceName );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool hasMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
@@ -64,7 +61,6 @@ namespace RegressionCurveHelper
      */
     OOO_DLLPUBLIC_CHARTTOOLS void addMeanValueLine(
         css::uno::Reference<css::chart2::XRegressionCurveContainer>& xRegCnt,
-        const css::uno::Reference<css::uno::XComponentContext>& xContext,
         const css::uno::Reference<css::beans::XPropertySet>& xSeriesProp );
 
     OOO_DLLPUBLIC_CHARTTOOLS void removeMeanValueLine(

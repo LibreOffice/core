@@ -56,8 +56,6 @@ namespace utl
                     m_xContainerAccess;     /// modifying set nodes  (optional interface of our UNO object)
         bool        m_bEscapeNames;         /// escape names before accessing children ?
 
-        OUString    m_sCompletePath;
-
         OConfigurationNode  insertNode(const OUString& _rName,const css::uno::Reference< css::uno::XInterface >& _xNode) const throw();
 
     protected:

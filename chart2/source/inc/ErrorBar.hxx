@@ -45,9 +45,6 @@
 namespace chart
 {
 
-OOO_DLLPUBLIC_CHARTTOOLS    css::uno::Reference< css::beans::XPropertySet > createErrorBar(
-    const css::uno::Reference< css::uno::XComponentContext > & xContext );
-
 namespace impl
 {
 typedef ::cppu::WeakImplHelper<
@@ -82,7 +79,7 @@ private:
     sal_Int32 meStyle;
 
 public:
-    explicit ErrorBar( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    OOO_DLLPUBLIC_CHARTTOOLS explicit ErrorBar();
     virtual ~ErrorBar() override;
 
     /// XServiceInfo declarations
@@ -154,9 +151,6 @@ protected:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    css::uno::Reference< css::uno::XComponentContext >
-                        m_xContext;
-
     typedef ::std::vector< css::uno::Reference<
             css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
     tDataSequenceContainer m_aDataSequences;

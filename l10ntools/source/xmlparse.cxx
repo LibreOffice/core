@@ -555,11 +555,8 @@ XMLElement::XMLElement(
 )
     : XMLParentNode( pParent )
     , m_sElementName( rName )
-    , m_sProject(OString())
-    , m_sFilename(OString())
     , m_sId(OString())
     , m_sOldRef(OString())
-    , m_sResourceType(OString())
     , m_sLanguageId(OString())
     , m_nPos(0)
 {
@@ -568,11 +565,8 @@ XMLElement::XMLElement(
 XMLElement::XMLElement(const XMLElement& rObj)
     : XMLParentNode( rObj )
     , m_sElementName( rObj.m_sElementName )
-    , m_sProject( rObj.m_sProject )
-    , m_sFilename( rObj.m_sFilename )
     , m_sId( rObj.m_sId )
     , m_sOldRef( rObj.m_sOldRef )
-    , m_sResourceType( rObj.m_sResourceType )
     , m_sLanguageId( rObj.m_sLanguageId )
     , m_nPos( rObj.m_nPos )
 {
@@ -590,11 +584,8 @@ XMLElement& XMLElement::operator=(const XMLElement& rObj)
     {
         XMLParentNode::operator=(rObj);
         m_sElementName = rObj.m_sElementName;
-        m_sProject = rObj.m_sProject;
-        m_sFilename = rObj.m_sFilename;
         m_sId = rObj.m_sId;
         m_sOldRef = rObj.m_sOldRef;
-        m_sResourceType = rObj.m_sResourceType;
         m_sLanguageId = rObj.m_sLanguageId;
         m_nPos = rObj.m_nPos;
 

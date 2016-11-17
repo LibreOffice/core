@@ -23,10 +23,9 @@
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
 
-PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize, sal_uInt16 nTextEnc ) :
+PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize ) :
     mnId        ( nId ),
     mnSize      ( nBufSize ),
-    mnTextEnc   ( nTextEnc ),
     mpBuf       ( new sal_uInt8[ nBufSize ] )
 {
     memcpy( static_cast<void*>(mpBuf), static_cast<void const *>(pBuf), nBufSize );
@@ -35,7 +34,6 @@ PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize
 PropEntry::PropEntry( const PropEntry& rProp ) :
     mnId        ( rProp.mnId ),
     mnSize      ( rProp.mnSize ),
-    mnTextEnc   ( rProp.mnTextEnc ),
     mpBuf       ( new sal_uInt8[ mnSize ] )
 {
     memcpy( static_cast<void*>(mpBuf), static_cast<void const *>(rProp.mpBuf), mnSize );
@@ -48,7 +46,6 @@ PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
         delete[] mpBuf;
         mnId = rPropEntry.mnId;
         mnSize = rPropEntry.mnSize;
-        mnTextEnc = rPropEntry.mnTextEnc;
         mpBuf = new sal_uInt8[ mnSize ];
         memcpy( static_cast<void*>(mpBuf), static_cast<void const *>(rPropEntry.mpBuf), mnSize );
     }
@@ -260,15 +257,15 @@ void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBu
     for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter )
     {
         if ( (*iter)->mnId == nId )
-            (*iter).reset(new PropEntry( nId, pBuf, nBufSize, mnTextEnc ));
+            (*iter).reset(new PropEntry( nId, pBuf, nBufSize ));
         else if ( (*iter)->mnId > nId )
-            maEntries.insert( iter, o3tl::make_unique<PropEntry>( nId, pBuf, nBufSize, mnTextEnc ));
+            maEntries.insert( iter, o3tl::make_unique<PropEntry>( nId, pBuf, nBufSize ));
         else
             continue;
         return;
     }
 
-    maEntries.push_back( o3tl::make_unique<PropEntry>( nId, pBuf, nBufSize, mnTextEnc ) );
+    maEntries.push_back( o3tl::make_unique<PropEntry>( nId, pBuf, nBufSize ) );
 }
 
 void Section::GetDictionary(Dictionary& rDict)

@@ -110,9 +110,8 @@ struct StaticPageBackgroundInfo : public rtl::StaticAggregate< uno::Reference< b
 namespace chart
 {
 
-PageBackground::PageBackground( const uno::Reference< uno::XComponentContext > & xContext ) :
-        ::property::OPropertySet( m_aMutex ),
-    m_xContext( xContext ),
+PageBackground::PageBackground() :
+    ::property::OPropertySet( m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
@@ -120,7 +119,6 @@ PageBackground::PageBackground( const PageBackground & rOther ) :
         MutexContainer(),
         impl::PageBackground_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xContext( rOther.m_xContext ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
@@ -233,10 +231,10 @@ IMPLEMENT_FORWARD_XINTERFACE2( PageBackground, PageBackground_Base, ::property::
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_PageBackground_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_PageBackground_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::PageBackground(context));
+    return cppu::acquire(new ::chart::PageBackground );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

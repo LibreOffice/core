@@ -33,19 +33,15 @@ public:
     typedef ::std::vector<const SdPage*> PageVec;
 
 private:
-    PageVec       maPages;
+    PageVec         maPages;
     OUString        aName;
-    SdDrawDocument* pDoc;
 
     // this is a weak reference to a possible living api wrapper for this custom show
     css::uno::WeakReference< css::uno::XInterface > mxUnoCustomShow;
 
-    SdCustomShow() = delete;
-
 public:
-    // single argument ctors shall be explicit
-    explicit SdCustomShow(SdDrawDocument* pDrawDoc);
-    SdCustomShow(SdDrawDocument* pDrawDoc, css::uno::Reference< css::uno::XInterface > const & xShow );
+    SdCustomShow();
+    SdCustomShow(css::uno::Reference< css::uno::XInterface > const & xShow );
 
     ~SdCustomShow();
 

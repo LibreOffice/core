@@ -176,14 +176,11 @@ struct StaticRegressionCurveInfo : public rtl::StaticAggregate< uno::Reference< 
 namespace chart
 {
 
-RegressionCurveModel::RegressionCurveModel(
-    uno::Reference< uno::XComponentContext > const & xContext,
-    tCurveType eCurveType ) :
-        ::property::OPropertySet( m_aMutex ),
-    m_xContext( xContext ),
+RegressionCurveModel::RegressionCurveModel( tCurveType eCurveType ) :
+    ::property::OPropertySet( m_aMutex ),
     m_eRegressionCurveType( eCurveType ),
-        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
-        m_xEquationProperties( new RegressionEquation )
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
+    m_xEquationProperties( new RegressionEquation )
 {
     // set 0 line width (default) hard, so that it is always written to XML,
     // because the old implementation uses different defaults
@@ -193,10 +190,9 @@ RegressionCurveModel::RegressionCurveModel(
 }
 
 RegressionCurveModel::RegressionCurveModel( const RegressionCurveModel & rOther ) :
-        MutexContainer(),
-        impl::RegressionCurveModel_Base(),
-        ::property::OPropertySet( rOther, m_aMutex ),
-    m_xContext( rOther.m_xContext ),
+    MutexContainer(),
+    impl::RegressionCurveModel_Base(),
+    ::property::OPropertySet( rOther, m_aMutex ),
     m_eRegressionCurveType( rOther.m_eRegressionCurveType ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
@@ -345,9 +341,8 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( RegressionCurveModel, RegressionCurveModel_Bas
 
 // implementations
 
-MeanValueRegressionCurve::MeanValueRegressionCurve(
-    const uno::Reference< uno::XComponentContext > & xContext )
-        : RegressionCurveModel( xContext, RegressionCurveModel::CURVE_TYPE_MEAN_VALUE )
+MeanValueRegressionCurve::MeanValueRegressionCurve()
+        : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_MEAN_VALUE )
 {}
 MeanValueRegressionCurve::MeanValueRegressionCurve(
     const MeanValueRegressionCurve & rOther ) :
@@ -380,9 +375,8 @@ uno::Reference< util::XCloneable > SAL_CALL MeanValueRegressionCurve::createClon
     return uno::Reference< util::XCloneable >( new MeanValueRegressionCurve( *this ));
 }
 
-LinearRegressionCurve::LinearRegressionCurve(
-    const uno::Reference< uno::XComponentContext > & xContext )
-        : RegressionCurveModel( xContext, RegressionCurveModel::CURVE_TYPE_LINEAR )
+LinearRegressionCurve::LinearRegressionCurve()
+        : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_LINEAR )
 {}
 LinearRegressionCurve::LinearRegressionCurve(
     const LinearRegressionCurve & rOther ) :
@@ -415,9 +409,8 @@ uno::Reference< util::XCloneable > SAL_CALL LinearRegressionCurve::createClone()
     return uno::Reference< util::XCloneable >( new LinearRegressionCurve( *this ));
 }
 
-LogarithmicRegressionCurve::LogarithmicRegressionCurve(
-    const uno::Reference< uno::XComponentContext > & xContext )
-        : RegressionCurveModel( xContext, RegressionCurveModel::CURVE_TYPE_LOGARITHM )
+LogarithmicRegressionCurve::LogarithmicRegressionCurve()
+        : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_LOGARITHM )
 {}
 LogarithmicRegressionCurve::LogarithmicRegressionCurve(
     const LogarithmicRegressionCurve & rOther ) :
@@ -450,9 +443,8 @@ uno::Reference< util::XCloneable > SAL_CALL LogarithmicRegressionCurve::createCl
     return uno::Reference< util::XCloneable >( new LogarithmicRegressionCurve( *this ));
 }
 
-ExponentialRegressionCurve::ExponentialRegressionCurve(
-    const uno::Reference< uno::XComponentContext > & xContext )
-        : RegressionCurveModel( xContext, RegressionCurveModel::CURVE_TYPE_EXPONENTIAL )
+ExponentialRegressionCurve::ExponentialRegressionCurve()
+        : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_EXPONENTIAL )
 {}
 ExponentialRegressionCurve::ExponentialRegressionCurve(
     const ExponentialRegressionCurve & rOther ) :
@@ -485,9 +477,8 @@ uno::Reference< util::XCloneable > SAL_CALL ExponentialRegressionCurve::createCl
     return uno::Reference< util::XCloneable >( new ExponentialRegressionCurve( *this ));
 }
 
-PotentialRegressionCurve::PotentialRegressionCurve(
-    const uno::Reference< uno::XComponentContext > & xContext )
-        : RegressionCurveModel( xContext, RegressionCurveModel::CURVE_TYPE_POWER )
+PotentialRegressionCurve::PotentialRegressionCurve()
+        : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_POWER )
 {}
 PotentialRegressionCurve::PotentialRegressionCurve(
     const PotentialRegressionCurve & rOther ) :
@@ -520,9 +511,8 @@ uno::Reference< util::XCloneable > SAL_CALL PotentialRegressionCurve::createClon
     return uno::Reference< util::XCloneable >( new PotentialRegressionCurve( *this ));
 }
 
-PolynomialRegressionCurve::PolynomialRegressionCurve(
-    const uno::Reference< uno::XComponentContext > & xContext )
-        : RegressionCurveModel( xContext, RegressionCurveModel::CURVE_TYPE_POLYNOMIAL )
+PolynomialRegressionCurve::PolynomialRegressionCurve()
+        : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_POLYNOMIAL )
 {}
 PolynomialRegressionCurve::PolynomialRegressionCurve(
     const PolynomialRegressionCurve & rOther ) :
@@ -555,9 +545,8 @@ uno::Reference< util::XCloneable > SAL_CALL PolynomialRegressionCurve::createClo
     return uno::Reference< util::XCloneable >( new PolynomialRegressionCurve( *this ));
 }
 
-MovingAverageRegressionCurve::MovingAverageRegressionCurve(
-    const uno::Reference< uno::XComponentContext > & xContext )
-        : RegressionCurveModel( xContext, RegressionCurveModel::CURVE_TYPE_MOVING_AVERAGE )
+MovingAverageRegressionCurve::MovingAverageRegressionCurve()
+        : RegressionCurveModel( RegressionCurveModel::CURVE_TYPE_MOVING_AVERAGE )
 {}
 MovingAverageRegressionCurve::MovingAverageRegressionCurve(
     const MovingAverageRegressionCurve & rOther ) :
@@ -593,52 +582,52 @@ uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::create
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_ExponentialRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_ExponentialRegressionCurve_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::ExponentialRegressionCurve(context));
+    return cppu::acquire(new ::chart::ExponentialRegressionCurve );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_LinearRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_LinearRegressionCurve_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::LinearRegressionCurve(context));
+    return cppu::acquire(new ::chart::LinearRegressionCurve );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_LogarithmicRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_LogarithmicRegressionCurve_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::LogarithmicRegressionCurve(context));
+    return cppu::acquire(new ::chart::LogarithmicRegressionCurve );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_MeanValueRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_MeanValueRegressionCurve_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::MeanValueRegressionCurve(context));
+    return cppu::acquire(new ::chart::MeanValueRegressionCurve );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_PotentialRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_PotentialRegressionCurve_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::PotentialRegressionCurve(context));
+    return cppu::acquire(new ::chart::PotentialRegressionCurve );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_PolynomialRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_PolynomialRegressionCurve_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::PolynomialRegressionCurve(context));
+    return cppu::acquire(new ::chart::PolynomialRegressionCurve );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_MovingAverageRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_MovingAverageRegressionCurve_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::MovingAverageRegressionCurve(context));
+    return cppu::acquire(new ::chart::MovingAverageRegressionCurve );
 }
 
 

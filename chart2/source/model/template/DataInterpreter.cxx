@@ -120,7 +120,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
         if( nSeriesIndex < aSeriesToReUse.getLength())
             xSeries.set( aSeriesToReUse[nSeriesIndex] );
         else
-            xSeries.set( new DataSeries( GetComponentContext() ));
+            xSeries.set( new DataSeries );
         OSL_ASSERT( xSeries.is() );
         Reference< data::XDataSink > xSink( xSeries, uno::UNO_QUERY );
         OSL_ASSERT( xSink.is() );
