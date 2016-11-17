@@ -3927,6 +3927,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // get the widgets in place
     NWEnsureGTKMenu( m_nXScreen );
     NWEnsureGTKMenubar( m_nXScreen );
+    NWEnsureGTKToolbar( m_nXScreen );
     NWEnsureGTKScrollbars( m_nXScreen );
     NWEnsureGTKEditBox( m_nXScreen );
     NWEnsureGTKTooltip( m_nXScreen );
@@ -4024,7 +4025,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     GtkStyle* pMenuItemStyle = gtk_rc_get_style( gWidgetData[m_nXScreen].gMenuItemMenuWidget );
     GtkStyle* pMenubarStyle = gtk_rc_get_style( gWidgetData[m_nXScreen].gMenubarWidget );
     GtkStyle* pMenuTextStyle = gtk_rc_get_style( gtk_bin_get_child( GTK_BIN(gWidgetData[m_nXScreen].gMenuItemMenuWidget) ) );
-
     aBackColor = getColor( pMenubarStyle->bg[GTK_STATE_NORMAL] );
     aStyleSet.SetMenuBarColor( aBackColor );
     aStyleSet.SetMenuBarRolloverColor( aBackColor );
@@ -4037,6 +4037,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetMenuBarTextColor( aTextColor );
     aStyleSet.SetMenuBarRolloverTextColor(getColor(pMenubarStyle->fg[GTK_STATE_PRELIGHT]));
     aStyleSet.SetMenuBarHighlightTextColor(getColor(pMenubarStyle->fg[GTK_STATE_SELECTED]));
+
+    // toolbar colors
+    GtkStyle* pToolbarButtonStyle = gtk_rc_get_style( gWidgetData[m_nXScreen].gToolbarButtonWidget );
+    aStyleSet.SetToolTextColor(getColor(pToolbarButtonStyle->fg[GTK_STATE_NORMAL]));
 
 #if OSL_DEBUG_LEVEL > 1
     std::fprintf( stderr, "==\n" );

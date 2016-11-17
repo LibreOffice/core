@@ -1451,7 +1451,7 @@ void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
             || (GetAlign() == WindowAlign::Bottom && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()))
         {
             rRenderContext.SetBackground();
-            rRenderContext.SetTextColor(rStyleSettings.GetMenuBarTextColor());
+            rRenderContext.SetTextColor(rStyleSettings.GetToolTextColor());
             SetPaintTransparent(true);
             SetParentClipMode(ParentClipMode::NoClip);
             mpData->maDisplayBackground = Wallpaper(rStyleSettings.GetFaceColor());

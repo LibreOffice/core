@@ -2506,7 +2506,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetAppFont( aFont );
     aStyleSet.SetHelpFont( aFont );
     aStyleSet.SetMenuFont( aFont );
-    aStyleSet.SetToolFont( aFont );
     aStyleSet.SetLabelFont( aFont );
     aStyleSet.SetInfoFont( aFont );
     aStyleSet.SetRadioCheckFont( aFont );
@@ -2651,6 +2650,15 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         aTextColor = getColor( text_color );
         aStyleSet.SetTabTextColor(aTextColor);
         aStyleSet.SetTabFont(getFont(mpNotebookHeaderTabsTabLabelStyle, rSettings.GetUILanguageTag().getLocale()));
+    }
+
+    {
+        GtkStyleContext *pCStyle = mpToolButtonStyle;
+        style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
+        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
+        aTextColor = getColor( text_color );
+        aStyleSet.SetToolTextColor(aTextColor);
+        aStyleSet.SetToolFont(getFont(mpToolButtonStyle, rSettings.GetUILanguageTag().getLocale()));
     }
 
     // mouse over text colors
