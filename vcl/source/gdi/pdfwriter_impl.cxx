@@ -6621,7 +6621,7 @@ my_NSS_CMSSignerInfo_AddAuthAttr(NSSCMSSignerInfo *signerinfo, NSSCMSAttribute *
     return my_NSS_CMSAttributeArray_AddAttr(signerinfo->cmsg->poolp, &(signerinfo->authAttr), attr);
 }
 
-NSSCMSMessage *CreateCMSMessage(PRTime time,
+NSSCMSMessage *CreateCMSMessage(PRTime* time,
                                 NSSCMSSignedData **cms_sd,
                                 NSSCMSSignerInfo **cms_signer,
                                 CERTCertificate *cert,
@@ -6671,7 +6671,7 @@ NSSCMSMessage *CreateCMSMessage(PRTime time,
         return nullptr;
     }
 
-    if (NSS_CMSSignerInfo_AddSigningTime(*cms_signer, time) != SECSuccess)
+    if (time && NSS_CMSSignerInfo_AddSigningTime(*cms_signer, *time) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_AddSigningTime failed");
         NSS_CMSSignedData_Destroy(*cms_sd);
@@ -6778,7 +6778,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     PRTime now = PR_Now();
     NSSCMSSignedData *cms_sd;
     NSSCMSSignerInfo *cms_signer;
-    NSSCMSMessage *cms_msg = CreateCMSMessage(now, &cms_sd, &cms_signer, cert, &digest);
+    NSSCMSMessage *cms_msg = CreateCMSMessage(nullptr, &cms_sd, &cms_signer, cert, &digest);
     if (!cms_msg)
         return false;
 
@@ -6803,7 +6803,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
 
         NSSCMSSignedData *ts_cms_sd;
         NSSCMSSignerInfo *ts_cms_signer;
-        NSSCMSMessage *ts_cms_msg = CreateCMSMessage(now, &ts_cms_sd, &ts_cms_signer, cert, &digest);
+        NSSCMSMessage *ts_cms_msg = CreateCMSMessage(&now, &ts_cms_sd, &ts_cms_signer, cert, &digest);
         if (!ts_cms_msg)
         {
             free(pass);
