@@ -33,7 +33,10 @@ enum SwTOIKeyType
     TOI_SECONDARY
 };
 
-enum TOXTypes
+// Somewhat redundantly fix TOXType's underlying type to int, so that
+// SwTOXEntryTabPage (sw/source/ui/index/cnttab.cxx) can initialize
+// aLastTOXType.eType to (TOXTypes)USHRT_MAX without causing -fsanitize=enum:
+enum TOXTypes: int
 {
     TOX_INDEX,
     TOX_USER,
