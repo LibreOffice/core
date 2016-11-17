@@ -68,6 +68,7 @@ public:
     void testGraphicInvalidate();
     void testAutoSum();
     void testHideColRow();
+    void testInvalidateOnCopyPasteCells();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -87,6 +88,7 @@ public:
     CPPUNIT_TEST(testGraphicInvalidate);
     CPPUNIT_TEST(testAutoSum);
     CPPUNIT_TEST(testHideColRow);
+    CPPUNIT_TEST(testInvalidateOnCopyPasteCells);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -932,6 +934,48 @@ void ScTiledRenderingTest::testHideColRow()
     nNewCurY = ScDocShell::GetViewData()->GetCurY();
     CPPUNIT_ASSERT(nNewCurY > nOldCurY);
     CPPUNIT_ASSERT_EQUAL(nOldCurX, nNewCurX);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+void ScTiledRenderingTest::testInvalidateOnCopyPasteCells()
+{
+    // Load a document
+    comphelper::LibreOfficeKit::setActive();
+    ScModelObj* pModelObj = createDoc("small.ods");
+    CPPUNIT_ASSERT(pModelObj);
+
+    // view
+    ViewCallback aView;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
+
+    aView.m_bInvalidateTiles = false;
+    uno::Sequence<beans::PropertyValue> aArgs;
+    // select and copy cells
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
+    Scheduler::ProcessEventsToIdle();
+    comphelper::dispatchCommand(".uno:Copy", aArgs);
+
+    // move to destination cell
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_UP);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_UP);
+    Scheduler::ProcessEventsToIdle();
+
+    // paste cells
+    aView.m_bInvalidateTiles = false;
+    comphelper::dispatchCommand(".uno:Paste", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 
     mxComponent->dispose();
     mxComponent.clear();
