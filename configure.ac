@@ -2960,8 +2960,8 @@ if test $_os = iOS; then
 
     xcode_developer=`xcode-select -print-path`
 
-    current_sdk_ver=9.3
-    for sdkver in 10.0 9.3 9.2; do
+    current_sdk_ver=10.2
+    for sdkver in 10.2 10.1 10.0 9.3; do
         t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$sdkver.sdk
         if test -d $t; then
             ios_sdk=$sdkver
@@ -2981,10 +2981,10 @@ if test $_os = iOS; then
     if test "$enable_ios_simulator" = yes; then
         if test "$BITNESS_OVERRIDE" = 64; then
             XCODE_ARCHS=x86_64
-            versionmin=-mios-simulator-version-min=9.0
+            versionmin=-mios-simulator-version-min=9.3
         else
             XCODE_ARCHS=i386
-            versionmin=-mios-simulator-version-min=9.0
+            versionmin=-mios-simulator-version-min=9.3
         fi
     else
         platform=iPhoneOS
@@ -2993,7 +2993,7 @@ if test $_os = iOS; then
         else
             XCODE_ARCHS=armv7
         fi
-        versionmin=-miphoneos-version-min=9.0
+        versionmin=-miphoneos-version-min=9.3
     fi
 
     # LTO is not really recommended for iOS builds,
