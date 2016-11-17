@@ -2380,7 +2380,6 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
             // align all baselines in that row if possible
             aPos = rNodeRect.AlignTo(aLineRect, RectPos::Right, RectHorAlign::Center, RectVerAlign::Baseline);
-            aPos.X() += nHorDist;
 
             // get horizontal alignment
             const SmNode *pCoNode   = pTmpNode->GetLeftMost();
@@ -2390,7 +2389,7 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             // and horizontal alignment
             switch (eHorAlign)
             {   case RectHorAlign::Left:
-                    aPos.X() = rNodeRect.GetLeft() + aColLeft[j];
+                    aPos.X() = aColLeft[j];
                     break;
                 case RectHorAlign::Center:
                     aPos.X() = rNodeRect.GetLeft() + aColLeft[j]
@@ -2398,7 +2397,7 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                                - rNodeRect.GetItalicCenterX();
                     break;
                 case RectHorAlign::Right:
-                    aPos.X() = rNodeRect.GetLeft() + aColLeft[j]
+                    aPos.X() = aColLeft[j]
                                + aColWidth[j] - rNodeRect.GetItalicWidth();
                     break;
                 default:
