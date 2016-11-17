@@ -48,7 +48,7 @@ class PageBackground :
     public ::property::OPropertySet
 {
 public:
-    explicit PageBackground( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit PageBackground();
     virtual ~PageBackground() override;
 
     /// XServiceInfo declarations
@@ -104,8 +104,6 @@ protected:
     using OPropertySet::disposing;
 
 private:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };
 

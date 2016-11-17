@@ -202,11 +202,8 @@ class XMLElement : public XMLParentNode
 private:
     OString m_sElementName;
     std::unique_ptr<XMLAttributeList> m_pAttributes;
-    OString m_sProject;
-    OString m_sFilename;
     OString m_sId;
     OString m_sOldRef;
-    OString m_sResourceType;
     OString m_sLanguageId;
     int m_nPos;
 

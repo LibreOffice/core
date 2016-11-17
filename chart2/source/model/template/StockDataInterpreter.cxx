@@ -239,7 +239,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
                 if( nReUsedSeriesIdx < rSeriesToReUse.getLength())
                     xSeries.set( rSeriesToReUse[nReUsedSeriesIdx] );
                 else
-                    xSeries.set( new DataSeries( GetComponentContext() ) );
+                    xSeries.set( new DataSeries );
                 OSL_ASSERT( xSeries.is() );
                 Reference< data::XDataSink > xSink( xSeries, uno::UNO_QUERY_THROW );
                 OSL_ASSERT( xSink.is() );

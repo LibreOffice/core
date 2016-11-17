@@ -108,7 +108,7 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
             mpModel = pPage->GetModel();
 
         if( nullptr != mpModel && nullptr == mpSdCustomShow && mpModel->GetDoc() )
-            mpSdCustomShow = new SdCustomShow( mpModel->GetDoc() );
+            mpSdCustomShow = new SdCustomShow;
 
         mpSdCustomShow->PagesVector().insert(mpSdCustomShow->PagesVector().begin() + Index,
             static_cast<SdPage*>(pPage->GetSdrPage()));
@@ -349,7 +349,7 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
     SdCustomShow* pShow = pXShow->GetSdCustomShow();
     if( nullptr == pShow )
     {
-        pShow = new SdCustomShow( mrModel.GetDoc(), xContainer );
+        pShow = new SdCustomShow( xContainer );
         pXShow->SetSdCustomShow( pShow );
     }
     else

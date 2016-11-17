@@ -234,7 +234,6 @@ Accelerator::Accelerator()
 
 Accelerator::Accelerator( const Accelerator& rAccel ) :
     Resource(),
-    maHelpStr( rAccel.maHelpStr ),
     maCurKeyCode( rAccel.maCurKeyCode )
 {
 
@@ -299,7 +298,6 @@ Accelerator& Accelerator::operator=( const Accelerator& rAccel )
 {
 
     // assign new data
-    maHelpStr       = rAccel.maHelpStr;
     maCurKeyCode    = vcl::KeyCode();
     mnCurId         = 0;
     mnCurRepeat     = 0;

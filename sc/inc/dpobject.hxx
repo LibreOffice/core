@@ -94,7 +94,6 @@ private:
                                             // cached data
     css::uno::Reference<css::sheet::XDimensionsSupplier> xSource;
     ScDPOutput*             pOutput;
-    sal_uInt16              mnAutoFormatIndex;
     long                    nHeaderRows;    // page fields plus filter button
     bool                    mbHeaderLayout:1;  // true : grid, false : standard
     bool                    bAllowMove:1;

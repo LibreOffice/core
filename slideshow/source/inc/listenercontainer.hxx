@@ -40,12 +40,6 @@ struct EmptyBase
     typedef EmptyClearableGuard ClearableGuard;
 };
 
-class MutexBase
-{
-public:
-    mutable osl::Mutex maMutex;
-};
-
 template< typename result_type, typename ListenerTargetT > struct FunctionApply
 {
     template<typename FuncT> static bool apply(
@@ -403,22 +397,6 @@ public:
 
 private:
     ContainerT  maListeners;
-};
-
-
-/** ListenerContainer variant that serialized access
-
-    This ListenerContainer is safe to use in a multi-threaded
-    context. It serializes access to the object, and avoids
-    dead-locking by releasing the object mutex before calling
-    listeners.
- */
-template< typename ListenerT,
-          typename ContainerT=std::vector<ListenerT> >
-class ThreadSafeListenerContainer : public ListenerContainerBase<ListenerT,
-                                                                 MutexBase,
-                                                                 ContainerT>
-{
 };
 
 

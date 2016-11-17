@@ -34,9 +34,8 @@ using namespace ::com::sun::star;
 |* Ctor
 |*
 \************************************************************************/
-SdCustomShow::SdCustomShow(SdDrawDocument* pDrawDoc)
-  : maPages(),
-  pDoc(pDrawDoc)
+SdCustomShow::SdCustomShow()
+  : maPages()
 {
 }
 
@@ -49,12 +48,10 @@ SdCustomShow::SdCustomShow( const SdCustomShow& rShow )
     : maPages(rShow.maPages)
 {
     aName = rShow.GetName();
-    pDoc = rShow.pDoc;
 }
 
-SdCustomShow::SdCustomShow(SdDrawDocument* pDrawDoc, css::uno::Reference< css::uno::XInterface > const & xShow )
+SdCustomShow::SdCustomShow(css::uno::Reference< css::uno::XInterface > const & xShow )
   : maPages(),
-  pDoc(pDrawDoc),
   mxUnoCustomShow( xShow )
 {
 }

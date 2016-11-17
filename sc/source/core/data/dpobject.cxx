@@ -312,7 +312,6 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     pServDesc( nullptr ),
     mpTableData(static_cast<ScDPTableData*>(nullptr)),
     pOutput( nullptr ),
-    mnAutoFormatIndex( 65535 ),
     nHeaderRows( 0 ),
     mbHeaderLayout(false),
     bAllowMove(false),
@@ -332,7 +331,6 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     pServDesc( nullptr ),
     mpTableData(static_cast<ScDPTableData*>(nullptr)),
     pOutput( nullptr ),
-    mnAutoFormatIndex( r.mnAutoFormatIndex ),
     nHeaderRows( r.nHeaderRows ),
     mbHeaderLayout( r.mbHeaderLayout ),
     bAllowMove(false),
@@ -363,7 +361,6 @@ ScDPObject& ScDPObject::operator= (const ScDPObject& r)
     aTableName = r.aTableName;
     aTableTag = r.aTableTag;
     aOutRange = r.aOutRange;
-    mnAutoFormatIndex = r.mnAutoFormatIndex;
     nHeaderRows = r.nHeaderRows;
     mbHeaderLayout = r.mbHeaderLayout;
     bAllowMove = false;

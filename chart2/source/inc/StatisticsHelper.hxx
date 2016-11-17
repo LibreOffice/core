@@ -73,7 +73,6 @@ namespace StatisticsHelper
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::beans::XPropertySet >
         addErrorBars(
             const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries,
-            const css::uno::Reference< css::uno::XComponentContext > & xContext,
             sal_Int32 nStyle,
             bool bYError = true );
 

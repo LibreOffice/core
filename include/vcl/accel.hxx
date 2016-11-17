@@ -36,7 +36,6 @@ class VCL_DLLPUBLIC Accelerator : public Resource
 
 private:
     ImplAccelData*          mpData;
-    OUString                maHelpStr;
     Link<Accelerator&,void> maActivateHdl;
     Link<Accelerator&,void> maSelectHdl;
 

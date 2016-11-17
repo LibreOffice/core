@@ -199,7 +199,7 @@ void setErrorBarVisible(const css::uno::Reference<css::frame::XModel>&
 
     if (bVisible)
     {
-                StatisticsHelper::addErrorBars( xSeries, comphelper::getProcessComponentContext(),
+        StatisticsHelper::addErrorBars( xSeries,
                     css::chart::ErrorBarStyle::STANDARD_DEVIATION,
                     bYError);
     }

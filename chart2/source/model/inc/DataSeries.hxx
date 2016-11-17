@@ -67,7 +67,7 @@ class DataSeries :
     public ::property::OPropertySet
 {
 public:
-    explicit DataSeries( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit DataSeries();
     virtual ~DataSeries() override;
 
     /// XServiceInfo declarations
@@ -176,7 +176,6 @@ protected:
     void fireModifyEvent();
 
 private:
-    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
     typedef ::std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
     tDataSequenceContainer        m_aDataSequences;
 
