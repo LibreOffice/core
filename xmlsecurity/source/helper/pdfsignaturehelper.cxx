@@ -118,7 +118,7 @@ void PDFSignatureHelper::SetDescription(const OUString& rDescription)
     m_aDescription = rDescription;
 }
 
-bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStream)
+bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStream, bool bAdES)
 {
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     xmlsecurity::pdfio::PDFDocument aDocument;
@@ -128,7 +128,7 @@ bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStre
         return false;
     }
 
-    if (!aDocument.Sign(m_xCertificate, m_aDescription))
+    if (!aDocument.Sign(m_xCertificate, m_aDescription, bAdES))
     {
         SAL_WARN("xmlsecurity.helper", "failed to sign");
         return false;

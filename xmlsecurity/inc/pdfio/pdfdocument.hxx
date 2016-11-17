@@ -117,7 +117,7 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     /// Suggest a minimal, yet free signature ID to use for the next signature.
     sal_uInt32 GetNextSignature();
     /// Write the signature object as part of signing.
-    sal_Int32 WriteSignatureObject(const OUString& rDescription, sal_uInt64& rLastByteRangeOffset, sal_Int64& rSignatureContentOffset);
+    sal_Int32 WriteSignatureObject(const OUString& rDescription, bool bAdES, sal_uInt64& rLastByteRangeOffset, sal_Int64& rSignatureContentOffset);
     /// Write the appearance object as part of signing.
     sal_Int32 WriteAppearanceObject();
     /// Write the annot object as part of signing.
@@ -162,7 +162,7 @@ public:
     /// Read elements from the start of the stream till its end.
     bool Read(SvStream& rStream);
     /// Sign the read document with xCertificate in the edit buffer.
-    bool Sign(const css::uno::Reference<css::security::XCertificate>& xCertificate, const OUString& rDescription);
+    bool Sign(const css::uno::Reference<css::security::XCertificate>& xCertificate, const OUString& rDescription, bool bAdES);
     /// Serializes the contents of the edit buffer.
     bool Write(SvStream& rStream);
     /// Get a list of signatures embedded into this document.
