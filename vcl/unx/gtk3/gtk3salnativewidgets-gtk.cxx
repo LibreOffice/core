@@ -685,9 +685,6 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     gtk_render_background(context, cr,
                           buttonRect.Left(), buttonRect.Top(),
                           buttonRect.GetWidth(), buttonRect.GetHeight() );
-    gtk_render_frame(context, cr,
-                     buttonRect.Left(), buttonRect.Top(),
-                     buttonRect.GetWidth(), buttonRect.GetHeight() );
 
     gint iconWidth = (buttonRect.GetWidth() - padding.left - padding.right - border.left - border.right);
     gint iconHeight = (buttonRect.GetHeight() - padding.top - padding.bottom - border.top - border.bottom);
@@ -710,6 +707,10 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
 
     gtk_render_icon(context, cr, pixbuf, arrowRect.Left(), arrowRect.Top());
     g_object_unref(pixbuf);
+
+    gtk_render_frame(context, cr,
+                     buttonRect.Left(), buttonRect.Top(),
+                     buttonRect.GetWidth(), buttonRect.GetHeight() );
 }
 
 void GtkSalGraphics::PaintSpinButton(GtkStateFlags flags,
@@ -1758,12 +1759,13 @@ void GtkSalGraphics::PaintCheckOrRadio(cairo_t *cr, GtkStyleContext *context,
 
     if (!bInMenu)
         gtk_render_background(context, cr, x, y, indicator_size, indicator_size);
-    gtk_render_frame(context, cr, x, y, indicator_size, indicator_size);
 
     if (bIsCheck)
         gtk_render_check(context, cr, x, y, indicator_size, indicator_size);
     else
         gtk_render_option(context, cr, x, y, indicator_size, indicator_size);
+
+    gtk_render_frame(context, cr, x, y, indicator_size, indicator_size);
 }
 
 void GtkSalGraphics::PaintCheck(cairo_t *cr, GtkStyleContext *context,
@@ -2142,7 +2144,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     case RenderType::Progress:
     {
         gtk_render_background(mpProgressBarTroughStyle, cr, nX, nY, nWidth, nHeight);
-        gtk_render_frame(mpProgressBarTroughStyle, cr, nX, nY, nWidth, nHeight);
+
         long nProgressWidth = rValue.getNumericVal();
         if (nProgressWidth)
         {
@@ -2156,6 +2158,8 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             gtk_render_background(context, cr, nX, nY, nProgressWidth, nHeight);
             gtk_render_frame(context, cr, nX, nY, nProgressWidth, nHeight);
         }
+
+        gtk_render_frame(mpProgressBarTroughStyle, cr, nX, nY, nWidth, nHeight);
 
         break;
     }
