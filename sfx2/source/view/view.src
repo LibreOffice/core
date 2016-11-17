@@ -90,6 +90,10 @@ String STR_READONLY_DOCUMENT
 {
     Text [ en-US ] = "This document is open in read-only mode." ;
 };
+String STR_READONLY_PDF
+{
+    Text [ en-US ] = "This PDF is open in read-only mode to allow signing the existing file." ;
+};
 
 String STR_CLASSIFIED_DOCUMENT
 {
