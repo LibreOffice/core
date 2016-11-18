@@ -366,7 +366,7 @@ public:
     static const sal_uInt16 APPEND;
     static const sal_uInt16 PAGE_NOT_FOUND;
 
-                    TabBar( vcl::Window* pParent, WinBits nWinStyle = WB_STDTABBAR );
+                    TabBar( vcl::Window* pParent, WinBits nWinStyle );
     virtual         ~TabBar() override;
     virtual void    dispose() override;
 

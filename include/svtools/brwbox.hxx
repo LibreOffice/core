@@ -389,7 +389,7 @@ protected:
     virtual void    ImplEndTracking();
 
 public:
-                    BrowseBox( vcl::Window* pParent, WinBits nBits = 0,
+                    BrowseBox( vcl::Window* pParent, WinBits nBits,
                                BrowserMode nMode = BrowserMode::NONE );
     virtual         ~BrowseBox() override;
     virtual void    dispose() override;

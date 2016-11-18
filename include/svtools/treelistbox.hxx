@@ -132,7 +132,7 @@ class SvLBoxTab
     void*   pUserData;
 public:
             SvLBoxTab();
-            SvLBoxTab( long nPos, SvLBoxTabFlags nFlags = SvLBoxTabFlags::ADJUST_LEFT );
+            SvLBoxTab( long nPos, SvLBoxTabFlags nFlags );
             SvLBoxTab( const SvLBoxTab& );
             ~SvLBoxTab();
 
@@ -555,7 +555,7 @@ protected:
     // Recalculate all tabs depending on TreeListStyle and Bitmap sizes
     // Is called automatically when inserting/changing Bitmaps, changing the Model etc.
     virtual void    SetTabs();
-    void            AddTab( long nPos, SvLBoxTabFlags nFlags=SvLBoxTabFlags::ADJUST_LEFT );
+    void            AddTab( long nPos, SvLBoxTabFlags nFlags );
     sal_uInt16      TabCount() const { return aTabs.size(); }
     SvLBoxTab*      GetFirstDynamicTab() const;
     SvLBoxTab*      GetFirstDynamicTab( sal_uInt16& rTabPos ) const;
@@ -662,7 +662,7 @@ public:
 
     void            EnableInplaceEditing( bool bEnable );
     // Edits the Entry's first StringItem, 0 == Cursor
-    void            EditEntry( SvTreeListEntry* pEntry = nullptr );
+    void            EditEntry( SvTreeListEntry* pEntry );
     virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
@@ -804,7 +804,7 @@ public:
     bool        EditingCanceled() const { return bCanceled; }
     OUString    GetText() const;
     OUString    GetSavedValue() const;
-    void        StopEditing( bool bCancel = false );
+    void        StopEditing( bool bCancel );
     void        Hide();
 };
 

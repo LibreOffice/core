@@ -268,7 +268,7 @@ private:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
 public:
-    HeaderBar( vcl::Window* pParent, WinBits nWinBits = WB_STDHEADERBAR );
+    HeaderBar( vcl::Window* pParent, WinBits nWinBits );
     virtual ~HeaderBar() override;
     virtual void dispose() override;
 

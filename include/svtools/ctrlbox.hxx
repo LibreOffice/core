@@ -301,7 +301,7 @@ protected:
     void            SaveMRUEntries( const OUString& aFontMRUEntriesFile ) const;
 public:
                     FontNameBox( vcl::Window* pParent,
-                                 WinBits nWinStyle = WB_SORT );
+                                 WinBits nWinStyle );
     virtual         ~FontNameBox() override;
     virtual void    dispose() override;
 
@@ -370,16 +370,16 @@ protected:
     virtual OUString CreateFieldText( sal_Int64 nValue ) const override;
 
 public:
-                    FontSizeBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
+                    FontSizeBox( vcl::Window* pParent, WinBits nWinStyle );
 
     void            Reformat() override;
     void            Modify() override;
 
     void            Fill( const FontMetric* pFontMetric, const FontList* pList );
 
-    void            EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax = 150,
+    void            EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax,
                                         sal_uInt16 nStep = 5 );
-    void            EnablePtRelativeMode( short nMin, short nMax = 200,
+    void            EnablePtRelativeMode( short nMin, short nMax,
                                           short nStep = 10 );
     bool            IsRelativeMode() const { return bRelativeMode; }
     void            SetRelative( bool bRelative );
