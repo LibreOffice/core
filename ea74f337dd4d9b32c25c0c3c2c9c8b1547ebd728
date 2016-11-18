@@ -1,0 +1,152 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_da1a3e17",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-18T16:34:39Z",
+      "side": 1,
+      "message": "Can we please have a more specific commit summary? Something like\nOOXML: write dimension range in full address notation",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 54
+      },
+      "revId": "ea74f337dd4d9b32c25c0c3c2c9c8b1547ebd728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_faee1aeb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-18T16:34:39Z",
+      "side": 1,
+      "message": "For the example given (A1:AMJ177) it\u0027s just \u003cdimension ref\u003d\"1:177\"/\u003e, not \u003cdimension ref\u003d\"A:AMJ\"/\u003e.",
+      "range": {
+        "startLine": 12,
+        "startChar": 13,
+        "endLine": 12,
+        "endChar": 66
+      },
+      "revId": "ea74f337dd4d9b32c25c0c3c2c9c8b1547ebd728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_fa17faea",
+        "filename": "sc/inc/address.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-18T16:34:39Z",
+      "side": 1,
+      "message": "I guess it\u0027s about time now to document the parameters of this function, i.e. \"bFullFormat\" doesn\u0027t tell the reader anything about what it does.",
+      "revId": "ea74f337dd4d9b32c25c0c3c2c9c8b1547ebd728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_1ad3d639",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-18T16:34:39Z",
+      "side": 1,
+      "message": "Move the !bFullFormat test to the end of the condition, because usually it will be false and needs only to be tested if start\u003d\u003d0 and end\u003d\u003dmax, which occurs less likely than other ranges, so\n\n if (aStart.Col() \u003d\u003d 0 \u0026\u0026 aEnd.Col() \u003e\u003d MAXCOL \u0026\u0026 !bFullFormat)",
+      "revId": "ea74f337dd4d9b32c25c0c3c2c9c8b1547ebd728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_3ad89253",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2243,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-18T16:34:39Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "ea74f337dd4d9b32c25c0c3c2c9c8b1547ebd728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_5add4e41",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2267,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-18T16:34:39Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "ea74f337dd4d9b32c25c0c3c2c9c8b1547ebd728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_7ae20a05",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-18T16:34:39Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "ea74f337dd4d9b32c25c0c3c2c9c8b1547ebd728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_9ae7e611",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-18T16:34:39Z",
+      "side": 1,
+      "message": "Please no unrelated cosmetic changes.",
+      "revId": "ea74f337dd4d9b32c25c0c3c2c9c8b1547ebd728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
