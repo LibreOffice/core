@@ -88,7 +88,7 @@ void XMLTableShapeImportHelper::finishShape(
         if (!pAnnotationContext)
         {
             ScDrawObjData aAnchor;
-            aAnchor.maStart = ScAddress(aStartCell.Column, aStartCell.Row, aStartCell.Sheet);
+            aAnchor.maStart = aStartCell;
             awt::Point aStartPoint(rShape->getPosition());
             aAnchor.maStartOffset = Point(aStartPoint.X, aStartPoint.Y);
 
