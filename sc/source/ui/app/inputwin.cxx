@@ -878,6 +878,11 @@ EditView* ScInputBarGroup::GetEditView()
     return maTextWnd->GetEditView();
 }
 
+bool ScInputBarGroup::HasEditView() const
+{
+    return maTextWnd->HasEditView();
+}
+
 bool ScInputBarGroup::IsInputActive()
 {
     return maTextWnd->IsInputActive();
@@ -1010,6 +1015,11 @@ EditView* ScTextWnd::GetEditView()
     if ( !mpEditView )
         InitEditEngine();
     return mpEditView.get();
+}
+
+bool ScTextWnd::HasEditView() const
+{
+    return mpEditView.get() != nullptr;
 }
 
 long ScTextWnd::GetPixelHeightForLines(long nLines)
