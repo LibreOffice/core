@@ -91,27 +91,12 @@
 #include <svtools/miscopt.hxx>
 #include <sax/tools/converter.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-
-#include <com/sun/star/sheet/XSheetCondition.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/text/ControlCharacter.hpp>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/document/XActionLockable.hpp>
 
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
-#include <com/sun/star/sheet/ConditionOperator.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/date.hxx>

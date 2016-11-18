@@ -25,7 +25,6 @@
 #include <vector>
 #include "worksheethelper.hxx"
 #include "sheetdatabuffer.hxx"
-#include <com/sun/star/sheet/XFormulaTokens.hpp>
 
 namespace oox { namespace xls {
 
