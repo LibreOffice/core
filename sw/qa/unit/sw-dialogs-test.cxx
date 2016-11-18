@@ -43,6 +43,8 @@ public:
 
     void setUp() override;
 
+    void tearDown() override;
+
     // try to open a dialog
     void openAnyDialog();
 
@@ -76,6 +78,12 @@ void SwDialogsTest::setUp()
         libSwui_.getFunctionSymbol("SwCreateDialogFactory"));
     CPPUNIT_ASSERT(fn != nullptr);
     (*fn)();
+}
+
+void SwDialogsTest::tearDown()
+{
+    component_->dispose();
+    ScreenshotTest::tearDown();
 }
 
 void SwDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
