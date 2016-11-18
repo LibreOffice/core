@@ -31,7 +31,6 @@ namespace connectivity
         class OCatalog : public connectivity::sdbcx::OCatalog
         {
             OConnection*    m_pConnection;      // used to get the metadata
-            css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 
         public:
             // implementation of the pure virtual methods

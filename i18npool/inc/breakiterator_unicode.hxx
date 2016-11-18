@@ -73,7 +73,6 @@ public:
 
 protected:
     const sal_Char *cBreakIterator, *lineRule;
-    Boundary result; // for word break iterator
 
     struct BI_Data
     {
