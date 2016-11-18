@@ -53,6 +53,7 @@ public:
     virtual void            StartEditEngine() = 0;
     virtual void            StopEditEngine( bool bAll ) = 0;
     virtual EditView*       GetEditView() = 0;
+    virtual bool            HasEditView() const = 0;
     virtual void            MakeDialogEditView() = 0;
     virtual void            SetFormulaMode( bool bSet ) = 0;
     virtual bool            IsInputActive() = 0;
@@ -71,6 +72,7 @@ public:
 
     bool                    IsInputActive() override;
     virtual EditView*       GetEditView() override;
+    virtual bool            HasEditView() const override;
 
                         // for function autopilots
     virtual void            MakeDialogEditView() override;
@@ -192,7 +194,8 @@ public:
     virtual void    RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;
     void            SetTextString( const OUString& rString ) override;
     void            StartEditEngine() override;
-    EditView*       GetEditView() override;
+    virtual EditView* GetEditView() override;
+    virtual bool HasEditView() const override;
     virtual void    Resize() override;
     virtual const OUString&   GetTextString() const override;
     virtual void            StopEditEngine( bool bAll ) override;

@@ -1040,7 +1040,7 @@ ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
         delete mpEditEngine;
         mpEditEngine = nullptr;    // don't access in ScAccessibleEditObjectTextData dtor!
     }
-    else if (pTxtWnd && pTxtWnd->GetEditView() && pTxtWnd->GetEditView()->GetEditEngine())
+    else if (pTxtWnd && pTxtWnd->HasEditView() && pTxtWnd->GetEditView()->GetEditEngine())
     {
         //  the NotifyHdl also has to be removed from the ScTextWnd's EditEngine
         //  (it's set in ScAccessibleEditLineTextData::GetTextForwarder, and mpEditEngine
@@ -1074,9 +1074,10 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
 
     if (pTxtWnd)
     {
-        mpEditView = pTxtWnd->GetEditView();
-        if (mpEditView)
+        if (pTxtWnd->HasEditView())
         {
+            mpEditView = pTxtWnd->GetEditView();
+
             if (mbEditEngineCreated && mpEditEngine)
                 ResetEditMode();
             mbEditEngineCreated = false;
@@ -1087,6 +1088,8 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
         }
         else
         {
+            mpEditView = nullptr;
+
             if (mpEditEngine && !mbEditEngineCreated)
                 ResetEditMode();
             if (!mpEditEngine)
@@ -1120,8 +1123,7 @@ SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( bool b
 
     if (pTxtWnd)
     {
-        mpEditView = pTxtWnd->GetEditView();
-        if (!mpEditView && bCreate)
+        if (!pTxtWnd->HasEditView() && bCreate)
         {
             if ( !pTxtWnd->IsInputActive() )
             {
@@ -1142,7 +1144,7 @@ void ScAccessibleEditLineTextData::ResetEditMode()
 
     if (mbEditEngineCreated && mpEditEngine)
         delete mpEditEngine;
-    else if (pTxtWnd && pTxtWnd->GetEditView() && pTxtWnd->GetEditView()->GetEditEngine())
+    else if (pTxtWnd && pTxtWnd->HasEditView() && pTxtWnd->GetEditView()->GetEditEngine())
         pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<EENotify&,void>());
     mpEditEngine = nullptr;
 
