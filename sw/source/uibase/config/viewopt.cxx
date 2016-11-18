@@ -40,6 +40,7 @@
 
 #include <editeng/acorrcfg.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/configurationlistener.hxx>
 
 #ifdef DBG_UTIL
 bool SwViewOption::m_bTest9 = false;        //DrawingLayerNotLoading
@@ -559,6 +560,22 @@ void SwViewOption::SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveIn
 bool SwViewOption::IsAppearanceFlag(ViewOptFlags nFlag)
 {
     return bool(m_nAppearanceFlags & nFlag);
+}
+
+namespace{
+rtl::Reference<comphelper::ConfigurationListener> const & getWCOptionListener()
+{
+    static rtl::Reference<comphelper::ConfigurationListener> xListener;
+    if (!xListener.is())
+        xListener.set(new comphelper::ConfigurationListener("/org.openoffice.Office.Writer/Cursor/Option"));
+    return xListener;
+}
+}
+
+bool SwViewOption::IsIgnoreProtectedArea()
+{
+    static comphelper::ConfigurationListenerProperty<bool> gIgnoreProtectedArea(getWCOptionListener(), "IgnoreProtectedArea");
+    return gIgnoreProtectedArea.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
