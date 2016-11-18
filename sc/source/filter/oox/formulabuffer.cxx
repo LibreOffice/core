@@ -10,11 +10,6 @@
 #include "formulabuffer.hxx"
 #include "formulaparser.hxx"
 #include <externallinkbuffer.hxx>
-#include <com/sun/star/sheet/XFormulaTokens.hpp>
-#include <com/sun/star/sheet/XArrayFormulaTokens.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/table/XCell2.hpp>
 #include "formulacell.hxx"
 #include "document.hxx"
 #include "documentimport.hxx"

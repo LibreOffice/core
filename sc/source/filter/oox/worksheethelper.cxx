@@ -25,14 +25,11 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XFormulaTokens.hpp>
-#include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XMultiFormulaTokens.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 #include <com/sun/star/sheet/XSheetCondition2.hpp>
@@ -40,7 +37,6 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <com/sun/star/text/XText.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <oox/core/filterbase.hxx>

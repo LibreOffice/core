@@ -24,7 +24,6 @@
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
-#include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>

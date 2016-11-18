@@ -88,14 +88,13 @@ void XMLTableShapeImportHelper::finishShape(
         if (!pAnnotationContext)
         {
             ScDrawObjData aAnchor;
-            aAnchor.maStart = ScAddress(aStartCell.Column, aStartCell.Row, aStartCell.Sheet);
+            aAnchor.maStart = aStartCell;
             awt::Point aStartPoint(rShape->getPosition());
             aAnchor.maStartOffset = Point(aStartPoint.X, aStartPoint.Y);
 
             sal_Int32 nEndX(-1);
             sal_Int32 nEndY(-1);
             sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-            table::CellAddress aEndCell;
             std::unique_ptr<OUString> xRangeList;
             sal_Int16 nLayerID(-1);
             for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -112,8 +111,7 @@ void XMLTableShapeImportHelper::finishShape(
                     if (IsXMLToken(aLocalName, XML_END_CELL_ADDRESS))
                     {
                         sal_Int32 nOffset(0);
-                        ScRangeStringConverter::GetAddressFromString(aEndCell, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset);
-                        aAnchor.maEnd = ScAddress(aEndCell.Column, aEndCell.Row, aEndCell.Sheet);
+                        ScRangeStringConverter::GetAddressFromString(aAnchor.maEnd, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset);
                     }
                     else if (IsXMLToken(aLocalName, XML_END_X))
                     {
