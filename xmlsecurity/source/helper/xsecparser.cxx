@@ -34,6 +34,7 @@ XSecParser::XSecParser(XSecController* pXSecController,
     , m_bInX509Certificate(false)
     , m_bInCertDigest(false)
     , m_bInEncapsulatedX509Certificate(false)
+    , m_bInSigningTime(false)
     , m_bInDigestValue(false)
     , m_bInSignatureValue(false)
     , m_bInDate(false)
@@ -198,6 +199,11 @@ void SAL_CALL XSecParser::startElement(
             m_ouEncapsulatedX509Certificate.clear();
             m_bInEncapsulatedX509Certificate = true;
         }
+        else if (aName == "xd:SigningTime" || aName == "xades:SigningTime")
+        {
+            m_ouDate.clear();
+            m_bInSigningTime = true;
+        }
         else if ( aName == "SignatureProperty" )
         {
             if (!ouIdAttr.isEmpty())
@@ -207,8 +213,8 @@ void SAL_CALL XSecParser::startElement(
         }
         else if (aName == "dc:date")
         {
-            m_ouDate.clear();
-            m_bInDate = true;
+            if (m_ouDate.isEmpty())
+                m_bInDate = true;
         }
         else if (aName == "dc:description")
         {
@@ -292,10 +298,18 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             m_pXSecController->addEncapsulatedX509Certificate( m_ouEncapsulatedX509Certificate );
             m_bInEncapsulatedX509Certificate = false;
         }
-        else if (aName == "dc:date")
+        else if (aName == "xd:SigningTime" || aName == "xades:SigningTime")
         {
             m_pXSecController->setDate( m_ouDate );
-            m_bInDate = false;
+            m_bInSigningTime = false;
+        }
+        else if (aName == "dc:date")
+        {
+            if (m_bInDate)
+            {
+                m_pXSecController->setDate( m_ouDate );
+                m_bInDate = false;
+            }
         }
         else if (aName == "dc:description")
         {
@@ -361,6 +375,10 @@ void SAL_CALL XSecParser::characters( const OUString& aChars )
     else if (m_bInEncapsulatedX509Certificate)
     {
         m_ouEncapsulatedX509Certificate += aChars;
+    }
+    else if (m_bInSigningTime)
+    {
+        m_ouDate += aChars;
     }
 
     if (m_xNextHandler.is())

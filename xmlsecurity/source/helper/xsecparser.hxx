@@ -73,6 +73,7 @@ private:
     bool m_bInX509Certificate;
     bool m_bInCertDigest;
     bool m_bInEncapsulatedX509Certificate;
+    bool m_bInSigningTime;
     bool m_bInDigestValue;
     bool m_bInSignatureValue;
     bool m_bInDate;
