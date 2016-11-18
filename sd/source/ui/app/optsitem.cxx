@@ -304,9 +304,8 @@ SfxPoolItem* SdOptionsLayoutItem::Clone( SfxItemPool* ) const
 
 bool SdOptionsLayoutItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    const bool bSameType = SfxPoolItem::operator==( rAttr );
-    DBG_ASSERT( bSameType, "SdOptionsLayoutItem::operator==(), different pool item type!" );
-    return bSameType && ( maOptionsLayout == static_cast< const SdOptionsLayoutItem& >( rAttr ).maOptionsLayout );
+    assert(SfxPoolItem::operator==(rAttr));
+    return maOptionsLayout == static_cast<const SdOptionsLayoutItem&>(rAttr).maOptionsLayout;
 }
 
 void SdOptionsLayoutItem::SetOptions( SdOptions* pOpts ) const
@@ -393,9 +392,8 @@ SfxPoolItem* SdOptionsContentsItem::Clone( SfxItemPool* ) const
 
 bool SdOptionsContentsItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    const bool bSameType = SfxPoolItem::operator==(rAttr);
-    DBG_ASSERT( bSameType, "SdOptionsContentsItem::operator==(), different pool item type!" );
-    return bSameType && ( maOptionsContents == static_cast<const SdOptionsContentsItem&>( rAttr ).maOptionsContents );
+    assert(SfxPoolItem::operator==(rAttr));
+    return maOptionsContents == static_cast<const SdOptionsContentsItem&>(rAttr).maOptionsContents;
 }
 
 /*************************************************************************
@@ -703,9 +701,8 @@ SfxPoolItem* SdOptionsMiscItem::Clone( SfxItemPool* ) const
 
 bool SdOptionsMiscItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    const bool bSameType = SfxPoolItem::operator==(rAttr);
-    DBG_ASSERT( bSameType, "SdOptionsMiscItem::operator==(), different pool item type!" );
-    return bSameType && ( maOptionsMisc == static_cast< const SdOptionsMiscItem& >(rAttr).maOptionsMisc );
+    assert(SfxPoolItem::operator==(rAttr));
+    return maOptionsMisc == static_cast<const SdOptionsMiscItem&>(rAttr).maOptionsMisc;
 }
 
 void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
@@ -889,9 +886,8 @@ SfxPoolItem* SdOptionsSnapItem::Clone( SfxItemPool* ) const
 
 bool SdOptionsSnapItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    const bool bSameType = SfxPoolItem::operator==(rAttr);
-    DBG_ASSERT( bSameType, "SdOptionsSnapItem::operator==(), different pool item type!" );
-    return bSameType && ( maOptionsSnap == static_cast< const SdOptionsSnapItem& >(rAttr).maOptionsSnap );
+    assert(SfxPoolItem::operator==(rAttr));
+    return maOptionsSnap == static_cast<const SdOptionsSnapItem&>(rAttr).maOptionsSnap;
 }
 
 void SdOptionsSnapItem::SetOptions( SdOptions* pOpts ) const
@@ -1343,9 +1339,8 @@ SfxPoolItem* SdOptionsPrintItem::Clone( SfxItemPool* ) const
 
 bool SdOptionsPrintItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    const bool bSameType = SfxPoolItem::operator==(rAttr);
-    DBG_ASSERT( bSameType, "SdOptionsPrintItem::operator==(), different pool item type!" );
-    return bSameType && ( maOptionsPrint == static_cast< const SdOptionsPrintItem& >( rAttr ).maOptionsPrint );
+    assert(SfxPoolItem::operator==(rAttr));
+    return maOptionsPrint == static_cast<const SdOptionsPrintItem&>(rAttr).maOptionsPrint;
 }
 
 void SdOptionsPrintItem::SetOptions( SdOptions* pOpts ) const
