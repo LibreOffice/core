@@ -130,7 +130,7 @@ private:
 
     OUString    aString;
     vcl::Font   aTextFont;
-    ScEditEngineDefaulter*  pEditEngine;            // only created when needed
+    std::unique_ptr<ScEditEngineDefaulter> mpEditEngine; // only created when needed
     std::unique_ptr<EditView> mpEditView;
     AccTextDataVector maAccTextDatas;   // #i105267# text datas may be cloned, remember all copies
     bool        bIsRTL;

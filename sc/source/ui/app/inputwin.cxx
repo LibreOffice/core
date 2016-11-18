@@ -1044,13 +1044,13 @@ void ScTextWnd::Resize()
         mpEditView->SetOutputArea( aOutputArea );
 
         // Don't leave an empty area at the bottom if we can move the text down.
-        long nMaxVisAreaTop = pEditEngine->GetTextHeight() - aOutputArea.GetHeight();
+        long nMaxVisAreaTop = mpEditEngine->GetTextHeight() - aOutputArea.GetHeight();
         if (mpEditView->GetVisArea().Top() > nMaxVisAreaTop)
         {
             mpEditView->Scroll(0, mpEditView->GetVisArea().Top() - nMaxVisAreaTop);
         }
 
-        pEditEngine->SetPaperSize( PixelToLogic( Size( aOutputSize.Width(), 10000 ) ) );
+        mpEditEngine->SetPaperSize( PixelToLogic( Size( aOutputSize.Width(), 10000 ) ) );
     }
 
     SetScrollBarRange();
@@ -1092,7 +1092,7 @@ void ScTextWnd::StartEditEngine()
     if ( pObjSh && pObjSh->IsInModalMode() )
         return;
 
-    if ( !mpEditView || !pEditEngine )
+    if ( !mpEditView || !mpEditEngine )
     {
         InitEditEngine();
     }
@@ -1165,37 +1165,37 @@ static void lcl_ModifyRTLVisArea( EditView* pEditView )
 
 void ScTextWnd::InitEditEngine()
 {
-    ScFieldEditEngine* pNew;
+    std::unique_ptr<ScFieldEditEngine> pNew;
     ScDocShell* pDocSh = nullptr;
     if ( mpViewShell )
     {
         pDocSh = mpViewShell->GetViewData().GetDocShell();
         ScDocument* pDoc = mpViewShell->GetViewData().GetDocument();
-        pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
+        pNew = o3tl::make_unique<ScFieldEditEngine>(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
     }
     else
-        pNew = new ScFieldEditEngine(nullptr, EditEngine::CreatePool(), nullptr, true);
+        pNew = o3tl::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
     pNew->SetExecuteURL( false );
-    pEditEngine = pNew;
+    mpEditEngine = std::move(pNew);
 
     Size barSize=GetSizePixel();
-    pEditEngine->SetUpdateMode( false );
-    pEditEngine->SetPaperSize( PixelToLogic(Size(barSize.Width(),10000)) );
-    pEditEngine->SetWordDelimiters(
-                    ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
-    pEditEngine->SetReplaceLeadingSingleQuotationMark( false );
+    mpEditEngine->SetUpdateMode( false );
+    mpEditEngine->SetPaperSize( PixelToLogic(Size(barSize.Width(),10000)) );
+    mpEditEngine->SetWordDelimiters(
+                    ScEditUtil::ModifyDelimiters( mpEditEngine->GetWordDelimiters() ) );
+    mpEditEngine->SetReplaceLeadingSingleQuotationMark( false );
 
     UpdateAutoCorrFlag();
 
     {
-        SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
+        SfxItemSet* pSet = new SfxItemSet( mpEditEngine->GetEmptyItemSet() );
         EditEngine::SetFontInfoInItemSet( *pSet, aTextFont );
         lcl_ExtendEditFontAttribs( *pSet );
         // turn off script spacing to match DrawText output
         pSet->Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
         if ( bIsRTL )
             lcl_ModifyRTLDefaults( *pSet );
-        pEditEngine->SetDefaults( pSet );
+        mpEditEngine->SetDefaults( pSet );
     }
 
     // If the Cell contains URLFields, they need to be taken over into the entry row,
@@ -1203,32 +1203,32 @@ void ScTextWnd::InitEditEngine()
     bool bFilled = false;
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
     if ( pHdl ) //! Test if it's the right InputHdl?
-        bFilled = pHdl->GetTextAndFields( *pEditEngine );
+        bFilled = pHdl->GetTextAndFields( *mpEditEngine );
 
-    pEditEngine->SetUpdateMode( true );
+    mpEditEngine->SetUpdateMode( true );
 
     // aString is the truth ...
-    if (bFilled && pEditEngine->GetText() == aString)
+    if (bFilled && mpEditEngine->GetText() == aString)
         Invalidate(); // Repaint for (filled) Field
     else
-        pEditEngine->SetText(aString); // At least the right text then
+        mpEditEngine->SetText(aString); // At least the right text then
 
-    mpEditView = o3tl::make_unique<EditView>(pEditEngine, this);
+    mpEditView = o3tl::make_unique<EditView>(mpEditEngine.get(), this);
     mpEditView->SetInsertMode(bIsInsertMode);
 
     // Text from Clipboard is taken over as ASCII in a single row
     EVControlBits n = mpEditView->GetControlWord();
     mpEditView->SetControlWord( n | EVControlBits::SINGLELINEPASTE );
 
-    pEditEngine->InsertView( mpEditView.get(), EE_APPEND );
+    mpEditEngine->InsertView( mpEditView.get(), EE_APPEND );
 
     Resize();
 
     if ( bIsRTL )
         lcl_ModifyRTLVisArea( mpEditView.get() );
 
-    pEditEngine->SetModifyHdl(LINK(this, ScTextWnd, ModifyHdl));
-    pEditEngine->SetNotifyHdl(LINK(this, ScTextWnd, NotifyHdl));
+    mpEditEngine->SetModifyHdl(LINK(this, ScTextWnd, ModifyHdl));
+    mpEditEngine->SetNotifyHdl(LINK(this, ScTextWnd, NotifyHdl));
 
     if (!maAccTextDatas.empty())
         maAccTextDatas.back()->StartEdit();
@@ -1247,7 +1247,7 @@ void ScTextWnd::InitEditEngine()
 ScTextWnd::ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh)
     :   ScTextWndBase(pParent, WinBits(WB_HIDE | WB_BORDER)),
         DragSourceHelper(this),
-        pEditEngine  (nullptr),
+        mpEditEngine  (nullptr),
         mpEditView    (nullptr),
         bIsInsertMode(true),
         bFormulaMode (false),
@@ -1305,8 +1305,7 @@ void ScTextWnd::dispose()
         maAccTextDatas.back()->Dispose();
     }
     mpEditView.reset();
-    delete pEditEngine;
-    pEditEngine = nullptr;
+    mpEditEngine.reset();
 
     DragSourceHelper::dispose();
     ScTextWndBase::dispose();
@@ -1468,8 +1467,8 @@ void ScTextWnd::LoseFocus()
 OUString ScTextWnd::GetText() const
 {
     //  Override to get the text via the testtool
-    if ( pEditEngine )
-        return pEditEngine->GetText();
+    if ( mpEditEngine )
+        return mpEditEngine->GetText();
     else
         return GetTextString();
 }
@@ -1485,9 +1484,9 @@ void ScTextWnd::SetFormulaMode( bool bSet )
 
 void ScTextWnd::UpdateAutoCorrFlag()
 {
-    if ( pEditEngine )
+    if ( mpEditEngine )
     {
-        EEControlBits nControl = pEditEngine->GetControlWord();
+        EEControlBits nControl = mpEditEngine->GetControlWord();
         EEControlBits nOld = nControl;
         if ( bFormulaMode )
             nControl &= ~EEControlBits::AUTOCORRECT; // No AutoCorrect in Formulas
@@ -1495,7 +1494,7 @@ void ScTextWnd::UpdateAutoCorrFlag()
             nControl |= EEControlBits::AUTOCORRECT; // Else do enable it
 
         if ( nControl != nOld )
-            pEditEngine->SetControlWord( nControl );
+            mpEditEngine->SetControlWord( nControl );
     }
 }
 
@@ -1527,10 +1526,10 @@ IMPL_LINK_NOARG(ScTextWnd, ModifyHdl, LinkParamNone*, void)
 
 void ScTextWnd::StopEditEngine( bool bAll )
 {
-    if (!pEditEngine)
+    if (!mpEditEngine)
         return;
 
-    pEditEngine->SetNotifyHdl(Link<EENotify&, void>());
+    mpEditEngine->SetNotifyHdl(Link<EENotify&, void>());
 
     if (mpEditView)
     {
@@ -1541,12 +1540,12 @@ void ScTextWnd::StopEditEngine( bool bAll )
 
         if (!bAll)
             pScMod->InputSelection( mpEditView.get() );
-        aString = pEditEngine->GetText();
+        aString = mpEditEngine->GetText();
         bIsInsertMode = mpEditView->IsInsertMode();
         bool bSelection = mpEditView->HasSelection();
-        pEditEngine->SetModifyHdl(Link<LinkParamNone*,void>());
+        mpEditEngine->SetModifyHdl(Link<LinkParamNone*,void>());
         mpEditView.reset();
-        DELETEZ(pEditEngine);
+        mpEditEngine.reset();
 
         if ( pScMod->IsEditMode() && !bAll )
             pScMod->SetInputMode(SC_INPUT_TABLE);
@@ -1593,7 +1592,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
         bInputMode = true;
 
         // Find position of the change, only paint the rest
-        if (!pEditEngine)
+        if (!mpEditEngine)
         {
             bool bPaintAll;
             if ( bIsRTL )
@@ -1650,7 +1649,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
         }
         else
         {
-            pEditEngine->SetText(rNewString);
+            mpEditEngine->SetText(rNewString);
         }
 
         aString = rNewString;
@@ -1679,32 +1678,32 @@ void ScTextWnd::MakeDialogEditView()
 {
     if ( mpEditView ) return;
 
-    ScFieldEditEngine* pNew;
+    std::unique_ptr<ScFieldEditEngine> pNew;
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
     {
         ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
-        pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
+        pNew = o3tl::make_unique<ScFieldEditEngine>(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
     }
     else
-        pNew = new ScFieldEditEngine(nullptr, EditEngine::CreatePool(), nullptr, true);
+        pNew = o3tl::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
     pNew->SetExecuteURL( false );
-    pEditEngine = pNew;
+    mpEditEngine = std::move(pNew);
 
-    pEditEngine->SetUpdateMode( false );
-    pEditEngine->SetWordDelimiters( pEditEngine->GetWordDelimiters() + "=" );
-    pEditEngine->SetPaperSize( Size( bIsRTL ? USHRT_MAX : THESIZE, 300 ) );
+    mpEditEngine->SetUpdateMode( false );
+    mpEditEngine->SetWordDelimiters( mpEditEngine->GetWordDelimiters() + "=" );
+    mpEditEngine->SetPaperSize( Size( bIsRTL ? USHRT_MAX : THESIZE, 300 ) );
 
-    SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
+    SfxItemSet* pSet = new SfxItemSet( mpEditEngine->GetEmptyItemSet() );
     EditEngine::SetFontInfoInItemSet( *pSet, aTextFont );
     lcl_ExtendEditFontAttribs( *pSet );
     if ( bIsRTL )
         lcl_ModifyRTLDefaults( *pSet );
-    pEditEngine->SetDefaults( pSet );
-    pEditEngine->SetUpdateMode( true );
+    mpEditEngine->SetDefaults( pSet );
+    mpEditEngine->SetUpdateMode( true );
 
-    mpEditView = o3tl::make_unique<EditView>(pEditEngine, this);
-    pEditEngine->InsertView( mpEditView.get(), EE_APPEND );
+    mpEditView = o3tl::make_unique<EditView>(mpEditEngine.get(), this);
+    mpEditEngine->InsertView( mpEditView.get(), EE_APPEND );
 
     Resize();
 
