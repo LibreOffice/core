@@ -234,14 +234,16 @@ namespace
             const SwPosition& rMarkStart = pMark->GetMarkStart();
             const SwPosition& rMarkEnd = pMark->GetMarkEnd();
             // only include marks that are in the range and not touching both start and end
-            // - not for annotation marks.
+            // - not for annotation or checkbox marks.
             const bool bIsNotOnBoundary =
                 pMark->IsExpanded()
                 ? (rMarkStart != rStt || rMarkEnd != rEnd)  // rMarkStart != rMarkEnd
                 : (rMarkStart != rStt && rMarkEnd != rEnd); // rMarkStart == rMarkEnd
+            const IDocumentMarkAccess::MarkType aMarkType = IDocumentMarkAccess::GetType(*pMark);
             if ( rMarkStart >= rStt && rMarkEnd <= rEnd
                  && ( bIsNotOnBoundary
-                      || IDocumentMarkAccess::GetType( *pMark ) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK ) )
+                      || aMarkType == IDocumentMarkAccess::MarkType::ANNOTATIONMARK
+                      || aMarkType == IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK ) )
             {
                 vMarksToCopy.push_back(pMark);
             }
