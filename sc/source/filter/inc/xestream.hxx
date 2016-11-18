@@ -260,7 +260,7 @@ public:
     static OString ToOString( const OUString& s );
     static OString ToOString( const ScfUInt16Vec& rBuffer );
     static OStringBuffer& ToOString( OStringBuffer& s, const ScAddress& rRange );
-    static OString ToOString( const ScRange& rRange );
+    static OString ToOString( const ScRange& rRange, bool bFullAddressNotation = false );
     static OString ToOString( const ScRangeList& rRangeList );
     static OStringBuffer& ToOString( OStringBuffer& s, const XclAddress& rAddress );
     static OString ToOString( const XclExpString& s );
