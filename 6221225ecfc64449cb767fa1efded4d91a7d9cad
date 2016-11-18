@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_9777bfd3",
+        "filename": "sw/source/uibase/inc/tbltoolbox.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-11-18T07:45:45Z",
+      "side": 1,
+      "message": "Please read the /TEMPLATE.SOURCECODE.HEADER file, and make sure you don\u0027t blindly copy\u0026paste the Apache notice, only keep it if it\u0027s indeed necessary.",
+      "revId": "6221225ecfc64449cb767fa1efded4d91a7d9cad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
