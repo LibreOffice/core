@@ -258,6 +258,7 @@ Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int
 {
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
 
+    Boundary result;
     result.startPos = icuBI->aBreakIterator->following(nStartPos);
     if( result.startPos >= Text.getLength() || result.startPos == BreakIterator::DONE )
         result.endPos = result.startPos;
@@ -280,6 +281,7 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
 {
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
 
+    Boundary result;
     result.startPos = icuBI->aBreakIterator->preceding(nStartPos);
     if( result.startPos < 0 || result.startPos == BreakIterator::DONE)
         result.endPos = result.startPos;
@@ -303,6 +305,7 @@ Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, 
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
     sal_Int32 len = Text.getLength();
 
+    Boundary result;
     if(icuBI->aBreakIterator->isBoundary(nPos)) {
         result.startPos = result.endPos = nPos;
         if((bDirection || nPos == 0) && nPos < len) //forward
