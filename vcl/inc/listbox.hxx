@@ -513,7 +513,6 @@ private:
     Image           maImage;
 
     Rectangle       maFocusRect;
-    Size            maUserItemSize;
 
     Link<void*,void> maMBDownHdl;
     Link<UserDrawEvent*, void> maUserDrawHdl;
@@ -545,8 +544,6 @@ public:
 
     void            SetMBDownHdl( const Link<void*,void>& rLink ) { maMBDownHdl = rLink; }
     void            SetUserDrawHdl( const Link<UserDrawEvent*, void>& rLink ) { maUserDrawHdl = rLink; }
-
-    void            SetUserItemSize( const Size& rSz )  { maUserItemSize = rSz; }
 
     void            EnableUserDraw( bool bUserDraw )    { mbUserDrawEnabled = bUserDraw; }
     bool            IsUserDrawEnabled() const           { return mbUserDrawEnabled; }

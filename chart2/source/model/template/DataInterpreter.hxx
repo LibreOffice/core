@@ -35,9 +35,6 @@ public:
     explicit DataInterpreter( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~DataInterpreter() override;
 
-    const css::uno::Reference< css::uno::XComponentContext >&
-        GetComponentContext() const { return m_xContext;}
-
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()
             throw( css::uno::RuntimeException, std::exception ) override;
