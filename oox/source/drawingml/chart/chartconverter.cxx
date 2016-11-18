@@ -126,6 +126,30 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
     const Reference< XDataProvider >& rxDataProvider, const DataSequenceModel& rDataSeq,
     const OUString& rRole )
 {
+    // HACK: find the base cell from maFormula if any. We *should* use the formula
+    // parser here but we lack context to load it and it seems only available in
+    // 'sheet' context.
+    sal_Int32 baseRow = 0;
+    if ( !rDataSeq.maFormula.isEmpty() )
+    {
+        // (well-formed) formula looks like 'Sheet1!$A$4:$A$16' so look locate
+        // the text between the 2nd '$' and the following ':' or end of string
+        // and cast it as int and ignore the rest.
+        sal_Int32 start = rDataSeq.maFormula.indexOf('$');
+        start = rDataSeq.maFormula.indexOf('$', start + 1);
+
+        if (start > -1)
+        {
+            OUString nrToParse = rDataSeq.maFormula.copy(start + 1);
+            baseRow = nrToParse.toInt32() - 1;
+        }
+
+        if (baseRow < 0)
+        {
+            baseRow = 0;
+        }
+    }
+
     Reference< XDataSequence > xDataSeq;
     if( rxDataProvider.is() )
     {
@@ -133,9 +157,9 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
         if( !rDataSeq.maData.empty() )
         {
             // create a single-row array from constant source data
-            Matrix< Any > aMatrix( rDataSeq.mnPointCount, 1 );
+            Matrix< Any > aMatrix( rDataSeq.mnPointCount + baseRow, 1 );
             for( DataSequenceModel::AnyMap::const_iterator aDIt = rDataSeq.maData.begin(), aDEnd = rDataSeq.maData.end(); aDIt != aDEnd; ++aDIt )
-                *aMatrix.at(aDIt->first, 0) = aDIt->second;
+                *aMatrix.at(aDIt->first + baseRow, 0) = aDIt->second;
 
             aRangeRep = lclGenerateApiArray( aMatrix );
         }
