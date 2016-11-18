@@ -26,6 +26,7 @@ extern "C" { using Fn = SwAbstractDialogFactory * (*)(); }
 class SwDialogsTest : public ScreenshotTest
 {
 private:
+    css::uno::Reference<css::lang::XComponent> component_;
     osl::Module libSwui_;
 
     /// helper method to populate KnownDialogs, called in setUp(). Needs to be
@@ -61,6 +62,9 @@ SwDialogsTest::~SwDialogsTest()
 void SwDialogsTest::setUp()
 {
     ScreenshotTest::setUp();
+    // Make sure the sw library's global pSwResMgr is initialized:
+    component_ = loadFromDesktop(
+        "private:factory/swriter", "com.sun.star.text.TextDocument");
     // Make sure the swui library's global pSwResMgr is initialized
     // (alternatively to dynamically loading the library, SwCreateDialogFactory
     // could be declared in an include file and this CppunitTest link against
