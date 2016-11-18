@@ -159,6 +159,8 @@ private:
     void exportAllSeries(const css::uno::Reference<css::chart2::XChartType>& xChartType, bool& rPrimaryAxes);
     void exportSeries(const css::uno::Reference< css::chart2::XChartType >& xChartType,
             css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& rSeriesSeq, bool& rPrimaryAxes);
+
+    void exportVaryColors(const css::uno::Reference<css::chart2::XChartType>& xChartType);
     void exportCandleStickSeries(
         const css::uno::Sequence<
             css::uno::Reference<

@@ -1541,10 +1541,7 @@ void ChartExport::exportBarChart( const Reference< chart2::XChartType >& xChartT
 
     exportGrouping( true );
 
-    const char* varyColors = "0";
-    pFS->singleElement( FSNS( XML_c, XML_varyColors ),
-            XML_val, varyColors,
-            FSEND );
+    exportVaryColors(xChartType);
 
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
@@ -1617,10 +1614,7 @@ void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xCha
     pFS->startElement( FSNS( XML_c, XML_bubbleChart ),
             FSEND );
 
-    const char* varyColors = "0";
-    pFS->singleElement( FSNS( XML_c, XML_varyColors ),
-            XML_val, varyColors,
-            FSEND );
+    exportVaryColors(xChartType);
 
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
@@ -1639,6 +1633,8 @@ void ChartExport::exportDoughnutChart( const Reference< chart2::XChartType >& xC
     FSHelperPtr pFS = GetFS();
     pFS->startElement( FSNS( XML_c, XML_doughnutChart ),
             FSEND );
+
+    exportVaryColors(xChartType);
 
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
@@ -1712,9 +1708,9 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
         pFS->startElement( FSNS( XML_c, nTypeId ),
                 FSEND );
 
+        exportVaryColors(xChartType);
+
         exportGrouping( );
-        pFS->singleElement(FSNS(XML_c, XML_varyColors),
-                XML_val, "0", FSEND);
         // TODO: show marker symbol in series?
         bool bPrimaryAxes = true;
         exportSeries(xChartType, *itr, bPrimaryAxes);
@@ -1755,11 +1751,8 @@ void ChartExport::exportPieChart( const Reference< chart2::XChartType >& xChartT
         nTypeId = XML_pie3DChart;
     pFS->startElement( FSNS( XML_c, nTypeId ),
             FSEND );
-    // TODO: varyColors
-    const char* varyColors = "1";
-    pFS->singleElement( FSNS( XML_c, XML_varyColors ),
-            XML_val, varyColors,
-            FSEND );
+
+    exportVaryColors(xChartType);
 
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
@@ -1789,6 +1782,8 @@ void ChartExport::exportRadarChart( const Reference< chart2::XChartType >& xChar
     pFS->singleElement( FSNS( XML_c, XML_radarStyle ),
             XML_val, radarStyle,
             FSEND );
+
+    exportVaryColors(xChartType);
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
     exportAxesId(bPrimaryAxes);
@@ -1825,10 +1820,7 @@ void ChartExport::exportScatterChart( const Reference< chart2::XChartType >& xCh
                 XML_val, scatterStyle,
                 FSEND );
 
-        pFS->singleElement( FSNS( XML_c, XML_varyColors ),
-                XML_val, "0",
-                FSEND );
-
+        exportVaryColors(xChartType);
         // FIXME: should export xVal and yVal
         bool bPrimaryAxes = true;
         exportSeries(xChartType, *itr, bPrimaryAxes);
@@ -1942,6 +1934,7 @@ void ChartExport::exportSurfaceChart( const Reference< chart2::XChartType >& xCh
         nTypeId = XML_surface3DChart;
     pFS->startElement( FSNS( XML_c, nTypeId ),
             FSEND );
+    exportVaryColors(xChartType);
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
     exportAxesId(bPrimaryAxes);
@@ -1958,6 +1951,48 @@ void ChartExport::exportAllSeries(const Reference<chart2::XChartType>& xChartTyp
     // export dataseries for current chart-type
     Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
     exportSeries(xChartType, aSeriesSeq, rPrimaryAxes);
+}
+
+namespace {
+
+Reference<chart2::XDataSeries> getPrimaryDataSeries(const Reference<chart2::XChartType>& xChartType)
+{
+    Reference< chart2::XDataSeriesContainer > xDSCnt(xChartType, uno::UNO_QUERY_THROW);
+
+    // export dataseries for current chart-type
+    Sequence< Reference< chart2::XDataSeries > > aSeriesSeq(xDSCnt->getDataSeries());
+    for (sal_Int32 nSeriesIdx=0; nSeriesIdx < aSeriesSeq.getLength(); ++nSeriesIdx)
+    {
+        Reference<chart2::XDataSeries> xSource(aSeriesSeq[nSeriesIdx], uno::UNO_QUERY);
+        if (xSource.is())
+            return xSource;
+    }
+
+    return Reference<chart2::XDataSeries>();
+}
+
+}
+
+void ChartExport::exportVaryColors(const Reference<chart2::XChartType>& xChartType)
+{
+    FSHelperPtr pFS = GetFS();
+    try
+    {
+        Reference<chart2::XDataSeries> xDataSeries = getPrimaryDataSeries(xChartType);
+        Reference<beans::XPropertySet> xDataSeriesProps(xDataSeries, uno::UNO_QUERY_THROW);
+        Any aAnyVaryColors = xDataSeriesProps->getPropertyValue("VaryColorsByPoint");
+        bool bVaryColors = false;
+        aAnyVaryColors >>= bVaryColors;
+        pFS->singleElement(FSNS(XML_c, XML_varyColors),
+                XML_val, bVaryColors ? "1": "0",
+                FSEND);
+    }
+    catch (...)
+    {
+        pFS->singleElement(FSNS(XML_c, XML_varyColors),
+                XML_val, "0",
+                FSEND);
+    }
 }
 
 void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
@@ -2009,6 +2044,7 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                 // xLabelSeq contain those.  Otherwise both are empty
                 {
                     FSHelperPtr pFS = GetFS();
+
                     pFS->startElement( FSNS( XML_c, XML_ser ),
                         FSEND );
 
