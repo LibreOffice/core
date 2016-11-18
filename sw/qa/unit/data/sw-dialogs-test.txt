@@ -42,6 +42,11 @@
 # modules/swriter/ui/footnotepage.ui
 # modules/swriter/ui/outlinenumberingpage.ui
 # modules/swriter/ui/picturepage.ui <- problems under Linux
+#
+# Problems under ASan/UBSan, SwEnvPreview needs SwEnvDlg as parent:
+# modules/swriter/ui/envaddresspage.ui
+# modules/swriter/ui/envformatpage.ui
+# modules/swriter/ui/envprinterpage.ui
 
 modules/swriter/ui/abstractdialog.ui
 modules/swriter/ui/addentrydialog.ui
@@ -80,10 +85,7 @@ modules/swriter/ui/dropdownfielddialog.ui
 modules/swriter/ui/editcategories.ui
 modules/swriter/ui/editfielddialog.ui
 modules/swriter/ui/editsectiondialog.ui
-modules/swriter/ui/envaddresspage.ui
 modules/swriter/ui/envdialog.ui
-modules/swriter/ui/envformatpage.ui
-modules/swriter/ui/envprinterpage.ui
 modules/swriter/ui/exchangedatabases.ui
 modules/swriter/ui/fielddialog.ui
 modules/swriter/ui/findentrydialog.ui
