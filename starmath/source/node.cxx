@@ -2447,7 +2447,11 @@ void SmMathSymbolNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 void SmMathSymbolNode::CreateTextFromNode(OUString &rText)
 {
     OUString sStr;
-    MathType::LookupChar(GetToken().cMathChar, sStr, 3);
+    sal_Unicode cChar = GetToken().cMathChar;
+    if (cChar == MS_INT && GetScaleMode() == SCALE_HEIGHT)
+        sStr = "intd ";
+    else
+        MathType::LookupChar(cChar, sStr, 3);
     rText += sStr;
 }
 
