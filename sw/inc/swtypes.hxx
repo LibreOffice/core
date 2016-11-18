@@ -154,7 +154,9 @@ enum RndStdIds
     RND_DRAW_OBJECT     // A draw-Object! For the SwDoc-interface only!
 };
 
-extern ResMgr* pSwResMgr;           // Is in swapp0.cxx.
+extern ResMgr* pSwResMgr;
+    // defined in sw/source/uibase/app/swmodule.cxx for the sw library and in
+    // sw/source/ui/dialog/swdialmgr.cxx for the swui library
 #define SW_RES(i)       ResId(i,*pSwResMgr)
 #define SW_RESSTR(i)    SW_RES(i).toString()
 
