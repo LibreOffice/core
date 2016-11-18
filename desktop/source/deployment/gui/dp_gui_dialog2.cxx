@@ -81,8 +81,6 @@ using namespace ::com::sun::star::system;
 
 namespace dp_gui {
 
-#define TOP_OFFSET           5
-
 #define USER_PACKAGE_MANAGER    "user"
 #define SHARED_PACKAGE_MANAGER  "shared"
 #define BUNDLED_PACKAGE_MANAGER "bundled"
@@ -116,18 +114,10 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 {
     bool            m_bInterfaceLocked;
 
-    VclPtr<PushButton>     m_pEnableBtn;
-
     VclPtr<ExtMgrDialog>   m_pParent;
 
-    void            SetButtonPos( const Rectangle& rRect );
     void            SetButtonStatus( const TEntry_Impl& rEntry );
     MENU_COMMAND    ShowPopupMenu( const Point &rPos, const long nPos );
-
-
-    DECL_LINK( ScrollHdl, ScrollBar*, void );
-
-    DECL_LINK( HandleEnableBtn, Button*, void );
 
 public:
     explicit ExtBoxWithBtns_Impl(vcl::Window* pParent);
@@ -147,7 +137,6 @@ public:
 ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(vcl::Window* pParent)
     : ExtensionBox_Impl(pParent)
     , m_bInterfaceLocked(false)
-    , m_pEnableBtn(nullptr)
     , m_pParent(nullptr)
 {
 }
@@ -158,22 +147,7 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
 
     m_pParent = pParentDialog;
 
-    m_pEnableBtn = VclPtr<PushButton>::Create( this, WB_TABSTOP );
-
     SetHelpId( HID_EXTENSION_MANAGER_LISTBOX );
-    m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
-
-    m_pEnableBtn->SetClickHdl( LINK( this, ExtBoxWithBtns_Impl, HandleEnableBtn ) );
-
-    m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
-
-    Size aSize = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
-                               MapMode( MapUnit::MapAppFont ) );
-    m_pEnableBtn->SetSizePixel( aSize );
-
-    SetExtraSize( aSize.Height() + 2 * TOP_OFFSET );
-
-    SetScrollHdl( LINK( this, ExtBoxWithBtns_Impl, ScrollHdl ) );
 }
 
 VCL_BUILDER_DECL_FACTORY(ExtBoxWithBtns)
@@ -189,7 +163,6 @@ ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 
 void ExtBoxWithBtns_Impl::dispose()
 {
-    m_pEnableBtn.disposeAndClear();
     m_pParent.clear();
     ExtensionBox_Impl::dispose();
 }
@@ -207,14 +180,10 @@ void ExtBoxWithBtns_Impl::RecalcAll()
     {
         m_pParent->enableOptionsButton( false );
         m_pParent->enableRemoveButton( false );
-        m_pEnableBtn->Disable();
-        m_pEnableBtn->Hide();
+        m_pParent->enableEnableButton( false );
     }
 
     ExtensionBox_Impl::RecalcAll();
-
-    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
-        SetButtonPos( GetEntryRect( nActive ) );
 }
 
 
@@ -227,17 +196,6 @@ void ExtBoxWithBtns_Impl::selectEntry( const long nPos )
     ExtensionBox_Impl::selectEntry( nPos );
 }
 
-
-void ExtBoxWithBtns_Impl::SetButtonPos( const Rectangle& rRect )
-{
-    Size  aBtnSize( m_pEnableBtn->GetSizePixel() );
-    Point aBtnPos( rRect.Left() + ICON_OFFSET,
-                   rRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
-
-    m_pEnableBtn->SetPosPixel( aBtnPos );
-}
-
-
 void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
 {
     bool bShowOptionBtn = true;
@@ -245,26 +203,22 @@ void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
     rEntry->m_bHasButtons = false;
     if ( ( rEntry->m_eState == REGISTERED ) || ( rEntry->m_eState == NOT_AVAILABLE ) )
     {
-        m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
-        m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
+        m_pParent->enableButtontoEnable( false );
     }
     else
     {
-        m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
-        m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
+        m_pParent->enableButtontoEnable( true );
         bShowOptionBtn = false;
     }
 
     if ( ( !rEntry->m_bUser || ( rEntry->m_eState == NOT_AVAILABLE ) || rEntry->m_bMissingDeps )
          && !rEntry->m_bMissingLic )
     {
-        m_pEnableBtn->Disable();
-        m_pEnableBtn->Hide();
+        m_pParent->enableEnableButton( false );
     }
     else
     {
-        m_pEnableBtn->Enable( !rEntry->m_bLocked );
-        m_pEnableBtn->Show();
+        m_pParent->enableEnableButton( !rEntry->m_bLocked );
         rEntry->m_bHasButtons = true;
     }
 
@@ -371,39 +325,9 @@ void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
     }
     else
     {
-        m_pEnableBtn->Enable( false );
+        m_pParent->enableEnableButton( false );
         m_pParent->enableOptionsButton( false );
         m_pParent->enableRemoveButton( false );
-    }
-}
-
-
-IMPL_LINK( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar, void )
-{
-    long nDelta = pScrBar->GetDelta();
-
-    Point aNewEnPt( m_pEnableBtn->GetPosPixel() - Point( 0, nDelta ) );
-
-    DoScroll( nDelta );
-
-    m_pEnableBtn->SetPosPixel( aNewEnPt );
-}
-
-IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleEnableBtn, Button*, void)
-{
-    const sal_Int32 nActive = getSelIndex();
-
-    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
-    {
-        TEntry_Impl pEntry = GetEntryData( nActive );
-
-        if ( pEntry->m_bMissingLic )
-            m_pParent->acceptLicense( pEntry->m_xPackage );
-        else
-        {
-            const bool bEnable( pEntry->m_eState != REGISTERED );
-            m_pParent->enablePackage( pEntry->m_xPackage, bEnable );
-        }
     }
 }
 
@@ -555,6 +479,7 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     get(m_pOptionsBtn, "optionsbtn");
     get(m_pAddBtn, "addbtn");
     get(m_pRemoveBtn, "removebtn");
+    get(m_pEnableBtn, "enablebtn");
     get(m_pUpdateBtn, "updatebtn");
     get(m_pCloseBtn, "close");
     get(m_pBundledCbx, "bundled");
@@ -569,10 +494,12 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
 
     m_pOptionsBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_OPTIONS );
     m_pRemoveBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_REMOVE );
+    m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
 
     m_pOptionsBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleOptionsBtn ) );
     m_pAddBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleAddBtn ) );
     m_pRemoveBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleRemoveBtn ) );
+    m_pEnableBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleEnableBtn ) );
     m_pCloseBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCloseBtn ) );
 
     m_pCancelBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCancelBtn ) );
@@ -611,6 +538,7 @@ void ExtMgrDialog::dispose()
     m_pOptionsBtn.clear();
     m_pAddBtn.clear();
     m_pRemoveBtn.clear();
+    m_pEnableBtn.clear();
     m_pUpdateBtn.clear();
     m_pCloseBtn.clear();
     m_pBundledCbx.clear();
@@ -819,9 +747,28 @@ void ExtMgrDialog::enableOptionsButton( bool bEnable )
     m_pOptionsBtn->Enable( bEnable );
 }
 
-void ExtMgrDialog::enableRemoveButton ( bool bEnable )
+void ExtMgrDialog::enableRemoveButton( bool bEnable )
 {
     m_pRemoveBtn->Enable( bEnable );
+}
+
+void ExtMgrDialog::enableEnableButton( bool bEnable )
+{
+    m_pEnableBtn->Enable( bEnable );
+}
+
+void ExtMgrDialog::enableButtontoEnable( bool bEnable )
+{
+    if (bEnable)
+    {
+        m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
+        m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
+    }
+    else
+    {
+        m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
+        m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
+    }
 }
 
 IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn, Button*, void)
@@ -963,6 +910,24 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleRemoveBtn, Button*, void)
     {
         TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nActive );
         removePackage( pEntry->m_xPackage );
+    }
+}
+
+IMPL_LINK_NOARG(ExtMgrDialog, HandleEnableBtn, Button*, void)
+{
+    const sal_Int32 nActive = m_pExtensionBox->getSelIndex();
+
+    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
+    {
+        TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nActive );
+
+        if ( pEntry->m_bMissingLic )
+            acceptLicense( pEntry->m_xPackage );
+        else
+        {
+            const bool bEnable( pEntry->m_eState != REGISTERED );
+            enablePackage( pEntry->m_xPackage, bEnable );
+        }
     }
 }
 

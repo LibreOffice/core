@@ -105,6 +105,7 @@ class ExtMgrDialog : public ModelessDialog,
     VclPtr<PushButton>          m_pOptionsBtn;
     VclPtr<PushButton>          m_pAddBtn;
     VclPtr<PushButton>          m_pRemoveBtn;
+    VclPtr<PushButton>          m_pEnableBtn;
     VclPtr<PushButton>          m_pUpdateBtn;
     VclPtr<CloseButton>         m_pCloseBtn;
     VclPtr<CheckBox>            m_pBundledCbx;
@@ -137,6 +138,7 @@ class ExtMgrDialog : public ModelessDialog,
     DECL_LINK( HandleOptionsBtn, Button*, void );
     DECL_LINK( HandleAddBtn, Button*, void );
     DECL_LINK( HandleRemoveBtn, Button*, void );
+    DECL_LINK( HandleEnableBtn, Button*, void );
     DECL_LINK( HandleUpdateBtn, Button*, void );
     DECL_LINK( HandleCancelBtn, Button*, void );
     DECL_LINK( HandleCloseBtn, Button*, void );
@@ -178,6 +180,12 @@ public:
 
     void enableOptionsButton( bool bEnable );
     void enableRemoveButton( bool bEnable );
+    void enableEnableButton( bool bEnable );
+    /*
+     * Transform the button to "Enable", or to "Disable"
+     * based on the value of bEnable.
+     */
+    void enableButtontoEnable( bool bEnable );
 };
 
 
