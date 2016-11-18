@@ -1353,7 +1353,10 @@ const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, con
         {
             const RecodeTable& r = aStarSymbolRecodeTable[i];
             if( aOrgName.equalsAscii( r.pOrgName ) )
-                { pCvt = &r.aCvt; break; }
+            {
+                pCvt = &r.aCvt;
+                break;
+            }
         }
     }
     //It's plausible that it's better to implement this
@@ -1366,7 +1369,10 @@ const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, con
         {
             const RecodeTable& r = aAppleSymbolRecodeTable[i];
             if( aOrgName.equalsAscii( r.pOrgName ) )
-                { pCvt = &r.aCvt; break; }
+            {
+                pCvt = &r.aCvt;
+                break;
+            }
         }
     }
     else if( aMapName == "starbats" )
