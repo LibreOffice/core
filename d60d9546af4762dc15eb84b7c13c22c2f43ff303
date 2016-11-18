@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_bacbc271",
+        "filename": "sc/source/filter/xml/XMLTableShapeImportHelper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-18T17:31:53Z",
+      "side": 1,
+      "message": "This does not belong into a commit mainly removing header includes.",
+      "revId": "d60d9546af4762dc15eb84b7c13c22c2f43ff303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_7ab92ae9",
+        "filename": "sc/source/filter/xml/XMLTableShapeImportHelper.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-18T17:31:53Z",
+      "side": 1,
+      "message": "Please don\u0027t mix different things in the same commit.\n\nHeader removal and changing code are completely unrelated.",
+      "revId": "d60d9546af4762dc15eb84b7c13c22c2f43ff303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_9ace0682",
+        "filename": "sc/source/filter/xml/xmlcelli.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-18T17:31:53Z",
+      "side": 1,
+      "message": "Again mixing of two things.",
+      "revId": "d60d9546af4762dc15eb84b7c13c22c2f43ff303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
