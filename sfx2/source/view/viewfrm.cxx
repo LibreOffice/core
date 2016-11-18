@@ -154,6 +154,55 @@ void SfxViewFrame::InitInterface_Impl()
 #endif
 }
 
+/// Asks the user if editing a read-only document is really wanted.
+class SfxEditDocumentDialog : public MessageDialog
+{
+private:
+    VclPtr<PushButton> m_pEditDocument;
+    VclPtr<PushButton> m_pCancel;
+
+public:
+    SfxEditDocumentDialog(vcl::Window* pParent);
+    ~SfxEditDocumentDialog() override;
+    void dispose() override;
+};
+
+SfxEditDocumentDialog::SfxEditDocumentDialog(vcl::Window* pParent)
+    : MessageDialog(pParent, "EditDocumentDialog", "sfx/ui/editdocumentdialog.ui")
+{
+    get(m_pEditDocument, "edit");
+    get(m_pCancel, "cancel");
+}
+
+SfxEditDocumentDialog::~SfxEditDocumentDialog()
+{
+    disposeOnce();
+}
+
+void SfxEditDocumentDialog::dispose()
+{
+    m_pEditDocument.clear();
+    m_pCancel.clear();
+    MessageDialog::dispose();
+}
+
+/// Is this read-only object shell opened via .uno:SignPDF?
+static bool IsSignPDF(SfxObjectShellRef xObjSh)
+{
+    if (!xObjSh.Is())
+        return false;
+
+    SfxMedium* pMedium = xObjSh->GetMedium();
+    if (pMedium && !pMedium->IsOriginallyReadOnly())
+    {
+        std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
+        if (pFilter && pFilter->GetName() == "draw_pdf_import")
+            return true;
+    }
+
+    return false;
+}
+
 static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const OUString& aPath, const std::shared_ptr<const SfxFilter>& pFilter, sal_uInt32 nPasswordHash, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     // TODO/LATER: In future the info should replace the direct hash completely
@@ -1149,13 +1198,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 }
                 else
                 {
-                    bool bSignPDF = false;
-                    SfxMedium* pMedium = m_xObjSh->GetMedium();
-                    if (pMedium && !pMedium->IsOriginallyReadOnly())
-                    {
-                        std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
-                        bSignPDF = pFilter && pFilter->GetName() == "draw_pdf_import";
-                    }
+                    bool bSignPDF = IsSignPDF(m_xObjSh);
 
                     SfxInfoBarWindow* pInfoBar = AppendInfoBar("readonly", SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT));
                     if (pInfoBar)
@@ -1267,6 +1310,12 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 IMPL_LINK_NOARG(SfxViewFrame, SwitchReadOnlyHandler, Button*, void)
 {
+    if (m_xObjSh.Is() && IsSignPDF(m_xObjSh))
+    {
+        ScopedVclPtrInstance<SfxEditDocumentDialog> pDialog(nullptr);
+        if (pDialog->Execute() != RET_OK)
+            return;
+    }
     GetDispatcher()->Execute(SID_EDITDOC);
 }
 
