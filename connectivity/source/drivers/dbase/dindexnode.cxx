@@ -56,7 +56,6 @@ ONDXKey::ONDXKey(const OUString& aStr, sal_uInt32 nRec)
     }
 }
 
-
 ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
     : ONDXKey_BASE(css::sdbc::DataType::DOUBLE)
      ,nRecord(nRec)
@@ -64,23 +63,20 @@ ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
 {
 }
 
-
 // index page
-
 ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
-           :bNoDelete(1)
-           ,nRefCount(0)
-           ,nPagePos(nPos)
-           ,bModified(false)
-           ,nCount(0)
-           ,aParent(pParent)
-           ,rIndex(rInd)
-           ,ppNodes(nullptr)
+    : nRefCount(0)
+    , bNoDelete(1)
+    , nPagePos(nPos)
+    , bModified(false)
+    , nCount(0)
+    , aParent(pParent)
+    , rIndex(rInd)
+    , ppNodes(nullptr)
 {
     sal_uInt16 nT = rIndex.getHeader().db_maxkeys;
     ppNodes = new ONDXNode[nT];
 }
-
 
 ONDXPage::~ONDXPage()
 {

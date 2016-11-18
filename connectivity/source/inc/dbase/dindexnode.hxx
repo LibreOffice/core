@@ -115,9 +115,11 @@ namespace connectivity
             friend  SvStream& WriteONDXPage(SvStream &rStream, const ONDXPage&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPage&);
 
+            // work around a clang 3.5 optimization bug: if the bNoDelete is *first*
+            // it mis-compiles "if (--nRefCount == 0)" and never deletes any object
+            unsigned int    nRefCount : 31;
             // the only reason this is not bool is because MSVC cannot handle mixed type bitfields
             unsigned int    bNoDelete : 1;
-            unsigned int    nRefCount : 31;
             sal_uInt32      nPagePos;       // Position in the index file
             bool            bModified : 1;
             sal_uInt16      nCount;
