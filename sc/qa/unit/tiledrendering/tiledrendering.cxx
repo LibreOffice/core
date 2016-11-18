@@ -69,6 +69,7 @@ public:
     void testAutoSum();
     void testHideColRow();
     void testInvalidateOnCopyPasteCells();
+    void testInvalidateOnInserRowCol();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -89,6 +90,7 @@ public:
     CPPUNIT_TEST(testAutoSum);
     CPPUNIT_TEST(testHideColRow);
     CPPUNIT_TEST(testInvalidateOnCopyPasteCells);
+    CPPUNIT_TEST(testInvalidateOnInserRowCol);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -939,6 +941,7 @@ void ScTiledRenderingTest::testHideColRow()
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
+
 void ScTiledRenderingTest::testInvalidateOnCopyPasteCells()
 {
     // Load a document
@@ -950,7 +953,6 @@ void ScTiledRenderingTest::testInvalidateOnCopyPasteCells()
     ViewCallback aView;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
 
-    aView.m_bInvalidateTiles = false;
     uno::Sequence<beans::PropertyValue> aArgs;
     // select and copy cells
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
@@ -981,6 +983,52 @@ void ScTiledRenderingTest::testInvalidateOnCopyPasteCells()
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
+
+void ScTiledRenderingTest::testInvalidateOnInserRowCol()
+{
+    // Load a document
+    comphelper::LibreOfficeKit::setActive();
+    ScModelObj* pModelObj = createDoc("small.ods");
+    CPPUNIT_ASSERT(pModelObj);
+
+    // view
+    ViewCallback aView;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
+
+    uno::Sequence<beans::PropertyValue> aArgs;
+    // move downward
+    for (int i = 0; i < 200; ++i)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    }
+    Scheduler::ProcessEventsToIdle();
+
+    // insert row
+    aView.m_bInvalidateTiles = false;
+    comphelper::dispatchCommand(".uno:InsertRows", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
+
+    // move on the right
+    for (int i = 0; i < 200; ++i)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT);
+    }
+    Scheduler::ProcessEventsToIdle();
+
+    // insert column
+    aView.m_bInvalidateTiles = false;
+    comphelper::dispatchCommand(".uno:InsertColumns", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTiledRenderingTest);
