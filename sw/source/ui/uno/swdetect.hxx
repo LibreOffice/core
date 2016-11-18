@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
 
-class SfxMedium;
+#include <sfx2/sfxuno.hxx>
 
 namespace com
 {
@@ -46,9 +46,9 @@ namespace com
     }
 }
 
-#include <sfx2/sfxuno.hxx>
 class SfxMedium;
 class SfxFilter;
+class SfxMedium;
 
 class SwFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {

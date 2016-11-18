@@ -63,6 +63,10 @@
 
 #include "lwppiece.hxx"
 #include "lwpbasetype.hxx"
+#include "lwpmargins.hxx"
+#include "lwpborderstuff.hxx"
+#include "lwpshadow.hxx"
+
 
 class LwpRotor
 {
@@ -127,8 +131,6 @@ private:
     virtual ~LwpLayoutScale() override;
 };
 
-#include "lwpmargins.hxx"
-
 class LwpLayoutMargins : public LwpVirtualPiece
 {
 public:
@@ -146,7 +148,6 @@ private:
     virtual ~LwpLayoutMargins() override;
 };
 
-#include "lwpborderstuff.hxx"
 class LwpLayoutBorder : public LwpVirtualPiece
 {
 public:
@@ -304,8 +305,6 @@ protected:
 private:
     virtual ~LwpLayoutJoins() override;
 };
-
-#include "lwpshadow.hxx"
 
 class LwpLayoutShadow : public LwpVirtualPiece
 {

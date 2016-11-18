@@ -59,6 +59,8 @@
 
 #include <cstdlib>
 #include <map>
+#include <stdlib.h>
+
 
 namespace {
     void lcl_ResetIndentAttrs(SwDoc *pDoc, const SwPaM &rPam, sal_uInt16 marker )
@@ -83,8 +85,6 @@ namespace {
         }
     }
 }
-
-#include <stdlib.h>
 
 inline sal_uInt8 GetUpperLvlChg( sal_uInt8 nCurLvl, sal_uInt8 nLevel, sal_uInt16 nMask )
 {

@@ -35,6 +35,7 @@
 #include <svx/svdpool.hxx>
 
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "unosrch.hxx"
 
@@ -285,7 +286,6 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-#include <cppuhelper/implbase.hxx>
 
 class SdPageLinkTargets : public ::cppu::WeakImplHelper< css::container::XNameAccess,
                                                   css::lang::XServiceInfo >

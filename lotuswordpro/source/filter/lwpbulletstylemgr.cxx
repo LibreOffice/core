@@ -70,6 +70,7 @@
 #include "xfilter/xfstylemanager.hxx"
 #include "xfilter/xflist.hxx"
 #include "lwpglobalmgr.hxx"
+#include "xfilter/xflistitem.hxx"
 
 LwpBulletStyleMgr::LwpBulletStyleMgr()
     : m_pFoundry(nullptr)
@@ -242,7 +243,6 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
 
 }
 
-#include "xfilter/xflistitem.hxx"
 //Create nested XFList and XFItems and then add it to XFContentContainer(pCont)
 //Return the inner XFItem created.
 XFContentContainer* LwpBulletStyleMgr::AddBulletList(

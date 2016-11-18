@@ -23,11 +23,10 @@
 #include <svx/svxdllapi.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-class PushButton;
-namespace svt { class OFileURLControl; }
-
 #include <memory>
 
+class PushButton;
+namespace svt { class OFileURLControl; }
 
 namespace svx
 {

@@ -24,6 +24,7 @@
 #include <services.h>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
+#include <typelib/typedescription.h>
 
 using namespace ::com::sun::star::uno;
 
@@ -46,7 +47,6 @@ DEFINE_INIT_SERVICE(
     }
 )
 
-#include <typelib/typedescription.h>
 
 void flatten_struct_members(
     ::std::vector< Any > * vec, void const * data,

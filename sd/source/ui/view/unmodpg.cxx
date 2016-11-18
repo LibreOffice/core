@@ -20,6 +20,8 @@
 #include <svx/svdlayer.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svx/svdviter.hxx>
+#include <svx/svdview.hxx>
 
 #include "strings.hrc"
 #include "glob.hxx"
@@ -71,8 +73,6 @@ ModifyPageUndoAction::ModifyPageUndoAction(
     maComment = SD_RESSTR(STR_UNDO_MODIFY_PAGE);
 }
 
-#include <svx/svdviter.hxx>
-#include <svx/svdview.hxx>
 void ModifyPageUndoAction::Undo()
 {
     // invalidate Selection, there could be objects deleted in this UNDO

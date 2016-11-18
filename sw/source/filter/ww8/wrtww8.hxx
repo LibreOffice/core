@@ -35,6 +35,7 @@
 #include "writerhelper.hxx"
 #include "../inc/msfilter.hxx"
 #include <expfld.hxx>
+#include "WW8TableInfo.hxx"
 
 #include <vcl/graph.hxx>
 
@@ -124,8 +125,6 @@ class XEmbeddedObject;
 typedef std::map<const css::embed::XEmbeddedObject*, sal_Int32> WW8OleMap;
 struct WW8_PdAttrDesc;
 class SvxBrushItem;
-
-#include "WW8TableInfo.hxx"
 
 #define GRF_MAGIC_1 0x12    // 3 magic bytes for PicLocFc attribute
 #define GRF_MAGIC_2 0x34

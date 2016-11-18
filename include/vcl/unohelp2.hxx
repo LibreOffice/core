@@ -24,11 +24,11 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/dllapi.h>
 
 namespace com { namespace sun { namespace star { namespace datatransfer { namespace clipboard {
     class XClipboard;
 } } } } }
-#include <vcl/dllapi.h>
 
 namespace vcl { namespace unohelper {
 

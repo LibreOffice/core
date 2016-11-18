@@ -39,6 +39,14 @@
 #include <svtools/grfmgr.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
+#include <com/sun/star/uno/Reference.h>
+
+#include <rtl/ref.hxx>
+#include <editeng/svxfont.hxx>
+#include <editeng/eedata.hxx>
+#include <editeng/paragraphdata.hxx>
+#include <o3tl/typed_flags_set.hxx>
+
 
 #include <functional>
 #include <vector>
@@ -80,14 +88,6 @@ namespace svl
 {
     class IUndoManager;
 }
-
-#include <com/sun/star/uno/Reference.h>
-
-#include <rtl/ref.hxx>
-#include <editeng/svxfont.hxx>
-#include <editeng/eedata.hxx>
-#include <editeng/paragraphdata.hxx>
-#include <o3tl/typed_flags_set.hxx>
 
 class SvxFieldData;
 

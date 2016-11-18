@@ -21,6 +21,15 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
+#include <rtl/ustring.hxx>
+#include <svl/SfxBroadcaster.hxx>
+#include <tools/lineend.hxx>
+#include <tools/link.hxx>
+#include <tools/gen.hxx>
+#include <vcl/font.hxx>
+
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 class TextDoc;
 class TextView;
@@ -47,15 +56,6 @@ namespace svl
 
 class TextLine;
 class TETextPortion;
-#include <rtl/ustring.hxx>
-#include <svl/SfxBroadcaster.hxx>
-#include <tools/lineend.hxx>
-#include <tools/link.hxx>
-#include <tools/gen.hxx>
-#include <vcl/font.hxx>
-
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 
 struct TEIMEInfos;
 class SvtCTLOptions;

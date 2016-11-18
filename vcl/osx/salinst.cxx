@@ -64,6 +64,10 @@
 #include "apple_remote/RemoteControl.h"
 #include "postmac.h"
 
+extern "C" {
+#include <crt_externs.h>
+}
+
 using namespace std;
 using namespace ::com::sun::star;
 
@@ -249,10 +253,6 @@ void DeInitSalData()
     }
     delete pSalData;
     SetSalData( nullptr );
-}
-
-extern "C" {
-#include <crt_externs.h>
 }
 
 void InitSalMain()

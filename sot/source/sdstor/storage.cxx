@@ -35,6 +35,9 @@
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <ucbhelper/content.hxx>
 
 #include <memory>
 
@@ -277,9 +280,6 @@ bool SotStorageStream::SetProperty( const OUString& rName, const css::uno::Any& 
     , m_nVersion( SOFFICE_FILEFORMAT_CURRENT )
 
 #define ERASEMASK  ( StreamMode::TRUNC | StreamMode::WRITE | StreamMode::SHARE_DENYALL )
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <ucbhelper/content.hxx>
 
 SotStorage::SotStorage( const OUString & rName, StreamMode nMode )
     INIT_SotStorage()

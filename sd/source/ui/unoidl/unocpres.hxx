@@ -29,6 +29,12 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+
+#include "unomodel.hxx"
+#include "drawdoc.hxx"
+
 
 class SdXImpressDocument;
 class SdCustomShow;
@@ -90,12 +96,6 @@ public:
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception) override;
 };
-
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-
-#include "unomodel.hxx"
-#include "drawdoc.hxx"
 
 class List;
 

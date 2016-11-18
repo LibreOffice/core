@@ -32,6 +32,17 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
 
+#include <swtypes.hxx>
+#include <ndarr.hxx>
+#include <charfmt.hxx>
+#include <fmtcol.hxx>
+#include <frmfmt.hxx>
+#include <section.hxx>
+#include <fldbas.hxx>
+#include <tox.hxx>
+#include <numrule.hxx>
+#include <frmfmt.hxx>
+
 class SwRangeRedline;
 class SwExtraRedline;
 class SwUnoCursor;
@@ -44,19 +55,8 @@ namespace com { namespace sun { namespace star { namespace i18n {
     struct ForbiddenCharacters;    ///< comes from the I18N UNO interface
 }}}}
 
-#include <swtypes.hxx>
-#include <ndarr.hxx>
-#include <charfmt.hxx>
-#include <fmtcol.hxx>
-#include <frmfmt.hxx>
-#include <section.hxx>
-#include <fldbas.hxx>
-#include <tox.hxx>
-#include <numrule.hxx>
-#include <frmfmt.hxx>
 
-/** provides some methods for generic operations on lists that contain
-SwFormat* subclasses. */
+/** provides some methods for generic operations on lists that contain SwFormat* subclasses. */
 class SwFormatsBase
 {
 public:

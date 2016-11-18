@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/drawing/FlagSequence.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
@@ -1221,9 +1223,6 @@ basegfx::B2DPolyPolygon SvxShapePolyPolygon::GetPolygon() const throw()
         return basegfx::B2DPolyPolygon();
     }
 }
-
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include <com/sun/star/drawing/FlagSequence.hpp>
 
 SvxShapePolyPolygonBezier::SvxShapePolyPolygonBezier( SdrObject* pObj , drawing::PolygonKind eNew ) throw()
 :   SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_POLYPOLYGONBEZIER), getSvxMapProvider().GetPropertySet(SVXMAP_POLYPOLYGONBEZIER, SdrObject::GetGlobalDrawObjectItemPool()) )

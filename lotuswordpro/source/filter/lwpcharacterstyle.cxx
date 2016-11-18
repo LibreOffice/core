@@ -66,6 +66,9 @@
 #include "lwpfont.hxx"
 #include "lwpfoundry.hxx"
 #include "lwpcharborderoverride.hxx"
+#include "xfilter/xfparastyle.hxx"
+#include "xfilter/xffont.hxx"
+
 
 /*class LwpTextStyle*/
 LwpTextStyle::LwpTextStyle(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
@@ -157,9 +160,6 @@ void LwpTextStyle::ReadCommon()
     }
 
 }
-
-#include "xfilter/xfparastyle.hxx"
-#include "xfilter/xffont.hxx"
 
 void LwpTextStyle::RegisterStyle()
 {

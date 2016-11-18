@@ -34,6 +34,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <svtools/treelistentry.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <vector>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
@@ -81,8 +82,6 @@ struct CompatibilityItem
         m_bProtectForm          ( _bProtectForm),
         m_bIsDefault            ( _bIsDefault ) {}
 };
-
-#include <vector>
 
 struct SwCompatibilityOptPage_Impl
 {

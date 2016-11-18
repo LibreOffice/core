@@ -20,11 +20,6 @@
 #include "SpellDialogChildWindow.hxx"
 #include <svx/svxids.hrc>
 
-namespace sd{
-
-SFX_IMPL_CHILDWINDOW_WITHID(SpellDialogChildWindow, SID_SPELL_DIALOG)
-}
-
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"
@@ -33,6 +28,8 @@ SFX_IMPL_CHILDWINDOW_WITHID(SpellDialogChildWindow, SID_SPELL_DIALOG)
 #include "drawdoc.hxx"
 
 namespace sd {
+
+SFX_IMPL_CHILDWINDOW_WITHID(SpellDialogChildWindow, SID_SPELL_DIALOG)
 
 SpellDialogChildWindow::SpellDialogChildWindow (
     vcl::Window* _pParent,

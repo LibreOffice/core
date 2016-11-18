@@ -24,6 +24,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/itemprop.hxx>
 #include <svx/svxdllapi.h>
+#include <editeng/unoipset.hxx>
+
 
 class SvxItemPropertySet;
 class SfxItemPool;
@@ -97,8 +99,6 @@ const sal_Int16 OBJ_OLE2_APPLET = 100;
 const sal_Int16 OBJ_OLE2_PLUGIN = 101;
 
 #define E3D_INVENTOR_FLAG           (0x80000000)
-
-#include <editeng/unoipset.hxx>
 
 /**
  * class SvxPropertySetInfoPool

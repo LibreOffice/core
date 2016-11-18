@@ -20,15 +20,15 @@
 #ifndef INCLUDED_SVX_SVDGLUE_HXX
 #define INCLUDED_SVX_SVDGLUE_HXX
 
-namespace vcl { class Window; }
-class OutputDevice;
-class SvStream;
-class SdrObject;
-
 #include <tools/gen.hxx>
 #include <svx/svxdllapi.h>
 #include <vector>
 #include <o3tl/typed_flags_set.hxx>
+
+namespace vcl { class Window; }
+class OutputDevice;
+class SvStream;
+class SdrObject;
 
 
 enum class SdrEscapeDirection

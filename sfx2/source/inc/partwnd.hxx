@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_PARTWND_HXX
 #define INCLUDED_SFX2_SOURCE_INC_PARTWND_HXX
 
+#include <sfx2/childwin.hxx>
+#include <sfx2/dockwin.hxx>
+
+
 namespace com
 {
     namespace sun
@@ -32,9 +36,6 @@ namespace com
         }
     }
 }
-
-#include <sfx2/childwin.hxx>
-#include <sfx2/dockwin.hxx>
 
 // forward ---------------------------------------------------------------
 

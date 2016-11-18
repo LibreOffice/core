@@ -23,6 +23,7 @@
 #include "layfrm.hxx"
 #include <list>
 #include "frmfmt.hxx"
+#include <anchoredobject.hxx>
 
 class SwPageFrame;
 class SwFormatFrameSize;
@@ -36,7 +37,6 @@ class SwFlyDrawContact;
 class SwFormat;
 class SwViewShell;
 
-#include <anchoredobject.hxx>
 
 /** search an anchor for paragraph bound frames starting from pOldAnch
 

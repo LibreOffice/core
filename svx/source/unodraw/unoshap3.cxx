@@ -28,6 +28,7 @@
 #include <comphelper/serviceinfohelper.hxx>
 
 #include <svx/svdpool.hxx>
+#include <svx/svditer.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unopage.hxx>
 #include <editeng/unoprnms.hxx>
@@ -284,8 +285,6 @@ static void ConvertObjectToHomogenMatric( E3dObject* pObject, Any& rValue )
     rValue <<= aHomMat;
 }
 
-
-#include <svx/svditer.hxx>
 
 struct ImpRememberTransAndRect
 {

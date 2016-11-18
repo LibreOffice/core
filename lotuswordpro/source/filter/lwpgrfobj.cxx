@@ -68,6 +68,8 @@
 #include "bento.hxx"
 
 #include "lwpglobalmgr.hxx"
+#include "lwpframelayout.hxx"
+
 #include "xfilter/xfframe.hxx"
 #include "xfilter/xfimage.hxx"
 #include "xfilter/xfimagestyle.hxx"
@@ -230,8 +232,6 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
         XFConvertEquation(pCont);
     }
 }
-
-#include "lwpframelayout.hxx"
 
 /**
  * @descr   judge if the graphic format is what we can support: bmp, jpg, wmf, gif, tgf(tif). other format will be filtered to

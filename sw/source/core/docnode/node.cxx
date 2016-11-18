@@ -67,6 +67,7 @@
 #include "ndole.hxx"
 #include <memory>
 #include <swcrsr.hxx>
+#include <svl/itemiter.hxx>
 
 using namespace ::com::sun::star::i18n;
 
@@ -1453,8 +1454,6 @@ bool SwContentNode::SetAttr(const SfxPoolItem& rAttr )
     }
     return bRet;
 }
-
-#include <svl/itemiter.hxx>
 
 bool SwContentNode::SetAttr( const SfxItemSet& rSet )
 {

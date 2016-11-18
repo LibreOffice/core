@@ -84,6 +84,10 @@
 #include <svx/drawitem.hxx>
 #include <memory>
 
+#define SwFrameShell
+#include <sfx2/msg.hxx>
+#include "swslots.hxx"
+
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -101,10 +105,6 @@ static const SwFrameFormat* lcl_GetFrameFormatByName(SwWrtShell& rSh, const OUSt
     }
     return nullptr;
 }
-
-#define SwFrameShell
-#include <sfx2/msg.hxx>
-#include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell)
 

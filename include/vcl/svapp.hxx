@@ -41,6 +41,9 @@
 #include <vcl/metric.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/connection/XConnection.hpp>
+
 
 class BitmapEx;
 class AllSettings;
@@ -60,9 +63,6 @@ class ZoomEvent;
 class ScrollEvent;
 struct ImplSVEvent;
 struct ConvertData;
-
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/connection/XConnection.hpp>
 
 namespace com {
 namespace sun {

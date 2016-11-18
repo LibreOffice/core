@@ -22,7 +22,12 @@
 #include <svl/itemset.hxx>
 #include <tools/solar.h>
 #include <vcl/keycod.hxx>
+#include <tox.hxx>
 
+#include <SwNumberTreeTypes.hxx>
+#include <IDocumentMarkAccess.hxx>
+
+#include <memory>
 #include <vector>
 #include <set>
 
@@ -49,12 +54,6 @@ class SwFormatChain;
 class SwNode;
 class SwCharFormat;
 
-#include <tox.hxx>
-
-#include <SwNumberTreeTypes.hxx>
-#include <IDocumentMarkAccess.hxx>
-
-#include <memory>
 
 enum HISTORY_HINT {
     HSTRY_SETFMTHNT,

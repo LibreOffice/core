@@ -29,12 +29,13 @@
 
 #include "address.hxx"
 
+#include <memory>
+#include <unordered_map>
+
+
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
-
-#include <memory>
-#include <unordered_map>
 
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
