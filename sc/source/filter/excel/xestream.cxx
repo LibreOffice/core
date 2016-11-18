@@ -726,15 +726,18 @@ OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
         RTL_TEXTENCODING_UTF8);
 }
 
-OString XclXmlUtils::ToOString( const ScRange& rRange )
+OString XclXmlUtils::ToOString( const ScRange& rRange, bool bFullFormat )
 {
-    OUString sRange(rRange.Format(ScRefFlags::VALID, nullptr, ScAddress::Details( FormulaGrammar::CONV_XL_A1)));
+    OUString sRange(rRange.Format( ScRefFlags::VALID, nullptr,
+                                   ScAddress::Details( FormulaGrammar::CONV_XL_A1 ),
+                                   bFullFormat ) );
     return ToOString( sRange );
 }
 
 OString XclXmlUtils::ToOString( const ScRangeList& rRangeList )
 {
     OUString s;
+
     rRangeList.Format(s, ScRefFlags::VALID, nullptr, FormulaGrammar::CONV_XL_OOX, ' ');
     return ToOString( s );
 }

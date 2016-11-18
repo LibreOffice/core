@@ -542,8 +542,10 @@ public:
                                         const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
                                         const OUString* pErrRef = nullptr );
 
-    SC_DLLPUBLIC OUString Format(ScRefFlags nFlags = ScRefFlags::ZERO, const ScDocument* pDocument = nullptr,
-                                 const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
+    SC_DLLPUBLIC OUString Format( ScRefFlags nFlags = ScRefFlags::ZERO,
+                                  const ScDocument* pDocument = nullptr,
+                                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+                                  bool bFullFormat = false ) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
                          SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
