@@ -69,8 +69,6 @@
 #include "patattr.hxx"
 #include "tabprotection.hxx"
 
-#include <com/sun/star/sheet/XCellAddressable.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>

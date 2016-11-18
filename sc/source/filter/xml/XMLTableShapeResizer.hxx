@@ -21,8 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESHAPERESIZER_HXX
 
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <list>
 
 class ScXMLImport;

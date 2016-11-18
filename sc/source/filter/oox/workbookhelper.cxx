@@ -21,17 +21,13 @@
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
-#include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <osl/thread.h>

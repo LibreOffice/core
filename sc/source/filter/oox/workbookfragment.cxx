@@ -19,7 +19,6 @@
 
 #include "workbookfragment.hxx"
 
-#include <com/sun/star/table/CellAddress.hpp>
 #include <oox/core/filterbase.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
