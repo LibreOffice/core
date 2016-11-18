@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_5a20ee9b",
+        "filename": "sw/source/core/crsr/pam.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-18T10:36:19Z",
+      "side": 0,
+      "message": "if you\u0027re removing that line, you should remove the associated comment, too.",
+      "revId": "8aec9057a169acfda6f2d986af93edca54677fd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_7a25aaa9",
+        "filename": "sw/source/core/crsr/pam.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-18T10:36:19Z",
+      "side": 0,
+      "message": "ditto",
+      "revId": "8aec9057a169acfda6f2d986af93edca54677fd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
