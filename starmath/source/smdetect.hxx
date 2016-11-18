@@ -30,6 +30,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
+#include <sfx2/sfxuno.hxx>
+
 
 namespace com
 {
@@ -48,8 +50,6 @@ namespace com
         }
     }
 }
-
-#include <sfx2/sfxuno.hxx>
 
 class SmFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {

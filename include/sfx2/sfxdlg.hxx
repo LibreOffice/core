@@ -29,6 +29,7 @@
 
 #include <sot/exchange.hxx>
 #include <sfx2/lnkbase.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 
@@ -44,8 +45,6 @@ class SfxItemPool;
 class SvObjectServerList;
 class TransferableDataHelper;
 struct TransferableObjectDescriptor;
-
-#include <sfx2/tabdlg.hxx>
 
 namespace sfx2
 {

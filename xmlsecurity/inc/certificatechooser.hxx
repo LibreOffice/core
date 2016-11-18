@@ -25,6 +25,9 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <sigstruct.hxx>
+
 
 namespace com {
 namespace sun {
@@ -34,9 +37,6 @@ namespace security {
 namespace xml { namespace crypto {
     class XSecurityEnvironment; }}
 }}}
-
-#include <com/sun/star/uno/Sequence.hxx>
-#include <sigstruct.hxx>
 
 class HeaderBar;
 

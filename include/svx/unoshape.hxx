@@ -41,6 +41,9 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
+#include <com/sun/star/drawing/XConnectorShape.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <sal/types.h>
 #include <tools/weakbase.hxx>
 #include <svl/lstner.hxx>
@@ -52,6 +55,7 @@
 #include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <editeng/unotext.hxx>
 
 #include <svx/svdouno.hxx>
 
@@ -314,8 +318,6 @@ private:
     SVX_DLLPRIVATE void impl_construct();
 };
 
-#include <editeng/unotext.hxx>
-
 class SVX_DLLPUBLIC SvxShapeText : public SvxShape, public SvxUnoTextBase
 {
 protected:
@@ -437,7 +439,6 @@ public:
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
 };
-#include <com/sun/star/drawing/XConnectorShape.hpp>
 
 /***********************************************************************
 *                                                                      *
@@ -474,7 +475,6 @@ public:
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
 };
-#include <com/sun/star/drawing/XControlShape.hpp>
 
 /***********************************************************************
 *                                                                      *
@@ -567,8 +567,6 @@ public:
     void createLink( const OUString& aLinkURL );
 };
 
-
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 /***********************************************************************
 *                                                                      *

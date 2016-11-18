@@ -19,6 +19,7 @@
 #include <osl/detail/android-bootstrap.h>
 #include <rtl/strbuf.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/layout.hxx>
 
 #define LOGTAG "LibreOffice/androidinst"
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
@@ -203,8 +204,6 @@ void DestroySalInstance( SalInstance *pInst )
     pInst->ReleaseYieldMutex();
     delete pInst;
 }
-
-#include <vcl/layout.hxx>
 
 int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,
                                         const OUString& rMessage,

@@ -99,6 +99,9 @@
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <memory>
+#include <framework/sfxhelperfunctions.hxx>
+#include <sfx2/imagemgr.hxx>
+#include "fwkhelper.hxx"
 
 using namespace ::com::sun::star;
 
@@ -117,10 +120,6 @@ namespace
     class theApplicationMutex
         : public rtl::Static<osl::Mutex, theApplicationMutex> {};
 }
-
-#include <framework/sfxhelperfunctions.hxx>
-#include <sfx2/imagemgr.hxx>
-#include "fwkhelper.hxx"
 
 SfxApplication* SfxApplication::Get()
 {

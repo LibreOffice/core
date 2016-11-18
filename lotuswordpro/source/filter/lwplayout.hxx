@@ -83,6 +83,8 @@
 #include "xfilter/xfframe.hxx"
 #include "xfilter/xfbgimage.hxx"
 #include "lwpusewhen.hxx"
+#include "lwplaypiece.hxx"
+
 
 #define FIRST_LAYOUTPAGENO  0x0001
 #define LAST_LAYOUTPAGENO       0xffff
@@ -325,8 +327,6 @@ private:
     sal_uInt16 m_nGridType;
     LwpAtomHolder* m_pContentStyle;
 };
-
-#include "lwplaypiece.hxx"
 
 class LwpMiddleLayout : public LwpVirtualLayout
 {

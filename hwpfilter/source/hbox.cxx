@@ -30,6 +30,7 @@
 #include "htags.h"
 #include "drawdef.h"
 #include "hcode.h"
+#include "datecode.h"
 
 #include <rtl/character.hxx>
 
@@ -139,8 +140,6 @@ DateCode::DateCode()
     , key(0)
 {
 }
-
-#include "datecode.h"
 
 static const hchar kor_week[] =
 {

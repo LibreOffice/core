@@ -58,6 +58,8 @@
 #include "xfilter/xfstylemanager.hxx"
 #include "xfilter/xffontfactory.hxx"
 #include "xfilter/xftextstyle.hxx"
+#include "xfilter/xfdefs.hxx"
+#include "xfilter/xfcolor.hxx"
 
 void LwpFontAttrEntry::Read(LwpObjectStream *pStrm)
 {
@@ -71,7 +73,6 @@ void LwpFontAttrEntry::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 
-#include "xfilter/xfdefs.hxx"
 void LwpFontAttrEntry::Override( rtl::Reference<XFFont> const & pFont )
 {
     if (IsBoldOverridden())
@@ -293,7 +294,7 @@ void LwpFontNameEntry::Read(LwpObjectStream *pStrm)
     m_nAltFaceName = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 }
-#include "xfilter/xfcolor.hxx"
+
 void LwpFontNameEntry::Override(rtl::Reference<XFFont> const & pFont)
 {
     if (IsPointSizeOverridden())

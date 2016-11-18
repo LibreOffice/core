@@ -61,15 +61,6 @@
 
 #include "svids.hrc"
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
-using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
-using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-
 // The dialog should check whether LO also supports the protocol
 // provided by KIO, and KFileWidget::dirOperator() is only 4.3+ .
 // Moreover it's only in this somewhat internal KFileWidget class,
@@ -84,6 +75,16 @@ using namespace ::com::sun::star::uno;
 // helper functions
 
 #include <QtCore/QDebug>
+
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
+using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
+using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
 
 namespace
 {

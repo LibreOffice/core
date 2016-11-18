@@ -21,6 +21,8 @@
 #define INCLUDED_SD_INC_SDIOCMPT_HXX
 
 #include <tools/stream.hxx>
+#include "sddllapi.h"
+
 
 class old_SdrDownCompat
 {
@@ -40,8 +42,6 @@ public:
     void  OpenSubRecord();
     void  CloseSubRecord();
 };
-
-#include "sddllapi.h"
 
 #define SDIOCOMPAT_VERSIONDONTKNOW (sal_uInt16)0xffff
 

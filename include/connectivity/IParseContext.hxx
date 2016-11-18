@@ -19,11 +19,11 @@
 #ifndef INCLUDED_CONNECTIVITY_IPARSECONTEXT_HXX
 #define INCLUDED_CONNECTIVITY_IPARSECONTEXT_HXX
 
-namespace connectivity { class OSQLParseNode; }
-
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
+
+namespace connectivity { class OSQLParseNode; }
 
 namespace connectivity
 {

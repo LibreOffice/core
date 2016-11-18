@@ -18,10 +18,10 @@
  */
 
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/tuple/b3ituple.hxx>
 #include <rtl/instance.hxx>
 
 namespace { struct EmptyTuple : public rtl::Static<basegfx::B3DTuple, EmptyTuple> {}; }
-#include <basegfx/tuple/b3ituple.hxx>
 
 namespace basegfx
 {

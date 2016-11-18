@@ -63,6 +63,10 @@
 #include "lwpglobalmgr.hxx"
 #include "lwpstory.hxx"
 #include "xfilter/xfstylemanager.hxx"
+#include "lwppara.hxx"
+#include "lwpobjfactory.hxx"
+#include "lwppagelayout.hxx"
+
 
 LwpStory::LwpStory(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpContent(objHdr, pStrm)
@@ -87,9 +91,6 @@ void LwpStory::Read()
     m_FirstParaStyle.ReadIndexed(m_pObjStrm);
     m_pObjStrm->SkipExtra();
 }
-
-#include "lwppara.hxx"
-#include "lwpobjfactory.hxx"
 
 /**************************************************************************
  * @descr:   Convert all the contents in current story
@@ -148,7 +149,6 @@ void LwpStory::Parse(IXFStream* pOutputStream)
     m_pXFContainer = nullptr;
 }
 
-#include "lwppagelayout.hxx"
 /**************************************************************************
  * @descr:   Set current page layout. If pPageLayout is a mirror page layout,
              use odd child page layout as current page layout.

@@ -31,6 +31,10 @@
 #include <editeng/editstat.hxx>
 #include <svl/languageoptions.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
+#include <editeng/editdata.hxx>
+#include <com/sun/star/uno/Reference.h>
+#include <editeng/editengdllapi.h>
+
 
 class EditEngine;
 class ImpEditEngine;
@@ -54,10 +58,6 @@ class SfxStyleSheet;
 namespace vcl { class Font; }
 class FontList;
 class OutputDevice;
-
-#include <editeng/editdata.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <editeng/editengdllapi.h>
 
 namespace com {
 namespace sun {

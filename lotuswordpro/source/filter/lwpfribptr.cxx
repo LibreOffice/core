@@ -82,6 +82,7 @@
 #include "xfilter/xfchange.hxx"
 #include "lwpchangemgr.hxx"
 #include "lwpglobalmgr.hxx"
+#include "lwpdropcapmgr.hxx"
 
 LwpFribPtr::LwpFribPtr()
     : m_pFribs(nullptr),m_pXFPara(nullptr),m_pPara(nullptr)
@@ -142,7 +143,6 @@ void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
     }
 }
 
-#include "lwpdropcapmgr.hxx"
 void LwpFribPtr::XFConvert()
 {
     LwpFrib* pFrib = m_pFribs;

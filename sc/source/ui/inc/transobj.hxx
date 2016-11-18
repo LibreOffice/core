@@ -23,6 +23,8 @@
 #include <svtools/transfer.hxx>
 #include "global.hxx"
 #include "address.hxx"
+#include <sfx2/objsh.hxx>
+
 
 class ScDocShell;
 class ScMarkData;
@@ -34,8 +36,6 @@ namespace com { namespace sun { namespace star {
         class XSheetCellRanges;
     }
 }}}
-
-#include <sfx2/objsh.hxx>
 
 class ScTransferObj : public TransferableHelper
 {

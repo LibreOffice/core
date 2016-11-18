@@ -9,6 +9,9 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FRAMECONTROL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FRAMECONTROL_HXX
 
+#include <vcl/menubtn.hxx>
+
+
 class SwEditWin;
 class SwPageFrame;
 class SwFrame;
@@ -43,8 +46,6 @@ public:
     void ShowAll( bool bShow )         { mpIFace->ShowAll( bShow ); }
     bool Contains( const Point &rDocPt ) const { return mpIFace->Contains( rDocPt ); }
 };
-
-#include <vcl/menubtn.hxx>
 
 /** Class sharing some MenuButton code
   */

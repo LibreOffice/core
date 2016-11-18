@@ -28,6 +28,16 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
+#include <vcl/bitmapex.hxx>
+#include <vcl/region.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
+#include <tools/mapunit.hxx>
+#include <tools/fldunit.hxx>
+#include <tools/poly.hxx>
+
+
 namespace com { namespace sun { namespace star { namespace uno {
     class XInterface;
 }}}}
@@ -52,15 +62,6 @@ namespace com { namespace sun { namespace star { namespace awt {
     struct KeyEvent;
 }}}}
 
-
-#include <vcl/bitmapex.hxx>
-#include <vcl/region.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/vclptr.hxx>
-#include <vcl/window.hxx>
-#include <tools/mapunit.hxx>
-#include <tools/fldunit.hxx>
-#include <tools/poly.hxx>
 
 class OutputDevice;
 class MouseEvent;

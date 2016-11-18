@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/text/XTextRangeMover.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -497,8 +498,6 @@ public:
     virtual css::uno::Any SAL_CALL nextElement(  ) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 };
 
-
-#include <com/sun/star/text/XTextContent.hpp>
 
 class SvxUnoTextContent : public SvxUnoTextRangeBase,
                           public css::text::XTextContent,

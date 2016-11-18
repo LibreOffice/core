@@ -69,6 +69,9 @@
 #include "lwpsection.hxx"
 #include "lwpcharacterstyle.hxx"
 #include "lwpglobalmgr.hxx"
+#include "xfilter/xfstylemanager.hxx"
+#include "lwplayout.hxx"
+
 
 #include <osl/diagnose.h>
 
@@ -169,9 +172,6 @@ void LwpFoundry::ReadStyles(LwpObjectStream *pStrm)
     m_DftRighColumnStyle.ReadIndexed(pStrm);
 
 }
-
-#include "xfilter/xfstylemanager.hxx"
-#include "lwplayout.hxx"
 
 void LwpFoundry::RegisterAllLayouts()
 {

@@ -24,10 +24,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
-namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
-namespace com { namespace sun { namespace star { namespace text { class XTextRange; } } } }
-
 #include <vcl/window.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/toolbox.hxx>
@@ -43,6 +39,11 @@ namespace com { namespace sun { namespace star { namespace text { class XTextRan
 #include <unotools/moduleoptions.hxx>
 
 #include "srchdlg.hxx"
+
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
+namespace com { namespace sun { namespace star { namespace text { class XTextRange; } } } }
+
 
 // ContentListBox_Impl ---------------------------------------------------
 

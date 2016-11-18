@@ -65,6 +65,7 @@
 #include "lwpobj.hxx"
 #include "lwpsection.hxx"
 #include "lwpborderstuff.hxx"
+#include "lwptable.hxx"
 
 // Footnote types are built up from these numbers
 #define FN_MASK_ENDNOTE         0x80
@@ -147,7 +148,6 @@ private:
 /**
  * @brief VO_FOOTNOTETABLE object
 */
-#include "lwptable.hxx"
 class LwpFootnoteTable : public LwpTable
 {
 public:

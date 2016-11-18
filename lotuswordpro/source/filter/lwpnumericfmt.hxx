@@ -64,6 +64,7 @@
 #include "lwpatomholder.hxx"
 #include "lwptblcell.hxx"
 #include "lwpcolor.hxx"
+#include "lwppiece.hxx"
 
 //For converting to xml
 #include "xfilter/xfnumberstyle.hxx"
@@ -295,7 +296,6 @@ LwpNumericFormat::IsNegativeOverridden()
     return (cFlags & NF_OVER_NEGATIVE) != 0;
 }
 
-#include "lwppiece.hxx"
 class LwpLayoutNumerics : public LwpVirtualPiece
 {
 public:

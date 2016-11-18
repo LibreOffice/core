@@ -58,6 +58,8 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPAGELAYOUT_HXX
 
 #include "lwplayout.hxx"
+#include "xfilter/xfmasterpage.hxx"
+
 
 class LwpHeaderLayout;
 class LwpFooterLayout;
@@ -105,8 +107,6 @@ public:
     bool operator <(LwpPageLayout& Other);
     LwpPara* GetPagePosition();
 };
-
-#include "xfilter/xfmasterpage.hxx"
 
 class LwpHeaderLayout: public LwpPlacableLayout
 {

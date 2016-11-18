@@ -30,6 +30,10 @@
 #include <svx/dialogs.hrc>
 #include <svx/svdview.hxx>
 #include <svx/sdasitm.hxx>
+#include "svx/gallery.hxx"
+#include <svx/fmmodel.hxx>
+#include <svx/fmpage.hxx>
+#include <svl/itempool.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <sfx2/bindings.hxx>
 #include <editeng/eeitem.hxx>
@@ -309,11 +313,6 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
         break;
     }
 }
-
-#include "svx/gallery.hxx"
-#include <svx/fmmodel.hxx>
-#include <svx/fmpage.hxx>
-#include <svl/itempool.hxx>
 
 void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const OUString& rCustomShape )
 {

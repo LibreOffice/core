@@ -35,6 +35,9 @@
 #include <rtl/strbuf.hxx>
 #include <svx/svdview.hxx>
 #include <clonelist.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/scene3d.hxx>
+
 
 using namespace com::sun::star;
 
@@ -113,9 +116,6 @@ void SdrEditView::InsertNewLayer(const OUString& rName, sal_uInt16 nPos)
 
     mpModel->SetChanged();
 }
-
-#include <svx/svdogrp.hxx>
-#include <svx/scene3d.hxx>
 
 bool SdrEditView::ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const
 {

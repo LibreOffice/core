@@ -23,6 +23,7 @@
 #include <vcl/dialog.hxx>
 #include <unotools/securityoptions.hxx>
 #include <vcl/button.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace com {
 namespace sun {
@@ -30,9 +31,6 @@ namespace star {
 namespace security {
     class XCertificate; }
 }}}
-
-#include <com/sun/star/uno/Sequence.hxx>
-
 
 class MacroWarning : public ModalDialog
 {
