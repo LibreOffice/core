@@ -468,7 +468,6 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
         "DirectCursor/UseDirectCursor", // 0
         "DirectCursor/Insert",          // 1
         "Option/ProtectedArea",         // 2
-        "Option/IgnoreProtectedArea"    // 3
     };
     const int nCount = SAL_N_ELEMENTS(aPropNames);
     Sequence<OUString> aNames(nCount);
@@ -500,10 +499,9 @@ void SwCursorConfig::ImplCommit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] <<= rParent.IsShadowCursor(); break;//  "DirectCursor/UseDirectCursor",
-            case  1: pValues[nProp] <<= (sal_Int32)rParent.GetShdwCursorFillMode();   break;//  "DirectCursor/Insert",
-            case  2: pValues[nProp] <<= rParent.IsCursorInProtectedArea(); break;// "Option/ProtectedArea"
-            case  3: pValues[nProp] <<= rParent.IsIgnoreProtectedArea(); break; // "Option/IgnoreProtectedArea"
+            case  0: pValues[nProp] <<= rParent.IsShadowCursor();                   break; // "DirectCursor/UseDirectCursor",
+            case  1: pValues[nProp] <<= (sal_Int32)rParent.GetShdwCursorFillMode(); break; // "DirectCursor/Insert",
+            case  2: pValues[nProp] <<= rParent.IsCursorInProtectedArea();          break; // "Option/ProtectedArea"
         }
     }
     PutProperties(aNames, aValues);
@@ -530,10 +528,9 @@ void SwCursorConfig::Load()
                     pValues[nProp] >>= nSet;
                 switch(nProp)
                 {
-                    case  0: rParent.SetShadowCursor(bSet);         break;//  "DirectCursor/UseDirectCursor",
-                    case  1: rParent.SetShdwCursorFillMode((sal_uInt8)nSet); break;//  "DirectCursor/Insert",
-                    case  2: rParent.SetCursorInProtectedArea(bSet); break;// "Option/ProtectedArea"
-                    case  3: rParent.SetIgnoreProtectedArea(bSet); break; // "Option/IgnoreProtectedArea"
+                    case  0: rParent.SetShadowCursor(bSet);                  break; // "DirectCursor/UseDirectCursor",
+                    case  1: rParent.SetShdwCursorFillMode((sal_uInt8)nSet); break; // "DirectCursor/Insert",
+                    case  2: rParent.SetCursorInProtectedArea(bSet);         break; // "Option/ProtectedArea"
                 }
             }
         }

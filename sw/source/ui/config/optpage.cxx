@@ -1331,7 +1331,6 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage( vcl::Window* pParent,
 
     get(m_pCursorProtFrame, "crsrprotframe");
     get(m_pCursorInProtCB, "cursorinprot");
-    get(m_pIgnoreProtCB, "ignoreprot");
 
     get(m_pMathBaselineAlignmentCB, "mathbaseline");
 
@@ -1365,7 +1364,6 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage( vcl::Window* pParent,
 
         m_pCursorProtFrame->Hide();
         m_pCursorInProtCB->Hide();
-        m_pIgnoreProtCB->Hide();
     }
 }
 
@@ -1393,7 +1391,6 @@ void SwShdwCursorOptionsTabPage::dispose()
     m_pFillSpaceRB.clear();
     m_pCursorProtFrame.clear();
     m_pCursorInProtCB.clear();
-    m_pIgnoreProtCB.clear();
     m_pMathBaselineAlignmentCB.clear();
     SfxTabPage::dispose();
 }
@@ -1447,12 +1444,6 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
         bRet = true;
     }
 
-    if (m_pIgnoreProtCB->IsValueChangedFromSaved())
-    {
-        rSet->Put(SfxBoolItem(FN_PARAM_IGNORE_PROTECTED, m_pIgnoreProtCB->IsChecked()));
-        bRet = true;
-    }
-
     const SwDocDisplayItem* pOldAttr = static_cast<const SwDocDisplayItem*>(
                         GetOldItem(GetItemSet(), FN_PARAM_DOCDISP));
 
@@ -1502,10 +1493,6 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
     if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_CRSR_IN_PROTECTED, false, &pItem ))
         m_pCursorInProtCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
     m_pCursorInProtCB->SaveValue();
-
-    if (rSet->GetItemState(FN_PARAM_IGNORE_PROTECTED, false, &pItem) == SfxItemState::SET)
-        m_pIgnoreProtCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
-    m_pIgnoreProtCB->SaveValue();
 
     const SwDocDisplayItem* pDocDisplayAttr = nullptr;
 
