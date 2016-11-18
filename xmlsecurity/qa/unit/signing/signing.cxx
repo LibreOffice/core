@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
+
 #include <sal/config.h>
 
 #include <type_traits>
@@ -76,12 +78,14 @@ public:
     void testOOXMLRemove();
     /// Test removing all signatures from a document.
     void testOOXMLRemoveAll();
+#if HAVE_FEATURE_PDFIMPORT
     /// Test a typical PDF where the signature is good.
     void testPDFGood();
     /// Test a typical PDF where the signature is bad.
     void testPDFBad();
     /// Test a typical PDF which is not signed.
     void testPDFNo();
+#endif
     void test96097Calc();
     void test96097Doc();
 
@@ -96,9 +100,11 @@ public:
     CPPUNIT_TEST(testOOXMLAppend);
     CPPUNIT_TEST(testOOXMLRemove);
     CPPUNIT_TEST(testOOXMLRemoveAll);
+#if HAVE_FEATURE_PDFIMPORT
     CPPUNIT_TEST(testPDFGood);
     CPPUNIT_TEST(testPDFBad);
     CPPUNIT_TEST(testPDFNo);
+#endif
     CPPUNIT_TEST(test96097Calc);
     CPPUNIT_TEST(test96097Doc);
     CPPUNIT_TEST_SUITE_END();
@@ -399,6 +405,8 @@ void SigningTest::testOOXMLBroken()
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
+#if HAVE_FEATURE_PDFIMPORT
+
 void SigningTest::testPDFGood()
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good.pdf");
@@ -435,6 +443,8 @@ void SigningTest::testPDFNo()
     CPPUNIT_ASSERT(pObjectShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::NOSIGNATURES), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
+
+#endif
 
 void SigningTest::test96097Calc()
 {
