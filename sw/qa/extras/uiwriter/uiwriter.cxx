@@ -95,6 +95,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/configurationhelper.hxx>
 #include <config_features.h>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
@@ -3017,11 +3018,8 @@ void SwUiWriterTest::testTdf90362()
     CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
 
     // Then enable ignoring of protected areas and make sure that this time the cursor is read-write.
-    pWrtShell->Up(/*bSelect=*/false);
-    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
-    aViewOptions.SetIgnoreProtectedArea(true);
-    pWrtShell->ApplyViewOptions(aViewOptions);
-    pWrtShell->Down(/*bSelect=*/false);
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(true), comphelper::EConfigurationModes::Standard);
     CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
 }
 

@@ -3060,7 +3060,7 @@ bool SwCursorShell::HasReadonlySel(bool bAnnotationMode) const
     // If protected area is to be ignored, then selections are never read-only.
     if ((IsReadOnlyAvailable() || GetViewOptions()->IsFormView() ||
         GetDoc()->GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM )) &&
-        !GetViewOptions()->IsIgnoreProtectedArea())
+        !SwViewOption::IsIgnoreProtectedArea())
     {
         if ( m_pTableCursor != nullptr )
         {
