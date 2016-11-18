@@ -774,12 +774,12 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     if( maPageSize.Width() > maPageSize.Height() )
     {
         nWidth = maOutRect.GetWidth();
-        nHeight = long( (double)(nWidth * maPageSize.Height()) / (double)maPageSize.Width() );
+        nHeight = maPageSize.Width() == 0 ? 0 : long( (double)(nWidth * maPageSize.Height()) / (double)maPageSize.Width() );
     }
     else
     {
         nHeight = maOutRect.GetHeight();
-        nWidth = long( (double)(nHeight * maPageSize.Width()) / (double)maPageSize.Height() );
+        nWidth = maPageSize.Height() == 0 ? 0 : long( (double)(nHeight * maPageSize.Width()) / (double)maPageSize.Height() );
     }
 
     maOutRect.Left() += (maOutRect.GetWidth() - nWidth) >> 1;
