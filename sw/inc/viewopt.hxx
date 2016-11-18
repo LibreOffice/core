@@ -74,7 +74,6 @@ enum class ViewOptCoreFlags2 {
     CursorInProt      = 0x0008,
     PdfExport         = 0x0010,
     Printing          = 0x0020,
-    IgnoreProt        = 0x0040
 };
 namespace o3tl {
     template<> struct typed_flags<ViewOptCoreFlags2> : is_typed_flags<ViewOptCoreFlags2, 0x007f> {};
@@ -358,15 +357,7 @@ public:
     inline void SetCursorInProtectedArea(bool b)
         { b ? (m_nCore2Options |= ViewOptCoreFlags2::CursorInProt) : (m_nCore2Options &= ~ViewOptCoreFlags2::CursorInProt);}
 
-    bool IsIgnoreProtectedArea() const
-    {
-        return bool(m_nCore2Options & ViewOptCoreFlags2::IgnoreProt);
-    }
-
-    void SetIgnoreProtectedArea(bool bSet)
-    {
-        bSet ? (m_nCore2Options |= ViewOptCoreFlags2::IgnoreProt) : (m_nCore2Options &= ~ViewOptCoreFlags2::IgnoreProt);
-    }
+    static bool IsIgnoreProtectedArea();
 
     inline bool IsPDFExport() const
         {return bool(m_nCore2Options & ViewOptCoreFlags2::PdfExport); }
