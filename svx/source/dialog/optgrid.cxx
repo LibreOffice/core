@@ -86,7 +86,7 @@ SfxPoolItem*  SvxGridItem::Clone( SfxItemPool* ) const
 
 bool SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "different types ");
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxGridItem& rItem = static_cast<const SvxGridItem&>(rAttr);
 

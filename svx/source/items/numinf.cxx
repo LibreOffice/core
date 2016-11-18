@@ -120,7 +120,7 @@ bool SvxNumberInfoItem::GetPresentation
 
 bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
+    assert(SfxPoolItem::operator==(rItem));
 
     const SvxNumberInfoItem& rOther = static_cast<const SvxNumberInfoItem&>(rItem);
 

@@ -47,7 +47,7 @@ SvxB3DVectorItem::SvxB3DVectorItem( const SvxB3DVectorItem& rItem ) :
 
 bool SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return static_cast<const SvxB3DVectorItem&>(rItem).aVal == aVal;
 }
 

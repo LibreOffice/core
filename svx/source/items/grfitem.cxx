@@ -42,7 +42,8 @@ SvxGrfCrop::~SvxGrfCrop()
 
 bool SvxGrfCrop::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "not equal attributes" );
+    assert(SfxPoolItem::operator==(rAttr));
+
     const SvxGrfCrop& rCrop = static_cast<const SvxGrfCrop&>(rAttr);
     return nLeft    == rCrop.GetLeft() &&
            nRight   == rCrop.GetRight() &&

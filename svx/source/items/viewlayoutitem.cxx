@@ -77,7 +77,7 @@ SvStream& SvxViewLayoutItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/
 
 bool SvxViewLayoutItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxViewLayoutItem& rItem = static_cast<const SvxViewLayoutItem&>(rAttr);
 

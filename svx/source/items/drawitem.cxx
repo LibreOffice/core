@@ -64,7 +64,7 @@ bool SvxColorListItem::GetPresentation
 
 bool SvxColorListItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return static_cast<const SvxColorListItem&>(rItem).pColorList == pColorList;
 }
 
@@ -127,7 +127,7 @@ bool SvxGradientListItem::GetPresentation
 
 bool SvxGradientListItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return static_cast<const SvxGradientListItem&>(rItem).pGradientList == pGradientList;
 }
 
@@ -174,7 +174,7 @@ bool SvxHatchListItem::GetPresentation
 
 bool SvxHatchListItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return static_cast<const SvxHatchListItem&>(rItem).pHatchList == pHatchList;
 }
 
@@ -216,7 +216,7 @@ bool SvxBitmapListItem::GetPresentation
 
 bool SvxBitmapListItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return static_cast<const SvxBitmapListItem&>(rItem).pBitmapList == pBitmapList;
 }
 
@@ -257,7 +257,7 @@ bool SvxPatternListItem::GetPresentation
 
 bool SvxPatternListItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return static_cast<const SvxPatternListItem&>(rItem).pPatternList == pPatternList;
 }
 
@@ -299,7 +299,7 @@ bool SvxDashListItem::GetPresentation
 
 bool SvxDashListItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return static_cast<const SvxDashListItem&>(rItem).pDashList == pDashList;
 }
 
@@ -340,7 +340,7 @@ bool SvxLineEndListItem::GetPresentation
 
 bool SvxLineEndListItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return static_cast<const SvxLineEndListItem&>(rItem).pLineEndList == pLineEndList;
 }
 

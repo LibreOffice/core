@@ -63,7 +63,7 @@ SfxPoolItem* SvxPageItem::Clone( SfxItemPool * ) const
 // Test for equality
 bool SvxPageItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
     const SvxPageItem& rItem = static_cast<const SvxPageItem&>(rAttr);
     return ( eNumType   == rItem.eNumType   &&
              bLandscape == rItem.bLandscape &&

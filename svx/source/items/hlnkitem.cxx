@@ -230,7 +230,7 @@ SfxPoolItem* SvxHyperlinkItem::Clone( SfxItemPool* ) const
 
 bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxHyperlinkItem& rItem = static_cast<const SvxHyperlinkItem&>(rAttr);
 

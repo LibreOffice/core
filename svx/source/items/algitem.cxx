@@ -248,7 +248,7 @@ bool SvxMarginItem::GetPresentation
 
 bool SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
 
     return ( ( nLeftMargin == static_cast<const SvxMarginItem&>(rItem).nLeftMargin )   &&
              ( nTopMargin == static_cast<const SvxMarginItem&>(rItem).nTopMargin )     &&
