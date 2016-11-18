@@ -2193,21 +2193,13 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
         nCol2 = nEndCol;
         nRow2 = nEndRow;
 
+        SCCOL nLastX = 0;
+        SCROW nLastY = 0;
+
         if (comphelper::LibreOfficeKit::isActive())
         {
-            SCCOL nLastX = 0;
-            SCROW nLastY = 0;
-            SCTAB nTab = aViewData.GetTabNo();
-            ScDocument& rDoc = aViewData.GetDocShell()->GetDocument();
-            if (rDoc.GetPrintArea(nTab, nLastX, nLastY, false))
-            {
-                nCol2 = nLastX;
-                nRow2 = nLastY;
-            }
-
-            if (nCol2 > MAXCOL) nCol2 = MAXCOL;
-            if (nRow2 > MAXROW) nRow2 = MAXROW;
-            bOut = nCol1 > nCol2 || nRow1 > nRow2;
+            nLastX = aViewData.GetMaxTiledCol();
+            nLastY = aViewData.GetMaxTiledRow();
         }
         else
         {
@@ -2229,17 +2221,18 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             if (nRow2 < nScrY)
                 bOut = true;
 
-            SCCOL nLastX = nScrX + aViewData.VisibleCellsX( eHWhich ) + 1;
-            SCROW nLastY = nScrY + aViewData.VisibleCellsY( eVWhich ) + 1;
-            if (nCol1 > nLastX)
-                bOut = true;
-            if (nCol2 > nLastX)
-                nCol2 = nLastX;
-            if (nRow1 > nLastY)
-                bOut = true;
-            if (nRow2 > nLastY)
-                nRow2 = nLastY;
+            nLastX = nScrX + aViewData.VisibleCellsX( eHWhich ) + 1;
+            nLastY = nScrY + aViewData.VisibleCellsY( eVWhich ) + 1;
         }
+
+        if (nCol1 > nLastX)
+            bOut = true;
+        if (nCol2 > nLastX)
+            nCol2 = nLastX;
+        if (nRow1 > nLastY)
+            bOut = true;
+        if (nRow2 > nLastY)
+            nRow2 = nLastY;
 
         if (bOut)
             continue;
