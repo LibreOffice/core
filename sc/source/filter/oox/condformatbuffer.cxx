@@ -20,7 +20,6 @@
 #include "condformatbuffer.hxx"
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>

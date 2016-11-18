@@ -37,7 +37,6 @@
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>

@@ -43,12 +43,6 @@
 
 #include <tools/urlobj.hxx>
 
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XPrintAreas.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-
 using namespace com::sun::star;
 using namespace xmloff::token;
 using ::com::sun::star::uno::Reference;
