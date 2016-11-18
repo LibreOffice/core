@@ -52,7 +52,7 @@ SfxSetItem::~SfxSetItem()
 
 bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "unequal type" );
+    assert(SfxPoolItem::operator==(rCmp));
     return *pSet == *static_cast<const SfxSetItem &>(rCmp).pSet;
 }
 

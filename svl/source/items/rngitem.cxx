@@ -63,7 +63,7 @@ bool SfxRangeItem::GetPresentation
 
 bool SfxRangeItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     const SfxRangeItem& rT = static_cast<const SfxRangeItem&>(rItem);
     return nFrom==rT.nFrom && nTo==rT.nTo;
 }

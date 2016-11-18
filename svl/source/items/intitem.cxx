@@ -59,7 +59,7 @@ SfxInt16Item::SfxInt16Item(sal_uInt16 which, SvStream & rStream):
 // virtual
 bool SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
 {
-    DBG_ASSERT(SfxPoolItem::operator ==(rItem), "unequal type");
+    assert(SfxPoolItem::operator==(rItem));
     return m_nValue == (static_cast< const SfxInt16Item * >(&rItem))->
                         m_nValue;
 }

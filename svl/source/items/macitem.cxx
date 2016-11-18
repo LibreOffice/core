@@ -205,7 +205,7 @@ void SvxMacroTableDtor::Erase(sal_uInt16 nEvent)
 
 bool SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxMacroTableDtor& rOwn = aMacroTable;
     const SvxMacroTableDtor& rOther = static_cast<const SvxMacroItem&>(rAttr).aMacroTable;

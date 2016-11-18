@@ -106,7 +106,7 @@ const std::vector<OUString>& SfxStringListItem::GetList () const
 
 bool SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
 
     const SfxStringListItem& rSSLItem = static_cast<const SfxStringListItem&>(rItem);
 

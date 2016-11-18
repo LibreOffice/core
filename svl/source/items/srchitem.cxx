@@ -262,7 +262,7 @@ static bool equalsWithoutLocale( const SearchOptions2& rItem1, const SearchOptio
 
 bool SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
+    assert(SfxPoolItem::operator==(rItem));
     const SvxSearchItem &rSItem = static_cast<const SvxSearchItem &>(rItem);
     return ( m_nCommand       == rSItem.m_nCommand )        &&
            ( m_bBackward      == rSItem.m_bBackward )       &&
