@@ -1,0 +1,41 @@
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mrow>
+      <munderover>
+        <mo stretchy="false">∫</mo>
+        <mi>a</mi>
+        <mi>b</mi>
+      </munderover>
+      <mrow>
+        <mfrac>
+          <mn>1</mn>
+          <mi>x</mi>
+        </mfrac>
+        <mspace width="0.5em"/>
+        <mstyle mathvariant="normal">
+          <mi mathvariant="normal">d</mi>
+        </mstyle>
+        <mi>x</mi>
+      </mrow>
+    </mrow>
+    <mo stretchy="false">=</mo>
+    <mrow>
+      <munderover>
+        <mo stretchy="true">∫</mo>
+        <mi>a</mi>
+        <mi>b</mi>
+      </munderover>
+      <mrow>
+        <mfrac>
+          <mn>1</mn>
+          <mi>y</mi>
+        </mfrac>
+        <mspace width="0.5em"/>
+        <mstyle mathvariant="normal">
+          <mi mathvariant="normal">d</mi>
+        </mstyle>
+        <mi>y</mi>
+      </mrow>
+    </mrow>
+  </mrow>
+</math>
