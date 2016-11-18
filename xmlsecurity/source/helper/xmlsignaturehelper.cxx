@@ -61,7 +61,6 @@ XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< uno::XComponentCon
     : mxCtx(rxCtx), mbODFPre1_2(false)
 {
     mpXSecController = new XSecController(rxCtx);
-    mxSecurityController = mpXSecController;
     mbError = false;
 }
 
