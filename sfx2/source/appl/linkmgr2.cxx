@@ -634,5 +634,3 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
 }
 
-
-
