@@ -805,27 +805,50 @@ SvStream& connectivity::dbase::WriteONDXPagePtr(SvStream &rStream, const ONDXPag
     return rStream;
 }
 
-
 // ONDXPagePtr
+ONDXPagePtr::ONDXPagePtr()
+    : mpPage(nullptr)
+    , nPagePos(0)
+{
+}
 
+ONDXPagePtr::ONDXPagePtr(ONDXPagePtr&& rRef)
+{
+    mpPage = rRef.mpPage;
+    rRef.mpPage = nullptr;
+    nPagePos = rRef.nPagePos;
+}
 
-ONDXPagePtr::ONDXPagePtr(const ONDXPagePtr& rRef)
-              :mpPage(rRef.mpPage)
-              ,nPagePos(rRef.nPagePos)
+ONDXPagePtr::ONDXPagePtr(ONDXPagePtr const & rRef)
+    : mpPage(rRef.mpPage)
+    , nPagePos(rRef.nPagePos)
 {
     if (mpPage != nullptr)
         mpPage->AddNextRef();
 }
 
-
 ONDXPagePtr::ONDXPagePtr(ONDXPage* pRefPage)
-              :mpPage(pRefPage)
-              ,nPagePos(0)
+    : mpPage(pRefPage)
+    , nPagePos(0)
 {
     if (mpPage != nullptr)
         mpPage->AddFirstRef();
     if (pRefPage)
         nPagePos = pRefPage->GetPagePos();
+}
+
+ONDXPagePtr::~ONDXPagePtr()
+{
+    if (mpPage != nullptr) mpPage->ReleaseRef();
+}
+
+void ONDXPagePtr::Clear()
+{
+    if (mpPage != nullptr) {
+        ONDXPage * pRefObj = mpPage;
+        mpPage = nullptr;
+        pRefObj->ReleaseRef();
+    }
 }
 
 ONDXPagePtr& ONDXPagePtr::operator=(ONDXPagePtr const & rOther)

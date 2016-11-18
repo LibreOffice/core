@@ -90,19 +90,20 @@ namespace connectivity
             sal_uInt32  nPagePos;       // Position in the index file
 
         public:
-            ONDXPagePtr() : mpPage(nullptr), nPagePos(0) {}
-            ONDXPagePtr(const ONDXPagePtr& rRef);
+            ONDXPagePtr();
+            ONDXPagePtr(ONDXPagePtr&& rObj);
+            ONDXPagePtr(ONDXPagePtr const & rRef);
             ONDXPagePtr(ONDXPage* pRefPage);
-            inline ~ONDXPagePtr();
+            ~ONDXPagePtr();
+            void Clear();
+            ONDXPagePtr& operator=(ONDXPagePtr const & rRef);
+            bool Is() const { return mpPage != nullptr; }
+
+            ONDXPage * operator ->() const { assert(mpPage != nullptr); return mpPage; }
+            operator ONDXPage *() const { return mpPage; }
 
             sal_uInt32 GetPagePos() const {return nPagePos;}
             bool HasPage() const {return nPagePos != 0;}
-
-            operator ONDXPage *() const { return mpPage; }
-            ONDXPage * operator ->() const { assert(mpPage != nullptr); return mpPage; }
-            bool Is() const { return mpPage != nullptr; }
-            inline void Clear();
-            ONDXPagePtr& operator=(const ONDXPagePtr& rRef);
         };
 
         // Index Page
@@ -201,16 +202,6 @@ namespace connectivity
             void PrintPage();
 #endif
         };
-
-        inline ONDXPagePtr::~ONDXPagePtr() { if (mpPage != nullptr) mpPage->ReleaseRef(); }
-        inline void ONDXPagePtr::Clear()
-            {
-                if (mpPage != nullptr) {
-                    ONDXPage * pRefObj = mpPage;
-                    mpPage = nullptr;
-                    pRefObj->ReleaseRef();
-                }
-            }
 
         SvStream& WriteONDXPagePtr(SvStream &rStream, const ONDXPagePtr&);
         SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
