@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,formula_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,formula_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,formula_dialogs_test, \
     formula/qa/unit/formula-dialogs-test \

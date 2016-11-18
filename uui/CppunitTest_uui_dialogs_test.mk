@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,uui_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,uui_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,uui_dialogs_test, \
     uui/qa/unit/uui-dialogs-test \

@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,starmath_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,starmath_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,starmath_dialogs_test, \
     starmath/qa/unit/starmath-dialogs-test \

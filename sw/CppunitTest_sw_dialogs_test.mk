@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sw_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,sw_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_dialogs_test, \
     sw/qa/unit/sw-dialogs-test \

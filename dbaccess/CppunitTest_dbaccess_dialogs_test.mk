@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,dbaccess_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,dbaccess_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_dialogs_test, \
     dbaccess/qa/unit/dbaccess-dialogs-test \

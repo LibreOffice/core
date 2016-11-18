@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,svtools_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,svtools_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,svtools_dialogs_test, \
     svtools/qa/unit/svtools-dialogs-test \

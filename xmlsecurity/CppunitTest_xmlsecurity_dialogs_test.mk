@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,xmlsecurity_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,xmlsecurity_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,xmlsecurity_dialogs_test, \
     xmlsecurity/qa/unit/xmlsecurity-dialogs-test \
