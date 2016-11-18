@@ -213,6 +213,7 @@ public:
     void testRedlineTimestamp();
     void testCursorWindows();
     void testLandscape();
+    void testTdf95699();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -323,6 +324,7 @@ public:
     CPPUNIT_TEST(testRedlineTimestamp);
     CPPUNIT_TEST(testCursorWindows);
     CPPUNIT_TEST(testLandscape);
+    CPPUNIT_TEST(testTdf95699);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4047,6 +4049,24 @@ void SwUiWriterTest::testLandscape()
     size_t nPageDesc = pWrtShell->GetCurPageDesc();
     // This failed, page was still portrait.
     CPPUNIT_ASSERT(pWrtShell->GetPageDesc(nPageDesc).GetLandscape());
+}
+
+void SwUiWriterTest::testTdf95699()
+{
+    // Open the document with single FORMCHECKBOX field, select all and copy to clipboard
+    // then check that clipboard contains the FORMCHECKBOX in text body.
+    // Previously that failed.
+    SwDoc* pDoc = createDoc("tdf95699.odt");
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SelAll();
+    pWrtShell->Copy(&aClipboard);
+    pMarkAccess = aClipboard.getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    ::sw::mark::IFieldmark* pFieldMark = pMarkAccess->getFieldmarkAfter(SwPosition(pDoc->GetNodes().GetEndOfExtras()));
+    CPPUNIT_ASSERT_EQUAL(OUString("vnd.oasis.opendocument.field.FORMCHECKBOX"), pFieldMark->GetFieldname());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
