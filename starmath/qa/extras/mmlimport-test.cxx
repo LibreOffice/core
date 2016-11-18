@@ -34,6 +34,7 @@ public:
     void testMaction();
     void testMspace();
     void testtdf99556();
+    void testTdf103500();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSimple);
@@ -41,6 +42,7 @@ public:
     CPPUNIT_TEST(testMaction);
     CPPUNIT_TEST(testMspace);
     CPPUNIT_TEST(testtdf99556);
+    CPPUNIT_TEST(testTdf103500);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -118,6 +120,13 @@ void Test::testtdf99556()
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf99556-1.mml"));
     OUString sExpected("sqrt { {} }");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
+}
+
+void Test::testTdf103500()
+{
+    loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf103500.mml"));
+    CPPUNIT_ASSERT_EQUAL(OUString("{{ int csub a csup b {1 over x ` d x}} = {intd csub a csup b {1 over y ` d y}}}"),
+                         mxDocShell->GetText());
 }
 
 
