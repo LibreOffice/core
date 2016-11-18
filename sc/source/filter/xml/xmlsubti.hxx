@@ -23,10 +23,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include "XMLTableShapeResizer.hxx"
 #include <formula/grammar.hxx>

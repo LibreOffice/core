@@ -1640,7 +1640,7 @@ void ScDatabaseRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// Hilfsfuntionen
+// Help functions
 
 ScDBData* ScDatabaseRangeObj::GetDBData_Impl() const
 {
