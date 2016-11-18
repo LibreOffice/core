@@ -297,11 +297,11 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     else
         mpTextBody.reset();
     maShapeProperties = rReferencedShape.maShapeProperties;
-    mpShapeRefLinePropPtr = LinePropertiesPtr( new LineProperties( *rReferencedShape.mpLinePropertiesPtr.get() ) );
-    mpShapeRefFillPropPtr = FillPropertiesPtr( new FillProperties( *rReferencedShape.mpFillPropertiesPtr.get() ) );
+    mpShapeRefLinePropPtr = LinePropertiesPtr( new LineProperties( rReferencedShape.getActualLineProperties(nullptr) ) );
+    mpShapeRefFillPropPtr = FillPropertiesPtr( new FillProperties( rReferencedShape.getActualFillProperties(nullptr, nullptr) ) );
     mpCustomShapePropertiesPtr = CustomShapePropertiesPtr( new CustomShapeProperties( *rReferencedShape.mpCustomShapePropertiesPtr.get() ) );
     mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr.get() ) : nullptr );
-    mpShapeRefEffectPropPtr = EffectPropertiesPtr( new EffectProperties( *rReferencedShape.mpEffectPropertiesPtr.get() ) );
+    mpShapeRefEffectPropPtr = EffectPropertiesPtr( new EffectProperties( rReferencedShape.getActualEffectProperties(nullptr) ) );
     mpMasterTextListStyle = TextListStylePtr( new TextListStyle( *rReferencedShape.mpMasterTextListStyle.get() ) );
     maShapeStyleRefs = rReferencedShape.maShapeStyleRefs;
     maSize = rReferencedShape.maSize;
@@ -607,25 +607,17 @@ Reference< XShape > Shape::createAndInsert(
 
         const GraphicHelper& rGraphicHelper = rFilterBase.getGraphicHelper();
 
-        LineProperties aLineProperties;
-        aLineProperties.maLineFill.moFillType = XML_noFill;
         sal_Int32 nLinePhClr = -1;
-        FillProperties aFillProperties;
-        aFillProperties.moFillType = XML_noFill;
         sal_Int32 nFillPhClr = -1;
-        EffectProperties aEffectProperties;
         // TODO: use ph color when applying effect properties
         //sal_Int32 nEffectPhClr = -1;
-
-        // First apply reference shape's properties (shape on the master slide)
-        aFillProperties.assignUsed( *mpShapeRefFillPropPtr );
-        aLineProperties.assignUsed( *mpShapeRefLinePropPtr );
-        aEffectProperties.assignUsed( *mpShapeRefEffectPropPtr );
 
         if( pTheme )
         {
             if( const ShapeStyleRef* pLineRef = getShapeStyleRef( XML_lnRef ) )
             {
+                LineProperties aLineProperties;
+                aLineProperties.maLineFill.moFillType = XML_noFill;
                 if( const LineProperties* pLineProps = pTheme->getLineStyle( pLineRef->mnThemedIdx ) )
                     aLineProperties.assignUsed( *pLineProps );
                 nLinePhClr = pLineRef->maPhClr.getColor( rGraphicHelper );
@@ -643,8 +635,6 @@ Reference< XShape > Shape::createAndInsert(
             }
             if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
             {
-                if( const FillProperties* pFillProps = pTheme->getFillStyle( pFillRef->mnThemedIdx ) )
-                    aFillProperties.assignUsed( *pFillProps );
                 nFillPhClr = pFillRef->maPhClr.getColor( rGraphicHelper );
 
                 OUString sColorScheme = pFillRef->maPhClr.getSchemeName();
@@ -661,8 +651,6 @@ Reference< XShape > Shape::createAndInsert(
             }
             if( const ShapeStyleRef* pEffectRef = getShapeStyleRef( XML_effectRef ) )
             {
-                if( const EffectProperties* pEffectProps = pTheme->getEffectStyle( pEffectRef->mnThemedIdx ) )
-                    aEffectProperties.assignUsed( *pEffectProps );
                 // TODO: use ph color when applying effect properties
                 // nEffectPhClr = pEffectRef->maPhClr.getColor( rGraphicHelper );
 
@@ -674,15 +662,6 @@ Reference< XShape > Shape::createAndInsert(
                 putPropertyToGrabBag( "StyleEffectRef", Any( aProperties ) );
             }
         }
-
-        aLineProperties.assignUsed( getLineProperties() );
-
-        // group fill inherits from parent
-        if ( getFillProperties().moFillType.has() && getFillProperties().moFillType.get() == XML_grpFill )
-            getFillProperties().assignUsed( rShapeOrParentShapeFillProps );
-        aFillProperties.assignUsed( getFillProperties() );
-        aEffectProperties.assignUsed ( getEffectProperties() );
-
         ShapePropertyMap aShapeProps( rFilterBase.getModelObjectHelper() );
 
         // add properties from textbody to shape properties
@@ -702,8 +681,12 @@ Reference< XShape > Shape::createAndInsert(
             mpGraphicPropertiesPtr->pushToPropMap( aShapeProps, rGraphicHelper );
         if ( mpTablePropertiesPtr.get() && aServiceName == "com.sun.star.drawing.TableShape" )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
+
+        FillProperties aFillProperties = getActualFillProperties(pTheme, &rShapeOrParentShapeFillProps);
         aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr, mbFlipH, mbFlipV );
+        LineProperties aLineProperties = getActualLineProperties(pTheme);
         aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr );
+        EffectProperties aEffectProperties = getActualEffectProperties(pTheme);
         // TODO: use ph color when applying effect properties
         aEffectProperties.pushToPropMap( aShapeProps, rGraphicHelper );
 
@@ -1408,6 +1391,82 @@ void Shape::putPropertiesToGrabBag( const Sequence< PropertyValue >& aProperties
         // put it back to the shape
         xSet->setPropertyValue( aGrabBagPropName, Any( aGrabBag ) );
     }
+}
+
+FillProperties Shape::getActualFillProperties(const Theme* pTheme, const FillProperties* pParentShapeFillProps) const
+{
+    FillProperties aFillProperties;
+    aFillProperties.moFillType = XML_noFill;
+
+    // Reference shape properties
+    aFillProperties.assignUsed( *mpShapeRefFillPropPtr );
+
+    // Theme
+    if( pTheme != nullptr )
+    {
+        if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
+        {
+            if( const FillProperties* pFillProps = pTheme->getFillStyle( pFillRef->mnThemedIdx ) )
+                aFillProperties.assignUsed( *pFillProps );
+        }
+    }
+
+    // Parent shape's properties
+    if ( pParentShapeFillProps != nullptr)
+        if( getFillProperties().moFillType.has() && getFillProperties().moFillType.get() == XML_grpFill )
+            aFillProperties.assignUsed( *pParentShapeFillProps );
+
+    // Properties specified directly for this shape
+    aFillProperties.assignUsed( getFillProperties() );
+
+    return aFillProperties;
+}
+
+LineProperties Shape::getActualLineProperties(const Theme* pTheme) const
+{
+    LineProperties aLineProperties;
+    aLineProperties.maLineFill.moFillType = XML_noFill;
+
+    // Reference shape properties
+    aLineProperties.assignUsed( *mpShapeRefLinePropPtr );
+
+    // Theme
+    if( pTheme != nullptr )
+    {
+        if( const ShapeStyleRef* pLineRef = getShapeStyleRef( XML_lnRef ) )
+        {
+            if( const LineProperties* pLineProps = pTheme->getLineStyle( pLineRef->mnThemedIdx ) )
+                aLineProperties.assignUsed( *pLineProps );
+        }
+    }
+
+    // Properties specified directly for this shape
+    aLineProperties.assignUsed( getLineProperties() );
+
+    return aLineProperties;
+}
+
+EffectProperties Shape::getActualEffectProperties(const Theme* pTheme) const
+{
+    EffectProperties aEffectProperties;
+
+    // Reference shape properties
+    aEffectProperties.assignUsed( *mpShapeRefEffectPropPtr );
+
+    // Theme
+    if( pTheme != nullptr )
+    {
+        if( const ShapeStyleRef* pEffectRef = getShapeStyleRef( XML_effectRef ) )
+        {
+            if( const EffectProperties* pEffectProps = pTheme->getEffectStyle( pEffectRef->mnThemedIdx ) )
+                aEffectProperties.assignUsed( *pEffectProps );
+        }
+    }
+
+    // Properties specified directly for this shape
+    aEffectProperties.assignUsed ( getEffectProperties() );
+
+    return aEffectProperties;
 }
 
 uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFromOfficeDoc(core::XmlFilterBase& rFilter, const OUString& sFragment, const OUString& sType )
