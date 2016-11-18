@@ -160,16 +160,12 @@ bool SwPosition::operator>=(const SwPosition &rPos) const
 bool SwPosition::operator==(const SwPosition &rPos) const
 {
     return (nNode == rPos.nNode)
-        // GetIndexReg may be null for FLY_AT_PARA frame anchor position
-        && (nContent.GetIdxReg() == rPos.nContent.GetIdxReg())
         && (nContent == rPos.nContent);
 }
 
 bool SwPosition::operator!=(const SwPosition &rPos) const
 {
     return (nNode != rPos.nNode)
-        // GetIndexReg may be null for FLY_AT_PARA frame anchor position
-        || (nContent.GetIdxReg() != rPos.nContent.GetIdxReg())
         || (nContent != rPos.nContent);
 }
 
