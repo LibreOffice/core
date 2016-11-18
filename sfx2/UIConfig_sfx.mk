@@ -20,6 +20,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/documentfontspage \
 	sfx2/uiconfig/ui/documentinfopage \
 	sfx2/uiconfig/ui/documentpropertiesdialog \
+	sfx2/uiconfig/ui/editdocumentdialog \
 	sfx2/uiconfig/ui/editdurationdialog \
 	sfx2/uiconfig/ui/emojicontrol \
 	sfx2/uiconfig/ui/errorfindemaildialog \
