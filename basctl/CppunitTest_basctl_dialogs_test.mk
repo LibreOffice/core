@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,basctl_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,basctl_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,basctl_dialogs_test, \
     basctl/qa/unit/basctl-dialogs-test \

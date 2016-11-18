@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,vcl_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,vcl_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_dialogs_test, \
     vcl/qa/unit/vcl-dialogs-test \

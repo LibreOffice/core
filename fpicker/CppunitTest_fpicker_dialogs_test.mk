@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,fpicker_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,fpicker_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,fpicker_dialogs_test, \
     fpicker/qa/unit/fpicker-dialogs-test \

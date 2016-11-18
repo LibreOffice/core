@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,desktop_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,desktop_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,desktop_dialogs_test, \
     desktop/qa/unit/desktop-dialogs-test \

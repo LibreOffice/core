@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,reportdesign_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,reportdesign_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,reportdesign_dialogs_test, \
     reportdesign/qa/unit/reportdesign-dialogs-test \

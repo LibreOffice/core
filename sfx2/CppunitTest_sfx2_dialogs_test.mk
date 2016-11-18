@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sfx2_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,sfx2_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sfx2_dialogs_test, \
     sfx2/qa/unit/sfx2-dialogs-test \

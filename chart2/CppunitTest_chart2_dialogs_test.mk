@@ -9,7 +9,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,chart2_dialogs_test))
+$(eval $(call gb_CppunitTest_CppunitScreenShot,chart2_dialogs_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,chart2_dialogs_test, \
     chart2/qa/unit/chart2-dialogs-test \
