@@ -726,9 +726,11 @@ OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
         RTL_TEXTENCODING_UTF8);
 }
 
-OString XclXmlUtils::ToOString( const ScRange& rRange )
+OString XclXmlUtils::ToOString( const ScRange& rRange, bool bFullAddressNotation )
 {
-    OUString sRange(rRange.Format(ScRefFlags::VALID, nullptr, ScAddress::Details( FormulaGrammar::CONV_XL_A1)));
+    OUString sRange(rRange.Format( ScRefFlags::VALID, nullptr,
+                                   ScAddress::Details( FormulaGrammar::CONV_XL_A1 ),
+                                   bFullAddressNotation ) );
     return ToOString( sRange );
 }
 
