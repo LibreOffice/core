@@ -27,7 +27,7 @@ class TextAttrib;
 class SVT_DLLPUBLIC ExtMultiLineEdit : public MultiLineEdit
 {
 public:
-                    ExtMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER );
+                    ExtMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle );
 
                     // methods of TextView
     void            InsertText( const OUString& rNew );

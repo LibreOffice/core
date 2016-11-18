@@ -49,7 +49,7 @@ namespace svt
         void                implInit();
 
     public:
-        HyperLabel( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
+        HyperLabel( vcl::Window* _pParent, WinBits _nWinStyle );
         virtual ~HyperLabel( ) override;
         virtual void dispose() override;
 

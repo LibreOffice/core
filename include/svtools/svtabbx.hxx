@@ -63,7 +63,7 @@ protected:
     SvTreeListEntry*            GetChildOnPos( SvTreeListEntry* _pParent, sal_uLong _nEntryPos, sal_uLong& _rPos ) const;
 
 public:
-    SvTabListBox( vcl::Window* pParent, WinBits = WB_BORDER );
+    SvTabListBox( vcl::Window* pParent, WinBits );
     virtual ~SvTabListBox() override;
     virtual void dispose() override;
     void            SetTabs(const long* pTabs, MapUnit = MapUnit::MapAppFont);
@@ -91,7 +91,7 @@ public:
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
                                  sal_uLong nPos, sal_uInt16 nCol, void* pUserData = nullptr );
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
-                                 const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = nullptr,
+                                 const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent,
                                  sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = nullptr );
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const override;
@@ -151,7 +151,7 @@ public:
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
                                  sal_uLong nPos, sal_uInt16 nCol, void* pUserData = nullptr ) override;
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
-                                 const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = nullptr,
+                                 const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent,
                                  sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = nullptr ) override;
     virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=TREELIST_APPEND) override;
     virtual sal_uLong Insert( SvTreeListEntry* pEntry, sal_uLong nRootPos = TREELIST_APPEND ) override;
