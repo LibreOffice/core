@@ -72,12 +72,15 @@ struct SprmInfoRow {
 
 class wwSprmSearcher {
 public:
-    wwSprmSearcher(SprmInfoRow const * rows, std::size_t size) {
+    //see Read_AmbiguousSPRM for the bPatchCJK oddity
+    wwSprmSearcher(SprmInfoRow const * rows, std::size_t size, bool bPatchCJK = false) {
         for (std::size_t i = 0; i != size; ++i) {
             bool ins = map_.insert(Map::value_type(rows[i].nId, rows[i].info))
                 .second;
             assert(ins); (void) ins;
         }
+        if (bPatchCJK)
+            patchCJKVariant();
     }
 
     SprmInfo const * search(sal_uInt16 id) const {
@@ -89,7 +92,11 @@ private:
     typedef std::unordered_map<sal_uInt16, SprmInfo> Map;
 
     Map map_;
+
+    void patchCJKVariant();
 };
+
+class WW8Fib;
 
 /**
     wwSprmParser knows how to take a sequence of bytes and split it up into
@@ -102,18 +109,18 @@ private:
     sal_uInt8 mnDelta;
     const wwSprmSearcher *mpKnownSprms;
     static const wwSprmSearcher* GetWW8SprmSearcher();
-    static const wwSprmSearcher* GetWW6SprmSearcher();
+    static const wwSprmSearcher* GetWW6SprmSearcher(const WW8Fib& rFib);
     static const wwSprmSearcher* GetWW2SprmSearcher();
 
     SprmInfo GetSprmInfo(sal_uInt16 nId) const;
 
     sal_uInt8 SprmDataOfs(sal_uInt16 nId) const;
 
+public:
     enum SprmType {L_FIX=0, L_VAR=1, L_VAR2=2};
 
-public:
     //7- ids are very different to 8+ ones
-    explicit wwSprmParser(ww::WordVersion eVersion);
+    explicit wwSprmParser(const WW8Fib& rFib);
     /// Return the SPRM id at the beginning of this byte sequence
     sal_uInt16 GetSprmId(const sal_uInt8* pSp) const;
 
@@ -156,7 +163,6 @@ OUString read_uInt16_BeltAndBracesString(SvStream& rStrm);
 
 //--Line above which the code has meaningful comments
 
-class  WW8Fib;
 class  WW8ScannerBase;
 class  WW8PLCFspecial;
 struct WW8PLCFxDesc;
@@ -378,7 +384,7 @@ enum eExtSprm { eFTN = 256, eEDN = 257, eFLD = 258, eBKN = 259, eAND = 260, eATN
 class WW8PLCFx              // virtual iterator for Piece Table Exceptions
 {
 private:
-    ww::WordVersion meVer;  // Version number of FIB
+    const WW8Fib& mrFib;
     bool bIsSprm;           // PLCF of Sprms or other stuff ( Footnote, ... )
     WW8_FC nStartFc;
     bool bDirty;
@@ -387,8 +393,8 @@ private:
     WW8PLCFx& operator=(const WW8PLCFx&) = delete;
 
 public:
-    WW8PLCFx(ww::WordVersion eVersion, bool bSprm)
-        : meVer(eVersion)
+    WW8PLCFx(const WW8Fib& rFib, bool bSprm)
+        : mrFib(rFib)
         , bIsSprm(bSprm)
         , nStartFc(-1)
         , bDirty(false)
@@ -408,7 +414,8 @@ public:
     virtual sal_uInt16 GetIstd() const { return 0xffff; }
     virtual void Save( WW8PLCFxSave1& rSave ) const;
     virtual void Restore( const WW8PLCFxSave1& rSave );
-    ww::WordVersion GetFIBVersion() const { return meVer; }
+    ww::WordVersion GetFIBVersion() const;
+    const WW8Fib& GetFIB() const { return mrFib; }
     void SetStartFc( WW8_FC nFc ) { nStartFc = nFc; }
     WW8_FC GetStartFc() const { return nStartFc; }
     void SetDirty(bool bIn) {bDirty=bIn;}
@@ -429,7 +436,7 @@ private:
     WW8PLCFx_PCDAttrs& operator=(const WW8PLCFx_PCDAttrs&) = delete;
 
 public:
-    WW8PLCFx_PCDAttrs(ww::WordVersion eVersion, WW8PLCFx_PCD* pPLCFx_PCD,
+    WW8PLCFx_PCDAttrs(const WW8Fib& rFib, WW8PLCFx_PCD* pPLCFx_PCD,
         const WW8ScannerBase* pBase );
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx( sal_uLong nI ) override;
@@ -452,7 +459,7 @@ private:
     WW8PLCFx_PCD& operator=(const WW8PLCFx_PCD&) = delete;
 
 public:
-    WW8PLCFx_PCD(ww::WordVersion eVersion, WW8PLCFpcd* pPLCFpcd,
+    WW8PLCFx_PCD(const WW8Fib& rFib, WW8PLCFpcd* pPLCFpcd,
         WW8_CP nStartCp, bool bVer67P);
     virtual ~WW8PLCFx_PCD() override;
     sal_uLong GetIMax() const;
@@ -522,7 +529,7 @@ public:
         void FillEntry(Entry &rEntry, std::size_t nDataOffset, sal_uInt16 nLen);
 
     public:
-        WW8Fkp (ww::WordVersion eVersion, SvStream* pFKPStrm,
+        WW8Fkp (const WW8Fib& rFib, SvStream* pFKPStrm,
             SvStream* pDataStrm, long _nFilePos, long nItemSiz, ePLCFT ePl,
             WW8_FC nStartFc);
         void Reset(WW8_FC nPos);
@@ -678,7 +685,7 @@ private:
     WW8PLCFx_SubDoc& operator=(const WW8PLCFx_SubDoc&) = delete;
 
 public:
-    WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion, WW8_CP nStartCp,
+    WW8PLCFx_SubDoc(SvStream* pSt, const WW8Fib& rFib, WW8_CP nStartCp,
                     long nFcRef, long nLenRef, long nFcText, long nLenText, long nStruc);
     virtual ~WW8PLCFx_SubDoc() override;
     virtual sal_uInt32 GetIdx() const override;
@@ -1002,7 +1009,7 @@ struct WW8PLCFxSaveAll
 
 class WW8ScannerBase
 {
-friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(ww::WordVersion eVersion,
+friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(const WW8Fib& rFib,
     WW8PLCFx_PCD* pPLCFx_PCD, const WW8ScannerBase* pBase );
 friend WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream*, SvStream*, SvStream*,
     const WW8ScannerBase&, ePLCFT );
@@ -1504,13 +1511,10 @@ public:
         they couldn't read any format with nFib > some constant
     */
     sal_uInt16 m_nFib_actual; // 0x05bc #i56856#
-    /*
-        now we only need a Ctor
-    */
-    WW8Fib( SvStream& rStrm, sal_uInt8 nWantedVersion,sal_uInt32 nOffset=0 );
 
-    /* unfortunately incorrect, you still need one for the export */
-    WW8Fib( sal_uInt8 nVersion = 6, bool bDot = false );
+    WW8Fib(SvStream& rStrm, sal_uInt8 nWantedVersion,sal_uInt32 nOffset=0);
+    explicit WW8Fib(sal_uInt8 nVersion = 6, bool bDot = false);
+
     void WriteHeader(SvStream& rStrm);
     void Write(SvStream& rStrm);
     static rtl_TextEncoding GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale);

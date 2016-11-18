@@ -1136,7 +1136,7 @@ SwNumRule* WW8ListManager::GetNumRule(size_t i)
 // oeffentliche Methoden
 
 WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
-    : maSprmParser(rReader_.GetFib().GetFIBVersion()), rReader(rReader_)
+    : maSprmParser(rReader_.GetFib()), rReader(rReader_)
     , rDoc(rReader.GetDoc())
     , rFib(rReader.GetFib()), rSt(rSt_)
     , nUniqueList(1)

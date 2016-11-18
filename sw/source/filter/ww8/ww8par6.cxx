@@ -2944,6 +2944,83 @@ void SwWW8ImplReader::Read_Bidi(sal_uInt16, const sal_uInt8* pData, short nLen)
     }
 }
 
+/*
+ tdf#91916, #i8726, #i42685# there is an ambiguity
+ around certain properties as to what they mean,
+ which appears to be a problem with different versions
+ of the file format where properties conflict, i.e.
+
+ooo40606-2.doc, magic is a699
+    : 0x6f 0x4 0x0 0x71 0x4 0x0
+ooo40635-1.doc, magic is a699
+    : 0x6f 0x4 0x0 0x71 0x4 0x0
+ooo31093/SIMPCHIN.doc, magic is a699
+    : 0x6f 0x2 0x0 0x70 0x0 0x0 0x71 0x2 0x0
+    : 0x6f 0x5 0x0 0x70 0x5 0x0
+ooo31093/TRADCHIN.doc, magic is a699
+    : 0x6f 0x1 0x0 0x70 0x0 0x0 0x71 0x1 0x0
+ooo31093/JAPANESE.doc, magic is a697
+    : 0x6f 0x2 0x0 0x70 0x0 0x0 0x71 0x2 0x0
+ooo31093/KOREAN.doc, magic is a698
+    : 0x6f 0x2 0x0 0x70 0x0 0x0 0x71 0x2 0x0
+ooo31093-1.doc, magic is a698
+    : 0x6f 0x5 0x0 0x70 0x5 0x0
+ooo31093-1.doc, magic is a698
+    : 0x6f 0x5 0x0 0x70 0x5 0x0
+
+meanwhile...
+
+ooo27954-1.doc, magic is a5dc
+    : 0x6f 0x1 0x81 0x71 0x2 0x4 0x0 0x74 0x2 0x20 0x0
+
+ooo33251-1.doc, magic is a5dc
+    : 0x6f 0x1 0x81 0x71 0x2 0x3 0x0 0x74 0x2 0x1c 0x0
+
+---
+
+So we have the same sprm values, but different payloads, where
+the a5dc versions appear to use a len argument, followed by len
+bytes, while the a698<->a699 versions use a 2byte argument
+
+commit c2213db9ed70c1fd546482d22e36e4029c10aa45
+
+    INTEGRATION: CWS tl28 (1.169.24); FILE MERGED
+    2006/10/25 13:40:41 tl 1.169.24.2: RESYNC: (1.169-1.170); FILE MERGED
+    2006/09/20 11:55:50 hbrinkm 1.169.24.1: #i42685# applied patch
+
+changed 0x6f and 0x70 from Read_BoldBiDiUsw to Read_FontCode for all versions.
+
+In the Word for Window 2 spec we have...
+ 78   //sprmCMajority
+ 80   //sprmCFBoldBi
+ 81   //sprmCFItalicBi
+ 82   //sprmCFtcBi
+ 83   //sprmClidBi
+ 84   //sprmCIcoBi
+ 85   //sprmCHpsBi
+as see in GetWW2SprmDispatcher, different numbers, but the sequence starts with
+the same sprmCMajority as appears before 0x6f in word 6/95
+
+I think the easiest explanation is that the CJK Word for Window 95, or whatever
+the product was went rogue, and did their own things with at least first three
+slots after sprmCMajority to do a different thing. I have no reason to think Tono
+was wrong with what they do in the a698<->a699 versions versions, but with magic
+a5dc they probably did mean sprmCFBoldBi, sprmCFItalicBi cause they have that 0x81
+pattern which has significance for those types of properties.
+*/
+void SwWW8ImplReader::Read_AmbiguousSPRM(sal_uInt16 nId, const sal_uInt8* pData,
+    short nLen)
+{
+    if (m_pWwFib->m_wIdent >= 0xa697 && m_pWwFib->m_wIdent <= 0xa699)
+    {
+        Read_FontCode(nId, pData, nLen);
+    }
+    else
+    {
+        Read_BoldBiDiUsw(nId, pData, nLen);
+    }
+}
+
 // Read_BoldUsw for BiDi Italic, Bold
 void SwWW8ImplReader::Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8* pData,
     short nLen)
@@ -5429,12 +5506,12 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
                                                      //percentage to grow hps short
         {110, nullptr},                                    //"sprmCCondHyhen", chp.ysri
                                                      //ysri short
-        {111, &SwWW8ImplReader::Read_FontCode},      //ww7 font
-        {112, &SwWW8ImplReader::Read_FontCode},      //ww7 CJK font
-        {113, &SwWW8ImplReader::Read_FontCode},      //ww7 rtl font
-        {114, &SwWW8ImplReader::Read_Language},      //ww7 lid
-        {115, &SwWW8ImplReader::Read_TextColor},      //ww7 rtl colour ?
-        {116, &SwWW8ImplReader::Read_FontSize},
+        {111, &SwWW8ImplReader::Read_AmbiguousSPRM}, //sprmCFBoldBi or font code
+        {112, &SwWW8ImplReader::Read_AmbiguousSPRM}, //sprmCFItalicBi or font code
+        {113, &SwWW8ImplReader::Read_FontCode},      //sprmCFtcBi
+        {114, &SwWW8ImplReader::Read_Language},      //sprmClidBi
+        {115, &SwWW8ImplReader::Read_TextColor},     //sprmCIcoBi
+        {116, &SwWW8ImplReader::Read_FontSize},      //sprmCHpsBi
         {117, &SwWW8ImplReader::Read_Special},       //"sprmCFSpec", chp.fSpec 1
                                                      //or 0 bit
         {118, &SwWW8ImplReader::Read_Obj},           //"sprmCFObj", chp.fObj 1 or 0

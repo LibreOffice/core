@@ -250,7 +250,7 @@ const wwSprmSearcher *wwSprmParser::GetWW2SprmSearcher()
     return &aSprmSrch;
 };
 
-const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
+const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher(const WW8Fib& rFib)
 {
     //double lock me
     // WW7- Sprms
@@ -352,12 +352,12 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         {108, { 0, L_VAR} }, // "sprmCMajority50" chp.fBold, chp.fItalic, ...
         {109, { 2, L_FIX} }, // "sprmCHpsMul" chp.hps percentage to grow hps
         {110, { 2, L_FIX} }, // "sprmCCondHyhen" chp.ysri ysri
-        {111, { 2, L_FIX} }, // ww7 font
-        {112, { 2, L_FIX} }, // ww7 CJK font
-        {113, { 2, L_FIX} }, // ww7 rtl font
-        {114, { 2, L_FIX} }, // ww7 lid
-        {115, { 2, L_FIX} }, // ww7 rtl colour ?
-        {116, { 2, L_FIX} }, // ww7 fontsize
+        {111, { 0, L_VAR} }, // sprmCFBoldBi or font code
+        {112, { 0, L_VAR} }, // sprmCFItalicBi or font code
+        {113, { 0, L_VAR} }, // ww7 rtl font
+        {114, { 0, L_VAR} }, // ww7 lid
+        {115, { 0, L_VAR} }, // ww7 CJK font
+        {116, { 0, L_VAR} }, // ww7 fontsize
         {117, { 1, L_FIX} }, // "sprmCFSpec" chp.fSpec  1 or 0 bit
         {118, { 1, L_FIX} }, // "sprmCFObj" chp.fObj 1 or 0 bit
         {119, { 1, L_FIX} }, // "sprmPicBrcl" pic.brcl brcl (see PIC definition)
@@ -429,9 +429,26 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         {207, { 0, L_VAR} }  // rtl property ?
     };
 
+    if (rFib.m_wIdent >= 0xa697 && rFib.m_wIdent <= 0xa699)
+    {
+        //see Read_AmbiguousSPRM for this oddity
+        static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms), true);
+        return &aSprmSrch;
+    }
+
     static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 };
+
+void wwSprmSearcher::patchCJKVariant()
+{
+    for (sal_uInt16 nId = 111; nId <= 113; ++nId)
+    {
+        SprmInfo& amb1 = map_[nId];
+        amb1.nLen = 2;
+        amb1.nVari = wwSprmParser::L_FIX;
+    }
+}
 
 const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
 {
@@ -773,7 +790,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
     return &aSprmSrch;
 };
 
-wwSprmParser::wwSprmParser(ww::WordVersion eVersion) : meVersion(eVersion)
+wwSprmParser::wwSprmParser(const WW8Fib& rFib) : meVersion(rFib.GetFIBVersion())
 {
    OSL_ENSURE((meVersion >= ww::eWW1 && meVersion <= ww::eWW8),
         "Impossible value for version");
@@ -783,7 +800,7 @@ wwSprmParser::wwSprmParser(ww::WordVersion eVersion) : meVersion(eVersion)
     if (meVersion <= ww::eWW2)
         mpKnownSprms = GetWW2SprmSearcher();
     else if (meVersion < ww::eWW8)
-        mpKnownSprms = GetWW6SprmSearcher();
+        mpKnownSprms = GetWW6SprmSearcher(rFib);
     else
         mpKnownSprms = GetWW8SprmSearcher();
 }
@@ -930,9 +947,9 @@ const sal_uInt8* WW8SprmIter::FindSprm(sal_uInt16 nId)
 // temporary test
 // WW8PLCFx_PCDAttrs cling to WW8PLCF_Pcd and therefore do not have their own iterators.
 // All methods relating to iterators are therefore dummies.
-WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(ww::WordVersion eVersion,
+WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(const WW8Fib& rFib,
     WW8PLCFx_PCD* pPLCFx_PCD, const WW8ScannerBase* pBase)
-    : WW8PLCFx(eVersion, true), pPcdI(pPLCFx_PCD->GetPLCFIter()),
+    : WW8PLCFx(rFib, true), pPcdI(pPLCFx_PCD->GetPLCFIter()),
     pPcd(pPLCFx_PCD), pGrpprls(pBase->m_aPieceGrpprls.data()),
     nGrpprls(pBase->m_aPieceGrpprls.size())
 {
@@ -1116,9 +1133,9 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
     }
 }
 
-WW8PLCFx_PCD::WW8PLCFx_PCD(ww::WordVersion eVersion, WW8PLCFpcd* pPLCFpcd,
+WW8PLCFx_PCD::WW8PLCFx_PCD(const WW8Fib& rFib, WW8PLCFpcd* pPLCFpcd,
     WW8_CP nStartCp, bool bVer67P)
-    : WW8PLCFx(eVersion, false), nClipStart(-1)
+    : WW8PLCFx(rFib, false), nClipStart(-1)
 {
     // construct own iterator
     pPcdI = new WW8PLCFpcd_Iter(*pPLCFpcd, nStartCp);
@@ -1564,9 +1581,9 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
     if( m_pPiecePLCF )
     {
         m_pPieceIter = new WW8PLCFpcd_Iter( *m_pPiecePLCF );
-        m_pPLCFx_PCD = new WW8PLCFx_PCD(pWwFib->GetFIBVersion(), m_pPiecePLCF, 0,
+        m_pPLCFx_PCD = new WW8PLCFx_PCD(*pWwFib, m_pPiecePLCF, 0,
             IsSevenMinus(m_pWw8Fib->GetFIBVersion()));
-        m_pPLCFx_PCDAttrs = new WW8PLCFx_PCDAttrs(pWwFib->GetFIBVersion(),
+        m_pPLCFx_PCDAttrs = new WW8PLCFx_PCDAttrs(*pWwFib,
             m_pPLCFx_PCD, this);
     }
     else
@@ -1583,15 +1600,15 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
     m_pSepPLCF = new WW8PLCFx_SEPX(   pSt, pTableSt, *pWwFib, 0 );          // SEPX
 
     // Footnotes
-    m_pFootnotePLCF = new WW8PLCFx_SubDoc( pTableSt, pWwFib->GetFIBVersion(), 0,
+    m_pFootnotePLCF = new WW8PLCFx_SubDoc( pTableSt, *pWwFib, 0,
         pWwFib->m_fcPlcffndRef, pWwFib->m_lcbPlcffndRef, pWwFib->m_fcPlcffndText,
         pWwFib->m_lcbPlcffndText, 2 );
     // Endnotes
-    m_pEdnPLCF = new WW8PLCFx_SubDoc( pTableSt, pWwFib->GetFIBVersion(), 0,
+    m_pEdnPLCF = new WW8PLCFx_SubDoc( pTableSt, *pWwFib, 0,
         pWwFib->m_fcPlcfendRef, pWwFib->m_lcbPlcfendRef, pWwFib->m_fcPlcfendText,
         pWwFib->m_lcbPlcfendText, 2 );
     // Comments
-    m_pAndPLCF = new WW8PLCFx_SubDoc( pTableSt, pWwFib->GetFIBVersion(), 0,
+    m_pAndPLCF = new WW8PLCFx_SubDoc( pTableSt, *pWwFib, 0,
         pWwFib->m_fcPlcfandRef, pWwFib->m_lcbPlcfandRef, pWwFib->m_fcPlcfandText,
         pWwFib->m_lcbPlcfandText, IsSevenMinus(pWwFib->GetFIBVersion()) ? 20 : 30);
 
@@ -2396,13 +2413,15 @@ void WW8PLCFx_Fc_FKP::WW8Fkp::FillEntry(WW8PLCFx_Fc_FKP::WW8Fkp::Entry &rEntry,
     rEntry.mpData = maRawData + nDataOffset;
 }
 
-WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
+WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
     SvStream* pDataSt, long _nFilePos, long nItemSiz, ePLCFT ePl,
     WW8_FC nStartFc)
-    : nItemSize(nItemSiz), nFilePos(_nFilePos),  mnIdx(0), ePLCF(ePl),
-    maSprmParser(eVersion)
+    : nItemSize(nItemSiz), nFilePos(_nFilePos),  mnIdx(0), ePLCF(ePl)
+    , maSprmParser(rFib)
 {
     memset(maRawData, 0, 512);
+
+    const ww::WordVersion eVersion = rFib.GetFIBVersion();
 
     sal_uInt64 const nOldPos = pSt->Tell();
 
@@ -2580,7 +2599,6 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
         {
             sal_Int32 nLen;
             sal_uInt8* pSprms = GetLenAndIStdAndSprms( nLen );
-
             WW8SprmIter aIter(pSprms, nLen, maSprmParser);
             while (aIter.GetSprms())
             {
@@ -2750,6 +2768,11 @@ void WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
     };
 }
 
+ww::WordVersion WW8PLCFx::GetFIBVersion() const
+{
+    return mrFib.GetFIBVersion();
+}
+
 void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
 {
     OSL_ENSURE( false, "Called wrong GetSprms" );
@@ -2850,7 +2873,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
         }
         else
         {
-            pFkp = new WW8Fkp(GetFIBVersion(), pFKPStrm, pDataStrm, nPo,
+            pFkp = new WW8Fkp(GetFIB(), pFKPStrm, pDataStrm, nPo,
                 pFkpSizeTab[ ePLCF ], ePLCF, GetStartFc());
             maFkpCache.push_back(pFkp);
 
@@ -2868,8 +2891,8 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
 
 WW8PLCFx_Fc_FKP::WW8PLCFx_Fc_FKP(SvStream* pSt, SvStream* pTableSt,
     SvStream* pDataSt, const WW8Fib& rFib, ePLCFT ePl, WW8_FC nStartFcL)
-    : WW8PLCFx(rFib.GetFIBVersion(), true), pFKPStrm(pSt), pDataStrm(pDataSt),
-    pFkp(nullptr), ePLCF(ePl), pPCDAttrs(nullptr)
+    : WW8PLCFx(rFib, true), pFKPStrm(pSt), pDataStrm(pDataSt)
+    , pFkp(nullptr), ePLCF(ePl), pPCDAttrs(nullptr)
 {
     SetStartFc(nStartFcL);
     long nLenStruct = (8 > rFib.m_nVersion) ? 2 : 4;
@@ -3087,7 +3110,7 @@ WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
 {
     ResetAttrStartEnd();
 
-    pPcd = rSBase.m_pPiecePLCF ? new WW8PLCFx_PCD(GetFIBVersion(),
+    pPcd = rSBase.m_pPiecePLCF ? new WW8PLCFx_PCD(GetFIB(),
         rBase.m_pPiecePLCF, 0, IsSevenMinus(GetFIBVersion())) : nullptr;
 
     /*
@@ -3099,7 +3122,7 @@ WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
     if (pPcd)
     {
         pPCDAttrs = rSBase.m_pPLCFx_PCDAttrs ? new WW8PLCFx_PCDAttrs(
-            rSBase.m_pWw8Fib->GetFIBVersion(), pPcd, &rSBase) : nullptr;
+            *rSBase.m_pWw8Fib, pPcd, &rSBase) : nullptr;
     }
 
     pPieceIter = rSBase.m_pPieceIter;
@@ -3357,7 +3380,7 @@ void WW8PLCFx_Cp_FKP::advance()
 
 WW8PLCFx_SEPX::WW8PLCFx_SEPX(SvStream* pSt, SvStream* pTableSt,
     const WW8Fib& rFib, WW8_CP nStartCp)
-    : WW8PLCFx(rFib.GetFIBVersion(), true), maSprmParser(rFib.GetFIBVersion()),
+    : WW8PLCFx(rFib, true), maSprmParser(rFib),
     pStrm(pSt), nArrMax(256), nSprmSiz(0)
 {
     pPLCF =   rFib.m_lcbPlcfsed
@@ -3538,10 +3561,10 @@ const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
     return nullptr;   // Sprm not found
 }
 
-WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion,
+WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(SvStream* pSt, const WW8Fib& rFib,
     WW8_CP nStartCp, long nFcRef, long nLenRef, long nFcText, long nLenText,
     long nStruct)
-    : WW8PLCFx(eVersion, true), pRef(nullptr), pText(nullptr)
+    : WW8PLCFx(rFib, true), pRef(nullptr), pText(nullptr)
 {
     if( nLenRef && nLenText )
     {
@@ -3632,7 +3655,7 @@ void WW8PLCFx_SubDoc::advance()
 
 // fields
 WW8PLCFx_FLD::WW8PLCFx_FLD( SvStream* pSt, const WW8Fib& rMyFib, short nType)
-    : WW8PLCFx(rMyFib.GetFIBVersion(), true), pPLCF(nullptr), rFib(rMyFib)
+    : WW8PLCFx(rMyFib, true), pPLCF(nullptr), rFib(rMyFib)
 {
     long nFc, nLen;
 
@@ -3927,7 +3950,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
 }
 
 WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTableSt, const WW8Fib& rFib)
-    : WW8PLCFx(rFib.GetFIBVersion(), false), nIsEnd(0), nBookmarkId(1)
+    : WW8PLCFx(rFib, false), nIsEnd(0), nBookmarkId(1)
 {
     if( !rFib.m_fcPlcfbkf || !rFib.m_lcbPlcfbkf || !rFib.m_fcPlcfbkl ||
         !rFib.m_lcbPlcfbkl || !rFib.m_fcSttbfbkmk || !rFib.m_lcbSttbfbkmk )
@@ -4190,7 +4213,7 @@ const OUString* WW8PLCFx_Book::GetName() const
 }
 
 WW8PLCFx_AtnBook::WW8PLCFx_AtnBook(SvStream* pTableSt, const WW8Fib& rFib)
-    : WW8PLCFx(rFib.GetFIBVersion(), /*bSprm=*/false),
+    : WW8PLCFx(rFib, /*bSprm=*/false),
     m_bIsEnd(false)
 {
     if (!rFib.m_fcPlcfAtnbkf || !rFib.m_lcbPlcfAtnbkf || !rFib.m_fcPlcfAtnbkl || !rFib.m_lcbPlcfAtnbkl)
@@ -4322,7 +4345,7 @@ bool WW8PLCFx_AtnBook::getIsEnd() const
 }
 
 WW8PLCFx_FactoidBook::WW8PLCFx_FactoidBook(SvStream* pTableSt, const WW8Fib& rFib)
-    : WW8PLCFx(rFib.GetFIBVersion(), /*bSprm=*/false),
+    : WW8PLCFx(rFib, /*bSprm=*/false),
     m_bIsEnd(false)
 {
     if (!rFib.m_fcPlcfBkfFactoid || !rFib.m_lcbPlcfBkfFactoid || !rFib.m_fcPlcfBklFactoid || !rFib.m_lcbPlcfBklFactoid)
@@ -4581,7 +4604,7 @@ sal_uInt16 WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
 
 WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
     bool bDoingDrawTextBox)
-    : maSprmParser(pBase->m_pWw8Fib->GetFIBVersion()),
+    : maSprmParser(*pBase->m_pWw8Fib),
     mbDoingDrawTextBox(bDoingDrawTextBox)
 {
     pWwFib = pBase->m_pWw8Fib;

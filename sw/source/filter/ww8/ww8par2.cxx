@@ -1785,7 +1785,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
 
     WW8TabBandDesc* pNewBand = new WW8TabBandDesc;
 
-    wwSprmParser aSprmParser(m_pIo->GetFib().GetFIBVersion());
+    wwSprmParser aSprmParser(m_pIo->GetFib());
 
     // process pPap until end of table found
     do
@@ -3638,6 +3638,9 @@ void WW8RStyle::ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap)
     WW8SprmIter aSprmIter(pSprms, nLen, maSprmParser);
     while (const sal_uInt8* pSprm = aSprmIter.GetSprms())
     {
+#ifdef DEBUGSPRMREADER
+        fprintf(stderr, "id is %x\n", aIter.GetAktId());
+#endif
         pIo->ImportSprm(pSprm);
         aSprmIter.advance();
     }
@@ -3740,7 +3743,7 @@ void WW8RStyle::ImportGrupx(short nLen, bool bPara, bool bOdd)
 
 WW8RStyle::WW8RStyle(WW8Fib& _rFib, SwWW8ImplReader* pI)
     : WW8Style(*pI->m_pTableStream, _rFib)
-    , maSprmParser(_rFib.GetFIBVersion())
+    , maSprmParser(_rFib)
     , pIo(pI)
     , pStStrm(pI->m_pTableStream)
     , pStyRule(nullptr)

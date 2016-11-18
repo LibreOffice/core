@@ -4977,7 +4977,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     RedlineFlags eMode = RedlineFlags::ShowInsert;
 
-    m_pSprmParser = new wwSprmParser(m_pWwFib->GetFIBVersion());
+    m_pSprmParser = new wwSprmParser(*m_pWwFib);
 
     // Set handy helper variables
     m_bVer6  = (6 == m_pWwFib->m_nVersion);
@@ -6387,7 +6387,7 @@ bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
                 nStartCp += rReader.m_nDrawCpO;
                 nEndCp   += rReader.m_nDrawCpO;
                 WW8PLCFx_Cp_FKP* pChp = rReader.m_pPlcxMan->GetChpPLCF();
-                wwSprmParser aSprmParser(rReader.m_pWwFib->GetFIBVersion());
+                wwSprmParser aSprmParser(*rReader.m_pWwFib);
                 while (nStartCp <= nEndCp && !nPictureId)
                 {
                     if (!pChp->SeekPos( nStartCp))

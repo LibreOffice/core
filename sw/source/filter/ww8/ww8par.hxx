@@ -1693,6 +1693,7 @@ public:     // really private, but can only be done public
     void Read_BoldUsw(sal_uInt16 nId, const sal_uInt8*, short nLen);
     void Read_Bidi(sal_uInt16 nId, const sal_uInt8*, short nLen);
     void Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8*, short nLen);
+    void Read_AmbiguousSPRM(sal_uInt16 nId, const sal_uInt8*, short nLen);
     void Read_SubSuper(         sal_uInt16, const sal_uInt8*, short nLen );
     bool ConvertSubToGraphicPlacement();
     static SwFrameFormat *ContainsSingleInlineGraphic(const SwPaM &rRegion);
