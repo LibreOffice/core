@@ -212,8 +212,8 @@ void ScFiltersTest::testTdf91979()
     Point aPos = aViewData.GetScrPos(MAXCOL - 1, 10000, SC_SPLIT_TOPLEFT, true);
     int nColWidth = ScViewData::ToPixel(pDoc->GetColWidth(0, 0), aViewData.GetPPTX());
     int nRowHeight = ScViewData::ToPixel(pDoc->GetRowHeight(0, 0), aViewData.GetPPTY());
-    CPPUNIT_ASSERT(aPos.getX() == (MAXCOL - 1) * nColWidth);
-    CPPUNIT_ASSERT(aPos.getY() == 10000 * nRowHeight);
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>((MAXCOL - 1) * nColWidth), aPos.getX());
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(10000 * nRowHeight), aPos.getY());
 
     xComponent->dispose();
 }
