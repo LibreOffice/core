@@ -600,7 +600,7 @@ OpenGLContext* X11SalInstance::CreateOpenGLContext()
 
 X11OpenGLSalGraphicsImpl::X11OpenGLSalGraphicsImpl( X11SalGraphics& rParent ):
     OpenGLSalGraphicsImpl(rParent,rParent.GetGeometryProvider()),
-    mrParent(rParent)
+    mrX11Parent(rParent)
 {
 }
 
@@ -611,13 +611,13 @@ X11OpenGLSalGraphicsImpl::~X11OpenGLSalGraphicsImpl()
 void X11OpenGLSalGraphicsImpl::Init()
 {
     // The m_pFrame and m_pVDev pointers are updated late in X11
-    mpProvider = mrParent.GetGeometryProvider();
+    mpProvider = mrX11Parent.GetGeometryProvider();
     OpenGLSalGraphicsImpl::Init();
 }
 
 rtl::Reference<OpenGLContext> X11OpenGLSalGraphicsImpl::CreateWinContext()
 {
-    NativeWindowHandleProvider *pProvider = dynamic_cast<NativeWindowHandleProvider*>(mrParent.m_pFrame);
+    NativeWindowHandleProvider *pProvider = dynamic_cast<NativeWindowHandleProvider*>(mrX11Parent.m_pFrame);
 
     if( !pProvider )
         return nullptr;
@@ -625,21 +625,21 @@ rtl::Reference<OpenGLContext> X11OpenGLSalGraphicsImpl::CreateWinContext()
     sal_uIntPtr aWin = pProvider->GetNativeWindowHandle();
     rtl::Reference<X11OpenGLContext> xContext = new X11OpenGLContext;
     xContext->setVCLOnly();
-    xContext->init( mrParent.GetXDisplay(), aWin,
-                    mrParent.m_nXScreen.getXScreen() );
+    xContext->init( mrX11Parent.GetXDisplay(), aWin,
+                    mrX11Parent.m_nXScreen.getXScreen() );
     return rtl::Reference<OpenGLContext>(xContext.get());
 }
 
 void X11OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
-    OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? static_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : static_cast< OpenGLSalGraphicsImpl *>(mrParent.GetImpl());
+    OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? static_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : static_cast< OpenGLSalGraphicsImpl *>(mrX11Parent.GetImpl());
     OpenGLSalGraphicsImpl::DoCopyBits( rPosAry, *pImpl );
 }
 
 bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
 {
-    Display* pDisplay = mrParent.GetXDisplay();
-    SalX11Screen nScreen = mrParent.GetScreenNumber();
+    Display* pDisplay = mrX11Parent.GetXDisplay();
+    SalX11Screen nScreen = mrX11Parent.GetScreenNumber();
     XVisualInfo aVisualInfo;
     XImage* pImage;
     char* pData;
@@ -747,7 +747,7 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask
         None
     };
 
-    Display* pDisplay = mrParent.GetXDisplay();
+    Display* pDisplay = mrX11Parent.GetXDisplay();
     bool bInverted = false;
 
     const long nWidth = pPixmap->GetWidth();

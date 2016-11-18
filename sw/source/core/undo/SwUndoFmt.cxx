@@ -323,14 +323,13 @@ SwFormat * SwUndoRenameCharFormat::Find(const OUString & rName) const
 SwUndoFrameFormatCreate::SwUndoFrameFormatCreate(SwFrameFormat * pNewFormat,
                                        SwFrameFormat * pDerivedFrom,
                                        SwDoc * pDocument)
-    : SwUndoFormatCreate(UNDO_FRMFMT_CREATE, pNewFormat, pDerivedFrom, pDocument),
-      bAuto(pNewFormat->IsAuto())
+    : SwUndoFormatCreate(UNDO_FRMFMT_CREATE, pNewFormat, pDerivedFrom, pDocument)
 {
 }
 
 SwFormat * SwUndoFrameFormatCreate::Create(SwFormat * pDerivedFrom)
 {
-    return pDoc->MakeFrameFormat(sNewName, static_cast<SwFrameFormat *>(pDerivedFrom), true, bAuto);
+    return pDoc->MakeFrameFormat(sNewName, static_cast<SwFrameFormat *>(pDerivedFrom), true, pNew->IsAuto());
 }
 
 void SwUndoFrameFormatCreate::Delete()
