@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,sw_dialogs_test))
 $(eval $(call gb_CppunitTest_set_include,sw_dialogs_test,\
     -I$(SRCDIR)/sw/source/ui/inc \
     -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/uibase/inc \
     $$(INCLUDE) \
 ))
 

@@ -9,17 +9,25 @@
 
 #include <sal/config.h>
 #include <test/screenshot_test.hxx>
+#include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/abstdlg.hxx>
 
+#include <swabstdlg.hxx>
+
 using namespace ::com::sun::star;
+
+extern "C" { using Fn = SwAbstractDialogFactory * (*)(); }
+    // sw/source/ui/dialog/swuiexp.cxx
 
 /// Test opening a dialog in sw
 class SwDialogsTest : public ScreenshotTest
 {
 private:
+    osl::Module libSwui_;
+
     /// helper method to populate KnownDialogs, called in setUp(). Needs to be
     /// written and has to add entries to KnownDialogs
     virtual void registerKnownDialogsByID(mapType& rKnownDialogs) override;
@@ -31,6 +39,8 @@ private:
 public:
     SwDialogsTest();
     virtual ~SwDialogsTest() override;
+
+    void setUp() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -46,6 +56,22 @@ SwDialogsTest::SwDialogsTest()
 
 SwDialogsTest::~SwDialogsTest()
 {
+}
+
+void SwDialogsTest::setUp()
+{
+    ScreenshotTest::setUp();
+    // Make sure the swui library's global pSwResMgr is initialized
+    // (alternatively to dynamically loading the library, SwCreateDialogFactory
+    // could be declared in an include file and this CppunitTest link against
+    // the swui library):
+    OUString url("${LO_LIB_DIR}/" SVLIBRARY("swui"));
+    rtl::Bootstrap::expandMacros(url); //TODO: detect failure
+    CPPUNIT_ASSERT(libSwui_.load(url, SAL_LOADMODULE_GLOBAL));
+    auto fn = reinterpret_cast<Fn>(
+        libSwui_.getFunctionSymbol("SwCreateDialogFactory"));
+    CPPUNIT_ASSERT(fn != nullptr);
+    (*fn)();
 }
 
 void SwDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
