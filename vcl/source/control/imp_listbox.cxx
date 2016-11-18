@@ -2805,8 +2805,7 @@ void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage, boo
 
         if ( !bDrawTextAtImagePos && ( bImage || IsUserDrawEnabled() ) )
         {
-            long nMaxWidth = std::max( maImage.GetSizePixel().Width(), maUserItemSize.Width() );
-            aTextRect.Left() += nMaxWidth + IMG_TXT_DISTANCE;
+            aTextRect.Left() += maImage.GetSizePixel().Width() + IMG_TXT_DISTANCE;
         }
 
         MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr;
