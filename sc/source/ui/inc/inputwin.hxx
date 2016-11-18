@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_INPUTWIN_HXX
 
 #include <vector>
+#include <memory>
 #include <vcl/toolbox.hxx>
 #include <sfx2/childwin.hxx>
 #include <svl/lstner.hxx>
@@ -130,7 +131,7 @@ private:
     OUString    aString;
     vcl::Font   aTextFont;
     ScEditEngineDefaulter*  pEditEngine;            // only created when needed
-    EditView*   pEditView;
+    std::unique_ptr<EditView> mpEditView;
     AccTextDataVector maAccTextDatas;   // #i105267# text datas may be cloned, remember all copies
     bool        bIsRTL;
     bool        bIsInsertMode;

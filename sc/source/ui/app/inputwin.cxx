@@ -40,6 +40,7 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include "inputwin.hxx"
 #include "scmod.hxx"
@@ -1000,15 +1001,15 @@ void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRec
             pView->Invalidate();
             mbInvalidate = false;
         }
-        pEditView->Paint(rRect, &rRenderContext);
+        mpEditView->Paint(rRect, &rRenderContext);
     }
 }
 
 EditView* ScTextWnd::GetEditView()
 {
-    if ( !pEditView )
+    if ( !mpEditView )
         InitEditEngine();
-    return pEditView;
+    return mpEditView.get();
 }
 
 long ScTextWnd::GetPixelHeightForLines(long nLines)
@@ -1036,17 +1037,17 @@ void ScTextWnd::Resize()
     aTextBoxSize.Height() = GetPixelHeightForLines( mnLines );
     SetSizePixel( aTextBoxSize );
 
-    if (pEditView)
+    if (mpEditView)
     {
         Size aOutputSize = GetOutputSizePixel();
         Rectangle aOutputArea = PixelToLogic( Rectangle( Point(), aOutputSize ));
-        pEditView->SetOutputArea( aOutputArea );
+        mpEditView->SetOutputArea( aOutputArea );
 
         // Don't leave an empty area at the bottom if we can move the text down.
         long nMaxVisAreaTop = pEditEngine->GetTextHeight() - aOutputArea.GetHeight();
-        if (pEditView->GetVisArea().Top() > nMaxVisAreaTop)
+        if (mpEditView->GetVisArea().Top() > nMaxVisAreaTop)
         {
-            pEditView->Scroll(0, pEditView->GetVisArea().Top() - nMaxVisAreaTop);
+            mpEditView->Scroll(0, mpEditView->GetVisArea().Top() - nMaxVisAreaTop);
         }
 
         pEditEngine->SetPaperSize( PixelToLogic( Size( aOutputSize.Width(), 10000 ) ) );
@@ -1057,29 +1058,29 @@ void ScTextWnd::Resize()
 
 long ScTextWnd::GetEditEngTxtHeight()
 {
-    return pEditView ? pEditView->GetEditEngine()->GetTextHeight() : 0;
+    return mpEditView ? mpEditView->GetEditEngine()->GetTextHeight() : 0;
 }
 
 void ScTextWnd::SetScrollBarRange()
 {
-    if ( pEditView )
+    if ( mpEditView )
     {
         ScrollBar& rVBar = mrGroupBar.GetScrollBar();
         rVBar.SetRange( Range( 0, GetEditEngTxtHeight() ) );
-        long currentDocPos = pEditView->GetVisArea().TopLeft().Y();
+        long currentDocPos = mpEditView->GetVisArea().TopLeft().Y();
         rVBar.SetThumbPos( currentDocPos );
     }
 }
 
 void ScTextWnd::DoScroll()
 {
-    if ( pEditView )
+    if ( mpEditView )
     {
         ScrollBar& rVBar = mrGroupBar.GetScrollBar();
-        long currentDocPos = pEditView->GetVisArea().TopLeft().Y();
+        long currentDocPos = mpEditView->GetVisArea().TopLeft().Y();
         long nDiff = currentDocPos - rVBar.GetThumbPos();
-        pEditView->Scroll( 0, nDiff );
-        currentDocPos = pEditView->GetVisArea().TopLeft().Y();
+        mpEditView->Scroll( 0, nDiff );
+        currentDocPos = mpEditView->GetVisArea().TopLeft().Y();
         rVBar.SetThumbPos( currentDocPos );
     }
 }
@@ -1091,7 +1092,7 @@ void ScTextWnd::StartEditEngine()
     if ( pObjSh && pObjSh->IsInModalMode() )
         return;
 
-    if ( !pEditView || !pEditEngine )
+    if ( !mpEditView || !pEditEngine )
     {
         InitEditEngine();
     }
@@ -1212,19 +1213,19 @@ void ScTextWnd::InitEditEngine()
     else
         pEditEngine->SetText(aString); // At least the right text then
 
-    pEditView = new EditView( pEditEngine, this );
-    pEditView->SetInsertMode(bIsInsertMode);
+    mpEditView = o3tl::make_unique<EditView>(pEditEngine, this);
+    mpEditView->SetInsertMode(bIsInsertMode);
 
     // Text from Clipboard is taken over as ASCII in a single row
-    EVControlBits n = pEditView->GetControlWord();
-    pEditView->SetControlWord( n | EVControlBits::SINGLELINEPASTE );
+    EVControlBits n = mpEditView->GetControlWord();
+    mpEditView->SetControlWord( n | EVControlBits::SINGLELINEPASTE );
 
-    pEditEngine->InsertView( pEditView, EE_APPEND );
+    pEditEngine->InsertView( mpEditView.get(), EE_APPEND );
 
     Resize();
 
     if ( bIsRTL )
-        lcl_ModifyRTLVisArea( pEditView );
+        lcl_ModifyRTLVisArea( mpEditView.get() );
 
     pEditEngine->SetModifyHdl(LINK(this, ScTextWnd, ModifyHdl));
     pEditEngine->SetNotifyHdl(LINK(this, ScTextWnd, NotifyHdl));
@@ -1247,7 +1248,7 @@ ScTextWnd::ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh)
     :   ScTextWndBase(pParent, WinBits(WB_HIDE | WB_BORDER)),
         DragSourceHelper(this),
         pEditEngine  (nullptr),
-        pEditView    (nullptr),
+        mpEditView    (nullptr),
         bIsInsertMode(true),
         bFormulaMode (false),
         bInputMode   (false),
@@ -1303,8 +1304,7 @@ void ScTextWnd::dispose()
     while (!maAccTextDatas.empty()) {
         maAccTextDatas.back()->Dispose();
     }
-    delete pEditView;
-    pEditView = nullptr;
+    mpEditView.reset();
     delete pEditEngine;
     pEditEngine = nullptr;
 
@@ -1314,8 +1314,8 @@ void ScTextWnd::dispose()
 
 void ScTextWnd::MouseMove( const MouseEvent& rMEvt )
 {
-    if (pEditView)
-        pEditView->MouseMove( rMEvt );
+    if (mpEditView)
+        mpEditView->MouseMove( rMEvt );
 }
 
 void ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
@@ -1327,26 +1327,26 @@ void ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
             GrabFocus();
     }
 
-    if (pEditView)
+    if (mpEditView)
     {
-        pEditView->SetEditEngineUpdateMode( true );
-        pEditView->MouseButtonDown( rMEvt );
+        mpEditView->SetEditEngineUpdateMode( true );
+        mpEditView->MouseButtonDown( rMEvt );
     }
 }
 
 void ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    if (pEditView)
-        if (pEditView->MouseButtonUp( rMEvt ))
+    if (mpEditView)
+        if (mpEditView->MouseButtonUp( rMEvt ))
         {
             if ( rMEvt.IsMiddle() &&
                      GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection )
             {
                 //  EditView may have pasted from selection
-                SC_MOD()->InputChanged( pEditView );
+                SC_MOD()->InputChanged( mpEditView.get() );
             }
             else
-                SC_MOD()->InputSelection( pEditView );
+                SC_MOD()->InputSelection( mpEditView.get() );
         }
 }
 
@@ -1361,7 +1361,7 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
 
     bInputMode = true;
     CommandEventId nCommand = rCEvt.GetCommand();
-    if ( pEditView /* && nCommand == CommandEventId::StartDrag */ )
+    if ( mpEditView /* && nCommand == CommandEventId::StartDrag */ )
     {
         ScModule* pScMod = SC_MOD();
         ScTabViewShell* pStartViewSh = ScTabViewShell::GetActiveViewShell();
@@ -1371,7 +1371,7 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
 
         // Prevent that the EditView is lost when switching between Views
         pScMod->SetInEditCommand( true );
-        pEditView->Command( rCEvt );
+        mpEditView->Command( rCEvt );
         pScMod->SetInEditCommand( false );
 
         //  CommandEventId::StartDrag does not mean by far that the content was actually changed,
@@ -1419,7 +1419,7 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
             //don't call InputChanged for CommandEventId::Swipe
         }
         else
-            SC_MOD()->InputChanged( pEditView );
+            SC_MOD()->InputChanged( mpEditView.get() );
     }
     else
         Window::Command(rCEvt); // Or else let the base class handle it...
@@ -1429,10 +1429,10 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
 
 void ScTextWnd::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 {
-    if ( pEditView )
+    if ( mpEditView )
     {
         CommandEvent aDragEvent( rPosPixel, CommandEventId::StartDrag, true );
-        pEditView->Command( aDragEvent );
+        mpEditView->Command( aDragEvent );
 
         //  handling of d&d to different view (CancelHandler) can't be done here,
         //  because the call returns before d&d is complete.
@@ -1513,7 +1513,7 @@ IMPL_LINK(ScTextWnd, NotifyHdl, EENotify&, rNotify, void)
 
 IMPL_LINK_NOARG(ScTextWnd, ModifyHdl, LinkParamNone*, void)
 {
-    if (pEditView && !bInputMode)
+    if (mpEditView && !bInputMode)
     {
         ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
 
@@ -1521,7 +1521,7 @@ IMPL_LINK_NOARG(ScTextWnd, ModifyHdl, LinkParamNone*, void)
         //  while an InputHandler method is modifying the EditEngine content
 
         if ( pHdl && !pHdl->IsInOwnChange() )
-            pHdl->InputChanged( pEditView, true );  // #i20282# InputChanged must know if called from modify handler
+            pHdl->InputChanged( mpEditView.get(), true );  // #i20282# InputChanged must know if called from modify handler
     }
 }
 
@@ -1532,7 +1532,7 @@ void ScTextWnd::StopEditEngine( bool bAll )
 
     pEditEngine->SetNotifyHdl(Link<EENotify&, void>());
 
-    if (pEditView)
+    if (mpEditView)
     {
         if (!maAccTextDatas.empty())
             maAccTextDatas.back()->EndEdit();
@@ -1540,12 +1540,12 @@ void ScTextWnd::StopEditEngine( bool bAll )
         ScModule* pScMod = SC_MOD();
 
         if (!bAll)
-            pScMod->InputSelection( pEditView );
+            pScMod->InputSelection( mpEditView.get() );
         aString = pEditEngine->GetText();
-        bIsInsertMode = pEditView->IsInsertMode();
-        bool bSelection = pEditView->HasSelection();
+        bIsInsertMode = mpEditView->IsInsertMode();
+        bool bSelection = mpEditView->HasSelection();
         pEditEngine->SetModifyHdl(Link<LinkParamNone*,void>());
-        DELETEZ(pEditView);
+        mpEditView.reset();
         DELETEZ(pEditEngine);
 
         if ( pScMod->IsEditMode() && !bAll )
@@ -1677,7 +1677,7 @@ bool ScTextWnd::IsInputActive()
 
 void ScTextWnd::MakeDialogEditView()
 {
-    if ( pEditView ) return;
+    if ( mpEditView ) return;
 
     ScFieldEditEngine* pNew;
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
@@ -1703,13 +1703,13 @@ void ScTextWnd::MakeDialogEditView()
     pEditEngine->SetDefaults( pSet );
     pEditEngine->SetUpdateMode( true );
 
-    pEditView   = new EditView( pEditEngine, this );
-    pEditEngine->InsertView( pEditView, EE_APPEND );
+    mpEditView = o3tl::make_unique<EditView>(pEditEngine, this);
+    pEditEngine->InsertView( mpEditView.get(), EE_APPEND );
 
     Resize();
 
     if ( bIsRTL )
-        lcl_ModifyRTLVisArea( pEditView );
+        lcl_ModifyRTLVisArea( mpEditView.get() );
 
     if (!maAccTextDatas.empty())
         maAccTextDatas.back()->StartEdit();
