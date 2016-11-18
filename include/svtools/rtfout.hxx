@@ -34,7 +34,7 @@ namespace RTFOutFuncs {
 
 SVT_DLLPUBLIC SvStream& Out_String(
     SvStream&, const rtl::OUString&,
-    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
+    rtl_TextEncoding eDestEnc,
     bool bWriteHelpFile = false );
 
 }

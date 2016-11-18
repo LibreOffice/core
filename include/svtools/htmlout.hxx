@@ -55,11 +55,11 @@ struct HTMLOutFuncs
 {
     SVT_DLLPUBLIC static OString ConvertStringToHTML( const OUString& sSrc,
                         rtl_TextEncoding eDestEnc,
-                        OUString *pNonConvertableChars = nullptr );
+                        OUString *pNonConvertableChars );
 
     SVT_DLLPUBLIC static SvStream& Out_AsciiTag( SvStream&, const sal_Char* pStr,
                                    bool bOn = true,
-                        rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252);
+                                   rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252);
     SVT_DLLPUBLIC static SvStream& Out_Char( SvStream&, sal_uInt32 cChar,
                         HTMLOutContext& rContext,
                         OUString *pNonConvertableChars );
@@ -74,10 +74,10 @@ struct HTMLOutFuncs
                                    const HTMLOutEvent *pEventTable,
                                    bool bOutStarBasic,
                                    const sal_Char *pDelim,
-                                   const sal_Char *pIndentArea = nullptr,
+                                   const sal_Char *pIndentArea,
                                    const sal_Char *pIndentMap = nullptr,
-                        rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                        OUString *pNonConvertableChars = nullptr );
+                                   rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
+                                   OUString *pNonConvertableChars = nullptr );
     SVT_DLLPUBLIC static SvStream& FlushToAscii( SvStream&, HTMLOutContext& rContext );
 
     SVT_DLLPUBLIC static SvStream& OutScript( SvStream& rStrm,
@@ -87,16 +87,16 @@ struct HTMLOutFuncs
                                 ScriptType eScriptType,
                                 const OUString& rSrc,
                                 const OUString *pSBLibrary,
-                                const OUString *pSBModule = nullptr,
-                        rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                        OUString *pNonConvertableChars = nullptr );
+                                const OUString *pSBModule,
+                                rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
+                                OUString *pNonConvertableChars = nullptr );
 
     // the 3rd parameter is an array of HTMLOutEvents which is terminated
     // by an entry that consists only of 0s
     SVT_DLLPUBLIC static SvStream& Out_Events( SvStream&, const SvxMacroTableDtor&,
-                                 const HTMLOutEvent*, bool bOutStarBasic,
-                        rtl_TextEncoding eDestEnc,
-                        OUString *pNonConvertableChars = nullptr );
+                                    const HTMLOutEvent*, bool bOutStarBasic,
+                                    rtl_TextEncoding eDestEnc,
+                                    OUString *pNonConvertableChars );
 
     // <TD SDVAL="..." SDNUM="...">
     SVT_DLLPUBLIC static OString CreateTableDataOptionsValNum(

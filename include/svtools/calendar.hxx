@@ -246,7 +246,7 @@ protected:
     DECL_LINK( ScrollHdl, Timer *, void );
 
 public:
-                    Calendar( vcl::Window* pParent, WinBits nWinStyle = 0 );
+                    Calendar( vcl::Window* pParent, WinBits nWinStyle );
     virtual         ~Calendar() override;
     virtual void    dispose() override;
 

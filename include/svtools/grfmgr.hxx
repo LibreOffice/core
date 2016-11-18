@@ -564,7 +564,7 @@ private:
                             const GraphicObject& rObj,
                             Graphic& rSubstitute,
                             const OString* pID,
-                            const GraphicObject* pCopyObj = nullptr
+                            const GraphicObject* pCopyObj
                         );
     void SVT_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
     inline bool SVT_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }
@@ -585,7 +585,7 @@ private:
     void SVT_DLLPRIVATE ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGraphicToIgnore);
 public:
 
-                        GraphicManager( sal_uLong nCacheSize = 10000000UL, sal_uLong nMaxObjCacheSize = 2400000UL );
+                        GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize );
                         ~GraphicManager();
 
     void                SetMaxCacheSize( sal_uLong nNewCacheSize );
