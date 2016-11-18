@@ -2166,7 +2166,7 @@ static inline bool lcl_RowAbsFlagDiffer(const ScRefFlags nFlags)
 }
 
 OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
-                          const ScAddress::Details& rDetails ) const
+                          const ScAddress::Details& rDetails, bool bFullAddressNotation ) const
 {
     if( !( nFlags & ScRefFlags::VALID ) )
     {
@@ -2201,14 +2201,14 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
         lcl_ScRange_Format_XL_Header( r, *this, nFlags, pDoc, rDetails );
-        if( aStart.Col() == 0 && aEnd.Col() >= MAXCOL )
+        if( aStart.Col() == 0 && aEnd.Col() >= MAXCOL && !bFullAddressNotation )
         {
             // Full col refs always require 2 rows (2:2)
             lcl_a1_append_r( r, aStart.Row(), (nFlags & ScRefFlags::ROW_ABS) != ScRefFlags::ZERO );
             r.append(":");
             lcl_a1_append_r( r, aEnd.Row(), (nFlags & ScRefFlags::ROW2_ABS) != ScRefFlags::ZERO );
         }
-        else if( aStart.Row() == 0 && aEnd.Row() >= MAXROW )
+        else if( aStart.Row() == 0 && aEnd.Row() >= MAXROW && !bFullAddressNotation )
         {
             // Full row refs always require 2 cols (A:A)
             lcl_a1_append_c( r, aStart.Col(), (nFlags & ScRefFlags::COL_ABS) != ScRefFlags::ZERO );
@@ -2232,7 +2232,7 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
         lcl_ScRange_Format_XL_Header( r, *this, nFlags, pDoc, rDetails );
-        if( aStart.Col() == 0 && aEnd.Col() >= MAXCOL )
+        if( aStart.Col() == 0 && aEnd.Col() >= MAXCOL && !bFullAddressNotation )
         {
             lcl_r1c1_append_r( r, aStart.Row(), (nFlags & ScRefFlags::ROW_ABS) != ScRefFlags::ZERO, rDetails );
             if( aStart.Row() != aEnd.Row() ||
@@ -2241,7 +2241,7 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
                 lcl_r1c1_append_r( r, aEnd.Row(), (nFlags & ScRefFlags::ROW2_ABS) != ScRefFlags::ZERO, rDetails );
             }
         }
-        else if( aStart.Row() == 0 && aEnd.Row() >= MAXROW )
+        else if( aStart.Row() == 0 && aEnd.Row() >= MAXROW && !bFullAddressNotation )
         {
             lcl_r1c1_append_c( r, aStart.Col(), (nFlags & ScRefFlags::COL_ABS) != ScRefFlags::ZERO, rDetails );
             if( aStart.Col() != aEnd.Col() ||

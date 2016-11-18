@@ -543,8 +543,30 @@ public:
                                         const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
                                         const OUString* pErrRef = nullptr );
 
-    SC_DLLPUBLIC OUString Format(ScRefFlags nFlags = ScRefFlags::ZERO, const ScDocument* pDocument = nullptr,
-                                 const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
+    /** Returns string with formatted cell range from aStart to aEnd,
+        according to provided address convention.
+        @param nFlags
+            Cell reference flags
+        @param pDocument
+            Pointer to document which is used for example to get tab names.
+        @param rDetails
+            Provide information about required address convention.
+            Supported address conventions are:
+                CONV_OOO      'doc'#sheet.A1:sheet2.B2
+                CONV_XL_A1,   [doc]sheet:sheet2!A1:B2
+                CONV_XL_OOX,  [#]sheet:sheet2!A1:B2
+                CONV_XL_R1C1, [doc]sheet:sheet2!R1C1:R2C2
+        @param bFullAddressNotation
+            If TRUE, the full address notation will be used.
+            For example in case all columns are used, "A1:AMJ177" is full address notation
+            and "1:177" is shortened address notation.
+        @returns
+            String contains formatted cell range in address convention
+     */
+    SC_DLLPUBLIC OUString Format( ScRefFlags nFlags = ScRefFlags::ZERO,
+                                  const ScDocument* pDocument = nullptr,
+                                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+                                  bool bFullAddressNotation = false ) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
                          SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
