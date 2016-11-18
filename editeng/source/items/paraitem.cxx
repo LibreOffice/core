@@ -91,7 +91,7 @@ SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId
 
 bool SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxLineSpacingItem& rLineSpace = static_cast<const SvxLineSpacingItem&>(rAttr);
     return
@@ -344,7 +344,7 @@ SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
 
 bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxAdjustItem& rItem = static_cast<const SvxAdjustItem&>(rAttr);
     return GetAdjust() == rItem.GetAdjust() &&
@@ -683,7 +683,7 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxHyphenZoneItem& rItem = static_cast<const SvxHyphenZoneItem&>(rAttr);
     return ( rItem.bHyphen == bHyphen
@@ -1005,7 +1005,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 bool SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxTabStopItem& rTSI = static_cast<const SvxTabStopItem&>(rAttr);
 
@@ -1237,7 +1237,7 @@ bool SvxPageModelItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId 
 
 bool SvxPageModelItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     return SfxStringItem::operator==(rAttr) &&
            bAuto == static_cast<const SvxPageModelItem&>( rAttr ).bAuto;
@@ -1464,7 +1464,7 @@ bool SvxParaVertAlignItem::PutValue( const css::uno::Any& rVal,
 
 bool SvxParaVertAlignItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return SfxUInt16Item::operator==( rItem );
 }
 

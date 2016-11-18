@@ -340,7 +340,7 @@ SvStream& SvxFieldItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) co
 
 bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
+    assert(SfxPoolItem::operator==(rItem));
 
     const SvxFieldData* pOtherFld = static_cast<const SvxFieldItem&>(rItem).GetField();
     if( pField == pOtherFld )

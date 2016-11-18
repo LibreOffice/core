@@ -71,7 +71,7 @@ SfxPoolItem* SfxSpellCheckItem::Clone( SfxItemPool* ) const
 
 bool SfxSpellCheckItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rItem), "unequal types" );
+    assert(SfxPoolItem::operator==(rItem));
     return ( xSpellCheck == static_cast<const SfxSpellCheckItem&>( rItem ).GetXSpellChecker() );
 }
 
@@ -97,7 +97,7 @@ SfxHyphenRegionItem::SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem ) :
 
 bool SfxHyphenRegionItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     return ( ( static_cast<const SfxHyphenRegionItem&>( rAttr ).nMinLead == nMinLead ) &&
              ( static_cast<const SfxHyphenRegionItem&>( rAttr ).nMinTrail == nMinTrail ) );

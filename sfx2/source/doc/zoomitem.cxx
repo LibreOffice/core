@@ -90,7 +90,7 @@ SvStream& SvxZoomItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) con
 
 bool SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxZoomItem& rItem = static_cast<const SvxZoomItem&>(rAttr);
 

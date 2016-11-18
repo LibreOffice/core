@@ -71,7 +71,7 @@ void SfxEventNamesList::DelDtor()
 
 bool SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SfxEventNamesList& rOwn = aEventsList;
     const SfxEventNamesList& rOther = static_cast<const SfxEventNamesItem&>( rAttr ).aEventsList;

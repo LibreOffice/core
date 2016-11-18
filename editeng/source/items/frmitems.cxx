@@ -307,7 +307,7 @@ SvxSizeItem::SvxSizeItem( const sal_uInt16 nId ) :
 
 bool SvxSizeItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     return ( aSize == static_cast<const SvxSizeItem&>( rAttr ).GetSize() );
 }
@@ -569,7 +569,7 @@ void SvxLRSpaceItem::AdjustLeft()
 
 bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxLRSpaceItem& rOther = static_cast<const SvxLRSpaceItem&>(rAttr);
 
@@ -953,7 +953,7 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 bool SvxULSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxULSpaceItem& rSpaceItem = static_cast<const SvxULSpaceItem&>( rAttr );
     return ( nUpper == rSpaceItem.nUpper &&
@@ -1177,7 +1177,7 @@ bool SvxOpaqueItem::GetPresentation
 
 bool SvxProtectItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxProtectItem& rItem = static_cast<const SvxProtectItem&>(rAttr);
     return ( bCntnt == rItem.bCntnt &&
@@ -1402,7 +1402,7 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 bool SvxShadowItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxShadowItem& rItem = static_cast<const SvxShadowItem&>(rAttr);
     return ( ( aShadowColor == rItem.aShadowColor ) &&
@@ -1650,7 +1650,7 @@ inline bool CmpBrdLn( const SvxBorderLine* pBrd1, const SvxBorderLine* pBrd2 )
 
 bool SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(rAttr);
     return (
@@ -2545,9 +2545,9 @@ SvxBoxInfoItem &SvxBoxInfoItem::operator=( const SvxBoxInfoItem& rCpy )
 
 bool SvxBoxInfoItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    const SvxBoxInfoItem& rBoxInfo = static_cast<const SvxBoxInfoItem&>(rAttr);
+    assert(SfxPoolItem::operator==(rAttr));
 
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    const SvxBoxInfoItem& rBoxInfo = static_cast<const SvxBoxInfoItem&>(rAttr);
 
     return (   mbEnableHor               == rBoxInfo.mbEnableHor
             && mbEnableVer               == rBoxInfo.mbEnableVer
@@ -2919,7 +2919,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 bool SvxFormatBreakItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     return GetValue() == static_cast<const SvxFormatBreakItem&>( rAttr ).GetValue();
 }
@@ -3105,7 +3105,7 @@ SvxLineItem& SvxLineItem::operator=( const SvxLineItem& rLine )
 
 bool SvxLineItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     return CmpBrdLn( pLine, static_cast<const SvxLineItem&>(rAttr).GetLine() );
 }
@@ -3716,7 +3716,7 @@ SvxBrushItem& SvxBrushItem::operator=(SvxBrushItem&& rItem)
 
 bool SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxBrushItem& rCmp = static_cast<const SvxBrushItem&>(rAttr);
     bool bEqual = ( aColor == rCmp.aColor && eGraphicPos == rCmp.eGraphicPos &&
@@ -4059,7 +4059,7 @@ SvxFrameDirectionItem::~SvxFrameDirectionItem()
 
 bool SvxFrameDirectionItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rCmp), "unequal types" );
+    assert(SfxPoolItem::operator==(rCmp));
 
     return GetValue() == static_cast<const SvxFrameDirectionItem&>(rCmp).GetValue();
 }

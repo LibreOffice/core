@@ -171,7 +171,7 @@ SfxPoolItem* SvxFontListItem::Clone( SfxItemPool* ) const
 
 bool SvxFontListItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     return( pFontList == static_cast<const SvxFontListItem&>(rAttr).pFontList );
 }
@@ -326,7 +326,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
 
 bool SvxFontItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxFontItem& rItem = static_cast<const SvxFontItem&>(rAttr);
 
@@ -773,7 +773,7 @@ SfxPoolItem* SvxFontHeightItem::Create( SvStream& rStrm,
 
 bool SvxFontHeightItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return GetHeight() == static_cast<const SvxFontHeightItem&>(rItem).GetHeight() &&
             GetProp() == static_cast<const SvxFontHeightItem&>(rItem).GetProp() &&
             GetPropUnit() == static_cast<const SvxFontHeightItem&>(rItem).GetPropUnit();
@@ -1146,7 +1146,7 @@ SfxPoolItem* SvxFontWidthItem::Create( SvStream& rStrm,
 
 bool SvxFontWidthItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return GetWidth() == static_cast<const SvxFontWidthItem&>(rItem).GetWidth() &&
             GetProp() == static_cast<const SvxFontWidthItem&>(rItem).GetProp();
 }
@@ -1347,7 +1347,7 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 bool SvxTextLineItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return SfxEnumItem::operator==( rItem ) &&
            GetColor() == static_cast<const SvxTextLineItem&>(rItem).GetColor();
 }
@@ -1871,7 +1871,7 @@ sal_uInt16 SvxColorItem::GetVersion( sal_uInt16 nFFVer ) const
 
 bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     return  mColor == static_cast<const SvxColorItem&>( rAttr ).mColor;
 }
@@ -2203,7 +2203,7 @@ SvxEscapementItem::SvxEscapementItem( const short _nEsc,
 
 bool SvxEscapementItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     return( nEsc  == static_cast<const SvxEscapementItem&>(rAttr).nEsc &&
             nProp == static_cast<const SvxEscapementItem&>(rAttr).nProp );
@@ -2760,7 +2760,7 @@ SvxTwoLinesItem::~SvxTwoLinesItem()
 
 bool SvxTwoLinesItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "not equal attribute types" );
+    assert(SfxPoolItem::operator==(rAttr));
     return bOn == static_cast<const SvxTwoLinesItem&>(rAttr).bOn &&
            cStartBracket == static_cast<const SvxTwoLinesItem&>(rAttr).cStartBracket &&
            cEndBracket == static_cast<const SvxTwoLinesItem&>(rAttr).cEndBracket;
@@ -2979,7 +2979,7 @@ bool SvxCharRotateItem::PutValue( const css::uno::Any& rVal,
 
 bool SvxCharRotateItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    assert(SfxPoolItem::operator==(rItem));
     return SfxUInt16Item::operator==( rItem ) &&
            IsFitToLine() == static_cast<const SvxCharRotateItem&>(rItem).IsFitToLine();
 }
