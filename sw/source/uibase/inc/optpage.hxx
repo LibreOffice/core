@@ -255,7 +255,6 @@ class SwShdwCursorOptionsTabPage : public SfxTabPage
 
     VclPtr<VclFrame> m_pCursorProtFrame;
     VclPtr<CheckBox> m_pCursorInProtCB;
-    VclPtr<CheckBox> m_pIgnoreProtCB;
 
     VclPtr<CheckBox> m_pMathBaselineAlignmentCB;
 
