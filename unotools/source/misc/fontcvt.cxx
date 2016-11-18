@@ -529,7 +529,7 @@ static const sal_Unicode aAdobeSymbolTab[224] =
              0,         0,         0,         0,
              0,         0,         0,         0,
     // F0a0
-        0xe11a,    0x03d2,    0x0384,    0xe11b,
+        0xe11a,    0x03d2,    0x2032,    0xe11b,
         0x2215,    0xe11c,    0xe11d,    0xe11e,
         0x2666,    0xe11f,    0xe120,    0xe121,
         0xe122,    0xe123,    0xe124,    0xe125,
