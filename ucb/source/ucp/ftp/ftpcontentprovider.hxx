@@ -118,8 +118,6 @@ namespace ftp
         };
 
     private:
-
-        osl::Mutex m_aMutex;
         FTPLoaderThread *m_ftpLoaderThread;
         ucbhelper::InternetProxyDecider *m_pProxyDecider;
         std::vector<ServerInfo> m_ServerInfo;
