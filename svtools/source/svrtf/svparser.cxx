@@ -171,13 +171,13 @@ sal_uInt32 SvParser::GetNextChar()
                 {
                     if( 0xfe == c1 && 0xff == c2 )
                     {
-                        SetSrcEncoding(RTL_TEXTENCODING_UCS2);
+                        eSrcEnc = RTL_TEXTENCODING_UCS2;
                         bUCS2BSrcEnc = true;
                         bSeekBack = false;
                     }
                     else if( 0xff == c1 && 0xfe == c2 )
                     {
-                        SetSrcEncoding(RTL_TEXTENCODING_UCS2);
+                        eSrcEnc = RTL_TEXTENCODING_UCS2;
                         bUCS2BSrcEnc = false;
                         bSeekBack = false;
                     }
