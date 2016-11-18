@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_fa31baed",
+        "filename": "sw/source/core/crsr/pam.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-11-18T10:39:55Z",
+      "side": 0,
+      "message": "The next comparison still does the job, so the comment still holds true?",
+      "parentUuid": "7a77a97e_5a20ee9b",
+      "revId": "8aec9057a169acfda6f2d986af93edca54677fd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_7a25aaa9",
         "filename": "sw/source/core/crsr/pam.cxx",
         "patchSetId": 1
