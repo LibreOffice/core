@@ -68,7 +68,6 @@ namespace pcr
     class SubmissionPropertyHandler : public EditPropertyHandler_Base, public ::comphelper::OPropertyChangeListener
     {
     private:
-        ::osl::Mutex                                m_aMutex;
         ::std::unique_ptr< SubmissionHelper >       m_pHelper;
         ::comphelper::OPropertyChangeMultiplexer*   m_pPropChangeMultiplexer;
 

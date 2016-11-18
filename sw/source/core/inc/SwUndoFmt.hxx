@@ -178,8 +178,6 @@ public:
 
 class SwUndoFrameFormatCreate : public SwUndoFormatCreate
 {
-    bool bAuto;
-
 public:
     SwUndoFrameFormatCreate(SwFrameFormat * pNew, SwFrameFormat * pDerivedFrom,
                        SwDoc * pDoc);

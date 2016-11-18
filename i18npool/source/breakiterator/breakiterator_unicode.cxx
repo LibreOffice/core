@@ -258,20 +258,21 @@ Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int
 {
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
 
-    result.startPos = icuBI->aBreakIterator->following(nStartPos);
-    if( result.startPos >= Text.getLength() || result.startPos == BreakIterator::DONE )
-        result.endPos = result.startPos;
+    Boundary rv;
+    rv.startPos = icuBI->aBreakIterator->following(nStartPos);
+    if( rv.startPos >= Text.getLength() || rv.startPos == BreakIterator::DONE )
+        rv.endPos = result.startPos;
     else {
         if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
                     rWordType == WordType::DICTIONARY_WORD ) &&
-                u_isWhitespace(Text.iterateCodePoints(&result.startPos, 0)) )
-            result.startPos = icuBI->aBreakIterator->following(result.startPos);
+                u_isWhitespace(Text.iterateCodePoints(&rv.startPos, 0)) )
+            rv.startPos = icuBI->aBreakIterator->following(rv.startPos);
 
-        result.endPos = icuBI->aBreakIterator->following(result.startPos);
-        if(result.endPos == BreakIterator::DONE)
-            result.endPos = result.startPos;
+        rv.endPos = icuBI->aBreakIterator->following(rv.startPos);
+        if(rv.endPos == BreakIterator::DONE)
+            rv.endPos = rv.startPos;
     }
-    return result;
+    return rv;
 }
 
 
@@ -280,20 +281,21 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
 {
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
 
-    result.startPos = icuBI->aBreakIterator->preceding(nStartPos);
-    if( result.startPos < 0 || result.startPos == BreakIterator::DONE)
-        result.endPos = result.startPos;
+    Boundary rv;
+    rv.startPos = icuBI->aBreakIterator->preceding(nStartPos);
+    if( rv.startPos < 0 || rv.startPos == BreakIterator::DONE)
+        rv.endPos = rv.startPos;
     else {
         if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
                     rWordType == WordType::DICTIONARY_WORD) &&
-                u_isWhitespace(Text.iterateCodePoints(&result.startPos, 0)) )
-            result.startPos = icuBI->aBreakIterator->preceding(result.startPos);
+                u_isWhitespace(Text.iterateCodePoints(&rv.startPos, 0)) )
+            rv.startPos = icuBI->aBreakIterator->preceding(rv.startPos);
 
-        result.endPos = icuBI->aBreakIterator->following(result.startPos);
-        if(result.endPos == BreakIterator::DONE)
-            result.endPos = result.startPos;
+        rv.endPos = icuBI->aBreakIterator->following(rv.startPos);
+        if(rv.endPos == BreakIterator::DONE)
+            rv.endPos = rv.startPos;
     }
-    return result;
+    return rv;
 }
 
 
@@ -303,30 +305,31 @@ Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, 
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
     sal_Int32 len = Text.getLength();
 
+    Boundary rv;
     if(icuBI->aBreakIterator->isBoundary(nPos)) {
-        result.startPos = result.endPos = nPos;
+        rv.startPos = rv.endPos = nPos;
         if((bDirection || nPos == 0) && nPos < len) //forward
-            result.endPos = icuBI->aBreakIterator->following(nPos);
+            rv.endPos = icuBI->aBreakIterator->following(nPos);
         else
-            result.startPos = icuBI->aBreakIterator->preceding(nPos);
+            rv.startPos = icuBI->aBreakIterator->preceding(nPos);
     } else {
         if(nPos <= 0) {
-            result.startPos = 0;
-            result.endPos = len ? icuBI->aBreakIterator->following((sal_Int32)0) : 0;
+            rv.startPos = 0;
+            rv.endPos = len ? icuBI->aBreakIterator->following((sal_Int32)0) : 0;
         } else if(nPos >= len) {
-            result.startPos = icuBI->aBreakIterator->preceding(len);
-            result.endPos = len;
+            rv.startPos = icuBI->aBreakIterator->preceding(len);
+            rv.endPos = len;
         } else {
-            result.startPos = icuBI->aBreakIterator->preceding(nPos);
-            result.endPos = icuBI->aBreakIterator->following(nPos);
+            rv.startPos = icuBI->aBreakIterator->preceding(nPos);
+            rv.endPos = icuBI->aBreakIterator->following(nPos);
         }
     }
-    if (result.startPos == BreakIterator::DONE)
-        result.startPos = result.endPos;
-    else if (result.endPos == BreakIterator::DONE)
-        result.endPos = result.startPos;
+    if (rv.startPos == BreakIterator::DONE)
+        rv.startPos = rv.endPos;
+    else if (rv.endPos == BreakIterator::DONE)
+        rv.endPos = rv.startPos;
 
-    return result;
+    return rv;
 }
 
 
