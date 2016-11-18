@@ -180,14 +180,14 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     mpMasterPageListWatcher = ::std::auto_ptr<ImpMasterPageListWatcher>(
         new ImpMasterPageListWatcher(*this));
 
-    SetObjectShell(pDrDocSh);       // fuer das VCDrawModel
+    SetObjectShell(pDrDocSh);       // for the VCDrawModel
 
     if (mpDocSh)
     {
         SetSwapGraphics(sal_True);
     }
 
-    // Masseinheit (von App) und Massstab (von SdMod) setzen
+    // set measurement unit (of App) and scale (of SdMod)
     sal_Int32 nX, nY;
     SdOptions* pOptions = SD_MOD()->GetSdOptions(meDocType);
     pOptions->GetScale( nX, nY );
@@ -206,13 +206,12 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     pItemPool->FreezeIdRanges();
     SetTextDefaults();
 
-    // die DrawingEngine muss auch wissen, wo er ist
+    // also the DrawingEngine needs to know where it is
     FmFormModel::SetStyleSheetPool( new SdStyleSheetPool( GetPool(), this ) );
 
-    // Dem DrawOutliner den StyleSheetPool setzen, damit Textobjekte richtig
-    // eingelesen werden koennen. Der Link zum StyleRequest-Handler des
-    // Dokuments wird erst in NewOrLoadCompleted gesetzt, da erst dann alle
-    // Vorlagen existieren.
+    // Set the StyleSheetPool to the DrawOutliner, in order to read text objects
+    // correctly. The link to the StyleRequest handler of the document will be
+    // set first in NewOrLoadCompleted, because only then all templates exist.
     SdrOutliner& rOutliner = GetDrawOutliner();
     rOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
     SetCalcFieldValueHdl( &rOutliner );
@@ -251,8 +250,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         GetPool().GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( sal_False, EE_PARA_ASIANCJKSPACING ) );
     }
 
-    // DefTab und SpellOptions setzen
-    // Jetzt am Modul (SD)
+    // set DefTab and SpellOptions
+    // now at the module (SD)
     sal_uInt16 nDefTab = pOptions->GetDefTab();
     SetDefaultTabulator( nDefTab );
 
@@ -303,10 +302,9 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // Initialize the printer independent layout mode.
     SetPrinterIndependentLayout (pOptions->GetPrinterIndependentLayout());
 
-    // Dem HitTestOutliner den StyleSheetPool setzen.
-    // Der Link zum StyleRequest-Handler des
-    // Dokuments wird erst in NewOrLoadCompleted gesetzt, da erst dann alle
-    // Vorlagen existieren.
+    // Set the StyleSheetPool to the HitTestOutliner.
+    // The link to the StyleRequest handler of the document will be set
+    // first in NewOrLoadCompleted, because only then all templates exist.
     SfxItemSet aSet2( pHitTestOutliner->GetEmptyItemSet() );
     pHitTestOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)GetStyleSheetPool() );
 
@@ -341,19 +339,19 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     pHitTestOutliner->SetControlWord( nCntrl2 );
 
     /**************************************************************************
-    * Layer anlegen
+    * Create layer
     *
-    * Es werden auf Pages und MasterPages folgende Default-Layer angelegt:
+    * The following default layer will created on Pages and MasterPages:
     *
-    * Layer STR_LAYOUT    : Standardlayer fr alle Zeichenobjekte
+    * Layer STR_LAYOUT  : Default layer for all drawing objects
     *
-    * Layer STR_BCKGRND   : Hintergrund der MasterPage
-    *                       (auf normalen Pages z.Z. keine Verwendung)
+    * Layer STR_BCKGRND : Background of the MasterPage
+    *             (it's currently not used on normal Pages)
     *
-    * Layer STR_BCKGRNDOBJ: Objekte auf dem Hintergrund der MasterPage
-    *                       (auf normalen Pages z.Z. keine Verwendung)
+    * Layer STR_BCKGRNDOBJ  : Objects on the background of the MasterPage
+    *             (it's currently not used on normal Pages)
     *
-    * Layer STR_CONTROLS  : Standardlayer fr Controls
+    * Layer STR_CONTROLS    : Default layer for Controls
     *
     **************************************************************************/
     {
@@ -374,7 +372,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
 /*************************************************************************
 |*
-|* Destruktor
+|* Destructor
 |*
 \************************************************************************/
 
@@ -403,7 +401,7 @@ SdDrawDocument::~SdDrawDocument()
 
     if (pLinkManager)
     {
-        // BaseLinks freigeben
+        // deallocate BaseLinks
         if ( pLinkManager->GetLinks().Count() )
         {
             pLinkManager->Remove( 0, pLinkManager->GetLinks().Count() );
@@ -417,7 +415,7 @@ SdDrawDocument::~SdDrawDocument()
 
     for (sal_uLong i = 0; i < mpFrameViewList->Count(); i++)
     {
-        // Ggf. FrameViews loeschen
+        // if necessary delete FrameViews
         pFrameView =
             static_cast< ::sd::FrameView*>(mpFrameViewList->GetObject(i));
 
@@ -432,7 +430,7 @@ SdDrawDocument::~SdDrawDocument()
     {
         for (sal_uLong j = 0; j < mpCustomShowList->Count(); j++)
         {
-            // Ggf. CustomShows loeschen
+            // if necessary delete CustomShows
             SdCustomShow* pCustomShow = (SdCustomShow*) mpCustomShowList->GetObject(j);
             delete pCustomShow;
         }
@@ -456,9 +454,9 @@ SdDrawDocument::~SdDrawDocument()
 
 /*************************************************************************
 |*
-|* Diese Methode erzeugt ein neues Dokument (SdDrawDocument) und gibt einen
-|* Zeiger darauf zurueck. Die Drawing Engine benutzt diese Methode um das
-|* Dokument oder Teile davon ins Clipboard/DragServer stellen zu koennen.
+|* This methods creates a new document (SdDrawDocument) and gives back a
+|* pointer to it. The Drawing Engine uses this method to be able to put
+|* the document or parts of it into Clipboard/DragServer.
 |*
 \************************************************************************/
 
@@ -468,7 +466,8 @@ SdrModel* SdDrawDocument::AllocModel() const
 
     if( mpCreatingTransferable )
     {
-        // Dokument wird fuer Drag&Drop/Clipboard erzeugt, dafuer muss dem Dokument eine DocShell (SvPersist) bekannt sein
+        // the document will created for Drag&Drop/Clipboard,
+        // for this the document has to know a DocShell (SvPersist)
         SfxObjectShell*   pObj = NULL;
         ::sd::DrawDocShell*     pNewDocSh = NULL;
 
@@ -483,8 +482,8 @@ SdrModel* SdDrawDocument::AllocModel() const
         pNewDocSh->DoInitNew( NULL );
         pNewModel = pNewDocSh->GetDoc();
 
-        // Nur fuer Clipboard notwendig,
-        // fuer Drag&Drop erfolgt dieses im DragServer
+        // only necessary for Clipboard,
+        // for Drag&Drop this will happen in DragServer
         SdStyleSheetPool* pOldStylePool = (SdStyleSheetPool*) GetStyleSheetPool();
         SdStyleSheetPool* pNewStylePool = (SdStyleSheetPool*) pNewModel->GetStyleSheetPool();
 
@@ -495,7 +494,7 @@ SdrModel* SdDrawDocument::AllocModel() const
 
         for (sal_uInt16 i = 0; i < GetMasterSdPageCount(PK_STANDARD); i++)
         {
-            // Alle Layouts der MasterPage mitnehmen
+            // take all layouts of the MasterPage
             String aOldLayoutName(((SdDrawDocument*) this)->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName());
             aOldLayoutName.Erase( aOldLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
             SdStyleSheetVector aCreatedSheets;
@@ -506,7 +505,7 @@ SdrModel* SdDrawDocument::AllocModel() const
     }
     else if( mbAllocDocSh )
     {
-        // Es wird eine DocShell erzeugt, welche mit GetAllocedDocSh() zurueckgegeben wird
+        // a DocShell will be created which will be returned with GetAllocedDocSh()
         SdDrawDocument* pDoc = (SdDrawDocument*) this;
         pDoc->SetAllocDocSh(sal_False);
         pDoc->mxAllocedDocShRef = new ::sd::DrawDocShell(
@@ -524,10 +523,9 @@ SdrModel* SdDrawDocument::AllocModel() const
 
 /*************************************************************************
 |*
-|* Diese Methode erzeugt eine neue Seite (SdPage) und gibt einen Zeiger
-|* darauf zurueck. Die Drawing Engine benutzt diese Methode beim Laden
-|* zur Erzeugung von Seiten (deren Typ sie ja nicht kennt, da es ABLEITUNGEN
-|* der SdrPage sind).
+|* This methods creates a new page (SdPage) and gives back a pointer to it.
+|* The Drawing Engine uses this method when loading to create pages (whose
+|* types are not knowed for it because these are DERIVATIONS of SdrPage).
 |*
 \************************************************************************/
 
@@ -538,7 +536,7 @@ SdrPage* SdDrawDocument::AllocPage(FASTBOOL bMasterPage)
 
 /*************************************************************************
 |*
-|* SetChanged(), das Model wurde geaendert
+|* SetChanged(), the modele was changed
 |*
 \************************************************************************/
 
@@ -548,16 +546,16 @@ void SdDrawDocument::SetChanged(sal_Bool bFlag)
     {
         if (mbNewOrLoadCompleted && mpDocSh->IsEnableSetModified())
         {
-            // weitergeben an Basisklasse
+            // forward to baseclass
             FmFormModel::SetChanged(bFlag);
 
-            // an ObjectShell weiterleiten
+            // pass to ObjectShell
             mpDocSh->SetModified(bFlag);
         }
     }
     else
     {
-        // weitergeben an Basisklasse
+        // forward to baseclass
         FmFormModel::SetChanged(bFlag);
     }
 }
@@ -578,8 +576,8 @@ void SdDrawDocument::NbcSetChanged(sal_Bool bFlag)
 |*
 |* NewOrLoadCompleted
 |*
-|* Wird gerufen, wenn das Dokument geladen wurde bzw. feststeht, dass es
-|* nicht mehr geladen wird.
+|* Will be called when the document was loaded respectively when it is
+|* certain that it will not be loaded any longer.
 |*
 \************************************************************************/
 
@@ -587,9 +585,9 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 {
     if (eMode == NEW_DOC)
     {
-        // Neues Dokument:
-        // Praesentations- und Standardvorlagen erzeugen,
-        // Pool fuer virtuelle Controls erzeugen
+        // new document:
+        // create Presentation and default templates,
+        // create pool for virtual controls
         CreateLayoutTemplates();
         CreateDefaultCellStyles();
 
@@ -597,7 +595,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     }
     else if (eMode == DOC_LOADED)
     {
-            // Dokument wurde geladen:
+            // document was loaded:
 
         CheckMasterPages();
 
@@ -632,26 +630,26 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
                 pPage->SetName( aName );
         }
 
-        // Sprachabhaengige Namen der StandardLayer erzeugen
+        // create language-dependent names of the default layer
         RestoreLayerNames();
 
-        // Sprachabhaengige Namen der Vorlagen setzen
+        // set language-dependent names of the templates
         static_cast<SdStyleSheetPool*>(mxStyleSheetPool.get())->UpdateStdNames();
 
-        // Ggf. fehlende Vorlagen erzeugen (es gab z.B. frueher keinen Subtitle)
+        // if necessary create missing templates (e.g., formerly there was no Subtitle)
         static_cast<SdStyleSheetPool*>(mxStyleSheetPool.get())->CreatePseudosIfNecessary();
     }
 
-    // Standardvorlage an der Drawing Engine setzen
+    // set default template at the Drawing Engine
     String aName( SdResId(STR_STANDARD_STYLESHEET_NAME));
     SetDefaultStyleSheet(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(aName, SD_STYLE_FAMILY_GRAPHICS)));
 
     // #119287# Set default StyleSheet for SdrGrafObj and SdrOle2Obj
     SetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(String( SdResId(STR_POOLSHEET_OBJNOLINENOFILL)), SD_STYLE_FAMILY_GRAPHICS)));
 
-    // Draw-Outliner und  Dokument Outliner initialisieren,
-    // aber nicht den globalen Outliner, den der ist ja nicht
-    // dokumentspezifisch wie StyleSheetPool und StyleRequestHandler
+    // initialize Draw-Outliner and Document Outliner,
+    // but not the global Outliner because it is not document-specific
+    // like StyleSheetPool and StyleRequestHandler
     ::Outliner& rDrawOutliner = GetDrawOutliner();
     rDrawOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
     sal_uLong nCntrl = rDrawOutliner.GetControlWord();
@@ -661,9 +659,9 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
     rDrawOutliner.SetControlWord(nCntrl);
 
-    // HitTest-Outliner und  Dokument Outliner initialisieren,
-    // aber nicht den globalen Outliner, den der ist ja nicht
-    // dokumentspezifisch wie StyleSheetPool und StyleRequestHandler
+    // initialize HitTest-Outliner and Document Outliner,
+    // but not the global Outliner because it is not document-specific
+    // like StyleSheetPool and StyleRequestHandler
     pHitTestOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
 
     if(mpOutliner)
@@ -677,8 +675,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
     if ( eMode == DOC_LOADED )
     {
-        // Praesentationsobjekte muessen wieder Listener der entsprechenden
-        // Vorlagen werden
+        // presentation objects have to be Listener again of the respective templates
         SdStyleSheetPool* pSPool = (SdStyleSheetPool*) GetStyleSheetPool();
         sal_uInt16 nPage, nPageCount;
 
@@ -691,7 +688,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
             pSPool->CreateLayoutStyleSheets( pPage->GetName(), sal_True );
         }
 
-        // Standard- und Notizseiten:
+        // Default and note pages:
         for (nPage = 0; nPage < GetPageCount(); nPage++)
         {
             SdPage* pPage = (SdPage*)GetPage(nPage);
@@ -710,7 +707,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     mbNewOrLoadCompleted = sal_True;
 
     /**************************************************************************
-    * Alle gelinkten Pages aktualisieren
+    * Update all linked Pages
     **************************************************************************/
     SdPage* pPage = NULL;
     sal_uInt16 nMaxSdPages = GetSdPageCount(PK_STANDARD);
@@ -767,7 +764,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
     const sd::ShapeList& rPresentationShapes( pPage->GetPresentationShapeList() );
     if(!rPresentationShapes.isEmpty())
     {
-        // Listen mit Titel- und Gliederungsvorlagen erstellen
+        // create lists with title and outline templates
         String aName = pPage->GetLayoutName();
         aName.Erase( aName.SearchAscii( SD_LT_SEPARATOR ));
 
@@ -777,8 +774,8 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
         SdrObject* pObj = rPresentationShapes.getNextShape(0);
 
-        // jetzt nach Titel- und Gliederungstextobjekten suchen und
-        // Objekte zu Listenern machen
+        // now search for title and outline text objects and
+        // change objects into Listener
         while(pObj)
         {
             if (pObj->GetObjInventor() == SdrInventor)
@@ -791,7 +788,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
                         pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
 
-                    // sal_True: harte Attribute dabei nicht loeschen
+                    // sal_True: in doing so do not delete hard attributes
                     if (pTitleSheet)
                         pObj->SetStyleSheet(pTitleSheet, sal_True);
                 }
@@ -808,7 +805,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                             pObj->StartListening(*pSheet);
 
                             if( nSheet == 0)
-                                // Textrahmen hoert auf StyleSheet der Ebene1
+                                // text frame listen to StyleSheet of Layer1
                                 pObj->NbcSetStyleSheet(pSheet, sal_True);
                         }
                     }
@@ -838,8 +835,8 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
 /*************************************************************************
 |*
-|* Lokaler Outliner, welcher fuer den Gliederungsmodus verwendet wird
-|* In diesen Outliner werden ggf. OutlinerViews inserted!
+|* Local Outliner that is used for the outline mode.
+|* If necessary, insert OutlinerViews into this outliner !
 |*
 \************************************************************************/
 
@@ -862,9 +859,8 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
 /*************************************************************************
 |*
-|* Interner Outliner, welcher fuer die Erzeugung von Textobjekten
-|* verwendet wird.
-|* In diesen Outliner werden keine OutlinerViews inserted!
+|* Internal Outliner that is used for creating text objects.
+|* No OutlinerViews will be inserted into this Outliner!
 |*
 \************************************************************************/
 
@@ -874,9 +870,9 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
     {
         mpInternalOutliner = new ::sd::Outliner( this, OUTLINERMODE_TEXTOBJECT );
         // MT:
-        // Dieser Outliner wird nur fuer das Erzeugen spezieller Textobjekte
-        // verwendet. Da in diesen Textobjekten keine Portion-Informationen
-        // gespeichert werden muessen, kann/soll der Update-Mode immer sal_False bleiben.
+        // This Outliner is used to create special text objects only.
+        // As no portion information have to be saved in these text objects,
+        // the update mode can/should stay always sal_False.
         mpInternalOutliner->SetUpdateMode( sal_False );
         mpInternalOutliner->EnableUndo( sal_False );
 
@@ -890,10 +886,10 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
     DBG_ASSERT( !mpInternalOutliner || ( mpInternalOutliner->GetUpdateMode() == sal_False ) , "InternalOutliner: UpdateMode = sal_True !" );
     DBG_ASSERT( !mpInternalOutliner || ( mpInternalOutliner->IsUndoEnabled() == sal_False ), "InternalOutliner: Undo = sal_True !" );
 
-    // MT: Wer ihn vollmuellt, macht ihn auch gleich wieder leer:
-    // Vorteile:
-    // a) Keine unnoetigen Clear-Aufrufe
-    // b) Kein Muell im Speicher.
+    // MT: Who fills it with spam has to empty it right after:
+    // Advantages:
+    // a) No uncessary clear calls.
+    // b) No spam in memory.
     DBG_ASSERT( !mpInternalOutliner || ( ( mpInternalOutliner->GetParagraphCount() == 1 ) && ( mpInternalOutliner->GetText( mpInternalOutliner->GetParagraph( 0 ) ).Len() == 0 ) ), "InternalOutliner: Nicht leer!" );
 
     return mpInternalOutliner;
@@ -901,7 +897,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
 /*************************************************************************
 |*
-|* OnlineSpelling ein/aus
+|* OnlineSpelling on/off
 |*
 \************************************************************************/
 
@@ -958,7 +954,7 @@ void SdDrawDocument::SetOnlineSpell(sal_Bool bIn)
 
 /*************************************************************************
 |*
-|* OnlineSpelling: Markierung ein/aus
+|* OnlineSpelling: Marking on/off
 |*
 \************************************************************************/
 
