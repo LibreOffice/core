@@ -1258,7 +1258,7 @@ void SdImportTest::testTdf103792()
 void SdImportTest::testTdf103876()
 {
     // Title text shape's placeholder text did not inherit the corresponding text properties
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf103876.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/tdf103876.pptx"), PPTX);
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     // Check paragraph alignment
