@@ -88,12 +88,12 @@ LinkManager::~LinkManager()
 /************************************************************************
 |*    LinkManager::Remove()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 
 void LinkManager::Remove( SvBaseLink *pLink )
 {
-    // keine Links doppelt einfuegen
+    // do not insert links double
     int bFound = sal_False;
     SvBaseLinkRef** ppRef = (SvBaseLinkRef**)aLinkTbl.GetData();
     for( sal_uInt16 n = aLinkTbl.Count(); n; --n, ++ppRef )
@@ -106,7 +106,7 @@ void LinkManager::Remove( SvBaseLink *pLink )
             bFound = sal_True;
         }
 
-        // falls noch leere rum stehen sollten, weg damit
+        // if there are still some empty ones, get rid of them
         if( !(*ppRef)->Is() )
         {
             delete *ppRef;
@@ -143,7 +143,7 @@ void LinkManager::Remove( sal_uInt16 nPos, sal_uInt16 nCnt )
 
 sal_Bool LinkManager::Insert( SvBaseLink* pLink )
 {
-    // keine Links doppelt einfuegen
+    // do not insert links double
     for( sal_uInt16 n = 0; n < aLinkTbl.Count(); ++n )
     {
         SvBaseLinkRef* pTmp = aLinkTbl[ n ];
@@ -166,7 +166,7 @@ sal_Bool LinkManager::InsertLink( SvBaseLink * pLink,
                                 sal_uInt16 nUpdateMode,
                                 const String* pName )
 {
-    // unbedingt zuerst
+    // in any case: do this first
     pLink->SetObjType( nObjType );
     if( pName )
         pLink->SetName( *pName );
@@ -205,7 +205,7 @@ sal_Bool LinkManager::InsertDDELink( SvBaseLink * pLink )
 }
 
 
-// erfrage die Strings fuer den Dialog
+// ask for the strings to be used in the dialog
 sal_Bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                                         String* pType,
                                         String* pFile,
@@ -278,8 +278,7 @@ void LinkManager::UpdateAllLinks(
     SvStringsDtor aApps, aTopics, aItems;
     String sApp, sTopic, sItem;
 
-    // erstmal eine Kopie vom Array machen, damit sich updatende Links in
-    // Links in ... nicht dazwischen funken!!
+    // first create a copy of the array, so that updated links to not interfere with ... in between!!
     SvPtrarr aTmpArr( 255, 50 );
     sal_uInt16 n;
     for( n = 0; n < aLinkTbl.Count(); ++n )
@@ -297,7 +296,7 @@ void LinkManager::UpdateAllLinks(
     {
         SvBaseLink* pLink = (SvBaseLink*)aTmpArr[ n ];
 
-        // suche erstmal im Array nach dem Eintrag
+        // first search the entry in the array
         sal_uInt16 nFndPos = USHRT_MAX;
         for( sal_uInt16 i = 0; i < aLinkTbl.Count(); ++i )
             if( pLink == *aLinkTbl[ i ] )
@@ -307,9 +306,9 @@ void LinkManager::UpdateAllLinks(
             }
 
         if( USHRT_MAX == nFndPos )
-            continue;                   // war noch nicht vorhanden!
+            continue;                   // was not already existing!
 
-        // Graphic-Links noch nicht updaten
+        // do not update graphic links yet
         if( !pLink->IsVisible() ||
             ( !bUpdateGrfLinks && OBJECT_CLIENT_GRF == pLink->GetObjType() ))
             continue;
@@ -327,9 +326,9 @@ void LinkManager::UpdateAllLinks(
                     rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
                 }
 
-                return ;        // es soll nichts geupdatet werden
+                return ;        // nothing should be updated
             }
-            bAskUpdate = sal_False;     // einmal reicht
+            bAskUpdate = sal_False;     // one time is OK
         }
 
         pLink->Update();
@@ -339,7 +338,7 @@ void LinkManager::UpdateAllLinks(
 /************************************************************************
 |*    SvBaseLink::CreateObject()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 
 SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
@@ -361,7 +360,7 @@ SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
 
 sal_Bool LinkManager::InsertServer( SvLinkSource* pObj )
 {
-    // keine doppelt einfuegen
+    // do not insert double
     if( !pObj || USHRT_MAX != aServerTbl.GetPos( pObj ) )
         return sal_False;
 
@@ -418,8 +417,8 @@ sal_Bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink )
     return sal_False;
 }
 
-// eine Uebertragung wird abgebrochen, also alle DownloadMedien canceln
-// (ist zur Zeit nur fuer die FileLinks interressant!)
+// a transfer will be discontinued, therefore cancel all DownloadMedia
+// (at the moment only interesting for the FileLinks!)
 void LinkManager::CancelTransfers()
 {
     SvFileObject* pFileObj;
@@ -435,18 +434,17 @@ void LinkManager::CancelTransfers()
             pFileObj->CancelTransfers();
 }
 
-    // um Status Informationen aus dem FileObject an den BaseLink zu
-    // senden, gibt es eine eigene ClipBoardId. Das SvData-Object hat
-    // dann die entsprechenden Informationen als String.
-    // Wird zur Zeit fuer FileObject in Verbindung mit JavaScript benoetigt
-    // - das braucht Informationen ueber Load/Abort/Error
+    // to send status information from the FileObject to the BaseLink, there is an own ClipboardId.
+    // The SvData object has then the respective information as string.
+    // Currently this will be used for FileObject in connection with JavaScript
+    // - that needs information about Load/Abort/Error
 sal_uIntPtr LinkManager::RegisterStatusInfoId()
 {
     static sal_uIntPtr nFormat = 0;
 
     if( !nFormat )
     {
-// wie sieht die neue Schnittstelle aus?
+// how does the new interface look like?
 //      nFormat = Exchange::RegisterFormatName( "StatusInfo vom SvxInternalLink" );
         nFormat = SotExchange::RegisterFormatName(
                     String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
@@ -520,8 +518,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         pLink->GetLinkManager()->GetDisplayNames( pLink, 0, &sTopic, &sItem )
         && sTopic.Len() )
     {
-        // erstmal nur ueber die DocumentShells laufen und die mit dem
-        // Namen heraussuchen:
+        // for the moment run through the DocumentShells and search for the ones with names:
 
         com::sun::star::lang::Locale aLocale;
         MsLangId::convertLanguageToLocale( LANGUAGE_SYSTEM, aLocale );
@@ -561,7 +558,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
 
             aCC.toLower( sTmp );
-            if( sTmp == sNmURL )        // die wollen wir haben
+            if( sTmp == sNmURL )        // these we want to have
             {
                 pFndShell = pShell;
                 break;
@@ -585,7 +582,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
     if( !pFndShell )
     {
-        // dann versuche die Datei zu laden:
+        // try to load the file:
         INetURLObject aURL( sTopic );
         INetProtocol eOld = aURL.GetProtocol();
         aURL.SetURL( sTopic = lcl_DDE_RelToAbs( sTopic, sReferer ) );
