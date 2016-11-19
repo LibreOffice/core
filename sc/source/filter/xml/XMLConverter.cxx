@@ -56,6 +56,8 @@ sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sF
         return sheet::GeneralFunction_PRODUCT;
     if( IsXMLToken(sFunction, XML_AVERAGE ) )
         return sheet::GeneralFunction_AVERAGE;
+    if( IsXMLToken(sFunction, XML_MEDIAN ) )
+        return sheet::GeneralFunction_MEDIAN;
     if( IsXMLToken(sFunction, XML_MAX ) )
         return sheet::GeneralFunction_MAX;
     if( IsXMLToken(sFunction, XML_MIN ) )
@@ -107,6 +109,7 @@ void ScXMLConverter::GetStringFromFunction(
     {
         case sheet::GeneralFunction_AUTO:       sFuncStr = GetXMLToken( XML_AUTO );         break;
         case sheet::GeneralFunction_AVERAGE:    sFuncStr = GetXMLToken( XML_AVERAGE );      break;
+        case sheet::GeneralFunction_MEDIAN:     sFuncStr = GetXMLToken( XML_MEDIAN );       break;
         case sheet::GeneralFunction_COUNT:      sFuncStr = GetXMLToken( XML_COUNT );        break;
         case sheet::GeneralFunction_COUNTNUMS:  sFuncStr = GetXMLToken( XML_COUNTNUMS );    break;
         case sheet::GeneralFunction_MAX:        sFuncStr = GetXMLToken( XML_MAX );          break;
@@ -120,7 +123,7 @@ void ScXMLConverter::GetStringFromFunction(
         case sheet::GeneralFunction_VARP:       sFuncStr = GetXMLToken( XML_VARP );         break;
         default:
         {
-            // added to avoid warnings
+            assert(false);
         }
     }
     ScRangeStringConverter::AssignString( rString, sFuncStr, false );
