@@ -57,7 +57,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace {
 
-sal_uInt16 nFuncStrIds[12] =     // matching enum ScSubTotalFunc
+sal_uInt16 nFuncStrIds[] =     // matching enum ScSubTotalFunc
 {
     0,                              // SUBTOTAL_FUNC_NONE
     STR_FUN_TEXT_AVG,               // SUBTOTAL_FUNC_AVE
@@ -70,7 +70,9 @@ sal_uInt16 nFuncStrIds[12] =     // matching enum ScSubTotalFunc
     STR_FUN_TEXT_STDDEV,            // SUBTOTAL_FUNC_STDP
     STR_FUN_TEXT_SUM,               // SUBTOTAL_FUNC_SUM
     STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VAR
-    STR_FUN_TEXT_VAR                // SUBTOTAL_FUNC_VARP
+    STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VARP
+    STR_FUN_TEXT_MEDIAN,            // SUBTOTAL_FUNC_MED
+    0                               // SUBTOTAL_FUNC_SELECTION_COUNT - not used for pivot table
 };
 
 bool lcl_SearchMember( const std::vector <ScDPResultMember *>& list, SCROW nOrder, SCROW& rIndex)
@@ -439,6 +441,15 @@ void ScDPAggData::Update( const ScDPValue& rNext, ScSubTotalFunc eFunc, const Sc
                     nCount = -1;                            // -1 for error
             }
             break;
+        case SUBTOTAL_FUNC_MED:
+            {
+                auto aIter = std::upper_bound(mSortedValues.begin(), mSortedValues.end(), rNext.mfValue);
+                if (aIter == mSortedValues.end())
+                    mSortedValues.push_back(rNext.mfValue);
+                else
+                    mSortedValues.insert(aIter, rNext.mfValue);
+            }
+            break;
         default:
             OSL_FAIL("invalid function");
     }
@@ -475,6 +486,7 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
             break;
 
         case SUBTOTAL_FUNC_AVE:
+        case SUBTOTAL_FUNC_MED:
         case SUBTOTAL_FUNC_MAX:
         case SUBTOTAL_FUNC_MIN:
         case SUBTOTAL_FUNC_STDP:
@@ -533,6 +545,16 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
             case SUBTOTAL_FUNC_VARP:
                 if ( nCount > 0 )
                     fResult = (fAux - fVal*fVal/(double)(nCount)) / (double)nCount;
+                break;
+            case SUBTOTAL_FUNC_MED:
+                if (mSortedValues.size() > 0)
+                {
+                    assert(mSortedValues.size() == static_cast<size_t>(nCount));
+                    if ((mSortedValues.size() % 2) == 1)
+                        fResult = mSortedValues[mSortedValues.size() / 2];
+                    else
+                        fResult = (mSortedValues[mSortedValues.size() / 2 - 1] + mSortedValues[mSortedValues.size() / 2]) / 2.0;
+                }
                 break;
             default:
                 OSL_FAIL("invalid function");
@@ -816,6 +838,7 @@ OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotal
     {
         //  for user-specified subtotal function with all measures,
         //  display only function name
+        assert(eForceFunc < SAL_N_ELEMENTS(nFuncStrIds));
         if ( eForceFunc != SUBTOTAL_FUNC_NONE )
             return ScGlobal::GetRscString(nFuncStrIds[eForceFunc]);
 

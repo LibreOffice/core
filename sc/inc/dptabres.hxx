@@ -160,6 +160,7 @@ private:
     double          fAux;
     long            nCount;
     ScDPAggData*    pChild;
+    std::vector<double> mSortedValues;
 
 public:
             ScDPAggData() : fVal(0.0), fAux(0.0), nCount(SC_DPAGG_EMPTY), pChild(nullptr) {}

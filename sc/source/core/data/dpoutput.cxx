@@ -1548,6 +1548,7 @@ OUString lcl_GetDataFieldName( const OUString& rSourceName, sheet::GeneralFuncti
         case sheet::GeneralFunction_COUNT:
         case sheet::GeneralFunction_COUNTNUMS:  nStrId = STR_FUN_TEXT_COUNT;    break;
         case sheet::GeneralFunction_AVERAGE:    nStrId = STR_FUN_TEXT_AVG;      break;
+        case sheet::GeneralFunction_MEDIAN:     nStrId = STR_FUN_TEXT_MEDIAN;   break;
         case sheet::GeneralFunction_MAX:        nStrId = STR_FUN_TEXT_MAX;      break;
         case sheet::GeneralFunction_MIN:        nStrId = STR_FUN_TEXT_MIN;      break;
         case sheet::GeneralFunction_PRODUCT:    nStrId = STR_FUN_TEXT_PRODUCT;  break;
@@ -1556,10 +1557,10 @@ OUString lcl_GetDataFieldName( const OUString& rSourceName, sheet::GeneralFuncti
         case sheet::GeneralFunction_VAR:
         case sheet::GeneralFunction_VARP:       nStrId = STR_FUN_TEXT_VAR;      break;
         case sheet::GeneralFunction_NONE:
-        case sheet::GeneralFunction_AUTO:
+        case sheet::GeneralFunction_AUTO:                                       break;
         default:
         {
-            OSL_FAIL("wrong function");
+            assert(false);
         }
     }
     if ( !nStrId )
