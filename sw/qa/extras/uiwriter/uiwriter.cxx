@@ -215,6 +215,7 @@ public:
     void testCursorWindows();
     void testLandscape();
     void testTdf95699();
+    void testTdf104032();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -326,6 +327,7 @@ public:
     CPPUNIT_TEST(testCursorWindows);
     CPPUNIT_TEST(testLandscape);
     CPPUNIT_TEST(testTdf95699);
+    CPPUNIT_TEST(testTdf104032);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4065,6 +4067,23 @@ void SwUiWriterTest::testTdf95699()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     ::sw::mark::IFieldmark* pFieldMark = pMarkAccess->getFieldmarkAfter(SwPosition(pDoc->GetNodes().GetEndOfExtras()));
     CPPUNIT_ASSERT_EQUAL(OUString("vnd.oasis.opendocument.field.FORMCHECKBOX"), pFieldMark->GetFieldname());
+}
+
+void SwUiWriterTest::testTdf104032()
+{
+    // Open the document with FORMCHECKBOX field, select it and copy to clipboard
+    // Go to end of document and paste it, then undo
+    // Previously that asserted in debug build.
+    SwDoc* pDoc = createDoc("tdf104032.odt");
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttDoc();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->EndDoc();
+    pWrtShell->Paste(&aClipboard);
+    rUndoManager.Undo();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
