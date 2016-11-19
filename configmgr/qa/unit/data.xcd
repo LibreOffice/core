@@ -3737,11 +3737,6 @@
           <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~AutoCorrect...</value>
         </prop>
       </node>
-      <node oor:name=".uno:AutoPilotPresentations" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">AutoPilot: Presentation</value>
-        </prop>
-      </node>
       <node oor:name=".uno:AutoPilotAgenda" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="x-no-translate"></value><value xml:lang="en-US">AutoPilot: Agenda</value>

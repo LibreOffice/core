@@ -1615,7 +1615,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             break;
         }
 
-        case SID_SD_AUTOPILOT :
         case SID_NEWSD :
         {
             SvtModuleOptions aModuleOpt;
@@ -1694,8 +1693,6 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
         rSet.DisableItem( FN_XFORMS_INIT );
     }
 
-    if ( !aModuleOpt.IsImpress() )
-        rSet.DisableItem( SID_SD_AUTOPILOT );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

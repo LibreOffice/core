@@ -32,12 +32,6 @@ interface StarImpress
         StateMethod = GetState;
     ]
 
-    SID_SD_AUTOPILOT // ole : ?, status : ?
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-
     SID_NEWSD // ole : ?, status : ?
     [
         ExecMethod = Execute ;

@@ -193,7 +193,6 @@ void SdModule::Execute(SfxRequest& rReq)
         }
         break;
 
-        case SID_SD_AUTOPILOT:
         case SID_NEWSD:
             {
                 SfxFrame* pFrame = ExecuteNewDocument( rReq );
@@ -314,30 +313,6 @@ bool SdModule::OutlineToImpress(SfxRequest& rRequest)
 
 void SdModule::GetState(SfxItemSet& rItemSet)
 {
-    // disable Autopilot during presentation
-    if (rItemSet.GetItemState(SID_SD_AUTOPILOT) != SfxItemState::UNKNOWN)
-    {
-        if (!SvtModuleOptions().IsImpress())
-        {
-            rItemSet.DisableItem(SID_SD_AUTOPILOT);
-        }
-        else
-        {
-            ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
-            if (pDocShell)
-            {
-                ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
-                if (pViewShell)
-                {
-                    if( sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ) )
-                    {
-                        rItemSet.DisableItem(SID_SD_AUTOPILOT);
-                    }
-                }
-            }
-        }
-    }
-
     if( SfxItemState::DEFAULT == rItemSet.GetItemState( SID_ATTR_METRIC ) )
     {
         ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
