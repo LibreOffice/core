@@ -27,6 +27,8 @@
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/XGlobalEventBroadcaster.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/process.h>
 #include <osl/diagnose.h>
@@ -176,6 +178,14 @@ gint RunDialog::run()
 {
     if (mxToolkit.is())
         mxToolkit->addTopWindowListener(this);
+
+    css::uno::Reference< css::uno::XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
+    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+    css::document::DocumentEvent aObject;
+    aObject.EventName = "FileDialogExecute";
+
+    xEventBroadcaster->documentEventOccured(aObject);
 
     gint nStatus = gtk_dialog_run( GTK_DIALOG( mpDialog ) );
 
