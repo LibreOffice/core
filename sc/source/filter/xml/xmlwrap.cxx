@@ -719,7 +719,21 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
 
 bool ScXMLImportWrapper::Export(bool bStylesOnly)
 {
+    // Prevent all broadcasting and repaints and notification of accessibility
+    // during mass creation of captions, which is a major bottleneck and not
+    // needed during Save.
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    bool bOldLock = bool();
+    if (pDrawLayer)
+    {
+        bOldLock = pDrawLayer->isLocked();
+        pDrawLayer->setLock(true);
+    }
+
     rDoc.CreateAllNoteCaptions();
+
+    if (pDrawLayer)
+        pDrawLayer->setLock(bOldLock);
 
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
