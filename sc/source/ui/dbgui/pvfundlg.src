@@ -26,6 +26,7 @@ StringArray SCSTR_DPFUNCLISTBOX
         < "Sum" ; Default ; > ;
         < "Count" ; Default ; > ;
         < "Average" ; Default ; > ;
+        < "Median" ; Default ; > ;
         < "Max" ; Default ; > ;
         < "Min" ; Default ; > ;
         < "Product" ; Default ; > ;

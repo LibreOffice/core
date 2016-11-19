@@ -27,18 +27,19 @@ enum class PivotFunc {
     Sum          = 0x0001,
     Count        = 0x0002,
     Average      = 0x0004,
-    Max          = 0x0008,
-    Min          = 0x0010,
-    Product      = 0x0020,
-    CountNum     = 0x0040,
-    StdDev       = 0x0080,
-    StdDevP      = 0x0100,
-    StdVar       = 0x0200,
-    StdVarP      = 0x0400,
+    Median       = 0x0008,
+    Max          = 0x0010,
+    Min          = 0x0020,
+    Product      = 0x0040,
+    CountNum     = 0x0080,
+    StdDev       = 0x0100,
+    StdDevP      = 0x0200,
+    StdVar       = 0x0400,
+    StdVarP      = 0x0800,
     Auto         = 0x1000
 };
 namespace o3tl {
-    template<> struct typed_flags<PivotFunc> : is_typed_flags<PivotFunc, 0x17ff> {};
+    template<> struct typed_flags<PivotFunc> : is_typed_flags<PivotFunc, 0x11ff> {};
 }
 
 struct ScDPValue

@@ -851,7 +851,8 @@ enum ScSubTotalFunc
         SUBTOTAL_FUNC_SUM   = 9,
         SUBTOTAL_FUNC_VAR   = 10,
         SUBTOTAL_FUNC_VARP  = 11,
-        SUBTOTAL_FUNC_SELECTION_COUNT = 12
+        SUBTOTAL_FUNC_MED   = 12,
+        SUBTOTAL_FUNC_SELECTION_COUNT = 13
     };
 
 enum ScAggregateFunc

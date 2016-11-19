@@ -367,7 +367,7 @@ sal_Int32 ScDPUtil::getDatePartValue(
 
 namespace {
 
-sal_uInt16 nFuncStrIds[12] = {
+sal_uInt16 nFuncStrIds[] = {
     0,                              // SUBTOTAL_FUNC_NONE
     STR_FUN_TEXT_AVG,               // SUBTOTAL_FUNC_AVE
     STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT
@@ -379,7 +379,9 @@ sal_uInt16 nFuncStrIds[12] = {
     STR_FUN_TEXT_STDDEV,            // SUBTOTAL_FUNC_STDP
     STR_FUN_TEXT_SUM,               // SUBTOTAL_FUNC_SUM
     STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VAR
-    STR_FUN_TEXT_VAR                // SUBTOTAL_FUNC_VARP
+    STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VARP
+    STR_FUN_TEXT_MEDIAN,            // SUBTOTAL_FUNC_MED
+    0                               // SUBTOTAL_FUNC_SELECTION_COUNT - not used for pivot table
 };
 
 }
@@ -387,6 +389,7 @@ sal_uInt16 nFuncStrIds[12] = {
 OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc)
 {
     OUStringBuffer aRet;
+    assert(eFunc < SAL_N_ELEMENTS(nFuncStrIds));
     sal_uInt16 nId = nFuncStrIds[eFunc];
     if (nId)
     {
@@ -400,13 +403,14 @@ OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc
 
 ScSubTotalFunc ScDPUtil::toSubTotalFunc(css::sheet::GeneralFunction eGenFunc)
 {
-    ScSubTotalFunc eSubTotal;
+    ScSubTotalFunc eSubTotal = SUBTOTAL_FUNC_NONE;
     switch (eGenFunc)
     {
         case sheet::GeneralFunction_NONE:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
         case sheet::GeneralFunction_SUM:        eSubTotal = SUBTOTAL_FUNC_SUM;  break;
         case sheet::GeneralFunction_COUNT:      eSubTotal = SUBTOTAL_FUNC_CNT2; break;
         case sheet::GeneralFunction_AVERAGE:    eSubTotal = SUBTOTAL_FUNC_AVE;  break;
+        case sheet::GeneralFunction_MEDIAN:     eSubTotal = SUBTOTAL_FUNC_MED;  break;
         case sheet::GeneralFunction_MAX:        eSubTotal = SUBTOTAL_FUNC_MAX;  break;
         case sheet::GeneralFunction_MIN:        eSubTotal = SUBTOTAL_FUNC_MIN;  break;
         case sheet::GeneralFunction_PRODUCT:    eSubTotal = SUBTOTAL_FUNC_PROD; break;
@@ -415,9 +419,9 @@ ScSubTotalFunc ScDPUtil::toSubTotalFunc(css::sheet::GeneralFunction eGenFunc)
         case sheet::GeneralFunction_STDEVP:     eSubTotal = SUBTOTAL_FUNC_STDP; break;
         case sheet::GeneralFunction_VAR:        eSubTotal = SUBTOTAL_FUNC_VAR;  break;
         case sheet::GeneralFunction_VARP:       eSubTotal = SUBTOTAL_FUNC_VARP; break;
-        case sheet::GeneralFunction_AUTO:
+        case sheet::GeneralFunction_AUTO:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
         default:
-            eSubTotal = SUBTOTAL_FUNC_NONE;
+            assert(false);
     }
     return eSubTotal;
 }

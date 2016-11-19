@@ -658,6 +658,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Average" ;
     };
+    String STR_FUN_TEXT_MEDIAN
+    {
+        Text [ en-US ] = "Median" ;
+    };
     String STR_FUN_TEXT_MAX
     {
         Text [ en-US ] = "Max" ;

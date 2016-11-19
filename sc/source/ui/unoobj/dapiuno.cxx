@@ -184,6 +184,7 @@ GeneralFunction ScDataPilotConversion::FirstFunc( PivotFunc nBits )
     if ( nBits & PivotFunc::Sum )       return GeneralFunction_SUM;
     if ( nBits & PivotFunc::Count )     return GeneralFunction_COUNT;
     if ( nBits & PivotFunc::Average )   return GeneralFunction_AVERAGE;
+    if ( nBits & PivotFunc::Median )    return GeneralFunction_MEDIAN;
     if ( nBits & PivotFunc::Max )       return GeneralFunction_MAX;
     if ( nBits & PivotFunc::Min )       return GeneralFunction_MIN;
     if ( nBits & PivotFunc::Product )   return GeneralFunction_PRODUCT;
@@ -204,6 +205,7 @@ PivotFunc ScDataPilotConversion::FunctionBit( GeneralFunction eFunc )
         case GeneralFunction_SUM:       nRet = PivotFunc::Sum;       break;
         case GeneralFunction_COUNT:     nRet = PivotFunc::Count;     break;
         case GeneralFunction_AVERAGE:   nRet = PivotFunc::Average;   break;
+        case GeneralFunction_MEDIAN:    nRet = PivotFunc::Median;    break;
         case GeneralFunction_MAX:       nRet = PivotFunc::Max;       break;
         case GeneralFunction_MIN:       nRet = PivotFunc::Min;       break;
         case GeneralFunction_PRODUCT:   nRet = PivotFunc::Product;   break;
@@ -215,7 +217,7 @@ PivotFunc ScDataPilotConversion::FunctionBit( GeneralFunction eFunc )
         case GeneralFunction_AUTO:      nRet = PivotFunc::Auto;      break;
         default:
         {
-            // added to avoid warnings
+            assert(false);
         }
     }
     return nRet;

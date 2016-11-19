@@ -149,6 +149,7 @@
 #define STR_FUN_TEXT_SUM            108
 #define STR_FUN_TEXT_COUNT          109
 #define STR_FUN_TEXT_AVG            110
+#define STR_FUN_TEXT_MEDIAN         544
 #define STR_FUN_TEXT_MAX            111
 #define STR_FUN_TEXT_MIN            112
 #define STR_FUN_TEXT_PRODUCT        113
@@ -709,7 +710,7 @@
 #define STR_BOOLEAN_VALUE               542
 #define STR_TEXT                        543
 
-#define SC_GLOBSTR_STR_COUNT            544     /**< the count of permanently resident strings */
+#define SC_GLOBSTR_STR_COUNT            545     /**< the count of permanently resident strings */
 
 #endif
 
