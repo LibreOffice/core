@@ -71,4 +71,8 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,chart2_dialogs_test,\
 	svx \
 ))
 
+$(eval $(call gb_CppunitTest_use_packages,chart2_dialogs_test,\
+	extras_palettes \
+))
+
 # vim: set noet sw=4 ts=4:
