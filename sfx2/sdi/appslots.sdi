@@ -283,11 +283,6 @@ shell SfxApplication
     [
         ExecMethod = OfaExec_Impl;
     ]
-    SID_SD_AUTOPILOT // status(final|play)
-    [
-        ExecMethod = OfaExec_Impl;
-        StateMethod = OfaState_Impl;
-    ]
     SID_NEWSD // status(final|play)
     [
         ExecMethod = OfaExec_Impl;

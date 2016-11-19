@@ -555,7 +555,6 @@
 #define SID_ZOOM_PREV                       (SID_SVX_START + 403)
 #define SID_INET_DLG                        (SID_SVX_START + 416)
 #define SID_AUTO_CORRECT_DLG                (SID_SVX_START + 424)
-#define SID_SD_AUTOPILOT                    (SID_SVX_START + 425)
 #define SID_ATTR_CHAR_COLOR_EXT             (SID_SVX_START + 488)
 #define SID_ATTR_CHAR_COLOR_BACKGROUND      (SID_SVX_START + 489)
 #define SID_ATTR_CHAR_COLOR_BACKGROUND_EXT  (SID_SVX_START + 490)
