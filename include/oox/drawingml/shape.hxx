@@ -125,7 +125,7 @@ public:
 
     table::TablePropertiesPtr       getTableProperties();
 
-    EffectProperties&               getEffectProperties() { return *mpEffectPropertiesPtr; }
+    EffectProperties&               getEffectProperties() const { return *mpEffectPropertiesPtr; }
 
     void                            setChildPosition( css::awt::Point nPosition ){ maChPosition = nPosition; }
     void                            setChildSize( css::awt::Size aSize ){ maChSize = aSize; }
@@ -258,6 +258,10 @@ protected:
                             const css::beans::PropertyValue& pProperty );
     void                putPropertiesToGrabBag(
                             const css::uno::Sequence< css::beans::PropertyValue >& aProperties );
+
+    FillProperties      getActualFillProperties(const Theme* pTheme, const FillProperties* pParentShapeFillProps) const;
+    LineProperties      getActualLineProperties(const Theme* pTheme) const;
+    EffectProperties    getActualEffectProperties(const Theme* pTheme) const;
 
     std::vector< ShapePtr >     maChildren;               // only used for group shapes
     css::awt::Size   maChSize;                 // only used for group shapes

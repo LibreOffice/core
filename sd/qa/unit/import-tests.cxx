@@ -124,6 +124,7 @@ public:
     void testTdf49561();
     void testTdf103473();
     void testTdf103792();
+    void testTdf104015();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -176,6 +177,7 @@ public:
     CPPUNIT_TEST(testTdf49561);
     CPPUNIT_TEST(testTdf103473);
     CPPUNIT_TEST(testTdf103792);
+    CPPUNIT_TEST(testTdf104015);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1440,6 +1442,44 @@ void SdImportTest::testTdf103792()
 
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     CPPUNIT_ASSERT_EQUAL(OUString("Click to add Title"), aEdit.GetText(0));
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf104015()
+{
+    // Shape fill, line and effect properties were not inherited from master slide shape
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf104015.pptx"), PPTX);
+
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+    CPPUNIT_ASSERT_MESSAGE("No page found", pPage != nullptr);
+    SdrObject *const pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Wrong object", pObj != nullptr);
+    // Should have a red fill color
+    {
+        const XFillStyleItem& rStyleItem = dynamic_cast<const XFillStyleItem&>(
+                pObj->GetMergedItem(XATTR_FILLSTYLE));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
+        const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
+                pObj->GetMergedItem(XATTR_FILLCOLOR));
+        CPPUNIT_ASSERT_EQUAL(ColorData(0xFF0000), rColorItem.GetColorValue().GetColor());
+    }
+    // Should have a blue line
+    {
+        const XLineStyleItem& rStyleItem = dynamic_cast<const XLineStyleItem&>(
+                pObj->GetMergedItem(XATTR_LINESTYLE));
+        CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, rStyleItem.GetValue());
+
+        const XLineColorItem& rColorItem = dynamic_cast<const XLineColorItem&>(
+                pObj->GetMergedItem(XATTR_LINECOLOR));
+        CPPUNIT_ASSERT_EQUAL(ColorData(0x0000FF), rColorItem.GetColorValue().GetColor());
+    }
+    // Should have some shadow
+    {
+        const SdrOnOffItem& rShadowItem = dynamic_cast<const SdrOnOffItem&>(
+                pObj->GetMergedItem(SDRATTR_SHADOW));
+        CPPUNIT_ASSERT(rShadowItem.GetValue());
+    }
 
     xDocShRef->DoClose();
 }
