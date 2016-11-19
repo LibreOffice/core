@@ -63,4 +63,8 @@ $(eval $(call gb_CppunitTest_use_rdb,xmlsecurity_dialogs_test,services))
 # $(eval $(call gb_CppunitTest_use_configuration,xmlsecurity_dialogs_test))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,xmlsecurity_dialogs_test))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,xmlsecurity_dialogs_test,\
+	xmlsec \
+))
+
 # vim: set noet sw=4 ts=4:

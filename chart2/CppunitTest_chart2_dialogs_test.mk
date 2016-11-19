@@ -66,4 +66,9 @@ $(eval $(call gb_CppunitTest_use_rdb,chart2_dialogs_test,services))
 # $(eval $(call gb_CppunitTest_use_configuration,chart2_dialogs_test))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,chart2_dialogs_test))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,chart2_dialogs_test,\
+	modules/schart \
+	svx \
+))
+
 # vim: set noet sw=4 ts=4:

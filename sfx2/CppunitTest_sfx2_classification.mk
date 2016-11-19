@@ -38,4 +38,8 @@ $(eval $(call gb_CppunitTest_use_rdb,sfx2_classification,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sfx2_classification))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,sfx2_classification,\
+	svx \
+))
+
 # vim: set noet sw=4 ts=4:

@@ -90,4 +90,8 @@ $(eval $(call gb_CppunitTest_set_include,sw_mailmerge,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,sw_mailmerge,\
+	modules/swriter \
+))
+
 # vim: set noet sw=4 ts=4:

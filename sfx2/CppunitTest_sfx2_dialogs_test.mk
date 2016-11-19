@@ -64,4 +64,8 @@ $(eval $(call gb_CppunitTest_use_rdb,sfx2_dialogs_test,services))
 # $(eval $(call gb_CppunitTest_use_configuration,sfx2_dialogs_test))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,sfx2_dialogs_test))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,sfx2_dialogs_test,\
+	sfx \
+))
+
 # vim: set noet sw=4 ts=4:

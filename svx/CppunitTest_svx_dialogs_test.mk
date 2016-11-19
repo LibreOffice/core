@@ -66,4 +66,8 @@ $(eval $(call gb_CppunitTest_use_rdb,svx_dialogs_test,services))
 # $(eval $(call gb_CppunitTest_use_configuration,svx_dialogs_test))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,svx_dialogs_test))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,svx_dialogs_test,\
+	svx \
+))
+
 # vim: set noet sw=4 ts=4:

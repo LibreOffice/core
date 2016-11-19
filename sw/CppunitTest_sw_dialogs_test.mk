@@ -69,4 +69,8 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_dialogs_test,services))
 # $(eval $(call gb_CppunitTest_use_configuration,sw_dialogs_test))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,sw_dialogs_test))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,sw_dialogs_test,\
+	modules/swriter \
+))
+
 # vim: set noet sw=4 ts=4:

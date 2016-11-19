@@ -63,4 +63,8 @@ $(eval $(call gb_CppunitTest_use_rdb,starmath_dialogs_test,services))
 # $(eval $(call gb_CppunitTest_use_configuration,starmath_dialogs_test))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,starmath_dialogs_test))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,starmath_dialogs_test,\
+	modules/smath \
+))
+
 # vim: set noet sw=4 ts=4:

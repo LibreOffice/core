@@ -58,4 +58,8 @@ $(eval $(call gb_CppunitTest_use_rdb,fpicker_dialogs_test,services))
 # $(eval $(call gb_CppunitTest_use_configuration,fpicker_dialogs_test))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,fpicker_dialogs_test))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,fpicker_dialogs_test,\
+	fps \
+))
+
 # vim: set noet sw=4 ts=4:

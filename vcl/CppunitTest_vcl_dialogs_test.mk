@@ -63,4 +63,8 @@ $(eval $(call gb_CppunitTest_use_rdb,vcl_dialogs_test,services))
 # $(eval $(call gb_CppunitTest_use_configuration,vcl_dialogs_test))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,vcl_dialogs_test))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,vcl_dialogs_test,\
+	vcl \
+))
+
 # vim: set noet sw=4 ts=4:

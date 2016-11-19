@@ -64,4 +64,8 @@ $(eval $(call gb_CppunitTest_use_rdb,dbaccess_dialogs_test,services))
 # $(eval $(call gb_CppunitTest_use_configuration,dbaccess_dialogs_test))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,dbaccess_dialogs_test))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,dbaccess_dialogs_test,\
+	dbaccess \
+))
+
 # vim: set noet sw=4 ts=4:

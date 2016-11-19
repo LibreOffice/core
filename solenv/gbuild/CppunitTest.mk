@@ -380,6 +380,16 @@ $(call gb_CppunitTest_get_target,$(1)) :\
 
 endef
 
+define gb_CppunitTest_use_uiconfig
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_UIConfig_get_target,$(2))
+
+endef
+
+define gb_CppunitTest_use_uiconfigs
+$(foreach uiconfig,$(2),$(call gb_CppunitTest_use_uiconfig,$(1),$(uiconfig)))
+
+endef
+
 define gb_CppunitTest__forward_to_Linktarget
 gb_CppunitTest_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_CppunitTest_get_linktarget,$$(1)),$$(2),$$(3),CppunitTest_$$(1))
 

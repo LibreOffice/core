@@ -64,4 +64,8 @@ $(eval $(call gb_CppunitTest_use_rdb,basctl_dialogs_test,services))
 # $(eval $(call gb_CppunitTest_use_configuration,basctl_dialogs_test))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,basctl_dialogs_test))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,basctl_dialogs_test,\
+	modules/BasicIDE \
+))
+
 # vim: set noet sw=4 ts=4:
