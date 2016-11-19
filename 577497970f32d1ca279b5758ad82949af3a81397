@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_b593004f",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-19T21:58:45Z",
+      "side": 1,
+      "message": "The ScPostIt* was already obtained by the caller so can be passed down instead of obtaining it again here.",
+      "revId": "577497970f32d1ca279b5758ad82949af3a81397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_958e0426",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-19T21:58:45Z",
+      "side": 1,
+      "message": "I\u0027d rather see a check at the beginning of the function\n\n if (!comphelper::LibreOfficeKit::isActive())\n     return;\n\nso everything else is not executed at all in the non-LOKit case.",
+      "range": {
+        "startLine": 659,
+        "startChar": 0,
+        "endLine": 659,
+        "endChar": 47
+      },
+      "revId": "577497970f32d1ca279b5758ad82949af3a81397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
