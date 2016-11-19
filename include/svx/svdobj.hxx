@@ -295,6 +295,7 @@ private:
     friend class                SdrObjListIter;
     friend class                SdrVirtObj;
     friend class                SdrRectObj;
+    friend class                SdrDelayBroadcastObjectChange;
 
 protected:
     Rectangle                   aOutRect;     // surrounding rectangle for Paint (incl. LineWdt, ...)
@@ -351,6 +352,11 @@ protected:
     // #i25616#
     bool                        mbSupportTextIndentingOnLineWidthChange : 1;
 
+private:
+    bool                        mbDelayBroadcastObjectChange : 1;
+    mutable bool                mbBroadcastObjectChangePending : 1;
+
+protected:
     // on import of OLE object from MS documents the BLIP size might be retrieved,
     // in this case the following member is initialized as nonempty rectangle
     Rectangle                   maBLIPSizeRectangle;
@@ -966,6 +972,20 @@ private:
     // HACK: Do not automatically insert newly created object into a page.
     // The user needs to do it manually later.
     bool mbDoNotInsertIntoPageAutomatically;
+};
+
+/** Suppress BroadcastObjectChange() until destruction of the (last) instance.
+    Prevents multiple broadcasts for a sequence of calls that would trigger a
+    broadcast each. Instances may be nested in levels, the outer instance will
+    trigger the final broadcast.
+ */
+class SVX_DLLPUBLIC SdrDelayBroadcastObjectChange
+{
+    SdrObject&  mrObj;
+    bool        mbOldDelayBroadcastObjectChange;
+public:
+    SdrDelayBroadcastObjectChange( SdrObject& rObj );
+    ~SdrDelayBroadcastObjectChange();
 };
 
 struct SdrObjCreatorParams

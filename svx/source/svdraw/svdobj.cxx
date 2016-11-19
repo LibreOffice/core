@@ -302,6 +302,8 @@ SdrObject::SdrObject() :
     ,pGrabBagItem(nullptr)
     ,mnNavigationPosition(SAL_MAX_UINT32)
     ,mnLayerID(0)
+    ,mbDelayBroadcastObjectChange(false)
+    ,mbBroadcastObjectChangePending(false)
     ,mpSvxShape( nullptr )
     ,maWeakUnoShape()
     ,mbDoNotInsertIntoPageAutomatically(false)
@@ -879,6 +881,12 @@ void SdrObject::BroadcastObjectChange() const
 {
     if( pModel && pModel->isLocked() )
         return;
+
+    if (mbDelayBroadcastObjectChange)
+    {
+        mbBroadcastObjectChangePending = true;
+        return;
+    }
 
     bool bPlusDataBroadcast(pPlusData && pPlusData->pBroadcast);
     bool bObjectChange(IsInserted() && pModel);
@@ -3091,6 +3099,27 @@ bool SdrObject::HasText() const
 {
     return false;
 }
+
+
+SdrDelayBroadcastObjectChange::SdrDelayBroadcastObjectChange( SdrObject& rObj ) :
+    mrObj(rObj), mbOldDelayBroadcastObjectChange( rObj.mbDelayBroadcastObjectChange)
+{
+    mrObj.mbDelayBroadcastObjectChange = true;
+}
+
+SdrDelayBroadcastObjectChange::~SdrDelayBroadcastObjectChange()
+{
+    if (!mbOldDelayBroadcastObjectChange)
+    {
+        mrObj.mbDelayBroadcastObjectChange = false;
+        if (mrObj.mbBroadcastObjectChangePending)
+        {
+            mrObj.mbBroadcastObjectChangePending = false;
+            mrObj.BroadcastObjectChange();
+        }
+    }
+}
+
 
 SdrObject* SdrObjFactory::CreateObjectFromFactory( sal_uInt32 nInventor, sal_uInt16 nObjIdentifier, SdrPage* , SdrModel*  )
 {
