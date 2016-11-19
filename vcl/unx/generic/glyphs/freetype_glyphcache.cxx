@@ -508,7 +508,8 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
 
     mbFaceOk = true;
 
-    ApplyGSUB( rFSD );
+    if (!SalLayout::UseCommonLayout())
+        ApplyGSUB( rFSD );
 
     // TODO: query GASP table for load flags
     mnLoadFlags = FT_LOAD_DEFAULT;
