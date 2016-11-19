@@ -125,8 +125,7 @@ const SwRangeRedline* SwEditShell::GetCurrRedline() const
 
 void SwEditShell::UpdateRedlineAttr()
 {
-    if( ( RedlineFlags::ShowInsert | RedlineFlags::ShowDelete ) ==
-        ( RedlineFlags::ShowMask & GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() ))
+    if( IDocumentRedlineAccess::IsShowChanges(GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags()) )
     {
         SET_CURR_SHELL( this );
         StartAllAction();

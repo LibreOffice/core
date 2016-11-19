@@ -2031,8 +2031,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
             bool bSet = false;
             if(WID_DOC_CHANGES_SHOW == pEntry->nWID)
             {
-                const RedlineFlags nMask = RedlineFlags::ShowInsert | RedlineFlags::ShowDelete;
-                bSet = bool(eMode & nMask);
+                bSet = IDocumentRedlineAccess::IsShowChanges(eMode);
             }
             else if(WID_DOC_CHANGES_RECORD == pEntry->nWID)
             {
