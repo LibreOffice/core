@@ -640,9 +640,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
             ScNoteCaptionCreator aCreator( mrDoc, rPos, maNoteData );
             if( maNoteData.mpCaption )
             {
-                // Prevent triple change broadcasts of the same object, which
-                // during Save triggered by ScDocument::CreateAllNoteCaptions()
-                // creates a major performance bottleneck.
+                // Prevent triple change broadcasts of the same object.
                 SdrDelayBroadcastObjectChange aDelayChange( *maNoteData.mpCaption);
 
                 ScCaptionInitData& rInitData = *maNoteData.mxInitData;
