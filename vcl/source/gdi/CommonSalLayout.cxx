@@ -595,11 +595,13 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                     nYOffset = -pHbPositions[i].y_offset;
                 }
 
-                Point aNewPos(lround((aCurrPos.X() + nXOffset) * nXScale),
-                              lround((aCurrPos.Y() + nYOffset) * nYScale));
+                nAdvance *= nXScale;
+                nXOffset *= nXScale;
+                nYOffset *= nYScale;
+
+                Point aNewPos(aCurrPos.X() + nXOffset, aCurrPos.Y() + nYOffset);
                 const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags,
-                                    lround(nAdvance * nXScale),
-                                    lround(nXOffset * nXScale));
+                                    nAdvance, nXOffset);
                 AppendGlyph(aGI);
 
                 aCurrPos.X() += nAdvance;
