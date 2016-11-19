@@ -149,6 +149,7 @@ public:
 
     void testPivotTableXLSX();
     void testPivotTableTwoDataFieldsXLSX();
+    void testPivotTableMedian();
 
     void testSwappedOutImageExport();
     void testLinkedGraphicRT();
@@ -238,6 +239,7 @@ public:
     CPPUNIT_TEST(testSheetProtection);
     CPPUNIT_TEST(testPivotTableXLSX);
     CPPUNIT_TEST(testPivotTableTwoDataFieldsXLSX);
+    CPPUNIT_TEST(testPivotTableMedian);
 #if !defined(_WIN32)
     CPPUNIT_TEST(testSupBookVirtualPath);
 #endif
@@ -2934,6 +2936,41 @@ void ScExportTest::testPivotTableTwoDataFieldsXLSX()
     CPPUNIT_ASSERT_MESSAGE("Reload check failed.", bCheck);
 
     xDocSh2->DoClose();
+}
+
+void ScExportTest::testPivotTableMedian()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table-median.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load test document.", xDocSh.Is());
+
+    // Export the document and import again for a check
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_ODS);
+    xDocSh->DoClose();
+
+    // Check sheet
+    ScDocument& rDoc = xDocSh2->GetDocument();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one sheet.", sal_Int16(1), rDoc.GetTableCount());
+
+    // Check pivot table
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a live ScDPCollection instance.", pDPs);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one pivot table instance.", size_t(1), pDPs->GetCount());
+    const ScDPObject* pDPObj = &(*pDPs)[0];
+    CPPUNIT_ASSERT_MESSAGE("Failed to get pivot table object.", pDPObj);
+    const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get ScDPSaveData instance.", pSaveData);
+
+    // Check the data field function.
+    std::vector<const ScDPSaveDimension*> aDims;
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDims);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There should be exactly 1 data field.",
+        std::vector<ScDPSaveDimension const *>::size_type(1), aDims.size());
+
+    const ScDPSaveDimension* pDim = aDims.back();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Function for the data field should be COUNT.",
+        sal_uInt16(sheet::GeneralFunction_MEDIAN), pDim->GetFunction());
 }
 
 void ScExportTest::testFunctionsExcel2010ODS()
