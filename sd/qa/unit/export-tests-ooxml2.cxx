@@ -101,6 +101,7 @@ public:
     void testExtFileField();
     void testAuthorField();
     void testTdf99224();
+    void testTdf92076();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -125,6 +126,7 @@ public:
     CPPUNIT_TEST(testExtFileField);
     CPPUNIT_TEST(testAuthorField);
     CPPUNIT_TEST(testTdf99224);
+    CPPUNIT_TEST(testTdf92076);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -733,6 +735,15 @@ void SdOOXMLExportTest2::testTdf99224()
     uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
     // This was 0: the image with text was lost on export.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());
+    xShell->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf92076()
+{
+    sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf92076.odp"), ODP);
+    xShell = saveAndReload(xShell.get(), PPTX);
+    uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xPage->getCount());
     xShell->DoClose();
 }
 

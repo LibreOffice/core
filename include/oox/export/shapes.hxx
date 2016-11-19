@@ -134,9 +134,9 @@ public:
     static bool         NonEmptyText( const css::uno::Reference< css::uno::XInterface >& xIface );
 
     ShapeExport&
-                        WriteBezierShape( const css::uno::Reference< css::drawing::XShape >& xShape, bool bClosed );
+                        WritePolyPolygonShape( const css::uno::Reference< css::drawing::XShape >& xShape, bool bClosed );
     ShapeExport&
-                        WriteClosedBezierShape( const css::uno::Reference< css::drawing::XShape >& xShape );
+                        WriteClosedPolyPolygonShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
                         WriteConnectorShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
@@ -154,7 +154,7 @@ public:
     virtual ShapeExport&
                         WriteNonVisualProperties( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
-                        WriteOpenBezierShape( const css::uno::Reference< css::drawing::XShape >& xShape );
+                        WriteOpenPolyPolygonShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
                         WriteRectangleShape( const css::uno::Reference< css::drawing::XShape >& xShape );
 
@@ -171,12 +171,14 @@ public:
      *
      * <table>
      *   <tr><th>Shape Type</th><th>Method</th></tr>
-     *   <tr><td><tt>com.sun.star.drawing.ClosedBezierShape</tt></td>    <td>ShapeExport::WriteClosedBezierShape</td></tr>
+     *   <tr><td><tt>com.sun.star.drawing.ClosedBezierShape</tt></td>    <td>ShapeExport::WriteClosedPolyPolygonShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.CustomShape</tt></td>          <td>ShapeExport::WriteCustomShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.EllipseShape</tt></td>         <td>ShapeExport::WriteEllipseShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.GraphicObjectShape</tt></td>   <td>ShapeExport::WriteGraphicObjectShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.LineShape</tt></td>            <td>ShapeExport::WriteLineShape</td></tr>
-     *   <tr><td><tt>com.sun.star.drawing.OpenBezierShape</tt></td>      <td>ShapeExport::WriteOpenBezierShape</td></tr>
+     *   <tr><td><tt>com.sun.star.drawing.OpenBezierShape</tt></td>      <td>ShapeExport::WriteOpenPolyPolygonShape</td></tr>
+     *   <tr><td><tt>com.sun.star.drawing.PolyPolygonShape</tt></td>      <td>ShapeExport::WriteClosedPolyPolygonShape</td></tr>
+     *   <tr><td><tt>com.sun.star.drawing.PolyLineShape</tt></td>      <td>ShapeExport::WriteOpenPolyPolygonShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.RectangleShape</tt></td>       <td>ShapeExport::WriteRectangleShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.TableShape</tt></td>           <td>ShapeExport::WriteTableShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.TextShape</tt></td>            <td>ShapeExport::WriteTextShape</td></tr>
