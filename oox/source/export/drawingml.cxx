@@ -2556,16 +2556,19 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
 
     mpFS->startElementNS( XML_a, XML_pathLst, FSEND );
 
+    const Rectangle aRect( rPolyPolygon.GetBoundRect() );
+
+    // Put all polygons of rPolyPolygon in the same path elemnt
+    // to subtract the overlapped areas.
+    mpFS->startElementNS( XML_a, XML_path,
+            XML_w, I64S( aRect.GetWidth() ),
+            XML_h, I64S( aRect.GetHeight() ),
+            FSEND );
+
     for( sal_uInt16 i = 0; i < rPolyPolygon.Count(); i ++ )
     {
 
         const tools::Polygon& rPoly = rPolyPolygon[ i ];
-        Rectangle aRect( rPoly.GetBoundRect() );
-
-        mpFS->startElementNS( XML_a, XML_path,
-                              XML_w, I64S( aRect.GetWidth() ),
-                              XML_h, I64S( aRect.GetHeight() ),
-                              FSEND );
 
         if( rPoly.GetSize() > 0 )
         {
@@ -2611,9 +2614,8 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
                 mpFS->endElementNS( XML_a, XML_lnTo );
             }
         }
-
-        mpFS->endElementNS( XML_a, XML_path );
     }
+    mpFS->endElementNS( XML_a, XML_path );
 
     mpFS->endElementNS( XML_a, XML_pathLst );
 

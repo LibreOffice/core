@@ -102,6 +102,7 @@ public:
     void testAuthorField();
     void testTdf99224();
     void testTdf92076();
+    void testTdf59046();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -127,6 +128,7 @@ public:
     CPPUNIT_TEST(testAuthorField);
     CPPUNIT_TEST(testTdf99224);
     CPPUNIT_TEST(testTdf92076);
+    CPPUNIT_TEST(testTdf59046);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -745,6 +747,16 @@ void SdOOXMLExportTest2::testTdf92076()
     uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xPage->getCount());
     xShell->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf59046()
+{
+    sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf59046.odp"), ODP);
+    utl::TempFile tempFile;
+    xShell = saveAndReload(xShell.get(), PPTX, &tempFile);
+    xShell->DoClose();
+    xmlDocPtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
