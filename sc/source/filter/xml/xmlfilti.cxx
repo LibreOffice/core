@@ -72,7 +72,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
                 sal_Int32 nOffset(0);
                 if (ScRangeStringConverter::GetRangeFromString( aScRange, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                 {
-                    ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
+                    aOutputPosition = aScRange.aStart;
                     bCopyOutputData = true;
                 }
             }
@@ -144,9 +144,9 @@ void ScXMLFilterContext::EndElement()
 
     if (bCopyOutputData)
     {
-        mrQueryParam.nDestCol = aOutputPosition.Column;
-        mrQueryParam.nDestRow = aOutputPosition.Row;
-        mrQueryParam.nDestTab = aOutputPosition.Sheet;
+        mrQueryParam.nDestCol = aOutputPosition.Col();
+        mrQueryParam.nDestRow = aOutputPosition.Row();
+        mrQueryParam.nDestTab = aOutputPosition.Tab();
     }
 
     if (bConditionSourceRange)
