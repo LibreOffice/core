@@ -238,7 +238,7 @@ public:
     inline ScDocument*          GetDocument()           { return pDoc; }
     inline const ScDocument*    GetDocument() const     { return pDoc; }
     bool IsMatrix (const ScAddress& aCell,
-        css::table::CellRangeAddress& aCellAddress, bool& bIsFirst) const;
+        ScRange& aCellAddress, bool& bIsFirst) const;
 
     const rtl::Reference < XMLPropertySetMapper >& GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
     const rtl::Reference < XMLPropertySetMapper >& GetTableStylesPropertySetMapper() { return xTableStylesPropertySetMapper; }
