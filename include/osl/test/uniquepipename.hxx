@@ -22,8 +22,8 @@
 #include "osl/process.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "unotest/uniquepipename.hxx"
 
+namespace osl {
 namespace test {
 
 OUString uniquePipeName(OUString const & name) {
@@ -35,6 +35,7 @@ OUString uniquePipeName(OUString const & name) {
     return name + OUString::number(info.Ident);
 }
 
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

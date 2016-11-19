@@ -39,7 +39,6 @@ $(eval $(call gb_Library_add_exception_objects,unotest,\
     unotest/source/cpp/macros_test \
     unotest/source/cpp/officeconnection \
     unotest/source/cpp/toabsolutefileurl \
-    unotest/source/cpp/uniquepipename \
 ))
 
 # vim: set noet sw=4 ts=4:

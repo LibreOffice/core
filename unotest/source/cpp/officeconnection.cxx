@@ -27,12 +27,12 @@
 #include "cppuhelper/bootstrap.hxx"
 #include "cppunit/TestAssert.h"
 #include "osl/process.h"
+#include "osl/test/uniquepipename.hxx"
 #include "osl/time.h"
 #include "sal/macros.h"
 #include "sal/types.h"
 #include "unotest/officeconnection.hxx"
 #include "unotest/toabsolutefileurl.hxx"
-#include "unotest/uniquepipename.hxx"
 
 #include "getargument.hxx"
 
@@ -53,7 +53,7 @@ void OfficeConnection::setUp() {
             "soffice",
             &argSoffice));
     if (argSoffice.match("path:")) {
-        desc = "pipe,name=" + uniquePipeName("oootest");
+        desc = "pipe,name=" + osl::test::uniquePipeName("oootest");
         OUString noquickArg("--quickstart=no");
         OUString norestoreArg("--norestore");
         OUString nologoArg("--nologo");
