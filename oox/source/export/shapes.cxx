@@ -428,9 +428,9 @@ bool ShapeExport::NonEmptyText( const Reference< XInterface >& xIface )
     return false;
 }
 
-ShapeExport& ShapeExport::WriteBezierShape( const Reference< XShape >& xShape, bool bClosed )
+ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xShape, bool bClosed )
 {
-    SAL_INFO("oox.shape", "write open bezier shape");
+    SAL_INFO("oox.shape", "write polypolygon shape");
 
     FSHelperPtr pFS = GetFS();
     pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
@@ -481,14 +481,14 @@ ShapeExport& ShapeExport::WriteBezierShape( const Reference< XShape >& xShape, b
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteClosedBezierShape( const Reference< XShape >& xShape )
+ShapeExport& ShapeExport::WriteClosedPolyPolygonShape( const Reference< XShape >& xShape )
 {
-    return WriteBezierShape( xShape, true );
+    return WritePolyPolygonShape( xShape, true );
 }
 
-ShapeExport& ShapeExport::WriteOpenBezierShape( const Reference< XShape >& xShape )
+ShapeExport& ShapeExport::WriteOpenPolyPolygonShape( const Reference< XShape >& xShape )
 {
-    return WriteBezierShape( xShape, false );
+    return WritePolyPolygonShape( xShape, false );
 }
 
 ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>& xShape)
@@ -1388,13 +1388,15 @@ static const NameToConvertMapType& lcl_GetConverters(DocumentType eDocumentType)
         return shape_converters;
     }
 
-    shape_converters[ "com.sun.star.drawing.ClosedBezierShape" ]        = &ShapeExport::WriteClosedBezierShape;
+    shape_converters[ "com.sun.star.drawing.ClosedBezierShape" ]        = &ShapeExport::WriteClosedPolyPolygonShape;
     shape_converters[ "com.sun.star.drawing.ConnectorShape" ]           = &ShapeExport::WriteConnectorShape;
     shape_converters[ "com.sun.star.drawing.CustomShape" ]              = &ShapeExport::WriteCustomShape;
     shape_converters[ "com.sun.star.drawing.EllipseShape" ]             = &ShapeExport::WriteEllipseShape;
     shape_converters[ "com.sun.star.drawing.GraphicObjectShape" ]       = &ShapeExport::WriteGraphicObjectShape;
     shape_converters[ "com.sun.star.drawing.LineShape" ]                = &ShapeExport::WriteLineShape;
-    shape_converters[ "com.sun.star.drawing.OpenBezierShape" ]          = &ShapeExport::WriteOpenBezierShape;
+    shape_converters[ "com.sun.star.drawing.OpenBezierShape" ]          = &ShapeExport::WriteOpenPolyPolygonShape;
+    shape_converters[ "com.sun.star.drawing.PolyPolygonShape" ]          = &ShapeExport::WriteClosedPolyPolygonShape;
+    shape_converters[ "com.sun.star.drawing.PolyLineShape" ]          = &ShapeExport::WriteClosedPolyPolygonShape;
     shape_converters[ "com.sun.star.drawing.RectangleShape" ]           = &ShapeExport::WriteRectangleShape;
     shape_converters[ "com.sun.star.drawing.OLE2Shape" ]                = &ShapeExport::WriteOLE2Shape;
     shape_converters[ "com.sun.star.drawing.TableShape" ]               = &ShapeExport::WriteTableShape;
