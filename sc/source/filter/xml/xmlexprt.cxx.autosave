@@ -2763,14 +2763,17 @@ bool ScXMLExport::GetMerged (const table::CellRangeAddress* pCellAddress,
                 uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
                 xCursor->collapseToMergedArea();
                 table::CellRangeAddress aCellAddress2(xCellAddress->getRangeAddress());
-                if ((aCellAddress2.EndRow > nRow ||
-                    aCellAddress2.EndColumn > nCol) &&
-                    aCellAddress2.StartRow == nRow &&
-                    aCellAddress2.StartColumn == nCol)
+                ScRange aScRange = ScRange( (SCCOL)aCellAddress2.StartColumn, (SCROW)aCellAddress2.StartRow, SCTAB(aCellAddress2.Sheet),
+                                             (SCCOL)aCellAddress2.EndColumn, (SCROW)aCellAddress2.EndRow, SCTAB(aCellAddress2.Sheet) );
+                
+                if ((aScRange.EndRow > nRow ||
+                    aScRange.EndColumn > nCol) &&
+                    aScRange.StartRow == nRow &&
+                    aScRange.StartColumn == nCol)
                 {
-                    pMergedRangesContainer->AddRange(aCellAddress2);
-                    pSharedData->SetLastColumn(aCellAddress2.Sheet, aCellAddress2.EndColumn);
-                    pSharedData->SetLastRow(aCellAddress2.Sheet, aCellAddress2.EndRow);
+                    pMergedRangesContainer->AddRange(aScRange);
+                    pSharedData->SetLastColumn(aScRange.Sheet, aScRange.EndColumn);
+                    pSharedData->SetLastRow(aScRange.Sheet, aScRange.EndRow);
                 }
                 else
                     bReady = true;
