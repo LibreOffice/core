@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_55ad4c87",
+        "filename": "sc/source/ui/drawfunc/futext3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-19T22:01:57Z",
+      "side": 1,
+      "message": "Similar to https://gerrit.libreoffice.org/30099 pass the pNote down.",
+      "revId": "0f385728543e4a94603f893210ab39a5e7d1975e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_75aa4872",
+        "filename": "sc/source/ui/view/viewfun6.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-19T22:01:57Z",
+      "side": 1,
+      "message": "Similar to https://gerrit.libreoffice.org/30099 pass the pNote down.",
+      "revId": "0f385728543e4a94603f893210ab39a5e7d1975e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
