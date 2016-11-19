@@ -711,7 +711,7 @@ void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
             if (pLink)
             {
                 ScMyAreaLink aAreaLink;
-                ScUnoConversion::FillApiRange( aAreaLink.aDestRange, pLink->GetDestArea() );
+                aAreaLink.aDestRange = pLink->GetDestArea();
                 aAreaLink.sSourceStr = pLink->GetSource();
                 aAreaLink.sFilter = pLink->GetFilter();
                 aAreaLink.sFilterOptions = pLink->GetOptions();
@@ -2763,14 +2763,17 @@ bool ScXMLExport::GetMerged (const table::CellRangeAddress* pCellAddress,
                 uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
                 xCursor->collapseToMergedArea();
                 table::CellRangeAddress aCellAddress2(xCellAddress->getRangeAddress());
-                if ((aCellAddress2.EndRow > nRow ||
-                    aCellAddress2.EndColumn > nCol) &&
-                    aCellAddress2.StartRow == nRow &&
-                    aCellAddress2.StartColumn == nCol)
+                ScRange aScRange = ScRange( aCellAddress2.StartColumn, aCellAddress2.StartRow, aCellAddress2.Sheet,
+                                            aCellAddress2.EndColumn, aCellAddress2.EndRow, aCellAddress2.Sheet );
+
+                if ((aScRange.aEnd.Row() > nRow ||
+                    aScRange.aEnd.Col() > nCol) &&
+                    aScRange.aStart.Row() == nRow &&
+                    aScRange.aStart.Col() == nCol)
                 {
-                    pMergedRangesContainer->AddRange(aCellAddress2);
-                    pSharedData->SetLastColumn(aCellAddress2.Sheet, aCellAddress2.EndColumn);
-                    pSharedData->SetLastRow(aCellAddress2.Sheet, aCellAddress2.EndRow);
+                    pMergedRangesContainer->AddRange(aScRange);
+                    pSharedData->SetLastColumn(aScRange.aEnd.Tab(), aScRange.aEnd.Col());
+                    pSharedData->SetLastRow(aScRange.aEnd.Tab(), aScRange.aEnd.Row());
                 }
                 else
                     bReady = true;
@@ -2789,7 +2792,7 @@ bool ScXMLExport::GetMerged (const table::CellRangeAddress* pCellAddress,
 }
 
 bool ScXMLExport::IsMatrix (const ScAddress& aCell,
-                            table::CellRangeAddress& aCellAddress, bool& bIsFirst) const
+                            ScRange& aCellAddress, bool& bIsFirst) const
 {
     bIsFirst = false;
 
@@ -2797,15 +2800,15 @@ bool ScXMLExport::IsMatrix (const ScAddress& aCell,
 
     if (pDoc && pDoc->GetMatrixFormulaRange(aCell, aMatrixRange))
     {
-        ScUnoConversion::FillApiRange( aCellAddress, aMatrixRange );
-        if ((aCellAddress.StartColumn == aCell.Col() && aCellAddress.StartRow == aCell.Row()) &&
-            (aCellAddress.EndColumn > aCell.Col() || aCellAddress.EndRow > aCell.Row()))
+        aCellAddress = aMatrixRange;
+        if ((aCellAddress.aStart.Col() == aCell.Col() && aCellAddress.aStart.Row() == aCell.Row()) &&
+            (aCellAddress.aEnd.Col() > aCell.Col() || aCellAddress.aEnd.Row() > aCell.Row()))
         {
             bIsFirst = true;
             return true;
         }
-        else if (aCellAddress.StartColumn != aCell.Col() || aCellAddress.StartRow != aCell.Row() ||
-            aCellAddress.EndColumn != aCell.Col() || aCellAddress.EndRow != aCell.Row())
+        else if (aCellAddress.aStart.Col() != aCell.Col() || aCellAddress.aStart.Row() != aCell.Row() ||
+            aCellAddress.aEnd.Col() != aCell.Col() || aCellAddress.aEnd.Row()!= aCell.Row())
             return true;
         else
         {
@@ -3148,8 +3151,8 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
     bool bIsFirstMatrixCell(aCell.bIsMatrixBase);
     if (bIsFirstMatrixCell)
     {
-        sal_Int32 nColumns(aCell.aMatrixRange.EndColumn - aCell.aMatrixRange.StartColumn + 1);
-        sal_Int32 nRows(aCell.aMatrixRange.EndRow - aCell.aMatrixRange.StartRow + 1);
+        sal_Int32 nColumns(aCell.aMatrixRange.aEnd.Col() - aCell.aMatrixRange.aStart.Col() + 1);
+        sal_Int32 nRows(aCell.aMatrixRange.aEnd.Row() - aCell.aMatrixRange.aStart.Row() + 1);
         OUStringBuffer sColumns;
         OUStringBuffer sRows;
         ::sax::Converter::convertNumber(sColumns, nColumns);
@@ -3264,8 +3267,8 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
     {
         if (aCell.bIsMergedBase)
         {
-            sal_Int32 nColumns(aCell.aMergeRange.EndColumn - aCell.aMergeRange.StartColumn + 1);
-            sal_Int32 nRows(aCell.aMergeRange.EndRow - aCell.aMergeRange.StartRow + 1);
+            sal_Int32 nColumns(aCell.aMergeRange.aEnd.Col() - aCell.aMergeRange.aStart.Col() + 1);
+            sal_Int32 nRows(aCell.aMergeRange.aEnd.Row() - aCell.aMergeRange.aStart.Row() + 1);
             OUStringBuffer sColumns;
             OUStringBuffer sRows;
             ::sax::Converter::convertNumber(sColumns, nColumns);
