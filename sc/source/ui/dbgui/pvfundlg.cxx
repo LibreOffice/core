@@ -100,6 +100,7 @@ static const PivotFunc spnFunctions[] =
     PivotFunc::Sum,
     PivotFunc::Count,
     PivotFunc::Average,
+    PivotFunc::Median,
     PivotFunc::Max,
     PivotFunc::Min,
     PivotFunc::Product,
@@ -189,6 +190,7 @@ void ScDPFunctionListBox::FillFunctionNames()
     ResStringArray aArr( ScResId( SCSTR_DPFUNCLISTBOX ) );
     for( sal_uInt16 nIndex = 0, nCount = sal::static_int_cast<sal_uInt16>(aArr.Count()); nIndex < nCount; ++nIndex )
         InsertEntry( aArr.GetString( nIndex ) );
+    assert(GetEntryCount() == SAL_N_ELEMENTS(spnFunctions));
 }
 
 ScDPFunctionDlg::ScDPFunctionDlg(

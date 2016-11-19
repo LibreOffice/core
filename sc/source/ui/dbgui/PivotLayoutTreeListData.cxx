@@ -35,6 +35,7 @@ OUString lclGetFunctionMaskName(const PivotFunc nFunctionMask)
         case PivotFunc::Sum:        nStrId = STR_FUN_TEXT_SUM;      break;
         case PivotFunc::Count:      nStrId = STR_FUN_TEXT_COUNT;    break;
         case PivotFunc::Average:    nStrId = STR_FUN_TEXT_AVG;      break;
+        case PivotFunc::Median:     nStrId = STR_FUN_TEXT_MEDIAN;   break;
         case PivotFunc::Max:        nStrId = STR_FUN_TEXT_MAX;      break;
         case PivotFunc::Min:        nStrId = STR_FUN_TEXT_MIN;      break;
         case PivotFunc::Product:    nStrId = STR_FUN_TEXT_PRODUCT;  break;
