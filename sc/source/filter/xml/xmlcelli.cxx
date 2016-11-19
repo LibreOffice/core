@@ -91,10 +91,8 @@
 #include <svtools/miscopt.hxx>
 #include <sax/tools/converter.hxx>
 
-#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/Date.hpp>
-
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 
@@ -710,9 +708,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
             XMLTableShapeImportHelper* pTableShapeImport =
                     static_cast< XMLTableShapeImportHelper* >( rXMLImport.GetShapeImport().get() );
             pTableShapeImport->SetOnTable(false);
-            css::table::CellAddress aCellAddress;
-            ScUnoConversion::FillApiAddress( aCellAddress, aCellPos );
-            pTableShapeImport->SetCell(aCellAddress);
+            pTableShapeImport->SetCell(aCellPos);
             pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
                 rXMLImport, nPrefix, rLName, xAttrList, xShapes);
             if (pContext)
