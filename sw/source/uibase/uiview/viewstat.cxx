@@ -267,8 +267,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_REDLINE_SHOW:
             {
-                RedlineFlags nMask = RedlineFlags::ShowInsert | RedlineFlags::ShowDelete;
-                rSet.Put( SfxBoolItem( nWhich, bool(m_pWrtShell->GetRedlineFlags() & nMask) ));
+                rSet.Put( SfxBoolItem( nWhich, IDocumentRedlineAccess::IsShowChanges(m_pWrtShell->GetRedlineFlags()) ));
             }
             break;
             case SID_AVMEDIA_PLAYER :
