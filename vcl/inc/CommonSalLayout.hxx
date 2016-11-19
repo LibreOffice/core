@@ -58,6 +58,9 @@ class CommonSalLayout : public GenericSalLayout
 
     void                    getScale(double* nXScale, double* nYScale);
 
+    hb_set_t*               mpVertGlyphs;
+    bool                    IsVerticalAlternate(hb_codepoint_t nGlyphIndex);
+
 public:
 #if defined(_WIN32)
     explicit                CommonSalLayout(HDC, WinFontInstance&, const WinFontFace&);
