@@ -182,6 +182,7 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
 ,   mhDC(hDC)
 ,   mhFont(static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT)))
 ,   mnAveWidthFactor(1.0f)
+,   mpVertGlyphs(nullptr)
 {
     mpHbFont = rWinFontFace.GetHbFont();
     if (!mpHbFont)
@@ -219,8 +220,9 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
 
 #elif defined(MACOSX) || defined(IOS)
 CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
-:   mrFontSelData(rCoreTextStyle.maFontSelData),
-    mrCoreTextStyle(rCoreTextStyle)
+:   mrFontSelData(rCoreTextStyle.maFontSelData)
+,   mrCoreTextStyle(rCoreTextStyle)
+,   mpVertGlyphs(nullptr)
 {
     mpHbFont = rCoreTextStyle.GetHbFont();
     if (!mpHbFont)
@@ -244,8 +246,9 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
 
 #else
 CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
-:   mrFontSelData(rFreetypeFont.GetFontSelData()),
-    mrFreetypeFont(rFreetypeFont)
+:   mrFontSelData(rFreetypeFont.GetFontSelData())
+,   mrFreetypeFont(rFreetypeFont)
+,   mpVertGlyphs(nullptr)
 {
     mpHbFont = rFreetypeFont.GetHbFont();
     if (!mpHbFont)
@@ -375,6 +378,41 @@ void CommonSalLayout::DrawText(SalGraphics& rSalGraphics) const
 {
     //call platform dependent DrawText functions
     rSalGraphics.DrawSalLayout( *this );
+}
+
+// Find if the given glyph index can result from applying “vert” feature.
+// We don’t check for a specific script or language as it shouldn’t matter
+// here; if the glyph would be the result from applying “vert” for any
+// script/language then we want to always treat it as upright glyph.
+bool CommonSalLayout::IsVerticalAlternate(hb_codepoint_t nGlyphIndex)
+{
+    if (!mpVertGlyphs)
+    {
+        hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
+        mpVertGlyphs = hb_set_create();
+
+        // Find all GSUB lookups for “vert” feature.
+        hb_set_t* pLookups = hb_set_create();
+        hb_tag_t  pFeatures[] = { HB_TAG('v','e','r','t'), HB_TAG_NONE };
+        hb_ot_layout_collect_lookups(pHbFace, HB_OT_TAG_GSUB, nullptr, nullptr, pFeatures, pLookups);
+        if (!hb_set_is_empty(pLookups))
+        {
+            // Find the output glyphs in each lookup (i.e. the glyphs that
+            // would result from applying this lookup).
+            hb_codepoint_t nIdx = HB_SET_VALUE_INVALID;
+            while (hb_set_next(pLookups, &nIdx))
+            {
+                hb_set_t* pGlyphs = hb_set_create();
+                hb_ot_layout_lookup_collect_glyphs(pHbFace, HB_OT_TAG_GSUB, nIdx, nullptr, nullptr, nullptr, pGlyphs);
+                hb_set_union(mpVertGlyphs, pGlyphs);
+            }
+        }
+    }
+
+    if (hb_set_has(mpVertGlyphs, nGlyphIndex))
+        return true;
+
+    return false;
 }
 
 bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
@@ -550,6 +588,9 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 if (bInCluster)
                     nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
 
+                sal_Int32 indexUtf16 = nCharPos;
+                sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
+
                 bool bDiacritic = false;
                 if (hb_ot_layout_has_glyph_classes(pHbFace))
                 {
@@ -560,8 +601,6 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 else
                 {
 #if HB_VERSION_ATLEAST(0, 9, 42)
-                    sal_Int32 indexUtf16 = nCharPos;
-                    sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
                     if (u_getIntPropertyValue(aChar, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
                         bDiacritic = true;
 #else
@@ -583,7 +622,14 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 DeviceCoordinate nAdvance, nXOffset, nYOffset;
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
-                    nGlyphIndex |= GF_ROTL;
+                    // If the vertical orientation is Tr, then we need to
+                    // consider the glyph upright only if it was a vertical
+                    // alternate (i.e. transformed).
+                    // See http://unicode.org/reports/tr50/#vo
+                    if (vcl::GetVerticalOrientation(aChar) != VerticalOrientation::TransformedRotated
+                    || IsVerticalAlternate(pHbGlyphInfos[i].codepoint))
+                        nGlyphIndex |= GF_ROTL;
+
                     nAdvance = -pHbPositions[i].y_advance;
                     nXOffset =  pHbPositions[i].y_offset;
                     nYOffset =  pHbPositions[i].x_offset;
