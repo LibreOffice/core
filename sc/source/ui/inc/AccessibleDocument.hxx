@@ -259,8 +259,9 @@ private:
     ScTabViewShell* mpViewShell;
     ScSplitPos      meSplitPos;
     rtl::Reference<ScAccessibleSpreadsheet> mpAccessibleSpreadsheet;
+    rtl::Reference<ScAccessibleEditObject> mpEditObj;
     ScChildrenShapes* mpChildrenShapes;
-    ScAccessibleEditObject* mpTempAccEdit;
+
     css::uno::Reference<css::accessibility::XAccessible> mxTempAcc;
     Rectangle maVisArea;
     bool mbCompleteSheetSelected;
