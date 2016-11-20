@@ -23,7 +23,12 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
     ) \
 ))
 
-$(eval $(call gb_Library_use_external,sofficeapp,boost_headers))
+$(eval $(call gb_Library_use_externals,sofficeapp, \
+    boost_headers \
+    icu_headers \
+    icui18n \
+    icuuc \
+))
 
 $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
 	officecfg/registry \
@@ -54,6 +59,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     sb \
     sfx \
     svl \
+    svx \
     svxcore \
     svt \
     tk \
