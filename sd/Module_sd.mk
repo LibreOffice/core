@@ -49,6 +49,7 @@ endif
 # screenshots
 $(eval $(call gb_Module_add_screenshot_targets,sd, \
     CppunitTest_sd_dialogs_test \
+    CppunitTest_sd_dialogs_test_2 \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
