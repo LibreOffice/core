@@ -73,4 +73,8 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_dialogs_test,\
 	modules/swriter \
 ))
 
+$(eval $(call gb_CppunitTest_use_packages,sw_dialogs_test,\
+	extras_palettes \
+))
+
 # vim: set noet sw=4 ts=4:
