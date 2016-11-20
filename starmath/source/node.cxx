@@ -2311,7 +2311,8 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         }
 
         aPos = aLineRect.AlignTo(*this, RectPos::Bottom, RectHorAlign::Center, RectVerAlign::Baseline);
-        aPos.Y() += nVerDist;
+        if (i > 0)
+            aPos.Y() += nVerDist;
 
         // move 'aLineRect' and rectangles in that line to final position
         Point aDelta(0, // since horizontal alignment is already done
