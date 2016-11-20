@@ -79,4 +79,7 @@ $(eval $(call gb_Library_add_exception_objects,ado,\
 	connectivity/source/drivers/ado/adoimp \
 ))
 
+# Runtime dependency for unit-tests
+$(call gb_Library_get_target,ado) :| $(call gb_Library_get_target,affine_uno_uno)
+
 # vim: set noet sw=4 ts=4:
