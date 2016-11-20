@@ -1,19 +1,21 @@
 Support for Office Open XML, the office XML-format designed by Microsoft.
 
-See also:
-[http://wiki.openoffice.org/wiki/OOX]
 
 == DrawingML Custom shapes and presets ==
 
-custom shapes are part of DrawingML and are different to binary ppt
-and VML in older formats, so we needed to add new code to work with
-these. the import happens in oox/source/drawingml, where they are
+Custom shapes are part of DrawingML and are different to binary ppt
+and VML in older formats.
+The import happens in oox/source/drawingml, where they are
 imported as LO's enhanced custom shape's. see
 offapi/com/sun/star/drawing/CustomShape.idl and
 offapi/com/sun/star/drawing/EnhancedCustomShape*.idl
+Check CustomShapeProperties::pushToPropSet() and see
+how custom shape properties are converted.
 
-the export is quite behind now, as it was done before we started work
-on fully supporting drawingml custom shapes. (see FUTURE WORK below)
+Preset shapes are custom shapes whose guides and handles
+have been defined in OOXML specification. By specifying
+preset type and the adjustment values, the reset can
+be taken from the shape definition.
 
 example of drawingml preset:
 
@@ -125,51 +127,24 @@ which is extension not yet in the standard. Thorsten suggested to put
 it in such a namespace and keep original (incomplete) geometry for
 backward compatibility, before we can extend the ODF. that's why you
 will see 2 of them in cases where some of the new commands was
-needed. Radek backported code for the new commands to 3-6
-and 4-0 branches.
+needed.
 
-the drawingml also contains new presets (compared to binary/VML) and
-so we now have code with these presets - they are basically
-predefined custom shapes. we generate them using scripts in
-oox/source/drawingml/customshapes/ and the output are
-oox/source/drawingml/customshapepresets[123456].cxx source files
-containing the definition for the preset shapes. this mean that we
-import presets from OOXML files perfectly. one area to look at might
-be check how handles on the imported custom shapes (and presets)
-work.
+In order to convert preset shapes to LO's enhanced custom shape,
+we need to load shape definition of preset shapes. The procedure
+to convert the defintion from OOXML spec for LO is documented
+( also a script ) in oox/source/drawingml/customshapes/README.
+The scripts in oox/source/drawingml/customshapes/ also generate pptx
+files for signle presets and also for all presets
+cshape-all.pptx. The cshape-all.pptx file is then loaded into Impress
+build with debug enabled in oox and the command line output contains
+information. The generated definition is oox-drawingml-cs-presets.
 
-the source code generation happens in these steps:
-
-  * generate pptx files by running generatePresetsPPTXs.pl. it
-    generates files in pptx/ from cshape.pptx sample - replacing
-    slide1.xml in it and placing it in new file in pptx/ named after
-    the preset plus one cshape-all.pptx file all the presets
-
-  * build oox module with debug (ie. make -s debug=t dbglevel=2)
-
-  * import cshape-all.pptx into impress and redirect output to
-    custom-shapes.log
-
-  * generate oox-drawingml-cs-presets data file by running
-    generatePresetsData.pl - it uses debug output from the custom-shapes.log
-    file
-
-  * check generated data file oox-drawingml-cs-presets and move them to
-    oox/source/drawingml/
-
-  * build oox with new source files and test
-
-while importing presets, we also set the name of the custom shape so
+Check CustomShapeProperties::initializePresetDataMap() to see how
+generated presets data are loaded into LO.
+While importing presets, we prefix the name with "ooxml-" so
 that we can detect it on export as save it again as preset.
 
-the scripts in oox/source/drawingml/customshapes/ also generate pptx
-files for signle presets and also for all presets
-cshape-all.pptx. the cshape-all.pptx file is then loaded into impress
-build with debug enabled in oox and the command line output contains
-information, which are used by generatePresetsCXX.pl. redirect the
-output into custom-shapes.log in oox/source/drawingml/customshapes/
-and run the script. it creates the customshapepresets[123456].cxx
-source files with presets definitions. also the generated pptx files
+The generated pptx files
 can be used when debugging bugs in custom shapes import/export. also
 the cshape-all.pptx can be used to test the round trips. there's small
 problem with these pptx as they cannot be imported into powerpoint,
@@ -179,6 +154,23 @@ custom shapes. OpenXML SDK tools might help when fixing
 cshape-all.pptx
 http://www.microsoft.com/en-us/download/details.aspx?id=30425
 
+== Export ==
+Here is how LO's enhanced custom shapes are exported:
+* Shape name is ooxml-* - they are imported from ooxml, export as is.
+* Blacklist - ODF presets that has OOXML equivalent.
+  We convert adjustment values case by case. Microsofot Office
+  is rather strict about adjustment values, either none of them
+  are provided so that default values are taken, or the exact set
+  of handles have to be provided. In some cases we are converting
+  from the preset with less handles to the one with more handles
+  so that default values suitable for the odf one need to be
+  provided.
+* Whitelist - ODF presets that has OOXML equivalent but looks a bit
+different, export them as PolyPolygon.
+
+Check Andras Timar's presentation[1] and ShapeExport::WriteCustomShape()
+for further detail.
+
 FUTURE WORK: because we have to make sure that all the roundtrips
 like PPTX --> ODP --> PPTX work correctly and doesn't lose data.
 the only problematic part is probably saving custom shapes (ie. not
@@ -187,3 +179,7 @@ and is unable to export general custom shapes yet. it will need a bit
 of work as LO has more complex equations than DrawingML. other parts
 should work OK, PPTX --> ODP should work and don't lose any
 data. presets should already survive PPTX --> ODP --> PPTX roundtrip
+
+[1]https://archive.fosdem.org/2016/schedule/event/drawingml/attachments/
+slides/1184/export/events/attachments/drawingml/slides/1184/
+andras_timar_fosdem_2016.pdf
