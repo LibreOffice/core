@@ -1397,6 +1397,7 @@ ScAccessibleDocument::ScAccessibleDocument(
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
     mpChildrenShapes(nullptr),
+    mpTempAccEdit(nullptr),
     mbCompleteSheetSelected(false)
 {
     maVisArea = GetVisibleArea_Impl();
@@ -1507,8 +1508,8 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         const ScAccGridWinFocusLostHint* pFocusLostHint = static_cast<const ScAccGridWinFocusLostHint *>(&rHint);
         if (pFocusLostHint->GetOldGridWin() == meSplitPos)
         {
-            if (mpEditObj.is())
-                mpEditObj->LostFocus();
+            if (mxTempAcc.is() && mpTempAccEdit)
+                mpTempAccEdit->LostFocus();
             else if (mpAccessibleSpreadsheet.is())
                 mpAccessibleSpreadsheet->LostFocus();
             else
@@ -1537,12 +1538,12 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             else
             {
-                if (mpEditObj.is())
-                    mpEditObj->GotFocus();
-                else if (mpAccessibleSpreadsheet.is())
-                    mpAccessibleSpreadsheet->GotFocus();
-                else
-                    CommitFocusGained();
+            if (mxTempAcc.is() && mpTempAccEdit)
+                mpTempAccEdit->GotFocus();
+            else if (mpAccessibleSpreadsheet.is())
+                mpAccessibleSpreadsheet->GotFocus();
+            else
+                CommitFocusGained();
             }
         }
     }
@@ -1586,14 +1587,11 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 const EditEngine* pEditEng = rViewData.GetEditView(meSplitPos)->GetEditEngine();
                 if (pEditEng && pEditEng->GetUpdateMode())
                 {
-                    if (!mpEditObj.is())
-                    {
-                        mpEditObj.set(new ScAccessibleEditObject(this, rViewData.GetEditView(meSplitPos),
-                            mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
-                            OUString(ScResId(STR_ACC_EDITLINE_DESCR)), ScAccessibleEditObject::CellInEditMode));
-                    }
+                    mpTempAccEdit = new ScAccessibleEditObject(this, rViewData.GetEditView(meSplitPos),
+                        mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
+                        OUString(ScResId(STR_ACC_EDITLINE_DESCR)), ScAccessibleEditObject::CellInEditMode);
+                    uno::Reference<XAccessible> xAcc = mpTempAccEdit;
 
-                    uno::Reference<XAccessible> xAcc = mpEditObj.get();
                     AddChild(xAcc, true);
 
                     if (mpAccessibleSpreadsheet.is())
@@ -1601,19 +1599,19 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     else
                         CommitFocusLost();
 
-                    mpEditObj->GotFocus();
+                    mpTempAccEdit->GotFocus();
                 }
             }
         }
         else if (rHint.GetId() == SC_HINT_ACC_LEAVEEDITMODE)
         {
-            if (mpEditObj.is())
+            if (mxTempAcc.is())
             {
-                mpEditObj->LostFocus();
+                if (mpTempAccEdit)
+                    mpTempAccEdit->LostFocus();
 
-                uno::Reference<XAccessible> xAcc = mpEditObj.get();
-                RemoveChild(xAcc, true);
-
+                mpTempAccEdit = nullptr;
+                RemoveChild(mxTempAcc, true);
                 if (mpAccessibleSpreadsheet.is() && mpViewShell && mpViewShell->IsActive())
                     mpAccessibleSpreadsheet->GotFocus();
                 else if( mpViewShell && mpViewShell->IsActive())
