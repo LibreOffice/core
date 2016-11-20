@@ -5,31 +5,31 @@
 <draw:color draw:name="White" draw:color="#ffffff" />
 <!-- LibreOffice colors -->
 <!-- http://wiki.documentfoundation.org/Marketing/Branding#Colors -->
-  <draw:color draw:name="Green 0" draw:color="#106802"/>
-  <draw:color draw:name="Green 1 (LibreOffice Main Color)" draw:color="#18a303"/>
-  <draw:color draw:name="Green 2" draw:color="#43c330"/>
-  <draw:color draw:name="Green 3" draw:color="#92e285"/>
-  <draw:color draw:name="Green 4" draw:color="#ccf4c6"/>
-  <draw:color draw:name="Blue 0" draw:color="#023f62"/>
-  <draw:color draw:name="Blue 1" draw:color="#0369a3"/>
-  <draw:color draw:name="Blue 2" draw:color="#1c99e0"/>
-  <draw:color draw:name="Blue 3" draw:color="#63bbee"/>
-  <draw:color draw:name="Blue 4" draw:color="#aadcf7"/>
-  <draw:color draw:name="Orange 0" draw:color="#622502"/>
-  <draw:color draw:name="Orange 1" draw:color="#a33e03"/>
-  <draw:color draw:name="Orange 2" draw:color="#d36118"/>
-  <draw:color draw:name="Orange 3" draw:color="#f09e6f"/>
-  <draw:color draw:name="Orange 4" draw:color="#f9cfb5"/>
-  <draw:color draw:name="Purple 0" draw:color="#530260"/>
-  <draw:color draw:name="Purple 1" draw:color="#8e03a3"/>
-  <draw:color draw:name="Purple 2" draw:color="#c254d2"/>
-  <draw:color draw:name="Purple 3" draw:color="#dc85e9"/>
-  <draw:color draw:name="Purple 4" draw:color="#f2cbf8"/>
-  <draw:color draw:name="Yellow 0" draw:color="#876900"/>
-  <draw:color draw:name="Yellow 1" draw:color="#c99c00"/>
-  <draw:color draw:name="Yellow 2" draw:color="#e9b913"/>
-  <draw:color draw:name="Yellow 3" draw:color="#f5cd53"/>
-  <draw:color draw:name="Yellow 4" draw:color="#fde9a9"/>
+  <draw:color draw:name="Moss Green" draw:color="#106802"/>
+  <draw:color draw:name="Libre Green" draw:color="#18a303"/>
+  <draw:color draw:name="Grass Green" draw:color="#43c330"/>
+  <draw:color draw:name="Mint Green" draw:color="#92e285"/>
+  <draw:color draw:name="Pale Green" draw:color="#ccf4c6"/>
+  <draw:color draw:name="Midnight Blue" draw:color="#023f62"/>
+  <draw:color draw:name="Libre Blue" draw:color="#0369a3"/>
+  <draw:color draw:name="Sky Blue" draw:color="#1c99e0"/>
+  <draw:color draw:name="Baby Blue" draw:color="#63bbee"/>
+  <draw:color draw:name="Pale Blue" draw:color="#aadcf7"/>
+  <draw:color draw:name="Redwood Orange" draw:color="#622502"/>
+  <draw:color draw:name="Libre Orange" draw:color="#a33e03"/>
+  <draw:color draw:name="Sundown Orange" draw:color="#d36118"/>
+  <draw:color draw:name="Pink Orange" draw:color="#f09e6f"/>
+  <draw:color draw:name="Pale Orange" draw:color="#f9cfb5"/>
+  <draw:color draw:name="Bishop's Purple" draw:color="#530260"/>
+  <draw:color draw:name="Libre Purple" draw:color="#8e03a3"/>
+  <draw:color draw:name="Amethyst Purple" draw:color="#c254d2"/>
+  <draw:color draw:name="Violet Purple" draw:color="#dc85e9"/>
+  <draw:color draw:name="Pale Purple" draw:color="#f2cbf8"/>
+  <draw:color draw:name="Khaki Yellow" draw:color="#876900"/>
+  <draw:color draw:name="Libre Yellow" draw:color="#c99c00"/>
+  <draw:color draw:name="Banana Yellow" draw:color="#e9b913"/>
+  <draw:color draw:name="Sand Yellow" draw:color="#f5cd53"/>
+  <draw:color draw:name="Pale Yellow" draw:color="#fde9a9"/>
   <draw:color draw:name="Green Accent" draw:color="#2cee0e"/>
   <draw:color draw:name="Blue Accent" draw:color="#00a0fc"/>
   <draw:color draw:name="Orange Accent" draw:color="#fc5c00"/>
