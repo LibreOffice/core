@@ -2969,8 +2969,10 @@ void ScExportTest::testPivotTableMedian()
 
     const ScDPSaveDimension* pDim = aDims.back();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "Function for the data field should be COUNT.",
+        "Function for the data field should be MEDIAN.",
         sal_uInt16(sheet::GeneralFunction_MEDIAN), pDim->GetFunction());
+
+    xDocSh2->DoClose();
 }
 
 void ScExportTest::testFunctionsExcel2010ODS()
