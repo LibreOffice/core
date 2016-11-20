@@ -1,0 +1,62 @@
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# See cui-dailog-test.txt for explanations
+
+# covering f to n
+
+cui/ui/fmsearchdialog.ui
+cui/ui/formatcellsdialog.ui
+cui/ui/galleryapplyprogress.ui
+cui/ui/galleryfilespage.ui
+cui/ui/gallerygeneralpage.ui
+cui/ui/gallerysearchprogress.ui
+cui/ui/gallerythemedialog.ui
+cui/ui/gallerythemeiddialog.ui
+cui/ui/gallerytitledialog.ui
+cui/ui/galleryupdateprogress.ui
+cui/ui/gradientpage.ui
+cui/ui/hangulhanjaadddialog.ui
+cui/ui/hangulhanjaconversiondialog.ui
+cui/ui/hangulhanjaeditdictdialog.ui
+cui/ui/hangulhanjaoptdialog.ui
+cui/ui/hatchpage.ui
+cui/ui/hyperlinkdialog.ui
+cui/ui/hyperlinkdocpage.ui
+cui/ui/hyperlinkinternetpage.ui
+cui/ui/hyperlinkmailpage.ui
+cui/ui/hyperlinkmarkdialog.ui
+cui/ui/hyperlinknewdocpage.ui
+cui/ui/hyphenate.ui
+cui/ui/iconchangedialog.ui
+cui/ui/iconselectordialog.ui
+cui/ui/insertfloatingframe.ui
+cui/ui/insertoleobject.ui
+cui/ui/insertrowcolumn.ui
+cui/ui/javaclasspathdialog.ui
+cui/ui/javastartparametersdialog.ui
+cui/ui/linedialog.ui
+cui/ui/lineendstabpage.ui
+cui/ui/linestyletabpage.ui
+cui/ui/linetabpage.ui
+cui/ui/macroassigndialog.ui
+cui/ui/macroassignpage.ui
+cui/ui/macroselectordialog.ui
+cui/ui/menuassignpage.ui
+cui/ui/messbox.ui
+cui/ui/mosaicdialog.ui
+cui/ui/movemenu.ui
+cui/ui/multipathdialog.ui
+cui/ui/namedialog.ui
+cui/ui/newlibdialog.ui
+cui/ui/newtabledialog.ui
+cui/ui/newtoolbardialog.ui
+cui/ui/numberingformatpage.ui
+cui/ui/numberingoptionspage.ui
+cui/ui/numberingpositionpage.ui

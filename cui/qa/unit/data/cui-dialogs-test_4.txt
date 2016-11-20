@@ -1,0 +1,74 @@
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# See cui-dailog-test.txt for explanations
+
+# covering p to z
+
+cui/ui/pageformatpage.ui
+cui/ui/paragalignpage.ui
+cui/ui/paraindentspacing.ui
+cui/ui/paratabspage.ui
+cui/ui/password.ui
+cui/ui/pastespecial.ui
+cui/ui/percentdialog.ui
+cui/ui/personalization_tab.ui
+cui/ui/pickbulletpage.ui
+cui/ui/pickgraphicpage.ui
+cui/ui/picknumberingpage.ui
+cui/ui/pickoutlinepage.ui
+cui/ui/positionpage.ui
+cui/ui/positionsizedialog.ui
+cui/ui/possizetabpage.ui
+cui/ui/posterdialog.ui
+cui/ui/querychangelineenddialog.ui
+cui/ui/querydeletebitmapdialog.ui
+cui/ui/querydeletechartcolordialog.ui
+cui/ui/querydeletecolordialog.ui
+cui/ui/querydeletedictionarydialog.ui
+cui/ui/querydeletegradientdialog.ui
+cui/ui/querydeletehatchdialog.ui
+cui/ui/querydeletelineenddialog.ui
+cui/ui/querydeletelinestyledialog.ui
+cui/ui/queryduplicatedialog.ui
+cui/ui/querynoloadedfiledialog.ui
+cui/ui/querynosavefiledialog.ui
+cui/ui/querysavelistdialog.ui
+cui/ui/queryupdategalleryfilelistdialog.ui
+cui/ui/recordnumberdialog.ui
+cui/ui/rotationtabpage.ui
+cui/ui/scriptorganizer.ui
+cui/ui/searchattrdialog.ui
+cui/ui/searchformatdialog.ui
+cui/ui/securityoptionsdialog.ui
+cui/ui/select_persona_dialog.ui
+cui/ui/selectpathdialog.ui
+cui/ui/shadowtabpage.ui
+cui/ui/showcoldialog.ui
+cui/ui/similaritysearchdialog.ui
+cui/ui/slantcornertabpage.ui
+cui/ui/smarttagoptionspage.ui
+cui/ui/smoothdialog.ui
+cui/ui/solarizedialog.ui
+cui/ui/specialcharacters.ui
+cui/ui/spellingdialog.ui
+cui/ui/spelloptionsdialog.ui
+cui/ui/splitcellsdialog.ui
+cui/ui/storedwebconnectiondialog.ui
+cui/ui/swpossizepage.ui
+cui/ui/textanimtabpage.ui
+cui/ui/textattrtabpage.ui
+cui/ui/textdialog.ui
+cui/ui/textflowpage.ui
+cui/ui/transparencytabpage.ui
+cui/ui/tsaurldialog.ui
+cui/ui/twolinespage.ui
+cui/ui/wordcompletionpage.ui
+cui/ui/zoomdialog.ui
+

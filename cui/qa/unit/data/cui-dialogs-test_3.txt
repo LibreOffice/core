@@ -1,0 +1,44 @@
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# See cui-dailog-test.txt for explanations
+
+# covering o
+
+cui/ui/objectnamedialog.ui
+cui/ui/objecttitledescdialog.ui
+cui/ui/optaccessibilitypage.ui
+cui/ui/optadvancedpage.ui
+cui/ui/optappearancepage.ui
+cui/ui/optasianpage.ui
+cui/ui/optbasicidepage.ui
+cui/ui/optchartcolorspage.ui
+cui/ui/optctlpage.ui
+cui/ui/optemailpage.ui
+cui/ui/optfltrembedpage.ui
+cui/ui/optfltrpage.ui
+cui/ui/optfontspage.ui
+cui/ui/optgeneralpage.ui
+cui/ui/opthtmlpage.ui
+cui/ui/optionsdialog.ui
+cui/ui/optionsdialog.ui
+cui/ui/optjsearchpage.ui
+cui/ui/optlanguagespage.ui
+cui/ui/optlingupage.ui
+cui/ui/optmemorypage.ui
+cui/ui/optnewdictionarydialog.ui
+cui/ui/optonlineupdatepage.ui
+cui/ui/optopenclpage.ui
+cui/ui/optpathspage.ui
+cui/ui/optproxypage.ui
+cui/ui/optsavepage.ui
+cui/ui/optsecuritypage.ui
+cui/ui/optuserpage.ui
+cui/ui/optviewpage.ui
+
