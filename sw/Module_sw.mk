@@ -107,6 +107,7 @@ endif
 # screenshots
 $(eval $(call gb_Module_add_screenshot_targets,sw,\
     CppunitTest_sw_dialogs_test \
+    CppunitTest_sw_dialogs_test_2 \
 ))
 
 # vim: set noet sw=4 ts=4:
