@@ -56,11 +56,7 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Xdg);
     Files = (auto_brand_ALL,
              gid_Brand_File_Gdb_Trace,
-             gid_Brand_File_Bin_Soffice,
-             gid_Brand_File_Bin_Soffice_Bin_Manifest,
              gid_Brand_File_Bin_Unoinfo,
-             gid_Brand_File_Bmp_IntroAboutShell,
-             gid_Brand_File_Bmp_IntroAboutShell_custom,
 	     gid_Brand_File_Desktophelper_Txt,
              gid_Brand_File_Html_Thirdpartylicensereadme,
              gid_Brand_File_Lib_Dbghelp,
@@ -496,17 +492,6 @@ End
 
 #endif
 
-#if !defined MACOSX && !defined WNT
-
-File gid_Brand_File_Bin_Soffice
-    BIN_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "desktop_soffice_sh.filelist";
-    Styles = (FILELIST, PACKED);
-End
-
-#endif
-
 #ifdef WNT
 File gid_Brand_File_Desktophelper_Txt
     TXT_FILE_BODY;
@@ -532,22 +517,6 @@ File gid_Brand_File_Script_Unopkg
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
     Name = "unopkg";
-End
-#endif
-
-File gid_Brand_File_Bmp_IntroAboutShell
-    TXT_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "desktop_branding.filelist";
-    Styles = (FILELIST);
-End
-
-#if defined CUSTOM_BRANDING
-File gid_Brand_File_Bmp_IntroAboutShell_custom
-    TXT_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "desktop_branding_custom.filelist";
-    Styles = (FILELIST);
 End
 #endif
 
