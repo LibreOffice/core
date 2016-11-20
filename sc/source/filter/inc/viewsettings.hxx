@@ -163,8 +163,7 @@ public:
                             const SheetViewModelRef& rxSheetView,
                             const css::uno::Any& rProperties );
     /** Stores the used area for a specific worksheet. */
-    void                setSheetUsedArea(
-                            const css::table::CellRangeAddress& rUsedArea );
+    void                setSheetUsedArea( const ScRange& rUsedArea );
 
     /** Converts all imported document view settings. */
     void                finalizeImport();

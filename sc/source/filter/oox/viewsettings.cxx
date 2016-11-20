@@ -533,9 +533,14 @@ void ViewSettings::setSheetViewSettings( sal_Int16 nSheet, const SheetViewModelR
     maSheetProps[ nSheet ] = rProperties;
 }
 
-void ViewSettings::setSheetUsedArea( const CellRangeAddress& rUsedArea )
+void ViewSettings::setSheetUsedArea( const ScRange& rUsedArea )
 {
-    maSheetUsedAreas[ rUsedArea.Sheet ] = rUsedArea;
+    assert( rUsedArea.IsValid() );
+    assert( rUsedArea.aStart.Col() <= MAXCOLCOUNT );
+    assert( rUsedArea.aStart.Row() <= MAXROWCOUNT );
+    maSheetUsedAreas[ rUsedArea.aStart.Tab() ] = CellRangeAddress( rUsedArea.aStart.Tab(),
+                                                                   rUsedArea.aStart.Col(), rUsedArea.aStart.Row(),
+                                                                   rUsedArea.aEnd.Col(), rUsedArea.aEnd.Row() );
 }
 
 void ViewSettings::finalizeImport()
