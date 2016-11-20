@@ -19,6 +19,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/processfactory.hxx>
+#include <rtl/uri.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <test/unoapi_test.hxx>
@@ -103,6 +104,7 @@ public:
     void testRedlineCalc();
     void testPaintPartTile();
     void testWriterCommentInsertCursor();
+    void testGetFontSubset();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -135,6 +137,7 @@ public:
     CPPUNIT_TEST(testRedlineCalc);
     CPPUNIT_TEST(testPaintPartTile);
     CPPUNIT_TEST(testWriterCommentInsertCursor);
+    CPPUNIT_TEST(testGetFontSubset);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -1620,6 +1623,30 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
 
     Scheduler::ProcessEventsToIdle();
     mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testGetFontSubset()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    OUString aFontName = rtl::Uri::encode(
+        OUString("Liberation Sans"),
+        rtl_UriCharClassRelSegment,
+        rtl_UriEncodeKeepEscapes,
+        RTL_TEXTENCODING_UTF8
+    );
+    OUString aUnoFontSubset(".uno:FontSubset&name=");
+    OString aCommand = OUStringToOString(aUnoFontSubset + aFontName, RTL_TEXTENCODING_UTF8);
+    boost::property_tree::ptree aTree;
+    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, aCommand.getStr());
+    std::stringstream aStream(pJSON);
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT( aTree.size() > 0 );
+    CPPUNIT_ASSERT( aTree.get_child("commandName").get_value<std::string>() == ".uno:FontSubset" );
+    boost::property_tree::ptree aValues = aTree.get_child("commandValues");
+    CPPUNIT_ASSERT( aValues.size() > 0 );
+    free(pJSON);
     comphelper::LibreOfficeKit::setActive(false);
 }
 

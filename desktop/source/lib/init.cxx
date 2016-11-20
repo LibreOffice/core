@@ -65,15 +65,18 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
+#include <svx/ucsubset.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/fract.hxx>
 #include <svtools/ctrltool.hxx>
+#include <vcl/fontcharmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <unicode/uchar.h>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -2049,6 +2052,58 @@ static char* getFonts (const char* pCommand)
     return pJson;
 }
 
+static char* getFontSubset (const OString& aFontName)
+{
+    OUString aFoundFont(::rtl::Uri::decode(OStringToOUString(aFontName, RTL_TEXTENCODING_UTF8), rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8));
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
+        pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
+    const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
+
+    boost::property_tree::ptree aTree;
+    aTree.put("commandName", ".uno:FontSubset");
+    boost::property_tree::ptree aValues;
+
+    if ( pList && !aFoundFont.isEmpty() )
+    {
+        sal_uInt16 nFontCount = pList->GetFontNameCount();
+        sal_uInt16 nItFont = 0;
+        for (; nItFont < nFontCount; ++nItFont)
+        {
+            if (aFoundFont.equals(pList->GetFontName(nItFont).GetFamilyName()))
+            {
+                break;
+            }
+        }
+
+        if ( nItFont < nFontCount )
+        {
+            FontCharMapRef xFontCharMap (new FontCharMap());
+            auto aDevice(VclPtr<VirtualDevice>::Create(nullptr, Size(1, 1), DeviceFormat::DEFAULT));
+            vcl::Font aFont(pList->GetFontName(nItFont));
+
+            aDevice->SetFont(aFont);
+            aDevice->GetFontCharMap(xFontCharMap);
+            SubsetMap aSubMap(xFontCharMap);
+
+            for(const Subset* pItSub = aSubMap.GetNextSubset(true); pItSub; pItSub = aSubMap.GetNextSubset(false))
+            {
+                boost::property_tree::ptree aChild;
+                aChild.put("", static_cast<int>(ublock_getCode(pItSub->GetRangeMin())));
+                aValues.push_back(std::make_pair("", aChild));
+            }
+        }
+    }
+
+    aTree.add_child("commandValues", aValues);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
+    strcpy(pJson, aStream.str().c_str());
+    pJson[aStream.str().size()] = '\0';
+    return pJson;
+}
+
 static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
@@ -2258,6 +2313,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     OString aCommand(pCommand);
     static const OString aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
     static const OString aCellCursor(".uno:CellCursor");
+    static const OString aFontSubset(".uno:FontSubset&name=");
 
     if (!strcmp(pCommand, ".uno:CharFontName"))
     {
@@ -2387,6 +2443,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
         strcpy(pMemory, aString.getStr());
         return pMemory;
+    }
+    else if (aCommand.startsWith(aFontSubset))
+    {
+        return getFontSubset(OString(pCommand + aFontSubset.getLength()));
     }
     else
     {
