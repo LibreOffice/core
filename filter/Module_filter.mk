@@ -48,7 +48,7 @@ $(eval $(call gb_Module_add_l10n_targets,filter,\
 	AllLangResTarget_pdffilter \
 	AllLangResTarget_t602filter \
 	AllLangResTarget_xsltdlg \
-	UIConfig_xsltdlg \
+	UIConfig_filter \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
