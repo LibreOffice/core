@@ -547,13 +547,16 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
                     fResult = (fAux - fVal*fVal/(double)(nCount)) / (double)nCount;
                 break;
             case SUBTOTAL_FUNC_MED:
-                if (mSortedValues.size() > 0)
                 {
-                    assert(mSortedValues.size() == static_cast<size_t>(nCount));
-                    if ((mSortedValues.size() % 2) == 1)
-                        fResult = mSortedValues[mSortedValues.size() / 2];
-                    else
-                        fResult = (mSortedValues[mSortedValues.size() / 2 - 1] + mSortedValues[mSortedValues.size() / 2]) / 2.0;
+                    size_t nSize = mSortedValues.size();
+                    if (nSize > 0)
+                    {
+                        assert(nSize == static_cast<size_t>(nCount));
+                        if ((nSize % 2) == 1)
+                            fResult = mSortedValues[nSize / 2];
+                        else
+                            fResult = (mSortedValues[nSize / 2 - 1] + mSortedValues[nSize / 2]) / 2.0;
+                    }
                 }
                 break;
             default:
