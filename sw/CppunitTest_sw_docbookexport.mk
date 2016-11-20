@@ -52,4 +52,8 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_docbookexport,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_docbookexport))
 
+$(eval $(call gb_CppunitTest_use_packages,sw_docbookexport,\
+	filter_docbook \
+))
+
 # vim: set noet sw=4 ts=4:
