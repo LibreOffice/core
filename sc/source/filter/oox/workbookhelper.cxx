@@ -133,7 +133,7 @@ public:
     /** Sets the VBA project storage used to import VBA source code and forms. */
     inline void         setVbaProjectStorage( const StorageRef& rxVbaPrjStrg ) { mxVbaPrjStrg = rxVbaPrjStrg; }
     /** Sets the index of the current Calc sheet, if filter currently processes a sheet. */
-    inline void         setCurrentSheetIndex( sal_Int16 nSheet ) { mnCurrSheet = nSheet; }
+    inline void         setCurrentSheetIndex( SCTAB nSheet ) { mnCurrSheet = nSheet; }
 
     // document model ---------------------------------------------------------
 
@@ -676,7 +676,7 @@ void WorkbookHelper::setVbaProjectStorage( const StorageRef& rxVbaPrjStrg )
     mrBookGlob.setVbaProjectStorage( rxVbaPrjStrg );
 }
 
-void WorkbookHelper::setCurrentSheetIndex( sal_Int16 nSheet )
+void WorkbookHelper::setCurrentSheetIndex( SCTAB nSheet )
 {
     mrBookGlob.setCurrentSheetIndex( nSheet );
 }

@@ -33,13 +33,10 @@ namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
     namespace awt { struct Size; }
     namespace drawing { class XDrawPage; }
-    namespace sheet { class XSheetCellRanges; }
     namespace sheet { class XSpreadsheet; }
     namespace table { class XCell; }
     namespace table { class XCell2; }
     namespace table { class XCellRange; }
-    namespace table { class XTableColumns; }
-    namespace table { class XTableRows; }
 } } }
 
 namespace oox {
@@ -191,7 +188,7 @@ public:
     /** Returns the type of this sheet. */
     WorksheetType       getSheetType() const;
     /** Returns the index of the current sheet. */
-    sal_Int32           getSheetIndex() const;
+    SCTAB               getSheetIndex() const;
     /** Returns the XSpreadsheet interface of the current sheet. */
     const css::uno::Reference< css::sheet::XSpreadsheet >&
                         getSheet() const;
@@ -252,6 +249,7 @@ public:
     /** Extends the used area of this sheet by the passed cell position. */
     void                extendUsedArea( const ScAddress& rAddress );
     /** Extends the used area of this sheet by the passed cell range. */
+    void                extendUsedArea( const ScRange& rRange );
     void                extendUsedArea( const css::table::CellRangeAddress& rRange );
     /** Extends the shape bounding box by the position and size of the passed rectangle (in 1/100 mm). */
     void                extendShapeBoundingBox( const css::awt::Rectangle& rShapeRect );
