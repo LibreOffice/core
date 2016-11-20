@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_38da8579",
+        "filename": "sc/source/ui/inc/tabview.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2016-11-20T21:53:42Z",
+      "side": 1,
+      "message": "better to move it to ScPostIt",
+      "revId": "05159d54c64f99580b99ae0a0727637ef8feb26e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
