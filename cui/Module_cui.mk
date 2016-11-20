@@ -21,9 +21,6 @@ $(eval $(call gb_Module_add_l10n_targets,cui,\
 # screenshots
 $(eval $(call gb_Module_add_screenshot_targets,cui,\
     CppunitTest_cui_dialogs_test \
-    CppunitTest_cui_dialogs_test_2 \
-    CppunitTest_cui_dialogs_test_3 \
-    CppunitTest_cui_dialogs_test_4 \
 ))
 
 # vim: set noet sw=4 ts=4:
