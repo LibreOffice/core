@@ -836,6 +836,12 @@ $(eval $(call gb_Helper_register_packages_for_install,xsltfilter,\
 	filter_xslt \
 ))
 
+$(eval $(call gb_Helper_register_packages_for_install,brand,\
+	desktop_branding \
+	$(if $(CUSTOM_BRAND_DIR),desktop_branding_custom) \
+	$(if $(and $(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),desktop_soffice_sh) \
+))
+
 ifeq ($(USING_X11), TRUE)
 $(eval $(call gb_Helper_register_packages_for_install,base_brand,\
 	desktop_sbase_sh \
