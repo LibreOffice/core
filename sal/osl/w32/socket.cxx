@@ -700,8 +700,8 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
     {
         SAL_INFO("sal.osl", "GetAddrInfoW failed: " << WSAGetLastError());
     }
-#endif // _WIN32_WINNT
     return nullptr;
+#endif // _WIN32_WINNT
 }
 
 /*****************************************************************************/
