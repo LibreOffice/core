@@ -28,6 +28,9 @@ $(eval $(call gb_Library_use_externals,sofficeapp, \
 	$(if $(filter OPENCL,$(BUILD_TYPE)),clew) \
     boost_headers \
     dbus \
+    icu_headers \
+    icui18n \
+    icuuc \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
@@ -61,6 +64,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     sb \
     sfx \
     svl \
+    svx \
     svxcore \
     svt \
     tk \
