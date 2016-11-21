@@ -608,7 +608,7 @@ namespace sdr
                         if(aOldName != aNewName)
                         {
                             sal_Int32 nText = rTextProvider.getTextCount();
-                            while( --nText > 0 )
+                            while( --nText >= 0 )
                             {
                                 OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
                                 if( pParaObj )
