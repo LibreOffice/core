@@ -17,6 +17,7 @@
 #include <editeng/editids.hrc>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
+#include <osl/endian.h>
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
 #include <sfx2/dispatch.hxx>
