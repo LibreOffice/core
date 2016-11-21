@@ -128,7 +128,7 @@ protected:
     StgDirEntry*    pEntry;                   // the dir entry
                     OLEStorageBase( StgIo*, StgDirEntry*, StreamMode& );
                     ~OLEStorageBase();
-    bool            Validate_Impl( bool=false ) const;
+    bool            Validate_Impl( bool ) const;
     static bool     ValidateMode_Impl( StreamMode, StgDirEntry* p = nullptr );
 };
 
@@ -165,9 +165,9 @@ class SOT_DLLPUBLIC Storage : public BaseStorage, public OLEStorageBase
 protected:
                                 virtual ~Storage() override;
 public:
-                                Storage( const OUString &, StreamMode = StreamMode::STD_READWRITE, bool bDirect = true );
-                                Storage( SvStream& rStrm, bool bDirect = true );
-                                Storage( UCBStorageStream& rStrm, bool bDirect = true );
+                                Storage( const OUString &, StreamMode, bool bDirect );
+                                Storage( SvStream& rStrm, bool bDirect );
+                                Storage( UCBStorageStream& rStrm, bool bDirect );
 
     static bool                 IsStorageFile( const OUString & rFileName );
     static bool                 IsStorageFile( SvStream* );
@@ -258,11 +258,16 @@ public:
     static bool                 IsStorageFile( SvStream* );
     static OUString             GetLinkedFile( SvStream& );
 
-                                UCBStorage( const ::ucbhelper::Content& rContent, const OUString& rName, StreamMode nMode, bool bDirect = true, bool bIsRoot = true );
+                                UCBStorage( const ::ucbhelper::Content& rContent,
+                                            const OUString& rName,
+                                            StreamMode nMode,
+                                            bool bDirect,
+                                            bool bIsRoot );
+
                                 UCBStorage( const OUString& rName,
                                             StreamMode nMode,
-                                            bool bDirect = true,
-                                            bool bIsRoot = true );
+                                            bool bDirect,
+                                            bool bIsRoot );
 
                                 UCBStorage( const OUString& rName,
                                             StreamMode nMode,
@@ -273,7 +278,8 @@ public:
                                             xProgressHandler );
 
                                 UCBStorage( UCBStorage_Impl* );
-                                UCBStorage( SvStream& rStrm, bool bDirect = true );
+
+                                UCBStorage( SvStream& rStrm, bool bDirect );
 
     virtual const OUString&     GetName() const override;
     virtual bool                IsRoot() const override;

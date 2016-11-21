@@ -150,10 +150,10 @@ public:
     const SfxPoolItem&              GetDefaultItem( sal_uInt16 nWhich ) const;
 
     const SfxPoolItem*              LoadItem( SvStream &rStream,
-                                              const SfxItemPool *pRefPool = nullptr );
+                                              const SfxItemPool *pRefPool );
     bool                            StoreItem( SvStream &rStream,
                                                const SfxPoolItem &rItem,
-                                               bool bDirect = false ) const;
+                                               bool bDirect ) const;
 
     sal_uInt32                      GetSurrogate(const SfxPoolItem *) const;
     const SfxPoolItem *             GetItem2(sal_uInt16 nWhich, sal_uInt32 nSurrogate) const;

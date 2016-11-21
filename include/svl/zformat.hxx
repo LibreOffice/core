@@ -618,7 +618,7 @@ private:
     // normal digits or other digits, depending on ImpSvNumFor.aNatNum,
     // [NatNum1], [NatNum2], ...
     SVL_DLLPRIVATE OUString ImpGetNatNumString( const SvNumberNatNum& rNum, sal_Int32 nVal,
-                                              sal_uInt16 nMinDigits = 0  ) const;
+                                              sal_uInt16 nMinDigits  ) const;
 
     OUString ImpIntToString( sal_uInt16 nIx, sal_Int32 nVal, sal_uInt16 nMinDigits = 0 ) const
     {

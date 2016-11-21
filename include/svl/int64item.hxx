@@ -18,7 +18,7 @@ class SVL_DLLPUBLIC SfxInt64Item : public SfxPoolItem
     sal_Int64 mnValue;
 
 public:
-    SfxInt64Item( sal_uInt16 nWhich = 0, sal_Int64 nVal = 0 );
+    SfxInt64Item( sal_uInt16 nWhich, sal_Int64 nVal );
     SfxInt64Item( sal_uInt16 nWhich, SvStream & rStream );
     SfxInt64Item( const SfxInt64Item& rItem );
 

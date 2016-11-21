@@ -333,7 +333,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode )
                 {
                     // UCBStorage always works directly on the UCB content, so discard the stream first
                     DELETEZ( m_pStorStm );
-                    m_pOwnStg = new UCBStorage( m_aName, nMode, true );
+                    m_pOwnStg = new UCBStorage( m_aName, nMode, true, true/*bIsRoot*/ );
                 }
             }
             else
@@ -345,7 +345,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode )
         }
         else if ( bForceUCBStorage )
         {
-            m_pOwnStg = new UCBStorage( m_aName, nMode, true );
+            m_pOwnStg = new UCBStorage( m_aName, nMode, true, true/*bIsRoot*/ );
             SetError( ERRCODE_IO_NOTSUPPORTED );
         }
         else
@@ -358,7 +358,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode )
     {
         // temporary storage
         if ( bForceUCBStorage )
-            m_pOwnStg = new UCBStorage( m_aName, nMode, true );
+            m_pOwnStg = new UCBStorage( m_aName, nMode, true, true/*bIsRoot*/ );
         else
             m_pOwnStg = new Storage( m_aName, nMode, true );
         m_aName = m_pOwnStg->GetName();

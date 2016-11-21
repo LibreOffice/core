@@ -30,7 +30,7 @@ class SVL_DLLPUBLIC CntByteItem: public SfxPoolItem
 
 public:
 
-    CntByteItem(sal_uInt16 which = 0, sal_uInt8 nTheValue = 0):
+    CntByteItem(sal_uInt16 which, sal_uInt8 nTheValue):
         SfxPoolItem(which), m_nValue(nTheValue) {}
 
     CntByteItem(const CntByteItem & rItem):
@@ -76,7 +76,7 @@ class SVL_DLLPUBLIC CntUInt16Item: public SfxPoolItem
 
 public:
 
-    CntUInt16Item(sal_uInt16 which = 0, sal_uInt16 nTheValue = 0):
+    CntUInt16Item(sal_uInt16 which, sal_uInt16 nTheValue):
         SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
@@ -125,7 +125,7 @@ class SVL_DLLPUBLIC CntInt32Item: public SfxPoolItem
 
 public:
 
-    CntInt32Item(sal_uInt16 which = 0, sal_Int32 nTheValue = 0):
+    CntInt32Item(sal_uInt16 which, sal_Int32 nTheValue):
         SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
@@ -174,7 +174,7 @@ class SVL_DLLPUBLIC CntUInt32Item: public SfxPoolItem
 
 public:
 
-    CntUInt32Item(sal_uInt16 which = 0, sal_uInt32 nTheValue = 0):
+    CntUInt32Item(sal_uInt16 which, sal_uInt32 nTheValue):
         SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
