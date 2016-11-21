@@ -68,7 +68,8 @@ void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString
 {
     OUString aDirname, aBasename;
     splitHelpId(rScreenshotId, aDirname, aBasename);
-    aDirname = m_aScreenshotDirectory + maCurrentLanguage + "/" + aDirname;
+    aDirname = m_aScreenshotDirectory + "/" + aDirname +
+               ( (maCurrentLanguage == "en-US") ? OUString() : "/" + maCurrentLanguage );
 
     osl::FileBase::RC err = osl::Directory::createPath(m_directories.getURLFromWorkdir(OUStringToOString(aDirname,RTL_TEXTENCODING_UTF8).getStr()));
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to create " + aDirname, RTL_TEXTENCODING_UTF8).getStr(),
