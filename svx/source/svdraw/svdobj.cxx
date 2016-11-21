@@ -290,18 +290,18 @@ void SdrObject::SetBoundRectDirty()
 
 
 SdrObject::SdrObject() :
-    mpImpl(new Impl),
-    mpProperties(nullptr)
-    ,mpViewContact(nullptr)
-    ,pObjList(nullptr)
-    ,pPage(nullptr)
+    pPage(nullptr)
     ,pModel(nullptr)
     ,pUserCall(nullptr)
     ,pPlusData(nullptr)
+    ,mpImpl(new Impl)
+    ,pObjList(nullptr)
     ,nOrdNum(0)
     ,pGrabBagItem(nullptr)
     ,mnNavigationPosition(SAL_MAX_UINT32)
     ,mnLayerID(0)
+    ,mpProperties(nullptr)
+    ,mpViewContact(nullptr)
     ,mbDelayBroadcastObjectChange(false)
     ,mbBroadcastObjectChangePending(false)
     ,mpSvxShape( nullptr )
