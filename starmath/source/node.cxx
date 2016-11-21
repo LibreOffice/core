@@ -2212,17 +2212,17 @@ sal_Unicode SmTextNode::ConvertSymbolToUnicode(sal_Unicode nIn)
 void SmMatrixNode::CreateTextFromNode(OUString &rText)
 {
     rText += "matrix {";
-    for (sal_uInt16 i = 0;  i < nNumRows; i++)
+    for (sal_uInt16 i = 0;  i < mnNumRows; i++)
     {
-        for (sal_uInt16 j = 0;  j < nNumCols; j++)
+        for (sal_uInt16 j = 0;  j < mnNumCols; j++)
         {
-            SmNode *pNode = GetSubNode(i * nNumCols + j);
+            SmNode *pNode = GetSubNode(i * mnNumCols + j);
             if (pNode)
                 pNode->CreateTextFromNode(rText);
-            if (j != nNumCols-1)
+            if (j != mnNumCols-1)
                 rText += "# ";
         }
-        if (i != nNumRows-1)
+        if (i != mnNumRows-1)
             rText += "## ";
     }
     rText = comphelper::string::stripEnd(rText, ' ');
@@ -2237,7 +2237,7 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     // initialize array that is to hold the maximum widths of all
     // elements (subnodes) in that column.
-    std::vector<long> aColWidth(nNumCols);
+    std::vector<long> aColWidth(mnNumCols);
 
     // arrange subnodes and calculate the above arrays contents
     sal_uInt16 nNodes = GetNumSubNodes();
@@ -2247,7 +2247,7 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         if (nullptr != (pNode = GetSubNode(nIdx)))
         {
             pNode->Arrange(rDev, rFormat);
-            int  nCol = nIdx % nNumCols;
+            int  nCol = nIdx % mnNumCols;
             aColWidth[nCol] = std::max(aColWidth[nCol], pNode->GetItalicWidth());
         }
     }
@@ -2261,21 +2261,22 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
           nVerDist = nNormDist * rFormat.GetDistance(DIS_MATRIXROW) / 100L;
 
     // build array that holds the leftmost position for each column
-    std::vector<long> aColLeft(nNumCols);
+    std::vector<long> aColLeft(mnNumCols);
     long  nX = 0;
-    for (j = 0;  j < nNumCols;  j++)
+    for (j = 0;  j < mnNumCols;  j++)
     {
         aColLeft[j] = nX;
         nX += aColWidth[j] + nHorDist;
     }
 
     SmRect::operator = (SmRect());
-    for (i = 0;  i < nNumRows;  i++)
+    for (i = 0;  i < mnNumRows;  i++)
     {
         Point aPos;
         SmRect aLineRect;
-        for (j = 0;  j < nNumCols;  j++)
-        {   SmNode *pTmpNode = GetSubNode(i * nNumCols + j);
+        for (j = 0;  j < mnNumCols;  j++)
+        {
+            SmNode *pTmpNode = GetSubNode(i * mnNumCols + j);
             assert(pTmpNode);
 
             const SmRect &rNodeRect = pTmpNode->GetRect();
@@ -2318,8 +2319,8 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         Point aDelta(0, // since horizontal alignment is already done
                      aPos.Y() - aLineRect.GetTop());
         aLineRect.Move(aDelta);
-        for (j = 0;  j < nNumCols;  j++)
-            if (nullptr != (pNode = GetSubNode(i * nNumCols + j)))
+        for (j = 0;  j < mnNumCols;  j++)
+            if (nullptr != (pNode = GetSubNode(i * mnNumCols + j)))
                 pNode->Move(aDelta);
 
         ExtendBy(aLineRect, RectCopyMBL::None);
@@ -2329,8 +2330,8 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 void SmMatrixNode::SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols)
 {
-    nNumRows = nMatrixRows;
-    nNumCols = nMatrixCols;
+    mnNumRows = nMatrixRows;
+    mnNumCols = nMatrixCols;
 }
 
 
