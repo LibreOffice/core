@@ -14,24 +14,73 @@
 #include <tools/stream.hxx>
 #include <rtl/ustring.hxx>
 #include <address.hxx>
+#include <osl/mutex.hxx>
+#include <osl/conditn.hxx>
+#include <queue>
+
+#include <config_orcus.h>
+#include "officecfg/Office/Calc.hxx"
+
+#if ENABLE_ORCUS
+#if defined(_WIN32)
+#define __ORCUS_STATIC_LIB
+#endif
+#include <orcus/csv_parser.hpp>
+#endif
 
 namespace sc {
+
+struct Cell
+{
+    struct Str
+    {
+        size_t Pos;
+        size_t Size;
+    };
+
+    union
+    {
+        Str maStr;
+        double mfValue;
+    };
+
+    bool mbValue;
+
+    Cell();
+    Cell( const Cell& r );
+};
+
+struct Line
+{
+    OString maLine;
+    std::vector<Cell> maCells;
+};
+
+typedef std::vector<Line> LinesType;
 
 class CSVFetchThread : public salhelper::Thread
 {
     SvStream *mpStream;
+    size_t mnColCount;
+
     bool mbTerminate;
+    osl::Mutex maMtxTerminate;
+
+#if ENABLE_ORCUS
+    orcus::csv::parser_config maConfig;
+#endif
 
     virtual void execute() override;
 
 public:
-    CSVFetchThread();
+    CSVFetchThread(SvStream*);
     virtual ~CSVFetchThread() override;
 
     void RequestTerminate();
-    void IsRequestedTerminate();
+    bool IsRequestedTerminate();
     void Terminate();
     void EndThread();
+    void EmptyLineQueue(std::queue<LinesType*>& );
 };
 
 class DataProvider

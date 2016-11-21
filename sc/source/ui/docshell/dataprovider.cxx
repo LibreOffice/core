@@ -7,5 +7,127 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <dataprovider.hxx>
+#include <config_orcus.h>
+#include "officecfg/Office/Calc.hxx"
+#include <stringutil.hxx>
+
+#if ENABLE_ORCUS
+#if defined(_WIN32)
+#define __ORCUS_STATIC_LIB
+#endif
+#include <orcus/csv_parser.hpp>
+#endif
+
+namespace sc {
+
+Cell::Cell() : mfValue(0.0), mbValue(true) {}
+
+Cell::Cell(const Cell& r) : mbValue(r.mbValue)
+{
+    if (r.mbValue)
+        mfValue = r.mfValue;
+    else
+    {
+        maStr.Pos = r.maStr.Pos;
+        maStr.Size = r.maStr.Size;
+    }
+}
+
+#if ENABLE_ORCUS
+
+class CSVHandler
+{
+    Line& mrLine;
+    size_t mnColCount;
+    size_t mnCols;
+    const char* mpLineHead;
+
+public:
+    CSVHandler( Line& rLine, size_t nColCount ) :
+        mrLine(rLine), mnColCount(nColCount), mnCols(0), mpLineHead(rLine.maLine.getStr()) {}
+
+    static void begin_parse() {}
+    static void end_parse() {}
+    static void begin_row() {}
+    static void end_row() {}
+
+    void cell(const char* p, size_t n)
+    {
+        if (mnCols >= mnColCount)
+            return;
+
+        Cell aCell;
+        if (ScStringUtil::parseSimpleNumber(p, n, '.', ',', aCell.mfValue))
+        {
+            aCell.mbValue = true;
+        }
+        else
+        {
+            aCell.mbValue = false;
+            aCell.maStr.Pos = std::distance(mpLineHead, p);
+            aCell.maStr.Size = n;
+        }
+        mrLine.maCells.push_back(aCell);
+
+        ++mnCols;
+    }
+};
+
+#endif
+
+CSVFetchThread::CSVFetchThread(SvStream *pData):
+        Thread("ReaderThread"),
+        mpStream(pData),
+        mbTerminate(false)
+    {
+#if ENABLE_ORCUS
+        maConfig.delimiters.push_back(',');
+        maConfig.text_qualifier = '"';
+#endif
+    }
+
+CSVFetchThread::~CSVFetchThread()
+{
+    delete mpStream;
+}
+
+bool CSVFetchThread::IsRequestedTerminate()
+{
+    osl::MutexGuard aGuard(maMtxTerminate);
+    return mbTerminate;
+}
+
+void CSVFetchThread::RequestTerminate()
+{
+    osl::MutexGuard aGuard(maMtxTerminate);
+    mbTerminate = true;
+}
+
+void CSVFetchThread::EndThread()
+{
+    RequestTerminate();
+}
+
+void CSVFetchThread::execute()
+{
+        LinesType* pLines = new LinesType(10);
+
+        // Read & store new lines from stream.
+        for (Line & rLine : *pLines)
+        {
+            rLine.maCells.clear();
+            mpStream->ReadLine(rLine.maLine);
+#if ENABLE_ORCUS
+            CSVHandler aHdl(rLine, mnColCount);
+            orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), rLine.maLine.getLength(), aHdl, maConfig);
+            parser.parse();
+#endif
+        }
+
+        if (!mpStream->good())
+            RequestTerminate();
+}
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
