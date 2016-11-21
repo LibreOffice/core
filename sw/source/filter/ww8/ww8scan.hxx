@@ -918,23 +918,23 @@ public:
 
 private:
     wwSprmParser maSprmParser;
-    long nCpO;                      // Origin Cp -- the basis for nNewCp
+    long m_nCpO;                      // Origin Cp -- the basis for nNewCp
 
-    WW8_CP nLineEnd;                // points *after* the <CR>
-    sal_uInt16 nPLCF;                   // this many PLCFs are managed
-    ManTypes nManType;
+    WW8_CP m_nLineEnd;                // points *after* the <CR>
+    sal_uInt16 m_nPLCF;                   // this many PLCFs are managed
+    ManTypes m_nManType;
     bool mbDoingDrawTextBox;        //Normally we adjust the end of attributes
                                     //so that the end of a paragraph occurs
                                     //before the para end mark, but for
                                     //drawboxes we want the true offsets
 
-    WW8PLCFxDesc aD[MAN_PLCF_COUNT];
-    WW8PLCFxDesc *pChp, *pPap, *pSep, *pField, *pFootnote, *pEdn, *pBkm, *pPcd,
-        *pPcdA, *pAnd, *pAtnBkm, *pFactoidBkm;
-    WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd,*pMagicTables, *pSubdocs;
-    sal_uInt8* pExtendedAtrds;
+    WW8PLCFxDesc m_aD[MAN_PLCF_COUNT];
+    WW8PLCFxDesc *m_pChp, *m_pPap, *m_pSep, *m_pField, *m_pFootnote, *m_pEdn, *m_pBkm, *m_pPcd,
+        *m_pPcdA, *m_pAnd, *m_pAtnBkm, *m_pFactoidBkm;
+    WW8PLCFspecial *m_pFdoa, *m_pTxbx, *m_pTxbxBkd,*m_pMagicTables, *m_pSubdocs;
+    sal_uInt8* m_pExtendedAtrds;
 
-    const WW8Fib* pWwFib;
+    const WW8Fib* m_pWwFib;
 
     sal_uInt16 WhereIdx(bool* pbStart, long* pPos=nullptr) const;
     void AdjustEnds(WW8PLCFxDesc& rDesc);
@@ -962,13 +962,13 @@ public:
     void advance();
     sal_uInt16 GetColl() const; // index of actual Style
     WW8PLCFx_FLD* GetField() const;
-    WW8PLCFx_SubDoc* GetEdn() const { return static_cast<WW8PLCFx_SubDoc*>(pEdn->pPLCFx); }
-    WW8PLCFx_SubDoc* GetFootnote() const { return static_cast<WW8PLCFx_SubDoc*>(pFootnote->pPLCFx); }
-    WW8PLCFx_SubDoc* GetAtn() const { return static_cast<WW8PLCFx_SubDoc*>(pAnd->pPLCFx); }
-    WW8PLCFx_Book* GetBook() const { return static_cast<WW8PLCFx_Book*>(pBkm->pPLCFx); }
-    WW8PLCFx_AtnBook* GetAtnBook() const { return static_cast<WW8PLCFx_AtnBook*>(pAtnBkm->pPLCFx); }
-    WW8PLCFx_FactoidBook* GetFactoidBook() const { return static_cast<WW8PLCFx_FactoidBook*>(pFactoidBkm->pPLCFx); }
-    long GetCpOfs() const { return pChp->nCpOfs; }  // for Header/Footer...
+    WW8PLCFx_SubDoc* GetEdn() const { return static_cast<WW8PLCFx_SubDoc*>(m_pEdn->pPLCFx); }
+    WW8PLCFx_SubDoc* GetFootnote() const { return static_cast<WW8PLCFx_SubDoc*>(m_pFootnote->pPLCFx); }
+    WW8PLCFx_SubDoc* GetAtn() const { return static_cast<WW8PLCFx_SubDoc*>(m_pAnd->pPLCFx); }
+    WW8PLCFx_Book* GetBook() const { return static_cast<WW8PLCFx_Book*>(m_pBkm->pPLCFx); }
+    WW8PLCFx_AtnBook* GetAtnBook() const { return static_cast<WW8PLCFx_AtnBook*>(m_pAtnBkm->pPLCFx); }
+    WW8PLCFx_FactoidBook* GetFactoidBook() const { return static_cast<WW8PLCFx_FactoidBook*>(m_pFactoidBkm->pPLCFx); }
+    long GetCpOfs() const { return m_pChp->nCpOfs; }  // for Header/Footer...
 
     /* asks, if *current paragraph* has an Sprm of this type */
     const sal_uInt8* HasParaSprm( sal_uInt16 nId ) const;
@@ -978,23 +978,23 @@ public:
     void HasCharSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult) const;
 
     WW8PLCFx_Cp_FKP* GetChpPLCF() const
-        { return static_cast<WW8PLCFx_Cp_FKP*>(pChp->pPLCFx); }
+        { return static_cast<WW8PLCFx_Cp_FKP*>(m_pChp->pPLCFx); }
     WW8PLCFx_Cp_FKP* GetPapPLCF() const
-        { return static_cast<WW8PLCFx_Cp_FKP*>(pPap->pPLCFx); }
+        { return static_cast<WW8PLCFx_Cp_FKP*>(m_pPap->pPLCFx); }
     WW8PLCFx_SEPX* GetSepPLCF() const
-        { return static_cast<WW8PLCFx_SEPX*>(pSep->pPLCFx); }
-    WW8PLCFxDesc* GetPap() const { return pPap; }
+        { return static_cast<WW8PLCFx_SEPX*>(m_pSep->pPLCFx); }
+    WW8PLCFxDesc* GetPap() const { return m_pPap; }
     void TransferOpenSprms(std::stack<sal_uInt16> &rStack);
     void SeekPos( long nNewCp );
     void SaveAllPLCFx( WW8PLCFxSaveAll& rSave ) const;
     void RestoreAllPLCFx( const WW8PLCFxSaveAll& rSave );
-    WW8PLCFspecial* GetFdoa() const { return pFdoa; }
-    WW8PLCFspecial* GetTxbx() const { return pTxbx; }
-    WW8PLCFspecial* GetTxbxBkd() const { return pTxbxBkd; }
-    WW8PLCFspecial* GetMagicTables() const { return pMagicTables; }
-    WW8PLCFspecial* GetWkbPLCF() const { return pSubdocs; }
-    sal_uInt8* GetExtendedAtrds() const { return pExtendedAtrds; }
-    ManTypes GetManType() const { return nManType; }
+    WW8PLCFspecial* GetFdoa() const { return m_pFdoa; }
+    WW8PLCFspecial* GetTxbx() const { return m_pTxbx; }
+    WW8PLCFspecial* GetTxbxBkd() const { return m_pTxbxBkd; }
+    WW8PLCFspecial* GetMagicTables() const { return m_pMagicTables; }
+    WW8PLCFspecial* GetWkbPLCF() const { return m_pSubdocs; }
+    sal_uInt8* GetExtendedAtrds() const { return m_pExtendedAtrds; }
+    ManTypes GetManType() const { return m_nManType; }
     bool GetDoingDrawTextBox() const { return mbDoingDrawTextBox; }
 };
 
