@@ -131,23 +131,14 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XAreaLinks.hpp>
-#include <com/sun/star/sheet/XAreaLink.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 #include <com/sun/star/sheet/XUniqueCellFormatRangesSupplier.hpp>
-#include <com/sun/star/sheet/XCellRangesQuery.hpp>
-#include <com/sun/star/sheet/CellFlags.hpp>
-#include <com/sun/star/sheet/XArrayFormulaRange.hpp>
-#include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XLabelRange.hpp>
-#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/util/XMergeable.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>

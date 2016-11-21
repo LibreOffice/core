@@ -40,14 +40,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSheetCellRange.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/CellInsertMode.hpp>
-#include <com/sun/star/sheet/XCellRangeMovement.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/util/XProtectable.hpp>
-#include <com/sun/star/sheet/XArrayFormulaRange.hpp>
 
 #include <memory>
 

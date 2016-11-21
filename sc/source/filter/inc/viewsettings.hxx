@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_VIEWSETTINGS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_VIEWSETTINGS_HXX
 
-#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include "addressconverter.hxx"
 #include "stylesbuffer.hxx"

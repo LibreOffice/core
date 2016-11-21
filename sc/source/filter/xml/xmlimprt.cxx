@@ -81,11 +81,6 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/util/XMergeable.hpp>
-#include <com/sun/star/sheet/CellInsertMode.hpp>
-#include <com/sun/star/sheet/XCellRangeMovement.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>

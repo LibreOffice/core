@@ -48,7 +48,6 @@
 #include <xmloff/nmspmap.hxx>
 
 #include <sax/tools/converter.hxx>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <sal/types.h>
 
 #include <memory>

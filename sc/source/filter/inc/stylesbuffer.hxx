@@ -23,7 +23,6 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
-#include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
 #include <oox/drawingml/color.hxx>

@@ -29,8 +29,6 @@
 
 #include <osl/diagnose.h>
 
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <memory>
