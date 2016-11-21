@@ -243,9 +243,9 @@ void E3dObject::SetRectsDirty(bool bNotMyself)
     }
 }
 
-sal_uInt32 E3dObject::GetObjInventor() const
+SdrInventor E3dObject::GetObjInventor() const
 {
-    return E3dInventor;
+    return SdrInventor::E3d;
 }
 
 sal_uInt16 E3dObject::GetObjIdentifier() const

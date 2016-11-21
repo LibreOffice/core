@@ -128,7 +128,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
     }
 
     SdrObject *pObj = rObj.Clone();
-    if( bMoveWithinDoc && FmFormInventor == pObj->GetObjInventor() )
+    if( bMoveWithinDoc && SdrInventor::FmForm == pObj->GetObjInventor() )
     {
         // We need to preserve the Name for Controls
         uno::Reference< awt::XControlModel >  xModel = static_cast<SdrUnoObj*>(pObj)->GetUnoControlModel();

@@ -179,7 +179,7 @@ bool SwWrtShell::GetURLFromButton( OUString& rURL, OUString& rDescr ) const
         if (rMarkList.GetMark(0))
         {
             SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( rMarkList.GetMark(0)->GetMarkedSdrObj() );
-            if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
+            if (pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor())
             {
                 uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
 

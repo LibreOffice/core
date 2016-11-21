@@ -71,7 +71,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
             pObj->TakeObjInfo( aInfoRec );
 
             if( aInfoRec.bCanConvToPath &&
-                pObj->GetObjInventor() == SdrInventor &&
+                pObj->GetObjInventor() == SdrInventor::Default &&
                 pObj->GetObjIdentifier() != OBJ_GRUP )
                 // bCanConvToPath is sal_True for group objects,
                 // but it crashes on ConvertToPathObj()!

@@ -157,7 +157,7 @@ namespace
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
 
-            if((pObj->GetObjInventor() == SdrInventor) && (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind))
+            if((pObj->GetObjInventor() == SdrInventor::Default) && (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind))
             {
                 const SdrTextObj* pSdrTextObj = dynamic_cast< const SdrTextObj* >(pObj);
 

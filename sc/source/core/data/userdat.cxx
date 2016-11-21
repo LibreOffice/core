@@ -34,7 +34,7 @@ ScDrawObjFactory::~ScDrawObjFactory()
 IMPL_STATIC_LINK(
     ScDrawObjFactory, MakeUserData, SdrObjUserDataCreatorParams, aParams, SdrObjUserData* )
 {
-    if ( aParams.nInventor == SC_DRAWLAYER )
+    if ( aParams.nInventor == SdrInventor::ScOrSwDraw )
     {
         if ( aParams.nObjIdentifier == SC_UD_OBJDATA )
             return new ScDrawObjData;
@@ -48,7 +48,7 @@ IMPL_STATIC_LINK(
 }
 
 ScDrawObjData::ScDrawObjData() :
-    SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA ),
+    SdrObjUserData( SdrInventor::ScOrSwDraw, SC_UD_OBJDATA ),
     maStart( ScAddress::INITIALIZE_INVALID ),
     maEnd( ScAddress::INITIALIZE_INVALID ),
     meType( DrawingObject )
@@ -61,12 +61,12 @@ ScDrawObjData* ScDrawObjData::Clone( SdrObject* ) const
 }
 
 ScIMapInfo::ScIMapInfo() :
-    SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA )
+    SdrObjUserData( SdrInventor::ScOrSwDraw, SC_UD_IMAPDATA )
 {
 }
 
 ScIMapInfo::ScIMapInfo( const ImageMap& rImageMap ) :
-    SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA ),
+    SdrObjUserData( SdrInventor::ScOrSwDraw, SC_UD_IMAPDATA ),
     aImageMap( rImageMap )
 {
 }
@@ -87,7 +87,7 @@ SdrObjUserData* ScIMapInfo::Clone( SdrObject* ) const
 }
 
 ScMacroInfo::ScMacroInfo() :
-    SdrObjUserData( SC_DRAWLAYER, SC_UD_MACRODATA )
+    SdrObjUserData( SdrInventor::ScOrSwDraw, SC_UD_MACRODATA )
 {
 }
 

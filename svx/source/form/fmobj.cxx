@@ -323,9 +323,9 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
 }
 
 
-sal_uInt32 FmFormObj::GetObjInventor()   const
+SdrInventor FmFormObj::GetObjInventor()   const
 {
-    return FmFormInventor;
+    return SdrInventor::FmForm;
 }
 
 

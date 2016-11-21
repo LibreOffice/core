@@ -1664,7 +1664,7 @@ private:
                 while (pTextObj==nullptr && nObj < pPage->GetObjCount())
                 {
                     SdrObject* pObj = pPage->GetObj(nObj++);
-                    if (pObj->GetObjInventor() == SdrInventor
+                    if (pObj->GetObjInventor() == SdrInventor::Default
                         && pObj->GetObjIdentifier() == OBJ_TITLETEXT)
                     {
                         pTextObj = dynamic_cast<SdrTextObj*>(pObj);
@@ -1688,7 +1688,7 @@ private:
                 while (pTextObj==nullptr && nObj<pPage->GetObjCount())
                 {
                     SdrObject* pObj = pPage->GetObj(nObj++);
-                    if (pObj->GetObjInventor() == SdrInventor
+                    if (pObj->GetObjInventor() == SdrInventor::Default
                         && pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
                     {
                         pTextObj = dynamic_cast<SdrTextObj*>(pObj);

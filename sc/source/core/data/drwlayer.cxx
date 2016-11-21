@@ -1855,7 +1855,7 @@ namespace
         for( sal_uInt16 i = 0; i < nCount; i++ )
         {
             SdrObjUserData* pData = pObj->GetUserData( i );
-            if( pData && pData->GetInventor() == SC_DRAWLAYER && pData->GetId() == nId )
+            if( pData && pData->GetInventor() == SdrInventor::ScOrSwDraw && pData->GetId() == nId )
                 return pData;
         }
         return nullptr;
@@ -1867,7 +1867,7 @@ namespace
         for( sal_uInt16 i = nCount; i > 0; i-- )
         {
             SdrObjUserData* pData = pObj->GetUserData( i-1 );
-            if( pData && pData->GetInventor() == SC_DRAWLAYER && pData->GetId() == nId )
+            if( pData && pData->GetInventor() == SdrInventor::ScOrSwDraw && pData->GetId() == nId )
                 pObj->DeleteUserData(i-1);
         }
     }
@@ -1983,7 +1983,7 @@ ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, bool bCreate 
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
         SdrObjUserData* pData = pObj->GetUserData( i );
-        if( pData && pData->GetInventor() == SC_DRAWLAYER && pData->GetId() == SC_UD_OBJDATA && ++nFound == 2 )
+        if( pData && pData->GetInventor() == SdrInventor::ScOrSwDraw && pData->GetId() == SC_UD_OBJDATA && ++nFound == 2 )
             return static_cast<ScDrawObjData*>(pData);
     }
     if( pObj && bCreate )

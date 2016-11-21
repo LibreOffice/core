@@ -151,7 +151,7 @@ public:
 
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual sal_uInt32 GetObjInventor() const override;
+    virtual SdrInventor GetObjInventor() const override;
 
 private:
     virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
@@ -195,7 +195,7 @@ public:
 
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual sal_uInt32 GetObjInventor() const override;
+    virtual SdrInventor GetObjInventor() const override;
     // Clone() should make a complete copy of the object.
     virtual OOle2Obj* Clone() const override;
     virtual void initializeOle() override;
@@ -247,7 +247,7 @@ public:
 
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual sal_uInt32 GetObjInventor() const override;
+    virtual SdrInventor GetObjInventor() const override;
     virtual OUnoObject* Clone() const override;
 
     OUnoObject& operator=(const OUnoObject& rObj);

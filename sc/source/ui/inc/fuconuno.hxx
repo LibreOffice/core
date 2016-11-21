@@ -22,12 +22,14 @@
 
 #include "fuconstr.hxx"
 
+enum class SdrInventor : sal_uInt32;
+
 /** Draw Control */
 class FuConstUnoControl : public FuConstruct
 {
 protected:
-    sal_uInt32 nInventor;
-    sal_uInt16 nIdentifier;
+    SdrInventor nInventor;
+    sal_uInt16  nIdentifier;
 
 public:
     FuConstUnoControl(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,

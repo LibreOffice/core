@@ -208,7 +208,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
     {
         const bool bDoCreateGeometry(pObject->GetPage()->checkVisibility( rOriginal, rDisplayInfo, true ));
 
-        if(!bDoCreateGeometry && !(( pObject->GetObjInventor() == SdrInventor ) && ( pObject->GetObjIdentifier() == OBJ_PAGE )) )
+        if(!bDoCreateGeometry && !(( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == OBJ_PAGE )) )
             return xRetval;
 
         PresObjKind eKind(PRESOBJ_NONE);
@@ -234,7 +234,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                     bCreateOutline = true;
                 }
             }
-            else if( ( pObject->GetObjInventor() == SdrInventor ) && ( pObject->GetObjIdentifier() == OBJ_TEXT ) )
+            else if( ( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == OBJ_TEXT ) )
             {
                 if( pObjectsSdPage )
                 {
@@ -250,7 +250,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                     }
                 }
             }
-            else if( ( pObject->GetObjInventor() == SdrInventor ) && ( pObject->GetObjIdentifier() == OBJ_PAGE ) )
+            else if( ( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == OBJ_PAGE ) )
             {
                 // only for handout page, else this frame will be created for each
                 // page preview object in SlideSorter and PagePane
@@ -728,7 +728,7 @@ bool View::SdrBeginTextEdit(
         if( pObj && pObj->GetPage() )
         {
             Color aBackground;
-            if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_TABLE )
+            if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_TABLE )
             {
                 aBackground = GetTextEditBackgroundColor(*this);
             }
@@ -866,7 +866,7 @@ void View::SetMarkedOriginalSize()
     {
         SdrObject* pObj = GetMarkedObjectByIndex(i);
 
-        if( pObj->GetObjInventor() == SdrInventor )
+        if( pObj->GetObjInventor() == SdrInventor::Default )
         {
             if( pObj->GetObjIdentifier() == OBJ_OLE2 )
             {

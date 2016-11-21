@@ -174,7 +174,7 @@ css::uno::Reference<css::uno::XInterface> create(
         if( nType != UHASHMAP_NOTFOUND )
         {
             sal_uInt16 nT = (sal_uInt16)(nType & ~E3D_INVENTOR_FLAG);
-            sal_uInt32 nI = (nType & E3D_INVENTOR_FLAG)?E3dInventor:SdrInventor;
+            SdrInventor nI = (nType & E3D_INVENTOR_FLAG) ? SdrInventor::E3d : SdrInventor::Default;
 
             return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI, nullptr, nullptr, referer )) );
         }
@@ -492,7 +492,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
         }
 
         // create the API wrapper
-        pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor, "" );
+        pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor::Default, "" );
 
         // set shape type
         if( pShape )

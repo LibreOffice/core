@@ -49,7 +49,7 @@ FuConstructUnoControl::FuConstructUnoControl (
     SdDrawDocument* pDoc,
     SfxRequest&     rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
-    , nInventor(0)
+    , nInventor(SdrInventor::Unknown)
     , nIdentifier(0)
 {
 }
@@ -70,7 +70,7 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
     const SfxUInt32Item* pInventorItem = rReq.GetArg<SfxUInt32Item>(SID_FM_CONTROL_INVENTOR);
     const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
     if( pInventorItem )
-        nInventor = pInventorItem->GetValue();
+        nInventor = (SdrInventor)pInventorItem->GetValue();
     if( pIdentifierItem )
         nIdentifier = pIdentifierItem->GetValue();
 

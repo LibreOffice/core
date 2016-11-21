@@ -352,7 +352,7 @@ void OViewsWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
     TSectionsMap::const_iterator aIter = m_aSections.begin();
     TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (;aIter != aEnd ; ++aIter)
-        (*aIter)->getReportSection().getSectionView().SetCurrentObj( eObj, ReportInventor );
+        (*aIter)->getReportSection().getSectionView().SetCurrentObj( eObj, SdrInventor::ReportDesign );
 
     m_sShapeType = _sShapeType;
 }

@@ -79,7 +79,7 @@ BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
 IMPL_STATIC_LINK(
     SgaUserDataFactory, MakeUserData, SdrObjUserDataCreatorParams, aParams, SdrObjUserData* )
 {
-    if ( aParams.nInventor == IV_IMAPINFO && aParams.nObjIdentifier == ID_IMAPINFO )
+    if ( aParams.nInventor == SdrInventor::SgaImap && aParams.nObjIdentifier == ID_IMAPINFO )
         return new SgaIMapInfo;
     return nullptr;
 }
@@ -172,7 +172,7 @@ bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& 
             {
                 const SdrObjUserData* pUserData = pObj->GetUserData( i );
 
-                if ( ( pUserData->GetInventor() == IV_IMAPINFO ) && ( pUserData->GetId() == ID_IMAPINFO ) )
+                if ( ( pUserData->GetInventor() == SdrInventor::SgaImap ) && ( pUserData->GetId() == ID_IMAPINFO ) )
                 {
                     rGraphic = static_cast<const SdrGrafObj*>( pObj )->GetGraphic();
                     rImageMap = static_cast<const SgaIMapInfo*>( pUserData )->GetImageMap();

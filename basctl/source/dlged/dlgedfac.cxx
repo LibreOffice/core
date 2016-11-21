@@ -61,7 +61,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
     }
 
     SdrObject* pNewObj = nullptr;
-    if( (aParams.nInventor == DlgInventor) &&
+    if( (aParams.nInventor == SdrInventor::BasicDialog) &&
         (aParams.nObjIdentifier >= OBJ_DLG_PUSHBUTTON) &&
         (aParams.nObjIdentifier <= OBJ_DLG_FORMHSCROLL)    )
     {

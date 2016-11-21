@@ -61,7 +61,6 @@ enum class SgaObjKind
     Inet = 6    // graphics from the internet
 };
 
-#define IV_IMAPINFO             (sal_uInt32('S')*0x00000001+sal_uInt32('D')*0x00000100+sal_uInt32('U')*0x00010000+sal_uInt32('D')*0x01000000)
 #define ID_IMAPINFO             2
 
 #define GAL_RES(nId)            ResId(nId, *GetGalleryResMgr())
@@ -106,10 +105,10 @@ class SgaIMapInfo : public SdrObjUserData, public SfxListener
     ImageMap                aImageMap;
 
 public:
-                            SgaIMapInfo() : SdrObjUserData( IV_IMAPINFO, ID_IMAPINFO ) {};
+                            SgaIMapInfo() : SdrObjUserData( SdrInventor::SgaImap, ID_IMAPINFO ) {};
 
                             SgaIMapInfo( const ImageMap& rImageMap) :
-                                SdrObjUserData( IV_IMAPINFO, ID_IMAPINFO ),
+                                SdrObjUserData( SdrInventor::SgaImap, ID_IMAPINFO ),
                                 aImageMap( rImageMap ) {};
 
     virtual                 ~SgaIMapInfo() override {};

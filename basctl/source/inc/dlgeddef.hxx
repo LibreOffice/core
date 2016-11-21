@@ -25,11 +25,6 @@
 namespace basctl
 {
 
-const sal_uInt32 DlgInventor = sal_uInt32('D')*0x00000001+
-                           sal_uInt32('L')*0x00000100+
-                           sal_uInt32('G')*0x00010000+
-                           sal_uInt32('1')*0x01000000;
-
 enum
 {
     OBJ_DLG_CONTROL         =  1,

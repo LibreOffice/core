@@ -690,10 +690,10 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
             SdrMark* pMark = rMarkList.GetMark(0);
             SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-            sal_uInt32 nInv = pObj->GetObjInventor();
-            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+            SdrInventor nInv = pObj->GetObjInventor();
+            sal_uInt16  nSdrObjKind = pObj->GetObjIdentifier();
 
-            if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
+            if (nInv == SdrInventor::Default && nSdrObjKind == OBJ_OLE2)
             {
                 DrawDocShell* pDocSh = mpDoc->GetDocSh();
 
@@ -705,7 +705,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                     mpViewShell->ActivateObject( static_cast<SdrOle2Obj*>(pObj), 0);
                 }
             }
-            else if (nInv == SdrInventor &&  nSdrObjKind == OBJ_GRAF && pObj->IsEmptyPresObj() )
+            else if (nInv == SdrInventor::Default &&  nSdrObjKind == OBJ_GRAF && pObj->IsEmptyPresObj() )
             {
                 mpViewShell->GetViewFrame()->
                     GetDispatcher()->Execute( SID_INSERT_GRAPHIC,
@@ -722,7 +722,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                         SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                         { &aItem });
             }
-            else if (nInv == SdrInventor &&  nSdrObjKind == OBJ_GRUP)
+            else if (nInv == SdrInventor::Default &&  nSdrObjKind == OBJ_GRUP)
             {
                 // hit group -> select subobject
                 mpView->UnMarkAll();

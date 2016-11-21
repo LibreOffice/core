@@ -189,7 +189,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
             if (mpView->GetDragMode() == SdrDragMode::Move && mpView->IsRotateAllowed() &&
                 (mpViewShell->GetFrameView()->IsClickChangeRotation() ||
-                 (pSingleObj && pSingleObj->GetObjInventor()==E3dInventor)))
+                 (pSingleObj && pSingleObj->GetObjInventor()==SdrInventor::E3d)))
             {
                 mpView->SetDragMode(SdrDragMode::Rotate);
             }

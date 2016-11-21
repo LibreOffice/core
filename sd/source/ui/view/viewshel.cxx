@@ -888,7 +888,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
                 for(size_t nNum = 0; nNum < nCount; ++nNum)
                 {
                     SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
-                    if( pObj->GetObjInventor() == SdrInventor )
+                    if( pObj->GetObjInventor() == SdrInventor::Default )
                     {
                         switch(pObj->GetObjIdentifier())
                         {

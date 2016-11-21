@@ -68,7 +68,7 @@ public:
     SAL_DLLPRIVATE virtual ~FmFormObj() override;
     SAL_DLLPRIVATE virtual void SetPage(SdrPage* pNewPage) override;
 
-    SAL_DLLPRIVATE virtual sal_uInt32 GetObjInventor() const override;
+    SAL_DLLPRIVATE virtual SdrInventor GetObjInventor() const override;
     SAL_DLLPRIVATE virtual sal_uInt16 GetObjIdentifier() const override;
     SAL_DLLPRIVATE virtual void NbcReformatText() override;
 

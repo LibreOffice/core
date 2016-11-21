@@ -128,7 +128,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
             //  URL button
 
             SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( pObject );
-            if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
+            if (pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor())
             {
                 uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
                 OSL_ENSURE( xControlModel.is(), "uno control without model" );

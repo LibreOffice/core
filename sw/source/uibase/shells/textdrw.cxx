@@ -60,7 +60,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
 
     rSh.StartAction();
     rSh.StartUndo( UNDO_UI_INSERT_URLBTN );
-    if (rSh.BeginCreate(OBJ_FM_BUTTON, FmFormInventor, aStartPos))
+    if (rSh.BeginCreate(OBJ_FM_BUTTON, SdrInventor::FmForm, aStartPos))
     {
         pSdrView->SetOrtho(false);
          Size aSz(GetView().GetEditWin().PixelToLogic(Size(140, 20)));

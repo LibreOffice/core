@@ -23,11 +23,6 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <svx/svdobj.hxx>
 
-const sal_uInt32 FmFormInventor = sal_uInt32('F')*0x00000001+
-                              sal_uInt32('M')*0x00000100+
-                              sal_uInt32('0')*0x00010000+
-                              sal_uInt32('1')*0x01000000;
-
 const sal_uInt16 OBJ_FM_CONTROL         =   css::form::FormComponentType::CONTROL;
                                                                     // for form components
 const sal_uInt16 OBJ_FM_EDIT            =   css::form::FormComponentType::TEXTFIELD;

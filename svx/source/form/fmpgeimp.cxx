@@ -177,8 +177,8 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
             FmFormObj* pForeignObj = dynamic_cast< FmFormObj* >( aForeignIter.Next() );
             FmFormObj* pOwnObj = dynamic_cast< FmFormObj* >( aOwnIter.Next() );
 
-            bool bForeignIsForm = pForeignObj && ( pForeignObj->GetObjInventor() == FmFormInventor );
-            bool bOwnIsForm = pOwnObj && ( pOwnObj->GetObjInventor() == FmFormInventor );
+            bool bForeignIsForm = pForeignObj && ( pForeignObj->GetObjInventor() == SdrInventor::FmForm );
+            bool bOwnIsForm = pOwnObj && ( pOwnObj->GetObjInventor() == SdrInventor::FmForm );
 
             if ( bForeignIsForm != bOwnIsForm )
             {

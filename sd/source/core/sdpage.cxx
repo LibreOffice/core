@@ -1463,7 +1463,7 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
                 if( pObj->IsEmptyPresObj() )
                     continue;
 
-                if( pObj->GetObjInventor() != SdrInventor )
+                if( pObj->GetObjInventor() != SdrInventor::Default )
                     continue;
 
                 // do not reuse shapes that are already part of the layout
@@ -2811,11 +2811,11 @@ bool SdPage::checkVisibility(
     // empty presentation objects only visible during edit mode
     if( (bIsPrinting || !bEdit || bIsInsidePageObj ) && pObj->IsEmptyPresObj() )
     {
-        if( (pObj->GetObjInventor() != SdrInventor) || ( (pObj->GetObjIdentifier() != OBJ_RECT) && (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
+        if( (pObj->GetObjInventor() != SdrInventor::Default) || ( (pObj->GetObjIdentifier() != OBJ_RECT) && (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
             return false;
     }
 
-    if( ( pObj->GetObjInventor() == SdrInventor ) && ( pObj->GetObjIdentifier() == OBJ_TEXT ) )
+    if( ( pObj->GetObjInventor() == SdrInventor::Default ) && ( pObj->GetObjIdentifier() == OBJ_TEXT ) )
     {
            const SdPage* pCheckPage = dynamic_cast< const SdPage* >(pObj->GetPage());
 
@@ -2862,7 +2862,7 @@ bool SdPage::checkVisibility(
     }
 
     // i63977, do not print SdrpageObjs from master pages
-    if( ( pObj->GetObjInventor() == SdrInventor ) && ( pObj->GetObjIdentifier() == OBJ_PAGE ) )
+    if( ( pObj->GetObjInventor() == SdrInventor::Default ) && ( pObj->GetObjIdentifier() == OBJ_PAGE ) )
     {
         if( pObj->GetPage() && pObj->GetPage()->IsMasterPage() )
             return false;

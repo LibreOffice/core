@@ -207,7 +207,7 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
                 if( (nDepth != -1) && (!getBulletState( aParaSet, mrOutliner.GetStyleSheet( nPara ), bState ) || !bState) )
                 {
                     // disable bullet if text::enable-bullet="false" is found
-                    if( (nDepth > 0 ) && (rTextShape.GetObjInventor()  == SdrInventor) && (rTextShape.GetObjIdentifier() == OBJ_OUTLINETEXT) )
+                    if( (nDepth > 0 ) && (rTextShape.GetObjInventor()  == SdrInventor::Default) && (rTextShape.GetObjIdentifier() == OBJ_OUTLINETEXT) )
                     {
                         // for outline object and level > 0 burn in the style sheet because it will be changed to "outline 1"
                         SfxStyleSheet* pStyleSheet = mrOutliner.GetStyleSheet( nPara );

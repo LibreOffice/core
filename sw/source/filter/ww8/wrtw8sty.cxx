@@ -2041,7 +2041,7 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
                 {
                     // is it an writer or sdr - textbox?
                     const SdrObject& rObj = *static_cast<SdrObject const *>(aContent[ i ]);
-                    if (rObj.GetObjInventor() == FmFormInventor)
+                    if (rObj.GetObjInventor() == SdrInventor::FmForm)
                     {
                         sal_uInt8 nOldTyp = rWrt.m_nTextTyp;
                         rWrt.m_nTextTyp = nTTyp;

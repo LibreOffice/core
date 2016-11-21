@@ -525,7 +525,7 @@ public:
      After RESTRAINTEND the object is created and selected.
      BreakCreate interrupts the process. In this case no object is selected. */
     bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Point &rPos );
-    bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, sal_uInt32 eObjInventor, const Point &);
+    bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, SdrInventor eObjInventor, const Point &);
     void MoveCreate ( const Point &rPos );
     bool EndCreate  ( SdrCreateCmd eSdrCreateCmd );
     void BreakCreate();

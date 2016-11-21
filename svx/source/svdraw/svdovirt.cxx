@@ -93,7 +93,7 @@ void SdrVirtObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rRefObj.TakeObjInfo(rInfo);
 }
 
-sal_uInt32 SdrVirtObj::GetObjInventor() const
+SdrInventor SdrVirtObj::GetObjInventor() const
 {
     return rRefObj.GetObjInventor();
 }

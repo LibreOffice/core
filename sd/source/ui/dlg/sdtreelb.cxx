@@ -611,7 +611,7 @@ void SdPageObjsTLB::AddShapeList (
 
         if( !aStr.isEmpty() )
         {
-            if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
+            if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_OLE2 )
             {
                 SvTreeListEntry *pNewEntry = InsertEntry(
                     aStr,
@@ -645,7 +645,7 @@ void SdPageObjsTLB::AddShapeList (
                     }
                 }
             }
-            else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
+            else if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_GRAF )
             {
                 SvTreeListEntry *pNewEntry = InsertEntry(
                     aStr,
@@ -913,11 +913,11 @@ void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
                         OUString aStr( GetObjectName( pObj ) );
                         if( !aStr.isEmpty() )
                         {
-                            if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
+                            if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_OLE2 )
                             {
                                 InsertEntry(aStr, maImgOle, maImgOle, pPageEntry);
                             }
-                            else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
+                            else if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_GRAF )
                             {
                                 InsertEntry(aStr, maImgGraphic, maImgGraphic, pPageEntry);
                             }

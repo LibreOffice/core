@@ -92,7 +92,7 @@ public:
     void SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
 
-    virtual sal_uInt32 GetObjInventor() const override;
+    virtual SdrInventor GetObjInventor() const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
 
     virtual DlgEdObj*   Clone() const override;                                          // not working yet

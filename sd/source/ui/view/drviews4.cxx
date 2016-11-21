@@ -155,10 +155,10 @@ bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 
                     if(pObj && dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
                     {
-                        sal_uInt32 nInv(pObj->GetObjInventor());
-                        sal_uInt16 nKnd(pObj->GetObjIdentifier());
+                        SdrInventor nInv(pObj->GetObjInventor());
+                        sal_uInt16  nKnd(pObj->GetObjIdentifier());
 
-                        if(SdrInventor == nInv &&
+                        if(SdrInventor::Default == nInv &&
                             (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd)
                             && bDidVisitOldObject)
                         {
@@ -622,7 +622,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 }
                                 else
                                 {
-                                    if( (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+                                    if( (pObj->GetObjInventor() == SdrInventor::Default) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
                                     {
                                         aPopupId = "tabletext";
                                     }
@@ -635,10 +635,10 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                         }
                         else
                         {
-                            sal_uInt32 nInv = pObj->GetObjInventor();
-                            sal_uInt16 nId = pObj->GetObjIdentifier();
+                            SdrInventor nInv = pObj->GetObjInventor();
+                            sal_uInt16  nId  = pObj->GetObjIdentifier();
 
-                            if (nInv == SdrInventor)
+                            if (nInv == SdrInventor::Default)
                             {
                                 switch ( nId )
                                 {
@@ -701,7 +701,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                         break;
                                 }
                             }
-                            else if( nInv == E3dInventor )
+                            else if( nInv == SdrInventor::E3d )
                             {
                                 if( nId == E3D_POLYSCENE_ID || nId == E3D_SCENE_ID )
                                 {
@@ -713,7 +713,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 else
                                     aPopupId = "3dobject";
                             }
-                            else if( nInv == FmFormInventor )
+                            else if( nInv == SdrInventor::FmForm )
                             {
                                 aPopupId = "form";
                             }

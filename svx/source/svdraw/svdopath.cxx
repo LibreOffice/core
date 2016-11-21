@@ -1294,18 +1294,27 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
     if (pView!=nullptr && pView->IsCreateMode()) {
         // switch to different CreateTool, if appropriate
         sal_uInt16 nIdent;
-        sal_uInt32 nInvent;
+        SdrInventor nInvent;
         pView->TakeCurrentObj(nIdent,nInvent);
-        if (nInvent==SdrInventor && pU->eAktKind!=(SdrObjKind)nIdent) {
+        if (nInvent==SdrInventor::Default && pU->eAktKind!=(SdrObjKind)nIdent) {
             SdrObjKind eNewKind=(SdrObjKind)nIdent;
             switch (eNewKind) {
-                case OBJ_CARC: case OBJ_CIRC: case OBJ_CCUT: case OBJ_SECT: eNewKind=OBJ_CARC;
+                case OBJ_CARC:
+                case OBJ_CIRC:
+                case OBJ_CCUT:
+                case OBJ_SECT:
+                    eNewKind=OBJ_CARC;
                     SAL_FALLTHROUGH;
                 case OBJ_RECT:
-                case OBJ_LINE: case OBJ_PLIN: case OBJ_POLY:
-                case OBJ_PATHLINE: case OBJ_PATHFILL:
-                case OBJ_FREELINE: case OBJ_FREEFILL:
-                case OBJ_SPLNLINE: case OBJ_SPLNFILL: {
+                case OBJ_LINE:
+                case OBJ_PLIN:
+                case OBJ_POLY:
+                case OBJ_PATHLINE:
+                case OBJ_PATHFILL:
+                case OBJ_FREELINE:
+                case OBJ_FREEFILL:
+                case OBJ_SPLNLINE:
+                case OBJ_SPLNFILL: {
                     pU->eAktKind=eNewKind;
                     pU->bMixedCreate=true;
                     pU->nBezierStartPoint=rXPoly.GetPointCount();

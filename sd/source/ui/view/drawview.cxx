@@ -144,9 +144,9 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
         {
             // Textedit
 
-            sal_uInt32 nInv = pEditObject->GetObjInventor();
+            SdrInventor nInv = pEditObject->GetObjInventor();
 
-            if (nInv == SdrInventor)
+            if (nInv == SdrInventor::Default)
             {
                 sal_uInt16 eObjKind = pEditObject->GetObjIdentifier();
                 PresObjKind ePresObjKind = rPage.GetPresObjKind(pEditObject);
@@ -270,10 +270,10 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
             const size_t nMarkCount = rList.GetMarkCount();
             for (size_t nMark = 0; nMark < nMarkCount; ++nMark)
             {
-                SdrObject* pObject = rList.GetMark(nMark)->GetMarkedSdrObj();
-                sal_uInt32 nInv = pObject->GetObjInventor();
+                SdrObject*  pObject = rList.GetMark(nMark)->GetMarkedSdrObj();
+                SdrInventor nInv    = pObject->GetObjInventor();
 
-                if (nInv == SdrInventor)
+                if (nInv == SdrInventor::Default)
                 {
                     sal_uInt16 eObjKind = pObject->GetObjIdentifier();
                     PresObjKind ePresObjKind = rPage.GetPresObjKind(pObject);

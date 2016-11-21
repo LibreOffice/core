@@ -485,9 +485,9 @@ sal_uInt16 OCustomShape::GetObjIdentifier() const
     return sal_uInt16(OBJ_CUSTOMSHAPE);
 }
 
-sal_uInt32 OCustomShape::GetObjInventor() const
+SdrInventor OCustomShape::GetObjInventor() const
 {
-    return ReportInventor;
+    return SdrInventor::ReportDesign;
 }
 
 SdrPage* OCustomShape::GetImplPage() const
@@ -645,9 +645,9 @@ sal_uInt16 OUnoObject::GetObjIdentifier() const
     return sal_uInt16(m_nObjectType);
 }
 
-sal_uInt32 OUnoObject::GetObjInventor() const
+SdrInventor OUnoObject::GetObjInventor() const
 {
-    return ReportInventor;
+    return SdrInventor::ReportDesign;
 }
 
 SdrPage* OUnoObject::GetImplPage() const
@@ -925,9 +925,9 @@ sal_uInt16 OOle2Obj::GetObjIdentifier() const
     return m_nType;
 }
 
-sal_uInt32 OOle2Obj::GetObjInventor() const
+SdrInventor OOle2Obj::GetObjInventor() const
 {
-    return ReportInventor;
+    return SdrInventor::ReportDesign;
 }
 
 SdrPage* OOle2Obj::GetImplPage() const

@@ -222,7 +222,7 @@ void FuText::DoExecute( SfxRequest& )
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if( pObj && (pObj->GetObjInventor() == SdrInventor ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+            if( pObj && (pObj->GetObjInventor() == SdrInventor::Default ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
             {
                 mpViewShell->GetViewShellBase().GetToolBarManager()->AddToolBarShell( ToolBarManager::TBG_FUNCTION, RID_DRAW_TABLE_TOOLBOX );
             }
@@ -923,7 +923,7 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
         }
     }
 
-    if ( mxTextObj.is() && mxTextObj->GetObjInventor() == SdrInventor && mxTextObj->GetObjIdentifier() == OBJ_TITLETEXT && rKEvt.GetKeyCode().GetCode() == KEY_RETURN )
+    if ( mxTextObj.is() && mxTextObj->GetObjInventor() == SdrInventor::Default && mxTextObj->GetObjIdentifier() == OBJ_TITLETEXT && rKEvt.GetKeyCode().GetCode() == KEY_RETURN )
     {
         // title text object: always soft breaks
         bShift = true;
@@ -1036,10 +1036,10 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
 
         if (GetTextObj() != mpView->GetTextEditObject() || bEmptyOutliner)
         {
-            sal_uInt32 nInv = mxTextObj->GetObjInventor();
-            sal_uInt16 nSdrObjKind = mxTextObj->GetObjIdentifier();
+            SdrInventor nInv = mxTextObj->GetObjInventor();
+            sal_uInt16  nSdrObjKind = mxTextObj->GetObjIdentifier();
 
-            if (nInv == SdrInventor && GetTextObj()->HasTextEdit() &&
+            if (nInv == SdrInventor::Default && GetTextObj()->HasTextEdit() &&
                 (nSdrObjKind == OBJ_TEXT ||
                  nSdrObjKind == OBJ_TITLETEXT ||
                  nSdrObjKind == OBJ_OUTLINETEXT || !mxTextObj->IsEmptyPresObj() ) )
@@ -1064,7 +1064,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                         pTextObj->setActiveText( pTextObj->CheckTextHit(aPnt ) );
                     }
 
-                    if (mpView->SdrBeginTextEdit(pTextObj, pPV, mpWindow, true, pOutl) && mxTextObj->GetObjInventor() == SdrInventor)
+                    if (mpView->SdrBeginTextEdit(pTextObj, pPV, mpWindow, true, pOutl) && mxTextObj->GetObjInventor() == SdrInventor::Default)
                     {
                         //tdf#102293 flush overlay before going on to pass clicks down to
                         //the outline view which will want to paint selections

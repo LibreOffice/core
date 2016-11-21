@@ -177,10 +177,10 @@ void DrawViewShell::SelectionHasChanged()
             SdrMark* pMark = rMarkList.GetMark(0);
             SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-            sal_uInt32 nInv = pObj->GetObjInventor();
-            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+            SdrInventor nInv        = pObj->GetObjInventor();
+            sal_uInt16  nSdrObjKind = pObj->GetObjIdentifier();
 
-            if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
+            if (nInv == SdrInventor::Default && nSdrObjKind == OBJ_OLE2)
             {
                 pOleObj = static_cast<SdrOle2Obj*>(pObj);
                 UpdateIMapDlg( pObj );
@@ -719,10 +719,10 @@ ErrCode DrawViewShell::DoVerb(long nVerb)
             SdrMark* pMark = rMarkList.GetMark(0);
             SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-            sal_uInt32 nInv = pObj->GetObjInventor();
-            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+            SdrInventor nInv        = pObj->GetObjInventor();
+            sal_uInt16  nSdrObjKind = pObj->GetObjIdentifier();
 
-            if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
+            if (nInv == SdrInventor::Default && nSdrObjKind == OBJ_OLE2)
             {
                 ActivateObject( static_cast<SdrOle2Obj*>(pObj), nVerb);
             }

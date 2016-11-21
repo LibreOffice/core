@@ -22,14 +22,6 @@
 
 #include <sal/types.h>
 
-/*
- * SdrObject
- */
-const sal_uInt32 SdrInventor=sal_uInt32('S')*0x00000001+
-                         sal_uInt32('V')*0x00000100+
-                         sal_uInt32('D')*0x00010000+
-                         sal_uInt32('r')*0x01000000;
-
 // commands for EndCreate()
 enum class SdrCreateCmd
 {

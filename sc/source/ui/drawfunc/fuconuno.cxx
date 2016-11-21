@@ -31,13 +31,13 @@
 FuConstUnoControl::FuConstUnoControl(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
-    , nInventor(0)
+    , nInventor(SdrInventor::Unknown)
     , nIdentifier(0)
 {
     const SfxUInt32Item* pInventorItem = rReq.GetArg<SfxUInt32Item>(SID_FM_CONTROL_INVENTOR);
     const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
     if( pInventorItem )
-        nInventor = pInventorItem->GetValue();
+        nInventor = (SdrInventor)pInventorItem->GetValue();
     if( pIdentifierItem )
         nIdentifier = pIdentifierItem->GetValue();
 }

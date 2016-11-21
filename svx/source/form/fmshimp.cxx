@@ -580,14 +580,14 @@ bool isControlList(const SdrMarkList& rMarkList)
                 SdrObjListIter aIter(*pObj->GetSubList());
                 while (aIter.IsMore() && bControlList)
                 {
-                    bControlList = FmFormInventor == aIter.Next()->GetObjInventor();
+                    bControlList = SdrInventor::FmForm == aIter.Next()->GetObjInventor();
                     bHadAnyLeafs = true;
                 }
             }
             else
             {
                 bHadAnyLeafs = true;
-                bControlList = FmFormInventor == pObj->GetObjInventor();
+                bControlList = SdrInventor::FmForm == pObj->GetObjInventor();
             }
         }
     }

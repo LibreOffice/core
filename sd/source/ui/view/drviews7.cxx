@@ -847,7 +847,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         for(size_t nNum = 0; nNum < nMarkCount; ++nNum)
         {
             SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
-            if( pObj->GetObjInventor() == SdrInventor )
+            if( pObj->GetObjInventor() == SdrInventor::Default )
             {
                 if( pObj->GetObjIdentifier() == OBJ_OUTLINETEXT )
                 {
@@ -1295,11 +1295,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 //      const size_t nMarkCount = aMarkList.GetMarkCount();
         for (size_t i=0; i < nMarkCount && !bFoundAny; ++i)
         {
-            SdrObject* pObj=  aMarkList.GetMark(i)->GetMarkedSdrObj();
-            sal_uInt16 nId = pObj->GetObjIdentifier();
-            sal_uInt32 nInv = pObj->GetObjInventor();
+            SdrObject*  pObj = aMarkList.GetMark(i)->GetMarkedSdrObj();
+            sal_uInt16  nId  = pObj->GetObjIdentifier();
+            SdrInventor nInv = pObj->GetObjInventor();
 
-            if(nInv == SdrInventor)
+            if(nInv == SdrInventor::Default)
             {
                 // 2D objects
                 switch( nId )
@@ -1358,7 +1358,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         bFoundAny = true;
                 }
             }
-            else if(nInv == E3dInventor)
+            else if(nInv == SdrInventor::E3d)
             {
                 // 3D objects
                 bFoundAny = true;
@@ -1420,7 +1420,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() );
 
-            if ( pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor() )
+            if ( pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor() )
             {
                 uno::Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel() );
                 if( xControlModel.is() )

@@ -68,7 +68,7 @@ bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
         m_pWin->SetPointer(Pointer(PointerStyle::DrawRect));
 
         m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
-        bReturn = m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), FmFormInventor, m_aStartPos);
+        bReturn = m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), SdrInventor::FmForm, m_aStartPos);
 
         if (bReturn)
             m_pWin->SetDrawAction(true);
@@ -102,7 +102,7 @@ void ConstFormControl::CreateDefaultObject()
 
     SdrView *pSdrView = m_pSh->GetDrawView();
     pSdrView->SetDesignMode();
-    m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), FmFormInventor, aStartPos);
+    m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), SdrInventor::FmForm, aStartPos);
     m_pSh->MoveCreate(aEndPos);
     m_pSh->EndCreate(SdrCreateCmd::ForceEnd);
 }

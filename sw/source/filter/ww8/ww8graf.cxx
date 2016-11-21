@@ -2626,20 +2626,16 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         for (sal_uInt16 i = 0; i < nCount; i++ )
         {
             SdrObjUserData* pData = pObject->GetUserData( i );
-            if( pData && pData->GetInventor() == SW_DRAWLAYER
+            if( pData && pData->GetInventor() == SdrInventor::ScOrSwDraw
                     && pData->GetId() == SW_UD_IMAPDATA)
             {
                 SwMacroInfo* macInf = dynamic_cast<SwMacroInfo*>(pData);
-                if( macInf )// && macInf->GetShapeId() == pF->nSpId)
+                if( macInf && macInf->GetShapeId() == pF->nSpId )
                 {
-                    sal_Int32 nShapeId = macInf->GetShapeId();
-                    if ( nShapeId ==  pF->nSpId )
-                    {
-                        lnName = macInf->GetHlink();
-                        aObjName = macInf->GetName();
-                        aTarFrame = macInf->GetTarFrame();
-                        break;
-                    }
+                    lnName = macInf->GetHlink();
+                    aObjName = macInf->GetName();
+                    aTarFrame = macInf->GetTarFrame();
+                    break;
                 }
             }
         }

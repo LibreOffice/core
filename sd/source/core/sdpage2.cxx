@@ -149,7 +149,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
     {
         auto pObj = GetObj(nObj);
 
-        if (pObj->GetObjInventor() == SdrInventor &&
+        if (pObj->GetObjInventor() == SdrInventor::Default &&
             pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
         {
             if (!bListsFilled || !bReplaceStyleSheets)
@@ -228,7 +228,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
                 }
             }
         }
-        else if (pObj->GetObjInventor() == SdrInventor &&
+        else if (pObj->GetObjInventor() == SdrInventor::Default &&
                  pObj->GetObjIdentifier() == OBJ_TITLETEXT)
         {
             // We do net get PresObjKind via GetPresObjKind() since there are

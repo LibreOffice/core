@@ -93,7 +93,7 @@ public:
         const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID,
         const OUString& _rFieldPostfix,
-        sal_uInt32 _nInventor,
+        SdrInventor _nInventor,
         sal_uInt16 _nLabelObjectID,
         SdrPage* _pLabelPage,
         SdrPage* _pControlPage,

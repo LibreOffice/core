@@ -45,12 +45,6 @@ struct NotifyInfo
 
 #define SVD_IMAP_USERDATA   0x0001
 
-const sal_uInt32 IMapInventor = sal_uInt32('I') * 0x00000001+
-                            sal_uInt32('M') * 0x00000100+
-                            sal_uInt32('A') * 0x00010000+
-                            sal_uInt32('P') * 0x01000000;
-
-
 typedef std::shared_ptr< IMapObject > IMapObjectPtr;
 
 class IMapUserData : public SdrObjUserData
@@ -61,11 +55,11 @@ class IMapUserData : public SdrObjUserData
 public:
 
                    explicit IMapUserData( const IMapObjectPtr& rIMapObj ) :
-                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA ),
+                                SdrObjUserData  ( SdrInventor::IMap, SVD_IMAP_USERDATA ),
                                 mpObj           ( rIMapObj ) {}
 
                             IMapUserData( const IMapUserData& rIMapUserData ) :
-                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA ),
+                                SdrObjUserData  ( SdrInventor::IMap, SVD_IMAP_USERDATA ),
                                 mpObj           ( rIMapUserData.mpObj ) {}
 
                             virtual ~IMapUserData() override { }

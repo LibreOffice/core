@@ -63,7 +63,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
             const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             if( rMarkList.GetMarkCount() == 1 &&
-                pObj->GetObjInventor() == SdrInventor &&
+                pObj->GetObjInventor() == SdrInventor::Default &&
                 pObj->GetObjIdentifier() == OBJ_CAPTION )
             {
                 // --------- itemset for caption --------

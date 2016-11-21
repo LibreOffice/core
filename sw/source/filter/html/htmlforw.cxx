@@ -628,7 +628,7 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrameFormat& rFormat 
 
     // Schauen, ob es ein SdrObject dafuer gibt
     const SdrObject *pObj = rFormat.FindSdrObject();
-    if( !pObj || FmFormInventor != pObj->GetObjInventor() )
+    if( !pObj || SdrInventor::FmForm != pObj->GetObjInventor() )
         return nullptr;
 
     const SdrUnoObj& rFormObj = dynamic_cast<const SdrUnoObj&>(*pObj);

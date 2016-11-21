@@ -57,6 +57,7 @@ namespace vcl { class Window; }
 class OutputDevice;
 class SdrUnoObj;
 struct ImplSVEvent;
+enum class SdrInventor : sal_uInt32;
 
 namespace com { namespace sun { namespace star {
     namespace awt {
@@ -256,7 +257,7 @@ private:
         const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID,
         const OUString& _rFieldPostfix,
-        sal_uInt32 _nInventor,
+        SdrInventor _nInventor,
         sal_uInt16 _nLabelObjectID,
         SdrPage* _pLabelPage,
         SdrPage* _pControlPage,

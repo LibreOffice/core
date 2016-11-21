@@ -130,9 +130,9 @@ SwFlyDrawObj::~SwFlyDrawObj()
 
 // SwFlyDrawObj - Factory-Methods
 
-sal_uInt32 SwFlyDrawObj::GetObjInventor() const
+SdrInventor SwFlyDrawObj::GetObjInventor() const
 {
-    return SWGInventor;
+    return SdrInventor::Swg;
 }
 
 sal_uInt16 SwFlyDrawObj::GetObjIdentifier() const

@@ -480,7 +480,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
             {
                 SdrObject* pObj = mpView->GetTextEditObject();
                 if( pObj &&
-                    pObj->GetObjInventor()   == SdrInventor &&
+                    pObj->GetObjInventor()   == SdrInventor::Default &&
                     pObj->GetObjIdentifier() == OBJ_TITLETEXT &&
                     pOutliner->GetParagraphCount() > 1 )
                 {

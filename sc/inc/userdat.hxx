@@ -26,8 +26,6 @@
 #include "global.hxx"
 #include "address.hxx"
 
-#define SC_DRAWLAYER 0x30334353     // Inventor: "SC30"
-
 // Object-Ids fuer UserData
 #define SC_UD_OBJDATA       1
 #define SC_UD_IMAPDATA      2

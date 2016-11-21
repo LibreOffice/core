@@ -145,10 +145,10 @@ public:
 
     virtual ~E3dObject() override;
 
-    virtual sal_uInt32  GetObjInventor() const override;
+    virtual SdrInventor GetObjInventor() const override;
     virtual sal_uInt16  GetObjIdentifier() const override;
 
-    virtual void    TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
+    virtual void        TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
 
     virtual void        NbcSetLayer(SdrLayerID nLayer) override;
 

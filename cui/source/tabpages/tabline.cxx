@@ -69,7 +69,7 @@ SvxLineTabDialog::SvxLineTabDialog
     mbAreaTP( false )
 {
     bool bLineOnly = false;
-    if( pObj && pObj->GetObjInventor() == SdrInventor )
+    if( pObj && pObj->GetObjInventor() == SdrInventor::Default )
     {
         switch( pObj->GetObjIdentifier() )
         {

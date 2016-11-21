@@ -900,7 +900,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
         if( mpDrawView->IsTextEdit() )
         {
             SdrObject* pObj = mpDrawView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj();
-            if( pObj->GetObjInventor() == SdrInventor)
+            if( pObj->GetObjInventor() == SdrInventor::Default)
             {
                 SfxItemSet aEditAttr( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aEditAttr );

@@ -749,9 +749,9 @@ OUString DlgEdObj::GetUniqueName() const
     return aUniqueName;
 }
 
-sal_uInt32 DlgEdObj::GetObjInventor()   const
+SdrInventor DlgEdObj::GetObjInventor()   const
 {
-    return DlgInventor;
+    return SdrInventor::BasicDialog;
 }
 
 sal_uInt16 DlgEdObj::GetObjIdentifier() const

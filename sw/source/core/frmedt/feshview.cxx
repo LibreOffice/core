@@ -1663,7 +1663,7 @@ bool SwFEShell::BeginCreate( sal_uInt16 /*SdrObjKind ?*/  eSdrObjectKind, const 
     return bRet;
 }
 
-bool SwFEShell::BeginCreate( sal_uInt16 /*SdrObjKind ?*/  eSdrObjectKind, sal_uInt32 eObjInventor,
+bool SwFEShell::BeginCreate( sal_uInt16 /*SdrObjKind ?*/  eSdrObjectKind, SdrInventor eObjInventor,
                              const Point &rPos )
 {
     bool bRet = false;
@@ -1755,7 +1755,7 @@ bool SwFEShell::ImpEndCreate()
 
     // alien identifier should end up on defaults
     // duplications possible!!
-    sal_uInt16 nIdent = SdrInventor == rSdrObj.GetObjInventor()
+    sal_uInt16 nIdent = SdrInventor::Default == rSdrObj.GetObjInventor()
                         ? rSdrObj.GetObjIdentifier()
                         : 0xFFFF;
 
@@ -2688,7 +2688,7 @@ void SwFEShell::CheckUnboundObjects()
             // Alien identifier should roll into the default,
             // Duplications are possible!!
             sal_uInt16 nIdent =
-                    Imp()->GetDrawView()->GetCurrentObjInventor() == SdrInventor ?
+                    Imp()->GetDrawView()->GetCurrentObjInventor() == SdrInventor::Default ?
                             Imp()->GetDrawView()->GetCurrentObjIdentifier() : 0xFFFF;
 
             SwFormatAnchor aAnch;
@@ -2893,7 +2893,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
     SdrView* pDrawView = GetDrawView();
     SdrModel* pDrawModel = pDrawView->GetModel();
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        SdrInventor, eSdrObjectKind,
+        SdrInventor::Default, eSdrObjectKind,
         nullptr, pDrawModel);
 
     if(pObj)

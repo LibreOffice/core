@@ -1481,7 +1481,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
         if( pMarkedObj ) try
         {
             // change first marked object
-            if( (FmFormInventor == pMarkedObj->GetObjInventor() && pMarkedObj->GetObjIdentifier() == OBJ_FM_BUTTON) )
+            if( (SdrInventor::FmForm == pMarkedObj->GetObjInventor() && pMarkedObj->GetObjIdentifier() == OBJ_FM_BUTTON) )
             {
                 bNewObj = false;
 
@@ -1519,7 +1519,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
 
     if (bNewObj) try
     {
-        SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >( SdrObjFactory::MakeNewObject(FmFormInventor, OBJ_FM_BUTTON,
+        SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >( SdrObjFactory::MakeNewObject(SdrInventor::FmForm, OBJ_FM_BUTTON,
                                 mpDrawView->GetSdrPageView()->GetPage(), GetDoc()) );
 
         Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_QUERY_THROW );

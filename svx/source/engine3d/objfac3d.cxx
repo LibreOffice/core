@@ -47,7 +47,7 @@ E3dObjFactory::~E3dObjFactory()
 
 IMPL_STATIC_LINK( E3dObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
 {
-    if ( aParams.nInventor == E3dInventor )
+    if ( aParams.nInventor == SdrInventor::E3d )
     {
         switch ( aParams.nObjIdentifier )
         {

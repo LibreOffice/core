@@ -47,7 +47,7 @@ IMPL_STATIC_LINK(
     DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
 {
     SdrObject* pNewObj = nullptr;
-    if ( aParams.nInventor == ReportInventor )
+    if ( aParams.nInventor == SdrInventor::ReportDesign )
     {
         switch( aParams.nObjIdentifier )
         {

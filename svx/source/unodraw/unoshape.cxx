@@ -360,19 +360,19 @@ void SvxShape::impl_initFromSdrObject()
         StartListening( *mpModel );
     }
 
-    const sal_uInt32 nInventor = mpObj->GetObjInventor();
+    const SdrInventor nInventor = mpObj->GetObjInventor();
 
     // is it one of ours (svx) ?
-    if( nInventor == SdrInventor || nInventor == E3dInventor || nInventor == FmFormInventor )
+    if( nInventor == SdrInventor::Default || nInventor == SdrInventor::E3d || nInventor == SdrInventor::FmForm )
     {
-        if(nInventor == FmFormInventor)
+        if(nInventor == SdrInventor::FmForm)
         {
             mpImpl->mnObjId = OBJ_UNO;
         }
         else
         {
             mpImpl->mnObjId = mpObj->GetObjIdentifier();
-            if( nInventor == E3dInventor )
+            if( nInventor == SdrInventor::E3d )
                 mpImpl->mnObjId |= E3D_INVENTOR_FLAG;
         }
 
@@ -1062,7 +1062,7 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 
 static bool svx_needLogicRectHack( SdrObject* pObj )
 {
-    if( pObj->GetObjInventor() == SdrInventor)
+    if( pObj->GetObjInventor() == SdrInventor::Default)
     {
         switch(pObj->GetObjIdentifier())
         {
@@ -1201,7 +1201,7 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
         Size aLocalSize( rSize.Width, rSize.Height );
         ForceMetricToItemPoolMetric(aLocalSize);
 
-        if(mpObj->GetObjInventor() == SdrInventor && mpObj->GetObjIdentifier() == OBJ_MEASURE )
+        if(mpObj->GetObjInventor() == SdrInventor::Default && mpObj->GetObjIdentifier() == OBJ_MEASURE )
         {
             Fraction aWdt(aLocalSize.Width(),aRect.Right()-aRect.Left());
             Fraction aHgt(aLocalSize.Height(),aRect.Bottom()-aRect.Top());
@@ -1945,7 +1945,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
 
     case SDRATTR_CIRCKIND:
     {
-        if( mpObj->GetObjInventor() == SdrInventor)
+        if( mpObj->GetObjInventor() == SdrInventor::Default)
         {
             drawing::CircleKind eKind;
             switch(mpObj->GetObjIdentifier())
@@ -2630,11 +2630,11 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     case OWN_ATTR_LDBITMAP:
     {
         sal_uInt16 nId;
-        if( mpObj->GetObjInventor() == SdrInventor && mpObj->GetObjIdentifier() == OBJ_OLE2 )
+        if( mpObj->GetObjInventor() == SdrInventor::Default && mpObj->GetObjIdentifier() == OBJ_OLE2 )
         {
             nId = RID_UNODRAW_OLE2;
         }
-        else if( mpObj->GetObjInventor() == SdrInventor && mpObj->GetObjIdentifier() == OBJ_GRAF )
+        else if( mpObj->GetObjInventor() == SdrInventor::Default && mpObj->GetObjIdentifier() == OBJ_GRAF )
         {
             nId = RID_UNODRAW_GRAPHICS;
         }
@@ -3165,7 +3165,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
 {
     ::SolarMutexGuard aGuard;
 
-    if( mpObj.is() && mpObj->GetObjInventor() == SdrInventor)
+    if( mpObj.is() && mpObj->GetObjInventor() == SdrInventor::Default)
     {
         const sal_uInt16 nIdent = mpObj->GetObjIdentifier();
 
@@ -3692,11 +3692,11 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
             }
         }
     }
-    else if( mpObj.is() && mpObj->GetObjInventor() == FmFormInventor)
+    else if( mpObj.is() && mpObj->GetObjInventor() == SdrInventor::FmForm)
     {
 #if OSL_DEBUG_LEVEL > 0
         const sal_uInt16 nIdent = mpObj->GetObjIdentifier();
-        OSL_ENSURE( nIdent == OBJ_UNO, "SvxShape::_getSupportedServiceNames: FmFormInventor, but no UNO object?" );
+        OSL_ENSURE( nIdent == OBJ_UNO, "SvxShape::_getSupportedServiceNames: SdrInventor::FmForm, but no UNO object?" );
 #endif
         static uno::Sequence< OUString > *pSeq = nullptr;
         if( nullptr == pSeq )
