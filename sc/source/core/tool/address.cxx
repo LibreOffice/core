@@ -27,7 +27,6 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include <com/sun/star/sheet/ExternalLinkType.hpp>
 #include <comphelper/string.hxx>

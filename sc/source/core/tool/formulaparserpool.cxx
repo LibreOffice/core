@@ -18,7 +18,6 @@
  */
 
 #include "formulaparserpool.hxx"
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>

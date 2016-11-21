@@ -32,7 +32,6 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 
 #include <com/sun/star/i18n/OrdinalSuffix.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/configmgr.hxx>

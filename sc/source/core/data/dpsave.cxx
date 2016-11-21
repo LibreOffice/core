@@ -39,15 +39,12 @@
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
-#include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
-#include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
-#include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 
 #include <unordered_map>
 #include <unordered_set>

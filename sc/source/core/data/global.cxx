@@ -53,7 +53,6 @@
 #include <comphelper/string.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
