@@ -1091,18 +1091,19 @@ public:
  */
 class SmMatrixNode : public SmStructureNode
 {
-    sal_uInt16  nNumRows,
-            nNumCols;
+    sal_uInt16 mnNumRows,
+               mnNumCols;
 
 public:
     explicit SmMatrixNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NMATRIX, rNodeToken)
+        : SmStructureNode(NMATRIX, rNodeToken)
+        , mnNumRows(0)
+        , mnNumCols(0)
     {
-        nNumRows = nNumCols = 0;
     }
 
-    sal_uInt16 GetNumRows() const {return nNumRows;}
-    sal_uInt16 GetNumCols() const {return nNumCols;}
+    sal_uInt16 GetNumRows() const {return mnNumRows;}
+    sal_uInt16 GetNumCols() const {return mnNumCols;}
     void SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols);
 
     virtual const SmNode * GetLeftMost() const override;
