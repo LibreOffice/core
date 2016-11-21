@@ -22,6 +22,6 @@
         <value>StarOffice_Writer</value>
     </prop>
     <prop oor:name="UIName">
-        <value>Legacy StarOffice Writer</value>
+        <value>Legacy StarOffice Text Document</value>
     </prop>
 </node>
