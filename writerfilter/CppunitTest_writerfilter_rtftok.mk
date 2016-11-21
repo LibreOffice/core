@@ -40,15 +40,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,writerfilter_rtftok))
 $(eval $(call gb_CppunitTest_use_ure,writerfilter_rtftok))
 $(eval $(call gb_CppunitTest_use_vcl,writerfilter_rtftok))
 
-$(eval $(call gb_CppunitTest_use_components,writerfilter_rtftok,\
-	configmgr/source/configmgr \
-	framework/util/fwk \
-	i18npool/util/i18npool \
-	svtools/util/svt \
-	ucb/source/core/ucb1 \
-	ucb/source/ucp/file/ucpfile1 \
-	writerfilter/util/writerfilter \
-))
+$(eval $(call gb_CppunitTest_use_rdb,writerfilter_rtftok,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,writerfilter_rtftok))
 

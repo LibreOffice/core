@@ -51,13 +51,7 @@ $(eval $(call gb_CppunitTest_use_libraries,connectivity_ado, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_components,connectivity_ado,\
-    configmgr/source/configmgr \
-    i18npool/util/i18npool \
-    connectivity/source/drivers/ado/ado \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-))
+$(eval $(call gb_CppunitTest_use_rdb,connectivity_ado,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,connectivity_ado))
 

@@ -51,13 +51,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,extensions_test_update))
 $(eval $(call gb_CppunitTest_use_ure,extensions_test_update))
 $(eval $(call gb_CppunitTest_use_vcl,extensions_test_update))
 
-$(eval $(call gb_CppunitTest_use_components,extensions_test_update,\
-    configmgr/source/configmgr \
-    extensions/source/update/feed/updatefeed \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    unoxml/source/service/unoxml \
-))
+$(eval $(call gb_CppunitTest_use_rdb,extensions_test_update,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,extensions_test_update))
 

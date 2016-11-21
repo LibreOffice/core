@@ -39,17 +39,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,cppcanvas_test))
 $(eval $(call gb_CppunitTest_use_ure,cppcanvas_test))
 $(eval $(call gb_CppunitTest_use_vcl,cppcanvas_test))
 
-$(eval $(call gb_CppunitTest_use_components,cppcanvas_test,\
-	canvas/source/cairo/cairocanvas \
-	canvas/source/factory/canvasfactory \
-    configmgr/source/configmgr \
-    i18npool/util/i18npool \
-	linguistic/source/lng \
-	package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    ucb/source/core/ucb1 \
-    unoxml/source/service/unoxml \
-))
+$(eval $(call gb_CppunitTest_use_rdb,cppcanvas_test,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,cppcanvas_test))
 

@@ -58,17 +58,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,editeng_core))
 $(eval $(call gb_CppunitTest_use_ure,editeng_core))
 $(eval $(call gb_CppunitTest_use_vcl,editeng_core))
 
-$(eval $(call gb_CppunitTest_use_components,editeng_core,\
-    configmgr/source/configmgr \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-	i18npool/source/search/i18nsearch \
-    linguistic/source/lng \
-    sfx2/util/sfx \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    unoxml/source/service/unoxml \
-))
+$(eval $(call gb_CppunitTest_use_rdb,editeng_core,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,editeng_core))
 

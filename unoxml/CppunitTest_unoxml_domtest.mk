@@ -15,16 +15,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,unoxml_domtest, \
 
 $(eval $(call gb_CppunitTest_use_sdk_api,unoxml_domtest))
 
-$(eval $(call gb_CppunitTest_use_components,unoxml_domtest,\
-    configmgr/source/configmgr \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    sfx2/util/sfx \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    unoxml/source/service/unoxml \
-))
-
 $(eval $(call gb_CppunitTest_use_externals,unoxml_domtest, \
     boost_headers \
 ))
@@ -38,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_libraries,unoxml_domtest, \
     unotest \
 ))
 
+$(eval $(call gb_CppunitTest_use_rdb,unoxml_domtest,services))
 $(eval $(call gb_CppunitTest_use_configuration,unoxml_domtest))
 $(eval $(call gb_CppunitTest_use_ure,unoxml_domtest))
 $(eval $(call gb_CppunitTest_use_vcl,unoxml_domtest))

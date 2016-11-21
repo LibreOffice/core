@@ -33,14 +33,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,sax_parser))
 $(eval $(call gb_CppunitTest_use_ure,sax_parser))
 $(eval $(call gb_CppunitTest_use_vcl,sax_parser))
 
-$(eval $(call gb_CppunitTest_use_components,sax_parser,\
-	configmgr/source/configmgr \
-	framework/util/fwk \
-	i18npool/util/i18npool \
-	sfx2/util/sfx \
-	ucb/source/core/ucb1 \
-	ucb/source/ucp/file/ucpfile1 \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sax_parser,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sax_parser))
 

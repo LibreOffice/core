@@ -44,13 +44,7 @@ $(eval $(call gb_CppunitTest_use_libraries,connectivity_mork, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_components,connectivity_mork,\
-    configmgr/source/configmgr \
-    i18npool/util/i18npool \
-    connectivity/source/drivers/mork/mork \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-))
+$(eval $(call gb_CppunitTest_use_rdb,connectivity_mork,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,connectivity_mork))
 

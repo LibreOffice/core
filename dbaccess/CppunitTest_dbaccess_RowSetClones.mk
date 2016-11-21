@@ -68,42 +68,7 @@ $(eval $(call gb_CppunitTest_use_api,dbaccess_RowSetClones,\
 $(eval $(call gb_CppunitTest_use_ure,dbaccess_RowSetClones))
 $(eval $(call gb_CppunitTest_use_vcl,dbaccess_RowSetClones))
 
-$(eval $(call gb_CppunitTest_use_components,dbaccess_RowSetClones,\
-    basic/util/sb \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-    connectivity/source/drivers/hsqldb/hsqldb \
-    connectivity/source/drivers/jdbc/jdbc \
-    connectivity/source/manager/sdbc2 \
-    dbaccess/util/dba \
-    dbaccess/util/dbu \
-    dbaccess/util/sdbt \
-    dbaccess/source/filter/xml/dbaxml \
-    filter/source/config/cache/filterconfig1 \
-    forms/util/frm \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    linguistic/source/lng \
-    oox/util/oox \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    scripting/source/basprov/basprov \
-    scripting/util/scriptframe \
-    sfx2/util/sfx \
-    sot/util/sot \
-    svl/source/fsstor/fsstorage \
-    svl/util/svl \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    ucb/source/ucp/tdoc/ucptdoc1 \
-    unotools/util/utl \
-    unoxml/source/rdf/unordf \
-    unoxml/source/service/unoxml \
-    uui/util/uui \
-    xmloff/util/xo \
-))
+$(eval $(call gb_CppunitTest_use_rdb,dbaccess_RowSetClones,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,dbaccess_RowSetClones))
 

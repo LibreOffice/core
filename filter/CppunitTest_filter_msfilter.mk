@@ -29,15 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_msfilter, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_components,filter_msfilter,\
-	configmgr/source/configmgr \
-	filter/source/config/cache/filterconfig1 \
-	framework/util/fwk \
-	framework/util/fwl \
-	i18npool/util/i18npool \
-	ucb/source/core/ucb1 \
-	ucb/source/ucp/file/ucpfile1 \
-))
+$(eval $(call gb_CppunitTest_use_rdb,filter_msfilter,services))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,filter_msfilter, \
 	filter/qa/cppunit/msfilter-test \

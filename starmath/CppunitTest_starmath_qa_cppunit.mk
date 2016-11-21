@@ -60,26 +60,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,starmath_qa_cppunit,\
 $(eval $(call gb_CppunitTest_use_ure,starmath_qa_cppunit))
 $(eval $(call gb_CppunitTest_use_vcl,starmath_qa_cppunit))
 
-$(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
-    configmgr/source/configmgr \
-    dtrans/util/mcnttype \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    toolkit/util/tk \
-    sfx2/util/sfx \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    unotools/util/utl \
-))
-
-ifeq ($(strip $(OS)),WNT)
-$(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
-    dtrans/util/ftransl \
-    dtrans/util/sysdtrans \
-))
-endif
+$(eval $(call gb_CppunitTest_use_rdb,starmath_qa_cppunit,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,starmath_qa_cppunit))
 

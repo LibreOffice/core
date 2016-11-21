@@ -62,12 +62,7 @@ $(eval $(call gb_CppunitTest_use_libraries,connectivity_commontools, \
     $(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_components,connectivity_commontools,\
-    configmgr/source/configmgr \
-    i18npool/util/i18npool \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-))
+$(eval $(call gb_CppunitTest_use_rdb,connectivity_commontools,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,connectivity_commontools))
 

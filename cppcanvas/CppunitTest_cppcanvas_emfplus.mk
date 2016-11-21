@@ -35,28 +35,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,cppcanvas_emfplus))
 $(eval $(call gb_CppunitTest_use_ure,cppcanvas_emfplus))
 $(eval $(call gb_CppunitTest_use_vcl_non_headless,cppcanvas_emfplus))
 
-$(eval $(call gb_CppunitTest_use_components,cppcanvas_emfplus,\
-	canvas/source/cairo/cairocanvas \
-	canvas/source/factory/canvasfactory \
-	cppcanvas/source/uno/mtfrenderer \
-	configmgr/source/configmgr \
-	extensions/source/scanner/scn \
-	filter/source/config/cache/filterconfig1 \
-	framework/util/fwk \
-	i18npool/util/i18npool \
-	package/util/package2 \
-	sax/source/expatwrap/expwrap \
-	sfx2/util/sfx \
-	sd/util/sd \
-	sd/util/sdd \
-	svl/source/fsstor/fsstorage \
-	toolkit/util/tk \
-	ucb/source/core/ucb1 \
-	ucb/source/ucp/file/ucpfile1 \
-	unoxml/source/service/unoxml \
-	uui/util/uui \
-	svtools/util/svt \
-))
+$(eval $(call gb_CppunitTest_use_rdb,cppcanvas_emfplus,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,cppcanvas_emfplus))
 

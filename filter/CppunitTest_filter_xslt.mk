@@ -27,13 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_xslt, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_components,filter_xslt,\
-	configmgr/source/configmgr \
-	filter/source/xsltfilter/xsltfilter \
-	i18npool/util/i18npool \
-	ucb/source/core/ucb1 \
-	ucb/source/ucp/file/ucpfile1 \
-))
+$(eval $(call gb_CppunitTest_use_rdb,filter_xslt,services))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,filter_xslt, \
 	filter/qa/cppunit/xslt-test \

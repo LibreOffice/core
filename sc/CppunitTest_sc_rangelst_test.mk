@@ -73,47 +73,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_rangelst_test,\
 $(eval $(call gb_CppunitTest_use_ure,sc_rangelst_test))
 $(eval $(call gb_CppunitTest_use_vcl,sc_rangelst_test))
 
-$(eval $(call gb_CppunitTest_use_components,sc_rangelst_test,\
-    basic/util/sb \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-    dbaccess/util/dba \
-    embeddedobj/util/embobj \
-    eventattacher/source/evtatt \
-    filter/source/config/cache/filterconfig1 \
-    forms/util/frm \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    oox/util/oox \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    scaddins/source/analysis/analysis \
-    scaddins/source/datefunc/date \
-    scripting/source/basprov/basprov \
-    scripting/util/scriptframe \
-    sc/util/sc \
-    sc/util/scd \
-    sc/util/scfilt \
-    $(call gb_Helper_optional,SCRIPTING, \
-	    sc/util/vbaobj) \
-    sfx2/util/sfx \
-    sot/util/sot \
-    svl/source/fsstor/fsstorage \
-    svl/util/svl \
-    svx/util/svx \
-    svx/util/svxcore \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    ucb/source/ucp/tdoc/ucptdoc1 \
-    unotools/util/utl \
-    unoxml/source/rdf/unordf \
-    unoxml/source/service/unoxml \
-    xmloff/util/xo \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sc_rangelst_test,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_rangelst_test))
 

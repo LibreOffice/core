@@ -38,32 +38,7 @@ $(eval $(call gb_CppunitTest_use_api,dbaccess_firebird_test,\
 $(eval $(call gb_CppunitTest_use_ure,dbaccess_firebird_test))
 $(eval $(call gb_CppunitTest_use_vcl,dbaccess_firebird_test))
 
-$(eval $(call gb_CppunitTest_use_components,dbaccess_firebird_test,\
-    basic/util/sb \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-    connectivity/source/drivers/firebird/firebird_sdbc \
-    connectivity/source/manager/sdbc2 \
-    dbaccess/util/dba \
-    dbaccess/source/filter/xml/dbaxml \
-    dbaccess/util/dbu \
-    filter/source/config/cache/filterconfig1 \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    linguistic/source/lng \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    sfx2/util/sfx \
-    svl/source/fsstor/fsstorage \
-    svl/util/svl \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    unotools/util/utl \
-    uui/util/uui \
-    xmloff/util/xo \
-))
+$(eval $(call gb_CppunitTest_use_rdb,dbaccess_firebird_test,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,dbaccess_firebird_test))
 
