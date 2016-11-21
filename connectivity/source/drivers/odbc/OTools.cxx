@@ -21,6 +21,7 @@
 #include "odbc/OFunctions.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <osl/diagnose.h>
+#include <osl/endian.h>
 #include "odbc/OConnection.hxx"
 #include <rtl/ustrbuf.hxx>
 
