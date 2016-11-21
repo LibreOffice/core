@@ -56,13 +56,6 @@ published enum GeneralFunction
     AVERAGE,
 
 
-    /**
-    *   median of all numerical values is calculated.
-    *   @since LibreOffice 5.3
-    */
-    MEDIAN,
-
-
     /** maximum value of all numerical values is calculated.
      */
     MAX,
@@ -100,8 +93,13 @@ published enum GeneralFunction
 
     /** variance is calculated based on the entire population.
      */
-    VARP
+    VARP,
 
+    /**
+    *   median of all numerical values is calculated.
+    *   @since LibreOffice 5.3
+    */
+    MEDIAN
 };
 
 
