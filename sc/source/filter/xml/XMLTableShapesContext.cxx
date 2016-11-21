@@ -21,7 +21,6 @@
 #include "XMLTableShapeImportHelper.hxx"
 #include "xmlimprt.hxx"
 #include "document.hxx"
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 using namespace com::sun::star;
 

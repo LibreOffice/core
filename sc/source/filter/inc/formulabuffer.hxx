@@ -18,9 +18,6 @@
 #include "workbookhelper.hxx"
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <map>
 #include <vector>
 #include "worksheethelper.hxx"

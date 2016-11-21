@@ -40,12 +40,8 @@
 #include <svx/dataaccessdescriptor.hxx>
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
-#include <com/sun/star/table/TableSortField.hpp>
-#include <com/sun/star/table/TableSortFieldType.hpp>
-#include <com/sun/star/sheet/XSubTotalField.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
-#include <com/sun/star/table/TableOrientation.hpp>
 #include <comphelper/extract.hxx>
 
 #include <map>

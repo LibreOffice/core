@@ -22,11 +22,6 @@
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
-#include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
-#include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
-#include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
-#include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 #include <tools/datetime.hxx>
 #include "ftools.hxx"
 #include "xladdress.hxx"
