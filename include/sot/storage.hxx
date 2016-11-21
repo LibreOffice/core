@@ -112,7 +112,7 @@ public:
                                 m_nError = nErrorCode;
                         }
 
-    void                SignAsRoot( bool b = true ) { m_bIsRoot = b; }
+    void                SignAsRoot( bool b ) { m_bIsRoot = b; }
 
                         // own data sector
     void                SetClass( const SvGlobalName & rClass,

@@ -30,7 +30,7 @@ class SVL_DLLPUBLIC CntUnencodedStringItem: public SfxPoolItem
 
 public:
 
-    CntUnencodedStringItem(sal_uInt16 which = 0): SfxPoolItem(which)
+    CntUnencodedStringItem(sal_uInt16 which): SfxPoolItem(which)
     {}
 
     CntUnencodedStringItem(sal_uInt16 which, const OUString & rTheValue):
