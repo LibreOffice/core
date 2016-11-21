@@ -3777,10 +3777,11 @@ bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword, bool /*bApi*/ )
     {
         // sheet protection
 
-        ScTableProtection aProtection;
-        aProtection.setProtected(true);
-        aProtection.setPassword(rPassword);
-        rDoc.SetTabProtection(nTab, &aProtection);
+        const ScTableProtection* pOldProtection = rDoc.GetTabProtection(nTab);
+        ::std::unique_ptr<ScTableProtection> pNewProtection(pOldProtection ? new ScTableProtection(*pOldProtection) : new ScTableProtection());
+        pNewProtection->setProtected(true);
+        pNewProtection->setPassword(rPassword);
+        rDoc.SetTabProtection(nTab, pNewProtection.get());
         if (rDoc.IsUndoEnabled())
         {
             ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
@@ -3859,7 +3860,9 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
             return false;
         }
 
-        rDoc.SetTabProtection(nTab, nullptr);
+        ::std::unique_ptr<ScTableProtection> pNewProtection(new ScTableProtection(*pTabProtect));
+        pNewProtection->setProtected(false);
+        rDoc.SetTabProtection(nTab, pNewProtection.get());
         if (rDoc.IsUndoEnabled())
         {
             pProtectCopy->setProtected(false);
