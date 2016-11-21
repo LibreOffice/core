@@ -34,8 +34,7 @@ using namespace ::cppu;
 
 MacabCatalog::MacabCatalog(MacabConnection* _pCon)
         : connectivity::sdbcx::OCatalog(_pCon),
-          m_pConnection(_pCon),
-          m_xMetaData(m_pConnection->getMetaData())
+          m_pConnection(_pCon)
 {
 }
 

@@ -31,7 +31,6 @@ namespace connectivity
         class MacabCatalog : public connectivity::sdbcx::OCatalog
         {
             MacabConnection* m_pConnection;     // used to get the metadata
-            css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 
         public:
             explicit MacabCatalog(MacabConnection* _pCon);
