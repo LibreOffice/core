@@ -4485,7 +4485,7 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
     // but its definitely the case for paragraphs that EndPos > StartPos
     // for a well formed paragraph as those always have a paragraph
     // <cr> in them
-    if (&rDesc == pPap && rDesc.bRealLineEnd)
+    if (&rDesc == m_pPap && rDesc.bRealLineEnd)
     {
         if (rDesc.nStartPos == rDesc.nEndPos && rDesc.nEndPos != WW8_CP_MAX)
         {
@@ -4509,23 +4509,23 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
     if (GetDoingDrawTextBox())
         return;
 
-    if ( (&rDesc == pPap) && rDesc.bRealLineEnd )
+    if ( (&rDesc == m_pPap) && rDesc.bRealLineEnd )
     {
-        if ( pPap->nEndPos != WW8_CP_MAX )    // Para adjust
+        if ( m_pPap->nEndPos != WW8_CP_MAX )    // Para adjust
         {
-            nLineEnd = pPap->nEndPos;// nLineEnd points *after* the <CR>
-            pPap->nEndPos--;        // shorten paragraph end by one character
+            m_nLineEnd = m_pPap->nEndPos;// nLineEnd points *after* the <CR>
+            m_pPap->nEndPos--;        // shorten paragraph end by one character
 
             // Is there already a sep end, which points to the current paragraph end?
             // Then we also must shorten by one character
-            if( pSep->nEndPos == nLineEnd )
-                pSep->nEndPos--;
+            if( m_pSep->nEndPos == m_nLineEnd )
+                m_pSep->nEndPos--;
         }
     }
-    else if (&rDesc == pSep)
+    else if (&rDesc == m_pSep)
     {
         // Sep Adjust if end Char-Attr == paragraph end ...
-        if( (rDesc.nEndPos == nLineEnd) && (rDesc.nEndPos > rDesc.nStartPos) )
+        if( (rDesc.nEndPos == m_nLineEnd) && (rDesc.nEndPos > rDesc.nStartPos) )
             rDesc.nEndPos--;            // ... then shorten by one character
     }
 }
@@ -4588,13 +4588,13 @@ sal_uInt16 WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
 {
     sal_uInt16 nId = 0;        // Id = 0 for empty attributes
 
-    if (p == pField)
+    if (p == m_pField)
         nId = eFLD;
-    else if (p == pFootnote)
+    else if (p == m_pFootnote)
         nId = eFTN;
-    else if (p == pEdn)
+    else if (p == m_pEdn)
         nId = eEDN;
-    else if (p == pAnd)
+    else if (p == m_pAnd)
         nId = eAND;
     else if (p->nSprmsLen >= maSprmParser.MinSprmLen())
         nId = maSprmParser.GetSprmId(p->pMemPos);
@@ -4607,125 +4607,125 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
     : maSprmParser(*pBase->m_pWw8Fib),
     mbDoingDrawTextBox(bDoingDrawTextBox)
 {
-    pWwFib = pBase->m_pWw8Fib;
+    m_pWwFib = pBase->m_pWw8Fib;
 
-    memset( aD, 0, sizeof( aD ) );
-    nLineEnd = WW8_CP_MAX;
-    nManType = nType;
+    memset( m_aD, 0, sizeof( m_aD ) );
+    m_nLineEnd = WW8_CP_MAX;
+    m_nManType = nType;
 
     if( MAN_MAINTEXT == nType )
     {
         // search order of the attributes
-        nPLCF = MAN_PLCF_COUNT;
-        pField = &aD[0];
-        pBkm = &aD[1];
-        pEdn = &aD[2];
-        pFootnote = &aD[3];
-        pAnd = &aD[4];
+        m_nPLCF = MAN_PLCF_COUNT;
+        m_pField = &m_aD[0];
+        m_pBkm = &m_aD[1];
+        m_pEdn = &m_aD[2];
+        m_pFootnote = &m_aD[3];
+        m_pAnd = &m_aD[4];
 
-        pPcd = ( pBase->m_pPLCFx_PCD ) ? &aD[5] : nullptr;
+        m_pPcd = ( pBase->m_pPLCFx_PCD ) ? &m_aD[5] : nullptr;
         //pPcdA index == pPcd index + 1
-        pPcdA = ( pBase->m_pPLCFx_PCDAttrs ) ? &aD[6] : nullptr;
+        m_pPcdA = ( pBase->m_pPLCFx_PCDAttrs ) ? &m_aD[6] : nullptr;
 
-        pChp = &aD[7];
-        pPap = &aD[8];
-        pSep = &aD[9];
-        pAtnBkm = &aD[10];
-        pFactoidBkm = &aD[11];
+        m_pChp = &m_aD[7];
+        m_pPap = &m_aD[8];
+        m_pSep = &m_aD[9];
+        m_pAtnBkm = &m_aD[10];
+        m_pFactoidBkm = &m_aD[11];
 
-        pSep->pPLCFx = pBase->m_pSepPLCF;
-        pFootnote->pPLCFx = pBase->m_pFootnotePLCF;
-        pEdn->pPLCFx = pBase->m_pEdnPLCF;
-        pBkm->pPLCFx = pBase->m_pBook;
-        pAnd->pPLCFx = pBase->m_pAndPLCF;
-        pAtnBkm->pPLCFx = pBase->m_pAtnBook;
-        pFactoidBkm->pPLCFx = pBase->m_pFactoidBook;
+        m_pSep->pPLCFx = pBase->m_pSepPLCF;
+        m_pFootnote->pPLCFx = pBase->m_pFootnotePLCF;
+        m_pEdn->pPLCFx = pBase->m_pEdnPLCF;
+        m_pBkm->pPLCFx = pBase->m_pBook;
+        m_pAnd->pPLCFx = pBase->m_pAndPLCF;
+        m_pAtnBkm->pPLCFx = pBase->m_pAtnBook;
+        m_pFactoidBkm->pPLCFx = pBase->m_pFactoidBook;
 
     }
     else
     {
         // search order of the attributes
-        nPLCF = 7;
-        pField = &aD[0];
-        pBkm = ( pBase->m_pBook ) ? &aD[1] : nullptr;
+        m_nPLCF = 7;
+        m_pField = &m_aD[0];
+        m_pBkm = ( pBase->m_pBook ) ? &m_aD[1] : nullptr;
 
-        pPcd = ( pBase->m_pPLCFx_PCD ) ? &aD[2] : nullptr;
+        m_pPcd = ( pBase->m_pPLCFx_PCD ) ? &m_aD[2] : nullptr;
         //pPcdA index == pPcd index + 1
-        pPcdA= ( pBase->m_pPLCFx_PCDAttrs ) ? &aD[3] : nullptr;
+        m_pPcdA= ( pBase->m_pPLCFx_PCDAttrs ) ? &m_aD[3] : nullptr;
 
-        pChp = &aD[4];
-        pPap = &aD[5];
-        pSep = &aD[6]; // Dummy
+        m_pChp = &m_aD[4];
+        m_pPap = &m_aD[5];
+        m_pSep = &m_aD[6]; // Dummy
 
-        pAnd = pAtnBkm = pFactoidBkm = pFootnote = pEdn = nullptr;     // not used at SpezText
+        m_pAnd = m_pAtnBkm = m_pFactoidBkm = m_pFootnote = m_pEdn = nullptr;     // not used at SpezText
     }
 
-    pChp->pPLCFx = pBase->m_pChpPLCF;
-    pPap->pPLCFx = pBase->m_pPapPLCF;
-    if( pPcd )
-        pPcd->pPLCFx = pBase->m_pPLCFx_PCD;
-    if( pPcdA )
-        pPcdA->pPLCFx= pBase->m_pPLCFx_PCDAttrs;
-    if( pBkm )
-        pBkm->pPLCFx = pBase->m_pBook;
+    m_pChp->pPLCFx = pBase->m_pChpPLCF;
+    m_pPap->pPLCFx = pBase->m_pPapPLCF;
+    if( m_pPcd )
+        m_pPcd->pPLCFx = pBase->m_pPLCFx_PCD;
+    if( m_pPcdA )
+        m_pPcdA->pPLCFx= pBase->m_pPLCFx_PCDAttrs;
+    if( m_pBkm )
+        m_pBkm->pPLCFx = pBase->m_pBook;
 
-    pMagicTables = pBase->m_pMagicTables;
-    pSubdocs = pBase->m_pSubdocs;
-    pExtendedAtrds = pBase->m_pExtendedAtrds;
+    m_pMagicTables = pBase->m_pMagicTables;
+    m_pSubdocs = pBase->m_pSubdocs;
+    m_pExtendedAtrds = pBase->m_pExtendedAtrds;
 
     switch( nType )                 // field initialization
     {
         case MAN_HDFT:
-            pField->pPLCFx = pBase->m_pFieldHdFtPLCF;
-            pFdoa = pBase->m_pHdFtFdoa;
-            pTxbx = pBase->m_pHdFtTxbx;
-            pTxbxBkd = pBase->m_pHdFtTxbxBkd;
+            m_pField->pPLCFx = pBase->m_pFieldHdFtPLCF;
+            m_pFdoa = pBase->m_pHdFtFdoa;
+            m_pTxbx = pBase->m_pHdFtTxbx;
+            m_pTxbxBkd = pBase->m_pHdFtTxbxBkd;
             break;
         case MAN_FTN:
-            pField->pPLCFx = pBase->m_pFieldFootnotePLCF;
-            pFdoa = pTxbx = pTxbxBkd = nullptr;
+            m_pField->pPLCFx = pBase->m_pFieldFootnotePLCF;
+            m_pFdoa = m_pTxbx = m_pTxbxBkd = nullptr;
             break;
         case MAN_EDN:
-            pField->pPLCFx = pBase->m_pFieldEdnPLCF;
-            pFdoa = pTxbx = pTxbxBkd = nullptr;
+            m_pField->pPLCFx = pBase->m_pFieldEdnPLCF;
+            m_pFdoa = m_pTxbx = m_pTxbxBkd = nullptr;
             break;
         case MAN_AND:
-            pField->pPLCFx = pBase->m_pFieldAndPLCF;
-            pFdoa = pTxbx = pTxbxBkd = nullptr;
+            m_pField->pPLCFx = pBase->m_pFieldAndPLCF;
+            m_pFdoa = m_pTxbx = m_pTxbxBkd = nullptr;
             break;
         case MAN_TXBX:
-            pField->pPLCFx = pBase->m_pFieldTxbxPLCF;
-            pTxbx = pBase->m_pMainTxbx;
-            pTxbxBkd = pBase->m_pMainTxbxBkd;
-            pFdoa = nullptr;
+            m_pField->pPLCFx = pBase->m_pFieldTxbxPLCF;
+            m_pTxbx = pBase->m_pMainTxbx;
+            m_pTxbxBkd = pBase->m_pMainTxbxBkd;
+            m_pFdoa = nullptr;
             break;
         case MAN_TXBX_HDFT:
-            pField->pPLCFx = pBase->m_pFieldTxbxHdFtPLCF;
-            pTxbx = pBase->m_pHdFtTxbx;
-            pTxbxBkd = pBase->m_pHdFtTxbxBkd;
-            pFdoa = nullptr;
+            m_pField->pPLCFx = pBase->m_pFieldTxbxHdFtPLCF;
+            m_pTxbx = pBase->m_pHdFtTxbx;
+            m_pTxbxBkd = pBase->m_pHdFtTxbxBkd;
+            m_pFdoa = nullptr;
             break;
         default:
-            pField->pPLCFx = pBase->m_pFieldPLCF;
-            pFdoa = pBase->m_pMainFdoa;
-            pTxbx = pBase->m_pMainTxbx;
-            pTxbxBkd = pBase->m_pMainTxbxBkd;
+            m_pField->pPLCFx = pBase->m_pFieldPLCF;
+            m_pFdoa = pBase->m_pMainFdoa;
+            m_pTxbx = pBase->m_pMainTxbx;
+            m_pTxbxBkd = pBase->m_pMainTxbxBkd;
             break;
     }
 
     WW8_CP cp = 0;
-    pWwFib->GetBaseCp(nType, &cp); //TODO: check return value
-    nCpO = cp;
+    m_pWwFib->GetBaseCp(nType, &cp); //TODO: check return value
+    m_nCpO = cp;
 
-    if( nStartCp || nCpO )
+    if( nStartCp || m_nCpO )
         SeekPos( nStartCp );    // adjust PLCFe at text StartPos
 
     // initialization to the member vars Low-Level
     GetChpPLCF()->ResetAttrStartEnd();
     GetPapPLCF()->ResetAttrStartEnd();
-    for( sal_uInt16 i=0; i < nPLCF; ++i)
+    for( sal_uInt16 i=0; i < m_nPLCF; ++i)
     {
-        WW8PLCFxDesc* p = &aD[i];
+        WW8PLCFxDesc* p = &m_aD[i];
 
         /*
         ##516##,##517##
@@ -4734,22 +4734,22 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         piecetable changes, and piecetable properties, otherwise a piece
         change that happens in a subdocument is lost.
         */
-        p->nCpOfs = ( p == pChp || p == pPap || p == pBkm || p == pPcd ||
-            p == pPcdA ) ? nCpO : 0;
+        p->nCpOfs = ( p == m_pChp || p == m_pPap || p == m_pBkm || p == m_pPcd ||
+            p == m_pPcdA ) ? m_nCpO : 0;
 
         p->nCp2OrIdx = 0;
         p->bFirstSprm = false;
         p->pIdStack = nullptr;
 
-        if ((p == pChp) || (p == pPap))
+        if ((p == m_pChp) || (p == m_pPap))
             p->nStartPos = p->nEndPos = nStartCp;
         else
             p->nStartPos = p->nEndPos = WW8_CP_MAX;
     }
 
     // initialization to the member vars High-Level
-    for( sal_uInt16 i=0; i<nPLCF; ++i){
-        WW8PLCFxDesc* p = &aD[i];
+    for( sal_uInt16 i=0; i<m_nPLCF; ++i){
+        WW8PLCFxDesc* p = &m_aD[i];
 
         if( !p->pPLCFx )
         {
@@ -4761,7 +4761,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         {
             // Careful: nEndPos must be
             p->pIdStack = new std::stack<sal_uInt16>;
-            if ((p == pChp) || (p == pPap))
+            if ((p == m_pChp) || (p == m_pPap))
             {
                 WW8_CP nTemp = p->nEndPos+p->nCpOfs;
                 p->pMemPos = nullptr;
@@ -4782,8 +4782,8 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
 
 WW8PLCFMan::~WW8PLCFMan()
 {
-    for( sal_uInt16 i=0; i<nPLCF; i++)
-        delete aD[i].pIdStack;
+    for( sal_uInt16 i=0; i<m_nPLCF; i++)
+        delete m_aD[i].pIdStack;
 }
 
 // 0. which attr class,
@@ -4791,15 +4791,15 @@ WW8PLCFMan::~WW8PLCFMan()
 // 2. CP, where is next attr change
 sal_uInt16 WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
 {
-    OSL_ENSURE(nPLCF,"What the hell");
+    OSL_ENSURE(m_nPLCF,"What the hell");
     long nNext = LONG_MAX;  // search order:
-    sal_uInt16 nNextIdx = nPLCF;// first ending found ( CHP, PAP, ( SEP ) ),
+    sal_uInt16 nNextIdx = m_nPLCF;// first ending found ( CHP, PAP, ( SEP ) ),
     bool bStart = true;     // now find beginnings ( ( SEP ), PAP, CHP )
     const WW8PLCFxDesc* pD;
-    for (sal_uInt16 i=0; i < nPLCF; ++i)
+    for (sal_uInt16 i=0; i < m_nPLCF; ++i)
     {
-        pD = &aD[i];
-        if (pD != pPcdA)
+        pD = &m_aD[i];
+        if (pD != m_pPcdA)
         {
             if( (pD->nEndPos < nNext) && (pD->nStartPos == WW8_CP_MAX) )
             {
@@ -4810,10 +4810,10 @@ sal_uInt16 WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
             }
         }
     }
-    for (sal_uInt16 i=nPLCF; i > 0; --i)
+    for (sal_uInt16 i=m_nPLCF; i > 0; --i)
     {
-        pD = &aD[i-1];
-        if (pD != pPcdA)
+        pD = &m_aD[i-1];
+        if (pD != m_pPcdA)
         {
             if( pD->nStartPos < nNext )
             {
@@ -4840,39 +4840,39 @@ WW8_CP WW8PLCFMan::Where() const
 
 void WW8PLCFMan::SeekPos( long nNewCp )
 {
-    pChp->pPLCFx->SeekPos( nNewCp + nCpO ); // create new attr
-    pPap->pPLCFx->SeekPos( nNewCp + nCpO );
-    pField->pPLCFx->SeekPos( nNewCp );
-    if( pPcd )
-        pPcd->pPLCFx->SeekPos( nNewCp + nCpO );
-    if( pBkm )
-        pBkm->pPLCFx->SeekPos( nNewCp + nCpO );
+    m_pChp->pPLCFx->SeekPos( nNewCp + m_nCpO ); // create new attr
+    m_pPap->pPLCFx->SeekPos( nNewCp + m_nCpO );
+    m_pField->pPLCFx->SeekPos( nNewCp );
+    if( m_pPcd )
+        m_pPcd->pPLCFx->SeekPos( nNewCp + m_nCpO );
+    if( m_pBkm )
+        m_pBkm->pPLCFx->SeekPos( nNewCp + m_nCpO );
 }
 
 void WW8PLCFMan::SaveAllPLCFx( WW8PLCFxSaveAll& rSave ) const
 {
     sal_uInt16 n=0;
-    if( pPcd )
-        pPcd->Save(  rSave.aS[n++] );
-    if( pPcdA )
-        pPcdA->Save( rSave.aS[n++] );
+    if( m_pPcd )
+        m_pPcd->Save(  rSave.aS[n++] );
+    if( m_pPcdA )
+        m_pPcdA->Save( rSave.aS[n++] );
 
-    for(sal_uInt16 i=0; i<nPLCF; ++i)
-        if( pPcd != &aD[i] && pPcdA != &aD[i] )
-            aD[i].Save( rSave.aS[n++] );
+    for(sal_uInt16 i=0; i<m_nPLCF; ++i)
+        if( m_pPcd != &m_aD[i] && m_pPcdA != &m_aD[i] )
+            m_aD[i].Save( rSave.aS[n++] );
 }
 
 void WW8PLCFMan::RestoreAllPLCFx( const WW8PLCFxSaveAll& rSave )
 {
     sal_uInt16 n=0;
-    if( pPcd )
-        pPcd->Restore(  rSave.aS[n++] );
-    if( pPcdA )
-        pPcdA->Restore( rSave.aS[n++] );
+    if( m_pPcd )
+        m_pPcd->Restore(  rSave.aS[n++] );
+    if( m_pPcdA )
+        m_pPcdA->Restore( rSave.aS[n++] );
 
-    for(sal_uInt16 i=0; i<nPLCF; ++i)
-        if( pPcd != &aD[i] && pPcdA != &aD[i] )
-            aD[i].Restore( rSave.aS[n++] );
+    for(sal_uInt16 i=0; i<m_nPLCF; ++i)
+        if( m_pPcd != &m_aD[i] && m_pPcdA != &m_aD[i] )
+            m_aD[i].Restore( rSave.aS[n++] );
 }
 
 void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
@@ -4883,20 +4883,20 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
 
     pRes->nMemLen = 0;
 
-    const WW8PLCFxDesc* p = &aD[nIdx];
+    const WW8PLCFxDesc* p = &m_aD[nIdx];
 
     // first Sprm in a Group
     if( p->bFirstSprm )
     {
-        if( p == pPap )
+        if( p == m_pPap )
             pRes->nFlags |= MAN_MASK_NEW_PAP;
-        else if( p == pSep )
+        else if( p == m_pSep )
             pRes->nFlags |= MAN_MASK_NEW_SEP;
     }
     pRes->pMemPos = p->pMemPos;
     pRes->nSprmId = GetId(p);
     pRes->nCp2OrIdx = p->nCp2OrIdx;
-    if ((p == pFootnote) || (p == pEdn) || (p == pAnd))
+    if ((p == m_pFootnote) || (p == m_pEdn) || (p == m_pAnd))
         pRes->nMemLen = p->nSprmsLen;
     else if (p->nSprmsLen >= maSprmParser.MinSprmLen()) //normal
     {
@@ -4909,7 +4909,7 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 {
     memset( pRes, 0, sizeof( WW8PLCFManResult ) );
 
-    const WW8PLCFxDesc* p = &aD[nIdx];
+    const WW8PLCFxDesc* p = &m_aD[nIdx];
 
     if (!(p->pIdStack->empty()))
         pRes->nSprmId = p->pIdStack->top();       // get end position
@@ -4922,27 +4922,27 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 
 void WW8PLCFMan::GetNoSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
 {
-    const WW8PLCFxDesc* p = &aD[nIdx];
+    const WW8PLCFxDesc* p = &m_aD[nIdx];
 
     pRes->nCpPos = p->nStartPos;
     pRes->nMemLen = p->nSprmsLen;
     pRes->nCp2OrIdx = p->nCp2OrIdx;
 
-    if( p == pField )
+    if( p == m_pField )
         pRes->nSprmId = eFLD;
-    else if( p == pFootnote )
+    else if( p == m_pFootnote )
         pRes->nSprmId = eFTN;
-    else if( p == pEdn )
+    else if( p == m_pEdn )
         pRes->nSprmId = eEDN;
-    else if( p == pBkm )
+    else if( p == m_pBkm )
         pRes->nSprmId = eBKN;
-    else if (p == pAtnBkm)
+    else if (p == m_pAtnBkm)
         pRes->nSprmId = eATNBKN;
-    else if (p == pFactoidBkm)
+    else if (p == m_pFactoidBkm)
         pRes->nSprmId = eFACTOIDBKN;
-    else if( p == pAnd )
+    else if( p == m_pAnd )
         pRes->nSprmId = eAND;
-    else if( p == pPcd )
+    else if( p == m_pPcd )
     {
         //We slave the piece table attributes to the piece table, the piece
         //table attribute iterator contains the sprms for this piece.
@@ -4956,13 +4956,13 @@ void WW8PLCFMan::GetNoSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 {
     pRes->nMemLen = -1;     // end tag
 
-    if( &aD[nIdx] == pBkm )
+    if( &m_aD[nIdx] == m_pBkm )
         pRes->nSprmId = eBKN;
-    else if (&aD[nIdx] == pAtnBkm)
+    else if (&m_aD[nIdx] == m_pAtnBkm)
         pRes->nSprmId = eATNBKN;
-    else if (&aD[nIdx] == pFactoidBkm)
+    else if (&m_aD[nIdx] == m_pFactoidBkm)
         pRes->nSprmId = eFACTOIDBKN;
-    else if( &aD[nIdx] == pPcd )
+    else if( &m_aD[nIdx] == m_pPcd )
     {
         //We slave the piece table attributes to the piece table, the piece
         //table attribute iterator contains the sprms for this piece.
@@ -4974,9 +4974,9 @@ void WW8PLCFMan::GetNoSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 
 void WW8PLCFMan::TransferOpenSprms(std::stack<sal_uInt16> &rStack)
 {
-    for (sal_uInt16 i = 0; i < nPLCF; ++i)
+    for (sal_uInt16 i = 0; i < m_nPLCF; ++i)
     {
-        WW8PLCFxDesc* p = &aD[i];
+        WW8PLCFxDesc* p = &m_aD[i];
         if (!p || !p->pIdStack)
             continue;
         while (!p->pIdStack->empty())
@@ -4989,7 +4989,7 @@ void WW8PLCFMan::TransferOpenSprms(std::stack<sal_uInt16> &rStack)
 
 void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
 {
-    WW8PLCFxDesc* p = &aD[nIdx];    // determine sprm class(!)
+    WW8PLCFxDesc* p = &m_aD[nIdx];    // determine sprm class(!)
 
     p->bFirstSprm = false;
     if( bStart )
@@ -5031,7 +5031,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
             p->pIdStack->pop();
         if (p->pIdStack->empty())
         {
-            if ( (p == pChp) || (p == pPap) )
+            if ( (p == m_pChp) || (p == m_pPap) )
             {
                 p->pMemPos = nullptr;
                 p->nSprmsLen = 0;
@@ -5048,7 +5048,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                     p->nEndPos = WW8_CP_MAX;
                     p->pPLCFx->SetDirty(true);
                 }
-                if (!p->pPLCFx->GetDirty() || pPcd)
+                if (!p->pPLCFx->GetDirty() || m_pPcd)
                     GetNewSprms( *p );
                 p->pPLCFx->SetDirty(false);
 
@@ -5075,12 +5075,12 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 position which will force them to be applied directly after
                 the pap and chps.
                 */
-                if (pPcd && ((p->nStartPos > pPcd->nStartPos) ||
-                    (pPcd->nStartPos == WW8_CP_MAX)) &&
-                    (pPcd->nEndPos != p->nStartPos))
+                if (m_pPcd && ((p->nStartPos > m_pPcd->nStartPos) ||
+                    (m_pPcd->nStartPos == WW8_CP_MAX)) &&
+                    (m_pPcd->nEndPos != p->nStartPos))
                 {
-                    pPcd->nEndPos = p->nStartPos;
-                    static_cast<WW8PLCFx_PCD *>(pPcd->pPLCFx)->SetClipStart(
+                    m_pPcd->nEndPos = p->nStartPos;
+                    static_cast<WW8PLCFx_PCD *>(m_pPcd->pPLCFx)->SetClipStart(
                         p->nStartPos);
                 }
 
@@ -5106,18 +5106,18 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
     structures, but act together as one logical one. The attributes only go
     to the next entry when the piece changes
     */
-    WW8PLCFxDesc* p = &aD[nIdx];
+    WW8PLCFxDesc* p = &m_aD[nIdx];
 
-    if( p == pPcd )
+    if( p == m_pPcd )
     {
         AdvSprm(nIdx+1,bStart);
         if( bStart )
-            p->nStartPos = aD[nIdx+1].nStartPos;
+            p->nStartPos = m_aD[nIdx+1].nStartPos;
         else
         {
-            if (aD[nIdx+1].pIdStack->empty())
+            if (m_aD[nIdx+1].pIdStack->empty())
             {
-                WW8PLCFx_PCD *pTemp = static_cast<WW8PLCFx_PCD*>(pPcd->pPLCFx);
+                WW8PLCFx_PCD *pTemp = static_cast<WW8PLCFx_PCD*>(m_pPcd->pPLCFx);
                 /*
                 #i2325#
                 As per normal, go on to the next set of properties, i.e. we
@@ -5129,7 +5129,7 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
                     p->pPLCFx->advance();
                 p->pMemPos = nullptr;
                 p->nSprmsLen = 0;
-                GetNewSprms( aD[nIdx+1] );
+                GetNewSprms( m_aD[nIdx+1] );
                 GetNewNoSprms( *p );
                 if (pTemp->GetClipStart() != -1)
                 {
@@ -5158,9 +5158,9 @@ void WW8PLCFMan::advance()
 {
     bool bStart;
     const sal_uInt16 nIdx = WhereIdx(&bStart);
-    if (nIdx < nPLCF)
+    if (nIdx < m_nPLCF)
     {
-        WW8PLCFxDesc* p = &aD[nIdx];
+        WW8PLCFxDesc* p = &m_aD[nIdx];
 
         p->bFirstSprm = true;                       // Default
 
@@ -5180,13 +5180,13 @@ bool WW8PLCFMan::Get(WW8PLCFManResult* pRes) const
     bool bStart;
     const sal_uInt16 nIdx = WhereIdx(&bStart);
 
-    if( nIdx >= nPLCF )
+    if( nIdx >= m_nPLCF )
     {
         OSL_ENSURE( false, "Position not found" );
         return true;
     }
 
-    if( aD[nIdx].pPLCFx->IsSprm() )
+    if( m_aD[nIdx].pPLCFx->IsSprm() )
     {
         if( bStart )
         {
@@ -5216,8 +5216,8 @@ bool WW8PLCFMan::Get(WW8PLCFManResult* pRes) const
 
 sal_uInt16 WW8PLCFMan::GetColl() const
 {
-    if( pPap->pPLCFx )
-        return  pPap->pPLCFx->GetIstd();
+    if( m_pPap->pPLCFx )
+        return  m_pPap->pPLCFx->GetIstd();
     else
     {
         OSL_ENSURE( false, "GetColl without PLCF_Pap" );
@@ -5227,23 +5227,23 @@ sal_uInt16 WW8PLCFMan::GetColl() const
 
 WW8PLCFx_FLD* WW8PLCFMan::GetField() const
 {
-    return static_cast<WW8PLCFx_FLD*>(pField->pPLCFx);
+    return static_cast<WW8PLCFx_FLD*>(m_pField->pPLCFx);
 }
 
 const sal_uInt8* WW8PLCFMan::HasParaSprm( sal_uInt16 nId ) const
 {
-    return static_cast<WW8PLCFx_Cp_FKP*>(pPap->pPLCFx)->HasSprm( nId );
+    return static_cast<WW8PLCFx_Cp_FKP*>(m_pPap->pPLCFx)->HasSprm( nId );
 }
 
 const sal_uInt8* WW8PLCFMan::HasCharSprm( sal_uInt16 nId ) const
 {
-    return static_cast<WW8PLCFx_Cp_FKP*>(pChp->pPLCFx)->HasSprm( nId );
+    return static_cast<WW8PLCFx_Cp_FKP*>(m_pChp->pPLCFx)->HasSprm( nId );
 }
 
 void WW8PLCFMan::HasCharSprm(sal_uInt16 nId,
     std::vector<const sal_uInt8 *> &rResult) const
 {
-    static_cast<WW8PLCFx_Cp_FKP*>(pChp->pPLCFx)->HasSprm(nId, rResult);
+    static_cast<WW8PLCFx_Cp_FKP*>(m_pChp->pPLCFx)->HasSprm(nId, rResult);
 }
 
 void WW8PLCFx::Save( WW8PLCFxSave1& rSave ) const
