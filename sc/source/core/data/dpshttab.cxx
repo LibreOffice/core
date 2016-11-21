@@ -29,7 +29,6 @@
 #include "rangenam.hxx"
 #include "queryentry.hxx"
 
-#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <osl/diagnose.h>
 
 #include <vector>

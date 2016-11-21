@@ -24,7 +24,6 @@
 #include <svl/zformat.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <stdlib.h>
 #include <unotools/transliterationwrapper.hxx>
 

@@ -18,9 +18,6 @@
  */
 
 #include <com/sun/star/util/CellProtection.hpp>
-#include <com/sun/star/util/XProtectable.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>

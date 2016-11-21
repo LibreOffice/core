@@ -34,7 +34,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
-#include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/transliterationwrapper.hxx>

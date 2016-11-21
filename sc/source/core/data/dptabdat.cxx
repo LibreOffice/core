@@ -31,7 +31,6 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
 
-#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 using namespace ::com::sun::star;
 using ::std::vector;

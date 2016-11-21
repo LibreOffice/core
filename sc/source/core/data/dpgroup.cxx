@@ -33,8 +33,6 @@
 #include <rtl/math.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
-#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
-#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
 #include <unordered_map>
 #include <unordered_set>

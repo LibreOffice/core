@@ -48,7 +48,6 @@
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
-#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 using namespace com::sun::star;
 using ::std::vector;
