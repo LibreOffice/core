@@ -82,13 +82,13 @@ namespace sdr
         void TextProperties::ItemSetChanged(const SfxItemSet& rSet)
         {
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
-            const svx::ITextProvider& rTextProvider(getTextProvider());
-            sal_Int32 nText = rTextProvider.getTextCount();
 
             // #i101556# ItemSet has changed -> new version
             maVersion++;
 
-            while( --nText >= 0 )
+            const svx::ITextProvider& rTextProvider(getTextProvider());
+            sal_Int32 nText = rTextProvider.getTextCount();
+            while (nText--)
             {
                 SdrText* pText = rTextProvider.getText( nText );
 
@@ -173,7 +173,7 @@ namespace sdr
 
                 const svx::ITextProvider& rTextProvider(getTextProvider());
                 sal_Int32 nCount = rTextProvider.getTextCount();
-                while( nCount-- )
+                while (nCount--)
                 {
                     SdrText* pText = rTextProvider.getText( nCount );
                     OutlinerParaObject* pParaObj = pText->GetOutlinerParaObject();
@@ -246,8 +246,7 @@ namespace sdr
 
                 const svx::ITextProvider& rTextProvider(getTextProvider());
                 sal_Int32 nText = rTextProvider.getTextCount();
-
-                while( --nText >= 0 )
+                while (nText--)
                 {
                     SdrText* pText = rTextProvider.getText( nText );
 
@@ -408,8 +407,7 @@ namespace sdr
                 Outliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, *rObj.GetModel());
                 const svx::ITextProvider& rTextProvider(getTextProvider());
                 sal_Int32 nText = rTextProvider.getTextCount();
-
-                while( --nText >= 0 )
+                while (nText--)
                 {
                     SdrText* pText = rTextProvider.getText( nText );
 
@@ -564,7 +562,7 @@ namespace sdr
                         rObj.SetPortionInfoChecked(false);
 
                         sal_Int32 nText = rTextProvider.getTextCount();
-                        while( --nText > 0 )
+                        while (nText--)
                         {
                             OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
                             if( pParaObj )
@@ -587,7 +585,7 @@ namespace sdr
                     {
                         rObj.SetPortionInfoChecked(false);
                         sal_Int32 nText = rTextProvider.getTextCount();
-                        while( --nText > 0 )
+                        while (nText--)
                         {
                             OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
                             if( pParaObj )
@@ -609,7 +607,7 @@ namespace sdr
                         if(aOldName != aNewName)
                         {
                             sal_Int32 nText = rTextProvider.getTextCount();
-                            while( --nText > 0 )
+                            while (nText--)
                             {
                                 OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
                                 if( pParaObj )
