@@ -1439,7 +1439,7 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
             nRes |= ScRefFlags::VALID;
     }
     else
-        nRes = nBailOutFlags;
+        nRes = rRawRes = nBailOutFlags;
     return nRes;
 }
 
