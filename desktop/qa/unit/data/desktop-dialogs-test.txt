@@ -35,7 +35,6 @@
 # test case since they need some document and model data to work
 # desktop/ui/extensionmanager.ui
 
-desktop/ui/cmdlinehelp.ui
 desktop/ui/dependenciesdialog.ui
 desktop/ui/updaterequireddialog.ui
 desktop/ui/showlicensedialog.ui

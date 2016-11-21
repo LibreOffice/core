@@ -10,7 +10,6 @@
 $(eval $(call gb_UIConfig_UIConfig,desktop))
 
 $(eval $(call gb_UIConfig_add_uifiles,desktop,\
-    desktop/uiconfig/ui/cmdlinehelp \
     desktop/uiconfig/ui/dependenciesdialog \
     desktop/uiconfig/ui/extensionmanager \
     desktop/uiconfig/ui/installforalldialog \
