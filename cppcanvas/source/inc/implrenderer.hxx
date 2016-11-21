@@ -28,6 +28,8 @@
 #include <action.hxx>
 #include <outdevstate.hxx>
 
+#include <osl/endian.h>
+
 #include <vector>
 #include <map>
 
