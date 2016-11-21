@@ -1481,6 +1481,7 @@ module com {
      [property] ::com::sun::star::util::Color TextColor;
      [property] ::com::sun::star::util::Color TextLineColor;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] boolean NoLabel;
     };
     published service UnoControlFormattedField {
      service ::com::sun::star::awt::UnoControlEdit;
@@ -11897,6 +11898,7 @@ module com {
      [property, optional, readonly] ::com::sun::star::awt::XDevice ReferenceDevice;
      [property, optional] boolean RecordChanges;
      [property, optional, readonly] boolean IsRecordChangesProtected;
+     [property, optional] boolean Wildcards;
     };
     published interface XFunctionAccess {
      interface ::com::sun::star::uno::XInterface;
@@ -17195,6 +17197,7 @@ module com {
      [property] short SearchSimilarityRemove;
      [property] short SearchSimilarityAdd;
      [property] short SearchSimilarityExchange;
+     [property, optional] boolean SearchWildcard;
     };
     published interface XReplaceDescriptor {
      interface ::com::sun::star::util::XSearchDescriptor;
@@ -17219,6 +17222,7 @@ module com {
      /** @deprecated */ const long REG_NOSUB = 512;
      const long REG_NOT_BEGINOFLINE = 2048;
      const long REG_NOT_ENDOFLINE = 4096;
+     const long WILD_MATCH_SELECTION = 1048576;
     };
     published struct SearchOptions {
      ::com::sun::star::util::SearchAlgorithms algorithmType;
