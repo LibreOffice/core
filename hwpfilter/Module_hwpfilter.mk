@@ -13,7 +13,7 @@ $(eval $(call gb_Module_add_targets,hwpfilter,\
     Library_hwp \
 ))
 
-$(eval $(call gb_Module_add_check_targets,hwpfilter,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,hwpfilter,\
     CppunitTest_hwpfilter_test_hwpfilter \
 ))
 

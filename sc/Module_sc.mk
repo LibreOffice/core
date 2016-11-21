@@ -44,35 +44,21 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	Library_scqahelper \
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sc_ucalc) \
-	CppunitTest_sc_bugfix_test \
-	CppunitTest_sc_filters_test \
-	CppunitTest_sc_rangelst_test \
-	CppunitTest_sc_range_test \
-	CppunitTest_sc_mark_test \
 	CppunitTest_sc_core \
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Module_add_check_targets,sc,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     CppunitTest_sc_tiledrendering \
 ))
 endif
-
-$(eval $(call gb_Module_add_slowcheck_targets,sc, \
-	CppunitTest_sc_condformats \
-	CppunitTest_sc_new_cond_format_api \
-	CppunitTest_sc_subsequent_filters_test \
-	CppunitTest_sc_subsequent_export_test \
-	CppunitTest_sc_html_export_test \
-	CppunitTest_sc_copypaste \
-))
 
 # Various function tests fail in 32-bit linux_x86 build due to dreaded floating
 # point weirdness (x87, registers, compiler optimization, ... whatever),
 # disable them until someone finds a real cure.
 
 ifneq ($(PLATFORMID),linux_x86)
-$(eval $(call gb_Module_add_slowcheck_targets,sc, \
+$(eval $(call gb_Module_add_subsequentcheck_targets,sc, \
 	CppunitTest_sc_functions_test_old \
 	CppunitTest_sc_database_functions_test \
 	CppunitTest_sc_array_functions_test \
@@ -100,6 +86,17 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	JunitTest_sc_unoapi_5 \
 	JunitTest_sc_unoapi_6 \
 	JunitTest_sc_unoapi_7 \
+	CppunitTest_sc_bugfix_test \
+	CppunitTest_sc_filters_test \
+	CppunitTest_sc_rangelst_test \
+	CppunitTest_sc_range_test \
+	CppunitTest_sc_mark_test \
+	CppunitTest_sc_condformats \
+	CppunitTest_sc_new_cond_format_api \
+	CppunitTest_sc_subsequent_filters_test \
+	CppunitTest_sc_subsequent_export_test \
+	CppunitTest_sc_html_export_test \
+	CppunitTest_sc_copypaste \
 	CppunitTest_sc_opencl_test \
 	CppunitTest_sc_anchor_test \
 	CppunitTest_sc_annotationshapeobj \

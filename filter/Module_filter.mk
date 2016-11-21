@@ -57,7 +57,7 @@ $(eval $(call gb_Module_add_targets,filter,\
 ))
 endif
 
-$(eval $(call gb_Module_add_check_targets,filter,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,filter,\
     CppunitTest_filter_xslt \
     CppunitTest_filter_priority \
     CppunitTest_filter_msfilter \

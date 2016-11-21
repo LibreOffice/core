@@ -13,7 +13,7 @@ $(eval $(call gb_Module_add_targets,drawinglayer,\
     Library_drawinglayer \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,drawinglayer,\
+$(eval $(call gb_Module_add_check_targets,drawinglayer,\
     CppunitTest_drawinglayer_border \
 ))
 

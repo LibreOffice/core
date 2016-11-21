@@ -108,7 +108,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_mozbootstrap \
 ))
 
-$(eval $(call gb_Module_add_check_targets,connectivity,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 	CppunitTest_connectivity_mork \
 ))
 
@@ -117,7 +117,7 @@ endif
 ifeq ($(OS),WNT)
 # "ADO is not available on 64bit" said the commit
 ifneq ($(CPUNAME),X86_64)
-$(eval $(call gb_Module_add_check_targets,connectivity,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 	CppunitTest_connectivity_ado \
 ))
 endif
@@ -133,7 +133,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 endif
 
 # general tests
-$(eval $(call gb_Module_add_check_targets,connectivity,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 	CppunitTest_connectivity_commontools \
 ))
 

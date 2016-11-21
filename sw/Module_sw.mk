@@ -47,9 +47,11 @@ $(eval $(call gb_Module_add_targets,sw,\
 
 endif
 
-$(eval $(call gb_Module_add_slowcheck_targets,sw,\
+$(eval $(call gb_Module_add_check_targets,sw,\
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sw_uwriter) \
+))
+$(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
     CppunitTest_sw_docbookexport \
     CppunitTest_sw_htmlexport \
     CppunitTest_sw_htmlimport \
@@ -80,13 +82,13 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Module_add_slowcheck_targets,sw,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
     CppunitTest_sw_tiledrendering \
 ))
 endif
 
 ifneq ($(DISABLE_CVE_TESTS),TRUE)
-$(eval $(call gb_Module_add_slowcheck_targets,sw,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
     CppunitTest_sw_filters_test \
 ))
 endif

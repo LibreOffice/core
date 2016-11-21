@@ -34,6 +34,9 @@ $(eval $(call gb_Module_add_l10n_targets,sfx2,\
 $(eval $(call gb_Module_add_check_targets,sfx2,\
     CppunitTest_sfx2_metadatable \
     CppunitTest_sfx2_controlleritem \
+))
+
+$(eval $(call gb_Module_add_subsequentcheck_targets,sfx2,\
     CppunitTest_sfx2_classification \
 ))
 

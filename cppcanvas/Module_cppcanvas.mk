@@ -26,12 +26,12 @@ $(eval $(call gb_Module_add_targets,cppcanvas,\
 
 # FIXME: should generalize these ...
 ifeq ($(ENABLE_CAIRO_CANVAS),TRUE)
-$(eval $(call gb_Module_add_check_targets,cppcanvas,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,cppcanvas,\
     CppunitTest_cppcanvas_test \
 ))
 
 ifneq ($(DISPLAY),)
-$(eval $(call gb_Module_add_slowcheck_targets,cppcanvas,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,cppcanvas,\
     CppunitTest_cppcanvas_emfplus \
 ))
 endif

@@ -29,6 +29,9 @@ ifeq ($(filter DRAGONFLY FREEBSD,$(OS)),)
 $(eval $(call gb_Module_add_check_targets,sd,\
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sd_uimpress) \
+))
+
+$(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
     CppunitTest_sd_import_tests \
     CppunitTest_sd_export_ooxml1 \
     CppunitTest_sd_export_ooxml2 \
@@ -40,7 +43,7 @@ $(eval $(call gb_Module_add_check_targets,sd,\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Module_add_check_targets,sd,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
     CppunitTest_sd_svg_export_tests \
     CppunitTest_sd_tiledrendering \
 ))

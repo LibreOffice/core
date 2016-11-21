@@ -32,7 +32,7 @@ $(eval $(call gb_Module_add_l10n_targets,svx,\
     UIConfig_svx \
 ))
 
-$(eval $(call gb_Module_add_check_targets,svx,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
 	CppunitTest_svx_unit \
 ))
 

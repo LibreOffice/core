@@ -28,7 +28,7 @@ $(eval $(call gb_Module_add_targets,framework,\
     Package_dtd \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,framework,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,framework,\
     CppunitTest_framework_dispatch \
 ))
 
