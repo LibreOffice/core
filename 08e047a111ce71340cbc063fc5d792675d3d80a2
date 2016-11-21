@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_78c15d2e",
+        "filename": "sc/source/filter/oox/worksheethelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:53:17Z",
+      "side": 1,
+      "message": "Maybe can you look into if this is really safe here with ScRange?",
+      "revId": "08e047a111ce71340cbc063fc5d792675d3d80a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_b8e135d3",
+        "filename": "sc/source/filter/oox/worksheethelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:53:17Z",
+      "side": 1,
+      "message": "aRange.aStart is already a ScAddress.\naRange.aEnd is already a ScAddress.",
+      "revId": "08e047a111ce71340cbc063fc5d792675d3d80a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
