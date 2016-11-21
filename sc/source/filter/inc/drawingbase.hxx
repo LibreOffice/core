@@ -23,8 +23,6 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include "worksheethelper.hxx"
 
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/table/XCell.hpp>
 
 namespace oox {
 namespace xls {

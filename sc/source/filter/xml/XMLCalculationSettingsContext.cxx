@@ -26,7 +26,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <sax/tools/converter.hxx>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <comphelper/extract.hxx>
 
 using namespace com::sun::star;
