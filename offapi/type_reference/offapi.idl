@@ -11484,15 +11484,15 @@ module com {
      SUM = 2,
      COUNT = 3,
      AVERAGE = 4,
-     MEDIAN = 5,
-     MAX = 6,
-     MIN = 7,
-     PRODUCT = 8,
-     COUNTNUMS = 9,
-     STDEV = 10,
-     STDEVP = 11,
-     VAR = 12,
-     VARP = 13
+     MAX = 5,
+     MIN = 6,
+     PRODUCT = 7,
+     COUNTNUMS = 8,
+     STDEV = 9,
+     STDEVP = 10,
+     VAR = 11,
+     VARP = 12,
+     MEDIAN = 13
     };
     /** @deprecated */ published interface XConsolidationDescriptor {
      interface ::com::sun::star::uno::XInterface;
