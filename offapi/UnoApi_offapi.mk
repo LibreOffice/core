@@ -2904,7 +2904,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/mozilla,\
 	XProfileDiscover \
 	XProfileManager \
 	XProxyRunner \
-	XRemoteServiceManagerProvider \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/office,\
 	XAnnotation \
