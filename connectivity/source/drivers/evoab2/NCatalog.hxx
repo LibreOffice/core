@@ -30,7 +30,6 @@ namespace connectivity
         class OEvoabCatalog : public connectivity::sdbcx::OCatalog
         {
             OEvoabConnection *m_pConnection;
-            css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData;
         public:
             explicit OEvoabCatalog(OEvoabConnection *_pCon);
             inline OEvoabConnection* getConnection() const { return m_pConnection; }
