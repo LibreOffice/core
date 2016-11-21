@@ -14,7 +14,7 @@ def get_src_dir_fallback():
     return os.path.abspath(os.path.join(current_dir, "../../"))
 
 def path2url(path):
-        return urljoin('file:', pathname2url(path))
+        return urljoin('file:', pathname2url(os.path.normpath(path)))
 
 def get_workdir_url():
     workdir_path = os.environ.get('WORKDIR', os.path.join(get_src_dir_fallback(), 'workdir'))
