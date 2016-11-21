@@ -112,7 +112,7 @@ IMPL_STATIC_LINK(
     FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject*)
 {
     SdrObject* pNewObj = nullptr;
-    if (aParams.nInventor == FmFormInventor)
+    if (aParams.nInventor == SdrInventor::FmForm)
     {
         OUString sServiceSpecifier;
 

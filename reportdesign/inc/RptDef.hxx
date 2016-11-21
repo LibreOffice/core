@@ -49,11 +49,6 @@ namespace rptui
 #define RPT_LAYER_HIDDEN        2
 
 
-const sal_uInt32 ReportInventor = sal_uInt32('R')*0x00000001+
-                           sal_uInt32('P')*0x00000100+
-                           sal_uInt32('T')*0x00010000+
-                           sal_uInt32('1')*0x01000000;
-
 
 #define OBJ_DLG_FIXEDTEXT       ((sal_uInt16) OBJ_MAXI + 1)
 #define OBJ_DLG_IMAGECONTROL    OBJ_FM_IMAGECONTROL

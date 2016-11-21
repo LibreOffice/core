@@ -606,7 +606,7 @@ void DlgEditor::SetInsertObj( sal_uInt16 eObj )
 {
     eActObj = eObj;
 
-    pDlgEdView->SetCurrentObj( eActObj, DlgInventor );
+    pDlgEdView->SetCurrentObj( eActObj, SdrInventor::BasicDialog );
 }
 
 void DlgEditor::CreateDefaultObject()

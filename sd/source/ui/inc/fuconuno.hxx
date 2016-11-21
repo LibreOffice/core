@@ -23,6 +23,8 @@
 #include <svl/itemset.hxx>
 #include "fuconstr.hxx"
 
+enum class SdrInventor : sal_uInt32;
+
 namespace sd {
 
 /**
@@ -56,8 +58,8 @@ protected:
     OUString aOldLayer;
 
 private:
-    sal_uInt32 nInventor;
-    sal_uInt16 nIdentifier;
+    SdrInventor nInventor;
+    sal_uInt16  nIdentifier;
 };
 
 } // end of namespace sd

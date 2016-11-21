@@ -1038,7 +1038,7 @@ SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage* pPage)
     for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
     {
         SdrObject* pObject = pPage->GetObj(nObject);
-        if (pObject->GetObjInventor() == SdrInventor &&
+        if (pObject->GetObjInventor() == SdrInventor::Default &&
             pObject->GetObjIdentifier() == OBJ_OUTLINETEXT)
         {
             pResult = static_cast<SdrTextObj*>(pObject);
@@ -1867,7 +1867,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                     if (!aHRef.isEmpty())
                     {
                         // a circle?
-                        if (pObject->GetObjInventor() == SdrInventor &&
+                        if (pObject->GetObjInventor() == SdrInventor::Default &&
                             pObject->GetObjIdentifier() == OBJ_CIRC  &&
                             bIsSquare )
                         {
@@ -1877,7 +1877,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                                                     aHRef));
                         }
                         // a polygon?
-                        else if (pObject->GetObjInventor() == SdrInventor &&
+                        else if (pObject->GetObjInventor() == SdrInventor::Default &&
                                  (pObject->GetObjIdentifier() == OBJ_PATHLINE ||
                                   pObject->GetObjIdentifier() == OBJ_PLIN ||
                                   pObject->GetObjIdentifier() == OBJ_POLY))

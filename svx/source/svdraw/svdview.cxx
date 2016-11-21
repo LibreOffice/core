@@ -890,7 +890,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         case SdrEventKind::BeginDragHelpline: bRet=BegDragHelpLine(rVEvt.nHlplIdx,rVEvt.pPV); break;
         case SdrEventKind::BeginDragObj: bRet=BegDragObj(aLogicPos,nullptr,rVEvt.pHdl,mnMinMovLog); break;
         case SdrEventKind::BeginCreateObj: {
-            if (nAktInvent==SdrInventor && nAktIdent==OBJ_CAPTION) {
+            if (nAktInvent==SdrInventor::Default && nAktIdent==OBJ_CAPTION) {
                 long nHgt=SdrEngineDefaults::GetFontHeight();
                 bRet=BegCreateCaptionObj(aLogicPos,Size(5*nHgt,2*nHgt));
             } else bRet=BegCreateObj(aLogicPos);

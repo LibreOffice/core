@@ -274,7 +274,7 @@ namespace sdr
 
                             if(GetStyleSheet())
                             {
-                                if((OBJ_OUTLINETEXT == rObj.GetTextKind()) && (SdrInventor == rObj.GetObjInventor()))
+                                if((OBJ_OUTLINETEXT == rObj.GetTextKind()) && (SdrInventor::Default == rObj.GetObjInventor()))
                                 {
                                     OUString aNewStyleSheetName(GetStyleSheet()->GetName());
                                     aNewStyleSheetName = aNewStyleSheetName.copy(0, aNewStyleSheetName.getLength() - 1);
@@ -361,7 +361,7 @@ namespace sdr
         {
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
-            if( rObj.GetObjInventor() == SdrInventor )
+            if( rObj.GetObjInventor() == SdrInventor::Default )
             {
                 const sal_uInt16 nSdrObjKind = rObj.GetObjIdentifier();
 

@@ -142,6 +142,20 @@ enum SdrObjKind {
     OBJ_MAXI
 };
 
+enum class SdrInventor : sal_uInt32 {
+    Unknown          = 0,
+    BasicDialog      = sal_uInt32( 'D' | ('L' << 8) | ('G' << 16) | ('1' << 24) ),
+    Default          = sal_uInt32( 'S' | ('V' << 8) | ('D' << 16) | ('r' << 24) ),
+    E3d              = sal_uInt32( 'E' | ('3' << 8) | ('D' << 16) | ('1' << 24) ),
+    FmForm           = sal_uInt32( 'F' | ('M' << 8) | ('0' << 16) | ('1' << 24) ),
+    IMap             = sal_uInt32( 'I' | ('M' << 8) | ('A' << 16) | ('P' << 24) ),
+    ReportDesign     = sal_uInt32( 'R' | ('P' << 8) | ('T' << 16) | ('1' << 24) ),
+    ScOrSwDraw       = sal_uInt32( 'S' | ('C' << 8) | ('3' << 16) | ('0' << 24) ), // Used in sc/ and sw/
+    SgaImap          = sal_uInt32( 'S' | ('D' << 8) | ('U' << 16) | ('D' << 24) ),
+    StarDrawUserData = sal_uInt32( 'S' | ('D' << 8) | ('U' << 16) | ('D' << 24) ),
+    Swg              = sal_uInt32( 'S' | ('W' << 8) | ('G' << 16) ),
+};
+
 enum class SdrUserCallType {
     MoveOnly,         // only moved, size unchanged
     Resize,           // size and maybe position changed
@@ -188,7 +202,7 @@ public:
 class SVX_DLLPUBLIC SdrObjUserData
 {
 protected:
-    sal_uInt32                      nInventor;
+    SdrInventor                     nInventor;
     sal_uInt16                      nIdentifier;
 
 private:
@@ -197,12 +211,12 @@ private:
     bool operator!=(const SdrObjUserData& rData) const = delete;
 
 public:
-    SdrObjUserData(sal_uInt32 nInv, sal_uInt16 nId);
+    SdrObjUserData(SdrInventor nInv, sal_uInt16 nId);
     SdrObjUserData(const SdrObjUserData& rData);
     virtual ~SdrObjUserData();
 
     virtual SdrObjUserData* Clone(SdrObject* pObj1) const = 0; // #i71039# NULL -> 0
-    sal_uInt32 GetInventor() const { return nInventor;}
+    SdrInventor GetInventor() const { return nInventor;}
     sal_uInt16 GetId() const { return nIdentifier;}
 };
 
@@ -434,7 +448,7 @@ public:
 
     void AddReference(SdrVirtObj& rVrtObj);
     void DelReference(SdrVirtObj& rVrtObj);
-    virtual sal_uInt32 GetObjInventor() const;
+    virtual SdrInventor GetObjInventor() const;
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
 
@@ -990,14 +1004,14 @@ public:
 
 struct SdrObjCreatorParams
 {
-    sal_uInt32 nInventor;
-    sal_uInt16 nObjIdentifier;
+    SdrInventor nInventor;
+    sal_uInt16  nObjIdentifier;
 };
 struct SdrObjUserDataCreatorParams
 {
-    sal_uInt32 nInventor;
-    sal_uInt16 nObjIdentifier;
-    SdrObject* pObject;
+    SdrInventor nInventor;
+    sal_uInt16  nObjIdentifier;
+    SdrObject*  pObject;
 };
 
 /**
@@ -1011,8 +1025,8 @@ struct SdrObjUserDataCreatorParams
 class SVX_DLLPUBLIC SdrObjFactory
 {
 public:
-    static SdrObject* MakeNewObject(sal_uInt32 nInventor, sal_uInt16 nObjIdentifier, SdrPage* pPage, SdrModel* pModel=nullptr);
-    static SdrObject* MakeNewObject(sal_uInt32 nInventor, sal_uInt16 nObjIdentifier, const Rectangle& rSnapRect, SdrPage* pPage);
+    static SdrObject* MakeNewObject(SdrInventor nInventor, sal_uInt16 nObjIdentifier, SdrPage* pPage, SdrModel* pModel=nullptr);
+    static SdrObject* MakeNewObject(SdrInventor nInventor, sal_uInt16 nObjIdentifier, const Rectangle& rSnapRect, SdrPage* pPage);
     static void InsertMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
     static void RemoveMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
     static void InsertMakeUserDataHdl(Link<SdrObjUserDataCreatorParams, SdrObjUserData*> const & rLink);
@@ -1020,7 +1034,7 @@ public:
 
 private:
     static SVX_DLLPRIVATE SdrObject* CreateObjectFromFactory(
-        sal_uInt32 nInventor, sal_uInt16 nIdentifier, SdrPage* pPage, SdrModel* pModel );
+        SdrInventor nInventor, sal_uInt16 nIdentifier, SdrPage* pPage, SdrModel* pModel );
 
     SdrObjFactory() = delete;
 };

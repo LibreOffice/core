@@ -24,7 +24,7 @@
 
 class SdrMarkList;
 class SdrObject;
-
+enum class SdrInventor : sal_uInt32;
 
 namespace svx { namespace sidebar {
 
@@ -57,7 +57,7 @@ private:
     static vcl::EnumContext::Context GetContextForObjectId_SD (
         const sal_uInt16 nObjectId,
         const ViewType eViewType);
-    static sal_uInt32 GetInventorTypeFromMark (
+    static SdrInventor GetInventorTypeFromMark (
         const SdrMarkList& rMarkList);
     static sal_uInt16 GetObjectTypeFromMark (
         const SdrMarkList& rMarkList);

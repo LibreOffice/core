@@ -27,8 +27,6 @@
 #include <fltshell.hxx>
 
 #include <svx/svdobj.hxx>
-#define SW_DRAWLAYER 0x30334353
-#define SW_UD_IMAPDATA      2
 
 #include <vector>
 #include <stack>
@@ -54,6 +52,7 @@
 #include <editeng/lrspitem.hxx>
 #include <oox/ole/olehelper.hxx>
 
+#define SW_UD_IMAPDATA      2
 
 class SwDoc;
 class SwPaM;

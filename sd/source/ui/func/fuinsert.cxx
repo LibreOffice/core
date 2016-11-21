@@ -571,7 +571,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         SdrMark* pMark = rMarkList.GetMark(0);
                         SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                        if (pObj->GetObjInventor() == SdrInventor &&
+                        if (pObj->GetObjInventor() == SdrInventor::Default &&
                         pObj->GetObjIdentifier() == OBJ_OLE2)
                         {
                             if ( !static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )

@@ -157,7 +157,7 @@ SdrObjMacroHitRec::SdrObjMacroHitRec() :
     bDown(false) {}
 
 
-SdrObjUserData::SdrObjUserData(sal_uInt32 nInv, sal_uInt16 nId) :
+SdrObjUserData::SdrObjUserData(SdrInventor nInv, sal_uInt16 nId) :
     nInventor(nInv),
     nIdentifier(nId) {}
 
@@ -535,9 +535,9 @@ SfxItemPool & SdrObject::GetObjectItemPool() const
     return SdrObject::GetGlobalDrawObjectItemPool();
 }
 
-sal_uInt32 SdrObject::GetObjInventor()   const
+SdrInventor SdrObject::GetObjInventor()   const
 {
-    return SdrInventor;
+    return SdrInventor::Default;
 }
 
 sal_uInt16 SdrObject::GetObjIdentifier() const
@@ -3100,7 +3100,6 @@ bool SdrObject::HasText() const
     return false;
 }
 
-
 SdrDelayBroadcastObjectChange::SdrDelayBroadcastObjectChange( SdrObject& rObj ) :
     mrObj(rObj), mbOldDelayBroadcastObjectChange( rObj.mbDelayBroadcastObjectChange)
 {
@@ -3121,7 +3120,7 @@ SdrDelayBroadcastObjectChange::~SdrDelayBroadcastObjectChange()
 }
 
 
-SdrObject* SdrObjFactory::CreateObjectFromFactory( sal_uInt32 nInventor, sal_uInt16 nObjIdentifier, SdrPage* , SdrModel*  )
+SdrObject* SdrObjFactory::CreateObjectFromFactory( SdrInventor nInventor, sal_uInt16 nObjIdentifier, SdrPage* , SdrModel*  )
 {
     SdrObjCreatorParams aParams { nInventor, nObjIdentifier };
     for (const auto & i : ImpGetUserMakeObjHdl()) {
@@ -3133,14 +3132,14 @@ SdrObject* SdrObjFactory::CreateObjectFromFactory( sal_uInt32 nInventor, sal_uIn
     return nullptr;
 }
 
-SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel)
+SdrObject* SdrObjFactory::MakeNewObject(SdrInventor nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel)
 {
     if (!pModel && pPage)
         pModel = pPage->GetModel();
 
     SdrObject* pObj = nullptr;
 
-    if (nInvent == SdrInventor)
+    if (nInvent == SdrInventor::Default)
     {
         switch (nIdent)
         {
@@ -3198,7 +3197,7 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
 }
 
 SdrObject* SdrObjFactory::MakeNewObject(
-    sal_uInt32 nInventor, sal_uInt16 nIdentifier, const Rectangle& rSnapRect, SdrPage* pPage )
+    SdrInventor nInventor, sal_uInt16 nIdentifier, const Rectangle& rSnapRect, SdrPage* pPage )
 {
     SdrModel* pModel = pPage ? pPage->GetModel() : nullptr;
 
@@ -3206,7 +3205,7 @@ SdrObject* SdrObjFactory::MakeNewObject(
 
     bool bSetSnapRect = true;
 
-    if (nInventor == SdrInventor)
+    if (nInventor == SdrInventor::Default)
     {
         switch (nIdentifier)
         {

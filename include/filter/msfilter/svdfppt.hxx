@@ -177,12 +177,6 @@ enum class TSS_Type : unsigned {
     Unknown        = 0xffffffff // or invalid
 };
 
-// Inventor-Id for PPT UserData
-const sal_uInt32 PPTInventor = sal_uInt32('P') * 0x00000001
-                             + sal_uInt32('P') * 0x00000100
-                             + sal_uInt32('T') * 0x00010000
-                             + sal_uInt32('0') * 0x01000000;
-
 const int nMaxPPTLevels = 5;
 
 // Object IDs for StarDraw UserData

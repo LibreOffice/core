@@ -22,11 +22,6 @@
 
 #include <sal/types.h>
 
-const sal_uInt32 E3dInventor = sal_uInt32('E')*0x00000001+
-                           sal_uInt32('3')*0x00000100+
-                           sal_uInt32('D')*0x00010000+
-                           sal_uInt32('1')*0x01000000;
-
 const sal_uInt16 E3D_SCENE_ID       = 1;
 const sal_uInt16 E3D_POLYSCENE_ID   = 2;
 const sal_uInt16 E3D_OBJECT_ID      = 3; // should not be used, it's only a helper class for E3DScene and E3DCompoundObject

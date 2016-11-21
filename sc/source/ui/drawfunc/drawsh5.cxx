@@ -81,7 +81,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
             aHLinkItem.SetInsertMode(HLINK_FIELD);
         }
         SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( pObj );
-        if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
+        if (pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor())
         {
             uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
             OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
@@ -167,7 +167,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( pObj  );
-                            if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
+                            if (pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor())
                             {
                                 uno::Reference<awt::XControlModel> xControlModel =
                                                         pUnoCtrl->GetUnoControlModel();

@@ -497,7 +497,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
 
                     pMainSequence->append( pEffect );
 
-                    if( ( pObj->GetObjInventor() == SdrInventor ) && ( pObj->GetObjIdentifier() == OBJ_OUTLINETEXT ) )
+                    if( ( pObj->GetObjInventor() == SdrInventor::Default ) && ( pObj->GetObjIdentifier() == OBJ_OUTLINETEXT ) )
                     {
                         // special case for outline text, effects are always mapped to text group effect
                         pMainSequence->

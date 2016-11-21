@@ -301,7 +301,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
     throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< drawing::XShape >  xRet;
-    if(dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr || pObj->GetObjInventor() == SWGInventor)
+    if(dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr || pObj->GetObjInventor() == SdrInventor::Swg)
     {
         SwFlyDrawContact* pFlyContact = static_cast<SwFlyDrawContact*>(pObj->GetUserCall());
         if(pFlyContact)
@@ -667,7 +667,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     SdrObject* pObj = pSvxShape->GetSdrObject();
     // #108784# - set layer of new drawing object to corresponding
     // invisible layer.
-    if(FmFormInventor != pObj->GetObjInventor())
+    if(SdrInventor::FmForm != pObj->GetObjInventor())
         pObj->SetLayer( bOpaque ? pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId() );
     else
         pObj->SetLayer(pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
@@ -1109,7 +1109,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         // set layer of new drawing
                         // object to corresponding invisible layer.
                         bool bIsVisible = pDoc->getIDocumentDrawModelAccess().IsVisibleLayerId( pObj->GetLayer() );
-                        if(FmFormInventor != pObj->GetObjInventor())
+                        if(SdrInventor::FmForm != pObj->GetObjInventor())
                         {
                             pObj->SetLayer( *o3tl::doAccess<bool>(aValue)
                                             ? ( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHeavenId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() )
@@ -1784,7 +1784,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
         if(pObject)
         {
             bGroupMember = pObject->GetUpGroup() != nullptr;
-            bFormControl = pObject->GetObjInventor() == FmFormInventor;
+            bFormControl = pObject->GetObjInventor() == SdrInventor::FmForm;
         }
         const OUString* pNames = aPropertyNames.getConstArray();
         beans::PropertyState* pRet = aRet.getArray();
@@ -2802,7 +2802,7 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape ) throw (uno::Ru
                     SwDoc* pDoc = pFormat->GetDoc();
                     // set layer of new drawing
                     // object to corresponding invisible layer.
-                    if( FmFormInventor != pObj->GetObjInventor())
+                    if( SdrInventor::FmForm != pObj->GetObjInventor())
                     {
                         pObj->SetLayer( pSwShape->pImpl->GetOpaque()
                                         ? pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId()

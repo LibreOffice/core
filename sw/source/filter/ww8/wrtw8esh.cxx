@@ -366,7 +366,7 @@ namespace
 bool WW8Export::MiserableFormFieldExportHack(const SwFrameFormat& rFrameFormat)
 {
     const SdrObject *pObject = rFrameFormat.FindRealSdrObject();
-    if (!pObject || pObject->GetObjInventor() != FmFormInventor)
+    if (!pObject || pObject->GetObjInventor() != SdrInventor::FmForm)
         return false;
 
     const SdrUnoObj *pFormObj = dynamic_cast< const SdrUnoObj* >(pObject);

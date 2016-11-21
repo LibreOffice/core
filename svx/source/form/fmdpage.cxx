@@ -82,7 +82,7 @@ SdrObject *SvxFmDrawPage::CreateSdrObject_( const css::uno::Reference< css::draw
 css::uno::Reference< css::drawing::XShape >  SvxFmDrawPage::CreateShape( SdrObject *pObj ) const
     throw (css::uno::RuntimeException, std::exception)
 {
-    if( FmFormInventor == pObj->GetObjInventor() )
+    if( SdrInventor::FmForm == pObj->GetObjInventor() )
     {
         css::uno::Reference< css::drawing::XShape >  xShape = static_cast<SvxShape*>(new SvxShapeControl( pObj ));
         return xShape;

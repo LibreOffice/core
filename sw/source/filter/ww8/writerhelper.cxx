@@ -247,7 +247,7 @@ namespace ww8
             default:
                 if (const SdrObject* pObj = rFormat.FindRealSdrObject())
                 {
-                    if (pObj->GetObjInventor() == FmFormInventor)
+                    if (pObj->GetObjInventor() == SdrInventor::FmForm)
                         meWriterType = eFormControl;
                     else
                         meWriterType = eDrawing;
@@ -372,7 +372,7 @@ namespace sw
 
         void SetLayer::SetObjectLayer(SdrObject &rObject, Layer eLayer) const
         {
-            if (FmFormInventor == rObject.GetObjInventor())
+            if (SdrInventor::FmForm == rObject.GetObjInventor())
                 rObject.SetLayer(mnFormLayer);
             else
             {

@@ -185,11 +185,11 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
         {
             mpGraphic = new Graphic( static_cast< SdrGrafObj* >( pObj )->GetTransformedGraphic() );
         }
-        else if( pObj->IsUnoObj() && FmFormInventor == pObj->GetObjInventor() && ( pObj->GetObjIdentifier() == (sal_uInt16) OBJ_FM_BUTTON ) )
+        else if( pObj->IsUnoObj() && SdrInventor::FmForm == pObj->GetObjInventor() && ( pObj->GetObjIdentifier() == (sal_uInt16) OBJ_FM_BUTTON ) )
         {
             SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >( pObj );
 
-            if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
+            if (pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor())
             {
                 Reference< css::awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel() );
 

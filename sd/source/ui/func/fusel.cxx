@@ -243,7 +243,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 sal_uInt16 nSdrObjKind = aVEvt.pObj->GetObjIdentifier();
 
-                if (aVEvt.pObj->GetObjInventor() == SdrInventor &&
+                if (aVEvt.pObj->GetObjInventor() == SdrInventor::Default &&
                     (nSdrObjKind == OBJ_TEXT ||
                      nSdrObjKind == OBJ_TITLETEXT ||
                      nSdrObjKind == OBJ_OUTLINETEXT ||
@@ -698,7 +698,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     && (rMEvt.GetClicks() != 2)
                     && (mpViewShell->GetFrameView()->IsClickChangeRotation()
                         || (pSingleObj
-                            && pSingleObj->GetObjInventor()==E3dInventor))
+                            && pSingleObj->GetObjInventor()==SdrInventor::E3d))
                     && ! bSelectionOnly)
 
                 {
@@ -826,7 +826,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
              ( mpView->GetDragMode() == SdrDragMode::Shear &&
               !mpView->IsShearAllowed() && !mpView->IsDistortAllowed() ) ||
              ( nSlotId==SID_CONVERT_TO_3D_LATHE && pSingleObj &&
-              (pSingleObj->GetObjInventor() != SdrInventor         ||
+              (pSingleObj->GetObjInventor() != SdrInventor::Default         ||
                pSingleObj->GetObjIdentifier() == OBJ_MEASURE) ) )
         {
             bReturn = true;

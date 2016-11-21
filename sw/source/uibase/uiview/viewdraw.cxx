@@ -601,8 +601,8 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
 
 bool SwView::IsTextTool() const
 {
-    sal_uInt16 nId;
-    sal_uInt32 nInvent;
+    sal_uInt16  nId;
+    SdrInventor nInvent;
     SdrView *pSdrView = GetWrtShell().GetDrawView();
     OSL_ENSURE( pSdrView, "IsTextTool without DrawView?" );
 
@@ -610,7 +610,7 @@ bool SwView::IsTextTool() const
         pSdrView->SetCreateMode(false);
 
     pSdrView->TakeCurrentObj(nId,nInvent);
-    return (nInvent==SdrInventor);
+    return nInvent == SdrInventor::Default;
 }
 
 SdrView* SwView::GetDrawView() const
@@ -664,7 +664,7 @@ bool SwView::AreOnlyFormsSelected() const
             // Except controls, are still normal draw objects selected?
             SdrObject *pSdrObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
-            if (!HasOnlyObj(pSdrObj, FmFormInventor))
+            if (!HasOnlyObj(pSdrObj, SdrInventor::FmForm))
             {
                 bForm = false;
                 break;
@@ -690,13 +690,13 @@ bool SwView::HasDrwObj(SdrObject *pSdrObj) const
             if ((bRet = HasDrwObj(pList->GetObj(i))))
                 break;
     }
-    else if (SdrInventor == pSdrObj->GetObjInventor() || pSdrObj->Is3DObj())
+    else if (SdrInventor::Default == pSdrObj->GetObjInventor() || pSdrObj->Is3DObj())
         return true;
 
     return bRet;
 }
 
-bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
+bool SwView::HasOnlyObj(SdrObject *pSdrObj, SdrInventor eObjInventor) const
 {
     bool bRet = false;
 

@@ -757,7 +757,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         // listeners.
         while( (pObj = rPresentationShapes.getNextShape()) )
         {
-            if (pObj->GetObjInventor() == SdrInventor)
+            if (pObj->GetObjInventor() == SdrInventor::Default)
             {
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 sal_uInt16 nId = pObj->GetObjIdentifier();

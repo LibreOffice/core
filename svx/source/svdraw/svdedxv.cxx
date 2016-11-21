@@ -1148,7 +1148,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                         !pTextObj->HasFill() &&
                         !pTextObj->HasLine();
 
-                if(pTEObj->IsInserted() && bDelObj && pTextObj->GetObjInventor()==SdrInventor && !bDontDeleteReally)
+                if(pTEObj->IsInserted() && bDelObj && pTextObj->GetObjInventor()==SdrInventor::Default && !bDontDeleteReally)
                 {
                     SdrObjKind eIdent=(SdrObjKind)pTextObj->GetObjIdentifier();
                     if(eIdent==OBJ_TEXT || eIdent==OBJ_TEXTEXT)
@@ -2080,7 +2080,7 @@ void SdrObjEditView::MarkListHasChanged()
     {
         const SdrObject* pObj= rMarkList.GetMark(0)->GetMarkedSdrObj();
         // check for table
-        if( pObj && (pObj->GetObjInventor() == SdrInventor ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+        if( pObj && (pObj->GetObjInventor() == SdrInventor::Default ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
         {
             mxSelectionController = sdr::table::CreateTableController( this, pObj, mxLastSelectionController );
             if( mxSelectionController.is() )
@@ -2144,9 +2144,9 @@ sal_uInt16 SdrObjEditView::GetSelectionLevel() const
     return nLevel;
 }
 
-bool SdrObjEditView::SupportsFormatPaintbrush( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier )
+bool SdrObjEditView::SupportsFormatPaintbrush( SdrInventor nObjectInventor, sal_uInt16 nObjectIdentifier )
 {
-    if( nObjectInventor != SdrInventor && nObjectInventor != E3dInventor )
+    if( nObjectInventor != SdrInventor::Default && nObjectInventor != SdrInventor::E3d )
         return false;
     switch(nObjectIdentifier)
     {

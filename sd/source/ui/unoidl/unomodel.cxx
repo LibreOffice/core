@@ -1053,7 +1053,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         }
 
         // create the API wrapper
-        pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor, referer );
+        pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor::Default, referer );
 
         // set shape type
         if( pShape && !mbClipBoard )
@@ -1063,7 +1063,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     }
     else if ( aServiceSpecifier == "com.sun.star.drawing.TableShape" )
     {
-        SvxShape* pShape = CreateSvxShapeByTypeAndInventor( OBJ_TABLE, SdrInventor, referer );
+        SvxShape* pShape = CreateSvxShapeByTypeAndInventor( OBJ_TABLE, SdrInventor::Default, referer );
         if( pShape && !mbClipBoard )
             pShape->SetShapeType(aServiceSpecifier);
 
@@ -1758,11 +1758,11 @@ vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( SdrObjec
 
     if ( pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF() )
     {
-        sal_uInt32 nInventor   = rObject.GetObjInventor();
-        sal_uInt16 nIdentifier = rObject.GetObjIdentifier();
-        bool   bIsTextObj  = dynamic_cast< const SdrTextObj *>( &rObject ) !=  nullptr;
+        SdrInventor nInventor   = rObject.GetObjInventor();
+        sal_uInt16  nIdentifier = rObject.GetObjIdentifier();
+        bool        bIsTextObj  = dynamic_cast< const SdrTextObj *>( &rObject ) !=  nullptr;
 
-        if ( nInventor == SdrInventor )
+        if ( nInventor == SdrInventor::Default )
         {
             if ( nIdentifier == OBJ_GRUP )
                 eElement = vcl::PDFWriter::Section;

@@ -1485,7 +1485,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
             const MapMode eSourceMode(MapUnit::Map100thMM);
             const sal_uInt16 nObjID = OBJ_FM_BUTTON;
             ::Size controlSize(4000, 500);
-            FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( FmFormInventor, nObjID, nullptr ));
+            FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( SdrInventor::FmForm, nObjID, nullptr ));
             controlSize.Width() = Fraction(controlSize.Width(), 1) * eTargetMode.GetScaleX();
             controlSize.Height() = Fraction(controlSize.Height(), 1) * eTargetMode.GetScaleY();
             ::Point controlPos( OutputDevice::LogicToLogic( ::Point( controlSize.Width(), 0 ), eSourceMode, eTargetMode ) );
@@ -1523,7 +1523,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
         const OUString& _rCommand, const sal_Int32 _nCommandType )
 {
     if  (   !createControlLabelPair( _rOutDev, _nXOffsetMM, _nYOffsetMM,
-                _rxField, _rxNumberFormats, _nControlObjectID, _rFieldPostfix, FmFormInventor, OBJ_FM_FIXEDTEXT,
+                _rxField, _rxNumberFormats, _nControlObjectID, _rFieldPostfix, SdrInventor::FmForm, OBJ_FM_FIXEDTEXT,
                 nullptr, nullptr, nullptr, _rpLabel, _rpControl )
         )
         return false;
@@ -1546,7 +1546,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
 bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
     const Reference< XPropertySet >& _rxField,
     const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
-    const OUString& _rFieldPostfix, sal_uInt32 _nInventor, sal_uInt16 _nLabelObjectID,
+    const OUString& _rFieldPostfix, SdrInventor _nInventor, sal_uInt16 _nLabelObjectID,
     SdrPage* _pLabelPage, SdrPage* _pControlPage, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
 {
     sal_Int32 nDataType = 0;
@@ -1780,7 +1780,7 @@ void FmXFormView::saveMarkList()
                     SdrObjListIter aIter( *pObj->GetSubList() );
                     bool bMixed = false;
                     while ( aIter.IsMore() && !bMixed )
-                        bMixed = ( aIter.Next()->GetObjInventor() != FmFormInventor );
+                        bMixed = ( aIter.Next()->GetObjInventor() != SdrInventor::FmForm );
 
                     if ( !bMixed )
                     {
@@ -1790,7 +1790,7 @@ void FmXFormView::saveMarkList()
                 }
                 else
                 {
-                    if ( pObj->GetObjInventor() == FmFormInventor )
+                    if ( pObj->GetObjInventor() == SdrInventor::FmForm )
                     {   // this is a form layer object
                         m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), true /* unmark! */ );
                     }
@@ -1891,7 +1891,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
                 {
                     SdrMark* pMark = m_aMark.GetMark(i);
                     SdrObject* pObj = pMark->GetMarkedSdrObj();
-                    if ( pObj->GetObjInventor() == FmFormInventor )
+                    if ( pObj->GetObjInventor() == SdrInventor::FmForm )
                         if ( !m_pView->IsObjMarked( pObj ) )
                             m_pView->MarkObj( pObj, pMark->GetPageView() );
                 }

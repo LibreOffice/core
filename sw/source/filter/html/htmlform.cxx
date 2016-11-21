@@ -685,7 +685,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     // Schauen, ob es ein SdrObject dafuer gibt
     const SdrObject *pObj = pFrameFormat ? pFrameFormat->FindSdrObject() : nullptr;
     OSL_ENSURE( pObj, "SdrObject nicht gefunden" );
-    OSL_ENSURE( pObj && FmFormInventor == pObj->GetObjInventor(), "falscher Inventor" );
+    OSL_ENSURE( pObj && SdrInventor::FmForm == pObj->GetObjInventor(), "falscher Inventor" );
 
     const SdrView* pDrawView = pVSh ? pVSh->GetDrawView() : nullptr;
 

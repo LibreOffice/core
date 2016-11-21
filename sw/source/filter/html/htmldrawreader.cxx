@@ -358,7 +358,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     // #i52858# - method name changed
     SwDrawModel* pModel = m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
     SdrPage* pPg = pModel->GetPage( 0 );
-    m_pMarquee = SdrObjFactory::MakeNewObject( SdrInventor,
+    m_pMarquee = SdrObjFactory::MakeNewObject( SdrInventor::Default,
                                              OBJ_TEXT, pPg, pModel );
     if( !m_pMarquee )
         return;

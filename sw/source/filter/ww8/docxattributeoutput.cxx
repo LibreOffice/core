@@ -4580,7 +4580,7 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
 
 void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 {
-    if (!pObject || pObject->GetObjInventor() != FmFormInventor)
+    if (!pObject || pObject->GetObjInventor() != SdrInventor::FmForm)
         return;
 
     SdrUnoObj *pFormObj = const_cast<SdrUnoObj*>(dynamic_cast< const SdrUnoObj*>(pObject));

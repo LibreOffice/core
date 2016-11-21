@@ -1619,7 +1619,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj )
         pInvestigatedObj = &rObj;
     }
 
-    if( FmFormInventor == pInvestigatedObj->GetObjInventor() )
+    if( SdrInventor::FmForm == pInvestigatedObj->GetObjInventor() )
     {
         eType = OBJCNT_CONTROL;
         uno::Reference< awt::XControlModel >  xModel =

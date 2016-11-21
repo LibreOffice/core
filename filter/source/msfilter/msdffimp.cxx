@@ -460,9 +460,9 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                     SdrGluePointList* pList = pO->ForceGluePointList();
 
                     sal_Int32 nId = nC;
-                    sal_uInt32 nInventor = pO->GetObjInventor();
+                    SdrInventor nInventor = pO->GetObjInventor();
 
-                    if( nInventor == SdrInventor )
+                    if( nInventor == SdrInventor::Default )
                     {
                         bool bValidGluePoint = false;
                         sal_uInt32 nObjId = pO->GetObjIdentifier();

@@ -576,7 +576,7 @@ bool SdrMarkView::ImpIsFrameHandles() const
     if (nMarkCount==1 && bStdDrag && bFrmHdl)
     {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
-        if (pObj->GetObjInventor()==SdrInventor)
+        if (pObj->GetObjInventor()==SdrInventor::Default)
         {
             sal_uInt16 nIdent=pObj->GetObjIdentifier();
             if (nIdent==OBJ_LINE || nIdent==OBJ_EDGE || nIdent==OBJ_CAPTION || nIdent==OBJ_MEASURE || nIdent==OBJ_CUSTOMSHAPE || nIdent==OBJ_TABLE )
@@ -2097,7 +2097,7 @@ void SdrMarkView::MarkListHasChanged()
     bool bOneEdgeMarked=false;
     if (GetMarkedObjectCount()==1) {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
-        if (pObj->GetObjInventor()==SdrInventor) {
+        if (pObj->GetObjInventor()==SdrInventor::Default) {
             sal_uInt16 nIdent=pObj->GetObjIdentifier();
             bOneEdgeMarked=nIdent==OBJ_EDGE;
         }

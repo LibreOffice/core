@@ -295,7 +295,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         SdAnimationInfo* pInfo2 = SdDrawDocument::GetAnimationInfo(pObject2);
         pInfo  = nullptr;
 
-        if (pObject1->GetObjInventor() == SdrInventor &&
+        if (pObject1->GetObjInventor() == SdrInventor::Default &&
             ((eKind1 == OBJ_LINE) ||                        // 2 point line
              (eKind1 == OBJ_PLIN) ||                        // Polygon
              (eKind1 == OBJ_PATHLINE))                &&    // Bezier curve
@@ -304,7 +304,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             pInfo = pInfo2;
         }
 
-        if (pObject2->GetObjInventor() == SdrInventor &&
+        if (pObject2->GetObjInventor() == SdrInventor::Default &&
             ((eKind2 == OBJ_LINE) ||                        // 2 point line
              (eKind2 == OBJ_PLIN) ||                        // Polygon
              (eKind2 == OBJ_PATHLINE))                &&    // Bezier curve
@@ -637,7 +637,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             SdrObjKind eKind2   = (SdrObjKind)pObject2->GetObjIdentifier();
             SdrObject* pRunningObj = nullptr;
 
-            if (pObject1->GetObjInventor() == SdrInventor &&
+            if (pObject1->GetObjInventor() == SdrInventor::Default &&
                 ((eKind1 == OBJ_LINE) ||        // 2 point line
                  (eKind1 == OBJ_PLIN) ||        // Polygon
                  (eKind1 == OBJ_PATHLINE)))     // Bezier curve
@@ -646,7 +646,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pRunningObj = pObject2;
             }
 
-            if (pObject2->GetObjInventor() == SdrInventor &&
+            if (pObject2->GetObjInventor() == SdrInventor::Default &&
                 ((eKind2 == OBJ_LINE) ||        // 2 point line
                  (eKind2 == OBJ_PLIN) ||        // Polygon
                  (eKind2 == OBJ_PATHLINE)))     // Bezier curve

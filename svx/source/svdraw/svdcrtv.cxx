@@ -189,7 +189,7 @@ void SdrCreateView::ImpClearConnectMarker()
 
 void SdrCreateView::ImpClearVars()
 {
-    nAktInvent=SdrInventor;
+    nAktInvent=SdrInventor::Default;
     nAktIdent=OBJ_NONE;
     pAktCreate=nullptr;
     pCreatePV=nullptr;
@@ -269,10 +269,10 @@ bool SdrCreateView::CheckEdgeMode()
     if (pAktCreate!=nullptr)
     {
         // is managed by EdgeObj
-        if (nAktInvent==SdrInventor && nAktIdent==OBJ_EDGE) return false;
+        if (nAktInvent==SdrInventor::Default && nAktIdent==OBJ_EDGE) return false;
     }
 
-    if (!IsCreateMode() || nAktInvent!=SdrInventor || nAktIdent!=OBJ_EDGE)
+    if (!IsCreateMode() || nAktInvent!=SdrInventor::Default || nAktIdent!=OBJ_EDGE)
     {
         ImpClearConnectMarker();
         return false;
@@ -333,20 +333,20 @@ bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
 
 bool SdrCreateView::IsTextTool() const
 {
-    return meEditMode==SdrViewEditMode::Create && nAktInvent==SdrInventor && (nAktIdent==OBJ_TEXT || nAktIdent==OBJ_TEXTEXT || nAktIdent==OBJ_TITLETEXT || nAktIdent==OBJ_OUTLINETEXT);
+    return meEditMode==SdrViewEditMode::Create && nAktInvent==SdrInventor::Default && (nAktIdent==OBJ_TEXT || nAktIdent==OBJ_TEXTEXT || nAktIdent==OBJ_TITLETEXT || nAktIdent==OBJ_OUTLINETEXT);
 }
 
 bool SdrCreateView::IsEdgeTool() const
 {
-    return meEditMode==SdrViewEditMode::Create && nAktInvent==SdrInventor && (nAktIdent==OBJ_EDGE);
+    return meEditMode==SdrViewEditMode::Create && nAktInvent==SdrInventor::Default && (nAktIdent==OBJ_EDGE);
 }
 
 bool SdrCreateView::IsMeasureTool() const
 {
-    return meEditMode==SdrViewEditMode::Create && nAktInvent==SdrInventor && (nAktIdent==OBJ_MEASURE);
+    return meEditMode==SdrViewEditMode::Create && nAktInvent==SdrInventor::Default && (nAktIdent==OBJ_MEASURE);
 }
 
-void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent)
+void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent)
 {
     if (nAktInvent!=nInvent || nAktIdent!=nIdent)
     {
@@ -380,7 +380,7 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent)
     ImpSetGlueVisible3(IsEdgeTool());
 }
 
-bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
+bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
     short nMinMov, const Rectangle& rLogRect, SdrObject* pPreparedFactoryObject)
 {
     bool bRet=false;
@@ -395,7 +395,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
     { // otherwise no side registered!
         OUString aLay(maActualLayer);
 
-        if(nInvent == SdrInventor && nIdent == OBJ_MEASURE && !maMeasureLayer.isEmpty())
+        if(nInvent == SdrInventor::Default && nIdent == OBJ_MEASURE && !maMeasureLayer.isEmpty())
         {
             aLay = maMeasureLayer;
         }
@@ -423,7 +423,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
             }
 
             Point aPnt(rPnt);
-            if (nAktInvent!=SdrInventor || (nAktIdent!=sal_uInt16(OBJ_EDGE) &&
+            if (nAktInvent!=SdrInventor::Default || (nAktIdent!=sal_uInt16(OBJ_EDGE) &&
                                             nAktIdent!=sal_uInt16(OBJ_FREELINE) &&
                                             nAktIdent!=sal_uInt16(OBJ_FREEFILL) )) { // no snapping for Edge and Freehand
                 aPnt=GetSnapPos(aPnt,pCreatePV);
@@ -436,7 +436,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
                 // object should not be created. Since it is possible to use it as a helper
                 // object (e.g. in letting the user define an area with the interactive
                 // construction) at least no items should be set at that object.
-                if(nInvent != SdrInventor || nIdent != OBJ_NONE)
+                if(nInvent != SdrInventor::Default || nIdent != OBJ_NONE)
                 {
                     pAktCreate->SetMergedItemSet(maDefaultAttr);
                 }
@@ -449,7 +449,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
 
                     pAktCreate->SetMergedItemSet(aSet);
                 }
-                if (mpModel && nInvent==SdrInventor && (nIdent==OBJ_TEXT || nIdent==OBJ_TEXTEXT ||
+                if (mpModel && nInvent==SdrInventor::Default && (nIdent==OBJ_TEXT || nIdent==OBJ_TEXTEXT ||
                     nIdent==OBJ_TITLETEXT || nIdent==OBJ_OUTLINETEXT))
                 {
                     // default for all text frames: no background, no border
@@ -518,7 +518,7 @@ bool SdrCreateView::BegCreateObj(const Point& rPnt, OutputDevice* pOut, short nM
 
 bool SdrCreateView::BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov, SdrObject* pPreparedFactoryObject)
 {
-    sal_uInt32 nInvent(nAktInvent);
+    SdrInventor nInvent(nAktInvent);
     sal_uInt16 nIdent(nAktIdent);
 
     if(pPreparedFactoryObject)
@@ -533,7 +533,7 @@ bool SdrCreateView::BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov
 bool SdrCreateView::BegCreateCaptionObj(const Point& rPnt, const Size& rObjSiz,
     OutputDevice* pOut, short nMinMov)
 {
-    return ImpBegCreateObj(SdrInventor,OBJ_CAPTION,rPnt,pOut,nMinMov,
+    return ImpBegCreateObj(SdrInventor::Default,OBJ_CAPTION,rPnt,pOut,nMinMov,
         Rectangle(rPnt,Size(rObjSiz.Width()+1,rObjSiz.Height()+1)), nullptr);
 }
 

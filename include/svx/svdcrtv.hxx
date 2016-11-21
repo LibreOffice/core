@@ -48,7 +48,7 @@ protected:
 
     sal_Int32                   nAutoCloseDistPix;
     sal_Int32                   nFreeHandMinDistPix;
-    sal_uInt32                  nAktInvent;     // set the current ones
+    SdrInventor                 nAktInvent;     // set the current ones
     sal_uInt16                  nAktIdent;      // Obj for re-creating
 
     bool                        b1stPointAsCenter : 1;
@@ -60,7 +60,7 @@ private:
     SVX_DLLPRIVATE void ImpClearVars();
 
 protected:
-    bool ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
+    bool ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
         sal_Int16 nMinMov, const Rectangle& rLogRect, SdrObject* pPreparedFactoryObject);
 
     void ShowCreateObj(/*OutputDevice* pOut, bool bFull*/);
@@ -99,10 +99,10 @@ public:
     // Determine whether a measurement tool activated
     bool IsMeasureTool() const;
 
-    void SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent=SdrInventor);
-    void TakeCurrentObj(sal_uInt16& nIdent, sal_uInt32& nInvent) const  { nInvent=nAktInvent; nIdent=nAktIdent; }
-    sal_uInt32 GetCurrentObjInventor() const { return nAktInvent; }
-    sal_uInt16 GetCurrentObjIdentifier() const { return nAktIdent; }
+    void SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent=SdrInventor::Default);
+    void TakeCurrentObj(sal_uInt16& nIdent, SdrInventor& nInvent) const  { nInvent=nAktInvent; nIdent=nAktIdent; }
+    SdrInventor GetCurrentObjInventor() const { return nAktInvent; }
+    sal_uInt16  GetCurrentObjIdentifier() const { return nAktIdent; }
 
     // Beginning the regular Create
     bool BegCreateObj(const Point& rPnt, OutputDevice* pOut=nullptr, short nMinMov=-3);

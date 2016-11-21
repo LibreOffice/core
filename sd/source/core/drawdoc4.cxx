@@ -885,7 +885,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 
         OutlinerMode nOldOutlMode = pOutl->GetMode();
         OutlinerMode nOutlMode = OutlinerMode::TextObject;
-        if (pObj->GetObjInventor() == SdrInventor &&
+        if (pObj->GetObjInventor() == SdrInventor::Default &&
             pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
         {
             nOutlMode = OutlinerMode::OutlineObject;
@@ -1120,7 +1120,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
             {
                 SdrObject* pObj = pPage->GetObj(nObj);
 
-                if (pObj->GetObjInventor() == SdrInventor)
+                if (pObj->GetObjInventor() == SdrInventor::Default)
                 {
                     switch( pObj->GetObjIdentifier() )
                     {
@@ -1163,7 +1163,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
             {
                 SdrObject* pObj = pPage->GetObj(nObj);
 
-                if (pObj->GetObjInventor() == SdrInventor)
+                if (pObj->GetObjInventor() == SdrInventor::Default)
                 {
                     switch(pObj->GetObjIdentifier())
                     {

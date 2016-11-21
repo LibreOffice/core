@@ -332,7 +332,7 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 void FmXUndoEnvironment::Inserted(SdrObject* pObj)
 {
-    if (pObj->GetObjInventor() == FmFormInventor)
+    if (pObj->GetObjInventor() == SdrInventor::FmForm)
     {
         FmFormObj* pFormObj = dynamic_cast<FmFormObj*>( pObj );
         Inserted( pFormObj );
@@ -446,7 +446,7 @@ void FmXUndoEnvironment::Removed(SdrObject* pObj)
         // object, which is sufficient here
         return;
 
-    if (pObj->GetObjInventor() == FmFormInventor)
+    if (pObj->GetObjInventor() == SdrInventor::FmForm)
     {
         FmFormObj* pFormObj = dynamic_cast<FmFormObj*>( pObj );
         Removed(pFormObj);

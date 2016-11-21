@@ -99,7 +99,7 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
             pObj = aIter.Next();
 
             if( ( pObj->GetName().equals(rObjName) ) ||
-                ( SdrInventor == pObj->GetObjInventor() &&
+                ( SdrInventor::Default == pObj->GetObjInventor() &&
                   OBJ_OLE2 == pObj->GetObjIdentifier() &&
                   rObjName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) )
             {
@@ -124,7 +124,7 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
             pObj = aIter.Next();
 
             if( ( pObj->GetName().equals(rObjName) ) ||
-                ( SdrInventor == pObj->GetObjInventor() &&
+                ( SdrInventor::Default == pObj->GetObjInventor() &&
                   OBJ_OLE2 == pObj->GetObjIdentifier() &&
                   rObjName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) )
             {
@@ -231,7 +231,7 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
             {
                 SdrObject* pObj = pPage->GetObj(nObj);
                 if (pObj->GetObjIdentifier() == OBJ_PAGE &&
-                    pObj->GetObjInventor() == SdrInventor)
+                    pObj->GetObjInventor() == SdrInventor::Default)
                 {
                     // The page object is the preceding page (drawing page)
                     SAL_WARN_IF(!nStartPos, "sd", "Position of notes page must not be 0.");
@@ -964,7 +964,7 @@ SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCrea
     for (nUD = 0; nUD < nUDCount; nUD++)
     {
         SdrObjUserData* pUD = rObject.GetUserData(nUD);
-        if((pUD->GetInventor() == SdUDInventor) && (pUD->GetId() == SD_ANIMATIONINFO_ID))
+        if((pUD->GetInventor() == SdrInventor::StarDrawUserData) && (pUD->GetId() == SD_ANIMATIONINFO_ID))
         {
             pRet = dynamic_cast<SdAnimationInfo*>(pUD);
             break;
@@ -992,7 +992,7 @@ SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject )
     {
         SdrObjUserData* pUserData = pObject->GetUserData( i );
 
-        if ( ( pUserData->GetInventor() == SdUDInventor ) && ( pUserData->GetId() == SD_IMAPINFO_ID ) )
+        if ( ( pUserData->GetInventor() == SdrInventor::StarDrawUserData ) && ( pUserData->GetId() == SD_IMAPINFO_ID ) )
             pIMapInfo = static_cast<SdIMapInfo*>(pUserData);
     }
 

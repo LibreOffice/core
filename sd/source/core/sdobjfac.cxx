@@ -37,7 +37,7 @@ SdObjectFactory aSdObjectFactory;
 
 IMPL_STATIC_LINK( SdObjectFactory, MakeUserData, SdrObjUserDataCreatorParams, aParams, SdrObjUserData* )
 {
-    if ( aParams.nInventor == SdUDInventor )
+    if ( aParams.nInventor == SdrInventor::StarDrawUserData )
     {
         switch( aParams.nObjIdentifier )
         {

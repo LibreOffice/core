@@ -482,7 +482,7 @@ SdrObject *SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
     throw (css::uno::RuntimeException, std::exception)
 {
     sal_uInt16 nType = 0;
-    sal_uInt32 nInventor = 0;
+    SdrInventor nInventor;
 
     GetTypeAndInventor( nType, nInventor, xShape->getShapeType() );
     if (!nType)
@@ -548,7 +548,7 @@ SdrObject *SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
     return pNewObj;
 }
 
-void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, const OUString& aName ) throw()
+void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, SdrInventor& rInventor, const OUString& aName ) throw()
 {
     sal_uInt32 nTempType = UHashMap::getId( aName );
 
@@ -557,25 +557,25 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, 
         if( aName == "com.sun.star.drawing.TableShape" ||
             aName == "com.sun.star.presentation.TableShape" )
         {
-            rInventor = SdrInventor;
+            rInventor = SdrInventor::Default;
             rType = OBJ_TABLE;
         }
 #if HAVE_FEATURE_AVMEDIA
         else if ( aName == "com.sun.star.presentation.MediaShape" )
         {
-            rInventor = SdrInventor;
+            rInventor = SdrInventor::Default;
             rType = OBJ_MEDIA;
         }
 #endif
     }
     else if(nTempType & E3D_INVENTOR_FLAG)
     {
-        rInventor = E3dInventor;
+        rInventor = SdrInventor::E3d;
         rType = (sal_uInt16)(nTempType & ~E3D_INVENTOR_FLAG);
     }
     else
     {
-        rInventor = SdrInventor;
+        rInventor = SdrInventor::Default;
         rType = (sal_uInt16)nTempType;
 
         switch( rType )
@@ -589,13 +589,13 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, 
     }
 }
 
-SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor, SdrObject *pObj, SvxDrawPage *mpPage, OUString const & referer )
+SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInventor nInventor, SdrObject *pObj, SvxDrawPage *mpPage, OUString const & referer )
     throw (css::uno::RuntimeException)
 {
     SvxShape* pRet = nullptr;
     switch( nInventor )
     {
-        case E3dInventor:
+        case SdrInventor::E3d:
         {
             switch( nType )
             {
@@ -624,7 +624,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
             }
             break;
         }
-        case SdrInventor:
+        case SdrInventor::Default:
         {
             switch( nType )
             {
@@ -785,7 +785,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
     {
         sal_uInt32 nObjId = nType;
 
-        if( nInventor == E3dInventor )
+        if( nInventor == SdrInventor::E3d )
             nObjId |= E3D_INVENTOR_FLAG;
 
         switch(nObjId)
@@ -858,7 +858,7 @@ uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames() throw
     return aSeq;
 }
 
-SvxShape* CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, sal_uInt32 nInventor, OUString const & referer)
+SvxShape* CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrInventor nInventor, OUString const & referer)
     throw (css::uno::RuntimeException, std::exception)
 {
     return SvxDrawPage::CreateShapeByTypeAndInventor( nType, nInventor, nullptr, nullptr, referer );

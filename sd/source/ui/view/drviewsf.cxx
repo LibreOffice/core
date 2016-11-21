@@ -122,7 +122,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                 bool bFound = false;
 
                 SdrObject* pMarkedObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-                if( pMarkedObj && (FmFormInventor == pMarkedObj->GetObjInventor()) )
+                if( pMarkedObj && (SdrInventor::FmForm == pMarkedObj->GetObjInventor()) )
                 {
                     SdrUnoObj* pUnoCtrl = dynamic_cast< SdrUnoObj* >( pMarkedObj );
 
@@ -647,7 +647,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 for (size_t nIndex = 0; nIndex < nMarkCount; ++nIndex)
                 {
                     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(rMarkList.GetMark(nIndex)->GetMarkedSdrObj());
-                    if (pTextObj && pTextObj->GetObjInventor() == SdrInventor)
+                    if (pTextObj && pTextObj->GetObjInventor() == SdrInventor::Default)
                     {
                         if (pTextObj->GetObjIdentifier() != OBJ_OLE2)
                         {

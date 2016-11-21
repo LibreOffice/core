@@ -3136,7 +3136,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
     uno::Reference< report::XReportComponent> xShapeProp;
     if ( _nObjectId == OBJ_CUSTOMSHAPE )
     {
-        pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
+        pNewControl = SdrObjFactory::MakeNewObject( SdrInventor::ReportDesign, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY);
         OUString sCustomShapeType = getDesignView()->GetInsertObjString();
         if ( sCustomShapeType.isEmpty() )
@@ -3146,7 +3146,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
     }
     else if ( _nObjectId == OBJ_OLE2 || OBJ_DLG_SUBREPORT == _nObjectId  )
     {
-        pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
+        pNewControl = SdrObjFactory::MakeNewObject( SdrInventor::ReportDesign, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
 
         pNewControl->SetLogicRect(Rectangle(3000,500,8000,5500)); // switch height and width
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY_THROW);
@@ -3162,7 +3162,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         SdrUnoObj* pControl( nullptr );
         FmFormView::createControlLabelPair( getDesignView()
                             ,nLeftMargin,0
-                            ,nullptr,nullptr,_nObjectId,OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
+                            ,nullptr,nullptr,_nObjectId,OUString(),SdrInventor::ReportDesign,OBJ_DLG_FIXEDTEXT,
                          nullptr,pSectionWindow->getReportSection().getPage(),m_aReportModel.get(),
                          pLabel,pControl);
         delete pLabel;
@@ -3457,7 +3457,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             // find this in svx
             FmFormView::createControlLabelPair( getDesignView()
                 ,nLeftMargin,0
-                ,xField,xNumberFormats,nOBJID,OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
+                ,xField,xNumberFormats,nOBJID,OUString(),SdrInventor::ReportDesign,OBJ_DLG_FIXEDTEXT,
                 pSectionWindow[1]->getReportSection().getPage(),pSectionWindow[0]->getReportSection().getPage(),m_aReportModel.get(),
                 pControl[0],pControl[1]);
             if ( pControl[0] && pControl[1] )

@@ -1957,7 +1957,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST);
 
-        if (pObject && pObject->GetObjInventor() == FmFormInventor)
+        if (pObject && pObject->GetObjInventor() == SdrInventor::FmForm)
         {
             if (const SdrUnoObj* pFormObj = dynamic_cast< const SdrUnoObj*>(pObject))
             {

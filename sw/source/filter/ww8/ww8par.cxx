@@ -165,7 +165,7 @@ SwMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate )             // static
         for( sal_uInt16 i = 0; i < nCount; i++ )
         {
             SdrObjUserData* pData = pObj->GetUserData( i );
-            if( pData && pData->GetInventor() == SW_DRAWLAYER
+            if( pData && pData->GetInventor() == SdrInventor::ScOrSwDraw
                 && pData->GetId() == SW_UD_IMAPDATA)
             {
                 return dynamic_cast<SwMacroInfo*>(pData);
@@ -6503,7 +6503,7 @@ namespace sw
 }
 
 SwMacroInfo::SwMacroInfo()
-    : SdrObjUserData( SW_DRAWLAYER, SW_UD_IMAPDATA )
+    : SdrObjUserData( SdrInventor::ScOrSwDraw, SW_UD_IMAPDATA )
     , mnShapeId(-1)
 {
 }

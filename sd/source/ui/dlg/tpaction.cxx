@@ -202,14 +202,14 @@ void SdTPAction::Construct()
             SdrMark* pMark = rMarkList.GetMark(0);
             pObj = pMark->GetMarkedSdrObj();
 
-            sal_uInt32 nInv = pObj->GetObjInventor();
-            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+            SdrInventor nInv        = pObj->GetObjInventor();
+            sal_uInt16  nSdrObjKind = pObj->GetObjIdentifier();
 
-            if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
+            if (nInv == SdrInventor::Default && nSdrObjKind == OBJ_OLE2)
             {
                 pOleObj = static_cast<SdrOle2Obj*>(pObj);
             }
-            else if (nInv == SdrInventor && nSdrObjKind == OBJ_GRAF)
+            else if (nInv == SdrInventor::Default && nSdrObjKind == OBJ_GRAF)
             {
                 pGrafObj = static_cast<SdrGrafObj*>(pObj);
             }

@@ -409,7 +409,7 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
     if( !aType.startsWith( aPrefix ) )
     {
         SdrObject* pObj = SvxFmDrawPage::CreateSdrObject_( xShape );
-        if( pObj && ( (pObj->GetObjInventor() != SdrInventor) || (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
+        if( pObj && ( (pObj->GetObjInventor() != SdrInventor::Default) || (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
         {
             SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
             if( pDoc )
@@ -1410,7 +1410,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
 
         SvxShape* pShape = nullptr;
 
-        if(pObj->GetObjInventor() == SdrInventor)
+        if(pObj->GetObjInventor() == SdrInventor::Default)
         {
             sal_uInt32 nInventor = pObj->GetObjIdentifier();
             switch( nInventor )

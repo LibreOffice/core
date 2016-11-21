@@ -262,7 +262,7 @@ public:
     const rtl::Reference< sdr::SelectionController >& getSelectionController() const { return mxSelectionController; }
 
     /** returns true if the shape identified by its inventor and identifier supports format paint brush operation */
-    static bool SupportsFormatPaintbrush( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier );
+    static bool SupportsFormatPaintbrush( SdrInventor nObjectInventor, sal_uInt16 nObjectIdentifier );
 
     /** returns a format paint brush set from the current selection */
     void TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  );

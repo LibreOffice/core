@@ -862,7 +862,7 @@ uno::Sequence< OUString > SAL_CALL SdXShape::getSupportedServiceNames() throw(cs
                                                   "com.sun.star.document.LinkTarget"} );
 
     SdrObject* pObj = mpShape->GetSdrObject();
-    if(pObj && pObj->GetObjInventor() == SdrInventor )
+    if(pObj && pObj->GetObjInventor() == SdrInventor::Default )
     {
         sal_uInt32 nInventor = pObj->GetObjIdentifier();
         switch( nInventor )

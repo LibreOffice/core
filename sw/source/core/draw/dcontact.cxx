@@ -160,7 +160,7 @@ SwContact* GetUserCall( const SdrObject* pObj )
 bool IsMarqueeTextObj( const SdrObject& rObj )
 {
     SdrTextAniKind eTKind;
-    return SdrInventor == rObj.GetObjInventor() &&
+    return SdrInventor::Default == rObj.GetObjInventor() &&
         OBJ_TEXT == rObj.GetObjIdentifier() &&
         ( SDRTEXTANI_SCROLL == ( eTKind = static_cast<const SdrTextObj&>(rObj).GetTextAniKind())
          || SDRTEXTANI_ALTERNATE == eTKind || SDRTEXTANI_SLIDE == eTKind );
@@ -550,7 +550,7 @@ void SwFlyDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchore
 
 bool CheckControlLayer( const SdrObject *pObj )
 {
-    if ( FmFormInventor == pObj->GetObjInventor() )
+    if ( SdrInventor::FmForm == pObj->GetObjInventor() )
         return true;
     if ( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
     {

@@ -26,7 +26,7 @@ SwObjectFactory aSwObjectFactory;
 IMPL_STATIC_LINK(
     SwObjectFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
 {
-    if ( aParams.nInventor == SWGInventor )
+    if ( aParams.nInventor == SdrInventor::Swg )
     {
         // No switch, there's only one at the moment
         OSL_ENSURE( aParams.nObjIdentifier == SwFlyDrawObjIdentifier,
