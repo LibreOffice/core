@@ -24,7 +24,7 @@ $(eval $(call gb_Module_add_targets,unoxml,\
     Library_unordf \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,unoxml,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,unoxml,\
     CppunitTest_unoxml_domtest \
 ))
 

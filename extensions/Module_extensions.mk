@@ -60,7 +60,7 @@ $(eval $(call gb_Module_add_l10n_targets,extensions,\
 	AllLangResTarget_updchk \
 ))
 
-$(eval $(call gb_Module_add_check_targets,extensions,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,extensions,\
     CppunitTest_extensions_test_update \
 ))
 endif

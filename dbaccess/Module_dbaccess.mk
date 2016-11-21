@@ -35,23 +35,22 @@ $(eval $(call gb_Module_add_l10n_targets,dbaccess,\
 ))
 
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
-$(eval $(call gb_Module_add_check_targets,dbaccess,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
     CppunitTest_dbaccess_firebird_test \
 ))
 endif
 
-$(eval $(call gb_Module_add_check_targets,dbaccess,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 	CppunitTest_dbaccess_dialog_save \
 	CppunitTest_dbaccess_empty_stdlib_save \
 	CppunitTest_dbaccess_nolib_save \
 	CppunitTest_dbaccess_macros_test \
-	$(if $(ENABLE_JAVA), \
-		CppunitTest_dbaccess_RowSetClones) \
 ))
 
 ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Module_add_check_targets,dbaccess,\
-    CppunitTest_dbaccess_hsqldb_test \
+$(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
+	CppunitTest_dbaccess_hsqldb_test \
+	CppunitTest_dbaccess_RowSetClones \
 ))
 endif
 
@@ -59,7 +58,7 @@ endif
 # Instructions on running the test can be found in qa/unit/embeddedb_performancetest
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Module_add_check_targets,dbaccess,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
     CppunitTest_dbaccess_embeddeddb_performancetest \
 ))
 endif

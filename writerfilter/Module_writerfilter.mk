@@ -14,9 +14,12 @@ $(eval $(call gb_Module_add_targets,writerfilter,\
     Library_writerfilter \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,writerfilter,\
-    CppunitTest_writerfilter_rtftok \
+$(eval $(call gb_Module_add_check_targets,writerfilter,\
     CppunitTest_writerfilter_misc \
+))
+
+$(eval $(call gb_Module_add_subsequentcheck_targets,writerfilter,\
+    CppunitTest_writerfilter_rtftok \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -15,7 +15,7 @@ $(eval $(call gb_Module_add_targets,lotuswordpro,\
     Library_lwpft \
 ))
 
-$(eval $(call gb_Module_add_check_targets,lotuswordpro,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,lotuswordpro,\
     CppunitTest_lotuswordpro_test_lotuswordpro \
 ))
 

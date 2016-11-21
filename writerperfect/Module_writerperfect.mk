@@ -36,7 +36,7 @@ $(eval $(call gb_Module_add_check_targets,writerperfect,\
 	CppunitTest_writerperfect_stream \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,writerperfect,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,writerperfect,\
 	CppunitTest_writerperfect_calc \
 	CppunitTest_writerperfect_draw \
 	CppunitTest_writerperfect_impress \

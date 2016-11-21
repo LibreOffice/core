@@ -15,7 +15,7 @@ $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	$(if $(filter-out ANDROID IOS,$(OS)),Library_xsec_xmlsec) \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,xmlsecurity,\
     CppunitTest_xmlsecurity_signing \
     CppunitTest_xmlsecurity_pdfsigning \
 ))

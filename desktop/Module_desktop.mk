@@ -136,7 +136,7 @@ $(eval $(call gb_Module_add_check_targets,desktop, \
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Module_add_check_targets,desktop, \
+$(eval $(call gb_Module_add_subsequentcheck_targets,desktop, \
     CppunitTest_desktop_lib \
 ))
 endif

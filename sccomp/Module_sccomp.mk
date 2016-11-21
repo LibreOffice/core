@@ -27,7 +27,7 @@ $(eval $(call gb_Module_add_l10n_targets,sccomp,\
 	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE), AllLangResTarget_solver) \
 ))
 
-$(eval $(call gb_Module_add_check_targets,sccomp,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,sccomp,\
 	CppunitTest_sccomp_lpsolver \
 ))
 

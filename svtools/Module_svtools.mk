@@ -29,7 +29,6 @@ $(eval $(call gb_Module_add_l10n_targets,svtools,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,svtools,\
-    CppunitTest_svtools_graphic \
     CppunitTest_svtools_html \
 ))
 
@@ -42,6 +41,10 @@ $(eval $(call gb_Module_add_targets,svtools,\
 endif
 
 endif
+
+$(eval $(call gb_Module_add_subsequentcheck_targets,svtools,\
+    CppunitTest_svtools_graphic \
+))
 
 ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,svtools,\
