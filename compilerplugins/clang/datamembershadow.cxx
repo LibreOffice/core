@@ -96,7 +96,7 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
     if (aFileName == SRCDIR "/xmloff/source/draw/ximplink.hxx")
         return true;
 
-    const CXXRecordDecl* parentCXXRecordDecl = dyn_cast<CXXRecordDecl>(fieldDecl->getParent());
+    const CXXRecordDecl* parentCXXRecordDecl = dyn_cast<CXXRecordDecl>(fieldDecl->getDeclContext());
     if (!parentCXXRecordDecl) {
         return true;
     }
