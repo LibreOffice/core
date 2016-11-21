@@ -198,12 +198,12 @@ namespace vcl
         int   winDescent;         /**< descender metric for Windows                            */
         bool  symbolEncoded;      /**< true: MS symbol encoded */
         int   rangeFlag;          /**< if set to 1 Unicode Range flags are applicable          */
-        sal_uInt32 ur1;               /**< bits 0 - 31 of Unicode Range flags                      */
-        sal_uInt32 ur2;               /**< bits 32 - 63 of Unicode Range flags                     */
-        sal_uInt32 ur3;               /**< bits 64 - 95 of Unicode Range flags                     */
-        sal_uInt32 ur4;               /**< bits 96 - 127 of Unicode Range flags                    */
-        sal_uInt8   panose[10];        /**< PANOSE classification number                            */
-        sal_uInt32 typeFlags;         /**< type flags (copyright bits + PS-OpenType flag)       */
+        sal_uInt32 ur1;           /**< bits 0 - 31 of Unicode Range flags                      */
+        sal_uInt32 ur2;           /**< bits 32 - 63 of Unicode Range flags                     */
+        sal_uInt32 ur3;           /**< bits 64 - 95 of Unicode Range flags                     */
+        sal_uInt32 ur4;           /**< bits 96 - 127 of Unicode Range flags                    */
+        sal_uInt8  panose[10];    /**< PANOSE classification number                            */
+        sal_uInt32 typeFlags;     /**< type flags (copyright bits + PS-OpenType flag)       */
     } TTGlobalFontInfo;
 
 #define TYPEFLAG_INVALID        0x8000000
