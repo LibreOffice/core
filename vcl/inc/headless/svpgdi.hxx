@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 #define INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 
+#include <osl/endian.h>
 #include <basebmp/bitmapdevice.hxx>
 #include <basebmp/color.hxx>
 #include <vcl/sysdata.hxx>
