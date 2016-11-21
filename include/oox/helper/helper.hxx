@@ -26,6 +26,7 @@
 #include <cstring>
 #include <limits>
 
+#include <osl/endian.h>
 #include <rtl/math.hxx>
 #include <rtl/string.hxx>
 #include <rtl/textenc.h>

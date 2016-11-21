@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 #define INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 
+#include <osl/endian.h>
 #include <vcl/sysdata.hxx>
 #include <vcl/metric.hxx>
 #include <config_cairo_canvas.h>

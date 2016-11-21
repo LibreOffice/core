@@ -31,6 +31,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include <osl/endian.h>
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include "sortedarray.hxx"
