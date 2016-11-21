@@ -1,0 +1,293 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_1895c93f",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "Should be SCTAB now.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_38928558",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "Should be SCTAB now.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_589f415f",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "Should be SCROW now.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_789cfd69",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "Should be SCTAB now.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_98871912",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "For code like this we have an IncCol method.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_f8864d12",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "I think this can be replaced with ScAddress::operator\u003c(const ScAddress\u0026).",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_187ce91f",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "SCTAB.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_3879a530",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "See operator\u003c",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_5876613f",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "SCTAB.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_988e3926",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "operator\u003c",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_d898b16d",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "SCTAB.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_f89d6d5a",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "operator\u003c",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_18a309a0",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "SCTAB.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_58ad8187",
+        "filename": "sc/source/filter/xml/XMLExportIterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "SCROW.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_98b559d2",
+        "filename": "sc/source/filter/xml/XMLExportIterator.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "Please look into removing this. This is such an ugly construct and might actually be a resource leak. ScRange does not have a virtual destructor and should not be used as a base class.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_b8ba15bf",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3153,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "SCROW and SCCOL.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_d8afd17b",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3269,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-21T07:49:01Z",
+      "side": 1,
+      "message": "SCROW and SCCOL.",
+      "revId": "3209d16bd43608c5e84ce83c89f84bb26fbee31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
