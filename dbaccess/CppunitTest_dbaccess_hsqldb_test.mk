@@ -57,7 +57,6 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_hsqldb_test,\
     dbaccess/util/dbu \
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
-    io/source/io \
     i18npool/util/i18npool \
     linguistic/source/lng \
     package/source/xstor/xstor \
