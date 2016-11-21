@@ -56,7 +56,7 @@ class KDEXLib : public QObject, public SalXLib
         int m_frameWidth;
         bool m_isGlibEventLoopType;
         bool m_allowKdeDialogs;
-        bool blockIdleTimeout;
+        bool m_blockIdleTimeout;
 
     private:
         void setupEventLoop();
