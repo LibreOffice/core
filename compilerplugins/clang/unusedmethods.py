@@ -17,6 +17,7 @@ callSet = set() # set of tuple(return_type, name_and_params)
 # for the "method can be private" analysis
 publicDefinitionSet = set() # set of tuple(return_type, name_and_params)
 calledFromOutsideSet = set() # set of tuple(return_type, name_and_params)
+virtualSet = set() # set of tuple(return_type, name_and_params)
 
 # for the "unused return types" analysis
 usedReturnSet = set() # set of tuple(return_type, name_and_params)
@@ -114,11 +115,15 @@ with io.open("loplugin.unusedmethods.log", "rb", buffering=1024*1024) as txt:
             returnType = tokens[2]
             nameAndParams = tokens[3]
             sourceLocation = tokens[4]
+            virtual = ""
+            if len(tokens)>=6: virtual = tokens[5]
             funcInfo = (normalizeTypeParams(returnType), normalizeTypeParams(nameAndParams))
             definitionSet.add(funcInfo)
             if access == "public":
                 publicDefinitionSet.add(funcInfo)
             definitionToSourceLocationMap[funcInfo] = sourceLocation
+            if virtual == "virtual":
+                virtualSet.add(funcInfo)
         elif tokens[0] == "call:":
             returnType = tokens[1]
             nameAndParams = tokens[2]
@@ -332,6 +337,8 @@ tmp3set = set()
 for d in publicDefinitionSet:
     method = d[0] + " " + d[1]
     if d in calledFromOutsideSet:
+        continue
+    if d in virtualSet:
         continue
     # TODO ignore constructors for now, my called-from-outside analysis doesn't work here
     if d[0] == "":

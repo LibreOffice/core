@@ -54,6 +54,7 @@ struct MyFuncInfo
     std::string returnType;
     std::string nameAndParams;
     std::string sourceLocation;
+    std::string virtualness;
 
 };
 bool operator < (const MyFuncInfo &lhs, const MyFuncInfo &rhs)
@@ -88,7 +89,8 @@ public:
 
         std::string output;
         for (const MyFuncInfo & s : definitionSet)
-            output += "definition:\t" + s.access + "\t" + s.returnType + "\t" + s.nameAndParams + "\t" + s.sourceLocation + "\n";
+            output += "definition:\t" + s.access + "\t" + s.returnType + "\t" + s.nameAndParams
+                      + "\t" + s.sourceLocation + "\t" + s.virtualness + "\n";
         // for the "unused method" analysis
         for (const MyFuncInfo & s : callSet)
             output += "call:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
@@ -144,10 +146,12 @@ MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
         aInfo.returnType = "";
     }
 
-    if (isa<CXXMethodDecl>(functionDecl)) {
-        const CXXRecordDecl* recordDecl = dyn_cast<CXXMethodDecl>(functionDecl)->getParent();
+    if (const CXXMethodDecl* methodDecl = dyn_cast<CXXMethodDecl>(functionDecl)) {
+        const CXXRecordDecl* recordDecl = methodDecl->getParent();
         aInfo.nameAndParams += recordDecl->getQualifiedNameAsString();
         aInfo.nameAndParams += "::";
+        if (methodDecl->isVirtual())
+            aInfo.virtualness = "virtual";
     }
     aInfo.nameAndParams += functionDecl->getNameAsString() + "(";
     bool bFirst = true;
@@ -230,12 +234,12 @@ gotfunc:
 
     // Now do the checks necessary for the "can be private" analysis
     CXXMethodDecl* calleeMethodDecl = dyn_cast<CXXMethodDecl>(calleeFunctionDecl);
-    if (calleeMethodDecl && calleeMethodDecl->getAccess() == AS_public)
+    if (calleeMethodDecl && calleeMethodDecl->getAccess() != AS_private)
     {
-        const FunctionDecl* parentFunction = parentFunctionDecl(expr);
-        if (parentFunction && parentFunction != calleeFunctionDecl) {
-            if (!ignoreLocation(parentFunction)) {
-                calledFromOutsideSet.insert(niceName(parentFunction));
+        const FunctionDecl* parentFunctionOfCallSite = parentFunctionDecl(expr);
+        if (parentFunctionOfCallSite != calleeFunctionDecl) {
+            if (!parentFunctionOfCallSite || !ignoreLocation(parentFunctionOfCallSite)) {
+                calledFromOutsideSet.insert(niceName(calleeFunctionDecl));
             }
         }
     }
@@ -316,7 +320,6 @@ bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
     return true;
 }
 
-// this catches places that take the address of a method
 bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 {
     const FunctionDecl* functionDecl = dyn_cast<FunctionDecl>(declRefExpr->getDecl());
@@ -325,6 +328,19 @@ bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     }
     logCallToRootMethods(functionDecl->getCanonicalDecl(), callSet);
     logCallToRootMethods(functionDecl->getCanonicalDecl(), usedReturnSet);
+
+    // Now do the checks necessary for the "can be private" analysis
+    const CXXMethodDecl* methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
+    if (methodDecl && methodDecl->getAccess() != AS_private)
+    {
+        const FunctionDecl* parentFunctionOfCallSite = parentFunctionDecl(declRefExpr);
+        if (parentFunctionOfCallSite != functionDecl) {
+            if (!parentFunctionOfCallSite || !ignoreLocation(parentFunctionOfCallSite)) {
+                calledFromOutsideSet.insert(niceName(functionDecl));
+            }
+        }
+    }
+
     return true;
 }
 
