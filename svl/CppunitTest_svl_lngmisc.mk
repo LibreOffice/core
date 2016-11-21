@@ -10,7 +10,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,svl_lngmisc))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,svl_lngmisc, \
-svl/qa/unit/test_lngmisc \
+	svl/qa/unit/test_lngmisc \
 ))
 
 # add a list of all needed libraries here
@@ -33,4 +33,5 @@ $(eval $(call gb_CppunitTest_set_include,svl_lngmisc,\
 	-I$(SRCDIR)/svl/source/inc \
 	$$(INCLUDE) \
 ))
+
 # vim: set noet sw=4 ts=4:

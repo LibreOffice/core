@@ -13,10 +13,6 @@ $(eval $(call gb_CppunitTest_use_external,svx_unit,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,svx_unit))
 
-$(eval $(call gb_CppunitTest_set_include,svx_unit,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,svx_unit, \
 	svx/qa/unit/svdraw/test_SdrTextObject \
 	svx/qa/unit/xoutdev \

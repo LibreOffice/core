@@ -55,10 +55,6 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_nolib_save, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,dbaccess_nolib_save,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_api,dbaccess_nolib_save,\
     offapi \
     oovbaapi \

@@ -18,14 +18,14 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_pict_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,filter_pict_test, \
-        cppu \
-        comphelper \
+	cppu \
+	comphelper \
 	basegfx \
 	sal \
 	test \
-        tk \
+	tk \
 	tl \
-        utl \
+	utl \
 	unotest \
 	vcl \
 	$(gb_UWINAPI) \

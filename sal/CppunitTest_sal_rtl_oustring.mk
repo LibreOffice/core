@@ -19,9 +19,9 @@ $(eval $(call gb_CppunitTest_use_libraries,sal_rtl_oustring,\
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sal_rtl_oustring,\
-		    -I$(SRCDIR)/sal/qa/inc \
-			    $$(INCLUDE) \
-				))
+	-I$(SRCDIR)/sal/qa/inc \
+	$$(INCLUDE) \
+))
 
 # The test uses O(U)String capabilities that dlopen this lib:
 $(call gb_CppunitTest_get_target,sal_rtl_oustring) : \

@@ -41,9 +41,9 @@ $(eval $(call gb_CppunitTest_use_system_win32_libs,basic_scanner, \
 endif
 
 $(eval $(call gb_CppunitTest_set_include,basic_scanner,\
--I$(SRCDIR)/basic/source/inc \
--I$(SRCDIR)/basic/inc \
-$$(INCLUDE) \
+	-I$(SRCDIR)/basic/source/inc \
+	-I$(SRCDIR)/basic/inc \
+	$$(INCLUDE) \
 ))
 
 # vim: set noet sw=4 ts=4:
