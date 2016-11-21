@@ -65,12 +65,11 @@ IMPLEMENT_SERVICE_INFO(MacabStatement, "com.sun.star.sdbc.drivers.MacabStatement
 
 MacabCommonStatement::MacabCommonStatement(MacabConnection* _pConnection )
     : MacabCommonStatement_BASE(m_aMutex),
-    OPropertySetHelper(MacabCommonStatement_BASE::rBHelper),
+    OPropertySetHelper(rBHelper),
     m_aParser(_pConnection->getDriver()->getComponentContext()),
     m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser ),
     m_pParseTree(nullptr),
-    m_pConnection(_pConnection),
-    rBHelper(MacabCommonStatement_BASE::rBHelper)
+    m_pConnection(_pConnection)
 {
     m_pConnection->acquire();
 }
@@ -374,7 +373,7 @@ void SAL_CALL MacabCommonStatement::cancel(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     // cancel the current sql statement
 }
 
@@ -382,7 +381,7 @@ void SAL_CALL MacabCommonStatement::close(  ) throw(SQLException, RuntimeExcepti
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
+        checkDisposed(rBHelper.bDisposed);
 
     }
     dispose();
@@ -392,7 +391,7 @@ sal_Bool SAL_CALL MacabCommonStatement::execute(
         const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
     Reference< XResultSet > xRS = executeQuery(sql);
 
@@ -403,7 +402,7 @@ Reference< XResultSet > SAL_CALL MacabCommonStatement::executeQuery(
         const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
 OSL_TRACE("Mac OS Address book - SQL Request: %s", OUtoCStr(sql));
 
@@ -462,7 +461,7 @@ OSL_TRACE("Mac OS Address book - SQL Request: %s", OUtoCStr(sql));
 Reference< XConnection > SAL_CALL MacabCommonStatement::getConnection(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
     // just return our connection here
     return m_pConnection;
@@ -471,7 +470,7 @@ Reference< XConnection > SAL_CALL MacabCommonStatement::getConnection(  ) throw(
 sal_Int32 SAL_CALL MacabCommonStatement::executeUpdate( const OUString& ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
     // the return values gives information about how many rows are affected by executing the sql statement
     return 0;
@@ -480,7 +479,7 @@ sal_Int32 SAL_CALL MacabCommonStatement::executeUpdate( const OUString& ) throw(
 Any SAL_CALL MacabCommonStatement::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
     return makeAny(m_aLastWarning);
 }
@@ -488,7 +487,7 @@ Any SAL_CALL MacabCommonStatement::getWarnings(  ) throw(SQLException, RuntimeEx
 void SAL_CALL MacabCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
     m_aLastWarning = SQLWarning();
 }

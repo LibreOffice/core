@@ -95,7 +95,7 @@ namespace connectivity
             virtual ~MacabCommonStatement() override;
 
         public:
-            ::cppu::OBroadcastHelper& rBHelper;
+            using MacabCommonStatement_BASE::rBHelper;
 
             explicit MacabCommonStatement(MacabConnection *_pConnection);
             using MacabCommonStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
