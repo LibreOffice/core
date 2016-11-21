@@ -1027,8 +1027,8 @@ void EditTextObjectImpl::SetStyleSheet(sal_Int32 nPara, const OUString& rName, c
         return;
 
     ContentInfo& rC = *aContents[nPara].get();
-    rC.GetStyle() = rName;
-    rC.GetFamily() = rFamily;
+    rC.SetStyle(rName);
+    rC.SetFamily(rFamily);
 }
 
 bool EditTextObjectImpl::ImpChangeStyleSheets(
@@ -1045,8 +1045,8 @@ bool EditTextObjectImpl::ImpChangeStyleSheets(
         {
             if ( rC.GetStyle() == rOldName )
             {
-                rC.GetStyle() = rNewName;
-                rC.GetFamily() = eNewFamily;
+                rC.SetStyle(rNewName);
+                rC.SetFamily(eNewFamily);
                 bChanges = true;
             }
         }
@@ -1307,10 +1307,10 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         pC->SetText(OStringToOUString(aByteString, eSrcEncoding));
 
         // StyleName and Family...
-        pC->GetStyle() = rIStream.ReadUniOrByteString(eSrcEncoding);
+        pC->SetStyle(rIStream.ReadUniOrByteString(eSrcEncoding));
         sal_uInt16 nStyleFamily(0);
         rIStream.ReadUInt16( nStyleFamily );
-        pC->GetFamily() = (SfxStyleFamily)nStyleFamily;
+        pC->SetFamily((SfxStyleFamily)nStyleFamily);
 
         // Paragraph attributes ...
         pC->GetParaAttribs().Load( rIStream );
@@ -1530,7 +1530,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
                     rtl_uString *pStr = rtl_uString_alloc(nL);
                     rIStream.ReadBytes(pStr->buffer, nL*sizeof(sal_Unicode) );
-                    rC.GetStyle() = OUString(pStr, SAL_NO_ACQUIRE);
+                    rC.SetStyle(OUString(pStr, SAL_NO_ACQUIRE));
                 }
             }
         }

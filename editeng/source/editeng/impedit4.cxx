@@ -1078,8 +1078,8 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
         // The StyleSheet...
         if ( pNode->GetStyleSheet() )
         {
-            pC->GetStyle() = pNode->GetStyleSheet()->GetName();
-            pC->GetFamily() = pNode->GetStyleSheet()->GetFamily();
+            pC->SetStyle(pNode->GetStyleSheet()->GetName());
+            pC->SetFamily(pNode->GetStyleSheet()->GetFamily());
         }
 
         // The Text...

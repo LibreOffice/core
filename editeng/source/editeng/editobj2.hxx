@@ -142,12 +142,13 @@ public:
     XEditAttributesType& GetCharAttribs() { return maCharAttribs; }
 
     const OUString&     GetStyle()          const   { return aStyle; }
-    const SfxItemSet&   GetParaAttribs()    const   { return aParaAttribs; }
     SfxStyleFamily      GetFamily()         const   { return eFamily; }
 
-    OUString&           GetStyle()          { return aStyle; }
+    void                SetStyle(const OUString& rStyle) { aStyle = rStyle; }
+    void                SetFamily(const SfxStyleFamily& rFamily) { eFamily  = rFamily; }
+
+    const SfxItemSet&   GetParaAttribs()    const   { return aParaAttribs; }
     SfxItemSet&         GetParaAttribs()    { return aParaAttribs; }
-    SfxStyleFamily&     GetFamily()         { return eFamily; }
 
     const WrongList* GetWrongList() const;
     void SetWrongList( WrongList* p );
