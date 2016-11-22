@@ -91,7 +91,7 @@ namespace sfx2
     }
 }
 
-class SfxLinkItem : public SfxPoolItem
+class SFX2_DLLPUBLIC SfxLinkItem : public SfxPoolItem
 {
     Link<SfxPoolItem*, void> aLink;
 public:
