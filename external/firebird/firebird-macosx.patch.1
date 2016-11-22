@@ -110,11 +110,15 @@
  #elif defined(HPUX)
  const char* const inTemplate = "libicui18n.sl.%s";
  const char* const ucTemplate = "libicuuc.sl.%s";
-@@ -353,6 +353,12 @@
+@@ -353,6 +353,16 @@
  		s.printf("%d%d", majorVersion, minorVersion);
  
  	filename.printf(templateName, s.c_str());
-+	const char * const envpath = getenv("LIBREOFFICE_FIREBIRD_LIB");
++	const char * envpath = getenv("LIBREOFFICE_FIREBIRD_LIB");
++	if(envpath == nullptr)
++	{
++		envpath = getenv("LIBREOFFICE_ICU_LIB");
++	}
 +	if(envpath != nullptr)
 +	{
 +		s = filename.c_str();
