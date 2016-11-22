@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_db9eeb06",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6056,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-22T12:04:59Z",
+      "side": 1,
+      "message": "s/cerficaite/certificate",
+      "revId": "9a2809b35502651afb6a33d688a4437619f9310d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
