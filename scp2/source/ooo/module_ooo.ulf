@@ -76,6 +76,12 @@ en-US = "Bengali"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_BN]
 en-US = "Bengali spelling dictionary"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_BO]
+en-US = "Classical Tibetan"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_BO]
+en-US = "Classical Tibetan syllable spelling dictionary"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_BR]
 en-US = "Breton"
 
