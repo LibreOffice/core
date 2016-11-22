@@ -46,21 +46,20 @@ struct UCBDeadPropertyValueParseContext
     ~UCBDeadPropertyValueParseContext() { delete pType; delete pValue; }
 };
 
-// static
-const OUString UCBDeadPropertyValue::aTypeString("string");
-const OUString UCBDeadPropertyValue::aTypeLong("long");
-const OUString UCBDeadPropertyValue::aTypeShort("short");
-const OUString UCBDeadPropertyValue::aTypeBoolean("boolean");
-const OUString UCBDeadPropertyValue::aTypeChar("char");
-const OUString UCBDeadPropertyValue::aTypeByte("byte");
-const OUString UCBDeadPropertyValue::aTypeHyper("hyper");
-const OUString UCBDeadPropertyValue::aTypeFloat("float");
-const OUString UCBDeadPropertyValue::aTypeDouble("double");
+static const char aTypeString[] = "string";
+static const char aTypeLong[] = "long";
+static const char aTypeShort[] = "short";
+static const char aTypeBoolean[] = "boolean";
+static const char aTypeChar[] = "char";
+static const char aTypeByte[] = "byte";
+static const char aTypeHyper[] = "hyper";
+static const char aTypeFloat[] = "float";
+static const char aTypeDouble[] = "double";
 
-// static
-const OUString UCBDeadPropertyValue::aXMLPre("<ucbprop><type>");
-const OUString UCBDeadPropertyValue::aXMLMid("</type><value>");
-const OUString UCBDeadPropertyValue::aXMLEnd("</value></ucbprop>");
+static const char aXMLPre[] = "<ucbprop><type>";
+static const char aXMLMid[] = "</type><value>";
+static const char aXMLEnd[] = "</value></ucbprop>";
+
 
 #define STATE_TOP (1)
 

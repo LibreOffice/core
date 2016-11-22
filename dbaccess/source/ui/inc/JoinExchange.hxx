@@ -33,7 +33,6 @@ namespace dbaui
     typedef ::cppu::ImplHelper1< css::lang::XUnoTunnel > OJoinExchObj_Base;
     class OJoinExchObj : public TransferableHelper, public OJoinExchObj_Base
     {
-        static OUString         m_sJoinFormat;
         bool                m_bFirstEntry;
 
     protected:

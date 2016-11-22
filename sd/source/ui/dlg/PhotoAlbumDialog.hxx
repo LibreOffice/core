@@ -49,7 +49,6 @@ public:
     virtual void dispose() override;
 
 private:
-    static OUString sDirUrl;
     VclPtr<CancelButton>   pCancelBtn;
     VclPtr<PushButton>     pCreateBtn;
 

@@ -434,9 +434,8 @@ OUString XclTools::GetXclFontName( const OUString& rFontName )
 }
 
 // built-in defined names
-const OUString XclTools::maDefNamePrefix( "Excel_BuiltIn_" );
-
-const OUString XclTools::maDefNamePrefixXml ( "_xlnm." );
+static const char maDefNamePrefix[]    = "Excel_BuiltIn_"; /// Prefix for built-in defined names.
+static const char maDefNamePrefixXml[] = "_xlnm.";         /// Prefix for built-in defined names for OOX
 
 static const sal_Char* const ppcDefNames[] =
 {
@@ -483,7 +482,7 @@ OUString XclTools::GetBuiltInDefNameXml( sal_Unicode cBuiltIn )
 
 sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )
 {
-    sal_Int32 nPrefixLen = maDefNamePrefix.getLength();
+    sal_Int32 nPrefixLen = strlen(maDefNamePrefix);
     if( rDefName.startsWithIgnoreAsciiCase( maDefNamePrefix ) )
     {
         for( sal_Unicode cBuiltIn = 0; cBuiltIn < EXC_BUILTIN_UNKNOWN; ++cBuiltIn )
@@ -505,8 +504,8 @@ sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )
 
 // built-in style names
 
-const OUString XclTools::maStyleNamePrefix1( "Excel_BuiltIn_" );
-const OUString XclTools::maStyleNamePrefix2( "Excel Built-in " );
+static const char maStyleNamePrefix1[] = "Excel_BuiltIn_";  /// Prefix for built-in cell style names.
+static const char maStyleNamePrefix2[] = "Excel Built-in "; /// Prefix for built-in cell style names from OOX filter.
 
 static const sal_Char* const ppcStyleNames[] =
 {
@@ -565,9 +564,9 @@ bool XclTools::IsBuiltInStyleName( const OUString& rStyleName, sal_uInt8* pnStyl
 
     sal_Int32 nPrefixLen = 0;
     if( rStyleName.startsWithIgnoreAsciiCase( maStyleNamePrefix1 ) )
-        nPrefixLen = maStyleNamePrefix1.getLength();
+        nPrefixLen = strlen(maStyleNamePrefix1);
     else if( rStyleName.startsWithIgnoreAsciiCase( maStyleNamePrefix2 ) )
-        nPrefixLen = maStyleNamePrefix2.getLength();
+        nPrefixLen = strlen(maStyleNamePrefix2);
     if( nPrefixLen > 0 )
     {
         for( sal_uInt8 nId = 0; nId < SAL_N_ELEMENTS( ppcStyleNames ); ++nId )
@@ -629,8 +628,8 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
 
 // conditional formatting style names
 
-const OUString XclTools::maCFStyleNamePrefix1( "Excel_CondFormat_" );
-const OUString XclTools::maCFStyleNamePrefix2( "ConditionalStyle_" );
+static const char maCFStyleNamePrefix1[] = "Excel_CondFormat_"; /// Prefix for cond. formatting style names.
+static const char maCFStyleNamePrefix2[] = "ConditionalStyle_"; /// Prefix for cond. formatting style names from OOX filter.
 
 OUString XclTools::GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
 {
@@ -670,8 +669,8 @@ void XclTools::SkipSubStream( XclImpStream& rStrm )
 
 // Basic macro names
 
-const OUString XclTools::maSbMacroPrefix( "vnd.sun.star.script:" );
-const OUString XclTools::maSbMacroSuffix( "?language=Basic&location=document" );
+static const char maSbMacroPrefix[] = "vnd.sun.star.script:";              /// Prefix for StarBasic macros.
+static const char maSbMacroSuffix[] = "?language=Basic&location=document"; /// Suffix for StarBasic macros.
 
 OUString XclTools::GetSbMacroUrl( const OUString& rMacroName, SfxObjectShell* pDocShell )
 {
@@ -685,12 +684,12 @@ OUString XclTools::GetSbMacroUrl( const OUString& rMacroName, SfxObjectShell* pD
 OUString XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
 {
     sal_Int32 nSbMacroUrlLen = rSbMacroUrl.getLength();
-    sal_Int32 nMacroNameLen = nSbMacroUrlLen - maSbMacroPrefix.getLength() - maSbMacroSuffix.getLength();
+    sal_Int32 nMacroNameLen = nSbMacroUrlLen - strlen(maSbMacroPrefix) - strlen(maSbMacroSuffix);
     if( (nMacroNameLen > 0) && rSbMacroUrl.startsWithIgnoreAsciiCase( maSbMacroPrefix ) &&
             rSbMacroUrl.endsWithIgnoreAsciiCase( maSbMacroSuffix ) )
     {
-        sal_Int32 nPrjDot = rSbMacroUrl.indexOf( '.', maSbMacroPrefix.getLength() ) + 1;
-        return rSbMacroUrl.copy( nPrjDot, nSbMacroUrlLen - nPrjDot - maSbMacroSuffix.getLength() );
+        sal_Int32 nPrjDot = rSbMacroUrl.indexOf( '.', strlen(maSbMacroPrefix) ) + 1;
+        return rSbMacroUrl.copy( nPrjDot, nSbMacroUrlLen - nPrjDot - strlen(maSbMacroSuffix) );
     }
     return OUString();
 }

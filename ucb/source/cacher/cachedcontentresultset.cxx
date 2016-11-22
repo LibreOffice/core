@@ -376,12 +376,6 @@ class CCRS_PropertySetInfo :
     Sequence< css::beans::Property >*
                             m_pProperties;
 
-    //some helping variables ( names for my special properties )
-    static OUString m_aPropertyNameForCount;
-    static OUString m_aPropertyNameForFinalCount;
-    static OUString m_aPropertyNameForFetchSize;
-    static OUString m_aPropertyNameForFetchDirection;
-
     long                    m_nFetchSizePropertyHandle;
     long                    m_nFetchDirectionPropertyHandle;
 
@@ -433,10 +427,11 @@ public:
         throw( RuntimeException, std::exception ) override;
 };
 
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForCount( "RowCount" );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFinalCount( "IsRowCountFinal" );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchSize( "FetchSize" );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection( "FetchDirection" );
+//some helping variables ( names for my special properties )
+static const char g_sPropertyNameForCount[] = "RowCount";
+static const char g_sPropertyNameForFinalCount[] = "IsRowCountFinal";
+static const char g_sPropertyNameForFetchSize[] = "FetchSize";
+static const char g_sPropertyNameForFetchDirection[] = "FetchDirection";
 
 CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         Reference< XPropertySetInfo > const & xInfo )
@@ -447,8 +442,8 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     //initialize list of properties:
 
     // it is required, that the received xInfo contains the two
-    // properties with names 'm_aPropertyNameForCount' and
-    // 'm_aPropertyNameForFinalCount'
+    // properties with names 'g_sPropertyNameForCount' and
+    // 'g_sPropertyNameForFinalCount'
 
     if( xInfo.is() )
     {
@@ -462,8 +457,8 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     }
 
     //ensure, that we haven't got the Properties 'FetchSize' and 'Direction' twice:
-    sal_Int32 nFetchSize = impl_getPos( m_aPropertyNameForFetchSize );
-    sal_Int32 nFetchDirection = impl_getPos( m_aPropertyNameForFetchDirection );
+    sal_Int32 nFetchSize = impl_getPos( g_sPropertyNameForFetchSize );
+    sal_Int32 nFetchDirection = impl_getPos( g_sPropertyNameForFetchDirection );
     sal_Int32 nDeleted = 0;
     if( nFetchSize != -1 )
         nDeleted++;
@@ -483,7 +478,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     }
     {
         Property& rMyProp = (*m_pProperties)[ nOrigProps - nDeleted ];
-        rMyProp.Name = m_aPropertyNameForFetchSize;
+        rMyProp.Name = g_sPropertyNameForFetchSize;
         rMyProp.Type = cppu::UnoType<sal_Int32>::get();
         rMyProp.Attributes = PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT;
 
@@ -497,7 +492,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     }
     {
         Property& rMyProp = (*m_pProperties)[ nOrigProps - nDeleted + 1 ];
-        rMyProp.Name = m_aPropertyNameForFetchDirection;
+        rMyProp.Name = g_sPropertyNameForFetchDirection;
         rMyProp.Type = cppu::UnoType<sal_Bool>::get();
         rMyProp.Attributes = PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT;
 
@@ -619,10 +614,10 @@ bool SAL_CALL CCRS_PropertySetInfo
 bool SAL_CALL CCRS_PropertySetInfo
         ::impl_isMyPropertyName( const OUString& rPropertyName )
 {
-    return ( rPropertyName == m_aPropertyNameForCount
-    || rPropertyName == m_aPropertyNameForFinalCount
-    || rPropertyName == m_aPropertyNameForFetchSize
-    || rPropertyName == m_aPropertyNameForFetchDirection );
+    return ( rPropertyName == g_sPropertyNameForCount
+    || rPropertyName == g_sPropertyNameForFinalCount
+    || rPropertyName == g_sPropertyNameForFetchSize
+    || rPropertyName == g_sPropertyNameForFetchDirection );
 }
 
 sal_Int32 SAL_CALL CCRS_PropertySetInfo
@@ -1027,8 +1022,7 @@ void SAL_CALL CachedContentResultSet
         //'RowCount' and 'IsRowCountFinal' are readonly!
         throw IllegalArgumentException();
     }
-    if( aProp.Name == CCRS_PropertySetInfo
-                        ::m_aPropertyNameForFetchDirection )
+    if( aProp.Name == g_sPropertyNameForFetchDirection )
     {
         //check value
         sal_Int32 nNew;
@@ -1065,8 +1059,7 @@ void SAL_CALL CachedContentResultSet
         //send PropertyChangeEvent to listeners
         impl_notifyPropertyChangeListeners( aEvt );
     }
-    else if( aProp.Name == CCRS_PropertySetInfo
-                        ::m_aPropertyNameForFetchSize )
+    else if( aProp.Name == g_sPropertyNameForFetchSize )
     {
         //check value
         sal_Int32 nNew;
@@ -1133,22 +1126,22 @@ Any SAL_CALL CachedContentResultSet
         //throws UnknownPropertyException, if so
 
     Any aValue;
-    if( rPropertyName == CCRS_PropertySetInfo::m_aPropertyNameForCount )
+    if( rPropertyName == g_sPropertyNameForCount )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_nKnownCount;
     }
-    else if( rPropertyName == CCRS_PropertySetInfo::m_aPropertyNameForFinalCount )
+    else if( rPropertyName == g_sPropertyNameForFinalCount )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_bFinalCount;
     }
-    else if( rPropertyName == CCRS_PropertySetInfo::m_aPropertyNameForFetchSize )
+    else if( rPropertyName == g_sPropertyNameForFetchSize )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_nFetchSize;
     }
-    else if( rPropertyName == CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection )
+    else if( rPropertyName == g_sPropertyNameForFetchDirection )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_nFetchDirection;
@@ -1204,15 +1197,12 @@ void SAL_CALL CachedContentResultSet
             ::impl_isMyPropertyName( rEvt.PropertyName ) )
     {
         //don't notify foreign events on fetchsize and fetchdirection
-        if( aEvt.PropertyName == CCRS_PropertySetInfo
-                                ::m_aPropertyNameForFetchSize
-        || aEvt.PropertyName == CCRS_PropertySetInfo
-                                ::m_aPropertyNameForFetchDirection )
+        if( aEvt.PropertyName == g_sPropertyNameForFetchSize
+        || aEvt.PropertyName == g_sPropertyNameForFetchDirection )
             return;
 
         //adjust my props 'RowCount' and 'IsRowCountFinal'
-        if( aEvt.PropertyName == CCRS_PropertySetInfo
-                            ::m_aPropertyNameForCount )
+        if( aEvt.PropertyName == g_sPropertyNameForCount )
         {//RowCount changed
 
             //check value
@@ -1225,8 +1215,7 @@ void SAL_CALL CachedContentResultSet
 
             impl_changeRowCount( m_nKnownCount, nNew );
         }
-        else if( aEvt.PropertyName == CCRS_PropertySetInfo
-                                ::m_aPropertyNameForFinalCount )
+        else if( aEvt.PropertyName == g_sPropertyNameForFinalCount )
         {//IsRowCountFinal changed
 
             //check value
