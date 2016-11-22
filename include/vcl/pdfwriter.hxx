@@ -226,7 +226,6 @@ public:
 
     struct VCL_DLLPUBLIC AnyWidget
     {
-    protected:
         WidgetType          Type;       // primitive RTTI
     public:
         OUString            Name;       // a distinct name to identify the control

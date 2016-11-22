@@ -106,7 +106,18 @@ private:
 MyFieldInfo UnusedFields::niceName(const FieldDecl* fieldDecl)
 {
     MyFieldInfo aInfo;
-    aInfo.parentClass = fieldDecl->getParent()->getQualifiedNameAsString();
+
+    const RecordDecl* recordDecl = fieldDecl->getParent();
+
+    if (const CXXRecordDecl* cxxRecordDecl = dyn_cast<CXXRecordDecl>(recordDecl))
+    {
+        if (cxxRecordDecl->getTemplateInstantiationPattern())
+            cxxRecordDecl = cxxRecordDecl->getTemplateInstantiationPattern();
+        aInfo.parentClass = cxxRecordDecl->getQualifiedNameAsString();
+    }
+    else
+        aInfo.parentClass = recordDecl->getQualifiedNameAsString();
+
     aInfo.fieldName = fieldDecl->getNameAsString();
     aInfo.fieldType = fieldDecl->getType().getAsString();
 

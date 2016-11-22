@@ -121,7 +121,7 @@ public:
             bool& rPrevCharIsSpace,
             FieldmarkType& openFieldMark);
 
-protected:
+private:
 
     // Implement Title/Description Elements UI (#i73249#)
     const OUString sTitle;
@@ -141,7 +141,6 @@ protected:
     const OUString sFootnote;
     const OUString sFootnoteCounting;
     const OUString sFrame;
-    const OUString sFrameStyleName;
     const OUString sGraphicFilter;
     const OUString sGraphicRotation;
     const OUString sGraphicURL;
@@ -202,6 +201,8 @@ protected:
     const OUString sTextFieldEnd;
     const OUString sTextFieldStartEnd;
 
+protected:
+    const OUString sFrameStyleName;
     SinglePropertySetInfoCache aCharStyleNamesPropInfoCache;
 
     SvXMLAutoStylePoolP& GetAutoStylePool() { return rAutoStylePool; }

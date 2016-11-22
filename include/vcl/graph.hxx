@@ -52,16 +52,7 @@ class ReaderData;
 
 class VCL_DLLPUBLIC GraphicReader
 {
-protected:
-
-    OUString        maUpperName;
-    ReaderData*     mpReaderData;
-
-                    GraphicReader() :
-                        mpReaderData( nullptr ) {}
-
 public:
-
     virtual         ~GraphicReader();
 
     const OUString& GetUpperFilterName() const { return maUpperName; }
@@ -71,6 +62,13 @@ public:
     void            DisablePreviewMode();
     void            SetPreviewSize( const Size& );
     Size            GetPreviewSize() const;
+
+protected:
+    OUString        maUpperName;
+
+                    GraphicReader() : mpReaderData( nullptr ) {}
+private:
+    ReaderData*     mpReaderData;
 };
 
 class VCL_DLLPUBLIC GraphicConversionParameters
