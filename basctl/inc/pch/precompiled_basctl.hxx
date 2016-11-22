@@ -440,7 +440,6 @@
 #include <svtools/treelistentry.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/viewdataentry.hxx>
-#include <svx/Palette.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/grfcrop.hxx>
