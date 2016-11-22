@@ -48,14 +48,11 @@ static css::uno::Reference<css::accessibility::XAccessibleAction>
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( action );
 
-    if( pWrap )
+    if (pWrap)
     {
-        if( !pWrap->mpAction.is() )
-        {
-            pWrap->mpAction.set(pWrap->mpContext, css::uno::UNO_QUERY);
-        }
-
-        return pWrap->mpAction;
+        uno::Reference<accessibility::XAccessibleAction> xAction(
+            pWrap->mpContext.get(), uno::UNO_QUERY);
+        return xAction;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleAction>();

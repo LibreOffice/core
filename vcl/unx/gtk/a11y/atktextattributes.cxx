@@ -211,14 +211,11 @@ static css::uno::Reference<css::accessibility::XAccessibleComponent>
     getComponent( AtkText *pText ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
-    if( pWrap )
+    if (pWrap)
     {
-        if( !pWrap->mpComponent.is() )
-        {
-            pWrap->mpComponent.set(pWrap->mpContext, css::uno::UNO_QUERY);
-        }
-
-        return pWrap->mpComponent;
+        uno::Reference<accessibility::XAccessibleComponent> xAC(
+            pWrap->mpContext.get(), uno::UNO_QUERY);
+        return xAC;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleComponent>();
