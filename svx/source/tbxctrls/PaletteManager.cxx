@@ -1096,6 +1096,7 @@ public:
 
     virtual void LoadColorSet( SvxColorValueSet& rColorSet ) override
     {
+        rColorSet.Clear();
         for (size_t i = 0; i < SAL_N_ELEMENTS(aLibreColors); i++)
         {
             rColorSet.InsertItem(i, aLibreColors[i].mColor, OUString::createFromAscii(aLibreColors[i].mName));
