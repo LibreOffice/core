@@ -119,6 +119,7 @@ class SwSidebarWin : public vcl::Window
         void            ShowAnchorOnly(const Point &aPoint);
         void            ShowNote();
         void            HideNote();
+        void            InvalidateControl();
 
         void            ResetAttributes();
 
