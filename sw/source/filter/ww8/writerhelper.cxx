@@ -23,7 +23,6 @@
 #include "writerhelper.hxx"
 #include <msfilter.hxx>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
 
 #include <algorithm>
 #include <functional>

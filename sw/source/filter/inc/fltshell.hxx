@@ -19,9 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_INC_FLTSHELL_HXX
 #define INCLUDED_SW_SOURCE_FILTER_INC_FLTSHELL_HXX
 
-#include <com/sun/star/text/HoriOrientation.hpp>
-#include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
 #include <hintids.hxx>
 #include <vcl/keycod.hxx>
 #include <tools/datetime.hxx>

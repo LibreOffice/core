@@ -18,13 +18,8 @@
  */
 
 #include <comphelper/classids.hxx>
-#include <com/sun/star/embed/XEmbedObjectCreator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/embed/XClassifiedObject.hpp>
-#include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <xmloff/families.hxx>
 #include <xmloff/xmlnmspe.hxx>

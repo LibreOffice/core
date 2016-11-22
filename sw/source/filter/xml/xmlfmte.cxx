@@ -35,7 +35,6 @@
 #include <unostyle.hxx>
 #include <cellatr.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include "xmlexp.hxx"
 #include <SwStyleNameMapper.hxx>
 
