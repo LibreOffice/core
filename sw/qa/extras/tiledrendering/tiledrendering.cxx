@@ -1506,6 +1506,14 @@ void SwTiledRenderingTest::testCommentEndTextEdit()
     // of the comment.
     CPPUNIT_ASSERT(!aView1.m_bOwnCursorAtOrigin);
 
+    // Hit enter and expect invalidation.
+    Scheduler::ProcessEventsToIdle();
+    aView1.m_bTilesInvalidated = false;
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+
     mxComponent->dispose();
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
