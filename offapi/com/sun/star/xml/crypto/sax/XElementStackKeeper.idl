@@ -29,8 +29,6 @@ module com { module sun { module star { module xml { module crypto { module sax 
 
 /**
  * Manipulate the "key SAX events" in a SAX event stream.
- *
- * @see   XSecurityController
  */
 interface XElementStackKeeper : com::sun::star::uno::XInterface
 {
