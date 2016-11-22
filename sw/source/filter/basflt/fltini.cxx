@@ -54,8 +54,6 @@
 #include <swdll.hxx>
 #include <osl/module.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
 #include <rtl/bootstrap.hxx>
 
 using namespace utl;

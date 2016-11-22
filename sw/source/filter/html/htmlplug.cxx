@@ -55,7 +55,6 @@
 #include "swcss1.hxx"
 #include "unoframe.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XStorable.hpp>

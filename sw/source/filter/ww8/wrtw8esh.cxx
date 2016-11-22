@@ -85,9 +85,7 @@
 #include "escher.hxx"
 #include <ndtxt.hxx>
 #include "WW8FFData.hxx"
-#include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include "docsh.hxx"
 #include "IDocumentStylePoolAccess.hxx"

@@ -43,13 +43,6 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/form/XFormsSupplier.hpp>
-#include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/form/XImageProducerSupplier.hpp>
-#include <com/sun/star/form/XFormController.hpp>
-#include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/container/XSet.hpp>
 #include <fmthdft.hxx>
 #include <fmtfld.hxx>
 #include <fmtpdsc.hxx>
