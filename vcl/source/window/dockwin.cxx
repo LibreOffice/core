@@ -589,6 +589,7 @@ bool DockingWindow::Docking( const Point&, Rectangle& )
 
 void DockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
 {
+    bool bOrigDockCanceled = mbDockCanceled;
     if (bFloatMode && !StyleSettings::GetDockingFloatsSupported())
         mbDockCanceled = true;
 
@@ -614,6 +615,7 @@ void DockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
             Show();
     }
     mbDocking = false;
+    mbDockCanceled = bOrigDockCanceled;
 }
 
 bool DockingWindow::PrepareToggleFloatingMode()

@@ -935,6 +935,7 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMo
 {
     Rectangle aRect( rRect );
 
+    bool bOrigDockCanceled = mbDockCanceled;
     if (bFloatMode && !StyleSettings::GetDockingFloatsSupported())
         mbDockCanceled = true;
 
@@ -971,6 +972,8 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMo
 
     // must be enabled in Window::Notify to prevent permanent docking during mouse move
     mbStartDockingEnabled = false;
+
+    mbDockCanceled = bOrigDockCanceled;
 }
 
 bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()

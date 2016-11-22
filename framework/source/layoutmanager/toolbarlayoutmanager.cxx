@@ -3476,6 +3476,9 @@ throw (uno::RuntimeException, std::exception)
 void SAL_CALL ToolbarLayoutManager::endDocking( const awt::EndDockingEvent& e )
 throw (uno::RuntimeException, std::exception)
 {
+    if (e.bCancelled)
+        return;
+
     bool bDockingInProgress( false );
     bool bStartDockFloated( false );
     bool bFloating( false );
