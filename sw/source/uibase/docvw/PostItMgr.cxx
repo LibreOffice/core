@@ -742,7 +742,10 @@ void SwPostItMgr::LayoutPostIts()
                                 comphelper::LibreOfficeKit::setTiledPainting(!(*i)->HasChildPathFocus());
                             (*i)->ShowNote();
                             if (!bTiledPainting)
+                            {
                                 comphelper::LibreOfficeKit::setTiledPainting(bTiledPainting);
+                                (*i)->InvalidateControl();
+                            }
                         }
                         else
                         {
