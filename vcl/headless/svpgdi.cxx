@@ -374,6 +374,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
 
 SvpSalGraphics::SvpSalGraphics()
     : m_pSurface(nullptr)
+    , m_fScale(1.0)
     , m_aLineColor(MAKE_SALCOLOR(0x00, 0x00, 0x00))
     , m_aFillColor(MAKE_SALCOLOR(0xFF, 0xFF, 0XFF))
     , m_ePaintMode(OVERPAINT)
@@ -388,6 +389,7 @@ SvpSalGraphics::~SvpSalGraphics()
 void SvpSalGraphics::setSurface(cairo_surface_t* pSurface)
 {
     m_pSurface = pSurface;
+    cairo_surface_get_device_scale(pSurface, &m_fScale, nullptr);
     ResetClipRegion();
 }
 

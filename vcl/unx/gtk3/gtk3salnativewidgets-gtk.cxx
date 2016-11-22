@@ -3117,7 +3117,7 @@ void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
     int nScaleFactor = 1;
 
 #if GTK_CHECK_VERSION(3, 10, 0)
-    nScaleFactor = gdk_window_get_scale_factor(widget_get_window(mpWindow));
+    nScaleFactor = GtkSalFrame::getDisplay()->IsOwnHiDpiScale() ? gtk_widget_get_scale_factor(mpWindow) : 1;
 #endif
 
     if (fResolution > 0.0)
