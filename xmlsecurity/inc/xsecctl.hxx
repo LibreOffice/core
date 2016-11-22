@@ -29,7 +29,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
-#include <com/sun/star/xml/crypto/sax/XSecurityController.hpp>
 #include <com/sun/star/xml/crypto/sax/XElementStackKeeper.hpp>
 #include <com/sun/star/xml/crypto/sax/XSecuritySAXEventKeeper.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
@@ -88,7 +87,6 @@ public:
 
 class XSecController : public cppu::WeakImplHelper
 <
-    css::xml::crypto::sax::XSecurityController,
     css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener,
     css::xml::crypto::sax::XSignatureCreationResultListener,
     css::xml::crypto::sax::XSignatureVerifyResultListener
@@ -405,12 +403,6 @@ public:
 
 public:
     /* Interface methods */
-
-    /*
-     * XSecurityController
-     *
-     * no method in XSecurityController interface
-     */
 
     /*
      * XSAXEventKeeperStatusChangeListener
