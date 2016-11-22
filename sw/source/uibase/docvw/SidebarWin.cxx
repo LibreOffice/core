@@ -1214,10 +1214,7 @@ void SwSidebarWin::ShowNote()
         mpAnchor->setVisible(true);
 
     // Invalidate.
-    mpSidebarTextControl->Push(PushFlags::MAPMODE);
-    lcl_translateTwips(EditWin(), *mpSidebarTextControl, nullptr);
-    mpSidebarTextControl->Invalidate();
-    mpSidebarTextControl->Pop();
+    InvalidateControl();
 }
 
 void SwSidebarWin::HideNote()
@@ -1233,6 +1230,15 @@ void SwSidebarWin::HideNote()
     }
     if (mpShadow && mpShadow->isVisible())
         mpShadow->setVisible(false);
+}
+
+void SwSidebarWin::InvalidateControl()
+{
+    // Invalidate.
+    mpSidebarTextControl->Push(PushFlags::MAPMODE);
+    lcl_translateTwips(EditWin(), *mpSidebarTextControl, nullptr);
+    mpSidebarTextControl->Invalidate();
+    mpSidebarTextControl->Pop();
 }
 
 void SwSidebarWin::ActivatePostIt()
