@@ -374,6 +374,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
 
 SvpSalGraphics::SvpSalGraphics()
     : m_pSurface(nullptr)
+    , m_fScale(1.0)
     , m_aLineColor(MAKE_SALCOLOR(0x00, 0x00, 0x00))
     , m_aFillColor(MAKE_SALCOLOR(0xFF, 0xFF, 0XFF))
     , m_ePaintMode(OVERPAINT)
@@ -388,6 +389,9 @@ SvpSalGraphics::~SvpSalGraphics()
 void SvpSalGraphics::setSurface(cairo_surface_t* pSurface)
 {
     m_pSurface = pSurface;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
+    cairo_surface_get_device_scale(pSurface, &m_fScale, nullptr);
+#endif
     ResetClipRegion();
 }
 
@@ -981,15 +985,17 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
 #if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 12, 0)
         pCopy = cairo_surface_create_similar(source,
                                             cairo_surface_get_content(m_pSurface),
-                                            aTR.mnSrcWidth,
-                                            aTR.mnSrcHeight);
+                                            aTR.mnSrcWidth * m_fScale,
+                                            aTR.mnSrcHeight * m_fScale);
 #else
         pCopy = cairo_surface_create_similar_image(source,
                                             cairo_image_surface_get_format(m_pSurface),
-                                            aTR.mnSrcWidth,
-                                            aTR.mnSrcHeight);
+                                            aTR.mnSrcWidth * m_fScale,
+                                            aTR.mnSrcHeight * m_fScale);
 #endif
-
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
+        cairo_surface_set_device_scale(pCopy, m_fScale, m_fScale);
+#endif
         cairo_t* cr = cairo_create(pCopy);
         cairo_set_source_surface(cr, source, -aTR.mnSrcX, -aTR.mnSrcY);
         cairo_rectangle(cr, 0, 0, aTR.mnSrcWidth, aTR.mnSrcHeight);
