@@ -44,6 +44,8 @@
 #include <sot/storage.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/unolingu.hxx>
@@ -237,7 +239,7 @@ bool SvxAutoCorrect::IsAutoCorrectChar( sal_Unicode cChar )
             cChar == '*'  || cChar == '_'  || cChar == '%' ||
             cChar == '.'  || cChar == ','  || cChar == ';' ||
             cChar == ':'  || cChar == '?' || cChar == '!' ||
-            cChar == '/';
+            cChar == '/'  || cChar == '-';
 }
 
 namespace
@@ -735,10 +737,10 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
                                         sal_Int32 , sal_Int32 nEndPos )
 {
     // Condition:
-    //  at the beginning:   _ or * after Space with the following !Space
-    //  at the end:         _ or * before Space (word delimiter?)
+    //  at the beginning:   _, *, / or ~ after Space with the following !Space
+    //  at the end:         _, *, / or ~ before Space (word delimiter?)
 
-    sal_Unicode cInsChar = rTxt[ nEndPos ];  // underline or bold
+    sal_Unicode cInsChar = rTxt[ nEndPos ];  // underline, bold, italic or strikeout
     if( ++nEndPos != rTxt.getLength() &&
         !IsWordDelim( rTxt[ nEndPos ] ) )
         return false;
@@ -755,6 +757,8 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
         switch( sal_Unicode c = rTxt[ --nPos ] )
         {
         case '_':
+        case '-':
+        case '/':
         case '*':
             if( c == cInsChar )
             {
@@ -787,17 +791,31 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
         {
             SvxWeightItem aSvxWeightItem( WEIGHT_BOLD, SID_ATTR_CHAR_WEIGHT );
             rDoc.SetAttr( nFndPos, nEndPos - 1,
-                            SID_ATTR_CHAR_WEIGHT,
-                            aSvxWeightItem);
+                          SID_ATTR_CHAR_WEIGHT,
+                          aSvxWeightItem);
         }
-        else                            // underline
+        else if( '/' == cInsChar )           // Italic
+        {
+            SvxPostureItem aSvxPostureItem( ITALIC_NORMAL, SID_ATTR_CHAR_POSTURE );
+            rDoc.SetAttr( nFndPos, nEndPos - 1,
+                          SID_ATTR_CHAR_POSTURE,
+                          aSvxPostureItem);
+        }
+        else if( '-' == cInsChar )           // Strikeout
+        {
+            SvxCrossedOutItem aSvxCrossedOutItem( STRIKEOUT_SINGLE, SID_ATTR_CHAR_STRIKEOUT );
+            rDoc.SetAttr( nFndPos, nEndPos - 1,
+                          SID_ATTR_CHAR_STRIKEOUT,
+                          aSvxCrossedOutItem);
+        }
+        else                            // Underline
         {
             SvxUnderlineItem aSvxUnderlineItem( LINESTYLE_SINGLE, SID_ATTR_CHAR_UNDERLINE );
             rDoc.SetAttr( nFndPos, nEndPos - 1,
-                            SID_ATTR_CHAR_UNDERLINE,
-                            aSvxUnderlineItem);
+                          SID_ATTR_CHAR_UNDERLINE,
+                          aSvxUnderlineItem);
         }
-    }
+      }
 
     return -1 != nFndPos;
 }
@@ -1304,7 +1322,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             break;
 
         // Set bold or underline automatically?
-        if (('*' == cChar || '_' == cChar) && (nPos+1 < rTxt.getLength()))
+        if (('*' == cChar || '_' == cChar || '/' == cChar || '-' == cChar) && (nPos+1 < rTxt.getLength()))
         {
             if( IsAutoCorrFlag( ChgWeightUnderl ) )
             {
