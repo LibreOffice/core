@@ -57,6 +57,7 @@ endef
 
 COMMA :=,
 
+OPEN_PAREN :=(
 CLOSE_PAREN :=)
 
 gb_VERBOSE := $(verbose)
