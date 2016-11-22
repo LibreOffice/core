@@ -112,7 +112,7 @@ class CheckGbuildToIdeModules(unittest.TestCase):
         shutil.copyfile(os.path.join(self.srcdirnative, 'RepositoryExternal.mk'), os.path.join(self.tempsrc, 'RepositoryExternal.mk'))
         shutil.copyfile(os.path.join(self.srcdirnative, 'RepositoryFixes.mk'), os.path.join(self.tempsrc, 'RepositoryFixes.mk'))
         shutil.copytree(os.path.join(self.srcdirnative, 'config_host'),  os.path.join(self.tempsrc, 'config_host'))
-        #print('copytree from _%s_ to _%s_' % (os.path.join(self.srcdirnative, 'solenv').replace('\\', '#').replace('/', '!'), os.path.join(self.tempsrc, 'solenv').replace('\\', '#').replace('/', '!')))
+        print('copytree from _%s_ to _%s_' % (os.path.join(self.srcdirnative, 'solenv').replace('\\', '#').replace('/', '!'), os.path.join(self.tempsrc, 'solenv').replace('\\', '#').replace('/', '!')))
         shutil.copytree(os.path.join(self.srcdirnative, 'solenv'),  os.path.join(self.tempsrc, 'solenv'))
 
     def tearDown(self):
@@ -120,6 +120,7 @@ class CheckGbuildToIdeModules(unittest.TestCase):
         shutil.rmtree(self.tempwork)
 
     def test_gbuildtoide(self):
+        blacklisted_modules = ['compilerplugins', 'cli_ure', 'dictionaries', 'bridges', 'helpcompiler', 'helpcontent2', 'icon-themes', 'sal', 'shell', 'cppu', 'cppuhelper', 'cpputools', 'extensions', 'external', 'i18npool', 'javaunohelper', 'jurt', 'lingucomponent', 'odk', 'scaddins', 'solenv', 'stoc', 'tools', 'translations', 'writerfilter']
         modules = ['accessibility', 'android', 'animations', 'apple_remote', 'avmedia', 'basctl', 'basegfx', 'basic', 'bean', 'canvas', 'chart2', 'codemaker', 'comphelper', 'cppcanvas', 'cui', 'dbaccess', 'desktop', 'drawinglayer', 'dtrans', 'editeng', 'embeddedobj', 'embedserv', 'eventattacher', 'extras', 'filter', 'forms', 'formula', 'fpicker', 'framework', 'hwpfilter', 'i18nlangtag', 'i18nutil', 'idl', 'idlc', 'instsetoo_native', 'io', 'ios', 'jvmaccess', 'jvmfwk', 'l10ntools', 'librelogo', 'libreofficekit', 'linguistic', 'lotuswordpro', 'mysqlc', 'nlpsolver', 'o3tl', 'offapi', 'officecfg', 'onlineupdate', 'oovbaapi', 'oox', 'opencl', 'package', 'postprocess', 'pyuno', 'registry', 'remotebridges', 'reportbuilder', 'reportdesign', 'ridljar', 'rsc', 'salhelper', 'sax', 'sc', 'sccomp', 'scp2', 'scripting', 'sd', 'sdext', 'setup_native', 'sfx2', 'slideshow', 'smoketest', 'soltools', 'sot', 'starmath', 'store', 'svgio', 'svl', 'svtools', 'svx', 'sw', 'swext', 'sysui', 'test', 'testtools', 'toolkit', 'tubes', 'ucb', 'ucbhelper', 'udkapi', 'uitest', 'UnoControls', 'unodevtools', 'unoidl', 'unoil', 'unotest', 'unotools', 'unoxml', 'ure', 'uui', 'vbahelper', 'vcl', 'winaccessibility', 'wizards', 'writerperfect', 'xmerge', 'xmlhelp', 'xmloff', 'xmlreader', 'xmlscript', 'xmlsecurity']
         if os.environ['OS'] == 'WNT':
             # for now, use a limited subset for testing on windows as it is so annoyingly slow on this
@@ -138,57 +139,6 @@ class CheckGbuildToIdeModules(unittest.TestCase):
             bashscript.close()
             subprocess.check_call([self.bash, bashscriptname.replace('\\', '/')])
             os.remove(bashscriptname)
-        jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToIde', 'Library'))
-        gbuildlibs = []
-        for jsonfilename in jsonfiles:
-            with open(os.path.join(self.tempwork, 'GbuildToIde', 'Library', jsonfilename), 'r') as f:
-                gbuildlibs.append(json.load(f))
-
-class CheckGbuildToIdeTopLevel(unittest.TestCase):
-    def setUp(self):
-        if os.environ['OS'] == 'WNT':
-            # for now, skip this on windows
-            return
-        getgbuildtesttools(self)
-        clearmakevars()
-        self.tempwork = tempfile.mkdtemp()
-        self.tempsrcparent = tempfile.mkdtemp()
-        self.tempsrc = os.path.join(self.tempsrcparent, 'src')
-        print('tempsrcparent:', self.tempsrcparent, 'tempsrc:', self.tempsrc)
-        self.srcdir = os.environ['SRCDIR']
-        if os.environ['OS'] == 'WNT':
-            self.tempworkmixed = self.tempwork.replace('\\','/')
-            self.tempsrcmixed = self.tempsrc.replace('\\','/')
-            self.srcdirnative = self.srcdir.replace('/','\\')
-        else:
-            self.tempworkmixed = self.tempwork
-            self.tempsrcmixed = self.tempsrc
-            self.srcdirnative = self.srcdir
-        shutil.copytree(self.srcdirnative, self.tempsrc)
-
-    def tearDown(self):
-        if os.environ['OS'] == 'WNT':
-            # for now, skip this on windows
-            return
-        shutil.rmtree(self.tempsrcparent)
-        shutil.rmtree(self.tempwork)
-
-    def test_gbuildtoide(self):
-        if os.environ['OS'] == 'WNT':
-            # for now, skip this on windows
-            return
-        shutil.rmtree(self.tempwork)
-        os.makedirs(os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
-        shutil.copy(self.gbuildtojson, os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
-        (bashscripthandle, bashscriptname) = tempfile.mkstemp()
-        bashscript = os.fdopen(bashscripthandle, 'w', newline='\n')
-        bashscript.write("set -e\n")
-        bashscript.write("cd %s\n" % self.tempsrc.replace('\\','/'))
-        bashscript.write("echo TEMPSRC: %s\n" % self.tempsrc.replace('\\','/'))
-        bashscript.write("%s gbuildtoide WORKDIR=%s SRCDIR=%s\n" % (self.make, self.tempwork.replace('\\', '/'), self.tempsrc.replace('\\','/')))
-        bashscript.close()
-        subprocess.check_call([self.bash, bashscriptname.replace('\\', '/')])
-        os.remove(bashscriptname)
         jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToIde', 'Library'))
         gbuildlibs = []
         for jsonfilename in jsonfiles:
