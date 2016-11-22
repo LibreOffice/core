@@ -200,15 +200,17 @@ class CAutoComInit
 public:
     CAutoComInit( )
     {
-        /*
-            to be safe we call CoInitialize
-            although it is not necessary if
-            the calling thread was created
-            using osl_CreateThread because
-            this function calls CoInitialize
-            for every thread it creates
+        /* To be safe we call CoInitializeEx although it is not necessary if
+           the calling thread was created using osl_CreateThread because
+           this function calls CoInitializeEx for every thread it creates.
+
+           We initialize with COINIT_APARTMENTTHREADED so Mulit-Threaded
+           Apartments(MTA) are used. See [1] for more details about STA and MTA
+           modes.
+
+           [1] https://msdn.microsoft.com/en-us/library/ms809971.aspx
         */
-        m_hResult = CoInitialize( nullptr );
+        m_hResult = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
 
         if ( S_OK == m_hResult )
             OSL_FAIL( \
@@ -220,15 +222,10 @@ public:
 
     ~CAutoComInit( )
     {
-        /*
-            we only call CoUninitialize when
-            CoInitialize returned S_FALSE, what
-            means that com was already initialize
-            for that thread so we keep the balance
-            if CoInitialize returned S_OK what means
-            com was not yet initialized we better
-            let com initialized or we may run into
-            the realm of undefined behaviour
+        /* We only call CoUninitialize when CoInitialize returned S_FALSE, what
+           means that com was already initialize for that thread so we keep the balance
+           if CoInitialize returned S_OK what means com was not yet initialized we better
+           let com initialized or we may run into the realm of undefined behaviour
         */
         if ( m_hResult == S_FALSE )
             CoUninitialize( );
