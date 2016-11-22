@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_5b93bbfa",
+        "filename": "sc/source/filter/excel/xltools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-22T12:14:31Z",
+      "side": 1,
+      "message": "I think those strlen() being a runtime function executed on each call could be replaced by SAL_N_ELEMENTS() compile time size.",
+      "range": {
+        "startLine": 485,
+        "startChar": 27,
+        "endLine": 485,
+        "endChar": 33
+      },
+      "revId": "6e2707b6715551b835d5c27b0fc06ef0a3f56fe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
