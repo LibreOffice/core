@@ -2091,7 +2091,7 @@ void ScTabView::KillEditView( bool bNoPaint )
     }
 
     // #108931#; notify accessibility before all things happen
-    if ((bNotifyAcc) && (aViewData.GetViewShell()->HasAccessibilityObjects()))
+    if (bNotifyAcc && aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SC_HINT_ACC_LEAVEEDITMODE));
 
     aViewData.ResetEditView();
