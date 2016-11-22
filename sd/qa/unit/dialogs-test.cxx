@@ -100,6 +100,7 @@ public:
     virtual ~SdDialogsTest() override;
 
     virtual void setUp() override;
+    virtual void tearDown() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -138,6 +139,10 @@ void SdDialogsTest::setUp()
     CPPUNIT_ASSERT(mpImpressDocument);
 }
 
+void SdDialogsTest::tearDown()
+{
+    mxComponent->dispose();
+}
 
 SdAbstractDialogFactory* SdDialogsTest::getSdAbstractDialogFactory()
 {
