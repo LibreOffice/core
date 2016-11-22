@@ -57,11 +57,11 @@ void init()
         {
             rtl_uString * pArg = nullptr;
             osl_getCommandArg (i, &pArg);
-            if (('-' == pArg->buffer[0] || '/' == pArg->buffer[0]) &&
-                 'e' == pArg->buffer[1] &&
-                 'n' == pArg->buffer[2] &&
-                 'v' == pArg->buffer[3] &&
-                 ':' == pArg->buffer[4] &&
+            if ((pArg->buffer[0] == '-' || pArg->buffer[0] == '/') &&
+                 pArg->buffer[1] == 'e' &&
+                 pArg->buffer[2] == 'n' &&
+                 pArg->buffer[3] == 'v' &&
+                 pArg->buffer[4] == ':' &&
                 rtl_ustr_indexOfChar (&(pArg->buffer[5]), '=') >= 0 )
             {
                 // ignore.

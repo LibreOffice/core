@@ -1343,7 +1343,7 @@ void SAL_CALL osl_acquireSocket(oslSocket pSocket)
 
 void SAL_CALL osl_releaseSocket( oslSocket pSocket )
 {
-    if( pSocket && 0 == osl_atomic_decrement( &(pSocket->m_nRefCount) ) )
+    if( pSocket && osl_atomic_decrement( &(pSocket->m_nRefCount) ) == 0)
     {
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     if ( pSocket->m_bIsAccepting )
@@ -1987,7 +1987,7 @@ static bool socket_poll (
     int           result;
 
     SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
-    if (nullptr == pSocket)
+    if (pSocket == nullptr)
       return false; /* EINVAL */
 
     pSocket->m_nLastError = 0;

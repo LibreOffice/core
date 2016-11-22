@@ -707,7 +707,7 @@ static void cancel_relative(char const * base, char** ref_cursor, char** ref_cur
 
 static inline void eat_space(char ** token)
 {
-    while ((' ' == **token) || ('\t' == **token)) {
+    while ((**token == ' ') || (**token == '\t')) {
         ++(*token);
     }
 }
@@ -738,7 +738,7 @@ elide_dependency(const char* key, int key_len, const char **unpacked_end)
     {
         if (key[i] == '/')
         {
-            if (0 == unpacked)
+            if (unpacked == 0)
             {
                 if (!PATHNCMP(key + i + 1, "workdir/", 8))
                 {
@@ -794,12 +794,12 @@ static inline void print_fullpaths(char* line)
     {
         end = token;
         /* hard to believe that in this day and age drive letters still exist */
-        if (*end && (':' == *(end+1)) &&
-            (('\\' == *(end+2)) || ('/' == *(end+2))) && isalpha(*end))
+        if (*end && (*(end+1) == ':') &&
+            ((*(end+2) == '\\') || (*(end+2) == '/')) && isalpha(*end))
         {
             end = end + 3; /* only one cross, err drive letter per filename */
         }
-        while (*end && (' ' != *end) && ('\t' != *end) && (':' != *end)) {
+        while (*end && (*end != ' ') && (*end != '\t') && (*end != ':')) {
             ++end;
         }
         token_len = end - token;
@@ -839,7 +839,7 @@ static inline void print_fullpaths(char* line)
         eat_space(&token);
         if (!target_seen)
         {
-            if (':' == *token)
+            if (*token == ':')
             {
                 target_seen = 1;
                 fputc(':', stdout);
@@ -855,8 +855,8 @@ static inline char * eat_space_at_end(char * end)
     char * real_end;
     assert('\0' == *end);
     real_end = end - 1;
-    while (' ' == *real_end || '\t' == *real_end || '\n' == *real_end
-                || ':' == *real_end)
+    while (*real_end == ' ' || *real_end == '\t' || *real_end == '\n'
+                || *real_end == ':')
     {    /* eat colon and whitespace at end */
          --real_end;
     }

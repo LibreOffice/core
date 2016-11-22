@@ -190,7 +190,7 @@ static rtl_Locale * parse_locale( const char * locale )
             rtl_Locale * ret;
 
             /* language is a two or three letter code */
-            if( (len > 3 && '_' == locale[3]) || (len == 3 && '_' != locale[2]) )
+            if( (len > 3 && locale[3] == '_') || (len == 3 && locale[2] != '_') )
                 offset = 3;
 
             /* convert language code to unicode */
@@ -198,7 +198,7 @@ static rtl_Locale * parse_locale( const char * locale )
             OSL_ASSERT(pLanguage != nullptr);
 
             /* convert country code to unicode */
-            if( len >= offset+3 && '_' == locale[offset] )
+            if( len >= offset+3 && locale[offset] == '_' )
             {
                 rtl_string2UString( &pCountry, locale + offset + 1, 2, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
                 OSL_ASSERT(pCountry != nullptr);
@@ -581,7 +581,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     char *codeset      = nullptr;
 
     /* default to process locale if pLocale == NULL */
-    if( nullptr == pLocale )
+    if( pLocale == nullptr )
         osl_getProcessLocale( &pLocale );
 
     /* convert rtl_Locale to locale string */
@@ -594,7 +594,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     ctype_locale = setlocale( LC_CTYPE, nullptr );
 
     /* set the desired LC_CTYPE locale */
-    if( nullptr == setlocale( LC_CTYPE, locale_buf ) )
+    if( setlocale( LC_CTYPE, locale_buf ) == nullptr )
     {
         pthread_mutex_unlock(&aLocalMutex);
         return RTL_TEXTENCODING_DONTKNOW;
@@ -652,7 +652,7 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
     locale = setlocale( LC_CTYPE, "" );
 
     /* fallback to the current locale */
-    if( nullptr == locale )
+    if( locale == nullptr )
         locale = setlocale( LC_CTYPE, nullptr );
 
     /* return the LC_CTYPE locale */
@@ -677,7 +677,7 @@ int imp_setProcessLocale( rtl_Locale * pLocale )
     pthread_mutex_lock( &aLocalMutex );
 
     /* try to set LC_ALL locale */
-    if( nullptr == setlocale( LC_ALL, locale_buf ) )
+    if( setlocale( LC_ALL, locale_buf ) == nullptr )
         ret = -1;
 
     pthread_mutex_unlock( &aLocalMutex );

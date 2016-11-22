@@ -52,7 +52,7 @@ inline XInterface * BaseReference::iquery(
     if (pInterface)
     {
         Any aRet( pInterface->queryInterface( rType ) );
-        if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
+        if (aRet.pType->eTypeClass == typelib_TypeClass_INTERFACE)
         {
             XInterface * pRet = static_cast< XInterface * >( aRet.pReserved );
             aRet.pReserved = NULL;
@@ -179,7 +179,7 @@ inline Reference< interface_type >::Reference( XInterface * pInterface, UnoRefer
 template< class interface_type >
 inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_Query )
 {
-    _pInterface = (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
+    _pInterface = (rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
                    ? iquery( static_cast< XInterface * >( rAny.pReserved ) ) : NULL);
 }
 
@@ -198,7 +198,7 @@ inline Reference< interface_type >::Reference( XInterface * pInterface, UnoRefer
 template< class interface_type >
 inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_QueryThrow )
 {
-    _pInterface = iquery_throw( typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
+    _pInterface = iquery_throw( rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
                                 ? static_cast< XInterface * >( rAny.pReserved ) : NULL );
 }
 
