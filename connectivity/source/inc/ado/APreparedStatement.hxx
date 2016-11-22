@@ -53,7 +53,6 @@ namespace connectivity
             // Data attributes
 
             css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData;
-            const OTypeInfoMap& m_aTypeInfo;
             ADOParameters*      m_pParameters;
 
             virtual ~OPreparedStatement() override;
@@ -61,7 +60,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
             // a Constructor, that is needed for when Returning the Object is needed:
-            OPreparedStatement( OConnection* _pConnection,const OTypeInfoMap& TypeInfo,const OUString& sql);
+            OPreparedStatement( OConnection* _pConnection, const OUString& sql);
 
             virtual void SAL_CALL acquire() throw() override;
             virtual void SAL_CALL release() throw() override;

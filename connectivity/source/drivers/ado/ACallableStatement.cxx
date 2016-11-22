@@ -38,8 +38,8 @@ IMPLEMENT_SERVICE_INFO(OCallableStatement,"com.sun.star.sdbcx.ACallableStatement
 
 //************ Class: java.sql.CallableStatement
 
-OCallableStatement::OCallableStatement( OConnection* _pConnection,const OTypeInfoMap& TypeInfo,const OUString& sql )
-                : OPreparedStatement( _pConnection, TypeInfo, sql )
+OCallableStatement::OCallableStatement( OConnection* _pConnection, const OUString& sql )
+                : OPreparedStatement( _pConnection, sql )
 {
     m_Command.put_CommandType(adCmdStoredProc);
 }

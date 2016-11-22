@@ -178,7 +178,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    OPreparedStatement* pStmt = new OPreparedStatement(this,m_aTypeInfo,sql);
+    OPreparedStatement* pStmt = new OPreparedStatement(this, sql);
     Reference< XPreparedStatement > xPStmt = pStmt;
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return xPStmt;
@@ -190,7 +190,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUStrin
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    OCallableStatement* pStmt = new OCallableStatement(this,m_aTypeInfo,sql);
+    OCallableStatement* pStmt = new OCallableStatement(this, sql);
     Reference< XPreparedStatement > xPStmt = pStmt;
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return xPStmt;

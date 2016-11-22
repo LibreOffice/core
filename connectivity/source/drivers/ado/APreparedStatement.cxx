@@ -52,9 +52,8 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.APreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInfoMap& TypeInfo,const OUString& sql)
+OPreparedStatement::OPreparedStatement( OConnection* _pConnection, const OUString& sql)
     : OStatement_Base( _pConnection )
-    ,m_aTypeInfo(TypeInfo)
 {
     osl_atomic_increment( &m_refCount );
 
