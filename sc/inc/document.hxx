@@ -58,6 +58,7 @@ namespace sc {
     class StartListeningContext;
     class EndListeningContext;
     class CopyFromClipContext;
+    class ColumnSpanSet;
     struct ColumnBlockPosition;
 }
 class SvxFontItem;
@@ -235,6 +236,7 @@ friend class ScFormulaCell;
 friend class ScTable;
 friend struct ScRefCellValue;
 friend class ScDocumentImport;
+friend class sc::ColumnSpanSet;
 
     typedef ::std::vector<ScTable*> TableContainer;
 private:

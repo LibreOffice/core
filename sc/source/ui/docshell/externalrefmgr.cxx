@@ -2484,7 +2484,7 @@ void ScExternalRefManager::clearCache(sal_uInt16 nFileId)
 {
     maRefCache.clearCache(nFileId);
 }
-
+/* #18736
 namespace {
 
 class RefCacheFiller : public sc::ColumnSpanSet::ColumnAction
@@ -2573,11 +2573,11 @@ public:
 };
 
 }
-
+*/
 bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
 {
-    sc::ColumnSpanSet aCachedArea(false);
-    maRefCache.getAllCachedDataSpans(nFileId, aCachedArea);
+    // #18736 sc::ColumnSpanSet aCachedArea(false);
+    // #18736 maRefCache.getAllCachedDataSpans(nFileId, aCachedArea);
 
     OUString aFilter;
     SfxObjectShellRef xDocShell;
@@ -2597,8 +2597,8 @@ bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
     // Clear the existing cache, and refill it.  Make sure we keep the
     // existing cache table instances here.
     maRefCache.clearCacheTables(nFileId);
-    RefCacheFiller aAction(mpDoc->GetSharedStringPool(), maRefCache, nFileId);
-    aCachedArea.executeColumnAction(*pSrcDoc, aAction);
+    // #18736 RefCacheFiller aAction(mpDoc->GetSharedStringPool(), maRefCache, nFileId);
+    // #18736 aCachedArea.executeColumnAction(*pSrcDoc, aAction);
 
     DocShellMap::iterator it = maDocShells.find(nFileId);
     if (it != maDocShells.end())
