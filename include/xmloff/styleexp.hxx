@@ -52,23 +52,17 @@ class SvXMLExport;
 class XMLOFF_DLLPUBLIC XMLStyleExport : public salhelper::SimpleReferenceObject
 {
     SvXMLExport& rExport;
-protected:
     const OUString sIsPhysical;
     const OUString sIsAutoUpdate;
     const OUString sFollowStyle;
     const OUString sNumberingStyleName;
     const OUString sOutlineLevel;
-
-    SvXMLExport& GetExport() { return rExport; }
-    const SvXMLExport& GetExport() const  { return rExport; }
-
-private:
-
     const OUString sPoolStyleName;
-
     SvXMLAutoStylePoolP *pAutoStylePool;
 
 protected:
+    SvXMLExport& GetExport() { return rExport; }
+    const SvXMLExport& GetExport() const  { return rExport; }
 
     bool exportStyle(
         const css::uno::Reference< css::style::XStyle > & rStyle,

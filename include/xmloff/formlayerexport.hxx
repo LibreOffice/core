@@ -52,7 +52,6 @@ namespace xmloff
     class XMLOFF_DLLPUBLIC OFormLayerXMLExport
                 :public ::salhelper::SimpleReferenceObject
     {
-    protected:
         // impl class
         std::unique_ptr<OFormLayerXMLExport_Impl> m_pImpl;
 

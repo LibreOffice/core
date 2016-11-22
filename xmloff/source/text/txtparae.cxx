@@ -1188,7 +1188,6 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sFootnote("Footnote"),
     sFootnoteCounting("FootnoteCounting"),
     sFrame("Frame"),
-    sFrameStyleName("FrameStyleName"),
     sGraphicFilter("GraphicFilter"),
     sGraphicRotation("GraphicRotation"),
     sGraphicURL("GraphicURL"),
@@ -1248,6 +1247,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sTextFieldStart( "TextFieldStart"  ),
     sTextFieldEnd( "TextFieldEnd"  ),
     sTextFieldStartEnd( "TextFieldStartEnd"  ),
+    sFrameStyleName("FrameStyleName"),
     aCharStyleNamesPropInfoCache( sCharStyleNames )
 {
     rtl::Reference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TextPropMap::PARA, true ));

@@ -131,9 +131,9 @@ void MessBox::ImplInitButtons()
 MessBox::MessBox( vcl::Window* pParent, WinBits nStyle,
                   const OUString& rTitle, const OUString& rMessage ) :
     ButtonDialog( WINDOW_MESSBOX ),
-    maMessText( rMessage ),
     mbHelpBtn( false ),
-    mbCheck( false )
+    mbCheck( false ),
+    maMessText( rMessage )
 {
     ImplInit( pParent, nStyle | WB_MOVEABLE | WB_HORZ | WB_CENTER );
     ImplInitButtons();

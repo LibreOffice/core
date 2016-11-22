@@ -114,47 +114,12 @@ enum class PushButtonDropdownStyle
 
 class VCL_DLLPUBLIC PushButton : public Button
 {
-protected:
-    SymbolType      meSymbol;
-    TriState        meState;
-    TriState        meSaveValue;
-    PushButtonDropdownStyle mnDDStyle;
-    bool            mbPressed;
-    bool            mbIsActive;
-
-    SAL_DLLPRIVATE void            ImplInitPushButtonData();
-    SAL_DLLPRIVATE static WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
-    SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SAL_DLLPRIVATE void            ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFlags,
-                                                             const Rectangle& rRect, bool bMenuBtnSep);
-    SAL_DLLPRIVATE void            ImplDrawPushButton(vcl::RenderContext& rRenderContext);
-    using Button::ImplGetTextStyle;
-    SAL_DLLPRIVATE DrawTextFlags   ImplGetTextStyle( DrawFlags nDrawFlags ) const;
-    SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SymbolType::DONTKNOW) && (meSymbol != SymbolType::IMAGE) ); }
-
-                                   PushButton( const PushButton & ) = delete;
-                                   PushButton& operator=( const PushButton & )
-                                       = delete;
-
-    SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
-
-    using Control::ImplInitSettings;
-    using Window::ImplInit;
 public:
     SAL_DLLPRIVATE void            ImplSetDefButton( bool bSet );
     SAL_DLLPRIVATE void            ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext, Rectangle& rRect, DrawButtonFlags nStyle);
     SAL_DLLPRIVATE static bool     ImplHitTestPushButton(vcl::Window* pDev, const Point& rPos);
     SAL_DLLPRIVATE bool            ImplIsDefButton() const;
 
-protected:
-    explicit        PushButton( WindowType nType );
-
-    virtual void    FillLayoutData() const override;
-    virtual const vcl::Font&
-                    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
-    virtual const Color&
-                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
-public:
     explicit        PushButton( vcl::Window* pParent, WinBits nStyle = 0 );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -198,6 +163,43 @@ public:
 
     virtual bool    set_property(const OString &rKey, const OString &rValue) override;
     virtual void    ShowFocus(const Rectangle& rRect) override;
+
+protected:
+    PushButtonDropdownStyle mnDDStyle;
+    bool            mbIsActive;
+
+    SAL_DLLPRIVATE void            ImplInitPushButtonData();
+    SAL_DLLPRIVATE static WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
+    SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+    SAL_DLLPRIVATE void            ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFlags,
+                                                             const Rectangle& rRect, bool bMenuBtnSep);
+    SAL_DLLPRIVATE void            ImplDrawPushButton(vcl::RenderContext& rRenderContext);
+    using Button::ImplGetTextStyle;
+    SAL_DLLPRIVATE DrawTextFlags   ImplGetTextStyle( DrawFlags nDrawFlags ) const;
+    SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SymbolType::DONTKNOW) && (meSymbol != SymbolType::IMAGE) ); }
+
+                                   PushButton( const PushButton & ) = delete;
+                                   PushButton& operator=( const PushButton & )
+                                       = delete;
+
+    SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
+
+    using Control::ImplInitSettings;
+    using Window::ImplInit;
+
+    explicit        PushButton( WindowType nType );
+
+    virtual void    FillLayoutData() const override;
+    virtual const vcl::Font&
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
+    virtual const Color&
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
+
+private:
+    SymbolType      meSymbol;
+    TriState        meState;
+    TriState        meSaveValue;
+    bool            mbPressed;
 };
 
 inline void PushButton::Check( bool bCheck )

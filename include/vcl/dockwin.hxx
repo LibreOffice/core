@@ -166,7 +166,6 @@ public:
 
 class VCL_DLLPUBLIC DockingManager
 {
-protected:
     ::std::vector<ImplDockingWindowWrapper *> mDockingWindows;
 
 public:
