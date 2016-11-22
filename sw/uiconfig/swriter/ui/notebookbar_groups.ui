@@ -1069,7 +1069,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="growb">
-                            <property name="label" translatable="yes"> </property>
+                            <property name="label"> </property>
                             <property name="width_request">35</property>
                             <property name="height_request">30</property>
                             <property name="visible">True</property>
@@ -1091,7 +1091,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="shrinkb">
-                            <property name="label" translatable="yes"> </property>
+                            <property name="label"> </property>
                             <property name="width_request">35</property>
                             <property name="height_request">30</property>
                             <property name="visible">True</property>
