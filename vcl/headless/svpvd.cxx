@@ -57,14 +57,16 @@ bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
         sal_uInt8 *const pBuffer)
 {
-    B2IVector aDevSize( nNewDX, nNewDY );
-    if( aDevSize.getX() == 0 )
-        aDevSize.setX( 1 );
-    if( aDevSize.getY() == 0 )
-        aDevSize.setY( 1 );
+    if (nNewDX == 0)
+        nNewDX = 1;
+    if (nNewDY == 0)
+        nNewDY = 1;
 
-    if (!m_pSurface || cairo_image_surface_get_width(m_pSurface) != aDevSize.getX() ||
-                       cairo_image_surface_get_height(m_pSurface) != aDevSize.getY() )
+    nNewDX *= m_fScale;
+    nNewDY *= m_fScale;
+
+    if (!m_pSurface || cairo_image_surface_get_width(m_pSurface) != nNewDX ||
+                       cairo_image_surface_get_height(m_pSurface) != nNewDY )
     {
         if (m_pSurface)
         {
@@ -74,21 +76,20 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
         if (m_eFormat == DeviceFormat::BITMASK)
         {
             m_pSurface = cairo_image_surface_create(CAIRO_FORMAT_A1,
-                                aDevSize.getX(),
-                                aDevSize.getY());
+                                nNewDX, nNewDY);
         }
         else
         {
             m_pSurface = pBuffer ?
                              cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
-                                   aDevSize.getX(),
-                                   aDevSize.getY(),
-                                   cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, aDevSize.getX()))
+                                   nNewDX, nNewDY,
+                                   cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nNewDX))
                                  :
                              cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                                   aDevSize.getX(),
-                                   aDevSize.getY());
+                                   nNewDX, nNewDY);
         }
+
+        cairo_surface_set_device_scale(m_pSurface, m_fScale, m_fScale);
 
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
