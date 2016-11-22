@@ -18,7 +18,6 @@
  */
 
 #include "hintids.hxx"
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <editeng/memberids.hrc>
 
 #include <xmloff/nmspmap.hxx>

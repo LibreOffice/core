@@ -22,25 +22,11 @@
 #include <vcl/outdev.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/form/XImageProducerSupplier.hpp>
-#include <com/sun/star/form/XFormController.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/drawing/XConnectableShape.hpp>
-#include <com/sun/star/drawing/XConnectorShape.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/drawing/XShapeAligner.hpp>
-#include <com/sun/star/drawing/XShapeGroup.hpp>
-#include <com/sun/star/drawing/XUniversalShapeDescriptor.hpp>
-#include <com/sun/star/drawing/XShapeMirror.hpp>
-#include <com/sun/star/drawing/XShapeArranger.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>

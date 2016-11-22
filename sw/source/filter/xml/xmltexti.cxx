@@ -19,12 +19,9 @@
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
 #include <com/sun/star/embed/OOoEmbeddedObjectFactory.hpp>
-#include <com/sun/star/embed/XLinkCreator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <o3tl/any.hxx>
