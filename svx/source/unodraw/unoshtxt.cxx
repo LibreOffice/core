@@ -589,6 +589,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         bCreated = true;
 
         mbForwarderIsEditMode = false;
+        mbDataValid = false;
     }
 
     if( mpObject && mpText && !mbDataValid && mpObject->IsInserted() && mpObject->GetPage() )
