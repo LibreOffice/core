@@ -20,6 +20,7 @@
 #include <svx/Palette.hxx>
 #include <tools/stream.hxx>
 
+#include "palettes.hxx"
 
 Palette::~Palette()
 {

@@ -33,6 +33,8 @@
 #include <cppu/unotype.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include "palettes.hxx"
+
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
     mnNumOfPalettes(2),
