@@ -179,9 +179,9 @@ protected:
     OpenGLFramebuffer* mpFirstFramebuffer;
     OpenGLFramebuffer* mpLastFramebuffer;
 
+private:
     OpenGLCapabilitySwitch maOpenGLCapabilitySwitch;
 
-private:
     struct ProgramHash
     {
         size_t operator()( const rtl::OString& aDigest ) const

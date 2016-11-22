@@ -160,11 +160,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
     SvXMLExportFlags  mnExportFlags;
     SvXMLErrorFlags   mnErrorFlags;
 
-public:
-
     const OUString               msWS;           // " "
-
-private:
 
     // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory meModelType;

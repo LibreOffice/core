@@ -94,13 +94,13 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
+    ::std::vector< css::uno::Reference<
+                      css::xml::sax::XAttributeList > > _subElems;
+private:
     OUString _name;
-
     ::std::vector< OUString > _attrNames;
     ::std::vector< OUString > _attrValues;
 
-    ::std::vector< css::uno::Reference<
-                      css::xml::sax::XAttributeList > > _subElems;
 };
 
 
