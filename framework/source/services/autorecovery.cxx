@@ -2266,6 +2266,7 @@ void AutoRecovery::implts_updateTimer()
 {
     implts_stopTimer();
 
+    sal_Int32 nMilliSeconds = 0;
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
@@ -2275,7 +2276,6 @@ void AutoRecovery::implts_updateTimer()
        )
         return;
 
-    sal_Int32 nMilliSeconds = 0;
     if (m_eTimerType == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
     {
         nMilliSeconds = (m_nAutoSaveTimeIntervall*60000); // [min] => 60.000 ms
@@ -2287,15 +2287,16 @@ void AutoRecovery::implts_updateTimer()
     else if (m_eTimerType == AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED)
         nMilliSeconds = 300; // there is a minimum time frame, where the user can lose some key input data!
 
+    } /* SAFE */
+
+    SolarMutexGuard g;
     m_aTimer.SetTimeout(nMilliSeconds);
     m_aTimer.Start();
-
-    } /* SAFE */
 }
 
 void AutoRecovery::implts_stopTimer()
 {
-    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+    SolarMutexGuard g;
 
     if (!m_aTimer.IsActive())
         return;
