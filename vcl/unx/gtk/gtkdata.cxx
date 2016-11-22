@@ -80,6 +80,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
         GetGenericData()->ErrorTrapPush(); // and leak the trap
 
     m_bX11Display = true;
+    m_bOwnHiDpiScale = true;
 
     gtk_widget_set_default_direction(AllSettings::GetLayoutRTL() ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
 }

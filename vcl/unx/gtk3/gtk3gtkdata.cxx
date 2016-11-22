@@ -83,6 +83,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
         GetGenericData()->ErrorTrapPush(); // and leak the trap
 
     m_bX11Display = GDK_IS_X11_DISPLAY( m_pGdkDisplay );
+    m_bOwnHiDpiScale = false;
 
 #if GTK_CHECK_VERSION(3,10,0)
 #ifdef GDK_WINDOWING_X11
@@ -91,6 +92,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
         if (!getenv("GDK_SCALE"))
         {
             gdk_x11_display_set_window_scale(m_pGdkDisplay, 1);
+            m_bOwnHiDpiScale = true;
         }
     }
 #endif
