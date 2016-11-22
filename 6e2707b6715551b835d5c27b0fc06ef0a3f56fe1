@@ -46,6 +46,30 @@
       "revId": "6e2707b6715551b835d5c27b0fc06ef0a3f56fe1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_fbbac76d",
+        "filename": "sc/source/filter/excel/xltools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-11-22T12:33:26Z",
+      "side": 1,
+      "message": "Oh, I didn\u0027t know that. But I also don\u0027t know what an \"old compiler\" would be here.. ;-)\nSo then, fine with me.",
+      "parentUuid": "5a74a57a_9bbb9375",
+      "range": {
+        "startLine": 485,
+        "startChar": 27,
+        "endLine": 485,
+        "endChar": 33
+      },
+      "revId": "6e2707b6715551b835d5c27b0fc06ef0a3f56fe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
