@@ -281,7 +281,7 @@ SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* /* pGraphics
                                                        DeviceFormat eFormat,
                                                        const SystemGraphicsData* /* pData */ )
 {
-    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice(eFormat);
+    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice(eFormat, 1);
     pNew->SetSize( nDX, nDY );
     return pNew;
 }
