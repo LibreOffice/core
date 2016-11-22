@@ -100,8 +100,7 @@ public:
     virtual ~SdDialogsTest() override;
 
     virtual void setUp() override;
-
-    void tearDown() override;
+    virtual void tearDown() override;
 
     // try to open a dialog
     void openAnyDialog();
