@@ -33,7 +33,6 @@
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
-#include <com/sun/star/xml/crypto/sax/XSecurityController.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
 

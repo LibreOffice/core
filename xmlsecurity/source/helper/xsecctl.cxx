@@ -930,12 +930,6 @@ SignatureInformations XSecController::getSignatureInformations() const
 }
 
 /*
- * XSecurityController
- *
- * no methods
- */
-
-/*
  * XSAXEventKeeperStatusChangeListener
  */
 
