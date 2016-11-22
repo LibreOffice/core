@@ -26,7 +26,7 @@ $(eval $(call gb_Executable_use_libraries,pdfverify,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,pdfverify,\
-    xmlsecurity/source/pdfio/pdfverify \
+    xmlsecurity/workben/pdfverify \
 ))
 
 # vim:set noet sw=4 ts=4:
