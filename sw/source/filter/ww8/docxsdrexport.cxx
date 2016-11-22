@@ -364,10 +364,15 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             lclMovePositionWithRotation(aPos, rSize, pObj->GetRotateAngle());
         }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
-        attrList->add(XML_distT, OString::number(TwipsToEMU(aULSpaceItem.GetUpper()) - nTopExt).getStr());
-        attrList->add(XML_distB, OString::number(TwipsToEMU(aULSpaceItem.GetLower()) - nBottomExt).getStr());
-        attrList->add(XML_distL, OString::number(TwipsToEMU(aLRSpaceItem.GetLeft()) - nLeftExt).getStr());
-        attrList->add(XML_distR, OString::number(TwipsToEMU(aLRSpaceItem.GetRight()) - nRightExt).getStr());
+        // The type of dist* attributes is unsigned, so make sure no negative value is written.
+        sal_Int64 nDistT = std::max(static_cast<sal_Int64>(0), TwipsToEMU(aULSpaceItem.GetUpper()) - nTopExt);
+        attrList->add(XML_distT, OString::number(nDistT).getStr());
+        sal_Int64 nDistB = std::max(static_cast<sal_Int64>(0), TwipsToEMU(aULSpaceItem.GetLower()) - nBottomExt);
+        attrList->add(XML_distB, OString::number(nDistB).getStr());
+        sal_Int64 nDistL = std::max(static_cast<sal_Int64>(0), TwipsToEMU(aLRSpaceItem.GetLeft()) - nLeftExt);
+        attrList->add(XML_distL, OString::number(nDistL).getStr());
+        sal_Int64 nDistR = std::max(static_cast<sal_Int64>(0), TwipsToEMU(aLRSpaceItem.GetRight()) - nRightExt);
+        attrList->add(XML_distR, OString::number(nDistR).getStr());
         attrList->add(XML_simplePos, "0");
         attrList->add(XML_locked, "0");
         attrList->add(XML_layoutInCell, "1");

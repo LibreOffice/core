@@ -829,6 +829,16 @@ DECLARE_OOXMLEXPORT_TEST(testTDF99434, "protectedform.docx")
 }
 
 
+DECLARE_OOXMLEXPORT_TEST(testTdf103982, "tdf103982.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    sal_Int32 nDistB = getXPath(pXmlDoc, "//wp:anchor", "distB").toInt32();
+    // This was -260350, which is not a valid value for an unsigned type.
+    CPPUNIT_ASSERT(nDistB >= 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
