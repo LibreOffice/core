@@ -35,7 +35,11 @@
 
 #include "palettes.hxx"
 
-static NamedColor aLibreColors[] =
+static const struct
+{
+    Color mColor;
+    const char* mName;
+} aLibreColors[] =
 {
     { Color(0x1b, 0x1b, 0x1b), "HLC 000 10 00" },
     { Color(0x30, 0x30, 0x30), "HLC 000 20 00" },
@@ -1094,7 +1098,7 @@ public:
     {
         for (size_t i = 0; i < SAL_N_ELEMENTS(aLibreColors); i++)
         {
-            rColorSet.InsertItem(i, aLibreColors[i].first, aLibreColors[i].second);
+            rColorSet.InsertItem(i, aLibreColors[i].mColor, OUString::createFromAscii(aLibreColors[i].mName));
         }
     }
 
