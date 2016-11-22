@@ -1572,20 +1572,33 @@ void GtkSalFrame::AllocateFrame()
             aFrameSize.setY( 1 );
 
         if (m_pSurface)
+        {
             cairo_surface_destroy(m_pSurface);
-
+            m_pSurface = nullptr;
+        }
 
 #if GTK_CHECK_VERSION(3,10,0)
-        m_pSurface = gdk_window_create_similar_image_surface(widget_get_window(m_pWindow),
-                                                             CAIRO_FORMAT_ARGB32,
-                                                             aFrameSize.getX(),
-                                                             aFrameSize.getY(),
-                                                             0);
-#else
-        m_pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                                                aFrameSize.getX(),
-                                                aFrameSize.getY());
+        GdkWindow* gdkWindow = widget_get_window(m_pWindow);
+        if (gdkWindow)
+        {
+            const int scale = gdk_window_get_scale_factor(gdkWindow);
+            const int width = aFrameSize.getX() * scale;
+            const int height = aFrameSize.getY() * scale;
+
+            m_pSurface = gdk_window_create_similar_image_surface(gdkWindow,
+                                                                 CAIRO_FORMAT_ARGB32,
+                                                                 width,
+                                                                 height,
+                                                                 0);
+        }
 #endif
+
+        if (!m_pSurface)
+        {
+            m_pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                                    aFrameSize.getX(),
+                                                    aFrameSize.getY());
+        }
         cairo_surface_set_user_data(m_pSurface, SvpSalGraphics::getDamageKey(), &m_aDamageHandler, nullptr);
         SAL_INFO("vcl.gtk3", "allocated Frame size of " << maGeometry.nWidth << " x " << maGeometry.nHeight);
 
