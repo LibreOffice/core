@@ -88,14 +88,33 @@ $(call gb_LinkTarget__add_include,$(1),$(call gb_CustomTarget_get_workdir,$(2)))
 
 endef
 
-define gb_Module_add_target
-$(if $(filter Library_% Executable_%,$(2)),$(call gb_Module__read_targetfile,$(1),$(2),target))
 
-$(if $(filter Library_% Executable_%,$(2)),$(call gb_Module_get_nonl10n_target,$(1)) : $$(gb_Module_CURRENTTARGET))
+define gb_Module__add_target_impl
+$(call gb_Module__read_targetfile,$(1),$(2),target)
+
+$(call gb_Module_get_nonl10n_target,$(1)) : $(3)
 
 endef
 
+define gb_Module_add_target
+$(if $(filter Library_% Executable_%,$(2)),$(call gb_Module__add_target_impl,$(1),$(2),$$(gb_Module_CURRENTTARGET)))
+endef
+
 gb_Module_add_l10n_target =
+
+gb_GbuildToIde_BLACKLISTEDMODULES := connectivity compilerplugins cli_ure dictionaries bridges helpcompiler helpcontent2 icon-themes jurt sal shell cppu cppuhelper cpputools extensions external i18npool javaunohelper jurt lingucomponent odk scaddins solenv stoc tools translations udkapi unoidl writerfilter
+
+define gb_Module__add_moduledir_impl
+include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
+$(call gb_Module_get_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
+gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
+
+endef
+
+define gb_Module_add_moduledir
+$(if $(filter $(gb_GbuildToIde_BLACKLISTEDMODULES),$(2)),,$(call gb_Module__add_moduledir_impl,$(1),$(2)))
+
+endef
 
 endif
 
