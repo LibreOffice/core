@@ -375,9 +375,13 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
     comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
     aSigBuffer.append(aContentFiller.makeStringAndClear());
     aSigBuffer.append(">\n/Type/Sig/SubFilter");
+#ifdef XMLSEC_CRYPTO_NSS
     if (bAdES)
         aSigBuffer.append("/ETSI.CAdES.detached");
     else
+#else
+        (void)bAdES;
+#endif
         aSigBuffer.append("/adbe.pkcs7.detached");
 
     // Time of signing.
@@ -2188,6 +2192,12 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     {
     case SEC_OID_PKCS1_SHA1_WITH_RSA_ENCRYPTION:
         eOidTag = SEC_OID_SHA1;
+        break;
+    case SEC_OID_PKCS1_SHA256_WITH_RSA_ENCRYPTION:
+        eOidTag = SEC_OID_SHA256;
+        break;
+    case SEC_OID_PKCS1_SHA512_WITH_RSA_ENCRYPTION:
+        eOidTag = SEC_OID_SHA512;
         break;
     default:
         break;
