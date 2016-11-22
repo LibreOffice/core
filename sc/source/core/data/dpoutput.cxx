@@ -1547,7 +1547,10 @@ OUString lcl_GetDataFieldName( const OUString& rSourceName, sheet::GeneralFuncti
         case sheet::GeneralFunction_COUNT:
         case sheet::GeneralFunction_COUNTNUMS:  nStrId = STR_FUN_TEXT_COUNT;    break;
         case sheet::GeneralFunction_AVERAGE:    nStrId = STR_FUN_TEXT_AVG;      break;
+#if 0
+// disabled because of css::sheet::GeneralFunction API incompatibility
         case sheet::GeneralFunction_MEDIAN:     nStrId = STR_FUN_TEXT_MEDIAN;   break;
+#endif
         case sheet::GeneralFunction_MAX:        nStrId = STR_FUN_TEXT_MAX;      break;
         case sheet::GeneralFunction_MIN:        nStrId = STR_FUN_TEXT_MIN;      break;
         case sheet::GeneralFunction_PRODUCT:    nStrId = STR_FUN_TEXT_PRODUCT;  break;

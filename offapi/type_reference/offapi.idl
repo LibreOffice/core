@@ -11492,8 +11492,7 @@ module com {
      STDEV = 9,
      STDEVP = 10,
      VAR = 11,
-     VARP = 12,
-     MEDIAN = 13
+     VARP = 12
     };
     /** @deprecated */ published interface XConsolidationDescriptor {
      interface ::com::sun::star::uno::XInterface;

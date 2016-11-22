@@ -56,8 +56,11 @@ sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sF
         return sheet::GeneralFunction_PRODUCT;
     if( IsXMLToken(sFunction, XML_AVERAGE ) )
         return sheet::GeneralFunction_AVERAGE;
+#if 0
+// disabled because of css::sheet::GeneralFunction API incompatibility
     if( IsXMLToken(sFunction, XML_MEDIAN ) )
         return sheet::GeneralFunction_MEDIAN;
+#endif
     if( IsXMLToken(sFunction, XML_MAX ) )
         return sheet::GeneralFunction_MAX;
     if( IsXMLToken(sFunction, XML_MIN ) )
@@ -111,7 +114,10 @@ void ScXMLConverter::GetStringFromFunction(
     {
         case sheet::GeneralFunction_AUTO:       sFuncStr = GetXMLToken( XML_AUTO );         break;
         case sheet::GeneralFunction_AVERAGE:    sFuncStr = GetXMLToken( XML_AVERAGE );      break;
+#if 0
+// disabled because of css::sheet::GeneralFunction API incompatibility
         case sheet::GeneralFunction_MEDIAN:     sFuncStr = GetXMLToken( XML_MEDIAN );       break;
+#endif
         case sheet::GeneralFunction_COUNT:      sFuncStr = GetXMLToken( XML_COUNT );        break;
         case sheet::GeneralFunction_COUNTNUMS:  sFuncStr = GetXMLToken( XML_COUNTNUMS );    break;
         case sheet::GeneralFunction_MAX:        sFuncStr = GetXMLToken( XML_MAX );          break;

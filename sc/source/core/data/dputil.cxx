@@ -410,7 +410,10 @@ ScSubTotalFunc ScDPUtil::toSubTotalFunc(css::sheet::GeneralFunction eGenFunc)
         case sheet::GeneralFunction_SUM:        eSubTotal = SUBTOTAL_FUNC_SUM;  break;
         case sheet::GeneralFunction_COUNT:      eSubTotal = SUBTOTAL_FUNC_CNT2; break;
         case sheet::GeneralFunction_AVERAGE:    eSubTotal = SUBTOTAL_FUNC_AVE;  break;
+#if 0
+// disabled because of css::sheet::GeneralFunction API incompatibility
         case sheet::GeneralFunction_MEDIAN:     eSubTotal = SUBTOTAL_FUNC_MED;  break;
+#endif
         case sheet::GeneralFunction_MAX:        eSubTotal = SUBTOTAL_FUNC_MAX;  break;
         case sheet::GeneralFunction_MIN:        eSubTotal = SUBTOTAL_FUNC_MIN;  break;
         case sheet::GeneralFunction_PRODUCT:    eSubTotal = SUBTOTAL_FUNC_PROD; break;
