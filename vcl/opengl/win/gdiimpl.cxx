@@ -700,7 +700,7 @@ OpenGLContext* WinSalInstance::CreateOpenGLContext()
 WinOpenGLSalGraphicsImpl::WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics,
                                                    SalGeometryProvider *mpProvider):
     OpenGLSalGraphicsImpl(rGraphics,mpProvider),
-    mrParent(rGraphics)
+    mrWinParent(rGraphics)
 {
 }
 
@@ -714,7 +714,7 @@ rtl::Reference<OpenGLContext> WinOpenGLSalGraphicsImpl::CreateWinContext()
 {
     rtl::Reference<WinOpenGLContext> xContext(new WinOpenGLContext);
     xContext->setVCLOnly();
-    if (!xContext->init(mrParent.mhLocalDC, mrParent.mhWnd))
+    if (!xContext->init(mrWinParent.mhLocalDC, mrWinParent.mhWnd))
     {
         SAL_WARN("vcl.opengl", "Context could not be created.");
         return rtl::Reference<OpenGLContext>();
@@ -727,7 +727,7 @@ void WinOpenGLSalGraphicsImpl::Init()
     if (!IsOffscreen() && mpContext.is() && mpContext->isInitialized())
     {
         const GLWinWindow& rGLWindow = static_cast<const GLWinWindow&>(mpContext->getOpenGLWindow());
-        if (rGLWindow.hWnd != mrParent.mhWnd || rGLWindow.hDC == mrParent.mhLocalDC)
+        if (rGLWindow.hWnd != mrWinParent.mhWnd || rGLWindow.hDC == mrWinParent.mhLocalDC)
         {
             // This can legitimately happen, SalFrame keeps 2x
             // SalGraphics which share the same hWnd and hDC.
