@@ -351,9 +351,8 @@ void SdTiledRenderingTest::testPostMouseEvent()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), rEditView.GetSelection().nStartPos);
 
     vcl::Cursor* pCursor = rEditView.GetCursor();
-    Point aPosition = pCursor->GetPos();
+    Point aPosition(pCursor->GetPos().getX(), pCursor->GetPos().getY() + pCursor->GetSize().Height() / 2);
     aPosition.setX(aPosition.getX() - 1000);
-    aPosition.setY(aPosition.getY() + 1000);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       convertMm100ToTwip(aPosition.getX()), convertMm100ToTwip(aPosition.getY()),
                                       1, MOUSE_LEFT, 0);
