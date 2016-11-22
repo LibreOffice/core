@@ -151,3 +151,13 @@
                    length(len), next(subNode) {}
          virtual UBool operator==(const Node &other) const;
          virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+--- source/i18n/collationdatareader.cpp
++++ source/i18n/collationdatareader.cpp
+@@ -419,6 +419,7 @@
+             tailoring.data, ts, fastLatinPrimaries, UPRV_LENGTHOF(fastLatinPrimaries));
+     if(options == ts.options && ts.variableTop != 0 &&
+             reorderCodesLength == ts.reorderCodesLength &&
++            reorderCodesLength != 0 &&
+             uprv_memcmp(reorderCodes, ts.reorderCodes, reorderCodesLength * 4) == 0 &&
+             fastLatinOptions == ts.fastLatinOptions &&
+             (fastLatinOptions < 0 ||
