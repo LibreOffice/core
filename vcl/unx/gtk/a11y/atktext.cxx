@@ -137,14 +137,11 @@ static css::uno::Reference<css::accessibility::XAccessibleText>
     getText( AtkText *pText ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
-    if( pWrap )
+    if (pWrap)
     {
-        if( !pWrap->mpText.is() )
-        {
-            pWrap->mpText.set(pWrap->mpContext, css::uno::UNO_QUERY);
-        }
-
-        return pWrap->mpText;
+        uno::Reference<accessibility::XAccessibleText> xAT(
+            pWrap->mpContext.get(), uno::UNO_QUERY);
+        return xAT;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleText>();
@@ -156,14 +153,11 @@ static css::uno::Reference<css::accessibility::XAccessibleTextMarkup>
     getTextMarkup( AtkText *pText ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
-    if( pWrap )
+    if (pWrap)
     {
-        if( !pWrap->mpTextMarkup.is() )
-        {
-            pWrap->mpTextMarkup.set(pWrap->mpContext, css::uno::UNO_QUERY);
-        }
-
-        return pWrap->mpTextMarkup;
+        uno::Reference<accessibility::XAccessibleTextMarkup> xATM(
+            pWrap->mpContext.get(), uno::UNO_QUERY);
+        return xATM;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleTextMarkup>();
@@ -175,14 +169,11 @@ static css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
     getTextAttributes( AtkText *pText ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
-    if( pWrap )
+    if (pWrap)
     {
-        if( !pWrap->mpTextAttributes.is() )
-        {
-            pWrap->mpTextAttributes.set(pWrap->mpContext, css::uno::UNO_QUERY);
-        }
-
-        return pWrap->mpTextAttributes;
+        uno::Reference<accessibility::XAccessibleTextAttributes> xATA(
+            pWrap->mpContext.get(), uno::UNO_QUERY);
+        return xATA;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleTextAttributes>();
@@ -194,14 +185,11 @@ static css::uno::Reference<css::accessibility::XAccessibleMultiLineText>
     getMultiLineText( AtkText *pText ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
-    if( pWrap )
+    if (pWrap)
     {
-        if( !pWrap->mpMultiLineText.is() )
-        {
-            pWrap->mpMultiLineText.set(pWrap->mpContext, css::uno::UNO_QUERY);
-        }
-
-        return pWrap->mpMultiLineText;
+        uno::Reference<accessibility::XAccessibleMultiLineText> xAML(
+            pWrap->mpContext.get(), uno::UNO_QUERY);
+        return xAML;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleMultiLineText>();

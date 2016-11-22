@@ -31,14 +31,11 @@ static css::uno::Reference<css::accessibility::XAccessibleEditableText>
     getEditableText( AtkEditableText *pEditableText ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pEditableText );
-    if( pWrap )
+    if (pWrap)
     {
-        if( !pWrap->mpEditableText.is() )
-        {
-            pWrap->mpEditableText.set(pWrap->mpContext, css::uno::UNO_QUERY);
-        }
-
-        return pWrap->mpEditableText;
+        uno::Reference<accessibility::XAccessibleEditableText> xET(
+            pWrap->mpContext.get(), uno::UNO_QUERY);
+        return xET;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleEditableText>();

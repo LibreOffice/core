@@ -39,14 +39,11 @@ static css::uno::Reference<css::accessibility::XAccessibleImage>
     getImage( AtkImage *pImage ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pImage );
-    if( pWrap )
+    if (pWrap)
     {
-        if( !pWrap->mpImage.is() )
-        {
-            pWrap->mpImage.set(pWrap->mpContext, css::uno::UNO_QUERY);
-        }
-
-        return pWrap->mpImage;
+        uno::Reference<accessibility::XAccessibleImage> xAI(
+            pWrap->mpContext.get(), uno::UNO_QUERY);
+        return xAI;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleImage>();

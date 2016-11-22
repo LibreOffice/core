@@ -86,12 +86,15 @@ atk_wrapper_focus_idle_handler (gpointer data)
             // also emit state-changed:focused event under the same condition.
             {
                 AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
-                if( wrapper_obj && !wrapper_obj->mpText.is() )
+
+                if (wrapper_obj)
                 {
-                    wrapper_obj->mpText.set(wrapper_obj->mpContext, css::uno::UNO_QUERY);
-                    if ( wrapper_obj->mpText.is() )
+                    uno::Reference<accessibility::XAccessibleText> xText(
+                        wrapper_obj->mpContext.get(), uno::UNO_QUERY);
+
+                    if (xText.is())
                     {
-                        gint caretPos = wrapper_obj->mpText->getCaretPosition();
+                        gint caretPos = xText->getCaretPosition();
 
                         if ( caretPos != -1 )
                         {
