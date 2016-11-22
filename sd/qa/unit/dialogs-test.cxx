@@ -142,6 +142,9 @@ void SdDialogsTest::setUp()
 
 void SdDialogsTest::tearDown()
 {
+    mpSfxItemSetFromSdrObject.reset();
+    mpEmptySfxItemSet.reset();
+    mpEmptyFillStyleSfxItemSet.reset();
     mxComponent->dispose();
     ScreenshotTest::tearDown();
 }
