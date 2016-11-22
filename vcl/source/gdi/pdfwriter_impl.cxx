@@ -6037,6 +6037,31 @@ typedef struct {
 } TimeStampReq;
 
 /**
+ * General name, defined by RFC 3280.
+ */
+struct GeneralName
+{
+    CERTName name;
+};
+
+/**
+ * List of general names (only one for now), defined by RFC 3280.
+ */
+struct GeneralNames
+{
+    GeneralName names;
+};
+
+/**
+ * Supplies different fields to identify a certificate, defined by RFC 5035.
+ */
+struct IssuerSerial
+{
+    GeneralNames issuer;
+    SECItem serialNumber;
+};
+
+/**
  * Supplies different fields that are used to identify certificates, defined by
  * RFC 5035.
  */
@@ -6044,6 +6069,7 @@ struct ESSCertIDv2
 {
     SECAlgorithmID hashAlgorithm;
     SECItem certHash;
+    IssuerSerial issuerSerial;
 };
 
 /**
@@ -6275,6 +6301,50 @@ const SEC_ASN1Template TimeStampReq_Template[] =
 };
 
 /**
+ * GeneralName ::= CHOICE {
+ *      otherName                       [0]     OtherName,
+ *      rfc822Name                      [1]     IA5String,
+ *      dNSName                         [2]     IA5String,
+ *      x400Address                     [3]     ORAddress,
+ *      directoryName                   [4]     Name,
+ *      ediPartyName                    [5]     EDIPartyName,
+ *      uniformResourceIdentifier       [6]     IA5String,
+ *      iPAddress                       [7]     OCTET STRING,
+ *      registeredID                    [8]     OBJECT IDENTIFIER
+ * }
+ */
+const SEC_ASN1Template GeneralNameTemplate[] =
+{
+    {SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(GeneralName)},
+    {SEC_ASN1_INLINE, offsetof(GeneralName, name), CERT_NameTemplate, 0},
+    {0, 0, nullptr, 0}
+};
+
+/**
+ * GeneralNames ::= SEQUENCE SIZE (1..MAX) OF GeneralName
+ */
+const SEC_ASN1Template GeneralNamesTemplate[] =
+{
+    {SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(GeneralNames)},
+    {SEC_ASN1_INLINE | SEC_ASN1_CONTEXT_SPECIFIC | 4, offsetof(GeneralNames, names), GeneralNameTemplate, 0},
+    {0, 0, nullptr, 0}
+};
+
+/**
+ * IssuerSerial ::= SEQUENCE {
+ *     issuer GeneralNames,
+ *     serialNumber CertificateSerialNumber
+ * }
+ */
+const SEC_ASN1Template IssuerSerialTemplate[] =
+{
+    {SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(IssuerSerial)},
+    {SEC_ASN1_INLINE, offsetof(IssuerSerial, issuer), GeneralNamesTemplate, 0},
+    {SEC_ASN1_INTEGER, offsetof(IssuerSerial, serialNumber), nullptr, 0},
+    {0, 0, nullptr, 0}
+};
+
+/**
  * Hash ::= OCTET STRING
  *
  * ESSCertIDv2 ::= SEQUENCE {
@@ -6288,6 +6358,7 @@ const SEC_ASN1Template ESSCertIDv2Template[] =
     {SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(ESSCertIDv2)},
     {SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(ESSCertIDv2, hashAlgorithm), SEC_ASN1_SUB(SECOID_AlgorithmIDTemplate), 0},
     {SEC_ASN1_OCTET_STRING, offsetof(ESSCertIDv2, certHash), nullptr, 0},
+    {SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(ESSCertIDv2, issuerSerial), IssuerSerialTemplate, 0},
     {0, 0, nullptr, 0}
 };
 
@@ -7113,6 +7184,13 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     aCertHashItem.data = aCertHash;
     HASH_End(aCertHashContext.get(), aCertHashItem.data, &aCertHashItem.len, SHA256_LENGTH);
     aCertID.certHash = aCertHashItem;
+    // Write ESSCertIDv2.issuerSerial.
+    IssuerSerial aSerial;
+    GeneralName aName;
+    aName.name = cert->issuer;
+    aSerial.issuer.names = aName;
+    aSerial.serialNumber = cert->serialNumber;
+    aCertID.issuerSerial = aSerial;
     // Write SigningCertificateV2.certs.
     aCertIDs[0] = &aCertID;
     aCertIDs[1] = nullptr;
