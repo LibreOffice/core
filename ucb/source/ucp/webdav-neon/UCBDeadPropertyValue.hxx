@@ -37,21 +37,6 @@ namespace webdav_ucp
 
 class UCBDeadPropertyValue
 {
-private:
-    static const OUString aTypeString;
-    static const OUString aTypeLong;
-    static const OUString aTypeShort;
-    static const OUString aTypeBoolean;
-    static const OUString aTypeChar;
-    static const OUString aTypeByte;
-    static const OUString aTypeHyper;
-    static const OUString aTypeFloat;
-    static const OUString aTypeDouble;
-
-    static const OUString aXMLPre;
-    static const OUString aXMLMid;
-    static const OUString aXMLEnd;
-
 public:
     static bool supportsType( const css::uno::Type & rType );
 

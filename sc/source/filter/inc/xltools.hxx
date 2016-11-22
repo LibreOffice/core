@@ -239,15 +239,6 @@ public:
     /** Returns the Excel macro name from a full StarBasic macro URL. */
     static OUString GetXclMacroName( const OUString& rSbMacroUrl );
 
-private:
-    static const OUString maDefNamePrefix;      /// Prefix for built-in defined names.
-    static const OUString maDefNamePrefixXml;   /// Prefix for built-in defined names for OOX
-    static const OUString maStyleNamePrefix1;   /// Prefix for built-in cell style names.
-    static const OUString maStyleNamePrefix2;   /// Prefix for built-in cell style names from OOX filter.
-    static const OUString maCFStyleNamePrefix1; /// Prefix for cond. formatting style names.
-    static const OUString maCFStyleNamePrefix2; /// Prefix for cond. formatting style names from OOX filter.
-    static const OUString maSbMacroPrefix;   /// Prefix for StarBasic macros.
-    static const OUString maSbMacroSuffix;   /// Suffix for StarBasic macros.
 };
 
 // read/write colors ----------------------------------------------------------

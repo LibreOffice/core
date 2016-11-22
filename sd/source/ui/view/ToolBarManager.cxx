@@ -296,8 +296,6 @@ public:
     ToolBarRules& GetToolBarRules() { return maToolBarRules;}
 
 private:
-    const static OUString msToolBarResourcePrefix;
-
     mutable ::osl::Mutex maMutex;
     ViewShellBase& mrBase;
     std::shared_ptr<sd::tools::EventMultiplexer> mpEventMultiplexer;
@@ -510,8 +508,6 @@ void ToolBarManager::ToolBarsDestroyed()
 }
 
 //===== ToolBarManager::Implementation =======================================
-
-const OUString ToolBarManager::Implementation::msToolBarResourcePrefix("private:resource/toolbar/");
 
 ToolBarManager::Implementation::Implementation (
     ViewShellBase& rBase,
@@ -894,9 +890,7 @@ IMPL_LINK_NOARG(ToolBarManager::Implementation, SetValidCallback, void*, void)
 OUString ToolBarManager::Implementation::GetToolBarResourceName (
     const OUString& rsBaseName)
 {
-    OUString sToolBarName (msToolBarResourcePrefix);
-    sToolBarName += rsBaseName;
-    return sToolBarName;
+    return "private:resource/toolbar/" + rsBaseName;
 }
 
 bool ToolBarManager::Implementation::CheckPlugInMode (const OUString& rsName) const

@@ -36,8 +36,6 @@
 namespace sd
 {
 
-OUString SdPhotoAlbumDialog::sDirUrl;
-
 SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pActDoc)
 : ModalDialog(pWindow, "PhotoAlbumCreatorDialog", "modules/simpress/ui/photoalbum.ui"),
   pDoc(pActDoc)
@@ -73,7 +71,6 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pAc
     pInsTypeCombo->SetSelectHdl(LINK(this, SdPhotoAlbumDialog, TypeSelectHdl));
 
     mpGraphicFilter = new GraphicFilter;
-    sDirUrl.clear();
     pAddBtn->GrabFocus();
     pImagesLst->Clear();
 }
