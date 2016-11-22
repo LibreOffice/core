@@ -10,9 +10,9 @@
 $(eval $(call gb_CompilerTest_CompilerTest,compilerplugins_clang))
 
 $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
-    compilerplugins/clang/test/salbool \
-    compilerplugins/clang/test/finalprotected \
     compilerplugins/clang/test/datamembershadow \
+    compilerplugins/clang/test/finalprotected \
+    compilerplugins/clang/test/salbool \
 ))
 
 # vim: set noet sw=4 ts=4:
