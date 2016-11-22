@@ -31,15 +31,16 @@ class CheckBox;
 
 class VCL_DLLPUBLIC MessBox : public ButtonDialog
 {
-protected:
     VclPtr<VclMultiLineEdit>   mpVCLMultiLineEdit;
     VclPtr<FixedImage>         mpFixedImage;
-    OUString                   maMessText;
     Image                      maImage;
     bool                       mbHelpBtn;
+    bool                       mbCheck;
+
+protected:
+    OUString                   maMessText;
     VclPtr<CheckBox>           mpCheckBox;
     OUString                   maCheckBoxText;
-    bool                       mbCheck;
 
     SAL_DLLPRIVATE void ImplInitButtons();
     SAL_DLLPRIVATE void ImplPosControls();

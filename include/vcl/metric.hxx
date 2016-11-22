@@ -69,7 +69,7 @@ public:
     bool                operator==( const FontMetric& rMetric ) const;
     bool                operator!=( const FontMetric& rMetric ) const
                             { return !operator==( rMetric ); }
-protected:
+private:
     tools::SvRef<ImplFontMetric> mxImplMetric;    // Implementation
 };
 

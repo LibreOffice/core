@@ -25,7 +25,6 @@
 
 class VCL_DLLPUBLIC Idle : public Scheduler
 {
-protected:
     Link<Idle *, void> maIdleHdl;          // Callback Link
 
 public:

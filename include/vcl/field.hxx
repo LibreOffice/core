@@ -122,38 +122,6 @@ public:
 
 class VCL_DLLPUBLIC NumericFormatter : public FormatterBase
 {
-private:
-    SAL_DLLPRIVATE void     ImplInit();
-
-protected:
-    sal_Int64               mnFieldValue;
-    sal_Int64               mnLastValue;
-    sal_Int64               mnMin;
-    sal_Int64               mnMax;
-    sal_uInt16              mnType;
-    sal_uInt16              mnDecimalDigits;
-    bool                    mbThousandSep;
-    bool                    mbShowTrailingZeros;
-    bool                    mbWrapOnLimits;
-
-    // the members below are used in all derivatives of NumericFormatter
-    // not in NumericFormatter itself.
-    sal_Int64               mnSpinSize;
-    sal_Int64               mnFirst;
-    sal_Int64               mnLast;
-
-protected:
-                            NumericFormatter();
-
-    void                    FieldUp();
-    void                    FieldDown();
-    void                    FieldFirst();
-    void                    FieldLast();
-
-    SAL_DLLPRIVATE bool ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
-    SAL_DLLPRIVATE void     ImplNewFieldValue( sal_Int64 nNewValue );
-    SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSelection = nullptr );
-
 public:
     virtual                 ~NumericFormatter() override;
 
@@ -191,26 +159,44 @@ public:
 
     sal_Int64               Normalize( sal_Int64 nValue ) const;
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
+
+protected:
+    sal_Int64               mnFieldValue;
+    sal_Int64               mnLastValue;
+    sal_Int64               mnMin;
+    sal_Int64               mnMax;
+    sal_uInt16              mnType;
+    bool                    mbWrapOnLimits;
+
+    // the members below are used in all derivatives of NumericFormatter
+    // not in NumericFormatter itself.
+    sal_Int64               mnSpinSize;
+    sal_Int64               mnFirst;
+    sal_Int64               mnLast;
+
+                            NumericFormatter();
+
+    void                    FieldUp();
+    void                    FieldDown();
+    void                    FieldFirst();
+    void                    FieldLast();
+
+    SAL_DLLPRIVATE bool     ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
+    SAL_DLLPRIVATE void     ImplNewFieldValue( sal_Int64 nNewValue );
+    SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSelection = nullptr );
+
+private:
+    SAL_DLLPRIVATE void     ImplInit();
+
+    sal_uInt16              mnDecimalDigits;
+    bool                    mbThousandSep;
+    bool                    mbShowTrailingZeros;
+
 };
 
 
 class VCL_DLLPUBLIC MetricFormatter : public NumericFormatter
 {
-private:
-    SAL_DLLPRIVATE  void    ImplInit();
-
-protected:
-    OUString                maCustomUnitText;
-    OUString                maCurUnitText;
-    sal_Int64               mnBaseValue;
-    FieldUnit               meUnit;
-    Link<MetricFormatter&,void> maCustomConvertLink;
-
-protected:
-                            MetricFormatter();
-
-    SAL_DLLPRIVATE bool     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
-
 public:
     virtual                 ~MetricFormatter() override;
 
@@ -244,6 +230,21 @@ public:
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
 
     void                    SetCustomConvertHdl( const Link<MetricFormatter&,void>& rLink ) { maCustomConvertLink = rLink; }
+
+protected:
+    sal_Int64               mnBaseValue;
+    FieldUnit               meUnit;
+    Link<MetricFormatter&,void> maCustomConvertLink;
+
+                            MetricFormatter();
+
+    SAL_DLLPRIVATE bool     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
+
+private:
+    SAL_DLLPRIVATE  void    ImplInit();
+
+    OUString                maCustomUnitText;
+    OUString                maCurUnitText;
 };
 
 
