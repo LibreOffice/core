@@ -63,7 +63,7 @@ private:
 
 public:
 
-    SfxNewFileDialog(vcl::Window *pParent, sal_uInt16 nFlags = 0);
+    SfxNewFileDialog(vcl::Window *pParent, sal_uInt16 nFlags);
     virtual ~SfxNewFileDialog() override;
     virtual void dispose() override;
 

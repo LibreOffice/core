@@ -295,7 +295,7 @@ public:
     void                        SetSharedXMLFlag( bool bFlag ) const;
     bool                        HasSharedXMLFlagSet() const;
 
-    SAL_DLLPRIVATE void         SetModalMode_Impl(bool bModal=true);
+    SAL_DLLPRIVATE void         SetModalMode_Impl(bool bModal);
     SAL_DLLPRIVATE void         SetMacroMode_Impl(bool bModal=true);
 
     void                        ResetError();
@@ -431,7 +431,7 @@ public:
     virtual HiddenInformation   GetHiddenInformationState( HiddenInformation nStates );
     sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, vcl::Window* pParent );
     bool                        IsSecurityOptOpenReadOnly() const;
-    void                        SetSecurityOptOpenReadOnly( bool bOpenReadOnly = true );
+    void                        SetSecurityOptOpenReadOnly( bool bOpenReadOnly );
 
     Size                        GetFirstPageSize();
     bool                        DoClose();
@@ -455,7 +455,7 @@ public:
     bool                        IsAvoidRecentDocs() const { return mbAvoidRecentDocs; }
 
     /// Don't add to the recent documents - it's an expensive operation, sometimes it is not wanted.
-    void                        AvoidRecentDocs(bool bAvoid = true) { mbAvoidRecentDocs = bAvoid; }
+    void                        AvoidRecentDocs(bool bAvoid) { mbAvoidRecentDocs = bAvoid; }
 
     // Transfer IFace
     bool                        IsAbortingImport() const;
@@ -463,7 +463,7 @@ public:
     void                        TemplateDisconnectionAfterLoad();
     bool                        IsLoading() const;
     bool                        IsLoadingFinished() const;
-    void                        SetAutoLoad( const INetURLObject&, sal_uInt32 nTime, bool bReload = true );
+    void                        SetAutoLoad( const INetURLObject&, sal_uInt32 nTime, bool bReload );
     bool                        IsAutoLoadLocked() const;
 
     // Misc
@@ -676,8 +676,8 @@ public:
     SAL_DLLPRIVATE void UpdateFromTemplate_Impl();
     SAL_DLLPRIVATE bool CanReload_Impl();
     SAL_DLLPRIVATE void SetNamedVisibility_Impl();
-    SAL_DLLPRIVATE bool DoSave_Impl( const SfxItemSet* pSet=nullptr );
-    SAL_DLLPRIVATE bool Save_Impl( const SfxItemSet* pSet=nullptr );
+    SAL_DLLPRIVATE bool DoSave_Impl( const SfxItemSet* pSet );
+    SAL_DLLPRIVATE bool Save_Impl( const SfxItemSet* pSet );
     SAL_DLLPRIVATE bool PreDoSaveAs_Impl(const OUString& rFileName, const OUString& rFiltName, SfxItemSet& rItemSet);
     SAL_DLLPRIVATE bool APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItemSet);
     SAL_DLLPRIVATE bool CommonSaveAs_Impl(const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet& rItemSet);

@@ -486,7 +486,7 @@ public:
     virtual VclPtr<SfxAbstractInsertObjectDialog>
                                            CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommmand,
                                             const css::uno::Reference < css::embed::XStorage >& xStor,
-                                            const SvObjectServerList* pList = nullptr ) override;
+                                            const SvObjectServerList* pList ) override;
     virtual VclPtr<VclAbstractDialog>      CreateEditObjectDialog( const OUString& rCommmand,
                                             const css::uno::Reference < css::embed::XEmbeddedObject >& xObj ) override;
     virtual VclPtr<SfxAbstractPasteDialog> CreatePasteDialog( vcl::Window* pParent ) override;

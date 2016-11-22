@@ -37,7 +37,7 @@ public:
     StylePreviewRenderer(const SfxObjectShell& rShell,
                          OutputDevice& rOutputDev,
                          SfxStyleSheetBase* pStyle,
-                         long nMaxHeight = 32)
+                         long nMaxHeight)
         : mrShell(rShell)
         , mrOutputDev(rOutputDev)
         , mpStyle(pStyle)

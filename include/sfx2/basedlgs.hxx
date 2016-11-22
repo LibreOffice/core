@@ -124,7 +124,7 @@ protected:
                             SfxFloatingWindow( SfxBindings *pBindings,
                                               SfxChildWindow *pCW,
                                               vcl::Window* pParent,
-                                              WinBits nWinBits=WB_STDMODELESS);
+                                              WinBits nWinBits);
                             SfxFloatingWindow( SfxBindings *pBindings,
                                               SfxChildWindow *pCW,
                                               vcl::Window* pParent,
@@ -168,7 +168,7 @@ public:
         const OUString& rID = OUString("SingleTabDialog"),
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
 
-    SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet* pInSet = nullptr,
+    SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet* pInSet,
         const OUString& rID = OUString("SingleTabDialog"),
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
 

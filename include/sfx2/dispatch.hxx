@@ -102,7 +102,7 @@ friend class SfxHelp;
                                     SfxItemSet &rState, const SfxSlot *pRealSlot );
     void                Execute_( SfxShell &rShell, const SfxSlot &rSlot,
                                   SfxRequest &rReq,
-                                  SfxCallMode eCall = SfxCallMode::RECORD);
+                                  SfxCallMode eCall);
 
     void FlushImpl();
 
@@ -124,7 +124,7 @@ public:
                                  SfxCallMode nCall,
                                  SfxItemSet* pArgs,
                                  SfxItemSet* pInternalArgs,
-                                 sal_uInt16 nModi = 0);
+                                 sal_uInt16 nModi);
 
     const SfxPoolItem*  ExecuteList( sal_uInt16 nSlot,
                                  SfxCallMode nCall,

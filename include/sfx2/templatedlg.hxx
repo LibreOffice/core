@@ -192,7 +192,7 @@ public:
 class SFX2_DLLPUBLIC SfxTemplateSelectionDlg : public SfxTemplateManagerDlg
 {
 public:
-    SfxTemplateSelectionDlg(vcl::Window *parent = nullptr);
+    SfxTemplateSelectionDlg(vcl::Window *parent);
 
     virtual ~SfxTemplateSelectionDlg() override;
     virtual void dispose() override;

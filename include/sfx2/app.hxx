@@ -155,7 +155,7 @@ public:
     /**
     * @param pArgs Takes ownership
     */
-    sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, SfxItemSet* pArgs = nullptr );
+    sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, SfxItemSet* pArgs );
     vcl::Window*                     GetTopWindow() const;
 
     // members
@@ -226,7 +226,7 @@ public:
     SAL_DLLPRIVATE void         SetLastDir_Impl( const OUString & );
 
     SAL_DLLPRIVATE static void  Registrations_Impl();
-    SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl(const SfxViewFrame *pFrame=nullptr) const;
+    SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl(const SfxViewFrame *pFrame) const;
 
     // TODO/CLEANUP: still needed? -- unclear whether this comment
     // refers to the GetDisabledSlotList_Impl() method which was

@@ -96,7 +96,7 @@ protected:
                     m_xInputStreamToLoadFrom;
 
                     SvBaseLink();
-                    SvBaseLink( SfxLinkUpdateMode nLinkType, SotClipboardFormatId nContentType = SotClipboardFormatId::STRING );
+                    SvBaseLink( SfxLinkUpdateMode nLinkType, SotClipboardFormatId nContentType );
     virtual         ~SvBaseLink() override;
 
     void            GetRealObject_( bool bConnect = true );
