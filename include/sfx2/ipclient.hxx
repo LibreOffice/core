@@ -55,7 +55,7 @@ friend class SfxInPlaceClient_Impl;
     SAL_DLLPRIVATE virtual void ViewChanged();
 
 public:
-                        SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window* pDraw, sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT );
+                        SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window* pDraw, sal_Int64 nAspect );
     virtual             ~SfxInPlaceClient();
 
     SfxViewShell*       GetViewShell() const { return m_pViewSh; }

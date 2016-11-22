@@ -74,7 +74,7 @@ protected:
 
     void CreateController(const sal_uInt16 nItemId,
                           const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                          const sal_Int32 nItemWidth = 0);
+                          const sal_Int32 nItemWidth);
     void RegisterHandlers();
 };
 

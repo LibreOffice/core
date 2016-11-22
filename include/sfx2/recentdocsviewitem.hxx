@@ -16,7 +16,7 @@ class RecentDocsViewItem : public ThumbnailViewItem
 {
 public:
     RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
-        const OUString &rTitle, const BitmapEx& rThumbnail, sal_uInt16 nId, long nThumbnailSize = 256);
+        const OUString &rTitle, const BitmapEx& rThumbnail, sal_uInt16 nId, long nThumbnailSize);
 
     /** Updates own highlight status based on the aPoint position.
 

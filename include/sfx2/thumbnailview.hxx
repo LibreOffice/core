@@ -226,7 +226,7 @@ public:
 
     void ShowTooltips( bool bShowTooltips );
 
-    void SetMultiSelectionEnabled( bool bIsMultiSelectionEnabled = true );
+    void SetMultiSelectionEnabled( bool bIsMultiSelectionEnabled );
 
     void filterItems (const std::function<bool (const ThumbnailViewItem*) > &func);
 

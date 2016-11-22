@@ -73,7 +73,7 @@ public:
                         SfxDockingWindow( SfxBindings *pBindings,
                                           SfxChildWindow *pCW,
                                           vcl::Window* pParent,
-                                          WinBits nWinBits=0);
+                                          WinBits nWinBits);
                         SfxDockingWindow( SfxBindings *pBindings,
                                           SfxChildWindow *pCW,
                                           vcl::Window* pParent,

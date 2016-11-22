@@ -186,7 +186,7 @@ class SFX2_DLLPUBLIC SfxFrameItem: public SfxPoolItem
 public:
 
                             SfxFrameItem( sal_uInt16 nWhich, SfxViewFrame *p );
-                            SfxFrameItem( SfxFrame *p=nullptr );
+                            SfxFrameItem( SfxFrame *p );
                             SfxFrameItem( sal_uInt16 nWhich, SfxFrame *p );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -195,8 +195,7 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    SfxFrame*               GetFrame() const
-                            { return wFrame; }
+    SfxFrame*               GetFrame() const { return wFrame; }
 };
 
 class SFX2_DLLPUBLIC SfxUsrAnyItem : public SfxPoolItem

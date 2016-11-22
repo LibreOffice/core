@@ -53,7 +53,7 @@ public:
     virtual             ~SfxControllerItem();
     virtual void        dispose();
 
-    void                Bind( sal_uInt16 nNewId, SfxBindings * = nullptr);    // Register in SfxBindings
+    void                Bind( sal_uInt16 nNewId, SfxBindings *);    // Register in SfxBindings
     void                UnBind();
     void                ReBind();
     bool                IsBound() const;

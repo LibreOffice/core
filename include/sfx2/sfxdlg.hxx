@@ -137,7 +137,7 @@ public:
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
     virtual VclPtr<SfxAbstractInsertObjectDialog> CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommand,
             const css::uno::Reference < css::embed::XStorage >& xStor,
-            const SvObjectServerList* pList = nullptr )=0;
+            const SvObjectServerList* pList )=0;
     virtual VclPtr<VclAbstractDialog>          CreateEditObjectDialog( const OUString& rCommand,
             const css::uno::Reference < css::embed::XEmbeddedObject >& xObj )=0;
     virtual VclPtr<SfxAbstractPasteDialog>    CreatePasteDialog( vcl::Window* pParent )=0;

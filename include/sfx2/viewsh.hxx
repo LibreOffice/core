@@ -187,7 +187,7 @@ private:
 
 public:
 
-                                SfxViewShell( SfxViewFrame *pFrame, SfxViewShellFlags nFlags = SfxViewShellFlags::NONE );
+                                SfxViewShell( SfxViewFrame *pFrame, SfxViewShellFlags nFlags );
     virtual                     ~SfxViewShell() override;
 
     SfxInPlaceClient*           GetIPClient() const;

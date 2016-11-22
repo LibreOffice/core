@@ -72,7 +72,7 @@ class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
     sal_uInt16                  m_nAdjustPosPixelLock;
 
 private:
-    SAL_DLLPRIVATE void Construct_Impl( SfxObjectShell *pObjSh=nullptr );
+    SAL_DLLPRIVATE void Construct_Impl( SfxObjectShell *pObjSh );
 
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -84,7 +84,7 @@ protected:
     virtual                 ~SfxViewFrame() override;
 
 public:
-                            SfxViewFrame( SfxFrame& rFrame, SfxObjectShell *pDoc = nullptr );
+                            SfxViewFrame( SfxFrame& rFrame, SfxObjectShell *pDoc );
 
                             SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWFRM)
 
@@ -98,7 +98,7 @@ public:
 
     static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId );
     static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId );
-    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const sal_uInt16 i_nViewId = 0 );
+    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const sal_uInt16 i_nViewId );
     static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const css::uno::Reference< css::frame::XFrame >& i_rFrameItem );
     static SfxViewFrame*    DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest );
 
@@ -106,10 +106,10 @@ public:
     static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
     static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
 
-    static SfxViewFrame*    Get( const css::uno::Reference< css::frame::XController>& i_rController, const SfxObjectShell* i_pDoc = nullptr );
+    static SfxViewFrame*    Get( const css::uno::Reference< css::frame::XController>& i_rController, const SfxObjectShell* i_pDoc );
 
             void            DoActivate(bool bMDI);
-            void            DoDeactivate(bool bMDI, SfxViewFrame *pOld=nullptr);
+            void            DoDeactivate(bool bMDI, SfxViewFrame *pOld);
 
     using SfxShell::GetDispatcher;
     SfxDispatcher*          GetDispatcher() { return m_pDispatcher; }

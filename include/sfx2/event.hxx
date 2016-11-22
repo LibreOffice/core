@@ -41,7 +41,7 @@ class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
     sal_uInt16              nEventId;
 
 public:
-    SfxEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj = nullptr )
+    SfxEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj )
                         :   pObjShell(pObj),
                             aEventName(aName),
                             nEventId(nId)

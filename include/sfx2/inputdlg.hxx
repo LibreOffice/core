@@ -21,7 +21,7 @@ class Button;
 class SFX2_DLLPUBLIC InputDialog : public ModalDialog
 {
 public:
-    InputDialog (const OUString &labelText, vcl::Window *pParent = nullptr);
+    InputDialog (const OUString &labelText, vcl::Window *pParent);
     OUString GetEntryText () const;
     void SetEntryText( OUString const & sStr );
     void HideHelpBtn();

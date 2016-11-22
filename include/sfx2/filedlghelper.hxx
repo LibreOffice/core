@@ -246,8 +246,8 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              std::vector<OUString>& rpURLList,
                              OUString& rFilter,
                              SfxItemSet *& rpSet,
-                             const OUString* pPath = nullptr,
-                             sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
+                             const OUString* pPath,
+                             sal_Int16 nDialog,
                              const OUString& rStandardDir = OUString(),
                              const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >());
 
