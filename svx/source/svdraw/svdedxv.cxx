@@ -2295,14 +2295,13 @@ void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoChar
 {
     if( !mxSelectionController.is() || !mxSelectionController->ApplyFormatPaintBrush( rFormatSet, bNoCharacterFormats, bNoParagraphFormats ) )
     {
-        const SdrMarkList& rMarkList = GetMarkedObjectList();
-        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         OutlinerView* pOLV = GetTextEditOutlinerView();
-
-        const SfxItemSet& rShapeSet = pObj->GetMergedItemSet();
-
         if( !pOLV )
         {
+            const SdrMarkList& rMarkList = GetMarkedObjectList();
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            const SfxItemSet& rShapeSet = pObj->GetMergedItemSet();
+
             // if not in text edit mode (aka the user selected text or clicked on a word)
             // apply formatting attributes to selected shape
             // All formatting items (see ranges above) that are unequal in selected shape and
@@ -2323,9 +2322,11 @@ void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoChar
 
             if( !bTextOnly )
             {
-                SfxItemSet aPaintSet( CreatePaintSet( GetFormatRangeImpl(false), *rShapeSet.GetPool(), rFormatSet, rShapeSet, bNoCharacterFormats, bNoParagraphFormats ) );
-                const bool bReplaceAll = false;
-                SetAttrToMarked(aPaintSet, bReplaceAll);
+                SfxItemSet aPaintSet( CreatePaintSet(
+                                        GetFormatRangeImpl(false), *rShapeSet.GetPool(),
+                                        rFormatSet, rShapeSet,
+                                        bNoCharacterFormats, bNoParagraphFormats ) );
+                SetAttrToMarked(aPaintSet, false/*bReplaceAll*/);
             }
 
             // now apply character and paragraph formatting to text, if the shape has any
@@ -2355,7 +2356,10 @@ void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoChar
                 const bool bRemoveParaAttribs = !bNoParagraphFormats;
                 pOLV->RemoveAttribsKeepLanguages( bRemoveParaAttribs );
                 SfxItemSet aSet( pOLV->GetAttribs() );
-                SfxItemSet aPaintSet( CreatePaintSet(GetFormatRangeImpl(true), *aSet.GetPool(), rFormatSet, aSet, bNoCharacterFormats, bNoParagraphFormats ) );
+                SfxItemSet aPaintSet( CreatePaintSet(
+                                        GetFormatRangeImpl(true), *aSet.GetPool(),
+                                        rFormatSet, aSet,
+                                        bNoCharacterFormats, bNoParagraphFormats ) );
                 pOLV->SetAttribs( aPaintSet );
             }
         }
