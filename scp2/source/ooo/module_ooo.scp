@@ -225,6 +225,17 @@ Module gid_Module_Root_Extension_Dictionary_Bn
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Bo
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_BO );
+    Files = (gid_File_Extension_Dictionary_Bo);
+    InstallOrder = "2000";
+    Sortkey = "525";
+    Spellcheckerlanguage = "bo";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Br
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_BR );
     Files = (gid_File_Extension_Dictionary_Br);
