@@ -18,9 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlmetae.hxx>
