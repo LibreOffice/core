@@ -4258,7 +4258,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/xml/crypto/sax,\
 	XSAXEventKeeper \
 	XSAXEventKeeperStatusChangeBroadcaster \
 	XSAXEventKeeperStatusChangeListener \
-	XSecurityController \
 	XSecuritySAXEventKeeper \
 	XSignatureCreationResultBroadcaster \
 	XSignatureCreationResultListener \
