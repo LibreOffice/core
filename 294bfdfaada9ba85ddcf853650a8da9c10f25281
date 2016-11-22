@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_fe455517",
+        "filename": "solenv/qa/python/gbuildtoide.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-11-22T20:33:39Z",
+      "side": 1,
+      "message": "because of this bullshit here i had to revert this commit on master as it was filling up /tmp here and it looks like on CI too:\n\nhttp://ci.libreoffice.org/job/lo_gerrit/2999/Config\u003dlinux_gcc_release_64/console",
+      "revId": "294bfdfaada9ba85ddcf853650a8da9c10f25281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
