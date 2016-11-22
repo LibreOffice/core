@@ -226,24 +226,7 @@ struct FilterErrorEx
 /** Class to import and export graphic formats. */
 class VCL_DLLPUBLIC GraphicFilter
 {
-private:
-
-    void            ImplInit();
-    sal_uLong           ImplSetError( sal_uLong nError, const SvStream* pStm = nullptr );
-    sal_uInt16      ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );
-
-                    DECL_LINK( FilterCallback, ConvertData&, bool );
-
-protected:
-
-    OUString       aFilterPath;
-    FilterConfigCache*  pConfig;
-    FilterErrorEx*      pErrorEx;
-    bool            bUseConfig;
-    long                nExpGraphHint;
-
 public:
-
                     GraphicFilter( bool bUseConfig = true );
                     ~GraphicFilter();
 
@@ -314,6 +297,21 @@ public:
                      sal_uInt16* pDeterminedFormat = nullptr );
 
     sal_uInt16 compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream);
+
+protected:
+    OUString        aFilterPath;
+    FilterConfigCache*  pConfig;
+
+private:
+    void            ImplInit();
+    sal_uLong       ImplSetError( sal_uLong nError, const SvStream* pStm = nullptr );
+    sal_uInt16      ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );
+
+                    DECL_LINK( FilterCallback, ConvertData&, bool );
+
+    FilterErrorEx*      pErrorEx;
+    bool                bUseConfig;
+    long                nExpGraphHint;
 };
 
 #endif // INCLUDED_VCL_GRAPHICFILTER_HXX

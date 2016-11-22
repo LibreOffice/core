@@ -112,7 +112,6 @@ namespace xmloff
 
     class XMLOFF_DLLPUBLIC OControlPropertyHandlerFactory : public XMLPropertyHandlerFactory
     {
-    protected:
         mutable std::unique_ptr<XMLConstantsPropertyHandler>    m_pTextAlignHandler;
         mutable std::unique_ptr<OControlBorderHandler>          m_pControlBorderStyleHandler;
         mutable std::unique_ptr<OControlBorderHandler>          m_pControlBorderColorHandler;

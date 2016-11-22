@@ -28,41 +28,6 @@
 
 class VCL_DLLPUBLIC SpinField : public Edit
 {
-protected:
-    VclPtr<Edit>    mpEdit;
-    AutoTimer       maRepeatTimer;
-    Rectangle       maUpperRect;
-    Rectangle       maLowerRect;
-    Rectangle       maDropDownRect; // noch nicht angebunden...
-    Link<SpinField&,void>  maUpHdlLink;
-    Link<SpinField&,void>  maDownHdlLink;
-    Link<SpinField&,void>  maFirstHdlLink;
-    Link<SpinField&,void>  maLastHdlLink;
-    bool            mbRepeat:1,
-                    mbSpin:1,
-                    mbInitialUp:1,
-                    mbInitialDown:1,
-                    mbNoSelect:1,
-                    mbUpperIn:1,
-                    mbLowerIn:1,
-                    mbInDropDown:1;
-
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void   ImplInit( vcl::Window* pParent, WinBits nStyle );
-
-private:
-    DECL_DLLPRIVATE_LINK( ImplTimeout, Timer*, void );
-    SAL_DLLPRIVATE void   ImplInitSpinFieldData();
-    SAL_DLLPRIVATE void   ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rectangle& rDDArea, Rectangle& rSpinUpArea, Rectangle& rSpinDownArea );
-
-protected:
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
-
-    void            EndDropDown();
-
-    virtual void    FillLayoutData() const override;
-    Rectangle *     ImplFindPartRect( const Point& rPt );
-
 public:
     explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle );
     virtual         ~SpinField() override;
@@ -97,6 +62,41 @@ public:
     virtual Size    CalcSize(sal_Int32 nChars) const override;
 
     virtual FactoryFunction GetUITestFactory() const override;
+
+protected:
+    Rectangle       maUpperRect;
+    Rectangle       maLowerRect;
+    Rectangle       maDropDownRect; // noch nicht angebunden...
+
+    using Window::ImplInit;
+    SAL_DLLPRIVATE void   ImplInit( vcl::Window* pParent, WinBits nStyle );
+
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+
+    void            EndDropDown();
+
+    virtual void    FillLayoutData() const override;
+    Rectangle *     ImplFindPartRect( const Point& rPt );
+
+private:
+    DECL_DLLPRIVATE_LINK( ImplTimeout, Timer*, void );
+    SAL_DLLPRIVATE void   ImplInitSpinFieldData();
+    SAL_DLLPRIVATE void   ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rectangle& rDDArea, Rectangle& rSpinUpArea, Rectangle& rSpinDownArea );
+
+    VclPtr<Edit>    mpEdit;
+    AutoTimer       maRepeatTimer;
+    Link<SpinField&,void>  maUpHdlLink;
+    Link<SpinField&,void>  maDownHdlLink;
+    Link<SpinField&,void>  maFirstHdlLink;
+    Link<SpinField&,void>  maLastHdlLink;
+    bool            mbRepeat:1,
+                    mbSpin:1,
+                    mbInitialUp:1,
+                    mbInitialDown:1,
+                    mbNoSelect:1,
+                    mbUpperIn:1,
+                    mbLowerIn:1,
+                    mbInDropDown:1;
 };
 
 #endif // INCLUDED_VCL_SPINFLD_HXX
