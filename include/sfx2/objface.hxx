@@ -64,13 +64,14 @@ public:
 
     const SfxInterface*     GetGenoType() const { return pGenoType; }
 
-    void                    RegisterObjectBar(sal_uInt16, sal_uInt32 nResId);
-    void                    RegisterObjectBar(sal_uInt16, sal_uInt32 nResId, SfxShellFeature nFeature);
+    void                    RegisterObjectBar(sal_uInt16, SfxVisibilityFlags nFlags, sal_uInt32 nResId);
+    void                    RegisterObjectBar(sal_uInt16, SfxVisibilityFlags nFlags, sal_uInt32 nResId, SfxShellFeature nFeature);
     void                    RegisterChildWindow(sal_uInt16, bool bContext = false);
     void                    RegisterChildWindow(sal_uInt16, bool bContext, SfxShellFeature nFeature);
     void                    RegisterStatusBar(sal_uInt32 nResId);
     sal_uInt32              GetObjectBarId(sal_uInt16 nNo) const;
     sal_uInt16              GetObjectBarPos( sal_uInt16 nNo ) const;
+    SfxVisibilityFlags      GetObjectBarFlags( sal_uInt16 nNo ) const;
     SfxShellFeature         GetObjectBarFeature(sal_uInt16 nNo) const;
     sal_uInt16              GetObjectBarCount() const;
     bool                    IsObjectBarVisible( sal_uInt16 nNo) const;

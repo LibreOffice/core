@@ -88,7 +88,8 @@ SFX_IMPL_INTERFACE(ScPreviewShell, SfxViewShell)
 
 void ScPreviewShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER|SFX_VISIBILITY_READONLYDOC,
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT,
+                                            SfxVisibilityFlags::Standard|SfxVisibilityFlags::Server|SfxVisibilityFlags::ReadonlyDoc,
                                             RID_OBJECTBAR_PREVIEW);
 
     GetStaticInterface()->RegisterPopupMenu("preview");

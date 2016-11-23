@@ -581,17 +581,18 @@ SFX_TMPL_INTERFACE(Class,SuperClass,false)                                  \
 #define SFX_IMPL_SUPERCLASS_INTERFACE(Class,SuperClass)                     \
 SFX_TMPL_INTERFACE(Class,SuperClass,true)                                   \
 
-#define SFX_POSITION_MASK               0x000F
-#define SFX_VISIBILITY_MASK             0xFFF0
-#define SFX_VISIBILITY_UNVISIBLE        0x0000  // Never visible
-#define SFX_VISIBILITY_VIEWER           0x0040
-#define SFX_VISIBILITY_READONLYDOC      0x0400
-#define SFX_VISIBILITY_DESKTOP          0x0800
-#define SFX_VISIBILITY_STANDARD         0x1000
-#define SFX_VISIBILITY_FULLSCREEN       0x2000
-#define SFX_VISIBILITY_CLIENT           0x4000
-#define SFX_VISIBILITY_SERVER           0x8000
-
+enum class SfxVisibilityFlags {
+    Invisible        = 0x0000, // Never visible
+    Viewer           = 0x0040,
+    ReadonlyDoc      = 0x0400,
+    Standard         = 0x1000,
+    FullScreen       = 0x2000,
+    Client           = 0x4000,
+    Server           = 0x8000,
+};
+namespace o3tl {
+    template<> struct typed_flags<SfxVisibilityFlags> : is_typed_flags<SfxVisibilityFlags, 0xf440> {};
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

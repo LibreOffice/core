@@ -95,11 +95,12 @@ struct SfxToDo_Impl
 
 struct SfxObjectBars_Impl
 {
-    sal_uInt32     nResId;  // Resource - and ConfigId of the Toolbox
-    sal_uInt16     nMode;   // special visibility flags
-    SfxInterface*  pIFace;
+    sal_uInt32         nResId;  // Resource - and ConfigId of the Toolbox
+    sal_uInt16         nPos;
+    SfxVisibilityFlags nFlags;   // special visibility flags
+    SfxInterface*      pIFace;
 
-    SfxObjectBars_Impl() : nResId(0), nMode(0), pIFace(nullptr) {}
+    SfxObjectBars_Impl() : nResId(0), nPos(0), nFlags(SfxVisibilityFlags::Invisible), pIFace(nullptr) {}
 };
 
 struct SfxDispatcher_Impl
@@ -1379,7 +1380,8 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
         for ( nNo = 0; pIFace && nNo<pIFace->GetObjectBarCount(); ++nNo )
         {
             sal_uInt16 nPos = pIFace->GetObjectBarPos(nNo);
-            if ( bReadOnlyShell && !( nPos & SFX_VISIBILITY_READONLYDOC ) )
+            SfxVisibilityFlags nFlags = pIFace->GetObjectBarFlags(nNo);
+            if ( bReadOnlyShell && !( nFlags & SfxVisibilityFlags::ReadonlyDoc ) )
                 continue;
 
             // check whether toolbar needs activation of a special feature
@@ -1390,7 +1392,7 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
             // check for toolboxes that are exclusively for a viewer
             if ( xImp->pFrame)
             {
-                bool bViewerTbx = SFX_VISIBILITY_VIEWER == ( nPos & SFX_VISIBILITY_VIEWER );
+                bool bViewerTbx( nFlags & SfxVisibilityFlags::Viewer );
                 SfxObjectShell* pSh = xImp->pFrame->GetObjectShell();
                 const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSh->GetMedium()->GetItemSet(), SID_VIEWONLY, false);
                 bool bIsViewer = pItem && pItem->GetValue();
@@ -1401,16 +1403,17 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
             // always register toolbars, allows to switch them on
             bool bVisible = pIFace->IsObjectBarVisible(nNo);
             if ( !bVisible )
-                nPos &= SFX_POSITION_MASK;
+                nFlags = SfxVisibilityFlags::Invisible;
 
-            SfxObjectBars_Impl& rBar = xImp->aObjBars[nPos & SFX_POSITION_MASK];
-            rBar.nMode = nPos;
+            SfxObjectBars_Impl& rBar = xImp->aObjBars[nPos];
+            rBar.nPos = nPos;
+            rBar.nFlags = nFlags;
             rBar.nResId = pIFace->GetObjectBarId(nNo);
             rBar.pIFace = pIFace;
 
             if ( bUIActive || bIsActive )
             {
-                pWorkWin->SetObjectBar_Impl(nPos, rBar.nResId, rBar.pIFace);
+                pWorkWin->SetObjectBar_Impl(nPos, nFlags, rBar.nResId, rBar.pIFace);
             }
 
             if ( !bVisible )
@@ -1434,18 +1437,18 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
                 continue;
 
             // slot decides whether a ChildWindow is shown when document is OLE server or OLE client
-            sal_uInt16 nMode = SFX_VISIBILITY_STANDARD;
+            SfxVisibilityFlags nMode = SfxVisibilityFlags::Standard;
             if( pSlot )
             {
                 if ( pSlot->IsMode(SfxSlotMode::CONTAINER) )
                 {
-                    if ( pWorkWin->IsVisible_Impl( SFX_VISIBILITY_CLIENT ) )
-                        nMode |= SFX_VISIBILITY_CLIENT;
+                    if ( pWorkWin->IsVisible_Impl( SfxVisibilityFlags::Client ) )
+                        nMode |= SfxVisibilityFlags::Client;
                 }
                 else
                 {
-                    if ( pWorkWin->IsVisible_Impl( SFX_VISIBILITY_SERVER ) )
-                        nMode |= SFX_VISIBILITY_SERVER;
+                    if ( pWorkWin->IsVisible_Impl( SfxVisibilityFlags::Server ) )
+                        nMode |= SfxVisibilityFlags::Server;
                 }
             }
 
@@ -1473,7 +1476,7 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
         {
             SfxObjectBars_Impl& rBar = xImp->aObjBars[nPos];
             rBar = rFixed;
-            pWorkWin->SetObjectBar_Impl(rFixed.nMode,
+            pWorkWin->SetObjectBar_Impl(rFixed.nPos, rFixed.nFlags,
                 rFixed.nResId, rFixed.pIFace);
         }
     }

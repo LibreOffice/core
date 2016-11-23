@@ -468,9 +468,9 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
     pWorkWin (pWin),
     pConfigShell( nullptr ),
     pActiveChild( nullptr ),
-    nUpdateMode(SFX_VISIBILITY_STANDARD),
+    nUpdateMode(SfxVisibilityFlags::Standard),
     nChildren( 0 ),
-    nOrigMode( 0 ),
+    nOrigMode( SfxVisibilityFlags::Invisible ),
     bSorted( true ),
     bDockingAllowed(true),
     bInternalDockingAllowed(true),
@@ -528,8 +528,8 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
         pSplit[n] = pSplitWin;
     }
 
-    nOrigMode = SFX_VISIBILITY_STANDARD;
-    nUpdateMode = SFX_VISIBILITY_STANDARD;
+    nOrigMode = SfxVisibilityFlags::Standard;
+    nUpdateMode = SfxVisibilityFlags::Standard;
 }
 
 
@@ -994,24 +994,22 @@ void SfxWorkWindow::ResetObjectBars_Impl()
         aChildWins[n]->nId = 0;
 }
 
-void SfxWorkWindow::SetObjectBar_Impl(sal_uInt16 nPos, sal_uInt32 nResId,
+void SfxWorkWindow::SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, sal_uInt32 nResId,
             SfxInterface* pIFace)
 {
-    DBG_ASSERT( (nPos & SFX_POSITION_MASK) < SFX_OBJECTBAR_MAX,
-                "object bar position overflow" );
+    DBG_ASSERT( nPos < SFX_OBJECTBAR_MAX, "object bar position overflow" );
 
-    sal_uInt16 nRealPos = nPos & SFX_POSITION_MASK;
-    if ( pParent && IsAppWorkWinToolbox_Impl( nRealPos ) )
+    if ( pParent && IsAppWorkWinToolbox_Impl( nPos ) )
     {
-        pParent->SetObjectBar_Impl(nPos, nResId, pIFace);
+        pParent->SetObjectBar_Impl(nPos, nFlags, nResId, pIFace);
         return;
     }
 
     SfxObjectBar_Impl aObjBar;
     aObjBar.pIFace = pIFace;
     aObjBar.nId = sal::static_int_cast<sal_uInt16>(nResId);
-    aObjBar.nPos = nRealPos;
-    aObjBar.nMode = (nPos & SFX_VISIBILITY_MASK);
+    aObjBar.nPos = nPos;
+    aObjBar.nMode = nFlags;
 
     for (SfxObjectBar_Impl & rBar : aObjBarList)
     {
@@ -1034,13 +1032,12 @@ bool SfxWorkWindow::KnowsObjectBar_Impl( sal_uInt16 nPos ) const
 */
 
 {
-    sal_uInt16 nRealPos = nPos & SFX_POSITION_MASK;
-    if ( pParent && IsAppWorkWinToolbox_Impl( nRealPos ) )
+    if ( pParent && IsAppWorkWinToolbox_Impl( nPos ) )
         return pParent->KnowsObjectBar_Impl( nPos );
 
     for (const SfxObjectBar_Impl& rBar : aObjBarList)
     {
-        if ( rBar.nPos == nRealPos )
+        if ( rBar.nPos == nPos )
             return true;
     }
 
@@ -1048,20 +1045,20 @@ bool SfxWorkWindow::KnowsObjectBar_Impl( sal_uInt16 nPos ) const
 }
 
 
-bool SfxWorkWindow::IsVisible_Impl( sal_uInt16 nMode ) const
+bool SfxWorkWindow::IsVisible_Impl( SfxVisibilityFlags nMode ) const
 {
     switch( nUpdateMode )
     {
-        case SFX_VISIBILITY_STANDARD:
+        case SfxVisibilityFlags::Standard:
             return true;
-        case SFX_VISIBILITY_UNVISIBLE:
+        case SfxVisibilityFlags::Invisible:
             return false;
-        case SFX_VISIBILITY_CLIENT:
-        case SFX_VISIBILITY_SERVER:
+        case SfxVisibilityFlags::Client:
+        case SfxVisibilityFlags::Server:
             return !!(nMode & nUpdateMode);
         default:
             return !!(nMode & nOrigMode ) ||
-                nOrigMode == SFX_VISIBILITY_STANDARD;
+                nOrigMode == SfxVisibilityFlags::Standard;
     }
 }
 
@@ -1204,14 +1201,13 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
         bool    bDestroy = aObjBarList[n].bDestroy;
 
         // Determine the valid mode for the ToolBox
-        sal_uInt16 nTbxMode = aObjBarList[n].nMode;
-        bool bFullScreenTbx = SFX_VISIBILITY_FULLSCREEN ==
-                                  ( nTbxMode & SFX_VISIBILITY_FULLSCREEN );
-        nTbxMode &= ~SFX_VISIBILITY_FULLSCREEN;
-        nTbxMode &= ~SFX_VISIBILITY_VIEWER;
+        SfxVisibilityFlags nTbxMode = aObjBarList[n].nMode;
+        bool bFullScreenTbx( nTbxMode & SfxVisibilityFlags::FullScreen );
+        nTbxMode &= ~SfxVisibilityFlags::FullScreen;
+        nTbxMode &= ~SfxVisibilityFlags::Viewer;
 
         // Is a ToolBox required in this context ?
-        bool bModesMatching = ( nUpdateMode && ( nTbxMode & nUpdateMode) == nUpdateMode );
+        bool bModesMatching = (nUpdateMode != SfxVisibilityFlags::Invisible) && ((nTbxMode & nUpdateMode) == nUpdateMode);
         if ( bDestroy )
         {
             OUString aTbxId( m_aTbxTypeName );
@@ -1484,9 +1480,9 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
 void SfxWorkWindow::MakeVisible_Impl( bool bVis )
 {
     if ( bVis )
-        nOrigMode = SFX_VISIBILITY_STANDARD;
+        nOrigMode = SfxVisibilityFlags::Standard;
     else
-        nOrigMode = SFX_VISIBILITY_UNVISIBLE;
+        nOrigMode = SfxVisibilityFlags::Invisible;
 
     if ( nOrigMode != nUpdateMode)
         nUpdateMode = nOrigMode;
@@ -1494,7 +1490,7 @@ void SfxWorkWindow::MakeVisible_Impl( bool bVis )
 
 bool SfxWorkWindow::IsVisible_Impl()
 {
-    return nOrigMode != SFX_VISIBILITY_UNVISIBLE;
+    return nOrigMode != SfxVisibilityFlags::Invisible;
 }
 
 
@@ -1760,7 +1756,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 }
 
 
-void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, bool bEnabled, sal_uInt16 nMode )
+void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, bool bEnabled, SfxVisibilityFlags nMode )
 {
     sal_uInt16 nInter = (sal_uInt16) ( lId >> 16 );
     sal_uInt16 nId = (sal_uInt16) ( lId & 0xFFFF );
@@ -1815,7 +1811,6 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, bool bEnabled, s
         pCW->nInterfaceId = nInter;
     pCW->nVisibility = nMode;
     pCW->bEnable = bEnabled;
-    pCW->nVisibility = nMode;
 }
 
 
@@ -1983,7 +1978,7 @@ bool SfxWorkWindow::IsFloating( sal_uInt16 nId )
         pCW = new SfxChildWin_Impl( nId );
         pCW->bEnable = false;
         pCW->nId = 0;
-        pCW->nVisibility = 0;
+        pCW->nVisibility = SfxVisibilityFlags::Invisible;
         InitializeChild_Impl( pCW );
         if ( pWork && !( pCW->aInfo.nFlags & SfxChildWindowFlags::TASK ) )
             pWork->aChildWins.push_back( pCW );

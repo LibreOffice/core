@@ -46,15 +46,15 @@ class SfxWorkWindow;
 // This struct makes all relevant Information available of Toolboxes
 struct SfxObjectBar_Impl
 {
-    sal_uInt16        nId;   // Resource - and ConfigId of Toolbox
-    sal_uInt16        nMode; // special visibility flags
-    sal_uInt16        nPos;
-    bool              bDestroy;
-    SfxInterface*     pIFace;
+    sal_uInt16         nId;   // Resource - and ConfigId of Toolbox
+    SfxVisibilityFlags nMode; // special visibility flags
+    sal_uInt16         nPos;
+    bool               bDestroy;
+    SfxInterface*      pIFace;
 
     SfxObjectBar_Impl() :
         nId(0),
-        nMode(0),
+        nMode(SfxVisibilityFlags::Invisible),
         nPos(0),
         bDestroy(false),
         pIFace(nullptr)
@@ -116,7 +116,7 @@ struct SfxChildWin_Impl
     bool                            bCreate;
     SfxChildWinInfo                 aInfo;
     SfxChild_Impl*                  pCli;          // != 0 at direct Children
-    sal_uInt16                      nVisibility;
+    SfxVisibilityFlags              nVisibility;
     bool                            bEnable;
 
     SfxChildWin_Impl( sal_uInt32 nID ) :
@@ -126,7 +126,7 @@ struct SfxChildWin_Impl
         pWin(nullptr),
         bCreate(false),
         pCli(nullptr),
-        nVisibility( SFX_VISIBILITY_UNVISIBLE ),
+        nVisibility( SfxVisibilityFlags::Invisible ),
         bEnable( true )
     {}
 };
@@ -206,9 +206,9 @@ class SfxWorkWindow final
     VclPtr<vcl::Window>     pWorkWin;
     SfxShell*               pConfigShell;
     VclPtr<vcl::Window>     pActiveChild;
-    sal_uInt16              nUpdateMode;
+    SfxVisibilityFlags      nUpdateMode;
     sal_uInt16              nChildren;
-    sal_uInt16              nOrigMode;
+    SfxVisibilityFlags      nOrigMode;
     bool                    bSorted : 1;
     bool                    bDockingAllowed : 1;
     bool                    bInternalDockingAllowed : 1;
@@ -275,7 +275,7 @@ public:
     void                    UpdateObjectBars_Impl();
     void                    UpdateObjectBars_Impl2();
     void                    ResetObjectBars_Impl();
-    void                    SetObjectBar_Impl(sal_uInt16 nPos, sal_uInt32 nResId,
+    void                    SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, sal_uInt32 nResId,
                                     SfxInterface *pIFace);
     bool                    KnowsObjectBar_Impl( sal_uInt16 nPos ) const;
     bool                    IsVisible_Impl();
@@ -285,7 +285,7 @@ public:
     // Methods for ChildWindows
     void                    UpdateChildWindows_Impl();
     void                    ResetChildWindows_Impl();
-    void                    SetChildWindowVisible_Impl( sal_uInt32, bool, sal_uInt16 );
+    void                    SetChildWindowVisible_Impl( sal_uInt32, bool, SfxVisibilityFlags );
     void                    ToggleChildWindow_Impl(sal_uInt16,bool);
     bool                    HasChildWindow_Impl(sal_uInt16);
     bool                    KnowsChildWindow_Impl(sal_uInt16);
@@ -295,7 +295,7 @@ public:
     void                    InitializeChild_Impl(SfxChildWin_Impl*);
     SfxSplitWindow*         GetSplitWindow_Impl(SfxChildAlignment);
 
-    bool                    IsVisible_Impl( sal_uInt16 nMode ) const;
+    bool                    IsVisible_Impl( SfxVisibilityFlags nMode ) const;
     bool                    IsFloating( sal_uInt16 nId );
     void                    SetActiveChild_Impl( vcl::Window *pChild );
     const VclPtr<vcl::Window>& GetActiveChild_Impl() const { return pActiveChild; }

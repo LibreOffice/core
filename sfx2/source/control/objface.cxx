@@ -53,13 +53,15 @@ SfxCompareSlots_bsearch( const void* pSmaller, const void* pBigger )
 
 struct SfxObjectUI_Impl
 {
-    sal_uInt16  nPos;
-    sal_uInt32  nResId;
-    bool        bContext;
-    SfxShellFeature nFeature;
+    sal_uInt16         nPos;
+    SfxVisibilityFlags nFlags;
+    sal_uInt32         nResId;
+    bool               bContext;
+    SfxShellFeature    nFeature;
 
-    SfxObjectUI_Impl(sal_uInt16 n, sal_uInt32 nId, SfxShellFeature nFeat) :
+    SfxObjectUI_Impl(sal_uInt16 n, SfxVisibilityFlags f, sal_uInt32 nId, SfxShellFeature nFeat) :
         nPos(n),
+        nFlags(f),
         nResId(nId),
         bContext(false),
         nFeature(nFeat)
@@ -95,7 +97,7 @@ struct SfxInterface_Impl
     }
 };
 
-static SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, sal_uInt32 nResId, SfxShellFeature nFeature);
+static SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, sal_uInt32 nResId, SfxShellFeature nFeature);
 
 // constuctor, registeres a new unit
 SfxInterface::SfxInterface( const char *pClassName,
@@ -360,24 +362,24 @@ void SfxInterface::RegisterPopupMenu( const OUString& rResourceName )
     pImplData->aPopupName = rResourceName;
 }
 
-void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, sal_uInt32 nResId)
+void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, SfxVisibilityFlags nFlags, sal_uInt32 nResId)
 {
-    RegisterObjectBar(nPos, nResId, SfxShellFeature::NONE);
+    RegisterObjectBar(nPos, nFlags, nResId, SfxShellFeature::NONE);
 }
 
-void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, sal_uInt32 nResId, SfxShellFeature nFeature)
+void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, SfxVisibilityFlags nFlags, sal_uInt32 nResId, SfxShellFeature nFeature)
 {
-    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl(nPos, nResId, nFeature);
+    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl(nPos, nFlags, nResId, nFeature);
     if ( pUI )
         pImplData->aObjectBars.push_back(pUI);
 }
 
-SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, sal_uInt32 nResId, SfxShellFeature nFeature)
+SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, sal_uInt32 nResId, SfxShellFeature nFeature)
 {
-    if ((nPos & SFX_VISIBILITY_MASK) == 0)
-        nPos |= SFX_VISIBILITY_STANDARD;
+    if (nFlags == SfxVisibilityFlags::Invisible)
+        nFlags |= SfxVisibilityFlags::Standard;
 
-    return new SfxObjectUI_Impl(nPos, nResId, nFeature);
+    return new SfxObjectUI_Impl(nPos, nFlags, nResId, nFeature);
 }
 
 sal_uInt32 SfxInterface::GetObjectBarId(sal_uInt16 nNo) const
@@ -418,6 +420,25 @@ sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
     return pImplData->aObjectBars[nNo]->nPos;
 }
 
+SfxVisibilityFlags SfxInterface::GetObjectBarFlags( sal_uInt16 nNo ) const
+{
+    bool bGenoType = (pGenoType != nullptr && pGenoType->UseAsSuperClass());
+    if ( bGenoType )
+    {
+        // Are there toolbars in the super class?
+        sal_uInt16 nBaseCount = pGenoType->GetObjectBarCount();
+        if ( nNo < nBaseCount )
+            // The Super class comes first
+            return pGenoType->GetObjectBarFlags( nNo );
+        else
+            nNo = nNo - nBaseCount;
+    }
+
+    assert( nNo<pImplData->aObjectBars.size() );
+
+    return pImplData->aObjectBars[nNo]->nFlags;
+}
+
 sal_uInt16 SfxInterface::GetObjectBarCount() const
 {
     if (pGenoType && pGenoType->UseAsSuperClass())
@@ -433,7 +454,7 @@ void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext)
 
 void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, SfxShellFeature nFeature)
 {
-    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, nId, nFeature);
+    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, SfxVisibilityFlags::Invisible, nId, nFeature);
     pUI->bContext = bContext;
     pImplData->aChildWindows.push_back(pUI);
 }

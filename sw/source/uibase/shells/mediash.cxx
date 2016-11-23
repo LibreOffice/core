@@ -75,7 +75,7 @@ void SwMediaShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("media");
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_MEDIA_TOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_MEDIA_TOOLBOX);
 }
 
 void SwMediaShell::ExecMedia(SfxRequest &rReq)
