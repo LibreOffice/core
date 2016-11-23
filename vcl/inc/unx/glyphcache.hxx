@@ -151,6 +151,7 @@ public:
                            ~FreetypeFont();
 
     const OString&          GetFontFileName() const;
+    int                     GetFontFaceIndex() const;
     bool                    TestFont() const { return mbFaceOk;}
     FT_Face                 GetFtFace() const;
     int                     GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
@@ -231,7 +232,7 @@ private:
     FT_FaceRec_*            maFaceFT;
     FT_SizeRec_*            maSizeFT;
 
-    std::shared_ptr<FontConfigFontOptions> mxFontOptions;
+    mutable std::shared_ptr<FontConfigFontOptions> mxFontOptions;
 
     bool                    mbFaceOk;
     bool                    mbArtItalic;
@@ -253,13 +254,9 @@ public:
     virtual                 ~FreetypeFontInstance() override;
 
     void                    SetFreetypeFont(FreetypeFont* p);
-    void                    HandleFontOptions();
 
 private:
     FreetypeFont*           mpFreetypeFont;
-    std::shared_ptr<FontConfigFontOptions> mxFontOptions;
-    bool                    mbGotFontOptions;
-
 };
 
 class VCL_DLLPUBLIC ServerFontLayout : public GenericSalLayout
