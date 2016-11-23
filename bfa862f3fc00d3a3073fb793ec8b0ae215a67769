@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "5a74a57a_7e030510",
+        "filename": "dtrans/source/win32/clipb/MtaOleClipb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-11-23T12:33:43Z",
+      "side": 1,
+      "message": "the code here directly contradicts the comment above: COINIT_APARTMENTTHREADED is a new STA (i.e. what this code already did before), while the MTA is COINIT_MULTITHREADED.\n\nswitching to MTA would require adding mutexes everywhere as the code could be called on any thread then.",
+      "revId": "bfa862f3fc00d3a3073fb793ec8b0ae215a67769",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a74a57a_5e772902",
         "filename": "dtrans/source/win32/dtobj/XTDataObject.cxx",
         "patchSetId": 1
