@@ -417,23 +417,6 @@ $(eval $(call gb_Library_add_cobjects,vcl,\
 
 # optional parts
 
-## handle Graphite
-ifeq ($(ENABLE_GRAPHITE),TRUE)
-# add graphite sources for all platforms
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/glyphs/graphite_features \
-    vcl/source/glyphs/graphite_layout \
-))
-
-# handle X11 platforms, which have additional files and possibly system graphite
-ifneq (,$(or $(USING_X11),$(ENABLE_HEADLESS)))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/glyphs/graphite_serverfont \
-))
-endif
-
-endif
-
 vcl_quartz_code= \
     vcl/quartz/salbmp \
     vcl/quartz/utils \
