@@ -59,8 +59,8 @@ public:
 
 struct ScMyShape
 {
-    ScAddress   aAddress;
-    ScAddress   aEndAddress;
+    ScAddress       aAddress;
+    ScAddress       aEndAddress;
     sal_Int32       nEndX;
     sal_Int32       nEndY;
     css::uno::Reference<css::drawing::XShape> xShape;
@@ -183,13 +183,7 @@ public:
     void                        SkipTable(SCTAB nSkip);
 };
 
-struct ScMyCellRangeAddress : ScRange
-{
-    explicit ScMyCellRangeAddress(const ScRange& rRange);
-    bool                        operator<(const ScMyCellRangeAddress& rCellRangeAddress ) const;
-};
-
-typedef std::list<ScMyCellRangeAddress> ScMyEmptyDatabaseRangeList;
+typedef std::list<ScRange> ScMyEmptyDatabaseRangeList;
 
 class ScMyEmptyDatabaseRangesContainer : public ScMyIteratorBase
 {
