@@ -22,6 +22,7 @@
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
+#include <com/sun/star/sheet/GeneralFunction2.hpp>
 
 using namespace com::sun::star;
 
@@ -410,10 +411,6 @@ ScSubTotalFunc ScDPUtil::toSubTotalFunc(css::sheet::GeneralFunction eGenFunc)
         case sheet::GeneralFunction_SUM:        eSubTotal = SUBTOTAL_FUNC_SUM;  break;
         case sheet::GeneralFunction_COUNT:      eSubTotal = SUBTOTAL_FUNC_CNT2; break;
         case sheet::GeneralFunction_AVERAGE:    eSubTotal = SUBTOTAL_FUNC_AVE;  break;
-#if 0
-// disabled because of css::sheet::GeneralFunction API incompatibility
-        case sheet::GeneralFunction_MEDIAN:     eSubTotal = SUBTOTAL_FUNC_MED;  break;
-#endif
         case sheet::GeneralFunction_MAX:        eSubTotal = SUBTOTAL_FUNC_MAX;  break;
         case sheet::GeneralFunction_MIN:        eSubTotal = SUBTOTAL_FUNC_MIN;  break;
         case sheet::GeneralFunction_PRODUCT:    eSubTotal = SUBTOTAL_FUNC_PROD; break;
@@ -423,6 +420,31 @@ ScSubTotalFunc ScDPUtil::toSubTotalFunc(css::sheet::GeneralFunction eGenFunc)
         case sheet::GeneralFunction_VAR:        eSubTotal = SUBTOTAL_FUNC_VAR;  break;
         case sheet::GeneralFunction_VARP:       eSubTotal = SUBTOTAL_FUNC_VARP; break;
         case sheet::GeneralFunction_AUTO:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
+        default:
+            assert(false);
+    }
+    return eSubTotal;
+}
+
+ScSubTotalFunc ScDPUtil::toSubTotalFunc(sal_Int16 eGenFunc)
+{
+    ScSubTotalFunc eSubTotal = SUBTOTAL_FUNC_NONE;
+    switch (eGenFunc)
+    {
+        case sheet::GeneralFunction2::NONE:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
+        case sheet::GeneralFunction2::SUM:        eSubTotal = SUBTOTAL_FUNC_SUM;  break;
+        case sheet::GeneralFunction2::COUNT:      eSubTotal = SUBTOTAL_FUNC_CNT2; break;
+        case sheet::GeneralFunction2::AVERAGE:    eSubTotal = SUBTOTAL_FUNC_AVE;  break;
+        case sheet::GeneralFunction2::MEDIAN:     eSubTotal = SUBTOTAL_FUNC_MED;  break;
+        case sheet::GeneralFunction2::MAX:        eSubTotal = SUBTOTAL_FUNC_MAX;  break;
+        case sheet::GeneralFunction2::MIN:        eSubTotal = SUBTOTAL_FUNC_MIN;  break;
+        case sheet::GeneralFunction2::PRODUCT:    eSubTotal = SUBTOTAL_FUNC_PROD; break;
+        case sheet::GeneralFunction2::COUNTNUMS:  eSubTotal = SUBTOTAL_FUNC_CNT;  break;
+        case sheet::GeneralFunction2::STDEV:      eSubTotal = SUBTOTAL_FUNC_STD;  break;
+        case sheet::GeneralFunction2::STDEVP:     eSubTotal = SUBTOTAL_FUNC_STDP; break;
+        case sheet::GeneralFunction2::VAR:        eSubTotal = SUBTOTAL_FUNC_VAR;  break;
+        case sheet::GeneralFunction2::VARP:       eSubTotal = SUBTOTAL_FUNC_VARP; break;
+        case sheet::GeneralFunction2::AUTO:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
         default:
             assert(false);
     }
