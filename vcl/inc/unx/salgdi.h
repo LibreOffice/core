@@ -54,7 +54,6 @@ class X11OpenGLSalGraphicsImpl;
 class X11OpenGLSalVirtualDevice;
 class FreetypeFont;
 class ImplLayoutArgs;
-class ServerFontLayout;
 class PhysicalFontCollection;
 class PhysicalFontFace;
 class SalGraphicsImpl;
@@ -66,7 +65,6 @@ namespace basegfx {
 
 class VCLPLUG_GEN_PUBLIC X11SalGraphics : public SalGraphics
 {
-    friend class ServerFontLayout;
     friend class X11SalGraphicsImpl;
     friend class X11OpenGLSalGraphicsImpl;
     friend class X11CairoTextRender;

@@ -185,9 +185,6 @@ void CairoTextRender::DrawServerFontLayout( const GenericSalLayout& rLayout, con
             case GF_ROTL:    // left
                 glyph_extrarotation.push_back(1);
                 break;
-            case GF_ROTR:    // right
-                glyph_extrarotation.push_back(-1);
-                break;
             default:
                 glyph_extrarotation.push_back(0);
                 break;
@@ -293,34 +290,16 @@ void CairoTextRender::DrawServerFontLayout( const GenericSalLayout& rLayout, con
             //like them
             double xdiff = 0.0;
             double ydiff = 0.0;
-            if (nGlyphRotation == 1)
+            if (nGlyphRotation)
             {
-                if (SalLayout::UseCommonLayout())
-                {
-                    // The y is the origin point position, but Cairo will draw
-                    // the glyph *above* that point, we need to move it down to
-                    // the glyph’s baseline.
-                    cairo_text_extents_t aExt;
-                    cairo_glyph_extents(cr, &cairo_glyphs[nStartIndex], nLen, &aExt);
-                    double nDescender = std::fmax(aExt.height + aExt.y_bearing, 0);
-                    ydiff = (aExt.x_advance - nDescender) / nHeight;
-                }
-                else
-                {
-                    ydiff = font_extents.ascent/nHeight;
-                }
+                // The y is the origin point position, but Cairo will draw
+                // the glyph *above* that point, we need to move it down to
+                // the glyph’s baseline.
+                cairo_text_extents_t aExt;
+                cairo_glyph_extents(cr, &cairo_glyphs[nStartIndex], nLen, &aExt);
+                double nDescender = std::fmax(aExt.height + aExt.y_bearing, 0);
+                ydiff = (aExt.x_advance - nDescender) / nHeight;
                 xdiff = -font_extents.descent/nHeight;
-            }
-            else if (nGlyphRotation == -1)
-            {
-                cairo_text_extents_t text_extents;
-                cairo_glyph_extents(cr, &cairo_glyphs[nStartIndex], nLen,
-                    &text_extents);
-
-                xdiff = -text_extents.x_advance/nHeight;
-                //to restore an apparent bug in the original X11 impl, replace
-                //nHeight with nWidth below
-                xdiff += font_extents.descent/nHeight;
             }
             cairo_matrix_translate(&m, xdiff, ydiff);
         }
@@ -506,10 +485,7 @@ SalLayout* CairoTextRender::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackL
     if( mpFreetypeFont[ nFallbackLevel ]
     && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
     {
-        if (SalLayout::UseCommonLayout())
-            pLayout = new CommonSalLayout(*mpFreetypeFont[nFallbackLevel]);
-        else
-            pLayout = new ServerFontLayout( *mpFreetypeFont[ nFallbackLevel ] );
+        pLayout = new CommonSalLayout(*mpFreetypeFont[nFallbackLevel]);
     }
 
     return pLayout;
