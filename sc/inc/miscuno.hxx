@@ -154,6 +154,8 @@ public:
                             AnyToInterface( const css::uno::Any& rAny );
     static bool             GetBoolProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, bool bDefault = false );
+    static sal_Int16        GetShortProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
+                                            const OUString& rName, sal_Int16 nDefault );
     static sal_Int32        GetLongProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName );
     static sal_Int32        GetEnumProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,

@@ -1869,7 +1869,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     }
     else if ( aPropertyName == SC_UNONAME_FUNCTION2 )
     {
-        sal_Int16 eFunction = (sal_Int16) ScUnoHelpFunctions::GetEnumFromAny( aValue );
+        sal_Int16 eFunction = ScUnoHelpFunctions::GetInt16FromAny( aValue );
         setFunction( eFunction );
     }
     else if ( aPropertyName == SC_UNONAME_SUBTOTALS )

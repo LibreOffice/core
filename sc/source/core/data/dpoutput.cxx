@@ -1588,7 +1588,7 @@ void ScDPOutput::GetDataDimensionNames(
         // Generate "given name" the same way as in dptabres.
         //TODO: Should use a stored name when available
 
-        sal_Int16 eFunc = (sal_Int16)ScUnoHelpFunctions::GetEnumProperty(
+        sal_Int16 eFunc = ScUnoHelpFunctions::GetShortProperty(
                           xDimProp, SC_UNO_DP_FUNCTION2,
                           sheet::GeneralFunction2::NONE );
         rGivenName = lcl_GetDataFieldName( rSourceName, eFunc );
