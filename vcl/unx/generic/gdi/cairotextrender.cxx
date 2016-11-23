@@ -138,31 +138,10 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
         // register to use the font
         mpFreetypeFont[ nFallbackLevel ] = pFreetypeFont;
 
-        // apply font specific-hint settings
-        FreetypeFontInstance* pSFE = static_cast<FreetypeFontInstance*>( pEntry->mpFontInstance );
-        pSFE->HandleFontOptions();
-
         return true;
     }
 
     return false;
-}
-
-FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize);
-
-void FreetypeFontInstance::HandleFontOptions()
-{
-    if( !mpFreetypeFont )
-        return;
-    if( !mbGotFontOptions )
-    {
-        // get and cache the font options
-        mbGotFontOptions = true;
-        mxFontOptions.reset(GetFCFontOptions( *maFontSelData.mpFontData,
-            maFontSelData.mnHeight ));
-    }
-    // apply the font options
-    mpFreetypeFont->SetFontOptions(mxFontOptions);
 }
 
 void CairoFontsCache::CacheFont(void *pFont, const CairoFontsCache::CacheId &rId)
@@ -470,18 +449,6 @@ void cairosubcallback(void* pPattern)
     if( !pFontOptions )
         return;
     cairo_ft_font_options_substitute(pFontOptions, static_cast<FcPattern*>(pPattern));
-}
-
-FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize)
-{
-    psp::FastPrintFontInfo aInfo;
-
-    aInfo.m_aFamilyName = rFontAttributes.GetFamilyName();
-    aInfo.m_eItalic = rFontAttributes.GetItalic();
-    aInfo.m_eWeight = rFontAttributes.GetWeight();
-    aInfo.m_eWidth = rFontAttributes.GetWidthType();
-
-    return psp::PrintFontManager::getFontOptions(aInfo, nSize, cairosubcallback);
 }
 
 void

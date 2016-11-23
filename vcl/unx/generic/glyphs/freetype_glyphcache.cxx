@@ -588,16 +588,30 @@ void FreetypeFont::SetFontOptions(const std::shared_ptr<FontConfigFontOptions>& 
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize);
+extern void cairosubcallback(void* pPattern);
+
+namespace
+{
+    FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize)
+    {
+        psp::FastPrintFontInfo aInfo;
+
+        aInfo.m_aFamilyName = rFontAttributes.GetFamilyName();
+        aInfo.m_eItalic = rFontAttributes.GetItalic();
+        aInfo.m_eWeight = rFontAttributes.GetWeight();
+        aInfo.m_eWidth = rFontAttributes.GetWidthType();
+
+        return psp::PrintFontManager::getFontOptions(aInfo, nSize, cairosubcallback);
+    }
+}
 
 const std::shared_ptr<FontConfigFontOptions>& FreetypeFont::GetFontOptions() const
 {
     if (!mxFontOptions)
     {
-        SAL_WARN("vcl", "this doesn't happen in practice I believe");
         mxFontOptions.reset(GetFCFontOptions(mpFontInfo->GetFontAttributes(), maFontSelData.mnHeight));
+        mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), NeedsArtificialBold());
     }
-    mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), NeedsArtificialBold());
     return mxFontOptions;
 }
 
