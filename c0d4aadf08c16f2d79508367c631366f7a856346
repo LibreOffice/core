@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a74a57a_be1cbd78",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-11-23T11:57:40Z",
+      "side": 1,
+      "message": "this is not an incompatible change; please use the phrase \"[API Change]\" only in the commit messages of incompatible changes---that makes it easier to grep for those when preparing release notes etc.",
+      "revId": "c0d4aadf08c16f2d79508367c631366f7a856346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a74a57a_bec03de2",
         "filename": "offapi/com/sun/star/sheet/GeneralFunction2.idl",
         "patchSetId": 7
