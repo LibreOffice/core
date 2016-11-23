@@ -225,7 +225,6 @@ void FreetypeFontInfo::ReleaseFaceFT()
 
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
-//static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
 
 static const sal_uInt32 T_true = 0x74727565;        /* 'true' */
 static const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
@@ -398,7 +397,6 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     mbArtItalic( false ),
     mbArtBold( false ),
     mbUseGamma( false ),
-    mpLayoutEngine( nullptr ),
     mpHbFont( nullptr )
 {
     // TODO: move update of mpFontInstance into FontEntry class when
@@ -444,9 +442,6 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     }
 
     mbFaceOk = true;
-
-    if (!SalLayout::UseCommonLayout())
-        ApplyGSUB( rFSD );
 
     // TODO: query GASP table for load flags
     mnLoadFlags = FT_LOAD_DEFAULT | FT_LOAD_IGNORE_TRANSFORM;
@@ -562,8 +557,6 @@ int FreetypeFont::GetFontFaceIndex() const
 
 FreetypeFont::~FreetypeFont()
 {
-    delete mpLayoutEngine;
-
     if( maSizeFT )
         FT_Done_Size( maSizeFT );
 
@@ -1211,232 +1204,6 @@ bool FreetypeFont::GetGlyphOutline( sal_GlyphId aGlyphId,
     rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix( +1.0/(1<<6), -1.0/(1<<6) ));
 
     return true;
-}
-
-void FreetypeFont::ApplyGSUB( const FontSelectPattern& rFSD )
-{
-#define MKTAG(s) ((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
-
-    std::vector<sal_uInt32> aReqFeatureTagList;
-    if( rFSD.mbVertical )
-        aReqFeatureTagList.push_back( MKTAG("vert") );
-    // TODO: request more features depending on script and language system
-
-    if( aReqFeatureTagList.empty()) // nothing to do
-        return;
-
-    // load GSUB table into memory
-    sal_uLong nLength = 0;
-    const FT_Byte* const pGsubBase = mpFontInfo->GetTable( "GSUB", &nLength );
-    if( !pGsubBase )
-        return;
-
-    // parse GSUB header
-    const FT_Byte* pGsubHeader = pGsubBase;
-    const sal_uInt16 nOfsScriptList     = GetUShort( pGsubHeader+4 );
-    const sal_uInt16 nOfsFeatureTable   = GetUShort( pGsubHeader+6 );
-    const sal_uInt16 nOfsLookupList     = GetUShort( pGsubHeader+8 );
-
-    std::vector<sal_uInt16> aFeatureIndexList;
-
-    // parse Script Table
-    const FT_Byte* pScriptHeader = pGsubBase + nOfsScriptList;
-    const sal_uInt16 nCntScript = GetUShort( pScriptHeader+0 );
-    pScriptHeader += 2;
-    for( sal_uInt16 nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
-    {
-        const sal_uInt16 nOfsScriptTable= GetUShort( pScriptHeader+4 );
-        pScriptHeader += 6;
-
-        const FT_Byte* pScriptTable     = pGsubBase + nOfsScriptList + nOfsScriptTable;
-        const sal_uInt16 nDefaultLangsysOfs = GetUShort( pScriptTable+0 );
-        const sal_uInt16 nCntLangSystem     = GetUShort( pScriptTable+2 );
-        pScriptTable += 4;
-        sal_uInt16 nLangsysOffset = 0;
-
-        if (nCntLangSystem != 0)
-        {
-            nLangsysOffset = GetUShort( pScriptTable+4 );
-        }
-
-        if (nDefaultLangsysOfs != 0 && nDefaultLangsysOfs != nLangsysOffset)
-        {
-            const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nDefaultLangsysOfs;
-            const sal_uInt16 nReqFeatureIdx = GetUShort( pLangSys+2 );
-            const sal_uInt16 nCntFeature    = GetUShort( pLangSys+4 );
-            pLangSys += 6;
-            aFeatureIndexList.push_back( nReqFeatureIdx );
-            for( sal_uInt16 i = 0; i < nCntFeature; ++i )
-            {
-                const sal_uInt16 nFeatureIndex = GetUShort( pLangSys );
-                pLangSys += 2;
-                aFeatureIndexList.push_back( nFeatureIndex );
-            }
-        }
-
-        if( nLangsysOffset != 0 )
-        {
-            const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nLangsysOffset;
-            const sal_uInt16 nReqFeatureIdx = GetUShort( pLangSys+2 );
-            const sal_uInt16 nCntFeature    = GetUShort( pLangSys+4 );
-            pLangSys += 6;
-            aFeatureIndexList.push_back( nReqFeatureIdx );
-            for( sal_uInt16 i = 0; i < nCntFeature; ++i )
-            {
-                const sal_uInt16 nFeatureIndex = GetUShort( pLangSys );
-                pLangSys += 2;
-                aFeatureIndexList.push_back( nFeatureIndex );
-            }
-        }
-    }
-
-    if( aFeatureIndexList.empty() )
-        return;
-
-    std::vector<sal_uInt16> aLookupIndexList;
-    std::vector<sal_uInt16> aLookupOffsetList;
-
-    // parse Feature Table
-    const FT_Byte* pFeatureHeader = pGsubBase + nOfsFeatureTable;
-    const sal_uInt16 nCntFeature = GetUShort( pFeatureHeader );
-    pFeatureHeader += 2;
-    for( sal_uInt16 nFeatureIndex = 0; nFeatureIndex < nCntFeature; ++nFeatureIndex )
-    {
-        const sal_uLong nTag    = GetUInt( pFeatureHeader+0 ); // e.g. locl/vert/trad/smpl/liga/fina/...
-        const sal_uInt16 nOffset= GetUShort( pFeatureHeader+4 );
-        pFeatureHeader += 6;
-
-        // short circuit some feature lookups
-        if( aFeatureIndexList[0] != nFeatureIndex ) // required feature?
-        {
-            const int nRequested = std::count( aFeatureIndexList.begin(), aFeatureIndexList.end(), nFeatureIndex);
-            if( !nRequested )  // ignore features that are not requested
-                continue;
-            const int nAvailable = std::count( aReqFeatureTagList.begin(), aReqFeatureTagList.end(), nTag);
-            if( !nAvailable )  // some fonts don't provide features they request!
-                continue;
-        }
-
-        const FT_Byte* pFeatureTable = pGsubBase + nOfsFeatureTable + nOffset;
-        pFeatureTable += 2; // ignore FeatureParams
-        const sal_uInt16 nCntLookups = GetUShort( pFeatureTable+0 );
-        pFeatureTable += 2;
-        for( sal_uInt16 i = 0; i < nCntLookups; ++i )
-        {
-            const sal_uInt16 nLookupIndex = GetUShort( pFeatureTable );
-            pFeatureTable += 2;
-            aLookupIndexList.push_back( nLookupIndex );
-        }
-        if( nCntLookups == 0 ) //### hack needed by Mincho/Gothic/Mingliu/Simsun/...
-            aLookupIndexList.push_back( 0 );
-    }
-
-    // parse Lookup List
-    const FT_Byte* pLookupHeader = pGsubBase + nOfsLookupList;
-    const sal_uInt16 nCntLookupTable = GetUShort( pLookupHeader );
-    pLookupHeader += 2;
-    for( sal_uInt16 nLookupIdx = 0; nLookupIdx < nCntLookupTable; ++nLookupIdx )
-    {
-        const sal_uInt16 nOffset = GetUShort( pLookupHeader );
-        pLookupHeader += 2;
-        if( std::count( aLookupIndexList.begin(), aLookupIndexList.end(), nLookupIdx ) )
-            aLookupOffsetList.push_back( nOffset );
-    }
-
-    std::vector<sal_uInt16>::const_iterator lookup_it = aLookupOffsetList.begin();
-    for(; lookup_it != aLookupOffsetList.end(); ++lookup_it )
-    {
-        const sal_uInt16 nOfsLookupTable = *lookup_it;
-        const FT_Byte* pLookupTable = pGsubBase + nOfsLookupList + nOfsLookupTable;
-        const sal_uInt16 eLookupType        = GetUShort( pLookupTable+0 );
-        const sal_uInt16 nCntLookupSubtable = GetUShort( pLookupTable+4 );
-        pLookupTable += 6;
-
-        // TODO: switch( eLookupType )
-        if( eLookupType != 1 )  // TODO: once we go beyond SingleSubst
-            continue;
-
-        for( sal_uInt16 nSubTableIdx = 0; nSubTableIdx < nCntLookupSubtable; ++nSubTableIdx )
-        {
-            const sal_uInt16 nOfsSubLookupTable = GetUShort( pLookupTable );
-            pLookupTable += 2;
-            const FT_Byte* pSubLookup = pGsubBase + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable;
-
-            const sal_uInt16 nFmtSubstitution   = GetUShort( pSubLookup+0 );
-            const sal_uInt16 nOfsCoverage       = GetUShort( pSubLookup+2 );
-            pSubLookup += 4;
-
-            typedef std::pair<sal_uInt16,sal_uInt16> GlyphSubst;
-            std::vector<GlyphSubst> aSubstVector;
-
-            const FT_Byte* pCoverage    = pGsubBase + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable + nOfsCoverage;
-            const sal_uInt16 nFmtCoverage   = GetUShort( pCoverage+0 );
-            pCoverage += 2;
-            switch( nFmtCoverage )
-            {
-                case 1:         // Coverage Format 1
-                    {
-                        const sal_uInt16 nCntGlyph = GetUShort( pCoverage );
-                        pCoverage += 2;
-                        aSubstVector.reserve( nCntGlyph );
-                        for( sal_uInt16 i = 0; i < nCntGlyph; ++i )
-                        {
-                            const sal_uInt16 nGlyphId = GetUShort( pCoverage );
-                            pCoverage += 2;
-                            aSubstVector.push_back( GlyphSubst( nGlyphId, 0 ) );
-                        }
-                    }
-                    break;
-
-                case 2:         // Coverage Format 2
-                    {
-                        const sal_uInt16 nCntRange = GetUShort( pCoverage );
-                        pCoverage += 2;
-                        for( int i = nCntRange; --i >= 0; )
-                        {
-                            const sal_uInt32 nGlyph0 = GetUShort( pCoverage+0 );
-                            const sal_uInt32 nGlyph1 = GetUShort( pCoverage+2 );
-                            const sal_uInt16 nCovIdx = GetUShort( pCoverage+4 );
-                            pCoverage += 6;
-                            for( sal_uInt32 j = nGlyph0; j <= nGlyph1; ++j )
-                                aSubstVector.push_back( GlyphSubst( static_cast<sal_uInt16>(j + nCovIdx), 0 ) );
-                        }
-                    }
-                    break;
-            }
-
-            std::vector<GlyphSubst>::iterator it( aSubstVector.begin() );
-
-            switch( nFmtSubstitution )
-            {
-                case 1:     // Single Substitution Format 1
-                    {
-                        const sal_uInt16 nDeltaGlyphId = GetUShort( pSubLookup );
-                        for(; it != aSubstVector.end(); ++it )
-                            (*it).second = (*it).first + nDeltaGlyphId;
-                    }
-                    break;
-
-                case 2:     // Single Substitution Format 2
-                    {
-                        const sal_uInt16 nCntGlyph = GetUShort( pSubLookup );
-                        pSubLookup += 2;
-                        for( int i = nCntGlyph; (it != aSubstVector.end()) && (--i>=0); ++it )
-                        {
-                            const sal_uInt16 nGlyphId = GetUShort( pSubLookup );
-                            pSubLookup += 2;
-                            (*it).second = nGlyphId;
-                        }
-                    }
-                    break;
-            }
-
-            SAL_WARN_IF( (it != aSubstVector.end()), "vcl", "lookup<->coverage table mismatch" );
-            // now apply the glyph substitutions that have been collected in this subtable
-            for( it = aSubstVector.begin(); it != aSubstVector.end(); ++it )
-                maGlyphSubstitution[ (*it).first ] =  (*it).second;
-        }
-    }
 }
 
 const unsigned char* FreetypeFont::GetTable(const char* pName, sal_uLong* pLength)
