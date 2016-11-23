@@ -12,7 +12,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_THEMEPANEL_HXX
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/document/XUndoManager.hpp>
 
 #include <svx/sidebar/PanelLayout.hxx>
 

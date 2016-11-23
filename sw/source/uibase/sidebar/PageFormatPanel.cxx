@@ -32,9 +32,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include "cmdid.h"
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <svtools/unitconv.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 

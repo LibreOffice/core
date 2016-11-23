@@ -23,8 +23,6 @@
 #include <svx/pageitem.hxx>
 #include <svx/rulritem.hxx>
 #include <editeng/sizeitem.hxx>
-#include <com/sun/star/document/XUndoManager.hpp>
-#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 class Button;
 
