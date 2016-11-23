@@ -51,9 +51,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <retrieveinputstreamconsumer.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>

@@ -19,8 +19,6 @@
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <frmfmt.hxx>
@@ -33,7 +31,6 @@
 #include <accnotexthyperlink.hxx>
 #include <svtools/imap.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <doc.hxx>
 

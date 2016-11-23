@@ -25,8 +25,6 @@
 #include <cmdid.h>
 #include <fesh.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <doc.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/autokernitem.hxx>
