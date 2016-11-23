@@ -50,6 +50,7 @@
 #include <vcl/fontcapabilities.hxx>
 
 #include <vector>
+#include <cstdint>
 
 namespace vcl
 {
