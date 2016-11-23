@@ -40,7 +40,7 @@ class PDFSigningTest : public test::BootstrapFixture
      * Read a pdf and make sure that it has the expected number of valid
      * signatures.
      */
-    std::vector<SignatureInformation> verify(const OUString& rURL, size_t nCount);
+    std::vector<SignatureInformation> verify(const OUString& rURL, size_t nCount, const OString& rExpectedSubFilter);
 
 public:
     PDFSigningTest();
@@ -98,7 +98,7 @@ void PDFSigningTest::setUp()
 #endif
 }
 
-std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, size_t nCount)
+std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, size_t nCount, const OString& rExpectedSubFilter)
 {
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
@@ -115,6 +115,15 @@ std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, s
         bool bLast = i == aSignatures.size() - 1;
         CPPUNIT_ASSERT(xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], aInfo, bLast));
         aRet.push_back(aInfo);
+
+        if (!rExpectedSubFilter.isEmpty())
+        {
+            xmlsecurity::pdfio::PDFObjectElement* pValue = aSignatures[i]->LookupObject("V");
+            CPPUNIT_ASSERT(pValue);
+            auto pSubFilter = dynamic_cast<xmlsecurity::pdfio::PDFNameElement*>(pValue->Lookup("SubFilter"));
+            CPPUNIT_ASSERT(pSubFilter);
+            CPPUNIT_ASSERT_EQUAL(rExpectedSubFilter, pSubFilter->GetValue());
+        }
     }
 
     return aRet;
@@ -148,7 +157,7 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_
     }
 
     // This was nOriginalSignatureCount when PDFDocument::Sign() silently returned success, without doing anything.
-    verify(rOutURL, nOriginalSignatureCount + 1);
+    verify(rOutURL, nOriginalSignatureCount + 1, /*rExpectedSubFilter=*/OString());
 
     return true;
 }
@@ -163,11 +172,14 @@ void PDFSigningTest::testPDFAdd()
 
     if (bHadCertificates)
     {
+        // Assert that the SubFilter is not adbe.pkcs7.detached in the bAdES case.
+        std::vector<SignatureInformation> aInfos = verify(aOutURL, 1, "ETSI.CAdES.detached");
         // Make sure the timestamp is correct.
-        std::vector<SignatureInformation> aInfos = verify(aOutURL, 1);
         DateTime aDateTime(DateTime::SYSTEM);
         // This was 0 (on Windows), as neither the /M key nor the PKCS#7 blob contained a timestamp.
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(aDateTime.GetYear()), aInfos[0].stDateTime.Year);
+        // Assert that the digest algorithm is not SHA-1 in the bAdES case.
+        CPPUNIT_ASSERT_EQUAL(xml::crypto::DigestID::SHA256, aInfos[0].nDigestID);
     }
 }
 
@@ -218,7 +230,7 @@ void PDFSigningTest::testPDFRemove()
     // Read back the pdf and make sure that it no longer has signatures.
     // This failed when PDFDocument::RemoveSignature() silently returned
     // success, without doing anything.
-    verify(aOutURL, 0);
+    verify(aOutURL, 0, /*rExpectedSubFilter=*/OString());
 }
 
 void PDFSigningTest::testPDFRemoveAll()
@@ -259,7 +271,7 @@ void PDFSigningTest::testPDF14Adobe()
     // Two signatures, first is SHA1, the second is SHA256.
     // This was 0, as we failed to find the Annots key's value when it was a
     // reference-to-array, not an array.
-    std::vector<SignatureInformation> aInfos = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14adobe.pdf", 2);
+    std::vector<SignatureInformation> aInfos = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14adobe.pdf", 2, /*rExpectedSubFilter=*/OString());
     // This was 0, out-of-PKCS#7 signature date wasn't read.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2016), aInfos[1].stDateTime.Year);
 }
@@ -270,7 +282,7 @@ void PDFSigningTest::testPDF16Adobe()
     // stream with a predictor. And a valid signature.
     // Found signatures was 0, as parsing failed due to lack of support for
     // these features.
-    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf16adobe.pdf", 1);
+    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf16adobe.pdf", 1, /*rExpectedSubFilter=*/OString());
 }
 
 void PDFSigningTest::testPDF16Add()
@@ -299,7 +311,7 @@ void PDFSigningTest::testPDF14LOWin()
     // algorithm when it meant SEC_OID_SHA1, make sure we tolerate that on all
     // platforms.
     // This failed, as NSS HASH_Create() didn't handle the sign algorithm.
-    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14lowin.pdf", 1);
+    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14lowin.pdf", 1, /*rExpectedSubFilter=*/OString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);

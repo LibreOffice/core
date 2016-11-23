@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_signing, \
 
 $(eval $(call gb_CppunitTest_use_externals,xmlsecurity_signing,\
     boost_headers \
+    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,xmlsecurity_signing,\

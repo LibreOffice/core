@@ -6805,6 +6805,101 @@ typedef BOOL (WINAPI *PointerTo_CryptRetrieveTimeStamp)(LPCWSTR wszUrl,
                                                         PCCERT_CONTEXT *ppTsSigner,
                                                         HCERTSTORE phStore);
 
+namespace
+{
+/// Create payload for the 'signing-certificate' signed attribute.
+bool CreateSigningCertificateAttribute(vcl::PDFWriter::PDFSignContext& rContext, SvStream& rEncodedCertificate)
+{
+    // CryptEncodeObjectEx() does not support encoding arbitrary ASN.1
+    // structures, like SigningCertificateV2 from RFC 5035, so let's build it
+    // manually.
+
+    // Count the certificate hash and put it to aHash.
+    // 2.16.840.1.101.3.4.2.1, i.e. sha256.
+    std::vector<unsigned char> aSHA256{0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01};
+
+    HCRYPTPROV hProv = 0;
+    if (!CryptAcquireContext(&hProv, nullptr, nullptr, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptAcquireContext() failed");
+        return false;
+    }
+
+    HCRYPTHASH hHash = 0;
+    if (!CryptCreateHash(hProv, CALG_SHA_256, 0, 0, &hHash))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptCreateHash() failed");
+        return false;
+    }
+
+    if (!CryptHashData(hHash, reinterpret_cast<const BYTE*>(rContext.m_pDerEncoded), rContext.m_nDerEncoded, 0))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptHashData() failed");
+        return false;
+    }
+
+    DWORD nHash = 0;
+    if (!CryptGetHashParam(hHash, HP_HASHVAL, nullptr, &nHash, 0))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptGetHashParam() failed to provide the hash length");
+        return false;
+    }
+
+    std::vector<unsigned char> aHash(nHash);
+    if (!CryptGetHashParam(hHash, HP_HASHVAL, aHash.data(), &nHash, 0))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptGetHashParam() failed to provide the hash");
+        return false;
+    }
+
+    CryptDestroyHash(hHash);
+    CryptReleaseContext(hProv, 0);
+
+    // We now have all the info to count the lengths.
+    // The layout of the payload is:
+    // SEQUENCE: SigningCertificateV2
+    //     SEQUENCE: SEQUENCE OF ESSCertIDv2
+    //      SEQUENCE: ESSCertIDv2
+    //          SEQUENCE: AlgorithmIdentifier
+    //              OBJECT: algorithm
+    //              NULL: parameters
+    //       OCTET STRING: certHash
+
+    size_t nAlgorithm = aSHA256.size() + 2;
+    size_t nParameters = 2;
+    size_t nAlgorithmIdentifier = nAlgorithm + nParameters + 2;
+    size_t nCertHash = aHash.size() + 2;
+    size_t nESSCertIDv2 = nAlgorithmIdentifier + nCertHash + 2;
+    size_t nESSCertIDv2s = nESSCertIDv2 + 2;
+
+    // Write SigningCertificateV2.
+    rEncodedCertificate.WriteUInt8(0x30);
+    rEncodedCertificate.WriteUInt8(nESSCertIDv2s);
+    // Write SEQUENCE OF ESSCertIDv2.
+    rEncodedCertificate.WriteUInt8(0x30);
+    rEncodedCertificate.WriteUInt8(nESSCertIDv2);
+    // Write ESSCertIDv2.
+    rEncodedCertificate.WriteUInt8(0x30);
+    rEncodedCertificate.WriteUInt8(nAlgorithmIdentifier + nCertHash);
+    // Write AlgorithmIdentifier.
+    rEncodedCertificate.WriteUInt8(0x30);
+    rEncodedCertificate.WriteUInt8(nAlgorithm + nParameters);
+    // Write algorithm.
+    rEncodedCertificate.WriteUInt8(0x06);
+    rEncodedCertificate.WriteUInt8(aSHA256.size());
+    rEncodedCertificate.WriteBytes(aSHA256.data(), aSHA256.size());
+    // Write parameters.
+    rEncodedCertificate.WriteUInt8(0x05);
+    rEncodedCertificate.WriteUInt8(0x00);
+    // Write certHash.
+    rEncodedCertificate.WriteUInt8(0x04);
+    rEncodedCertificate.WriteUInt8(aHash.size());
+    rEncodedCertificate.WriteBytes(aHash.data(), aHash.size());
+
+    return true;
+}
+} // anonymous namespace
+
 #endif
 
 bool PDFWriter::Sign(PDFSignContext& rContext)
@@ -7337,6 +7432,28 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     aSignerInfo.dwKeySpec = nKeySpec;
     aSignerInfo.HashAlgorithm.pszObjId = const_cast<LPSTR>(szOID_NIST_sha256);
     aSignerInfo.HashAlgorithm.Parameters.cbData = 0;
+
+    // Add the signing certificate as a signed attribute.
+    CRYPT_INTEGER_BLOB aCertificateBlob;
+    SvMemoryStream aEncodedCertificate;
+    if (!CreateSigningCertificateAttribute(rContext, aEncodedCertificate))
+    {
+        SAL_WARN("vcl.pdfwriter", "CreateSigningCertificateAttribute() failed");
+        return false;
+    }
+    aCertificateBlob.pbData = const_cast<BYTE*>(static_cast<const BYTE*>(aEncodedCertificate.GetData()));
+    aCertificateBlob.cbData = aEncodedCertificate.GetSize();
+    CRYPT_ATTRIBUTE aCertificateAttribute;
+    /*
+     * id-aa-signingCertificateV2 OBJECT IDENTIFIER ::=
+     * { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
+     *   smime(16) id-aa(2) 47 }
+     */
+    aCertificateAttribute.pszObjId = const_cast<LPSTR>("1.2.840.113549.1.9.16.2.47");
+    aCertificateAttribute.cValue = 1;
+    aCertificateAttribute.rgValue = &aCertificateBlob;
+    aSignerInfo.cAuthAttr = 1;
+    aSignerInfo.rgAuthAttr = &aCertificateAttribute;
 
     CMSG_SIGNED_ENCODE_INFO aSignedInfo;
     memset(&aSignedInfo, 0, sizeof(aSignedInfo));
