@@ -148,8 +148,6 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
     return false;
 }
 
-FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize);
-
 void FreetypeFontInstance::HandleFontOptions()
 {
     if( !mpFreetypeFont )

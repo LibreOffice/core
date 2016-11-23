@@ -20,6 +20,7 @@
 
 #include <vcl/fontcharmap.hxx>
 
+#include <unx/cairotextrender.hxx>
 #include "unx/freetype_glyphcache.hxx"
 
 #include <vcl/svapp.hxx>
@@ -587,8 +588,6 @@ void FreetypeFont::SetFontOptions(const std::shared_ptr<FontConfigFontOptions>& 
     if( mnPrioEmbedded <= 0 )
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
-
-extern FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize);
 
 const std::shared_ptr<FontConfigFontOptions>& FreetypeFont::GetFontOptions() const
 {

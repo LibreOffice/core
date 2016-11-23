@@ -26,6 +26,7 @@
 
 #include <deque>
 
+class FontConfigFontOptions;
 class FreetypeFont;
 class GlyphCache;
 typedef struct _cairo cairo_t;
@@ -93,6 +94,8 @@ public:
     virtual SystemFontData      GetSysFontData( int nFallbackLevel ) const override;
 #endif
 };
+
+FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize);
 
 #endif
 
