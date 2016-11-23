@@ -81,6 +81,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/fileurl.hxx>
+#include <comphelper/threadpool.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/backupfilehelper.hxx>
 #include <unotools/bootstrap.hxx>
@@ -1791,10 +1792,13 @@ int Desktop::doShutdown()
         StarBASIC::DetachAllDocBasicItems();
 #endif
     }
+
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
     pExecGlobals->pLanguageOptions.reset( nullptr );
     pExecGlobals->pPathOptions.reset( nullptr );
+
+    comphelper::ThreadPool::getSharedOptimalPool().shutdown();
 
     bool bRR = pExecGlobals->bRestartRequested;
     delete pExecGlobals;
