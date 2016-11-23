@@ -28,12 +28,6 @@
 #include "fontattributes.hxx"
 
 #include <config_features.h>
-#include <config_graphite.h>
-#if ENABLE_GRAPHITE
-#  include <graphite_static.hxx>
-#  include <graphite2/Font.h>
-#  include <graphite_layout.hxx>
-#endif
 #include <unotools/fontdefs.hxx>
 
 #include "tools/poly.hxx"
@@ -170,33 +164,6 @@ void FreetypeFontFile::Unmap()
     mpFileMap = nullptr;
 }
 
-#if ENABLE_GRAPHITE
-// wrap FreetypeFontInfo's table function
-const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, size_t *len)
-{
-    const FreetypeFontInfo * pFontInfo = static_cast<const FreetypeFontInfo*>(appFaceHandle);
-    typedef union {
-        char m_c[5];
-        unsigned int m_id;
-    } TableId;
-    TableId tableId;
-    tableId.m_id = name;
-#ifndef OSL_BIGENDIAN
-    TableId swapped;
-    swapped.m_c[3] = tableId.m_c[0];
-    swapped.m_c[2] = tableId.m_c[1];
-    swapped.m_c[1] = tableId.m_c[2];
-    swapped.m_c[0] = tableId.m_c[3];
-    tableId.m_id = swapped.m_id;
-#endif
-    tableId.m_c[4] = '\0';
-    sal_uLong nLength = 0;
-    const void * pTable = static_cast<const void*>(pFontInfo->GetTable(tableId.m_c, &nLength));
-    if (len) *len = static_cast<size_t>(nLength);
-    return pTable;
-}
-#endif
-
 FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
     const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId)
 :
@@ -204,10 +171,6 @@ FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
     mpFontFile( FreetypeFontFile::FindFontFile( rNativeFileName ) ),
     mnFaceNum( nFaceNum ),
     mnRefCount( 0 ),
-#if ENABLE_GRAPHITE
-    mbCheckedGraphite(false),
-    mpGraphiteFace(nullptr),
-#endif
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes ),
     mxFontCharMap( nullptr ),
@@ -226,9 +189,6 @@ FreetypeFontInfo::~FreetypeFontInfo()
         mxFontCharMap.Clear();
     delete mpChar2Glyph;
     delete mpGlyph2Char;
-#if ENABLE_GRAPHITE
-    delete mpGraphiteFace;
-#endif
 }
 
 void FreetypeFontInfo::InitHashes() const
@@ -252,29 +212,6 @@ FT_FaceRec_* FreetypeFontInfo::GetFaceFT()
    ++mnRefCount;
    return maFaceFT;
 }
-
-#if ENABLE_GRAPHITE
-GraphiteFaceWrapper * FreetypeFontInfo::GetGraphiteFace()
-{
-    if (mbCheckedGraphite)
-        return mpGraphiteFace;
-    // test for graphite here so that it is cached most efficiently
-    if (GetTable("Silf"))
-    {
-        static const char* pGraphiteCacheStr = getenv( "SAL_GRAPHITE_CACHE_SIZE" );
-        int graphiteSegCacheSize = pGraphiteCacheStr ? (atoi(pGraphiteCacheStr)) : 0;
-        gr_face * pGraphiteFace;
-        if (graphiteSegCacheSize > 500)
-            pGraphiteFace = gr_make_face_with_seg_cache(this, graphiteFontTable, graphiteSegCacheSize, gr_face_cacheCmap);
-        else
-            pGraphiteFace = gr_make_face(this, graphiteFontTable, gr_face_cacheCmap);
-        if (pGraphiteFace)
-            mpGraphiteFace = new GraphiteFaceWrapper(pGraphiteFace);
-    }
-    mbCheckedGraphite = true;
-    return mpGraphiteFace;
-}
-#endif
 
 void FreetypeFontInfo::ReleaseFaceFT()
 {
@@ -1506,12 +1443,5 @@ const unsigned char* FreetypeFont::GetTable(const char* pName, sal_uLong* pLengt
 {
     return mpFontInfo->GetTable( pName, pLength );
 }
-
-#if ENABLE_GRAPHITE
-GraphiteFaceWrapper* FreetypeFont::GetGraphiteFace() const
-{
-    return mpFontInfo->GetGraphiteFace();
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
