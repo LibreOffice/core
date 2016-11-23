@@ -16,6 +16,7 @@ gb_FULLDEPS:=
 gbuildtojson:
 	@true
 
+
 .PHONY : foo
 foo:
 	@true
@@ -27,6 +28,7 @@ mkdir -p $(WORKDIR)/GbuildToJson/$(dir $(2))
 mkdir -p $(WORKDIR)/LinkTarget/$(dir $(2))
 $(if $(GBUILDTOJSON_LD_LIBRARY_PATH),LD_LIBRARY_PATH=$(GBUILDTOJSON_LD_LIBRARY_PATH)) \
 $(call gb_Executable_get_command,gbuildtojson) \
+--makefile=$(call var2file,$(shell $(gb_MKTEMP)),100,$(T_MAKEFILE)) \
 --linktarget=$(call var2file,$(shell $(gb_MKTEMP)),100,$(2)) \
 --ilibtarget=$(call var2file,$(shell $(gb_MKTEMP)),100,$(ILIBTARGET)) \
 --cxxobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(CXXOBJECTS)) \
@@ -55,6 +57,7 @@ define gb_Postprocess_register_target
 gbuildtojson : $(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3)))
 
 $(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3))): $(gb_Helper_MISCDUMMY) foo
+$(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3))): T_MAKEFILE := $(lastword $(MAKEFILE_LIST))
 endef
 
 gb_LinkTarget_use_static_libraries =
