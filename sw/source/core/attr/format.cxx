@@ -29,7 +29,6 @@
 #include <swcache.hxx>
 #include <swtblfmt.hxx>
 #include <svl/grabbagitem.hxx>
-#include <com/sun/star/beans/PropertyValues.hpp>
 
 //UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>

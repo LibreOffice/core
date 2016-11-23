@@ -22,9 +22,6 @@
 
 #include <deque>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/text/XTextContent.hpp>
 
 #include <cppuhelper/implbase.hxx>
 

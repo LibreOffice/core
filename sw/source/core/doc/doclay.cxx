@@ -19,9 +19,7 @@
 
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include <hintids.hxx>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <sfx2/progress.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>

@@ -36,7 +36,6 @@
 #include <docsh.hxx>
 #include <shellio.hxx>
 #include <hintids.hxx>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 

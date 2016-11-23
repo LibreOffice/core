@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/view/XRenderable.hpp>
 
 #include <hintids.hxx>
 #include <sfx2/app.hxx>

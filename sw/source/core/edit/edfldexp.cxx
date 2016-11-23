@@ -20,9 +20,7 @@
 #include <editsh.hxx>
 #include <dbfld.hxx>
 #include <dbmgr.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
