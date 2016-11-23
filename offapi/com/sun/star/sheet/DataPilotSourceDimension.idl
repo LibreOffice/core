@@ -122,6 +122,12 @@ service DataPilotSourceDimension
      */
     [readonly, property, optional] long Flags;
 
+
+    /** specifies how data are aggregated.
+        @since LibreOffice 5.3
+     */
+    [property, optional] short Function2;
+
 };
 
 

@@ -3409,6 +3409,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	FunctionArgument \
 	FunctionCategory \
 	GeneralFunction \
+       GeneralFunction2 \
 	GoalResult \
 	IconSetFormatEntry \
 	IconSetType \

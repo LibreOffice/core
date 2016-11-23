@@ -48,6 +48,7 @@
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
+#include <com/sun/star/sheet/GeneralFunction2.hpp>
 
 using namespace com::sun::star;
 using ::std::vector;
@@ -729,9 +730,9 @@ static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, long nFuncNo )
     {
         //TODO: direct access via ScDPLevel
 
-        uno::Sequence<sheet::GeneralFunction> aSeq = pLevel->getSubTotals();
+        uno::Sequence<sal_Int16> aSeq = pLevel->getSubTotals();
         long nSequence = aSeq.getLength();
-        if ( nSequence && aSeq[0] != sheet::GeneralFunction_AUTO )
+        if ( nSequence && aSeq[0] != sheet::GeneralFunction2::AUTO )
         {
             // For manual subtotals, "automatic" is added as first function.
             // ScDPResultMember::GetSubTotalCount adds to the count, here NONE has to be
@@ -742,8 +743,8 @@ static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, long nFuncNo )
 
         if ( nFuncNo >= 0 && nFuncNo < nSequence )
         {
-            sheet::GeneralFunction eUser = aSeq.getConstArray()[nFuncNo];
-            if (eUser != sheet::GeneralFunction_AUTO)
+            sal_Int16 eUser = aSeq.getConstArray()[nFuncNo];
+            if (eUser != sheet::GeneralFunction2::AUTO)
                 eRet = ScDPUtil::toSubTotalFunc(eUser);
         }
     }
@@ -1237,9 +1238,9 @@ long ScDPResultMember::GetSubTotalCount( long* pUserSubStart ) const
     {
         //TODO: direct access via ScDPLevel
 
-        uno::Sequence<sheet::GeneralFunction> aSeq = pParentLevel->getSubTotals();
+        uno::Sequence<sal_Int16> aSeq = pParentLevel->getSubTotals();
         long nSequence = aSeq.getLength();
-        if ( nSequence && aSeq[0] != sheet::GeneralFunction_AUTO )
+        if ( nSequence && aSeq[0] != sheet::GeneralFunction2::AUTO )
         {
             // For manual subtotals, always add "automatic" as first function
             // (used for calculation, but not for display, needed for sorting, see lcl_GetForceFunc)
