@@ -304,14 +304,14 @@ long FreetypeFont::Release() const
     return --mnRefCount;
 }
 
-GlyphData& FreetypeFont::GetGlyphData( sal_GlyphId aGlyphId )
+const GlyphMetric& FreetypeFont::GetGlyphMetric(sal_GlyphId aGlyphId)
 {
     // usually the GlyphData is cached
     GlyphList::iterator it = maGlyphList.find( aGlyphId );
     if( it != maGlyphList.end() ) {
         GlyphData& rGlyphData = it->second;
         GlyphCache::GetInstance().UsingGlyph( *this, rGlyphData );
-        return rGlyphData;
+        return rGlyphData.GetMetric();
     }
 
     // sometimes not => we need to create and initialize it ourselves
@@ -319,7 +319,7 @@ GlyphData& FreetypeFont::GetGlyphData( sal_GlyphId aGlyphId )
     mnBytesUsed += sizeof( GlyphData );
     InitGlyphData( aGlyphId, rGlyphData );
     GlyphCache::GetInstance().AddedGlyph( *this, rGlyphData );
-    return rGlyphData;
+    return rGlyphData.GetMetric();
 }
 
 void FreetypeFont::GarbageCollect( long nMinLruIndex )
