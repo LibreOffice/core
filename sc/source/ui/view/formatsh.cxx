@@ -125,7 +125,8 @@ SFX_IMPL_INTERFACE(ScFormatShell, SfxShell)
 
 void ScFormatShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER,
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT,
+                                            SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
                                             RID_OBJECTBAR_FORMAT);
 }
 
