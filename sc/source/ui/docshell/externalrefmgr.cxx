@@ -45,16 +45,12 @@
 #include "svl/stritem.hxx"
 #include "svl/urihelper.hxx"
 #include "svl/zformat.hxx"
-#include <svl/sharedstringpool.hxx>
 #include "sfx2/linkmgr.hxx"
 #include "tools/urlobj.hxx"
 #include "unotools/ucbhelper.hxx"
 #include "unotools/localfilehelper.hxx"
 #include "vcl/msgbox.hxx"
 #include "stringutil.hxx"
-#include "scmatrix.hxx"
-#include <columnspanset.hxx>
-#include <column.hxx>
 
 #include <memory>
 #include <algorithm>
@@ -504,6 +500,8 @@ ScExternalRefCache::~ScExternalRefCache()
 
 const OUString* ScExternalRefCache::getRealTableName(sal_uInt16 nFileId, const OUString& rTabName) const
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     DocDataType::const_iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
     {
@@ -525,6 +523,8 @@ const OUString* ScExternalRefCache::getRealTableName(sal_uInt16 nFileId, const O
 
 const OUString* ScExternalRefCache::getRealRangeName(sal_uInt16 nFileId, const OUString& rRangeName) const
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     DocDataType::const_iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
     {
@@ -545,6 +545,8 @@ const OUString* ScExternalRefCache::getRealRangeName(sal_uInt16 nFileId, const O
 ScExternalRefCache::TokenRef ScExternalRefCache::getCellData(
     sal_uInt16 nFileId, const OUString& rTabName, SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex)
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     DocDataType::const_iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
     {
@@ -574,6 +576,8 @@ ScExternalRefCache::TokenRef ScExternalRefCache::getCellData(
 ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
     sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange)
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     DocDataType::iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
         // specified document is not cached.
@@ -683,6 +687,8 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
 
 ScExternalRefCache::TokenArrayRef ScExternalRefCache::getRangeNameTokens(sal_uInt16 nFileId, const OUString& rName)
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     DocItem* pDoc = getDocItem(nFileId);
     if (!pDoc)
         return TokenArrayRef();
@@ -698,6 +704,8 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getRangeNameTokens(sal_uIn
 
 void ScExternalRefCache::setRangeNameTokens(sal_uInt16 nFileId, const OUString& rName, TokenArrayRef pArray)
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     DocItem* pDoc = getDocItem(nFileId);
     if (!pDoc)
         return;
@@ -913,6 +921,8 @@ SCsTAB ScExternalRefCache::getTabSpan( sal_uInt16 nFileId, const OUString& rStar
 
 void ScExternalRefCache::getAllNumberFormats(vector<sal_uInt32>& rNumFmts) const
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     using ::std::sort;
     using ::std::unique;
 
@@ -987,6 +997,8 @@ bool ScExternalRefCache::setCacheTableReferenced( sal_uInt16 nFileId, const OUSt
 
 void ScExternalRefCache::setAllCacheTableReferencedStati( bool bReferenced )
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     if (bReferenced)
     {
         maReferenced.reset(0);
@@ -1086,35 +1098,6 @@ bool ScExternalRefCache::areAllCacheTablesReferenced() const
     return maReferenced.mbAllReferenced;
 }
 
-void ScExternalRefCache::getAllCachedDataSpans( sal_uInt16 nFileId, sc::ColumnSpanSet& rSet ) const
-{
-    const DocItem* pDocItem = getDocItem(nFileId);
-    if (!pDocItem)
-        // This document is not cached.
-        return;
-
-    const std::vector<TableTypeRef>& rTables = pDocItem->maTables;
-    for (size_t nTab = 0, nTabCount = rTables.size(); nTab < nTabCount; ++nTab)
-    {
-        const Table& rTable = *rTables[nTab];
-        std::vector<SCROW> aRows;
-        rTable.getAllRows(aRows);
-        std::vector<SCROW>::const_iterator itRow = aRows.begin(), itRowEnd = aRows.end();
-        for (; itRow != itRowEnd; ++itRow)
-        {
-            SCROW nRow = *itRow;
-            std::vector<SCCOL> aCols;
-            rTable.getAllCols(nRow, aCols);
-            std::vector<SCCOL>::const_iterator itCol = aCols.begin(), itColEnd = aCols.end();
-            for (; itCol != itColEnd; ++itCol)
-            {
-                SCCOL nCol = *itCol;
-                rSet.set(nTab, nCol, nRow, true);
-            }
-        }
-    }
-}
-
 ScExternalRefCache::ReferencedStatus::ReferencedStatus() :
     mbAllReferenced(false)
 {
@@ -1204,6 +1187,7 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
 
 void ScExternalRefCache::clearCache(sal_uInt16 nFileId)
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
     maDocs.erase(nFileId);
 }
 
@@ -1231,6 +1215,8 @@ void ScExternalRefCache::clearCacheTables(sal_uInt16 nFileId)
 
 ScExternalRefCache::DocItem* ScExternalRefCache::getDocItem(sal_uInt16 nFileId) const
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     using ::std::pair;
     DocDataType::iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
@@ -1824,7 +1810,6 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
 
         // Put the data into cache.
         putRangeDataIntoCache(maRefCache, pArray, nFileId, rTabName, aCacheData, rRange, aDataRange);
-        fprintf(stdout, "ScExternalRefManager::getDoubleRefTokens:   in memory!\n");
         return pArray;
     }
 
@@ -1832,11 +1817,8 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     ScExternalRefCache::TokenArrayRef pArray =
         maRefCache.getCellRangeData(nFileId, rTabName, rRange);
     if (pArray)
-    {
         // Cache hit !
-        fprintf(stdout, "ScExternalRefManager::getDoubleRefTokens:   cached!\n");
         return pArray;
-    }
 
     pSrcDoc = getSrcDocument(nFileId);
     if (!pSrcDoc)
@@ -2484,101 +2466,9 @@ void ScExternalRefManager::clearCache(sal_uInt16 nFileId)
 {
     maRefCache.clearCache(nFileId);
 }
-/* #18736
-namespace {
 
-class RefCacheFiller : public sc::ColumnSpanSet::ColumnAction
-{
-    svl::SharedStringPool& mrStrPool;
-
-    ScExternalRefCache& mrRefCache;
-    ScExternalRefCache::TableTypeRef mpRefTab;
-    sal_uInt16 mnFileId;
-    ScColumn* mpCurCol;
-    sc::ColumnBlockConstPosition maBlockPos;
-
-public:
-    RefCacheFiller( svl::SharedStringPool& rStrPool, ScExternalRefCache& rRefCache, sal_uInt16 nFileId ) :
-        mrStrPool(rStrPool), mrRefCache(rRefCache), mnFileId(nFileId), mpCurCol(NULL) {}
-
-    virtual void startColumn( ScColumn* pCol )
-    {
-        mpCurCol = pCol;
-        if (!mpCurCol)
-            return;
-
-        mpCurCol->InitBlockPosition(maBlockPos);
-        mpRefTab = mrRefCache.getCacheTable(mnFileId, mpCurCol->GetTab());
-    }
-
-    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal )
-    {
-        if (!mpCurCol || !bVal)
-            return;
-
-        if (!mpRefTab)
-            return;
-
-        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-        {
-            ScExternalRefCache::TokenRef pTok;
-            ScRefCellValue aCell = mpCurCol->GetCellValue(maBlockPos, nRow);
-            switch (aCell.meType)
-            {
-                case CELLTYPE_STRING:
-                case CELLTYPE_EDIT:
-                {
-                    OUString aStr = aCell.getString(&mpCurCol->GetDoc());
-                    svl::SharedString aSS = mrStrPool.intern(aStr);
-                    pTok.reset(new formula::FormulaStringToken(aSS));
-                }
-                break;
-                case CELLTYPE_VALUE:
-                    pTok.reset(new formula::FormulaDoubleToken(aCell.mfValue));
-                break;
-                case CELLTYPE_FORMULA:
-                {
-                    sc::FormulaResultValue aRes = aCell.mpFormula->GetResult();
-                    switch (aRes.meType)
-                    {
-                        case sc::FormulaResultValue::Value:
-                            pTok.reset(new formula::FormulaDoubleToken(aRes.mfValue));
-                        break;
-                        case sc::FormulaResultValue::String:
-                        {
-                            // Re-intern the string to the host document pool.
-                            svl::SharedString aInterned = mrStrPool.intern(aRes.maString.getString());
-                            pTok.reset(new formula::FormulaStringToken(aInterned));
-                        }
-                        break;
-                        case sc::FormulaResultValue::Error:
-                        case sc::FormulaResultValue::Invalid:
-                        default:
-                            pTok.reset(new FormulaErrorToken(errNoValue));
-                    }
-                }
-                break;
-                default:
-                    pTok.reset(new FormulaErrorToken(errNoValue));
-            }
-
-            if (pTok)
-            {
-                // Cache this cell.
-                mpRefTab->setCell(mpCurCol->GetCol(), nRow, pTok, mpCurCol->GetNumberFormat(nRow));
-                mpRefTab->setCachedCell(mpCurCol->GetCol(), nRow);
-            }
-        }
-    };
-};
-
-}
-*/
 bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
 {
-    // #18736 sc::ColumnSpanSet aCachedArea(false);
-    // #18736 maRefCache.getAllCachedDataSpans(nFileId, aCachedArea);
-
     OUString aFilter;
     SfxObjectShellRef xDocShell;
     try
@@ -2592,13 +2482,10 @@ bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
         return false;
 
     ScDocShell& rDocSh = static_cast<ScDocShell&>(*xDocShell);
-    ScDocument* pSrcDoc = rDocSh.GetDocument();
 
     // Clear the existing cache, and refill it.  Make sure we keep the
     // existing cache table instances here.
     maRefCache.clearCacheTables(nFileId);
-    // #18736 RefCacheFiller aAction(mpDoc->GetSharedStringPool(), maRefCache, nFileId);
-    // #18736 aCachedArea.executeColumnAction(*pSrcDoc, aAction);
 
     DocShellMap::iterator it = maDocShells.find(nFileId);
     if (it != maDocShells.end())

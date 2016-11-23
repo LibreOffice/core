@@ -50,18 +50,6 @@ class ScFormulaCell;
 
 class ScExternalRefCache;
 
-namespace svl {
-
-class SharedStringPool;
-
-}
-
-namespace sc {
-
-class ColumnSpanSet;
-
-}
-
 class ScExternalRefLink : public ::sfx2::SvBaseLink
 {
 public:
@@ -275,13 +263,6 @@ public:
     bool setCacheTableReferenced( sal_uInt16 nFileId, const OUString& rTabName, size_t nSheets, bool bPermanent );
     void setAllCacheTableReferencedStati( bool bReferenced );
     bool areAllCacheTablesReferenced() const;
-
-    /**
-     * Collect all cached non-empty cell positions, inferred directly from the
-     * cached data, not the cached range metadata stored separately in the
-     * Table.
-     */
-    void getAllCachedDataSpans( sal_uInt16 nFileId, sc::ColumnSpanSet& rSet ) const;
 
 private:
     struct ReferencedStatus
