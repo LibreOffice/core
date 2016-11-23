@@ -782,9 +782,13 @@ public:
 
      User events allow for the deferreal of work to later in the main-loop - at idle.
 
+     Execution of the deferred work is thread-safe which means all the tasks are executed
+     serially, so no thread-safety locks between tasks are necessary.
+
      @param     rLink           Link to event callback function
      @param     pCaller         Pointer to data sent to the event by the caller. Optional.
      @param     bReferenceLink  If true - hold a VclPtr<> reference on the Link's instance.
+                                Taking the reference is guarded by a SolarMutexGuard.
 
      @return the event ID used to post the event.
     */
