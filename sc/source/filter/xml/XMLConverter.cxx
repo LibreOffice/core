@@ -19,6 +19,7 @@
 
 #include "XMLConverter.hxx"
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/sheet/GeneralFunction2.hpp>
 #include <tools/datetime.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -56,11 +57,6 @@ sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sF
         return sheet::GeneralFunction_PRODUCT;
     if( IsXMLToken(sFunction, XML_AVERAGE ) )
         return sheet::GeneralFunction_AVERAGE;
-#if 0
-// disabled because of css::sheet::GeneralFunction API incompatibility
-    if( IsXMLToken(sFunction, XML_MEDIAN ) )
-        return sheet::GeneralFunction_MEDIAN;
-#endif
     if( IsXMLToken(sFunction, XML_MAX ) )
         return sheet::GeneralFunction_MAX;
     if( IsXMLToken(sFunction, XML_MIN ) )
@@ -74,6 +70,37 @@ sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sF
     if( IsXMLToken(sFunction, XML_VARP ) )
         return sheet::GeneralFunction_VARP;
     return sheet::GeneralFunction_NONE;
+}
+
+sal_Int16 ScXMLConverter::GetFunctionFromString2( const OUString& sFunction )
+{
+    if( IsXMLToken(sFunction, XML_SUM ) )
+        return sheet::GeneralFunction2::SUM;
+    if( IsXMLToken(sFunction, XML_AUTO ) )
+        return sheet::GeneralFunction2::AUTO;
+    if( IsXMLToken(sFunction, XML_COUNT ) )
+        return sheet::GeneralFunction2::COUNT;
+    if( IsXMLToken(sFunction, XML_COUNTNUMS ) )
+        return sheet::GeneralFunction2::COUNTNUMS;
+    if( IsXMLToken(sFunction, XML_PRODUCT ) )
+        return sheet::GeneralFunction2::PRODUCT;
+    if( IsXMLToken(sFunction, XML_AVERAGE ) )
+        return sheet::GeneralFunction2::AVERAGE;
+    if( IsXMLToken(sFunction, XML_MEDIAN ) )
+        return sheet::GeneralFunction2::MEDIAN;
+    if( IsXMLToken(sFunction, XML_MAX ) )
+        return sheet::GeneralFunction2::MAX;
+    if( IsXMLToken(sFunction, XML_MIN ) )
+        return sheet::GeneralFunction2::MIN;
+    if( IsXMLToken(sFunction, XML_STDEV ) )
+        return sheet::GeneralFunction2::STDEV;
+    if( IsXMLToken(sFunction, XML_STDEVP ) )
+        return sheet::GeneralFunction2::STDEVP;
+    if( IsXMLToken(sFunction, XML_VAR ) )
+        return sheet::GeneralFunction2::VAR;
+    if( IsXMLToken(sFunction, XML_VARP ) )
+        return sheet::GeneralFunction2::VARP;
+    return sheet::GeneralFunction2::NONE;
 }
 
 ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( const OUString& sFunction )
@@ -107,28 +134,25 @@ ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( const OUString& sFunct
 
 void ScXMLConverter::GetStringFromFunction(
         OUString& rString,
-        const sheet::GeneralFunction eFunction )
+        sal_Int16 eFunction )
 {
     OUString sFuncStr;
     switch( eFunction )
     {
-        case sheet::GeneralFunction_AUTO:       sFuncStr = GetXMLToken( XML_AUTO );         break;
-        case sheet::GeneralFunction_AVERAGE:    sFuncStr = GetXMLToken( XML_AVERAGE );      break;
-#if 0
-// disabled because of css::sheet::GeneralFunction API incompatibility
-        case sheet::GeneralFunction_MEDIAN:     sFuncStr = GetXMLToken( XML_MEDIAN );       break;
-#endif
-        case sheet::GeneralFunction_COUNT:      sFuncStr = GetXMLToken( XML_COUNT );        break;
-        case sheet::GeneralFunction_COUNTNUMS:  sFuncStr = GetXMLToken( XML_COUNTNUMS );    break;
-        case sheet::GeneralFunction_MAX:        sFuncStr = GetXMLToken( XML_MAX );          break;
-        case sheet::GeneralFunction_MIN:        sFuncStr = GetXMLToken( XML_MIN );          break;
-        case sheet::GeneralFunction_NONE:       sFuncStr = GetXMLToken( XML_NONE );         break;
-        case sheet::GeneralFunction_PRODUCT:    sFuncStr = GetXMLToken( XML_PRODUCT );      break;
-        case sheet::GeneralFunction_STDEV:      sFuncStr = GetXMLToken( XML_STDEV );        break;
-        case sheet::GeneralFunction_STDEVP:     sFuncStr = GetXMLToken( XML_STDEVP );       break;
-        case sheet::GeneralFunction_SUM:        sFuncStr = GetXMLToken( XML_SUM );          break;
-        case sheet::GeneralFunction_VAR:        sFuncStr = GetXMLToken( XML_VAR );          break;
-        case sheet::GeneralFunction_VARP:       sFuncStr = GetXMLToken( XML_VARP );         break;
+        case sheet::GeneralFunction2::AUTO:       sFuncStr = GetXMLToken( XML_AUTO );         break;
+        case sheet::GeneralFunction2::AVERAGE:    sFuncStr = GetXMLToken( XML_AVERAGE );      break;
+        case sheet::GeneralFunction2::MEDIAN:     sFuncStr = GetXMLToken( XML_MEDIAN );       break;
+        case sheet::GeneralFunction2::COUNT:      sFuncStr = GetXMLToken( XML_COUNT );        break;
+        case sheet::GeneralFunction2::COUNTNUMS:  sFuncStr = GetXMLToken( XML_COUNTNUMS );    break;
+        case sheet::GeneralFunction2::MAX:        sFuncStr = GetXMLToken( XML_MAX );          break;
+        case sheet::GeneralFunction2::MIN:        sFuncStr = GetXMLToken( XML_MIN );          break;
+        case sheet::GeneralFunction2::NONE:       sFuncStr = GetXMLToken( XML_NONE );         break;
+        case sheet::GeneralFunction2::PRODUCT:    sFuncStr = GetXMLToken( XML_PRODUCT );      break;
+        case sheet::GeneralFunction2::STDEV:      sFuncStr = GetXMLToken( XML_STDEV );        break;
+        case sheet::GeneralFunction2::STDEVP:     sFuncStr = GetXMLToken( XML_STDEVP );       break;
+        case sheet::GeneralFunction2::SUM:        sFuncStr = GetXMLToken( XML_SUM );          break;
+        case sheet::GeneralFunction2::VAR:        sFuncStr = GetXMLToken( XML_VAR );          break;
+        case sheet::GeneralFunction2::VARP:       sFuncStr = GetXMLToken( XML_VARP );         break;
         default:
         {
             assert(false);

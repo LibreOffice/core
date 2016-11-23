@@ -3657,7 +3657,7 @@ void ScInterpreter::ScGetPivotData()
     if (bOldSyntax)
     {
         OUString aFilterStr = aDataFieldName;
-        std::vector<sheet::GeneralFunction> aFilterFuncs;
+        std::vector<sal_Int16> aFilterFuncs;
         if (!pDPObj->ParseFilters(aDataFieldName, aFilters, aFilterFuncs, aFilterStr))
         {
             PushError(FormulaError::NoRef);
