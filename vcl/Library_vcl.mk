@@ -35,8 +35,6 @@ endif
 
 $(eval $(call gb_Library_set_precompiled_header,vcl,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
 
-$(eval $(call gb_Library_use_custom_headers,vcl,officecfg/registry vcl/unx/generic/fontmanager))
-
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
@@ -549,7 +547,6 @@ vcl_headless_freetype_code=\
     vcl/unx/generic/fontmanager/fontconfig \
     vcl/unx/generic/fontmanager/fontmanager \
     vcl/unx/generic/fontmanager/helper \
-    vcl/unx/generic/fontmanager/parseAFM \
     vcl/headless/svpcairotextrender \
     vcl/unx/generic/print/bitmap_gfx \
     vcl/unx/generic/print/common_gfx \
