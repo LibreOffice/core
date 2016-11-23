@@ -34,12 +34,6 @@
 #include "impfont.hxx"
 #include "impfontmetricdata.hxx"
 
-#include <config_graphite.h>
-#if ENABLE_GRAPHITE
-#include <graphite_layout.hxx>
-#include <graphite_serverfont.hxx>
-#endif
-
 #include <cairo.h>
 #include <cairo-ft.h>
 #include "CommonSalLayout.hxx"
@@ -95,12 +89,6 @@ CairoTextRender::CairoTextRender()
 {
     for(FreetypeFont* & rp : mpFreetypeFont)
         rp = nullptr;
-
-#if ENABLE_GRAPHITE
-    // check if graphite fonts have been disabled
-    static const char* pDisableGraphiteStr = getenv( "SAL_DISABLE_GRAPHITE" );
-    bDisableGraphite_ = pDisableGraphiteStr && (pDisableGraphiteStr[0]!='0');
-#endif
 }
 
 bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLevel )
@@ -519,22 +507,9 @@ SalLayout* CairoTextRender::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackL
     && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
     {
         if (SalLayout::UseCommonLayout())
-        {
             pLayout = new CommonSalLayout(*mpFreetypeFont[nFallbackLevel]);
-        }
         else
-        {
-#if ENABLE_GRAPHITE
-            // Is this a Graphite font?
-            if (!bDisableGraphite_ &&
-                GraphiteServerFontLayout::IsGraphiteEnabledFont(*mpFreetypeFont[nFallbackLevel]))
-            {
-                pLayout = new GraphiteServerFontLayout(*mpFreetypeFont[nFallbackLevel]);
-            }
-            else
-#endif
-                pLayout = new ServerFontLayout( *mpFreetypeFont[ nFallbackLevel ] );
-        }
+            pLayout = new ServerFontLayout( *mpFreetypeFont[ nFallbackLevel ] );
     }
 
     return pLayout;
