@@ -55,7 +55,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
 
     mbAddFlyOffsets(false),
     mbAddVerticalFlyOffsets(false),
-    mbAllowPaddingWithoutBorders( false ),
+    mbAllowPaddingWithoutBorders( true ),
     mbUseHiResolutionVirtualDevice(true),
     mbMathBaselineAlignment(false), // default for *old* documents is 'off'
     mbStylesNoDefault(false),

@@ -1829,7 +1829,7 @@ SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
     m_bCachedJoinedWithPrev = false;
     m_bCachedJoinedWithNext = false;
 
-    bool bAllowPaddingWithoutBorders = true;
+    const bool bAllowPaddingWithoutBorders = pConstructor->getRootFrame()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::ALLOW_PADDING_WITHOUT_BORDERS);
     m_bBorderDist = bool(pConstructor->GetType() & SwFrameType::Cell) || bAllowPaddingWithoutBorders;
 }
 
