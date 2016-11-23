@@ -64,7 +64,7 @@ public:
     struct CacheId
     {
         FT_Face maFace;
-        const void *mpOptions;
+        const FontConfigFontOptions *mpOptions;
         bool mbEmbolden;
         bool mbVerticalMetrics;
         bool operator ==(const CacheId& rOther) const
@@ -138,31 +138,10 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
         // register to use the font
         mpFreetypeFont[ nFallbackLevel ] = pFreetypeFont;
 
-        // apply font specific-hint settings
-        FreetypeFontInstance* pSFE = static_cast<FreetypeFontInstance*>( pEntry->mpFontInstance );
-        pSFE->HandleFontOptions();
-
         return true;
     }
 
     return false;
-}
-
-FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize);
-
-void FreetypeFontInstance::HandleFontOptions()
-{
-    if( !mpFreetypeFont )
-        return;
-    if( !mbGotFontOptions )
-    {
-        // get and cache the font options
-        mbGotFontOptions = true;
-        mxFontOptions.reset(GetFCFontOptions( *maFontSelData.mpFontData,
-            maFontSelData.mnHeight ));
-    }
-    // apply the font options
-    mpFreetypeFont->SetFontOptions(mxFontOptions);
 }
 
 void CairoFontsCache::CacheFont(void *pFont, const CairoFontsCache::CacheId &rId)
@@ -288,12 +267,9 @@ void CairoTextRender::DrawServerFontLayout( const GenericSalLayout& rLayout, con
         cairo_font_face_t* font_face = static_cast<cairo_font_face_t*>(CairoFontsCache::FindCachedFont(aId));
         if (!font_face)
         {
-            const FontConfigFontOptions *pOptions = rFont.GetFontOptions().get();
-            void *pPattern = pOptions ? pOptions->GetPattern(aFace, aId.mbEmbolden) : nullptr;
-            if (pPattern)
-                font_face = cairo_ft_font_face_create_for_pattern(static_cast<FcPattern*>(pPattern));
-            if (!font_face)
-                font_face = cairo_ft_font_face_create_for_ft_face(reinterpret_cast<FT_Face>(aFace), rFont.GetLoadFlags());
+            const FontConfigFontOptions *pOptions = aId.mpOptions;
+            FcPattern *pPattern = pOptions->GetPattern();
+            font_face = cairo_ft_font_face_create_for_pattern(pPattern);
             CairoFontsCache::CacheFont(font_face, aId);
         }
         cairo_set_font_face(cr, font_face);
@@ -466,29 +442,16 @@ void CairoTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
     ImplGetSVData()->maGDIData.mbNativeFontConfig = true;
 }
 
-void cairosubcallback(void* pPattern)
+void FontConfigFontOptions::cairo_font_options_substitute(FcPattern* pPattern)
 {
     ImplSVData* pSVData = ImplGetSVData();
     const cairo_font_options_t* pFontOptions = pSVData->mpDefInst->GetCairoFontOptions();
     if( !pFontOptions )
         return;
-    cairo_ft_font_options_substitute(pFontOptions, static_cast<FcPattern*>(pPattern));
+    cairo_ft_font_options_substitute(pFontOptions, pPattern);
 }
 
-FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize)
-{
-    psp::FastPrintFontInfo aInfo;
-
-    aInfo.m_aFamilyName = rFontAttributes.GetFamilyName();
-    aInfo.m_eItalic = rFontAttributes.GetItalic();
-    aInfo.m_eWeight = rFontAttributes.GetWeight();
-    aInfo.m_eWidth = rFontAttributes.GetWidthType();
-
-    return psp::PrintFontManager::getFontOptions(aInfo, nSize, cairosubcallback);
-}
-
-void
-CairoTextRender::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
+void CairoTextRender::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
 {
     if( nFallbackLevel >= MAX_FALLBACK )
         return;
