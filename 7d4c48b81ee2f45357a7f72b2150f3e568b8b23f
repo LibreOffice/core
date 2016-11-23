@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_c98c6138",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-23T17:33:00Z",
+      "side": 1,
+      "message": "use something like\n  rCol.back().\nfor these ? assuming rCol is some kind of STL container",
+      "revId": "7d4c48b81ee2f45357a7f72b2150f3e568b8b23f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_09873910",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-23T17:33:00Z",
+      "side": 1,
+      "message": "use range based for loops ?",
+      "revId": "7d4c48b81ee2f45357a7f72b2150f3e568b8b23f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
