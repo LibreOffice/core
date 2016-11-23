@@ -10,7 +10,7 @@
 $(eval $(call gb_Library_Library,gbuildselftest))
 
 $(eval $(call gb_Library_set_include,gbuildselftest,\
-    -Igbuildtoidetestinclude\
+    -Igbuildtojsontestinclude\
     $$(INCLUDE) \
 ))
 
