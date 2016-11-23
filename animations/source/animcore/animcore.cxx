@@ -129,7 +129,6 @@ class AnimationNode : public AnimationNodeBase
 public:
     explicit AnimationNode(sal_Int16 nNodeType);
     explicit AnimationNode(const AnimationNode& rNode);
-    virtual ~AnimationNode() override;
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException, std::exception) override;
@@ -352,7 +351,6 @@ class TimeContainerEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
 public:
     explicit TimeContainerEnumeration( const ChildList_t &rChildren );
-    virtual ~TimeContainerEnumeration() override;
 
     // Methods
     virtual sal_Bool SAL_CALL hasMoreElements() throw (RuntimeException, std::exception) override;
@@ -373,10 +371,6 @@ TimeContainerEnumeration::TimeContainerEnumeration( const ChildList_t &rChildren
 : maChildren( rChildren )
 {
     maIter = maChildren.begin();
-}
-
-TimeContainerEnumeration::~TimeContainerEnumeration()
-{
 }
 
 // Methods
@@ -497,10 +491,6 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
     // XIterateContainer
     mnIterateType( rNode.mnIterateType ),
     mfIterateInterval( rNode.mfIterateInterval )
-{
-}
-
-AnimationNode::~AnimationNode()
 {
 }
 
