@@ -36,8 +36,6 @@ class VCL_DLLPUBLIC CairoTextRender : public TextRenderImpl
 
     SalColor        mnTextColor;
 
-    bool            bDisableGraphite_;
-
 protected:
     virtual GlyphCache&         getPlatformGlyphCache() = 0;
     virtual cairo_t*            getCairoContext() = 0;

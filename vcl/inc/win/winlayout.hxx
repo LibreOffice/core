@@ -34,14 +34,6 @@
 
 typedef std::unordered_map<int,int> IntMap;
 
-// Graphite headers
-#include <config_graphite.h>
-#if ENABLE_GRAPHITE
-#include <graphite_layout.hxx>
-#include <i18nlangtag/languagetag.hxx>
-#include <graphite_features.hxx>
-#endif
-
 class WinFontInstance;
 struct VisualItem;
 
@@ -349,57 +341,6 @@ private:
     int            mnMinKashidaGlyph;
     bool           mbDisableGlyphInjection;
 };
-
-#if ENABLE_GRAPHITE
-
-class GraphiteLayoutWinImpl : public GraphiteLayout
-{
-public:
-    GraphiteLayoutWinImpl(const gr_face * pFace, WinFontInstance & rFont)
-        throw()
-    : GraphiteLayout(pFace), mrFont(rFont) {};
-    virtual ~GraphiteLayoutWinImpl() throw() override {};
-    virtual sal_GlyphId getKashidaGlyph(int & rWidth) override;
-private:
-    WinFontInstance & mrFont;
-};
-
-/// This class uses the SIL Graphite engine to provide complex text layout services to the VCL
-class GraphiteWinLayout : public WinLayout
-{
-private:
-    gr_font * mpFont;
-    grutils::GrFeatureParser * mpFeatures;
-    mutable GraphiteLayoutWinImpl maImpl;
-public:
-    GraphiteWinLayout(HDC hDC, const WinFontFace& rWFD, WinFontInstance& rWFE, bool bUseOpenGL) throw();
-    virtual ~GraphiteWinLayout() override;
-
-    // used by upper layers
-    virtual bool  LayoutText( ImplLayoutArgs& ) override;    // first step of layout
-    virtual void  AdjustLayout( ImplLayoutArgs& ) override;  // adjusting after fallback etc.
-    virtual bool  DrawTextImpl(HDC hDC, const Rectangle* pRectToErase, Point* pPos, int* pGetNextGlypInfo) const override;
-    virtual bool  CacheGlyphs(SalGraphics& rGraphics) const override;
-    virtual bool  DrawCachedGlyphs(SalGraphics& rGraphics) const override;
-
-    // methods using string indexing
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
-
-    virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
-
-    // methods using glyph indexing
-    virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,
-                                DeviceCoordinate* pGlyphAdvAry = nullptr, int* pCharPosAry = nullptr,
-                                const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
-
-    // used by glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos ) override;
-    virtual void    DropGlyph( int nStart ) override;
-    virtual void    Simplify( bool bIsBase ) override;
-};
-
-#endif // ENABLE_GRAPHITE
 
 class TextOutRenderer
 {
