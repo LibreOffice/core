@@ -1145,30 +1145,31 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                             break;
                     }
 
-                    sal_uInt8 nDel = 0, nMode = 0;
+                    sal_uInt8 nDel = 0;
+                    DeleteMode nMode = DeleteMode::Simple;
                     switch( nCode )
                     {
                     case css::awt::Key::DELETE_WORD_BACKWARD:
-                        nMode = DELMODE_RESTOFWORD;
+                        nMode = DeleteMode::RestOfWord;
                         nDel = DEL_LEFT;
                         break;
                     case css::awt::Key::DELETE_WORD_FORWARD:
-                        nMode = DELMODE_RESTOFWORD;
+                        nMode = DeleteMode::RestOfWord;
                         nDel = DEL_RIGHT;
                         break;
                     case css::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
-                        nMode = DELMODE_RESTOFCONTENT;
+                        nMode = DeleteMode::RestOfContent;
                         nDel = DEL_LEFT;
                         break;
                     case css::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
-                        nMode = DELMODE_RESTOFCONTENT;
+                        nMode = DeleteMode::RestOfContent;
                         nDel = DEL_RIGHT;
                         break;
                     default:
                         nDel = ( nCode == KEY_DELETE ) ? DEL_RIGHT : DEL_LEFT;
-                        nMode = rKeyEvent.GetKeyCode().IsMod1() ? DELMODE_RESTOFWORD : DELMODE_SIMPLE;
-                        if ( ( nMode == DELMODE_RESTOFWORD ) && rKeyEvent.GetKeyCode().IsShift() )
-                            nMode = DELMODE_RESTOFCONTENT;
+                        nMode = rKeyEvent.GetKeyCode().IsMod1() ? DeleteMode::RestOfWord : DeleteMode::Simple;
+                        if ( ( nMode == DeleteMode::RestOfWord ) && rKeyEvent.GetKeyCode().IsShift() )
+                            nMode = DeleteMode::RestOfContent;
                         break;
                     }
 

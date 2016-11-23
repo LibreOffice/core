@@ -2263,7 +2263,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     return aPaM;
 }
 
-EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 nMode, sal_uInt8 nDelMode )
+EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 nMode, DeleteMode nDelMode )
 {
     OSL_ENSURE( !EditSelection( rSel ).DbgIsBuggy( aEditDoc ), "Index out of range in DeleteLeftOrRight" );
 
@@ -2275,11 +2275,11 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
     EditPaM aDelEnd( aCurPos );
     if ( nMode == DEL_LEFT )
     {
-        if ( nDelMode == DELMODE_SIMPLE )
+        if ( nDelMode == DeleteMode::Simple )
         {
             aDelStart = CursorLeft( aCurPos, i18n::CharacterIteratorMode::SKIPCHARACTER );
         }
-        else if ( nDelMode == DELMODE_RESTOFWORD )
+        else if ( nDelMode == DeleteMode::RestOfWord )
         {
             aDelStart = StartOfWord( aCurPos );
             if ( aDelStart.GetIndex() == aCurPos.GetIndex() )
@@ -2299,11 +2299,11 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
     }
     else
     {
-        if ( nDelMode == DELMODE_SIMPLE )
+        if ( nDelMode == DeleteMode::Simple )
         {
             aDelEnd = CursorRight( aCurPos );
         }
-        else if ( nDelMode == DELMODE_RESTOFWORD )
+        else if ( nDelMode == DeleteMode::RestOfWord )
         {
             aDelEnd = EndOfWord( aCurPos );
 
@@ -2351,12 +2351,12 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
     }
 
     // ConnectParagraphs not enough for different Nodes when
-    // DELMODE_RESTOFCONTENT.
-    if ( ( nDelMode == DELMODE_RESTOFCONTENT ) || ( aDelStart.GetNode() == aDelEnd.GetNode() ) )
+    // DeleteMode::RestOfContent.
+    if ( ( nDelMode == DeleteMode::RestOfContent ) || ( aDelStart.GetNode() == aDelEnd.GetNode() ) )
         return ImpDeleteSelection( EditSelection( aDelStart, aDelEnd ) );
 
     // Decide now if to delete selection (RESTOFCONTENTS)
-    bool bSpecialBackward = ( nMode == DEL_LEFT ) && ( nDelMode == DELMODE_SIMPLE );
+    bool bSpecialBackward = ( nMode == DEL_LEFT ) && ( nDelMode == DeleteMode::Simple );
     if ( aStatus.IsAnyOutliner() )
         bSpecialBackward = false;
 
