@@ -27,7 +27,6 @@
 #include <config_features.h>
 #include <config_folders.h>
 #include <config_global.h>
-#include <config_graphite.h>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>

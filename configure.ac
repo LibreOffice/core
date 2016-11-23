@@ -1046,12 +1046,9 @@ dnl ---------- *** ----------
 
 AC_ARG_ENABLE(mergelibs,
     AS_HELP_STRING([--enable-mergelibs],
-        [Merge several of the smaller libraries into one big, "merged", one.])
-)
-
-AC_ARG_ENABLE(graphite,
-    AS_HELP_STRING([--disable-graphite],
-        [Disables the compilation of Graphite smart font rendering.])
+        [Enables linking of big, merged, library. Experimental feature, tested
+        only for Linux at some stage in history, but possibly does not work even
+        for Linux any more. This will link a core set of libraries into libmerged.])
 )
 
 AC_ARG_ENABLE(breakpad,
@@ -4631,7 +4628,6 @@ if test "$cross_compiling" = "yes"; then
     # Don't bother having configure look for stuff not needed for the build platform anyway
     ./configure \
         --disable-cups \
-        --disable-graphite \
         --disable-gtk3 \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
@@ -9212,29 +9208,6 @@ AC_SUBST(ICU_RECLASSIFIED_HEBREW_LETTER)
 AC_SUBST(ICU_CFLAGS)
 AC_SUBST(ICU_LIBS)
 
-dnl ===================================================================
-dnl Graphite
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3],["-I${WORKDIR}/UnpackedTarball/graphite/include -DGRAPHITE2_STATIC"],["-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"])
-if test "$with_system_graphite" = "yes"; then
-    libo_MINGW_CHECK_DLL([libgraphite2])
-fi
-if test "$COM" = "MSC"; then # override the above
-    GRAPHITE_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/graphite.lib"
-fi
-
-# This is the old Graphite support that will eventually be removed
-AC_MSG_CHECKING([whether to enable graphite support])
-if test $_os != Darwin -a $_os != Android -a $_os != iOS -a \( -z "$enable_graphite" -o "$enable_graphite" != no \); then
-    AC_MSG_RESULT([yes])
-    ENABLE_GRAPHITE="TRUE"
-    AC_DEFINE(ENABLE_GRAPHITE)
-
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_GRAPHITE)
-
 dnl ==================================================================
 dnl Breakpad
 dnl ==================================================================
@@ -9310,10 +9283,19 @@ AC_SUBST(ENABLE_ORCUS)
 dnl ===================================================================
 dnl HarfBuzz
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.42],["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"])
-if test "$COM" = "MSC"; then # override the above
+libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3],
+                         ["-I${WORKDIR}/UnpackedTarball/graphite/include -DGRAPHITE2_STATIC"],
+                         ["-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"])
+
+libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.42],
+                         ["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],
+                         ["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"])
+
+ if test "$COM" = "MSC"; then # override the above
+    GRAPHITE_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/graphite.lib"
     HARFBUZZ_LIBS="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.lib"
 fi
+
 if test "$with_system_harfbuzz" = "yes"; then
     if test "$with_system_graphite" = "no"; then
         AC_MSG_ERROR([--with-system-graphite must be used when --with-system-harfbuzz is used])
@@ -12934,7 +12916,6 @@ AC_CONFIG_HEADERS([config_host/config_firebird.h])
 AC_CONFIG_HEADERS([config_host/config_folders.h])
 AC_CONFIG_HEADERS([config_host/config_gio.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
-AC_CONFIG_HEADERS([config_host/config_graphite.h])
 AC_CONFIG_HEADERS([config_host/config_java.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
 AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
