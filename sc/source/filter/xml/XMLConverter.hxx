@@ -47,13 +47,16 @@ public:
     static css::sheet::GeneralFunction
                         GetFunctionFromString(
                             const OUString& rString );
+    static sal_Int16    GetFunctionFromString2(
+                            const OUString& rString );
+
     static ScSubTotalFunc GetSubTotalFuncFromString(
                             const OUString& rString );
 
-// EXPORT: GeneralFunction / ScSubTotalFunc
+// EXPORT: GeneralFunctio2 / ScSubTotalFunc
     static void         GetStringFromFunction(
                             OUString& rString,
-                            const css::sheet::GeneralFunction eFunction );
+                            const sal_Int16 eFunction );
     static void         GetStringFromFunction(
                             OUString& rString,
                             const ScSubTotalFunc eFunction );

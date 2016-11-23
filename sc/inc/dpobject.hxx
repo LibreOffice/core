@@ -186,7 +186,7 @@ public:
     bool ParseFilters(
         OUString& rDataFieldName,
         std::vector<css::sheet::DataPilotFieldFilter>& rFilters,
-        std::vector<css::sheet::GeneralFunction>& rFilterFuncs,
+        std::vector<sal_Int16>& rFilterFuncs,
         const OUString& rFilterList );
 
     void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);
