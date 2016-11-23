@@ -173,7 +173,6 @@
   <block-list:block block-list:abbreviated-name=":byggingavinna:" block-list:name="🚧"/>
   <block-list:block block-list:abbreviated-name=":byrjandi:" block-list:name="🔰"/>
   <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
-  <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᵪ"/>
   <block-list:block block-list:abbreviated-name=":cd:" block-list:name="💿"/>
   <block-list:block block-list:abbreviated-name=":^chi:" block-list:name="ᵡ"/>
   <block-list:block block-list:abbreviated-name=":_chi:" block-list:name="ᵪ"/>
@@ -548,6 +547,18 @@
   <block-list:block block-list:abbreviated-name=":klappspjald:" block-list:name="🎬"/>
   <block-list:block block-list:abbreviated-name=":kleinuhringur:" block-list:name="🍩"/>
   <block-list:block block-list:abbreviated-name=":klippispjald:" block-list:name="📋"/>
+  <block-list:block block-list:abbreviated-name=":klukkan 10:" block-list:name="🕙"/>
+  <block-list:block block-list:abbreviated-name=":klukkan 11:" block-list:name="🕚"/>
+  <block-list:block block-list:abbreviated-name=":klukkan 12:" block-list:name="🕛"/>
+  <block-list:block block-list:abbreviated-name=":klukkan 1:" block-list:name="🕐"/>
+  <block-list:block block-list:abbreviated-name=":klukkan 2:" block-list:name="🕑"/>
+  <block-list:block block-list:abbreviated-name=":klukkan 3:" block-list:name="🕒"/>
+  <block-list:block block-list:abbreviated-name=":klukkan 4:" block-list:name="🕓"/>
+  <block-list:block block-list:abbreviated-name=":klukkan 5:" block-list:name="🕔"/>
+  <block-list:block block-list:abbreviated-name=":klukkan 6:" block-list:name="🕕"/>
+  <block-list:block block-list:abbreviated-name=":klukkan 7:" block-list:name="🕖"/>
+  <block-list:block block-list:abbreviated-name=":klukkan 8:" block-list:name="🕗"/>
+  <block-list:block block-list:abbreviated-name=":klukkan 9:" block-list:name="🕘"/>
   <block-list:block block-list:abbreviated-name=":knattspyrna:" block-list:name="⚽"/>
   <block-list:block block-list:abbreviated-name=":kóalabjörn:" block-list:name="🐨"/>
   <block-list:block block-list:abbreviated-name=":kokkteill:" block-list:name="🍸"/>
