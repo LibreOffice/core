@@ -45,7 +45,6 @@ private:
     OString             maBaseName;
     fonttype::type      meBaseType;
     rtl_TextEncoding    mnBaseEncoding;
-    bool                mbUseFontEncoding;
 
     typedef std::unordered_map< sal_Unicode, sal_uInt8 > char_map_t;
     typedef std::list< char_map_t > char_list_t;
@@ -59,9 +58,6 @@ private:
     OString     GetCharSetName (sal_Int32 nGlyphSetID);
     sal_Int32   GetGlyphSetEncoding (sal_Int32 nGlyphSetID);
     OString     GetGlyphSetEncodingName (sal_Int32 nGlyphSetID);
-
-    void        PSDefineReencodedFont (osl::File* pOutFile,
-                                           sal_Int32 nGlyphSetID);
 
     bool        GetCharID (sal_Unicode nChar,
                                 unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
@@ -113,7 +109,6 @@ public:
                                 sal_Int16 nLen,
                                 const sal_Int32* pDeltaArray,
                                 bool bUseGlyphs=true);
-    void        PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx);
     void        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< OString >& rSuppliedFonts );
 };
 
