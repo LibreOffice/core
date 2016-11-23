@@ -400,8 +400,7 @@ public:
     virtual bool            GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) override;
 
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
-    virtual void            DrawSalLayout( const CommonSalLayout& ) override;
-    virtual void            DrawServerFontLayout( const GenericSalLayout&, const FreetypeFont& ) override {};
+    virtual void            DrawTextLayout( const CommonSalLayout& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
 
 #ifdef MACOSX
