@@ -39,7 +39,7 @@ class BASIC_DLLPUBLIC SbMethod : public SbxMethod
 
     SbxVariable*  mCaller;                   // caller
     SbModule*     pMod;
-    sal_uInt16    nDebugFlags;
+    BasicDebugFlags nDebugFlags;
     sal_uInt16    nLine1, nLine2;
     sal_uInt32    nStart;
     bool          bInvalid;
@@ -55,9 +55,9 @@ public:
     virtual SbxInfo* GetInfo() override;
     SbxArray*  GetStatics();
     void       ClearStatics();
-    SbModule*  GetModule()                { return pMod;        }
-    sal_uInt16 GetDebugFlags()            { return nDebugFlags; }
-    void       SetDebugFlags( sal_uInt16 n )  { nDebugFlags = n;    }
+    SbModule*  GetModule()                         { return pMod;        }
+    BasicDebugFlags GetDebugFlags()                { return nDebugFlags; }
+    void       SetDebugFlags( BasicDebugFlags n )  { nDebugFlags = n;    }
     void       GetLineRange( sal_uInt16&, sal_uInt16& );
 
     // Interface to execute a method from the applications

@@ -54,8 +54,8 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     SbxArrayRef     xUnoListeners;          // Listener handled by CreateUnoListener
 
    // Handler-Support:
-    Link<StarBASIC*,bool>       aErrorHdl;              // Error handler
-    Link<StarBASIC*,sal_uInt16> aBreakHdl;              // Breakpoint handler
+    Link<StarBASIC*,bool>            aErrorHdl;              // Error handler
+    Link<StarBASIC*,BasicDebugFlags> aBreakHdl;              // Breakpoint handler
     bool            bNoRtl;                 // if true: do not search RTL
     bool            bBreak;                 // if true: Break, otherwise Step
     bool            bDocBasic;
@@ -72,14 +72,14 @@ protected:
     bool                                CError( SbError, const OUString&, sal_Int32, sal_Int32, sal_Int32 );
 private:
     BASIC_DLLPRIVATE bool               RTError( SbError, const OUString& rMsg, sal_Int32, sal_Int32, sal_Int32 );
-    BASIC_DLLPRIVATE sal_uInt16         BreakPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
-    BASIC_DLLPRIVATE sal_uInt16         StepPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
+    BASIC_DLLPRIVATE BasicDebugFlags    BreakPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
+    BASIC_DLLPRIVATE BasicDebugFlags    StepPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
 
 protected:
-    bool        ErrorHdl();
-    sal_uInt16  BreakHdl();
+    bool             ErrorHdl();
+    BasicDebugFlags  BreakHdl();
     virtual ~StarBASIC() override;
 
 public:
@@ -140,7 +140,7 @@ public:
     static Link<StarBASIC*,bool> GetGlobalErrorHdl();
     static void     SetGlobalErrorHdl( const Link<StarBASIC*,bool>& rNewHdl );
 
-    static void     SetGlobalBreakHdl( const Link<StarBASIC*,sal_uInt16>& rNewHdl );
+    static void     SetGlobalBreakHdl( const Link<StarBASIC*,BasicDebugFlags>& rNewHdl );
 
     SbxArrayRef const & getUnoListeners();
 
