@@ -38,7 +38,6 @@ class DtransX11ConfigItem : public ::utl::ConfigItem
 
 public:
     DtransX11ConfigItem();
-    virtual ~DtransX11ConfigItem() override;
 
     sal_Int32 getSelectionTimeout() const { return m_nSelectionTimeout; }
 };
@@ -98,14 +97,6 @@ DtransX11ConfigItem::DtransX11ConfigItem() :
                      OUStringToOString( pValue->getValueType().getTypeName(), osl_getThreadTextEncoding() ).getStr() );
 #endif
     }
-}
-
-/*
- *  DtransX11ConfigItem destructor
- */
-
-DtransX11ConfigItem::~DtransX11ConfigItem()
-{
 }
 
 void DtransX11ConfigItem::ImplCommit()

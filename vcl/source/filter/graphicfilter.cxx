@@ -100,7 +100,6 @@ protected:
 public:
 
     explicit ImpFilterOutputStream( SvStream& rStm ) : mrStm( rStm ) {}
-    virtual ~ImpFilterOutputStream() override {}
 };
 
 #ifndef DISABLE_EXPORT

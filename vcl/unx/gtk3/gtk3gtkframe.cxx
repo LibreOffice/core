@@ -4356,8 +4356,23 @@ long GtkSalFrame::CallCallbackExc(SalEvent nEvent, const void* pEvent) const
     }
     catch (const css::uno::Exception&)
     {
+        auto e = cppu::getCaughtException();
         GtkData *pSalData = static_cast<GtkData*>(GetSalData());
-        pSalData->setException(::cppu::getCaughtException());
+        pSalData->setException(e);
+    }
+    catch (std::exception & e)
+    {
+        static_cast<GtkData *>(GetSalData())->setException(
+            css::uno::Any(
+                css::uno::RuntimeException(
+                    "wrapped std::exception "
+                    + OUString::createFromAscii(e.what()))));
+    }
+    catch (...)
+    {
+        static_cast<GtkData *>(GetSalData())->setException(
+            css::uno::Any(
+                css::uno::RuntimeException("wrapped unknown exception")));
     }
     return nRet;
 }

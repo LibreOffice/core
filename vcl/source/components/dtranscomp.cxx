@@ -68,7 +68,6 @@ public:
         XServiceInfo
         >( m_aMutex )
     {}
-    virtual ~GenericClipboard() override;
 
     /*
      * XServiceInfo
@@ -113,10 +112,6 @@ public:
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
         throw(RuntimeException, std::exception) override;
 };
-
-GenericClipboard::~GenericClipboard()
-{
-}
 
 Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
 {
@@ -203,7 +198,6 @@ class ClipboardFactory : public ::cppu::WeakComponentImplHelper<
     osl::Mutex m_aMutex;
 public:
     ClipboardFactory();
-    virtual ~ClipboardFactory() override;
 
     /*
      *  XSingleServiceFactory
@@ -216,10 +210,6 @@ ClipboardFactory::ClipboardFactory() :
         cppu::WeakComponentImplHelper<
     css::lang::XSingleServiceFactory
 >( m_aMutex )
-{
-}
-
-ClipboardFactory::~ClipboardFactory()
 {
 }
 
@@ -265,7 +255,6 @@ class GenericDragSource : public cppu::WeakComponentImplHelper<
     osl::Mutex                          m_aMutex;
 public:
     GenericDragSource() : WeakComponentImplHelper( m_aMutex ) {}
-    virtual ~GenericDragSource() override;
 
     // XDragSource
     virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception) override;
@@ -298,10 +287,6 @@ public:
         return aRet;
     }
 };
-
-GenericDragSource::~GenericDragSource()
-{
-}
 
 sal_Bool GenericDragSource::isDragImageSupported() throw(std::exception)
 {
@@ -372,7 +357,6 @@ class GenericDropTarget : public cppu::WeakComponentImplHelper<
 public:
     GenericDropTarget() : WeakComponentImplHelper( m_aMutex )
     {}
-    virtual ~GenericDropTarget() override;
 
     // XInitialization
     virtual void        SAL_CALL initialize( const Sequence< Any >& args ) throw ( Exception, std::exception ) override;
@@ -403,10 +387,6 @@ public:
         return aRet;
     }
 };
-
-GenericDropTarget::~GenericDropTarget()
-{
-}
 
 void GenericDropTarget::initialize( const Sequence< Any >& ) throw( Exception, std::exception )
 {
