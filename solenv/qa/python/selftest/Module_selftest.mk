@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,gbuildtoidetest))
+$(eval $(call gb_Module_Module,gbuildtojsontest))
 
-$(eval $(call gb_Module_add_targets,gbuildtoidetest,\
+$(eval $(call gb_Module_add_targets,gbuildtojsontest,\
 	Library_gbuildselftestdep \
 	Library_gbuildselftest \
 	Executable_gbuildselftestexe \

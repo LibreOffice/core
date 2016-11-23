@@ -10,7 +10,7 @@
 $(eval $(call gb_PythonTest_PythonTest,solenv_python))
 
 $(eval $(call gb_PythonTest_add_modules,solenv_python,$(SRCDIR)/solenv/qa/python,\
-	gbuildtoide \
+	gbuildtojson \
 ))
 
 $(call gb_PythonTest_get_target,solenv_python): $(call gb_CustomTarget_get_target,solenv/gbuildtesttools)
