@@ -27,9 +27,12 @@ namespace pdfio
 {
 
 class PDFTrailerElement;
-class PDFObjectElement;
 class PDFHexStringElement;
 class PDFReferenceElement;
+class PDFDocument;
+class PDFDictionaryElement;
+class PDFArrayElement;
+class PDFStreamElement;
 
 /// A byte range in a PDF file.
 class PDFElement
@@ -37,6 +40,67 @@ class PDFElement
 public:
     virtual bool Read(SvStream& rStream) = 0;
     virtual ~PDFElement() { }
+};
+
+/// Indirect object: something with a unique ID.
+class XMLSECURITY_DLLPUBLIC PDFObjectElement : public PDFElement
+{
+    PDFDocument& m_rDoc;
+    double m_fObjectValue;
+    double m_fGenerationValue;
+    std::map<OString, PDFElement*> m_aDictionary;
+    /// Position after the '<<' token.
+    sal_uInt64 m_nDictionaryOffset;
+    /// Length of the dictionary buffer till (before) the '<<' token.
+    sal_uInt64 m_nDictionaryLength;
+    PDFDictionaryElement* m_pDictionaryElement;
+    /// The contained direct array, if any.
+    PDFArrayElement* m_pArrayElement;
+    /// The stream of this object, used when this is an object stream.
+    PDFStreamElement* m_pStreamElement;
+    /// Objects of an object stream.
+    std::vector< std::unique_ptr<PDFObjectElement> > m_aStoredElements;
+    /// Elements of an object in an object stream.
+    std::vector< std::unique_ptr<PDFElement> > m_aElements;
+    /// Uncompressed buffer of an object in an object stream.
+    std::unique_ptr<SvMemoryStream> m_pStreamBuffer;
+
+public:
+    PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue);
+    bool Read(SvStream& rStream) override;
+    PDFElement* Lookup(const OString& rDictionaryKey);
+    PDFObjectElement* LookupObject(const OString& rDictionaryKey);
+    double GetObjectValue() const;
+    void SetDictionaryOffset(sal_uInt64 nDictionaryOffset);
+    sal_uInt64 GetDictionaryOffset();
+    void SetDictionaryLength(sal_uInt64 nDictionaryLength);
+    sal_uInt64 GetDictionaryLength();
+    PDFDictionaryElement* GetDictionary() const;
+    void SetDictionary(PDFDictionaryElement* pDictionaryElement);
+    void SetArray(PDFArrayElement* pArrayElement);
+    void SetStream(PDFStreamElement* pStreamElement);
+    PDFArrayElement* GetArray() const;
+    /// Parse objects stored in this object stream.
+    void ParseStoredObjects();
+    std::vector< std::unique_ptr<PDFElement> >& GetStoredElements();
+    SvMemoryStream* GetStreamBuffer() const;
+    void SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamBuffer);
+};
+
+/// Name object: a key string.
+class XMLSECURITY_DLLPUBLIC PDFNameElement : public PDFElement
+{
+    OString m_aValue;
+    /// Offset after the '/' token.
+    sal_uInt64 m_nLocation;
+    /// Length till the next token start.
+    sal_uInt64 m_nLength;
+public:
+    PDFNameElement();
+    bool Read(SvStream& rStream) override;
+    const OString& GetValue() const;
+    sal_uInt64 GetLocation() const;
+    sal_uInt64 GetLength() const;
 };
 
 enum class TokenizeMode
