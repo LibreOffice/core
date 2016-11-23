@@ -18,6 +18,7 @@
  */
 
 #include <cstddef>
+#include <forward_list>
 #include <limits>
 #include <memory>
 
@@ -429,20 +430,19 @@ class INetMIMECharsetList_Impl
     {
         Charset m_aCharset;
         bool m_bDisabled;
-        Node * m_pNext;
 
-        inline Node(const Charset & rTheCharset, Node * pTheNext);
+        explicit Node(const Charset & rCharset)
+            :m_aCharset(rCharset), m_bDisabled(false)
+        {}
     };
 
-    Node * m_pFirst;
+    std::forward_list<Node> m_aList;
 
 public:
-    INetMIMECharsetList_Impl(): m_pFirst(nullptr) {}
-
-    ~INetMIMECharsetList_Impl();
-
     void prepend(const Charset & rCharset)
-    { m_pFirst = new Node(rCharset, m_pFirst); }
+    {
+        m_aList.emplace_front(rCharset);
+    }
 
     void includes(sal_uInt32 nChar);
 
@@ -451,13 +451,6 @@ public:
 
     void reset();
 };
-
-inline INetMIMECharsetList_Impl::Node::Node(const Charset & rTheCharset,
-                                            Node * pTheNext):
-    m_aCharset(rTheCharset),
-    m_bDisabled(false),
-    m_pNext(pTheNext)
-{}
 
 struct Parameter
 {
@@ -539,36 +532,26 @@ void appendISO88591(OUString & rText, sal_Char const * pBegin,
 
 //  INetMIMECharsetList_Impl
 
-INetMIMECharsetList_Impl::~INetMIMECharsetList_Impl()
-{
-    while (m_pFirst)
-    {
-        Node * pRemove = m_pFirst;
-        m_pFirst = m_pFirst->m_pNext;
-        delete pRemove;
-    }
-}
-
 void INetMIMECharsetList_Impl::includes(sal_uInt32 nChar)
 {
-    for (Node * p = m_pFirst; p; p = p->m_pNext)
-        if (!(p->m_bDisabled || p->m_aCharset.contains(nChar)))
-            p->m_bDisabled = true;
+    for (Node& rNode : m_aList)
+        if (!(rNode.m_bDisabled || rNode.m_aCharset.contains(nChar)))
+            rNode.m_bDisabled = true;
 }
 
 rtl_TextEncoding INetMIMECharsetList_Impl::getPreferredEncoding(rtl_TextEncoding eDefault)
     const
 {
-    for (Node * p = m_pFirst; p; p = p->m_pNext)
-        if (!p->m_bDisabled)
-            return p->m_aCharset.getEncoding();
+    for (const Node& rNode : m_aList)
+        if (!rNode.m_bDisabled)
+            return rNode.m_aCharset.getEncoding();
     return eDefault;
 }
 
 void INetMIMECharsetList_Impl::reset()
 {
-    for (Node * p = m_pFirst; p; p = p->m_pNext)
-        p->m_bDisabled = false;
+    for (Node& rNode : m_aList)
+        rNode.m_bDisabled = false;
 }
 
 //  ParameterList
