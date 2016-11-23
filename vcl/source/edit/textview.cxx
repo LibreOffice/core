@@ -68,7 +68,6 @@ private:
 
 public:
     explicit TETextDataObject( const OUString& rText );
-    virtual ~TETextDataObject() override;
 
     OUString&        GetText() { return maText; }
     SvMemoryStream& GetHTMLStream() { return maHTMLStream; }
@@ -85,10 +84,6 @@ public:
 };
 
 TETextDataObject::TETextDataObject( const OUString& rText ) : maText( rText )
-{
-}
-
-TETextDataObject::~TETextDataObject()
 {
 }
 
