@@ -149,8 +149,8 @@ void SfxViewFrame::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SID_BROWSER);
     GetStaticInterface()->RegisterChildWindow(SID_RECORDING_FLOATWINDOW);
 #if HAVE_FEATURE_DESKTOP
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_FULLSCREEN | SFX_VISIBILITY_FULLSCREEN, RID_FULLSCREENTOOLBOX);
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_STANDARD, RID_ENVTOOLBOX );
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_FULLSCREEN, SfxVisibilityFlags::FullScreen, RID_FULLSCREENTOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION, SfxVisibilityFlags::Standard, RID_ENVTOOLBOX );
 #endif
 }
 

@@ -158,15 +158,15 @@ SFX_IMPL_INTERFACE(FmFormShell, SfxShell)
 
 void FmFormShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_NAVIGATION|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_READONLYDOC,
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_NAVIGATION, SfxVisibilityFlags::Standard|SfxVisibilityFlags::ReadonlyDoc,
                                             RID_SVXTBX_FORM_NAVIGATION,
                                             SfxShellFeature::FormShowDatabaseBar);
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_NAVIGATION|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_READONLYDOC,
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_NAVIGATION, SfxVisibilityFlags::Standard|SfxVisibilityFlags::ReadonlyDoc,
                                             RID_SVXTBX_FORM_FILTER,
                                             SfxShellFeature::FormShowFilterBar);
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_READONLYDOC,
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Standard | SfxVisibilityFlags::ReadonlyDoc,
                                             RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES,
                                             SfxShellFeature::FormShowTextControlBar);
 
@@ -176,15 +176,15 @@ void FmFormShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SID_FM_FILTER_NAVIGATOR, false, SfxShellFeature::FormShowFilterNavigator);
     GetStaticInterface()->RegisterChildWindow(SID_FM_SHOW_DATANAVIGATOR, false, SfxShellFeature::FormShowDataNavigator);
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Standard,
                                             RID_SVXTBX_CONTROLS,
                                             SfxShellFeature::FormTBControls);
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Standard,
                                             RID_SVXTBX_MORECONTROLS,
                                             SfxShellFeature::FormTBMoreControls);
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Standard,
                                             RID_SVXTBX_FORMDESIGN,
                                             SfxShellFeature::FormTBDesign);
 }

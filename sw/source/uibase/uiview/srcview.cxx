@@ -118,7 +118,8 @@ void SwSrcView::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("source");
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS,
+                                            SfxVisibilityFlags::Standard|SfxVisibilityFlags::Server,
                                             RID_WEBTOOLS_TOOLBOX);
 
     GetStaticInterface()->RegisterChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
