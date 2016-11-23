@@ -72,6 +72,7 @@ public:
     void                  ReleaseFaceFT();
 
     const OString&        GetFontFileName() const   { return mpFontFile->GetFileName(); }
+    int                   GetFontFaceIndex() const  { return mnFaceNum; }
     sal_IntPtr            GetFontId() const         { return mnFontId; }
     bool                  IsSymbolFont() const      { return maDevFontAttributes.IsSymbolFont(); }
     const FontAttributes& GetFontAttributes() const { return maDevFontAttributes; }

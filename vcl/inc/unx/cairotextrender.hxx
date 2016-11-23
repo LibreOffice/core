@@ -28,8 +28,10 @@
 
 typedef struct FT_FaceRec_* FT_Face;
 
+class FontConfigFontOptions;
 class ServerFont;
 class GlyphCache;
+class FontConfigFontOptions;
 typedef struct _cairo cairo_t;
 
 class VCL_DLLPUBLIC CairoFontsCache
@@ -38,7 +40,7 @@ public:
     struct CacheId
     {
         FT_Face maFace;
-        const void *mpOptions;
+        const FontConfigFontOptions *mpOptions;
         bool mbEmbolden;
         bool mbVerticalMetrics;
         bool operator ==(const CacheId& rOther) const
@@ -123,6 +125,8 @@ public:
     virtual SystemFontData      GetSysFontData( int nFallbackLevel ) const override;
 #endif
 };
+
+FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize);
 
 #endif
 

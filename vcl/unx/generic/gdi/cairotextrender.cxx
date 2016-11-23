@@ -244,12 +244,9 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
         cairo_font_face_t* font_face = static_cast<cairo_font_face_t*>(CairoFontsCache::FindCachedFont(aId));
         if (!font_face)
         {
-            const FontConfigFontOptions *pOptions = rFont.GetFontOptions().get();
-            void *pPattern = pOptions ? pOptions->GetPattern(aFace, aId.mbEmbolden) : nullptr;
-            if (pPattern)
-                font_face = cairo_ft_font_face_create_for_pattern(static_cast<FcPattern*>(pPattern));
-            if (!font_face)
-                font_face = cairo_ft_font_face_create_for_ft_face(reinterpret_cast<FT_Face>(aFace), rFont.GetLoadFlags());
+            const FontConfigFontOptions *pOptions = aId.mpOptions;
+            FcPattern *pPattern = pOptions->GetPattern();
+            font_face = cairo_ft_font_face_create_for_pattern(pPattern);
             CairoFontsCache::CacheFont(font_face, aId);
         }
         cairo_set_font_face(cr, font_face);
