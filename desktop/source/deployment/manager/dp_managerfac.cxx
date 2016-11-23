@@ -55,7 +55,6 @@ protected:
     virtual void SAL_CALL disposing() override;
 
 public:
-    virtual ~PackageManagerFactoryImpl() override;
     explicit PackageManagerFactoryImpl(
         Reference<XComponentContext> const & xComponentContext );
 
@@ -80,12 +79,6 @@ PackageManagerFactoryImpl::PackageManagerFactoryImpl(
       m_xComponentContext( xComponentContext )
 {
 }
-
-
-PackageManagerFactoryImpl::~PackageManagerFactoryImpl()
-{
-}
-
 
 inline void PackageManagerFactoryImpl::check()
 {

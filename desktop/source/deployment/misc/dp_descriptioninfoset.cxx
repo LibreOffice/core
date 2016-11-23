@@ -62,8 +62,6 @@ class EmptyNodeList:
 public:
     EmptyNodeList();
 
-    virtual ~EmptyNodeList() override;
-
     EmptyNodeList(const EmptyNodeList&) = delete;
     const EmptyNodeList& operator=(const EmptyNodeList&) = delete;
 
@@ -74,8 +72,6 @@ public:
 };
 
 EmptyNodeList::EmptyNodeList() {}
-
-EmptyNodeList::~EmptyNodeList() {}
 
 ::sal_Int32 EmptyNodeList::getLength() throw (css::uno::RuntimeException, std::exception) {
     return 0;
@@ -146,7 +142,6 @@ class FileDoesNotExistFilter
     css::uno::Reference< css::ucb::XCommandEnvironment > m_xCommandEnv;
 
 public:
-    virtual ~FileDoesNotExistFilter() override;
     explicit FileDoesNotExistFilter(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
 
@@ -256,10 +251,6 @@ FileDoesNotExistFilter::FileDoesNotExistFilter(
     const Reference< css::ucb::XCommandEnvironment >& xCmdEnv):
     m_bExist(true), m_xCommandEnv(xCmdEnv)
 {}
-
-FileDoesNotExistFilter::~FileDoesNotExistFilter()
-{
-};
 
     // XCommandEnvironment
 Reference<css::task::XInteractionHandler >

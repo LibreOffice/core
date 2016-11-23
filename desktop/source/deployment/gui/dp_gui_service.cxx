@@ -53,7 +53,6 @@ class MyApp : public Application
 {
 public:
     MyApp();
-    virtual ~MyApp() override;
 
     MyApp(const MyApp&) = delete;
     const MyApp& operator=(const MyApp&) = delete;
@@ -62,12 +61,6 @@ public:
     virtual int Main() override;
     virtual void DeInit() override;
 };
-
-
-MyApp::~MyApp()
-{
-}
-
 
 MyApp::MyApp()
 {

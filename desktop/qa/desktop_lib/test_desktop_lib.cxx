@@ -53,10 +53,6 @@ public:
     {
     }
 
-    virtual ~DesktopLOKTest() override
-    {
-    }
-
     virtual void setUp() override
     {
         UnoApiTest::setUp();

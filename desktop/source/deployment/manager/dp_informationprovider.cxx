@@ -63,7 +63,6 @@ class PackageInformationProvider :
 {
     public:
     explicit PackageInformationProvider( uno::Reference< uno::XComponentContext >const& xContext);
-    virtual     ~PackageInformationProvider() override;
 
     // XPackageInformationProvider
     virtual OUString SAL_CALL getPackageLocation( const OUString& extensionId )
@@ -89,12 +88,6 @@ PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XCo
     mxUpdateInformation( deployment::UpdateInformationProvider::create( xContext ) )
 {
 }
-
-
-PackageInformationProvider::~PackageInformationProvider()
-{
-}
-
 
 OUString PackageInformationProvider::getPackageLocation(
     const OUString & repository,

@@ -131,8 +131,6 @@ class ProgressCmdEnv
     void update_( uno::Any const & Status ) throw ( uno::RuntimeException );
 
 public:
-    virtual ~ProgressCmdEnv() override;
-
     /** When param bAskWhenInstalling = true, then the user is asked if he
     agrees to install this extension. In case this extension is already installed
     then the user is also notified and asked if he wants to replace that existing
@@ -307,13 +305,6 @@ void ProgressCmdEnv::updateProgress()
     if ( m_pDialogHelper )
         m_pDialogHelper->updateProgress( nProgress );
 }
-
-
-ProgressCmdEnv::~ProgressCmdEnv()
-{
-    // TODO: stop all threads and wait
-}
-
 
 // XCommandEnvironment
 

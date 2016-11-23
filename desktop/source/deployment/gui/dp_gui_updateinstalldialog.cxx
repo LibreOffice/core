@@ -121,7 +121,6 @@ class UpdateCommandEnv
     cssu::Reference< cssu::XComponentContext > m_xContext;
 
 public:
-    virtual ~UpdateCommandEnv() override;
     UpdateCommandEnv( cssu::Reference< cssu::XComponentContext > const & xCtx,
         ::rtl::Reference<UpdateInstallDialog::Thread>const & thread);
 
@@ -628,10 +627,6 @@ UpdateCommandEnv::UpdateCommandEnv( cssu::Reference< cssu::XComponentContext > c
     ::rtl::Reference<UpdateInstallDialog::Thread>const & thread)
     : m_installThread(thread),
     m_xContext(xCtx)
-{
-}
-
-UpdateCommandEnv::~UpdateCommandEnv()
 {
 }
 

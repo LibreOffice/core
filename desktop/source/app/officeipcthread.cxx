@@ -140,8 +140,6 @@ public:
         }
     }
 
-    virtual ~Parser() override {}
-
     virtual boost::optional< OUString > getCwdUrl() override { return m_cwdUrl; }
 
     virtual bool next(OUString * argument) override { return next(argument, true); }
