@@ -47,6 +47,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_bugfix_test \
 	CppunitTest_sc_filters_test \
 	CppunitTest_sc_rangelst_test \
+	CppunitTest_sc_range_test \
 	CppunitTest_sc_mark_test \
 	CppunitTest_sc_core \
 ))
