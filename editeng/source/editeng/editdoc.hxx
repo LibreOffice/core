@@ -338,9 +338,9 @@ enum class PortionKind
     HYPHENATOR  = 4
 };
 
-#define DELMODE_SIMPLE          0
-#define DELMODE_RESTOFWORD      1
-#define DELMODE_RESTOFCONTENT   2
+enum class DeleteMode {
+    Simple, RestOfWord, RestOfContent
+};
 
 #define CHAR_NORMAL            0x00
 #define CHAR_KANA              0x01
