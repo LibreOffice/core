@@ -44,7 +44,6 @@ public:
 
     explicit WrappedDataCaptionProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
                                         tSeriesOrDiagramPropertyType ePropertyType );
-    virtual ~WrappedDataCaptionProperty() override;
 };
 
 namespace
@@ -126,9 +125,6 @@ WrappedDataCaptionProperty::WrappedDataCaptionProperty(
     , tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< sal_Int32 >( "DataCaption"
             , uno::makeAny( sal_Int32(0) ), spChart2ModelContact, ePropertyType )
-{
-}
-WrappedDataCaptionProperty::~WrappedDataCaptionProperty()
 {
 }
 

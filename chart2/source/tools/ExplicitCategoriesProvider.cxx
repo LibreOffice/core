@@ -226,8 +226,6 @@ public:
         : m_rSplitCategoriesList( rSplitCategoriesList )
         , mrModel( rModel )
     {}
-    virtual ~SplitCategoriesProvider_ForLabeledDataSequences() override
-    {}
 
     virtual sal_Int32 getLevelCount() const override;
     virtual uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const override;

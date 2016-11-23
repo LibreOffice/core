@@ -45,7 +45,6 @@ class DocumentChartTypeTemplateProvider : public ChartTypeTemplateProvider
 public:
     explicit DocumentChartTypeTemplateProvider(
         const Reference< chart2::XChartDocument > & xDoc );
-    virtual ~DocumentChartTypeTemplateProvider() override;
 
     // ____ ChartTypeTemplateProvider ____
     virtual Reference< chart2::XChartTypeTemplate > getCurrentTemplate() const override;
@@ -71,9 +70,6 @@ DocumentChartTypeTemplateProvider::DocumentChartTypeTemplateProvider(
         }
     }
 }
-
-DocumentChartTypeTemplateProvider::~DocumentChartTypeTemplateProvider()
-{}
 
 Reference< chart2::XChartTypeTemplate > DocumentChartTypeTemplateProvider::getCurrentTemplate() const
 {

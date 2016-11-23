@@ -52,7 +52,6 @@ public:
             , m_aOwnInnerName(rInnerName)
     {
     }
-    virtual ~WrappedSplineProperty() override {};
 
     bool detectInnerValue( PROPERTYTYPE& rValue, bool& rHasAmbiguousValue ) const
     {
@@ -162,7 +161,6 @@ class WrappedSplineTypeProperty : public WrappedSplineProperty< sal_Int32 >
 {
 public:
     explicit WrappedSplineTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
-    virtual ~WrappedSplineTypeProperty() override;
 
     virtual css::uno::Any convertInnerToOuterValue( const css::uno::Any& rInnerValue ) const override;
     virtual css::uno::Any convertOuterToInnerValue( const css::uno::Any& rOuterValue ) const override;
@@ -221,10 +219,6 @@ void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty
 
 WrappedSplineTypeProperty::WrappedSplineTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
     : WrappedSplineProperty<sal_Int32>(CHART_UNONAME_SPLINE_TYPE, CHART_UNONAME_CURVE_STYLE, uno::makeAny(sal_Int32(0)), spChart2ModelContact )
-{
-}
-
-WrappedSplineTypeProperty::~WrappedSplineTypeProperty()
 {
 }
 

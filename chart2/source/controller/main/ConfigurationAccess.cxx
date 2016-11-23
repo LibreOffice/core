@@ -47,7 +47,6 @@ private:
 
 public:
     CalcConfigItem();
-    virtual ~CalcConfigItem() override;
 
     FieldUnit getFieldUnit();
     virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) override;
@@ -55,10 +54,6 @@ public:
 
 CalcConfigItem::CalcConfigItem()
     : ConfigItem( OUString( "Office.Calc/Layout" ))
-{
-}
-
-CalcConfigItem::~CalcConfigItem()
 {
 }
 

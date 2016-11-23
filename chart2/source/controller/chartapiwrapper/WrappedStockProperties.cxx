@@ -41,7 +41,6 @@ public:
     explicit WrappedStockProperty( const OUString& rOuterName
         , const css::uno::Any& rDefaulValue
         , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact );
-    virtual ~WrappedStockProperty() override;
 
     void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                     throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -64,9 +63,6 @@ WrappedStockProperty::WrappedStockProperty( const OUString& rOuterName
         , m_spChart2ModelContact(spChart2ModelContact)
         , m_aOuterValue()
         , m_aDefaultValue(rDefaulValue)
-{
-}
-WrappedStockProperty::~WrappedStockProperty()
 {
 }
 
@@ -117,7 +113,6 @@ class WrappedVolumeProperty : public WrappedStockProperty
 {
 public:
     explicit WrappedVolumeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
-    virtual ~WrappedVolumeProperty() override;
 
     css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                             throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -127,10 +122,6 @@ public:
 
 WrappedVolumeProperty::WrappedVolumeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
         : WrappedStockProperty( "Volume", uno::makeAny(false) , spChart2ModelContact )
-{
-}
-
-WrappedVolumeProperty::~WrappedVolumeProperty()
 {
 }
 
@@ -189,7 +180,6 @@ class WrappedUpDownProperty : public WrappedStockProperty
 {
 public:
     explicit WrappedUpDownProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
-    virtual ~WrappedUpDownProperty() override;
 
     css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                             throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -199,10 +189,6 @@ public:
 
 WrappedUpDownProperty::WrappedUpDownProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
         : WrappedStockProperty( "UpDown", uno::makeAny(false) , spChart2ModelContact )
-{
-}
-
-WrappedUpDownProperty::~WrappedUpDownProperty()
 {
 }
 

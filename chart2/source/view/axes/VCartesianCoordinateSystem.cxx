@@ -41,9 +41,6 @@ public:
         : m_aTextSequence( rTextSequence )
     {
     }
-    virtual ~TextualDataProvider() override
-    {
-    }
 
     //XTextualDataSequence
     virtual uno::Sequence< OUString > SAL_CALL getTextualData()

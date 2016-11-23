@@ -258,7 +258,6 @@ class WrappedAttachedAxisProperty : public ::chart::WrappedProperty
 {
 public:
     explicit WrappedAttachedAxisProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
-    virtual ~WrappedAttachedAxisProperty() override;
 
     virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -277,10 +276,6 @@ WrappedAttachedAxisProperty::WrappedAttachedAxisProperty(
                 const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact )
                 : WrappedProperty("Axis",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
-{
-}
-
-WrappedAttachedAxisProperty::~WrappedAttachedAxisProperty()
 {
 }
 
@@ -330,7 +325,6 @@ class WrappedSegmentOffsetProperty : public ::chart::WrappedProperty
 {
 public:
     WrappedSegmentOffsetProperty();
-    virtual ~WrappedSegmentOffsetProperty() override;
 
 protected:
     virtual Any convertInnerToOuterValue( const Any& rInnerValue ) const override;
@@ -339,9 +333,6 @@ protected:
 
 WrappedSegmentOffsetProperty::WrappedSegmentOffsetProperty() :
         WrappedProperty("SegmentOffset","Offset")
-{}
-
-WrappedSegmentOffsetProperty::~WrappedSegmentOffsetProperty()
 {}
 
 Any WrappedSegmentOffsetProperty::convertInnerToOuterValue( const Any& rInnerValue ) const
@@ -372,7 +363,6 @@ class WrappedLineColorProperty : public WrappedSeriesAreaOrLineProperty
 {
 public:
     explicit WrappedLineColorProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
-    virtual ~WrappedLineColorProperty() override;
 
     virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -395,10 +385,6 @@ WrappedLineColorProperty::WrappedLineColorProperty(
                 , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
                 , m_aDefaultValue(uno::makeAny(sal_Int32( 0x0099ccff )))  // blue 8
                 , m_aOuterValue(m_aDefaultValue)
-{
-}
-
-WrappedLineColorProperty::~WrappedLineColorProperty()
 {
 }
 
@@ -433,7 +419,6 @@ class WrappedLineStyleProperty : public WrappedSeriesAreaOrLineProperty
 {
 public:
     explicit WrappedLineStyleProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
-    virtual ~WrappedLineStyleProperty() override;
 
     virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -453,10 +438,6 @@ WrappedLineStyleProperty::WrappedLineStyleProperty(
                 , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
                 , m_aDefaultValue(uno::makeAny(drawing::LineStyle_SOLID))
                 , m_aOuterValue(m_aDefaultValue)
-{
-}
-
-WrappedLineStyleProperty::~WrappedLineStyleProperty()
 {
 }
 

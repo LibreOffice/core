@@ -50,7 +50,6 @@ class WrappedTitleStringProperty : public WrappedProperty
 {
 public:
     explicit WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext );
-    virtual ~WrappedTitleStringProperty() override;
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException) override;
@@ -66,9 +65,6 @@ protected:
 WrappedTitleStringProperty::WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext )
     : ::chart::WrappedProperty( "String", OUString() )
     , m_xContext( xContext )
-{
-}
-WrappedTitleStringProperty::~WrappedTitleStringProperty()
 {
 }
 
@@ -111,14 +107,10 @@ class WrappedStackedTextProperty : public WrappedProperty
 {
 public:
     WrappedStackedTextProperty();
-    virtual ~WrappedStackedTextProperty() override;
 };
 
 WrappedStackedTextProperty::WrappedStackedTextProperty()
     : ::chart::WrappedProperty( "StackedText", "StackCharacters" )
-{
-}
-WrappedStackedTextProperty::~WrappedStackedTextProperty()
 {
 }
 

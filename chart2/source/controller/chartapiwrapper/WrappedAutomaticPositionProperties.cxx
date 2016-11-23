@@ -37,7 +37,6 @@ class WrappedAutomaticPositionProperty : public WrappedProperty
 {
 public:
     WrappedAutomaticPositionProperty();
-    virtual ~WrappedAutomaticPositionProperty() override;
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException) override;
@@ -49,9 +48,6 @@ public:
 
 WrappedAutomaticPositionProperty::WrappedAutomaticPositionProperty()
     : ::chart::WrappedProperty( "AutomaticPosition" , OUString() )
-{
-}
-WrappedAutomaticPositionProperty::~WrappedAutomaticPositionProperty()
 {
 }
 

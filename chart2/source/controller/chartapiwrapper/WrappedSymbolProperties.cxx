@@ -62,7 +62,6 @@ public:
 
     explicit WrappedSymbolTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
                                        tSeriesOrDiagramPropertyType ePropertyType);
-    virtual ~WrappedSymbolTypeProperty() override;
 };
 
 class WrappedSymbolBitmapURLProperty : public WrappedSeriesOrDiagramProperty< OUString >
@@ -73,7 +72,6 @@ public:
 
     explicit WrappedSymbolBitmapURLProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
                                             tSeriesOrDiagramPropertyType ePropertyType);
-    virtual ~WrappedSymbolBitmapURLProperty() override;
 };
 
 class WrappedSymbolSizeProperty : public WrappedSeriesOrDiagramProperty< awt::Size >
@@ -86,7 +84,6 @@ public:
 
     explicit WrappedSymbolSizeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
                                        tSeriesOrDiagramPropertyType ePropertyType);
-    virtual ~WrappedSymbolSizeProperty() override;
 };
 
 class WrappedSymbolAndLinesProperty : public WrappedSeriesOrDiagramProperty< bool >
@@ -99,7 +96,6 @@ public:
 
     explicit WrappedSymbolAndLinesProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
                                            tSeriesOrDiagramPropertyType ePropertyType);
-    virtual ~WrappedSymbolAndLinesProperty() override;
 };
 
 namespace
@@ -222,9 +218,6 @@ WrappedSymbolTypeProperty::WrappedSymbolTypeProperty(
             , ePropertyType )
 {
 }
-WrappedSymbolTypeProperty::~WrappedSymbolTypeProperty()
-{
-}
 
 sal_Int32 WrappedSymbolTypeProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
 {
@@ -304,10 +297,6 @@ WrappedSymbolBitmapURLProperty::WrappedSymbolBitmapURLProperty(
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< OUString >( "SymbolBitmapURL"
             , uno::makeAny( OUString() ), spChart2ModelContact, ePropertyType  )
-{
-}
-
-WrappedSymbolBitmapURLProperty::~WrappedSymbolBitmapURLProperty()
 {
 }
 
@@ -435,10 +424,6 @@ WrappedSymbolSizeProperty::WrappedSymbolSizeProperty(
 {
 }
 
-WrappedSymbolSizeProperty::~WrappedSymbolSizeProperty()
-{
-}
-
 awt::Size WrappedSymbolSizeProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
 {
     awt::Size aRet;
@@ -494,10 +479,6 @@ WrappedSymbolAndLinesProperty::WrappedSymbolAndLinesProperty(
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< bool >( "Lines"
             , uno::makeAny( true ), spChart2ModelContact, ePropertyType  )
-{
-}
-
-WrappedSymbolAndLinesProperty::~WrappedSymbolAndLinesProperty()
 {
 }
 

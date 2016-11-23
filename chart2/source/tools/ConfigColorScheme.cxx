@@ -53,7 +53,6 @@ class ChartConfigItem : public ::utl::ConfigItem
 {
 public:
     explicit ChartConfigItem( ConfigColorScheme & rListener );
-    virtual ~ChartConfigItem() override {}
 
     void addPropertyNotification( const OUString & rPropertyName );
     uno::Any getProperty( const OUString & aPropertyName );

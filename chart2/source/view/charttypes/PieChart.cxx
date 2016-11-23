@@ -98,7 +98,6 @@ class PiePositionHelper : public PolarPlottingPositionHelper
 {
 public:
     PiePositionHelper( NormalAxis eNormalAxis, double fAngleDegreeOffset );
-    virtual ~PiePositionHelper() override;
 
     bool    getInnerAndOuterRadius( double fCategoryX, double& fLogicInnerRadius, double& fLogicOuterRadius, bool bUseRings, double fMaxOffset ) const;
 
@@ -113,10 +112,6 @@ PiePositionHelper::PiePositionHelper( NormalAxis eNormalAxis, double fAngleDegre
 {
     m_fRadiusOffset = 0.0;
     m_fAngleDegreeOffset = fAngleDegreeOffset;
-}
-
-PiePositionHelper::~PiePositionHelper()
-{
 }
 
 /** Compute the outer and the inner radius for the current ring (not for the

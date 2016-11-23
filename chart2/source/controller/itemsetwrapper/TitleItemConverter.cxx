@@ -56,7 +56,6 @@ public:
         SfxItemPool & rItemPool,
         const awt::Size* pRefSize,
         const uno::Reference< beans::XPropertySet > & xParentProp );
-    virtual ~FormattedStringsConverter() override;
 
 protected:
     virtual const sal_uInt16 * GetWhichPairs() const override;
@@ -83,10 +82,6 @@ FormattedStringsConverter::FormattedStringsConverter(
                 m_aConverters.push_back( new CharacterPropertyItemConverter( xProp, rItemPool ));
         }
     }
-}
-
-FormattedStringsConverter::~FormattedStringsConverter()
-{
 }
 
 const sal_uInt16 * FormattedStringsConverter::GetWhichPairs() const
