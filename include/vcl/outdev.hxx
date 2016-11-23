@@ -141,7 +141,6 @@ enum class SalLayoutFlags
     EnableLigatures         = 0x0200,
     SubstituteDigits        = 0x0400,
     KashidaJustification    = 0x0800,
-    DisableGlyphProcessing  = 0x1000,
     ForFallback             = 0x2000,
     DrawBullet              = 0x4000,
 };
