@@ -64,7 +64,6 @@ class CommonSalLayout : public GenericSalLayout
 public:
 #if defined(_WIN32)
     explicit                CommonSalLayout(HDC, WinFontInstance&, const WinFontFace&);
-    void                    InitFont() const override { SelectObject(mhDC, mhFont); };
     const FontSelectPattern& getFontSelData() const { return mrFontSelData; };
 #elif defined(MACOSX) || defined(IOS)
     explicit                CommonSalLayout(const CoreTextStyle&);
@@ -74,6 +73,7 @@ public:
     const FreetypeFont&     getFontData() const { return mrFreetypeFont; };
 #endif
 
+    virtual void            InitFont() const override;
     void                    SetNeedFallback(ImplLayoutArgs&, sal_Int32, bool);
     void                    AdjustLayout(ImplLayoutArgs&) override;
     bool                    LayoutText(ImplLayoutArgs&) override;
