@@ -20,12 +20,10 @@
 #include <cstdarg>
 
 #include <unotxdoc.hxx>
-#include <com/sun/star/text/NotePrintMode.hpp>
 #include <sfx2/app.hxx>
 #include <sfx2/printer.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
@@ -40,7 +38,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -87,7 +84,6 @@
 #include <mmconfigitem.hxx>
 #include <sfx2/request.hxx>
 #include <hintids.hxx>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

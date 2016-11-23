@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>

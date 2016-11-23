@@ -29,13 +29,6 @@
 #include <vcl/combobox.hxx>
 
 #include <vcl/menubtn.hxx>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/container/XElementAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/XAutoTextContainer2.hpp>
 
 #include <rtl/ustring.hxx>

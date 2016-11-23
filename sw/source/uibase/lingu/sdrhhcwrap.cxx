@@ -26,7 +26,6 @@
 #include <sfx2/printer.hxx>
 #include <svx/svdmodel.hxx>
 #include <editeng/langitem.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <linguistic/lngprops.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <svx/svdview.hxx>

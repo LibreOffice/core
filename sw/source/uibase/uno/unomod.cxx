@@ -32,7 +32,6 @@
 #include <viewopt.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/text/NotePrintMode.hpp>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

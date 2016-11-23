@@ -18,8 +18,6 @@
  */
 
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
-#include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>

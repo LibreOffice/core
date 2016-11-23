@@ -22,8 +22,8 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <sfx2/objface.hxx>

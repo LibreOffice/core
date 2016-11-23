@@ -52,7 +52,6 @@
 #include <svx/modctrl.hxx>
 #include <sfx2/emojipopup.hxx>
 #include <com/sun/star/scanner/ScannerManager.hpp>
-#include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <comphelper/processfactory.hxx>
 #include <docsh.hxx>

@@ -38,7 +38,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/protitem.hxx>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <fmthdft.hxx>
 #include <fmtanchr.hxx>

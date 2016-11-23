@@ -19,8 +19,6 @@
 
 #include <hintids.hxx>
 #include <com/sun/star/util/SearchOptions2.hpp>
-#include <com/sun/star/util/SearchFlags.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <comphelper/string.hxx>
 #include <unotools/tempfile.hxx>
