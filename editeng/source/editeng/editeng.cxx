@@ -963,7 +963,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     bool bAllowIdle = true;
     bool bReadOnly  = pEditView->IsReadOnly();
 
-    sal_uInt16 nNewCursorFlags = 0;
+    GetCursorFlags nNewCursorFlags = GetCursorFlags::NONE;
     bool bSetCursorFlags = true;
 
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
@@ -1096,9 +1096,9 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
 
                     bMoved = true;
                     if ( nCode == KEY_HOME )
-                        nNewCursorFlags |= GETCRSR_STARTOFLINE;
+                        nNewCursorFlags |= GetCursorFlags::StartOfLine;
                     else if ( nCode == KEY_END )
-                        nNewCursorFlags |= GETCRSR_ENDOFLINE;
+                        nNewCursorFlags |= GetCursorFlags::EndOfLine;
 
                 }
 #if OSL_DEBUG_LEVEL > 1
@@ -2388,8 +2388,8 @@ Rectangle EditEngine::GetCharacterBounds( const EPosition& rPos ) const
     // Check against index, not paragraph
     if ( pNode && ( rPos.nIndex < pNode->Len() ) )
     {
-        aBounds = pImpEditEngine->PaMtoEditCursor( EditPaM( pNode, rPos.nIndex ), GETCRSR_TXTONLY );
-        Rectangle aR2 = pImpEditEngine->PaMtoEditCursor( EditPaM( pNode, rPos.nIndex+1 ), GETCRSR_TXTONLY|GETCRSR_ENDOFLINE );
+        aBounds = pImpEditEngine->PaMtoEditCursor( EditPaM( pNode, rPos.nIndex ), GetCursorFlags::TextOnly );
+        Rectangle aR2 = pImpEditEngine->PaMtoEditCursor( EditPaM( pNode, rPos.nIndex+1 ), GetCursorFlags::TextOnly|GetCursorFlags::EndOfLine );
         if ( aR2.Right() > aBounds.Right() )
             aBounds.Right() = aR2.Right();
     }

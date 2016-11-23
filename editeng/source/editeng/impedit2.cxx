@@ -481,7 +481,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             const EditLine& rLine = pParaPortion->GetLines()[nLine];
             if ( nInputEnd > rLine.GetEnd() )
                 nInputEnd = rLine.GetEnd();
-            Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), GETCRSR_ENDOFLINE );
+            Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), GetCursorFlags::EndOfLine );
             Rectangle aRect = pView->GetImpEditView()->GetWindowPos( aR1 );
             pView->GetWindow()->SetCursorRect( &aRect, aR2.Left()-aR1.Right() );
         }
@@ -917,7 +917,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
     const EditLine& rLine = pParaPortion->GetLines()[nLine];
     bool bEmptyLine = rLine.GetStart() == rLine.GetEnd();
 
-    pEditView->pImpEditView->nExtraCursorFlags = 0;
+    pEditView->pImpEditView->nExtraCursorFlags = GetCursorFlags::NONE;
 
     if ( !bEmptyLine )
     {
@@ -972,7 +972,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
     const EditLine& rLine = pParaPortion->GetLines()[nLine];
     bool bEmptyLine = rLine.GetStart() == rLine.GetEnd();
 
-    pEditView->pImpEditView->nExtraCursorFlags = 0;
+    pEditView->pImpEditView->nExtraCursorFlags = GetCursorFlags::NONE;
 
     bool bParaRTL = IsRightToLeft( nPara );
 
@@ -2967,7 +2967,7 @@ EditPaM ImpEditEngine::InsertLineBreak(const EditSelection& aCurSel)
 
 //  Helper functions
 
-Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, sal_uInt16 nFlags )
+Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags )
 {
     OSL_ENSURE( GetUpdateMode(), "Must not be reached when Update=FALSE: PaMtoEditCursor" );
 
@@ -4117,13 +4117,13 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
     }
 }
 
-Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex, sal_uInt16 nFlags )
+Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex, GetCursorFlags nFlags )
 {
     OSL_ENSURE( pPortion->IsVisible(), "Why GetEditCursor() for an invisible paragraph?" );
     OSL_ENSURE( IsFormatted() || GetTextRanger(), "GetEditCursor: Not formatted" );
 
     /*
-     GETCRSR_ENDOFLINE: If after the last character of a wrapped line, remaining
+     GetCursorFlags::EndOfLine: If after the last character of a wrapped line, remaining
      at the end of the line, not the beginning of the next one.
      Purpose:   - END => really after the last character
                 - Selection....
@@ -4141,7 +4141,7 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex,
     if (nLineCount == 0)
         return Rectangle();
     const EditLine* pLine = nullptr;
-    bool bEOL = ( nFlags & GETCRSR_ENDOFLINE ) != 0;
+    bool bEOL( nFlags & GetCursorFlags::EndOfLine );
     for (sal_Int32 nLine = 0; nLine < nLineCount; ++nLine)
     {
         const EditLine& rTmpLine = pPortion->GetLines()[nLine];
@@ -4176,24 +4176,24 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex,
     // Search within the line...
     long nX;
 
-    if ( ( nIndex == pLine->GetStart() ) && ( nFlags & GETCRSR_STARTOFLINE ) )
+    if ( ( nIndex == pLine->GetStart() ) && ( nFlags & GetCursorFlags::StartOfLine ) )
     {
         Range aXRange = GetLineXPosStartEnd( pPortion, pLine );
         nX = !IsRightToLeft( GetEditDoc().GetPos( pPortion->GetNode() ) ) ? aXRange.Min() : aXRange.Max();
     }
-    else if ( ( nIndex == pLine->GetEnd() ) && ( nFlags & GETCRSR_ENDOFLINE ) )
+    else if ( ( nIndex == pLine->GetEnd() ) && ( nFlags & GetCursorFlags::EndOfLine ) )
     {
         Range aXRange = GetLineXPosStartEnd( pPortion, pLine );
         nX = !IsRightToLeft( GetEditDoc().GetPos( pPortion->GetNode() ) ) ? aXRange.Max() : aXRange.Min();
     }
     else
     {
-        nX = GetXPos( pPortion, pLine, nIndex, ( nFlags & GETCRSR_PREFERPORTIONSTART ) != 0 );
+        nX = GetXPos( pPortion, pLine, nIndex, bool( nFlags & GetCursorFlags::PreferPortionStart ) );
     }
 
     aEditCursor.Left() = aEditCursor.Right() = nX;
 
-    if ( nFlags & GETCRSR_TXTONLY )
+    if ( nFlags & GetCursorFlags::TextOnly )
         aEditCursor.Top() = aEditCursor.Bottom() - pLine->GetTxtHeight() + 1;
     else
         aEditCursor.Top() = aEditCursor.Bottom() - std::min( pLine->GetTxtHeight(), pLine->GetHeight() ) + 1;
