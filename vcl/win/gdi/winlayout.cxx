@@ -3606,7 +3606,7 @@ void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout, HDC hDC, boo
     assert(!result);
 }
 
-void WinSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
+void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
 {
     HDC hDC = getHDC();
     bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
