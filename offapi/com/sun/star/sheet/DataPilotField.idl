@@ -98,7 +98,6 @@ published service DataPilotField
      */
     [property, optional] sequence<GeneralFunction> Subtotals;
 
-
     /** specifies the selected page which is used to filter the data pilot.
      */
     [property, optional] string SelectedPage;
@@ -175,6 +174,37 @@ published service DataPilotField
     /** specifies whether to show this field also if it is empty or not.
      */
     [property, optional] boolean ShowEmpty;
+
+    /** specifies the function used to calculate results for this field.
+
+        <p>For column and row fields, this is the function for subtotals
+        (GeneralFunction2::NONE means no subtotals).
+        For data fields, this is the function shown in the data pilot
+        table.</p>
+
+        @since LibreOffice 5.3
+     */
+
+    [property, optional] short Function2;
+
+    /** specifies the functions used to calculate subtotals for this field.
+
+        <p>This property is supported by column and row fields only.</p>
+
+        <p>An empty sequence means no subtotals. The same effect can be
+        achieved by setting the property #Function2 to the
+        value GeneralFunction::NONE. If the length of the
+        sequence is greater then 1, then the sequence MUST NOT contain one of
+        the values GeneralFunction2::NONE or
+        GeneralFunction2::AUTO.</p>
+
+        <p>The order of the functions in this sequence is reflected in the
+        DataPilot table. Multiple entries of the same function are ignored
+        when setting the property.</p>
+
+        @since LibreOffice 5.3
+     */
+    [property, optional] sequence<short> Subtotals2;
 };
 
 

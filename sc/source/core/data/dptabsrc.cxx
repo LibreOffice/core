@@ -54,6 +54,7 @@
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
+#include <com/sun/star/sheet/GeneralFunction2.hpp>
 
 #include <comphelper/string.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -798,11 +799,11 @@ void ScDPSource::CreateRes_Impl()
         // Get function for each data field.
         long nDimIndex = *it;
         ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nDimIndex);
-        sheet::GeneralFunction eUser = (sheet::GeneralFunction)pDim->getFunction();
-        if (eUser == sheet::GeneralFunction_AUTO)
+        sal_Int16 eUser = static_cast<sal_Int16>(pDim->getFunction());
+        if (eUser == sheet::GeneralFunction2::AUTO)
         {
             //TODO: test for numeric data
-            eUser = sheet::GeneralFunction_SUM;
+            eUser = sheet::GeneralFunction2::SUM;
         }
 
         // Map UNO's enum to internal enum ScSubTotalFunc.
@@ -1465,6 +1466,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         { OUString(SC_UNO_DP_FILTER),   0,  cppu::UnoType<uno::Sequence<sheet::TableFilterField>>::get(), 0, 0 },
         { OUString(SC_UNO_DP_FLAGS),    0,  cppu::UnoType<sal_Int32>::get(),                beans::PropertyAttribute::READONLY, 0 },
         { OUString(SC_UNO_DP_FUNCTION), 0,  cppu::UnoType<sheet::GeneralFunction>::get(),   0, 0 },
+        { OUString(SC_UNO_DP_FUNCTION2), 0,  cppu::UnoType<sal_Int16>::get(),   0, 0 },
         { OUString(SC_UNO_DP_ISDATALAYOUT), 0,  cppu::UnoType<bool>::get(),                      beans::PropertyAttribute::READONLY, 0 },
         { OUString(SC_UNO_DP_NUMBERFO), 0,  cppu::UnoType<sal_Int32>::get(),                beans::PropertyAttribute::READONLY, 0 },
         { OUString(SC_UNO_DP_ORIENTATION), 0,  cppu::UnoType<sheet::DataPilotFieldOrientation>::get(), 0, 0 },
@@ -1503,6 +1505,12 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
         sheet::GeneralFunction eEnum;
         if (aValue >>= eEnum)
             setFunction( sal::static_int_cast<sal_uInt16>(eEnum) );
+    }
+    else if ( aPropertyName == SC_UNO_DP_FUNCTION2 )
+    {
+        sal_Int16 eEnum;
+        if (aValue >>= eEnum)
+            setFunction( eEnum );
     }
     else if ( aPropertyName == SC_UNO_DP_REFVALUE )
         aValue >>= aReferenceValue;
@@ -1578,7 +1586,21 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
     }
     else if ( aPropertyName == SC_UNO_DP_FUNCTION )
     {
-        sheet::GeneralFunction eVal = (sheet::GeneralFunction)getFunction();
+        sheet::GeneralFunction eVal;
+        sal_Int16 nVal = getFunction();
+        if (nVal == sheet::GeneralFunction2::MEDIAN)
+        {
+            eVal = sheet::GeneralFunction_NONE;
+        }
+        else
+        {
+            eVal = static_cast<sheet::GeneralFunction>(getFunction());
+        }
+        aRet <<= eVal;
+    }
+    else if ( aPropertyName == SC_UNO_DP_FUNCTION2 )
+    {
+        sal_Int16 eVal = getFunction();
         aRet <<= eVal;
     }
     else if ( aPropertyName == SC_UNO_DP_REFVALUE )
@@ -1588,9 +1610,9 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
     else if ( aPropertyName == SC_UNO_DP_NUMBERFO )
     {
         sal_Int32 nFormat = 0;
-        sheet::GeneralFunction eFunc = (sheet::GeneralFunction)getFunction();
+        sal_Int16 eFunc = getFunction();
         // #i63745# don't use source format for "count"
-        if ( eFunc != sheet::GeneralFunction_COUNT && eFunc != sheet::GeneralFunction_COUNTNUMS )
+        if ( eFunc != sheet::GeneralFunction2::COUNT && eFunc != sheet::GeneralFunction2::COUNTNUMS )
             nFormat = pSource->GetData()->GetNumberFormat( ( nSourceDim >= 0 ) ? nSourceDim : nDim );
 
         switch ( aReferenceValue.ReferenceType )
@@ -2125,13 +2147,13 @@ void SAL_CALL ScDPLevel::setName( const OUString& /* rNewName */ ) throw(uno::Ru
     OSL_FAIL("not implemented");        //TODO: exception?
 }
 
-uno::Sequence<sheet::GeneralFunction> ScDPLevel::getSubTotals() const
+uno::Sequence<sal_Int16> ScDPLevel::getSubTotals() const
 {
     //TODO: separate functions for settings and evaluation?
 
     long nSrcDim = pSource->GetSourceDim( nDim );
     if ( !pSource->SubTotalAllowed( nSrcDim ) )
-        return uno::Sequence<sheet::GeneralFunction>(0);
+        return uno::Sequence<sal_Int16>(0);
 
     return aSubTotals;
 }
@@ -2152,6 +2174,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
         { OUString(SC_UNO_DP_REPEATITEMLABELS), 0, cppu::UnoType<bool>::get(),                                   0, 0 },
         { OUString(SC_UNO_DP_SORTING),  0,  cppu::UnoType<sheet::DataPilotFieldSortInfo>::get(),         0, 0 },
         { OUString(SC_UNO_DP_SUBTOTAL), 0,  cppu::UnoType<uno::Sequence<sheet::GeneralFunction>>::get(), 0, 0 },
+        { OUString(SC_UNO_DP_SUBTOTAL2), 0, cppu::UnoType<uno::Sequence<sal_Int16>>::get(), 0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -2169,6 +2192,16 @@ void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const 
     else if ( aPropertyName == SC_UNO_DP_REPEATITEMLABELS )
         bRepeatItemLabels = lcl_GetBoolFromAny(aValue);
     else if ( aPropertyName == SC_UNO_DP_SUBTOTAL )
+    {
+        uno::Sequence<sheet::GeneralFunction> aSeq;
+        aValue >>= aSeq;
+        aSubTotals.realloc(aSeq.getLength());
+        for (sal_Int32 nIndex = 0; nIndex < aSeq.getLength(); nIndex++)
+        {
+            aSubTotals[nIndex] = static_cast<sal_Int16>(aSeq[nIndex]);
+        }
+    }
+    else if ( aPropertyName == SC_UNO_DP_SUBTOTAL2 )
         aValue >>= aSubTotals;
     else if ( aPropertyName == SC_UNO_DP_SORTING )
         aValue >>= aSortInfo;
@@ -2193,7 +2226,22 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
         aRet <<= bRepeatItemLabels;
     else if ( aPropertyName == SC_UNO_DP_SUBTOTAL )
     {
-        uno::Sequence<sheet::GeneralFunction> aSeq = getSubTotals();        //TODO: avoid extra copy?
+        uno::Sequence<sal_Int16> aSeq = getSubTotals();
+        uno::Sequence<sheet::GeneralFunction> aNewSeq;
+        aNewSeq.realloc(aSeq.getLength());
+        for (sal_Int32 nIndex = 0; nIndex < aSeq.getLength(); nIndex++)
+        {
+            if (aSeq[nIndex] == sheet::GeneralFunction2::MEDIAN)
+                aNewSeq[nIndex] = sheet::GeneralFunction_NONE;
+            else
+                aNewSeq[nIndex] = static_cast<sheet::GeneralFunction>(aSeq[nIndex]);
+        }
+
+        aRet <<= aNewSeq;
+    }
+    else if ( aPropertyName == SC_UNO_DP_SUBTOTAL2 )
+    {
+        uno::Sequence<sal_Int16> aSeq = getSubTotals();        //TODO: avoid extra copy?
         aRet <<= aSeq;
     }
     else if ( aPropertyName == SC_UNO_DP_SORTING )

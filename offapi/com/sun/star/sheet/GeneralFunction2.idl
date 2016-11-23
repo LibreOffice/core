@@ -1,0 +1,111 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef __com_sun_star_sheet_GeneralFunction2_idl__
+#define __com_sun_star_sheet_GeneralFunction2_idl__
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/** used to specify a function to be calculated from values.
+    @since LibreOffice 5.3
+ */
+published constants GeneralFunction2
+{
+
+    /** nothing is calculated.
+     */
+    const short NONE = 0;
+
+
+    /** function is determined automatically.
+
+        <p>If the values are all numerical, SUM is used, otherwise COUNT.</p>
+     */
+    const short AUTO = 1;
+
+
+    /** sum of all numerical values is calculated.
+     */
+    const short SUM = 2;
+
+
+    /** all values, including non-numerical values, are counted.
+     */
+    const short COUNT = 3;
+
+
+    /** average of all numerical values is calculated.
+     */
+    const short AVERAGE = 4;
+
+
+    /** maximum value of all numerical values is calculated.
+     */
+    const short MAX = 5;
+
+
+    /** minimum value of all numerical values is calculated.
+     */
+    const short MIN = 6;
+
+
+    /** product of all numerical values is calculated.
+     */
+    const short PRODUCT = 7;
+
+
+    /** numerical values are counted.
+     */
+    const short COUNTNUMS = 8;
+
+
+    /** standard deviation is calculated based on a sample.
+     */
+    const short STDEV = 9;
+
+
+    /** standard deviation is calculated based on the entire population.
+     */
+    const short STDEVP = 10;
+
+
+    /** variance is calculated based on a sample.
+     */
+    const short VAR = 11;
+
+
+    /** variance is calculated based on the entire population.
+     */
+    const short VARP = 12;
+
+    /**
+    *   median of all numerical values is calculated.
+    *   @since LibreOffice 5.3
+    */
+    const short MEDIAN = 13;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

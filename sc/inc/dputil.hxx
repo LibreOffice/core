@@ -51,6 +51,7 @@ public:
     static OUString getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc);
 
     static ScSubTotalFunc toSubTotalFunc(css::sheet::GeneralFunction eGenFunc);
+    static ScSubTotalFunc toSubTotalFunc(sal_Int16 eGenFunc);
 };
 
 #endif

@@ -51,6 +51,7 @@
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#include <com/sun/star/sheet/GeneralFunction2.hpp>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -431,8 +432,6 @@ void ScXMLExportDataPilot::WriteLayoutInfo(ScDPSaveDimension* pDim)
 
 void ScXMLExportDataPilot::WriteSubTotals(ScDPSaveDimension* pDim)
 {
-    using sheet::GeneralFunction;
-
     sal_Int32 nSubTotalCount = pDim->GetSubTotalsCount();
     const OUString* pLayoutName = nullptr;
     if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
@@ -446,10 +445,10 @@ void ScXMLExportDataPilot::WriteSubTotals(ScDPSaveDimension* pDim)
         for (sal_Int32 nSubTotal = 0; nSubTotal < nSubTotalCount; nSubTotal++)
         {
             OUString sFunction;
-            GeneralFunction nFunc = static_cast<GeneralFunction>(pDim->GetSubTotalFunc(nSubTotal));
+            sal_Int16 nFunc = static_cast<sal_Int16>(pDim->GetSubTotalFunc(nSubTotal));
             ScXMLConverter::GetStringFromFunction( sFunction, nFunc);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sFunction);
-            if (pLayoutName && nFunc == sheet::GeneralFunction_AUTO)
+            if (pLayoutName && nFunc == sheet::GeneralFunction2::AUTO)
                 rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
             SvXMLElementExport aElemST(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTAL, true, true);
         }
@@ -699,8 +698,7 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
         ::sax::Converter::convertNumber(sBuffer, pDim->GetUsedHierarchy());
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USED_HIERARCHY, sBuffer.makeStringAndClear());
     }
-    ScXMLConverter::GetStringFromFunction( sValueStr,
-        (sheet::GeneralFunction) pDim->GetFunction() );
+    ScXMLConverter::GetStringFromFunction( sValueStr, static_cast<sal_Int16>(pDim->GetFunction()) );
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sValueStr);
 
     if (eOrientation == sheet::DataPilotFieldOrientation_PAGE)

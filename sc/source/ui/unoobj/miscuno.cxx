@@ -56,6 +56,24 @@ bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertyS
     return bRet;
 }
 
+sal_Int16 ScUnoHelpFunctions::GetShortProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
+                                                const OUString& rName, sal_Int16 nDefault )
+{
+    sal_Int16 nRet = nDefault;
+    if ( xProp.is() )
+    {
+        try
+        {
+            xProp->getPropertyValue( rName ) >>= nRet;
+        }
+        catch(uno::Exception&)
+        {
+            // keep default
+        }
+    }
+    return nRet;
+}
+
 sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const OUString& rName )
 {
