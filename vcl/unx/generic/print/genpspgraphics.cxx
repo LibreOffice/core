@@ -724,13 +724,7 @@ void PspFontLayout::DrawText( SalGraphics& ) const
     DrawPrinterLayout(*this, mrPrinterGfx);
 }
 
-void GenPspGraphics::DrawServerFontLayout( const GenericSalLayout& rLayout, const FreetypeFont& /*unused*/ )
-{
-    // print complex text
-    DrawPrinterLayout(rLayout, *m_pPrinterGfx);
-}
-
-void GenPspGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
+void GenPspGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
 {
     DrawPrinterLayout(rLayout, *m_pPrinterGfx);
 }
