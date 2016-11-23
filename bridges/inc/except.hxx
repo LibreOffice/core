@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BRIDGES_INC_EXCEPT_HXX
 #define INCLUDED_BRIDGES_INC_EXCEPT_HXX
 
-#if _MSC_VER >= 1900 // VC 2015 (and later?)
+#if _MSC_VER >= 1900 // VC 2015/2017 (and later?)
 // extern "C" void** __cdecl __current_exception()
 // is defined in MSVS14.0/VC/crt/src/vcruntime/frame.cpp:
 // return &__vcrt_getptd()->_curexception;
