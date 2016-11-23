@@ -30,6 +30,7 @@
 #include <svl/itempool.hxx>
 #include <svl/languageoptions.hxx>
 #include <tools/lineend.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <deque>
 #include <memory>
@@ -342,10 +343,16 @@ enum class DeleteMode {
     Simple, RestOfWord, RestOfContent
 };
 
-#define CHAR_NORMAL            0x00
-#define CHAR_KANA              0x01
-#define CHAR_PUNCTUATIONLEFT   0x02
-#define CHAR_PUNCTUATIONRIGHT  0x04
+enum class AsianCompressionFlags {
+    Normal            = 0x00,
+    Kana              = 0x01,
+    PunctuationLeft   = 0x02,
+    PunctuationRight  = 0x04,
+};
+namespace o3tl {
+    template<> struct typed_flags<AsianCompressionFlags> : is_typed_flags<AsianCompressionFlags, 0x07> {};
+}
+
 
 
 // struct ExtraPortionInfos
@@ -359,7 +366,7 @@ struct ExtraPortionInfo
 
     sal_uInt16  nMaxCompression100thPercent;
 
-    sal_uInt8    nAsianCompressionTypes;
+    AsianCompressionFlags nAsianCompressionTypes;
     bool    bFirstCharIsRightPunktuation;
     bool    bCompressed;
 
