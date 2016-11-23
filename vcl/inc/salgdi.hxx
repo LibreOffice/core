@@ -217,8 +217,7 @@ public:
     virtual bool                GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) = 0;
 
     virtual SalLayout*          GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
-    virtual void                DrawSalLayout( const CommonSalLayout& ) = 0;
-    virtual void                DrawServerFontLayout( const GenericSalLayout&, const FreetypeFont& ) = 0;
+    virtual void                DrawTextLayout( const CommonSalLayout& ) = 0;
 
     virtual bool                supportsOperation( OutDevSupportType ) const = 0;
 
