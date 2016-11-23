@@ -252,13 +252,9 @@ public:
     virtual                 ~FreetypeFontInstance() override;
 
     void                    SetFreetypeFont(FreetypeFont* p);
-    void                    HandleFontOptions();
 
 private:
     FreetypeFont*           mpFreetypeFont;
-    std::shared_ptr<FontConfigFontOptions> mxFontOptions;
-    bool                    mbGotFontOptions;
-
 };
 
 class VCL_DLLPUBLIC ServerFontLayout : public GenericSalLayout
