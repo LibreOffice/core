@@ -499,7 +499,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     SvtPathOptions aPathOpt;
                     ScopedVclPtr<SfxNewFileDialog> pNewFileDlg(
-                        VclPtr<SfxNewFileDialog>::Create(&GetView()->GetViewFrame()->GetWindow(), SFXWB_LOAD_TEMPLATE));
+                        VclPtr<SfxNewFileDialog>::Create(&GetView()->GetViewFrame()->GetWindow(), SfxNewFileDialogMode::LoadTemplate));
                     pNewFileDlg->SetTemplateFlags(nFlags);
 
                     nRet = pNewFileDlg->Execute();
