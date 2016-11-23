@@ -102,11 +102,14 @@ struct SignatureInformation
     OUString ouCertDigest;
     /// A full OOXML signguature for unchanged roundtrip, empty for ODF.
     css::uno::Sequence<sal_Int8> aSignatureBytes;
+    /// For PDF: digest format, from css::xml::crypto::DigestID
+    sal_Int32 nDigestID;
 
     SignatureInformation( sal_Int32 nId )
     {
         nSecurityId = nId;
         nStatus = css::xml::crypto::SecurityOperationStatus_UNKNOWN;
+        nDigestID = 0;
     }
 };
 
