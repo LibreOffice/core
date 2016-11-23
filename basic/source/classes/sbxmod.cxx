@@ -99,7 +99,6 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
 
 public:
     explicit DocObjectWrapper( SbModule* pMod );
-    virtual ~DocObjectWrapper() override;
 
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
@@ -183,10 +182,6 @@ DocObjectWrapper::release() throw ()
 {
     SAL_INFO("basic","DocObjectWrapper::release("<< OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr() << ") 0x" << this << " decrementing refcount, was " << m_refCount );
     OWeakObject::release();
-}
-
-DocObjectWrapper::~DocObjectWrapper()
-{
 }
 
 Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
