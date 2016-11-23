@@ -15,7 +15,6 @@ echo "--without-doxygen
 --enable-gio
 --enable-packagekit
 --enable-extension-integration
---enable-graphite
 --enable-evolution2
 --enable-online-update
 --enable-dbgutil
