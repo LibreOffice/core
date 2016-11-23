@@ -32,9 +32,6 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/syslocale.hxx>
 
-#define EF_VISITED      0x0001
-#define EF_DIRTY        0x0002
-
 namespace dbaui
 {
 
@@ -94,7 +91,7 @@ namespace dbaui
                 pValues->Name = ::comphelper::getString(xParamAsSet->getPropertyValue(PROPERTY_NAME));
                 m_pAllParams->InsertEntry(pValues->Name);
 
-                m_aVisitedParams.push_back(0);
+                m_aVisitedParams.push_back(VisitFlags::NONE);
                     // not visited, not dirty
             }
 
@@ -165,7 +162,7 @@ namespace dbaui
     {
         if (m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND)
         {
-            if ( ( m_aVisitedParams[ m_nCurrentlySelected ] & EF_DIRTY ) == 0 )
+            if ( !( m_aVisitedParams[ m_nCurrentlySelected ] & VisitFlags::Dirty ) )
                 // nothing to do, the value isn't dirty
                 return false;
         }
@@ -183,7 +180,7 @@ namespace dbaui
                 {
                     // with this the value isn't dirty anymore
                     if (m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND)
-                        m_aVisitedParams[m_nCurrentlySelected] &= ~EF_DIRTY;
+                        m_aVisitedParams[m_nCurrentlySelected] &= ~VisitFlags::Dirty;
                 }
                 else
                 {
@@ -269,10 +266,10 @@ namespace dbaui
 
                 // search the next entry in list we haven't visited yet
                 sal_Int32 nNext = (nCurrent + 1) % nCount;
-                while ((nNext != nCurrent) && ( m_aVisitedParams[nNext] & EF_VISITED ))
+                while ((nNext != nCurrent) && ( m_aVisitedParams[nNext] & VisitFlags::Visited ))
                     nNext = (nNext + 1) % nCount;
 
-                if ( m_aVisitedParams[nNext] & EF_VISITED )
+                if ( m_aVisitedParams[nNext] & VisitFlags::Visited )
                     // there is no such "not visited yet" entry -> simply take the next one
                     nNext = (nCurrent + 1) % nCount;
 
@@ -320,7 +317,7 @@ namespace dbaui
 
         // with this the value isn't dirty
         OSL_ENSURE(static_cast<size_t>(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnEntrySelected : invalid current entry !");
-        m_aVisitedParams[m_nCurrentlySelected] &= ~EF_DIRTY;
+        m_aVisitedParams[m_nCurrentlySelected] &= ~VisitFlags::Dirty;
 
         m_aResetVisitFlag.SetTimeout(1000);
         m_aResetVisitFlag.Start();
@@ -334,16 +331,16 @@ namespace dbaui
 
         // mark the currently selected entry as visited
         OSL_ENSURE(static_cast<size_t>(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnVisitedTimeout : invalid entry !");
-        m_aVisitedParams[m_nCurrentlySelected] |= EF_VISITED;
+        m_aVisitedParams[m_nCurrentlySelected] |= VisitFlags::Visited;
 
         // was it the last "not visited yet" entry ?
-        ByteVector::const_iterator aIter;
+        std::vector<VisitFlags>::const_iterator aIter;
         for (   aIter = m_aVisitedParams.begin();
                 aIter < m_aVisitedParams.end();
                 ++aIter
             )
         {
-            if (((*aIter) & EF_VISITED) == 0)
+            if (!((*aIter) & VisitFlags::Visited))
                 break;
         }
         if (aIter == m_aVisitedParams.end())
@@ -378,7 +375,7 @@ namespace dbaui
     {
         // mark the currently selected entry as dirty
         OSL_ENSURE(static_cast<size_t>(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
-        m_aVisitedParams[m_nCurrentlySelected] |= EF_DIRTY;
+        m_aVisitedParams[m_nCurrentlySelected] |= VisitFlags::Dirty;
 
         m_bNeedErrorOnCurrent = true;
     }

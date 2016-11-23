@@ -36,11 +36,22 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <connectivity/predicateinput.hxx>
 #include "svx/ParseContext.hxx"
+#include <o3tl/typed_flags_set.hxx>
 
 namespace connectivity
 {
     class OSQLParseNode;
 }
+
+enum class VisitFlags {
+    NONE        = 0x00,
+    Visited     = 0x01,
+    Dirty       = 0x02,
+};
+namespace o3tl {
+    template<> struct typed_flags<VisitFlags> : is_typed_flags<VisitFlags, 0x03> {};
+}
+
 
 namespace dbaui
 {
@@ -69,7 +80,7 @@ namespace dbaui
         ::dbtools::OPredicateInputController
                                m_aPredicateInput;
 
-        ByteVector             m_aVisitedParams;
+        std::vector<VisitFlags>  m_aVisitedParams;
         Timer                  m_aResetVisitFlag;
             // we reset the "visited flag" 1 second after and entry has been selected
 
