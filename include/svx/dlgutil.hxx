@@ -34,7 +34,9 @@ SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit();
 SVX_DLLPUBLIC bool GetApplyCharUnit( const SfxItemSet& );
 
 SAL_CONSTEXPR DrawModeFlags const OUTPUT_DRAWMODE_COLOR = DrawModeFlags::Default;
-SAL_CONSTEXPR DrawModeFlags const OUTPUT_DRAWMODE_CONTRAST = DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient;
+//SAL_CONSTEXPR DrawModeFlags const OUTPUT_DRAWMODE_CONTRAST = DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient;
+// TODO(davido): Remove this hack when MSVC 15.0 constexpr regression is fixed
+SAL_CONSTEXPR DrawModeFlags const OUTPUT_DRAWMODE_CONTRAST = DrawModeFlags::SettingContrast;
 
 #endif
 
