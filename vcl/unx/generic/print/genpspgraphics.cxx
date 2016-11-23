@@ -56,12 +56,6 @@
 #include "salprn.hxx"
 #include "CommonSalLayout.hxx"
 
-#include <config_graphite.h>
-#if ENABLE_GRAPHITE
-#include <graphite_layout.hxx>
-#include <graphite_serverfont.hxx>
-#endif
-
 using namespace psp;
 
 // ----- Implementation of PrinterBmp by means of SalBitmap/BitmapBuffer ---------------
@@ -741,20 +735,12 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
     if (bIsPspServerFontLayout)
     {
         const PspServerFontLayout * pPspLayout = dynamic_cast<const PspServerFontLayout*>(&rLayout);
-#if ENABLE_GRAPHITE
-        const GraphiteServerFontLayout * pGrLayout = dynamic_cast<const GraphiteServerFontLayout*>(&rLayout);
-#endif
         if (pPspLayout)
         {
             pText = pPspLayout->getTextPtr();
             nMinCharPos = pPspLayout->getMinCharPos();
             nMaxCharPos = pPspLayout->getMaxCharPos();
         }
-#if ENABLE_GRAPHITE
-        else if (pGrLayout)
-        {
-        }
-#endif
     }
     for( int nStart = 0;; )
     {
@@ -1027,21 +1013,9 @@ SalLayout* GenPspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
         && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
     {
         if (SalLayout::UseCommonLayout())
-        {
-                pLayout = new PspCommonSalLayout(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]);
-        }
+            pLayout = new PspCommonSalLayout(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]);
         else
-        {
-#if ENABLE_GRAPHITE
-            // Is this a Graphite font?
-            if (GraphiteServerFontLayout::IsGraphiteEnabledFont(*m_pFreetypeFont[nFallbackLevel]))
-            {
-                pLayout = new GraphiteServerFontLayout(*m_pFreetypeFont[nFallbackLevel]);
-            }
-            else
-#endif
-                pLayout = new PspServerFontLayout( *m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel], rArgs );
-        }
+            pLayout = new PspServerFontLayout( *m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel], rArgs );
     }
     else
         pLayout = new PspFontLayout( *m_pPrinterGfx );

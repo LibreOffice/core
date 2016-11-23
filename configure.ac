@@ -1039,11 +1039,6 @@ AC_ARG_ENABLE(mergelibs,
         for Linux any more. This will link a core set of libraries into libmerged.])
 )
 
-AC_ARG_ENABLE(graphite,
-    AS_HELP_STRING([--disable-graphite],
-        [Disables the compilation of Graphite smart font rendering.])
-)
-
 AC_ARG_ENABLE(breakpad,
     AS_HELP_STRING([--enable-breakpad],
         [Enables breakpad for crash reporting.])
@@ -4593,7 +4588,6 @@ if test "$cross_compiling" = "yes"; then
     # Don't bother having configure look for stuff not needed for the build platform anyway
     ./configure \
         --disable-cups \
-        --disable-graphite \
         --disable-gtk3 \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
@@ -9194,18 +9188,6 @@ if test "$COM" = "MSC"; then # override the above
     GRAPHITE_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/graphite.lib"
 fi
 
-# This is the old Graphite support that will eventually be removed
-AC_MSG_CHECKING([whether to enable graphite support])
-if test $_os != Darwin -a $_os != Android -a $_os != iOS -a \( -z "$enable_graphite" -o "$enable_graphite" != no \); then
-    AC_MSG_RESULT([yes])
-    ENABLE_GRAPHITE="TRUE"
-    AC_DEFINE(ENABLE_GRAPHITE)
-
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_GRAPHITE)
-
 dnl ==================================================================
 dnl Breakpad
 dnl ==================================================================
@@ -12877,7 +12859,6 @@ AC_CONFIG_HEADERS([config_host/config_firebird.h])
 AC_CONFIG_HEADERS([config_host/config_folders.h])
 AC_CONFIG_HEADERS([config_host/config_gio.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
-AC_CONFIG_HEADERS([config_host/config_graphite.h])
 AC_CONFIG_HEADERS([config_host/config_java.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
 AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
