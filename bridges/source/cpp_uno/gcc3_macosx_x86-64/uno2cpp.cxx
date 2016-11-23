@@ -23,10 +23,10 @@
 #include <typeinfo>
 
 #include "rtl/alloc.h"
-#include "rtl/ustrbuf.hxx"
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include <o3tl/runtimetooustring.hxx>
 #include <uno/data.h>
 
 #include <bridge.hxx>
@@ -93,14 +93,6 @@ void INSERT_INT8(
         pGPR[nr++] = *static_cast<sal_uInt8 const *>( pSV );
     else
         *pDS++ = *static_cast<sal_uInt8 const *>( pSV );
-}
-
-void appendCString(OUStringBuffer & buffer, char const * text) {
-    if (text != nullptr) {
-        buffer.append(
-            OStringToOUString(OString(text), RTL_TEXTENCODING_ISO_8859_1));
-            // use 8859-1 to avoid conversion failure
-    }
 }
 
 }
@@ -246,13 +238,9 @@ static void cpp_call(
         } catch (const Exception &) {
             throw;
         } catch (const std::exception & e) {
-            OUStringBuffer buf;
-            buf.append("C++ code threw ");
-            appendCString(buf, typeid(e).name());
-            buf.append(": ");
-            appendCString(buf, e.what());
             throw RuntimeException(
-                buf.makeStringAndClear());
+                "C++ code threw " + o3tl::runtimeToOUString(typeid(e).name())
+                + ": " + o3tl::runtimeToOUString(e.what()));
         } catch (...) {
             throw RuntimeException("C++ code threw unknown exception");
         }

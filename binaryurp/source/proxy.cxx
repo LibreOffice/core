@@ -24,6 +24,7 @@
 #include <vector>
 
 #include "cppuhelper/exc_hlp.hxx"
+#include "o3tl/runtimetooustring.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -100,10 +101,7 @@ void Proxy::do_dispatch(
             do_dispatch_throw(member, returnValue, arguments, exception);
         } catch (const std::exception & e) {
             throw css::uno::RuntimeException(
-                "caught C++ exception: " +
-                OStringToOUString(
-                    OString(e.what()), RTL_TEXTENCODING_ASCII_US));
-                // best-effort string conversion
+                "caught C++ exception: " + o3tl::runtimeToOUString(e.what()));
         }
     } catch (const css::uno::RuntimeException &) {
         css::uno::Any exc(cppu::getCaughtException());
