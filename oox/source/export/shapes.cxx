@@ -547,7 +547,6 @@ static bool lcl_IsOnBlacklist(OUString& rShapeType)
         OUStringLiteral("smiley"),
         OUStringLiteral("sun"),
         OUStringLiteral("flower"),
-        OUStringLiteral("forbidden"),
         OUStringLiteral("bracket-pair"),
         OUStringLiteral("brace-pair"),
         OUStringLiteral("col-60da8460"),
@@ -606,6 +605,7 @@ static bool lcl_IsOnWhitelist(OUString& rShapeType)
     static
 #endif
     const std::initializer_list<OUStringLiteral> vWhitelist = {
+        OUStringLiteral("forbidden"),
         OUStringLiteral("heart"),
         OUStringLiteral("puzzle")
     };
@@ -915,12 +915,6 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             case mso_sptFoldedCorner:
             {
                 sal_Int32 adj =  double( aViewBox.Width - nXPosition) / std::min( aViewBox.Width,aViewBox.Height ) * 100000;
-                lcl_AppendAdjustmentValue( aAvList, 0, adj );
-                break;
-            }
-            case mso_sptNoSmoking:
-            {
-                sal_Int32 adj =  double( nXPosition )/7200 *50000 ;
                 lcl_AppendAdjustmentValue( aAvList, 0, adj );
                 break;
             }
