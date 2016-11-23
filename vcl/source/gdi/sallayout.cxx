@@ -75,7 +75,6 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
         TEST(EnableLigatures);
         TEST(SubstituteDigits);
         TEST(KashidaJustification);
-        TEST(DisableGlyphProcessing);
         TEST(ForFallback);
 #undef TEST
         s << "}";
