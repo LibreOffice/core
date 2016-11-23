@@ -49,21 +49,11 @@ namespace svt
     namespace
     {
 
-        #define PROPERTY_FLAG_TEXT                  0x00000001
-        #define PROPERTY_FLAG_ENDBALED              0x00000002
-        #define PROPERTY_FLAG_VISIBLE               0x00000004
-        #define PROPERTY_FLAG_HELPURL               0x00000008
-        #define PROPERTY_FLAG_LISTITEMS             0x00000010
-        #define PROPERTY_FLAG_SELECTEDITEM          0x00000020
-        #define PROPERTY_FLAG_SELECTEDITEMINDEX     0x00000040
-        #define PROPERTY_FLAG_CHECKED               0x00000080
-
-
         struct ControlDescription
         {
             const sal_Char* pControlName;
             sal_Int16       nControlId;
-            sal_Int32       nPropertyFlags;
+            PropFlags       nPropertyFlags;
         };
 
 
@@ -71,38 +61,38 @@ namespace svt
         typedef ::std::pair< ControlDescIterator, ControlDescIterator > ControlDescRange;
 
 
-        #define PROPERTY_FLAGS_COMMON       ( PROPERTY_FLAG_ENDBALED | PROPERTY_FLAG_VISIBLE | PROPERTY_FLAG_HELPURL )
-        #define PROPERTY_FLAGS_LISTBOX      ( PROPERTY_FLAG_LISTITEMS | PROPERTY_FLAG_SELECTEDITEM | PROPERTY_FLAG_SELECTEDITEMINDEX )
-        #define PROPERTY_FLAGS_CHECKBOX     ( PROPERTY_FLAG_CHECKED | PROPERTY_FLAG_TEXT )
+        #define PROPERTY_FLAGS_COMMON       ( PropFlags::Enabled | PropFlags::Visible | PropFlags::HelpUrl )
+        #define PROPERTY_FLAGS_LISTBOX      ( PropFlags::ListItems | PropFlags::SelectedItem | PropFlags::SelectedItemIndex )
+        #define PROPERTY_FLAGS_CHECKBOX     ( PropFlags::Checked | PropFlags::Text )
 
         // Note: this array MUST be sorted by name!
         static const ControlDescription aDescriptions[] =  {
             { "AutoExtensionBox",       CHECKBOX_AUTOEXTENSION,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
-            { "CancelButton",           PUSHBUTTON_CANCEL,              PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
-            { "CurrentFolderText",      FIXEDTEXT_CURRENTFOLDER,        PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "CancelButton",           PUSHBUTTON_CANCEL,              PROPERTY_FLAGS_COMMON | PropFlags::Text          },
+            { "CurrentFolderText",      FIXEDTEXT_CURRENTFOLDER,        PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "DefaultLocationButton",  TOOLBOXBUTOON_DEFAULT_LOCATION, PROPERTY_FLAGS_COMMON                               },
-            { "FileURLEdit",            EDIT_FILEURL,                   PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
-            { "FileURLEditLabel",       EDIT_FILEURL_LABEL,             PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "FileURLEdit",            EDIT_FILEURL,                   PROPERTY_FLAGS_COMMON | PropFlags::Text          },
+            { "FileURLEditLabel",       EDIT_FILEURL_LABEL,             PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "FileView",               CONTROL_FILEVIEW,               PROPERTY_FLAGS_COMMON                               },
             { "FilterList",             LISTBOX_FILTER,                 PROPERTY_FLAGS_COMMON                               },
-            { "FilterListLabel",        LISTBOX_FILTER_LABEL,           PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "FilterListLabel",        LISTBOX_FILTER_LABEL,           PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "FilterOptionsBox",       CHECKBOX_FILTEROPTIONS,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
-            { "HelpButton",             PUSHBUTTON_HELP,                PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "HelpButton",             PUSHBUTTON_HELP,                PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "ImageTemplateList",      LISTBOX_IMAGE_TEMPLATE,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX      },
-            { "ImageTemplateListLabel", LISTBOX_IMAGE_TEMPLATE_LABEL,   PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "ImageTemplateListLabel", LISTBOX_IMAGE_TEMPLATE_LABEL,   PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "LevelUpButton",          TOOLBOXBUTOON_LEVEL_UP,         PROPERTY_FLAGS_COMMON                               },
             { "LinkBox",                CHECKBOX_LINK,                  PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "NewFolderButton",        TOOLBOXBUTOON_NEW_FOLDER,       PROPERTY_FLAGS_COMMON                               },
-            { "OkButton",               PUSHBUTTON_OK ,                 PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "OkButton",               PUSHBUTTON_OK ,                 PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "PasswordBox",            CHECKBOX_PASSWORD,              PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
-            { "PlayButton",             PUSHBUTTON_PLAY,                PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "PlayButton",             PUSHBUTTON_PLAY,                PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "PreviewBox",             CHECKBOX_PREVIEW,               PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "ReadOnlyBox",            CHECKBOX_READONLY,              PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "SelectionBox",           CHECKBOX_SELECTION,             PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "TemplateList",           LISTBOX_TEMPLATE,               PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX      },
-            { "TemplateListLabel",      LISTBOX_TEMPLATE_LABEL,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "TemplateListLabel",      LISTBOX_TEMPLATE_LABEL,         PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "VersionList",            LISTBOX_VERSION,                PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX      },
-            { "VersionListLabel",       LISTBOX_VERSION_LABEL,          PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          }
+            { "VersionListLabel",       LISTBOX_VERSION_LABEL,          PROPERTY_FLAGS_COMMON | PropFlags::Text          }
         };
 
 
@@ -124,21 +114,21 @@ namespace svt
         struct ControlProperty
         {
             const sal_Char* pPropertyName;
-            sal_Int16       nPropertyId;
+            PropFlags       nPropertyId;
         };
 
         typedef const ControlProperty* ControlPropertyIterator;
 
 
         static const ControlProperty aProperties[] =  {
-            { "Text",               PROPERTY_FLAG_TEXT              },
-            { "Enabled",            PROPERTY_FLAG_ENDBALED          },
-            { "Visible",            PROPERTY_FLAG_VISIBLE           },
-            { "HelpURL",            PROPERTY_FLAG_HELPURL           },
-            { "ListItems",          PROPERTY_FLAG_LISTITEMS         },
-            { "SelectedItem",       PROPERTY_FLAG_SELECTEDITEM      },
-            { "SelectedItemIndex",  PROPERTY_FLAG_SELECTEDITEMINDEX },
-            { "Checked",            PROPERTY_FLAG_CHECKED           }
+            { "Text",               PropFlags::Text              },
+            { "Enabled",            PropFlags::Enabled          },
+            { "Visible",            PropFlags::Visible           },
+            { "HelpURL",            PropFlags::HelpUrl           },
+            { "ListItems",          PropFlags::ListItems         },
+            { "SelectedItem",       PropFlags::SelectedItem      },
+            { "SelectedItemIndex",  PropFlags::SelectedItemIndex },
+            { "Checked",            PropFlags::Checked           }
         };
 
 
@@ -217,7 +207,7 @@ namespace svt
     {
         // look up the control
         sal_Int16 nControlId = -1;
-        sal_Int32 nPropertyMask = 0;
+        PropFlags nPropertyMask = PropFlags::NONE;
         Control* pControl = implGetControl( _rControlName, &nControlId, &nPropertyMask );
             // will throw an IllegalArgumentException if the name is not valid
 
@@ -227,7 +217,7 @@ namespace svt
             // it's a completely unknown property
             lcl_throwIllegalArgumentException();
 
-        if ( 0 == ( nPropertyMask & aPropDesc->nPropertyId ) )
+        if ( !( nPropertyMask & aPropDesc->nPropertyId ) )
             // it's a property which is known, but not allowed for this control
             lcl_throwIllegalArgumentException();
 
@@ -235,7 +225,7 @@ namespace svt
     }
 
 
-    Control* OControlAccess::implGetControl( const OUString& _rControlName, sal_Int16* _pId, sal_Int32* _pPropertyMask ) const
+    Control* OControlAccess::implGetControl( const OUString& _rControlName, sal_Int16* _pId, PropFlags* _pPropertyMask ) const
     {
         Control* pControl = nullptr;
         ControlDescription tmpDesc;
@@ -301,7 +291,7 @@ namespace svt
     Sequence< OUString > OControlAccess::getSupportedControlProperties( const OUString& _rControlName )
     {
         sal_Int16 nControlId = -1;
-        sal_Int32 nPropertyMask = 0;
+        PropFlags nPropertyMask = PropFlags::NONE;
         implGetControl( _rControlName, &nControlId, &nPropertyMask );
             // will throw an IllegalArgumentException if the name is not valid
 
@@ -310,7 +300,7 @@ namespace svt
         OUString* pProperty = aProps.getArray();
 
         for ( ControlPropertyIterator aProp = s_pProperties; aProp != s_pPropertiesEnd; ++aProp )
-            if ( 0 != ( nPropertyMask & aProp->nPropertyId ) )
+            if ( nPropertyMask & aProp->nPropertyId )
                 *pProperty++ = OUString::createFromAscii( aProp->pPropertyName );
 
         aProps.realloc( pProperty - aProps.getArray() );
@@ -331,7 +321,7 @@ namespace svt
     {
         // look up the control
         sal_Int16 nControlId = -1;
-        sal_Int32 nPropertyMask = 0;
+        PropFlags nPropertyMask = PropFlags::NONE;
         implGetControl( _rControlName, &nControlId, &nPropertyMask );
             // will throw an IllegalArgumentException if the name is not valid
 
@@ -341,7 +331,7 @@ namespace svt
             // it's a property which is completely unknown
             return false;
 
-        return 0 != ( aPropDesc->nPropertyId & nPropertyMask );
+        return bool( aPropDesc->nPropertyId & nPropertyMask );
     }
 
 
@@ -351,10 +341,10 @@ namespace svt
         DBG_ASSERT( pControl, "OControlAccess::SetValue: don't have this control in the current mode!" );
         if ( pControl )
         {
-            sal_Int16 nPropertyId = -1;
+            PropFlags nPropertyId = PropFlags::Unknown;
             if ( ControlActions::SET_HELP_URL == _nControlAction )
             {
-                nPropertyId = PROPERTY_FLAG_HELPURL;
+                nPropertyId = PropFlags::HelpUrl;
             }
             else
             {
@@ -367,7 +357,7 @@ namespace svt
                     case CHECKBOX_LINK:
                     case CHECKBOX_PREVIEW:
                     case CHECKBOX_SELECTION:
-                        nPropertyId = PROPERTY_FLAG_CHECKED;
+                        nPropertyId = PropFlags::Checked;
                         break;
 
                     case LISTBOX_FILTER:
@@ -379,7 +369,7 @@ namespace svt
                     case LISTBOX_IMAGE_TEMPLATE:
                         if ( ControlActions::SET_SELECT_ITEM == _nControlAction )
                         {
-                            nPropertyId = PROPERTY_FLAG_SELECTEDITEMINDEX;
+                            nPropertyId = PropFlags::SelectedItemIndex;
                         }
                         else
                         {
@@ -390,7 +380,7 @@ namespace svt
                 }
             }
 
-            if ( -1 != nPropertyId )
+            if ( PropFlags::Unknown != nPropertyId )
                 implSetControlProperty( _nControlId, pControl, nPropertyId, _rValue );
         }
     }
@@ -404,10 +394,10 @@ namespace svt
         DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
         if ( pControl )
         {
-            sal_Int16 nPropertyId = -1;
+            PropFlags nPropertyId = PropFlags::Unknown;
             if ( ControlActions::SET_HELP_URL == _nControlAction )
             {
-                nPropertyId = PROPERTY_FLAG_HELPURL;
+                nPropertyId = PropFlags::HelpUrl;
             }
             else
             {
@@ -420,7 +410,7 @@ namespace svt
                     case CHECKBOX_LINK:
                     case CHECKBOX_PREVIEW:
                     case CHECKBOX_SELECTION:
-                        nPropertyId = PROPERTY_FLAG_CHECKED;
+                        nPropertyId = PropFlags::Checked;
                         break;
 
                     case LISTBOX_FILTER:
@@ -440,13 +430,13 @@ namespace svt
                         switch ( _nControlAction )
                         {
                             case ControlActions::GET_SELECTED_ITEM:
-                                nPropertyId = PROPERTY_FLAG_SELECTEDITEM;
+                                nPropertyId = PropFlags::SelectedItem;
                                 break;
                             case ControlActions::GET_SELECTED_ITEM_INDEX:
-                                nPropertyId = PROPERTY_FLAG_SELECTEDITEMINDEX;
+                                nPropertyId = PropFlags::SelectedItemIndex;
                                 break;
                             case ControlActions::GET_ITEMS:
-                                nPropertyId = PROPERTY_FLAG_LISTITEMS;
+                                nPropertyId = PropFlags::ListItems;
                                 break;
                             default:
                                 SAL_WARN( "fpicker.office", "OControlAccess::GetValue: invalid control action for the listbox!" );
@@ -456,7 +446,7 @@ namespace svt
                 }
             }
 
-            if ( -1 != nPropertyId )
+            if ( PropFlags::Unknown != nPropertyId )
                 aRet = implGetControlProperty( pControl, nPropertyId );
         }
 
@@ -536,7 +526,7 @@ namespace svt
     }
 
 
-    void OControlAccess::implSetControlProperty( sal_Int16 _nControlId, Control* _pControl, sal_Int16 _nProperty, const Any& _rValue, bool _bIgnoreIllegalArgument )
+    void OControlAccess::implSetControlProperty( sal_Int16 _nControlId, Control* _pControl, PropFlags _nProperty, const Any& _rValue, bool _bIgnoreIllegalArgument )
     {
         if ( !_pControl )
             _pControl = m_pFilePickerController->getControl( _nControlId );
@@ -549,7 +539,7 @@ namespace svt
 
         switch ( _nProperty )
         {
-            case PROPERTY_FLAG_TEXT:
+            case PropFlags::Text:
             {
                 OUString sText;
                 if ( _rValue >>= sText )
@@ -563,7 +553,7 @@ namespace svt
             }
             break;
 
-            case PROPERTY_FLAG_ENDBALED:
+            case PropFlags::Enabled:
             {
                 bool bEnabled = false;
                 if ( _rValue >>= bEnabled )
@@ -577,7 +567,7 @@ namespace svt
             }
             break;
 
-            case PROPERTY_FLAG_VISIBLE:
+            case PropFlags::Visible:
             {
                 bool bVisible = false;
                 if ( _rValue >>= bVisible )
@@ -591,7 +581,7 @@ namespace svt
             }
             break;
 
-            case PROPERTY_FLAG_HELPURL:
+            case PropFlags::HelpUrl:
             {
                 OUString sHelpURL;
                 if ( _rValue >>= sHelpURL )
@@ -605,7 +595,7 @@ namespace svt
             }
             break;
 
-            case PROPERTY_FLAG_LISTITEMS:
+            case PropFlags::ListItems:
             {
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implSetControlProperty: invalid control/property combination!" );
@@ -635,7 +625,7 @@ namespace svt
             }
             break;
 
-            case PROPERTY_FLAG_SELECTEDITEM:
+            case PropFlags::SelectedItem:
             {
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implSetControlProperty: invalid control/property combination!" );
@@ -652,7 +642,7 @@ namespace svt
             }
             break;
 
-            case PROPERTY_FLAG_SELECTEDITEMINDEX:
+            case PropFlags::SelectedItemIndex:
             {
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implSetControlProperty: invalid control/property combination!" );
@@ -669,7 +659,7 @@ namespace svt
             }
             break;
 
-            case PROPERTY_FLAG_CHECKED:
+            case PropFlags::Checked:
             {
                 DBG_ASSERT( WINDOW_CHECKBOX == _pControl->GetType(),
                     "OControlAccess::implSetControlProperty: invalid control/property combination!" );
@@ -692,30 +682,30 @@ namespace svt
     }
 
 
-    Any OControlAccess::implGetControlProperty( Control* _pControl, sal_Int16 _nProperty ) const
+    Any OControlAccess::implGetControlProperty( Control* _pControl, PropFlags _nProperty ) const
     {
         DBG_ASSERT( _pControl, "OControlAccess::implGetControlProperty: invalid argument, this will crash!" );
 
         Any aReturn;
         switch ( _nProperty )
         {
-            case PROPERTY_FLAG_TEXT:
+            case PropFlags::Text:
                 aReturn <<= OUString( _pControl->GetText() );
                 break;
 
-            case PROPERTY_FLAG_ENDBALED:
+            case PropFlags::Enabled:
                 aReturn <<= _pControl->IsEnabled();
                 break;
 
-            case PROPERTY_FLAG_VISIBLE:
+            case PropFlags::Visible:
                 aReturn <<= _pControl->IsVisible();
                 break;
 
-            case PROPERTY_FLAG_HELPURL:
+            case PropFlags::HelpUrl:
                 aReturn <<= getHelpURL( _pControl, m_pFileView == _pControl );
                 break;
 
-            case PROPERTY_FLAG_LISTITEMS:
+            case PropFlags::ListItems:
             {
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
@@ -729,7 +719,7 @@ namespace svt
             }
             break;
 
-            case PROPERTY_FLAG_SELECTEDITEM:
+            case PropFlags::SelectedItem:
             {
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
@@ -742,7 +732,7 @@ namespace svt
             }
             break;
 
-            case PROPERTY_FLAG_SELECTEDITEMINDEX:
+            case PropFlags::SelectedItemIndex:
             {
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
@@ -755,7 +745,7 @@ namespace svt
             }
             break;
 
-            case PROPERTY_FLAG_CHECKED:
+            case PropFlags::Checked:
                 DBG_ASSERT( WINDOW_CHECKBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
