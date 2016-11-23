@@ -50,6 +50,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/python-vc2013.patch.1 \
 ))
 endif
+ifneq ($(filter 150,$(VCVER)),)
+$(eval $(call gb_UnpackedTarball_add_patches,python3,\
+	external/python3/python3-vs2017.patch.1 \
+))
+endif
 endif
 
 ifneq ($(SYSTEM_ZLIB),TRUE)

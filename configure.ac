@@ -2060,10 +2060,10 @@ libo_FUZZ_ARG_WITH(doxygen,
 ,with_doxygen=yes)
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2013/2015>],
+    AS_HELP_STRING([--with-visual-studio=<2013/2015/2017>],
         [Specify which Visual Studio version to use in case several are
          installed. If not specified, only 2013 is detected automatically
-         because 2015 support is currently experimental.]),
+         because 2015 and 2017 support is currently experimental.]),
 ,)
 
 AC_ARG_WITH(windows-sdk,
@@ -3236,6 +3236,8 @@ map_vs_year_to_version()
         vsversion=12.0;;
     2015)
         vsversion=14.0;;
+    2017)
+        vsversion=15.0;;
     *)
         AC_MSG_ERROR([Assertion failure - invalid argument "$1" to map_vs_year_to_version()]);;
     esac
@@ -3252,16 +3254,20 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # By default we prefer 2013/2015, in this order
-        vsversions="12.0 14.0"
+        # By default we prefer 2013/2015/2017, in this order
+        vsversions="12.0 14.0 15.0"
     fi
 }
 
 win_get_env_from_vsvars32bat()
 {
     WRAPPERBATCHFILEPATH="`mktemp -t wrpXXXXXX.bat`"
+    if test $vcnum = "150"; then
+      echo -e "@call \"`cygpath -w $VC_PRODUCT_DIR`/../Common7/Tools/VsDevCmd.bat\" /no_logo\r\n" >> $WRAPPERBATCHFILEPATH
+    else
+      echo -e "@call \"`cygpath -w $VC_PRODUCT_DIR`/../Common7/Tools/vsvars32.bat\"\r\n" >> $WRAPPERBATCHFILEPATH
+    fi
     echo -e "@setlocal\r\n" >> $WRAPPERBATCHFILEPATH
-    echo -e "@call \"`cygpath -w $VC_PRODUCT_DIR`/../Common7/Tools/vsvars32.bat\"\r\n" >> $WRAPPERBATCHFILEPATH
     echo -e "@echo %$1%\r\n" >> $WRAPPERBATCHFILEPATH
     echo -e "@endlocal\r\n" >> $WRAPPERBATCHFILEPATH
     chmod +x $WRAPPERBATCHFILEPATH
@@ -3278,27 +3284,43 @@ find_ucrt()
         UCRTSDKDIR=$formatted_path
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/ProductVersion"
         UCRTVERSION=$regvalue
+        # Rest if not exist
+        if ! test -d "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"; then
+          UCRTSDKDIR=
+          AC_MSG_RESULT([UCRT: give up registry detection and retrieve from IDE env file])
+        fi
     fi
     if test -z "$UCRTSDKDIR"; then
-        if test -f "$VC_PRODUCT_DIR/../Common7/Tools/vsvars32.bat"; then
+        ide_env_dir="$VC_PRODUCT_DIR/../Common7/Tools/"
+        if test "$vcnum" = "150"; then
+          ide_env_file="${ide_env_dir}VsDevCmd.bat"
+        else
+          ide_env_file="${ide_env_dir}/vsvars32.bat"
+        fi
+        if test -f "$ide_env_file"; then
             PathFormat "`win_get_env_from_vsvars32bat "UniversalCRTSdkDir"`"
             UCRTSDKDIR=$formatted_path
             UCRTVERSION=`win_get_env_from_vsvars32bat "UCRTVersion"`
+        else
+          AC_MSG_ERROR([No UCRT found])
         fi
     fi
 }
 
 find_msvc()
 {
-    # Find Visual C++ 2013/2015
+    # Find Visual C++ 2013/2015/2017
     # Args: $1 (optional) : The VS version year
-    # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot
+    # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot, $vcbuildnumber
 
-    unset vctest vcnum vcnumwithdot vcexpress
+    unset vctest vcnum vcnumwithdot vcexpress vcbuildnumber
 
     vs_versions_to_check "$1"
 
+    AC_MSG_CHECKING([whether vs inst is $vsversions])
+
     for ver in $vsversions; do
+        AC_MSG_CHECKING([ver is now: $ver])
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VC/ProductDir
         if test -n "$regvalue"; then
             vctest=$regvalue
@@ -3307,6 +3329,14 @@ find_msvc()
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VC/ProductDir
         if test -n "$regvalue"; then
             vctest=$regvalue
+            break
+        fi
+        # As always MSVC 15.0 is special here
+        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/SxS/VS7/$ver
+        if test -n "$regvalue"; then
+            AC_MSG_RESULT([found: $regvalue])
+            PathFormat "$regvalue"
+            vctest=$formatted_path
             break
         fi
     done
@@ -3320,6 +3350,11 @@ find_msvc()
         14.0)
             vcyear=2015
             vcnum=140
+            ;;
+        15.0)
+            vcyear=2017
+            vcnum=150
+            vcbuildnumber=`ls $vctest/VC/Tools/MSVC -A1r | head -1`
             ;;
         esac
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$vcnumwithdot/Setup/VC/ProductDir
@@ -3335,31 +3370,35 @@ MSBUILD_PATH=
 DEVENV=
 if test "$_os" = "WINNT"; then
     if test "$WITH_MINGW" != "yes"; then
-        AC_MSG_CHECKING([Visual C++])
+        AC_MSG_CHECKING([Visual C++: $with_visual_studio])
 
         find_msvc "$with_visual_studio"
         if test -z "$vctest"; then
             if test -n "$with_visual_studio"; then
                 AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
             else
-                AC_MSG_ERROR([No Visual Studio 2013/2015 installation found])
+                AC_MSG_ERROR([No Visual Studio 2013/2015/2017 installation found])
             fi
         fi
 
         if test "$BITNESS_OVERRIDE" = ""; then
             if test -f "$vctest/bin/cl.exe"; then
                 VC_PRODUCT_DIR=$vctest
+            elif test -f "$vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe"; then
+                VC_PRODUCT_DIR=$vctest/VC
             else
                 AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/cl.exe])
             fi
         else
             if test -f "$vctest/bin/amd64/cl.exe"; then
                 VC_PRODUCT_DIR=$vctest
+            elif test -f "$vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe"; then
+                VC_PRODUCT_DIR=$vctest/VC
             else
                 if test -f "$vctest/bin/x86_amd64/cl.exe" -a "$vcexpress" = "Express"; then
                     VC_PRODUCT_DIR=$vctest
                 else
-                    AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/amd64/cl.exe or $vctest/bin/x86_amd64/cl.exe])
+                    AC_MSG_ERROR([No compiler (cl.exe) in $vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe or $vctest/bin/amd64/cl.exe or $vctest/bin/x86_amd64/cl.exe])
                 fi
             fi
         fi
@@ -3402,10 +3441,23 @@ if test "$_os" = "WINNT"; then
         AC_SUBST(UCRTSDKDIR)
         AC_SUBST(UCRTVERSION)
 
+        AC_MSG_CHECKING([for MSBuild.exe location for: $vcnumwithdot])
         # Find the proper version of MSBuild.exe to use based on the VS version
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath
         if test -n "$regvalue" ; then
+            AC_MSG_RESULT([found: $regvalue])
             MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
+        else
+            if test $vcnum = "150"; then
+                if test "$BITNESS_OVERRIDE" = ""; then
+                    regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin"
+                else
+                    regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin/amd64"
+                fi
+                MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
+            else
+                AC_MSG_ERROR([No msbuild found, Visual Studio installation broken?])
+            fi
         fi
 
         # Find the version of devenv.exe
@@ -3423,22 +3475,39 @@ if test "$_os" = "WINNT"; then
         dnl ===========================================================
 
         MSPDB_PATH=
+        CL_DIR=
+        CL_LIB=
 
         if test "$BITNESS_OVERRIDE" = ""; then
             if test "$vcnum" = "120"; then
                 MSPDB_PATH="$VC_PRODUCT_DIR/../VC/bin"
+                CL_DIR=bin
             else
                 MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
+                CL_DIR=bin
             fi
         else
             if test "$vcexpress" = "Express"; then
                 MSPDB_PATH="$VC_PRODUCT_DIR/bin"
+                CL_DIR=bin
             else
-                MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
+                if test "$vcnum" = "150"; then
+                    MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64"
+                    CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX64/x64
+                else
+                    MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
+                    CL_DIR=bin/amd64
+                fi
             fi
         fi
 
-        mspdbnum=$vcnum
+        AC_MSG_RESULT([MSPDB_PATH = $MSPDB_PATH])
+        # MSVC 15.0 has libraries from 14.0?
+        if test  "$vcnum" = "150"; then
+            mspdbnum="140"
+        else
+            mspdbnum=$vcnum
+        fi
 
         if test ! -e "$MSPDB_PATH/mspdb${mspdbnum}.dll"; then
             AC_MSG_ERROR([No mspdb${mspdbnum}.dll in $MSPDB_PATH, Visual Studio installation broken?])
@@ -3450,8 +3519,6 @@ if test "$_os" = "WINNT"; then
         dnl The path needs to be added before cl is called
         PATH="$MSPDB_PATH:$PATH"
 
-        AC_MSG_CHECKING([cl.exe])
-
         # Is there really ever a need to pass CC explicitly? Surely we can hope to get all the
         # automagical niceness to work OK? If somebody has some unsupported compiler in some weird
         # location, isn't it likely that lots of other things needs changes, too, and just setting CC
@@ -3460,7 +3527,7 @@ if test "$_os" = "WINNT"; then
         if test -z "$CC"; then
             if test "$BITNESS_OVERRIDE" = ""; then
                 if test -f "$VC_PRODUCT_DIR/bin/cl.exe"; then
-                    CC="$VC_PRODUCT_DIR/bin/cl.exe"
+                    CC="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
                 fi
             else
                 if test "$vcexpress" = "Express"; then
@@ -3468,8 +3535,8 @@ if test "$_os" = "WINNT"; then
                         CC="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
                    fi
                 else
-                   if test -f "$VC_PRODUCT_DIR/bin/amd64/cl.exe"; then
-                        CC="$VC_PRODUCT_DIR/bin/amd64/cl.exe"
+                   if test -f "$VC_PRODUCT_DIR/$CL_DIR/cl.exe"; then
+                        CC="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
                    fi
                 fi
             fi
@@ -3477,7 +3544,6 @@ if test "$_os" = "WINNT"; then
             # This gives us a posix path with 8.3 filename restrictions
             CC=`win_short_path_for_make "$CC"`
         fi
-
         if test -n "$CC"; then
             # Remove /cl.exe from CC case insensitive
             AC_MSG_RESULT([found Visual C++ $vcyear $vcexpress ($CC)])
@@ -3492,7 +3558,13 @@ if test "$_os" = "WINNT"; then
                 dnl since MSVC 2012, default for x86 is -arch:SSE2:
                 CC="$CC -arch:SSE"
             fi
-            export INCLUDE=`cygpath -d "$COMPATH/Include"`
+
+            if test "$vcnum" = "150"; then
+                COMPATH="$COMPATH/Tools/MSVC/$vcbuildnumber"
+            fi
+
+            export INCLUDE=`cygpath -d "$COMPATH\Include"`
+            AC_MSG_RESULT([INCLUDE is: ($INCLUDE)])
 
             PathFormat "$COMPATH"
             COMPATH="$formatted_path"
@@ -3509,6 +3581,10 @@ if test "$_os" = "WINNT"; then
                 WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.1A 8.1 8.0 7.1A"
                 ;;
             140)
+                COMEX=19
+                WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0A 10.0 8.1A 8.1 8.0 7.1A"
+                ;;
+            150)
                 COMEX=19
                 WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0A 10.0 8.1A 8.1 8.0 7.1A"
                 ;;
@@ -3571,6 +3647,7 @@ if test "$_os" = "WINNT"; then
         LINK_X64_BINARY=
 
         if test "$BITNESS_OVERRIDE" = ""; then
+            # TODO(davido): This is probably broken for MSVC 15.0
             AC_MSG_CHECKING([for a x64 compiler and libraries for 64-bit Explorer extensions])
             if test -f "$VC_PRODUCT_DIR/atlmfc/lib/amd64/atls.lib"; then
                 # Prefer native x64 compiler to cross-compiler, in case we are running
@@ -5199,6 +5276,14 @@ find_al()
             return
         fi
     done
+
+    # TODO(davido): We need this additional check to detect 4.6.2
+    # This should be made generic, though
+    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/4.6.2\WinSDK-NetFx40Tools/InstallationFolder"
+    if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
+        altest=$regvalue
+        return
+    fi
 }
 
 find_dotnetsdk()
@@ -5220,7 +5305,7 @@ find_dotnetsdk46()
 {
     unset frametest
 
-    for ver in 4.6.1 4.6; do
+    for ver in 4.6.2 4.6.1 4.6; do
         reg_get_value_64 "HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
         if test -n "$regvalue"; then
             frametest=$regvalue
@@ -5273,6 +5358,9 @@ find_winsdk_version()
             winsdktest=$regvalue
             reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/ProductVersion"
             winsdklibsubdir=$regvalue
+            if test "$regvalue" = "10.0.14393"; then
+                winsdklibsubdir="10.0.14393.0"
+            fi
             return
         fi
         ;;
@@ -5299,7 +5387,7 @@ find_msms()
     my_msm_file=Microsoft_VC${VCVER}_CRT_x86.msm
     AC_MSG_CHECKING([for $my_msm_file])
     msmdir=
-    for ver in 12.0 14.0; do
+    for ver in 12.0 14.0 15.0; do
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
             if test -e "$regvalue/$my_msm_file"; then
@@ -5323,6 +5411,15 @@ find_msms()
             msmdir=$my_msm_dir
         fi
     fi
+
+    dnl Starting from MSVC 15.0, merge modules are located in different directory
+    if test $VCVER = 150; then
+        my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$vcbuildnumber/MergeModules/"
+        if test -e "$my_msm_dir/$my_msm_file"; then
+            msmdir=$my_msm_dir
+        fi
+    fi
+
     if test -n "$msmdir"; then
         msmdir=`cygpath -m "$msmdir"`
         AC_MSG_RESULT([$msmdir])
@@ -5338,11 +5435,17 @@ find_msms()
 find_msvc_x64_dlls()
 {
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
+    if test "$VCVER" = 150; then
+        msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$vcbuildnumber/x64/Microsoft.VC${VCVER}.CRT"
+    fi
     # http://blogs.msdn.com/b/vcblog/archive/2014/06/03/visual-studio-14-ctp.aspx
     # Refactored C Runtime (CRT): This CTP contains the first preview of the substantially refactored CRT.
     # msvcr140.dll no longer exists. It is replaced by a trio of DLLs: vcruntime140.dll, appcrt140.dll,
     # and desktopcrt140.dll.
-    if test "$VCVER" = 140; then
+
+    if test "$VCVER" = 150; then
+       msvcdlls="msvcp140.dll vcruntime140.dll"
+    elif test "$VCVER" = 140; then
        msvcdlls="msvcp${VCVER}.dll vcruntime${VCVER}.dll"
     else
        msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
@@ -9812,7 +9915,7 @@ the  Windows SDK are installed.])
     PathFormat "$WINDOWS_SDK_HOME"
     WINDOWS_SDK_HOME="$formatted_path"
     if test "$build_os" = "cygwin"; then
-        SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/include"
+        SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/Include"
         if test -d "$WINDOWS_SDK_HOME/include/um"; then
             SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
         elif test -d "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um"; then
@@ -9991,7 +10094,7 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
             assembler_bin=bin/x86_amd64
         else
             assembler=ml64.exe
-            assembler_bin=bin/amd64
+            assembler_bin=$CL_DIR
         fi
     fi
 
@@ -12459,23 +12562,33 @@ if test "$build_os" = "cygwin"; then
     fi
     ILIB1=-link
     if test "$BITNESS_OVERRIDE" = 64; then
-        ILIB="$ILIB;$COMPATH/lib/amd64"
-        ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib/amd64"
+        if test $vcnum = "150"; then
+            ILIB="$ILIB;$COMPATH/lib/x64"
+            ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib/x64"
+        else
+            ILIB="$ILIB;$COMPATH/lib/amd64"
+            ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib/amd64"
+        fi
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/x64"
         ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/x64"
         if test $WINDOWS_SDK_VERSION = 80 -o $WINDOWS_SDK_VERSION = 81 -o $WINDOWS_SDK_VERSION = 10; then
             ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x64"
             ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x64"
         fi
-        if test $VCVER = 140; then
+        if test $VCVER = 140 -o $VCVER = 150; then
             PathFormat "${UCRTSDKDIR}lib/$UCRTVERSION/ucrt/x64"
             ucrtlibpath_formatted=$formatted_path
             ILIB="$ILIB;$ucrtlibpath_formatted"
             ILIB1="$ILIB1 -LIBPATH:$ucrtlibpath_formatted"
         fi
     else
-        ILIB="$ILIB;$COMPATH/lib"
-        ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib"
+        if test $vcnum = "150"; then
+            ILIB="$ILIB;$COMPATH/lib/x86"
+            ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib/x86"
+        else
+            ILIB="$ILIB;$COMPATH/lib"
+            ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib"
+        fi
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib"
         ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib"
         if test $WINDOWS_SDK_VERSION = 80 -o $WINDOWS_SDK_VERSION = 81 -o $WINDOWS_SDK_VERSION = 10; then
@@ -12691,7 +12804,11 @@ if test "$build_os" = "cygwin"; then
         ATL_INCLUDE="$WINDOWS_SDK_HOME/include/atl"
     fi
     if test "$BITNESS_OVERRIDE" = 64; then
-        ATL_LIB="$ATL_LIB/amd64"
+        if test $VCVER = "150"; then
+            ATL_LIB="$ATL_LIB/x64"
+        else
+            ATL_LIB="$ATL_LIB/amd64"
+        fi
     fi
     # sort.exe and find.exe also exist in C:/Windows/system32 so need /usr/bin/
     PathFormat "/usr/bin/find.exe"
