@@ -21,9 +21,6 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
-#include <com/sun/star/animations/Event.hpp>
-#include <com/sun/star/animations/EventTrigger.hpp>
-#include <com/sun/star/animations/Timing.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>

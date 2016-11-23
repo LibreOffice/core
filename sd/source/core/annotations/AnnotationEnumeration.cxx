@@ -21,7 +21,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/office/XAnnotationEnumeration.hpp"
 
 #include "AnnotationEnumeration.hxx"

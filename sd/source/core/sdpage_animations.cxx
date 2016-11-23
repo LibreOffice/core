@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/animations/ParallelTimeContainer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <comphelper/processfactory.hxx>
