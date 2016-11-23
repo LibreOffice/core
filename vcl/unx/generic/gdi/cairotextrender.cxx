@@ -558,15 +558,9 @@ void CairoTextRender::FreeEmbedFontData( const void* pData, long nLen )
     GenPspGraphics::DoFreeEmbedFontData( pData, nLen );
 }
 
-const Ucs2SIntMap* CairoTextRender::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const** ppPriority)
+const Ucs2SIntMap* CairoTextRender::GetFontEncodingVector(const PhysicalFontFace*, const Ucs2OStrMap**, std::set<sal_Unicode> const**)
 {
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
-    psp::fontID aFont = pFont->GetFontId();
-    return GenPspGraphics::DoGetFontEncodingVector(aFont, pNonEncoded, ppPriority);
+    return nullptr;
 }
 
 void CairoTextRender::GetGlyphWidths( const PhysicalFontFace* pFont,
