@@ -37,7 +37,7 @@
             </child>
             <child>
               <object class="GtkButton" id="restart">
-                <property name="label">_Restart</property>
+                <property name="label" translatable="yes">_Restart</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
