@@ -239,6 +239,9 @@ enum class DrawModeFlags : sal_uLong
     SettingsText           = 0x08000000,
     SettingsGradient       = 0x10000000,
     NoTransparency         = 0x80000000,
+
+    // TODO(davido): Remove this hack when MSVC 15.0 constexpr regression is fixed
+    SettingContrast        = 0x1E000000,
 };
 namespace o3tl
 {

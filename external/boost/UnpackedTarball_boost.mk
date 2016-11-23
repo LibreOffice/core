@@ -40,6 +40,9 @@ boost_patches += boost_1_60_0.quadmath.patch
 boost_patches += boost_1_60_0.undef.warning.patch
 boost_patches += boost_1_60_0.android.undef.warning.patch
 
+# Add support for bleeding edge compiler
+boost_patches += msvs2017.patch.0
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))

@@ -35,10 +35,10 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
-			$(if $(filter 120,$(VCVER)),/p:PlatformToolset=v120 \
-				/p:VisualStudioVersion=12.0 /ToolsVersion:12.0) \
-			$(if $(filter 140,$(VCVER)),/p:PlatformToolset=v140 \
-				/p:VisualStudioVersion=14.0 /ToolsVersion:14.0) \
+			$(if $(filter 120,$(VCVER)),/p:PlatformToolset=v120 /p:VisualStudioVersion=12.0 /ToolsVersion:12.0) \
+			$(if $(filter 140,$(VCVER)),/p:PlatformToolset=v140 /p:VisualStudioVersion=14.0 /ToolsVersion:14.0) \
+			$(if $(filter 150,$(VCVER)),/p:PlatformToolset=v141 /p:VisualStudioVersion=15.0 /ToolsVersion:15.0) \
+			$(if $(filter $(UCRTVERSION),),,/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
 	,PCBuild)
 
 else
