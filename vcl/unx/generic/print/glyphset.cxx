@@ -53,7 +53,6 @@ GlyphSet::GlyphSet (sal_Int32 nFontID, bool bVertical)
     maBaseName          = OUStringToOString (rMgr.getPSName(mnFontID),
                                            RTL_TEXTENCODING_ASCII_US);
     mnBaseEncoding      = rMgr.getFontEncoding(mnFontID);
-    mbUseFontEncoding   = rMgr.getUseOnlyFontEncoding(mnFontID);
 }
 
 GlyphSet::~GlyphSet ()
@@ -386,31 +385,6 @@ GlyphSet::GetGlyphSetEncodingName (sal_Int32 nGlyphSetID)
     return GetGlyphSetEncodingName (GetGlyphSetEncoding(nGlyphSetID), maBaseName);
 }
 
-void
-GlyphSet::PSDefineReencodedFont (osl::File* pOutFile, sal_Int32 nGlyphSetID)
-{
-    // only for ps fonts
-    if (meBaseType != fonttype::Type1)
-        return;
-
-    sal_Char  pEncodingVector [256];
-    sal_Int32 nSize = 0;
-
-    nSize += psp::appendStr ("(", pEncodingVector + nSize);
-    nSize += psp::appendStr (GetReencodedFontName(GetGlyphSetEncoding(nGlyphSetID), maBaseName).getStr(),
-                                  pEncodingVector + nSize);
-    nSize += psp::appendStr (") cvn (", pEncodingVector + nSize);
-    nSize += psp::appendStr (maBaseName.getStr(),
-                                  pEncodingVector + nSize);
-    nSize += psp::appendStr (") cvn ", pEncodingVector + nSize);
-    nSize += psp::appendStr (GetGlyphSetEncodingName(nGlyphSetID).getStr(),
-                                  pEncodingVector + nSize);
-    nSize += psp::appendStr (" psp_definefont\n",
-                                  pEncodingVector + nSize);
-
-    psp::WritePS (pOutFile, pEncodingVector, nSize);
-}
-
 OString
 GlyphSet::GetReencodedFontName (rtl_TextEncoding nEnc, const OString &rFontName)
 {
@@ -529,15 +503,6 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
 {
     rGfx.PSMoveTo (rPoint);
 
-    if( mbUseFontEncoding )
-    {
-        OString aPSName( OUStringToOString( rGfx.GetFontMgr().getPSName( mnFontID ), RTL_TEXTENCODING_ISO_8859_1 ) );
-        OString aBytes( OUStringToOString( OUString( pStr, nLen ), mnBaseEncoding ) );
-        rGfx.PSSetFont( aPSName, mnBaseEncoding );
-        rGfx.PSShowText( reinterpret_cast<const unsigned char*>(aBytes.getStr()), nLen, aBytes.getLength() );
-        return;
-    }
-
     int nChar;
     unsigned char *pGlyphID    = static_cast<unsigned char*>(alloca (nLen * sizeof(unsigned char)));
     sal_Int32 *pGlyphSetID = static_cast<sal_Int32*>(alloca (nLen * sizeof(sal_Int32)));
@@ -573,103 +538,7 @@ void
 GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
                         const sal_Unicode* pStr, sal_Int16 nLen, const sal_Int32* pDeltaArray)
 {
-    if( mbUseFontEncoding )
-    {
-        OString aPSName( OUStringToOString( rGfx.GetFontMgr().getPSName( mnFontID ), RTL_TEXTENCODING_ISO_8859_1 ) );
-        OString aBytes( OUStringToOString( OUString( pStr, nLen ), mnBaseEncoding ) );
-        rGfx.PSMoveTo( rPoint );
-        rGfx.PSSetFont( aPSName, mnBaseEncoding );
-        rGfx.PSShowText( reinterpret_cast<const unsigned char*>(aBytes.getStr()), nLen, aBytes.getLength(), pDeltaArray );
-        return;
-    }
-
     DrawGlyphs( rGfx, rPoint, nullptr, pStr, nLen, pDeltaArray, false);
-}
-
-void
-GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
-{
-    // only for ps fonts
-    if (meBaseType != fonttype::Type1)
-        return;
-    if (mnBaseEncoding == RTL_TEXTENCODING_SYMBOL)
-        return;
-
-    PrintFontManager &rMgr = rGfx.GetFontMgr();
-
-    // loop through all the font subsets
-    sal_Int32               nGlyphSetID = 0;
-    char_list_t::iterator   aGlyphSet;
-    for (aGlyphSet = maCharList.begin(); aGlyphSet != maCharList.end(); ++aGlyphSet)
-    {
-        ++nGlyphSetID;
-
-        if (nGlyphSetID == 1) // latin1 page uses global reencoding table
-        {
-            PSDefineReencodedFont (pOutFile, nGlyphSetID);
-            continue;
-        }
-        if ((*aGlyphSet).empty()) // empty set, doesn't need reencoding
-        {
-            continue;
-        }
-
-        // create reencoding table
-
-        sal_Char  pEncodingVector [256];
-        sal_Int32 nSize = 0;
-
-        nSize += psp::appendStr ("/",
-                                 pEncodingVector + nSize);
-        nSize += psp::appendStr (GetGlyphSetEncodingName(nGlyphSetID).getStr(),
-                                 pEncodingVector + nSize);
-        nSize += psp::appendStr (" [ ",
-                                 pEncodingVector + nSize);
-
-        // need a list of glyphs, sorted by glyphid
-        typedef std::map< sal_uInt8, sal_Unicode > ps_mapping_t;
-        typedef ps_mapping_t::value_type ps_value_t;
-        ps_mapping_t aSortedGlyphSet;
-
-        char_map_t::const_iterator aUnsortedGlyph;
-        for (aUnsortedGlyph  = (*aGlyphSet).begin();
-             aUnsortedGlyph != (*aGlyphSet).end();
-             ++aUnsortedGlyph)
-        {
-            aSortedGlyphSet.insert(ps_value_t((*aUnsortedGlyph).second,
-                                             (*aUnsortedGlyph).first));
-        }
-
-        ps_mapping_t::const_iterator aSortedGlyph;
-        // loop through all the glyphs in the subset
-        for (aSortedGlyph  = (aSortedGlyphSet).begin();
-             aSortedGlyph != (aSortedGlyphSet).end();
-             ++aSortedGlyph)
-        {
-            nSize += psp::appendStr ("/",
-                                     pEncodingVector + nSize);
-
-            std::list< OString > aName( rMgr.getAdobeNameFromUnicode((*aSortedGlyph).second) );
-
-            if( !aName.empty() )
-                nSize += psp::appendStr ( aName.front().getStr(), pEncodingVector + nSize);
-            else
-                nSize += psp::appendStr (".notdef", pEncodingVector + nSize );
-            nSize += psp::appendStr (" ",  pEncodingVector + nSize);
-            // flush line
-            if (nSize >= 70)
-            {
-                psp::appendStr ("\n", pEncodingVector + nSize);
-                psp::WritePS (pOutFile, pEncodingVector);
-                nSize = 0;
-            }
-        }
-
-        nSize += psp::appendStr ("] def\n", pEncodingVector + nSize);
-        psp::WritePS (pOutFile, pEncodingVector, nSize);
-
-        PSDefineReencodedFont (pOutFile, nGlyphSetID);
-    }
 }
 
 struct EncEntry

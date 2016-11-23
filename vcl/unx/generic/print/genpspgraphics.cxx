@@ -948,11 +948,7 @@ bool GenPspGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
 
 SalLayout* GenPspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
-    // workaround for printers not handling glyph indexing for non-TT fonts
-    int nFontId = m_pPrinterGfx->GetFontID();
-    if( psp::fonttype::TrueType != psp::PrintFontManager::get().getFontType( nFontId ) )
-        rArgs.mnFlags |= SalLayoutFlags::DisableGlyphProcessing;
-    else if( nFallbackLevel > 0 )
+    if( nFallbackLevel > 0 )
         rArgs.mnFlags &= ~SalLayoutFlags::DisableGlyphProcessing;
 
     GenericSalLayout* pLayout = nullptr;
@@ -996,15 +992,9 @@ bool GenPspGraphics::CreateFontSubset(
     return bSuccess;
 }
 
-const Ucs2SIntMap* GenPspGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const** ppPriority)
+const Ucs2SIntMap* GenPspGraphics::GetFontEncodingVector(const PhysicalFontFace*, const Ucs2OStrMap**, std::set<sal_Unicode> const**)
 {
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
-    psp::fontID aFont = pFont->GetFontId();
-    return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded, ppPriority );
+    return nullptr;
 }
 
 void GenPspGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
@@ -1019,21 +1009,6 @@ void GenPspGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     // be to have the GlyphCache search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
     GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
-}
-
-const Ucs2SIntMap* GenPspGraphics::DoGetFontEncodingVector( fontID aFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const** ppPriority)
-{
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-
-    psp::PrintFontInfo aFontInfo;
-    if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
-    {
-        if( pNonEncoded )
-            *pNonEncoded = nullptr;
-        return nullptr;
-    }
-
-    return rMgr.getEncodingMap( aFont, pNonEncoded, ppPriority );
 }
 
 void GenPspGraphics::DoGetGlyphWidths( psp::fontID aFont,
@@ -1057,16 +1032,12 @@ FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo
     aDFA.SetPitch( rInfo.m_ePitch );
     aDFA.SetSymbolFlag( (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL) );
     aDFA.SetSubsettableFlag( rInfo.m_bSubsettable );
-    aDFA.SetEmbeddableFlag( rInfo.m_bEmbeddable );
+    aDFA.SetEmbeddableFlag(false);
 
     switch( rInfo.m_eType )
     {
         case psp::fonttype::TrueType:
             aDFA.SetQuality( 512 );
-            aDFA.SetBuiltInFontFlag( false );
-            break;
-        case psp::fonttype::Type1:
-            aDFA.SetQuality( 0 );
             aDFA.SetBuiltInFontFlag( false );
             break;
         default:
@@ -1249,13 +1220,6 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
     rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
 
     std::vector<psp::CharacterMetric> aMetrics(nLen);
-    sal_Ucs aUnicodes[nLen];
-    if( aFontInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL && aFontInfo.m_eType == psp::fonttype::Type1 )
-    {
-        for (size_t i = 0; i < nLen; ++i)
-            aUnicodes[i] = pUnicodes[i] < 0x0100 ? pUnicodes[i] + 0xf000 : pUnicodes[i];
-        pUnicodes = aUnicodes;
-    }
     if (!rMgr.getMetrics(aFont, pUnicodes, nLen, aMetrics.data()))
         return nullptr;
 
@@ -1286,11 +1250,6 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
     {
         case psp::fonttype::TrueType:
             rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF;
-            break;
-        case psp::fonttype::Type1: {
-            const bool bPFA = *static_cast<unsigned char*>(pFile) < 0x80;
-            rInfo.m_nFontType = bPFA ? FontSubsetInfo::TYPE1_PFA : FontSubsetInfo::TYPE1_PFB;
-            }
             break;
         default:
             DoFreeEmbedFontData( pFile, *pDataLen );

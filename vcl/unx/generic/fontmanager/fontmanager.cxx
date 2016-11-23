@@ -52,7 +52,6 @@
 #include "i18nlangtag/applelangid.hxx"
 #include "i18nlangtag/mslangid.hxx"
 
-#include "parseAFM.hxx"
 #include "sft.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
@@ -62,9 +61,6 @@
 
 #include <algorithm>
 #include <set>
-#include <unordered_set>
-
-#include "adobe_encoding_table.hxx"
 
 #ifdef CALLGRIND_COMPILE
 #include <valgrind/callgrind.h>
@@ -95,43 +91,6 @@ inline sal_uInt16 getUInt16BE( const sal_uInt8*& pBuffer )
     return nRet;
 }
 
-static FontWeight parseWeight( const OString& rWeight )
-{
-    FontWeight eWeight = WEIGHT_DONTKNOW;
-    if (rWeight.indexOf("bold") != -1)
-    {
-        if (rWeight.indexOf("emi") != -1) // semi, demi
-            eWeight = WEIGHT_SEMIBOLD;
-        else if (rWeight.indexOf("ultra") != -1)
-            eWeight = WEIGHT_ULTRABOLD;
-        else
-            eWeight = WEIGHT_BOLD;
-    }
-    else if (rWeight.indexOf("heavy") != -1)
-        eWeight = WEIGHT_BOLD;
-    else if (rWeight.indexOf("light") != -1)
-    {
-        if (rWeight.indexOf("emi") != -1) // semi, demi
-            eWeight = WEIGHT_SEMILIGHT;
-        else if (rWeight.indexOf("ultra") != -1)
-            eWeight = WEIGHT_ULTRALIGHT;
-        else
-            eWeight = WEIGHT_LIGHT;
-    }
-    else if (rWeight.indexOf("black") != -1)
-        eWeight = WEIGHT_BLACK;
-    else if (rWeight == "demi")
-        eWeight = WEIGHT_SEMIBOLD;
-    else if ((rWeight == "book") ||
-             (rWeight == "semicondensed"))
-        eWeight = WEIGHT_LIGHT;
-    else if ((rWeight == "medium") || (rWeight == "roman"))
-        eWeight = WEIGHT_MEDIUM;
-    else
-        eWeight = WEIGHT_NORMAL;
-    return eWeight;
-}
-
 /*
  *  PrintFont implementations
  */
@@ -144,7 +103,6 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_eWeight( WEIGHT_DONTKNOW ),
         m_ePitch( PITCH_DONTKNOW ),
         m_aEncoding( RTL_TEXTENCODING_DONTKNOW ),
-        m_bFontEncodingOnly( false ),
         m_pMetrics( nullptr ),
         m_nAscend( 0 ),
         m_nDescend( 0 ),
@@ -163,10 +121,6 @@ PrintFontManager::PrintFont::~PrintFont()
     delete m_pMetrics;
 }
 
-PrintFontManager::Type1FontFile::~Type1FontFile()
-{
-}
-
 PrintFontManager::TrueTypeFontFile::TrueTypeFontFile()
 :   PrintFont( fonttype::TrueType )
 ,   m_nDirectory( 0 )
@@ -176,11 +130,6 @@ PrintFontManager::TrueTypeFontFile::TrueTypeFontFile()
 
 PrintFontManager::TrueTypeFontFile::~TrueTypeFontFile()
 {
-}
-
-bool PrintFontManager::Type1FontFile::queryMetricPage( int /*nPage*/, MultiAtomProvider* pProvider )
-{
-    return readAfmMetrics( pProvider, false, false );
 }
 
 bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomProvider* /*pProvider*/ )
@@ -248,396 +197,6 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
     return bSuccess;
 }
 
-/* #i73387# There seem to be fonts with a rather unwell chosen family name
-*  consider e.g. "Helvetica Narrow" which defines its family as "Helvetica"
-*  It can really only be distinguished by its PSName and FullName. Both of
-*  which are not user presentable in OOo. So replace it by something sensible.
-*
-*  If other fonts feature this behaviour, insert them to the map.
-*/
-static bool familyNameOverride( const OUString& i_rPSname, OUString& o_rFamilyName )
-{
-    static std::unordered_map< OUString, OUString, OUStringHash > aPSNameToFamily( 16 );
-    if( aPSNameToFamily.empty() ) // initialization
-    {
-        aPSNameToFamily[ "Helvetica-Narrow" ] = "Helvetica Narrow";
-        aPSNameToFamily[ "Helvetica-Narrow-Bold" ] = "Helvetica Narrow";
-        aPSNameToFamily[ "Helvetica-Narrow-BoldOblique" ] = "Helvetica Narrow";
-        aPSNameToFamily[ "Helvetica-Narrow-Oblique" ] = "Helvetica Narrow";
-    }
-    std::unordered_map<OUString,OUString,OUStringHash>::const_iterator it =
-       aPSNameToFamily.find( i_rPSname );
-    bool bReplaced = (it != aPSNameToFamily.end() );
-    if( bReplaced )
-        o_rFamilyName = it->second;
-    return bReplaced;
-};
-
-bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, bool bFillEncodingvector, bool bOnlyGlobalAttributes )
-{
-    PrintFontManager& rManager( PrintFontManager::get() );
-    const OString& rFileName = rManager.getAfmFile( this );
-
-    FontInfo* pInfo = nullptr;
-    parseFile( rFileName.getStr(), &pInfo, P_ALL );
-    if( ! pInfo || ! pInfo->numOfChars )
-    {
-        if( pInfo )
-            freeFontInfo( pInfo );
-        return false;
-    }
-
-    m_aEncodingVector.clear();
-    m_aEncodingVectorPriority.clear();
-    // fill in global info
-
-    // PSName
-    OUString aPSName( OStringToOUString( pInfo->gfi->fontName, RTL_TEXTENCODING_ISO_8859_1 ) );
-    m_nPSName = pProvider->getAtom( ATOM_PSNAME, aPSName );
-
-    // family name (if not already set)
-    OUString aFamily;
-    if( ! m_nFamilyName )
-    {
-        aFamily = OStringToOUString( pInfo->gfi->familyName, RTL_TEXTENCODING_ISO_8859_1 );
-        if( aFamily.isEmpty() )
-        {
-            aFamily = OStringToOUString( pInfo->gfi->fontName, RTL_TEXTENCODING_ISO_8859_1 );
-            sal_Int32 nIndex  = 0;
-            aFamily = aFamily.getToken( 0, '-', nIndex );
-        }
-        familyNameOverride( aPSName, aFamily );
-        m_nFamilyName = pProvider->getAtom( ATOM_FAMILYNAME, aFamily );
-    }
-    else
-        aFamily = pProvider->getString( ATOM_FAMILYNAME, m_nFamilyName );
-
-    // style name: if fullname begins with family name
-    // interpret the rest of fullname as style
-    if( m_aStyleName.isEmpty() && pInfo->gfi->fullName && *pInfo->gfi->fullName )
-    {
-        OUString aFullName( OStringToOUString( pInfo->gfi->fullName, RTL_TEXTENCODING_ISO_8859_1 ) );
-        if( aFullName.startsWith( aFamily ) )
-            m_aStyleName = WhitespaceToSpace( aFullName.copy( aFamily.getLength() ) );
-    }
-
-    // italic
-    if( pInfo->gfi->italicAngle > 0 )
-        m_eItalic = ITALIC_OBLIQUE;
-    else if( pInfo->gfi->italicAngle < 0 )
-        m_eItalic = ITALIC_NORMAL;
-    else
-        m_eItalic = ITALIC_NONE;
-
-    // weight
-    OString aWeight( pInfo->gfi->weight );
-    m_eWeight = parseWeight( aWeight.toAsciiLowerCase() );
-
-    // pitch
-    m_ePitch = pInfo->gfi->isFixedPitch ? PITCH_FIXED : PITCH_VARIABLE;
-
-    // encoding - only set if unknown
-    int nAdobeEncoding = 0;
-    if( pInfo->gfi->encodingScheme )
-    {
-        if( !strcmp( pInfo->gfi->encodingScheme, "AdobeStandardEncoding" ) )
-            nAdobeEncoding = 1;
-        else if( !strcmp( pInfo->gfi->encodingScheme, "ISO10646-1" ) )
-        {
-            nAdobeEncoding = 1;
-            m_aEncoding = RTL_TEXTENCODING_UNICODE;
-        }
-        else if( !strcmp( pInfo->gfi->encodingScheme, "Symbol") )
-            nAdobeEncoding = 2;
-        else if( !strcmp( pInfo->gfi->encodingScheme, "FontSpecific") )
-            nAdobeEncoding = 3;
-
-        if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
-            m_aEncoding = nAdobeEncoding == 1 ?
-                RTL_TEXTENCODING_ADOBE_STANDARD : RTL_TEXTENCODING_SYMBOL;
-    }
-    else if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
-        m_aEncoding = RTL_TEXTENCODING_ADOBE_STANDARD;
-
-    // try to parse the font name and decide whether it might be a
-    // japanese font. Who invented this PITA ?
-    OUString aPSNameLastToken( aPSName.copy( aPSName.lastIndexOf( '-' )+1 ) );
-    if( aPSNameLastToken == "H"    ||
-        aPSNameLastToken == "V"  )
-    {
-        static const char* pEncs[] =
-            {
-                "EUC",
-                "RKSJ",
-                "SJ"
-            };
-        static const rtl_TextEncoding aEncs[] =
-            {
-                RTL_TEXTENCODING_EUC_JP,
-                RTL_TEXTENCODING_SHIFT_JIS,
-                RTL_TEXTENCODING_JIS_X_0208
-            };
-
-        for( unsigned int enc = 0; enc < SAL_N_ELEMENTS( aEncs ) && m_aEncoding == RTL_TEXTENCODING_DONTKNOW; enc++ )
-        {
-            sal_Int32 nIndex = 0, nOffset = 1;
-            do
-            {
-                OUString aToken( aPSName.getToken( nOffset, '-', nIndex ) );
-                if( nIndex == -1 )
-                    break;
-                nOffset = 0;
-                if( aToken.equalsAscii( pEncs[enc] ) )
-                {
-                    m_aEncoding = aEncs[ enc ];
-                    m_bFontEncodingOnly = true;
-                }
-            } while( nIndex != -1 );
-        }
-
-        // default is jis
-        if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
-            m_aEncoding = RTL_TEXTENCODING_JIS_X_0208;
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "Encoding %d for %s\n", m_aEncoding, pInfo->gfi->fontName );
-#endif
-    }
-
-    // #i37313# check if Fontspecific is not rather some character encoding
-    if( nAdobeEncoding == 3 && m_aEncoding == RTL_TEXTENCODING_SYMBOL )
-    {
-        bool bYFound = false;
-        bool bQFound = false;
-        CharMetricInfo* pChar = pInfo->cmi;
-        for( int j = 0; j < pInfo->numOfChars && ! (bYFound && bQFound); j++ )
-        {
-            if( pChar[j].name )
-            {
-                if( pChar[j].name[0] == 'Y' && pChar[j].name[1] == 0 )
-                    bYFound = true;
-                else if( pChar[j].name[0] == 'Q' && pChar[j].name[1] == 0 )
-                    bQFound = true;
-            }
-        }
-        if( bQFound && bYFound )
-        {
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "setting FontSpecific font %s (file %s) to unicode\n",
-                     pInfo->gfi->fontName,
-                     rFileName.getStr()
-                     );
-            #endif
-            nAdobeEncoding = 4;
-            m_aEncoding = RTL_TEXTENCODING_UNICODE;
-            bFillEncodingvector = false; // will be filled anyway, don't do the work twice
-        }
-    }
-
-    // ascend
-    m_nAscend = pInfo->gfi->fontBBox.ury;
-
-    // descend
-    // descends have opposite sign of our definition
-    m_nDescend = -pInfo->gfi->fontBBox.lly;
-
-    // fallback to ascender, descender
-    // interesting: the BBox seems to describe Ascender and Descender better
-    // as we understand it
-    if( m_nAscend == 0 )
-        m_nAscend = pInfo->gfi->ascender;
-    if( m_nDescend == 0)
-        m_nDescend = -pInfo->gfi->descender;
-
-    m_nLeading = m_nAscend + m_nDescend - 1000;
-
-    delete m_pMetrics;
-    m_pMetrics = new PrintFontMetrics;
-    // mark all pages as queried (or clear if only global font info queried)
-    memset( m_pMetrics->m_aPages, bOnlyGlobalAttributes ? 0 : 0xff, sizeof( m_pMetrics->m_aPages ) );
-
-    m_aGlobalMetricX.width = m_aGlobalMetricY.width =
-        pInfo->gfi->charwidth ? pInfo->gfi->charwidth : pInfo->gfi->fontBBox.urx;
-    m_aGlobalMetricX.height = m_aGlobalMetricY.height =
-        pInfo->gfi->capHeight ? pInfo->gfi->capHeight : pInfo->gfi->fontBBox.ury;
-
-    m_nXMin = pInfo->gfi->fontBBox.llx;
-    m_nYMin = pInfo->gfi->fontBBox.lly;
-    m_nXMax = pInfo->gfi->fontBBox.urx;
-    m_nYMax = pInfo->gfi->fontBBox.ury;
-
-    if( bFillEncodingvector || !bOnlyGlobalAttributes )
-    {
-        // fill in character metrics
-
-        // first transform the character codes to unicode
-        // note: this only works with single byte encodings
-        std::unique_ptr<sal_Unicode[]> const pUnicodes(new sal_Unicode[pInfo->numOfChars]);
-        CharMetricInfo* pChar = pInfo->cmi;
-        int i;
-
-        for( i = 0; i < pInfo->numOfChars; i++, pChar++ )
-        {
-            if( nAdobeEncoding == 4 )
-            {
-                if( pChar->name )
-                {
-                    pUnicodes[i] = 0;
-                    std::vector< sal_Unicode > aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
-                    for( std::vector< sal_Unicode >::const_iterator it = aCodes.begin(); it != aCodes.end(); ++it )
-                    {
-                        if( *it != 0 )
-                        {
-                            m_aEncodingVector[ *it ] = pChar->code;
-                            if( pChar->code == -1 )
-                                m_aNonEncoded[ *it ] = pChar->name;
-                            if( ! pUnicodes[i] ) // map the first
-                                pUnicodes[i] = *it;
-                        }
-                    }
-                }
-            }
-            else if( pChar->code != -1 )
-            {
-                if( nAdobeEncoding == 3 && m_aEncoding == RTL_TEXTENCODING_SYMBOL )
-                {
-                    pUnicodes[i] = pChar->code + 0xf000;
-                    if( bFillEncodingvector )
-                    {
-                        m_aEncodingVector[ pUnicodes[i] ] = pChar->code;
-                        m_aEncodingVectorPriority.insert(pUnicodes[i]);
-                    }
-                    continue;
-                }
-
-                if( m_aEncoding == RTL_TEXTENCODING_UNICODE )
-                {
-                    pUnicodes[i] = (sal_Unicode)pChar->code;
-                    continue;
-                }
-
-                OStringBuffer aTranslate;
-                if( pChar->code & 0xff000000 )
-                    aTranslate.append((char)(pChar->code >> 24));
-                if( pChar->code & 0xffff0000 )
-                    aTranslate.append((char)((pChar->code & 0x00ff0000) >> 16));
-                if( pChar->code & 0xffffff00 )
-                    aTranslate.append((char)((pChar->code & 0x0000ff00) >> 8 ));
-                aTranslate.append((char)(pChar->code & 0xff));
-                OUString aUni(OStringToOUString(aTranslate.makeStringAndClear(), m_aEncoding));
-                pUnicodes[i] = aUni.toChar();
-            }
-            else
-                pUnicodes[i] = 0;
-        }
-
-        // now fill in the character metrics
-        // parseAFM.cxx effectively only supports direction 0 (horizontal)
-        pChar = pInfo->cmi;
-        CharacterMetric aMetric;
-        for( i = 0; i < pInfo->numOfChars; i++, pChar++ )
-        {
-            if( pChar->code == -1 && ! pChar->name )
-                continue;
-
-            if( bFillEncodingvector && pChar->name )
-            {
-                std::vector< sal_Unicode > aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
-                for( std::vector< sal_Unicode >::const_iterator it = aCodes.begin(); it != aCodes.end(); ++it )
-                {
-                    if( *it != 0 )
-                    {
-                        m_aEncodingVector[ *it ] = pChar->code;
-                        if( pChar->code == -1 )
-                            m_aNonEncoded[ *it ] = pChar->name;
-                    }
-                }
-            }
-
-            aMetric.width   = pChar->wx ? pChar->wx : pChar->charBBox.urx;
-            aMetric.height  = pChar->wy ? pChar->wy : pChar->charBBox.ury - pChar->charBBox.lly;
-            if( aMetric.width == 0 && aMetric.height == 0 )
-                // guess something for e.g. space
-                aMetric.width = m_aGlobalMetricX.width/4;
-
-            if( ( nAdobeEncoding == 0 ) ||
-                ( ( nAdobeEncoding == 3 ) && ( m_aEncoding != RTL_TEXTENCODING_SYMBOL ) ) )
-            {
-                if( pChar->code != -1 )
-                {
-                    m_pMetrics->m_aMetrics[ pUnicodes[i] ] = aMetric;
-                    if( bFillEncodingvector )
-                    {
-                        m_aEncodingVector[ pUnicodes[i] ] = pChar->code;
-                        m_aEncodingVectorPriority.insert(pUnicodes[i]);
-                    }
-                }
-                else if( pChar->name )
-                {
-                    std::vector< sal_Unicode > aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
-                    for( std::vector< sal_Unicode >::const_iterator it = aCodes.begin(); it != aCodes.end(); ++it )
-                    {
-                        if( *it != 0 )
-                            m_pMetrics->m_aMetrics[ *it ] = aMetric;
-                    }
-                }
-            }
-            else if( nAdobeEncoding == 1 || nAdobeEncoding == 2 || nAdobeEncoding == 4)
-            {
-                if( pChar->name )
-                {
-                    std::vector< sal_Unicode > aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
-                    for( std::vector< sal_Unicode >::const_iterator it = aCodes.begin(); it != aCodes.end(); ++it )
-                    {
-                        if( *it != 0 )
-                            m_pMetrics->m_aMetrics[ *it ] = aMetric;
-                    }
-                }
-                else if( pChar->code != -1 )
-                {
-                    ::std::pair< std::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator,
-                          std::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator >
-                          aCodes = rManager.getUnicodeFromAdobeCode( pChar->code );
-                    bool bFirst = true;
-                    while( aCodes.first != aCodes.second )
-                    {
-                        if( (*aCodes.first).second != 0 )
-                        {
-                            m_pMetrics->m_aMetrics[ (*aCodes.first).second ] = aMetric;
-                            if( bFillEncodingvector )
-                            {
-                                m_aEncodingVector[ (*aCodes.first).second ] = pChar->code;
-                                if (bFirst) // arbitrarily prefer the first one
-                                {
-                                    m_aEncodingVectorPriority.insert((*aCodes.first).second);
-                                    bFirst = false;
-                                }
-                            }
-                        }
-                        ++aCodes.first;
-                    }
-                }
-            }
-            else if( nAdobeEncoding == 3 )
-            {
-                if( pChar->code != -1 )
-                {
-                    sal_Unicode code = 0xf000 + pChar->code;
-                    m_pMetrics->m_aMetrics[ code ] = aMetric;
-                    // maybe should try to find the name in the convtabs ?
-                    if( bFillEncodingvector )
-                    {
-                        m_aEncodingVector[ code ] = pChar->code;
-                        m_aEncodingVectorPriority.insert(code);
-                    }
-                }
-            }
-        }
-    }
-
-    freeFontInfo( pInfo );
-    return true;
-}
-
 /*
  *  one instance only
  */
@@ -663,17 +222,6 @@ PrintFontManager::PrintFontManager()
     , m_nNextDirAtom( 1 )
     , m_pFontCache( nullptr )
 {
-    for(const AdobeEncEntry& rEntry : aAdobeCodes)
-    {
-        m_aUnicodeToAdobename.insert( std::unordered_multimap< sal_Unicode, OString >::value_type( rEntry.aUnicode, rEntry.pAdobename ) );
-        m_aAdobenameToUnicode.insert( std::unordered_multimap< OString, sal_Unicode, OStringHash >::value_type( rEntry.pAdobename, rEntry.aUnicode ) );
-        if( rEntry.aAdobeStandardCode )
-        {
-            m_aUnicodeToAdobecode.insert( std::unordered_multimap< sal_Unicode, sal_uInt8 >::value_type( rEntry.aUnicode, rEntry.aAdobeStandardCode ) );
-            m_aAdobecodeToUnicode.insert( std::unordered_multimap< sal_uInt8, sal_Unicode >::value_type( rEntry.aAdobeStandardCode, rEntry.aUnicode ) );
-        }
-    }
-
 #if ENABLE_DBUS
     m_aFontInstallerTimer.SetTimeoutHdl(LINK(this, PrintFontManager, autoInstallFontLangSupport));
     m_aFontInstallerTimer.SetTimeout(5000);
@@ -743,7 +291,7 @@ std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
 
 enum fontFormat
 {
-    UNKNOWN, TRUETYPE, CFF, TYPE1
+    UNKNOWN, TRUETYPE, CFF
 };
 
 bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::std::list< PrintFontManager::PrintFont* >& rNewFonts, const char *pFormat ) const
@@ -767,15 +315,11 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
             eFormat = TRUETYPE;
         else if (!strcmp(pFormat, "CFF"))
             eFormat = CFF;
-        else if (!strcmp(pFormat, "Type 1"))
-            eFormat = TYPE1;
     }
     if (eFormat == UNKNOWN)
     {
         OString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
-        if( aExt.equalsIgnoreAsciiCase("pfb") || aExt.equalsIgnoreAsciiCase("pfa") )
-            eFormat = TYPE1;
-        else if( aExt.equalsIgnoreAsciiCase("ttf")
+        if( aExt.equalsIgnoreAsciiCase("ttf")
              ||  aExt.equalsIgnoreAsciiCase("ttc")
              ||  aExt.equalsIgnoreAsciiCase("tte") ) // #i33947# for Gaiji support
             eFormat = TRUETYPE;
@@ -783,53 +327,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
             eFormat = CFF;
     }
 
-    if (eFormat == TYPE1)
-    {
-        // check for corresponding afm metric
-        // first look for an adjacent file
-        static const char* pSuffix[] = { ".afm", ".AFM" };
-
-        for(const char* i : pSuffix)
-        {
-            OString aName = OStringBuffer(
-                rFontFile.copy(0, rFontFile.getLength() - 4)).
-                append(i).makeStringAndClear();
-
-            OStringBuffer aFilePath(aDir);
-            aFilePath.append('/').append(aName);
-
-            OString aAfmFile;
-            if( access( aFilePath.makeStringAndClear().getStr(), R_OK ) )
-            {
-                // try in subdirectory afm instead
-                aFilePath.append(aDir).append("/afm/").append(aName);
-
-                if (!access(aFilePath.getStr(), R_OK))
-                    aAfmFile = OString("afm/") + aName;
-            }
-            else
-                aAfmFile = aName;
-
-            if( !aAfmFile.isEmpty() )
-            {
-                Type1FontFile* pFont = new Type1FontFile();
-                pFont->m_nDirectory     = nDirID;
-
-                pFont->m_aFontFile      = rFontFile;
-                pFont->m_aMetricFile    = aAfmFile;
-
-                if( ! pFont->readAfmMetrics( m_pAtoms, false, true ) )
-                {
-                    delete pFont;
-                    pFont = nullptr;
-                }
-                if( pFont )
-                    rNewFonts.push_back( pFont );
-                break;
-            }
-        }
-    }
-    else if (eFormat == TRUETYPE || eFormat == CFF)
+    if (eFormat == TRUETYPE || eFormat == CFF)
     {
         // get number of ttc entries
         int nLength = CountTTCFonts( aFullPath.getStr() );
@@ -915,14 +413,6 @@ fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile, i
             continue;
         switch( it->second->m_eType )
         {
-            case fonttype::Type1:
-            {
-                Type1FontFile* const pFont = static_cast< Type1FontFile* const >((*it).second);
-                if( pFont->m_nDirectory == nDirID &&
-                    pFont->m_aFontFile == rFontFile )
-                    nID = it->first;
-            }
-            break;
             case fonttype::TrueType:
             {
                 TrueTypeFontFile* const pFont = static_cast< TrueTypeFontFile* const >((*it).second);
@@ -954,14 +444,6 @@ std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString
             continue;
         switch( it->second->m_eType )
         {
-            case fonttype::Type1:
-            {
-                Type1FontFile* const pFont = static_cast< Type1FontFile* const >((*it).second);
-                if( pFont->m_nDirectory == nDirID &&
-                    pFont->m_aFontFile == rFontFile )
-                    aIds.push_back(it->first);
-            }
-            break;
             case fonttype::TrueType:
             {
                 TrueTypeFontFile* const pFont = static_cast< TrueTypeFontFile* const >((*it).second);
@@ -1459,9 +941,7 @@ void PrintFontManager::initialize()
             {
                 fontID aFont = m_nNextFontID++;
                 m_aFonts[ aFont ] = *it;
-                if( (*it)->m_eType == fonttype::Type1 )
-                    m_aFontFileToFontID[ static_cast<Type1FontFile*>(*it)->m_aFontFile ].insert( aFont );
-                else if( (*it)->m_eType == fonttype::TrueType )
+                if( (*it)->m_eType == fonttype::TrueType )
                     m_aFontFileToFontID[ static_cast<TrueTypeFontFile*>(*it)->m_aFontFile ].insert( aFont );
 #if OSL_DEBUG_LEVEL > 1
                 else
@@ -1534,7 +1014,6 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& r
     rInfo.m_ePitch          = pFont->m_ePitch;
     rInfo.m_aEncoding       = pFont->m_aEncoding;
 
-    rInfo.m_bEmbeddable  = (pFont->m_eType == fonttype::Type1);
     rInfo.m_bSubsettable = (pFont->m_eType == fonttype::TrueType); // TODO: rename to SfntType
 
     rInfo.m_aAliases.clear();
@@ -1548,10 +1027,8 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo
         ! pFont->m_pMetrics || pFont->m_pMetrics->isEmpty()
         )
     {
-        // might be a truetype font not analyzed or type1 without metrics read
-        if( pFont->m_eType == fonttype::Type1 )
-            pFont->readAfmMetrics( m_pAtoms, false, false );
-        else if( pFont->m_eType == fonttype::TrueType )
+        // might be a truetype font not analyzed
+        if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
     }
 
@@ -1592,10 +1069,7 @@ void PrintFontManager::getFontBoundingBox( fontID nFontID, int& xMin, int& yMin,
     {
         if( pFont->m_nXMin == 0 && pFont->m_nYMin == 0 && pFont->m_nXMax == 0 && pFont->m_nYMax == 0 )
         {
-            // might be a truetype font not analyzed or type1 without metrics read
-            if( pFont->m_eType == fonttype::Type1 )
-                pFont->readAfmMetrics( m_pAtoms, false, true );
-            else if( pFont->m_eType == fonttype::TrueType )
+            if( pFont->m_eType == fonttype::TrueType )
                 analyzeTrueTypeFile( pFont );
         }
         xMin = pFont->m_nXMin;
@@ -1681,40 +1155,11 @@ FontFamily PrintFontManager::matchFamilyName( const OUString& rFamily )
     return FAMILY_DONTKNOW;
 }
 
-OString PrintFontManager::getAfmFile( PrintFont* pFont ) const
-{
-    OString aMetricPath;
-    if( pFont )
-    {
-        switch( pFont->m_eType )
-        {
-            case fonttype::Type1:
-            {
-                Type1FontFile* pPSFont = static_cast< Type1FontFile* >(pFont);
-                aMetricPath = getDirectory( pPSFont->m_nDirectory );
-                aMetricPath += "/";
-                aMetricPath += pPSFont->m_aMetricFile;
-            }
-            break;
-            default: break;
-        }
-    }
-    return aMetricPath;
-}
-
 OString PrintFontManager::getFontFile( PrintFont* pFont ) const
 {
     OString aPath;
 
-    if( pFont && pFont->m_eType == fonttype::Type1 )
-    {
-        Type1FontFile* pPSFont = static_cast< Type1FontFile* >(pFont);
-        std::unordered_map< int, OString >::const_iterator it = m_aAtomToDir.find( pPSFont->m_nDirectory );
-        aPath = it->second;
-        aPath += "/";
-        aPath += pPSFont->m_aFontFile;
-    }
-    else if( pFont && pFont->m_eType == fonttype::TrueType )
+    if( pFont && pFont->m_eType == fonttype::TrueType )
     {
         TrueTypeFontFile* pTTFont = static_cast< TrueTypeFontFile* >(pFont);
         std::unordered_map< int, OString >::const_iterator it = m_aAtomToDir.find( pTTFont->m_nDirectory );
@@ -1745,8 +1190,6 @@ int PrintFontManager::getFontAscend( fontID nFontID ) const
         // might be a truetype font not yet analyzed
         if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
-        else if( pFont->m_eType == fonttype::Type1 )
-            pFont->readAfmMetrics( m_pAtoms, false, true );
     }
     return pFont ? pFont->m_nAscend : 0;
 }
@@ -1759,8 +1202,6 @@ int PrintFontManager::getFontDescend( fontID nFontID ) const
         // might be a truetype font not yet analyzed
         if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
-        else if( pFont->m_eType == fonttype::Type1 )
-            pFont->readAfmMetrics( m_pAtoms, false, true );
     }
     return pFont ? pFont->m_nDescend : 0;
 }
@@ -1839,9 +1280,7 @@ bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, i
         )
     {
         // might be a font not yet analyzed
-        if( pFont->m_eType == fonttype::Type1 )
-            pFont->readAfmMetrics( m_pAtoms, false, false );
-        else if( pFont->m_eType == fonttype::TrueType )
+        if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
     }
 
@@ -1880,9 +1319,7 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
         )
     {
         // might be a font not yet analyzed
-        if( pFont->m_eType == fonttype::Type1 )
-            pFont->readAfmMetrics( m_pAtoms, false, false );
-        else if( pFont->m_eType == fonttype::TrueType )
+        if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
     }
 
@@ -1930,11 +1367,9 @@ bool PrintFontManager::createFontSubset(
     switch( pFont->m_eType )
     {
         case psp::fonttype::TrueType: rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF; break;
-        case psp::fonttype::Type1: rInfo.m_nFontType = FontSubsetInfo::ANY_TYPE1; break;
         default:
             return false;
     }
-    // TODO: remove when Type1 subsetting gets implemented
     if( pFont->m_eType != fonttype::TrueType )
         return false;
 
@@ -2071,8 +1506,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                                        std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc )
 {
     PrintFont* pFont = getFont( nFont );
-    if( !pFont ||
-        (pFont->m_eType != fonttype::TrueType && pFont->m_eType != fonttype::Type1) )
+    if( !pFont || pFont->m_eType != fonttype::TrueType )
         return;
     if( pFont->m_eType == fonttype::TrueType )
     {
@@ -2131,90 +1565,6 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
         }
         CloseTTFont( pTTFont );
     }
-    else if( pFont->m_eType == fonttype::Type1 )
-    {
-        if( pFont->m_aEncodingVector.empty() )
-            pFont->readAfmMetrics( m_pAtoms, true, true );
-        if( pFont->m_pMetrics )
-        {
-            rUnicodeEnc.clear();
-            rWidths.clear();
-            rWidths.reserve( pFont->m_pMetrics->m_aMetrics.size() );
-            for( std::unordered_map< int, CharacterMetric >::const_iterator it =
-                 pFont->m_pMetrics->m_aMetrics.begin();
-                 it != pFont->m_pMetrics->m_aMetrics.end(); ++it )
-            {
-                if( (it->first & 0x00010000) == 0 || bVertical )
-                {
-                    rUnicodeEnc[ sal_Unicode(it->first & 0x0000ffff) ] = sal_uInt32(rWidths.size());
-                    rWidths.push_back( it->second.width );
-                }
-            }
-        }
-    }
-}
-
-const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( fontID nFont, const std::map< sal_Unicode, OString >** pNonEncoded, std::set<sal_Unicode> const** ppPriority ) const
-{
-    PrintFont* pFont = getFont( nFont );
-    if( !pFont || pFont->m_eType != fonttype::Type1 )
-        return nullptr;
-
-    if( pFont->m_aEncodingVector.empty() )
-        pFont->readAfmMetrics( m_pAtoms, true, true );
-
-    if( pNonEncoded )
-        *pNonEncoded = !pFont->m_aNonEncoded.empty() ? &pFont->m_aNonEncoded : nullptr;
-
-    if (ppPriority)
-    {
-        *ppPriority = &pFont->m_aEncodingVectorPriority;
-    }
-
-    return !pFont->m_aEncodingVector.empty() ? &pFont->m_aEncodingVector : nullptr;
-}
-
-std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aChar ) const
-{
-    std::pair< std::unordered_multimap< sal_Unicode, OString >::const_iterator,
-        std::unordered_multimap< sal_Unicode, OString >::const_iterator > range
-        =  m_aUnicodeToAdobename.equal_range( aChar );
-
-    std::list< OString > aRet;
-    for( ; range.first != range.second; ++range.first )
-        aRet.push_back( range.first->second );
-
-    if( aRet.empty() && aChar != 0 )
-    {
-        sal_Char aBuf[8];
-        sal_Int32 nChars = snprintf(
-            aBuf, sizeof(aBuf), "uni%.4hX", sal_uInt16(aChar));
-        aRet.push_back( OString( aBuf, nChars ) );
-    }
-
-    return aRet;
-}
-
-std::vector< sal_Unicode >  PrintFontManager::getUnicodeFromAdobeName( const OString& rName ) const
-{
-    std::pair< std::unordered_multimap< OString, sal_Unicode, OStringHash >::const_iterator,
-        std::unordered_multimap< OString, sal_Unicode, OStringHash >::const_iterator > range
-        =  m_aAdobenameToUnicode.equal_range( rName );
-
-    std::vector< sal_Unicode > aRet;
-    for( ; range.first != range.second; ++range.first )
-        aRet.push_back( range.first->second );
-
-    if( aRet.empty() )
-    {
-        if( rName.getLength() == 7 && rName.startsWith( "uni" ) )
-        {
-            sal_Unicode aCode = (sal_Unicode)rName.copy( 3 ).toUInt32( 16 );
-            aRet.push_back( aCode );
-        }
-    }
-
-    return aRet;
 }
 
 /// used by online unit tests via dlopen.

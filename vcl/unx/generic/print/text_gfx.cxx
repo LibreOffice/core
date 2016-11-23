@@ -82,19 +82,6 @@ static int getVerticalDeltaAngle( sal_Unicode nChar )
     return 0;
 }
 
-void
-PrinterGfx::PSUploadPS1Font (sal_Int32 nFontID)
-{
-    // already in the document header ?
-    for ( int i : maPS1Font )
-        if( nFontID == i )
-            return;
-
-    // no occurrence yet, mark for download
-    // add the fontid to the list
-    maPS1Font.push_back (nFontID);
-}
-
 /*
  * implement text handling printer routines,
  */
@@ -164,12 +151,6 @@ void PrinterGfx::DrawGlyphs(
     if ( !mrFontMgr.isFontDownloadingAllowedForPrinting( mnFontID ) )
     {
         LicenseWarning(rPoint, pUnicodes, nLen, pDeltaArray);
-        return;
-    }
-
-    if( mrFontMgr.getFontType( mnFontID ) != fonttype::TrueType )
-    {
-        DrawText( rPoint, pUnicodes, nLen, pDeltaArray );
         return;
     }
 
@@ -559,20 +540,10 @@ PrinterGfx::drawText(
 
     fonttype::type   eType          = mrFontMgr.getFontType (mnFontID);
 
-    if (eType == fonttype::Type1)
-        PSUploadPS1Font (mnFontID);
-
     if (   eType == fonttype::TrueType
         && !mrFontMgr.isFontDownloadingAllowedForPrinting(mnFontID))
     {
         LicenseWarning(rPoint, pStr, nLen, pDeltaArray);
-        return;
-    }
-
-    if( mrFontMgr.getUseOnlyFontEncoding( mnFontID ) )
-    {
-        GlyphSet aGSet( mnFontID, mbTextVertical );
-        aGSet.DrawText( *this, rPoint, pStr, nLen, pDeltaArray );
         return;
     }
 
@@ -656,51 +627,11 @@ void
 PrinterGfx::OnEndJob ()
 {
     maPS3Font.clear();
-    maPS1Font.clear();
 }
 
 void
 PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts )
 {
-    // write all type 1 fonts
-    // already in the document header ?
-    for (int aFont : maPS1Font)
-    {
-        const OString& rSysPath (mrFontMgr.getFontFileSysPath(aFont) );
-        OUString aUNCPath;
-        osl::File::getFileURLFromSystemPath (OStringToOUString (rSysPath, osl_getThreadTextEncoding()), aUNCPath);
-        osl::File aFontFile (aUNCPath);
-
-        // provide the pfb or pfa font as a (pfa-)font resource
-        OString aPostScriptName =
-            OUStringToOString ( mrFontMgr.getPSName(aFont),
-                                     RTL_TEXTENCODING_ASCII_US );
-
-        WritePS (pFile, "%%BeginResource: font ");
-        WritePS (pFile, aPostScriptName.getStr());
-        WritePS (pFile, "\n");
-
-        osl::File::RC nError = aFontFile.open(osl_File_OpenFlag_Read);
-        if (nError == osl::File::E_None)
-        {
-            convertPfbToPfa (aFontFile, *pFile);
-            aFontFile.close ();
-
-            char lastchar = '\n';
-
-            if (pFile->setPos(osl_Pos_Current, -1) == osl::FileBase::E_None)
-            {
-                sal_uInt64 uBytes(1);
-                pFile->read(static_cast<void *>(&lastchar), uBytes, uBytes);
-            }
-
-            if (lastchar != '\n')
-                WritePS (pFile, "\n");
-        }
-        WritePS (pFile, "%%EndResource\n");
-        rSuppliedFonts.push_back( aPostScriptName );
-    }
-
     // write glyphsets and reencodings
     std::list< GlyphSet >::iterator aIter;
     for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
@@ -708,10 +639,6 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFon
         if (aIter->GetFontType() == fonttype::TrueType)
         {
             aIter->PSUploadFont (*pFile, *this, mbUploadPS42Fonts, rSuppliedFonts );
-        }
-        else
-        {
-            aIter->PSUploadEncoding (pFile, *this);
         }
     }
 }
