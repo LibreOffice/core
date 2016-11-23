@@ -32,14 +32,19 @@
 #include "admincontrols.hxx"
 
 #include <svtools/dialogcontrolling.hxx>
+#include <o3tl/typed_flags_set.hxx>
+
+enum class OCommonBehaviourTabPageFlags {
+    NONE        = 0x0000,
+    UseCharset  = 0x0002,
+    UseOptions  = 0x0004,
+};
+namespace o3tl {
+    template<> struct typed_flags<OCommonBehaviourTabPageFlags> : is_typed_flags<OCommonBehaviourTabPageFlags, 0x0006> {};
+}
 
 namespace dbaui
 {
-    // OCommonBehaviourTabPage
-    #define     CBTP_NONE                           0x00000000
-    #define     CBTP_USE_CHARSET                    0x00000002
-    #define     CBTP_USE_OPTIONS                    0x00000004
-
     /** eases the implementation of tab pages handling user/password and/or character
         set and/or generic options input
         <BR>
@@ -62,13 +67,12 @@ namespace dbaui
         VclPtr<FixedText>          m_pAutoRetrievingLabel;
         VclPtr<Edit>               m_pAutoRetrieving;
 
-        sal_uInt32          m_nControlFlags;
+        OCommonBehaviourTabPageFlags m_nControlFlags;
 
     public:
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
-        // nControlFlags is a combination of the CBTP_xxx-constants
-        OCommonBehaviourTabPage(vcl::Window* pParent, const OString& rId, const OUString& rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt32 nControlFlags);
+        OCommonBehaviourTabPage(vcl::Window* pParent, const OString& rId, const OUString& rUIXMLDescription, const SfxItemSet& _rCoreAttrs, OCommonBehaviourTabPageFlags nControlFlags);
     protected:
 
         virtual ~OCommonBehaviourTabPage() override;
