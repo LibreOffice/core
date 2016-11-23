@@ -21,7 +21,6 @@
 
 #include <config_features.h>
 
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <view.hxx>
 
 #include <sfx2/objsh.hxx>

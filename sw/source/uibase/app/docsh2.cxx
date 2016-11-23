@@ -20,7 +20,6 @@
 #include <config_features.h>
 
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 
 #include <comphelper/processfactory.hxx>

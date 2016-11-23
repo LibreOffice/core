@@ -21,7 +21,6 @@
 
 #include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
-#include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <o3tl/any.hxx>
 #include <vcl/graphicfilter.hxx>

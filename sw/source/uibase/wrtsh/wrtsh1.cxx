@@ -19,7 +19,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedVerbs.hpp>

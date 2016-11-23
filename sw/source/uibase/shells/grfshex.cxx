@@ -40,9 +40,6 @@
 #include <svx/svdpagv.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <poolfmt.hrc>
 
 #include <sfx2/request.hxx>

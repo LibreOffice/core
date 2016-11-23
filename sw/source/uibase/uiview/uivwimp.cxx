@@ -23,9 +23,7 @@
 #include "globals.hrc"
 
 #include <com/sun/star/scanner/XScannerManager2.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/layout.hxx>

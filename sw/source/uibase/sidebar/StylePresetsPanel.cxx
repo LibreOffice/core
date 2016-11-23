@@ -26,11 +26,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/DocumentTemplates.hpp>
-#include <com/sun/star/frame/XDocumentTemplates.hpp>
-#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <sfx2/doctempl.hxx>
 

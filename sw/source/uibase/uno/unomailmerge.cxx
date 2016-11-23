@@ -34,14 +34,12 @@
 #include <com/sun/star/text/MailMergeType.hpp>
 #include <com/sun/star/text/MailMergeEvent.hpp>
 #include <com/sun/star/text/XMailMergeListener.hpp>
-#include <com/sun/star/text/XMailMergeBroadcaster.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
