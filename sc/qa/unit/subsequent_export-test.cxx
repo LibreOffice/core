@@ -67,7 +67,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/GeneralFunction2.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -2787,7 +2787,7 @@ void ScExportTest::testPivotTableXLSX()
             }
 
             const ScDPSaveDimension* pDim = aDims[0];
-            if (pDim->GetFunction() != sheet::GeneralFunction_SUM)
+            if (pDim->GetFunction() != sheet::GeneralFunction2::SUM)
             {
                 cerr << "Data field should have SUM function." << endl;
                 return false;
@@ -2894,13 +2894,13 @@ void ScExportTest::testPivotTableTwoDataFieldsXLSX()
                 return false;
             }
 
-            if (aDims[0]->GetFunction() != sheet::GeneralFunction_SUM)
+            if (aDims[0]->GetFunction() != sheet::GeneralFunction2::SUM)
             {
                 cerr << "First data field should be SUM." << endl;
                 return false;
             }
 
-            if (aDims[1]->GetFunction() != sheet::GeneralFunction_COUNT)
+            if (aDims[1]->GetFunction() != sheet::GeneralFunction2::COUNT)
             {
                 cerr << "First data field should be COUNT." << endl;
                 return false;
@@ -2968,16 +2968,9 @@ void ScExportTest::testPivotTableMedian()
         std::vector<ScDPSaveDimension const *>::size_type(1), aDims.size());
 
     const ScDPSaveDimension* pDim = aDims.back();
-#if 0
-// disabled because of css::sheet::GeneralFunction API incompatibility
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Function for the data field should be MEDIAN.",
-        sal_uInt16(sheet::GeneralFunction_MEDIAN), pDim->GetFunction());
-#else
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "Function for the data field should be MEDIAN.",
-        sal_uInt16(sheet::GeneralFunction_NONE), pDim->GetFunction());
-#endif
+        sal_uInt16(sheet::GeneralFunction2::MEDIAN), pDim->GetFunction());
 
     xDocSh2->DoClose();
 }
@@ -3669,7 +3662,6 @@ void ScExportTest::testHeaderImage()
     OUString aURL;
     xStyle->getPropertyValue("HeaderBackGraphicURL") >>= aURL;
     CPPUNIT_ASSERT(aURL.startsWith("vnd.sun.star.GraphicObject:"));
-
     xDocSh->DoClose();
 }
 

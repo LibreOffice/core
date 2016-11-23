@@ -41,7 +41,6 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/XDataPilotDataLayoutFieldSupplier.hpp>
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
 #include <com/sun/star/sheet/XDataPilotField.hpp>
@@ -70,8 +69,8 @@ class ScDataPilotItemObj;
 class ScDataPilotConversion
 {
 public:
-    static css::sheet::GeneralFunction   FirstFunc( PivotFunc nBits );
-    static PivotFunc           FunctionBit( css::sheet::GeneralFunction eFunc );
+    static sal_Int16   FirstFunc( PivotFunc nBits );
+    static PivotFunc           FunctionBit( sal_Int16 eFunc );
 
     static void         FillGroupInfo(
                             css::sheet::DataPilotFieldGroupInfo& rInfo,
@@ -551,10 +550,10 @@ public:
                             // only called from property-functions:
     css::sheet::DataPilotFieldOrientation getOrientation() const;
     void setOrientation(css::sheet::DataPilotFieldOrientation Orientation);
-    css::sheet::GeneralFunction getFunction() const;
-    void setFunction(css::sheet::GeneralFunction Function);
-    css::uno::Sequence< css::sheet::GeneralFunction > getSubtotals() const;
-    void setSubtotals(const css::uno::Sequence< css::sheet::GeneralFunction >& rFunctions);
+    sal_Int16 getFunction() const;
+    void setFunction(sal_Int16 Function);
+    css::uno::Sequence< sal_Int16 > getSubtotals() const;
+    void setSubtotals(const css::uno::Sequence< sal_Int16 >& rFunctions);
     void setCurrentPage(const OUString& sPage);
     void setUseCurrentPage(bool bUse);
     const css::sheet::DataPilotFieldAutoShowInfo* getAutoShowInfo();
