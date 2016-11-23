@@ -86,14 +86,7 @@
 #include <mmconfigitem.hxx>
 #include <linguistic/lngprops.hxx>
 #include <editeng/unolingu.hxx>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/TextConnectionSettings.hpp>

@@ -63,7 +63,6 @@
 #include <comcore.hrc>
 #include <view.hrc>
 #include <hhcwrp.hxx>
-#include <com/sun/star/frame/XStorable.hpp>
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

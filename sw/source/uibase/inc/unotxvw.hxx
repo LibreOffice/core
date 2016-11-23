@@ -21,7 +21,6 @@
 
 #include <sfx2/sfxbasecontroller.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XRubySelection.hpp>

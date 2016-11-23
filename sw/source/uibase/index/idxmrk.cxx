@@ -20,9 +20,6 @@
 #include <hintids.hxx>
 #include <helpid.h>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>

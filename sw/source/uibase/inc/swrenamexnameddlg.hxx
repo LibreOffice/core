@@ -24,10 +24,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
 #include <actctrl.hxx>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
 class SwRenameXNamedDlg : public ModalDialog

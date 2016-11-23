@@ -25,7 +25,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 #include <linguistic/lngprops.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <swwait.hxx>
 

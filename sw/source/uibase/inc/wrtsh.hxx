@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WRTSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WRTSH_HXX
 
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include "swdllapi.h"
 #include <fesh.hxx>
 #include <sortopt.hxx>

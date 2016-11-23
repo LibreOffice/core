@@ -97,8 +97,6 @@
 #include <IDocumentStatistics.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <unotools/lingucfg.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <editeng/unolingu.hxx>
 #include <unotools/syslocaleoptions.hxx>

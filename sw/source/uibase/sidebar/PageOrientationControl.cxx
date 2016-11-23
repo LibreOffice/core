@@ -19,6 +19,8 @@
 
 #include "PageOrientationControl.hxx"
 #include "PageMarginControl.hxx"
+#include <com/sun/star/document/XUndoManager.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <swtypes.hxx>
 #include <sfx2/viewsh.hxx>

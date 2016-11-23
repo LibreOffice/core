@@ -49,13 +49,9 @@
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

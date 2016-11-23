@@ -30,17 +30,9 @@
 #include <svl/itemset.hxx>
 #include <sfx2/request.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/sdb/XDatabaseAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <sfx2/frame.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>

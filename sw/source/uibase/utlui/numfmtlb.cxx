@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
