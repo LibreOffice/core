@@ -25,6 +25,7 @@
 #include <iderid.hxx>
 #include <svtools/tabbar.hxx>
 #include <vcl/toolbox.hxx>
+#include <basic/sbdef.hxx>
 
 #include <unordered_map>
 
@@ -63,13 +64,13 @@ struct BasicStatus
     bool bIsRunning : 1;
     bool bError : 1;
     bool bIsInReschedule : 1;
-    sal_uInt16 nBasicFlags;
+    BasicDebugFlags nBasicFlags;
 
     BasicStatus():
         bIsRunning(false),
         bError(false),
         bIsInReschedule(false),
-        nBasicFlags(0) { }
+        nBasicFlags(BasicDebugFlags::NONE) { }
 };
 
 

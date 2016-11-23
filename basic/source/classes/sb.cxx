@@ -1430,7 +1430,7 @@ SbModule* StarBASIC::GetActiveModule()
     }
 }
 
-sal_uInt16 StarBASIC::BreakPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
+BasicDebugFlags StarBASIC::BreakPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
     SetErrorData( 0, l, c1, c2 );
     bBreak = true;
@@ -1444,7 +1444,7 @@ sal_uInt16 StarBASIC::BreakPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
     }
 }
 
-sal_uInt16 StarBASIC::StepPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
+BasicDebugFlags StarBASIC::StepPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
     SetErrorData( 0, l, c1, c2 );
     bBreak = false;
@@ -1458,9 +1458,9 @@ sal_uInt16 StarBASIC::StepPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
     }
 }
 
-sal_uInt16 StarBASIC::BreakHdl()
+BasicDebugFlags StarBASIC::BreakHdl()
 {
-    return aBreakHdl.IsSet() ? aBreakHdl.Call( this ) : SbDEBUG_CONTINUE;
+    return aBreakHdl.IsSet() ? aBreakHdl.Call( this ) : BasicDebugFlags::Continue;
 }
 
 // Calls for error handler and break handler
@@ -1802,7 +1802,7 @@ void StarBASIC::SetGlobalErrorHdl( const Link<StarBASIC*,bool>& rLink )
     GetSbData()->aErrHdl = rLink;
 }
 
-void StarBASIC::SetGlobalBreakHdl( const Link<StarBASIC*,sal_uInt16>& rLink )
+void StarBASIC::SetGlobalBreakHdl( const Link<StarBASIC*,BasicDebugFlags>& rLink )
 {
     GetSbData()->aBreakHdl = rLink;
 }

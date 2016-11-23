@@ -1181,10 +1181,10 @@ void SbModule::Run( SbMethod* pMeth )
             GetSbData()->pInst->nCallLvl--;          // Call-Level down again
 
             // Exist an higher-ranking runtime instance?
-            // Then take over SbDEBUG_BREAK, if set
+            // Then take over BasicDebugFlags::Break, if set
             SbiRuntime* pRtNext = pRt->pNext;
-            if( pRtNext && (pRt->GetDebugFlags() & SbDEBUG_BREAK) )
-                pRtNext->SetDebugFlags( SbDEBUG_BREAK );
+            if( pRtNext && (pRt->GetDebugFlags() & BasicDebugFlags::Break) )
+                pRtNext->SetDebugFlags( BasicDebugFlags::Break );
 
             delete pRt;
             GetSbData()->pMod = pOldMod;
@@ -1558,9 +1558,9 @@ bool SbModule::SetBP( sal_uInt16 nLine )
     }
     pBreaks->insert( pBreaks->begin() + i, nLine );
 
-    // #38568: Set during runtime as well here SbDEBUG_BREAK
+    // #38568: Set during runtime as well here BasicDebugFlags::Break
     if( GetSbData()->pInst && GetSbData()->pInst->pRun )
-        GetSbData()->pInst->pRun->SetDebugFlags( SbDEBUG_BREAK );
+        GetSbData()->pInst->pRun->SetDebugFlags( BasicDebugFlags::Break );
 
     return IsBreakable( nLine );
 }
@@ -1975,12 +1975,12 @@ SbMethod::SbMethod( const OUString& r, SbxDataType t, SbModule* p )
         : SbxMethod( r, t ), pMod( p )
 {
     bInvalid     = true;
-    nStart       =
-    nDebugFlags  =
-    nLine1       =
+    nStart       = 0;
+    nDebugFlags  = BasicDebugFlags::NONE;
+    nLine1       = 0;
     nLine2       = 0;
-    refStatics = new SbxArray;
-    mCaller          = nullptr;
+    refStatics   = new SbxArray;
+    mCaller      = nullptr;
     // HACK due to 'Referenz could not be saved'
     SetFlag( SbxFlagBits::NoModify );
 }

@@ -89,8 +89,8 @@ struct SbiGlobals
     SbModule*       pMod;           // currently active module
     SbModule*       pCompMod;       // currently compiled module
     short           nInst;          // number of BASICs
-    Link<StarBASIC*,bool>        aErrHdl;        // global error handler
-    Link<StarBASIC*,sal_uInt16>  aBreakHdl;      // global break handler
+    Link<StarBASIC*,bool>            aErrHdl;        // global error handler
+    Link<StarBASIC*,BasicDebugFlags> aBreakHdl;      // global break handler
     SbError         nCode;
     sal_Int32       nLine;
     sal_Int32       nCol1,nCol2;    // from... to...

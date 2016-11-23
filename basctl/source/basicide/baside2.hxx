@@ -360,7 +360,7 @@ public:
     void            BasicAddWatch();
 
     bool            BasicErrorHdl( StarBASIC* pBasic );
-    long            BasicBreakHdl( StarBASIC* pBasic );
+    BasicDebugFlags BasicBreakHdl( StarBASIC* pBasic );
     void            AssertValidEditEngine();
 
     void            LoadBasic();
