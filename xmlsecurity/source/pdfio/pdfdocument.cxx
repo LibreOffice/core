@@ -380,7 +380,7 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
         aSigBuffer.append("/ETSI.CAdES.detached");
     else
 #else
-        (void)bAdES;
+    (void)bAdES;
 #endif
         aSigBuffer.append("/adbe.pkcs7.detached");
 
