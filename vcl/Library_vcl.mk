@@ -549,7 +549,6 @@ vcl_headless_freetype_code=\
     vcl/unx/generic/fontmanager/fontconfig \
     vcl/unx/generic/fontmanager/fontmanager \
     vcl/unx/generic/fontmanager/helper \
-    vcl/unx/generic/fontmanager/parseAFM \
     vcl/headless/svpcairotextrender \
     vcl/unx/generic/print/bitmap_gfx \
     vcl/unx/generic/print/common_gfx \
