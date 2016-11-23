@@ -159,7 +159,7 @@ public:
     // explanation see runtime.cxx at SbiInstance::CalcBreakCallLevel()
     sal_uInt16  nCallLvl;
     sal_uInt16  nBreakCallLvl;
-    void    CalcBreakCallLevel( sal_uInt16 nFlags );
+    void    CalcBreakCallLevel( BasicDebugFlags nFlags );
 
     SbiInstance( StarBASIC* );
    ~SbiInstance();
@@ -217,46 +217,46 @@ class SbiRuntime
     static pStep1 aStep1[];
     static pStep2 aStep2[];
 
-    StarBASIC&    rBasic;           // StarBASIC instance
-    SbiInstance*   pInst;           // current thread
-    SbModule*     pMod;             // current module
-    SbMethod*     pMeth;            // method instance
-    SbiIoSystem*   pIosys;          // I/O-System
-    const SbiImage* pImg;           // Code-Image
-    SbxArrayRef   refExprStk;       // expression stack
-    SbxArrayRef   refCaseStk;       // CASE expression stack
-    SbxArrayRef   refRedimpArray;   // Array saved to use for REDIM PRESERVE
-    SbxVariableRef   refRedim;   // Array saved to use for REDIM
-    SbxVariableRef xDummyVar;       // substitute for variables that weren't found
-    SbxVariable* mpExtCaller;       // Caller ( external - e.g. button name, shape, range object etc. - only in vba mode )
-    SbiForStack*   pForStk;         // FOR/NEXT-Stack
-    sal_uInt16        nExprLvl;         // depth of the expr-stack
-    sal_uInt16        nForLvl;          // #118235: Maintain for level
+    StarBASIC&         rBasic;           // StarBASIC instance
+    SbiInstance*       pInst;            // current thread
+    SbModule*          pMod;             // current module
+    SbMethod*          pMeth;            // method instance
+    SbiIoSystem*       pIosys;           // I/O-System
+    const SbiImage*    pImg;             // Code-Image
+    SbxArrayRef        refExprStk;       // expression stack
+    SbxArrayRef        refCaseStk;       // CASE expression stack
+    SbxArrayRef        refRedimpArray;   // Array saved to use for REDIM PRESERVE
+    SbxVariableRef     refRedim;         // Array saved to use for REDIM
+    SbxVariableRef     xDummyVar;        // substitute for variables that weren't found
+    SbxVariable*       mpExtCaller;      // Caller ( external - e.g. button name, shape, range object etc. - only in vba mode )
+    SbiForStack*       pForStk;          // FOR/NEXT-Stack
+    sal_uInt16         nExprLvl;         // depth of the expr-stack
+    sal_uInt16         nForLvl;          // #118235: Maintain for level
     const sal_uInt8*   pCode;            // current Code-Pointer
     const sal_uInt8*   pStmnt;           // beginning of the last statement
     const sal_uInt8*   pError;           // address of the current error handler
     const sal_uInt8*   pRestart;         // restart-address
     const sal_uInt8*   pErrCode;         // restart-adresse RESUME NEXT
     const sal_uInt8*   pErrStmnt;        // Restart-Adresse RESUME 0
-    OUString        aLibName;         // Lib-name for declare-call
-    SbxArrayRef   refParams;        // current procedure parameters
-    SbxArrayRef   refLocals;        // local variable
-    SbxArrayRef   refArgv;
+    OUString           aLibName;         // Lib-name for declare-call
+    SbxArrayRef        refParams;        // current procedure parameters
+    SbxArrayRef        refLocals;        // local variable
+    SbxArrayRef        refArgv;
     // #74254, one refSaveObj is not enough! new: pRefSaveList (see above)
-    short         nArgc;
-    bool          bRun;
-    bool          bError;           // true: handle errors
-    bool          bInError;         // true: in an error handler
-    bool          bBlocked;         // true: blocked by next call level, #i48868
-    bool          bVBAEnabled;
-    sal_uInt16        nFlags;           // Debugging-Flags
-    SbError       nError;
-    sal_uInt16        nOps;             // opcode counter
-    sal_uInt32    m_nLastTime;
+    short              nArgc;
+    bool               bRun;
+    bool               bError;           // true: handle errors
+    bool               bInError;         // true: in an error handler
+    bool               bBlocked;         // true: blocked by next call level, #i48868
+    bool               bVBAEnabled;
+    BasicDebugFlags    nFlags;           // Debugging-Flags
+    SbError            nError;
+    sal_uInt16         nOps;             // opcode counter
+    sal_uInt32         m_nLastTime;
 
     std::vector<SbxVariableRef>  aRefSaved; // #74254 save temporary references
-    std::vector<SbiGosub>   pGosubStk; // GOSUB stack
-    std::vector<SbiArgv>    pArgvStk;  // ARGV-Stack
+    std::vector<SbiGosub>   pGosubStk;      // GOSUB stack
+    std::vector<SbiArgv>    pArgvStk;       // ARGV-Stack
 
 
     SbxVariable* FindElement
@@ -364,8 +364,8 @@ public:
     void block()     { bBlocked = true; }
     void unblock()   { bBlocked = false; }
     SbModule* GetModule()  { return pMod;    }
-    sal_uInt16 GetDebugFlags() { return nFlags;  }
-    void SetDebugFlags( sal_uInt16 nFl ) { nFlags = nFl;  }
+    BasicDebugFlags GetDebugFlags() { return nFlags;  }
+    void SetDebugFlags( BasicDebugFlags nFl ) { nFlags = nFl;  }
     SbMethod* GetCaller() { return pMeth;}
     SbxVariable* GetExternalCaller(){ return mpExtCaller; }
 

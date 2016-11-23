@@ -283,26 +283,20 @@ SbiRTLData::~SbiRTLData()
 // (also have a look at: step2.cxx, SbiRuntime::StepSTMNT() )
 
 
-void SbiInstance::CalcBreakCallLevel( sal_uInt16 nFlags )
+void SbiInstance::CalcBreakCallLevel( BasicDebugFlags nFlags )
 {
 
-    nFlags &= ~((sal_uInt16)SbDEBUG_BREAK);
+    nFlags &= ~BasicDebugFlags::Break;
 
     sal_uInt16 nRet;
-    switch( nFlags )
-    {
-    case SbDEBUG_STEPINTO:
+    if (nFlags  == BasicDebugFlags::StepInto) {
         nRet = nCallLvl + 1;    // CallLevel+1 is also stopped
-        break;
-    case SbDEBUG_STEPOVER | SbDEBUG_STEPINTO:
+    } else if (nFlags == (BasicDebugFlags::StepOver | BasicDebugFlags::StepInto)) {
         nRet = nCallLvl;        // current CallLevel is stopped
-        break;
-    case SbDEBUG_STEPOUT:
+    } else if (nFlags == BasicDebugFlags::StepOut) {
         nRet = nCallLvl - 1;    // smaller CallLevel is stopped
-        break;
-    case SbDEBUG_CONTINUE:
-        // Basic-IDE returns 0 instead of SbDEBUG_CONTINUE, so also default=continue
-    default:
+    } else {
+        // Basic-IDE returns 0 instead of BasicDebugFlags::Continue, so also default=continue
         nRet = 0;               // CallLevel is always > 0 -> no StepPoint
     }
     nBreakCallLvl = nRet;           // take result
@@ -448,7 +442,7 @@ SvNumberFormatter* SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx
 }
 
 
-// Let engine run. If Flags == SbDEBUG_CONTINUE, take Flags over
+// Let engine run. If Flags == BasicDebugFlags::Continue, take Flags over
 
 void SbiInstance::Stop()
 {
@@ -572,7 +566,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
          : rBasic( *static_cast<StarBASIC*>(pm->pParent) ), pInst( GetSbData()->pInst ),
            pMod( pm ), pMeth( pe ), pImg( pMod->pImage ), mpExtCaller(nullptr), m_nLastTime(0)
 {
-    nFlags    = pe ? pe->GetDebugFlags() : 0;
+    nFlags    = pe ? pe->GetDebugFlags() : BasicDebugFlags::NONE;
     pIosys    = pInst->GetIoSystem();
     pForStk   = nullptr;
     pError    = nullptr;
@@ -4228,18 +4222,18 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     if( pInst->nCallLvl <= pInst->nBreakCallLvl )
     {
         StarBASIC* pStepBasic = GetCurrentBasic( &rBasic );
-        sal_uInt16 nNewFlags = pStepBasic->StepPoint( nLine, nCol1, nCol2 );
+        BasicDebugFlags nNewFlags = pStepBasic->StepPoint( nLine, nCol1, nCol2 );
 
         pInst->CalcBreakCallLevel( nNewFlags );
     }
 
     // break points only at STMNT-commands in a new line!
     else if( ( nOp1 != nOld )
-        && ( nFlags & SbDEBUG_BREAK )
+        && ( nFlags & BasicDebugFlags::Break )
         && pMod->IsBP( static_cast<sal_uInt16>( nOp1 ) ) )
     {
         StarBASIC* pBreakBasic = GetCurrentBasic( &rBasic );
-        sal_uInt16 nNewFlags = pBreakBasic->BreakPoint( nLine, nCol1, nCol2 );
+        BasicDebugFlags nNewFlags = pBreakBasic->BreakPoint( nLine, nCol1, nCol2 );
 
         pInst->CalcBreakCallLevel( nNewFlags );
     }

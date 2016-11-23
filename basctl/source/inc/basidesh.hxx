@@ -178,7 +178,7 @@ public:
     virtual bool        HasUIFeature(SfxShellFeature nFeature) const override;
 
     bool                CallBasicErrorHdl( StarBASIC* pBasic );
-    long                CallBasicBreakHdl( StarBASIC* pBasic );
+    BasicDebugFlags     CallBasicBreakHdl( StarBASIC* pBasic );
 
     VclPtr<BaseWindow>   FindWindow( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rName, ItemType nType, bool bFindSuspended = false );
     VclPtr<DialogWindow> FindDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rName, bool bCreateIfNotExist = false, bool bFindSuspended = false );

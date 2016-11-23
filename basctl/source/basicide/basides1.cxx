@@ -1109,9 +1109,9 @@ bool Shell::CallBasicErrorHdl( StarBASIC* pBasic )
     return bRet;
 }
 
-long Shell::CallBasicBreakHdl( StarBASIC* pBasic )
+BasicDebugFlags Shell::CallBasicBreakHdl( StarBASIC* pBasic )
 {
-    long nRet = 0;
+    BasicDebugFlags nRet = BasicDebugFlags::NONE;
     VclPtr<ModulWindow> pModWin = ShowActiveModuleWindow( pBasic );
     if ( pModWin )
     {

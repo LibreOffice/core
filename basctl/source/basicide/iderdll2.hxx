@@ -48,7 +48,7 @@ private:
     bool            bShellInCriticalSection;
 
 protected:
-    DECL_STATIC_LINK( ExtraData, GlobalBasicBreakHdl, StarBASIC *, sal_uInt16 );
+    DECL_STATIC_LINK( ExtraData, GlobalBasicBreakHdl, StarBASIC *, BasicDebugFlags );
 
 public:
     ExtraData();

@@ -170,9 +170,9 @@ void ExtraData::SetSearchItem (const SvxSearchItem& rItem)
     pSearchItem.reset(static_cast<SvxSearchItem*>(rItem.Clone()));
 }
 
-IMPL_STATIC_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic, sal_uInt16)
+IMPL_STATIC_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic, BasicDebugFlags)
 {
-    sal_uInt16 nRet = 0;
+    BasicDebugFlags nRet = BasicDebugFlags::NONE;
     if (Shell* pShell = GetShell())
     {
         if (BasicManager* pBasMgr = FindBasicManager(pBasic))
@@ -193,7 +193,7 @@ IMPL_STATIC_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic, sal_uInt16
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                     {
                            // a step-out should get me out of the protected area...
-                        nRet = SbDEBUG_STEPOUT;
+                        nRet = BasicDebugFlags::StepOut;
                     }
                     else
                     {

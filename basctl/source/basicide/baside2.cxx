@@ -314,7 +314,7 @@ void ModulWindow::BasicExecute()
     if ( XModule().Is() && m_xModule->IsCompiled() && !m_aStatus.bError )
     {
         if ( GetBreakPoints().size() )
-            m_aStatus.nBasicFlags = m_aStatus.nBasicFlags | SbDEBUG_BREAK;
+            m_aStatus.nBasicFlags = m_aStatus.nBasicFlags | BasicDebugFlags::Break;
 
         if ( !m_aStatus.bIsRunning )
         {
@@ -369,26 +369,26 @@ void ModulWindow::CompileBasic()
 
 void ModulWindow::BasicRun()
 {
-    m_aStatus.nBasicFlags = 0;
+    m_aStatus.nBasicFlags = BasicDebugFlags::NONE;
     BasicExecute();
 }
 
 void ModulWindow::BasicStepOver()
 {
-    m_aStatus.nBasicFlags = SbDEBUG_STEPINTO | SbDEBUG_STEPOVER;
+    m_aStatus.nBasicFlags = BasicDebugFlags::StepInto | BasicDebugFlags::StepOver;
     BasicExecute();
 }
 
 
 void ModulWindow::BasicStepInto()
 {
-    m_aStatus.nBasicFlags = SbDEBUG_STEPINTO;
+    m_aStatus.nBasicFlags = BasicDebugFlags::StepInto;
     BasicExecute();
 }
 
 void ModulWindow::BasicStepOut()
 {
-    m_aStatus.nBasicFlags = SbDEBUG_STEPOUT;
+    m_aStatus.nBasicFlags = BasicDebugFlags::StepOut;
     BasicExecute();
 }
 
@@ -515,7 +515,7 @@ void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
                     {
                         SbMethod* pMethod = static_cast<SbMethod*>(m_xModule->GetMethods()->Get( nMethod ));
                         assert(pMethod && "Methode nicht gefunden! (NULL)");
-                        pMethod->SetDebugFlags( pMethod->GetDebugFlags() | SbDEBUG_BREAK );
+                        pMethod->SetDebugFlags( pMethod->GetDebugFlags() | BasicDebugFlags::Break );
                     }
                 }
             }
@@ -626,7 +626,7 @@ bool ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     return false;
 }
 
-long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
+BasicDebugFlags ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 {
     // #i69280 Required in Window despite normal usage in next command!
     (void)pBasic;
@@ -1280,7 +1280,7 @@ void ModulWindow::BasicStarted()
             {
                 SbMethod* pMethod = static_cast<SbMethod*>(m_xModule->GetMethods()->Get( nMethod ));
                 assert(pMethod && "Methode nicht gefunden! (NULL)");
-                pMethod->SetDebugFlags( pMethod->GetDebugFlags() | SbDEBUG_BREAK );
+                pMethod->SetDebugFlags( pMethod->GetDebugFlags() | BasicDebugFlags::Break );
             }
         }
     }
