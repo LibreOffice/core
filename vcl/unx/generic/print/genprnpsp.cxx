@@ -30,11 +30,9 @@
  */
 
 // For spawning PDF and FAX generation
-#if defined( UNX )
-#  include <unistd.h>
-#  include <sys/wait.h>
-#  include <sys/stat.h>
-#endif
+#include <unistd.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
 
 #include <comphelper/fileurl.hxx>
 #include "rtl/ustring.hxx"
@@ -253,7 +251,6 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 }
 
 // Needs a cleaner abstraction ...
-#if defined( UNX )
 static bool passFileToCommandLine( const OUString& rFilename, const OUString& rCommandLine )
 {
     bool bSuccess = false;
@@ -337,7 +334,6 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
 
     return bSuccess;
 }
-#endif
 
 static std::vector<OUString> getFaxNumbers()
 {
@@ -360,15 +356,10 @@ static std::vector<OUString> getFaxNumbers()
 
 static bool createPdf( const OUString& rToFile, const OUString& rFromFile, const OUString& rCommandLine )
 {
-#if defined( UNX )
     OUString aCommandLine(
         rCommandLine.replaceAll("(OUTFILE)", rToFile));
 
     return passFileToCommandLine( rFromFile, aCommandLine );
-#else
-    (void)rToFile; (void)rFromFile; (void)rCommandLine;
-    return false;
-#endif
 }
 
 /*
@@ -904,7 +895,6 @@ bool PspSalPrinter::StartJob(
     }
 
     int nMode = 0;
-#if defined( UNX )
     // check whether this printer is configured as fax
     sal_Int32 nIndex = 0;
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
@@ -928,7 +918,6 @@ bool PspSalPrinter::StartJob(
             break;
         }
     }
-#endif
     m_aPrinterGfx.Init( m_aJobData );
 
     return m_aPrintJob.StartJob( ! m_aTmpFile.isEmpty() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect );

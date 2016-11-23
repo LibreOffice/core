@@ -23,14 +23,11 @@
 
 #include <sal/types.h>
 
-// for mmap etc.
-#if defined( UNX )
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#endif
 
 #include <comphelper/string.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -1311,13 +1308,8 @@ bool GenPspGraphics::supportsOperation( OutDevSupportType ) const
 
 void GenPspGraphics::DoFreeEmbedFontData( const void* pData, long nLen )
 {
-#if defined( UNX )
     if( pData )
         munmap( const_cast<void *>(pData), nLen );
-#else
-    (void)nLen;
-    rtl_freeMemory( (void *)pData );
-#endif
 }
 
 const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, size_t nLen, FontSubsetInfo& rInfo, long* pDataLen )
@@ -1350,7 +1342,6 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
 
     OString aSysPath = rMgr.getFontFileSysPath( aFont );
 
-#if defined( UNX )
     int fd = open( aSysPath.getStr(), O_RDONLY );
     if( fd < 0 )
         return nullptr;
@@ -1365,25 +1356,6 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
     if( pFile == MAP_FAILED )
         return nullptr;
     *pDataLen = aStat.st_size;
-#else
-    // FIXME: test me ! ...
-    OUString aURL;
-    if( osl::File::getFileURLFromSystemPath( OStringToOUString( aSysPath, osl_getThreadTextEncoding() ), aURL ) != osl::File::E_None )
-        return NULL;
-    osl::File aFile( aURL );
-    if( aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock ) != osl::File::E_None )
-        return NULL;
-
-    osl::DirectoryItem aItem;
-    osl::DirectoryItem::get( aURL, aItem );
-    osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
-    aItem.getFileStatus( aFileStatus );
-
-    void *pFile = rtl_allocateMemory( aFileStatus.getFileSize() );
-    sal_uInt64 nRead = 0;
-    aFile.read( pFile, aFileStatus.getFileSize(), nRead );
-    *pDataLen = (long) nRead;
-#endif
 
     rInfo.m_aFontBBox   = Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
     rInfo.m_nCapHeight  = yMax; // Well ...
