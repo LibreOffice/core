@@ -10,15 +10,13 @@
 #include "rtfattributeoutput.hxx"
 
 RtfStringBufferValue::RtfStringBufferValue()
-    : m_aBuffer(),
-      m_pFlyFrameFormat(nullptr),
+    : m_pFlyFrameFormat(nullptr),
       m_pGrfNode(nullptr)
 {
 }
 
 RtfStringBufferValue::RtfStringBufferValue(const SwFlyFrameFormat* pFlyFrameFormat, const SwGrfNode* pGrfNode)
-    : m_aBuffer(),
-      m_pFlyFrameFormat(pFlyFrameFormat),
+    : m_pFlyFrameFormat(pFlyFrameFormat),
       m_pGrfNode(pGrfNode)
 {
 }
@@ -41,10 +39,7 @@ bool RtfStringBufferValue::isGraphic() const
     return m_pFlyFrameFormat != nullptr && m_pGrfNode != nullptr;
 }
 
-RtfStringBuffer::RtfStringBuffer()
-    : m_aValues()
-{
-}
+RtfStringBuffer::RtfStringBuffer() = default;
 
 sal_Int32 RtfStringBuffer::getLength() const
 {
@@ -73,7 +68,7 @@ OString RtfStringBuffer::makeStringAndClear()
 OStringBuffer& RtfStringBuffer::getLastBuffer()
 {
     if (m_aValues.empty() || m_aValues.back().isGraphic())
-        m_aValues.push_back(RtfStringBufferValue());
+        m_aValues.emplace_back(RtfStringBufferValue());
     return m_aValues.back().m_aBuffer;
 }
 
@@ -89,7 +84,7 @@ void RtfStringBuffer::clear()
 
 void RtfStringBuffer::append(const SwFlyFrameFormat* pFlyFrameFormat, const SwGrfNode* pGrfNode)
 {
-    m_aValues.push_back(RtfStringBufferValue(pFlyFrameFormat, pGrfNode));
+    m_aValues.emplace_back(RtfStringBufferValue(pFlyFrameFormat, pGrfNode));
 }
 
 void RtfStringBuffer::appendAndClear(RtfStringBuffer& rBuf)

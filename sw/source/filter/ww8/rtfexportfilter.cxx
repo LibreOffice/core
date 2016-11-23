@@ -36,9 +36,7 @@ RtfExportFilter::RtfExportFilter(const uno::Reference< uno::XComponentContext >&
 {
 }
 
-RtfExportFilter::~RtfExportFilter()
-{
-}
+RtfExportFilter::~RtfExportFilter() = default;
 
 sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor) throw(uno::RuntimeException, std::exception)
 {
