@@ -20,7 +20,6 @@
 $(eval $(call gb_Module_Module,vcl))
 
 $(eval $(call gb_Module_add_targets,vcl,\
-    CustomTarget_afm_hash \
     Library_vcl \
 	Package_opengl \
 	$(if $(filter WNT,$(OS)), \
