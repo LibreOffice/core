@@ -54,7 +54,6 @@ namespace pdfio
 const int MAX_SIGNATURE_CONTENT_LENGTH = 50000;
 
 class PDFTrailerElement;
-class PDFObjectElement;
 
 /// A one-liner comment.
 class PDFCommentElement : public PDFElement
@@ -85,54 +84,6 @@ public:
 };
 
 class PDFReferenceElement;
-class PDFDictionaryElement;
-class PDFArrayElement;
-class PDFStreamElement;
-
-/// Indirect object: something with a unique ID.
-class PDFObjectElement : public PDFElement
-{
-    PDFDocument& m_rDoc;
-    double m_fObjectValue;
-    double m_fGenerationValue;
-    std::map<OString, PDFElement*> m_aDictionary;
-    /// Position after the '<<' token.
-    sal_uInt64 m_nDictionaryOffset;
-    /// Length of the dictionary buffer till (before) the '<<' token.
-    sal_uInt64 m_nDictionaryLength;
-    PDFDictionaryElement* m_pDictionaryElement;
-    /// The contained direct array, if any.
-    PDFArrayElement* m_pArrayElement;
-    /// The stream of this object, used when this is an object stream.
-    PDFStreamElement* m_pStreamElement;
-    /// Objects of an object stream.
-    std::vector< std::unique_ptr<PDFObjectElement> > m_aStoredElements;
-    /// Elements of an object in an object stream.
-    std::vector< std::unique_ptr<PDFElement> > m_aElements;
-    /// Uncompressed buffer of an object in an object stream.
-    std::unique_ptr<SvMemoryStream> m_pStreamBuffer;
-
-public:
-    PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue);
-    bool Read(SvStream& rStream) override;
-    PDFElement* Lookup(const OString& rDictionaryKey);
-    PDFObjectElement* LookupObject(const OString& rDictionaryKey);
-    double GetObjectValue() const;
-    void SetDictionaryOffset(sal_uInt64 nDictionaryOffset);
-    sal_uInt64 GetDictionaryOffset();
-    void SetDictionaryLength(sal_uInt64 nDictionaryLength);
-    sal_uInt64 GetDictionaryLength();
-    PDFDictionaryElement* GetDictionary() const;
-    void SetDictionary(PDFDictionaryElement* pDictionaryElement);
-    void SetArray(PDFArrayElement* pArrayElement);
-    void SetStream(PDFStreamElement* pStreamElement);
-    PDFArrayElement* GetArray() const;
-    /// Parse objects stored in this object stream.
-    void ParseStoredObjects();
-    std::vector< std::unique_ptr<PDFElement> >& GetStoredElements();
-    SvMemoryStream* GetStreamBuffer() const;
-    void SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamBuffer);
-};
 
 /// Dictionary object: a set key-value pairs.
 class PDFDictionaryElement : public PDFElement
@@ -168,22 +119,6 @@ public:
     PDFEndDictionaryElement();
     bool Read(SvStream& rStream) override;
     sal_uInt64 GetLocation() const;
-};
-
-/// Name object: a key string.
-class PDFNameElement : public PDFElement
-{
-    OString m_aValue;
-    /// Offset after the '/' token.
-    sal_uInt64 m_nLocation;
-    /// Length till the next token start.
-    sal_uInt64 m_nLength;
-public:
-    PDFNameElement();
-    bool Read(SvStream& rStream) override;
-    const OString& GetValue() const;
-    sal_uInt64 GetLocation() const;
-    sal_uInt64 GetLength() const;
 };
 
 /// Reference object: something with a unique ID.
@@ -375,13 +310,9 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
     comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
     aSigBuffer.append(aContentFiller.makeStringAndClear());
     aSigBuffer.append(">\n/Type/Sig/SubFilter");
-#ifdef XMLSEC_CRYPTO_NSS
     if (bAdES)
         aSigBuffer.append("/ETSI.CAdES.detached");
     else
-#else
-        (void)bAdES;
-#endif
         aSigBuffer.append("/adbe.pkcs7.detached");
 
     // Time of signing.
@@ -2243,9 +2174,14 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     {
     case SEC_OID_SHA1:
         nMaxResultLen = msfilter::SHA1_HASH_LENGTH;
+        rInformation.nDigestID = xml::crypto::DigestID::SHA1;
         break;
     case SEC_OID_SHA256:
         nMaxResultLen = msfilter::SHA256_HASH_LENGTH;
+        rInformation.nDigestID = xml::crypto::DigestID::SHA256;
+        break;
+    case SEC_OID_SHA512:
+        nMaxResultLen = msfilter::SHA512_HASH_LENGTH;
         break;
     default:
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: unrecognized algorithm");
