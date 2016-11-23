@@ -17,9 +17,9 @@ ifeq ($(COM),MSC)
 
 $(call gb_ExternalProject_get_state_target,lcms2,build):
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter 140,$(VCVER)),$(DEVENV) /Upgrade lcms2_DLL.vcxproj,echo up-to-date) && \
-		MSBuild.exe lcms2_DLL.vcxproj \
-			$(if $(filter 140,$(VCVER)),/p:PlatformToolset=v140,/p:PlatformToolset=v120) \
+		$(if $(filter 150,$(VCVER)),$(DEVENV) /Upgrade lcms2_DLL.vcxproj,echo up-to-date) && \
+		C:/PROGRA~2/MSBuild/15.0/bin/msbuild.exe lcms2_DLL.vcxproj \
+			$(if $(filter 150,$(VCVER)),/p:PlatformToolset=v140,/p:PlatformToolset=v120) \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:TargetName=lcms2 \
 	,Projects/VC2013/lcms2_DLL)
