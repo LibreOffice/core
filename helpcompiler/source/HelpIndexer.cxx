@@ -12,6 +12,7 @@
 #include <rtl/string.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/runtimetooustring.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <algorithm>
@@ -72,7 +73,7 @@ bool HelpIndexer::indexDocuments()
     }
     catch (CLuceneError &e)
     {
-        d_error = OUString::createFromAscii(e.what());
+        d_error = o3tl::runtimeToOUString(e.what());
         return false;
     }
 

@@ -37,6 +37,7 @@
 #include "desktopcontext.hxx"
 #include "migration.hxx"
 
+#include <o3tl/runtimetooustring.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/javacontext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1696,7 +1697,7 @@ int Desktop::Main()
         catch( const std::exception& exSTD)
         {
             RequestHandler::SetDowning();
-            FatalError( OUString::createFromAscii( exSTD.what()));
+            FatalError(o3tl::runtimeToOUString(exSTD.what()));
         }
         catch( ...)
         {

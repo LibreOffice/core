@@ -30,6 +30,7 @@
 #include <unx/genprn.h>
 #include <unx/geninst.h>
 #include <headless/svpgdi.hxx>
+#include <o3tl/runtimetooustring.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/process.h>
@@ -4274,7 +4275,7 @@ long GtkSalFrame::CallCallbackExc(SalEvent nEvent, const void* pEvent) const
             css::uno::Any(
                 css::uno::RuntimeException(
                     "wrapped std::exception "
-                    + OUString::createFromAscii(e.what()))));
+                    + o3tl::runtimeToOUString(e.what()))));
     }
     catch (...)
     {

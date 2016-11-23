@@ -43,6 +43,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <config_oauth2.h>
+#include <o3tl/runtimetooustring.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentidentifier.hxx>
@@ -1133,7 +1134,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                OUString::createFromAscii( e.what() ) );
+                                o3tl::runtimeToOUString(e.what()));
         }
         return aRet;
     }
@@ -1199,7 +1200,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                OUString::createFromAscii( e.what() ) );
+                                o3tl::runtimeToOUString(e.what()));
         }
         return aRet;
     }
@@ -1240,7 +1241,7 @@ namespace cmis
                     ucb::IOErrorCode_GENERAL,
                     uno::Sequence< uno::Any >( 0 ),
                     xEnv,
-                    OUString::createFromAscii( e.what() ) );
+                    o3tl::runtimeToOUString(e.what()));
         }
         return uno::Sequence< document::CmisVersion > ( );
     }
@@ -1449,7 +1450,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                OUString::createFromAscii( e.what() ) );
+                                o3tl::runtimeToOUString(e.what()));
         }
 
         sal_Int32 nCount = rValues.getLength();
@@ -1517,7 +1518,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                OUString::createFromAscii( e.what() ) );
+                                o3tl::runtimeToOUString(e.what()));
         }
 
         return aRet;
@@ -1564,7 +1565,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                OUString::createFromAscii( e.what() ) );
+                                o3tl::runtimeToOUString(e.what()));
         }
 
         return true;
@@ -1843,7 +1844,7 @@ namespace cmis
                                     ucb::IOErrorCode_GENERAL,
                                     uno::Sequence< uno::Any >( 0 ),
                                     xEnv,
-                                    OUString::createFromAscii( e.what() ) );
+                                    o3tl::runtimeToOUString(e.what()));
             }
         }
         else if ( aCommand.Name == "checkout" )
