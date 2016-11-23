@@ -82,7 +82,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     mpViewShell         = nullptr;
     mpOtherShell        = nullptr;
     nScrollDiffX        = 0;
-    nExtraCursorFlags   = 0;
+    nExtraCursorFlags   = GetCursorFlags::NONE;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
     pCursor             = nullptr;
     pDragAndDropInfo    = nullptr;
@@ -848,7 +848,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
     const ParaPortion* pParaPortion = pEditEngine->GetParaPortions()[nPara];
 
-    sal_uInt16 nShowCursorFlags = nExtraCursorFlags | GETCRSR_TXTONLY;
+    GetCursorFlags nShowCursorFlags = nExtraCursorFlags | GetCursorFlags::TextOnly;
 
     // Use CursorBidiLevel 0/1 in meaning of
     // 0: prefer portion end, normal mode
@@ -856,7 +856,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
     if ( ( GetCursorBidiLevel() != CURSOR_BIDILEVEL_DONTKNOW ) && GetCursorBidiLevel() )
     {
-        nShowCursorFlags |= GETCRSR_PREFERPORTIONSTART;
+        nShowCursorFlags |= GetCursorFlags::PreferPortionStart;
     }
 
     Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, nShowCursorFlags );
@@ -865,7 +865,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         if ( aPaM.GetNode()->Len() && ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) )
         {
             // If we are behind a portion, and the next portion has other direction, we must change position...
-            aEditCursor.Left() = aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY|GETCRSR_PREFERPORTIONSTART ).Left();
+            aEditCursor.Left() = aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly|GetCursorFlags::PreferPortionStart ).Left();
 
             sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
             const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
@@ -876,9 +876,9 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             else
             {
                 EditPaM aNext = pEditEngine->CursorRight( aPaM );
-                Rectangle aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GETCRSR_TXTONLY );
+                Rectangle aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly );
                 if ( aTmpRect.Top() != aEditCursor.Top() )
-                    aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GETCRSR_TXTONLY|GETCRSR_ENDOFLINE );
+                    aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly|GetCursorFlags::EndOfLine );
                 aEditCursor.Right() = aTmpRect.Left();
             }
         }
@@ -1079,7 +1079,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         CursorDirection nCursorDir = CursorDirection::NONE;
         if ( IsInsertMode() && !aEditSelection.HasRange() && ( pEditEngine->pImpEditEngine->HasDifferentRTLLevels( aPaM.GetNode() ) ) )
         {
-            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, (nShowCursorFlags & GETCRSR_PREFERPORTIONSTART) != 0 );
+            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, bool(nShowCursorFlags & GetCursorFlags::PreferPortionStart) );
             const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             if (rTextPortion.IsRightToLeft())
                 nCursorDir = CursorDirection::RTL;
@@ -1301,7 +1301,7 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     }
     nTravelXPos = TRAVEL_X_DONTKNOW;
     nCursorBidiLevel = CURSOR_BIDILEVEL_DONTKNOW;
-    nExtraCursorFlags = 0;
+    nExtraCursorFlags = GetCursorFlags::NONE;
     bClickedInSelection = false;
 
     if ( rMouseEvent.IsMiddle() && !bReadOnly &&
@@ -1329,8 +1329,8 @@ bool ImpEditView::MouseButtonDown( const MouseEvent& rMouseEvent )
     pEditEngine->CheckIdleFormatter();  // If fast typing and mouse button downs
     if ( pEditEngine->GetInternalEditStatus().NotifyCursorMovements() )
         pEditEngine->GetInternalEditStatus().GetPrevParagraph() = pEditEngine->GetEditDoc().GetPos( GetEditSelection().Max().GetNode() );
-    nTravelXPos = TRAVEL_X_DONTKNOW;
-    nExtraCursorFlags = 0;
+    nTravelXPos         = TRAVEL_X_DONTKNOW;
+    nExtraCursorFlags   = GetCursorFlags::NONE;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
     bClickedInSelection = IsSelectionAtPoint( rMouseEvent.GetPosPixel() );
     return pEditEngine->pImpEditEngine->MouseButtonDown( rMouseEvent, GetEditViewPtr() );

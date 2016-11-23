@@ -56,22 +56,10 @@
 #include <i18nlangtag/lang.h>
 #include <rtl/ref.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
 #include <vector>
-
-#define DEL_LEFT    1
-#define DEL_RIGHT   2
-#define TRAVEL_X_DONTKNOW   0xFFFFFFFF
-#define CURSOR_BIDILEVEL_DONTKNOW   0xFFFF
-#define MAXCHARSINPARA      0x3FFF-CHARPOSGROW  // Max 16K, because WYSIWYG array
-
-#define GETCRSR_TXTONLY             0x0001
-#define GETCRSR_STARTOFLINE         0x0002
-#define GETCRSR_ENDOFLINE           0x0004
-#define GETCRSR_PREFERPORTIONSTART  0x0008
-
-#define LINE_SEP    '\x0A'
 
 class EditView;
 class EditEngine;
@@ -102,6 +90,28 @@ namespace svtools {
 namespace editeng {
     struct MisspellRanges;
 }
+
+#define DEL_LEFT    1
+#define DEL_RIGHT   2
+#define TRAVEL_X_DONTKNOW           0xFFFFFFFF
+#define CURSOR_BIDILEVEL_DONTKNOW   0xFFFF
+#define MAXCHARSINPARA              0x3FFF-CHARPOSGROW  // Max 16K, because WYSIWYG array
+#define LINE_SEP    '\x0A'
+
+#define ATTRSPECIAL_WHOLEWORD   1
+#define ATTRSPECIAL_EDGE        2
+
+enum class GetCursorFlags {
+    NONE                = 0x0000,
+    TextOnly            = 0x0001,
+    StartOfLine         = 0x0002,
+    EndOfLine           = 0x0004,
+    PreferPortionStart  = 0x0008,
+};
+namespace o3tl {
+    template<> struct typed_flags<GetCursorFlags> : is_typed_flags<GetCursorFlags, 0x0f> {};
+}
+
 
 struct DragAndDropInfo
 {
@@ -238,7 +248,7 @@ private:
     long                nInvMore;
     EVControlBits       nControl;
     sal_uInt32          nTravelXPos;
-    sal_uInt16          nExtraCursorFlags;
+    GetCursorFlags      nExtraCursorFlags;
     sal_uInt16          nCursorBidiLevel;
     sal_uInt16          nScrollDiffX;
     bool                bReadOnly;
@@ -835,8 +845,8 @@ public:
     bool            HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
     const SfxPoolItem&  GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
 
-    Rectangle       PaMtoEditCursor( EditPaM aPaM, sal_uInt16 nFlags = 0 );
-    Rectangle       GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex, sal_uInt16 nFlags = 0 );
+    Rectangle       PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags = GetCursorFlags::NONE );
+    Rectangle       GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex, GetCursorFlags nFlags = GetCursorFlags::NONE );
 
     bool            IsModified() const      { return aEditDoc.IsModified(); }
     void            SetModifyFlag( bool b ) { aEditDoc.SetModified( b ); }
