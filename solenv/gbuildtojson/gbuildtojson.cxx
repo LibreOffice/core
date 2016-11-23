@@ -18,6 +18,7 @@
 
 using namespace std;
 static const list<string> validargs = {
+    "makefile",
     "linktarget",
     "ilibtarget",
     "cxxobjects",

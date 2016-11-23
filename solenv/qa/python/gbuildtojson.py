@@ -62,7 +62,7 @@ class CheckGbuildToJson(unittest.TestCase):
                 gbuildlibs.append(json.load(f))
         foundlibs = set()
         for lib in gbuildlibs:
-            self.assertEqual(set(lib.keys()), set(['ASMOBJECTS', 'CFLAGS', 'CFLAGSAPPEND', 'CXXFLAGS', 'CXXFLAGSAPPEND', 'CXXOBJECTS', 'DEFS', 'GENCOBJECTS', 'GENCXXOBJECTS', 'ILIBTARGET', 'INCLUDE', 'LINKED_LIBS', 'LINKED_STATIC_LIBS', 'LINKTARGET', 'OBJCFLAGS', 'OBJCFLAGSAPPEND', 'OBJCOBJECTS', 'OBJCXXFLAGS', 'OBJCXXFLAGSAPPEND', 'OBJCXXOBJECTS', 'YACCOBJECTS']))
+            self.assertEqual(set(lib.keys()), set(['MAKEFILE', 'ASMOBJECTS', 'CFLAGS', 'CFLAGSAPPEND', 'CXXFLAGS', 'CXXFLAGSAPPEND', 'CXXOBJECTS', 'DEFS', 'GENCOBJECTS', 'GENCXXOBJECTS', 'ILIBTARGET', 'INCLUDE', 'LINKED_LIBS', 'LINKED_STATIC_LIBS', 'LINKTARGET', 'OBJCFLAGS', 'OBJCFLAGSAPPEND', 'OBJCOBJECTS', 'OBJCXXFLAGS', 'OBJCXXFLAGSAPPEND', 'OBJCXXOBJECTS', 'YACCOBJECTS']))
             if lib['LINKTARGET'].find('gbuildselftestdep') != -1:
                 foundlibs.add('gbuildselftestdep')
             elif lib['LINKTARGET'].find('gbuildselftest') != -1:
