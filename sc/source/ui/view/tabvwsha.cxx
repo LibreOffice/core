@@ -617,7 +617,7 @@ void ScTabViewShell::ExecuteInputDirect()
 
 void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bStopEditing /* = sal_True */ )
 {
-    ScInputHandler* pHdl = pInputHandler ? pInputHandler : SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = mpInputHandler ? mpInputHandler.get() : SC_MOD()->GetInputHdl();
 
     if ( pHdl )
     {
@@ -694,7 +694,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
 
         //  if using the view's local input handler, this view can always be set
         //  as current view inside NotifyChange.
-        ScTabViewShell* pSourceSh = pInputHandler ? this : nullptr;
+        ScTabViewShell* pSourceSh = mpInputHandler ? this : nullptr;
 
         pHdl->NotifyChange( &aState, bForce, pSourceSh, bStopEditing );
     }
@@ -707,7 +707,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
 
 void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
 {
-    if( ScInputHandler* pHdl = pInputHandler ? pInputHandler : SC_MOD()->GetInputHdl() )
+    if( ScInputHandler* pHdl = mpInputHandler ? mpInputHandler.get() : SC_MOD()->GetInputHdl() )
         pHdl->UpdateCellAdjust( eJust );
 }
 

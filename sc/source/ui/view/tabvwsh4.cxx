@@ -40,6 +40,7 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/openglwin.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include "tabvwsh.hxx"
 #include "sc.hrc"
@@ -126,7 +127,7 @@ void ScTabViewShell::Activate(bool bMDI)
         // RegisterNewTargetNames does not exist anymore
 
         SfxViewFrame* pThisFrame  = GetViewFrame();
-        if ( pInputHandler && pThisFrame->HasChildWindow(FID_INPUTLINE_STATUS) )
+        if ( mpInputHandler && pThisFrame->HasChildWindow(FID_INPUTLINE_STATUS) )
         {
             // actually only required for Reload (last version):
             // The InputWindow remains, but the View along with the InputHandler is newly created,
@@ -151,7 +152,7 @@ void ScTabViewShell::Activate(bool bMDI)
                         pSh = SfxViewShell::GetNext( *pSh, true, checkSfxViewShell<ScTabViewShell> );
                     }
 
-                    pWin->SetInputHandler( pInputHandler );
+                    pWin->SetInputHandler( mpInputHandler.get() );
                 }
             }
         }
@@ -1502,7 +1503,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     // As an intermediate solution each View gets its own InputHandler,
     // which only yields problems if two Views are in one task window.
 
-    pInputHandler = new ScInputHandler;
+    mpInputHandler = o3tl::make_unique<ScInputHandler>();
 
     // old version:
     //  if ( !GetViewFrame()->ISA(SfxTopViewFrame) )        // OLE or Plug-In
@@ -1655,7 +1656,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     pExtrusionBarShell(nullptr),
     pFontworkBarShell(nullptr),
     pFormShell(nullptr),
-    pInputHandler(nullptr),
+    mpInputHandler(nullptr),
     pCurFrameLine(nullptr),
     aTarget(this),
     pDialogDPObject(nullptr),
@@ -1765,8 +1766,8 @@ ScTabViewShell::~ScTabViewShell()
 
     // all to NULL, in case the TabView-dtor tries to access them
     //! (should not really! ??!?!)
-    if (pInputHandler)
-        pInputHandler->SetDocumentDisposing(true);
+    if (mpInputHandler)
+        mpInputHandler->SetDocumentDisposing(true);
 
     DELETEZ(pFontworkBarShell);
     DELETEZ(pExtrusionBarShell);
@@ -1783,7 +1784,7 @@ ScTabViewShell::~ScTabViewShell()
     DELETEZ(pPivotShell);
     DELETEZ(pAuditingShell);
     DELETEZ(pCurFrameLine);
-    DELETEZ(pInputHandler);
+    mpInputHandler.reset();
     DELETEZ(pPivotSource);
     DELETEZ(pDialogDPObject);
     DELETEZ(pNavSettings);

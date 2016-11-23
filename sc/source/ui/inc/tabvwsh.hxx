@@ -115,7 +115,7 @@ private:
 
     FmFormShell*            pFormShell;
 
-    ScInputHandler*         pInputHandler;              // for OLE input cell
+    std::unique_ptr<ScInputHandler> mpInputHandler;              // for OLE input cell
 
     ::editeng::SvxBorderLine*           pCurFrameLine;
 
@@ -236,7 +236,8 @@ public:
     bool            IsRefInputMode() const;
     void            ExecuteInputDirect();
 
-    ScInputHandler* GetInputHandler() const { return pInputHandler;}
+    const ScInputHandler* GetInputHandler() const { return mpInputHandler.get(); }
+    ScInputHandler* GetInputHandler() { return mpInputHandler.get(); }
     void            UpdateInputHandler( bool bForce = false, bool bStopEditing = true );
     void            UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust );
     bool            TabKeyInput(const KeyEvent& rKEvt);
