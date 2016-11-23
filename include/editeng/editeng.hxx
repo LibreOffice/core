@@ -140,6 +140,10 @@ template<class T> bool checkSvxFieldData(const SvxFieldData* pData)
     return dynamic_cast<const T*>(pData) != nullptr;
 }
 
+enum class SetAttribsMode {
+    NONE, WholeWord, Edge
+};
+
 class SdrObject;
 class EDITENG_DLLPUBLIC EditEngine
 {
@@ -571,7 +575,7 @@ public:
 
     const SfxItemSet& GetBaseParaAttribs(sal_Int32 nPara) const;
     void SetParaAttribsOnly(sal_Int32 nPara, const SfxItemSet& rSet);
-    void SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, sal_uInt8 nSpecial = 0);
+    void SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, SetAttribsMode nSpecial = SetAttribsMode::NONE);
 
     OUString GetSelected(const EditSelection& rSel) const;
     EditPaM DeleteSelected(const EditSelection& rSel);

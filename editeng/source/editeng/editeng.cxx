@@ -912,7 +912,7 @@ void EditEngine::SetParaAttribsOnly(sal_Int32 nPara, const SfxItemSet& rSet)
     pImpEditEngine->SetParaAttribs(nPara, rSet);
 }
 
-void EditEngine::SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, sal_uInt8 nSpecial)
+void EditEngine::SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, SetAttribsMode nSpecial)
 {
     pImpEditEngine->SetAttribs(rSel, rSet, nSpecial);
 }

@@ -490,13 +490,13 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
 }
 
 
-void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_uInt8 nSpecial )
+void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetAttribsMode nSpecial )
 {
     aSel.Adjust( aEditDoc );
 
     // When no selection => use the Attribute on the word.
     // ( the RTF-parser should actually never call the Method without a Range )
-    if ( ( nSpecial == ATTRSPECIAL_WHOLEWORD ) && !aSel.HasRange() )
+    if ( nSpecial == SetAttribsMode::WholeWord && !aSel.HasRange() )
         aSel = SelectWord( aSel, css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, false );
 
     sal_Int32 nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
@@ -547,7 +547,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_
                 {
                     aEditDoc.InsertAttrib( pNode, nStartPos, nEndPos, rItem );
                     bCharAttribFound = true;
-                    if ( nSpecial == ATTRSPECIAL_EDGE )
+                    if ( nSpecial == SetAttribsMode::Edge )
                     {
                         CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
                         for (std::unique_ptr<EditCharAttrib> & rAttrib : rAttribs)

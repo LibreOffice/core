@@ -481,7 +481,7 @@ void EditView::SetAttribs( const SfxItemSet& rSet )
     DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blind Selection in ...." );
 
     pImpEditView->DrawSelection();
-    pImpEditView->pEditEngine->SetAttribs( pImpEditView->GetEditSelection(), rSet, ATTRSPECIAL_WHOLEWORD );
+    pImpEditView->pEditEngine->SetAttribs( pImpEditView->GetEditSelection(), rSet, SetAttribsMode::WholeWord );
     pImpEditView->pEditEngine->FormatAndUpdate( this );
 }
 
