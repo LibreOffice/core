@@ -182,7 +182,6 @@ private:
        glyph in one of the subfonts, the mapping from unicode to the
        glyph has to be remembered */
 
-    std::vector< sal_Int32 > maPS1Font;
     std::list< GlyphSet > maPS3Font;
 
     sal_Int32       mnFontID;
@@ -233,7 +232,6 @@ public:
     void            PSSetColor (const PrinterColor& rColor)
     { maVirtualStatus.maColor = rColor; }
 
-    void            PSUploadPS1Font (sal_Int32 nFontID);
     void            PSSetFont (const OString& rName,
                                rtl_TextEncoding nEncoding)
     { maVirtualStatus.maFont = rName; maVirtualStatus.maEncoding = nEncoding; }
