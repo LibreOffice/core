@@ -23,7 +23,6 @@
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/DataResult.hpp>
 #include <com/sun/star/sheet/MemberResult.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 
 #include "global.hxx"

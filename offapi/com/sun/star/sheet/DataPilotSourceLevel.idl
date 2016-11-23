@@ -70,6 +70,13 @@ service DataPilotSourceLevel
      */
     [property] boolean ShowEmpty;
 
+
+    /** specifies the subtotals that are inserted for the level.
+
+        <p>The subtotals are calculated with the members of this level.</p>
+        @since LibreOffice 5.3
+     */
+    [property, optional] sequence< short > SubTotals2;
 };
 
 

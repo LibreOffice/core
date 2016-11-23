@@ -49,7 +49,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/GeneralFunction2.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
@@ -1335,7 +1335,7 @@ public:
         if (pLayoutName && ScGlobal::pCharClass->uppercase(*pLayoutName) == maName)
             return true;
 
-        sheet::GeneralFunction eGenFunc = static_cast<sheet::GeneralFunction>(pDim->GetFunction());
+        sal_Int16 eGenFunc = pDim->GetFunction();
         ScSubTotalFunc eFunc = ScDPUtil::toSubTotalFunc(eGenFunc);
         OUString aSrcName = ScDPUtil::getSourceDimensionName(pDim->GetName());
         OUString aFuncName = ScDPUtil::getDisplayedMeasureName(aSrcName, eFunc);
@@ -1491,29 +1491,29 @@ bool dequote( const OUString& rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, 
 struct ScGetPivotDataFunctionEntry
 {
     const sal_Char*         pName;
-    sheet::GeneralFunction  eFunc;
+    sal_Int16               eFunc;
 };
 
-bool parseFunction( const OUString& rList, sal_Int32 nStartPos, sal_Int32& rEndPos, sheet::GeneralFunction& rFunc )
+bool parseFunction( const OUString& rList, sal_Int32 nStartPos, sal_Int32& rEndPos, sal_Int16& rFunc )
 {
     static const ScGetPivotDataFunctionEntry aFunctions[] =
     {
         // our names
-        { "Sum",        sheet::GeneralFunction_SUM       },
-        { "Count",      sheet::GeneralFunction_COUNT     },
-        { "Average",    sheet::GeneralFunction_AVERAGE   },
-        { "Max",        sheet::GeneralFunction_MAX       },
-        { "Min",        sheet::GeneralFunction_MIN       },
-        { "Product",    sheet::GeneralFunction_PRODUCT   },
-        { "CountNums",  sheet::GeneralFunction_COUNTNUMS },
-        { "StDev",      sheet::GeneralFunction_STDEV     },
-        { "StDevp",     sheet::GeneralFunction_STDEVP    },
-        { "Var",        sheet::GeneralFunction_VAR       },
-        { "VarP",       sheet::GeneralFunction_VARP      },
+        { "Sum",        sheet::GeneralFunction2::SUM       },
+        { "Count",      sheet::GeneralFunction2::COUNT     },
+        { "Average",    sheet::GeneralFunction2::AVERAGE   },
+        { "Max",        sheet::GeneralFunction2::MAX       },
+        { "Min",        sheet::GeneralFunction2::MIN       },
+        { "Product",    sheet::GeneralFunction2::PRODUCT   },
+        { "CountNums",  sheet::GeneralFunction2::COUNTNUMS },
+        { "StDev",      sheet::GeneralFunction2::STDEV     },
+        { "StDevp",     sheet::GeneralFunction2::STDEVP    },
+        { "Var",        sheet::GeneralFunction2::VAR       },
+        { "VarP",       sheet::GeneralFunction2::VARP      },
         // compatibility names
-        { "Count Nums", sheet::GeneralFunction_COUNTNUMS },
-        { "StdDev",     sheet::GeneralFunction_STDEV     },
-        { "StdDevp",    sheet::GeneralFunction_STDEVP    }
+        { "Count Nums", sheet::GeneralFunction2::COUNTNUMS },
+        { "StdDev",     sheet::GeneralFunction2::STDEV     },
+        { "StdDevp",    sheet::GeneralFunction2::STDEVP    }
     };
 
     const sal_Int32 nListLen = rList.getLength();
@@ -1558,7 +1558,7 @@ bool parseFunction( const OUString& rList, sal_Int32 nStartPos, sal_Int32& rEndP
     return bFound;
 }
 
-bool extractAtStart( const OUString& rList, sal_Int32& rMatched, bool bAllowBracket, sheet::GeneralFunction* pFunc,
+bool extractAtStart( const OUString& rList, sal_Int32& rMatched, bool bAllowBracket, sal_Int16* pFunc,
         OUString& rDequoted )
 {
     sal_Int32 nMatchList = 0;
@@ -1663,7 +1663,7 @@ bool extractAtStart( const OUString& rList, sal_Int32& rMatched, bool bAllowBrac
 
 bool isAtStart(
     const OUString& rList, const OUString& rSearch, sal_Int32& rMatched,
-    bool bAllowBracket, sheet::GeneralFunction* pFunc )
+    bool bAllowBracket, sal_Int16* pFunc )
 {
     sal_Int32 nMatchList = 0;
     sal_Int32 nMatchSearch = 0;
@@ -1714,7 +1714,7 @@ bool isAtStart(
 bool ScDPObject::ParseFilters(
     OUString& rDataFieldName,
     std::vector<sheet::DataPilotFieldFilter>& rFilters,
-    std::vector<sheet::GeneralFunction>& rFilterFuncs, const OUString& rFilterList )
+    std::vector<sal_Int16>& rFilterFuncs, const OUString& rFilterList )
 {
     // parse the string rFilterList into parameters for GetPivotData
 
@@ -1868,8 +1868,8 @@ bool ScDPObject::ParseFilters(
             OUString aFoundName;
             OUString aFoundValueName;
             OUString aFoundValue;
-            sheet::GeneralFunction eFunc = sheet::GeneralFunction_NONE;
-            sheet::GeneralFunction eFoundFunc = sheet::GeneralFunction_NONE;
+            sal_Int16 eFunc = sheet::GeneralFunction2::NONE;
+            sal_Int16 eFoundFunc = sheet::GeneralFunction2::NONE;
 
             OUString aQueryValueName;
             const bool bHasQuery = extractAtStart( aRemaining, nMatched, false, &eFunc, aQueryValueName);
@@ -2118,16 +2118,16 @@ static PivotFunc lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& x
                 uno::Any aSubAny;
                 try
                 {
-                    aSubAny = xLevProp->getPropertyValue( SC_UNO_DP_SUBTOTAL );
+                    aSubAny = xLevProp->getPropertyValue( SC_UNO_DP_SUBTOTAL2 );
                 }
                 catch(uno::Exception&)
                 {
                 }
-                uno::Sequence<sheet::GeneralFunction> aSeq;
+                uno::Sequence<sal_Int16> aSeq;
                 if ( aSubAny >>= aSeq )
                 {
                     PivotFunc nMask = PivotFunc::NONE;
-                    const sheet::GeneralFunction* pArray = aSeq.getConstArray();
+                    const sal_Int16* pArray = aSeq.getConstArray();
                     long nCount = aSeq.getLength();
                     for (long i=0; i<nCount; i++)
                         nMask |= ScDataPilotConversion::FunctionBit(pArray[i]);
@@ -2195,13 +2195,13 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
             PivotFunc nMask = PivotFunc::NONE;
             if ( nOrient == sheet::DataPilotFieldOrientation_DATA )
             {
-                sheet::GeneralFunction eFunc = (sheet::GeneralFunction)ScUnoHelpFunctions::GetEnumProperty(
-                                            xDimProp, SC_UNO_DP_FUNCTION,
-                                            sheet::GeneralFunction_NONE );
-                if ( eFunc == sheet::GeneralFunction_AUTO )
+                sal_Int16 eFunc = (sal_Int16)ScUnoHelpFunctions::GetEnumProperty(
+                                  xDimProp, SC_UNO_DP_FUNCTION2,
+                                  sheet::GeneralFunction2::NONE );
+                if ( eFunc == sheet::GeneralFunction2::AUTO )
                 {
                     //TODO: test for numeric data
-                    eFunc = sheet::GeneralFunction_SUM;
+                    eFunc = sheet::GeneralFunction2::SUM;
                 }
                 nMask = ScDataPilotConversion::FunctionBit(eFunc);
             }
@@ -2683,7 +2683,7 @@ void ScDPObject::ConvertOrientation(
                 bFirst = std::none_of(itrBeg, itr, FindByOriginalDim(nCol));
             }
 
-            sheet::GeneralFunction eFunc = ScDataPilotConversion::FirstFunc(rField.nFuncMask);
+            sal_Int16 eFunc = ScDataPilotConversion::FirstFunc(rField.nFuncMask);
             if (!bFirst)
                 pDim = rSaveData.DuplicateDimension(pDim->GetName());
             pDim->SetOrientation(nOrient);
