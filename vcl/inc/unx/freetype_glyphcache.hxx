@@ -23,11 +23,6 @@
 #include "unx/glyphcache.hxx"
 #include "PhysicalFontFace.hxx"
 
-#include <config_graphite.h>
-#if ENABLE_GRAPHITE
-class GraphiteFaceWrapper;
-#endif
-
 // FreetypeFontFile has the responsibility that a font file is only mapped once.
 // (#86621#) the old directly ft-managed solution caused it to be mapped
 // in up to nTTC*nSizes*nOrientation*nSynthetic times
@@ -66,9 +61,6 @@ public:
     const unsigned char*  GetTable( const char*, sal_uLong* pLength=nullptr ) const;
 
     FT_FaceRec_*          GetFaceFT();
-#if ENABLE_GRAPHITE
-    GraphiteFaceWrapper*  GetGraphiteFace();
-#endif
     void                  ReleaseFaceFT();
 
     const OString&        GetFontFileName() const   { return mpFontFile->GetFileName(); }
@@ -90,10 +82,6 @@ private:
     FreetypeFontFile*     mpFontFile;
     const int       mnFaceNum;
     int             mnRefCount;
-#if ENABLE_GRAPHITE
-    bool            mbCheckedGraphite;
-    GraphiteFaceWrapper * mpGraphiteFace;
-#endif
     sal_IntPtr      mnFontId;
     FontAttributes  maDevFontAttributes;
 

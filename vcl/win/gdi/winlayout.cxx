@@ -3430,164 +3430,6 @@ bool D2DWriteTextOutRenderer::GetDWriteInkBox(SalLayout const &rLayout, Rectangl
     return true;
 }
 
-#if ENABLE_GRAPHITE
-
-sal_GlyphId GraphiteLayoutWinImpl::getKashidaGlyph(int & rWidth)
-{
-	rWidth = mrFont.GetMinKashidaWidth();
-	return mrFont.GetMinKashidaGlyph();
-}
-
-float gr_fontAdvance(const void* appFontHandle, gr_uint16 glyphId)
-{
-    HDC hDC = static_cast<HDC>(const_cast<void*>(appFontHandle));
-    GLYPHMETRICS gm;
-    const MAT2 mat2 = {{0,1}, {0,0}, {0,0}, {0,1}};
-    if (GDI_ERROR == GetGlyphOutlineW(hDC, glyphId, GGO_GLYPH_INDEX | GGO_METRICS,
-        &gm, 0, nullptr, &mat2))
-    {
-        return .0f;
-    }
-    return gm.gmCellIncX;
-}
-
-GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const WinFontFace& rWFD, WinFontInstance& rWFE, bool bUseOpenGL) throw()
-  : WinLayout(hDC, rWFD, rWFE, bUseOpenGL), mpFont(nullptr),
-    maImpl(rWFD.GraphiteFace(), rWFE)
-{
-    // the log font size may differ from the font entry size if scaling is used for large fonts
-    LOGFONTW aLogFont;
-    GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
-    mpFont = gr_make_font_with_advance_fn(static_cast<float>(-aLogFont.lfHeight),
-        hDC, gr_fontAdvance, rWFD.GraphiteFace());
-    maImpl.SetFont(mpFont);
-    const OString aLang = OUStringToOString( LanguageTag::convertToBcp47( rWFE.maFontSelData.meLanguage ),
-            RTL_TEXTENCODING_ASCII_US);
-    OString name = OUStringToOString(
-        rWFE.maFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
-    sal_Int32 nFeat = name.indexOf(FontSelectPatternAttributes::FEAT_PREFIX) + 1;
-    if (nFeat > 0)
-    {
-        OString aFeat = name.copy(nFeat, name.getLength() - nFeat);
-        mpFeatures = new grutils::GrFeatureParser(rWFD.GraphiteFace(), aFeat.getStr(), aLang.getStr());
-    }
-    else
-    {
-        mpFeatures = new grutils::GrFeatureParser(rWFD.GraphiteFace(), aLang.getStr());
-    }
-    maImpl.SetFeatures(mpFeatures);
-}
-
-GraphiteWinLayout::~GraphiteWinLayout()
-{
-    delete mpFeatures;
-    gr_font_destroy(maImpl.GetFont());
-}
-
-bool GraphiteWinLayout::LayoutText(ImplLayoutArgs & args)
-{
-    HFONT hUnRotatedFont = nullptr;
-    if (args.mnOrientation)
-    {
-        // Graphite gets very confused if the font is rotated
-        LOGFONTW aLogFont;
-        GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
-        aLogFont.lfEscapement = 0;
-        aLogFont.lfOrientation = 0;
-        hUnRotatedFont = CreateFontIndirectW( &aLogFont);
-        SelectFont(mhDC, hUnRotatedFont);
-    }
-    WinLayout::AdjustLayout(args);
-    maImpl.SetFontScale(WinLayout::mfFontScale);
-    bool bSucceeded = maImpl.LayoutText(args);
-    if (args.mnOrientation)
-    {
-        // restore the rotated font
-        SelectFont(mhDC, mhFont);
-        DeleteObject(hUnRotatedFont);
-    }
-    return bSucceeded;
-}
-
-void  GraphiteWinLayout::AdjustLayout(ImplLayoutArgs& rArgs)
-{
-    WinLayout::AdjustLayout(rArgs);
-    maImpl.DrawBase() = WinLayout::maDrawBase;
-    maImpl.DrawOffset() = WinLayout::maDrawOffset;
-    if ( (rArgs.mnFlags & SalLayoutFlags::BiDiRtl) && rArgs.mpDXArray)
-    {
-        mrWinFontEntry.InitKashidaHandling(mhDC);
-    }
-    maImpl.AdjustLayout(rArgs);
-}
-
-bool GraphiteWinLayout::DrawTextImpl(HDC hDC,
-                                     const Rectangle* pRectToErase,
-                                     Point* pPos,
-                                     int* pGetNextGlypInfo) const
-{
-    HFONT hOrigFont = DisableFontScaling();
-    maImpl.DrawBase() = WinLayout::maDrawBase;
-    maImpl.DrawOffset() = WinLayout::maDrawOffset;
-
-    TextOutRenderer & render = TextOutRenderer::get(true);
-    bool const ok = render(*this, hDC, pRectToErase, pPos, pGetNextGlypInfo);
-    if( hOrigFont )
-        DeleteFont(SelectFont(hDC, hOrigFont));
-    return ok;
-}
-
-bool GraphiteWinLayout::CacheGlyphs(SalGraphics& /*rGraphics*/) const
-{
-    return false;
-}
-
-bool GraphiteWinLayout::DrawCachedGlyphs(SalGraphics& /*rGraphics*/) const
-{
-    return false;
-}
-
-sal_Int32 GraphiteWinLayout::GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const
-{
-    sal_Int32 nBreak = maImpl.GetTextBreak(nMaxWidth, nCharExtra, nFactor);
-    return nBreak;
-}
-
-DeviceCoordinate GraphiteWinLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
-{
-    return maImpl.FillDXArray(pDXArray);
-}
-
-void GraphiteWinLayout::GetCaretPositions( int nArraySize, long* pCaretXArray ) const
-{
-    maImpl.GetCaretPositions(nArraySize, pCaretXArray);
-}
-
-int GraphiteWinLayout::GetNextGlyphs( int length, sal_GlyphId* glyph_out,
-                                      Point& pos_out, int& glyph_slot, DeviceCoordinate* glyph_adv, int* char_index,
-                                      const PhysicalFontFace** pFallbackFonts ) const
-{
-    maImpl.DrawBase() = WinLayout::maDrawBase;
-    maImpl.DrawOffset() = WinLayout::maDrawOffset;
-    return maImpl.GetNextGlyphs(length, glyph_out, pos_out, glyph_slot, glyph_adv, char_index, pFallbackFonts);
-}
-
-void GraphiteWinLayout::MoveGlyph( int glyph_idx, long new_x_pos )
-{
-    maImpl.MoveGlyph(glyph_idx, new_x_pos);
-}
-
-void GraphiteWinLayout::DropGlyph( int glyph_idx )
-{
-    maImpl.DropGlyph(glyph_idx);
-}
-
-void GraphiteWinLayout::Simplify( bool is_base )
-{
-    maImpl.Simplify(is_base);
-}
-#endif // ENABLE_GRAPHITE
-
 SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
     if (!mpWinFontEntry[nFallbackLevel]) return nullptr;
@@ -3612,13 +3454,6 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 
         if( !(rArgs.mnFlags & SalLayoutFlags::ComplexDisabled) )
         {
-#if ENABLE_GRAPHITE
-            if (rFontFace.SupportsGraphite())
-            {
-                pWinLayout = new GraphiteWinLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
-            }
-            else
-#endif // ENABLE_GRAPHITE
             {
                 // script complexity is determined in upper layers
                 pWinLayout = new UniscribeLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
@@ -3629,13 +3464,6 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
         }
         else
         {
-#if ENABLE_GRAPHITE
-            if (rFontFace.SupportsGraphite())
-            {
-                pWinLayout = new GraphiteWinLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
-            }
-            else
-#endif // ENABLE_GRAPHITE
             {
                 static bool bAvoidSimpleWinLayout = (std::getenv("VCL_NO_SIMPLEWINLAYOUT") != nullptr);
 
@@ -3756,10 +3584,6 @@ bool WinFontInstance::InitKashidaHandling( HDC hDC )
 
 PhysicalFontFace* WinFontFace::Clone() const
 {
-#if ENABLE_GRAPHITE
-    if ( mpGraphiteData )
-        mpGraphiteData->AddReference();
-#endif
     if( mpHbFont )
         hb_font_reference( mpHbFont );
 
