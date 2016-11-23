@@ -1222,7 +1222,7 @@ inline vcl::Cursor* ImpEditView::GetCursor()
 
 void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );
 void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const MapUnit* pSourceUnit = nullptr, const MapUnit* pDestUnit = nullptr );
-sal_uInt8 GetCharTypeForCompression( sal_Unicode cChar );
+AsianCompressionFlags GetCharTypeForCompression( sal_Unicode cChar );
 Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin );
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_IMPEDIT_HXX

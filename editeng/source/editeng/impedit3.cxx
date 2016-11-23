@@ -128,7 +128,7 @@ Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin )
     return aTranslatedPos;
 }
 
-sal_uInt8 GetCharTypeForCompression( sal_Unicode cChar )
+AsianCompressionFlags GetCharTypeForCompression( sal_Unicode cChar )
 {
     switch ( cChar )
     {
@@ -136,18 +136,18 @@ sal_uInt8 GetCharTypeForCompression( sal_Unicode cChar )
         case 0x3010: case 0x3014: case 0x3016: case 0x3018:
         case 0x301A: case 0x301D:
         {
-            return CHAR_PUNCTUATIONRIGHT;
+            return AsianCompressionFlags::PunctuationRight;
         }
         case 0x3001: case 0x3002: case 0x3009: case 0x300B:
         case 0x300D: case 0x300F: case 0x3011: case 0x3015:
         case 0x3017: case 0x3019: case 0x301B: case 0x301E:
         case 0x301F:
         {
-            return CHAR_PUNCTUATIONLEFT;
+            return AsianCompressionFlags::PunctuationLeft;
         }
         default:
         {
-            return ( ( 0x3040 <= cChar ) && ( 0x3100 > cChar ) ) ? CHAR_KANA : CHAR_NORMAL;
+            return ( ( 0x3040 <= cChar ) && ( 0x3100 > cChar ) ) ? AsianCompressionFlags::Kana : AsianCompressionFlags::Normal;
         }
     }
 }
@@ -4426,10 +4426,10 @@ bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
         sal_Int32 nPortionLen = pTextPortion->GetLen();
         for ( sal_Int32 n = 0; n < nPortionLen; n++ )
         {
-            sal_uInt8 nType = GetCharTypeForCompression( pNode->GetChar( n+nStartPos ) );
+            AsianCompressionFlags nType = GetCharTypeForCompression( pNode->GetChar( n+nStartPos ) );
 
-            bool bCompressPunctuation = ( nType == CHAR_PUNCTUATIONLEFT ) || ( nType == CHAR_PUNCTUATIONRIGHT );
-            bool bCompressKana = ( nType == CHAR_KANA ) && ( GetAsianCompressionMode() == text::CharacterCompressionType::PUNCTUATION_AND_KANA );
+            bool bCompressPunctuation = ( nType == AsianCompressionFlags::PunctuationLeft ) || ( nType == AsianCompressionFlags::PunctuationRight );
+            bool bCompressKana = ( nType == AsianCompressionFlags::Kana ) && ( GetAsianCompressionMode() == text::CharacterCompressionType::PUNCTUATION_AND_KANA );
 
             // create Extra infos only if needed...
             if ( bCompressPunctuation || bCompressKana )
@@ -4439,7 +4439,7 @@ bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
                     ExtraPortionInfo* pExtraInfos = new ExtraPortionInfo;
                     pTextPortion->SetExtraInfos( pExtraInfos );
                     pExtraInfos->nOrgWidth = pTextPortion->GetSize().Width();
-                    pExtraInfos->nAsianCompressionTypes = CHAR_NORMAL;
+                    pExtraInfos->nAsianCompressionTypes = AsianCompressionFlags::Normal;
                 }
                 pTextPortion->GetExtraInfos()->nMaxCompression100thPercent = n100thPercentFromMax;
                 pTextPortion->GetExtraInfos()->nAsianCompressionTypes |= nType;
@@ -4489,7 +4489,7 @@ bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
                         if ( !pTextPortion->GetExtraInfos()->pOrgDXArray )
                             pTextPortion->GetExtraInfos()->SaveOrgDXArray( pDXArray, pTextPortion->GetLen()-1 );
 
-                        if ( nType == CHAR_PUNCTUATIONRIGHT )
+                        if ( nType == AsianCompressionFlags::PunctuationRight )
                         {
                             // If it's the first char, I must handle it in Paint()...
                             if ( n )
