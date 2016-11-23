@@ -53,6 +53,7 @@ private:
     ScDocShellRef                           mxDocSh;
     ScTabViewShell*                         mpViewShell;
     ScAbstractDialogFactory*                mpFact;
+    OUString                                mCsv; // needs to outlive mpStream
     std::unique_ptr<SvMemoryStream>         mpStream;
     std::unique_ptr<SfxItemSet>             mpItemSet;
 
@@ -84,6 +85,7 @@ ScScreenshotTest::ScScreenshotTest()
     mxDocSh(),
     mpViewShell(nullptr),
     mpFact(nullptr),
+    mCsv("some, strings, here, separated, by, commas"),
     mpStream(),
     mpItemSet()
 {
@@ -112,8 +114,7 @@ void ScScreenshotTest::initialize()
     mpFact = ScAbstractDialogFactory::Create();
     CPPUNIT_ASSERT_MESSAGE("Failed to create dialog factory", mpFact);
 
-    const OUString aCsv("some, strings, here, separated, by, commas");
-    SvMemoryStream* pNewMemStream = new SvMemoryStream(const_cast<sal_Unicode *>(aCsv.getStr()), aCsv.getLength() * sizeof(sal_Unicode), StreamMode::READ);
+    SvMemoryStream* pNewMemStream = new SvMemoryStream(const_cast<sal_Unicode *>(mCsv.getStr()), mCsv.getLength() * sizeof(sal_Unicode), StreamMode::READ);
     pNewMemStream->SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
     #ifdef OSL_BIGENDIAN
         pNewMemStream->SetEndian(SvStreamEndian::BIG);
