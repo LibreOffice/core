@@ -84,7 +84,6 @@ private:
     public:
 
         explicit        SalPrinterBmp (BitmapBuffer* pBitmap);
-        virtual         ~SalPrinterBmp () override;
         virtual sal_uInt32  GetPaletteColor (sal_uInt32 nIdx) const override;
         virtual sal_uInt32  GetPaletteEntryCount () const override;
         virtual sal_uInt32  GetPixelRGB  (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
@@ -152,10 +151,6 @@ SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
             mpFncGetPixel = nullptr;
         break;
     }
-}
-
-SalPrinterBmp::~SalPrinterBmp ()
-{
 }
 
 sal_uInt32

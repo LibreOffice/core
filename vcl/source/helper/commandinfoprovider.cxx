@@ -57,9 +57,7 @@ namespace
             if (mxFrame.is())
                 mxFrame->addFrameActionListener(this);
         }
-        virtual ~FrameListener() override
-        {
-        }
+
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
             throw (css::uno::RuntimeException, std::exception) override
         {
