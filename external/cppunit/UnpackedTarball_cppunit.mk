@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/enable-win32-debug.patch \
 	external/cppunit/0001-mark-the-fails-as-no-return.patch.1 \
 	external/cppunit/rtti.patch.0 \
+	$(if $(filter MSC-150,$(COM)-$(VCVER)),external/cppunit/cppunit-vs2017.patch.1) \
 ))
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\

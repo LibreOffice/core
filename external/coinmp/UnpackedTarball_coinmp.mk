@@ -26,6 +26,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/coinmp-msvc-disable-sse2.patch.1 \
 	$(if $(filter MSC,$(COM)),external/coinmp/windows.build.patch.1 \
 		$(if $(filter 120,$(VCVER)),external/coinmp/coinmp-vs2013.patch.1) \
+		$(if $(filter 150,$(VCVER)),external/coinmp/coinmp-vs2017.patch.1) \
 	) \
 	$(if $(filter MACOSX,$(OS)),external/coinmp/macosx.build.patch.1) \
 	external/coinmp/werror-format-pedantic.patch.0 \
