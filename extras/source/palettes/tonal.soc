@@ -13,40 +13,40 @@
 <draw:color draw:name="91% Grey" draw:color="#E8E8E8"/>
 <draw:color draw:name="100% Grey" draw:color="#FFFFFF"/>
 <draw:color draw:name="82% Magenta" draw:color="#FF00FF"/>
-<draw:color draw:name="82% Vi saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="82% Blue saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="82% Az saturated" draw:color="#FFFFFE"/>
+<draw:color draw:name="82% Violet (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="82% Blue (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="82% Azure (Out of Gamut)" draw:color="#FFFFFE"/>
 <draw:color draw:name="82% Cyan" draw:color="#00FFFF"/>
-<draw:color draw:name="82% SG saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="82% Green saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="82% CG saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="82% Yellow saturated" draw:color="#FFFF00"/>
-<draw:color draw:name="82% Or saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="82% Red saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="82% Ro saturated" draw:color="#FFFFFE"/>
+<draw:color draw:name="82% Sprg Green (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="82% Green (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="82% Char Green (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="82% Yellow" draw:color="#FFFF00"/>
+<draw:color draw:name="82% Orange (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="82% Red (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="82% Rose (Out of Gamut)" draw:color="#FFFFFE"/>
 <draw:color draw:name="73% Magenta" draw:color="#E300E3"/>
-<draw:color draw:name="73% Vi saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="73% Blue saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="73% Az saturated" draw:color="#FFFFFE"/>
+<draw:color draw:name="73% Violet (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="73% Blue (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="73% Azure (Out of Gamut)" draw:color="#FFFFFE"/>
 <draw:color draw:name="73% Cyan" draw:color="#00E3E3"/>
-<draw:color draw:name="73% SG saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="73% Green saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="73% CG saturated" draw:color="#FFFFFE"/>
+<draw:color draw:name="73% Sprg Green (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="73% Green (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="73% Char Green (Out of Gamut)" draw:color="#FFFFFE"/>
 <draw:color draw:name="73% Yellow" draw:color="#E3E300"/>
-<draw:color draw:name="73% Or saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="73% Red saturated" draw:color="#FFFFFE"/>
-<draw:color draw:name="73% Ro saturated" draw:color="#FFFFFE"/>
+<draw:color draw:name="73% Orange (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="73% Red (Out of Gamut)" draw:color="#FFFFFE"/>
+<draw:color draw:name="73% Rose (Out of Gamut)" draw:color="#FFFFFE"/>
 <draw:color draw:name="65% Magenta" draw:color="#CA00CA"/>
 <draw:color draw:name="65% Violet" draw:color="#7F00FE"/>
-<draw:color draw:name="65% Blue saturated" draw:color="#FFFFFE"/>
+<draw:color draw:name="65% Blue (Out of Gamut)" draw:color="#FFFFFE"/>
 <draw:color draw:name="65% Azure" draw:color="#007FFE"/>
 <draw:color draw:name="65% Cyan" draw:color="#00CACA"/>
 <draw:color draw:name="65% Sprg Green" draw:color="#00FE7F"/>
-<draw:color draw:name="65% Green saturated" draw:color="#FFFFFE"/>
+<draw:color draw:name="65% Green (Out of Gamut)" draw:color="#FFFFFE"/>
 <draw:color draw:name="65% Char Green" draw:color="#7FFE00"/>
 <draw:color draw:name="65% Yellow" draw:color="#CACA00"/>
 <draw:color draw:name="65% Orange" draw:color="#FE7F00"/>
-<draw:color draw:name="65% Red saturated" draw:color="#FFFFFE"/>
+<draw:color draw:name="65% Red (Out of Gamut)" draw:color="#FFFFFE"/>
 <draw:color draw:name="65% Rose" draw:color="#FE007F"/>
 <draw:color draw:name="58% Magenta" draw:color="#B400B4"/>
 <draw:color draw:name="58% Violet" draw:color="#7200E4"/>
