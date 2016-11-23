@@ -994,7 +994,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION :
             {
-                nFunction = (sal_Int16) ScXMLConverter::GetFunctionFromString( sValue );
+                nFunction = ScXMLConverter::GetFunctionFromString2( sValue );
             }
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION :
@@ -1522,8 +1522,7 @@ ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImpo
         {
             case XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_FUNCTION :
             {
-                pDataPilotSubTotals->AddFunction( sal::static_int_cast<sal_Int16>(
-                                ScXMLConverter::GetFunctionFromString( sValue ) ) );
+                pDataPilotSubTotals->AddFunction( ScXMLConverter::GetFunctionFromString2( sValue ) );
             }
             break;
             case XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME:

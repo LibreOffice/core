@@ -28,7 +28,6 @@
 #include <com/sun/star/sheet/XDataPilotResults.hpp>
 #include <com/sun/star/sheet/XDataPilotMemberResults.hpp>
 #include <com/sun/star/sheet/MemberResult.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
@@ -307,7 +306,7 @@ class ScDPDimension : public cppu::WeakImplHelper<
     ScDPSource*         pSource;
     long                nDim;               // dimension index (== column ID)
     rtl::Reference<ScDPHierarchies> mxHierarchies;
-    sal_uInt16          nFunction;          // enum GeneralFunction
+    sal_uInt16          nFunction;          // enum GeneralFunction2
     OUString            aName;              // if empty, take from source
     std::unique_ptr<OUString> mpLayoutName;
     std::unique_ptr<OUString> mpSubtotalName;
@@ -538,7 +537,7 @@ private:
     long                        nHier;
     long                        nLev;
     rtl::Reference<ScDPMembers> mxMembers;
-    css::uno::Sequence<css::sheet::GeneralFunction> aSubTotals;
+    css::uno::Sequence<sal_Int16> aSubTotals;
     css::sheet::DataPilotFieldSortInfo     aSortInfo;      // stored user settings
     css::sheet::DataPilotFieldAutoShowInfo aAutoShowInfo;  // stored user settings
     css::sheet::DataPilotFieldLayoutInfo   aLayoutInfo;    // stored user settings
@@ -614,7 +613,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(css::uno::RuntimeException, std::exception) override;
 
-    css::uno::Sequence<css::sheet::GeneralFunction> getSubTotals() const;
+    css::uno::Sequence<sal_Int16> getSubTotals() const;
     bool getShowEmpty() const { return bShowEmpty;}
     bool getRepeatItemLabels() const { return bRepeatItemLabels; }
 
