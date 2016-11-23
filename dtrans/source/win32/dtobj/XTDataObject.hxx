@@ -64,7 +64,7 @@ class CXTDataObject : public IDataObject
 public:
     CXTDataObject( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                    const css::uno::Reference< css::datatransfer::XTransferable >& aXTransferable );
-    virtual ~CXTDataObject() {}
+    virtual ~CXTDataObject();
 
     // ole interface implementation
 
@@ -118,6 +118,7 @@ private:
 private:
     LONG m_nRefCnt;
     css::uno::Reference< css::datatransfer::XTransferable >      m_XTransferable;
+    css::uno::Reference< css::uno::XComponentContext>            m_XComponentContext;
     CFormatEtcContainer                                          m_FormatEtcContainer;
     sal_Bool                                                     m_bFormatEtcContainerInitialized;
     CDataFormatTranslator                                        m_DataFormatTranslator;

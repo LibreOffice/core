@@ -25,8 +25,11 @@
 #include "DTransHelper.hxx"
 #include "TxtCnvtHlp.hxx"
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
+#include "com/sun/star/awt/AsyncCallback.hpp"
+#include "com/sun/star/awt/XCallback.hpp"
 #include "FmtFilter.hxx"
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #if defined _MSC_VER
 #pragma warning(push,1)
@@ -52,6 +55,33 @@ using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
+namespace
+{
+
+/**
+   We need to destroy XTransferable in the main thread to avoid dead lock
+   when locking in the clipboard thread. So we transfer the ownership of the
+   XTransferable reference to this object and release it when the callback
+   is executed in main thread.
+*/
+class AsyncDereference : public cppu::WeakImplHelper<css::awt::XCallback>
+{
+    Reference<XTransferable> maTransferable;
+
+public:
+    AsyncDereference(css::uno::Reference<css::datatransfer::XTransferable> const & rTransferable)
+        : maTransferable(rTransferable)
+    {}
+
+    virtual void SAL_CALL notify(css::uno::Any const &)
+        throw (css::uno::RuntimeException, std::exception) override
+    {
+        maTransferable.set(nullptr);
+    }
+};
+
+}
+
 // a helper class that will be thrown by the function validateFormatEtc
 
 class CInvalidFormatEtcException
@@ -67,10 +97,18 @@ CXTDataObject::CXTDataObject( const Reference< XComponentContext >& rxContext,
                               const Reference< XTransferable >& aXTransferable )
     : m_nRefCnt( 0 )
     , m_XTransferable( aXTransferable )
+    , m_XComponentContext( rxContext )
     , m_bFormatEtcContainerInitialized( sal_False )
     , m_DataFormatTranslator( rxContext )
     , m_FormatRegistrar( rxContext, m_DataFormatTranslator )
 {
+}
+
+CXTDataObject::~CXTDataObject()
+{
+    css::awt::AsyncCallback::create(m_XComponentContext)->addCallback(
+        new AsyncDereference(m_XTransferable),
+        css::uno::Any());
 }
 
 // IUnknown->QueryInterface
