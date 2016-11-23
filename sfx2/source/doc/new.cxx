@@ -140,7 +140,7 @@ class SfxNewFileDialog_Impl
     OUString aNone;
     OUString sLoadTemplate;
 
-    sal_uInt16 nFlags;
+    SfxNewFileDialogMode nFlags;
     SfxDocumentTemplates aTemplates;
     SfxObjectShellLock xDocShell;
     VclPtr<SfxNewFileDialog> pAntiImpl;
@@ -156,7 +156,7 @@ class SfxNewFileDialog_Impl
 
 public:
 
-    SfxNewFileDialog_Impl(SfxNewFileDialog* pAntiImplP, sal_uInt16 nFlags);
+    SfxNewFileDialog_Impl(SfxNewFileDialog* pAntiImplP, SfxNewFileDialogMode nFlags);
     ~SfxNewFileDialog_Impl();
 
     // Returns sal_False if '- No -' is set as a template
@@ -186,7 +186,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update, Idle*, void)
         return;
     }
 
-    if (m_pMoreBt->get_expanded() && (nFlags & SFXWB_PREVIEW) == SFXWB_PREVIEW)
+    if (m_pMoreBt->get_expanded() && (nFlags == SfxNewFileDialogMode::Preview))
     {
 
         OUString aFileName = aTemplates.GetPath(m_pRegionLb->GetSelectEntryPos(), nEntry - 1);
@@ -342,7 +342,7 @@ void    SfxNewFileDialog_Impl::SetTemplateFlags(SfxTemplateFlags nSet)
 
 
 SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
-    SfxNewFileDialog* pAntiImplP, sal_uInt16 nFl)
+    SfxNewFileDialog* pAntiImplP, SfxNewFileDialogMode nFl)
     : aNone(SfxResId(STR_NONE).toString())
     , nFlags(nFl)
     , pAntiImpl(pAntiImplP)
@@ -366,9 +366,9 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     pAntiImplP->get(m_pLoadFilePB, "fromfile");
     sLoadTemplate = pAntiImplP->get<FixedText>("alttitle")->GetText();
 
-    if (!nFlags)
+    if (nFlags == SfxNewFileDialogMode::NONE)
         m_pMoreBt->Hide();
-    else if(SFXWB_LOAD_TEMPLATE == nFlags)
+    else if(SfxNewFileDialogMode::LoadTemplate == nFlags)
     {
         m_pLoadFilePB->SetClickHdl(LINK(this, SfxNewFileDialog_Impl, LoadFile));
         m_pLoadFilePB->Show();
@@ -389,7 +389,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
 
     OUString &rExtra = pAntiImplP->GetExtraData();
     bool bExpand = !rExtra.isEmpty() && rExtra[0] == 'Y';
-    m_pMoreBt->set_expanded(bExpand && nFlags);
+    m_pMoreBt->set_expanded(bExpand && (nFlags != SfxNewFileDialogMode::NONE));
 
     m_pTemplateLb->SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, TemplateSelect));
     m_pTemplateLb->SetDoubleClickHdl(LINK(this, SfxNewFileDialog_Impl, DoubleClick));
@@ -421,7 +421,7 @@ SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
     rExtra = m_pMoreBt->get_expanded() ? OUString("Y") : OUString("N");
 }
 
-SfxNewFileDialog::SfxNewFileDialog(vcl::Window *pParent, sal_uInt16 nFlags)
+SfxNewFileDialog::SfxNewFileDialog(vcl::Window *pParent, SfxNewFileDialogMode nFlags)
     : SfxModalDialog(pParent, "LoadTemplateDialog",
         "sfx/ui/loadtemplatedialog.ui"),
       pImpl( new SfxNewFileDialog_Impl(this, nFlags) )
