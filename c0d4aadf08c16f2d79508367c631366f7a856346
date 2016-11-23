@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_bec03de2",
+        "filename": "offapi/com/sun/star/sheet/GeneralFunction2.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-11-23T09:42:19Z",
+      "side": 1,
+      "message": "Please use the more generic UNO type \u0027long\u0027 for these constants.  Including \u0027short\u0027 in the UNO type system was a historic mistake; new code should best avoid it.",
+      "revId": "c0d4aadf08c16f2d79508367c631366f7a856346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_deb5f97e",
+        "filename": "offapi/com/sun/star/sheet/GeneralFunction2.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-11-23T09:42:19Z",
+      "side": 1,
+      "message": "this @since tag is redundant now",
+      "revId": "c0d4aadf08c16f2d79508367c631366f7a856346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
