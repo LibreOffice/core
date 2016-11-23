@@ -35,7 +35,7 @@ def clearmakevars():
             del os.environ[makeenvvar]
 
 
-class CheckGbuildToIde(unittest.TestCase):
+class CheckGbuildToJson(unittest.TestCase):
     def setUp(self):
         getgbuildtesttools(self)
         clearmakevars()
@@ -44,21 +44,21 @@ class CheckGbuildToIde(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.tempwork)
 
-    def test_gbuildtoide(self):
+    def test_gbuildtojson(self):
         os.makedirs(os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
         shutil.copy(self.gbuildtojson, os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
         (bashscripthandle, bashscriptname) = tempfile.mkstemp()
         bashscript = os.fdopen(bashscripthandle, 'w', newline='\n')
         bashscript.write("set -e\n")
         bashscript.write("cd %s/solenv/qa/python/selftest\n" % os.environ['SRCDIR'])
-        bashscript.write("%s gbuildtoide WORKDIR=%s\n" % (self.make, self.tempwork.replace('\\', '/')))
+        bashscript.write("%s gbuildtojson WORKDIR=%s\n" % (self.make, self.tempwork.replace('\\', '/')))
         bashscript.close()
         subprocess.check_call([self.bash, bashscriptname.replace('\\', '/')])
         os.remove(bashscriptname)
-        jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToIde', 'Library'))
+        jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToJson', 'Library'))
         gbuildlibs = []
         for jsonfilename in jsonfiles:
-            with open(os.path.join(self.tempwork, 'GbuildToIde', 'Library', jsonfilename), 'r') as f:
+            with open(os.path.join(self.tempwork, 'GbuildToJson', 'Library', jsonfilename), 'r') as f:
                 gbuildlibs.append(json.load(f))
         foundlibs = set()
         for lib in gbuildlibs:
@@ -67,7 +67,7 @@ class CheckGbuildToIde(unittest.TestCase):
                 foundlibs.add('gbuildselftestdep')
             elif lib['LINKTARGET'].find('gbuildselftest') != -1:
                 foundlibs.add('gbuildselftest')
-                self.assertIn('-Igbuildtoidetestinclude', lib['INCLUDE'].split())
+                self.assertIn('-Igbuildtojsontestinclude', lib['INCLUDE'].split())
                 self.assertIn('gbuildselftestdep', lib['LINKED_LIBS'].split())
                 self.assertIn('solenv/qa/python/selftest/selftestobject', lib['CXXOBJECTS'].split())
                 self.assertIn('-DGBUILDSELFTESTDEF', lib['DEFS'].split())
@@ -77,10 +77,10 @@ class CheckGbuildToIde(unittest.TestCase):
                 self.assertTrue(False)
         self.assertEqual(foundlibs, set(['gbuildselftest', 'gbuildselftestdep']))
         self.assertEqual(len(foundlibs), 2)
-        jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToIde', 'Executable'))
+        jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToJson', 'Executable'))
         gbuildexes = []
         for jsonfilename in jsonfiles:
-            with open(os.path.join(self.tempwork, 'GbuildToIde', 'Executable', jsonfilename), 'r') as f:
+            with open(os.path.join(self.tempwork, 'GbuildToJson', 'Executable', jsonfilename), 'r') as f:
                 gbuildexes.append(json.load(f))
         foundexes = set()
         for exe in gbuildexes:
@@ -91,7 +91,7 @@ class CheckGbuildToIde(unittest.TestCase):
         self.assertEqual(foundexes, set(['gbuildselftestexe']))
         self.assertEqual(len(foundexes), 1)
 
-class CheckGbuildToIdeModules(unittest.TestCase):
+class CheckGbuildToJsonModules(unittest.TestCase):
     def setUp(self):
         getgbuildtesttools(self)
         clearmakevars()
@@ -119,7 +119,7 @@ class CheckGbuildToIdeModules(unittest.TestCase):
         shutil.rmtree(self.tempsrc)
         shutil.rmtree(self.tempwork)
 
-    def test_gbuildtoide(self):
+    def test_gbuildtojson(self):
         modules = ['accessibility', 'android', 'animations', 'apple_remote', 'avmedia', 'basctl', 'basegfx', 'basic', 'bean', 'canvas', 'chart2', 'codemaker', 'comphelper', 'cppcanvas', 'cui', 'dbaccess', 'desktop', 'drawinglayer', 'dtrans', 'editeng', 'embeddedobj', 'embedserv', 'eventattacher', 'extras', 'filter', 'forms', 'formula', 'fpicker', 'framework', 'hwpfilter', 'i18nlangtag', 'i18nutil', 'idl', 'idlc', 'instsetoo_native', 'io', 'ios', 'jvmaccess', 'jvmfwk', 'l10ntools', 'librelogo', 'libreofficekit', 'linguistic', 'lotuswordpro', 'mysqlc', 'nlpsolver', 'o3tl', 'offapi', 'officecfg', 'onlineupdate', 'oovbaapi', 'oox', 'opencl', 'package', 'postprocess', 'pyuno', 'registry', 'remotebridges', 'reportbuilder', 'reportdesign', 'ridljar', 'rsc', 'salhelper', 'sax', 'sc', 'sccomp', 'scp2', 'scripting', 'sd', 'sdext', 'setup_native', 'sfx2', 'slideshow', 'smoketest', 'soltools', 'sot', 'starmath', 'store', 'svgio', 'svl', 'svtools', 'svx', 'sw', 'swext', 'sysui', 'test', 'testtools', 'toolkit', 'tubes', 'ucb', 'ucbhelper', 'udkapi', 'uitest', 'UnoControls', 'unodevtools', 'unoidl', 'unoil', 'unotest', 'unotools', 'unoxml', 'ure', 'uui', 'vbahelper', 'vcl', 'winaccessibility', 'wizards', 'writerperfect', 'xmerge', 'xmlhelp', 'xmloff', 'xmlreader', 'xmlscript', 'xmlsecurity']
         if os.environ['OS'] == 'WNT':
             # for now, use a limited subset for testing on windows as it is so annoyingly slow on this
@@ -134,15 +134,16 @@ class CheckGbuildToIdeModules(unittest.TestCase):
             bashscript = os.fdopen(bashscripthandle, 'w', newline='\n')
             bashscript.write("set -e\n")
             bashscript.write("cd %s/%s\n" % (self.tempsrc.replace('\\','/'), module))
-            bashscript.write("%s gbuildtoide WORKDIR=%s SRCDIR=%s\n" % (self.make, self.tempwork.replace('\\', '/'), self.tempsrc.replace('\\','/')))
+            bashscript.write("%s gbuildtojson WORKDIR=%s SRCDIR=%s\n" % (self.make, self.tempwork.replace('\\', '/'), self.tempsrc.replace('\\','/')))
             bashscript.close()
             subprocess.check_call([self.bash, bashscriptname.replace('\\', '/')])
             os.remove(bashscriptname)
-        jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToIde', 'Library'))
+        jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToJson', 'Library'))
         gbuildlibs = []
         for jsonfilename in jsonfiles:
-            with open(os.path.join(self.tempwork, 'GbuildToIde', 'Library', jsonfilename), 'r') as f:
+            with open(os.path.join(self.tempwork, 'GbuildToJson', 'Library', jsonfilename), 'r') as f:
                 gbuildlibs.append(json.load(f))
+
 
 if __name__ == "__main__":
     unittest.main()

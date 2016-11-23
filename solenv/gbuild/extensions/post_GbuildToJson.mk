@@ -7,21 +7,23 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifneq ($(filter gbuildtoide,$(MAKECMDGOALS)),)
+ifneq ($(filter gbuildtojson,$(MAKECMDGOALS)),)
 
 # possibly recurse to ensure gbuildtojson was build before running the modded make
-gb_GbuildToIde_prep := $(shell $(MAKE) -f $(SRCDIR)/solenv/Makefile Executable_gbuildtojson)
+gb_GbuildToJson_prep := $(shell $(MAKE) -f $(SRCDIR)/solenv/Makefile Executable_gbuildtojson)
 gb_FULLDEPS:=
 
-gbuildtoide:
+gbuildtojson:
 	@true
 
 .PHONY : foo
 foo:
 	@true
 
+
+
 define gb_LinkTarget__command
-mkdir -p $(WORKDIR)/GbuildToIde/$(dir $(2))
+mkdir -p $(WORKDIR)/GbuildToJson/$(dir $(2))
 mkdir -p $(WORKDIR)/LinkTarget/$(dir $(2))
 $(if $(GBUILDTOJSON_LD_LIBRARY_PATH),LD_LIBRARY_PATH=$(GBUILDTOJSON_LD_LIBRARY_PATH)) \
 $(call gb_Executable_get_command,gbuildtojson) \
@@ -46,11 +48,11 @@ $(call gb_Executable_get_command,gbuildtojson) \
 --include=$(call var2file,$(shell $(gb_MKTEMP)),100,$(INCLUDE)) \
 --linked_libs=$(call var2file,$(shell $(gb_MKTEMP)),100,$(LINKED_LIBS)) \
 --linked_static_libs=$(call var2file,$(shell $(gb_MKTEMP)),100,$(LINKED_STATIC_LIBS)) \
-> $(WORKDIR)/GbuildToIde/$(2)
+> $(WORKDIR)/GbuildToJson/$(2)
 endef
 
 define gb_Postprocess_register_target
-gbuildtoide : $(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3)))
+gbuildtojson : $(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3)))
 
 $(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3))): $(gb_Helper_MISCDUMMY) foo
 endef
@@ -102,7 +104,7 @@ endef
 
 gb_Module_add_l10n_target =
 
-gb_GbuildToIde_BLACKLISTEDMODULES := connectivity compilerplugins cli_ure dictionaries bridges helpcompiler helpcontent2 icon-themes jurt sal shell cppu cppuhelper cpputools extensions external i18npool javaunohelper jurt lingucomponent odk scaddins solenv stoc tools translations udkapi unoidl writerfilter
+gb_GbuildToJson_BLACKLISTEDMODULES := connectivity compilerplugins cli_ure dictionaries bridges helpcompiler helpcontent2 icon-themes jurt sal shell cppu cppuhelper cpputools extensions external i18npool javaunohelper jurt lingucomponent odk scaddins solenv stoc tools translations udkapi unoidl writerfilter
 
 define gb_Module__add_moduledir_impl
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
@@ -112,7 +114,7 @@ gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb
 endef
 
 define gb_Module_add_moduledir
-$(if $(filter $(gb_GbuildToIde_BLACKLISTEDMODULES),$(2)),,$(call gb_Module__add_moduledir_impl,$(1),$(2)))
+$(if $(filter $(gb_GbuildToJson_BLACKLISTEDMODULES),$(2)),,$(call gb_Module__add_moduledir_impl,$(1),$(2)))
 
 endef
 
