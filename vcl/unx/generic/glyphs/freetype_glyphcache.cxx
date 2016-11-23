@@ -20,6 +20,7 @@
 
 #include <vcl/fontcharmap.hxx>
 
+#include <unx/cairotextrender.hxx>
 #include "unx/freetype_glyphcache.hxx"
 
 #include <vcl/svapp.hxx>
@@ -510,11 +511,7 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI )
     ApplyGSUB( rFSD );
 
     // TODO: query GASP table for load flags
-    mnLoadFlags = FT_LOAD_DEFAULT;
-#if 1 // #i97326# cairo sometimes uses FT_Set_Transform() on our FT_FACE
-    // we are not using FT_Set_Transform() yet, so just ignore it for now
-    mnLoadFlags |= FT_LOAD_IGNORE_TRANSFORM;
-#endif
+    mnLoadFlags = FT_LOAD_DEFAULT | FT_LOAD_IGNORE_TRANSFORM;
 
     mbArtItalic = (rFSD.GetItalic() != ITALIC_NONE && pFI->GetFontAttributes().GetItalic() == ITALIC_NONE);
     mbArtBold = (rFSD.GetWeight() > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
@@ -592,6 +589,12 @@ void ServerFont::SetFontOptions(const std::shared_ptr<FontConfigFontOptions>& xF
 
 const std::shared_ptr<FontConfigFontOptions>& ServerFont::GetFontOptions() const
 {
+    if (!mxFontOptions)
+    {
+        SAL_WARN("vcl", "this doesn't happen in practice I believe");
+        mxFontOptions.reset(GetFCFontOptions(mpFontInfo->GetFontAttributes(), maFontSelData.mnHeight));
+    }
+    mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), NeedsArtificialBold());
     return mxFontOptions;
 }
 
@@ -600,6 +603,10 @@ const OString& ServerFont::GetFontFileName() const
     return mpFontInfo->GetFontFileName();
 }
 
+int ServerFont::GetFontFaceIndex() const
+{
+    return mpFontInfo->GetFontFaceIndex();
+}
 
 ServerFont::~ServerFont()
 {

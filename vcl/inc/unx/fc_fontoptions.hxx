@@ -51,7 +51,8 @@ public:
     bool                DontUseEmbeddedBitmaps() const { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
     bool                DontUseAntiAlias() const { return meAntiAlias == ANTIALIAS_FALSE; }
     bool                DontUseHinting() const { return (meHinting == HINTING_FALSE) || (GetHintStyle() == FontHintStyle::NONE); }
-    void*               GetPattern(void * /*pFace*/, bool /*bEmbolden*/) const;
+    void                SyncPattern(const OString& rFileName, int nFontFace, bool bEmbolden);
+    FcPattern*          GetPattern() const;
 private:
     FcPattern* mpPattern;
 };
