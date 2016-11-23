@@ -2066,7 +2066,7 @@ void OApplicationController::renameEntry()
                                 pNameChecker.reset( new HierarchicalNameCheck( xHNames.get(), OUString() ) );
                                 aDialog.reset( VclPtr<OSaveAsDlg>::Create(
 
-                                    getView(), getORB(), sName, sLabel, *pNameChecker, SAD_TITLE_RENAME ) );
+                                    getView(), getORB(), sName, sLabel, *pNameChecker, SADFlags::TitleRename ) );
                             }
                         }
                     }
@@ -2087,7 +2087,7 @@ void OApplicationController::renameEntry()
                         aDialog.reset( VclPtr<OSaveAsDlg>::Create(
 
                             getView(), nCommandType, getORB(), getConnection(),
-                                *aList.begin(), *pNameChecker, SAD_TITLE_RENAME ) );
+                                *aList.begin(), *pNameChecker, SADFlags::TitleRename ) );
                     }
                     break;
                 default:

@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/msgbox.hxx>
 #include <memory>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace sdbc {
@@ -33,13 +34,16 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
+enum class SADFlags {
+    NONE                  = 0x0000,
+    AdditionalDescription = 0x0001,
+    TitlePasteAs          = 0x0100,
+    TitleRename           = 0x0200,
+};
+namespace o3tl {
+    template<> struct typed_flags<SADFlags> : is_typed_flags<SADFlags, 0x0301> {};
+}
 
-#define SAD_DEFAULT                 0x0000
-#define SAD_ADDITIONAL_DESCRIPTION  0x0001
-
-#define SAD_TITLE_STORE_AS          0x0000
-#define SAD_TITLE_PASTE_AS          0x0100
-#define SAD_TITLE_RENAME            0x0200
 
 class Button;
 class Edit;
@@ -58,14 +62,14 @@ namespace dbaui
                     const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                     const OUString& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
-                    sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
+                    SADFlags _nFlags = SADFlags::NONE);
 
         OSaveAsDlg( vcl::Window* _pParent,
                     const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                     const OUString& _rDefault,
                     const OUString& _sLabel,
                     const IObjectNameCheck& _rObjectNameCheck,
-                    sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
+                    SADFlags _nFlags = SADFlags::NONE);
         virtual ~OSaveAsDlg() override;
         virtual void dispose() override;
 

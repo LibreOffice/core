@@ -62,17 +62,17 @@ public:
     const IObjectNameCheck&    m_rObjectNameCheck;
     css::uno::Reference< css::sdbc::XDatabaseMetaData>            m_xMetaData;
     sal_Int32                  m_nType;
-    sal_Int32                  m_nFlags;
+    SADFlags                   m_nFlags;
 
     OSaveAsDlgImpl( OSaveAsDlg* pParent, sal_Int32 _rType,
                     const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                     const OUString& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
-                    sal_Int32 _nFlags);
+                    SADFlags _nFlags);
     OSaveAsDlgImpl( OSaveAsDlg* pParent,
                     const OUString& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
-                    sal_Int32 _nFlags);
+                    SADFlags _nFlags);
 };
 
 } // dbaui
@@ -82,7 +82,7 @@ OSaveAsDlgImpl::OSaveAsDlgImpl(OSaveAsDlg* pParent,
                                const Reference< XConnection>& _xConnection,
                                const OUString& rDefault,
                                const IObjectNameCheck& _rObjectNameCheck,
-                               sal_Int32 _nFlags)
+                               SADFlags _nFlags)
     : m_aQryLabel(ModuleRes(STR_QRY_LABEL))
     , m_sTblLabel(ModuleRes(STR_TBL_LABEL))
     , m_aName(rDefault)
@@ -116,7 +116,7 @@ OSaveAsDlgImpl::OSaveAsDlgImpl(OSaveAsDlg* pParent,
 OSaveAsDlgImpl::OSaveAsDlgImpl(OSaveAsDlg* pParent,
                                const OUString& rDefault,
                                const IObjectNameCheck& _rObjectNameCheck,
-                               sal_Int32 _nFlags)
+                               SADFlags _nFlags)
     : m_aQryLabel(ModuleRes(STR_QRY_LABEL))
     , m_sTblLabel(ModuleRes(STR_TBL_LABEL))
     , m_aName(rDefault)
@@ -175,7 +175,7 @@ OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
                         const Reference< XConnection>& _xConnection,
                         const OUString& rDefault,
                         const IObjectNameCheck& _rObjectNameCheck,
-                        sal_Int32 _nFlags)
+                        SADFlags _nFlags)
     : ModalDialog(pParent, "SaveDialog", "dbaccess/ui/savedialog.ui")
     , m_xContext( _rxContext )
 {
@@ -257,7 +257,7 @@ OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
                         const OUString& rDefault,
                         const OUString& _sLabel,
                         const IObjectNameCheck& _rObjectNameCheck,
-                        sal_Int32 _nFlags)
+                        SADFlags _nFlags)
     : ModalDialog(pParent, "SaveDialog", "dbaccess/ui/savedialog.ui")
     , m_xContext( _rxContext )
 {
@@ -324,14 +324,14 @@ void OSaveAsDlg::implInitOnlyTitle(const OUString& _rLabel)
 
 void OSaveAsDlg::implInit()
 {
-    if ( 0 == ( m_pImpl->m_nFlags & SAD_ADDITIONAL_DESCRIPTION ) ) {
+    if ( !( m_pImpl->m_nFlags & SADFlags::AdditionalDescription ) ) {
         // hide the description window
         m_pImpl->m_pDescription->Hide();
     }
 
-    if ( SAD_TITLE_PASTE_AS == ( m_pImpl->m_nFlags & SAD_TITLE_PASTE_AS ) )
+    if ( SADFlags::TitlePasteAs == ( m_pImpl->m_nFlags & SADFlags::TitlePasteAs ) )
         SetText( ModuleRes( STR_TITLE_PASTE_AS ) );
-    else if ( SAD_TITLE_RENAME == ( m_pImpl->m_nFlags & SAD_TITLE_RENAME ) )
+    else if ( SADFlags::TitleRename == ( m_pImpl->m_nFlags & SADFlags::TitleRename ) )
         SetText( ModuleRes( STR_TITLE_RENAME ) );
 
     m_pImpl->m_pPB_OK->SetClickHdl(LINK(this,OSaveAsDlg,ButtonClickHdl));

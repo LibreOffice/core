@@ -1367,7 +1367,7 @@ bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements, b
                 getConnection(),
                 aDefaultName,
                 aNameChecker,
-                SAD_DEFAULT );
+                SADFlags::NONE );
 
         bRet = ( aDlg->Execute() == RET_OK );
         if ( bRet )

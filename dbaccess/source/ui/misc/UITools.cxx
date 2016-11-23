@@ -1433,7 +1433,7 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
                                     sTargetName,
                                     sLabel,
                                     aNameChecker,
-                                    SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS );
+                                    SADFlags::AdditionalDescription | SADFlags::TitlePasteAs );
             if ( RET_OK != aAskForName->Execute() )
                 // cancelled by the user
                 return false;
