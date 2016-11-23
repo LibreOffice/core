@@ -24,18 +24,10 @@
 #include <hintids.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/script/Converter.hpp>
-#include <com/sun/star/text/SetVariableType.hpp>
-#include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <com/sun/star/text/UserDataPart.hpp>
-#include <com/sun/star/text/ChapterFormat.hpp>
-#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/PlaceholderType.hpp>
 #include <com/sun/star/text/TemplateDisplayFormat.hpp>
-#include <com/sun/star/text/UserFieldFormat.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
-#include <com/sun/star/text/ReferenceFieldPart.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
-#include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/DocumentStatistic.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -57,7 +49,6 @@
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
 
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 

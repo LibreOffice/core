@@ -21,8 +21,6 @@
 #include <rtl/math.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <comphelper/processfactory.hxx>
 #include <editeng/unolingu.hxx>
 #include <docary.hxx>

@@ -43,13 +43,6 @@
 #include <tools/globname.hxx>
 #include <svx/svxids.hrc>
 
-#include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <comphelper/string.hxx>
 #include <comphelper/random.hxx>
 #include <tools/urlobj.hxx>

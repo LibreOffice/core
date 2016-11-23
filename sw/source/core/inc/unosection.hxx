@@ -26,7 +26,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 
 #include <cppuhelper/implbase.hxx>

@@ -21,7 +21,6 @@
 
 #include <observablethread.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <retrievedinputstreamdata.hxx>
 
 /** class for a thread to retrieve an input stream given by an URL

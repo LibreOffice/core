@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/embed/EmbedStates.hpp>
 
 #include <sfx2/ipclient.hxx>
 #include <sfx2/viewsh.hxx>

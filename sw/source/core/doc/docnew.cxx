@@ -22,9 +22,6 @@
 #include <doc.hxx>
 #include <dcontact.hxx>
 #include <proofreadingiterator.hxx>
-#include <com/sun/star/document/PrinterIndependentLayout.hpp>
-#include <com/sun/star/document/UpdateDocMode.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 
 #include <comphelper/processfactory.hxx>

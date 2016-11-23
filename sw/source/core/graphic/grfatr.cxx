@@ -17,18 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/text/RelOrientation.hpp>
-#include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/HorizontalAdjust.hpp>
-#include <com/sun/star/text/DocumentStatistic.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
-#include <com/sun/star/text/HoriOrientationFormat.hpp>
-#include <com/sun/star/text/NotePrintMode.hpp>
-#include <com/sun/star/text/SizeType.hpp>
-#include <com/sun/star/text/VertOrientationFormat.hpp>
-#include <com/sun/star/text/WrapTextMode.hpp>
-#include <com/sun/star/text/GraphicCrop.hpp>
-#include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <o3tl/any.hxx>
 #include <svtools/grfmgr.hxx>
