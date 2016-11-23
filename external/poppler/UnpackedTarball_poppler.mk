@@ -15,8 +15,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/poppler-notests.patch.1 \
 	$(if $(filter MSC-120,$(COM)-$(VCVER)),external/poppler/poppler-snprintf.patch.1) \
 	external/poppler/poppler-mac-fake.patch.1 \
-	external/poppler/poppler-vs2013.patch.1 \
-	external/poppler/poppler-0.46.0-std-max.patch.1 \
 	external/poppler/ubsan.patch.0 \
 	external/poppler/poppler-libjpeg.patch.1 \
 ))
