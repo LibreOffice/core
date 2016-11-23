@@ -3974,10 +3974,10 @@ long ImpEditEngine::GetXPos(
                 if ( rPortion.GetExtraInfos() && rPortion.GetExtraInfos()->bCompressed )
                 {
                     nX += rPortion.GetExtraInfos()->nPortionOffsetX;
-                    if ( rPortion.GetExtraInfos()->nAsianCompressionTypes & CHAR_PUNCTUATIONRIGHT )
+                    if ( rPortion.GetExtraInfos()->nAsianCompressionTypes & AsianCompressionFlags::PunctuationRight )
                     {
-                        sal_uInt8 nType = GetCharTypeForCompression( pParaPortion->GetNode()->GetChar( nIndex ) );
-                        if ( nType == CHAR_PUNCTUATIONRIGHT && !pLine->GetCharPosArray().empty() )
+                        AsianCompressionFlags nType = GetCharTypeForCompression( pParaPortion->GetNode()->GetChar( nIndex ) );
+                        if ( nType == AsianCompressionFlags::PunctuationRight && !pLine->GetCharPosArray().empty() )
                         {
                             sal_Int32 n = nIndex - nTextPortionStart;
                             const long* pDXArray = &pLine->GetCharPosArray()[0]+( nTextPortionStart-pLine->GetStart() );
@@ -3985,9 +3985,9 @@ long ImpEditEngine::GetXPos(
                                                             - ( n ? pDXArray[n-1] : 0 );
                             if ( (n+1) < rPortion.GetLen() )
                             {
-                                // smaller, when char behind is CHAR_PUNCTUATIONRIGHT also
+                                // smaller, when char behind is AsianCompressionFlags::PunctuationRight also
                                 nType = GetCharTypeForCompression( pParaPortion->GetNode()->GetChar( nIndex+1 ) );
-                                if ( nType == CHAR_PUNCTUATIONRIGHT )
+                                if ( nType == AsianCompressionFlags::PunctuationRight )
                                 {
                                     sal_Int32 nNextCharWidth = ( ( (n+2) < rPortion.GetLen() ) ? pDXArray[n+1] : rPortion.GetSize().Width() )
                                                                     - pDXArray[n];
