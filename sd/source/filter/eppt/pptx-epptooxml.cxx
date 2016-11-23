@@ -319,7 +319,6 @@ PowerPointExport::PowerPointExport( const Reference< XComponentContext > & rxCtx
     , mnAnimationNodeIdMax(1)
     , mbCreateNotes(false)
 {
-    memset( mLayoutInfo, 0, sizeof(mLayoutInfo) );
 }
 
 PowerPointExport::~PowerPointExport()
