@@ -640,48 +640,6 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
     return (aOldGlyphId != GF_DROPPED);
 }
 
-class PspServerFontLayout : public ServerFontLayout
-{
-public:
-    PspServerFontLayout( psp::PrinterGfx&, FreetypeFont& rFont, const ImplLayoutArgs& rArgs );
-
-    virtual void        InitFont() const override;
-    const sal_Unicode*  getTextPtr() const { return maText.getStr() - mnMinCharPos; }
-    int                 getMinCharPos() const { return mnMinCharPos; }
-    int                 getMaxCharPos() const { return mnMinCharPos+maText.getLength()-1; }
-private:
-    ::psp::PrinterGfx&  mrPrinterGfx;
-    sal_IntPtr          mnFontID;
-    int                 mnFontHeight;
-    int                 mnFontWidth;
-    bool                mbVertical;
-    bool                mbArtItalic;
-    bool                mbArtBold;
-    OUString       maText;
-    int                 mnMinCharPos;
-};
-
-PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, FreetypeFont& rFont, const ImplLayoutArgs& rArgs )
-        :   ServerFontLayout( rFont ),
-            mrPrinterGfx( rGfx )
-{
-    mnFontID     = mrPrinterGfx.GetFontID();
-    mnFontHeight = mrPrinterGfx.GetFontHeight();
-    mnFontWidth  = mrPrinterGfx.GetFontWidth();
-    mbVertical   = mrPrinterGfx.GetFontVertical();
-    mbArtItalic  = mrPrinterGfx.GetArtificialItalic();
-    mbArtBold    = mrPrinterGfx.GetArtificialBold();
-    const sal_Unicode *pStr = rArgs.mrStr.getStr();
-    maText       = OUString( pStr + rArgs.mnMinCharPos, rArgs.mnEndCharPos - rArgs.mnMinCharPos+1 );
-    mnMinCharPos = rArgs.mnMinCharPos;
-}
-
-void PspServerFontLayout::InitFont() const
-{
-    mrPrinterGfx.SetFont( mnFontID, mnFontHeight, mnFontWidth,
-                          mnOrientation, mbVertical, mbArtItalic, mbArtBold );
-}
-
 class PspCommonSalLayout : public CommonSalLayout
 {
 public:
@@ -718,7 +676,7 @@ void PspCommonSalLayout::InitFont() const
                          mnOrientation, mbVertical, mbArtItalic, mbArtBold);
 }
 
-static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx, bool bIsPspServerFontLayout )
+static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx)
 {
     const int nMaxGlyphs = 1;
     sal_GlyphId aGlyphAry[ nMaxGlyphs ];
@@ -732,16 +690,6 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
     const sal_Unicode* pText = nullptr;
     int nMinCharPos = 0;
     int nMaxCharPos = 0;
-    if (bIsPspServerFontLayout)
-    {
-        const PspServerFontLayout * pPspLayout = dynamic_cast<const PspServerFontLayout*>(&rLayout);
-        if (pPspLayout)
-        {
-            pText = pPspLayout->getTextPtr();
-            nMinCharPos = pPspLayout->getMinCharPos();
-            nMaxCharPos = pPspLayout->getMaxCharPos();
-        }
-    }
     for( int nStart = 0;; )
     {
         int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry, pText ? aCharPosAry : nullptr );
@@ -773,18 +721,18 @@ void PspFontLayout::InitFont() const
 
 void PspFontLayout::DrawText( SalGraphics& ) const
 {
-    DrawPrinterLayout( *this, mrPrinterGfx, false );
+    DrawPrinterLayout(*this, mrPrinterGfx);
 }
 
 void GenPspGraphics::DrawServerFontLayout( const GenericSalLayout& rLayout, const FreetypeFont& /*unused*/ )
 {
     // print complex text
-    DrawPrinterLayout( rLayout, *m_pPrinterGfx, true );
+    DrawPrinterLayout(rLayout, *m_pPrinterGfx);
 }
 
 void GenPspGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
 {
-    DrawPrinterLayout(rLayout, *m_pPrinterGfx, false);
+    DrawPrinterLayout(rLayout, *m_pPrinterGfx);
 }
 
 const FontCharMapRef GenPspGraphics::GetFontCharMap() const
@@ -1012,10 +960,7 @@ SalLayout* GenPspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     if( m_pFreetypeFont[ nFallbackLevel ]
         && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
     {
-        if (SalLayout::UseCommonLayout())
-            pLayout = new PspCommonSalLayout(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]);
-        else
-            pLayout = new PspServerFontLayout( *m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel], rArgs );
+        pLayout = new PspCommonSalLayout(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]);
     }
     else
         pLayout = new PspFontLayout( *m_pPrinterGfx );
