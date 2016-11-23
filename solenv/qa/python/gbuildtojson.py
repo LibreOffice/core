@@ -39,7 +39,7 @@ class CheckGbuildToJson(unittest.TestCase):
     def setUp(self):
         getgbuildtesttools(self)
         clearmakevars()
-        self.tempwork = tempfile.mkdtemp()
+        self.tempwork = tempfile.mkdtemp(prefix='gbuild')
 
     def tearDown(self):
         shutil.rmtree(self.tempwork)
@@ -47,7 +47,7 @@ class CheckGbuildToJson(unittest.TestCase):
     def test_gbuildtojson(self):
         os.makedirs(os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
         shutil.copy(self.gbuildtojson, os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
-        (bashscripthandle, bashscriptname) = tempfile.mkstemp()
+        (bashscripthandle, bashscriptname) = tempfile.mkstemp('gbuild')
         bashscript = os.fdopen(bashscripthandle, 'w', newline='\n')
         bashscript.write("set -e\n")
         bashscript.write("cd %s/solenv/qa/python/selftest\n" % os.environ['SRCDIR'])
@@ -95,8 +95,8 @@ class CheckGbuildToJsonModules(unittest.TestCase):
     def setUp(self):
         getgbuildtesttools(self)
         clearmakevars()
-        self.tempwork = tempfile.mkdtemp()
-        self.tempsrc = tempfile.mkdtemp()
+        self.tempwork = tempfile.mkdtemp(prefix='gbuild')
+        self.tempsrc = tempfile.mkdtemp(prefix='gbuild')
         self.srcdir = os.environ['SRCDIR']
         if os.environ['OS'] == 'WNT':
             self.tempworkmixed = self.tempwork.replace('\\','/')
@@ -130,7 +130,7 @@ class CheckGbuildToJsonModules(unittest.TestCase):
             shutil.copy(self.gbuildtojson, os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
             if module != 'solenv':
                 shutil.copytree(os.path.join(os.environ['SRCDIR'], module), os.path.join(self.tempsrc, module))
-            (bashscripthandle, bashscriptname) = tempfile.mkstemp()
+            (bashscripthandle, bashscriptname) = tempfile.mkstemp(prefix='gbuild')
             bashscript = os.fdopen(bashscripthandle, 'w', newline='\n')
             bashscript.write("set -e\n")
             bashscript.write("cd %s/%s\n" % (self.tempsrc.replace('\\','/'), module))
