@@ -23,7 +23,6 @@
 #include <com/sun/star/animations/AnimateMotion.hpp>
 #include <com/sun/star/animations/AnimateSet.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
-#include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/Audio.hpp>
 #include <com/sun/star/animations/Command.hpp>
 #include <com/sun/star/animations/Event.hpp>
