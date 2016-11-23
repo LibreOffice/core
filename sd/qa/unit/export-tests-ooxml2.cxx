@@ -467,8 +467,6 @@ void SdOOXMLExportTest2::testPresetShapesExport()
         "adj1","val 10490",
         "donut",
         "adj","val 9601",
-        "noSmoking",
-        "adj","val 16118",
         "bevel",
         "adj","val 42587",
         "foldedCorner",
