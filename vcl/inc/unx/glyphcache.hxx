@@ -169,8 +169,7 @@ public:
     const FontCharMapRef    GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 
-    const GlyphMetric&      GetGlyphMetric( sal_GlyphId aGlyphId )
-                            { return GetGlyphData( aGlyphId ).GetMetric(); }
+    const GlyphMetric&      GetGlyphMetric(sal_GlyphId aGlyphId);
 
 #if ENABLE_GRAPHITE
     GraphiteFaceWrapper* GetGraphiteFace() const;
@@ -202,7 +201,6 @@ private:
 
     void                    ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* ) const;
     void                    ApplyGSUB( const FontSelectPattern& );
-    GlyphData&              GetGlyphData( sal_GlyphId );
 
     ServerFontLayoutEngine* GetLayoutEngine();
 
