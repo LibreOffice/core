@@ -91,7 +91,7 @@ void GetOptimalHeightsInColumn(
     //  on standard format)
 
 
-    rCol[MAXCOL].GetOptimalHeight(rCxt, nStartRow, nEndRow, 0, 0);
+    rCol[rCol.size()-1].GetOptimalHeight(rCxt, nStartRow, nEndRow, 0, 0);
 
     //  from there search for the standard height that is in use in the lower part
 
@@ -110,7 +110,7 @@ void GetOptimalHeightsInColumn(
     SCROW nMinStart = nPos;
 
     sal_uLong nWeightedCount = 0;
-    for (SCCOL nCol=0; nCol<MAXCOL; nCol++)     // MAXCOL already above
+    for (SCCOL nCol=0; nCol<(rCol.size()-1); nCol++)     // last col done already above
     {
         rCol[nCol].GetOptimalHeight(rCxt, nStartRow, nEndRow, nMinHeight, nMinStart);
 
@@ -336,7 +336,7 @@ ScTable::~ScTable()
 {
     if (!pDocument->IsInDtorClear())
     {
-        for (SCCOL nCol = 0; nCol < MAXCOL; ++nCol)
+        for (SCCOL nCol = 0; nCol < (aCol.size() - 1); ++nCol)
         {
             aCol[nCol].FreeNotes();
         }
@@ -454,6 +454,9 @@ sal_uInt16 ScTable::GetOptimalColWidth( SCCOL nCol, OutputDevice* pDev,
                                     bool bFormula, const ScMarkData* pMarkData,
                                     const ScColWidthParam* pParam )
 {
+    if ( nCol >= aCol.size() )
+        return ( STD_COL_WIDTH - STD_EXTRA_WIDTH );
+
     return aCol[nCol].GetOptimalColWidth( pDev, nPPTX, nPPTY, rZoomX, rZoomY,
         bFormula, STD_COL_WIDTH - STD_EXTRA_WIDTH, pMarkData, pParam );
 }
@@ -464,6 +467,9 @@ long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
                                 const Fraction& rZoomX, const Fraction& rZoomY,
                                 bool bWidth, bool bTotalSize )
 {
+    if ( nCol >= aCol.size() )
+        return 0;
+
     ScNeededSizeOptions aOptions;
     aOptions.bSkipMerged = false;       // count merged cells
     aOptions.bTotalSize  = bTotalSize;
@@ -532,7 +538,7 @@ bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const
     bool bFound = false;
     SCCOL nMaxX = 0;
     SCROW nMaxY = 0;
-    for (SCCOL i=0; i<=MAXCOL; i++)
+    for (SCCOL i=0; i<aCol.size(); i++)
         {
             if (!aCol[i].IsEmptyData())
             {
@@ -585,7 +591,7 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
     SCROW nMaxY = 0;
     SCCOL i;
 
-    for (i=0; i<=MAXCOL; i++)               // Test data
+    for (i=0; i<aCol.size(); i++)               // Test data
         {
             if (!aCol[i].IsEmptyData())
             {
@@ -617,7 +623,7 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
 
     SCCOL nMaxDataX = nMaxX;
 
-    for (i=0; i<=MAXCOL; i++)               // Test attribute
+    for (i=0; i<aCol.size(); i++)               // Test attribute
     {
         SCROW nLastRow;
         if (aCol[i].GetLastVisibleAttr( nLastRow ))
@@ -643,10 +649,10 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
     else if ( nMaxX > nMaxDataX )
     {
         SCCOL nAttrStartX = nMaxDataX + 1;
-        while ( nAttrStartX < MAXCOL )
+        while ( nAttrStartX < (aCol.size()-1) )
         {
             SCCOL nAttrEndX = nAttrStartX;
-            while ( nAttrEndX < MAXCOL && aCol[nAttrStartX].IsVisibleAttrEqual(aCol[nAttrEndX+1]) )
+            while ( nAttrEndX < (aCol.size()-1) && aCol[nAttrStartX].IsVisibleAttrEqual(aCol[nAttrEndX+1]) )
                 ++nAttrEndX;
             if ( nAttrEndX + 1 - nAttrStartX >= SC_COLUMNS_STOP )
             {
@@ -675,7 +681,7 @@ bool ScTable::GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
     SCCOL nMaxX = 0;
     SCCOL i;
 
-    for (i=0; i<=MAXCOL; i++)               // Test attribute
+    for (i=0; i<aCol.size(); i++)               // Test attribute
     {
         if (aCol[i].HasVisibleAttrIn( nStartRow, nEndRow ))
         {
@@ -691,7 +697,7 @@ bool ScTable::GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
             --nMaxX;
     }
 
-    for (i=0; i<=MAXCOL; i++)               // Daten testen
+    for (i=0; i<aCol.size(); i++)               // Daten testen
     {
         if (!aCol[i].IsEmptyBlock( nStartRow, nEndRow ))        //TODO: bNotes ??????
         {
@@ -708,6 +714,8 @@ bool ScTable::GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
 bool ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
                                 SCROW& rEndRow, bool bNotes ) const
 {
+    nStartCol = std::min<SCCOL>( nStartCol, aCol.size()-1 );
+    nEndCol   = std::min<SCCOL>( nEndCol,   aCol.size()-1 );
     bool bFound = false;
     SCROW nMaxY = 0;
     SCCOL i;
@@ -753,11 +761,11 @@ bool ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
 bool ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 {
     bool bFound = false;
-    SCCOL nMinX = MAXCOL;
+    SCCOL nMinX = aCol.size()-1;
     SCROW nMinY = MAXROW;
     SCCOL i;
 
-    for (i=0; i<=MAXCOL; i++)                   // Test attribute
+    for (i=0; i<aCol.size(); i++)                   // Test attribute
     {
         SCROW nFirstRow;
         if (aCol[i].GetFirstVisibleAttr( nFirstRow ))
@@ -772,16 +780,16 @@ bool ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 
     if (nMinX == 0)                                     // omit attribute at the right
     {
-        if ( aCol[0].IsVisibleAttrEqual(aCol[1]) )      // no single ones
+        if ( aCol.size() > 1 && aCol[0].IsVisibleAttrEqual(aCol[1]) )      // no single ones
         {
             ++nMinX;
-            while ( nMinX<MAXCOL && aCol[nMinX].IsVisibleAttrEqual(aCol[nMinX-1]) )
+            while ( nMinX<(aCol.size()-1) && aCol[nMinX].IsVisibleAttrEqual(aCol[nMinX-1]) )
                 ++nMinX;
         }
     }
 
     bool bDatFound = false;
-    for (i=0; i<=MAXCOL; i++)                   // Test data
+    for (i=0; i<aCol.size(); i++)                   // Test data
     {
         if (!aCol[i].IsEmptyData())
         {
@@ -823,6 +831,9 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     //                   independently of the emptiness of rows / columns (i.e. does not allow shrinking)
     //     bOnlyDown = true means extend / shrink the inputed area only down, i.e modifiy only rEndRow
 
+    rStartCol = std::min<SCCOL>( rStartCol, aCol.size()-1 );
+    rEndCol   = std::min<SCCOL>( rEndCol,   aCol.size()-1 );
+
     bool bLeft = false;
     bool bRight  = false;
     bool bTop = false;
@@ -840,7 +851,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
             if (nStart>0) --nStart;
             if (nEnd<MAXROW) ++nEnd;
 
-            if (rEndCol < MAXCOL)
+            if (rEndCol < (aCol.size()-1))
                 if (!aCol[rEndCol+1].IsEmptyBlock(nStart,nEnd))
                 {
                     ++rEndCol;
@@ -892,7 +903,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     if ( !bIncludeOld && !bOnlyDown )
     {
         if ( !bLeft )
-            while ( aCol[rStartCol].IsEmptyBlock(rStartRow,rEndRow) && rStartCol < MAXCOL && rStartCol < rEndCol)
+            while ( aCol[rStartCol].IsEmptyBlock(rStartRow,rEndRow) && rStartCol < (aCol.size()-1) && rStartCol < rEndCol)
                 ++rStartCol;
 
         if ( !bRight )
