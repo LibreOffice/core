@@ -642,107 +642,11 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
     }
 }
 
-#if ENABLE_GRAPHITE
-
-#ifdef DEBUG
-static FILE * grLogFile = NULL;
-static FILE * grLog()
-{
-    std::string logFileName(getenv("TEMP"));
-    logFileName.append("\\grface.log");
-    if (grLogFile == NULL) grLogFile = fopen(logFileName.c_str(),"w");
-    else fflush(grLogFile);
-    return grLogFile;
-}
-#endif
-
-const void * getGrTable(const void* appFaceHandle, unsigned int name, size_t *len)
-{
-    const GrFontData * fontTables = static_cast<const GrFontData*>(appFaceHandle);
-    return fontTables->getTable(name, len);
-}
-
-GrFontData::GrFontData(HDC hDC) :
-    mhDC(hDC), mpFace(nullptr), mnRefCount(1)
-{
-    // The face options ensure that the tables are all read at construction
-    // time so there is no need to keep the hDC uptodate
-    static const char* pGraphiteCacheStr = getenv( "SAL_GRAPHITE_CACHE_SIZE" );
-    unsigned long graphiteSegCacheSize = pGraphiteCacheStr ? (atoi(pGraphiteCacheStr)) : 0;
-    if (graphiteSegCacheSize > 500)
-        mpFace = gr_make_face_with_seg_cache(this, getGrTable,
-            graphiteSegCacheSize, gr_face_preloadGlyphs | gr_face_cacheCmap);
-    else
-        mpFace = gr_make_face(this, getGrTable,
-            gr_face_preloadGlyphs | gr_face_cacheCmap);
-#ifdef DEBUG
-        fprintf(grLog(), "gr_make_face %lx for WinFontData %lx\n", (unsigned long)mpFace,
-            (unsigned long)this);
-#endif
-    mhDC = nullptr;
-}
-
-GrFontData::~GrFontData()
-{
-    if (mpFace)
-    {
-#ifdef DEBUG
-        fprintf(grLog(), "gr_face_destroy %lx for WinFontData %lx\n", (unsigned long)mpFace,
-            (unsigned long)this);
-#endif
-        gr_face_destroy(mpFace);
-        mpFace = nullptr;
-    }
-    std::vector<RawFontData*>::iterator i = mvData.begin();
-    while (i != mvData.end())
-    {
-        delete *i;
-        ++i;
-    }
-    mvData.clear();
-}
-
-const void * GrFontData::getTable(unsigned int name, size_t *len) const
-{
-    assert(mhDC);
-    // swap the bytes
-    union TtfTag {
-        unsigned int i;
-        unsigned char c[4];
-    };
-    TtfTag littleEndianTag;
-    littleEndianTag.i = name;
-    TtfTag bigEndianTag;
-    bigEndianTag.c[0] = littleEndianTag.c[3];
-    bigEndianTag.c[1] = littleEndianTag.c[2];
-    bigEndianTag.c[2] = littleEndianTag.c[1];
-    bigEndianTag.c[3] = littleEndianTag.c[0];
-    mvData.push_back(new RawFontData(mhDC, bigEndianTag.i));
-    const RawFontData * data = mvData[mvData.size()-1];
-    if (data && (data->size() > 0))
-    {
-        if (len)
-            *len = data->size();
-        return static_cast<const void *>(data->get());
-    }
-    else
-    {
-        if (len)
-            *len = 0;
-        return nullptr;
-    }
-}
-#endif
-
 WinFontFace::WinFontFace( const FontAttributes& rDFS,
     int nHeight, BYTE eWinCharSet, BYTE nPitchAndFamily )
 :   PhysicalFontFace( rDFS ),
     mnId( 0 ),
     mbHasCJKSupport( false ),
-#if ENABLE_GRAPHITE
-    mpGraphiteData(nullptr),
-    mbHasGraphiteSupport( false ),
-#endif
     mbHasArabicSupport ( false ),
     mbFontCapabilitiesRead( false ),
     mxUnicodeMap( nullptr ),
@@ -785,13 +689,7 @@ WinFontFace::~WinFontFace()
 {
     if( mxUnicodeMap.Is() )
         mxUnicodeMap = nullptr;
-#if ENABLE_GRAPHITE
-    if (mpGraphiteData)
-        mpGraphiteData->DeReference();
-#ifdef DEBUG
-    fprintf(grLog(), "WinFontFace::~WinFontFace %lx\n", (unsigned long)this);
-#endif
-#endif // ENABLE_GRAPHITE
+
     delete mpEncodingVector;
 
     if( mpHbFont )
@@ -814,44 +712,7 @@ void WinFontFace::UpdateFromHDC( HDC hDC ) const
 
     ReadCmapTable( hDC );
     GetFontCapabilities( hDC );
-#if ENABLE_GRAPHITE
-    static const char* pDisableGraphiteText = getenv( "SAL_DISABLE_GRAPHITE" );
-    if( !pDisableGraphiteText || (pDisableGraphiteText[0] == '0') )
-    {
-        const DWORD nSilfTag = CalcTag("Silf");
-        const RawFontData aRawFontData( hDC, nSilfTag );
-        mbHasGraphiteSupport = (aRawFontData.size() > 0);
-        if (mbHasGraphiteSupport)
-        {
-#ifdef DEBUG
-            fprintf(grLog(), "WinFontFace::UpdateFromHDC %lx\n",
-            (unsigned long)this);
-#endif
-            if (mpGraphiteData == nullptr)
-            {
-                mpGraphiteData = new GrFontData(hDC);
-                if (!mpGraphiteData->getFace())
-                {
-                    mbHasGraphiteSupport = false;
-                    delete mpGraphiteData;
-                    mpGraphiteData = nullptr;
-                }
-            }
-        }
-    }
-#endif
 }
-
-#if ENABLE_GRAPHITE
-const gr_face* WinFontFace::GraphiteFace() const
-{
-#ifdef DEBUG
-    fprintf(grLog(), "WinFontFace::GraphiteFace %lx has face %lx\n",
-        (unsigned long)this, mpGraphiteData? mpGraphiteData->getFace(): 0);
-#endif
-    return (mpGraphiteData)? mpGraphiteData->getFace() : nullptr;
-}
-#endif
 
 bool WinFontFace::HasGSUBstitutions( HDC hDC ) const
 {
