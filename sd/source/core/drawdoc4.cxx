@@ -21,7 +21,6 @@
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <i18nlangtag/mslangid.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
@@ -89,7 +88,6 @@
 #include <editeng/editeng.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svl/itempool.hxx>
 #include <editeng/outlobj.hxx>
 #include <sfx2/viewfrm.hxx>
