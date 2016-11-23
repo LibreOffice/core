@@ -1154,21 +1154,16 @@ FontConfigFontOptions::~FontConfigFontOptions()
     FcPatternDestroy(mpPattern);
 }
 
-    void *FontConfigFontOptions::GetPattern(void * face, bool bEmbolden) const
-    {
-        FcValue value;
-        value.type = FcTypeFTFace;
-        value.u.f = face;
-        FcPatternDel(mpPattern, FC_FT_FACE);
-        FcPatternAdd (mpPattern, FC_FT_FACE, value, FcTrue);
-        FcPatternDel(mpPattern, FC_EMBOLDEN);
-        FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
-#if 0
-        FcPatternDel(mpPattern, FC_VERTICAL_LAYOUT);
-        FcPatternAddBool(mpPattern, FC_VERTICAL_LAYOUT, bVerticalLayout ? FcTrue : FcFalse);
-#endif
-        return mpPattern;
-    }
+FcPattern *FontConfigFontOptions::GetPattern(const OString& rFileName, int nIndex, bool bEmbolden) const
+{
+    FcPatternDel(mpPattern, FC_FILE);
+    FcPatternAddString(mpPattern, FC_FILE, reinterpret_cast<FcChar8 const *>(rFileName.getStr()));
+    FcPatternDel(mpPattern, FC_INDEX);
+    FcPatternAddInteger(mpPattern, FC_INDEX, nIndex);
+    FcPatternDel(mpPattern, FC_EMBOLDEN);
+    FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
+    return mpPattern;
+}
 
 FontConfigFontOptions* PrintFontManager::getFontOptions(
     const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void*))

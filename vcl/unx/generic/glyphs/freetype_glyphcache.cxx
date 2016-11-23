@@ -512,11 +512,7 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
         ApplyGSUB( rFSD );
 
     // TODO: query GASP table for load flags
-    mnLoadFlags = FT_LOAD_DEFAULT;
-#if 1 // #i97326# cairo sometimes uses FT_Set_Transform() on our FT_FACE
-    // we are not using FT_Set_Transform() yet, so just ignore it for now
-    mnLoadFlags |= FT_LOAD_IGNORE_TRANSFORM;
-#endif
+    mnLoadFlags = FT_LOAD_DEFAULT | FT_LOAD_IGNORE_TRANSFORM;
 
     mbArtItalic = (rFSD.GetItalic() != ITALIC_NONE && pFI->GetFontAttributes().GetItalic() == ITALIC_NONE);
     mbArtBold = (rFSD.GetWeight() > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
@@ -602,6 +598,10 @@ const OString& FreetypeFont::GetFontFileName() const
     return mpFontInfo->GetFontFileName();
 }
 
+int FreetypeFont::GetFontFaceIndex() const
+{
+    return mpFontInfo->GetFontFaceIndex();
+}
 
 FreetypeFont::~FreetypeFont()
 {

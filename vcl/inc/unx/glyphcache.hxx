@@ -151,6 +151,7 @@ public:
                            ~FreetypeFont();
 
     const OString&          GetFontFileName() const;
+    int                     GetFontFaceIndex() const;
     bool                    TestFont() const { return mbFaceOk;}
     FT_Face                 GetFtFace() const;
     int                     GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
