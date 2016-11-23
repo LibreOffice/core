@@ -478,17 +478,12 @@ bool CairoTextRender::GetGlyphOutline( sal_GlyphId aGlyphId,
     return false;
 }
 
-SalLayout* CairoTextRender::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
+SalLayout* CairoTextRender::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
-    SalLayout* pLayout = nullptr;
+    if (mpFreetypeFont[nFallbackLevel])
+        return new CommonSalLayout(*mpFreetypeFont[nFallbackLevel]);
 
-    if( mpFreetypeFont[ nFallbackLevel ]
-    && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
-    {
-        pLayout = new CommonSalLayout(*mpFreetypeFont[nFallbackLevel]);
-    }
-
-    return pLayout;
+    return nullptr;
 }
 
 #if ENABLE_CAIRO_CANVAS
