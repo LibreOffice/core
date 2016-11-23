@@ -178,7 +178,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl, ValueSet*, void)
  */
 IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
 {
-    VclPtrInstance< SfxNewFileDialog > pDlg(this, SFXWB_PREVIEW);
+    VclPtrInstance< SfxNewFileDialog > pDlg(this, SfxNewFileDialogMode::Preview);
     pDlg->SetText(SD_RESSTR(STR_LOAD_PRESENTATION_LAYOUT));
 
     if(!IsReallyVisible())
