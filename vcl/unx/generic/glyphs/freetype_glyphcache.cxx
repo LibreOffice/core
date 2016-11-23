@@ -588,8 +588,16 @@ void FreetypeFont::SetFontOptions(const std::shared_ptr<FontConfigFontOptions>& 
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
+extern FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize);
+
 const std::shared_ptr<FontConfigFontOptions>& FreetypeFont::GetFontOptions() const
 {
+    if (!mxFontOptions)
+    {
+        SAL_WARN("vcl", "this doesn't happen in practice I believe");
+        mxFontOptions.reset(GetFCFontOptions(mpFontInfo->GetFontAttributes(), maFontSelData.mnHeight));
+    }
+    mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), NeedsArtificialBold());
     return mxFontOptions;
 }
 

@@ -1154,7 +1154,12 @@ FontConfigFontOptions::~FontConfigFontOptions()
     FcPatternDestroy(mpPattern);
 }
 
-FcPattern *FontConfigFontOptions::GetPattern(const OString& rFileName, int nIndex, bool bEmbolden) const
+FcPattern *FontConfigFontOptions::GetPattern() const
+{
+    return mpPattern;
+}
+
+void FontConfigFontOptions::SyncPattern(const OString& rFileName, int nIndex, bool bEmbolden)
 {
     FcPatternDel(mpPattern, FC_FILE);
     FcPatternAddString(mpPattern, FC_FILE, reinterpret_cast<FcChar8 const *>(rFileName.getStr()));
@@ -1162,7 +1167,6 @@ FcPattern *FontConfigFontOptions::GetPattern(const OString& rFileName, int nInde
     FcPatternAddInteger(mpPattern, FC_INDEX, nIndex);
     FcPatternDel(mpPattern, FC_EMBOLDEN);
     FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
-    return mpPattern;
 }
 
 FontConfigFontOptions* PrintFontManager::getFontOptions(

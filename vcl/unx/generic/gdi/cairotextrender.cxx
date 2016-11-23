@@ -64,7 +64,7 @@ public:
     struct CacheId
     {
         FT_Face maFace;
-        const void *mpOptions;
+        const FontConfigFontOptions *mpOptions;
         bool mbEmbolden;
         bool mbVerticalMetrics;
         bool operator ==(const CacheId& rOther) const
@@ -288,8 +288,8 @@ void CairoTextRender::DrawServerFontLayout( const GenericSalLayout& rLayout, con
         cairo_font_face_t* font_face = static_cast<cairo_font_face_t*>(CairoFontsCache::FindCachedFont(aId));
         if (!font_face)
         {
-            const FontConfigFontOptions *pOptions = rFont.GetFontOptions().get();
-            FcPattern *pPattern = pOptions->GetPattern(rFont.GetFontFileName(), rFont.GetFontFaceIndex(), aId.mbEmbolden);
+            const FontConfigFontOptions *pOptions = aId.mpOptions;
+            FcPattern *pPattern = pOptions->GetPattern();
             font_face = cairo_ft_font_face_create_for_pattern(pPattern);
             CairoFontsCache::CacheFont(font_face, aId);
         }

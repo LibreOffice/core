@@ -230,7 +230,7 @@ private:
     FT_FaceRec_*            maFaceFT;
     FT_SizeRec_*            maSizeFT;
 
-    std::shared_ptr<FontConfigFontOptions> mxFontOptions;
+    mutable std::shared_ptr<FontConfigFontOptions> mxFontOptions;
 
     bool                    mbFaceOk;
     bool                    mbArtItalic;
