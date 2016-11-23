@@ -946,22 +946,12 @@ bool GenPspGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     return false;
 }
 
-SalLayout* GenPspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
+SalLayout* GenPspGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
-    if( nFallbackLevel > 0 )
-        rArgs.mnFlags &= ~SalLayoutFlags::DisableGlyphProcessing;
-
-    GenericSalLayout* pLayout = nullptr;
-
-    if( m_pFreetypeFont[ nFallbackLevel ]
-        && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
-    {
-        pLayout = new PspCommonSalLayout(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]);
-    }
+    if (m_pFreetypeFont[nFallbackLevel])
+        return new PspCommonSalLayout(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]);
     else
-        pLayout = new PspFontLayout( *m_pPrinterGfx );
-
-    return pLayout;
+        return new PspFontLayout(*m_pPrinterGfx);
 }
 
 bool GenPspGraphics::CreateFontSubset(
