@@ -17,8 +17,9 @@ gbuildtojson:
 	@true
 
 
-.PHONY : foo
-foo:
+gb_GbuildToJson_PHONY := $(WORKDIR)/GBUILDTOJSONPHONY
+.PHONY : $(gb_GbuildToJson_PHONY)
+$(gb_GbuildToJson_PHONY):
 	@true
 
 
@@ -56,13 +57,13 @@ endef
 define gb_Postprocess_register_target
 gbuildtojson : $(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3)))
 
-$(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3))): $(gb_Helper_MISCDUMMY) foo
+$(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3))): $(gb_Helper_MISCDUMMY) $(gb_GbuildToJson_PHONY)
 $(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3))): T_MAKEFILE := $(lastword $(MAKEFILE_LIST))
 endef
 
 gb_LinkTarget_use_static_libraries =
-gb_UnoApiHeadersTarget_get_target = foo
-gb_UnpackedTarball_get_final_target = foo
+gb_UnoApiHeadersTarget_get_target = $(gb_Helper_MISCDUMMY)
+gb_UnpackedTarball_get_final_target = $(gb_Helper_MISCDUMMY)
 gb_LinkTarget__get_headers_check =
 gb_LinkTarget_add_cobject = $(call gb_LinkTarget_get_target,$(1)) : COBJECTS += $(2)
 gb_LinkTarget_add_cxxobject = $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS += $(2)
