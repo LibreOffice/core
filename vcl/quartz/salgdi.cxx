@@ -422,7 +422,7 @@ bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect 
     return false;
 }
 
-void AquaSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
+void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
 {
     const CoreTextStyle& rStyle = rLayout.getFontData();
     const FontSelectPattern& rFontSelect = rStyle.maFontSelData;
