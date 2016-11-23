@@ -71,10 +71,6 @@ public:
     {
     }
 
-    virtual ~ContainerListenerImpl() override
-    {
-    }
-
     void addContainerListener( const ScriptDocument& rScriptDocument, const OUString& aLibName )
     {
         try
