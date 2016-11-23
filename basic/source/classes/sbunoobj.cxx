@@ -3826,7 +3826,6 @@ public:
     OUString        aPrefixName;
 
     explicit BasicAllListener_Impl( const OUString& aPrefixName );
-    virtual ~BasicAllListener_Impl() override;
 
     // Methods of XAllListener
     virtual void SAL_CALL firing(const AllEventObject& Event) throw ( RuntimeException, std::exception ) override;
@@ -3841,12 +3840,6 @@ BasicAllListener_Impl::BasicAllListener_Impl(const OUString& aPrefixName_)
     : aPrefixName( aPrefixName_ )
 {
 }
-
-
-BasicAllListener_Impl::~BasicAllListener_Impl()
-{
-}
-
 
 void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet )
 {
@@ -4249,8 +4242,6 @@ class ModuleInvocationProxy : public WeakImplHelper< XInvocation, XComponent >
 
 public:
     ModuleInvocationProxy( const OUString& aPrefix, SbxObjectRef xScopeObj );
-    virtual ~ModuleInvocationProxy() override
-    {}
 
     // XInvocation
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() throw(std::exception) override;
