@@ -102,7 +102,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         mbTLBREnabled( false ),
         mbBLTREnabled( false ),
         mbUseMarginItem( false ),
-        mbAllowPaddingWithoutBorders( false ),
+        mbAllowPaddingWithoutBorders( true ),
         mbSync(true),
         mbRemoveAdjacentCellBorders( false ),
         bIsCalcDoc( false )
@@ -179,11 +179,6 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         // The caller specifies default line width.  Honor it.
         const SfxInt64Item* p = static_cast<const SfxInt64Item*>(pItem);
         m_pLineWidthMF->SetValue(p->GetValue());
-    }
-
-    if (rCoreAttrs.HasItem(SID_ALLOW_PADDING_WITHOUT_BORDERS, &pItem))
-    {
-        mbAllowPaddingWithoutBorders = static_cast<const SfxBoolItem*>(pItem)->GetValue();
     }
 
     // set metric
