@@ -66,9 +66,6 @@
 #define CURSOR_BIDILEVEL_DONTKNOW   0xFFFF
 #define MAXCHARSINPARA      0x3FFF-CHARPOSGROW  // Max 16K, because WYSIWYG array
 
-#define ATTRSPECIAL_WHOLEWORD   1
-#define ATTRSPECIAL_EDGE        2
-
 #define GETCRSR_TXTONLY             0x0001
 #define GETCRSR_STARTOFLINE         0x0002
 #define GETCRSR_ENDOFLINE           0x0004
@@ -827,7 +824,7 @@ public:
 
     SfxItemSet      GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, GetAttribsFlags nFlags = GetAttribsFlags::ALL ) const;
     SfxItemSet      GetAttribs( EditSelection aSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs_All  );
-    void            SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_uInt8 nSpecial = 0 );
+    void            SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetAttribsMode nSpecial = SetAttribsMode::NONE );
     void            RemoveCharAttribs( EditSelection aSel, bool bRemoveParaAttribs, sal_uInt16 nWhich );
     void            RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0, bool bRemoveFeatures = false );
     void            SetFlatMode( bool bFlat );

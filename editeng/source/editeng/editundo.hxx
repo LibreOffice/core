@@ -28,7 +28,7 @@
 
 class EditEngine;
 class EditView;
-
+enum class SetAttribsMode;
 
 // EditUndoDelContent
 
@@ -216,10 +216,10 @@ private:
     SfxItemSet          aNewAttribs;
     InfoArrayType       aPrevAttribs;
 
-    sal_uInt8               nSpecial;
+    SetAttribsMode      nSpecial;
     bool                bSetIsRemove;
     bool                bRemoveParaAttribs;
-    sal_uInt16              nRemoveWhich;
+    sal_uInt16          nRemoveWhich;
 
     void                ImpSetSelection( EditView* pView );
 
@@ -230,10 +230,10 @@ public:
 
     SfxItemSet&         GetNewAttribs()     { return aNewAttribs; }
 
-    void                SetSpecial( sal_uInt8 n )           { nSpecial = n; }
+    void                SetSpecial( SetAttribsMode n )  { nSpecial = n; }
     void                SetRemoveAttribs( bool b )      { bSetIsRemove = b; }
     void                SetRemoveParaAttribs( bool b )  { bRemoveParaAttribs = b; }
-    void                SetRemoveWhich( sal_uInt16 n )      { nRemoveWhich = n; }
+    void                SetRemoveWhich( sal_uInt16 n )  { nRemoveWhich = n; }
 
     virtual void        Undo() override;
     virtual void        Redo() override;

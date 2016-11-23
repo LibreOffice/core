@@ -505,7 +505,7 @@ EditUndoSetAttribs::EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel,
     bSetIsRemove = false;
     bRemoveParaAttribs = false;
     nRemoveWhich = 0;
-    nSpecial = 0;
+    nSpecial = SetAttribsMode::NONE;
 }
 
 namespace {

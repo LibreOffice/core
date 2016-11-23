@@ -624,7 +624,7 @@ void EdtAutoCorrDoc::SetAttr(sal_Int32 nStt, sal_Int32 nEnd,
 
         EditSelection aSel( EditPaM( pCurNode, nStt ), EditPaM( pCurNode, nEnd ) );
         aSel.Max().SetIndex( nEnd );    // ???
-        mpEditEngine->SetAttribs( aSel, aSet, ATTRSPECIAL_EDGE );
+        mpEditEngine->SetAttribs( aSel, aSet, SetAttribsMode::Edge );
         bAllowUndoAction = false;
     }
 }
